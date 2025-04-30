@@ -125,8 +125,20 @@ if (count($courses) > 0) {
                 }
                 $table_content .= "<tr class='$invisible'><td>" . $course1->title . " ($badge->title)</td>
                     <td>
-                    <a href= '{$urlServer}modules/progress/index.php?course=$code&amp;badge_id=$badge->badge&amp;u=$uid'>" . $cert_content . "</a>" . $icon_content .
-                            "</td></tr>";
+                        <div class='d-flex justify-content-between gap-5'>
+                            <div><a href= '{$urlServer}modules/progress/index.php?course=$code&amp;badge_id=$badge->badge&amp;u=$uid'>" . $cert_content . "</a>" . $icon_content ."</div>
+                            <div>
+                                ". action_button(array(
+                                    array(
+                                        'title' => $langAddResePortfolio,
+                                        'url' => "$urlServer"."main/eportfolio/resources.php?token=".token_generate('eportfolio' . $uid)."&amp;action=add&amp;type=my_badges&amp;rid=".$badge->badge,
+                                        'icon' => 'fa-star',
+                                        'show' => (get_config('eportfolio_enable'))
+                                    ),
+                                ))."
+                            </div>
+                        </div>
+                    </td></tr>";
             }
         }
     }

@@ -5861,6 +5861,8 @@ $langEnabledePortfolioButtonsLabel = 'Ενεργοποιημένο e-Portfolio';
 $langPageLink = 'Σύνδεσμος σελίδας';
 $langCopiedSucc = 'Αντιγράφηκε';
 $langCopiedErr = 'Πατήστε Ctrl+c για αντιγραφή';
+$langNoCompletedBadge = "Μη ολοκληρωμένο";
+$langResourceExists = "Ο πόρος υπάρχει ήδη.";
 
 /* * ******************************************
   Widgets
