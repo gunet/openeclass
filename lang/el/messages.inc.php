@@ -4460,13 +4460,14 @@ $langColorboxCurrent = "πολυμέσο {current} από {total}";
 $langVideoDirectory = "Γενικά πολυμεσικά αρχεία";
 $langCatVideoDirectory = "Κατηγορίες πολυμεσικών αρχείων";
 $langCatVideoDirectoryCreated = "Η κατηγορία προστέθηκε";
-$langOpenDelosReplaceInfo = "<p>Αν κάποιος επιλεγμένος σύνδεσμος ήδη υπάρχει στα πολυμέσα, θα ανανεωθεί με τα τρέχοντα στοιχεία.</p><p><span style='color:red'>*</span> Ο σύνδεσμος έχει ήδη προστεθεί στα πολυμέσα του $langsOfCourse.</p><p><span style='color:red'>**</span> Ο σύνδεσμος έχει ήδη προστεθεί στα πολυμέσα, αλλά η πλατφόρμα OpenDelos διαθέτει νεότερη έκδοσή του.</p>";
+$langOpenDelosReplaceInfo = "Αν κάποιος επιλεγμένος σύνδεσμος ήδη υπάρχει στα πολυμέσα, θα ανανεωθεί με τα τρέχοντα στοιχεία";
+$langDelosNewFileVersion = "Υπάρχει νεώτερη έκδσοη του αρχείου στο OpenDelos.";
 $langOpenDelosPublicVideos = "Ανοικτά πολυμεσικά αρχεία";
 $langOpenDelosPrivateVideos = "Κλειστά πολυμεσικά αρχεία";
-$langOpenDelosRequireAuth = "Απαιτείται ξεχωριστή αυθεντικοποίηση με το OpenDelos";
+$langOpenDelosRequireAuth = "Για την εμφάνιση κλειστών πολυμεσικών αρχείων απαιτείται ξεχωριστή αυθεντικοποίηση με το OpenDelos";
 $langOpenDelosRequireAuthHere = "εδώ";
 $langOpenDelosAuth = "Αυθεντικοποίηση OpenDelos";
-$langOpenDelosPrivateNote = "Σημείωση: αν το μάθημά σας χρησιμοποιεί Ανοικτή/Ελεύθερη πρόσβαση και προσθέσετε κλειστά πολυμεσικά αρχεία στους συνδέσμους του μαθήματος, τα πολυμεσικά αρχεία θα είναι ορατά και στους ανώνυμους χρήστες.";
+$langOpenDelosPrivateNote = "Σημείωση: Αν το μάθημά σας είναι 'ανοικτό' τότε τα κλειστά πολυμεσικά αρχεία θα είναι ορατά σε όλους τους χρήστες.";
 $langOpenDelosHttpsError = "Η συνδεσιμότητα με το Open Delos δεν μπορεί να ενεργοποιηθεί γιατί ο τοπικός server χρησιμοποιεί HTTPS πρωτόκολλο, ενώ το Open Delos χρησιμοποιεί HTTP πρωτόκολλο. Οι νεότερες εκδόσεις των web browsers δεν επιτρέπουν μικτή χρήση των πρωτοκόλλων.";
 
 
