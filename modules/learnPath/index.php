@@ -362,15 +362,15 @@ if ($is_editor) {
         exit;
     } else {
         $action_bar = action_bar(array(
-                    array('title' => $langCreate,
-                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;cmd=create",
-                        'icon' => 'fa-plus-circle',
-                        'level' => 'primary-label',
-                        'button-class' => 'btn-success'),
                     array('title' => $langInsert,
                         'url' => "importLearningPath.php?course=$course_code",
                         'icon' => 'fa-upload',
                         'level' => 'primary-label',
+                        'button-class' => 'btn-success'),
+                    array('title' => $langCreate,
+                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;cmd=create",
+                        'icon' => 'fa-plus-circle',
+                        'level' => 'secondary',
                         'button-class' => 'btn-success'),
                     array('title' => $langTrackAllPathExplanation,
                         'url' => "detailsAll.php?course=$course_code",
@@ -380,7 +380,7 @@ if ($is_editor) {
                         'url' => "detailsAllAnalysis.php?course=$course_code",
                         'icon' => 'fa-line-chart',
                         'level' => 'secondary'),
-                    array('title' => $langLearningObjectsInUse_sort,
+                    array('title' => $langLearningObjectsInUse,
                         'url' => "modules_pool.php?course=$course_code",
                         'icon' => 'fa-book',
                         'level' => 'secondary')));
