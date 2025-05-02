@@ -129,10 +129,10 @@
                                             <div class="btn-group" role="group">
                                                 @if($_SESSION['provider'] !== 'lti_publish')
                                                 <button id="btnGroupDrop1" type="button" class="btn user-menu-btn rounded-0 d-flex justify-content-center align-items-center gap-2 rounded-0" data-bs-toggle="dropdown" aria-expanded="false">
-                                                        @if(user_icon_menu($_SESSION['uid'], IMAGESIZE_LARGE) !== false)
+                                                        @if(user_icon($_SESSION['uid'], IMAGESIZE_LARGE, true) !== false)
                                                             <img class="user-icon-filename" src="{{ user_icon($_SESSION['uid'], IMAGESIZE_LARGE) }}" alt="{{ trans('langUser') }}:{{ $uname }}">
                                                         @else
-                                                            <span class='TextBold fs-6'>
+                                                            <span class='name-initials TextBold fs-6'>
                                                                 {{ isset($_SESSION['givenname']) ? mb_strtoupper(mb_substr(trim($_SESSION['givenname']), 0, 1, 'UTF-8'), 'UTF-8') : '' }}
                                                                 {{ isset($_SESSION['surname']) ? mb_strtoupper(mb_substr(trim($_SESSION['surname']), 0, 1, 'UTF-8'), 'UTF-8') : '' }}
                                                             </span>
@@ -352,7 +352,14 @@
                         <div>
                             <button class="btn btn-transparent p-0 dropdown-toogle d-flex justify-content-end align-items-center" type="button"
                                     id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                @if(user_icon($_SESSION['uid'], IMAGESIZE_LARGE,true) !== false)
                                     <img class="user-icon-filename mt-0" src="{{ user_icon($_SESSION['uid'], IMAGESIZE_LARGE) }}" alt="{{ trans('langUser') }}:{{ $uname }}">
+                                @else
+                                    <span class='name-initials TextBold fs-6'>
+                                        {{ isset($_SESSION['givenname']) ? mb_strtoupper(mb_substr(trim($_SESSION['givenname']), 0, 1, 'UTF-8'), 'UTF-8') : '' }}
+                                        {{ isset($_SESSION['surname']) ? mb_strtoupper(mb_substr(trim($_SESSION['surname']), 0, 1, 'UTF-8'), 'UTF-8') : '' }}
+                                    </span>
+                                @endif
                             </button>
 
                             <div class="m-0 py-3 px-3 dropdown-menu dropdown-menu-end contextual-menu contextual-menu-user contextual-border" aria-labelledby="dropdownMenuButton1">

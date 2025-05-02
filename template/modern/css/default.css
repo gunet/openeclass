@@ -5082,7 +5082,7 @@ body .delThemeBtn{
 
   .breadcrumb-item span{ max-width:325px; flex-wrap: wrap; }
 
-  .user-icon-filename{ width:30px; height:30px; margin-top: -3px; border-radius:50%; object-fit: cover;}
+  .user-icon-filename{ width:45px; height:45px; margin-top: -3px; border-radius:50%; object-fit: cover;border: 1px solid #ccc;}
 
   .dropdownLanguage{ width:230px ;  background-color: #003F87 ; }
 
@@ -5113,7 +5113,7 @@ body .delThemeBtn{
 
   .pen-nib-navhead{ transform: rotate(265deg); }
 
-  .user-icon-filename{ width:30px; height:30px; margin-top: -3px; border-radius:50%; object-fit: cover;}
+  .user-icon-filename{ width:45px; height:45px; margin-top: -3px; border-radius:50%; object-fit: cover;border: 1px solid #ccc;}
 
   .dropdownLanguage{ width:230px ; background-color: #003F87 ; }
 
@@ -5135,7 +5135,7 @@ body .delThemeBtn{
 
   .course-units{ -moz-box-shadow: 0 0 3px #ccc; -webkit-box-shadow: 0 0 3px #ccc; box-shadow: 0 0 3px #ccc; border-radius: 25px; padding:25px; }
 
-  .user-icon-filename{ width:30px; height:30px; margin-top: -3px; border-radius:50%; object-fit: cover;}
+  .user-icon-filename{ width:45px; height:45px; margin-top: -3px; border-radius:50%; object-fit: cover;border: 1px solid #ccc;}
 }
 
 /* ------------------------------------------------------- tablet -------------------------------------------------------------------------- */
@@ -5148,7 +5148,7 @@ body .delThemeBtn{
 
   .course-units{ -moz-box-shadow: 0 0 3px #ccc; -webkit-box-shadow: 0 0 3px #ccc; box-shadow: 0 0 3px #ccc; border-radius: 25px;  padding:25px; }
 
-  .user-icon-filename{ width:30px; height:30px; margin-top: -3px; border-radius:50%; object-fit: cover;}
+  .user-icon-filename{ width:45px; height:45px; margin-top: -3px; border-radius:50%; object-fit: cover;border: 1px solid #ccc;}
 
 }
 
@@ -5156,7 +5156,7 @@ body .delThemeBtn{
 
   .course-units{ -moz-box-shadow: none;  -webkit-box-shadow: none; box-shadow: none; border-radius: 25px; padding:25px; }
 
-  .user-icon-filename{ width:20px; height:20px; border-radius:50%; object-fit: cover;}
+  .user-icon-filename{ width:45px; height:45px; border-radius:50%; object-fit: cover;border: 1px solid #ccc;}
 
 }
 
@@ -5168,7 +5168,7 @@ body .delThemeBtn{
 
 @media (min-width: 1024px) and (max-width: 1199px){
 
-  .user-icon-filename{ width:30px; height:30px; border-radius:50%; object-fit: cover;}
+  .user-icon-filename{ width:45px; height:45px; border-radius:50%; object-fit: cover;border: 1px solid #ccc;}
 
 }
 
@@ -5180,7 +5180,7 @@ body .delThemeBtn{
 
 @media (min-width: 1200px) and (max-width: 1399px){
 
-  .user-icon-filename{ width:30px; height:30px; border-radius:50%; object-fit: cover;}
+  .user-icon-filename{ width:45px; height:45px; border-radius:50%; object-fit: cover;border: 1px solid #ccc;}
 }
 
 /* -------------------------------------------------large - desktop - laptop --------------------------------------------------------------- */
@@ -5191,10 +5191,19 @@ body .delThemeBtn{
 
 @media (min-width:1400px){
 
-  .user-icon-filename{ width:30px; height:30px; border-radius:50%; object-fit: cover;}
+  .user-icon-filename{ width:45px; height:45px; border-radius:50%; object-fit: cover;border: 1px solid #ccc;}
 }
 
-
+.name-initials {
+  width: 45px;
+  height: 45px;
+  border:1px solid #ccc;
+  border-radius:50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f3f3f3;
+}
 
 
 
