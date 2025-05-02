@@ -4066,7 +4066,7 @@ body .delThemeBtn{
 .lesson-image:hover{ opacity:0.5; }
 
 
-.user-detals-photo { width: 80px; height: 80px; border-radius: 50%; object-fit: cover;}
+.user-detals-photo { width: 80px; height: 80px; border-radius: 50%; object-fit: cover;border: 1px solid #ccc;}
 @media(min-width:768px) and (max-width:991px){
   .user-detals-photo { max-width: 120px; }
 }
