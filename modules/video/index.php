@@ -183,12 +183,12 @@ add_units_navigation(TRUE); // TODO: test
 ModalBoxHelper::loadModalBox(true);
 
 if (isset($_GET['form_input']) and $_GET['form_input'] === 'opendelos') {
+    load_js('datatables');
     list($jsonPublicObj, $jsonPrivateObj, $checkAuth) = requestDelosJSON();
     $data['jsonPublicObj'] = $jsonPublicObj;
     $data['jsonPrivateObj'] = $jsonPrivateObj;
     $data['checkAuth'] = $checkAuth;
     $data['currentVideoLinks'] = getCurrentVideoLinks($course_id);
-    $head_content .= getDelosJavaScript();
     view('modules.video.editdelos', $data);
 } else {
     view('modules.video.index', $data);
