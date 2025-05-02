@@ -979,11 +979,6 @@ function get_theme_options() {
                     color: $theme_options_styles[linkHoverColorHeader];
                 }
 
-                #bgr-cheat-header:not(:has(.fixed)) .user-menu-btn:hover,
-                #bgr-cheat-header:not(:has(.fixed)) .user-menu-btn:focus{
-                    border-top: solid 4px $theme_options_styles[linkHoverColorHeader];
-                }
-
                 .user-menu-btn:hover .user-name,
                 .user-menu-btn:focus .user-name{
                     color: $theme_options_styles[linkHoverColorHeader];
