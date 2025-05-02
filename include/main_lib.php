@@ -487,6 +487,32 @@ function user_icon($user_id, $size = IMAGESIZE_SMALL) {
     return "$themeimg/default_$size.png$suffix";
 }
 
+function user_icon_menu($user_id, $size = IMAGESIZE_SMALL) {
+    global $webDir, $themeimg, $urlAppend, $course_id, $is_editor, $uid;
+
+    if (isset($_SESSION['profile_image_cache_buster'])) {
+        $suffix = '?v=' . $_SESSION['profile_image_cache_buster'];
+    } else {
+        $suffix = '';
+    }
+
+    $user = Database::get()->querySingle("SELECT has_icon, pic_public
+        FROM user WHERE id = ?d", $user_id);
+    if ($user and
+        ($user->pic_public or $uid == $user_id or
+            $_SESSION['status'] == USER_TEACHER or
+            (isset($course_id) and $course_id and $is_editor))) {
+        $hash = profile_image_hash($user_id);
+        $hashed_file = "courses/userimg/{$user_id}_{$hash}_$size.jpg";
+        if (file_exists($hashed_file)) {
+            return $urlAppend . $hashed_file;
+        } elseif (file_exists("courses/userimg/{$user_id}_$size.jpg")) {
+            return "{$urlAppend}courses/userimg/{$user_id}_$size.jpg";
+        }
+    }
+    return false;
+}
+
 /**
  * @brief Display links to the groups a user is member of
  * @param type $course_id
