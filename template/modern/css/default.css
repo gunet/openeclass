@@ -1101,7 +1101,7 @@ b a {
 
 #bgr-cheat-header:not(:has(.fixed)) .user-menu-btn:hover,
 #bgr-cheat-header:not(:has(.fixed)) .user-menu-btn:focus{
-  border-top: solid 4px #0073E6;
+  /* border-top: solid 4px #0073E6; */
   cursor:  url(../images/pointer.png), auto;
 }
 
@@ -1120,10 +1120,10 @@ b a {
 /*  color: #0073E6;*/
 /*}*/
 
-#bgr-cheat-header:not(:has(.fixed)) .user-menu-btn:hover .fa-chevron-down,
+/* #bgr-cheat-header:not(:has(.fixed)) .user-menu-btn:hover .fa-chevron-down,
 #bgr-cheat-header:not(:has(.fixed)) .user-menu-btn:focus .fa-chevron-down{
   margin-top: -4px;
-}
+} */
 
 .btn-mobile-quick-search{
   height:38px !important;
