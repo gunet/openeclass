@@ -455,62 +455,64 @@ function get_course_users($cid) {
 }
 
 /**
- * @brief Return the URL for a user profile image
- * @param int $uid user id
- * @param int $size optional image size in pixels (IMAGESIZE_SMALL or IMAGESIZE_LARGE)
- * @return string
+ * Retrieve the URL for a user's profile image.
+ *
+ * @param int $user_id The ID of the user whose profile image is being retrieved.
+ * @param int $size The size of the image in pixels. Defaults to IMAGESIZE_SMALL.
+ * @param bool $menu If true, the function will return false if no image is found. Defaults to false.
+ *
+ * @global string $webDir The root directory of the web application.
+ * @global string $themeimg The directory containing theme images.
+ * @global string $urlAppend The base URL of the application.
+ * @global int $course_id The ID of the current course (if applicable).
+ * @global bool $is_editor Whether the current user is an editor.
+ * @global int $uid The ID of the currently logged-in user.
+ *
+ * @return string|false The URL of the user's profile image, or a default image if none exists.
+ *                      Returns false if $menu is true and no image is found.
  */
 
-function user_icon($user_id, $size = IMAGESIZE_SMALL) {
+function user_icon($user_id, $size = IMAGESIZE_SMALL, $menu = false) {
     global $webDir, $themeimg, $urlAppend, $course_id, $is_editor, $uid;
 
+    // Check if a cache buster is set for the profile image and append it as a query parameter.
     if (isset($_SESSION['profile_image_cache_buster'])) {
         $suffix = '?v=' . $_SESSION['profile_image_cache_buster'];
     } else {
         $suffix = '';
     }
 
+    // Query the database to check if the user has a profile image and if it is public.
     $user = Database::get()->querySingle("SELECT has_icon, pic_public
         FROM user WHERE id = ?d", $user_id);
+
+    // If the user has a public image or the current user has permission to view it.
     if ($user and
         ($user->pic_public or $uid == $user_id or
          $_SESSION['status'] == USER_TEACHER or
          (isset($course_id) and $course_id and $is_editor))) {
+
+        // Generate the hashed file name for the user's profile image.
         $hash = profile_image_hash($user_id);
         $hashed_file = "courses/userimg/{$user_id}_{$hash}_$size.jpg";
+
+        // Check if the hashed file exists and return its URL.
         if (file_exists($hashed_file)) {
            return $urlAppend . $hashed_file;
+
+        // Check if a non-hashed version of the file exists and return its URL.
         } elseif (file_exists("courses/userimg/{$user_id}_$size.jpg")) {
            return "{$urlAppend}courses/userimg/{$user_id}_$size.jpg";
         }
     }
+
+    // If $menu is true and no image is found, return false.
+    if ($menu) {
+        return false;
+    }
+
+    // Return the URL of the default profile image.
     return "$themeimg/default_$size.png$suffix";
-}
-
-function user_icon_menu($user_id, $size = IMAGESIZE_SMALL) {
-    global $webDir, $themeimg, $urlAppend, $course_id, $is_editor, $uid;
-
-    if (isset($_SESSION['profile_image_cache_buster'])) {
-        $suffix = '?v=' . $_SESSION['profile_image_cache_buster'];
-    } else {
-        $suffix = '';
-    }
-
-    $user = Database::get()->querySingle("SELECT has_icon, pic_public
-        FROM user WHERE id = ?d", $user_id);
-    if ($user and
-        ($user->pic_public or $uid == $user_id or
-            $_SESSION['status'] == USER_TEACHER or
-            (isset($course_id) and $course_id and $is_editor))) {
-        $hash = profile_image_hash($user_id);
-        $hashed_file = "courses/userimg/{$user_id}_{$hash}_$size.jpg";
-        if (file_exists($hashed_file)) {
-            return $urlAppend . $hashed_file;
-        } elseif (file_exists("courses/userimg/{$user_id}_$size.jpg")) {
-            return "{$urlAppend}courses/userimg/{$user_id}_$size.jpg";
-        }
-    }
-    return false;
 }
 
 /**
