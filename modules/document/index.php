@@ -1026,7 +1026,7 @@ if ($can_upload or $user_upload) {
             $dialogData = array(
                 'renamePath' => $_GET['rename'],
                 'filename' => $r->filename,
-                'filenameLabel' => $r->format == '.dir'? $m['dirname'] : $m['filename']);
+                'filenameLabel' => $r->format == '.dir'? $langDirectory : $langFileName);
         }
     }
 
@@ -1152,7 +1152,6 @@ if ($can_upload or $user_upload) {
             $docId = $result->id;
             $oldpath = $result->path;
             $oldformat = $result->format;
-            $curDirPath = $_POST['curDirPathAfterReplace'];
             // check for disk quota
             if ($diskUsed - filesize($basedir . $oldpath) + $_FILES['newFile']['size'] > $diskQuotaDocument) {
                 Session::Messages($langNoSpace, 'alert-danger');
@@ -1188,6 +1187,7 @@ if ($can_upload or $user_upload) {
                     Log::record($course_id, MODULE_ID_DOCS, LOG_MODIFY, array('oldpath' => $oldpath,
                         'newpath' => $newpath,
                         'filename' => $_FILES['newFile']['name']));
+                    $curDirPath = my_dirname($replacePath);
                     Session::Messages($langReplaceOK, 'alert-success');
                     redirect_to_current_dir();
                 }
