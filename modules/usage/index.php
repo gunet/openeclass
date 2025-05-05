@@ -96,7 +96,6 @@ load_js('jszip');
 load_js('pdfmake');
 load_js('vfs_fonts');
 load_js('datatables_buttons_html5');
-load_js('bootstrap-datetimepicker');
 load_js('statistics.js');
 //Remove space between consecutive pagination buttons if datatables
 $head_content .= "<style>

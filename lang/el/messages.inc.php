@@ -4397,6 +4397,8 @@ $langStatOfFaculty = "Αναφορές $langsOfFaculty";
 $langHaveCreated = "Έχουν δημιουργηθεί";
 $langInfoUserDuration = "Στους παρακάτω χρόνους συμμετοχής <strong>δεν</strong> συμπεριλαμβάνονται οι χρόνοι στη Τηλεσυνεργασία</em>.";
 $langInfoUserDuration2 = "Για αυτά τα υποσυστήματα, κάντε κλικ στα αντίστοιχα κουμπιά.";
+$langConfirmMonthlyReport = "Προσοχή! Η διαδικασία δημιουργίας αναφορών ενδεχομένως να καθυστερήσει αν εκτελείται για πρώτη φορά τον τρέχοντα μήνα.";
+$langConfirmChartReport = "Προσοχή! Η διαδικασία δημιουργίας διαγραμμάτων ενδεχομένως να καθυστερήσει.";
 
 // for platform statistics
 $langUsersCourse = "Χρήστες ανά $langsCourse";
