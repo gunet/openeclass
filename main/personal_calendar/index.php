@@ -406,7 +406,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
 
 
                     $tool_content .= "
-                        <div id='editEventModal' class='modal fade in' role='dialog'>
+                        <div id='editEventModal' class='modal fade in' role='dialog' data-bs-focus='false'>
                             <form id='myeventform' class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]'>
                                 <div class='modal-dialog modal-md'>
 
@@ -718,7 +718,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                 </div>
                             </div>
 
-                            <div id='createEventModal' class='modal fade in' role='dialog'>
+                            <div id='createEventModal' class='modal fade in' role='dialog' data-bs-focus='false'>
                                 <form id='myeventform' class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]'>
                                     <div class='modal-dialog modal-md'>
 
