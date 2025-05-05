@@ -71,7 +71,7 @@ $(function() {
         language: '".$language."',
         autoclose: true
     });
-    $('#enddatecal').datepicker({
+    $('#enddatecal,#enddate').datepicker({
         format: 'dd-mm-yyyy',
         pickerPosition: 'bottom-right',
         language: '".$language."',
@@ -387,11 +387,13 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                         $eventID = $_GET['modify'];
                         $startDateEvent = Database::get()->querySingle("SELECT start FROM admin_calendar WHERE id = ?d",$eventID)->start;
                         $startDateEvent = date('Y-m-d',strtotime($startDateEvent));
+                        $recursionEndDate = Database::get()->querySingle("SELECT recursion_end FROM admin_calendar WHERE course_id = ?d AND id = ?d",$course_id,$id)->recursion_end;
                     }else{
                         $showEventUser = 'simpleUser';
                         $eventID = $_GET['modify'];
                         $startDateEvent = Database::get()->querySingle("SELECT start FROM personal_calendar WHERE id = ?d",$eventID)->start;
                         $startDateEvent = date('Y-m-d',strtotime($startDateEvent));
+                        $recursionEndDate = Database::get()->querySingle("SELECT recursion_end FROM personal_calendar WHERE course_id = ?d AND id = ?d",$course_id,$id)->recursion_end;
                     }
 
 
@@ -420,6 +422,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                             <div class='modal-body'>
                                                 <div class='form-wrapper form-edit rounded border-0 px-0'>
 
+                                                    <input type='hidden' id='recursionEndDate' value='$recursionEndDate'>
                                                     <input type='hidden' id='id' name='id' value='$eventToModify'>
                                                     <input type='hidden' name='rep' id='rep' value='$applytogroup'>
 
@@ -616,6 +619,20 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                             duration = hours + ':' + (minutes <= 9 ? '0' : '') + minutes;
                                             $('#editEventModal #duration').val(duration);
                                             $('#editEventModal').modal('toggle');
+
+                                            var recursionEndDate = $('#recursionEndDate').val();
+                                            if(!recursionEndDate) {
+                                                var endDateValueForm = $('#editEventModal #startdate').val();
+                                                var parts = endDateValueForm.split(' ');
+                                                var datePart = parts[0];
+                                                var dateParts = datePart.split('-');
+                                                var numberDay = parseInt(dateParts[0], 10);
+                                                var numberMonth = parseInt(dateParts[1], 10) - 1;
+                                                var numberYear = parseInt(dateParts[2], 10);
+                                                var endDateEventVal = new Date(numberYear, numberMonth, numberDay);
+                                                $('#enddate').datepicker('setDate', endDateEventVal);            
+                                            }
+
                                         }else{
                                             alert('$langChooseDayAgain');
                                             window.location.reload();
@@ -927,6 +944,16 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                         $('#createEventModal #durationCreate').val(duration);
 
                                         $('#createEventModal').modal('toggle');
+
+                                        var endDateValueForm = $('#createEventModal #enddateEvent').val();
+                                        var parts = endDateValueForm.split(' ');
+                                        var datePart = parts[0];
+                                        var dateParts = datePart.split('-');
+                                        var numberDay = parseInt(dateParts[0], 10);
+                                        var numberMonth = parseInt(dateParts[1], 10) - 1;
+                                        var numberYear = parseInt(dateParts[2], 10);
+                                        var endDateEventVal = new Date(numberYear, numberMonth, numberDay);
+                                        $('#enddate').datepicker('setDate', endDateEventVal);
 
                                     }else{
                                         alert('$langChooseDayAgain');

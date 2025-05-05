@@ -289,6 +289,7 @@ if ($is_editor) {
                     $eventID = $id;
                     $startDateEvent = Database::get()->querySingle("SELECT start FROM agenda WHERE course_id = ?d AND id = ?d",$course_id,$id)->start;
                     $startDateEvent = date('Y-m-d',strtotime($startDateEvent));
+                    $recursionEndDate = Database::get()->querySingle("SELECT recursion_end FROM agenda WHERE course_id = ?d AND id = ?d",$course_id,$id)->recursion_end;
 
                     $tool_content .= "
                                 <div class='col-12 calendar-events-container'>
@@ -312,7 +313,7 @@ if ($is_editor) {
                                                 <div class='modal-body'>
                                                     <div class='form-wrapper form-edit border-0 px-0'>
 
-
+                                                        <input type='hidden' id='recursionEndDate' value='$recursionEndDate'>
                                                         <input type='hidden' id = 'id' name='id' value='$id'>
                                                         <input type='hidden' name='rep' id='rep' value='$applytogroup'>
 
@@ -499,6 +500,19 @@ if ($is_editor) {
                                             duration = hours + ':' + (minutes <= 9 ? '0' : '') + minutes;
                                             $('#editAgendaEventModal #durationcal').val(duration);
                                             $('#editAgendaEventModal').modal('toggle');
+
+                                            var recursionEndDate = $('#recursionEndDate').val();
+                                            if(!recursionEndDate) {
+                                                var endDateValueForm = $('#editAgendaEventModal #startdate').val();
+                                                var parts = endDateValueForm.split(' ');
+                                                var datePart = parts[0];
+                                                var dateParts = datePart.split('-');
+                                                var numberDay = parseInt(dateParts[0], 10);
+                                                var numberMonth = parseInt(dateParts[1], 10) - 1;
+                                                var numberYear = parseInt(dateParts[2], 10);
+                                                var endDateEventVal = new Date(numberYear, numberMonth, numberDay);
+                                                $('#enddate').datepicker('setDate', endDateEventVal);            
+                                            }
                                         }else{
                                             alert('$langChooseDayAgain');
                                             window.location.reload();
@@ -776,6 +790,16 @@ if ($is_editor) {
                                     $('#createAgendaEventModal #durationcalCreate').val(duration);
 
                                     $('#createAgendaEventModal').modal('toggle');
+
+                                    var endDateValueForm = $('#createAgendaEventModal #enddateEvent').val();
+                                    var parts = endDateValueForm.split(' ');
+                                    var datePart = parts[0];
+                                    var dateParts = datePart.split('-');
+                                    var numberDay = parseInt(dateParts[0], 10);
+                                    var numberMonth = parseInt(dateParts[1], 10) - 1;
+                                    var numberYear = parseInt(dateParts[2], 10);
+                                    var endDateEventVal = new Date(numberYear, numberMonth, numberDay);
+                                    $('#enddate').datepicker('setDate', endDateEventVal);
 
                                 }else{
                                     alert('$langChooseDayAgain');
