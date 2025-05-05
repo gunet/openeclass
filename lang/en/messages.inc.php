@@ -6362,3 +6362,12 @@ $langQRCodePresence = "Presence via QR code";
 $langAddPresenceSuccess = "Your presence was successfully registered.";
 $langCoursePage = "$langCourse page";
 $langDefaultCourseAccess = 'Default access type';
+$langNoStoredProcedures = 'Warning! It seems that necessary Database Stored Procedures are missing - without them, the hierarchy of schools/departments will not function properly. Please re-run the upgrade process to recreate them.';
+$langImportAttendances = 'Import attendance records from file';
+$langAttendancesImported = 'The attendances were imported';
+$langImportExtraAttendanceUsers = 'The following users did not participate in the attendance book';
+$langImportAttendancesHelp = 'You can upload an Excel file (e.g. xls, xlsx) with user attendance info.
+    The presence of users must be completed in the last column of the file you can download from the link below.<br><br>
+    <strong>Do not</strong> change the file structure (e.g. number of columns) because the attendance import will fail.<br><br>
+    Also note that to record a presence, enter <strong>1</strong>. Anything else is not considered a presence.';
+$langGradebookUsers = 'Gradebook users';
