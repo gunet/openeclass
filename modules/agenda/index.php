@@ -299,7 +299,7 @@ if ($is_editor) {
                                     </div>
                                 </div>
 
-                                <div id='editAgendaEventModal' class='modal fade in' role='dialog'>
+                                <div id='editAgendaEventModal' class='modal fade in' role='dialog' data-bs-focus='false'>
                                     <form id='agendaform' class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
                                         <div class='modal-dialog modal-md'>
                                             <!-- Modal content-->
@@ -590,7 +590,7 @@ if ($is_editor) {
                     </div>
                 </div>
 
-                <div id='createAgendaEventModal' class='modal fade in' role='dialog'>
+                <div id='createAgendaEventModal' class='modal fade in' role='dialog' data-bs-focus='false'>
                     <form id='agendaform' class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
                         <div class='modal-dialog modal-md'>
 
