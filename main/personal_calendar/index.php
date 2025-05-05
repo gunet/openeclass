@@ -387,15 +387,14 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                         $eventID = $_GET['modify'];
                         $startDateEvent = Database::get()->querySingle("SELECT start FROM admin_calendar WHERE id = ?d",$eventID)->start;
                         $startDateEvent = date('Y-m-d',strtotime($startDateEvent));
-                        $recursionEndDate = Database::get()->querySingle("SELECT recursion_end FROM admin_calendar WHERE course_id = ?d AND id = ?d",$course_id,$id)->recursion_end;
+                        $recursionEndDate = Database::get()->querySingle("SELECT recursion_end FROM admin_calendar WHERE id = ?d",$eventID)->recursion_end;
                     }else{
                         $showEventUser = 'simpleUser';
                         $eventID = $_GET['modify'];
                         $startDateEvent = Database::get()->querySingle("SELECT start FROM personal_calendar WHERE id = ?d",$eventID)->start;
                         $startDateEvent = date('Y-m-d',strtotime($startDateEvent));
-                        $recursionEndDate = Database::get()->querySingle("SELECT recursion_end FROM personal_calendar WHERE course_id = ?d AND id = ?d",$course_id,$id)->recursion_end;
+                        $recursionEndDate = Database::get()->querySingle("SELECT recursion_end FROM personal_calendar WHERE id = ?d",$eventID)->recursion_end;
                     }
-
 
                     $tool_content .= "
                         <div class='col-12 calendar-events-container'>
