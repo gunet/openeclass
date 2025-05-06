@@ -1293,8 +1293,8 @@ function tc_session_details() {
         $langParticipants,$langConfirmDelete, $langHasExpiredS,
         $langNote, $langBBBNoteEnableJoin, $langTitle,
         $langActivate, $langDeactivate, $langEditChange, $langDelete, $langParticipate,
-        $langNoBBBSesssions, $langDaysLeft, $langBBBNotServerAvailableStudent,
-        $langBBBNotServerAvailableTeacher,
+        $langNoBBBSesssions, $langBBBNotServerAvailableStudent,
+        $langBBBNotServerAvailableTeacher, $langWillStart,
         $langBBBImportRecordings, $langAllUsers, $langDuration, $langBBBNoServerForRecording,
         $langFrom, $langTill, $langBBBHideParticipants, $langSettingSelect, $langOpenNewTab;
 
@@ -1366,7 +1366,7 @@ function tc_session_details() {
             $starttimeLabel = '';
             if (date_diff_in_minutes($start_date, date('Y-m-d H:i:s')) > 0) {
                 $starttimeLeft = date_diff_in_minutes($start_date, date('Y-m-d H:i:s'));
-                $starttimeLabel .= "<br><span><small class='label label-warning'>$langDaysLeft " .
+                $starttimeLabel .= "<br><span><small class='label label-warning'>$langWillStart " .
                     format_time_duration($starttimeLeft * 60) .
                     "</small></span>";
             }
@@ -1379,7 +1379,7 @@ function tc_session_details() {
                 $timeLabel = '&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;';
             }
             if ($timeLeft > 0 and date_diff_in_minutes($start_date, date('Y-m-d H:i:s')) < 0) {
-                $timeLabel .= "<br><span><small class='label label-warning'>$langDaysLeft " .
+                $timeLabel .= "<br><span><small class='label label-warning'>$langWillStart " .
                     format_time_duration($timeLeft * 60) .
                     "</small></span>";
             } elseif (isset($end_date) and ($timeLeft < 0)) {

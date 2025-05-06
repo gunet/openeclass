@@ -1895,7 +1895,7 @@ function show_h5p($title, $comments, $resource_id, $h5p_id, $visibility, $act_na
  */
 function show_tc($title, $comments, $resource_id, $tc_id, $visibility, $act_name) {
     global  $is_editor, $langWasDeleted, $langInactiveModule, $course_id,
-            $langBBB, $langDaysLeft, $langHasExpiredS;
+            $langBBB, $langWillStart, $langHasExpiredS;
 
     require_once 'modules/tc/functions.php';
 
@@ -1933,7 +1933,7 @@ function show_tc($title, $comments, $resource_id, $tc_id, $visibility, $act_name
 
     if ($tc) {
         if (date_diff_in_minutes($tc->start_date, date('Y-m-d H:i:s')) > 0) {
-            $message_box .= "$langDaysLeft " . format_time_duration(date_diff_in_minutes($tc->start_date, date('Y-m-d H:i:s')) * 60);
+            $message_box .= "$langWillStart " . format_time_duration(date_diff_in_minutes($tc->start_date, date('Y-m-d H:i:s')) * 60);
         } else if (isset($tc->end_date) and (date_diff_in_minutes($tc->end_date, date('Y-m-d H:i:s')) < 0)) { // expired tc
             $message_box .= "$langHasExpiredS";
             $tclink = 'javascript: void(0)';
@@ -1946,9 +1946,9 @@ function show_tc($title, $comments, $resource_id, $tc_id, $visibility, $act_name
           <div class='unitIcon' width='1'>$imagelink</div>
           " . (!empty($act_name) ? "<div class='text-start'>$act_name</div>" : "") . "
           <div>
-            <div class='module-name'>$langBBB</div>
+            <div class='module-name'>$langBBB <span class='help-block label label-warning ps-4'>$message_box</span></div>
             <a href='$tclink'>" . q($title) . "</a> $comment_box</div>
-            <div class='help-block label label-warning'>$message_box</div>" .
+            " .
         actions('tc', $resource_id, $visibility) . '
         </div>';
 }
