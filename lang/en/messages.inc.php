@@ -4217,6 +4217,7 @@ $langGroupWorkIntro = '
 	been graded.';
 $langAssignmentPasswordModalTitle = "Please enter assignment password";
 $langWillStartAt = 'start at';
+$langWillStart = 'will start in';
 $langGroupWorkSubmitted = "Has been Submitted";
 $langGroupWorkDeadline_of_Submission = "Submission deadline";
 $langEmptyAsTitle = "You didn't enter assignment title";
