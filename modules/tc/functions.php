@@ -2496,3 +2496,45 @@ function get_tc_participants($meeting_id) {
 
     return $result;
 }
+
+
+function get_tc_link($tc_id) {
+
+    global $is_editor, $urlServer, $course_code;
+
+    $tc_link = '';
+    $tc_session_data = Database::get()->querySingle("SELECT * FROM tc_session WHERE id = ?d", $tc_id);
+    $tc_server_data = Database::get()->querySingle("SELECT * FROM tc_servers WHERE id = ?d", $tc_session_data->running_at);
+    $tc_type = $tc_server_data->type;
+
+    switch ($tc_type) {
+        case 'webex':
+        case 'googlemeet':
+        case 'microsoftteams':
+            $tc_link = $tc_session_data->meeting_id;
+            break;
+        case 'jitsi':
+            $tc_link = $tc_server_data->hostname . $tc_session_data->meeting_id;
+            break;
+        case 'zoom':
+            if (!empty($tc_server_data->webapp) && $tc_server_data->webapp == 'api') {
+                if ($is_editor) {
+                    $tc_link = unserialize($tc_session_data->options);
+                } else {
+                    $tc_link = rtrim($tc_server_data->hostname, '/') . '/j/'. $tc_session_data->meeting_id . '?pwd=' . $tc_session_data->mod_pw;
+                }
+            } else {
+                $tc_link = $tc_session_data->meeting_id;
+            }
+            break;
+        case 'bbb':
+            if ($is_editor) {
+                $tc_link = $urlServer . "modules/tc/index.php?course=$course_code&choice=do_join&meeting_id=$tc_session_data->meeting_id&title$tc_session_data->title&att_pw=$tc_session_data->att_pw&mod_pw=$tc_session_data->mod_pw";
+            } else {
+                $tc_link = $urlServer . "modules/tc/index.php?course=$course_code&choice=do_join&meeting_id=$tc_session_data->meeting_id&title$tc_session_data->title&att_pw=$tc_session_data->att_pw";
+            }
+            break;
+    }
+
+    return $tc_link;
+}
