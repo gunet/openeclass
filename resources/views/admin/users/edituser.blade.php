@@ -194,7 +194,7 @@
                             <input type='hidden' name='registered_at' value='{{ $info->registered_at }}'>
                             {!! showSecondFactorChallenge() !!}
                             <div class='col-12 mt-5 d-flex justify-content-end align-items-center'>
-                                <input class='btn submitAdminBtn' type='submit' name='submit_edituser' value='{{ trans('langModify') }}'>
+                                <input class='btn submitAdminBtn' type='submit' name='submit_edituser' value='{{ trans('langSubmit') }}'>
                             </div>
                         </fieldset>
                         {!! generate_csrf_token_form_field() !!}

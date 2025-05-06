@@ -12,7 +12,7 @@
 
                 <div class='mt-4'></div>
 
-                @include('layouts.partials.show_alert') 
+                @include('layouts.partials.show_alert')
 
                 <div class='col-lg-6 col-12'>
                     <div class='form-wrapper form-edit border-0 px-0'>
@@ -66,7 +66,7 @@
 
                         <div class='form-group mt-5'>
                             <div class='col-12 d-flex justify-content-end align-items-center gap-2'>
-                                <input class='btn submitAdminBtn' type='submit' name='submit' value='{{ trans('langModify') }}'>
+                                <input class='btn submitAdminBtn' type='submit' name='submit' value='{{ trans('langSubmit') }}'>
                                 <a class='btn cancelAdminBtn' href='auth.php'>{{ trans('langCancel') }}</a>
                             </div>
                         </div>

@@ -28,7 +28,7 @@
                     allDaySlot: false,
                     displayEventTime: true,
                     events: "{{ $urlAppend }}modules/session/disabled_session_slots.php?course={{ $course_id }}&show_sessions=true&edit=true&session={{ $sessionID }}&from_coordinator={{ $tmp_coordinator }}&selectedConsultant="+consultant_choosen,
-                
+
                     eventRender: function( event, element, view ) {
                         var title = element.find( '.fc-title' );
                         title.html( title.text() );
@@ -147,7 +147,7 @@
                             return false;
                         }
                     }
- 
+
                 });
 
                 // $('#calendarAddSessionDate').removeClass('d-none');
@@ -187,7 +187,7 @@
                 $('#select_group_session').removeClass('d-block');
                 $('#select_group_session').addClass('d-none');
             });
-            
+
             $('#group_session').on('change',function(){
                 $('#select_users_group_session').select2();
                 $('#select_one_session').removeClass('d-block');
@@ -226,7 +226,7 @@
             @include('layouts.partials.left_menu')
 
             <div class="col_maincontent_active">
-                    
+
                 <div class="row">
 
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
@@ -241,10 +241,10 @@
                     </div>
 
                     @include('layouts.partials.legend_view')
-                    
+
                     {!! $action_bar !!}
 
-                    @include('layouts.partials.show_alert') 
+                    @include('layouts.partials.show_alert')
 
                     <div class='d-lg-flex gap-4 mt-4'>
                         <div class='flex-grow-1'>
@@ -342,7 +342,7 @@
                                             <p class='control-label-notes mb-2'>{{ trans('langStartEndSessionDateTime') }} <span class='asterisk Accent-200-cl'>(*)</span></p>
                                             <div class="input-group mb-3 rounded-2 border-0 gap-2">
                                                 <span class="input-group-text p-0 border-0 bg-transparent" id="start-end-datetime-session">
-                                                    <a type="button" class="btn submitAdminBtn d-inline-flex gap-1 rounded-2" 
+                                                    <a type="button" class="btn submitAdminBtn d-inline-flex gap-1 rounded-2"
                                                         data-bs-toggle="modal" data-bs-target="#staticDateTimeSession" id='openSessionCal' aria-label="{{ trans('langStartEndSessionDateTime') }}">
                                                         <i class='fa-solid fa-calendar'></i>
                                                     </a>
@@ -400,11 +400,11 @@
                                             </div>
                                         </div>
 
-                                        {!! generate_csrf_token_form_field() !!}    
+                                        {!! generate_csrf_token_form_field() !!}
 
                                         <div class='form-group mt-5'>
                                             <div class='col-12 d-flex justify-content-end aling-items-center'>
-                                                <input class='btn submitAdminBtn' type='submit' name='modify' value='{{ trans('langModify') }}'>
+                                                <input class='btn submitAdminBtn' type='submit' name='modify' value='{{ trans('langSubmit') }}'>
                                             </div>
                                         </div>
 
@@ -421,9 +421,6 @@
         </div>
     </div>
 </div>
-
-
-
 
 <!-- Show Calendar for adding session datetime -->
 <div class="modal fade" id="staticDateTimeSession" tabindex="-1" aria-labelledby="staticDateTimeSessionLabel" aria-hidden="true">
