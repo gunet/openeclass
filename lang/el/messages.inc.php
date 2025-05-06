@@ -4685,6 +4685,7 @@ $langGroupWorkIntro = "
 	από τον διδάσκοντα.";
 $langAssignmentPasswordModalTitle = "Παρακαλώ πληκτρολογήστε τον κωδικό της εργασίας";
 $langWillStartAt = 'έναρξη στις';
+$langWillStart = 'θα ξεκινήσει σε';
 $langGroupWorkSubmitted = "Έχει υποβληθεί";
 $langGroupWorkDeadline_of_Submission = "Προθεσμία";
 $langEmptyAsTitle = "Δεν συμπληρώσατε τον τίτλο της εργασίας";
