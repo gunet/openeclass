@@ -7,7 +7,7 @@
         <div class="row m-auto">
 
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
-                    
+
 
                     @include('layouts.partials.legend_view')
 
@@ -17,7 +17,7 @@
                         <div class='mt-4'></div>
                     @endif
 
-                    @include('layouts.partials.show_alert') 
+                    @include('layouts.partials.show_alert')
 
                     <div class='col-12'>
                         <form class='form-wrapper form-edit rounded' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
@@ -47,7 +47,7 @@
                                                     <input class='FormData_InputText form-control' type='text' name='form{{ $curField }}' size='80'  value='{{ $rules[$curField]['rule'] }}' disabled>
                                                     <input class='FormData_InputText form-control' type='text' name='form{{ $curField }}' size='80' value='{{ $rules[$curField]['description'] }}' disabled>
                                                 </td>
-                                                <td>  
+                                                <td>
                                                     <div class='col-sm-12 control-label-notes'>{{ trans('langActivate') }}:</div>
                                                     <br>
                                                     <div class='col-sm-12 radio'>
@@ -63,14 +63,14 @@
                                                 </td>
                                             </tr>
                                         @endforeach
-                                    @endforeach           
+                                    @endforeach
                                 </table>
                             </fieldset>
-                            <div class='col-12 d-flex justify-content-end'><input class='btn submitAdminBtn' type='submit' name='submit' value='{{ trans('langModify') }}'></div>
+                            <div class='col-12 d-flex justify-content-end'><input class='btn submitAdminBtn' type='submit' name='submit' value='{{ trans('langSubmit') }}'></div>
                             {!! generate_csrf_token_form_field() !!}
                         </form>
                     </div>
-                
+
         </div>
 </div>
 </div>
