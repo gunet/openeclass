@@ -115,20 +115,16 @@ function getUserCourseInfo($uid): string
 
                                     <div class='modal-content modal-content-opencourses px-lg-5 py-lg-5'>
                                         <div class='col-12 d-flex justify-content-between align-items-start modal-display'>
-                                            <div class='w-100'>
-                                                <div class='d-flex justify-content-between gap-2'>
-                                                    <div>
-                                                        <h2 class='mb-0'>". q($data->title) . "</h2>
-                                                    </div>
-                                                    <div class='d-flex align-items-baseline'>
-                                                        " . course_access_icon($data->visible) . "
-                                                        $license
-                                                    </div>
+                                            <div>
+                                                <div class='d-flex justify-content-start align-items-center gap-2 flex-wrap'>
+                                                    <h2 class='mb-0'>". q($data->title) . "</h2>
+                                                    " . course_access_icon($data->visible) . "
+                                                    $license
                                                 </div>
                                                 <div class='mt-2'>" . q($data->public_code) . "&nbsp; - &nbsp;" . q($data->professor) . "</div>
                                             </div>
-                                            <div class='d-flex'>
-                                                <button aria-label='$langClose' type='button' class='close mt-0'></button>
+                                            <div>
+                                                <button aria-label='$langClose' type='button' class='close'></button>
                                             </div>
 
                                         </div>
