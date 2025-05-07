@@ -927,7 +927,11 @@ function show_lp($title, $comments, $resource_id, $lp_id, $act_name): string
         <div$class_vis data-id='$resource_id'>
           <div class='unitIcon' width='1'>$imagelink</a></div>
           " . (!empty($act_name) ? "<div class='text-start'>$act_name</div>" : "") . "
-          <div class='text-start'><div class='module-name'>$langLearnPath</div> $link $res_prereq_icon <span class='pull-right d-flex justify-content-start align-items-center gap-3'>$lp_susp_button $lp_results_button $lp_results</span><br>$comment_box </div>" .
+          <div class='text-start'>
+            <div class='module-name'>$langLearnPath</div> 
+                 <span class='pull-right d-flex justify-content-start align-items-center gap-3'>$link $res_prereq_icon $lp_susp_button $lp_results_button $lp_results</span>
+                 <div class='content'>$comment_box</div> 
+            </div>" .
 
             actions('lp', $resource_id, $status) . "</div>";
 }
