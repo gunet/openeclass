@@ -117,8 +117,8 @@ function getUserCourseInfo($uid): string
                                         <div class='col-12 d-flex justify-content-between align-items-start modal-display'>
                                             <div>
                                                 <div class='d-flex justify-content-start align-items-center gap-2 flex-wrap'>
-                                                    <h2 class='mb-0'>". q($data->title) . "</h2>
-                                                    " . course_access_icon($data->visible) . "
+                                                    <h2 class='mb-0'>". q($data->title) . "
+                                                    " . course_access_icon($data->visible) . "</h2>
                                                     $license
                                                 </div>
                                                 <div class='mt-2'>" . q($data->public_code) . "&nbsp; - &nbsp;" . q($data->professor) . "</div>
