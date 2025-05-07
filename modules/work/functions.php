@@ -1094,7 +1094,12 @@ function display_submission_details($id) {
     }
     $assignment = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $sub->assignment_id);
 
-    if (!empty($sub->grade) or !empty($sub->grade_comment)) {
+    $notice = $langSubmitted;
+    $grade = $grade_comments = '';
+    if (!empty($sub->grade_comments)) {
+        $grade_comments = $sub->grade_comments;
+    }
+    if (!empty($sub->grade)) {
         $notice = $langSubmittedAndGraded;
         if ($assignment->grading_type == ASSIGNMENT_SCALING_GRADE) {
             $serialized_scale_data = Database::get()->querySingle("SELECT scales FROM grading_scale WHERE id = ?d AND course_id = ?d", $assignment->grading_scale_id, $course_id)->scales;
@@ -1108,10 +1113,6 @@ function display_submission_details($id) {
         } else {
             $grade = $sub->grade;
         }
-        $grade_comments = $sub->grade_comments;
-    } else {
-        $notice = $langSubmitted;
-        $grade = $grade_comments = '';
     }
 
     // Κατάσταση υποβολής εργασίας από ομάδες
