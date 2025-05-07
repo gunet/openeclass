@@ -66,7 +66,7 @@
                             <li class="list-group-item element d-flex justify-content-between align-items-center gap-5">
                                 <div class='d-flex justify-content-start align-items-start gap-3'>
                                     @if (isset($_SESSION['uid'])) {{-- logged in user --}}
-                                        <div class="d-flex justify-content-start align-items-center gap-3">
+                                        <div class="d-flex justify-content-center align-items-center gap-3" style="min-width: 30px;">
                                             @if (isset($myCourses[$mycourse->id]))
                                                 @if ($myCourses[$mycourse->id]->status != 1) {{-- display registered courses --}}
                                                     <label class='label-container' aria-label='{{ trans('langSelect') }}'>
@@ -77,7 +77,7 @@
                                                     <i class='fa-solid fa-user fa-lg mt-3'></i>
                                                 @endif
                                             @else {{-- display unregistered courses--}}
-                                                    <label class='label-container' aria-label='{{ trans('langSelect') }}'>
+                                                    <label class='label-container gap-0' aria-label='{{ trans('langSelect') }}'>
                                                         <input type='checkbox' name='selectCourse[]' value='{{ $mycourse->id }}'
                                                                @if ((($mycourse->visible == COURSE_REGISTRATION or $mycourse->visible == COURSE_OPEN)
                                                                         and setting_get(SETTING_FACULTY_USERS_REGISTRATION, $mycourse->id) == 1
