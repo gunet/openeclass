@@ -25,7 +25,7 @@
  * Defines standard functions and validates variables
  */
 
-define('ECLASS_VERSION', '4.1-dev');
+define('ECLASS_VERSION', '4.1');
 
 // mPDF library temporary file path and font path
 if (isset($webDir)) { // needed for avoiding 'notices' in some files
@@ -5749,7 +5749,7 @@ function theme_initialization() {
                 .split-content{
                     border-left: solid 1px $theme_options_styles[linkColorHeader];
                 }
-                
+
                 .user-menu-btn .header-login-text .fa-chevron-down::before {
                     color:$theme_options_styles[linkColorHeader];
                 }
