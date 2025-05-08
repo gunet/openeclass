@@ -184,6 +184,7 @@ $langIndexNumDocs = "Αριθμός Εγγράφων στο Ευρετήριο";
 $langIndexIsOptimized = "Είναι βελτιστοποιημένο;";
 $langOptimize = "Βελτιστοποίηση";
 $langReindex = "Αναδημιουργία ευρετηρίου";
+$langIndexDisabled = 'Η μηχανή ευρετηρίου είναι απενεργοποιημένη.';
 $langCronInfo = "Ενημερωτικά στοιχεία για τις προγραμματισμένες εργασίες";
 $langCronName = "Όνομα εργασίας";
 $langCronLastRun = "Τελευταία Εκτέλεση";

@@ -161,28 +161,39 @@
                         <div class='col'>
                             <div class='card panelCard border-card-left-default px-lg-4 py-lg-3 h-100'>
                                 <div class='card-body'>
-                                    <div class='row p-2 margin-bottom-thin'>
-                                        <div class='col-lg-6 col-12'>
-                                            <div class='form-label'>{{ trans('langIndexNumDocs') }}</div>
+                                    @if (get_config('enable_indexing'))
+                                        <div class='row p-2 margin-bottom-thin'>
+                                            <div class='col-lg-6 col-12'>
+                                                <div class='form-label'>{{ trans('langIndexNumDocs') }}</div>
+                                            </div>
+                                            <div class='col-lg-6 col-12'>
+                                                <div>{{ $numDocs }}</div>
+                                            </div>
                                         </div>
-                                        <div class='col-lg-6 col-12'>
-                                            <div>{{ $numDocs }}</div>
+                                        <div class='row p-2 margin-bottom-thin'>
+                                            <div class='col-lg-6 col-12'>
+                                                <div class='form-label'>{{ trans('langIndexIsOptimized') }}</div>
+                                            </div>
+                                            <div class='col-lg-6 col-12'>
+                                                <div>{{ $isOpt }}</div>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class='row p-2 margin-bottom-thin'>
-                                        <div class='col-lg-6 col-12'>
-                                            <div class='form-label'>{{ trans('langIndexIsOptimized') }}</div>
+                                        <div class='row p-2 margin-bottom-thin'>
+                                            <div class='d-flex justify-content-start align-items-center gap-3 flex-wrap'>
+                                                <a class='btn submitAdminBtn text-nowrap' href='../search/optpopup.php' onclick="return optpopup('../search/optpopup.php', 600, 500)">{{ trans('langOptimize') }}</a>
+                                                <a class='btn submitAdminBtn text-nowrap mt-lg-0 mt-3' id='reindex_link' href='../search/idxpopup.php?reindex'>{{ trans('langReindex') }}</a>
+                                            </div>
                                         </div>
-                                        <div class='col-lg-6 col-12'>
-                                            <div>{{ $isOpt }}</div>
+                                    @else
+                                        <div class='row p-2'>
+                                            <div class='col-lg-6 col-12'>
+                                                <div class='form-label'>{{ trans('langMetaIndex') }}</div>
+                                            </div>
+                                            <div class='col-lg-6 col-12'>
+                                                {{ trans('langIndexDisabled') }}
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class='row p-2 margin-bottom-thin'>
-                                        <div class='d-flex justify-content-start align-items-center gap-3 flex-wrap'>
-                                            <a class='btn submitAdminBtn text-nowrap' href='../search/optpopup.php' onclick="return optpopup('../search/optpopup.php', 600, 500)">{{ trans('langOptimize') }}</a>
-                                            <a class='btn submitAdminBtn text-nowrap mt-lg-0 mt-3' id='reindex_link' href='../search/idxpopup.php?reindex'>{{ trans('langReindex') }}</a>
-                                        </div>
-                                    </div>
+                                    @endif
                                 </div>
                             </div>
                             {!! $idxModal !!}

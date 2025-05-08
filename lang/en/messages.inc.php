@@ -172,6 +172,7 @@ $langIndexNumDocs = "Number of Documents Indexed";
 $langIndexIsOptimized = "Is optimized?";
 $langOptimize = "Optimize";
 $langReindex = "Rebuild index";
+$langIndexDisabled = 'The indexing engine is disabled.';
 $langCronInfo = "Information about scheduled tasks";
 $langCronName = "Job name";
 $langCronLastRun = "Last Run";
