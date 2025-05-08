@@ -34,7 +34,7 @@
                     <div class='col-12 mb-2'>
                         <div class='d-flex justify-content-start align-items-center gap-2 flex-wrap'>
                             @if (isset($course_code))
-                                <a href="{{$urlAppend}}courses/{{$course_code}}"><h2 class='mb-0'>{{ $currentCourseName }}</h2></a>
+                                <a href="{{$urlAppend}}courses/{{$course_code}}/"><h2 class='mb-0'>{{ $currentCourseName }}</h2></a>
                             @else
                                 <h2 class='mb-0'>{{ $currentCourseName }}</h2>
                             @endif
