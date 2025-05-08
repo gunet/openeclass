@@ -225,30 +225,29 @@ $data['lang_selection'] = [
     'en' => 'English (en)',
 ];
 $availableThemes = [
-    'Default',
+    'Neutral',
     'Crimson',
     'Emerald',
-    'Light Purple Pink',
+    'Light pink',
     'Dark',
-    'Dark Purple',
+    'Dark purple',
     'Wood',
-    'Neutral',
-    'Soft_light',
     'Collaboration',
     'Consulting',
-    'Elearning Brown',
-    'Elearning Brown (small image)',
-    'Elearning White Blue',
-    'Elearning White Blue (small image)',
-    'Elearning Dark White Blue',
-    'Elearning Dark White Blue (small image)',
-    'Education Light Blue',
-    'Education Light Blue (small image)',
-    'Education Light Yellow',
-    'Education Light Yellow (small image)',
+    'E-learning 1',
+    'E-learning 1 small',
+    'E-learning 2',
+    'E-learning 2 small',
+    'E-learning 3',
+    'E-learning 3 small',
+    'University 1',
+    'University 1 small',
+    'University 2',
+    'University 2 small',
     'Education',
-    'School Green White',
-    'School Red Blue'
+    'School_1',
+    'School_2',
+    'Default-demo'
 ];
 
 $data['user_registration_selection'] = selection(
@@ -413,10 +412,11 @@ if (isset($_POST['install1'])) { // step 1 requirements
     set_config('dont_display_open_courses', 1);
     set_config('dont_display_texts', 1);
     set_config('dont_display_login_link', 0);
+    set_config('user_notifications', 1);
     set_config('homepage_title_el', $langEclass);
     set_config('homepage_intro_el', $langEclassInfo);
     $selectedTheme = Database::get()->querySingle('SELECT id FROM theme_options WHERE name = ?s', $availableThemes[$_POST['theme_selection']]);
-    if($selectedTheme) {
+    if ($selectedTheme) {
         $selectedThemeId = $selectedTheme->id;
     } else {
         $selectedThemeId = 0;

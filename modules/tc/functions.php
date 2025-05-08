@@ -90,16 +90,16 @@ function select_tc_server($course_id) {
  */
 function tc_session_form($session_id = 0, $tc_type = 'bbb') {
 
-    global $course_id, $uid, $tool_content, $langAdd, $course_code,
+    global $course_id, $uid, $tool_content, $course_code,
         $langUnitDescr, $langStart, $langVisible, $langInvisible,
         $langNewBBBSessionStatus, $langBBBSessionAvailable, $langBBBMinutesBefore,
         $start_session, $BBBEndDate, $langAnnouncements, $langBBBAnnDisplay,
-        $langTitle, $langNo, $langYes,
+        $langTitle, $langNo, $langYes, $langSubmit,
         $langBBBNotifyUsers, $langBBBNotifyExternalUsers, $langBBBSessionMaxUsers,
         $langAllUsers, $langParticipants, $langBBBRecord,
         $langBBBSessionSuggestedUsers, $langBBBSessionSuggestedUsers2,
         $langBBBAlertTitle, $langBBBAlertMaxParticipants, $langJQCheckAll, $langJQUncheckAll,
-        $langNewBBBSessionEnd, $langBBBEndHelpBlock, $langModify, $langBBBExternalUsers,
+        $langNewBBBSessionEnd, $langBBBEndHelpBlock, $langBBBExternalUsers,
         $langReadMore, $langBBBmuteOnStart, $langBBBlockSettingsDisableCam,
         $langBBBlockSettingsDisableMic, $langBBBlockSettingsDisablePrivateChat,
         $langBBBlockSettingsDisablePublicChat, $langBBBlockSettingsDisableNote,
@@ -138,6 +138,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         $status = ($row->active == 1 ? 1 : 0);
         $record = ($row->record == "true" ? true : false);
         $running_at = $row->running_at;
+        $data_external_users = [];
         $unlock_interval = $row->unlock_interval;
         $r_group = explode(",",$row->participants);
         $start_date = DateTime::createFromFormat('Y-m-d H:i:s', $row->start_date);
@@ -183,7 +184,6 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
 
         $submit_name = 'update_tc_session';
         $submit_id = "<input type=hidden name = 'id' value=" . getIndirectReference($session_id) . ">";
-        $value_message = $langModify;
         $meeting_id_input = $row->meeting_id;
     } else { // new TC meeting
         $meeting_id_input = '';
@@ -206,7 +206,6 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         $submit_name = 'new_tc_session';
         $submit_id = '';
         $google_meet_link = $zoom_link = $webex_link = $microsoft_teams_link = '';
-        $value_message = $langAdd;
         $record = get_config('bbb_recording', 1);
         $checked_muteOnStart = get_config('bbb_muteOnStart', 0) ? 'checked' : '';
         $checked_lockSettingsDisableMic = get_config('bbb_DisableMic', 0) ? 'checked' : '';
@@ -260,7 +259,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
             $tool_content .= "<div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langGoToGoogleMeetLink</span></div>";
             $tool_content .= "<div class='form-group col-sm-12 d-flex justify-content-center'><a class='btn submitAdminBtn' href='https://meet.google.com/' target='_blank' aria-label='$langOpenNewTab'>$langGoToGoogleMeetLinkText</a></div>";
 
-            $tool_content .= "<div class='form-group'>
+            $tool_content .= "<div class='form-group mb-4'>
                 <label for='title_id' class='col-12 control-label-notes'>$langLink:</label>
                 <div class='col-12'>
                     <input id='title_id' class='form-control' type='text' name='google_meet_link' value='$google_meet_link' placeholder='$langLink Google Meet' size='50' $disabled>
@@ -272,7 +271,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
             $tool_content .= "<div class='alert alert-info'>$langGoToMicrosoftTeamsLink</div>";
             $tool_content .= "<div class='form-group col-sm-12 d-flex justify-content-center'><a class='btn submitAdminBtn' href='https://teams.live.com/' target='_blank' aria-label='$langOpenNewTab'>$langGoToMicrosoftTeamsLinkText</a></div>";
 
-            $tool_content .= "<div class='form-group mt-4'>
+            $tool_content .= "<div class='form-group mb-4'>
                             <label for='microsoft_teams_link_id' class='col-sm-12 control-label-notes'>$langLink:</label>
                             <div class='col-sm-12'>
                                 <input id='microsoft_teams_link_id' class='form-control' type='text' name='microsoft_teams_link' value='$microsoft_teams_link' placeholder='$langLink Microsoft Teams' size='50' $disabled>
@@ -304,7 +303,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
                     $tool_content .= "<div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langGoToZoomLink</span></div>";
                     $tool_content .= "<div class='form-group col-sm-12 d-flex justify-content-center'><a class='btn submitAdminBtn' href='$hostname' target='_blank' aria-label='$langOpenNewTab'>$langGoToZoomLinkText</a></div>";
                 }
-                $tool_content .= "<div class='form-group'>
+                $tool_content .= "<div class='form-group mb-4'>
                     <label for='zoom_link_id' class='col-12 control-label-notes'>$langLink:</label>
                     <div class='col-12'>
                         <input id='zoom_link_id' class='form-control' type='text' name='zoom_link' value='$zoom_link' placeholder='Zoom $langLink' size='50' $disabled>
@@ -318,7 +317,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
                 $tool_content .= "<div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langGoToWebexLink</span></div>";
                 $tool_content .= "<div class='form-group col-sm-12 d-flex justify-content-center'><a class='btn submitAdminBtn' href='$hostname' target='_blank' aria-label='$langOpenNewTab'>$langGoToWebexLinkText</a></div>";
             }
-            $tool_content .= "<div class='form-group'>
+            $tool_content .= "<div class='form-group mb-4'>
                 <label for='webex_link_id' class='col-sm-12 control-label-notes'>$langLink:</label>
                 <div class='col-12'>
                     <input id='webex_link_id' class='form-control' type='text' name='webex_link' value='$webex_link' placeholder='Webex $langLink' size='50' $disabled>
@@ -326,7 +325,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
             </div>";
         }
 
-        $tool_content .= "<div class='form-group mt-4'>
+        $tool_content .= "<div class='form-group'>
             <label for='title' class='col-12 control-label-notes'>$langTitle: <span class='asterisk Accent-200-cl'>(*)</span></label>
             <div class='col-12'>
                 <input class='form-control' type='text' name='title' id='title' value='$value_title' placeholder='$langTitle' size='50'>
@@ -655,7 +654,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         $submit_id
         <div class='form-group mt-5'>
             <div class='col-sm-10 col-sm-offset-2'>
-                <input class='btn btn-primary' type='submit' name='$submit_name' value='$value_message'>
+                <input class='btn btn-primary' type='submit' name='$submit_name' value='$langSubmit'>
             </div>
         </div>
         </fieldset>
@@ -1294,8 +1293,8 @@ function tc_session_details() {
         $langParticipants,$langConfirmDelete, $langHasExpiredS,
         $langNote, $langBBBNoteEnableJoin, $langTitle,
         $langActivate, $langDeactivate, $langEditChange, $langDelete, $langParticipate,
-        $langNoBBBSesssions, $langDaysLeft, $langBBBNotServerAvailableStudent,
-        $langBBBNotServerAvailableTeacher,
+        $langNoBBBSesssions, $langBBBNotServerAvailableStudent,
+        $langBBBNotServerAvailableTeacher, $langWillStart,
         $langBBBImportRecordings, $langAllUsers, $langDuration, $langBBBNoServerForRecording,
         $langFrom, $langTill, $langBBBHideParticipants, $langSettingSelect, $langOpenNewTab;
 
@@ -1367,7 +1366,7 @@ function tc_session_details() {
             $starttimeLabel = '';
             if (date_diff_in_minutes($start_date, date('Y-m-d H:i:s')) > 0) {
                 $starttimeLeft = date_diff_in_minutes($start_date, date('Y-m-d H:i:s'));
-                $starttimeLabel .= "<br><span><small class='label label-warning'>$langDaysLeft " .
+                $starttimeLabel .= "<br><span><small class='label label-warning'>$langWillStart " .
                     format_time_duration($starttimeLeft * 60) .
                     "</small></span>";
             }
@@ -1380,7 +1379,7 @@ function tc_session_details() {
                 $timeLabel = '&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;';
             }
             if ($timeLeft > 0 and date_diff_in_minutes($start_date, date('Y-m-d H:i:s')) < 0) {
-                $timeLabel .= "<br><span><small class='label label-warning'>$langDaysLeft " .
+                $timeLabel .= "<br><span><small class='label label-warning'>$langWillStart " .
                     format_time_duration($timeLeft * 60) .
                     "</small></span>";
             } elseif (isset($end_date) and ($timeLeft < 0)) {
@@ -1958,16 +1957,17 @@ function get_active_rooms_details($salt, $bbb_url)
  * @brief display video recordings in multimedia
  * @param type $course_id
  * @param type $id
+ * @param type $course_code
  * @return boolean
  */
-function publish_video_recordings($course_id, $id)
+function publish_video_recordings($course_id, $id, $course_code)
 {
     global $langBBBImportRecordingsOK, $langBBBImportRecordingsNo, $langBBBImportRecordingsNoNew, $tool_content;
 
     $sessions = Database::get()->queryArray("SELECT tc_session.id, tc_session.course_id AS course_id,"
             . "tc_session.title, tc_session.description, tc_session.start_date,"
             . "tc_session.meeting_id, course.prof_names FROM tc_session "
-            . "LEFT JOIN course ON tc_session.course_id=course.id WHERE course.code=?s AND tc_session.id=?d", $course_id, $id);
+            . "LEFT JOIN course ON tc_session.course_id=course.id WHERE course.code=?s AND tc_session.id=?d", $course_code, $id);
 
     $servers = Database::get()->queryArray("SELECT * FROM tc_servers WHERE enabled='true' AND `type` = 'bbb'");
 
@@ -2495,4 +2495,46 @@ function get_tc_participants($meeting_id) {
                     WHERE meeting_id = ?s", $meeting_id)->sessionUsers;
 
     return $result;
+}
+
+
+function get_tc_link($tc_id) {
+
+    global $is_editor, $urlServer, $course_code;
+
+    $tc_link = '';
+    $tc_session_data = Database::get()->querySingle("SELECT * FROM tc_session WHERE id = ?d", $tc_id);
+    $tc_server_data = Database::get()->querySingle("SELECT * FROM tc_servers WHERE id = ?d", $tc_session_data->running_at);
+    $tc_type = $tc_server_data->type;
+
+    switch ($tc_type) {
+        case 'webex':
+        case 'googlemeet':
+        case 'microsoftteams':
+            $tc_link = $tc_session_data->meeting_id;
+            break;
+        case 'jitsi':
+            $tc_link = $tc_server_data->hostname . $tc_session_data->meeting_id;
+            break;
+        case 'zoom':
+            if (!empty($tc_server_data->webapp) && $tc_server_data->webapp == 'api') {
+                if ($is_editor) {
+                    $tc_link = unserialize($tc_session_data->options);
+                } else {
+                    $tc_link = rtrim($tc_server_data->hostname, '/') . '/j/'. $tc_session_data->meeting_id . '?pwd=' . $tc_session_data->mod_pw;
+                }
+            } else {
+                $tc_link = $tc_session_data->meeting_id;
+            }
+            break;
+        case 'bbb':
+            if ($is_editor) {
+                $tc_link = $urlServer . "modules/tc/index.php?course=$course_code&choice=do_join&meeting_id=$tc_session_data->meeting_id&title$tc_session_data->title&att_pw=$tc_session_data->att_pw&mod_pw=$tc_session_data->mod_pw";
+            } else {
+                $tc_link = $urlServer . "modules/tc/index.php?course=$course_code&choice=do_join&meeting_id=$tc_session_data->meeting_id&title$tc_session_data->title&att_pw=$tc_session_data->att_pw";
+            }
+            break;
+    }
+
+    return $tc_link;
 }

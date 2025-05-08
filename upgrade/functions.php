@@ -3177,6 +3177,165 @@ function upgrade_to_4_0($tbl_options): void {
     set_config('homepage_intro_el', $langEclassInfo);
 }
 
+/**
+ * @brief upgrade queries to 4.1
+ * @param $tbl_options
+ * @return void
+ */
+function upgrade_to_4_1($tbl_options) : void {
+
+    Database::get()->querySingle("ALTER TABLE `api_token`
+              MODIFY `ip` TEXT CHARACTER SET ascii COLLATE ascii_bin NOT NULL");
+    if (!DBHelper::fieldExists('api_token', 'read_only')) {
+        Database::get()->query('ALTER TABLE `api_token` ADD `read_only` BOOLEAN NOT NULL DEFAULT 0');
+    }
+    if (!DBHelper::fieldExists('api_token', 'all_courses')) {
+        Database::get()->query('ALTER TABLE `api_token` ADD `all_courses` BOOLEAN NOT NULL DEFAULT 1');
+    }
+    if (!DBHelper::tableExists('api_token_course')) {
+        Database::get()->query("CREATE TABLE `api_token_course` (
+              `id` int(11) NOT NULL AUTO_INCREMENT,
+              `course_id` int(11) NOT NULL,
+              `token_id` smallint(11) NOT NULL,
+              PRIMARY KEY (`id`),
+              FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE,
+              FOREIGN KEY (`token_id`) REFERENCES `api_token` (`id`) ON DELETE CASCADE) $tbl_options");
+    }
+
+    Database::get()->query("ALTER TABLE announcement CHANGE content content MEDIUMTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
+
+    if (DBHelper::fieldExists('monthly_summary', 'details')) {
+        Database::get()->query("ALTER TABLE monthly_summary DROP COLUMN details");
+    }
+    if (!DBHelper::fieldExists('monthly_summary', 'dep_id')) {
+        Database::get()->query("ALTER TABLE monthly_summary ADD dep_id INT DEFAULT 0 AFTER id");
+    }
+    if (!DBHelper::fieldExists('monthly_summary', 'inactive_courses')) {
+        Database::get()->query("ALTER TABLE monthly_summary ADD inactive_courses INT DEFAULT 0");
+    }
+    if (!DBHelper::fieldExists('monthly_summary', 'documents')) {
+        Database::get()->query("ALTER TABLE monthly_summary ADD documents INT DEFAULT 0");
+    }
+    if (!DBHelper::fieldExists('monthly_summary', 'exercises')) {
+        Database::get()->query("ALTER TABLE monthly_summary ADD exercises INT DEFAULT 0");
+    }
+    if (!DBHelper::fieldExists('monthly_summary', 'messages')) {
+        Database::get()->query("ALTER TABLE monthly_summary ADD messages INT DEFAULT 0");
+    }
+    if (!DBHelper::fieldExists('monthly_summary', 'announcements')) {
+        Database::get()->query("ALTER TABLE monthly_summary ADD announcements INT DEFAULT 0");
+    }
+    if (!DBHelper::fieldExists('monthly_summary', 'assignments')) {
+        Database::get()->query("ALTER TABLE monthly_summary ADD assignments INT DEFAULT 0");
+    }
+    if (!DBHelper::fieldExists('monthly_summary', 'forum_posts')) {
+        Database::get()->query("ALTER TABLE monthly_summary ADD forum_posts INT DEFAULT 0");
+    }
+    if (DBHelper::fieldExists('monthly_summary', 'profesNum')) {
+        Database::get()->query("ALTER TABLE monthly_summary CHANGE profesNum teachers INT DEFAULT 0");
+    }
+    if (DBHelper::fieldExists('monthly_summary', 'studNum')) {
+        Database::get()->query("ALTER TABLE monthly_summary CHANGE studNum students  INT DEFAULT 0");
+    }
+    if (DBHelper::fieldExists('monthly_summary', 'visitorsNum')) {
+        Database::get()->query("ALTER TABLE monthly_summary CHANGE visitorsNum guests INT DEFAULT 0");
+    }
+    if (DBHelper::fieldExists('monthly_summary', 'coursNum')) {
+        Database::get()->query("ALTER TABLE monthly_summary CHANGE coursNum courses INT DEFAULT 0");
+    }
+    if (!DBHelper::fieldExists('course_units', 'assign_to_specific')) {
+        Database::get()->query("ALTER TABLE course_units ADD assign_to_specific TINYINT NOT NULL DEFAULT 0 AFTER `order`");
+    }
+
+    if (!DBHelper::tableExists('course_units_to_specific')) {
+        Database::get()->query("CREATE TABLE course_units_to_specific (
+                id INT auto_increment NOT NULL,
+                unit_id INT NOT NULL,
+                user_id INT NULL,
+                group_id INT NULL,
+              PRIMARY KEY (`id`),
+              KEY `unit_id` (`unit_id`)) $tbl_options");
+    }
+
+    // About table type question in a poll
+    if (!DBHelper::fieldExists('poll_question', 'description')) {
+        Database::get()->query("ALTER TABLE poll_question ADD `description` TEXT DEFAULT NULL");
+    }
+
+    if (!DBHelper::fieldExists('poll_question', 'answer_scale')) {
+        Database::get()->query("ALTER TABLE poll_question ADD `answer_scale` TEXT DEFAULT NULL");
+    }
+
+    if (!DBHelper::fieldExists('poll_question', 'q_row')) {
+        Database::get()->query("ALTER TABLE poll_question ADD `q_row` int(11) NOT NULL DEFAULT 0");
+    }
+
+    if (!DBHelper::fieldExists('poll_question', 'q_column')) {
+        Database::get()->query("ALTER TABLE poll_question ADD `q_column` int(11) NOT NULL DEFAULT 0");
+    }
+
+    if (!DBHelper::fieldExists('poll_question_answer', 'sub_question')) {
+        Database::get()->query("ALTER TABLE poll_question_answer ADD `sub_question` int(11) NOT NULL DEFAULT 0");
+    }
+
+    if (!DBHelper::fieldExists('poll_answer_record', 'sub_qid')) {
+        Database::get()->query("ALTER TABLE poll_answer_record ADD `sub_qid` int(11) NOT NULL DEFAULT 0");
+    }
+
+    if (!DBHelper::fieldExists('poll_answer_record', 'sub_qid_row')) {
+        Database::get()->query("ALTER TABLE poll_answer_record ADD `sub_qid_row` int(11) NOT NULL DEFAULT 0");
+    }
+
+    if (!DBHelper::fieldExists('poll', 'pagination')) {
+        Database::get()->query("ALTER TABLE poll ADD `pagination` int(11) NOT NULL DEFAULT 0");
+    }
+
+    if (!DBHelper::fieldExists('poll', 'require_answer')) {
+        Database::get()->query("ALTER TABLE poll ADD `require_answer` int(11) NOT NULL DEFAULT 0");
+    }
+
+    // delete stale guest users (if any)
+    $guest_users = Database::get()->queryArray("SELECT id FROM user LEFT JOIN course_user 
+                    ON user.id = course_user.user_id 
+                    WHERE user.status= " . USER_GUEST . " 
+                    AND course_user.user_id IS NULL");
+    foreach ($guest_users as $guest) {
+        Database::get()->query("DELETE FROM user WHERE id = ?d", $guest->id);
+    }
+    // lti apps
+    if (!DBHelper::fieldExists('lti_apps', 'lti_version')) {
+        Database::get()->query("ALTER TABLE lti_apps ADD lti_version VARCHAR(255) NOT NULL DEFAULT '1.1' AFTER `description`");
+    }
+    if (!DBHelper::fieldExists('lti_apps', 'lti_provider_public_keyset_url')) {
+        Database::get()->query("ALTER TABLE lti_apps ADD lti_provider_public_keyset_url VARCHAR(255) DEFAULT NULL AFTER `lti_provider_secret`");
+    }
+    if (!DBHelper::fieldExists('lti_apps', 'lti_provider_initiate_login_url')) {
+        Database::get()->query("ALTER TABLE lti_apps ADD lti_provider_initiate_login_url VARCHAR(255) DEFAULT NULL AFTER `lti_provider_public_keyset_url`");
+    }
+    if (!DBHelper::fieldExists('lti_apps', 'lti_provider_redirection_uri')) {
+        Database::get()->query("ALTER TABLE lti_apps ADD lti_provider_redirection_uri VARCHAR(255) DEFAULT NULL AFTER `lti_provider_initiate_login_url`");
+    }
+    if (!DBHelper::fieldExists('lti_apps', 'client_id')) {
+        Database::get()->query("ALTER TABLE lti_apps ADD client_id VARCHAR(255) DEFAULT NULL AFTER `lti_provider_redirection_uri`");
+    }
+    if (!DBHelper::tableExists('lti_access_tokens')) {
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `lti_access_tokens` (
+              `id` int(11) NOT NULL AUTO_INCREMENT,
+              `lti_app` int(11) NOT NULL,
+              `scope` TEXT,
+              `token` VARCHAR(128) NOT NULL,
+              `valid_until` int(11) NOT NULL,
+              `time_created` int(11) NOT NULL,
+              `last_access` int(11),
+              PRIMARY KEY (`id`),
+              FOREIGN KEY (`lti_app`) REFERENCES `lti_apps` (`id`)) $tbl_options");
+    }
+    if (!DBHelper::fieldExists('assignment', 'tii_instructorcustomparameters')) {
+        Database::get()->query("ALTER TABLE assignment ADD tii_instructorcustomparameters TEXT AFTER `tii_exclude_value`");
+    }
+    // user notifications setting
+    set_config('user_notifications', 1);
+}
 
 /**
  * @brief Create Indexes

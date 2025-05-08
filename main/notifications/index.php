@@ -43,7 +43,7 @@ elseif(isset($_GET['m'])){
 }
 
 if(!is_null($res)){
-        echo json_encode($res);
+    echo json_encode($res);
 } else {
     echo "$x: No data";
 }

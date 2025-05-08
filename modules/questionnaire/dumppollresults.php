@@ -74,11 +74,38 @@ if ($full) { // user questions results
                                                 WHERE pid = ?d
                                                 AND email_verification = 1",
                                         $pid, $pid);
+
+    $q_counter = 0;
+    foreach ($questions as $q) {
+        if ($q->qtype == QTYPE_TABLE) {
+            $sub_questions = Database::get()->queryArray("SELECT answer_text,sub_question FROM poll_question_answer WHERE pqid = ?d", $q->pqid);
+            if (count($sub_questions) > 0) {
+                foreach ($sub_questions as $sq) {
+                    $questions[] = (object) array("pqid" => $q->pqid, 
+                                                  "pid" => $q->pid, 
+                                                  "question_text" => $sq->answer_text, 
+                                                  "qtype" => $q->qtype, 
+                                                  "q_position" => $q->q_position, 
+                                                  "q_scale" => $q->q_scale, 
+                                                  "description" => $q->description, 
+                                                  "answer_scale" => $q->answer_scale,
+                                                  "q_row" => $q->q_row,
+                                                  "q_column" => $q->q_column,
+                                                  "sub_question" => $sq->sub_question);
+                }
+            }
+            unset($questions[$q_counter]);
+        }
+        $q_counter++;
+    }
+
+    $headingQ = [];
     foreach ($questions as $q) {
         if ($q->qtype == QTYPE_LABEL) {
             $q->question_text = strip_tags($q->question_text);
         }
         $heading[] = $q->question_text;
+        $headingQ[] = (isset($q->sub_question)) ? $q->pqid . '_' . $q->sub_question : $q->pqid;
         if ($q->qtype == QTYPE_LABEL) {
             foreach ($users as $user) {
                 $qlist[$user->user_identifier][$q->pqid] = '-';
@@ -103,6 +130,28 @@ if ($full) { // user questions results
                     $submit_date[$user_identifier] = format_locale_date(strtotime($a->submit_date), 'short');
                 }
             }
+        } elseif ($q->qtype == QTYPE_TABLE) {
+            $answers = Database::get()->queryArray("SELECT a.answer_text, a.sub_qid,  b.uid, b.email, a.submit_date
+                                                    FROM poll_answer_record a, poll_user_record b
+                                                    WHERE a.qid = ?d
+                                                    AND a.sub_qid = ?d
+                                                    AND a.poll_user_record_id = b.id
+                                                    AND (b.email_verification = 1 OR b.email_verification IS NULL)
+                                                    ORDER BY uid", $q->pqid, $q->sub_question);
+
+            foreach ($answers as $a) {
+                $answer_text = $a->answer_text;
+                $user_identifier = $a->uid ?: $a->email;
+                $subQuestion = $q->pqid . '_' .$a->sub_qid;
+                if (isset($qlist[$user_identifier][$subQuestion])) {
+                    $qlist[$user_identifier][$subQuestion] .= ', ' . $answer_text;
+                } else {
+                    $qlist[$user_identifier][$subQuestion] = $answer_text;
+                }
+                if (!isset($submit_date[$user_identifier])) {
+                    $submit_date[$user_identifier] = format_locale_date(strtotime($a->submit_date), 'short');
+                }
+            }
         } else { // free text questions
             $answers = Database::get()->queryArray("SELECT a.answer_text, b.uid, b.email, a.submit_date
                                 FROM poll_answer_record a, poll_user_record b
@@ -122,6 +171,15 @@ if ($full) { // user questions results
     $k = 0;
     $data[] = $heading;
     foreach ($qlist as $user_identifier => $answers) {
+        $answers_keys = array_keys($answers);
+        $result = array_diff($headingQ,$answers_keys);
+        if (count($result) > 0) {
+            foreach ($result as $key => $a) {
+                $value = array($a => '');
+                $answers = array_merge(array_slice($answers, 0, $key), $value, array_slice($answers, $key));
+            }
+        }
+
         $k++;
         if ($anonymized) {
             $user_info = [ "$langStudent $k"];

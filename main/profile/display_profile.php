@@ -34,14 +34,45 @@ $data['user'] = new User();
 $toolName = $langPortfolio;
 $pageName = $langMyProfile;
 
+$is_simple_user = false;
 if (isset($_GET['id']) and isset($_GET['token'])) {
     $data['id'] = $id = intval($_GET['id']);
     if (!token_validate($data['id'], $_GET['token'], 3600)) {
         forbidden($_SERVER['REQUEST_URI']);
     }
     $toolName = $langUserProfile;
+    $qstatus = Database::get()->querySingle("SELECT status FROM user WHERE id = ?d", $uid)->status;
+    if ($qstatus == USER_STUDENT) {
+            $is_simple_user = true;
+    }
 } else {
     $data['id'] = $id = $uid;
+}
+$data['is_simple_user'] = $is_simple_user;
+
+//Display tutor's available tutor.
+if (isset($_GET['view']) and isset($_GET['show_tutor'])) {
+    $tutor_id = intval($_GET['show_tutor']);
+    $start = date('Y-m-d H:i:s', strtotime($_GET['start']));
+    $end = date('Y-m-d H:i:s', strtotime($_GET['end']));
+    $eventArr = array();
+    $result_events = Database::get()->queryArray("SELECT * FROM date_availability_user
+                                                    WHERE start BETWEEN (?t) AND (?t)
+                                                    AND user_id = ?d", $start, $end, $tutor_id);
+
+    if($result_events){
+        foreach($result_events as $row){
+            $eventArr[] = [
+                'id' => $row->id,
+                'start' => $row->start,
+                'end' => $row->end,
+                'user_id' => $row->user_id
+            ];
+        }
+    }
+    header('Content-Type: application/json');
+    echo json_encode($eventArr);
+    exit();
 }
 
 $data['action_bar_blog_portfolio'] = $data['action_bar'] = $data['action_bar_unreg'] = '';
@@ -61,6 +92,7 @@ if ($data['userdata']->status == USER_TEACHER) {
 } else {
     $myBooks = '&myBooks=true';
 }
+$data['is_user_teacher'] = $is_user_teacher;
 
 $q = Database::get()->querySingle('SELECT privilege FROM admin WHERE user_id = ?d', $data['id']);
 if ($q) {
@@ -114,12 +146,6 @@ if ($data['userdata']) {
                       'button-class' => 'submitAdminBtn',
                       'level' => 'primary-label',
                       'show' => ($is_user_teacher && get_config('individual_group_bookings'))),
-                array('title' => $langDisplayAvailableUsersForBooking,
-                      'url' => "add_available_dates.php?user_id=$uid&do_booking=1&show_all_users=1",
-                      'icon' => 'fa-solid fa-users',
-                      'button-class' => 'submitAdminBtn',
-                      'level' => 'primary-label',
-                      'show' => (!$is_user_teacher && get_config('individual_group_bookings'))),
                 array('title' => $langMYBookings,
                       'url' => "available_booking.php?user_id=$uid$myBooks",
                       'icon' => 'fa-solid fa-book',

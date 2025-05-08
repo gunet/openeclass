@@ -33,6 +33,7 @@ require_once 'include/lib/course.class.php';
 require_once 'include/lib/user.class.php';
 require_once 'include/lib/hierarchy.class.php';
 require_once 'include/lib/fileUploadLib.inc.php';
+require_once 'include/course_settings.php';
 require_once 'functions.php';
 
 $tree = new Hierarchy();
@@ -113,7 +114,7 @@ if (!isset($_POST['create_course'])) {
                     <div class='col'>
                         <div class='card panelCard card-default h-100'>
                             <img style='height:200px;' class='card-img-top' src='{$urlAppend}template/modern/images/courses_images/$image' alt='image course'/>
-                            <div class='card-body'>                                
+                            <div class='card-body'>
                                 <input id='$image' type='button' class='btn submitAdminBtnDefault w-100 chooseCourseImage mt-3' value='$langSelect'>
                             </div>
                         </div>
@@ -122,6 +123,7 @@ if (!isset($_POST['create_course'])) {
             }
         }
         $data['image_content'] = $image_content;
+        $data['default_access'] = intval(get_config('default_course_access', COURSE_REGISTRATION));
         view('modules.create_course.index', $data);
 
 } else if ($_POST['view_type'] == "flippedclassroom") {
@@ -148,6 +150,7 @@ if (!isset($_POST['create_course'])) {
     redirect_to_home_page('modules/create_course/flipped_classroom.php');
 
 } else  { // create the course and the course database
+
     // validation in case it skipped JS validation
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $v = new Valitron\Validator($_POST);
@@ -287,7 +290,8 @@ if (!isset($_POST['create_course'])) {
                         glossary_index = 1,
                         is_collaborative = ?d,
                         description = ?s,
-                        course_image = ?s",
+                        course_image = ?s,
+                        view_units = 1",
             $code, $language, $title, $_POST['formvisible'],
             $course_license, $_POST['prof_names'], $public_code, $doc_quota * 1024 * 1024,
             $video_quota * 1024 * 1024, $group_quota * 1024 * 1024,
@@ -318,6 +322,11 @@ if (!isset($_POST['create_course'])) {
         Database::get()->query("INSERT INTO forum_category
                             SET cat_title = ?s,
                             course_id = ?d", $langForumDefaultCat, $new_course_id);
+
+        // set course option faculty_users_registration (if checked)
+        if (isset($_POST['faculty_users_registration'])) {
+            setting_set(SETTING_FACULTY_USERS_REGISTRATION, 1, $new_course_id);
+        }
 
         $_SESSION['courses'][$code] = USER_TEACHER;
 

@@ -23,12 +23,21 @@
  * @brief main script for the questionnaire tool
  */
 
+use BaconQrCode\Renderer\ImageRenderer;
+use BaconQrCode\Renderer\Image\SvgImageBackEnd;
+use BaconQrCode\Renderer\RendererStyle\RendererStyle;
+use BaconQrCode\Writer;
+
 $require_current_course = TRUE;
 $require_user_registration = true;
 $require_help = TRUE;
 $helpTopic = 'questionnaire';
 require_once '../../include/baseTheme.php';
 require_once 'modules/group/group_functions.php';
+require_once 'include/lib/forcedownload.php';
+require_once 'include/lib/fileDisplayLib.inc.php';
+require_once 'include/lib/fileManageLib.inc.php';
+require_once 'include/lib/fileUploadLib.inc.php';
 /* * ** The following is added for statistics purposes ** */
 require_once 'include/action.php';
 $action = new action();
@@ -93,7 +102,7 @@ $head_content .= "<script type='text/javascript'>
                     success: function(data) {
                         var dialog = bootbox.dialog({
                             message: data,
-                            title : '$m[WorkAssignTo]',
+                            title : '$langWorkAssignTo',
                             onEscape: true,
                             backdrop: true,
                             buttons: {
@@ -121,6 +130,124 @@ if (isset($_GET['verification_code'])) {
     redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
 }
 if ($is_editor) {
+
+    if (isset($_GET['download_qrcode'])) {
+        $pID = intval($_GET['download_qrcode']);
+        $fileNamePoll = $pID . '_QRcode.svg';
+        $dload_filename = "$webDir/courses/$course_code/pollQrCode/$pID/$fileNamePoll";
+        //send_file_to_client($dload_filename, $fileNamePoll, null, true, false);
+
+        $filePath = $dload_filename; // Update this with the actual path to your SVG file
+        // Check if the file exists
+        if (file_exists($filePath)) {
+            // Set the appropriate headers to trigger a download
+            header('Content-Description: File Transfer');
+            header('Content-Type: image/svg+xml');
+            header('Content-Disposition: attachment; filename="' . basename($filePath) . '"');
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate');
+            header('Pragma: public');
+            header('Content-Length: ' . filesize($filePath));
+
+            // Clear output buffer
+            ob_clean();
+            flush();
+
+            // Read the file and send it to the output buffer
+            readfile($filePath);
+            exit;
+        } else {
+            // Handle the error if the file does not exist
+            echo "File not found.";
+        }
+    }
+
+    // QR code generation for specific poll
+    if (isset($_GET['gen_qrcode'])) {
+
+        $pollID = intval($_GET['pollId']);
+        $fileNamePoll = $pollID . '_QRcode.svg';
+
+        // Initialize URL and parameters
+        $string = $urlServer . "/modules/questionnaire/pollparticipate.php?course=" . $course_code . "&UseCase=1&pid=" . $pollID;
+
+        // Create QR Code
+        $renderer = new ImageRenderer(new RendererStyle(256), new SvgImageBackEnd());
+        $writer = new Writer($renderer);
+
+        // Generate the QR image
+        $qr_image = $writer->writeString($string);
+
+        // Base64 encode the SVG string
+        $qr_image_base64 = base64_encode($qr_image);
+
+        // Prepare the data URL for the SVG
+        $qr_image_data_url = "data:image/svg+xml;base64," . $qr_image_base64;
+
+        // Specify the path where you want to save the image
+        $qrCode_dir = "$webDir/courses/$course_code/pollQrCode/$pollID";
+        if (!file_exists($qrCode_dir)) {
+            mkdir("$webDir/courses/$course_code/pollQrCode/$pollID", 0755, true);
+        }
+        if (file_exists($qrCode_dir . '/' . $fileNamePoll)) {
+            unlink($qrCode_dir . '/' . $fileNamePoll);
+        }
+        file_put_contents($qrCode_dir . '/' . $fileNamePoll, $qr_image);
+
+        $downloadURL = $_SERVER['SCRIPT_NAME'] . "?course=$course_code&download_qrcode=$pollID";
+
+        // Prepare JavaScript content for modal
+        $head_content .= "
+            <script type='text/javascript'>
+                $(document).ready(function() {
+                    var downloadURL = '$downloadURL';
+                    var bts = {
+                        download: {
+                            label: '" . js_escape($langDownload) . "',
+                            className: 'submitAdminBtn gap-1',
+                            callback: function (d) {
+                                var anchor = document.createElement('a');
+                                anchor.href = downloadURL;
+                                anchor.target = '_blank';
+                                anchor.download = '$fileNamePoll';
+                                anchor.click();
+                            }
+                        }
+                    };
+    
+                    if (screenfull.enabled) {
+                        bts.fullscreen = {
+                            label: '" . js_escape($langFullScreen) . "',
+                            className: 'submitAdminBtn gap-1',
+                            callback: function() {
+                                screenfull.request(document.getElementById('fileFrame'));
+                                return false;
+                            }
+                        };
+                    }
+                    bts.cancel = {
+                        label: '" . js_escape($langCancel) . "',
+                        className: 'cancelAdminBtn'
+                    };
+    
+                    bootbox.dialog({
+                        size: 'large',
+                        title: '" . js_escape($langGenQrCode) . "',
+                        onEscape: function() {},
+                        backdrop: true,
+                        message: '<div class=\"row\">' +
+                                    '<div class=\"col-sm-12\">' +
+                                        '<div class=\"iframe-container\" style=\"height:300px;\">' +
+                                            '<iframe title=\"{$langGenQrCode}\" id=\"fileFrame\" src=\"{$qr_image_data_url}\" style=\"width:260px; height:260px; margin:auto; display:block;\"></iframe>' +
+                                        '</div>' +
+                                    '</div>' +
+                                 '</div>',
+                        buttons: bts
+                    });
+                });
+            </script>
+        ";
+    }
 
     // info about polls assigned to users and groups
     if (isset($_GET['poll_info_assigned_to'])) {
@@ -266,15 +393,26 @@ if ($is_editor) {
                                             WHERE poll_id = ?d", $new_pid, $pid)->lastInsertID;
                 }
                 foreach ($questions as $question) {
+                    $q_description = !empty($question->description) ? $question->description : '';
+                    $answer_scales = !empty($question->answer_scale) ? $question->answer_scale : '';
+                    $q_row = $question->q_row;
+                    $q_column = $question->q_column;
                     $new_pqid = Database::get()->query("INSERT INTO poll_question
                                                SET pid = ?d,
                                                    question_text = ?s,
-                                                   qtype = ?d, q_position = ?d, q_scale = ?d", $new_pid, $question->question_text, $question->qtype, $question->q_position, $question->q_scale)->lastInsertID;
+                                                   qtype = ?d, 
+                                                   q_position = ?d, 
+                                                   q_scale = ?d,
+                                                   `description` = ?s,
+                                                   answer_scale = ?s,
+                                                   q_row = ?d,
+                                                   q_column = ?d", $new_pid, $question->question_text, $question->qtype, $question->q_position, $question->q_scale, $q_description, $answer_scales, $q_row, $q_column)->lastInsertID;
                     $answers = Database::get()->queryArray("SELECT * FROM poll_question_answer WHERE pqid = ?d ORDER BY pqaid", $question->pqid);
                     foreach ($answers as $answer) {
                         Database::get()->query("INSERT INTO poll_question_answer
                                                 SET pqid = ?d,
-                                                    answer_text = ?s", $new_pqid, $answer->answer_text);
+                                                    answer_text = ?s,
+                                                    sub_question = ?d", $new_pqid, $answer->answer_text, $answer->sub_question);
                     }
                 }
                 $message = $langCopySuccess;
@@ -317,10 +455,11 @@ function printPolls() {
         $langEditChange, $langDelete, $langSurveyNotStarted, $langResourceAccessLock,
         $langDeactivate, $langHasExpired, $langActivate, $langResourceAccessUnlock,
         $langParticipate,  $langHasParticipated, $langSee,
-        $langHasNotParticipated, $uid, $langConfirmDelete,
+        $langHasNotParticipated, $uid, $langConfirmDelete, $langResults,
         $langPurgeExercises, $langConfirmPurgeExercises, $langCreateDuplicate,
-        $langCreateDuplicateIn, $langCurrentCourse, $langUsage, $langDate,
-        $langUserDuration, $m, $langQuickSurvey, $langChoiceLesson;
+        $langCreateDuplicateIn, $langCurrentCourse, $langDate,
+        $langUserDuration, $m, $langQuickSurvey, $langChoiceLesson, $langGenQrCode,
+        $langWorkToUser, $langWorkAssignTo, $langWorkToGroup;
 
     $poll_check = 0;
     $query = "SELECT * FROM poll WHERE course_id = ?d";
@@ -407,9 +546,9 @@ function printPolls() {
                         $lock_icon = "&nbsp;&nbsp;&nbsp;<span class='fa fa-lock'></span>";
                     }
                     if ($thepoll->assign_to_specific == 1) {
-                        $assign_to_users_message = "<a class='assigned_to' data-pid='$thepoll->pid'><small class='help-block'>$m[WorkAssignTo]: $m[WorkToUser]</small></a>";
+                        $assign_to_users_message = "<a class='assigned_to' data-pid='$thepoll->pid'><small class='help-block'>$langWorkAssignTo: $langWorkToUser</small></a>";
                     } else if ($thepoll->assign_to_specific == 2) {
-                        $assign_to_users_message = "<a class='assigned_to' data-pid='$thepoll->pid'><small class='help-block'>$m[WorkAssignTo]: $m[WorkToGroup]</small></a>";
+                        $assign_to_users_message = "<a class='assigned_to' data-pid='$thepoll->pid'><small class='help-block'>$langWorkAssignTo: $langWorkToGroup</small></a>";
                     } else {
                         $assign_to_users_message = '';
                     }
@@ -431,7 +570,7 @@ function printPolls() {
                 }
 
                 $tool_content .= "</div>
-                                    <div class='table_td_body'>" . standard_text_escape($thepoll->description) . "</div>
+                                    <div class='mt-2'>" . standard_text_escape($thepoll->description) . "</div>
                                     </div></td>";
                 if (isset($thepoll->start_date)) {
                     $sort_date = date("Y-m-d H:i", strtotime($thepoll->start_date));
@@ -455,7 +594,7 @@ function printPolls() {
                             ['title' => $visibility ? $langDeactivate : $langActivate,
                                 'icon' => $visibility ? 'fa-toggle-off' : 'fa-toggle-on',
                                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;visibility=$visibility_func&amp;pid={$pid}"],
-                            ['title' => $langUsage,
+                            ['title' => $langResults,
                                 'level' => 'primary',
                                 'icon' => 'fa-line-chart',
                                 'url' => "pollresults.php?course=$course_code&amp;pid=$pid",
@@ -477,6 +616,10 @@ function printPolls() {
                                 'icon-class' => 'warnLink',
                                 'icon-extra' => "data-pid='$pid'",
                                 'show' => $thepoll->type == POLL_NORMAL],
+                            ['title' => $langGenQrCode,
+                                'icon' => 'fa-solid fa-qrcode',
+                                'icon-class' => 'QRcodeOpen',
+                                'url' => "index.php?course=$course_code&amp;pollId=$pid&amp;gen_qrcode=true"],
                             ['title' => $langPurgeExercises,
                                 'icon' => 'fa-eraser',
                                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete_results=yes&amp;pid=$pid",
@@ -513,7 +656,7 @@ function printPolls() {
                     }
                     $tool_content .= "</td>";
 
-                    $line_chart_link = ($has_participated && $thepoll->show_results && ($thepoll->type == 0 || $thepoll->type == 3))? "<a href='pollresults.php?course=$course_code&pid=$pid'><span class='fa fa-line-chart'></span></a>" : "" ;
+                    $line_chart_link = ($has_participated && $thepoll->show_results && ($thepoll->type == POLL_NORMAL || $thepoll->type == POLL_QUICK))? "" . icon('fa-line-chart', $langResults, "pollresults.php?course=$course_code&pid=$pid") : "" ;
                     $tool_content .= "<td class='text-end option-btn-cell'>
                                         <div style='padding-top:7px;padding-bottom:7px;'>$line_chart_link</div>
                                       </td></tr>";

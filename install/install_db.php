@@ -140,7 +140,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `log_archive` (
 $db->query("CREATE TABLE `announcement` (
     `id` INT(11) NOT NULL auto_increment,
     `title` VARCHAR(255) NOT NULL DEFAULT '',
-    `content` TEXT,
+    `content` MEDIUMTEXT,
     `date` DATETIME NOT NULL,
     `course_id` INT(11) NOT NULL DEFAULT 0,
     `order` MEDIUMINT(11) NOT NULL DEFAULT 0,
@@ -405,11 +405,19 @@ $db->query("CREATE TABLE `loginout_summary` (
 // monthly reports
 $db->query("CREATE TABLE monthly_summary (
     id int(11) NOT NULL auto_increment,
-    `month` DATE NOT NULL,
-    profesNum int(11) NOT NULL default 0,
-    studNum int(11) NOT NULL default 0,
-    visitorsNum int(11) NOT NULL default 0,
-    coursNum int(11) NOT NULL default 0,
+    `month` date NOT NULL,
+    `teachers` int NOT NULL DEFAULT '0',
+    `students` int NOT NULL DEFAULT '0',
+    `guests` int NOT NULL DEFAULT '0',
+    `courses` int NOT NULL DEFAULT '0',
+    `dep_id` int DEFAULT '0',
+    `assignments` int DEFAULT '0',
+    `exercises` int DEFAULT '0',
+    `documents` int DEFAULT '0',
+    `messages` int DEFAULT '0',
+    `announcements` int DEFAULT '0',
+    `forum_posts` int DEFAULT '0',
+    `inactive_courses` int DEFAULT '0',            
     PRIMARY KEY (id)) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `document` (
@@ -1052,8 +1060,10 @@ $db->query("CREATE TABLE IF NOT EXISTS `poll` (
     `default_answer` TINYINT NOT NULL DEFAULT '0',
     `type` TINYINT NOT NULL DEFAULT 0,
     `assign_to_specific` TINYINT NOT NULL DEFAULT '0',
-     `lti_template` INT(11) DEFAULT NULL,
-    `launchcontainer` TINYINT DEFAULT NULL) $tbl_options");
+    `lti_template` INT(11) DEFAULT NULL,
+    `launchcontainer` TINYINT DEFAULT NULL,
+    `pagination` INT(11) NOT NULL DEFAULT 0,
+    `require_answer` INT(11) NOT NULL DEFAULT 0) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `poll_to_specific` (
     `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -1076,6 +1086,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `poll_answer_record` (
     `aid` INT(11) NOT NULL DEFAULT 0,
     `answer_text` TEXT NOT NULL,
     `submit_date` DATETIME NOT NULL,
+    `sub_qid` INT(11) NOT NULL DEFAULT 0,
+    `sub_qid_row` int(11) NOT NULL DEFAULT 0,
     FOREIGN KEY (`poll_user_record_id`)
     REFERENCES `poll_user_record` (`id`)
     ON DELETE CASCADE) $tbl_options");
@@ -1086,12 +1098,17 @@ $db->query("CREATE TABLE IF NOT EXISTS `poll_question` (
     `question_text` TEXT NOT NULL,
     `qtype` tinyint(3) UNSIGNED NOT NULL,
     `q_position` INT(11) DEFAULT 1,
-    `q_scale` INT(11) NULL DEFAULT NULL) $tbl_options");
+    `q_scale` INT(11) NULL DEFAULT NULL,
+    `description` TEXT DEFAULT NULL,
+    `answer_scale` TEXT DEFAULT NULL,
+    `q_row` INT(11) NOT NULL DEFAULT 0,
+    `q_column` INT(11) NOT NULL DEFAULT 0) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `poll_question_answer` (
     `pqaid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `pqid` INT(11) NOT NULL DEFAULT 0,
-    `answer_text` TEXT NOT NULL) $tbl_options");
+    `answer_text` TEXT NOT NULL,
+    `sub_question` INT(11) NOT NULL DEFAULT 0) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `assignment` (
     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -1133,6 +1150,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `assignment` (
     `tii_use_quoted_exclusion` TINYINT NOT NULL DEFAULT '0',
     `tii_exclude_type` VARCHAR(20) NOT NULL DEFAULT 'none',
     `tii_exclude_value` INT(11) NOT NULL DEFAULT '0',
+    `tii_instructorcustomparameters` TEXT,
     `reviews_per_assignment` int(4) DEFAULT NULL,
     `start_date_review` DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
     `due_date_review` DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
@@ -1300,15 +1318,31 @@ $db->query("CREATE TABLE IF NOT EXISTS lti_apps (
     `course_id` INT(11) DEFAULT NULL,
     `title` VARCHAR(255) DEFAULT NULL,
     `description` TEXT,
+    `lti_version` VARCHAR(255) NOT NULL DEFAULT '1.1',
     `lti_provider_url` VARCHAR(255) DEFAULT NULL,
     `lti_provider_key` VARCHAR(255) DEFAULT NULL,
     `lti_provider_secret` VARCHAR(255) DEFAULT NULL,
+    `lti_provider_public_keyset_url` VARCHAR(255) DEFAULT NULL,
+    `lti_provider_initiate_login_url` VARCHAR(255) DEFAULT NULL,
+    `lti_provider_redirection_uri` VARCHAR(255) DEFAULT NULL,
+    `client_id` VARCHAR(255) DEFAULT NULL,
     `launchcontainer` TINYINT(4) NOT NULL DEFAULT 1,
     `is_template` TINYINT(4) NOT NULL DEFAULT 0,
     `enabled` TINYINT(4) NOT NULL DEFAULT 1,
     `all_courses` TINYINT(1) NOT NULL DEFAULT 1,
     `type` VARCHAR(255) NOT NULL DEFAULT 'turnitin',
     PRIMARY KEY (`id`)) $tbl_options");
+
+$db->query("CREATE TABLE IF NOT EXISTS `lti_access_tokens` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `lti_app` int(11) NOT NULL,
+    `scope` TEXT,
+    `token` VARCHAR(128) NOT NULL,
+    `valid_until` int(11) NOT NULL,
+    `time_created` int(11) NOT NULL,
+    `last_access` int(11),
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`lti_app`) REFERENCES `lti_apps` (`id`)) $tbl_options");
 
 $db->query("CREATE TABLE `course_lti_app` (
       `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -1635,7 +1669,6 @@ $default_config = array(
     // 'student_upload_whitelist', $student_upload_whitelist,
     // 'teacher_upload_whitelist', $teacher_upload_whitelist,
     'theme', 'modern',
-    'theme_options_id', 0,
     'login_fail_check', 1,
     'login_fail_threshold', 15,
     'login_fail_deny_interval', 5,
@@ -1683,8 +1716,17 @@ $db->query("CREATE TABLE `course_units` (
     `visible` TINYINT(4),
     `public` TINYINT(4) NOT NULL DEFAULT 1,
     `order` INT(11) NOT NULL DEFAULT 0,
+    `assign_to_specific` tinyint NOT NULL DEFAULT '0',
     `course_id` INT(11) NOT NULL,
     UNIQUE KEY `course_units_order` (`course_id`,`order`)) $tbl_options");
+
+$db->query("CREATE TABLE course_units_to_specific (
+        id INT auto_increment NOT NULL,
+        unit_id INT NOT NULL,
+        user_id INT NULL,
+        group_id INT NULL,
+      PRIMARY KEY (`id`),
+      KEY `unit_id` (`unit_id`)) $tbl_options");
 
 $db->query("CREATE TABLE `unit_resources` (
     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,

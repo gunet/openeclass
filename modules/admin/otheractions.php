@@ -110,7 +110,7 @@ if (isset($_GET['stats'])) {
                                     JOIN user 
                                 ON course_user.user_id = user.id 
                                 WHERE course_user.status=5 
-                                    GROUP BY user_id 
+                                    GROUP BY user_id, surname, givenname, username
                                     ORDER BY num_of_courses 
                                     DESC 
                                     LIMIT 0,30");
@@ -120,7 +120,7 @@ if (isset($_GET['stats'])) {
                                 FROM course 
                                     JOIN course_user 
                                 ON course_id = course.id 
-                                GROUP BY course_id 
+                                GROUP BY course_id, code, public_code, title, prof_names, visible
                                 ORDER BY COUNT(*) 
                                 DESC 
                                 LIMIT 30");

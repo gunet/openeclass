@@ -85,12 +85,11 @@
    
             @if(count($bookings) > 0)
                 <div class='col-12 mb-5'>
-                <div class='table-responsive'>
                     <table class='table-default' id='all_bookings'>
                         <thead>
                             <tr>
                                 @if($is_user_teacher)
-                                    <th style='width:40%;'>{{ trans('langUser') }}</th>
+                                    <th style='width:40%;'>{{ trans('langFrom') }} {{ trans('langUser') }}</th>
                                     <th style='width:20%;'>{{ trans('langFrom') }}</th>
                                     <th style='width:20%;'>{{ trans('langUntil') }}</th>
                                     <th style='width:15%;'>{{ trans('langAccept') }}</th>
@@ -109,7 +108,7 @@
                                 <tr>
                                     <td @if($is_user_teacher) style='width:40%;' @else style='width:30%;' @endif>{{ $b->title }}</td>
                                     @if(!$is_user_teacher)
-                                        <td style='width:30%;'>{{ $b->givenname }}&nbsp;{{ $b->surname }}</td>
+                                        <td style='width:30%;'>{!! display_user($b->teacher_id) !!}</td>
                                     @endif
                                     <td @if($is_user_teacher) style='width:20%;' @else style='width:15%;' @endif>{{ format_locale_date(strtotime($b->start), 'short') }}</td>
                                     <td @if($is_user_teacher) style='width:20%;' @else style='width:15%;' @endif>{{ format_locale_date(strtotime($b->end), 'short') }}</td>
@@ -142,7 +141,7 @@
                             @endforeach
                         </tbody>
                     </table>
-                </div></div>
+                </div>
             @else
                 <div class='col-12 mb-5'>
                     <div class='alert alert-warning'>
@@ -157,11 +156,10 @@
                 <div class='col-12'>
                     <h2 class='pb-3'>{{ trans('langHistoyBooking') }}</h2>
                     @if(count($booking_history) > 0)
-                    <div class='table-responsive'>
                         <table class='table-default' id='all_history_bookings'>
                             <thead>
                                 <tr>
-                                    <th style='width:40%;'>{{ trans('langUser') }}</th>
+                                    <th style='width:40%;'>{{ trans('langFrom') }} {{ trans('langUser') }}</th>
                                     <th style='width:20%;'>{{ trans('langFrom') }}</th>
                                     <th style='width:20%;'>{{ trans('langUntil') }}</th>
                                     <th style='width:15%;'>{{ trans('langAccept') }}</th>
@@ -195,7 +193,6 @@
                                 @endforeach
                             </tbody>
                         </table>
-                    </div>
                     @else
                         <div class='alert alert-warning'>
                             <i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langNoInfoAvailable') }}</span>

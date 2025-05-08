@@ -137,7 +137,7 @@
                                                 <ul>
                                                     @foreach ($units as $cu)
                                                         <li {{ $cu->id == $id ? "class=active-unit" : "" }}>
-                                                            <a class='TextBold{{ $cu->id != $id ? " gray-color" : "" }}' href='{{ $urlServer }}modules/units/index.php?course={{ $course_code }}&amp;id={{ $cu->id }}'>
+                                                            <a class='TextBold{{ $cu->id != $id ? "" : " Success-200-cl" }}' href='{{ $urlServer }}modules/units/index.php?course={{ $course_code }}&amp;id={{ $cu->id }}'>
                                                                 {{ $cu->title }}
                                                             </a>
                                                             <br>
@@ -173,7 +173,7 @@
                             <div class="card-body">
 
                                 @if ($previousLink or $nextLink)
-                                    <div class='col-12 d-flex justify-content-between align-items-center gap-3 flex-wrap pb-4 mb-4 border-bottom-default'>
+                                    <div class='col-12 d-flex justify-content-between align-items-center gap-3 flex-wrap mb-4 @if($comments) border-bottom-default pb-4 @endif'>
                                         @if ($previousLink)
                                             <a class='TextBold' title='{{ $previousTitle }}' href='{{ $previousLink}}'>
                                                 <i class='fa fa-arrow-left space-after-icon'></i>
@@ -191,9 +191,11 @@
 
 
 
-                                <div style="display: flow-root;" class="{{ $comments ? 'border-bottom-default pb-4' : '' }}">
+                                @if($comments)
+                                <div style="display: flow-root;">
                                     {!! $comments !!}
                                 </div>
+                                @endif
                                 <div class='unit-resources mt-3'>
                                     {!! $tool_content_units !!}
                                 </div>

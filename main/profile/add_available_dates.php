@@ -69,7 +69,7 @@ if(isset($_GET['do_booking'])){
         $data['action_bar'] =
         action_bar(array(
             array('title' => $langBack,
-                'url' => $urlAppend . "main/profile/add_available_dates.php?user_id=".$uid."&amp;do_booking=1&amp;show_all_users=1",
+                'url' => $urlAppend . "main/profile/display_profile.php?id=$_GET[uBook]&token=$_GET[token]",
                 'icon' => 'fa-reply',
                 'level' => 'primary')
             ));

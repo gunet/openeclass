@@ -160,6 +160,12 @@ if ($is_editor) {
                                 ));
         view('modules.glossary.createCategory', $data);
     }
+} else {
+        $data['action_bar'] = action_bar(array(
+            array('title' => $langGlossaryTerms,
+                'url' => "index.php?course=$course_code",
+                'icon' => 'fa-tasks',
+                'level' => 'primary-label')));
 }
 
 if (!isset($_GET['edit']) && !isset($_GET['add'])) {

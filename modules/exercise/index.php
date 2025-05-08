@@ -105,7 +105,7 @@ $head_content .= "<script type='text/javascript'>
                     success: function(data) {
                         var dialog = bootbox.dialog({
                             message: data,
-                            title : '$m[WorkAssignTo]',
+                            title : '$langWorkAssignTo',
                             onEscape: true,
                             backdrop: true,
                             buttons: {
@@ -371,9 +371,9 @@ if (!$nbrExercises) {
             }
 
             if ($row->assign_to_specific == 1) {
-                $assign_to_users_message = "<a class='assigned_to' data-eid='$row->id'><small class='help-block link-color'>$m[WorkAssignTo]: $m[WorkToUser]</small></a>";
+                $assign_to_users_message = "<a class='assigned_to' data-eid='$row->id'><small class='help-block link-color'>$langWorkAssignTo: $langWorkToUser</small></a>";
             } else if ($row->assign_to_specific == 2) {
-                $assign_to_users_message = "<a class='assigned_to' data-eid='$row->id'><small class='help-block link-color'>$m[WorkAssignTo]: $m[WorkToGroup]</small></a>";
+                $assign_to_users_message = "<a class='assigned_to' data-eid='$row->id'><small class='help-block link-color'>$langWorkAssignTo: $langWorkToGroup</small></a>";
             } else {
                 $assign_to_users_message = '';
             }
@@ -478,6 +478,9 @@ if (!$nbrExercises) {
                         array('title' => $langUsage,
                               'url' => "exercise_stats.php?course=$course_code&amp;exerciseId=$row->id",
                               'icon' => 'fa-line-chart'),
+                        array('title' => $langWorkUserGroupNoSubmission,
+                              'url' => "users_no_submission.php?course=$course_code&amp;exerciseId=$row->id",
+                              'icon' => 'fa-minus-square'),
                         array('title' => $langCreateDuplicate,
                               'icon-class' => 'warnLink',
                               'icon-extra' => "data-exerciseid='$row->id'",

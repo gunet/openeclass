@@ -357,15 +357,15 @@ if ($is_editor) {
         exit;
     } else {
         $action_bar = action_bar(array(
-                    array('title' => $langCreate,
-                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;cmd=create",
-                        'icon' => 'fa-plus-circle',
-                        'level' => 'primary-label',
-                        'button-class' => 'btn-success'),
                     array('title' => $langInsert,
                         'url' => "importLearningPath.php?course=$course_code",
                         'icon' => 'fa-upload',
                         'level' => 'primary-label',
+                        'button-class' => 'btn-success'),
+                    array('title' => $langCreate,
+                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;cmd=create",
+                        'icon' => 'fa-plus-circle',
+                        'level' => 'secondary',
                         'button-class' => 'btn-success'),
                     array('title' => $langTrackAllPathExplanation,
                         'url' => "detailsAll.php?course=$course_code",
@@ -375,7 +375,7 @@ if ($is_editor) {
                         'url' => "detailsAllAnalysis.php?course=$course_code",
                         'icon' => 'fa-line-chart',
                         'level' => 'secondary'),
-                    array('title' => $langLearningObjectsInUse_sort,
+                    array('title' => $langLearningObjectsInUse,
                         'url' => "modules_pool.php?course=$course_code",
                         'icon' => 'fa-book',
                         'level' => 'secondary')));
@@ -492,38 +492,32 @@ foreach ($result as $list) { // while ... learning path list
                   AND M.`course_id` = ?d
                 ORDER BY LPM.`rank` ASC";
         $resultmodules = Database::get()->queryArray($modulessql, $list->learnPath_id, CTLABEL_, $course_id);
-        $play_img = "<span class='fa fa-line-chart' style='font-size:15px;'></span>";
-        $susp_img = "<span class='fa fa-repeat' style='font-size:15px;'></span>";
 
         $susp_button = "";
         if ($list->suspend_data) {
-            $susp_button = "<div class='line-height-default'><a data-href='viewer.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "&amp;module_id=" . $resultmodules[0]->module_id . "&amp;cleanattempt=on' data-bd-toggle='modal' data-bs-target='#confirmLpCleanAttemptDialog'>$susp_img</a></div>";
+            $susp_button = "<span class='ps-2'>
+                    <a data-href='viewer.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "&amp;module_id=" . $resultmodules[0]->module_id . "&amp;cleanattempt=on' data-bs-toggle='modal' data-bs-target='#confirmLpCleanAttemptDialog'>
+                    <span class='fa fa-repeat' data-bs-toggle='tooltip' data-bs-placement='top' title='$langLearningPathCleanAttempt'></span></a>
+                    </span>";
         }
 
         if(!$is_editor) { // If is student
-            $play_button = "<div class='line-height-default'><a href='learningPath.php?course=".$course_code."&amp;path_id=".$list->learnPath_id."'>$play_img</a></div>";
+            $play_button = "<span class='ps-2'><a href='learningPath.php?course=".$course_code."&amp;path_id=".$list->learnPath_id."'><span class='fa fa-line-chart' data-bs-toggle='tooltip' data-bs-placement='top' title='$langLearningPathData'></span></a></span>";
             if (count($resultmodules) > 0) { // If there are modules
-                $play_url = "<div class='line-height-default'><a href='viewer.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "&amp;module_id=" . $resultmodules[0]->module_id . "'>" . htmlspecialchars($list->name) . "</a></div>";
+                $play_url = "<a href='viewer.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "&amp;module_id=" . $resultmodules[0]->module_id . "'>" . htmlspecialchars($list->name) . "</a>";
             } else { // If there are no modules
                 $play_url = htmlspecialchars($list->name);
             }
         } else { // If is admin
             $play_button = "";
             if (count($resultmodules) > 0) { // If there are modules
-                $play_url = "<div class='line-height-default'><a href='viewer.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "&amp;module_id=" . $resultmodules[0]->module_id . "'>" . htmlspecialchars($list->name) . "</a></div>";
+                $play_url = "<a href='viewer.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "&amp;module_id=" . $resultmodules[0]->module_id . "'>" . htmlspecialchars($list->name) . "</a>";
             } else {
                 $play_url = htmlspecialchars($list->name);
             }
         }
 
-        $tool_content .= "
-            <td>
-                <div>
-                    <strong>$play_url</strong>
-                    <span class='ps-2' data-bs-toggle='tooltip' data-bs-placement='top' title='$langLearningPathData'>$play_button</span>";
-        if ($susp_button) {
-            $tool_content .= "&nbsp;<span class='pull-right' style='padding-left: 15px;'  data-bs-toggle='tooltip' data-bs-placement='top' title='$langLearningPathCleanAttempt'>$susp_button</span>";
-        }
+        $tool_content .= "<td><div><strong>$play_url</strong>$play_button$susp_button";
         $tool_content .= "
                     </div>
                 <div class='mt-2'><p>" . q($list->lp_comment) . "<p></div>

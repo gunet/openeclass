@@ -1,3 +1,16 @@
+@push('head_scripts')
+    <script type='text/javascript'>
+        $(document).ready(function () {
+            $('#startdate, #enddate').datetimepicker({
+                format: 'dd-mm-yyyy hh:ii',
+                pickerPosition: 'bottom-right',
+                language: '{{ $language }}',
+                autoclose: true
+            });
+        });
+    </script>
+@endpush
+
 @extends('layouts.default')
 
 @section('content')
@@ -19,7 +32,7 @@
 
             @include('layouts.partials.show_alert')
 
-            <div class='col-lg-6 col-12'>
+            <div class='col-lg-10 col-12'>
                 <div class='form-wrapper form-edit border-0 px-0'>
 
                     <form role='form' class='form-horizontal' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}'>
@@ -86,13 +99,15 @@
                         <div class='mt-5 form-group'>
                             <div class='col-12 d-flex justify-content-end align-items-center'>
                                 <input id='submitAnnouncement' class='btn submitAdminBtn' type='submit' name='submitAnnouncement' value='{{ trans('langSubmit') }}'>
+                                <a href='{{ $_SERVER['SCRIPT_NAME'] }}' class='btn cancelAdminBtn ms-2'>{{ trans('langCancel') }}</a>
                             </div>
                         </div>
+
                         {!! generate_csrf_token_form_field() !!}
                     </form>
                 </div>
             </div>
-            <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
+            <div class='col-lg-2 col-12 d-none d-md-none d-lg-block text-end'>
                 <img class='form-image-modules' src='{!! get_form_image() !!}' alt="{{ trans('langImgFormsDes') }}">
             </div>
         </div>

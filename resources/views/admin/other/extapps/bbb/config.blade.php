@@ -176,7 +176,7 @@
                                         <span class='fa fa-info-circle p-1' data-bs-toggle='tooltip' data-bs-placement='top' title='{{ trans('langInMinutes') }}'></span>
                                     </label>
                                     <div class='col-12'>
-                                        <input class='form-control' type='number' min='1' max='10000' step='10' pattern='\d+' id='bbb_max_duration' name='bbb_max_duration' value='{{ $bbb_max_duration }}'>
+                                        <input class='form-control' type='number' min='0' max='10000' step='10' pattern='\d+' id='bbb_max_duration' name='bbb_max_duration' value='{{ $bbb_max_duration }}'>
                                     </div>
                                 </div>
 

@@ -135,41 +135,7 @@ function group_tutors($group_id) {
 }
 
 /**
- * @brief fills an array with user groups (group_id => group_name)
- * passing $as_id will give back only the groups that have been given the specific assignment
- * @param type $uid
- * @param type $course_id
- * @param type $as_id
- * @return type
- */
-function user_group_info($uid, $course_id, $as_id = NULL) {
-    $gids = array();
-
-    if ($uid != null) {
-        $q = Database::get()->queryArray("SELECT group_members.group_id AS grp_id, `group`.name AS grp_name FROM group_members,`group`
-            WHERE group_members.group_id = `group`.id
-            AND `group`.course_id = ?d AND group_members.user_id = ?d", $course_id, $uid);
-    } else {
-        if (!is_null($as_id) && Database::get()->querySingle("SELECT assign_to_specific FROM assignment WHERE id = ?d", $as_id)->assign_to_specific) {
-            $q = Database::get()->queryArray("SELECT `group`.name AS grp_name,`group`.id AS grp_id FROM `group`, assignment_to_specific WHERE `group`.id = assignment_to_specific.group_id AND `group`.course_id = ?d AND assignment_to_specific.assignment_id = ?d", $course_id, $as_id);
-        } else {
-            $q = Database::get()->queryArray("SELECT name AS grp_name,id AS grp_id FROM `group` WHERE course_id = ?d", $course_id);
-        }
-    }
-
-    foreach ($q as $r) {
-        $gids[$r->grp_id] = $r->grp_name;
-    }
-    return $gids;
-}
-
-/**
  *
- * @global type $langDelete
- * @global type $langEditChange
- * @global type $langGroupCatDel
- * @global type $tool_content
- * @global type $course_code
  * @param type $categoryid
  */
 

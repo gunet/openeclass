@@ -19,6 +19,6 @@
  */
 
 define('LISTING_MODE', 'COURSE_METADATA');
-require_once('../auth/listfaculte.php');
+require_once('../auth/listfaculties.php');
 
 exit();

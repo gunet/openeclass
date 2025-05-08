@@ -29,13 +29,13 @@ $content_id = intval($_GET['id']);
 $onlyEnabledWhere = ($is_editor) ? '' : " AND enabled = 1 ";
 $content = Database::get()->querySingle("SELECT * FROM h5p_content WHERE id = ?d AND course_id = ?d $onlyEnabledWhere", $content_id, $course_id);
 if (!$content) {
-    redirect_to_home_page("modules/h5p/index.php?course=$course_code");
+    redirect_to_home_page("modules/h5p/?course=$course_code");
 }
 
 if (!$res_type) {
-    $backUrl = $urlAppend . 'modules/h5p/index.php?course=' . $course_code;
+    $backUrl = $urlAppend . 'modules/h5p/?course=' . $course_code;
 } else {
-    $backUrl = $urlAppend . 'modules/units/index.php?course=' . $course_code . '&id=' . $unit;
+    $backUrl = $urlAppend . 'modules/units/?course=' . $course_code . '&id=' . $unit;
 }
 
 $toolName = $langImport;

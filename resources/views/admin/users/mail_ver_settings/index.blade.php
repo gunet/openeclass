@@ -44,7 +44,7 @@
                             <td class='text-center'>
                                 <b>{{ $verified_email_cnt }}</b>
                             </td>
-                            <td class='text-end'><input class='btn submitAdminBtn' type='submit' name='submit1' value='{{ trans("m['edit']") }}'></td>
+                            <td class='text-end'><input class='btn submitAdminBtn' type='submit' name='submit1' value='{{ trans('langModify') }}'></td>
                         </tr>
                         <tr>
                         <td>
@@ -53,7 +53,7 @@
                                 <b>{{ $unverified_email_cnt }}</b>
                             </td>
                             <td class='text-end'>
-                                <input class='btn submitAdminBtn' type='submit' name='submit2' value='{{ trans("m['edit']}") }}'>
+                                <input class='btn submitAdminBtn' type='submit' name='submit2' value='{{ trans('langModify') }}'>
                             </td>
                         </tr>
                         <tr>
@@ -63,7 +63,7 @@
                                 <b>{{ $verification_required_email_cnt }}</b>
                             </td>
                             <td class='text-end'>
-                                <input class='btn submitAdminBtn' type='submit' name='submit0' value='{{ trans("m['edit']") }}'>
+                                <input class='btn submitAdminBtn' type='submit' name='submit0' value='{{ trans('langModify') }}'>
                             </td>
                         </tr>
                             @if (!get_config('email_required'))

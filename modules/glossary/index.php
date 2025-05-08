@@ -348,7 +348,7 @@ if ($is_editor) {
 } else {
     // Show categories link for students if needed
     if ($categories) {
-        $tool_content .= action_bar(array(
+        $data['action_bar'] = action_bar(array(
                       array('title' => $langCategories,
                             'url' => "categories.php?course=$course_code",
                             'icon' => 'fa-tasks',

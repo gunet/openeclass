@@ -18,6 +18,8 @@
  *
  */
 
+$lti_allow_framing = true;
+
 require_once '../../include/baseTheme.php';
 require_once 'modules/auth/auth.inc.php';
 require_once 'modules/lti/classes/LtiEnrolHelper.php';
@@ -33,6 +35,7 @@ require_once 'modules/lti/ltiprovider/src/OAuth/OAuthRequest.php';
 require_once 'modules/lti/ltiprovider/src/OAuth/OAuthUtil.php';
 require_once 'modules/lti/ltiprovider/src/OAuth/OAuthConsumer.php';
 require_once 'modules/lti/ltiprovider/src/OAuth/OAuthToken.php';
+require_once 'modules/lti/ltiprovider/src/OAuth/OAuthException.php';
 require_once 'modules/lti/ltiprovider/src/ToolProvider/OAuthDataStore.php';
 require_once 'modules/admin/extconfig/ltipublishapp.php';
 

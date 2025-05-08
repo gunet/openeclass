@@ -40,6 +40,10 @@ $action = new action();
 $action->record('MODULE_ID_VIDEO');
 $data = array();
 
+// js and view
+load_js('tools.js');
+load_js('bootstrap-datetimepicker');
+
 // navigation
 $toolName = $langVideo;
 if (isset($_GET['id'])) {
@@ -111,9 +115,7 @@ if (isset($_POST['edit_submit']) && isset($_POST['id'])) { // edit
 
 // handle submitted data
 if (isset($_POST['add_submit'])) { // add
-    print_a($_POST);
-
-
+    //print_a($_POST);
     $uploaded = false;
     $date = date_create($_POST['date']);
     $videodate = date_format($date, "Y-m-d H:i");
@@ -219,7 +221,7 @@ if (isset($_POST['add_submit_delos'])) {
         list($jsonPublicObj, $jsonPrivateObj, $checkAuth) = requestDelosJSON();
         storeDelosResources($jsonPublicObj, $jsonPrivateObj, $checkAuth);
     }
-    Session::flash('message',$langLinksAdded);
+    Session::flash('message', $langLinksAdded);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/video/index.php?course=" . $course_code);
 }
@@ -234,15 +236,29 @@ if (isset($_GET['id']) && isset($_GET['table_edit'])) {
 $data['nick'] = $_SESSION['givenname'] . ' ' . $_SESSION['surname'];
 $data['resultcategories'] = Database::get()->queryArray("SELECT * FROM video_category WHERE course_id = ?d ORDER BY `name`", $course_id);
 
-// js and view
-load_js('tools.js');
-load_js('bootstrap-datetimepicker');
-
 if ($form_input === 'opendelos') {
-    list($jsonPublicObj, $jsonPrivateObj, $checkAuth) = requestDelosJSON();
+    $jsonPublicObj = $jsonPrivateObj = $authUrl = '';
+    $checkAuth = false;
+    if (!$checkAuth) {
+        $authUrl = (isCASUser()) ? getDelosURL() . getDelosRLoginCASAPI() : getDelosURL() . getDelosRLoginAPI();
+        $authUrl .= "?token=" . getDelosSignedToken();
+        $data['action_bar'] = action_bar([
+            [
+                'title' => $langOpenDelosAuth,
+                'url' => $authUrl,
+                'icon' => 'fa-film',
+                'level' => 'primary'
+            ]
+        ]);
+    } else {
+        list($jsonPublicObj, $jsonPrivateObj, $checkAuth) = requestDelosJSON();
+        $checkAuth = true;
+    }
+
     $data['jsonPublicObj'] = $jsonPublicObj;
     $data['jsonPrivateObj'] = $jsonPrivateObj;
     $data['checkAuth'] = $checkAuth;
+    $data['authUrl'] = $authUrl;
     $data['currentVideoLinks'] = getCurrentVideoLinks($course_id);
     $head_content .= getDelosJavaScript();
     view('modules.video.editdelos', $data);

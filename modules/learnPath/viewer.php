@@ -107,7 +107,7 @@ if (isset($_GET['fullscreen']) && is_numeric($_GET['fullscreen'])) {
     $displayFull = FULL_SCREEN;
 }
 if ($displayFull == 0) {
-    $tool_content .= "<iframe src='$startModuleLink' name='mainFrame' "
+    $tool_content .= "<iframe class='iframe-learningPath' src='$startModuleLink' name='mainFrame' "
             . "width='100%' height='550' scrolling='no' frameborder='0'"
             . $langBrowserCannotSeeFrames
             . "<br />" . "\n"
@@ -130,7 +130,7 @@ if ($displayFull == 0) {
        }, $action_period);</script>"
     . "</head>"
     . "<frameset cols=\"*\" border=\"0\" frameborder=\"0\">" . "\n"
-    . "<frame src='$startModuleLink' name='mainFrame' />" . "\n"
+    . "<frame class='iframe-learningPath' src='$startModuleLink' name='mainFrame' />" . "\n"
     . "</frameset>"
     . "</html>";
 }

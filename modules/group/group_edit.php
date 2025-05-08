@@ -374,7 +374,7 @@ $tool_content .= " <div class='d-lg-flex gap-4 mt-4'>
 
     $tool_content .= "
             <div class='form-group mt-4'>
-            <div class='col-sm-12 control-label-notes mb-2'>$langGroupStudentRegistrationType</div>
+                <div class='col-sm-12 control-label-notes mb-2'>$langGroupStudentRegistrationType</div>
                 <div class='col-sm-12'>
                     <div class='checkbox'>
                         <label class='label-container' aria-label='$langSelect'>
@@ -386,7 +386,7 @@ $tool_content .= " <div class='d-lg-flex gap-4 mt-4'>
                 </div>
             </div>
             <div class='form-group mt-4'>
-            <div class='col-sm-12 control-label-notes mb-2'>$langGroupAllowUnregister</labedivl>
+                <div class='col-sm-12 control-label-notes mb-2'>$langGroupAllowUnregister</div>
                 <div class='col-sm-12'>
                     <div class='checkbox'>
                         <label class='label-container' aria-label='$langSelect'>

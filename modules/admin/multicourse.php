@@ -118,11 +118,11 @@ $user = new user();
 
 load_js('jstree3');
 
-
 $options = $is_admin ? array() : array('allowables' => $user->getDepartmentIds($uid));
 list($js, $html) = $tree->buildCourseNodePicker($options);
 $head_content .= $js;
 $data['html'] = $html;
+$data['default_access'] = intval(get_config('default_course_access', COURSE_REGISTRATION));
 
 view('admin.courses.multicourse', $data);
 

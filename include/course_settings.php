@@ -50,7 +50,9 @@ function setting_default($setting_id) {
         SETTING_COURSE_FORUM_NOTIFICATIONS => 0,
         SETTING_DOCUMENTS_PUBLIC_WRITE => 0,
         SETTING_OFFLINE_COURSE => 0,
-        SETTING_USERS_LIST_ACCESS => 1);
+        SETTING_USERS_LIST_ACCESS => 1,
+        SETTING_AGENDA_ANNOUNCEMENT_COURSE_COMPLETION => 1,
+        SETTING_FACULTY_USERS_REGISTRATION => 0);
     if (isset($defaults[$setting_id])) {
         return $defaults[$setting_id];
     } else {
@@ -85,7 +87,6 @@ function setting_get($setting_id, $course_id=null) {
  * @param int $course_id    The course id (default: the current course id)
  */
 function setting_set($setting_id, $value, $course_id=null) {
-    global $course_code;
 
     if (!$course_id) {
         $course_id = $GLOBALS['course_id'];

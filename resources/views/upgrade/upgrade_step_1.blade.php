@@ -70,7 +70,11 @@
                                     @endif
 
                                     <div class='col-12 d-flex justify-content-center mt-5'>
-                                        <input class='btn btn-primary' name='submit_2' value='{{ trans('langContinue') }} &raquo;' type='submit'>
+                                         @if ($skip_theme)
+                                            <input aria-label="{{ trans('langContinue') }}" class='btn btn-primary' name='do_upgrade' value='{{ trans('langContinue') }} &raquo;' type='submit'>
+                                        @else
+                                            <input class='btn btn-primary' name='submit_2' value='{{ trans('langContinue') }} &raquo;' type='submit'>
+                                         @endif
                                     </div>
 
                                 </form>
@@ -78,7 +82,7 @@
                         </div>
                     </div>
 
-                    @include('upgrade.upgrade_menu', [ 'upgrade_menu' => upgrade_menu() ] )
+                    @include('upgrade.upgrade_menu', [ 'upgrade_menu' => upgrade_menu($skip_theme) ] )
 
                 </div>
 

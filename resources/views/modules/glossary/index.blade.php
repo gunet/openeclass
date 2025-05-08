@@ -25,12 +25,9 @@
 
                                 @include('layouts.partials.legend_view')
 
+                                {!! isset($action_bar) ?  $action_bar : '' !!}
 
-                                @if($is_editor)
-                                    {!! isset($action_bar) ?  $action_bar : '' !!}
-                                @endif
-
-                                @include('layouts.partials.show_alert') 
+                                @include('layouts.partials.show_alert')
 
                                 @if ($is_editor == 1 && $expand_glossary && $total_glossary_terms > $max_glossary_terms)
                                     <div class='col-12'>

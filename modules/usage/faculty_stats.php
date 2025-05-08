@@ -84,58 +84,69 @@ if (isset($_GET['stats_submit'])) {
 
     // only one course
     if (isset($_GET['c'])) {
-        $total_visits = $total_users = 0;
-        $month_stats = $module_month_stats = [];
+        $navigation[] = array("url" => "faculty_stats.php?formsearchfaculte=1&user_date_start=$_GET[user_date_start]&user_date_end=$_GET[user_date_end]&stats_submit=true", "name" => $langStatOfFaculty);
+        $pageName = $langStatsCourse;
+        $month_stats =  [];
         $start = new DateTime($u_date_start);
         $end = new DateTime($u_date_end);
+
         $interval = new DateInterval('P1M'); // per month
         $period = new DatePeriod($start, $interval, $end);
 
         $name = Database::get()->querySingle("SELECT name FROM hierarchy, course, course_department WHERE hierarchy.id = course_department.department
                                          AND course_department.course = course.id AND course.id = ?d", $_GET['c'])->name;
         $data['name'] = $tree->unserializeLangField($name);
-
         $data['course'] = $course = Database::get()->querySingle("SELECT title, prof_names, code, visible FROM course WHERE id = ?d", $_GET['c']);
         $data['users'] = Database::get()->querySingle("SELECT COUNT(user_id) AS users FROM course_user WHERE course_id = ?d", $_GET['c'])->users;
+
         $data['visibility_icon'] = course_access_icon($course->visible);
         foreach ($period as $dt) {
             $start = $dt->format('Y-m-d');
-            $end = $dt->format('Y-m-d');
-            $q1 = Database::get()->querySingle("SELECT COUNT(*) AS registrations FROM course_user
-                            WHERE course_id = ?d AND (reg_date BETWEEN '$start' AND DATE_ADD('$start', INTERVAL 1 MONTH))
-                            AND status = " . USER_STUDENT . "", $_GET['c']);
-            $q2 = Database::get()->querySingle("SELECT COUNT(*) AS visits, COUNT(DISTINCT user_id) AS users FROM actions_daily
-                        WHERE (day BETWEEN '$start' AND DATE_ADD('$start', INTERVAL 1 MONTH)) AND course_id = ?d", $_GET['c']);
-
+            $cnt_prof = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM course_user
+                                                    WHERE course_id = ?d
+                                                    AND status = " . USER_TEACHER . "
+                                                    AND reg_date <= ?t",
+                                            $_GET['c'], $start)->cnt;
+            $cnt_students = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM course_user
+                                                    WHERE course_id = ?d
+                                                    AND status = " . USER_STUDENT . "
+                                                    AND reg_date <= ?t",
+                                            $_GET['c'], $start)->cnt;
+            $cnt_guests = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM course_user
+                                                    WHERE course_id = ?d
+                                                    AND status = " . USER_GUEST . "
+                                                    AND reg_date <= ?t",
+                                            $_GET['c'], $start)->cnt;
+            $cnt_documents = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM document
+                                                    WHERE course_id = ?d
+                                                    AND date <= ?t",
+                                            $_GET['c'], $start)->cnt;
+            $cnt_announcements = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM announcement
+                                                    WHERE course_id = ?d
+                                                    AND date <= ?t",
+                                            $_GET['c'], $start)->cnt;
+            $cnt_messages = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM dropbox_msg
+                                                    WHERE course_id = ?d                                                    
+                                                    AND FROM_UNIXTIME(timestamp, '%Y-%m-%d') <= ?t",
+                                            $_GET['c'], $start)->cnt;
+            $cnt_exercises = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM exercise WHERE course_id = ?d", $_GET['c'])->cnt;
+            $cnt_assignments = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM assignment WHERE course_id = ?d", $_GET['c'])->cnt;
+            $cnt_forum_posts = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM forum WHERE course_id = ?d", $_GET['c'])->cnt;
             $month_stats[] = [
                 'start' => $dt->format('m-Y'),
-                'registration' => $q1->registrations,
-                'visits' => $q2->visits,
-                'users' => $q2->users
+                'prof' => $cnt_prof,
+                'students' => $cnt_students,
+                'guests' => $cnt_guests,
+                'documents' => $cnt_documents,
+                'announcements' => $cnt_announcements,
+                'messages' => $cnt_messages,
+                'exercises' => $cnt_exercises,
+                'assignments' => $cnt_assignments,
+                'forum_posts' => $cnt_forum_posts,
             ];
-            $total_visits += $q2->visits;
-            $total_users += $q2->users;
         }
-        $data['total_visits'] = $total_visits;
-        $data['total_users'] = $total_users;
-        $data['month_stats'] = $month_stats;
+        $data['month_stats'] = array_reverse($month_stats);
 
-        // visits per module per month
-        $all_modules = $modules+$static_modules+$deprecated_modules; // union of all modules
-        $q3 = Database::get()->queryArray("SELECT COUNT(*) AS cnt, module_id, COUNT(DISTINCT user_id) AS users FROM actions_daily
-                        WHERE (day BETWEEN '$u_date_start' AND '$u_date_end') AND course_id = ?d
-                        GROUP BY module_id", $_GET['c']);
-        foreach ($q3 as $sql_data) {
-            if ($sql_data->module_id > 0 ) {
-                $mod_id = $all_modules[$sql_data->module_id];
-                $module_month_stats[] = [
-                    'title' => $mod_id['title'],
-                    'cnt' => $sql_data->cnt,
-                    'users' => $sql_data->users
-                ];
-            }
-        }
-        $data['module_month_stats'] = $module_month_stats;
     } else { // courses list
         if (!empty($query)) {
             $data['s'] = Database::get()->querySingle("SELECT COUNT(*) AS total FROM course, course_department, hierarchy

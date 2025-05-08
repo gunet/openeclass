@@ -160,63 +160,6 @@ load_js('tools.js');
 load_js('bootstrap-datetimepicker');
 load_js('trunk8');
 
-$head_content .= <<<hContent
-<script type='text/javascript'>
-function toggle(id, checkbox, name)
-{
-        var f = document.getElementById('f-calendar-field-' + id);
-        f.disabled = !checkbox.checked;
-}
-</script>
-hContent;
-
-$head_content .= "<script type='text/javascript'>
-        $(document).ready(function () {
-            $('.table_td_body').each(function() {
-                $(this).trunk8({
-                    lines: '3',
-                    fill: '&hellip;<div class=\"clearfix\"></div><a style=\"float:right;\" href=\"adminannouncements_single.php?ann_id='
-                    + $(this).data('id')+'\">$langMore</div>'
-                })
-            });
-
-            if ( $('#submitAnnouncement').length > 0 ) {
-
-            $('input[type=checkbox]').eq(0).prop('checked') ? $('input[type=checkbox]').eq(0).parents('.input-group').children('input').prop('disabled', false) : $('input[type=checkbox]').eq(0).parents('.input-group').children('input').prop('disabled', true);
-            $('input[type=checkbox]').eq(1).prop('checked') ? $('input[type=checkbox]').eq(1).parents('.input-group').children('input').prop('disabled', false) : $('input[type=checkbox]').eq(1).parents('.input-group').children('input').prop('disabled', true);
-
-                $('input[type=checkbox]').eq(0).on('click', function() {
-                    if ($('input[type=checkbox]').eq(0).prop('checked')) {
-                        $('input[type=checkbox]').eq(1).prop('disabled', false);
-                    } else {
-                        $('input[type=checkbox]').eq(1).prop('disabled', true);
-                        $('input[type=checkbox]').eq(1).prop('checked', false);
-                        $('input[type=checkbox]').eq(1).parents('.input-group').children('input').prop('disabled', true);
-                    }
-                });
-
-
-                $('.input-group-addon input[type=checkbox]').on('click', function(){
-                var prop = $(this).parents('.input-group').children('input').prop('disabled');
-                    if(prop){
-                        $(this).parents('.input-group').children('input').prop('disabled', false);
-                    } else {
-                        $(this).parents('.input-group').children('input').prop('disabled', true);
-                    }
-                });
-            }
-        });
-        $(function() {
-            $('#startdate, #enddate').datetimepicker({
-                format: 'dd-mm-yyyy hh:ii',
-                pickerPosition: 'bottom-right',
-                language: '".$language."',
-                autoclose: true
-            });            
-        });
-    </script>";
-
-
 if (isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
         if (isset($_GET['addAnnounce'])) {
             $pageName = $langAdminAddAnn;
@@ -286,11 +229,10 @@ if (isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
 }
 
 elseif (isset($_GET['ann_id'])) {
-
     $row = Database::get()->querySingle("SELECT * FROM admin_announcement WHERE id = ". intval($_GET['ann_id']));
-    if(empty($row)){
+    if (empty($row)) {
         redirect_to_home_page("modules/admin/adminannouncements.php");
-    }else{
+    } else {
         $data['announcementsID'] = $row;
         $view = 'admin.other.announcements.show';
     }
@@ -303,7 +245,6 @@ elseif (isset($_GET['ann_id'])) {
                                     'level' => 'primary-label',
                                     'button-class' => 'btn-success'
                                 ]
-
                             ]);
     $data['announcements'] = Database::get()->queryArray("SELECT * FROM admin_announcement ORDER BY `order` DESC");
     $view = 'admin.other.announcements.index';

@@ -60,7 +60,9 @@ if (isset($_POST['submit'])) {
         set_config('default_language', $_POST['default_language']);
     }
 
-    set_config('maintenance_theme', $_POST['maintenance_theme']);
+    if (isset($_POST['maintenance_theme'])) {
+        set_config('maintenance_theme', $_POST['maintenance_theme']);
+    }
     set_config('active_ui_languages', implode(' ', $active_lang_codes));
     set_config('base_url', $_POST['formurlServer']);
     set_config('phpMyAdminURL', $_POST['formphpMyAdminURL']);
@@ -77,6 +79,12 @@ if (isset($_POST['submit'])) {
     set_config('show_modal_openCourses', $_POST['show_modal_openCourses']);
     set_config('individual_group_bookings', $_POST['individual_group_bookings']);
     set_config('enable_quick_note', $_POST['enable_quick_note']);
+    set_config('user_notifications', $_POST['user_notifications']);
+    if ($_POST['user_notifications'] == 2) {
+        set_config('user_notifications_interval', $_POST['user_notifications_interval']);
+    } else {
+        set_config('user_notifications_interval', '');
+    }
 
     //Maintenance Text set
     foreach ($session->active_ui_languages as $langcode) {
@@ -159,7 +167,9 @@ if (isset($_POST['submit'])) {
         'course_invitation' => true,
         'show_modal_openCourses' => true,
         'individual_group_bookings' => true,
-        'enable_quick_note' => true
+        'enable_quick_note' => true,
+        'user_notifications' => true,
+        'default_course_access' => true,
         ];
 
     register_posted_variables($config_vars, 'all', 'intval');
@@ -334,6 +344,30 @@ else {     // Display config.php edit form
     $data['cbox_course_invitation'] = get_config('course_invitation') ? 'checked' : '';
     $data['cbox_individual_group_bookings'] = get_config('individual_group_bookings') ? 'checked' : '';
     $data['cbox_enable_quick_note'] = get_config('enable_quick_note') ? 'checked' : '';
+    $data['default_course_access'] = intval(get_config('default_course_access', COURSE_REGISTRATION));
+
+    $user_notifications_interval = get_config('user_notifications_interval');
+    $user_notifications = get_config('user_notifications');
+    if ($user_notifications == 0) {
+        $data['user_notifications0'] = 'checked';
+        $data['user_notifications1'] = '';
+        $data['user_notifications2'] = '';
+    } else if ($user_notifications == 1) {
+        $data['user_notifications0'] = '';
+        $data['user_notifications1'] = 'checked';
+        $data['user_notifications2'] = '';
+    } else if ($user_notifications == 2) {
+        $data['user_notifications0'] = '';
+        $data['user_notifications1'] = '';
+        $data['user_notifications2'] = 'checked';
+    }
+
+    $data['user_notifications_interval'] = selection([
+                                                    '5' => $langLast5Days,
+                                                    '10' => $langLast10Days,
+                                                    '15' => $langLast15Days,
+                                                    '30' => $langLast30Days
+                                                    ], 'user_notifications_interval', $user_notifications_interval, 'id="user_notification_id" class="form-control"');
 
     $data['emailTransports'] = array(1 => 'SMTP', 2 => 'sendmail');
     $email_transport = 1;

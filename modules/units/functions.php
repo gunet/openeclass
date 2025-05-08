@@ -138,6 +138,102 @@ function process_actions() {
 }
 
 /**
+ * @brief new / edit course unit info
+ * @return type
+ */
+function handle_unit_info_edit() {
+    global $course_id, $course_code, $langCourseUnitModified, $webDir, $langCourseUnitAdded;
+
+    $title = $_REQUEST['unittitle'];
+    $descr = $_REQUEST['unitdescr'];
+    $assign_to_specific = $_REQUEST['assign_to_specific'];
+    $unitdurationfrom = $unitdurationto = null;
+    if (!empty($_REQUEST['unitdurationfrom'])) {
+        $unitdurationfrom = DateTime::createFromFormat('d-m-Y', $_REQUEST['unitdurationfrom'])->format('Y-m-d');
+    }
+    if (!empty($_REQUEST['unitdurationto'])) {
+        $unitdurationto = DateTime::createFromFormat('d-m-Y', $_REQUEST['unitdurationto'])->format('Y-m-d');
+    }
+    if (isset($_REQUEST['unit_id'])) { // update course unit
+        $unit_id = $_REQUEST['unit_id'];
+        Database::get()->query("UPDATE course_units SET
+                                        title = ?s,
+                                        comments = ?s,
+                                        start_week = ?s,
+                                        finish_week = ?s,
+                                        assign_to_specific = ?d
+                                    WHERE id = ?d AND course_id = ?d",
+            $title, $descr, $unitdurationfrom, $unitdurationto, $assign_to_specific, $unit_id, $course_id);
+        // course unit assigned info (if any)
+        unit_assign_to($unit_id, $assign_to_specific, filter_input(INPUT_POST, 'ingroup', FILTER_VALIDATE_INT, FILTER_REQUIRE_ARRAY));
+        // tags
+        if (!isset($_POST['tags'])) {
+            $tagsArray = [];
+        } else {
+            $tagsArray = $_POST['tags'];
+        }
+        $moduleTag = new ModuleElement($unit_id);
+        $moduleTag->syncTags($tagsArray);
+        $successmsg = $langCourseUnitModified;
+    } else { // add new course unit
+        $order = units_get_maxorder()+1;
+        $q = Database::get()->query("INSERT INTO course_units SET
+                                  title = ?s,
+                                  comments = ?s,
+                                  start_week = ?s,
+                                  finish_week = ?s,
+                                  visible = 1,
+                                  assign_to_specific = ?d,
+                                 `order` = ?d, course_id = ?d",
+            $title, $descr, $unitdurationfrom, $unitdurationto, $assign_to_specific, $order, $course_id);
+
+        $unit_id = $q->lastInsertID;
+        // course unit assigned info (if any)
+        unit_assign_to($unit_id, $assign_to_specific, filter_input(INPUT_POST, 'ingroup', FILTER_VALIDATE_INT, FILTER_REQUIRE_ARRAY));
+
+        if (units_get_maxorder() == 1) { // make 'list' default unit view
+            Database::get()->query("UPDATE course SET view_units = 1 WHERE id = ?d", $course_id);
+        }
+        $successmsg = $langCourseUnitAdded;
+        // tags
+        if (isset($_POST['tags'])) {
+            $moduleTag = new ModuleElement($unit_id);
+            $moduleTag->attachTags($_POST['tags']);
+        }
+    }
+    // update index
+    require_once 'modules/search/indexer.class.php';
+    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNIT, $unit_id);
+    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+    // refresh course metadata
+    require_once 'modules/course_metadata/CourseXML.php';
+    CourseXMLElement::refreshCourse($course_id, $course_code);
+
+    Session::flash('message',$successmsg);
+    Session::flash('alert-class', 'alert-success');
+    redirect_to_home_page("modules/units/index.php?course=$course_code&id=$unit_id");
+}
+
+
+function unit_assign_to($unit_id, $assign_specific_type, $assignees)
+{
+    Database::get()->query("DELETE FROM course_units_to_specific WHERE unit_id = ?d", $unit_id);
+    if ($assign_specific_type && !empty($assignees)) {
+        if ($assign_specific_type == 1) {
+            foreach ($assignees as $assignee_id) {
+                Database::get()->query("INSERT INTO course_units_to_specific (user_id, unit_id) VALUES (?d, ?d)", $assignee_id, $unit_id);
+            }
+        } else {
+            foreach ($assignees as $group_id) {
+                Database::get()->query("INSERT INTO course_units_to_specific (group_id, unit_id) VALUES (?d, ?d)", $group_id, $unit_id);
+            }
+        }
+    }
+}
+
+
+
+/**
  * @brief Check that a specified resource id belongs to a resource in the
           current course, and that the user is an admin in this course.
           Return the id of the unit or false if user is not an admin
@@ -649,7 +745,7 @@ function show_resource($info) {
  */
 function show_doc($title, $comments, $resource_id, $file_id, $act_name) {
     global $can_upload, $course_id, $langWasDeleted, $urlServer,
-           $id, $course_code, $langResourceBelongsToUnitPrereq, 
+           $id, $course_code, $langResourceBelongsToUnitPrereq,
            $langDownloadPdfNotAllowed, $langDoc;
 
     $file = Database::get()->querySingle("SELECT * FROM document WHERE course_id = ?d AND id = ?d", $course_id, $file_id);
@@ -677,19 +773,19 @@ function show_doc($title, $comments, $resource_id, $file_id, $act_name) {
         if ($file->format == '.dir') {
             $image = 'fa-folder-open';
             $download_hidden_link = '';
-            $link = "<a href='{$urlServer}modules/document/index.php?course=$course_code&amp;openDir=$file->path&amp;unit=$id'>" .
+            $link = "<a class='TextBold' href='{$urlServer}modules/document/index.php?course=$course_code&amp;openDir=$file->path&amp;unit=$id'>" .
                 q($title) . "</a>";
         } else {
             $file->title = $title;
             $image = choose_image('.' . $file->format);
-            $download_url = "{$urlServer}modules/document/index.php?course=$course_code&amp;download=$file->path";
+            $download_url = "{$urlServer}modules/document/index.php?course=$course_code&amp;download=" . getIndirectReference($file->path);
             $download_hidden_link = ($can_upload || visible_module(MODULE_ID_DOCS))?
                 "<input type='hidden' value='$download_url'>" : '';
             if (get_config('enable_prevent_download_url') && $file->format == 'pdf' && $file->prevent_download){
                 $file_title = $file->title !== '' ? $file->title : $file->filename;
                 $file_url = file_url($file->path, $file->filename);
-                $link = "<a class='fileURL-link' target='_blank' href='{$urlServer}main/prevent_pdf.php?urlPr=" . urlencode($file_url) . "'>
-                            $file_title&nbsp;&nbsp;" . icon('fa-shield', $langDownloadPdfNotAllowed) . 
+                $link = "<a class='fileURL-link TextBold' target='_blank' href='{$urlServer}main/prevent_pdf.php?urlPr=" . urlencode($file_url) . "'>
+                            $file_title&nbsp;&nbsp;" . icon('fa-shield', $langDownloadPdfNotAllowed) .
                          "</a>";
             } else {
                 $file_obj = MediaResourceFactory::initFromDocument($file);
@@ -791,12 +887,12 @@ function show_lp($title, $comments, $resource_id, $lp_id, $act_name): string
         }
         $module_id = Database::get()->querySingle("SELECT module_id FROM lp_rel_learnPath_module WHERE learnPath_id = ?d ORDER BY `rank` LIMIT 1", $lp_id)->module_id;
         $suspend_data = Database::get()->querySingle("SELECT MAX(suspend_data) AS suspend_data FROM lp_user_module_progress WHERE user_id = ?d AND learnPath_id = ?d", $uid, $lp_id)->suspend_data;
-        $link = "<a href='{$urlAppend}modules/units/view.php?course=$course_code&amp;res_type=lp&amp;path_id=$lp_id&amp;module_id=$module_id&amp;unit=$id'> $title</a>";
+        $link = "<a class='TextBold' href='{$urlAppend}modules/units/view.php?course=$course_code&amp;res_type=lp&amp;path_id=$lp_id&amp;module_id=$module_id&amp;unit=$id'> $title</a>";
 
         $lp_susp_button = "";
         if ($suspend_data) {
             $lp_susp_button = "
-                <span class='pull-right' style='padding-left: 15px;' data-bs-toggle='tooltip' data-bs-placement='top' title='$langLearningPathCleanAttempt'>
+                <span class='pull-right' data-bs-toggle='tooltip' data-bs-placement='top' title='$langLearningPathCleanAttempt'>
                     <a data-href='{$urlAppend}modules/units/view.php?course=$course_code&amp;res_type=lp&amp;path_id=$lp_id&amp;module_id=$module_id&amp;unit=$id&amp;cleanattempt=on' data-toggle='modal' data-target='#confirmLpCleanAttemptDialog'>
                         <span class='fa fa-repeat' style='font-size:15px;'></span>
                     </a>
@@ -813,26 +909,29 @@ function show_lp($title, $comments, $resource_id, $lp_id, $act_name): string
         } else {
                 list($lpProgress, $lpTotalTime) = get_learnPath_progress_details($lp_id, $uid);
                 $lp_results = "<span data-bs-toggle='tooltip' data-bs-placement='top' data-bs-original-title='$langTotalTimeSpent'>" . $lpTotalTime . "</span>
-                            &nbsp; &nbsp;
-                           <span data-bs-toggle='tooltip' data-bs-placement='top' data-bs-original-title='$langTotalPercentCompleteness'>" . disp_progress_bar($lpProgress, 1) . "</span>";
-                $lp_results_button = "<span class='pull-right' style='padding-left: 15px;'  data-bs-toggle='tooltip' data-bs-placement='top' title='$langDetails'>
+                               <span style='margin-top:10px !important;' data-bs-toggle='tooltip' data-bs-placement='top' data-bs-original-title='$langTotalPercentCompleteness'>" . disp_progress_bar($lpProgress, 1) . "</span>";
+                $lp_results_button = "<span class='pull-right' data-bs-toggle='tooltip' data-bs-placement='top' title='$langDetails'>
                     <a href=" . $urlAppend . "modules/units/view.php?course=" . $course_code . "&amp;res_type=lp_results&amp;path_id=" . $lp_id . "&amp;unit=" . $id. ">
                     <span class='fa fa-line-chart'></span>
                     </a>
                 </span>";
         }
-        $imagelink = icon('fa-ellipsis-h');
+        $imagelink = icon('fa-solid fa-timeline');
     }
 
     if (!empty($comments)) {
-        $comment_box = "<small>$comments</small>";
+        $comment_box = "<small class='comment-lp'>$comments</small>";
     }
     $class_vis = ($status == 0) ? ' class="not_visible"' : ' ';
     return "
         <div$class_vis data-id='$resource_id'>
           <div class='unitIcon' width='1'>$imagelink</a></div>
           " . (!empty($act_name) ? "<div class='text-start'>$act_name</div>" : "") . "
-          <div class='text-start'><div class='module-name'>$langLearnPath</div> $link $res_prereq_icon <span class='pull-right'>$lp_susp_button $lp_results_button $lp_results</span><br>$comment_box </div>" .
+          <div class='text-start'>
+            <div class='module-name'>$langLearnPath</div> 
+                 <span class='pull-right d-flex justify-content-start align-items-center gap-3'>$link $res_prereq_icon $lp_susp_button $lp_results_button $lp_results</span>
+                 <div class='content'>$comment_box</div> 
+            </div>" .
 
             actions('lp', $resource_id, $status) . "</div>";
 }
@@ -980,7 +1079,8 @@ function show_videocat($title, $comments, $resource_id, $videolinkcat_id, $visib
 function show_work($title, $comments, $resource_id, $work_id, $visibility, $act_name) {
 
     global $id, $urlServer, $is_editor, $uid, $m, $langResourceBelongsToUnitPrereq,
-            $langWasDeleted, $course_id, $course_code, $langPassCode, $langWorks;
+            $langWasDeleted, $course_id, $course_code, $langPassCode, $langWorks,
+            $langWorkToUser, $langWorkAssignTo, $langWorkToGroup;
 
     $title = q($title);
     $res_prereq_icon = '';
@@ -1017,9 +1117,9 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility, $act_
         $assign_to_users_message = '';
         if ($is_editor) {
             if ($work->assign_to_specific == 1) {
-                $assign_to_users_message = "<small class='help-block'>$m[WorkAssignTo]: $m[WorkToUser]</small>";
+                $assign_to_users_message = "<small class='help-block'>$langWorkAssignTo: $langWorkToUser</small>";
             } else if ($work->assign_to_specific == 2) {
-                $assign_to_users_message = "<small class='help-block'>$m[WorkAssignTo]: $m[WorkToGroup]</small>";
+                $assign_to_users_message = "<small class='help-block'>$langWorkAssignTo: $langWorkToGroup</small>";
             }
             if (resource_belongs_to_unit_completion($_GET['id'], $work_id)) {
                 $res_prereq_icon = icon('fa-star', $langResourceBelongsToUnitPrereq);
@@ -1037,7 +1137,7 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility, $act_
             $class = $exclamation_icon = '';
         }
 
-        $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=assignment&amp;id=$work_id&amp;unit=$id' $class>";
+        $link = "<a class='TextBold' href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=assignment&amp;id=$work_id&amp;unit=$id' $class>";
         $exlink = $link . "$title</a> $exclamation_icon";
         $imagelink = $link . "</a>".icon('fa-flask')."";
     }
@@ -1068,7 +1168,8 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility, $act_
  */
 function show_exercise($title, $comments, $resource_id, $exercise_id, $visibility, $act_name) {
     global $id, $urlServer, $is_editor, $langWasDeleted, $course_id, $course_code, $langPassCode, $uid,
-        $langAttemptActive, $langAttemptPausedS, $m, $langResourceBelongsToUnitPrereq, $langExercises;
+        $langAttemptActive, $langAttemptPausedS, $m, $langResourceBelongsToUnitPrereq, $langExercises,
+        $langWorkToUser, $langWorkAssignTo, $langWorkToGroup;
 
     $title = q($title);
     $link_class = $exclamation_icon = $res_prereq_icon = '';
@@ -1114,9 +1215,9 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
         $assign_to_users_message = '';
         if ($is_editor) {
             if ($exercise->assign_to_specific == 1) {
-                $assign_to_users_message = "<small class='help-block'>$m[WorkAssignTo]: $m[WorkToUser]</small>";
+                $assign_to_users_message = "<small class='help-block'>$langWorkAssignTo: $langWorkToUser</small>";
             } else if ($exercise->assign_to_specific == 2) {
-                $assign_to_users_message = "<small class='help-block'>$m[WorkAssignTo]: $m[WorkToGroup]</small>";
+                $assign_to_users_message = "<small class='help-block'>$langWorkAssignTo: $langWorkToGroup</small>";
             }
             if (resource_belongs_to_unit_completion($_GET['id'], $exercise_id)) {
                 $res_prereq_icon = icon('fa-star', $langResourceBelongsToUnitPrereq);
@@ -1152,12 +1253,12 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
         }
         if ($pending_class) {
             enable_password_bootbox();
-            $link = "<a class='ex_settings $pending_class $link_class' href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id&amp;eurId=$eurid&amp;unit=$id'>";
+            $link = "<a class='ex_settings $pending_class $link_class TextBold' href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id&amp;eurId=$eurid&amp;unit=$id'>";
         } else {
-            $link = "<a class='ex_settings $link_class' href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id&amp;unit=$id'>";
+            $link = "<a class='ex_settings $link_class TextBold' href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id&amp;unit=$id'>";
         }
         $exlink = $link . "$title</a> $exclamation_icon $assign_to_users_message $pending_label";
-        $imagelink = $link . "</a>" . icon('fa-square-pen'). "";
+        $imagelink = $link . "</a>" . icon('fa-solid fa-file-pen'). "";
     }
     $class_vis = ($status == '0' or $status == 'del') ? ' class="not_visible"' : ' ';
 
@@ -1211,7 +1312,7 @@ function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility,
                 }
             }
             $forum_id = $r->forum_id;
-            $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=forum_topic&amp;topic=$ft_id&amp;forum=$forum_id&amp;unit=$id'>";
+            $link = "<a class='TextBold' href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=forum_topic&amp;topic=$ft_id&amp;forum=$forum_id&amp;unit=$id'>";
             $forumlink = $link . "$title</a>";
             $imagelink = icon('fa-comments'). "";
         }
@@ -1244,7 +1345,9 @@ function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility,
  */
 function show_poll($title, $comments, $resource_id, $poll_id, $visibility, $act_name) {
 
-    global $course_id, $course_code, $is_editor, $urlServer, $id, $uid, $langWasDeleted, $langResourceBelongsToUnitPrereq, $m, $langQuestionnaire;
+    global $course_id, $course_code, $is_editor, $urlServer, $id,
+           $uid, $langWasDeleted, $langResourceBelongsToUnitPrereq,
+           $m, $langQuestionnaire, $langWorkToUser, $langWorkAssignTo, $langWorkToGroup;
 
     $res_prereq_icon = '';
 
@@ -1282,15 +1385,15 @@ function show_poll($title, $comments, $resource_id, $poll_id, $visibility, $act_
         $assign_to_users_message = '';
         if ($is_editor) {
             if ($poll->assign_to_specific == 1) {
-                $assign_to_users_message = "<small class='help-block'>$m[WorkAssignTo]: $m[WorkToUser]</small>";
+                $assign_to_users_message = "<small class='help-block'>$langWorkAssignTo: $langWorkToUser</small>";
             } else if ($poll->assign_to_specific == 2) {
-                $assign_to_users_message = "<small class='help-block'>$m[WorkAssignTo]: $m[WorkToGroup]</small>";
+                $assign_to_users_message = "<small class='help-block'>$langWorkAssignTo: $langWorkToGroup</small>";
             }
             if (resource_belongs_to_unit_completion($_GET['id'], $poll_id)) {
                 $res_prereq_icon = icon('fa-star', $langResourceBelongsToUnitPrereq);
             }
         }
-        $link = "<a href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=questionnaire&amp;pid=$poll_id&amp;UseCase=1&amp;unit_id=$id'>";
+        $link = "<a class='TextBold' href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=questionnaire&amp;pid=$poll_id&amp;UseCase=1&amp;unit_id=$id'>";
         $polllink = $link . $title . '</a>';
         $imagelink = $link . "</a>" . icon('fa-question-circle') . "";
     }
@@ -1345,7 +1448,7 @@ function show_wiki($title, $comments, $resource_id, $wiki_id, $visibility, $act_
                 $res_prereq_icon = icon('fa-star', $langResourceBelongsToUnitPrereq);
             }
         }
-        $link = "<a href='{$urlServer}modules/wiki/page.php?course=$course_code&amp;wikiId=$wiki_id&amp;action=show&amp;unit=$id'>";
+        $link = "<a class='TextBold' href='{$urlServer}modules/wiki/page.php?course=$course_code&amp;wikiId=$wiki_id&amp;action=show&amp;unit=$id'>";
         $wikilink = $link . "$title</a>";
         if (!$module_visible) {
             $wikilink .= " <i>($langInactiveModule)</i>";
@@ -1402,7 +1505,7 @@ function show_link($title, $comments, $resource_id, $link_id, $visibility, $act_
         } else {
             $title = q($title);
         }
-        $link = "<a href='" . q($l->url) . "' target='_blank' aria-label='$langOpenNewTab'>";
+        $link = "<a class='TextBold' href='" . q($l->url) . "' target='_blank' aria-label='$langOpenNewTab'>";
         $exlink = $link . "$title</a>";
         $imagelink = icon('fa-link');
     }
@@ -1510,7 +1613,7 @@ function show_ebook($title, $comments, $resource_id, $ebook_id, $visibility, $ac
                 $res_prereq_icon = icon('fa-star', $langResourceBelongsToUnitPrereq);
             }
         }
-        $link = "<a href='{$urlServer}modules/ebook/show.php/$course_code/$ebook_id/unit=$id'>";
+        $link = "<a class='TextBold' href='{$urlServer}modules/ebook/show.php/$course_code/$ebook_id/unit=$id'>";
         $exlink = $link . "$title</a>";
         $imagelink = $link . "</a>" .icon('fa-book') . "";
     }
@@ -1622,7 +1725,7 @@ function show_ebook_resource($title, $comments, $resource_id, $ebook_id, $displa
             $exlink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
         }
     } else {
-        $link = "<a href='${urlServer}modules/ebook/show.php?$course_code/$ebook_id/$display_id/unit=$id'>";
+        $link = "<a class='TextBold' href='${urlServer}modules/ebook/show.php?$course_code/$ebook_id/$display_id/unit=$id'>";
         $exlink = $link . q($title) . '</a>';
         if (!$module_visible) {
             $exlink .= " <i>($langInactiveModule)</i>";
@@ -1670,7 +1773,7 @@ function show_chat($title, $comments, $resource_id, $chat_id, $visibility, $act_
         if (!$is_editor and $chat->status == 'inactive') {
             return '';
         }
-        $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=chat&amp;conference_id=$chat_id&amp;unit=$id'>";
+        $link = "<a class='TextBold' href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=chat&amp;conference_id=$chat_id&amp;unit=$id'>";
         $chatlink = $link . "$title</a>";
         $imagelink = $link . "</a>" .icon('fa-commenting') . "";
     }
@@ -1712,7 +1815,7 @@ function show_blog($title, $comments, $resource_id, $blog_id, $visibility, $act_
             $bloglink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
         }
     } else {
-        $link = "<a href='{$urlServer}modules/blog/index.php?course=$course_code&amp;action=showPost&amp;pId=$blog_id'>";
+        $link = "<a class='TextBold' href='{$urlServer}modules/blog/index.php?course=$course_code&amp;action=showPost&amp;pId=$blog_id'>";
         $bloglink = $link . "$title</a>";
         $imagelink = $link . "</a>" .icon('fa-columns') . "";
     }
@@ -1764,7 +1867,7 @@ function show_h5p($title, $comments, $resource_id, $h5p_id, $visibility, $act_na
         $typeIcon = (file_exists($typeIconPath))
             ? $urlAppend . "courses/h5p/libraries/" . $typeFolder . "/icon.svg"  // expected icon
             : $urlAppend . "resources/icons/h5p_library.svg"; // fallback icon
-        $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=h5p&amp;id=$h5p_id&amp;unit=$id'>";
+        $link = "<a class='TextBold' href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=h5p&amp;id=$h5p_id&amp;unit=$id'>";
         $h5plink = $link . "$title</a>";
         $imagelink = $link . "</a><img src='$typeIcon' width='30px' height='30px' title='$h5p_content_type_title' alt='$h5p_content_type_title'>";
     }
@@ -1791,13 +1894,17 @@ function show_h5p($title, $comments, $resource_id, $h5p_id, $visibility, $act_na
  * @param $resource_id
  * @param $tc_id
  * @param $visibility
+ * @param $act_name
  * @return string
  */
 function show_tc($title, $comments, $resource_id, $tc_id, $visibility, $act_name) {
-    global  $is_editor, $langWasDeleted, $langInactiveModule, $course_id, $langBBB;
+    global  $is_editor, $langWasDeleted, $langInactiveModule, $course_id,
+            $langBBB, $langWillStart, $langHasExpiredS;
+
+    require_once 'modules/tc/functions.php';
 
     $module_visible = visible_module(MODULE_ID_TC); // checks module visibility
-    $class_vis = '';
+    $class_vis = $comment_box = $message_box = '';
     if (!$module_visible and !$is_editor) {
         return '';
     }
@@ -1809,14 +1916,15 @@ function show_tc($title, $comments, $resource_id, $tc_id, $visibility, $act_name
             return '';
         } else {
             $imagelink = icon('fa-xmark link-delete');
-            $tclink = "<span class='not_visible'>" .q($title) ." ($langWasDeleted)</span>";
+            $tclink = 'javascript: void(0)';
+            $message_box .= "$langWasDeleted";
             $class_vis = "class='not_visible'";
         }
     } else {
         if (!$is_editor and !$tc->active) {
             return '';
         }
-        $tclink = q($title);
+        $tclink = get_tc_link($tc_id);
         if (!$module_visible) {
             $tclink .= " <i>($langInactiveModule)</i>";
         }
@@ -1825,15 +1933,26 @@ function show_tc($title, $comments, $resource_id, $tc_id, $visibility, $act_name
 
     if (!empty($comments)) {
         $comment_box = "<br>$comments";
-    } else {
-        $comment_box = '';
+    }
+
+    if ($tc) {
+        if (date_diff_in_minutes($tc->start_date, date('Y-m-d H:i:s')) > 0) {
+            $message_box .= "$langWillStart " . format_time_duration(date_diff_in_minutes($tc->start_date, date('Y-m-d H:i:s')) * 60);
+        } else if (isset($tc->end_date) and (date_diff_in_minutes($tc->end_date, date('Y-m-d H:i:s')) < 0)) { // expired tc
+            $message_box .= "$langHasExpiredS";
+            $tclink = 'javascript: void(0)';
+            $class_vis = "class='not_visible'";
+        }
     }
 
     return "
         <div $class_vis data-id='$resource_id'>
           <div class='unitIcon' width='1'>$imagelink</div>
           " . (!empty($act_name) ? "<div class='text-start'>$act_name</div>" : "") . "
-          <div><div class='module-name'>$langBBB</div>$tclink $comment_box</div>" .
+          <div>
+            <div class='module-name'>$langBBB <span class='help-block label label-warning ps-4'>$message_box</span></div>
+            <a href='$tclink'>" . q($title) . "</a> $comment_box</div>
+            " .
         actions('tc', $resource_id, $visibility) . '
         </div>';
 }
@@ -2101,5 +2220,34 @@ function resource_belongs_to_unit_completion($unit_id, $unit_resource_id) {
         return true;
     } else {
         return false;
+    }
+}
+
+/**
+ * @brief check if user has access to unit if it is assigned to specific users or groups
+ * @param $unit_id
+ * @return bool
+ */
+function has_access_to_unit($unit_id, $assign_to_specific, $user_id)
+{
+    switch ($assign_to_specific) {
+        case 0:
+            return true;
+        case 1:
+            $q = Database::get()->querySingle("SELECT user_id FROM course_units_to_specific WHERE unit_id = ?d AND user_id = ?d", $unit_id, $user_id);
+            if ($q) {
+                return true;
+            } else {
+                return false;
+            }
+        case 2:
+            $unit_to_group_ids = Database::get()->queryArray("SELECT group_id FROM course_units_to_specific WHERE unit_id = ?d", $unit_id);
+            foreach ($unit_to_group_ids as $g) {
+                $q = Database::get()->querySingle("SELECT * FROM group_members WHERE group_id = ?d AND user_id = ?d", $g->group_id, $user_id);
+                if ($q) {
+                    return true;
+                }
+            }
+            return false;
     }
 }

@@ -45,7 +45,7 @@
                                                 </div>
 
                                                 <div class='row input-append date form-group mt-4' data-date = '{{ $user_date_start }}' data-date-format='dd-mm-yyyy'>
-                                                    <label class='col-12 control-label-notes' for='user_date_start'>{{ trans('langStartDate') }}</label>
+                                                    <label class='col-12 control-label-notes' for='user_date_start'>{{ trans('langFrom') }}</label>
                                                     <div class='col-12'>
                                                         <div class='input-group'>
                                                             <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>
@@ -54,7 +54,7 @@
                                                     </div>
                                                 </div>
                                                 <div class='row input-append date form-group mt-4' data-date= '{{ $user_date_end }}' data-date-format='dd-mm-yyyy'>
-                                                    <label class='col-12 control-label-notes' for='user_date_end'>{{ trans('langEndDate') }}</label>
+                                                    <label class='col-12 control-label-notes' for='user_date_end'>{{ trans('langTill') }}</label>
                                                     <div class='col-12'>
                                                         <div class='input-group'>
                                                             <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>
@@ -103,58 +103,38 @@
                                             <table class='table-default'>
                                                 <thead>
                                                     <tr class='list-header'>
-                                                        <th class='col-4'>{{ trans('langMonth') }}</th>
-                                                        <th class='col-4'>{{ trans('langMonthlyCourseRegistrations') }}</th>
-                                                        <th class='col-2'>{{ trans('langVisits') }}</th>
-                                                        <th class='col-2'>{{ trans('langUsers') }}</th>
+                                                        <th class='col-1 text-center'>{{ trans('langMonth') }}</th>
+                                                        <th class='text-center'>{{ trans('langTeachers') }}</th>
+                                                        <th class='text-center'>{{ trans('langStudents') }}</th>
+                                                        <th class='text-center'>{{ trans('langGuests') }}</th>
+                                                        <th class='text-center'>{{ trans('langDoc') }}</th>
+                                                        <th class='text-center'>{{ trans('langAnnouncements') }}</th>
+                                                        <th class='text-center'>{{ trans('langMessages') }}</th>
+                                                        <th class='text-center'>{{ trans('langExercises') }}</th>
+                                                        <th class='text-center'>{{ trans('langWorks') }}</th>
+                                                        <th class='text-center'>{{ trans('langForums') }}</th>
                                                     </tr>
                                                 </thead>
                                                 @foreach ($month_stats as $month_stats_data)
                                                     <tr>
-                                                        <td>{{ $month_stats_data['start'] }}</td>
-                                                        <td>{{ $month_stats_data['registration'] }}</td>
-                                                        <td>{{ $month_stats_data['visits'] }}</td>
-                                                        <td>{{ $month_stats_data['users'] }}</td>
+                                                        <td class='text-center'>{{ $month_stats_data['start'] }}</td>
+                                                        <td class='text-center'>{{ $month_stats_data['prof'] }}</td>
+                                                        <td class='text-center'>{{ $month_stats_data['students'] }}</td>
+                                                        <td class='text-center'>{{ $month_stats_data['guests'] }}</td>
+                                                        <td class='text-center'>{{ $month_stats_data['documents'] }}</td>
+                                                        <td class='text-center'>{{ $month_stats_data['announcements'] }}</td>
+                                                        <td class='text-center'>{{ $month_stats_data['messages'] }}</td>
+                                                        <td class='text-center'>{{ $month_stats_data['exercises'] }}</td>
+                                                        <td class='text-center'>{{ $month_stats_data['assignments'] }}</td>
+                                                        <td class='text-center'>{{ $month_stats_data['forum_posts'] }}</td>
                                                     <tr>
-                                                @endforeach
-                                                <tr>
-                                                    <td>
-                                                        <h5 class='title-default'>{{ trans('langTotal') }}</h5>
-                                                    </td>
-                                                    <td>&nbsp;</td>
-                                                    <td>
-                                                        <h5>{{ $total_visits }}</h5>
-                                                    </td>
-                                                    <td>
-                                                        <h5>{{ $total_users }}</h5>
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </div>
-                                        <div class='table-responsive mt-5'>
-                                            <table class='table-default'>
-                                                <thead>
-                                                    <tr class='list-header'>
-                                                        <th class='col-6'>{{ trans('langModule') }}</th>
-                                                        <th class='col-2'>{{ trans('langVisits') }}</th>
-                                                        <th class='col-2'>{{ trans('langUsers') }}</th>
-                                                    </tr>
-                                                </thead>
-                                                @foreach ($module_month_stats as $module_month_stats_data)
-                                                    <tr>
-                                                        <td>{{ $module_month_stats_data['title'] }}</td>
-                                                        <td>{{ $module_month_stats_data['cnt'] }}</td>
-                                                        <td>{{ $module_month_stats_data['users'] }}</td>
-                                                    </tr>
                                                 @endforeach
                                             </table>
                                         </div>
                                     </div>
                                 </div>
-                            @else
-                                {{--  courses list --}}
+                            @else {{--  courses list --}}
                                 <div class='table-responsive'>
-
                                     <div class='alert alert-info'>
                                         <i class='fa-solid fa-circle-info fa-lg'></i><span>{{ $s }} {{ trans('langCourses') }}({{ trans('langFrom2') }} {{ $all }} {{ trans('langSumFrom') }})</span>
                                     </div>
@@ -170,7 +150,11 @@
                                             </thead>
 
                                             @foreach ($sql as $data)
-                                                <tr>
+                                                @if ($data->visible == COURSE_INACTIVE)
+                                                    <tr class='not_visible'>
+                                                @else
+                                                    <tr>
+                                                @endif
                                                     <td><a href='{{ $_SERVER['SCRIPT_NAME'] }}?c={{ $data->id }}&amp;user_date_start={{ $user_date_start }}&user_date_end={{ $user_date_end }}&stats_submit=true'>{{ $data->title }}</a><br/><small>({{ $data->code }})</small></td>
                                                     <td>{{ $data->prof_names }}</td>
                                                     <td>{!! format_locale_date(strtotime($data->creation_time), 'short') !!}</td>

@@ -141,6 +141,9 @@ function delete_video_category($id) {
 }
 
 function getLinksOfCategory($cat_id, $is_editor, $filterv, $order, $course_id, $filterl, $is_in_tinymce, $compatiblePlugin) {
+
+    global $langCreator;
+
     $uncatresults = array();
 
     $vis_q = ($is_editor) ? '' : "AND visible = 1";
@@ -182,23 +185,12 @@ function getLinksOfCategory($cat_id, $is_editor, $filterv, $order, $course_id, $
                 $resultObj->row_class = (!$myrow->visible) ? 'not_visible' : 'visible' ;
                 $resultObj->extradescription = '';
 
-                if (!$is_in_tinymce and ( !empty($myrow->creator) or ! empty($myrow->publisher))) {
-                    $resultObj->extradescription .= '<br><small>';
-                    if ($myrow->creator == $myrow->publisher) {
-                        $resultObj->extradescription .= $GLOBALS['langCreator'] . ": " . q($myrow->creator);
-                    } else {
-                        $emit = false;
-                        if (!empty($myrow->creator)) {
-                            $resultObj->extradescription .= $GLOBALS['langCreator'] . ": " . q($myrow->creator);
-                            $emit = true;
-                        }
-                        if (!empty($myrow->publisher)) {
-                            $resultObj->extradescription .= ($emit ? ', ' : '') . $GLOBALS['langpublisher'] . ": " . q($myrow->publisher);
-                        }
-                    }
-                    $resultObj->extradescription .= "</small>";
+                if (!$is_in_tinymce) {
                     if ($myrow->description) {
-                        $resultObj->extradescription .= "<p>" . nl2br(q($myrow->description)) . "</p>";
+                        $resultObj->extradescription .= "<div class='help-block'>" . q($myrow->description) . "</div>";
+                    }
+                    if (!empty($myrow->creator)) {
+                        $resultObj->extradescription .= "<div class='help-block mt-2'>$langCreator: " . q($myrow->creator) . "</div>";
                     }
                 }
                 $uncatresults[] = $resultObj;

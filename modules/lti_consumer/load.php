@@ -42,23 +42,13 @@ if (check_guest()) {
     exit;
 }
 
-$head_content .= <<<EOF
-<script type='text/javascript'>
-//<![CDATA[
-$(document).ready(function() {
-    
-    document.ltiLaunchForm.submit();
-
-});
-//]]
-</script>
-EOF;
-
 $resource_link_id = getDirectReference($_GET['id']);
 $lti_app = Database::get()->querySingle("SELECT * FROM lti_apps WHERE id = ?d ", $resource_link_id);
 if (!$lti_app) {
     redirect_to_home_page("courses/" . $course_code);
 }
+
+$head_content .= create_js_for_docreadylaunch($lti_app);
 
 $pageName = q($lti_app->title);
 $tool_content .= action_bar(array(
@@ -70,16 +60,7 @@ $tool_content .= action_bar(array(
     )
 ));
 
-$tool_content .= create_join_button(
-    $lti_app->lti_provider_url,
-    $lti_app->lti_provider_key,
-    $lti_app->lti_provider_secret,
-    $lti_app->id,
-    RESOURCE_LINK_TYPE_LTI_TOOL,
-    $lti_app->title,
-    $lti_app->description,
-    LTI_LAUNCHCONTAINER_EXISTINGWINDOW
-);
+$tool_content .= create_join_button_for_ltitool($lti_app);
 
 add_units_navigation(TRUE);
 draw($tool_content, 2, null, $head_content);

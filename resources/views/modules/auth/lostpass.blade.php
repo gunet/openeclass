@@ -29,7 +29,7 @@
             <div class='col-12 mb-4'>
                 <h1>{{ trans('lang_remind_pass') }}</h1>
             </div>
-            @include('layouts.partials.show_alert') 
+            @include('layouts.partials.show_alert')
             @if(isset($_REQUEST['u']) and isset($_REQUEST['h']))
                 @if(isset($is_valid))
                     @if(!$change_ok)
@@ -53,7 +53,7 @@
                                     </div>
                                     <div class='form-group mt-4'>
                                         <div class='col-12 d-flex justify-content-end align-items-center'>
-                                            <input class='btn submitAdminBtn' type='submit' name='submit' value="{{ trans('langModify') }}">
+                                            <input class='btn submitAdminBtn' type='submit' name='submit' value="{{ trans('langSubmit') }}">
                                         </div>
                                     </div>
                                 </form>
@@ -107,4 +107,3 @@
 </div>
 
 @endsection
-

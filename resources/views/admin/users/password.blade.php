@@ -54,7 +54,7 @@
                       </div>
                       <div class='col-12 mt-5 d-flex justify-content-end align-items-center gap-2'>
                         {!! showSecondFactorChallenge() !!}
-                        <input class='btn submitAdminBtn' type='submit' name='changePass' value='{{ trans('langModify') }}'>
+                        <input class='btn submitAdminBtn' type='submit' name='changePass' value='{{ trans('langSubmit') }}'>
                         <a class='btn cancelAdminBtn' href='{{ $urlServer }}modules/admin/edituser.php?u={{ urlencode(getDirectReference($_REQUEST['userid'])) }}'>{{ trans('langCancel') }}</a>
                       </div>
                     </fieldset>

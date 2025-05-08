@@ -41,19 +41,5 @@ if (!$lti_app) {
     die();
 }
 
-echo create_join_button(
-    $lti_app->lti_provider_url,
-    $lti_app->lti_provider_key,
-    $lti_app->lti_provider_secret,
-    $lti_app->id,
-    RESOURCE_LINK_TYPE_LTI_TOOL,
-    $lti_app->title,
-    $lti_app->description,
-    $lti_app->launchcontainer
-);
-
-echo '<script type="text/javascript">
-//<![CDATA[
-document.ltiLaunchForm.submit();
-//]]>
-</script>';
+echo create_join_button_for_ltitool($lti_app);
+echo create_js_for_immediatelaunch($lti_app);

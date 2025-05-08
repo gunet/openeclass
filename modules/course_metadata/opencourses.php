@@ -19,6 +19,6 @@
  */
 
 define('LISTING_MODE', 'COURSE_METADATA');
-require_once('../auth/opencourses.php');
+require_once('../auth/courses.php');
 
 exit();

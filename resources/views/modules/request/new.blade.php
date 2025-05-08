@@ -9,7 +9,7 @@
             @include('layouts.partials.left_menu')
 
             <div class="col_maincontent_active">
-                    
+
                 <div class="row">
 
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
@@ -26,26 +26,26 @@
 
                     @include('layouts.partials.legend_view')
 
-                    @include('layouts.partials.show_alert') 
+                    @include('layouts.partials.show_alert')
 
                      {!! $action_bar !!}
                      <div class='d-lg-flex gap-4 mt-4'>
                         <div class='flex-grow-1'>
                         <div class='form-wrapper form-edit rounded'>
-                           
+
                             <form class='form-horizontal' action='{{ $targetUrl }}' method='post'>
                                 <div class='form-group'>
                                     <div class='col-sm-12'>
-                                        <div class='control-label-notes'>{{ trans('langCreator') }}: 
+                                        <div class='control-label-notes'>{{ trans('langCreator') }}:
                                             <span>{{ $creatorName }}</span>
                                         </div>
                                     </div>
                                 </div>
 
-                                
 
-                                
-                                    
+
+
+
                                         @if ($request_types)
                                             <div class='form-group mt-4'>
                                                 <label for='requestType' class='col-sm-12 control-label-notes'>{{ trans('langType') }}</label>
@@ -59,18 +59,18 @@
                                                 </div>
                                             </div>
                                         @endif
-                                    
-                                   
+
+
                                         <div class='form-group mt-4'>
                                             <label for='requestTitle' class='col-sm-12 control-label-notes'>{{ trans('langTitle') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
                                             <div class='col-sm-12'>
                                                 <input type='text' class='form-control' placeholder="{{ trans('langTitle') }}..." id='requestTitle' name='requestTitle' required>
                                             </div>
                                         </div>
-                                    
-                                
 
-                                
+
+
+
 
                                 <div class='form-group mt-4'>
                                     <label for='requestDescription' class='col-sm-12 control-label-notes'>{{ trans('langDescription') }}</label>
@@ -79,12 +79,12 @@
                                     </div>
                                 </div>
 
-                             
 
-                               
-                                    
+
+
+
                                         <div class='form-group mt-4'>
-                                            <label for='assignTo' class='col-sm-12 control-label-notes'>{{ trans("m['WorkAssignTo']") }}:</label>
+                                            <label for='assignTo' class='col-sm-12 control-label-notes'>{{ trans('langWorkAssignTo') }}:</label>
                                             <div class='col-sm-12'>
                                                 <select class='form-select' name='assignTo[]' multiple id='assignTo'>
                                                     @foreach ($course_users as $cu)
@@ -93,8 +93,8 @@
                                                 </select>
                                             </div>
                                         </div>
-                                   
-                                  
+
+
                                         <div class='form-group mt-4'>
                                             <label for='requestWatchers' class='col-sm-12 control-label-notes'>{{ trans('langWatchers') }}:</label>
                                             <div class='col-sm-12'>
@@ -107,8 +107,8 @@
                                                 </select>
                                             </div>
                                         </div>
-                                    
-                               
+
+
 
                                 @if ($request_types)
                                     <div class="mt-4"></div>
@@ -120,7 +120,7 @@
                                     @endforeach
                                 @endif
 
-                                
+
 
                                 <div class='form-group mt-4'>
                                     <div class='col-12'>
@@ -132,7 +132,7 @@
                                     </div>
                                 </div>
 
-                                
+
 
                                 <div class='form-group mt-5'>
                                     <div class='col-12 d-flex justify-content-end align-items-center gap-2'>
@@ -148,7 +148,7 @@
                             <img class='form-image-modules' src='{!! get_form_image() !!}' alt="{{ trans('langImgFormsDes') }}">
                         </div>
                         </div>
-                        
+
 
 
                 </div>
@@ -156,7 +156,7 @@
 
 
         </div>
-   
+
 </div>
 </div>
 

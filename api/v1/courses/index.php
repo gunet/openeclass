@@ -282,18 +282,38 @@ function api_method($access) {
         exit();
     }
 
-    $courses = Database::get()->queryArray('SELECT course.code AS id,
-            course.title AS name,
-            course.title AS shortname,
-            course_department.department AS categoryid,
-            "" AS summary,
-            course.description AS description,
-            created AS timecreated,
-            created AS timemodified
-        FROM course
-            JOIN course_department ON course.id = course_department.course
-        WHERE visible <> ' . COURSE_INACTIVE . '
-        ORDER BY course.title');
+    if ($access->all_courses) {
+        $courses = Database::get()->queryArray("SELECT course.code AS id,
+                course.title AS name,
+                course.title AS shortname,
+                course_department.department AS categoryid,
+                '' AS summary,
+                course.description AS description,
+                created AS timecreated,
+                created AS timemodified
+            FROM course
+                JOIN course_department ON course.id = course_department.course
+            WHERE visible <> " . COURSE_INACTIVE . "
+            ORDER BY course.title");
+    } else {
+        if ($access->courseIDs) {
+            $placeholders = implode(',', array_fill(0, count($access->courseIDs), '?d'));
+            $courses = Database::get()->queryArray("SELECT course.code AS id,
+                    course.title AS name,
+                    course.title AS shortname,
+                    course_department.department AS categoryid,
+                    '' AS summary,
+                    course.description AS description,
+                    created AS timecreated,
+                    created AS timemodified
+                FROM course
+                    JOIN course_department ON course.id = course_department.course
+                WHERE visible <> " . COURSE_INACTIVE . " AND course.id IN ($placeholders)
+                ORDER BY course.title", $access->courseIDs);
+        } else {
+            $courses = [];
+        }
+    }
 
     header('Content-Type: application/json');
     echo json_encode($courses, JSON_UNESCAPED_UNICODE);
