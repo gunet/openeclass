@@ -239,7 +239,8 @@ function display_attendance_activities($attendance_id) {
            $langHere, $langAttendanceNoActMessage3, $langAttendanceActivity,
            $langConfig, $langStudents, $langGradebookAddActivity, $langInsertWorkCap, $langExercise,
            $langAdd, $langExport, $langBack, $langNoStudentsInAttendance, $langBBB,
-           $is_editor, $is_course_reviewer, $is_collaborative_course, $langSettingSelect;
+           $is_editor, $is_course_reviewer, $is_collaborative_course, $langSettingSelect,
+           $langQRCodePresence;
 
     $attendance_id_ind = getIndirectReference($attendance_id);
     if ($is_editor) {
@@ -366,6 +367,11 @@ function display_attendance_activities($attendance_id) {
                             'icon' => 'fa-edit',
                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;modify=" . getIndirectReference($details->id)
                         ),
+                        array('title' => $langQRCodePresence,
+                            'icon' => 'fa-solid fa-qrcode',
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;gen_qrcodePr=true&amp;actId=" . getIndirectReference($details->id),
+                            'show' => !$details->module_auto_id
+                        ),
                         array('title' => $langDelete,
                             'icon' => 'fa-xmark',
                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;&amp;attendance_id=$attendance_id&amp;delete=" . getIndirectReference($details->id),
@@ -426,7 +432,7 @@ function attendance_display_available_assignments($attendance_id) {
 
     global $course_id, $course_code, $tool_content, $urlServer,
            $m, $langDescription, $langAttendanceNoActMessageAss4,
-           $langAdd, $langTitle, $langSettingSelect;
+           $langAdd, $langTitle, $langSettingSelect, $langWorkAssignTo;
 
     $checkForAss = Database::get()->queryArray("SELECT * FROM assignment WHERE assignment.course_id = ?d
                                                 AND assignment.active = 1
@@ -445,7 +451,7 @@ function attendance_display_available_assignments($attendance_id) {
         foreach ($checkForAss as $newAssToGradebook) {
             $content = ellipsize_html($newAssToGradebook->description, 50);
             if ($newAssToGradebook->assign_to_specific) {
-                $content .= "$m[WorkAssignTo]:<br>";
+                $content .= "$langWorkAssignTo:<br>";
                 $checkForAssSpec = Database::get()->queryArray("SELECT user_id, user.surname, user.givenname
                                                     FROM `assignment_to_specific`, user
                                                     WHERE user_id = user.id AND assignment_id = ?d", $newAssToGradebook->id);

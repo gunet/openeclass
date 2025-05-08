@@ -562,7 +562,8 @@ function show_sessionResource($info) {
  */
 function show_session_poll($title, $comments, $resource_id, $poll_id, $visibility) {
 
-    global $course_id, $course_code, $is_consultant, $urlServer, $uid, $langWasDeleted, $langResourceBelongsToSessionPrereq, $m;
+    global $course_id, $course_code, $is_consultant, $urlServer, $uid, $langWasDeleted, 
+           $langResourceBelongsToSessionPrereq, $m, $langWorkToUser, $langWorkAssignTo, $langWorkToGroup;
 
     $res_prereq_icon = '';
     $class_vis = ($visibility == 0 ) ? ' class="not_visible"' : ' ';
@@ -597,9 +598,9 @@ function show_session_poll($title, $comments, $resource_id, $poll_id, $visibilit
         $assign_to_users_message = '';
         if ($is_consultant) {
             if ($poll->assign_to_specific == 1) {
-                $assign_to_users_message = "<small class='help-block'>$m[WorkAssignTo]: $m[WorkToUser]</small>";
+                $assign_to_users_message = "<small class='help-block'>$langWorkAssignTo: $langWorkToUser</small>";
             } else if ($poll->assign_to_specific == 2) {
-                $assign_to_users_message = "<small class='help-block'>$m[WorkAssignTo]: $m[WorkToGroup]</small>";
+                $assign_to_users_message = "<small class='help-block'>$langWorkAssignTo: $langWorkToGroup</small>";
             }
             if (resource_belongs_to_session_completion($_GET['session'], $poll_id)) {
                 $res_prereq_icon = icon('fa-star', $langResourceBelongsToSessionPrereq);
@@ -817,7 +818,8 @@ function show_session_reference_doc($title, $comments, $resource_id, $file_id) {
 function show_session_work($title, $comments, $resource_id, $work_id, $visibility) {
 
     global $urlServer, $is_consultant, $uid, $m, $langResourceBelongsToSessionPrereq,
-            $langWasDeleted, $course_id, $course_code, $langPassCode;
+            $langWasDeleted, $course_id, $course_code, $langPassCode, $langWorkToUser, 
+            $langWorkAssignTo, $langWorkToGroup;
 
     $title = q($title);
     $res_prereq_icon = '';
@@ -850,9 +852,9 @@ function show_session_work($title, $comments, $resource_id, $work_id, $visibilit
         $assign_to_users_message = '';
         if ($is_consultant) {
             if ($work->assign_to_specific == 1) {
-                $assign_to_users_message = "<small class='help-block'>$m[WorkAssignTo]: $m[WorkToUser]</small>";
+                $assign_to_users_message = "<small class='help-block'>$langWorkAssignTo: $langWorkToUser</small>";
             } else if ($work->assign_to_specific == 2) {
-                $assign_to_users_message = "<small class='help-block'>$m[WorkAssignTo]: $m[WorkToGroup]</small>";
+                $assign_to_users_message = "<small class='help-block'>$langWorkAssignTo: $langWorkToGroup</small>";
             }
             if (resource_belongs_to_session_completion($_GET['session'], $work_id)) {
                 $res_prereq_icon = icon('fa-star', $langResourceBelongsToSessionPrereq);

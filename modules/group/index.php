@@ -681,7 +681,7 @@ if ($is_editor) {
                                                                 $tool_content .= "<p class='form-label'>$langGroupTutor</p>";
                                                                 if(count($tutors)>0){
                                                                     foreach ($tutors as $t) {
-                                                                        $tool_content .= display_user($t->user_id) . "</br><div class='mt-2'></div>";
+                                                                        $tool_content .= display_user($t->user_id) . "<div class='mt-2'></div>";
                                                                     }
                                                                 }else{
                                                                     $tool_content .= "<p class='small-text'>$langNoInfoAvailable</p>";
@@ -967,7 +967,7 @@ if ($is_editor) {
                                                                     <p class='form-label'>$langGroupTutor</p>";
                                                                     if (count($tutors) > 0) {
                                                                         foreach ($tutors as $t) {
-                                                                            $tool_content .= display_user($t->user_id) . "</br><div class='mt-2'></div>";
+                                                                            $tool_content .= display_user($t->user_id) . "<div class='mt-2'></div>";
                                                                         }
                                                                     } else {
                                                                         $tool_content .= "<p class='small-text'>$langNoInfoAvailable</p>";

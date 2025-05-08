@@ -69,8 +69,9 @@ class LtiPublishApp extends ExtApp {
     }
 
     public function getFramebustHeader(): string {
+        global $lti_allow_framing;
         $framebustheader = 'X-Frame-Options: SAMEORIGIN';
-        if ($this->isEnabledForCurrentCourse()) {
+        if ($this->isEnabledForCurrentCourse() or $lti_allow_framing ?? false) {
             $frameancestors = get_config('ext_ltipublish_frameancestors');
             $sources = explode(",", $frameancestors);
             if ($sources !== false && count($sources) > 0) {

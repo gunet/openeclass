@@ -31,7 +31,7 @@
 
                 {!! $action_bar !!}
 
-                @include('layouts.partials.show_alert') 
+                @include('layouts.partials.show_alert')
 
                 <div class='col-lg-6 col-12'>
                 <div class='form-wrapper form-edit border-0 px-0'>
@@ -72,7 +72,7 @@
 
                             <div class='form-group mt-5'>
                                 <div class='col-12 d-flex justify-content-end align-items-center gap-2'>
-                                    <input type='submit' class='btn submitAdminBtn' name='submit' value='{{ trans('langModify') }}'>
+                                    <input type='submit' class='btn submitAdminBtn' name='submit' value='{{ trans('langSubmit') }}'>
                                     <a href='display_profile.php' class='btn cancelAdminBtn'>{{ trans('langCancel') }}</a>
                                 </div>
                             </div>

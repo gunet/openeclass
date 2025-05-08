@@ -32,7 +32,6 @@ $head_content .= "
 load_js('d3/d3.min.js');
 load_js('c3-0.4.10/c3.min.js');
 
-
 $toolName = $langQuestionnaire;
 $pageName = $langPollCharts;
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langQuestionnaire);
@@ -223,12 +222,23 @@ $j=1;
 $chart_data = [];
 $chart_counter = 0;
 
+$all_users_participants = Database::get()->queryArray("SELECT user.id,user.givenname,user.surname,poll_user_record.uid FROM poll_user_record
+                                                        LEFT JOIN user ON user.id=poll_user_record.uid
+                                                        WHERE poll_user_record.pid = ?d", $pid);
+foreach ($all_users_participants as $p) {
+    $all_participants[] = (object) array("participants" => $p->uid, "givenname" => $p->givenname, "surname" => $p->surname);
+}
+
 if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK) {
     foreach ($questions as $theQuestion) {
         $this_chart_data = array();
         if ($theQuestion->qtype == QTYPE_LABEL) {
             $tool_content .= "<div class='col-12 mt-3'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$theQuestion->question_text</span></div></div>";
         } else {
+           $ansExists = Database::get()->querySingle("SELECT arid FROM poll_answer_record WHERE qid = ?d", $theQuestion->pqid);
+            if (!$ansExists) {
+                continue;
+            }
             $tool_content .= "
             <div class='col-12 mt-4'>
             <div class='card panelCard card-default px-lg-4 py-lg-3'>
@@ -320,7 +330,7 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK) {
                             '<td>' . $ellipsized_names_str .
                             (($ellipsized_names_str != $names_str)? ' <a href="#" class="trigger_names" data-type="multiple" id="show">'.$langViewShow.'</a>' : '') .
                             '</td>
-                                <td class="hidden_names" style="display:none;">'.q($names_str).' <a href="#" class="trigger_names" data-type="multiple" id="hide">'.$langViewHide.'</a></td>')."</tr>";
+                                <td class="hidden_names" style="display:none;"><em>'.q($names_str).'</em> <a href="#" class="trigger_names" data-type="multiple" id="hide">'.$langViewHide.'</a></td>')."</tr>";
                     unset($names_array);
                 }
                 $answers_table .= "</table></div><br>";
@@ -330,7 +340,9 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK) {
                 $tool_content .= "<div class='col-lg-12'>";
                 $tool_content .= plot_placeholder("poll_chart$chart_counter", q_math($theQuestion->question_text));
                 $tool_content .= "</div></div>";
-                $tool_content .= $answers_table;
+                if ($is_editor) {
+                    $tool_content .= $answers_table;
+                }
                 $chart_counter++;
             } elseif ($theQuestion->qtype == QTYPE_SCALE) {
                 $names_array = array();
@@ -361,6 +373,7 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK) {
                     if (!is_null($this_chart_data['answer'])) {
                         $this_chart_data['percentage'][array_search($answer->answer_text, $this_chart_data['answer'])] = $percentage;
                     }
+
                     if ($thePoll->anonymized != 1) {
                         $names_str = $ellipsized_names_str = '';
                         // Gets names for registered users and emails for unregistered
@@ -399,9 +412,9 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK) {
                             '<td>'.$ellipsized_names_str.
                             (($ellipsized_names_str != $names_str)? ' <a href="#" class="trigger_names" data-type="multiple" id="show">'.$langViewShow.'</a>' : '').
                             '</td>
-                            <td class="hidden_names" style="display:none;">'
+                            <td class="hidden_names" style="display:none;"><em>'
                             . q($names_str) .
-                            ' <a href="#" class="trigger_names" data-type="multiple" id="hide">'.$langViewHide.'</a>
+                            '</em> <a href="#" class="trigger_names" data-type="multiple" id="hide">'.$langViewHide.'</a>
                             </td>').
                         "</tr>";
                     unset($names_array);
@@ -414,7 +427,9 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK) {
                 $tool_content .= "<div class='col-lg-12'>";
                 $tool_content .= plot_placeholder("poll_chart$chart_counter", q($theQuestion->question_text));
                 $tool_content .= "</div></div>";
-                $tool_content .= $answers_table;
+                if ($is_editor) {
+                    $tool_content .= $answers_table;
+                }
                 $chart_counter++;
             } elseif ($theQuestion->qtype == QTYPE_FILL) {
                 $tool_content .= "<div class='panel-body'>";
@@ -432,13 +447,12 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK) {
                         <tr class='list-header'>
                                 <th>$langAnswer</th>
                                 <th>$langSurveyTotalAnswers</th>
-                                ".(($thePoll->anonymized == 1)?'':'<th>'.$langStudents.'</th>')."
+                                ".(($thePoll->anonymized == 1 or (!$is_editor))?'':'<th>'.$langStudents.'</th>')."
                         </tr>";
                 $k=1;
                 foreach ($answers as $answer) {
                     if (!$thePoll->anonymized) {
                         // Gets names for registered users and emails for unregistered
-
                         $names = Database::get()->queryArray("(SELECT CONCAT(user.surname, ' ', user.givenname) AS fullname,
                                                             submit_date AS s
                                                     FROM poll_user_record, poll_answer_record, user
@@ -463,21 +477,21 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK) {
                         $ellipsized_names_str = q(ellipsize($names_str, 60));
                     }
                     $row_class = ($k>3) ? 'class="hidden_row" style="display:none;"' : '';
-                    $extra_column = !$thePoll->anonymized ?
+                    $extra_column = (!$thePoll->anonymized and $is_editor)?
                         "<td>"
                         . $ellipsized_names_str
                         . (($ellipsized_names_str != $names_str) ? ' <a href="#" class="trigger_names" data-type="multiple" id="show">'.$langViewShow.'</a>' : '').
                         "</td>
-                            <td class='hidden_names' style='display:none;'>"
+                            <td class='hidden_names' style='display:none;'><em>"
                         . q($names_str) .
-                        " <a href='#' class='trigger_names' data-type='multiple' id='hide'>".$langViewHide."</a>
+                        "</em> <a href='#' class='trigger_names' data-type='multiple' id='hide'>".$langViewHide."</a>
                            </td>" : "";
                     $tool_content .= "
-                    <tr $row_class>
-                            <td>".q($answer->answer_text)."</td>
-                            <td>$answer->count</td>
-                            $extra_column
-                    </tr>";
+                        <tr $row_class>
+                                <td>".q($answer->answer_text)."</td>
+                                <td>$answer->count</td>
+                                $extra_column
+                        </tr>";
                     $k++;
                     if (!$thePoll->anonymized) {
                         unset($names_array);
@@ -490,6 +504,89 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK) {
                     </tr>";
                 }
                 $tool_content .= '</tbody></table></div><br>';
+            } elseif ($theQuestion->qtype == QTYPE_TABLE) {
+                $tool_content .= "<div class='panel-body'>
+                                    <div class='inner-heading'><strong>$theQuestion->question_text</strong></div>
+                                </div>";
+
+                $answers = Database::get()->queryArray("SELECT poll_answer_record.poll_user_record_id,
+                                                               poll_answer_record.qid,
+                                                               poll_answer_record.answer_text,
+                                                               poll_answer_record.sub_qid,
+                                                               poll_answer_record.sub_qid_row,
+                                                               poll_user_record.id,
+                                                               poll_user_record.uid,
+                                                               poll_question_answer.answer_text as sub_question_text,
+                                                               poll_question_answer.sub_question FROM poll_answer_record
+                                                                INNER JOIN poll_user_record ON poll_answer_record.poll_user_record_id=poll_user_record.id
+                                                                INNER JOIN poll_question_answer ON poll_answer_record.sub_qid=poll_question_answer.sub_question
+                                                                WHERE poll_answer_record.qid = ?d 
+                                                                AND poll_user_record.pid = ?d
+                                                                AND poll_question_answer.pqid = ?d", $theQuestion->pqid, $pid, $theQuestion->pqid);
+
+                if (count($all_participants) > 0 && count($answers) > 0) {
+                    $sub_questions = Database::get()->queryArray("SELECT * FROM poll_question_answer WHERE pqid = ?d",$theQuestion->pqid);
+                    foreach ($all_participants as $p) {
+                        $pollUserR = Database::get()->querySingle("SELECT id FROM poll_user_record WHERE pid = ?d AND uid = ?d", $pid, $p->participants);
+                        $displayUser = false;
+                        foreach ($sub_questions as $s) {
+                            if ($pollUserR) {
+                                $check = Database::get()->queryArray("SELECT * FROM poll_answer_record
+                                                                        WHERE poll_user_record_id = ?d
+                                                                        AND qid = ?d
+                                                                        AND sub_qid = ?d", $pollUserR->id, $s->pqid, $s->sub_question);
+
+                                if (count($check) > 0) {
+                                    $displayUser = true;
+                                }
+                            }
+                        }
+                        if ($displayUser) {
+                            $tool_content .="<div class='card panelCard card-default card-user-answers mb-4'>
+                                                <div class='card-header'>";
+                                                    if ($thePoll->anonymized or (!$is_editor)) {
+                                                        $tool_content .= "$langAnswer";
+                                                    } else {
+                                                        $tool_content .= "<h3 style='margin-bottom:0px;'>$p->givenname&nbsp;$p->surname</h3>";
+                                                    }
+                            $tool_content .= "</div>
+                                                <div class='card-body'>";
+                            $tool_content .= "<div class='d-flex justify-content-start align-items-start gap-4 flew-wrap'>";
+                                                foreach ($sub_questions as $s) {
+                                                    $displayItem = false;
+                                                    if ($pollUserR) {
+                                                        $check = Database::get()->queryArray("SELECT * FROM poll_answer_record
+                                                                                                WHERE poll_user_record_id = ?d
+                                                                                                AND qid = ?d
+                                                                                                AND sub_qid = ?d", $pollUserR->id, $s->pqid, $s->sub_question);
+                                                        if (count($check) > 0) {
+                                                            $displayItem = true;
+                                                        }
+                                                    }
+                                                    if ($displayItem) {
+                                                        $tool_content .= "<ul class='list-group list-group-flush w-100'>
+                                                        <li class='list-group-item element'><h5 style='margin-bottom:0px;'>$s->answer_text</h5></li>";
+                                                        foreach ($answers as $a) {
+                                                            if ($p->participants == $a->uid && $theQuestion->pqid == $a->qid &&
+                                                                    $s->sub_question == $a->sub_question) {
+                                                                        $tool_content .= "<li class='list-group-item element'>$a->answer_text</li>";
+                                                            }
+                                                        }
+                                                    }
+                                                    $tool_content .= "</ul>";
+                                                }
+                            $tool_content .= "          
+                                                        </div>    
+                                                </div>
+                                            </div>";
+                        }
+                    }
+                } else {
+                    $tool_content .= "<div class='alert alert-warning'>
+                                            <i class='fa-solid fa-triangle-exclamation fa-lg'></i>
+                                            <span>$langNoAnswers</span>
+                                        </div>";
+                }
             }
             $tool_content .= "</div></div></div>";
         }

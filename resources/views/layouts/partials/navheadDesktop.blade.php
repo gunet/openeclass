@@ -6,9 +6,11 @@
             <div class='d-none d-lg-block w-100 header-large-screen'>
                 <div class='col-12 h-100 d-flex justify-content-between align-items-center gap-5'>
                     <nav class='d-flex justify-content-start align-items-center h-100'>
-                        <a class='me-lg-4 me-xl-5' href="{{ $urlAppend }}" aria-label="{{ trans('langHomePage') }}">
+                        <a class='me-lg-4 me-xl-5' href="@if($_SESSION['provider'] !== 'lti_publish'){{ $urlAppend }}@endif" aria-label="{{ trans('langHomePage') }}">
                             <img class="eclass-nav-icon m-auto d-block" src="{{ $logo_img }}" alt="{{ trans('langLogo') }}"/>
                         </a>
+
+                        @if($_SESSION['provider'] !== 'lti_publish')
                         <ul class="container-items nav">
                             @if(!get_config('hide_login_link'))
                                 <li class="nav-item">
@@ -25,7 +27,7 @@
                                 </li>
                                 @if (!get_config('dont_display_courses_menu'))
                                     <li class="nav-item">
-                                        <a id="link-lessons" class="nav-link menu-item mx-lg-2" href="{{ $urlServer }}modules/auth/listfaculte.php">
+                                        <a id="link-lessons" class="nav-link menu-item mx-lg-2" href="{{ $urlServer }}modules/auth/listfaculties.php">
                                             {{ trans('langCourses') }}
                                         </a>
                                     </li>
@@ -53,6 +55,7 @@
                                 @endif
                             @endif
                         </ul>
+                        @endif
                     </nav>
                     <div class='d-flex justify-content-end align-items-center h-100 pe-0 gap-3'>
                         @if (get_config('enable_search'))
@@ -124,10 +127,17 @@
                                     <div class='d-flex justify-content-end p-0 h-80px'>
                                         <div class="btn-group" role="group" aria-label="{{ trans('langMenu') }}">
                                             <div class="btn-group" role="group">
+                                                @if($_SESSION['provider'] !== 'lti_publish')
                                                 <button id="btnGroupDrop1" type="button" class="btn user-menu-btn rounded-0 d-flex justify-content-center align-items-center gap-2 rounded-0" data-bs-toggle="dropdown" aria-expanded="false">
-                                                        <img class="user-icon-filename" src="{{ user_icon($_SESSION['uid'], IMAGESIZE_LARGE) }}" alt="{{ trans('langUser') }}:{{ $uname }}">
-                                                        <span class='TextBold user-name'>{{ $_SESSION['uname'] }}</span>
-                                                        <i class="fa-solid fa-chevron-down"></i>
+                                                        @if(user_icon($_SESSION['uid'], IMAGESIZE_LARGE, true) !== false)
+                                                            <img class="user-icon-filename" src="{{ user_icon($_SESSION['uid'], IMAGESIZE_LARGE) }}" alt="{{ trans('langUser') }}:{{ $uname }}">
+                                                        @else
+                                                            <span class='name-initials TextBold fs-6'>
+                                                                {{ isset($_SESSION['givenname']) ? mb_strtoupper(mb_substr(trim($_SESSION['givenname']), 0, 1, 'UTF-8'), 'UTF-8') : '' }}
+                                                                {{ isset($_SESSION['surname']) ? mb_strtoupper(mb_substr(trim($_SESSION['surname']), 0, 1, 'UTF-8'), 'UTF-8') : '' }}
+                                                            </span>
+                                                        @endif
+                                                            <i class="fa-solid fa-chevron-down ms-1"></i>
                                                 </button>
                                                 <div class="m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-menu-user" aria-labelledby="btnGroupDrop1">
                                                     <ul class="list-group list-group-flush">
@@ -284,6 +294,17 @@
                                                         </li>
                                                     </ul>
                                                 </div>
+                                                @else
+                                                <div id="lti_menu_btn" class="rounded-0 d-flex justify-content-center align-items-center gap-2 rounded-0">
+                                                    <img class="user-icon-filename" src="{{ user_icon($_SESSION['uid'], IMAGESIZE_LARGE) }}" alt="{{ trans('langUser') }}:{{ $uname }}">
+                                                    <div class="pt-1 pb-1">
+                                                        <span class='TextBold user-name fs-6'>
+                                                            {{ isset($_SESSION['givenname']) ? mb_strtoupper(mb_substr(trim($_SESSION['givenname']), 0, 1, 'UTF-8'), 'UTF-8') : '' }}
+                                                            {{ isset($_SESSION['surname']) ? mb_strtoupper(mb_substr(trim($_SESSION['surname']), 0, 1, 'UTF-8'), 'UTF-8') : '' }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                @endif
                                             </div>
                                         </div>
                                     </div>
@@ -331,7 +352,14 @@
                         <div>
                             <button class="btn btn-transparent p-0 dropdown-toogle d-flex justify-content-end align-items-center" type="button"
                                     id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                @if(user_icon($_SESSION['uid'], IMAGESIZE_LARGE,true) !== false)
                                     <img class="user-icon-filename mt-0" src="{{ user_icon($_SESSION['uid'], IMAGESIZE_LARGE) }}" alt="{{ trans('langUser') }}:{{ $uname }}">
+                                @else
+                                    <span class='name-initials TextBold fs-6'>
+                                        {{ isset($_SESSION['givenname']) ? mb_strtoupper(mb_substr(trim($_SESSION['givenname']), 0, 1, 'UTF-8'), 'UTF-8') : '' }}
+                                        {{ isset($_SESSION['surname']) ? mb_strtoupper(mb_substr(trim($_SESSION['surname']), 0, 1, 'UTF-8'), 'UTF-8') : '' }}
+                                    </span>
+                                @endif
                             </button>
 
                             <div class="m-0 py-3 px-3 dropdown-menu dropdown-menu-end contextual-menu contextual-menu-user contextual-border" aria-labelledby="dropdownMenuButton1">
@@ -489,7 +517,7 @@
                                 @endif
                                 @if (!get_config('dont_display_courses_menu'))
                                     <p class='py-2 px-0'>
-                                        <a id='coursesId' type='button' class='header-mobile-link d-flex justify-content-start align-items-start gap-2 flex-wrap TextBold' href="{{ $urlAppend }}modules/auth/listfaculte.php" aria-label="{{ trans('langOtherCourses') }}">
+                                        <a id='coursesId' type='button' class='header-mobile-link d-flex justify-content-start align-items-start gap-2 flex-wrap TextBold' href="{{ $urlAppend }}modules/auth/listfaculties.php" aria-label="{{ trans('langOtherCourses') }}">
                                             <i class="fa-solid fa-book"></i>{{ trans('langCourses') }}
                                         </a>
                                     </p>
@@ -540,8 +568,8 @@
        || current_url.includes('/modules/auth/altnewuser.php')){
         localStorage.setItem("menu-item", "register");
     }
-    if(current_url.includes('/modules/auth/opencourses.php')
-        || current_url.includes('/modules/auth/listfaculte.php')
+    if(current_url.includes('/modules/auth/courses.php')
+        || current_url.includes('/modules/auth/listfaculties.php')
         || current_url.includes('/modules/auth/courses.php')){
         localStorage.setItem("menu-item", "lessons");
     }
@@ -555,8 +583,8 @@
        && !current_url.includes('/modules/auth/formuser.php')
        && !current_url.includes('/modules/auth/newuser.php')
        && !current_url.includes('/modules/auth/altnewuser.php')
-       && !current_url.includes('/modules/auth/opencourses.php')
-       && !current_url.includes('/modules/auth/listfaculte.php')
+       && !current_url.includes('/modules/auth/courses.php')
+       && !current_url.includes('/modules/auth/listfaculties.php')
        && !current_url.includes('/modules/auth/courses.php')
        && !current_url.includes('/main/portfolio.php')
        && !current_url.includes('/info/faq.php')

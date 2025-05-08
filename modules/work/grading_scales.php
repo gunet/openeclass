@@ -23,7 +23,7 @@ $require_help = true;
 $helpTopic = 'assignments';
 $helpSubTopic = 'scale';
 
-include '../../include/baseTheme.php';
+require_once '../../include/baseTheme.php';
 
 $toolName = $langGradeScales;
 $pageName = $langGradeScales;

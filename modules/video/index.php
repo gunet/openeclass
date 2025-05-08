@@ -117,7 +117,7 @@ if ($is_editor && !$is_in_tinymce) { // admin actions
             }
             $q = Database::get()->queryArray("SELECT id FROM videolink WHERE category = ?d AND course_id = ?d", $_GET['id'], $course_id);
             foreach ($q as $a) {
-                delete_video($a->id, 'videolink');
+                delete_video($a->id, 'videolink', $course_id, $course_code, $webDir);
             }
             delete_video_category($_GET['id']);
         } else {  // delete video / videolink
@@ -168,7 +168,7 @@ if ($display_tools) {
 }
 
 $data['display_tools'] = $display_tools;
-$data['action_bar'] = $action_bar;
+$data['action_bar'] = $action_bar ?? '';
 $data['count_video'] = Database::get()->querySingle("SELECT COUNT(*) AS count FROM video $filterv AND course_id = ?d", $course_id)->count;
 $data['count_video_links'] = Database::get()->querySingle("SELECT count(*) AS count FROM videolink $filterl AND course_id = ?d", $course_id)->count;
 $data['num_of_categories'] = Database::get()->querySingle("SELECT COUNT(*) AS count FROM `video_category` WHERE course_id = ?d", $course_id)->count;
@@ -183,12 +183,12 @@ add_units_navigation(TRUE); // TODO: test
 ModalBoxHelper::loadModalBox(true);
 
 if (isset($_GET['form_input']) and $_GET['form_input'] === 'opendelos') {
+    load_js('datatables');
     list($jsonPublicObj, $jsonPrivateObj, $checkAuth) = requestDelosJSON();
     $data['jsonPublicObj'] = $jsonPublicObj;
     $data['jsonPrivateObj'] = $jsonPrivateObj;
     $data['checkAuth'] = $checkAuth;
     $data['currentVideoLinks'] = getCurrentVideoLinks($course_id);
-    $head_content .= getDelosJavaScript();
     view('modules.video.editdelos', $data);
 } else {
     view('modules.video.index', $data);

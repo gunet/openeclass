@@ -174,7 +174,7 @@ function course_list_handler() {
                     text: title_span.text()
                 }
                 ));
-                title_span.append(' <i class="fa solid fa-check">');
+                title_span.append(' <i class="fa-solid fa-check fa-lg Success-200-cl">');
             } else {
                 if (result === 'prereqsnotcomplete') {
                     alert(lang.prereqsNotComplete);
@@ -659,14 +659,21 @@ function initialize_filemodal(lang) {
   $('.fileModal').click(function (e) {
     e.preventDefault();
     var fileURL = $(this).attr('href');
-    var downloadURL = fileURL + '&download=true';
+    var downloadUrl = $(this).data('downloadUrl');
     var fileTitle = $(this).text();
     var buttons = {};
+    if (!downloadUrl) {
+      downloadUrl = fileURL + '&download=true';
+    }
     buttons.download = {
       label: '<i class="fa fa-download"></i> ' + lang.download,
       className: 'submitAdminBtn gap-1',
       callback: function (d) {
-        window.location = downloadURL;
+        var downloadLink = document.createElement('a');
+        downloadLink.href = downloadUrl;
+        downloadLink.target = '_blank';
+        downloadLink.download = 'download';
+        downloadLink.click();
       }
     };
     buttons.print = {
@@ -707,7 +714,9 @@ function initialize_filemodal(lang) {
         '<div class="iframe-container" style="height:500px;"><iframe title="'+fileTitle+'" id="fileFrame" src="'+fileURL+'" style="width:100%; height:500px;"></iframe></div>'+
         '</div>'+
         '</div>',
-      buttons: buttons
+      buttons: buttons,
+      onEscape: true,
+      backdrop: true,
     });
   });
 }

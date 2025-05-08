@@ -24,15 +24,21 @@
             </div>
 
             {{-- table data --}}
-            <div class='col-12'>
+            <div class='col-4 text-center'>
                 <div class='table-responsive'>
                     <table class='table-default'>
-                        @foreach ($recent_logins as $data)
+                        {{--@foreach ($recent_logins as $data)
                             <tr>
                                 <td><strong>{{ $data[0] }}</strong></td>
                                 <td class='text-right col-sm-1'>{{ $data[1] }}</td>
                             </tr>
-                        @endforeach
+                        @endforeach --}}
+                        <th>
+                            {{ trans('langMonth') }}
+                        </th>
+                        <th>
+                            {{ trans('langNbLogin') }}
+                        </th>
                         @foreach ($user_logins_data as $data)
                             @php
                                 $formatted_data = date_format(date_create($data[0]), "n / Y")

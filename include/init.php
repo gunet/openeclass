@@ -53,17 +53,6 @@ if (!session_id()) {
     session_start();
 }
 
-header('Content-Type: text/html; charset=UTF-8');
-
-// Will add headers to prevent against clickjacking.
-//add_framebusting_headers();
-
-add_xxsfilter_headers();
-
-add_nosniff_headers();
-
-//add_hsts_headers();
-
 if (file_exists('config/config.php')) { // read config file
     include_once 'config/config.php';
 } else {
@@ -84,6 +73,8 @@ try {
 } catch (Exception $ex) { // db credentials are wrong
     redirect(guess_base_url() . 'include/not_installed.php?err=db');
 }
+
+header('Content-Type: text/html; charset=UTF-8');
 
 require_once 'modules/admin/extconfig/externals.php';
 
@@ -562,6 +553,15 @@ if (isset($require_user_registration) && $require_user_registration) {
     }
 }
 
+// Add headers to prevent against clickjacking.
+add_framebusting_headers();
+
+add_xxsfilter_headers();
+
+add_nosniff_headers();
+
+//add_hsts_headers();
+
 // get message array for copyright info
 require_once "license_info.php";
 // ----------------------------------------
@@ -662,7 +662,7 @@ $activities = array(
                                                                           MODULE_ID_WIKI,
                                                                           MODULE_ID_TC,
                                                                           MODULE_ID_H5P)),
-    MODULE_ID_PROJECT => array('title' => $langFCProject,'tools' => array(MODULE_ID_ASSIGN,MODULE_ID_EXERCISE, MODULE_ID_WIKI, MODULE_ID_LINKS,MODULE_ID_H5P)),
+    MODULE_ID_PROJECT => array('title' => $langGroupAssignment,'tools' => array(MODULE_ID_ASSIGN,MODULE_ID_EXERCISE, MODULE_ID_WIKI, MODULE_ID_LINKS,MODULE_ID_H5P)),
     MODULE_ID_BRAINSTORMING => array('title' => $langFCBrainstorming,'tools' => array(MODULE_ID_WALL, MODULE_ID_BLOG, MODULE_ID_FORUM, MODULE_ID_CHAT,MODULE_ID_H5P)),
     MODULE_ID_WORK_PAPER => array('title' => $langFCWorkPaper,'tools' => array(MODULE_ID_DOCS,
                                                                                MODULE_ID_WALL,

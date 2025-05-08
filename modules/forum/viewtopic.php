@@ -267,11 +267,6 @@ if (!add_units_navigation(TRUE)) {
 }
 $pageName = $langTopic;
 
-if (isset($_SESSION['message'])) {
-    $tool_content .= $_SESSION['message'];
-    unset($_SESSION['message']);
-}
-
 if ($topic_locked == 1) {
     $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langErrorTopicLocked</span></div></div>";
 } else {
@@ -646,7 +641,7 @@ function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offse
     }
 
     if ($count > 1) { // for all posts except first
-        $content .= "<div id='$myrow->id' class='post-message card panelCard card-default px-lg-4 py-lg-3 col-sm-offset-$offset mt-3'>";
+        $content .= "<div id='$myrow->id' class='post-message card panelCard card-default px-lg-4 py-lg-3 offset-sm-$offset mt-3'>";
         $content .= "<div class='card-header border-0 d-flex justify-content-between align-items-center'>
                             <div class='panel-title d-flex justify-content-between align-items-center w-100'>$langMsgRe " . q($topic_subject);
     } else {
@@ -693,7 +688,7 @@ function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offse
                     <div class='flex-grow-1 d-flex justify-content-between align-items-start gap-3 flex-wrap'>
                         <div class='forum-post-header'>
                             <small class='help-block'>
-                                <strong>$langSent:</strong> " . format_locale_date(strtotime($myrow->post_time), 'short') . 
+                                <strong>$langSent:</strong> " . format_locale_date(strtotime($myrow->post_time), 'short') .
                                 " $langFrom2 " . display_user($myrow->poster_id, false, false) .
                                 " ({$user_stats[$myrow->poster_id]})
                             </small>

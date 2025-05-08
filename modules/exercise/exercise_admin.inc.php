@@ -515,24 +515,24 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                      </div>
                  </div>
                  <div class='row form-group mt-4'>
-                    <div class='control-label-notes mb-1'>$m[WorkAssignTo]</div>
+                    <div class='control-label-notes mb-1'>$langWorkAssignTo</div>
                     <div class='col-12'>
                         <div class='radio'>
                           <label>
                             <input type='radio' id='assign_button_all' name='assign_to_specific' value='0'".($exerciseAssignToSpecific == 0 ? " checked" : "").">
-                            $m[WorkToAllUsers]
+                            $langWorkToAllUsers
                           </label>
                         </div>
                         <div class='radio'>
                           <label>
                             <input type='radio' id='assign_button_user' name='assign_to_specific' value='1'".($exerciseAssignToSpecific == 1 ? " checked" : "").">
-                            $m[WorkToUser]
+                            $langWorkToUser
                           </label>
                         </div>
                         <div class='radio'>
                           <label>
                             <input type='radio' id='assign_button_group' name='assign_to_specific' value='2'".($exerciseAssignToSpecific == 2 ? " checked" : "").">
-                            $m[WorkToGroup]
+                            $langWorkToGroup
                           </label>
                         </div>
                     </div>
@@ -545,7 +545,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                                     <tr class='title1 list-header'>
                                         <td class='form-label' id='assignees'>$langStudents</td>
                                         <td class='form-label text-center'>$langMove</td>
-                                        <td class='form-label'>$m[WorkAssignTo]</td>
+                                        <td class='form-label'>$langWorkAssignTo</td>
                                     </tr>
                                 </thead>
                                 <tr>
@@ -561,7 +561,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                                     </div>
                                   </td>
                                   <td>
-                                    <select aria-label='$m[WorkAssignTo]' class='form-select h-100' id='assignee_box' name='ingroup[]' size='10' multiple>
+                                    <select aria-label='$langWorkAssignTo' class='form-select h-100' id='assignee_box' name='ingroup[]' size='10' multiple>
                                     ".((isset($assignee_options)) ? $assignee_options : '')."
                                     </select>
                                   </td>
@@ -613,35 +613,36 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                     </div>
                 </div>
 
-                <div class='course-info-title clearfix mt-4'>
-                    <a class='TextBold text-decoration-none'role='button' data-bs-toggle='collapse' href='#CheckAccess' aria-expanded='false' aria-controls='CheckAccess'>
-                        <div class='card panelCard card-default px-0 py-1 h-100'>
-                            <div class='card-header border-0 d-flex justify-content-between align-items-center'>
+                <div class='panel-group group-section mt-4' id='accordionEx' role='tablist' aria-multiselectable='true'>
+                    <ul class='list-group list-group-flush'>
+                        <li class='list-group-item px-0 mb-4 bg-transparent'>
+                            <a class='accordion-btn d-flex justify-content-start align-items-start' role='button' data-bs-toggle='collapse' href='#CheckAccess' aria-expanded='false' aria-controls='CheckAccess'>
+                                <span class='fa-solid fa-chevron-down'></span> 
                                 $langCheckAccess
-                                <span class='fa fa-chevron-down fa-fw'></span> 
+                            </a>
+                            <div id='CheckAccess' class='panel-collapse accordion-collapse collapse border-0 rounded-0' role='tabpanel' data-bs-parent='#accordionEx'>
+                                <div class='panel-body bg-transparent Neutral-900-cl p-0'>
+                                    <div class='form-group ".(Session::getError('exercisePasswordLock') ? "has-error" : "")." mt-4'>
+                                        <label for='exercisePasswordLock' class='col-12 control-label-notes mb-1'>$langPassCode <span class='asterisk Accent-200-cl'>(*)</span></label>
+                                        <div class='col-12'>
+                                            <input name='exercisePasswordLock' type='text' class='form-control' id='exercisePasswordLock' value='$exercisePasswordLock' placeholder=''>
+                                            <span class='help-block Accent-200-cl'>".Session::getError('exercisePasswordLock')."</span>
+                                        </div>
+                                    </div>
+                                    <div class='form-group ".(Session::getError('exerciseIPLock') ? "has-error" : "")." mt-4'>
+                                        <label for='exerciseIPLock' class='col-12 control-label-notes mb-1'>$langIPUnlock <span class='asterisk Accent-200-cl'>(*)</span></label>
+                                        <div class='col-12'>
+                                            <select name='exerciseIPLock[]' class='form-select' id='exerciseIPLock' multiple>
+                                                $exerciseIPLockOptions
+                                            </select>
+                                            <span class='help-block Accent-200-cl'>".Session::getError('exerciseIPLock')."</span>
+                                        </div>
+                                    </div>" .
+                                    eClassTag::tagInput($exerciseId) . "
+                                </div>
                             </div>
-                        </div>
-                    </a>
-                </div>
-
-                <div id='CheckAccess' class='collapse'>
-                    <div class='row form-group ".(Session::getError('exercisePasswordLock') ? "has-error" : "")." mt-4'>
-                        <label for='exercisePasswordLock' class='col-12 control-label-notes mb-1'>$langPassCode <span class='asterisk Accent-200-cl'>(*)</span></label>
-                        <div class='col-12'>
-                            <input name='exercisePasswordLock' type='text' class='form-control' id='exercisePasswordLock' value='$exercisePasswordLock' placeholder=''>
-                            <span class='help-block Accent-200-cl'>".Session::getError('exercisePasswordLock')."</span>
-                        </div>
-                    </div>
-                    <div class='row form-group ".(Session::getError('exerciseIPLock') ? "has-error" : "")." mt-4'>
-                        <label for='exerciseIPLock' class='col-12 control-label-notes mb-1'>$langIPUnlock <span class='asterisk Accent-200-cl'>(*)</span></label>
-                        <div class='col-12'>
-                            <select name='exerciseIPLock[]' class='form-select' id='exerciseIPLock' multiple>
-                                $exerciseIPLockOptions
-                            </select>
-                            <span class='help-block Accent-200-cl'>".Session::getError('exerciseIPLock')."</span>
-                        </div>
-                    </div>" .
-                    eClassTag::tagInput($exerciseId) . "
+                        </li>
+                    </ul>
                 </div>
 
                 <div class='row form-group mt-5'>
@@ -698,9 +699,9 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
             break;
     }
     switch ($exerciseAssignToSpecific) {
-        case 1: $assign_to_users_message = $m['WorkToUser'];
+        case 1: $assign_to_users_message = $langWorkToUser;
             break;
-        case 2: $assign_to_users_message = $m['WorkToGroup'];
+        case 2: $assign_to_users_message = $langWorkToGroup;
             break;
     }
     if ($exerciseType == MULTIPLE_PAGE_TYPE) {
@@ -792,7 +793,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                     <div class='col-sm-12 '>$disp_score_message</div>";
 
     if ($exerciseAssignToSpecific > 0) {
-        $tool_content .= "<div class='col-sm-12 '>$m[WorkAssignTo]: <b>$assign_to_users_message</b></div>";
+        $tool_content .= "<div class='col-sm-12 '>$langWorkAssignTo: <b>$assign_to_users_message</b></div>";
     }
 
     $tags_list = $moduleTag->showTags();

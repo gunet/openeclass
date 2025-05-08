@@ -111,14 +111,14 @@ class LtiEnrolHelper {
      *
      * @param stdClass $tool The tool object (retrieved using self::get_lti_tool() or self::get_lti_tools())
      * @param int $userid The user id
-     * @param string $sourceid
+     * @param string|null $sourceid
      * @param string $serviceurl
      * @param string $consumerkey
      * @param string $membershipsurl
      * @param string $membershipsid
      * @return bool returns true if successful, else an error code
      */
-    public static function enrol_user(stdClass $tool, int $userid, string $sourceid, string $serviceurl, string $consumerkey, string $membershipsurl, string $membershipsid): bool {
+    public static function enrol_user(stdClass $tool, int $userid, ?string $sourceid, string $serviceurl, string $consumerkey, string $membershipsurl, string $membershipsid): bool {
         $now = time();
 
         // check if the user enrolment exists

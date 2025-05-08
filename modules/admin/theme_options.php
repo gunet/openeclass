@@ -305,6 +305,7 @@ if (isset($_POST['optionsSave'])) {
     clear_default_settings();
     $serialized_data = serialize($_POST);
     Database::get()->query("UPDATE theme_options SET styles = ?s WHERE id = ?d", $serialized_data, $theme_id);
+    $_SESSION['theme_changed'] = true;
     redirect_to_home_page('modules/admin/theme_options.php');
 } elseif (isset($_GET['delThemeId'])) {
     $theme_id = intval($_GET['delThemeId']);
@@ -329,6 +330,7 @@ if (isset($_POST['optionsSave'])) {
     $serialized_data = serialize($_POST);
     Database::get()->query("UPDATE theme_options SET styles = ?s WHERE id = ?d", $serialized_data, $new_theme_id);
     $_SESSION['theme_options_id'] = $new_theme_id;
+    $_SESSION['theme_changed'] = true;
     redirect_to_home_page('modules/admin/theme_options.php');
 } elseif (isset($_POST['active_theme_options'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
@@ -342,6 +344,7 @@ if (isset($_POST['optionsSave'])) {
         set_config('theme_options_id', $_POST['active_theme_options']);
         unset($_SESSION['theme_options_id']);
     }
+    $_SESSION['theme_changed'] = true;
     redirect_to_home_page('modules/admin/theme_options.php');
 } else {
     $toolName = $langAdmin;
@@ -1026,7 +1029,7 @@ $tool_content .= "
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navsettingsAlerts' aria-controls='navsettingsAlerts' role='tab' data-bs-toggle='tab'>$langNavSettingsAlert</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navsettingsLoginHomepage' aria-controls='navsettingsLoginHomepage' role='tab' data-bs-toggle='tab'>$langHomePage</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navcontainer' aria-controls='navcontainer' role='tab' data-bs-toggle='tab'>$langPortfolio</a></li>
-    <li role='presentation' class='nav-item'><a class='nav-link' href='#navsettings' aria-controls='navsettings' role='tab' data-bs-toggle='tab'>$langNavSettings</a></li>
+    <li role='presentation' class='nav-item'><a class='nav-link' href='#navsettings' aria-controls='navsettings' role='tab' data-bs-toggle='tab'>$langCoursePage</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navMoreOptions' aria-controls='navMoreOptions' role='tab' data-bs-toggle='tab'>$langNavMoreOptions</a></li>
   </ul>
 

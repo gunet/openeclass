@@ -55,34 +55,32 @@
                         @include('layouts.partials.show_alert')
 
                         @if (count($result) > 0)
-                            <div class='row'>
-                                <div class='col-sm-12'>
-                                    <div class='table-responsive'>
-                                        <table class='table-default'>
-                                            <thead>
-                                                <tr class='list-header'>
-                                                    <th>{{ trans('langTitle') }}</th>
-                                                    <th aria-label='{{ trans('langSettingSelect') }}'><span class='fa gears'></span></th>
-                                                </tr>
-                                            </thead>
-                                            @foreach ($result as $row)
-                                                <tr>
-                                                    <td>{{ $row->title }} {{ ($row->public_code) }}</td>
-                                                    <td class='option-btn-cell text-end'>
-                                                        {!! action_button(
-                                                                array(array(
-                                                                    'title' => trans('langRemovePrerequisite'),
-                                                                    'level' => 'primary',
-                                                                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del=" . intval($row->id),
-                                                                    'icon' => 'fa-xmark Accent-200-cl',
-                                                                    'btn_class' => 'delete_btn deleteAdminBtn'
-                                                                )))
-                                                        !!}
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                        </table>
-                                    </div>
+                            <div class='col-sm-12'>
+                                <div class='table-responsive'>
+                                    <table class='table-default'>
+                                        <thead>
+                                            <tr class='list-header'>
+                                                <th>{{ trans('langTitle') }}</th>
+                                                <th aria-label='{{ trans('langSettingSelect') }}'><span class='fa gears'></span></th>
+                                            </tr>
+                                        </thead>
+                                        @foreach ($result as $row)
+                                            <tr>
+                                                <td>{{ $row->title }} {{ ($row->public_code) }}</td>
+                                                <td class='option-btn-cell text-end'>
+                                                    {!! action_button(
+                                                            array(array(
+                                                                'title' => trans('langRemovePrerequisite'),
+                                                                'level' => 'primary',
+                                                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del=" . intval($row->id),
+                                                                'icon' => 'fa-xmark Accent-200-cl',
+                                                                'btn_class' => 'delete_btn deleteAdminBtn'
+                                                            )))
+                                                    !!}
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </table>
                                 </div>
                             </div>
                         @else

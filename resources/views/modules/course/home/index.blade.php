@@ -348,7 +348,7 @@
 
                                     <div class='d-flex gap-2 flex-wrap'>
                                         <a id='cu-help-btn' class='helpAdminBtn' href='{{ $urlServer }}modules/help/help.php?language={{$language}}&topic=course_units' class='add-unit-btn d-flex align-items-center' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langHelp') }}" aria-label="{{ trans('langHelp') }}" role="button">
-                                            <i class="fa-solid fa-circle-info"></i>
+                                            <i class="fa-solid fa-circle-question"></i>
                                         </a>
                                         @if($is_editor)
                                             <button class="btn submitAdminBtn" type="button" id="dropdownToolsUnit" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-expanded="false" aria-label="{{ trans('langCourseInfo') }}" role="button">
@@ -408,7 +408,7 @@
                         @if($course_info->view_type == 'activity')
                             @if($is_editor)
                                 <div class='col-12 d-flex justify-content-start mb-3 mt-5'>
-                                    <a class='btn submitAdminBtnDefault mt-0 mb-2 gap-2' href="{{ $urlServer }}modules/course_info/activity_edit.php?course{{$course_code}}">
+                                    <a class='btn submitAdminBtnDefault mt-0 mb-2 gap-2' href="{{ $urlServer }}modules/course_info/activity_edit.php?course={{$course_code}}">
                                         <i class='fa-solid fa-edit'></i>
                                         {{trans('langActivityEdit')}}
                                     </a>
@@ -485,7 +485,7 @@
                                     <h3>{{ trans('langSession') }}</h3>
                                     <a class='TextRegular text-decoration-underline vsmall-text'
                                          href="{{ $urlAppend }}modules/session/index.php?course={{ $course_code }}">
-                                         {{ trans('langAllAnnouncements') }}
+                                         {{ trans('langAllSessions') }}
                                     </a>
                                 </div>
                                 <div class='card-body card-body-default px-0 pt-0'>
@@ -616,7 +616,7 @@
 
 
 
-                    <div>
+                    <div class="@if(!$right_col_display) d-none @else d-block @endif">
                         <div class='card bg-transparent card-transparent border-0 sticky-column-course-home mb-3 mt-4 mt-xl-0'>
                             <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
                                 <h3 class='mb-0'>{{ trans('langAgenda') }}</h3>

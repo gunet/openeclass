@@ -238,7 +238,7 @@ class LtiToolProvider extends ToolProvider {
             $registered_at = DBHelper::timeAfter();
 
             $uq = Database::get()->query("INSERT INTO user (surname, givenname, username, password, email, registered_at, expires_at)
-                                                              VALUES (?s, ?s, ?s, ?s, ?s, " . $registered_at . ", 
+                                                              VALUES (?s, ?s, ?s, ?s, ?s, $registered_at,
                                                               DATE_ADD(NOW(), INTERVAL " . get_config('account_duration') . " SECOND))",
                 $user->surname,
                 $user->givenname,

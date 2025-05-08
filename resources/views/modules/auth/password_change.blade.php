@@ -58,7 +58,7 @@
 
                             <div class='form-group mt-4'>
                                 <div class='col-12 d-flex justify-content-end align-items-center'>
-                                    <input class='btn submitAdminBtn' type='submit' name='submit' value="{{ trans('langModify') }}">
+                                    <input class='btn submitAdminBtn' type='submit' name='submit' value="{{ trans('langSubmit') }}">
                                 </div>
                             </div>
                             {!! generate_csrf_token_form_field() !!}
@@ -74,5 +74,3 @@
     </div>
 
 @endsection
-
-

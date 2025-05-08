@@ -203,7 +203,7 @@ function displayForm($id = null, $name = null, $ordering = null, $multiple = nul
 
     $html .= "
     <div class='row'>
-       
+
     <div class='col-lg-6 col-12 mt-3'><div class='form-wrapper form-edit border-0 px-0'>
         <form role='form' class='form-horizontal' method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?action=" . $action . "'>
         <fieldset><legend class='mb-0' aria-label='$langForm'></legend>";
@@ -240,7 +240,7 @@ function displayForm($id = null, $name = null, $ordering = null, $multiple = nul
     $orderingValue = ($id != null) ? "value='" . $ordering . "'" : '';
     $html .= "
     <div class='form-group mt-4'>
-        <label for='ordering_id' class='col-sm-12 control-label-notes'>" . $GLOBALS['langReorder'] . "</label>
+        <label for='ordering_id' class='col-sm-12 control-label-notes'>" . $GLOBALS['langNodeOrderPriority'] . "</label>
         <div class='col-sm-12'>
             <input id='ordering_id' class='form-control' type='text' name='ordering' " . $orderingValue . " placeholder='". $GLOBALS['langCourseCategoryOrdering2'] . "'>
         </div>
@@ -292,7 +292,7 @@ function displayForm($id = null, $name = null, $ordering = null, $multiple = nul
     }
 
     $html .= "
-    <div class='form-group mt-5 d-flex justify-content-end align-items-center'>       
+    <div class='form-group mt-5 d-flex justify-content-end align-items-center'>
            "
                 . form_buttons(array(
                     array(
@@ -306,7 +306,7 @@ function displayForm($id = null, $name = null, $ordering = null, $multiple = nul
                         'href' => $_SERVER['SCRIPT_NAME']
                     )
                 )) .
-           "        
+           "
     </div>
     </fieldset>
     ". generate_csrf_token_form_field() ."

@@ -197,8 +197,11 @@ switch ($module->contentType) {
 
 $unitParam = isset($_GET['unit'])? "&amp;unit=$_GET[unit]": '';
 
+$theme_id = get_config('theme_options_id') ?? 0;
+
 echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Frameset//EN''http://www.w3.org/TR/html4/frameset.dtd'>
 <html><head>
+<link rel='stylesheet' type='text/css' href='{$urlAppend}courses/theme_data/{$theme_id}/style_str.css?".CACHE_SUFFIX."'/>
 <script type='text/javascript' src='{$urlAppend}js/jquery" . JQUERY_VERSION . ".min.js'></script>";
 
 // add the update frame if this is a SCORM module
@@ -213,6 +216,6 @@ if ($module->contentType == CTSCORM_ || $module->contentType == CTSCORMASSET_) {
 echo "<frame src='../viewer_toc.php?course=$course_code$unitParam' name='tocFrame' scrolling='no' />";
 echo "<frameset border='0' cols='250,*' frameborder='0' id='colFrameset'>";
 echo "<frame src='../toc.php?course=$course_code$unitParam' name='tocleftFrame'>";
-echo "<frame src='$moduleStartAssetPage' name='scoFrame'>";
+echo "<frame class='iframe-learningPath' src='$moduleStartAssetPage' name='scoFrame'>";
 echo "</frameset>";
 echo "</html>";

@@ -29,7 +29,7 @@
 
                     {!! $action_bar !!}
 
-                    @include('layouts.partials.show_alert') 
+                    @include('layouts.partials.show_alert')
 
                     <div class='col-12'>
                         <div class='card panelCard card-default px-lg-4 py-lg-3'>
@@ -73,7 +73,7 @@
                                 @if ($assigned)
                                     <div class='row mt-3'>
                                         <div class='d-inline-flex align-items-center'>
-                                            <b class='control-label-notes pe-2'>{{ trans("m['WorkAssignTo']") }}:</b>
+                                            <b class='control-label-notes pe-2'>{{ trans('langWorkAssignTo') }}:</b>
                                             @foreach ($assigned as $user)
                                                 {!! display_user($user) !!}
                                             @endforeach
@@ -129,7 +129,7 @@
                                 @endif
                                 @if ($can_modify)
                                 <div class='d-flex'>
-                                    <button class='btn submitAdminBtn me-1' type='button' data-bs-toggle='modal' data-bs-target='#assigneesModal'>{{ trans("m['WorkAssignTo']") }}...</button>
+                                    <button class='btn submitAdminBtn me-1' type='button' data-bs-toggle='modal' data-bs-target='#assigneesModal'>{{ trans('langWorkAssignTo') }}...</button>
                                     <button class='btn submitAdminBtn me-1' type='button' data-bs-toggle='modal' data-bs-target='#watchersModal'>{{ trans("langWatchers") }}...</button>
                                     <a class='btn submitAdminBtn' href='{{ $editUrl }}'>{{ trans("langElaboration") }}...</a>
                                 </div>

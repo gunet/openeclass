@@ -6,106 +6,97 @@
 @endpush
 
 @push('head_scripts')
-<script type='text/javascript' src='{{ $urlAppend }}js/jstree3/jstree.min.js'></script>
-<script type='text/javascript' src='{{ $urlAppend }}js/pwstrength.js'></script>
-<script type='text/javascript' src='{{ $urlAppend }}js/tools.js'></script>
+    <script type='text/javascript' src='{{ $urlAppend }}js/jstree3/jstree.min.js'></script>
+    <script type='text/javascript' src='{{ $urlAppend }}js/pwstrength.js'></script>
+    <script type='text/javascript' src='{{ $urlAppend }}js/tools.js'></script>
 
-<script type='text/javascript'>
+    <script type='text/javascript'>
+        var lang = {
+            pwStrengthTooShort: "{{ js_escape(trans('langPwStrengTooShort')) }}",
+            pwStrengthWeak: "{{ js_escape(trans('langPwStrengthWeak')) }}",
+            pwStrengthGood: "{{ js_escape(trans('langPwStrengthGood')) }}",
+            pwStrengthStrong: "{{ js_escape(trans('langPwStrengthStrong')) }}"
+        }
 
-    function deactivate_input_password () {
-            $('#coursepassword').attr('disabled', 'disabled');
+        function deactivate_input_password () {
+            $('#coursepassword, #faculty_users_registration').attr('disabled', 'disabled');
             $('#coursepassword').closest('div.form-group').addClass('invisible');
-    }
+        }
 
-    function activate_input_password () {
-            $('#coursepassword').removeAttr('disabled', 'disabled');
+        function activate_input_password () {
+            $('#coursepassword, #faculty_users_registration').removeAttr('disabled', 'disabled');
             $('#coursepassword').closest('div.form-group').removeClass('invisible');
-    }
+        }
 
-    function displayCoursePassword() {
-
-            if ($('#courseclose,#courseiactive').is(":checked")) {
-                    deactivate_input_password ();
+        function displayCoursePassword() {
+            if ($('#courseclose, #courseiactive').is(":checked")) {
+                deactivate_input_password ();
             } else {
-                    activate_input_password ();
-            }
-    }
-
-    var lang = {
-        pwStrengthTooShort: "{{ js_escape(trans('langPwStrengTooShort')) }}",
-        pwStrengthWeak: "{{ js_escape(trans('langPwStrengthWeak')) }}",
-        pwStrengthGood: "{{ js_escape(trans('langPwStrengthGood')) }}",
-        pwStrengthStrong: "{{ js_escape(trans('langPwStrengthStrong')) }}"
-    }
-
-    function showCCFields() {
-        $('#cc').show();
-    }
-    function hideCCFields() {
-        $('#cc').hide();
-    }
-
-    $(document).ready(function() {
-
-        $('#coursepassword').keyup(function() {
-            $('#result').html(checkStrength($('#coursepassword').val()))
-        });
-
-        displayCoursePassword();
-
-        $('#courseopen').click(function(event) {
-                activate_input_password();
-        });
-        $('#coursewithregistration').click(function(event) {
-                activate_input_password();
-        });
-        $('#courseclose').click(function(event) {
-                deactivate_input_password();
-        });
-        $('#courseinactive').click(function(event) {
-                deactivate_input_password();
-        });
-
-        $('input[name=l_radio]').change(function () {
-            if ($('#cc_license').is(":checked")) {
-                showCCFields();
-            } else {
-                hideCCFields();
-            }
-        }).change();
-
-        if($("#radio_collaborative_helper").length > 0){
-            if(document.getElementById("radio_collaborative_helper").value == 0){
-                document.getElementById("radio_collaborative").style.display="none";
-            }else{
-                document.getElementById("radio_collaborative").style.display="block";
+                activate_input_password ();
             }
         }
-        if($('#type_collab').is(":checked")){
-            document.getElementById("radio_flippedclassroom").style.display="none";
-            document.getElementById("radio_activity").style.display="none";
-            document.getElementById("radio_wall").style.display="none";
-        }else{
-            document.getElementById("radio_flippedclassroom").style.display="block";
-            document.getElementById("radio_activity").style.display="block";
-            document.getElementById("radio_wall").style.display="block";
-        }
-        $('#type_collab').on('click',function(){
-            if($('#type_collab').is(":checked")){
+
+        $(document).ready(function() {
+
+            $('#coursepassword').keyup(function() {
+                $('#result').html(checkStrength($('#coursepassword').val()))
+            });
+
+            displayCoursePassword();
+
+            $('#courseopen').click(function(event) {
+                activate_input_password();
+            });
+            $('#coursewithregistration').click(function(event) {
+                activate_input_password();
+            });
+            $('#courseclose').click(function(event) {
+                deactivate_input_password();
+            });
+            $('#courseinactive').click(function(event) {
+                deactivate_input_password();
+            });
+
+            $('input[name=l_radio]').change(function () {
+                if ($('#cc_license').is(":checked")) {
+                    $('#cc').show();
+                } else {
+                    $('#cc').hide();
+                }
+            }).change();
+
+            if ($("#radio_collaborative_helper").length > 0) {
+                if (document.getElementById("radio_collaborative_helper").value == 0) {
+                    document.getElementById("radio_collaborative").style.display="none";
+                } else {
+                    document.getElementById("radio_collaborative").style.display="block";
+                }
+            }
+            if ($('#type_collab').is(":checked")) {
                 document.getElementById("radio_flippedclassroom").style.display="none";
                 document.getElementById("radio_activity").style.display="none";
                 document.getElementById("radio_wall").style.display="none";
-                document.getElementById("radio_collaborative").style.display="block";
-            }else{
+            } else {
                 document.getElementById("radio_flippedclassroom").style.display="block";
                 document.getElementById("radio_activity").style.display="block";
                 document.getElementById("radio_wall").style.display="block";
-                document.getElementById("radio_collaborative").style.display="none";
             }
+            $('#type_collab').on('click',function() {
+                if($('#type_collab').is(":checked")) {
+                    document.getElementById("radio_flippedclassroom").style.display="none";
+                    document.getElementById("radio_activity").style.display="none";
+                    document.getElementById("radio_wall").style.display="none";
+                    document.getElementById("radio_collaborative").style.display="block";
+                }else{
+                    document.getElementById("radio_flippedclassroom").style.display="block";
+                    document.getElementById("radio_activity").style.display="block";
+                    document.getElementById("radio_wall").style.display="block";
+                    document.getElementById("radio_collaborative").style.display="none";
+                }
+            });
         });
-    });
 
-</script>
+    </script>
 @endpush
 
 @section('content')
@@ -342,8 +333,13 @@
                                         </div>
                                     </div>
 
-
-                                    <div class='form-group mt-4'>
+                                    <div class='form-group mt-3'>
+                                        <div class='checkbox mb-2 mt-4'>
+                                            <label class='label-container' aria-label="{{ trans('langSelect') }}">
+                                                <input type='checkbox' id='faculty_users_registration' name='faculty_users_registration' {!! $check_enable_faculty_users_registration !!}>
+                                                <span class='checkmark'></span>{{ trans('langFacultyUsersRegistrationLegend') }}
+                                            </label>
+                                        </div>
                                         <label for='coursepassword' class='col-sm-12 control-label-notes'>{{ trans('langOptPassword') }}</label>
                                         <div class='col-sm-12'>
                                               <input class='form-control' id='coursepassword' type='text' name='password' value='{{ $password }}' autocomplete='off'>
@@ -440,9 +436,6 @@
                                         </div>
                                     </div>
 
-
-
-
                                     <div class='form-group mt-4'>
                                         <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langForum') }}</div>
                                         <div class='col-sm-12'>
@@ -461,9 +454,6 @@
                                         </div>
                                     </div>
 
-
-
-
                                     <div class='form-group mt-4'>
                                         <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langCourseRating') }}:</div>
                                         <div class='col-sm-12'>
@@ -481,8 +471,6 @@
                                             </div>
                                         </div>
                                     </div>
-
-
 
                                     <div class='form-group mt-4'>
                                         <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langCourseAnonymousRating') }}</div>
@@ -542,6 +530,25 @@
                                             </div>
                                         </div>
                                     </div>
+
+                                    <div class='form-group mt-4'>
+                                        <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langDisplayRightContentInCPage') }}</div>
+                                        <div class='col-sm-12'>
+                                            <div class='radio'>
+                                                <label>
+                                                    <input type='radio' value='1' name='enable_agenda_announcement_widget_courseCompletion' {!! $check_enable_agenda_announcement_widget_courseCompletion !!}>
+                                                    {{ trans('langActivate') }}
+                                                </label>
+                                            </div>
+                                            <div class='radio'>
+                                                <label>
+                                                    <input type='radio' value='0' name='enable_agenda_announcement_widget_courseCompletion' {!! $check_disable_agenda_announcement_widget_courseCompletion !!} >
+                                                    {{ trans('langDeactivate') }}
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     {!! showSecondFactorChallenge() !!}
 
                                     <div class='form-group mt-5 mb-1 d-flex justify-content-end align-items-center'>

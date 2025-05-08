@@ -137,7 +137,7 @@ function display_user_grades($gradebook_id) {
 function new_gradebook() {
 
     global $tool_content, $course_code, $langStart, $langEnd, $head_content, $language,
-           $langTitle, $langSave, $langInsert, $langGradebookRange, $langGradeScalesSelect, $urlAppend, $langImgFormsDes;
+           $langTitle, $langSubmit, $langInsert, $langGradebookRange, $langGradeScalesSelect, $langImgFormsDes;
 
         load_js('bootstrap-datetimepicker');
         $head_content .= "
@@ -226,7 +226,7 @@ function new_gradebook() {
                                 .form_buttons(array(
                                     array(
                                             'class' => 'submitAdminBtn',
-                                            'text' => $langSave,
+                                            'text' => $langSubmit,
                                             'name' => 'newGradebook',
                                             'value'=> $langInsert
                                     ),
@@ -333,9 +333,9 @@ function delete_gradebook_user($gradebook_id, $userid) {
 function gradebook_settings($gradebook_id) {
 
     global $tool_content, $course_code,
-           $langTitle, $langSave, $langStart, $langEnd, $head_content,
+           $langTitle, $langSubmit, $langStart, $langEnd, $head_content,
            $langSave, $langGradebookRange, $langGradebookUpdate,
-           $gradebook, $langGradeScalesSelect, $language, $urlAppend, $langImgFormsDes;
+           $gradebook, $langGradeScalesSelect, $language, $langImgFormsDes;
     load_js('bootstrap-datetimepicker');
     $head_content .= "
     <script type='text/javascript'>
@@ -420,7 +420,7 @@ function gradebook_settings($gradebook_id) {
                                       ".form_buttons(array(
                                         array(
                                             'class' => 'submitAdminBtn',
-                                            'text' => $langSave,
+                                            'text' => $langSubmit,
                                             'name' => 'submitGradebookSettings',
                                             'value'=> $langGradebookUpdate
                                         ),
@@ -1100,7 +1100,7 @@ function display_available_assignments($gradebook_id) {
 
     global $course_id, $course_code, $tool_content, $urlServer,
            $m, $langDescription, $langAttendanceNoActMessageAss4,
-           $langAdd, $langTitle;
+           $langAdd, $langTitle, $langWorkAssignTo;
 
     $checkForAss = Database::get()->queryArray("SELECT * FROM assignment WHERE assignment.course_id = ?d
                     AND assignment.active = 1
@@ -1119,14 +1119,14 @@ function display_available_assignments($gradebook_id) {
         foreach ($checkForAss as $newAssToGradebook) {
             $content = ellipsize_html($newAssToGradebook->description, 50);
             if ($newAssToGradebook->assign_to_specific == 1) { // assignment to specific users
-                $content .= "$m[WorkAssignTo]:<br>";
+                $content .= "$langWorkAssignTo:<br>";
                 $checkForAssSpec = Database::get()->queryArray("SELECT user_id, user.surname, user.givenname FROM `assignment_to_specific`, user WHERE user_id = user.id AND assignment_id = ?d", $newAssToGradebook->id);
                 foreach ($checkForAssSpec as $checkForAssSpecR) {
                     $content .= q($checkForAssSpecR->surname). " " . q($checkForAssSpecR->givenname) . "<br>";
                 }
             }
             if ($newAssToGradebook->assign_to_specific == 2) { // assignment to specific groups
-                $content .= "$m[WorkAssignTo]:<br>";
+                $content .= "$langWorkAssignTo:<br>";
                 $checkForAssSpec = Database::get()->queryArray("SELECT group_id, `group`.name FROM `assignment_to_specific`, `group` WHERE assignment_to_specific.group_id= `group`.id AND assignment_id = ?d", $newAssToGradebook->id);
                 foreach ($checkForAssSpec as $checkForAssSpecR) {
                     $content .= q($checkForAssSpecR->name) . "<br>";

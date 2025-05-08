@@ -508,9 +508,9 @@
                                                                         <i class="fa-solid fa-book-open fa-xl mt-4 pt-1" role="presentation"></i>
                                                                         <div class='TextBold largest-text mb-0 ms-2'>
                                                                             @if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
-                                                                                {{ number_format(get_config('total_courses'), 0, '', $digit_separator) }}
+                                                                                {{ number_format(intval(get_config('total_courses')), 0, '', $digit_separator) }}
                                                                             @else
-                                                                                {{ number_format($total_collaboration_courses, 0 ,'', $digit_separator) }}
+                                                                                {{ number_format(intval($total_collaboration_courses), 0 ,'', $digit_separator) }}
                                                                             @endif
                                                                         </div>
                                                                     </div>
@@ -525,7 +525,7 @@
                                                                 <div>
                                                                     <div class='d-flex justify-content-center'>
                                                                         <i class="fa-solid fa-globe fa-xl mt-4 pt-1" role="presentation"></i>
-                                                                        <div class='TextBold largest-text mb-0 ms-2'>{{ number_format(get_config('visits_per_week'), 0, '', $digit_separator) }}</div>
+                                                                        <div class='TextBold largest-text mb-0 ms-2'>{{ number_format(intval(get_config('visits_per_week')), 0, '', $digit_separator) }}</div>
                                                                     </div>
                                                                     <p class='form-label text-center'>{{trans('langUserLogins')}} {{trans('langPerMonth')}}</p>
                                                                 </div>
@@ -538,7 +538,7 @@
                                                                 <div>
                                                                     <div class='d-flex justify-content-center'>
                                                                         <i class="fa-solid fa-user fa-xl mt-4 pt-1" role="presentation"></i>
-                                                                        <div class='TextBold largest-text mb-0 ms-2'>{{ number_format(get_config('users_registered'), 0, '', $digit_separator) }}</div>
+                                                                        <div class='TextBold largest-text mb-0 ms-2'>{{ number_format(intval(get_config('users_registered')), 0, '', $digit_separator) }}</div>
                                                                     </div>
                                                                     <p class='form-label text-center'>{{ trans('langRegisteredUsers') }}</p>
                                                                 </div>

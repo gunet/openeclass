@@ -49,7 +49,6 @@ if (isset($toolContent_ErrorExists)) {
     exit();
 }
 
-require_once 'template/template.inc.php';
 require_once 'tools.php';
 
 /**
@@ -66,19 +65,19 @@ function view($view_file, $view_data = array()) {
             $is_admin, $is_power_user, $is_departmentmanage_user, $is_usermanage_user, $leftsideImg,
             $courseLicense, $loginIMG, $authCase, $authNameEnabled, $pinned_announce_id, $pinned_announce_title, $pinned_announce_body,
             $collaboration_platform, $collaboration_value, $is_enabled_collaboration, $is_collaborative_course,
-            $is_consultant, $require_consultant, $is_coordinator, $is_simple_user, $langFaq, $langRegistration,
-            $container, $logo_img, $logo_img_small, $eclass_banner_value, $PositionFormLogin,  $image_footer, 
-            $favicon_img, $theme_css, $theme_id;
+            $is_consultant, $require_consultant, $is_coordinator, $is_simple_user,
+            $container, $logo_img, $logo_img_small, $eclass_banner_value, $PositionFormLogin,  $image_footer,
+            $favicon_img, $theme_css, $theme_id, $langClose;
 
     if (!isset($course_id) or !$course_id or $course_id < 1) {
         $course_id = $course_code = null;
     }
 
+    if (!isset($_SESSION['provider'])) {
+        $_SESSION['provider'] = null;
+    }
     $pageTitle = $siteName;
     $is_mobile = (isset($_SESSION['mobile']) && $_SESSION['mobile'] == true);
-
-    // Setting $menuTypeID and Getting Side Menu
-    $menuTypeID = $view_data['menuTypeID'] ?? 2;
 
     $toolArr = [];
     if (isset($course_id) and !$is_mobile) {
@@ -106,30 +105,11 @@ function view($view_file, $view_data = array()) {
     if (isset($_SESSION['uname'])) {
         $uname = $_SESSION['uname'];
     }
-    if (isset($GLOBALS['leftNavExtras'])) {
-        $eclass_leftnav_extras = $GLOBALS['leftNavExtras'];
-    }
 
     if (!$toolName and $pageName) {
         $toolName = $pageName;
     } elseif (!$pageName and $toolName) {
         $pageName = $toolName;
-    }
-
-    // set the text and icon on the third bar (header)
-    if ($menuTypeID == 2) {
-        $section_title = $currentCourseName;
-    } elseif ($menuTypeID == 3) {
-        $section_title = trans('langAdmin');
-    } elseif ($menuTypeID > 0 and $menuTypeID < 3) {
-        $section_title = trans('langUserPortfolio');
-    } else {
-        $homepagetitle = get_config('homepage_title');
-        if (isset($homepagetitle)) {
-            $section_title = $homepagetitle;
-        } else {
-            $section_title = $siteName;
-        }
     }
 
     // breadcrumb and page title
@@ -155,14 +135,13 @@ function view($view_file, $view_data = array()) {
         }
 
         // Breadcrumb first entry (home / portfolio)
-        if ($session->status != USER_GUEST) {
+        if ($session->status != USER_GUEST && $_SESSION['provider'] !== 'lti_publish') {
             if (isset($_SESSION['uid'])) {
                 $item['bread_text'] = trans('langPortfolio');
                 if (isset($require_current_course) or $pageName) {
                     $item['bread_href'] = $urlAppend . 'main/portfolio.php';
                 }
             } else {
-                $hideStart = true;
                 $homebreadcrumb = get_config('homepage_name');
                 if (isset($homebreadcrumb)) {
                     $item['bread_text'] = $homebreadcrumb;
@@ -182,7 +161,7 @@ function view($view_file, $view_data = array()) {
         }
 
         // Breadcrumb course home entry
-        if (isset($course_code) and $menuTypeID != 3) {
+        if (isset($course_code)) {
             $item['bread_text'] = ellipsize($currentCourseName, 48);
             if ($pageName) {
                 $item['bread_href'] = $urlAppend . 'courses/' . $course_code . '/';
@@ -231,24 +210,24 @@ function view($view_file, $view_data = array()) {
     if ($require_help) {
         $head_content .= "
         <script>
-        $(function() {
-            $('#help-btn').click(function(e) {
-                e.preventDefault();
-                $.get($(this).attr(\"href\"), function(data) {
-                    bootbox.alert({
-                        size: 'large',
-                        backdrop: true,
-                        message: data,
-                        buttons: {
-                            ok: {
-                                label: '". js_escape($GLOBALS['langClose']). "',
-                                className: 'submitAdminBtnDefault'
+            $(function() {
+                $('#help-btn').click(function(e) {
+                    e.preventDefault();
+                    $.get($(this).attr(\"href\"), function(data) {
+                        bootbox.alert({
+                            size: 'large',
+                            backdrop: true,
+                            message: data,
+                            buttons: {
+                                ok: {
+                                    label: '". js_escape($langClose). "',
+                                    className: 'submitAdminBtnDefault'
+                                }
                             }
-                        }
+                        });
                     });
                 });
             });
-        });
         </script>
         ";
     }
@@ -336,7 +315,7 @@ function view($view_file, $view_data = array()) {
             'pageTitle', 'urlAppend', 'urlServer', 'eclass_version', 'template_base', 'toolName',
             'container', 'uid', 'uname', 'is_embedonce', 'session', 'nextParam', 'action_bar',
             'require_help', 'helpTopic', 'helpSubTopic', 'head_content', 'toolArr', 'module_id',
-            'module_visibility', 'professor', 'pageName', 'menuTypeID', 'section_title',
+            'module_visibility', 'professor', 'pageName',
             'logo_img', 'logo_img_small', 'breadcrumbs', 'is_mobile', 'current_module_dir', 'require_current_course',
             'saved_is_editor', 'require_course_admin', 'is_course_admin', 'require_editor', 'sidebar_courses',
             'show_toggle_student_view', 'themeimg', 'currentCourseName', 'default_open_group',
@@ -344,7 +323,7 @@ function view($view_file, $view_data = array()) {
             'logo_url_path','leftsideImg','eclass_banner_value', 'is_in_tinymce', 'PositionFormLogin',
             'courseLicense', 'loginIMG', 'image_footer', 'authCase', 'authNameEnabled', 'pinned_announce_id',
             'pinned_announce_title', 'pinned_announce_body','favicon_img','collaboration_platform', 'collaboration_value',
-            'is_enabled_collaboration', 'is_collaborative_course', 'is_consultant', 'require_consultant', 'is_coordinator', 
+            'is_enabled_collaboration', 'is_collaborative_course', 'is_consultant', 'require_consultant', 'is_coordinator',
             'is_simple_user', 'theme_css', 'theme_id');
     $data = array_merge($global_data, $view_data);
 
@@ -372,12 +351,11 @@ function widget_view($view_file, $view_data = array()) {
 /**
  * @brief Old views. user for compatibility issue.
  * @param mixed $toolContent html code
- * @param int $menuTypeID
  * @param string $tool_css (optional) catalog name where a "tool.css" file exists
  * @param string $head_content (optional) code to be added to the HEAD of the UI
  */
-function draw($tool_content, $menuTypeID, $tool_css = null, $head_content = null, $perso_tool_content = null) {
-    view('legacy.index', compact('tool_content', 'menuTypeID', 'perso_tool_content'));
+function draw($tool_content, $menuTypeID, $tool_css = null, $head_content = null) {
+    view('legacy.index', compact('tool_content'));
 }
 
 // Simplified draw for pop-ups

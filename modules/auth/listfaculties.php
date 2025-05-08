@@ -25,13 +25,13 @@ if (get_config('dont_display_courses_menu')) {
     redirect_to_home_page();
 }
 
-$redirectUrl = "modules/auth/opencourses.php?fc=";
+$redirectUrl = "modules/auth/courses.php?fc=";
 $countCallback = null;
 $showEmpty = true;
 
 if (defined('LISTING_MODE') && LISTING_MODE === 'COURSE_METADATA') {
     require_once 'modules/course_metadata/CourseXML.php';
-    $redirectUrl = "modules/course_metadata/opencourses.php?fc=";
+    $redirectUrl = "modules/course_metadata/courses.php?fc=";
     $countCallback = CourseXMLElement::getCountCallback();
     $showEmpty = false;
     // exit if feature disabled
@@ -42,38 +42,17 @@ if (defined('LISTING_MODE') && LISTING_MODE === 'COURSE_METADATA') {
 }
 
 $tree = new Hierarchy();
-$toolName = $langSelectFac;
 list($roots, $subtrees) = $tree->buildRootsWithSubTreesArray();
 
 if (count($roots) <= 0) {
-    die("ERROR: no root nodes");
+    Session::flash('message', $langNoRootNodes);
+    Session::flash('alert-class', 'alert-danger');
+    header("Location: {$urlServer}");
+    exit();
 } else if (count($roots) == 1) {
     header("Location:" . $urlServer . $redirectUrl . intval($roots[0]->id));
     exit();
 } else {
-
-    $margin = '';
-    if(isset($_SESSION['uid'])){
-        $margin = 'mt-4';
-    }
-
-    $tool_content .= "
-        <div class='col-12 $margin'>
-            <h1>$langCourses</h1>
-        </div>
-        <div class='col-12 mt-4'>
-            <div class='row row-cols-1 row-cols-lg-2 g-lg-5 g-4'>
-                <div class='col-lg-6 col-12'>
-                    <ul class='list-group list-group-flush'>";
-                $tool_content .= $tree->buildNodesNavigationHtml($roots, 'opencourses', $countCallback, array('showEmpty' => $showEmpty, 'respectVisibility' => true), $subtrees);
-                $tool_content .= "                       
-                    </ul>
-                </div>
-                <div class='col-lg-6 col-12 d-none d-lg-block text-end'>
-                    <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
-                </div>
-            </div>
-        </div>";
+    $data['tree'] = $tree->buildNodesNavigationHtml($roots, 'courses', $countCallback, array('showEmpty' => $showEmpty, 'respectVisibility' => true), $subtrees);
+    view('modules.auth.listfaculties', $data);
 }
-
-draw($tool_content, (isset($uid) and $uid) ? 1 : 0);

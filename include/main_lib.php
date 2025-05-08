@@ -25,7 +25,7 @@
  * Defines standard functions and validates variables
  */
 
-define('ECLASS_VERSION', '4.0.3');
+define('ECLASS_VERSION', '4.1');
 
 // mPDF library temporary file path and font path
 if (isset($webDir)) { // needed for avoiding 'notices' in some files
@@ -455,35 +455,63 @@ function get_course_users($cid) {
 }
 
 /**
- * @brief Return the URL for a user profile image
- * @param int $uid user id
- * @param int $size optional image size in pixels (IMAGESIZE_SMALL or IMAGESIZE_LARGE)
- * @return string
+ * Retrieve the URL for a user's profile image.
+ *
+ * @param int $user_id The ID of the user whose profile image is being retrieved.
+ * @param int $size The size of the image in pixels. Defaults to IMAGESIZE_SMALL.
+ * @param bool $menu If true, the function will return false if no image is found. Defaults to false.
+ *
+ * @global string $webDir The root directory of the web application.
+ * @global string $themeimg The directory containing theme images.
+ * @global string $urlAppend The base URL of the application.
+ * @global int $course_id The ID of the current course (if applicable).
+ * @global bool $is_editor Whether the current user is an editor.
+ * @global int $uid The ID of the currently logged-in user.
+ *
+ * @return string|false The URL of the user's profile image, or a default image if none exists.
+ *                      Returns false if $menu is true and no image is found.
  */
 
-function user_icon($user_id, $size = IMAGESIZE_SMALL) {
+function user_icon($user_id, $size = IMAGESIZE_SMALL, $menu = false) {
     global $webDir, $themeimg, $urlAppend, $course_id, $is_editor, $uid;
 
+    // Check if a cache buster is set for the profile image and append it as a query parameter.
     if (isset($_SESSION['profile_image_cache_buster'])) {
         $suffix = '?v=' . $_SESSION['profile_image_cache_buster'];
     } else {
         $suffix = '';
     }
 
+    // Query the database to check if the user has a profile image and if it is public.
     $user = Database::get()->querySingle("SELECT has_icon, pic_public
         FROM user WHERE id = ?d", $user_id);
+
+    // If the user has a public image or the current user has permission to view it.
     if ($user and
         ($user->pic_public or $uid == $user_id or
          $_SESSION['status'] == USER_TEACHER or
          (isset($course_id) and $course_id and $is_editor))) {
+
+        // Generate the hashed file name for the user's profile image.
         $hash = profile_image_hash($user_id);
         $hashed_file = "courses/userimg/{$user_id}_{$hash}_$size.jpg";
+
+        // Check if the hashed file exists and return its URL.
         if (file_exists($hashed_file)) {
            return $urlAppend . $hashed_file;
+
+        // Check if a non-hashed version of the file exists and return its URL.
         } elseif (file_exists("courses/userimg/{$user_id}_$size.jpg")) {
            return "{$urlAppend}courses/userimg/{$user_id}_$size.jpg";
         }
     }
+
+    // If $menu is true and no image is found, return false.
+    if ($menu) {
+        return false;
+    }
+
+    // Return the URL of the default profile image.
     return "$themeimg/default_$size.png$suffix";
 }
 
@@ -750,9 +778,6 @@ function check_opencourses_reviewer() {
 
 /**
  * @brief just make sure that the $uid variable isn't faked
- * @global type $urlServer
- * @global type $require_valid_uid
- * @global type $uid
  */
 function check_uid() {
 
@@ -1042,11 +1067,22 @@ function datetime_remove_seconds($datetime) {
     return preg_replace('/:\d\d$/', '', $datetime);
 }
 
-// Returns user's previous login date, or today's date if no previous login
-function last_login($uid) {
+/**
+ * @brief returns user's previous login date, or today's date if no previous login
+ * @param $uid
+ * @param $time
+ * @return string
+ */
+function last_login($uid, $time = false) {
 
-    $last_login = Database::get()->querySingle("SELECT DATE_FORMAT(MAX(`when`), '%Y-%m-%d') AS last_login FROM loginout
+    if ($time) {
+        $last_login = Database::get()->querySingle("SELECT DATE_FORMAT(MAX(`when`), '%Y-%m-%d %H:%i') AS last_login FROM loginout
                           WHERE id_user = ?d AND action = 'LOGIN'", $uid)->last_login;
+    } else {
+        $last_login = Database::get()->querySingle("SELECT DATE_FORMAT(MAX(`when`), '%Y-%m-%d') AS last_login FROM loginout
+                          WHERE id_user = ?d AND action = 'LOGIN'", $uid)->last_login;
+    }
+
     if (!$last_login) {
         $last_login = date('Y-m-d');
     }
@@ -1111,7 +1147,6 @@ function randomkeys($length) {
 // and optionally the number of decimal places required,
 // it returns a formated number string, with unit identifier.
 function format_bytesize($kbytes, $dec_places = 2) {
-    global $text;
 
     if ($kbytes > 1048576) {
         $result = sprintf('%.' . $dec_places . 'f', $kbytes / 1048576);
@@ -1139,10 +1174,6 @@ function is_javascript_enabled() {
     return isset($_COOKIE['javascriptEnabled']) and $_COOKIE['javascriptEnabled'];
 }
 
-function add_check_if_javascript_enabled_js() {
-    return '<script type="text/javascript">document.cookie="javascriptEnabled=true";</script>';
-}
-
 // Check if we can display activation link (e.g. module_id is one of our modules)
 // Link is displayed only on main page of each module
 function display_activation_link($module_id) {
@@ -1162,8 +1193,13 @@ function display_activation_link($module_id) {
  * @param type $module_id
  * @return boolean
  */
-function visible_module($module_id) {
-    global $course_id;
+function visible_module($module_id, $course_id = null): bool
+{
+    if ($course_id == null) {
+        $course_id = $GLOBALS['course_id'];
+    } else {
+        $course_id = $course_id;
+    }
 
     $v = Database::get()->querySingle("SELECT visible FROM course_module
                                 WHERE module_id = ?d AND
@@ -1180,7 +1216,7 @@ function visible_module($module_id) {
  *        If called inside of a course, takes in account course / collaboration setting
  * @return boolean
  */
-function is_module_disable($module_id) {
+function is_module_disable($module_id, $extra = null) {
     global $require_current_course, $is_collaborative_course;
 
     if ((get_config('show_collaboration') && get_config('show_always_collaboration')) or
@@ -1189,7 +1225,7 @@ function is_module_disable($module_id) {
         if ($q) {
             return true;
         }
-    } elseif (!$require_current_course && get_config('show_collaboration') && !get_config('show_always_collaboration')){
+    } elseif (!$require_current_course && get_config('show_collaboration') && !get_config('show_always_collaboration') && is_null($extra)){
         $q1 = Database::get()->querySingle("SELECT * FROM module_disable WHERE module_id = ?d", $module_id);
         $q2 = Database::get()->querySingle("SELECT * FROM module_disable_collaboration WHERE module_id = ?d", $module_id);
         if ($q1 or $q2) {
@@ -1253,6 +1289,37 @@ function current_module_id() {
     }
     return false;
 }
+
+/**
+ * @brief fills an array with user groups (group_id => group_name)
+ * passing $as_id will give back only the groups that have been given the specific assignment
+ * @param type $uid
+ * @param type $course_id
+ * @param type $as_id
+ * @return type
+ */
+function user_group_info($uid, $course_id, $as_id = NULL) {
+    $gids = array();
+
+    if ($uid != null) {
+        $q = Database::get()->queryArray("SELECT group_members.group_id AS grp_id, `group`.name AS grp_name FROM group_members,`group`
+            WHERE group_members.group_id = `group`.id
+            AND `group`.course_id = ?d AND group_members.user_id = ?d", $course_id, $uid);
+    } else {
+        if (!is_null($as_id) && Database::get()->querySingle("SELECT assign_to_specific FROM assignment WHERE id = ?d", $as_id)->assign_to_specific) {
+            $q = Database::get()->queryArray("SELECT `group`.name AS grp_name,`group`.id AS grp_id FROM `group`, assignment_to_specific WHERE `group`.id = assignment_to_specific.group_id AND `group`.course_id = ?d AND assignment_to_specific.assignment_id = ?d", $course_id, $as_id);
+        } else {
+            $q = Database::get()->queryArray("SELECT name AS grp_name,id AS grp_id FROM `group` WHERE course_id = ?d", $course_id);
+        }
+    }
+
+    foreach ($q as $r) {
+        $gids[$r->grp_id] = $r->grp_name;
+    }
+    return $gids;
+}
+
+
 
 // Returns true if a string is invalid UTF-8
 function invalid_utf8($s) {
@@ -1709,11 +1776,16 @@ function add_units_navigation($entry_page = false) {
  * @param type $all_units
  * @return array
  */
-function findUserVisibleUnits($uid, $all_units) {
-    global $course_id;
+function findUserVisibleUnits($uid, $all_units, $course_id = null) {
+
+    if ($course_id == null) {
+        $course_id = $GLOBALS['course_id'];
+    } else {
+        $course_id = $course_id;
+    }
 
     $user_units = [];
-    $userInBadges = Database::get()->queryArray("SELECT cu.id, cu.title, cu.comments, cu.start_week, cu.finish_week, cu.visible, cu.public, ub.completed
+    $userInBadges = Database::get()->queryArray("SELECT cu.id, cu.title, cu.comments, cu.start_week, cu.finish_week, cu.visible, cu.public, cu.assign_to_specific, ub.completed
                                                           FROM course_units cu
                                                           INNER JOIN badge b ON (b.unit_id = cu.id)
                                                           INNER JOIN user_badge ub ON (b.id = ub.badge)
@@ -1910,6 +1982,7 @@ function delete_course($cid): void
     Database::get()->query("DELETE FROM agenda WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM course_review WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE d FROM unit_resources d,course_units s WHERE d.unit_id=s.id AND s.course_id = ?d", $cid);
+    Database::get()->query("DELETE d FROM course_units_to_specific d,course_units s WHERE d.unit_id=s.id AND s.course_id = ?d", $cid);
     Database::get()->query("DELETE FROM course_units WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM abuse_report WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE `comments` FROM `comments` INNER JOIN `blog_post` ON `comments`.`rid` = `blog_post`.`id`
@@ -2515,77 +2588,6 @@ function units_get_maxorder() {
         $maxorder = 1;
     }
     return $maxorder;
-}
-
-/**
- *
- * @return type
- */
-function handle_unit_info_edit() {
-    global $course_id, $course_code, $langCourseUnitModified, $webDir, $langCourseUnitAdded;
-
-    $title = $_REQUEST['unittitle'];
-    $descr = $_REQUEST['unitdescr'];
-    $unitdurationfrom = $unitdurationto = null;
-    if (!empty($_REQUEST['unitdurationfrom'])) {
-            $unitdurationfrom = DateTime::createFromFormat('d-m-Y', $_REQUEST['unitdurationfrom'])->format('Y-m-d');
-    }
-    if (!empty($_REQUEST['unitdurationto'])) {
-        $unitdurationto = DateTime::createFromFormat('d-m-Y', $_REQUEST['unitdurationto'])->format('Y-m-d');
-    }
-    if (isset($_REQUEST['unit_id'])) { // update course unit
-        $unit_id = $_REQUEST['unit_id'];
-        Database::get()->query("UPDATE course_units SET
-                                        title = ?s,
-                                        comments = ?s,
-                                        start_week = ?s,
-                                        finish_week = ?s
-                                    WHERE id = ?d AND course_id = ?d",
-                            $title, $descr, $unitdurationfrom, $unitdurationto, $unit_id, $course_id);
-        // tags
-        if (!isset($_POST['tags'])) {
-            $tagsArray = [];
-        } else {
-            $tagsArray = $_POST['tags'];
-        }
-        $moduleTag = new ModuleElement($unit_id);
-        $moduleTag->syncTags($tagsArray);
-        $successmsg = $langCourseUnitModified;
-    } else { // add new course unit
-        $order = units_get_maxorder()+1;
-        $q = Database::get()->query("INSERT INTO course_units SET
-                                  title = ?s,
-                                  comments = ?s,
-                                  start_week = ?s,
-                                  finish_week = ?s,
-                                  visible = 1,
-                                 `order` = ?d, course_id = ?d", $title, $descr,
-                                        $unitdurationfrom, $unitdurationto,
-                                        $order, $course_id);
-
-        if (units_get_maxorder() == 1) { // make 'list' default unit view
-            Database::get()->query("UPDATE course SET view_units = 1 WHERE id = ?d", $course_id);
-        }
-
-        $successmsg = $langCourseUnitAdded;
-        $unit_id = $q->lastInsertID;
-        // tags
-        if (isset($_POST['tags'])) {
-            $moduleTag = new ModuleElement($unit_id);
-            $moduleTag->attachTags($_POST['tags']);
-        }
-    }
-    // update index
-    require_once 'modules/search/indexer.class.php';
-    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNIT, $unit_id);
-    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
-    // refresh course metadata
-    require_once 'modules/course_metadata/CourseXML.php';
-    CourseXMLElement::refreshCourse($course_id, $course_code);
-
-    Session::flash('message',$successmsg);
-    Session::flash('alert-class', 'alert-success');
-    redirect_to_home_page("modules/units/index.php?course=$course_code&id=$unit_id");
 }
 
 function math_unescape($matches) {
@@ -3925,12 +3927,8 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
                         </div>";
             }
         } else {
-            $marginBottom = 'mb-4';
-            if(isset($_SESSION['uid'])){
-                $marginBottom = 'my-4';
-            }
             $titleHeader = (!empty($pageName) ? $pageName : '');
-            return "<div class='col-12 d-md-flex justify-content-md-between align-items-lg-start $marginBottom'>
+            return "<div class='col-12 d-md-flex justify-content-md-between align-items-lg-start my-4'>
                         <div class='col-lg-5 col-md-6 col-12'><div class='action-bar-title mb-0'>$titleHeader</div></div>
                         <div class='col-lg-7 col-md-6 col-12 action_bar d-flex justify-content-md-end justify-content-start align-items-start px-0 mt-md-0 mt-4'>
                             <div class='margin-top-thin margin-bottom-fat hidden-print w-100'>
@@ -5097,7 +5095,7 @@ function module_path($path) {
     } elseif (strpos($path, '/main/') !== false) {
         return preg_replace('|^.*(main/.*\.php)|', '\1', $path);
     } elseif (preg_match('+/auth/(opencourses|listfaculte)\.php+', $path)) {
-        return '/auth/opencourses.php';
+        return '/auth/courses.php';
     } elseif (preg_match('+/auth/(registration|newuser|altnewuser|formuser|altsearch)\.php+', $path)) {
         return '/auth/registration.php';
     } elseif (isset($GLOBALS['course_code']) and
@@ -5121,7 +5119,7 @@ function theme_initialization() {
            $head_content, $webDir, $theme_id, $container,
            $leftsideImg, $eclass_banner_value, $PositionFormLogin,
            $logo_img, $image_footer, $loginIMG, $themeimg, $favicon_img,
-           $logo_img_small, $theme_css;
+           $logo_img_small;
 
     // Add Theme Options styles
     $styles_str = '';
@@ -5640,6 +5638,9 @@ function theme_initialization() {
                 .label.label-success{
                     color: $theme_options_styles[ColorGreenText] !important;
                 }
+                .active-unit::after{
+                    background: $theme_options_styles[ColorGreenText] !important;
+                }
             ";
         }
 
@@ -5749,6 +5750,10 @@ function theme_initialization() {
                     border-left: solid 1px $theme_options_styles[linkColorHeader];
                 }
 
+                .user-menu-btn .header-login-text .fa-chevron-down::before {
+                    color:$theme_options_styles[linkColorHeader];
+                }
+
             ";
         }
 
@@ -5797,11 +5802,6 @@ function theme_initialization() {
                 .container-items .menu-item:hover,
                 .container-items .menu-item:focus{
                     color: $theme_options_styles[linkHoverColorHeader];
-                }
-
-                #bgr-cheat-header:not(:has(.fixed)) .user-menu-btn:hover,
-                #bgr-cheat-header:not(:has(.fixed)) .user-menu-btn:focus{
-                    border-top: solid 4px $theme_options_styles[linkHoverColorHeader];
                 }
 
                 .user-menu-btn:hover .user-name,
@@ -6000,6 +6000,10 @@ function theme_initialization() {
 
                 .border-bottom-default{
                     border-bottom: solid 1px $theme_options_styles[clBorderBottomAccordions];
+                }
+
+                #unitResources .unit-divider{
+                    background-color: $theme_options_styles[clBorderBottomAccordions];
                 }
             ";
         }
@@ -7083,7 +7087,7 @@ function theme_initialization() {
                 @media(min-width:992px){
                     .header-login-text,
                     .header-login-text:hover,
-                    .header-login-text:focus{
+                    .header-login-text:focus, .user-menu-btn .header-login-text .fa-chevron-down::before{
                          color:$theme_options_styles[buttonTextColor];
                     }
                 }
@@ -10484,18 +10488,6 @@ function theme_initialization() {
                     background: $theme_options_styles[linkColor] url($urlServer/resources/img/units-expand-collapse.svg) 0 0;
                 }
 
-                .active-unit::after {
-                    background: $theme_options_styles[linkColor] !important;
-                }
-
-                .prev-next-learningPath{
-                    color: $theme_options_styles[linkColor];
-                }
-
-                #leftTOCtoggler{
-                    color: $theme_options_styles[linkColor];
-                }
-
                 .more-enabled-login-methods div{
                     color: $theme_options_styles[linkColor];
                 }
@@ -12003,15 +11995,57 @@ function theme_initialization() {
             ";
         }
 
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////// LEARNPATH - SPECIAL CASES  ///////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if (!empty($theme_options_styles['linkColorHeader'])){
+            $styles_str .= "
+                #leftTOCtoggler,
+                .prev-next-learningPath{
+                    color:$theme_options_styles[linkColorHeader];
+                }
+
+            ";
+        }
+        if (!empty($theme_options_styles['bgColor'])){
+            $styles_str .= "
+                .body-learning-path,
+                .iframe-learningPath,
+                .body-learningPath{
+                    background-color:$theme_options_styles[bgColor];
+                }
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////// PROGRESSBAR - SPECIAL CASES /////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['BackProgressBar']) && !empty($theme_options_styles['BgProgressBar']) &&
+                            !empty($theme_options_styles['BgColorProgressBarAndText'])){
+
+            $styles_str .= "
+                .progress-circle-bar::before{
+                    color: $theme_options_styles[BgColorProgressBarAndText];
+                }
+            ";
+        }
 
         // Create .css file for the ($theme_id) in order to override the default.css file when it is necessary.
-        if (isset($styles_str) && $styles_str){
-            $fileStyleStr = $webDir . "/courses/theme_data/$theme_id/style_str.css";
-            if(!file_exists($fileStyleStr)){
-                file_put_contents($fileStyleStr,"");
-            }else{
-                file_put_contents($fileStyleStr,$styles_str);
-            }
+        $fileStyleStr = $webDir . "/courses/theme_data/$theme_id/style_str.css";
+        if (!file_exists($fileStyleStr)) {
+            file_put_contents($fileStyleStr, "");
+        } else if (isset($_SESSION['theme_changed'])) { // theme has changed ?
+            file_put_contents($fileStyleStr, $styles_str);
+            unset($_SESSION['theme_changed']);
+        } else if (isset($_SESSION['step'])) { // first time
+            file_put_contents($fileStyleStr, $styles_str);
+            unset($_SESSION['step']);
         }
     }
 }

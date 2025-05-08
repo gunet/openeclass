@@ -362,7 +362,7 @@ if (count($exercise_question_ids) > 0) {
             $choice = purify($choice);
             if (!empty($choice)) {
                 if (!$question_graded) {
-                    $tool_content .= " <small>(<span class='text-danger'>$langAnswerUngraded</span>) </small>";
+                    $tool_content .= " <small class='text-danger'>(<span class='text-danger'>$langAnswerUngraded</span>) </small>";
                 } else {
                     $tool_content .= " <small>($langGradebookGrade: <strong>$question_weight</strong></span>)</small>";
                 }
@@ -370,7 +370,7 @@ if (count($exercise_question_ids) > 0) {
         } else {
              if (($showScore) and (!is_null($choice))) {
                  if ($answerType == MULTIPLE_ANSWER && $question_weight < 0 && $calc_grade_method == 1) {
-                     $qw_legend1 = "<span style='color: red;'>$question_weight</span>";
+                     $qw_legend1 = "<span class='Accent-200-cl'>$question_weight</span>";
                      $qw_legend2 = " $langConvertedTo <strong>0 / $questionWeighting</strong>";
                  } else {
                      $qw_legend1 = "$question_weight";
@@ -479,7 +479,7 @@ if (count($exercise_question_ids) > 0) {
                                 if (isset($_GET['pdf'])) {
                                     $icon = "<label class='label-container' aria-label='$langSelect'><input type='checkbox' checked='checked'><span class='checkmark'></span></label>";
                                 } else {
-                                    $icon = "<span class='fa fa-check text-success'></span>";
+                                    $icon = "<span class='fa-solid fa-check text-success'></span>";
                                 }
                             }
                             // else if the word entered is not the same as the one defined by the professor
@@ -548,7 +548,7 @@ if (count($exercise_question_ids) > 0) {
                                 if (isset($_GET['pdf'])) {
                                     $icon = "<label class='label-container' aria-label='$langSelect'><input type='checkbox' checked='checked'><span class='checkmark'></span></label>";
                                 } else {
-                                    $icon = "<span class='fa fa-check text-success'></span>";
+                                    $icon = "<span class='fa-solid fa-check text-success'></span>";
                                 }
                             }  else { // wrong answer
                                 if (isset($possible_answer[$choice[$j]])) { // if we have chosen something
@@ -574,7 +574,7 @@ if (count($exercise_question_ids) > 0) {
                                 $questionScore += $answerWeighting;
                                 $grade = $answerWeighting;
                                 $choice[$answerId] = q($matching[$choice[$answerId]]);
-                                $icon = "<span class='fa fa-check text-success'></span>";
+                                $icon = "<span class='fa-solid fa-check text-success'></span>";
                                 $pdf_icon = "✓";
                             } elseif (!$thisChoice) {
                                 $choice[$answerId] = '<del class="text-danger">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</del>';
@@ -616,7 +616,7 @@ if (count($exercise_question_ids) > 0) {
                             $pdf_student_choice_icon = "<label class='label-container' aria-label='$langSelect'><input type='checkbox' checked='checked'><span class='checkmark'></span></label>";
                             $style = '';
                             if ($answerCorrect) {
-                                $answer_icon = "fa fa-check text-success";
+                                $answer_icon = "fa-solid fa-check text-success";
                             } else {
                                 $answer_icon = "fa-solid fa-xmark text-danger";
                             }
@@ -634,9 +634,9 @@ if (count($exercise_question_ids) > 0) {
 
                         $tool_content .= standard_text_escape($answer);
                         if ($answerCorrect) {
-                            $tool_content .= "&nbsp;<span class='text-success text-nowrap'><small>($langCorrectS)</small></span>";
+                            $tool_content .= "&nbsp;<span class='text-success text-nowrap'><small class='text-success text-nowrap'>($langCorrectS)</small></span>";
                         } else {
-                            $tool_content .= "&nbsp;<span class='text-danger text-nowrap'><small>($langIncorrectS)</small></span>";
+                            $tool_content .= "&nbsp;<span class='text-danger text-nowrap'><small class='text-danger text-nowrap'>($langIncorrectS)</small></span>";
                         }
                         $tool_content .= "</div>";
                         if ($studentChoice or $answerCorrect) {
@@ -806,7 +806,15 @@ if (isset($_GET['pdf'])) {
             h2 { font-size: 12pt; border-bottom: 1px solid black; }
             h3 { font-size: 10pt; color: #158; border-bottom: 1px solid #158; }            
             th { text-align: left; border-bottom: 1px solid #999; }
-            td { text-align: left; }
+            td { text-align: left; padding: 10px 0px 10px 0px;}
+            .text-danger{color: red;}
+            .text-success{color: green;}
+            .table-responsive{
+                padding: 25px;
+                margin: 15px 0px 15px 0px;
+                background-color: #eeeeee;
+                border: solid 1px #eeeeee;
+            }
           </style>
         </head>
         <body>" . get_platform_logo() .

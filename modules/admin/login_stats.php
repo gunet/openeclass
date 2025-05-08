@@ -90,16 +90,16 @@ $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 $navigation[] = array("url" => "../usage/index.php?t=a", "name" => $langUsage);
 
 // recent logins
-$interval = [ $langToday => 1, $langLast7Days => 7];
+/*$interval = [ $langToday => 1, $langLast7Days => 7];
 foreach ($interval as $legend => $value) {
-    $loginUsers = Database::get()->querySingle("SELECT COUNT(*) AS cnt 
+    $loginUsers = Database::get()->querySingle("SELECT COUNT(*) AS cnt
                         FROM loginout
                         WHERE action='LOGIN'
                         AND `when` >= DATE_SUB(DATE(NOW()), INTERVAL $value DAY)");
     $data['recent_logins'][] = [ $legend, $loginUsers->cnt ];
 }
-
-// old logins
+*/
+// monthly logins
 $data['user_logins_data'] = $user_logins_data = get_user_login_archives();
 
 view('admin.other.stats.login_stats', $data);

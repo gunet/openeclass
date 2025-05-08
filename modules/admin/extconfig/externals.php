@@ -23,7 +23,6 @@ foreach (ExtAppManager::$AppCategories as $category => $appNames) {
         require_once strtolower($appName) . '.php';
     }
 }
-require_once realpath(dirname(__FILE__)) . '/../../db/database.php';
 
 class ExtAppManager {
 
