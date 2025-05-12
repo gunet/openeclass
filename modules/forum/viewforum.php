@@ -41,6 +41,7 @@ if (!add_units_navigation(true)) {
 if ($is_editor) {
     load_js('tools.js');
 }
+load_js('datatables');
 
 $next = 0;
 if (isset($_GET['forum'])) {
@@ -108,64 +109,6 @@ if (isset($_GET['start'])) {
     $first_topic = intval($_GET['start']);
 } else {
     $first_topic = 0;
-}
-
-if ($total_topics > TOPICS_PER_PAGE) { // navigation
-    $base_url = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forum=$forum_id&amp;start=";
-    if ($unit) {
-        $base_url = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;res_type=forum&amp;unit=$unit&amp;forum=$forum_id&amp;start=";
-    }
-    $paging = array();
-
-    $current_page = $first_topic / TOPICS_PER_PAGE + 1; // current page
-    for ($x = 1; $x <= $pages; $x++) { // display navigation numbers
-        if ($current_page == $x) {
-            $paging[] = "<li class='active'><a href='#'>$x</a></li>";
-        } else {
-            $start = ($x - 1) * TOPICS_PER_PAGE;
-            $paging[] = "<li><a href='$base_url&amp;start=$start'>$x</a></li>";
-        }
-    }
-
-    $next = $first_topic + TOPICS_PER_PAGE;
-    $prev = $first_topic - TOPICS_PER_PAGE;
-    if ($prev < 0) {
-        $prev = 0;
-    }
-    if ($first_topic == 0) { // beginning
-        $nexturlclass = "";
-        $privurlclass = "class='disabled'";
-        $nexturl = $base_url.$next;
-        $prevurl = "#";
-    } elseif ($first_topic + TOPICS_PER_PAGE < $total_topics) {
-        $nexturlclass = "";
-        $privurlclass = "";
-        $prevurl = $base_url.$prev;
-        $nexturl = $base_url.$next;
-    } elseif ($start - TOPICS_PER_PAGE < $total_topics) { // end
-        $nexturlclass = "class='disabled'";
-        $privurlclass = "";
-        $nexturl = "#";
-        $prevurl = $base_url.$prev;
-    }
-
-    $tool_content .= "
-        <nav class='clearfix'>
-          <ul class='pagination float-end'>
-            <li $privurlclass>
-                <a href='$prevurl' aria-label='$langPrevious'>
-                    <span aria-hidden='true'>&laquo;</span>
-                </a>
-            </li>
-            ".implode($paging)."
-            <li $nexturlclass>
-              <a href='$nexturl' aria-label='$langNext'>
-                <span aria-hidden='true'>&raquo;</span>
-              </a>
-            </li>
-          </ul>
-        </nav>
-    ";
 }
 
 // delete topic
@@ -272,12 +215,12 @@ $result = Database::get()->queryArray("SELECT t.*, p.post_time, t.poster_id AS t
         FROM forum_topic t
         LEFT JOIN forum_post p ON t.last_post_id = p.id
         WHERE t.forum_id = ?d
-        ORDER BY topic_time DESC LIMIT $first_topic, " . TOPICS_PER_PAGE . "", $forum_id);
+        ORDER BY topic_time DESC", $forum_id);
 
 
 if (count($result) > 0) { // topics found
     $tool_content .= "<div class='table-responsive'>
-        <table class='table-default'>
+        <table class='table-default forum_viewforum'>
         <thead>
         <tr class='list-header'>
           <th class='forum_td'>$langTopics</th>
@@ -325,9 +268,11 @@ if (count($result) > 0) { // topics found
         $tool_content .= "<td>$replies</td>";
         $tool_content .= "<td>" . q(uid_to_name($myrow->topic_poster_id)) . "</td>";
         $tool_content .= "<td>$myrow->num_views</td>";
-        $tool_content .= "<td>";
         if (!is_null($last_post_datetime)) {
-            $tool_content .= "<br>" . format_locale_date(strtotime($last_post_datetime), 'short');
+            $tool_content .= "<td data-order='$last_post_datetime'>";
+            $tool_content .= format_locale_date(strtotime($last_post_datetime), 'short');
+        } else {
+            $tool_content .= "<td data-order='00/00/0000 - 00:00'>";
         }
         $tool_content .= "</td>";
         $sql = Database::get()->querySingle("SELECT notify_sent FROM forum_notify
@@ -405,7 +350,32 @@ if (count($result) > 0) { // topics found
         $tool_content .= action_button($dyntools);
         $tool_content .= "</td></tr>";
     } // end of while
-    $tool_content .= "</table></div>";
+    $tool_content .= "</table>
+
+    <script>
+            $(document).ready(function() {
+                $('.table-default').DataTable({
+                    ordering: true,
+                    searching: true,
+                    columnDefs: [
+                        {
+                            targets: 0, // Enable searching only for the first column
+                            searchable: true
+                        },
+                        {
+                            targets: '_all', // Disable searching for all other columns
+                            searchable: false
+                        },
+                        {
+                            targets: -1, // No orderable for last column
+                            orderable: false
+                        }
+                    ]
+                });
+            });
+        </script>
+
+    </div>";
 } else {
     $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoTopics</span></div></div>";
 }
