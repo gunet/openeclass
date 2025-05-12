@@ -39,6 +39,7 @@ require_once 'functions.php';
 require_once 'modules/group/group_functions.php';
 
 load_js('tools.js');
+load_js('datatables');
 
 if ($is_editor) {
     $action_bar = action_bar(array(
@@ -163,7 +164,7 @@ if ($total_categories > 0) {
                             </div>
         <div class='card-body'>";
 
-        $tool_content .= "<div class='table-responsive mt-0'><table class='table-default '>";
+        $tool_content .= "<div class='table-responsive mt-0'><table class='table-default forum_index'>";
         $tool_content .= "<thead>";
         $tool_content .= "<tr class='list-header'>
             <th>$toolName</th>
@@ -244,16 +245,15 @@ if ($total_categories > 0) {
                         $tool_content .= "<div class='smaller'>$desc</div>" .
                             "</td>" .
                             "<td class='text-center'>$total_topics</td>" .
-                            "<td class='text-center'>$total_posts</td>" .
-                            "<td>";
+                            "<td class='text-center'>$total_posts</td>";
                         if ($total_topics > 0 && $total_posts > 0) {
-                            $tool_content .= "<span class='smaller'>" . q($last_user_post) . "&nbsp;";
+                            $tool_content .= "<td data-order='$human_last_post_time'><span class='smaller'>" . q($last_user_post) . "&nbsp;";
                             if ($is_editor or ! $group_id or ($has_forum and $is_member)) {
                                 $tool_content .= "<a aria-label='$langLastPost' href='viewtopic.php?course=$course_code&amp;topic=$last_post_topic_id&amp;forum=$forum_id'>".icon('fa-comment-o', $langLastPost) ."</a>";
                             }
                             $tool_content .= "<br>$human_last_post_time</span></td>";
                         } else {
-                            $tool_content .= "<div class='inactive'>$langNoPosts</div></td>";
+                            $tool_content .= "<td data-order='00/00/0000 - 00:00'><div class='inactive'>$langNoPosts</div></td>";
                         }
 
                         if (!isset($forum_action_notify)) {
@@ -310,7 +310,31 @@ if ($total_categories > 0) {
     }
 
     $tool_content .= "</div>
-                    </div>";
+    
+        <script>
+            $(document).ready(function() {
+                $('.table-default').DataTable({
+                    ordering: true,
+                    searching: true,
+                    columnDefs: [
+                        {
+                            targets: 0, // Enable searching only for the first column
+                            searchable: true
+                        },
+                        {
+                            targets: '_all', // Disable searching for all other columns
+                            searchable: false
+                        },
+                        {
+                            targets: -1, // No orderable for last column
+                            orderable: false
+                        }
+                    ]
+                });
+            });
+        </script>
+
+    </div>";
 
 } else {
     $tool_content .= "<div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoForums</span></div></div>";

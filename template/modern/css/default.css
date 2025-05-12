@@ -5937,3 +5937,8 @@ th.grade-col a{
 .comment-lp p{
   line-height: 16px !important;
 }
+
+/******************************** Forum ************************************/
+.forum_index thead th, .forum_viewforum thead th {
+  padding: 10px 25px 10px 10px!important;
+}
