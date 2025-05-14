@@ -86,8 +86,7 @@ if ($is_editor) {
             }
             if (isset($_GET['modifyAnswers'])) {
                 //clone and redirect to edit
-                if (isset($_GET['clone'])) {
-                    // if user comes from an exercise page
+                if (isset($_GET['clone'])) { // if user comes from an exercise question list
                     if (isset($exerciseId)) {
                         // duplicates the question
                         $new_question_id = $objQuestion->duplicate();
@@ -105,8 +104,7 @@ if ($is_editor) {
                         $objAnswer->duplicate($new_question_id);
                         redirect_to_home_page("modules/exercise/admin.php?course=$course_code&modifyQuestion=$new_question_id&exerciseId=$exerciseId");
                         exit();
-                        // if user comes from question pool
-                    } else {
+                    } else { // if user comes from question pool
                         $new_question_id = $objQuestion->duplicate();
                         $objQuestion = new Question();
                         $objQuestion->read($new_question_id);
