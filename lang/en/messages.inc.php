@@ -1844,6 +1844,7 @@ $langConfirmQuestionPoolPurge = "Unused exercise questions will be deleted.";
 $langQuestionPoolPurgeSuccess = "Unused questions were deleted from question pool.";
 $langShuffleQuestions = "Shuffle all questions";
 $langClear = 'Clear';
+$langClearChoice = 'Clear Choice';
 $langExerciseFeedback = "End Message";
 $langExerciseFeedbackInfo = "appears after exercise is complete";
 $langExercisePreventCopy = 'Prevent Text Copying';

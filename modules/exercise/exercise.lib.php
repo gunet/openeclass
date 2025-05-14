@@ -30,7 +30,7 @@ function showQuestion(&$objQuestionTmp, $question_number, $exerciseResult = [], 
 
     global $tool_content, $picturePath, $langNoAnswer, $langQuestion, $langSelect,
             $langColumnA, $langColumnB, $langMakeCorrespond, $langInfoGrades,
-            $exerciseType, $nbrQuestions, $langInfoGrade, $langHasAnswered, $langClear, $langSelect;
+            $exerciseType, $nbrQuestions, $langInfoGrade, $langHasAnswered, $langClearChoice, $langSelect;
 
     $questionId = $objQuestionTmp->selectId();
     $questionWeight = $objQuestionTmp->selectWeighting();
@@ -217,7 +217,7 @@ function showQuestion(&$objQuestionTmp, $question_number, $exerciseResult = [], 
         $tool_content .= "<div class='col-sm-12'><div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langNoAnswer</span></div></div>";
     }
     if (in_array($answerType, [TRUE_FALSE, UNIQUE_ANSWER])) {
-        $tool_content .= "<button class='float-end clearSelect btn deleteAdminBtn' style='margin-top:0px;'><i class='fa-solid fa-xmark'></i> $langClear</button>";
+        $tool_content .= "<button class='float-end clearSelect btn btn-outline-secondary mt-0'><i class='fa fa-solid fa-xmark'></i>&nbsp;$langClearChoice</button>";
     }
     $tool_content .= "
                 </div>

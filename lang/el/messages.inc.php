@@ -2067,6 +2067,7 @@ $langConfirmQuestionPoolPurge = "Οι ερωτήσεις που δεν χρησ�
 $langQuestionPoolPurgeSuccess = "Η διαγραφή των αχρησιμοποίητων ερωτήσεων από την τράπεζα ερωτήσεων πραγματοποιήθηκε.";
 $langShuffleQuestions = "Ανακάτεμα όλων των ερωτήσεων";
 $langClear = 'Εκκαθάριση';
+$langClearChoice = 'Εκκαθάριση επιλογής';
 $langExerciseFeedback = "Κείμενο Ολοκλήρωσης";
 $langExerciseFeedbackInfo = "εμφανίζεται μετά την ολοκλήρωση της άσκησης";
 $langExercisePreventCopy = 'Αποτροπή αντιγραφής κειμένου';
