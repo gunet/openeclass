@@ -59,7 +59,7 @@ if (!class_exists('Answer')):
         }
 
         /**
-         * reads answer informations from the data base
+         * reads answer information from the database
          *
          * @author - Olivier Brouckaert
          */
