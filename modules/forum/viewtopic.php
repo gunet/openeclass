@@ -574,7 +574,7 @@ function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offse
 
     global $langForumPostParentDel, $langMsgRe, $course_id, $langReply, $langAttachedFile, $unit, $res_type, $langFrom2,
            $langMessages, $course_code, $is_editor, $topic, $forum, $uid, $langMessage, $head_content,
-           $langModify, $langDelete, $langSent, $webDir, $langForumPostParent;
+           $langModify, $langDelete, $langSent, $webDir, $langForumPostParent, $user_settings;
 
     $content = '';
     if (!isset($user_stats[$myrow->poster_id])) {
@@ -641,7 +641,12 @@ function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offse
     }
 
     if ($count > 1) { // for all posts except first
-        $content .= "<div id='$myrow->id' class='post-message card panelCard card-default px-lg-4 py-lg-3 offset-sm-$offset mt-3'>";
+        if ($user_settings->get(SETTING_FORUM_POST_VIEW) == 2) {
+            $content .= "<details open id='$myrow->id' class='post-message card panelCard card-default px-lg-4 py-lg-3 offset-sm-$offset mt-3'>
+            <summary style='list-style: disclosure-closed;'>". display_user($myrow->poster_id, false, false) ."</summary>";
+        } else {
+            $content .= "<div id='$myrow->id' class='post-message card panelCard card-default px-lg-4 py-lg-3 offset-sm-$offset mt-3'>";
+        }
         $content .= "<div class='card-header border-0 d-flex justify-content-between align-items-center'>
                             <div class='panel-title d-flex justify-content-between align-items-center w-100'>$langMsgRe " . q($topic_subject);
     } else {
@@ -727,7 +732,11 @@ function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offse
             </div>
         </div>";
     }
-    $content .= "</div>";
+    if ($user_settings->get(SETTING_FORUM_POST_VIEW) == 2) {
+        $content .= "</details>";
+    } else {
+        $content .= "</div>";
+    }
 
     return $content;
 }
