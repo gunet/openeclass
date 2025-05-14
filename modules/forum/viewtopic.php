@@ -65,8 +65,8 @@ if ($is_editor) { // delete post confirmation
     $head_content .= "
         $('.delete-btn').click(function(e) {
             var link = $(this).attr('href');
-            e.preventDefault();            
-            bootbox.confirm({ 
+            e.preventDefault();
+            bootbox.confirm({
                 closeButton: false,
                 title: '<div class=\'icon-modal-default\'><i class=\'fa-regular fa-trash-can fa-xl Accent-200-cl\'></i></div><div class=\'modal-title-default text-center mb-0\'>".js_escape($langConfirmDelete)."</div>',
                 message: '<p class=\'text-center\'>".js_escape($langConfirmDelete)."</p>',
@@ -85,7 +85,7 @@ if ($is_editor) { // delete post confirmation
                         document.location.href = link;
                     }
                 }
-            });     
+            });
 
         });
     ";
@@ -257,13 +257,13 @@ $topic_subject = Database::get()->querySingle("SELECT title FROM forum_topic WHE
 if (!add_units_navigation(TRUE)) {
     if (!$res_type) {
         $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langForums);
-        $navigation[] = array('url' => "viewforum.php?course=$course_code&amp;forum=$forum", 'name' => q($forum_name));
+        $navigation[] = array('url' => "viewforum.php?course=$course_code&forum=$forum", 'name' => q($forum_name));
     } else {
         $navigation[] = array('url' => "../wall/index.php?course=$course_code", 'name' => $langWall);
-        $navigation[] = array('url' => "../units/view.php?course=$course_code&amp;res_type=forum&amp;forum=$forum", 'name' => q($forum_name));
+        $navigation[] = array('url' => "../units/view.php?course=$course_code&res_type=forum&forum=$forum", 'name' => q($forum_name));
     }
 } else {
-    $navigation[] = array('url' => "../units/view.php?course=$course_code&amp;res_type=forum&amp;forum=$forum&amp;unit=$unit", 'name' => q($forum_name));
+    $navigation[] = array('url' => "../units/view.php?course=$course_code&res_type=forum&forum=$forum&unit=$unit", 'name' => q($forum_name));
 }
 $pageName = $langTopic;
 
@@ -717,17 +717,17 @@ function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offse
                     <div class='text-justify'>$message</div>
                     $fileinfo
                 </div>
-            
+
         </div>";
     if ($rate_str or $parent_post_link or $reply_button) {
         $content .= "
         <div class='card-footer border-0'>
             <div class='row'>
                 <div class='col-12 d-flex justify-content-between align-items-center'>
-                   
+
                         <span>$rate_str $parent_post_link</span>
                         <span>$reply_button</span>
-                    
+
                 </div>
             </div>
         </div>";
