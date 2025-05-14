@@ -1050,9 +1050,9 @@ $langDBSetting = "Paramètres de MySQL";
 $langMainLang = "Langue Principale de l'installation";
 $langLastCheck = "Dernière vérification avant l'installation";
 $langRequirements = "Exigences du système";
-$langInstallEnd = "Installation terminée" 
+$langInstallEnd = "Installation terminée"
 ;
-$langModuleNotInstalled = "Non installé" 
+$langModuleNotInstalled = "Non installé"
 ;
 $langReadHelp = "Lire plus";
 $langWarnConfig = "Warning !! File <b>config.php</b> exists !! Installation cannot proceed. If you want to rerun installation, first delete config.php file!";
@@ -1082,7 +1082,7 @@ $langLDAPBaseDn = "Base DN du Serveur LDAP";
 $langChooseLang = "Choisissez la langue";
 $langBeforeInstall1 = "Avant de procéder à l'installation, veuillez imprimer et lire attentivement les";
 $langBeforeInstall2 = "De plus, vous trouverez des informations générales concernant la plateforme";
-$langInstallInstr = "Instructions d'installation" 
+$langInstallInstr = "Instructions d'installation"
 ;
 $langAddComment = "Ajouter / Modifier un commentaire";
 $langLearningModule = "Section";
@@ -1141,7 +1141,7 @@ $langDocumentAsModule = "Utiliser un document";
 $langDocumentAsModuleLabel = "de Document";
 $langDocumentInModule = "Document dans un module";
 $langEXERCISETypeDesc = "Exercice de la plateforme";
-$langEndOfSteps = "Cliquez Sortir après la fin de cette dernière étape." 
+$langEndOfSteps = "Cliquez Sortir après la fin de cette dernière étape."
 ;
 $langErrorAssetNotFound = "Élément introuvable :";
 $langErrorCopyAttachedFile = "Impossible de copier le fichier : ";
@@ -1821,9 +1821,9 @@ $langNewId = "Nouveau identifiant"
 $langUsersWillAdd = "Les utilisateurs du cours seront ajoutés";
 $langErrorLang = "Erreur ! Aucune langue trouvée !"
 ;
-$langDoSearch = "Poursuivre la recherche" 
+$langDoSearch = "Poursuivre la recherche"
 ;
-$langSearch_terms = "Critères de recherche :" 
+$langSearch_terms = "Critères de recherche :"
 ;
 $langSearchIn = "Recherche dans :";
 $langSearchWith = "Recherche selon des critères :";
@@ -6423,3 +6423,4 @@ $langNumberColumnsSmallerThanQ = "The number of columns you entered is less than
 $langUserAnswer = "User response";
 $langAddRowsColumns = "Registration";
 $langCurrentDuration = "Current duration";
+$langClearChoice = 'Clear Choice';
