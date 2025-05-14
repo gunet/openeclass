@@ -49,13 +49,15 @@
                             </div>
                         </div>
                         @if (!isset($action_bar) or empty($action_bar))
-                            <div class='col-12 d-inline-flex'>
-                                <p>
-                                    {{ $toolName }}
-                                    @if ($pageName and ($pageName != $toolName))
-                                        - {{ $pageName }}
-                                    @endif
-                                </p>
+                            <div class="col-12 d-md-flex justify-content-md-between align-items-lg-start my-3">
+                                <div class='col-12 d-inline-flex'>
+                                    <div class="action-bar-title mb-0">
+                                        {{ $toolName }}
+                                        @if ($pageName and ($pageName != $toolName))
+                                            - {{ $pageName }}
+                                        @endif
+                                    </div>
+                                </div>
                             </div>
                         @endif
                     </div>
