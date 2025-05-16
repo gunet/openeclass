@@ -39,7 +39,8 @@ $picturePath = "courses/$course_code/image";
 $head_content .= "
     <script type='text/javascript'>
         $(function() {
-            $('#questions').DataTable ({
+            $('#questions_$course_code').DataTable ({
+                'stateSave': true,
                 'fnDrawCallback': function (settings) { typeof MathJax !== 'undefined' && MathJax.typeset(); },
                 'sPaginationType': 'full_numbers',
                 'bAutoWidth': true,
@@ -181,6 +182,10 @@ if (isset($_GET['categoryId'])) {
     $categoryId = intval($_GET['categoryId']);
 }
 
+if (isset($_GET['answerType'])) {
+    $answerType = intval($_GET['answerType']);
+}
+
 // deletes a question from the data base and all exercises
 if (isset($_GET['delete'])) {
     $delete = intval($_GET['delete']);
@@ -223,6 +228,7 @@ elseif (isset($_GET['recup']) and $fromExercise) {
 $exportUrl = "export.php?course=$course_code" .
     (isset($exerciseId)? "&amp;exerciseId=$exerciseId": '') .
     (isset($difficultyId)? "&amp;difficultyId=$difficultyId": '') .
+    (isset($answerType)? "&amp;answerType=$answerType": '') .
     (isset($categoryId)? "&amp;categoryId=$categoryId": '');
 
 if ($fromExercise) {
@@ -294,52 +300,66 @@ foreach ($q_cats as $q_cat) {
     $q_cat_options .= "<option value='" . $q_cat->question_cat_id . "' ".(isset($categoryId) && $categoryId == $q_cat->question_cat_id ? "selected":"").">$q_cat->question_cat_name</option>\n";
 }
 //Start of filtering Component
-$tool_content .= "<div class='form-wrapper mb-4'><form class='form-inline' role='form' name='qfilter' method='get' action='$_SERVER[REQUEST_URI]'><input type='hidden' name='course' value='$course_code'>
+$tool_content .= "<div class='form-wrapper mb-4'><form class='form-inline' role='form' name='qfilter' method='get' action='$_SERVER[REQUEST_URI]'>
+                    <input type='hidden' name='course' value='$course_code'>
                     ".($fromExercise? "<input type='hidden' name='fromExercise' value='$fromExercise'>" : "")."
                     <div class='form-group'>
                         <select onChange = 'document.qfilter.submit();' name='exerciseId' class='form-select'>
                             $exercise_options
                         </select>
-                </div>
-                <div class='form-group mt-3'>
-                    <select onChange = 'document.qfilter.submit();' name='difficultyId' class='form-select'>
-                        <option value='-1' ".(isset($difficultyId) && $difficultyId == -1 ? "selected='selected'": "").">-- $langQuestionAllDiffs --</option>
-                        <option value='0' ".(isset($difficultyId) && $difficultyId == 0 ? "selected='selected'": "").">-- $langQuestionNotDefined --</option>
-                        <option value='1' ".(isset($difficultyId) && $difficultyId == 1 ? "selected='selected'": "").">$langQuestionVeryEasy</option>
-                        <option value='2' ".(isset($difficultyId) && $difficultyId == 2 ? "selected='selected'": "").">$langQuestionEasy</option>
-                        <option value='3' ".(isset($difficultyId) && $difficultyId == 3 ? "selected='selected'": "").">$langQuestionModerate</option>
-                        <option value='4' ".(isset($difficultyId) && $difficultyId == 4 ? "selected='selected'": "").">$langQuestionDifficult</option>
-                        <option value='5' ".(isset($difficultyId) && $difficultyId == 5 ? "selected='selected'": "").">$langQuestionVeryDifficult</option>
-                    </select>
-                </div>
-                <div class='form-group mt-3'>
-                    <select onChange = 'document.qfilter.submit();' name='categoryId' class='form-select'>
-                        $q_cat_options
-                    </select>
-                </div>
-            </form>
-        </div>";
+                    </div>
+                    <div class='form-group mt-3'>
+                        <select onChange = 'document.qfilter.submit();' name='categoryId' class='form-select'>
+                            $q_cat_options
+                        </select>
+                    </div>
+                    <div class='form-group mt-3'>
+                        <select onChange = 'document.qfilter.submit();' name='difficultyId' class='form-select'>
+                            <option value='-1' ".(isset($difficultyId) && $difficultyId == -1 ? "selected='selected'": "").">-- $langQuestionAllDiffs --</option>
+                            <option value='0' ".(isset($difficultyId) && $difficultyId == 0 ? "selected='selected'": "").">-- $langQuestionNotDefined --</option>
+                            <option value='1' ".(isset($difficultyId) && $difficultyId == 1 ? "selected='selected'": "").">$langQuestionVeryEasy</option>
+                            <option value='2' ".(isset($difficultyId) && $difficultyId == 2 ? "selected='selected'": "").">$langQuestionEasy</option>
+                            <option value='3' ".(isset($difficultyId) && $difficultyId == 3 ? "selected='selected'": "").">$langQuestionModerate</option>
+                            <option value='4' ".(isset($difficultyId) && $difficultyId == 4 ? "selected='selected'": "").">$langQuestionDifficult</option>
+                            <option value='5' ".(isset($difficultyId) && $difficultyId == 5 ? "selected='selected'": "").">$langQuestionVeryDifficult</option>
+                        </select>
+                    </div>
+                    <div class='form-group mt-3'>
+                        <select onChange = 'document.qfilter.submit();' name='answerType' class='form-select'>
+                            <option value='-1' ". (isset($answerType) && $answerType == -1 ? "selected='selected'": "") .">-- $langQuestionAllTypes --</option>                        
+                            <option value='" . UNIQUE_ANSWER ."' ". (isset($answerType) && $answerType == UNIQUE_ANSWER ? "selected='selected'": "") .">$langUniqueSelect</option>
+                            <option value='" . MULTIPLE_ANSWER ."' ".(isset($answerType) && $answerType == MULTIPLE_ANSWER ? "selected='selected'": "").">$langMultipleSelect</option>
+                            <option value='" . TRUE_FALSE ."' ".(isset($answerType) && $answerType == TRUE_FALSE ? "selected='selected'": "").">$langTrueFalse</option>
+                            <option value='" . FILL_IN_BLANKS ."' ".(isset($answerType) && $answerType == FILL_IN_BLANKS ? "selected='selected'": "").">$langFillBlanks</option>
+                            <option value='" . FILL_IN_FROM_PREDEFINED_ANSWERS ."' ".(isset($answerType) && $answerType == FILL_IN_FROM_PREDEFINED_ANSWERS ? "selected='selected'": "").">$langFillFromSelectedWords</option>
+                            <option value='" . MATCHING ."' ".(isset($answerType) && $answerType == MATCHING ? "selected='selected'": "").">$langMatching</option>                        
+                            <option value='" . FREE_TEXT ."' ".(isset($answerType) && $answerType == FREE_TEXT ? "selected='selected'": "").">$langFreeText</option>
+                        </select>
+                    </div>                
+                </form>
+            </div>";
 //End of filtering Component
 
 if ($fromExercise) {
     $tool_content .= "<input type='hidden' name='fromExercise' value='$fromExercise'>";
 }
 
-$tool_content .= "<div class='table-responsive'><table class='table-default' id='questions'>";
+$tool_content .= "<div class='table-responsive'><table class='table-default' id='questions_$course_code'>";
 
 //START OF BUILDING QUERIES AND QUERY VARS
 if (isset($exerciseId) && $exerciseId > 0) { //If user selected specific exercise
     //Building query vars and query
     $result_query_vars = array($course_id, $exerciseId);
     $extraSql = "";
-    if(isset($difficultyId) && $difficultyId!=-1) {
+    if (isset($difficultyId) && $difficultyId!=-1) {
         $result_query_vars[] = $difficultyId;
         $extraSql .= " AND difficulty = ?d";
     }
-    if(isset($categoryId) && $categoryId!=-1) {
+    if (isset($categoryId) && $categoryId!=-1) {
         $result_query_vars[] = $categoryId;
         $extraSql .= " AND category = ?d";
     }
+
     if ($fromExercise) {
         $result_query_vars = array_merge($result_query_vars, [$fromExercise, $fromExercise]);
         $result_query = "SELECT exercise_question.id FROM `exercise_question` LEFT JOIN `exercise_with_questions`
@@ -351,16 +371,20 @@ if (isset($exerciseId) && $exerciseId > 0) { //If user selected specific exercis
                         WHERE course_id = ?d AND question_id = exercise_question.id AND exercise_id = ?d$extraSql
                         ORDER BY q_position";
     }
-} else { // if user selected either Orphan Question or All Questions
+} else { // question pool
     $result_query_vars[] = $course_id;
     $extraSql = "";
-    if(isset($difficultyId) && $difficultyId!=-1) {
+    if (isset($difficultyId) && $difficultyId!=-1) {
         $result_query_vars[] = $difficultyId;
         $extraSql .= " AND difficulty = ?d";
     }
-    if(isset($categoryId) && $categoryId!=-1) {
+    if (isset($categoryId) && $categoryId!=-1) {
         $result_query_vars[] = $categoryId;
         $extraSql .= " AND category = ?d";
+    }
+    if (isset($answerType) && $answerType!=-1) {
+        $result_query_vars[] = $answerType;
+        $extraSql .= " AND type = ?d";
     }
     // If user selected All question and comes to question pool from an exercise
     if ((!isset($exerciseId) || $exerciseId == 0) and $fromExercise) {

@@ -2136,6 +2136,7 @@ $langInvalidPicture = "Μη υποστηριζόμενος τύπος εικόν
 $langQuestionDiffGrade = "Βαθμός δυσκολίας";
 $langNumQuestions = "Αρ. ερωτήσεων";
 $langQuestionAllDiffs = "Όλοι οι βαθμοί δυσκολίας";
+$langQuestionAllTypes = "'Ολοι οι τύποι ερωτήσεων";
 $langQuestionNotDefined = "Μη προσδιορισμένη";
 $langQuestionVeryEasy = "Πολύ εύκολη";
 $langQuestionEasy = "Εύκολη";
