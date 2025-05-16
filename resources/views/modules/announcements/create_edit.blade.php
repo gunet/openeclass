@@ -108,8 +108,8 @@
 
                                         <div class="row form-group {{ $antitle_error }}">
                                             <label for="AnnTitle" class="col-12 control-label-notes">{{ trans('langAnnTitle') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
-                                            <div class="col-12 ">
-                                                <input id='AnnTitle' class="form-control" placeholder="{{ trans('langAnnTitle') }}..." type="text" name="antitle" value="{{ $titleToModify }}"/>
+                                            <div class="col-12">
+                                                <input id='AnnTitle' class="form-control" placeholder="{{ trans('langAnnTitle') }}..." type="text" name="antitle" value="{{ $titleToModify }}" maxlength="255">
                                                 <span class='help-block Accent-200-cl'>{{ Session::getError('antitle') }}</span>
                                             </div>
                                         </div>
