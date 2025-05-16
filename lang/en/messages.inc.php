@@ -1898,6 +1898,7 @@ $langInvalidPicture = "Unsupported image format";
 $langQuestionDiffGrade = "Difficulty Grade";
 $langNumQuestions = "Num of questions";
 $langQuestionAllDiffs = "All Difficulty Grades";
+$langQuestionAllTypes = "All Question Types";
 $langQuestionNotDefined = "Not defined";
 $langQuestionVeryEasy = "Very easy";
 $langQuestionEasy = "Easy";
