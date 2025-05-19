@@ -485,6 +485,65 @@ if (isset($_GET['delete_server'])) {
             "</tr>";
     }
     $data['bbb_cnt'] = $bbb_cnt;
+
+    // Enabled rooms
+    $html_enabled_rooms = '';
+    if (count($q)>0) {
+        $html_enabled_rooms .= "<div class='text-heading-h3'>$langActiveRooms</div>";
+        $html_enabled_rooms .= "<div class='table-responsive mt-2'>";
+        $html_enabled_rooms .= "<table class='table-default'>
+            <thead>
+            <tr><th>$langServer</th>
+                <th>$langCourse</th>
+                <th>$langTitle</th>
+                <th>$langUsers</th>
+                <th>$langBBBMics / $langBBBCameras</th>
+                <th>$langStart</th>
+            </thead>";
+        foreach ($q as $srv) {
+            $meetings = get_active_rooms_details($srv->server_key, $srv->api_url);
+            foreach ($meetings as $meeting) {
+                $meeting_id = $meeting['meetingId'];
+                if ($meeting_id != null) {
+                    $course = Database::get()->querySingle("SELECT code, course.title, tc_session.title AS mtitle
+                        FROM course LEFT JOIN tc_session ON course.id = tc_session.course_id
+                        WHERE tc_session.meeting_id = ?s", $meeting_id);
+                    // don't list meetings from other APIs
+                    if (!$course) {
+                        continue;
+                    }
+                    $createstamp = $meeting['createTime'];
+                    $createDate = date('d/m/Y H:i:s', $createstamp/1000);
+                    $recording = $meeting['recording'];
+                    $mod_pw = $meeting['moderatorPw'];
+                    $att_pw = $meeting['attendeePw'];
+                    $mparticipants = $meeting['participantCount'];
+                    $mvoicecount = $meeting['voiceParticipantCount'];
+                    $mvideocount = $meeting['videoCount'];
+                    $course_code = $course->code;
+                    $course_title = $course->title;
+                    // meeting name without course code
+                    $mtitle = $course->mtitle;
+                    // meeting name with course code
+                    $title = $meeting['meetingName'];
+                    $courseLink = "<a href='/modules/tc/?course=$course_code'>" . q($course_title) . "</a>";
+                    $joinLink = "<a href='/modules/tc/index.php?course=$course_code&amp;choice=do_join&amp;meeting_id=" . urlencode($meeting_id) . "&amp;title=".urlencode($title)."&amp;att_pw=".urlencode($att_pw)."&amp;mod_pw=".urlencode($mod_pw)."' target='_blank'>" . q($mtitle) . "</a>";
+
+                    $html_enabled_rooms .= "<tr>" .
+                        "<td>$srv->hostname</td>" .
+                        "<td>$courseLink ($course_code)</td>" .
+                        "<td>$joinLink</td>" .
+                        "<td>$mparticipants</td>" .
+                        "<td>$mvoicecount / $mvideocount</td>" .
+                        "<td>$createDate</td>" .
+                        "</tr>";
+                }
+            }
+        }
+        $html_enabled_rooms .= "</table></div>";
+    }
+    $data['html_enabled_rooms'] = $html_enabled_rooms;
+
     view('admin.other.extapps.bbb.index', $data);
 }
 

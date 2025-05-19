@@ -31,15 +31,18 @@
                                     <th>{{ trans('langBBBEnabled') }}</th>
                                     <th>{{ trans('langUsers') }}</th>
                                     <th>{{ trans('langActiveRooms') }}</th>
-                                    <th>{{ trans('langBBBMIcs') }} / {{ trans('langBBBCameras') }}</th>
+                                    <th>{{ trans('langBBBMics') }} / {{ trans('langBBBCameras') }}</th>
                                     <th>{{ trans('langBBBServerOrderP') }} / {{ trans('langBBBServerLoad') }}</th>
                                     <th aria-label="{{ trans('langSettingSelect') }}">{!! icon('fa-gears') !!}</th>
                                 </tr>
                                 </thead>
 
-                            {!! $bbb_cnt !!}
-
-                        </table></div>
+                                {!! $bbb_cnt !!}    
+                            </table>
+                        </div>
+                    </div>
+                    <div class='col-12 mt-5'>
+                        {!! $html_enabled_rooms !!}
                     </div>
                 @else
                     <div class='col-12'>
