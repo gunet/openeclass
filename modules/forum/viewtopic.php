@@ -399,7 +399,7 @@ if ($view != POSTS_THREADED_VIEW) {
             $pagination_btns .= "<li class='disabled'><a href='#'><span aria-hidden='true'>&raquo;</span></a></li>";
         }
         $tool_content .= "
-            <nav>
+            <nav class='viewtopicNav'>
                 <ul class='pagination'>
                 $pagination_btns
                 </ul>
