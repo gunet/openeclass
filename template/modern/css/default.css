@@ -5942,3 +5942,21 @@ th.grade-col a{
 .forum_index thead th, .forum_viewforum thead th {
   padding: 10px 25px 10px 10px!important;
 }
+
+.viewtopicNav li {
+  border: 0px;
+  border-radius: 30%;
+  height: 30px;
+  width: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.viewtopicNav li:hover {
+  background: #E8EDF8;
+}
+
+.viewtopicNav .active {
+  background: #E8EDF8;
+}

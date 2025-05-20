@@ -219,12 +219,16 @@ if ($total_categories > 0) {
                         if (setting_get(SETTING_COURSE_FORUM_NOTIFICATIONS)) { // first lookup for course setting
                             $forum_action_notify = false;
                         } else { // if it's not set lookup user setting
-                            $forum_action_notify = Database::get()->querySingle("SELECT notify_sent FROM forum_notify
-                                WHERE user_id = ?d
-                                      AND forum_id = ?d
-                                      AND course_id = ?d", $uid, $forum_id, $course_id);
-                            if ($forum_action_notify) {
-                                $forum_action_notify = $forum_action_notify->notify_sent;
+                            
+                            $forum_action_notify = Database::get()->queryArray("SELECT * FROM forum_notify
+                                        WHERE user_id = ?d 
+                                        AND course_id = ?d 
+                                        AND cat_id = ?d 
+                                        OR forum_id = ?d
+                                        order by forum_id DESC, cat_id DESC LIMIT 1", $uid, $course_id, $cat_id, $forum_id);
+
+                            if ($forum_action_notify && $forum_action_notify[0]->notify_sent == 1) {
+                                $forum_action_notify = $forum_action_notify[0]->notify_sent;
                             } else {
                                 $forum_action_notify = false;
                             }
