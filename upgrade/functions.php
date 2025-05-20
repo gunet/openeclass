@@ -3335,6 +3335,10 @@ function upgrade_to_4_1($tbl_options) : void {
     }
     // user notifications setting
     set_config('user_notifications', 1);
+
+    if (!DBHelper::fieldExists('forum_topic', 'pin_time')) {
+        Database::get()->query("ALTER TABLE forum_topic ADD pin_time DATETIME DEFAULT NULL");
+    }
 }
 
 /**
