@@ -676,6 +676,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `forum_topic` (
     `last_post_id` INT(10) NOT NULL DEFAULT 0,
     `forum_id` INT(10) NOT NULL DEFAULT 0,
     `locked` TINYINT DEFAULT 0 NOT NULL,
+    `pin_time` DATETIME DEFAULT NULL,
     PRIMARY KEY  (`id`)) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `forum_user_stats` (
