@@ -526,8 +526,8 @@ if (isset($_GET['delete_server'])) {
                     $mtitle = $course->mtitle;
                     // meeting name with course code
                     $title = $meeting['meetingName'];
-                    $courseLink = "<a href='/modules/tc/?course=$course_code'>" . q($course_title) . "</a>";
-                    $joinLink = "<a href='/modules/tc/index.php?course=$course_code&amp;choice=do_join&amp;meeting_id=" . urlencode($meeting_id) . "&amp;title=".urlencode($title)."&amp;att_pw=".urlencode($att_pw)."&amp;mod_pw=".urlencode($mod_pw)."' target='_blank'>" . q($mtitle) . "</a>";
+                    $courseLink = "<a href='{$urlAppend}modules/tc/index.php?course=$course_code'>" . q($course_title) . "</a>";
+                    $joinLink = "<a href='{$urlAppend}modules/tc/index.php?course=$course_code&amp;choice=do_join&amp;meeting_id=" . urlencode($meeting_id) . "&amp;title=".urlencode($title)."&amp;att_pw=".urlencode($att_pw)."&amp;mod_pw=".urlencode($mod_pw)."' target='_blank'>" . q($mtitle) . "</a>";
 
                     $html_enabled_rooms .= "<tr>" .
                         "<td>$srv->hostname</td>" .
