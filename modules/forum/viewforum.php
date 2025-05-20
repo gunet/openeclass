@@ -211,12 +211,12 @@ if ($is_editor and isset($_GET['topiclock'])) {
 
 }
 
-$result = Database::get()->queryArray("SELECT t.*, p.post_time, t.poster_id AS topic_poster_id, p.poster_id AS poster_id
+$result = Database::get()->queryArray("SELECT t.*, p.post_time, t.poster_id AS topic_poster_id, p.poster_id AS poster_id, f.cat_id
         FROM forum_topic t
         LEFT JOIN forum_post p ON t.last_post_id = p.id
+        INNER JOIN forum f ON t.forum_id = f.id
         WHERE t.forum_id = ?d
         ORDER BY topic_time DESC", $forum_id);
-
 
 if (count($result) > 0) { // topics found
     $tool_content .= "<div class='table-responsive'>
@@ -233,6 +233,8 @@ if (count($result) > 0) { // topics found
     foreach ($result as $myrow) {
         $replies = $myrow->num_replies;
         $topic_id = $myrow->id;
+        $forum_id = $myrow->forum_id;
+        $cat_id = $myrow->cat_id;
         $last_post_datetime = $myrow->post_time;
         $topic_title = $myrow->title;
         $topic_locked = $myrow->locked;
@@ -255,11 +257,22 @@ if (count($result) > 0) { // topics found
             $image_fire = '';
         }
 
-        $sql_notify = Database::get()->querySingle("SELECT notify_sent FROM forum_notify
-			WHERE user_id = ?d AND topic_id = ?d AND course_id = ?d AND notify_sent = 1", $uid, $myrow->id, $course_id);
-        if ($sql_notify) {
+//        $sql_notify = Database::get()->querySingle("SELECT notify_sent FROM forum_notify
+//			WHERE user_id = ?d AND topic_id = ?d AND course_id = ?d AND notify_sent = 1", $uid, $myrow->id, $course_id);
+
+        $sql_notify = Database::get()->queryArray("SELECT * FROM forum_notify
+			WHERE user_id = ?d 
+			AND course_id = ?d 
+			AND cat_id = ?d 
+			OR forum_id = ?d 
+			OR topic_id = ?d 
+			order by topic_id DESC, forum_id DESC, cat_id DESC LIMIT 1", $uid, $course_id, $cat_id, $forum_id, $topic_id);
+
+        if ($sql_notify && $sql_notify[0]->notify_sent == 1) {
+            $notify_action = 1;
             $image_notify = icon('fa-envelope');
         } else {
+            $notify_action = 0;
             $image_notify = '';
         }
 
@@ -355,10 +368,11 @@ if (count($result) > 0) { // topics found
         }
 
 
-        $dyntools[] = array('title' => $langNotify,
+        $dyntools[] = array('title' => $notify_action ? $langStopNotify : $langNotify,
                             'url' => $link_notify,
-                            'icon' => 'fa-envelope',
+                            'icon' => $notify_action ? 'fa-envelope-open' : 'fa-envelope',
                             'show' => (!setting_get(SETTING_COURSE_FORUM_NOTIFICATIONS)));
+
         $tool_content .= action_button($dyntools);
         $tool_content .= "</td></tr>";
     } // end of while
