@@ -196,6 +196,18 @@ if (isset($_GET['topicnotify'])) {
     }
 }
 
+if (isset($_GET['topicpin'])) {
+    if (isset($_GET['topic_id'])) {
+        $topic_id = intval($_GET['topic_id']);
+    }
+
+    if ($_GET['topicpin'] == 0) {
+        Database::get()->query("UPDATE forum_topic SET pin_time = NULL WHERE id = ?d", $topic_id);
+    } else {
+        Database::get()->query("UPDATE forum_topic SET pin_time = NOW() WHERE id = ?d", $topic_id);
+    }
+}
+
 //lock and unlock topic
 if ($is_editor and isset($_GET['topiclock'])) {
     if (isset($_GET['topic_id'])) {
@@ -211,12 +223,19 @@ if ($is_editor and isset($_GET['topiclock'])) {
 
 }
 
+//$result = Database::get()->queryArray("SELECT t.*, p.post_time, t.poster_id AS topic_poster_id, p.poster_id AS poster_id, f.cat_id
+//        FROM forum_topic t
+//        LEFT JOIN forum_post p ON t.last_post_id = p.id
+//        INNER JOIN forum f ON t.forum_id = f.id
+//        WHERE t.forum_id = ?d
+//        ORDER BY topic_time DESC", $forum_id);
+
 $result = Database::get()->queryArray("SELECT t.*, p.post_time, t.poster_id AS topic_poster_id, p.poster_id AS poster_id, f.cat_id
         FROM forum_topic t
         LEFT JOIN forum_post p ON t.last_post_id = p.id
         INNER JOIN forum f ON t.forum_id = f.id
         WHERE t.forum_id = ?d
-        ORDER BY topic_time DESC", $forum_id);
+        ORDER BY t.pin_time DESC, topic_time DESC", $forum_id);
 
 if (count($result) > 0) { // topics found
     $tool_content .= "<div class='table-responsive'>
@@ -238,6 +257,11 @@ if (count($result) > 0) { // topics found
         $last_post_datetime = $myrow->post_time;
         $topic_title = $myrow->title;
         $topic_locked = $myrow->locked;
+        $pin_time = $myrow->pin_time;
+
+        $pin_action = $pin_time ? 1 : 0;
+        $pin_icon = ($pin_action == 1) ? icon('fa-thumbtack') : "";
+
         $pagination = '';
         $topiclink = "viewtopic.php?course=$course_code&amp;topic=$topic_id&amp;forum=$forum_id";
         if ($unit) {
@@ -289,12 +313,13 @@ if (count($result) > 0) { // topics found
             $pagination .= "&nbsp;</span></strong>";
         }
 
-        $tool_content .= "<td><div class='d-flex justify-content-between border-0'><a href='$topiclink'>" . q($topic_title) . "</a> <span class='d-flex align-items-center gap-2'>$image_lock $image_fire $image_notify $pagination</span></div></td>";
+        $tool_content .= "<td><div class='d-flex justify-content-between border-0'><a href='$topiclink'>" . q($topic_title) . "</a> <span class='d-flex align-items-center gap-2'>$image_lock $image_fire $image_notify $pin_icon $pagination</span></div></td>";
         $tool_content .= "<td>$replies</td>";
         $tool_content .= "<td>" . q(uid_to_name($myrow->topic_poster_id)) . "</td>";
         $tool_content .= "<td>$myrow->num_views</td>";
         if (!is_null($last_post_datetime)) {
-            $tool_content .= "<td data-order='$last_post_datetime'>";
+//            $tool_content .= "<td data-order='$last_post_datetime'>";
+            $tool_content .= "<td>";
             $tool_content .= format_locale_date(strtotime($last_post_datetime), 'short');
         } else {
             $tool_content .= "<td data-order='00/00/0000 - 00:00'>";
@@ -367,11 +392,17 @@ if (count($result) > 0) { // topics found
             }
         }
 
+        $link_pin = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forum=$forum_id&amp;topic_id=$myrow->id&amp;topicpin=" . ($pin_action == 1 ? 0 : 1);
 
         $dyntools[] = array('title' => $notify_action ? $langStopNotify : $langNotify,
                             'url' => $link_notify,
                             'icon' => $notify_action ? 'fa-envelope-open' : 'fa-envelope',
                             'show' => (!setting_get(SETTING_COURSE_FORUM_NOTIFICATIONS)));
+
+        $dyntools[] = array('title' => $pin_action ? $langUnpinTopic : $langPinTopic,
+                            'url' => $link_pin,
+                            'icon' => $pin_action ? 'fa-thumbtack text-danger' : 'fa-thumbtack');
+
 
         $tool_content .= action_button($dyntools);
         $tool_content .= "</td></tr>";
@@ -382,6 +413,7 @@ if (count($result) > 0) { // topics found
             $(document).ready(function() {
                 $('.table-default').DataTable({
                     ordering: true,
+                    order: [],
                     searching: true,
                     columnDefs: [
                         {
