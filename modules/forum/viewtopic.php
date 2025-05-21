@@ -399,17 +399,17 @@ if ($view != POSTS_THREADED_VIEW) {
             $pagination_btns .= "<li class='disabled'><a href='#'><span aria-hidden='true'>&raquo;</span></a></li>";
         }
         $tool_content .= "
-            <nav class='viewtopicNav'>
+            <nav class='viewtopicNav d-flex justify-content-between'>
                 <ul class='pagination'>
                 $pagination_btns
                 </ul>
                 <div class='float-end'>";
                 if ($unit) {
-                    $tool_content .= "<a class='btn btn-default' href='../units/view.php?course=$course_code&amp;res_type=forum_topic&amp;topic=$topic&amp;forum=$forum&amp;all=true&amp;unit=$unit'>$langAllOfThem</a>";
+                    $tool_content .= "<a class='btn btn-default' href='../units/view.php?course=$course_code&amp;res_type=forum_topic&amp;topic=$topic&amp;forum=$forum&amp;all=true&amp;unit=$unit'>$langForumViewAll</a>";
                 } else if ($res_type) {
-                    $tool_content .= "<a class='btn btn-default' href='../units/view.php?course=$course_code&amp;res_type=forum_topic&amp;topic=$topic&amp;forum=$forum&amp;all=true'>$langAllOfThem</a>";
+                    $tool_content .= "<a class='btn btn-default' href='../units/view.php?course=$course_code&amp;res_type=forum_topic&amp;topic=$topic&amp;forum=$forum&amp;all=true'>$langForumViewAll</a>";
                 } else {
-                    $tool_content .= "<a class='btn btn-default' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;all=true'>$langAllOfThem</a>";
+                    $tool_content .= "<a class='btn btn-default' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;all=true'>$langForumViewAll</a>";
                 }
                 $tool_content .= "</div>
               </nav>
@@ -421,11 +421,11 @@ if ($view != POSTS_THREADED_VIEW) {
               <nav>
                 <div class='float-end'>";
                 if ($unit) {
-                    $tool_content .= "<a class='btn btn-default' href='../units/view.php?course=$course_code&amp;res_type=forum_topic&amp;topic=$topic&amp;forum=$forum&amp;start=0&amp;unit=$unit'>$langPages</a>";
+                    $tool_content .= "<a class='btn btn-default' href='../units/view.php?course=$course_code&amp;res_type=forum_topic&amp;topic=$topic&amp;forum=$forum&amp;start=0&amp;unit=$unit'>$langForumViewPage</a>";
                 } else if ($res_type) {
-                    $tool_content .= "<a class='btn btn-default' href='../units/view.php?course=$course_code&amp;res_type=forum_topic&amp;topic=$topic&amp;forum=$forum&amp;start=0'>$langPages</a>";
+                    $tool_content .= "<a class='btn btn-default' href='../units/view.php?course=$course_code&amp;res_type=forum_topic&amp;topic=$topic&amp;forum=$forum&amp;start=0'>$langForumViewPage</a>";
                 } else {
-                    $tool_content .= "<a class='btn btn-default' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=0'>$langPages</a>";
+                    $tool_content .= "<a class='btn btn-default' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=0'>$langForumViewPage</a>";
                 }
                 $tool_content .= "</div>
               </nav>
@@ -516,17 +516,17 @@ Database::get()->query("UPDATE forum_topic SET num_views = num_views + 1
 if ($view == POSTS_PAGINATION_VIEW_ASC) {
     if ($paging and $total > POSTS_PER_PAGE) {
         $tool_content .= "
-        <nav>
+        <nav class='viewtopicNav mt-3 d-flex justify-content-between'>
             <ul class='pagination'>
             $pagination_btns
             </ul>
             <div class='float-end'>";
             if ($unit) {
-                $tool_content .= "<a class='btn btn-default' href='../units/view.php?course=$course_code&amp;res_type=forum_topic&amp;topic=$topic&amp;forum=$forum&amp;all=true&amp;unit=$unit'>$langAllOfThem</a>";
+                $tool_content .= "<a class='btn btn-default' href='../units/view.php?course=$course_code&amp;res_type=forum_topic&amp;topic=$topic&amp;forum=$forum&amp;all=true&amp;unit=$unit'>$langForumViewAll</a>";
             } else if ($res_type) {
-                $tool_content .= "<a class='btn btn-default' href='../units/view.php?course=$course_code&amp;res_type=forum_topic&amp;topic=$topic&amp;forum=$forum&amp;all=true'>$langAllOfThem</a>";
+                $tool_content .= "<a class='btn btn-default' href='../units/view.php?course=$course_code&amp;res_type=forum_topic&amp;topic=$topic&amp;forum=$forum&amp;all=true'>$langForumViewAll</a>";
             } else {
-                $tool_content .= "<a class='btn btn-default' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;all=true'>$langAllOfThem</a>";
+                $tool_content .= "<a class='btn btn-default' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;all=true'>$langForumViewAll</a>";
             }
 
             $tool_content .= "</div>
@@ -539,11 +539,11 @@ if ($view == POSTS_PAGINATION_VIEW_ASC) {
               <nav>
                 <div class='float-end'>";
                 if ($unit) {
-                    $tool_content .= "<a class='btn btn-default' href='../units/view.php?course=$course_code&amp;res_type=forum_topic&amp;topic=$topic&amp;forum=$forum&amp;start=0&amp;unit=$unit'>$langPages</a>";
+                    $tool_content .= "<a class='btn btn-default' href='../units/view.php?course=$course_code&amp;res_type=forum_topic&amp;topic=$topic&amp;forum=$forum&amp;start=0&amp;unit=$unit'>$langForumViewPage</a>";
                 } else if ($res_type) {
-                    $tool_content .= "<a class='btn btn-default' href='../units/view.php?course=$course_code&amp;res_type=forum_topic&amp;topic=$topic&amp;forum=$forum&amp;start=0'>$langPages</a>";
+                    $tool_content .= "<a class='btn btn-default' href='../units/view.php?course=$course_code&amp;res_type=forum_topic&amp;topic=$topic&amp;forum=$forum&amp;start=0'>$langForumViewPage</a>";
                 } else {
-                    $tool_content .= "<a class='btn btn-default' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=0'>$langPages</a>";
+                    $tool_content .= "<a class='btn btn-default' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=0'>$langForumViewPage</a>";
                 }
                 $tool_content .= "</div>
               </nav>

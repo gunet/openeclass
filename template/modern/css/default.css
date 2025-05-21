@@ -5943,7 +5943,11 @@ th.grade-col a{
   padding: 10px 25px 10px 10px!important;
 }
 
-.viewtopicNav li {
+.viewtopicNav .pagination {
+  gap: 1px;
+}
+
+.viewtopicNav .pagination a {
   border: 0px;
   border-radius: 30%;
   height: 30px;
@@ -5953,10 +5957,11 @@ th.grade-col a{
   align-items: center;
 }
 
-.viewtopicNav li:hover {
+.viewtopicNav .pagination a:hover {
   background: #E8EDF8;
+  text-decoration: none;
 }
 
-.viewtopicNav .active {
+.viewtopicNav .pagination .active a {
   background: #E8EDF8;
 }
