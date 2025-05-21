@@ -300,20 +300,7 @@ if (count($result) > 0) { // topics found
             $image_notify = '';
         }
 
-        if ($replies > POSTS_PER_PAGE) {
-            $total_reply_pages = ceil($replies / POSTS_PER_PAGE);
-            $pagination .= "<strong class='pagination'><span>";
-            add_topic_link(0, $total_reply_pages);
-            if ($total_reply_pages > PAGINATION_CONTEXT + 1) {
-                $pagination .= "&nbsp;...&nbsp;";
-            }
-            for ($p = max(1, $total_reply_pages - PAGINATION_CONTEXT); $p < $total_reply_pages; $p++) {
-                add_topic_link($p, $total_reply_pages);
-            }
-            $pagination .= "&nbsp;</span></strong>";
-        }
-
-        $tool_content .= "<td><div class='d-flex justify-content-between border-0'><a href='$topiclink'>" . q($topic_title) . "</a> <span class='d-flex align-items-center gap-2'>$image_lock $image_fire $image_notify $pin_icon $pagination</span></div></td>";
+        $tool_content .= "<td><div class='d-flex justify-content-between border-0'><a href='$topiclink'>" . q($topic_title) . "</a> <span class='d-flex align-items-center gap-2'>$image_lock $image_fire $image_notify $pin_icon</span></div></td>";
         $tool_content .= "<td>$replies</td>";
         $tool_content .= "<td>" . q(uid_to_name($myrow->topic_poster_id)) . "</td>";
         $tool_content .= "<td>$myrow->num_views</td>";
