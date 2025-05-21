@@ -1611,6 +1611,8 @@ function edit_assignment($id) {
            $langPeerReviewDeadlineCompulsory, $langPeerReviewStartDateError2,
            $langPeerReviewStartDateError;
 
+    $row = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $id);
+
     $v = new Valitron\Validator($_POST);
     $v->rule('required', array('title'));
     $v->rule('integer', array('group_submissions', 'assign_to_specific'));
@@ -1623,7 +1625,7 @@ function edit_assignment($id) {
         $v->labels(array('max_grade' => "$langTheField $m[max_grade]"));
     }
     //upoxrewtika pedia sthn epilogh aksiologhsh apo omotimous
-    if (isset($_POST['reviews_per_user']) and !empty($_POST['reviews_per_user'])) {
+    if ($row->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE and isset($_POST['reviews_per_user']) and !empty($_POST['reviews_per_user'])) {
         $v->rule('required', array('reviews_per_user'));
         $v->rule('numeric', array('reviews_per_user'));
         $v->rule('min', array('reviews_per_user'), 3);
@@ -1646,7 +1648,6 @@ function edit_assignment($id) {
 
     $v->labels(array('title' => "$langTheField $langTitle"));
     if ($v->validate()) {
-        $row = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $id);
         $title = $_POST['title'];
         $desc = purify($_POST['desc']);
         $reviews_per_user = null;
