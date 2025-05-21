@@ -81,16 +81,15 @@ if (isset($_GET['delete'])) { // delete rubric
     Database::get()->query("DELETE FROM `rubric` WHERE id = ?d", $_GET['delete']);
     Session::flash('message',$langRubricDeleted);
     Session::flash('alert-class', 'alert-success');
-    redirect_to_home_page("modules/work/rubrics.php");
+    redirect_to_home_page("modules/work/rubrics.php?course=$course_code");
 }
 
-
-if (isset($_GET['rubric_id']) and $_GET['rubric_id']) {
-    $rubric_data = Database::get()->querySingle("SELECT * FROM rubric WHERE id = ?d AND course_id = ?d", $_GET['rubric_id'], $course_id);
+if (isset($_REQUEST['rubric_id'])) {
+    $rubric_data = Database::get()->querySingle("SELECT * FROM rubric WHERE id = ?d AND course_id = ?d", $_REQUEST['rubric_id'], $course_id);
 }
-// submit rubric
+
 if (isset($_POST['submitRubric'])) {
-    if (is_rubric_used_in_grading($_POST['rubric_id'], $course_id)) { // rubric is used in assignments. Only updating options are allowed.
+    if (isset($_POST['rubric_id']) and is_rubric_used_in_grading($_POST['rubric_id'], $course_id)) { // rubric is used in assignments. Only updating options are allowed.
         $v = new Valitron\Validator($_POST);
         $v->rule('required', array('name'));
         if ($v->validate()) {
@@ -107,7 +106,7 @@ if (isset($_POST['submitRubric'])) {
             redirect_to_home_page("modules/work/rubrics.php?course=$course_code");
         } else {
             Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
-            redirect_to_home_page("modules/work/rubrics.php?course=$course_code&rubric_id=$rubric_id");
+            redirect_to_home_page("modules/work/rubrics.php?course=$course_code&rubric_id=$_REQUEST[rubric_id]");
         }
     } else {
         $v = new Valitron\Validator($_POST);
@@ -126,7 +125,7 @@ if (isset($_POST['submitRubric'])) {
             foreach ($_POST['title'] as $crit => $item_criterio) {
                 $criteria[$crit]['title_name'] = $item_criterio;
                 $criteria[$crit]['crit_weight'] = $_POST['weight'][$crit];
-                foreach ($_POST['scale_item_name'][$crit] as $key => $item_name) {
+                foreach ($_POST['scale_item_value'][$crit] as $key => $item_name) {
                     $criteria[$crit]['crit_scales'][$key]['scale_item_name'] = $item_name;
                     $criteria[$crit]['crit_scales'][$key]['scale_item_value'] = $_POST['scale_item_value'][$crit][$key];
                 }
@@ -135,7 +134,7 @@ if (isset($_POST['submitRubric'])) {
             if ($sum_weight != 100) {
                 Session::flash('message', $langRubricWeight);
                 Session::flash('alert-class', 'alert-warning');
-                redirect_to_home_page("modules/work/rubrics.php?course=$course_code&rubric_id=$rubric_id");
+                redirect_to_home_page("modules/work/rubrics.php?course=$course_code&rubric_id=$_REQUEST[rubric_id]");
             } else {
                 $serialized_criteria = serialize($criteria);
                 $preview_rubric = isset($_POST['options0']) ? 1 : 0;
@@ -151,7 +150,7 @@ if (isset($_POST['submitRubric'])) {
             redirect_to_home_page("modules/work/rubrics.php?course=$course_code");
         } else {
             Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
-            redirect_to_home_page("modules/work/rubrics.php?course=$course_code&rubric_id=$rubric_id");
+            redirect_to_home_page("modules/work/rubrics.php?course=$course_code&rubric_id=$_REQUEST[rubric_id]");
         }
     }
 }
@@ -673,6 +672,7 @@ function is_rubric_used_in_assignment($rubric_id, $course_id) {
  * @return bool
  */
 function is_rubric_used_in_grading($rubric_id, $course_id) {
+
     $sql = Database::get()->querySingle("SELECT * FROM `assignment`, `assignment_submit`
                     WHERE `assignment`.`grading_scale_id` = ?d
                     AND `assignment`.`course_id` = ?d
