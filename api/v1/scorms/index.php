@@ -114,10 +114,10 @@ function api_method($access) {
             $sco_id = get_scorm_sco_id($course_code, $lp->learnPath_id);
             if ($sco_id) {
                 return [
-                    'id' => $lp->res_id,
-                    'name' => $lp->title,
-                    'summary' => $lp->comments,
-                    'order' => $lp->order,
+                    'id' => $lp->learnPath_id,
+                    'name' => $lp->name,
+                    'summary' => $lp->comment,
+                    'order' => $lp->rank,
                     'sco_id' => $sco_id,
                 ];
             } else {
