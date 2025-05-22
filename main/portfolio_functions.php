@@ -621,7 +621,11 @@ function CountStudentCollaborations($uid) {
                     ON course.id = course_user.course_id
                     AND course_user.user_id = ?d
                     AND course.is_collaborative = ?d
-                    AND course.visible != " . COURSE_INACTIVE, $uid, 1)->total;
+                    AND (course.visible != " . COURSE_INACTIVE . " OR
+                         course_user.status = " . USER_TEACHER . " OR
+                         course_user.course_reviewer = 1 OR
+                         course_user.editor = 1)", $uid, 1)->total;
+
     return $total;
 }
 
@@ -651,7 +655,11 @@ function CountTeacherCollaborations($uid) {
                 FROM course JOIN course_user
                     ON course.id = course_user.course_id
             AND course_user.user_id = ?d
-            AND course.is_collaborative = ?d", $uid, 1)->total;
+            AND course.is_collaborative = ?d
+            AND (course.visible != " . COURSE_INACTIVE . " OR 
+                 course_user.status = " . USER_TEACHER . " OR
+                 course_user.course_reviewer = 1 OR
+                 course_user.editor = 1)", $uid, 1)->total;
 
     return $total;
 }
