@@ -410,7 +410,7 @@ if ($uid) {
     $data['course_completion_id'] = $course_completion_id = is_course_completion_active(); // is course completion active?
     if ($course_completion_id) {
         if ($is_editor) {
-            $data['studentUsers'] = Database::get()->querySingle("SELECT COUNT(*) AS studentUsers FROM course_user
+            $data['studentUsers'] = $student_users = Database::get()->querySingle("SELECT COUNT(*) AS studentUsers FROM course_user
                                         WHERE status = " .USER_STUDENT . "
                                             AND editor = 0
                                             AND course_id = ?d", $course_id)->studentUsers;
@@ -421,9 +421,13 @@ if ($uid) {
                                                                     AND course_id = ?d
                                                                     AND completed = 1
                                                                     AND badge = ?d", $course_id, $course_completion_id)->t;
-
-            $data['percentage_t'] = $percentage_t = round($data['certified_users'] / $data['studentUsers'] * 100, 0);
-            $data['angle'] = $percentage_t * 100 / 360;
+            if ($student_users == 0) {
+                $data['percentage_t'] = $percentage_t = 0;
+                $data['angle'] = 0;
+            } else {
+                $data['percentage_t'] = $percentage_t = round($data['certified_users'] / $data['studentUsers'] * 100, 0);
+                $data['angle'] = $percentage_t * 100 / 360;
+            }
         } else {
             $course_completion_status = has_certificate_completed($uid, 'badge', $course_completion_id);
             $data['percentage'] = $percentage = get_cert_percentage_completion('badge', $course_completion_id);
