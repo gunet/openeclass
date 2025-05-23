@@ -883,7 +883,7 @@ function is_course_completion_enabled() {
     global $course_id;
 
     $sql = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND bundle = -1
-                                                    AND unit_id = 0", $course_id);
+                                                    AND unit_id = 0 AND session_id = 0", $course_id);
     if ($sql) {
         return $sql->id;
     } else {
