@@ -387,7 +387,11 @@
                                                                     @if($pop_course->course_image)
                                                                         <img class='card-img-top popular_course_img' src='{{$urlAppend}}courses/{{$pop_course->code}}/image/{{$pop_course->course_image}}' alt="{{ $pop_course->title }}" />
                                                                     @else
-                                                                        <img class='card-img-top popular_course_img' src='{{$urlAppend}}resources/img/ph1.jpg' alt="{{ $pop_course->title }}" />
+                                                                        @if($pop_course->is_collaborative)
+                                                                            <img class='card-img-top popular_course_img' src='{{$urlAppend}}template/modern/images/default-collaboration.jpg' alt="{{ $pop_course->title }}" />
+                                                                        @else
+                                                                            <img class='card-img-top popular_course_img' src='{{$urlAppend}}resources/img/ph1.jpg' alt="{{ $pop_course->title }}" />
+                                                                        @endif
                                                                     @endif
                                                                 </a>
                                                                 <div class='card-body'>

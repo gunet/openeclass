@@ -632,12 +632,20 @@
                                                                         if(!empty($course->course_image)){
                                                                             $courseImage = "{$urlServer}courses/$course->code/image/$course->course_image";
                                                                         }else{
-                                                                            $courseImage = "{$urlServer}resources/img/ph1.jpg";
+                                                                            if($course->is_collaborative){
+                                                                                $courseImage = "{$urlServer}template/modern/images/default-collaboration.jpg";
+                                                                            }else{
+                                                                                $courseImage = "{$urlServer}resources/img/ph1.jpg";
+                                                                            }
                                                                         }
                                                                     @endphp
 
                                                                     @if($course->course_image == NULL)
-                                                                        <img class="card-img-top cardImgCourse @if($course->visible == 3) InvisibleCourse @endif" src="{{ $urlAppend }}resources/img/ph1.jpg" alt="{{ trans('langCourseImage') }} : {{ $course->title }}" />
+                                                                        @if($course->is_collaborative)
+                                                                            <img class="card-img-top cardImgCourse @if($course->visible == 3) InvisibleCourse @endif" src="{{ $urlAppend }}template/modern/images/default-collaboration.jpg" alt="{{ trans('langCourseImage') }} : {{ $course->title }}" />
+                                                                        @else
+                                                                            <img class="card-img-top cardImgCourse @if($course->visible == 3) InvisibleCourse @endif" src="{{ $urlAppend }}resources/img/ph1.jpg" alt="{{ trans('langCourseImage') }} : {{ $course->title }}" />
+                                                                        @endif
                                                                     @else
                                                                         <img class="card-img-top cardImgCourse @if($course->visible == 3) InvisibleCourse @endif" src="{{$urlAppend}}courses/{{$course->code}}/image/{{$course->course_image}}" alt="{{ trans('langCourseImage') }} : {{ $course->title }}" />
                                                                     @endif
