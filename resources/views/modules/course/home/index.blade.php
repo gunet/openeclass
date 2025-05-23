@@ -248,9 +248,13 @@
                                             <figure role="none">
                                                 <picture>
                                                     @if($course_info->course_image)
-                                                        <img class='uploadImageCourse' src='{{$urlAppend}}courses/{{$course_code}}/image/{{$course_info->course_image}}' alt='This is the image of course'/>
+                                                        <img class='uploadImageCourse' src='{{ $urlAppend }}courses/{{ $course_code }}/image/{{ $course_info->course_image }}' alt="{{ trans('langCourse') }}"/>
                                                     @else
-                                                        <img class='uploadImageCourse' src='{{$urlAppend}}resources/img/ph1.jpg' alt='No available'/>
+                                                        @if($is_collaborative_course)
+                                                            <img class='uploadImageCourse' src='{{ $urlAppend }}template/modern/images/default-collaboration.jpg' alt="{{ trans('langCourse') }}"/>
+                                                        @else
+                                                            <img class='uploadImageCourse' src='{{ $urlAppend }}resources/img/ph1.jpg' alt="{{ trans('langCourse') }}"/>
+                                                        @endif
                                                     @endif
                                                 </picture>
                                             </figure>

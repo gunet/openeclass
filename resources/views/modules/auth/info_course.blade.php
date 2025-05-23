@@ -20,7 +20,11 @@
                         <div class="row row-cols-1 row-cols-md-2 g-3">
                             <div class="col-md-4 col d-flex justify-content-center justify-content-md-start">
                                 @if($c->course_image == NULL)
-                                    <img class='img-fluid rounded-start course_info_img' src="{{ $urlAppend }}resources/img/ph1.jpg" alt="{{ trans('langImageSelected') }}" />
+                                    @if($c->is_collaborative)
+                                        <img class='img-fluid rounded-start course_info_img' src="{{ $urlAppend }}template/modern/images/default-collaboration.jpg" alt="{{ trans('langImageSelected') }}" />
+                                    @else
+                                        <img class='img-fluid rounded-start course_info_img' src="{{ $urlAppend }}resources/img/ph1.jpg" alt="{{ trans('langImageSelected') }}" />
+                                    @endif
                                 @else
                                     <img class='img-fluid rounded-start course_info_img' src="{{ $urlAppend }}courses/{{ $c->code }}/image/{{ $c->course_image }}" alt="{{ trans('langImageSelected') }}" />
                                 @endif
