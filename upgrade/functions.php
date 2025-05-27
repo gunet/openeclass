@@ -3295,9 +3295,9 @@ function upgrade_to_4_1($tbl_options) : void {
     }
 
     // delete stale guest users (if any)
-    $guest_users = Database::get()->queryArray("SELECT id FROM user LEFT JOIN course_user 
-                    ON user.id = course_user.user_id 
-                    WHERE user.status= " . USER_GUEST . " 
+    $guest_users = Database::get()->queryArray("SELECT id FROM user LEFT JOIN course_user
+                    ON user.id = course_user.user_id
+                    WHERE user.status= " . USER_GUEST . "
                     AND course_user.user_id IS NULL");
     foreach ($guest_users as $guest) {
         Database::get()->query("DELETE FROM user WHERE id = ?d", $guest->id);
@@ -3335,10 +3335,6 @@ function upgrade_to_4_1($tbl_options) : void {
     }
     // user notifications setting
     set_config('user_notifications', 1);
-
-    if (!DBHelper::fieldExists('forum_topic', 'pin_time')) {
-        Database::get()->query("ALTER TABLE forum_topic ADD pin_time DATETIME DEFAULT NULL");
-    }
 }
 
 /**
