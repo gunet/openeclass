@@ -5937,3 +5937,31 @@ th.grade-col a{
 .comment-lp p{
   line-height: 16px !important;
 }
+
+/******************************** Forum ************************************/
+.forum_index thead th, .forum_viewforum thead th {
+  padding: 10px 25px 10px 10px!important;
+}
+
+.viewtopicNav .pagination {
+  gap: 1px;
+}
+
+.viewtopicNav .pagination a {
+  border: 0px;
+  border-radius: 30%;
+  height: 30px;
+  width: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.viewtopicNav .pagination a:hover {
+  background: #E8EDF8;
+  text-decoration: none;
+}
+
+.viewtopicNav .pagination .active a {
+  background: #E8EDF8;
+}

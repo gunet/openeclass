@@ -34,7 +34,7 @@ $unit = isset($unit)? $unit: null;
 if ($unit) {
     $unit_name = Database::get()->querySingle('SELECT title FROM course_units WHERE course_id = ?d AND id = ?d',
         $course_id, $unit)->title;
-    $navigation[] = ['url' => "index.php?course=$course_code&amp;id=$unit", 'name' => q($unit_name)];
+    $navigation[] = ['url' => "index.php?course=$course_code&id=$unit", 'name' => q($unit_name)];
 } else {
     $navigation[] = ['url' => "index.php?course=$course_code", 'name' => $langExercices];
 }
@@ -74,7 +74,7 @@ if (isset($_GET['eurId'])) {
     $objExercise = new Exercise();
     $objExercise->read($exercise_user_record->eid);
     if (!$unit) {
-        $navigation[] = array('url' => "results.php?course=$course_code&amp;exerciseId=" . getIndirectReference($exercise_user_record->eid), 'name' => $langResults);
+        $navigation[] = array('url' => "results.php?course=$course_code&exerciseId=" . getIndirectReference($exercise_user_record->eid), 'name' => $langResults);
     }
 } else {
     // exercise user recird id is not set
@@ -321,7 +321,6 @@ if ($is_editor and in_array($exercise_user_record->attempt_status, [ATTEMPT_COMP
 
 $totalWeighting = $totalScore = 0;
 $i = 1;
-
 if (count($exercise_question_ids) > 0) {
     // for each question
     foreach ($exercise_question_ids as $row) {
@@ -535,7 +534,7 @@ if (count($exercise_question_ids) > 0) {
 
                             $possible_answer = $possible_answers[$j-1]; // possible answers for each choice
                             $possible_answer = reindex_array_keys_from_one($possible_answer); // start from 1
-                            if ($choice[$j] == $answer_string[$j]) { // correct answer
+                            if (isset($choice[$j]) and $choice[$j] == $answer_string[$j]) { // correct answer
                                 $questionScore += $answerWeighting[$j-1]; // weight assignment
                                 if ($regrade) {
                                     Database::get()->query('UPDATE exercise_answer_record
@@ -551,7 +550,7 @@ if (count($exercise_question_ids) > 0) {
                                     $icon = "<span class='fa-solid fa-check text-success'></span>";
                                 }
                             }  else { // wrong answer
-                                if (isset($possible_answer[$choice[$j]])) { // if we have chosen something
+                                if (isset($choice[$j]) and isset($possible_answer[$choice[$j]])) { // if we have chosen something
                                     // adds the word in red at the end of the string, and strikes it
                                     $answer_choice = '<span class="text-danger"><s>' . q($possible_answer[$choice[$j]]) . '</s></span>';
                                 } else {
@@ -774,7 +773,7 @@ if ($is_editor and ($totalScore != $oldScore or $totalWeighting != $oldWeighting
     } else {
 
              Session::flash('message',$langScoreDiffers .
-             "<form action='exercise_result.php?course=$course_code&amp;eurId=$eurid' method='post'>
+             "<form action='exercise_result.php?course=$course_code&eurId=$eurid' method='post'>
                  <button class='btn submitAdminBtn mt-3' type='submit' name='regrade' value='true'>$langRegrade</button>
               </form>");
             Session::flash('alert-class', 'alert-warning');

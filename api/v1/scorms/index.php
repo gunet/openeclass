@@ -86,22 +86,23 @@ function api_method($access) {
             $course_id = $section->course_id;
             $course_code = course_id_to_code($course_id);
         }
-        $lps = Database::get()->queryArray('SELECT title, comments, res_id, `order`
-            FROM unit_resources WHERE unit_id = ?d ORDER BY `order`',
+        $lps = Database::get()->queryArray("SELECT title, comments, res_id, `order`
+            FROM unit_resources WHERE unit_id = ?d AND type = 'lp' ORDER BY `order`",
             $section->id);
-        $lp_data = array_map(function ($lp) use ($course_code) {
+        $lp_data = array_filter(array_map(function ($lp) use ($course_code) {
             $sco_id = get_scorm_sco_id($course_code, $lp->res_id);
-            $lp_data = [
-                'id' => $lp->res_id,
-                'name' => $lp->title,
-                'summary' => $lp->comments,
-                'order' => $lp->order,
-            ];
             if ($sco_id) {
-                $lp_data['sco_id'] = $sco_id;
+                return [
+                    'id' => $lp->res_id,
+                    'name' => $lp->title,
+                    'summary' => $lp->comments,
+                    'order' => $lp->order,
+                    'sco_id' => $sco_id,
+                ];
+            } else {
+                return null;
             }
-            return $lp_data;
-        }, $lps);
+        }, $lps));
     } else {
         if (!$course) {
             Access::error(2, 'Required parameter missing - scorm_id, course_id or section_id is required');
@@ -109,19 +110,20 @@ function api_method($access) {
         $lps = Database::get()->queryArray('SELECT learnPath_id, name, comment, rank
             FROM lp_learnPath WHERE course_id = ?d ORDER BY rank', $course->id);
         $course_code = $course->code;
-        $lp_data = array_map(function ($lp) use ($course_code) {
+        $lp_data = array_filter(array_map(function ($lp) use ($course_code) {
             $sco_id = get_scorm_sco_id($course_code, $lp->learnPath_id);
-            $lp_data = [
-                'id' => $lp->learnPath_id,
-                'name' => $lp->name,
-                'summary' => $lp->comment,
-                'order' => $lp->rank,
-            ];
             if ($sco_id) {
-                $lp_data['sco_id'] = $sco_id;
+                return [
+                    'id' => $lp->learnPath_id,
+                    'name' => $lp->name,
+                    'summary' => $lp->comment,
+                    'order' => $lp->rank,
+                    'sco_id' => $sco_id,
+                ];
+            } else {
+                return null;
             }
-            return $lp_data;
-        }, $lps);
+        }, $lps));
     }
     header('Content-Type: application/json');
     echo json_encode($lp_data, JSON_UNESCAPED_UNICODE);

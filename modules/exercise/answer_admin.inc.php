@@ -459,7 +459,7 @@ if (isset($_GET['modifyAnswers'])) {
                         </tr>";
 
             for ($i = 1; $i <= $nbrAnswers; $i++) {
-                $tool_content .="<tr><td valign='top'>$i.</td>";
+                $tool_content .="<tr><td style='min-width: 4%;' valign='top'>$i.</td>";
                 if ($answerType == UNIQUE_ANSWER) {
                     $tool_content .= "<td><input type='radio' value=\"" . $i . "\" name='correct' ";
                     if ((isset($correct) and $correct == $i) or (isset($_POST['correct']) and ($_POST['correct'] == $i))) {

@@ -33,7 +33,7 @@ if (isset($_GET['delete'])) { // delete scale
     Database::get()->query("DELETE FROM `grading_scale` WHERE id = ?d", $_GET['delete']);
     Session::flash('message',$langGradeScalesDeleted);
     Session::flash('alert-class', 'alert-success');
-    redirect_to_home_page("modules/work/grading_scales.php");
+    redirect_to_home_page("modules/work/grading_scales.php?course=$course_code");
 }
 
 if (isset($_POST['submitScale'])) {
@@ -43,7 +43,7 @@ if (isset($_POST['submitScale'])) {
         'title' => "$langTheField $langTitle",
         'scale_item_name' => "$langNoGradeScales"
     ));
-    $scale_id = isset($_POST['grading_scale_id']) ? $_POST['grading_scale_id'] : 0;
+    $scale_id = $_POST['grading_scale_id'] ?? 0;
     if($v->validate()) {
         $title = $_POST['title'];
         $scales = array();

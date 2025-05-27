@@ -6218,3 +6218,4 @@ $langNumberColumnsSmallerThanQ = "The number of columns you entered is less than
 $langUserAnswer = "User response";
 $langAddRowsColumns = "Registration";
 $langCurrentDuration = "Current duration";
+$langClearChoice = 'Clear Choice';

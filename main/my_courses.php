@@ -60,6 +60,7 @@ if(isset($_GET['term'])){
                       course.lang,
                       course.visible visible,
                       course.course_image course_image,
+                      course.is_collaborative,
                       course_user.status status,
                       course_user.favorite favorite
                 FROM course JOIN course_user
@@ -77,6 +78,7 @@ if(isset($_GET['term'])){
                    course.lang,
                    course.visible visible,
                    course.course_image course_image,
+                   course.is_collaborative,
                    course_user.status status,
                    course_user.favorite favorite
              FROM course JOIN course_user
@@ -110,7 +112,7 @@ if(isset($_GET['term'])){
                                 if(!empty($course->course_image)){
                                     $courseImage = "{$urlServer}courses/{$course->code}/image/{$course->course_image}";
                                 }else{
-                                    $courseImage = "{$urlServer}resources/img/ph1.jpg";
+                                    $courseImage = $course->is_collaborative ? "{$urlServer}template/modern/images/default-collaboration.jpg" : "{$urlServer}resources/img/ph1.jpg";
                                 }
 
                       $html .= "<div class='card-header border-0'>
