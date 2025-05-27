@@ -892,7 +892,7 @@ if ($is_editor) {
                                                                     $group_id_indirect = getIndirectReference($group_id);
                                                                     $control = '';
                                                                     if ($max_members == 0) {
-                                                                        $tool_content .= " <span class='badge Primary-600-bg'>$langGroupMembersNum:&nbsp; -- </span>";
+                                                                        $tool_content .= " <span class='badge Primary-600-bg'>$langGroupMembersNum:&nbsp;$member_count</span>";
                                                                     } else {
                                                                         $tool_content .= " <span class='badge Primary-600-bg'>$langGroupMembersNum:&nbsp;$member_count/$max_members</span>";
                                                                     };
@@ -1011,7 +1011,7 @@ if ($is_editor) {
                                                                     }
                                                                     $tool_content .= ($control? $control: '&mdash;');
                                                                     if ($max_members == 0) {
-                                                                        $tool_content .= " <span class='badge Primary-600-bg'>$langGroupMembersNum:&nbsp; -- </span>";
+                                                                        $tool_content .= " <span class='badge Primary-600-bg'>$langGroupMembersNum:&nbsp;$member_count</span>";
                                                                     } else {
                                                                         $tool_content .= " <span class='badge Primary-600-bg'>$langGroupMembersNum:&nbsp;$member_count/$max_members</span>";
                                                                     }

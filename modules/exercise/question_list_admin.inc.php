@@ -645,10 +645,11 @@ $tool_content .= "
   <div class='modal-dialog'>
     <div class='modal-content'>
       <div class='modal-header'>
+      <div class='modal-title'>$langNote</div>
         <button type='button' class='close' data-bs-dismiss='modal'><span aria-hidden='true'>&times;</span><span class='sr-only'>Close</span></button>
       </div>
       <div class='modal-body'>
-        $langUsedInSeveralExercises
+        $langUsedInSeveralExercises2
       </div>
       <div class='modal-footer'>
         <a href='#' id='modifyAll' class='btn submitAdminBtn'>$langModifyInAllExercises</a>

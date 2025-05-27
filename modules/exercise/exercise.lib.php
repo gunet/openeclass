@@ -26,11 +26,12 @@
  * @param $question_number
  * @return int
  */
-function showQuestion(&$objQuestionTmp, $question_number, $exerciseResult = [], $options = []) {
+function showQuestion(&$objQuestionTmp, $question_number, array $exerciseResult = [], $options = []) {
 
-    global $tool_content, $picturePath, $langNoAnswer, $langQuestion, $langSelect,
+    global $tool_content, $picturePath, $langNoAnswer, $langQuestion,
             $langColumnA, $langColumnB, $langMakeCorrespond, $langInfoGrades,
-            $exerciseType, $nbrQuestions, $langInfoGrade, $langHasAnswered, $langClear, $langSelect;
+            $exerciseType, $nbrQuestions, $langInfoGrade, $langHasAnswered,
+           $langClearChoice, $langSelect;
 
     $questionId = $objQuestionTmp->selectId();
     $questionWeight = $objQuestionTmp->selectWeighting();
@@ -97,7 +98,11 @@ function showQuestion(&$objQuestionTmp, $question_number, $exerciseResult = [], 
         $tool_content .= "<div class='container-fill-in-the-blank'>";
     }
 
-    for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
+    $answer_ids = range(1, $nbrAnswers);
+    if (in_array('shuffle_answers', $options) and ($answerType == MULTIPLE_ANSWER or $answerType == UNIQUE_ANSWER)) { // is option `shuffle answers` enabled?
+        shuffle($answer_ids);
+    }
+    foreach ($answer_ids as $answerId) {
         $answer = $objAnswerTmp->selectAnswer($answerId);
         if (is_null($answer) or $answer == '') {  // don't display blank or empty answers
             continue;
@@ -217,7 +222,7 @@ function showQuestion(&$objQuestionTmp, $question_number, $exerciseResult = [], 
         $tool_content .= "<div class='col-sm-12'><div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langNoAnswer</span></div></div>";
     }
     if (in_array($answerType, [TRUE_FALSE, UNIQUE_ANSWER])) {
-        $tool_content .= "<button class='float-end clearSelect btn deleteAdminBtn' style='margin-top:0px;'><i class='fa-solid fa-xmark'></i> $langClear</button>";
+        $tool_content .= "<button class='float-end clearSelect btn btn-outline-secondary mt-0'><i class='fa fa-solid fa-xmark'></i>&nbsp;$langClearChoice</button>";
     }
     $tool_content .= "
                 </div>

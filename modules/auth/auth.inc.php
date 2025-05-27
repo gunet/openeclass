@@ -331,19 +331,12 @@ function auth_user_login($auth, $test_username, $test_password, $settings) {
                 @ldap_set_option($ldap, LDAP_OPT_PROTOCOL_VERSION, 3);
                 @ldap_set_option($ldap, LDAP_OPT_REFERRALS, 0); // for search in Active Directory
                 if (@ldap_bind($ldap, $settings['ldapbind_dn'], $settings['ldapbind_pw'])) {
+                    $search_filter = "($settings[ldap_login_attr]=$test_username)";
                     if (isset($settings['ldap_login_attr2']) and !empty($settings['ldap_login_attr2'])) {
-                        $settings['ldap_login_attr'] .= ' ' . $settings['ldap_login_attr2'];
-                    }
-                    $search_filter = '';
-                    $ldap_login_attrs = explode(' ', $settings['ldap_login_attr']);
-                    foreach ($ldap_login_attrs as $attr) {
-                        $search_filter .= "($attr=$test_username)";
-                    }
-                    if (count($ldap_login_attrs) > 1) {
-                        $search_filter = "(|$search_filter)";
+                        $search_filter = "(|$search_filter($settings[ldap_login_attr2]=$test_username))";
                     }
                     $userinforequest = ldap_search($ldap, $settings['ldap_base'], $search_filter);
-                    if ($entry_id = ldap_first_entry($ldap, $userinforequest)) {
+                    if ($userinforequest and ($entry_id = ldap_first_entry($ldap, $userinforequest))) {
                         $user_dn = ldap_get_dn($ldap, $entry_id);
                         if (@ldap_bind($ldap, $user_dn, $test_password)) {
                             $testauth = true;

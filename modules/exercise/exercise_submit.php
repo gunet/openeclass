@@ -259,19 +259,21 @@ $shuffleQuestions = $objExercise->selectShuffle();
 $randomQuestions = $objExercise->isRandom();
 $exerciseType = $objExercise->selectType();
 $exerciseTempSave = $objExercise->selectTempSave();
-$exerciseTimeConstraint = (int) $objExercise->selectTimeConstraint();
+$exerciseTimeConstraint = $objExercise->selectTimeConstraint();
 $exerciseAllowedAttempts = $objExercise->selectAttemptsAllowed();
 $exercisetotalweight = $objExercise->selectTotalWeighting();
 
+$questionOptions = [];
+$shuffle_answers = $objExercise->getOption('ShuffleAnswers')? 1: 0;
+if ($shuffle_answers) {
+    $questionOptions[] = 'shuffle_answers';
+}
 $exercisePreventCopy = $objExercise->getOption('jsPreventCopy')? 1: 0;
 if ($exercisePreventCopy) {
-    $questionOptions = ['prevent_copy_paste'];
-} else {
-    $questionOptions = [];
+    $questionOptions[] = 'prevent_copy_paste';
 }
 
 $is_exam = $objExercise->isExam();
-
 if ($is_exam) { // disallow links outside exercise frame. disallow button quick note
     $head_content .= "
         <script type='text/javascript'>
@@ -702,7 +704,7 @@ if ($questionList) {
             } else { // next
                 $questionNumber = array_search($_REQUEST['questionId'], $questionList) + 1;
             }
-        } else { // starting multi-page exercise from first question
+        } else { // starting multipage exercise from first question
             $questionNumber = 1;
         }
         $questionId = $questionList[$questionNumber];

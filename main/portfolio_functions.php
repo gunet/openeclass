@@ -131,7 +131,11 @@ function getUserCourseInfo($uid): string
                                         <div class='course-content mt-4'>
                                             <div class='col-12 d-flex justify-content-center align-items-start'>";
                 if($data->course_image == NULL) {
-                    $lesson_content .= "<img class='openCourseImg' src='{$urlServer}resources/img/ph1.jpg' alt='$langCourseImage' />";
+                    if ($data->is_collaborative) {
+                        $lesson_content .= "<img class='openCourseImg' src='{$urlServer}template/modern/images/default-collaboration.jpg' alt='$langCourseImage' />";
+                    } else {
+                        $lesson_content .= "<img class='openCourseImg' src='{$urlServer}resources/img/ph1.jpg' alt='$langCourseImage' />";
+                    }
                 } else {
                     $lesson_content .= "<img class='openCourseImg' src='{$urlServer}courses/{$data->code}/image/{$data->course_image}' alt='$langCourseImage' />";
                 }
@@ -291,7 +295,11 @@ function getUserCourseInfo($uid): string
                                             <div class='course-content mt-4'>
                                                 <div class='col-12 d-flex justify-content-center align-items-start'>";
                     if($data->course_image == NULL) {
-                        $lesson_content .= "<img class='openCourseImg' src='{$urlServer}resources/img/ph1.jpg' alt='$langCourseImage' />";
+                        if ($data->is_collaborative) {
+                            $lesson_content .= "<img class='openCourseImg' src='{$urlServer}template/modern/images/default-collaboration.jpg' alt='$langCourseImage' />";
+                        } else {
+                            $lesson_content .= "<img class='openCourseImg' src='{$urlServer}resources/img/ph1.jpg' alt='$langCourseImage' />";
+                        }
                     } else {
                         $lesson_content .= "<img class='openCourseImg' src='{$urlServer}courses/{$data->code}/image/{$data->course_image}' alt='$langCourseImage' />";
                     }
@@ -584,6 +592,7 @@ function getUserCourses($uid, $colaborative = 0)
                              course.description description,
                              course.course_image course_image,
                              course.popular_course popular_course,
+                             course.is_collaborative,
                              course_user.status status,
                              course_user.favorite favorite
                         FROM course JOIN course_user
@@ -621,7 +630,11 @@ function CountStudentCollaborations($uid) {
                     ON course.id = course_user.course_id
                     AND course_user.user_id = ?d
                     AND course.is_collaborative = ?d
-                    AND course.visible != " . COURSE_INACTIVE, $uid, 1)->total;
+                    AND (course.visible != " . COURSE_INACTIVE . " OR
+                         course_user.status = " . USER_TEACHER . " OR
+                         course_user.course_reviewer = 1 OR
+                         course_user.editor = 1)", $uid, 1)->total;
+
     return $total;
 }
 
@@ -651,7 +664,11 @@ function CountTeacherCollaborations($uid) {
                 FROM course JOIN course_user
                     ON course.id = course_user.course_id
             AND course_user.user_id = ?d
-            AND course.is_collaborative = ?d", $uid, 1)->total;
+            AND course.is_collaborative = ?d
+            AND (course.visible != " . COURSE_INACTIVE . " OR 
+                 course_user.status = " . USER_TEACHER . " OR
+                 course_user.course_reviewer = 1 OR
+                 course_user.editor = 1)", $uid, 1)->total;
 
     return $total;
 }

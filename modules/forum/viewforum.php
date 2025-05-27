@@ -41,6 +41,7 @@ if (!add_units_navigation(true)) {
 if ($is_editor) {
     load_js('tools.js');
 }
+load_js('datatables');
 
 $next = 0;
 if (isset($_GET['forum'])) {
@@ -108,64 +109,6 @@ if (isset($_GET['start'])) {
     $first_topic = intval($_GET['start']);
 } else {
     $first_topic = 0;
-}
-
-if ($total_topics > TOPICS_PER_PAGE) { // navigation
-    $base_url = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forum=$forum_id&amp;start=";
-    if ($unit) {
-        $base_url = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;res_type=forum&amp;unit=$unit&amp;forum=$forum_id&amp;start=";
-    }
-    $paging = array();
-
-    $current_page = $first_topic / TOPICS_PER_PAGE + 1; // current page
-    for ($x = 1; $x <= $pages; $x++) { // display navigation numbers
-        if ($current_page == $x) {
-            $paging[] = "<li class='active'><a href='#'>$x</a></li>";
-        } else {
-            $start = ($x - 1) * TOPICS_PER_PAGE;
-            $paging[] = "<li><a href='$base_url&amp;start=$start'>$x</a></li>";
-        }
-    }
-
-    $next = $first_topic + TOPICS_PER_PAGE;
-    $prev = $first_topic - TOPICS_PER_PAGE;
-    if ($prev < 0) {
-        $prev = 0;
-    }
-    if ($first_topic == 0) { // beginning
-        $nexturlclass = "";
-        $privurlclass = "class='disabled'";
-        $nexturl = $base_url.$next;
-        $prevurl = "#";
-    } elseif ($first_topic + TOPICS_PER_PAGE < $total_topics) {
-        $nexturlclass = "";
-        $privurlclass = "";
-        $prevurl = $base_url.$prev;
-        $nexturl = $base_url.$next;
-    } elseif ($start - TOPICS_PER_PAGE < $total_topics) { // end
-        $nexturlclass = "class='disabled'";
-        $privurlclass = "";
-        $nexturl = "#";
-        $prevurl = $base_url.$prev;
-    }
-
-    $tool_content .= "
-        <nav class='clearfix'>
-          <ul class='pagination float-end'>
-            <li $privurlclass>
-                <a href='$prevurl' aria-label='$langPrevious'>
-                    <span aria-hidden='true'>&laquo;</span>
-                </a>
-            </li>
-            ".implode($paging)."
-            <li $nexturlclass>
-              <a href='$nexturl' aria-label='$langNext'>
-                <span aria-hidden='true'>&raquo;</span>
-              </a>
-            </li>
-          </ul>
-        </nav>
-    ";
 }
 
 // delete topic
@@ -253,6 +196,18 @@ if (isset($_GET['topicnotify'])) {
     }
 }
 
+if (isset($_GET['topicpin'])) {
+    if (isset($_GET['topic_id'])) {
+        $topic_id = intval($_GET['topic_id']);
+    }
+
+    if ($_GET['topicpin'] == 0) {
+        Database::get()->query("UPDATE forum_topic SET pin_time = NULL WHERE id = ?d", $topic_id);
+    } else {
+        Database::get()->query("UPDATE forum_topic SET pin_time = NOW() WHERE id = ?d", $topic_id);
+    }
+}
+
 //lock and unlock topic
 if ($is_editor and isset($_GET['topiclock'])) {
     if (isset($_GET['topic_id'])) {
@@ -268,16 +223,23 @@ if ($is_editor and isset($_GET['topiclock'])) {
 
 }
 
-$result = Database::get()->queryArray("SELECT t.*, p.post_time, t.poster_id AS topic_poster_id, p.poster_id AS poster_id
+//$result = Database::get()->queryArray("SELECT t.*, p.post_time, t.poster_id AS topic_poster_id, p.poster_id AS poster_id, f.cat_id
+//        FROM forum_topic t
+//        LEFT JOIN forum_post p ON t.last_post_id = p.id
+//        INNER JOIN forum f ON t.forum_id = f.id
+//        WHERE t.forum_id = ?d
+//        ORDER BY topic_time DESC", $forum_id);
+
+$result = Database::get()->queryArray("SELECT t.*, p.post_time, t.poster_id AS topic_poster_id, p.poster_id AS poster_id, f.cat_id
         FROM forum_topic t
         LEFT JOIN forum_post p ON t.last_post_id = p.id
+        INNER JOIN forum f ON t.forum_id = f.id
         WHERE t.forum_id = ?d
-        ORDER BY topic_time DESC LIMIT $first_topic, " . TOPICS_PER_PAGE . "", $forum_id);
-
+        ORDER BY t.pin_time DESC, topic_time DESC", $forum_id);
 
 if (count($result) > 0) { // topics found
     $tool_content .= "<div class='table-responsive'>
-        <table class='table-default'>
+        <table class='table-default forum_viewforum'>
         <thead>
         <tr class='list-header'>
           <th class='forum_td'>$langTopics</th>
@@ -290,9 +252,16 @@ if (count($result) > 0) { // topics found
     foreach ($result as $myrow) {
         $replies = $myrow->num_replies;
         $topic_id = $myrow->id;
+        $forum_id = $myrow->forum_id;
+        $cat_id = $myrow->cat_id;
         $last_post_datetime = $myrow->post_time;
         $topic_title = $myrow->title;
         $topic_locked = $myrow->locked;
+        $pin_time = $myrow->pin_time;
+
+        $pin_action = $pin_time ? 1 : 0;
+        $pin_icon = ($pin_action == 1) ? icon('fa-thumbtack') : "";
+
         $pagination = '';
         $topiclink = "viewtopic.php?course=$course_code&amp;topic=$topic_id&amp;forum=$forum_id";
         if ($unit) {
@@ -301,33 +270,46 @@ if (count($result) > 0) { // topics found
             $topiclink = "view.php?course=$course_code&amp;&amp;res_type=forum_topic&amp;topic=$topic_id&amp;forum=$forum_id";
         }
         if ($topic_locked) {
-            $image = icon('fa-lock');
+            $image_lock = icon('fa-lock');
         } else {
-            if ($replies >= HOT_THRESHOLD) {
-                $image = icon('fa-fire');
-            } else {
-                $image = icon('fa-comments');
-            }
+            $image_lock = '';
         }
-        if ($replies > POSTS_PER_PAGE) {
-            $total_reply_pages = ceil($replies / POSTS_PER_PAGE);
-            $pagination .= "<strong class='pagination'><span>&nbsp;".icon('fa-arrow-circle-right')." ";
-            add_topic_link(0, $total_reply_pages);
-            if ($total_reply_pages > PAGINATION_CONTEXT + 1) {
-                $pagination .= "&nbsp;...&nbsp;";
-            }
-            for ($p = max(1, $total_reply_pages - PAGINATION_CONTEXT); $p < $total_reply_pages; $p++) {
-                add_topic_link($p, $total_reply_pages);
-            }
-            $pagination .= "&nbsp;</span></strong>";
+
+        if ($replies >= HOT_THRESHOLD) {
+            $image_fire = icon('fa-fire');
+        } else {
+            $image_fire = '';
         }
-        $tool_content .= "<td>$image <a href='$topiclink'>" . q($topic_title) . "</a>$pagination</td>";
+
+//        $sql_notify = Database::get()->querySingle("SELECT notify_sent FROM forum_notify
+//			WHERE user_id = ?d AND topic_id = ?d AND course_id = ?d AND notify_sent = 1", $uid, $myrow->id, $course_id);
+
+        $sql_notify = Database::get()->queryArray("SELECT * FROM forum_notify
+			WHERE user_id = ?d 
+			AND course_id = ?d 
+			AND cat_id = ?d 
+			OR forum_id = ?d 
+			OR topic_id = ?d 
+			order by topic_id DESC, forum_id DESC, cat_id DESC LIMIT 1", $uid, $course_id, $cat_id, $forum_id, $topic_id);
+
+        if ($sql_notify && $sql_notify[0]->notify_sent == 1) {
+            $notify_action = 1;
+            $image_notify = icon('fa-envelope');
+        } else {
+            $notify_action = 0;
+            $image_notify = '';
+        }
+
+        $tool_content .= "<td><div class='d-flex justify-content-between border-0'><a href='$topiclink'>" . q($topic_title) . "</a> <span class='d-flex align-items-center gap-2'>$image_lock $image_fire $image_notify $pin_icon</span></div></td>";
         $tool_content .= "<td>$replies</td>";
         $tool_content .= "<td>" . q(uid_to_name($myrow->topic_poster_id)) . "</td>";
         $tool_content .= "<td>$myrow->num_views</td>";
-        $tool_content .= "<td>";
         if (!is_null($last_post_datetime)) {
-            $tool_content .= "<br>" . format_locale_date(strtotime($last_post_datetime), 'short');
+//            $tool_content .= "<td data-order='$last_post_datetime'>";
+            $tool_content .= "<td>";
+            $tool_content .= format_locale_date(strtotime($last_post_datetime), 'short');
+        } else {
+            $tool_content .= "<td data-order='00/00/0000 - 00:00'>";
         }
         $tool_content .= "</td>";
         $sql = Database::get()->querySingle("SELECT notify_sent FROM forum_notify
@@ -397,15 +379,65 @@ if (count($result) > 0) { // topics found
             }
         }
 
+        $link_pin = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forum=$forum_id&amp;topic_id=$myrow->id&amp;topicpin=" . ($pin_action == 1 ? 0 : 1);
 
-        $dyntools[] = array('title' => $langNotify,
+        $dyntools[] = array('title' => $notify_action ? $langStopNotify : $langNotify,
                             'url' => $link_notify,
-                            'icon' => 'fa-envelope',
+                            'icon' => $notify_action ? 'fa-envelope-open' : 'fa-envelope',
                             'show' => (!setting_get(SETTING_COURSE_FORUM_NOTIFICATIONS)));
+
+        $dyntools[] = array('title' => $pin_action ? $langUnpinTopic : $langPinTopic,
+                            'url' => $link_pin,
+                            'icon' => $pin_action ? 'fa-thumbtack text-danger' : 'fa-thumbtack');
+
+
         $tool_content .= action_button($dyntools);
         $tool_content .= "</td></tr>";
     } // end of while
-    $tool_content .= "</table></div>";
+    $tool_content .= "</table>
+
+    <script>
+            $(document).ready(function() {
+                $('.table-default').DataTable({
+                    ordering: true,
+                    order: [],
+                    searching: true,
+                    columnDefs: [
+                        {
+                            targets: 0, // Enable searching only for the first column
+                            searchable: true
+                        },
+                        {
+                            targets: '_all', // Disable searching for all other columns
+                            searchable: false
+                        },
+                        {
+                            targets: -1, // No orderable for last column
+                            orderable: false
+                        }
+                    ],
+                    'searchDelay': 1000,                
+                    'oLanguage': {
+                       'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
+                       'sZeroRecords':  '" . $langNoResult . "',
+                       'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
+                       'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
+                       'sInfoFiltered': '',
+                       'sInfoPostFix':  '',
+                       'sSearch':       '',
+                       'sUrl':          '',
+                       'oPaginate': {
+                           'sFirst':    '&laquo;',
+                           'sPrevious': '&lsaquo;',
+                           'sNext':     '&rsaquo;',
+                           'sLast':     '&raquo;'
+                       }
+                   }
+                });
+            });
+        </script>
+
+    </div>";
 } else {
     $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoTopics</span></div></div>";
 }

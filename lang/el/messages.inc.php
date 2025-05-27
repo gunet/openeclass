@@ -184,6 +184,7 @@ $langIndexNumDocs = "Αριθμός Εγγράφων στο Ευρετήριο";
 $langIndexIsOptimized = "Είναι βελτιστοποιημένο;";
 $langOptimize = "Βελτιστοποίηση";
 $langReindex = "Αναδημιουργία ευρετηρίου";
+$langIndexDisabled = 'Η μηχανή ευρετηρίου είναι απενεργοποιημένη.';
 $langCronInfo = "Ενημερωτικά στοιχεία για τις προγραμματισμένες εργασίες";
 $langCronName = "Όνομα εργασίας";
 $langCronLastRun = "Τελευταία Εκτέλεση";
@@ -1313,6 +1314,10 @@ $langDoc = "Έγγραφα";
 $langVideoLinks = "Βιντεοσκοπημένα $langCourses";
 $langWorks = "Εργασίες";
 $langForums = "Συζητήσεις";
+$langPinTopic = "Καρφίτσωμα ως σημαντική";
+$langForumViewAll = "Εμφάνιση όλων";
+$langForumViewPage = "Εμφάνιση ανά σελίδα";
+$langUnpinTopic = "Αφαίρεση σήμανσης ως σημαντικής";
 $langExercices = "Ασκήσεις";
 $langAddPageHome = "Ανέβασμα Ιστοσελίδας";
 $langModifyInfo = "Διαχείριση $langOfCourse";
@@ -1965,6 +1970,8 @@ $langAnswersNotDisp = "Απόκρυψη απαντήσεων μετά το τέ�
 $langAnswersDisp = "Εμφάνιση απαντήσεων μετά το τέλος της άσκησης";
 $langAnswersDispLastAttempt = "Εμφάνιση απαντήσεων μετά το τέλος της τελευταίας προσπάθειας του $langsOfStudent";
 $langAnswersDispEndDate = "Εμφάνιση απαντήσεων μετά την Ημερομηνία Λήξης της άσκησης";
+$langShuffleAnswers = "Εμφάνιση των απαντήσεων των ερωτήσεων με τυχαία σειρά.";
+$langShuffleAnswersLegend = "αφορά μόνο τις ερωτήσεις πολλαπλής επιλογής";
 $langScoreNotDisp = "Απόκρυψη βαθμολογίας μετά το τέλος της άσκησης";
 $langScoreDisp = "Εμφάνιση βαθμολογίας μετά το τέλος της άσκησης";
 $langScoreDispLastAttempt = "Εμφάνιση βαθμολογίας μετά το τέλος της τελευταίας προσπάθειας του $langsOfStudent";
@@ -2066,6 +2073,7 @@ $langConfirmQuestionPoolPurge = "Οι ερωτήσεις που δεν χρησ�
 $langQuestionPoolPurgeSuccess = "Η διαγραφή των αχρησιμοποίητων ερωτήσεων από την τράπεζα ερωτήσεων πραγματοποιήθηκε.";
 $langShuffleQuestions = "Ανακάτεμα όλων των ερωτήσεων";
 $langClear = 'Εκκαθάριση';
+$langClearChoice = 'Εκκαθάριση επιλογής';
 $langExerciseFeedback = "Κείμενο Ολοκλήρωσης";
 $langExerciseFeedbackInfo = "εμφανίζεται μετά την ολοκλήρωση της άσκησης";
 $langExercisePreventCopy = 'Αποτροπή αντιγραφής κειμένου';
@@ -2093,6 +2101,11 @@ $langUsedInSeveralExercises = "Η ερώτηση (και οι απαντήσει
 <ul>
 <li>Αν επιλέξετε <i>σε όλες τις ασκήσεις</i> η αλλαγή θα γίνει σε όλες.</li>
 <li>Αν επιλέξετε <i>μόνο στην τράπεζα ερωτήσεων</i> θα δημιουργηθεί ένα αντίγραφο της αρχικής ερώτησης.</li>
+</ul>";
+$langUsedInSeveralExercises2 = "Η ερώτηση (και οι απαντήσεις της) χρησιμοποιείται σε αρκετές ασκήσεις.<br><br>
+<ul>
+<li>Αν επιλέξετε <i>σε όλες τις ασκήσεις</i> η αλλαγή θα γίνει σε όλες.</li>
+<li>Αν επιλέξετε <i>μόνο στην τρέχουσα άσκηση</i> η αλλαγή θα γίνει μόνο στην τρέχουσα.</li>
 </ul>";
 $langModifyInAllExercises = "σε όλες τις ασκήσεις";
 $langModifyInThisExercise = "μόνο στην τρέχουσα άσκηση";
@@ -2129,6 +2142,7 @@ $langInvalidPicture = "Μη υποστηριζόμενος τύπος εικόν
 $langQuestionDiffGrade = "Βαθμός δυσκολίας";
 $langNumQuestions = "Αρ. ερωτήσεων";
 $langQuestionAllDiffs = "Όλοι οι βαθμοί δυσκολίας";
+$langQuestionAllTypes = "'Ολοι οι τύποι ερωτήσεων";
 $langQuestionNotDefined = "Μη προσδιορισμένη";
 $langQuestionVeryEasy = "Πολύ εύκολη";
 $langQuestionEasy = "Εύκολη";

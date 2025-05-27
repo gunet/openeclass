@@ -195,7 +195,11 @@
                                                         <div class='course-content mt-4'>
                                                             <div class='col-12 d-flex justify-content-center align-items-start'>
                                                                 @if($mycourse->img == NULL)
-                                                                    <img class='openCourseImg' src="{{ $urlAppend }}resources/img/ph1.jpg" alt="{{ trans('langCourseImage') }}" /></a>
+                                                                    @if($mycourse->clb)
+                                                                        <img class='openCourseImg' src="{{ $urlAppend }}template/modern/images/default-collaboration.jpg" alt="{{ trans('langCourseImage') }}" /></a>
+                                                                    @else
+                                                                        <img class='openCourseImg' src="{{ $urlAppend }}resources/img/ph1.jpg" alt="{{ trans('langCourseImage') }}" /></a>
+                                                                    @endif
                                                                 @else
                                                                     <img class='openCourseImg' src="{{ $urlAppend }}courses/{{ $mycourse->k }}/image/{{ $mycourse->img }}" alt="{{ trans('langCourseImage') }}" /></a>
                                                                 @endif
