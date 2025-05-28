@@ -51,8 +51,8 @@ RUN cd /var/www/html && \
 
 RUN mkdir ${INSTALL}/config && \
     mkdir ${INSTALL}/courses && \
-    mkdir ${INSTALL}/video
-    # chown -R www-data:www-data ${INSTALL}/
+    mkdir ${INSTALL}/video && \
+    chown -R www-data:www-data ${INSTALL}/
 USER root
 
 HEALTHCHECK --interval=10s --timeout=3s --start-period=3s --retries=5 \
