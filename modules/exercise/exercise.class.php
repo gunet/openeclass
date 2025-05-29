@@ -1138,27 +1138,47 @@ if (!class_exists('Exercise')) {
                     unset($answer_weight);
                 }
             } elseif ($question_type == DRAG_AND_DROP_TEXT) {
+
                 $objAnswersTmp = new Answer($key);
-                print_r($objAnswersTmp);
-                // $answer_field = $objAnswersTmp->selectAnswer(1);
-                // list($answer, $answerWeighting) = Question::blanksSplitAnswer($answer_field);
-                // // split weightings that are joined with a comma
-                // $rightAnswerWeighting = explode(',', $answerWeighting);
-                // $blanks = Question::getBlanks($answer);
-                // foreach ($value as $row_key => $row_choice) {
-                //     // if user's choice is right assign rightAnswerWeight else 0
-                //     // Some more coding should be done if blank can have multiple answers
-                //     $canonical_choice = canonicalize_whitespace($objQuestionTmp->selectType() == FILL_IN_BLANKS_TOLERANT ?
-                //         remove_accents($row_choice) : $row_choice);
-                //     $canonical_match = $objQuestionTmp->selectType() == FILL_IN_BLANKS_TOLERANT ?
-                //         remove_accents($blanks[$row_key - 1]) : $blanks[$row_key - 1];
-                //     $right_answers = array_map('canonicalize_whitespace', preg_split('/\s*\|\s*/', $canonical_match));
-                //     $weight = in_array($canonical_choice, $right_answers) ? $rightAnswerWeighting[$row_key - 1] : 0;
-                //     Database::get()->query("INSERT INTO exercise_answer_record
-                //         (eurid, question_id, answer, answer_id, weight, is_answered, q_position)
-                //         VALUES (?d, ?d, ?s, ?d, ?f, ?d, ?d)",
-                //         $eurid, $key, $row_choice, $row_key, $weight, $as_answered, $q_position);
-                // }
+                $questionWords = $objAnswersTmp->get_drag_and_drop_answer_text();
+                $questionGrades = $objAnswersTmp->get_drag_and_drop_answer_grade();
+                $userAnswersAsJSON = $_POST['choice'][$key];
+
+                if (!$userAnswersAsJSON) { // User has no filled in to the blanks of the question.
+                    $blank = 1;
+                    foreach ($questionWords as $word) {
+                        $weight = 0;
+                        $word = '';
+                        $as_answered = 0;
+                        Database::get()->query("INSERT INTO exercise_answer_record
+                            (eurid, question_id, answer, answer_id, weight, is_answered, q_position)
+                            VALUES (?d, ?d, ?s, ?d, ?f, ?d, ?d)",
+                            $eurid, $key, $word, $blank, $weight, $as_answered, $q_position);
+                        $blank++;
+                    }
+
+                } else { // User has filled in at least one blank of the question.
+                    $data = json_decode($userAnswersAsJSON, true);
+                    $resultAns = [];
+                    foreach ($data as $item) {
+                        $blank = (int)$item['dataAnswer'];
+                        $value = isset($item['dataWord']) && $item['dataWord'] !== null ? $item['dataWord'] : 0;
+                        $resultAns[$blank] = $value;
+                    }
+                    foreach ($resultAns as $blank => $value) {
+                        if ($value == 0) {// User has no filled in to the specific blank.
+                            $weight = 0;
+                            $value = '';
+                        } else {
+                            $weight = ($blank > 0 && !empty($value) && $questionWords[$blank-1] == $value) ? $questionGrades[$blank-1] : 0;
+                        }
+                        Database::get()->query("INSERT INTO exercise_answer_record
+                            (eurid, question_id, answer, answer_id, weight, is_answered, q_position)
+                            VALUES (?d, ?d, ?s, ?d, ?f, ?d, ?d)",
+                            $eurid, $key, $value, $blank, $weight, $as_answered, $q_position);
+                    }
+                }
+                
             } else {
                 if ($value) {
                     $objAnswersTmp = new Answer($key);

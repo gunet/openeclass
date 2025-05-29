@@ -222,7 +222,7 @@ function showQuestion(&$objQuestionTmp, $question_number, array $exerciseResult 
             }
             $tool_content .= "</div>
             
-            <input type='hidden' name='arrAnswersOfBlanks[$questionId]' id='arrInput_{$questionId}'>";                  
+            <input type='hidden' name='choice[$questionId]' id='arrInput_{$questionId}'>";                  
             
             $head_content .= "
             <script>
@@ -259,12 +259,6 @@ function showQuestion(&$objQuestionTmp, $question_number, array $exerciseResult 
                             zIndex: 100,
                             start: function(event, ui) {
                                 $(this).data('dragging', true);
-                                // Calculate the user's answers
-                                user_answers_calculation($(this));
-                            },
-                            drag: function(event, ui) {
-                                // Calculate the user's answers
-                                user_answers_calculation($(this));
                             },
                             stop: function(event, ui) {
                                 $(this).data('dragging', false);
@@ -301,15 +295,24 @@ function showQuestion(&$objQuestionTmp, $question_number, array $exerciseResult 
                             var word = draggedWord.clone();
                             var poolOfWord = word.attr('data-pool-id');
                             if (thisCardOfBlank!=poolOfWord){
+                                alert('You try to fill in a blank to other question!');
                                 return;
                             }
 
                             // Remove from pool
-                            draggedWord.remove(); // Remove from pool
+                            draggedWord.remove();
 
                             // Clone the dragged word for placement
                             var word = draggedWord.clone();
                             word.addClass('dropped-word');
+
+                            // Append to blank
+                            thisBlank.empty().append(word);
+
+                            // Calculate the user's answers
+                            setTimeout(function() {
+                                user_answers_calculation(word);
+                            }, 500);
 
                             // Make the dropped word draggable to allow removal
                             word.draggable({
@@ -320,12 +323,6 @@ function showQuestion(&$objQuestionTmp, $question_number, array $exerciseResult 
                                     $(this).data('dragging', true);
                                 }
                             });
-
-                            // Append to blank
-                            thisBlank.empty().append(word);
-
-                            // Calculate the user's answers
-                            user_answers_calculation(word);
 
                             // Add click to remove the word and return it to pool
                             word.on('click', function() {
@@ -343,8 +340,6 @@ function showQuestion(&$objQuestionTmp, $question_number, array $exerciseResult 
 
                                 // Calculate the user's answers
                                 user_answers_calculation($(this));
-
-                                console.log('Clicking the draggable word to remove it from a blank ...');
 
                                 // Reinitialize all pool draggable items
                                 initializePoolDraggable();
