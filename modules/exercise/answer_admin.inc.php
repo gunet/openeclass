@@ -244,7 +244,67 @@ if (isset($submitAnswers) || isset($buttonBack)) {
                 }
             }
         }
+    } elseif ($answerType == DRAG_AND_DROP_TEXT) {
+        $q_text = trim($_POST['drag_and_drop_question']);
+        // Use preg_match_all to find all numbers within brackets
+        preg_match_all('/\[(\d+)\]/', $q_text, $matches);
+        // $matches[1] contains all the captured numbers
+        $numbers = $matches[1];
+        $totalAnsFromText = [];
+        foreach ($numbers as $n) {
+            if ($n>0) {
+                $n = $n-1;
+                $totalAnsFromText[] = $n;
+            }
+        }
+
+        $totalAnsFromChoices = [];
+        if (isset($_POST['choice_answer'])) {
+            foreach ($_POST['choice_answer'] as $index => $value) {
+                $totalAnsFromChoices[] = $index;
+            }
+        }
+
+        // If the number of answers is diffent than the number of brackets stop processing.
+        sort($totalAnsFromText);
+        sort($totalAnsFromChoices);
+        if ($totalAnsFromText == $totalAnsFromChoices) {
+            // insert to db
+            // If a brucket of text equals with index of choice then add the corresponding answer.
+            $choicesAnsArr = [];
+            foreach ($totalAnsFromText as $inde_x) {
+                $choicesAnsArr[] = $inde_x . '|' . $_POST['choice_answer'][$inde_x] . '|' . $_POST['choice_grade'][$inde_x];
+            }
+            $choices_ans = '';
+            if (count($choicesAnsArr) > 0) {
+                $choices_ans = implode(',', $choicesAnsArr);
+                $choices_ans = '::' . $choices_ans;
+            }
+
+            $reponse = $q_text . $choices_ans;
+            $objAnswer->createAnswer($reponse, 0, '', 0, 1);
+            $objAnswer->save();
+
+            if (isset($_POST['choice_grade'])) {
+                $weighting = array_map('fix_float', $_POST['choice_grade']);
+                $weighting = array_map('abs', $weighting);
+                $questionWeighting = array_sum($weighting);
+                $objQuestion->updateWeighting($questionWeighting);
+                if (isset($exerciseId)) {
+                    $objQuestion->save($exerciseId);
+                } else {
+                    $objQuestion->save();
+                }
+            }
+
+        } else {
+            Session::flash('message',$langErrorWithChoicesAsAnswers);
+            Session::flash('alert-class', 'alert-warning');
+            redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId&modifyAnswers=$_GET[modifyAnswers]");
+        }
+
     }
+
     if (empty($msgErr) and !isset($_POST['setWeighting'])) {
         if (isset($exerciseId)) {
             Session::flash('message',$langQuestionReused);
@@ -411,7 +471,31 @@ if (isset($_GET['modifyAnswers'])) {
                 }
             }
         }
+    } elseif ($answerType == DRAG_AND_DROP_TEXT) {
+
+        $drag_and_drop_question = (isset($_POST['drag_and_drop_question']) and !empty($_POST['drag_and_drop_question'])) ? $_POST['drag_and_drop_question'] : '';
+        if (empty($drag_and_drop_question)) {
+            $drag_and_drop_question = $objAnswer->get_drag_and_drop_text();
+        }
+        
+        if ($newAnswer) {
+            $nbrAnswers = $_POST['nbrAnswers'] + 1;
+        } else {
+            $nbrAnswers = $objAnswer->get_total_drag_and_drop_answers();
+        }
+        if ($deleteAnswer) {
+            $nbrAnswers = $_POST['nbrAnswers'] - 1;
+            if ($nbrAnswers < 2) { // minimum 2 answers
+               $nbrAnswers = 2;
+            }
+        }
+
+        $choices_from_db = $objAnswer->get_drag_and_drop_answer_text();
+        $grades_from_db = $objAnswer->get_drag_and_drop_answer_grade();
+
     }
+
+
     $tool_content .= "<div class='col-12'><div class='card panelCard card-default px-lg-4 py-lg-3'>
                       <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                         <h3>$langQuestion &nbsp;" .
@@ -717,7 +801,69 @@ if (isset($_GET['modifyAnswers'])) {
                <td><input class='form-control' type='text' name='weighting[2]' size='5' value='$setWeighting[2]'></td>
              </tr>
            </table>";
+     } elseif ($answerType == DRAG_AND_DROP_TEXT) {
+        $setId = isset($exerciseId)? "&amp;exerciseId=$exerciseId" : '';
+        $tool_content .= "<p>$langInfoDragAndDropText</p>";
+        $tool_content .= "
+                        <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code$setId&amp;modifyAnswers=" . urlencode($_GET['modifyAnswers']) . "'>
+                            <fieldset><legend class='mb-0' aria-label='$langForm'></legend>
+                            <input type='hidden' name='nbrAnswers' value='$nbrAnswers'>
+                            <textarea class='form-control mt-4' name='drag_and_drop_question' cols='70' rows='6' placeholder='$langPlaceholderDragAndDropText'>{$drag_and_drop_question}</textarea>
+                            <div class='table-responsive mb-4'>
+                                <table class='table-default'>
+                                    <thead>
+                                        <tr>
+                                            <th>$langChoice</th>
+                                            <th>$langAnswer</th>
+                                            <th>$langGradebookGrade</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>";
+                                    for ($i=0; $i<$nbrAnswers; $i++) {
+                                        $chAns = $i+1;
+                                        $choiceAsAnswer = (count($choices_from_db) > 0) ? $choices_from_db[$i] : $_POST['choice_answer'][$i];
+                                        $choiceAsGrade = (count($grades_from_db) > 0) ? $grades_from_db[$i] : $_POST['choice_grade'][$i];
+                                        $tool_content .= "
+                                        <tr>
+                                            <td>[{$chAns}]</td>
+                                            <td>
+                                                <div class='col-12'>
+                                                    <input type='text' class='form-control' name='choice_answer[$i]' value='{$choiceAsAnswer}'>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class='col-12'>
+                                                    <input type='number' class='form-control' name='choice_grade[$i]' value='{$choiceAsGrade}' step='any'>
+                                                </div>
+                                            </td>
+                                        </tr>";
+                                    }
+        $tool_content .= "          </tbody>
+                                </table>
+                            </div>
+                            <div class='col-12 d-flex justify-content-start align-items-center gap-3 flex-wrap my-4'>
+                                <input class='btn submitAdminBtn' type='submit' name='moreAnswers' value='$langMoreAnswers' />
+                                <input class='btn deleteAdminBtn' type='submit' name='lessAnswers' value='$langLessAnswers' />
+                            </div>";
      }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
      $cancel_link = isset($exerciseId) ? "admin.php?course=$course_code&exerciseId=$exerciseId" : "question_pool.php?course=$course_code";
      $submit_text = ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT || $answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) && !isset($setWeighting) ? "$langNext &gt;" : $langSubmit;

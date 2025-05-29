@@ -5965,3 +5965,32 @@ th.grade-col a{
 .viewtopicNav .pagination .active a {
   background: #E8EDF8;
 }
+
+/******************************** EXERCISE QUESTIONS ************************************/
+
+.blank {
+  display: inline-block;
+  width: 100px;
+  height: 40px;
+  border: 1px solid #2B3944;
+  margin-top: 15px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+.blank:has(.dropped-word){
+  background-color: #e8e8e8;
+}
+
+.draggable {
+  display: inline-block;
+  padding: 8px 12px;
+  height: 25px;
+  margin: 5px;
+  background-color: #FFFFFF;
+  color: #2B3944;
+  cursor: move;
+  border: 1px solid #2B3944;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

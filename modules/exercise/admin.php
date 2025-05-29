@@ -40,6 +40,7 @@ if (isset($_GET['htopic'])) {
         case '5': $helpSubTopic = 'true_false'; break;
         case '6': $helpSubTopic = 'free_text'; break;
         case '8': $helpSubTopic = 'fill_gaps_predefined_answers'; break;
+        case '9': $helpSubTopic = 'drag_and_drop_text'; break;
     }
 }
 

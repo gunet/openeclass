@@ -963,7 +963,8 @@ if (!class_exists('Exercise')) {
                     $exerciseResult[$row->question_id] = $row->answer;
                 } elseif ($question_type == MATCHING) {
                     $exerciseResult[$row->question_id][$row->answer] = $row->answer_id;
-                } elseif ($question_type == FILL_IN_BLANKS || $question_type == FILL_IN_BLANKS_TOLERANT || $question_type == FILL_IN_FROM_PREDEFINED_ANSWERS) {
+                } elseif ($question_type == FILL_IN_BLANKS || $question_type == FILL_IN_BLANKS_TOLERANT || $question_type == FILL_IN_FROM_PREDEFINED_ANSWERS
+                            || $question_type == DRAG_AND_DROP_TEXT) {
                     $exerciseResult[$row->question_id][$row->answer_id] = $row->answer;
                 } elseif ($question_type == MULTIPLE_ANSWER) {
                     $exerciseResult[$row->question_id][$row->answer_id] = 1;
@@ -1136,6 +1137,28 @@ if (!class_exists('Exercise')) {
                         $eurid, $key, $row_key, $row_choice, $answer_weight, $as_answered, $q_position);
                     unset($answer_weight);
                 }
+            } elseif ($question_type == DRAG_AND_DROP_TEXT) {
+                $objAnswersTmp = new Answer($key);
+                print_r($objAnswersTmp);
+                // $answer_field = $objAnswersTmp->selectAnswer(1);
+                // list($answer, $answerWeighting) = Question::blanksSplitAnswer($answer_field);
+                // // split weightings that are joined with a comma
+                // $rightAnswerWeighting = explode(',', $answerWeighting);
+                // $blanks = Question::getBlanks($answer);
+                // foreach ($value as $row_key => $row_choice) {
+                //     // if user's choice is right assign rightAnswerWeight else 0
+                //     // Some more coding should be done if blank can have multiple answers
+                //     $canonical_choice = canonicalize_whitespace($objQuestionTmp->selectType() == FILL_IN_BLANKS_TOLERANT ?
+                //         remove_accents($row_choice) : $row_choice);
+                //     $canonical_match = $objQuestionTmp->selectType() == FILL_IN_BLANKS_TOLERANT ?
+                //         remove_accents($blanks[$row_key - 1]) : $blanks[$row_key - 1];
+                //     $right_answers = array_map('canonicalize_whitespace', preg_split('/\s*\|\s*/', $canonical_match));
+                //     $weight = in_array($canonical_choice, $right_answers) ? $rightAnswerWeighting[$row_key - 1] : 0;
+                //     Database::get()->query("INSERT INTO exercise_answer_record
+                //         (eurid, question_id, answer, answer_id, weight, is_answered, q_position)
+                //         VALUES (?d, ?d, ?s, ?d, ?f, ?d, ?d)",
+                //         $eurid, $key, $row_choice, $row_key, $weight, $as_answered, $q_position);
+                // }
             } else {
                 if ($value) {
                     $objAnswersTmp = new Answer($key);

@@ -289,5 +289,130 @@ if (!class_exists('Answer')):
 
         }
 
+                /**
+         * get the text of drag and drop question from the database
+         *
+         * @author - Nikos Mpalamoutis
+         */
+        public function get_drag_and_drop_text() {
+
+            $questionId = $this->questionId;
+            $answer = Database::get()->querySingle("SELECT answer FROM exercise_answer WHERE question_id = ?d", $questionId);
+            if ($answer) {
+                $q = explode('::',$answer->answer);
+                if (count($q) > 0) {
+                    return $q[0];
+                }
+            }
+
+        }
+
+                /**
+         * get the answers of drag and drop question from the database
+         *
+         * @author - Nikos Mpalamoutis
+         */
+        public function get_drag_and_drop_answers() {
+
+            $questionId = $this->questionId;
+            $answer = Database::get()->querySingle("SELECT answer FROM exercise_answer WHERE question_id = ?d", $questionId);
+            if ($answer) {
+                $q = explode('::',$answer->answer);
+                if (count($q) > 1) {
+                    return $q[1];
+                }
+            }
+            
+        }
+
+                        /**
+         * modify drag and drop answers into the database
+         *
+         * @author - Nikos Mpalamoutis
+         */
+        public function get_total_drag_and_drop_answers() {
+
+            $questionId = $this->questionId;
+            $answer = Database::get()->querySingle("SELECT answer FROM exercise_answer WHERE question_id = ?d", $questionId);
+            if ($answer) {
+                $q = explode('::',$answer->answer);
+                if (count($q) > 1) {
+                    $res = explode(',', $q[1]);
+                    return count($res);
+                }
+            } else {
+                return 2; // minimum answers
+            }
+
+        }
+
+                        /**
+         * get the answers of drag and drop question from the database
+         *
+         * @author - Nikos Mpalamoutis
+         */
+        public function get_drag_and_drop_answer_text() {
+
+            $finalArray = [];
+            $questionId = $this->questionId;
+            $answer = Database::get()->querySingle("SELECT answer FROM exercise_answer WHERE question_id = ?d", $questionId);
+            if ($answer) {
+                $q = explode('::', $answer->answer);
+                if (count($q) > 1) {
+                    $items = explode(',', $q[1]);
+                    $reformattedItems = [];
+                    foreach ($items as $item) {
+                        $lastPipePos = strrpos($item, '|');
+                        if ($lastPipePos !== false) {
+                            $cleanItem = substr($item, 0, $lastPipePos);
+                            list($index, $value) = explode('|', $cleanItem);
+                            $reformattedItems[(int)$index] = $value;
+                        }
+                    }
+                    ksort($reformattedItems);
+                    $finalArray = array_values($reformattedItems);
+                }
+            } 
+
+            return $finalArray;
+            
+        }
+
+
+                       /**
+         * get the answers of drag and drop question from the database
+         *
+         * @author - Nikos Mpalamoutis
+         */
+        public function get_drag_and_drop_answer_grade() {
+
+            $resultArray = [];
+            $questionId = $this->questionId;
+            $answer = Database::get()->querySingle("SELECT answer FROM exercise_answer WHERE question_id = ?d", $questionId);
+            if ($answer) {
+                $q = explode('::',$answer->answer);
+                if (count($q) > 1) {
+                    $items = explode(',', $q[1]);
+                    $cleanedItems = [];
+                    foreach ($items as $item) {
+                        $item = trim($item);
+                        $parts = explode('|', $item);
+                        if (count($parts) == 3) {
+                            $cleanedItems[] = $parts[0] . "|" . $parts[2];
+                        }
+                    }
+                    $cleanedString = implode(',', $cleanedItems);
+                    foreach ($cleanedItems as $item) {
+                        $arr = explode('|', $item);
+                        $resultArray[$arr[0]] = $arr[1]; // cast to int if needed
+                    }
+                }
+            } 
+
+            return $resultArray;
+            
+        }
+
+
     }
 endif;

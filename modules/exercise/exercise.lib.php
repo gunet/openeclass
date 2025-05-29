@@ -31,7 +31,7 @@ function showQuestion(&$objQuestionTmp, $question_number, array $exerciseResult 
     global $tool_content, $picturePath, $langNoAnswer, $langQuestion,
             $langColumnA, $langColumnB, $langMakeCorrespond, $langInfoGrades,
             $exerciseType, $nbrQuestions, $langInfoGrade, $langHasAnswered,
-           $langClearChoice, $langSelect;
+           $langClearChoice, $langSelect, $head_content;
 
     $questionId = $objQuestionTmp->selectId();
     $questionWeight = $objQuestionTmp->selectWeighting();
@@ -210,6 +210,152 @@ function showQuestion(&$objQuestionTmp, $question_number, array $exerciseResult 
                             " . standard_text_escape($answer) . "
                           </label>
                         </div>";
+        } elseif ($answerType == DRAG_AND_DROP_TEXT) {
+            $question_text = $objAnswerTmp-> get_drag_and_drop_text();
+            $list_answers = $objAnswerTmp->get_drag_and_drop_answer_text();
+            $question_text = replaceBracketsWithBlanks($question_text,$questionId);
+
+            $tool_content .= "<div class='col-12'>$question_text</div>";
+            $tool_content .= "<div class='col-12 d-flex justify-content-start align-items-center gap-4 flex-wrap mt-4' id='words_{$questionId}'>";
+            foreach ($list_answers as $an) {
+                $tool_content .= "<div class='draggable' data-word='{$an}' data-pool-id='words_{$questionId}'>$an</div>";
+            }
+            $tool_content .= "</div>
+            
+            <input type='hidden' name='arrAnswersOfBlanks[$questionId]' id='arrInput_{$questionId}'>";                  
+            
+            $head_content .= "
+            <script>
+
+                // Calculate the user's answers
+                function user_answers_calculation(draggableItem) {
+                    var pool_id = draggableItem.attr('data-pool-id');
+                    const parts = pool_id.split('_');
+                    const number = parseInt(parts[1], 10);
+                    const arr = [];
+                    const blanks = document.querySelectorAll('.blank');
+                    blanks.forEach(blank => {
+                        const dataCardId = blank.getAttribute('data-card-id');
+                        const partscard = dataCardId.split('_');
+                        const cardId = parseInt(partscard[1], 10);
+                        if (cardId == number) {
+                            const dataAnswer = blank.getAttribute('data-answer');
+                            const draggable = blank.querySelector('.dropped-word');
+                            const dataWord = draggable ? draggable.getAttribute('data-word') : null;
+                            arr.push({ dataAnswer, dataWord });
+                        }
+                    });
+                    const jsonStr = JSON.stringify(arr);
+                    document.getElementById('arrInput_'+number).value = jsonStr;
+                }
+
+                // Initialize draggable pool words
+                function initializePoolDraggable() {
+                    $('.draggable').each(function() {
+                        $(this).draggable({
+                            revert: 'invalid',
+                            cursor: 'move',
+                            helper: 'clone',
+                            zIndex: 100,
+                            start: function(event, ui) {
+                                $(this).data('dragging', true);
+                                // Calculate the user's answers
+                                user_answers_calculation($(this));
+                            },
+                            drag: function(event, ui) {
+                                // Calculate the user's answers
+                                user_answers_calculation($(this));
+                            },
+                            stop: function(event, ui) {
+                                $(this).data('dragging', false);
+                                // Calculate the user's answers
+                                user_answers_calculation($(this));
+                            }
+                        });
+                    });
+                }
+
+                $(function() {
+
+                    // Initialize drag on pool items
+                    initializePoolDraggable();
+
+                    // Make blanks droppable
+                    $('.blank').droppable({
+                        accept: '.draggable',
+                        hoverClass: 'hovered',
+                        drop: function(event, ui) {
+                            var thisBlank = $(this);
+                            var thisCardOfBlank = $(this).attr('data-card-id');
+
+                            // If blank already has a word, do nothing
+                            if (thisBlank.children().length > 0) {
+                                alert('The blank is not empty!');
+                                return;
+                            }
+
+                            // Remove the dragged word from pool immediately
+                            var draggedWord = ui.draggable;
+
+                            // Do not drop a word to a blank of other question
+                            var word = draggedWord.clone();
+                            var poolOfWord = word.attr('data-pool-id');
+                            if (thisCardOfBlank!=poolOfWord){
+                                return;
+                            }
+
+                            // Remove from pool
+                            draggedWord.remove(); // Remove from pool
+
+                            // Clone the dragged word for placement
+                            var word = draggedWord.clone();
+                            word.addClass('dropped-word');
+
+                            // Make the dropped word draggable to allow removal
+                            word.draggable({
+                                revert: 'invalid',
+                                helper: 'clone',
+                                zIndex: 100,
+                                start: function(event, ui) {
+                                    $(this).data('dragging', true);
+                                }
+                            });
+
+                            // Append to blank
+                            thisBlank.empty().append(word);
+
+                            // Calculate the user's answers
+                            user_answers_calculation(word);
+
+                            // Add click to remove the word and return it to pool
+                            word.on('click', function() {
+                                // Get pool id
+                                var pool_id = $(this).attr('data-pool-id');
+                                
+                                // Remove the word from blank
+                                $(this).remove();
+
+                                // Return the original draggable to pool
+                                $('#'+pool_id).append(draggedWord);
+
+                                // Remove the 'dropped-word' class to make it draggable again
+                                draggedWord.removeClass('dropped-word');
+
+                                // Calculate the user's answers
+                                user_answers_calculation($(this));
+
+                                console.log('Clicking the draggable word to remove it from a blank ...');
+
+                                // Reinitialize all pool draggable items
+                                initializePoolDraggable();
+                            });
+
+                        }
+                    });
+
+                });
+            </script>";
+            
         }
     } // end for()
     if ($answerType == MATCHING && $nbrAnswers>0) {
@@ -500,7 +646,7 @@ function display_exercise($exercise_id): void
                             $tool_content .= "</td></tr>";
                         } else {
                             $tool_content .= "<tr><td>" . standard_text_escape($answerTitle) . "</td>";
-                            $tool_content .= "<td>" . $answer->answer[$answerCorrect] . "&nbsp;&nbsp;&nbsp;<strong><small>($langScore: $answerWeighting)</small></strong></td>";
+                            $tool_content .= "<td>" . $answer->answer[$answerCorrect] . "&nbsp;&nbsp;&nbsp;<strong><small class='text-nowrap'>($langScore: $answerWeighting)</small></strong></td>";
                             $tool_content .= "</tr>";
                         }
                     }
@@ -535,4 +681,14 @@ function display_exercise($exercise_id): void
                             </div>
                           </div>";
     }
+}
+
+function replaceBracketsWithBlanks($text,$cardId) {
+    // Use preg_replace_callback to find all brackets
+    return preg_replace_callback('/\[(\d+)\]/', function($matches) use ($cardId) {
+        $blankId = htmlspecialchars($matches[1]);
+        // Return a span element with data-blank-id attribute
+        $card = "words_" . $cardId;
+        return "<span class='blank' data-answer='$blankId' data-blank-id='$blankId' data-card-id='$card'></span>";
+    }, $text);
 }

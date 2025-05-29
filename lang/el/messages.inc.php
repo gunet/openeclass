@@ -2150,6 +2150,13 @@ $langQuestionModerate = "Μέτρια";
 $langQuestionDifficult = "Δύσκολη";
 $langQuestionVeryDifficult = "Πολύ δύσκολη";
 $langCheckAccess = "Έλεγχος πρόσβασης";
+$langDragAndDropText = "Drag and Drop κειμένου";
+$langInfoDragAndDropText = "Πληκτρολογείστε το κείμενο σας παρακάτω και χρησιμοποιήστε αγκύλες περιλαμβάνοντας τον μοναδικό αριθμό που θα αντιστοιχεί στην σωστή απάντηση.</br>
+                            Π.χ στο παρακάτω κείμενο η αγκύλη [1] αντιστοιχεί ως απάντηση στην επιλογή 1 ενώ η αγκύλη [2] αντιστοιχεί στην επιλογή 2.";
+$langPlaceholderDragAndDropText = "Πρωτεύουσα της Ελλάδας είναι [1] ενώ πρωτεύουσα της Γερμανίας είναι [2] ."; ;
+$langAthens = "Αθήνα";
+$langBerlin = "Βερολίνο";
+$langErrorWithChoicesAsAnswers = "Υπάρχει λάθος στην αντιστοιχία των απαντήσεων";
 
 // answer_admin.php
 $langWeightingForEachBlank = "Δώστε ένα βάρος σε κάθε κενό";
