@@ -23,14 +23,15 @@ foreach (ExtAppManager::$AppCategories as $category => $appNames) {
         require_once strtolower($appName) . '.php';
     }
 }
+require_once realpath(dirname(__FILE__)) . '/../../db/database.php';
 
 class ExtAppManager {
 
     public static $AppCategories = [
-        'general' => ['APITokenApp', 'H5PApp', 'TurnitinApp', 'LtiPublishApp', 'LimesurveyApp'],
+        'general' => ['APITokenApp', 'H5PApp', 'TurnitinApp', 'LtiPublishApp', 'LimesurveyApp', 'OpenBadgesApp'],
         'teleconference' => ['BBBApp', 'ZoomApp', 'WebexApp','GoogleMeetApp', 'JitsiApp', 'MicrosoftTeamsApp', 'OpenDelosApp'],
         'cloud' => ['GoogleDriveApp', 'OneDriveApp', 'DropBoxApp', 'OwnCloudApp', 'WebDAVApp', 'FTPApp'],
-        'other' => ['AnalyticsApp', 'AntivirusApp', 'secondfaApp', 'UserWayApp', 'AutojudgeApp', 'ColmoocApp', 'UnPlagApp', 'UnPlagApp'],
+        'other' => ['AnalyticsApp', 'AntivirusApp', 'secondfaApp', 'UserWayApp', 'AutojudgeApp', 'ColmoocApp', 'UnPlagApp'],
     ];
 
 

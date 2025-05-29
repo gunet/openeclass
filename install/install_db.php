@@ -2182,6 +2182,21 @@ $db->query("CREATE TABLE `user_certificate` (
   foreign key (`certificate`) references `certificate` (`id`)
 ) $tbl_options");
 
+$db->query("CREATE TABLE IF NOT EXISTS `backpack_provider` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `name` VARCHAR(255) NOT NULL,
+    `api_url` VARCHAR(512) NOT NULL,
+    `basic_auth_access_token` VARCHAR(512) DEFAULT NULL,
+    `refresh_access_token` VARCHAR(512) DEFAULT NULL,
+    `client_id` VARCHAR(255) DEFAULT NULL,
+    `client_secret` VARCHAR(255) DEFAULT NULL,
+    `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    `active` TINYINT(1) NOT NULL DEFAULT 1,
+    `ob_version` ENUM('2.0', '2.1', '3.0') DEFAULT '2.1',
+    UNIQUE KEY (`name`)
+) $tbl_options");
+
 $db->query("CREATE TABLE `user_badge` (
   `id` int(11) not null auto_increment primary key,
   `user` int(11) not null,

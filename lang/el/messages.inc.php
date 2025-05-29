@@ -7062,3 +7062,17 @@ $langNowAllowNullDuration = "Η διάρκεια δεν μπορεί να είν
 $langDownloadPdfNotAllowed = "Μη επιτρεπτή λήψη αρχείου";
 $langDisplayRightContentInCPage = "Εμφάνιση ημερολογίου, ανακοινώσεων κ.λπ.";
 $langCoursePage = "Σελίδα $langsOfCourse";
+// Backpack external provider
+$langBackpackExternalProvider = "Προσθήκη Εξωτερικού Παρόχου OpenBadge Backpack";
+$langBackpackExternalProviderTitle = "Τίτλος";
+$langBackpackExternalProviderDescription = "Περιγραφή";
+$langBackpackExternalProviderEnabled = "Ενεργοποιημένο";
+$langBackpackExternalProviderDisabled = "Απενεργοποιημένο";
+$langBackpackExternalProviderAPIURL = "API URL";
+$langBackpackExternalProviderBasicAuthAccessToken = "Διακριτικό Πρόσβασης Βασικής Εξουσιοδότησης";
+$langNewBackpackProvider = "Προσθήκη νέου παρόχου Backpack";
+$langNoAvailableBackpackProvider = "Δεν υπάρχουν διαθέσιμοι πάροχοι OpenBadge backpack";
+$langBackpackProvider = "Όνομα παρόχου Backpack";
+$langBackpackProviderUrl = "API Backpack URL";
+$langOpenBadgesShortDescription = "Διασύνδεση με υπηρεσία Open Badges";
+$langOpenBadgesLongDescription = "Διασύνδεση με υπηρεσία Open Badges";
