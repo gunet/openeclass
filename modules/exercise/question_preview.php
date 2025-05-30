@@ -78,7 +78,8 @@ if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerTyp
         <td><strong>$langAnswer</strong></td>
         <td><strong>$langComment</strong></td>
       </tr>";
-} elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT || $answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) {
+} elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT 
+            || $answerType == FILL_IN_FROM_PREDEFINED_ANSWERS || $answerType == DRAG_AND_DROP_TEXT) {
     $tool_content .= "<tr class='active'><td><strong>$langAnswer</strong></td></tr>";
 } elseif ($answerType == MATCHING) {
     $tool_content .= "
@@ -155,6 +156,18 @@ if ($answerType != FREE_TEXT) {
                   <tr>
                     <td>$formatted_answer_text&nbsp;&nbsp;&nbsp;<strong><small>($langScore: $answer_weight)</small></strong>
                     </td>
+                  </tr>";
+            } elseif($answerType == DRAG_AND_DROP_TEXT){
+                $quetionText = $answer->get_drag_and_drop_text();
+                $gradesOfAnswers = $answer->get_drag_and_drop_answer_grade();
+                $AnswersGradeArr= [];
+                foreach ($gradesOfAnswers as $gr) {
+                    $AnswersGradeArr[] = $gr;
+                }
+                $AnswersGrade = implode(':', $AnswersGradeArr);
+                $tool_content .= "
+                  <tr>
+                    <td>" . standard_text_escape($quetionText) . " <strong><small>($langScore: $AnswersGrade)</small></strong></td>
                   </tr>";
             } else {
                 $tool_content .= "

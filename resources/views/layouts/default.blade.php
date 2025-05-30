@@ -47,6 +47,7 @@
     {{-- jQuery --}}
     <script type="text/javascript" src="{{ $urlAppend }}js/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" src="{{ $urlAppend }}js/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="{{ $urlAppend }}js/jquery.ui.touch-punch.min.js"></script>
 
     {{-- Bootstrap v5 js --}}
     <script type="text/javascript" src="{{ $urlAppend }}js/bootstrap.bundle.min.js?v={{ $cache_suffix }}"></script>

@@ -5626,7 +5626,8 @@ function theme_initialization() {
             $styles_str .= "
                 .text-danger,
                 .Accent-200-cl,
-                .label.label-danger{
+                .label.label-danger,
+                .blank.ui-droppable-active.ui-droppable-hover.hovered .dropped-word{
                     color: $theme_options_styles[ColorRedText] !important;
                 }
             ";
@@ -5635,10 +5636,12 @@ function theme_initialization() {
             $styles_str .= "
                 .text-success,
                 .Success-200-cl,
-                .label.label-success{
+                .label.label-success,
+                .blank.ui-droppable-active.ui-droppable-hover.hovered{
                     color: $theme_options_styles[ColorGreenText] !important;
                 }
-                .active-unit::after{
+                .active-unit::after,
+                .blank:has(.dropped-word){
                     background: $theme_options_styles[ColorGreenText] !important;
                 }
             ";
@@ -7994,7 +7997,8 @@ function theme_initialization() {
                     border-color: $theme_options_styles[clBorderInput] !important;
                 }
 
-                .input-border-color {
+                .input-border-color,
+                .blank {
                     border-color: $theme_options_styles[clBorderInput] ;
                 }
 
@@ -8006,6 +8010,10 @@ function theme_initialization() {
 
                 .wallWrapper textarea:focus{
                     border-color: $theme_options_styles[clBorderInput] ;
+                }
+
+                .blank{
+                    border: solid 1px $theme_options_styles[clBorderInput] ;
                 }
 
             ";

@@ -2157,6 +2157,8 @@ $langPlaceholderDragAndDropText = "Πρωτεύουσα της Ελλάδας ε
 $langAthens = "Αθήνα";
 $langBerlin = "Βερολίνο";
 $langErrorWithChoicesAsAnswers = "Υπάρχει λάθος στην αντιστοιχία των απαντήσεων";
+$langDragAndDropText = "Drag and drop κειμένου";
+$langCalcelDroppableItem = "Μπορείτε να αναιρέσετε την απάντησή σας κάνοντας κλικ πάνω στην λέξη.";
 
 // answer_admin.php
 $langWeightingForEachBlank = "Δώστε ένα βάρος σε κάθε κενό";

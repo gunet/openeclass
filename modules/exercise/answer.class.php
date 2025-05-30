@@ -413,6 +413,34 @@ if (!class_exists('Answer')):
             
         }
 
+        public function get_drag_and_drop_answer_grade_as_text() {
+
+            $resultArray = [];
+            $questionId = $this->questionId;
+            $answer = Database::get()->querySingle("SELECT answer FROM exercise_answer WHERE question_id = ?d", $questionId);
+            if ($answer) {
+                $q = explode('::',$answer->answer);
+                if (count($q) > 1) {
+                    $items = explode(',', $q[1]);
+                    $cleanedItems = [];
+                    foreach ($items as $item) {
+                        $item = trim($item);
+                        $parts = explode('|', $item);
+                        if (count($parts) == 3) {
+                            $cleanedItems[] = $parts[0] . "|" . $parts[2];
+                        }
+                    }
+                    $cleanedString = implode(',', $cleanedItems);
+                    foreach ($cleanedItems as $item) {
+                        $arr = explode('|', $item);
+                        $resultArray[$arr[0]] = $arr[1]; // cast to int if needed
+                    }
+                }
+            } 
+
+            return implode(',',$resultArray);
+        }
+
 
     }
 endif;

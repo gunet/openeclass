@@ -411,7 +411,10 @@ if (count($exercise_question_ids) > 0) {
                     list($answer, $answerWeighting) = Question::blanksSplitAnswer($answer);
                 } elseif ($answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) {
                     $answer_array = unserialize($answer);
-                }  else {
+                } elseif ($answerType == DRAG_AND_DROP_TEXT) {
+                    $answer = $objAnswerTmp->get_drag_and_drop_text();
+                    $answerWeighting = $objAnswerTmp->get_drag_and_drop_answer_grade();
+                } else {
                     $answer = standard_text_escape($answer);
                 }
                 $grade = 0;
@@ -431,7 +434,11 @@ if (count($exercise_question_ids) > 0) {
                             $grade = $answerWeighting;
                         }
                         break;
-
+                    case DRAG_AND_DROP_TEXT :
+                        $arrResult = drag_and_drop_user_results_as_text($eurid,$row->question_id);
+                        $answer = $arrResult[0]['aboutUserAnswers'];
+                        $questionScore = $arrResult[0]['aboutUserGrade'];
+                        break;
                     case FILL_IN_BLANKS :
                     case FILL_IN_BLANKS_TOLERANT :
                         // splits weightings that are joined with a comma
@@ -599,7 +606,7 @@ if (count($exercise_question_ids) > 0) {
 
                 } // end switch()
 
-                if ($regrade and !in_array($answerType, [FILL_IN_BLANKS_TOLERANT, FILL_IN_BLANKS, FILL_IN_FROM_PREDEFINED_ANSWERS, MATCHING])) {
+                if ($regrade and !in_array($answerType, [FILL_IN_BLANKS_TOLERANT, FILL_IN_BLANKS, FILL_IN_FROM_PREDEFINED_ANSWERS, MATCHING, DRAG_AND_DROP_TEXT])) {
                     Database::get()->query('UPDATE exercise_answer_record
                         SET weight = ?f
                         WHERE eurid = ?d AND question_id = ?d AND answer_id = ?d',
@@ -645,6 +652,8 @@ if (count($exercise_question_ids) > 0) {
                         $tool_content .= "</td></tr>";
                     } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT || $answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) {
                         $tool_content .= "<tr><td>" . standard_text_escape(nl2br($answer)) . "</td></tr>";
+                    } elseif ($answerType == DRAG_AND_DROP_TEXT) {
+                        $tool_content .= "<tr><td>$answer</td></tr>";
                     } elseif ($answerType == MATCHING) {
                         $tool_content .= "<tr><td><div class='d-flex align-items-center'><div class='d-flex align-items-end m-1 me-2 col-6'>" . q($answer) . "</div>";
                         $tool_content .= "<div class='d-flex align-items-center col-6 m-1 me-2'>" . $choice[$answerId];
@@ -852,4 +861,47 @@ if (isset($_GET['pdf'])) {
     $mpdf->Output("$course_code exercise_results.pdf", 'I'); // 'D' or 'I' for download / inline display
 } else {
     draw($tool_content, 2, null, $head_content);
+}
+
+
+function drag_and_drop_user_results_as_text($eurid,$questionId) {
+    $objAnswerTmp = new Answer($questionId);
+    $ex_answer = Database::get()->querySingle("SELECT answer FROM exercise_answer WHERE question_id = ?d", $questionId)->answer;
+    $ex_answer = $objAnswerTmp->get_drag_and_drop_text();
+
+    $definedAnswers = $objAnswerTmp->get_drag_and_drop_answer_text();
+    // Create an array of new indexes starting from 1
+    $keys = range(1, count($definedAnswers));
+    // Combine the new keys with the original values
+    $definedAnswers = array_combine($keys, $definedAnswers);
+
+    $ex_user_record = Database::get()->queryArray("SELECT answer,answer_id,weight FROM exercise_answer_record WHERE eurid = ?d AND question_id = ?d", $eurid, $questionId);
+
+    $userGrade = 0;
+    // Use preg_replace_callback to find all [number] patterns
+    $result = preg_replace_callback('/\[(\d+)\]/', function($matches) use ($definedAnswers, $ex_user_record, &$userGrade) {
+        $bracket = (int)$matches[1];
+        if ($bracket > 0) {
+            // Here we create the answer like [user_answer / defined_answer] .
+            foreach ($ex_user_record as $an) {
+                if ($an->answer_id == $bracket) {
+                    if ($an->answer == $definedAnswers[$bracket]) { // correct answer
+                        $userGrade += $an->weight;
+                        return "[" . "<strong>".$an->answer."</strong>" . "&nbsp;/&nbsp;" . $definedAnswers[$bracket] . "]" . "&nbsp;&nbsp;<span class='fa-solid fa-check text-success'></span>";
+                    } else {
+                        if (!empty($an->answer)) {
+                            return "[" . "<span class='text-danger'><s>".$an->answer."</s></span>" . "&nbsp;/&nbsp;" . $definedAnswers[$bracket] . "]" . "&nbsp;&nbsp;<span class='fa-solid fa-xmark text-danger'></span>";
+                        } else {
+                            return "[" . "<span>&nbsp;&nbsp;&nbsp;</span>" . "/&nbsp;" . $definedAnswers[$bracket] . "]" . "&nbsp;&nbsp;<span class='fa-solid fa-xmark text-danger'></span>";
+                        }
+                    }
+                }
+            }
+        }
+        return $matches[0];
+    }, $ex_answer);
+
+    $arr[] = ['aboutUserAnswers' => $result, 'aboutUserGrade' => $userGrade];
+
+    return $arr;
 }

@@ -31,7 +31,7 @@ function showQuestion(&$objQuestionTmp, $question_number, array $exerciseResult 
     global $tool_content, $picturePath, $langNoAnswer, $langQuestion,
             $langColumnA, $langColumnB, $langMakeCorrespond, $langInfoGrades,
             $exerciseType, $nbrQuestions, $langInfoGrade, $langHasAnswered,
-           $langClearChoice, $langSelect, $head_content;
+           $langClearChoice, $langSelect, $head_content, $langCalcelDroppableItem;
 
     $questionId = $objQuestionTmp->selectId();
     $questionWeight = $objQuestionTmp->selectWeighting();
@@ -215,6 +215,7 @@ function showQuestion(&$objQuestionTmp, $question_number, array $exerciseResult 
             $list_answers = $objAnswerTmp->get_drag_and_drop_answer_text();
             $question_text = replaceBracketsWithBlanks($question_text,$questionId);
 
+            $tool_content .= "<div class='col-12 mb-4'><small class='Accent-200-cl'>(*)$langCalcelDroppableItem</small></div>";
             $tool_content .= "<div class='col-12'>$question_text</div>";
             $tool_content .= "<div class='col-12 d-flex justify-content-start align-items-center gap-4 flex-wrap mt-4' id='words_{$questionId}'>";
             foreach ($list_answers as $an) {
@@ -566,7 +567,8 @@ function display_exercise($exercise_id): void
                   <td colspan='2'><strong>$langAnswer</strong></td>
                   <td><strong>$langComment</strong></td>
                 </tr>";
-            } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT || $answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) {
+            } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT 
+                        || $answerType == FILL_IN_FROM_PREDEFINED_ANSWERS || $answerType == DRAG_AND_DROP_TEXT) {
                 $tool_content .= "<tr class='active'><td><strong>$langAnswer</strong></td></tr>";
             } elseif ($answerType == MATCHING) {
                 $tool_content .= "
@@ -639,6 +641,17 @@ function display_exercise($exercise_id): void
                             $tool_content .= "<tr><td>" . $formatted_answer_text;
                             $tool_content .= "&nbsp;&nbsp;&nbsp;<strong><small>($langScore: $answer_weight)</small></strong>";
                             $tool_content .= "</td></tr>";
+                        } elseif ($answerType == DRAG_AND_DROP_TEXT) {
+                            $quetionText = $answer->get_drag_and_drop_text();
+                            $gradesOfAnswers = $answer->get_drag_and_drop_answer_grade();
+                            $AnswersGradeArr= [];
+                            foreach ($gradesOfAnswers as $gr) {
+                                $AnswersGradeArr[] = $gr;
+                            }
+                            $AnswersGrade = implode(':', $AnswersGradeArr);
+                            $tool_content .= "<tr>
+                                                <td>" . standard_text_escape($quetionText) . "&nbsp;&nbsp;&nbsp;<strong><small class='text-nowrap'>($langScore: $AnswersGrade)</small></strong></td>
+                                              </tr>";
                         } else {
                             $tool_content .= "<tr><td>" . standard_text_escape($answerTitle) . "</td>";
                             $tool_content .= "<td>" . $answer->answer[$answerCorrect] . "&nbsp;&nbsp;&nbsp;<strong><small class='text-nowrap'>($langScore: $answerWeighting)</small></strong></td>";

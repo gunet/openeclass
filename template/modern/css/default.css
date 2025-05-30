@@ -5967,18 +5967,24 @@ th.grade-col a{
 }
 
 /******************************** EXERCISE QUESTIONS ************************************/
-
+/* DRAG AND DROP TEXT */
 .blank {
   display: inline-block;
-  width: 100px;
+  min-width: 100px;
   height: 40px;
-  border: 1px solid #2B3944;
+  border: solid 1px #2B3944;
   margin-top: 15px;
   margin-left: 10px;
   margin-right: 10px;
 }
 .blank:has(.dropped-word){
-  background-color: #e8e8e8;
+  background-color: #1E7E0E;
+}
+.blank.ui-droppable-active.ui-droppable-hover.hovered{
+  box-shadow: 0 0 0 2px #1E7E0E;
+}
+.blank.ui-droppable-active.ui-droppable-hover.hovered .dropped-word{
+  box-shadow: 0 0 0 2px #C44601;
 }
 
 .draggable {
@@ -5993,4 +5999,5 @@ th.grade-col a{
   display: flex;
   align-items: center;
   justify-content: center;
+  min-width: 50px;
 }
