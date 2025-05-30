@@ -834,8 +834,8 @@ if (isset($_GET['modifyAnswers'])) {
                                     <tbody>";
                                     for ($i=0; $i<$nbrAnswers; $i++) {
                                         $chAns = $i+1;
-                                        $choiceAsAnswer = (count($choices_from_db) > 0) ? $choices_from_db[$i] : $_POST['choice_answer'][$i];
-                                        $choiceAsGrade = (count($grades_from_db) > 0) ? $grades_from_db[$i] : $_POST['choice_grade'][$i];
+                                        $choiceAsAnswer = ((count($choices_from_db) > 0) && array_key_exists($i,$choices_from_db)) ? $choices_from_db[$i] : $_POST['choice_answer'][$i] ?? '';
+                                        $choiceAsGrade = ((count($grades_from_db) > 0) && array_key_exists($i,$grades_from_db)) ? $grades_from_db[$i] : $_POST['choice_grade'][$i] ?? 0;
                                         $tool_content .= "
                                         <tr>
                                             <td>[{$chAns}]</td>

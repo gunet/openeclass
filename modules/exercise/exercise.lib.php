@@ -296,7 +296,7 @@ function showQuestion(&$objQuestionTmp, $question_number, array $exerciseResult 
                             var word = draggedWord.clone();
                             var poolOfWord = word.attr('data-pool-id');
                             if (thisCardOfBlank!=poolOfWord){
-                                alert('You try to fill in a blank to other question!');
+                                alert('You are trying to fill in a blank to other question!');
                                 return;
                             }
 

@@ -5981,7 +5981,7 @@ th.grade-col a{
   background-color: #1E7E0E;
 }
 .blank.ui-droppable-active.ui-droppable-hover.hovered{
-  box-shadow: 0 0 0 2px #1E7E0E;
+  box-shadow: 0 0 5px 5px #1E7E0E;
 }
 .blank.ui-droppable-active.ui-droppable-hover.hovered .dropped-word{
   box-shadow: 0 0 0 2px #C44601;
