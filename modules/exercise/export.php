@@ -97,9 +97,14 @@ if ($exerciseId) { // Export questions from specific exercise
                             question_id NOT IN (SELECT question_id FROM `exercise_with_questions` WHERE exercise_id = ?d))
                             GROUP BY exercise_question.id, question, `type` ORDER BY question";
         } else {
-            $result_query = "SELECT exercise_question.id, question, `type` FROM `exercise_question` LEFT JOIN `exercise_with_questions`
-                            ON question_id = exercise_question.id WHERE course_id = ?d $extraSql
-                            GROUP BY exercise_question.id, question, type ORDER BY question";
+            $result_query = "SELECT exercise_question.id, question, `type` FROM `exercise_question` 
+                            LEFT JOIN `exercise_with_questions`
+                                ON question_id = exercise_question.id 
+                            LEFT JOIN exercise_question_cats 
+                                ON exercise_question.category = question_cat_id
+                            WHERE exercise_question.course_id = ?d $extraSql
+                            GROUP BY exercise_question.id, question, type 
+                            ORDER BY question_cat_name, question";
         }
         // forces the value to 0
         $exerciseId = 0;
@@ -113,6 +118,7 @@ foreach ($exercises as $exercise) {
 }
 
 $result = Database::get()->queryArray($result_query, $result_query_vars);
+
 $tool_content = "
 <!DOCTYPE html>
 <html lang='el'>
@@ -165,7 +171,7 @@ foreach ($result as $row) {
     $picturePath = "courses/$course_code/image/quiz-{$row->id}";
     $tool_content .= "
         <h3>$question_title</h3>
-        <small>$question_type_legend &ndash; id: {$row->id}</small><br>" .
+        <small>$question_type_legend &ndash; Νο: {$row->id}</small><br>" .
         (file_exists($picturePath)? "<img class='img-responsive' src='$picturePath' alt=''>": '') .
         $question_description .
         question_html($question, $row->id) . "
