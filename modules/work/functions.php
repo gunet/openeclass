@@ -583,6 +583,7 @@ function display_student_assignment($id, $on_behalf_of = false) {
     $data['group_select_hidden_input'] = $group_select_hidden_input;
     $data['group_select_form'] = $group_select_form;
     $data['grade_field'] = $grade_field;
+    $data['rich_text_editor'] = rich_text_editor('submission_text', 10, 20, '');
     $data['id'] = $id;
     $data['on_behalf_of'] = $on_behalf_of;
     $data['submissions_exist'] = $submissions_exist;
@@ -1045,7 +1046,7 @@ function display_submission_details($id) {
 
     global $uid, $course_id, $langSubmittedAndGraded, $course_code,
            $urlAppend, $langOfGroup, $langGroupSubmit, $langYourGroup,
-           $head_content, $langSubmitted,$langSubmittedByOtherMember,
+           $head_content, $langSubmitted,$langSubmittedByOtherMember, $langClose,
            $langDownload, $langPrint, $langFullScreen, $langNewTab, $langCancel;
 
     load_js('tools.js');
@@ -1070,6 +1071,12 @@ function display_submission_details($id) {
                     title: assignment_title,
                     size: 'large',
                     message: data.submission_text? data.submission_text: '',
+                    buttons: {
+                                ok: {
+                                    label: '". js_escape($langClose). "',
+                                    className: 'submitAdminBtnDefault'
+                                }
+                            }
                 });
               },
               error: function(xhr, textStatus, error){
