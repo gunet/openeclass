@@ -258,6 +258,21 @@ if (isset($submitAnswers) || isset($buttonBack)) {
             }
         }
 
+        // Check for duplicates items about the unique number of a blank
+        $countsArr = array_count_values($totalAnsFromText);
+        $hasDuplicates = false;
+        foreach ($countsArr as $value => $count) {
+            if ($count > 1) {
+                $hasDuplicates = true;
+                break;
+            }
+        }
+        if ($hasDuplicates) {
+            Session::flash('message', $langErrorWithUniqueNumberOfBlank);
+            Session::flash('alert-class', 'alert-warning');
+            redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId&modifyAnswers=$_GET[modifyAnswers]");
+        }
+
         $totalAnsFromChoices = [];
         if (isset($_POST['choice_answer'])) {
             foreach ($_POST['choice_answer'] as $index => $value) {
@@ -265,42 +280,40 @@ if (isset($submitAnswers) || isset($buttonBack)) {
             }
         }
 
-        // If the number of answers is diffent than the number of brackets stop processing.
-        sort($totalAnsFromText);
-        sort($totalAnsFromChoices);
-        if ($totalAnsFromText == $totalAnsFromChoices) {
-            // insert to db
-            // If a brucket of text equals with index of choice then add the corresponding answer.
-            $choicesAnsArr = [];
-            foreach ($totalAnsFromText as $inde_x) {
-                $choicesAnsArr[] = $inde_x . '|' . $_POST['choice_answer'][$inde_x] . '|' . $_POST['choice_grade'][$inde_x];
-            }
-            $choices_ans = '';
-            if (count($choicesAnsArr) > 0) {
-                $choices_ans = implode(',', $choicesAnsArr);
-                $choices_ans = '::' . $choices_ans;
-            }
-
-            $reponse = $q_text . $choices_ans;
-            $objAnswer->createAnswer($reponse, 0, '', 0, 1);
-            $objAnswer->save();
-
-            if (isset($_POST['choice_grade'])) {
-                $weighting = array_map('fix_float', $_POST['choice_grade']);
-                $weighting = array_map('abs', $weighting);
-                $questionWeighting = array_sum($weighting);
-                $objQuestion->updateWeighting($questionWeighting);
-                if (isset($exerciseId)) {
-                    $objQuestion->save($exerciseId);
-                } else {
-                    $objQuestion->save();
-                }
-            }
-
-        } else {
-            Session::flash('message',$langErrorWithChoicesAsAnswers);
+        // The total number of defined answers can be the same or bigger than the total number of the question blanks.
+        $totalNumberOfBlanks = count($totalAnsFromText);
+        $totalNumberOfDefinedAnswers = count($totalAnsFromChoices);
+        if ($totalNumberOfBlanks > $totalNumberOfDefinedAnswers) {
+            Session::flash('message', $langErrorWithChoicesAsAnswers);
             Session::flash('alert-class', 'alert-warning');
             redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId&modifyAnswers=$_GET[modifyAnswers]");
+        }
+
+        sort($totalAnsFromText);
+        sort($totalAnsFromChoices);
+        $choicesAnsArr = [];
+        foreach ($totalAnsFromChoices as $inde_x) {
+            $choicesAnsArr[] = $inde_x . '|' . $_POST['choice_answer'][$inde_x] . '|' . $_POST['choice_grade'][$inde_x];
+        }
+        $choices_ans = '';
+        if (count($choicesAnsArr) > 0) {
+            $choices_ans = implode(',', $choicesAnsArr);
+            $choices_ans = '::' . $choices_ans;
+        }
+
+        $reponse = $q_text . $choices_ans;
+        $objAnswer->createAnswer($reponse, 0, '', 0, 1);
+        $objAnswer->save();
+        if (isset($_POST['choice_grade'])) {
+            $weighting = array_map('fix_float', $_POST['choice_grade']);
+            $weighting = array_map('abs', $weighting);
+            $questionWeighting = array_sum($weighting);
+            $objQuestion->updateWeighting($questionWeighting);
+            if (isset($exerciseId)) {
+                $objQuestion->save($exerciseId);
+            } else {
+                $objQuestion->save();
+            }
         }
 
     }
