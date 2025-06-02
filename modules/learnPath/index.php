@@ -202,11 +202,11 @@ if ($is_editor) {
                         </div>";
                         $style = "caution";
                         $dialogBox .= "
-                        
+
                          <div class='col-12'>
                         <div class='form-wrapper form-edit rounded'><form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='POST'>
-                        
-                       
+
+
 
                         <div class='form-group'>
                             <label for='newPathName' class='col-sm-6 control-label-notes'>$langName</label>
@@ -215,7 +215,7 @@ if ($is_editor) {
                             </div>
                         </div>
 
-      
+
 
                         <div class='form-group mt-4'>
                             <label for='newComment' class='col-sm-6 control-label-notes'>$langDescription</label>
@@ -224,7 +224,7 @@ if ($is_editor) {
                             </div>
                         </div>
 
-           
+
 
                         <div class='form-group mt-5'>
                             <div class='col-12 d-flex justify-content-end align-items-center'>
@@ -250,29 +250,29 @@ if ($is_editor) {
                     $dialogBox = "<div class='d-lg-flex gap-4 mt-4'>
                         <div class='flex-grow-1'>
 
-                            <div class='form-wrapper form-edit rounded'><form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='POST'>                        
-                           
+                            <div class='form-wrapper form-edit rounded'><form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='POST'>
+
                                 <div class='form-group'>
                                     <label for='newPathName' class='col-sm-6 control-label-notes'>$langName <span class='asterisk Accent-200-cl'>(*)</span></label>
                                     <div class='col-sm-12'>
                                     <input name='newPathName' placeholder='$langName' type='text' class='form-control' id='newPathName'>
                                     </div>
                                 </div>
-                            
+
                                 <div class='form-group mt-4'>
                                     <label for='newComment' class='col-sm-6 control-label-notes'>$langDescription</label>
                                     <div class='col-sm-12'>
                                     <input name='newComment' placeholder='$langDescription' type='text' class='form-control' id='newComment'>
                                     </div>
                                 </div>
-                            
-                        
 
-                       
+
+
+
 
                                 <div class='form-group mt-5'>
                                     <div class='col-12 d-flex justify-content-end align-items-center'>
-                                    <input type='hidden' name='cmd' value='create'>                                    
+                                    <input type='hidden' name='cmd' value='create'>
                                         "
                                             .
                                                 form_buttons(array(
@@ -287,8 +287,8 @@ if ($is_editor) {
                                                     )
                                                 ))
                                                 .
-                                        "                                    
-                                    
+                                        "
+
                                     </div>
                                 </div>
                             </form>
@@ -329,23 +329,23 @@ $head_content .= "
                     });
                 }
             });
-            
+
             let confirmLpCleanAttemptHref;
-            
+
             $('#confirmLpCleanAttemptDialog').modal({
                 show: false,
                 keyboard: false,
                 backdrop: 'static'
             });
-            
+
             $('#confirmLpCleanAttemptDialog').on('show.bs.modal', function (event) {
               confirmLpCleanAttemptHref = $(event.relatedTarget).data('href');
             });
-        
+
             $('#confirmLpCleanAttemptCancel').click(function() {
                 $('#confirmLpCleanAttemptDialog').modal('hide');
             });
-        
+
             $('#confirmLpCleanAttemptOk').click(function() {
                 $('#confirmLpCleanAttemptDialog').modal('hide');
                 window.location.href = confirmLpCleanAttemptHref;
@@ -445,7 +445,7 @@ if ($uid) {
 }
 
 // list available learning paths
-$sql = "SELECT MIN(LP.name) AS name, MIN(LP.comment) AS lp_comment, 
+$sql = "SELECT MIN(LP.name) AS name, MIN(LP.comment) AS lp_comment,
                MIN(UMP.`raw`) AS minRaw,
                MIN(LP.`lock`) AS `lock`, MIN(LP.visible) AS visible,
                MIN(LP.learnPath_id) AS learnPath_id,
@@ -473,6 +473,7 @@ $is_blocked = false;
 $allow = false;
 $ind = 0;
 $globaltime = "00:00:00";
+$total_lpProgress = 0;
 foreach ($result as $list) { // while ... learning path list
     if ($list->visible == 0) {
         if ($is_editor) {
@@ -649,6 +650,7 @@ foreach ($result as $list) { // while ... learning path list
                         </td>";
     } elseif ($uid) {
         list($lpProgress, $lpTotalTime, $lpTotalStarted, $lpTotalAccessed, $lpTotalStatus, $lpAttemptsNb) = get_learnPath_progress_details($list->learnPath_id, $uid);
+        $total_lpProgress += $lpProgress;
         // time
         if (!empty($lpTotalTime)) {
             $globaltime = addScormTime($globaltime, $lpTotalTime);
@@ -669,12 +671,12 @@ if (!$is_editor && $iterator != 1 && $uid) {
         $globaltime = "";
     }
     // add a blank line between module progression and global progression
-    $total = round($lpProgress / ($iterator - 1));
+    $total = round($total_lpProgress / ($iterator - 1));
     $tool_content .= "
     <tr>
       <td class='text-start'><strong>$langTotal</strong>:</td>
       <td class='text-start'><strong>$globaltime</strong:</td>
-      <td class='text-end'>" . disp_progress_bar($total, 1) . "</td>
+      <td>" . disp_progress_bar($total, 1) . "</td>
     </tr>";
 }
 $tool_content .= "</tbody></table></div>";
