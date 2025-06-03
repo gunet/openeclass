@@ -31,7 +31,7 @@ function showQuestion(&$objQuestionTmp, $question_number, array $exerciseResult 
     global $tool_content, $picturePath, $langNoAnswer, $langQuestion,
             $langColumnA, $langColumnB, $langMakeCorrespond, $langInfoGrades,
             $exerciseType, $nbrQuestions, $langInfoGrade, $langHasAnswered,
-           $langClearChoice, $langSelect, $head_content, $langCalcelDroppableItem;
+           $langClearChoice, $langSelect, $head_content, $langCalcelDroppableItem, $webDir, $course_code;
 
     $questionId = $objQuestionTmp->selectId();
     $questionWeight = $objQuestionTmp->selectWeighting();
@@ -67,7 +67,10 @@ function showQuestion(&$objQuestionTmp, $question_number, array $exerciseResult 
                     $tool_content .= " <div class='mb-4'>$questionDescription</div>";
                 }
                 if (file_exists($picturePath . '/quiz-' . $questionId)) {
-                    $tool_content .= "<div class='mb-4'><img src='../../$picturePath/quiz-$questionId'></div>";
+                    $tool_content .= "<div id='image-container' style='position: relative; display: inline-block;'>
+                                        <img id='map-image' src='../../$picturePath/quiz-$questionId' style='width: 100%;'>
+                                        <canvas id='drawingCanvas-$questionId' style='position: absolute; top: 0; left: 0; z-index: 10;'></canvas>
+                                      </div>";
                 }
 
     // construction of the Answer object
@@ -223,136 +226,66 @@ function showQuestion(&$objQuestionTmp, $question_number, array $exerciseResult 
             }
             $tool_content .= "</div>
             
-            <input type='hidden' name='choice[$questionId]' id='arrInput_{$questionId}'>";                  
+            <input type='hidden' name='choice[$questionId]' id='arrInput_{$questionId}'>";
             
-            $head_content .= "
-            <script>
-
-                // Calculate the user's answers
-                function user_answers_calculation(draggableItem) {
-                    var pool_id = draggableItem.attr('data-pool-id');
-                    const parts = pool_id.split('_');
-                    const number = parseInt(parts[1], 10);
-                    const arr = [];
-                    const blanks = document.querySelectorAll('.blank');
-                    blanks.forEach(blank => {
-                        const dataCardId = blank.getAttribute('data-card-id');
-                        const partscard = dataCardId.split('_');
-                        const cardId = parseInt(partscard[1], 10);
-                        if (cardId == number) {
-                            const dataAnswer = blank.getAttribute('data-answer');
-                            const draggable = blank.querySelector('.dropped-word');
-                            const dataWord = draggable ? draggable.getAttribute('data-word') : null;
-                            arr.push({ dataAnswer, dataWord });
-                        }
-                    });
-                    const jsonStr = JSON.stringify(arr);
-                    document.getElementById('arrInput_'+number).value = jsonStr;
-                }
-
-                // Initialize draggable pool words
-                function initializePoolDraggable() {
-                    $('.draggable').each(function() {
-                        $(this).draggable({
-                            revert: 'invalid',
-                            cursor: 'move',
-                            helper: 'clone',
-                            zIndex: 100,
-                            start: function(event, ui) {
-                                $(this).data('dragging', true);
-                            },
-                            stop: function(event, ui) {
-                                $(this).data('dragging', false);
-                                // Calculate the user's answers
-                                user_answers_calculation($(this));
-                            }
-                        });
-                    });
-                }
-
-                $(function() {
-
-                    // Initialize drag on pool items
-                    initializePoolDraggable();
-
-                    // Make blanks droppable
-                    $('.blank').droppable({
-                        accept: '.draggable',
-                        hoverClass: 'hovered',
-                        drop: function(event, ui) {
-                            var thisBlank = $(this);
-                            var thisCardOfBlank = $(this).attr('data-card-id');
-
-                            // If blank already has a word, do nothing
-                            if (thisBlank.children().length > 0) {
-                                alert('The blank is not empty!');
-                                return;
-                            }
-
-                            // Remove the dragged word from pool immediately
-                            var draggedWord = ui.draggable;
-
-                            // Do not drop a word to a blank of other question
-                            var word = draggedWord.clone();
-                            var poolOfWord = word.attr('data-pool-id');
-                            if (thisCardOfBlank!=poolOfWord){
-                                alert('You are trying to fill in a blank to other question!');
-                                return;
-                            }
-
-                            // Remove from pool
-                            draggedWord.remove();
-
-                            // Clone the dragged word for placement
-                            var word = draggedWord.clone();
-                            word.addClass('dropped-word');
-
-                            // Append to blank
-                            thisBlank.empty().append(word);
-
-                            // Calculate the user's answers
-                            setTimeout(function() {
-                                user_answers_calculation(word);
-                            }, 500);
-
-                            // Make the dropped word draggable to allow removal
-                            word.draggable({
-                                revert: 'invalid',
-                                helper: 'clone',
-                                zIndex: 100,
-                                start: function(event, ui) {
-                                    $(this).data('dragging', true);
-                                }
-                            });
-
-                            // Add click to remove the word and return it to pool
-                            word.on('click', function() {
-                                // Get pool id
-                                var pool_id = $(this).attr('data-pool-id');
-                                
-                                // Remove the word from blank
-                                $(this).remove();
-
-                                // Return the original draggable to pool
-                                $('#'+pool_id).append(draggedWord);
-
-                                // Remove the 'dropped-word' class to make it draggable again
-                                draggedWord.removeClass('dropped-word');
-
-                                // Calculate the user's answers
-                                user_answers_calculation($(this));
-
-                                // Reinitialize all pool draggable items
-                                initializePoolDraggable();
-                            });
-
-                        }
-                    });
-
-                });
-            </script>";
+            drag_and_drop_process();
+            
             
         } elseif ($answerType == DRAG_AND_DROP_MARKERS) {
+
+            $question_text = $objAnswerTmp-> get_drag_and_drop_text();
+            $list_answers = $objAnswerTmp->get_drag_and_drop_answer_text();
+
+            $dropZonesDir = "$webDir/courses/$course_code/dropZones";
+            $dropZonesFile = "$dropZonesDir/dropZones_$questionId.json";
+            $arrDataMarkers = [];
+            if (file_exists($dropZonesFile)) {
+                $dataJsonFile = file_get_contents($dropZonesFile);
+                $markersData = json_decode($dataJsonFile, true);
+                // Loop through each item in the original array
+                foreach ($markersData as $item => $value) {
+                    if (count($value) == 9) {
+                        $arrDataMarkers[$value[0]['marker_id']] = [
+                                                                    'marker_answer' => $value[1]['marker_answer'],
+                                                                    'marker_shape' => $value[2]['shape_type'],
+                                                                    'marker_coordinates' => $value[3]['x'] . ',' . $value[4]['y'],
+                                                                    'marker_offsets' => $value[5]['endX'] . ',' . $value[6]['endY'],
+                                                                    'marker_grade' => $value[7]['marker_grade'],
+                                                                    'marker_radius' => $value[8]['marker_radius']
+                                                                ];
+                    }
+                }
+            }
+            foreach ($arrDataMarkers as $index => $m) {
+                $arr_m = explode(',', $m['marker_coordinates']);
+                $m['x'] = $arr_m[0];
+                $m['y'] = $arr_m[1];
+                $arr_of = explode(',', $m['marker_offsets']);
+                $m['endX'] = $arr_of[0];
+                $m['endY'] = $arr_of[1];
+                if ($m['marker_shape'] == 'circle') {
+                    $coordinatesXY[] = ['marker_id' => $index, 'x' => $m['x'], 'y' => $m['y'], 'shape_type' => $m['marker_shape'], 'radius' => $m['marker_radius']];
+                } elseif ($m['marker_shape'] == 'rectangle') {
+                    $coordinatesXY[] = ['marker_id' => $index, 'x' => $m['x'], 'y' => $m['y'], 'shape_type' => $m['marker_shape'], 'endY' => $m['endY'], 'endX' => $m['endX']];
+                }
+            }
+            $DataMarkersToJson = json_encode($coordinatesXY) ?? '';
+        
+            
+            $tool_content .= "<div class='col-12 mb-4'><small class='Accent-200-cl'>(*)$langCalcelDroppableItem</small></div>";
+            $tool_content .= "<div class='col-12 d-flex justify-content-start align-items-center gap-4 flex-wrap mt-4' id='words_{$questionId}'>";
+            foreach ($list_answers as $an) {
+                $tool_content .= "<div class='draggable' data-word='{$an}' data-pool-id='words_{$questionId}'>$an</div>";
+            }
+            $tool_content .= "</div>
+            
+            <input type='hidden' id='question-id' value='{$questionId}'>
+            <input type='hidden' name='choice[$questionId]' id='arrInput_{$questionId}'>
+            <input type='hidden' id='insertedMarkersAsJson' value='{$DataMarkersToJson}'>";                  
+            
+            createMarkersBlanksOnImage();
+            drag_and_drop_process();
+
 
         }
     } // end for()
@@ -703,4 +636,327 @@ function replaceBracketsWithBlanks($text,$cardId) {
         $card = "words_" . $cardId;
         return "<span class='blank' data-answer='$blankId' data-blank-id='$blankId' data-card-id='$card'></span>";
     }, $text);
+}
+
+// Function to create blanks
+function createMarkersBlanksOnImage() {
+    global $head_content;
+
+    $head_content .= "<script>
+
+    function drawCircleWithBlank(x, y, radius, fillColor = 'rgba(207, 207, 207, 0.8)', strokeColor = 'red', label = '', ctx, dataAttrs = {}) {
+        const container = document.getElementById('image-container');
+        if (!ctx || !container) {
+            console.error('Canvas context or container not found.');
+            return;
+        }
+
+        // Draw the blank rectangle at the center
+        const blankWidth = 100; // fixed size
+        const blankHeight = 40;
+
+        // Create overlay span positioned exactly at circle center
+        const blankDiv = document.createElement('span');
+        blankDiv.className = 'blank';
+
+        for (const key in dataAttrs) {
+            if (dataAttrs.hasOwnProperty(key)) {
+                blankDiv.setAttribute('data-' + key, dataAttrs[key]);
+            }
+        }
+
+        // Style the overlay span
+        blankDiv.style.position = 'absolute';
+        blankDiv.style.width = blankWidth + 'px';
+        blankDiv.style.height = blankHeight + 'px';
+        blankDiv.style.backgroundColor = 'white';
+        blankDiv.style.border = '1px solid grey';
+        blankDiv.style.boxSizing = 'border-box';
+        blankDiv.style.cursor = 'pointer';
+        blankDiv.style.zIndex = 20;
+
+        // Position the span relative to the container
+        blankDiv.style.left = x + 'px';
+        blankDiv.style.top = y + 'px';
+
+        // Center the span exactly over the point
+        blankDiv.style.transform = 'translate(-50%, -50%)';
+
+        // Append overlay to container
+        container.appendChild(blankDiv);
+    }
+
+    function drawRectangleWithBlank(x, y, width, height, fillColor = 'rgba(207, 207, 207, 0.8)', borderColor = 'grey', label = '', ctx, dataAttrs = {}) {
+        const container = document.getElementById('image-container');
+
+        // Dimensions for the blank span
+        const blankWidth = 100;
+        const blankHeight = 40;
+
+        // Center position for the blank rectangle
+        const blankX = x + (width - blankWidth) / 2;
+        const blankY = y + (height - blankHeight) / 2;
+
+
+        // Create the overlay span
+        const blankDiv = document.createElement('span');
+        blankDiv.className = 'blank';
+
+        for (const key in dataAttrs) {
+            if (dataAttrs.hasOwnProperty(key)) {
+                blankDiv.setAttribute('data-'+key, dataAttrs[key]);
+            }
+        }
+
+        // Get container's position relative to viewport
+        const containerRect = container.getBoundingClientRect();
+
+        // Position the span relative to the container
+        // Since the container's position is relative/absolute, 
+        // and the container's top-left is (0,0) for the overlay,
+        // we offset by the container's position
+        blankDiv.style.position = 'absolute';
+
+        // Set the position relative to the container
+        blankDiv.style.left = (containerRect.left + blankX - containerRect.left) + 'px'; // same as blankX
+        blankDiv.style.top = (containerRect.top + blankY - containerRect.top) + 'px'; // same as blankY
+
+        // For simplicity, just assign the position relative to container
+        // because the container is positioned relatively
+        blankDiv.style.left = blankX + 'px';
+        blankDiv.style.top = blankY + 'px';
+
+        // Set size and styles
+        blankDiv.style.width = blankWidth + 'px';
+        blankDiv.style.height = blankHeight + 'px';
+        blankDiv.style.backgroundColor = 'white';
+        blankDiv.style.border = '1px solid grey';
+        blankDiv.style.boxSizing = 'border-box';
+        blankDiv.style.cursor = 'pointer';
+        blankDiv.style.zIndex = 20;
+
+        // Append overlay to container
+        container.appendChild(blankDiv);
+    }
+
+    function drawPolygon(points, color = 'green', ctx) {
+        if (points.length < 2) return;
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(points[0].x, points[0].y);
+        for (let i = 1; i < points.length; i++) {
+            ctx.lineTo(points[i].x, points[i].y);
+        }
+        ctx.closePath();
+        ctx.stroke();
+    }
+
+    function loadShapes(qID) {
+        const canvas = $('#drawingCanvas-'+qID);
+        const ctx = canvas[0].getContext('2d');
+
+        // Clear existing shapes array
+        shapes = [];
+
+        // Clear canvas
+        ctx.clearRect(0, 0, canvas.width(), canvas.height());
+
+        // Parse shapes data from hidden input or server
+        let shapesData;
+        try {
+            shapesData = JSON.parse($('#insertedMarkersAsJson').val());
+        } catch (e) {
+            console.error('Invalid JSON data for shapes:', e);
+            return;
+        }
+
+        // Populate shapes array and draw each shape
+        if (shapesData) {
+            shapesData.forEach(shape => {
+                switch (shape.shape_type) {
+                    case 'circle':
+                        if (shape.radius !== undefined) {
+                            attributes = {
+                                            'answer': shape.marker_id,
+                                            'blank-id': shape.marker_id,
+                                            'card-id': 'words_'+qID
+                                         };
+                            drawCircleWithBlank(shape.x, shape.y, shape.radius, 'rgba(207, 207, 207, 0.8)', 'grey', shape.marker_id, ctx, attributes);
+                        }
+                        break;
+                    case 'rectangle':
+                        if (shape.endY !== undefined && shape.endX !== undefined) {
+                            const rectX = Math.min(shape.x, shape.endX);
+                            const rectY = Math.min(shape.y, shape.endY);
+                            const rectWidth = Math.abs(shape.endX - shape.x);
+                            const rectHeight = Math.abs(shape.endY - shape.y);
+                            attributes = {
+                                            'answer': shape.marker_id,
+                                            'blank-id': shape.marker_id,
+                                            'card-id': 'words_'+qID
+                                         };
+                            drawRectangleWithBlank(rectX, rectY, rectWidth, rectHeight, 'rgba(207, 207, 207, 0.8)', 'grey', shape.marker_id, ctx, attributes);
+                        }
+                        break;
+                    case 'polygon':
+                        if (Array.isArray(shape.points)) {
+                            drawPolygon(shape.points, 'grey', ctx);
+                        }
+                        break;
+                }
+            });
+        }
+    }
+
+
+    $(function() {
+        var qID = $('#question-id').val();
+        const img = $('#map-image');
+        const canvas = $('#drawingCanvas-'+qID);
+
+        // Set canvas size to match image
+        const width = img.width();
+        const height = img.height();
+        canvas.attr({ width: width, height: height }).css({ width: width + 'px', height: height + 'px', display: 'block', position: 'absolute', top: img.position().top, left: img.position().left });
+
+        // Load existing shapes
+       loadShapes(qID);
+
+
+    });
+
+    </script>";
+}
+
+function drag_and_drop_process() {
+    global $head_content;
+
+    $head_content .= "
+    <script>
+
+        // Calculate the user's answers
+        function user_answers_calculation(draggableItem) {
+            var pool_id = draggableItem.attr('data-pool-id');
+            const parts = pool_id.split('_');
+            const number = parseInt(parts[1], 10);
+            const arr = [];
+            const blanks = document.querySelectorAll('.blank');
+            blanks.forEach(blank => {
+                const dataCardId = blank.getAttribute('data-card-id');
+                const partscard = dataCardId.split('_');
+                const cardId = parseInt(partscard[1], 10);
+                if (cardId == number) {
+                    const dataAnswer = blank.getAttribute('data-answer');
+                    const draggable = blank.querySelector('.dropped-word');
+                    const dataWord = draggable ? draggable.getAttribute('data-word') : null;
+                    arr.push({ dataAnswer, dataWord });
+                }
+            });
+            const jsonStr = JSON.stringify(arr);
+            document.getElementById('arrInput_'+number).value = jsonStr;
+        }
+
+        // Initialize draggable pool words
+        function initializePoolDraggable() {
+            $('.draggable').each(function() {
+                $(this).draggable({
+                    revert: 'invalid',
+                    cursor: 'move',
+                    helper: 'clone',
+                    zIndex: 100,
+                    start: function(event, ui) {
+                        $(this).data('dragging', true);
+                    },
+                    stop: function(event, ui) {
+                        $(this).data('dragging', false);
+                        // Calculate the user's answers
+                        user_answers_calculation($(this));
+                    }
+                });
+            });
+        }
+
+        $(function() {
+
+            // Initialize drag on pool items
+            initializePoolDraggable();
+
+            // Make blanks droppable
+            $('.blank').droppable({
+                accept: '.draggable',
+                hoverClass: 'hovered',
+                drop: function(event, ui) {
+                    var thisBlank = $(this);
+                    var thisCardOfBlank = $(this).attr('data-card-id');
+
+                    // If blank already has a word, do nothing
+                    if (thisBlank.children().length > 0) {
+                        alert('The blank is not empty!');
+                        return;
+                    }
+
+                    // Remove the dragged word from pool immediately
+                    var draggedWord = ui.draggable;
+
+                    // Do not drop a word to a blank of other question
+                    var word = draggedWord.clone();
+                    var poolOfWord = word.attr('data-pool-id');
+                    if (thisCardOfBlank!=poolOfWord){
+                        alert('You are trying to fill in a blank to other question!');
+                        return;
+                    }
+
+                    // Remove from pool
+                    draggedWord.remove();
+
+                    // Clone the dragged word for placement
+                    var word = draggedWord.clone();
+                    word.addClass('dropped-word');
+
+                    // Append to blank
+                    thisBlank.empty().append(word);
+
+                    // Calculate the user's answers
+                    setTimeout(function() {
+                        user_answers_calculation(word);
+                    }, 500);
+
+                    // Make the dropped word draggable to allow removal
+                    word.draggable({
+                        revert: 'invalid',
+                        helper: 'clone',
+                        zIndex: 100,
+                        start: function(event, ui) {
+                            $(this).data('dragging', true);
+                        }
+                    });
+
+                    // Add click to remove the word and return it to pool
+                    word.on('click', function() {
+                        // Get pool id
+                        var pool_id = $(this).attr('data-pool-id');
+                        
+                        // Remove the word from blank
+                        $(this).remove();
+
+                        // Return the original draggable to pool
+                        $('#'+pool_id).append(draggedWord);
+
+                        // Remove the 'dropped-word' class to make it draggable again
+                        draggedWord.removeClass('dropped-word');
+
+                        // Calculate the user's answers
+                        user_answers_calculation($(this));
+
+                        // Reinitialize all pool draggable items
+                        initializePoolDraggable();
+                    });
+
+                }
+            });
+
+        });
+    </script>";
+
 }

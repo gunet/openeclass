@@ -325,12 +325,14 @@ if (isset($submitAnswers) || isset($buttonBack)) {
             $markersData = json_decode($dataJsonFile, true);
             // Loop through each item in the original array
             foreach ($markersData as $item => $value) {
-                if (count($value) == 5) {
+                if (count($value) == 9) {
                     $arrDataMarkers[$value[0]['marker_id']] = [
                                                                 'marker_answer' => $value[1]['marker_answer'],
                                                                 'marker_shape' => $value[2]['shape_type'],
-                                                                'marker_coordinates' => $value[3]['x'] . ',' . $value[3]['y'],
-                                                                'marker_grade' => $value[4]['marker_grade'],
+                                                                'marker_coordinates' => $value[3]['x'] . ',' . $value[4]['y'],
+                                                                'marker_offsets' => $value[5]['endX'] . ',' . $value[6]['endY'],
+                                                                'marker_grade' => $value[7]['marker_grade'],
+                                                                'marker_radius' => $value[8]['marker_radius']
                                                               ];
                 }
             }
@@ -349,7 +351,7 @@ if (isset($submitAnswers) || isset($buttonBack)) {
             $marker_ans = '::' . $marker_ans;
         }
 
-        $reponse = 'Η ερώτηση περιλαμβάνει ' . count($markerAnsArr) . ' απαντήσεις ' . $marker_ans;
+        $reponse = 'Αντιστοιχίστε τις απαντήσεις πάνω στην εικόνα. Υπάρχουν ' . count($markerAnsArr) . ' πιθανές απαντήσεις ' . $marker_ans;
         $objAnswer->createAnswer($reponse, 0, '', 0, 1);
         $objAnswer->save();
         if (isset($_POST['marker_grade'])) {
