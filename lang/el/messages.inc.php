@@ -2162,6 +2162,13 @@ $langCalcelDroppableItem = "Μπορείτε να αναιρέσετε την α
 $langAllowMoreDefinedAnswersThanBlanks = "Οι προκαθορισμένες απαντήσεις να είναι περισσότερες απο τον αριθμό των κενών";
 $langErrorWithUniqueNumberOfBlank = "Καταχωρήσατε τον ίδιο μοναδικό αριθμό σε παραπάνω από ένα κενά.";
 
+$langDragAndDropMarkers = "Drag and Drop σημείων";
+$langMarker = "Σημείο";
+$langShape = "Σχήμα";
+$langRectangle = "Ορθογώνιο";
+$langCircle = "Κύκλος";
+$langPolygon = "Πολύγωνο";
+
 // answer_admin.php
 $langWeightingForEachBlank = "Δώστε ένα βάρος σε κάθε κενό";
 $langWeightingForEachBlankandChoose = "Δώστε ένα βάρος σε κάθε κενό και διαλέξτε την σωστή απάντηση";

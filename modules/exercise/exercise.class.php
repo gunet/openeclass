@@ -964,7 +964,7 @@ if (!class_exists('Exercise')) {
                 } elseif ($question_type == MATCHING) {
                     $exerciseResult[$row->question_id][$row->answer] = $row->answer_id;
                 } elseif ($question_type == FILL_IN_BLANKS || $question_type == FILL_IN_BLANKS_TOLERANT || $question_type == FILL_IN_FROM_PREDEFINED_ANSWERS
-                            || $question_type == DRAG_AND_DROP_TEXT) {
+                            || $question_type == DRAG_AND_DROP_TEXT || $question_type == DRAG_AND_DROP_MARKERS) {
                     $exerciseResult[$row->question_id][$row->answer_id] = $row->answer;
                 } elseif ($question_type == MULTIPLE_ANSWER) {
                     $exerciseResult[$row->question_id][$row->answer_id] = 1;
@@ -1178,6 +1178,8 @@ if (!class_exists('Exercise')) {
                             $eurid, $key, $value, $blank, $weight, $as_answered, $q_position);
                     }
                 }
+                
+            } elseif ($question_type == DRAG_AND_DROP_MARKERS) {
                 
             } else {
                 if ($value) {

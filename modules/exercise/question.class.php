@@ -218,7 +218,7 @@ if (!class_exists('Question')) {
             global $langUniqueSelect, $langMultipleSelect, $langFillBlanks,
                    $langMatching, $langTrueFalse, $langFreeText,
                    $langFillBlanksStrict, $langFillBlanksTolerant, 
-                   $langFillFromSelectedWords, $langDragAndDropText;
+                   $langFillFromSelectedWords, $langDragAndDropText, $langDragAndDropMarkers;
 
             switch ($answerTypeId) {
                 case UNIQUE_ANSWER:
@@ -239,6 +239,8 @@ if (!class_exists('Question')) {
                     return "$langFillFromSelectedWords";
                 case DRAG_AND_DROP_TEXT:
                     return "$langDragAndDropText";
+                case DRAG_AND_DROP_MARKERS:
+                    return "$langDragAndDropMarkers";
             }
         }
         /**
@@ -510,7 +512,8 @@ if (!class_exists('Question')) {
                         $choice[$row->answer_id] = 1;
                     } elseif ($type == FREE_TEXT) {
                         $choice = $row->answer;
-                    } elseif ($type == FILL_IN_BLANKS || $type == FILL_IN_BLANKS_TOLERANT || $type == FILL_IN_FROM_PREDEFINED_ANSWERS || $type == DRAG_AND_DROP_TEXT) {
+                    } elseif ($type == FILL_IN_BLANKS || $type == FILL_IN_BLANKS_TOLERANT || $type == FILL_IN_FROM_PREDEFINED_ANSWERS 
+                                || $type == DRAG_AND_DROP_TEXT || $type == DRAG_AND_DROP_MARKERS) {
                         $choice[$row->answer_id] = $row->answer;
                     } elseif ($type == MATCHING) {
                         $choice[$row->answer] = $row->answer_id;

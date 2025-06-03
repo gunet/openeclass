@@ -354,6 +354,12 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
                                 $langDragAndDropText
                             </label>
                         </div>
+                        <div class='radio'>
+                            <label>
+                                <input type='radio' name='answerType' value='10' ". (($answerType == DRAG_AND_DROP_MARKERS) ? "checked" : "") .">
+                                $langDragAndDropMarkers
+                            </label>
+                        </div>
                     </div>
                 </div>
             </div>

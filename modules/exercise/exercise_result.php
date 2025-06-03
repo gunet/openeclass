@@ -422,6 +422,8 @@ if (count($exercise_question_ids) > 0) {
                 } elseif ($answerType == DRAG_AND_DROP_TEXT) {
                     $answer = $objAnswerTmp->get_drag_and_drop_text();
                     $answerWeighting = $objAnswerTmp->get_drag_and_drop_answer_grade();
+                } elseif ($answerType == DRAG_AND_DROP_MARKERS) {
+
                 } else {
                     $answer = standard_text_escape($answer);
                 }
@@ -446,6 +448,8 @@ if (count($exercise_question_ids) > 0) {
                         $arrResult = drag_and_drop_user_results_as_text($eurid,$row->question_id);
                         $answer = $arrResult[0]['aboutUserAnswers'];
                         $questionScore = $arrResult[0]['aboutUserGrade'];
+                        break;
+                    case DRAG_AND_DROP_MARKERS :
                         break;
                     case FILL_IN_BLANKS :
                     case FILL_IN_BLANKS_TOLERANT :
@@ -614,7 +618,7 @@ if (count($exercise_question_ids) > 0) {
 
                 } // end switch()
 
-                if ($regrade and !in_array($answerType, [FILL_IN_BLANKS_TOLERANT, FILL_IN_BLANKS, FILL_IN_FROM_PREDEFINED_ANSWERS, MATCHING, DRAG_AND_DROP_TEXT])) {
+                if ($regrade and !in_array($answerType, [FILL_IN_BLANKS_TOLERANT, FILL_IN_BLANKS, FILL_IN_FROM_PREDEFINED_ANSWERS, MATCHING, DRAG_AND_DROP_TEXT, DRAG_AND_DROP_MARKERS])) {
                     Database::get()->query('UPDATE exercise_answer_record
                         SET weight = ?f
                         WHERE eurid = ?d AND question_id = ?d AND answer_id = ?d',
@@ -662,6 +666,8 @@ if (count($exercise_question_ids) > 0) {
                         $tool_content .= "<tr><td>" . standard_text_escape(nl2br($answer)) . "</td></tr>";
                     } elseif ($answerType == DRAG_AND_DROP_TEXT) {
                         $tool_content .= "<tr><td>$answer</td></tr>";
+                    } elseif ($answerType == DRAG_AND_DROP_MARKERS) {
+                        
                     } elseif ($answerType == MATCHING) {
                         $tool_content .= "<tr><td><div class='d-flex align-items-center'><div class='d-flex align-items-end m-1 me-2 col-6'>" . q($answer) . "</div>";
                         $tool_content .= "<div class='d-flex align-items-center col-6 m-1 me-2'>" . $choice[$answerId];

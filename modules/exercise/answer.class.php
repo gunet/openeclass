@@ -442,5 +442,35 @@ if (!class_exists('Answer')):
         }
 
 
+                        /**
+         * modify drag and drop marker answers count
+         *
+         * @author - Nikos Mpalamoutis
+         */
+        function get_total_drag_and_drop_marker_answers($questionId) {
+            global $webDir, $course_code;
+
+            $dropZonesDir = "$webDir/courses/$course_code/dropZones";
+            $dropZonesFile = "$dropZonesDir/dropZones_$questionId.json";
+            $arrDataMarkers = [];
+            $markersData = [];
+            if (file_exists($dropZonesFile)) {
+                $dataJsonFile = file_get_contents($dropZonesFile);
+                $markersData = json_decode($dataJsonFile, true);
+            }
+            $arrMarkers = [];
+            foreach ($markersData as $marker => $value) {
+                foreach ($value as $index => $m) {
+                    if (isset($m['marker_id'])) {
+                        $arrMarkers[] = $m['marker_id'];
+                    } 
+                }
+            }
+            // minumun 2 answers
+            $maxValueMarker = (count($arrMarkers) > 0) ? max($arrMarkers) : 2;
+            return $maxValueMarker;
+        }
+
+
     }
 endif;

@@ -352,6 +352,8 @@ function showQuestion(&$objQuestionTmp, $question_number, array $exerciseResult 
                 });
             </script>";
             
+        } elseif ($answerType == DRAG_AND_DROP_MARKERS) {
+
         }
     } // end for()
     if ($answerType == MATCHING && $nbrAnswers>0) {
@@ -568,7 +570,7 @@ function display_exercise($exercise_id): void
                   <td><strong>$langComment</strong></td>
                 </tr>";
             } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT 
-                        || $answerType == FILL_IN_FROM_PREDEFINED_ANSWERS || $answerType == DRAG_AND_DROP_TEXT) {
+                        || $answerType == FILL_IN_FROM_PREDEFINED_ANSWERS || $answerType == DRAG_AND_DROP_TEXT || $answerType == DRAG_AND_DROP_MARKERS) {
                 $tool_content .= "<tr class='active'><td><strong>$langAnswer</strong></td></tr>";
             } elseif ($answerType == MATCHING) {
                 $tool_content .= "
@@ -652,6 +654,8 @@ function display_exercise($exercise_id): void
                             $tool_content .= "<tr>
                                                 <td>" . standard_text_escape($quetionText) . "&nbsp;&nbsp;&nbsp;<strong><small class='text-nowrap'>($langScore: $AnswersGrade)</small></strong></td>
                                               </tr>";
+                        } elseif ($answerType == DRAG_AND_DROP_MARKERS) {
+                            
                         } else {
                             $tool_content .= "<tr><td>" . standard_text_escape($answerTitle) . "</td>";
                             $tool_content .= "<td>" . $answer->answer[$answerCorrect] . "&nbsp;&nbsp;&nbsp;<strong><small class='text-nowrap'>($langScore: $answerWeighting)</small></strong></td>";

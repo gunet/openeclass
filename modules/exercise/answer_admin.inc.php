@@ -316,6 +316,54 @@ if (isset($submitAnswers) || isset($buttonBack)) {
             }
         }
 
+    } elseif ($answerType == DRAG_AND_DROP_MARKERS) {
+        $dropZonesDir = "$webDir/courses/$course_code/dropZones";
+        $dropZonesFile = "$dropZonesDir/dropZones_$questionId.json";
+        $arrDataMarkers = [];
+        if (file_exists($dropZonesFile)) {
+            $dataJsonFile = file_get_contents($dropZonesFile);
+            $markersData = json_decode($dataJsonFile, true);
+            // Loop through each item in the original array
+            foreach ($markersData as $item => $value) {
+                if (count($value) == 5) {
+                    $arrDataMarkers[$value[0]['marker_id']] = [
+                                                                'marker_answer' => $value[1]['marker_answer'],
+                                                                'marker_shape' => $value[2]['shape_type'],
+                                                                'marker_coordinates' => $value[3]['x'] . ',' . $value[3]['y'],
+                                                                'marker_grade' => $value[4]['marker_grade'],
+                                                              ];
+                }
+            }
+        }
+        
+        $markerAnsArr = [];
+        if (count($arrDataMarkers) > 0) {
+            foreach($arrDataMarkers as $index => $marker) {
+                $markerAnsArr[] = $index . '|' . $arrDataMarkers[$index]['marker_answer'] . '|' . $arrDataMarkers[$index]['marker_grade'];
+            }
+        }
+
+        $marker_ans = '';
+        if (count($markerAnsArr) > 0) {
+            $marker_ans = implode(',', $markerAnsArr);
+            $marker_ans = '::' . $marker_ans;
+        }
+
+        $reponse = 'Η ερώτηση περιλαμβάνει ' . count($markerAnsArr) . ' απαντήσεις ' . $marker_ans;
+        $objAnswer->createAnswer($reponse, 0, '', 0, 1);
+        $objAnswer->save();
+        if (isset($_POST['marker_grade'])) {
+            $weighting = array_map('fix_float', $_POST['marker_grade']);
+            $weighting = array_map('abs', $weighting);
+            $questionWeighting = array_sum($weighting);
+            $objQuestion->updateWeighting($questionWeighting);
+            if (isset($exerciseId)) {
+                $objQuestion->save($exerciseId);
+            } else {
+                $objQuestion->save();
+            }
+        }
+        
     }
 
     if (empty($msgErr) and !isset($_POST['setWeighting'])) {
@@ -506,6 +554,37 @@ if (isset($_GET['modifyAnswers'])) {
         $choices_from_db = $objAnswer->get_drag_and_drop_answer_text();
         $grades_from_db = $objAnswer->get_drag_and_drop_answer_grade();
 
+    } elseif ($answerType == DRAG_AND_DROP_MARKERS) {
+        if ($newAnswer) {
+            $nbrAnswers = $_POST['nbrAnswers'] + 1;
+        } else { // for edit
+            $nbrAnswers = $objAnswer->get_total_drag_and_drop_marker_answers($questionId);
+        }
+        if ($deleteAnswer) {
+            $nbrAnswers = $_POST['nbrAnswers'] - 1;
+            if ($nbrAnswers < 2) { // minimum 2 answers
+               $nbrAnswers = 2;
+            } elseif ($nbrAnswers+1 >= 3) {
+                $nbrAnswersDel = $nbrAnswers + 1;
+                removeJsonDataFromMarkerId($nbrAnswersDel,$questionId);
+            }
+        }
+
+        $arrDataMarkers = getDataMarkersFromJson($questionId);
+        foreach ($arrDataMarkers as $index => $m) {
+            $arr_m = explode(',', $m['marker_coordinates']);
+            $m['x'] = $arr_m[0];
+            $m['y'] = $arr_m[1];
+            $arr_of = explode(',', $m['marker_offsets']);
+            $m['endx'] = $arr_of[0];
+            $m['endy'] = $arr_of[1];
+            if ($m['marker_shape'] == 'circle') {
+                $coordinatesXY[] = ['marker_id' => $index, 'x' => $m['x'], 'y' => $m['y'], 'marker_shape' => $m['marker_shape'], 'color' => 'rgba(255, 0, 0, 0.8)', 'radius' => $m['marker_radius']];
+            } elseif ($m['marker_shape'] == 'rectangle') {
+                $coordinatesXY[] = ['marker_id' => $index, 'x' => $m['x'], 'y' => $m['y'], 'marker_shape' => $m['marker_shape'], 'color' => 'rgba(0, 249, 91, 0.8)', 'width' => $m['endy'], 'height' => $m['endx']];
+            }
+        }
+        $DataMarkersToJson = json_encode($coordinatesXY) ?? '';
     }
 
 
@@ -518,7 +597,7 @@ if (isset($_GET['modifyAnswers'])) {
                       <div class='card-body'>
                             <h5>$questionTypeWord<br>" . nl2br(q_math($questionName)) . "</h5>
                                 <p>$questionDescription</p>
-                                ".(($okPicture)? "<div class='text-center'><img src='../../$picturePath/quiz-$questionId'></div>":"")."
+                                ".(($okPicture)? "<div id='imageContainer-$questionId' style='position: relative; display: inline-block;'><img id='img-quiz-$questionId' src='../../$picturePath/quiz-$questionId'><canvas id='drawingCanvas-$questionId' style='position: absolute; top: 0; left: 0; z-index: 10;'></canvas></div>":"")."
                       </div>
                     </div></div>";
 
@@ -858,6 +937,445 @@ if (isset($_GET['modifyAnswers'])) {
                                 <input class='btn submitAdminBtn' type='submit' name='moreAnswers' value='$langMoreAnswers' />
                                 <input class='btn deleteAdminBtn' type='submit' name='lessAnswers' value='$langLessAnswers' />
                             </div>";
+     } elseif ($answerType == DRAG_AND_DROP_MARKERS) {
+
+        $head_content .= "
+            <script type='text/javascript'>
+
+                let currentShape = null;
+                let currentShapeId = null;
+                let isDrawing = false;
+                let startX = 0; 
+                let startY = 0;
+                let vertices = [];
+                let currentX = 0;
+                let currentY = 0;
+                let polygonPoints = [];
+                let currentMarker = 0;
+                let radiusOriginal = 0;
+                let shapes = [];
+
+                function drawCircle(x, y, radius, fillColor = 'rgba(255, 0, 0, 0.8)', strokeColor = 'red', label = '', ctx) {
+                    ctx.fillStyle = fillColor;
+                    ctx.beginPath();
+                    ctx.arc(x, y, radius, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.strokeStyle = strokeColor;
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
+
+                    if (label) {
+                        ctx.fillStyle = 'black';
+                        ctx.font = '14px Arial';
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'middle';
+                        ctx.fillText(label, x, y);
+                    }
+
+                    radiusOriginal = radius;
+                }
+
+                function drawRectangle(x, y, width, height, fillColor = 'rgba(0, 249, 91, 0.8)', borderColor = 'green', label = '', ctx) {
+                    ctx.fillStyle = fillColor;
+                    ctx.fillRect(x, y, width, height); // Fill background
+                    ctx.strokeStyle = borderColor;
+                    ctx.lineWidth = 2;
+                    ctx.strokeRect(x, y, width, height);
+
+                    if (label) {
+                        ctx.fillStyle = 'black'; // Text color
+                        ctx.font = '14px Arial';
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'middle';
+
+                        // Calculate center of rectangle
+                        const centerX = x + width / 2;
+                        const centerY = y + height / 2;
+
+                        ctx.fillText(label, centerX, centerY);
+                    }
+                }
+
+                function drawPolygon(points, color = 'green', ctx) {
+                    if (points.length < 2) return;
+                    ctx.strokeStyle = color;
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    ctx.moveTo(points[0].x, points[0].y);
+                    for (let i = 1; i < points.length; i++) {
+                        ctx.lineTo(points[i].x, points[i].y);
+                    }
+                    ctx.closePath();
+                    ctx.stroke();
+                }
+
+                function redraw(ctx) {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    // Optionally, redraw existing shapes stored in an array
+                }
+
+                function getNumberOftheText(text) {
+                    const str = text;
+                    const match = str.match(/[\d.]+/);
+                    const number = match ? parseFloat(match[0]) : null;
+                    return number;
+                }
+
+                function loadShapes() {
+                    const canvas = $('#drawingCanvas-$questionId');
+                    const ctx = canvas[0].getContext('2d');
+
+                    // Clear existing shapes array
+                    shapes = [];
+
+                    // Clear canvas
+                    ctx.clearRect(0, 0, canvas.width(), canvas.height());
+
+                    // Parse shapes data from hidden input or server
+                    let shapesData;
+                    try {
+                        shapesData = JSON.parse($('#insertedMarkersAsJson').val());
+                    } catch (e) {
+                        console.error('Invalid JSON data for shapes:', e);
+                        return;
+                    }
+
+                    // Populate shapes array and draw each shape
+                    if (shapesData) {
+                        shapesData.forEach(shape => {
+                            shapes.push(shape);
+                            switch (shape.marker_shape) {
+                                case 'circle':
+                                    if (shape.radius !== undefined) {
+                                        drawCircle(shape.x, shape.y, shape.radius, shape.color || 'rgba(255, 0, 0, 0.8)', 'red', shape.marker_id, ctx);
+                                    }
+                                    break;
+                                case 'rectangle':
+                                    if (shape.width !== undefined && shape.height !== undefined) {
+                                        const rectX = Math.min(shape.x, shape.height);
+                                        const rectY = Math.min(shape.y, shape.width);
+                                        const rectWidth = Math.abs(shape.height - shape.x);
+                                        const rectHeight = Math.abs(shape.width - shape.y);
+                                        drawRectangle(rectX, rectY, rectWidth, rectHeight, shape.color, 'green', shape.marker_id, ctx);
+                                    }
+                                    break;
+                                case 'polygon':
+                                    if (Array.isArray(shape.points)) {
+                                        drawPolygon(shape.points, shape.color || 'green', ctx);
+                                    }
+                                    break;
+                            }
+                        });
+                    }
+                }
+
+                function saveShape(vertices) {
+                    // Send shape coordinates to server via AJAX to save
+                    $.ajax({
+                        url: 'save_dropZones.php?course_code=$course_code&questionId=$questionId',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify(vertices),
+                        success: function(response) {
+                            console.log(response);
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            console.error('Error:', textStatus, errorThrown);
+                        }
+                    });
+                }
+
+                function enableDrawing(currentShape) {
+                    const container = $('#imageContainer-$questionId');
+                    const img = $('#img-quiz-$questionId');
+                    const width = img.width();
+                    const height = img.height();
+                    const canvas = $('#drawingCanvas-$questionId');
+                    const ctx = canvas[0].getContext('2d');
+
+                    // Set canvas size
+                    canvas.attr({ width: width, height: height }).css({ width: width + 'px', height: height + 'px', display: 'block' });
+                    // Clear previous drawings
+                    //ctx.clearRect(0, 0, width, height);
+                    redrawAllShapes(ctx);
+
+                    $('#drawingCanvas-$questionId').off(); // Remove previous event handlers to avoid stacking
+                    // Mousedown
+                    $('#drawingCanvas-$questionId').on('mousedown', function(e) {
+                        if (!currentShape) return;
+                        isDrawing = true;
+                        startX = e.offsetX;
+                        startY = e.offsetY;
+
+                        if (currentShape === 'polygon') {
+                            polygonPoints = [];
+                            polygonPoints.push({ x: startX, y: startY });
+                        }
+                    });
+
+                    // Mousemove
+                    $('#drawingCanvas-$questionId').on('mousemove', function(e) {
+                        if (!isDrawing || currentShape === 'polygon') return;
+
+                        currentX = e.offsetX;
+                        currentY = e.offsetY;
+
+                        //ctx.clearRect(0, 0, width, height); // Clear previous preview
+                        redrawAllShapes(ctx);
+
+                        // Draw shape preview
+                        if (currentShape === 'rectangle') {
+                            var textMarker = 'Marker:'+currentMarker;
+                            drawRectangle(startX, startY, currentX - startX, currentY - startY, 'rgba(0, 207, 76, 0.8)', 'green', textMarker, ctx);
+                        } else if (currentShape === 'circle') {
+                            const radius = Math.hypot(currentX - startX, currentY - startY);
+                            var textMarker = 'Marker:'+currentMarker;
+                            radiusOriginal = radius;
+                            drawCircle(startX, startY, radius, 'rgba(255, 0, 0, 0.8)', 'red', textMarker, ctx);
+                        }
+                    });
+
+                    // Mouseup
+                    $('#drawingCanvas-$questionId').on('mouseup', function(e) {
+                        if (!isDrawing) return;
+                        isDrawing = false;
+
+                        //ctx.clearRect(0, 0, width, height); // Clear before final drawing
+                        redrawAllShapes(ctx);
+
+                        const endX = e.offsetX;
+                        const endY = e.offsetY;
+
+                        if (currentShape === 'rectangle') {
+                            var textMarker = 'Marker:'+currentMarker;
+                            drawRectangle(startX, startY, endX - startX, endY - startY, 'rgba(0, 207, 76, 0.8)', 'green', textMarker, ctx);
+                            // Save shape data
+                            var coords = startX + ',' + startY + ':' + endX + ',' + endY;
+                            $('#shape-coordinates-'+currentMarker).val(coords);
+                        } else if (currentShape === 'circle') {
+                            const radius = Math.hypot(endX - startX, endY - startY);
+                            radiusOriginal = radius;
+                            var textMarker = 'Marker:'+currentMarker;
+                            drawCircle(startX, startY, radius, 'rgba(255, 0, 0, 0.8)', 'red', textMarker, ctx);
+                            // Save shape data
+                            var coords = startX + ',' + startY + ':' + endX + ',' + endY;
+                            $('#shape-coordinates-'+currentMarker).val(coords);
+                        }
+                    });
+
+                    // For polygon: add points on click
+                    $('#drawingCanvas-$questionId').off('click').on('click', function(e) {
+                        if (currentShape !== 'polygon') return;
+                        const x = e.offsetX;
+                        const y = e.offsetY;
+                        polygonPoints.push({ x, y });
+                        //ctx.clearRect(0, 0, width, height);
+                        redrawAllShapes(ctx);
+                        // Draw existing points
+                        drawPolygon(polygonPoints, 'green', ctx);
+                        // Draw current point
+                        ctx.fillStyle = 'blue';
+                        ctx.beginPath();
+                        ctx.arc(x, y, 3, 0, Math.PI * 2);
+                        ctx.fill();
+                    });
+
+                    $('#finishPolygon').off('click').on('click', function() {
+                        if (polygonPoints.length < 3) {
+                            alert('Polygon needs at least 3 points');
+                            return;
+                        }
+                        //ctx.clearRect(0, 0, width, height);
+                        redrawAllShapes(ctx);
+                        drawPolygon(polygonPoints, 'green', ctx);
+                        // Save polygon data if needed
+                        polygonPoints = [];
+                    });
+                }
+
+                function redrawAllShapes(ctx) {
+                    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+                    if (shapes.length > 0) {
+                        shapes.forEach(shape => {
+                            switch (shape.marker_shape) {
+                                case 'circle':
+                                    drawCircle(shape.x, shape.y, shape.radius, shape.color || 'rgba(255, 0, 0, 0.8)', 'red', shape.marker_id, ctx);
+                                    break;
+                                case 'rectangle':
+                                    if (shape.width !== undefined && shape.height !== undefined) {
+                                        const rectX = Math.min(shape.x, shape.height);
+                                        const rectY = Math.min(shape.y, shape.width);
+                                        const rectWidth = Math.abs(shape.height - shape.x);
+                                        const rectHeight = Math.abs(shape.width - shape.y);
+                                        drawRectangle(rectX, rectY, rectWidth, rectHeight, shape.color, 'green', shape.marker_id, ctx);
+                                    }
+                                    break;
+                                case 'polygon':
+                                    if (Array.isArray(shape.points)) {
+                                        drawPolygon(shape.points, shape.color || 'green', ctx);
+                                    }
+                                    break;
+                            }
+                        });
+                    }
+                }
+
+
+                $(document).ready(function() {
+
+                    const img = $('#img-quiz-$questionId');
+                    const canvas = $('#drawingCanvas-$questionId');
+
+                    // Set canvas size to match image
+                    const width = img.width();
+                    const height = img.height();
+                    canvas.attr({ width: width, height: height }).css({ width: width + 'px', height: height + 'px', display: 'block', position: 'absolute', top: img.position().top, left: img.position().left });
+
+                    // Load existing shapes
+                    loadShapes();
+
+                    // When shape is selected, enable drawing
+                    $('.shape-selection').on('change', function() {
+                        currentShape = $(this).val();
+                        currentMarker = getNumberOftheText($(this).attr('id'));
+                        if (currentShape) {
+                            enableDrawing(currentShape);
+                        } else {
+                            $('#drawingCanvas-$questionId').hide();
+                        }
+                    });
+
+                    $('.add-data-shape').on('click',function(e) {
+                        e.preventDefault();
+                        var addValuesId = $(this).attr('id');
+                        isDrawing = false;
+                        if (confirm('Do you want to proceed?')) {
+                            var number = getNumberOftheText(addValuesId);
+                            var markerAnswer = $('#marker-answer-'+number).val();
+                            var markerGrade = $('#marker-grade-'+number).val();
+                            var markerCoordinates = $('#shape-coordinates-'+number).val();
+                            
+                            // Replace colon with comma
+                            const replacedStr = markerCoordinates.replace(/:/g, ',');
+                            // Split the string into an array
+                            const arr = replacedStr.split(',').map(Number);
+                            
+                            if (markerAnswer && markerCoordinates) {
+                                vertices = [
+                                                {'marker_id': number},
+                                                {'marker_answer': markerAnswer},
+                                                {'shape_type': currentShape},
+                                                {'x': arr[0]},
+                                                {'y': arr[1]},
+                                                {'endX': arr[2]},
+                                                {'endY': arr[3]},
+                                                {'marker_grade': markerGrade},
+                                                {'marker_radius': radiusOriginal}
+                                           ];
+                                saveShape(vertices);
+                                window.location.reload();
+                            } else {
+                                alert('Give an answer for this shape');
+                                window.location.reload();
+                            }
+                        }
+                    });
+
+                    $('.delete-data-shape').on('click', function(e){
+                        e.preventDefault(); 
+                        var delValuesId = $(this).attr('id');
+                        isDrawing = false;
+                        var number = getNumberOftheText(delValuesId);
+                        if (confirm('Do you want to proceed?')) {
+                            $.ajax({
+                                url: 'delete_marker.php?course_code=$course_code&questionId=$questionId',
+                                method: 'POST',
+                                data: { marker_id: number },
+                                success: function(response) {
+                                    console.log(response); // Handle response
+                                    alert('Marker deleted successfully!');
+                                    window.location.reload();
+                                },
+                                error: function() {
+                                    alert('Error deleting marker.');
+                                    window.location.reload();
+                                }
+                            });
+                        }
+                    });
+
+                });
+            
+            
+            </script>
+        
+        ";
+
+
+        $setId = isset($exerciseId)? "&amp;exerciseId=$exerciseId" : '';
+        $tool_content .= "
+                        <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code$setId&amp;modifyAnswers=" . urlencode($_GET['modifyAnswers']) . "'>
+                            <fieldset><legend class='mb-0' aria-label='$langForm'></legend>
+                            <input type='hidden' name='nbrAnswers' value='$nbrAnswers'>
+                            <input type='hidden' id='insertedMarkersAsJson' value='{$DataMarkersToJson}'>
+                            <input type='hidden' id='ImgSrc' value='../../$picturePath/quiz-$questionId'>
+                            <div class='table-responsive mb-4'>
+                                <table class='table-default'>
+                                    <thead>
+                                        <tr>
+                                            <th>$langMarker</th>
+                                            <th>$langAnswer</th>
+                                            <th>$langShape</th>
+                                            <th>$langGradebookGrade</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>";
+                                    for ($i=0; $i<$nbrAnswers; $i++) {
+                                        $chAns = $i+1;
+                                        $markerShape = $arrDataMarkers[$chAns]['marker_shape'] ?? '';
+                                        $markerCoordinates = $arrDataMarkers[$chAns]['marker_coordinates'] ?? '';
+                                        $markerAnswer = $arrDataMarkers[$chAns]['marker_answer'] ?? '';
+                                        $markerGrade = $arrDataMarkers[$chAns]['marker_grade'] ?? 0;
+                                        $tool_content .= "
+                                        <tr>
+                                            <td>[{$chAns}]</td>
+                                            <td>
+                                                <div class='col-12'>
+                                                    <input type='text' id='marker-answer-$chAns' class='form-control marker-answer' name='marker_answer[$chAns]' value='{$markerAnswer}'>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class='col-12 d-flex gap-2 flex-wrap'>
+                                                    <select class='shape-selection form-select' id='shapeType-$chAns'>
+                                                        <option value=''>$langSelect</option>
+                                                        <option value='rectangle' " . (($markerShape == 'rectangle') ? 'selected' : '') . ">$langRectangle</option>
+                                                        <option value='circle' " . (($markerShape == 'circle') ? 'selected' : '') . ">$langCircle</option>
+                                                        <option value='polygon' " . (($markerShape == 'polygon') ? 'selected' : '') . ">$langPolygon</option>
+                                                    </select>
+                                                    <input type='text' class='form-control pe-none' id='shape-coordinates-$chAns' name='marker_coordinates[$chAns]' value='{$markerCoordinates}'>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class='col-12'>
+                                                    <input type='number' id='marker-grade-$chAns' class='form-control' name='marker_grade[$chAns]' value='{$markerGrade}' step='any'>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class='col-12 d-flex justify-content-center align-items-center gap-3 flex-wrap'>
+                                                    <button id='add-data-shape-$chAns' class='btn submitAdminBtn add-data-shape text-nowrap'>$langAdd</button>
+                                                    <button id='delete-data-shape-$chAns' class='btn deleteAdminBtn delete-data-shape text-nowrap'>$langDelete</button>
+                                                </div>
+                                            </td>
+                                        </tr>";
+                                    }
+        $tool_content .= "          </tbody>
+                                </table>
+                            </div>
+                            <div class='col-12 d-flex justify-content-start align-items-center gap-3 flex-wrap my-4'>
+                                <input class='btn submitAdminBtn' type='submit' name='moreAnswers' value='$langMoreAnswers' />
+                                <input class='btn deleteAdminBtn' type='submit' name='lessAnswers' value='$langLessAnswers' />
+                            </div>";
      }
 
 
@@ -895,4 +1413,72 @@ if (isset($_GET['modifyAnswers'])) {
          </div>
      </div></div>";
    }
+}
+
+
+
+function removeJsonDataFromMarkerId($markerId,$questionId) {
+    global $webDir,$course_code;
+    // Path to your JSON file
+    $dropZonesDir = "$webDir/courses/$course_code/dropZones";
+    $dropZonesFile = "$dropZonesDir/dropZones_$questionId.json";
+    $jsonFile = $dropZonesFile;
+
+    // Read the JSON file content
+    $jsonData = file_get_contents($jsonFile);
+
+    // Decode JSON into PHP array
+    $data = json_decode($jsonData, true);
+
+    // Check if decoding was successful
+    if ($data === null) {
+        die("Error decoding JSON");
+    }
+
+    // Filter out the sub-array with marker_id = 2
+    $filteredData = array_filter($data, function($item) use($markerId){
+        // The first element in each sub-array contains the marker_id
+        if (isset($item[0]['marker_id']) && $item[0]['marker_id'] == $markerId) {
+            return false; // Exclude this item
+        }
+        return true; // Keep others
+    });
+
+    // Reindex the array to prevent gaps
+    $filteredData = array_values($filteredData);
+
+    // Encode back to JSON
+    $newJsonData = json_encode($filteredData, JSON_PRETTY_PRINT);
+
+    // Save the updated JSON back to the file
+    file_put_contents($jsonFile, $newJsonData);
+
+}
+
+
+function getDataMarkersFromJson($questionId) {
+    global $webDir, $course_code;
+
+    $dropZonesDir = "$webDir/courses/$course_code/dropZones";
+    $dropZonesFile = "$dropZonesDir/dropZones_$questionId.json";
+    $arrDataMarkers = [];
+    if (file_exists($dropZonesFile)) {
+        $dataJsonFile = file_get_contents($dropZonesFile);
+        $markersData = json_decode($dataJsonFile, true);
+        // Loop through each item in the original array
+        foreach ($markersData as $item => $value) {
+            if (count($value) == 9) {
+                $arrDataMarkers[$value[0]['marker_id']] = [
+                                                            'marker_answer' => $value[1]['marker_answer'],
+                                                            'marker_shape' => $value[2]['shape_type'],
+                                                            'marker_coordinates' => $value[3]['x'] . ',' . $value[4]['y'],
+                                                            'marker_offsets' => $value[5]['endX'] . ',' . $value[6]['endY'],
+                                                            'marker_grade' => $value[7]['marker_grade'],
+                                                            'marker_radius' => $value[8]['marker_radius']
+                                                          ];
+            }
+        }
+    }
+
+    return $arrDataMarkers;
 }

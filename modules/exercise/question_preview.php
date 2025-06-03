@@ -79,7 +79,7 @@ if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerTyp
         <td><strong>$langComment</strong></td>
       </tr>";
 } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT 
-            || $answerType == FILL_IN_FROM_PREDEFINED_ANSWERS || $answerType == DRAG_AND_DROP_TEXT) {
+            || $answerType == FILL_IN_FROM_PREDEFINED_ANSWERS || $answerType == DRAG_AND_DROP_TEXT || $answerType == DRAG_AND_DROP_MARKERS) {
     $tool_content .= "<tr class='active'><td><strong>$langAnswer</strong></td></tr>";
 } elseif ($answerType == MATCHING) {
     $tool_content .= "
@@ -169,6 +169,8 @@ if ($answerType != FREE_TEXT) {
                   <tr>
                     <td>" . standard_text_escape($quetionText) . " <strong><small>($langScore: $AnswersGrade)</small></strong></td>
                   </tr>";
+            } elseif($answerType == DRAG_AND_DROP_MARKERS) {
+              
             } else {
                 $tool_content .= "
                   <tr>
