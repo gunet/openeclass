@@ -35,7 +35,7 @@
         <div class='form-group mt-4' id='SelectContentModalDiv'>
             <div class='col-sm-12'>
                 <button type='button' class='btn submitAdminBtn' style='display: inline; margin-bottom: 10px; margin-right: 10px;' data-bs-toggle='modal' data-bs-target='#SelectContentModal'>{{ trans('langTiiSelectContent') }}</button>
-                <span id='tii_selected_content_span'>{{ $tii_selected_content }}</span>
+                <span id='tii_selected_content_span'>{!! $tii_selected_content !!}</span>
             </div>
             <div class='col-sm-12'>{{ trans('langTiiSelectContentDesc') }}</div>
         </div>
