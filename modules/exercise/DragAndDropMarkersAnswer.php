@@ -16,10 +16,10 @@ class DragAndDropMarkersAnswer extends \QuestionType
 
     public function AnswerQuestion($question_number, $exerciseResult = [], $options = []): string
     {
-        global $webDir, $course_code, $langCalcelDroppableItem;
+        global $webDir, $course_code, $langCalcelDroppableItem, $head_content;
 
         $questionId = $this->question_id;
-        $question_text = $this->answer_object-> get_drag_and_drop_text();
+        $question_text = $this->answer_object->get_drag_and_drop_text();
         $list_answers = $this->answer_object->get_drag_and_drop_answer_text();
 
         $dropZonesDir = "$webDir/courses/$course_code/dropZones";
@@ -65,9 +65,18 @@ class DragAndDropMarkersAnswer extends \QuestionType
         $html_content .= "</div>";
         $html_content .= "<input type='hidden' name='choice[$questionId]' id='arrInput_{$questionId}'>";
         $html_content .= "<input type='hidden' id='insertedMarkersAsJson-$questionId' value='{$DataMarkersToJson}'>";
+        $html_content .= "<input type='hidden' class='currentQuestion' value='{$questionId}'>";
 
-        createMarkersBlanksOnImage($questionId);
-        drag_and_drop_process();
+        load_js('tools.js');
+        $head_content .= "<script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                                createMarkersBlanksOnImage();
+                                drag_and_drop_process();
+                            });
+                          </script>";
+
+        //createMarkersBlanksOnImage($questionId);
+        //drag_and_drop_process();
 
         return $html_content;
     }

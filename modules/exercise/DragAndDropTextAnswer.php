@@ -32,7 +32,7 @@ class DragAndDropTextAnswer extends \QuestionType
 
     public function AnswerQuestion($question_number, $exerciseResult = [], $options = []): string
     {
-        global $langCalcelDroppableItem;
+        global $langCalcelDroppableItem, $head_content;
 
         $questionId = $this->question_id;
         $question_text = $this->answer_object->get_drag_and_drop_text();
@@ -48,7 +48,13 @@ class DragAndDropTextAnswer extends \QuestionType
         $html_content .= "</div>";
         $html_content .= "<input type='hidden' name='choice[$questionId]' id='arrInput_{$questionId}'>";
 
-        drag_and_drop_process();
+        //drag_and_drop_process();
+        load_js('tools.js');
+        $head_content .= "<script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                                drag_and_drop_process();
+                            });
+                          </script>";
 
         return $html_content;
     }
