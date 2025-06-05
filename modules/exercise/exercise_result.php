@@ -410,10 +410,10 @@ if (count($exercise_question_ids) > 0) {
             $nbrAnswers = $objAnswerTmp->selectNbrAnswers();
 
             for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
-                $answer = $objAnswerTmp->selectAnswer($answerId);
-                $answerComment = $objAnswerTmp->selectComment($answerId);
+                $answer = $objAnswerTmp->getTitle($answerId);
+                $answerComment = $objAnswerTmp->getComment($answerId);
                 $answerCorrect = $objAnswerTmp->isCorrect($answerId);
-                $answerWeighting = $objAnswerTmp->selectWeighting($answerId);
+                $answerWeighting = $objAnswerTmp->getWeighting($answerId);
 
                 if ($answerType == FILL_IN_BLANKS or $answerType == FILL_IN_BLANKS_TOLERANT) {
                     list($answer, $answerWeighting) = Question::blanksSplitAnswer($answer);

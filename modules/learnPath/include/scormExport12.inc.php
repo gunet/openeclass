@@ -330,7 +330,7 @@ if (!class_exists('ScormExport')) {
                 $Select = array();
 
                 for ($answerId = 1; $answerId <= $answerCount; $answerId++) {
-                    $answerText = $answer->selectAnswer($answerId);
+                    $answerText = $answer->getTitle($answerId);
                     $answerCorrect = $answer->isCorrect($answerId);
 
                     // Unique answer
@@ -341,7 +341,7 @@ if (!class_exists('ScormExport')) {
                         $pageBody .= '<tr><td width="5%" align="center">
                         <input type="radio" name="' . $htmlQuestionId . '"
                         id="scorm_' . $idCounter . '"
-                        value="' . $answer->selectWeighting($answerId) . '"></td>
+                        value="' . $answer->getWeighting($answerId) . '"></td>
                     <td width="95%"><label for="scorm_' . $idCounter . '">' . $answerText . '</label>
                     </td></tr>';
 
@@ -353,7 +353,7 @@ if (!class_exists('ScormExport')) {
                         $htmlQuestionId = 'multiple_' . $questionCount . '_' . $answerId;
 
                         // Compute the score modifier if this answer is checked
-                        $raw = $answer->selectWeighting($answerId);
+                        $raw = $answer->getWeighting($answerId);
 
                         $pageBody .= '<tr><td width="5%" align="center">
                         <label class="label-container" aria-label="'.$langSelect.'"><input type="checkbox" name="' . $htmlQuestionId . '"
@@ -467,7 +467,7 @@ if (!class_exists('ScormExport')) {
                             // fills the list-box
                             $letter = 'A';
                             foreach ($Select as $key => $val) {
-                                $scoreModifier = ( $key == $answer->isCorrect($answerId) ) ? $answer->selectWeighting($answerId) : 0;
+                                $scoreModifier = ( $key == $answer->isCorrect($answerId) ) ? $answer->getWeighting($answerId) : 0;
                                 $pageBody .= '<option value="' . $scoreModifier . '">' . $letter++ .
                                         '</option>';
                             }

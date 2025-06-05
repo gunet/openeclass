@@ -247,10 +247,10 @@ function question_html($question, $qid) {
     $nbrAnswers = $answer->selectNbrAnswers();
 
     for ($answer_id = 1; $answer_id <= $nbrAnswers; $answer_id++) {
-        $answerTitle = $answer->selectAnswer($answer_id);
-        $answerComment = standard_text_escape($answer->selectComment($answer_id));
+        $answerTitle = $answer->getTitle($answer_id);
+        $answerComment = standard_text_escape($answer->getComment($answer_id));
         $answerCorrect = $answer->isCorrect($answer_id);
-        $answerWeighting = $answer->selectWeighting($answer_id);
+        $answerWeighting = $answer->getWeighting($answer_id);
 
         if ($answerType == FILL_IN_BLANKS or $answerType == FILL_IN_BLANKS_TOLERANT) {
             list($answerTitle, $answerWeighting) = Question::blanksSplitAnswer($answerTitle);

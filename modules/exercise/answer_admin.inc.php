@@ -408,9 +408,9 @@ if (isset($_GET['modifyAnswers'])) {
             $correct = 0;
         }
         for ($i = 1; $i <= $nbrAnswers; $i++) {
-            $reponse[$i] = $objAnswer->selectAnswer($i);
-            $comment[$i] = $objAnswer->selectComment($i);
-            $weighting[$i] = $objAnswer->selectWeighting($i);
+            $reponse[$i] = $objAnswer->getTitle($i);
+            $comment[$i] = $objAnswer->getComment($i);
+            $weighting[$i] = $objAnswer->getWeighting($i);
 
             if ($answerType == MULTIPLE_ANSWER) {
                 $correct[$i] = $objAnswer->isCorrect($i);
@@ -422,7 +422,7 @@ if (isset($_GET['modifyAnswers'])) {
     } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
         if (!isset($submitAnswers) && !isset($buttonBack)) {
             if (!(isset($_POST['setWeighting']) and $_POST['setWeighting'])) {
-                $reponse = $objAnswer->selectAnswer(1);
+                $reponse = $objAnswer->getTitle(1);
                 if ($reponse) {
                     list($reponse, $weighting) = explode('::', $reponse);
                     $weighting = explode(',', $weighting);
@@ -437,7 +437,7 @@ if (isset($_GET['modifyAnswers'])) {
     }  elseif ($answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) {
         if (!isset($submitAnswers) && !isset($buttonBack)) {
             if (!(isset($_POST['setWeighting']) and $_POST['setWeighting'])) {
-                $answer = $objAnswer->selectAnswer(1);
+                $answer = $objAnswer->getTitle(1);
                 if ($answer) {
                     $answer_array = unserialize($answer);
                     $reponse = $answer_array[0]; // answer text
@@ -481,12 +481,12 @@ if (isset($_GET['modifyAnswers'])) {
             for ($i = 1; $i <= $objAnswer->selectNbrAnswers(); $i++) {
                 // it is a match
                 if ($objAnswer->isCorrect($i)) {
-                    $match[$i] = $objAnswer->selectAnswer($i);
+                    $match[$i] = $objAnswer->getTitle($i);
                     $sel[$i] = $objAnswer->isCorrect($i);
-                    $weighting[$i] = $objAnswer->selectWeighting($i);
+                    $weighting[$i] = $objAnswer->getWeighting($i);
                     $nbrMatches++;
                 } else { // it is an option
-                    $option[$i] = $objAnswer->selectAnswer($i);
+                    $option[$i] = $objAnswer->getTitle($i);
                     $nbrOptions++;
                 }
             }
@@ -530,9 +530,9 @@ if (isset($_GET['modifyAnswers'])) {
             $weighting = array();
             $correct = 0;
             for ($i = 1; $i <= $nbrAnswers; $i++) {
-                $reponse[$i] = $objAnswer->selectAnswer($i);
-                $comment[$i] = $objAnswer->selectComment($i);
-                $weighting[$i] = $objAnswer->selectWeighting($i);
+                $reponse[$i] = $objAnswer->getTitle($i);
+                $comment[$i] = $objAnswer->getComment($i);
+                $weighting[$i] = $objAnswer->getWeighting($i);
                 if ($objAnswer->isCorrect($i)) {
                     $correct = $i;
                 }

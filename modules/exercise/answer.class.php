@@ -105,23 +105,19 @@ if (!class_exists('Answer')):
         }
 
         /**
-         * returns the question ID which the answers belong to
-         *
-         * @author - Olivier Brouckaert
-         * @return - integer - the question ID
+         * @brief get answer question id
+         * @return mixed
          */
-        public function selectQuestionId() {
+        public function getQuestionId() {
             return $this->questionId;
         }
 
         /**
-         * returns the answer title
-         *
-         * @author - Olivier Brouckaert
-         * @param - integer $id - answer ID
-         * @return - string - answer title
+         * @brief get answer title
+         * @param $id
+         * @return mixed|string
          */
-        public function selectAnswer($id) {
+        public function getTitle($id) {
             if (isset($this->answer[$id])) {
                 return $this->answer[$id];
             } else {
@@ -144,13 +140,11 @@ if (!class_exists('Answer')):
         }
 
         /**
-         * returns answer comment
-         *
-         * @author - Olivier Brouckaert
-         * @param - integer $id - answer ID
-         * @return - string - answer comment
+         * @brief get comment
+         * @param $id
+         * @return mixed|string
          */
-        public function selectComment($id) {
+        public function getComment($id) {
             if (!isset($this->comment[$id])) {
                 $this->comment[$id] = '';
             }
@@ -158,13 +152,11 @@ if (!class_exists('Answer')):
         }
 
         /**
-         * returns answer weighting
-         *
-         * @author - Olivier Brouckaert
-         * @param - integer $id - answer ID
-         * @return - float - answer weighting
+         * @brief get answer weighting
+         * @param $id
+         * @return float|mixed
          */
-        public function selectWeighting($id) {
+        public function getWeighting($id) {
             if (!isset($this->weighting[$id])) {
                 $this->weighting[$id] = 0.00;
             }
@@ -172,13 +164,11 @@ if (!class_exists('Answer')):
         }
 
         /**
-         * returns answer position
-         *
-         * @author - Olivier Brouckaert
-         * @param - integer $id - answer ID
-         * @return - integer - answer position
+         * @brief get answer position
+         * @param $id
+         * @return mixed
          */
-        public function selectPosition($id) {
+        public function getPosition($id) {
             if (!isset($this->weighting[$id])) {
                 $this->weighting[$id] = 0;
             }
@@ -223,9 +213,8 @@ if (!class_exists('Answer')):
         }
 
         /**
-         * save answers into the data base
-         *
-         * @author - Olivier Brouckaert
+         * @brief save answers
+         * @return void
          */
         public function save() {
 
@@ -259,7 +248,7 @@ if (!class_exists('Answer')):
 
             // if at least one answer
             if ($this->nbrAnswers) {
-                // inserts new answers into data base
+                // inserts new answers
                 $sql = "INSERT INTO exercise_answer (question_id, answer, correct, comment, weight, r_position) VALUES ";
 
                 for ($i = 1; $i <= $this->nbrAnswers; $i++) {
@@ -279,19 +268,16 @@ if (!class_exists('Answer')):
         }
 
         /**
-         * @brief get question type (e.g. multiple choice, matching etc)
+         * @brief get a question type (e.g., multiple choice, matching, etc)
          * @return type
          */
         private function getQuestionType() {
-
-            $question_type = Database::get()->querySingle("SELECT `type` FROM exercise_question WHERE id = ?d", $this->selectQuestionId())->type;
+            $question_type = Database::get()->querySingle("SELECT `type` FROM exercise_question WHERE id = ?d", $this->getQuestionId())->type;
             return $question_type;
-
         }
 
-                /**
-         * get the text of drag and drop question from the database
-         *
+        /**
+         * @brief get the text of drag and drop question from the database
          * @author - Nikos Mpalamoutis
          */
         public function get_drag_and_drop_text() {
@@ -307,9 +293,8 @@ if (!class_exists('Answer')):
 
         }
 
-                /**
-         * get the answers of drag and drop question from the database
-         *
+        /**
+         * @brief get the answers of drag and drop question from the database
          * @author - Nikos Mpalamoutis
          */
         public function get_drag_and_drop_answers() {
@@ -322,12 +307,11 @@ if (!class_exists('Answer')):
                     return $q[1];
                 }
             }
-            
+
         }
 
-                        /**
-         * modify drag and drop answers into the database
-         *
+         /**
+         * @brief modify drag and drop answers into the database
          * @author - Nikos Mpalamoutis
          */
         public function get_total_drag_and_drop_answers() {
@@ -346,11 +330,10 @@ if (!class_exists('Answer')):
 
         }
 
-                        /**
-         * get the answers of drag and drop question from the database
-         *
-         * @author - Nikos Mpalamoutis
-         */
+        /**
+        * @brief get the answers of drag and drop question from the database
+        * @author - Nikos Mpalamoutis
+        */
         public function get_drag_and_drop_answer_text() {
 
             $finalArray = [];
@@ -372,18 +355,16 @@ if (!class_exists('Answer')):
                     ksort($reformattedItems);
                     $finalArray = array_values($reformattedItems);
                 }
-            } 
+            }
 
             return $finalArray;
-            
+
         }
 
-
-                       /**
-         * get the answers of drag and drop question from the database
-         *
-         * @author - Nikos Mpalamoutis
-         */
+       /**
+       * @brief get the answers of drag and drop question from the database
+       * @author - Nikos Mpalamoutis
+       */
         public function get_drag_and_drop_answer_grade() {
 
             $resultArray = [];
@@ -407,10 +388,10 @@ if (!class_exists('Answer')):
                         $resultArray[$arr[0]] = $arr[1]; // cast to int if needed
                     }
                 }
-            } 
+            }
 
             return $resultArray;
-            
+
         }
 
         public function get_drag_and_drop_answer_grade_as_text() {
@@ -436,15 +417,16 @@ if (!class_exists('Answer')):
                         $resultArray[$arr[0]] = $arr[1]; // cast to int if needed
                     }
                 }
-            } 
+            }
 
             return implode(',',$resultArray);
         }
 
 
-                        /**
-         * modify drag and drop marker answers count
-         *
+        /**
+         * @brief modify drag and drop marker answers count
+         * @param $questionId
+         * @return int|mixed
          * @author - Nikos Mpalamoutis
          */
         function get_total_drag_and_drop_marker_answers($questionId) {
@@ -452,7 +434,6 @@ if (!class_exists('Answer')):
 
             $dropZonesDir = "$webDir/courses/$course_code/dropZones";
             $dropZonesFile = "$dropZonesDir/dropZones_$questionId.json";
-            $arrDataMarkers = [];
             $markersData = [];
             if (file_exists($dropZonesFile)) {
                 $dataJsonFile = file_get_contents($dropZonesFile);
@@ -463,14 +444,13 @@ if (!class_exists('Answer')):
                 foreach ($value as $index => $m) {
                     if (isset($m['marker_id'])) {
                         $arrMarkers[] = $m['marker_id'];
-                    } 
+                    }
                 }
             }
             // minumun 2 answers
             $maxValueMarker = (count($arrMarkers) > 0) ? max($arrMarkers) : 2;
             return $maxValueMarker;
         }
-
 
     }
 endif;

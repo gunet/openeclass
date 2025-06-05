@@ -601,9 +601,9 @@ if (!class_exists('Question')) {
                 for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
                     if ($objAnswerTmp->isCorrect($answerId)) {
                         $q_correct_answers_sql .= ($i!=1) ? ' OR ' : '';
-                        $q_correct_answers_sql .= 'a.answer_id = '.$objAnswerTmp->selectPosition($answerId);
+                        $q_correct_answers_sql .= 'a.answer_id = '.$objAnswerTmp->getPosition($answerId);
                         $q_incorrect_answers_sql .= ($i!=1) ? ' AND ' : '';
-                        $q_incorrect_answers_sql .= 'a.answer_id != '.$objAnswerTmp->selectPosition($answerId);
+                        $q_incorrect_answers_sql .= 'a.answer_id != '.$objAnswerTmp->getPosition($answerId);
                         $i++;
                     }
                 }
@@ -623,7 +623,7 @@ if (!class_exists('Question')) {
                     }
                     $q_correct_answers_cnt = $i-1;
             } elseif ($type == FILL_IN_BLANKS || $type == FILL_IN_BLANKS_TOLERANT) { // Works Great
-               $answer_field = $objAnswerTmp->selectAnswer($nbrAnswers);
+               $answer_field = $objAnswerTmp->getTitle($nbrAnswers);
                list($answer, $answerWeighting) = $this::blanksSplitAnswer($answer_field);
                $blanks = $this::getBlanks($answer);
                $i = 1;
