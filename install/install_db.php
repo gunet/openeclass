@@ -1836,7 +1836,7 @@ $db->query("CREATE TABLE `tc_attendance` (
     KEY `meetingid` (`meetingid`)) $tbl_options");
 
 $db->query("CREATE TABLE `tc_log` (
-    `id` int(11) NOT NULL,
+    `id` int(11) NOT NULL AUTO_INCREMENT,
     `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     `meetingid` varchar(42) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
     `bbbuserid` varchar(255) DEFAULT NULL,
