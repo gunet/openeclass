@@ -22,7 +22,7 @@ class DragAndDropMarkersAnswer extends \QuestionType
         $question_text = $this->answer_object->get_drag_and_drop_text();
         $list_answers = $this->answer_object->get_drag_and_drop_answer_text();
 
-        $dropZonesDir = "$webDir/courses/$course_code/dropZones";
+        $dropZonesDir = "$webDir/courses/$course_code/image";
         $dropZonesFile = "$dropZonesDir/dropZones_$questionId.json";
         $arrDataMarkers = [];
         if (file_exists($dropZonesFile)) {

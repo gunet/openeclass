@@ -432,7 +432,7 @@ if (!class_exists('Answer')):
         function get_total_drag_and_drop_marker_answers($questionId) {
             global $webDir, $course_code;
 
-            $dropZonesDir = "$webDir/courses/$course_code/dropZones";
+            $dropZonesDir = "$webDir/courses/$course_code/image";
             $dropZonesFile = "$dropZonesDir/dropZones_$questionId.json";
             $markersData = [];
             if (file_exists($dropZonesFile)) {

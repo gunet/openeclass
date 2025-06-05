@@ -8,7 +8,7 @@ $course_code = $_GET['course_code'];
 $questionId = $_GET['questionId'];
 
 // Create json file
-$dropZonesDir = "$webDir/courses/$course_code/dropZones";
+$dropZonesDir = "$webDir/courses/$course_code/image";
 // Ensure directory exists with correct permissions
 if (!file_exists($dropZonesDir)) {
     mkdir($dropZonesDir, 0775, true); // Use 775 for web server user group

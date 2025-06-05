@@ -8,7 +8,7 @@ $course_code = $_GET['course_code'];
 $questionId = $_GET['questionId'];
 
 // Path to JSON file
-$dropZonesDir = "$webDir/courses/$course_code/dropZones";
+$dropZonesDir = "$webDir/courses/$course_code/image";
 $dropZonesFile = "$dropZonesDir/dropZones_$questionId.json";
 
 // Check if marker_id is provided

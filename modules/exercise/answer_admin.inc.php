@@ -317,7 +317,7 @@ if (isset($submitAnswers) || isset($buttonBack)) {
         }
 
     } elseif ($answerType == DRAG_AND_DROP_MARKERS) {
-        $dropZonesDir = "$webDir/courses/$course_code/dropZones";
+        $dropZonesDir = "$webDir/courses/$course_code/image";
         $dropZonesFile = "$dropZonesDir/dropZones_$questionId.json";
         $arrDataMarkers = [];
         if (file_exists($dropZonesFile)) {
@@ -1427,7 +1427,7 @@ if (isset($_GET['modifyAnswers'])) {
 function removeJsonDataFromMarkerId($markerId,$questionId) {
     global $webDir,$course_code;
     // Path to your JSON file
-    $dropZonesDir = "$webDir/courses/$course_code/dropZones";
+    $dropZonesDir = "$webDir/courses/$course_code/image";
     $dropZonesFile = "$dropZonesDir/dropZones_$questionId.json";
     $jsonFile = $dropZonesFile;
 
@@ -1466,7 +1466,7 @@ function removeJsonDataFromMarkerId($markerId,$questionId) {
 function getDataMarkersFromJson($questionId) {
     global $webDir, $course_code;
 
-    $dropZonesDir = "$webDir/courses/$course_code/dropZones";
+    $dropZonesDir = "$webDir/courses/$course_code/image";
     $dropZonesFile = "$dropZonesDir/dropZones_$questionId.json";
     $arrDataMarkers = [];
     if (file_exists($dropZonesFile)) {
