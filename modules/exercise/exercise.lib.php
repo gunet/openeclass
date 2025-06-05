@@ -75,8 +75,8 @@ function showQuestion(&$objQuestionTmp, $question_number, array $exerciseResult 
                     $tool_content .= " <div class='mb-4'>$questionDescription</div>";
                 }
                 if (file_exists($picturePath . '/quiz-' . $questionId)) {
-                    $tool_content .= "<div class='$classContainer' id='image-container' style='position: relative; display: inline-block;'>
-                                        <img class='$classImg' id='map-image' src='../../$picturePath/quiz-$questionId' style='width: 100%;'>
+                    $tool_content .= "<div class='$classContainer' id='image-container-$questionId' style='position: relative; display: inline-block;'>
+                                        <img class='$classImg' id='map-image-$questionId' src='../../$picturePath/quiz-$questionId' style='width: 100%;'>
                                         <canvas id='drawingCanvas-$questionId' style='position: absolute; top: 0; left: 0; z-index: 10;'></canvas>
                                       </div>";
                 }
@@ -287,11 +287,9 @@ function showQuestion(&$objQuestionTmp, $question_number, array $exerciseResult 
             }
             $tool_content .= "</div>
             
-            <input type='hidden' id='question-id' value='{$questionId}'>
             <input type='hidden' name='choice[$questionId]' id='arrInput_{$questionId}'>
-            <input type='hidden' id='insertedMarkersAsJson' value='{$DataMarkersToJson}'>";                  
-            
-            createMarkersBlanksOnImage();
+            <input type='hidden' id='insertedMarkersAsJson-$questionId' value='{$DataMarkersToJson}'>";
+            createMarkersBlanksOnImage($questionId);
             drag_and_drop_process();
 
 
@@ -645,13 +643,14 @@ function replaceBracketsWithBlanks($text,$cardId) {
 }
 
 // Function to create blanks
-function createMarkersBlanksOnImage() {
-    global $head_content;
+function createMarkersBlanksOnImage($Qid) {
+    global $tool_content, $head_content;
 
+    $tool_content .= "<input type='hidden' class='currentQuestion' value='{$Qid}'>";
     $head_content .= "<script>
 
-    function drawCircleWithBlank(x, y, radius, fillColor = 'rgba(207, 207, 207, 0.8)', strokeColor = 'red', label = '', ctx, dataAttrs = {}) {
-        const container = document.getElementById('image-container');
+    function drawCircleWithBlank(x, y, radius, fillColor = 'rgba(207, 207, 207, 0.8)', strokeColor = 'red', label = '', ctx, dataAttrs = {}, question_ID) {
+        const container = document.getElementById('image-container-'+question_ID);
         if (!ctx || !container) {
             console.error('Canvas context or container not found.');
             return;
@@ -692,8 +691,8 @@ function createMarkersBlanksOnImage() {
         container.appendChild(blankDiv);
     }
 
-    function drawRectangleWithBlank(x, y, width, height, fillColor = 'rgba(207, 207, 207, 0.8)', borderColor = 'grey', label = '', ctx, dataAttrs = {}) {
-        const container = document.getElementById('image-container');
+    function drawRectangleWithBlank(x, y, width, height, fillColor = 'rgba(207, 207, 207, 0.8)', borderColor = 'grey', label = '', ctx, dataAttrs = {}, question_ID) {
+        const container = document.getElementById('image-container-'+question_ID);
 
         // Dimensions for the blank span
         const blankWidth = 100;
@@ -771,7 +770,7 @@ function createMarkersBlanksOnImage() {
         // Parse shapes data from hidden input or server
         let shapesData;
         try {
-            shapesData = JSON.parse($('#insertedMarkersAsJson').val());
+            shapesData = JSON.parse($('#insertedMarkersAsJson-'+qID).val());
         } catch (e) {
             console.error('Invalid JSON data for shapes:', e);
             return;
@@ -788,7 +787,7 @@ function createMarkersBlanksOnImage() {
                                             'blank-id': shape.marker_id,
                                             'card-id': 'words_'+qID
                                          };
-                            drawCircleWithBlank(shape.x, shape.y, shape.radius, 'rgba(207, 207, 207, 0.8)', 'grey', shape.marker_id, ctx, attributes);
+                            drawCircleWithBlank(shape.x, shape.y, shape.radius, 'rgba(207, 207, 207, 0.8)', 'grey', shape.marker_id, ctx, attributes, qID);
                         }
                         break;
                     case 'rectangle':
@@ -802,7 +801,7 @@ function createMarkersBlanksOnImage() {
                                             'blank-id': shape.marker_id,
                                             'card-id': 'words_'+qID
                                          };
-                            drawRectangleWithBlank(rectX, rectY, rectWidth, rectHeight, 'rgba(207, 207, 207, 0.8)', 'grey', shape.marker_id, ctx, attributes);
+                            drawRectangleWithBlank(rectX, rectY, rectWidth, rectHeight, 'rgba(207, 207, 207, 0.8)', 'grey', shape.marker_id, ctx, attributes, qID);
                         }
                         break;
                     case 'polygon':
@@ -817,8 +816,8 @@ function createMarkersBlanksOnImage() {
 
 
     $(function() {
-        var qID = $('#question-id').val();
-        const img = $('#map-image');
+        var qID = $('.currentQuestion').val();
+        const img = $('#map-image-'+qID);
         const canvas = $('#drawingCanvas-'+qID);
 
         // Set canvas size to match image
@@ -827,8 +826,13 @@ function createMarkersBlanksOnImage() {
         canvas.attr({ width: width, height: height }).css({ width: width + 'px', height: height + 'px', display: 'block', position: 'absolute', top: img.position().top, left: img.position().left });
 
         // Load existing shapes
-       loadShapes(qID);
+        loadShapes(qID);
 
+        // Remove current question in order to get the next question.
+        const hiddenInput = document.querySelector('input.currentQuestion');
+        if (hiddenInput) {
+            hiddenInput.remove();
+        }
 
     });
 
