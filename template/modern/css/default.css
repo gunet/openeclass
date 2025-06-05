@@ -6017,3 +6017,11 @@ th.grade-col a{
 .panelCard-exercise .draggable.dropped-word{
   line-height: 1;
 }
+.drag-and-drop-markers-container,
+.drag-and-drop-markers-img {
+  width: 760px;
+  height: 400px;
+}
+.drag-and-drop-markers-container-words{
+  width: 760px;
+}

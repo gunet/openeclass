@@ -53,6 +53,14 @@ function showQuestion(&$objQuestionTmp, $question_number, array $exerciseResult 
     } else {
         $qNumber = "$question_number / $nbrQuestions";
     }
+
+    $classImg = '';
+    $classContainer = '';
+    if ($answerType == DRAG_AND_DROP_MARKERS) {
+        $classImg = 'drag-and-drop-markers-img';
+        $classContainer = 'drag-and-drop-markers-container';
+    }
+
     $tool_content .= "
             <div class='card panelCard px-lg-4 py-lg-3 qPanel panelCard-exercise mt-4' id='qPanel$questionId'>
               <div class='card-header border-0 d-flex justify-content-between align-items-center'>
@@ -67,8 +75,8 @@ function showQuestion(&$objQuestionTmp, $question_number, array $exerciseResult 
                     $tool_content .= " <div class='mb-4'>$questionDescription</div>";
                 }
                 if (file_exists($picturePath . '/quiz-' . $questionId)) {
-                    $tool_content .= "<div id='image-container' style='position: relative; display: inline-block;'>
-                                        <img id='map-image' src='../../$picturePath/quiz-$questionId' style='width: 100%;'>
+                    $tool_content .= "<div class='$classContainer' id='image-container' style='position: relative; display: inline-block;'>
+                                        <img class='$classImg' id='map-image' src='../../$picturePath/quiz-$questionId' style='width: 100%;'>
                                         <canvas id='drawingCanvas-$questionId' style='position: absolute; top: 0; left: 0; z-index: 10;'></canvas>
                                       </div>";
                 }
@@ -273,7 +281,7 @@ function showQuestion(&$objQuestionTmp, $question_number, array $exerciseResult 
         
             
             $tool_content .= "<div class='col-12 mb-4'><small class='Accent-200-cl'>(*)$langCalcelDroppableItem</small></div>";
-            $tool_content .= "<div class='col-12 d-flex justify-content-start align-items-center gap-4 flex-wrap mt-4' id='words_{$questionId}'>";
+            $tool_content .= "<div class='col-12 d-flex justify-content-start align-items-center drag-and-drop-markers-container-words gap-4 flex-wrap mt-4' id='words_{$questionId}'>";
             foreach ($list_answers as $an) {
                 $tool_content .= "<div class='draggable' data-word='{$an}' data-pool-id='words_{$questionId}'>$an</div>";
             }
