@@ -1414,14 +1414,14 @@ function add_assignment() {
     if ($v->validate()) {
         $title = $_POST['title'];
         $desc =$_POST['desc'];
-        $submission_date = isset($_POST['WorkStart']) && !empty($_POST['WorkStart']) ? DateTime::createFromFormat('d-m-Y H:i', $_POST['WorkStart'])->format('Y-m-d H:i:s') : (new DateTime('NOW'))->format('Y-m-d H:i:s');
-        $deadline = isset($_POST['WorkEnd']) && !empty($_POST['WorkEnd']) ? DateTime::createFromFormat('d-m-Y H:i', $_POST['WorkEnd'])->format('Y-m-d H:i:s') : NULL;
+        $submission_date = datetimeCreateAndFormat($_POST['WorkStart'] ?? null, (new DateTime('NOW'))->format('Y-m-d H:i:s'));
+        $deadline = datetimeCreateAndFormat($_POST['WorkEnd'] ?? null, NULL);
         //aksiologhseis ana xrhsth
         $reviews_per_user = isset($_POST['reviews_per_user']) && !empty($_POST['reviews_per_user']) ? $_POST['reviews_per_user']: NULL;
         //hmeromhnia enarkshs ths aksiologhshs apo omotimous
-        $submission_date_review = isset($_POST['WorkStart_review']) && !empty($_POST['WorkStart_review']) ? DateTime::createFromFormat('d-m-Y H:i', $_POST['WorkStart_review'])->format('Y-m-d H:i:s') : NULL;
+        $submission_date_review = datetimeCreateAndFormat($_POST['WorkStart_review'] ?? null, NULL);
         //deadline aksiologhshs apo omotimous
-        $deadline_review = isset($_POST['WorkEnd_review']) && !empty($_POST['WorkEnd_review']) ? DateTime::createFromFormat('d-m-Y H:i', $_POST['WorkEnd_review'])->format('Y-m-d H:i:s') :NULL;
+        $deadline_review = datetimeCreateAndFormat($_POST['WorkEnd_review'] ?? null, NULL);
         $submission_type = isset($_POST['submission_type']) ? intval($_POST['submission_type']) : 0;
         $late_submission = isset($_POST['late_submission']) ? 1 : 0;
         $group_submissions = $_POST['group_submissions'];
@@ -1470,7 +1470,7 @@ function add_assignment() {
 
         $lti_template = $_POST['lti_template'] ?? NULL;
         $launchcontainer = $_POST['lti_launchcontainer'] ?? NULL;
-        $tii_feedbackreleasedate = isset($_POST['tii_feedbackreleasedate']) && !empty($_POST['tii_feedbackreleasedate']) ? DateTime::createFromFormat('d-m-Y H:i', $_POST['tii_feedbackreleasedate'])->format('Y-m-d H:i:s') : NULL;
+        $tii_feedbackreleasedate = datetimeCreateAndFormat($_POST['tii_feedbackreleasedate'] ?? null, NULL);
         $tii_internetcheck = isset($_POST['tii_internetcheck']) ? 1 : 0;
         $tii_institutioncheck = isset($_POST['tii_institutioncheck']) ? 1 : 0;
         $tii_journalcheck = isset($_POST['tii_journalcheck']) ? 1 : 0;
@@ -1655,12 +1655,12 @@ function edit_assignment($id) {
             $reviews_per_user = $_POST['reviews_per_user'];
         }
         $submission_type = isset($_POST['submission_type']) ? intval($_POST['submission_type']) : 0;
-        $submission_date = isset($_POST['WorkStart']) && !empty($_POST['WorkStart']) ? DateTime::createFromFormat('d-m-Y H:i', $_POST['WorkStart'])->format('Y-m-d H:i:s') : (new DateTime('NOW'))->format('Y-m-d H:i:s');
-        $deadline = isset($_POST['WorkEnd']) && !empty($_POST['WorkEnd']) ? DateTime::createFromFormat('d-m-Y H:i', $_POST['WorkEnd'])->format('Y-m-d H:i:s') : NULL;
+        $submission_date = datetimeCreateAndFormat($_POST['WorkStart'] ?? null, (new DateTime('NOW'))->format('Y-m-d H:i:s'));
+        $deadline = datetimeCreateAndFormat($_POST['WorkEnd'] ?? null, NULL);
         //hmeromhnia enarkshs ths aksiologhshs apo omotimous
-        $submission_date_review = isset($_POST['WorkStart_review']) && !empty($_POST['WorkStart_review']) ? DateTime::createFromFormat('d-m-Y H:i', $_POST['WorkStart_review'])->format('Y-m-d H:i:s') : NULL;
+        $submission_date_review = datetimeCreateAndFormat($_POST['WorkStart_review'] ?? null, NULL);
         //deadline aksiologhshs apo omotimous
-        $deadline_review = isset($_POST['WorkEnd_review']) && !empty($_POST['WorkEnd_review']) ? DateTime::createFromFormat('d-m-Y H:i', $_POST['WorkEnd_review'])->format('Y-m-d H:i:s') : NULL;
+        $deadline_review = datetimeCreateAndFormat($_POST['WorkEnd_review'] ?? null, NULL);
         $late_submission = isset($_POST['late_submission']) ? 1 : 0;
         $group_submissions = $_POST['group_submissions'];
         $grade_type = $_POST['grading_type'];
@@ -1725,7 +1725,7 @@ function edit_assignment($id) {
         $assignment_type = intval($_POST['assignment_type']);
         $lti_template = isset($_POST['lti_template']) ? $_POST['lti_template'] : NULL;
         $launchcontainer = isset($_POST['lti_launchcontainer']) ? $_POST['lti_launchcontainer'] : NULL;
-        $tii_feedbackreleasedate = isset($_POST['tii_feedbackreleasedate']) && !empty($_POST['tii_feedbackreleasedate']) ? DateTime::createFromFormat('d-m-Y H:i', $_POST['tii_feedbackreleasedate'])->format('Y-m-d H:i:s') : NULL;
+        $tii_feedbackreleasedate = datetimeCreateAndFormat($_POST['tii_feedbackreleasedate'] ?? null, NULL);
         $tii_internetcheck = isset($_POST['tii_internetcheck']) ? 1 : 0;
         $tii_institutioncheck = isset($_POST['tii_institutioncheck']) ? 1 : 0;
         $tii_journalcheck = isset($_POST['tii_journalcheck']) ? 1 : 0;
@@ -3542,4 +3542,15 @@ function resolve_lti_template_1P3_ids_js(array $lti_templates): string {
 function get_selected_content_indicator(): string {
     global $langTiiSelectedContent;
     return "<span><i class='icon fa fa-check text-success fa-fw me-1' title='$langTiiSelectedContent' role='img' aria-label='$langTiiSelectedContent'></i>$langTiiSelectedContent</span>";
+}
+
+function datetimeCreateAndFormat(?string $data, ?string $default): ?string {
+    $ret = $default;
+    if (!empty($data)) {
+        $dt = DateTime::createFromFormat('d-m-Y H:i', $data);
+        if ($dt !== false) {
+            $ret = $dt->format('Y-m-d H:i:s');
+        }
+    }
+    return $ret;
 }
