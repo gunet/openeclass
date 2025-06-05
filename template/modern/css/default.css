@@ -213,7 +213,19 @@ iframe{
   body:has(.footer-image) .fixed-announcement .module-container{
     min-height: calc(100vh - 80px - 235px - 60px);
   }
+
+  .footer-image{
+    max-width: 425px;
+    max-height: 150px;
+  }
 }
+@media(max-width: 991px) {
+  .footer-image{
+    max-width: 280px;
+    max-height: 100px;
+  }
+}
+
 
 
 .panel-phpinfo{
