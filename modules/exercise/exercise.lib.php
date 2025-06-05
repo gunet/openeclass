@@ -576,7 +576,7 @@ function display_exercise($exercise_id): void
                             $tool_content .= "<tr><td>" . $formatted_answer_text;
                             $tool_content .= "&nbsp;&nbsp;&nbsp;<strong><small>($langScore: $answer_weight)</small></strong>";
                             $tool_content .= "</td></tr>";
-                        } elseif ($answerType == DRAG_AND_DROP_TEXT) {
+                        } elseif ($answerType == DRAG_AND_DROP_TEXT || $answerType == DRAG_AND_DROP_MARKERS) {
                             $quetionText = $answer->get_drag_and_drop_text();
                             $gradesOfAnswers = $answer->get_drag_and_drop_answer_grade();
                             $AnswersGradeArr= [];
@@ -587,8 +587,6 @@ function display_exercise($exercise_id): void
                             $tool_content .= "<tr>
                                                 <td>" . standard_text_escape($quetionText) . "&nbsp;&nbsp;&nbsp;<strong><small class='text-nowrap'>($langScore: $AnswersGrade)</small></strong></td>
                                               </tr>";
-                        } elseif ($answerType == DRAG_AND_DROP_MARKERS) {
-                            
                         } else {
                             $tool_content .= "<tr><td>" . standard_text_escape($answerTitle) . "</td>";
                             $tool_content .= "<td>" . $answer->answer[$answerCorrect] . "&nbsp;&nbsp;&nbsp;<strong><small class='text-nowrap'>($langScore: $answerWeighting)</small></strong></td>";

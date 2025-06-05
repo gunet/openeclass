@@ -351,7 +351,11 @@ if (isset($submitAnswers) || isset($buttonBack)) {
             $marker_ans = '::' . $marker_ans;
         }
 
-        $reponse = 'Αντιστοιχίστε τις απαντήσεις πάνω στην εικόνα. Υπάρχουν ' . count($markerAnsArr) . ' πιθανές απαντήσεις ' . $marker_ans;
+        $bracketAnswers = '';
+        for ($i=1; $i <= count($markerAnsArr); $i++) {
+            $bracketAnswers .= ' [' . $i . '] ';
+        }
+        $reponse = $langDragAndDropMarkersTextAnswers . $bracketAnswers . $marker_ans;
         $objAnswer->createAnswer($reponse, 0, '', 0, 1);
         $objAnswer->save();
         if (isset($_POST['marker_grade'])) {
@@ -1256,17 +1260,18 @@ if (isset($_GET['modifyAnswers'])) {
                             var markerAnswer = $('#marker-answer-'+number).val();
                             var markerGrade = $('#marker-grade-'+number).val();
                             var markerCoordinates = $('#shape-coordinates-'+number).val();
+                            var markerShape = $('#shapeType-'+number).val();
                             
                             // Replace colon with comma
                             const replacedStr = markerCoordinates.replace(/:/g, ',');
                             // Split the string into an array
                             const arr = replacedStr.split(',').map(Number);
-                            
+
                             if (markerAnswer && markerCoordinates) {
                                 vertices = [
                                                 {'marker_id': number},
                                                 {'marker_answer': markerAnswer},
-                                                {'shape_type': currentShape},
+                                                {'shape_type': markerShape},
                                                 {'x': arr[0]},
                                                 {'y': arr[1]},
                                                 {'endX': arr[2]},

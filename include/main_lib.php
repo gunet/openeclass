@@ -265,6 +265,10 @@ function load_js($file, $init='') {
             $file = 'trunk8.js';
         } elseif ($file == 'clipboard.js') {
             $file = 'clipboard.js/clipboard.min.js';
+        } elseif ($file == 'jquery-ui') {
+            $file = 'jquery-ui.min.js';
+        } elseif ($file == 'jquery-touch') {
+            $file = 'jquery.ui.touch-punch.min.js';
         }
 
         $head_content .= js_link($file);

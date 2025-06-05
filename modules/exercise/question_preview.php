@@ -157,7 +157,7 @@ if ($answerType != FREE_TEXT) {
                     <td>$formatted_answer_text&nbsp;&nbsp;&nbsp;<strong><small>($langScore: $answer_weight)</small></strong>
                     </td>
                   </tr>";
-            } elseif($answerType == DRAG_AND_DROP_TEXT){
+            } elseif($answerType == DRAG_AND_DROP_TEXT || $answerType == DRAG_AND_DROP_MARKERS){
                 $quetionText = $answer->get_drag_and_drop_text();
                 $gradesOfAnswers = $answer->get_drag_and_drop_answer_grade();
                 $AnswersGradeArr= [];
@@ -169,8 +169,6 @@ if ($answerType != FREE_TEXT) {
                   <tr>
                     <td>" . standard_text_escape($quetionText) . " <strong><small>($langScore: $AnswersGrade)</small></strong></td>
                   </tr>";
-            } elseif($answerType == DRAG_AND_DROP_MARKERS) {
-              
             } else {
                 $tool_content .= "
                   <tr>

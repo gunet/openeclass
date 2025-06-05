@@ -1137,12 +1137,24 @@ if (!class_exists('Exercise')) {
                         $eurid, $key, $row_key, $row_choice, $answer_weight, $as_answered, $q_position);
                     unset($answer_weight);
                 }
-            } elseif ($question_type == DRAG_AND_DROP_TEXT) {
+            } elseif ($question_type == DRAG_AND_DROP_TEXT || $question_type == DRAG_AND_DROP_MARKERS) {
 
                 $objAnswersTmp = new Answer($key);
                 $questionWords = $objAnswersTmp->get_drag_and_drop_answer_text();
                 $questionGrades = $objAnswersTmp->get_drag_and_drop_answer_grade();
                 $userAnswersAsJSON = $_POST['choice'][$key];
+
+                // Change indexes to start from 0.
+                if ($question_type == DRAG_AND_DROP_MARKERS) {
+                    $arrTmp = [];
+                    foreach ($questionGrades as $index => $value) {
+                        if ($index > 0) {
+                            $index = $index - 1;
+                            $arrTmp[$index] = $value;
+                        }
+                    }
+                    $questionGrades = $arrTmp;
+                }
 
                 if (!$userAnswersAsJSON) { // User has no filled in to the blanks of the question.
                     $blank = 1;
@@ -1170,7 +1182,9 @@ if (!class_exists('Exercise')) {
                             $weight = 0;
                             $value = '';
                         } else {
-                            $weight = ($blank > 0 && !empty($value) && $questionWords[$blank-1] == $value) ? $questionGrades[$blank-1] : 0;
+                            if ($question_type == DRAG_AND_DROP_TEXT || $question_type == DRAG_AND_DROP_MARKERS) {
+                                $weight = ($blank > 0 && !empty($value) && $questionWords[$blank-1] == $value) ? $questionGrades[$blank-1] : 0;
+                            }
                         }
                         Database::get()->query("INSERT INTO exercise_answer_record
                             (eurid, question_id, answer, answer_id, weight, is_answered, q_position)
@@ -1178,8 +1192,6 @@ if (!class_exists('Exercise')) {
                             $eurid, $key, $value, $blank, $weight, $as_answered, $q_position);
                     }
                 }
-                
-            } elseif ($question_type == DRAG_AND_DROP_MARKERS) {
                 
             } else {
                 if ($value) {

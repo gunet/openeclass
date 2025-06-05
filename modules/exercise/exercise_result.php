@@ -419,11 +419,20 @@ if (count($exercise_question_ids) > 0) {
                     list($answer, $answerWeighting) = Question::blanksSplitAnswer($answer);
                 } elseif ($answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) {
                     $answer_array = unserialize($answer);
-                } elseif ($answerType == DRAG_AND_DROP_TEXT) {
+                } elseif ($answerType == DRAG_AND_DROP_TEXT || $answerType == DRAG_AND_DROP_MARKERS) {
                     $answer = $objAnswerTmp->get_drag_and_drop_text();
                     $answerWeighting = $objAnswerTmp->get_drag_and_drop_answer_grade();
-                } elseif ($answerType == DRAG_AND_DROP_MARKERS) {
-
+                    if ($answerType == DRAG_AND_DROP_MARKERS) {
+                        // Change indexes to start from 0.
+                        $arrTmp = [];
+                        foreach ($answerWeighting as $index => $value) {
+                            if ($index > 0) {
+                                $index = $index - 1;
+                                $arrTmp[$index] = $value;
+                            }
+                        }
+                        $answerWeighting = $arrTmp;
+                    }
                 } else {
                     $answer = standard_text_escape($answer);
                 }
@@ -445,11 +454,10 @@ if (count($exercise_question_ids) > 0) {
                         }
                         break;
                     case DRAG_AND_DROP_TEXT :
+                    case DRAG_AND_DROP_MARKERS :
                         $arrResult = drag_and_drop_user_results_as_text($eurid,$row->question_id);
                         $answer = $arrResult[0]['aboutUserAnswers'];
                         $questionScore = $arrResult[0]['aboutUserGrade'];
-                        break;
-                    case DRAG_AND_DROP_MARKERS :
                         break;
                     case FILL_IN_BLANKS :
                     case FILL_IN_BLANKS_TOLERANT :
@@ -664,10 +672,8 @@ if (count($exercise_question_ids) > 0) {
                         $tool_content .= "</td></tr>";
                     } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT || $answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) {
                         $tool_content .= "<tr><td>" . standard_text_escape(nl2br($answer)) . "</td></tr>";
-                    } elseif ($answerType == DRAG_AND_DROP_TEXT) {
+                    } elseif ($answerType == DRAG_AND_DROP_TEXT || $answerType == DRAG_AND_DROP_MARKERS) {
                         $tool_content .= "<tr><td>$answer</td></tr>";
-                    } elseif ($answerType == DRAG_AND_DROP_MARKERS) {
-                        
                     } elseif ($answerType == MATCHING) {
                         $tool_content .= "<tr><td><div class='d-flex align-items-center'><div class='d-flex align-items-end m-1 me-2 col-6'>" . q($answer) . "</div>";
                         $tool_content .= "<div class='d-flex align-items-center col-6 m-1 me-2'>" . $choice[$answerId];

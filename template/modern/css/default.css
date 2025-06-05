@@ -5968,7 +5968,8 @@ th.grade-col a{
 
 /******************************** EXERCISE QUESTIONS ************************************/
 /* DRAG AND DROP TEXT */
-.blank {
+
+.panelCard-exercise .blank {
   display: inline-block;
   min-width: 100px;
   height: 40px;
@@ -5977,17 +5978,17 @@ th.grade-col a{
   margin-left: 10px;
   margin-right: 10px;
 }
-.blank:has(.dropped-word){
+.panelCard-exercise .blank:has(.dropped-word){
   background-color: #1E7E0E;
 }
-.blank.ui-droppable-active.ui-droppable-hover.hovered{
+.panelCard-exercise .blank.ui-droppable-active.ui-droppable-hover.hovered{
   box-shadow: 0 0 5px 5px #1E7E0E;
 }
-.blank.ui-droppable-active.ui-droppable-hover.hovered .dropped-word{
+.panelCard-exercise .blank.ui-droppable-active.ui-droppable-hover.hovered .dropped-word{
   box-shadow: 0 0 0 2px #C44601;
 }
 
-.draggable {
+.panelCard-exercise .draggable {
   display: inline-block;
   padding: 8px 12px;
   height: 25px;
@@ -6000,4 +6001,7 @@ th.grade-col a{
   align-items: center;
   justify-content: center;
   min-width: 50px;
+}
+.panelCard-exercise .draggable.dropped-word{
+  line-height: 1;
 }
