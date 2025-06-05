@@ -931,7 +931,7 @@ if (isset($_GET['modifyAnswers'])) {
                                             </td>
                                             <td>
                                                 <div class='col-12'>
-                                                    <input type='number' class='form-control' name='choice_grade[$i]' value='{$choiceAsGrade}' step='any'>
+                                                    <input type='number' class='form-control' name='choice_grade[$i]' value='{$choiceAsGrade}' min='-1000'>
                                                 </div>
                                             </td>
                                         </tr>";
@@ -1365,7 +1365,7 @@ if (isset($_GET['modifyAnswers'])) {
                                             </td>
                                             <td>
                                                 <div class='col-12'>
-                                                    <input type='number' id='marker-grade-$chAns' class='form-control' name='marker_grade[$chAns]' value='{$markerGrade}' step='any'>
+                                                    <input type='number' id='marker-grade-$chAns' class='form-control' name='marker_grade[$chAns]' value='{$markerGrade}' min='-1000'>
                                                 </div>
                                             </td>
                                             <td>

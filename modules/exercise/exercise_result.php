@@ -909,6 +909,9 @@ function drag_and_drop_user_results_as_text($eurid,$questionId) {
                         $userGrade += $an->weight;
                         return "[" . "<strong>".$an->answer."</strong>" . "&nbsp;/&nbsp;" . $definedAnswers[$bracket] . "]" . "&nbsp;&nbsp;<span class='fa-solid fa-check text-success'></span>";
                     } else {
+                        if ($an->weight < 0) {
+                            $userGrade -= $an->weight;
+                        }
                         if (!empty($an->answer)) {
                             return "[" . "<span class='text-danger'><s>".$an->answer."</s></span>" . "&nbsp;/&nbsp;" . $definedAnswers[$bracket] . "]" . "&nbsp;&nbsp;<span class='fa-solid fa-xmark text-danger'></span>";
                         } else {
