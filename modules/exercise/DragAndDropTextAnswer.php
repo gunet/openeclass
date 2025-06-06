@@ -11,7 +11,10 @@ class DragAndDropTextAnswer extends \QuestionType
 
     public function PreviewQuestion(): string
     {
-        global $langAnswer, $langScore;
+        global $langAnswer, $langScore, $head_content, $webDir, $course_code;
+
+        $questionId = $this->question_id;
+        $answerType = Database::get()->querySingle("SELECT type FROM exercise_question WHERE id = ?d", $questionId)->type;
 
         $html_content = "<tr class='active'><td><strong>$langAnswer</strong></td></tr>";
 
@@ -26,6 +29,63 @@ class DragAndDropTextAnswer extends \QuestionType
             <tr>
                 <td>" . standard_text_escape($questionText) . " <strong><small>($langScore: $AnswersGrade)</small></strong></td>
             </tr>";
+
+        // Create the blanks on the image and display them if the question type is DRAG AND DROP MARKERS.
+        if ($answerType == DRAG_AND_DROP_MARKERS) {
+            $dropZonesDir = "$webDir/courses/$course_code/image";
+            $dropZonesFile = "$dropZonesDir/dropZones_$questionId.json";
+            $arrDataMarkers = [];
+            if (file_exists($dropZonesFile)) {
+                $dataJsonFile = file_get_contents($dropZonesFile);
+                $markersData = json_decode($dataJsonFile, true);
+                // Loop through each item in the original array
+                foreach ($markersData as $item => $value) {
+                    if (count($value) == 9) {
+                        $arrDataMarkers[$value[0]['marker_id']] = [
+                            'marker_answer' => $value[1]['marker_answer'],
+                            'marker_shape' => $value[2]['shape_type'],
+                            'marker_coordinates' => $value[3]['x'] . ',' . $value[4]['y'],
+                            'marker_offsets' => $value[5]['endX'] . ',' . $value[6]['endY'],
+                            'marker_grade' => $value[7]['marker_grade'],
+                            'marker_radius' => $value[8]['marker_radius']
+                        ];
+                    }
+                }
+            }
+
+            $coordinatesXY = [];
+            foreach ($arrDataMarkers as $index => $m) {
+                $arr_m = explode(',', $m['marker_coordinates']);
+                $m['x'] = $arr_m[0];
+                $m['y'] = $arr_m[1];
+                $arr_of = explode(',', $m['marker_offsets']);
+                $m['endX'] = $arr_of[0];
+                $m['endY'] = $arr_of[1];
+                if ($m['marker_shape'] == 'circle') {
+                    $coordinatesXY[] = ['marker_id' => $index, 'x' => $m['x'], 'y' => $m['y'], 'shape_type' => $m['marker_shape'], 'radius' => $m['marker_radius']];
+                } elseif ($m['marker_shape'] == 'rectangle') {
+                    $coordinatesXY[] = ['marker_id' => $index, 'x' => $m['x'], 'y' => $m['y'], 'shape_type' => $m['marker_shape'], 'endY' => $m['endY'], 'endX' => $m['endX']];
+                } elseif ($m['marker_shape'] == 'polygon') {
+                    // Here it will be added the polygon process.
+                }
+            }
+
+            $DataMarkersToJson = json_encode($coordinatesXY) ?? '';
+
+            // Show the blanks on the image
+            if ($DataMarkersToJson) {
+                $html_content .= "<input type='hidden' class='currentQuestion' value='{$questionId}'>
+                                  <input type='hidden' id='insertedMarkersAsJson-$questionId' value='{$DataMarkersToJson}'>";
+
+                load_js('tools.js');
+
+                $head_content .= "<script>
+                                    document.addEventListener('DOMContentLoaded', function() {
+                                        createMarkersBlanksOnImage();
+                                    });
+                                  </script>";
+            }
+        }
 
         return $html_content;
     }

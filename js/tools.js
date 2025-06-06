@@ -842,15 +842,17 @@ function drawCircleWithBlank(x, y, radius, fillColor = 'rgba(207, 207, 207, 0.8)
     blankDiv.style.cursor = 'pointer';
     blankDiv.style.zIndex = 20;
 
-    // Position the span relative to the container
-    blankDiv.style.left = x + 'px';
-    blankDiv.style.top = y + 'px';
-
-    // Center the span exactly over the point
-    blankDiv.style.transform = 'translate(-50%, -50%)';
-
     // Append overlay to container
+    container.style.position = 'relative';
     container.appendChild(blankDiv);
+
+    // Position the span relative to the container
+    // Calculate top and left to center span on circle
+    const left = x - blankWidth / 2;
+    const top = y - blankHeight / 2;
+    blankDiv.style.left = left + 'px';
+    blankDiv.style.top = top + 'px';
+
 }
 
 
@@ -937,7 +939,6 @@ function loadShapes(qID) {
     let shapesData;
     try {
         shapesData = JSON.parse($('#insertedMarkersAsJson-'+qID).val());
-        console.log(shapesData);
     } catch (e) {
         console.error('Invalid JSON data for shapes:', e);
         return;
@@ -984,7 +985,7 @@ function loadShapes(qID) {
 // Create blanks on the image regarding defined answers. (Drag and drop marker type of question in exercise).
 function createMarkersBlanksOnImage() {
     var qID = $('.currentQuestion').val();
-    const img = $('#map-image-'+qID);
+    const img = $('#img-quiz-'+qID);
     const canvas = $('#drawingCanvas-'+qID);
 
     // Set canvas size to match image

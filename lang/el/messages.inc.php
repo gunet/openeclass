@@ -2160,7 +2160,7 @@ $langErrorWithChoicesAsAnswers = "Υπάρχει λάθος στην αντισ�
 $langCalcelDroppableItem = "Μπορείτε να αναιρέσετε την απάντησή σας κάνοντας αριστερό κλικ πάνω στην λέξη.";
 $langAllowMoreDefinedAnswersThanBlanks = "Οι προκαθορισμένες απαντήσεις να είναι περισσότερες απο τον αριθμό των κενών";
 $langErrorWithUniqueNumberOfBlank = "Καταχωρήσατε τον ίδιο μοναδικό αριθμό σε παραπάνω από ένα κενά.";
-$langDragAndDropMarkersTextAnswers = "Ο χρήστης απάντησε: ";
+$langDragAndDropMarkersTextAnswers = "Σημεία απαντήσεων: ";
 
 $langDragAndDropMarkers = "Drag and Drop σημείων";
 $langMarker = "Σημείο";

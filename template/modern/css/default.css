@@ -6018,9 +6018,10 @@ th.grade-col a{
   line-height: 1;
 }
 .drag-and-drop-markers-container,
-.drag-and-drop-markers-img {
-  width: 760px;
-  height: 400px;
+.drag-and-drop-markers-img,
+.drag-and-drop-markers-canvas {
+  width: 760px !important;
+  height: 400px !important;
 }
 .drag-and-drop-markers-container-words{
   width: 760px;

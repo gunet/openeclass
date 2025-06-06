@@ -64,9 +64,11 @@ function showQuestion(&$objQuestionTmp, $question_number, array $exerciseResult 
 
     $classImg = '';
     $classContainer = '';
+    $classCanvas = '';
     if ($answerType == DRAG_AND_DROP_MARKERS) {
         $classImg = 'drag-and-drop-markers-img';
         $classContainer = 'drag-and-drop-markers-container';
+        $classCanvas = 'drag-and-drop-markers-canvas';
     }
 
     $tool_content .= "
@@ -84,8 +86,8 @@ function showQuestion(&$objQuestionTmp, $question_number, array $exerciseResult 
                 }
                 if (file_exists($picturePath . '/quiz-' . $questionId)) {
                     $tool_content .= "<div class='$classContainer' id='image-container-$questionId' style='position: relative; display: inline-block;'>
-                                        <img class='$classImg' id='map-image-$questionId' src='../../$picturePath/quiz-$questionId' style='width: 100%;'>
-                                        <canvas id='drawingCanvas-$questionId' style='position: absolute; top: 0; left: 0; z-index: 10;'></canvas>
+                                        <img class='$classImg' id='img-quiz-$questionId' src='../../$picturePath/quiz-$questionId' style='width: 100%;'>
+                                        <canvas id='drawingCanvas-$questionId' class='$classCanvas' style='position: absolute; top: 0; left: 0; z-index: 10;'></canvas>
                                       </div>";
                 }
 
@@ -282,8 +284,24 @@ function display_exercise($exercise_id): void
             <br>" . standard_text_escape($questionDescription) . "<br><br>
             </td></tr>";
 
+            $classImg = '';
+            $classContainer = '';
+            $classCanvas = '';
+            if ($answerType == DRAG_AND_DROP_MARKERS) {
+                $classImg = 'drag-and-drop-markers-img';
+                $classContainer = 'drag-and-drop-markers-container';
+                $classCanvas = 'drag-and-drop-markers-canvas';
+            }
+
             if (file_exists($picturePath . '/quiz-' . $qid)) {
-                $tool_content .= "<tr><td colspan='$colspan'><img src='../../$picturePath/quiz-" . $qid . "'></td></tr>";
+                $tool_content .= "<tr>
+                                    <td colspan='$colspan'>
+                                        <div class='$classContainer' id='image-container-$qid' style='position: relative; display: inline-block;'>
+                                            <img class='$classImg' id='img-quiz-$qid' src='../../$picturePath/quiz-" . $qid . "'>
+                                            <canvas class='$classCanvas' id='drawingCanvas-$qid' style='position: absolute; top: 0; left: 0; z-index: 10;'></canvas>
+                                        </div>
+                                    </td>
+                                 </tr>";
             }
 
             // display answers

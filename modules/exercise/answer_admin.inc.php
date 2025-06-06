@@ -576,6 +576,7 @@ if (isset($_GET['modifyAnswers'])) {
             }
         }
 
+        $coordinatesXY = [];
         $arrDataMarkers = getDataMarkersFromJson($questionId);
         foreach ($arrDataMarkers as $index => $m) {
             $arr_m = explode(',', $m['marker_coordinates']);
@@ -588,9 +589,20 @@ if (isset($_GET['modifyAnswers'])) {
                 $coordinatesXY[] = ['marker_id' => $index, 'x' => $m['x'], 'y' => $m['y'], 'marker_shape' => $m['marker_shape'], 'color' => 'rgba(255, 0, 0, 0.8)', 'radius' => $m['marker_radius']];
             } elseif ($m['marker_shape'] == 'rectangle') {
                 $coordinatesXY[] = ['marker_id' => $index, 'x' => $m['x'], 'y' => $m['y'], 'marker_shape' => $m['marker_shape'], 'color' => 'rgba(0, 249, 91, 0.8)', 'width' => $m['endy'], 'height' => $m['endx']];
+            } elseif ($m['marker_shape'] == 'polygon') {
+
             }
         }
         $DataMarkersToJson = json_encode($coordinatesXY) ?? '';
+    }
+
+    $classImg = '';
+    $classContainer = '';
+    $classCanvas = '';
+    if ($answerType == DRAG_AND_DROP_MARKERS) {
+        $classImg = 'drag-and-drop-markers-img';
+        $classContainer = 'drag-and-drop-markers-container';
+        $classCanvas = 'drag-and-drop-markers-canvas';
     }
 
 
@@ -600,10 +612,10 @@ if (isset($_GET['modifyAnswers'])) {
                             icon('fa-edit', $langModify, $_SERVER['SCRIPT_NAME'] . "?course=$course_code".(isset($exerciseId) ? "&amp;exerciseId=$exerciseId" : "")."&amp;modifyQuestion=" . $questionId)."
                         </h3>
                       </div>
-                      <div class='card-body'>
+                      <div class='card-body' style='overflow:auto;'>
                             <h5>$questionTypeWord<br>" . nl2br(q_math($questionName)) . "</h5>
                                 <p>$questionDescription</p>
-                                ".(($okPicture)? "<div id='imageContainer-$questionId' style='position: relative; display: inline-block;'><img id='img-quiz-$questionId' src='../../$picturePath/quiz-$questionId'><canvas id='drawingCanvas-$questionId' style='position: absolute; top: 0; left: 0; z-index: 10;'></canvas></div>":"")."
+                                ".(($okPicture)? "<div class='$classContainer' id='image-container-$questionId' style='position: relative; display: inline-block;'><img class='$classImg' id='img-quiz-$questionId' src='../../$picturePath/quiz-$questionId'><canvas id='drawingCanvas-$questionId' class='$classCanvas' style='position: absolute; top: 0; left: 0; z-index: 10;'></canvas></div>":"")."
                       </div>
                     </div></div>";
 
@@ -1092,7 +1104,7 @@ if (isset($_GET['modifyAnswers'])) {
                 }
 
                 function enableDrawing(currentShape) {
-                    const container = $('#imageContainer-$questionId');
+                    const container = $('#image-container-$questionId');
                     const img = $('#img-quiz-$questionId');
                     const width = img.width();
                     const height = img.height();
