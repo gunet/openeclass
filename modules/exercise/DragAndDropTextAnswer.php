@@ -77,7 +77,7 @@ class DragAndDropTextAnswer extends \QuestionType
                 $html_content .= "<input type='hidden' class='currentQuestion' value='{$questionId}'>
                                   <input type='hidden' id='insertedMarkersAsJson-$questionId' value='{$DataMarkersToJson}'>";
 
-                load_js('tools.js');
+                load_js('drag-and-drop-shapes');
 
                 $head_content .= "<script>
                                     document.addEventListener('DOMContentLoaded', function() {
@@ -108,8 +108,8 @@ class DragAndDropTextAnswer extends \QuestionType
         $html_content .= "</div>";
         $html_content .= "<input type='hidden' name='choice[$questionId]' id='arrInput_{$questionId}'>";
 
-        //drag_and_drop_process();
-        load_js('tools.js');
+        load_js('drag-and-drop-shapes');
+        
         $head_content .= "<script>
                             document.addEventListener('DOMContentLoaded', function() {
                                 drag_and_drop_process();

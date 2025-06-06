@@ -67,7 +67,7 @@ class DragAndDropMarkersAnswer extends \QuestionType
         $html_content .= "<input type='hidden' id='insertedMarkersAsJson-$questionId' value='{$DataMarkersToJson}'>";
         $html_content .= "<input type='hidden' class='currentQuestion' value='{$questionId}'>";
 
-        load_js('tools.js');
+        load_js('drag-and-drop-shapes');
         $head_content .= "<script>
                             document.addEventListener('DOMContentLoaded', function() {
                                 createMarkersBlanksOnImage();

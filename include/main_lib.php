@@ -269,6 +269,8 @@ function load_js($file, $init='') {
             $file = 'jquery-ui.min.js';
         } elseif ($file == 'jquery-touch') {
             $file = 'jquery.ui.touch-punch.min.js';
+        } elseif ($file == 'drag-and-drop-shapes') {
+            $file = 'drag-and-drop-shapes.js';
         }
 
         $head_content .= js_link($file);
