@@ -586,9 +586,9 @@ if (isset($_GET['modifyAnswers'])) {
             $m['endx'] = $arr_of[0];
             $m['endy'] = $arr_of[1];
             if ($m['marker_shape'] == 'circle') {
-                $coordinatesXY[] = ['marker_id' => $index, 'x' => $m['x'], 'y' => $m['y'], 'marker_shape' => $m['marker_shape'], 'color' => 'rgba(255, 0, 0, 0.8)', 'radius' => $m['marker_radius']];
+                $coordinatesXY[] = ['marker_id' => $index, 'x' => $m['x'], 'y' => $m['y'], 'marker_shape' => $m['marker_shape'], 'color' => 'rgba(255, 255, 255, 0.5)', 'radius' => $m['marker_radius']];
             } elseif ($m['marker_shape'] == 'rectangle') {
-                $coordinatesXY[] = ['marker_id' => $index, 'x' => $m['x'], 'y' => $m['y'], 'marker_shape' => $m['marker_shape'], 'color' => 'rgba(0, 249, 91, 0.8)', 'width' => $m['endy'], 'height' => $m['endx']];
+                $coordinatesXY[] = ['marker_id' => $index, 'x' => $m['x'], 'y' => $m['y'], 'marker_shape' => $m['marker_shape'], 'color' => 'rgba(255, 255, 255, 0.5)', 'width' => $m['endy'], 'height' => $m['endx']];
             } elseif ($m['marker_shape'] == 'polygon') {
 
             }
@@ -969,7 +969,7 @@ if (isset($_GET['modifyAnswers'])) {
                 let radiusOriginal = 0;
                 let shapes = [];
 
-                function drawCircle(x, y, radius, fillColor = 'rgba(255, 0, 0, 0.8)', strokeColor = 'red', label = '', ctx) {
+                function drawCircle(x, y, radius, fillColor = 'rgba(255, 255, 255, 0.5)', strokeColor = 'grey', label = '', ctx) {
                     ctx.fillStyle = fillColor;
                     ctx.beginPath();
                     ctx.arc(x, y, radius, 0, Math.PI * 2);
@@ -989,7 +989,7 @@ if (isset($_GET['modifyAnswers'])) {
                     radiusOriginal = radius;
                 }
 
-                function drawRectangle(x, y, width, height, fillColor = 'rgba(0, 249, 91, 0.8)', borderColor = 'green', label = '', ctx) {
+                function drawRectangle(x, y, width, height, fillColor = 'rgba(255, 255, 255, 0.5)', borderColor = 'grey', label = '', ctx) {
                     ctx.fillStyle = fillColor;
                     ctx.fillRect(x, y, width, height); // Fill background
                     ctx.strokeStyle = borderColor;
@@ -1010,7 +1010,7 @@ if (isset($_GET['modifyAnswers'])) {
                     }
                 }
 
-                function drawPolygon(points, color = 'green', ctx) {
+                function drawPolygon(points, color = 'grey', ctx) {
                     if (points.length < 2) return;
                     ctx.strokeStyle = color;
                     ctx.lineWidth = 2;
@@ -1061,7 +1061,7 @@ if (isset($_GET['modifyAnswers'])) {
                             switch (shape.marker_shape) {
                                 case 'circle':
                                     if (shape.radius !== undefined) {
-                                        drawCircle(shape.x, shape.y, shape.radius, shape.color || 'rgba(255, 0, 0, 0.8)', 'red', shape.marker_id, ctx);
+                                        drawCircle(shape.x, shape.y, shape.radius, shape.color || 'rgba(255, 255, 255, 0.5)', 'grey', shape.marker_id, ctx);
                                     }
                                     break;
                                 case 'rectangle':
@@ -1070,12 +1070,12 @@ if (isset($_GET['modifyAnswers'])) {
                                         const rectY = Math.min(shape.y, shape.width);
                                         const rectWidth = Math.abs(shape.height - shape.x);
                                         const rectHeight = Math.abs(shape.width - shape.y);
-                                        drawRectangle(rectX, rectY, rectWidth, rectHeight, shape.color, 'green', shape.marker_id, ctx);
+                                        drawRectangle(rectX, rectY, rectWidth, rectHeight, shape.color, 'grey', shape.marker_id, ctx);
                                     }
                                     break;
                                 case 'polygon':
                                     if (Array.isArray(shape.points)) {
-                                        drawPolygon(shape.points, shape.color || 'green', ctx);
+                                        drawPolygon(shape.points, shape.color || 'grey', ctx);
                                     }
                                     break;
                             }
@@ -1140,12 +1140,12 @@ if (isset($_GET['modifyAnswers'])) {
                         // Draw shape preview
                         if (currentShape === 'rectangle') {
                             var textMarker = 'Marker:'+currentMarker;
-                            drawRectangle(startX, startY, currentX - startX, currentY - startY, 'rgba(0, 207, 76, 0.8)', 'green', textMarker, ctx);
+                            drawRectangle(startX, startY, currentX - startX, currentY - startY, 'rgba(255, 255, 255, 0.5)', 'grey', textMarker, ctx);
                         } else if (currentShape === 'circle') {
                             const radius = Math.hypot(currentX - startX, currentY - startY);
                             var textMarker = 'Marker:'+currentMarker;
                             radiusOriginal = radius;
-                            drawCircle(startX, startY, radius, 'rgba(255, 0, 0, 0.8)', 'red', textMarker, ctx);
+                            drawCircle(startX, startY, radius, 'rgba(255, 255, 255, 0.5)', 'grey', textMarker, ctx);
                         }
                     });
 
@@ -1162,7 +1162,7 @@ if (isset($_GET['modifyAnswers'])) {
 
                         if (currentShape === 'rectangle') {
                             var textMarker = 'Marker:'+currentMarker;
-                            drawRectangle(startX, startY, endX - startX, endY - startY, 'rgba(0, 207, 76, 0.8)', 'green', textMarker, ctx);
+                            drawRectangle(startX, startY, endX - startX, endY - startY, 'rgba(255, 255, 255, 0.5)', 'grey', textMarker, ctx);
                             // Save shape data
                             var coords = startX + ',' + startY + ':' + endX + ',' + endY;
                             $('#shape-coordinates-'+currentMarker).val(coords);
@@ -1170,7 +1170,7 @@ if (isset($_GET['modifyAnswers'])) {
                             const radius = Math.hypot(endX - startX, endY - startY);
                             radiusOriginal = radius;
                             var textMarker = 'Marker:'+currentMarker;
-                            drawCircle(startX, startY, radius, 'rgba(255, 0, 0, 0.8)', 'red', textMarker, ctx);
+                            drawCircle(startX, startY, radius, 'rgba(255, 255, 255, 0.5)', 'grey', textMarker, ctx);
                             // Save shape data
                             var coords = startX + ',' + startY + ':' + endX + ',' + endY;
                             $('#shape-coordinates-'+currentMarker).val(coords);
@@ -1186,7 +1186,7 @@ if (isset($_GET['modifyAnswers'])) {
                         //ctx.clearRect(0, 0, width, height);
                         redrawAllShapes(ctx);
                         // Draw existing points
-                        drawPolygon(polygonPoints, 'green', ctx);
+                        drawPolygon(polygonPoints, 'grey', ctx);
                         // Draw current point
                         ctx.fillStyle = 'blue';
                         ctx.beginPath();
@@ -1201,7 +1201,7 @@ if (isset($_GET['modifyAnswers'])) {
                         }
                         //ctx.clearRect(0, 0, width, height);
                         redrawAllShapes(ctx);
-                        drawPolygon(polygonPoints, 'green', ctx);
+                        drawPolygon(polygonPoints, 'grey', ctx);
                         // Save polygon data if needed
                         polygonPoints = [];
                     });
@@ -1213,7 +1213,7 @@ if (isset($_GET['modifyAnswers'])) {
                         shapes.forEach(shape => {
                             switch (shape.marker_shape) {
                                 case 'circle':
-                                    drawCircle(shape.x, shape.y, shape.radius, shape.color || 'rgba(255, 0, 0, 0.8)', 'red', shape.marker_id, ctx);
+                                    drawCircle(shape.x, shape.y, shape.radius, shape.color || 'rgba(255, 255, 255, 0.5)', 'grey', shape.marker_id, ctx);
                                     break;
                                 case 'rectangle':
                                     if (shape.width !== undefined && shape.height !== undefined) {
@@ -1221,12 +1221,12 @@ if (isset($_GET['modifyAnswers'])) {
                                         const rectY = Math.min(shape.y, shape.width);
                                         const rectWidth = Math.abs(shape.height - shape.x);
                                         const rectHeight = Math.abs(shape.width - shape.y);
-                                        drawRectangle(rectX, rectY, rectWidth, rectHeight, shape.color, 'green', shape.marker_id, ctx);
+                                        drawRectangle(rectX, rectY, rectWidth, rectHeight, shape.color, 'grey', shape.marker_id, ctx);
                                     }
                                     break;
                                 case 'polygon':
                                     if (Array.isArray(shape.points)) {
-                                        drawPolygon(shape.points, shape.color || 'green', ctx);
+                                        drawPolygon(shape.points, shape.color || 'grey', ctx);
                                     }
                                     break;
                             }
