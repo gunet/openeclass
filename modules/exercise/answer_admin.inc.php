@@ -337,7 +337,7 @@ if (isset($submitAnswers) || isset($buttonBack)) {
                 }
             }
         }
-        
+
         $markerAnsArr = [];
         if (count($arrDataMarkers) > 0) {
             foreach($arrDataMarkers as $index => $marker) {
@@ -369,7 +369,7 @@ if (isset($submitAnswers) || isset($buttonBack)) {
                 $objQuestion->save();
             }
         }
-        
+
     }
 
     if (empty($msgErr) and !isset($_POST['setWeighting'])) {
@@ -544,7 +544,7 @@ if (isset($_GET['modifyAnswers'])) {
         if (empty($drag_and_drop_question)) {
             $drag_and_drop_question = $objAnswer->get_drag_and_drop_text();
         }
-        
+
         if ($newAnswer) {
             $nbrAnswers = $_POST['nbrAnswers'] + 1;
         } else {
@@ -934,19 +934,15 @@ if (isset($_GET['modifyAnswers'])) {
                                         $choiceAsAnswer = ((count($choices_from_db) > 0) && array_key_exists($i,$choices_from_db)) ? $choices_from_db[$i] : $_POST['choice_answer'][$i] ?? '';
                                         $choiceAsGrade = ((count($grades_from_db) > 0) && array_key_exists($i,$grades_from_db)) ? $grades_from_db[$i] : $_POST['choice_grade'][$i] ?? 0;
                                         $tool_content .= "
-                                        <tr>
-                                            <td>[{$chAns}]</td>
-                                            <td>
-                                                <div class='col-12'>
-                                                    <input type='text' class='form-control' name='choice_answer[$i]' value='{$choiceAsAnswer}'>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class='col-12'>
-                                                    <input type='number' class='form-control' name='choice_grade[$i]' value='{$choiceAsGrade}' min='0' step='0.1'>
-                                                </div>
-                                            </td>
-                                        </tr>";
+                                            <tr>
+                                                <td>[{$chAns}]</td>
+                                                <td class='col-9'>                                       
+                                                    <input type='text' class='form-control' name='choice_answer[$i]' value='{$choiceAsAnswer}'>                                        
+                                                </td>
+                                                <td>                                        
+                                                    <input type='number' class='form-control' name='choice_grade[$i]' value='{$choiceAsGrade}' min='0' step='0.05'>                                        
+                                                </td>
+                                            </tr>";
                                     }
         $tool_content .= "          </tbody>
                                 </table>

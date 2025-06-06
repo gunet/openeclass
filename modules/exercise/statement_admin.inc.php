@@ -318,10 +318,15 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
                                         <label>
                                             <input type='radio' name='fillInBlanksOptions' value='".FILL_IN_BLANKS_TOLERANT."' ". (($answerType == FILL_IN_BLANKS_TOLERANT) ? "checked" : "") .">
                                             $langFillBlanksTolerant $langFillBlanksTolerantExample
-
                                         </label>
                                     </div>
-                                    <div class='radio'>
+                                    <div class='radio mb-2'>
+                                        <label>
+                                            <input type='radio' name='fillInBlanksOptions' value='" . DRAG_AND_DROP_TEXT . "' ". (($answerType == DRAG_AND_DROP_TEXT) ? "checked" : "") .">
+                                            $langDragAndDropText
+                                        </label>
+                                    </div>
+                                    <div class='radio mb-2'>
                                         <label>
                                             <input type='radio' name='fillInBlanksOptions' value='".FILL_IN_FROM_PREDEFINED_ANSWERS."' ". (($answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) ? "checked" : "") .">
                                             $langFillFromSelectedWords
@@ -347,16 +352,10 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
                             <input type='radio' id='free_text_selector' name='answerType' value='".FREE_TEXT."' ". (($answerType == FREE_TEXT) ? "checked" : "") .">
                            $langFreeText
                           </label>
-                        </div>
+                        </div>                        
                         <div class='radio'>
                             <label>
-                                <input type='radio' name='answerType' value='9' ". (($answerType == DRAG_AND_DROP_TEXT) ? "checked" : "") .">
-                                $langDragAndDropText
-                            </label>
-                        </div>
-                        <div class='radio'>
-                            <label>
-                                <input type='radio' name='answerType' value='10' ". (($answerType == DRAG_AND_DROP_MARKERS) ? "checked" : "") .">
+                                <input type='radio' name='answerType' value='" . DRAG_AND_DROP_MARKERS . "'". (($answerType == DRAG_AND_DROP_MARKERS) ? "checked" : "") .">
                                 $langDragAndDropMarkers
                             </label>
                         </div>
