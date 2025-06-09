@@ -6379,3 +6379,38 @@ $langImportAttendancesHelp = 'You can upload an Excel file (e.g. xls, xlsx) with
     <strong>Do not</strong> change the file structure (e.g. number of columns) because the attendance import will fail.<br><br>
     Also note that to record a presence, enter <strong>1</strong>. Anything else is not considered a presence.';
 $langGradebookUsers = 'Gradebook users';
+
+// AI-related language constants
+$langAIGenerateQuestions = 'AI Generate Questions';
+$langAIQuestionGeneration = 'AI Question Generation';
+$langAINotAvailable = 'AI functionality is not available';
+$langContentRequired = 'Content is required';
+$langQuestionsGenerated = '%d questions generated successfully';
+$langNoQuestionsGenerated = 'No questions were generated';
+$langAIGenerationError = 'Error generating questions';
+$langQuestionsSaved = '%d questions saved to question bank';
+$langSaveError = 'Error saving questions';
+$langAIQuestionInfo = 'Use AI to generate questions from your content. The AI will analyze your text and create questions suitable for assessments.';
+$langProvider = 'Provider';
+$langContent = 'Content';
+$langEnterContent = 'Enter the content you want to generate questions from...';
+$langContentHelp = 'Paste your lesson content, document text, or any educational material here.';
+$langQuestionCount = 'Number of Questions';
+$langDifficulty = 'Difficulty';
+$langQuestionTypes = 'Question Types';
+$langGenerateQuestions = 'Generate Questions';
+$langGeneratedQuestions = 'Generated Questions';
+$langSelectQuestions = 'Select the questions you want to save to your question bank';
+$langQuestion = 'Question';
+$langCorrectAnswer = 'Correct Answer';
+$langExplanation = 'Explanation';
+$langQuestionCategory = 'Question Category';
+$langSaveToQuestionBank = 'Save to Question Bank';
+$langGenerateNew = 'Generate New Questions';
+$langUsageTips = 'Usage Tips';
+$langTip1 = 'Provide clear, well-structured content for better question generation';
+$langTip2 = 'Review all generated questions before saving to ensure accuracy';
+$langTip3 = 'Mix different question types for comprehensive assessments';
+$langTip4 = 'Use appropriate difficulty levels based on your students\' level';
+$langSelectAll = 'Select All';
+$langDefaultCategory = 'Default Category';
