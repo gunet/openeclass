@@ -5018,6 +5018,7 @@ $langBBBAnnDisplay = "to be displayed in announcements";
 $langBBBScheduledSession = "Teleconference scheduling";
 $langBBBScheduleSessionInfo = "The teleconference titled ";
 $langBBBScheduleSessionInfo2 = "was scheduled for ";
+$langBBBScheduleSessionInfo3 = "is now available.";
 $langBBBScheduleSessionInfoJoin = "Connect to the $langsCourse environment to watch by clicking here ";
 $langBBBNotServerAvailableStudent = "Teleconferences are not supoorted. Please contact the $langsCourse $langsTeacher.";
 $langBBBNotServerAvailableTeacher = "Teleconferences are not suported. Please contact the platform administrator.";

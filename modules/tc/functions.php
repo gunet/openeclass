@@ -893,7 +893,8 @@ function add_update_tc_session($tc_type, $title, $desc, $start_session, $BBBEndD
 {
 
     global $langBBBScheduledSession, $langBBBScheduleSessionInfo, $langZoomErrorUserNotFound,
-           $langBBBScheduleSessionInfo2, $langBBBScheduleSessionInfoJoin, $langTheU, $langNotFound,
+           $langBBBScheduleSessionInfo2, $langBBBScheduleSessionInfo3,
+           $langBBBScheduleSessionInfoJoin, $langTheU, $langNotFound,
            $langDescription, $course_code, $course_id, $urlServer, $uid, $is_admin;
 
     // Groups of participants per session
@@ -1159,6 +1160,12 @@ function add_update_tc_session($tc_type, $title, $desc, $start_session, $BBBEndD
     $new_mod_pw = $q->mod_pw;
     $new_att_pw = $q->att_pw;
     // if we have to notify users for new session
+    $start_date = strtotime($start_session);
+    $now = time();
+    $header_title = $langBBBScheduleSessionInfo . ' <em>' . q($title) . '</em> ' .
+        ($start_date < $now?
+            $langBBBScheduleSessionInfo3:
+            ($langBBBScheduleSessionInfo2 . ' ' . q(format_locale_date($start_date))));
     if ($notifyUsers == "1") {
         if (isset($_POST['groups']) and count($_POST['groups']) > 0) {
             $recipients = array();
@@ -1210,10 +1217,9 @@ function add_update_tc_session($tc_type, $title, $desc, $start_session, $BBBEndD
                 $emailheader = "
                     <div id='mail-header'>
                         <div>
-                            <div id='header-title'>$langBBBScheduleSessionInfo" . q($title) .  " $langBBBScheduleSessionInfo2" . q(format_locale_date(strtotime($start_session), 'short')) . "</div>
+                            <div id='header-title'>$header_title</div>
                         </div>
-                    </div>
-                ";
+                    </div>";
 
                 $emailmain = "
                 <div id='mail-body'>
@@ -1239,7 +1245,7 @@ function add_update_tc_session($tc_type, $title, $desc, $start_session, $BBBEndD
         $emailheader = "
             <div id='mail-header'>
                 <div>
-                    <div id='header-title'>$langBBBScheduleSessionInfo " . q($title) .  " $langBBBScheduleSessionInfo2 " . q(format_locale_date(strtotime($start_session), 'short')) ."</div>
+                    <div id='header-title'>$header_title</div>
                 </div>
             </div>";
         if (is_array($notifyExternalUsers)) {
