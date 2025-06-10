@@ -325,7 +325,7 @@ if (isset($submitAnswers) || isset($buttonBack)) {
             $markersData = json_decode($dataJsonFile, true);
             // Loop through each item in the original array
             foreach ($markersData as $item => $value) {
-                if (count($value) == 9) {
+                if (count($value) == 9) { // circle or rectangle
                     $arrDataMarkers[$value[0]['marker_id']] = [
                                                                 'marker_answer' => $value[1]['marker_answer'],
                                                                 'marker_shape' => $value[2]['shape_type'],
@@ -334,6 +334,13 @@ if (isset($submitAnswers) || isset($buttonBack)) {
                                                                 'marker_grade' => $value[7]['marker_grade'],
                                                                 'marker_radius' => $value[8]['marker_radius']
                                                               ];
+                } elseif (count($value) == 5) { // polygon
+                    $arrDataMarkers[$value[0]['marker_id']] = [
+                                                                'marker_answer' => $value[1]['marker_answer'],
+                                                                'marker_shape' => $value[2]['shape_type'],
+                                                                'marker_coordinates' => $value[3]['points'],
+                                                                'marker_grade' => $value[4]['marker_grade']
+                                                               ];
                 }
             }
         }
@@ -582,15 +589,17 @@ if (isset($_GET['modifyAnswers'])) {
             $arr_m = explode(',', $m['marker_coordinates']);
             $m['x'] = $arr_m[0];
             $m['y'] = $arr_m[1];
-            $arr_of = explode(',', $m['marker_offsets']);
-            $m['endx'] = $arr_of[0];
-            $m['endy'] = $arr_of[1];
+            if ($m['marker_shape'] == 'circle' or $m['marker_shape'] == 'rectangle') {
+                $arr_of = explode(',', $m['marker_offsets']);
+                $m['endx'] = $arr_of[0];
+                $m['endy'] = $arr_of[1];
+            }
             if ($m['marker_shape'] == 'circle') {
                 $coordinatesXY[] = ['marker_id' => $index, 'x' => $m['x'], 'y' => $m['y'], 'marker_shape' => $m['marker_shape'], 'color' => 'rgba(255, 255, 255, 0.5)', 'radius' => $m['marker_radius']];
             } elseif ($m['marker_shape'] == 'rectangle') {
                 $coordinatesXY[] = ['marker_id' => $index, 'x' => $m['x'], 'y' => $m['y'], 'marker_shape' => $m['marker_shape'], 'color' => 'rgba(255, 255, 255, 0.5)', 'width' => $m['endy'], 'height' => $m['endx']];
             } elseif ($m['marker_shape'] == 'polygon') {
-
+                $coordinatesXY[] = ['marker_id' => $index, 'points' => $m['marker_coordinates'], 'marker_shape' => $m['marker_shape'], 'color' => 'rgba(255, 255, 255, 0.5)'];
             }
         }
         $DataMarkersToJson = json_encode($coordinatesXY) ?? '';
@@ -1118,7 +1127,7 @@ function getDataMarkersFromJson($questionId) {
         $markersData = json_decode($dataJsonFile, true);
         // Loop through each item in the original array
         foreach ($markersData as $item => $value) {
-            if (count($value) == 9) {
+            if (count($value) == 9) { // circle or rectangle
                 $arrDataMarkers[$value[0]['marker_id']] = [
                                                             'marker_answer' => $value[1]['marker_answer'],
                                                             'marker_shape' => $value[2]['shape_type'],
@@ -1126,6 +1135,13 @@ function getDataMarkersFromJson($questionId) {
                                                             'marker_offsets' => $value[5]['endX'] . ',' . $value[6]['endY'],
                                                             'marker_grade' => $value[7]['marker_grade'],
                                                             'marker_radius' => $value[8]['marker_radius']
+                                                          ];
+            } elseif (count($value) == 5) { // polygon
+                $arrDataMarkers[$value[0]['marker_id']] = [
+                                                            'marker_answer' => $value[1]['marker_answer'],
+                                                            'marker_shape' => $value[2]['shape_type'],
+                                                            'marker_coordinates' => $value[3]['points'],
+                                                            'marker_grade' => $value[4]['marker_grade']
                                                           ];
             }
         }

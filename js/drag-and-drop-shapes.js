@@ -100,17 +100,58 @@ function drawRectangleWithBlank(x, y, width, height, fillColor = 'rgba(207, 207,
 }
 
 // Drawing blanks in the polygons shapes
-function drawPolygon(points, color = 'green', ctx) {
+function drawPolygonWithBlank(points, color, fillColor, label, ctx, dataAttrs = {},  Qid) {
+    const container = document.getElementById('image-container-'+Qid);
     if (points.length < 2) return;
-        ctx.strokeStyle = color;
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.moveTo(points[0].x, points[0].y);
-    for (let i = 1; i < points.length; i++) {
-        ctx.lineTo(points[i].x, points[i].y);
+    //ctx.strokeStyle = color;
+    //ctx.lineWidth = 2;
+    //ctx.fillStyle = fillColor;
+    // ctx.beginPath();
+    // ctx.moveTo(points[0].x, points[0].y);
+    // for (let i = 1; i < points.length; i++) {
+    //     ctx.lineTo(points[i].x, points[i].y);
+    // }
+    // ctx.closePath();
+    //ctx.fill(); 
+    //ctx.stroke();
+
+    // Compute simple center (average of points)
+    const centerPolX = points.reduce((sum, p) => sum + p.x, 0) / points.length;
+    const centerPolY = points.reduce((sum, p) => sum + p.y, 0) / points.length;
+
+    // Dimensions for the blank span
+    const blankWidth = 100;
+    const blankHeight = 40;
+
+    // Create overlay span positioned exactly at circle center
+    const blankDiv = document.createElement('span');
+    blankDiv.className = 'blank';
+
+    for (const key in dataAttrs) {
+        if (dataAttrs.hasOwnProperty(key)) {
+            blankDiv.setAttribute('data-' + key, dataAttrs[key]);
+        }
     }
-    ctx.closePath();
-    ctx.stroke();
+
+    // Style the overlay span
+    blankDiv.style.position = 'absolute';
+    blankDiv.style.width = blankWidth + 'px';
+    blankDiv.style.height = blankHeight + 'px';
+    blankDiv.style.backgroundColor = 'white';
+    blankDiv.style.border = '1px solid grey';
+    blankDiv.style.boxSizing = 'border-box';
+    blankDiv.style.cursor = 'pointer';
+    blankDiv.style.zIndex = 20;
+
+    // Append overlay to container
+    container.style.position = 'relative';
+    container.appendChild(blankDiv);
+
+    // Position the span relative to the container
+    // Calculate top and left to center span on circle
+    blankDiv.style.left = centerPolX - 25 + 'px';
+    blankDiv.style.top = centerPolY - 25 + 'px';
+
 }
 
 // Loading shapes for displaying
@@ -162,8 +203,19 @@ function loadShapes(qID) {
                     }
                     break;
                 case 'polygon':
-                    if (Array.isArray(shape.points)) {
-                        drawPolygon(shape.points, 'grey', ctx);
+                    const inputString = shape.points;
+                    const pairs = inputString.split(':');
+                    const resultArray = pairs.map(pair => {
+                    const [x, y] = pair.split(',');
+                        return { x: parseFloat(x), y: parseFloat(y) };
+                    });
+                    if (Array.isArray(resultArray)) { console.log(resultArray);
+                        attributes = {
+                                        'answer': shape.marker_id,
+                                        'blank-id': shape.marker_id,
+                                        'card-id': 'words_'+qID
+                                     };
+                        drawPolygonWithBlank(resultArray, 'grey', shape.color, shape.marker_id, ctx, attributes, qID);
                     }
                     break;
             }
@@ -329,7 +381,7 @@ function drag_and_drop_process() {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // answer_admin_inc.php
-
+// Draw a shape of a marker during creating an answer of a question. 
 
 let currentShape = null;
 let currentShapeId = null;
@@ -386,17 +438,33 @@ function drawRectangle(x, y, width, height, fillColor = 'rgba(255, 255, 255, 0.5
     }
 }
 
-function drawPolygon(points, color = 'grey', ctx) {
+function drawPolygon(points, color, fillColor, label, ctx) {
     if (points.length < 2) return;
     ctx.strokeStyle = color;
     ctx.lineWidth = 2;
+    ctx.fillStyle = fillColor;
     ctx.beginPath();
     ctx.moveTo(points[0].x, points[0].y);
     for (let i = 1; i < points.length; i++) {
         ctx.lineTo(points[i].x, points[i].y);
     }
     ctx.closePath();
+    ctx.fill(); 
     ctx.stroke();
+
+    // Compute simple center (average of points)
+    const centerPolX = points.reduce((sum, p) => sum + p.x, 0) / points.length;
+    const centerPolY = points.reduce((sum, p) => sum + p.y, 0) / points.length;
+
+    // Draw label at approximate center
+    if (label) {
+        ctx.fillStyle = 'black';
+        ctx.font = '14px Arial';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(label, centerPolX, centerPolY);
+    }
+
 }
 
 function redraw(ctx) {
@@ -450,8 +518,14 @@ function loadShapesOnImage(questionId) {
                     }
                     break;
                 case 'polygon':
-                    if (Array.isArray(shape.points)) {
-                        drawPolygon(shape.points, shape.color || 'grey', ctx);
+                    const inputString = shape.points;
+                    const pairs = inputString.split(':');
+                    const resultArray = pairs.map(pair => {
+                    const [x, y] = pair.split(',');
+                        return { x: parseFloat(x), y: parseFloat(y) };
+                    });
+                    if (Array.isArray(resultArray)) {
+                        drawPolygon(resultArray, 'grey', shape.color, shape.marker_id, ctx);
                     }
                     break;
             }
@@ -497,10 +571,6 @@ function enableDrawing(currentShape,questionId) {
         startX = e.offsetX;
         startY = e.offsetY;
 
-        if (currentShape === 'polygon') {
-            polygonPoints = [];
-            polygonPoints.push({ x: startX, y: startY });
-        }
     });
 
     // Mousemove
@@ -562,7 +632,18 @@ function enableDrawing(currentShape,questionId) {
         //ctx.clearRect(0, 0, width, height);
         redrawAllShapes(ctx);
         // Draw existing points
-        drawPolygon(polygonPoints, 'grey', ctx);
+        var textMarker = 'Marker:'+currentMarker;
+        drawPolygon(polygonPoints, 'grey', 'rgba(255, 255, 255, 0.5)', textMarker, ctx);
+        // Save shape data
+        var coordsArr = [];
+        for (var i = 0; i < polygonPoints.length; i++) {
+            coordsArr.push(polygonPoints[i].x + ',' + polygonPoints[i].y);
+        }
+        const jsonString = JSON.stringify(coordsArr);
+        const arrJson = JSON.parse(jsonString);
+        const resultCoords = arrJson.join(':');
+        $('#shape-coordinates-'+currentMarker).val(resultCoords);
+
         // Draw current point
         ctx.fillStyle = 'blue';
         ctx.beginPath();
@@ -570,17 +651,6 @@ function enableDrawing(currentShape,questionId) {
         ctx.fill();
     });
 
-    $('#finishPolygon').off('click').on('click', function() {
-        if (polygonPoints.length < 3) {
-            alert('Polygon needs at least 3 points');
-            return;
-        }
-        //ctx.clearRect(0, 0, width, height);
-        redrawAllShapes(ctx);
-        drawPolygon(polygonPoints, 'grey', ctx);
-        // Save polygon data if needed
-        polygonPoints = [];
-    });
 }
 
 function redrawAllShapes(ctx) {
@@ -601,8 +671,14 @@ function redrawAllShapes(ctx) {
                     }
                     break;
                 case 'polygon':
-                    if (Array.isArray(shape.points)) {
-                        drawPolygon(shape.points, shape.color || 'grey', ctx);
+                    const inputString = shape.points;
+                    const pairs = inputString.split(':');
+                    const resultArray = pairs.map(pair => {
+                    const [x, y] = pair.split(',');
+                        return { x: parseFloat(x), y: parseFloat(y) };
+                    });
+                    if (Array.isArray(resultArray)) {
+                        drawPolygon(resultArray, 'grey', shape.color, shape.marker_id, ctx);
                     }
                     break;
             }
@@ -636,6 +712,7 @@ function shapesCreationProcess() {
             if (currentShape) {
                 enableDrawing(currentShape,questionId);
             } else {
+                polygonPoints = [];
                 $('#drawingCanvas-'+questionId).hide();
             }
         });
@@ -651,23 +728,35 @@ function shapesCreationProcess() {
                 var markerCoordinates = $('#shape-coordinates-'+number).val();
                 var markerShape = $('#shapeType-'+number).val();
                 
-                // Replace colon with comma
-                const replacedStr = markerCoordinates.replace(/:/g, ',');
-                // Split the string into an array
-                const arr = replacedStr.split(',').map(Number);
 
                 if (markerAnswer && markerCoordinates) {
-                    vertices = [
-                                    {'marker_id': number},
-                                    {'marker_answer': markerAnswer},
-                                    {'shape_type': markerShape},
-                                    {'x': arr[0]},
-                                    {'y': arr[1]},
-                                    {'endX': arr[2]},
-                                    {'endY': arr[3]},
-                                    {'marker_grade': markerGrade},
-                                    {'marker_radius': radiusOriginal}
-                                ];
+                    if (markerShape == 'circle' || markerShape == 'rectangle') {
+
+                        // Replace colon with comma
+                        const replacedStr = markerCoordinates.replace(/:/g, ',');
+                        // Split the string into an array
+                        const arr = replacedStr.split(',').map(Number);
+
+                        vertices = [
+                                        {'marker_id': number},
+                                        {'marker_answer': markerAnswer},
+                                        {'shape_type': markerShape},
+                                        {'x': arr[0]},
+                                        {'y': arr[1]},
+                                        {'endX': arr[2]},
+                                        {'endY': arr[3]},
+                                        {'marker_grade': markerGrade},
+                                        {'marker_radius': radiusOriginal}
+                                    ];
+                    } else if (markerShape == 'polygon') {
+                        vertices = [
+                                        {'marker_id': number},
+                                        {'marker_answer': markerAnswer},
+                                        {'shape_type': markerShape},
+                                        {'points': markerCoordinates},
+                                        {'marker_grade': markerGrade}
+                                    ];
+                    }
                     saveShape(vertices,questionId,courseCode);
                     window.location.reload();
                 } else {

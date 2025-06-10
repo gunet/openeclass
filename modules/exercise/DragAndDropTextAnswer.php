@@ -49,6 +49,13 @@ class DragAndDropTextAnswer extends \QuestionType
                             'marker_grade' => $value[7]['marker_grade'],
                             'marker_radius' => $value[8]['marker_radius']
                         ];
+                    } elseif (count($value) == 5) { // polygon
+                        $arrDataMarkers[$value[0]['marker_id']] = [
+                                                                    'marker_answer' => $value[1]['marker_answer'],
+                                                                    'marker_shape' => $value[2]['shape_type'],
+                                                                    'marker_coordinates' => $value[3]['points'],
+                                                                    'marker_grade' => $value[4]['marker_grade']
+                                                                ];
                     }
                 }
             }
@@ -58,15 +65,17 @@ class DragAndDropTextAnswer extends \QuestionType
                 $arr_m = explode(',', $m['marker_coordinates']);
                 $m['x'] = $arr_m[0];
                 $m['y'] = $arr_m[1];
-                $arr_of = explode(',', $m['marker_offsets']);
-                $m['endX'] = $arr_of[0];
-                $m['endY'] = $arr_of[1];
+                if ($m['marker_shape'] == 'circle' or $m['marker_shape'] == 'rectangle') {
+                    $arr_of = explode(',', $m['marker_offsets']);
+                    $m['endX'] = $arr_of[0];
+                    $m['endY'] = $arr_of[1];
+                }
                 if ($m['marker_shape'] == 'circle') {
                     $coordinatesXY[] = ['marker_id' => $index, 'x' => $m['x'], 'y' => $m['y'], 'shape_type' => $m['marker_shape'], 'radius' => $m['marker_radius']];
                 } elseif ($m['marker_shape'] == 'rectangle') {
                     $coordinatesXY[] = ['marker_id' => $index, 'x' => $m['x'], 'y' => $m['y'], 'shape_type' => $m['marker_shape'], 'endY' => $m['endY'], 'endX' => $m['endX']];
                 } elseif ($m['marker_shape'] == 'polygon') {
-                    // Here it will be added the polygon process.
+                    $coordinatesXY[] = ['marker_id' => $index, 'points' => $m['marker_coordinates'], 'shape_type' => $m['marker_shape'], 'color' => 'rgba(255, 255, 255, 0.5)'];
                 }
             }
 
