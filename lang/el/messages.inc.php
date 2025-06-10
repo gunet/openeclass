@@ -3599,6 +3599,7 @@ $langEmailInfo = "Μπορείτε να δηλώσετε μια διεύθυνσ
 $langEmailNotice = "Η διεύθυνση email δεν είναι απαραίτητη, αλλά χωρίς αυτή δε θα μπορείτε να λαμβάνετε
 ανακοινώσεις και ειδοποιήσεις.";
 $langAm = "Αριθμός μητρώου";
+$langVisibleInfo = "εμφανίζεται μόνο στους $langsTeachers.";
 $langAmShort = "Α.Μ.";
 $langEmailVerified = "Το e-mail έχει επιβεβαιωθεί";
 $langUserDetails = "Εγγραφή Χρήστη";
