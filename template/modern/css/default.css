@@ -5991,19 +5991,22 @@ th.grade-col a{
   margin-right: 10px;
 }
 .panelCard-exercise .blank:has(.dropped-word){
-  background-color: #1E7E0E;
+  background-color: #ffffff;
 }
 .panelCard-exercise .blank.ui-droppable-active.ui-droppable-hover.hovered{
   box-shadow: 0 0 5px 5px #1E7E0E;
 }
-.panelCard-exercise .blank.ui-droppable-active.ui-droppable-hover.hovered .dropped-word{
-  box-shadow: 0 0 0 2px #C44601;
+.panelCard-exercise .drag-and-drop-markers-canvas{
+  position: absolute; 
+  top: 0; 
+  left: 0;
+  /* z-index: 3; */
 }
 
 .panelCard-exercise .draggable {
   display: inline-block;
   padding: 8px 12px;
-  height: 25px;
+  height: 30px;
   margin: 5px;
   background-color: #FFFFFF;
   color: #2B3944;
@@ -6014,8 +6017,13 @@ th.grade-col a{
   justify-content: center;
   min-width: 50px;
 }
+.panelCard-exercise .blank.ui-droppable .draggable.dropped-word{
+  border: 0px;
+}
 .panelCard-exercise .draggable.dropped-word{
   line-height: 1;
+  padding: 0px;
+  z-index: 3;
 }
 .drag-and-drop-markers-container,
 .drag-and-drop-markers-img,
@@ -6025,4 +6033,19 @@ th.grade-col a{
 }
 .drag-and-drop-markers-container-words{
   width: 760px;
+}
+
+.panelCard-exercise .dropped-word.ui-draggable-dragging{
+  text-wrap: nowrap;
+  padding: 8px 12px;
+  height: 30px;
+  margin: 5px;
+  border: solid 1px #2B3944 !important;
+}
+
+.panelCard-exercise .blank-drag-and-drop-text{
+  margin-top: 10px;
+  margin-bottom: 10px;
+  display: inline-block;
+  vertical-align: middle;
 }

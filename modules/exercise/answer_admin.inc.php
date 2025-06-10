@@ -624,7 +624,7 @@ if (isset($_GET['modifyAnswers'])) {
                       <div class='card-body' style='overflow:auto;'>
                             <h5>$questionTypeWord<br>" . nl2br(q_math($questionName)) . "</h5>
                                 <p>$questionDescription</p>
-                                ".(($okPicture)? "<div class='$classContainer' id='image-container-$questionId' style='position: relative; display: inline-block;'><img class='$classImg' id='img-quiz-$questionId' src='../../$picturePath/quiz-$questionId'><canvas id='drawingCanvas-$questionId' class='$classCanvas' style='position: absolute; top: 0; left: 0; z-index: 10;'></canvas></div>":"")."
+                                ".(($okPicture)? "<div class='$classContainer' id='image-container-$questionId' style='position: relative; display: inline-block;'><img class='$classImg' id='img-quiz-$questionId' src='../../$picturePath/quiz-$questionId'><canvas id='drawingCanvas-$questionId' class='$classCanvas'></canvas></div>":"")."
                       </div>
                     </div></div>";
 
@@ -1037,24 +1037,6 @@ if (isset($_GET['modifyAnswers'])) {
                                 <input class='btn deleteAdminBtn' type='submit' name='lessAnswers' value='$langLessAnswers' />
                             </div>";
      }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
      $cancel_link = isset($exerciseId) ? "admin.php?course=$course_code&exerciseId=$exerciseId" : "question_pool.php?course=$course_code";
      $submit_text = ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT || $answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) && !isset($setWeighting) ? "$langNext &gt;" : $langSubmit;

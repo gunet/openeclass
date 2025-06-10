@@ -29,7 +29,7 @@ function drawCircleWithBlank(x, y, radius, fillColor = 'rgba(207, 207, 207, 0.8)
     blankDiv.style.border = '1px solid grey';
     blankDiv.style.boxSizing = 'border-box';
     blankDiv.style.cursor = 'pointer';
-    blankDiv.style.zIndex = 20;
+    // blankDiv.style.zIndex = 3;
 
     // Append overlay to container
     container.style.position = 'relative';
@@ -93,7 +93,7 @@ function drawRectangleWithBlank(x, y, width, height, fillColor = 'rgba(207, 207,
     blankDiv.style.border = '1px solid grey';
     blankDiv.style.boxSizing = 'border-box';
     blankDiv.style.cursor = 'pointer';
-    blankDiv.style.zIndex = 20;
+    // blankDiv.style.zIndex = 3;
 
     // Append overlay to container
     container.appendChild(blankDiv);
@@ -141,7 +141,7 @@ function drawPolygonWithBlank(points, color, fillColor, label, ctx, dataAttrs = 
     blankDiv.style.border = '1px solid grey';
     blankDiv.style.boxSizing = 'border-box';
     blankDiv.style.cursor = 'pointer';
-    blankDiv.style.zIndex = 20;
+    // blankDiv.style.zIndex = 3;
 
     // Append overlay to container
     container.style.position = 'relative';

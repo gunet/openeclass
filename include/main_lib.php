@@ -5632,8 +5632,7 @@ function theme_initialization() {
             $styles_str .= "
                 .text-danger,
                 .Accent-200-cl,
-                .label.label-danger,
-                .blank.ui-droppable-active.ui-droppable-hover.hovered .dropped-word{
+                .label.label-danger{
                     color: $theme_options_styles[ColorRedText] !important;
                 }
             ";
@@ -5642,13 +5641,8 @@ function theme_initialization() {
             $styles_str .= "
                 .text-success,
                 .Success-200-cl,
-                .label.label-success,
-                .blank.ui-droppable-active.ui-droppable-hover.hovered{
+                .label.label-success{
                     color: $theme_options_styles[ColorGreenText] !important;
-                }
-                .active-unit::after,
-                .blank:has(.dropped-word){
-                    background: $theme_options_styles[ColorGreenText] !important;
                 }
             ";
         }
