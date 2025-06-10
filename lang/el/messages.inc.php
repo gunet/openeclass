@@ -5516,6 +5516,7 @@ $langBBBAnnDisplay = "Εμφάνιση στις ανακοινώσεις";
 $langBBBScheduledSession = "Προγραμματισμός τηλεσυνεργασίας";
 $langBBBScheduleSessionInfo = "Η τηλεσυνεργασία με τίτλο ";
 $langBBBScheduleSessionInfo2 = "προγραμματίστηκε για τις ";
+$langBBBScheduleSessionInfo3 = "είναι τώρα διαθέσιμη.";
 $langBBBScheduleSessionInfoJoin = "Συνδεθείτε για να την παρακολουθήσετε κάνοντας κλικ παρακάτω ";
 $langBBBNotServerAvailableStudent = "Η εξυπηρέτηση τηλεσυνεργασιών δεν είναι δυνατή. Επικοινωνήστε με τον $langsTeacher του $langsOfCourse.";
 $langBBBNotServerAvailableTeacher = "Η τηλεσυνεργασία δεν είναι ενεργοποιημένη στο μάθημα.";
