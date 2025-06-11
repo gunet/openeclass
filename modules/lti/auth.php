@@ -113,14 +113,18 @@ if ($ok) {
     }
     $_SESSION['dbname'] = $course->code;
     $stat = Database::get()->querySingle("SELECT status, tutor, editor, course_reviewer FROM course_user WHERE user_id = ?d AND course_id = ?d", $uid, $courseid);
-    if (empty($stat) || empty($stat->status)) {
+    if (!$is_admin && (empty($stat) || empty($stat->status))) {
         throw new Exception('LTI Error: course_user not found during auth request.');
+    }
+    if ($is_admin && (empty($stat) || empty($stat->status))) {
+        $stat = new stdClass();
+        $stat->status = USER_TEACHER;
     }
 
     if ($resourceId) {
         list($endpoint, $params) = ltiGetLaunchData($ltiApp, $course, $stat, $nonce, $messagetype, $resourceType, $resourceId);
     } else {
-        if ($stat->status != USER_TEACHER) {
+        if (!$is_admin && $stat->status != USER_TEACHER) {
             throw new Exception('LTI Error: action requires course editor access.');
         }
         // Set the return URL.
