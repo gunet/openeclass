@@ -1350,6 +1350,9 @@ function ltiToolConfigurationFromContentItem(int $ltiAppId, string $messagetype,
             if (isset($custom->default_feedbackreleasedate)) {
                 $config->feedbackdate = $custom->default_feedbackreleasedate;
             }
+            if (isset($custom->tii_setting_workflow_feedback_release_date)) {
+                $config->feedbackdate = $custom->tii_setting_workflow_feedback_release_date;
+            }
         }
     }
     return $config;
