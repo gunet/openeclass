@@ -987,7 +987,8 @@ $db->query("INSERT INTO `eportfolio_fields_category` (`id`, `name`, `sortorder`)
         (2, '$langEduEmpl', -1),
         (3, '$langAchievements', -2),
         (4, '$langGoalsSkills', -3),
-        (5, '$langContactInfo', -4)");
+        (5, '$langContactInfo', -4),
+        (6, '$langResearchProfiles', -5)");
 
 $db->query("INSERT INTO `eportfolio_fields` (`id`, `shortname`, `name`, `description`, `datatype`, `categoryid`, `sortorder`, `required`, `data`) VALUES
         (1, 'birth_date', '$langBirthDate', '', '3', 1, 0, 0, ''),
@@ -1010,7 +1011,10 @@ $db->query("INSERT INTO `eportfolio_fields` (`id`, `shortname`, `name`, `descrip
         (18, 'Address', '$langAddress', '', '1', 5, -2, 0, ''),
         (19, 'fb', '$langFBProfile', '', '5', 5, -3, 0, ''),
         (20, 'twitter', '$langTwitterAccount', '', '5', 5, -4, 0, ''),
-        (21, 'linkedin', '$langLinkedInProfile', '', '5', 5, -5, 0, '')");
+        (21, 'linkedin', '$langLinkedInProfile', '', '5', 5, -5, 0, ''),
+        (22, 'gscholar', '$langGoogleScholarProfile', '', '5', 6, 0, 0, ''),
+        (23, 'scopus', '$langScopusID', '', '5', 6, -1, 0, ''),
+        (24, 'orcid', '$langOrcid', '', '5', 6, -2, 0, '')");
 
 $db->query("CREATE TABLE IF NOT EXISTS `eportfolio_resource` (
         `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
