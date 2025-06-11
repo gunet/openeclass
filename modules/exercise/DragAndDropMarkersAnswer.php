@@ -74,6 +74,11 @@ class DragAndDropMarkersAnswer extends \QuestionType
             $html_content .= "<div class='draggable' data-word='{$an}' data-pool-id='words_{$questionId}'>$an</div>";
         }
         $html_content .= "</div>";
+        $html_content .= "<input type='hidden' class='QuestionPerPage' value='{$questionId}'>";
+        if (isset($_SESSION['userHasAnswered'])) {
+            $uHasAnswered = json_encode($_SESSION['userHasAnswered'][$questionId], JSON_PRETTY_PRINT);
+            $html_content .= "<input type='hidden' id='userHasAnswered-$questionId' value='{$uHasAnswered}'>";
+        }
         $html_content .= "<input type='hidden' name='choice[$questionId]' id='arrInput_{$questionId}'>";
         $html_content .= "<input type='hidden' id='insertedMarkersAsJson-$questionId' value='{$DataMarkersToJson}'>";
         $html_content .= "<input type='hidden' class='currentQuestion' value='{$questionId}'>";
@@ -86,8 +91,13 @@ class DragAndDropMarkersAnswer extends \QuestionType
                             });
                           </script>";
 
-        //createMarkersBlanksOnImage($questionId);
-        //drag_and_drop_process();
+        if (isset($_SESSION['userHasAnswered'])) {
+            $head_content .= "<script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                                save_user_answers();
+                            });
+                          </script>";
+        }
 
         return $html_content;
     }

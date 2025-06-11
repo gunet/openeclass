@@ -239,6 +239,11 @@ if ($ips && !$is_editor){
 // If the user has clicked on the "Cancel" button,
 // end the exercise and return to the exercise list
 if (isset($_POST['buttonCancel'])) {
+    
+    unset($_SESSION['userHasAnswered']);
+    unset($_SESSION['choicesAn']);
+    unset($_SESSION['savedAnsForExerPerPage']);
+
     $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value];
     Database::get()->query("UPDATE exercise_user_record
         SET record_end_date = " . DBHelper::timeAfter() . ", attempt_status = ?d, total_score = 0, total_weighting = 0
@@ -265,6 +270,60 @@ $exerciseTempSave = $objExercise->selectTempSave();
 $exerciseTimeConstraint = $objExercise->selectTimeConstraint();
 $exerciseAllowedAttempts = $objExercise->selectAttemptsAllowed();
 $exercisetotalweight = $objExercise->selectTotalWeighting();
+
+// In this php block we save the user's answers for dragging and drop types 
+// when the exercise has MULTIPLE_PAGE_TYPE type.
+if ($exerciseType == MULTIPLE_PAGE_TYPE && isset($_POST['choice'])) {
+    // $arrKey = question Id
+    $arrKey = array_keys($_POST['choice']);
+    $arrKey = $arrKey[0];
+    if (!empty($_POST['choice'][$arrKey])) {
+        if (empty($_SESSION['choicesAn'][$arrKey])) {
+            $_SESSION['choicesAn'][$arrKey] = $_POST['choice'][$arrKey]; 
+            $_SESSION['savedAnsForExerPerPage'][] = json_decode($_POST['choice'][$arrKey], true);
+        } else {
+            $arrSavedAnwersForExerPerPage = [];
+            $arrayNewJsonValue = json_decode($_POST['choice'][$arrKey], true);
+            foreach ($_SESSION['choicesAn'] as $index => $value) {
+                if ($index == $arrKey) {
+                    $oldJsonValue = $_SESSION['choicesAn'][$index];
+                    $arrayOldJsonValue = json_decode($oldJsonValue, true);
+                    // Here we merge the old with new answers by a user
+                    $lookup = [];
+                    foreach ($arrayNewJsonValue as $item) {
+                        $lookup[$item['dataAnswer']] = $item;
+                    }
+                    // Initialize result array
+                    $result = [];
+                    // Loop through array1 and replace entries if matching dataAnswer exists in array2
+                    foreach ($arrayOldJsonValue as $item) {
+                        $answer = $item['dataAnswer'];
+                        if (isset($lookup[$answer])) {
+                            // Replace with array2's item
+                            $result[] = $lookup[$answer];
+                            // Remove from lookup to avoid duplication if needed
+                            unset($lookup[$answer]);
+                        } else {
+                            // Keep original item
+                            $result[] = $item;
+                        }
+                    }
+                    // Add remaining items from array2 that were not in array1
+                    foreach ($lookup as $item) {
+                        $result[] = $item;
+                    }
+                    $arrSavedAnwersForExerPerPage = $result;
+                }
+            }
+            $_SESSION['savedAnsForExerPerPage'][] = $arrSavedAnwersForExerPerPage;
+        }
+        
+        if (count($_SESSION['savedAnsForExerPerPage']) > 0) {
+            $totalCount = count($_SESSION['savedAnsForExerPerPage']) - 1;
+            $_SESSION['userHasAnswered'][$arrKey] = $_SESSION['savedAnsForExerPerPage'][$totalCount];
+        }
+    }
+} 
 
 $questionOptions = [];
 $shuffle_answers = $objExercise->getOption('ShuffleAnswers')? 1: 0;
@@ -512,6 +571,11 @@ if (isset($_POST['formSent'])) {
 
     // if the user has made a final submission or the time has expired
     if (isset($_POST['buttonFinish']) or $time_expired) {
+
+        unset($_SESSION['userHasAnswered']);
+        unset($_SESSION['choicesAn']);
+        unset($_SESSION['savedAnsForExerPerPage']);
+
         if (isset($_POST['secsRemaining'])) {
             $secs_remaining = $_POST['secsRemaining'];
         } else {

@@ -209,7 +209,7 @@ function loadShapes(qID) {
                     const [x, y] = pair.split(',');
                         return { x: parseFloat(x), y: parseFloat(y) };
                     });
-                    if (Array.isArray(resultArray)) { console.log(resultArray);
+                    if (Array.isArray(resultArray)) {
                         attributes = {
                                         'answer': shape.marker_id,
                                         'blank-id': shape.marker_id,
@@ -790,4 +790,105 @@ function shapesCreationProcess() {
         });
 
     });
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Save the user's answers after redirecting to the next or previous page.
+
+function save_user_answers() {
+    
+    $(function() {
+        
+        const questionId = $('.QuestionPerPage').val();
+        if (questionId > 0) {
+            const droppedWordsByUser = $('#userHasAnswered-'+questionId).val();
+            if (droppedWordsByUser) {
+                const dataArray = JSON.parse(droppedWordsByUser);
+                console.log(dataArray);
+                if (dataArray) {
+                    dataArray.forEach(function(item) {
+                        //console.log("Answer:", item.dataAnswer, "Word:", item.dataWord);
+                        const spanElementBlank = $('#qPanel' + questionId + ' .blank[data-blank-id="' + item.dataAnswer + '"][data-card-id="words_' + questionId + '"]');
+                        
+                        if (spanElementBlank.length > 0 && item.dataWord != null) {
+                            // Create the <div>
+                            const div = document.createElement('div');
+                            div.classList.add('draggable', 'dropped-word', 'ui-draggable', 'ui-draggable-handle');
+                            div.setAttribute('data-word', item.dataWord);
+                            div.setAttribute('data-pool-id', 'words_'+questionId);
+                            div.textContent = item.dataWord;
+
+                            // Append the <div> into the <span>
+                            $(div).appendTo(spanElementBlank);
+
+                            // Make the div to be draggable
+                            $(div).draggable({
+                                revert: 'invalid',
+                                cursor: 'move',
+                                helper: 'clone',
+                                zIndex: 100,
+                                start: function(event, ui) {
+                                    $(this).data('dragging', true);
+                                }
+                            });
+
+                            // Calculate the user's answers
+                            setTimeout(function() {
+                                user_answers_calculation($(div));
+                            }, 500);
+
+                            // Remove the div from predifined answers in the pool
+                            const wordInPool = $('#words_' + questionId + ' .draggable[data-word="' + item.dataWord + '"]');
+                            wordInPool.remove();
+        
+                        }
+                        
+                    });
+                }
+            }
+
+            $('.draggable.dropped-word').on('click', function(e) {
+                e.preventDefault();
+                var wordText = $(this).attr('data-word');
+                var poolId = $(this).attr('data-pool-id');
+                
+                // Send the word back to the pool
+                const divPoolWord = document.createElement('div');
+                divPoolWord.classList.add('draggable', 'ui-draggable', 'ui-draggable-handle');
+                divPoolWord.setAttribute('data-word', wordText);
+                divPoolWord.setAttribute('data-pool-id', poolId);
+                divPoolWord.textContent = wordText;
+
+                // Append the <div> into the <span>
+                const poolWords = $('#'+poolId);
+                $(divPoolWord).appendTo(poolWords);
+
+                // Calculate the user's answers
+                user_answers_calculation($(divPoolWord));
+
+                // Remove it from the blank
+                $(this).remove();
+
+                // Make the div to be draggable
+                $(divPoolWord).draggable({
+                    revert: 'invalid',
+                    cursor: 'move',
+                    helper: 'clone',
+                    zIndex: 100,
+                    start: function(event, ui) {
+                        $(this).data('dragging', true);
+                    }
+                });
+
+
+            })
+        }
+
+    });
+
 }

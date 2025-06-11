@@ -117,6 +117,12 @@ class DragAndDropTextAnswer extends \QuestionType
         $html_content .= "</div>";
         $html_content .= "<input type='hidden' name='choice[$questionId]' id='arrInput_{$questionId}'>";
 
+        $html_content .= "<input type='hidden' class='QuestionPerPage' value='{$questionId}'>";
+        if (isset($_SESSION['userHasAnswered'])) {
+            $uHasAnswered = json_encode($_SESSION['userHasAnswered'][$questionId], JSON_PRETTY_PRINT);
+            $html_content .= "<input type='hidden' id='userHasAnswered-$questionId' value='{$uHasAnswered}'>";
+        }
+
         load_js('drag-and-drop-shapes');
         
         $head_content .= "<script>
@@ -124,6 +130,14 @@ class DragAndDropTextAnswer extends \QuestionType
                                 drag_and_drop_process();
                             });
                           </script>";
+
+        if (isset($_SESSION['userHasAnswered'])) {
+        $head_content .= "<script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                                save_user_answers();
+                            });
+                          </script>";
+        }
 
         return $html_content;
     }
