@@ -6987,6 +6987,7 @@ $langPositionJumbotronText = "Στοίχηση κειμένου";
 $langTopPositionJumbotronText = "Στοίχηση κειμένου στο πάνω μέρος";
 $langCenterPositionJumbotronText = "Κεντρική στοίχηση";
 $langBottomPositionJumbotronText = "Στοίχηση κειμένου στο κάτω μέρος";
+$langJumbotronWithVideo = "Το αρχείο που ανεβάσατε είναι τύπου .mp4 με πλήρη ονομασία << video.mp4 >>";
 $langMaxHeightMaxScreenJumbotron = "Εναλλακτικά το ύψος διαμορφώνεται ανάλογα με ύψος της τρέχουσας οθόνης.";
 $langMaxHeightHalfMaxScreenJumbotron = "Εναλλακτικά το ύψος διαμορφώνεται ανάλογα με ύψος της τρέχουσας οθόνης.";
 $langHelpJumbotronInfoText = "Σε περίπτωση που το επιλέξετε, το μέγιστο ύψος που είναι καταχωρημένο παύει να ισχύει.";

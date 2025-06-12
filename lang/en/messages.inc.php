@@ -6283,6 +6283,7 @@ $langPositionJumbotronText = "Text position";
 $langTopPositionJumbotronText = "Align text to top";
 $langCenterPositionJumbotronText = "Align text to center";
 $langBottomPositionJumbotronText = "Align text to bottom";
+$langJumbotronWithVideo = "The file you uploaded is of type .mp4 with full name << video.mp4 >>";
 $langMaxHeightMaxScreenJumbotron = "Alternatively, the height is configured according to the height of the current screen";
 $langHelpJumbotronInfoText = "In case you choose it, the maximum height ceases to apply.";
 $langMaxWidthTextJumbotron = "Max width of text";
