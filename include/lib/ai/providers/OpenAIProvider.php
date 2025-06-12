@@ -20,8 +20,7 @@ class OpenAIProvider extends AbstractAIProvider {
         // For now, using hardcoded values for development
 
         // IMPORTANT: Replace with your actual OpenAI API key for testing
-        //$this->apiKey = 'YOUR_OPENAI_API_KEY_HERE'; // TODO: Get from database: $this->getProviderConfig('openai', 'api_key')
-        $this->apiKey = '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';
+        $this->apiKey = OPENAI_API_KEY; // TODO: Get from database: $this->getProviderConfig('openai', 'api_key')
         $this->modelName = 'gpt-4o-mini'; // TODO: Get from database: $this->getProviderConfig('openai', 'model_name')
         $this->endpointUrl = self::DEFAULT_ENDPOINT;
         $this->enabled = true; // TODO: Get from database: $this->getProviderConfig('openai', 'enabled')
