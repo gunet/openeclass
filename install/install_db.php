@@ -1013,7 +1013,7 @@ $db->query("INSERT INTO `eportfolio_fields` (`id`, `shortname`, `name`, `descrip
         (20, 'twitter', '$langTwitterAccount', '', '5', 5, -4, 0, ''),
         (21, 'linkedin', '$langLinkedInProfile', '', '5', 5, -5, 0, ''),
         (22, 'gscholar', '$langGoogleScholarProfile', '', '5', 6, 0, 0, ''),
-        (23, 'scopus', '$langScopusID', '', '5', 6, -1, 0, ''),
+        (23, 'scopus', '$langScopusID', '', '1', 6, -1, 0, ''),
         (24, 'orcid', '$langOrcid', '', '5', 6, -2, 0, '')");
 
 $db->query("CREATE TABLE IF NOT EXISTS `eportfolio_resource` (

@@ -358,11 +358,33 @@ function process_eportfolio_fields_data() {
 }
 
 function epf_validate(&$valitron_object) {
-    global $langCPFLinkValidFail, $langCPFDateValidFail, $langTheFieldIsRequired;
+    global $langCPFLinkValidFail, $langCPFDateValidFail, $langTheFieldIsRequired, $langGScholarURLValidFail, $langOrcidURLValidFail, 
+        $langScopusIDValidFail, $langFacebookUrlValidFail, $langTwitterUrlValidFail, $langLinkedInUrlValidFail, $langInvalidEmail;
+
+    $valitron_object->addRule('gscholarURL', function($field, $value, array $params, array $fields) {
+        return preg_match('/^https?:\/\/scholar\.google\.[a-z.]+\/citations\?user=[a-zA-Z0-9_-]+$/', $value);
+    });
+
+    $valitron_object->addRule('orcid', function($field, $value, array $params, array $fields) {
+        return preg_match('/^(https:\/\/orcid\.org\/)?\d{4}-\d{4}-\d{4}-\d{3}[\dX]$/', $value);
+    });
+
+    $valitron_object->addRule('facebook', function($field, $value, array $params, array $fields) {
+        return preg_match('/^https:\/\/(www\.)?(facebook\.com|fb\.me)\/(p\/)?[a-zA-Z0-9\.]+\/?$/', $value);
+    });
+
+    $valitron_object->addRule('twitter', function($field, $value, array $params, array $fields) {
+        return preg_match('/^https:\/\/(twitter\.com|x\.com)\/[A-Za-z0-9_]{1,15}\/?(\?[a-zA-Z0-9=&_]*)?$/', $value);
+    });
+
+    $valitron_object->addRule('linkedin', function($field, $value, array $params, array $fields) {
+        return preg_match('/^https:\/\/(www\.)?linkedin\.com\/(in|pub|company)\/[a-zA-Z0-9\-_%]+\/?$/', $value);
+    });
+
     foreach ($_POST as $key => $value) {
         if (substr($key, 0, 4) == 'epf_') { //e-portfolio fields input names start with epf_
-            $field_name = substr($key, 4);
-            $result = Database::get()->querySingle("SELECT name, datatype, required FROM eportfolio_fields WHERE shortname = ?s", $field_name);
+            $shortname = substr($key, 4);
+            $result = Database::get()->querySingle("SELECT name, datatype, required FROM eportfolio_fields WHERE shortname = ?s", $shortname);
             $datatype = $result->datatype;
             $field_name = $result->name;
             $required = $result->required;
@@ -377,10 +399,34 @@ function epf_validate(&$valitron_object) {
             }
 
             if ($datatype == EPF_LINK) {
-                $valitron_object->rule('url', $key)->message(sprintf($langCPFLinkValidFail, q($field_name)))->label($field_name);
+                if ($shortname == 'gscholar') {
+                    $valitron_object->rule('gscholarURL', $key)->message(sprintf($langGScholarURLValidFail, q($field_name)))->label($field_name);
+                } elseif ($shortname == 'orcid') {
+                    $valitron_object->rule('orcid', $key)->message(sprintf($langOrcidURLValidFail, q($field_name)))->label($field_name);
+                } elseif ($shortname == 'fb') {
+                    $valitron_object->rule('facebook', $key)->message(sprintf($langFacebookUrlValidFail, q($field_name)))->label($field_name);
+                } elseif ($shortname == 'twitter') {
+                    $valitron_object->rule('twitter', $key)->message(sprintf($langTwitterUrlValidFail, q($field_name)))->label($field_name);
+                } elseif ($shortname == 'linkedin') {
+                    $valitron_object->rule('linkedin', $key)->message(sprintf($langLinkedInUrlValidFail, q($field_name)))->label($field_name);
+                } else {
+                    $valitron_object->rule('url', $key)->message(sprintf($langCPFLinkValidFail, q($field_name)))->label($field_name);
+                }
             } elseif ($datatype == EPF_DATE) {
                 $valitron_object->rule('date', $key)->message(sprintf($langCPFDateValidFail, q($field_name)))->label($field_name);
+            }
+
+            if ($datatype == EPF_TEXTBOX) {
+                if ($shortname == 'scopus') {
+                    $valitron_object->rule('numeric', $key)->message(sprintf($langScopusIDValidFail, q($field_name)))->label($field_name);
+                    $valitron_object->rule('lengthMin', $key, 9)->message(sprintf($langScopusIDValidFail, q($field_name)))->label($field_name);
+                    $valitron_object->rule('lengthMax', $key, 11)->message(sprintf($langScopusIDValidFail, q($field_name)))->label($field_name);
+                } elseif ($shortname == 'email') {
+                    $valitron_object->rule('email', $key)->message(sprintf($langInvalidEmail, q($field_name)))->label($field_name);
+                }
             }
         }
     }
 }
+
+
