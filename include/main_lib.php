@@ -5125,7 +5125,7 @@ function theme_initialization() {
            $head_content, $webDir, $theme_id, $container,
            $leftsideImg, $eclass_banner_value, $PositionFormLogin,
            $logo_img, $image_footer, $loginIMG, $themeimg, $favicon_img,
-           $logo_img_small;
+           $logo_img_small, $VideoUploadedInJumbotron;
 
     // Add Theme Options styles
     $styles_str = '';
@@ -5139,6 +5139,7 @@ function theme_initialization() {
     $logo_img_small = $themeimg.'/eclass-new-logo.svg';
     $loginIMG = $themeimg.'/loginIMG.png';
     $favicon_img = $urlAppend . 'resources/favicon/openeclass_128x128.png';
+    $VideoUploadedInJumbotron = 0;
 
     //////////////////////////////////////////  Theme creation  ///////////////////////////////////////////////
 
@@ -5245,6 +5246,16 @@ function theme_initialization() {
 
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////// UPLOAD VIDEO IN THE JUMBOTRON //////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if (isset($theme_options_styles['JumbotronWithVideo']) and $theme_options_styles['JumbotronWithVideo']){
+            $VideoUploadedInJumbotron = 1;
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
         //////////////////////////// BACKGROUND COLOR OF JUMBOTRON //////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
@@ -5254,6 +5265,16 @@ function theme_initialization() {
             $styles_str .= "
                 .jumbotron.jumbotron-login{
                     background: $gradient_str;
+                }
+                .radial-gradient-video{
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: $gradient_str;
+                    z-index: 2;
+                    pointer-events: none;
                 }
             ";
         }
@@ -5289,6 +5310,10 @@ function theme_initialization() {
                     .jumbotron.jumbotron-login{
                         min-height: $theme_options_styles[maxHeightJumbotron]px;
                     }
+
+                    .jumbotron.jumbotron-login:has(video){
+                        height: $theme_options_styles[maxHeightJumbotron]px;
+                    }
                 }
             ";
         }
@@ -5299,16 +5324,34 @@ function theme_initialization() {
                     .jumbotron.jumbotron-login{
                         min-height: calc(100vh - 80px);
                     }
+
+                    .jumbotron.jumbotron-login:has(video){
+                        height: calc(100vh - 80px);
+                    }
+
                     body:has(.fixed-announcement) .jumbotron.jumbotron-login{
                         min-height: calc(100vh - 80px - 60px);
+                    }
+
+                    body:has(.fixed-announcement) .jumbotron.jumbotron-login:has(video){
+                        height: calc(100vh - 80px - 60px);
                     }
                 }
                 @media(max-width:991px){
                     .jumbotron.jumbotron-login{
                         min-height: calc(100vh - 56px);
                     }
+
+                    .jumbotron.jumbotron-login:has(video){
+                        height: calc(100vh - 56px);
+                    }
+
                     body:has(.fixed-announcement) .jumbotron.jumbotron-login{
                         min-height: calc(100vh - 56px - 60px);
+                    }
+
+                    body:has(.fixed-announcement) .jumbotron.jumbotron-login:has(video){
+                        height: calc(100vh - 56px - 60px);
                     }
                 }
             ";
@@ -5320,16 +5363,34 @@ function theme_initialization() {
                     .jumbotron.jumbotron-login{
                         min-height: calc((100vh - 80px)/2);
                     }
+
+                    .jumbotron.jumbotron-login:has(video){
+                        height: calc((100vh - 80px)/2);
+                    }
+
                     body:has(.fixed-announcement) .jumbotron.jumbotron-login{
                         min-height: calc((100vh - 80px - 60px)/2);
+                    }
+
+                    body:has(.fixed-announcement) .jumbotron.jumbotron-login:has(video){
+                        height: calc((100vh - 80px - 60px)/2);
                     }
                 }
                 @media(max-width:991px){
                     .jumbotron.jumbotron-login{
                         min-height: calc((100vh - 56px)/2);
                     }
+
+                    .jumbotron.jumbotron-login:has(video){
+                        height: calc((100vh - 56px)/2);
+                    }
+
                     body:has(.fixed-announcement) .jumbotron.jumbotron-login{
                         min-height: calc((100vh - 56px - 60px)/2);
+                    }
+
+                    body:has(.fixed-announcement) .jumbotron.jumbotron-login:has(video){
+                        height: calc((100vh - 56px - 60px)/2);
                     }
                 }
             ";
@@ -5472,6 +5533,16 @@ function theme_initialization() {
                             display: flex;
                             align-items: top;
                         }
+                        .overlay-video-container {
+                            display: flex;
+                            align-items: top;
+                        }
+                    }
+                    @media(max-width:991px){
+                        .overlay-video-container {
+                            display: flex;
+                            align-items: top;
+                        }
                     }
                 ";
             }elseif($theme_options_styles['PositionJumbotronText'] == 1){
@@ -5481,12 +5552,32 @@ function theme_initialization() {
                             display: flex;
                             align-items: center;
                         }
+                        .overlay-video-container {
+                            display: flex;
+                            align-items: center;
+                        }
+                    }
+                    @media(max-width:991px){
+                        .overlay-video-container {
+                            display: flex;
+                            align-items: center;
+                        }
                     }
                 ";
             }elseif($theme_options_styles['PositionJumbotronText'] == 2){
                 $styles_str .= "
                     @media(min-width:992px){
                         .jumbotron.jumbotron-login{
+                            display: flex;
+                            align-items: end;
+                        }
+                        .overlay-video-container {
+                            display: flex;
+                            align-items: end;
+                        }
+                    }
+                    @media(max-width:991px){
+                        .overlay-video-container {
                             display: flex;
                             align-items: end;
                         }
