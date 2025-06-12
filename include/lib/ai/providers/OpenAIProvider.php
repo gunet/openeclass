@@ -7,10 +7,10 @@ require_once __DIR__ . '/AbstractAIProvider.php';
  * Handles communication with OpenAI's GPT models
  */
 class OpenAIProvider extends AbstractAIProvider {
-    
+
     private const DEFAULT_MODEL = 'gpt-4o-mini';
     private const DEFAULT_ENDPOINT = 'https://api.openai.com/v1/chat/completions';
-    
+
     /**
      * Load hardcoded configuration for development
      * TODO: Remove this when admin configuration is implemented
@@ -18,48 +18,49 @@ class OpenAIProvider extends AbstractAIProvider {
     protected function loadHardcodedConfig() {
         // TODO: Replace with database configuration when admin pages are ready
         // For now, using hardcoded values for development
-        
+
         // IMPORTANT: Replace with your actual OpenAI API key for testing
-        $this->apiKey = 'YOUR_OPENAI_API_KEY_HERE'; // TODO: Get from database: $this->getProviderConfig('openai', 'api_key')
-        $this->modelName = 'gpt-4o-mini'; // TODO: Get from database: $this->getProviderConfig('openai', 'model_name') 
+        //$this->apiKey = 'YOUR_OPENAI_API_KEY_HERE'; // TODO: Get from database: $this->getProviderConfig('openai', 'api_key')
+        $this->apiKey = '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';
+        $this->modelName = 'gpt-4o-mini'; // TODO: Get from database: $this->getProviderConfig('openai', 'model_name')
         $this->endpointUrl = self::DEFAULT_ENDPOINT;
         $this->enabled = true; // TODO: Get from database: $this->getProviderConfig('openai', 'enabled')
-        
+
         // For development/testing purposes only
         // Remove this warning when configuration is implemented
         if ($this->apiKey === 'YOUR_OPENAI_API_KEY_HERE') {
             error_log("WARNING: OpenAI provider is using placeholder API key. Update OpenAIProvider.php with actual key for testing.");
         }
     }
-    
+
     /**
      * Get provider type identifier
      */
     public function getProviderType(): string {
         return 'openai';
     }
-    
+
     /**
      * Get display name
      */
     public function getDisplayName(): string {
         return 'OpenAI (ChatGPT)';
     }
-    
+
     /**
      * Get default model
      */
     protected function getDefaultModel(): string {
         return self::DEFAULT_MODEL;
     }
-    
+
     /**
      * Get default endpoint
      */
     protected function getDefaultEndpoint(): string {
         return self::DEFAULT_ENDPOINT;
     }
-    
+
     /**
      * Get available models for OpenAI
      */
@@ -73,7 +74,7 @@ class OpenAIProvider extends AbstractAIProvider {
             'gpt-3.5-turbo' => 'GPT-3.5 Turbo'
         ];
     }
-    
+
     /**
      * Check if OpenAI service is healthy
      */
@@ -87,14 +88,14 @@ class OpenAIProvider extends AbstractAIProvider {
                 ],
                 'max_tokens' => 10
             ];
-            
+
             $response = $this->makeApiRequest($this->endpointUrl, $testData);
             return isset($response['choices']) && !empty($response['choices']);
         } catch (Exception $e) {
             return false;
         }
     }
-    
+
     /**
      * Make API request to OpenAI
      */
@@ -103,7 +104,7 @@ class OpenAIProvider extends AbstractAIProvider {
             'Content-Type: application/json',
             'Authorization: Bearer ' . $this->apiKey
         ];
-        
+
         $ch = curl_init();
         curl_setopt_array($ch, [
             CURLOPT_URL => $endpoint,
@@ -114,37 +115,37 @@ class OpenAIProvider extends AbstractAIProvider {
             CURLOPT_TIMEOUT => 60,
             CURLOPT_SSL_VERIFYPEER => true
         ]);
-        
+
         $response = curl_exec($ch);
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         $error = curl_error($ch);
         curl_close($ch);
-        
+
         if ($error) {
             throw new Exception("cURL error: " . $error);
         }
-        
+
         if ($httpCode !== 200) {
             $errorData = json_decode($response, true);
             $errorMessage = $errorData['error']['message'] ?? "HTTP error: " . $httpCode;
             throw new Exception("OpenAI API error: " . $errorMessage);
         }
-        
+
         $decodedResponse = json_decode($response, true);
         if (!$decodedResponse) {
             throw new Exception("Invalid JSON response from OpenAI API");
         }
-        
+
         // Log usage for monitoring
         $this->logApiUsage('api_request', [
             'model' => $data['model'] ?? $this->modelName,
             'tokens_used' => $decodedResponse['usage']['total_tokens'] ?? 0,
             'http_code' => $httpCode
         ]);
-        
+
         return $decodedResponse;
     }
-    
+
     /**
      * Build API request for OpenAI format
      */
@@ -157,7 +158,7 @@ class OpenAIProvider extends AbstractAIProvider {
                     'content' => 'You are an educational assistant that generates high-quality questions for learning assessment. Always respond with valid JSON format.'
                 ],
                 [
-                    'role' => 'user', 
+                    'role' => 'user',
                     'content' => $prompt
                 ]
             ],
@@ -166,7 +167,7 @@ class OpenAIProvider extends AbstractAIProvider {
             'response_format' => ['type' => 'json_object'] // Ensure JSON response
         ];
     }
-    
+
     /**
      * Format OpenAI response into OpenEclass question format
      */
@@ -174,41 +175,41 @@ class OpenAIProvider extends AbstractAIProvider {
         if (!isset($apiResponse['choices'][0]['message']['content'])) {
             throw new Exception("Invalid response format from OpenAI");
         }
-        
+
         $content = $apiResponse['choices'][0]['message']['content'];
         $questionsData = json_decode($content, true);
-        
+
         if (!$questionsData || !isset($questionsData['questions'])) {
             throw new Exception("Invalid JSON format in OpenAI response");
         }
-        
+
         $formattedQuestions = [];
         foreach ($questionsData['questions'] as $question) {
             $formattedQuestions[] = $this->formatSingleQuestion($question);
         }
-        
+
         return $formattedQuestions;
     }
-    
+
     /**
-     * Format a single question into OpenEclass format
+     * Format a single question into an OpenEclass format
      */
     private function formatSingleQuestion(array $questionData): array {
         $formatted = [
             'question_text' => $questionData['question'] ?? '',
             'question_type' => $this->mapQuestionType($questionData['type'] ?? 'multiple_choice'),
-            'difficulty' => $questionData['difficulty'] ?? 'medium',
+            'difficulty' => $questionData['difficulty'] ?? 3,
             'correct_answer' => $questionData['correct_answer'] ?? '',
             'explanation' => $questionData['explanation'] ?? '',
             'provider' => $this->getProviderType(),
             'created_at' => date('Y-m-d H:i:s')
         ];
-        
+
         // Handle options for multiple choice questions
         if (isset($questionData['options']) && is_array($questionData['options'])) {
             $formatted['options'] = $questionData['options'];
         }
-        
+
         // Handle different question types
         switch ($formatted['question_type']) {
             case 'multiple_choice':
@@ -216,30 +217,30 @@ class OpenAIProvider extends AbstractAIProvider {
                     $formatted['options'] = ['Option A', 'Option B', 'Option C', 'Option D'];
                 }
                 break;
-                
+
             case 'true_false':
                 $formatted['options'] = ['True', 'False'];
                 break;
         }
-        
+
         return $formatted;
     }
-    
+
     /**
      * Map AI question types to OpenEclass question types
      */
     private function mapQuestionType(string $aiType): string {
         $mapping = [
-            'multiple_choice' => 'multiple_choice',
-            'true_false' => 'true_false', 
-            'fill_blank' => 'fill_in_blanks',
-            'essay' => 'free_text',
-            'short_answer' => 'free_text'
+            'multiple_choice' => UNIQUE_ANSWER,
+            'true_false' => TRUE_FALSE,
+            'fill_blank' => FILL_IN_BLANKS_TOLERANT,
+            'essay' => FREE_TEXT,
+            'short_answer' => FREE_TEXT
         ];
-        
+
         return $mapping[$aiType] ?? 'multiple_choice';
     }
-    
+
     /**
      * TODO: Method to get provider configuration from database
      * This will replace hardcoded values when admin system is ready

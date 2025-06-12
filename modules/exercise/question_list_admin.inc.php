@@ -22,7 +22,7 @@
  */
 
 // Check if AI functionality is available
-require_once '../../include/lib/ai/services/AIQuestionBankService.php';
+require_once 'include/lib/ai/services/AIQuestionBankService.php';
 $aiService = new AIQuestionBankService($course_id, $uid);
 $aiAvailable = $aiService->isAvailable() && $aiService->isEnabledForCourse();
 
@@ -430,7 +430,7 @@ if ($objExercise->hasQuestionListWithRandomCriteria()) {
 
 
 $tool_content .= "<div>";
-    
+
     // Build action bar buttons array
     $actionBarButtons = array(
         array('title' => $langNewQu,
