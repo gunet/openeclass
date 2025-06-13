@@ -2197,6 +2197,23 @@ $db->query("CREATE TABLE IF NOT EXISTS `backpack_provider` (
     UNIQUE KEY (`name`)
 ) $tbl_options");
 
+$db->query("CREATE TABLE IF NOT EXISTS `user_backpack_connection` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `user_id` INT(11) NOT NULL,
+    `backpack_provider_id` INT(11) NOT NULL,
+    `email` VARCHAR(255) DEFAULT NULL,
+    `password` VARCHAR(255) DEFAULT NULL,
+    `access_token` VARCHAR(512) DEFAULT NULL,
+    `refresh_token` VARCHAR(512) DEFAULT NULL,
+    `status` ENUM('connected', 'disconnected', 'error') DEFAULT 'disconnected',
+    `last_sync` DATETIME DEFAULT NULL,
+    `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE KEY `user_provider` (`user_id`, `backpack_provider_id`),
+    FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`backpack_provider_id`) REFERENCES `backpack_provider`(`id`) ON DELETE CASCADE
+) $tbl_options");
+
 $db->query("CREATE TABLE `user_badge` (
   `id` int(11) not null auto_increment primary key,
   `user` int(11) not null,
