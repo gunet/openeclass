@@ -26,7 +26,7 @@ class FillInBlanksAnswer extends QuestionType
             list($answerTitle, $answerWeighting) = Question::blanksSplitAnswer($answerTitle);
             $html_content .= "
               <tr>
-                <td>" . standard_text_escape(nl2br($answerTitle)) . " <strong><small>($langScore: " . preg_replace('/,/', ' : ', "$answerWeighting") . ")</small></strong></td>
+                <td>" . standard_text_escape(nl2br($answerTitle)) . " <strong><small class='text-nowrap'>($langScore: " . preg_replace('/,/', ' : ', "$answerWeighting") . ")</small></strong></td>
               </tr>";
         }
         return $html_content;

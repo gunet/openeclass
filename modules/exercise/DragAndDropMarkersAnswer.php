@@ -46,21 +46,31 @@ class DragAndDropMarkersAnswer extends \QuestionType
                                                                 'marker_coordinates' => $value[3]['points'],
                                                                 'marker_grade' => $value[4]['marker_grade']
                                                                ];
+                } elseif (count($value) == 4) { // without shape . So the defined answer is not correct
+                    $arrDataMarkers[$value[0]['marker_id']] = [
+                                                                'marker_answer' => $value[1]['marker_answer'],
+                                                                'marker_shape' => null,
+                                                                'marker_coordinates' => null,
+                                                                'marker_grade' => 0
+                                                            ];
+
                 }
             }
         }
         foreach ($arrDataMarkers as $index => $m) {
-            $arr_m = explode(',', $m['marker_coordinates']);
-            $m['x'] = $arr_m[0];
-            $m['y'] = $arr_m[1];
+            $arr_m = explode(',', $m['marker_coordinates'] ?? '');
+            if (count($arr_m) == 2) {
+                $m['x'] = $arr_m[0];
+                $m['y'] = $arr_m[1];
+            }
             if ($m['marker_shape'] == 'circle' or $m['marker_shape'] == 'rectangle') {
                 $arr_of = explode(',', $m['marker_offsets']);
                 $m['endX'] = $arr_of[0];
                 $m['endY'] = $arr_of[1];
             }
-            if ($m['marker_shape'] == 'circle') {
+            if ($m['marker_shape'] == 'circle' && count($arr_m) == 2) {
                 $coordinatesXY[] = ['marker_id' => $index, 'x' => $m['x'], 'y' => $m['y'], 'shape_type' => $m['marker_shape'], 'radius' => $m['marker_radius']];
-            } elseif ($m['marker_shape'] == 'rectangle') {
+            } elseif ($m['marker_shape'] == 'rectangle' && count($arr_m) == 2) {
                 $coordinatesXY[] = ['marker_id' => $index, 'x' => $m['x'], 'y' => $m['y'], 'shape_type' => $m['marker_shape'], 'endY' => $m['endY'], 'endX' => $m['endX']];
             } elseif ($m['marker_shape'] == 'polygon') {
                 $coordinatesXY[] = ['marker_id' => $index, 'points' => $m['marker_coordinates'], 'shape_type' => $m['marker_shape'], 'color' => 'rgba(255, 255, 255, 0.5)'];

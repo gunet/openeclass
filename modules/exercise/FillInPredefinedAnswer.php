@@ -51,7 +51,7 @@ class FillInPredefinedAnswer extends QuestionType
             // format correct answers
             $html_content .= " 
                   <tr>
-                    <td>$formatted_answer_text&nbsp;&nbsp;&nbsp;<strong><small>($langScore: $answer_weight)</small></strong>
+                    <td>$formatted_answer_text&nbsp;&nbsp;&nbsp;<strong><small class='text-nowrap'>($langScore: $answer_weight)</small></strong>
                     </td>
                   </tr>";
         }

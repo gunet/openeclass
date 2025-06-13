@@ -34,7 +34,7 @@ class MultipleChoiceUniqueAnswer extends QuestionType
             $html_content .= "
                   <tr>
                     <td>$icon_choice</td>
-                    <td>" . standard_text_escape($answerTitle) . " <strong><small>($langScore: $answerWeighting)</small></strong></td>
+                    <td>" . standard_text_escape($answerTitle) . " <strong><small class='text-nowrap'>($langScore: $answerWeighting)</small></strong></td>
                     <td>" . $answerComment . "</td>
                   </tr>";
         }

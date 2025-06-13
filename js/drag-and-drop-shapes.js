@@ -729,8 +729,8 @@ function shapesCreationProcess() {
                 var markerShape = $('#shapeType-'+number).val();
                 
 
-                if (markerAnswer && markerCoordinates) {
-                    if (markerShape == 'circle' || markerShape == 'rectangle') {
+                if (markerAnswer) {
+                    if ((markerShape == 'circle' || markerShape == 'rectangle') && markerCoordinates) {
 
                         // Replace colon with comma
                         const replacedStr = markerCoordinates.replace(/:/g, ',');
@@ -748,13 +748,20 @@ function shapesCreationProcess() {
                                         {'marker_grade': markerGrade},
                                         {'marker_radius': radiusOriginal}
                                     ];
-                    } else if (markerShape == 'polygon') {
+                    } else if (markerShape == 'polygon' && markerCoordinates) {
                         vertices = [
                                         {'marker_id': number},
                                         {'marker_answer': markerAnswer},
                                         {'shape_type': markerShape},
                                         {'points': markerCoordinates},
                                         {'marker_grade': markerGrade}
+                                    ];
+                    } else { // You can add an answer that is not related to a specific shape
+                        vertices = [
+                                        {'marker_id': number},
+                                        {'marker_answer': markerAnswer},
+                                        {'shape_type': null},
+                                        {'marker_grade': 0}
                                     ];
                     }
                     saveShape(vertices,questionId,courseCode);

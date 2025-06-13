@@ -29,7 +29,7 @@ class MatchingAnswer extends QuestionType
                 $html_content .= "
                   <tr>
                     <td>" . standard_text_escape($answerTitle) . "</td>
-                    <td>{$answerTitle[$answerCorrect]}&nbsp;&nbsp;&nbsp;<strong><small>($langScore: $answerWeighting)</small></strong></td>
+                    <td>{$answerTitle[$answerCorrect]}&nbsp;&nbsp;&nbsp;<strong><small class='text-nowrap'>($langScore: $answerWeighting)</small></strong></td>
                   </tr>";
             }
         }
