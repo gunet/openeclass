@@ -7,6 +7,31 @@
 
             @include('layouts.partials.show_alert')
 
+            @if (Session::has('login_error'))
+                <div class='modal show' id='warning-modal' tabindex='-1'>
+                    <div class='modal-dialog modal-dialog-centered'>
+                        <div class='modal-content border-0 p-0'>
+                            <div class='modal-header d-flex justify-content-between align-items-center'>
+                                <div class='modal-title'>{{ trans('langError') }}</div>
+                                <button aria-label="{{ trans('langClose') }}" type='button' class='close' data-bs-dismiss='modal'></button>
+                            </div>
+                            <div class='modal-body'>
+                                <div class='alert alert-warning'>
+                                    <i class='fa-solid fa-triangle-exclamation fa-lg'></i>
+                                    <span>{!! Session::get('login_error') !!}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @push('bottom_scripts')
+                    <script>
+                        var warningModal = new bootstrap.Modal(document.getElementById('warning-modal'), {})
+                        warningModal.toggle()
+                    </script>
+                @endpush
+            @endif
+
             <div class='row m-auto'>
                 <h1>{{ trans('langUserLogin') }}</h1>
                 <div class='padding-default mt-4'>
@@ -21,27 +46,6 @@
 
                                                     @foreach($authLink as $authInfo)
 
-                                                        @if (Session::has('login_error') and $authInfo[0])
-                                                            <div class='col-12'>
-                                                                <input id='showWarningModal2' type='hidden' value='1'>
-                                                                <div class='modal fade' id='WarningModal2' aria-hidden='true' tabindex='-1' data-bs-backdrop='static' data-bs-keyboard='false'>
-                                                                    <div class='modal-dialog modal-dialog-centered'>
-                                                                        <div class='modal-content border-0 p-0'>
-                                                                            <div class='modal-header d-flex justify-content-between align-items-center'>
-                                                                                <div class='modal-title'>{{ trans('langError') }}</div>
-                                                                                <button aria-label="{{ trans('langClose') }}" type='button' class='close close-error' data-bs-dismiss='modal'></button>
-                                                                            </div>
-                                                                            <div class='modal-body'>
-                                                                                <div class='alert alert-warning'>
-                                                                                    <i class='fa-solid fa-triangle-exclamation fa-lg'></i>
-                                                                                    <span>{!! Session::get('login_error') !!}</span>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        @endif
 
                                                         @if ($loop->first)
                                                             <div class='col-12 page slide-page h-100'>
@@ -192,14 +196,6 @@
 
 <script type='text/javascript'>
     $(document).ready(function() {
-        if($('#showWarningModal2').val() == 1){
-            var ModalWarning = document.getElementById('WarningModal2');
-            var Modal_W = new bootstrap.Modal(ModalWarning);
-            Modal_W.show();
-        }
-        $('.close-error').on('click',function(){
-            window.location.reload();
-        });
         $('#revealPass').mousedown(function () {
             $('#password_id').attr('type', 'text');
         }).mouseup(function () {
