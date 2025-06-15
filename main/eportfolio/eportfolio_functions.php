@@ -51,7 +51,7 @@ function render_eportfolio_fields_content($uid) {
         $cat_return_string['panels'] = "";
         $cat_return_string['right_menu'] = "";
 
-        $res = Database::get()->queryArray("SELECT id, name, datatype, data FROM eportfolio_fields WHERE categoryid = ?d ORDER BY sortorder DESC", $c->id);
+        $res = Database::get()->queryArray("SELECT id, shortname, name, datatype, data FROM eportfolio_fields WHERE categoryid = ?d ORDER BY sortorder DESC", $c->id);
 
         if (count($res) > 0) {
             $cat_return_string['panels'] .= '
@@ -98,7 +98,11 @@ function render_eportfolio_fields_content($uid) {
                     switch ($f->datatype) {
                         case EPF_DATE:
                         case EPF_TEXTBOX:
-                            $cat_return_string['panels'] .= q($fdata_res->data);
+                            if ($f->shortname == 'scopus') {
+                                $cat_return_string['panels'] .= "<a href='https://www.scopus.com/authid/detail.uri?authorId=".q($fdata_res->data)."'>".q($fdata_res->data)."</a>";
+                            } else {
+                                $cat_return_string['panels'] .= q($fdata_res->data);
+                            }
                             break;
                         case EPF_TEXTAREA:
                             $cat_return_string['panels'] .= "".standard_text_escape($fdata_res->data)."";
