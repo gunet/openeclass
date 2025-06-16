@@ -43,7 +43,7 @@ if (!get_config('eportfolio_enable')) {
 
 if (isset($_GET['id']) && intval($_GET['id']) > 0) {
     $id = intval($_GET['id']);
-    if ($id == $_SESSION['uid']) {
+    if (isset($_SESSION['uid']) && ($id == $_SESSION['uid'])) {
         $toolName = $langPortfolio;
         $pageName = $langMyePortfolio;
     } else {
