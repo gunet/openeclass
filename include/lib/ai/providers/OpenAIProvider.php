@@ -181,6 +181,7 @@ class OpenAIProvider extends AbstractAIProvider {
             'question_type' => $this->mapQuestionType($questionData['type'] ?? 'multiple_choice'),
             'difficulty' => $questionData['difficulty'] ?? 3,
             'correct_answer' => $questionData['correct_answer'] ?? '',
+            'correct_answer_index' => $questionData['correct_answer_index'] ?? null,
             'explanation' => $questionData['explanation'] ?? '',
             'provider' => $this->getProviderType(),
             'created_at' => date('Y-m-d H:i:s')
@@ -200,7 +201,9 @@ class OpenAIProvider extends AbstractAIProvider {
                 break;
 
             case 'true_false':
-                $formatted['options'] = ['True', 'False'];
+                // Use language-appropriate true/false labels from language files
+                global $langFalse, $langTrue;
+                $formatted['options'] = [$langFalse, $langTrue]; // Order: False=0, True=1
                 break;
         }
 

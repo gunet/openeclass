@@ -459,7 +459,7 @@ $tool_content .= "<div>";
     if ($aiAvailable) {
         $actionBarButtons[] = array(
             'title' => ($langAIGenerateQuestions ?? 'AI Generate Questions'),
-            'url' => "ai_question_generation.php?course=$course_code",
+            'url' => "ai_question_generation.php?course=$course_code&exerciseId=$exerciseId",
             'icon' => 'fa-magic',
             'level' => 'primary-label',
             'button-class' => 'btn-info'

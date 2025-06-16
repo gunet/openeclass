@@ -7103,3 +7103,5 @@ $langAINotEnabledCourse = "Η λειτουργία Τ.Ν. δεν είναι εν
 $langAPIKeyNotConfigured = "Δεν είναι ρυθμισμένο το API key";
 $langProviderDisabled = "Ο πάροχος είναι απενεργοποιημένος";
 $langAIConfigSaved = "Η ρύθμιση παρόχου AI αποθηκεύτηκε με επιτυχία";
+$langAddToExercise = "Προσθήκη στην Άσκηση";
+$langQuestionsAddedToExercise = '%d ερωτήσεις προστέθηκαν στην άσκηση';

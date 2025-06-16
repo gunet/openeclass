@@ -26,7 +26,7 @@
 require_once 'exercise.class.php';
 require_once 'question.class.php';
 require_once 'answer.class.php';
-require_once '../../include/lib/ai/services/AIQuestionBankService.php';
+require_once 'exercise.lib.php';
 
 $require_editor = TRUE;
 $require_current_course = TRUE;
@@ -35,6 +35,17 @@ $helpTopic = 'exercises';
 $helpSubTopic = 'ai_question_generation';
 
 include '../../include/baseTheme.php';
+
+// AI service and exercise setup AFTER baseTheme
+require_once 'include/lib/ai/services/AIQuestionBankService.php';
+
+// Get exercise ID if provided
+$exerciseId = isset($_GET['exerciseId']) ? intval($_GET['exerciseId']) : 0;
+$exercise = null;
+if ($exerciseId > 0) {
+    $exercise = new Exercise();
+    $exercise->read($exerciseId);
+}
 
 $pageName = $langAIQuestionGeneration ?? 'AI Question Generation';
 
@@ -78,10 +89,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } catch (Exception $e) {
             Session::Messages($langAIGenerationError ?? 'Error generating questions: ' . $e->getMessage(), 'alert-danger');
         }
-    } elseif (isset($_POST['save_questions'])) {
-        // Save selected questions to question bank
+    } elseif (isset($_POST['save_questions']) || isset($_POST['add_to_exercise'])) {
+        // Save selected questions to question bank or add to exercise
         $selectedQuestions = $_POST['selected_questions'] ?? [];
         $categoryId = intval($_POST['category_id'] ?? 0);
+        $addToExercise = isset($_POST['add_to_exercise']);
 
         if (!empty($selectedQuestions) && isset($_SESSION['ai_generated_questions'])) {
             $questionsToSave = [];
@@ -93,8 +105,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if (!empty($questionsToSave)) {
                 try {
-                    $result = $aiService->saveQuestionsToBank($questionsToSave, $categoryId);
-                    Session::Messages(sprintf($langQuestionsSaved ?? '%d questions saved to question bank', count($result['saved'])), 'alert-success');
+                    if ($addToExercise && $exerciseId > 0) {
+                        // Add questions directly to the exercise
+                        $result = $aiService->saveQuestionsToExercise($questionsToSave, $exerciseId, $categoryId);
+                        Session::Messages(sprintf($langQuestionsAddedToExercise ?? '%d questions added to exercise', count($result['saved'])), 'alert-success');
+                    } else {
+                        // Save to question bank only
+                        $result = $aiService->saveQuestionsToBank($questionsToSave, $categoryId);
+                        Session::Messages(sprintf($langQuestionsSaved ?? '%d questions saved to question bank', count($result['saved'])), 'alert-success');
+                    }
                     // Clear generated questions from the session
                     unset($_SESSION['ai_generated_questions']);
                 } catch (Exception $e) {
@@ -122,7 +141,8 @@ $tool_content .= "
         <div class='col-md-12'>
             <div class='panel panel-primary'>
                 <div class='panel-heading'>
-                    <h3 class='panel-title'>$langAIQuestionGeneration</h3>
+                    <h3 class='panel-title'>$langAIQuestionGeneration" . 
+                    ($exercise ? " - " . htmlspecialchars($exercise->selectTitle()) : "") . "</h3>
                 </div>
                 <div class='panel-body'>
                     <div class='alert alert-info'>
@@ -254,9 +274,9 @@ if (!empty($_SESSION['ai_generated_questions'])) {
     }
 
     $tool_content .= "
-                        <div class='form-group'>
-                            <label>$langQuestionCategory:</label>
-                            <select name='category_id' class='form-control' style='width: 300px;'>";
+                        <div class='form-group' style='padding: 15px; background-color: #f9f9f9; border-radius: 5px; margin-bottom: 20px;'>
+                            <label style='margin-bottom: 10px; font-weight: bold;'>$langQuestionCategory:</label>
+                            <select name='category_id' class='form-control' style='width: 300px; margin-bottom: 15px;'>";
 
     foreach ($questionCategories as $catId => $catName) {
         $tool_content .= "<option value='$catId'>$catName</option>";
@@ -266,13 +286,30 @@ if (!empty($_SESSION['ai_generated_questions'])) {
                             </select>
                         </div>
                         
-                        <div class='form-group'>
-                            <button type='submit' name='save_questions' class='btn btn-success'>
-                                <i class='fa fa-save'></i>$langSaveToQuestionBank
-                            </button>
-                            <a href='ai_question_generation.php?course=$course_code' class='btn btn-default'>
-                                <i class='fa fa-refresh'></i>$langGenerateNew
-                            </a>
+                            <div class='text-center' style='padding-top: 10px; border-top: 1px solid #ddd; margin-top: 15px; white-space: nowrap;'>";
+    
+    // Show appropriate save buttons based on context
+    if ($exerciseId > 0) {
+        $tool_content .= "
+                                <button type='submit' name='add_to_exercise' class='btn btn-primary' style='margin-right: 10px; display: inline-block; vertical-align: middle; line-height: 1.5; padding: 8px 12px;'>
+                                    <i class='fa fa-plus-circle'></i> $langAddToExercise
+                                </button>
+                                <button type='submit' name='save_questions' class='btn btn-success' style='margin-right: 10px; display: inline-block; vertical-align: middle; line-height: 1.5; padding: 8px 12px;'>
+                                    <i class='fa fa-save'></i> $langSaveToQuestionBank
+                                </button>";
+    } else {
+        $tool_content .= "
+                                <button type='submit' name='save_questions' class='btn btn-success' style='margin-right: 10px; display: inline-block; vertical-align: middle; line-height: 1.5; padding: 8px 12px;'>
+                                    <i class='fa fa-save'></i> $langSaveToQuestionBank
+                                </button>";
+    }
+    
+    $redirectUrl = $exerciseId > 0 ? "ai_question_generation.php?course=$course_code&exerciseId=$exerciseId" : "ai_question_generation.php?course=$course_code";
+    $tool_content .= "
+                                <a href='$redirectUrl' class='btn btn-default' style='display: inline-block; vertical-align: middle; line-height: 1.5; padding: 8px 12px;'>
+                                    <i class='fa fa-refresh'></i> $langGenerateNew
+                                </a>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -321,17 +358,27 @@ $head_content .= "
 $head_content .= "
     <script>
         $(document).ready(function() {
-            // Select/deselect all questions
-            $('#selectAll').change(function() {
-                $('input[name=\"selected_questions[]\"]').prop('checked', this.checked);
-            });
-            
             // Add select all checkbox if questions exist
-            if ($('input[name=\"selected_questions[]\"]').length > 0) {
-                $('.panel-success .panel-heading').append(
-                    '<div class=\"pull-right\"><label><input type=\"checkbox\" id=\"selectAll\" checked> " . ($langSelectAll ?? 'Select All') . "</label></div>'
-                );
-            }
+            setTimeout(function() {
+                var questionCheckboxes = $('input[name=\"selected_questions[]\"]');
+                if (questionCheckboxes.length > 0) {
+                    $('.panel-success .panel-heading h3').after(
+                        '<div class=\"pull-right\"><label><input type=\"checkbox\" id=\"selectAll\" checked> " . ($langSelectAll ?? 'Select All') . "</label></div>'
+                    );
+                    
+                    // Select/deselect all questions functionality
+                    $('#selectAll').change(function() {
+                        questionCheckboxes.prop('checked', this.checked);
+                    });
+                    
+                    // Update select all checkbox when individual checkboxes change
+                    questionCheckboxes.change(function() {
+                        var totalCheckboxes = questionCheckboxes.length;
+                        var checkedCheckboxes = questionCheckboxes.filter(':checked').length;
+                        $('#selectAll').prop('checked', totalCheckboxes === checkedCheckboxes);
+                    });
+                }
+            }, 100);
         });
     </script>";
 

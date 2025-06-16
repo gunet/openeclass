@@ -128,13 +128,12 @@ class AIService {
      */
     public function getAvailableQuestionTypes(): array {
 
-        global $langUniqueSelect, $langTrueFalse, $langFillBlanksTolerant, $langFreeText;
+        global $langUniqueSelect, $langTrueFalse, $langFillBlanksTolerant;
 
         return [
             'multiple_choice' => $langUniqueSelect,
             'true_false' => $langTrueFalse,
-            'fill_blank' => $langFillBlanksTolerant,
-            'essay' => $langFreeText
+            'fill_blank' => $langFillBlanksTolerant
         ];
     }
 

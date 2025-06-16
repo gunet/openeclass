@@ -72,6 +72,113 @@ class AIQuestionBankService extends AIService {
     }
 
     /**
+     * Save generated questions directly to an exercise
+     *
+     * @param array $questions Generated questions
+     * @param int $exerciseId Exercise ID to add questions to
+     * @param int $categoryId Question category ID
+     * @return array Results of save operation
+     */
+    public function saveQuestionsToExercise(array $questions, int $exerciseId, int $categoryId = 0): array {
+        // Exercise class is already loaded by the calling file
+        $exercise = new Exercise();
+        if (!$exercise->read($exerciseId)) {
+            throw new Exception("Exercise not found");
+        }
+
+        $saved = [];
+        $errors = [];
+
+        foreach ($questions as $question) {
+            try {
+                // First save to question bank
+                $question_obj = new Question();
+                $question_obj->updateTitle($question['question_text']);
+                $question_obj->updateWeighting($question['weight']);
+                $question_obj->updateType($question['question_type']);
+                $question_obj->updateDifficulty($question['difficulty']);
+                $question_obj->updateCategory($question['category_id']);
+                $question_obj->updateFeedback($question['explanation']);
+                $question_obj->save();
+                $question_id = $question_obj->selectId();
+
+                // Save answers based on question type
+                if ($question['question_type'] == FILL_IN_BLANKS_TOLERANT) {
+                    // For fill-in-the-blanks, AI generates question with [answer] format
+                    $answer = new Answer($question_id);
+                    
+                    // The AI question text already has [answer] format (e.g., "Capital of Greece is [Athens]")
+                    $questionTextWithAnswers = $question['question_text'];
+                    
+                    // Extract answers and count blanks
+                    $blanks = $this->extractBlanksFromQuestion($questionTextWithAnswers);
+                    $weights = array_fill(0, count($blanks), 1);
+                    $weightString = implode(',', $weights);
+                    
+                    // Format: "question_text_with_answers::weights"  
+                    $answerText = $questionTextWithAnswers . '::' . $weightString;
+                    
+                    $answer->createAnswer($answerText, 1, '', count($blanks), 1);
+                    $answer->save();
+                } else {
+                    // For multiple choice and true/false questions
+                    $position = 0;
+                    foreach ($question['options'] as $answer_data) {
+                        $answer = new Answer($question_id);
+                        
+                        // Use index-based matching for reliable answer identification
+                        if ($position === intval($question['correct_answer_index'])) {
+                            $right_answer = 1;
+                            $weighting = 1;
+                        } else {
+                            $right_answer = 0;
+                            $weighting = 0;
+                        }
+                        
+                        $position++;
+                        $answer->createAnswer($answer_data, $right_answer, '', $weighting, $position);
+                        $answer->save();
+                    }
+                }
+
+                // Add question to exercise
+                if ($exercise->addToList($question_id)) {
+                    $saved[] = [
+                        'question_id' => $question_id,
+                        'question_text' => $question['question_text'],
+                        'status' => 'saved_and_added'
+                    ];
+                } else {
+                    $saved[] = [
+                        'question_id' => $question_id,
+                        'question_text' => $question['question_text'],
+                        'status' => 'saved_only'
+                    ];
+                }
+
+            } catch (Exception $e) {
+                $errors[] = [
+                    'question_text' => $question['question_text'] ?? 'Unknown question',
+                    'error' => $e->getMessage()
+                ];
+            }
+        }
+
+        // Save the exercise to persist question associations
+        if (!empty($saved)) {
+            $exercise->save();
+        }
+
+        return [
+            'saved' => $saved,
+            'errors' => $errors,
+            'total_generated' => count($questions),
+            'total_saved' => count($saved),
+            'exercise_id' => $exerciseId
+        ];
+    }
+
+    /**
      * Save generated questions to question bank
      * TODO: Implement database insertion when admin system is ready
      *
@@ -98,15 +205,18 @@ class AIQuestionBankService extends AIService {
 
                 $position = 0;
                 foreach ($question['options'] as $answer_data) { // answers
-                    $position++;
                     $answer = new Answer($question_id);
-                    if ($answer_data === $question_correct_answer) {
+                    
+                    // Use index-based matching for reliable answer identification
+                    if ($position === intval($question['correct_answer_index'])) {
                         $right_answer = 1;
                         $weighting = 1;
                     } else {
                         $right_answer = 0;
                         $weighting = 0;
                     }
+                    
+                    $position++;
                     $answer->createAnswer($answer_data, $right_answer, '', $weighting, $position);
                     $answer->save();
                 }
@@ -149,6 +259,7 @@ class AIQuestionBankService extends AIService {
                 'question_type' => $question['question_type'],
                 'difficulty' => $this->mapToOpenEclassQuestionDifficulty($question['difficulty'] ?? 3),
                 'correct_answer' => $question['correct_answer'] ?? '',
+                'correct_answer_index' => $question['correct_answer_index'] ?? null,
                 'explanation' => $question['explanation'] ?? '',
                 'weight' => 1, // Default weight
                 'category_id' => 0, // Default category
@@ -166,7 +277,9 @@ class AIQuestionBankService extends AIService {
                     break;
 
                 case TRUE_FALSE:
-                    $formattedQuestion['options'] = ['true', 'false'];
+                    // Use language-appropriate true/false labels from language files
+                    global $langFalse, $langTrue;
+                    $formattedQuestion['options'] = [$langFalse, $langTrue]; // False=0, True=1
                     break;
 
                 case FILL_IN_BLANKS_TOLERANT:
@@ -261,6 +374,24 @@ class AIQuestionBankService extends AIService {
             }
         }
 
+        return $blanks;
+    }
+
+    /**
+     * Extract blanks from question text for answer formatting
+     *
+     * @param string $questionText Question text with [answer] format
+     * @return array Array of answers found in brackets
+     */
+    private function extractBlanksFromQuestion(string $questionText): array {
+        $blanks = [];
+        
+        if (preg_match_all('/\[([^\]]+)\]/', $questionText, $matches)) {
+            foreach ($matches[1] as $blank) {
+                $blanks[] = trim($blank);
+            }
+        }
+        
         return $blanks;
     }
 

@@ -6417,3 +6417,5 @@ $langAINotEnabledCourse = "AI is not enabled for this course";
 $langAPIKeyNotConfigured = "API key not configured";
 $langProviderDisabled = "Provider is disabled";
 $langAIConfigSaved = "AI provider configuration saved successfully";
+$langAddToExercise = "Add to Exercise";
+$langQuestionsAddedToExercise = '%d questions added to exercise';

@@ -153,15 +153,20 @@ abstract class AbstractAIProvider implements AIProviderInterface {
         return "Generate {$count} educational questions in {$language} based on the following content. " .
                "Question types: {$questionTypes}. Difficulty level: {$difficulty}.\n\n" .
                "Content:\n{$content}\n\n" .
+               "IMPORTANT: For multiple choice and true/false questions, always provide the correct_answer_index as a number:\n" .
+               "- For multiple choice: use 0, 1, 2, 3, etc. (0-based index of the correct option)\n" .
+               "- For true/false: use 0 for false, 1 for true\n" .
+               "- For fill-in-the-blanks: use [correct_answer] format where correct_answer is the actual answer inside brackets (e.g., 'Athens is the capital of [Greece]')\n\n" .
                "Return the questions in JSON format with the following structure:\n" .
                "{\n" .
                "  \"questions\": [\n" .
                "    {\n" .
-               "      \"question\": \"The question text\",\n" .
+               "      \"question\": \"The question text (use [answer] format for fill_blank type)\",\n" .
                "      \"type\": \"multiple_choice|true_false|fill_blank|essay\",\n" .
                "      \"difficulty\": \"easy|medium|hard\",\n" .
-               "      \"options\": [\"Option A\", \"Option B\", \"Option C\", \"Option D\"], // for multiple choice\n" .
-               "      \"correct_answer\": \"Correct answer or option index\",\n" .
+               "      \"options\": [\"Option A\", \"Option B\", \"Option C\", \"Option D\"], // for multiple choice, [\"False\", \"True\"] for true_false, [\"answer1\", \"answer2\"] for fill_blank\n" .
+               "      \"correct_answer\": \"The text of the correct answer\",\n" .
+               "      \"correct_answer_index\": 1, // REQUIRED: numeric index (0-based for multiple choice, 0/1 for true_false)\n" .
                "      \"explanation\": \"Explanation of the correct answer\"\n" .
                "    }\n" .
                "  ]\n" .
