@@ -988,7 +988,9 @@ $db->query("INSERT INTO `eportfolio_fields_category` (`id`, `name`, `sortorder`)
         (3, '$langAchievements', -2),
         (4, '$langGoalsSkills', -3),
         (5, '$langContactInfo', -4),
-        (6, '$langResearchProfiles', -5)");
+        (6, '$langResearchProfiles', -5),
+        (7, '$langLangProfLevel', -6),
+        (8, '$langVolontSocialAct', -7)");
 
 $db->query("INSERT INTO `eportfolio_fields` (`id`, `shortname`, `name`, `description`, `datatype`, `categoryid`, `sortorder`, `required`, `data`) VALUES
         (1, 'birth_date', '$langBirthDate', '', '3', 1, 0, 0, ''),
@@ -1014,7 +1016,14 @@ $db->query("INSERT INTO `eportfolio_fields` (`id`, `shortname`, `name`, `descrip
         (21, 'linkedin', '$langLinkedInProfile', '', '5', 5, -5, 0, ''),
         (22, 'gscholar', '$langGoogleScholarProfile', '', '5', 6, 0, 0, ''),
         (23, 'scopus', '$langScopusID', '', '1', 6, -1, 0, ''),
-        (24, 'orcid', '$langOrcid', '', '5', 6, -2, 0, '')");
+        (24, 'orcid', '$langOrcid', '', '5', 6, -2, 0, ''),
+        (25, 'english', '$langEnglish', '', '4', 7, 0, 0, 'a:6:{i:0;s:".strlen($langLangCEFRA1).":\"$langLangCEFRA1\";i:1;s:".strlen($langLangCEFRA2).":\"$langLangCEFRA2\";i:2;s:".strlen($langLangCEFRB1).":\"$langLangCEFRB1\";i:3;s:".strlen($langLangCEFRB2).":\"$langLangCEFRB2\";i:4;s:".strlen($langLangCEFRC1).":\"$langLangCEFRC1\";i:5;s:".strlen($langLangCEFRC2).":\"$langLangCEFRC2\";}'),
+        (26, 'french', '$langFrench', '', '4', 7, -1, 0, 'a:6:{i:0;s:".strlen($langLangCEFRA1).":\"$langLangCEFRA1\";i:1;s:".strlen($langLangCEFRA2).":\"$langLangCEFRA2\";i:2;s:".strlen($langLangCEFRB1).":\"$langLangCEFRB1\";i:3;s:".strlen($langLangCEFRB2).":\"$langLangCEFRB2\";i:4;s:".strlen($langLangCEFRC1).":\"$langLangCEFRC1\";i:5;s:".strlen($langLangCEFRC2).":\"$langLangCEFRC2\";}'),
+        (27, 'german', '$langGerman', '', '4', 7, -2, 0, 'a:6:{i:0;s:".strlen($langLangCEFRA1).":\"$langLangCEFRA1\";i:1;s:".strlen($langLangCEFRA2).":\"$langLangCEFRA2\";i:2;s:".strlen($langLangCEFRB1).":\"$langLangCEFRB1\";i:3;s:".strlen($langLangCEFRB2).":\"$langLangCEFRB2\";i:4;s:".strlen($langLangCEFRC1).":\"$langLangCEFRC1\";i:5;s:".strlen($langLangCEFRC2).":\"$langLangCEFRC2\";}'),
+        (28, 'italian', '$langItalian', '', '4', 7, -3, 0, 'a:6:{i:0;s:".strlen($langLangCEFRA1).":\"$langLangCEFRA1\";i:1;s:".strlen($langLangCEFRA2).":\"$langLangCEFRA2\";i:2;s:".strlen($langLangCEFRB1).":\"$langLangCEFRB1\";i:3;s:".strlen($langLangCEFRB2).":\"$langLangCEFRB2\";i:4;s:".strlen($langLangCEFRC1).":\"$langLangCEFRC1\";i:5;s:".strlen($langLangCEFRC2).":\"$langLangCEFRC2\";}'),
+        (29, 'spanish', '$langSpanish', '', '4', 7, -4, 0, 'a:6:{i:0;s:".strlen($langLangCEFRA1).":\"$langLangCEFRA1\";i:1;s:".strlen($langLangCEFRA2).":\"$langLangCEFRA2\";i:2;s:".strlen($langLangCEFRB1).":\"$langLangCEFRB1\";i:3;s:".strlen($langLangCEFRB2).":\"$langLangCEFRB2\";i:4;s:".strlen($langLangCEFRC1).":\"$langLangCEFRC1\";i:5;s:".strlen($langLangCEFRC2).":\"$langLangCEFRC2\";}'),
+        (30, 'social_activities', '$langSocialActivities', '', '2', 8, 0, 0, ''),
+        (31, 'volunteer_activities', '$langVolunteerActivities', '', '2', 8, -1, 0, '')");
 
 $db->query("CREATE TABLE IF NOT EXISTS `eportfolio_resource` (
         `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
