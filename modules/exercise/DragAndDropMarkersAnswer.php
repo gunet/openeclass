@@ -84,7 +84,6 @@ class DragAndDropMarkersAnswer extends \QuestionType
             $html_content .= "<div class='draggable' data-word='{$an}' data-pool-id='words_{$questionId}'>$an</div>";
         }
         $html_content .= "</div>";
-        $html_content .= "<input type='hidden' class='QuestionPerPage' value='{$questionId}'>";
         if (isset($_SESSION['userHasAnswered'])) {
             $uHasAnswered = json_encode($_SESSION['userHasAnswered'][$questionId], JSON_PRETTY_PRINT);
             $html_content .= "<input type='hidden' id='userHasAnswered-$questionId' value='{$uHasAnswered}'>";
@@ -104,7 +103,7 @@ class DragAndDropMarkersAnswer extends \QuestionType
         if (isset($_SESSION['userHasAnswered'])) {
             $head_content .= "<script>
                             document.addEventListener('DOMContentLoaded', function() {
-                                save_user_answers();
+                                save_user_answers($questionId);
                             });
                           </script>";
         }

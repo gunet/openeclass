@@ -273,56 +273,59 @@ $exercisetotalweight = $objExercise->selectTotalWeighting();
 
 // In this php block it has been saving the user's answers for dragging and drop types 
 // when the exercise has MULTIPLE_PAGE_TYPE type.
-if ($exerciseType == MULTIPLE_PAGE_TYPE && isset($_POST['choice'])) {
+if (($exerciseType == MULTIPLE_PAGE_TYPE || isset($_POST['buttonSave'])) && isset($_POST['choice'])) {
     // $arrKey = question Id
-    $arrKey = array_keys($_POST['choice']);
-    $arrKey = $arrKey[0];
-    $CurrentQuestion = new Question();
-    $CurrentQuestion->read($arrKey);
-    if (($CurrentQuestion->selectType() == DRAG_AND_DROP_TEXT or $CurrentQuestion->selectType() == DRAG_AND_DROP_MARKERS) && !empty($_POST['choice'][$arrKey])) {
-        if (empty($_SESSION['choicesAn'][$arrKey])) {
-            $_SESSION['choicesAn'][$arrKey] = $_POST['choice'][$arrKey]; 
-            $_SESSION['savedAnsForExerPerPage'][] = json_decode($_POST['choice'][$arrKey], true);
-        } else {
-            $arrSavedAnwersForExerPerPage = [];
-            $arrayNewJsonValue = json_decode($_POST['choice'][$arrKey], true);
-            foreach ($_SESSION['choicesAn'] as $index => $value) {
-                if ($index == $arrKey) {
-                    $oldJsonValue = $_SESSION['choicesAn'][$index];
-                    $arrayOldJsonValue = json_decode($oldJsonValue, true);
-                    // Here we merge the old with new answers by a user
-                    $lookup = [];
-                    foreach ($arrayNewJsonValue as $item) {
-                        $lookup[$item['dataAnswer']] = $item;
-                    }
-                    // Initialize result array
-                    $result = [];
-                    // Loop through array1 and replace entries if matching dataAnswer exists in array2
-                    foreach ($arrayOldJsonValue as $item) {
-                        $answer = $item['dataAnswer'];
-                        if (isset($lookup[$answer])) {
-                            // Replace with array2's item
-                            $result[] = $lookup[$answer];
-                            // Remove from lookup to avoid duplication if needed
-                            unset($lookup[$answer]);
-                        } else {
-                            // Keep original item
-                            $result[] = $item;
+    $arrayKeys = array_keys($_POST['choice']);
+    if (count($arrayKeys) > 0) {
+        foreach ($arrayKeys as $arrKey) {
+            $CurrentQuestion = new Question();
+            $CurrentQuestion->read($arrKey);
+            if (($CurrentQuestion->selectType() == DRAG_AND_DROP_TEXT or $CurrentQuestion->selectType() == DRAG_AND_DROP_MARKERS) && !empty($_POST['choice'][$arrKey])) {
+                if (empty($_SESSION['choicesAn'][$arrKey])) {
+                    $_SESSION['choicesAn'][$arrKey] = $_POST['choice'][$arrKey]; 
+                    $_SESSION['savedAnsForExerPerPage'][] = json_decode($_POST['choice'][$arrKey], true);
+                } else {
+                    $arrSavedAnwersForExerPerPage = [];
+                    $arrayNewJsonValue = json_decode($_POST['choice'][$arrKey], true);
+                    foreach ($_SESSION['choicesAn'] as $index => $value) {
+                        if ($index == $arrKey) {
+                            $oldJsonValue = $_SESSION['choicesAn'][$index];
+                            $arrayOldJsonValue = json_decode($oldJsonValue, true);
+                            // Here we merge the old with new answers by a user
+                            $lookup = [];
+                            foreach ($arrayNewJsonValue as $item) {
+                                $lookup[$item['dataAnswer']] = $item;
+                            }
+                            // Initialize result array
+                            $result = [];
+                            // Loop through array1 and replace entries if matching dataAnswer exists in array2
+                            foreach ($arrayOldJsonValue as $item) {
+                                $answer = $item['dataAnswer'];
+                                if (isset($lookup[$answer])) {
+                                    // Replace with array2's item
+                                    $result[] = $lookup[$answer];
+                                    // Remove from lookup to avoid duplication if needed
+                                    unset($lookup[$answer]);
+                                } else {
+                                    // Keep original item
+                                    $result[] = $item;
+                                }
+                            }
+                            // Add remaining items from array2 that were not in array1
+                            foreach ($lookup as $item) {
+                                $result[] = $item;
+                            }
+                            $arrSavedAnwersForExerPerPage = $result;
                         }
                     }
-                    // Add remaining items from array2 that were not in array1
-                    foreach ($lookup as $item) {
-                        $result[] = $item;
-                    }
-                    $arrSavedAnwersForExerPerPage = $result;
+                    $_SESSION['savedAnsForExerPerPage'][] = $arrSavedAnwersForExerPerPage;
+                }
+                
+                if (count($_SESSION['savedAnsForExerPerPage']) > 0) {
+                    $totalCount = count($_SESSION['savedAnsForExerPerPage']) - 1;
+                    $_SESSION['userHasAnswered'][$arrKey] = $_SESSION['savedAnsForExerPerPage'][$totalCount];
                 }
             }
-            $_SESSION['savedAnsForExerPerPage'][] = $arrSavedAnwersForExerPerPage;
-        }
-        
-        if (count($_SESSION['savedAnsForExerPerPage']) > 0) {
-            $totalCount = count($_SESSION['savedAnsForExerPerPage']) - 1;
-            $_SESSION['userHasAnswered'][$arrKey] = $_SESSION['savedAnsForExerPerPage'][$totalCount];
         }
     }
 } 

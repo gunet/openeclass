@@ -807,16 +807,14 @@ function shapesCreationProcess() {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Save the user's answers after redirecting to the next or previous page.
 
-function save_user_answers() {
+function save_user_answers(questionId) {
     
     $(function() {
         
-        const questionId = $('.QuestionPerPage').val();
         if (questionId > 0) {
             const droppedWordsByUser = $('#userHasAnswered-'+questionId).val();
             if (droppedWordsByUser) {
                 const dataArray = JSON.parse(droppedWordsByUser);
-                console.log(dataArray);
                 if (dataArray) {
                     dataArray.forEach(function(item) {
                         //console.log("Answer:", item.dataAnswer, "Word:", item.dataWord);
