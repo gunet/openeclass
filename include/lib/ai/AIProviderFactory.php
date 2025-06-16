@@ -36,28 +36,25 @@ class AIProviderFactory {
     
     /**
      * Get all enabled AI providers
-     * TODO: Replace hardcoded logic with database queries when admin system is ready
      * 
      * @return array Array of enabled provider instances
      */
     public static function getEnabledProviders(): array {
         $providers = [];
         
-        // TODO: Replace with actual database query
-        // $results = Database::get()->queryArray("SELECT * FROM ai_providers WHERE enabled='true'");
-        
-        // For now, using hardcoded configuration
-        $hardcodedProviders = self::getHardcodedProviderConfigs();
-        
-        foreach ($hardcodedProviders as $providerConfig) {
-            if ($providerConfig['enabled']) {
+        try {
+            $results = Database::get()->queryArray("SELECT * FROM ai_providers WHERE enabled='true'");
+            
+            foreach ($results as $providerConfig) {
                 try {
-                    $provider = self::create($providerConfig['provider_type'], $providerConfig);
+                    $provider = self::create($providerConfig->provider_type, (array)$providerConfig);
                     $providers[] = $provider;
                 } catch (Exception $e) {
-                    error_log("Failed to create AI provider {$providerConfig['provider_type']}: " . $e->getMessage());
+                    error_log("Failed to create AI provider {$providerConfig->provider_type}: " . $e->getMessage());
                 }
             }
+        } catch (Exception $e) {
+            error_log("Failed to load AI providers from database: " . $e->getMessage());
         }
         
         return $providers;
@@ -70,20 +67,14 @@ class AIProviderFactory {
      * @return AIProviderInterface|null Provider instance or null if not found/enabled
      */
     public static function getProvider(string $providerType): ?AIProviderInterface {
-        // TODO: Replace with database query
-        // $config = Database::get()->querySingle("SELECT * FROM ai_providers WHERE provider_type = ? AND enabled='true'", [$providerType]);
-        
-        $hardcodedProviders = self::getHardcodedProviderConfigs();
-        
-        foreach ($hardcodedProviders as $providerConfig) {
-            if ($providerConfig['provider_type'] === $providerType && $providerConfig['enabled']) {
-                try {
-                    return self::create($providerType, $providerConfig);
-                } catch (Exception $e) {
-                    error_log("Failed to create AI provider {$providerType}: " . $e->getMessage());
-                    return null;
-                }
+        try {
+            $config = Database::get()->querySingle("SELECT * FROM ai_providers WHERE provider_type = ? AND enabled='true'", [$providerType]);
+            
+            if ($config) {
+                return self::create($providerType, (array)$config);
             }
+        } catch (Exception $e) {
+            error_log("Failed to load AI provider {$providerType} from database: " . $e->getMessage());
         }
         
         return null;
@@ -130,49 +121,6 @@ class AIProviderFactory {
         ];
     }
     
-    /**
-     * Hardcoded provider configurations for development
-     * TODO: Remove this method when database configuration is implemented
-     * 
-     * @return array Array of provider configurations
-     */
-    private static function getHardcodedProviderConfigs(): array {
-        return [
-            [
-                'id' => 1,
-                'name' => 'OpenAI Development',
-                'provider_type' => 'openai',
-                'api_key' => 'YOUR_OPENAI_API_KEY_HERE', // TODO: Replace with actual key for testing
-                'model_name' => 'gpt-4o-mini',
-                'endpoint_url' => 'https://api.openai.com/v1/chat/completions',
-                'enabled' => true, // Enable OpenAI for development
-                'enabled_features' => ['question_generation'],
-                'course_restrictions' => null
-            ],
-            [
-                'id' => 2,
-                'name' => 'Anthropic Development',
-                'provider_type' => 'anthropic',
-                'api_key' => 'YOUR_ANTHROPIC_API_KEY_HERE',
-                'model_name' => 'claude-3-5-sonnet-20241022',
-                'endpoint_url' => 'https://api.anthropic.com/v1/messages',
-                'enabled' => false, // Disabled for now
-                'enabled_features' => ['question_generation'],
-                'course_restrictions' => null
-            ],
-            [
-                'id' => 3,
-                'name' => 'Gemini Development',
-                'provider_type' => 'gemini',
-                'api_key' => 'YOUR_GEMINI_API_KEY_HERE',
-                'model_name' => 'gemini-1.5-flash',
-                'endpoint_url' => 'https://generativelanguage.googleapis.com/v1beta/models/',
-                'enabled' => false, // Disabled for now
-                'enabled_features' => ['question_generation'],
-                'course_restrictions' => null
-            ]
-        ];
-    }
     
     /**
      * Validate provider configuration

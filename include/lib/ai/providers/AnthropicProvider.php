@@ -11,17 +11,6 @@ class AnthropicProvider extends AbstractAIProvider {
     private const DEFAULT_MODEL = 'claude-3-5-sonnet-20241022';
     private const DEFAULT_ENDPOINT = 'https://api.anthropic.com/v1/messages';
     
-    /**
-     * Load hardcoded configuration for development
-     * TODO: Remove this when admin configuration is implemented
-     */
-    protected function loadHardcodedConfig() {
-        // TODO: Replace with database configuration when admin pages are ready
-        $this->apiKey = 'YOUR_ANTHROPIC_API_KEY_HERE'; // TODO: Get from database
-        $this->modelName = self::DEFAULT_MODEL; // TODO: Get from database
-        $this->endpointUrl = self::DEFAULT_ENDPOINT;
-        $this->enabled = false; // Disabled for now - TODO: Get from database
-    }
     
     public function getProviderType(): string {
         return 'anthropic';

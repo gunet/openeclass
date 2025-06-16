@@ -40,4 +40,28 @@ class aiapp extends ExtApp {
         return $GLOBALS['langAILongDescription'];
     }
 
+    /**
+     * Override isEnabled to check if any AI providers are enabled in database
+     */
+    public function isEnabled() {
+        try {
+            $result = Database::get()->querySingle("SELECT COUNT(*) as count FROM ai_providers WHERE enabled = 'true'");
+            return $result && $result->count > 0;
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    /**
+     * Override setEnabled to enable/disable all AI providers
+     */
+    function setEnabled($status) {
+        try {
+            $enabled = $status ? 'true' : 'false';
+            Database::get()->query("UPDATE ai_providers SET enabled = ?", [$enabled]);
+        } catch (Exception $e) {
+            error_log("Failed to update AI providers enabled status: " . $e->getMessage());
+        }
+    }
+
 }

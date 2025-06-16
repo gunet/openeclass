@@ -11,26 +11,6 @@ class OpenAIProvider extends AbstractAIProvider {
     private const DEFAULT_MODEL = 'gpt-4o-mini';
     private const DEFAULT_ENDPOINT = 'https://api.openai.com/v1/chat/completions';
 
-    /**
-     * Load hardcoded configuration for development
-     * TODO: Remove this when admin configuration is implemented
-     */
-    protected function loadHardcodedConfig() {
-        // TODO: Replace with database configuration when admin pages are ready
-        // For now, using hardcoded values for development
-
-        // IMPORTANT: Replace with your actual OpenAI API key for testing
-        $this->apiKey = OPENAI_API_KEY; // TODO: Get from database: $this->getProviderConfig('openai', 'api_key')
-        $this->modelName = 'gpt-4o-mini'; // TODO: Get from database: $this->getProviderConfig('openai', 'model_name')
-        $this->endpointUrl = self::DEFAULT_ENDPOINT;
-        $this->enabled = true; // TODO: Get from database: $this->getProviderConfig('openai', 'enabled')
-
-        // For development/testing purposes only
-        // Remove this warning when configuration is implemented
-        if ($this->apiKey === 'YOUR_OPENAI_API_KEY_HERE') {
-            error_log("WARNING: OpenAI provider is using placeholder API key. Update OpenAIProvider.php with actual key for testing.");
-        }
-    }
 
     /**
      * Get provider type identifier
@@ -64,13 +44,15 @@ class OpenAIProvider extends AbstractAIProvider {
      * Get available models for OpenAI
      */
     public function getAvailableModels(): array {
-        // TODO: When admin is ready, this could be fetched dynamically from OpenAI API
         return [
-            'gpt-4o' => 'GPT-4o (Latest)',
-            'gpt-4o-mini' => 'GPT-4o Mini (Fast & Efficient)',
-            'gpt-4-turbo' => 'GPT-4 Turbo',
-            'gpt-4' => 'GPT-4',
-            'gpt-3.5-turbo' => 'GPT-3.5 Turbo'
+            'gpt-4.1' => 'GPT-4.1',
+            'gpt-4.1-mini' => 'GPT-4.1 Mini',
+            'gpt-4.1-nano' => 'GPT-4.1 Nano',
+            'gpt-4o' => 'GPT-4o',
+            'gpt-4o-mini' => 'GPT-4o Mini',
+            'o4-mini' => 'O4 Mini (Reasoning)',
+            'o3' => 'O3 (Reasoning)',
+            'o3-mini' => 'O3 Mini (Reasoning)'
         ];
     }
 
@@ -79,17 +61,9 @@ class OpenAIProvider extends AbstractAIProvider {
      */
     public function isHealthy(): bool {
         try {
-            // Make a simple test request
-            $testData = [
-                'model' => $this->modelName,
-                'messages' => [
-                    ['role' => 'user', 'content' => 'Hello, just testing connectivity.']
-                ],
-                'max_tokens' => 10
-            ];
-
-            $response = $this->makeApiRequest($this->endpointUrl, $testData);
-            return isset($response['choices']) && !empty($response['choices']);
+            // Use models endpoint for connectivity check - simpler and doesn't consume tokens
+            $response = $this->makeApiRequest('https://api.openai.com/v1/models', [], 'GET');
+            return isset($response['data']) && is_array($response['data']);
         } catch (Exception $e) {
             return false;
         }
@@ -100,20 +74,28 @@ class OpenAIProvider extends AbstractAIProvider {
      */
     protected function makeApiRequest(string $endpoint, array $data, string $method = 'POST'): array {
         $headers = [
-            'Content-Type: application/json',
             'Authorization: Bearer ' . $this->apiKey
         ];
 
         $ch = curl_init();
-        curl_setopt_array($ch, [
+        $curlOptions = [
             CURLOPT_URL => $endpoint,
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_POST => ($method === 'POST'),
-            CURLOPT_POSTFIELDS => json_encode($data),
             CURLOPT_HTTPHEADER => $headers,
-            CURLOPT_TIMEOUT => 60,
+            CURLOPT_TIMEOUT => 30,
             CURLOPT_SSL_VERIFYPEER => true
-        ]);
+        ];
+        
+        if ($method === 'POST') {
+            $curlOptions[CURLOPT_POST] = true;
+            $curlOptions[CURLOPT_POSTFIELDS] = json_encode($data);
+            $headers[] = 'Content-Type: application/json';
+            $curlOptions[CURLOPT_HTTPHEADER] = $headers;
+        } else {
+            $curlOptions[CURLOPT_HTTPGET] = true;
+        }
+        
+        curl_setopt_array($ch, $curlOptions);
 
         $response = curl_exec($ch);
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
@@ -240,13 +222,4 @@ class OpenAIProvider extends AbstractAIProvider {
         return $mapping[$aiType] ?? 'multiple_choice';
     }
 
-    /**
-     * TODO: Method to get provider configuration from database
-     * This will replace hardcoded values when admin system is ready
-     */
-    private function getProviderConfig(string $provider, string $key) {
-        // TODO: Implement database query
-        // return Database::get()->querySingle("SELECT value FROM ai_provider_config WHERE provider = ? AND config_key = ?", [$provider, $key])->value;
-        return null;
-    }
 }

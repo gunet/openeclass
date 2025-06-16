@@ -6416,3 +6416,4 @@ $langAIUserForbidden = "User does not have permission to use AI";
 $langAINotEnabledCourse = "AI is not enabled for this course";
 $langAPIKeyNotConfigured = "API key not configured";
 $langProviderDisabled = "Provider is disabled";
+$langAIConfigSaved = "AI provider configuration saved successfully";

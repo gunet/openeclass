@@ -26,15 +26,8 @@ abstract class AbstractAIProvider implements AIProviderInterface {
         $this->enabled = $config['enabled'] ?? true;
         $this->providerConfig = $config;
 
-        // Load hardcoded config for development
-        $this->loadHardcodedConfig();
     }
 
-    /**
-     * Load hardcoded configuration for development
-     * TODO: Remove this method when admin configuration is ready
-     */
-    abstract protected function loadHardcodedConfig();
 
     /**
      * Get the default model for this provider

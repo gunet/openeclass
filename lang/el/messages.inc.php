@@ -7102,3 +7102,4 @@ $langAIUserForbidden = "Ο χρήστης δεν έχει δικαίωμα να 
 $langAINotEnabledCourse = "Η λειτουργία Τ.Ν. δεν είναι ενεργοποιημένη για το $langsCourse";
 $langAPIKeyNotConfigured = "Δεν είναι ρυθμισμένο το API key";
 $langProviderDisabled = "Ο πάροχος είναι απενεργοποιημένος";
+$langAIConfigSaved = "Η ρύθμιση παρόχου AI αποθηκεύτηκε με επιτυχία";

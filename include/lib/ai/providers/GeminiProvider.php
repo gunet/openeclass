@@ -11,17 +11,6 @@ class GeminiProvider extends AbstractAIProvider {
     private const DEFAULT_MODEL = 'gemini-1.5-flash';
     private const DEFAULT_ENDPOINT = 'https://generativelanguage.googleapis.com/v1beta/models/';
     
-    /**
-     * Load hardcoded configuration for development
-     * TODO: Remove this when admin configuration is implemented
-     */
-    protected function loadHardcodedConfig() {
-        // TODO: Replace with database configuration when admin pages are ready
-        $this->apiKey = 'YOUR_GEMINI_API_KEY_HERE'; // TODO: Get from database
-        $this->modelName = self::DEFAULT_MODEL; // TODO: Get from database
-        $this->endpointUrl = self::DEFAULT_ENDPOINT;
-        $this->enabled = false; // Disabled for now - TODO: Get from database
-    }
     
     public function getProviderType(): string {
         return 'gemini';
