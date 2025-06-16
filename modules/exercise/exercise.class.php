@@ -1142,7 +1142,7 @@ if (!class_exists('Exercise')) {
                 $objAnswersTmp = new Answer($key);
                 $questionWords = $objAnswersTmp->get_drag_and_drop_answer_text();
                 $questionGrades = $objAnswersTmp->get_drag_and_drop_answer_grade();
-                if (isset($_POST['choice'])) {
+                if (isset($_POST['choice']) && !empty($_POST['choice'][$key])) {
                     $userAnswersAsJSON = $_POST['choice'][$key];
                 }
 
@@ -1158,7 +1158,7 @@ if (!class_exists('Exercise')) {
                     $questionGrades = $arrTmp;
                 }
 
-                if (!isset($userAnswersAsJSON)) { // User has not filled in to the blanks of the question.
+                if (!isset($userAnswersAsJSON)) { // User has not filled in the blanks of the question.
                     $blank = 1;
                     foreach ($questionWords as $word) {
                         $weight = 0;

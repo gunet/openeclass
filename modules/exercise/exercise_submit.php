@@ -271,13 +271,15 @@ $exerciseTimeConstraint = $objExercise->selectTimeConstraint();
 $exerciseAllowedAttempts = $objExercise->selectAttemptsAllowed();
 $exercisetotalweight = $objExercise->selectTotalWeighting();
 
-// In this php block we save the user's answers for dragging and drop types 
+// In this php block it has been saving the user's answers for dragging and drop types 
 // when the exercise has MULTIPLE_PAGE_TYPE type.
 if ($exerciseType == MULTIPLE_PAGE_TYPE && isset($_POST['choice'])) {
     // $arrKey = question Id
     $arrKey = array_keys($_POST['choice']);
     $arrKey = $arrKey[0];
-    if (!empty($_POST['choice'][$arrKey])) {
+    $CurrentQuestion = new Question();
+    $CurrentQuestion->read($arrKey);
+    if (($CurrentQuestion->selectType() == DRAG_AND_DROP_TEXT or $CurrentQuestion->selectType() == DRAG_AND_DROP_MARKERS) && !empty($_POST['choice'][$arrKey])) {
         if (empty($_SESSION['choicesAn'][$arrKey])) {
             $_SESSION['choicesAn'][$arrKey] = $_POST['choice'][$arrKey]; 
             $_SESSION['savedAnsForExerPerPage'][] = json_decode($_POST['choice'][$arrKey], true);
@@ -744,6 +746,27 @@ foreach ($questionList as $k => $q_id) {
                 }
             }
         }
+    } elseif (($t_question->selectType() == DRAG_AND_DROP_TEXT or $t_question->selectType() == DRAG_AND_DROP_MARKERS)
+        and array_key_exists($q_id, $exerciseResult)) {
+        $answered = true;
+        if (empty($exerciseResult[$q_id])) {
+            $answered = false;
+        } elseif (is_string($exerciseResult[$q_id]) && !empty($exerciseResult[$q_id])) {
+            $arrAn = json_decode($exerciseResult[$q_id], true);
+            foreach ($arrAn as $index => $value) {
+                if (empty($value['dataWord'])) {
+                    $answered = false;
+                    break;
+                }
+            }
+        } elseif (is_array($exerciseResult[$q_id])) {
+            foreach ($exerciseResult[$q_id] as $val) {
+                if ($val == '') {
+                    $answered = false;
+                    break;
+                }
+            }
+        } 
     }
     if ($answered) {
         $answeredIds[] = $q_id;

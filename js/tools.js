@@ -357,6 +357,30 @@ function exercise_init_countdown(params) {
                 return qids.indexOf(id) < 0;
             }));
         }
+        // Checking drag and drop (text,markers) answers 
+        $('.blockUI').on('click', function (e) {
+            const questionBlanks = document.querySelectorAll('#qPanel' + qids[0] + ' .blank');
+            if (questionBlanks.length > 0) {
+                var qID = qids[0];
+                
+                answered[qID] = true; // assume answered unless a blank isn't filled
+
+                questionBlanks.forEach(function(blank) {
+                    // Wrap the DOM element with jQuery for convenience
+                    var $blank = $(blank);
+
+                    // Check if the blank contains a div with class 'draggable dropped-word'
+                    var hasDraggable = $blank.find('div.draggable.dropped-word').length > 0;
+
+                    // Optional: also check if the blank's text is empty
+                    var isEmpty = $.trim($blank.text()) === '';
+
+                    if (!hasDraggable && isEmpty) {
+                        answered[qID] = false; // Found an unanswered blank
+                    }
+                });
+            }
+        });
         $('.qPanel :input').change(function () {
             var el = $(this);
             var id = questionId(el);

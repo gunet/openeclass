@@ -875,11 +875,11 @@ function save_user_answers() {
                 const poolWords = $('#'+poolId);
                 $(divPoolWord).appendTo(poolWords);
 
-                // Calculate the user's answers
-                user_answers_calculation($(divPoolWord));
-
                 // Remove it from the blank
                 $(this).remove();
+
+                // Calculate the user's answers
+                user_answers_calculation($(divPoolWord));
 
                 // Make the div to be draggable
                 $(divPoolWord).draggable({
