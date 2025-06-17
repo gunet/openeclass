@@ -467,6 +467,7 @@ function is_active_account($userid, $eclass_auth = true) {
  * ************************************************************** */
 
 function get_ldap_attribute($search_result, $attribute) {
+    $attribute = strtolower($attribute);
     if (isset($search_result[0][$attribute][0])) {
         return iconv('UTF-8', $GLOBALS['charset'], $search_result[0][$attribute][0]);
     } else {
