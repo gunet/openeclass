@@ -3351,19 +3351,19 @@ function upgrade_to_4_2($tbl_options) : void {
         Database::get()->query("ALTER TABLE tc_log CHANGE id id INT NOT NULL AUTO_INCREMENT");
     }
 
-    if (!DBHelper::tableExists('ai_api_token')) {
-        Database::get()->query("CREATE TABLE ai_api_token (
+    if (!DBHelper::tableExists('ai_providers')) {
+        Database::get()->query("CREATE TABLE ai_providers (
             `id` smallint NOT NULL AUTO_INCREMENT,
-            `token` text CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
-            `provider` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
-            `model` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
-            `api_type` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
-            `endpoint_url` VARCHAR(255) CHARACTER SET ascii COLLATE ascii_bin DEFAULT NULL,
+            `name` text CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+            `api_key` text CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+            `model_name` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+            `provider_type` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin,
+            `endpoint_url` varchar(255) CHARACTER SET ascii COLLATE ascii_bin DEFAULT NULL,
             `enabled` tinyint NOT NULL,
             `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
             `updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
             `expired` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-            `options` text DEFAULT NULL,
+            `options` text COLLATE utf8mb4_bin,
             PRIMARY KEY (`id`)) $tbl_options");
     }
 }

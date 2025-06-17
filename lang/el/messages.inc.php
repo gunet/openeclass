@@ -6349,9 +6349,9 @@ $langGoogleMeetShortDescription = "Σύνδεση με την υπηρεσία �
 $langGoogleMeetLongDescription = "Σύνδεση με την υπηρεσία τηλεδιάσκεψης Google Meet.";
 $langMsTeamsShortDescription = "Σύνδεση με την υπηρεσία τηλεδιάσκεψης Microsoft Teams.";
 $langMsTeamsLongDescription = "Σύνδεση με την υπηρεσία τηλεδιάσκεψης Microsoft Teams.";
-$langAIShortDescription = "Υπηρεσία AI.";
-$langAILongDescription = "Υπηρεσία AI.";
-$langAI = "Ρυθμίσεις AI.";
+$langAIShortDescription = "Υπηρεσία Τ.Ν.";
+$langAILongDescription = "Υπηρεσία Τ.Ν.";
+$langAI = "Ρυθμίσεις Τ.Ν.";
 $langZoomShortDescription = "Σύνδεση με την υπηρεσία τηλεδιάσκεψης Zoom.";
 $langZoomLongDescription = "Σύνδεση με την υπηρεσία τηλεδιάσκεψης Zoom.";
 $langWebexShortDescription = "Σύνδεση με την υπηρεσία τηλεδιάσκεψης Webex.";
@@ -7067,6 +7067,7 @@ $langDisplayRightContentInCPage = "Εμφάνιση ημερολογίου, αν
 $langCoursePage = "Σελίδα $langsOfCourse";
 
 // AI-related language constants - Greek translations
+$langAI = "Τεχνητή Νοημοσύνη";
 $langAIGenerateQuestions = 'Δημιουργία Ερωτήσεων με χρήση Τ.Ν.';
 $langAIQuestionGeneration = 'Δημιουργία Ερωτήσεων με χρήση Τ.Ν.';
 $langAINotAvailable = 'Η λειτουργία Τ.Ν. δεν είναι διαθέσιμη';
@@ -7102,6 +7103,14 @@ $langAIUserForbidden = "Ο χρήστης δεν έχει δικαίωμα να 
 $langAINotEnabledCourse = "Η λειτουργία Τ.Ν. δεν είναι ενεργοποιημένη για το $langsCourse";
 $langAPIKeyNotConfigured = "Δεν είναι ρυθμισμένο το API key";
 $langProviderDisabled = "Ο πάροχος είναι απενεργοποιημένος";
-$langAIConfigSaved = "Η ρύθμιση παρόχου AI αποθηκεύτηκε με επιτυχία";
+$langSelectLanguageModel = "Διαλέξτε γλωσσικό μοντέλο";
+$langSelectAIProvider = "Διαλέξτε πάροχο Τ.Ν.";
+$langNoLangModels = "Δεν υπάρχουν διαθέσιμα γλωσσικά μοντέλα";
+$langLanguageModel = "Γλωσσικό Μοντέλο";
+$langLanguageModelName = "Όνομα γλωσσικού μοντέλου";
+$langAITokenDeleted =  "Διαγράφηκε το κλειδί του παρόχου Τ.Ν.";
+$langAIConfigSaved = "Η ρύθμιση του παρόχου Τ.Ν. αποθηκεύτηκε με επιτυχία";
 $langAddToExercise = "Προσθήκη στην Άσκηση";
 $langQuestionsAddedToExercise = '%d ερωτήσεις προστέθηκαν στην άσκηση';
+$langTestConnection = "Δοκιμή Σύνδεσης";
+

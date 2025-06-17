@@ -18,12 +18,8 @@
  *
  */
 
-
-// Check if user is administrator and if yes continue
-// Othewise exit with appropriate message
 $require_admin = true;
 require_once '../../include/baseTheme.php';
-require_once 'modules/auth/auth.inc.php';
 require_once 'modules/admin/extconfig/externals.php';
 require_once 'modules/admin/extconfig/aiapp.php';
 require_once 'include/lib/ai/AIProviderFactory.php';
@@ -32,81 +28,107 @@ $nameTools = $langAI;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'extapp.php', 'name' => $langExtAppConfig);
 $pageName = $langAI;
+const AI_KEY_DURATION_TIME = 365*24*60*60; // one year (in seconds)
 
-// Handle form submission
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
-    $provider_type = $_POST['dropdown'] ?? '';
-    $api_key = $_POST['api_key'] ?? '';
+if (isset($_GET['edit'])) {
+    $data['q'] = $q = Database::get()->queryArray("SELECT * FROM ai_providers WHERE id = ?d", $_GET['edit']);
+} else if (isset($_GET['delete'])) {
+    Database::get()->query("DELETE FROM ai_providers WHERE id = ?d", $_GET['delete']);
+    Session::flash('message', $langAITokenDeleted);
+    Session::flash('alert-class', 'alert-success');
+    redirect_to_home_page('modules/admin/aimoduleconf.php');
+} else if (isset($_POST['submit'])) {
+    print_a($_POST);
+    //die;
+
+    $provider_type = $_POST['provider'] ?? '';
+    $api_key = trim($_POST['api_key']) ?? '';
     $model = $_POST['model'] ?? '';
     $endpoint_url = !empty($_POST['endpoint_url']) ? $_POST['endpoint_url'] : null;
     $model_name = $_POST['model_name'] ?? '';
     $api_type = $_POST['api_type'] ?? 'openai_chat';
-    $ai_enabled = isset($_POST['ai_enabled']) ? 'true' : 'false';
-    
+    $ai_enabled = isset($_POST['ai_enabled']) ? 1 : 0;
+    $expirationDate = DateTime::createFromFormat("Y-m-d H:i", date('Y-m-d H:i', strtotime("now") + AI_KEY_DURATION_TIME))->format("Y-m-d H:i:s");
+
     if ($provider_type && $api_key) {
         try {
-            // For "other" provider type, use custom values
+            // For "another" provider type, use custom values
             if ($provider_type === 'other') {
                 $provider_type = 'custom';
                 $model = $model_name;
             }
-            
-            // Check if provider already exists
-            $existing = Database::get()->querySingle("SELECT id FROM ai_providers WHERE provider_type = ?", [$provider_type]);
-            
+
+            // Check if the provider already exists
+            $existing = Database::get()->querySingle("SELECT id FROM ai_providers WHERE provider_type = ?s", $provider_type);
+
             if ($existing) {
                 // Update existing provider
                 Database::get()->query("UPDATE ai_providers SET 
-                    api_key = ?, 
-                    model_name = ?, 
-                    endpoint_url = ?, 
-                    enabled = ? 
-                    WHERE provider_type = ?", 
-                    [$api_key, $model, $endpoint_url, $ai_enabled, $provider_type]);
+                                        api_key = ?s, 
+                                        model_name = ?s, 
+                                        endpoint_url = ?s, 
+                                        enabled = ?d 
+                                    WHERE provider_type = ?s",
+                                    $api_key, $model, $endpoint_url, $ai_enabled, $provider_type);
             } else {
                 // Insert new provider
-                Database::get()->query("INSERT INTO ai_providers 
-                    (name, provider_type, api_key, model_name, endpoint_url, enabled) 
-                    VALUES (?, ?, ?, ?, ?, ?)", 
-                    [ucfirst($provider_type) . ' Provider', $provider_type, $api_key, $model, $endpoint_url, $ai_enabled]);
+                Database::get()->query("INSERT INTO ai_providers (name, provider_type, api_key, model_name, endpoint_url, enabled, created, updated, expired, options) 
+                                            VALUES (?s, ?s, ?s, ?s, ?s, ?s, " . DBHelper::timeAfter() . "," . DBHelper::timeAfter() . ", ?t, '')",
+                                        ucfirst($provider_type) . ' Provider',
+                                        $provider_type,
+                                        $api_key,
+                                        $model,
+                                        $endpoint_url,
+                                        $ai_enabled,
+                                        $expirationDate);
             }
-            
+
             Session::Messages($langAIConfigSaved, 'alert-success');
-            redirect_to_home_page('modules/admin/aimoduleconf.php');
+            //redirect_to_home_page('modules/admin/aimoduleconf.php');
         } catch (Exception $e) {
             Session::Messages($langGeneralError . ': ' . $e->getMessage(), 'alert-danger');
         }
     } else {
         Session::Messages($langFieldsMissing, 'alert-warning');
     }
-}
-
+} else if (isset($_GET['add'])) {
 // Get provider display names
-$providerDisplayNames = AIProviderFactory::getProviderDisplayNames();
+    $providerDisplayNames = AIProviderFactory::getProviderDisplayNames();
 
-// Load existing configuration
-$existingConfig = null;
-try {
-    $existingConfig = Database::get()->querySingle("SELECT * FROM ai_providers WHERE enabled = 'true' LIMIT 1");
-} catch (Exception $e) {
-    // Ignore errors, will use defaults
-}
+    $data['q'] = $q = Database::get()->queryArray("SELECT * FROM ai_providers");
+    // Load existing configuration
+    $existingConfig = null;
+    try {
+        $existingConfig = Database::get()->querySingle("SELECT * FROM ai_providers WHERE enabled = 'true' LIMIT 1");
+    } catch (Exception $e) {
+        // Ignore errors, will use defaults
+    }
+    // Get the current model name for JavaScript (escaped for security)
+    $currentModelName = '';
+    if ($existingConfig && isset($existingConfig->model_name)) {
+        $currentModelName = htmlspecialchars($existingConfig->model_name, ENT_QUOTES, 'UTF-8');
+    }
 
-$data['dropdownOptions'] = array_map(function ($key, $value) {
-    return ['value' => $key, 'label' => $value];
-}, array_keys($providerDisplayNames), $providerDisplayNames);
-$data['dropdownOptions'] = array_merge(
-    $data['dropdownOptions'],
-    [['value' => 'other', 'label' => 'Other']]
-);
 
-// Pass existing config to view
-$data['existingConfig'] = $existingConfig;
+} else { // list
+    $providerDisplayNames = AIProviderFactory::getProviderDisplayNames();
+    $data['q'] = $q = Database::get()->queryArray("SELECT * FROM ai_providers");
+    // Load existing configuration
 
-// Get current model name for JavaScript (escaped for security)
-$currentModelName = '';
-if ($existingConfig && isset($existingConfig->model_name)) {
-    $currentModelName = htmlspecialchars($existingConfig->model_name, ENT_QUOTES, 'UTF-8');
+    $data['dropdownOptions'] = array_map(function ($key, $value) {
+        return ['value' => $key, 'label' => $value];
+    }, array_keys($providerDisplayNames), $providerDisplayNames);
+    $data['dropdownOptions'] = array_merge(
+        $data['dropdownOptions'],
+        [['value' => 'other', 'label' => 'Other']]
+    );
+
+
+// Get the current model name for JavaScript (escaped for security)
+    $currentModelName = '';
+    if ($q && isset($q->model_name)) {
+        $currentModelName = htmlspecialchars($q->model_name, ENT_QUOTES, 'UTF-8');
+    }
 }
 
 
@@ -124,8 +146,10 @@ $head_content .= "
                     data: { provider: provider },
                     success: function (response) {
                         console.log('Server Response:', response); // Debugging
+                        
                         if (response && response.success && typeof response.models === 'object') {
-                            $('#modelDropdown').empty().append('<option value=\"\">Select a model</option>');
+                            $('#modelDropdown').empty().append('<option value=\"\">" . js_escape($langSelectLanguageModel) . "</option>');
+
                             Object.entries(response.models).forEach(function ([key, label]) {
                                 var selected = '';
                                 if (key === '" . $currentModelName . "') {
@@ -136,7 +160,7 @@ $head_content .= "
                         } else if (response && response.error) {
                             $('#modelDropdown').empty().append('<option value=\"\">' + response.error + '</option>');
                         } else {
-                            $('#modelDropdown').empty().append('<option value=\"\">No models available</option>');
+                            $('#modelDropdown').empty().append('<option value=\"\">" . js_escape($langNoLangModels) . "</option>');
                         }
                     },
                     error: function () {

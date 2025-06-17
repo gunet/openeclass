@@ -23,7 +23,7 @@ class aiapp extends ExtApp {
 
     public function getDisplayName()
     {
-        return "AI";
+        return $GLOBALS['langAI'];
     }
 
     public function getConfigUrl() {

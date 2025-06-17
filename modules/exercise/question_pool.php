@@ -282,17 +282,13 @@ if ($fromExercise) {
           'icon' => 'fa-upload',
           'button-class' => 'btn-success'
         ],
+        [ 'title' => $langAIGenerateQuestions,
+          'url' => "ai_question_generation.php?course=$course_code",
+          'icon' => 'fa-magic',
+          'button-class' => 'btn-info',
+          /*'show' => $aiAvailable */
+        ]
     ];
-    
-    // Add AI button if available and not from exercise
-    if ($aiAvailable) {
-        $action_bar_options[] = [
-            'title' => ($langAIGenerateQuestions ?? 'AI Generate Questions'),
-            'url' => "ai_question_generation.php?course=$course_code",
-            'icon' => 'fa-magic',
-            'button-class' => 'btn-info'
-        ];
-    }
 }
 
 $action_bar = action_bar($action_bar_options);
