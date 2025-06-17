@@ -15,6 +15,12 @@ $dropZonesFile = "$dropZonesDir/dropZones_$questionId.json";
 if (isset($_POST['marker_id'])) {
     $targetMarkerId = intval($_POST['marker_id']);
 
+    // Delete image as predefined answer
+    $imagePathDel = "$webDir/courses/$course_code/image/answer-$questionId-$targetMarkerId";
+    if (file_exists($imagePathDel)) {
+        unlink($imagePathDel);
+    }
+
     // Read existing JSON data
     $jsonData = file_get_contents($dropZonesFile);
     $data = json_decode($jsonData, true);

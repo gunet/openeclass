@@ -2169,6 +2169,10 @@ $langRectangle = "Ορθογώνιο";
 $langCircle = "Κύκλος";
 $langPolygon = "Πολύγωνο";
 
+$langAddAnswerThroughImg = "Η προκαθορισμένη απάντηση θα εμφανίζεται μέσω της εικόνας";
+$langImageHasBeenDeleted = "Η εικόνα διαγράφηκε επιτυχώς.";
+$langSomethingWentWrong = "Κάτι πήγε στραβά. Δοκιμάστε πάλι.";
+
 // answer_admin.php
 $langWeightingForEachBlank = "Δώστε ένα βάρος σε κάθε κενό";
 $langWeightingForEachBlankandChoose = "Δώστε ένα βάρος σε κάθε κενό και διαλέξτε την σωστή απάντηση";

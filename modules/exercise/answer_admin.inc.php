@@ -325,28 +325,31 @@ if (isset($submitAnswers) || isset($buttonBack)) {
             $markersData = json_decode($dataJsonFile, true);
             // Loop through each item in the original array
             foreach ($markersData as $item => $value) {
-                if (count($value) == 9) { // circle or rectangle
+                if (count($value) == 10) { // circle or rectangle
                     $arrDataMarkers[$value[0]['marker_id']] = [
                                                                 'marker_answer' => $value[1]['marker_answer'],
                                                                 'marker_shape' => $value[2]['shape_type'],
                                                                 'marker_coordinates' => $value[3]['x'] . ',' . $value[4]['y'],
                                                                 'marker_offsets' => $value[5]['endX'] . ',' . $value[6]['endY'],
                                                                 'marker_grade' => $value[7]['marker_grade'],
-                                                                'marker_radius' => $value[8]['marker_radius']
+                                                                'marker_radius' => $value[8]['marker_radius'],
+                                                                'marker_answer_with_image' => $value[9]['marker_answer_with_image']
                                                               ];
-                } elseif (count($value) == 5) { // polygon
+                } elseif (count($value) == 6) { // polygon
                     $arrDataMarkers[$value[0]['marker_id']] = [
                                                                 'marker_answer' => $value[1]['marker_answer'],
                                                                 'marker_shape' => $value[2]['shape_type'],
                                                                 'marker_coordinates' => $value[3]['points'],
-                                                                'marker_grade' => $value[4]['marker_grade']
+                                                                'marker_grade' => $value[4]['marker_grade'],
+                                                                'marker_answer_with_image' => $value[5]['marker_answer_with_image']
                                                                ];
-                } elseif (count($value) == 4) { // without shape . So the defined answer is not correct
+                } elseif (count($value) == 5) { // without shape . So the defined answer is not correct
                     $arrDataMarkers[$value[0]['marker_id']] = [
                                                                 'marker_answer' => $value[1]['marker_answer'],
                                                                 'marker_shape' => null,
                                                                 'marker_coordinates' => null,
-                                                                'marker_grade' => 0
+                                                                'marker_grade' => 0,
+                                                                'marker_answer_with_image' => $value[4]['marker_answer_with_image']
                                                             ];
 
                 }
@@ -981,6 +984,34 @@ if (isset($_GET['modifyAnswers'])) {
                             document.addEventListener('DOMContentLoaded', function() {
                                 shapesCreationProcess();
                             });
+
+                            $(function() {
+                                const checkboxes = document.querySelectorAll('.checkUploadAnswerWithImg');
+                                checkboxes.forEach(ch => {
+                                    var checkBoxId = ch.getAttribute('id');
+                                    const partsCheckbox = checkBoxId.split('-');
+                                    const val_chAns = partsCheckbox[partsCheckbox.length - 1];
+                                    if (ch.checked) {
+                                        $('#hasUploadedImg_'+val_chAns).show();
+                                    } else {
+                                        $('#hasUploadedImg_'+val_chAns).hide();
+                                    }
+                                });
+
+                                $('.checkUploadAnswerWithImg').change(function() {
+                                    var checkBoxId = $(this).attr('id');
+                                    const partsCheckbox = checkBoxId.split('-');
+                                    const val_chAns = partsCheckbox[partsCheckbox.length - 1];
+                                    if ($(this).is(':checked')) {
+                                        $(this).val(1);
+                                        $('#hasUploadedImg_'+val_chAns).show();
+                                    } else {
+                                        $(this).val(0);
+                                        $('#hasUploadedImg_'+val_chAns).hide();
+                                    }
+                                });
+                            });
+
                           </script>";
 
         $setId = isset($exerciseId)? "&amp;exerciseId=$exerciseId" : '';
@@ -1008,12 +1039,38 @@ if (isset($_GET['modifyAnswers'])) {
                                         $markerCoordinates = $arrDataMarkers[$chAns]['marker_coordinates'] ?? '';
                                         $markerAnswer = $arrDataMarkers[$chAns]['marker_answer'] ?? '';
                                         $markerGrade = $arrDataMarkers[$chAns]['marker_grade'] ?? 0;
+                                        $markerAnswerWithImageChecked = ((isset($arrDataMarkers[$chAns]['marker_answer_with_image']) && $arrDataMarkers[$chAns]['marker_answer_with_image'] == 1) ? 'checked' : '');
+                                        $markerAnswerWithImageValue = $arrDataMarkers[$chAns]['marker_answer_with_image'] ?? 0;
+                                        $htopic = DRAG_AND_DROP_MARKERS;
+
+                                        $delUploadImage = '';
+                                        $anUploadImg = "$webDir/courses/$course_code/image/answer-$questionId-$chAns";
+                                        if (file_exists($anUploadImg)) {
+                                            $pathDel = $urlAppend . "modules/exercise/upload_image_as_answer.php?delete_image=true&course=$course_code&exerciseId=$exerciseId&modifyAnswers=$_GET[modifyAnswers]&htopic=$htopic&questionId=$questionId&markerId=$chAns";
+                                            $delUploadImage .= ' <div class="col-sm-12 d-inline-flex justify-content-start align-items-center">
+                                                                    <img id="imageUploaded-'.$chAns.'" src="../../courses/'.$course_code.'/image/answer-'.$questionId.'-'.$chAns.'" style="height:80px; width:80px;" alt="answer-'.$questionId.'-'.$chAns.'"> 
+                                                                    <a class="link-color Accent-200-cl" href="'.$pathDel.'"><i class="fa-solid fa-xmark fa-lg"></i></a>
+                                                                 </div>';
+                                        } else {
+                                            $delUploadImage .= '<input type="file" id="hasUploadedImg_'.$chAns.'" name="image_as_answer">';
+                                        }
+
                                         $tool_content .= "
                                         <tr>
                                             <td>[{$chAns}]</td>
                                             <td>
                                                 <div class='col-12'>
                                                     <input type='text' id='marker-answer-$chAns' class='form-control marker-answer' name='marker_answer[$chAns]' value='{$markerAnswer}'>
+                                                </div>
+                                                <div class='col-12 mt-3' style='width:200px;'>
+                                                    <div class='checkbox'>
+                                                        <label class='label-container' aria-label='$langSelect'>
+                                                            <input type='checkbox' id='marker-answer-with-image-$chAns' class='checkUploadAnswerWithImg' value='{$markerAnswerWithImageValue}' $markerAnswerWithImageChecked>                                                                        
+                                                            <span class='checkmark'></span>
+                                                            $langAddAnswerThroughImg
+                                                        </label>
+                                                    </div>
+                                                    $delUploadImage
                                                 </div>
                                             </td>
                                             <td>
@@ -1120,28 +1177,31 @@ function getDataMarkersFromJson($questionId) {
         $markersData = json_decode($dataJsonFile, true);
         // Loop through each item in the original array
         foreach ($markersData as $item => $value) {
-            if (count($value) == 9) { // circle or rectangle
+            if (count($value) == 10) { // circle or rectangle
                 $arrDataMarkers[$value[0]['marker_id']] = [
                                                             'marker_answer' => $value[1]['marker_answer'],
                                                             'marker_shape' => $value[2]['shape_type'],
                                                             'marker_coordinates' => $value[3]['x'] . ',' . $value[4]['y'],
                                                             'marker_offsets' => $value[5]['endX'] . ',' . $value[6]['endY'],
                                                             'marker_grade' => $value[7]['marker_grade'],
-                                                            'marker_radius' => $value[8]['marker_radius']
+                                                            'marker_radius' => $value[8]['marker_radius'],
+                                                            'marker_answer_with_image' => $value[9]['marker_answer_with_image']
                                                           ];
-            } elseif (count($value) == 5) { // polygon
+            } elseif (count($value) == 6) { // polygon
                 $arrDataMarkers[$value[0]['marker_id']] = [
                                                             'marker_answer' => $value[1]['marker_answer'],
                                                             'marker_shape' => $value[2]['shape_type'],
                                                             'marker_coordinates' => $value[3]['points'],
-                                                            'marker_grade' => $value[4]['marker_grade']
+                                                            'marker_grade' => $value[4]['marker_grade'],
+                                                            'marker_answer_with_image' => $value[5]['marker_answer_with_image']
                                                           ];
-            } elseif (count($value) == 4) { // without shape . So the defined answer is not correct
+            } elseif (count($value) == 5) { // without shape . So the defined answer is not correct
                 $arrDataMarkers[$value[0]['marker_id']] = [
                                                             'marker_answer' => $value[1]['marker_answer'],
                                                             'marker_shape' => null,
                                                             'marker_coordinates' => null,
-                                                            'marker_grade' => 0
+                                                            'marker_grade' => 0,
+                                                            'marker_answer_with_image' => $value[4]['marker_answer_with_image']
                                                           ];
 
             }

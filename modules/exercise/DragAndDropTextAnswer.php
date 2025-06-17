@@ -40,28 +40,31 @@ class DragAndDropTextAnswer extends \QuestionType
                 $markersData = json_decode($dataJsonFile, true);
                 // Loop through each item in the original array
                 foreach ($markersData as $item => $value) {
-                    if (count($value) == 9) {
+                    if (count($value) == 10) {
                         $arrDataMarkers[$value[0]['marker_id']] = [
                             'marker_answer' => $value[1]['marker_answer'],
                             'marker_shape' => $value[2]['shape_type'],
                             'marker_coordinates' => $value[3]['x'] . ',' . $value[4]['y'],
                             'marker_offsets' => $value[5]['endX'] . ',' . $value[6]['endY'],
                             'marker_grade' => $value[7]['marker_grade'],
-                            'marker_radius' => $value[8]['marker_radius']
+                            'marker_radius' => $value[8]['marker_radius'],
+                            'marker_answer_with_image' => $value[9]['marker_answer_with_image']
                         ];
-                    } elseif (count($value) == 5) { // polygon
+                    } elseif (count($value) == 6) { // polygon
                         $arrDataMarkers[$value[0]['marker_id']] = [
                                                                     'marker_answer' => $value[1]['marker_answer'],
                                                                     'marker_shape' => $value[2]['shape_type'],
                                                                     'marker_coordinates' => $value[3]['points'],
-                                                                    'marker_grade' => $value[4]['marker_grade']
+                                                                    'marker_grade' => $value[4]['marker_grade'],
+                                                                    'marker_answer_with_image' => $value[5]['marker_answer_with_image']
                                                                 ];
-                    } elseif (count($value) == 4) { // without shape . So the defined answer is not correct
+                    } elseif (count($value) == 5) { // without shape . So the defined answer is not correct
                         $arrDataMarkers[$value[0]['marker_id']] = [
                                                                     'marker_answer' => $value[1]['marker_answer'],
                                                                     'marker_shape' => null,
                                                                     'marker_coordinates' => null,
-                                                                    'marker_grade' => 0
+                                                                    'marker_grade' => 0,
+                                                                    'marker_answer_with_image' => $value[4]['marker_answer_with_image']
                                                                 ];
 
                     }
