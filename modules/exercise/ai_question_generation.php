@@ -47,14 +47,16 @@ if ($exerciseId > 0) {
     $exercise->read($exerciseId);
 }
 
-$pageName = $langAIQuestionGeneration ?? 'AI Question Generation';
+$toolName = $langQuestionPool;
+$pageName = $langAIQuestionGeneration;
+$navigation[] = array("url" => "question_pool.php?course=$course_code", "name" => $langQuestionPool);
 
 // Initialize AI service
 $aiService = new AIQuestionBankService($course_id, $uid);
 
 // Check if AI is available
 if (!$aiService->isAvailable()) {
-    Session::Messages($langAINotAvailable ?? 'AI functionality is not available', 'alert-warning');
+    Session::Messages($langAINotAvailable, 'alert-warning');
     redirect_to_home_page("modules/exercise/index.php?course=$course_code");
 }
 
@@ -64,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         try {
             $content = $_POST['content'] ?? '';
             $questionCount = intval($_POST['question_count'] ?? 5);
-            $difficulty = $_POST['difficulty'] ?? 3;
+            $difficulty = $_POST['difficulty'] ?? 'medium';
             $questionTypes = $_POST['question_types'] ?? [UNIQUE_ANSWER];
 
             if (empty($content)) {
@@ -83,11 +85,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $_SESSION['ai_generated_questions'] = $questions;
                     Session::Messages(sprintf($langQuestionsGenerated ?? '%d questions generated successfully', count($questions)), 'alert-success');
                 } else {
-                    Session::Messages($langNoQuestionsGenerated ?? 'No questions were generated', 'alert-warning');
+                    Session::Messages($langNoQuestionsGenerated, 'alert-warning');
                 }
             }
         } catch (Exception $e) {
-            Session::Messages($langAIGenerationError ?? 'Error generating questions: ' . $e->getMessage(), 'alert-danger');
+            Session::Messages($langAIGenerationError . $e->getMessage(), 'alert-danger');
         }
     } elseif (isset($_POST['save_questions']) || isset($_POST['add_to_exercise'])) {
         // Save selected questions to question bank or add to exercise
@@ -117,7 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     // Clear generated questions from the session
                     unset($_SESSION['ai_generated_questions']);
                 } catch (Exception $e) {
-                    Session::Messages($langSaveError ?? 'Error saving questions: ' . $e->getMessage(), 'alert-danger');
+                    Session::Messages($langSaveError . $e->getMessage(), 'alert-danger');
                 }
             }
         }
@@ -141,7 +143,7 @@ $tool_content .= "
         <div class='col-md-12'>
             <div class='panel panel-primary'>
                 <div class='panel-heading'>
-                    <h3 class='panel-title'>$langAIQuestionGeneration" . 
+                    <h3 class='panel-title'>$langAIQuestionGeneration" .
                     ($exercise ? " - " . htmlspecialchars($exercise->selectTitle()) : "") . "</h3>
                 </div>
                 <div class='panel-body'>
@@ -287,7 +289,7 @@ if (!empty($_SESSION['ai_generated_questions'])) {
                         </div>
                         
                             <div class='text-center' style='padding-top: 10px; border-top: 1px solid #ddd; margin-top: 15px; white-space: nowrap;'>";
-    
+
     // Show appropriate save buttons based on context
     if ($exerciseId > 0) {
         $tool_content .= "
@@ -303,7 +305,7 @@ if (!empty($_SESSION['ai_generated_questions'])) {
                                     <i class='fa fa-save'></i> $langSaveToQuestionBank
                                 </button>";
     }
-    
+
     $redirectUrl = $exerciseId > 0 ? "ai_question_generation.php?course=$course_code&exerciseId=$exerciseId" : "ai_question_generation.php?course=$course_code";
     $tool_content .= "
                                 <a href='$redirectUrl' class='btn btn-default' style='display: inline-block; vertical-align: middle; line-height: 1.5; padding: 8px 12px;'>

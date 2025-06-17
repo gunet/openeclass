@@ -84,7 +84,7 @@ if (isset($_GET['edit'])) {
             }
 
             Session::Messages($langAIConfigSaved, 'alert-success');
-            //redirect_to_home_page('modules/admin/aimoduleconf.php');
+            redirect_to_home_page('modules/admin/aimoduleconf.php');
         } catch (Exception $e) {
             Session::Messages($langGeneralError . ': ' . $e->getMessage(), 'alert-danger');
         }
@@ -95,21 +95,14 @@ if (isset($_GET['edit'])) {
 // Get provider display names
     $providerDisplayNames = AIProviderFactory::getProviderDisplayNames();
 
-    $data['q'] = $q = Database::get()->queryArray("SELECT * FROM ai_providers");
-    // Load existing configuration
-    $existingConfig = null;
-    try {
-        $existingConfig = Database::get()->querySingle("SELECT * FROM ai_providers WHERE enabled = 'true' LIMIT 1");
-    } catch (Exception $e) {
-        // Ignore errors, will use defaults
-    }
-    // Get the current model name for JavaScript (escaped for security)
+    $data['dropdownOptions'] = array_map(function ($key, $value) {
+        return ['value' => $key, 'label' => $value];
+    }, array_keys($providerDisplayNames), $providerDisplayNames);
+    $data['dropdownOptions'] = array_merge(
+        $data['dropdownOptions'],
+        [['value' => 'other', 'label' => 'Other']]
+    );
     $currentModelName = '';
-    if ($existingConfig && isset($existingConfig->model_name)) {
-        $currentModelName = htmlspecialchars($existingConfig->model_name, ENT_QUOTES, 'UTF-8');
-    }
-
-
 } else { // list
     $providerDisplayNames = AIProviderFactory::getProviderDisplayNames();
     $data['q'] = $q = Database::get()->queryArray("SELECT * FROM ai_providers");

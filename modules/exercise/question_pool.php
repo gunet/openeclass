@@ -286,7 +286,7 @@ if ($fromExercise) {
           'url' => "ai_question_generation.php?course=$course_code",
           'icon' => 'fa-magic',
           'button-class' => 'btn-info',
-          /*'show' => $aiAvailable */
+          'show' => $aiAvailable
         ]
     ];
 }

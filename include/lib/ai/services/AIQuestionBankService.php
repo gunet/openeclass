@@ -106,18 +106,18 @@ class AIQuestionBankService extends AIService {
                 if ($question['question_type'] == FILL_IN_BLANKS_TOLERANT) {
                     // For fill-in-the-blanks, AI generates question with [answer] format
                     $answer = new Answer($question_id);
-                    
+
                     // The AI question text already has [answer] format (e.g., "Capital of Greece is [Athens]")
                     $questionTextWithAnswers = $question['question_text'];
-                    
+
                     // Extract answers and count blanks
                     $blanks = $this->extractBlanksFromQuestion($questionTextWithAnswers);
                     $weights = array_fill(0, count($blanks), 1);
                     $weightString = implode(',', $weights);
-                    
-                    // Format: "question_text_with_answers::weights"  
+
+                    // Format: "question_text_with_answers::weights"
                     $answerText = $questionTextWithAnswers . '::' . $weightString;
-                    
+
                     $answer->createAnswer($answerText, 1, '', count($blanks), 1);
                     $answer->save();
                 } else {
@@ -125,7 +125,7 @@ class AIQuestionBankService extends AIService {
                     $position = 0;
                     foreach ($question['options'] as $answer_data) {
                         $answer = new Answer($question_id);
-                        
+
                         // Use index-based matching for reliable answer identification
                         if ($position === intval($question['correct_answer_index'])) {
                             $right_answer = 1;
@@ -134,7 +134,7 @@ class AIQuestionBankService extends AIService {
                             $right_answer = 0;
                             $weighting = 0;
                         }
-                        
+
                         $position++;
                         $answer->createAnswer($answer_data, $right_answer, '', $weighting, $position);
                         $answer->save();
@@ -190,6 +190,10 @@ class AIQuestionBankService extends AIService {
         $saved = [];
         $errors = [];
 
+        print_a($questions);
+        //die;
+
+
         foreach ($questions as $question) {
             try {
                 $question_obj = new Question();
@@ -201,21 +205,20 @@ class AIQuestionBankService extends AIService {
                 $question_obj->updateFeedback($question['explanation']);
                 $question_obj->save();
                 $question_id = $question_obj->selectId();
-                $question_correct_answer = $question['correct_answer'];
 
                 $position = 0;
                 foreach ($question['options'] as $answer_data) { // answers
                     $answer = new Answer($question_id);
-                    
+
                     // Use index-based matching for reliable answer identification
-                    if ($position === intval($question['correct_answer_index'])) {
+                    if ($position == intval($question['correct_answer_index'])) {
                         $right_answer = 1;
                         $weighting = 1;
                     } else {
                         $right_answer = 0;
                         $weighting = 0;
                     }
-                    
+
                     $position++;
                     $answer->createAnswer($answer_data, $right_answer, '', $weighting, $position);
                     $answer->save();
@@ -316,9 +319,9 @@ class AIQuestionBankService extends AIService {
 
     private function mapToOpenEclassQuestionDifficulty(string $aiType): string {
         $mapping = [
-            'easy' => 3,
-            'medium' => 4,
-            'hard' => 5
+            'easy' => 2,
+            'medium' => 3,
+            'hard' => 4
         ];
 
         return $mapping[$aiType] ?? 3;
@@ -385,13 +388,13 @@ class AIQuestionBankService extends AIService {
      */
     private function extractBlanksFromQuestion(string $questionText): array {
         $blanks = [];
-        
+
         if (preg_match_all('/\[([^\]]+)\]/', $questionText, $matches)) {
             foreach ($matches[1] as $blank) {
                 $blanks[] = trim($blank);
             }
         }
-        
+
         return $blanks;
     }
 
