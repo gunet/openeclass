@@ -611,20 +611,14 @@ function get_learnPath_progress_details($lpid, $lpUid, $total=true, $from_date =
               AND LP.`course_id` = ?d
               AND LPM.`visible` = 1
               AND M.`module_id` = LPM.`module_id`
-              AND M.`contentType` != ?s";
-//            ORDER BY UMP.`attempt`, LPM.`rank`";
-
-    if ($from_date) {
-        $sql .= " AND UMP.`started` >= ?s";
-    }
-
-    $sql .= " ORDER BY UMP.`attempt`, LPM.`rank`";
+              AND M.`contentType` != ?s" .
+            ($from_date? " AND UMP.`started` >= ?s": '') . "
+            ORDER BY UMP.`attempt`, LPM.`rank`";
     $params = [$lpUid, $lpid, $course_id, CTLABEL_];
     if ($from_date) {
         $params[] = $from_date;
     }
 
-//    $modules = Database::get()->queryArray($sql, $lpUid, $lpid, $course_id, CTLABEL_);
     $modules = Database::get()->queryArray($sql, ...$params);
     $totalProgress = 0;
     $totalStarted = $totalAccessed = $totalStatus = $maxAttempt = "";
@@ -648,8 +642,6 @@ function get_learnPath_progress_details($lpid, $lpUid, $total=true, $from_date =
             $global_time[$i] = "0000:00:00";
             // total progress calculation
             $global_progress[$i] = calculate_learnPath_progress($lpid, $modsForProg[$i]);
-            //echo $global_progress[$i];
-            //echo "<br>";
         }
 
         foreach ($modules as $module) {
@@ -689,7 +681,8 @@ function get_learnPath_progress_details($lpid, $lpUid, $total=true, $from_date =
         $bestAttempt = 1; // discover best attempt
 
         for ($i = 1; $i <= $maxAttempt; $i++) {
-            if ($global_progress[$i] > $global_progress[$bestAttempt] || enum_lesson_status($global_status[$i]) > enum_lesson_status($global_status[$bestAttempt])) {
+            if ($global_progress[$i] > $global_progress[$bestAttempt] or
+                enum_lesson_status($global_status[$i]) > enum_lesson_status($global_status[$bestAttempt])) {
                 $bestAttempt = $i;
             }
         }
@@ -708,14 +701,16 @@ function get_learnPath_progress_details($lpid, $lpUid, $total=true, $from_date =
     } else {
         $attempts = [];
         for ($i = 1; $i <= $maxAttempt; $i++) {
-            $attempts[$i] = [
-                $global_progress[$i],
-                $global_time[$i],
-                $global_started[$i],
-                $global_accessed[$i],
-                $global_status[$i],
-                $i,
-            ];
+            if ($global_started[$i]) {
+                $attempts[$i] = [
+                    $global_progress[$i],
+                    $global_time[$i],
+                    $global_started[$i],
+                    $global_accessed[$i],
+                    $global_status[$i],
+                    $i,
+                ];
+            }
         }
         return $attempts;
     }
@@ -1476,7 +1471,7 @@ function disp_progress_bar($progress, $factor) {
     } else {
         $progressBar = "<p>$progress%</p>";
     }
-    
+
 
     return $progressBar;
 }
