@@ -34,7 +34,7 @@
 
                                 <div class='form-group mt-3'>
                                     <label for="api_key" class="form-label">API Key</label>
-                                    <input type="text" id="api_key" name="api_key" class="form-control" placeholder="Enter API key" value="@if (isset($existingConfig->api_key)) $existingConfig->api_key @endif">
+                                    <input type="text" id="api_key" name="api_key" class="form-control" placeholder="Enter API key" value="@if (isset($existingConfig->api_key)) {{ $existingConfig->api_key }} @endif">
                                 </div>
 
                                 <div id='modelDropdownContainer' class='form-group mt-3'>
@@ -75,7 +75,7 @@
                                     <div class='col-sm-offset-2 col-sm-10'>
                                         <div class='checkbox'>
                                             <label class='label-container' aria-label='{{ trans('langSettingSelect') }}'>
-                                                <input type='checkbox' name='ai_enabled' @if (isset($existingConfig->enabled) and $existingConfig->enabled == 'true') value='0' checked @else value='1' @endif>
+                                                <input type='checkbox' name='ai_enabled' @if (isset($existingConfig->enabled) and $existingConfig->enabled == '1') value='1' checked @else value='0' @endif>
                                                 <span class='checkmark'></span>{{ trans('langCEnabled') }}</label>
                                         </div>
                                     </div>

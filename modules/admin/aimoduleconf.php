@@ -31,7 +31,23 @@ $pageName = $langAI;
 const AI_KEY_DURATION_TIME = 365*24*60*60; // one year (in seconds)
 
 if (isset($_GET['edit'])) {
-    $data['q'] = $q = Database::get()->queryArray("SELECT * FROM ai_providers WHERE id = ?d", $_GET['edit']);
+    $data['existingConfig'] = $existingConfig = Database::get()->querySingle("SELECT * FROM ai_providers WHERE id = ?d", $_GET['edit']);
+    //print_a($q);
+    //die;
+    $currentModelName = '';
+    if ($existingConfig && isset($existingConfig->model_name)) {
+        $currentModelName = htmlspecialchars($existingConfig->model_name, ENT_QUOTES, 'UTF-8');
+    }
+    $providerDisplayNames = AIProviderFactory::getProviderDisplayNames();
+
+    $data['dropdownOptions'] = array_map(function ($key, $value) {
+        return ['value' => $key, 'label' => $value];
+    }, array_keys($providerDisplayNames), $providerDisplayNames);
+    $data['dropdownOptions'] = array_merge(
+        $data['dropdownOptions'],
+        [['value' => 'other', 'label' => 'Other']]
+    );
+
 } else if (isset($_GET['delete'])) {
     Database::get()->query("DELETE FROM ai_providers WHERE id = ?d", $_GET['delete']);
     Session::flash('message', $langAITokenDeleted);
