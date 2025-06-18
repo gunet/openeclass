@@ -7113,4 +7113,5 @@ $langAIConfigSaved = "Η ρύθμιση του παρόχου Τ.Ν. αποθη�
 $langAddToExercise = "Προσθήκη στην Άσκηση";
 $langQuestionsAddedToExercise = '%d ερωτήσεις προστέθηκαν στην άσκηση';
 $langTestConnection = "Δοκιμή Σύνδεσης";
+$langDefaultFillInBlanks = "Συμπληρώστε τα κενά.";
 

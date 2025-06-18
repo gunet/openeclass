@@ -187,17 +187,23 @@ class AIQuestionBankService extends AIService {
      * @return array Results of save operation
      */
     public function saveQuestionsToBank(array $questions, int $categoryId = 0): array {
+        global $langDefaultFillInBlanks;
+
         $saved = [];
         $errors = [];
 
-        print_a($questions);
+//        print_a($questions);
         //die;
-
 
         foreach ($questions as $question) {
             try {
                 $question_obj = new Question();
-                $question_obj->updateTitle($question['question_text']);
+
+                if ($question['question_type'] == FILL_IN_BLANKS_TOLERANT) {
+                    $question_obj->updateTitle($langDefaultFillInBlanks);
+                } else {
+                    $question_obj->updateTitle($question['question_text']);
+                }
                 $question_obj->updateWeighting($question['weight']);
                 $question_obj->updateType($question['question_type']);
                 $question_obj->updateDifficulty($question['difficulty']);
@@ -206,22 +212,27 @@ class AIQuestionBankService extends AIService {
                 $question_obj->save();
                 $question_id = $question_obj->selectId();
 
-                $position = 0;
-                foreach ($question['options'] as $answer_data) { // answers
+                if ($question['question_type'] == FILL_IN_BLANKS_TOLERANT) {
                     $answer = new Answer($question_id);
-
-                    // Use index-based matching for reliable answer identification
-                    if ($position == intval($question['correct_answer_index'])) {
-                        $right_answer = 1;
-                        $weighting = 1;
-                    } else {
-                        $right_answer = 0;
-                        $weighting = 0;
-                    }
-
-                    $position++;
-                    $answer->createAnswer($answer_data, $right_answer, '', $weighting, $position);
+                    $answer_data = $question['question_text'] . "::" . $question['weight'];
+                    $answer->createAnswer($answer_data, 0, '', 0, 1);
                     $answer->save();
+                } else {
+                    $position = 0;
+                    foreach ($question['options'] as $answer_data) { // answers
+                        $answer = new Answer($question_id);
+                        // Use index-based matching for reliable answer identification
+                        if ($position == intval($question['correct_answer_index'])) {
+                            $right_answer = 1;
+                            $weighting = 1;
+                        } else {
+                            $right_answer = 0;
+                            $weighting = 0;
+                        }
+                        $position++;
+                        $answer->createAnswer($answer_data, $right_answer, '', $weighting, $position);
+                        $answer->save();
+                    }
                 }
 
                 $saved[] = [
