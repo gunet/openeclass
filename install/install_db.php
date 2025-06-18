@@ -969,7 +969,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `eportfolio_fields` (
         `categoryid` INT(11) NOT NULL DEFAULT 0,
         `sortorder`  INT(11) NOT NULL DEFAULT 0,
         `required` TINYINT NOT NULL DEFAULT 0,
-        `data` TEXT NULL DEFAULT NULL) $tbl_options");
+        `data` TEXT NULL DEFAULT NULL,
+        UNIQUE (`shortname`)) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `eportfolio_fields_data` (
         `user_id` INT(11) UNSIGNED NOT NULL DEFAULT 0,
@@ -992,10 +993,13 @@ $db->query("INSERT INTO `eportfolio_fields_category` (`id`, `name`, `sortorder`)
         (7, '$langLangProfLevel', -6),
         (8, '$langVolontSocialAct', -7)");
 
+$gender_options = [$langMale, $langFemale];
+$lang_proficiency_levels = [$langLangCEFRA1, $langLangCEFRA2, $langLangCEFRB1, $langLangCEFRB2, $langLangCEFRC1, $langLangCEFRC2];
+
 $db->query("INSERT INTO `eportfolio_fields` (`id`, `shortname`, `name`, `description`, `datatype`, `categoryid`, `sortorder`, `required`, `data`) VALUES
         (1, 'birth_date', '$langBirthDate', '', '3', 1, 0, 0, ''),
         (2, 'birth_place', '$langBirthPlace', '', '1', 1, -1, 0, ''),
-        (3, 'gender', '$langGender', '', '4', 1, -2, 0, 'a:2:{i:0;s:".strlen($langMale).":\"$langMale\";i:1;s:".strlen($langFemale).":\"$langFemale\";}'),
+        (3, 'gender', '$langGender', '', '4', 1, -2, 0, '".serialize($gender_options)."'),
         (4, 'about_me', '$langAboutMe', '$langAboutMeDescr', '2', 1, -3, 0, ''),
         (5, 'personal_website', '$langPersWebsite', '', '5', 1, -4, 0, ''),
         (6, 'education', '$langEducation', '$langEducationDescr', '2', 2, 0, 0, ''),
@@ -1017,11 +1021,11 @@ $db->query("INSERT INTO `eportfolio_fields` (`id`, `shortname`, `name`, `descrip
         (22, 'gscholar', '$langGoogleScholarProfile', '', '5', 6, 0, 0, ''),
         (23, 'scopus', '$langScopusID', '', '1', 6, -1, 0, ''),
         (24, 'orcid', '$langOrcid', '', '5', 6, -2, 0, ''),
-        (25, 'english', '$langEnglish', '', '4', 7, 0, 0, 'a:6:{i:0;s:".strlen($langLangCEFRA1).":\"$langLangCEFRA1\";i:1;s:".strlen($langLangCEFRA2).":\"$langLangCEFRA2\";i:2;s:".strlen($langLangCEFRB1).":\"$langLangCEFRB1\";i:3;s:".strlen($langLangCEFRB2).":\"$langLangCEFRB2\";i:4;s:".strlen($langLangCEFRC1).":\"$langLangCEFRC1\";i:5;s:".strlen($langLangCEFRC2).":\"$langLangCEFRC2\";}'),
-        (26, 'french', '$langFrench', '', '4', 7, -1, 0, 'a:6:{i:0;s:".strlen($langLangCEFRA1).":\"$langLangCEFRA1\";i:1;s:".strlen($langLangCEFRA2).":\"$langLangCEFRA2\";i:2;s:".strlen($langLangCEFRB1).":\"$langLangCEFRB1\";i:3;s:".strlen($langLangCEFRB2).":\"$langLangCEFRB2\";i:4;s:".strlen($langLangCEFRC1).":\"$langLangCEFRC1\";i:5;s:".strlen($langLangCEFRC2).":\"$langLangCEFRC2\";}'),
-        (27, 'german', '$langGerman', '', '4', 7, -2, 0, 'a:6:{i:0;s:".strlen($langLangCEFRA1).":\"$langLangCEFRA1\";i:1;s:".strlen($langLangCEFRA2).":\"$langLangCEFRA2\";i:2;s:".strlen($langLangCEFRB1).":\"$langLangCEFRB1\";i:3;s:".strlen($langLangCEFRB2).":\"$langLangCEFRB2\";i:4;s:".strlen($langLangCEFRC1).":\"$langLangCEFRC1\";i:5;s:".strlen($langLangCEFRC2).":\"$langLangCEFRC2\";}'),
-        (28, 'italian', '$langItalian', '', '4', 7, -3, 0, 'a:6:{i:0;s:".strlen($langLangCEFRA1).":\"$langLangCEFRA1\";i:1;s:".strlen($langLangCEFRA2).":\"$langLangCEFRA2\";i:2;s:".strlen($langLangCEFRB1).":\"$langLangCEFRB1\";i:3;s:".strlen($langLangCEFRB2).":\"$langLangCEFRB2\";i:4;s:".strlen($langLangCEFRC1).":\"$langLangCEFRC1\";i:5;s:".strlen($langLangCEFRC2).":\"$langLangCEFRC2\";}'),
-        (29, 'spanish', '$langSpanish', '', '4', 7, -4, 0, 'a:6:{i:0;s:".strlen($langLangCEFRA1).":\"$langLangCEFRA1\";i:1;s:".strlen($langLangCEFRA2).":\"$langLangCEFRA2\";i:2;s:".strlen($langLangCEFRB1).":\"$langLangCEFRB1\";i:3;s:".strlen($langLangCEFRB2).":\"$langLangCEFRB2\";i:4;s:".strlen($langLangCEFRC1).":\"$langLangCEFRC1\";i:5;s:".strlen($langLangCEFRC2).":\"$langLangCEFRC2\";}'),
+        (25, 'english', '$langEnglish', '', '4', 7, 0, 0, '".serialize($lang_proficiency_levels)."'),
+        (26, 'french', '$langFrench', '', '4', 7, -1, 0, '".serialize($lang_proficiency_levels)."'),
+        (27, 'german', '$langGerman', '', '4', 7, -2, 0, '".serialize($lang_proficiency_levels)."'),
+        (28, 'italian', '$langItalian', '', '4', 7, -3, 0, '".serialize($lang_proficiency_levels)."'),
+        (29, 'spanish', '$langSpanish', '', '4', 7, -4, 0, '".serialize($lang_proficiency_levels)."'),
         (30, 'social_activities', '$langSocialActivities', '', '2', 8, 0, 0, ''),
         (31, 'volunteer_activities', '$langVolunteerActivities', '', '2', 8, -1, 0, '')");
 
