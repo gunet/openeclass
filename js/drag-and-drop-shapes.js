@@ -1,6 +1,6 @@
 
 // Drawing blanks in the circles shapes
-function drawCircleWithBlank(x, y, radius, fillColor = 'rgba(207, 207, 207, 0.8)', strokeColor = 'red', label = '', ctx, dataAttrs = {}, Qid) {
+function drawCircleWithBlank(x, y, radius, fillColor = 'rgba(207, 207, 207, 0.8)', strokeColor = 'red', label = '', ctx, dataAttrs = {}, Qid, markerWithImage) {
     const container = document.getElementById('image-container-'+Qid);
     if (!ctx || !container) {
         console.error('Canvas context or container not found.');
@@ -8,8 +8,12 @@ function drawCircleWithBlank(x, y, radius, fillColor = 'rgba(207, 207, 207, 0.8)
     }
 
     // Draw the blank rectangle at the center
-    const blankWidth = 100; // fixed size
-    const blankHeight = 40;
+    var blankWidth = 100; // fixed size
+    var blankHeight = 40;
+    if (markerWithImage == 1) { // predefined answer will be showed as image
+        blankWidth = 150; // fixed size
+        blankHeight = 150;
+    }
 
     // Create overlay span positioned exactly at circle center
     const blankDiv = document.createElement('span');
@@ -25,7 +29,7 @@ function drawCircleWithBlank(x, y, radius, fillColor = 'rgba(207, 207, 207, 0.8)
     blankDiv.style.position = 'absolute';
     blankDiv.style.width = blankWidth + 'px';
     blankDiv.style.height = blankHeight + 'px';
-    blankDiv.style.backgroundColor = 'white';
+    blankDiv.style.backgroundColor = 'rgba(255, 255, 255, 0.5)';
     blankDiv.style.border = '1px solid grey';
     blankDiv.style.boxSizing = 'border-box';
     blankDiv.style.cursor = 'pointer';
@@ -46,12 +50,16 @@ function drawCircleWithBlank(x, y, radius, fillColor = 'rgba(207, 207, 207, 0.8)
 
 
 // Drawing blanks in the rectangles shapes
-function drawRectangleWithBlank(x, y, width, height, fillColor = 'rgba(207, 207, 207, 0.8)', borderColor = 'grey', label = '', ctx, dataAttrs = {}, Qid) {
+function drawRectangleWithBlank(x, y, width, height, fillColor = 'rgba(207, 207, 207, 0.8)', borderColor = 'grey', label = '', ctx, dataAttrs = {}, Qid, markerWithImage) {
     const container = document.getElementById('image-container-'+Qid);
 
     // Dimensions for the blank span
-    const blankWidth = 100;
-    const blankHeight = 40;
+    var blankWidth = 100;
+    var blankHeight = 40;
+    if (markerWithImage == 1) { // predefined answer will be showed as image
+        blankWidth = 150; // fixed size
+        blankHeight = 150;
+    }
 
     // Center position for the blank rectangle
     const blankX = x + (width - blankWidth) / 2;
@@ -89,7 +97,7 @@ function drawRectangleWithBlank(x, y, width, height, fillColor = 'rgba(207, 207,
     // Set size and styles
     blankDiv.style.width = blankWidth + 'px';
     blankDiv.style.height = blankHeight + 'px';
-    blankDiv.style.backgroundColor = 'white';
+    blankDiv.style.backgroundColor = 'rgba(255, 255, 255, 0.5)';
     blankDiv.style.border = '1px solid grey';
     blankDiv.style.boxSizing = 'border-box';
     blankDiv.style.cursor = 'pointer';
@@ -100,7 +108,7 @@ function drawRectangleWithBlank(x, y, width, height, fillColor = 'rgba(207, 207,
 }
 
 // Drawing blanks in the polygons shapes
-function drawPolygonWithBlank(points, color, fillColor, label, ctx, dataAttrs = {},  Qid) {
+function drawPolygonWithBlank(points, color, fillColor, label, ctx, dataAttrs = {},  Qid, markerWithImage) {
     const container = document.getElementById('image-container-'+Qid);
     if (points.length < 2) return;
     //ctx.strokeStyle = color;
@@ -120,8 +128,12 @@ function drawPolygonWithBlank(points, color, fillColor, label, ctx, dataAttrs = 
     const centerPolY = points.reduce((sum, p) => sum + p.y, 0) / points.length;
 
     // Dimensions for the blank span
-    const blankWidth = 100;
-    const blankHeight = 40;
+    var blankWidth = 100;
+    var blankHeight = 40;
+    if (markerWithImage == 1) { // predefined answer will be showed as image
+        blankWidth = 150; // fixed size
+        blankHeight = 150;
+    }
 
     // Create overlay span positioned exactly at circle center
     const blankDiv = document.createElement('span');
@@ -137,7 +149,7 @@ function drawPolygonWithBlank(points, color, fillColor, label, ctx, dataAttrs = 
     blankDiv.style.position = 'absolute';
     blankDiv.style.width = blankWidth + 'px';
     blankDiv.style.height = blankHeight + 'px';
-    blankDiv.style.backgroundColor = 'white';
+    blankDiv.style.backgroundColor = 'rgba(255, 255, 255, 0.5)';
     blankDiv.style.border = '1px solid grey';
     blankDiv.style.boxSizing = 'border-box';
     blankDiv.style.cursor = 'pointer';
@@ -185,7 +197,7 @@ function loadShapes(qID) {
                                         'blank-id': shape.marker_id,
                                         'card-id': 'words_'+qID
                                     };
-                        drawCircleWithBlank(shape.x, shape.y, shape.radius, 'rgba(207, 207, 207, 0.8)', 'grey', shape.marker_id, ctx, attributes, qID);
+                        drawCircleWithBlank(shape.x, shape.y, shape.radius, 'rgba(207, 207, 207, 0.8)', 'grey', shape.marker_id, ctx, attributes, qID, shape.marker_answer_with_image);
                     }
                     break;
                 case 'rectangle':
@@ -199,7 +211,7 @@ function loadShapes(qID) {
                                         'blank-id': shape.marker_id,
                                         'card-id': 'words_'+qID
                                     };
-                        drawRectangleWithBlank(rectX, rectY, rectWidth, rectHeight, 'rgba(207, 207, 207, 0.8)', 'grey', shape.marker_id, ctx, attributes, qID);
+                        drawRectangleWithBlank(rectX, rectY, rectWidth, rectHeight, 'rgba(207, 207, 207, 0.8)', 'grey', shape.marker_id, ctx, attributes, qID, shape.marker_answer_with_image);
                     }
                     break;
                 case 'polygon':
@@ -215,7 +227,7 @@ function loadShapes(qID) {
                                         'blank-id': shape.marker_id,
                                         'card-id': 'words_'+qID
                                      };
-                        drawPolygonWithBlank(resultArray, 'grey', shape.color, shape.marker_id, ctx, attributes, qID);
+                        drawPolygonWithBlank(resultArray, 'grey', shape.color, shape.marker_id, ctx, attributes, qID, shape.marker_answer_with_image);
                     }
                     break;
             }
@@ -729,7 +741,7 @@ function shapesCreationProcess() {
                 var markerShape = $('#shapeType-'+number).val();
                 var markerAnswerWithImage = $('#marker-answer-with-image-'+number).val();
 
-                if (markerAnswer) {
+                if (markerAnswer && !containsMarkerAnswer(markerAnswer)) {
                     if ((markerShape == 'circle' || markerShape == 'rectangle') && markerCoordinates) {
 
                         // Replace colon with comma
@@ -804,7 +816,7 @@ function shapesCreationProcess() {
                         window.location.reload();
                     }
                 } else {
-                    alert('Give an answer for this shape');
+                    alert('The value of the answer is empty OR you have added an answer that already exist.');
                     window.location.reload();
                 }
             }
@@ -856,14 +868,36 @@ function save_user_answers(questionId) {
                     dataArray.forEach(function(item) {
                         //console.log("Answer:", item.dataAnswer, "Word:", item.dataWord);
                         const spanElementBlank = $('#qPanel' + questionId + ' .blank[data-blank-id="' + item.dataAnswer + '"][data-card-id="words_' + questionId + '"]');
-                        
+                        var answerType = typeOfPredefinedAnswer(questionId,item.dataAnswer);
                         if (spanElementBlank.length > 0 && item.dataWord != null) {
                             // Create the <div>
                             const div = document.createElement('div');
-                            div.classList.add('draggable', 'dropped-word', 'ui-draggable', 'ui-draggable-handle');
+                            if (answerType == 1) {
+                                div.classList.add('draggable', 'draggable-image', 'dropped-word', 'ui-draggable', 'ui-draggable-handle');
+                                var imageId = getMarkerIdByAnswer(questionId,item.dataWord);
+                                div.setAttribute('data-image-id', imageId);
+                            } else {
+                                div.classList.add('draggable', 'dropped-word', 'ui-draggable', 'ui-draggable-handle');
+                            }
                             div.setAttribute('data-word', item.dataWord);
                             div.setAttribute('data-pool-id', 'words_'+questionId);
-                            div.textContent = item.dataWord;
+                            if (answerType == 0) {
+                                div.textContent = item.dataWord;
+                            }
+
+                            // Create the image as element
+                            if (answerType == 1) {
+                                // Construct the relative path
+                                var cCode = $('.CourseCodeNow').val();
+                                var imageId = getMarkerIdByAnswer(questionId,item.dataWord);
+                                var imagePath = '../../courses/'+cCode+'/image/answer-'+questionId+'-'+imageId;
+
+                                // Create the full URL relative to the current page
+                                var imageUrl = new URL(imagePath, window.location.origin + window.location.pathname).href;
+                                var image = document.createElement('img');
+                                image.setAttribute('src', imageUrl);
+                                $(image).appendTo(div);
+                            }
 
                             // Append the <div> into the <span>
                             $(div).appendTo(spanElementBlank);
@@ -901,10 +935,30 @@ function save_user_answers(questionId) {
                 
                 // Send the word back to the pool
                 const divPoolWord = document.createElement('div');
-                divPoolWord.classList.add('draggable', 'ui-draggable', 'ui-draggable-handle');
+                if ($(this).hasClass('draggable-image')) {
+                    divPoolWord.classList.add('draggable', 'draggable-image', 'ui-draggable', 'ui-draggable-handle');
+                } else {
+                    divPoolWord.classList.add('draggable', 'ui-draggable', 'ui-draggable-handle');
+                }
                 divPoolWord.setAttribute('data-word', wordText);
                 divPoolWord.setAttribute('data-pool-id', poolId);
-                divPoolWord.textContent = wordText;
+                if (!$(this).hasClass('draggable-image')) {
+                    divPoolWord.textContent = wordText;
+                }
+
+                // Create the image as element
+                if ($(this).hasClass('draggable-image')) {
+                    // Construct the relative path
+                    var blank_id = $(this).attr('data-image-id');
+                    var cCode = $('.CourseCodeNow').val();
+                    var imagePath = '../../courses/'+cCode+'/image/answer-'+questionId+'-'+blank_id;
+
+                    // Create the full URL relative to the current page
+                    var imageUrl = new URL(imagePath, window.location.origin + window.location.pathname).href;
+                    var image = document.createElement('img');
+                    image.setAttribute('src', imageUrl);
+                    $(image).appendTo(divPoolWord);
+                }
 
                 // Append the <div> into the <span>
                 const poolWords = $('#'+poolId);
@@ -933,4 +987,77 @@ function save_user_answers(questionId) {
 
     });
 
+}
+
+function typeOfPredefinedAnswer(qid,blankid) {
+    let DataJson;
+    try {
+        DataJson = JSON.parse($('#insertedMarkersAsJson-'+qid).val());
+    } catch (e) {
+        console.error('Invalid JSON data for shapes:', e);
+        return;
+    }
+    // Populate shapes array and draw each shape
+    if (DataJson) {
+        for (let i = 0; i < DataJson.length; i++) {
+            const data = DataJson[i];
+            if (data.marker_id == blankid) {
+                return data.marker_answer_with_image; // return when found
+            }
+        }
+    }
+    // Optional: return null or undefined if not found
+    return null;
+}
+
+// Function to find marker_id by marker_answer
+function getMarkerIdByAnswer(qid, answer) {
+    let DataJson;
+    try {
+        DataJson = JSON.parse($('#DataJsonFile-' + qid).val());
+    } catch (e) {
+        console.error('Invalid JSON data for shapes:', e);
+        return null;
+    }
+
+    if (DataJson) {
+        // Loop through each array in the main array
+        for (let i = 0; i < DataJson.length; i++) {
+            const dataArray = DataJson[i];
+            // Loop through each object in the inner array
+            for (let k = 0; k < dataArray.length; k++) {
+                const item = dataArray[k];
+                if (item.hasOwnProperty('marker_answer') && item['marker_answer'] === answer) {
+                    const parentArray = dataArray;
+                    const markerIdObj = parentArray.find(obj => obj.hasOwnProperty('marker_id'));
+                    if (markerIdObj && markerIdObj['marker_id']) {
+                        return markerIdObj['marker_id'];
+                    }
+                }
+            }
+        }
+    }
+    return null;
+}
+
+// Function to find if exists the same marker_answer value in the json file
+function containsMarkerAnswer(answer) {
+    let jsonData;
+    try {
+        jsonData = JSON.parse($('#dataJsonVariables').val());
+    } catch (e) {
+        console.error('Invalid JSON data for shapes:', e);
+        return null;
+    }
+
+    if (jsonData) {
+        for (let itemArray of jsonData) {
+            for (let obj of itemArray) {
+                if (obj.hasOwnProperty('marker_answer') && obj.marker_answer === answer) {
+                    return true; // Found the answer
+                }
+            }
+        }
+    }
+    return false; // Not found
 }

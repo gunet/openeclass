@@ -72,28 +72,42 @@ class DragAndDropMarkersAnswer extends \QuestionType
                 $m['endY'] = $arr_of[1];
             }
             if ($m['marker_shape'] == 'circle' && count($arr_m) == 2) {
-                $coordinatesXY[] = ['marker_id' => $index, 'x' => $m['x'], 'y' => $m['y'], 'shape_type' => $m['marker_shape'], 'radius' => $m['marker_radius']];
+                $coordinatesXY[] = ['marker_id' => $index, 'x' => $m['x'], 'y' => $m['y'], 'shape_type' => $m['marker_shape'], 'radius' => $m['marker_radius'], 'marker_answer_with_image' => $m['marker_answer_with_image']];
             } elseif ($m['marker_shape'] == 'rectangle' && count($arr_m) == 2) {
-                $coordinatesXY[] = ['marker_id' => $index, 'x' => $m['x'], 'y' => $m['y'], 'shape_type' => $m['marker_shape'], 'endY' => $m['endY'], 'endX' => $m['endX']];
+                $coordinatesXY[] = ['marker_id' => $index, 'x' => $m['x'], 'y' => $m['y'], 'shape_type' => $m['marker_shape'], 'endY' => $m['endY'], 'endX' => $m['endX'], 'marker_answer_with_image' => $m['marker_answer_with_image']];
             } elseif ($m['marker_shape'] == 'polygon') {
-                $coordinatesXY[] = ['marker_id' => $index, 'points' => $m['marker_coordinates'], 'shape_type' => $m['marker_shape'], 'color' => 'rgba(255, 255, 255, 0.5)'];
+                $coordinatesXY[] = ['marker_id' => $index, 'points' => $m['marker_coordinates'], 'shape_type' => $m['marker_shape'], 'color' => 'rgba(255, 255, 255, 0.5)', 'marker_answer_with_image' => $m['marker_answer_with_image']];
             }
         }
         $DataMarkersToJson = json_encode($coordinatesXY) ?? '';
+        $DataJsonFileVal = json_encode($markersData) ?? '';
 
         $html_content = "<div class='col-12 mb-4'><small class='Accent-200-cl'>(*)$langCalcelDroppableItem</small></div>";
         $html_content .= "<div class='col-12 d-flex justify-content-start align-items-center drag-and-drop-markers-container-words gap-4 flex-wrap mt-4' id='words_{$questionId}'>";
         foreach ($list_answers as $an) {
-            $html_content .= "<div class='draggable' data-word='{$an}' data-pool-id='words_{$questionId}'>$an</div>";
+            foreach ($arrDataMarkers as $index => $value) {
+                if (array_key_exists('marker_answer', $value) && array_key_exists('marker_answer_with_image', $value) && $value['marker_answer'] == $an) {
+                   if ($value['marker_answer_with_image'] == 1) { // predefined answer will be shown as image
+                        $mID = $index;
+                        $html_content .= "<div class='draggable draggable-image' data-image-id='{$mID}' data-word='{$an}' data-pool-id='words_{$questionId}'>
+                                            <img src='../../courses/$course_code/image/answer-$questionId-$mID' alt='{$an}'>
+                                          </div>";
+                    } else { // predefined answer will be shown as text
+                        $html_content .= "<div class='draggable' data-word='{$an}' data-pool-id='words_{$questionId}'>$an</div>";
+                    } 
+                }
+            }
         }
         $html_content .= "</div>";
         if (isset($_SESSION['userHasAnswered'])) {
             $uHasAnswered = json_encode($_SESSION['userHasAnswered'][$questionId], JSON_PRETTY_PRINT);
-            $html_content .= "<input type='hidden' id='userHasAnswered-$questionId' value='{$uHasAnswered}'>";
+            $html_content .= "<input type='hidden' id='userHasAnswered-$questionId' value='{$uHasAnswered}'>                      
+                              <input type='hidden' class='CourseCodeNow' value='{$course_code}'>";
         }
         $html_content .= "<input type='hidden' name='choice[$questionId]' id='arrInput_{$questionId}'>";
         $html_content .= "<input type='hidden' id='insertedMarkersAsJson-$questionId' value='{$DataMarkersToJson}'>";
         $html_content .= "<input type='hidden' class='currentQuestion' value='{$questionId}'>";
+        $html_content .= "<input type='hidden' id='DataJsonFile-$questionId' value='{$DataJsonFileVal}'>";
 
         load_js('drag-and-drop-shapes');
         $head_content .= "<script>

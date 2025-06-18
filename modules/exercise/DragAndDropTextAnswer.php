@@ -84,11 +84,11 @@ class DragAndDropTextAnswer extends \QuestionType
                     $m['endY'] = $arr_of[1];
                 }
                 if ($m['marker_shape'] == 'circle' && count($arr_m) == 2) {
-                    $coordinatesXY[] = ['marker_id' => $index, 'x' => $m['x'], 'y' => $m['y'], 'shape_type' => $m['marker_shape'], 'radius' => $m['marker_radius']];
+                    $coordinatesXY[] = ['marker_id' => $index, 'x' => $m['x'], 'y' => $m['y'], 'shape_type' => $m['marker_shape'], 'radius' => $m['marker_radius'], 'marker_answer_with_image' => $m['marker_answer_with_image']];
                 } elseif ($m['marker_shape'] == 'rectangle' && count($arr_m) == 2) {
-                    $coordinatesXY[] = ['marker_id' => $index, 'x' => $m['x'], 'y' => $m['y'], 'shape_type' => $m['marker_shape'], 'endY' => $m['endY'], 'endX' => $m['endX']];
+                    $coordinatesXY[] = ['marker_id' => $index, 'x' => $m['x'], 'y' => $m['y'], 'shape_type' => $m['marker_shape'], 'endY' => $m['endY'], 'endX' => $m['endX'], 'marker_answer_with_image' => $m['marker_answer_with_image']];
                 } elseif ($m['marker_shape'] == 'polygon') {
-                    $coordinatesXY[] = ['marker_id' => $index, 'points' => $m['marker_coordinates'], 'shape_type' => $m['marker_shape'], 'color' => 'rgba(255, 255, 255, 0.5)'];
+                    $coordinatesXY[] = ['marker_id' => $index, 'points' => $m['marker_coordinates'], 'shape_type' => $m['marker_shape'], 'color' => 'rgba(255, 255, 255, 0.5)', 'marker_answer_with_image' => $m['marker_answer_with_image']];
                 }
             }
 
@@ -132,7 +132,8 @@ class DragAndDropTextAnswer extends \QuestionType
 
         if (isset($_SESSION['userHasAnswered'])) {
             $uHasAnswered = json_encode($_SESSION['userHasAnswered'][$questionId], JSON_PRETTY_PRINT);
-            $html_content .= "<input type='hidden' id='userHasAnswered-$questionId' value='{$uHasAnswered}'>";
+            $html_content .= "<input type='hidden' id='userHasAnswered-$questionId' value='{$uHasAnswered}'>
+                              <input type='hidden' class='CourseCodeNow' value='{$course_code}'>";
         }
 
         load_js('drag-and-drop-shapes');

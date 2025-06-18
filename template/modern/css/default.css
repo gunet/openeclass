@@ -6040,6 +6040,17 @@ th.grade-col a{
   justify-content: center;
   min-width: 50px;
 }
+.panelCard-exercise .draggable.draggable-image {
+  width: 145px !important;
+  height: 145px !important;
+  padding: 0px;
+  align-items: stretch;
+}
+.panelCard-exercise .draggable.draggable-image img{
+  width: 140px !important;
+  height: 140px !important;
+  object-fit: cover;
+}
 .panelCard-exercise .blank.ui-droppable .draggable.dropped-word{
   border: 0px;
 }
@@ -6047,6 +6058,12 @@ th.grade-col a{
   line-height: 1;
   padding: 0px;
   z-index: 3;
+}
+.panelCard-exercise .draggable.draggable-image.dropped-word{
+  line-height: 0;
+  padding: 3px;
+  z-index: 3;
+  margin: 0;
 }
 .drag-and-drop-markers-container,
 .drag-and-drop-markers-img,
@@ -6071,4 +6088,8 @@ th.grade-col a{
   margin-bottom: 10px;
   display: inline-block;
   vertical-align: middle;
+}
+
+.panelCard-exercise .blank:has(.dropped-word){
+ background-color: #FFFFFF !important;
 }
