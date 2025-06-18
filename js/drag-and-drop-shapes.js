@@ -10,7 +10,7 @@ function drawCircleWithBlank(x, y, radius, fillColor = 'rgba(207, 207, 207, 0.8)
     // Draw the blank rectangle at the center
     var blankWidth = 100; // fixed size
     var blankHeight = 40;
-    if (markerWithImage == 1) { // predefined answer will be showed as image
+    if (markerWithImage == 1) { // predefined answer will be displayed as an image
         blankWidth = 150; // fixed size
         blankHeight = 150;
     }
@@ -56,7 +56,7 @@ function drawRectangleWithBlank(x, y, width, height, fillColor = 'rgba(207, 207,
     // Dimensions for the blank span
     var blankWidth = 100;
     var blankHeight = 40;
-    if (markerWithImage == 1) { // predefined answer will be showed as image
+    if (markerWithImage == 1) { // predefined answer will be displayed as an image
         blankWidth = 150; // fixed size
         blankHeight = 150;
     }
@@ -130,7 +130,7 @@ function drawPolygonWithBlank(points, color, fillColor, label, ctx, dataAttrs = 
     // Dimensions for the blank span
     var blankWidth = 100;
     var blankHeight = 40;
-    if (markerWithImage == 1) { // predefined answer will be showed as image
+    if (markerWithImage == 1) { // predefined answer will be displayed as an image
         blankWidth = 150; // fixed size
         blankHeight = 150;
     }

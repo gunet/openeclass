@@ -2161,9 +2161,9 @@ $langPredefinedAnswerExists = "Δεν μπορείτε να καταχωρήσε
 $langCalcelDroppableItem = "Μπορείτε να αναιρέσετε την απάντησή σας κάνοντας αριστερό κλικ πάνω στην λέξη.";
 $langAllowMoreDefinedAnswersThanBlanks = "Οι προκαθορισμένες απαντήσεις να είναι περισσότερες απο τον αριθμό των κενών";
 $langErrorWithUniqueNumberOfBlank = "Καταχωρήσατε τον ίδιο μοναδικό αριθμό σε παραπάνω από ένα κενά.";
-$langDragAndDropMarkersTextAnswers = "Σημεία απαντήσεων: ";
+$langDragAndDropMarkersTextAnswers = "Μεταφορά και απόθεση σημείων εικόνας: ";
 
-$langDragAndDropMarkers = "Drag and Drop σημείων";
+$langDragAndDropMarkers = "Μεταφορά και απόθεση σημείων κειμένων ή εικόνας";
 $langMarker = "Σημείο";
 $langShape = "Σχήμα";
 $langRectangle = "Ορθογώνιο";
