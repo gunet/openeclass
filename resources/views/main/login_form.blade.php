@@ -26,8 +26,13 @@
                 </div>
                 @push('bottom_scripts')
                     <script>
-                        var warningModal = new bootstrap.Modal(document.getElementById('warning-modal'), {})
-                        warningModal.toggle()
+                        var warningModal = new bootstrap.Modal(document.getElementById('warning-modal'), {});
+                        warningModal.toggle();
+                        document.body.addEventListener('keydown', function(e) {
+                          if (e.key == "Escape") {
+                            warningModal.hide();
+                          }
+                        });
                     </script>
                 @endpush
             @endif
