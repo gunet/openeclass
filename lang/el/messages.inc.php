@@ -7067,7 +7067,7 @@ $langDisplayRightContentInCPage = "Εμφάνιση ημερολογίου, αν
 $langCoursePage = "Σελίδα $langsOfCourse";
 
 // AI-related language constants - Greek translations
-$langAI = "Τεχνητή Νοημοσύνη";
+$langAI = "Κόμβος Τεχνητής Νοημοσύνης";
 $langAIGenerateQuestions = 'Δημιουργία Ερωτήσεων με χρήση Τ.Ν.';
 $langAIQuestionGeneration = 'Δημιουργία Ερωτήσεων με χρήση Τ.Ν.';
 $langAINotAvailable = 'Η λειτουργία Τ.Ν. δεν είναι διαθέσιμη';
@@ -7114,4 +7114,4 @@ $langAddToExercise = "Προσθήκη στην Άσκηση";
 $langQuestionsAddedToExercise = '%d ερωτήσεις προστέθηκαν στην άσκηση';
 $langTestConnection = "Δοκιμή Σύνδεσης";
 $langDefaultFillInBlanks = "Συμπληρώστε τα κενά.";
-
+$langAIService = "Λειτουργία Τ.Ν.";

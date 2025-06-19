@@ -171,6 +171,26 @@ class AIService {
         ];
     }
 
+    public static function getAIServices(): array {
+        return [
+            AI_MODULE_QUESTION_POOL => 'Question Pool',
+        ];
+    }
+
+    public static function getAIServiceProviderModel($service_id): array
+    {
+
+        $q = Database::get()->querySingle("SELECT ai_module_id, name, model_name 
+                FROM ai_modules 
+                    JOIN ai_providers 
+                ON ai_modules.ai_provider_id=ai_providers.id");
+        if ($q) {
+            return [ $q->name, $q->model_name ];
+        } else {
+            return [ '', ''];
+        }
+    }
+
     /**
      * Test AI connectivity
      *

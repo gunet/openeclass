@@ -23,6 +23,7 @@ require_once '../../include/baseTheme.php';
 require_once 'modules/admin/extconfig/externals.php';
 require_once 'modules/admin/extconfig/aiapp.php';
 require_once 'include/lib/ai/AIProviderFactory.php';
+require_once 'include/lib/ai/services/AIService.php';
 
 $nameTools = $langAI;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
@@ -132,14 +133,22 @@ if (isset($_GET['edit'])) {
         [['value' => 'other', 'label' => 'Other']]
     );
 
-
 // Get the current model name for JavaScript (escaped for security)
     $currentModelName = '';
     if ($q && isset($q->model_name)) {
         $currentModelName = htmlspecialchars($q->model_name, ENT_QUOTES, 'UTF-8');
     }
-}
 
+    $ai_services = AIService::getAIServices();
+    foreach ($ai_services as $ai_service_id => $ai_service_name) {
+        list($ai_provider_id, $ai_model_name) = AIService::getAIServiceProviderModel($ai_service_id);
+        $data['ai_service_data'][] = [
+            'ai_service_name' => $ai_service_name,
+            'ai_provider_id' => $ai_provider_id,
+            'ai_module_name' => $ai_model_name
+        ];
+    }
+}
 
 $head_content .= "
     <script type='text/javascript'>

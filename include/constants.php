@@ -237,3 +237,6 @@ define('BADGE_TEMPLATE_PATH', "/courses/user_progress_data/badge_templates/");
 define('MAX_IDLE_TIME', 10);
 
 define('JQUERY_VERSION', '-3.6.0');
+
+// ai modules
+define('AI_MODULE_QUESTION_POOL', 1);

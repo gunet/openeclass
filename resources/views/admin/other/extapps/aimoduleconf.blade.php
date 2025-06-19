@@ -123,6 +123,7 @@
                         ));
                     !!}
 
+                {{-- list of AI providers --}}
                     <div class='table-responsive'>
                         <table class='table-default'>
                             <thead>
@@ -155,6 +156,42 @@
                                 </tr>
                             @endforeach
                         </table>
+                    </div>
+
+                    {{-- list of AI modules --}}
+                    <div class='table-responsive'>
+                        <table class='table-default'>
+                            <thead>
+                            <tr class='list-header'>
+                                <th>{{ trans('langAIService') }}</th>
+                                <th>{{ trans('langProvider') }}</th>
+                                <th>{{ trans('langLanguageModel') }}</th>
+                                <th class='text-end' aria-label='{{ trans('langSettingSelect') }}'><i class='fa-solid fa-gears'></i></th>
+                            </tr>
+                            </thead>
+
+                            @foreach ($ai_service_data as $ai_service)
+                                <tr>
+                                    <td>{{ $ai_service['ai_service_name'] }}</td>
+                                    <td>{{ $ai_service['ai_provider_id'] }}</td>
+                                    <td>{{ $ai_service['ai_module_name'] }}</td>
+                                    <td class='option-btn-cell text-end'>
+                                        {!!
+                                            action_button(array(
+                                                array('title' => trans('langEditChange'),
+                                                      'url' => "$_SERVER[SCRIPT_NAME]?edit=$row->id",
+                                                      'icon' => 'fa-edit'),
+                                                array('title' => trans('langDelete'),
+                                                      'url' => "$_SERVER[SCRIPT_NAME]?delete=$row->id",
+                                                      'icon' => 'fa-times',
+                                                      'class' => 'delete',
+                                                      'confirm' => trans('langConfirmDelete'))))
+                                        !!}
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </table>
+
                     </div>
                 @endif
 
