@@ -174,6 +174,7 @@ class LtiServiceMemberships extends LtiServiceBase {
             $roles[] = 'http://purl.imsglobal.org/vocab/lis/v2/person#Administrator';
         } else {
             $roles[] = 'Learner';
+            $roles[] = self::CONTEXT_ROLE_LEARNER;
         }
 
         return join(',', $roles);
