@@ -892,7 +892,11 @@ function save_user_answers(questionId) {
                     dataArray.forEach(function(item) {
                         //console.log("Answer:", item.dataAnswer, "Word:", item.dataWord);
                         const spanElementBlank = $('#qPanel' + questionId + ' .blank[data-blank-id="' + item.dataAnswer + '"][data-card-id="words_' + questionId + '"]');
-                        var answerType = typeOfPredefinedAnswer(questionId,item.dataAnswer);
+                        const questionType = $('#typeQuestion-'+questionId).val();
+                        var answerType = 0;
+                        if (questionType && questionType == 10) { // Drag and drop markers
+                            answerType = typeOfPredefinedAnswer(questionId,item.dataAnswer);
+                        }
                         if (spanElementBlank.length > 0 && item.dataWord != null) {
                             // Create the <div>
                             const div = document.createElement('div');

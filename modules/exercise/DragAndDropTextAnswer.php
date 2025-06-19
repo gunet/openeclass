@@ -146,6 +146,7 @@ class DragAndDropTextAnswer extends \QuestionType
             $uHasAnswered = json_encode($_SESSION['userHasAnswered'][$questionId], JSON_PRETTY_PRINT);
             $html_content .= "<input type='hidden' id='userHasAnswered-$questionId' value='{$uHasAnswered}'>
                               <input type='hidden' class='CourseCodeNow' value='{$course_code}'>";
+            $html_content .= "<input type='hidden' id='typeQuestion-$questionId' value='".DRAG_AND_DROP_TEXT."'>";
         }
 
         load_js('drag-and-drop-shapes');
