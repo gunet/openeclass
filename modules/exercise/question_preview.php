@@ -76,6 +76,12 @@ if (file_exists($picturePath)) {
     $tool_content .= "<tr><td colspan='$colspan'><img class='img-responsive' src='{$urlAppend}$picturePath' alt=''></td></tr>";
 }
 
+if ($answerType == DRAG_AND_DROP_TEXT) { 
+    $objAnswerTmp = new Answer($qid);
+    $questionText = $objAnswerTmp->get_drag_and_drop_text();
+    $tool_content .= "<tr><td>$questionText</td></tr>";
+}
+
 // display answers
 $tool_content .= preview_question($qid, $answerType);
 
