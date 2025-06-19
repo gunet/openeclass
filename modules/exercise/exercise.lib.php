@@ -304,6 +304,12 @@ function display_exercise($exercise_id): void
                                  </tr>";
             }
 
+            if ($answerType == DRAG_AND_DROP_TEXT) { 
+                $objAnswerTmp = new Answer($qid);
+                $questionText = $objAnswerTmp->get_drag_and_drop_text();
+                $tool_content .= "<tr><td>$questionText</td></tr>";
+            }
+
             // display answers
             $tool_content .= preview_question($qid, $answerType);
 
@@ -382,6 +388,9 @@ function preview_question($question_id, $answer_type): string {
             $html_content .= $answer->PreviewQuestion();
             break;
         case DRAG_AND_DROP_MARKERS:
+            $answer = new DragAndDropMarkersAnswer($question_id);
+            $html_content .= $answer->PreviewQuestion();
+            break;
         case DRAG_AND_DROP_TEXT:
             $answer = new DragAndDropTextAnswer($question_id);
             $html_content .= $answer->PreviewQuestion();

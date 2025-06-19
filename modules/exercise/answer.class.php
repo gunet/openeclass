@@ -293,11 +293,68 @@ if (!class_exists('Answer')):
 
         }
 
+                /**
+         * @brief Retrieve the answers for each bracket inside the text.
+         * @author - Nikos Mpalamoutis
+         */
+        public function get_drag_and_drop_text_with_answers() {
+
+            $questionId = $this->questionId;
+            $answer = Database::get()->querySingle("SELECT answer FROM exercise_answer WHERE question_id = ?d", $questionId);
+            $TempArr = [];
+            $textWithAnswer = [];
+
+            if ($answer) {
+                $q = explode('::', $answer->answer);
+                if (count($q) > 0) {
+                    $str = $q[1];
+                    $arr = explode(',', $str);
+                    foreach ($arr as $value) {
+                        $arr2 = explode('|', $value);
+                        if (count($arr2) == 3) {
+                            $textWithAnswer[$arr2[0]+1] = $arr2[1];
+                        }
+                    }
+                }
+            }
+
+            return $textWithAnswer;
+
+        }
+
+        /**
+         * @brief Retrieve the grades for each bracket inside the text.
+         * @author - Nikos Mpalamoutis
+         */
+        public function get_drag_and_drop_text_with_grades() {
+
+            $questionId = $this->questionId;
+            $answer = Database::get()->querySingle("SELECT answer FROM exercise_answer WHERE question_id = ?d", $questionId);
+            $markerWithGrade = [];
+
+            if ($answer) {
+                $q = explode('::', $answer->answer);
+                if (count($q) > 0) {
+                    $str = $q[1];
+                    $arr = explode(',', $str);
+                    foreach ($arr as $value) {
+                        $arr2 = explode('|', $value);
+                        if (count($arr2) == 3) {
+                            $markerWithGrade[$arr2[0]+1] = $arr2[2];
+                        }
+                    }
+                }
+            }
+
+            return $markerWithGrade;
+
+        }
+
         /**
          * @brief Retrieve the answers for each marker inside the text.
          * @author - Nikos Mpalamoutis
          */
-        public function get_drag_and_drop_markers_with_answers($typeAnswer) {
+        public function get_drag_and_drop_markers_with_answers() {
 
             $questionId = $this->questionId;
             $answer = Database::get()->querySingle("SELECT answer FROM exercise_answer WHERE question_id = ?d", $questionId);
@@ -321,14 +378,8 @@ if (!class_exists('Answer')):
                     }
 
                     foreach ($allTextMarkers as $m) {
-                        if ($typeAnswer == DRAG_AND_DROP_TEXT) {
-                            $m = $m - 1; // The marker starts from the zero index.
-                        }
                         foreach ($TempArr as $index => $val) {
                             if ($index == $m) {
-                                if ($typeAnswer == DRAG_AND_DROP_TEXT) {
-                                    $index = $m + 1;
-                                }
                                 $markerWithAnswer[$index] = $val; 
                             }
                         }
@@ -345,7 +396,7 @@ if (!class_exists('Answer')):
          * @brief Retrieve the grades for each marker inside the text.
          * @author - Nikos Mpalamoutis
          */
-        public function get_drag_and_drop_markers_with_grades($typeAnswer) {
+        public function get_drag_and_drop_markers_with_grades() {
 
             $questionId = $this->questionId;
             $answer = Database::get()->querySingle("SELECT answer FROM exercise_answer WHERE question_id = ?d", $questionId);
@@ -359,9 +410,6 @@ if (!class_exists('Answer')):
                     foreach ($arrTmp as $value) {
                         $arr2 = explode('|', $value);
                         if (count($arr2) == 3) {
-                            if ($typeAnswer == DRAG_AND_DROP_TEXT) {
-                                $arr2[0] = $arr2[0] + 1; // The marker starts from the one index.
-                            }
                             $markerWithGrade[$arr2[0]] = $arr2[2];
                         }
                     }
