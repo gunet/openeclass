@@ -1,6 +1,6 @@
 
 // Drawing blanks in the circles shapes
-function drawCircleWithBlank(x, y, radius, fillColor = 'rgba(207, 207, 207, 0.8)', strokeColor = 'red', label = '', ctx, dataAttrs = {}, Qid, markerWithImage) {
+function drawCircleWithBlank(x, y, radius, fillColor = 'rgba(207, 207, 207, 0.8)', strokeColor = 'red', label = '', ctx, dataAttrs = {}, Qid, markerWithImage, addMarkerNumberInBlank) {
     const container = document.getElementById('image-container-'+Qid);
     if (!ctx || !container) {
         console.error('Canvas context or container not found.');
@@ -19,9 +19,13 @@ function drawCircleWithBlank(x, y, radius, fillColor = 'rgba(207, 207, 207, 0.8)
     const blankDiv = document.createElement('span');
     blankDiv.className = 'blank';
 
+    var dataBlankId = 0;
     for (const key in dataAttrs) {
         if (dataAttrs.hasOwnProperty(key)) {
             blankDiv.setAttribute('data-' + key, dataAttrs[key]);
+            if (key == 'blank-id') {
+                dataBlankId = dataAttrs[key];
+            }
         }
     }
 
@@ -33,7 +37,11 @@ function drawCircleWithBlank(x, y, radius, fillColor = 'rgba(207, 207, 207, 0.8)
     blankDiv.style.border = '1px solid grey';
     blankDiv.style.boxSizing = 'border-box';
     blankDiv.style.cursor = 'pointer';
-    // blankDiv.style.zIndex = 3;
+    if (addMarkerNumberInBlank == 1) {
+        blankDiv.textContent = dataBlankId;
+        blankDiv.style.fontSize = '18px';
+        blankDiv.style.fontWeight = 'bold';
+    }
 
     // Append overlay to container
     container.style.position = 'relative';
@@ -50,7 +58,7 @@ function drawCircleWithBlank(x, y, radius, fillColor = 'rgba(207, 207, 207, 0.8)
 
 
 // Drawing blanks in the rectangles shapes
-function drawRectangleWithBlank(x, y, width, height, fillColor = 'rgba(207, 207, 207, 0.8)', borderColor = 'grey', label = '', ctx, dataAttrs = {}, Qid, markerWithImage) {
+function drawRectangleWithBlank(x, y, width, height, fillColor = 'rgba(207, 207, 207, 0.8)', borderColor = 'grey', label = '', ctx, dataAttrs = {}, Qid, markerWithImage, addMarkerNumberInBlank) {
     const container = document.getElementById('image-container-'+Qid);
 
     // Dimensions for the blank span
@@ -70,9 +78,13 @@ function drawRectangleWithBlank(x, y, width, height, fillColor = 'rgba(207, 207,
     const blankDiv = document.createElement('span');
     blankDiv.className = 'blank';
 
+    var dataBlankId = 0;
     for (const key in dataAttrs) {
         if (dataAttrs.hasOwnProperty(key)) {
-            blankDiv.setAttribute('data-'+key, dataAttrs[key]);
+            blankDiv.setAttribute('data-' + key, dataAttrs[key]);
+            if (key == 'blank-id') {
+                dataBlankId = dataAttrs[key];
+            }
         }
     }
 
@@ -101,14 +113,18 @@ function drawRectangleWithBlank(x, y, width, height, fillColor = 'rgba(207, 207,
     blankDiv.style.border = '1px solid grey';
     blankDiv.style.boxSizing = 'border-box';
     blankDiv.style.cursor = 'pointer';
-    // blankDiv.style.zIndex = 3;
+    if (addMarkerNumberInBlank == 1) {
+        blankDiv.textContent = dataBlankId;
+        blankDiv.style.fontSize = '18px';
+        blankDiv.style.fontWeight = 'bold';
+    }
 
     // Append overlay to container
     container.appendChild(blankDiv);
 }
 
 // Drawing blanks in the polygons shapes
-function drawPolygonWithBlank(points, color, fillColor, label, ctx, dataAttrs = {},  Qid, markerWithImage) {
+function drawPolygonWithBlank(points, color, fillColor, label, ctx, dataAttrs = {},  Qid, markerWithImage, addMarkerNumberInBlank) {
     const container = document.getElementById('image-container-'+Qid);
     if (points.length < 2) return;
     //ctx.strokeStyle = color;
@@ -139,9 +155,13 @@ function drawPolygonWithBlank(points, color, fillColor, label, ctx, dataAttrs = 
     const blankDiv = document.createElement('span');
     blankDiv.className = 'blank';
 
+    var dataBlankId = 0;
     for (const key in dataAttrs) {
         if (dataAttrs.hasOwnProperty(key)) {
             blankDiv.setAttribute('data-' + key, dataAttrs[key]);
+            if (key == 'blank-id') {
+                dataBlankId = dataAttrs[key];
+            }
         }
     }
 
@@ -153,7 +173,11 @@ function drawPolygonWithBlank(points, color, fillColor, label, ctx, dataAttrs = 
     blankDiv.style.border = '1px solid grey';
     blankDiv.style.boxSizing = 'border-box';
     blankDiv.style.cursor = 'pointer';
-    // blankDiv.style.zIndex = 3;
+    if (addMarkerNumberInBlank == 1) {
+        blankDiv.textContent = dataBlankId;
+        blankDiv.style.fontSize = '18px';
+        blankDiv.style.fontWeight = 'bold';
+    }
 
     // Append overlay to container
     container.style.position = 'relative';
@@ -167,7 +191,7 @@ function drawPolygonWithBlank(points, color, fillColor, label, ctx, dataAttrs = 
 }
 
 // Loading shapes for displaying
-function loadShapes(qID) {
+function loadShapes(qID, addMarkerNumberInBlank = 0) {
     const canvas = $('#drawingCanvas-'+qID);
     const ctx = canvas[0].getContext('2d');
 
@@ -197,7 +221,7 @@ function loadShapes(qID) {
                                         'blank-id': shape.marker_id,
                                         'card-id': 'words_'+qID
                                     };
-                        drawCircleWithBlank(shape.x, shape.y, shape.radius, 'rgba(207, 207, 207, 0.8)', 'grey', shape.marker_id, ctx, attributes, qID, shape.marker_answer_with_image);
+                        drawCircleWithBlank(shape.x, shape.y, shape.radius, 'rgba(207, 207, 207, 0.8)', 'grey', shape.marker_id, ctx, attributes, qID, shape.marker_answer_with_image, addMarkerNumberInBlank);
                     }
                     break;
                 case 'rectangle':
@@ -211,7 +235,7 @@ function loadShapes(qID) {
                                         'blank-id': shape.marker_id,
                                         'card-id': 'words_'+qID
                                     };
-                        drawRectangleWithBlank(rectX, rectY, rectWidth, rectHeight, 'rgba(207, 207, 207, 0.8)', 'grey', shape.marker_id, ctx, attributes, qID, shape.marker_answer_with_image);
+                        drawRectangleWithBlank(rectX, rectY, rectWidth, rectHeight, 'rgba(207, 207, 207, 0.8)', 'grey', shape.marker_id, ctx, attributes, qID, shape.marker_answer_with_image, addMarkerNumberInBlank);
                     }
                     break;
                 case 'polygon':
@@ -227,7 +251,7 @@ function loadShapes(qID) {
                                         'blank-id': shape.marker_id,
                                         'card-id': 'words_'+qID
                                      };
-                        drawPolygonWithBlank(resultArray, 'grey', shape.color, shape.marker_id, ctx, attributes, qID, shape.marker_answer_with_image);
+                        drawPolygonWithBlank(resultArray, 'grey', shape.color, shape.marker_id, ctx, attributes, qID, shape.marker_answer_with_image, addMarkerNumberInBlank);
                     }
                     break;
             }
@@ -236,7 +260,7 @@ function loadShapes(qID) {
 }
 
 // Create blanks on the image regarding defined answers. (Drag and drop marker type of question in exercise).
-function createMarkersBlanksOnImage() {
+function createMarkersBlanksOnImage(DisplayMarker = 0) {
     var qID = $('.currentQuestion').val();
     const img = $('#img-quiz-'+qID);
     const canvas = $('#drawingCanvas-'+qID);
@@ -247,7 +271,7 @@ function createMarkersBlanksOnImage() {
     canvas.attr({ width: width, height: height }).css({ width: width + 'px', height: height + 'px', display: 'block', position: 'absolute', top: img.position().top, left: img.position().left });
 
     // Load existing shapes
-    loadShapes(qID);
+    loadShapes(qID, DisplayMarker);
 
     if (qID > 0) {
         // Remove the current question in order to get the next question.

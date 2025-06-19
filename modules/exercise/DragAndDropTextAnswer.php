@@ -11,7 +11,7 @@ class DragAndDropTextAnswer extends \QuestionType
 
     public function PreviewQuestion(): string
     {
-        global $langAnswer, $langScore, $head_content, $webDir, $course_code;
+        global $langAnswer, $langScore, $head_content, $webDir, $course_code, $langPoint, $langThisAnswerIsNotCorrect;
 
         $questionId = $this->question_id;
         $answerType = Database::get()->querySingle("SELECT type FROM exercise_question WHERE id = ?d", $questionId)->type;
@@ -19,16 +19,27 @@ class DragAndDropTextAnswer extends \QuestionType
         $html_content = "<tr class='active'><td><strong>$langAnswer</strong></td></tr>";
 
         $questionText = $this->answer_object->get_drag_and_drop_text();
+        $markersWithAnswers = $this->answer_object->get_drag_and_drop_markers_with_answers($answerType);
+        $markersWithGrades = $this->answer_object->get_drag_and_drop_markers_with_grades($answerType);
         $gradesOfAnswers = $this->answer_object->get_drag_and_drop_answer_grade();
         $AnswersGradeArr= [];
         foreach ($gradesOfAnswers as $gr) {
             $AnswersGradeArr[] = $gr;
         }
         $AnswersGrade = implode(':', $AnswersGradeArr);
-        $html_content .= "
-            <tr>
-                <td>" . standard_text_escape($questionText) . " <strong><small class='text-nowrap'>($langScore: $AnswersGrade)</small></strong></td>
-            </tr>";
+        $html_content .= "<tr>
+                           <td>
+                                " . standard_text_escape($questionText) . " 
+                                <strong><small class='text-nowrap'>($langScore: $AnswersGrade)</small></strong>";
+                    foreach ($markersWithAnswers as $index => $val) {
+                        $html_content .= "<div class='mt-2'>$langPoint [$index] = $val";
+                        if (isset($markersWithGrades[$index]) && $markersWithGrades[$index] == 0) {
+                            $html_content .= "&nbsp;&nbsp;<span class='Accent-200-cl'>($langThisAnswerIsNotCorrect)</span>";
+                        }
+                        $html_content .= "</div>";
+                    }
+        $html_content .= "</td>
+                         </tr>";
 
         // Create the blanks on the image and display them if the question type is DRAG AND DROP MARKERS.
         if ($answerType == DRAG_AND_DROP_MARKERS) {
@@ -93,6 +104,7 @@ class DragAndDropTextAnswer extends \QuestionType
             }
 
             $DataMarkersToJson = json_encode($coordinatesXY) ?? '';
+            $preview = $_GET['preview'] ?? 0;
 
             // Show the blanks on the image
             if ($DataMarkersToJson) {
@@ -103,7 +115,7 @@ class DragAndDropTextAnswer extends \QuestionType
 
                 $head_content .= "<script>
                                     document.addEventListener('DOMContentLoaded', function() {
-                                        createMarkersBlanksOnImage();
+                                        createMarkersBlanksOnImage($preview);
                                     });
                                   </script>";
             }
@@ -114,7 +126,7 @@ class DragAndDropTextAnswer extends \QuestionType
 
     public function AnswerQuestion($question_number, $exerciseResult = [], $options = []): string
     {
-        global $langCalcelDroppableItem, $head_content;
+        global $langCalcelDroppableItem, $head_content, $course_code;
 
         $questionId = $this->question_id;
         $question_text = $this->answer_object->get_drag_and_drop_text();
@@ -130,7 +142,7 @@ class DragAndDropTextAnswer extends \QuestionType
         $html_content .= "</div>";
         $html_content .= "<input type='hidden' name='choice[$questionId]' id='arrInput_{$questionId}'>";
 
-        if (isset($_SESSION['userHasAnswered'])) {
+        if (isset($_SESSION['userHasAnswered'][$questionId])) {
             $uHasAnswered = json_encode($_SESSION['userHasAnswered'][$questionId], JSON_PRETTY_PRINT);
             $html_content .= "<input type='hidden' id='userHasAnswered-$questionId' value='{$uHasAnswered}'>
                               <input type='hidden' class='CourseCodeNow' value='{$course_code}'>";

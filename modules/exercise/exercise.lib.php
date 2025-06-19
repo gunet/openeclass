@@ -195,7 +195,7 @@ function display_exercise($exercise_id): void
               <h3>" . q_math($exercise->selectTitle());
               if ($is_editor) {
                     $tool_content .= "<a class='ms-2' href='admin.php?course=$course_code&amp;exerciseId=$exercise_id&amp;modifyExercise=yes' aria-label='$langModify'>
-                      <span class='fa fa-edit' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langModify'></span>
+                      <span class='fa-solid fa-edit' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langModify'></span>
                     </a>";
                 }
               $tool_content .= "</h3>
@@ -270,7 +270,7 @@ function display_exercise($exercise_id): void
                     <strong class='pe-2'><u>$langQuestion</u>: $i</strong>";
             if ($is_editor) {
                 $tool_content .= "<a $modal_params href = 'admin.php?course=$course_code&amp;exerciseId=$exercise_id&amp;modifyAnswers=$qid' aria-label='$langModify'>
-                    <span class='fa fa-edit' data-bs-toggle='tooltip' data-bs-placement ='bottom' data-bs-original-title ='$langModify' ></span >
+                    <span class='fa-solid fa-edit' data-bs-toggle='tooltip' data-bs-placement ='bottom' data-bs-original-title ='$langModify' ></span >
                     </a >";
             }
                 $tool_content .= "</td>

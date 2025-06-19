@@ -277,7 +277,7 @@ if (!class_exists('Answer')):
         }
 
         /**
-         * @brief get the text of drag and drop question from the database
+         * @brief Retrieve the text that contains all the brackets with their markers.
          * @author - Nikos Mpalamoutis
          */
         public function get_drag_and_drop_text() {
@@ -294,7 +294,85 @@ if (!class_exists('Answer')):
         }
 
         /**
-         * @brief get the answers of drag and drop question from the database
+         * @brief Retrieve the answers for each marker inside the text.
+         * @author - Nikos Mpalamoutis
+         */
+        public function get_drag_and_drop_markers_with_answers($typeAnswer) {
+
+            $questionId = $this->questionId;
+            $answer = Database::get()->querySingle("SELECT answer FROM exercise_answer WHERE question_id = ?d", $questionId);
+            $TempArr = [];
+            $markerWithAnswer = [];
+
+            if ($answer) {
+                $q = explode('::', $answer->answer);
+                if (count($q) > 0) {
+                    // Get the all markers from the brackets inside the text.
+                    preg_match_all('/\[(\d+)\]/', $q[0], $matches);
+                    $allTextMarkers = $matches[1];
+
+                    $str = $q[1];
+                    $arr = explode(',', $str);
+                    foreach ($arr as $value) {
+                        $arr2 = explode('|', $value);
+                        if (count($arr2) == 3) {
+                            $TempArr[$arr2[0]] = $arr2[1];
+                        }
+                    }
+
+                    foreach ($allTextMarkers as $m) {
+                        if ($typeAnswer == DRAG_AND_DROP_TEXT) {
+                            $m = $m - 1; // The marker starts from the zero index.
+                        }
+                        foreach ($TempArr as $index => $val) {
+                            if ($index == $m) {
+                                if ($typeAnswer == DRAG_AND_DROP_TEXT) {
+                                    $index = $m + 1;
+                                }
+                                $markerWithAnswer[$index] = $val; 
+                            }
+                        }
+
+                    }
+                }
+            }
+
+            return $markerWithAnswer;
+
+        }
+
+        /**
+         * @brief Retrieve the grades for each marker inside the text.
+         * @author - Nikos Mpalamoutis
+         */
+        public function get_drag_and_drop_markers_with_grades($typeAnswer) {
+
+            $questionId = $this->questionId;
+            $answer = Database::get()->querySingle("SELECT answer FROM exercise_answer WHERE question_id = ?d", $questionId);
+            $markerWithGrade = [];
+
+            if ($answer) {
+                $q = explode('::', $answer->answer);
+                if (count($q) > 0) {
+                    $str = $q[1];
+                    $arrTmp = explode(',', $str);
+                    foreach ($arrTmp as $value) {
+                        $arr2 = explode('|', $value);
+                        if (count($arr2) == 3) {
+                            if ($typeAnswer == DRAG_AND_DROP_TEXT) {
+                                $arr2[0] = $arr2[0] + 1; // The marker starts from the one index.
+                            }
+                            $markerWithGrade[$arr2[0]] = $arr2[2];
+                        }
+                    }
+                }
+            }
+
+            return $markerWithGrade;
+        }
+
+        /**
+         * @brief Retrieve the predefined answers for each question.
          * @author - Nikos Mpalamoutis
          */
         public function get_drag_and_drop_answers() {
@@ -311,7 +389,7 @@ if (!class_exists('Answer')):
         }
 
          /**
-         * @brief modify drag and drop answers into the database
+         * @brief Getting the total number of predefined answers.
          * @author - Nikos Mpalamoutis
          */
         public function get_total_drag_and_drop_answers() {
@@ -331,7 +409,7 @@ if (!class_exists('Answer')):
         }
 
         /**
-        * @brief get the answers of drag and drop question from the database
+        * 
         * @author - Nikos Mpalamoutis
         */
         public function get_drag_and_drop_answer_text() {
@@ -362,7 +440,7 @@ if (!class_exists('Answer')):
         }
 
        /**
-       * @brief get the answers of drag and drop question from the database
+       * 
        * @author - Nikos Mpalamoutis
        */
         public function get_drag_and_drop_answer_grade() {
@@ -394,6 +472,10 @@ if (!class_exists('Answer')):
 
         }
 
+       /**
+       * 
+       * @author - Nikos Mpalamoutis
+       */
         public function get_drag_and_drop_answer_grade_as_text() {
 
             $resultArray = [];
@@ -424,7 +506,7 @@ if (!class_exists('Answer')):
 
 
         /**
-         * @brief modify drag and drop marker answers count
+         * 
          * @param $questionId
          * @return int|mixed
          * @author - Nikos Mpalamoutis
