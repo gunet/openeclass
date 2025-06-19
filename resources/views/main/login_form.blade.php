@@ -26,8 +26,8 @@
                 </div>
                 @push('bottom_scripts')
                     <script>
-                        var warningModal = new bootstrap.Modal(document.getElementById('warning-modal'), {})
-                        warningModal.toggle()
+                        var warningModal = new bootstrap.Modal(document.getElementById('warning-modal'), {keyboard: true});
+                        warningModal.toggle();
                     </script>
                 @endpush
             @endif
