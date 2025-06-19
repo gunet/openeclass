@@ -125,7 +125,7 @@ if (isset($_POST['submitRubric'])) {
             foreach ($_POST['title'] as $crit => $item_criterio) {
                 $criteria[$crit]['title_name'] = $item_criterio;
                 $criteria[$crit]['crit_weight'] = $_POST['weight'][$crit];
-                foreach ($_POST['scale_item_value'][$crit] as $key => $item_name) {
+                foreach ($_POST['scale_item_name'][$crit] as $key => $item_name) {
                     $criteria[$crit]['crit_scales'][$key]['scale_item_name'] = $item_name;
                     $criteria[$crit]['crit_scales'][$key]['scale_item_value'] = $_POST['scale_item_value'][$crit][$key];
                 }
@@ -344,7 +344,7 @@ if (isset($_GET['rubric_id']) or isset($_GET['new_rubric'])) { // edit rubric or
                     foreach ($title['crit_scales'] as $key => $scale) {
                         $cc++;
                         $tool_content .= "<tr>
-                                        <td class='form-group'><input aria-label='$langWording' [$crit][]' class='form-control' value='".q($scale['scale_item_name'])."' required type='text'></td>
+                                        <td class='form-group'><input aria-label='$langWording' name='scale_item_name[$crit][]' class='form-control' value='".q($scale['scale_item_name'])."' required type='text'></td>
                                         <td class='form-group'><input aria-label='$langValue' name='scale_item_value[$crit][]' class='form-control' value='$scale[scale_item_value]' min='0' required type='number'></td>";
                         if ($i == 0) {
                             $tool_content .= "<td class='text-center'></td>";
