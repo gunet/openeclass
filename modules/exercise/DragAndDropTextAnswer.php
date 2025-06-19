@@ -52,7 +52,7 @@ class DragAndDropTextAnswer extends \QuestionType
 
         $html_content = "<div class='col-12 mb-4'><small class='Accent-200-cl'>(*)$langCalcelDroppableItem</small></div>";
         $html_content .= "<div class='col-12'>$question_text</div>";
-        $html_content .= "<div class='col-12 d-flex justify-content-start align-items-center gap-4 flex-wrap mt-4' id='words_{$questionId}'>";
+        $html_content .= "<div class='col-12 d-flex justify-content-start align-items-center gap-4 flex-wrap mt-4 border-top-default pt-4' id='words_{$questionId}'>";
         foreach ($list_answers as $an) {
             $html_content .= "<div class='draggable' data-word='{$an}' data-pool-id='words_{$questionId}'>$an</div>";
         }

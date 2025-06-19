@@ -33,7 +33,7 @@ function drawCircleWithBlank(x, y, radius, fillColor = 'rgba(207, 207, 207, 0.8)
     blankDiv.style.position = 'absolute';
     blankDiv.style.width = blankWidth + 'px';
     blankDiv.style.height = blankHeight + 'px';
-    blankDiv.style.backgroundColor = 'rgba(255, 255, 255, 0.5)';
+    blankDiv.style.backgroundColor = 'rgba(255, 255, 255, 0.7)';
     blankDiv.style.border = '1px solid grey';
     blankDiv.style.boxSizing = 'border-box';
     blankDiv.style.cursor = 'pointer';
@@ -41,6 +41,7 @@ function drawCircleWithBlank(x, y, radius, fillColor = 'rgba(207, 207, 207, 0.8)
         blankDiv.textContent = dataBlankId;
         blankDiv.style.fontSize = '18px';
         blankDiv.style.fontWeight = 'bold';
+        blankDiv.style.color = 'black';
     }
 
     // Append overlay to container
@@ -109,7 +110,7 @@ function drawRectangleWithBlank(x, y, width, height, fillColor = 'rgba(207, 207,
     // Set size and styles
     blankDiv.style.width = blankWidth + 'px';
     blankDiv.style.height = blankHeight + 'px';
-    blankDiv.style.backgroundColor = 'rgba(255, 255, 255, 0.5)';
+    blankDiv.style.backgroundColor = 'rgba(255, 255, 255, 0.7)';
     blankDiv.style.border = '1px solid grey';
     blankDiv.style.boxSizing = 'border-box';
     blankDiv.style.cursor = 'pointer';
@@ -117,6 +118,7 @@ function drawRectangleWithBlank(x, y, width, height, fillColor = 'rgba(207, 207,
         blankDiv.textContent = dataBlankId;
         blankDiv.style.fontSize = '18px';
         blankDiv.style.fontWeight = 'bold';
+        blankDiv.style.color = 'black';
     }
 
     // Append overlay to container
@@ -169,7 +171,7 @@ function drawPolygonWithBlank(points, color, fillColor, label, ctx, dataAttrs = 
     blankDiv.style.position = 'absolute';
     blankDiv.style.width = blankWidth + 'px';
     blankDiv.style.height = blankHeight + 'px';
-    blankDiv.style.backgroundColor = 'rgba(255, 255, 255, 0.5)';
+    blankDiv.style.backgroundColor = 'rgba(255, 255, 255, 0.7)';
     blankDiv.style.border = '1px solid grey';
     blankDiv.style.boxSizing = 'border-box';
     blankDiv.style.cursor = 'pointer';
@@ -177,6 +179,7 @@ function drawPolygonWithBlank(points, color, fillColor, label, ctx, dataAttrs = 
         blankDiv.textContent = dataBlankId;
         blankDiv.style.fontSize = '18px';
         blankDiv.style.fontWeight = 'bold';
+        blankDiv.style.color = 'black';
     }
 
     // Append overlay to container

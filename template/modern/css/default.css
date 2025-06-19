@@ -6012,6 +6012,7 @@ th.grade-col a{
   margin-top: 15px;
   margin-left: 10px;
   margin-right: 10px;
+  border-radius: 4px;
 }
 .panelCard-exercise .blank:has(.dropped-word){
   background-color: #ffffff;
@@ -6034,11 +6035,12 @@ th.grade-col a{
   background-color: #FFFFFF;
   color: #2B3944;
   cursor: move;
-  border: 1px solid #2B3944;
+  border: 2px solid #2B3944;
   display: flex;
   align-items: center;
   justify-content: center;
   min-width: 50px;
+  border-radius: 4px;
 }
 .panelCard-exercise .draggable.draggable-image {
   width: 145px !important;

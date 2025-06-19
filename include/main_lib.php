@@ -8088,8 +8088,7 @@ function theme_initialization() {
                     border-color: $theme_options_styles[clBorderInput] !important;
                 }
 
-                .input-border-color,
-                .blank {
+                .input-border-color {
                     border-color: $theme_options_styles[clBorderInput] ;
                 }
 
@@ -8103,7 +8102,7 @@ function theme_initialization() {
                     border-color: $theme_options_styles[clBorderInput] ;
                 }
 
-                .blank{
+                .panelCard-exercise .blank{
                     border: solid 1px $theme_options_styles[clBorderInput] ;
                 }
 
