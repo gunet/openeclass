@@ -5915,14 +5915,14 @@ th.grade-col a{
 #unitResources_1 .module-name,
 #unitResources_2 .module-name,
 #unitResources_3 .module-name {
-  font-size: 0.65rem;
+  font-size: 12px;
 }
 
 #unitResources .text-start p,
 #unitResources_1 .text-start p,
 #unitResources_2 .text-start p,
 #unitResources_3 .text-start p {
-  font-size: 0.75rem;
+  font-size: 14px;
 }
 
 #unitResources .not_visible .unitIcon, 

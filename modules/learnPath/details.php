@@ -35,7 +35,6 @@ require_once '../../include/baseTheme.php';
 require_once 'include/lib/learnPathLib.inc.php';
 
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langLearningPaths);
-$toolName = $langStatsOfLearnPath;
 
 if (empty($_REQUEST['path_id'])) { // path id can not be empty
     header("Location: ./index.php?course=$course_code");
@@ -83,13 +82,14 @@ $learnPathName = Database::get()->querySingle("SELECT `name` FROM `lp_learnPath`
 
 if ($learnPathName) {
     $titleTab['subTitle'] = q($learnPathName->name);
-    $pageName = $langLearnPath.": ".disp_tool_title($titleTab);
+
+    $pageName = $langTracking . ": " .  q($learnPathName->name);
 
     if (isset($_GET['pdf'])) {
         $emailCol = "<th class='text-left'>$langEmail</th>";
     } else {
         $emailCol = '';
-        $tool_content .= action_bar(array(
+        $action_bar .= action_bar(array(
             array('title' => $langBack,
                 'url' => "index.php",
                 'icon' => 'fa-reply',
@@ -104,6 +104,7 @@ if ($learnPathName) {
                 'level' => 'primary-label')
 
         ));
+        $tool_content .= $action_bar;
     }
 
     $tool_content .= "<div class='table-responsive'>
@@ -172,7 +173,7 @@ if ($learnPathName) {
 if (isset($_GET['xls'])) {
     $spreadsheet = new Spreadsheet();
     $sheet = $spreadsheet->getActiveSheet();
-    $sheet->setTitle($langStatsOfLearnPath);
+    $sheet->setTitle($langTracking);
     $sheet->getDefaultColumnDimension()->setWidth(30);
     $filename = $course_code . " learning_path_results.xlsx";
 
@@ -200,7 +201,7 @@ if (isset($_GET['xls'])) {
         <html lang='el'>
         <head>
           <meta charset='utf-8'>
-          <title>" . q("$currentCourseName - $langStatsOfLearnPath") . "</title>
+          <title>" . q("$currentCourseName - $langTracking") . "</title>
           <style>
             * { font-family: 'opensans'; }
             body { font-family: 'opensans'; font-size: 10pt; }
