@@ -187,9 +187,15 @@ function drawPolygonWithBlank(points, color, fillColor, label, ctx, dataAttrs = 
     container.appendChild(blankDiv);
 
     // Position the span relative to the container
-    // Calculate top and left to center span on circle
-    blankDiv.style.left = centerPolX - 25 + 'px';
-    blankDiv.style.top = centerPolY - 25 + 'px';
+    // Calculate top and left to center the blank on polygon
+    if (markerWithImage == 1) { 
+        blankDiv.style.left = centerPolX - 75 + 'px';
+        blankDiv.style.top = centerPolY - 75 + 'px';
+    } else {
+        blankDiv.style.left = centerPolX - 50 + 'px';
+        blankDiv.style.top = centerPolY - 25 + 'px';
+    }
+    
 
 }
 
