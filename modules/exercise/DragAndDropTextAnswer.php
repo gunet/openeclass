@@ -67,7 +67,7 @@ class DragAndDropTextAnswer extends \QuestionType
         }
 
         load_js('drag-and-drop-shapes');
-        
+
         $head_content .= "<script>
                             document.addEventListener('DOMContentLoaded', function() {
                                 drag_and_drop_process();
@@ -82,6 +82,27 @@ class DragAndDropTextAnswer extends \QuestionType
                           </script>";
         }
 
+        return $html_content;
+    }
+
+    public function QuestionResult($choice, $eurid, $regrade, $extra_type = ''): string
+    {
+
+        global $questionScore;
+
+        $html_content = '';
+
+        $nbrAnswers = $this->answer_object->selectNbrAnswers();
+        $answer_object_ids = range(1, $nbrAnswers);
+
+        foreach ($answer_object_ids as $answerId) {
+            $answer = $this->answer_object->get_drag_and_drop_text();
+            $answerWeighting = $this->answer_object->get_drag_and_drop_answer_grade();
+            $arrResult = drag_and_drop_user_results_as_text($eurid, $this->question_id);
+            $answer = $arrResult[0]['aboutUserAnswers'];
+            $questionScore = $arrResult[0]['aboutUserGrade'];
+            $html_content .= "<tr><td>$answer</td></tr>";
+        }
         return $html_content;
     }
 }
