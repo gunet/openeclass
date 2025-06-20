@@ -284,6 +284,7 @@ function display_exercise($exercise_id): void
             <br>" . standard_text_escape($questionDescription) . "<br><br>
             </td></tr>";
 
+
             $classImg = '';
             $classContainer = '';
             $classCanvas = '';
@@ -344,7 +345,6 @@ function display_exercise($exercise_id): void
     }
 }
 
-
 function replaceBracketsWithBlanks($text,$cardId) {
     // Use preg_replace_callback to find all brackets
     return preg_replace_callback('/\[(\d+)\]/', function($matches) use ($cardId) {
@@ -354,8 +354,6 @@ function replaceBracketsWithBlanks($text,$cardId) {
         return "<span class='blank blank-drag-and-drop-text' data-answer='$blankId' data-blank-id='$blankId' data-card-id='$card'></span>";
     }, $text);
 }
-
-
 
 
 /**
@@ -452,3 +450,63 @@ function answer_question($question_id, $question_number, $answer_type, $exercise
 
     return $html;
 }
+
+/**
+ * @brief display user answer in question results
+ * @param $answer_type
+ * @param $question_id
+ * @param $choice
+ * @param $eurid
+ * @param $regrade
+ * @param $extra_type
+ * @return string
+ */
+function question_result($answer_type, $question_id, $choice, $eurid, $regrade): string {
+
+    $html = '';
+    switch ($answer_type) {
+        case MULTIPLE_ANSWER:
+            $answer = new MultipleChoiceMultipleAnswer($question_id);
+            $html .= $answer->QuestionResult($choice, $eurid, $regrade);
+            break;
+        case UNIQUE_ANSWER:
+        case TRUE_FALSE:
+            $answer = new MultipleChoiceUniqueAnswer($question_id);
+            $html .= $answer->QuestionResult($choice, $eurid, $regrade);
+            break;
+        case FILL_IN_BLANKS_TOLERANT:
+        case FILL_IN_BLANKS:
+            $answer = new FillInBlanksAnswer($question_id);
+            if (FILL_IN_BLANKS_TOLERANT) {
+                $html .= $answer->QuestionResult($choice, $eurid, $regrade, 'tolerant');
+            } else {
+                $html .= $answer->QuestionResult($choice, $eurid, $regrade);
+            }
+            break;
+        case FILL_IN_FROM_PREDEFINED_ANSWERS:
+            $answer = new FillInPredefinedAnswer($question_id);
+            $html .= $answer->QuestionResult($choice, $eurid, $regrade);
+            break;
+        case MATCHING:
+            $answer = new MatchingAnswer($question_id);
+            $html .= $answer->QuestionResult($choice, $eurid, $regrade);
+            break;
+        case FREE_TEXT:
+            $answer = new FreeTextAnswer($question_id);
+            $html .= $answer->QuestionResult($choice, $eurid, $regrade);
+            break;
+        case DRAG_AND_DROP_TEXT:
+            $answer = new DragAndDropTextAnswer($question_id);
+            $html .= $answer->QuestionResult($choice, $eurid, $regrade);
+            break;
+        case DRAG_AND_DROP_MARKERS:
+            $answer = new DragAndDropMarkersAnswer($question_id);
+            $html .= $answer->QuestionResult($choice, $eurid, $regrade);
+            break;
+    }
+
+    unset($answer);
+
+    return $html;
+}
+

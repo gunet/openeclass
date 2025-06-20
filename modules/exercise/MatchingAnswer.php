@@ -104,4 +104,57 @@ class MatchingAnswer extends QuestionType
         }
         return $html_content;
     }
+
+
+    public function QuestionResult($choice, $eurid, $regrade, $extra_type = ''): string
+    {
+        global $questionScore;
+
+        $html_content = '';
+
+        $nbrAnswers = $this->answer_object->selectNbrAnswers();
+        $answer_object_ids = range(1, $nbrAnswers);
+        foreach ($answer_object_ids as $answerId) {
+            $grade = 0;
+            $answer = standard_text_escape($this->answer_object->getTitle($answerId));
+            $answerCorrect = $this->answer_object->isCorrect($answerId);
+            $answerWeighting = $this->answer_object->getWeighting($answerId);
+
+            if ($answerCorrect) {
+                $thisChoice = isset($choice[$answerId]) ? $choice[$answerId] : null;
+                if ($answerCorrect == $thisChoice) {
+                    $questionScore += $answerWeighting;
+                    $grade = $answerWeighting;
+                    $choice[$answerId] = q($matching[$choice[$answerId]]);
+                    $icon = "<span class='fa-solid fa-check text-success'></span>";
+                    $pdf_icon = "✓";
+                } elseif (!$thisChoice) {
+                    $choice[$answerId] = '<del class="text-danger">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</del>';
+                    $icon = "<span class='fa-solid fa-xmark text-danger'></span>";
+                    $pdf_icon = "✓";
+                } else {
+                    $choice[$answerId] = "<span class='text-danger'><del>" .
+                        q($matching[$choice[$answerId]]) . "</del></span>";
+                    $icon = "<span class='fa-solid fa-xmark text-danger'></span>";
+                    $pdf_icon = "✓";
+                }
+            } else {
+                $icon = '';
+                $matching[$answerId] = $answer;
+            }
+            if ($regrade) {
+                Database::get()->query('UPDATE exercise_answer_record
+                                SET weight = ?f
+                                WHERE eurid = ?d AND question_id = ?d AND answer = ?d',
+                    $grade, $eurid, $this->question_id, $answerId);
+            }
+            if ($answerCorrect) {
+                $html_content .= "<tr><td><div class='d-flex align-items-center'><div class='d-flex align-items-end m-1 me-2 col-6'>" . q($answer) . "</div>";
+                $html_content .= "<div class='d-flex align-items-center col-6 m-1 me-2'>" . $choice[$answerId];
+                $html_content .= " / <span class='text-success'><strong>" . q($matching[$answerCorrect]) . "</strong></span>&nbsp;&nbsp;$icon";
+                $html_content .= "</div></div></td></tr>";
+            }
+        }
+        return $html_content;
+    }
 }

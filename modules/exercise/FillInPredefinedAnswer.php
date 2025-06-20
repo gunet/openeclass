@@ -89,4 +89,88 @@ class FillInPredefinedAnswer extends QuestionType
         $html_content .= "</div>";
         return $html_content;
     }
+
+
+    public function QuestionResult($choice, $eurid, $regrade, $extra_type = ''): string
+    {
+
+        global $langSelect, $questionScore;
+        $html_content = '';
+
+        $nbrAnswers = $this->answer_object->selectNbrAnswers();
+        $answer_object_ids = range(1, $nbrAnswers);
+
+        foreach ($answer_object_ids as $answerId) {
+            $answerTitle = $this->answer_object->getTitle($answerId);
+            $answer_array = unserialize($answerTitle);
+            $answer = $answer_array[0]; // answer text
+            // fetch possible answers for all choices
+            preg_match_all('/\[[^]]+\]/', $answer, $out);
+            $possible_answers = [];
+            foreach ($out[0] as $output) {
+                $possible_answers[] = explode("|", str_replace(array('[', ']'), ' ', q($output)));
+            }
+            $answer_string = $answer_array[1]; // answers
+            $answerWeighting = $answer_array[2]; // answer weight
+            $temp = $answer;
+            $answer = '';
+            $j = 1;
+            // the loop will stop at the end of the text
+            while (true) {
+                $answer_string = reindex_array_keys_from_one($answer_string); // start from 1
+                // quits the loop if there are no more blanks
+                if (($pos = strpos($temp, '[')) === false) {
+                    // adds the end of the text
+                    $answer .= q($temp);
+                }
+                // adds the piece of text that is before the blank and ended by [
+                $answer .= substr($temp, 0, $pos + 1);
+                $temp = substr($temp, $pos + 1);
+                // quits the loop if there are no more blanks
+                if (($pos = strpos($temp, ']')) === false) {
+                    // adds the end of the text
+                    $answer .= q($temp);
+                    break;
+                }
+
+                $possible_answer = $possible_answers[$j - 1]; // possible answers for each choice
+                $possible_answer = reindex_array_keys_from_one($possible_answer); // start from 1
+                if (isset($choice[$j]) and $choice[$j] == $answer_string[$j]) { // correct answer
+                    $questionScore += $answerWeighting[$j - 1]; // weight assignment
+                    if ($regrade) {
+                        Database::get()->query('UPDATE exercise_answer_record
+                                        SET weight = ?f
+                                        WHERE eurid = ?d AND question_id = ?d AND answer_id = ?d',
+                            $answerWeighting[$j - 1], $eurid, $this->question_id, $j);
+                    }
+                    // adds the word in green at the end of the string
+                    $answer .= '<strong>' . q($possible_answer[$choice[$j]]) . '</strong>';
+                    if (isset($_GET['pdf'])) {
+                        $icon = "<label class='label-container' aria-label='$langSelect'><input type='checkbox' checked='checked'><span class='checkmark'></span></label>";
+                    } else {
+                        $icon = "<span class='fa-solid fa-check text-success'></span>";
+                    }
+                } else { // wrong answer
+                    if (isset($choice[$j]) and isset($possible_answer[$choice[$j]])) { // if we have chosen something,
+                        // adds the word in red at the end of the string and strikes it
+                        $answer_choice = '<span class="text-danger"><s>' . q($possible_answer[$choice[$j]]) . '</s></span>';
+                    } else {
+                        $answer_choice = "&nbsp;&mdash;";
+                    }
+                    $answer .= $answer_choice;
+                    $icon = "<span class='fa-solid fa-xmark text-danger'></span>";
+                }
+                // adds the correct word, followed by ] to close the blank
+                $answer .= ' / <span class="text-success"><strong>' . q($possible_answer[$answer_string[$j]]) . '</strong></span>';
+                $answer .= "]";
+                $answer .= "&nbsp;&nbsp;$icon";
+                $j++;
+                $temp = substr($temp, $pos + 1);
+            }
+
+            $html_content .= "<tr><td>" . standard_text_escape(nl2br($answer)) . "</td></tr>";
+
+        }
+        return $html_content;
+    }
 }

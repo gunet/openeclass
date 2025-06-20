@@ -13,4 +13,6 @@ abstract class QuestionType {
 
     abstract public function PreviewQuestion(): string;
     abstract public function AnswerQuestion($question_number, $exerciseResult = [], $options = []): string;
+    abstract public function QuestionResult($choice, $eurid, $regrade, $extra_type = ''): string;
+
 }

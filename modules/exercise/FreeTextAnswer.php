@@ -19,4 +19,17 @@ class FreeTextAnswer extends QuestionType
         $text = (isset($exerciseResult[$questionId])) ? $exerciseResult[$questionId] : '';
         return rich_text_editor("choice[$questionId]", 14, 90, $text, options: $options);
     }
+
+
+    public function QuestionResult($choice, $eurid, $regrade, $extra_type = ''): string
+    {
+
+        global $questionScore, $question_weight;
+
+        $questionScore = $question_weight;
+        $html_content = "<tr><td>" . purify($choice) . "</td></tr>";
+
+        return $html_content;
+
+    }
 }
