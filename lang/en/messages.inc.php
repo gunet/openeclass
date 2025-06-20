@@ -1919,6 +1919,7 @@ $langErrorWithChoicesAsAnswers = "There is an error in the correspondence of the
 $langPredefinedAnswerExists = "You cannot enter the same or empty answer. Please try again.";
 $langPoint = "Point";
 $langThisAnswerIsNotCorrect = "Does not correspond to a correct answer";
+$langBracket = "Bracket";
 $langCalcelDroppableItem = "You can undo your answer by left-clicking on the word.";
 $langAllowMoreDefinedAnswersThanBlanks = "The predefined answers should be more than the number of blanks.";
 $langErrorWithUniqueNumberOfBlank = "You entered the same unique number in more than one space.";

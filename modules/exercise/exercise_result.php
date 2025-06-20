@@ -393,9 +393,19 @@ if (count($exercise_question_ids) > 0) {
 
         $tool_content .= "<tr><td colspan='2'>";
         $tool_content .= "<p>" . q_math($questionName) . "</p>" . standard_text_escape($questionDescription);
+
+        $classImg = '';
+        $classContainer = '';
+        $classCanvas = '';
+        if ($answerType == DRAG_AND_DROP_MARKERS) {
+            $classImg = 'drag-and-drop-markers-img';
+            $classContainer = 'drag-and-drop-markers-container';
+            $classCanvas = 'drag-and-drop-markers-canvas';
+        }
         if (file_exists($picturePath . '/quiz-' . $row->question_id)) {
-            $tool_content .= "<div style='padding: 20px;' class='text-center'>
-                                <img src='../../$picturePath/quiz-" . $row->question_id . "'>
+            $tool_content .= "<div class='$classContainer' id='image-container-$row->question_id' style='position: relative; display: inline-block;'>
+                                <img class='$classImg' id='img-quiz-$row->question_id' src='../../$picturePath/quiz-$row->question_id' style='width: 100%;'>
+                                <canvas id='drawingCanvas-$row->question_id' class='$classCanvas'></canvas>
                               </div>";
         }
 
@@ -463,6 +473,10 @@ if (count($exercise_question_ids) > 0) {
                             $arrResult = drag_and_drop_user_results_as_text($eurid, $row->question_id);
                             $answer = $arrResult[0]['aboutUserAnswers'];
                             $questionScore = $arrResult[0]['aboutUserGrade'];
+                            if ($answerType == DRAG_AND_DROP_MARKERS) {// Display blanks on the image
+                                $blanks = new DragAndDropMarkersAnswer($row->question_id);
+                                $tool_content .= $blanks->PreviewQuestion();
+                            }
                             break;
                         case FILL_IN_BLANKS :
                         case FILL_IN_BLANKS_TOLERANT :
@@ -892,8 +906,11 @@ if (isset($_GET['pdf'])) {
 
 
 function drag_and_drop_user_results_as_text($eurid,$questionId) {
+
+    global $langPoint, $course_code, $urlAppend;
+
     $objAnswerTmp = new Answer($questionId);
-    $ex_answer = Database::get()->querySingle("SELECT answer FROM exercise_answer WHERE question_id = ?d", $questionId)->answer;
+    $qType = Database::get()->querySingle("SELECT type FROM exercise_question WHERE id = ?d", $questionId)->type;
     $ex_answer = $objAnswerTmp->get_drag_and_drop_text();
 
     $definedAnswers = $objAnswerTmp->get_drag_and_drop_answer_text();
@@ -903,32 +920,101 @@ function drag_and_drop_user_results_as_text($eurid,$questionId) {
     $definedAnswers = array_combine($keys, $definedAnswers);
 
     $ex_user_record = Database::get()->queryArray("SELECT answer,answer_id,weight FROM exercise_answer_record WHERE eurid = ?d AND question_id = ?d", $eurid, $questionId);
-
     $userGrade = 0;
     // Use preg_replace_callback to find all [number] patterns
-    $result = preg_replace_callback('/\[(\d+)\]/', function($matches) use ($definedAnswers, $ex_user_record, &$userGrade) {
+    $result = preg_replace_callback('/\[(\d+)\]/', function($matches) use ($definedAnswers, $ex_user_record, &$userGrade, $qType, $langPoint, $questionId, $course_code, $urlAppend) {
         $bracket = (int)$matches[1];
+        $replacement = ''; // Initialize to empty
+        
         if ($bracket > 0) {
-            // Here we create the answer like [user_answer / defined_answer] .
             foreach ($ex_user_record as $an) {
+                $userAnswerAsImage = $predefindedAnswerAsImage = false;
+                $newLine = $currentBracket = $userAnswerImg = $predefinedAnswerImg= '';
                 if ($an->answer_id == $bracket) {
+                    if ($qType == DRAG_AND_DROP_MARKERS) {
+                        $newLine = '</br>';
+                        $currentBracket = $langPoint . "[$bracket] -> ";
+                        $userAnswerAsImage = checkMarkerImage($an->answer_id, $an->answer, $questionId);
+                        $predefindedAnswerAsImage = checkMarkerImage($bracket, $definedAnswers[$bracket], $questionId);
+                    }
+
+                    if ($userAnswerAsImage && $predefindedAnswerAsImage) {
+                        $userAnswerImg = "<img src='../../courses/$course_code/image/answer-$questionId-$an->answer_id' style='width:30px; height: 30px;'>";
+                        $predefinedAnswerImg = "<img src='../../courses/$course_code/image/answer-$questionId-$bracket' style='width:30px; height: 30px;'>";
+                    }
+
                     if ($an->answer == $definedAnswers[$bracket]) { // correct answer
                         $userGrade += $an->weight;
-                        return "[" . "<strong>".$an->answer."</strong>" . "&nbsp;/&nbsp;" . $definedAnswers[$bracket] . "]" . "&nbsp;&nbsp;<span class='fa-solid fa-check text-success'></span>";
+                        $replacement = $currentBracket . "[" . "<strong class='Success-200-cl'>".$an->answer."</strong>$userAnswerImg" . "&nbsp;/&nbsp;" . $definedAnswers[$bracket] . "]$predefinedAnswerImg" . "&nbsp;&nbsp;<span class='fa-solid fa-check text-success'></span>$newLine";
                     } else {
                         if (!empty($an->answer)) {
-                            return "[" . "<span class='text-danger'><s>".$an->answer."</s></span>" . "&nbsp;/&nbsp;" . $definedAnswers[$bracket] . "]" . "&nbsp;&nbsp;<span class='fa-solid fa-xmark text-danger'></span>";
+                            // Get the correct bracket for incorrect answer for displaying image
+                            if ($predefindedAnswerAsImage) {
+                                $usIndex = array_search($an->answer, $definedAnswers);
+                                $userAnswerImg = "<img src='../../courses/$course_code/image/answer-$questionId-$usIndex' style='width:30px; height: 30px;'>";
+                                $prIndex = array_search($definedAnswers[$bracket], $definedAnswers);
+                                $predefinedAnswerImg = "<img src='../../courses/$course_code/image/answer-$questionId-$prIndex' style='width:30px; height: 30px;'>";
+                            }
+                            $replacement = $currentBracket . "[" . "<span class='text-danger'><s>".$an->answer."</s></span>$userAnswerImg" . "&nbsp;/&nbsp;" . $definedAnswers[$bracket] . "]$predefinedAnswerImg" . "&nbsp;&nbsp;<span class='fa-solid fa-xmark text-danger'></span>$newLine";
                         } else {
-                            return "[" . "<span>&nbsp;&nbsp;&nbsp;</span>" . "/&nbsp;" . $definedAnswers[$bracket] . "]" . "&nbsp;&nbsp;<span class='fa-solid fa-xmark text-danger'></span>";
+                            $replacement = $currentBracket . "[" . "<span>&nbsp;&nbsp;&nbsp;</span>" . "/&nbsp;" . $definedAnswers[$bracket] . "]$predefinedAnswerImg" . "&nbsp;&nbsp;<span class='fa-solid fa-xmark text-danger'></span>$newLine";
                         }
                     }
+                    break; // Exit loop once a match is found
                 }
             }
         }
-        return $matches[0];
+        // If no matching answer was found, $replacement remains '' (empty string)
+        return $replacement;
     }, $ex_answer);
 
     $arr[] = ['aboutUserAnswers' => $result, 'aboutUserGrade' => $userGrade];
 
     return $arr;
+}
+
+
+/**
+ * Function to check if marker_answer_with_image is "1" for given marker_id and marker_answer
+ *
+ * @param array $data The decoded JSON data
+ * @param int $marker_id The marker ID to search for
+ * @param string $marker_answer The marker answer to match
+ * @return bool Returns true if marker_answer_with_image == "1", false otherwise
+ */
+function checkMarkerImage($marker_id, $marker_answer, $questionId) {
+
+    global $webDir,$course_code;
+
+    $dropZonesDir = "$webDir/courses/$course_code/image";
+    $dropZonesFile = "$dropZonesDir/dropZones_$questionId.json";
+
+    if (file_exists($dropZonesFile)) {
+        $dataJsonFile = file_get_contents($dropZonesFile);
+        $data = json_decode($dataJsonFile, true);
+        foreach ($data as $item) {
+            $idMatch = false;
+            $answerMatch = false;
+            $imageFlag = null;
+            foreach ($item as $pair) {
+                if (isset($pair['marker_id']) && $pair['marker_id'] == $marker_id) {
+                    $idMatch = true;
+                }
+                if (isset($pair['marker_answer']) && $pair['marker_answer'] == $marker_answer) {
+                    $answerMatch = true;
+                }
+                if (isset($pair['marker_answer_with_image'])) {
+                    $imageFlag = $pair['marker_answer_with_image'];
+                }
+            }
+            // If both marker_id and marker_answer match, check the image flag
+            if ($idMatch && $answerMatch) {
+                return $imageFlag === "1";
+            }
+        }
+        // If no match found
+        return false;
+    } else {
+        return false;
+    }
 }

@@ -15,28 +15,34 @@ class DragAndDropMarkersAnswer extends \QuestionType
 
         $questionId = $this->question_id;
 
-        $html_content = "<tr class='active'><td><strong>$langAnswer</strong></td></tr>";
+        $html_content = '';
 
-        $markersWithAnswers = $this->answer_object->get_drag_and_drop_markers_with_answers();
-        $markersWithGrades = $this->answer_object->get_drag_and_drop_markers_with_grades();
-        $gradesOfAnswers = $this->answer_object->get_drag_and_drop_answer_grade();
-        $AnswersGradeArr= [];
-        foreach ($gradesOfAnswers as $gr) {
-            $AnswersGradeArr[] = $gr;
-        }
-        $AnswersGrade = implode(':', $AnswersGradeArr);
-        $html_content .= "<tr>
-                           <td> 
-                                <strong><small class='text-nowrap'>($langScore: $AnswersGrade)</small></strong>";
-                    foreach ($markersWithAnswers as $index => $val) {
-                        $html_content .= "<div class='mt-2'>$langPoint [$index] = $val";
-                        if (isset($markersWithGrades[$index]) && $markersWithGrades[$index] == 0) {
-                            $html_content .= "&nbsp;&nbsp;<span class='Accent-200-cl'>($langThisAnswerIsNotCorrect)</span>";
+        if (!isset($_GET['eurId'])) { // Display them in preview question
+
+            $html_content = "<tr class='active'><td><strong>$langAnswer</strong></td></tr>";
+
+            $markersWithAnswers = $this->answer_object->get_drag_and_drop_markers_with_answers();
+            $markersWithGrades = $this->answer_object->get_drag_and_drop_markers_with_grades();
+            $gradesOfAnswers = $this->answer_object->get_drag_and_drop_answer_grade();
+            $AnswersGradeArr= [];
+            foreach ($gradesOfAnswers as $gr) {
+                $AnswersGradeArr[] = $gr;
+            }
+            $AnswersGrade = implode(':', $AnswersGradeArr);
+        
+            $html_content .= "<tr>
+                            <td> 
+                                    <strong><small class='text-nowrap'>($langScore: $AnswersGrade)</small></strong>";
+                        foreach ($markersWithAnswers as $index => $val) {
+                            $html_content .= "<div class='mt-2'>$langPoint [$index] = $val";
+                            if (isset($markersWithGrades[$index]) && $markersWithGrades[$index] == 0) {
+                                $html_content .= "&nbsp;&nbsp;<span class='Accent-200-cl'>($langThisAnswerIsNotCorrect)</span>";
+                            }
+                            $html_content .= "</div>";
                         }
-                        $html_content .= "</div>";
-                    }
-        $html_content .= "</td>
-                         </tr>";
+            $html_content .= "</td>
+                            </tr>";
+        }
 
         // Create the blanks on the image and display them if the question type is DRAG AND DROP MARKERS.
         $dropZonesDir = "$webDir/courses/$course_code/image";
@@ -101,6 +107,9 @@ class DragAndDropMarkersAnswer extends \QuestionType
 
         $DataMarkersToJson = json_encode($coordinatesXY) ?? '';
         $preview = $_GET['preview'] ?? 0;
+        if (isset($_GET['eurId'])) { // Display the blanks of an image inside the user's results.
+            $preview = 1;
+        }
 
         // Show the blanks on the image
         if ($DataMarkersToJson) {

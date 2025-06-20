@@ -2171,6 +2171,7 @@ $langCircle = "Κύκλος";
 $langPolygon = "Πολύγωνο";
 $langPoint = "Σημείο";
 $langThisAnswerIsNotCorrect = "Δεν αντιστοιχεί σε σωστή απάντηση";
+$langBracket = "Αγκύλη";
 
 $langAddAnswerThroughImg = "Η προκαθορισμένη απάντηση θα εμφανίζεται μέσω της εικόνας";
 $langImageHasBeenDeleted = "Η εικόνα διαγράφηκε επιτυχώς.";

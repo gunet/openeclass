@@ -11,7 +11,7 @@ class DragAndDropTextAnswer extends \QuestionType
 
     public function PreviewQuestion(): string
     {
-        global $langAnswer, $langScore, $head_content, $webDir, $course_code, $langPoint, $langThisAnswerIsNotCorrect;
+        global $langAnswer, $langScore, $head_content, $webDir, $course_code, $langBracket, $langThisAnswerIsNotCorrect;
 
         $questionId = $this->question_id;
 
@@ -29,7 +29,7 @@ class DragAndDropTextAnswer extends \QuestionType
                            <td>
                             <strong><small class='text-nowrap'>($langScore: $AnswersGrade)</small></strong>";
                     foreach ($textWithAnswers as $index => $val) {
-                        $html_content .= "<div class='mt-2'>$langPoint [$index] = $val";
+                        $html_content .= "<div class='mt-2'>$langBracket [$index] = $val";
                         if (isset($textWithGrades[$index]) && $textWithGrades[$index] == 0) {
                             $html_content .= "&nbsp;&nbsp;<span class='Accent-200-cl'>($langThisAnswerIsNotCorrect)</span>";
                         }
