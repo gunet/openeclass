@@ -507,14 +507,14 @@ foreach ($result as $list) { // while ... learning path list
                     </span>";
         }
 
-        if(!$is_editor) { // If is student
-            $play_button = "<span class='ps-2'><a href='learningPath.php?course=".$course_code."&amp;path_id=".$list->learnPath_id."'><span class='fa fa-line-chart' data-bs-toggle='tooltip' data-bs-placement='top' title='$langLearningPathData'></span></a></span>";
+        if(!$is_editor) { // student
+            $play_button = "<span class='ps-2'><a href='learningPath.php?course=".$course_code."&amp;path_id=".$list->learnPath_id."'><span class='fa fa-line-chart' data-bs-toggle='tooltip' data-bs-placement='top' title='$langTracking'></span></a></span>";
             if (count($resultmodules) > 0) { // If there are modules
                 $play_url = "<a href='viewer.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "&amp;module_id=" . $resultmodules[0]->module_id . "'>" . htmlspecialchars($list->name) . "</a>";
             } else { // If there are no modules
                 $play_url = htmlspecialchars($list->name);
             }
-        } else { // If is admin
+        } else { //  admin
             $play_button = "";
             if (count($resultmodules) > 0) { // If there are modules
                 $play_url = "<a href='viewer.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "&amp;module_id=" . $resultmodules[0]->module_id . "'>" . htmlspecialchars($list->name) . "</a>";
@@ -531,7 +531,7 @@ foreach ($result as $list) { // while ... learning path list
 
         // --------------TEST IF FOLLOWING PATH MUST BE BLOCKED------------------
         // ---------------------(MUST BE OPTIMIZED)------------------------------
-        // step 1. find last visible module of the current learning path in DB
+        // step 1. find the last visible module of the current learning path in DB
 
         $blocksql = "SELECT `learnPath_module_id`
                      FROM `lp_rel_learnPath_module`
@@ -657,8 +657,8 @@ foreach ($result as $list) { // while ... learning path list
         }
         // % progress
         $prog = get_learnPath_combined_progress($list->learnPath_id, $uid);
-        $tool_content .= "<td>$lpTotalTime</td>";
-        $tool_content .= "<td>" . disp_progress_bar($prog, 1) . "</td>";
+        $tool_content .= "<td style='width: 15%;'>$lpTotalTime</td>";
+        $tool_content .= "<td style='width: 15%;'>" . disp_progress_bar($prog, 1) . "</td>";
     }
 
     $tool_content .= "</tr>";

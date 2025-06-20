@@ -88,7 +88,7 @@ function commentBox($type, $mode) {
 
     // will be set 'true' if the comment has to be displayed
     $dsp = false;
-    $output = "";
+    $output = $defaultTxt = "";
 
     // those vars will be used to build sql queries according to the comment type
     switch ($type) {
@@ -158,8 +158,8 @@ function commentBox($type, $mode) {
         $result = Database::get()->querySingle($sql);
         $currentComment = ($result && !empty($result->$col_name)) ? $result->$col_name : false;
 
-        // display nothing if this is default comment and not an admin
-        if (($currentComment == $defaultTxt) && !$is_editor) {
+        // display nothing if this is the default comment and not an admin
+        if (($currentComment == $defaultTxt || empty($currentComment)) && !$is_editor) {
             return $output;
         }
 
@@ -1445,25 +1445,11 @@ function disp_button($url, $text, $confirmMessage = '') {
 
 function disp_progress_bar($progress, $factor) {
 
-    $maxSize = $factor * 100; //pixels
-    $barwidth = $factor * $progress;
-
-    // display progress bar
-    // origin of the bar
-
-
-    /*$progressBar = "
-    <div class='progress' style='display: inline-block; width: 200px; margin-bottom:0px;'>
-        <div class='progress-bar' role='progressbar' aria-valuenow='60' aria-valuemin='0' aria-valuemax='100' style='width: $progress%; min-width: 2em;'>
-            $progress%
-        </div>
-    </div>";*/
 
     // Progress bar not displaying in mpdf library
     if (!isset($_GET['pdf'])) {
-        //$progressBar = "<div class='progress-circle-bar' role='progressbar' aria-valuenow=$progress aria-valuemin='0' aria-valuemax='100' style='--value: $progress; --size: 6rem;'></div>";
         $progressBar = "
-        <div class='progress' style='display: inline-block; width: 200px; height:auto; margin-bottom:0px;'>
+        <div class='progress' style='display: inline-block; width: 100px; height:auto; margin-bottom:0px;'>
             <div class='progress-bar' role='progressbar' aria-valuenow='60' aria-valuemin='0' aria-valuemax='100' style='width: $progress%; min-width: 2em; min-height:100%;'>
                 $progress%
             </div>
@@ -1471,7 +1457,6 @@ function disp_progress_bar($progress, $factor) {
     } else {
         $progressBar = "<p>$progress%</p>";
     }
-
 
     return $progressBar;
 }
