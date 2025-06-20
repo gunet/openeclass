@@ -253,7 +253,7 @@ foreach ($flatElementList as $module) {
 
     //-- if chapter head
     if ($module['contentType'] == CTLABEL_) {
-        $tool_content .= '<b>' . htmlspecialchars($module['name']) . '</b>' . "";
+        $tool_content .= '<strong>' . htmlspecialchars($module['name']) . '</strong>' . "";
     }
     //-- if user can access module
     elseif (!$is_blocked) {
@@ -286,7 +286,7 @@ foreach ($flatElementList as $module) {
             and ($module['credit'] != 'CREDIT'
             or ($module['lesson_status'] != 'COMPLETED' and $module['lesson_status'] != 'PASSED')))
             {
-                    $is_blocked = true; // following modules will be unlinked
+                $is_blocked = true; // the following modules will be unlinked
             }
     } else { //-- user is blocked by previous module, don't display link
         if ($module['contentType'] == CTEXERCISE_) {
@@ -303,6 +303,8 @@ foreach ($flatElementList as $module) {
 
         $tool_content .= "<span>" . icon($moduleImg, $contentType_alt) . "</span>" . q($module['name']);
     }
+
+    $tool_content .= "<span class='ps-2'><a href='detailsUserPath.php?course=" . $course_code . "&uInfo=" .$uid . "&path_id=" . intval($_SESSION['path_id']) . "'><span class='fa fa-line-chart' data-bs-toggle='tooltip' data-bs-placement='top' title='$langDetails'></span></a></span>";;
     $tool_content .= "</td>";
 
     if ($uid && ($module['contentType'] != CTLABEL_)) {
@@ -319,7 +321,7 @@ foreach ($flatElementList as $module) {
         $tool_content .= "<td>" . disp_progress_bar($progress, 1) . "</td>";
     }
     elseif ($uid && $module['contentType'] == CTLABEL_) {
-        $tool_content .= '<td>&nbsp;</td>' . "\n";
+        $tool_content .= '<td>&nbsp;</td>';
     }
     if ($progress > 0) {
         $globalProg = $globalProg + $progress;
