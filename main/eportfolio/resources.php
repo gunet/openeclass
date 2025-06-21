@@ -314,6 +314,24 @@ if ($userdata) {
                         }
                     }
                     redirect_to_home_page("main/mycertificates.php");
+                } elseif ($rtype == 'note') {
+                    $noteExists = Database::get()->querySingle("SELECT id FROM eportfolio_resource WHERE user_id = ?d AND resource_id = ?d AND resource_type = ?s", $uid, $rid, $rtype);
+                    if ($noteExists) {
+                        Session::flash('message', $langResourceExists);
+                        Session::flash('alert-class', 'alert-warning');
+                    } else {
+                        $note = Database::get()->querySingle("SELECT * FROM note WHERE id = ?d AND user_id = ?d", $rid, $uid);
+                        if($note && get_config('enable_quick_note')) {
+                            $data = array('title' => $note->title, 'content' => $note->content, 'date_time' => $note->date_time);
+                            Database::get()->query("INSERT INTO eportfolio_resource (user_id,resource_id,resource_type,data)
+                                    VALUES (?d,?d,?s,?s)", $uid, $rid, 'note', serialize($data));
+                            Session::flash('message', $langePortfolioResourceAdded);
+                            Session::flash('alert-class','alert-success');
+                        } else {
+                            Session::flash('message', $langGeneralError);
+                            Session::flash('alert-class', 'alert-danger');
+                        } 
+                    }
                 }
             }
         } elseif (isset($_GET['action']) && $_GET['action'] == 'remove' && isset($_GET['er_id'])) {
