@@ -322,9 +322,14 @@ if ($userdata) {
                     } else {
                         $note = Database::get()->querySingle("SELECT * FROM note WHERE id = ?d AND user_id = ?d", $rid, $uid);
                         if($note && get_config('enable_quick_note')) {
-                            $data = array('title' => $note->title, 'content' => $note->content, 'date_time' => $note->date_time);
-                            Database::get()->query("INSERT INTO eportfolio_resource (user_id,resource_id,resource_type,data)
+                            $data = array('title' => $note->title, 'content' => $note->content, 'date_time' => $note->date_time);                            
+                            if (empty($note->reference_obj_course)) {
+                                Database::get()->query("INSERT INTO eportfolio_resource (user_id,resource_id,resource_type,data)
                                     VALUES (?d,?d,?s,?s)", $uid, $rid, 'note', serialize($data));
+                            } else {
+                                Database::get()->query("INSERT INTO eportfolio_resource (user_id,resource_id,resource_type, course_id,course_title,data)
+                                    VALUES (?d,?d,?s,?d,?s,?s)", $uid, $rid, 'note', $note->reference_obj_course, course_id_to_title($note->reference_obj_course), serialize($data));
+                            }
                             Session::flash('message', $langePortfolioResourceAdded);
                             Session::flash('alert-class','alert-success');
                         } else {
