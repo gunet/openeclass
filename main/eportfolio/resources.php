@@ -462,9 +462,10 @@ if ($userdata) {
     $docs = Database::get()->queryArray("SELECT * FROM eportfolio_resource WHERE user_id = ?d AND resource_type = ?s ORDER BY time_added DESC", $id, 'mydocs');
     $myBadges = Database::get()->queryArray("SELECT * FROM eportfolio_resource WHERE user_id = ?d AND resource_type = ?s ORDER BY time_added DESC", $id, 'my_badges');
     $myCertificates = Database::get()->queryArray("SELECT * FROM eportfolio_resource WHERE user_id = ?d AND resource_type = ?s ORDER BY time_added DESC", $id, 'my_certificates');
+    $notes = Database::get()->queryArray("SELECT * FROM eportfolio_resource WHERE user_id = ?d AND resource_type = ?s ORDER BY time_added DESC", $id, 'note');
 
     //hide tabs when there are no resources
-    if (!$blog_posts && !$submissions && !$docs && !$myBadges && !$myCertificates) {
+    if (!$blog_posts && !$submissions && !$docs && !$myBadges && !$myCertificates && !$notes) {
         $tool_content .= "<div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langePortfolioNoResInCollection</span></div></div>";
     } else {
 
@@ -530,12 +531,25 @@ if ($userdata) {
             $myCertificates_li = '';
         }
 
+        if ($notes) {
+            $notes_li = '<li class="nav-item" role="presentation"><button id="notestab" class="nav-link" data-bs-toggle="tab" data-bs-target="#notes">'.$langNotes.'</button></li>';
+            if ($active_class != '') {
+                $notes_div_class = 'tab-pane fade show active';
+            } else {
+                $notes_div_class = 'tab-pane fade';
+            }
+            $active_class = '';
+        } else {
+            $notes_li = '';
+        }
+
         $tool_content .= '<div class="col-12"><ul class="nav nav-tabs" role="tablist">
                             '.$blog_li.'
                             '.$work_li.'
                             '.$mydocs_li.'
                             '.$myBadges_li.'
                             '.$myCertificates_li.'
+                            '.$notes_li.'
                           </ul></div>';
         $tool_content .= '<div class="col-12"><div class="tab-content pb-4">';
 
@@ -805,6 +819,50 @@ if ($userdata) {
                                                 " . $data['issuer'] . "
                                             </a>
                                         </div>
+                                    </div>
+                                </div>";
+            $tool_content .= "</div>";
+            }
+            $tool_content .= "
+                            </div>
+                          </div>";
+        }
+
+        //show personal notes
+        if ($notes) {
+            $tool_content .= '<div id="notes" role="tabpanel" class="'.$notes_div_class.'" aria-labelledby="notestab" >';
+            $tool_content .= "<div class='row row-cols-1 row-cols-md-2 g-4'>";
+
+            foreach ($notes as $note) {
+                $tool_content .= "<div class='col'>";
+                $data = unserialize($note->data);
+                if (!empty($note->course_title)) {
+                    $note_course_title = $langCourse.': '.q($note->course_title);
+                } else {
+                    $note_course_title = "";
+                }
+
+                $tool_content .= "<div class='card panelCard card-default px-lg-4 py-lg-3 mt-3 h-100'>
+                                    <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>                                           
+                                        <h3>".q($data['title'])."</h3>                                    
+                                        <div>
+                                            ". action_button(array(
+                                                array(
+                                                    'title' => $langePortfolioRemoveResource,
+                                                    'url' => "$_SERVER[SCRIPT_NAME]?token=$token&amp;action=remove&amp;type=note&amp;er_id=".$note->id,
+                                                    'icon' => 'fa-xmark',
+                                                    'class' => 'delete',
+                                                    'confirm' => $langePortfolioSureToRemoveResource,
+                                                    'show' => ($note->user_id == $uid)
+                                                )))."
+                                        </div>                                          
+                                    </div>
+                                    <div class='card-body'>
+                                        <p class='TextBold'>$langSubmit:<span class='ms-1 small-text TextRegular'>" . format_locale_date(strtotime($data['date_time'])) . "</span></p>
+                                        ".standard_text_escape($data['content'])."
+                                    </div>
+                                    <div class='card-footer border-0 d-flex justify-content-start align-items-center'>                                       
+                                        <div class='small-text'>$note_course_title</div>                                       
                                     </div>
                                 </div>";
             $tool_content .= "</div>";
