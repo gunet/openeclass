@@ -3343,6 +3343,12 @@ function upgrade_to_4_1($tbl_options) : void {
  * @return void
  */
 function upgrade_to_4_2($tbl_options) : void {
+
+    global $langResearchProfiles, $langGoogleScholarProfile, $langScopusID, $langOrcid,
+           $langEnglish, $langFrench, $langGerman, $langSpanish, $langItalian, $langLangProfLevel,
+           $langLangCEFRA1, $langLangCEFRA2, $langLangCEFRB1, $langLangCEFRB2, $langLangCEFRC1,
+           $langLangCEFRC2, $langSocialActivities, $langVolunteerActivities, $langVolontSocialAct;
+
     if (!DBHelper::fieldExists('forum_topic', 'pin_time')) {
         Database::get()->query("ALTER TABLE forum_topic ADD pin_time DATETIME DEFAULT NULL");
     }
@@ -3360,14 +3366,14 @@ function upgrade_to_4_2($tbl_options) : void {
     } else {
         $min_eportf_cat_order = 0;
     }
-    
+
     $eportf_cat_id = Database::get()->query("INSERT INTO eportfolio_fields_category (name, sortorder) VALUES ('$langResearchProfiles', $min_eportf_cat_order)")->lastInsertID;
     Database::get()->query("INSERT INTO eportfolio_fields (shortname, name, description, datatype, categoryid, sortorder, required, data) VALUES
         ('gscholar', '$langGoogleScholarProfile', '', '5', $eportf_cat_id, 0, 0, ''),
         ('scopus', '$langScopusID', '', '1', $eportf_cat_id, -1, 0, ''),
         ('orcid', '$langOrcid', '', '5', $eportf_cat_id, -2, 0, '')");
     $min_eportf_cat_order--;
-    
+
     $eportf_cat_id = Database::get()->query("INSERT INTO eportfolio_fields_category (name, sortorder) VALUES ('$langLangProfLevel', $min_eportf_cat_order)")->lastInsertID;
     $lang_proficiency_levels = [$langLangCEFRA1, $langLangCEFRA2, $langLangCEFRB1, $langLangCEFRB2, $langLangCEFRC1, $langLangCEFRC2];
     Database::get()->query("INSERT INTO eportfolio_fields (shortname, name, description, datatype, categoryid, sortorder, required, data) VALUES
@@ -3377,12 +3383,12 @@ function upgrade_to_4_2($tbl_options) : void {
         ('italian', '$langItalian', '', '4', $eportf_cat_id, -3, 0, '".serialize($lang_proficiency_levels)."'),
         ('spanish', '$langSpanish', '', '4', $eportf_cat_id, -4, 0, '".serialize($lang_proficiency_levels)."')");
     $min_eportf_cat_order--;
-    
+
     $eportf_cat_id = Database::get()->query("INSERT INTO eportfolio_fields_category (name, sortorder) VALUES ('$langVolontSocialAct', $min_eportf_cat_order)")->lastInsertID;
     Database::get()->query("INSERT INTO eportfolio_fields (shortname, name, description, datatype, categoryid, sortorder, required, data) VALUES
         ('social_activities', '$langSocialActivities', '', '2', $eportf_cat_id, 0, 0, ''),
         ('volunteer_activities', '$langVolunteerActivities', '', '2', $eportf_cat_id, -1, 0, '')");
-    
+
     Database::get()->query("ALTER TABLE eportfolio_fields ADD UNIQUE (shortname)");
 }
 
