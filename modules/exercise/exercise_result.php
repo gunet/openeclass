@@ -29,7 +29,6 @@ require_once 'modules/exercise/exercise.lib.php';
 require_once 'modules/gradebook/functions.php';
 require_once 'game.php';
 require_once 'analytics.php';
-const LIB = false; // if set to true, use new class methods ...
 
 $unit = $unit ?? null;
 
@@ -404,8 +403,7 @@ if (count($exercise_question_ids) > 0) {
         }
         if (file_exists($picturePath . '/quiz-' . $row->question_id)) {
             $tool_content .= "<div class='$classContainer' id='image-container-$row->question_id' style='position: relative; display: inline-block;'>
-                                <img class='$classImg' id='img-quiz-$row->question_id' src='../../$picturePath/quiz-$row->question_id' style='width: 100%;'>
-                                <canvas id='drawingCanvas-$row->question_id' class='$classCanvas'></canvas>
+                                <img class='$classImg' id='img-quiz-$row->question_id' src='../../$picturePath/quiz-$row->question_id' style='width: 100%;'>                                
                               </div>";
         }
 
@@ -415,299 +413,10 @@ if (count($exercise_question_ids) > 0) {
             $tool_content .= "<tr class='active'><th colspan='2'><u>$langAnswer</u></th></tr>";
         }
         $questionScore = 0;
-        if (LIB == false) {
-            //$questionScore = 0;
-            if ($answerType != FREE_TEXT) { // if NOT FREE TEXT (i.e., question has answers)
-                // construction of the Answer object
-                $objAnswerTmp = new Answer($row->question_id);
-                $nbrAnswers = $objAnswerTmp->selectNbrAnswers();
 
-                for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
-                    $answer = $objAnswerTmp->getTitle($answerId);
-                    $answerComment = $objAnswerTmp->getComment($answerId);
-                    $answerCorrect = $objAnswerTmp->isCorrect($answerId);
-                    $answerWeighting = $objAnswerTmp->getWeighting($answerId);
+        // display results
+        $tool_content .= question_result($answerType, $row->question_id, $choice, $eurid, $regrade);
 
-                    if ($answerType == FILL_IN_BLANKS or $answerType == FILL_IN_BLANKS_TOLERANT) {
-                        list($answer, $answerWeighting) = Question::blanksSplitAnswer($answer);
-                    } elseif ($answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) {
-                        $answer_array = unserialize($answer);
-                    } elseif ($answerType == DRAG_AND_DROP_TEXT || $answerType == DRAG_AND_DROP_MARKERS) {
-                        $answer = $objAnswerTmp->get_drag_and_drop_text();
-                        $answerWeighting = $objAnswerTmp->get_drag_and_drop_answer_grade();
-                        if ($answerType == DRAG_AND_DROP_MARKERS) {
-                            // Change indexes to start from 0.
-                            $arrTmp = [];
-                            foreach ($answerWeighting as $index => $value) {
-                                if ($index > 0) {
-                                    $index = $index - 1;
-                                    $arrTmp[$index] = $value;
-                                }
-                            }
-                            $answerWeighting = $arrTmp;
-                        }
-                    } else {
-                        $answer = standard_text_escape($answer);
-                    }
-                    $grade = 0;
-                    switch ($answerType) {
-
-                        case TRUE_FALSE:
-                        case UNIQUE_ANSWER :
-                            $studentChoice = ($choice == $answerId) ? 1 : 0;
-                            if ($studentChoice) {
-                                $questionScore += $answerWeighting;
-                                $grade = $answerWeighting;
-                            }
-                            break;
-
-                        case MULTIPLE_ANSWER :
-                            $studentChoice = @$choice[$answerId];
-                            if ($studentChoice) {
-                                $questionScore += $answerWeighting;
-                                $grade = $answerWeighting;
-                            }
-                            break;
-                        case DRAG_AND_DROP_TEXT :
-                        case DRAG_AND_DROP_MARKERS :
-                            $arrResult = drag_and_drop_user_results_as_text($eurid, $row->question_id);
-                            $answer = $arrResult[0]['aboutUserAnswers'];
-                            $questionScore = $arrResult[0]['aboutUserGrade'];
-                            if ($answerType == DRAG_AND_DROP_MARKERS) {// Display blanks on the image
-                                $blanks = new DragAndDropMarkersAnswer($row->question_id);
-                                $tool_content .= $blanks->PreviewQuestion();
-                            }
-                            break;
-                        case FILL_IN_BLANKS :
-                        case FILL_IN_BLANKS_TOLERANT :
-                            // splits weightings that are joined with a comma
-                            $answerWeighting = explode(',', $answerWeighting);
-                            // we save the answer because it will be modified
-                            $temp = $answer;
-                            $answer = '';
-                            $j = 1;
-                            // the loop will stop at the end of the text
-                            while (1) {
-                                // quits the loop if there are no more blanks
-                                if (($pos = strpos($temp, '[')) === false) {
-                                    // adds the end of the text
-                                    $answer .= q($temp);
-                                    break;
-                                }
-                                // adds the piece of text that is before the blank and ended by [
-                                $answer .= substr($temp, 0, $pos + 1);
-                                $temp = substr($temp, $pos + 1);
-                                // quits the loop if there are no more blanks
-                                if (($pos = strpos($temp, ']')) === false) {
-                                    // adds the end of the text
-                                    $answer .= q($temp);
-                                    break;
-                                }
-                                $choice[$j] = canonicalize_whitespace($choice[$j]);
-                                // if the word entered is the same as the one defined by the professor
-                                $canonical_choice = $answerType == FILL_IN_BLANKS_TOLERANT ? remove_accents($choice[$j]) : $choice[$j];
-                                $canonical_match = $answerType == FILL_IN_BLANKS_TOLERANT ? remove_accents(substr($temp, 0, $pos)) : substr($temp, 0, $pos);
-                                $right_answers = array_map('canonicalize_whitespace',
-                                    preg_split('/\s*\|\s*/', $canonical_match));
-                                if (in_array($canonical_choice, $right_answers)) {
-                                    // gives the related weighting to the student
-                                    $questionScore += $answerWeighting[$j - 1];
-                                    if ($regrade) {
-                                        Database::get()->query('UPDATE exercise_answer_record
-                                        SET weight = ?f
-                                        WHERE eurid = ?d AND question_id = ?d AND answer_id = ?d',
-                                            $answerWeighting[$j - 1], $eurid, $row->question_id, $j);
-                                    }
-                                    // increments total score
-                                    // adds the word in green at the end of the string
-                                    $answer .= '<strong>' . q($choice[$j]) . '</strong>';
-                                    if (isset($_GET['pdf'])) {
-                                        $icon = "<label class='label-container' aria-label='$langSelect'><input type='checkbox' checked='checked'><span class='checkmark'></span></label>";
-                                    } else {
-                                        $icon = "<span class='fa-solid fa-check text-success'></span>";
-                                    }
-                                } // else if the word entered is not the same as the one defined by the professor
-                                elseif ($choice[$j] !== '') {
-                                    // adds the word in red at the end of the string and strikes it
-                                    $answer .= '<span class="text-danger"><s>' . q($choice[$j]) . '</s></span>';
-                                    $icon = "<span class='fa-solid fa-xmark text-danger'></span>";
-                                } else {
-                                    // adds tabulation if no word has been typed by the student
-                                    $answer .= '&nbsp;&nbsp;&nbsp;';
-                                    $icon = "<span class='fa-solid fa-xmark text-danger'></span>";
-                                }
-                                // adds the correct word, followed by ] to close the blank
-                                $answer .= ' / <span class="text-success"><strong>' .
-                                    preg_replace('/\s*\|\s*/', " </strong>$langOr<strong> ", q(substr($temp, 0, $pos))) .
-                                    '</strong></span>';
-                                $answer .= "]";
-                                $answer .= "&nbsp;&nbsp;$icon";
-                                $j++;
-                                $temp = substr($temp, $pos + 1);
-                            }
-                            break;
-                        case FILL_IN_FROM_PREDEFINED_ANSWERS :
-                            $answer = $answer_array[0]; // answer text
-                            // fetch possible answers for all choices
-                            preg_match_all('/\[[^]]+\]/', $answer, $out);
-                            $possible_answers = [];
-                            foreach ($out[0] as $output) {
-                                $possible_answers[] = explode("|", str_replace(array('[', ']'), ' ', q($output)));
-                            }
-                            $answer_string = $answer_array[1]; // answers
-                            $answerWeighting = $answer_array[2]; // answer weight
-                            $temp = $answer;
-                            $answer = '';
-                            $j = 1;
-                            // the loop will stop at the end of the text
-                            while (true) {
-                                $answer_string = reindex_array_keys_from_one($answer_string); // start from 1
-                                // quits the loop if there are no more blanks
-                                if (($pos = strpos($temp, '[')) === false) {
-                                    // adds the end of the text
-                                    $answer .= q($temp);
-                                }
-                                // adds the piece of text that is before the blank and ended by [
-                                $answer .= substr($temp, 0, $pos + 1);
-                                $temp = substr($temp, $pos + 1);
-                                // quits the loop if there are no more blanks
-                                if (($pos = strpos($temp, ']')) === false) {
-                                    // adds the end of the text
-                                    $answer .= q($temp);
-                                    break;
-                                }
-
-                                $possible_answer = $possible_answers[$j - 1]; // possible answers for each choice
-                                $possible_answer = reindex_array_keys_from_one($possible_answer); // start from 1
-                                if (isset($choice[$j]) and $choice[$j] == $answer_string[$j]) { // correct answer
-                                    $questionScore += $answerWeighting[$j - 1]; // weight assignment
-                                    if ($regrade) {
-                                        Database::get()->query('UPDATE exercise_answer_record
-                                        SET weight = ?f
-                                        WHERE eurid = ?d AND question_id = ?d AND answer_id = ?d',
-                                            $answerWeighting[$j - 1], $eurid, $row->question_id, $j);
-                                    }
-                                    // adds the word in green at the end of the string
-                                    $answer .= '<strong>' . q($possible_answer[$choice[$j]]) . '</strong>';
-                                    if (isset($_GET['pdf'])) {
-                                        $icon = "<label class='label-container' aria-label='$langSelect'><input type='checkbox' checked='checked'><span class='checkmark'></span></label>";
-                                    } else {
-                                        $icon = "<span class='fa-solid fa-check text-success'></span>";
-                                    }
-                                } else { // wrong answer
-                                    if (isset($choice[$j]) and isset($possible_answer[$choice[$j]])) { // if we have chosen something,
-                                        // adds the word in red at the end of the string, and strikes it
-                                        $answer_choice = '<span class="text-danger"><s>' . q($possible_answer[$choice[$j]]) . '</s></span>';
-                                    } else {
-                                        $answer_choice = "&nbsp;&mdash;";
-                                    }
-                                    $answer .= $answer_choice;
-                                    $icon = "<span class='fa-solid fa-xmark text-danger'></span>";
-                                }
-                                // adds the correct word, followed by ] to close the blank
-                                $answer .= ' / <span class="text-success"><strong>' . q($possible_answer[$answer_string[$j]]) . '</strong></span>';
-                                $answer .= "]";
-                                $answer .= "&nbsp;&nbsp;$icon";
-                                $j++;
-                                $temp = substr($temp, $pos + 1);
-                            }
-                            break;
-                        case MATCHING :
-                            if ($answerCorrect) {
-                                $thisChoice = isset($choice[$answerId]) ? $choice[$answerId] : null;
-                                if ($answerCorrect == $thisChoice) {
-                                    $questionScore += $answerWeighting;
-                                    $grade = $answerWeighting;
-                                    $choice[$answerId] = q($matching[$choice[$answerId]]);
-                                    $icon = "<span class='fa-solid fa-check text-success'></span>";
-                                    $pdf_icon = "✓";
-                                } elseif (!$thisChoice) {
-                                    $choice[$answerId] = '<del class="text-danger">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</del>';
-                                    $icon = "<span class='fa-solid fa-xmark text-danger'></span>";
-                                    $pdf_icon = "✓";
-                                } else {
-                                    $choice[$answerId] = "<span class='text-danger'><del>" .
-                                        q($matching[$choice[$answerId]]) . "</del></span>";
-                                    $icon = "<span class='fa-solid fa-xmark text-danger'></span>";
-                                    $pdf_icon = "✓";
-                                }
-                            } else {
-                                $icon = '';
-                                $matching[$answerId] = $answer;
-                            }
-                            if ($regrade) {
-                                Database::get()->query('UPDATE exercise_answer_record
-                                SET weight = ?f
-                                WHERE eurid = ?d AND question_id = ?d AND answer = ?d',
-                                    $grade, $eurid, $row->question_id, $answerId);
-                            }
-                            break;
-
-                    } // end switch()
-
-                    if ($regrade and !in_array($answerType, [FILL_IN_BLANKS_TOLERANT, FILL_IN_BLANKS, FILL_IN_FROM_PREDEFINED_ANSWERS, MATCHING, DRAG_AND_DROP_TEXT, DRAG_AND_DROP_MARKERS])) {
-                        Database::get()->query('UPDATE exercise_answer_record
-                        SET weight = ?f
-                        WHERE eurid = ?d AND question_id = ?d AND answer_id = ?d',
-                            $grade, $eurid, $row->question_id, $answerId);
-                    }
-
-                    if ($answerType != MATCHING || $answerCorrect) {
-                        if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
-                            $tool_content .= "<tr><td><div class='d-flex align-items-center'>";
-                            $answer_icon = '';
-                            if ($studentChoice) {
-                                $student_choice_icon = "fa-regular fa-square-check";
-                                $pdf_student_choice_icon = "<label class='label-container' aria-label='$langSelect'><input type='checkbox' checked='checked'><span class='checkmark'></span></label>";
-                                $style = '';
-                                if ($answerCorrect) {
-                                    $answer_icon = "fa-solid fa-check text-success";
-                                } else {
-                                    $answer_icon = "fa-solid fa-xmark text-danger";
-                                }
-                            } else {
-                                $student_choice_icon = "fa-regular fa-square";
-                                $pdf_student_choice_icon = "<label class='label-container' aria-label='$langSelect'><input type='checkbox'><span class='checkmark'></span></label>";
-                                $style = "visibility: hidden;";
-                            }
-                            if (isset($_GET['pdf'])) {
-                                $tool_content .= "<span>$pdf_student_choice_icon</span>";
-                            } else {
-                                $tool_content .= "<div class='d-flex align-items-center m-1 me-2'><span class='$student_choice_icon p-3'></span>";
-                                $tool_content .= "<span style='$style' class='$answer_icon'></span></div>";
-                            }
-
-                            $tool_content .= standard_text_escape($answer);
-                            if ($answerCorrect) {
-                                $tool_content .= "&nbsp;<span class='text-success text-nowrap'><small class='text-success text-nowrap'>($langCorrectS)</small></span>";
-                            } else {
-                                $tool_content .= "&nbsp;<span class='text-danger text-nowrap'><small class='text-danger text-nowrap'>($langIncorrectS)</small></span>";
-                            }
-                            $tool_content .= "</div>";
-                            if ($studentChoice or $answerCorrect) {
-                                $tool_content .= "<div class='d-flex align-items-center'><small><span class='help-block'>" . standard_text_escape(nl2br($answerComment)) . "</span></small></div>";
-                            }
-                            $tool_content .= "</div>";
-                            $tool_content .= "</td></tr>";
-                        } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT || $answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) {
-                            $tool_content .= "<tr><td>" . standard_text_escape(nl2br($answer)) . "</td></tr>";
-                        } elseif ($answerType == DRAG_AND_DROP_TEXT || $answerType == DRAG_AND_DROP_MARKERS) {
-                            $tool_content .= "<tr><td>$answer</td></tr>";
-                        } elseif ($answerType == MATCHING) {
-                            $tool_content .= "<tr><td><div class='d-flex align-items-center'><div class='d-flex align-items-end m-1 me-2 col-6'>" . q($answer) . "</div>";
-                            $tool_content .= "<div class='d-flex align-items-center col-6 m-1 me-2'>" . $choice[$answerId];
-                            $tool_content .= " / <span class='text-success'><strong>" . q($matching[$answerCorrect]) . "</strong></span>&nbsp;&nbsp;$icon";
-                            $tool_content .= "</div></div></td></tr>";
-                        }
-                    }
-                } // end for()
-            } else { // If FREE TEXT type
-                $questionScore = $question_weight;
-                $tool_content .= "<tr><td>" . purify($choice) . "</td></tr>";
-            }
-        } else {
-            $tool_content .= question_result($answerType, $row->question_id, $choice, $eurid, $regrade);
-        }
         if ($questionFeedback !== '') {
             $tool_content .= "<tr><td>";
             $tool_content .= "<div><strong>$langQuestionFeedback:</strong><br>" . standard_text_escape($questionFeedback) . "</div>";
@@ -925,7 +634,7 @@ function drag_and_drop_user_results_as_text($eurid,$questionId) {
     $result = preg_replace_callback('/\[(\d+)\]/', function($matches) use ($definedAnswers, $ex_user_record, &$userGrade, $qType, $langPoint, $questionId, $course_code, $urlAppend) {
         $bracket = (int)$matches[1];
         $replacement = ''; // Initialize to empty
-        
+
         if ($bracket > 0) {
             foreach ($ex_user_record as $an) {
                 $userAnswerAsImage = $predefindedAnswerAsImage = false;

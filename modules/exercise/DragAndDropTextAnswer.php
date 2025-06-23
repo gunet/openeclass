@@ -11,9 +11,7 @@ class DragAndDropTextAnswer extends \QuestionType
 
     public function PreviewQuestion(): string
     {
-        global $langAnswer, $langScore, $head_content, $webDir, $course_code, $langBracket, $langThisAnswerIsNotCorrect;
-
-        $questionId = $this->question_id;
+        global $langAnswer, $langScore, $langBracket, $langThisAnswerIsNotCorrect;
 
         $html_content = "<tr class='active'><td><strong>$langAnswer</strong></td></tr>";
 
@@ -87,22 +85,14 @@ class DragAndDropTextAnswer extends \QuestionType
 
     public function QuestionResult($choice, $eurid, $regrade, $extra_type = ''): string
     {
-
         global $questionScore;
 
         $html_content = '';
+        $arrResult = drag_and_drop_user_results_as_text($eurid, $this->question_id);
+        $answer = $arrResult[0]['aboutUserAnswers'];
+        $questionScore = $arrResult[0]['aboutUserGrade'];
+        $html_content .= "<tr><td>$answer</td></tr>";
 
-        $nbrAnswers = $this->answer_object->selectNbrAnswers();
-        $answer_object_ids = range(1, $nbrAnswers);
-
-        foreach ($answer_object_ids as $answerId) {
-            $answer = $this->answer_object->get_drag_and_drop_text();
-            $answerWeighting = $this->answer_object->get_drag_and_drop_answer_grade();
-            $arrResult = drag_and_drop_user_results_as_text($eurid, $this->question_id);
-            $answer = $arrResult[0]['aboutUserAnswers'];
-            $questionScore = $arrResult[0]['aboutUserGrade'];
-            $html_content .= "<tr><td>$answer</td></tr>";
-        }
         return $html_content;
     }
 }

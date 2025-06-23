@@ -305,7 +305,7 @@ function display_exercise($exercise_id): void
                                  </tr>";
             }
 
-            if ($answerType == DRAG_AND_DROP_TEXT) { 
+            if ($answerType == DRAG_AND_DROP_TEXT) {
                 $objAnswerTmp = new Answer($qid);
                 $questionText = $objAnswerTmp->get_drag_and_drop_text();
                 $tool_content .= "<tr><td>$questionText</td></tr>";

@@ -17,9 +17,9 @@ class DragAndDropMarkersAnswer extends \QuestionType
 
         $html_content = '';
 
-        if (!isset($_GET['eurId'])) { // Display them in preview question
+        if (!isset($_GET['eurId'])) { // Display them in the preview question
 
-            $html_content = "<tr class='active'><td><strong>$langAnswer</strong></td></tr>";
+            $html_content .= "<tr class='active'><td><strong>$langAnswer</strong></td></tr>";
 
             $markersWithAnswers = $this->answer_object->get_drag_and_drop_markers_with_answers();
             $markersWithGrades = $this->answer_object->get_drag_and_drop_markers_with_grades();
@@ -29,7 +29,7 @@ class DragAndDropMarkersAnswer extends \QuestionType
                 $AnswersGradeArr[] = $gr;
             }
             $AnswersGrade = implode(':', $AnswersGradeArr);
-        
+
             $html_content .= "<tr>
                             <td> 
                                     <strong><small class='text-nowrap'>($langScore: $AnswersGrade)</small></strong>";
@@ -126,7 +126,7 @@ class DragAndDropMarkersAnswer extends \QuestionType
         }
 
         return $html_content;
-        
+
     }
 
     public function AnswerQuestion($question_number, $exerciseResult = [], $options = []): string
@@ -209,7 +209,7 @@ class DragAndDropMarkersAnswer extends \QuestionType
                                           </div>";
                     } else { // predefined answer will be shown as text
                         $html_content .= "<div class='draggable' data-word='{$an}' data-pool-id='words_{$questionId}'>$an</div>";
-                    } 
+                    }
                 }
             }
         }
@@ -249,28 +249,12 @@ class DragAndDropMarkersAnswer extends \QuestionType
         global $questionScore;
 
         $html_content = '';
+        $arrResult = drag_and_drop_user_results_as_text($eurid, $this->question_id);
+        $answer = $arrResult[0]['aboutUserAnswers'];
+        $questionScore = $arrResult[0]['aboutUserGrade'];
 
-        $nbrAnswers = $this->answer_object->selectNbrAnswers();
-        $answer_object_ids = range(1, $nbrAnswers);
+        $html_content .= "<tr><td>$answer</td></tr>";
 
-        foreach ($answer_object_ids as $answerId) {
-            $answer = $this->answer_object->get_drag_and_drop_text();
-            $answerWeighting = $this->answer_object->get_drag_and_drop_answer_grade();
-            // Change indexes to start from 0.
-            $arrTmp = [];
-            foreach ($answerWeighting as $index => $value) {
-                if ($index > 0) {
-                    $index = $index - 1;
-                    $arrTmp[$index] = $value;
-                }
-            }
-            $answerWeighting = $arrTmp;
-            $arrResult = drag_and_drop_user_results_as_text($eurid, $this->question_id);
-            $answer = $arrResult[0]['aboutUserAnswers'];
-            $questionScore = $arrResult[0]['aboutUserGrade'];
-
-            $html_content .= "<tr><td>$answer</td></tr>";
-        }
         return $html_content;
     }
 }
