@@ -403,7 +403,8 @@ if (count($exercise_question_ids) > 0) {
         }
         if (file_exists($picturePath . '/quiz-' . $row->question_id)) {
             $tool_content .= "<div class='$classContainer' id='image-container-$row->question_id' style='position: relative; display: inline-block;'>
-                                <img class='$classImg' id='img-quiz-$row->question_id' src='../../$picturePath/quiz-$row->question_id' style='width: 100%;'>                                
+                                <img class='$classImg' id='img-quiz-$row->question_id' src='../../$picturePath/quiz-$row->question_id' style='width: 100%;'>
+                                <canvas id='drawingCanvas-$row->question_id' class='$classCanvas'></canvas>
                               </div>";
         }
 
@@ -654,7 +655,7 @@ function drag_and_drop_user_results_as_text($eurid,$questionId) {
 
                     if ($an->answer == $definedAnswers[$bracket]) { // correct answer
                         $userGrade += $an->weight;
-                        $replacement = $currentBracket . "[" . "<strong class='Success-200-cl'>".$an->answer."</strong>$userAnswerImg" . "&nbsp;/&nbsp;" . $definedAnswers[$bracket] . "]$predefinedAnswerImg" . "&nbsp;&nbsp;<span class='fa-solid fa-check text-success'></span>$newLine";
+                        $replacement = $currentBracket . "[" . "<strong class='Success-200-cl'>".$an->answer."</strong>$userAnswerImg" . "&nbsp;/&nbsp;" . $definedAnswers[$bracket] . "$predefinedAnswerImg]" . "&nbsp;&nbsp;<span class='fa-solid fa-check text-success'></span>$newLine";
                     } else {
                         if (!empty($an->answer)) {
                             // Get the correct bracket for incorrect answer for displaying image
@@ -664,9 +665,9 @@ function drag_and_drop_user_results_as_text($eurid,$questionId) {
                                 $prIndex = array_search($definedAnswers[$bracket], $definedAnswers);
                                 $predefinedAnswerImg = "<img src='../../courses/$course_code/image/answer-$questionId-$prIndex' style='width:30px; height: 30px;'>";
                             }
-                            $replacement = $currentBracket . "[" . "<span class='text-danger'><s>".$an->answer."</s></span>$userAnswerImg" . "&nbsp;/&nbsp;" . $definedAnswers[$bracket] . "]$predefinedAnswerImg" . "&nbsp;&nbsp;<span class='fa-solid fa-xmark text-danger'></span>$newLine";
+                            $replacement = $currentBracket . "[" . "<span class='text-danger'><s>".$an->answer."</s></span>$userAnswerImg" . "&nbsp;/&nbsp;" . $definedAnswers[$bracket] . "$predefinedAnswerImg]" . "&nbsp;&nbsp;<span class='fa-solid fa-xmark text-danger'></span>$newLine";
                         } else {
-                            $replacement = $currentBracket . "[" . "<span>&nbsp;&nbsp;&nbsp;</span>" . "/&nbsp;" . $definedAnswers[$bracket] . "]$predefinedAnswerImg" . "&nbsp;&nbsp;<span class='fa-solid fa-xmark text-danger'></span>$newLine";
+                            $replacement = $currentBracket . "[" . "<span>&nbsp;&nbsp;&nbsp;</span>" . "/&nbsp;" . $definedAnswers[$bracket] . "$predefinedAnswerImg]" . "&nbsp;&nbsp;<span class='fa-solid fa-xmark text-danger'></span>$newLine";
                         }
                     }
                     break; // Exit loop once a match is found

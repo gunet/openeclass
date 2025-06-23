@@ -253,6 +253,10 @@ class DragAndDropMarkersAnswer extends \QuestionType
         $answer = $arrResult[0]['aboutUserAnswers'];
         $questionScore = $arrResult[0]['aboutUserGrade'];
 
+        // Display blanks on the image
+        $blanks = new DragAndDropMarkersAnswer($this->question_id);
+        $html_content .= $blanks->PreviewQuestion();
+
         $html_content .= "<tr><td>$answer</td></tr>";
 
         return $html_content;
