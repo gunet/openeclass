@@ -1057,21 +1057,14 @@ function getMarkerIdByAnswer(qid, answer) {
     }
 
     if (DataJson) {
-        // Loop through each array in the main array
-        for (let i = 0; i < DataJson.length; i++) {
-            const dataArray = DataJson[i];
-            // Loop through each object in the inner array
-            for (let k = 0; k < dataArray.length; k++) {
-                const item = dataArray[k];
-                if (item.hasOwnProperty('marker_answer') && item['marker_answer'] === answer) {
-                    const parentArray = dataArray;
-                    const markerIdObj = parentArray.find(obj => obj.hasOwnProperty('marker_id'));
-                    if (markerIdObj && markerIdObj['marker_id']) {
-                        return markerIdObj['marker_id'];
-                    }
+        for (const key in DataJson) {
+            if (DataJson.hasOwnProperty(key)) {
+                if (DataJson[key] === answer) {
+                    return key; // Found the key
                 }
             }
         }
+        return null; // Not found
     }
     return null;
 }

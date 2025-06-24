@@ -196,7 +196,13 @@ class DragAndDropMarkersAnswer extends \QuestionType
             }
         }
         $DataMarkersToJson = json_encode($coordinatesXY) ?? '';
-        $DataJsonFileVal = json_encode($markersData) ?? '';
+
+        // Temporary array that contains the data json to find the correct marker_id regarding the given response.
+        $markerIdsWithAns = [];
+        foreach ($arrDataMarkers as $index => $val) {
+            $markerIdsWithAns[$index] = $arrDataMarkers[$index]['marker_answer'];
+        }
+        $DataJsonFileVal = json_encode($markerIdsWithAns) ?? '';
 
         $html_content = "<div class='col-12 mb-4'><small class='Accent-200-cl'>(*)$langCalcelDroppableItem</small></div>";
         $html_content .= "<div class='col-12 d-flex justify-content-start align-items-center drag-and-drop-markers-container-words gap-4 flex-wrap mt-4' id='words_{$questionId}'>";
