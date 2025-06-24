@@ -39,29 +39,20 @@ function api_method($access) {
             Access::error(2, 'Required parameters for user creation missing: username, firstname, lastname, emailaddress, [adt], [password], [auth]');
         }
 
-        $authFlag = false;
 
         if (!empty($auth)) {
-
             require_once __DIR__ . '/../../../modules/auth/auth.inc.php';
-
             $active_auth_methods = get_auth_active_methods();
-
             $active_auth_names = array_map(function($id) use ($auth_ids) {
                 return isset($auth_ids[$id]) ? $auth_ids[$id] : null;
             }, $active_auth_methods);
 
             if (!in_array($auth, $active_auth_names)) {
                 Access::error(2, 'Invalid authentication method');
-            } else {
-                $authFlag = true;
             }
-
             if (in_array($auth, $hybridAuthMethods)) {
                 Access::error(2, $auth . ' authentication method is not accepted');
-                $authFlag = false;
             }
-
         }
 
         if (get_config('case_insensitive_usernames')) {
@@ -80,7 +71,7 @@ function api_method($access) {
                     WHERE id = ?d',
                     $lastname, $firstname, $emailaddress, $user->id);
 
-                if ( $authFlag ) {
+                if ( !empty($auth) ) {
                     Database::get()->query('UPDATE user SET password = ?s WHERE id = ?d', $auth, $user->id);
                 } else if (!$password == '') {
                     $password_encrypted = password_hash($password, PASSWORD_DEFAULT);
@@ -93,7 +84,7 @@ function api_method($access) {
             $statusmsg = 'updated';
             $user_id = $user->id;
         } else {
-            if ($authFlag) {
+            if (!empty($auth)) {
                 $password_encrypted = $auth;
             } else {
                 if ($password == '') {
@@ -121,7 +112,7 @@ function api_method($access) {
         user_hook($id);
         header('Content-Type: application/json');
         $response = ['id' => $user_id, 'status' => $statusmsg];
-        if ($authFlag) {
+        if (!empty($auth)) {
             $response['auth'] = $auth;
         } elseif (isset($password) && $password !== '') {
             $response['password'] = $password;
