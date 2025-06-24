@@ -3390,6 +3390,8 @@ function upgrade_to_4_2($tbl_options) : void {
         ('volunteer_activities', '$langVolunteerActivities', '', '2', $eportf_cat_id, -1, 0, '')");
 
     Database::get()->query("ALTER TABLE eportfolio_fields ADD UNIQUE (shortname)");
+    Database::get()->query("ALTER TABLE eportfolio_fields_data ADD visibility TINYINT UNSIGNED NOT NULL DEFAULT 1");
+    Database::get()->query("ALTER TABLE eportfolio_resource ADD visibility TINYINT UNSIGNED NOT NULL DEFAULT 1");
 }
 
 /**

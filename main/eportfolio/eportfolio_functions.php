@@ -24,6 +24,9 @@ define('EPF_DATE', 3);
 define('EPF_MENU', 4);
 define('EPF_LINK', 5);
 
+define('EPF_VISIBLE_PUBLIC', 1);
+define('EPF_VISIBLE_USER', 2);
+define('EPF_VISIBLE_PRIVATE', 3);
 
 /**
  * Render e-portfolio fields content when viewing e-portfolio

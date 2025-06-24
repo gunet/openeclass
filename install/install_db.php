@@ -976,6 +976,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `eportfolio_fields_data` (
         `user_id` INT(11) UNSIGNED NOT NULL DEFAULT 0,
         `field_id` INT(11) NOT NULL,
         `data` TEXT NOT NULL,
+        `visibility` TINYINT UNSIGNED NOT NULL DEFAULT 1,
         PRIMARY KEY (`user_id`, `field_id`)) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `eportfolio_fields_category` (
@@ -1038,6 +1039,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `eportfolio_resource` (
         `course_title` VARCHAR(255) NOT NULL DEFAULT '',
         `time_added` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
         `data` TEXT NOT NULL,
+        `visibility` TINYINT UNSIGNED NOT NULL DEFAULT 1,
         INDEX `eportfolio_res_index` (`user_id`,`resource_type`)) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `wall_post` (
