@@ -1169,6 +1169,10 @@ function removeJsonDataFromMarkerId($markerId,$questionId) {
 
         $_SESSION['data_shapes'][$questionId] = implode('|', $newJsonArray);
         Database::get()->query("UPDATE exercise_question SET options = ?s WHERE id = ?d", $_SESSION['data_shapes'][$questionId], $questionId);
+        $filePath = "$webDir/courses/$course_code/image/answer-$questionId-$markerId";
+        if (file_exists($filePath)) {
+            unlink($filePath);
+        }
     }
 
 }

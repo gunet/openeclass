@@ -11,6 +11,12 @@ $questionId = $_GET['questionId'];
 if (isset($_POST['deleteMarker']) && $_POST['deleteMarker'] == 1) {
     remove_json_marker_id_if_exists($_POST['marker_id'], $questionId);
     Database::get()->query("UPDATE exercise_question SET options = ?s WHERE id = ?d", $_SESSION['data_shapes'][$questionId], $questionId);
+    // Delete image if needs
+    $mId = $_POST['marker_id'];
+    $filePath = "$webDir/courses/$course_code/image/answer-$questionId-$mId";
+    if (file_exists($filePath)) {
+        unlink($filePath);
+    }
     exit;
 }
 
