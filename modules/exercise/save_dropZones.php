@@ -43,6 +43,7 @@ foreach ($vertices as $item) {
 }
 $str_json = json_encode($assocArray ?? '');
 
+$_SESSION['data_shapes'][$questionId] = Database::get()->querySingle("SELECT options FROM exercise_question WHERE id = ?d", $questionId)->options;
 if (isset($_SESSION['data_shapes'][$questionId]) && !empty($_SESSION['data_shapes'][$questionId])) {
     remove_json_marker_id_if_exists($assocArray['marker_id'], $questionId);
     $_SESSION['data_shapes'][$questionId] .=  '|' . $str_json;
