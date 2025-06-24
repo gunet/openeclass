@@ -591,7 +591,7 @@ if (isset($_GET['modifyAnswers'])) {
         $grades_from_db = $objAnswer->get_drag_and_drop_answer_grade();
 
     } elseif ($answerType == DRAG_AND_DROP_MARKERS) {
-        if ($newAnswer) {
+        if ($newAnswer && !isset($_GET['remImg'])) {
             $nbrAnswers = $_POST['nbrAnswers'] + 1;
         } else { // for edit
             $nbrAnswers = $objAnswer->get_total_drag_and_drop_marker_answers($questionId);

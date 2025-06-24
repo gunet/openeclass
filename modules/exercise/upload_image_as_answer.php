@@ -23,7 +23,7 @@ if (isset($_GET['delete_image'])) {
         Session::flash('message', $langFileNotFound);
         Session::flash('alert-class', 'alert-warning');
     }
-    redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId&modifyAnswers=$questionId&htopic=$htopic");
+    redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId&modifyAnswers=$questionId&htopic=$htopic&remImg=true");
 }
 
 // Upload images as predefined answers for each marker.
