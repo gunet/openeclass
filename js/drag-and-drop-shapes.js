@@ -862,11 +862,10 @@ function shapesCreationProcess() {
             var number = getNumberOftheText(delValuesId);
             if (confirm('Do you want to proceed?')) {
                 $.ajax({
-                    url: 'delete_marker.php?course_code='+courseCode+'&questionId='+questionId,
+                    url: 'save_dropZones.php?course_code='+courseCode+'&questionId='+questionId,
                     method: 'POST',
-                    data: { marker_id: number },
+                    data: { marker_id: number, deleteMarker: 1 },
                     success: function(response) {
-                        console.log(response); // Handle response
                         alert('Marker deleted successfully!');
                         window.location.reload();
                     },
@@ -1079,22 +1078,20 @@ function getMarkerIdByAnswer(qid, answer) {
 
 // Function to find if exists the same marker_answer value in the json file
 function containsMarkerAnswer(answer) {
-    let jsonData;
-    try {
-        jsonData = JSON.parse($('#dataJsonVariables').val());
-    } catch (e) {
-        console.error('Invalid JSON data for shapes:', e);
-        return null;
-    }
+    const rawData = $('#dataJsonVariables').val();
+    if (!rawData) return false;
 
-    if (jsonData) {
-        for (let itemArray of jsonData) {
-            for (let obj of itemArray) {
-                if (obj.hasOwnProperty('marker_answer') && obj.marker_answer === answer) {
-                    return true; // Found the answer
-                }
+    const jsonStrings = rawData.split('|');
+    for (let jsonStr of jsonStrings) {
+        try {
+            const obj = JSON.parse(jsonStr);
+            if (obj.marker_answer === answer) {
+                return true; // Found a match
             }
+        } catch (e) {
+            console.error('Invalid JSON object:', jsonStr, e);
+            // Optionally continue or handle error
         }
     }
-    return false; // Not found
+    return false; // No match found
 }

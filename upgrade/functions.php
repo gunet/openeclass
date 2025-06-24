@@ -3335,6 +3335,10 @@ function upgrade_to_4_1($tbl_options) : void {
     }
     // user notifications setting
     set_config('user_notifications', 1);
+
+    if (!DBHelper::fieldExists('exercise_question', 'options')) {
+        Database::get()->query("ALTER TABLE exercise_question ADD options TEXT DEFAULT NULL");
+    }
 }
 
 /**

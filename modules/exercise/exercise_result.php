@@ -693,37 +693,30 @@ function drag_and_drop_user_results_as_text($eurid,$questionId) {
  * @return bool Returns true if marker_answer_with_image == "1", false otherwise
  */
 function checkMarkerImage($marker_id, $marker_answer, $questionId) {
+    // Split the string into individual JSON objects
+    $dataString = Database::get()->querySingle("SELECT options FROM exercise_question WHERE id = ?d", $questionId)->options;
+    if ($dataString) {
+        $jsonObjects = explode('|', $dataString);
+            
+            foreach ($jsonObjects as $jsonStr) {
+                $jsonStr = trim($jsonStr);
+                if (empty($jsonStr)) continue;
 
-    global $webDir,$course_code;
-
-    $dropZonesDir = "$webDir/courses/$course_code/image";
-    $dropZonesFile = "$dropZonesDir/dropZones_$questionId.json";
-
-    if (file_exists($dropZonesFile)) {
-        $dataJsonFile = file_get_contents($dropZonesFile);
-        $data = json_decode($dataJsonFile, true);
-        foreach ($data as $item) {
-            $idMatch = false;
-            $answerMatch = false;
-            $imageFlag = null;
-            foreach ($item as $pair) {
-                if (isset($pair['marker_id']) && $pair['marker_id'] == $marker_id) {
-                    $idMatch = true;
+                // Decode JSON
+                $obj = json_decode($jsonStr, true);
+                if ($obj === null) {
+                    // Invalid JSON, skip or handle error
+                    continue;
                 }
-                if (isset($pair['marker_answer']) && $pair['marker_answer'] == $marker_answer) {
-                    $answerMatch = true;
-                }
-                if (isset($pair['marker_answer_with_image'])) {
-                    $imageFlag = $pair['marker_answer_with_image'];
+
+                // Check for matching marker_id and marker_answer
+                if (isset($obj['marker_id'], $obj['marker_answer'], $obj['marker_answer_with_image']) && $obj['marker_id'] == $marker_id && $obj['marker_answer'] == $marker_answer) {
+                    // Return true if marker_answer_with_image is "1"
+                    return $obj['marker_answer_with_image'] === "1";
                 }
             }
-            // If both marker_id and marker_answer match, check the image flag
-            if ($idMatch && $answerMatch) {
-                return $imageFlag === "1";
-            }
-        }
-        // If no match found
-        return false;
+            // Not found or no match
+            return false;
     } else {
         return false;
     }

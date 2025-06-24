@@ -328,41 +328,42 @@ if (isset($submitAnswers) || isset($buttonBack)) {
         }
 
     } elseif ($answerType == DRAG_AND_DROP_MARKERS) {
-        $dropZonesDir = "$webDir/courses/$course_code/image";
-        $dropZonesFile = "$dropZonesDir/dropZones_$questionId.json";
-        $arrDataMarkers = [];
-        if (file_exists($dropZonesFile)) {
-            $dataJsonFile = file_get_contents($dropZonesFile);
-            $markersData = json_decode($dataJsonFile, true);
-            // Loop through each item in the original array
-            foreach ($markersData as $item => $value) {
-                if (count($value) == 10) { // circle or rectangle
-                    $arrDataMarkers[$value[0]['marker_id']] = [
-                                                                'marker_answer' => $value[1]['marker_answer'],
-                                                                'marker_shape' => $value[2]['shape_type'],
-                                                                'marker_coordinates' => $value[3]['x'] . ',' . $value[4]['y'],
-                                                                'marker_offsets' => $value[5]['endX'] . ',' . $value[6]['endY'],
-                                                                'marker_grade' => $value[7]['marker_grade'],
-                                                                'marker_radius' => $value[8]['marker_radius'],
-                                                                'marker_answer_with_image' => $value[9]['marker_answer_with_image']
-                                                              ];
-                } elseif (count($value) == 6) { // polygon
-                    $arrDataMarkers[$value[0]['marker_id']] = [
-                                                                'marker_answer' => $value[1]['marker_answer'],
-                                                                'marker_shape' => $value[2]['shape_type'],
-                                                                'marker_coordinates' => $value[3]['points'],
-                                                                'marker_grade' => $value[4]['marker_grade'],
-                                                                'marker_answer_with_image' => $value[5]['marker_answer_with_image']
-                                                               ];
-                } elseif (count($value) == 5) { // without shape . So the defined answer is not correct
-                    $arrDataMarkers[$value[0]['marker_id']] = [
-                                                                'marker_answer' => $value[1]['marker_answer'],
-                                                                'marker_shape' => null,
-                                                                'marker_coordinates' => null,
-                                                                'marker_grade' => 0,
-                                                                'marker_answer_with_image' => $value[4]['marker_answer_with_image']
-                                                            ];
 
+        $arrDataMarkers = [];
+        $jsonData = Database::get()->querySingle("SELECT options FROM exercise_question WHERE id = ?d", $questionId)->options;
+        if ($jsonData) {
+            $dataJsonMarkers = explode('|', $jsonData);
+            foreach ($dataJsonMarkers as $dataJsonValue) {
+                $markersData = json_decode($dataJsonValue, true);
+                // Loop through each item in the original array
+                foreach ($markersData as $index => $value) {
+                    if (count($markersData) == 10) { // circle or rectangle
+                        $arrDataMarkers[$markersData['marker_id']] = [
+                                                                    'marker_answer' => $markersData['marker_answer'],
+                                                                    'marker_shape' => $markersData['shape_type'],
+                                                                    'marker_coordinates' => $markersData['x'] . ',' . $markersData['y'],
+                                                                    'marker_offsets' => $markersData['endX'] . ',' . $markersData['endY'],
+                                                                    'marker_grade' => $markersData['marker_grade'],
+                                                                    'marker_radius' => $markersData['marker_radius'],
+                                                                    'marker_answer_with_image' => $markersData['marker_answer_with_image']
+                                                                ];
+                    } elseif (count($markersData) == 6) { // polygon
+                        $arrDataMarkers[$markersData['marker_id']] = [
+                                                                    'marker_answer' => $markersData['marker_answer'],
+                                                                    'marker_shape' => $markersData['shape_type'],
+                                                                    'marker_coordinates' => $markersData['points'],
+                                                                    'marker_grade' => $markersData['marker_grade'],
+                                                                    'marker_answer_with_image' => $markersData['marker_answer_with_image']
+                                                                ];
+                    } elseif (count($markersData) == 5) { // without shape . So the defined answer is not correct
+                        $arrDataMarkers[$markersData['marker_id']] = [
+                                                                    'marker_answer' => $markersData['marker_answer'],
+                                                                    'marker_shape' => null,
+                                                                    'marker_coordinates' => null,
+                                                                    'marker_grade' => 0,
+                                                                    'marker_answer_with_image' => $markersData['marker_answer_with_image']
+                                                                ];
+                    }
                 }
             }
         }
@@ -1026,13 +1027,7 @@ if (isset($_GET['modifyAnswers'])) {
                             </script>";
 
             $setId = isset($exerciseId)? "&amp;exerciseId=$exerciseId" : '';
-            $dropZonesDir = "$webDir/courses/$course_code/image";
-            $dropZonesFile = "$dropZonesDir/dropZones_$questionId.json";
-            if (file_exists($dropZonesFile)) {
-                $dataJsonFile = file_get_contents($dropZonesFile);
-                $mData = json_decode($dataJsonFile, true);
-            }
-            $DataJsonFileVariables = json_encode($mData) ?? '';
+            $DataJsonFileVariables = Database::get()->querySingle("SELECT options FROM exercise_question WHERE id = ?d", $questionId)->options;
             $tool_content .= "
                             <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code$setId&amp;modifyAnswers=" . urlencode($_GET['modifyAnswers']) . "'>
                                 <fieldset><legend class='mb-0' aria-label='$langForm'></legend>
@@ -1056,6 +1051,9 @@ if (isset($_GET['modifyAnswers'])) {
                                             $chAns = $i+1;
                                             $markerShape = $arrDataMarkers[$chAns]['marker_shape'] ?? '';
                                             $markerCoordinates = $arrDataMarkers[$chAns]['marker_coordinates'] ?? '';
+                                            if ($markerShape == 'rectangle' or $markerShape == 'circle') {
+                                                $markerCoordinates = ($arrDataMarkers[$chAns]['marker_coordinates'] . ':' . $arrDataMarkers[$chAns]['marker_offsets']) ?? '';
+                                            }
                                             $markerAnswer = $arrDataMarkers[$chAns]['marker_answer'] ?? '';
                                             $markerGrade = $arrDataMarkers[$chAns]['marker_grade'] ?? 0;
                                             $markerAnswerWithImageChecked = ((isset($arrDataMarkers[$chAns]['marker_answer_with_image']) && $arrDataMarkers[$chAns]['marker_answer_with_image'] == 1) ? 'checked' : '');
@@ -1151,39 +1149,27 @@ if (isset($_GET['modifyAnswers'])) {
 
 function removeJsonDataFromMarkerId($markerId,$questionId) {
     global $webDir,$course_code;
-    // Path to your JSON file
-    $dropZonesDir = "$webDir/courses/$course_code/image";
-    $dropZonesFile = "$dropZonesDir/dropZones_$questionId.json";
-    $jsonFile = $dropZonesFile;
 
-    // Read the JSON file content
-    $jsonData = file_get_contents($jsonFile);
+    if ($markerId > 0 && isset($_SESSION['data_shapes'][$questionId])) {
+        $jsonArray = explode('|', $_SESSION['data_shapes'][$questionId]);
+        $newJsonArray = [];
 
-    // Decode JSON into PHP array
-    $data = json_decode($jsonData, true);
-
-    // Check if decoding was successful
-    if ($data === null) {
-        die("Error decoding JSON");
-    }
-
-    // Filter out the sub-array with marker_id = 2
-    $filteredData = array_filter($data, function($item) use($markerId){
-        // The first element in each sub-array contains the marker_id
-        if (isset($item[0]['marker_id']) && $item[0]['marker_id'] == $markerId) {
-            return false; // Exclude this item
+        foreach ($jsonArray as $json) {
+            $jsonDecoded = json_decode($json, true);
+            if ($jsonDecoded && isset($jsonDecoded['marker_id'])) {
+                if ($jsonDecoded['marker_id'] != $markerId) {
+                    $newJsonArray[] = $json; // keep if not matching
+                }
+                // else, skip (this removes the matching marker_id)
+            } else {
+                // handle invalid JSON if needed
+                $newJsonArray[] = $json; // keep invalid JSON as is
+            }
         }
-        return true; // Keep others
-    });
 
-    // Reindex the array to prevent gaps
-    $filteredData = array_values($filteredData);
-
-    // Encode back to JSON
-    $newJsonData = json_encode($filteredData, JSON_PRETTY_PRINT);
-
-    // Save the updated JSON back to the file
-    file_put_contents($jsonFile, $newJsonData);
+        $_SESSION['data_shapes'][$questionId] = implode('|', $newJsonArray);
+        Database::get()->query("UPDATE exercise_question SET options = ?s WHERE id = ?d", $_SESSION['data_shapes'][$questionId], $questionId);
+    }
 
 }
 
@@ -1191,41 +1177,41 @@ function removeJsonDataFromMarkerId($markerId,$questionId) {
 function getDataMarkersFromJson($questionId) {
     global $webDir, $course_code;
 
-    $dropZonesDir = "$webDir/courses/$course_code/image";
-    $dropZonesFile = "$dropZonesDir/dropZones_$questionId.json";
     $arrDataMarkers = [];
-    if (file_exists($dropZonesFile)) {
-        $dataJsonFile = file_get_contents($dropZonesFile);
-        $markersData = json_decode($dataJsonFile, true);
-        // Loop through each item in the original array
-        foreach ($markersData as $item => $value) {
-            if (count($value) == 10) { // circle or rectangle
-                $arrDataMarkers[$value[0]['marker_id']] = [
-                                                            'marker_answer' => $value[1]['marker_answer'],
-                                                            'marker_shape' => $value[2]['shape_type'],
-                                                            'marker_coordinates' => $value[3]['x'] . ',' . $value[4]['y'],
-                                                            'marker_offsets' => $value[5]['endX'] . ',' . $value[6]['endY'],
-                                                            'marker_grade' => $value[7]['marker_grade'],
-                                                            'marker_radius' => $value[8]['marker_radius'],
-                                                            'marker_answer_with_image' => $value[9]['marker_answer_with_image']
-                                                          ];
-            } elseif (count($value) == 6) { // polygon
-                $arrDataMarkers[$value[0]['marker_id']] = [
-                                                            'marker_answer' => $value[1]['marker_answer'],
-                                                            'marker_shape' => $value[2]['shape_type'],
-                                                            'marker_coordinates' => $value[3]['points'],
-                                                            'marker_grade' => $value[4]['marker_grade'],
-                                                            'marker_answer_with_image' => $value[5]['marker_answer_with_image']
-                                                          ];
-            } elseif (count($value) == 5) { // without shape . So the defined answer is not correct
-                $arrDataMarkers[$value[0]['marker_id']] = [
-                                                            'marker_answer' => $value[1]['marker_answer'],
-                                                            'marker_shape' => null,
-                                                            'marker_coordinates' => null,
-                                                            'marker_grade' => 0,
-                                                            'marker_answer_with_image' => $value[4]['marker_answer_with_image']
-                                                          ];
-
+    $jsonData = Database::get()->querySingle("SELECT options FROM exercise_question WHERE id = ?d", $questionId)->options;
+    if ($jsonData) {
+        $dataJsonMarkers = explode('|', $jsonData);
+        foreach ($dataJsonMarkers as $dataJsonValue) {
+            $markersData = json_decode($dataJsonValue, true);
+            // Loop through each item in the original array
+            foreach ($markersData as $index => $value) {
+                if (count($markersData) == 10) { // circle or rectangle
+                    $arrDataMarkers[$markersData['marker_id']] = [
+                                                                    'marker_answer' => $markersData['marker_answer'],
+                                                                    'marker_shape' => $markersData['shape_type'],
+                                                                    'marker_coordinates' => $markersData['x'] . ',' . $markersData['y'],
+                                                                    'marker_offsets' => $markersData['endX'] . ',' . $markersData['endY'],
+                                                                    'marker_grade' => $markersData['marker_grade'],
+                                                                    'marker_radius' => $markersData['marker_radius'],
+                                                                    'marker_answer_with_image' => $markersData['marker_answer_with_image']
+                                                                ];
+                } elseif (count($markersData) == 6) { // polygon
+                    $arrDataMarkers[$markersData['marker_id']] = [
+                                                                    'marker_answer' => $markersData['marker_answer'],
+                                                                    'marker_shape' => $markersData['shape_type'],
+                                                                    'marker_coordinates' => $markersData['points'],
+                                                                    'marker_grade' => $markersData['marker_grade'],
+                                                                    'marker_answer_with_image' => $markersData['marker_answer_with_image']
+                                                                ];
+                } elseif (count($markersData) == 5) { // without shape . So the defined answer is not correct
+                    $arrDataMarkers[$markersData['marker_id']] = [
+                                                                    'marker_answer' => $markersData['marker_answer'],
+                                                                    'marker_shape' => null,
+                                                                    'marker_coordinates' => null,
+                                                                    'marker_grade' => 0,
+                                                                    'marker_answer_with_image' => $markersData['marker_answer_with_image']
+                                                                 ];
+                }
             }
         }
     }
