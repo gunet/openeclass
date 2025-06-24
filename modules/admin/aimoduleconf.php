@@ -25,16 +25,14 @@ require_once 'modules/admin/extconfig/aiapp.php';
 require_once 'include/lib/ai/AIProviderFactory.php';
 require_once 'include/lib/ai/services/AIService.php';
 
-$nameTools = $langAI;
+$toolName = $langAI;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'extapp.php', 'name' => $langExtAppConfig);
-$pageName = $langAI;
+$navigation[] = array('url' => 'aimoduleconf.php', 'name' => $langAI);
 const AI_KEY_DURATION_TIME = 365*24*60*60; // one year (in seconds)
 
-if (isset($_GET['edit'])) {
-    $data['existingConfig'] = $existingConfig = Database::get()->querySingle("SELECT * FROM ai_providers WHERE id = ?d", $_GET['edit']);
-    //print_a($q);
-    //die;
+if (isset($_GET['edit_provider'])) {
+    $data['existingConfig'] = $existingConfig = Database::get()->querySingle("SELECT * FROM ai_providers WHERE id = ?d", $_GET['edit_provider']);
     $currentModelName = '';
     if ($existingConfig && isset($existingConfig->model_name)) {
         $currentModelName = htmlspecialchars($existingConfig->model_name, ENT_QUOTES, 'UTF-8');
@@ -50,14 +48,11 @@ if (isset($_GET['edit'])) {
     );
 
 } else if (isset($_GET['delete'])) {
-    Database::get()->query("DELETE FROM ai_providers WHERE id = ?d", $_GET['delete']);
+    Database::get()->query("DELETE FROM ai_providers WHERE id = ?d", $_GET['delete_provider']);
     Session::flash('message', $langAITokenDeleted);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page('modules/admin/aimoduleconf.php');
-} else if (isset($_POST['submit'])) {
-    print_a($_POST);
-    //die;
-
+} else if (isset($_POST['submit_provider'])) {
     $provider_type = $_POST['provider'] ?? '';
     $api_key = trim($_POST['api_key']) ?? '';
     $model = $_POST['model'] ?? '';
@@ -74,7 +69,6 @@ if (isset($_GET['edit'])) {
                 $provider_type = 'custom';
                 $model = $model_name;
             }
-
             // Check if the provider already exists
             $existing = Database::get()->querySingle("SELECT id FROM ai_providers WHERE provider_type = ?s", $provider_type);
 
@@ -89,8 +83,8 @@ if (isset($_GET['edit'])) {
                                     $api_key, $model, $endpoint_url, $ai_enabled, $provider_type);
             } else {
                 // Insert new provider
-                Database::get()->query("INSERT INTO ai_providers (name, provider_type, api_key, model_name, endpoint_url, enabled, created, updated, expired, options) 
-                                            VALUES (?s, ?s, ?s, ?s, ?s, ?s, " . DBHelper::timeAfter() . "," . DBHelper::timeAfter() . ", ?t, '')",
+                Database::get()->query("INSERT INTO ai_providers (name, provider_type, api_key, model_name, endpoint_url, enabled, created, updated, expired) 
+                                            VALUES (?s, ?s, ?s, ?s, ?s, ?s, " . DBHelper::timeAfter() . "," . DBHelper::timeAfter() . ", ?t)",
                                         ucfirst($provider_type) . ' Provider',
                                         $provider_type,
                                         $api_key,
@@ -108,7 +102,14 @@ if (isset($_GET['edit'])) {
     } else {
         Session::Messages($langFieldsMissing, 'alert-warning');
     }
-} else if (isset($_GET['add'])) {
+} else if (isset($_POST['submit_service'])) {
+    print_a($_POST);
+    Database::get()->query("INSERT INTO ai_modules (ai_module_id, ai_provider_id) 
+                                VALUES (?d, ?d)",
+                            $_POST['module'], $_POST['provider_model']);
+    Session::Messages($langAIConfigSaved, 'alert-success');
+    redirect_to_home_page('modules/admin/aimoduleconf.php');
+} else if (isset($_GET['add_provider'])) {
 // Get provider display names
     $providerDisplayNames = AIProviderFactory::getProviderDisplayNames();
 
@@ -120,6 +121,14 @@ if (isset($_GET['edit'])) {
         [['value' => 'other', 'label' => 'Other']]
     );
     $currentModelName = '';
+} else if (isset($_GET['add_service'])) {
+    $provider_model_data = [];
+    $data['ai_services'] = AIService::getAIServices();
+    $providers_data = Database::get()->queryArray("SELECT id, name, model_name FROM ai_providers WHERE enabled = 1");
+    foreach ($providers_data as $provider_data) {
+        $provider_model_data[$provider_data->id] = $provider_data->name . ' (' . $provider_data->model_name . ')';
+    }
+    $data['provider_model_data'] = $provider_model_data;
 } else { // list
     $providerDisplayNames = AIProviderFactory::getProviderDisplayNames();
     $data['q'] = $q = Database::get()->queryArray("SELECT * FROM ai_providers");
@@ -140,14 +149,20 @@ if (isset($_GET['edit'])) {
     }
 
     $ai_services = AIService::getAIServices();
-    foreach ($ai_services as $ai_service_id => $ai_service_name) {
-        list($ai_provider_id, $ai_model_name) = AIService::getAIServiceProviderModel($ai_service_id);
-        $data['ai_service_data'][] = [
-            'ai_service_name' => $ai_service_name,
-            'ai_provider_id' => $ai_provider_id,
-            'ai_module_name' => $ai_model_name
+
+    $q = Database::get()->queryArray("SELECT ai_module_id, name, model_name 
+                FROM ai_modules 
+                    JOIN ai_providers 
+                ON ai_modules.ai_provider_id = ai_providers.id");
+    foreach ($q as $modules_data) {
+        $ai_service_data[] = [
+            $ai_services[$modules_data->ai_module_id],
+            $modules_data->name,
+            $modules_data->model_name
         ];
     }
+
+    $data['ai_service_data'] = $ai_service_data;
 }
 
 $head_content .= "

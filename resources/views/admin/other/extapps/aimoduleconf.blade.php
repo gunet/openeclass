@@ -10,15 +10,9 @@
 
                 @include('layouts.partials.legend_view')
 
-                @if(isset($action_bar))
-                    {!! $action_bar !!}
-                @else
-                    <div class='mt-4'></div>
-                @endif
-
                 @include('layouts.partials.show_alert')
 
-                @if (isset($_GET['add']) || isset($_GET['edit']))
+                @if (isset($_GET['add_provider']) || isset($_GET['edit_provider']))
                     <div class='col-lg-6 col-12'>
                         <div class='form-wrapper form-edit border-0 px-0'>
                             <form class='form-horizontal' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
@@ -89,9 +83,9 @@
                                         {!! form_buttons(array(
                                             array(
                                                 'class' => 'submitAdminBtn',
-                                                'text' => trans('langModify'),
-                                                'name' => 'submit',
-                                                'value'=> trans('langModify')
+                                                'text' => trans('langSubmit'),
+                                                'name' => 'submit_provider',
+                                                'value'=> trans('langSubmit')
                                             )
                                         )) !!}
 
@@ -99,7 +93,55 @@
                                         {!! form_buttons(array(
                                             array(
                                                 'class' => 'cancelAdminBtn ms-1',
-                                                'href' => "extapp.php"
+                                                'href' => "aimoduleconf.php"
+                                            )
+                                        )) !!}
+
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
+                        <img class='form-image-modules' src='{!! get_form_image() !!}' alt="{{ trans('langImgFormsDes') }}">
+                    </div>
+                @elseif (isset($_GET['add_service']))
+                    <div class='col-lg-6 col-12'>
+                        <div class='form-wrapper form-edit border-0 px-0'>
+                            <form class='form-horizontal' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
+                                <div class='form-group'>
+                                    <label for="dropdown" class="form-label">{{ trans('langAIService') }}</label>
+                                    <select name='module' class='form-control'>
+                                        @foreach ($ai_services as $value => $label)
+                                            <option value='{{ $value }}'> {{ $label }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class='form-group mt-3'>
+                                    <label for="modelDropdown" class="form-label">{{ trans('langProvider') }} - {{ trans('langLanguageModel') }}</label>
+                                    <select name="provider_model" class="form-control">
+                                        @foreach ($provider_model_data as $id => $name)
+                                            <option value='{{ $id }}'> {{ $name }}</option>"
+                                         @endforeach
+                                    </select>
+                                </div>
+
+                                <div class='form-group mt-5'>
+                                    <div class='col-12 d-flex justify-content-end align-items-center'>
+                                        {!! form_buttons(array(
+                                            array(
+                                                'class' => 'submitAdminBtn',
+                                                'text' => trans('langSubmit'),
+                                                'name' => 'submit_service',
+                                                'value'=> trans('langSubmit')
+                                            )
+                                        )) !!}
+                                        {!! form_buttons(array(
+                                            array(
+                                                'class' => 'cancelAdminBtn ms-1',
+                                                'href' => "aimoduleconf.php"
                                             )
                                         )) !!}
 
@@ -113,11 +155,12 @@
                         <img class='form-image-modules' src='{!! get_form_image() !!}' alt="{{ trans('langImgFormsDes') }}">
                     </div>
 
+
                 @else
                     {!! action_bar(array(
-                        array('title' => trans('langAdd'),
-                            'url' => "$_SERVER[SCRIPT_NAME]?add",
-                            'icon' => 'fa-plus',
+                        array('title' => trans('langAddProvider'),
+                            'url' => "$_SERVER[SCRIPT_NAME]?add_provider",
+                            'icon' => 'fa-solid fa-plug',
                             'level' => 'primary-label',
                             'button-class' => 'btn-success')
                         ));
@@ -144,10 +187,10 @@
                                         {!!
                                             action_button(array(
                                                 array('title' => trans('langEditChange'),
-                                                      'url' => "$_SERVER[SCRIPT_NAME]?edit=$row->id",
+                                                      'url' => "$_SERVER[SCRIPT_NAME]?edit_provider=$row->id",
                                                       'icon' => 'fa-edit'),
                                                 array('title' => trans('langDelete'),
-                                                      'url' => "$_SERVER[SCRIPT_NAME]?delete=$row->id",
+                                                      'url' => "$_SERVER[SCRIPT_NAME]?delete_provider=$row->id",
                                                       'icon' => 'fa-times',
                                                       'class' => 'delete',
                                                       'confirm' => trans('langConfirmDelete'))))
@@ -157,6 +200,16 @@
                             @endforeach
                         </table>
                     </div>
+
+
+                    {!! action_bar(array(
+                            array('title' => trans('langAddService'),
+                                'url' => "$_SERVER[SCRIPT_NAME]?add_service",
+                                'icon' => 'fa-plus',
+                                'level' => 'primary-label',
+                                'button-class' => 'btn-success')
+                            ));
+                        !!}
 
                     {{-- list of AI modules --}}
                     <div class='table-responsive'>
@@ -172,15 +225,12 @@
 
                             @foreach ($ai_service_data as $ai_service)
                                 <tr>
-                                    <td>{{ $ai_service['ai_service_name'] }}</td>
-                                    <td>{{ $ai_service['ai_provider_id'] }}</td>
-                                    <td>{{ $ai_service['ai_module_name'] }}</td>
+                                    <td>{{ $ai_service[0] }}</td>
+                                    <td>{{ $ai_service[1] }}</td>
+                                    <td>{{ $ai_service[2] }}</td>
                                     <td class='option-btn-cell text-end'>
                                         {!!
                                             action_button(array(
-                                                array('title' => trans('langEditChange'),
-                                                      'url' => "$_SERVER[SCRIPT_NAME]?edit=$row->id",
-                                                      'icon' => 'fa-edit'),
                                                 array('title' => trans('langDelete'),
                                                       'url' => "$_SERVER[SCRIPT_NAME]?delete=$row->id",
                                                       'icon' => 'fa-times',

@@ -7115,3 +7115,5 @@ $langQuestionsAddedToExercise = '%d ερωτήσεις προστέθηκαν σ
 $langTestConnection = "Δοκιμή Σύνδεσης";
 $langDefaultFillInBlanks = "Συμπληρώστε τα κενά.";
 $langAIService = "Λειτουργία Τ.Ν.";
+$langAddProvider = "Προσθήκη Παρόχου";
+$langAddService = "Προσθήκη Λειτουργίας";
