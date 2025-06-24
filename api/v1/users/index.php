@@ -42,16 +42,17 @@ function api_method($access) {
 
         if (!empty($auth)) {
             require_once __DIR__ . '/../../../modules/auth/auth.inc.php';
+            array_push($hybridAuthMethods, 'eclass');
+
             $active_auth_methods = get_auth_active_methods();
             $active_auth_names = array_map(function($id) use ($auth_ids) {
                 return isset($auth_ids[$id]) ? $auth_ids[$id] : null;
             }, $active_auth_methods);
 
-            if (!in_array($auth, $active_auth_names)) {
-                Access::error(2, 'Invalid authentication method');
-            }
-            if (in_array($auth, $hybridAuthMethods)) {
-                Access::error(2, $auth . ' authentication method is not accepted');
+            $allowed_auth_names = array_diff($active_auth_names, $hybridAuthMethods);
+
+            if (!in_array($auth, $active_auth_names) || in_array($auth, $hybridAuthMethods)) {
+                Access::error(2, 'Invalid authentication method. Allowed methods are: ' . implode(', ', $allowed_auth_names));
             }
         }
 
