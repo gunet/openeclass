@@ -25,7 +25,7 @@ define('EPF_MENU', 4);
 define('EPF_LINK', 5);
 
 define('EPF_VISIBLE_PUBLIC', 1);
-define('EPF_VISIBLE_USER', 2);
+define('EPF_VISIBLE_USERS', 2);
 define('EPF_VISIBLE_PRIVATE', 3);
 
 /**
@@ -159,7 +159,8 @@ function render_eportfolio_fields_content($uid) {
  * @return string
  */
 function render_eportfolio_fields_form() {
-    global $uid, $langOptional, $langCompulsory, $langForm;
+    global $uid, $langOptional, $langCompulsory, $langForm, $langProfileInfoPrivate, $langPublicePortfolioField, $langOpenToRegisteredUsers, 
+        $langePortfolioFieldsVisibilitySettings, $langClose;
 
     $return_string = array();
     $return_string['panels'] = "";
@@ -211,12 +212,8 @@ function render_eportfolio_fields_form() {
                     $help_block = '';
                 }
 
-                $return_string['panels'] .= '<div class="'.$form_class.'">';
-                $return_string['panels'] .= '<label class="col-sm-12 title-default" for="epf_'.$f->shortname.'">'.q($f->name).'</label>';
-                $return_string['panels'] .= '<div class="col-sm-12">';
-
                 //get data to prefill fields
-                $data_res = Database::get()->querySingle("SELECT data FROM eportfolio_fields_data
+                $data_res = Database::get()->querySingle("SELECT data, visibility FROM eportfolio_fields_data
                                                       WHERE field_id = ?d AND user_id = ?d", $f->id, $uid);
                 if ($data_res) {
                     $fdata = $data_res->data;
@@ -225,6 +222,37 @@ function render_eportfolio_fields_form() {
                 if (Session::has('epf_'.$f->shortname)) {
                     $fdata = Session::get('epf_'.$f->shortname);
                 }
+
+                if (isset($fdata) && $fdata != '') {
+                    $visibility = $data_res->visibility;
+                } else {
+                    $visibility = EPF_VISIBLE_PUBLIC;
+                }
+
+                if ($visibility == EPF_VISIBLE_USERS) {
+                    $visibility_fa_icon = '<i class="fa fa-users"></i>';
+                    $fa_icon_title = $langOpenToRegisteredUsers;
+                    $users_selected = "selected";
+                    $public_selected = $private_selected = "";
+                    $hidden_visibility_element = '<input type="hidden" id="visibility_epf_'.$f->shortname.'_hidden" name="visibility_epf_'.$f->shortname.'_hidden" value="'.EPF_VISIBLE_USERS.'">';
+                } elseif ($visibility == EPF_VISIBLE_PRIVATE) {
+                    $visibility_fa_icon = '<i class="fa fa-lock"></i>';
+                    $fa_icon_title = $langProfileInfoPrivate;
+                    $private_selected = "selected";
+                    $public_selected = $users_selected = "";
+                    $hidden_visibility_element = '<input type="hidden" id="visibility_epf_'.$f->shortname.'_hidden" name="visibility_epf_'.$f->shortname.'_hidden" value="'.EPF_VISIBLE_PRIVATE.'">';
+                } else { //$visibility == EPF_VISIBLE_PUBLIC
+                    $visibility_fa_icon = '<i class="fa fa-globe"></i>';
+                    $fa_icon_title = $langPublicePortfolioField;
+                    $public_selected = "selected";
+                    $private_selected = $users_selected = "";
+                    $hidden_visibility_element = '<input type="hidden" id="visibility_epf_'.$f->shortname.'_hidden" name="visibility_epf_'.$f->shortname.'_hidden" value="'.EPF_VISIBLE_PUBLIC.'">';
+                }
+
+                $return_string['panels'] .= '<div class="'.$form_class.'">';
+                $return_string['panels'] .= '<div class="d-flex align-items-center"><label class="mb-0 title-default" for="epf_'.$f->shortname.'">'.q($f->name).'</label><button type="button" id="visibility_epf_'.$f->shortname.'_button" class="btn btn-link p-0 ms-2" data-bs-toggle="modal" data-bs-target="#visibilityModal-epf_'.$f->shortname.'" title="'.$fa_icon_title.'">'.$visibility_fa_icon.'</button></div>';
+                $return_string['panels'] .= '<div class="col-sm-12">';
+                $return_string['panels'] .= $hidden_visibility_element;
 
                 $val = '';
                 $placeholder = '';
@@ -315,6 +343,27 @@ function render_eportfolio_fields_form() {
                 }
                 $return_string['panels'] .= $help_block.'</div></div>';
                 unset($req_label);
+
+                $return_string['panels'] .= '<div class="modal fade" backdrop="static" id="visibilityModal-epf_'.$f->shortname.'" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title">'.$langePortfolioFieldsVisibilitySettings.' — '.$f->name.'</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                      <select class="form-select visibility_select" name="visibility_epf_'.$f->shortname.'">
+                        <option value="'.EPF_VISIBLE_PUBLIC.'" '.$public_selected.'>'.$langPublicePortfolioField.'</option>
+                        <option value="'.EPF_VISIBLE_USERS.'" '.$users_selected.'>'.$langOpenToRegisteredUsers.'</option>
+                        <option value="'.EPF_VISIBLE_PRIVATE.'" '.$private_selected.'>'.$langProfileInfoPrivate.'</option>
+                      </select>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-primary" data-bs-dismiss="modal">'.$langClose.'</button>
+                    </div>
+                  </div>
+                </div>
+              </div>';
             }
 
             $return_string['panels'] .= '</fieldset>
@@ -356,7 +405,15 @@ function process_eportfolio_fields_data() {
                 if ($result->datatype == EPF_TEXTAREA) {
                     $value = purify($value);
                 }
-                Database::get()->query("INSERT INTO eportfolio_fields_data (user_id, field_id, data) VALUES (?d,?d,?s)", $uid, $field_id, $value);
+
+                if (isset($_POST['visibility_epf_'.$field_name.'_hidden']) && in_array($_POST['visibility_epf_'.$field_name.'_hidden'], [EPF_VISIBLE_PUBLIC, EPF_VISIBLE_USERS, EPF_VISIBLE_PRIVATE])) {
+                    $visibility = intval($_POST['visibility_epf_'.$field_name.'_hidden']);
+                } else {
+                    $visibility = EPF_VISIBLE_PUBLIC;
+                }
+
+                Database::get()->query("INSERT INTO eportfolio_fields_data (user_id, field_id, data, visibility) VALUES (?d,?d,?s,?d)", $uid, $field_id, $value, $visibility);
+                
             }
             $updated = true;
         }
