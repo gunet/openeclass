@@ -594,7 +594,8 @@ if (isset($_GET['modifyAnswers'])) {
         if ($newAnswer && !isset($_GET['remImg'])) {
             $nbrAnswers = $_POST['nbrAnswers'] + 1;
         } else { // for edit
-            $nbrAnswers = $objAnswer->get_total_drag_and_drop_marker_answers($questionId);
+            $marker_ids_arr = $objAnswer->get_marker_ids($questionId);
+            $nbrAnswers = max($marker_ids_arr);
         }
         if ($deleteAnswer) {
             $nbrAnswers = $_POST['nbrAnswers'] - 1;

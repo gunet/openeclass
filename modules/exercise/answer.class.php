@@ -572,5 +572,28 @@ if (!class_exists('Answer')):
             return $maxValueMarker;
         }
 
+        /**
+         * 
+         * @param $questionId
+         * @return int|mixed
+         * @author - Nikos Mpalamoutis
+         */
+        function get_marker_ids($questionId) {
+            global $webDir, $course_code;
+
+            $q = Database::get()->querySingle("SELECT options FROM exercise_question WHERE id = ?d", $questionId)->options;
+            $arrMarkers = [];
+            $markerIds = [];
+            if ($q) {
+                $arrMarkers = explode('|', $q);
+                foreach ($arrMarkers as $m) {
+                    $markersData = json_decode($m, true);
+                    $markerIds[] = $markersData['marker_id'];
+                }
+            }
+            
+            return $markerIds;
+        }
+
     }
 endif;
