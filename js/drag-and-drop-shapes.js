@@ -774,7 +774,7 @@ function shapesCreationProcess() {
                 var markerShape = $('#shapeType-'+number).val();
                 var markerAnswerWithImage = $('#marker-answer-with-image-'+number).val();
 
-                if (markerAnswer && !containsMarkerAnswer(markerAnswer)) {
+                if (markerAnswer && !containsMarkerAnswer(markerAnswer,number)) {
                     if ((markerShape == 'circle' || markerShape == 'rectangle') && markerCoordinates) {
 
                         // Replace colon with comma
@@ -1070,7 +1070,7 @@ function getMarkerIdByAnswer(qid, answer) {
 }
 
 // Function to find if exists the same marker_answer value in the json file
-function containsMarkerAnswer(answer) {
+function containsMarkerAnswer(answer,currentMarkerId) {
     const rawData = $('#dataJsonVariables').val();
     if (!rawData) return false;
 
@@ -1078,7 +1078,7 @@ function containsMarkerAnswer(answer) {
     for (let jsonStr of jsonStrings) {
         try {
             const obj = JSON.parse(jsonStr);
-            if (obj.marker_answer === answer) {
+            if (obj.marker_answer === answer && obj.marker_id != currentMarkerId) {
                 return true; // Found a match
             }
         } catch (e) {
