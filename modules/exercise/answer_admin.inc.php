@@ -26,7 +26,7 @@ $questionTypeWord = $objQuestion->selectTypeLegend($answerType);
 $questionDescription = standard_text_escape($objQuestion->selectDescription());
 $okPicture = file_exists($picturePath . '/quiz-' . $questionId) ? true : false;
 
-$newAnswer = $deleteAnswer = false;
+$newAnswer = $deleteAnswer = $modifyWildCards = false;
 
 $htopic = 0;
 if (isset($_GET['htopic'])) { //new question
@@ -46,6 +46,9 @@ if (isset($_POST['lessAnswers'])) {
 }
 if (isset($_POST['moreAnswers'])) {
     $newAnswer = true;
+}
+if (isset($_POST['modifyWildCards'])) {
+    $modifyWildCards = true;
 }
 
 // the answer form has been submitted
@@ -595,7 +598,7 @@ if (isset($_GET['modifyAnswers'])) {
             $nbrAnswers = $_POST['nbrAnswers'] + 1;
         } else { // for edit
             $marker_ids_arr = $objAnswer->get_marker_ids($questionId);
-            $nbrAnswers = max($marker_ids_arr);
+            $nbrAnswers = (count($marker_ids_arr) > 0 ? max($marker_ids_arr) : 2);
         }
         if ($deleteAnswer) {
             $nbrAnswers = $_POST['nbrAnswers'] - 1;
@@ -630,7 +633,52 @@ if (isset($_GET['modifyAnswers'])) {
         }
         $DataMarkersToJson = json_encode($coordinatesXY) ?? '';
 
+    } elseif ($answerType == CALCULATED or $modifyWildCards) {
+        if ($newAnswer) {
+            $nbrAnswers = $_POST['nbrAnswers'] + 1;
+        } else { // for edit
+            // Get the total number of predefined answers
+            $nbrAnswers = $_POST['nbrAnswers'] ?? 1;
+        }
+        if ($deleteAnswer) {
+            $nbrAnswers = $_POST['nbrAnswers'] - 1;
+            if ($nbrAnswers <= 2) { // minimum 1 answers
+               $nbrAnswers = 1;
+            }
+        }
+
+        $calculated_question = $_POST['calculated_question'] ?? '';
+        $calculated_answer = [];
+        if (isset($_POST['calculated_answer'])) {
+            foreach ($_POST['calculated_answer'] as $index => $answer) {
+                $calculated_answer[$index] = $answer;
+            }
+        }
+        $calculated_answer_grade = [];
+        if (isset($_POST['calculated_answer_grade'])) {
+            foreach ($_POST['calculated_answer_grade'] as $index => $grade) {
+                $calculated_answer_grade[$index] = $grade;
+            }
+        }
+
+        // Here we get the variables from the Curly brackets
+        if ($modifyWildCards) {
+
+        }
+
+
     }
+
+
+
+
+
+
+
+
+
+
+
 
     $classImg = '';
     $classContainer = '';
@@ -1125,6 +1173,65 @@ if (isset($_GET['modifyAnswers'])) {
                                     <input class='btn submitAdminBtn' type='submit' name='moreAnswers' value='$langMoreAnswers' />
                                     <input class='btn deleteAdminBtn' type='submit' name='lessAnswers' value='$langLessAnswers' />
                                 </div>";
+        } elseif ($answerType == CALCULATED or $modifyWildCards) {
+
+            $modifyWildCards = isset($exerciseId)? "?course=$course_code&amp;exerciseId=$exerciseId&amp;modifyAnswers=$_GET[modifyAnswers]" : '';
+            $tool_content .= "
+                            <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId&amp;modifyAnswers=" . urlencode($_GET['modifyAnswers']) . "'>
+                                <fieldset><legend class='mb-0' aria-label='$langForm'></legend>
+                                <input type='hidden' name='nbrAnswers' value='$nbrAnswers'>
+                                <textarea class='form-control mt-4' name='calculated_question' cols='70' rows='6'>{$calculated_question}</textarea>
+                                <div class='table-responsive mb-4'>
+                                    <table class='table-default'>
+                                        <thead>
+                                            <tr>
+                                                <th>$langAnswer</th>
+                                                <th>$langGradebookGrade</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>";
+                                        for ($i=1; $i<=$nbrAnswers; $i++) {
+                                            $cal_answer = (isset($calculated_answer[$i]) ? $calculated_answer[$i] : '');
+                                            $cal_grade = (isset($calculated_answer_grade[$i]) ? $calculated_answer_grade[$i] : '');
+                                            $tool_content .= "
+                                                <tr>
+                                                    <td>                                       
+                                                        <input type='text' class='form-control' name='calculated_answer[$i]' value='{$cal_answer}'>                                        
+                                                    </td>
+                                                    <td>                                        
+                                                        <input type='number' class='form-control' name='calculated_answer_grade[$i]' value='{$cal_grade}' min='0' step='0.01'>                                        
+                                                    </td>
+                                                </tr>";
+                                        }
+            $tool_content .= "          </tbody>
+                                    </table>
+                                </div>
+                                <div class='col-12 mt-4'>
+                                    <button class='btn submitAdminBtn' type='submit' name='modifyWildCards'><i class='fa-solid fa-edit'></i>$langEditCourseCategoryValues</button>
+                                </div>";
+                                if ($modifyWildCards) { // We are going to display the wild cards which have inserted.
+                                    $wildCardsArr = extractValuesInCurlyBrackets($calculated_question);
+                                    
+                                    foreach ($wildCardsArr as $wildCard) {
+                                        $tool_content .= "<div class='col-12 my-3 bg-light p-3'>";
+                                        $tool_content .= "<div class=''>{{$wildCard}}</p></div>";
+                                        $tool_content .= "<div class='d-flex justify-content-start align-items-center gap-3'>             
+                                                                <div>
+                                                                    <input type='text' class='form-control' name='calcmin[1]' id='id_calcmin_1' value='1' data-initial-value='1'>
+                                                                </div>
+                                                                <div>
+                                                                   <input type='text' class='form-control ' name='calcmax[1]' id='id_calcmax_1' value='10'>
+                                                            </div>
+                                                        </div>";
+                                        $tool_content .= "</div>";
+                                    }
+                                    
+                                }
+            $tool_content .= "  <div class='col-12 d-flex justify-content-start align-items-center gap-3 flex-wrap my-4 mt-5'>
+                                    <input class='btn submitAdminBtn' type='submit' name='moreAnswers' value='$langMoreAnswers' />
+                                    <input class='btn deleteAdminBtn' type='submit' name='lessAnswers' value='$langLessAnswers' />
+                                </div>";
+
         }
 
         $cancel_link = isset($exerciseId) ? "admin.php?course=$course_code&exerciseId=$exerciseId" : "question_pool.php?course=$course_code";
@@ -1222,4 +1329,10 @@ function getDataMarkersFromJson($questionId) {
     }
 
     return $arrDataMarkers;
+}
+
+
+function extractValuesInCurlyBrackets ($text) {
+    preg_match_all('/\{([^}]+)\}/', $text, $matches);
+    return $matches[1]; // This contains all the captured groups inside {}
 }

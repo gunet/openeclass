@@ -2163,7 +2163,7 @@ $langAllowMoreDefinedAnswersThanBlanks = "Οι προκαθορισμένες α
 $langErrorWithUniqueNumberOfBlank = "Καταχωρήσατε τον ίδιο μοναδικό αριθμό σε παραπάνω από ένα κενά.";
 $langDragAndDropMarkersTextAnswers = "Μεταφορά και απόθεση σημείων εικόνας: ";
 
-$langDragAndDropMarkers = "Μεταφορά και απόθεση σημείων κειμένων ή εικόνας";
+$langDragAndDropMarkers = "Μεταφορά και απόθεση σε προκαθορισμένα σημεία ή εικόνα";
 $langMarker = "Σημείο";
 $langShape = "Σχήμα";
 $langRectangle = "Ορθογώνιο";
@@ -2176,6 +2176,8 @@ $langBracket = "Αγκύλη";
 $langAddAnswerThroughImg = "Η προκαθορισμένη απάντηση θα εμφανίζεται μέσω της εικόνας";
 $langImageHasBeenDeleted = "Η εικόνα διαγράφηκε επιτυχώς.";
 $langSomethingWentWrong = "Κάτι πήγε στραβά. Δοκιμάστε πάλι.";
+
+$langCalculated = "Υπολογισμού αριθμητικών πράξεων";
 
 // answer_admin.php
 $langWeightingForEachBlank = "Δώστε ένα βάρος σε κάθε κενό";
