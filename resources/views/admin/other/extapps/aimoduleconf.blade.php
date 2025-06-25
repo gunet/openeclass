@@ -79,7 +79,6 @@
                                 <div class='form-group mt-5'>
                                     <div class='col-12 d-flex justify-content-end align-items-center'>
 
-
                                         {!! form_buttons(array(
                                             array(
                                                 'class' => 'submitAdminBtn',
@@ -126,6 +125,17 @@
                                             <option value='{{ $id }}'> {{ $name }}</option>"
                                          @endforeach
                                     </select>
+                                </div>
+
+                                <div class='form-group mt-3' id='courses-list'>
+                                    <label for='select-courses' class='col-12 control-label-notes'>{{ trans('langUseOfService') }}&nbsp;&nbsp;
+                                    <span class='fa fa-info-circle' data-bs-toggle='tooltip' data-bs-placement='right' title='{{ trans('langUseOfServiceInfo') }}'></span></label>
+                                    <div class='col-12'>
+                                        <select id='select-courses' class='form-control' name='ai_courses[]' multiple>
+                                            {!! $courses_content !!}
+                                        </select>
+                                        <a href='#' id='selectAll'>{{ trans('langJQCheckAll') }}</a> | <a href='#' id='removeAll'>{{ trans('langJQUncheckAll') }}</a>
+                                    </div>
                                 </div>
 
                                 <div class='form-group mt-5'>
@@ -203,7 +213,7 @@
 
 
                     {!! action_bar(array(
-                            array('title' => trans('langAddService'),
+                            array('title' => trans('langAssignAIToModule'),
                                 'url' => "$_SERVER[SCRIPT_NAME]?add_service",
                                 'icon' => 'fa-plus',
                                 'level' => 'primary-label',
@@ -219,20 +229,26 @@
                                 <th>{{ trans('langAIService') }}</th>
                                 <th>{{ trans('langProvider') }}</th>
                                 <th>{{ trans('langLanguageModel') }}</th>
+                                <th>{{ trans('langGradebookActivityWeightLeft') }}</th>
                                 <th class='text-end' aria-label='{{ trans('langSettingSelect') }}'><i class='fa-solid fa-gears'></i></th>
                             </tr>
                             </thead>
 
-                            @foreach ($ai_service_data as $ai_service)
+                            @foreach ($ai_module_data as $ai_module)
                                 <tr>
-                                    <td>{{ $ai_service[0] }}</td>
-                                    <td>{{ $ai_service[1] }}</td>
-                                    <td>{{ $ai_service[2] }}</td>
+                                    <td>{{ $ai_module[1] }}</td>
+                                    <td>{{ $ai_module[2] }}</td>
+                                    <td>{{ $ai_module[3] }}</td>
+                                    <td>
+                                        @if ($ai_module[4] == 1)
+                                            {{ trans('langToAllCourses') }}
+                                        @endif
+                                    </td>
                                     <td class='option-btn-cell text-end'>
                                         {!!
                                             action_button(array(
                                                 array('title' => trans('langDelete'),
-                                                      'url' => "$_SERVER[SCRIPT_NAME]?delete=$row->id",
+                                                      'url' => "$_SERVER[SCRIPT_NAME]?delete_service=$ai_module[0]",
                                                       'icon' => 'fa-times',
                                                       'class' => 'delete',
                                                       'confirm' => trans('langConfirmDelete'))))
@@ -248,5 +264,173 @@
             </div>
         </div>
     </div>
+
+    <script type='text/javascript'>
+        function doSelectedCourses() {
+            let selectedVals = $('#select-courses').val();
+            let i = 0;
+            let csvSelection = '';
+
+            // comma separate selection and update field
+            while (i < selectedVals.length) {
+                if (csvSelection.length > 0) {
+                    csvSelection = csvSelection.concat(',', selectedVals[i]);
+                } else {
+                    csvSelection = csvSelection.concat(selectedVals[i]);
+                }
+                i++;
+            }
+            $('#enabled-courses').val(csvSelection);
+
+            // remove 'all courses' selection when selected other courses
+            if (selectedVals.length > 1) {
+                let index = selectedVals.indexOf('0');
+                if (index > -1) {
+                    selectedVals.splice(index, 1);
+                    $('#select-courses').val(selectedVals).trigger('change');
+                }
+            }
+            // restore all courses selections when deselected other courses
+            if (selectedVals.length <= 0) {
+                selectedVals.push(0);
+                $('#select-courses').val(selectedVals).trigger('change');
+            }
+        }
+
+        // Function to load models for a given provider
+        function loadModels(provider) {
+            if (provider) {
+                $('#modelDropdown').empty().append('<option value=\"\">Loading...</option>');
+
+                $.ajax({
+                    url: 'aigetmodels.php',
+                    method: 'POST',
+                    data: { provider: provider },
+                    success: function (response) {
+                        console.log('Server Response:', response); // Debugging
+
+                        if (response && response.success && typeof response.models === 'object') {
+                            $('#modelDropdown').empty().append('<option value=\"\">{{ trans('langSelectLanguageModel') }}</option>');
+
+                            Object.entries(response.models).forEach(function ([key, label]) {
+                                var selected = '';
+                                if (key === '" . $currentModelName . "') {
+                                    selected = ' selected';
+                                }
+                                $('#modelDropdown').append('<option value=\"' + key + '\"' + selected + '>' + label + '</option>');
+                            });
+                        } else if (response && response.error) {
+                            $('#modelDropdown').empty().append('<option value=\"\">' + response.error + '</option>');
+                        } else {
+                            $('#modelDropdown').empty().append('<option value=\"\">{{ trans('langNoLangModels') }}</option>');
+                        }
+                    },
+                    error: function () {
+                        $('#modelDropdown').empty().append('<option value=\"\">Error loading models</option>');
+                    }
+                });
+            } else {
+                $('#modelDropdown').empty().append('<option value=\"\">Select a model</option>');
+            }
+        }
+
+        $(document).ready(function () {
+
+            // Load models for existing provider on page load
+            var selectedProvider = $('#dropdownprovider').val();
+            if (selectedProvider && selectedProvider !== 'other') {
+                loadModels(selectedProvider);
+            }
+
+            // Handle provider dropdown change
+            $('#dropdownprovider').on('change', function () {
+                const provider = $(this).val();
+
+                if (provider === 'other') {
+                    $('#modelDropdownContainer').addClass('d-none');
+                    $('#otherFields').removeClass('d-none');
+                } else {
+                    $('#modelDropdownContainer').removeClass('d-none');
+                    $('#otherFields').addClass('d-none');
+                }
+
+                if (provider && provider !== 'other') {
+                    loadModels(provider);
+                }
+            });
+
+            // Handle test connection button
+            $('#testConnectionBtn').on('click', function() {
+                const btn = $(this);
+                const originalText = btn.text();
+                const apiKey = $('#api_key').val();
+                const provider = $('#dropdownprovider').val();
+                const model = provider === 'other' ? $('#modelName').val() : $('#modelDropdown').val();
+                const endpointUrl = $('#endpointUrl').val();
+
+                if (!apiKey) {
+                    $('#connectionStatus').html('<div class=\"alert alert-warning\">Please enter an API key first</div>');
+                    return;
+                }
+
+                if (!provider) {
+                    $('#connectionStatus').html('<div class=\"alert alert-warning\">Please select a provider first</div>');
+                    return;
+                }
+
+                // Show loading state
+                btn.prop('disabled', true).text('Testing...');
+                $('#connectionStatus').html('<div class=\"alert alert-info\">Testing connection...</div>');
+
+                $.ajax({
+                    url: 'aitestconnection.php',
+                    method: 'POST',
+                    data: {
+                        provider_type: provider,
+                        api_key: apiKey,
+                        model_name: model,
+                        endpoint_url: endpointUrl
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            $('#connectionStatus').html('<div class=\"alert alert-success\"><i class=\"fa fa-check\"></i> ' + response.message + '</div>');
+                        } else {
+                            $('#connectionStatus').html('<div class=\"alert alert-danger\"><i class=\"fa fa-times\"></i> ' + response.message + '</div>');
+                        }
+                    },
+                    error: function() {
+                        $('#connectionStatus').html('<div class=\"alert alert-danger\"><i class=\"fa fa-times\"></i> Connection test failed</div>');
+                    },
+                    complete: function() {
+                        btn.prop('disabled', false).text(originalText);
+                    }
+                });
+            });
+
+
+            $('#ai-courses').select2();
+            $('#selectAll').click(function(e) {
+                e.preventDefault();
+                let stringVal = [];
+                $('#ai-courses').find('option').each(function(){
+                    if ($(this).val() != 0) {
+                        stringVal.push($(this).val());
+                    }
+                });
+                $('#ai-courses').val(stringVal).trigger('change');
+            });
+            $('#removeAll').click(function(e) {
+                e.preventDefault();
+                let stringVal = [];
+                stringVal.push(0);
+                $('#ai-courses').val(stringVal).trigger('change');
+            });
+            $('#ai-courses').change(function(e) {
+                doSelectedCourses();
+            });
+            doSelectedCourses();
+        });
+
+    </script>
 
 @endsection

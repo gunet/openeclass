@@ -29,6 +29,8 @@ $toolName = $langAI;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'extapp.php', 'name' => $langExtAppConfig);
 $navigation[] = array('url' => 'aimoduleconf.php', 'name' => $langAI);
+
+load_js('select2');
 const AI_KEY_DURATION_TIME = 365*24*60*60; // one year (in seconds)
 
 if (isset($_GET['edit_provider'])) {
@@ -47,9 +49,14 @@ if (isset($_GET['edit_provider'])) {
         [['value' => 'other', 'label' => 'Other']]
     );
 
-} else if (isset($_GET['delete'])) {
+} else if (isset($_GET['delete_provider'])) {
     Database::get()->query("DELETE FROM ai_providers WHERE id = ?d", $_GET['delete_provider']);
     Session::flash('message', $langAITokenDeleted);
+    Session::flash('alert-class', 'alert-success');
+    redirect_to_home_page('modules/admin/aimoduleconf.php');
+} else if (isset($_GET['delete_service'])) {
+    Database::get()->query("DELETE FROM ai_modules WHERE id = ?d", $_GET['delete_service']);
+    Session::flash('message', $langAIModuleDeleted);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page('modules/admin/aimoduleconf.php');
 } else if (isset($_POST['submit_provider'])) {
@@ -104,8 +111,8 @@ if (isset($_GET['edit_provider'])) {
     }
 } else if (isset($_POST['submit_service'])) {
     print_a($_POST);
-    Database::get()->query("INSERT INTO ai_modules (ai_module_id, ai_provider_id) 
-                                VALUES (?d, ?d)",
+    Database::get()->query("INSERT INTO ai_modules (ai_module_id, ai_provider_id, all_courses) 
+                                VALUES (?d, ?d, 1)",
                             $_POST['module'], $_POST['provider_model']);
     Session::Messages($langAIConfigSaved, 'alert-success');
     redirect_to_home_page('modules/admin/aimoduleconf.php');
@@ -122,6 +129,18 @@ if (isset($_GET['edit_provider'])) {
     );
     $currentModelName = '';
 } else if (isset($_GET['add_service'])) {
+
+    $courses_list = Database::get()->queryArray("SELECT id, code, title FROM course
+                                                    WHERE visible != " . COURSE_INACTIVE . "
+                                                 ORDER BY title");
+    $selections = array();
+    $courses_content = "<option value='0' selected><h2>$langToAllCourses</h2></option>";
+    foreach ($courses_list as $c) {
+        $selected = in_array($c->id, $selections) ? "selected" : "";
+        $courses_content .= "<option value='$c->id' $selected>" . q($c->title) . " (" . q($c->code) . ")</option>";
+    }
+    $data['courses_content'] = $courses_content;
+
     $provider_model_data = [];
     $data['ai_services'] = AIService::getAIServices();
     $providers_data = Database::get()->queryArray("SELECT id, name, model_name FROM ai_providers WHERE enabled = 1");
@@ -150,132 +169,20 @@ if (isset($_GET['edit_provider'])) {
 
     $ai_services = AIService::getAIServices();
 
-    $q = Database::get()->queryArray("SELECT ai_module_id, name, model_name 
+    $q = Database::get()->queryArray("SELECT ai_modules.id, ai_module_id, name, model_name, all_courses 
                 FROM ai_modules 
                     JOIN ai_providers 
                 ON ai_modules.ai_provider_id = ai_providers.id");
     foreach ($q as $modules_data) {
-        $ai_service_data[] = [
+        $ai_module_data[] = [
+            $modules_data->id,
             $ai_services[$modules_data->ai_module_id],
             $modules_data->name,
-            $modules_data->model_name
+            $modules_data->model_name,
+            $modules_data->all_courses
         ];
     }
 
-    $data['ai_service_data'] = $ai_service_data;
+    $data['ai_module_data'] = $ai_module_data;
 }
-
-$head_content .= "
-    <script type='text/javascript'>
-    $(document).ready(function() {
-        // Function to load models for a given provider
-        function loadModels(provider) {
-            if (provider) {
-                $('#modelDropdown').empty().append('<option value=\"\">Loading...</option>');
-
-                $.ajax({
-                    url: 'aigetmodels.php',
-                    method: 'POST',
-                    data: { provider: provider },
-                    success: function (response) {
-                        console.log('Server Response:', response); // Debugging
-                        
-                        if (response && response.success && typeof response.models === 'object') {
-                            $('#modelDropdown').empty().append('<option value=\"\">" . js_escape($langSelectLanguageModel) . "</option>');
-
-                            Object.entries(response.models).forEach(function ([key, label]) {
-                                var selected = '';
-                                if (key === '" . $currentModelName . "') {
-                                    selected = ' selected';
-                                }
-                                $('#modelDropdown').append('<option value=\"' + key + '\"' + selected + '>' + label + '</option>');
-                            });
-                        } else if (response && response.error) {
-                            $('#modelDropdown').empty().append('<option value=\"\">' + response.error + '</option>');
-                        } else {
-                            $('#modelDropdown').empty().append('<option value=\"\">" . js_escape($langNoLangModels) . "</option>');
-                        }
-                    },
-                    error: function () {
-                        $('#modelDropdown').empty().append('<option value=\"\">Error loading models</option>');
-                    }
-                });
-            } else {
-                $('#modelDropdown').empty().append('<option value=\"\">Select a model</option>');
-            }
-        }
-
-        // Load models for existing provider on page load
-        var selectedProvider = $('#dropdownprovider').val();
-        if (selectedProvider && selectedProvider !== 'other') {
-            loadModels(selectedProvider);
-        }
-
-        // Handle provider dropdown change
-        $('#dropdownprovider').on('change', function () {
-            const provider = $(this).val();
-
-            if (provider === 'other') {
-                $('#modelDropdownContainer').addClass('d-none');
-                $('#otherFields').removeClass('d-none');
-            } else {
-                $('#modelDropdownContainer').removeClass('d-none');
-                $('#otherFields').addClass('d-none');
-            }
-
-            if (provider && provider !== 'other') {
-                loadModels(provider);
-            }
-        });
-
-        // Handle test connection button
-        $('#testConnectionBtn').on('click', function() {
-            const btn = $(this);
-            const originalText = btn.text();
-            const apiKey = $('#api_key').val();
-            const provider = $('#dropdownprovider').val();
-            const model = provider === 'other' ? $('#modelName').val() : $('#modelDropdown').val();
-            const endpointUrl = $('#endpointUrl').val();
-
-            if (!apiKey) {
-                $('#connectionStatus').html('<div class=\"alert alert-warning\">Please enter an API key first</div>');
-                return;
-            }
-
-            if (!provider) {
-                $('#connectionStatus').html('<div class=\"alert alert-warning\">Please select a provider first</div>');
-                return;
-            }
-
-            // Show loading state
-            btn.prop('disabled', true).text('Testing...');
-            $('#connectionStatus').html('<div class=\"alert alert-info\">Testing connection...</div>');
-
-            $.ajax({
-                url: 'aitestconnection.php',
-                method: 'POST',
-                data: {
-                    provider_type: provider,
-                    api_key: apiKey,
-                    model_name: model,
-                    endpoint_url: endpointUrl
-                },
-                success: function(response) {
-                    if (response.success) {
-                        $('#connectionStatus').html('<div class=\"alert alert-success\"><i class=\"fa fa-check\"></i> ' + response.message + '</div>');
-                    } else {
-                        $('#connectionStatus').html('<div class=\"alert alert-danger\"><i class=\"fa fa-times\"></i> ' + response.message + '</div>');
-                    }
-                },
-                error: function() {
-                    $('#connectionStatus').html('<div class=\"alert alert-danger\"><i class=\"fa fa-times\"></i> Connection test failed</div>');
-                },
-                complete: function() {
-                    btn.prop('disabled', false).text(originalText);
-                }
-            });
-        });
-    });
-    </script>";
-
 view('admin.other.extapps.aimoduleconf', $data);

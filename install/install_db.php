@@ -2517,7 +2517,8 @@ $db->query("CREATE TABLE ai_providers (
 $db->query("CREATE TABLE ai_modules (
     `id` SMALLINT NOT NULL AUTO_INCREMENT, 
     `ai_module_id` SMALLINT NOT NULL DEFAULT 0, 
-    `ai_provider_id` SMALLINT DEFAULT 0, 
+    `ai_provider_id` SMALLINT DEFAULT 0,
+    `all_courses` TINYINT NOT NULL DEFAULT 1, 
     PRIMARY KEY(ID)) $tbl_options");
 
 $db->query("INSERT INTO ai_modules SET ai_module_id = 1"); // question pool

@@ -3371,9 +3371,8 @@ function upgrade_to_4_2($tbl_options) : void {
             `id` SMALLINT NOT NULL AUTO_INCREMENT, 
             `ai_module_id` SMALLINT NOT NULL DEFAULT 0, 
             `ai_provider_id` SMALLINT DEFAULT 0, 
+            `all_courses` TINYINT NOT NULL DEFAULT 1,
             PRIMARY KEY(ID)) $tbl_options");
-
-        Database::get()->query("INSERT INTO ai_modules SET ai_module_id = 1"); // question pool
     }
 }
 
