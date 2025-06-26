@@ -1,5 +1,4 @@
 <?php
-
 /*
  *  ========================================================================
  *  * Open eClass
@@ -83,9 +82,19 @@ function render_eportfolio_fields_content($uid) {
                     unset($fdata);
                 }
 
+                if (!isset($_SESSION['uid'])) {
+                    $visibility_query = "=".EPF_VISIBLE_PUBLIC;
+                } else {
+                    if ($_SESSION['uid'] == $uid) {
+                        $visibility_query = "<=".EPF_VISIBLE_PRIVATE;
+                    } else {
+                        $visibility_query = "<=".EPF_VISIBLE_USERS;
+                    }
+                }
+
                 //get data to prefill fields
                 $fdata_res = Database::get()->querySingle("SELECT data FROM eportfolio_fields_data
-                                 WHERE user_id = ?d AND field_id = ?d", $uid, $f->id);
+                                 WHERE user_id = ?d AND field_id = ?d AND visibility ".$visibility_query, $uid, $f->id);
                 if ($fdata_res AND (($f->datatype != EPF_MENU AND $fdata_res->data != '') OR ($f->datatype == EPF_MENU AND $fdata_res->data != 0))) {
                     $showCat = true;
                     $showAll = true;
