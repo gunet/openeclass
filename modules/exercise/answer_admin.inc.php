@@ -797,7 +797,6 @@ if (isset($_GET['modifyAnswers'])) {
 
 
             }
-            print_a($_SESSION['wildCard_'.$questionId]);
         }
         
     }
