@@ -23,18 +23,18 @@ function api_method($access) {
     if (isset($_GET['all'])) {
 
         $categories = Database::get()->queryArray('SELECT hierarchy.id,hierarchy.code, hierarchy.name, hierarchy.description,
-            MIN(course.created) AS timemodified, 0 AS sortorder
-        FROM hierarchy
-            LEFT JOIN course_department ON hierarchy.id = course_department.department
-            LEFT JOIN course ON course_department.course = course.id
-        GROUP BY hierarchy.id, hierarchy.name, hierarchy.description
-        ORDER BY hierarchy.id');
+                MIN(course.created) AS timemodified, 0 AS sortorder
+            FROM hierarchy
+                LEFT JOIN course_department ON hierarchy.id = course_department.department
+                LEFT JOIN course ON course_department.course = course.id
+            GROUP BY hierarchy.id, hierarchy.name, hierarchy.description
+            ORDER BY hierarchy.id');
         $categories = array_map(function ($item) {
             return [
                 'id' => $item->id,
                 'code' => $item->code,
-                'description' => getSerializedMessage($item->description, 'el'),
-                'name' => getSerializedMessage($item->name, 'el'),
+                'description' => getSerializedMessage($item->description),
+                'name' => getSerializedMessage($item->name),
                 'timemodified' => $item->timemodified,
                 'sortorder' => $item->sortorder,
             ];
@@ -42,9 +42,7 @@ function api_method($access) {
 
         header('Content-Type: application/json');
         echo json_encode($categories, JSON_UNESCAPED_UNICODE);
-        exit();
-
-
+        exit;
     }
 
     if (isset($_GET['id'])) {
@@ -59,8 +57,8 @@ function api_method($access) {
         } else {
             $categories = [
                 'id' => $category->id,
-                'name' => getSerializedMessage($category->name, 'el'),
-                'description' => getSerializedMessage($category->description, 'el'),
+                'name' => getSerializedMessage($category->name),
+                'description' => getSerializedMessage($category->description),
                 'timemodified' => $category->timemodified,
                 'sortorder' => $category->sortorder,
             ];
@@ -74,21 +72,22 @@ function api_method($access) {
                        JOIN course_department ON hierarchy.id = course_department.department
                        JOIN course ON course_department.course = course.id
                     WHERE course.id IN ($placeholders)
+                    GROUP BY hierarchy.id
                     ORDER BY name", $access->courseIDs);
-	} else {
-		$categories = Database::get()->queryArray('SELECT hierarchy.id, hierarchy.name, hierarchy.description,
-			MIN(course.created) AS timemodified, 0 AS sortorder
-		    FROM hierarchy
-			JOIN course_department ON hierarchy.id = course_department.department
-			JOIN course ON course_department.course = course.id
-		    WHERE allow_course = 1
-		    ORDER BY name');
-	}
+        } else {
+            $categories = Database::get()->queryArray('SELECT hierarchy.id, hierarchy.name, hierarchy.description,
+                    MIN(course.created) AS timemodified, 0 AS sortorder
+                FROM hierarchy
+                    LEFT JOIN course_department ON hierarchy.id = course_department.department
+                    LEFT JOIN course ON course_department.course = course.id
+                WHERE allow_course = 1
+                ORDER BY name');
+        }
         $categories = array_map(function ($item) {
             return [
                 'id' => $item->id,
-                'name' => getSerializedMessage($item->name, 'el'),
-                'description' => getSerializedMessage($item->description, 'el'),
+                'name' => getSerializedMessage($item->name),
+                'description' => getSerializedMessage($item->description),
                 'timemodified' => $item->timemodified,
                 'sortorder' => $item->sortorder,
             ];

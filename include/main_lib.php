@@ -4155,9 +4155,12 @@ function getSerializedMessage($message, $lang=null) {
         $lang = $language;
     }
 
+    $data = @unserialize($message);
     // Message is simple string, not serialized array - just return it
-    if (!($data = @unserialize($message))) {
+    if ($data === false) {
         return $message;
+    } elseif ($data === []) { // empty array - return empty string
+        return '';
     } else {
         if (isset($data[$lang])) {
             return $data[$lang]; // return requested language if possible...
