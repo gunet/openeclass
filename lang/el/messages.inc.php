@@ -2178,6 +2178,24 @@ $langImageHasBeenDeleted = "Η εικόνα διαγράφηκε επιτυχώ�
 $langSomethingWentWrong = "Κάτι πήγε στραβά. Δοκιμάστε πάλι.";
 
 $langCalculated = "Υπολογισμού αριθμητικών πράξεων";
+$langEditItems = "Επεξεργασία στοιχείων";
+$langTypeOfAnswer = "Τύπος απάντησης";
+$langRangeOfValues = "Έυρος τιμών";
+$langItem = "Στοιχείο";
+$langDecimalValues = "Δεκαδικά ψηφία";
+$langAutoCompleteValues = "Προσθήκη τιμής";
+$langAutoCompleteWildCardInfo = "Μπορείτε προαιρετικά να καταχωρήσετε μία τυχαία τιμή στο τρέχον στοιχείο συμπληρώνοντας το εύρος τιμών του και επιλέγοντας την <strong>Προσθήκη τιμής</strong>. 
+Σε διαφορετική περίπτωση συμπληρώνετε την τιμή του στο πεδίο <strong>Τιμή</strong>.";
+$langCompleteTheTextOfTheQuestion = "Εκφώνηση άσκησης";
+$langCompleteVariablesOfQuestionInfo = "
+<ul>
+<li>Συμπληρώστε την εκφώνηση της άσκησης στο πεδίο κειμένου <strong>Εκφώνηση άσκησης</strong>.</li> 
+<li>Κάθε στοιχείο θα πρέπει να ορίζεται μέσα σε <strong>άγκυστρα {}</strong>.</li>
+<li>Συμπληρώστε τον τύπο της απάντησης που δίνει το επιθυμητό απότελεσμα της άσκησης καθώς και τον βαθμό στα πεδία <strong>Τύπος απάντησης</strong> και <strong>Βαθμός</strong> αντίστοιχα.</li>
+<li>Καταχωρήστε τις τιμές των στοιχείων από την <strong>επεξεργασία στοιχείων</strong>. Μπορείτε επίσης να ορίσετε τυχαίες τιμές από το εύρος τιμών του κάθε στοιχείου.</li>
+</ul>";
+$langNoExistVariables = "Η εκφώνηση της άσκησης δεν περιέχει στοιχεία ή το πεδίο κειμένου είναι κενό.";
+$langFinalValueOfWildCard = "Τιμή στοιχείου";
 
 // answer_admin.php
 $langWeightingForEachBlank = "Δώστε ένα βάρος σε κάθε κενό";

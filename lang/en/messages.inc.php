@@ -1920,6 +1920,25 @@ $langPredefinedAnswerExists = "You cannot enter the same or empty answer. Please
 $langPoint = "Point";
 $langThisAnswerIsNotCorrect = "Does not correspond to a correct answer";
 $langBracket = "Bracket";
+$langCalculated = "Calculation of arithmetic operations";
+$langEditItems = "Edit items";
+$langTypeOfAnswer = "Response type";
+$langRangeOfValues = "Range of values";
+$langItem = "Item";
+$langDecimalValues = "Decimal digits";
+$langAutoCompleteValues = "Add value";
+$langAutoCompleteWildCardInfo = "You can optionally enter a random value for the current item by filling in its value range and selecting <strong>Add value</strong>.
+Otherwise, enter its value in the <strong>Value</strong> field.";
+$langCompleteTheTextOfTheQuestion = "Text of exercise";
+$langCompleteVariablesOfQuestionInfo = "
+<ul>
+<li>Fill in the exercise pronunciation in the <strong>Exercise pronunciation</strong> text field.</li>
+<li>Each item should be defined within <strong>brackets {}</strong>.</li>
+<li>Fill in the answer type that gives the desired result of the exercise as well as the grade in the <strong>Answer type</strong> and <strong>Grade</strong> fields respectively.</li>
+<li>Enter the values of the items from the <strong>item editor</strong>. You can also define random values from the value range of each item.</li>
+</ul>";
+$langNoExistVariables = "The exercise pronunciation contains no data or the text field is empty.";
+$langFinalValueOfWildCard = "Value of item";
 $langCalcelDroppableItem = "You can undo your answer by left-clicking on the word.";
 $langAllowMoreDefinedAnswersThanBlanks = "The predefined answers should be more than the number of blanks.";
 $langErrorWithUniqueNumberOfBlank = "You entered the same unique number in more than one space.";
