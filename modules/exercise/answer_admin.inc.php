@@ -413,21 +413,22 @@ if (isset($submitAnswers) || isset($buttonBack)) {
             // Inserting the options for each wildCard in database.
             $arrItems = [];
             $wildCardOptions = false;
-            if (isset($_POST['wildCard_answer']) && count($_POST['wildCard_answer']) > 0) {
-                foreach ($_POST['wildCard_answer'] as $item => $val) {
-                        $arrItems[] = [
-                            'item' => $item,
-                            'minimum' => (isset($_POST['wildCard_min'][$item]) && !empty($_POST['wildCard_min'][$item]) ? $_POST['wildCard_min'][$item] : ''),
-                            'maximum' => (isset($_POST['wildCard_max'][$item]) && !empty($_POST['wildCard_max'][$item]) ? $_POST['wildCard_max'][$item] : ''),
-                            'decimal' => (isset($_POST['wildCard_decimal'][$item]) && !empty($_POST['wildCard_decimal'][$item]) ? $_POST['wildCard_decimal'][$item] : ''),
-                            'value' => (isset($_POST['wildCard_answer'][$item]) && !empty($_POST['wildCard_answer'][$item]) ? $_POST['wildCard_answer'][$item] : '')
-                        ];
-                }
+            foreach ($_POST['wildCard_answer'] as $item => $val) {
+                $arrItems[] = [
+                    'item' => $item,
+                    'minimum' => (isset($_POST['wildCard_min'][$item]) && !empty($_POST['wildCard_min'][$item]) ? $_POST['wildCard_min'][$item] : ''),
+                    'maximum' => (isset($_POST['wildCard_max'][$item]) && !empty($_POST['wildCard_max'][$item]) ? $_POST['wildCard_max'][$item] : ''),
+                    'decimal' => (isset($_POST['wildCard_decimal'][$item]) && !empty($_POST['wildCard_decimal'][$item]) ? $_POST['wildCard_decimal'][$item] : ''),
+                    'value' => (isset($_POST['wildCard_answer'][$item]) && !empty($_POST['wildCard_answer'][$item]) ? $_POST['wildCard_answer'][$item] : '')
+                ];
             }
+            
             if (count($arrItems) > 0) {
                 $jsonItems = json_encode($arrItems);
+                $description = purify($_POST['calculated_question']);
+                $objQuestion->updateDescription($description);
                 if ($questionId > 0) {
-                    $q = Database::get()->query("UPDATE exercise_question SET description = ?s, options = ?s WHERE id = ?d", $_POST['calculated_question'], $jsonItems, $questionId);
+                    $q = Database::get()->query("UPDATE exercise_question SET options = ?s WHERE id = ?d", $jsonItems, $questionId);
                     if ($q) {
                         $wildCardOptions = true;
                         unset($_SESSION['wildCard_'.$questionId]);
