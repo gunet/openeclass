@@ -49,9 +49,7 @@ if (isset($_POST['moreAnswers'])) {
 }
 if (isset($_POST['modifyWildCards']) && $_POST['modifyWildCards'] == 'on') {
     $modifyWildCards = true;
-    print_r('is on:' . $modifyWildCards);
 } else {
-    print_r('is off:'. $modifyWildCards); 
 }
 
 // the answer form has been submitted
