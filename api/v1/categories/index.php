@@ -66,13 +66,24 @@ function api_method($access) {
             ];
         }
     } else {
-        $categories = Database::get()->queryArray('SELECT hierarchy.id, hierarchy.name, hierarchy.description,
-                MIN(course.created) AS timemodified, 0 AS sortorder
-            FROM hierarchy
-                JOIN course_department ON hierarchy.id = course_department.department
-                JOIN course ON course_department.course = course.id
-            WHERE allow_course = 1
-            ORDER BY name');
+        if ($access and !$access->allCourses and $access->courseIDs) {
+            $placeholders = implode(',', array_fill(0, count($access->courseIDs), '?s'));
+            $categories = Database::get()->queryArray("SELECT hierarchy.id, hierarchy.name, hierarchy.description,
+                       MIN(course.created) AS timemodified, 0 AS sortorder
+                    FROM hierarchy
+                       JOIN course_department ON hierarchy.id = course_department.department
+                       JOIN course ON course_department.course = course.id
+                    WHERE course.id IN ($placeholders)
+                    ORDER BY name", $access->courseIDs);
+	} else {
+		$categories = Database::get()->queryArray('SELECT hierarchy.id, hierarchy.name, hierarchy.description,
+			MIN(course.created) AS timemodified, 0 AS sortorder
+		    FROM hierarchy
+			JOIN course_department ON hierarchy.id = course_department.department
+			JOIN course ON course_department.course = course.id
+		    WHERE allow_course = 1
+		    ORDER BY name');
+	}
         $categories = array_map(function ($item) {
             return [
                 'id' => $item->id,
