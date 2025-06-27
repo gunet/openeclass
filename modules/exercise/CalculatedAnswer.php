@@ -69,14 +69,19 @@ class CalculatedAnswer extends \QuestionType
         foreach ($answer_object_ids as $answerId) {
             $answerTitle = $this->answer_object->getTitle($answerId);
             $arrTitle = explode(':', $answerTitle);
-            $answerVal = ((count($arrTitle) > 1) ? $arrTitle[1] : ''); // Contains the correct answer of the question
+            $answerVal = ((count($arrTitle) > 1) ? $arrTitle[1] : ''); // predefined answers
             if (is_null($this->answer_object) or $this->answer_object == '') {  // don't display blank or empty answers
                 continue;
             }
             if (count($answer_object_ids) > 1) { // multiple answers with radios buttons
                 $checked = '';
-                if (isset($exerciseResult[$this->question_id]) && $exerciseResult[$this->question_id] == $answerVal) {
-                    $checked = 'checked';
+                if (isset($exerciseResult[$this->question_id]) && !empty($exerciseResult[$this->question_id])) {
+                    $arrExerResults = explode(',', $exerciseResult[$this->question_id]);
+                    if (count($arrExerResults) == 2) {
+                        if ($arrExerResults[0] == $answerVal) {
+                            $checked = 'checked';
+                        }
+                    }
                 }
                 $html_content .= "
                     <div class='radio mb-1'>
