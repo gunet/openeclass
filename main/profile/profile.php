@@ -125,7 +125,6 @@ if (isset($_POST['submit'])) {
                     'username_form' => $allow_username_change,
                     'email_public' => false,
                     'phone_public' => false,
-                    'am_public' => false,
                     'pic_public' => false);
 
     //add custom profile fields required variables
@@ -243,11 +242,11 @@ if (isset($_POST['submit'])) {
                              email_public = ?d,
                              phone_public = ?d,
                              receive_mail = ?d,
-                             am_public = ?d,
+                             am_public = 0,
                              pic_public = ?d
                              $verified_mail_sql
                          WHERE id = ?d",
-                            $surname_form, $givenname_form, $username_form, $email_form, $am_form, $phone_form, $desc_form, $email_public, $phone_public, $subscribe, $am_public, $pic_public, $uid);
+                            $surname_form, $givenname_form, $username_form, $email_form, $am_form, $phone_form, $desc_form, $email_public, $phone_public, $subscribe, $pic_public, $uid);
 
     // fill custom profile fields
     process_profile_fields_data(array('uid' => $uid, 'origin' => 'edit_profile'));
@@ -477,7 +476,6 @@ $data['surname_form'] = q($myrow->surname);
 $data['givenname_form'] = q($myrow->givenname);
 $data['username_form'] = q($myrow->username);
 $data['email_public'] = q($myrow->email_public);
-$data['am_public'] = q($myrow->am_public);
 $data['email_form'] = q($myrow->email);
 $data['am_form'] = q($myrow->am);
 $data['phone_form'] = q($myrow->phone);
@@ -490,9 +488,7 @@ $data['email_public_selected'] = $data['am_public_selected'] = $data['phone_publ
 if ($myrow->email_public) {
     $data['email_public_selected'] = 'checked';
 }
-if ($myrow->am_public) {
-    $data['am_public_selected'] = 'checked';
-}
+
 if ($myrow->phone_public) {
     $data['phone_public_selected'] = 'checked';
 }

@@ -73,6 +73,7 @@ if (isset($_GET['eurId'])) {
     }
     $objExercise = new Exercise();
     $objExercise->read($exercise_user_record->eid);
+    $exercise_id = $exercise_user_record->eid;
     if (!$unit) {
         $navigation[] = array('url' => "results.php?course=$course_code&exerciseId=" . getIndirectReference($exercise_user_record->eid), 'name' => $langResults);
     }
@@ -321,6 +322,7 @@ if ($is_editor and in_array($exercise_user_record->attempt_status, [ATTEMPT_COMP
 
 $totalWeighting = $totalScore = 0;
 $i = 1;
+$qid_display = $edit_link = '';
 if (count($exercise_question_ids) > 0) {
     // for each question
     foreach ($exercise_question_ids as $row) {
@@ -342,6 +344,12 @@ if (count($exercise_question_ids) > 0) {
         $questionWeighting = $objQuestionTmp->selectWeighting();
         $answerType = $objQuestionTmp->selectType();
         $questionType = $objQuestionTmp->selectTypeLegend($answerType);
+        $questionId = $objQuestionTmp->selectId();
+        if ($is_editor) {
+            $qid_display = " - id: $questionId";
+            $edit_link = icon('fa-edit', $langEdit,
+                $urlAppend . "modules/exercise/admin.php?course=$course_code&amp;modifyAnswers=$questionId&fromExercise=$exercise_id");
+        }
 
         // destruction of the Question object
         unset($objQuestionTmp);
@@ -378,7 +386,7 @@ if (count($exercise_question_ids) > 0) {
                  $tool_content .= " <span class='fw-light m-1'><small>($langGradebookGrade: <strong>$qw_legend1 / $questionWeighting</strong>$qw_legend2)</small></span>";
              }
         }
-        $tool_content .= "<span class='fw-lighter m-2'><small>($questionType)</small></span>"; // question type
+        $tool_content .= "<span class='fw-lighter m-2'><small>($questionType$qid_display)</small></span>$edit_link"; // question type
         $tool_content .= "</td></tr></thead>";
 
         $tool_content .= "<tr><td colspan='2'>";
@@ -803,7 +811,7 @@ if (isset($_GET['pdf'])) {
             h1, h2, h3, h4 { font-family: 'roboto'; margin: .8em 0 0; }
             h1 { font-size: 16pt; }
             h2 { font-size: 12pt; border-bottom: 1px solid black; }
-            h3 { font-size: 10pt; color: #158; border-bottom: 1px solid #158; }            
+            h3 { font-size: 10pt; color: #158; border-bottom: 1px solid #158; }
             th { text-align: left; border-bottom: 1px solid #999; }
             td { text-align: left; padding: 10px 0px 10px 0px;}
             .text-danger{color: red;}

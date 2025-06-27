@@ -3362,15 +3362,15 @@ function upgrade_to_4_2($tbl_options) : void {
             `enabled` tinyint NOT NULL,
             `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
             `updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-            `expired` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,            
+            `expired` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
             PRIMARY KEY (`id`)) $tbl_options");
     }
 
     if (!DBHelper::tableExists('ai_modules')) {
         Database::get()->query("CREATE TABLE ai_modules (
-            `id` SMALLINT NOT NULL AUTO_INCREMENT, 
-            `ai_module_id` SMALLINT NOT NULL DEFAULT 0, 
-            `ai_provider_id` SMALLINT DEFAULT 0, 
+            `id` SMALLINT NOT NULL AUTO_INCREMENT,
+            `ai_module_id` SMALLINT NOT NULL DEFAULT 0,
+            `ai_provider_id` SMALLINT DEFAULT 0,
             `all_courses` TINYINT NOT NULL DEFAULT 1,
             PRIMARY KEY(ID)) $tbl_options");
     }

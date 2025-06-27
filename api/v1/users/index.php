@@ -90,6 +90,51 @@ function api_method($access) {
         }
         echo json_encode($response);
         exit();
+    } elseif (isset($_GET['course_id'])) {
+        $course_id = course_code_to_id($_GET['course_id']);
+        if ($access->allCourses or in_array($course_id, $access->courseIDs)) {
+            $users = Database::get()->queryArray('SELECT user.id, username, givenname, surname, email, am
+                FROM user, course_user
+                WHERE user.id = course_user.user_id AND course_user.course_id = ?d',
+                $course_id);
+            echo json_encode(array_map(function ($user) {
+                return [
+                    'id' => $user->id,
+                    'username' => $user->username,
+                    'firstname' => $user->givenname,
+                    'lastname' => $user->surname,
+                    'emailaddress' => $user->email,
+                    'adt' => $user->am];
+            }, $users), JSON_UNESCAPED_UNICODE);
+            exit;
+        } else {
+            Access::error(403, 'Course is not valid for this API token', 403);
+        }
+    } elseif (isset($_GET['group_id'])) {
+        $course_id = Database::get()->querySingle('SELECT course_id
+            FROM `group`
+            WHERE id = ?d', $_GET['group_id']);
+        if (!$course_id) {
+            Access::error(404, "Group with id '$_GET[group_id]' not found", 404);
+        }
+        if ($course_id and $access->allCourses or in_array($course_id->course_id, $access->courseIDs)) {
+            $users = Database::get()->queryArray('SELECT user.id, username, givenname, surname, email, am
+                FROM user, group_members
+                WHERE user.id = group_members.user_id',
+                $_GET['group_id']);
+            echo json_encode(array_map(function ($user) {
+                return [
+                    'id' => $user->id,
+                    'username' => $user->username,
+                    'firstname' => $user->givenname,
+                    'lastname' => $user->surname,
+                    'emailaddress' => $user->email,
+                    'adt' => $user->am];
+            }, $users), JSON_UNESCAPED_UNICODE);
+            exit;
+        } else {
+            Access::error(403, 'Course is not valid for this API token', 403);
+        }
     } elseif (isset($_GET['id']) or isset($_GET['username'])) {
         if (isset($_GET['username'])) {
             if (get_config('case_insensitive_usernames')) {

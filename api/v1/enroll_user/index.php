@@ -66,6 +66,8 @@ function api_method($access) {
         $is_editor = 0;
         if (!$role_id) {
             $role_id = USER_STUDENT;
+        } elseif (in_array($role_id, [USER_STUDENT, USER_TEACHER])) {
+            $role_id = $role_id;
         } else {
             if ($role_id == 'teacher_assistant') {
                 $is_editor = 1;
