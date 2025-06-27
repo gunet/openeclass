@@ -416,10 +416,10 @@ if (isset($submitAnswers) || isset($buttonBack)) {
             foreach ($_POST['wildCard_answer'] as $item => $val) {
                 $arrItems[] = [
                     'item' => $item,
-                    'minimum' => (isset($_POST['wildCard_min'][$item]) && !empty($_POST['wildCard_min'][$item]) ? $_POST['wildCard_min'][$item] : ''),
-                    'maximum' => (isset($_POST['wildCard_max'][$item]) && !empty($_POST['wildCard_max'][$item]) ? $_POST['wildCard_max'][$item] : ''),
-                    'decimal' => (isset($_POST['wildCard_decimal'][$item]) && !empty($_POST['wildCard_decimal'][$item]) ? $_POST['wildCard_decimal'][$item] : ''),
-                    'value' => (isset($_POST['wildCard_answer'][$item]) && !empty($_POST['wildCard_answer'][$item]) ? $_POST['wildCard_answer'][$item] : '')
+                    'minimum' => $_POST['wildCard_min'][$item] ?? 0,
+                    'maximum' => $_POST['wildCard_max'][$item] ?? 0,
+                    'decimal' => $_POST['wildCard_decimal'][$item] ?? 0,
+                    'value' => $_POST['wildCard_answer'][$item] ?? 0
                 ];
             }
             
@@ -788,10 +788,10 @@ if (isset($_GET['modifyAnswers'])) {
             // Create a key-value array for items
             foreach ($dataItems as $wildcard) {
                 $_SESSION['wildCard_'.$questionId][$wildcard['item']] = [
-                                                                            'wildcard_minimum_val' => (!empty($wildcard['minimum']) ? $wildcard['minimum'] : ''),
-                                                                            'wildcard_maximum_val' => (!empty($wildcard['maximum']) ? $wildcard['maximum'] : ''),
-                                                                            'wildcard_decimal_val' => (!empty($wildcard['decimal']) ? $wildcard['decimal'] : ''),
-                                                                            'wildcard_random_val' => $wildcard['value'],
+                                                                            'wildcard_minimum_val' => $wildcard['minimum'] ?? 0,
+                                                                            'wildcard_maximum_val' => $wildcard['maximum'] ?? 0,
+                                                                            'wildcard_decimal_val' => $wildcard['decimal'] ?? 0,
+                                                                            'wildcard_random_val' => $wildcard['value'] ?? 0
                                                                         ];
 
 
@@ -1207,6 +1207,7 @@ if (isset($_GET['modifyAnswers'])) {
 
             $setId = isset($exerciseId)? "&amp;exerciseId=$exerciseId" : '';
             $DataJsonFileVariables = Database::get()->querySingle("SELECT options FROM exercise_question WHERE id = ?d", $questionId)->options;
+            $tool_content .= "<div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langInfoDragAndDropMarkersCreation</span></div>";
             $tool_content .= "
                             <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code$setId&amp;modifyAnswers=" . urlencode($_GET['modifyAnswers']) . "'>
                                 <fieldset><legend class='mb-0' aria-label='$langForm'></legend>
@@ -1395,10 +1396,10 @@ if (isset($_GET['modifyAnswers'])) {
                                     if (count($wildCardsArr) > 0) {
                                         foreach ($wildCardsArr as $wildCard) {
 
-                                            $wildCardMinimumValue = '';
-                                            $wildCardMaximumValue = '';
-                                            $wildCardDecimalValue = '';
-                                            $wildCardValue = '';
+                                            $wildCardMinimumValue = 0;
+                                            $wildCardMaximumValue = 0;
+                                            $wildCardDecimalValue = 0;
+                                            $wildCardValue = 0;
 
                                             if (isset($_SESSION['wildCard_'.$questionId][$wildCard]) && !empty($_SESSION['wildCard_'.$questionId][$wildCard])) {
                                                 $wildCardMinimumValue = $_SESSION['wildCard_'.$questionId][$wildCard]['wildcard_minimum_val'];;
@@ -1570,8 +1571,13 @@ function evaluateExpression($expression, $questionId) {
             $expression = str_replace("{" . $key . "}", $value, $expression);
         }
 
+        // Check for division by zero before eval
+        if (preg_match('/\/\s*0(\D|$)/', $expression)) {
+            // Return null or handle as needed if division by zero is detected
+            return null;
+        }
+
         // Evaluate the expression safely
-        // Note: Using eval is risky if input isn't controlled; use with caution
         return eval('return ' . $expression . ';');
     }
 }

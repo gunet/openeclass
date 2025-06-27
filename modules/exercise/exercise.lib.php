@@ -27,6 +27,7 @@ require_once 'FillInPredefinedAnswer.php';
 require_once 'FreeTextAnswer.php';
 require_once 'DragAndDropTextAnswer.php';
 require_once 'DragAndDropMarkersAnswer.php';
+require_once 'CalculatedAnswer.php';
 
 
 /**
@@ -81,7 +82,7 @@ function showQuestion(&$objQuestionTmp, $question_number, array $exerciseResult 
             </div>
             <div class='panel-body'>
                 <div class='text-heading-h4 mb-4'>" . q_math($questionName) . "</div>";
-                if (!empty($questionDescription)) {
+                if (!empty($questionDescription) && $answerType != CALCULATED) {
                     $tool_content .= " <div class='mb-4'>$questionDescription</div>";
                 }
                 if (file_exists($picturePath . '/quiz-' . $questionId)) {
@@ -217,7 +218,7 @@ function display_exercise($exercise_id): void
         $questionWeighting = $question->selectWeighting();
         $answerType = $question->selectType();
 
-        if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
+        if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE || $answerType == CALCULATED) {
             $colspan = 3;
         } elseif ($answerType == MATCHING) {
             $colspan = 2;
@@ -279,6 +280,11 @@ function display_exercise($exercise_id): void
             <tr>
               <td colspan='$colspan'>";
 
+            if ($answerType == CALCULATED) {
+                $objAn = new Answer($qid);
+                $questionDescription = $objAn->replaceItemsBracesWithWildCards($questionDescription, $qid);
+                unset($objAn);
+            }
             $tool_content .= "
             <strong>" . q_math($questionName) . "</strong>
             <br>" . standard_text_escape($questionDescription) . "<br><br>
@@ -393,6 +399,10 @@ function preview_question($question_id, $answer_type): string {
             $answer = new DragAndDropTextAnswer($question_id);
             $html_content .= $answer->PreviewQuestion();
             break;
+        case CALCULATED:
+            $answer = new CalculatedAnswer($question_id);
+            $html_content .= $answer->PreviewQuestion();
+            break;
     }
 
     return $html_content;
@@ -443,6 +453,10 @@ function answer_question($question_id, $question_number, $answer_type, $exercise
             break;
         case DRAG_AND_DROP_MARKERS:
             $answer = new DragAndDropMarkersAnswer($question_id);
+            $html .= $answer->AnswerQuestion($question_number, $exerciseResult, $options);
+            break;
+        case CALCULATED:
+            $answer = new CalculatedAnswer($question_id);
             $html .= $answer->AnswerQuestion($question_number, $exerciseResult, $options);
             break;
     }
@@ -501,6 +515,10 @@ function question_result($answer_type, $question_id, $choice, $eurid, $regrade):
             break;
         case DRAG_AND_DROP_MARKERS:
             $answer = new DragAndDropMarkersAnswer($question_id);
+            $html .= $answer->QuestionResult($choice, $eurid, $regrade);
+            break;
+        case CALCULATED:
+            $answer = new CalculatedAnswer($question_id);
             $html .= $answer->QuestionResult($choice, $eurid, $regrade);
             break;
     }

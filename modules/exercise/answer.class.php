@@ -575,7 +575,6 @@ if (!class_exists('Answer')):
         /**
          * 
          * @param $questionId
-         * @return int|mixed
          * @author - Nikos Mpalamoutis
          */
         function get_marker_ids($questionId) {
@@ -593,6 +592,127 @@ if (!class_exists('Answer')):
             }
             
             return $markerIds;
+        }
+
+        /**
+         * 
+         * @param $questionId
+         * @return string|mixed
+         * @author - Nikos Mpalamoutis
+         */
+        function get_correct_calculated_answer($questionId) {
+
+            $correctAnswer = '';
+            $q = Database::get()->queryArray("SELECT answer,correct FROM exercise_answer WHERE question_id = ?d", $questionId);
+            foreach ($q as $an) {
+                if ($an->correct == 1) {
+                    $arrCorrect = explode(':', $an->answer);
+                    if (count($arrCorrect) == 2) {
+                        $correctAnswer = $arrCorrect[1];
+                    }
+                }
+            }
+
+            return $correctAnswer;
+        }
+
+        /**
+         * 
+         * @param $questionId
+         * @return int|mixed
+         * @author - Nikos Mpalamoutis
+         */
+        function get_correct_calculated_grade($questionId) {
+
+            $correctAnswerGrade = 0;
+            $q = Database::get()->queryArray("SELECT weight,correct FROM exercise_answer WHERE question_id = ?d", $questionId);
+            foreach ($q as $an) {
+                if ($an->correct == 1) {
+                    $correctAnswerGrade = $an->weight;
+                }
+            }
+
+            return $correctAnswerGrade;
+        }
+
+         /**
+         * 
+         * @param $questionId
+         * @param $hasAnswered
+         * @return string|mixed
+         * @author - Nikos Mpalamoutis
+         */
+        function get_user_calculated_answer($questionId, $eurid) {
+
+            $userAnswer = Database::get()->querySingle("SELECT answer FROM exercise_answer_record WHERE eurid = ?d AND question_id = ?d", $eurid, $questionId)->answer;
+            $userAnswer = $userAnswer ?? '';
+            return $userAnswer;
+        }
+
+        /**
+         * 
+         * @param $questionId
+         * @param $hasAnswered
+         * @return int|mixed
+         * @author - Nikos Mpalamoutis
+         */
+        function get_user_answer_grade($questionId, $hasAnswered) {
+
+            $grade = 0;
+            $predefinedAnswer = Database::get()->queryArray("SELECT answer,weight FROM exercise_answer WHERE question_id = ?d", $questionId);
+            foreach ($predefinedAnswer as $an) {
+                $tmpArr = explode(':', $an->answer);
+                if (count($tmpArr) == 2) {
+                    if ($hasAnswered == $tmpArr[1]) {
+                        $grade = $an->weight;
+                    }
+                }
+            }
+
+            return $grade;
+        }
+
+        /**
+         * 
+         * @param $eurid
+         * @param $questionId
+         * @return int|mixed
+         * @author - Nikos Mpalamoutis
+         */
+        function get_user_grade_for_answered_calculated_question($eurid, $questionId) {
+            $grade = Database::get()->querySingle("SELECT weight FROM exercise_answer_record WHERE eurid = ?d AND question_id = ?d", $eurid, $questionId)->weight;
+            $grade = $grade ?? 0;
+            return $grade;
+        }
+
+        /**
+         * 
+         * @param $questionId
+         * @param $expression
+         * @return string|mixed
+         * @author - Nikos Mpalamoutis
+         */
+        function replaceItemsBracesWithWildCards($expression, $questionId) {
+            
+            $options = Database::get()->querySingle("SELECT options FROM exercise_question WHERE id = ?d", $questionId)->options;
+            if ($options) {
+                // Decode JSON to array
+                $dataItems = json_decode($options, true);
+
+                // Create a key-value array for items
+                $wildCards = [];
+                foreach ($dataItems as $item) {
+                    $wildCards[$item['item']] = $item['value'];
+                }
+
+                foreach ($wildCards as $key => $value) {
+                    $expression = str_replace("{" . $key . "}", $value, $expression);
+                }
+
+            }
+
+            return $expression;
+
         }
 
     }

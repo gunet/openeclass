@@ -46,7 +46,13 @@ $questionFeedback = $question->selectFeedback();
 $questionWeighting = $question->selectWeighting();
 $answerType = $question->selectType();
 
-if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
+if ($answerType == CALCULATED) {
+  $objAn = new Answer($qid);
+  $questionDescription = $objAn->replaceItemsBracesWithWildCards($questionDescription, $qid);
+  unset($objAn);
+}
+
+if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE || $answerType == CALCULATED) {
     $colspan = 3;
 } elseif ($answerType == MATCHING) {
     $colspan = 2;

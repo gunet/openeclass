@@ -1920,6 +1920,24 @@ $langPredefinedAnswerExists = "You cannot enter the same or empty answer. Please
 $langPoint = "Point";
 $langThisAnswerIsNotCorrect = "Does not correspond to a correct answer";
 $langBracket = "Bracket";
+$langInfoDragAndDropMarkersCreation = "
+<ul>
+<li>
+Select the point for which you want to add a predefined answer.
+</li>
+<li>
+For example, if you want to create the answer to point [1], then in the table below
+go to the specific point and select its shape from the <strong>Shape</strong> field. Once you have selected it (e.g. rectangle), start forming
+the predefined answer on the image.
+</li>
+<li>Enter the text of the predefined answer in the <strong>Answer</strong> field (Required).</li>
+<li>If you want the predefined answer to appear via an image and not text, then fill in the <strong>Answer</strong> field and upload the image using the <strong>predefined answer will appear via an image</strong> option.</li>
+<li>Give a grade to the answer in the <strong>Grade</strong> field (optional).</li>
+<li>Select <strong>Add</strong> to temporarily save the answer.</li>
+<li>The process for creating predefined answers is completed by clicking <strong>Submit</strong>.</li>
+</ul>";
+$langRequiresImageUploadedForThisType = "For dragging and dropping to predefined points, an image must be uploaded.";
+$langYourOwnAnswerIs = "The answer you gave is:";
 $langCalculated = "Calculation of arithmetic operations";
 $langEditItems = "Edit items";
 $langTypeOfAnswer = "Response type";

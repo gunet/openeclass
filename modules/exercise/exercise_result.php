@@ -391,6 +391,11 @@ if (count($exercise_question_ids) > 0) {
         $tool_content .= "</td></tr></thead>";
 
         $tool_content .= "<tr><td colspan='2'>";
+        if ($answerType == CALCULATED) {
+            $objAn = new Answer($questionId);
+            $questionDescription = $objAn->replaceItemsBracesWithWildCards($questionDescription, $questionId);
+            unset($objAn);
+        }
         $tool_content .= "<p>" . q_math($questionName) . "</p>" . standard_text_escape($questionDescription);
 
         $classImg = '';

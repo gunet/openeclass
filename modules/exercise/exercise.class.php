@@ -1195,6 +1195,37 @@ if (!class_exists('Exercise')) {
                     }
                 }
 
+            } elseif ($question_type == CALCULATED) {
+
+                // $key = $question_id
+                $objAnswersTmp = new Answer($key);
+                $correctAnswer = $objAnswersTmp->get_correct_calculated_answer($key);
+                $correctAnswerGrade = $objAnswersTmp->get_correct_calculated_grade($key);
+                if (isset($_POST['choice'][$key]) && $_POST['choice'][$key]) {
+                    $arrAnswer = explode(',', $_POST['choice'][$key]);
+                    if (count($arrAnswer) == 2) { // multiple predefined answers
+                        $user_answer = $arrAnswer[0];
+                        $answer_id = $arrAnswer[1];
+                        $user_got_grade = $objAnswersTmp->get_user_answer_grade($key, $user_answer);
+                        
+                    } else { // unique answer as text
+                        $user_answer = $_POST['choice'][$key] ?? '';
+                        $answer_id = $_POST['answer_id_choice'][$key] ?? 0;
+                        $user_got_grade = $objAnswersTmp->get_user_answer_grade($key, $user_answer);
+                    }
+                } else {
+                    $user_answer = '';
+                    $answer_id = 0;
+                    $user_got_grade = 0;
+                }
+
+                Database::get()->query("INSERT INTO exercise_answer_record
+                                (eurid, question_id, answer, answer_id, weight, is_answered, q_position)
+                                VALUES (?d, ?d, ?s, ?d, ?f, ?d, ?d)",
+                                $eurid, $key, $user_answer, $answer_id, $user_got_grade, $as_answered, $q_position);
+
+                unset($objAnswersTmp);
+
             } else {
                 if ($value) {
                     $objAnswersTmp = new Answer($key);

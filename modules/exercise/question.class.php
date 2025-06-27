@@ -506,7 +506,7 @@ if (!class_exists('Question')) {
             if ($answers) {
                 $i = 1;
                 foreach ($answers as $row) {
-                    if ($type == UNIQUE_ANSWER || $type == TRUE_FALSE) {
+                    if ($type == UNIQUE_ANSWER || $type == TRUE_FALSE || $type == CALCULATED) {
                         $choice = $row->answer_id;
                     } elseif ($type == MULTIPLE_ANSWER) {
                         $choice[$row->answer_id] = 1;

@@ -86,6 +86,17 @@ if (isset($_POST['submitQuestion'])) {
         $questionDescription = purify($_POST['questionDescription']);
         $questionFeedback = purify($_POST['questionFeedback']);
         $answerType = intval($_POST['answerType']);
+
+        // It requires to be uploaded an image for this type of question
+       
+        
+        if (isset($_FILES['imageUpload']) && !is_uploaded_file($_FILES['imageUpload']['tmp_name']) && $answerType == DRAG_AND_DROP_MARKERS) {
+            $redirectURL = $urlAppend . "modules/exercise/admin.php?course=$course_code&exerciseId=$_GET[exerciseId]&newQuestion=yes";
+            Session::flash('message', $langRequiresImageUploadedForThisType);
+            Session::flash('alert-class', 'alert-warning');
+            redirect_to_home_page($redirectURL);
+        }
+
         // no name given
         if (empty($questionName)) {
             $msgErr = $langGiveQuestion;
@@ -115,6 +126,17 @@ if (isset($_POST['submitQuestion'])) {
         if (isset($_POST['deletePicture'])) {
             $objQuestion->removePicture();
         } elseif (isset($_FILES['imageUpload']) && is_uploaded_file($_FILES['imageUpload']['tmp_name'])) {
+
+            if ($answerType == DRAG_AND_DROP_MARKERS) {
+                $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/svg+xml'];
+                $fileType = mime_content_type($_FILES['imageUpload']['tmp_name']);
+                if (!in_array($_FILES['imageUpload']['type'], $allowedTypes)) {
+                    $redirectURL = $urlAppend . "modules/exercise/admin.php?course=$course_code&exerciseId=$_GET[exerciseId]&newQuestion=yes";
+                    Session::flash('message', $langRequiresImageUploadedForThisType);
+                    Session::flash('alert-class', 'alert-warning');
+                    redirect_to_home_page($redirectURL);
+                }
+            }
 
             require_once 'include/lib/fileUploadLib.inc.php';
             validateUploadedFile($_FILES['imageUpload']['name'], 2);

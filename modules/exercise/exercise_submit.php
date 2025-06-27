@@ -722,9 +722,12 @@ foreach ($questionList as $k => $q_id) {
     $t_question = new Question();
     $t_question->read($q_id);
     $questions[$q_id] = $t_question;
-    if (($t_question->selectType() == UNIQUE_ANSWER or $t_question->selectType() == MULTIPLE_ANSWER or $t_question->selectType() == TRUE_FALSE)
+    if (($t_question->selectType() == UNIQUE_ANSWER or $t_question->selectType() == MULTIPLE_ANSWER or $t_question->selectType() == TRUE_FALSE or $t_question->selectType() == CALCULATED)
         and array_key_exists($q_id, $exerciseResult) and $exerciseResult[$q_id] != 0) {
         $answered = true;
+        if ($t_question->selectType() == CALCULATED && $exerciseResult[$q_id] == '') { // User has not answered the current question
+            $answered = false;
+        }
     } elseif (($t_question->selectType() == FILL_IN_BLANKS or $t_question->selectType() == FILL_IN_BLANKS_TOLERANT)
         and array_key_exists($q_id, $exerciseResult)) {
         if (is_array($exerciseResult[$q_id])) {
