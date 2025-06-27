@@ -34,7 +34,7 @@
                                 <div id='modelDropdownContainer' class='form-group mt-3'>
                                     <label for="modelDropdown" class="form-label">{{ trans('langLanguageModel') }}</label>
                                     <select id="modelDropdown" name="model" class="form-control">
-                                        <option value="">{{ trans('langSelectLanguageModel') }}</option>
+                                        <option value="{{ $currentModelName }}">{{ $currentModelName }}</option>
                                     </select>
                                 </div>
 
@@ -189,7 +189,7 @@
                             </thead>
 
                             @foreach ($q as $row)
-                                <tr>
+                                <tr @if (!$row->enabled) class='not_visible' @endif>
                                     <td>{{ $row->name }}</td>
                                     <td>{{ $row->model_name }}</td>
                                     <td>{{ ($row->enabled)? trans('langYes') : trans('langNo') }}</td>
@@ -235,12 +235,12 @@
                             </thead>
 
                             @foreach ($ai_module_data as $ai_module)
-                                <tr>
-                                    <td>{{ $ai_module[1] }}</td>
-                                    <td>{{ $ai_module[2] }}</td>
-                                    <td>{{ $ai_module[3] }}</td>
+                                <tr @if ($ai_module['enabled'] == 0) class="not_visible" @endif>
+                                    <td>{{ $ai_module['module_id'] }}</td>
+                                    <td>{{ $ai_module['name'] }}</td>
+                                    <td>{{ $ai_module['model_name'] }}</td>
                                     <td>
-                                        @if ($ai_module[4] == 1)
+                                        @if ($ai_module['all_courses'] == 1)
                                             {{ trans('langToAllCourses') }}
                                         @endif
                                     </td>
@@ -248,7 +248,7 @@
                                         {!!
                                             action_button(array(
                                                 array('title' => trans('langDelete'),
-                                                      'url' => "$_SERVER[SCRIPT_NAME]?delete_service=$ai_module[0]",
+                                                      'url' => "$_SERVER[SCRIPT_NAME]?delete_service=$ai_module[id]",
                                                       'icon' => 'fa-times',
                                                       'class' => 'delete',
                                                       'confirm' => trans('langConfirmDelete'))))
@@ -307,14 +307,13 @@
                     method: 'POST',
                     data: { provider: provider },
                     success: function (response) {
-                        console.log('Server Response:', response); // Debugging
-
+                        //console.log('Server Response:', response);
                         if (response && response.success && typeof response.models === 'object') {
                             $('#modelDropdown').empty().append('<option value=\"\">{{ trans('langSelectLanguageModel') }}</option>');
 
                             Object.entries(response.models).forEach(function ([key, label]) {
                                 var selected = '';
-                                if (key === '" . $currentModelName . "') {
+                                if (key === '{{ $currentModelName }}') {
                                     selected = ' selected';
                                 }
                                 $('#modelDropdown').append('<option value=\"' + key + '\"' + selected + '>' + label + '</option>');

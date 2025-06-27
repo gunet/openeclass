@@ -36,9 +36,10 @@ const AI_KEY_DURATION_TIME = 365*24*60*60; // one year (in seconds)
 if (isset($_GET['edit_provider'])) {
     $data['existingConfig'] = $existingConfig = Database::get()->querySingle("SELECT * FROM ai_providers WHERE id = ?d", $_GET['edit_provider']);
     $currentModelName = '';
-    if ($existingConfig && isset($existingConfig->model_name)) {
-        $currentModelName = htmlspecialchars($existingConfig->model_name, ENT_QUOTES, 'UTF-8');
+    if ($existingConfig) {
+        $currentModelName = $existingConfig->model_name;
     }
+    $data['currentModelName'] = $currentModelName;
     $providerDisplayNames = AIProviderFactory::getProviderDisplayNames();
 
     $data['dropdownOptions'] = array_map(function ($key, $value) {
@@ -48,7 +49,6 @@ if (isset($_GET['edit_provider'])) {
         $data['dropdownOptions'],
         [['value' => 'other', 'label' => 'Other']]
     );
-
 } else if (isset($_GET['delete_provider'])) {
     Database::get()->query("DELETE FROM ai_providers WHERE id = ?d", $_GET['delete_provider']);
     Session::flash('message', $langAITokenDeleted);
@@ -127,7 +127,7 @@ if (isset($_GET['edit_provider'])) {
         $data['dropdownOptions'],
         [['value' => 'other', 'label' => 'Other']]
     );
-    $currentModelName = '';
+    $data['currentModelName'] = $currentModelName = '';
 } else if (isset($_GET['add_service'])) {
 
     $courses_list = Database::get()->queryArray("SELECT id, code, title FROM course
@@ -151,7 +151,6 @@ if (isset($_GET['edit_provider'])) {
 } else { // list
     $providerDisplayNames = AIProviderFactory::getProviderDisplayNames();
     $data['q'] = $q = Database::get()->queryArray("SELECT * FROM ai_providers");
-    // Load existing configuration
 
     $data['dropdownOptions'] = array_map(function ($key, $value) {
         return ['value' => $key, 'label' => $value];
@@ -168,21 +167,21 @@ if (isset($_GET['edit_provider'])) {
     }
 
     $ai_services = AIService::getAIServices();
-
-    $q = Database::get()->queryArray("SELECT ai_modules.id, ai_module_id, name, model_name, all_courses 
+    $q = Database::get()->queryArray("SELECT ai_modules.id, ai_module_id, name, model_name, all_courses, enabled 
                 FROM ai_modules 
                     JOIN ai_providers 
                 ON ai_modules.ai_provider_id = ai_providers.id");
     foreach ($q as $modules_data) {
-        $ai_module_data[] = [
-            $modules_data->id,
-            $ai_services[$modules_data->ai_module_id],
-            $modules_data->name,
-            $modules_data->model_name,
-            $modules_data->all_courses
-        ];
+        $ai_module_data[] = [ 'id' => $modules_data->id,
+                              'module_id' => $ai_services[$modules_data->ai_module_id],
+                              'name' => $modules_data->name,
+                              'model_name' => $modules_data->model_name,
+                              'all_courses' => $modules_data->all_courses,
+                              'enabled' => $modules_data->enabled
+                            ];
     }
 
     $data['ai_module_data'] = $ai_module_data;
 }
+
 view('admin.other.extapps.aimoduleconf', $data);

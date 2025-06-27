@@ -37,16 +37,22 @@ class AIService {
      * Check if AI is enabled for the current course
      * TODO: Implement course-specific AI permissions when admin system is ready
      *
-     * @return bool True if AI is enabled for current course
+     * @return bool True if AI is enabled for the current course
      */
     public function isEnabledForCourse(): bool {
-        if (!$this->isAvailable() || !$this->courseId) {
+        $q = Database::get()->querySingle("SELECT ai_modules.id, ai_module_id, name, model_name, all_courses, enabled FROM ai_modules 
+                    JOIN ai_providers ON ai_modules.ai_provider_id = ai_providers.id 
+                        AND ai_module_id =" . AI_MODULE_QUESTION_POOL . " 
+                        AND enabled = 1");
+        if ($q) {
+            if ($q->all_courses == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
             return false;
         }
-
-        // TODO: Check course-specific AI permissions from database
-        // For now, return true if AI is generally available
-        return true;
     }
 
     /**

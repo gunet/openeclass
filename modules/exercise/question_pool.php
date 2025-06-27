@@ -37,7 +37,6 @@ require_once 'imsqtilib.php';
 
 // Initialize AI service
 $aiService = new AIQuestionBankService($course_id, $uid);
-$aiAvailable = $aiService->isAvailable() && $aiService->isEnabledForCourse();
 
 load_js('datatables');
 
@@ -286,7 +285,7 @@ if ($fromExercise) {
           'url' => "ai_question_generation.php?course=$course_code",
           'icon' => 'fa-magic',
           'button-class' => 'btn-info',
-          'show' => $aiAvailable
+          'show' => $aiService->isEnabledForCourse()
         ]
     ];
 }
