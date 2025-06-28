@@ -17,6 +17,9 @@
  *  * ========================================================================
  *
  */
+define('EPF_VISIBLE_PUBLIC', 1);
+define('EPF_VISIBLE_USERS', 2);
+define('EPF_VISIBLE_PRIVATE', 3);
 
 $require_login = false;
 $guest_allowed = true;
@@ -382,11 +385,21 @@ if ($userdata) {
         $tool_content .= $action_bar;
     }
 
+    if (!isset($_SESSION['uid'])) {
+        $visibility_query = "visibility=".EPF_VISIBLE_PUBLIC;
+    } else {
+        if ($_SESSION['uid'] == $id) {
+            $visibility_query = "visibility<=".EPF_VISIBLE_PRIVATE;
+        } else {
+            $visibility_query = "visibility<=".EPF_VISIBLE_USERS;
+        }
+    }
+
     if (isset($_GET['action']) && $_GET['action'] == 'get') {
         if (isset($_GET['type']) && isset($_GET['er_id'])) {
             if ($_GET['type'] == 'assignment' || $_GET['type'] == 'submission') {
                 $info = Database::get()->querySingle("SELECT data FROM eportfolio_resource WHERE user_id = ?d
-                                    AND resource_type = ?d AND id = ?d", $id, 'work_submission', intval($_GET['er_id']));
+                                    AND resource_type = ?d AND id = ?d AND ".$visibility_query, $id, 'work_submission', intval($_GET['er_id']));
                 if ($info) {
                     $data_array = unserialize($info->data);
                     if ($_GET['type'] == 'assignment') {
@@ -404,7 +417,7 @@ if ($userdata) {
                 }
             } elseif ($_GET['type'] == 'mydocs') {
                 $info = Database::get()->querySingle("SELECT data FROM eportfolio_resource WHERE user_id = ?d
-                                    AND resource_type = ?d AND id = ?d", $id, 'mydocs', intval($_GET['er_id']));
+                                    AND resource_type = ?d AND id = ?d AND ".$visibility_query, $id, 'mydocs', intval($_GET['er_id']));
 
                 if ($info) {
                     $data_array = unserialize($info->data);
@@ -417,7 +430,7 @@ if ($userdata) {
     }
 
     if (isset($_GET['action']) && $_GET['action'] == 'showBlogPost' && isset($_GET['er_id'])) {
-        $post = Database::get()->querySingle("SELECT * FROM eportfolio_resource WHERE user_id = ?d AND resource_type = ?s AND id = ?d", $id, 'blog', intval($_GET['er_id']));
+        $post = Database::get()->querySingle("SELECT * FROM eportfolio_resource WHERE user_id = ?d AND resource_type = ?s AND id = ?d AND ".$visibility_query, $id, 'blog', intval($_GET['er_id']));
         if ($post) {
             $data = unserialize($post->data);
             if (!empty($post->course_title)) {
@@ -447,22 +460,22 @@ if ($userdata) {
                                             <div class='small-text'>$post->course_title</div>                                        
                                     </div>
                                 </div>";
-            }
-
-            if ($session->status == 0) {
-                draw($tool_content, 0);
-            } else {
-                draw($tool_content, 1);
-            }
-            exit;
         }
 
-    $blog_posts = Database::get()->queryArray("SELECT * FROM eportfolio_resource WHERE user_id = ?d AND resource_type = ?s ORDER BY time_added DESC", $id, 'blog');
-    $submissions = Database::get()->queryArray("SELECT * FROM eportfolio_resource WHERE user_id = ?d AND resource_type = ?s ORDER BY time_added DESC", $id, 'work_submission');
-    $docs = Database::get()->queryArray("SELECT * FROM eportfolio_resource WHERE user_id = ?d AND resource_type = ?s ORDER BY time_added DESC", $id, 'mydocs');
-    $myBadges = Database::get()->queryArray("SELECT * FROM eportfolio_resource WHERE user_id = ?d AND resource_type = ?s ORDER BY time_added DESC", $id, 'my_badges');
-    $myCertificates = Database::get()->queryArray("SELECT * FROM eportfolio_resource WHERE user_id = ?d AND resource_type = ?s ORDER BY time_added DESC", $id, 'my_certificates');
-    $notes = Database::get()->queryArray("SELECT * FROM eportfolio_resource WHERE user_id = ?d AND resource_type = ?s ORDER BY time_added DESC", $id, 'note');
+        if ($session->status == 0) {
+            draw($tool_content, 0);
+        } else {
+            draw($tool_content, 1);
+        }
+        exit;
+    }
+
+    $blog_posts = Database::get()->queryArray("SELECT * FROM eportfolio_resource WHERE user_id = ?d AND resource_type = ?s AND $visibility_query ORDER BY time_added DESC", $id, 'blog');
+    $submissions = Database::get()->queryArray("SELECT * FROM eportfolio_resource WHERE user_id = ?d AND resource_type = ?s AND $visibility_query ORDER BY time_added DESC", $id, 'work_submission');
+    $docs = Database::get()->queryArray("SELECT * FROM eportfolio_resource WHERE user_id = ?d AND resource_type = ?s AND $visibility_query ORDER BY time_added DESC", $id, 'mydocs');
+    $myBadges = Database::get()->queryArray("SELECT * FROM eportfolio_resource WHERE user_id = ?d AND resource_type = ?s AND $visibility_query ORDER BY time_added DESC", $id, 'my_badges');
+    $myCertificates = Database::get()->queryArray("SELECT * FROM eportfolio_resource WHERE user_id = ?d AND resource_type = ?s AND $visibility_query ORDER BY time_added DESC", $id, 'my_certificates');
+    $notes = Database::get()->queryArray("SELECT * FROM eportfolio_resource WHERE user_id = ?d AND resource_type = ?s AND $visibility_query ORDER BY time_added DESC", $id, 'note');
 
     //hide tabs when there are no resources
     if (!$blog_posts && !$submissions && !$docs && !$myBadges && !$myCertificates && !$notes) {
