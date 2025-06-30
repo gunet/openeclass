@@ -1550,9 +1550,21 @@ function getDataMarkersFromJson($questionId) {
 }
 
 
-function extractValuesInCurlyBrackets ($text) {
-    preg_match_all('/\{([^}]+)\}/', $text, $matches);
-    return $matches[1]; // This contains all the captured groups inside {}
+function extractValuesInCurlyBrackets($text) {
+    // Find all occurrences of {...}
+    preg_match_all('/\{([^{}]+)\}/', $text, $matches);
+    $variables = [];
+
+    foreach ($matches[1] as $group) {
+        // For each group, split to get individual variables
+        // Variables are separated by operators or spaces, so split by non-word characters
+        preg_match_all('/\b\w+\b/', $group, $submatches);
+        foreach ($submatches[0] as $var) {
+            $variables[] = $var;
+        }
+    }
+    // Remove duplicates if desired
+    return array_unique($variables);
 }
 
 function evaluateExpression($expression, $questionId) {
