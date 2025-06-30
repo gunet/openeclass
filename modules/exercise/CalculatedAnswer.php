@@ -58,12 +58,14 @@ class CalculatedAnswer extends \QuestionType
             shuffle($answer_object_ids);
         }
 
-        $html_content = "<input type='hidden' name='choice[$this->question_id]' value='0'>";
-
         $q_data = Database::get()->querySingle("SELECT description,options FROM exercise_question WHERE id = ?d", $this->question_id);
         if ($q_data) {
             $question_description = $this->answer_object->replaceItemsBracesWithWildCards($q_data->description, $this->question_id);
             $html_content .= "<div class='col-12 my-4'>$question_description</div>";
+        }
+
+        if (!isset($_POST['choice'][$this->question_id])) {
+            unset($exerciseResult[$this->question_id]);
         }
 
         foreach ($answer_object_ids as $answerId) {
@@ -77,11 +79,16 @@ class CalculatedAnswer extends \QuestionType
                 $checked = '';
                 if (isset($exerciseResult[$this->question_id]) && !empty($exerciseResult[$this->question_id])) {
                     $arrExerResults = explode(',', $exerciseResult[$this->question_id]);
-                    if (count($arrExerResults) == 2) {
-                        if ($arrExerResults[0] == $answerVal) {
-                            $checked = 'checked';
-                        }
+                    if (count($arrExerResults) == 2 && $arrExerResults[0] == $answerVal) {
+                        $checked = 'checked';   
                     }
+                } elseif (!isset($exerciseResult[$this->question_id]) && isset($_SESSION['calculatedTemporarySave'][$this->question_id])
+                    && !empty($_SESSION['calculatedTemporarySave'][$this->question_id])) {
+                        $arrExerResults = explode(',', $_SESSION['calculatedTemporarySave'][$this->question_id]);
+                        if (count($arrExerResults) == 2 && $arrExerResults[0] == $answerVal) {
+                            $checked = 'checked';
+                            unset($_SESSION['calculatedTemporarySave'][$this->question_id]);
+                        }
                 }
                 $html_content .= "
                     <div class='radio mb-1'>
@@ -94,6 +101,10 @@ class CalculatedAnswer extends \QuestionType
                 $uniqueAnswer = '';
                 if (isset($exerciseResult[$this->question_id]) && !empty($exerciseResult[$this->question_id])) {
                     $uniqueAnswer = $exerciseResult[$this->question_id];
+                } elseif (!isset($exerciseResult[$this->question_id]) && isset($_SESSION['calculatedTemporarySave'][$this->question_id])
+                    && !empty($_SESSION['calculatedTemporarySave'][$this->question_id])) {
+                    $uniqueAnswer = $_SESSION['calculatedTemporarySave'][$this->question_id];
+                    unset($_SESSION['calculatedTemporarySave'][$this->question_id]);
                 }
                 $html_content .= "<input type='hidden' name='answer_id_choice[$this->question_id]' value='{$answerId}'>";
                 $html_content .= "<input type='text' class='form-control' name='choice[$this->question_id]' value='{$uniqueAnswer}' style='max-width:300px;'>";

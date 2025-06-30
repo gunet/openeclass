@@ -243,6 +243,7 @@ if (isset($_POST['buttonCancel'])) {
     unset($_SESSION['userHasAnswered']);
     unset($_SESSION['choicesAn']);
     unset($_SESSION['savedAnsForExerPerPage']);
+    unset($_SESSION['calculatedTemporarySave']);
 
     $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value];
     Database::get()->query("UPDATE exercise_user_record
@@ -271,7 +272,7 @@ $exerciseTimeConstraint = $objExercise->selectTimeConstraint();
 $exerciseAllowedAttempts = $objExercise->selectAttemptsAllowed();
 $exercisetotalweight = $objExercise->selectTotalWeighting();
 
-// In this php block it has been saving the user's answers for dragging and drop types 
+// In this php block it has been saving the user's answers for dragging and drop and calculated types 
 // when the exercise has MULTIPLE_PAGE_TYPE type.
 if (($exerciseType == MULTIPLE_PAGE_TYPE || isset($_POST['buttonSave'])) && isset($_POST['choice'])) {
     // $arrKey = question Id
@@ -325,10 +326,23 @@ if (($exerciseType == MULTIPLE_PAGE_TYPE || isset($_POST['buttonSave'])) && isse
                     $totalCount = count($_SESSION['savedAnsForExerPerPage']) - 1;
                     $_SESSION['userHasAnswered'][$arrKey] = $_SESSION['savedAnsForExerPerPage'][$totalCount];
                 }
+            } elseif ($CurrentQuestion->selectType() == CALCULATED) {
+                $tempSaveAnsCalc = ''; 
+                if (!empty($_POST['choice'][$arrKey])) {
+                    if (isset($_POST['answer_id_choice'])) { // calculated with text as answer
+                        $tempSaveAnsCalc = $_POST['choice'][$arrKey];
+                    } else { // calculated with multiple choices as answers
+                        $arrCal = explode(',', $_POST['choice'][$arrKey]);
+                        if (count($arrCal) == 2) {
+                            $tempSaveAnsCalc = $arrCal[0] . "," . $arrCal[1];
+                        }
+                    }
+                }
+                $_SESSION['calculatedTemporarySave'][$arrKey] = $tempSaveAnsCalc;
             }
         }
     }
-} 
+}
 
 $questionOptions = [];
 $shuffle_answers = $objExercise->getOption('ShuffleAnswers')? 1: 0;
@@ -580,6 +594,7 @@ if (isset($_POST['formSent'])) {
         unset($_SESSION['userHasAnswered']);
         unset($_SESSION['choicesAn']);
         unset($_SESSION['savedAnsForExerPerPage']);
+        unset($_SESSION['calculatedTemporarySave']);
 
         if (isset($_POST['secsRemaining'])) {
             $secs_remaining = $_POST['secsRemaining'];
