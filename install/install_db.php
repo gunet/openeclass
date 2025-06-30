@@ -2201,8 +2201,6 @@ $db->query("CREATE TABLE IF NOT EXISTS `user_backpack_connection` (
     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `user_id` INT(11) NOT NULL,
     `backpack_provider_id` INT(11) NOT NULL,
-    `email` VARCHAR(255) DEFAULT NULL,
-    `password` VARCHAR(255) DEFAULT NULL,
     `access_token` VARCHAR(512) DEFAULT NULL,
     `refresh_token` VARCHAR(512) DEFAULT NULL,
     `status` ENUM('connected', 'disconnected', 'error') DEFAULT 'disconnected',

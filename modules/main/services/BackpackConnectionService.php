@@ -76,6 +76,50 @@ class BackpackConnectionService
     }
 
     /**
+     * Create or update backpack connection with OAuth tokens
+     */
+    public function connectBackpackWithTokens(
+        int $userId, 
+        int $providerId, 
+        ?string $email = null, 
+        ?string $accessToken = null,
+        ?string $refreshToken = null
+    ): bool {
+        try {
+            // Check if connection exists
+            $existingConnection = $this->db->querySingle(
+                "SELECT id FROM user_backpack_connection WHERE user_id = ?d AND backpack_provider_id = ?d",
+                $userId, $providerId
+            );
+
+            if ($existingConnection) {
+                // Update existing connection
+                $result = $this->db->query(
+                    "UPDATE user_backpack_connection 
+                     SET email = ?s, access_token = ?s, refresh_token = ?s, status = 'connected', updated_at = NOW() 
+                     WHERE user_id = ?d AND backpack_provider_id = ?d",
+                    $email, $accessToken, $refreshToken, $userId, $providerId
+                );
+            } else {
+                // Create new connection
+                $result = $this->db->query(
+                    "INSERT INTO user_backpack_connection 
+                     (user_id, backpack_provider_id, email, access_token, refresh_token, status, created_at, updated_at) 
+                     VALUES (?d, ?d, ?s, ?s, ?s, 'connected', NOW(), NOW())",
+                    $userId, $providerId, $email, $accessToken, $refreshToken
+                );
+            }
+
+            return $result && is_object($result) && 
+                   (isset($result->affectedRows) ? $result->affectedRows > 0 : true);
+                   
+        } catch (Exception $e) {
+            error_log('Backpack connection with tokens error: ' . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
      * Disconnect user's backpack
      */
     public function disconnectBackpack(int $userId): bool

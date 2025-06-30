@@ -20,11 +20,48 @@
 
 $require_login = true;
 $require_help = true;
-$helpTopic = 'Portfolio';
+$helpTopic = 'Backpacks';
 
 require_once '../include/baseTheme.php';
 require_once  dirname(__DIR__) .  '/modules/main/services/BackpackConnectionService.php';
 require_once  dirname(__DIR__) .  '/modules/admin/repositories/BackpackProviderRepository.php';
+
+// Handle AJAX test connection request
+if (isset($_POST['ajax_action']) && $_POST['ajax_action'] === 'test_connection') {
+    header('Content-Type: application/json');
+    
+    $provider_id = intval($_POST['provider_id'] ?? 0);
+    $email = trim($_POST['email'] ?? '');
+    $password = trim($_POST['password'] ?? '');
+    
+    if (!$provider_id || !$email || !$password) {
+        echo json_encode([
+            'success' => false,
+            'error' => 'Missing required parameters',
+            'status' => 400
+        ]);
+        exit;
+    }
+    
+    // Get provider details
+    $providerRepo = new BackpackProviderRepository();
+    $provider = $providerRepo->findById($provider_id);
+    
+    if (!$provider || !$provider->isEnabled()) {
+        echo json_encode([
+            'success' => false,
+            'error' => 'Provider not found or disabled',
+            'status' => 404
+        ]);
+        exit;
+    }
+    
+    // Test the connection and save if successful
+    $backpackConnectionService = new BackpackConnectionService();
+    $result = testBackpackConnection($provider, $email, $password, $uid, $backpackConnectionService);
+    echo json_encode($result);
+    exit;
+}
 
 $toolName = $langPortfolio;
 $pageName = $langMyBackpacks ?? 'My Backpacks';
@@ -132,4 +169,137 @@ function handleBackpackDisconnection(BackpackConnectionService $connectionServic
     }
     
     redirect_to_home_page('main/mybackpacks.php');
+}
+
+/**
+ * Test backpack connection via server-side request
+ */
+function testBackpackConnection($provider, $email, $password, $userId, $backpackConnectionService) {
+    // $tokenUrl = rtrim($provider->api_url, '/') . '/o/token';
+    $tokenUrl = 'https://api.eu.badgr.io/o/token';
+    error_log('Token URL: ' . $tokenUrl);
+    // Prepare POST data - Badgr API expects 'username' and 'password' parameters
+    $postData = http_build_query([
+        'username' => $email,
+        'password' => $password
+    ]);
+    
+    // Initialize cURL
+    $ch = curl_init();
+    curl_setopt_array($ch, [
+        CURLOPT_URL => $tokenUrl,
+        CURLOPT_POST => true,
+        CURLOPT_POSTFIELDS => $postData,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_TIMEOUT => 30,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_SSL_VERIFYPEER => true,
+        CURLOPT_HTTPHEADER => [
+            'Accept: application/json',
+            'Content-Type: application/x-www-form-urlencoded',
+            'User-Agent: OpenEClass-BackpackConnector/1.0'
+        ]
+    ]);
+    
+    // Execute request
+    $response = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $error = curl_error($ch);
+    curl_close($ch);
+    
+    // Handle cURL errors
+    if ($error) {
+        return [
+            'success' => false,
+            'error' => 'Connection error: ' . $error,
+            'status' => 0,
+            'response' => null
+        ];
+    }
+    
+    // Try to decode JSON response
+    $decodedResponse = json_decode($response, true);
+    
+    // Check if request was successful
+    if ($httpCode < 200 || $httpCode >= 300) {
+        return [
+            'success' => false,
+            'status' => $httpCode,
+            'error' => 'Authentication failed',
+            'response' => $decodedResponse ?: $response,
+            'raw_response' => $response
+        ];
+    }
+    
+    // Validate OAuth response structure
+    if (!$decodedResponse || !is_array($decodedResponse)) {
+        return [
+            'success' => false,
+            'error' => 'Invalid response format',
+            'status' => $httpCode,
+            'response' => $response
+        ];
+    }
+    
+    // Check for required OAuth fields
+    $requiredFields = ['access_token', 'token_type', 'expires_in'];
+    foreach ($requiredFields as $field) {
+        if (!isset($decodedResponse[$field]) || empty($decodedResponse[$field])) {
+            return [
+                'success' => false,
+                'error' => "Invalid OAuth response: missing or empty '$field' field",
+                'status' => $httpCode,
+                'response' => $decodedResponse
+            ];
+        }
+    }
+    
+    // Validate token_type is Bearer
+    if (strtolower($decodedResponse['token_type']) !== 'bearer') {
+        return [
+            'success' => false,
+            'error' => 'Invalid token type. Expected "Bearer", got "' . $decodedResponse['token_type'] . '"',
+            'status' => $httpCode,
+            'response' => $decodedResponse
+        ];
+    }
+    
+    // Validate expires_in is a positive number
+    if (!is_numeric($decodedResponse['expires_in']) || $decodedResponse['expires_in'] <= 0) {
+        return [
+            'success' => false,
+            'error' => 'Invalid expires_in value',
+            'status' => $httpCode,
+            'response' => $decodedResponse
+        ];
+    }
+    
+    // Response is valid, save the connection
+    $accessToken = $decodedResponse['access_token'];
+    $refreshToken = $decodedResponse['refresh_token'] ?? null; // refresh_token is optional
+    
+    $connectionSaved = $backpackConnectionService->connectBackpackWithTokens(
+        $userId,
+        $provider->id,
+        $email,
+        $accessToken,
+        $refreshToken
+    );
+    
+    if (!$connectionSaved) {
+        return [
+            'success' => false,
+            'error' => 'Failed to save backpack connection',
+            'status' => $httpCode,
+            'response' => $decodedResponse
+        ];
+    }
+    
+    return [
+        'success' => true,
+        'status' => $httpCode,
+        'response' => $decodedResponse,
+        'raw_response' => $response,
+        'connection_saved' => true
+    ];
 }

@@ -41,6 +41,7 @@ services:
 
 volumes:
     config_data:
+    vendor_data:
     courses_data:
     video_data:
     db_data:
