@@ -303,3 +303,107 @@ function testBackpackConnection($provider, $email, $password, $userId, $backpack
         'connection_saved' => true
     ];
 }
+
+/**
+ * Handle API operations using the new OpenBadges API service
+ */
+function handleApiOperation(): void
+{
+    global $uid;
+    
+    if (!isset($_POST['api_operation'])) {
+        return;
+    }
+    
+    $operation = $_POST['api_operation'];
+    $apiService = new OpenBadgesApiService();
+    
+    try {
+        switch ($operation) {
+            case 'get_badges':
+                $response = $apiService->getUserBadges($uid);
+                if ($response->isSuccess()) {
+                    $badges = $response->getBadges();
+                    Session::flash('message', sprintf(trans('langFoundBadges'), count($badges)));
+                    Session::flash('alert-class', 'alert-success');
+                    Session::flash('badges_data', json_encode($badges));
+                } else {
+                    Session::flash('message', trans('langErrorFetchingBadges') . ': ' . $response->getError());
+                    Session::flash('alert-class', 'alert-danger');
+                }
+                break;
+                
+            case 'get_profile':
+                $response = $apiService->getUserProfile($uid);
+                if ($response->isSuccess()) {
+                    $profile = $response->getProfile();
+                    Session::flash('message', trans('langProfileFetchedSuccessfully'));
+                    Session::flash('alert-class', 'alert-success');
+                    Session::flash('profile_data', json_encode($profile));
+                } else {
+                    Session::flash('message', trans('langErrorFetchingProfile') . ': ' . $response->getError());
+                    Session::flash('alert-class', 'alert-danger');
+                }
+                break;
+                
+            case 'get_collections':
+                $response = $apiService->getUserCollections($uid);
+                if ($response->isSuccess()) {
+                    $collections = $response->getCollections();
+                    Session::flash('message', sprintf(trans('langFoundCollections'), count($collections)));
+                    Session::flash('alert-class', 'alert-success');
+                    Session::flash('collections_data', json_encode($collections));
+                } else {
+                    Session::flash('message', trans('langErrorFetchingCollections') . ': ' . $response->getError());
+                    Session::flash('alert-class', 'alert-danger');
+                }
+                break;
+                
+            case 'refresh_token':
+                $response = $apiService->refreshAccessToken($uid);
+                if ($response->isSuccess()) {
+                    Session::flash('message', trans('langTokenRefreshedSuccessfully'));
+                    Session::flash('alert-class', 'alert-success');
+                } else {
+                    Session::flash('message', trans('langErrorRefreshingToken') . ': ' . $response->getError());
+                    Session::flash('alert-class', 'alert-danger');
+                }
+                break;
+                
+            default:
+                Session::flash('message', trans('langUnsupportedOperation'));
+                Session::flash('alert-class', 'alert-warning');
+                break;
+        }
+    } catch (Exception $e) {
+        error_log('API Operation Error: ' . $e->getMessage());
+        Session::flash('message', trans('langApiOperationFailed') . ': ' . $e->getMessage());
+        Session::flash('alert-class', 'alert-danger');
+    }
+    
+    redirect_to_home_page('main/mybackpacks.php');
+}
+
+/**
+ * Get provider capabilities for display
+ */
+function getProviderCapabilities($connection): array
+{
+    if (!$connection) {
+        return [];
+    }
+    
+    try {
+        $provider = BackpackProvider::create(
+            $connection->provider_name,
+            $connection->api_url,
+            $connection->ob_version
+        );
+        
+        $apiService = new OpenBadgesApiService();
+        return $apiService->getProviderCapabilities($provider);
+    } catch (Exception $e) {
+        error_log('Error getting provider capabilities: ' . $e->getMessage());
+        return [];
+    }
+}
