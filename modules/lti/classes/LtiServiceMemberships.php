@@ -169,7 +169,7 @@ class LtiServiceMemberships extends LtiServiceBase {
         $sql = "SELECT cu.* FROM course_user cu WHERE cu.course_id = ?d AND cu.user_id = ?d";
         $cu = Database::get()->querySingle($sql, $course->id, $user->id);
 
-        if ($cu->tutor === 1) {
+        if ($cu->status == USER_TEACHER || $cu->editor == 1 || $cu->tutor == 1) {
             $roles[] = 'Instructor';
             $roles[] = 'http://purl.imsglobal.org/vocab/lis/v2/person#Administrator';
         } else {
