@@ -156,9 +156,13 @@ if ($userdata) {
 
             if (isset($_GET['view'])) {
                 if ($_GET['view']== 'public') {
-                    $tool_content .= "<div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langePortfolioPreviewAsGuest</span></div></div>";
+                    $tool_content .= "<div class='col-12'><div class='alert alert-info '><i class='fa-solid fa-circle-info fa-lg'></i><span>
+                        $langePortfolioPreviewAsGuest</span>
+                    </div></div>";
                 } elseif ($_GET['view']== 'registered') {
-                    $tool_content .= "<div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langePortfolioPreviewAsRegistered</span></div></div>";
+                    $tool_content .= "<div class='col-12'><div class='alert alert-info '><i class='fa-solid fa-circle-info fa-lg'></i><span>
+                        $langePortfolioPreviewAsRegistered</span>
+                    </div></div>";
                 }
             }
 

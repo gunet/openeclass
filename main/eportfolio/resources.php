@@ -130,9 +130,34 @@ if ($userdata) {
         ));
         $tool_content .= $action_bar;
 
+        $tool_content .= "<div class='d-flex mb-3'><div class='ms-auto'>".action_button(array(
+            array('title' => $langNotRegistered,
+                  'url' => "{$urlAppend}main/eportfolio/resources.php?id=$id&amp;token=$token&amp;view=public",
+                  'icon' => 'fa-globe'),
+            array('title' => $langRegisteredUsers,
+                  'url' => "{$urlAppend}main/eportfolio/resources.php?id=$id&amp;token=$token&amp;view=registered",
+                  'icon' => 'fa-users'),
+            array('title' => $langUser,
+                  'url' => "{$urlAppend}main/eportfolio/resources.php?id=$id&amp;token=$token",
+                  'icon' => 'fa-lock')
+            ),
+            array('secondary_icon' => 'fa-binoculars', 'secondary_title' => $langSee))."</div></div>";
+
         $tool_content .= "<div class='col-12'><div class='alert alert-info '><i class='fa-solid fa-circle-info fa-lg'></i><span>
                             $langePortfolioCollectionUserInfo</span>
                           </div></div>";
+                        
+        if (isset($_GET['view'])) {
+            if ($_GET['view']== 'public') {
+                $tool_content .= "<div class='col-12'><div class='alert alert-info '><i class='fa-solid fa-circle-info fa-lg'></i><span>
+                                    $langePortfolioPreviewAsGuest</span>
+                                </div></div>";
+            } elseif ($_GET['view']== 'registered') {
+                $tool_content .= "<div class='col-12'><div class='alert alert-info '><i class='fa-solid fa-circle-info fa-lg'></i><span>
+                                    $langePortfolioPreviewAsRegistered</span>
+                                </div></div>";
+            }
+        }
 
         if (isset($_GET['action']) && $_GET['action'] == 'add') {
             if (isset($_GET['type']) && isset($_GET['rid'])) {
@@ -390,6 +415,13 @@ if ($userdata) {
     } else {
         if ($_SESSION['uid'] == $id) {
             $visibility_query = "visibility<=".EPF_VISIBLE_PRIVATE;
+            if (isset($_GET['view'])) { //preview mode
+                if ($_GET['view']=='public') {
+                    $visibility_query = "visibility=".EPF_VISIBLE_PUBLIC;
+                } elseif ($_GET['view']=='registered') {
+                    $visibility_query = "visibility<=".EPF_VISIBLE_USERS;
+                }
+            }
         } else {
             $visibility_query = "visibility<=".EPF_VISIBLE_USERS;
         }
