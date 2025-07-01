@@ -68,6 +68,8 @@ class CalculatedAnswer extends \QuestionType
             unset($exerciseResult[$this->question_id]);
         }
 
+        $html_content .= "<input type='hidden' name='currentCalculatedQuestion' value='{$this->question_id}'>";
+
         foreach ($answer_object_ids as $answerId) {
             $answerTitle = $this->answer_object->getTitle($answerId);
             $arrTitle = explode(':', $answerTitle);
