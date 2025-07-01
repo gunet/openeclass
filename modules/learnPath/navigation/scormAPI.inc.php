@@ -116,6 +116,12 @@ $sco['score_children'] = "raw,min,max";
 $sco['exit'] = "";
 $sco['session_time'] = "0000:00:00.00";
 
+if (isset($_GET['unit'])) {
+    $closeurl = $urlAppend . "modules/units/index.php?course=$course_code&amp;id=" . $_GET['unit'];
+} else {
+    $closeurl = "index.php?course=$course_code";
+}
+
 ?>
 <script type="text/javascript">
 
@@ -950,7 +956,44 @@ $sco['session_time'] = "0000:00:00.00";
         };
 
         // target form is in a hidden frame
-        let cmiform = upFrame.document.forms[0];
+        let cmiform = null;
+        let safeToUseUpFrame = false;
+        try {
+            // Try accessing the frame and its form
+            if (typeof upFrame !== 'undefined' && upFrame && upFrame.document && upFrame.document.forms.length > 0) {
+                cmiform = upFrame.document.forms[0];
+                safeToUseUpFrame = true;
+            }
+        } catch (err) {
+            // Accessing upFrame threw an exception (likely due to being destroyed or cross-origin)
+            safeToUseUpFrame = false;
+        }
+
+        if (!safeToUseUpFrame) {
+            cdbg('upFrame is not available. Constructing fallback form.');
+
+            let fallbackForm = document.createElement('form');
+            fallbackForm.method = 'POST';
+            fallbackForm.action = '<?php echo $urlAppend . "modules/learnPath/navigation/updateProgress.php?course=" . $course_code . (isset($_GET['unit'])? ('&unit=' . intval($_GET['unit'])): '') ?>';
+
+            // replicate original inputs
+            fallbackForm.appendChild(makeHiddenInput('ump_id', null));
+            fallbackForm.appendChild(makeHiddenInput('lesson_status', null));
+            fallbackForm.appendChild(makeHiddenInput('lesson_location', null));
+            fallbackForm.appendChild(makeHiddenInput('credit', null));
+            fallbackForm.appendChild(makeHiddenInput('entry', null));
+            fallbackForm.appendChild(makeHiddenInput('raw', null));
+            fallbackForm.appendChild(makeHiddenInput('total_time', null));
+            fallbackForm.appendChild(makeHiddenInput('session_time', null));
+            fallbackForm.appendChild(makeHiddenInput('suspend_data', null));
+            fallbackForm.appendChild(makeHiddenInput('scoreMin', null));
+            fallbackForm.appendChild(makeHiddenInput('scoreMax', null));
+            fallbackForm.appendChild(makeHiddenInput('scoreScaled', null));
+            fallbackForm.appendChild(makeHiddenInput('exit', null));
+
+            cmiform = fallbackForm;
+        }
+
         // user module progress id
         cmiform.ump_id.value = "<?php echo $userProgressionDetails->user_module_progress_id ?>";
 
@@ -974,7 +1017,17 @@ $sco['session_time'] = "0000:00:00.00";
         cmiform.scoreScaled.value = values[45];
 
         let cmiformVars = $(cmiform).serialize();
-        let closelocation = tocFrame.document.getElementById('close-btn').getElementsByTagName('a')[0].href;
+        let closelocation = null;
+        let safeToUseTocFrame = false;
+        try {
+            if (typeof tocFrame !== 'undefined' && tocFrame && tocFrame.document) {
+                closelocation = tocFrame.document.getElementById('close-btn').getElementsByTagName('a')[0].href;
+                safeToUseTocFrame = true;
+            }
+        } catch (err) {
+            safeToUseTocFrame = false;
+            closelocation = '<?php echo $closeurl ?>';
+        }
         cdbg('doCommit cmiform submit');
 
         $.ajax({
@@ -1003,12 +1056,14 @@ $sco['session_time'] = "0000:00:00.00";
             }
         }).always(function() {
             cdbg('doCommit exiting...');
-            tocFrame.document.location.reload();
-            // adl.nav.request
-            if (values[47].length > 0) {
-                setTimeout(function() {
-                    window.location.href = closelocation;
-                }, 300);
+            if (safeToUseTocFrame) {
+                tocFrame.document.location.reload();
+                // adl.nav.request
+                if (values[47].length > 0) {
+                    setTimeout(function () {
+                        window.top.location.href = closelocation;
+                    }, 300);
+                }
             }
         });
     }
@@ -1020,6 +1075,14 @@ $sco['session_time'] = "0000:00:00.00";
             }
         }
         return -1;
+    }
+
+    function makeHiddenInput(name, value) {
+        let input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = name;
+        input.value = value;
+        return input;
     }
 
     // ====================================================

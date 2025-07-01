@@ -339,7 +339,7 @@ function ltiGetImsRole(stdClass $stat): string {
 
     $roles = array();
 
-    if ($stat->status == USER_TEACHER) {
+    if ($stat->status == USER_TEACHER || $stat->editor == 1 || $stat->tutor == 1) {
         $roles[] = 'Instructor';
     } else {
         $roles[] = 'Learner';
