@@ -140,6 +140,28 @@ if ($userdata) {
                                             )
                                 ));
         $tool_content .= $action_bar;
+
+        $tool_content .= "<div class='d-flex mb-3'><div class='ms-auto'>".action_button(array(
+            array('title' => $langNotRegistered,
+                  'url' => "{$urlAppend}main/eportfolio/index.php?id=$id&amp;token=$token&amp;view=public",
+                  'icon' => 'fa-globe'),
+            array('title' => $langRegisteredUsers,
+                  'url' => "{$urlAppend}main/eportfolio/index.php?id=$id&amp;token=$token&amp;view=registered",
+                  'icon' => 'fa-users'),
+            array('title' => $langUser,
+                  'url' => "{$urlAppend}main/eportfolio/index.php?id=$id&amp;token=$token",
+                  'icon' => 'fa-lock')
+            ),
+            array('secondary_icon' => 'fa-binoculars', 'secondary_title' => $langSee))."</div></div>";
+
+            if (isset($_GET['view'])) {
+                if ($_GET['view']== 'public') {
+                    $tool_content .= "<div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langePortfolioPreviewAsGuest</span></div></div>";
+                } elseif ($_GET['view']== 'registered') {
+                    $tool_content .= "<div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langePortfolioPreviewAsRegistered</span></div></div>";
+                }
+            }
+
     } else {
         if ($userdata->eportfolio_enable == 0) {
             $tool_content = "<div class='col-12'><div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langUserePortfolioDisabled</span></div></div>";

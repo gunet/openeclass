@@ -87,6 +87,13 @@ function render_eportfolio_fields_content($uid) {
                 } else {
                     if ($_SESSION['uid'] == $uid) {
                         $visibility_query = "<=".EPF_VISIBLE_PRIVATE;
+                        if (isset($_GET['view'])) { //preview mode
+                            if ($_GET['view']=='public') {
+                                $visibility_query = "=".EPF_VISIBLE_PUBLIC;
+                            } elseif ($_GET['view']=='registered') {
+                                $visibility_query = "<=".EPF_VISIBLE_USERS;
+                            }
+                        }
                     } else {
                         $visibility_query = "<=".EPF_VISIBLE_USERS;
                     }
