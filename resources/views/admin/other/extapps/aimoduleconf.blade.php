@@ -75,7 +75,6 @@
                                     </div>
                                 </div>
 
-
                                 <div class='form-group mt-5'>
                                     <div class='col-12 d-flex justify-content-end align-items-center'>
 
@@ -87,7 +86,6 @@
                                                 'value'=> trans('langSubmit')
                                             )
                                         )) !!}
-
 
                                         {!! form_buttons(array(
                                             array(
@@ -105,15 +103,18 @@
                     <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
                         <img class='form-image-modules' src='{!! get_form_image() !!}' alt="{{ trans('langImgFormsDes') }}">
                     </div>
-                @elseif (isset($_GET['add_service']))
-                    <div class='col-lg-6 col-12'>
+                @elseif (isset($_GET['add_service']) || isset($_GET['edit_service']))
+                    <div class='col-lg-9 col-12'>
                         <div class='form-wrapper form-edit border-0 px-0'>
                             <form class='form-horizontal' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
+                                @if (isset($_GET['edit_service']))
+                                    <input type="hidden" name="ai_service_id" value="{{ $_GET['edit_service'] }}">
+                                @endif
                                 <div class='form-group'>
                                     <label for="dropdown" class="form-label">{{ trans('langAIService') }}</label>
                                     <select name='module' class='form-control'>
                                         @foreach ($ai_services as $value => $label)
-                                            <option value='{{ $value }}'> {{ $label }}</option>
+                                            <option value='{{ $value }}' @if (isset($ai_service) and $ai_service == $value) selected @endif> {{ $label }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -122,7 +123,7 @@
                                     <label for="modelDropdown" class="form-label">{{ trans('langProvider') }} - {{ trans('langLanguageModel') }}</label>
                                     <select name="provider_model" class="form-control">
                                         @foreach ($provider_model_data as $id => $name)
-                                            <option value='{{ $id }}'> {{ $name }}</option>"
+                                            <option value='{{ $id }}' @if (isset($model_data) and $model_data == $name) selected @endif> {{ $name }}</option>"
                                          @endforeach
                                     </select>
                                 </div>
@@ -161,10 +162,9 @@
                         </div>
                     </div>
 
-                    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
+                    <div class='col-lg-3 col-12 d-none d-md-none d-lg-block text-end'>
                         <img class='form-image-modules' src='{!! get_form_image() !!}' alt="{{ trans('langImgFormsDes') }}">
                     </div>
-
 
                 @else
                     {!! action_bar(array(
@@ -247,6 +247,10 @@
                                     <td class='option-btn-cell text-end'>
                                         {!!
                                             action_button(array(
+                                                array('title' => trans('langEdit'),
+                                                      'url' => "$_SERVER[SCRIPT_NAME]?edit_service=$ai_module[id]",
+                                                      'icon' => 'fa-edit'
+                                                      ),
                                                 array('title' => trans('langDelete'),
                                                       'url' => "$_SERVER[SCRIPT_NAME]?delete_service=$ai_module[id]",
                                                       'icon' => 'fa-times',
@@ -406,25 +410,24 @@
                 });
             });
 
-
-            $('#ai-courses').select2();
+            $('#select-courses').select2();
             $('#selectAll').click(function(e) {
                 e.preventDefault();
                 let stringVal = [];
-                $('#ai-courses').find('option').each(function(){
+                $('#select-courses').find('option').each(function(){
                     if ($(this).val() != 0) {
                         stringVal.push($(this).val());
                     }
                 });
-                $('#ai-courses').val(stringVal).trigger('change');
+                $('#select-courses').val(stringVal).trigger('change');
             });
             $('#removeAll').click(function(e) {
                 e.preventDefault();
                 let stringVal = [];
                 stringVal.push(0);
-                $('#ai-courses').val(stringVal).trigger('change');
+                $('#select-courses').val(stringVal).trigger('change');
             });
-            $('#ai-courses').change(function(e) {
+            $('#select-courses').change(function(e) {
                 doSelectedCourses();
             });
             doSelectedCourses();

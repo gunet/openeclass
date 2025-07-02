@@ -48,7 +48,12 @@ class AIService {
             if ($q->all_courses == 1) {
                 return true;
             } else {
-                return false;
+                $q2 = Database::get()->querySingle("SELECT * FROM ai_courses WHERE course_id = ?d AND ai_module = ?d", $q->courseId, $q->id);
+                if ($q2) {
+                    return true;
+                } else {
+                    return false;
+                }
             }
         } else {
             return false;

@@ -2521,7 +2521,11 @@ $db->query("CREATE TABLE ai_modules (
     `all_courses` TINYINT NOT NULL DEFAULT 1, 
     PRIMARY KEY(ID)) $tbl_options");
 
-$db->query("INSERT INTO ai_modules SET ai_module_id = 1"); // question pool
+$db->query("CREATE TABLE `ai_courses` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `course_id` int NOT NULL,
+    `ai_module` int NOT NULL,
+    PRIMARY KEY (`id`), KEY (`ai_module`, `course_id`))  $tbl_options");
 
 $db->query("CREATE TABLE `course_invitation` (
     `id` int(11) NOT NULL AUTO_INCREMENT,

@@ -3374,6 +3374,15 @@ function upgrade_to_4_2($tbl_options) : void {
             `all_courses` TINYINT NOT NULL DEFAULT 1,
             PRIMARY KEY(ID)) $tbl_options");
     }
+
+    if (!DBHelper::tableExists('ai_courses')) {
+        Database::get()->query("CREATE TABLE `ai_courses` (
+            `id` int(11) NOT NULL AUTO_INCREMENT,
+            `course_id` int NOT NULL,
+            `ai_module` int NOT NULL,
+            PRIMARY KEY (`id`), KEY (`ai_module`, `course_id`))  $tbl_options");
+    }
+
 }
 
 /**

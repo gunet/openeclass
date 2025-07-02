@@ -56,6 +56,7 @@ if (isset($_GET['edit_provider'])) {
     redirect_to_home_page('modules/admin/aimoduleconf.php');
 } else if (isset($_GET['delete_service'])) {
     Database::get()->query("DELETE FROM ai_modules WHERE id = ?d", $_GET['delete_service']);
+    Database::get()->query("DELETE FROM ai_courses WHERE ai_module = ?d", $_GET['delete_service']);
     Session::flash('message', $langAIModuleDeleted);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page('modules/admin/aimoduleconf.php');
@@ -110,10 +111,37 @@ if (isset($_GET['edit_provider'])) {
         Session::Messages($langFieldsMissing, 'alert-warning');
     }
 } else if (isset($_POST['submit_service'])) {
-    print_a($_POST);
-    Database::get()->query("INSERT INTO ai_modules (ai_module_id, ai_provider_id, all_courses) 
-                                VALUES (?d, ?d, 1)",
-                            $_POST['module'], $_POST['provider_model']);
+    if ($_POST['ai_courses'][0] == 0) {
+        $all_courses = 1;
+    } else {
+        $all_courses = 0;
+    }
+    if (isset($_POST['ai_service_id'])) { // update
+        $q = Database::get()->query("UPDATE ai_modules SET 
+                                        ai_module_id = ?d, 
+                                        ai_provider_id = ?d,
+                                        all_courses = ?d
+                                WHERE id = ?d",
+                            $_POST['module'], $_POST['provider_model'], $all_courses, $_POST['ai_service_id']);
+        if ($all_courses == 1) {
+            Database::get()->query("DELETE FROM ai_courses WHERE ai_module = ?d", $_POST['ai_service_id']);
+        } else {
+            Database::get()->query("DELETE FROM ai_courses WHERE ai_module = ?d", $_POST['ai_service_id']);
+            foreach ($_POST['ai_courses'] as $ai_course) {
+                Database::get()->query("INSERT INTO ai_courses (course_id, ai_module) VALUES (?d, ?d)", $ai_course, $_POST['ai_service_id']);
+            }
+        }
+    } else { // new
+        $q = Database::get()->query("INSERT INTO ai_modules (ai_module_id, ai_provider_id, all_courses) VALUES (?d, ?d, ?d)",
+                                    $_POST['module'], $_POST['provider_model'], $all_courses);
+        $ai_module = $q->lastInsertID;
+    }
+    if (($all_courses == 0) and count($_POST['ai_courses']) > 0) {
+        foreach ($_POST['ai_courses'] as $ai_course) {
+            Database::get()->query("INSERT INTO ai_courses (course_id, ai_module) VALUES (?d, ?d)", $ai_course, $ai_module);
+        }
+    }
+
     Session::Messages($langAIConfigSaved, 'alert-success');
     redirect_to_home_page('modules/admin/aimoduleconf.php');
 } else if (isset($_GET['add_provider'])) {
@@ -129,15 +157,13 @@ if (isset($_GET['edit_provider'])) {
     );
     $data['currentModelName'] = $currentModelName = '';
 } else if (isset($_GET['add_service'])) {
-
     $courses_list = Database::get()->queryArray("SELECT id, code, title FROM course
                                                     WHERE visible != " . COURSE_INACTIVE . "
                                                  ORDER BY title");
     $selections = array();
     $courses_content = "<option value='0' selected><h2>$langToAllCourses</h2></option>";
     foreach ($courses_list as $c) {
-        $selected = in_array($c->id, $selections) ? "selected" : "";
-        $courses_content .= "<option value='$c->id' $selected>" . q($c->title) . " (" . q($c->code) . ")</option>";
+        $courses_content .= "<option value='$c->id'>" . q($c->title) . " (" . q($c->code) . ")</option>";
     }
     $data['courses_content'] = $courses_content;
 
@@ -148,6 +174,45 @@ if (isset($_GET['edit_provider'])) {
         $provider_model_data[$provider_data->id] = $provider_data->name . ' (' . $provider_data->model_name . ')';
     }
     $data['provider_model_data'] = $provider_model_data;
+    $data['currentModelName'] = $currentModelName = '';
+} else if (isset($_GET['edit_service'])) {
+    $data['currentModelName'] = '';
+    $data['ai_services'] = AIService::getAIServices();
+    $providers_data = Database::get()->queryArray("SELECT id, name, model_name FROM ai_providers WHERE enabled = 1");
+    foreach ($providers_data as $provider_data) {
+        $provider_model_data[$provider_data->id] = $provider_data->name . ' (' . $provider_data->model_name . ')';
+    }
+    $data['provider_model_data'] = $provider_model_data;
+    $q = Database::get()->querySingle("SELECT ai_modules.id, ai_module_id, name, model_name, all_courses, enabled 
+                FROM ai_modules 
+                    JOIN ai_providers 
+                ON ai_modules.ai_provider_id = ai_providers.id
+                WHERE ai_modules.id = ?d", $_GET['edit_service']);
+    $data['ai_service'] = $q->ai_module_id;
+    $data['model_data'] = $q->name . ' (' . $q->model_name . ')';
+    $all_courses = $q->all_courses;
+    $id = $q->id;
+
+    $courses_list = Database::get()->queryArray("SELECT id, code, title FROM course
+                                                    WHERE visible != " . COURSE_INACTIVE . "
+                                                 ORDER BY title");
+    $selections = [];
+    $all_selected = $some_selected = "";
+    if ($all_courses == 1) {
+        $all_selected = "selected";
+    } else {
+        $ai_courses = Database::get()->queryArray("SELECT course_id FROM ai_courses WHERE ai_module = ?d", $id);
+        foreach ($ai_courses as $ai_course) {
+            $selections[] = $ai_course->course_id;
+        }
+    }
+    $courses_content = "<option value='0' $all_selected><h2>$langToAllCourses</h2></option>";
+    foreach ($courses_list as $c) {
+        $some_selected = in_array($c->id, $selections) ? "selected" : "";
+        $courses_content .= "<option value='$c->id' $some_selected>" . q($c->title) . " (" . q($c->code) . ")</option>";
+    }
+    $data['courses_content'] = $courses_content;
+
 } else { // list
     $providerDisplayNames = AIProviderFactory::getProviderDisplayNames();
     $data['q'] = $q = Database::get()->queryArray("SELECT * FROM ai_providers");
