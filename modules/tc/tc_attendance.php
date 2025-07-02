@@ -100,6 +100,9 @@ if (defined('TC_CRON')) {
 function xml2sql($room_xml, $bbb) {
 
     $xml = $bbb->getMeetingInfo($room_xml);
+    if (!$xml) {
+        return;
+    }
     $xml_meet_id = $xml->meetingID;   //meetingID of specific bbb request meeting room
 
     foreach ($xml->attendees->attendee as $row) {
