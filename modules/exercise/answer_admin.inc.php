@@ -437,8 +437,20 @@ if (isset($submitAnswers) || isset($buttonBack)) {
                 Session::flash('alert-class', 'alert-warning');
                 redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId&modifyAnswers=$_GET[modifyAnswers]&htopic=" . CALCULATED);
             }
+
+            // Check if the Answer type field contains the type of expression with the final result of it seperated by the colon symbol (:)
+            if (count($uniqueMandatoryWildCards) == 0 && count($allPredefinedWildCards) == 0 && count($_POST['calculated_answer']) > 0) {
+                foreach ($_POST['calculated_answer'] as $an) {
+                    $tmpArr = explode(':', $an);
+                    if (count($tmpArr) < 2) {
+                        Session::flash('message', $langSeperateCorrectlyTheTypeOfAnswer);
+                        Session::flash('alert-class', 'alert-warning');
+                        redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId&modifyAnswers=$_GET[modifyAnswers]&htopic=" . CALCULATED);
+                    }
+                }
+            }
     
-            if (isset($_POST['wildCard_answer']) && count($_POST['wildCard_answer']) > 0) {
+            if (isset($_POST['wildCard_answer']) && count($_POST['wildCard_answer']) > 0 ) {
                 foreach ($_POST['wildCard_answer'] as $item => $val) {
                     if (!empty($val)) {
                         $arrItems[] = [

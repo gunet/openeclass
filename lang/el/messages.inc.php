@@ -2241,6 +2241,8 @@ $langCompleteVariablesOfQuestionWarning = "
 ";
 $langNoExistVariables = "Η εκφώνηση της άσκησης δεν περιέχει στοιχεία ή το πεδίο κειμένου είναι κενό.";
 $langFinalValueOfWildCard = "Τιμή στοιχείου";
+$langSeperateCorrectlyTheTypeOfAnswer = "Δεν υπάρχουν διαθέσιμα {στοιχεία} στην εκφώνηση ή στους τύπους των απαντήσεων. </br>
+Συνεπώς θα πρέπει στο πεδίο <strong>Τύπος απάντησης</strong> να προσθέσετε τον αριθμητικό τύπο που προσθέσατε στην εκφώνηση μαζί με το τελικό της αποτέλεσμα, χωρισμένα με το σύμβολο (<strong>:</strong>)";
 
 // answer_admin.php
 $langWeightingForEachBlank = "Δώστε ένα βάρος σε κάθε κενό";

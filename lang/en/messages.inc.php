@@ -1982,6 +1982,8 @@ For example, if we want to calculate the unknown <strong>x</strong> in the equat
 </ul>
 </div>
 ";
+$langSeperateCorrectlyTheTypeOfAnswer = "There are no {items} available in the pronunciation or in the answer types. </br>
+Therefore, in the <strong>Answer type</strong> field, you must add the numerical formula you added to the pronunciation along with its final result, separated by the symbol (<strong>:</strong>)";
 $langNoExistVariables = "The exercise pronunciation contains no data or the text field is empty.";
 $langFinalValueOfWildCard = "Value of item";
 $langCalcelDroppableItem = "You can undo your answer by left-clicking on the word.";
