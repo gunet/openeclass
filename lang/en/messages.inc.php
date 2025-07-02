@@ -1943,41 +1943,41 @@ $langEditItems = "Edit items";
 $langItIsNotWildCard = "It is not an item of the exercise";
 $langItIsWildCard = "It is an item of the exercise";
 $langAddCorrectMandatoryWildCrds = "The numeric expression contains more items than you inserted. Please try again.";
-$langTypeOfAnswer = "Response type";
+$langTypeOfAnswer = "Answer type";
 $langRangeOfValues = "Range of values";
 $langItem = "Item";
 $langDecimalValues = "Decimal digits";
 $langAutoCompleteValues = "Add value";
 $langAutoCompleteWildCardInfo = "You can optionally enter a random value for the current item by filling in its value range and selecting <strong>Add value</strong>.
 Otherwise, enter its value in the <strong>Value</strong> field.";
-$langCompleteTheTextOfTheQuestion = "Text of exercise";
+$langCompleteTheTextOfTheQuestion = "Pronunciation text field";
 $langCompleteVariablesOfQuestionInfo = "
 <ul>
-<li>Fill in the pronunciation of the exercise in the text field <strong>Exercise pronunciation</strong>.</li>
-<li>Each element should be defined within <strong>brackets {}</strong>.</li>
-<li>Fill in the type of answer that gives the desired result of the exercise as well as the grade in the <strong>Answer type</strong> and <strong>Grade</strong> fields respectively. The system automatically calculates the final result based on the type you provided.</li>
-<li>Enter the values ​​of the elements from the <strong>element editing</strong>. You can also define random values ​​from the range of values ​​of each element.</li>
+<li>Fill in the pronunciation in the <strong>Pronunciation</strong> text field.</li>
+<li>Each item should be defined within <strong>brackets {}</strong>.</li>
+<li>Fill in the numerical formula that gives the result as well as the grade in the <strong>Answer type</strong> and <strong>Grade</strong> fields respectively. The system automatically calculates the final result based on the formula you provided.</li>
+<li>Enter the values ​​of the items from the <strong>Edit items</strong>. You can also specify random values ​​from the range of values.</li>
 </ul>
 <div class='mt-4'>
-For example, if we want to calculate the result of the arithmetic operation 15+30 then we follow these steps:
+For example, if we want to calculate the result of the arithmetic operation 15+30, then we follow these steps:
 <ul class='mt-3'>
-<li>In the <strong>Exercise pronunciation</strong> field we write the pronunciation we want including the elements of the exercise if they exist. So we can give the pronunciation `Calculate the result of the arithmetic operation {X}+{Y}`.</li>
-<li>In the <strong>Answer type</strong> field we fill in the formula that will give the final result. In our example, we write {X}+{Y}.</li>
+<li>In the <strong>Pronunciation</strong> field, we write the pronunciation we want, including the items if they exist. So we can give the pronunciation `Calculate the result of the arithmetic operation {X}+{Y}`.</li>
+<li>In the <strong>Answer type</strong> field, we fill in the formula that will give the final result. In our example, we write the formula {X}+{Y}.</li>
 <li>In the <strong>Grade</strong> field, we fill in the grade.</li>
-<li>Following from <strong>Edit elements</strong>, we set the values ​​of the elements X = 15,Y = 30 by selecting <strong>Constitutes an element of the exercise</strong>.</li>
+<li>Following from <strong>Edit items</strong>, we define the values ​​of the items X = 15,Y = 30 by selecting <strong>It is an item of the exercise</strong>.</li>
 <li>Finally, we click <strong>Submit</strong>.</li>
 </ul>
 </div>";
 $langCompleteVariablesOfQuestionWarning = "
 <strong>Attention!</strong></br></br>
-If the exercise <strong>DOES</strong> NOT include any element and must be calculated, then in the <strong>Answer type</strong> field you must fill in the numerical expression as you filled it in the pronunciation along with its final result separated by the colon symbol <strong>(:)</strong></br>
+If the exercise <strong>DOES NOT</strong> include an item and it must be calculated, then in the <strong>Answer type</strong> field you must fill in the numerical expression as you filled it in the pronunciation along with its final result separated by the colon symbol <strong>(:)</strong></br>
 <div class='mt-3'>
-For example, if we want to calculate the unknown <strong>x</strong> in the equation <strong>(3x - 2 = 2x)</strong> then we follow these steps:
+For example, if we want to calculate the unknown <strong>x</strong> in the equation <strong>3x - 2 = 2x</strong> then we follow these steps:
 <ul class='mt-4'>
-<li>In the <strong>Exercise pronunciation</strong> field we write the pronunciation we want. In our example, we can write `Find the unknown x of the equation 3x - 2 = 2x`.</li>
-<li>In the <strong>Answer type</strong> field, we fill in the numerical expression along with the final value of x that we are looking for as a result, separated by the symbol (<strong>:</strong>), that is, we write 3x - 2 = 2x:2</li>
+<li>In the <strong>Pronunciation</strong> field we write the pronunciation we want. In our example, we can write `Find the unknown <strong>x</strong> of the equation <strong>3x - 2 = 2x</strong>`.</li>
+<li>In the <strong>Answer type</strong> field, we fill in the numerical expression along with the final value of <strong>x</strong> that we are looking for as a result, separated by the symbol (<strong>:</strong>), that is, we write <strong>3x - 2 = 2x:2</strong></li>
 <li>In the <strong>Grade</strong> field, we fill in its degree.</li>
-<li>Then we <strong>DO NOT</strong> select <strong>Edit elements</strong>, as there are no <strong>{elements}</strong>.</li>
+<li>Then, we <strong>DO NOT</strong> select <strong>Edit items</strong>, as there are no <strong>{items}</strong>.</li>
 <li>Finally, we click <strong>Submit</strong>.</li>
 </ul>
 </div>
