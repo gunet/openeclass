@@ -407,7 +407,6 @@ if (isset($submitAnswers) || isset($buttonBack)) {
     } elseif ($answerType == CALCULATED) {
 
         if (isset($_POST['calculated_answer']) && count($_POST['calculated_answer']) > 0
-            && isset($_POST['wildCard_answer']) && count($_POST['wildCard_answer']) > 0
             && isset($_POST['calculated_question']) && !empty($_POST['calculated_question'])) {
 
             // Inserting the options for each wildCard in database.
@@ -425,9 +424,11 @@ if (isset($submitAnswers) || isset($buttonBack)) {
             }
             $uniqueMandatoryWildCards = array_unique($allMandatoryWildCards);
 
-            foreach ($_POST['wildCard_answer'] as $w) {
-                if (!empty($w)) {
-                    $allPredefinedWildCards[] = $w;
+            if (isset($_POST['wildCard_answer']) && count($_POST['wildCard_answer']) > 0) {
+                foreach ($_POST['wildCard_answer'] as $w) {
+                    if (!empty($w)) {
+                        $allPredefinedWildCards[] = $w;
+                    }
                 }
             }
 
@@ -437,22 +438,24 @@ if (isset($submitAnswers) || isset($buttonBack)) {
                 redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId&modifyAnswers=$_GET[modifyAnswers]&htopic=" . CALCULATED);
             }
     
-            foreach ($_POST['wildCard_answer'] as $item => $val) {
-                if (!empty($val)) {
-                    $arrItems[] = [
-                        'item' => $item,
-                        'minimum' => $_POST['wildCard_min'][$item] ?? '',
-                        'maximum' => $_POST['wildCard_max'][$item] ?? '',
-                        'decimal' => $_POST['wildCard_decimal'][$item] ?? '',
-                        'value' => $_POST['wildCard_answer'][$item] ?? ''
-                    ];
+            if (isset($_POST['wildCard_answer']) && count($_POST['wildCard_answer']) > 0) {
+                foreach ($_POST['wildCard_answer'] as $item => $val) {
+                    if (!empty($val)) {
+                        $arrItems[] = [
+                            'item' => $item,
+                            'minimum' => $_POST['wildCard_min'][$item] ?? '',
+                            'maximum' => $_POST['wildCard_max'][$item] ?? '',
+                            'decimal' => $_POST['wildCard_decimal'][$item] ?? '',
+                            'value' => $_POST['wildCard_answer'][$item] ?? ''
+                        ];
+                    }
                 }
             }
-            
+
+            $description = purify($_POST['calculated_question']);
+            $objQuestion->updateDescription($description);
             if (count($arrItems) > 0) {
                 $jsonItems = json_encode($arrItems);
-                $description = purify($_POST['calculated_question']);
-                $objQuestion->updateDescription($description);
                 if ($questionId > 0) {
                     $q = Database::get()->query("UPDATE exercise_question SET options = ?s WHERE id = ?d", $jsonItems, $questionId);
                     if ($q) {
@@ -786,7 +789,16 @@ if (isset($_GET['modifyAnswers'])) {
             $predefinedAns = Database::get()->queryArray("SELECT * FROM exercise_answer WHERE question_id = ?d", $questionId);
             foreach ($predefinedAns as $an) {
                 $arrAns = explode(':', $an->answer);
-                $calculated_answer[$an->r_position] = (count($arrAns) > 0 ? $arrAns[0] : '');
+                if (count($arrAns) > 0) {
+                    $option = Database::get()->querySingle("SELECT options FROM exercise_question WHERE id = ?d", $questionId)->options;
+                    if (is_null($option)) {
+                        $calculated_answer[$an->r_position] = $an->answer;
+                    } else {
+                        $calculated_answer[$an->r_position] = $arrAns[0];
+                    }
+                } else {
+                    $calculated_answer[$an->r_position] = '';
+                }
                 $calculated_answer_grade[$an->r_position] = $an->weight;
             }
         }
@@ -1372,12 +1384,16 @@ if (isset($_GET['modifyAnswers'])) {
                             </script>";
 
             $modifyWildCards = isset($exerciseId)? "?course=$course_code&amp;exerciseId=$exerciseId&amp;modifyAnswers=$_GET[modifyAnswers]" : '';
+            if (isset($_GET['fromExercise'])) {
+                $exerciseId = $_GET['fromExercise'];
+            }
             $tool_content .= "
                             <form id='calculatedFormId' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId&amp;modifyAnswers=" . urlencode($_GET['modifyAnswers']) . "'>
                                 <fieldset><legend class='mb-0' aria-label='$langForm'></legend>
                                 <input type='hidden' name='nbrAnswers' value='$nbrAnswers'>
                                 
                                 <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langCompleteVariablesOfQuestionInfo</span></div>
+                                <div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langCompleteVariablesOfQuestionWarning</span></div>
 
                                 <p><span class='Accent-200-cl'>(*)</span>$langCPFFieldRequired</p>
                                 <label for='calculated_question_id' class='form-label mt-4'>$langCompleteTheTextOfTheQuestion<span class='Accent-200-cl'>(*)</span></label>
@@ -1639,6 +1655,16 @@ function extractValuesInCurlyBrackets($text) {
             $variables[] = $var;
         }
     }
+    
+    // If the value is numeric , remove it.
+    if (count($variables) > 0) {
+        for ($i = 0; $i < count($variables); $i++) {
+            if (is_numeric($variables[$i])) {
+                unset($variables[$i]);
+            }
+        }
+    }
+
     // Remove duplicates if desired
     return array_unique($variables);
 }
