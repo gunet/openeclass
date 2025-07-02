@@ -6137,3 +6137,4 @@ $langUserAnswer = "User response";
 $langAddRowsColumns = "Registration";
 $langCurrentDuration = "Current duration";
 $langClearChoice = 'Clear Choice';
+$langBBBScheduleSessionInfo3 = "is now available.";

@@ -54,7 +54,6 @@ if (isset($_GET['unit'])) {
     $_SESSION['unit'] = intval($_GET['unit']);
 }
 
-// $_SESSION
 if (isset($_GET['path_id'])) {
     $_SESSION['path_id'] = intval($_GET['path_id']);
 } elseif ((!isset($_SESSION['path_id']) || $_SESSION['path_id'] == '')) {
@@ -64,8 +63,7 @@ if (isset($_GET['path_id'])) {
 }
 
 $lp = Database::get()->querySingle("SELECT name, visible FROM lp_learnPath WHERE learnPath_id = ?d AND `course_id` = ?d", $_SESSION['path_id'], $course_id);
-$pageName = $lp->name;
-$toolName = $langLearningPaths;
+$toolName = $langTracking;
 if (!add_units_navigation(TRUE)) {
     $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langLearningPaths);
 }
@@ -136,18 +134,14 @@ $sql = "SELECT
 $fetchedList = Database::get()->queryArray($sql, $_SESSION['path_id'], $course_id);
 
 if (isset($_GET['unit'])) {
-    $back_url = "index.php?course=$course_code&id=$_GET[unit]";
-} else {
-    $back_url = "index.php?course=$course_code";
+    $tool_content .= action_bar(array(
+        array('title' => $langBack,
+            'url' => "index.php?course=$course_code&id=$_GET[unit]",
+            'icon' => 'fa-reply',
+            'level' => 'primary'
+        )
+    ),false);
 }
-
-$tool_content .= action_bar(array(
-            array('title' => $langBack,
-                'url' => "$back_url",
-                'icon' => 'fa-reply',
-                'level' => 'primary'
-            )
-        ),false);
 
 if (count($fetchedList) == 0) {
     $tool_content .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoModule</span></div>";
@@ -198,18 +192,14 @@ for ($i = 0; $i < sizeof($flatElementList); $i++) {
   OUTPUT STARTS HERE
   ================================================================ */
 
-
 // comment
-$tool_content .= "<div class='col-sm-12'><div class='card panelCard card-default px-lg-4 py-lg-3'>";
-//$tool_content .= "<div class='card-body'>";
+$tool_content .= "<div class='card panelCard card-default px-lg-4 py-lg-3'>";
 $tool_content .= nameBox(LEARNINGPATH_, DISPLAY_);
 
 if (commentBox(LEARNINGPATH_, DISPLAY_)) {
     $tool_content .= commentBox(LEARNINGPATH_, DISPLAY_);
 }
-
-$tool_content .= "</div></div>";
-
+$tool_content .= "</div>";
 
 // --------------------------- module table header --------------------------
 $tool_content .= "<div class='table-responsive'>";
@@ -218,7 +208,7 @@ $tool_content .= "<thead><tr class='list-header'><th colspan='" . ($maxDeep + 2)
 
 // show only progress column for authenticated users
 if ($uid) {
-    $tool_content .= "<th><strong>$langProgress</strong></th>";
+    $tool_content .= "<th style='width: 10%;'>$langProgress</th>";
 }
 
 $tool_content .= "</tr></thead>";
@@ -263,7 +253,7 @@ foreach ($flatElementList as $module) {
 
     //-- if chapter head
     if ($module['contentType'] == CTLABEL_) {
-        $tool_content .= '<b>' . htmlspecialchars($module['name']) . '</b>' . "";
+        $tool_content .= '<strong>' . htmlspecialchars($module['name']) . '</strong>' . "";
     }
     //-- if user can access module
     elseif (!$is_blocked) {
@@ -296,7 +286,7 @@ foreach ($flatElementList as $module) {
             and ($module['credit'] != 'CREDIT'
             or ($module['lesson_status'] != 'COMPLETED' and $module['lesson_status'] != 'PASSED')))
             {
-                    $is_blocked = true; // following modules will be unlinked
+                $is_blocked = true; // the following modules will be unlinked
             }
     } else { //-- user is blocked by previous module, don't display link
         if ($module['contentType'] == CTEXERCISE_) {
@@ -313,6 +303,8 @@ foreach ($flatElementList as $module) {
 
         $tool_content .= "<span>" . icon($moduleImg, $contentType_alt) . "</span>" . q($module['name']);
     }
+
+    $tool_content .= "<span class='ps-2'><a href='detailsUserPath.php?course=" . $course_code . "&uInfo=" .$uid . "&path_id=" . intval($_SESSION['path_id']) . "'><span class='fa fa-line-chart' data-bs-toggle='tooltip' data-bs-placement='top' title='$langDetails'></span></a></span>";;
     $tool_content .= "</td>";
 
     if ($uid && ($module['contentType'] != CTLABEL_)) {
@@ -329,7 +321,7 @@ foreach ($flatElementList as $module) {
         $tool_content .= "<td>" . disp_progress_bar($progress, 1) . "</td>";
     }
     elseif ($uid && $module['contentType'] == CTLABEL_) {
-        $tool_content .= '<td>&nbsp;</td>' . "\n";
+        $tool_content .= '<td>&nbsp;</td>';
     }
     if ($progress > 0) {
         $globalProg = $globalProg + $progress;
@@ -343,8 +335,8 @@ foreach ($flatElementList as $module) {
 
 if ($uid && $moduleNb > 0) {
     // add a blank line between module progression and global progression
-    $tool_content .= "<tr><th class='px-2' colspan='" . ($maxDeep + 2) . "'>$langGlobalProgress</th> 
-                          <th>" . disp_progress_bar(round($globalProg / ($moduleNb)), 1) . "</th> 
+    $tool_content .= "<tr><td class='px-2' colspan='" . ($maxDeep + 2) . "'><strong>$langTotal</strong></td> 
+                          <td>" . disp_progress_bar(round($globalProg / ($moduleNb)), 1) . "</td> 
                       </tr>";
 }
 $tool_content .= "</table></div>";

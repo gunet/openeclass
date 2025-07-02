@@ -60,8 +60,7 @@ $tool_content .= "<div class='alert alert-info'><i class='fa-solid fa-circle-inf
 
 if (isset($_GET['delete'])) {
     Database::get()->query("DELETE FROM api_token WHERE id = ?d", $_GET['delete']);
-    Session:;flash('message', $langApiTokenDeleted);
-    Session::flash('alert-class', 'alert-success');
+    Session::Messages($langApiTokenDeleted, 'alert-success');
     redirect_to_home_page($app->getConfigUrl());
 }
 

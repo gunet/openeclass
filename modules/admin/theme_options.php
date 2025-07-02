@@ -1581,6 +1581,15 @@ $tool_content .= "
                                     <div class='col-sm-12'>
                                     $login_image_field
                                     </div>
+                                    <div class='col-sm-12 mt-4'>
+                                        <div class='checkbox'>
+                                            <label class='label-container' aria-label='$langSettingSelect'>
+                                                <input type='checkbox' name='JumbotronWithVideo' value='1' ".((isset($theme_options_styles['JumbotronWithVideo']))? 'checked' : '').">
+                                                <span class='checkmark'></span>
+                                                $langJumbotronWithVideo
+                                            </label>
+                                        </div>
+                                    </div>
                                 </div>
 
 

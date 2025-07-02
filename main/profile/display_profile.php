@@ -78,11 +78,10 @@ if (isset($_GET['view']) and isset($_GET['show_tutor'])) {
 $data['action_bar_blog_portfolio'] = $data['action_bar'] = $data['action_bar_unreg'] = '';
 $data['userdata'] = Database::get()->querySingle("SELECT surname, givenname, username, email, status, phone, am, registered_at,
                                             has_icon, description, password,
-                                            email_public, phone_public, am_public
+                                            email_public, phone_public, am_public, pic_public
                                         FROM user
                                         WHERE id = ?d", $data['id']);
 
-//Get status for user
 $is_user_teacher = false;
 $data['privilege_message'] = ' - ';
 $myBooks = '';
@@ -177,8 +176,6 @@ if ($data['userdata']) {
     }
 
     $data['profile_img'] = profile_image($data['id'], IMAGESIZE_LARGE, 'img-responsive img-circle img-profile img-public-profile');
-
-
     $data['cert_completed'] = Database::get()->queryArray("SELECT cert_title,identifier,template_id,cert_issuer,assigned "
                                         . "FROM certified_users "
                                         . "WHERE user_fullname = ?s OR user_id = ?d", uid_to_name($uid, 'fullname'), $uid);
@@ -213,7 +210,7 @@ function allow_access($level) {
         return true;
     } else if ($level == ACCESS_USERS) { // if we have allowed it
         return true;
-    } elseif ($_SESSION['status'] == USER_TEACHER) { // if we are teacher
+    } elseif ($_SESSION['status'] == USER_TEACHER) { // if we are a teacher
         return true;
     } elseif (isset($_GET['course'])) {
         $c = $_GET['course'];

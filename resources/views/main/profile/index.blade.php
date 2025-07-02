@@ -113,7 +113,7 @@
                                                     <div class='title-default'>{{ trans('langPhone') }}</div>
                                                 </div>
                                                 <div class='col-lg-8 col-12 title-default-line-height'>
-                                                    {{ q($userdata->phone) }}
+                                                    {{ $userdata->phone }}
                                                 </div>
                                             </div>
                                         </li>
@@ -125,7 +125,7 @@
                                                     <div class='title-default'>{{ trans('langAm') }}</div>
                                                 </div>
                                                 <div class='col-lg-8 col-12 title-default-line-height'>
-                                                    {{ q($userdata->am) }}
+                                                    {{ $userdata->am }}
                                                 </div>
                                             </div>
                                         </li>
@@ -180,7 +180,7 @@
                                             </a>
                                             <div id="AboutMe" class="panel-collapse accordion-collapse collapse border-0 rounded-0" role="tabpanel" data-bs-parent="#accordion">
                                                 <div class="panel-body bg-transparent Neutral-900-cl px-4">
-                                                    @if(!empty($userdata->description))
+                                                    @if(!empty($userdata->description) && ($userdata->pic_public || $_SESSION['status'] == USER_TEACHER || $uid == $id))
                                                         {!! $userdata->description !!}
                                                     @else
                                                         {{ trans('langNoInfoAvailable') }}
@@ -192,18 +192,18 @@
                                 </div>
                             </div>
                             @if($is_user_teacher)
-                            <div class='card-footer border-0'>
-                                <div class='col-12'>
-                                    <div class='control-label-notes mb-3'>{{ trans('langAvailableDateForUser') }}</div>
-                                    <div id='smallCalendar{{ $id }}' class='calendarViewDatesTutorGroup'></div>
-                                    @if(isset($_GET['id']) and isset($_GET['token']) and $is_simple_user)
-                                        <a class="btn submitAdminBtnDefault w-100 m-auto mt-3" 
-                                            href="{{ $urlAppend }}main/profile/add_available_dates.php?uBook={{ $id }}&bookWith=1&do_booking=1&token={{ $_GET['token'] }}">
-                                                {{ trans('langDoBooking') }}
-                                        </a>
-                                    @endif
+                                <div class='card-footer border-0'>
+                                    <div class='col-12'>
+                                        <div class='control-label-notes mb-3'>{{ trans('langAvailableDateForUser') }}</div>
+                                        <div id='smallCalendar{{ $id }}' class='calendarViewDatesTutorGroup'></div>
+                                        @if(isset($_GET['id']) and isset($_GET['token']) and $is_simple_user)
+                                            <a class="btn submitAdminBtnDefault w-100 m-auto mt-3"
+                                                href="{{ $urlAppend }}main/profile/add_available_dates.php?uBook={{ $id }}&bookWith=1&do_booking=1&token={{ $_GET['token'] }}">
+                                                    {{ trans('langDoBooking') }}
+                                            </a>
+                                        @endif
+                                    </div>
                                 </div>
-                            </div>
                             @endif
                         </div>
                     </div>
