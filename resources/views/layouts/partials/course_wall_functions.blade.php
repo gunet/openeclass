@@ -1,13 +1,97 @@
+@push('head_styles')
+    <link  rel="stylesheet" type="text/css" href="{{ $urlServer }}/js/jstree3/themes/proton/style.min.css?v={{ CACHE_SUFFIX }}">
+    <link rel="stylesheet" type="text/css" href="{{ $urlServer }}/modules/rating/style.css?v={{ CACHE_SUFFIX }}">
+@endpush
+
 @push('head_scripts')
-<script src="{{ $urlServer }}/js/autosize/autosize.min.js?v={{ CACHE_SUFFIX }}"></script>
-<link href="{{ $urlServer }}/js/jstree3/themes/proton/style.min.css?v={{ CACHE_SUFFIX }}" rel="stylesheet" type="text/css">
-<script src="{{ $urlServer }}/js/jstree3/jstree.js"></script>
-<script type='text/javascript'>
-    function expand_form() {
-        $("#resources_panel").collapse('show');
-    }
-</script>
-<script> autosize(document.querySelector('textarea')); </script>
+    <script type="text/javascript" src="{{ $urlServer }}/js/waypoints/jquery.waypoints.min.js?v={{ CACHE_SUFFIX }}"></script>
+    <script type="text/javascript" src="{{ $urlServer }}/js/waypoints/shortcuts/infinite.min.js?v={{ CACHE_SUFFIX }}"></script>
+    <script src="{{ $urlServer }}/js/autosize/autosize.min.js?v={{ CACHE_SUFFIX }}"></script>
+    <script src="{{ $urlServer }}/modules/rating/js/thumbs_up/rating.js?v={{ CACHE_SUFFIX }}" type="text/javascript"></script>
+    <script src="{{ $urlServer }}/js/jstree3/jstree.js"></script>
+    <script src="{{ $urlServer }}/js/screenfull/screenfull.min.js"></script>
+
+    <script type='text/javascript'>
+        $(function() {
+            var infinite = new Waypoint.Infinite({
+                element: $(".infinite-container")[0]
+            });
+
+            $('.coloboxframe').click(function() {
+                $('.colorboxframe').colorbox();
+            })
+
+            $('.colobox').click(function() {
+                $('.colorbox').colorbox();
+            })
+
+            $('.fileModal').click(function (e)
+            {
+                e.preventDefault();
+                var fileURL = $(this).attr('href');
+                var downloadURL = $(this).prev('input').val();
+                var fileTitle = $(this).attr('title');
+                var buttons = {};
+                if (downloadURL) {
+                    buttons.download = {
+                        label: '<i class=\"fa fa-download\"></i> {{ trans("langDownload") }}',
+                        className: 'submitAdminBtn gap-1',
+                        callback: function (d) {
+                            window.location = downloadURL;
+                        }
+                    };
+                }
+                buttons.print = {
+                    label: '<i class=\"fa fa-print\"></i> {{ trans("langPrint") }}',
+                    className: 'submitAdminBtn gap-1',
+                    callback: function (d) {
+                        var iframe = document.getElementById('fileFrame');
+                        iframe.contentWindow.print();
+                    }
+                };
+                if (screenfull.enabled) {
+                    buttons.fullscreen = {
+                        label: '<i class=\"fa fa-arrows-alt\"></i> {{ trans("langFullScreen") }}',
+                        className: 'submitAdminBtn gap-1',
+                        callback: function() {
+                            screenfull.request(document.getElementById('fileFrame'));
+                            return false;
+                        }
+                    };
+                }
+                buttons.newtab = {
+                    label: '<i class=\"fa fa-plus\"></i> {{ trans("langNewTab") }}',
+                    className: 'submitAdminBtn gap-1',
+                    callback: function() {
+                        window.open(fileURL);
+                        return false;
+                    }
+                };
+                buttons.cancel = {
+                    label: '{{ trans("langCancel") }}',
+                    className: 'cancelAdminBtn'
+                };
+                bootbox.dialog({
+                    size: 'large',
+                    title: fileTitle,
+                    message: '<div class=\"row\">'+
+                        '<div class=\"col-sm-12\">'+
+                        '<div class=\"iframe-container\"><iframe title=\"'+fileTitle+'\" id=\"fileFrame\" src=\"'+fileURL+'\" style=\"width:100%; height:500px;\"></iframe></div>'+
+                        '</div>'+
+                        '</div>',
+                    buttons: buttons
+                });
+            });
+        });
+
+        autosize(document.querySelector('textarea'));
+
+        function expand_form() {
+            $("#resources_panel").collapse('show');
+        }
+
+    </script>
+
 @endpush
 
 @if (allow_to_post($course_id, $uid, $is_editor))
@@ -150,90 +234,6 @@
 
 @endif
 
-
-@push('head_scripts')
-
-<script type="text/javascript" src="{{ $urlServer }}/js/waypoints/jquery.waypoints.min.js?v={{ CACHE_SUFFIX }}"></script>
-<script type="text/javascript" src="{{ $urlServer }}/js/waypoints/shortcuts/infinite.min.js?v={{ CACHE_SUFFIX }}"></script>
-<link rel="stylesheet" type="text/css" href="{{ $urlServer }}/modules/rating/style.css?v={{ CACHE_SUFFIX }}">
-<script src="{{ $urlServer }}/modules/rating/js/thumbs_up/rating.js?v={{ CACHE_SUFFIX }}" type="text/javascript"></script>
-<script>
-    var infinite = new Waypoint.Infinite({
-        element: $(".infinite-container")[0]
-    });
-</script>
-<script type='text/javascript'>
-    $('body').on('click', '.colorboxframe', function() {
-        $('.colorboxframe').colorbox();
-    });
-    $('body').on('click', '.colorbox', function() {
-        $('.colorbox').colorbox();
-    });
-</script>
-<script src="{{ $urlServer }}/js/screenfull/screenfull.min.js"></script>
-<script type='text/javascript'>
-        $(function(){
-            $('.fileModal').click(function (e)
-            {
-                e.preventDefault();
-                var fileURL = $(this).attr('href');
-                var downloadURL = $(this).prev('input').val();
-                var fileTitle = $(this).attr('title');
-                var buttons = {};
-                if (downloadURL) {
-                    buttons.download = {
-                            label: '<i class=\"fa fa-download\"></i> {{ trans("langDownload") }}',
-                            className: 'submitAdminBtn gap-1',
-                            callback: function (d) {
-                                window.location = downloadURL;
-                            }
-                    };
-                }
-                buttons.print = {
-                            label: '<i class=\"fa fa-print\"></i> {{ trans("langPrint") }}',
-                            className: 'submitAdminBtn gap-1',
-                            callback: function (d) {
-                                var iframe = document.getElementById('fileFrame');
-                                iframe.contentWindow.print();
-                            }
-                        };
-                if (screenfull.enabled) {
-                    buttons.fullscreen = {
-                        label: '<i class=\"fa fa-arrows-alt\"></i> {{ trans("langFullScreen") }}',
-                        className: 'submitAdminBtn gap-1',
-                        callback: function() {
-                            screenfull.request(document.getElementById('fileFrame'));
-                            return false;
-                        }
-                    };
-                }
-                buttons.newtab = {
-                    label: '<i class=\"fa fa-plus\"></i> {{ trans("langNewTab") }}',
-                    className: 'submitAdminBtn gap-1',
-                    callback: function() {
-                        window.open(fileURL);
-                        return false;
-                    }
-                };
-                buttons.cancel = {
-                            label: '{{ trans("langCancel") }}',
-                            className: 'cancelAdminBtn'
-                        };
-                bootbox.dialog({
-                    size: 'large',
-                    title: fileTitle,
-                    message: '<div class=\"row\">'+
-                                '<div class=\"col-sm-12\">'+
-                                    '<div class=\"iframe-container\"><iframe title=\"'+fileTitle+'\" id=\"fileFrame\" src=\"'+fileURL+'\" style=\"width:100%; height:500px;\"></iframe></div>'+
-                                '</div>'+
-                            '</div>',
-                    buttons: buttons
-                });
-            });
-        });
-
-</script>
-@endpush
 @php
     $posts_per_page = 10;
     $posts = Database::get()->queryArray("SELECT id, user_id, content, extvideo, FROM_UNIXTIME(timestamp) as datetime, pinned
