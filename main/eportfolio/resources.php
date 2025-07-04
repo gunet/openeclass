@@ -31,6 +31,30 @@ require_once 'modules/group/group_functions.php';
 require_once 'modules/sharing/sharing.php';
 require_once 'modules/progress/process_functions.php';
 
+$visibility_vars = array(
+    EPF_VISIBLE_PUBLIC => array(
+        'fa_icon' => 'fa-globe',
+        'fa_icon_title' => $langOpenToRegisteredUsers,
+        'users_selected' => "",
+        'public_selected' => "selected",
+        'private_selected' => ""
+    ),
+    EPF_VISIBLE_USERS => array(
+        'fa_icon' => 'fa-users',
+        'fa_icon_title' => $langOpenToRegisteredUsers,
+        'users_selected' => "selected",
+        'public_selected' => "",
+        'private_selected' => ""
+    ),
+    EPF_VISIBLE_PRIVATE => array(
+        'fa_icon' => 'fa-lock',
+        'fa_icon_title' => $langProfileInfoPrivate,
+        'users_selected' => "",
+        'public_selected' => "",
+        'private_selected' => "selected"
+    )
+);
+
 if (!get_config('eportfolio_enable')) {
     $tool_content = "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langePortfolioDisabled</span></div>";
     if ($session->status == 0) {
@@ -394,6 +418,16 @@ if ($userdata) {
                 redirect_to_home_page("main/eportfolio/resources.php?id=$uid&token=$token");
             }
         }
+
+        //visibility settings form submitted
+        if(!isset($_GET['view']) && isset($_POST['resource_type']) && isset($_POST['resource_id']) && isset($_POST['visibility'])) {
+            $q = Database::get()->querySingle("SELECT id FROM eportfolio_resource WHERE user_id = ?d AND resource_type = ?s AND resource_id = ?d",
+                $uid, $_POST['resource_type'], intval($_POST['resource_id'])); 
+            if ($q) {
+                Database::get()->query("UPDATE eportfolio_resource SET visibility = ?d WHERE user_id = ?d AND resource_type = ?s AND resource_id = ?d",
+                intval($_POST['visibility']), $uid, $_POST['resource_type'], intval($_POST['resource_id']));
+            }
+        }
     } else {
         if ($userdata->eportfolio_enable == 0) {
             $tool_content = "<div class='col-sm-12'><div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langUserePortfolioDisabled</span></div></div>";
@@ -616,10 +650,57 @@ if ($userdata) {
                 } else {
                     $post->course_title = $langUserBlog;
                 }
+
+                if(!isset($_GET['view']) && ($post->user_id == $uid)) {
+                    $title_vis_icon = "<span>&nbsp;
+                                            <i class=\"fa ".$visibility_vars[$post->visibility]['fa_icon']." 
+                                                role=\"button\" 
+                                                style=\"cursor:pointer;\" 
+                                                data-bs-toggle=\"modal\" 
+                                                data-bs-target=\"#modal_blog_".$post->resource_id."\"
+                                                data-bs-toggle=\"tooltip\"
+                                                data-bs-placement=\"top\"
+                                                title=\"".$visibility_vars[$post->visibility]['fa_icon_title']."\"\">
+                                            </i>
+                                        </span>";
+                    
+                    $vis_modal_form = '<div class="modal fade" id="modal_blog_'.$post->resource_id.'" tabindex="-1" aria-labelledby="blogModalLabel_'.$post->resource_id.'" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                  
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="blogModalLabel_'.$post->resource_id.'">'.$langePortfolioFieldsVisibilitySettings.' - '.q($data['title']).'</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="'.$langClose.'"></button>
+                        </div>
+                  
+                        <div class="modal-body">
+                          <form name="vis_form_blog_'.$post->resource_id.'" action="" method="post">
+                            <input type="hidden" name="resource_type" value="blog">
+                            <input type="hidden" name="resource_id" value="'.$post->resource_id.'">
+                            <div class="mb-3">
+                                <select class="form-select" name="visibility">
+                                <option value="'.EPF_VISIBLE_PUBLIC.'" '.$visibility_vars[$post->visibility]['public_selected'].'>'.$langPublicePortfolioField.'</option>
+                                <option value="'.EPF_VISIBLE_USERS.'" '.$visibility_vars[$post->visibility]['users_selected'].'>'.$langOpenToRegisteredUsers.'</option>
+                                <option value="'.EPF_VISIBLE_PRIVATE.'" '.$visibility_vars[$post->visibility]['private_selected'].'>'.$langProfileInfoPrivate.'</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">'.$langSubmit.'</button>
+                          </form>
+                        </div>
+                  
+                      </div>
+                    </div>
+                  </div>';
+                } else {
+                    $title_vis_icon = "";
+                    $vis_modal_form = "";
+                }
+
                 $tool_content .= "<div class='card panelCard card-default px-lg-4 py-lg-3 mt-3 h-100'>
                                     <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>                                           
-                                        <h3>".q($data['title'])."</h3>                                    
-                                        <div>
+                                        <h3>".q($data['title']).$title_vis_icon."</h3>"
+                                        .$vis_modal_form.                                    
+                                        "<div>
                                             ". action_button(array(
                                                 array(
                                                     'title' => $langePortfolioRemoveResource,
