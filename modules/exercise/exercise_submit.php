@@ -244,6 +244,8 @@ if (isset($_POST['buttonCancel'])) {
     unset($_SESSION['choicesAn']);
     unset($_SESSION['savedAnsForExerPerPage']);
     unset($_SESSION['calculatedTemporarySave']);
+    unset($_SESSION['changeWildCardAttemptWithRandom']);
+    unset($_SESSION['QuestionDisplayed']);
 
     $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value];
     Database::get()->query("UPDATE exercise_user_record
@@ -607,6 +609,8 @@ if (isset($_POST['formSent'])) {
         unset($_SESSION['choicesAn']);
         unset($_SESSION['savedAnsForExerPerPage']);
         unset($_SESSION['calculatedTemporarySave']);
+        unset($_SESSION['changeWildCardAttemptWithRandom']);
+        unset($_SESSION['QuestionDisplayed']);
 
         if (isset($_POST['secsRemaining'])) {
             $secs_remaining = $_POST['secsRemaining'];

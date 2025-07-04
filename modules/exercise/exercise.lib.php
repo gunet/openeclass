@@ -29,6 +29,7 @@ require_once 'DragAndDropTextAnswer.php';
 require_once 'DragAndDropMarkersAnswer.php';
 require_once 'CalculatedAnswer.php';
 
+use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 /**
  * @brief display question
@@ -70,6 +71,10 @@ function showQuestion(&$objQuestionTmp, $question_number, array $exerciseResult 
         $classImg = 'drag-and-drop-markers-img';
         $classContainer = 'drag-and-drop-markers-container';
         $classCanvas = 'drag-and-drop-markers-canvas';
+    } elseif ($answerType == CALCULATED) {
+        // Update variables for each wildcard if necessary.
+        require_once __DIR__ . '/../../vendor/autoload.php';
+        updateWildCardsWithRandomVariables($questionId, $exerciseType);
     }
 
     $tool_content .= "
@@ -528,3 +533,138 @@ function question_result($answer_type, $question_id, $choice, $eurid, $regrade):
     return $html;
 }
 
+/**
+ * @brief Create random variable regarding the range of values of a wildcard.
+ * @param $min
+ * @param $max
+ * @param $decimals
+ * @return float|mixed
+ */
+function getRandomDecimal($min, $max, $decimals = 0) {
+
+    $scale = pow(10, $decimals);
+    $minInt = (int)($min * $scale);
+    $maxInt = (int)($max * $scale);
+    $randInt = mt_rand($minInt, $maxInt);
+    
+    return $randInt / $scale;
+}
+
+
+/**
+ * @brief Update the value of a wildcard regarding its range of values.
+ * @param $questionId
+ */
+function updateWildCardsWithRandomVariables($questionId, $exerciseType) {
+
+    global $attempt_value;
+
+    if ((isset($_SESSION['changeWildCardAttemptWithRandom']) && $_SESSION['changeWildCardAttemptWithRandom'] != $attempt_value) 
+        or !isset($_SESSION['changeWildCardAttemptWithRandom'])
+        or ($exerciseType == MULTIPLE_PAGE_TYPE && (!in_array($questionId, $_SESSION['QuestionDisplayed']) or !isset($_SESSION['QuestionDisplayed'])))) {
+        
+        $_SESSION['changeWildCardAttemptWithRandom'] = $attempt_value;
+        $_SESSION['QuestionDisplayed'][] = $questionId;
+
+        // Instantiate ExpressionLanguage
+        $expressionLanguage = new ExpressionLanguage();
+
+        // These math functions must be registered that are not supported.
+        $functions = [
+            'cos' => 'cos',
+            'sin' => 'sin',
+            'tan' => 'tan',
+            'acos' => 'acos',
+            'asin' => 'asin',
+            'atan' => 'atan',
+            'atan2' => 'atan2',
+            'pow' => 'pow',
+            'sqrt' => 'sqrt',
+            'abs' => 'abs',
+            'log' => 'log',
+            'log10' => 'log10',
+            'exp' => 'exp',
+            'max' => 'max',
+            'min' => 'min',
+            'round' => 'round',
+            'floor' => 'floor',
+            'ceil' => 'ceil',
+        ];
+
+        foreach ($functions as $name => $function) {
+            $expressionLanguage->register($name, $function, function (array $variables, ...$args) use ($function) {
+                return $function(...$args);
+            });
+        }
+
+        $predefinedAnswers = Database::get()->queryArray("SELECT answer,r_position FROM exercise_answer WHERE question_id = ?d", $questionId);
+        $q_data = Database::get()->querySingle("SELECT options FROM exercise_question WHERE id = ?d", $questionId);
+        
+        if (!is_null($q_data->options) or !empty($q_data->options)) {
+            
+            $newOptions = [];
+            $oldOptions = json_decode($q_data->options, true);
+            if (count($oldOptions) > 0) {
+                for ($i = 0; $i < count($oldOptions); $i++) {
+                    if (is_numeric($oldOptions[$i]['minimum']) && is_numeric($oldOptions[$i]['maximum']) && is_numeric($oldOptions[$i]['decimal'])
+                        && (!empty($oldOptions[$i]['minimum']) or $oldOptions[$i]['minimum'] == 0) 
+                        && (!empty($oldOptions[$i]['maximum']) or $oldOptions[$i]['maximum'] == 0) 
+                        && (!empty($oldOptions[$i]['decimal']) or $oldOptions[$i]['decimal'] == 0)) {
+                            $value_wcard = getRandomDecimal($oldOptions[$i]['minimum'], $oldOptions[$i]['maximum'], $oldOptions[$i]['decimal']);
+                            $newOptions[] = [
+                                                'item' => $oldOptions[$i]['item'],
+                                                'minimum' => $oldOptions[$i]['minimum'],
+                                                'maximum' => $oldOptions[$i]['maximum'],
+                                                'decimal' => $oldOptions[$i]['decimal'],
+                                                'value' => $value_wcard
+                                            ];
+                    }
+                }
+            }
+
+            //print_a($newOptions);
+
+            if (count($newOptions) > 0) {
+                $newJsonItems = json_encode($newOptions);
+                $q = Database::get()->query("UPDATE exercise_question SET options = ?s WHERE id = ?d", $newJsonItems, $questionId);
+                if ($q) {
+                    foreach ($predefinedAnswers as $an) {
+                        $arr = explode(':', $an->answer);
+                        if (count($arr) > 1) {
+                            $expression = $arr[0];
+                            $dataItems = json_decode($newJsonItems, true);
+
+                            // Create a key-value array for items
+                            $wildCards = [];
+                            foreach ($dataItems as $item) {
+                                $wildCards[$item['item']] = $item['value'];
+                            }
+
+                            // Get expression of predefined answer
+                            foreach ($wildCards as $key => $value) {
+                                $expression = str_replace("{" . $key . "}", $value, $expression);
+                            }
+
+                            // Check for division by zero (simple check)
+                            if (preg_match('/\/\s*0(\D|$)/', $expression)) {
+                                return null; // or handle as needed
+                            }
+
+                            try {
+                                $result = $expressionLanguage->evaluate($expression);
+                                $finalAnswer = $arr[0] . ":" . $result;
+                                Database::get()->query("UPDATE exercise_answer SET answer = ?s WHERE question_id = ?d AND r_position = ?d", $finalAnswer, $questionId, $an->r_position);
+                            } catch (\Exception $e) {
+                                // Handle evaluation error
+                                return null;
+                            }
+
+                        } 
+                    }
+                }
+            }
+            
+        }
+
+    }
+}

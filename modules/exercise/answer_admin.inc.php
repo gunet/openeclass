@@ -426,7 +426,7 @@ if (isset($submitAnswers) || isset($buttonBack)) {
 
             if (isset($_POST['wildCard_answer']) && count($_POST['wildCard_answer']) > 0) {
                 foreach ($_POST['wildCard_answer'] as $w) {
-                    if (!empty($w)) {
+                    if (!empty($w) or $w == 0) {
                         $allPredefinedWildCards[] = $w;
                     }
                 }
@@ -452,7 +452,7 @@ if (isset($submitAnswers) || isset($buttonBack)) {
     
             if (isset($_POST['wildCard_answer']) && count($_POST['wildCard_answer']) > 0 ) {
                 foreach ($_POST['wildCard_answer'] as $item => $val) {
-                    if (!empty($val)) {
+                    if (!empty($val) or $val == 0) {
                         $arrItems[] = [
                             'item' => $item,
                             'minimum' => $_POST['wildCard_min'][$item] ?? '',
@@ -483,7 +483,7 @@ if (isset($submitAnswers) || isset($buttonBack)) {
                 $reponse[$i] = trim($_POST['calculated_answer'][$i]);
                 if ($wildCardOptions) {
                     $resultOfExpression = evaluateExpression($reponse[$i], $questionId);
-                    if ($resultOfExpression) {
+                    if ($resultOfExpression or $resultOfExpression == 0) {
                         $reponse[$i] = $reponse[$i] . ':' . $resultOfExpression;
                     }
                 }
@@ -1697,15 +1697,33 @@ function evaluateExpression($expression, $questionId) {
         // Instantiate ExpressionLanguage
         $expressionLanguage = new ExpressionLanguage();
 
-        // Register 'max' function
-        $expressionLanguage->register('max', 'max', function (array $variables, ...$args) {
-            return max(...$args);
-        });
+        // These math functions must be registered that are not supported.
+        $functions = [
+            'cos' => 'cos',
+            'sin' => 'sin',
+            'tan' => 'tan',
+            'acos' => 'acos',
+            'asin' => 'asin',
+            'atan' => 'atan',
+            'atan2' => 'atan2',
+            'pow' => 'pow',
+            'sqrt' => 'sqrt',
+            'abs' => 'abs',
+            'log' => 'log',
+            'log10' => 'log10',
+            'exp' => 'exp',
+            'max' => 'max',
+            'min' => 'min',
+            'round' => 'round',
+            'floor' => 'floor',
+            'ceil' => 'ceil',
+        ];
 
-        // Register 'min' function
-        $expressionLanguage->register('min', 'min', function (array $variables, ...$args) {
-            return min(...$args);
-        });
+        foreach ($functions as $name => $function) {
+            $expressionLanguage->register($name, $function, function (array $variables, ...$args) use ($function) {
+                return $function(...$args);
+            });
+        }
 
         // Evaluate the expression
         try {
