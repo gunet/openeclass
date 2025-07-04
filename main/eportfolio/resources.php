@@ -106,6 +106,21 @@ if ($userdata) {
                               </script>";
         }
 
+        if (isset($_GET['view']) && $_GET['view'] == 'public') {
+            $view_str = "&amp;view=public";
+            $preview_info_div = "<div class='col-12'><div class='alert alert-info '><i class='fa-solid fa-circle-info fa-lg'></i><span>
+                    $langePortfolioPreviewAsGuest</span>
+                </div></div>";
+        } elseif (isset($_GET['view']) && $_GET['view'] == 'registered') {
+            $view_str = "&amp;view=registered";
+            $preview_info_div = "<div class='col-12'><div class='alert alert-info '><i class='fa-solid fa-circle-info fa-lg'></i><span>
+                    $langePortfolioPreviewAsRegistered</span>
+                </div></div>";
+        } else {
+            $view_str = "";
+            $preview_info_div = "";
+        }
+
         $action_bar = action_bar(array(
             array('title' => $userdata->eportfolio_enable ? $langViewHide : $langViewShow,
                 'url' => $userdata->eportfolio_enable ? "{$urlAppend}main/eportfolio/index.php?id=$id&amp;token=$token&amp;toggle_val=off" : "{$urlAppend}main/eportfolio/index.php?id=$id&amp;token=$token&amp;toggle_val=on",
@@ -123,7 +138,7 @@ if ($userdata) {
                 'url' => "{$urlAppend}main/eportfolio/edit_eportfolio.php",
                 'icon' => 'fa-edit' ),
             array('title' => $langResourcesCollection,
-                'url' => "{$urlAppend}main/eportfolio/resources.php?id=$id&amp;token=$token",
+                'url' => "{$urlAppend}main/eportfolio/resources.php?id=$id&amp;token=$token".$view_str,
                 'icon' => 'fa-solid fa-award',
                 'level' => 'primary'
             )
@@ -147,17 +162,7 @@ if ($userdata) {
                             $langePortfolioCollectionUserInfo</span>
                           </div></div>";
                         
-        if (isset($_GET['view'])) {
-            if ($_GET['view']== 'public') {
-                $tool_content .= "<div class='col-12'><div class='alert alert-info '><i class='fa-solid fa-circle-info fa-lg'></i><span>
-                                    $langePortfolioPreviewAsGuest</span>
-                                </div></div>";
-            } elseif ($_GET['view']== 'registered') {
-                $tool_content .= "<div class='col-12'><div class='alert alert-info '><i class='fa-solid fa-circle-info fa-lg'></i><span>
-                                    $langePortfolioPreviewAsRegistered</span>
-                                </div></div>";
-            }
-        }
+        $tool_content .= $preview_info_div;
 
         if (isset($_GET['action']) && $_GET['action'] == 'add') {
             if (isset($_GET['type']) && isset($_GET['rid'])) {
