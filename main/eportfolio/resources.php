@@ -743,7 +743,53 @@ if ($userdata) {
                 } else {
                     $assignment_type = $langGroupAssignment;
                 }
-                $submission_header_content = "<h3>".q($data['title'])."</h3>";
+
+                if(!isset($_GET['view']) && ($submission->user_id == $uid)) {
+                    $title_vis_icon = "<span>&nbsp;
+                                            <i class=\"fa ".$visibility_vars[$submission->visibility]['fa_icon']." 
+                                                role=\"button\" 
+                                                style=\"cursor:pointer;\" 
+                                                data-bs-toggle=\"modal\" 
+                                                data-bs-target=\"#modal_work_submission_".$submission->resource_id."\"
+                                                data-bs-toggle=\"tooltip\"
+                                                data-bs-placement=\"top\"
+                                                title=\"".$visibility_vars[$submission->visibility]['fa_icon_title']."\"\">
+                                            </i>
+                                        </span>";
+                    
+                    $vis_modal_form = '<div class="modal fade" id="modal_work_submission_'.$submission->resource_id.'" tabindex="-1" aria-labelledby="work_submissionModalLabel_'.$submission->resource_id.'" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                  
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="work_submissionModalLabel_'.$submission->resource_id.'">'.$langePortfolioFieldsVisibilitySettings.' - '.$filename.'</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="'.$langClose.'"></button>
+                        </div>
+                  
+                        <div class="modal-body">
+                          <form name="vis_form_work_submission_'.$submission->resource_id.'" action="" method="post">
+                            <input type="hidden" name="resource_type" value="work_submission">
+                            <input type="hidden" name="resource_id" value="'.$submission->resource_id.'">
+                            <div class="mb-3">
+                                <select class="form-select" name="visibility">
+                                <option value="'.EPF_VISIBLE_PUBLIC.'" '.$visibility_vars[$submission->visibility]['public_selected'].'>'.$langPublicePortfolioField.'</option>
+                                <option value="'.EPF_VISIBLE_USERS.'" '.$visibility_vars[$submission->visibility]['users_selected'].'>'.$langOpenToRegisteredUsers.'</option>
+                                <option value="'.EPF_VISIBLE_PRIVATE.'" '.$visibility_vars[$submission->visibility]['private_selected'].'>'.$langProfileInfoPrivate.'</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">'.$langSubmit.'</button>
+                          </form>
+                        </div>
+                  
+                      </div>
+                    </div>
+                  </div>';
+                } else {
+                    $title_vis_icon = "";
+                    $vis_modal_form = "";
+                }
+
+                $submission_header_content = "<h3>".q($data['title']).$title_vis_icon."</h3>".$vis_modal_form;
                 $submission->course_title = $langCourse.': '. q($submission->course_title);
 
                 $submission_content = " <div class='well panel border-bottom-default mb-3'>
@@ -842,9 +888,55 @@ if ($userdata) {
                     $file_link = "<a href='resources.php?action=get&amp;id=$id&amp;token=$token&amp;type=mydocs&amp;er_id=$doc->id'>$filename</a>";
                     $filesize = format_file_size(filesize($data['file_path']));
                 }
+
+                if(!isset($_GET['view']) && ($doc->user_id == $uid)) {
+                    $title_vis_icon = "<span>&nbsp;
+                                            <i class=\"fa ".$visibility_vars[$doc->visibility]['fa_icon']." 
+                                                role=\"button\" 
+                                                style=\"cursor:pointer;\" 
+                                                data-bs-toggle=\"modal\" 
+                                                data-bs-target=\"#modal_mydocs_".$doc->resource_id."\"
+                                                data-bs-toggle=\"tooltip\"
+                                                data-bs-placement=\"top\"
+                                                title=\"".$visibility_vars[$doc->visibility]['fa_icon_title']."\"\">
+                                            </i>
+                                        </span>";
+                    
+                    $vis_modal_form = '<div class="modal fade" id="modal_mydocs_'.$doc->resource_id.'" tabindex="-1" aria-labelledby="mydocsModalLabel_'.$doc->resource_id.'" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                  
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="mydocsModalLabel_'.$doc->resource_id.'">'.$langePortfolioFieldsVisibilitySettings.' - '.$filename.'</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="'.$langClose.'"></button>
+                        </div>
+                  
+                        <div class="modal-body">
+                          <form name="vis_form_mydocs_'.$doc->resource_id.'" action="" method="post">
+                            <input type="hidden" name="resource_type" value="mydocs">
+                            <input type="hidden" name="resource_id" value="'.$doc->resource_id.'">
+                            <div class="mb-3">
+                                <select class="form-select" name="visibility">
+                                <option value="'.EPF_VISIBLE_PUBLIC.'" '.$visibility_vars[$doc->visibility]['public_selected'].'>'.$langPublicePortfolioField.'</option>
+                                <option value="'.EPF_VISIBLE_USERS.'" '.$visibility_vars[$doc->visibility]['users_selected'].'>'.$langOpenToRegisteredUsers.'</option>
+                                <option value="'.EPF_VISIBLE_PRIVATE.'" '.$visibility_vars[$doc->visibility]['private_selected'].'>'.$langProfileInfoPrivate.'</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">'.$langSubmit.'</button>
+                          </form>
+                        </div>
+                  
+                      </div>
+                    </div>
+                  </div>';
+                } else {
+                    $title_vis_icon = "";
+                    $vis_modal_form = "";
+                }
+
                 $tool_content .= "<tr class='$row_class'>
                                     <td><span class='fa ".choose_image('.' . $data['format'])."'></span></td>
-                                    <td>$file_link</td>
+                                    <td>".$file_link.$title_vis_icon.$vis_modal_form."</td>
                                     <td>".format_locale_date(strtotime($data['date_modified']), 'short', false)."</td>
                                     <td>$filesize</td>
                                     <td class='text-end'>
@@ -879,10 +971,57 @@ if ($userdata) {
                 } else {
                     $mybadge->course_title = $langBadges;
                 }
+
+                if(!isset($_GET['view']) && ($mybadge->user_id == $uid)) {
+                    $title_vis_icon = "<span>&nbsp;
+                                            <i class=\"fa ".$visibility_vars[$mybadge->visibility]['fa_icon']." 
+                                                role=\"button\" 
+                                                style=\"cursor:pointer;\" 
+                                                data-bs-toggle=\"modal\" 
+                                                data-bs-target=\"#modal_my_badges_".$mybadge->resource_id."\"
+                                                data-bs-toggle=\"tooltip\"
+                                                data-bs-placement=\"top\"
+                                                title=\"".$visibility_vars[$mybadge->visibility]['fa_icon_title']."\"\">
+                                            </i>
+                                        </span>";
+                    
+                    $vis_modal_form = '<div class="modal fade" id="modal_my_badges_'.$mybadge->resource_id.'" tabindex="-1" aria-labelledby="my_badgesModalLabel_'.$mybadge->resource_id.'" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                  
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="my_badgesModalLabel_'.$mybadge->resource_id.'">'.$langePortfolioFieldsVisibilitySettings.' - '.q($data['title']).'</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="'.$langClose.'"></button>
+                        </div>
+                  
+                        <div class="modal-body">
+                          <form name="vis_form_my_badges_'.$mybadge->resource_id.'" action="" method="post">
+                            <input type="hidden" name="resource_type" value="my_badges">
+                            <input type="hidden" name="resource_id" value="'.$mybadge->resource_id.'">
+                            <div class="mb-3">
+                                <select class="form-select" name="visibility">
+                                <option value="'.EPF_VISIBLE_PUBLIC.'" '.$visibility_vars[$mybadge->visibility]['public_selected'].'>'.$langPublicePortfolioField.'</option>
+                                <option value="'.EPF_VISIBLE_USERS.'" '.$visibility_vars[$mybadge->visibility]['users_selected'].'>'.$langOpenToRegisteredUsers.'</option>
+                                <option value="'.EPF_VISIBLE_PRIVATE.'" '.$visibility_vars[$mybadge->visibility]['private_selected'].'>'.$langProfileInfoPrivate.'</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">'.$langSubmit.'</button>
+                          </form>
+                        </div>
+                  
+                      </div>
+                    </div>
+                  </div>';
+                } else {
+                    $title_vis_icon = "";
+                    $vis_modal_form = "";
+                }
+
                 $tool_content .= "<div class='card panelCard card-default px-lg-4 py-lg-3 mt-3 h-100'>
                                     <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>                                           
-                                        <h3>".q($data['title'])."</h3>                                    
-                                        <div>
+                                        <h3>".q($data['title']).$title_vis_icon."</h3>"
+                                        .$vis_modal_form.
+                                        "<div>
                                             ". action_button(array(
                                                 array(
                                                     'title' => $langePortfolioRemoveResource,
@@ -926,10 +1065,57 @@ if ($userdata) {
                     $mycertificate->course_title = $langCertificates;
                 }
                 $identifier = Database::get()->querySingle("SELECT identifier FROM certified_users WHERE cert_id = ?d AND template_id = ?d AND user_id = ?d", $mycertificate->resource_id, $data['template'], $mycertificate->user_id)->identifier;
+
+                if(!isset($_GET['view']) && ($mycertificate->user_id == $uid)) {
+                    $title_vis_icon = "<span>&nbsp;
+                                            <i class=\"fa ".$visibility_vars[$mycertificate->visibility]['fa_icon']." 
+                                                role=\"button\" 
+                                                style=\"cursor:pointer;\" 
+                                                data-bs-toggle=\"modal\" 
+                                                data-bs-target=\"#modal_my_certificates_".$mycertificate->resource_id."\"
+                                                data-bs-toggle=\"tooltip\"
+                                                data-bs-placement=\"top\"
+                                                title=\"".$visibility_vars[$mycertificate->visibility]['fa_icon_title']."\"\">
+                                            </i>
+                                        </span>";
+                    
+                    $vis_modal_form = '<div class="modal fade" id="modal_my_certificates_'.$mycertificate->resource_id.'" tabindex="-1" aria-labelledby="my_certificatesModalLabel_'.$mycertificate->resource_id.'" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                  
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="my_certificatesModalLabel_'.$mycertificate->resource_id.'">'.$langePortfolioFieldsVisibilitySettings.' - '.q($data['title']).'</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="'.$langClose.'"></button>
+                        </div>
+                  
+                        <div class="modal-body">
+                          <form name="vis_form_my_certificates_'.$mycertificate->resource_id.'" action="" method="post">
+                            <input type="hidden" name="resource_type" value="my_certificates">
+                            <input type="hidden" name="resource_id" value="'.$mycertificate->resource_id.'">
+                            <div class="mb-3">
+                                <select class="form-select" name="visibility">
+                                <option value="'.EPF_VISIBLE_PUBLIC.'" '.$visibility_vars[$mycertificate->visibility]['public_selected'].'>'.$langPublicePortfolioField.'</option>
+                                <option value="'.EPF_VISIBLE_USERS.'" '.$visibility_vars[$mycertificate->visibility]['users_selected'].'>'.$langOpenToRegisteredUsers.'</option>
+                                <option value="'.EPF_VISIBLE_PRIVATE.'" '.$visibility_vars[$mycertificate->visibility]['private_selected'].'>'.$langProfileInfoPrivate.'</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">'.$langSubmit.'</button>
+                          </form>
+                        </div>
+                  
+                      </div>
+                    </div>
+                  </div>';
+                } else {
+                    $title_vis_icon = "";
+                    $vis_modal_form = "";
+                }
+
                 $tool_content .= "<div class='card panelCard card-default px-lg-4 py-lg-3 mt-3 h-100'>
                                     <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>                                           
-                                        <h3>".q($data['title'])."</h3>                                    
-                                        <div>
+                                        <h3>".q($data['title']).$title_vis_icon."</h3>"
+                                        .$vis_modal_form.
+                                        "<div>
                                             ". action_button(array(
                                                 array(
                                                     'title' => $langePortfolioRemoveResource,
@@ -973,10 +1159,56 @@ if ($userdata) {
                     $note_course_title = "";
                 }
 
+                if(!isset($_GET['view']) && ($note->user_id == $uid)) {
+                    $title_vis_icon = "<span>&nbsp;
+                                            <i class=\"fa ".$visibility_vars[$note->visibility]['fa_icon']." 
+                                                role=\"button\" 
+                                                style=\"cursor:pointer;\" 
+                                                data-bs-toggle=\"modal\" 
+                                                data-bs-target=\"#modal_note_".$note->resource_id."\"
+                                                data-bs-toggle=\"tooltip\"
+                                                data-bs-placement=\"top\"
+                                                title=\"".$visibility_vars[$note->visibility]['fa_icon_title']."\"\">
+                                            </i>
+                                        </span>";
+                    
+                    $vis_modal_form = '<div class="modal fade" id="modal_note_'.$note->resource_id.'" tabindex="-1" aria-labelledby="noteModalLabel_'.$note->resource_id.'" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                  
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="noteModalLabel_'.$note->resource_id.'">'.$langePortfolioFieldsVisibilitySettings.' - '.q($data['title']).'</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="'.$langClose.'"></button>
+                        </div>
+                  
+                        <div class="modal-body">
+                          <form name="vis_form_note_'.$note->resource_id.'" action="" method="post">
+                            <input type="hidden" name="resource_type" value="note">
+                            <input type="hidden" name="resource_id" value="'.$note->resource_id.'">
+                            <div class="mb-3">
+                                <select class="form-select" name="visibility">
+                                <option value="'.EPF_VISIBLE_PUBLIC.'" '.$visibility_vars[$note->visibility]['public_selected'].'>'.$langPublicePortfolioField.'</option>
+                                <option value="'.EPF_VISIBLE_USERS.'" '.$visibility_vars[$note->visibility]['users_selected'].'>'.$langOpenToRegisteredUsers.'</option>
+                                <option value="'.EPF_VISIBLE_PRIVATE.'" '.$visibility_vars[$note->visibility]['private_selected'].'>'.$langProfileInfoPrivate.'</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">'.$langSubmit.'</button>
+                          </form>
+                        </div>
+                  
+                      </div>
+                    </div>
+                  </div>';
+                } else {
+                    $title_vis_icon = "";
+                    $vis_modal_form = "";
+                }
+
                 $tool_content .= "<div class='card panelCard card-default px-lg-4 py-lg-3 mt-3 h-100'>
                                     <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>                                           
-                                        <h3>".q($data['title'])."</h3>                                    
-                                        <div>
+                                        <h3>".q($data['title']).$title_vis_icon."</h3>"
+                                        .$vis_modal_form.                                  
+                                        "<div>
                                             ". action_button(array(
                                                 array(
                                                     'title' => $langePortfolioRemoveResource,
