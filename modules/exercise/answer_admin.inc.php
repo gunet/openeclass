@@ -18,6 +18,7 @@
  *
  */
 
+use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 $questionName = $objQuestion->selectTitle();
 $answerType = $objQuestion->selectType();
@@ -1688,13 +1689,33 @@ function evaluateExpression($expression, $questionId) {
             $expression = str_replace("{" . $key . "}", $value, $expression);
         }
 
-        // Check for division by zero before eval
+        // Check for division by zero (simple check)
         if (preg_match('/\/\s*0(\D|$)/', $expression)) {
-            // Return null or handle as needed if division by zero is detected
-            return null;
+            return null; // or handle as needed
         }
 
-        // Evaluate the expression safely
-        return eval('return ' . $expression . ';');
+        // Instantiate ExpressionLanguage
+        $expressionLanguage = new ExpressionLanguage();
+
+        // Register 'max' function
+        $expressionLanguage->register('max', 'max', function (array $variables, ...$args) {
+            return max(...$args);
+        });
+
+        // Register 'min' function
+        $expressionLanguage->register('min', 'min', function (array $variables, ...$args) {
+            return min(...$args);
+        });
+
+        // Evaluate the expression
+        try {
+            $result = $expressionLanguage->evaluate($expression);
+            return $result;
+        } catch (\Exception $e) {
+            // Handle evaluation error
+            return null;
+        }
     }
+
+    return null; // If options not found
 }
