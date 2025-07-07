@@ -125,7 +125,7 @@ if (isset($_POST['submitRubric'])) {
             foreach ($_POST['title'] as $crit => $item_criterio) {
                 $criteria[$crit]['title_name'] = $item_criterio;
                 $criteria[$crit]['crit_weight'] = $_POST['weight'][$crit];
-                foreach ($_POST['scale_item_name'][$crit] as $key => $item_name) {
+                foreach ($_POST['scale_item_value'][$crit] as $key => $item_name) {
                     $criteria[$crit]['crit_scales'][$key]['scale_item_name'] = $item_name;
                     $criteria[$crit]['crit_scales'][$key]['scale_item_value'] = $_POST['scale_item_value'][$crit][$key];
                 }
