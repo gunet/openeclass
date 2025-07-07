@@ -721,12 +721,11 @@ if (!class_exists('Answer')):
         */
         public function get_ordering_answers() {
 
-            $finalArray = [];
+            $reformattedItems = [];
             $questionId = $this->questionId;
             $answer = Database::get()->querySingle("SELECT answer FROM exercise_answer WHERE question_id = ?d", $questionId);
             if ($answer) {
-                $items = explode(',', $q[1]);
-                $reformattedItems = [];
+                $items = explode(',', $answer->answer);
                 foreach ($items as $item) {
                     $lastPipePos = strrpos($item, '|');
                     if ($lastPipePos !== false) {
@@ -735,12 +734,56 @@ if (!class_exists('Answer')):
                         $reformattedItems[(int)$index] = $value;
                     }
                 }
-                ksort($reformattedItems);
-                $finalArray = array_values($reformattedItems);
             }
 
-            return $finalArray;
+            return $reformattedItems;
+        }
 
+        /**
+       * 
+       * @author - Nikos Mpalamoutis
+       */
+        public function get_ordering_answer_grade() {
+
+            $resultArray = [];
+            $questionId = $this->questionId;
+            $answer = Database::get()->querySingle("SELECT answer FROM exercise_answer WHERE question_id = ?d", $questionId);
+            if ($answer) {
+                $items = explode(',', $answer->answer);
+                $cleanedItems = [];
+                foreach ($items as $item) {
+                    $item = trim($item);
+                    $parts = explode('|', $item);
+                    if (count($parts) == 3) {
+                        $cleanedItems[] = $parts[0] . "|" . $parts[2];
+                    }
+                }
+                $cleanedString = implode(',', $cleanedItems);
+                foreach ($cleanedItems as $item) {
+                    $arr = explode('|', $item);
+                    $resultArray[$arr[0]] = $arr[1]; // cast to int if needed
+                }
+            }
+
+            return $resultArray;
+
+        }
+
+        /**
+        * 
+        * @author - Nikos Mpalamoutis
+        */
+        public function get_total_ordering_answers() {
+
+            $questionId = $this->questionId;
+            $items = [];
+            $answer = Database::get()->querySingle("SELECT answer FROM exercise_answer WHERE question_id = ?d", $questionId);
+            if ($answer) {
+                $items = explode(',', $answer->answer);
+            }
+            
+            return count($items);
+            
         }
 
     }

@@ -537,6 +537,48 @@ if (isset($submitAnswers) || isset($buttonBack)) {
 
     } elseif($answerType == ORDERING) {
 
+        $totalAnsFromOrderingChoices = [];
+        $PredefinedValues = [];
+        if (isset($_POST['ordering_answer'])) {
+            foreach ($_POST['ordering_answer'] as $index => $value) {
+                $totalAnsFromOrderingChoices[] = $index;
+                $PredefinedValues[] = $value;
+            }
+        }
+
+        // Check for duplicates or empty values
+        $DuplicatesItemsOn = (count($PredefinedValues) !== count(array_unique($PredefinedValues)));
+        $EmptyItemsOn = in_array("", $PredefinedValues, true);
+        if ($DuplicatesItemsOn || $EmptyItemsOn) {
+            Session::flash('message', $langPredefinedAnswerExists);
+            Session::flash('alert-class', 'alert-warning');
+            redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId&modifyAnswers=$_GET[modifyAnswers]&htopic=" . ORDERING);
+        }
+
+        sort($totalAnsFromOrderingChoices);
+        $choicesOrdArr = [];
+        foreach ($totalAnsFromOrderingChoices as $inde_x) {
+            $choicesOrdArr[] = $inde_x . '|' . $_POST['ordering_answer'][$inde_x] . '|' . $_POST['ordering_answer_grade'][$inde_x];
+        }
+        $choices_ordering_answer = '';
+        if (count($choicesOrdArr) > 0) {
+            $choices_ordering_answer = implode(',', $choicesOrdArr);
+        }
+
+        $reponse = $choices_ordering_answer;
+        $objAnswer->createAnswer($reponse, 0, '', 0, 1);
+        $objAnswer->save();
+        if (isset($_POST['ordering_answer_grade'])) {
+            $weighting = array_map('fix_float', $_POST['ordering_answer_grade']);
+            $weighting = array_map('abs', $weighting);
+            $questionWeighting = array_sum($weighting);
+            $objQuestion->updateWeighting($questionWeighting);
+            if (isset($exerciseId)) {
+                $objQuestion->save($exerciseId);
+            } else {
+                $objQuestion->save();
+            }
+        }
     }
 
     if (empty($msgErr) and !isset($_POST['setWeighting'])) {
@@ -857,8 +899,7 @@ if (isset($_GET['modifyAnswers'])) {
             $nbrAnswers = $_POST['nbrAnswers'] + 1;
         } else { // for edit
             // Get the total number of predefined answers
-            $totalOrderingAnswers = Database::get()->querySingle("SELECT COUNT(*) as total FROM exercise_answer WHERE question_id = ?d", $questionId)->total;
-            $nbrAnswers = (isset($totalOrderingAnswers) && $totalOrderingAnswers > 0 ? $totalOrderingAnswers : 2); // minimum 2 answer
+            $nbrAnswers = $objAnswer->get_total_ordering_answers() ?? 2; // minimum 2 answer
 
         }
         if ($deleteAnswer) {
@@ -868,12 +909,8 @@ if (isset($_GET['modifyAnswers'])) {
             }
         }
 
-        if (isset($_POST['ordering_answer']) && count($_POST['ordering_answer']) > 0) {
-
-        }
-
-        // $ordering_answer = $objAnswer->get_ordering_answers();
-        // $ordering_answer_grade = $objAnswer->get_ordering_answer_grade();
+        $ordering_answer = $objAnswer->get_ordering_answers();
+        $ordering_answer_grade = $objAnswer->get_ordering_answer_grade();
 
     }
 
