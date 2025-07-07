@@ -1869,6 +1869,11 @@ $langQuestionAnswers = "Question answers";
 $langNegativeScoreLegend = "If you wish, you can grade wrong question answers with negative score.
 Note, that if $langsStudent has been graded with negative score in one question, then the final grade in this question will be converted to zero.";
 $langUsedInSeveralExercises = "Warning! This question and its answers are used in several exercises. Do you want to change them?";
+$langUsedInSeveralExercises2 = "The question (and its answers) is used in several exercises.<br><br>
+<ul>
+<li>If you select <i>in all exercises</i> the change will be made to all of them.</li>
+<li>If you select <i>in the current exercise only</i> the change will be made to the current one only.</li>
+</ul>";
 $langModifyInAllExercises = "in all exercises";
 $langModifyInThisExercise = "in this exercise";
 $langModifyInQuestionPool = "only in question pool";

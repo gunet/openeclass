@@ -1201,7 +1201,8 @@ if (!class_exists('Exercise')) {
                 $objAnswersTmp = new Answer($key);
                 $correctAnswer = $objAnswersTmp->get_correct_calculated_answer($key);
                 $correctAnswerGrade = $objAnswersTmp->get_correct_calculated_grade($key);
-                if (isset($_POST['choice'][$key]) && $_POST['choice'][$key]) {
+                if ((isset($_POST['choice'][$key]) && $_POST['choice'][$key]) or
+                    (isset($_POST['choice'][$key]) && $_POST['choice'][$key] == 0)) {
                     $arrAnswer = explode(',', $_POST['choice'][$key]);
                     if (count($arrAnswer) == 2) { // multiple predefined answers
                         $user_answer = $arrAnswer[0];
@@ -1210,6 +1211,9 @@ if (!class_exists('Exercise')) {
                         
                     } else { // unique answer as text
                         $user_answer = $_POST['choice'][$key] ?? '';
+                        if ($_POST['choice'][$key] == 0) {
+                            $user_answer = 0;
+                        }
                         $answer_id = $_POST['answer_id_choice'][$key] ?? 0;
                         $user_got_grade = $objAnswersTmp->get_user_answer_grade($key, $user_answer);
                     }
@@ -1429,8 +1433,8 @@ if (!class_exists('Exercise')) {
                     function ($question) use ($clone_id, $clone_course_id, $old_path, $new_path) {
                         if (is_null($question->random_criteria)) {
                             $question_clone_id = Database::get()->query("INSERT INTO exercise_question
-                                (course_id, question, description, weight, type, difficulty, category)
-                                SELECT ?d, question, description, weight, type, difficulty, 0
+                                (course_id, question, description, weight, type, difficulty, category, options)
+                                SELECT ?d, question, description, weight, type, difficulty, 0, options
                                     FROM `exercise_question` WHERE id = ?d", $clone_course_id, $question->id)->lastInsertID;
                             Database::get()->query("INSERT INTO exercise_with_questions
                                 (question_id, exercise_id, q_position, random_criteria) VALUES (?d, ?d, ?d, NULL)", $question_clone_id, $clone_id, $question->q_position);

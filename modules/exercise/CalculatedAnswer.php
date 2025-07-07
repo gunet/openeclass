@@ -199,7 +199,7 @@ class CalculatedAnswer extends \QuestionType
 
         if (count($answer_object_ids) == 1) { // unique answer as text
             $userHasAnswered = $this->answer_object->get_user_calculated_answer($questionId, $eurid);
-            $html_content .= "<tr><td>$langYourOwnAnswerIs&nbsp&nbsp<span class='TextBold'>$userHasAnswered</span></td></tr>";
+            $html_content .= "<tr><td>$langYourOwnAnswerIs <span class='TextBold'>$userHasAnswered</span></td></tr>";
         }
 
         return $html_content;
