@@ -52,7 +52,7 @@ if ($answerType == CALCULATED) {
   unset($objAn);
 }
 
-if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE || $answerType == CALCULATED) {
+if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE || $answerType == CALCULATED || $answerType == ORDERING) {
     $colspan = 3;
 } elseif ($answerType == MATCHING) {
     $colspan = 2;

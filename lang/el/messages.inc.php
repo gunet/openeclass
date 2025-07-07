@@ -2243,6 +2243,8 @@ $langNoExistVariables = "Η εκφώνηση της άσκησης δεν περ
 $langFinalValueOfWildCard = "Τιμή στοιχείου";
 $langSeperateCorrectlyTheTypeOfAnswer = "Δεν υπάρχουν διαθέσιμα {στοιχεία} στην εκφώνηση ή στους τύπους των απαντήσεων. </br>
 Συνεπώς θα πρέπει στο πεδίο <strong>Τύπος απάντησης</strong> να προσθέσετε τον αριθμητικό τύπο που προσθέσατε στην εκφώνηση μαζί με το τελικό της αποτέλεσμα, χωρισμένα με το σύμβολο (<strong>:</strong>)";
+$langOrdering = "Ταξινόμηση";
+
 
 // answer_admin.php
 $langWeightingForEachBlank = "Δώστε ένα βάρος σε κάθε κενό";

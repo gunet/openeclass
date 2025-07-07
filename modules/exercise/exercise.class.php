@@ -1230,6 +1230,8 @@ if (!class_exists('Exercise')) {
 
                 unset($objAnswersTmp);
 
+            } elseif ($answerType == ORDERING) {
+
             } else {
                 if ($value) {
                     $objAnswersTmp = new Answer($key);

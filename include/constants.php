@@ -172,6 +172,7 @@ define('FILL_IN_FROM_PREDEFINED_ANSWERS', 8);
 define('DRAG_AND_DROP_TEXT', 9);
 define('DRAG_AND_DROP_MARKERS', 10);
 define('CALCULATED', 11);
+define('ORDERING', 12);
 
 // exercise view type
 define('SINGLE_PAGE_TYPE', 1);

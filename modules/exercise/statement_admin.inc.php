@@ -387,6 +387,12 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
                            $langCalculated
                           </label>
                         </div>
+                        <div class='radio'>
+                          <label>
+                            <input type='radio' name='answerType' value='".ORDERING."' ". (($answerType == ORDERING) ? "checked" : "") .">
+                           $langOrdering
+                          </label>
+                        </div>
                     </div>
                 </div>
             </div>

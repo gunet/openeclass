@@ -535,6 +535,8 @@ if (isset($submitAnswers) || isset($buttonBack)) {
             redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId&modifyAnswers=$_GET[modifyAnswers]&htopic=" . CALCULATED);
         }
 
+    } elseif($answerType == ORDERING) {
+
     }
 
     if (empty($msgErr) and !isset($_POST['setWeighting'])) {
@@ -849,6 +851,30 @@ if (isset($_GET['modifyAnswers'])) {
                 }
             }
         }
+    } elseif ($answerType == ORDERING) {
+
+        if ($newAnswer) {
+            $nbrAnswers = $_POST['nbrAnswers'] + 1;
+        } else { // for edit
+            // Get the total number of predefined answers
+            $totalOrderingAnswers = Database::get()->querySingle("SELECT COUNT(*) as total FROM exercise_answer WHERE question_id = ?d", $questionId)->total;
+            $nbrAnswers = (isset($totalOrderingAnswers) && $totalOrderingAnswers > 0 ? $totalOrderingAnswers : 2); // minimum 2 answer
+
+        }
+        if ($deleteAnswer) {
+            $nbrAnswers = $_POST['nbrAnswers'] - 1;
+            if ($nbrAnswers <= 2) { // minimum 1 answers
+                $nbrAnswers = 2;
+            }
+        }
+
+        if (isset($_POST['ordering_answer']) && count($_POST['ordering_answer']) > 0) {
+
+        }
+
+        // $ordering_answer = $objAnswer->get_ordering_answers();
+        // $ordering_answer_grade = $objAnswer->get_ordering_answer_grade();
+
     }
 
     $classImg = '';
@@ -1537,6 +1563,53 @@ if (isset($_GET['modifyAnswers'])) {
                                     
                                 
             }
+
+        } elseif ($answerType == ORDERING) {
+
+            if (isset($_GET['fromExercise'])) {
+                $exerciseId = $_GET['fromExercise'];
+            }
+
+            $tool_content .= " <form id='calculatedFormId' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId&amp;modifyAnswers=" . urlencode($_GET['modifyAnswers']) . "'>
+                                    <fieldset><legend class='mb-0' aria-label='$langForm'></legend>
+                                    <input type='hidden' name='nbrAnswers' value='$nbrAnswers'>";
+
+            $tool_content .= "      <p><span class='Accent-200-cl'>(*)</span>$langCPFFieldRequired</p>
+                                    <div class='table-responsive mb-4'>
+                                        <table class='table-default'>
+                                            <thead>
+                                                <tr>
+                                                    <th>$langItem</th>
+                                                    <th>$langTypeOfAnswer<span class='Accent-200-cl'>(*)</span></th>
+                                                    <th>$langGradebookGrade<span class='Accent-200-cl'>(*)</span></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>";
+                                            for ($i=1; $i <= $nbrAnswers; $i++) {
+                                                $order_answer = (isset($ordering_answer[$i]) ? $ordering_answer[$i] : '');
+                                                $order_grade = (isset($ordering_answer_grade[$i]) ? $ordering_answer_grade[$i] : '');
+                                                $tool_content .= "
+                                                    <tr>
+                                                        <td>($i)</td>
+                                                        <td>                                       
+                                                            <input type='text' class='form-control' name='ordering_answer[$i]' value='{$order_answer}'>                                        
+                                                        </td>
+                                                        <td>                                        
+                                                            <input type='number' class='form-control' name='ordering_answer_grade[$i]' value='{$order_grade}' step='any'>                                        
+                                                        </td>
+                                                    </tr>";
+                                            }
+                $tool_content .= "          </tbody>
+                                        </table>
+                                    </div>
+
+                                    <div class='col-12 d-flex justify-content-between align-items-center gap-3 flex-wrap mt-4'>
+                                        <div class='d-flex justify-content-start align-items-center gap-3 flex-wrap'>
+                                            <input class='btn submitAdminBtn' type='submit' name='moreAnswers' value='$langMoreAnswers' />
+                                            <input class='btn deleteAdminBtn' type='submit' name='lessAnswers' value='$langLessAnswers' />
+                                        </div>
+                                    </div>";
+
 
         }
 

@@ -28,6 +28,7 @@ require_once 'FreeTextAnswer.php';
 require_once 'DragAndDropTextAnswer.php';
 require_once 'DragAndDropMarkersAnswer.php';
 require_once 'CalculatedAnswer.php';
+require_once 'OrderingAnswer.php';
 
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
@@ -223,7 +224,7 @@ function display_exercise($exercise_id): void
         $questionWeighting = $question->selectWeighting();
         $answerType = $question->selectType();
 
-        if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE || $answerType == CALCULATED) {
+        if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE || $answerType == CALCULATED || $answerType == ORDERING) {
             $colspan = 3;
         } elseif ($answerType == MATCHING) {
             $colspan = 2;
@@ -408,6 +409,10 @@ function preview_question($question_id, $answer_type): string {
             $answer = new CalculatedAnswer($question_id);
             $html_content .= $answer->PreviewQuestion();
             break;
+        case ORDERING:
+            $answer = new OrderingAnswer($question_id);
+            $html_content .= $answer->PreviewQuestion();
+            break;
     }
 
     return $html_content;
@@ -462,6 +467,10 @@ function answer_question($question_id, $question_number, $answer_type, $exercise
             break;
         case CALCULATED:
             $answer = new CalculatedAnswer($question_id);
+            $html .= $answer->AnswerQuestion($question_number, $exerciseResult, $options);
+            break;
+        case ORDERING:
+            $answer = new OrderingAnswer($question_id);
             $html .= $answer->AnswerQuestion($question_number, $exerciseResult, $options);
             break;
     }
@@ -524,6 +533,10 @@ function question_result($answer_type, $question_id, $choice, $eurid, $regrade):
             break;
         case CALCULATED:
             $answer = new CalculatedAnswer($question_id);
+            $html .= $answer->QuestionResult($choice, $eurid, $regrade);
+            break;
+        case ORDERING:
+            $answer = new OrderingAnswer($question_id);
             $html .= $answer->QuestionResult($choice, $eurid, $regrade);
             break;
     }

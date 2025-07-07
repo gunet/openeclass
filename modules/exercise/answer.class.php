@@ -715,5 +715,33 @@ if (!class_exists('Answer')):
 
         }
 
+        /**
+        * 
+        * @author - Nikos Mpalamoutis
+        */
+        public function get_ordering_answers() {
+
+            $finalArray = [];
+            $questionId = $this->questionId;
+            $answer = Database::get()->querySingle("SELECT answer FROM exercise_answer WHERE question_id = ?d", $questionId);
+            if ($answer) {
+                $items = explode(',', $q[1]);
+                $reformattedItems = [];
+                foreach ($items as $item) {
+                    $lastPipePos = strrpos($item, '|');
+                    if ($lastPipePos !== false) {
+                        $cleanItem = substr($item, 0, $lastPipePos);
+                        list($index, $value) = explode('|', $cleanItem);
+                        $reformattedItems[(int)$index] = $value;
+                    }
+                }
+                ksort($reformattedItems);
+                $finalArray = array_values($reformattedItems);
+            }
+
+            return $finalArray;
+
+        }
+
     }
 endif;
