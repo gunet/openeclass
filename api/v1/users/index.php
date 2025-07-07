@@ -82,7 +82,7 @@ function api_method($access) {
             Database::get()->query("INSERT IGNORE INTO personal_calendar_settings(user_id) VALUES (?d)", $user_id);
             $statusmsg = 'created';
         }
-        user_hook($id);
+        user_hook($user_id);
         header('Content-Type: application/json');
         $response = ['id' => $user_id, 'status' => $statusmsg];
         if (isset($password) and $password !== '') {
