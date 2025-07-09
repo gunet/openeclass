@@ -1988,7 +1988,16 @@ For example, if we want to calculate the unknown <strong>x</strong> in the equat
 </div>
 ";
 $langOrdering = "Ordering";
-
+$langLayoutItems = "Layout items";
+$langHorizontal = "Horizontal";
+$langVertical = "Vertical";
+$langItemsSelectionType = "Item selection type";
+$langSelectAllItems = "Select all items";
+$langSelectRandomSubSetOfItems = "Select a random subset of items";
+$langSelectContiguousSubSetOfItems = "Select a contiguous subset of items";
+$langSizeOfSubset = "Size of subset";
+$langFillInTheSizeOfSubset = "Fill in the size of subset.";
+$langTheSizeOfSubsetIsBiggerThanPrAnswers = "The size of the subset is larger than the total number of predefined answers.";
 
 
 $langSeperateCorrectlyTheTypeOfAnswer = "There are no {items} available in the pronunciation or in the answer types. </br>

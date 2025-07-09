@@ -36,6 +36,7 @@ if (!class_exists('Question')) {
         private $category;
         private $copy_of_qid;
         private $exerciseList;  // array with the list of exercises which this question is in
+        private $options;
 
         /**
          * constructor of the class
@@ -51,6 +52,7 @@ if (!class_exists('Question')) {
             $this->category = 0;
             $this->copy_of_qid = null;
             $this->exerciseList = array();
+            $this->options = null;
         }
 
         /**
@@ -62,7 +64,7 @@ if (!class_exists('Question')) {
         function read($id) {
             global $course_id;
 
-            $object = Database::get()->querySingle("SELECT question, description, feedback, weight, `type`, difficulty, category, copy_of_qid
+            $object = Database::get()->querySingle("SELECT question, description, feedback, weight, `type`, difficulty, category, copy_of_qid, options
                         FROM `exercise_question` WHERE course_id = ?d AND id = ?d", $course_id, $id);
             // if the question has been found
             if ($object) {
@@ -75,6 +77,7 @@ if (!class_exists('Question')) {
                 $this->difficulty = $object->difficulty;
                 $this->category = $object->category;
                 $this->copy_of_qid = $object->copy_of_qid;
+                $this->options = $object->options;
 
                 $result = Database::get()->queryArray("SELECT exercise_id FROM `exercise_with_questions` WHERE question_id = ?d", $id);
                 // fills the array with the exercises which this question is in
@@ -139,6 +142,13 @@ if (!class_exists('Question')) {
          */
         function selectDifficulty() {
             return $this->difficulty;
+        }
+
+        /**
+         * @brief returns the question options
+         */
+        function selectOptions() {
+            return $this->options;
         }
 
 
@@ -293,6 +303,15 @@ if (!class_exists('Question')) {
         }
 
         /**
+         * @brief update question options
+         * @param $options
+         * @return void
+         */
+        function updateOptions($options) {
+            $this->options = $options;
+        }
+
+        /**
          * @brief changes the answer type. If the user changes the type from "unique answer" to "multiple answers"
          * (or conversely) answers are not deleted, otherwise yes
          * @param - integer $type - answer type
@@ -410,18 +429,19 @@ if (!class_exists('Question')) {
             $difficulty = $this->difficulty;
             $category = $this->category;
             $copy_of_qid = $this->copy_of_qid;
+            $options = $this->options;
 
             // question already exists
             if ($id) {
                 Database::get()->query("UPDATE `exercise_question` SET question = ?s, description = ?s, feedback = ?s,
-                                            weight = ?f, type = ?d, difficulty = ?d, category = ?d, copy_of_qid = ?d
+                                            weight = ?f, type = ?d, difficulty = ?d, category = ?d, copy_of_qid = ?d, options = ?s
                                         WHERE course_id = $course_id AND id='$id'",
-                                    $question, $description, $feedback, $weighting, $type, $difficulty, $category, $copy_of_qid);
+                                    $question, $description, $feedback, $weighting, $type, $difficulty, $category, $copy_of_qid, $options);
             }
             // creates a new question
             else {
-                $this->id = Database::get()->query("INSERT INTO `exercise_question` (course_id, question, description, feedback, weight, type, difficulty, category)
-                VALUES (?d, ?s, ?s, ?s, ?f, ?d, ?d, ?d)", $course_id, $question, $description, $feedback, $weighting, $type, $difficulty, $category)->lastInsertID;
+                $this->id = Database::get()->query("INSERT INTO `exercise_question` (course_id, question, description, feedback, weight, type, difficulty, category, options)
+                VALUES (?d, ?s, ?s, ?s, ?f, ?d, ?d, ?d, ?s)", $course_id, $question, $description, $feedback, $weighting, $type, $difficulty, $category, $options)->lastInsertID;
             }
 
             // if the question is created in an exercise
@@ -513,7 +533,7 @@ if (!class_exists('Question')) {
                     } elseif ($type == FREE_TEXT) {
                         $choice = $row->answer;
                     } elseif ($type == FILL_IN_BLANKS || $type == FILL_IN_BLANKS_TOLERANT || $type == FILL_IN_FROM_PREDEFINED_ANSWERS 
-                                || $type == DRAG_AND_DROP_TEXT || $type == DRAG_AND_DROP_MARKERS) {
+                                || $type == DRAG_AND_DROP_TEXT || $type == DRAG_AND_DROP_MARKERS || $type == ORDERING) {
                         $choice[$row->answer_id] = $row->answer;
                     } elseif ($type == MATCHING) {
                         $choice[$row->answer] = $row->answer_id;
@@ -539,9 +559,10 @@ if (!class_exists('Question')) {
             $difficulty = $this->difficulty;
             $category = $this->category;
             $copy_of_qid = $this->id;
+            $options = $this->options;
 
-            $id = Database::get()->query("INSERT INTO `exercise_question` (course_id, question, description, feedback, weight, `type`, difficulty, category, copy_of_qid)
-                        VALUES (?d, ?s, ?s, ?s, ?f, ?d, ?d, ?d, ?d)", $course_id, $question, $description, $feedback, $weighting, $type, $difficulty, $category, $copy_of_qid)->lastInsertID;
+            $id = Database::get()->query("INSERT INTO `exercise_question` (course_id, question, description, feedback, weight, `type`, difficulty, category, copy_of_qid, options)
+                        VALUES (?d, ?s, ?s, ?s, ?f, ?d, ?d, ?d, ?d, ?s)", $course_id, $question, $description, $feedback, $weighting, $type, $difficulty, $category, $copy_of_qid, $options)->lastInsertID;
 
             // duplicates the picture
             $this->exportPicture($id);

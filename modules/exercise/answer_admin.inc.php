@@ -469,11 +469,9 @@ if (isset($submitAnswers) || isset($buttonBack)) {
             if (count($arrItems) > 0) {
                 $jsonItems = json_encode($arrItems);
                 if ($questionId > 0) {
-                    $q = Database::get()->query("UPDATE exercise_question SET options = ?s WHERE id = ?d", $jsonItems, $questionId);
-                    if ($q) {
-                        $wildCardOptions = true;
-                        unset($_SESSION['wildCard_'.$questionId]);
-                    } 
+                    $objQuestion->updateOptions($jsonItems);
+                    $wildCardOptions = true;
+                    unset($_SESSION['wildCard_'.$questionId]);
                 }
             }
 
@@ -546,6 +544,31 @@ if (isset($submitAnswers) || isset($buttonBack)) {
             }
         }
 
+        // Update options
+        $layoutItems = (isset($_POST['layoutItems']) ? $_POST['layoutItems'] : '');
+        $ItemsSelectionType = (isset($_POST['ltemsSelectionType']) ? $_POST['ltemsSelectionType'] : '');
+        $SizeOfSubset = (isset($_POST['SizeOfSubset']) ? $_POST['SizeOfSubset'] : '');
+        if (isset($ItemsSelectionType) && $ItemsSelectionType == 1) {
+            $SizeOfSubset = '';
+        } elseif (isset($ItemsSelectionType) && $ItemsSelectionType > 1) {
+            if (!is_numeric($SizeOfSubset)) {
+                Session::flash('message', $langFillInTheSizeOfSubset);
+                Session::flash('alert-class', 'alert-warning');
+                redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId&modifyAnswers=$_GET[modifyAnswers]&htopic=" . ORDERING);
+            } elseif (is_numeric($SizeOfSubset) && ($SizeOfSubset > count($PredefinedValues) or $SizeOfSubset <= 1)) { // A subset must have at least 2 items.
+                Session::flash('message', $langTheSizeOfSubsetIsBiggerThanPrAnswers);
+                Session::flash('alert-class', 'alert-warning');
+                redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId&modifyAnswers=$_GET[modifyAnswers]&htopic=" . ORDERING);
+            }
+        }
+        $arrOptions = [
+                        'layoutItems' => $layoutItems,
+                        'itemsSelectionType' => $ItemsSelectionType,
+                        'sizeOfSubset' => $SizeOfSubset
+                        ];
+        $opt = json_encode($arrOptions);
+        $objQuestion->updateOptions($opt);
+
         // Check for duplicates or empty values
         $DuplicatesItemsOn = (count($PredefinedValues) !== count(array_unique($PredefinedValues)));
         $EmptyItemsOn = in_array("", $PredefinedValues, true);
@@ -555,7 +578,6 @@ if (isset($submitAnswers) || isset($buttonBack)) {
             redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId&modifyAnswers=$_GET[modifyAnswers]&htopic=" . ORDERING);
         }
 
-        sort($totalAnsFromOrderingChoices);
         $choicesOrdArr = [];
         foreach ($totalAnsFromOrderingChoices as $inde_x) {
             $choicesOrdArr[] = $inde_x . '|' . $_POST['ordering_answer'][$inde_x] . '|' . $_POST['ordering_answer_grade'][$inde_x];
@@ -900,13 +922,20 @@ if (isset($_GET['modifyAnswers'])) {
         } else { // for edit
             // Get the total number of predefined answers
             $nbrAnswers = $objAnswer->get_total_ordering_answers() ?? 2; // minimum 2 answer
-
+            if ($nbrAnswers == 0) {
+                $nbrAnswers = 2;
+            }
         }
         if ($deleteAnswer) {
             $nbrAnswers = $_POST['nbrAnswers'] - 1;
             if ($nbrAnswers <= 2) { // minimum 1 answers
                 $nbrAnswers = 2;
             }
+        }
+
+        $opts = $objQuestion->selectOptions();
+        if ($opts) {
+            $arrOpts = json_decode($opts, true);
         }
 
         $ordering_answer = $objAnswer->get_ordering_answers();
@@ -1603,6 +1632,19 @@ if (isset($_GET['modifyAnswers'])) {
 
         } elseif ($answerType == ORDERING) {
 
+            $head_content .= "<script>
+                                $(function() {
+                                    $('#ItemsSelectionTypeId').on('click', function (){
+                                        var valType = $(this).val();
+                                        if (valType == 2 || valType == 3) {
+                                            $('.SizeOfSubSetContainer').removeClass('d-none').addClass('d-block');
+                                        } else {
+                                            $('.SizeOfSubSetContainer').removeClass('d-block').addClass('d-none');
+                                        }
+                                    });
+                                });
+                                </script>";
+
             if (isset($_GET['fromExercise'])) {
                 $exerciseId = $_GET['fromExercise'];
             }
@@ -1623,8 +1665,10 @@ if (isset($_GET['modifyAnswers'])) {
                                             </thead>
                                             <tbody>";
                                             for ($i=1; $i <= $nbrAnswers; $i++) {
-                                                $order_answer = (isset($ordering_answer[$i]) ? $ordering_answer[$i] : '');
-                                                $order_grade = (isset($ordering_answer_grade[$i]) ? $ordering_answer_grade[$i] : '');
+                                                $fromPostAnswer = $_POST['ordering_answer'][$i] ?? '';
+                                                $fromPostAnswerGrade = $_POST['ordering_answer_grade'][$i] ?? '';
+                                                $order_answer = (isset($ordering_answer[$i]) ? $ordering_answer[$i] : $fromPostAnswer);
+                                                $order_grade = (isset($ordering_answer_grade[$i]) ? $ordering_answer_grade[$i] : $fromPostAnswerGrade);
                                                 $tool_content .= "
                                                     <tr>
                                                         <td>($i)</td>
@@ -1644,6 +1688,34 @@ if (isset($_GET['modifyAnswers'])) {
                                         <div class='d-flex justify-content-start align-items-center gap-3 flex-wrap'>
                                             <input class='btn submitAdminBtn' type='submit' name='moreAnswers' value='$langMoreAnswers' />
                                             <input class='btn deleteAdminBtn' type='submit' name='lessAnswers' value='$langLessAnswers' />
+                                        </div>
+                                    </div>";
+                
+                $valSizeOfSubset = (isset($arrOpts) && !empty($arrOpts['sizeOfSubset']) ? $arrOpts['sizeOfSubset'] : '');
+                $hiddenSize = 'd-none';
+                if (!empty($valSizeOfSubset)) {
+                    $hiddenSize = 'd-block';
+                }
+                                    
+                $tool_content .= "  <div class='col-12 d-flex justify-content-start align-items-start gap-3 my-4'>
+                                        <div style='flex: 1;'>
+                                            <label for='layoutItemsId' class='form-label'>$langLayoutItems</label>
+                                            <select class='form-select' id='layoutItemsId' name='layoutItems'>
+                                                <option value='Horizontal' " . (isset($arrOpts) && $arrOpts['layoutItems'] == 'Horizontal' ? 'selected' : ''). ">$langHorizontal</option>
+                                                <option value='Vertical' " . (isset($arrOpts) && $arrOpts['layoutItems'] == 'Vertical' ? 'selected' : ''). ">$langVertical</option>
+                                            </select>
+                                        </div>
+                                        <div style='flex: 1;'>
+                                            <label for='ItemsSelectionTypeId' class='form-label'>$langItemsSelectionType</label>
+                                            <select class='form-select' id='ItemsSelectionTypeId' name='ltemsSelectionType'>
+                                                <option value='1' " . (isset($arrOpts) && $arrOpts['itemsSelectionType'] == 1 ? 'selected' : ''). ">$langSelectAllItems</option>
+                                                <option value='2' " . (isset($arrOpts) && $arrOpts['itemsSelectionType'] == 2 ? 'selected' : ''). ">$langSelectRandomSubSetOfItems</option>
+                                                <option value='3' " . (isset($arrOpts) && $arrOpts['itemsSelectionType'] == 3 ? 'selected' : ''). ">$langSelectContiguousSubSetOfItems</option>
+                                            </select>
+                                            <div class='SizeOfSubSetContainer $hiddenSize mt-3'>
+                                                <label for='SizeOfSubsetId' class='form-label'>$langSizeOfSubset</label>
+                                                <input type='text' id='SizeOfSubsetId' class='form-control' name='SizeOfSubset' value='{$valSizeOfSubset}'>
+                                            </div>
                                         </div>
                                     </div>";
 

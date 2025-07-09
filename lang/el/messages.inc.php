@@ -2244,6 +2244,17 @@ $langFinalValueOfWildCard = "Τιμή στοιχείου";
 $langSeperateCorrectlyTheTypeOfAnswer = "Δεν υπάρχουν διαθέσιμα {στοιχεία} στην εκφώνηση ή στους τύπους των απαντήσεων. </br>
 Συνεπώς θα πρέπει στο πεδίο <strong>Τύπος απάντησης</strong> να προσθέσετε τον αριθμητικό τύπο που προσθέσατε στην εκφώνηση μαζί με το τελικό της αποτέλεσμα, χωρισμένα με το σύμβολο (<strong>:</strong>)";
 $langOrdering = "Ταξινόμηση";
+$langLayoutItems = "Διάταξη στοιχείων";
+$langHorizontal = "Οριζόντια";
+$langVertical = "Κατακόρυφη";
+$langItemsSelectionType = "Τύπος επιλογής στοιχείου";
+$langSelectAllItems = "Επιλογή όλων των στοιχείων";
+$langSelectRandomSubSetOfItems = "Επιλογή τυχαίου υποσυνόλου στοιχείων";
+$langSelectContiguousSubSetOfItems = "Επιλογή συνεχόμενου υποσυνόλου στοιχείων";
+$langSizeOfSubset = "Μέγεθος υποσυνόλου";
+$langFillInTheSizeOfSubset = "Συμπληρώστε το μέγεθος του υποσυνόλου.";
+$langTheSizeOfSubsetIsBiggerThanPrAnswers = "Το μέγεθος του υποσυνόλου είναι μεγαλύτερο από τον συνολικό αριθμό των προκαθορισμένων απαντήσεων.";
+
 
 
 // answer_admin.php

@@ -1,5 +1,6 @@
 <?php
 
+require_once 'question.class.php';
 require_once 'answer.class.php';
 
 class OrderingAnswer extends \QuestionType
@@ -11,28 +12,133 @@ class OrderingAnswer extends \QuestionType
 
     public function PreviewQuestion(): string
     {
-        global $langScore, $langAnswer, $langComment;
+        global $langScore, $langAnswer, $langComment, $langOrdering;
 
-        $html_content = "
-            <tr>
-                <td>#</td>
-                <td><strong>$langAnswer</strong></td>
-                <td><strong>$langComment</strong></td>
-           </tr>";
+        $html_content = "<tr class='active'><td><strong>$langAnswer</strong></td></tr>";
 
-        $nbrAnswers = $this->answer_object->selectNbrAnswers();
+        $predefinedOrderingAnswers = $this->answer_object->get_ordering_answers();
+        $predefinedOrderingGrades = $this->answer_object->get_ordering_answer_grade();
+
+        $Answers = implode('->', $predefinedOrderingAnswers);
+        $AnswersGrade = implode(':', $predefinedOrderingGrades);
+        $html_content .= "<tr>
+                           <td>
+                                <strong><small class='text-nowrap'>($langScore: $AnswersGrade)</small></strong>
+                                <div><strong>$langOrdering:</strong><span class='ps-2'>$Answers</span></div>";
+        $html_content .= "</td>
+                         </tr>";
 
         return $html_content;
     }
 
     public function AnswerQuestion($question_number, $exerciseResult = [], $options = []): string
     {
-        global $head_content, $course_code, $langClearChoice;
+        global $head_content, $course_code, $langClearChoice, $langReorder, $urlServer;
 
         $html_content = "";
 
+        $questionId = $this->answer_object->getQuestionId();
         $nbrAnswers = $this->answer_object->selectNbrAnswers();
 
+        $head_content .= "
+            <script src='{$urlServer}/js/sortable/Sortable.min.js'></script>
+            <script type='text/javascript'>
+
+                function updateCardPositions() {
+                    const cards = document.querySelectorAll('#CardList_{$questionId} > .draggable-item');
+                    const dataObject = [];
+                    cards.forEach((card, index) => {
+                        // Assign the new position (index + 1)
+                        const newPosition = index + 1;
+                        card.setAttribute('data-position', newPosition);
+                        const value = card.getAttribute('data-value');
+                        const result = newPosition + ':' + value;
+                        dataObject.push(result);
+                    });
+                    const joinedResult = dataObject.join(',');
+                    $('#orderingResponses_{$questionId}').val(joinedResult);
+                }
+
+                $(document).ready(function() {
+                    updateCardPositions();
+                    var box = document.getElementById('CardList_{$questionId}');
+                    Sortable.create(box, {
+                        animation: 350,
+                        handle: '.fa-arrows',
+                        onEnd: function(evt) {
+                            // This fires after a drag-and-drop completes
+                            updateCardPositions();
+                        }
+                    });
+                });
+            </script>
+        
+        ";
+        
+        $objQuestion = new Question();
+        $objQuestion->read($questionId);
+        
+        $ordering_answer = $this->answer_object->get_ordering_answers();
+        $ordering_answer_grade = $this->answer_object->get_ordering_answer_grade();
+        $optionsQ = $objQuestion->selectOptions();
+        $arrOptions = json_decode($optionsQ, true);
+        $countOrderingAnswers = count($ordering_answer);
+        $allOrderingKeys = array_keys($ordering_answer);
+
+        $layoutItems = (isset($arrOptions['layoutItems']) ? $arrOptions['layoutItems'] : '');
+        $itemsSelectionType = (isset($arrOptions['itemsSelectionType']) ? $arrOptions['itemsSelectionType'] : '');
+        $sizeOfSubset = (isset($arrOptions['sizeOfSubset']) ? $arrOptions['sizeOfSubset'] : '');
+
+        $displayItems = '';
+        if (isset($layoutItems) && $layoutItems == 'Horizontal') {
+            $displayItems = 'd-flex justify-content-start align-items-center gap-3 flex-wrap';
+        } elseif (isset($layoutItems) && $layoutItems == 'Vertical') {
+            $displayItems = 'd-flex flex-column gap-3';
+        }
+
+        $randomKeys = array_keys($ordering_answer);
+        if (isset($itemsSelectionType) && $itemsSelectionType > 1 && isset($sizeOfSubset) && $sizeOfSubset >= 2) {
+            $minKey = min($randomKeys);
+            $maxKey = max($randomKeys);
+            $range = array_combine(range($minKey, $maxKey), range($minKey, $maxKey));
+            if ($itemsSelectionType == 2) {
+                $randomKeys = array_rand($range, $sizeOfSubset);
+            } elseif ($itemsSelectionType == 3) {
+                $maxStart = $maxKey - $sizeOfSubset + 1;
+                $start = rand($minKey, $maxStart);
+                $randomKeys = range($start, $start + $sizeOfSubset - 1);
+            }
+        }
+
+        $indices = range(1, $countOrderingAnswers);
+        shuffle($indices); // Shuffle the indices
+        $html_content .= "  <div class='{$displayItems}' id='CardList_{$questionId}'>";
+        foreach ($indices as $i) {
+            $position = $i;
+            if (!in_array($i, $randomKeys)) {
+                $displayCard = 'd-none';
+                $value = '';
+            } else {
+                $displayCard = 'd-block';
+                $value = $ordering_answer[$i];
+            }
+            $html_content .= "  <div class='draggable-item $displayCard' data-position='{$position}' data-value='{$value}'>
+                                    <div class='card panelCard card-default p-2 h-100'>
+                                        <div class='card-body p-0'>
+                                            <div class='d-flex justify-content-between align-items-center gap-3'>
+                                                <p class='text-nowrap'>$value</p>
+                                                <span class='reorder-btn'>
+                                                    <span class='fa fa-arrows' data-bs-toggle='tooltip' data-bs-placement='top' title='' style='cursor: grab;'></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>";
+            
+        }
+        $html_content .= "  </div>";
+        $html_content .= "<input type='hidden' id='orderingResponses_{$questionId}' name='choice[$questionId]'>";
+        
         return $html_content;
     }
 
