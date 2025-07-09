@@ -1236,84 +1236,32 @@ if (!class_exists('Exercise')) {
                 $ordering_answer = $objAnswersTmp->get_ordering_answers();
                 $ordering_answer_grade = $objAnswersTmp->get_ordering_answer_grade();
 
-                $fUserAnswers = [];
                 if (isset($_POST['choice']) && !empty($_POST['choice'][$key])) {
-                    $userAnswers = $_POST['choice'][$key];
-                    $userAnswersArr = explode(',', $userAnswers);
-                    foreach ($userAnswersArr as $an) {
-                        $arr = explode(':', $an);
-                        $index = $arr[0];
-                        $value = $arr[1];
-                        $fUserAnswers[$index] = $value; 
-                    }
+                    $userAnswers = json_decode($_POST['choice'][$key], true);
+                    if (count($userAnswers) > 0) {
+                        $optionsQ = $objQuestionTmp->selectOptions();
+                        $arrOptions = json_decode($optionsQ, true);
+                        $layoutItems = (isset($arrOptions['layoutItems']) ? $arrOptions['layoutItems'] : '');
+                        $itemsSelectionType = (isset($arrOptions['itemsSelectionType']) ? $arrOptions['itemsSelectionType'] : '');
+                        $sizeOfSubset = (isset($arrOptions['sizeOfSubset']) ? $arrOptions['sizeOfSubset'] : '');
+                        for ($i = 1; $i <= count($userAnswers)-1; $i++) { // Index 0 is null.
+                            $position = $i;
+                            $weight = 0;
+                            $value = $userAnswers[$i];
 
-                }
-
-
-
-                if (count($fUserAnswers) > 0) {
-                    $optionsQ = $objQuestionTmp->selectOptions();
-                    $arrOptions = json_decode($optionsQ, true);
-                    $layoutItems = (isset($arrOptions['layoutItems']) ? $arrOptions['layoutItems'] : '');
-                    $itemsSelectionType = (isset($arrOptions['itemsSelectionType']) ? $arrOptions['itemsSelectionType'] : '');
-                    $sizeOfSubset = (isset($arrOptions['sizeOfSubset']) ? $arrOptions['sizeOfSubset'] : '');
-                    
-                    for ($i = 1; $i <= count($ordering_answer); $i++) {
-
-                        if (isset($itemsSelectionType) && $itemsSelectionType == 1) { // all items
-                            if (isset($fUserAnswers[$i]) && $fUserAnswers[$i] == $ordering_answer[$i]) { // correct answer
-                                $value = $fUserAnswers[$i];
-                                $weight = $ordering_answer_grade[$i];
-                            } elseif (isset($fUserAnswers[$i]) && $fUserAnswers[$i] != $ordering_answer[$i]) { // incorrect answer
-                                $value = $fUserAnswers[$i];
-                                $weight = 0;
-                            }
-                        } elseif (isset($itemsSelectionType) && $itemsSelectionType == 2) { // random items by subset
-                            if (empty($fUserAnswers[$i])) { // empty answer so put the original weight of answer
-                                $value = '';
-                                $weight = $ordering_answer_grade[$i];
-                            } else {
-                                if ($fUserAnswers[$i] == $ordering_answer[$i]) { // correct answer
-                                    $value = $fUserAnswers[$i];
-                                    $weight = $ordering_answer_grade[$i];
-                                } elseif ($fUserAnswers[$i] != $ordering_answer[$i]) { // incorrect answer
-                                    $value = $fUserAnswers[$i];
-                                    $weight = 0;
-                                }
-                            }
-                        } elseif (isset($itemsSelectionType) && $itemsSelectionType == 3) { // random items by contiguous subset
-                            if (!empty($fUserAnswers[$i])) { // check specific indexes
-                                if ($fUserAnswers[$i] == $ordering_answer[$i]) { // correct answer
-                                    $value = $fUserAnswers[$i];
-                                    $weight = $ordering_answer_grade[$i];
-                                } elseif ($fUserAnswers[$i] != $ordering_answer[$i]) { // incorrect answer
-                                    $value = $fUserAnswers[$i];
-                                    $weight = 0;
-                                }
-                            } else {
-                                $value = '';
+                            if ($userAnswers[$i] == $ordering_answer[$i]) {
                                 $weight = $ordering_answer_grade[$i];
                             }
+                           
+                            Database::get()->query("INSERT INTO exercise_answer_record
+                                (eurid, question_id, answer, answer_id, weight, is_answered, q_position)
+                                VALUES (?d, ?d, ?s, ?d, ?f, ?d, ?d)",
+                                $eurid, $key, $value, $position, $weight, $as_answered, $q_position);
                         }
-
-                        Database::get()->query("INSERT INTO exercise_answer_record
-                            (eurid, question_id, answer, answer_id, weight, is_answered, q_position)
-                            VALUES (?d, ?d, ?s, ?d, ?f, ?d, ?d)",
-                            $eurid, $key, $value, $i, $weight, $as_answered, $q_position);
-                        
                     }
-
-                    
                 }
 
-                
-
-                
-                
-
-                
-
-                //unset($objAnswersTmp);
+                unset($objAnswersTmp);
 
             } else {
                 if ($value) {

@@ -43,33 +43,43 @@ class OrderingAnswer extends \QuestionType
         $head_content .= "
             <script src='{$urlServer}/js/sortable/Sortable.min.js'></script>
             <script type='text/javascript'>
+            
+                let dataObject = [];
 
-                function updateCardPositions() {
-                    const cards = document.querySelectorAll('#CardList_{$questionId} > .draggable-item');
-                    const dataObject = [];
-                    cards.forEach((card, index) => {
-                        // Assign the new position (index + 1)
-                        const newPosition = index + 1;
-                        card.setAttribute('data-position', newPosition);
-                        const value = card.getAttribute('data-value');
-                        const result = newPosition + ':' + value;
-                        dataObject.push(result);
+                function initialPositions() {
+                    // Loop through all items to get their current indexes
+                    const items = document.querySelectorAll('#CardList_{$questionId} > .draggable-item');
+                    const indexes = Array.from(items).map((item, index) => {
+                        return {
+                            element: item,
+                            currentIndex: index+1,
+                            dataValue: item.getAttribute('data-value')
+                        };
                     });
-                    const joinedResult = dataObject.join(',');
-                    $('#orderingResponses_{$questionId}').val(joinedResult);
+                    for (var i = 0; i < indexes.length; i++) {
+                        var currentIndex = indexes[i].currentIndex;
+                        var currentValue = indexes[i].dataValue;
+                        dataObject[currentIndex] = currentValue;
+                    }
+
+                    const jsonString = JSON.stringify(dataObject);
+                    $('#orderingResponses_{$questionId}').val(jsonString);
                 }
 
-                $(document).ready(function() {
-                    updateCardPositions();
+                function calculatePositions() {
                     var box = document.getElementById('CardList_{$questionId}');
                     Sortable.create(box, {
                         animation: 350,
                         handle: '.fa-arrows',
                         onEnd: function(evt) {
-                            // This fires after a drag-and-drop completes
-                            updateCardPositions();
+                            initialPositions();
                         }
                     });
+                }
+
+                $(document).ready(function() {
+                    initialPositions();
+                    calculatePositions();
                 });
             </script>
         
@@ -83,7 +93,6 @@ class OrderingAnswer extends \QuestionType
         $optionsQ = $objQuestion->selectOptions();
         $arrOptions = json_decode($optionsQ, true);
         $countOrderingAnswers = count($ordering_answer);
-        $allOrderingKeys = array_keys($ordering_answer);
 
         $layoutItems = (isset($arrOptions['layoutItems']) ? $arrOptions['layoutItems'] : '');
         $itemsSelectionType = (isset($arrOptions['itemsSelectionType']) ? $arrOptions['itemsSelectionType'] : '');
@@ -110,19 +119,30 @@ class OrderingAnswer extends \QuestionType
             }
         }
 
-        $indices = range(1, $countOrderingAnswers);
-        shuffle($indices); // Shuffle the indices
+        $fullRange = range(1, $countOrderingAnswers);
+        if (isset($itemsSelectionType) && $itemsSelectionType == 1) {
+            shuffle($fullRange); // Shuffle all items
+        } elseif (isset($itemsSelectionType) && $itemsSelectionType == 3) {
+            $positions = [];
+            foreach ($fullRange as $index => $value) {
+                if (in_array($value, $randomKeys)) {
+                    $positions[] = $index; // store index positions
+                }
+            }
+            // Shuffle the subset
+            shuffle($randomKeys);
+            foreach ($positions as $i => $pos) {
+                $fullRange[$pos] = $randomKeys[$i];
+            }
+        }
         $html_content .= "  <div class='{$displayItems}' id='CardList_{$questionId}'>";
-        foreach ($indices as $i) {
-            $position = $i;
+        foreach ($fullRange as $i) {
+            $displayCard = 'd-block';
+            $value = $ordering_answer[$i];
             if (!in_array($i, $randomKeys)) {
                 $displayCard = 'd-none';
-                $value = '';
-            } else {
-                $displayCard = 'd-block';
-                $value = $ordering_answer[$i];
             }
-            $html_content .= "  <div class='draggable-item $displayCard' data-position='{$position}' data-value='{$value}'>
+            $html_content .= "  <div class='draggable-item $displayCard' data-value='{$value}'>
                                     <div class='card panelCard card-default p-2 h-100'>
                                         <div class='card-body p-0'>
                                             <div class='d-flex justify-content-between align-items-center gap-3'>
