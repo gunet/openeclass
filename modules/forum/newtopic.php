@@ -24,7 +24,7 @@ $require_help = false;
 require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
 require_once 'modules/group/group_functions.php';
-require_once 'modules/search/indexer.class.php';
+require_once 'modules/search/lucene/indexer.class.php';
 require_once 'include/log.class.php';
 require_once 'functions.php';
 require_once 'include/lib/fileUploadLib.inc.php';

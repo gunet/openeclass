@@ -126,8 +126,8 @@ class Indexer {
     /**
      * Convert an input string to its phonetic representation.
      *
-     * @param  string $text
-     * @param  int    $ignoreCase
+     * @param string $text
+     * @param int $ignoreCase
      * @return string
      */
     public static function phonetics($text, $ignoreCase = 1) {
@@ -141,7 +141,7 @@ class Indexer {
     /**
      * Clear/filter Lucene operators.
      *
-     * @param  string $inputStr
+     * @param string $inputStr
      * @return string
      */
     public static function filterQuery($inputStr) {
@@ -182,10 +182,10 @@ class Indexer {
         } catch (Zend_Search_Lucene_Exception $e) {
             $errorMessage = $e->getMessage();
             if ($is_admin) {
-                Session::flash('message',"$langIdxErrorPermissions $errorMessage");
+                Session::flash('message', "$langIdxErrorPermissions $errorMessage");
                 Session::flash('alert-class', 'alert-warning');
             } else {
-                Session::flash('message',$langSearchDisabled);
+                Session::flash('message', $langSearchDisabled);
                 Session::flash('alert-class', 'alert-warning');
             }
 
@@ -209,7 +209,7 @@ class Indexer {
     /**
      * Checks if a lucene index path exists.
      *
-     * @param  string  $path The lucene index path.
+     * @param string $path The lucene index path.
      * @return boolean       TRUE if the lucene index path exists else FALSE.
      */
     private function checkPath($path) {
@@ -228,7 +228,7 @@ class Indexer {
     /**
      * Filtered Search in the index.
      *
-     * @param  string $inputStr - A Lucene Query, it is filtered for Lucene operators
+     * @param string $inputStr - A Lucene Query, it is filtered for Lucene operators
      * @return array            - array of Zend_Search_Lucene_Search_QueryHit objects
      */
     public function search($inputStr) {
@@ -243,7 +243,7 @@ class Indexer {
     /**
      * Raw Search in the index.
      *
-     * @param  string $inputStr - A Lucene Query, it is NOT filtered for Lucene operators
+     * @param string $inputStr - A Lucene Query, it is NOT filtered for Lucene operators
      * @return array            - array of Zend_Search_Lucene_Search_QueryHit objects
      */
     public function searchRaw($inputStr) {
@@ -263,7 +263,7 @@ class Indexer {
     /**
      * Raw Searches in the index.
      *
-     * @param  array $inputQueries - One or more Lucene Queries, they are NOT filtered for Lucene operators
+     * @param array $inputQueries - One or more Lucene Queries, they are NOT filtered for Lucene operators
      * @return array               - array of Zend_Search_Lucene_Search_QueryHit objects
      */
     public function multiSearchRaw($inputQueries) {
@@ -275,15 +275,15 @@ class Indexer {
             $allhits = array();
             $prevHitIds = array();
 
-            foreach($inputQueries as $inputStr) {
+            foreach ($inputQueries as $inputStr) {
                 $query = Zend_Search_Lucene_Search_QueryParser::parse($inputStr, 'utf-8');
                 $hits = $this->__index->find($query);
                 $hitIds = array();
 
-                foreach($hits as $hit) {
+                foreach ($hits as $hit) {
                     $hitIds[] = intval($hit->pkid);
 
-                    if(!in_array(intval($hit->pkid), $prevHitIds)) {
+                    if (!in_array(intval($hit->pkid), $prevHitIds)) {
                         $allhits[] = $hit;
                     }
 
@@ -292,7 +292,7 @@ class Indexer {
             }
 
             return $allhits;
-        }  catch (Zend_Search_Exception $e) {
+        } catch (Zend_Search_Exception $e) {
             return array();
         }
         return array();
@@ -418,7 +418,7 @@ class Indexer {
         if (is_dir($index_path)) {
             $files = array_diff(scandir($index_path), array('.', '..'));
             foreach ($files as $file) {
-                unlink($index_path ."/" . $file);
+                unlink($index_path . "/" . $file);
             }
             rmdir($index_path);
         }
@@ -427,10 +427,10 @@ class Indexer {
     /**
      * Schedule Asynchronous Indexing.
      *
-     * @global int    $uid          - user id
-     * @param  string $requestType  - type of async request
-     * @param  string $resourceType - type of resource
-     * @param  int    $resourceId   - id of resource
+     * @param string $requestType - type of async request
+     * @param string $resourceType - type of resource
+     * @param int $resourceId - id of resource
+     * @global int $uid - user id
      */
     public static function queueAsync($requestType, $resourceType, $resourceId) {
         global $uid;
@@ -443,8 +443,8 @@ class Indexer {
     /**
      * Return JS Code for triggering Asynchronous Indexing.
      *
-     * @global string $urlAppend
      * @return string
+     * @global string $urlAppend
      */
     public static function queueAsyncJSCode() {
         global $urlAppend;
@@ -466,7 +466,7 @@ class Indexer {
     public function queueAsyncProcess() {
         global $uid;
         $resources = Database::get()->queryArray("SELECT id, request_type, resource_id, resource_type FROM idx_queue_async WHERE user_id = ?d ORDER BY id", $uid);
-        foreach($resources as $resource) {
+        foreach ($resources as $resource) {
             $varidx = null;
             switch ($resource->resource_type) {
                 case self::RESOURCE_AGENDA:
@@ -526,8 +526,8 @@ class Indexer {
      * Calling helper for variable indexers and methods.
      *
      * @param AbstractBaseIndexer $idxObj
-     * @param string              $method
-     * @param mixed               $arg
+     * @param string $method
+     * @param mixed $arg
      */
     private static function callVariableIndexer($idxObj, $method, $arg) {
         if ($idxObj !== null && $method !== null && is_callable(array($idxObj, $method))) {
@@ -538,12 +538,12 @@ class Indexer {
     /**
      * Build a Lucene Query.
      *
-     * @param  array   $data      - The data (normally $_POST), needs specific array keys
+     * @param array $data - The data (normally $_POST), needs specific array keys
      * @return string             - the returned query string
      */
     public static function buildQuery($data) {
         if (isset($data['search_terms']) && !empty($data['search_terms']) &&
-                isset($data['course_id']) && !empty($data['course_id'])) {
+            isset($data['course_id']) && !empty($data['course_id'])) {
             $terms = explode(' ', Indexer::filterQuery($data['search_terms']));
             $queryStr = 'courseid:' . $data['course_id'] . ' AND (';
             foreach ($terms as $term) {

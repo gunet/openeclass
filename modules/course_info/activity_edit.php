@@ -24,7 +24,7 @@
 $require_current_course = true;
 $require_editor = true;
 require_once '../../include/baseTheme.php';
-require_once 'modules/search/indexer.class.php';
+require_once 'modules/search/lucene/indexer.class.php';
 require_once 'modules/units/functions.php';
 $toolName = $langActivityEdit;
 

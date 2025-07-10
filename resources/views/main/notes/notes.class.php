@@ -77,7 +77,7 @@ use References;
 use text;
 
 require_once 'include/log.class.php';
-require_once 'modules/search/indexer.class.php';
+require_once 'modules/search/lucene/indexer.class.php';
 
 class Notes
 {

@@ -18,7 +18,7 @@
  *
  */
 
-require_once 'modules/search/indexer.class.php';
+require_once 'modules/search/lucene/indexer.class.php';
 require_once 'modules/rating/class.rating.php';
 require_once 'modules/abuse_report/abuse_report.php';
 

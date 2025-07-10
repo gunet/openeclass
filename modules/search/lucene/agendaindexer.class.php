@@ -30,9 +30,9 @@ class AgendaIndexer extends AbstractIndexer implements ResourceIndexerInterface 
     /**
      * Construct a Zend_Search_Lucene_Document object out of an agenda db row.
      *
-     * @global string $urlServer
-     * @param  object  $agenda
+     * @param object $agenda
      * @return Zend_Search_Lucene_Document
+     * @global string $urlServer
      */
     protected function makeDoc($agenda) {
         global $urlServer;
@@ -54,7 +54,7 @@ class AgendaIndexer extends AbstractIndexer implements ResourceIndexerInterface 
     /**
      * Fetch an Agenda from DB.
      *
-     * @param  int $agendaId
+     * @param int $agendaId
      * @return object - the mysql fetched row
      */
     protected function fetch($agendaId) {
@@ -69,7 +69,7 @@ class AgendaIndexer extends AbstractIndexer implements ResourceIndexerInterface 
     /**
      * Get Term object for locating a unique single agenda.
      *
-     * @param  int $agendaId - the agenda id
+     * @param int $agendaId - the agenda id
      * @return Zend_Search_Lucene_Index_Term
      */
     protected function getTermForSingleResource($agendaId) {
@@ -97,7 +97,7 @@ class AgendaIndexer extends AbstractIndexer implements ResourceIndexerInterface 
     /**
      * Get Lucene query input string for locating all agendas belonging to a given course.
      *
-     * @param  int $courseId - the given course id
+     * @param int $courseId - the given course id
      * @return string        - the string that can be used as Lucene query input
      */
     protected function getQueryInputByCourse($courseId) {
@@ -107,7 +107,7 @@ class AgendaIndexer extends AbstractIndexer implements ResourceIndexerInterface 
     /**
      * Get all agendas belonging to a given course from DB.
      *
-     * @param  int   $courseId - the given course id
+     * @param int $courseId - the given course id
      * @return array           - array of DB fetched anonymous objects with property names that correspond to the column names
      */
     protected function getCourseResourcesFromDB($courseId) {

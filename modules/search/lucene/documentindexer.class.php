@@ -30,9 +30,9 @@ class DocumentIndexer extends AbstractIndexer implements ResourceIndexerInterfac
     /**
      * Construct a Zend_Search_Lucene_Document object out of a document db row.
      *
-     * @global string $urlServer
-     * @param  object  $docu
+     * @param object $docu
      * @return Zend_Search_Lucene_Document
+     * @global string $urlServer
      */
     protected function makeDoc($docu) {
         global $urlServer;
@@ -55,8 +55,8 @@ class DocumentIndexer extends AbstractIndexer implements ResourceIndexerInterfac
 
         $urlAction = ($docu->format == '.dir') ? 'openDir' : 'download';
         $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', $urlServer
-                        . 'modules/document/index.php?course=' . course_id_to_code($docu->course_id)
-                        . '&amp;' . $urlAction . '=' . $docu->path, $encoding));
+            . 'modules/document/index.php?course=' . course_id_to_code($docu->course_id)
+            . '&amp;' . $urlAction . '=' . $docu->path, $encoding));
 
         return $doc;
     }
@@ -64,7 +64,7 @@ class DocumentIndexer extends AbstractIndexer implements ResourceIndexerInterfac
     /**
      * Fetch a Document from DB.
      *
-     * @param  int $docId
+     * @param int $docId
      * @return object - the mysql fetched row
      */
     protected function fetch($docId) {
@@ -80,7 +80,7 @@ class DocumentIndexer extends AbstractIndexer implements ResourceIndexerInterfac
     /**
      * Get Term object for locating a unique single document.
      *
-     * @param  int $docId - the document id
+     * @param int $docId - the document id
      * @return Zend_Search_Lucene_Index_Term
      */
     protected function getTermForSingleResource($docId) {
@@ -108,7 +108,7 @@ class DocumentIndexer extends AbstractIndexer implements ResourceIndexerInterfac
     /**
      * Get Lucene query input string for locating all documents belonging to a given course.
      *
-     * @param  int $courseId - the given course id
+     * @param int $courseId - the given course id
      * @return string        - the string that can be used as Lucene query input
      */
     protected function getQueryInputByCourse($courseId) {
@@ -118,7 +118,7 @@ class DocumentIndexer extends AbstractIndexer implements ResourceIndexerInterfac
     /**
      * Get all documents belonging to a given course from DB.
      *
-     * @param  int   $courseId - the given course id
+     * @param int $courseId - the given course id
      * @return array           - array of DB fetched anonymous objects with property names that correspond to the column names
      */
     protected function getCourseResourcesFromDB($courseId) {

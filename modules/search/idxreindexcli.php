@@ -20,7 +20,7 @@
 
 set_time_limit(0);
 require_once __DIR__ . '/../../include/baseTheme.php';
-require_once 'modules/search/indexer.class.php';
+require_once 'modules/search/lucene/indexer.class.php';
 
 $command_line = (php_sapi_name() == 'cli' && !isset($_SERVER['REMOTE_ADDR']));
 if (!$command_line) {

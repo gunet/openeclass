@@ -30,9 +30,9 @@ class UnitResourceIndexer extends AbstractIndexer implements ResourceIndexerInte
     /**
      * Construct a Zend_Search_Lucene_Document object out of a unit resource db row.
      *
-     * @global string $urlServer
-     * @param  object  $ures
+     * @param object $ures
      * @return Zend_Search_Lucene_Document
+     * @global string $urlServer
      */
     protected function makeDoc($ures) {
         global $urlServer;
@@ -48,8 +48,8 @@ class UnitResourceIndexer extends AbstractIndexer implements ResourceIndexerInte
         $doc->addField(Zend_Search_Lucene_Field::Text('content', Indexer::phonetics(strip_tags($ures->comments)), $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Text('visible', $ures->visible, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', $urlServer
-                        . 'modules/units/index.php?course=' . course_id_to_code($ures->course_id)
-                        . '&amp;id=' . $ures->unit_id, $encoding));
+            . 'modules/units/index.php?course=' . course_id_to_code($ures->course_id)
+            . '&amp;id=' . $ures->unit_id, $encoding));
 
         return $doc;
     }
@@ -57,14 +57,14 @@ class UnitResourceIndexer extends AbstractIndexer implements ResourceIndexerInte
     /**
      * Fetch a Unit Resource from DB.
      *
-     * @param  int $uresId
+     * @param int $uresId
      * @return object - the mysql fetched row
      */
     protected function fetch($uresId) {
         $ures = Database::get()->querySingle("SELECT ur.*, cu.course_id
                                                 FROM unit_resources ur 
                                             JOIN course_units cu ON cu.id = ur.unit_id 
-                                                WHERE ur.id = ?d",  $uresId);
+                                                WHERE ur.id = ?d", $uresId);
         if (!$ures) {
             return null;
         }
@@ -75,7 +75,7 @@ class UnitResourceIndexer extends AbstractIndexer implements ResourceIndexerInte
     /**
      * Get Term object for locating a unique single unit resource.
      *
-     * @param  int $uresId - the unit resource id
+     * @param int $uresId - the unit resource id
      * @return Zend_Search_Lucene_Index_Term
      */
     protected function getTermForSingleResource($uresId) {
@@ -105,7 +105,7 @@ class UnitResourceIndexer extends AbstractIndexer implements ResourceIndexerInte
     /**
      * Get Lucene query input string for locating all unit resources belonging to a given course.
      *
-     * @param  int $courseId - the given course id
+     * @param int $courseId - the given course id
      * @return string        - the string that can be used as Lucene query input
      */
     protected function getQueryInputByCourse($courseId) {
@@ -115,7 +115,7 @@ class UnitResourceIndexer extends AbstractIndexer implements ResourceIndexerInte
     /**
      * Get all unit resources belonging to a given course from DB.
      *
-     * @param  int   $courseId - the given course id
+     * @param int $courseId - the given course id
      * @return array           - array of DB fetched anonymous objects with property names that correspond to the column names
      */
     protected function getCourseResourcesFromDB($courseId) {
@@ -127,7 +127,7 @@ class UnitResourceIndexer extends AbstractIndexer implements ResourceIndexerInte
     /**
      * Remove all Unit Resources belonging to a Unit.
      *
-     * @param int     $unitId
+     * @param int $unitId
      * @param boolean $optimize
      */
     public function removeByUnit($unitId, $optimize = false) {

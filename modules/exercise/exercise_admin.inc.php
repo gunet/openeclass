@@ -22,7 +22,7 @@
  * @file exercise_admin.inc.php
  * @brief Create new exercise or modify an existing one
  */
-require_once 'modules/search/indexer.class.php';
+require_once 'modules/search/lucene/indexer.class.php';
 require_once 'modules/tags/moduleElement.class.php';
 
 if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {

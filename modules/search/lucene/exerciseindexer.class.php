@@ -30,9 +30,9 @@ class ExerciseIndexer extends AbstractIndexer implements ResourceIndexerInterfac
     /**
      * Construct a Zend_Search_Lucene_Document object out of an exercise db row.
      *
-     * @global string $urlServer
-     * @param  object  $exercise
+     * @param object $exercise
      * @return Zend_Search_Lucene_Document
+     * @global string $urlServer
      */
     protected function makeDoc($exercise) {
         global $urlServer;
@@ -54,7 +54,7 @@ class ExerciseIndexer extends AbstractIndexer implements ResourceIndexerInterfac
     /**
      * Fetch an Exercise from DB.
      *
-     * @param  int $exerciseId
+     * @param int $exerciseId
      * @return object - the mysql fetched row
      */
     protected function fetch($exerciseId) {
@@ -69,7 +69,7 @@ class ExerciseIndexer extends AbstractIndexer implements ResourceIndexerInterfac
     /**
      * Get Term object for locating a unique single exercise.
      *
-     * @param  int $exerciseId - the exercise id
+     * @param int $exerciseId - the exercise id
      * @return Zend_Search_Lucene_Index_Term
      */
     protected function getTermForSingleResource($exerciseId) {
@@ -97,7 +97,7 @@ class ExerciseIndexer extends AbstractIndexer implements ResourceIndexerInterfac
     /**
      * Get Lucene query input string for locating all exercises belonging to a given course.
      *
-     * @param  int $courseId - the given course id
+     * @param int $courseId - the given course id
      * @return string        - the string that can be used as Lucene query input
      */
     protected function getQueryInputByCourse($courseId) {
@@ -107,7 +107,7 @@ class ExerciseIndexer extends AbstractIndexer implements ResourceIndexerInterfac
     /**
      * Get all exercises belonging to a given course from DB.
      *
-     * @param  int   $courseId - the given course id
+     * @param int $courseId - the given course id
      * @return array           - array of DB fetched anonymous objects with property names that correspond to the column names
      */
     protected function getCourseResourcesFromDB($courseId) {

@@ -30,9 +30,9 @@ class ForumIndexer extends AbstractIndexer implements ResourceIndexerInterface {
     /**
      * Construct a Zend_Search_Lucene_Document object out of a forum db row.
      *
-     * @global string $urlServer
-     * @param  object  $forum
+     * @param object $forum
      * @return Zend_Search_Lucene_Document
+     * @global string $urlServer
      */
     protected function makeDoc($forum) {
         global $urlServer;
@@ -46,7 +46,7 @@ class ForumIndexer extends AbstractIndexer implements ResourceIndexerInterface {
         $doc->addField(Zend_Search_Lucene_Field::Text('title', Indexer::phonetics($forum->name), $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Text('content', Indexer::phonetics($forum->desc), $encoding));
         $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', $urlServer . 'modules/forum/viewforum.php?course=' . course_id_to_code($forum->course_id)
-                        . '&amp;forum=' . $forum->id, $encoding));
+            . '&amp;forum=' . $forum->id, $encoding));
 
         return $doc;
     }
@@ -54,7 +54,7 @@ class ForumIndexer extends AbstractIndexer implements ResourceIndexerInterface {
     /**
      * Fetch a Forum from DB.
      *
-     * @param  int $forumId
+     * @param int $forumId
      * @return object - the mysql fetched row
      */
     protected function fetch($forumId) {
@@ -71,7 +71,7 @@ class ForumIndexer extends AbstractIndexer implements ResourceIndexerInterface {
     /**
      * Get Term object for locating a unique single forum.
      *
-     * @param  int $forumId - the forum id
+     * @param int $forumId - the forum id
      * @return Zend_Search_Lucene_Index_Term
      */
     protected function getTermForSingleResource($forumId) {
@@ -102,7 +102,7 @@ class ForumIndexer extends AbstractIndexer implements ResourceIndexerInterface {
     /**
      * Get Lucene query input string for locating all forums belonging to a given course.
      *
-     * @param  int $courseId - the given course id
+     * @param int $courseId - the given course id
      * @return string        - the string that can be used as Lucene query input
      */
     protected function getQueryInputByCourse($courseId) {
@@ -112,7 +112,7 @@ class ForumIndexer extends AbstractIndexer implements ResourceIndexerInterface {
     /**
      * Get all forums belonging to a given course from DB.
      *
-     * @param  int   $courseId - the given course id
+     * @param int $courseId - the given course id
      * @return array           - array of DB fetched anonymous objects with property names that correspond to the column names
      */
     protected function getCourseResourcesFromDB($courseId) {

@@ -23,7 +23,7 @@ $require_editor = true;
 include '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
 require_once 'include/log.class.php';
-require_once 'modules/search/indexer.class.php';
+require_once 'modules/search/lucene/indexer.class.php';
 require_once 'modules/tags/moduleElement.class.php';
 require_once 'include/action.php';
 

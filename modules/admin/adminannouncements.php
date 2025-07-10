@@ -24,7 +24,7 @@ $helpTopic = 'system_settings';
 $helpSubTopic = 'admin_announcements';
 
 require_once '../../include/baseTheme.php';
-require_once 'modules/search/indexer.class.php';
+require_once 'modules/search/lucene/indexer.class.php';
 require_once 'include/log.class.php';
 
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);

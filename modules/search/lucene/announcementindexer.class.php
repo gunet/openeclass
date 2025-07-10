@@ -30,9 +30,9 @@ class AnnouncementIndexer extends AbstractIndexer implements ResourceIndexerInte
     /**
      * Construct a Zend_Search_Lucene_Document object out of an announcement db row.
      *
-     * @global string $urlServer
-     * @param  object  $announce
+     * @param object $announce
      * @return Zend_Search_Lucene_Document
+     * @global string $urlServer
      */
     protected function makeDoc($announce) {
         global $urlServer;
@@ -54,7 +54,7 @@ class AnnouncementIndexer extends AbstractIndexer implements ResourceIndexerInte
     /**
      * Fetch an Announcement from DB.
      *
-     * @param  int $announceId
+     * @param int $announceId
      * @return object - the mysql fetched row
      */
     protected function fetch($announceId) {
@@ -69,7 +69,7 @@ class AnnouncementIndexer extends AbstractIndexer implements ResourceIndexerInte
     /**
      * Get Term object for locating a unique single announcement.
      *
-     * @param  int $announceId - the announcement id
+     * @param int $announceId - the announcement id
      * @return Zend_Search_Lucene_Index_Term
      */
     protected function getTermForSingleResource($announceId) {
@@ -97,7 +97,7 @@ class AnnouncementIndexer extends AbstractIndexer implements ResourceIndexerInte
     /**
      * Get Lucene query input string for locating all announcements belonging to a given course.
      *
-     * @param  int $courseId - the given course id
+     * @param int $courseId - the given course id
      * @return string        - the string that can be used as Lucene query input
      */
     protected function getQueryInputByCourse($courseId) {
@@ -107,7 +107,7 @@ class AnnouncementIndexer extends AbstractIndexer implements ResourceIndexerInte
     /**
      * Get all announcements belonging to a given course from DB.
      *
-     * @param  int   $courseId - the given course id
+     * @param int $courseId - the given course id
      * @return array           - array of DB fetched anonymous objects with property names that correspond to the column names
      */
     protected function getCourseResourcesFromDB($courseId) {

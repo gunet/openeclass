@@ -81,7 +81,7 @@ if ($lastadminloginres && $lastadminloginres->when) {
 }
 // INDEX RELATED
 if (get_config('enable_indexing')) {
-    require_once 'modules/search/indexer.class.php';
+    require_once 'modules/search/lucene/indexer.class.php';
     $idx = new Indexer();
 
     $data['numDocs'] = 0;

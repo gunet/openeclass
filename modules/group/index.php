@@ -38,7 +38,7 @@ require_once 'modules/wiki/lib/class.wiki.php';
 require_once 'modules/wiki/lib/class.wikipage.php';
 require_once 'modules/wiki/lib/class.wikistore.php';
 /* ***Required classes for forum deletion*** */
-require_once 'modules/search/indexer.class.php';
+require_once 'modules/search/lucene/indexer.class.php';
 /* * ** The following is added for statistics purposes ** */
 require_once 'include/action.php';
 $action = new action();

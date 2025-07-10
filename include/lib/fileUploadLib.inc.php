@@ -37,7 +37,7 @@
   ==============================================================================
  */
 
-require_once 'modules/search/indexer.class.php';
+require_once 'modules/search/lucene/indexer.class.php';
 
 /*
  * replaces some dangerous character in a string for HTML use

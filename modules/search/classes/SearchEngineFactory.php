@@ -20,15 +20,15 @@
 
 require_once 'SearchEngineInterface.php';
 require_once 'SolrSearchEngine.php';
-require_once 'NativeSearchEngine.php';
+require_once 'LuceneSearchEngine.php';
 
 class SearchEngineFactory {
 
     public static function create(): SearchEngineInterface {
-        $engine = get_config('search_engine', 'native');
+        $engine = get_config('search_engine', 'lucene');
         return $engine === 'solr'
             ? new SolrSearchEngine()
-            : new NativeSearchEngine();
+            : new LuceneSearchEngine();
     }
 
 }

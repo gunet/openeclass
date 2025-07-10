@@ -86,7 +86,7 @@ if (isset($_GET['delete_image'])) {
     $db_vars[] = $course_id;
     Database::get()->query("UPDATE course SET description = ?s, home_layout = ?d$extra_sql WHERE id = ?d", $db_vars);
     // update index
-    require_once 'modules/search/indexer.class.php';
+    require_once 'modules/search/lucene/indexer.class.php';
     Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
     header("Location: {$urlAppend}courses/$course_code/");
     exit;

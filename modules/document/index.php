@@ -45,7 +45,7 @@ require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 require_once 'include/lib/mediaresource.factory.php';
-require_once 'modules/search/indexer.class.php';
+require_once 'modules/search/lucene/indexer.class.php';
 require_once 'include/log.class.php';
 require_once 'modules/drives/clouddrive.php';
 require_once 'include/course_settings.php';

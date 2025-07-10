@@ -225,7 +225,7 @@ if (isset($_POST['submit'])) {
 
     // indexing was previously on, but now set to off, need to empty it
     if (get_config('enable_indexing') && !$enable_indexing) {
-        require_once 'modules/search/indexer.class.php';
+        require_once 'modules/search/lucene/indexer.class.php';
         Indexer::deleteAll();
     }
     // update table `config`

@@ -39,7 +39,7 @@ function process_actions() {
         $langEditChange, $langViMod;
 
     // update index and refresh course metadata
-    require_once 'modules/search/indexer.class.php';
+    require_once 'modules/search/lucene/indexer.class.php';
     require_once 'modules/course_metadata/CourseXML.php';
     if (isset($_REQUEST['edit'])) {
         $res_id = intval($_GET['edit']);
@@ -202,7 +202,7 @@ function handle_unit_info_edit() {
         }
     }
     // update index
-    require_once 'modules/search/indexer.class.php';
+    require_once 'modules/search/lucene/indexer.class.php';
     Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNIT, $unit_id);
     Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
     // refresh course metadata

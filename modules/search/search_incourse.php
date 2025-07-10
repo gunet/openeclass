@@ -28,19 +28,19 @@
 $require_current_course = TRUE;
 $guest_allowed = true;
 require_once '../../include/baseTheme.php';
-require_once 'indexer.class.php';
-require_once 'announcementindexer.class.php';
-require_once 'agendaindexer.class.php';
-require_once 'linkindexer.class.php';
-require_once 'videoindexer.class.php';
-require_once 'videolinkindexer.class.php';
-require_once 'exerciseindexer.class.php';
-require_once 'forumindexer.class.php';
-require_once 'forumtopicindexer.class.php';
-require_once 'forumpostindexer.class.php';
-require_once 'documentindexer.class.php';
-require_once 'unitindexer.class.php';
-require_once 'unitresourceindexer.class.php';
+require_once 'lucene/indexer.class.php';
+require_once 'lucene/announcementindexer.class.php';
+require_once 'lucene/agendaindexer.class.php';
+require_once 'lucene/linkindexer.class.php';
+require_once 'lucene/videoindexer.class.php';
+require_once 'lucene/videolinkindexer.class.php';
+require_once 'lucene/exerciseindexer.class.php';
+require_once 'lucene/forumindexer.class.php';
+require_once 'lucene/forumtopicindexer.class.php';
+require_once 'lucene/forumpostindexer.class.php';
+require_once 'lucene/documentindexer.class.php';
+require_once 'lucene/unitindexer.class.php';
+require_once 'lucene/unitresourceindexer.class.php';
 
 $pageName = $langSearch;
 

@@ -30,9 +30,9 @@ class NoteIndexer extends AbstractIndexer implements ResourceIndexerInterface {
     /**
      * Construct a Zend_Search_Lucene_Document object out of a note db row.
      *
-     * @global string $urlServer
-     * @param  object  $note
+     * @param object $note
      * @return Zend_Search_Lucene_Document
+     * @global string $urlServer
      */
     protected function makeDoc($note) {
         global $urlServer;
@@ -43,7 +43,7 @@ class NoteIndexer extends AbstractIndexer implements ResourceIndexerInterface {
         $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $note->id, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Keyword('doctype', 'note', $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Keyword('userid', $note->user_id, $encoding));
-        if(isset($note->course_id)){
+        if (isset($note->course_id)) {
             $doc->addField(Zend_Search_Lucene_Field::Keyword('courseid', $note->course_id, $encoding));
         }
         $doc->addField(Zend_Search_Lucene_Field::Text('title', Indexer::phonetics($note->title), $encoding));
@@ -56,7 +56,7 @@ class NoteIndexer extends AbstractIndexer implements ResourceIndexerInterface {
     /**
      * Fetch a Note from DB.
      *
-     * @param  int $noteId
+     * @param int $noteId
      * @return object - the mysql fetched row
      */
     protected function fetch($noteId) {
@@ -65,7 +65,7 @@ class NoteIndexer extends AbstractIndexer implements ResourceIndexerInterface {
             return null;
         }
 
-        if(!is_null($note->reference_obj_course)) {
+        if (!is_null($note->reference_obj_course)) {
             $note->course_id = intval($note->reference_obj_course);
         }
 
@@ -75,7 +75,7 @@ class NoteIndexer extends AbstractIndexer implements ResourceIndexerInterface {
     /**
      * Get Term object for locating a unique single note.
      *
-     * @param  int $noteId - the note id
+     * @param int $noteId - the note id
      * @return Zend_Search_Lucene_Index_Term
      */
     protected function getTermForSingleResource($noteId) {
@@ -103,7 +103,7 @@ class NoteIndexer extends AbstractIndexer implements ResourceIndexerInterface {
     /**
      * Get Lucene query input string for locating all notes belonging to a given course.
      *
-     * @param  int $courseId - the given course id
+     * @param int $courseId - the given course id
      * @return string        - the string that can be used as Lucene query input
      */
     protected function getQueryInputByCourse($courseId) {
@@ -113,7 +113,7 @@ class NoteIndexer extends AbstractIndexer implements ResourceIndexerInterface {
     /**
      * Get all notes belonging to a given course from DB.
      *
-     * @param  int   $courseId - the given course id
+     * @param int $courseId - the given course id
      * @return array           - array of DB fetched anonymous objects with property names that correspond to the column names
      */
     protected function getCourseResourcesFromDB($courseId) {
@@ -123,7 +123,7 @@ class NoteIndexer extends AbstractIndexer implements ResourceIndexerInterface {
     /**
      * Store all Notes written by a user.
      *
-     * @param int     $userId
+     * @param int $userId
      * @param boolean $optimize
      */
     public function storeByUser($userId, $optimize = false) {
@@ -146,7 +146,7 @@ class NoteIndexer extends AbstractIndexer implements ResourceIndexerInterface {
     /**
      * Remove all Notes written by a user.
      *
-     * @param int     $userId
+     * @param int $userId
      * @param boolean $optimize
      */
     public function removeByUser($userId, $optimize = false) {
@@ -165,13 +165,13 @@ class NoteIndexer extends AbstractIndexer implements ResourceIndexerInterface {
     /**
      * Build a Lucene Query.
      *
-     * @param  array   $data      - The data (usually $_POST), needs specific array keys
-     * @param  boolean $anonymous - whether we build query for anonymous user access or not
+     * @param array $data - The data (usually $_POST), needs specific array keys
+     * @param boolean $anonymous - whether we build query for anonymous user access or not
      * @return string             - the returned query string
      */
     public static function buildQuery($data, $anonymous = true) {
         if (isset($data['search_terms']) && !empty($data['search_terms']) &&
-                isset($data['user_id']) && !empty($data['user_id'])) {
+            isset($data['user_id']) && !empty($data['user_id'])) {
             $terms = explode(' ', Indexer::filterQuery($data['search_terms']));
             $queryStr = '(';
             foreach ($terms as $term) {

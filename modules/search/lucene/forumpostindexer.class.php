@@ -30,9 +30,9 @@ class ForumPostIndexer extends AbstractIndexer implements ResourceIndexerInterfa
     /**
      * Construct a Zend_Search_Lucene_Document object out of a forum post row.
      *
-     * @global string $urlServer
-     * @param  object  $fpost
+     * @param object $fpost
      * @return Zend_Search_Lucene_Document
+     * @global string $urlServer
      */
     protected function makeDoc($fpost) {
         global $urlServer;
@@ -46,8 +46,8 @@ class ForumPostIndexer extends AbstractIndexer implements ResourceIndexerInterfa
         $doc->addField(Zend_Search_Lucene_Field::Keyword('topicid', $fpost->topic_id, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Text('content', Indexer::phonetics(strip_tags($fpost->post_text)), $encoding));
         $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', $urlServer . 'modules/forum/viewtopic.php?course=' . course_id_to_code($fpost->course_id)
-                        . '&amp;topic=' . intval($fpost->topic_id)
-                        . '&amp;forum=' . intval($fpost->forum_id), $encoding));
+            . '&amp;topic=' . intval($fpost->topic_id)
+            . '&amp;forum=' . intval($fpost->forum_id), $encoding));
 
         return $doc;
     }
@@ -55,7 +55,7 @@ class ForumPostIndexer extends AbstractIndexer implements ResourceIndexerInterfa
     /**
      * Fetch a Forum Post from DB.
      *
-     * @param  int    $fpostId - the forum post id
+     * @param int $fpostId - the forum post id
      * @return object          - the DB fetched anonymous object
      */
     protected function fetch($fpostId) {
@@ -74,7 +74,7 @@ class ForumPostIndexer extends AbstractIndexer implements ResourceIndexerInterfa
     /**
      * Get Term object for locating a unique single forum post.
      *
-     * @param  int $fpostId - the forum post id
+     * @param int $fpostId - the forum post id
      * @return Zend_Search_Lucene_Index_Term
      */
     protected function getTermForSingleResource($fpostId) {
@@ -106,7 +106,7 @@ class ForumPostIndexer extends AbstractIndexer implements ResourceIndexerInterfa
     /**
      * Get Lucene query input string for locating all forum posts belonging to a given course.
      *
-     * @param  int $courseId - the given course id
+     * @param int $courseId - the given course id
      * @return string        - the string that can be used as Lucene query input
      */
     protected function getQueryInputByCourse($courseId) {
@@ -116,7 +116,7 @@ class ForumPostIndexer extends AbstractIndexer implements ResourceIndexerInterfa
     /**
      * Get all forum posts belonging to a given course from DB.
      *
-     * @param  int   $courseId - the given course id
+     * @param int $courseId - the given course id
      * @return array           - array of DB fetched anonymous objects with property names that correspond to the column names
      */
     protected function getCourseResourcesFromDB($courseId) {
@@ -130,7 +130,7 @@ class ForumPostIndexer extends AbstractIndexer implements ResourceIndexerInterfa
     /**
      * Remove all Forum Posts belonging to a Forum Topic.
      *
-     * @param int     $topicId
+     * @param int $topicId
      * @param boolean $optimize
      */
     public function removeByTopic($topicId, $optimize = false) {

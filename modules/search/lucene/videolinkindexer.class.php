@@ -30,9 +30,9 @@ class VideolinkIndexer extends AbstractIndexer implements ResourceIndexerInterfa
     /**
      * Construct a Zend_Search_Lucene_Document object out of a VideoLink db row.
      *
-     * @global string $urlServer
-     * @param  object  $vlink
+     * @param object $vlink
      * @return Zend_Search_Lucene_Document
+     * @global string $urlServer
      */
     protected function makeDoc($vlink) {
         $encoding = 'utf-8';
@@ -52,7 +52,7 @@ class VideolinkIndexer extends AbstractIndexer implements ResourceIndexerInterfa
     /**
      * Fetch a VideoLink from DB.
      *
-     * @param  int $vlinkId
+     * @param int $vlinkId
      * @return object - the mysql fetched row
      */
     protected function fetch($vlinkId) {
@@ -68,7 +68,7 @@ class VideolinkIndexer extends AbstractIndexer implements ResourceIndexerInterfa
     /**
      * Get Term object for locating a unique single videolink.
      *
-     * @param  int $vlinkId - the videolink id
+     * @param int $vlinkId - the videolink id
      * @return Zend_Search_Lucene_Index_Term
      */
     protected function getTermForSingleResource($vlinkId) {
@@ -96,7 +96,7 @@ class VideolinkIndexer extends AbstractIndexer implements ResourceIndexerInterfa
     /**
      * Get Lucene query input string for locating all videolinks belonging to a given course.
      *
-     * @param  int $courseId - the given course id
+     * @param int $courseId - the given course id
      * @return string        - the string that can be used as Lucene query input
      */
     protected function getQueryInputByCourse($courseId) {
@@ -106,7 +106,7 @@ class VideolinkIndexer extends AbstractIndexer implements ResourceIndexerInterfa
     /**
      * Get all videolinks belonging to a given course from DB.
      *
-     * @param  int   $courseId - the given course id
+     * @param int $courseId - the given course id
      * @return array           - array of DB fetched anonymous objects with property names that correspond to the column names
      */
     protected function getCourseResourcesFromDB($courseId) {

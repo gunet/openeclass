@@ -25,7 +25,7 @@ $require_help = FALSE;
 $require_editor = TRUE;
 require_once '../../include/baseTheme.php';
 require_once 'functions.php';
-require_once 'modules/search/indexer.class.php';
+require_once 'modules/search/lucene/indexer.class.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
 
 load_js('tools.js');

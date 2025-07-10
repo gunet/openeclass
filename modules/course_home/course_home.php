@@ -106,7 +106,7 @@ if ($is_editor and isset($_SERVER['HTTP_X_REQUESTED_WITH']) and strtolower($_SER
 // other actions in course unit
 if ($is_editor) {
     // update index and refresh course metadata
-    require_once 'modules/search/indexer.class.php';
+    require_once 'modules/search/lucene/indexer.class.php';
 
     if (isset($_REQUEST['del'])) { // delete course unit
         $id = intval(getDirectReference($_REQUEST['del']));

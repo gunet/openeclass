@@ -20,10 +20,10 @@
 
 require_once 'SearchEngineInterface.php';
 require_once 'SearchResult.php';
-require_once 'modules/search/indexer.class.php';
-require_once 'modules/search/courseindexer.class.php';
+require_once 'modules/search/lucene/indexer.class.php';
+require_once 'modules/search/lucene/courseindexer.class.php';
 
-class NativeSearchEngine implements SearchEngineInterface {
+class LuceneSearchEngine implements SearchEngineInterface {
 
     public function search(array $params): array {
         $idx = new Indexer();

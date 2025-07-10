@@ -20,7 +20,7 @@
 
 $require_admin = true;
 require_once '../../include/baseTheme.php';
-require_once 'modules/search/indexer.class.php';
+require_once 'modules/search/lucene/indexer.class.php';
 header('Content-Type: application/json; charset=utf-8');
 
 // fetch number of courses waiting in index queue

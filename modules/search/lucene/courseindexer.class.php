@@ -30,9 +30,9 @@ class CourseIndexer extends AbstractBaseIndexer implements CourseIndexerInterfac
     /**
      * Construct a Zend_Search_Lucene_Document object out of a course db row.
      *
-     * @global string $urlServer
-     * @param  object  $course
+     * @param object $course
      * @return Zend_Search_Lucene_Document
+     * @global string $urlServer
      */
     protected function makeDoc($course) {
         global $urlServer;
@@ -58,7 +58,7 @@ class CourseIndexer extends AbstractBaseIndexer implements CourseIndexerInterfac
     /**
      * Fetch a Course from DB.
      *
-     * @param  int $courseId
+     * @param int $courseId
      * @return object - the mysql fetched row
      */
     protected function fetch($courseId) {
@@ -133,7 +133,7 @@ class CourseIndexer extends AbstractBaseIndexer implements CourseIndexerInterfac
     /**
      * Get Term object for locating a unique single course.
      *
-     * @param  int $courseId - the course id
+     * @param int $courseId - the course id
      * @return Zend_Search_Lucene_Index_Term
      */
     protected function getTermForSingleResource($courseId) {
@@ -161,7 +161,7 @@ class CourseIndexer extends AbstractBaseIndexer implements CourseIndexerInterfac
     /**
      * Build one or more Lucene Queries.
      *
-     * @param  array   $data      - The data (normally $_POST), needs specific array keys, @see getDetailedSearchForm()
+     * @param array $data - The data (normally $_POST), needs specific array keys, @see getDetailedSearchForm()
      * @return string             - the returned query string
      */
     public static function buildQueries($data) {
@@ -212,11 +212,11 @@ class CourseIndexer extends AbstractBaseIndexer implements CourseIndexerInterfac
     /**
      * Append to the Lucene Query according to data input.
      *
-     * @param  array   $data     - The data (normally coming from $_POST)
-     * @param  string  $key      - $data[key]
-     * @param  string  $queryKey - Lucene Document field key
-     * @param  string  $queryStr - The Lucene Query string
-     * @param  boolean $needsOR  - special flag for appending OR
+     * @param array $data - The data (normally coming from $_POST)
+     * @param string $key - $data[key]
+     * @param string $queryKey - Lucene Document field key
+     * @param string $queryStr - The Lucene Query string
+     * @param boolean $needsOR - special flag for appending OR
      * @return array             - returns the Lucene Query string and the flag for appending OR in an array
      */
     private static function appendQuery($data, $key, $queryKey, $queryStr, $needsOR) {

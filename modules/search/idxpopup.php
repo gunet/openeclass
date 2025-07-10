@@ -23,7 +23,7 @@ require_once '../../include/baseTheme.php';
 load_js('jquery' . JQUERY_VERSION . '.min.js');
 
 if (isset($_GET['reindex'])) {
-    require_once 'modules/search/indexer.class.php';
+    require_once 'modules/search/lucene/indexer.class.php';
     Indexer::deleteAll();
     Database::get()->query("DELETE FROM idx_queue");
     Database::get()->queryFunc("SELECT id FROM course", function($r) {

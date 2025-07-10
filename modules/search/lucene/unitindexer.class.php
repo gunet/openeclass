@@ -30,9 +30,9 @@ class UnitIndexer extends AbstractIndexer implements ResourceIndexerInterface {
     /**
      * Construct a Zend_Search_Lucene_Document object out of a unit db row.
      *
-     * @global string $urlServer
-     * @param  object  $unit
+     * @param object $unit
      * @return Zend_Search_Lucene_Document
+     * @global string $urlServer
      */
     protected function makeDoc($unit) {
         global $urlServer;
@@ -47,7 +47,7 @@ class UnitIndexer extends AbstractIndexer implements ResourceIndexerInterface {
         $doc->addField(Zend_Search_Lucene_Field::Text('content', Indexer::phonetics(strip_tags($unit->comments)), $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Text('visible', $unit->visible, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', $urlServer
-                        . 'modules/units/index.php?course=' . course_id_to_code($unit->course_id) . '&amp;id=' . $unit->id, $encoding));
+            . 'modules/units/index.php?course=' . course_id_to_code($unit->course_id) . '&amp;id=' . $unit->id, $encoding));
 
         return $doc;
     }
@@ -55,7 +55,7 @@ class UnitIndexer extends AbstractIndexer implements ResourceIndexerInterface {
     /**
      * Fetch a Unit from DB.
      *
-     * @param  int $unitId
+     * @param int $unitId
      * @return object - the mysql fetched row
      */
     protected function fetch($unitId) {
@@ -70,7 +70,7 @@ class UnitIndexer extends AbstractIndexer implements ResourceIndexerInterface {
     /**
      * Get Term object for locating a unique single unit.
      *
-     * @param  int $unitId - the unit id
+     * @param int $unitId - the unit id
      * @return Zend_Search_Lucene_Index_Term
      */
     protected function getTermForSingleResource($unitId) {
@@ -98,7 +98,7 @@ class UnitIndexer extends AbstractIndexer implements ResourceIndexerInterface {
     /**
      * Get Lucene query input string for locating all units belonging to a given course.
      *
-     * @param  int $courseId - the given course id
+     * @param int $courseId - the given course id
      * @return string        - the string that can be used as Lucene query input
      */
     protected function getQueryInputByCourse($courseId) {
@@ -108,7 +108,7 @@ class UnitIndexer extends AbstractIndexer implements ResourceIndexerInterface {
     /**
      * Get all units belonging to a given course from DB.
      *
-     * @param  int   $courseId - the given course id
+     * @param int $courseId - the given course id
      * @return array           - array of DB fetched anonymous objects with property names that correspond to the column names
      */
     protected function getCourseResourcesFromDB($courseId) {

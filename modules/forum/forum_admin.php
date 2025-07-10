@@ -31,7 +31,7 @@ require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
 require_once 'include/course_settings.php';
 require_once 'functions.php';
-require_once 'modules/search/indexer.class.php';
+require_once 'modules/search/lucene/indexer.class.php';
 
 $forum_id = isset($_REQUEST['forum_id']) ? intval($_REQUEST['forum_id']) : '';
 $cat_id = isset($_REQUEST['cat_id']) ? intval($_REQUEST['cat_id']) : '';

@@ -34,7 +34,7 @@ include '../../include/baseTheme.php';
 require_once 'modules/group/group_functions.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
-require_once 'modules/search/indexer.class.php';
+require_once 'modules/search/lucene/indexer.class.php';
 
 ModalBoxHelper::loadModalBox();
 /* * ** The following is added for statistics purposes ** */

@@ -25,11 +25,21 @@ class SolrSearchEngine implements SearchEngineInterface {
 
     public function search(array $params): array {
         // Perform Solr query
-        $solrResults = [];
+        // $solrResults = [];
 
-        return array_map(function ($doc) {
-            return new SearchResult($doc['pk'], $doc['pkid'], $doc['doctype'], $doc['visible'], $doc);
-        }, $solrResults);
+        $solrUrl = 'http://localhost:8983/solr/lalakoko_index/select';
+        $query = [
+            'q' => 'title:example',
+            'wt' => 'json'
+        ];
+        $fullUrl = $solrUrl . '?' . http_build_query($query);
+        list($response, $code) = CurlUtil::httpGetRequest($fullUrl);
+        $resp = json_decode($response, false);
+        $hits = $resp->response->docs;
+
+        return array_map(function ($hit) {
+            return new SearchResult("hit->pk", $hit->vid, "hit->doctype", "hit->visible", $hit);
+        }, $hits);
     }
 
 }

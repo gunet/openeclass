@@ -30,7 +30,7 @@ require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'modules/drives/clouddrive.php';
 require_once 'include/action.php';
 require_once 'include/log.class.php';
-require_once 'modules/search/indexer.class.php';
+require_once 'modules/search/lucene/indexer.class.php';
 require_once 'modules/admin/extconfig/externals.php';
 require_once 'modules/admin/extconfig/opendelosapp.php';
 require_once 'delos_functions.php';
