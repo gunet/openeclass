@@ -25,15 +25,17 @@ require_once 'modules/admin/extconfig/aiapp.php';
 require_once 'include/lib/ai/AIProviderFactory.php';
 require_once 'include/lib/ai/services/AIService.php';
 
-$toolName = $langAI;
+$toolName = $langAINode;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'extapp.php', 'name' => $langExtAppConfig);
-$navigation[] = array('url' => 'aimoduleconf.php', 'name' => $langAI);
 
 load_js('select2');
 const AI_KEY_DURATION_TIME = 365*24*60*60; // one year (in seconds)
 
 if (isset($_GET['edit_provider'])) {
+    $toolName = $langAddProvider;
+    $navigation[] = array('url' => 'aimoduleconf.php', 'name' => $langAINode);
+
     $data['existingConfig'] = $existingConfig = Database::get()->querySingle("SELECT * FROM ai_providers WHERE id = ?d", $_GET['edit_provider']);
     $currentModelName = '';
     if ($existingConfig) {
@@ -145,6 +147,8 @@ if (isset($_GET['edit_provider'])) {
     Session::Messages($langAIConfigSaved, 'alert-success');
     redirect_to_home_page('modules/admin/aimoduleconf.php');
 } else if (isset($_GET['add_provider'])) {
+    $toolName = $langAddProvider;
+    $navigation[] = array('url' => 'aimoduleconf.php', 'name' => $langAINode);
 // Get provider display names
     $providerDisplayNames = AIProviderFactory::getProviderDisplayNames();
 
@@ -157,6 +161,8 @@ if (isset($_GET['edit_provider'])) {
     );
     $data['currentModelName'] = $currentModelName = '';
 } else if (isset($_GET['add_service'])) {
+    $toolName = $langAssignAIToModule;
+    $navigation[] = array('url' => 'aimoduleconf.php', 'name' => $langAINode);
     $courses_list = Database::get()->queryArray("SELECT id, code, title FROM course
                                                     WHERE visible != " . COURSE_INACTIVE . "
                                                  ORDER BY title");
@@ -176,6 +182,8 @@ if (isset($_GET['edit_provider'])) {
     $data['provider_model_data'] = $provider_model_data;
     $data['currentModelName'] = $currentModelName = '';
 } else if (isset($_GET['edit_service'])) {
+    $toolName = $langAssignAIToModule;
+    $navigation[] = array('url' => 'aimoduleconf.php', 'name' => $langAINode);
     $data['currentModelName'] = '';
     $data['ai_services'] = AIService::getAIServices();
     $providers_data = Database::get()->queryArray("SELECT id, name, model_name FROM ai_providers WHERE enabled = 1");

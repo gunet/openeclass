@@ -6353,7 +6353,6 @@ $langMsTeamsShortDescription = "Σύνδεση με την υπηρεσία τη
 $langMsTeamsLongDescription = "Σύνδεση με την υπηρεσία τηλεδιάσκεψης Microsoft Teams.";
 $langAIShortDescription = "Υπηρεσία Τ.Ν.";
 $langAILongDescription = "Υπηρεσία Τ.Ν.";
-$langAI = "Ρυθμίσεις Τ.Ν.";
 $langZoomShortDescription = "Σύνδεση με την υπηρεσία τηλεδιάσκεψης Zoom.";
 $langZoomLongDescription = "Σύνδεση με την υπηρεσία τηλεδιάσκεψης Zoom.";
 $langWebexShortDescription = "Σύνδεση με την υπηρεσία τηλεδιάσκεψης Webex.";
@@ -7070,7 +7069,8 @@ $langDisplayRightContentInCPage = "Εμφάνιση ημερολογίου, αν
 $langCoursePage = "Σελίδα $langsOfCourse";
 
 // AI-related language constants - Greek translations
-$langAI = "Κόμβος Τεχνητής Νοημοσύνης";
+$langAI = "AI";
+$langAINode = "Κόμβος Τεχνητής Νοημοσύνης";
 $langAIGenerateQuestions = 'Δημιουργία Ερωτήσεων με χρήση Τ.Ν.';
 $langAIQuestionGeneration = 'Δημιουργία Ερωτήσεων με χρήση Τ.Ν.';
 $langAINotAvailable = 'Η λειτουργία Τ.Ν. δεν είναι διαθέσιμη';
