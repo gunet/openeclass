@@ -6358,6 +6358,9 @@ $langWebexLongDescription = "Σύνδεση με την υπηρεσία τηλ�
 $langJitsiShortDescription = "Το ανοικτό λογισμικό <a href=\"https://jitsi.org/\" target=\"_blank\">Jitsi</a> αποτελεί μια υπηρεσία τηλεδιάσκεψης. Κάντε κλικ στις <a href=\"jitsiconf.php\">Ρυθμίσεις</a> για να την ενεργοποιήσετε. Σημειώστε ότι η υπηρεσία προτείνεται για τηλεδιασκέψεις μέχρι 30 άτομα.";
 $langJitsiLongDescription = "Σύνδεση με την υπηρεσία τηλεδιάσκεψης <em>Jitsi</em> (μέχρι <strong>30</strong> άτομα).";
 $langJitsiUrl = "Μπορείτε να το αλλάξετε αν θέλετε να χρησιμοποιήσετε κάποιον διαφορετικό Jitsi server.";
+$langSolrShortDescription = "Το ανοικτό λογισμικό <a href=\"https://solr.apache.org/\" target=\"_blank\">Solr</a> αποτελεί μια πλατφόρμα αναζήτησης. Κάντε κλικ στις <a href=\"solrconf.php\">Ρυθμίσεις</a> για να την ενεργοποιήσετε.";
+$langSolrLongDescription = "Σύνδεση με την πλατφόρμα αναζήτησης <em>Solr</em>.";
+$langSolrUrl = "Μπορείτε να το αλλάξετε για να δείχνει στη σωστή διεύθυνση της εγκατάστασης Solr.";
 $langWebexUrl = "Μπορείτε να το αλλάξετε αν θέλετε να χρησιμοποιήσετε κάποιον διαφορετικό WebEx server.";
 $langZoomUrl = "Μπορείτε να το αλλάξετε αν θέλετε να χρησιμοποιήσετε κάποιον διαφορετικό Zoom server.";
 $langChooseTCServer = "Επιλογή υπηρεσίας Τηλεσυνεργασίας";

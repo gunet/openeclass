@@ -20,20 +20,36 @@
 
 require_once 'SearchEngineInterface.php';
 require_once 'SearchResult.php';
+require_once 'modules/admin/extconfig/solrapp.php';
 
 class SolrSearchEngine implements SearchEngineInterface {
 
     public function search(array $params): array {
-        // Perform Solr query
-        // $solrResults = [];
+        if (!get_config('ext_solr_enabled')) {
+            return [];
+        }
 
-        $solrUrl = 'http://localhost:8983/solr/lalakoko_index/select';
+        // construct Solr Url for searching
+        $solrUrl = get_config('ext_solr_url', SolrApp::SOLRDEFAULTURL);
+        if ($solrUrl[strlen($solrUrl) - 1] != '/') {
+            $solrUrl .= '/';
+        }
+        $solrUrl .= "select";
+
+        // search parameters
         $query = [
             'q' => 'title:example',
             'wt' => 'json'
         ];
         $fullUrl = $solrUrl . '?' . http_build_query($query);
+
+        // Perform Solr query
         list($response, $code) = CurlUtil::httpGetRequest($fullUrl);
+        if ($code !== 200) {
+            return [];
+        }
+
+        // Handle Solr response
         $resp = json_decode($response, false);
         $hits = $resp->response->docs;
 
