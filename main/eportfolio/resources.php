@@ -17,9 +17,6 @@
  *  * ========================================================================
  *
  */
-define('EPF_VISIBLE_PUBLIC', 1);
-define('EPF_VISIBLE_USERS', 2);
-define('EPF_VISIBLE_PRIVATE', 3);
 
 $require_login = false;
 $guest_allowed = true;

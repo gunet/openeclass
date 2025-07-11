@@ -16,9 +16,6 @@
  *  * ========================================================================
  *
  */
-define('EPF_VISIBLE_PUBLIC', 1);
-define('EPF_VISIBLE_USERS', 2);
-define('EPF_VISIBLE_PRIVATE', 3);
 
 if (isset($_GET['course'])) { //course blog
     $require_current_course = TRUE;
