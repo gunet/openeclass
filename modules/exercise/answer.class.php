@@ -786,5 +786,14 @@ if (!class_exists('Answer')):
             
         }
 
+        /**
+        * 
+        * @author - Nikos Mpalamoutis
+        */
+        public function get_ordering_answers_by_user($qid, $eurid) {
+            $answers = Database::get()->queryArray("SELECT answer,answer_id,weight FROM exercise_answer_record WHERE question_id = ?d AND eurid = ?d", $qid, $eurid);
+            return $answers;
+        }
+
     }
 endif;

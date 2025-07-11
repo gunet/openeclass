@@ -246,6 +246,8 @@ if (isset($_POST['buttonCancel'])) {
     unset($_SESSION['calculatedTemporarySave']);
     unset($_SESSION['changeWildCardAttemptWithRandom']);
     unset($_SESSION['QuestionDisplayed']);
+    unset($_SESSION['OrderingTemporarySave']);
+    unset($_SESSION['OrderingSubsetKeys']);
 
     $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value];
     Database::get()->query("UPDATE exercise_user_record
@@ -341,6 +343,13 @@ if (($exerciseType == MULTIPLE_PAGE_TYPE || isset($_POST['buttonSave'])) && isse
                     }
                 }
                 $_SESSION['calculatedTemporarySave'][$arrKey] = $tempSaveAnsCalc;
+            } elseif ($CurrentQuestion->selectType() == ORDERING) {
+                if (!empty($_POST['choice'][$arrKey]) && !empty($_POST['subsetKeys'][$arrKey])) {
+                    $arr = json_decode($_POST['choice'][$arrKey], true);
+                    $arr2 = json_decode($_POST['subsetKeys'][$arrKey], true);
+                    $_SESSION['OrderingTemporarySave'][$arrKey] = $arr;
+                    $_SESSION['OrderingSubsetKeys'][$arrKey] = $arr2;
+                }
             }
         }
     }
@@ -611,6 +620,8 @@ if (isset($_POST['formSent'])) {
         unset($_SESSION['calculatedTemporarySave']);
         unset($_SESSION['changeWildCardAttemptWithRandom']);
         unset($_SESSION['QuestionDisplayed']);
+        unset($_SESSION['OrderingTemporarySave']);
+        unset($_SESSION['OrderingSubsetKeys']);
 
         if (isset($_POST['secsRemaining'])) {
             $secs_remaining = $_POST['secsRemaining'];
@@ -753,7 +764,7 @@ foreach ($questionList as $k => $q_id) {
     $t_question = new Question();
     $t_question->read($q_id);
     $questions[$q_id] = $t_question;
-    if (($t_question->selectType() == UNIQUE_ANSWER or $t_question->selectType() == MULTIPLE_ANSWER or $t_question->selectType() == TRUE_FALSE or $t_question->selectType() == CALCULATED)
+    if (($t_question->selectType() == UNIQUE_ANSWER or $t_question->selectType() == MULTIPLE_ANSWER or $t_question->selectType() == TRUE_FALSE or $t_question->selectType() == CALCULATED or $t_question->selectType() == ORDERING)
         and array_key_exists($q_id, $exerciseResult) and $exerciseResult[$q_id] != 0) {
         $answered = true;
         if ($t_question->selectType() == CALCULATED && $exerciseResult[$q_id] == '') { // This question is calculated type with unique answer as text and the user has not answered it.

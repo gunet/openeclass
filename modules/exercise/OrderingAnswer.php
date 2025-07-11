@@ -106,58 +106,88 @@ class OrderingAnswer extends \QuestionType
         }
 
         $randomKeys = array_keys($ordering_answer);
-        if (isset($itemsSelectionType) && $itemsSelectionType > 1 && isset($sizeOfSubset) && $sizeOfSubset >= 2) {
-            $minKey = min($randomKeys);
-            $maxKey = max($randomKeys);
-            $range = array_combine(range($minKey, $maxKey), range($minKey, $maxKey));
-            if ($itemsSelectionType == 2) {
-                $randomKeys = array_rand($range, $sizeOfSubset);
-            } elseif ($itemsSelectionType == 3) {
-                $maxStart = $maxKey - $sizeOfSubset + 1;
-                $start = rand($minKey, $maxStart);
-                $randomKeys = range($start, $start + $sizeOfSubset - 1);
-            }
-        }
+        if (!isset($_SESSION['OrderingTemporarySave'][$questionId]) && !isset($_SESSION['OrderingSubsetKeys'][$questionId])) {
 
-        $fullRange = range(1, $countOrderingAnswers);
-        if (isset($itemsSelectionType) && $itemsSelectionType == 1) {
-            shuffle($fullRange); // Shuffle all items
-        } elseif (isset($itemsSelectionType) && $itemsSelectionType == 3) {
-            $positions = [];
-            foreach ($fullRange as $index => $value) {
-                if (in_array($value, $randomKeys)) {
-                    $positions[] = $index; // store index positions
+            if (isset($itemsSelectionType) && $itemsSelectionType > 1 && isset($sizeOfSubset) && $sizeOfSubset >= 2) {
+                $minKey = min($randomKeys);
+                $maxKey = max($randomKeys);
+                $range = array_combine(range($minKey, $maxKey), range($minKey, $maxKey));
+                if ($itemsSelectionType == 2) {
+                    $randomKeys = array_rand($range, $sizeOfSubset);
+                } elseif ($itemsSelectionType == 3) {
+                    $maxStart = $maxKey - $sizeOfSubset + 1;
+                    $start = rand($minKey, $maxStart);
+                    $randomKeys = range($start, $start + $sizeOfSubset - 1);
                 }
             }
-            // Shuffle the subset
-            shuffle($randomKeys);
-            foreach ($positions as $i => $pos) {
-                $fullRange[$pos] = $randomKeys[$i];
+
+            $fullRange = range(1, $countOrderingAnswers);
+            if (isset($itemsSelectionType) && $itemsSelectionType == 1) {
+                shuffle($fullRange); // Shuffle all items
+            } elseif (isset($itemsSelectionType) && $itemsSelectionType == 2) {
+                shuffle($randomKeys);
+                $sizeRandomKeys = count($randomKeys);
+                for ($i = 0; $i < $sizeRandomKeys; $i++) {
+                    if ($i < $sizeRandomKeys - 1) {
+                        $fullRangeKey = array_search($randomKeys[$i], $fullRange);
+                        $fullRangeNextKey = array_search($randomKeys[$i+1], $fullRange);
+                        $tmpValOfKey = $fullRange[$fullRangeKey];
+                        $fullRange[$fullRangeKey] = $fullRange[$fullRangeNextKey];
+                        $fullRange[$fullRangeNextKey] = $tmpValOfKey;
+                    }
+                }
+            } elseif (isset($itemsSelectionType) && $itemsSelectionType == 3) {
+                $positions = [];
+                foreach ($fullRange as $index => $value) {
+                    if (in_array($value, $randomKeys)) {
+                        $positions[] = $index; // store index positions
+                    }
+                }
+                // Shuffle the subset
+                shuffle($randomKeys);
+                foreach ($positions as $i => $pos) {
+                    $fullRange[$pos] = $randomKeys[$i];
+                }
             }
+
+        } else { // FullRange will change after temporary save or prev-next navigation
+
+            $fullRange = [];
+            $arr = $_SESSION['OrderingTemporarySave'][$questionId];
+            $randomKeys = $_SESSION['OrderingSubsetKeys'][$questionId];
+            foreach ($arr as $v) {
+                if (!empty($v)) {
+                    $fullRange[] = array_search($v, $ordering_answer);
+                }
+            }
+
         }
+
+        $jsonRandomKeys = json_encode($randomKeys);
         $html_content .= "  <div class='{$displayItems}' id='CardList_{$questionId}'>";
         foreach ($fullRange as $i) {
-            $displayCard = 'd-block';
+            $class = '';
+            $icon = 'fa-arrows';
             $value = $ordering_answer[$i];
+            $style = '';
+            $bgColor = '';
             if (!in_array($i, $randomKeys)) {
-                $displayCard = 'd-none';
+                $class = 'bg-light';
+                $icon = '';
             }
-            $html_content .= "  <div class='draggable-item $displayCard' data-value='{$value}'>
-                                    <div class='card panelCard card-default p-2 h-100'>
-                                        <div class='card-body p-0'>
-                                            <div class='d-flex justify-content-between align-items-center gap-3'>
-                                                <p class='text-nowrap'>$value</p>
-                                                <span class='reorder-btn'>
-                                                    <span class='fa fa-arrows' data-bs-toggle='tooltip' data-bs-placement='top' title='' style='cursor: grab;'></span>
-                                                </span>
-                                            </div>
-                                        </div>
+            $html_content .= "  <div class='draggable-item $class border-card p-3' data-value='{$value}' data-position='{$i}'>
+                                    <div class='d-flex justify-content-between align-items-center gap-3'>
+                                        <p class='text-nowrap'>$value</p>
+                                        <span class='reorder-btn'>
+                                            <span class='fa $icon' data-bs-toggle='tooltip' data-bs-placement='top' title='' style='cursor: grab;'></span>
+                                        </span>
                                     </div>
                                 </div>";
             
         }
         $html_content .= "  </div>";
         $html_content .= "<input type='hidden' id='orderingResponses_{$questionId}' name='choice[$questionId]'>";
+        $html_content .= "<input type='hidden' name='subsetKeys[$questionId]' value='{$jsonRandomKeys}'>";
         
         return $html_content;
     }
@@ -165,14 +195,51 @@ class OrderingAnswer extends \QuestionType
     public function QuestionResult($choice, $eurid, $regrade, $extra_type = ''): string
     {
 
-        global $langSelect, $langCorrectS, $langIncorrectS, $questionScore, $langYourOwnAnswerIs;
+        global $langSelect, $langCorrectS, $langIncorrectS, $questionScore, $langYourOwnAnswerIs, $langCorrectOrdering;
 
         $html_content = '';
 
         $questionId = $this->answer_object->getQuestionId();
-
         $nbrAnswers = $this->answer_object->selectNbrAnswers();
+        $ordering_answers = $this->answer_object->get_ordering_answers();
+        $answersByUser = $this->answer_object->get_ordering_answers_by_user($questionId, $eurid);
 
+        $arr = [];
+        $arrGrade = [];
+        $loop = 1;
+        foreach ($answersByUser as $an) {
+            $arr[$loop] = $an->answer;
+            $arrGrade[$loop] = $an->weight;
+            $loop++;
+        }
+
+        if (count($ordering_answers) == count($arr) && count($arr) == count($arrGrade)) {
+            for ($i = 1; $i <= count($ordering_answers); $i++) {
+                if ($ordering_answers[$i] != $arr[$i]) {
+                    $arr[$i] = "<span class='text-danger TextBold'><s>" . $arr[$i] . "</s></span>";
+                    if ($arrGrade[$i] < 0) {
+                        $questionScore -= $arrGrade[$i];
+                        $grade = $arrGrade[$i];
+                    }
+                } else {
+                    $arr[$i] = "<span class='text-success TextBold'>" . $arr[$i] . "</span>";
+                    $questionScore += $arrGrade[$i];
+                    $grade = $arrGrade[$i];
+                }
+                if ($regrade) {
+                    Database::get()->query('UPDATE exercise_answer_record
+                            SET weight = ?f
+                            WHERE eurid = ?d AND question_id = ?d AND answer_id = ?d',
+                            $grade, $eurid, $questionId, $arrAnId[$i]);
+                }
+            }
+        }
+
+        $correct = implode(' -> ', $ordering_answers);
+        $str = implode(' -> ', $arr);
+
+        $html_content .= "<tr><td><strong>$langCorrectOrdering</strong> $correct</td></tr>";
+        $html_content .= "<tr><td><strong>$langYourOwnAnswerIs</strong> $str</td></tr>";
 
         return $html_content;
 

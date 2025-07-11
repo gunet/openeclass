@@ -1749,6 +1749,8 @@ $langAnswersDisp = "Display correct answers after exercise end";
 $langAnswersDispLastAttempt = "Display correct answers after last attempt by $langsStudent";
 $langAnswersDispEndDate = "Display correct answers after the exercisei end date";
 $langScoreNotDisp = "Hide scoring after exercise end";
+$langShuffleAnswers = "Display the answers to the questions in random order.";
+$langShuffleAnswersLegend = "only applies to multiple choice questions";
 $langScoreDisp = "Display scoring after exercise end";
 $langScoreDispLastAttempt = "Display score after last attempt of $langsStudent";
 $langScoreDispEndDate = "Display score after exercise's end date";
@@ -1998,6 +2000,7 @@ $langSelectContiguousSubSetOfItems = "Select a contiguous subset of items";
 $langSizeOfSubset = "Size of subset";
 $langFillInTheSizeOfSubset = "Fill in the size of subset.";
 $langTheSizeOfSubsetIsBiggerThanPrAnswers = "The size of the subset is larger than the total number of predefined answers.";
+$langCorrectOrdering = "The correct ordering is: ";
 
 
 $langSeperateCorrectlyTheTypeOfAnswer = "There are no {items} available in the pronunciation or in the answer types. </br>

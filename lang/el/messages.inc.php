@@ -2254,7 +2254,7 @@ $langSelectContiguousSubSetOfItems = "Επιλογή συνεχόμενου υπ
 $langSizeOfSubset = "Μέγεθος υποσυνόλου";
 $langFillInTheSizeOfSubset = "Συμπληρώστε το μέγεθος του υποσυνόλου.";
 $langTheSizeOfSubsetIsBiggerThanPrAnswers = "Το μέγεθος του υποσυνόλου είναι μεγαλύτερο από τον συνολικό αριθμό των προκαθορισμένων απαντήσεων.";
-
+$langCorrectOrdering = "Η σωστή ταξινόμηση είναι: ";
 
 
 // answer_admin.php
