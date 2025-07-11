@@ -220,9 +220,13 @@ if ($userdata) {
                                     }
                                 }
                                 $data = array('title' => $post->title, 'content' => $post->content, 'timestamp' => $post->time);
-
-                                Database::get()->query("INSERT INTO eportfolio_resource (user_id,resource_id,resource_type,course_id,course_title,data)
-                                        VALUES (?d,?d,?s,?d,?s,?s)", $uid,$rid,'blog',$post->course_id,$course_title,serialize($data));
+                                if (isset($_POST['visibility'])) {
+                                    $visibility = intval($_POST['visibility']);
+                                } else {
+                                    $visibility = EPF_VISIBLE_PUBLIC;
+                                }
+                                Database::get()->query("INSERT INTO eportfolio_resource (user_id,resource_id,resource_type,course_id,course_title,data,visibility)
+                                        VALUES (?d,?d,?s,?d,?s,?s,?d)", $uid,$rid,'blog',$post->course_id,$course_title,serialize($data),$visibility);
                                 Session::flash('message', $langePortfolioResourceAdded);
                                 Session::flash('alert-class', 'alert-success');
                                 $tool_content .= "
