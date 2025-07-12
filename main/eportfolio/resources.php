@@ -753,7 +753,7 @@ if ($userdata) {
                       <div class="modal-content">
                   
                         <div class="modal-header">
-                          <h5 class="modal-title" id="work_submissionModalLabel_'.$submission->resource_id.'">'.$langePortfolioFieldsVisibilitySettings.' - '.$filename.'</h5>
+                          <h5 class="modal-title" id="work_submissionModalLabel_'.$submission->resource_id.'">'.$langePortfolioFieldsVisibilitySettings.' - '.q($data['title']).'</h5>
                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="'.$langClose.'"></button>
                         </div>
                   
