@@ -33,6 +33,47 @@ $toolName = $langPortfolio;
 $pageName = $langMyCertificates;
 $content = false;
 
+if (get_config('eportfolio_enable')) {
+    $head_content .= 
+        '<script>
+            $(document).on(\'click\', \'a.list-group-item[href*="resources.php?token="]\', function(e) {
+                e.preventDefault();
+
+                const href = $(this).attr(\'href\');
+                const url = new URL(href, window.location.origin);
+                const rid = url.searchParams.get(\'rid\');
+
+                if (href.includes("my_certificates")) {
+                    const modalId = `modal_certificate_${rid}`;
+                    const modalElement = document.getElementById(modalId);
+
+                    if (modalElement) {
+                        const Modal = new bootstrap.Modal(modalElement);
+                        Modal.show();
+
+                        const formSelector = `#vis_form_certificate_${rid}`;
+                        $(formSelector).attr(\'action\', href);
+                    } else {
+                        console.warn(\'Certificate Modal with ID\', modalId, \'not found\');
+                    }
+                } else if (href.includes("my_badges")) {
+                    const modalId = `modal_badge_${rid}`;
+                    const modalElement = document.getElementById(modalId);
+
+                    if (modalElement) {
+                        const Modal = new bootstrap.Modal(modalElement);
+                        Modal.show();
+
+                        const formSelector = `#vis_form_badge_${rid}`;
+                        $(formSelector).attr(\'action\', href);
+                    } else {
+                        console.warn(\'Modal with ID\', modalId, \'not found\');
+                    }
+                }
+            });
+        </script>';
+}
+
 $table_content = '';
 $courses = Database::get()->queryArray('SELECT course.id course_id, code, title
                 FROM course, course_user, user, course_module
@@ -55,8 +96,39 @@ if (count($courses) > 0) {
                                         . "WHERE user_fullname = ?s", uid_to_name($uid, 'fullname'));
     if (count($sql) > 0) {
         foreach ($sql as $data) {
+
+            if (get_config('eportfolio_enable')) {
+                $certificate_modal .= '<div class="modal fade" id="modal_certificate_'.$data->cert_id.'" tabindex="-1" aria-labelledby="certificateModalLabel_'.$data->cert_id.'" aria-hidden="true">
+                    <div class="modal-dialog">
+                    <div class="modal-content">
+                
+                        <div class="modal-header">
+                        <h5 class="modal-title" id="certificateModalLabel_'.$data->cert_id.'">'.$langePortfolioFieldsVisibilitySettings.' - '.$data->cert_title.'</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="'.$langClose.'"></button>
+                        </div>
+                
+                        <div class="modal-body">
+                        <form id="vis_form_certificate_'.$data->cert_id.'" name="vis_form_certificate_'.$data->cert_id.'" action="" method="post">
+                            <div class="mb-3">
+                                <select class="form-select" name="visibility">
+                                <option value="'.EPF_VISIBLE_PUBLIC.'">'.$langPublicePortfolioField.'</option>
+                                <option value="'.EPF_VISIBLE_USERS.'">'.$langOpenToRegisteredUsers.'</option>
+                                <option value="'.EPF_VISIBLE_PRIVATE.'">'.$langProfileInfoPrivate.'</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">'.$langSubmit.'</button>
+                        </form>
+                        </div>
+                
+                    </div>
+                    </div>
+                </div>';
+            } else {
+                $certificate_modal = '';
+            }
+
                 $icon_content = "<span style='padding-left: 5px;' class='fa fa-check-circle'></span>";
-                $table_content .= "<tr><td>" . $data->course_title . " ($data->cert_title)</td>
+                $table_content .= "<tr><td>" . $data->course_title . " ($data->cert_title) $certificate_modal</td>
                     <td>
                         <div class='d-flex justify-content-between gap-5'>
                             <div><a href= '{$urlServer}main/out.php?i=$data->identifier'>" . "100%" . "</a>" . $icon_content ."</div>
@@ -135,7 +207,38 @@ if (count($courses) > 0) {
                     $icon_content = "<span style='padding-left: 5px;' class='fa fa-check-circle'></span>";
                     $invisible = '';
                 }
-                $table_content .= "<tr class='$invisible'><td>" . $course1->title . " ($badge->title)</td>
+
+                if (get_config('eportfolio_enable')) {
+                    $badge_modal .= '<div class="modal fade" id="modal_badge_'.$badge->badge.'" tabindex="-1" aria-labelledby="badgeModalLabel_'.$badge->badge.'" aria-hidden="true">
+                        <div class="modal-dialog">
+                        <div class="modal-content">
+                    
+                            <div class="modal-header">
+                            <h5 class="modal-title" id="badgeModalLabel_'.$badge->badge.'">'.$langePortfolioFieldsVisibilitySettings.' - '.$badge->title.'</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="'.$langClose.'"></button>
+                            </div>
+                    
+                            <div class="modal-body">
+                            <form id="vis_form_badge_'.$badge->badge.'" name="vis_form_badge_'.$badge->badge.'" action="" method="post">
+                                <div class="mb-3">
+                                    <select class="form-select" name="visibility">
+                                    <option value="'.EPF_VISIBLE_PUBLIC.'">'.$langPublicePortfolioField.'</option>
+                                    <option value="'.EPF_VISIBLE_USERS.'">'.$langOpenToRegisteredUsers.'</option>
+                                    <option value="'.EPF_VISIBLE_PRIVATE.'">'.$langProfileInfoPrivate.'</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-primary">'.$langSubmit.'</button>
+                            </form>
+                            </div>
+                    
+                        </div>
+                        </div>
+                    </div>';
+                } else {
+                    $badge_modal = '';
+                }
+
+                $table_content .= "<tr class='$invisible'><td>" . $course1->title . " ($badge->title) $badge_modal</td>
                     <td>
                         <div class='d-flex justify-content-between gap-5'>
                             <div><a href= '{$urlServer}modules/progress/index.php?course=$code&amp;badge_id=$badge->badge&amp;u=$uid'>" . $cert_content . "</a>" . $icon_content ."</div>
