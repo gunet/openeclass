@@ -68,6 +68,30 @@ $head_content .= "<script>
         });
 </script>";
 
+$head_content .= 
+    '<script>
+        $(document).on(\'click\', \'a.list-group-item[href*="resources.php?token="]\', function(e) {
+            e.preventDefault();
+
+            const href = $(this).attr(\'href\');
+            const url = new URL(href, window.location.origin);
+            const rid = url.searchParams.get(\'rid\');
+
+            const modalId = `modal_note_${rid}`;
+            const modalElement = document.getElementById(modalId);
+
+            if (modalElement) {
+                const Modal = new bootstrap.Modal(modalElement);
+                Modal.show();
+
+                const formSelector = `#vis_form_note_${rid}`;
+                $(formSelector).attr(\'action\', href);
+            } else {
+                console.warn(\'Modal with ID\', modalId, \'not found\');
+            }
+        });
+    </script>';
+
 $noteNumber = Notes::count_user_notes();
 
 $displayForm = true;
@@ -226,6 +250,35 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
                 <p class='small-text'>". format_locale_date(strtotime($note->date_time)). "</p>
             </div>
         </div></div>";
+
+        if (get_config('eportfolio_enable') && $note->user_id==$uid) {
+            $tool_content .= '<div class="modal fade" id="modal_note_'.$note->id.'" tabindex="-1" aria-labelledby="noteModalLabel_'.$note->id.'" aria-hidden="true">
+                <div class="modal-dialog">
+                <div class="modal-content">
+            
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="noteModalLabel_'.$note->id.'">'.$langePortfolioFieldsVisibilitySettings.' - '.q($note->title).'</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="'.$langClose.'"></button>
+                    </div>
+            
+                    <div class="modal-body">
+                    <form id="vis_form_note_'.$note->id.'" name="vis_form_note_'.$note->id.'" action="" method="post">
+                        <div class="mb-3">
+                            <select class="form-select" name="visibility">
+                            <option value="'.EPF_VISIBLE_PUBLIC.'">'.$langPublicePortfolioField.'</option>
+                            <option value="'.EPF_VISIBLE_USERS.'">'.$langOpenToRegisteredUsers.'</option>
+                            <option value="'.EPF_VISIBLE_PRIVATE.'">'.$langProfileInfoPrivate.'</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">'.$langSubmit.'</button>
+                    </form>
+                    </div>
+            
+                </div>
+                </div>
+            </div>';
+        }
+
 } else {
     /* display actions toolbar */
     $action_bar = action_bar(array(
@@ -270,6 +323,35 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
             $tool_content .= "<br><small>$langReferencedObject: " . References::item_link($note->reference_obj_module, $note->reference_obj_type, $note->reference_obj_id, $note->reference_obj_course) . "</small>";
         }
         $tool_content .= "<div class = 'note-content' data-id= '" . getIndirectReference($note->id) . "'>$content</div>";
+
+        if (get_config('eportfolio_enable') && $note->user_id==$uid) {
+            $tool_content .= '<div class="modal fade" id="modal_note_'.$note->id.'" tabindex="-1" aria-labelledby="noteModalLabel_'.$note->id.'" aria-hidden="true">
+                <div class="modal-dialog">
+                <div class="modal-content">
+            
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="noteModalLabel_'.$note->id.'">'.$langePortfolioFieldsVisibilitySettings.' - '.q($note->title).'</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="'.$langClose.'"></button>
+                    </div>
+            
+                    <div class="modal-body">
+                    <form id="vis_form_note_'.$note->id.'" name="vis_form_note_'.$note->id.'" action="" method="post">
+                        <div class="mb-3">
+                            <select class="form-select" name="visibility">
+                            <option value="'.EPF_VISIBLE_PUBLIC.'">'.$langPublicePortfolioField.'</option>
+                            <option value="'.EPF_VISIBLE_USERS.'">'.$langOpenToRegisteredUsers.'</option>
+                            <option value="'.EPF_VISIBLE_PRIVATE.'">'.$langProfileInfoPrivate.'</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">'.$langSubmit.'</button>
+                    </form>
+                    </div>
+            
+                </div>
+                </div>
+            </div>';
+        }
+
         $tool_content .= "</td>";
 
         $tool_content .= "<td class='option-btn-cell text-end'>" .
