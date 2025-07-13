@@ -225,4 +225,32 @@ class OpenAIProvider extends AbstractAIProvider {
         return $mapping[$aiType] ?? 'multiple_choice';
     }
 
+    /**
+     * Evaluate a text response using AI
+     * 
+     * @param string $prompt The evaluation prompt
+     * @param array $options Request options (temperature, max_tokens, etc.)
+     * @return array AI response data
+     */
+    public function evaluateText(string $prompt, array $options = []): array {
+        $requestData = [
+            'model' => $this->modelName,
+            'messages' => [
+                [
+                    'role' => 'system',
+                    'content' => 'You are an educational assessment assistant that evaluates student responses fairly and consistently. Always respond with valid JSON format.'
+                ],
+                [
+                    'role' => 'user',
+                    'content' => $prompt
+                ]
+            ],
+            'max_tokens' => $options['max_tokens'] ?? 1000,
+            'temperature' => $options['temperature'] ?? 0.3,
+            'response_format' => $options['response_format'] ?? ['type' => 'json_object']
+        ];
+
+        return $this->makeApiRequest($this->getDefaultEndpoint(), $requestData);
+    }
+
 }

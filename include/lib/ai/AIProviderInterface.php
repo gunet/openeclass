@@ -58,4 +58,13 @@ interface AIProviderInterface {
      * @return array Single question data
      */
     public function generateSingleQuestion(string $content, string $questionType = 'multiple_choice', string $difficulty = 'medium'): array;
+    
+    /**
+     * Evaluate a text response using AI
+     * 
+     * @param string $prompt The evaluation prompt
+     * @param array $options Request options (temperature, max_tokens, etc.)
+     * @return array AI response data
+     */
+    public function evaluateText(string $prompt, array $options = []): array;
 }

@@ -26,6 +26,17 @@ $questionTypeWord = $objQuestion->selectTypeLegend($answerType);
 $questionDescription = standard_text_escape($objQuestion->selectDescription());
 $okPicture = file_exists($picturePath . '/quiz-' . $questionId) ? true : false;
 
+// Check if AI evaluation is available for FREE_TEXT questions
+$aiEvaluationAvailable = false;
+if ($answerType == FREE_TEXT) {
+    require_once 'include/lib/ai/services/AIExerciseEvaluationService.php';
+    $aiService = new AIExerciseEvaluationService($course_id, $uid);
+    $aiEvaluationAvailable = $aiService->isAvailable();
+    
+    // Get existing AI configuration if it exists
+    $aiConfig = Database::get()->querySingle("SELECT * FROM exercise_ai_config WHERE question_id = ?d", $questionId);
+}
+
 $newAnswer = $deleteAnswer = false;
 
 $htopic = 0;
@@ -34,6 +45,9 @@ if (isset($_GET['htopic'])) { //new question
 }
 if (isset($_POST['submitAnswers'])) {
     $submitAnswers = $_POST['submitAnswers'];
+}
+if (isset($_POST['submitAIConfig'])) {
+    $submitAIConfig = $_POST['submitAIConfig'];
 }
 if (isset($_POST['buttonBack'])) {
     $buttonBack = $_POST['buttonBack'];
@@ -46,6 +60,70 @@ if (isset($_POST['lessAnswers'])) {
 }
 if (isset($_POST['moreAnswers'])) {
     $newAnswer = true;
+}
+
+// Handle AI configuration form submission for FREE_TEXT questions
+if (isset($submitAIConfig) && $answerType == FREE_TEXT && $aiEvaluationAvailable) {
+    $aiEnabled = isset($_POST['ai_enabled']) ? 1 : 0;
+    $evaluationPrompt = trim($_POST['evaluation_prompt'] ?? '');
+    $maxPoints = $objQuestion->selectWeighting(); // Use question's weight as max points
+    $sampleResponses = trim($_POST['sample_responses'] ?? '');
+    
+    // Validate AI configuration
+    $aiConfigError = '';
+    if ($aiEnabled && empty($evaluationPrompt)) {
+        $aiConfigError = $langAIEvaluationPromptRequired;
+    } elseif ($aiEnabled && $maxPoints <= 0) {
+        $aiConfigError = $langAIMaxPointsRequired;
+    }
+    
+    if (empty($aiConfigError)) {
+        // Process sample responses if provided
+        $sampleResponsesJson = null;
+        if (!empty($sampleResponses)) {
+            $lines = array_filter(array_map('trim', explode("\n", $sampleResponses)));
+            $samples = [];
+            foreach ($lines as $line) {
+                if (strpos($line, '|') !== false) {
+                    list($response, $quality) = array_map('trim', explode('|', $line, 2));
+                    $samples[] = ['response' => $response, 'quality' => $quality];
+                } else {
+                    $samples[] = ['response' => $line, 'quality' => 'good'];
+                }
+            }
+            if (!empty($samples)) {
+                $sampleResponsesJson = json_encode($samples);
+            }
+        }
+        
+        if ($aiEnabled) {
+            // Insert or update AI configuration
+            if ($aiConfig) {
+                Database::get()->query("UPDATE exercise_ai_config 
+                                       SET enabled = ?d, evaluation_prompt = ?s, 
+                                           sample_responses = ?s, updated_at = NOW()
+                                       WHERE question_id = ?d", 
+                                       $aiEnabled, $evaluationPrompt, 
+                                       $sampleResponsesJson, $questionId);
+            } else {
+                Database::get()->query("INSERT INTO exercise_ai_config 
+                                       (question_id, course_id, enabled, evaluation_prompt, sample_responses)
+                                       VALUES (?d, ?d, ?d, ?s, ?s)",
+                                       $questionId, $course_id, $aiEnabled, $evaluationPrompt, 
+                                       $sampleResponsesJson);
+            }
+            $msgSuccess = $langAIConfigSaved;
+        } else {
+            // Disable AI evaluation
+            if ($aiConfig) {
+                Database::get()->query("UPDATE exercise_ai_config SET enabled = 0 WHERE question_id = ?d", $questionId);
+            }
+            $msgSuccess = $langAIConfigDisabled;
+        }
+        
+        // Refresh AI config after save
+        $aiConfig = Database::get()->querySingle("SELECT * FROM exercise_ai_config WHERE question_id = ?d", $questionId);
+    }
 }
 
 // the answer form has been submitted
@@ -735,5 +813,114 @@ if (isset($_GET['modifyAnswers'])) {
             </form>
          </div>
      </div></div>";
+   } else {
+       // FREE_TEXT questions - show AI evaluation configuration if available
+       if ($aiEvaluationAvailable) {
+           
+           // Display success/error messages
+           if (!empty($aiConfigError)) {
+               $tool_content .= "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$aiConfigError</span></div>";
+           }
+           if (!empty($msgSuccess)) {
+               $tool_content .= "<div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$msgSuccess</span></div>";
+           }
+           
+           $aiEnabled = $aiConfig ? $aiConfig->enabled : 0;
+           $evaluationPrompt = $aiConfig ? $aiConfig->evaluation_prompt : '';
+           $maxPoints = $objQuestion->selectWeighting(); // Use question's weight as max points
+           $sampleResponses = '';
+           
+           if ($aiConfig && $aiConfig->sample_responses) {
+               $samples = json_decode($aiConfig->sample_responses, true);
+               if ($samples && is_array($samples)) {
+                   $lines = [];
+                   foreach ($samples as $sample) {
+                       if (isset($sample['response']) && isset($sample['quality'])) {
+                           $lines[] = $sample['response'] . ' | ' . $sample['quality'];
+                       } else {
+                           $lines[] = $sample['response'];
+                       }
+                   }
+                   $sampleResponses = implode("\n", $lines);
+               }
+           }
+           
+           $tool_content .= "
+           <div class='col-12 mt-4'>
+               <div class='card panelCard card-default px-lg-4 py-lg-3'>
+                   <div class='card-header border-0'>
+                       <h3>$langAIEvaluation</h3>
+                   </div>
+                   <div class='card-body'>
+                       <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code".((isset($exerciseId))? "&amp;exerciseId=$exerciseId" : "")."&amp;modifyAnswers=" . urlencode($_GET['modifyAnswers']) . "'>
+                           <input type='hidden' name='formSent' value='1'>
+                           <fieldset><legend class='mb-0' aria-label='$langForm'></legend>
+                           
+                           <div class='form-group mb-3'>
+                               <label class='label-container'>
+                                   <input type='checkbox' name='ai_enabled' value='1'" . ($aiEnabled ? " checked='checked'" : "") . ">
+                                   <span class='checkmark'></span>
+                                   $langEnableAIEvaluation
+                               </label>
+                               <small class='form-text text-muted'>$langAIEvaluationDescription</small>
+                           </div>
+                           
+                           <div class='form-group mb-3'>
+                               <label for='evaluation_prompt' class='form-label'>$langEvaluationCriteria <span class='asterisk'>*</span></label>
+                               <textarea name='evaluation_prompt' id='evaluation_prompt' class='form-control' rows='4' 
+                                         placeholder='$langEvaluationCriteriaPlaceholder'>" . q($evaluationPrompt) . "</textarea>
+                               <small class='form-text text-muted'>$langEvaluationCriteriaHelp</small>
+                           </div>
+                           
+                           <div class='form-group mb-3'>
+                               <label class='form-label'>$langMaxPoints</label>
+                               <div class='form-control-static'>
+                                   <strong>$maxPoints</strong> <span class='text-muted'>($langDefinedInQuestionStatement)</span>
+                               </div>
+                               <small class='form-text text-muted'>$langMaxPointsHelp</small>
+                           </div>
+                           
+                           <div class='form-group mb-3'>
+                               <label for='sample_responses' class='form-label'>$langSampleResponses</label>
+                               <textarea name='sample_responses' id='sample_responses' class='form-control' rows='6'
+                                         placeholder='$langSampleResponsesPlaceholder'>" . q($sampleResponses) . "</textarea>
+                               <small class='form-text text-muted'>$langSampleResponsesHelp</small>
+                           </div>
+                           
+                           <div class='row'>
+                               <div class='col-12 d-flex justify-content-end align-items-center gap-2 flex-wrap'>
+                                   <input class='btn submitAdminBtn' type='submit' name='submitAIConfig' value='$langSaveAIConfig'>
+                                   <a class='btn cancelAdminBtn' href='" . (isset($exerciseId) ? "admin.php?course=$course_code&exerciseId=$exerciseId" : "question_pool.php?course=$course_code") . "'>$langCancel</a>
+                               </div>
+                           </div>
+                           
+                           </fieldset>
+                       </form>
+                   </div>
+               </div>
+           </div>";
+           
+           // Show info about existing AI evaluations if any
+           if ($aiEnabled && isset($exerciseId)) {
+               $evaluationCount = Database::get()->querySingle("SELECT COUNT(*) as count FROM exercise_ai_evaluation WHERE question_id = ?d", $questionId)->count;
+               if ($evaluationCount > 0) {
+                   $tool_content .= "
+                   <div class='col-12 mt-3'>
+                       <div class='alert alert-info'>
+                           <i class='fa-solid fa-circle-info fa-lg'></i>
+                           <span>$langAIEvaluationsFound ($evaluationCount evaluations)</span>
+                       </div>
+                   </div>";
+               }
+           }
+       } else {
+           $tool_content .= "
+           <div class='col-12 mt-4'>
+               <div class='alert alert-info'>
+                   <i class='fa-solid fa-circle-info fa-lg'></i>
+                   <span>$langFreeTextNoAnswerConfig</span>
+               </div>
+           </div>";
+       }
    }
 }

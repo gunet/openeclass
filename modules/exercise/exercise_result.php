@@ -58,7 +58,7 @@ if (isset($_GET['eurId'])) {
     $exercise_user_record = Database::get()->querySingle("SELECT *, DATE_FORMAT(record_start_date, '%Y-%m-%d %H:%i') AS record_start_date,
                                                                       TIME_TO_SEC(TIMEDIFF(record_end_date, record_start_date)) AS time_duration
                                                                     FROM exercise_user_record WHERE eurid = ?d", $eurid);
-    $exercise_question_ids = Database::get()->queryArray("SELECT DISTINCT question_id, q_position FROM exercise_answer_record WHERE eurid = ?d ORDER BY q_position", $eurid);
+    $exercise_question_ids = Database::get()->queryArray("SELECT question_id, q_position, MAX(answer_record_id) as answer_record_id FROM exercise_answer_record WHERE eurid = ?d GROUP BY question_id, q_position ORDER BY q_position", $eurid);
     if (!$exercise_user_record) {
         // No record matches with this exercise user record id
         Session::flash('message',$langExerciseNotFound);
@@ -664,6 +664,50 @@ if (count($exercise_question_ids) > 0) {
         } else { // If FREE TEXT type
             $questionScore = $question_weight;
             $tool_content .= "<tr><td>" . purify($choice) . "</td></tr>";
+            
+            // Check for AI evaluation if available
+            if ($is_editor || (!$is_editor && $objExercise->selectResults() == 1)) {
+                $ai_evaluation = Database::get()->querySingle("SELECT * FROM exercise_ai_evaluation 
+                                                              WHERE answer_record_id = ?d", 
+                                                              $row->answer_record_id);
+                if ($ai_evaluation) {
+                    $confidence_percent = round($ai_evaluation->ai_confidence * 100);
+                    $confidence_class = '';
+                    $confidence_text = '';
+                    
+                    if ($ai_evaluation->ai_confidence >= 0.8) {
+                        $confidence_class = 'text-success';
+                        $confidence_text = $langHighConfidence;
+                    } elseif ($ai_evaluation->ai_confidence >= 0.5) {
+                        $confidence_class = 'text-warning';
+                        $confidence_text = $langMediumConfidence;
+                    } else {
+                        $confidence_class = 'text-danger';
+                        $confidence_text = $langLowConfidence;
+                    }
+                    
+                    $tool_content .= "<tr><td>";
+                    $tool_content .= "<div class='mt-3 p-3 bg-light border-start border-info border-4'>";
+                    $tool_content .= "<h6 class='text-info'><i class='fa fa-robot'></i> $langAIEvaluation</h6>";
+                    
+                    $tool_content .= "<div class='row mb-2'>";
+                    $tool_content .= "<div class='col-md-6'>";
+                    $tool_content .= "<strong>$langAISuggestion: {$ai_evaluation->ai_suggested_score}/{$ai_evaluation->ai_max_score}</strong>";
+                    $tool_content .= "</div>";
+                    $tool_content .= "<div class='col-md-6 text-end'>";
+                    $tool_content .= "<span class='$confidence_class'>$langConfidence: {$confidence_percent}% ($confidence_text)</span>";
+                    $tool_content .= "</div>";
+                    $tool_content .= "</div>";
+                    
+                    $tool_content .= "<div class='mb-2'>";
+                    $tool_content .= "<strong>$langReasoning:</strong><br>";
+                    $tool_content .= nl2br(q($ai_evaluation->ai_reasoning));
+                    $tool_content .= "</div>";
+                    
+                    $tool_content .= "</div>";
+                    $tool_content .= "</td></tr>";
+                }
+            }
         }
 
         if ($questionFeedback !== '') {

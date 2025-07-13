@@ -1057,10 +1057,15 @@ if (!class_exists('Exercise')) {
             Database::get()->query("DELETE FROM exercise_answer_record
                             WHERE eurid = ?d AND question_id = ?d", $eurid, $key);
             if ($question_type == FREE_TEXT) {
-                Database::get()->query("INSERT INTO exercise_answer_record
+                $answer_record_id = Database::get()->query("INSERT INTO exercise_answer_record
                    (eurid, question_id, answer, answer_id, weight, is_answered, q_position)
                    VALUES (?d, ?d, ?s, 0, NULL, ?d, ?d)",
-                    $eurid, $key, $value, $as_answered, $q_position);
+                    $eurid, $key, $value, $as_answered, $q_position)->lastInsertID;
+                    
+                // Check if AI evaluation is enabled for this question and trigger it
+                if (!empty($value) && trim($value) !== '') {
+                    $this->triggerAIEvaluation($answer_record_id, $key, $value);
+                }
             } elseif ($question_type == FILL_IN_BLANKS || $question_type == FILL_IN_BLANKS_TOLERANT) {
                 $objAnswersTmp = new Answer($key);
                 $answer_field = $objAnswersTmp->selectAnswer(1);
@@ -1168,6 +1173,13 @@ if (!class_exists('Exercise')) {
                 if (!empty($value)) {
                     Database::get()->query("UPDATE exercise_answer_record SET answer = ?s, answer_id = 1, weight = NULL,
                                           is_answered = 1 WHERE eurid = ?d AND question_id = ?d", $value, $eurid, $key);
+                    
+                    // Get the answer_record_id for AI evaluation
+                    $answer_record = Database::get()->querySingle("SELECT answer_record_id FROM exercise_answer_record 
+                                                                 WHERE eurid = ?d AND question_id = ?d", $eurid, $key);
+                    if ($answer_record && trim($value) !== '') {
+                        $this->triggerAIEvaluation($answer_record->answer_record_id, $key, $value);
+                    }
                 } else {
                     Database::get()->query("UPDATE exercise_answer_record SET answer = ?s,
                                           answer_id = 0, weight = 0, is_answered = 1 WHERE eurid = ?d AND question_id = ?d", $value, $eurid, $key);
@@ -1472,6 +1484,49 @@ if (!class_exists('Exercise')) {
             }
 
             return $totalScore;
+        }
+        
+        /**
+         * Trigger AI evaluation for FREE_TEXT question responses
+         */
+        private function triggerAIEvaluation($answer_record_id, $question_id, $response_text)
+        {
+            global $course_id, $uid;
+            
+            try {
+                // Check if AI evaluation is available and enabled for this question
+                require_once 'include/lib/ai/services/AIExerciseEvaluationService.php';
+                $aiService = new AIExerciseEvaluationService($course_id, $uid);
+                
+                if (!$aiService->isAvailable()) {
+                    return false; // AI not available, silently continue
+                }
+                
+                // Check if AI evaluation is enabled for this specific question
+                $aiConfig = Database::get()->querySingle("SELECT * FROM exercise_ai_config 
+                                                         WHERE question_id = ?d AND enabled = 1", $question_id);
+                if (!$aiConfig) {
+                    return false; // AI evaluation not enabled for this question
+                }
+                
+                // Check if evaluation already exists (to avoid duplicates)
+                $existingEval = Database::get()->querySingle("SELECT id FROM exercise_ai_evaluation 
+                                                             WHERE answer_record_id = ?d", $answer_record_id);
+                if ($existingEval) {
+                    return false; // Already evaluated
+                }
+                
+                // Trigger AI evaluation asynchronously to avoid blocking the submission
+                // In a production environment, this could be queued for background processing
+                $evaluation = $aiService->evaluateResponse($answer_record_id, $response_text);
+                
+                return true;
+                
+            } catch (Exception $e) {
+                // Log the error but don't block the submission
+                error_log("AI Evaluation Error for answer_record_id $answer_record_id: " . $e->getMessage());
+                return false;
+            }
         }
     }
 }

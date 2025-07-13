@@ -131,16 +131,32 @@ if (isset($_POST['submitQuestion'])) {
                 $nbrQuestions++;
             }
         }
-        // if the answer type is free text (which means it doesn't have predefined answers)
-        // redirect to either pool or edit exercise page
-        // else redirect to modify answers page in order to add answers to question
+        // For FREE_TEXT questions with AI available, redirect to answer configuration
+        // For other question types, redirect to question list
+        $needsAnswerConfig = false;
         if ($answerType == FREE_TEXT) {
-            $redirect_url = (isset($exerciseId)) ? "modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId&htopic=6" : "modules/exercise/question_pool.php?course=$course_code";
+            // Check if AI evaluation is available
+            require_once 'include/lib/ai/services/AIExerciseEvaluationService.php';
+            $aiService = new AIExerciseEvaluationService($course_id, $uid);
+            $needsAnswerConfig = $aiService->isAvailable();
         } else {
+            // Non-FREE_TEXT questions need answer configuration
+            $needsAnswerConfig = true;
+        }
+        
+        if ($needsAnswerConfig) {
+            // redirect to modify answers page to configure answers/AI evaluation
             if (isset($_GET['modifyQuestion'])) { // existing question
                 $redirect_url = "modules/exercise/admin.php?course=$course_code".((isset($exerciseId))? "&exerciseId=$exerciseId" : "")."&modifyAnswers=$questionId";
             } else { // new question
                 $redirect_url = "modules/exercise/admin.php?course=$course_code".((isset($exerciseId))? "&exerciseId=$exerciseId" : "")."&modifyAnswers=$questionId&htopic=$answerType";
+            }
+        } else {
+            // FREE_TEXT without AI - go back to question list
+            if (isset($exerciseId)) {
+                $redirect_url = "modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId";
+            } else {
+                $redirect_url = "modules/exercise/question_pool.php?course=$course_code";
             }
         }
         redirect_to_home_page($redirect_url);

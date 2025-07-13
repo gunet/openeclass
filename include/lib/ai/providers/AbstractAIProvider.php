@@ -205,4 +205,17 @@ abstract class AbstractAIProvider implements AIProviderInterface {
         // For now, just log to error log
         error_log("AI API Usage - Provider: {$this->getProviderType()}, Action: {$action}, Metadata: " . json_encode($metadata));
     }
+
+    /**
+     * Default implementation of evaluateText
+     * Concrete providers should override this method
+     *
+     * @param string $prompt The evaluation prompt
+     * @param array $options Request options
+     * @return array AI response data
+     * @throws Exception If not implemented by concrete provider
+     */
+    public function evaluateText(string $prompt, array $options = []): array {
+        throw new Exception("Text evaluation not implemented for " . $this->getProviderType() . " provider");
+    }
 }
