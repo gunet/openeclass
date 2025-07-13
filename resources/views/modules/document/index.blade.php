@@ -445,7 +445,7 @@
                                                 </td>
                                                 <td class='fileURL-th' style='width:50%;'>
                                                     <input type='hidden' value='{!! $base_url !!}download={{ getIndirectReference($file->path) }}'>
-
+                                                    {!! $file->eportfolio_modal !!}
                                                     <div class='d-flex justify-content-start align-items-start gap-3'>
                                                         @if($file->visible == 1)
                                                             @if ($file->is_dir)
