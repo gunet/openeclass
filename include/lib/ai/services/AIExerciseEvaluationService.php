@@ -86,17 +86,18 @@ class AIExerciseEvaluationService {
         // Validate the score is within bounds
         $suggestedScore = min(max(0, floatval($result['suggested_score'])), floatval($evaluation->weight));
         
-        // Store evaluation result with transaction
-        Database::get()->begin();
+        // Get provider type before transaction
+        $providerType = $this->provider->getProviderType();
         
-        try {
+        // Store evaluation result with transaction
+        $evaluationId = null;
+        Database::get()->transaction(function() use ($answerRecordId, $evaluation, $suggestedScore, $result, $providerType, &$evaluationId) {
             // Double-check that evaluation doesn't already exist within transaction
             $existingEval = Database::get()->querySingle("
                 SELECT id FROM exercise_ai_evaluation 
-                WHERE answer_record_id = ?d FOR UPDATE", $answerRecordId);
+                WHERE answer_record_id = ?d", $answerRecordId);
                 
             if ($existingEval) {
-                Database::get()->rollback();
                 throw new Exception("Response has already been evaluated");
             }
             
@@ -113,14 +114,9 @@ class AIExerciseEvaluationService {
                 $evaluation->weight,
                 $result['reasoning'] ?? 'No reasoning provided',
                 isset($result['confidence']) ? min(max(0, floatval($result['confidence'])), 1.0) : 0.5,
-                $this->provider->getProviderType()
+                $providerType
             )->lastInsertID;
-            
-            Database::get()->commit();
-        } catch (Exception $e) {
-            Database::get()->rollback();
-            throw $e;
-        }
+        });
         
         return [
             'evaluation_id' => $evaluationId,
