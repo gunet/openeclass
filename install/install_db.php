@@ -1040,6 +1040,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `eportfolio_resource` (
         `time_added` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
         `data` TEXT NOT NULL,
         `visibility` TINYINT UNSIGNED NOT NULL DEFAULT 1,
+        `reflection_comments` TEXT NOT NULL,
         INDEX `eportfolio_res_index` (`user_id`,`resource_type`)) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `wall_post` (

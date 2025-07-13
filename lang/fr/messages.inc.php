@@ -4763,6 +4763,8 @@ $langePortfolioCollectionUserInfo = 'In the resource collection of e-Portfolio y
 The respective tabs appear only if resources have been added from the relevant module to the collection.';
 $langePortfolioNoResInCollection = 'There are no resources in this collection';
 $langEnabledePortfolioButtonsLabel = 'Enabled e-Portfolio';
+$langResourceExists = "The resource already exists.";
+$langePortfolioPromptAddReflComments = "Optionally record some personal, reflective comments about this resource. Answer questions like \"What did I learn from this activity?\" or \"What difficulties and challenges did I face?\", etc.";
 $langPageLink = 'Page link:';
 $langCopiedSucc = 'Copied';
 $langCopiedErr = 'Press Ctrl+c to copy';

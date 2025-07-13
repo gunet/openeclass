@@ -218,8 +218,9 @@ if ($userdata) {
                                 }
                                 $data = array('title' => $post->title, 'content' => $post->content, 'timestamp' => $post->time);
                                 $visibility = (isset($_POST['visibility'])) ? intval($_POST['visibility']) : EPF_VISIBLE_PUBLIC;
-                                Database::get()->query("INSERT INTO eportfolio_resource (user_id,resource_id,resource_type,course_id,course_title,data,visibility)
-                                        VALUES (?d,?d,?s,?d,?s,?s,?d)", $uid,$rid,'blog',$post->course_id,$course_title,serialize($data),$visibility);
+                                $reflection_comments = (!empty($_POST['reflection_comments'])) ? $_POST['reflection_comments'] : '';
+                                Database::get()->query("INSERT INTO eportfolio_resource (user_id,resource_id,resource_type,course_id,course_title,data,visibility,reflection_comments)
+                                        VALUES (?d,?d,?s,?d,?s,?s,?d,?s)", $uid,$rid,'blog',$post->course_id,$course_title,serialize($data),$visibility,$reflection_comments);
                                 Session::flash('message', $langePortfolioResourceAdded);
                                 Session::flash('alert-class', 'alert-success');
                                 $tool_content .= "
@@ -281,8 +282,9 @@ if ($userdata) {
                                     }
 
                                     $visibility = (isset($_POST['visibility'])) ? intval($_POST['visibility']) : EPF_VISIBLE_PUBLIC;
-                                    Database::get()->query("INSERT INTO eportfolio_resource (user_id,resource_id,resource_type,course_id,course_title,data,visibility)
-                                        VALUES (?d,?d,?s,?d,?s,?s,?d)", $uid,$rid,'work_submission',$work->course_id,$course_title,serialize($data),$visibility);
+                                    $reflection_comments = (!empty($_POST['reflection_comments'])) ? $_POST['reflection_comments'] : '';
+                                    Database::get()->query("INSERT INTO eportfolio_resource (user_id,resource_id,resource_type,course_id,course_title,data,visibility,reflection_comments)
+                                        VALUES (?d,?d,?s,?d,?s,?s,?d,?s)", $uid,$rid,'work_submission',$work->course_id,$course_title,serialize($data),$visibility,$reflection_comments);
                                     Session::flash('message', $langePortfolioResourceAdded);
                                     Session::flash('alert-class', 'alert-success');
                                 }
@@ -317,8 +319,9 @@ if ($userdata) {
                                 }
 
                                 $visibility = (isset($_POST['visibility'])) ? intval($_POST['visibility']) : EPF_VISIBLE_PUBLIC;
-                                Database::get()->query("INSERT INTO eportfolio_resource (user_id,resource_id,resource_type,course_id,course_title,data,visibility)
-                                        VALUES (?d,?d,?s,?d,?s,?s,?d)", $uid, $rid, 'mydocs', 0 ,'', serialize($data), $visibility);
+                                $reflection_comments = (!empty($_POST['reflection_comments'])) ? $_POST['reflection_comments'] : '';
+                                Database::get()->query("INSERT INTO eportfolio_resource (user_id,resource_id,resource_type,course_id,course_title,data,visibility,reflection_comments)
+                                        VALUES (?d,?d,?s,?d,?s,?s,?d,?s)", $uid, $rid, 'mydocs', 0 ,'', serialize($data), $visibility,$reflection_comments);
 
                                 Session::flash('message', $langePortfolioResourceAdded);
                                 Session::flash('alert-class', 'alert-success');
@@ -337,8 +340,9 @@ if ($userdata) {
                                         'date_created' => $badgeInfo->created, 'date_expired' => $badgeInfo->expires, 'badgeId' => $rid);
     
                             $visibility = (isset($_POST['visibility'])) ? intval($_POST['visibility']) : EPF_VISIBLE_PUBLIC;
-                            Database::get()->query("INSERT INTO eportfolio_resource (user_id,resource_id,resource_type,course_id,course_title,data,visibility)
-                                                    VALUES (?d,?d,?s,?d,?s,?s,?d)", $uid, $rid, 'my_badges', $badgeInfo->course_id ,course_id_to_title($badgeInfo->course_id), serialize($data), $visibility);
+                            $reflection_comments = (!empty($_POST['reflection_comments'])) ? $_POST['reflection_comments'] : '';
+                            Database::get()->query("INSERT INTO eportfolio_resource (user_id,resource_id,resource_type,course_id,course_title,data,visibility,reflection_comments)
+                                                    VALUES (?d,?d,?s,?d,?s,?s,?d,?s)", $uid, $rid, 'my_badges', $badgeInfo->course_id ,course_id_to_title($badgeInfo->course_id), serialize($data), $visibility, $reflection_comments);
     
                             Session::flash('message', $langePortfolioResourceAdded);
                             Session::flash('alert-class','alert-success');
@@ -356,8 +360,9 @@ if ($userdata) {
                                         'date_created' => $certificateInfo->created, 'date_expired' => $certificateInfo->expires, 'certificateId' => $rid);
 
                             $visibility = (isset($_POST['visibility'])) ? intval($_POST['visibility']) : EPF_VISIBLE_PUBLIC;
-                            Database::get()->query("INSERT INTO eportfolio_resource (user_id,resource_id,resource_type,course_id,course_title,data,visibility)
-                                    VALUES (?d,?d,?s,?d,?s,?s,?d)", $uid, $rid, 'my_certificates', $certificateInfo->course_id ,course_id_to_title($certificateInfo->course_id), serialize($data), $visibility);
+                            $reflection_comments = (!empty($_POST['reflection_comments'])) ? $_POST['reflection_comments'] : '';
+                            Database::get()->query("INSERT INTO eportfolio_resource (user_id,resource_id,resource_type,course_id,course_title,data,visibility,reflection_comments)
+                                    VALUES (?d,?d,?s,?d,?s,?s,?d,?s)", $uid, $rid, 'my_certificates', $certificateInfo->course_id ,course_id_to_title($certificateInfo->course_id), serialize($data), $visibility, $reflection_comments);
                             Session::flash('message', $langePortfolioResourceAdded);
                             Session::flash('alert-class','alert-success');
                         } elseif ($userCertificate && $userCertificate->completed_criteria < $userCertificate->total_criteria) {
@@ -370,12 +375,13 @@ if ($userdata) {
                         if($note && get_config('enable_quick_note')) {
                             $data = array('title' => $note->title, 'content' => $note->content, 'date_time' => $note->date_time);
                             $visibility = (isset($_POST['visibility'])) ? intval($_POST['visibility']) : EPF_VISIBLE_PUBLIC;
+                            $reflection_comments = (!empty($_POST['reflection_comments'])) ? $_POST['reflection_comments'] : '';
                             if (empty($note->reference_obj_course)) {
-                                Database::get()->query("INSERT INTO eportfolio_resource (user_id,resource_id,resource_type,data,visibility)
-                                    VALUES (?d,?d,?s,?s,?d)", $uid, $rid, 'note', serialize($data), $visibility);
+                                Database::get()->query("INSERT INTO eportfolio_resource (user_id,resource_id,resource_type,data,visibility,reflection_comments)
+                                    VALUES (?d,?d,?s,?s,?d,?s)", $uid, $rid, 'note', serialize($data), $visibility,$reflection_comments);
                             } else {
-                                Database::get()->query("INSERT INTO eportfolio_resource (user_id,resource_id,resource_type, course_id,course_title,data,visibility)
-                                    VALUES (?d,?d,?s,?d,?s,?s,?d)", $uid, $rid, 'note', $note->reference_obj_course, course_id_to_title($note->reference_obj_course), serialize($data),$visibility);
+                                Database::get()->query("INSERT INTO eportfolio_resource (user_id,resource_id,resource_type, course_id,course_title,data,visibility,reflection_comments)
+                                    VALUES (?d,?d,?s,?d,?s,?s,?d,?s)", $uid, $rid, 'note', $note->reference_obj_course, course_id_to_title($note->reference_obj_course), serialize($data),$visibility,$reflection_comments);
                             }
                             Session::flash('message', $langePortfolioResourceAdded);
                             Session::flash('alert-class','alert-success');

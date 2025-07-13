@@ -5349,6 +5349,7 @@ $langCopiedSucc = 'Copied';
 $langCopiedErr = 'Press Ctrl+c to copy';
 $langNoCompleted = "Not completed";
 $langResourceExists = "The resource already exists.";
+$langePortfolioPromptAddReflComments = "Optionally record some personal, reflective comments about this resource. Answer questions like \"What did I learn from this activity?\" or \"What difficulties and challenges did I face?\", etc.";
 $langWidgets = "Widgets";
 $langMyWidgets = "My widgets";
 $langCourseWidgets = "Widgets $langsOfCourse";

@@ -98,23 +98,28 @@ if (count($courses) > 0) {
         foreach ($sql as $data) {
 
             if (get_config('eportfolio_enable')) {
-                $certificate_modal .= '<div class="modal fade" id="modal_certificate_'.$data->cert_id.'" tabindex="-1" aria-labelledby="certificateModalLabel_'.$data->cert_id.'" aria-hidden="true">
+                $certificate_modal = '<div class="modal fade" id="modal_certificate_'.$data->cert_id.'" tabindex="-1" aria-labelledby="certificateModalLabel_'.$data->cert_id.'" aria-hidden="true">
                     <div class="modal-dialog">
                     <div class="modal-content">
                 
                         <div class="modal-header">
-                        <h5 class="modal-title" id="certificateModalLabel_'.$data->cert_id.'">'.$langePortfolioFieldsVisibilitySettings.' - '.$data->cert_title.'</h5>
+                        <h5 class="modal-title" id="certificateModalLabel_'.$data->cert_id.'">'.$langAddResePortfolio.' - '.$data->cert_title.'</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="'.$langClose.'"></button>
                         </div>
                 
                         <div class="modal-body">
                         <form id="vis_form_certificate_'.$data->cert_id.'" name="vis_form_certificate_'.$data->cert_id.'" action="" method="post">
                             <div class="mb-3">
-                                <select class="form-select" name="visibility">
+                                <label for="vis_form_certificate_'.$data->cert_id.'_select" class="form-label">'.$langePortfolioFieldsVisibilitySettings.'</label>
+                                <select class="form-select" name="visibility" id="vis_form_certificate_'.$data->cert_id.'_select">
                                 <option value="'.EPF_VISIBLE_PUBLIC.'">'.$langPublicePortfolioField.'</option>
                                 <option value="'.EPF_VISIBLE_USERS.'">'.$langOpenToRegisteredUsers.'</option>
                                 <option value="'.EPF_VISIBLE_PRIVATE.'">'.$langProfileInfoPrivate.'</option>
                                 </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="vis_form_certificate_'.$data->cert_id.'_textarea" class="form-label">'.$langePortfolioPromptAddReflComments.'</label>
+                                <textarea class="form-control" name="reflection_comments" id="vis_form_certificate_'.$data->cert_id.'_textarea"></textarea>
                             </div>
                             <button type="submit" class="btn btn-primary">'.$langSubmit.'</button>
                         </form>
@@ -209,23 +214,28 @@ if (count($courses) > 0) {
                 }
 
                 if (get_config('eportfolio_enable')) {
-                    $badge_modal .= '<div class="modal fade" id="modal_badge_'.$badge->badge.'" tabindex="-1" aria-labelledby="badgeModalLabel_'.$badge->badge.'" aria-hidden="true">
+                    $badge_modal = '<div class="modal fade" id="modal_badge_'.$badge->badge.'" tabindex="-1" aria-labelledby="badgeModalLabel_'.$badge->badge.'" aria-hidden="true">
                         <div class="modal-dialog">
                         <div class="modal-content">
                     
                             <div class="modal-header">
-                            <h5 class="modal-title" id="badgeModalLabel_'.$badge->badge.'">'.$langePortfolioFieldsVisibilitySettings.' - '.$badge->title.'</h5>
+                            <h5 class="modal-title" id="badgeModalLabel_'.$badge->badge.'">'.$langAddResePortfolio.' - '.$badge->title.'</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="'.$langClose.'"></button>
                             </div>
                     
                             <div class="modal-body">
                             <form id="vis_form_badge_'.$badge->badge.'" name="vis_form_badge_'.$badge->badge.'" action="" method="post">
                                 <div class="mb-3">
-                                    <select class="form-select" name="visibility">
+                                    <label for="vis_form_badge_'.$badge->badge.'_select" class="form-label">'.$langePortfolioFieldsVisibilitySettings.'</label>
+                                    <select class="form-select" name="visibility" id="vis_form_badge_'.$badge->badge.'_select">
                                     <option value="'.EPF_VISIBLE_PUBLIC.'">'.$langPublicePortfolioField.'</option>
                                     <option value="'.EPF_VISIBLE_USERS.'">'.$langOpenToRegisteredUsers.'</option>
                                     <option value="'.EPF_VISIBLE_PRIVATE.'">'.$langProfileInfoPrivate.'</option>
                                     </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="vis_form_badge_'.$badge->badge.'_textarea" class="form-label">'.$langePortfolioPromptAddReflComments.'</label>
+                                    <textarea class="form-control" name="reflection_comments" id="vis_form_badge_'.$badge->badge.'_textarea"></textarea>
                                 </div>
                                 <button type="submit" class="btn btn-primary">'.$langSubmit.'</button>
                             </form>

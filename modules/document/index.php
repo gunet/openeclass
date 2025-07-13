@@ -1498,18 +1498,23 @@ foreach ($result as $row) {
                 <div class="modal-content">
             
                     <div class="modal-header">
-                    <h5 class="modal-title" id="docModalLabel_'.$row->id.'">'.$langePortfolioFieldsVisibilitySettings.' - '.$row->filename.'</h5>
+                    <h5 class="modal-title" id="docModalLabel_'.$row->id.'">'.$langAddResePortfolio.' - '.$row->filename.'</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="'.$langClose.'"></button>
                     </div>
             
                     <div class="modal-body">
                     <form id="vis_form_doc_'.$row->id.'" name="vis_form_doc_'.$row->id.'" action="" method="post">
                         <div class="mb-3">
-                            <select class="form-select" name="visibility">
+                            <label for="vis_form_doc_'.$row->id.'_select" class="form-label">'.$langePortfolioFieldsVisibilitySettings.'</label>
+                            <select class="form-select" name="visibility" id="vis_form_doc_'.$row->id.'_select">
                             <option value="'.EPF_VISIBLE_PUBLIC.'">'.$langPublicePortfolioField.'</option>
                             <option value="'.EPF_VISIBLE_USERS.'">'.$langOpenToRegisteredUsers.'</option>
                             <option value="'.EPF_VISIBLE_PRIVATE.'">'.$langProfileInfoPrivate.'</option>
                             </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="vis_form_doc_'.$row->id.'_textarea" class="form-label">'.$langePortfolioPromptAddReflComments.'</label>
+                            <textarea class="form-control" name="reflection_comments" id="vis_form_doc_'.$row->id.'_textarea"></textarea>
                         </div>
                         <button type="submit" class="btn btn-primary">'.$langSubmit.'</button>
                     </form>
