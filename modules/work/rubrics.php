@@ -36,11 +36,11 @@ if (isset($_GET['clone'])) {
     redirect_to_home_page('modules/work/rubrics.php?course=' . $course_code);
 }
 
-$my_courses = Database::get()->queryArray("SELECT a.course_id Course_id, b.title Title 
-            FROM course_user a, course b 
-            WHERE a.course_id = b.id 
-            AND a.course_id != ?d 
-            AND a.user_id = ?d 
+$my_courses = Database::get()->queryArray("SELECT a.course_id Course_id, b.title Title
+            FROM course_user a, course b
+            WHERE a.course_id = b.id
+            AND a.course_id != ?d
+            AND a.user_id = ?d
             AND a.status = " . USER_TEACHER, $course_id, $uid);
 $courses_options = "";
 foreach ($my_courses as $row) {
@@ -97,8 +97,8 @@ if (isset($_POST['submitRubric'])) {
             $desc = $_POST['desc'];
             $preview_rubric = isset($_POST['options0']) ? 1 : 0;
             $points_to_graded = isset($_POST['options1']) ? 1 : 0;
-            Database::get()->query("UPDATE rubric SET name = ?s, description = ?s, 
-                                        preview_rubric = ?d, points_to_graded = ?d, 
+            Database::get()->query("UPDATE rubric SET name = ?s, description = ?s,
+                                        preview_rubric = ?d, points_to_graded = ?d,
                                         course_id = ?d WHERE id = ?d",
                 $name, $desc, $preview_rubric, $points_to_graded, $course_id, $_POST['rubric_id']);
             Session::flash('message', $langRubricUpdated);
@@ -167,7 +167,7 @@ if (isset($_GET['rubric_id']) or isset($_GET['new_rubric'])) { // edit rubric or
                        trc=$(\"a[id^='remScale']\").length;
                     } else {
                        trc++;
-                    }                
+                    }
                     var rowCount = $('#scale_table tbody tr').length;
                     $('#scale_table'+par.attr('id').substr(8)+' tbody').append(
                         '<tr>'+
@@ -187,19 +187,19 @@ if (isset($_GET['rubric_id']) or isset($_GET['new_rubric'])) { // edit rubric or
                         }
                     );
                 };
-                        
-            $('a[id^=\'addScale\']').on('click', function() { 
+
+            $('a[id^=\'addScale\']').on('click', function() {
                     ins_scale($(this));
                 }
             );
             var del_scale  =  function (par) {
                 par.closest('tr').remove();
             }
-            
+
             var del_crit  =  function (par) {
                 par.closest('div[id^=\'critDiv\']').remove();
             }
-            $('a[id^=\'remCrit\']').on('click', function() { 
+            $('a[id^=\'remCrit\']').on('click', function() {
                 del_crit($(this));
             });
             $('a[id^=\'remScale\']').on('click', function() {
@@ -213,15 +213,15 @@ if (isset($_GET['rubric_id']) or isset($_GET['new_rubric'])) { // edit rubric or
                    j++;
                 }
                 $('#inserthere').before(
-                        '<div id=\'critDiv'+ j +'\'>'+	
+                        '<div id=\'critDiv'+ j +'\'>'+
                         '<div class=\'row form-group mt-4\'>'+
                     '   <label for=\'title\' class=\'col-12 control-label-notes mb-1\'>". js_escape($langRubricCrit). "</label>'+
                     '    <div class=\'col-12\'>'+
-                    '      <input name=\'title[]\' class=\'form-control\' id=\'title\' value=\'\' type=\'text\'> '+     
+                    '      <input name=\'title[]\' class=\'form-control\' id=\'title\' value=\'\' type=\'text\'> '+
                     '    </div>'+
                         '<label for=\'weight\' class=\'col-12 control-label-notes mb-1 mt-4\'>" . js_escape($langGradebookWeight). " (%)</label>'+
                     '    <div class=\'col-12 mt-0\'>'+
-                    '      <input name=\'weight[]\' class=\'form-control\' id=\'weight\' value=\'\' type=\'number\'> '+     
+                    '      <input name=\'weight[]\' class=\'form-control\' id=\'weight\' value=\'\' type=\'number\'> '+
                     '    </div>'+
                     '    <div class=\'col-12 d-flex justify-content-center align-items-center mt-4\'><a class=\'btn deleteAdminBtn\' href=\'#\' id=\'remCrit'+j+'\'><span class=\'fa-solid fa-xmark\'></span></a></div>'+
                     '</div>'+
@@ -247,7 +247,7 @@ if (isset($_GET['rubric_id']) or isset($_GET['new_rubric'])) { // edit rubric or
                                         '</td>'+
                                         '<td class=\'text-center\'>'+
                                         '</td>'+
-                                        '</tr>'+				
+                                        '</tr>'+
                     '                </tbody>'+
                     '            </table>'+
                     '        </div>'+
@@ -258,7 +258,7 @@ if (isset($_GET['rubric_id']) or isset($_GET['new_rubric'])) { // edit rubric or
                     '	</div>'+
                     '</div>'
                 );
-                $('#remCrit'+ j +'').bind('click', function() { 
+                $('#remCrit'+ j +'').bind('click', function() {
                         del_crit($(this));
                     }
                 );
@@ -314,8 +314,8 @@ if (isset($_GET['rubric_id']) or isset($_GET['new_rubric'])) { // edit rubric or
                 <div class='form-group'>
                     <div class='col-12 control-label-notes mb-1 mt-4'>$langRubricCrit:</div>
                     <div class='col-12'>
-                        <input type='text' name='title[$crit]' class='form-control' value='".q($title['title_name'])."' required>                    
-                        <div class='col-12 control-label-notes mb-1 mt-4'>$langGradebookWeight (%):</div>                    
+                        <input type='text' name='title[$crit]' class='form-control' value='".q($title['title_name'])."' required>
+                        <div class='col-12 control-label-notes mb-1 mt-4'>$langGradebookWeight (%):</div>
                         <input name='weight[$crit]' class='form-control' id='weight' value='".q($title['crit_weight'])."' type='number'>
                     </div>";
                 if($crit>0) {
@@ -413,7 +413,7 @@ if (isset($_GET['rubric_id']) or isset($_GET['new_rubric'])) { // edit rubric or
             $tool_content .= "</div>";
             $tool_content .= "<div id='inserthere' class=''>
                         <div class='form-group mt-4'>
-                            <div class='col-12 d-flex justify-content-center'>                        
+                            <div class='col-12 d-flex justify-content-center'>
                                 <a class='btn submitAdminBtn' id='addCriteria'>$langAddRubricCriteria</a>
                             </div>
                         </div>
