@@ -217,7 +217,7 @@ class OrderingAnswer extends \QuestionType
             for ($i = 1; $i <= count($ordering_answers); $i++) {
                 if ($ordering_answers[$i] != $arr[$i]) {
                     $arr[$i] = "<span class='text-danger TextBold'><s>" . $arr[$i] . "</s></span>";
-                    if ($arrGrade[$i] < 0) {
+                    if ($arrGrade[$i] < 0) { // Negative grade
                         $questionScore -= $arrGrade[$i];
                         $grade = $arrGrade[$i];
                     }

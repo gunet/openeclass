@@ -6095,3 +6095,17 @@ th.grade-col a{
 .panelCard-exercise .blank:has(.dropped-word){
  background-color: #FFFFFF !important;
 }
+
+.popovers-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: 'Manrope', sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  height: 40px;
+  padding-top: 5px;
+  margin-top: 5px;
+}

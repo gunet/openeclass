@@ -570,13 +570,16 @@ function getRandomDecimal($min, $max, $decimals = 0) {
  */
 function updateWildCardsWithRandomVariables($questionId, $exerciseType) {
 
-    global $attempt_value;
+    $questionDisplay = [];
+    if (isset($_SESSION['QuestionDisplayed'])) {
+        foreach ($_SESSION['QuestionDisplayed'] as $q) {
+            $questionDisplay[] = $q;
+        }
+    }
 
-    if ((isset($_SESSION['changeWildCardAttemptWithRandom']) && $_SESSION['changeWildCardAttemptWithRandom'] != $attempt_value) 
-        or !isset($_SESSION['changeWildCardAttemptWithRandom'])
-        or ($exerciseType == MULTIPLE_PAGE_TYPE && (!in_array($questionId, $_SESSION['QuestionDisplayed']) or !isset($_SESSION['QuestionDisplayed'])))) {
+    // If the user has not executed the current question , update the wildcards of the question with new values.
+    if (!in_array($questionId, $questionDisplay)) {
         
-        $_SESSION['changeWildCardAttemptWithRandom'] = $attempt_value;
         $_SESSION['QuestionDisplayed'][] = $questionId;
 
         // Instantiate ExpressionLanguage
@@ -619,23 +622,28 @@ function updateWildCardsWithRandomVariables($questionId, $exerciseType) {
             $oldOptions = json_decode($q_data->options, true);
             if (count($oldOptions) > 0) {
                 for ($i = 0; $i < count($oldOptions); $i++) {
-                    if (is_numeric($oldOptions[$i]['minimum']) && is_numeric($oldOptions[$i]['maximum']) && is_numeric($oldOptions[$i]['decimal'])
-                        && (!empty($oldOptions[$i]['minimum']) or $oldOptions[$i]['minimum'] == 0) 
-                        && (!empty($oldOptions[$i]['maximum']) or $oldOptions[$i]['maximum'] == 0) 
-                        && (!empty($oldOptions[$i]['decimal']) or $oldOptions[$i]['decimal'] == 0)) {
+                    if ($oldOptions[$i]['type'] == 1 && is_numeric($oldOptions[$i]['minimum']) && is_numeric($oldOptions[$i]['maximum']) && is_numeric($oldOptions[$i]['decimal'])) {
                             $value_wcard = getRandomDecimal($oldOptions[$i]['minimum'], $oldOptions[$i]['maximum'], $oldOptions[$i]['decimal']);
                             $newOptions[] = [
                                                 'item' => $oldOptions[$i]['item'],
                                                 'minimum' => $oldOptions[$i]['minimum'],
                                                 'maximum' => $oldOptions[$i]['maximum'],
                                                 'decimal' => $oldOptions[$i]['decimal'],
-                                                'value' => $value_wcard
+                                                'value' => $value_wcard,
+                                                'type' => $oldOptions[$i]['type']
                                             ];
+                    } elseif ($oldOptions[$i]['type'] == 2) {
+                        $newOptions[] = [
+                                            'item' => $oldOptions[$i]['item'],
+                                            'minimum' => '',
+                                            'maximum' => '',
+                                            'decimal' => '',
+                                            'value' => $oldOptions[$i]['value'],
+                                            'type' => $oldOptions[$i]['type']
+                                        ];
                     }
                 }
             }
-
-            //print_a($newOptions);
 
             if (count($newOptions) > 0) {
                 $newJsonItems = json_encode($newOptions);

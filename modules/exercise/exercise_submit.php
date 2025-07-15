@@ -244,7 +244,6 @@ if (isset($_POST['buttonCancel'])) {
     unset($_SESSION['choicesAn']);
     unset($_SESSION['savedAnsForExerPerPage']);
     unset($_SESSION['calculatedTemporarySave']);
-    unset($_SESSION['changeWildCardAttemptWithRandom']);
     unset($_SESSION['QuestionDisplayed']);
     unset($_SESSION['OrderingTemporarySave']);
     unset($_SESSION['OrderingSubsetKeys']);
@@ -618,7 +617,6 @@ if (isset($_POST['formSent'])) {
         unset($_SESSION['choicesAn']);
         unset($_SESSION['savedAnsForExerPerPage']);
         unset($_SESSION['calculatedTemporarySave']);
-        unset($_SESSION['changeWildCardAttemptWithRandom']);
         unset($_SESSION['QuestionDisplayed']);
         unset($_SESSION['OrderingTemporarySave']);
         unset($_SESSION['OrderingSubsetKeys']);

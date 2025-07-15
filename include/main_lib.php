@@ -12150,3 +12150,40 @@ function theme_initialization() {
         }
     }
 }
+
+
+/**
+ * @brief display types of messages-popovers such as information message or warning message
+ * @param $type
+ * @param $message
+ * @return string
+ */
+function form_popovers($type, $message): string {
+
+    $html = '';
+    switch ($type) {
+        case 'help':
+            $html .= "<button class='btn helpAdminBtn popovers-btn' data-bs-toggle='popover' data-bs-html='true' data-bs-content='{$message}'>
+                        <i class='fa-solid fa-question-circle'></i>
+                      </button>";
+            break;
+        case 'warning':
+            $html .= "<button class='btn btn-warning popovers-btn' data-bs-toggle='popover' data-bs-html='true' data-bs-content='{$message}'>
+                        <i class='fa-solid fa-triangle-exclamation'></i>
+                      </button>";
+            break;
+        case 'success':
+            $html .= "<button class='btn successAdminBtn popovers-btn' data-bs-toggle='popover' data-bs-html='true' data-bs-content='{$message}'>
+                        <i class='fa-solid fa-circle-check'></i>
+                      </button>";
+            break;
+        case 'danger':
+            $html .= "<button class='btn deleteAdminBtn popovers-btn' data-bs-toggle='popover' data-bs-html='true' data-bs-content='{$message}'>
+                        <i class='fa-solid fa-circle-xmark'></i>
+                      </button>";
+            break;
+    }
+
+    return $html;
+
+}
