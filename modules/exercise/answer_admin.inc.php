@@ -249,7 +249,7 @@ if (isset($submitAnswers) || isset($buttonBack)) {
             }
         }
     } elseif ($answerType == DRAG_AND_DROP_TEXT) {
-        $q_text = trim($_POST['drag_and_drop_question']);
+        $q_text = purify($_POST['drag_and_drop_question']);
         // Use preg_match_all to find all numbers within brackets
         preg_match_all('/\[(\d+)\]/', $q_text, $matches);
         // $matches[1] contains all the captured numbers
@@ -308,7 +308,7 @@ if (isset($submitAnswers) || isset($buttonBack)) {
         sort($totalAnsFromChoices);
         $choicesAnsArr = [];
         foreach ($totalAnsFromChoices as $inde_x) {
-            $choicesAnsArr[] = $inde_x . '|' . $_POST['choice_answer'][$inde_x] . '|' . $_POST['choice_grade'][$inde_x];
+            $choicesAnsArr[] = $inde_x . '|' . purify($_POST['choice_answer'][$inde_x]) . '|' . $_POST['choice_grade'][$inde_x];
         }
         $choices_ans = '';
         if (count($choicesAnsArr) > 0) {
@@ -343,7 +343,7 @@ if (isset($submitAnswers) || isset($buttonBack)) {
                 foreach ($markersData as $index => $value) {
                     if (count($markersData) == 10) { // circle or rectangle
                         $arrDataMarkers[$markersData['marker_id']] = [
-                                                                    'marker_answer' => $markersData['marker_answer'],
+                                                                    'marker_answer' => purify($markersData['marker_answer']),
                                                                     'marker_shape' => $markersData['shape_type'],
                                                                     'marker_coordinates' => $markersData['x'] . ',' . $markersData['y'],
                                                                     'marker_offsets' => $markersData['endX'] . ',' . $markersData['endY'],
@@ -353,7 +353,7 @@ if (isset($submitAnswers) || isset($buttonBack)) {
                                                                 ];
                     } elseif (count($markersData) == 6) { // polygon
                         $arrDataMarkers[$markersData['marker_id']] = [
-                                                                    'marker_answer' => $markersData['marker_answer'],
+                                                                    'marker_answer' => purify($markersData['marker_answer']),
                                                                     'marker_shape' => $markersData['shape_type'],
                                                                     'marker_coordinates' => $markersData['points'],
                                                                     'marker_grade' => $markersData['marker_grade'],
@@ -361,7 +361,7 @@ if (isset($submitAnswers) || isset($buttonBack)) {
                                                                 ];
                     } elseif (count($markersData) == 5) { // without shape . So the defined answer is not correct
                         $arrDataMarkers[$markersData['marker_id']] = [
-                                                                    'marker_answer' => $markersData['marker_answer'],
+                                                                    'marker_answer' => purify($markersData['marker_answer']),
                                                                     'marker_shape' => null,
                                                                     'marker_coordinates' => null,
                                                                     'marker_grade' => 0,
@@ -521,7 +521,7 @@ if (isset($submitAnswers) || isset($buttonBack)) {
                 // Inserting the predefined answers for the current question in database.
                 $questionWeighting = $nbrGoodAnswers = 0;
                 for ($i = 1; $i <= count($_POST['calculated_answer']); $i++) {
-                    $reponse[$i] = trim($_POST['calculated_answer'][$i]);
+                    $reponse[$i] = purify($_POST['calculated_answer'][$i]);
                     if ($wildCardOptions) {
                         $resultOfExpression = evaluateExpression($reponse[$i], $questionId);
                         if ($resultOfExpression or $resultOfExpression == 0) {
@@ -631,7 +631,7 @@ if (isset($submitAnswers) || isset($buttonBack)) {
             $choices_ordering_answer = implode(',', $choicesOrdArr);
         }
 
-        $reponse = $choices_ordering_answer;
+        $reponse = purify($choices_ordering_answer);
         $objAnswer->createAnswer($reponse, 0, '', 0, 1);
         $objAnswer->save();
         if (isset($_POST['ordering_answer_grade'])) {

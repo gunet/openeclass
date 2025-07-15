@@ -172,7 +172,7 @@ class OrderingAnswer extends \QuestionType
             $style = '';
             $bgColor = '';
             if (!in_array($i, $randomKeys)) {
-                $class = 'bg-light';
+                $class = 'light-transparent';
                 $icon = '';
             }
             $html_content .= "  <div class='draggable-item $class border-card p-3' data-value='{$value}' data-position='{$i}'>

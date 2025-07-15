@@ -38,7 +38,7 @@ $assocArray = array();
 // Loop through each object and add key-value pairs to the associative array
 foreach ($vertices as $item) {
     foreach ($item as $key => $value) {
-        $assocArray[$key] = $value;
+        $assocArray[$key] = purify($value);
     }
 }
 $str_json = json_encode($assocArray ?? '');

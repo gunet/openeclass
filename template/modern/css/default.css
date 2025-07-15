@@ -6109,3 +6109,7 @@ th.grade-col a{
   padding-top: 5px;
   margin-top: 5px;
 }
+
+.light-transparent {
+  background: rgba(0,0,0,0.1);
+}
