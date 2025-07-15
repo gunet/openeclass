@@ -247,7 +247,7 @@ if (isset($_POST['submit'])) {
     warnCourseInvalidDepartment();
 
     $data['action_bar'] = action_bar([
-        ['title' => $langCourseDescription,
+        ['title' => $langSyllabus,
             'url' => "../course_description/index.php?course=$course_code&" . generate_csrf_token_link_parameter(),
             'icon' => 'fa-info-circle'],
         ['title' => $langBackupCourse,

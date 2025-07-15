@@ -6,10 +6,10 @@
                 <div class='col-12 d-flex justify-content-center align-items-center gap-3 pt-3'>
                     @if(get_config('link_footer_image'))
                     <a href="{!! get_config('link_footer_image') !!}" target="_blank">
-                        <img class='footer-image' style='max-width:280px; max-height:100px;' src='{{ $image_footer }}?<?php echo time(); ?>' alt="{{ trans('langMetaImage') }}">
+                        <img class='footer-image' src='{{ $image_footer }}?<?php echo time(); ?>' alt="{{ trans('langMetaImage') }}">
                     </a>
                     @else
-                    <img class='footer-image' style='max-width:280px; max-height:100px;' src='{{ $image_footer }}?<?php echo time(); ?>' alt="{{ trans('langMetaImage') }}">
+                    <img class='footer-image' src='{{ $image_footer }}?<?php echo time(); ?>' alt="{{ trans('langMetaImage') }}">
                     @endif
                 </div>
                 @if(get_config('footer_intro'))
@@ -133,10 +133,10 @@
                     <div class='col-12 d-flex justify-content-center align-items-center pb-3 gap-3'>
                         @if(get_config('link_footer_image'))
                         <a href="{!! get_config('link_footer_image') !!}" target="_blank">
-                            <img class='footer-image' style='max-width:280px; max-height:100px;' src='{{ $image_footer }}?<?php echo time(); ?>' alt="{{ trans('langMetaImage') }}">
+                            <img class='footer-image' src='{{ $image_footer }}?<?php echo time(); ?>' alt="{{ trans('langMetaImage') }}">
                         </a>
                         @else
-                        <img class='footer-image' style='max-width:280px; max-height:100px;' src='{{ $image_footer }}?<?php echo time(); ?>' alt="{{ trans('langMetaImage') }}">
+                        <img class='footer-image' src='{{ $image_footer }}?<?php echo time(); ?>' alt="{{ trans('langMetaImage') }}">
                         @endif
                     </div>
                 @endif

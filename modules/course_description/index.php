@@ -34,6 +34,7 @@ require_once 'include/action.php';
 $action = new action();
 $action->record(MODULE_ID_DESCRIPTION);
 
+$navigation[] = array('url' => "../course_info/index.php?course=$course_code", 'name' => $langCourseInfo);
 $toolName = $langSyllabus;
 
 ModalBoxHelper::loadModalBox();

@@ -297,7 +297,7 @@
                                                     </td>
 
                                                     {{-- submission files --}}
-                                                    <td class='filename-col col-md-2'>
+                                                    <td class='filename-col text-nowrap'>
                                                         @if ($assign->submission_type == 1)
                                                             <button class='onlineText btn btn-xs btn-default submitAdminBtn' data-id='{{ $row->id }}'>
                                                                 {{ trans('langQuestionView') }}
@@ -309,7 +309,7 @@
                                                     </td>
 
                                                     {{-- submission date --}}
-                                                    <td class='col-md-1'>
+                                                    <td data-sort='{{ $row->submission_date }}' class='col-md-1'>
                                                         <small>
                                                             {!! format_locale_date(strtotime($row->submission_date)) !!}
                                                             @if ($row->deadline && $row->submission_date > $row->deadline)

@@ -186,25 +186,19 @@ if (isset($_GET['topicnotify'])) {
         $topic_id = intval($_GET['topic_id']);
     }
     $rows = Database::get()->querySingle("SELECT COUNT(*) AS count FROM forum_notify
-		WHERE user_id = ?d AND topic_id = ?d AND course_id = ?d", $uid, $topic_id, $course_id);
+        WHERE user_id = ?d AND topic_id = ?d AND course_id = ?d", $uid, $topic_id, $course_id);
     if ($rows->count > 0) {
         Database::get()->query("UPDATE forum_notify SET notify_sent = ?d
-			WHERE user_id = ?d AND topic_id = ?d AND course_id = ?d", $_GET['topicnotify'], $uid, $topic_id, $course_id);
+            WHERE user_id = ?d AND topic_id = ?d AND course_id = ?d", $_GET['topicnotify'], $uid, $topic_id, $course_id);
     } else {
         Database::get()->query("INSERT INTO forum_notify SET user_id = ?d,
-		topic_id = $topic_id, notify_sent = 1, course_id = ?d", $uid, $course_id);
+            topic_id = $topic_id, notify_sent = 1, course_id = ?d", $uid, $course_id);
     }
 }
 
 if (isset($_GET['topicpin'])) {
     if (isset($_GET['topic_id'])) {
         $topic_id = intval($_GET['topic_id']);
-    }
-
-    if ($_GET['topicpin'] == 0) {
-        Database::get()->query("UPDATE forum_topic SET pin_time = NULL WHERE id = ?d", $topic_id);
-    } else {
-        Database::get()->query("UPDATE forum_topic SET pin_time = NOW() WHERE id = ?d", $topic_id);
     }
 }
 
@@ -285,11 +279,11 @@ if (count($result) > 0) { // topics found
 //			WHERE user_id = ?d AND topic_id = ?d AND course_id = ?d AND notify_sent = 1", $uid, $myrow->id, $course_id);
 
         $sql_notify = Database::get()->queryArray("SELECT * FROM forum_notify
-			WHERE user_id = ?d 
-			AND course_id = ?d 
-			AND cat_id = ?d 
-			OR forum_id = ?d 
-			OR topic_id = ?d 
+			WHERE user_id = ?d
+			AND course_id = ?d
+			AND cat_id = ?d
+			OR forum_id = ?d
+			OR topic_id = ?d
 			order by topic_id DESC, forum_id DESC, cat_id DESC LIMIT 1", $uid, $course_id, $cat_id, $forum_id, $topic_id);
 
         if ($sql_notify && $sql_notify[0]->notify_sent == 1) {
@@ -379,17 +373,10 @@ if (count($result) > 0) { // topics found
             }
         }
 
-        $link_pin = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forum=$forum_id&amp;topic_id=$myrow->id&amp;topicpin=" . ($pin_action == 1 ? 0 : 1);
-
         $dyntools[] = array('title' => $notify_action ? $langStopNotify : $langNotify,
                             'url' => $link_notify,
                             'icon' => $notify_action ? 'fa-envelope-open' : 'fa-envelope',
                             'show' => (!setting_get(SETTING_COURSE_FORUM_NOTIFICATIONS)));
-
-        $dyntools[] = array('title' => $pin_action ? $langUnpinTopic : $langPinTopic,
-                            'url' => $link_pin,
-                            'icon' => $pin_action ? 'fa-thumbtack text-danger' : 'fa-thumbtack');
-
 
         $tool_content .= action_button($dyntools);
         $tool_content .= "</td></tr>";
@@ -416,7 +403,7 @@ if (count($result) > 0) { // topics found
                             orderable: false
                         }
                     ],
-                    'searchDelay': 1000,                
+                    'searchDelay': 1000,
                     'oLanguage': {
                        'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
                        'sZeroRecords':  '" . $langNoResult . "',

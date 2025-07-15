@@ -35,14 +35,14 @@ $langsOfTeachers = "συντονιστών";
 $langCTeacher = "ΣΥΝΤΟΝΙΣΤΗΣ";
 
 $langConsultant = "Σύμβουλος";
-$langOfConsultant = "Σύμβουλο";
+$langOfConsultant = "Συμβούλου";
 $langConsultants = "Σύμβουλους";
 $langOfConsultants = "Συμβούλων";
 
-$langsTeacher = "σύμβουλος";
-$langsOfTeacher = "σύμβουλο";
-$langsTeachers = "σύμβουλοι";
-$langsOfTeachers = "σύμβούλων";
+$langsConsultant = "σύμβουλος";
+$langsOfConsultant = "συμβούλου";
+$langsConsultants = "σύμβουλοι";
+$langsOfConsultants = "συμβούλων";
 
 $langCourseAdminTeacher = "Διαχειριστής - Συντονιστής";
 $langOfCourseAdminTeacher = "Διαχειριστή - Συντονιστή";

@@ -40,7 +40,7 @@ function api_method($access) {
     } elseif (isset($_GET['group_id'])) {
         $group = Database::get()->querySingle('SELECT * FROM `group` WHERE id = ?d', $_GET['group_id']);
         if (!$group) {
-            Access::error(3, "Group with id '$_GET[group_id]' not found");
+            Access::error(3, "Group with id '$_GET[group_id]' not found", 404);
         }
         $course = Database::get()->querySingle('SELECT id, code, visible FROM course
             WHERE id = ?d', $group->course_id);
@@ -78,7 +78,7 @@ function api_method($access) {
         $lps = Database::get()->queryArray("SELECT lp_learnPath.learnPath_id
             FROM lp_learnPath
                 JOIN lp_rel_learnPath_module ON lp_learnPath.learnPath_id = lp_rel_learnPath_module.learnPath_id
-                JOIN lp_module ON lp_module.module_id = lp_rel_learnPath_module.learnPath_module_id
+                JOIN lp_module ON lp_module.module_id = lp_rel_learnPath_module.module_id
             WHERE lp_learnPath.course_id = ?d AND lp_module.contentType = 'SCORM'",
             $course->id);
         $course_code = $course->code;

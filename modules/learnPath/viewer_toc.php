@@ -185,7 +185,7 @@ if ($moduleNb > 1) {
 }
 $theme_id = isset($_SESSION['theme_options_id']) ? $_SESSION['theme_options_id'] : get_config('theme_options_id');
 $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
-$theme_options_styles = unserialize($theme_options->styles);
+$theme_options_styles = $theme_options? unserialize($theme_options->styles): [];
 $urlThemeData = $urlAppend . 'courses/theme_data/' . $theme_id;
 $logoUrl = isset($theme_options_styles['imageUploadSmall']) ? $urlThemeData."/".$theme_options_styles['imageUploadSmall'] : $themeimg."/eclass-new-logo.svg" ;
 

@@ -29,48 +29,99 @@
         @if ($display_login_form != 1)
             <div class='row m-auto'>
                 <div class="col-12 jumbotron jumbotron-login">
-                    <div class='{{ $container }} padding-default'>
-                        <div class='row row-cols-1 g-4'>
-                            <div class='col'>
-                                <div class='card bg-transparent card-transparent border-0'>
-                                    <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0 gap-3 flex-wrap'>
-                                        <div class='jumbotron-intro-text'>
-                                            @if(get_config('homepage_title_'.$language_code))
-                                                <h1 class='eclass-title' aria-label="{{ trans('langEclass') }}">{{ get_config('homepage_title_'.$language_code) }}</h1>
-                                            @endif
 
-                                            @if(get_config('homepage_intro_'.$language_code))
-                                                <p class='eclassInfo mb-0' aria-label="{{ trans('langInfo') }}">{!! get_config('homepage_intro_'.$language_code) !!}</p>
-                                            @endif
-                                        </div>
-                                    </div>
-                                    <div class='card-body px-0'>
-                                        @if(get_config('enable_mobileapi') || $eclass_banner_value == 1)
-                                            <div class="d-flex justify-content-between align-items-center flex-wrap gap-4">
-                                                @if(get_config('enable_mobileapi'))
-                                                    <div class='d-flex gap-3 pe-3'>
-                                                        <a href='https://play.google.com/store/apps/details?id=gr.gunet.eclass3' target='_blank' aria-label='Google Play'>
-                                                            <img style='width:150px;' src='resources/img/GooglePlay.svg' class='img-responsive center-block m-auto d-block' alt='Get it on Google Play'>
-                                                        </a>
-                                                        <a href='https://itunes.apple.com/us/app/open-eclass-mobile/id1398319489' target='_blank' aria-label='App Store'>
-                                                            <img style='width:150px;' src='resources/img/AppStore.svg' class='img-responsive center-block m-auto d-block' alt='Download on the App Store'>
-                                                        </a>
-                                                    </div>
+                    @if ($VideoUploadedInJumbotron)
+                        <video preload="auto" autoplay="" playsinline="" loop="" muted="">
+                            <source type="video/mp4" src="{{ $urlAppend }}courses/theme_data/{{ $theme_id}}/video.mp4">
+                        </video>
+                        <div class='radial-gradient-video'></div>
+                        <div class='{{ $container }} padding-default overlay-video-container'>
+                            <div class='row row-cols-1 g-4'>
+                                <div class='col'>
+                                    <div class='card bg-transparent card-transparent border-0'>
+                                        <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0 gap-3 flex-wrap'>
+                                            <div class='jumbotron-intro-text'>
+                                                @if(get_config('homepage_title_'.$language_code))
+                                                    <h1 class='eclass-title' aria-label="{{ trans('langEclass') }}">{{ get_config('homepage_title_'.$language_code) }}</h1>
                                                 @endif
-                                                @if($eclass_banner_value == 1)
-                                                    <div>
-                                                        <a class='banner-link' href="{!! get_config('banner_link') !!}" target="_blank" aria-label='Banner'>
-                                                            <img style='width:134px;' src="{{ $logo_img }}" alt="This is the banner of platform">
-                                                        </a>
-                                                    </div>
+
+                                                @if(get_config('homepage_intro_'.$language_code))
+                                                    <p class='eclassInfo mb-0' aria-label="{{ trans('langInfo') }}">{!! get_config('homepage_intro_'.$language_code) !!}</p>
                                                 @endif
                                             </div>
-                                        @endif
+                                        </div>
+                                        <div class='card-body px-0'>
+                                            @if(get_config('enable_mobileapi') || $eclass_banner_value == 1)
+                                                <div class="d-flex justify-content-between align-items-center flex-wrap gap-4">
+                                                    @if(get_config('enable_mobileapi'))
+                                                        <div class='d-flex gap-3 pe-3'>
+                                                            <a href='https://play.google.com/store/apps/details?id=gr.gunet.eclass3' target='_blank' aria-label='Google Play'>
+                                                                <img style='width:150px;' src='resources/img/GooglePlay.svg' class='img-responsive center-block m-auto d-block' alt='Get it on Google Play'>
+                                                            </a>
+                                                            <a href='https://itunes.apple.com/us/app/open-eclass-mobile/id1398319489' target='_blank' aria-label='App Store'>
+                                                                <img style='width:150px;' src='resources/img/AppStore.svg' class='img-responsive center-block m-auto d-block' alt='Download on the App Store'>
+                                                            </a>
+                                                        </div>
+                                                    @endif
+                                                    @if($eclass_banner_value == 1)
+                                                        <div>
+                                                            <a class='banner-link' href="{!! get_config('banner_link') !!}" target="_blank" aria-label='Banner'>
+                                                                <img style='width:134px;' src="{{ $logo_img }}" alt="This is the banner of platform">
+                                                            </a>
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                            @endif
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    @else
+                        <div class='{{ $container }} padding-default'>
+                            <div class='row row-cols-1 g-4'>
+                                <div class='col'>
+                                    <div class='card bg-transparent card-transparent border-0'>
+                                        <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0 gap-3 flex-wrap'>
+                                            <div class='jumbotron-intro-text'>
+                                                @if(get_config('homepage_title_'.$language_code))
+                                                    <h1 class='eclass-title' aria-label="{{ trans('langEclass') }}">{{ get_config('homepage_title_'.$language_code) }}</h1>
+                                                @endif
+
+                                                @if(get_config('homepage_intro_'.$language_code))
+                                                    <p class='eclassInfo mb-0' aria-label="{{ trans('langInfo') }}">{!! get_config('homepage_intro_'.$language_code) !!}</p>
+                                                @endif
+                                            </div>
+                                        </div>
+                                        <div class='card-body px-0'>
+                                            @if(get_config('enable_mobileapi') || $eclass_banner_value == 1)
+                                                <div class="d-flex justify-content-between align-items-center flex-wrap gap-4">
+                                                    @if(get_config('enable_mobileapi'))
+                                                        <div class='d-flex gap-3 pe-3'>
+                                                            <a href='https://play.google.com/store/apps/details?id=gr.gunet.eclass3' target='_blank' aria-label='Google Play'>
+                                                                <img style='width:150px;' src='resources/img/GooglePlay.svg' class='img-responsive center-block m-auto d-block' alt='Get it on Google Play'>
+                                                            </a>
+                                                            <a href='https://itunes.apple.com/us/app/open-eclass-mobile/id1398319489' target='_blank' aria-label='App Store'>
+                                                                <img style='width:150px;' src='resources/img/AppStore.svg' class='img-responsive center-block m-auto d-block' alt='Download on the App Store'>
+                                                            </a>
+                                                        </div>
+                                                    @endif
+                                                    @if($eclass_banner_value == 1)
+                                                        <div>
+                                                            <a class='banner-link' href="{!! get_config('banner_link') !!}" target="_blank" aria-label='Banner'>
+                                                                <img style='width:134px;' src="{{ $logo_img }}" alt="This is the banner of platform">
+                                                            </a>
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+
                 </div>
             </div>
         @endif

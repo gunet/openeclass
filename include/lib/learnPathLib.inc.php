@@ -88,7 +88,7 @@ function commentBox($type, $mode) {
 
     // will be set 'true' if the comment has to be displayed
     $dsp = false;
-    $output = "";
+    $output = $defaultTxt = "";
 
     // those vars will be used to build sql queries according to the comment type
     switch ($type) {
@@ -158,8 +158,8 @@ function commentBox($type, $mode) {
         $result = Database::get()->querySingle($sql);
         $currentComment = ($result && !empty($result->$col_name)) ? $result->$col_name : false;
 
-        // display nothing if this is default comment and not an admin
-        if (($currentComment == $defaultTxt) && !$is_editor) {
+        // display nothing if this is the default comment and not an admin
+        if (($currentComment == $defaultTxt || empty($currentComment)) && !$is_editor) {
             return $output;
         }
 
@@ -611,20 +611,14 @@ function get_learnPath_progress_details($lpid, $lpUid, $total=true, $from_date =
               AND LP.`course_id` = ?d
               AND LPM.`visible` = 1
               AND M.`module_id` = LPM.`module_id`
-              AND M.`contentType` != ?s";
-//            ORDER BY UMP.`attempt`, LPM.`rank`";
-
-    if ($from_date) {
-        $sql .= " AND UMP.`started` >= ?s";
-    }
-
-    $sql .= " ORDER BY UMP.`attempt`, LPM.`rank`";
+              AND M.`contentType` != ?s" .
+            ($from_date? " AND UMP.`started` >= ?s": '') . "
+            ORDER BY UMP.`attempt`, LPM.`rank`";
     $params = [$lpUid, $lpid, $course_id, CTLABEL_];
     if ($from_date) {
         $params[] = $from_date;
     }
 
-//    $modules = Database::get()->queryArray($sql, $lpUid, $lpid, $course_id, CTLABEL_);
     $modules = Database::get()->queryArray($sql, ...$params);
     $totalProgress = 0;
     $totalStarted = $totalAccessed = $totalStatus = $maxAttempt = "";
@@ -648,8 +642,6 @@ function get_learnPath_progress_details($lpid, $lpUid, $total=true, $from_date =
             $global_time[$i] = "0000:00:00";
             // total progress calculation
             $global_progress[$i] = calculate_learnPath_progress($lpid, $modsForProg[$i]);
-            //echo $global_progress[$i];
-            //echo "<br>";
         }
 
         foreach ($modules as $module) {
@@ -689,7 +681,8 @@ function get_learnPath_progress_details($lpid, $lpUid, $total=true, $from_date =
         $bestAttempt = 1; // discover best attempt
 
         for ($i = 1; $i <= $maxAttempt; $i++) {
-            if ($global_progress[$i] > $global_progress[$bestAttempt] || enum_lesson_status($global_status[$i]) > enum_lesson_status($global_status[$bestAttempt])) {
+            if ($global_progress[$i] > $global_progress[$bestAttempt] or
+                enum_lesson_status($global_status[$i]) > enum_lesson_status($global_status[$bestAttempt])) {
                 $bestAttempt = $i;
             }
         }
@@ -708,14 +701,16 @@ function get_learnPath_progress_details($lpid, $lpUid, $total=true, $from_date =
     } else {
         $attempts = [];
         for ($i = 1; $i <= $maxAttempt; $i++) {
-            $attempts[$i] = [
-                $global_progress[$i],
-                $global_time[$i],
-                $global_started[$i],
-                $global_accessed[$i],
-                $global_status[$i],
-                $i,
-            ];
+            if ($global_started[$i]) {
+                $attempts[$i] = [
+                    $global_progress[$i],
+                    $global_time[$i],
+                    $global_started[$i],
+                    $global_accessed[$i],
+                    $global_status[$i],
+                    $i,
+                ];
+            }
         }
         return $attempts;
     }
@@ -1450,25 +1445,11 @@ function disp_button($url, $text, $confirmMessage = '') {
 
 function disp_progress_bar($progress, $factor) {
 
-    $maxSize = $factor * 100; //pixels
-    $barwidth = $factor * $progress;
-
-    // display progress bar
-    // origin of the bar
-
-
-    /*$progressBar = "
-    <div class='progress' style='display: inline-block; width: 200px; margin-bottom:0px;'>
-        <div class='progress-bar' role='progressbar' aria-valuenow='60' aria-valuemin='0' aria-valuemax='100' style='width: $progress%; min-width: 2em;'>
-            $progress%
-        </div>
-    </div>";*/
 
     // Progress bar not displaying in mpdf library
     if (!isset($_GET['pdf'])) {
-        //$progressBar = "<div class='progress-circle-bar' role='progressbar' aria-valuenow=$progress aria-valuemin='0' aria-valuemax='100' style='--value: $progress; --size: 6rem;'></div>";
         $progressBar = "
-        <div class='progress' style='display: inline-block; width: 200px; height:auto; margin-bottom:0px;'>
+        <div class='progress' style='display: inline-block; width: 100px; height:auto; margin-bottom:0px;'>
             <div class='progress-bar' role='progressbar' aria-valuenow='60' aria-valuemin='0' aria-valuemax='100' style='width: $progress%; min-width: 2em; min-height:100%;'>
                 $progress%
             </div>
@@ -1476,7 +1457,6 @@ function disp_progress_bar($progress, $factor) {
     } else {
         $progressBar = "<p>$progress%</p>";
     }
-    
 
     return $progressBar;
 }

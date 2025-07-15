@@ -35,7 +35,7 @@ require_once '../../include/baseTheme.php';
 require_once 'include/lib/learnPathLib.inc.php';
 
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langLearningPaths);
-$pageName = $langTrackAllPathExplanation;
+$toolName = $langTrackAllPathExplanation;
 
 load_js('datatables');
 
@@ -72,7 +72,7 @@ $head_content .= "<script type='text/javascript'>
         </script>";
 
 if (!isset($_GET['pdf'])) {
-    $tool_content .= action_bar(array(
+    $action_bar = action_bar(array(
         array('title' => $langBack,
             'url' => "index.php",
             'icon' => 'fa-reply',
@@ -89,6 +89,7 @@ if (!isset($_GET['pdf'])) {
         false);
 }
 
+$tool_content .= $action_bar;
 
 $course_title = course_code_to_title($_GET['course']);
 

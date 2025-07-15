@@ -73,8 +73,18 @@
 
     }
 
+    /*
+        Ref: https://datatables.net/forums/discussion/77095/bootstrap-5-tooltips-stay-on-screen-when-datatable-reloads
+     */
     function tooltip_init() {
-        $('[data-bs-toggle="tooltip"]').tooltip({container: 'body'});
+        let tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+        let tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl, {
+                boundary: document.body,
+                container: 'body',
+                trigger: 'hover'
+            }
+        ));
+        tooltipList.forEach((tooltip) => { $('.tooltip').hide(); });
     }
 
     let checkboxStates = [];
@@ -200,7 +210,7 @@
                     pin_announce: 1
                 },
                 beforeSend: function(){
-                    console.log(tr_affected);
+                    //console.log(tr_affected);
                     tr_affected.css('backgroundColor','rgba(100,100,100,0.3)');
                 },
                 success: function(data){
@@ -211,35 +221,7 @@
 
         $(document).on( 'click','.delete_btn', function (e) {
             e.preventDefault();
-            //var row_id = $(this).data('id');
             var row_id = (this.id);
-            // bootbox.confirm('{{ js_escape(trans('langSureToDelAnnounce')) }}', function(result) {
-            //     if(result) {
-            //         $.ajax({
-            //             type: 'POST',
-            //             url: '',
-            //             datatype: 'json',
-            //             data: {
-            //                 action: 'delete',
-            //                 value: row_id
-            //             },
-            //             success: function(data){
-            //                 var info = oTable.page.info();
-            //                 var page_number = info.page;
-            //                 oTable.draw(false);
-            //             },
-            //             error: function(xhr, textStatus, error){
-            //                 console.log(xhr.statusText);
-            //                 console.log(textStatus);
-            //                 console.log(error);
-            //             }
-            //         });
-            //         $.ajax({
-            //             type: 'POST',
-            //             url: '{{$urlAppend}}modules/search/idxasync.php'
-            //         });
-            //     }
-            // });
             bootbox.confirm({
                 closeButton: false,
                 title: "<div class='icon-modal-default'><i class='fa-regular fa-trash-can fa-xl Accent-200-cl'></i></div><div class='modal-title-default text-center mb-0'>{{ js_escape(trans('langConfirmDelete')) }}</div>",
@@ -348,13 +330,13 @@
 @endpush
 
 @push('head_styles')
-<link rel='stylesheet' type='text/css' href="{{ $urlServer }}/js/datatables/media/css/jquery.dataTables.css" />
+    <link rel='stylesheet' type='text/css' href="{{ $urlServer }}/js/datatables/media/css/jquery.dataTables.css" />
 @endpush
 
 @section('content')
 
 <div class="col-12 main-section">
-<div class='{{ $container }} module-container announcement-index py-lg-0'>
+    <div class='{{ $container }} module-container announcement-index py-lg-0'>
         <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
 
             @include('layouts.partials.left_menu')
@@ -454,7 +436,6 @@
             </div>
 
         </div>
-
-</div>
+    </div>
 </div>
 @endsection

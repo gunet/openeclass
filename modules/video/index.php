@@ -188,9 +188,8 @@ if (isset($_GET['form_input']) and $_GET['form_input'] === 'opendelos') {
     $data['jsonPublicObj'] = $jsonPublicObj;
     $data['jsonPrivateObj'] = $jsonPrivateObj;
     $data['checkAuth'] = $checkAuth;
-    $data['currentVideoLinks'] = getCurrentVideoLinks($course_id);
+    $data['currentVideoLinks'] = getCurrentVideoLinks();
     view('modules.video.editdelos', $data);
 } else {
     view('modules.video.index', $data);
 }
-

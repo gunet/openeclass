@@ -74,7 +74,7 @@
                                                         <div class='form-group mt-0'>
                                                             <label for='submission_text' class='col-sm-6 control-label-notes'>{{ trans('langWorkOnlineText') }}:</label>
                                                             <div class='col-sm-12'>
-                                                                {!! rich_text_editor('submission_text', 10, 20, '')!!}
+                                                                {!! $rich_text_editor !!}
                                                             </div>
                                                         </div>
                                                     @elseif ($submission_type == 2) {{-- Multiple file submission --}}
@@ -100,6 +100,14 @@
                                                             </div>
                                                         </div>
                                                     @endif
+
+                                                    {{-- Comments --}}
+                                                    <div class='form-group mt-3'>
+                                                        <label for='stud_comments' class='col-sm-6 control-label-notes'>{{ trans('langComments') }}:</label>
+                                                        <div class='col-sm-12'>
+                                                            <textarea class='form-control' name='stud_comments' id='stud_comments' rows='5'></textarea>
+                                                        </div>
+                                                    </div>
 
                                                     @if ($on_behalf_of)
                                                         <div class='form-group mt-4'>

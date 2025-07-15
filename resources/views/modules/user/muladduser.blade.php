@@ -47,8 +47,9 @@
                                         </div>
                                         {!! showSecondFactorChallenge() !!}
 
-                                        <div class='col-12 mt-5 d-flex justify-content-end align-items-center'>
+                                        <div class='col-12 mt-5 d-flex justify-content-end align-items-center gap-2'>
                                             <input class='btn submitAdminBtn' type='submit' name='submit' value='{{ trans('langAdd') }}'>
+                                            <a class='btn cancelAdminBtn' href='index.php?course={{ $course_code }}'>{{ trans('langCancel') }}</a>
                                         </div>
                                         {!! generate_csrf_token_form_field() !!}
                                     </fieldset>
