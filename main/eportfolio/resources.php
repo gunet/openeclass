@@ -79,7 +79,7 @@ if (isset($_GET['id']) && intval($_GET['id']) > 0) {
 $toolName = $langMyePortfolio;
 $pageName = $langResourcesCollection;
 
-if (!token_validate('eportfolio' . $id, $_GET['token'])) {
+if (!isset($_GET['token']) || !token_validate('eportfolio' . $id, $_GET['token'])) {
     redirect_to_home_page();
 }
 
@@ -719,7 +719,7 @@ if ($userdata) {
                                     </div>
                                     <div class='card-body'>
                                         <p class='TextBold'>$langSubmit:<span class='ms-1 small-text TextRegular'>" . format_locale_date(strtotime($data['timestamp'])) . "</span></p>
-                                        ".ellipsize_html(standard_text_escape($data['content']), 500, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?id=$id&amp;action=showBlogPost&amp;er_id=".$post->id."'> <span class='smaller'>[$langMore]</span></a></strong>")."
+                                        ".ellipsize_html(standard_text_escape($data['content']), 500, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?id=$id&amp;token=$token&amp;action=showBlogPost&amp;er_id=".$post->id."'> <span class='smaller'>[$langMore]</span></a></strong>")."
                                     </div>
                                     <div class='card-footer border-0 d-flex justify-content-start align-items-center'>                                       
                                         <div class='small-text'>$post->course_title</div>
