@@ -506,6 +506,9 @@ if ($userdata) {
             } else {
                 $post->course_title = $langUserBlog;
             }
+
+            $reflection_comments = (!empty($post->reflection_comments) && ($post->user_id == $uid)) ? $langComment.':"'.$post->reflection_comments.'"' : '';
+
             $tool_content .= "<div class='card panelCard card-default px-lg-4 py-lg-3 mb-3'>
                                     <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>                                                                                 
                                             <h3>".q($data['title'])."</h3>
@@ -526,6 +529,9 @@ if ($userdata) {
                                     </div>
                                     <div class='card-footer border-0 d-flex justify-content-start align-items-center'>                                        
                                             <div class='small-text'>$post->course_title</div>                                        
+                                    </div>
+                                    <div class='card-footer border-0 d-flex justify-content-start align-items-center'>                                       
+                                        <div class='small-text'><em>$reflection_comments</em></div>
                                     </div>
                                 </div>";
         }
@@ -648,6 +654,8 @@ if ($userdata) {
                     $post->course_title = $langUserBlog;
                 }
 
+                $reflection_comments = (!empty($post->reflection_comments) && ($post->user_id == $uid)) ? $langComment.':"'.$post->reflection_comments.'"' : '';
+
                 if(!isset($_GET['view']) && ($post->user_id == $uid)) {
                     $title_vis_icon = "<span>&nbsp;
                                             <i class=\"fa ".$visibility_vars[$post->visibility]['fa_icon']." 
@@ -714,7 +722,10 @@ if ($userdata) {
                                         ".ellipsize_html(standard_text_escape($data['content']), 500, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?id=$id&amp;action=showBlogPost&amp;er_id=".$post->id."'> <span class='smaller'>[$langMore]</span></a></strong>")."
                                     </div>
                                     <div class='card-footer border-0 d-flex justify-content-start align-items-center'>                                       
-                                        <div class='small-text'>$post->course_title</div>                                       
+                                        <div class='small-text'>$post->course_title</div>
+                                    </div>
+                                    <div class='card-footer border-0 d-flex justify-content-start align-items-center'>                                       
+                                        <div class='small-text'><em>$reflection_comments</em></div>
                                     </div>
                                 </div>";
             $tool_content .= "</div>";
@@ -1156,6 +1167,8 @@ if ($userdata) {
                     $note_course_title = "";
                 }
 
+                $reflection_comments = (!empty($note->reflection_comments) && ($note->user_id == $uid)) ? $langComment.':"'.$note->reflection_comments.'"' : '';
+
                 if(!isset($_GET['view']) && ($note->user_id == $uid)) {
                     $title_vis_icon = "<span>&nbsp;
                                             <i class=\"fa ".$visibility_vars[$note->visibility]['fa_icon']." 
@@ -1223,6 +1236,9 @@ if ($userdata) {
                                     </div>
                                     <div class='card-footer border-0 d-flex justify-content-start align-items-center'>                                       
                                         <div class='small-text'>$note_course_title</div>                                       
+                                    </div>
+                                    <div class='card-footer border-0 d-flex justify-content-start align-items-center'>                                       
+                                        <div class='small-text'><em>$reflection_comments</em></div>
                                     </div>
                                 </div>";
             $tool_content .= "</div>";
