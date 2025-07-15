@@ -835,8 +835,14 @@ if ($userdata) {
                 } else {
                    $submission_content .= "<div class='mb-3'><a class='link-color TextBold' href='resources.php?action=get&amp;id=$id&amp;token=$token&amp;type=submission&amp;er_id=$submission->id'>$langWorkFile</a></div>";
                 }
+
+                $reflection_comments = (!empty($submission->reflection_comments) && ($submission->user_id == $uid)) ? $langComment.':"'.$submission->reflection_comments.'"' : '';
+
                 $submission_footer = "<div class='card-footer border-0 d-flex justify-content-start align-items-center'>                                         
                                               <div class='small-text'>$submission->course_title</div>                                          
+                                      </div>
+                                      <div class='card-footer border-0 d-flex justify-content-start align-items-center'>                                         
+                                              <div class='small-text'><em>$reflection_comments</em></div>                                          
                                       </div>";
                 $tool_content .= "<div class='card panelCard card-default px-lg-4 py-lg-3 h-100'>
                                     <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>                                        
@@ -942,6 +948,8 @@ if ($userdata) {
                     $vis_modal_form = "";
                 }
 
+                $reflection_comments = (!empty($doc->reflection_comments) && ($doc->user_id == $uid)) ? $langComment.':"'.$doc->reflection_comments.'"' : '';
+
                 $tool_content .= "<tr class='$row_class'>
                                     <td><span class='fa ".choose_image('.' . $data['format'])."'></span></td>
                                     <td>".$file_link.$title_vis_icon.$vis_modal_form."</td>
@@ -1025,6 +1033,8 @@ if ($userdata) {
                     $vis_modal_form = "";
                 }
 
+                $reflection_comments = (!empty($mybadge->reflection_comments) && ($mybadge->user_id == $uid)) ? $langComment.':"'.$mybadge->reflection_comments.'"' : '';
+
                 $tool_content .= "<div class='card panelCard card-default px-lg-4 py-lg-3 mt-3 h-100'>
                                     <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>                                           
                                         <h3>".q($data['title']).$title_vis_icon."</h3>"
@@ -1050,6 +1060,9 @@ if ($userdata) {
                                                 " . $data['issuer'] . "
                                             </a>
                                         </div>
+                                    </div>
+                                    <div class='card-footer border-0 d-flex justify-content-start align-items-center'>                                       
+                                        <div class='small-text'><em>$reflection_comments</em></div>
                                     </div>
                                 </div>";
             $tool_content .= "</div>";
@@ -1119,6 +1132,8 @@ if ($userdata) {
                     $vis_modal_form = "";
                 }
 
+                $reflection_comments = (!empty($mycertificate->reflection_comments) && ($mycertificate->user_id == $uid)) ? $langComment.':"'.$mycertificate->reflection_comments.'"' : '';
+
                 $tool_content .= "<div class='card panelCard card-default px-lg-4 py-lg-3 mt-3 h-100'>
                                     <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>                                           
                                         <h3>".q($data['title']).$title_vis_icon."</h3>"
@@ -1144,6 +1159,9 @@ if ($userdata) {
                                                 " . $data['issuer'] . "
                                             </a>
                                         </div>
+                                    </div>
+                                    <div class='card-footer border-0 d-flex justify-content-start align-items-center'>                                       
+                                        <div class='small-text'><em>$reflection_comments</em></div>
                                     </div>
                                 </div>";
             $tool_content .= "</div>";
