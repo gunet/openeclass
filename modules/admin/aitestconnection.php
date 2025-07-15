@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 try {
     $provider_type = $_POST['provider_type'] ?? '';
-    $api_key = $_POST['api_key'] ?? '';
+    $api_key = trim($_POST['api_key']) ?? '';
     $model_name = $_POST['model_name'] ?? '';
     $endpoint_url = $_POST['endpoint_url'] ?? null;
 
@@ -62,7 +62,7 @@ try {
 
     // Create provider instance
     $provider = AIProviderFactory::create($provider_type, $config);
-    
+
     if (!$provider) {
         echo json_encode([
             'success' => false,
@@ -73,7 +73,7 @@ try {
 
     // Test the connection
     $isHealthy = $provider->isHealthy();
-    
+
     if ($isHealthy) {
         echo json_encode([
             'success' => true,
