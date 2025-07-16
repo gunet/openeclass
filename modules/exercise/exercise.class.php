@@ -1259,11 +1259,14 @@ if (!class_exists('Exercise')) {
                         }
                     }
                 } else {
-                    // Initial variables
-                    $initial = Database::get()->query("INSERT INTO exercise_answer_record
+
+                    // Initial variables. Set weight = 0 for each position as unaswered question.
+                    for ($i = 1; $i <= count($ordering_answer); $i++) {
+                        Database::get()->query("INSERT INTO exercise_answer_record
                                     (eurid, question_id, answer, answer_id, weight, is_answered, q_position)
                                     VALUES (?d, ?d, ?s, ?d, ?f, ?d, ?d)",
-                                    $eurid, $key, '', 0, 0, 0, $q_position);
+                                    $eurid, $key, '', $i, 0, 0, $q_position);
+                    }
 
                     if (isset($_POST['choice']) && !empty($_POST['choice'][$key])) {
                         $userAnswers = json_decode($_POST['choice'][$key], true);
