@@ -21,5 +21,6 @@
 interface SearchEngineInterface {
 
     public function search(array $params): array;
+    public function index(int $courseId): void;
 
 }

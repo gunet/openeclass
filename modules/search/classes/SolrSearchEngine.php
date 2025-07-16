@@ -30,21 +30,14 @@ class SolrSearchEngine implements SearchEngineInterface {
         }
 
         // construct Solr Url for searching
-        $solrUrl = get_config('ext_solr_url', SolrApp::SOLRDEFAULTURL);
-        if ($solrUrl[strlen($solrUrl) - 1] != '/') {
-            $solrUrl .= '/';
-        }
-        $solrUrl .= "select";
-
-        // search parameters
         $query = [
             'q' => 'title:example',
             'wt' => 'json'
         ];
-        $fullUrl = $solrUrl . '?' . http_build_query($query);
+        $solrUrl = $this->constructSolrUrl("select", $query);
 
         // Perform Solr query
-        list($response, $code) = CurlUtil::httpGetRequest($fullUrl);
+        list($response, $code) = CurlUtil::httpGetRequest($solrUrl);
         if ($code !== 200) {
             return [];
         }
@@ -56,6 +49,36 @@ class SolrSearchEngine implements SearchEngineInterface {
         return array_map(function ($hit) {
             return new SearchResult("hit->pk", $hit->vid, "hit->doctype", "hit->visible", $hit);
         }, $hits);
+    }
+
+    public function index(int $courseId): void {
+        if (!get_config('ext_solr_enabled')) {
+            return;
+        }
+
+        // construct Solr Url for indexing
+        $query = [
+            'commit' => 'true'
+        ];
+        $solrUrl = $this->constructSolrUrl("update", $query);
+
+        /*
+         *
+         * #!/bin/bash
+            curl http://localhost:8983/solr/eclass_index/update?commit=true \
+              -H 'Content-Type: application/json' \
+              --data-binary @sample_docs.json
+         *
+         */
+    }
+
+    private function constructSolrUrl(string $action, array $params): string {
+        $solrUrl = get_config('ext_solr_url', SolrApp::SOLRDEFAULTURL);
+        if ($solrUrl[strlen($solrUrl) - 1] != '/') {
+            $solrUrl .= '/';
+        }
+        $solrUrl .= $action;
+        return $solrUrl . '?' . http_build_query($params);
     }
 
 }

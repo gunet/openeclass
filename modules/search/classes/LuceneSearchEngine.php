@@ -39,4 +39,15 @@ class LuceneSearchEngine implements SearchEngineInterface {
         }, $hits);
     }
 
+    public function index(int $courseId): void {
+        $idx = new Indexer();
+        if (!$idx->getIndex()) {
+            return;
+        }
+        // re-index
+        $idx->removeAllByCourse($courseId);
+        $idx->storeAllByCourse($courseId);
+        $idx->getIndex()->optimize();
+    }
+
 }
