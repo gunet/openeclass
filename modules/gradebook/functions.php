@@ -1739,7 +1739,7 @@ function import_grades($gradebook_id, $activity_id, $import = false) {
         $highestColumnIndex = Coordinate::columnIndexFromString($highestColumn);
 
         for ($row = 1; $row <= $highestRow; ++$row) {
-            if ($row <= 4) { // first 4 rows are headers
+            if ($row <= 2) { // the first 2 rows are headers
                 continue;
             } else {
                 for ($col = 4; $col <= $highestColumnIndex; $col = $col + 2) {
