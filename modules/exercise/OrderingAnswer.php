@@ -43,12 +43,14 @@ class OrderingAnswer extends \QuestionType
         $head_content .= "
             <script src='{$urlServer}/js/sortable/Sortable.min.js'></script>
             <script type='text/javascript'>
-            
-                let dataObject = [];
 
-                function initialPositions() {
+                function initialPositions(QID) {
+
+                    let dataObject = [];
+
                     // Loop through all items to get their current indexes
-                    const items = document.querySelectorAll('#CardList_{$questionId} > .draggable-item');
+                    const items = document.querySelectorAll('#CardList_'+QID+' > .draggable-item');
+                    
                     const indexes = Array.from(items).map((item, index) => {
                         return {
                             element: item,
@@ -63,23 +65,69 @@ class OrderingAnswer extends \QuestionType
                     }
 
                     const jsonString = JSON.stringify(dataObject);
-                    $('#orderingResponses_{$questionId}').val(jsonString);
-                }
+                    $('#orderingResponses_'+QID).val(jsonString);
 
-                function calculatePositions() {
-                    var box = document.getElementById('CardList_{$questionId}');
+                    calculatePositions(QID);
+                    updateButtonOpacity(QID);
+
+                }
+                
+
+                function calculatePositions(QID) {
+                    var box = document.getElementById('CardList_'+QID);
                     Sortable.create(box, {
                         animation: 350,
                         handle: '.fa-arrows',
                         onEnd: function(evt) {
-                            initialPositions();
+                            initialPositions(QID);
                         }
                     });
                 }
+                
+                function updateButtonOpacity(QID) {
+                    const container = $('#CardList_'+QID);
+                    const items = container.children('.draggable-item');
+
+                    // Reset all button opacities and listeners first
+                    container.find('.move-up').css('opacity', 1);
+                    container.find('.move-down').css('opacity', 1);
+                    container.find('.move-up').removeClass('pe-none');
+                    container.find('.move-down').removeClass('pe-none');
+
+                    // Set opacity for the first item's Up button
+                    const firstItem = items.first();
+                    firstItem.find('.move-up').css('opacity', 0.3);
+                    firstItem.find('.move-up').addClass('pe-none');
+
+                    // Set opacity for the last item's Down button
+                    const lastItem = items.last();
+                    lastItem.find('.move-down').css('opacity', 0.3);
+                    lastItem.find('.move-down').addClass('pe-none');
+                }
 
                 $(document).ready(function() {
-                    initialPositions();
-                    calculatePositions();
+                    initialPositions($questionId);
+
+                    $('#CardList_{$questionId}').on('click', '.move-up, .move-down', function() {
+                        
+                        const button = $(this);
+                        const item = button.closest('#CardList_{$questionId} > .draggable-item');
+
+                        if (button.hasClass('move-up')) {
+                            const prev = item.prev('#CardList_{$questionId} > .draggable-item');
+                            if (prev.length) {
+                                item.insertBefore(prev);
+                                initialPositions($questionId);
+                            }
+                        } else if (button.hasClass('move-down')) {
+                            const next = item.next('#CardList_{$questionId} > .draggable-item');
+                            if (next.length) {
+                                next.insertBefore(item);
+                                initialPositions($questionId);
+                            }
+                        }
+                    });
+
                 });
             </script>
         
@@ -171,16 +219,24 @@ class OrderingAnswer extends \QuestionType
             $value = $ordering_answer[$i];
             $style = '';
             $bgColor = '';
+            $sortingBtns = "<div class='sorting-controls d-flex gap-2'>
+                                <button type='button' class='btn submitAdminBtn move-up'><i class='fa-solid fa-up-long'></i></button>
+                                <button type='button' class='btn submitAdminBtn move-down'><i class='fa-solid fa-down-long'></i></button>
+                            </div>";
             if (!in_array($i, $randomKeys)) {
                 $class = 'light-transparent';
                 $icon = '';
+                $sortingBtns = '';
             }
             $html_content .= "  <div class='draggable-item $class border-card p-3' data-value='{$value}' data-position='{$i}'>
                                     <div class='d-flex justify-content-between align-items-center gap-3'>
                                         <p class='text-nowrap'>$value</p>
-                                        <span class='reorder-btn'>
-                                            <span class='fa $icon' data-bs-toggle='tooltip' data-bs-placement='top' title='' style='cursor: grab;'></span>
-                                        </span>
+                                        <div class='d-flex align-items-center gap-4'>
+                                            $sortingBtns
+                                            <span class='reorder-btn'>
+                                                <span class='fa $icon' data-bs-toggle='tooltip' data-bs-placement='top' title='' data-icon='{$questionId}' style='cursor: grab;'></span>
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>";
             
