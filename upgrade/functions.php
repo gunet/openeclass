@@ -2776,7 +2776,7 @@ function upgrade_to_4_0($tbl_options): void {
         Database::get()->query("ALTER TABLE course ADD `is_collaborative` int(11) NOT NULL DEFAULT 0");
     }
     if (!DBHelper::fieldExists('course', 'view_units')) {
-        Database::get()->query("ALTER table course ADD `view_units` INT(11) NOT NULL DEFAULT 0");
+        Database::get()->query("ALTER table course ADD `view_units` INT(11) NOT NULL DEFAULT 1");
     }
     if (!DBHelper::fieldExists('course', 'popular_course')) {
         Database::get()->query("ALTER table course ADD `popular_course` INT(11) NOT NULL DEFAULT 0");
