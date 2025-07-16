@@ -327,6 +327,33 @@ if (isset($_SESSION['is_admin']) and $_SESSION['is_admin']) {
     } else if (isset($_POST['submit_2'])) {
         $_SESSION['step'] = 2;
         $mail_settings_form = $theme_images = $homepage_intro = '';
+
+        $availableThemes = [
+            'Neutral',
+            'Crimson',
+            'Emerald',
+            'Light pink',
+            'Dark',
+            'Dark purple',
+            'Wood',
+            'Collaboration',
+            'Consulting',
+            'E-learning 1',
+            'E-learning 1 small',
+            'E-learning 2',
+            'E-learning 2 small',
+            'E-learning 3',
+            'E-learning 3 small',
+            'University 1',
+            'University 1 small',
+            'University 2',
+            'University 2 small',
+            'Education',
+            'School_1',
+            'School_2',
+            'Default-demo'
+        ];
+
         unset($_SESSION['upgrade_logfile_path']);
         unset($_SESSION['upgrade_logfile_name']);
 
@@ -336,41 +363,34 @@ if (isset($_SESSION['is_admin']) and $_SESSION['is_admin']) {
 
         setGlobalContactInfo();
 
-        $theme_id = get_config('theme_options_id') ?? 0;
-        $all_themes = Database::get()->queryArray("SELECT * FROM theme_options WHERE version >= 3 ORDER BY name");
-        $active_theme = 0;
-        foreach ($all_themes as $row) {
-            $themes_arr[$row->id] = $row->name;
-            if ($row->id == $theme_id) {
-                $active_theme = $row->id;
-            }
-        }
         // Get all images from dir screenshots
+        $theme_images = '';
         $dir_screens = getcwd();
         $dir_screens = $dir_screens . '/template/modern/images/screenshots';
         $dir_themes_images = scandir($dir_screens);
-        $data['active_theme'] = $themes_arr[$active_theme];
-        $data['theme_selection'] = selection($themes_arr, 'theme_selection', $theme_id, 'class="form-select" id="themeSelection"');
 
-        foreach ($dir_themes_images as $image) {
+        foreach($dir_themes_images as $image) {
             $extension = pathinfo($image, PATHINFO_EXTENSION);
             $imgExtArr = ['jpg', 'jpeg', 'png', 'PNG'];
             if (in_array($extension, $imgExtArr)) {
-                $theme_images .=
-                    "<div class='col-lg-8 col-md-10 m-auto py-4'>
-                    <div class='card panelCard h-100'>
-                        <h3 class='alert alert-secondary'>
-                          " . strtok($image, '.') . "
-                        </h3>
-                        <div class='card-body'>
-                            <img style='width:100%; height:auto; object-fit:cover; object-position:50% 50%;' class='card-img-top' src='{$urlAppend}template/modern/images/screenshots/$image' alt='Image for current theme'/>
-                        </div>
-                    </div>
-                </div>";
+                $theme_images .= "
+                  <div class='col-lg-8 col-md-10 m-auto py-4'>
+                      <div class='card panelCard card-default h-100'>
+                          <div class='card-header border-0 d-flex justify-content-between align-items-center'>
+                                <h3>
+                                    " . strtok($image, '.') . "
+                                </h3>
+                          </div>
+                          <div class='card-body'>
+                              <img style='width:100%; height:auto; object-fit:cover; object-position:50% 50%;' class='card-img-top' src='{$urlAppend}/template/modern/images/screenshots/$image' alt='Image for current theme'/>
+                          </div>
+                      </div>
+                  </div>";
             }
         }
-
         $data['theme_images'] = $theme_images;
+        $data['theme_selection'] = selection($availableThemes, 'theme_selection', $availableThemes[0], "class='form-select'");
+
         $data['mail_settings_form'] = $mail_settings_form;
         $homePageIntro = "homepage_intro_$language";
         $data['homepage_intro'] = $homepage_intro = rich_text_editor('homepage_intro', 5, 20, get_config($homePageIntro));
@@ -400,22 +420,6 @@ if (isset($_SESSION['is_admin']) and $_SESSION['is_admin']) {
             set_config('dont_display_texts', get_config('dont_display_texts') ?? 1);
             set_config('dont_display_open_courses', get_config('dont_display_open_courses') ?? 1);
             set_config('dont_display_login_form', get_config('dont_display_login_form') ?? 0);
-
-            if (get_config('dont_display_statistics')) {
-                Database::get()->query("UPDATE homepagePriorities SET visible = 0 WHERE title = ?s", 'statistics');
-            }
-            if (get_config('dont_display_popular_courses')) {
-                Database::get()->query("UPDATE homepagePriorities SET visible = 0 WHERE title = ?s", 'popular_courses');
-            }
-            if (get_config('dont_display_testimonials')) {
-                Database::get()->query("UPDATE homepagePriorities SET visible = 0 WHERE title = ?s", 'testimonials');
-            }
-            if (get_config('dont_display_texts')) {
-                Database::get()->query("UPDATE homepagePriorities SET visible = 0 WHERE title = ?s", 'texts');
-            }
-            if (get_config('dont_display_open_courses')) {
-                Database::get()->query("UPDATE homepagePriorities SET visible = 0 WHERE title = ?s", 'open_courses');
-            }
         }
 
         unset($_SESSION['upgrade_step']);
