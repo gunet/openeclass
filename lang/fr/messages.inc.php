@@ -4764,6 +4764,7 @@ The respective tabs appear only if resources have been added from the relevant m
 $langePortfolioNoResInCollection = 'There are no resources in this collection';
 $langEnabledePortfolioButtonsLabel = 'Enabled e-Portfolio';
 $langResourceExists = "The resource already exists.";
+$langReflectionComment = "Reflection Comment";
 $langePortfolioPromptAddReflComments = "Optionally record some personal, reflective comments about this resource. Answer questions like \"What did I learn from this activity?\" or \"What difficulties and challenges did I face?\", etc.";
 $langPageLink = 'Page link:';
 $langCopiedSucc = 'Copied';
