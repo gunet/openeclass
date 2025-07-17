@@ -12,7 +12,7 @@ class OrderingAnswer extends \QuestionType
 
     public function PreviewQuestion(): string
     {
-        global $langScore, $langAnswer, $langComment, $langOrdering;
+        global $langScore, $langAnswer, $langOrdering;
 
         $html_content = "<tr class='active'><td><strong>$langAnswer</strong></td></tr>";
 
@@ -132,10 +132,10 @@ class OrderingAnswer extends \QuestionType
             </script>
         
         ";
-        
+
         $objQuestion = new Question();
         $objQuestion->read($questionId);
-        
+
         $ordering_answer = $this->answer_object->get_ordering_answers();
         $ordering_answer_grade = $this->answer_object->get_ordering_answer_grade();
         $optionsQ = $objQuestion->selectOptions();
@@ -239,19 +239,19 @@ class OrderingAnswer extends \QuestionType
                                         </div>
                                     </div>
                                 </div>";
-            
+
         }
         $html_content .= "  </div>";
         $html_content .= "<input type='hidden' id='orderingResponses_{$questionId}' name='choice[$questionId]'>";
         $html_content .= "<input type='hidden' name='subsetKeys[$questionId]' value='{$jsonRandomKeys}'>";
-        
+
         return $html_content;
     }
 
     public function QuestionResult($choice, $eurid, $regrade, $extra_type = ''): string
     {
 
-        global $langSelect, $langCorrectS, $langIncorrectS, $questionScore, $langYourOwnAnswerIs, $langCorrectOrdering;
+        global $questionScore, $langYourOwnAnswerIs, $langCorrectOrdering;
 
         $html_content = '';
 

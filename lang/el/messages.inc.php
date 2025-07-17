@@ -2208,7 +2208,7 @@ $langInfoDragAndDropMarkersCreation = '
 </ul>';
 $langRequiresImageUploadedForThisType = "Για την μεταφορά και απόθεση σε προκαθορισμένα σημεία απαιτείται η προσθήκη εικόνας.";
 $langYourOwnAnswerIs = "Η απάντηση που δώσατε είναι:";
-$langCalculated = "Υπολογισμού αριθμητικών πράξεων";
+$langCalculated = "Υπολογισμός αριθμητικών πράξεων";
 $langEditItems = "Επεξεργασία στοιχείων";
 $langItIsNotWildCard = "Δεν αποτελεί στοιχείο της άσκησης";
 $langItIsWildCard = "Αποτελεί στοιχείο της άσκησης";

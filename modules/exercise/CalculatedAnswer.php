@@ -48,7 +48,7 @@ class CalculatedAnswer extends \QuestionType
 
     public function AnswerQuestion($question_number, $exerciseResult = [], $options = []): string
     {
-        global $head_content, $course_code, $langClearChoice;
+        global $langClearChoice;
 
         $html_content = "";
 
@@ -82,7 +82,7 @@ class CalculatedAnswer extends \QuestionType
                 if (isset($exerciseResult[$this->question_id]) && !empty($exerciseResult[$this->question_id])) {
                     $arrExerResults = explode(',', $exerciseResult[$this->question_id]);
                     if (count($arrExerResults) == 2 && $arrExerResults[0] == $answerVal) {
-                        $checked = 'checked';   
+                        $checked = 'checked';
                     }
                 } elseif (!isset($exerciseResult[$this->question_id]) && isset($_SESSION['calculatedTemporarySave'][$this->question_id])
                     && !empty($_SESSION['calculatedTemporarySave'][$this->question_id])) {

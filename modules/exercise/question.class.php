@@ -226,8 +226,8 @@ if (!class_exists('Question')) {
          */
         function selectTypeLegend($answerTypeId) {
             global $langUniqueSelect, $langMultipleSelect, $langFillBlanks,
-                   $langMatching, $langTrueFalse, $langFreeText,
-                   $langFillBlanksStrict, $langFillBlanksTolerant, 
+                   $langMatching, $langTrueFalse, $langFreeText, $langOrdering,
+                   $langFillBlanksStrict, $langFillBlanksTolerant, $langCalculated,
                    $langFillFromSelectedWords, $langDragAndDropText, $langDragAndDropMarkers;
 
             switch ($answerTypeId) {
@@ -251,6 +251,11 @@ if (!class_exists('Question')) {
                     return "$langDragAndDropText";
                 case DRAG_AND_DROP_MARKERS:
                     return "$langDragAndDropMarkers";
+                case CALCULATED:
+                    return $langCalculated;
+                case ORDERING:
+                    return $langOrdering;
+                break;
             }
         }
         /**
@@ -532,7 +537,7 @@ if (!class_exists('Question')) {
                         $choice[$row->answer_id] = 1;
                     } elseif ($type == FREE_TEXT) {
                         $choice = $row->answer;
-                    } elseif ($type == FILL_IN_BLANKS || $type == FILL_IN_BLANKS_TOLERANT || $type == FILL_IN_FROM_PREDEFINED_ANSWERS 
+                    } elseif ($type == FILL_IN_BLANKS || $type == FILL_IN_BLANKS_TOLERANT || $type == FILL_IN_FROM_PREDEFINED_ANSWERS
                                 || $type == DRAG_AND_DROP_TEXT || $type == DRAG_AND_DROP_MARKERS || $type == ORDERING) {
                         $choice[$row->answer_id] = $row->answer;
                     } elseif ($type == MATCHING) {

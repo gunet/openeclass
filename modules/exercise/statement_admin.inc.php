@@ -88,8 +88,8 @@ if (isset($_POST['submitQuestion'])) {
         $answerType = intval($_POST['answerType']);
 
         // It requires to be uploaded an image for this type of question
-       
-        
+
+
         if (isset($_FILES['imageUpload']) && !is_uploaded_file($_FILES['imageUpload']['tmp_name']) && $answerType == DRAG_AND_DROP_MARKERS) {
             $redirectURL = $urlAppend . "modules/exercise/admin.php?course=$course_code&exerciseId=$_GET[exerciseId]&newQuestion=yes";
             Session::flash('message', $langRequiresImageUploadedForThisType);
@@ -305,98 +305,33 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
                     </div>                    
                 </div>
             ";
-        $tool_content .= "<div class='row form-group mt-4'>
-                <div class='col-12 control-label-notes mb-1'>$langAnswerType</div>
+
+        $tool_content .= "
+            <div class='row form-group mt-4'>
+                <div class='col-12 control-label-notes mb-1'>
+                    $langAnswerType
+                </div>
                 <div class='col-12'>
-                    <div class='radio'>
-                      <label>
-                        <input type='radio' name='answerType' value='1' ". (($answerType == UNIQUE_ANSWER) ? "checked" : "") .">
-                        $langUniqueSelect
-                      </label>
-                    </div>
-                    <div class='radio'>
-                      <label>
-                        <input type='radio' name='answerType' value='2' ". (($answerType == MULTIPLE_ANSWER) ? "checked" : "") .">
-                       $langMultipleSelect
-                      </label>
-                    </div>
-                    <div class='radio'>
-                      <label>
-                        <input type='radio' name='answerType' value='". (($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT || $answerType == FILL_IN_FROM_PREDEFINED_ANSWERS || $answerType == DRAG_AND_DROP_TEXT) ? $answerType : 3) ."' id='fill_in_blanks_selector' ". (($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT || $answerType == FILL_IN_FROM_PREDEFINED_ANSWERS || $answerType == DRAG_AND_DROP_TEXT) ? "checked" : "") .">
-                       $langFillBlanks
-                      </label>
-                    </div>
-                    <div class='row'>
-                        <div class='col-10 offset-2 d-flex justify-content-center'>
-                            <div class='form-group ".(($answerType != FILL_IN_BLANKS && $answerType != FILL_IN_BLANKS_TOLERANT && $answerType != FILL_IN_FROM_PREDEFINED_ANSWERS && $answerType != DRAG_AND_DROP_TEXT) ? "hide": "")."' id='fillInBlanksOptions'>
-                                <div class='col-12'>
-                                    <div class='radio mb-2'>
-                                        <label>
-                                            <input type='radio' name='fillInBlanksOptions' value='".FILL_IN_BLANKS."' ". (($answerType != FILL_IN_BLANKS_TOLERANT) ? "checked" : "") .">
-                                            $langFillBlanksStrict $langFillBlanksStrictExample
-                                        </label>
-                                    </div>
-                                    <div class='radio mb-2'>
-                                        <label>
-                                            <input type='radio' name='fillInBlanksOptions' value='".FILL_IN_BLANKS_TOLERANT."' ". (($answerType == FILL_IN_BLANKS_TOLERANT) ? "checked" : "") .">
-                                            $langFillBlanksTolerant $langFillBlanksTolerantExample
-                                        </label>
-                                    </div>
-                                    <div class='radio mb-2'>
-                                        <label>
-                                            <input type='radio' name='fillInBlanksOptions' value='" . DRAG_AND_DROP_TEXT . "' ". (($answerType == DRAG_AND_DROP_TEXT) ? "checked" : "") .">
-                                            $langDragAndDropText
-                                        </label>
-                                    </div>
-                                    <div class='radio mb-2'>
-                                        <label>
-                                            <input type='radio' name='fillInBlanksOptions' value='".FILL_IN_FROM_PREDEFINED_ANSWERS."' ". (($answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) ? "checked" : "") .">
-                                            $langFillFromSelectedWords
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class='radio'>
-                          <label>
-                            <input type='radio' name='answerType' value='".MATCHING."' ". (($answerType == MATCHING) ? "checked" : "") .">
-                           $langMatching
-                          </label>
-                        </div>
-                        <div class='radio'>
-                          <label>
-                            <input type='radio' name='answerType' value='".TRUE_FALSE. "' ". (($answerType == TRUE_FALSE) ? "checked" : "") .">
-                           $langTrueFalse
-                          </label>
-                        </div>
-                        <div class='radio'>
-                          <label>
-                            <input type='radio' id='free_text_selector' name='answerType' value='".FREE_TEXT."' ". (($answerType == FREE_TEXT) ? "checked" : "") .">
-                           $langFreeText
-                          </label>
-                        </div>                        
-                        <div class='radio'>
-                            <label>
-                                <input type='radio' name='answerType' value='" . DRAG_AND_DROP_MARKERS . "'". (($answerType == DRAG_AND_DROP_MARKERS) ? "checked" : "") .">
-                                $langDragAndDropMarkers
-                            </label>
-                        </div>
-                        <div class='radio'>
-                          <label>
-                            <input type='radio' name='answerType' value='".CALCULATED."' ". (($answerType == CALCULATED) ? "checked" : "") .">
-                           $langCalculated
-                          </label>
-                        </div>
-                        <div class='radio'>
-                          <label>
-                            <input type='radio' name='answerType' value='".ORDERING."' ". (($answerType == ORDERING) ? "checked" : "") .">
-                           $langOrdering
-                          </label>
-                        </div>
-                    </div>
+                " . selection([
+                                UNIQUE_ANSWER => $langUniqueSelect,
+                                MULTIPLE_ANSWER => $langMultipleSelect,
+                                TRUE_FALSE => $langTrueFalse,
+                                FILL_IN_BLANKS_TOLERANT => "$langFillBlanks - $langFillBlanksStrict $langFillBlanksStrictExample",
+                                FILL_IN_BLANKS => "$langFillBlanks - $langFillBlanksTolerant $langFillBlanksTolerantExample",
+                                FILL_IN_FROM_PREDEFINED_ANSWERS => "$langFillFromSelectedWords",
+                                MATCHING => $langMatching,
+                                ORDERING => $langOrdering,
+                                DRAG_AND_DROP_TEXT => "$langDragAndDropText",
+                                DRAG_AND_DROP_MARKERS => "$langDragAndDropMarkers",
+                                CALCULATED => $langCalculated,
+                                FREE_TEXT => $langFreeText,
+                            ],
+                        'answerType', (isset($answerType))? $answerType : UNIQUE_ANSWER) . " 
                 </div>
             </div>
-            <div class='row form-group ".(($answerType != FREE_TEXT) ? "hide": "")." mt-4'>
+            ";
+
+            $tool_content .= "<div class='row form-group ".(($answerType != FREE_TEXT) ? "hide": "")." mt-4'>
                 <label for='questionGrade' class='col-12 control-label-notes mb-1'>$langGradebookGrade</label>
                 <div class='col-12'>
                   <input name='questionGrade' type='text' class='form-control' id='questionGrade' placeholder='$langGradebookGrade' value='$questionWeight'".(($answerType != 6) ? " disabled": "").">
