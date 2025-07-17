@@ -169,7 +169,13 @@ if ($userdata) {
             ),
             array('secondary_icon' => 'fa-binoculars', 'secondary_title' => $langSee))."</div></div>";
 
-            $tool_content .= $preview_info_div;
+        if (!file_exists("$webDir/courses/eportfolio/userbios/$id/bio.pdf")) {
+            $tool_content .= "<div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>
+                    $langePortfolioAddCVPrompt</span>
+                </div>";
+        }
+
+        $tool_content .= $preview_info_div;
 
     } else {
         if ($userdata->eportfolio_enable == 0) {

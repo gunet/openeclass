@@ -182,7 +182,13 @@ if ($userdata) {
         $tool_content .= "<div class='col-12'><div class='alert alert-info '><i class='fa-solid fa-circle-info fa-lg'></i><span>
                             $langePortfolioCollectionUserInfo</span>
                           </div></div>";
-                        
+        
+        if (!file_exists("$webDir/courses/eportfolio/userbios/$id/bio.pdf")) {
+            $tool_content .= "<div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>
+                    $langePortfolioAddCVPrompt</span>
+                </div>";
+        }
+
         $tool_content .= $preview_info_div;
 
         if (isset($_GET['action']) && $_GET['action'] == 'add') {

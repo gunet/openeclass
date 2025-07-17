@@ -4552,6 +4552,7 @@ $langEnabledePortfolioButtonsLabel = 'Enabled e-Portfolio';
 $langResourceExists = "The resource already exists.";
 $langReflectionComment = "Reflection Comment";
 $langePortfolioPromptAddReflComments = "Optionally record some personal, reflective comments about this resource. Answer questions like \"What did I learn from this activity?\" or \"What difficulties and challenges did I face?\", etc.";
+$langePortfolioAddCVPrompt = "Don't forget to upload your CV! It's one of the key elements of a complete e-portfolio.";
 $langPageLink = 'Page link:';
 $langCopiedSucc = 'Copied';
 $langCopiedErr = 'Press Ctrl+c to copy';
