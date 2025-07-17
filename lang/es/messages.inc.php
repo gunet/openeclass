@@ -4554,7 +4554,7 @@ $langePortfolioResourceAdded = 'The resource was successfully added to your coll
 $langePortfolioResourceRemoved = 'The resource was successfully removed from your collection';
 $langePortfolioRemoveResource = 'Remove';
 $langePortfolioSureToRemoveResource = 'Are you sure you want to remove this resource from your collection?';
-$langePortfolioCollectionUserInfo = 'In the resource collection of e-Portfolio you can add resources from the following modules (if they are enabled): blog (personal and course), course assignments and personal documents.
+$langePortfolioCollectionUserInfo = 'In the resource collection of e-Portfolio you can add resources from the following modules (if they are enabled): blog (personal and course), course assignments, personal documents, progress (badges and certificates) and personal notes.
 The respective tabs appear only if resources have been added from the relevant module to the collection.';
 $langePortfolioNoResInCollection = 'There are no resources in this collection';
 $langEnabledePortfolioButtonsLabel = 'Enabled e-Portfolio';
