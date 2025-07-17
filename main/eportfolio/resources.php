@@ -872,6 +872,8 @@ if ($userdata) {
 
         //show mydocs collection
         if ($docs) {
+            $reflection_comment_th = ($id == $uid) ? "<th>$langComment</th>" : "";
+
             $tool_content .= '<div id="mydocs" role="tabpanel" class="'.$mydocs_div_class.'" aria-labelledby="blogtab" style="padding-top:20px">';
             $tool_content .= "<div class='table-responsive'>
                                 <table class='table-default'>
@@ -879,6 +881,7 @@ if ($userdata) {
                                     <tr class='list-header'>
                                       <th>$langType</th>
                                       <th>$langName</th>
+                                      $reflection_comment_th
                                       <th>$langDate</th>
                                       <th>$langSize</th>";
             if ($id == $uid) {
@@ -948,11 +951,12 @@ if ($userdata) {
                     $vis_modal_form = "";
                 }
 
-                $reflection_comments = (!empty($doc->reflection_comments) && ($doc->user_id == $uid)) ? $langComment.':"'.$doc->reflection_comments.'"' : '';
+                $reflection_comment_td = ($id == $uid) ? "<td style='width:30%'><em>".$doc->reflection_comments."</em></td>" : "";
 
                 $tool_content .= "<tr class='$row_class'>
                                     <td><span class='fa ".choose_image('.' . $data['format'])."'></span></td>
                                     <td>".$file_link.$title_vis_icon.$vis_modal_form."</td>
+                                    $reflection_comment_td
                                     <td>".format_locale_date(strtotime($data['date_modified']), 'short', false)."</td>
                                     <td>$filesize</td>
                                     <td class='text-end'>
