@@ -62,14 +62,7 @@ class SolrSearchEngine implements SearchEngineInterface {
         ];
         $solrUrl = $this->constructSolrUrl("update", $query);
 
-        /*
-         *
-         * #!/bin/bash
-            curl http://localhost:8983/solr/eclass_index/update?commit=true \
-              -H 'Content-Type: application/json' \
-              --data-binary @sample_docs.json
-         *
-         */
+        CurlUtil::httpPostJsonRequest($solrUrl, $this->generateSampleDocuments(2));
     }
 
     private function constructSolrUrl(string $action, array $params): string {
@@ -79,6 +72,44 @@ class SolrSearchEngine implements SearchEngineInterface {
         }
         $solrUrl .= $action;
         return $solrUrl . '?' . http_build_query($params);
+    }
+
+    private function generateSampleDocuments($count = 10) {
+        $docs = [];
+
+        for ($i = 0; $i < $count; $i++) {
+            $docs[] = [
+                "id" => uniqid("doc_", true),
+                "vid" => $i,
+                "object_type" => "book",
+                "opac1" => "OPAC_$i",
+                "label" => "Sample Label $i",
+                "record_type" => "typeA",
+                "form_type" => "printed",
+                "label_ol" => "Label OL $i",
+                "title" => "Example Title $i",
+                "sort_label" => "Label $i",
+                "is_subject" => false,
+                "pubdate" => gmdate("Y-m-d\TH:i:s\Z"),
+                "create_dt" => gmdate("Y-m-d\TH:i:s\Z"),
+                "num_of_books" => rand(0, 10),
+                "tree" => ["tree_" . uniqid()],
+                "collection" => ["col_" . uniqid()],
+                "item_type" => ["monograph"],
+                "author" => ["Author $i"],
+                "subjects" => ["Subject $i"],
+                "title_lang" => ["en"],
+                "manif_type" => ["paper"],
+                "organization_category" => ["archive"],
+                "contributors" => ["Contributor $i"],
+                "w_languages" => ["en"],
+                "keywords" => ["keyword$i"],
+                "digital_object" => ["http://example.org/object/$i"],
+                "ocr_text" => "OCR content for sample $i"
+            ];
+        }
+
+        return $docs;
     }
 
 }
