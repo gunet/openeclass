@@ -565,14 +565,21 @@ function questionUpdateListener(question_number, question_id) {
     }
 
     // Check all blanks (divs with class 'dropped-word')
-    // $(qpanel_id).find('.dropped-word').each(function () {
-    //     // Assuming that a filled blank has a non-empty innerHTML or data-word
-    //     var word = $(this).data('word'); // or $(this).text()
-    //     if (!word || word.trim() === '') {
-    //         answered = false;
-    //         return false; // break out of the each loop
+    // const blanks = document.querySelectorAll(qpanel_id+' .blank');
+    // let allFilled = true;
+    // for (let blank of blanks) {
+    //     // Check if it contains a div with class 'dropped-word'
+    //     const droppedWordDiv = blank.querySelector('.dropped-word');
+    //     if (!droppedWordDiv) {
+    //         allFilled = false;
+    //         break; // Exit early if any blank isn't filled
     //     }
-    // });
+    // }
+    // if (allFilled) {
+    //     answered = true;
+    // } else {
+    //     answered = false;
+    // }
 
     if (answered) {
         $(button_id).removeClass('btn-default').addClass('btn-info')

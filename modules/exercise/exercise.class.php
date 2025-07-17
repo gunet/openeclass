@@ -1231,7 +1231,7 @@ if (!class_exists('Exercise')) {
                         Database::get()->query("INSERT INTO exercise_answer_record
                                 (eurid, question_id, answer, answer_id, weight, is_answered, q_position)
                                 VALUES (?d, ?d, ?s, ?d, ?f, ?d, ?d)",
-                                $eurid, $key, '', $i, 0, $as_answered, $q_position);
+                                $eurid, $key, '', 0, 0, $as_answered, $q_position);
                     }
                 } elseif (is_string($value) && empty($value) && $value != 0) { // unaswered question from text predefined answer
                     Database::get()->query("INSERT INTO exercise_answer_record
