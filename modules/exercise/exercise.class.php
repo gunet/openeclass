@@ -1032,6 +1032,31 @@ if (!class_exists('Exercise')) {
                                 $value[$answerId] = '';
                             }
                         }
+                    } elseif ($question_type == DRAG_AND_DROP_TEXT || $question_type == DRAG_AND_DROP_MARKERS) {
+                        $objAnswer = new Answer($question_id);
+                        $totalPredefinedAnswers = $objAnswer->get_total_correct_drag_and_drop_predefined_answers();
+                        for ($i = 1; $i <= $totalPredefinedAnswers; $i++) {
+                            $value[$i] = '';
+                        }
+                        unset($objAnswer);
+                    } elseif ($question_type == CALCULATED) {
+                        $objAnswer = new Answer($question_id);
+                        $totalPredefinedAnswers = $objAnswer->get_total_calculated_predefined_answers();
+                        if ($totalPredefinedAnswers > 1) { // multiple predefined answers
+                            for ($answerId = 1; $answerId <= $totalPredefinedAnswers; $answerId++) {
+                                $value[$answerId] = 0;
+                            }
+                        } elseif ($totalPredefinedAnswers == 1) { // unique predefined answer as text
+                            $value = '';
+                        }
+                        unset($objAnswer);
+                    } elseif ($question_type == ORDERING) {
+                        $objAnswer = new Answer($question_id);
+                        $totalPredefinedAnswers = $objAnswer->get_total_correct_ordering_predefined_answers();
+                        for ($i = 1; $i <= $totalPredefinedAnswers; $i++) {
+                            $value[$i] = '';
+                        }
+                        unset($objAnswer);
                     } elseif ($question_type == FREE_TEXT) {
                         $value = '';
                     } else {
@@ -1163,7 +1188,7 @@ if (!class_exists('Exercise')) {
                     foreach ($questionWords as $word) {
                         $weight = 0;
                         $word = '';
-                        $as_answered = 0;
+                        //$as_answered = 0;
                         Database::get()->query("INSERT INTO exercise_answer_record
                             (eurid, question_id, answer, answer_id, weight, is_answered, q_position)
                             VALUES (?d, ?d, ?s, ?d, ?f, ?d, ?d)",
@@ -1199,35 +1224,46 @@ if (!class_exists('Exercise')) {
 
                 // $key = $question_id
                 $objAnswersTmp = new Answer($key);
-                $correctAnswer = $objAnswersTmp->get_correct_calculated_answer($key);
-                $correctAnswerGrade = $objAnswersTmp->get_correct_calculated_grade($key);
-                if ((isset($_POST['choice'][$key]) && $_POST['choice'][$key]) or
-                    (isset($_POST['choice'][$key]) && $_POST['choice'][$key] == 0)) {
-                    $arrAnswer = explode(',', $_POST['choice'][$key]);
+                $totalAnswers = $objAnswersTmp->get_total_calculated_predefined_answers();
+
+                if (is_array($value)) { // unaswered question from multiple predefined answers
+                    for ($i = 1; $i <= count($value); $i++) {
+                        Database::get()->query("INSERT INTO exercise_answer_record
+                                (eurid, question_id, answer, answer_id, weight, is_answered, q_position)
+                                VALUES (?d, ?d, ?s, ?d, ?f, ?d, ?d)",
+                                $eurid, $key, '', $i, 0, $as_answered, $q_position);
+                    }
+                } elseif (is_string($value) && empty($value) && $value != 0) { // unaswered question from text predefined answer
+                    Database::get()->query("INSERT INTO exercise_answer_record
+                                (eurid, question_id, answer, answer_id, weight, is_answered, q_position)
+                                VALUES (?d, ?d, ?s, ?d, ?f, ?d, ?d)",
+                                $eurid, $key, '', 1, 0, $as_answered, $q_position);
+                } elseif (is_string($value) && !empty($value)) { // answered question
+                    $arrAnswer = explode(',', $value);
                     if (count($arrAnswer) == 2) { // multiple predefined answers
                         $user_answer = $arrAnswer[0];
                         $answer_id = $arrAnswer[1];
                         $user_got_grade = $objAnswersTmp->get_user_answer_grade($key, $user_answer);
-                        
                     } else { // unique answer as text
-                        $user_answer = $_POST['choice'][$key] ?? '';
-                        if ($_POST['choice'][$key] == 0) {
+                        $user_answer = $value;
+                        if ($value == 0) {
                             $user_answer = 0;
                         }
                         $answer_id = $_POST['answer_id_choice'][$key] ?? 0;
                         $user_got_grade = $objAnswersTmp->get_user_answer_grade($key, $user_answer);
                     }
-                } else {
-                    $user_answer = '';
-                    $answer_id = 0;
-                    $user_got_grade = 0;
-                }
 
-                Database::get()->query("INSERT INTO exercise_answer_record
+                    Database::get()->query("INSERT INTO exercise_answer_record
                                 (eurid, question_id, answer, answer_id, weight, is_answered, q_position)
                                 VALUES (?d, ?d, ?s, ?d, ?f, ?d, ?d)",
                                 $eurid, $key, $user_answer, $answer_id, $user_got_grade, $as_answered, $q_position);
-
+                } elseif (is_numeric($value) && $value == 0) { // unaswered question from multiple predefined answers
+                    Database::get()->query("INSERT INTO exercise_answer_record
+                                (eurid, question_id, answer, answer_id, weight, is_answered, q_position)
+                                VALUES (?d, ?d, ?s, ?d, ?f, ?d, ?d)",
+                                $eurid, $key, '', 0, 0, $as_answered, $q_position);
+                }
+                
                 unset($objAnswersTmp);
 
             } elseif ($question_type == ORDERING) {
@@ -1235,61 +1271,33 @@ if (!class_exists('Exercise')) {
                 $objAnswersTmp = new Answer($key);
                 $ordering_answer = $objAnswersTmp->get_ordering_answers();
                 $ordering_answer_grade = $objAnswersTmp->get_ordering_answer_grade();
-                $objEx = new Exercise();
-                $exType = $objEx->selectType();
 
-                if ($exType == SINGLE_PAGE_TYPE) {
-                    if (isset($_POST['choice'])) {
-                        foreach ($_POST['choice'] as $key => $val) {
-                            $userAnswers = json_decode($_POST['choice'][$key], true);
-                            if (count($userAnswers) > 0) {
-                                for ($i = 1; $i <= count($userAnswers)-1; $i++) { // Index 0 is null.
-                                    $position = $i;
-                                    $weight = 0;
-                                    $value = $userAnswers[$i];
-                                    if ($userAnswers[$i] == $ordering_answer[$i]) {
-                                        $weight = $ordering_answer_grade[$i];
-                                    }
-                                    Database::get()->query("INSERT INTO exercise_answer_record
-                                        (eurid, question_id, answer, answer_id, weight, is_answered, q_position)
-                                        VALUES (?d, ?d, ?s, ?d, ?f, ?d, ?d)",
-                                        $eurid, $key, $value, $position, $weight, $as_answered, $q_position);
-                                }
-                            }
-                        }
-                    }
-                } else {
-
-                    // Initial variables. Set weight = 0 for each position as unaswered question.
+                if (!is_string($value)) { // unaswered question
                     for ($i = 1; $i <= count($ordering_answer); $i++) {
                         Database::get()->query("INSERT INTO exercise_answer_record
                                     (eurid, question_id, answer, answer_id, weight, is_answered, q_position)
                                     VALUES (?d, ?d, ?s, ?d, ?f, ?d, ?d)",
-                                    $eurid, $key, '', $i, 0, 0, $q_position);
+                                    $eurid, $key, '', $i, 0, $as_answered, $q_position);
                     }
-
-                    if (isset($_POST['choice']) && !empty($_POST['choice'][$key])) {
-                        $userAnswers = json_decode($_POST['choice'][$key], true);
-                        if (count($userAnswers) > 0) {
-                            Database::get()->query("DELETE FROM exercise_answer_record WHERE eurid = ?d AND question_id = ?d", $eurid, $key);
-                            for ($i = 1; $i <= count($userAnswers)-1; $i++) { // Index 0 is null.
-                                $position = $i;
-                                $weight = 0;
-                                $value = $userAnswers[$i];
-                                if ($userAnswers[$i] == $ordering_answer[$i]) {
-                                    $weight = $ordering_answer_grade[$i];
-                                }
-                                Database::get()->query("INSERT INTO exercise_answer_record
-                                    (eurid, question_id, answer, answer_id, weight, is_answered, q_position)
-                                    VALUES (?d, ?d, ?s, ?d, ?f, ?d, ?d)",
-                                    $eurid, $key, $value, $position, $weight, $as_answered, $q_position);
+                } else { // $value contains json value as string
+                    $userAnswers = json_decode($value, true);
+                    if (count($userAnswers) > 0) {
+                        for ($i = 1; $i <= count($userAnswers)-1; $i++) { // Index 0 is null.
+                            $position = $i;
+                            $weight = 0;
+                            $val = $userAnswers[$i];
+                            if ($userAnswers[$i] == $ordering_answer[$i]) {
+                                $weight = $ordering_answer_grade[$i];
                             }
+                            Database::get()->query("INSERT INTO exercise_answer_record
+                                (eurid, question_id, answer, answer_id, weight, is_answered, q_position)
+                                VALUES (?d, ?d, ?s, ?d, ?f, ?d, ?d)",
+                                $eurid, $key, $val, $position, $weight, $as_answered, $q_position);
                         }
                     }
                 }
 
                 unset($objAnswersTmp);
-                unset($objEx);
 
             } else {
                 if ($value) {

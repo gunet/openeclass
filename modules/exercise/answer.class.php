@@ -456,6 +456,32 @@ if (!class_exists('Answer')):
 
         }
 
+         /**
+         * @brief Getting the total number of correct predefined answers.
+         * @author - Nikos Mpalamoutis
+         */
+        public function get_total_correct_drag_and_drop_predefined_answers() {
+
+            $questionId = $this->questionId;
+            $answer = Database::get()->querySingle("SELECT answer FROM exercise_answer WHERE question_id = ?d", $questionId);
+            $total = 0;
+            if ($answer) {
+                $q = explode('::',$answer->answer);
+                if (count($q) > 1) {
+                    $res = explode(',', $q[1]);
+                    foreach ($res as $r) {
+                        $arr = explode('|', $r);
+                        if (count($arr) == 3 && $arr[2] > 0) {
+                            $total++;
+                        } 
+                    }
+                }
+            } 
+
+            return $total;
+
+        }
+
         /**
         * 
         * @author - Nikos Mpalamoutis
@@ -635,6 +661,18 @@ if (!class_exists('Answer')):
             return $correctAnswerGrade;
         }
 
+        /**
+         * @return int|mixed
+         * @author - Nikos Mpalamoutis
+         */
+        function get_total_calculated_predefined_answers() {
+            
+            $questionId = $this->questionId;
+            $totalAnswers = Database::get()->queryArray("SELECT answer FROM exercise_answer WHERE question_id = ?d", $questionId);
+            
+            return count($totalAnswers);
+        }
+
          /**
          * 
          * @param $questionId
@@ -679,8 +717,8 @@ if (!class_exists('Answer')):
          * @return int|mixed
          * @author - Nikos Mpalamoutis
          */
-        function get_user_grade_for_answered_calculated_question($eurid, $questionId) {
-            $grade = Database::get()->querySingle("SELECT weight FROM exercise_answer_record WHERE eurid = ?d AND question_id = ?d", $eurid, $questionId)->weight;
+        function get_user_grade_for_answered_calculated_question($eurid, $questionId, $answer_id) {
+            $grade = Database::get()->querySingle("SELECT weight FROM exercise_answer_record WHERE eurid = ?d AND question_id = ?d AND answer_id = ?d", $eurid, $questionId, $answer_id)->weight;
             $grade = $grade ?? 0;
             return $grade;
         }
@@ -793,6 +831,31 @@ if (!class_exists('Answer')):
         public function get_ordering_answers_by_user($qid, $eurid) {
             $answers = Database::get()->queryArray("SELECT answer,answer_id,weight FROM exercise_answer_record WHERE question_id = ?d AND eurid = ?d", $qid, $eurid);
             return $answers;
+        }
+
+        /**
+         * @brief Getting the total number of correct ordering predefined answers.
+         * @author - Nikos Mpalamoutis
+         */
+        public function get_total_correct_ordering_predefined_answers() {
+
+            $questionId = $this->questionId;
+            $answer = Database::get()->querySingle("SELECT answer FROM exercise_answer WHERE question_id = ?d", $questionId);
+            $total = 0;
+            if ($answer) {
+                $q = explode(',', $answer->answer);
+                if (count($q) > 0) {
+                    foreach ($q as $r) {
+                        $arr = explode('|', $r);
+                        if (count($arr) == 3 && $arr[2] > 0) {
+                            $total++;
+                        } 
+                    }
+                }
+            } 
+
+            return $total;
+
         }
 
     }

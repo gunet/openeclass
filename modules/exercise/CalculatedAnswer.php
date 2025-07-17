@@ -69,6 +69,7 @@ class CalculatedAnswer extends \QuestionType
         }
 
         $html_content .= "<input type='hidden' name='currentCalculatedQuestion' value='{$this->question_id}'>";
+        $html_content .= "<input type='hidden' name='choice[{$this->question_id}]' value='0'>";
 
         foreach ($answer_object_ids as $answerId) {
             $answerTitle = $this->answer_object->getTitle($answerId);
@@ -141,13 +142,11 @@ class CalculatedAnswer extends \QuestionType
             }
             $answerComment = $this->answer_object->getComment($answerId);
             $answerCorrect = $this->answer_object->isCorrect($answerId);
-            $answerWeighting = $this->answer_object->getWeighting($answerId);
 
             $studentChoice = ($choice == $answerId) ? 1 : 0;
             if ($studentChoice) {
-                if (count($answer_object_ids) == 1) { // If question contains unique answer through text , get the user's grade again.
-                    $answerWeighting = $this->answer_object->get_user_grade_for_answered_calculated_question($eurid, $questionId);
-                }
+                // Get the user's grade.
+                $answerWeighting = $this->answer_object->get_user_grade_for_answered_calculated_question($eurid, $questionId, $answerId);
                 $questionScore += $answerWeighting;
                 $grade = $answerWeighting;
             }
