@@ -31,7 +31,7 @@ class SolrSearchEngine implements SearchEngineInterface {
 
         // construct Solr Url for searching
         $query = [
-            'q' => 'title:example',
+            'q' => 'title:' . $params['search_terms'],
             'wt' => 'json'
         ];
         $solrUrl = $this->constructSolrUrl("select", $query);
@@ -47,7 +47,7 @@ class SolrSearchEngine implements SearchEngineInterface {
         $hits = $resp->response->docs;
 
         return array_map(function ($hit) {
-            return new SearchResult("hit->pk", $hit->vid, "hit->doctype", "hit->visible", $hit);
+            return new SearchResult($hit->pk, $hit->pkid, $hit->doctype, $hit->visible, $hit);
         }, $hits);
     }
 
@@ -75,37 +75,24 @@ class SolrSearchEngine implements SearchEngineInterface {
     }
 
     private function generateSampleDocuments($count = 10) {
+        global $urlServer;
         $docs = [];
 
         for ($i = 0; $i < $count; $i++) {
             $docs[] = [
                 "id" => uniqid("doc_", true),
-                "vid" => $i,
-                "object_type" => "book",
-                "opac1" => "OPAC_$i",
-                "label" => "Sample Label $i",
-                "record_type" => "typeA",
-                "form_type" => "printed",
-                "label_ol" => "Label OL $i",
-                "title" => "Example Title $i",
-                "sort_label" => "Label $i",
-                "is_subject" => false,
-                "pubdate" => gmdate("Y-m-d\TH:i:s\Z"),
-                "create_dt" => gmdate("Y-m-d\TH:i:s\Z"),
-                "num_of_books" => rand(0, 10),
-                "tree" => ["tree_" . uniqid()],
-                "collection" => ["col_" . uniqid()],
-                "item_type" => ["monograph"],
-                "author" => ["Author $i"],
-                "subjects" => ["Subject $i"],
-                "title_lang" => ["en"],
-                "manif_type" => ["paper"],
-                "organization_category" => ["archive"],
-                "contributors" => ["Contributor $i"],
-                "w_languages" => ["en"],
-                "keywords" => ["keyword$i"],
-                "digital_object" => ["http://example.org/object/$i"],
-                "ocr_text" => "OCR content for sample $i"
+                "pk" => "course_$i",
+                "pkid" => $i,
+                "doctype" => "course",
+                "code" => "TMA$i",
+                "title" => "course title $i",
+                "keywords" => "course keywords $i",
+                "visible" => 1,
+                "prof_names" => "course prof_names $i",
+                "public_code" => "TMA$i",
+                "units" => "course units $i",
+                "created" => gmdate("Y-m-d\TH:i:s\Z"),
+                "url" => $urlServer . 'courses/' . "TMA$i"
             ];
         }
 
