@@ -242,6 +242,7 @@ function question_answer_details($eurid, $qid) {
     global $langChoice;
 
     $content = $temp_content = '';
+    $temp_array_content = [];
     $q = Database::get()->queryArray("SELECT question_id, answer, answer_id, `type`
                        FROM exercise_answer_record
                             JOIN exercise_question
@@ -273,6 +274,27 @@ function question_answer_details($eurid, $qid) {
                         $temp_content .= '';
                     }
                     $content = rtrim(trim($temp_content), '-- '); // remove last `--`
+                    break;
+                case ORDERING:
+                    $temp_array_content[] = $data->answer;
+                    $temp_content = implode(' -> ', $temp_array_content);
+                    $content = $temp_content;
+                    break;
+                case DRAG_AND_DROP_TEXT:
+                case DRAG_AND_DROP_MARKERS:
+                case CALCULATED:
+                    $objAnswerTmp = new Answer($data->question_id);
+                    if ($data->type == DRAG_AND_DROP_TEXT or $data->type == DRAG_AND_DROP_MARKERS) {
+                        $definedAnswers = $objAnswerTmp->get_drag_and_drop_answer_text();
+                        $correctAnswer = $definedAnswers[$data->answer_id-1];
+                    } else {
+                        $correctAnswer = $objAnswerTmp->get_correct_calculated_answer($data->question_id);
+                        
+                    }
+                    $temp_array_content[] = "[" . $data->answer . "|" . $correctAnswer . "]";
+                    $temp_content = implode(' -- ', $temp_array_content);
+                    $content = $temp_content;
+                    unset($objAnswerTmp);
                     break;
                 case FILL_IN_BLANKS_TOLERANT:
                 case FILL_IN_BLANKS:
