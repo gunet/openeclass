@@ -4652,8 +4652,7 @@ $langePortfolioEmploymentDescr = "<p>Record the job positions you have held, alo
   <li>Duration of employment</li>
   <li>Main duties and achievements</li>
 </ul>";
-$langePortfolioSocialActivitiesDescr = "<h3>Social Activities</h3>
-<p>Record your participation in activities with social or community character, such as organizations, groups, or initiatives aimed at social development and awareness.</p>
+$langePortfolioSocialActivitiesDescr = "<p>Record your participation in activities with social or community character, such as organizations, groups, or initiatives aimed at social development and awareness.</p>
 <p>This field highlights your social responsibility and commitment to improving the community.</p>
 <p><strong>It is recommended to include:</strong></p>
 <ul>
@@ -4662,8 +4661,7 @@ $langePortfolioSocialActivitiesDescr = "<h3>Social Activities</h3>
   <li>Duration of participation</li>
   <li>Results or impact</li>
 </ul>";
-$langePortfolioVolunteerActivitiesDescr = "<h3>Volunteer Activities</h3>
-<p>Record your participation in volunteer initiatives where you offer services or assistance without pay, such as charity events, social services, or organizations.</p>
+$langePortfolioVolunteerActivitiesDescr = "<p>Record your participation in volunteer initiatives where you offer services or assistance without pay, such as charity events, social services, or organizations.</p>
 <p>This field highlights your willingness for selfless contribution and active involvement.</p>
 <p><strong>It is recommended to include:</strong></p>
 <ul>
