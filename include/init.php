@@ -100,6 +100,10 @@ if (isset($language)) {
     $session = new Session();
     $uid = $session->user_id;
     $language = $session->language;
+    // 3.x to 4.x migration needed
+    if (get_config('version') < '4' and !defined('UPGRADE')) {
+        redirect_to_home_page('upgrade/index.php');
+    }
 }
 //Initializing Valitron (form validation library)
 use Valitron\Validator as V;

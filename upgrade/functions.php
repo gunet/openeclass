@@ -2776,7 +2776,7 @@ function upgrade_to_4_0($tbl_options): void {
         Database::get()->query("ALTER TABLE course ADD `is_collaborative` int(11) NOT NULL DEFAULT 0");
     }
     if (!DBHelper::fieldExists('course', 'view_units')) {
-        Database::get()->query("ALTER table course ADD `view_units` INT(11) NOT NULL DEFAULT 0");
+        Database::get()->query("ALTER table course ADD `view_units` INT(11) NOT NULL DEFAULT 1");
     }
     if (!DBHelper::fieldExists('course', 'popular_course')) {
         Database::get()->query("ALTER table course ADD `popular_course` INT(11) NOT NULL DEFAULT 0");
@@ -3173,6 +3173,23 @@ function upgrade_to_4_0($tbl_options): void {
     if (is_null($enable_user_notes)) {
         set_config('enable_quick_note', 1);
     }
+
+    if (get_config('dont_display_statistics')) {
+        Database::get()->query("UPDATE homepagePriorities SET visible = 0 WHERE title = ?s", 'statistics');
+    }
+    if (get_config('dont_display_popular_courses')) {
+        Database::get()->query("UPDATE homepagePriorities SET visible = 0 WHERE title = ?s", 'popular_courses');
+    }
+    if (get_config('dont_display_testimonials')) {
+        Database::get()->query("UPDATE homepagePriorities SET visible = 0 WHERE title = ?s", 'testimonials');
+    }
+    if (get_config('dont_display_texts')) {
+        Database::get()->query("UPDATE homepagePriorities SET visible = 0 WHERE title = ?s", 'texts');
+    }
+    if (get_config('dont_display_open_courses')) {
+        Database::get()->query("UPDATE homepagePriorities SET visible = 0 WHERE title = ?s", 'open_courses');
+    }
+
     set_config('homepage_title_el', $langEclass);
     set_config('homepage_intro_el', $langEclassInfo);
 }
