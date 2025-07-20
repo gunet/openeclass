@@ -3364,7 +3364,12 @@ function upgrade_to_4_2($tbl_options) : void {
     global $langResearchProfiles, $langGoogleScholarProfile, $langScopusID, $langOrcid,
            $langEnglish, $langFrench, $langGerman, $langSpanish, $langItalian, $langLangProfLevel,
            $langLangCEFRA1, $langLangCEFRA2, $langLangCEFRB1, $langLangCEFRB2, $langLangCEFRC1,
-           $langLangCEFRC2, $langSocialActivities, $langVolunteerActivities, $langVolontSocialAct;
+           $langLangCEFRC2, $langSocialActivities, $langVolunteerActivities, $langVolontSocialAct,
+           $langAboutMeDescr, $langePortfolioPersonalWebsiteDescr, $langEducationDescr, $langePortfolioEmploymentDescr,
+           $langePortfolioCertificatesAwardsDescr, $langePortfolioPublicationsDescr, $langePortfolioPersonalGoalsDescr,
+           $langePortfolioAcademicGoalsDescr, $langePortfolioCareerGoalsDescr, $langePortfolioPersonalSkillsDescr,
+           $langePortfolioAcademicSkillsDescr, $langePortfolioCareerSkillsDesc, $langePortfolioSocialActivitiesDescr,
+           $langePortfolioVolunteerActivitiesDescr;
 
     if (!DBHelper::fieldExists('forum_topic', 'pin_time')) {
         Database::get()->query("ALTER TABLE forum_topic ADD pin_time DATETIME DEFAULT NULL");
@@ -3409,6 +3414,22 @@ function upgrade_to_4_2($tbl_options) : void {
     Database::get()->query("ALTER TABLE eportfolio_fields ADD UNIQUE (shortname)");
     Database::get()->query("ALTER TABLE eportfolio_fields_data ADD visibility TINYINT UNSIGNED NOT NULL DEFAULT 1");
     Database::get()->query("ALTER TABLE eportfolio_resource ADD visibility TINYINT UNSIGNED NOT NULL DEFAULT 1, ADD reflection_comments TEXT NOT NULL");
+
+    Database::get()->query("UPDATE eportfolio_fields SET description = ?s WHERE shortname = ?s AND (description IS NULL OR description = '')", $langAboutMeDescr, 'about_me');
+    Database::get()->query("UPDATE eportfolio_fields SET description = ?s WHERE shortname = ?s AND (description IS NULL OR description = '')", $langePortfolioPersonalWebsiteDescr, 'personal_website');
+    Database::get()->query("UPDATE eportfolio_fields SET description = ?s WHERE shortname = ?s AND (description IS NULL OR description = '')", $langEducationDescr, 'education');
+    Database::get()->query("UPDATE eportfolio_fields SET description = ?s WHERE shortname = ?s AND (description IS NULL OR description = '')", $langePortfolioEmploymentDescr, 'employment');
+    Database::get()->query("UPDATE eportfolio_fields SET description = ?s WHERE shortname = ?s AND (description IS NULL OR description = '')", $langePortfolioCertificatesAwardsDescr, 'certificates_awards');
+    Database::get()->query("UPDATE eportfolio_fields SET description = ?s WHERE shortname = ?s AND (description IS NULL OR description = '')", $langePortfolioPublicationsDescr, 'publications');
+    Database::get()->query("UPDATE eportfolio_fields SET description = ?s WHERE shortname = ?s AND (description IS NULL OR description = '')", $langePortfolioPersonalGoalsDescr, 'personal_goals');
+    Database::get()->query("UPDATE eportfolio_fields SET description = ?s WHERE shortname = ?s AND (description IS NULL OR description = '')", $langePortfolioAcademicGoalsDescr, 'academic_goals');
+    Database::get()->query("UPDATE eportfolio_fields SET description = ?s WHERE shortname = ?s AND (description IS NULL OR description = '')", $langePortfolioCareerGoalsDescr, 'career_goals');
+    Database::get()->query("UPDATE eportfolio_fields SET description = ?s WHERE shortname = ?s AND (description IS NULL OR description = '')", $langePortfolioPersonalSkillsDescr, 'personal_skills');
+    Database::get()->query("UPDATE eportfolio_fields SET description = ?s WHERE shortname = ?s AND (description IS NULL OR description = '')", $langePortfolioAcademicSkillsDescr, 'academic_skills');
+    Database::get()->query("UPDATE eportfolio_fields SET description = ?s WHERE shortname = ?s AND (description IS NULL OR description = '')", $langePortfolioCareerSkillsDesc, 'career_skills');
+    Database::get()->query("UPDATE eportfolio_fields SET description = ?s WHERE shortname = ?s AND (description IS NULL OR description = '')", $langePortfolioSocialActivitiesDescr, 'social_activities');
+    Database::get()->query("UPDATE eportfolio_fields SET description = ?s WHERE shortname = ?s AND (description IS NULL OR description = '')", $langePortfolioVolunteerActivitiesDescr, 'volunteer_activities');
+    
 }
 
 /**
