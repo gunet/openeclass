@@ -31,7 +31,7 @@ $showEmpty = true;
 
 if (defined('LISTING_MODE') && LISTING_MODE === 'COURSE_METADATA') {
     require_once 'modules/course_metadata/CourseXML.php';
-    $redirectUrl = "modules/course_metadata/courses.php?fc=";
+    $redirectUrl = "modules/course_metadata/opencourses.php?fc=";
     $countCallback = CourseXMLElement::getCountCallback();
     $showEmpty = false;
     // exit if feature disabled

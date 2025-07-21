@@ -496,7 +496,7 @@ if (!is_dir($baseWorkDir)) {
 // handle upload
 // if the post is done a second time, the claroformid mecanism
 // will set $_POST to NULL, so we need to check it
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST) {
 
     // arrays used to store inserted ids
     $insertedModule_id = array();

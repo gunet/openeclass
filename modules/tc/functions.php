@@ -18,11 +18,11 @@
  *
  */
 
- use GuzzleHttp\Client;
- use modules\tc\Zoom\Api\Service;
- use modules\tc\Zoom\Api\Repository;
- use modules\tc\Zoom\User\ZoomUser;
- use modules\tc\Zoom\User\ZoomUserRepository;
+use GuzzleHttp\Client;
+use modules\tc\Zoom\Api\Service;
+use modules\tc\Zoom\Api\Repository;
+use modules\tc\Zoom\User\ZoomUser;
+use modules\tc\Zoom\User\ZoomUserRepository;
 require_once 'bbb-api.php';
 require_once 'modules/tc/Zoom/Api/Service.php';
 require_once 'modules/tc/Zoom/Api/Repository.php';
