@@ -189,17 +189,6 @@ if ($userdata) {
                 </div>";
         }
 
-        $eportfolio_completion = calculate_eportfolio_completion($id);
-        if ($eportfolio_completion < 30) {
-            $tool_content .= "<div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>
-                    $langePortfolioComplBelow30</span>
-                </div>";
-        } elseif ($eportfolio_completion < 60) {
-            $tool_content .= "<div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>
-                    $langePortfolioComplBelow60</span>
-                </div>";
-        }
-
         $tool_content .= $preview_info_div;
 
         if (isset($_GET['action']) && $_GET['action'] == 'add') {
