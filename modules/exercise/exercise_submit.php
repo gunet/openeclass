@@ -61,6 +61,55 @@ function unset_exercise_var($exerciseId) {
     unset($_SESSION['password'][$exerciseId][$attempt_value]);
 }
 
+if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+     /* save audio recorded data */
+    if (isset($_FILES['audio-blob'])) {
+        $courseCode = $_GET['course'];
+        $questionId = $_POST['questionId'];
+        $file_path = '/' . safe_filename('mp3');
+        $filename = 'recording-' . $questionId . '-' . $uid . '.mp3';
+        $oldFile = Database::get()->querySingle("SELECT id,path FROM document WHERE course_id = ?d AND subsystem = ?d 
+                                                    AND subsystem_id = ?d AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $questionId, $uid);
+
+        if (file_exists("$webDir/courses/$courseCode/image" . $oldFile->path)) {
+            Database::get()->query("DELETE FROM document WHERE id = ?d", $oldFile->id);
+            unlink("$webDir/courses/$courseCode/image" . $oldFile->path);
+        }
+        if (move_uploaded_file($_FILES['audio-blob']['tmp_name'], "$webDir/courses/$courseCode/image/$file_path")) {
+            $file_creator = "$_SESSION[givenname] $_SESSION[surname]";
+            $file_date = date('Y-m-d G:i:s');
+            $file_format = 'mp3';
+            Database::get()->query("INSERT INTO document SET
+            course_id = ?d,
+            subsystem = ?d,
+            subsystem_id = ?d,
+            path = ?s,
+            extra_path = '',
+            filename = ?s,
+            visible = 1,
+            comment = '',
+            category = 0,
+            title = ?s,
+            creator = ?s,
+            date = ?s,
+            date_modified = ?s,
+            subject = '',
+            description = '',
+            author = ?s,
+            format = ?s,
+            language = ?s,
+            copyrighted = 0,
+            editable = 0,
+            lock_user_id = ?d",
+                $course_id, ORAL_QUESTION, $questionId, $file_path,
+                $filename, $filename, $file_creator,
+                $file_date, $file_date, $file_creator, $file_format,
+                $language, $uid);
+        }
+    }
+    exit();
+}
+
 // Does nothing, just refreshes the session
 if (isset($_POST['action']) and $_POST['action'] == 'refreshSession') {
     exit();

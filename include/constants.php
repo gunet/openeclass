@@ -232,6 +232,7 @@ define('COMMON', 3);
 define('MYDOCS', 4);
 define('MYSESSIONS',5);
 define('SESSION_REFERENCE',6);
+define('ORAL_QUESTION',7);
 
 // path for certificates / badges templates
 define('CERT_TEMPLATE_PATH', "/courses/user_progress_data/cert_templates/");

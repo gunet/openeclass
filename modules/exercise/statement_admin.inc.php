@@ -324,7 +324,7 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
                                 DRAG_AND_DROP_TEXT => "$langDragAndDropText",
                                 DRAG_AND_DROP_MARKERS => "$langDragAndDropMarkers",
                                 CALCULATED => $langCalculated,
-                                FREE_TEXT => $langFreeText,
+                                FREE_TEXT => "$langFreeText - $langOral",
                             ],
                         'answerType', (isset($answerType))? $answerType : UNIQUE_ANSWER) . " 
                 </div>
