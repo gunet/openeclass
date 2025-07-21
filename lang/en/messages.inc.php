@@ -5470,6 +5470,8 @@ $langePortfolioVolunteerActivitiesDescr = "<p>Record your participation in volun
   <li>Duration and frequency of participation</li>
   <li>Achievements or experiences</li>
 </ul>";
+$langePortfolioComplBelow30 = "Fill in as many fields as possible to better showcase your skills, experiences, and interests. Your e-portfolio is your personal footprint – start building it today!";
+$langePortfolioComplBelow60 = "Keep completing your e-portfolio to fully highlight your profile. The more complete it is, the stronger your presence will be.";
 $langWidgets = "Widgets";
 $langMyWidgets = "My widgets";
 $langCourseWidgets = "Widgets $langsOfCourse";

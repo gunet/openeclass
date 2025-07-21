@@ -505,4 +505,51 @@ function epf_validate(&$valitron_object) {
     }
 }
 
+function calculate_eportfolio_completion($user_id) {
+    // language shortnames
+    $language_fields = ['english', 'french', 'spanish', 'german', 'italian']; //this group is considered as one field
+
+    // get all fields
+    $all_fields = Database::get()->queryArray("SELECT id, shortname FROM eportfolio_fields");
+    $completed_fields = Database::get()->queryArray("SELECT field_id FROM eportfolio_fields_data WHERE user_id = ?s", $user_id);
+    
+    $total_fields = 0;
+    $completed_fields = 0;
+    $language_field_ids = [];
+    $language_group_completed = false;
+
+    foreach ($all_fields as $field) {
+        $shortname = $field->shortname;
+        $field_id = $field->id;
+
+        if (in_array($shortname, $language_fields)) {
+            $language_field_ids[] = $field_id;
+        } else {
+            $total_fields++;
+        }
+    }
+
+    foreach ($completed_fields as $completed_field) {
+        if (in_array($completed_field->field_id, $language_field_ids)) {
+            $language_group_completed = true;
+        } else {
+            $completed_fields++;
+        }
+    }
+
+    if (!empty($language_field_ids)) {
+        $total_fields++;
+        if ($language_group_completed) {
+            $completed_fields++;
+        }
+    }
+
+    if ($total_fields === 0) {
+        return 0;
+    }
+
+    $percentage = ($completed_fields / $total_fields) * 100;
+    return round($percentage, 2);
+}
+
 
