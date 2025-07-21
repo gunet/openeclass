@@ -24,6 +24,8 @@ require_once 'resourceindexer.interface.php';
 require_once 'Zend/Search/Lucene/Document.php';
 require_once 'Zend/Search/Lucene/Field.php';
 require_once 'Zend/Search/Lucene/Index/Term.php';
+require_once 'modules/search/classes/ConstantsUtil.php';
+require_once 'modules/search/classes/FetcherUtil.php';
 
 class UnitResourceIndexer extends AbstractIndexer implements ResourceIndexerInterface {
 
@@ -39,15 +41,15 @@ class UnitResourceIndexer extends AbstractIndexer implements ResourceIndexerInte
         $encoding = 'utf-8';
 
         $doc = new Zend_Search_Lucene_Document();
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', Indexer::DOCTYPE_UNITRESOURCE . '_' . $ures->id, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $ures->id, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('doctype', Indexer::DOCTYPE_UNITRESOURCE, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('courseid', $ures->course_id, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('unitid', $ures->unit_id, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('title', Indexer::phonetics($ures->title), $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('content', Indexer::phonetics(strip_tags($ures->comments)), $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('visible', $ures->visible, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', $urlServer
+        $doc->addField(Zend_Search_Lucene_Field::Keyword(ConstantsUtil::FIELD_PK, ConstantsUtil::DOCTYPE_UNITRESOURCE . '_' . $ures->id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword(ConstantsUtil::FIELD_PKID, $ures->id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword(ConstantsUtil::FIELD_DOCTYPE, ConstantsUtil::DOCTYPE_UNITRESOURCE, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword(ConstantsUtil::FIELD_COURSEID, $ures->course_id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword(ConstantsUtil::FIELD_UNITID, $ures->unit_id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text(ConstantsUtil::FIELD_TITLE, Indexer::phonetics($ures->title), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text(ConstantsUtil::FIELD_CONTENT, Indexer::phonetics(strip_tags($ures->comments)), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text(ConstantsUtil::FIELD_VISIBLE, $ures->visible, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::UnIndexed(ConstantsUtil::FIELD_URL, $urlServer
             . 'modules/units/index.php?course=' . course_id_to_code($ures->course_id)
             . '&amp;id=' . $ures->unit_id, $encoding));
 
@@ -119,9 +121,7 @@ class UnitResourceIndexer extends AbstractIndexer implements ResourceIndexerInte
      * @return array           - array of DB fetched anonymous objects with property names that correspond to the column names
      */
     protected function getCourseResourcesFromDB($courseId) {
-        return Database::get()->queryArray("SELECT ur.*, cu.course_id
-                                            FROM unit_resources ur 
-                                           JOIN course_units cu ON cu.id = ur.unit_id AND cu.course_id = ?d", $courseId);
+        return FetcherUtil::fetchUnitResources($courseId);
     }
 
     /**

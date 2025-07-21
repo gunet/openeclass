@@ -24,6 +24,8 @@ require_once 'resourceindexer.interface.php';
 require_once 'Zend/Search/Lucene/Document.php';
 require_once 'Zend/Search/Lucene/Field.php';
 require_once 'Zend/Search/Lucene/Index/Term.php';
+require_once 'modules/search/classes/ConstantsUtil.php';
+require_once 'modules/search/classes/FetcherUtil.php';
 
 class LinkIndexer extends AbstractIndexer implements ResourceIndexerInterface {
 
@@ -38,13 +40,13 @@ class LinkIndexer extends AbstractIndexer implements ResourceIndexerInterface {
         $encoding = 'utf-8';
 
         $doc = new Zend_Search_Lucene_Document();
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', Indexer::DOCTYPE_LINK . '_' . $link->id, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $link->id, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('doctype', Indexer::DOCTYPE_LINK, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('courseid', $link->course_id, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('title', Indexer::phonetics($link->title), $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('content', Indexer::phonetics(strip_tags($link->description)), $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', $link->url, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword(ConstantsUtil::FIELD_PK, ConstantsUtil::DOCTYPE_LINK . '_' . $link->id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword(ConstantsUtil::FIELD_PKID, $link->id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword(ConstantsUtil::FIELD_DOCTYPE, ConstantsUtil::DOCTYPE_LINK, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword(ConstantsUtil::FIELD_COURSEID, $link->course_id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text(ConstantsUtil::FIELD_TITLE, Indexer::phonetics($link->title), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text(ConstantsUtil::FIELD_CONTENT, Indexer::phonetics(strip_tags($link->description)), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::UnIndexed(ConstantsUtil::FIELD_URL, $link->url, $encoding));
 
         return $doc;
     }
@@ -109,7 +111,7 @@ class LinkIndexer extends AbstractIndexer implements ResourceIndexerInterface {
      * @return array           - array of DB fetched anonymous objects with property names that correspond to the column names
      */
     protected function getCourseResourcesFromDB($courseId) {
-        return Database::get()->queryArray("SELECT * FROM link WHERE course_id = ?d", $courseId);
+        FetcherUtil::fetchLinks($courseId);
     }
 
 }

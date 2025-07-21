@@ -24,6 +24,8 @@ require_once 'resourceindexer.interface.php';
 require_once 'Zend/Search/Lucene/Document.php';
 require_once 'Zend/Search/Lucene/Field.php';
 require_once 'Zend/Search/Lucene/Index/Term.php';
+require_once 'modules/search/classes/ConstantsUtil.php';
+require_once 'modules/search/classes/FetcherUtil.php';
 
 class NoteIndexer extends AbstractIndexer implements ResourceIndexerInterface {
 
@@ -39,16 +41,16 @@ class NoteIndexer extends AbstractIndexer implements ResourceIndexerInterface {
         $encoding = 'utf-8';
 
         $doc = new Zend_Search_Lucene_Document();
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', 'note_' . $note->id, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $note->id, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('doctype', 'note', $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('userid', $note->user_id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword(ConstantsUtil::FIELD_PK, ConstantsUtil::DOCTYPE_NOTE . '_' . $note->id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword(ConstantsUtil::FIELD_PKID, $note->id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword(ConstantsUtil::FIELD_DOCTYPE, ConstantsUtil::DOCTYPE_NOTE, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword(ConstantsUtil::FIELD_USERID, $note->user_id, $encoding));
         if (isset($note->course_id)) {
-            $doc->addField(Zend_Search_Lucene_Field::Keyword('courseid', $note->course_id, $encoding));
+            $doc->addField(Zend_Search_Lucene_Field::Keyword(ConstantsUtil::FIELD_COURSEID, $note->course_id, $encoding));
         }
-        $doc->addField(Zend_Search_Lucene_Field::Text('title', Indexer::phonetics($note->title), $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('content', Indexer::phonetics(strip_tags($note->content)), $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', $urlServer . 'modules/notes/index.php?an_id=' . $note->id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text(ConstantsUtil::FIELD_TITLE, Indexer::phonetics($note->title), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text(ConstantsUtil::FIELD_CONTENT, Indexer::phonetics(strip_tags($note->content)), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::UnIndexed(ConstantsUtil::FIELD_URL, $urlServer . 'modules/notes/index.php?an_id=' . $note->id, $encoding));
 
         return $doc;
     }
@@ -117,7 +119,7 @@ class NoteIndexer extends AbstractIndexer implements ResourceIndexerInterface {
      * @return array           - array of DB fetched anonymous objects with property names that correspond to the column names
      */
     protected function getCourseResourcesFromDB($courseId) {
-        return Database::get()->queryArray("SELECT * FROM note WHERE reference_obj_course = ?d", $courseId);
+        return FetcherUtil::fetchNotes($courseId);
     }
 
     /**

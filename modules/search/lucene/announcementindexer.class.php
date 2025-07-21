@@ -24,6 +24,8 @@ require_once 'resourceindexer.interface.php';
 require_once 'Zend/Search/Lucene/Document.php';
 require_once 'Zend/Search/Lucene/Field.php';
 require_once 'Zend/Search/Lucene/Index/Term.php';
+require_once 'modules/search/classes/ConstantsUtil.php';
+require_once 'modules/search/classes/FetcherUtil.php';
 
 class AnnouncementIndexer extends AbstractIndexer implements ResourceIndexerInterface {
 
@@ -39,14 +41,14 @@ class AnnouncementIndexer extends AbstractIndexer implements ResourceIndexerInte
         $encoding = 'utf-8';
 
         $doc = new Zend_Search_Lucene_Document();
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', Indexer::DOCTYPE_ANNOUNCEMENT . '_' . $announce->id, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $announce->id, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('doctype', Indexer::DOCTYPE_ANNOUNCEMENT, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('courseid', $announce->course_id, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('title', Indexer::phonetics($announce->title), $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('content', Indexer::phonetics(strip_tags($announce->content)), $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('visible', $announce->visible, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', $urlServer . 'modules/announcements/index.php?course=' . course_id_to_code($announce->course_id) . '&amp;an_id=' . $announce->id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword(ConstantsUtil::FIELD_PK, ConstantsUtil::DOCTYPE_ANNOUNCEMENT . '_' . $announce->id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword(ConstantsUtil::FIELD_PKID, $announce->id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword(ConstantsUtil::FIELD_DOCTYPE, ConstantsUtil::DOCTYPE_ANNOUNCEMENT, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword(ConstantsUtil::FIELD_COURSEID, $announce->course_id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text(ConstantsUtil::FIELD_TITLE, Indexer::phonetics($announce->title), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text(ConstantsUtil::FIELD_CONTENT, Indexer::phonetics(strip_tags($announce->content)), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text(ConstantsUtil::FIELD_VISIBLE, $announce->visible, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::UnIndexed(ConstantsUtil::FIELD_URL, $urlServer . 'modules/announcements/index.php?course=' . course_id_to_code($announce->course_id) . '&amp;an_id=' . $announce->id, $encoding));
 
         return $doc;
     }
@@ -110,8 +112,8 @@ class AnnouncementIndexer extends AbstractIndexer implements ResourceIndexerInte
      * @param int $courseId - the given course id
      * @return array           - array of DB fetched anonymous objects with property names that correspond to the column names
      */
-    protected function getCourseResourcesFromDB($courseId) {
-        return Database::get()->queryArray("SELECT * FROM announcement WHERE course_id = ?d", $courseId);
+    protected function getCourseResourcesFromDB($courseId): array {
+        return FetcherUtil::fetchAnnouncements($courseId);
     }
 
 }

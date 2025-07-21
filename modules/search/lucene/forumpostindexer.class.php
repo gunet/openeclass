@@ -24,6 +24,8 @@ require_once 'resourceindexer.interface.php';
 require_once 'Zend/Search/Lucene/Document.php';
 require_once 'Zend/Search/Lucene/Field.php';
 require_once 'Zend/Search/Lucene/Index/Term.php';
+require_once 'modules/search/classes/ConstantsUtil.php';
+require_once 'modules/search/classes/FetcherUtil.php';
 
 class ForumPostIndexer extends AbstractIndexer implements ResourceIndexerInterface {
 
@@ -39,13 +41,13 @@ class ForumPostIndexer extends AbstractIndexer implements ResourceIndexerInterfa
         $encoding = 'utf-8';
 
         $doc = new Zend_Search_Lucene_Document();
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', Indexer::DOCTYPE_FORUMPOST . '_' . $fpost->id, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $fpost->id, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('doctype', Indexer::DOCTYPE_FORUMPOST, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('courseid', $fpost->course_id, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('topicid', $fpost->topic_id, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('content', Indexer::phonetics(strip_tags($fpost->post_text)), $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', $urlServer . 'modules/forum/viewtopic.php?course=' . course_id_to_code($fpost->course_id)
+        $doc->addField(Zend_Search_Lucene_Field::Keyword(ConstantsUtil::FIELD_PK, ConstantsUtil::DOCTYPE_FORUMPOST . '_' . $fpost->id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword(ConstantsUtil::FIELD_PKID, $fpost->id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword(ConstantsUtil::FIELD_DOCTYPE, ConstantsUtil::DOCTYPE_FORUMPOST, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword(ConstantsUtil::FIELD_COURSEID, $fpost->course_id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword(ConstantsUtil::FIELD_TOPICID, $fpost->topic_id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text(ConstantsUtil::FIELD_CONTENT, Indexer::phonetics(strip_tags($fpost->post_text)), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::UnIndexed(ConstantsUtil::FIELD_URL, $urlServer . 'modules/forum/viewtopic.php?course=' . course_id_to_code($fpost->course_id)
             . '&amp;topic=' . intval($fpost->topic_id)
             . '&amp;forum=' . intval($fpost->forum_id), $encoding));
 
@@ -120,11 +122,7 @@ class ForumPostIndexer extends AbstractIndexer implements ResourceIndexerInterfa
      * @return array           - array of DB fetched anonymous objects with property names that correspond to the column names
      */
     protected function getCourseResourcesFromDB($courseId) {
-        return Database::get()->queryArray("SELECT fp.*, f.course_id, ft.forum_id FROM forum_post fp 
-                            JOIN forum_topic ft ON fp.topic_id = ft.id 
-                            JOIN forum f ON ft.forum_id = f.id 
-                            JOIN forum_category fc ON fc.id = f.cat_id 
-                        WHERE fc.cat_order >= 0 AND f.course_id = ?d", $courseId);
+        return FetcherUtil::fetchForumPosts($courseId);
     }
 
     /**

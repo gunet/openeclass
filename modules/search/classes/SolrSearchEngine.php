@@ -21,6 +21,7 @@
 require_once 'SearchEngineInterface.php';
 require_once 'SearchResult.php';
 require_once 'modules/admin/extconfig/solrapp.php';
+require_once 'modules/search/solr/SolrIndexer.php';
 
 class SolrSearchEngine implements SearchEngineInterface {
 
@@ -62,7 +63,11 @@ class SolrSearchEngine implements SearchEngineInterface {
         ];
         $solrUrl = $this->constructSolrUrl("update", $query);
 
-        CurlUtil::httpPostJsonRequest($solrUrl, $this->generateSampleDocuments(2));
+        // delete previous course contents and (re)index
+        $idx = new SolrIndexer();
+        CurlUtil::httpPostJsonRequest($solrUrl, $idx->removeAllByCourse($courseId));
+        CurlUtil::httpPostJsonRequest($solrUrl, $idx->storeAllByCourse($courseId));
+        // CurlUtil::httpPostJsonRequest($solrUrl, $this->generateSampleDocuments(2, $courseId));
     }
 
     private function constructSolrUrl(string $action, array $params): string {
@@ -74,29 +79,30 @@ class SolrSearchEngine implements SearchEngineInterface {
         return $solrUrl . '?' . http_build_query($params);
     }
 
-    private function generateSampleDocuments($count = 10) {
-        global $urlServer;
-        $docs = [];
-
-        for ($i = 0; $i < $count; $i++) {
-            $docs[] = [
-                "id" => uniqid("doc_", true),
-                "pk" => "course_$i",
-                "pkid" => $i,
-                "doctype" => "course",
-                "code" => "TMA$i",
-                "title" => "course title $i",
-                "keywords" => "course keywords $i",
-                "visible" => 1,
-                "prof_names" => "course prof_names $i",
-                "public_code" => "TMA$i",
-                "units" => "course units $i",
-                "created" => gmdate("Y-m-d\TH:i:s\Z"),
-                "url" => $urlServer . 'courses/' . "TMA$i"
-            ];
-        }
-
-        return $docs;
-    }
+//    private function generateSampleDocuments(int $count = 10, int $courseId): array {
+//        global $urlServer;
+//        $docs = [];
+//
+//        for ($i = 0; $i < $count; $i++) {
+//            $docs[] = [
+//                "id" => uniqid("doc_", true),
+//                "pk" => "course_$i",
+//                "pkid" => $i,
+//                "courseid" => $courseId,
+//                "doctype" => "course",
+//                "code" => "TMA$i",
+//                "title" => "course title $i",
+//                "keywords" => "course keywords $i",
+//                "visible" => 1,
+//                "prof_names" => "course prof_names $i",
+//                "public_code" => "TMA$i",
+//                "units" => "course units $i",
+//                "created" => gmdate("Y-m-d\TH:i:s\Z"),
+//                "url" => $urlServer . 'courses/' . "TMA$i"
+//            ];
+//        }
+//
+//        return $docs;
+//    }
 
 }

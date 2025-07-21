@@ -24,6 +24,8 @@ require_once 'courseindexer.interface.php';
 require_once 'Zend/Search/Lucene/Document.php';
 require_once 'Zend/Search/Lucene/Field.php';
 require_once 'Zend/Search/Lucene/Index/Term.php';
+require_once 'modules/search/classes/ConstantsUtil.php';
+require_once 'modules/search/classes/FetcherUtil.php';
 
 class CourseIndexer extends AbstractBaseIndexer implements CourseIndexerInterface {
 
@@ -39,18 +41,18 @@ class CourseIndexer extends AbstractBaseIndexer implements CourseIndexerInterfac
         $encoding = 'utf-8';
 
         $doc = new Zend_Search_Lucene_Document();
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', 'course_' . $course->id, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $course->id, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('doctype', 'course', $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('code', Indexer::phonetics($course->code), $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('title', Indexer::phonetics($course->title), $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('keywords', Indexer::phonetics($course->keywords), $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('visible', $course->visible, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('prof_names', Indexer::phonetics($course->prof_names), $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('public_code', Indexer::phonetics($course->public_code), $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('units', Indexer::phonetics(strip_tags($course->units)), $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('created', $course->created, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', $urlServer . 'courses/' . $course->code, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword(ConstantsUtil::FIELD_PK, ConstantsUtil::DOCTYPE_COURSE . '_' . $course->id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword(ConstantsUtil::FIELD_PKID, $course->id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword(ConstantsUtil::FIELD_DOCTYPE, ConstantsUtil::DOCTYPE_COURSE, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text(ConstantsUtil::FIELD_CODE, Indexer::phonetics($course->code), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text(ConstantsUtil::FIELD_TITLE, Indexer::phonetics($course->title), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text(ConstantsUtil::FIELD_KEYWORDS, Indexer::phonetics($course->keywords), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text(ConstantsUtil::FIELD_VISIBLE, $course->visible, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text(ConstantsUtil::FIELD_PROF_NAMES, Indexer::phonetics($course->prof_names), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text(ConstantsUtil::FIELD_PUBLIC_CODE, Indexer::phonetics($course->public_code), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text(ConstantsUtil::FIELD_UNITS, Indexer::phonetics(strip_tags($course->units)), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::UnIndexed(ConstantsUtil::FIELD_CREATED, $course->created, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::UnIndexed(ConstantsUtil::FIELD_URL, $urlServer . 'courses/' . $course->code, $encoding));
 
         return $doc;
     }
@@ -59,75 +61,10 @@ class CourseIndexer extends AbstractBaseIndexer implements CourseIndexerInterfac
      * Fetch a Course from DB.
      *
      * @param int $courseId
-     * @return object - the mysql fetched row
+     * @return ?object - the mysql fetched row
      */
-    protected function fetch($courseId) {
-        $course = Database::get()->querySingle("SELECT * FROM course WHERE id = ?d", $courseId);
-        if (!$course) {
-            return null;
-        }
-
-        $course->units = $course->description;
-        if ($course->view_type == 'activity') {
-            $res = Database::get()->queryArray("SELECT content
-                                                FROM activity_content
-                                               WHERE course_id = ?d", $courseId);
-            foreach ($res as $row) {
-                $course->units .= $row->content . ' ';
-            }
-        } elseif (in_array($course->view_type, ['units', 'weekly'])) {
-            if ($course->view_type == 'units') {
-                $dbtable = 'course_units';
-                $resdbtable = 'unit_resources';
-                $keyfield = 'unit_id';
-            } else {
-                $dbtable = 'course_weekly_view';
-                $resdbtable = 'course_weekly_view_activities';
-                $keyfield = 'course_weekly_view_id';
-            }
-            // visible units
-            $res = Database::get()->queryArray("SELECT id, title, comments
-                                                FROM $dbtable
-                                               WHERE visible > 0
-                                                 AND course_id = ?d", $courseId);
-            $unitIds = array();
-            foreach ($res as $row) {
-                $course->units .= $row->title . ' ' . $row->comments . ' ';
-                $unitIds[] = $row->id;
-            }
-
-            // visible unit resources
-            foreach ($unitIds as $unitId) {
-                $res = Database::get()->queryArray("SELECT title, comments
-                                                    FROM $resdbtable
-                                                   WHERE visible > 0
-                                                     AND $keyfield = ?d", $unitId);
-                foreach ($res as $row) {
-                    $course->units .= $row->title . ' ' . $row->comments . ' ';
-                }
-            }
-        }
-
-        // invisible but useful units and resources
-        $res = Database::get()->queryArray("SELECT id
-                                            FROM course_units
-                                           WHERE visible = 0
-                                             AND `order` = -1
-                                             AND course_id  = ?d", $courseId);
-        $unitIds = array();
-        foreach ($res as $row) {
-            $unitIds[] = $row->id;
-        }
-        foreach ($unitIds as $unitId) {
-            $res = Database::get()->queryArray("SELECT comments
-                                                FROM unit_resources
-                                               WHERE visible >= 0
-                                                 AND unit_id = ?d", $unitId);
-            foreach ($res as $row) {
-                $course->units .= $row->comments . ' ';
-            }
-        }
-        return $course;
+    protected function fetch($courseId): ?object {
+        return FetcherUtil::fetchCourse($courseId);
     }
 
     /**
