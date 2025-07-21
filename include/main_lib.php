@@ -4121,7 +4121,7 @@ function setOpenCoursesExtraHTML() {
                                                     <i class='fa-solid fa-book-open fa-xl'></i>
                                                     <span class='text-uppercase TextBold Primary-500-cl fs-5'>$openCoursesNum</span>
                                                     <span class='text-uppercase TextBold Primary-500-cl fs-5'>
-                                                        " .(($openCoursesNum == 1)? $langCourses: $langCourse) . "
+                                                        " .(($openCoursesNum == 1)? $langCourse: $langCourses) . "
                                                     </span>
                                                 </a>
                                             </div>
