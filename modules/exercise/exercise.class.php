@@ -1083,6 +1083,9 @@ if (!class_exists('Exercise')) {
             Database::get()->query("DELETE FROM exercise_answer_record
                             WHERE eurid = ?d AND question_id = ?d", $eurid, $key);
             if ($question_type == FREE_TEXT) {
+                if (isset($_POST['choice_recording'][$key]) && !empty($_POST['choice_recording'][$key])) {
+                    $value = $_POST['choice_recording'][$key];
+                }
                 Database::get()->query("INSERT INTO exercise_answer_record
                    (eurid, question_id, answer, answer_id, weight, is_answered, q_position)
                    VALUES (?d, ?d, ?s, 0, NULL, ?d, ?d)",

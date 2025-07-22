@@ -62,52 +62,69 @@ function unset_exercise_var($exerciseId) {
 }
 
 if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+
+    if (isset($_POST['delete-recording'])) {
+        $courseCode = $_GET['course'];
+        $delPath = Database::get()->querySingle("SELECT id,`path` FROM document WHERE course_id = ?d AND subsystem = ?d 
+                                                    AND subsystem_id = ?d AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $_POST['delete-recording'], $uid);
+        unlink("$webDir/courses/$courseCode/image" . $delPath->path);
+        Database::get()->query("DELETE FROM document WHERE id = ?d", $delPath->id);
+    }
      /* save audio recorded data */
     if (isset($_FILES['audio-blob'])) {
         $courseCode = $_GET['course'];
         $questionId = $_POST['questionId'];
         $file_path = '/' . safe_filename('mp3');
-        $filename = 'recording-' . $questionId . '-' . $uid . '.mp3';
-        $oldFile = Database::get()->querySingle("SELECT id,path FROM document WHERE course_id = ?d AND subsystem = ?d 
+        $filename = 'recording-file.mp3';
+        $oldFile = Database::get()->querySingle("SELECT id,`path` FROM document WHERE course_id = ?d AND subsystem = ?d 
                                                     AND subsystem_id = ?d AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $questionId, $uid);
 
-        if (file_exists("$webDir/courses/$courseCode/image" . $oldFile->path)) {
-            Database::get()->query("DELETE FROM document WHERE id = ?d", $oldFile->id);
+        if ($oldFile && file_exists("$webDir/courses/$courseCode/image" . $oldFile->path)) {
             unlink("$webDir/courses/$courseCode/image" . $oldFile->path);
+            Database::get()->query("DELETE FROM document WHERE id = ?d", $oldFile->id);
         }
         if (move_uploaded_file($_FILES['audio-blob']['tmp_name'], "$webDir/courses/$courseCode/image/$file_path")) {
             $file_creator = "$_SESSION[givenname] $_SESSION[surname]";
             $file_date = date('Y-m-d G:i:s');
             $file_format = 'mp3';
-            Database::get()->query("INSERT INTO document SET
-            course_id = ?d,
-            subsystem = ?d,
-            subsystem_id = ?d,
-            path = ?s,
-            extra_path = '',
-            filename = ?s,
-            visible = 1,
-            comment = '',
-            category = 0,
-            title = ?s,
-            creator = ?s,
-            date = ?s,
-            date_modified = ?s,
-            subject = '',
-            description = '',
-            author = ?s,
-            format = ?s,
-            language = ?s,
-            copyrighted = 0,
-            editable = 0,
-            lock_user_id = ?d",
+            $q = Database::get()->query("INSERT INTO document SET
+                course_id = ?d,
+                subsystem = ?d,
+                subsystem_id = ?d,
+                path = ?s,
+                extra_path = '',
+                filename = ?s,
+                visible = 1,
+                comment = '',
+                category = 0,
+                title = ?s,
+                creator = ?s,
+                date = ?s,
+                date_modified = ?s,
+                subject = '',
+                description = '',
+                author = ?s,
+                format = ?s,
+                language = ?s,
+                copyrighted = 0,
+                editable = 0,
+                lock_user_id = ?d",
                 $course_id, ORAL_QUESTION, $questionId, $file_path,
                 $filename, $filename, $file_creator,
                 $file_date, $file_date, $file_creator, $file_format,
                 $language, $uid);
+
+            if ($q) { 
+                if (!isset($_SESSION['recordings_ids'][$uid]) || !in_array($q->lastInsertID, $_SESSION['recordings_ids'][$uid])) {
+                    $_SESSION['recordings_ids'][$uid][] = $q->lastInsertID;
+                }
+                $newFilePath = Database::get()->querySingle("SELECT `path` FROM document WHERE id = ?d", $q->lastInsertID)->path;
+                $fPath = $urlServer . "courses/$course_code/image" . $newFilePath;
+                echo json_encode(['newFilePath' => $fPath]); 
+            }
         }
     }
-    exit();
+    exit;
 }
 
 // Does nothing, just refreshes the session
@@ -296,6 +313,18 @@ if (isset($_POST['buttonCancel'])) {
     unset($_SESSION['QuestionDisplayed']);
     unset($_SESSION['OrderingTemporarySave']);
     unset($_SESSION['OrderingSubsetKeys']);
+
+    // Remove all user's oral mp3 files.
+    if (isset($_SESSION['recordings_ids'][$uid])) {
+        foreach ($_SESSION['recordings_ids'][$uid] as $f) {
+            $fFile = Database::get()->querySingle("SELECT `path` FROM document WHERE id = ?d", $f);
+            if (file_exists("$webDir/courses/$course_code/image" . $fFile->path)) {
+                unlink("$webDir/courses/$course_code/image" . $fFile->path);
+            }
+            Database::get()->query("DELETE FROM document WHERE id = ?d", $f);
+        }
+        unset($_SESSION['recordings_ids'][$uid]);
+    }
 
     $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value];
     Database::get()->query("UPDATE exercise_user_record
@@ -669,6 +698,7 @@ if (isset($_POST['formSent'])) {
         unset($_SESSION['QuestionDisplayed']);
         unset($_SESSION['OrderingTemporarySave']);
         unset($_SESSION['OrderingSubsetKeys']);
+        unset($_SESSION['recordings_ids'][$uid]);
 
         if (isset($_POST['secsRemaining'])) {
             $secs_remaining = $_POST['secsRemaining'];

@@ -18,16 +18,19 @@ class FreeTextAnswer extends QuestionType
         global $langFreeText, $langOral, $langStart, $langStopRecording, $head_content, 
                $langStart, $langStopRecording, $urlAppend, $langReleaseMic, $langSaveInDoc, 
                $langMaxRecAudioTime, $course_code, $urlServer, $langEnterFile, $langSave, 
-               $langSaveOralMsg, $langOk, $uid, $webDir, $course_id, $course_code;
+               $langSaveOralMsg, $langOk, $uid, $webDir, $course_id, $course_code, 
+               $langDeleteRecordingOk, $langListenToRecordingAudio;
 
         $questionId = $this->question_id;
         $text = (isset($exerciseResult[$questionId])) ? $exerciseResult[$questionId] : '';
         $html_content = '';
 
-        $userfile = Database::get()->querySingle("SELECT `path`,`filename` FROM document WHERE course_id = ?d AND subsystem = ?d AND subsystem_id = ?d AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $questionId, $uid);
+        $userfile = Database::get()->querySingle("SELECT id,`path`,`filename` FROM document WHERE course_id = ?d AND subsystem = ?d AND subsystem_id = ?d AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $questionId, $uid);
+        $url = $urlServer. "courses/$course_code/image" . ($userfile->path ?? '');
+        $filename = $userfile->filename ?? '';
+        $displayItems = 'd-none';
         if ($userfile) {
-            $url = $urlServer. "courses/$course_code/image" . $userfile->path;
-            $filename = $userfile->filename;
+            $displayItems = 'd-block';
         }
 
         $html_content .= "
@@ -39,13 +42,12 @@ class FreeTextAnswer extends QuestionType
                 <button class='nav-link' id='oral-tab_{$questionId}' data-bs-toggle='tab' data-bs-target='#oral_{$questionId}' type='button' role='tab' aria-controls='oral_{$questionId}' aria-selected='false'>$langOral</button>
             </li>
         </ul>
-
-        <!-- Tab panes -->
         <div class='tab-content fade mt-4' id='myTabContent_{$questionId}'>
             <div class='tab-pane fade show active' id='freetext_{$questionId}' role='tabpanel' aria-labelledby='freetext-tab_{$questionId}'>
                 " . rich_text_editor("choice[$questionId]", 14, 90, $text, options: $options) . "
             </div>
             <div class='tab-pane fade' id='oral_{$questionId}' role='tabpanel' aria-labelledby='oral-tab_{$questionId}'>
+                <input type='hidden' name='choice_recording[$questionId]' id='hidden-recording-{$questionId}'>
                 <div class='col-12 d-flex gap-3'>
                     <button class='btn submitAdminBtnDefault' id='button-start-recording-{$questionId}'>$langStart</button>
                     <button class='btn submitAdminBtn' id='button-release-microphone-{$questionId}' disabled><i class='fa-solid fa-microphone-slash'></i></button>
@@ -58,14 +60,22 @@ class FreeTextAnswer extends QuestionType
                 <div class='col-12 d-flex justify-content-start align-item-center mt-4'>
                     <audio controls autoplay playsinline></audio>
                 </div>";
-                if ($userfile) {
-    $html_content .= "<div class='col-12 mt-4'>
-                        <p class='TextBold'>$filename</p>
-                        <audio controls>
-                            <source src=" . htmlspecialchars($url) . " type='audio/mpeg'>
-                        </audio>
-                    </div>";
-                }
+$html_content .= "<div class='col-12 d-flex align-items-center gap-3 mt-4'>
+                    <span id='listenSpan_{$questionId}' class='$displayItems'>$langListenToRecordingAudio</span>
+                    <a id='filename-link-{$questionId}' class='TextBold $displayItems' href='#' data-bs-toggle='modal' data-bs-target='#audioModal_{$questionId}'>($question_number) $filename</a>
+                    <a id='deleteRecording-{$questionId}' class='deleteRecording $displayItems' data-id='{$questionId}'><i class='fa-solid fa-circle-xmark fa-lg Accent-200-cl'></i></a>
+                    <div class='modal fade' id='audioModal_{$questionId}' tabindex='-1' aria-labelledby='audioModalLabel_{$questionId}'>
+                        <div class='modal-dialog modal-dialog-centered'>
+                            <div class='modal-content'>
+                                <div class='modal-body'>
+                                    <audio id='audio_{$questionId}' controls>
+                                        <source id='audioSource_{$questionId}' src=" . htmlspecialchars($url) . " type='audio/mpeg'>
+                                    </audio>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>";
 $html_content .= "</div>
         </div>";
 
@@ -74,6 +84,32 @@ $html_content .= "</div>
         <script src='{$urlAppend}node_modules/recordrtc/RecordRTC.min.js'></script>
         <script type='text/javascript'>
             $(document).ready(function() {
+
+                $('.deleteRecording').on('click', function (){
+                    var qID = $(this).data('id');
+                    var deleteData = new FormData();
+                    deleteData.append('delete-recording', qID);
+                    var del_url = '{$urlAppend}modules/exercise/exercise_submit.php?course={$course_code}';
+                    $.ajax({
+                        url: del_url,
+                        data: deleteData,
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        type: 'POST'
+                    }).done(function(data) {
+                        alert('$langDeleteRecordingOk');
+                        $('body').find('#audioSource_{$questionId}').attr('src', '');
+                        $('#audio_{$questionId}')[0].load();
+                        // Select the link and change its text
+                        $('#listenSpan_{$questionId}').removeClass('d-block').addClass('d-none');
+                        $('#filename-link-{$questionId}').removeClass('d-block').addClass('d-none');
+                        $('#deleteRecording-{$questionId}').removeClass('d-block').addClass('d-none');
+                        $('#hidden-recording-{$questionId}-{$uid}').val('');
+                    })
+
+                });
+                
 
                 var audio = document.querySelector('audio');
                 function captureMicrophone(callback) {
@@ -146,6 +182,7 @@ $html_content .= "</div>
                     this.disabled = true;
                     this.style.border = '';
                     this.style.fontSize = '';
+                    saveBtn.disabled = true;
                     if (!microphone) {
                         captureMicrophone(function(mic) {
                             microphone = mic;
@@ -270,9 +307,20 @@ $html_content .= "</div>
                                 cache: false,
                                 contentType: false,
                                 processData: false,
-                                type: 'POST'
+                                type: 'POST',
+                                dataType: 'json' // Expect JSON response
                             }).done(function(data) {
                                 alert('$langOk');
+                                var newFilePath = data.newFilePath;
+                                $('#listenSpan_{$questionId}').removeClass('d-none').addClass('d-block');
+                                $('#filename-link-{$questionId}').removeClass('d-none').addClass('d-block');
+                                $('#deleteRecording-{$questionId}').removeClass('d-none').addClass('d-block');
+                                $('body').find('#audioSource_{$questionId}').attr('src', newFilePath);
+                                $('#audio_{$questionId}')[0].load();
+                                // Select the link and change its text
+                                $('#filename-link-{$questionId}').text('($question_number) recording-file.mp3');
+                                $('#deleteRecording-{$questionId}').addClass('d-block');
+                                $('#hidden-recording-{$questionId}').val('recording-file-{$questionId}-{$uid}.mp3');
                             })
                         }
                     });
@@ -290,10 +338,49 @@ $html_content .= "</div>
     public function QuestionResult($choice, $eurid, $regrade, $extra_type = ''): string
     {
 
-        global $questionScore, $question_weight;
+        global $questionScore, $question_weight, $course_id, $course_code, $uid, $urlServer, $is_editor;
 
+        $questionId = $this->question_id;
         $questionScore = $question_weight;
-        $html_content = "<tr><td>" . purify($choice) . "</td></tr>";
+        
+        $userID = $uid;
+        if ($is_editor) {
+            $an = Database::get()->querySingle("SELECT answer FROM exercise_answer_record WHERE eurid = ?d AND question_id = ?d", $eurid, $questionId);
+            if ($an && strpos($an->answer, '.mp3') !== false) {
+                $filename_without_extension = str_replace('.mp3', '', $an->answer);
+                $arr = explode('-', $filename_without_extension);
+                if (count($arr) == 4) {
+                    $userID = $arr[3];
+                }
+            }
+        }
+    
+        $text = '';
+        if ($choice == "recording-file-$questionId-$userID.mp3") {
+            $userfile = Database::get()->querySingle("SELECT `path`,`filename` FROM document 
+                                                        WHERE course_id = ?d AND subsystem = ?d 
+                                                        AND subsystem_id = ?d AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $questionId, $userID);
+            $url = $urlServer. "courses/$course_code/image" . $userfile->path ?? '';
+            $filename = $userfile->filename ?? '';
+            $text .= "<a id='recording-link-{$questionId}' class='TextBold' href='#' data-bs-toggle='modal' data-bs-target='#recording_AudioModal_{$questionId}'>$filename</a>";
+            $text .= "
+                <div class='modal fade' id='recording_AudioModal_{$questionId}' tabindex='-1'>
+                    <div class='modal-dialog modal-dialog-centered'>
+                        <div class='modal-content'>
+                            <div class='modal-body'>
+                                <audio controls>
+                                    <source src=" . htmlspecialchars($url) . " type='audio/mpeg'>
+                                </audio>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            ";
+        } else {
+            $text .= purify($choice);
+        }
+
+        $html_content = "<tr><td>$text</td></tr>";
 
         return $html_content;
 
