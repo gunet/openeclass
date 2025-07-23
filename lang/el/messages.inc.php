@@ -1166,6 +1166,7 @@ $langCourseUserRequests = "Αιτήσεις εγγραφής χρηστών στ
 $langCourseUserRequestsDisabled = "Αιτήσεις εγγραφής χρηστών δεν υπάρχουν για τα μη κλειστά $langsCourses.";
 $langUsersListAccess = "Εμφάνιση χρηστών του $langsOfCourse";
 $langUsersListAccessInfo = "αφορά μόνο τους εγγεγραμμένους χρήστες του $langsOfCourse";
+$langCourseAdminTools = "Διαχείριση εργαλείων";
 
 // delete_course.php
 $langModifGroups = "Ομάδες Εργασίας";

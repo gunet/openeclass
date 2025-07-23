@@ -76,6 +76,8 @@ try {
 
 header('Content-Type: text/html; charset=UTF-8');
 
+require_once 'include/lib/permissions.class.php';
+
 require_once 'modules/admin/extconfig/externals.php';
 
 if (isset($language)) {
