@@ -239,7 +239,7 @@ function details($qid, $eurid) {
  */
 function question_answer_details($eurid, $qid) {
 
-    global $langChoice;
+    global $langChoice, $course_code, $course_id, $webDir, $urlServer;
 
     $content = $temp_content = '';
     $temp_array_content = [];
@@ -248,6 +248,8 @@ function question_answer_details($eurid, $qid) {
                             JOIN exercise_question
                         ON exercise_question.id = exercise_answer_record.question_id
                             WHERE eurid = ?d AND question_id = ?d", $eurid, $qid);
+
+    $userID = Database::get()->querySingle("SELECT `uid` FROM exercise_user_record WHERE eurid = ?d", $eurid)->uid;
 
     foreach ($q as $data) {
             switch ($data->type) {
@@ -330,7 +332,26 @@ function question_answer_details($eurid, $qid) {
                     $content = rtrim(trim($temp_content), ','); // remove last `comma`
                 break;
                 case FREE_TEXT:
-                    $content .= html2text($data->answer);
+                    if (strpos($data->answer, '::') !== false) {
+                        $hyperLink = '';
+                        $file = Database::get()->querySingle("SELECT `path` FROM document WHERE course_id = ?d
+                                                              AND subsystem = ?d AND subsystem_id = ?d
+                                                              AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $data->question_id, $userID);
+                        if ($file && file_exists("$webDir/courses/$course_code/image" . $file->path)) {
+                            $pathUrl = $urlServer . "courses/$course_code/image" . $file->path;
+                            $fileName = "recording-file-$data->question_id-$userID";
+                            $hyperLink = 'HYPERLINK("' . $pathUrl . '", "' . $fileName . '")';
+                        } 
+                        $explode = explode('::', $data->answer);
+                        if (count($explode) == 1) { // only oral
+                            $content .= $hyperLink;
+                        } elseif (count($explode) == 2) { // both oral and text
+                            $content .= html2text($explode[0]) . "::" . $hyperLink;
+                        }
+                    } else {
+                        $content .= html2text($data->answer);
+                    }
+
                 break;
             }
     }
