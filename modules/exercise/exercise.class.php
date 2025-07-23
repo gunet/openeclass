@@ -1412,7 +1412,7 @@ if (!class_exists('Exercise')) {
                                                         FROM exercise_user_record
                                                         JOIN exercise_answer_record ON exercise_user_record.eurid = exercise_answer_record.eurid
                                                         WHERE exercise_user_record.eid = ?d", $id);
-                                                        print_a($userRecords);
+                                                        
             foreach ($userRecords as $rec) {
                 $file = Database::get()->querySingle("SELECT id,`path` FROM document WHERE course_id = ?d
                                                       AND subsystem = ?d AND subsystem_id = ?d
