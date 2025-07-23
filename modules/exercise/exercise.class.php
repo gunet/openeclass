@@ -1083,9 +1083,11 @@ if (!class_exists('Exercise')) {
             Database::get()->query("DELETE FROM exercise_answer_record
                             WHERE eurid = ?d AND question_id = ?d", $eurid, $key);
             if ($question_type == FREE_TEXT) {
+                $extra_value = '';
                 if (isset($_POST['choice_recording'][$key]) && !empty($_POST['choice_recording'][$key])) {
-                    $value = $_POST['choice_recording'][$key];
+                    $extra_value = '::' . $_POST['choice_recording'][$key];
                 }
+                $value = $value . $extra_value;
                 Database::get()->query("INSERT INTO exercise_answer_record
                    (eurid, question_id, answer, answer_id, weight, is_answered, q_position)
                    VALUES (?d, ?d, ?s, 0, NULL, ?d, ?d)",
@@ -1402,8 +1404,25 @@ if (!class_exists('Exercise')) {
          */
         public function purge()
         {
-            global $course_id;
+            global $course_id, $webDir, $course_code;
             $id = $this->id;
+
+            // Remove oral answers from document table and courses folder
+            $userRecords = Database::get()->queryArray("SELECT exercise_user_record.eurid,exercise_user_record.`uid`,exercise_answer_record.question_id 
+                                                        FROM exercise_user_record
+                                                        JOIN exercise_answer_record ON exercise_user_record.eurid = exercise_answer_record.eurid
+                                                        WHERE exercise_user_record.eid = ?d", $id);
+                                                        print_a($userRecords);
+            foreach ($userRecords as $rec) {
+                $file = Database::get()->querySingle("SELECT id,`path` FROM document WHERE course_id = ?d
+                                                      AND subsystem = ?d AND subsystem_id = ?d
+                                                      AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $rec->question_id, $rec->uid);
+                if ($file && file_exists("$webDir/courses/$course_code/image" . $file->path)) {
+                    unlink("$webDir/courses/$course_code/image" . $file->path);
+                    Database::get()->query("DELETE FROM document WHERE id = ?d", $file->id);
+                } 
+            }
+            
 
             Database::get()->query("DELETE d FROM exercise_answer_record d, exercise_user_record s
                               WHERE d.eurid = s.eurid AND s.eid = ?d", $id);

@@ -343,44 +343,52 @@ $html_content .= "</div>
         $questionId = $this->question_id;
         $questionScore = $question_weight;
         
-        $userID = $uid;
-        if ($is_editor) {
-            $an = Database::get()->querySingle("SELECT answer FROM exercise_answer_record WHERE eurid = ?d AND question_id = ?d", $eurid, $questionId);
-            if ($an && strpos($an->answer, '.mp3') !== false) {
-                $filename_without_extension = str_replace('.mp3', '', $an->answer);
-                $arr = explode('-', $filename_without_extension);
-                if (count($arr) == 4) {
-                    $userID = $arr[3];
-                }
-            }
-        }
-    
+        $html_content = '';
         $text = '';
-        if ($choice == "recording-file-$questionId-$userID.mp3") {
-            $userfile = Database::get()->querySingle("SELECT `path`,`filename` FROM document 
-                                                        WHERE course_id = ?d AND subsystem = ?d 
-                                                        AND subsystem_id = ?d AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $questionId, $userID);
-            $url = $urlServer. "courses/$course_code/image" . $userfile->path ?? '';
-            $filename = $userfile->filename ?? '';
-            $text .= "<a id='recording-link-{$questionId}' class='TextBold' href='#' data-bs-toggle='modal' data-bs-target='#recording_AudioModal_{$questionId}'>$filename</a>";
-            $text .= "
-                <div class='modal fade' id='recording_AudioModal_{$questionId}' tabindex='-1'>
-                    <div class='modal-dialog modal-dialog-centered'>
-                        <div class='modal-content'>
-                            <div class='modal-body'>
-                                <audio controls>
-                                    <source src=" . htmlspecialchars($url) . " type='audio/mpeg'>
-                                </audio>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            ";
-        } else {
-            $text .= purify($choice);
-        }
+        $oral = '';
+        $recording = '';
+        $url = '';
+        $filename = '';
 
-        $html_content = "<tr><td>$text</td></tr>";
+        if (strpos($choice, '::') !== false) { // choice contains oral answer apart from text
+            $user_answer = explode('::', $choice);
+            if (count($user_answer) == 1) { // only oral
+                $oral = $user_answer[0];
+            } elseif (count($user_answer) == 2) { // oran and text together
+                $text = $user_answer[0];
+                $oral = $user_answer[1];
+            }
+            $filename_without_extension = str_replace('.mp3', '', $oral);
+            $user_recording = explode('-', $filename_without_extension);
+            if (count($user_recording) == 4) {
+                $userID = $user_recording[3];
+                $userfile = Database::get()->querySingle("SELECT `path`,`filename` FROM document 
+                                                          WHERE course_id = ?d AND subsystem = ?d 
+                                                          AND subsystem_id = ?d AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $questionId, $userID);
+                $url = $urlServer. "courses/$course_code/image" . ($userfile->path ?? '');
+                $filename = $userfile->filename ?? '';
+            }
+            if (!empty($text)) {
+                $html_content .= "<tr><td>" . purify($text). "</td></tr>";
+            }
+            if (!empty($oral) && !empty($url) && !empty($filename)) {
+                $html_content .= "<tr><td><a id='recording-link-{$questionId}' class='TextBold' href='#' data-bs-toggle='modal' data-bs-target='#recording_AudioModal_{$questionId}'>$filename</a></td></tr>";
+                $html_content .= "<div class='modal fade' id='recording_AudioModal_{$questionId}' tabindex='-1'>
+                                    <div class='modal-dialog modal-dialog-centered'>
+                                        <div class='modal-content'>
+                                            <div class='modal-body'>
+                                                <audio controls>
+                                                    <source src=" . htmlspecialchars($url) . " type='audio/mpeg'>
+                                                </audio>
+                                            </div>
+                                        </div>
+                                    </div>
+                                  </div>";
+            }
+        } else {
+            $text = $choice; // plain text
+            $html_content .= "<tr><td>" . purify($text). "</td></tr>";
+        }
 
         return $html_content;
 
