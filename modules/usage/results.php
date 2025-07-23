@@ -67,7 +67,7 @@ if (!is_null($plotuser) && $plotuser != $uid && !$is_admin) { // security check
 $plotcourse = (isset($_REQUEST['c']) && is_numeric($_REQUEST['c']) && $_REQUEST['c']>0)? $_REQUEST['c'] : null;
 $plotmodule = (isset($_REQUEST['m']) && is_numeric($_REQUEST['m']) && $_REQUEST['m']>0)? $_REQUEST['m'] : null;
 $department = (isset($_REQUEST['d']) && is_numeric($_REQUEST['d']) && $_REQUEST['d']>0)? $_REQUEST['d'] : null;
-$total = (isset($_REQUEST['o']) && is_numeric($_REQUEST['o']) && $_REQUEST['o']>0)? true : false;
+$total = isset($_REQUEST['o']) && is_numeric($_REQUEST['o']) && $_REQUEST['o']>0;
 
 $ds = DateTime::createFromFormat('Y-n-j', $_REQUEST['s']);
 $de = DateTime::createFromFormat('Y-n-j', $_REQUEST['e']);

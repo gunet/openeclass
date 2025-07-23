@@ -58,13 +58,14 @@ $tschema = "<thead><tr class='list-header'>"
     . "<th>$langDate</th>"
     . "<th>$langModule</th>"
     . "<th>$langUser</th>"
-    . "<th>$langHits</th>"
+    . "<th>$langGroup</th>"
+    . "<th>$langHitsShort</th>"
     . "<th>$langDuration</th>"
     . "<th>$langUsername</th>"
     . "<th>$langEmail</th>"
     . "</tr></thead>"
     . "<tbody></tbody>"
-    . "<tfoot><tr><th>$langTotal</th><th></th><th></th><th></th><th></th></tr></tfoot>";
+    . "<tfoot><tr><th>$langTotal</th><th></th><th></th><th></th><th></th><th></th></tr></tfoot>";
 $tool_content .= table_placeholder("cdetails1", "table-default table-striped table-logs", $tschema, "$langHits $langAnd $langDuration");
 $tool_content .= "</div></div>";
 
