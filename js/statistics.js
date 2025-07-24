@@ -203,18 +203,18 @@ $(document).ready(function(){
            'sPaginationType': 'full_numbers',
            'pageLength': pLength,
            'lengthMenu': [5, 10, 20, 50, 100],
-           'buttons': [{
-                        extend:'print',
-                        text: langPrint},
-                    {
-                        extend:'copyHtml5',
-                        text: langCopy},
-                    {
-                        extend: 'collection',
-                        text: langExport+'...',
-                        buttons: ['csvHtml5','excelHtml5', 'pdfHtml5']
-                    }
-            ],
+           'buttons': [
+                           {
+                               extend: 'copy',
+                               text: langCopy
+                           },
+                            'excel',
+                            'pdf',
+                           {
+                               extend: 'print',
+                               text: langPrint
+                           }
+                      ],
             'autoWidth': true,
             'footerCallback': footerCB(tableid, tableElId),
             'columnDefs': colDefs,
