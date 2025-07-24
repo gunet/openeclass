@@ -19,17 +19,29 @@ class FreeTextAnswer extends QuestionType
                $langStart, $langStopRecording, $urlAppend, $langReleaseMic, $langSaveInDoc, 
                $langMaxRecAudioTime, $course_code, $urlServer, $langEnterFile, $langSave, 
                $langSaveOralMsg, $langOk, $uid, $webDir, $course_id, $course_code, 
-               $langDeleteRecordingOk, $langListenToRecordingAudio;
+               $langDeleteRecordingOk, $langListenToRecordingAudio, $langFileUploadingOkReplaceWithNew;
 
         $questionId = $this->question_id;
-        $text = (isset($exerciseResult[$questionId])) ? $exerciseResult[$questionId] : '';
+        $text = '';
+        if (isset($exerciseResult[$questionId])) {
+            if (strpos($exerciseResult[$questionId], '::') !== false) {
+                $arr = explode('::', $exerciseResult[$questionId]);
+                if (count($arr) == 2) {
+                    $text = $arr[0]; // plain text
+                }
+            } else {
+                $text = $exerciseResult[$questionId];
+            }
+        } 
         $html_content = '';
-
-        $userfile = Database::get()->querySingle("SELECT id,`path`,`filename` FROM document WHERE course_id = ?d AND subsystem = ?d AND subsystem_id = ?d AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $questionId, $uid);
-        $url = $urlServer. "courses/$course_code/image" . ($userfile->path ?? '');
-        $filename = $userfile->filename ?? '';
+        $url = '';
+        $filename = '';
         $displayItems = 'd-none';
-        if ($userfile) {
+        $answered_oral = $_SESSION['answered_oral'][$questionId] ?? '';
+        if (!empty($answered_oral)) {
+            $answered_oral = explode('::', $answered_oral);
+            $url = $answered_oral[0];
+            $filename = $answered_oral[1];
             $displayItems = 'd-block';
         }
 
@@ -47,7 +59,7 @@ class FreeTextAnswer extends QuestionType
                 " . rich_text_editor("choice[$questionId]", 14, 90, $text, options: $options) . "
             </div>
             <div class='tab-pane fade' id='oral_{$questionId}' role='tabpanel' aria-labelledby='oral-tab_{$questionId}'>
-                <input type='hidden' name='choice_recording[$questionId]' id='hidden-recording-{$questionId}'>
+                <input type='hidden' name='choice_recording[$questionId]' id='hidden-recording-{$questionId}' value='{$filename}'>
                 <div class='col-12 d-flex gap-3'>
                     <button class='btn submitAdminBtnDefault' id='button-start-recording-{$questionId}'>$langStart</button>
                     <button class='btn submitAdminBtn' id='button-release-microphone-{$questionId}' disabled><i class='fa-solid fa-microphone-slash'></i></button>
@@ -58,12 +70,12 @@ class FreeTextAnswer extends QuestionType
                     <span class='help-block'>$langMaxRecAudioTime</span>
                 </div>
                 <div class='col-12 d-flex justify-content-start align-item-center mt-4'>
-                    <audio controls autoplay playsinline></audio>
+                    <audio class='audio-{$questionId}' controls autoplay playsinline></audio>
                 </div>";
-$html_content .= "<div class='col-12 d-flex align-items-center gap-3 mt-4'>
-                    <span id='listenSpan_{$questionId}' class='$displayItems'>$langListenToRecordingAudio</span>
-                    <a id='filename-link-{$questionId}' class='TextBold $displayItems' href='#' data-bs-toggle='modal' data-bs-target='#audioModal_{$questionId}'>($question_number) $filename</a>
-                    <a id='deleteRecording-{$questionId}' class='deleteRecording $displayItems' data-id='{$questionId}'><i class='fa-solid fa-circle-xmark fa-lg Accent-200-cl'></i></a>
+$html_content .= "<div id='recording_file_container_{$questionId}' class='col-12 $displayItems d-flex align-items-center gap-3 mt-4'>
+                    <span>$langListenToRecordingAudio</span>
+                    <a id='filename-link-{$questionId}' class='TextBold' href='#' data-bs-toggle='modal' data-bs-target='#audioModal_{$questionId}'>($question_number) $filename</a>
+                    <a id='deleteRecording-{$questionId}' class='deleteRecording' data-id='{$questionId}'><i class='fa-solid fa-circle-xmark fa-lg Accent-200-cl'></i></a>
                     <div class='modal fade' id='audioModal_{$questionId}' tabindex='-1' aria-labelledby='audioModalLabel_{$questionId}'>
                         <div class='modal-dialog modal-dialog-centered'>
                             <div class='modal-content'>
@@ -85,7 +97,7 @@ $html_content .= "</div>
         <script type='text/javascript'>
             $(document).ready(function() {
 
-                $('.deleteRecording').on('click', function (){
+                $('#deleteRecording-{$questionId}').on('click', function (){
                     var qID = $(this).data('id');
                     var deleteData = new FormData();
                     deleteData.append('delete-recording', qID);
@@ -99,19 +111,20 @@ $html_content .= "</div>
                         type: 'POST'
                     }).done(function(data) {
                         alert('$langDeleteRecordingOk');
+
+                        // Set empty the src of current audio and load it again.
                         $('body').find('#audioSource_{$questionId}').attr('src', '');
                         $('#audio_{$questionId}')[0].load();
-                        // Select the link and change its text
-                        $('#listenSpan_{$questionId}').removeClass('d-block').addClass('d-none');
-                        $('#filename-link-{$questionId}').removeClass('d-block').addClass('d-none');
-                        $('#deleteRecording-{$questionId}').removeClass('d-block').addClass('d-none');
+
+                        // Hide recording link and change its value.
+                        $('#recording_file_container_{$questionId}').removeClass('d-block').addClass('d-none');
                         $('#hidden-recording-{$questionId}-{$uid}').val('');
                     })
 
                 });
                 
 
-                var audio = document.querySelector('audio');
+                var audio = document.querySelector('audio.audio-{$questionId}');
                 function captureMicrophone(callback) {
                     btnReleaseMicrophone.disabled = false;
                     $('#button-release-microphone-{$questionId} i').removeClass('fa-solid fa-microphone-slash').addClass('fa-solid fa-microphone');
@@ -310,17 +323,18 @@ $html_content .= "</div>
                                 type: 'POST',
                                 dataType: 'json' // Expect JSON response
                             }).done(function(data) {
-                                alert('$langOk');
+                                alert('$langFileUploadingOkReplaceWithNew');
                                 var newFilePath = data.newFilePath;
-                                $('#listenSpan_{$questionId}').removeClass('d-none').addClass('d-block');
-                                $('#filename-link-{$questionId}').removeClass('d-none').addClass('d-block');
-                                $('#deleteRecording-{$questionId}').removeClass('d-none').addClass('d-block');
+                                $('#recording_file_container_{$questionId}').removeClass('d-none').addClass('d-block');
+
+                                // Create and load new audio sourse
                                 $('body').find('#audioSource_{$questionId}').attr('src', newFilePath);
                                 $('#audio_{$questionId}')[0].load();
-                                // Select the link and change its text
+
+                                // Show the recordinf link file and change its text. Disable save button after clicking it.
                                 $('#filename-link-{$questionId}').text('($question_number) recording-file.mp3');
-                                $('#deleteRecording-{$questionId}').addClass('d-block');
                                 $('#hidden-recording-{$questionId}').val('recording-file-{$questionId}-{$uid}.mp3');
+                                $('#button-save-recording-{$questionId}').prop('disabled', true);
                             })
                         }
                     });

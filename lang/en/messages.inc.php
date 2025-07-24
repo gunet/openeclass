@@ -1901,6 +1901,7 @@ $langOral = "Oral";
 $langSaveOralMsg = "Your answer will be temporarily saved. The final saving is completed by submitting the exercise. Do you want to proceed?";
 $langDeleteRecordingOk = "The file has been deleted successfully!";
 $langListenToRecordingAudio = "Listen to your recorded response here: ";
+$langFileUploadingOkReplaceWithNew = "The file was saved successfully. In case of a new attempt at the exercise, if you answer the same question then the old file will be replaced with the new one.";
 $langScale = "Scale";
 $langFalse = "False";
 $langAddPicture = "Add Picture";

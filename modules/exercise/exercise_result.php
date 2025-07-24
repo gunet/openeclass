@@ -451,12 +451,21 @@ if (count($exercise_question_ids) > 0) {
         if ($answerType == MULTIPLE_ANSWER and $questionScore < 0) {
             $questionScore = 0;
         }
-        $rounded_weight = round($question_weight, 2);
+        if (!is_null($question_weight)) {
+            $rounded_weight = round($question_weight, 2);
+        } else {
+            $rounded_weight = 0;
+        }
+        
 
         if ($rounded_weight < 0 and $answerType == MULTIPLE_ANSWER) {
             $rounded_weight = 0;
         }
-        $rounded_score = round($questionScore, 2);
+        if (!is_null($questionScore)) {
+            $rounded_score = round($questionScore, 2);
+        } else {
+            $rounded_score = 0;
+        }
         if ($showScore and $rounded_weight != $rounded_score) {
             $tool_content .= "<tr class='warning'>
                                 <th colspan='2' class='text-end'>

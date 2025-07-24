@@ -69,6 +69,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                                                     AND subsystem_id = ?d AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $_POST['delete-recording'], $uid);
         unlink("$webDir/courses/$courseCode/image" . $delPath->path);
         Database::get()->query("DELETE FROM document WHERE id = ?d", $delPath->id);
+        unset($_SESSION['answered_oral'][$_POST['delete-recording']]);
     }
      /* save audio recorded data */
     if (isset($_FILES['audio-blob'])) {
@@ -115,11 +116,12 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                 $language, $uid);
 
             if ($q) { 
-                if (!isset($_SESSION['recordings_ids'][$uid]) || !in_array($q->lastInsertID, $_SESSION['recordings_ids'][$uid])) {
-                    $_SESSION['recordings_ids'][$uid][] = $q->lastInsertID;
-                }
                 $newFilePath = Database::get()->querySingle("SELECT `path` FROM document WHERE id = ?d", $q->lastInsertID)->path;
                 $fPath = $urlServer . "courses/$course_code/image" . $newFilePath;
+                if (!isset($_SESSION['recordings_ids'][$uid]) || !in_array($q->lastInsertID, $_SESSION['recordings_ids'][$uid])) {
+                    $_SESSION['recordings_ids'][$uid][] = $q->lastInsertID;
+                    $_SESSION['answered_oral'][$questionId] = "$fPath" . "::" ."recording-file-$questionId-$uid.mp3";
+                }
                 echo json_encode(['newFilePath' => $fPath]); 
             }
         }
@@ -313,6 +315,7 @@ if (isset($_POST['buttonCancel'])) {
     unset($_SESSION['QuestionDisplayed']);
     unset($_SESSION['OrderingTemporarySave']);
     unset($_SESSION['OrderingSubsetKeys']);
+    unset($_SESSION['answered_oral']);
 
     // Remove all user's oral mp3 files.
     if (isset($_SESSION['recordings_ids'][$uid])) {
@@ -699,6 +702,7 @@ if (isset($_POST['formSent'])) {
         unset($_SESSION['OrderingTemporarySave']);
         unset($_SESSION['OrderingSubsetKeys']);
         unset($_SESSION['recordings_ids'][$uid]);
+        unset($_SESSION['answered_oral']);
 
         if (isset($_POST['secsRemaining'])) {
             $secs_remaining = $_POST['secsRemaining'];
