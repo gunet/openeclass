@@ -7,7 +7,7 @@
     "bower": ">=1.8.8",
     "grunt": "^0.4.1",
     "grunt-contrib-cssmin": "^0.5.0",
-    "grunt-contrib-less": "^0.7.0",
+    "grunt-contrib-less": "^2.0.0",
     "grunt-contrib-uglify": "^0.2.0"
   },
   "devDependencies": {},
