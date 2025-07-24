@@ -313,9 +313,9 @@ if (isset($_GET['pdf']) and $is_course_reviewer) {
     $pdf_content .= $tool_content;
     $pdf_content .= "</body></html>";
 
-    $defaultConfig = new Mpdf\Config\ConfigVariables()->getDefaults();
+    $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
     $fontDirs = $defaultConfig['fontDir'];
-    $defaultFontConfig = new Mpdf\Config\FontVariables()->getDefaults();
+    $defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
     $fontData = $defaultFontConfig['fontdata'];
 
     $mpdf = new Mpdf\Mpdf([
