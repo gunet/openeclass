@@ -514,7 +514,7 @@ function calculate_eportfolio_completion($user_id) {
     $completed_fields = Database::get()->queryArray("SELECT field_id FROM eportfolio_fields_data WHERE user_id = ?s", $user_id);
     
     $total_fields = 0;
-    $completed_fields = 0;
+    $completed_fields_num = 0;
     $language_field_ids = [];
     $language_group_completed = false;
 
@@ -533,14 +533,14 @@ function calculate_eportfolio_completion($user_id) {
         if (in_array($completed_field->field_id, $language_field_ids)) {
             $language_group_completed = true;
         } else {
-            $completed_fields++;
+            $completed_fields_num++;
         }
     }
 
     if (!empty($language_field_ids)) {
         $total_fields++;
         if ($language_group_completed) {
-            $completed_fields++;
+            $completed_fields_num++;
         }
     }
 
@@ -548,7 +548,7 @@ function calculate_eportfolio_completion($user_id) {
         return 0;
     }
 
-    $percentage = ($completed_fields / $total_fields) * 100;
+    $percentage = ($completed_fields_num / $total_fields) * 100;
     return round($percentage, 2);
 }
 
