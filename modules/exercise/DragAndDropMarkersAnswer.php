@@ -131,7 +131,7 @@ class DragAndDropMarkersAnswer extends \QuestionType
 
     public function AnswerQuestion($question_number, $exerciseResult = [], $options = []): string
     {
-        global $webDir, $course_code, $langCalcelDroppableItem, $head_content;
+        global $webDir, $course_code, $langCalcelDroppableItem, $head_content, $uid;
 
         $questionId = $this->question_id;
         $question_text = $this->answer_object->get_drag_and_drop_text();
@@ -221,8 +221,8 @@ class DragAndDropMarkersAnswer extends \QuestionType
             }
         }
         $html_content .= "</div>";
-        if (isset($_SESSION['userHasAnswered'][$questionId])) {
-            $uHasAnswered = json_encode($_SESSION['userHasAnswered'][$questionId], JSON_PRETTY_PRINT);
+        if (isset($_SESSION['userHasAnswered'][$uid][$questionId])) {
+            $uHasAnswered = json_encode($_SESSION['userHasAnswered'][$uid][$questionId], JSON_PRETTY_PRINT);
             $html_content .= "<input type='hidden' id='userHasAnswered-$questionId' value='{$uHasAnswered}'>                      
                               <input type='hidden' class='CourseCodeNow' value='{$course_code}'>";
         }
@@ -240,7 +240,7 @@ class DragAndDropMarkersAnswer extends \QuestionType
                             });
                           </script>";
 
-        if (isset($_SESSION['userHasAnswered'])) {
+        if (isset($_SESSION['userHasAnswered'][$uid][$questionId])) {
             $head_content .= "<script>
                             document.addEventListener('DOMContentLoaded', function() {
                                 save_user_answers($questionId);

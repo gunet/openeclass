@@ -69,7 +69,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                                                     AND subsystem_id = ?d AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $_POST['delete-recording'], $uid);
         unlink("$webDir/courses/$courseCode/image" . $delPath->path);
         Database::get()->query("DELETE FROM document WHERE id = ?d", $delPath->id);
-        unset($_SESSION['answered_oral'][$_POST['delete-recording']]);
+        unset($_SESSION['answered_oral'][$uid][$_POST['delete-recording']]);
     }
      /* save audio recorded data */
     if (isset($_FILES['audio-blob'])) {
@@ -120,7 +120,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                 $fPath = $urlServer . "courses/$course_code/image" . $newFilePath;
                 if (!isset($_SESSION['recordings_ids'][$uid]) || !in_array($q->lastInsertID, $_SESSION['recordings_ids'][$uid])) {
                     $_SESSION['recordings_ids'][$uid][] = $q->lastInsertID;
-                    $_SESSION['answered_oral'][$questionId] = "$fPath" . "::" ."recording-file-$questionId-$uid.mp3";
+                    $_SESSION['answered_oral'][$uid][$questionId] = "$fPath" . "::" ."recording-file-$questionId-$uid.mp3";
                 }
                 echo json_encode(['newFilePath' => $fPath]); 
             }
@@ -308,14 +308,14 @@ if ($ips && !$is_editor){
 // end the exercise and return to the exercise list
 if (isset($_POST['buttonCancel'])) {
     
-    unset($_SESSION['userHasAnswered']);
-    unset($_SESSION['choicesAn']);
-    unset($_SESSION['savedAnsForExerPerPage']);
-    unset($_SESSION['calculatedTemporarySave']);
-    unset($_SESSION['QuestionDisplayed']);
-    unset($_SESSION['OrderingTemporarySave']);
-    unset($_SESSION['OrderingSubsetKeys']);
-    unset($_SESSION['answered_oral']);
+    unset($_SESSION['userHasAnswered'][$uid]);
+    unset($_SESSION['choicesAn'][$uid]);
+    unset($_SESSION['savedAnsForExerPerPage'][$uid]);
+    unset($_SESSION['calculatedTemporarySave'][$uid]);
+    unset($_SESSION['QuestionDisplayed'][$uid]);
+    unset($_SESSION['OrderingTemporarySave'][$uid]);
+    unset($_SESSION['OrderingSubsetKeys'][$uid]);
+    unset($_SESSION['answered_oral'][$uid]);
 
     // Remove all user's oral mp3 files.
     if (isset($_SESSION['recordings_ids'][$uid])) {
@@ -366,15 +366,15 @@ if (($exerciseType == MULTIPLE_PAGE_TYPE || isset($_POST['buttonSave'])) && isse
             $CurrentQuestion = new Question();
             $CurrentQuestion->read($arrKey);
             if (($CurrentQuestion->selectType() == DRAG_AND_DROP_TEXT or $CurrentQuestion->selectType() == DRAG_AND_DROP_MARKERS) && !empty($_POST['choice'][$arrKey])) {
-                if (empty($_SESSION['choicesAn'][$arrKey])) {
-                    $_SESSION['choicesAn'][$arrKey] = $_POST['choice'][$arrKey]; 
-                    $_SESSION['savedAnsForExerPerPage'][] = json_decode($_POST['choice'][$arrKey], true);
+                if (empty($_SESSION['choicesAn'][$uid][$arrKey])) {
+                    $_SESSION['choicesAn'][$uid][$arrKey] = $_POST['choice'][$arrKey]; 
+                    $_SESSION['savedAnsForExerPerPage'][$uid][] = json_decode($_POST['choice'][$arrKey], true);
                 } else {
                     $arrSavedAnwersForExerPerPage = [];
                     $arrayNewJsonValue = json_decode($_POST['choice'][$arrKey], true);
-                    foreach ($_SESSION['choicesAn'] as $index => $value) {
+                    foreach ($_SESSION['choicesAn'][$uid] as $index => $value) {
                         if ($index == $arrKey) {
-                            $oldJsonValue = $_SESSION['choicesAn'][$index];
+                            $oldJsonValue = $_SESSION['choicesAn'][$uid][$index];
                             $arrayOldJsonValue = json_decode($oldJsonValue, true);
                             // Here we merge the old with new answers by a user
                             $lookup = [];
@@ -403,12 +403,12 @@ if (($exerciseType == MULTIPLE_PAGE_TYPE || isset($_POST['buttonSave'])) && isse
                             $arrSavedAnwersForExerPerPage = $result;
                         }
                     }
-                    $_SESSION['savedAnsForExerPerPage'][] = $arrSavedAnwersForExerPerPage;
+                    $_SESSION['savedAnsForExerPerPage'][$uid][] = $arrSavedAnwersForExerPerPage;
                 }
                 
-                if (count($_SESSION['savedAnsForExerPerPage']) > 0) {
-                    $totalCount = count($_SESSION['savedAnsForExerPerPage']) - 1;
-                    $_SESSION['userHasAnswered'][$arrKey] = $_SESSION['savedAnsForExerPerPage'][$totalCount];
+                if (count($_SESSION['savedAnsForExerPerPage'][$uid]) > 0) {
+                    $totalCount = count($_SESSION['savedAnsForExerPerPage'][$uid]) - 1;
+                    $_SESSION['userHasAnswered'][$uid][$arrKey] = $_SESSION['savedAnsForExerPerPage'][$uid][$totalCount];
                 }
             } elseif ($CurrentQuestion->selectType() == CALCULATED) {
                 $tempSaveAnsCalc = ''; 
@@ -422,13 +422,13 @@ if (($exerciseType == MULTIPLE_PAGE_TYPE || isset($_POST['buttonSave'])) && isse
                         }
                     }
                 }
-                $_SESSION['calculatedTemporarySave'][$arrKey] = $tempSaveAnsCalc;
+                $_SESSION['calculatedTemporarySave'][$uid][$arrKey] = $tempSaveAnsCalc;
             } elseif ($CurrentQuestion->selectType() == ORDERING) {
                 if (!empty($_POST['choice'][$arrKey]) && !empty($_POST['subsetKeys'][$arrKey])) {
                     $arr = json_decode($_POST['choice'][$arrKey], true);
                     $arr2 = json_decode($_POST['subsetKeys'][$arrKey], true);
-                    $_SESSION['OrderingTemporarySave'][$arrKey] = $arr;
-                    $_SESSION['OrderingSubsetKeys'][$arrKey] = $arr2;
+                    $_SESSION['OrderingTemporarySave'][$uid][$arrKey] = $arr;
+                    $_SESSION['OrderingSubsetKeys'][$uid][$arrKey] = $arr2;
                 }
             }
         }
@@ -694,15 +694,15 @@ if (isset($_POST['formSent'])) {
     // if the user has made a final submission or the time has expired
     if (isset($_POST['buttonFinish']) or $time_expired) {
 
-        unset($_SESSION['userHasAnswered']);
-        unset($_SESSION['choicesAn']);
-        unset($_SESSION['savedAnsForExerPerPage']);
-        unset($_SESSION['calculatedTemporarySave']);
-        unset($_SESSION['QuestionDisplayed']);
-        unset($_SESSION['OrderingTemporarySave']);
-        unset($_SESSION['OrderingSubsetKeys']);
+        unset($_SESSION['userHasAnswered'][$uid]);
+        unset($_SESSION['choicesAn'][$uid]);
+        unset($_SESSION['savedAnsForExerPerPage'][$uid]);
+        unset($_SESSION['calculatedTemporarySave'][$uid]);
+        unset($_SESSION['QuestionDisplayed'][$uid]);
+        unset($_SESSION['OrderingTemporarySave'][$uid]);
+        unset($_SESSION['OrderingSubsetKeys'][$uid]);
         unset($_SESSION['recordings_ids'][$uid]);
-        unset($_SESSION['answered_oral']);
+        unset($_SESSION['answered_oral'][$uid]);
 
         if (isset($_POST['secsRemaining'])) {
             $secs_remaining = $_POST['secsRemaining'];
@@ -862,8 +862,8 @@ foreach ($questionList as $k => $q_id) {
                 }
             }
         }
-    } elseif ($t_question->selectType() == FREE_TEXT
-        and array_key_exists($q_id, $exerciseResult) and trim($exerciseResult[$q_id]) !== '') { // button color is `blue` if we have type anything
+    } elseif (($t_question->selectType() == FREE_TEXT
+        and array_key_exists($q_id, $exerciseResult) and trim($exerciseResult[$q_id]) !== '') or (isset($_SESSION['answered_oral'][$uid][$q_id]) && !empty($_SESSION['answered_oral'][$uid][$q_id]))) { // button color is `blue` if we have type anything
         $answered = true;
     } elseif (($t_question->selectType() == MATCHING or $t_question->selectType() == FILL_IN_FROM_PREDEFINED_ANSWERS) and array_key_exists($q_id, $exerciseResult)) {
         if (is_array($exerciseResult[$q_id])) {

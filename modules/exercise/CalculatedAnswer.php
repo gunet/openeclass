@@ -48,7 +48,7 @@ class CalculatedAnswer extends \QuestionType
 
     public function AnswerQuestion($question_number, $exerciseResult = [], $options = []): string
     {
-        global $langClearChoice;
+        global $langClearChoice, $uid;
 
         $html_content = "";
 
@@ -85,12 +85,12 @@ class CalculatedAnswer extends \QuestionType
                     if (count($arrExerResults) == 2 && $arrExerResults[0] == $answerVal) {
                         $checked = 'checked';
                     }
-                } elseif (!isset($exerciseResult[$this->question_id]) && isset($_SESSION['calculatedTemporarySave'][$this->question_id])
-                    && !empty($_SESSION['calculatedTemporarySave'][$this->question_id])) {
-                        $arrExerResults = explode(',', $_SESSION['calculatedTemporarySave'][$this->question_id]);
+                } elseif (!isset($exerciseResult[$this->question_id]) && isset($_SESSION['calculatedTemporarySave'][$uid][$this->question_id])
+                    && !empty($_SESSION['calculatedTemporarySave'][$uid][$this->question_id])) {
+                        $arrExerResults = explode(',', $_SESSION['calculatedTemporarySave'][$uid][$this->question_id]);
                         if (count($arrExerResults) == 2 && $arrExerResults[0] == $answerVal) {
                             $checked = 'checked';
-                            unset($_SESSION['calculatedTemporarySave'][$this->question_id]);
+                            unset($_SESSION['calculatedTemporarySave'][$uid][$this->question_id]);
                         }
                 }
                 $html_content .= "
@@ -104,10 +104,10 @@ class CalculatedAnswer extends \QuestionType
                 $uniqueAnswer = '';
                 if (isset($exerciseResult[$this->question_id]) && !empty($exerciseResult[$this->question_id])) {
                     $uniqueAnswer = $exerciseResult[$this->question_id];
-                } elseif (!isset($exerciseResult[$this->question_id]) && isset($_SESSION['calculatedTemporarySave'][$this->question_id])
-                    && !empty($_SESSION['calculatedTemporarySave'][$this->question_id])) {
-                    $uniqueAnswer = $_SESSION['calculatedTemporarySave'][$this->question_id];
-                    unset($_SESSION['calculatedTemporarySave'][$this->question_id]);
+                } elseif (!isset($exerciseResult[$this->question_id]) && isset($_SESSION['calculatedTemporarySave'][$uid][$this->question_id])
+                    && !empty($_SESSION['calculatedTemporarySave'][$uid][$this->question_id])) {
+                    $uniqueAnswer = $_SESSION['calculatedTemporarySave'][$uid][$this->question_id];
+                    unset($_SESSION['calculatedTemporarySave'][$uid][$this->question_id]);
                 }
                 $html_content .= "<input type='hidden' name='answer_id_choice[$this->question_id]' value='{$answerId}'>";
                 $html_content .= "<input type='text' class='form-control' name='choice[$this->question_id]' value='{$uniqueAnswer}' style='max-width:300px;'>";

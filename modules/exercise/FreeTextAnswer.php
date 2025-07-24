@@ -37,7 +37,7 @@ class FreeTextAnswer extends QuestionType
         $url = '';
         $filename = '';
         $displayItems = 'd-none';
-        $answered_oral = $_SESSION['answered_oral'][$questionId] ?? '';
+        $answered_oral = $_SESSION['answered_oral'][$uid][$questionId] ?? '';
         if (!empty($answered_oral)) {
             $answered_oral = explode('::', $answered_oral);
             $url = $answered_oral[0];

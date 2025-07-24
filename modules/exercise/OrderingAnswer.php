@@ -33,7 +33,7 @@ class OrderingAnswer extends \QuestionType
 
     public function AnswerQuestion($question_number, $exerciseResult = [], $options = []): string
     {
-        global $head_content, $course_code, $langClearChoice, $langReorder, $urlServer;
+        global $head_content, $course_code, $langClearChoice, $langReorder, $urlServer, $uid;
 
         $html_content = "";
 
@@ -154,7 +154,7 @@ class OrderingAnswer extends \QuestionType
         }
 
         $randomKeys = array_keys($ordering_answer);
-        if (!isset($_SESSION['OrderingTemporarySave'][$questionId]) && !isset($_SESSION['OrderingSubsetKeys'][$questionId])) {
+        if (!isset($_SESSION['OrderingTemporarySave'][$uid][$questionId]) && !isset($_SESSION['OrderingSubsetKeys'][$uid][$questionId])) {
 
             if (isset($itemsSelectionType) && $itemsSelectionType > 1 && isset($sizeOfSubset) && $sizeOfSubset >= 2) {
                 $minKey = min($randomKeys);
@@ -201,8 +201,8 @@ class OrderingAnswer extends \QuestionType
         } else { // FullRange will change after temporary save or prev-next navigation
 
             $fullRange = [];
-            $arr = $_SESSION['OrderingTemporarySave'][$questionId];
-            $randomKeys = $_SESSION['OrderingSubsetKeys'][$questionId];
+            $arr = $_SESSION['OrderingTemporarySave'][$uid][$questionId];
+            $randomKeys = $_SESSION['OrderingSubsetKeys'][$uid][$questionId];
             foreach ($arr as $v) {
                 if (!empty($v)) {
                     $fullRange[] = array_search($v, $ordering_answer);

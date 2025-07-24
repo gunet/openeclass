@@ -570,9 +570,11 @@ function getRandomDecimal($min, $max, $decimals = 0) {
  */
 function updateWildCardsWithRandomVariables($questionId, $exerciseType) {
 
+    global $uid;
+
     $questionDisplay = [];
-    if (isset($_SESSION['QuestionDisplayed'])) {
-        foreach ($_SESSION['QuestionDisplayed'] as $q) {
+    if (isset($_SESSION['QuestionDisplayed'][$uid])) {
+        foreach ($_SESSION['QuestionDisplayed'][$uid] as $q) {
             $questionDisplay[] = $q;
         }
     }
@@ -580,7 +582,7 @@ function updateWildCardsWithRandomVariables($questionId, $exerciseType) {
     // If the user has not executed the current question , update the wildcards of the question with new values.
     if (!in_array($questionId, $questionDisplay)) {
         
-        $_SESSION['QuestionDisplayed'][] = $questionId;
+        $_SESSION['QuestionDisplayed'][$uid][] = $questionId;
 
         // Instantiate ExpressionLanguage
         $expressionLanguage = new ExpressionLanguage();
