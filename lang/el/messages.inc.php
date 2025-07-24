@@ -135,6 +135,7 @@ $langVisitsStats = "Στατιστικά επισκέψεων";
 $langMonthlyReport = "Μηνιαίες αναφορές";
 $langMonthlyReportInfo = "Παρουσιάζονται συγκεντρωτικά στοιχεία (μαθήματα, χρήστες) των τελευταίων 24 μηνών.";
 $langStatsReports = "Αναφορές συμμετοχής";
+$langStatsReport = "Αναφορά συμμετοχής";
 $langStatsReportsLP = "Αναφορές συμμετοχής στις γραμμές μάθησης";
 $langStatsReportsTC = "Αναφορές συμμετοχής στη τηλεσυνεργασία";
 $langReport = "Αναφορά για το μήνα";
