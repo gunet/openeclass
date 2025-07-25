@@ -311,7 +311,6 @@ if (isset($_POST['buttonCancel'])) {
     unset($_SESSION['userHasAnswered'][$uid]);
     unset($_SESSION['choicesAn'][$uid]);
     unset($_SESSION['savedAnsForExerPerPage'][$uid]);
-    unset($_SESSION['calculatedTemporarySave'][$uid]);
     unset($_SESSION['QuestionDisplayed'][$uid]);
     unset($_SESSION['OrderingTemporarySave'][$uid]);
     unset($_SESSION['OrderingSubsetKeys'][$uid]);
@@ -410,37 +409,12 @@ if (($exerciseType == MULTIPLE_PAGE_TYPE || isset($_POST['buttonSave'])) && isse
                     $totalCount = count($_SESSION['savedAnsForExerPerPage'][$uid]) - 1;
                     $_SESSION['userHasAnswered'][$uid][$arrKey] = $_SESSION['savedAnsForExerPerPage'][$uid][$totalCount];
                 }
-            } elseif ($CurrentQuestion->selectType() == CALCULATED) {
-                $tempSaveAnsCalc = ''; 
-                if (!empty($_POST['choice'][$arrKey])) {
-                    if (isset($_POST['answer_id_choice'])) { // calculated with text as answer
-                        $tempSaveAnsCalc = $_POST['choice'][$arrKey];
-                    } else { // calculated with multiple choices as answers
-                        $arrCal = explode(',', $_POST['choice'][$arrKey]);
-                        if (count($arrCal) == 2) {
-                            $tempSaveAnsCalc = $arrCal[0] . "," . $arrCal[1];
-                        }
-                    }
-                }
-                $_SESSION['calculatedTemporarySave'][$uid][$arrKey] = $tempSaveAnsCalc;
             } elseif ($CurrentQuestion->selectType() == ORDERING) {
                 if (!empty($_POST['choice'][$arrKey]) && !empty($_POST['subsetKeys'][$arrKey])) {
                     $arr = json_decode($_POST['choice'][$arrKey], true);
                     $arr2 = json_decode($_POST['subsetKeys'][$arrKey], true);
                     $_SESSION['OrderingTemporarySave'][$uid][$arrKey] = $arr;
                     $_SESSION['OrderingSubsetKeys'][$uid][$arrKey] = $arr2;
-                }
-            }
-        }
-    }
-} elseif ($exerciseType == MULTIPLE_PAGE_TYPE && !isset($_POST['choice'])) {
-    if (isset($_POST['currentCalculatedQuestion']) && isset($_SESSION['exerciseResult'][$exerciseId][$attempt_value])) { // Request comes only from calculated question type.
-        $questionWithNoChoice = $_POST['currentCalculatedQuestion']; // This is the question_id which has not been answered.
-        $allQuestionsOfAttempt = array_keys($_SESSION['exerciseResult'][$exerciseId][$attempt_value]);
-        if (in_array($questionWithNoChoice, $allQuestionsOfAttempt)) { // Remove the question_id from attempt if this question is not answered.
-            foreach ($_SESSION['exerciseResult'][$exerciseId][$attempt_value] as $index => $value) {
-                if ($index == $questionWithNoChoice) {
-                    unset($_SESSION['exerciseResult'][$exerciseId][$attempt_value][$index]);
                 }
             }
         }
@@ -697,7 +671,6 @@ if (isset($_POST['formSent'])) {
         unset($_SESSION['userHasAnswered'][$uid]);
         unset($_SESSION['choicesAn'][$uid]);
         unset($_SESSION['savedAnsForExerPerPage'][$uid]);
-        unset($_SESSION['calculatedTemporarySave'][$uid]);
         unset($_SESSION['QuestionDisplayed'][$uid]);
         unset($_SESSION['OrderingTemporarySave'][$uid]);
         unset($_SESSION['OrderingSubsetKeys'][$uid]);
@@ -845,12 +818,9 @@ foreach ($questionList as $k => $q_id) {
     $t_question = new Question();
     $t_question->read($q_id);
     $questions[$q_id] = $t_question;
-    if (($t_question->selectType() == UNIQUE_ANSWER or $t_question->selectType() == MULTIPLE_ANSWER or $t_question->selectType() == TRUE_FALSE or $t_question->selectType() == CALCULATED or $t_question->selectType() == ORDERING)
+    if (($t_question->selectType() == UNIQUE_ANSWER or $t_question->selectType() == MULTIPLE_ANSWER or $t_question->selectType() == TRUE_FALSE or $t_question->selectType() == ORDERING)
         and array_key_exists($q_id, $exerciseResult) and $exerciseResult[$q_id] != 0) {
         $answered = true;
-        if ($t_question->selectType() == CALCULATED && $exerciseResult[$q_id] == '') { // This question is calculated type with unique answer as text and the user has not answered it.
-            $answered = false;
-        }
     } elseif (($t_question->selectType() == FILL_IN_BLANKS or $t_question->selectType() == FILL_IN_BLANKS_TOLERANT)
         and array_key_exists($q_id, $exerciseResult)) {
         if (is_array($exerciseResult[$q_id])) {
@@ -896,6 +866,9 @@ foreach ($questionList as $k => $q_id) {
                 }
             }
         } 
+    } elseif ($t_question->selectType() == CALCULATED and array_key_exists($q_id, $exerciseResult) 
+        and (strpos($exerciseResult[$q_id], '|') !== false)) { // This question is calculated type with unique answer as text and the user has not answered it.
+        $answered = true;
     }
     if ($answered) {
         $answeredIds[] = $q_id;

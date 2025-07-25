@@ -64,51 +64,30 @@ class CalculatedAnswer extends \QuestionType
             $html_content .= "<div class='col-12 my-4'>$question_description</div>";
         }
 
-        if (!isset($_POST['choice'][$this->question_id])) {
-            unset($exerciseResult[$this->question_id]);
-        }
-
-        $html_content .= "<input type='hidden' name='currentCalculatedQuestion' value='{$this->question_id}'>";
-        $html_content .= "<input type='hidden' name='choice[{$this->question_id}]' value='0'>";
+        $html_content .= "<input type='hidden' name='choice[{$this->question_id}]' value=''>";
 
         foreach ($answer_object_ids as $answerId) {
             $answerTitle = $this->answer_object->getTitle($answerId);
             $arrTitle = explode(':', $answerTitle);
             $answerVal = ((count($arrTitle) > 1) ? $arrTitle[1] : ''); // predefined answers
-            if (is_null($this->answer_object) or $this->answer_object == '') {  // don't display blank or empty answers
-                continue;
-            }
-            if (count($answer_object_ids) > 1) { // multiple answers with radios buttons
-                $checked = '';
-                if (isset($exerciseResult[$this->question_id]) && !empty($exerciseResult[$this->question_id])) {
-                    $arrExerResults = explode(',', $exerciseResult[$this->question_id]);
-                    if (count($arrExerResults) == 2 && $arrExerResults[0] == $answerVal) {
-                        $checked = 'checked';
-                    }
-                } elseif (!isset($exerciseResult[$this->question_id]) && isset($_SESSION['calculatedTemporarySave'][$uid][$this->question_id])
-                    && !empty($_SESSION['calculatedTemporarySave'][$uid][$this->question_id])) {
-                        $arrExerResults = explode(',', $_SESSION['calculatedTemporarySave'][$uid][$this->question_id]);
-                        if (count($arrExerResults) == 2 && $arrExerResults[0] == $answerVal) {
-                            $checked = 'checked';
-                            unset($_SESSION['calculatedTemporarySave'][$uid][$this->question_id]);
-                        }
+            $checked = '';
+            $uniqueAnswer = '';
+            if (isset($exerciseResult[$this->question_id]) && $exerciseResult[$this->question_id] != '') {
+                $arrExerResults = explode('|', $exerciseResult[$this->question_id]);
+                if (count($arrExerResults) == 2 && $arrExerResults[0] == $answerVal) {
+                    $checked = 'checked';
                 }
+                $uniqueAnswer = $arrExerResults[0];
+            } 
+            if (count($answer_object_ids) > 1) { // multiple answers with radios buttons
                 $html_content .= "
                     <div class='radio mb-1'>
                         <label>
-                            <input type='radio' name='choice[$this->question_id]' value='{$answerVal},{$answerId}' $checked onClick='updateQuestionNavButton(" . $question_number . ");'>                        
+                            <input type='radio' name='choice[$this->question_id]' value='{$answerVal}|{$answerId}' $checked onClick='updateQuestionNavButton(" . $question_number . ");'>                        
                             " . standard_text_escape($answerVal) . "
                         </label>
                     </div>";
             } elseif (count($answer_object_ids) == 1) { // unique answer with text
-                $uniqueAnswer = '';
-                if (isset($exerciseResult[$this->question_id]) && !empty($exerciseResult[$this->question_id])) {
-                    $uniqueAnswer = $exerciseResult[$this->question_id];
-                } elseif (!isset($exerciseResult[$this->question_id]) && isset($_SESSION['calculatedTemporarySave'][$uid][$this->question_id])
-                    && !empty($_SESSION['calculatedTemporarySave'][$uid][$this->question_id])) {
-                    $uniqueAnswer = $_SESSION['calculatedTemporarySave'][$uid][$this->question_id];
-                    unset($_SESSION['calculatedTemporarySave'][$uid][$this->question_id]);
-                }
                 $html_content .= "<input type='hidden' name='answer_id_choice[$this->question_id]' value='{$answerId}'>";
                 $html_content .= "<input type='text' class='form-control' name='choice[$this->question_id]' value='{$uniqueAnswer}' style='max-width:300px;'>";
             }
