@@ -974,7 +974,7 @@ if (!class_exists('Exercise')) {
                 } elseif ($question_type == MATCHING) {
                     $exerciseResult[$row->question_id][$row->answer] = $row->answer_id;
                 } elseif ($question_type == FILL_IN_BLANKS || $question_type == FILL_IN_BLANKS_TOLERANT || $question_type == FILL_IN_FROM_PREDEFINED_ANSWERS
-                            || $question_type == DRAG_AND_DROP_TEXT || $question_type == DRAG_AND_DROP_MARKERS || $question_type == ORDERING) {
+                            || $question_type == DRAG_AND_DROP_TEXT || $question_type == DRAG_AND_DROP_MARKERS) {
                     $exerciseResult[$row->question_id][$row->answer_id] = $row->answer;
                 } elseif ($question_type == CALCULATED) {
                     if ($row->answer_id == 0) { // unaswered
@@ -986,6 +986,9 @@ if (!class_exists('Exercise')) {
                             $exerciseResult[$row->question_id] = $row->answer . '|' . $row->answer_id;
                         }
                     }
+                } elseif ($question_type == ORDERING) {
+                    $exerciseResult[$row->question_id][$row->answer_id] = $row->answer;
+                    ksort($exerciseResult[$row->question_id]);
                 } elseif ($question_type == MULTIPLE_ANSWER) {
                     $exerciseResult[$row->question_id][$row->answer_id] = 1;
                 } else {
@@ -1301,7 +1304,9 @@ if (!class_exists('Exercise')) {
                                     $eurid, $key, '', $i, 0, $as_answered, $q_position);
                     }
                 } else { // $value contains json value as string
-                    $userAnswers = json_decode($value, true);
+                    
+                    $tmp = explode('::', $value);
+                    $userAnswers = json_decode($tmp[0], true);
                     if (count($userAnswers) > 0) {
                         for ($i = 1; $i <= count($userAnswers)-1; $i++) { // Index 0 is null.
                             $position = $i;

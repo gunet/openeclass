@@ -312,7 +312,6 @@ if (isset($_POST['buttonCancel'])) {
     unset($_SESSION['choicesAn'][$uid]);
     unset($_SESSION['savedAnsForExerPerPage'][$uid]);
     unset($_SESSION['QuestionDisplayed'][$uid]);
-    unset($_SESSION['OrderingTemporarySave'][$uid]);
     unset($_SESSION['OrderingSubsetKeys'][$uid]);
     unset($_SESSION['answered_oral'][$uid]);
 
@@ -410,10 +409,8 @@ if (($exerciseType == MULTIPLE_PAGE_TYPE || isset($_POST['buttonSave'])) && isse
                     $_SESSION['userHasAnswered'][$uid][$arrKey] = $_SESSION['savedAnsForExerPerPage'][$uid][$totalCount];
                 }
             } elseif ($CurrentQuestion->selectType() == ORDERING) {
-                if (!empty($_POST['choice'][$arrKey]) && !empty($_POST['subsetKeys'][$arrKey])) {
-                    $arr = json_decode($_POST['choice'][$arrKey], true);
+                if (!empty($_POST['subsetKeys'][$arrKey])) {
                     $arr2 = json_decode($_POST['subsetKeys'][$arrKey], true);
-                    $_SESSION['OrderingTemporarySave'][$uid][$arrKey] = $arr;
                     $_SESSION['OrderingSubsetKeys'][$uid][$arrKey] = $arr2;
                 }
             }
@@ -672,7 +669,6 @@ if (isset($_POST['formSent'])) {
         unset($_SESSION['choicesAn'][$uid]);
         unset($_SESSION['savedAnsForExerPerPage'][$uid]);
         unset($_SESSION['QuestionDisplayed'][$uid]);
-        unset($_SESSION['OrderingTemporarySave'][$uid]);
         unset($_SESSION['OrderingSubsetKeys'][$uid]);
         unset($_SESSION['recordings_ids'][$uid]);
         unset($_SESSION['answered_oral'][$uid]);

@@ -66,6 +66,8 @@ class OrderingAnswer extends \QuestionType
 
                     const jsonString = JSON.stringify(dataObject);
                     $('#orderingResponses_'+QID).val(jsonString);
+                    const arrSubsetKeys = JSON.parse($('#subsetKeys_'+QID).val());
+                    $('#orderingWithSubsetKeys_'+QID).val(jsonString+'::'+'['+arrSubsetKeys+']');
 
                     calculatePositions(QID);
                     updateButtonOpacity(QID);
@@ -154,7 +156,7 @@ class OrderingAnswer extends \QuestionType
         }
 
         $randomKeys = array_keys($ordering_answer);
-        if (!isset($_SESSION['OrderingTemporarySave'][$uid][$questionId]) && !isset($_SESSION['OrderingSubsetKeys'][$uid][$questionId])) {
+        if (!isset($exerciseResult[$questionId])) {
 
             if (isset($itemsSelectionType) && $itemsSelectionType > 1 && isset($sizeOfSubset) && $sizeOfSubset >= 2) {
                 $minKey = min($randomKeys);
@@ -201,8 +203,15 @@ class OrderingAnswer extends \QuestionType
         } else { // FullRange will change after temporary save or prev-next navigation
 
             $fullRange = [];
-            $arr = $_SESSION['OrderingTemporarySave'][$uid][$questionId];
-            $randomKeys = $_SESSION['OrderingSubsetKeys'][$uid][$questionId];
+            if (is_string($exerciseResult[$questionId])) { // comes from navigation (prev-next buttons)
+                $tmpArr = explode('::', $exerciseResult[$questionId]);
+                $arr = json_decode($tmpArr[0], true);
+                $randomKeys = json_decode($tmpArr[1], true);
+            } elseif (is_array($exerciseResult[$questionId])) { // comes from temporary
+                $arr = $exerciseResult[$questionId];
+                $randomKeys = $_SESSION['OrderingSubsetKeys'][$uid][$questionId];
+            }
+            
             foreach ($arr as $v) {
                 if (!empty($v)) {
                     $fullRange[] = array_search($v, $ordering_answer);
@@ -242,8 +251,9 @@ class OrderingAnswer extends \QuestionType
 
         }
         $html_content .= "  </div>";
-        $html_content .= "<input type='hidden' id='orderingResponses_{$questionId}' name='choice[$questionId]'>";
-        $html_content .= "<input type='hidden' name='subsetKeys[$questionId]' value='{$jsonRandomKeys}'>";
+        $html_content .= "<input type='hidden' id='orderingResponses_{$questionId}'>";
+        $html_content .= "<input type='hidden' id='subsetKeys_{$questionId}' name='subsetKeys[$questionId]' value='{$jsonRandomKeys}'>";
+        $html_content .= "<input type='hidden' id='orderingWithSubsetKeys_{$questionId}' name='choice[$questionId]'>";
 
         return $html_content;
     }
