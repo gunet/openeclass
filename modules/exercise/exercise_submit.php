@@ -308,9 +308,6 @@ if ($ips && !$is_editor){
 // end the exercise and return to the exercise list
 if (isset($_POST['buttonCancel'])) {
     
-    unset($_SESSION['userHasAnswered'][$uid]);
-    unset($_SESSION['choicesAn'][$uid]);
-    unset($_SESSION['savedAnsForExerPerPage'][$uid]);
     unset($_SESSION['QuestionDisplayed'][$uid]);
     unset($_SESSION['OrderingSubsetKeys'][$uid]);
     unset($_SESSION['answered_oral'][$uid]);
@@ -354,8 +351,8 @@ $exerciseTimeConstraint = $objExercise->selectTimeConstraint();
 $exerciseAllowedAttempts = $objExercise->selectAttemptsAllowed();
 $exercisetotalweight = $objExercise->selectTotalWeighting();
 
-// In this php block it has been saving the user's answers for dragging and drop and calculated types 
-// when the exercise has MULTIPLE_PAGE_TYPE type.
+// In this php block we have been saving the subset of predefined answers in ordering question
+// when the exercise has MULTIPLE_PAGE_TYPE type or user press the save button.
 if (($exerciseType == MULTIPLE_PAGE_TYPE || isset($_POST['buttonSave'])) && isset($_POST['choice'])) {
     // $arrKey = question Id
     $arrayKeys = array_keys($_POST['choice']);
@@ -363,52 +360,7 @@ if (($exerciseType == MULTIPLE_PAGE_TYPE || isset($_POST['buttonSave'])) && isse
         foreach ($arrayKeys as $arrKey) {
             $CurrentQuestion = new Question();
             $CurrentQuestion->read($arrKey);
-            if (($CurrentQuestion->selectType() == DRAG_AND_DROP_TEXT or $CurrentQuestion->selectType() == DRAG_AND_DROP_MARKERS) && !empty($_POST['choice'][$arrKey])) {
-                if (empty($_SESSION['choicesAn'][$uid][$arrKey])) {
-                    $_SESSION['choicesAn'][$uid][$arrKey] = $_POST['choice'][$arrKey]; 
-                    $_SESSION['savedAnsForExerPerPage'][$uid][] = json_decode($_POST['choice'][$arrKey], true);
-                } else {
-                    $arrSavedAnwersForExerPerPage = [];
-                    $arrayNewJsonValue = json_decode($_POST['choice'][$arrKey], true);
-                    foreach ($_SESSION['choicesAn'][$uid] as $index => $value) {
-                        if ($index == $arrKey) {
-                            $oldJsonValue = $_SESSION['choicesAn'][$uid][$index];
-                            $arrayOldJsonValue = json_decode($oldJsonValue, true);
-                            // Here we merge the old with new answers by a user
-                            $lookup = [];
-                            foreach ($arrayNewJsonValue as $item) {
-                                $lookup[$item['dataAnswer']] = $item;
-                            }
-                            // Initialize result array
-                            $result = [];
-                            // Loop through array1 and replace entries if matching dataAnswer exists in array2
-                            foreach ($arrayOldJsonValue as $item) {
-                                $answer = $item['dataAnswer'];
-                                if (isset($lookup[$answer])) {
-                                    // Replace with array2's item
-                                    $result[] = $lookup[$answer];
-                                    // Remove from lookup to avoid duplication if needed
-                                    unset($lookup[$answer]);
-                                } else {
-                                    // Keep original item
-                                    $result[] = $item;
-                                }
-                            }
-                            // Add remaining items from array2 that were not in array1
-                            foreach ($lookup as $item) {
-                                $result[] = $item;
-                            }
-                            $arrSavedAnwersForExerPerPage = $result;
-                        }
-                    }
-                    $_SESSION['savedAnsForExerPerPage'][$uid][] = $arrSavedAnwersForExerPerPage;
-                }
-                
-                if (count($_SESSION['savedAnsForExerPerPage'][$uid]) > 0) {
-                    $totalCount = count($_SESSION['savedAnsForExerPerPage'][$uid]) - 1;
-                    $_SESSION['userHasAnswered'][$uid][$arrKey] = $_SESSION['savedAnsForExerPerPage'][$uid][$totalCount];
-                }
-            } elseif ($CurrentQuestion->selectType() == ORDERING) {
+            if ($CurrentQuestion->selectType() == ORDERING) {
                 if (!empty($_POST['subsetKeys'][$arrKey])) {
                     $arr2 = json_decode($_POST['subsetKeys'][$arrKey], true);
                     $_SESSION['OrderingSubsetKeys'][$uid][$arrKey] = $arr2;
@@ -665,9 +617,6 @@ if (isset($_POST['formSent'])) {
     // if the user has made a final submission or the time has expired
     if (isset($_POST['buttonFinish']) or $time_expired) {
 
-        unset($_SESSION['userHasAnswered'][$uid]);
-        unset($_SESSION['choicesAn'][$uid]);
-        unset($_SESSION['savedAnsForExerPerPage'][$uid]);
         unset($_SESSION['QuestionDisplayed'][$uid]);
         unset($_SESSION['OrderingSubsetKeys'][$uid]);
         unset($_SESSION['recordings_ids'][$uid]);

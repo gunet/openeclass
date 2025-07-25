@@ -963,6 +963,7 @@ if (!class_exists('Exercise')) {
         public function get_attempt_results_array($eurid)
         {
             $exerciseResult = array();
+            $temporaryUserAnswers = [];
             $results = Database::get()->queryArray("SELECT * FROM exercise_answer_record WHERE eurid = ?d AND is_answered <> 0 ORDER BY q_position", $eurid);
             foreach ($results as $row) {
                 $objQuestionTmp = new Question();
@@ -973,9 +974,14 @@ if (!class_exists('Exercise')) {
                     $exerciseResult[$row->question_id] = $row->answer;
                 } elseif ($question_type == MATCHING) {
                     $exerciseResult[$row->question_id][$row->answer] = $row->answer_id;
-                } elseif ($question_type == FILL_IN_BLANKS || $question_type == FILL_IN_BLANKS_TOLERANT || $question_type == FILL_IN_FROM_PREDEFINED_ANSWERS
-                            || $question_type == DRAG_AND_DROP_TEXT || $question_type == DRAG_AND_DROP_MARKERS) {
+                } elseif ($question_type == FILL_IN_BLANKS || $question_type == FILL_IN_BLANKS_TOLERANT || $question_type == FILL_IN_FROM_PREDEFINED_ANSWERS) {
                     $exerciseResult[$row->question_id][$row->answer_id] = $row->answer;
+                } elseif ($question_type == DRAG_AND_DROP_TEXT || $question_type == DRAG_AND_DROP_MARKERS) {
+                    if (empty($row->answer)) {
+                        $row->answer = null;
+                    }
+                    $temporaryUserAnswers[$row->question_id][] = ['dataAnswer' => $row->answer_id, 'dataWord' => $row->answer];
+                    $exerciseResult[$row->question_id] = json_encode($temporaryUserAnswers[$row->question_id]);
                 } elseif ($question_type == CALCULATED) {
                     if ($row->answer_id == 0) { // unaswered
                         $exerciseResult[$row->question_id] = '';

@@ -221,8 +221,9 @@ class DragAndDropMarkersAnswer extends \QuestionType
             }
         }
         $html_content .= "</div>";
-        if (isset($_SESSION['userHasAnswered'][$uid][$questionId])) {
-            $uHasAnswered = json_encode($_SESSION['userHasAnswered'][$uid][$questionId], JSON_PRETTY_PRINT);
+        if (isset($exerciseResult[$questionId]) && !empty($exerciseResult[$questionId])) {
+            $userAnswerAsArray = json_decode($exerciseResult[$questionId]);
+            $uHasAnswered = json_encode($userAnswerAsArray);
             $html_content .= "<input type='hidden' id='userHasAnswered-$questionId' value='{$uHasAnswered}'>                      
                               <input type='hidden' class='CourseCodeNow' value='{$course_code}'>";
         }
@@ -240,12 +241,12 @@ class DragAndDropMarkersAnswer extends \QuestionType
                             });
                           </script>";
 
-        if (isset($_SESSION['userHasAnswered'][$uid][$questionId])) {
+        if (isset($uHasAnswered)) {
             $head_content .= "<script>
-                            document.addEventListener('DOMContentLoaded', function() {
-                                save_user_answers($questionId);
-                            });
-                          </script>";
+                                document.addEventListener('DOMContentLoaded', function() {
+                                    save_user_answers($questionId);
+                                });
+                              </script>";
         }
 
         return $html_content;

@@ -57,8 +57,9 @@ class DragAndDropTextAnswer extends \QuestionType
         $html_content .= "</div>";
         $html_content .= "<input type='hidden' name='choice[$questionId]' id='arrInput_{$questionId}'>";
 
-        if (isset($_SESSION['userHasAnswered'][$uid][$questionId])) {
-            $uHasAnswered = json_encode($_SESSION['userHasAnswered'][$uid][$questionId], JSON_PRETTY_PRINT);
+        if (isset($exerciseResult[$questionId]) && !empty($exerciseResult[$questionId])) {
+            $userAnswerAsArray = json_decode($exerciseResult[$questionId]);
+            $uHasAnswered = json_encode($userAnswerAsArray);
             $html_content .= "<input type='hidden' id='userHasAnswered-$questionId' value='{$uHasAnswered}'>
                               <input type='hidden' class='CourseCodeNow' value='{$course_code}'>";
             $html_content .= "<input type='hidden' id='typeQuestion-$questionId' value='".DRAG_AND_DROP_TEXT."'>";
@@ -72,7 +73,7 @@ class DragAndDropTextAnswer extends \QuestionType
                             });
                           </script>";
 
-        if (isset($_SESSION['userHasAnswered'][$uid][$questionId])) {
+        if (isset($uHasAnswered)) {
         $head_content .= "<script>
                             document.addEventListener('DOMContentLoaded', function() {
                                 save_user_answers($questionId);
