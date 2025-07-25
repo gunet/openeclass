@@ -905,12 +905,18 @@ if (!class_exists('Exercise')) {
 
             $action = $record_type . '_answer_records';
 
-            // Special case for calculated question when answers comes from input text as unique answer.
+            // Special cases for both calculated and oral questions.
+            // In calculated question the user answer comes from input-text whereas
+            // in oral question the answer comes from recording-audio.
             $choice_key = array_keys($choice);
             if (count($choice_key) > 0) {
                 foreach ($choice_key as $k) {
                     if (isset($_POST['answer_id_choice'][$k]) && isset($_POST['choice'][$k]) && $_POST['choice'][$k] != '') {
                         $choice[$k] = $_POST['choice'][$k] . '|' . $_POST['answer_id_choice'][$k]; // such as 15|1
+                    }
+                    if (isset($_POST['choice_recording'][$k])) {
+                        $extra_value = (!empty($_POST['choice_recording'][$k]) ? ':::' . $_POST['choice_recording'][$k] : '');
+                        $choice[$k] = $_POST['choice'][$k] . $extra_value;
                     }
                 }
             }
@@ -1108,11 +1114,6 @@ if (!class_exists('Exercise')) {
             Database::get()->query("DELETE FROM exercise_answer_record
                             WHERE eurid = ?d AND question_id = ?d", $eurid, $key);
             if ($question_type == FREE_TEXT) {
-                $extra_value = '';
-                if (isset($_POST['choice_recording'][$key]) && !empty($_POST['choice_recording'][$key])) {
-                    $extra_value = '::' . $_POST['choice_recording'][$key];
-                }
-                $value = $value . $extra_value;
                 Database::get()->query("INSERT INTO exercise_answer_record
                    (eurid, question_id, answer, answer_id, weight, is_answered, q_position)
                    VALUES (?d, ?d, ?s, 0, NULL, ?d, ?d)",

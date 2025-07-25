@@ -23,27 +23,37 @@ class FreeTextAnswer extends QuestionType
 
         $questionId = $this->question_id;
         $text = '';
-        if (isset($exerciseResult[$questionId])) {
-            if (strpos($exerciseResult[$questionId], '::') !== false) {
-                $arr = explode('::', $exerciseResult[$questionId]);
+        $html_content = '';
+        $url = '';
+        $filename = '';
+        $filenameRecording = '';
+        $displayItems = 'd-none';
+        if (isset($exerciseResult[$questionId]) && $exerciseResult[$questionId] != '') {
+            if (strpos($exerciseResult[$questionId], ':::') !== false) {
+                $arr = explode(':::', $exerciseResult[$questionId]);
                 if (count($arr) == 2) {
                     $text = $arr[0]; // plain text
+                    $filenameRecording = $arr[1];
+                    $filenameWithoutExtension = str_replace('.mp3', '', $arr[1]);
+                    $tempFile = explode('-', $filenameWithoutExtension);
+                    if (count($tempFile) == 4) {
+                        $subSystemId = $tempFile[2];
+                        $lockUserId = $tempFile[3];
+                        $file = Database::get()->querySingle("SELECT `filename`,`path` FROM document WHERE course_id = ?d
+                                                                    AND subsystem = ?d AND subsystem_id = ?d
+                                                                    AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $subSystemId, $lockUserId);
+                        if ($file) {
+                            $filename = $file->filename; // recording filename
+                            $filePath = $file->path;
+                            $url = $urlServer . "courses/$course_code/image" . $filePath;
+                        }
+                    }
                 }
+                $displayItems = 'd-block';
             } else {
                 $text = $exerciseResult[$questionId];
             }
         } 
-        $html_content = '';
-        $url = '';
-        $filename = '';
-        $displayItems = 'd-none';
-        $answered_oral = $_SESSION['answered_oral'][$uid][$questionId] ?? '';
-        if (!empty($answered_oral)) {
-            $answered_oral = explode('::', $answered_oral);
-            $url = $answered_oral[0];
-            $filename = $answered_oral[1];
-            $displayItems = 'd-block';
-        }
 
         $html_content .= "
         <ul class='nav nav-tabs' id='myTab_{$questionId}' role='tablist'>
@@ -59,7 +69,7 @@ class FreeTextAnswer extends QuestionType
                 " . rich_text_editor("choice[$questionId]", 14, 90, $text, options: $options) . "
             </div>
             <div class='tab-pane fade' id='oral_{$questionId}' role='tabpanel' aria-labelledby='oral-tab_{$questionId}'>
-                <input type='hidden' name='choice_recording[$questionId]' id='hidden-recording-{$questionId}' value='{$filename}'>
+                <input type='hidden' name='choice_recording[$questionId]' id='hidden-recording-{$questionId}' value='{$filenameRecording}'>
                 <div class='col-12 d-flex gap-3'>
                     <button class='btn submitAdminBtnDefault' id='button-start-recording-{$questionId}'>$langStart</button>
                     <button class='btn submitAdminBtn' id='button-release-microphone-{$questionId}' disabled><i class='fa-solid fa-microphone-slash'></i></button>
@@ -118,7 +128,7 @@ $html_content .= "</div>
 
                         // Hide recording link and change its value.
                         $('#recording_file_container_{$questionId}').removeClass('d-block').addClass('d-none');
-                        $('#hidden-recording-{$questionId}-{$uid}').val('');
+                        $('#hidden-recording-{$questionId}').val('');
                     })
 
                 });
