@@ -117,8 +117,8 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             if ($q) { 
                 $newFilePath = Database::get()->querySingle("SELECT `path` FROM document WHERE id = ?d", $q->lastInsertID)->path;
                 $fPath = $urlServer . "courses/$course_code/image" . $newFilePath;
-                if (!isset($_SESSION['recordings_ids'][$uid]) || !in_array($q->lastInsertID, $_SESSION['recordings_ids'][$uid])) {
-                    $_SESSION['recordings_ids'][$uid][] = $q->lastInsertID;
+                if (!isset($_SESSION['recordings_ids'][$uid][$questionId]) || !in_array($q->lastInsertID, $_SESSION['recordings_ids'][$uid][$questionId])) {
+                    $_SESSION['recordings_ids'][$uid][$questionId] = $q->lastInsertID;
                 }
                 echo json_encode(['newFilePath' => $fPath]); 
             }
@@ -305,21 +305,7 @@ if ($ips && !$is_editor){
 // If the user has clicked on the "Cancel" button,
 // end the exercise and return to the exercise list
 if (isset($_POST['buttonCancel'])) {
-    
-    unset($_SESSION['QuestionDisplayed'][$uid]);
-    unset($_SESSION['OrderingSubsetKeys'][$uid]);
 
-    // Remove all user's oral mp3 files.
-    if (isset($_SESSION['recordings_ids'][$uid])) {
-        foreach ($_SESSION['recordings_ids'][$uid] as $f) {
-            $fFile = Database::get()->querySingle("SELECT `path` FROM document WHERE id = ?d", $f);
-            if (file_exists("$webDir/courses/$course_code/image" . $fFile->path)) {
-                unlink("$webDir/courses/$course_code/image" . $fFile->path);
-            }
-            Database::get()->query("DELETE FROM document WHERE id = ?d", $f);
-        }
-        unset($_SESSION['recordings_ids'][$uid]);
-    }
 
     $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value];
     Database::get()->query("UPDATE exercise_user_record
@@ -330,6 +316,7 @@ if (isset($_POST['buttonCancel'])) {
         'title' => $objExercise->selectTitle(),
         'legend' => $langCancel,
         'eurid' => $eurid ]);
+    unset_session_variables_of_questions($eurid);
     unset_exercise_var($exerciseId);
     Session::flash('message',$langAttemptWasCanceled);
     Session::flash('alert-class', 'alert-warning');
@@ -614,9 +601,6 @@ if (isset($_POST['formSent'])) {
     // if the user has made a final submission or the time has expired
     if (isset($_POST['buttonFinish']) or $time_expired) {
 
-        unset($_SESSION['QuestionDisplayed'][$uid]);
-        unset($_SESSION['OrderingSubsetKeys'][$uid]);
-        unset($_SESSION['recordings_ids'][$uid]);
 
         if (isset($_POST['secsRemaining'])) {
             $secs_remaining = $_POST['secsRemaining'];
@@ -657,6 +641,7 @@ if (isset($_POST['formSent'])) {
                 'legend' => $langSubmit,
                 'eurid' => $eurid ]);
         }
+        unset_session_variables_of_questions($eurid);
         unset($objExercise);
         unset_exercise_var($exerciseId);
         // if time expired set flashdata
@@ -1032,3 +1017,47 @@ if ($questionList) {
 }
 
 draw($tool_content, 2, null, $head_content);
+
+function unset_session_variables_of_questions($eurid) {
+    global $uid;
+
+    $question_ids = [];
+    $qids = Database::get()->queryArray("SELECT question_id FROM exercise_answer_record WHERE eurid = ?d", $eurid);
+    foreach ($qids as $q) {
+        $question_ids[] = $q->question_id;
+    }
+
+    // Remove sessions of ordering questions
+    if (count($question_ids) > 0) {
+        foreach ($question_ids as $qid) {
+            if (isset($_SESSION['OrderingSubsetKeys'][$uid][$qid])) {
+                unset($_SESSION['OrderingSubsetKeys'][$uid][$qid]);
+            }
+        }
+    }
+
+    // Remove sessions of calculated question
+    if (isset($_SESSION['QuestionDisplayed'][$uid]) && count($question_ids) > 0) {
+        foreach ($_SESSION['QuestionDisplayed'][$uid] as $index => $q) {
+            if (in_array($q, $question_ids)) {
+                unset($_SESSION['QuestionDisplayed'][$uid][$index]);
+            }
+        }
+    }
+
+    // Remove session of user's oral mp3 files.
+    if (isset($_SESSION['recordings_ids'][$uid]) && count($question_ids) > 0) {
+        foreach ($_SESSION['recordings_ids'][$uid] as $keyQ => $documentId) {
+            if (in_array($keyQ, $question_ids)) {
+                if (isset($_POST['buttonCancel'])) {
+                    $fFile = Database::get()->querySingle("SELECT `path` FROM document WHERE id = ?d", $documentId);
+                    if (file_exists("$webDir/courses/$course_code/image" . $fFile->path)) {
+                        unlink("$webDir/courses/$course_code/image" . $fFile->path);
+                    }
+                    Database::get()->query("DELETE FROM document WHERE id = ?d", $documentId);
+                }
+                unset($_SESSION['recordings_ids'][$uid][$keyQ]);
+            }
+        }
+    }
+}
