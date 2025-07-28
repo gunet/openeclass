@@ -117,9 +117,6 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             if ($q) { 
                 $newFilePath = Database::get()->querySingle("SELECT `path` FROM document WHERE id = ?d", $q->lastInsertID)->path;
                 $fPath = $urlServer . "courses/$course_code/image" . $newFilePath;
-                if (!isset($_SESSION['recordings_ids'][$uid][$questionId]) || !in_array($q->lastInsertID, $_SESSION['recordings_ids'][$uid][$questionId])) {
-                    $_SESSION['recordings_ids'][$uid][$questionId] = $q->lastInsertID;
-                }
                 echo json_encode(['newFilePath' => $fPath]); 
             }
         }
@@ -316,7 +313,7 @@ if (isset($_POST['buttonCancel'])) {
         'title' => $objExercise->selectTitle(),
         'legend' => $langCancel,
         'eurid' => $eurid ]);
-    unset_session_variables_of_questions($eurid);
+    unset_session_variables_of_questions($eurid, 'cancel_exercise');
     unset_exercise_var($exerciseId);
     Session::flash('message',$langAttemptWasCanceled);
     Session::flash('alert-class', 'alert-warning');
@@ -1018,8 +1015,8 @@ if ($questionList) {
 
 draw($tool_content, 2, null, $head_content);
 
-function unset_session_variables_of_questions($eurid) {
-    global $uid;
+function unset_session_variables_of_questions($eurid, $type = '') {
+    global $course_id, $uid, $webDir, $course_code;
 
     $question_ids = [];
     $qids = Database::get()->queryArray("SELECT question_id FROM exercise_answer_record WHERE eurid = ?d", $eurid);
@@ -1027,11 +1024,22 @@ function unset_session_variables_of_questions($eurid) {
         $question_ids[] = $q->question_id;
     }
 
-    // Remove sessions of ordering questions
+    // Remove sessions of ordering and oral questions
     if (count($question_ids) > 0) {
         foreach ($question_ids as $qid) {
+            // About ordering questions
             if (isset($_SESSION['OrderingSubsetKeys'][$uid][$qid])) {
                 unset($_SESSION['OrderingSubsetKeys'][$uid][$qid]);
+            }
+            // About oral questions
+            if ($type == 'cancel_exercise') {
+                $fFile = Database::get()->querySingle("SELECT id,`path` FROM document WHERE course_id = ?d
+                                                        AND subsystem = ?d AND subsystem_id = ?d
+                                                        AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $qid, $uid);
+                if (file_exists("$webDir/courses/$course_code/image" . $fFile->path)) {
+                    unlink("$webDir/courses/$course_code/image" . $fFile->path);
+                }
+                Database::get()->query("DELETE FROM document WHERE id = ?d", $fFile->id);
             }
         }
     }
@@ -1041,22 +1049,6 @@ function unset_session_variables_of_questions($eurid) {
         foreach ($_SESSION['QuestionDisplayed'][$uid] as $index => $q) {
             if (in_array($q, $question_ids)) {
                 unset($_SESSION['QuestionDisplayed'][$uid][$index]);
-            }
-        }
-    }
-
-    // Remove session of user's oral mp3 files.
-    if (isset($_SESSION['recordings_ids'][$uid]) && count($question_ids) > 0) {
-        foreach ($_SESSION['recordings_ids'][$uid] as $keyQ => $documentId) {
-            if (in_array($keyQ, $question_ids)) {
-                if (isset($_POST['buttonCancel'])) {
-                    $fFile = Database::get()->querySingle("SELECT `path` FROM document WHERE id = ?d", $documentId);
-                    if (file_exists("$webDir/courses/$course_code/image" . $fFile->path)) {
-                        unlink("$webDir/courses/$course_code/image" . $fFile->path);
-                    }
-                    Database::get()->query("DELETE FROM document WHERE id = ?d", $documentId);
-                }
-                unset($_SESSION['recordings_ids'][$uid][$keyQ]);
             }
         }
     }
