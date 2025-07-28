@@ -238,6 +238,71 @@ if (isset($_POST['submit'])) {
             } else {
                 setting_set(SETTING_FACULTY_USERS_REGISTRATION, 0, $course_id);
             }
+            if (isset($_POST['choose_print_header_from_list'])) {
+                setting_set(SETTING_COUSE_IMAGE_PRINT_HEADER, $_POST['choose_print_header_from_list'], $course_id);
+            }
+            if (isset($_POST['choose_print_footer_from_list'])) {
+                setting_set(SETTING_COUSE_IMAGE_PRINT_FOOTER, $_POST['choose_print_footer_from_list'], $course_id);
+            }
+
+            // Handle PDF header image
+            if (isset($_FILES['pdf_header_image']) && is_uploaded_file($_FILES['pdf_header_image']['tmp_name'])) {
+                $file_name = $_FILES['pdf_header_image']['name'];
+                validateUploadedFile($file_name, 2);
+                $pdf_header_dir = "$webDir/courses/$course_code/pdf_images";
+                if (!is_dir($pdf_header_dir)) {
+                    make_dir($pdf_header_dir);
+                }
+                move_uploaded_file($_FILES['pdf_header_image']['tmp_name'], "$pdf_header_dir/header_$file_name");
+                setting_set('PDF_HEADER_IMAGE', "header_$file_name", $course_id);
+            }
+
+            // Handle PDF header image selection from gallery
+            if (!empty($_POST['choose_pdf_header_from_list'])) {
+                $imageName = $_POST['choose_pdf_header_from_list'];
+                $imagePath = "$webDir/template/modern/images/pdf_images/header/$imageName";
+                $newPath = "$webDir/courses/$course_code/pdf_images/";
+                if (!is_dir($newPath)) {
+                    make_dir($newPath);
+                }
+                $newName = $newPath . "header_" . $imageName;
+                if (file_exists($imagePath)) {
+                    $copied = copy($imagePath, $newName);
+                    if ($copied) {
+                        setting_set('PDF_HEADER_IMAGE', "header_$imageName", $course_id);
+                    }
+                }
+            }
+
+            // Handle PDF footer image
+            if (isset($_FILES['pdf_footer_image']) && is_uploaded_file($_FILES['pdf_footer_image']['tmp_name'])) {
+                $file_name = $_FILES['pdf_footer_image']['name'];
+                validateUploadedFile($file_name, 2);
+                $pdf_footer_dir = "$webDir/courses/$course_code/pdf_images";
+                if (!is_dir($pdf_footer_dir)) {
+                    make_dir($pdf_footer_dir);
+                }
+                move_uploaded_file($_FILES['pdf_footer_image']['tmp_name'], "$pdf_footer_dir/footer_$file_name");
+                setting_set('PDF_FOOTER_IMAGE', "footer_$file_name", $course_id);
+            }
+
+            // Handle PDF footer image selection from gallery
+            if (!empty($_POST['choose_pdf_footer_from_list'])) {
+                $imageName = $_POST['choose_pdf_footer_from_list'];
+                $imagePath = "$webDir/template/modern/images/pdf_images/footer/$imageName";
+                $newPath = "$webDir/courses/$course_code/pdf_images/";
+                if (!is_dir($newPath)) {
+                    make_dir($newPath);
+                }
+                $newName = $newPath . "footer_" . $imageName;
+                if (file_exists($imagePath)) {
+                    $copied = copy($imagePath, $newName);
+                    if ($copied) {
+                        setting_set('PDF_FOOTER_IMAGE', "footer_$imageName", $course_id);
+                    }
+                }
+            }
+
             // Course settings modified, will get success message after redirect in current course language
             Session::flash('course-modify-success', true);
             redirect_to_home_page("modules/course_info/index.php?course=$course_code");
