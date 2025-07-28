@@ -126,8 +126,8 @@ $usersList = Database::get()->queryArray("SELECT U.`surname`, U.`givenname`, U.`
 
 $tool_content .= "<tbody>";
 foreach ($usersList as $user) {
-    // list available learning paths
-    $learningPathList = Database::get()->queryArray("SELECT learnPath_id FROM lp_learnPath WHERE course_id = ?d", $course_id);
+    // list available visible learning paths
+    $learningPathList = Database::get()->queryArray("SELECT learnPath_id FROM lp_learnPath WHERE course_id = ?d AND visible = 1", $course_id);
     $iterator = 1;
     $globalprog = 0;
     $globaltime = "00:00:00";
