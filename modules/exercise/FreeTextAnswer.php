@@ -19,7 +19,7 @@ class FreeTextAnswer extends QuestionType
                $langStart, $langStopRecording, $urlAppend, $langReleaseMic, $langSaveInDoc, 
                $langMaxRecAudioTime, $course_code, $urlServer, $langEnterFile, $langSave, 
                $langSaveOralMsg, $langOk, $uid, $webDir, $course_id, $course_code, 
-               $langDeleteRecordingOk, $langListenToRecordingAudio, $langFileUploadingOkReplaceWithNew;
+               $langDeleteRecordingOk, $langListenToRecordingAudio, $langFileUploadingOkReplaceWithNew, $eurid;
 
         $questionId = $this->question_id;
         $text = '';
@@ -38,10 +38,10 @@ class FreeTextAnswer extends QuestionType
                     $tempFile = explode('-', $filenameWithoutExtension);
                     if (count($tempFile) == 4) {
                         $subSystemId = $tempFile[2];
-                        $lockUserId = $tempFile[3];
+                        $UserRecordId = $tempFile[3]; // eurid
                         $file = Database::get()->querySingle("SELECT `filename`,`path` FROM document WHERE course_id = ?d
                                                                     AND subsystem = ?d AND subsystem_id = ?d
-                                                                    AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $subSystemId, $lockUserId);
+                                                                    AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $subSystemId, $UserRecordId);
                         if ($file) {
                             $filename = $file->filename; // recording filename
                             $filePath = $file->path;
@@ -111,7 +111,7 @@ $html_content .= "</div>
                     var qID = $(this).data('id');
                     var deleteData = new FormData();
                     deleteData.append('delete-recording', qID);
-                    var del_url = '{$urlAppend}modules/exercise/exercise_submit.php?course={$course_code}';
+                    var del_url = '{$urlAppend}modules/exercise/exercise_submit.php?course={$course_code}&eurid={$eurid}';
                     $.ajax({
                         url: del_url,
                         data: deleteData,
@@ -322,7 +322,7 @@ $html_content .= "</div>
                             // for question id
                             formData.append('questionId', $questionId);
 
-                            var save_url = '{$urlAppend}modules/exercise/exercise_submit.php?course={$course_code}';
+                            var save_url = '{$urlAppend}modules/exercise/exercise_submit.php?course={$course_code}&eurid={$eurid}';
 
                             $.ajax({
                                 url: save_url,
@@ -343,7 +343,7 @@ $html_content .= "</div>
 
                                 // Show the recordinf link file and change its text. Disable save button after clicking it.
                                 $('#filename-link-{$questionId}').text('($question_number) recording-file.mp3');
-                                $('#hidden-recording-{$questionId}').val('recording-file-{$questionId}-{$uid}.mp3');
+                                $('#hidden-recording-{$questionId}').val('recording-file-{$questionId}-{$eurid}.mp3');
                                 $('#button-save-recording-{$questionId}').prop('disabled', true);
                             })
                         }
@@ -385,10 +385,10 @@ $html_content .= "</div>
             $filename_without_extension = str_replace('.mp3', '', $oral);
             $user_recording = explode('-', $filename_without_extension);
             if (count($user_recording) == 4) {
-                $userID = $user_recording[3];
+                $eurID = $user_recording[3];
                 $userfile = Database::get()->querySingle("SELECT `path`,`filename` FROM document 
                                                           WHERE course_id = ?d AND subsystem = ?d 
-                                                          AND subsystem_id = ?d AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $questionId, $userID);
+                                                          AND subsystem_id = ?d AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $questionId, $eurID);
                 $url = $urlServer. "courses/$course_code/image" . ($userfile->path ?? '');
                 $filename = $userfile->filename ?? '';
             }

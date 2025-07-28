@@ -249,8 +249,6 @@ function question_answer_details($eurid, $qid) {
                         ON exercise_question.id = exercise_answer_record.question_id
                             WHERE eurid = ?d AND question_id = ?d", $eurid, $qid);
 
-    $userID = Database::get()->querySingle("SELECT `uid` FROM exercise_user_record WHERE eurid = ?d", $eurid)->uid;
-
     foreach ($q as $data) {
             switch ($data->type) {
                 case UNIQUE_ANSWER:
@@ -336,10 +334,10 @@ function question_answer_details($eurid, $qid) {
                         $hyperLink = '';
                         $file = Database::get()->querySingle("SELECT `path` FROM document WHERE course_id = ?d
                                                               AND subsystem = ?d AND subsystem_id = ?d
-                                                              AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $data->question_id, $userID);
+                                                              AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $data->question_id, $eurid);
                         if ($file && file_exists("$webDir/courses/$course_code/image" . $file->path)) {
                             $pathUrl = $urlServer . "courses/$course_code/image" . $file->path;
-                            $fileName = "recording-file-$data->question_id-$userID";
+                            $fileName = "recording-file-$data->question_id-$eurid";
                             $hyperLink = 'HYPERLINK("' . $pathUrl . '", "' . $fileName . '")';
                         } 
                         $explode = explode('::', $data->answer);

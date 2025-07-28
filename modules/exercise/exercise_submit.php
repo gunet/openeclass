@@ -65,8 +65,9 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
 
     if (isset($_POST['delete-recording'])) {
         $courseCode = $_GET['course'];
+        $eurID = $_GET['eurid'];
         $delPath = Database::get()->querySingle("SELECT id,`path` FROM document WHERE course_id = ?d AND subsystem = ?d 
-                                                    AND subsystem_id = ?d AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $_POST['delete-recording'], $uid);
+                                                    AND subsystem_id = ?d AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $_POST['delete-recording'], $eurID);
         unlink("$webDir/courses/$courseCode/image" . $delPath->path);
         Database::get()->query("DELETE FROM document WHERE id = ?d", $delPath->id);
     }
@@ -76,8 +77,9 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         $questionId = $_POST['questionId'];
         $file_path = '/' . safe_filename('mp3');
         $filename = 'recording-file.mp3';
+        $eurID = $_GET['eurid'];
         $oldFile = Database::get()->querySingle("SELECT id,`path` FROM document WHERE course_id = ?d AND subsystem = ?d 
-                                                    AND subsystem_id = ?d AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $questionId, $uid);
+                                                    AND subsystem_id = ?d AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $questionId, $eurID);
 
         if ($oldFile && file_exists("$webDir/courses/$courseCode/image" . $oldFile->path)) {
             unlink("$webDir/courses/$courseCode/image" . $oldFile->path);
@@ -112,7 +114,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                 $course_id, ORAL_QUESTION, $questionId, $file_path,
                 $filename, $filename, $file_creator,
                 $file_date, $file_date, $file_creator, $file_format,
-                $language, $uid);
+                $language, $eurID);
 
             if ($q) { 
                 $newFilePath = Database::get()->querySingle("SELECT `path` FROM document WHERE id = ?d", $q->lastInsertID)->path;
@@ -1035,7 +1037,7 @@ function unset_session_variables_of_questions($eurid, $type = '') {
             if ($type == 'cancel_exercise') {
                 $fFile = Database::get()->querySingle("SELECT id,`path` FROM document WHERE course_id = ?d
                                                         AND subsystem = ?d AND subsystem_id = ?d
-                                                        AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $qid, $uid);
+                                                        AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $qid, $eurid);
                 if (file_exists("$webDir/courses/$course_code/image" . $fFile->path)) {
                     unlink("$webDir/courses/$course_code/image" . $fFile->path);
                 }

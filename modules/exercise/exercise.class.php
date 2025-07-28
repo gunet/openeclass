@@ -1436,19 +1436,18 @@ if (!class_exists('Exercise')) {
             $id = $this->id;
 
             // Remove oral answers from document table and courses folder
-            $userRecords = Database::get()->queryArray("SELECT exercise_user_record.eurid,exercise_user_record.`uid`,exercise_answer_record.question_id 
-                                                        FROM exercise_user_record
-                                                        JOIN exercise_answer_record ON exercise_user_record.eurid = exercise_answer_record.eurid
-                                                        WHERE exercise_user_record.eid = ?d", $id);
+            $userRecords = Database::get()->queryArray("SELECT eurid FROM exercise_user_record WHERE eid = ?d", $id);
                                                         
             foreach ($userRecords as $rec) {
-                $file = Database::get()->querySingle("SELECT id,`path` FROM document WHERE course_id = ?d
-                                                      AND subsystem = ?d AND subsystem_id = ?d
-                                                      AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $rec->question_id, $rec->uid);
-                if ($file && file_exists("$webDir/courses/$course_code/image" . $file->path)) {
-                    unlink("$webDir/courses/$course_code/image" . $file->path);
-                    Database::get()->query("DELETE FROM document WHERE id = ?d", $file->id);
-                } 
+                $file = Database::get()->queryArray("SELECT id,`path` FROM document WHERE course_id = ?d
+                                                      AND subsystem = ?d AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $rec->eurid);
+                foreach ($file as $f) {
+                    if (file_exists("$webDir/courses/$course_code/image" . $f->path)) {
+                        unlink("$webDir/courses/$course_code/image" . $f->path);
+                    } 
+                    Database::get()->query("DELETE FROM document WHERE id = ?d", $f->id);
+                }
+                
             }
             
 
@@ -1471,7 +1470,16 @@ if (!class_exists('Exercise')) {
          */
         public function purgeAttempt($id, $eurid)
         {
-            global $course_id;
+            global $course_id, $webDir, $course_code;
+
+            // Remove oral recording audio
+            $file = Database::get()->queryArray("SELECT id,`path` FROM document WHERE course_id = ?d AND subsystem = ?d AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $eurid);
+            if ($file) {
+                foreach ($file as $f) {
+                    unlink("$webDir/courses/$course_code/image" . $f->path);
+                    Database::get()->query("DELETE FROM document WHERE id = ?d", $f->id);
+                }
+            }
 
             $exercise_title = Database::get()->querySingle("SELECT title FROM exercise WHERE id = ?d", $id)->title;
             $eurid_uid = Database::get()->querySingle("SELECT uid FROM exercise_user_record WHERE eid = ?d AND eurid = ?d", $id, $eurid)->uid;
