@@ -94,6 +94,107 @@
                     document.getElementById("radio_collaborative").style.display="none";
                 }
             });
+
+            // Print Header Images functionality
+            $('#loadPrintHeaderImages').click(function() {
+                loadPrintImages('header');
+            });
+
+            // Print Footer Images functionality
+            $('#loadPrintFooterImages').click(function() {
+                loadPrintImages('footer');
+            });
+
+            function loadPrintImages(type) {
+                const modalId = type === 'header' ? '#PrintHeaderImagesModal' : '#PrintFooterImagesModal';
+                const contentId = type === 'header' ? '#printHeaderImagesContent' : '#printFooterImagesContent';
+
+                $(contentId).html('<div class="text-center"><i class="fa fa-spinner fa-spin"></i> Loading images...</div>');
+
+                $.ajax({
+                    url: '{{ $urlAppend }}modules/course_info/ajax_load_images.php',
+                    method: 'GET',
+                    data: {
+                        course_id: '{{ $course_id ?? "" }}',
+                        type: type
+                    },
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.success && response.images) {
+                            displayImages(response.images, type, contentId);
+                        } else {
+                            $(contentId).html('<div class="alert alert-info">{{ trans("langNoImagesFound") }}</div>');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error loading images:', error);
+                        $(contentId).html('<div class="alert alert-danger">Error loading images. Please try again.</div>');
+                    }
+                });
+            }
+
+            function displayImages(images, type, contentId) {
+                let html = '<div class="row">';
+
+                images.forEach(function(image) {
+                    html += `
+                        <div class="col-md-3 col-sm-4 col-6 mb-3">
+                            <div class="card print-image-card" style="cursor: pointer;" data-image-path="${image.path}" data-image-name="${image.name}" data-type="${type}" data-image-id="${image.id}">
+                                <img src="${image.url}" class="card-img-top" style="height: 150px; object-fit: cover;" alt="${image.name}">
+                                <div class="card-body p-2">
+                                    <small class="text-muted">${image.name}</small>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                html += '</div>';
+                $(contentId).html(html);
+
+                // Handle image selection
+                $(contentId).on('click', '.print-image-card', function() {
+                    const imagePath = $(this).data('image-path');
+                    const imageName = $(this).data('image-name');
+                    const imageType = $(this).data('type');
+                    const imageID = $(this).data('image-id');
+
+                    // Remove previous selection styling
+                    $(contentId).find('.print-image-card').removeClass('border-primary');
+
+                    // Add selection styling
+                    $(this).addClass('border-primary');
+
+                    // Update hidden input and display
+                    if (imageType === 'header') {
+                        $('#choose_print_header_from_list').val(imageID);
+                        $('#selectedPrintHeaderImage').html(`<small class="text-success"><i class="fa fa-check"></i> Selected: ${imageName}</small>`);
+                    } else {
+                        $('#choose_print_footer_from_list').val(imageID);
+                        $('#selectedPrintFooterImage').html(`<small class="text-success"><i class="fa fa-check"></i> Selected: ${imageName}</small>`);
+                    }
+
+                    // Close modal after selection
+                    setTimeout(function() {
+                        $(imageType === 'header' ? '#PrintHeaderImagesModal' : '#PrintFooterImagesModal').modal('hide');
+                    }, 500);
+                });
+            }
+
+            // Delete Print Header Image
+            $('#deletePrintHeaderImage').click(function() {
+                $('#choose_print_header_from_list').val('0');
+                $('#printHeaderImagePreview').remove();
+                $('#selectedPrintHeaderImage').html('');
+            });
+
+            // Delete Print Footer Image
+            $('#deletePrintFooterImage').click(function() {
+                $('#choose_print_footer_from_list').val('0');
+                $('#printFooterImagePreview').remove();
+                $('#selectedPrintFooterImage').html('');
+            });
+
         });
 
     </script>
@@ -549,6 +650,52 @@
                                         </div>
                                     </div>
 
+                                    @php
+                                        $print_header_image_url = setting_get_print_image_url(SETTING_COUSE_IMAGE_PRINT_HEADER, $course_id);
+                                        $print_footer_image_url = setting_get_print_image_url(SETTING_COUSE_IMAGE_PRINT_FOOTER, $course_id);
+                                    @endphp
+
+                                    <div class='form-group mt-4'>
+                                        <div class='col-sm-12 control-label-notes mb-2'>
+                                            Print Header Image
+                                            <div class="d-flex gap-2 align-items-center mt-2">
+                                                <button type="button" class="btn btn-secondary" id="loadPrintHeaderImages" data-bs-toggle="modal" data-bs-target="#PrintHeaderImagesModal">
+                                                    <i class="fa fa-images"></i> {{ trans('langSelectFromGallery') }}
+                                                </button>
+                                                <button type="button" class="btn deleteAdminBtn btn-sm" id="deletePrintHeaderImage">
+                                                    <i class="fa fa-trash"></i>
+                                                </button>
+                                            </div>
+                                            @if($print_header_image_url)
+                                                <div class="mt-2" id="printHeaderImagePreview">
+                                                    <img src="{{ $print_header_image_url }}" alt="Print Header Image" style="max-width: 200px; max-height: 100px;" class="img-thumbnail">
+                                                </div>
+                                            @endif
+{{--                                            <input type="hidden" name="choose_print_header_from_list" id="choose_print_header_from_list" value="">--}}
+                                            <input type="hidden" name="choose_print_header_from_list" id="choose_print_header_from_list" value="{{ $print_header_image_url ? setting_get(SETTING_COUSE_IMAGE_PRINT_HEADER, $course_id) : '' }}">
+                                            <div id="selectedPrintHeaderImage" class="mt-2 text-muted"></div>
+                                        </div>
+                                        <div class='col-sm-12 control-label-notes mb-2'>
+                                            Print Footer Image
+                                            <div class="d-flex gap-2 align-items-center mt-2">
+                                                <button type="button" class="btn btn-secondary" id="loadPrintFooterImages" data-bs-toggle="modal" data-bs-target="#PrintFooterImagesModal">
+                                                    <i class="fa fa-images"></i> {{ trans('langSelectFromGallery') }}
+                                                </button>
+                                                <button type="button" class="btn deleteAdminBtn btn-sm" id="deletePrintFooterImage">
+                                                    <i class="fa fa-trash"></i>
+                                                </button>
+                                            </div>
+                                            @if($print_footer_image_url)
+                                                <div class="mt-2" id="printFooterImagePreview">
+                                                    <img src="{{ $print_footer_image_url }}" alt="Print Footer Image" style="max-width: 200px; max-height: 100px;" class="img-thumbnail">
+                                                </div>
+                                            @endif
+{{--                                            <input type="hidden" name="choose_print_footer_from_list" id="choose_print_footer_from_list" value="">--}}
+                                            <input type="hidden" name="choose_print_footer_from_list" id="choose_print_footer_from_list" value="{{ $print_footer_image_url ? setting_get(SETTING_COUSE_IMAGE_PRINT_FOOTER, $course_id) : '' }}">
+                                            <div id="selectedPrintFooterImage" class="mt-2 text-muted"></div>
+                                        </div>
+                                    </div>
+
                                     {!! showSecondFactorChallenge() !!}
 
                                     <div class='form-group mt-5 mb-1 d-flex justify-content-end align-items-center'>
@@ -570,4 +717,39 @@
 
 </div>
 </div>
+
+<!-- Print Images Modal -->
+<div class="modal fade" id="PrintHeaderImagesModal" tabindex="-1" aria-labelledby="PrintHeaderImagesModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="PrintHeaderImagesModalLabel">PrintHeaderImagesModal</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="printHeaderImagesContent">
+                    <!-- Images will be loaded here via AJAX -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Print Footer Images Modal -->
+<div class="modal fade" id="PrintFooterImagesModal" tabindex="-1" aria-labelledby="PrintFooterImagesModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="PrintFooterImagesModalLabel">PrintFooterImagesModal</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="printFooterImagesContent">
+                    <!-- Images will be loaded here via AJAX -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 @endsection

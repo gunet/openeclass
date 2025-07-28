@@ -52,7 +52,11 @@ function setting_default($setting_id) {
         SETTING_OFFLINE_COURSE => 0,
         SETTING_USERS_LIST_ACCESS => 1,
         SETTING_AGENDA_ANNOUNCEMENT_COURSE_COMPLETION => 1,
-        SETTING_FACULTY_USERS_REGISTRATION => 0);
+        SETTING_FACULTY_USERS_REGISTRATION => 0,
+        SETTING_COUSE_IMAGE_STYLE => 0,
+        SETTING_COUSE_IMAGE_PRINT_HEADER => 0,
+        SETTING_COUSE_IMAGE_PRINT_FOOTER => 0
+    );
     if (isset($defaults[$setting_id])) {
         return $defaults[$setting_id];
     } else {
@@ -99,4 +103,27 @@ function setting_set($setting_id, $value, $course_id=null) {
         Log::record($course_id, MODULE_ID_COURSEINFO, LOG_MODIFY,
             array('id' => $setting_id, 'value' => $value));
     }
+}
+
+function setting_get_print_image_url($setting_id, $course_id=null) {
+    global $urlServer;
+
+    if (!$course_id) {
+        $course_id = $GLOBALS['course_id'];
+    }
+
+    $document_id = setting_get($setting_id, $course_id);
+    if (!$document_id) {
+        return null;
+    }
+
+    $document = Database::get()->querySingle("SELECT path, filename FROM document 
+                                             WHERE id = ?d AND course_id = ?d AND visible = 1",
+        $document_id, $course_id);
+    if (!$document) {
+        return null;
+    }
+
+    $course_code = course_id_to_code($course_id);
+    return $urlServer . "modules/document/index.php?course=" . $course_code . "&download=" . getInDirectReference($document->path);
 }
