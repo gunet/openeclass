@@ -71,6 +71,7 @@ if ($rescnt == 0) {
 $lpList = Database::get()->queryArray("SELECT name, learnPath_id
             FROM lp_learnPath
             WHERE course_id = ?d
+            AND visible = 1
             ORDER BY `rank`", $course_id);
 
 
