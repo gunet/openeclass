@@ -209,7 +209,12 @@ class OrderingAnswer extends \QuestionType
                 $randomKeys = json_decode($tmpArr[1], true);
             } elseif (is_array($exerciseResult[$questionId])) { // comes from temporary
                 $arr = $exerciseResult[$questionId];
-                $randomKeys = $_SESSION['OrderingSubsetKeys'][$uid][$questionId];
+                // RandomKeys will get its subset from option question
+                $jsonQuestion = Database::get()->querySingle("SELECT options FROM exercise_question WHERE id = ?d", $questionId)->options;
+                $arrJson = json_decode($jsonQuestion, true);
+                $arrayRes = json_decode($arrJson['userSubset_' . $uid], true);
+                $result = implode(',', $arrayRes);
+                $randomKeys = explode(',', $result);
             }
             
             foreach ($arr as $v) {

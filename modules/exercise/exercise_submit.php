@@ -374,8 +374,13 @@ if (($exerciseType == MULTIPLE_PAGE_TYPE || isset($_POST['buttonSave'])) && isse
             $CurrentQuestion->read($arrKey);
             if ($CurrentQuestion->selectType() == ORDERING) {
                 if (!empty($_POST['subsetKeys'][$arrKey])) {
-                    $arr2 = json_decode($_POST['subsetKeys'][$arrKey], true);
-                    $_SESSION['OrderingSubsetKeys'][$uid][$arrKey] = $arr2;
+                    $jsonString = Database::get()->querySingle("SELECT options FROM exercise_question WHERE id = ?d", $arrKey)->options;
+                    $data = json_decode($jsonString ?? '', true);
+                    if ($data) {
+                        $data['userSubset_'.$uid] = $_POST['subsetKeys'][$arrKey];
+                        $updatedJsonString = json_encode($data);
+                        Database::get()->query("UPDATE exercise_question SET options = ?s WHERE id = ?d", $updatedJsonString, $arrKey);
+                    }
                 }
             }
         }
@@ -1050,20 +1055,33 @@ function unset_session_variables_of_questions($eurid, $type = '') {
     global $course_id, $uid, $webDir, $course_code;
 
     $question_ids = [];
-    $qids = Database::get()->queryArray("SELECT question_id FROM exercise_answer_record WHERE eurid = ?d", $eurid);
+    $typeQuestion = [];
+    $qids = Database::get()->queryArray("SELECT DISTINCT exercise_question.type,exercise_answer_record.question_id
+                                         FROM exercise_answer_record 
+                                         JOIN exercise_question ON exercise_question.id=exercise_answer_record.question_id
+                                         WHERE exercise_answer_record.eurid = ?d", $eurid);
+                            
     foreach ($qids as $q) {
         $question_ids[] = $q->question_id;
+        $typeQuestion[$q->question_id] = $q->type;
     }
 
     // Remove sessions of ordering and oral questions
     if (count($question_ids) > 0) {
         foreach ($question_ids as $qid) {
             // About ordering questions
-            if (isset($_SESSION['OrderingSubsetKeys'][$uid][$qid])) {
-                unset($_SESSION['OrderingSubsetKeys'][$uid][$qid]);
+            if ($typeQuestion[$qid] == ORDERING) {
+                $jsonString = Database::get()->querySingle("SELECT options FROM exercise_question WHERE id = ?d", $qid)->options;
+                $data = json_decode($jsonString ?? '', true);
+                if ($data) {
+                    // Unset subset question of user
+                    unset($data['userSubset_'.$uid]);
+                    $updatedJsonString = json_encode($data);
+                    Database::get()->query("UPDATE exercise_question SET options = ?s WHERE id = ?d", $updatedJsonString, $qid);
+                }
             }
             // About oral questions
-            if ($type == 'cancel_exercise') {
+            if ($type == 'cancel_exercise' && $typeQuestion[$qid] == FREE_TEXT) {
                 $fFile = Database::get()->querySingle("SELECT id,`path` FROM document WHERE course_id = ?d
                                                         AND subsystem = ?d AND subsystem_id = ?d
                                                         AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $qid, $eurid);
