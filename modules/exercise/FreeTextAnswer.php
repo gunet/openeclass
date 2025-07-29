@@ -374,8 +374,8 @@ $html_content .= "</div>
         $url = '';
         $filename = '';
 
-        if (strpos($choice, '::') !== false) { // choice contains oral answer apart from text
-            $user_answer = explode('::', $choice);
+        if (strpos($choice, ':::') !== false) { // choice contains oral answer apart from text
+            $user_answer = explode(':::', $choice);
             if (count($user_answer) == 1) { // only oral
                 $oral = $user_answer[0];
             } elseif (count($user_answer) == 2) { // oran and text together

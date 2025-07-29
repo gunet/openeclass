@@ -241,7 +241,7 @@ if (isset($_POST['attempt_value']) && !isset($_GET['eurId'])) {
         // Regenerate eurid so that attempt can't be restarted from other browser
         unset($_SESSION['exerciseResult'][$exerciseId][$attempt_value]);
         Database::get()->transaction(function () {
-            global $eurid, $paused_attempt;
+            global $eurid, $paused_attempt, $course_id;
             $new_eurid = Database::get()->query('INSERT INTO exercise_user_record
                 (eid, uid, record_start_date, record_end_date, total_score,
                  total_weighting, attempt, attempt_status, secs_remaining,
@@ -251,10 +251,39 @@ if (isset($_POST['attempt_value']) && !isset($_GET['eurId'])) {
                        assigned_to FROM exercise_user_record WHERE eurid = ?d',
                 ATTEMPT_ACTIVE, $eurid)->lastInsertID;
             if ($new_eurid) {
+                // Replace eurid of recorded audio with new eurid in document table.
+                // Replace recorded audio of old eurid with new eurid in exercise_answer_record table.
+                // It's a special case for oral question type.
+                $old_answers = Database::get()->queryArray("SELECT answer_record_id,answer FROM exercise_answer_record WHERE eurid = ?d", $eurid);
+                if (count($old_answers) > 0) {
+                    foreach ($old_answers as $old_an) {
+                        if (strpos($old_an->answer, ':::') !== false) { // oral question
+                            $temp_answer = explode(':::', $old_an->answer);
+                            if (count($temp_answer) == 2) {
+                                $text = $temp_answer[0];
+                                $old_recorded = $temp_answer[1];
+                                $temp_old_recorded = explode('-', $old_recorded);
+                                if (count($temp_old_recorded) == 4 && $temp_old_recorded[3] == $eurid . '.mp3') {
+                                    $new_answer = $text . ':::' . $temp_old_recorded[0] . '-' . $temp_old_recorded[1] . '-' . $temp_old_recorded[2] . '-' . $new_eurid . '.mp3';
+                                    Database::get()->query("UPDATE exercise_answer_record SET answer = ?s WHERE answer_record_id = ?d", $new_answer, $old_an->answer_record_id);
+                                }
+                            }
+                        }
+                    }
+                }
+                $old_documents = Database::get()->queryArray("SELECT id,lock_user_id FROM document WHERE course_id = ?d 
+                                                                AND subsystem = ?d AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $eurid);
+                if (count($old_documents) > 0) {
+                    foreach ($old_documents as $old_doc) {
+                        Database::get()->query("UPDATE document SET lock_user_id = ?d WHERE id = ?d", $new_eurid, $old_doc->id);
+                    }
+                }
+                
+                /////////////////////////////////////////////////////////
                 Database::get()->query('UPDATE exercise_answer_record
                     SET eurid = ?d WHERE eurid = ?d', $new_eurid, $eurid);
                 Database::get()->query('DELETE FROM exercise_user_record
-                    WHERE eurid = ?d', $eurid);
+                    WHERE eurid = ?d', $eurid); 
                 $paused_attempt->eurid = $eurid = $new_eurid;
             }
         });
