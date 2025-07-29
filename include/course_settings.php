@@ -118,7 +118,7 @@ function setting_get_print_image_url($setting_id, $course_id=null) {
     }
 
     $document = Database::get()->querySingle("SELECT path, filename FROM document 
-                                             WHERE id = ?d AND course_id = ?d AND visible = 1",
+                                             WHERE id = ?d AND course_id = ?d",
         $document_id, $course_id);
     if (!$document) {
         return null;
