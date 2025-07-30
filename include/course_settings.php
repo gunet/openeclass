@@ -125,7 +125,8 @@ function setting_get_print_image_url($setting_id, $course_id=null) {
     }
 
     $course_code = course_id_to_code($course_id);
-    return $urlServer . "modules/document/index.php?course=" . $course_code . "&download=" . getInDirectReference($document->path);
+    //return $urlServer . "modules/document/index.php?course=" . $course_code . "&download=" . getInDirectReference($document->path);
+    return $urlServer . "modules/document/file.php/" . $course_code . "/" . $document->filename;
 }
 
 function setting_get_print_image_disk_path($setting_id, $course_id=null) {
