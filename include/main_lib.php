@@ -4807,15 +4807,16 @@ function trans($var_name, $var_array = []) {
     }
 }
 
-function get_platform_logo($size='normal') {
+function get_platform_logo($size='normal',$position='header') {
     global $themeimg, $urlAppend, $course_id;
 
     require_once 'include/course_settings.php';
     $print_header_image_url = imageToBase64(setting_get_print_image_disk_path(SETTING_COUSE_IMAGE_PRINT_HEADER, $course_id));
+    $print_footer_image_url = imageToBase64(setting_get_print_image_disk_path(SETTING_COUSE_IMAGE_PRINT_FOOTER, $course_id));
 
-    if ($print_header_image_url) {
+    if ($print_header_image_url || $print_footer_image_url) {
+        $logo_img = ($position == 'footer') ? $print_footer_image_url : $print_header_image_url;
         $bg_color = '#ffffff';
-        $logo_img = $print_header_image_url;
     } else {
         if ($size == 'small') {
             $logo_img = $themeimg . '/eclass-new-logo.svg';
