@@ -656,6 +656,7 @@
                                     @endphp
 
                                     <div class='form-group mt-4'>
+{{--                                        Ρυθμισεις εμφανισης αναφορων μαθηματος--}}
                                         <div class='col-sm-12 control-label-notes mb-2'>
                                             Print Header Image
                                             <div class="d-flex gap-2 align-items-center mt-2">

@@ -38,6 +38,8 @@ var xAxisLabels = {1:langDay, 7:langWeek, 30:langMonth, 365:langYear};
 var xMinVal = null;
 var xMaxVal = null;
 var xTicks = null;
+var pdfHeaderImg = null;
+var pdfFooterImg = null;
 var department_details = new Array();
 var tableOptions = {
     'a': {
@@ -190,10 +192,39 @@ $(document).ready(function(){
             refresh_plots();
         });
     }
+    // var pdfHeaderImg = null;
+    // var pdfFooterImg = null;
+    if($('#pdfHeaderImg').length){
+        pdfHeaderImg = $('#pdfHeaderImg').val();
+    }
+    if($('#pdfFooterImg').length){
+        pdfFooterImg = $('#pdfFooterImg').val();
+    }
+
     detailsTables = new Object();
     tableTools = new Object();
 
     /*******************/
+
+    function pdfWithOptionalImages(doc) {
+        if (typeof pdfHeaderImg === 'string' && pdfHeaderImg.startsWith('data:image')) {
+            doc.content.splice(0, 0, {
+                image: pdfHeaderImg,
+                width: 100,
+                alignment: 'center',
+                margin: [0, 0, 0, 20]
+            });
+        }
+
+        if (typeof pdfFooterImg === 'string' && pdfFooterImg.startsWith('data:image')) {
+            doc.content.push({
+                image: pdfFooterImg,
+                width: 300,
+                alignment: 'center',
+                margin: [0, 20, 0, 0]
+            });
+        }
+    }
 
     for(tableid in tableOptions[stats]){
         tableElId = stats+'details'+tableid;
@@ -203,18 +234,34 @@ $(document).ready(function(){
            'sPaginationType': 'full_numbers',
            'pageLength': pLength,
            'lengthMenu': [5, 10, 20, 50, 100],
-           'buttons': [
-                           {
-                               extend: 'copy',
-                               text: langCopy
-                           },
-                            'excel',
-                            'pdf',
-                           {
-                               extend: 'print',
-                               text: langPrint
-                           }
-                      ],
+           // 'buttons': [
+           //                 {
+           //                     extend: 'copy',
+           //                     text: langCopy
+           //                 },
+           //                  'excel',
+           //                  'pdf',
+           //                 {
+           //                     extend: 'print',
+           //                     text: langPrint
+           //                 }
+           //            ],
+            buttons: [
+                {
+                    extend: 'copy',
+                    text: langCopy
+                },
+                'excel',
+                {
+                    extend: 'pdfHtml5',
+                    text: 'PDF',
+                    customize: pdfWithOptionalImages
+                },
+                {
+                    extend: 'print',
+                    text: langPrint
+                }
+            ],
             'autoWidth': true,
             'footerCallback': footerCB(tableid, tableElId),
             'columnDefs': colDefs,
