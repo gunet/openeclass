@@ -4811,7 +4811,7 @@ function get_platform_logo($size='normal') {
     global $themeimg, $urlAppend, $course_id;
 
     require_once 'include/course_settings.php';
-    $print_header_image_url = setting_get_print_image_url(SETTING_COUSE_IMAGE_PRINT_HEADER, $course_id);
+    $print_header_image_url = imageToBase64(setting_get_print_image_disk_path(SETTING_COUSE_IMAGE_PRINT_HEADER, $course_id));
 
     if ($print_header_image_url) {
         $bg_color = '#ffffff';
