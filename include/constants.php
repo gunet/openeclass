@@ -159,6 +159,10 @@ define('SETTING_FACULTY_USERS_REGISTRATION', 26); /* course registration is allo
 define('SETTING_COUSE_IMAGE_STYLE', 27); /* course image description object-fit css */
 define('SETTING_COUSE_IMAGE_PRINT_HEADER', 28); /* course image print header */
 define('SETTING_COUSE_IMAGE_PRINT_FOOTER', 29); /* course image print footer */
+define('SETTING_COUSE_IMAGE_PRINT_HEADER_ALIGNMENT', 30); /* course image header alignment */
+define('SETTING_COUSE_IMAGE_PRINT_FOOTER_ALIGNMENT', 31); /* course image footer alignment */
+define('SETTING_COUSE_IMAGE_PRINT_HEADER_WIDTH', 32); /* course image header width */
+define('SETTING_COUSE_IMAGE_PRINT_FOOTER_WIDTH', 33); /* course image footer width */
 
 // Available user settings
 define('SETTING_FORUM_POST_VIEW', 1);

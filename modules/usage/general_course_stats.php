@@ -56,9 +56,13 @@ if (!isset($_GET['id'])) {
 
 $pdfHeaderImg = imageToBase64(setting_get_print_image_disk_path(SETTING_COUSE_IMAGE_PRINT_HEADER, $course_id));
 $tool_content .= "<input type='hidden' id='pdfHeaderImg' value='".$pdfHeaderImg."' data-course-id='$course_id'>";
+$tool_content .= "<input type='hidden' id='pdfHeaderImgAlignment' value='".setting_get(SETTING_COUSE_IMAGE_PRINT_HEADER_ALIGNMENT, $course_id)."'>";
+$tool_content .= "<input type='hidden' id='pdfHeaderImgWidth' value='".setting_get(SETTING_COUSE_IMAGE_PRINT_HEADER_WIDTH, $course_id)."'>";
 
 $pdfFooterImg = imageToBase64(setting_get_print_image_disk_path(SETTING_COUSE_IMAGE_PRINT_FOOTER, $course_id));
 $tool_content .= "<input type='hidden' id='pdfFooterImg' value='".$pdfFooterImg."' data-course-id='$course_id'>";
+$tool_content .= "<input type='hidden' id='pdfFooterImgAlignment' value='".setting_get(SETTING_COUSE_IMAGE_PRINT_FOOTER_ALIGNMENT, $course_id)."'>";
+$tool_content .= "<input type='hidden' id='pdfFooterImgWidth' value='".setting_get(SETTING_COUSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id)."'>";
 
 
 /****   Datatables   ****/

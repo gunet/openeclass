@@ -40,6 +40,10 @@ var xMaxVal = null;
 var xTicks = null;
 var pdfHeaderImg = null;
 var pdfFooterImg = null;
+var pdfHeaderImgAlignment = null;
+var pdfFooterImgAlignment = null;
+var pdfHeaderImgWidth = 100;
+var pdfFooterImgWidth = 100;
 var department_details = new Array();
 var tableOptions = {
     'a': {
@@ -200,6 +204,24 @@ $(document).ready(function(){
     if($('#pdfFooterImg').length){
         pdfFooterImg = $('#pdfFooterImg').val();
     }
+    if($('#pdfHeaderImgAlignment').length){
+        const alignments = ['left', 'center', 'right'];
+        let val = $('#pdfHeaderImgAlignment').val();
+        pdfHeaderImgAlignment = alignments[val] || 'left';
+    }
+    if($('#pdfFooterImgAlignment').length){
+        const alignments = ['left', 'center', 'right'];
+        let val = $('#pdfFooterImgAlignment').val();
+        pdfFooterImgAlignment = alignments[val] || 'left';
+    }
+    if($('#pdfHeaderImgWidth').length){
+        pdfHeaderImgWidth = parseInt($('#pdfHeaderImgWidth').val(), 10);
+    }
+    if($('#pdfFooterImgWidth').length){
+        pdfFooterImgWidth = parseInt($('#pdfFooterImgWidth').val(), 10);
+    }
+
+
 
     detailsTables = new Object();
     tableTools = new Object();
@@ -210,8 +232,8 @@ $(document).ready(function(){
         if (typeof pdfHeaderImg === 'string' && pdfHeaderImg.startsWith('data:image')) {
             doc.content.splice(0, 0, {
                 image: pdfHeaderImg,
-                width: 100,
-                alignment: 'center',
+                width: pdfHeaderImgWidth,
+                alignment: pdfHeaderImgAlignment,
                 margin: [0, 0, 0, 20]
             });
         }
@@ -219,8 +241,8 @@ $(document).ready(function(){
         if (typeof pdfFooterImg === 'string' && pdfFooterImg.startsWith('data:image')) {
             doc.content.push({
                 image: pdfFooterImg,
-                width: 300,
-                alignment: 'center',
+                width: pdfFooterImgWidth,
+                alignment: pdfFooterImgAlignment,
                 margin: [0, 20, 0, 0]
             });
         }
@@ -234,18 +256,6 @@ $(document).ready(function(){
            'sPaginationType': 'full_numbers',
            'pageLength': pLength,
            'lengthMenu': [5, 10, 20, 50, 100],
-           // 'buttons': [
-           //                 {
-           //                     extend: 'copy',
-           //                     text: langCopy
-           //                 },
-           //                  'excel',
-           //                  'pdf',
-           //                 {
-           //                     extend: 'print',
-           //                     text: langPrint
-           //                 }
-           //            ],
             buttons: [
                 {
                     extend: 'copy',

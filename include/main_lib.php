@@ -4816,6 +4816,8 @@ function get_platform_logo($size='normal',$position='header') {
 
     if ($print_header_image_url || $print_footer_image_url) {
         $logo_img = ($position == 'footer') ? $print_footer_image_url : $print_header_image_url;
+        $image_align = ($position == 'footer') ? setting_get(SETTING_COUSE_IMAGE_PRINT_FOOTER_ALIGNMENT, $course_id) : setting_get(SETTING_COUSE_IMAGE_PRINT_HEADER_ALIGNMENT, $course_id);
+        $image_align = ($image_align == 0) ? 'left' : (($image_align == 1) ? 'center' : 'right');
         $bg_color = '#ffffff';
     } else {
         if ($size == 'small') {
@@ -4845,7 +4847,7 @@ function get_platform_logo($size='normal',$position='header') {
         }
     }
 
-    $logo = "<div style='clear: right; background-color: $bg_color; padding: 1rem; margin-bottom: 2rem;'>
+    $logo = "<div style='clear: right; background-color: $bg_color; padding: 1rem; margin-bottom: 2rem; text-align: $image_align;'>
                 <img style='float: left; height:6rem;' src='$logo_img'>
             </div>";
 
