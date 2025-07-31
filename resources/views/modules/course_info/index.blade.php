@@ -682,7 +682,7 @@
                                             </div>
                                             <div class="d-flex gap-2 align-items-center mt-2">
                                                 <label class="col-sm-2" for="header_image_width">{{ trans('langWidth') }} (px)</label>
-                                                <input type="number" name="header_image_width" id="header_image_width" value="{{ setting_get(SETTING_COUSE_IMAGE_PRINT_HEADER_WIDTH, $course_id) }}" placeholder="Width (px)" style="max-width: 100px;" class="form-control">
+                                                <input type="number" name="header_image_width" id="header_image_width" value="{{ setting_get(SETTING_COUSE_IMAGE_PRINT_HEADER_WIDTH, $course_id) }}" placeholder="Width (px)" class="form-control">
                                             </div>
                                             <input type="hidden" name="choose_print_header_from_list" id="choose_print_header_from_list" value="{{ $print_header_image_url ? setting_get(SETTING_COUSE_IMAGE_PRINT_HEADER, $course_id) : '' }}">
                                             <div id="selectedPrintHeaderImage" class="mt-2 text-muted"></div>
@@ -713,7 +713,7 @@
                                             </div>
                                             <div class="d-flex gap-2 align-items-center mt-2">
                                                 <label class="col-sm-2" for="header_image_width">{{ trans('langWidth') }} (px)</label>
-                                                <input type="number" name="footer_image_width" id="footer_image_width" value="{{ setting_get(SETTING_COUSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id) }}" placeholder="Width (px)" style="max-width: 100px;" class="form-control">
+                                                <input type="number" name="footer_image_width" id="footer_image_width" value="{{ setting_get(SETTING_COUSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id) }}" placeholder="Width (px)" class="form-control">
                                             </div>
                                             <input type="hidden" name="choose_print_footer_from_list" id="choose_print_footer_from_list" value="{{ $print_footer_image_url ? setting_get(SETTING_COUSE_IMAGE_PRINT_FOOTER, $course_id) : '' }}">
                                             <div id="selectedPrintFooterImage" class="mt-2 text-muted"></div>
