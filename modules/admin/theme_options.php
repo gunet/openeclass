@@ -66,7 +66,7 @@ $defaults = array(
                 "rgba(37, 70, 240, 1)" => array('BgBadgePrimary', 'bgAlertInfo'),
                 "rgba(30, 126, 14, 0.81)" => array('bgHoveredSuccessButtonColor'),
                 "rgba(155, 169, 193, 0.82)" => array('bgHoveredHelpButtonColor'),
-                "rgba(255, 255, 255, 0)" => array('bgHoveredBoxShadowPanels'),
+                "rgba(255, 255, 255, 0)" => array('bgHoveredBoxShadowPanels', 'borderColorContentPlatformLeftRight'),
                 "rgba(232, 242, 231, 1)" => array('bgContainerImportantAnnouncement'),
                 "rgba(62, 73, 101, 1)" => array('clOptionSelect', 'ClTextEditor', 'clInputText', 'clTabs', 'clAccordions', 'clColorBodyAgenda'),
                 "rgba(0, 74, 148, 1)" => array('leftMenuSelectedLinkColor'),
@@ -1267,6 +1267,26 @@ $tool_content .= "
                                 <img src='$urlServer/template/modern/images/theme_settings/main.png' class='figure-img img-fluid rounded theme-img-settings' alt='...'>
                                 <figcaption class='figure-caption'>$langDisplayOptionsImg</figcaption>
                             </figure>
+                        </div>
+                    </div>
+                    <div class='mt-4'>
+                        <h3 class='theme_options_legend text-decoration-underline'>$langBorderColorLeftRight</h3>
+                        <div class='form-group'>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                <label for='borderColorContentPlatformLeftRight' class='control-label-notes mb-2 me-2'>$langBorderColorLeftRight:</label>
+                                <input name='borderColorContentPlatformLeftRight' type='text' class='form-control colorpicker' id='borderColorContentPlatformLeftRight' value='$theme_options_styles[borderColorContentPlatformLeftRight]'>
+                            </div>
+                        </div>
+                        <div class='form-group mt-3'>
+                            <div class='col-sm-12'>
+                                <div class='checkbox'>
+                                    <label class='label-container' aria-label='$langSettingSelect'>
+                                    <input type='checkbox' name='EnableBorderSidesOfMain' value='1' ".((isset($theme_options_styles['EnableBorderSidesOfMain']))? 'checked' : '').">
+                                    <span class='checkmark'></span>
+                                    $langActivate
+                                    </label>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

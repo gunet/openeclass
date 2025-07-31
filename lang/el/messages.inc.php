@@ -6082,6 +6082,7 @@ $langSubMenuLinkBgHoverColor = "Χρώμα Φόντου Hovered Συνδέσμο
 $langSubMenuLinkBgActive = "Χρώμα Φόντου Ενεργού Συνδέσμου Επιλογών";
 $langSubMenuLinkColorActive = "Χρώμα Συνδέσμου Ενεργού Συνδέσμου Επιλογών";
 $langBgColor = 'Χρώμα Φόντου';
+$langBorderColorLeftRight = "Χρώμα border";
 $langBgColorConfig = 'Ρυθμίσεις Φόντου';
 $langLinksCongiguration = 'Ρυθμίσεις Συνδέσμων';
 $langBgHeaderCongiguration = "Χρώμα Φόντου";

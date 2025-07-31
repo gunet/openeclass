@@ -5520,6 +5520,7 @@ $langSubMenuLinkBgHoverColor = "Menu Group Item Link Background Hover Color";
 $langSubMenuLinkBgActive = "Menu Group Item Active Link Background Color";
 $langSubMenuLinkColorActive = "Menu Group Item Active Link Color";
 $langBgColor = 'Background Color';
+$langBorderColorLeftRight = "Border color - left and right side";
 $langBgColorConfig = 'Background Color Configuration';
 $langLinksCongiguration = 'Links Configuration';
 $langBgHeaderCongiguration = "Background color Header";
