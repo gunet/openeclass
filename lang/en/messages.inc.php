@@ -6384,3 +6384,6 @@ $langImportAttendancesHelp = 'You can upload an Excel file (e.g. xls, xlsx) with
     <strong>Do not</strong> change the file structure (e.g. number of columns) because the attendance import will fail.<br><br>
     Also note that to record a presence, enter <strong>1</strong>. Anything else is not considered a presence.';
 $langGradebookUsers = 'Gradebook users';
+$langCoursePrintSetting = "Course report display settings";
+$langCoursePrintHeaderImage = "Header image";
+$langCoursePrintFooterImage = "Footer image";

@@ -7067,3 +7067,6 @@ $langNowAllowNullDuration = "Η διάρκεια δεν μπορεί να είν
 $langDownloadPdfNotAllowed = "Μη επιτρεπτή λήψη αρχείου";
 $langDisplayRightContentInCPage = "Εμφάνιση ημερολογίου, ανακοινώσεων κ.λπ.";
 $langCoursePage = "Σελίδα $langsOfCourse";
+$langCoursePrintSetting = "Ρυθμίσεις εμφάνισης αναφορών μαθήματος";
+$langCoursePrintHeaderImage = "Εικόνα κεφαλίδας";
+$langCoursePrintFooterImage = "Εικόνα υποσέλιδου";

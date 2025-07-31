@@ -94,3 +94,9 @@ $langsOfCourseReviewer = "reviewer";
 $langCTeacher = "INSTRUCTOR";
 $langCStudent = "LEARNER";
 $langCStudent2 = "STUDENT";
+
+$langAlignment = "Alignment";
+$langWidth = "Width";
+$langAlignLeft = "Left";
+$langAlignCenter = "Center";
+$langAlignRight = "Right";
