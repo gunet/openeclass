@@ -86,18 +86,20 @@
 
             <div class='col-lg-6 col-12 mt-4'>
                 <div class='row row-cols-1 row-cols-lg-2 g-4'>
-                    <div class='col'>
-                        <div class='card panelCard h-100'>
-                            <div class='card-body d-flex justify-content-center align-items-center'>
-                                <div>
-                                    <h1 class='d-flex justify-content-center align-items-center'>
-                                        <i class='fa-solid fa-user pe-2'></i>{{ getOnlineUsers() }}
-                                    </h1>
-                                    <div class='form-label text-center'>{{ trans('langOnlineUsers') }}</div>
+                    @if ($onlineusers > 0)
+                        <div class='col'>
+                            <div class='card panelCard h-100'>
+                                <div class='card-body d-flex justify-content-center align-items-center'>
+                                    <div>
+                                        <h1 class='d-flex justify-content-center align-items-center'>
+                                            <i class='fa-solid fa-user pe-2'></i>{{ $onlineusers }}
+                                        </h1>
+                                        <div class='form-label text-center'>{{ trans('langOnlineUsers') }}</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    @endif
                     <div class='col'>
                         <div class='card panelCard h-100'>
                             <div class='card-body d-flex justify-content-center align-items-center'>

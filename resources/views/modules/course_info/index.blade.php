@@ -656,6 +656,7 @@
                                     @endphp
 
                                     <div class='form-group mt-4'>
+{{--                                        {{--Ρυθμισεις εμφανισης αναφορων μαθηματος--}}
                                         <div class='col-sm-12 control-label-notes mb-2'>
                                             Print Header Image
                                             <div class="d-flex gap-2 align-items-center mt-2">
@@ -671,10 +672,22 @@
                                                     <img src="{{ $print_header_image_url }}" alt="Print Header Image" style="max-width: 200px; max-height: 100px;" class="img-thumbnail">
                                                 </div>
                                             @endif
-{{--                                            <input type="hidden" name="choose_print_header_from_list" id="choose_print_header_from_list" value="">--}}
+                                            <div class="d-flex gap-2 align-items-center mt-2">
+                                                <label class="col-sm-2" for="header_image_alignment">Alignment</label>
+                                                <select name="header_image_alignment" id="header_image_alignment" class="form-select">
+                                                    <option value="0" {{ setting_get(SETTING_COUSE_IMAGE_PRINT_HEADER_ALIGNMENT, $course_id) == '0' ? 'selected' : '' }}>Left</option>
+                                                    <option value="1" {{ setting_get(SETTING_COUSE_IMAGE_PRINT_HEADER_ALIGNMENT, $course_id) == '1' ? 'selected' : '' }}>Center</option>
+                                                    <option value="2" {{ setting_get(SETTING_COUSE_IMAGE_PRINT_HEADER_ALIGNMENT, $course_id) == '2' ? 'selected' : '' }}>Right</option>
+                                                </select>
+                                            </div>
+                                            <div class="d-flex gap-2 align-items-center mt-2">
+                                                <label class="col-sm-2" for="header_image_width">Width (px)</label>
+                                                <input type="number" name="header_image_width" id="header_image_width" value="{{ setting_get(SETTING_COUSE_IMAGE_PRINT_HEADER_WIDTH, $course_id) }}" placeholder="Width (px)" style="max-width: 100px;" class="form-control">
+                                            </div>
                                             <input type="hidden" name="choose_print_header_from_list" id="choose_print_header_from_list" value="{{ $print_header_image_url ? setting_get(SETTING_COUSE_IMAGE_PRINT_HEADER, $course_id) : '' }}">
                                             <div id="selectedPrintHeaderImage" class="mt-2 text-muted"></div>
                                         </div>
+
                                         <div class='col-sm-12 control-label-notes mb-2'>
                                             Print Footer Image
                                             <div class="d-flex gap-2 align-items-center mt-2">
@@ -690,7 +703,18 @@
                                                     <img src="{{ $print_footer_image_url }}" alt="Print Footer Image" style="max-width: 200px; max-height: 100px;" class="img-thumbnail">
                                                 </div>
                                             @endif
-{{--                                            <input type="hidden" name="choose_print_footer_from_list" id="choose_print_footer_from_list" value="">--}}
+                                            <div class="d-flex gap-2 align-items-center mt-2">
+                                                <label class="col-sm-2" for="footer_image_alignment">Alignment</label>
+                                                <select name="footer_image_alignment" id="footer_image_alignment" class="form-select">
+                                                    <option value="0" {{ setting_get(SETTING_COUSE_IMAGE_PRINT_FOOTER_ALIGNMENT, $course_id) == '0' ? 'selected' : '' }}>Left</option>
+                                                    <option value="1" {{ setting_get(SETTING_COUSE_IMAGE_PRINT_FOOTER_ALIGNMENT, $course_id) == '1' ? 'selected' : '' }}>Center</option>
+                                                    <option value="2" {{ setting_get(SETTING_COUSE_IMAGE_PRINT_FOOTER_ALIGNMENT, $course_id) == '2' ? 'selected' : '' }}>Right</option>
+                                                </select>
+                                            </div>
+                                            <div class="d-flex gap-2 align-items-center mt-2">
+                                                <label class="col-sm-2" for="footer_image_width">Width (px)</label>
+                                                <input type="number" name="footer_image_width" id="footer_image_width" value="{{ setting_get(SETTING_COUSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id) }}" placeholder="Width (px)" style="max-width: 100px;" class="form-control">
+                                            </div>
                                             <input type="hidden" name="choose_print_footer_from_list" id="choose_print_footer_from_list" value="{{ $print_footer_image_url ? setting_get(SETTING_COUSE_IMAGE_PRINT_FOOTER, $course_id) : '' }}">
                                             <div id="selectedPrintFooterImage" class="mt-2 text-muted"></div>
                                         </div>

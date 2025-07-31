@@ -55,7 +55,11 @@ function setting_default($setting_id) {
         SETTING_FACULTY_USERS_REGISTRATION => 0,
         SETTING_COUSE_IMAGE_STYLE => 0,
         SETTING_COUSE_IMAGE_PRINT_HEADER => 0,
-        SETTING_COUSE_IMAGE_PRINT_FOOTER => 0
+        SETTING_COUSE_IMAGE_PRINT_FOOTER => 0,
+        SETTING_COUSE_IMAGE_PRINT_HEADER_ALIGNMENT => '0',
+        SETTING_COUSE_IMAGE_PRINT_FOOTER_ALIGNMENT => '0',
+        SETTING_COUSE_IMAGE_PRINT_HEADER_WIDTH => 100,
+        SETTING_COUSE_IMAGE_PRINT_FOOTER_WIDTH => 100
     );
     if (isset($defaults[$setting_id])) {
         return $defaults[$setting_id];
@@ -125,5 +129,40 @@ function setting_get_print_image_url($setting_id, $course_id=null) {
     }
 
     $course_code = course_id_to_code($course_id);
-    return $urlServer . "modules/document/index.php?course=" . $course_code . "&download=" . getInDirectReference($document->path);
+    //return $urlServer . "modules/document/index.php?course=" . $course_code . "&download=" . getInDirectReference($document->path);
+    return $urlServer . "modules/document/file.php/" . $course_code . "/" . $document->filename;
+}
+
+function setting_get_print_image_disk_path($setting_id, $course_id=null) {
+    global $webDir;
+    if (!$course_id) {
+        $course_id = $GLOBALS['course_id'];
+    }
+    $document_id = setting_get($setting_id, $course_id);
+    if (!$document_id) {
+        return null;
+    }
+    $document = Database::get()->querySingle("SELECT path, filename FROM document 
+                                             WHERE id = ?d AND course_id = ?d",
+        $document_id, $course_id);
+    if (!$document) {
+        return null;
+    }
+    return $webDir . "/courses/" . course_id_to_code($course_id) ."/document". $document->path;
+}
+
+function imageToBase64($imagePath) {
+    if (!file_exists($imagePath)) {
+        return 'not found';
+    }
+
+    // Παίρνουμε το mime type σωστά
+    $finfo = finfo_open(FILEINFO_MIME_TYPE);
+    $mimeType = finfo_file($finfo, $imagePath);
+    finfo_close($finfo);
+
+    $data = file_get_contents($imagePath);
+    $base64 = 'data:' . $mimeType . ';base64,' . base64_encode($data);
+
+    return $base64;
 }
