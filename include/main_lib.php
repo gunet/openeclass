@@ -12058,6 +12058,31 @@ function theme_initialization() {
             ";
         }
 
+        if (isset($theme_options_styles['EnableBorderSidesOfMain']) && !empty($theme_options_styles['borderColorContentPlatformLeftRight'])){
+            $styles_str .= "
+                #bgr-cheat-header,
+                #bgr-cheat-footer,
+                .row-jumbotron,
+                .homepage-annnouncements-container,
+                .homepage-popoular-courses-container,
+                .homepage-testimonials-container,
+                .homepage-statistics-container,
+                .homepage-popoular-courses-container,
+                .homepage-testimonials-container,
+                .homepage-opencourses-container,
+                .homepage-texts-container,
+                .homepage-login-container,
+                .portfolio-profile-container,
+                .portfolio-courses-container,
+                .main-container,
+                .module-container,
+                .about-content {
+                    border-left:  solid 1px $theme_options_styles[borderColorContentPlatformLeftRight];
+                    border-right: solid 1px $theme_options_styles[borderColorContentPlatformLeftRight];
+                }
+            ";
+        }
+
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////// COLOR FOCUS IN TEXT AREA  ///////////////////////////////
