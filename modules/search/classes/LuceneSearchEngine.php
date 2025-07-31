@@ -50,4 +50,8 @@ class LuceneSearchEngine implements SearchEngineInterface {
         $idx->getIndex()->optimize();
     }
 
+    public function deleteAll(): void {
+        Indexer::deleteAll();
+    }
+
 }

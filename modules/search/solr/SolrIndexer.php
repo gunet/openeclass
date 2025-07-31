@@ -114,4 +114,16 @@ class SolrIndexer {
         ];
     }
 
+    public function removeAll(): array {
+        if (!get_config('ext_solr_enabled')) {
+            return [];
+        }
+
+        return [
+            "delete" => [
+                "query" => "*:*"
+            ]
+        ];
+    }
+
 }

@@ -225,8 +225,9 @@ if (isset($_POST['submit'])) {
 
     // indexing was previously on, but now set to off, need to empty it
     if (get_config('enable_indexing') && !$enable_indexing) {
-        require_once 'modules/search/lucene/indexer.class.php';
-        Indexer::deleteAll();
+        require_once 'modules/search/classes/SearchEngineFactory.php';
+        $searchEngine = SearchEngineFactory::create();
+        $searchEngine->deleteAll();
     }
     // update table `config`
     foreach ($config_vars as $varname => $what) {

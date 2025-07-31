@@ -23,8 +23,9 @@ require_once '../../include/baseTheme.php';
 load_js('jquery' . JQUERY_VERSION . '.min.js');
 
 if (isset($_GET['reindex'])) {
-    require_once 'modules/search/lucene/indexer.class.php';
-    Indexer::deleteAll();
+    require_once 'modules/search/classes/SearchEngineFactory.php';
+    $searchEngine = SearchEngineFactory::create();
+    $searchEngine->deleteAll();
     Database::get()->query("DELETE FROM idx_queue");
     Database::get()->queryFunc("SELECT id FROM course", function($r) {
         Database::get()->query("INSERT INTO idx_queue (course_id) VALUES (?d)", $r->id);

@@ -70,6 +70,22 @@ class SolrSearchEngine implements SearchEngineInterface {
         // CurlUtil::httpPostJsonRequest($solrUrl, $this->generateSampleDocuments(2, $courseId));
     }
 
+    public function deleteAll(): void {
+        if (!get_config('ext_solr_enabled')) {
+            return;
+        }
+
+        // construct Solr Url for indexing
+        $query = [
+            'commit' => 'true'
+        ];
+        $solrUrl = $this->constructSolrUrl("update", $query);
+
+        // delete all contents
+        $idx = new SolrIndexer();
+        CurlUtil::httpPostJsonRequest($solrUrl, $idx->removeAll());
+    }
+
     private function constructSolrUrl(string $action, array $params): string {
         $solrUrl = get_config('ext_solr_url', SolrApp::SOLRDEFAULTURL);
         if ($solrUrl[strlen($solrUrl) - 1] != '/') {
