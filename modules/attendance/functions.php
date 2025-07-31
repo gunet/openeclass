@@ -764,6 +764,48 @@ function update_user_attendance_activities($attendance_id, $uid) {
 }
 
 /**
+ * @brief Get current and upcoming semesters
+ * @param int $count Optional. How many (upcoming) semesters to fetch information for. By default, information for the current semester only is returned.
+ */
+function get_semester_info(int $count = 1) {
+    $semester = Semester::fromMonth(date('n'));
+
+    $semester_cases = Semester::cases();
+    // Seek the internal pointer to the correct index so it can wrap around
+    while (current($semester_cases) !== $semester)
+        next($semester_cases);
+
+    $start = DateTime::createFromFormat('|', ''); // Zero-initialize it
+    $start->setDate(date('Y'), $semester->month_start(), 1);
+
+    // Create $count periods to calculate the end and start of each upcoming semester
+    $intv = new DateInterval('P6M');
+    $period = new DatePeriod($start, $intv, $count);
+
+    $dates = [];
+    foreach ($period as $dt)
+        $dates[] = $dt;
+
+    $ret = [];
+    for ($i = 0; $i < count($dates) - 1; $i++) {
+        $start = clone $dates[$i];
+        $end = (clone $dates[$i+1])->modify('-1 second'); // 23:59:59 as the next semester starts at 00:00:00
+
+        // Calculate the academic year, not the year the semester starts
+        $academic_start = ((clone $dates[$i])->add($semester->year_offset()))->format('Y');
+        $academic_end = $end->format('Y');
+
+        $ret[] = ['semester' => $semester, 'start' => $start, 'end' => $end, 'academic_year' => ['start' => $academic_start, 'end' => $academic_end]];
+
+        // Wrap around if needed
+        if (($semester = next($semester_cases)) === false)
+            $semester = reset($semester_cases);
+    }
+
+    return $ret;
+}
+
+/**
  * @brief Display attendance book form
  * @param type $attendance_id
  * @global string $tool_content
@@ -794,8 +836,10 @@ function attendance_book_form($attendance_id = null) {
     // Create new attendance book
     if ($attendance_id === null) {
         $title_default = '';
-        $start_date_default = '';
-        $end_date_default = '';
+        // Calculate current semester to populate datepicker with sensible values
+        $semester_dates = get_semester_info()[0];
+        $start_date_default = $semester_dates['start']->format('d-m-Y H:i');
+        $end_date_default = $semester_dates['end']->format('d-m-Y H:i');
         // Assume a default of 2 classes per week, for 3 months, with two missed attendances (2*4*3)-2
         $limit_default = '22';
 
