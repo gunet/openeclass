@@ -29,6 +29,7 @@ require_once 'DragAndDropTextAnswer.php';
 require_once 'DragAndDropMarkersAnswer.php';
 require_once 'CalculatedAnswer.php';
 require_once 'OrderingAnswer.php';
+require_once 'OralAnswer.php';
 
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
@@ -457,6 +458,10 @@ function answer_question($question_id, $question_number, $answer_type, $exercise
             $answer = new FreeTextAnswer($question_id);
             $html .= $answer->AnswerQuestion($question_number, $exerciseResult, $options);
             break;
+        case ORAL:
+            $answer = new OralAnswer($question_id);
+            $html .= $answer->AnswerQuestion($question_number, $exerciseResult, $options);
+            break;
         case DRAG_AND_DROP_TEXT:
             $answer = new DragAndDropTextAnswer($question_id);
             $html .= $answer->AnswerQuestion($question_number, $exerciseResult, $options);
@@ -521,6 +526,10 @@ function question_result($answer_type, $question_id, $choice, $eurid, $regrade):
             break;
         case FREE_TEXT:
             $answer = new FreeTextAnswer($question_id);
+            $html .= $answer->QuestionResult($choice, $eurid, $regrade);
+            break;
+        case ORAL:
+            $answer = new OralAnswer($question_id);
             $html .= $answer->QuestionResult($choice, $eurid, $regrade);
             break;
         case DRAG_AND_DROP_TEXT:

@@ -44,6 +44,7 @@ if (isset($_GET['htopic'])) {
         case '10': $helpSubTopic = 'drag_and_drop_markers'; break;
         case '11': $helpSubTopic = 'calculated'; break;
         case '12': $helpSubTopic = 'ordering'; break;
+        case '13': $helpSubTopic = 'oral'; break;
     }
 }
 

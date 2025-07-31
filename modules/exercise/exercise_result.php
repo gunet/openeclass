@@ -366,7 +366,7 @@ if (count($exercise_question_ids) > 0) {
               <td class='w-75'>
                 <strong class='fs-6'><u>$langQuestion</u>: $i</strong>";
 
-        if ($answerType == FREE_TEXT) {
+        if ($answerType == FREE_TEXT or $answerType == ORAL) {
             $choice = purify($choice);
             if (!empty($choice)) {
                 if (!$question_graded) {
@@ -431,7 +431,7 @@ if (count($exercise_question_ids) > 0) {
 
         if ($showScore) {
             if (!is_null($choice)) {
-                if ($answerType == FREE_TEXT && $is_editor) {
+                if (($answerType == FREE_TEXT or $answerType == ORAL) && $is_editor) {
                     if (isset($question_graded) && !$question_graded) {
                         $value = '';
                     } else {

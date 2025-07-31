@@ -257,16 +257,12 @@ if (isset($_POST['attempt_value']) && !isset($_GET['eurId'])) {
                 $old_answers = Database::get()->queryArray("SELECT answer_record_id,answer FROM exercise_answer_record WHERE eurid = ?d", $eurid);
                 if (count($old_answers) > 0) {
                     foreach ($old_answers as $old_an) {
-                        if (strpos($old_an->answer, ':::') !== false) { // oral question
-                            $temp_answer = explode(':::', $old_an->answer);
-                            if (count($temp_answer) == 2) {
-                                $text = $temp_answer[0];
-                                $old_recorded = $temp_answer[1];
-                                $temp_old_recorded = explode('-', $old_recorded);
-                                if (count($temp_old_recorded) == 4 && $temp_old_recorded[3] == $eurid . '.mp3') {
-                                    $new_answer = $text . ':::' . $temp_old_recorded[0] . '-' . $temp_old_recorded[1] . '-' . $temp_old_recorded[2] . '-' . $new_eurid . '.mp3';
-                                    Database::get()->query("UPDATE exercise_answer_record SET answer = ?s WHERE answer_record_id = ?d", $new_answer, $old_an->answer_record_id);
-                                }
+                        if (strpos($old_an->answer, '.mp3') !== false) { // oral question
+                            $old_recorded = $old_an->answer;
+                            $temp_old_recorded = explode('-', $old_recorded);
+                            if (count($temp_old_recorded) == 4 && $temp_old_recorded[3] == $eurid . '.mp3') {
+                                $new_answer = $temp_old_recorded[0] . '-' . $temp_old_recorded[1] . '-' . $temp_old_recorded[2] . '-' . $new_eurid . '.mp3';
+                                Database::get()->query("UPDATE exercise_answer_record SET answer = ?s WHERE answer_record_id = ?d", $new_answer, $old_an->answer_record_id);
                             }
                         }
                     }
@@ -791,7 +787,7 @@ foreach ($questionList as $k => $q_id) {
                 }
             }
         }
-    } elseif ($t_question->selectType() == FREE_TEXT
+    } elseif (($t_question->selectType() == FREE_TEXT or $t_question->selectType() == ORAL)
         and array_key_exists($q_id, $exerciseResult) and trim($exerciseResult[$q_id]) !== '') { // button color is `blue` if we have type anything
         $answered = true;
     } elseif (($t_question->selectType() == MATCHING or $t_question->selectType() == FILL_IN_FROM_PREDEFINED_ANSWERS) and array_key_exists($q_id, $exerciseResult)) {
@@ -1081,7 +1077,7 @@ function unset_session_variables_of_questions($eurid, $type = '') {
                 }
             }
             // About oral questions
-            if ($type == 'cancel_exercise' && $typeQuestion[$qid] == FREE_TEXT) {
+            if ($type == 'cancel_exercise' && $typeQuestion[$qid] == ORAL) {
                 $fFile = Database::get()->querySingle("SELECT id,`path` FROM document WHERE course_id = ?d
                                                         AND subsystem = ?d AND subsystem_id = ?d
                                                         AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $qid, $eurid);

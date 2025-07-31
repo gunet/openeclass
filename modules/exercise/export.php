@@ -221,7 +221,7 @@ function question_html($question, $qid) {
     $checkbox_empty = '<label class="label-container" aria-label="'.$langSelect.'"><input type="checkbox"><span class="checkmark"></span></label>';
 
     $answerType = $question->selectType();
-    if ($answerType == FREE_TEXT) {
+    if ($answerType == FREE_TEXT or $answerType == ORAL) {
         return '';
     }
 

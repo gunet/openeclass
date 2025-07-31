@@ -330,26 +330,19 @@ function question_answer_details($eurid, $qid) {
                     $content = rtrim(trim($temp_content), ','); // remove last `comma`
                 break;
                 case FREE_TEXT:
-                    if (strpos($data->answer, '::') !== false) {
-                        $hyperLink = '';
-                        $file = Database::get()->querySingle("SELECT `path` FROM document WHERE course_id = ?d
-                                                              AND subsystem = ?d AND subsystem_id = ?d
-                                                              AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $data->question_id, $eurid);
-                        if ($file && file_exists("$webDir/courses/$course_code/image" . $file->path)) {
-                            $pathUrl = $urlServer . "courses/$course_code/image" . $file->path;
-                            $fileName = "recording-file-$data->question_id-$eurid";
-                            $hyperLink = 'HYPERLINK("' . $pathUrl . '", "' . $fileName . '")';
-                        } 
-                        $explode = explode('::', $data->answer);
-                        if (count($explode) == 1) { // only oral
-                            $content .= $hyperLink;
-                        } elseif (count($explode) == 2) { // both oral and text
-                            $content .= html2text($explode[0]) . "::" . $hyperLink;
-                        }
-                    } else {
-                        $content .= html2text($data->answer);
-                    }
-
+                    $content .= html2text($data->answer);
+                break;
+                case ORAL:
+                    $hyperLink = '';
+                    $file = Database::get()->querySingle("SELECT `path` FROM document WHERE course_id = ?d
+                                                            AND subsystem = ?d AND subsystem_id = ?d
+                                                            AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $data->question_id, $eurid);
+                    if ($file && file_exists("$webDir/courses/$course_code/image" . $file->path)) {
+                        $pathUrl = $urlServer . "courses/$course_code/image" . $file->path;
+                        $fileName = "recording-file-$data->question_id-$eurid";
+                        $hyperLink = 'HYPERLINK("' . $pathUrl . '", "' . $fileName . '")';
+                        $content .= $hyperLink;
+                    } 
                 break;
             }
     }

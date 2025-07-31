@@ -914,10 +914,6 @@ if (!class_exists('Exercise')) {
                     if (isset($_POST['answer_id_choice'][$k]) && isset($_POST['choice'][$k]) && $_POST['choice'][$k] != '') {
                         $choice[$k] = $_POST['choice'][$k] . '|' . $_POST['answer_id_choice'][$k]; // such as 15|1
                     }
-                    if (isset($_POST['choice_recording'][$k])) {
-                        $extra_value = (!empty($_POST['choice_recording'][$k]) ? ':::' . $_POST['choice_recording'][$k] : '');
-                        $choice[$k] = $_POST['choice'][$k] . $extra_value;
-                    }
                 }
             }
 
@@ -976,7 +972,7 @@ if (!class_exists('Exercise')) {
                 // reads question information
                 $objQuestionTmp->read($row->question_id);
                 $question_type = $objQuestionTmp->selectType();
-                if ($question_type == FREE_TEXT) {
+                if ($question_type == FREE_TEXT or $question_type == ORAL) {
                     $exerciseResult[$row->question_id] = $row->answer;
                 } elseif ($question_type == MATCHING) {
                     $exerciseResult[$row->question_id][$row->answer] = $row->answer_id;
@@ -1088,7 +1084,7 @@ if (!class_exists('Exercise')) {
                             $value[$i] = '';
                         }
                         unset($objAnswer);
-                    } elseif ($question_type == FREE_TEXT) {
+                    } elseif ($question_type == FREE_TEXT or $question_type == ORAL) {
                         $value = '';
                     } else {
                         $value = 0;
@@ -1113,7 +1109,7 @@ if (!class_exists('Exercise')) {
             $eurid = $_SESSION['exerciseUserRecordID'][$id][$attempt_value];
             Database::get()->query("DELETE FROM exercise_answer_record
                             WHERE eurid = ?d AND question_id = ?d", $eurid, $key);
-            if ($question_type == FREE_TEXT) {
+            if ($question_type == FREE_TEXT or $question_type == ORAL) {
                 Database::get()->query("INSERT INTO exercise_answer_record
                    (eurid, question_id, answer, answer_id, weight, is_answered, q_position)
                    VALUES (?d, ?d, ?s, 0, NULL, ?d, ?d)",
@@ -1360,7 +1356,7 @@ if (!class_exists('Exercise')) {
             $id = $this->id;
             $attempt_value = $_POST['attempt_value'];
             $eurid = $_SESSION['exerciseUserRecordID'][$id][$attempt_value];
-            if ($question_type == FREE_TEXT) {
+            if ($question_type == FREE_TEXT or $question_type == ORAL) {
                 if (!empty($value)) {
                     Database::get()->query("UPDATE exercise_answer_record SET answer = ?s, answer_id = 1, weight = NULL,
                                           is_answered = 1 WHERE eurid = ?d AND question_id = ?d", $value, $eurid, $key);

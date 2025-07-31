@@ -2607,6 +2607,9 @@ function standard_text_escape($text, $mathimg = null) {
     if (is_null($mathimg)) {
         $mathimg = $urlAppend . 'courses/mathimg/';
     }
+    if (is_null($text)) {
+        $text = '';
+    }
     $text = preg_replace_callback('/\[m\].*?\[\/m\]/s', 'math_unescape', $text);
     $html = $purifier->purify(mathfilter($text, 12, $mathimg));
 

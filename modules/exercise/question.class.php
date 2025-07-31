@@ -228,7 +228,8 @@ if (!class_exists('Question')) {
             global $langUniqueSelect, $langMultipleSelect, $langFillBlanks,
                    $langMatching, $langTrueFalse, $langFreeText, $langOrdering,
                    $langFillBlanksStrict, $langFillBlanksTolerant, $langCalculated,
-                   $langFillFromSelectedWords, $langDragAndDropText, $langDragAndDropMarkers;
+                   $langFillFromSelectedWords, $langDragAndDropText, $langDragAndDropMarkers,
+                   $langOral;
 
             switch ($answerTypeId) {
                 case UNIQUE_ANSWER:
@@ -243,6 +244,8 @@ if (!class_exists('Question')) {
                     return $langTrueFalse;
                 case FREE_TEXT:
                     return $langFreeText;
+                case ORAL:
+                    return $langOral;
                 case FILL_IN_BLANKS_TOLERANT:
                     return "$langFillBlanks ($langFillBlanksTolerant)";
                 case FILL_IN_FROM_PREDEFINED_ANSWERS:
@@ -535,7 +538,7 @@ if (!class_exists('Question')) {
                         $choice = $row->answer_id;
                     } elseif ($type == MULTIPLE_ANSWER) {
                         $choice[$row->answer_id] = 1;
-                    } elseif ($type == FREE_TEXT) {
+                    } elseif ($type == FREE_TEXT or $type == ORAL) {
                         $choice = $row->answer;
                     } elseif ($type == FILL_IN_BLANKS || $type == FILL_IN_BLANKS_TOLERANT || $type == FILL_IN_FROM_PREDEFINED_ANSWERS
                                 || $type == DRAG_AND_DROP_TEXT || $type == DRAG_AND_DROP_MARKERS || $type == ORDERING) {
@@ -676,7 +679,7 @@ if (!class_exists('Question')) {
                 $q_correct_answers_cnt = 0;
             }
             //FIND CORRECT ANSWER ATTEMPTS
-            if ($type == FREE_TEXT) {
+            if ($type == FREE_TEXT or $type == ORAL) {
                 // This query gets answers which where graded with question maximum grade
                 $correct_answer_attempts = Database::get()->querySingle("SELECT COUNT(DISTINCT a.eurid) AS count
                         FROM exercise_answer_record a, exercise_user_record b, exercise_question c

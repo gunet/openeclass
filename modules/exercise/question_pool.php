@@ -334,6 +334,7 @@ $tool_content .= "<div class='form-wrapper mb-4'><form class='form-inline' role=
                             <option value='" . FILL_IN_FROM_PREDEFINED_ANSWERS ."' ".(isset($answerType) && $answerType == FILL_IN_FROM_PREDEFINED_ANSWERS ? "selected='selected'": "").">$langFillFromSelectedWords</option>
                             <option value='" . MATCHING ."' ".(isset($answerType) && $answerType == MATCHING ? "selected='selected'": "").">$langMatching</option>                        
                             <option value='" . FREE_TEXT ."' ".(isset($answerType) && $answerType == FREE_TEXT ? "selected='selected'": "").">$langFreeText</option>
+                            <option value='" . ORAL ."' ".(isset($answerType) && $answerType == ORAL ? "selected='selected'": "").">$langOral</option>
                         </select>
                     </div>                
                 </form>
@@ -452,7 +453,7 @@ if (isset($_GET['exportIMSQTI'])) { // export to IMS QTI xml format
                 $question_excl_legend = '';
             }
             // check if question has answers
-            if ($question_type != FREE_TEXT and $question_type != MATCHING and (!$question_temp->hasAnswers())) {
+            if ($question_type != FREE_TEXT and $question_type != ORAL and $question_type != MATCHING and (!$question_temp->hasAnswers())) {
                 $question_excl_legend_2 = "&nbsp;&nbsp;<span class='fas fa-exclamation-triangle space-after-icon' 
                         data-bs-toggle='tooltip' data-bs-placement='right' data-bs-html='true' data-bs-title='$langNoQuestionAnswers'></span>";
             } else {

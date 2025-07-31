@@ -156,7 +156,7 @@ if (isset($_POST['submitQuestion'])) {
         // if the answer type is free text (which means it doesn't have predefined answers)
         // redirect to either pool or edit exercise page
         // else redirect to modify answers page in order to add answers to question
-        if ($answerType == FREE_TEXT) {
+        if ($answerType == FREE_TEXT or $answerType == ORAL) {
             $redirect_url = (isset($exerciseId)) ? "modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId&htopic=6" : "modules/exercise/question_pool.php?course=$course_code";
         } else {
             if (isset($_GET['modifyQuestion'])) { // existing question
@@ -324,17 +324,18 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
                                 DRAG_AND_DROP_TEXT => "$langDragAndDropText",
                                 DRAG_AND_DROP_MARKERS => "$langDragAndDropMarkers",
                                 CALCULATED => $langCalculated,
-                                FREE_TEXT => "$langFreeText - $langOral",
+                                FREE_TEXT => "$langFreeText",
+                                ORAL => "$langOral",
                             ],
                         'answerType', (isset($answerType))? $answerType : UNIQUE_ANSWER) . " 
                 </div>
             </div>
             ";
 
-            $tool_content .= "<div class='row form-group ".(($answerType != FREE_TEXT) ? "hide": "")." mt-4'>
+            $tool_content .= "<div class='row form-group ".(($answerType != FREE_TEXT and $answerType != ORAL) ? "hide": "")." mt-4'>
                 <label for='questionGrade' class='col-12 control-label-notes mb-1'>$langGradebookGrade</label>
                 <div class='col-12'>
-                  <input name='questionGrade' type='text' class='form-control' id='questionGrade' placeholder='$langGradebookGrade' value='$questionWeight'".(($answerType != 6) ? " disabled": "").">
+                  <input name='questionGrade' type='text' class='form-control' id='questionGrade' placeholder='$langGradebookGrade' value='$questionWeight'".(($answerType != 6 and $answerType != 13) ? " disabled": "").">
                 </div>
             </div>
             <div class='row'>
