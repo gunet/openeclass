@@ -4813,45 +4813,45 @@ function trans($var_name, $var_array = []) {
     }
 }
 
-function get_platform_logo($size='normal',$position='header') {
+function get_platform_logo($size = 'normal', $position = 'header') {
     global $themeimg, $urlAppend, $course_id;
 
     require_once 'include/course_settings.php';
-    $print_header_image_url = imageToBase64(setting_get_print_image_disk_path(SETTING_COUSE_IMAGE_PRINT_HEADER, $course_id));
-    $print_footer_image_url = imageToBase64(setting_get_print_image_disk_path(SETTING_COUSE_IMAGE_PRINT_FOOTER, $course_id));
 
-    if ($print_header_image_url || $print_footer_image_url) {
-        $logo_img = ($position == 'footer') ? $print_footer_image_url : $print_header_image_url;
-        $image_align = ($position == 'footer') ? setting_get(SETTING_COUSE_IMAGE_PRINT_FOOTER_ALIGNMENT, $course_id) : setting_get(SETTING_COUSE_IMAGE_PRINT_HEADER_ALIGNMENT, $course_id);
+    if ($position == 'footer') {
+        $footer_path = setting_get_print_image_disk_path(SETTING_COUSE_IMAGE_PRINT_FOOTER, $course_id);
+        if (!$footer_path) {
+            return '';
+        }
+        $logo_img = imageToBase64($footer_path);
+        $image_align = setting_get(SETTING_COUSE_IMAGE_PRINT_FOOTER_ALIGNMENT, $course_id);
         $image_align = ($image_align == 0) ? 'left' : (($image_align == 1) ? 'center' : 'right');
-        $image_width = ($position == 'footer') ? setting_get(SETTING_COUSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id) : setting_get(SETTING_COUSE_IMAGE_PRINT_HEADER_WIDTH, $course_id);
+        $image_width = setting_get(SETTING_COUSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id);
         $bg_color = '#ffffff';
     } else {
-        if ($size == 'small') {
-            $logo_img = $themeimg . '/eclass-new-logo.svg';
+        $header_path = setting_get_print_image_disk_path(SETTING_COUSE_IMAGE_PRINT_HEADER, $course_id);
+        if ($header_path) {
+            $logo_img = imageToBase64($header_path);
+            $image_align = setting_get(SETTING_COUSE_IMAGE_PRINT_HEADER_ALIGNMENT, $course_id);
+            $image_align = ($image_align == 0) ? 'left' : (($image_align == 1) ? 'center' : 'right');
+            $image_width = setting_get(SETTING_COUSE_IMAGE_PRINT_HEADER_WIDTH, $course_id);
+            $bg_color = '#ffffff';
         } else {
             $logo_img = $themeimg . '/eclass-new-logo.svg';
-        }
-
-        $theme_id = get_config('theme_options_id');
-        $bg_color = '#ffffff';
-        $image_width = 200;
-        $image_align = 'left';
-        if ($theme_id) {
-            $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
-            $theme_options_styles = unserialize($theme_options->styles);
-            $bg_color = $theme_options_styles['leftNavBgColor'];
-
-            $urlThemeData = $urlAppend . 'courses/theme_data/' . $theme_id;
-            if ($size == 'small') {
-                if (isset($theme_options_styles['imageUploadSmall'])) {
-                    $logo_img = "$urlThemeData/$theme_options_styles[imageUploadSmall]";
+            $image_width = 200;
+            $image_align = 'left';
+            $bg_color = '#ffffff';
+            $theme_id = get_config('theme_options_id');
+            if ($theme_id) {
+                $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
+                $theme_options_styles = unserialize($theme_options->styles);
+                $bg_color = $theme_options_styles['leftNavBgColor'];
+                $urlThemeData = $urlAppend . 'courses/theme_data/' . $theme_id;
+                if ($size == 'small' && isset($theme_options_styles['imageUploadSmall'])) {
+                    $logo_img = "$urlThemeData/{$theme_options_styles['imageUploadSmall']}";
+                } elseif (isset($theme_options_styles['imageUpload'])) {
+                    $logo_img = "$urlThemeData/{$theme_options_styles['imageUpload']}";
                 }
-            } else {
-                if (isset($theme_options_styles['imageUpload'])) {
-                    $logo_img = "$urlThemeData/$theme_options_styles[imageUpload]";
-                }
-
             }
         }
     }
@@ -4862,7 +4862,6 @@ function get_platform_logo($size='normal',$position='header') {
 
     return $logo;
 }
-
 
 /**
  * @brief Set the content disposition header for file display / download, with

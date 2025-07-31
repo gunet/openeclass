@@ -574,9 +574,7 @@ function pdf_output() {
         <h2> " . q($langUserDuration) . "</h2>";
 
     $pdf_content .= $tool_content;
-
     $pdf_content .= get_platform_logo('','footer');
-
     $pdf_content .= "</body></html>";
 
     $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
