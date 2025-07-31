@@ -311,6 +311,7 @@ if (isset($_GET['pdf']) and $is_course_reviewer) {
          <p></p>";
 
     $pdf_content .= $tool_content;
+    $pdf_content .= get_platform_logo('','footer');
     $pdf_content .= "</body></html>";
 
     $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
