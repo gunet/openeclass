@@ -4818,6 +4818,7 @@ function get_platform_logo($size='normal',$position='header') {
         $logo_img = ($position == 'footer') ? $print_footer_image_url : $print_header_image_url;
         $image_align = ($position == 'footer') ? setting_get(SETTING_COUSE_IMAGE_PRINT_FOOTER_ALIGNMENT, $course_id) : setting_get(SETTING_COUSE_IMAGE_PRINT_HEADER_ALIGNMENT, $course_id);
         $image_align = ($image_align == 0) ? 'left' : (($image_align == 1) ? 'center' : 'right');
+        $image_width = ($position == 'footer') ? setting_get(SETTING_COUSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id) : setting_get(SETTING_COUSE_IMAGE_PRINT_HEADER_WIDTH, $course_id);
         $bg_color = '#ffffff';
     } else {
         if ($size == 'small') {
@@ -4828,6 +4829,8 @@ function get_platform_logo($size='normal',$position='header') {
 
         $theme_id = get_config('theme_options_id');
         $bg_color = '#ffffff';
+        $image_width = 200;
+        $image_align = 'left';
         if ($theme_id) {
             $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
             $theme_options_styles = unserialize($theme_options->styles);
@@ -4848,7 +4851,7 @@ function get_platform_logo($size='normal',$position='header') {
     }
 
     $logo = "<div style='clear: right; background-color: $bg_color; padding: 1rem; margin-bottom: 2rem; text-align: $image_align;'>
-                <img style='float: left; height:6rem;' src='$logo_img'>
+                <img style='width: {$image_width}px;' src='$logo_img'>
             </div>";
 
     return $logo;
