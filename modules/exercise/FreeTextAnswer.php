@@ -26,16 +26,9 @@ class FreeTextAnswer extends QuestionType
         } 
 
         $html_content .= "
-        <ul class='nav nav-tabs' id='myTab_{$questionId}' role='tablist'>
-            <li class='nav-item' role='presentation'>
-                <button class='nav-link active' id='freetext-tab_{$questionId}' data-bs-toggle='tab' data-bs-target='#freetext_{$questionId}' type='button' role='tab' aria-controls='freetext_{$questionId}' aria-selected='true'>$langFreeText</button>
-            </li>
-        </ul>
-        <div class='tab-content fade mt-4' id='myTabContent_{$questionId}'>
-            <div class='tab-pane fade show active' id='freetext_{$questionId}' role='tabpanel' aria-labelledby='freetext-tab_{$questionId}'>
+            <div class='col-12' id='freetext_{$questionId}'>
                 " . rich_text_editor("choice[$questionId]", 14, 90, $text, options: $options) . "
-            </div>
-        </div>";
+            </div>";
 
         return $html_content;
     }
