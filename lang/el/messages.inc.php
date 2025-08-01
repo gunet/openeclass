@@ -416,7 +416,6 @@ $langPublicDocumentManagementExplanation = 'Επιτρέπεται αποστο�
 $langPassCode = "Συνθηματικό πρόσβασης";
 $langCourseEndDate = "Ημερομηνία λήξης $langsOfCourse";
 $langExplainCourseEndDate = "Μετά την ημερομηνία λήξης το $langsOfCourse θα γίνει ανενεργό";
-
 // listreq.php
 
 $langOpenProfessorRequests = "Ανοικτές Αιτήσεις Χρηστών";
@@ -7070,3 +7069,4 @@ $langCoursePage = "Σελίδα $langsOfCourse";
 $langCoursePrintSetting = "Ρυθμίσεις εμφάνισης αναφορών μαθήματος";
 $langCoursePrintHeaderImage = "Εικόνα κεφαλίδας";
 $langCoursePrintFooterImage = "Εικόνα υποσέλιδου";
+$langReportImageNotFound = "Οι εικόνες πρέπει να βρίσκονται στον κατάλογο με τίτλο Report_Images στα 'Εγγραφα'";
