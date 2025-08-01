@@ -45,6 +45,7 @@ require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 require_once 'include/lib/mediaresource.factory.php';
+require_once 'modules/search/classes/ConstantsUtil.php';
 require_once 'modules/search/lucene/indexer.class.php';
 require_once 'include/log.class.php';
 require_once 'modules/drives/clouddrive.php';
@@ -135,7 +136,7 @@ if ($is_editor) {
                             Database::get()->queryFunc("SELECT id FROM document WHERE course_id >= 1 AND subsystem = 0
                                                 AND format <> '.meta' AND path LIKE ?s",
                                 function ($r2) {
-                                    Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_DOCUMENT, $r2->id);
+                                    Indexer::queueAsync(ConstantsUtil::REQUEST_REMOVE, ConstantsUtil::RESOURCE_DOCUMENT, $r2->id);
                                     if (resource_belongs_to_progress_data(MODULE_ID_DOCS, $r2->id)) {
                                         Session::Messages(trans('langResourceBelongsToCert'), 'alert-warning');
                                     }
@@ -169,13 +170,13 @@ if ($is_editor) {
             if ($_POST['bulk_action'] == 'visible') {
                 foreach ($cbids as $row_id) {
                     Database::get()->query("UPDATE document SET visible = ?d WHERE id = ?d", 1, $row_id);
-                    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $row_id);
+                    Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_DOCUMENT, $row_id);
                 }
             }
             if ($_POST['bulk_action'] == 'invisible') {
                 foreach ($cbids as $row_id) {
                     Database::get()->query("UPDATE document SET visible = ?d WHERE id = ?d", 0, $row_id);
-                    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $row_id);
+                    Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_DOCUMENT, $row_id);
                 }
             }
 
@@ -739,7 +740,7 @@ if ($can_upload or $user_upload) {
                             , $_POST['file_comment'] ?? '', $_POST['file_title'] ?? ''
                             , $file_date, $file_date
                             , $file_format, $language, $_POST['file_copyrighted'], $uid)->lastInsertID;
-            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $id);
+            Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_DOCUMENT, $id);
             // Logging
             Log::record($course_id, MODULE_ID_DOCS, LOG_INSERT, [
                 'id' => $id,
@@ -844,7 +845,7 @@ if ($can_upload or $user_upload) {
                         purify($_POST['file_content']) .
                         "\n</body>\n</html>\n");
                     $session->setDocumentTimestamp($course_id);
-                    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $id);
+                    Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_DOCUMENT, $id);
                     Session::Messages($langDownloadEnd, 'alert-success');
                     if (isset($_GET['from']) and $_GET['from'] == 'ebookEdit') {
                         $redirect_url = "modules/ebook/edit.php?course=$course_code&id=$ebook_id";
@@ -945,7 +946,7 @@ if ($can_upload or $user_upload) {
                 Database::get()->queryFunc("SELECT id FROM document WHERE course_id >= 1 AND subsystem = 0
                                                 AND format <> '.meta' AND path LIKE ?s",
                     function ($r2) use($langResourceBelongsToCert) {
-                        Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_DOCUMENT, $r2->id);
+                        Indexer::queueAsync(ConstantsUtil::REQUEST_REMOVE, ConstantsUtil::RESOURCE_DOCUMENT, $r2->id);
                         if (resource_belongs_to_progress_data(MODULE_ID_DOCS, $r2->id)) {
                             Session::flash('message',$langResourceBelongsToCert);
                             Session::flash('alert-class', 'alert-warning');
@@ -996,7 +997,7 @@ if ($can_upload or $user_upload) {
 
         Database::get()->query("UPDATE document SET filename = ?s, date_modified = NOW()
                           WHERE $group_sql AND path=?s", $renameTo, $sourceFile);
-        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $r->id);
+        Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_DOCUMENT, $r->id);
         Log::record($course_id, MODULE_ID_DOCS, LOG_MODIFY, array(
             'path' => $sourceFile,
             'filename' => $r->filename,
@@ -1044,7 +1045,7 @@ if ($can_upload or $user_upload) {
             } else {
                 $session->setDocumentTimestamp($course_id);
                 $r = Database::get()->querySingle("SELECT id FROM document WHERE $group_sql AND path = ?s", $newDirPath);
-                Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $r->id);
+                Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_DOCUMENT, $r->id);
                 Session::Messages($langDirCr, 'alert-success');
             }
             $curDirPath = $_POST['newDirPath'];
@@ -1082,7 +1083,7 @@ if ($can_upload or $user_upload) {
                                               path = ?s"
                     , $_POST['file_comment'], $_POST['file_title']
                     , $_POST['file_copyrighted'], $commentPath);
-            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $res->id);
+            Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_DOCUMENT, $res->id);
             Log::record($course_id, MODULE_ID_DOCS, LOG_MODIFY, array('path' => $commentPath,
                 'filename' => $res->filename,
                 'comment' => $_POST['file_comment'],
@@ -1183,7 +1184,7 @@ if ($can_upload or $user_upload) {
                                 , ($newpath . ".xml"), ($_FILES['newFile']['name'] . ".xml"), ($oldpath . ".xml"));
                     }
                     $session->setDocumentTimestamp($course_id);
-                    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $docId);
+                    Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_DOCUMENT, $docId);
                     Log::record($course_id, MODULE_ID_DOCS, LOG_MODIFY, array('oldpath' => $oldpath,
                         'newpath' => $newpath,
                         'filename' => $_FILES['newFile']['name']));
@@ -1283,7 +1284,7 @@ if ($can_upload or $user_upload) {
                 Database::get()->query("UPDATE document SET visible = ?d
                                                   WHERE $group_sql AND
                                                         path = ?s", $newVisibilityStatus, $visibilityPath);
-                Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $r->id);
+                Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_DOCUMENT, $r->id);
                 Session::Messages($langViMod, 'alert-success');
             }
             $curDirPath = my_dirname($visibilityPath);
@@ -1298,7 +1299,7 @@ if ($can_upload or $user_upload) {
                                               WHERE $group_sql AND
                                                     path = ?s", $new_public_status, $path);
             $r = Database::get()->querySingle("SELECT id FROM document WHERE $group_sql AND path = ?s", $path);
-            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $r->id);
+            Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_DOCUMENT, $r->id);
             Session::Messages($langViMod, 'alert-success');
             $curDirPath = my_dirname($path);
             redirect_to_current_dir();

@@ -38,6 +38,7 @@ require_once 'modules/wiki/lib/class.wiki.php';
 require_once 'modules/wiki/lib/class.wikipage.php';
 require_once 'modules/wiki/lib/class.wikistore.php';
 /* ***Required classes for forum deletion*** */
+require_once 'modules/search/classes/ConstantsUtil.php';
 require_once 'modules/search/lucene/indexer.class.php';
 /* * ** The following is added for statistics purposes ** */
 require_once 'include/action.php';
@@ -300,13 +301,13 @@ if ($is_editor) {
                 foreach ($result2 as $result_row2) {
                     $topic_id = $result_row2->id;
                     Database::get()->query("DELETE FROM forum_post WHERE topic_id = ?d", $topic_id);
-                    Indexer::queueAsync(Indexer::REQUEST_REMOVEBYTOPIC, Indexer::RESOURCE_FORUMPOST, $topic_id);
+                    Indexer::queueAsync(ConstantsUtil::REQUEST_REMOVEBYTOPIC, ConstantsUtil::RESOURCE_FORUMPOST, $topic_id);
                 }
                 Database::get()->query("DELETE FROM forum_topic WHERE forum_id = ?d", $forum_id);
-                Indexer::queueAsync(Indexer::REQUEST_REMOVEBYFORUM, Indexer::RESOURCE_FORUMTOPIC, $forum_id);
+                Indexer::queueAsync(ConstantsUtil::REQUEST_REMOVEBYFORUM, ConstantsUtil::RESOURCE_FORUMTOPIC, $forum_id);
                 Database::get()->query("DELETE FROM forum_notify WHERE forum_id = ?d AND course_id = ?d", $forum_id, $course_id);
                 Database::get()->query("DELETE FROM forum WHERE id = ?d AND course_id = ?d", $forum_id, $course_id);
-                Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_FORUM, $forum_id);
+                Indexer::queueAsync(ConstantsUtil::REQUEST_REMOVE, ConstantsUtil::RESOURCE_FORUM, $forum_id);
             }
         }
         /*         * ******************************************** */
@@ -348,13 +349,13 @@ if ($is_editor) {
             foreach ($result2 as $result_row2) {
                 $topic_id = $result_row2->id;
                 Database::get()->query("DELETE FROM forum_post WHERE topic_id = ?d", $topic_id);
-                Indexer::queueAsync(Indexer::REQUEST_REMOVEBYTOPIC, Indexer::RESOURCE_FORUMPOST, $topic_id);
+                Indexer::queueAsync(ConstantsUtil::REQUEST_REMOVEBYTOPIC, ConstantsUtil::RESOURCE_FORUMPOST, $topic_id);
             }
             Database::get()->query("DELETE FROM forum_topic WHERE forum_id = ?d", $forum_id);
-            Indexer::queueAsync(Indexer::REQUEST_REMOVEBYFORUM, Indexer::RESOURCE_FORUMTOPIC, $forum_id);
+            Indexer::queueAsync(ConstantsUtil::REQUEST_REMOVEBYFORUM, ConstantsUtil::RESOURCE_FORUMTOPIC, $forum_id);
             Database::get()->query("DELETE FROM forum_notify WHERE forum_id = ?d AND course_id = ?d", $forum_id, $course_id);
             Database::get()->query("DELETE FROM forum WHERE id = ?d AND course_id = ?d", $forum_id, $course_id);
-            Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_FORUM, $forum_id);
+            Indexer::queueAsync(ConstantsUtil::REQUEST_REMOVE, ConstantsUtil::RESOURCE_FORUM, $forum_id);
         }
         /*         * *********************************** */
 

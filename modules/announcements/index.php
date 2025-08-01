@@ -28,6 +28,7 @@ require_once 'include/sendMail.inc.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 require_once 'include/log.class.php';
+require_once 'modules/search/classes/ConstantsUtil.php';
 require_once 'modules/search/lucene/indexer.class.php';
 require_once 'modules/tags/moduleElement.class.php';
 require_once 'include/action.php';
@@ -50,7 +51,7 @@ if ($is_editor) {
                     $announce = Database::get()->querySingle("SELECT title, content FROM announcement WHERE id = ?d ", $row_id);
                     $txt_content = ellipsize_html(canonicalize_whitespace(strip_tags($announce->content)), 50, '+');
                     Database::get()->query("DELETE FROM announcement WHERE id= ?d", $row_id);
-                    Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_ANNOUNCEMENT, $row_id);
+                    Indexer::queueAsync(ConstantsUtil::REQUEST_REMOVE, ConstantsUtil::RESOURCE_ANNOUNCEMENT, $row_id);
                     Log::record($course_id, MODULE_ID_ANNOUNCE, LOG_DELETE, array('id' => $row_id,
                         'title' => $announce->title,
                         'content' => $txt_content));
@@ -59,13 +60,13 @@ if ($is_editor) {
             if ($_POST['bulk_action'] == 'visible') {
                 foreach ($cbids as $row_id) {
                     Database::get()->query("UPDATE announcement SET visible = ?d WHERE id = ?d", 1, $row_id);
-                    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_ANNOUNCEMENT, $row_id);
+                    Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_ANNOUNCEMENT, $row_id);
                 }
             }
             if ($_POST['bulk_action'] == 'invisible') {
                 foreach ($cbids as $row_id) {
                     Database::get()->query("UPDATE announcement SET visible = ?d WHERE id = ?d", 0, $row_id);
-                    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_ANNOUNCEMENT, $row_id);
+                    Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_ANNOUNCEMENT, $row_id);
                 }
             }
         }
@@ -89,7 +90,7 @@ if ($is_editor) {
             $announce = Database::get()->querySingle("SELECT title, content FROM announcement WHERE id = ?d ", $row_id);
             $txt_content = ellipsize_html(canonicalize_whitespace(strip_tags($announce->content)), 50, '+');
             Database::get()->query("DELETE FROM announcement WHERE id= ?d", $row_id);
-            Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_ANNOUNCEMENT, $row_id);
+            Indexer::queueAsync(ConstantsUtil::REQUEST_REMOVE, ConstantsUtil::RESOURCE_ANNOUNCEMENT, $row_id);
             Log::record($course_id, MODULE_ID_ANNOUNCE, LOG_DELETE, array('id' => $row_id,
                 'title' => $announce->title,
                 'content' => $txt_content));
@@ -99,7 +100,7 @@ if ($is_editor) {
             $row_id = intval($_POST['value']);
             $visible = intval($_POST['visible']) ? 1 : 0;
             Database::get()->query("UPDATE announcement SET visible = ?d WHERE id = ?d", $visible, $row_id);
-            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_ANNOUNCEMENT, $row_id);
+            Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_ANNOUNCEMENT, $row_id);
             exit();
         }
     }

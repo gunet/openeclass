@@ -1367,9 +1367,10 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
         removeDir($restoreThis);
 
         // index course after restoring
+        require_once 'modules/search/classes/ConstantsUtil.php';
         require_once 'modules/search/lucene/indexer.class.php';
-        Indexer::queueAsync(Indexer::REQUEST_REMOVEALLBYCOURSE, Indexer::RESOURCE_IDX, $new_course_id);
-        Indexer::queueAsync(Indexer::REQUEST_STOREALLBYCOURSE, Indexer::RESOURCE_IDX, $new_course_id);
+        Indexer::queueAsync(ConstantsUtil::REQUEST_REMOVEALLBYCOURSE, ConstantsUtil::RESOURCE_IDX, $new_course_id);
+        Indexer::queueAsync(ConstantsUtil::REQUEST_STOREALLBYCOURSE, ConstantsUtil::RESOURCE_IDX, $new_course_id);
     });
 
     // check/cleanup video files after restore transaction

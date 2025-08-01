@@ -23,5 +23,6 @@ interface SearchEngineInterface {
     public function search(array $params): array;
     public function index(int $courseId): void;
     public function deleteAll(): void;
+    public function indexResource(string $requestType, string $resourceType, int $resourceId): void;
 
 }

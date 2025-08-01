@@ -34,6 +34,7 @@ include '../../include/baseTheme.php';
 require_once 'modules/group/group_functions.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
+require_once 'modules/search/classes/ConstantsUtil.php';
 require_once 'modules/search/lucene/indexer.class.php';
 
 ModalBoxHelper::loadModalBox();
@@ -158,7 +159,7 @@ if ($is_editor) {
                 case 'delete': // deletes an exercise
                     if (!resource_belongs_to_progress_data(MODULE_ID_EXERCISE, $exerciseId)) {
                         $objExerciseTmp->delete();
-                        Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_EXERCISE, $exerciseId);
+                        Indexer::queueAsync(ConstantsUtil::REQUEST_REMOVE, ConstantsUtil::RESOURCE_EXERCISE, $exerciseId);
                         Session::flash('message', $langPurgeExerciseSuccess);
                         Session::flash('alert-class', 'alert-success');
                         redirect_to_home_page('modules/exercise/index.php?course=' . $course_code);
@@ -182,14 +183,14 @@ if ($is_editor) {
                 case 'enable':  // enables an exercise
                     $objExerciseTmp->enable();
                     $objExerciseTmp->save();
-                    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_EXERCISE, $exerciseId);
+                    Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_EXERCISE, $exerciseId);
                     redirect_to_home_page('modules/exercise/index.php?course=' . $course_code);
                     break;
                 case 'disable': // disables an exercise
                     if (!resource_belongs_to_progress_data(MODULE_ID_EXERCISE, $exerciseId)) {
                         $objExerciseTmp->disable();
                         $objExerciseTmp->save();
-                        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_EXERCISE, $exerciseId);
+                        Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_EXERCISE, $exerciseId);
                         redirect_to_home_page('modules/exercise/index.php?course=' . $course_code);
                     } else {
                         Session::flash('message', $langResourceBelongsToCert);
@@ -199,13 +200,13 @@ if ($is_editor) {
                 case 'public':  // make exercise public
                     $objExerciseTmp->makepublic();
                     $objExerciseTmp->save();
-                    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_EXERCISE, $exerciseId);
+                    Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_EXERCISE, $exerciseId);
                     redirect_to_home_page('modules/exercise/index.php?course=' . $course_code);
                     break;
                 case 'limited':  // make exercise limited
                     $objExerciseTmp->makelimited();
                     $objExerciseTmp->save();
-                    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_EXERCISE, $exerciseId);
+                    Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_EXERCISE, $exerciseId);
                     redirect_to_home_page('modules/exercise/index.php?course=' . $course_code);
                     break;
                 case 'clone':  // make exercise limited

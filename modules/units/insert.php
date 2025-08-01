@@ -29,6 +29,7 @@ require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
+require_once 'modules/search/classes/ConstantsUtil.php';
 require_once 'modules/search/lucene/indexer.class.php';
 require_once 'modules/course_metadata/CourseXML.php';
 require_once 'include/log.class.php';
@@ -239,9 +240,9 @@ function insert_docs($id) {
                                             $id, $title, $comment, $order, $file->id);
             }
             $uresId = $q->lastInsertID;
-            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $uresId);
+            Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_UNITRESOURCE, $uresId);
         }
-        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+        Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_COURSE, $course_id);
         CourseXMLElement::refreshCourse($course_id, $course_code);
     }
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
@@ -270,8 +271,8 @@ function insert_text($id) {
                                 comments = ?s, visible=1, `order` = ?d, `date`= " . DBHelper::timeAfter() . ", res_id = 0", $id, $comments, $order);
         }
         $uresId = $q->lastInsertID;
-        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $uresId);
-        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+        Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_UNITRESOURCE, $uresId);
+        Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_COURSE, $course_id);
         CourseXMLElement::refreshCourse($course_id, $course_code);
     }
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
@@ -300,8 +301,8 @@ function insert_divider($id) {
                             comments = ?s, visible=1, `order` = ?d, `date`= " . DBHelper::timeAfter() . ", res_id = 0", $id, $divider, $order);
     }
     $uresId = $q->lastInsertID;
-    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $uresId);
-    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+    Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_UNITRESOURCE, $uresId);
+    Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_COURSE, $course_id);
     CourseXMLElement::refreshCourse($course_id, $course_code);
 
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
@@ -333,9 +334,9 @@ function insert_lp($id) {
                     $id, $lp->name, $lp->comment, $lp->visible, $order, $lp->learnPath_id);
             }
             $uresId = $q->lastInsertID;
-            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $uresId);
+            Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_UNITRESOURCE, $uresId);
         }
-        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+        Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_COURSE, $course_id);
         CourseXMLElement::refreshCourse($course_id, $course_code);
     }
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
@@ -367,9 +368,9 @@ function insert_h5p($id) {
                     $id, $h5p->title, $order, $h5p->id);
             }
             $uresId = $q->lastInsertID;
-            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $uresId);
+            Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_UNITRESOURCE, $uresId);
         }
-        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+        Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_COURSE, $course_id);
         CourseXMLElement::refreshCourse($course_id, $course_code);
     }
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
@@ -419,9 +420,9 @@ function insert_video($id) {
                                     $id, $row->title, $row->description, $res_id);
             }
             $uresId = $q->lastInsertID;
-            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $uresId);
+            Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_UNITRESOURCE, $uresId);
         }
-        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+        Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_COURSE, $course_id);
         CourseXMLElement::refreshCourse($course_id, $course_code);
     }
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
@@ -471,9 +472,9 @@ function insert_work($id) {
                                         res_id = ?d", $id, $work->title, $work->description, $visibility, $order, $work->id);
             }
             $uresId = $q->lastInsertID;
-            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $uresId);
+            Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_UNITRESOURCE, $uresId);
         }
-        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+        Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_COURSE, $course_id);
         CourseXMLElement::refreshCourse($course_id, $course_code);
     }
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
@@ -511,9 +512,9 @@ function insert_exercise($id) {
                             $id, $exercise->title, $exercise->description, $visibility, $order, $exercise->id);
             }
             $uresId = $q->lastInsertID;
-            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $uresId);
+            Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_UNITRESOURCE, $uresId);
         }
-        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+        Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_COURSE, $course_id);
         CourseXMLElement::refreshCourse($course_id, $course_code);
     }
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
@@ -566,9 +567,9 @@ function insert_forum($id) {
                 }
             }
             $uresId = $q->lastInsertID;
-            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $uresId);
+            Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_UNITRESOURCE, $uresId);
         }
-        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+        Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_COURSE, $course_id);
         CourseXMLElement::refreshCourse($course_id, $course_code);
     }
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
@@ -600,9 +601,9 @@ function insert_poll($id) {
             $id, $poll->name, $order, $poll->pid);
             }
             $uresId = $q->lastInsertID;
-            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $uresId);
+            Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_UNITRESOURCE, $uresId);
         }
-        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+        Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_COURSE, $course_id);
         CourseXMLElement::refreshCourse($course_id, $course_code);
     }
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
@@ -635,9 +636,9 @@ function insert_wiki($id) {
                                             $id, $wiki->title, $wiki->description, $order, $wiki->id);
             }
             $uresId = $q->lastInsertID;
-            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $uresId);
+            Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_UNITRESOURCE, $uresId);
         }
-        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+        Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_COURSE, $course_id);
         CourseXMLElement::refreshCourse($course_id, $course_code);
     }
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
@@ -671,7 +672,7 @@ function insert_link($id) {
                                 $id, $linkcat->name, $linkcat->description, $order, $linkcat->id);
             }
             $uresId = $q->lastInsertID;
-            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $uresId);
+            Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_UNITRESOURCE, $uresId);
         }
     }
 
@@ -690,10 +691,10 @@ function insert_link($id) {
             }
 
             $uresId = $q->lastInsertID;
-            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $uresId);
+            Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_UNITRESOURCE, $uresId);
         }
     }
-    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+    Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_COURSE, $course_id);
     CourseXMLElement::refreshCourse($course_id, $course_code);
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
     unset($_SESSION['fc_type']);
@@ -724,11 +725,11 @@ function insert_ebook($id) {
                     $id, $_POST[$type . '_title'][$ebook_id], $order, $ebook_id);
                 }
                 $uresId = $q->lastInsertID;
-                Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $uresId);
+                Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_UNITRESOURCE, $uresId);
             }
         }
     }
-    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+    Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_COURSE, $course_id);
     CourseXMLElement::refreshCourse($course_id, $course_code);
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
     unset($_SESSION['fc_type']);
@@ -762,9 +763,9 @@ function insert_chat($id) {
             }
 
             $uresId = $q->lastInsertID;
-            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $uresId);
+            Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_UNITRESOURCE, $uresId);
         }
-        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+        Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_COURSE, $course_id);
         CourseXMLElement::refreshCourse($course_id, $course_code);
     }
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
@@ -797,9 +798,9 @@ function insert_blog($id) {
                     $id, $blog->title, $blog->content, $order, $blog->id);
             }
             $uresId = $q->lastInsertID;
-            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $uresId);
+            Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_UNITRESOURCE, $uresId);
         }
-        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+        Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_COURSE, $course_id);
         CourseXMLElement::refreshCourse($course_id, $course_code);
     }
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
@@ -833,9 +834,9 @@ function insert_tc($id) {
                     $id, $tc->title, $tc->description, $order, $tc->id);
             }
             $uresId = $q->lastInsertID;
-            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $uresId);
+            Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_UNITRESOURCE, $uresId);
         }
-        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+        Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_COURSE, $course_id);
         CourseXMLElement::refreshCourse($course_id, $course_code);
     }
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
@@ -861,7 +862,7 @@ function insert_common_docs($file, $target_dir) {
     if ($file->format == '.dir') {
         $target_dir = make_path($target_dir, array($file->filename));
         $r = Database::get()->querySingle("SELECT id FROM document WHERE $group_sql AND path = ?s", $target_dir);
-        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $r->id);
+        Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_DOCUMENT, $r->id);
         $common_docs_dir_map[$file->path] = $target_dir;
         $q = Database::get()->queryArray("SELECT * FROM document
                                       WHERE course_id = -1 AND
@@ -873,7 +874,7 @@ function insert_common_docs($file, $target_dir) {
             if ($file->format == '.dir') {
                 $new_dir = make_path($new_target_dir, array($file->filename));
                 $r2 = Database::get()->querySingle("SELECT id FROM document WHERE $group_sql AND path = ?s", $new_dir);
-                Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $r2->id);
+                Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_DOCUMENT, $r2->id);
                 $common_docs_dir_map[$file->path] = $new_dir;
             } else {
                 insert_common_docs($file, $new_target_dir);
@@ -899,6 +900,6 @@ function insert_common_docs($file, $target_dir) {
                                 date_modified =	" . DBHelper::timeAfter() . ",
                                 format = ?s", $course_id, $path, $extra_path, $file->filename, $file->comment, $file->title, $file->format);
         $id = $q->lastInsertID;
-        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $id);
+        Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_DOCUMENT, $id);
     }
 }

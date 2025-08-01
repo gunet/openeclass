@@ -22,6 +22,7 @@
  * @file exercise_admin.inc.php
  * @brief Create new exercise or modify an existing one
  */
+require_once 'modules/search/classes/ConstantsUtil.php';
 require_once 'modules/search/lucene/indexer.class.php';
 require_once 'modules/tags/moduleElement.class.php';
 
@@ -118,7 +119,7 @@ if (isset($_POST['submitExercise'])) {
         $exerciseId = $objExercise->selectId();
 
         $objExercise->assignTo(filter_input(INPUT_POST, 'ingroup', FILTER_VALIDATE_INT, FILTER_REQUIRE_ARRAY));
-        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_EXERCISE, $exerciseId);
+        Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_EXERCISE, $exerciseId);
 
         // tags
         $moduleTag = new ModuleElement($exerciseId);

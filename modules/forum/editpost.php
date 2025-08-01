@@ -25,6 +25,7 @@ $require_help = FALSE;
 $require_editor = TRUE;
 require_once '../../include/baseTheme.php';
 require_once 'functions.php';
+require_once 'modules/search/classes/ConstantsUtil.php';
 require_once 'modules/search/lucene/indexer.class.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
 
@@ -96,7 +97,7 @@ if (isset($_POST['submit'])) {
         draw($tool_content, 2, null, $head_content);
         exit();
     }
-    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_FORUMPOST, $post_id);
+    Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_FORUMPOST, $post_id);
 
     if (isset($_POST['subject'])) {
         $subject = $_POST['subject'];
@@ -108,7 +109,7 @@ if (isset($_POST['submit'])) {
             draw($tool_content, 2, null, $head_content);
             exit();
         }
-        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_FORUMTOPIC, $topic_id);
+        Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_FORUMTOPIC, $topic_id);
     }
     header("Location: {$urlServer}modules/forum/viewtopic.php?course=$course_code&topic=$topic_id&forum=$forum_id");
     exit;

@@ -28,6 +28,7 @@ require_once 'Zend/Search/Lucene/Analysis/Analyzer.php';
 require_once 'Zend/Search/Lucene/Analysis/Analyzer/Common/Utf8Num/CaseInsensitive.php';
 require_once 'Zend/Search/Lucene/Exception.php';
 require_once 'Zend/Search/Lucene/Storage/Directory/Filesystem.php';
+require_once 'modules/search/classes/ConstantsUtil.php';
 require_once 'agendaindexer.class.php';
 require_once 'announcementindexer.class.php';
 require_once 'courseindexer.class.php';
@@ -44,31 +45,6 @@ require_once 'videoindexer.class.php';
 require_once 'videolinkindexer.class.php';
 
 class Indexer {
-
-    const REQUEST_REMOVE = 'remove';
-    const REQUEST_REMOVEALLBYCOURSE = 'removeAllByCourse';
-    const REQUEST_REMOVEBYFORUM = 'removeByForum';
-    const REQUEST_REMOVEBYTOPIC = 'removeByTopic';
-    const REQUEST_REMOVEBYUNIT = 'removeByUnit';
-    const REQUEST_REMOVEBYUSER = 'removeByUser';
-    const REQUEST_STORE = 'store';
-    const REQUEST_STOREALLBYCOURSE = 'storeAllByCourse';
-
-    const RESOURCE_AGENDA = 'agenda';
-    const RESOURCE_ANNOUNCEMENT = 'announcement';
-    const RESOURCE_COURSE = 'course';
-    const RESOURCE_DOCUMENT = 'document';
-    const RESOURCE_EXERCISE = 'exercise';
-    const RESOURCE_FORUM = 'forum';
-    const RESOURCE_FORUMPOST = 'forum_post';
-    const RESOURCE_FORUMTOPIC = 'forum_topic';
-    const RESOURCE_IDX = 'idx';
-    const RESOURCE_LINK = 'link';
-    const RESOURCE_NOTE = 'note';
-    const RESOURCE_UNIT = 'unit';
-    const RESOURCE_UNITRESOURCE = 'unitresource';
-    const RESOURCE_VIDEO = 'video';
-    const RESOURCE_VIDEOLINK = 'videolink';
 
     const SESSION_PROCESS_AT_NEXT_DRAW = 'SESSION_PROCESS_AT_NEXT_DRAW';
 
@@ -456,49 +432,49 @@ class Indexer {
         foreach ($resources as $resource) {
             $varidx = null;
             switch ($resource->resource_type) {
-                case self::RESOURCE_AGENDA:
+                case ConstantsUtil::RESOURCE_AGENDA:
                     $varidx = new AgendaIndexer($this);
                     break;
-                case self::RESOURCE_ANNOUNCEMENT:
+                case ConstantsUtil::RESOURCE_ANNOUNCEMENT:
                     $varidx = new AnnouncementIndexer($this);
                     break;
-                case self::RESOURCE_COURSE:
+                case ConstantsUtil::RESOURCE_COURSE:
                     $varidx = new CourseIndexer($this);
                     break;
-                case self::RESOURCE_DOCUMENT:
+                case ConstantsUtil::RESOURCE_DOCUMENT:
                     $varidx = new DocumentIndexer($this);
                     break;
-                case self::RESOURCE_EXERCISE:
+                case ConstantsUtil::RESOURCE_EXERCISE:
                     $varidx = new ExerciseIndexer($this);
                     break;
-                case self::RESOURCE_FORUM:
+                case ConstantsUtil::RESOURCE_FORUM:
                     $varidx = new ForumIndexer($this);
                     break;
-                case self::RESOURCE_FORUMPOST:
+                case ConstantsUtil::RESOURCE_FORUMPOST:
                     $varidx = new ForumPostIndexer($this);
                     break;
-                case self::RESOURCE_FORUMTOPIC:
+                case ConstantsUtil::RESOURCE_FORUMTOPIC:
                     $varidx = new ForumTopicIndexer($this);
                     break;
-                case self::RESOURCE_IDX:
+                case ConstantsUtil::RESOURCE_IDX:
                     $varidx = $this;
                     break;
-                case self::RESOURCE_LINK:
+                case ConstantsUtil::RESOURCE_LINK:
                     $varidx = new LinkIndexer($this);
                     break;
-                case self::RESOURCE_NOTE:
+                case ConstantsUtil::RESOURCE_NOTE:
                     $varidx = new NoteIndexer($this);
                     break;
-                case self::RESOURCE_UNIT:
+                case ConstantsUtil::RESOURCE_UNIT:
                     $varidx = new UnitIndexer($this);
                     break;
-                case self::RESOURCE_UNITRESOURCE:
+                case ConstantsUtil::RESOURCE_UNITRESOURCE:
                     $varidx = new UnitResourceIndexer($this);
                     break;
-                case self::RESOURCE_VIDEO:
+                case ConstantsUtil::RESOURCE_VIDEO:
                     $varidx = new VideoIndexer($this);
                     break;
-                case self::RESOURCE_VIDEOLINK:
+                case ConstantsUtil::RESOURCE_VIDEOLINK:
                     $varidx = new VideolinkIndexer($this);
                     break;
                 default:

@@ -2059,8 +2059,9 @@ function delete_course($cid): void
     removeDir("$webDir/courses/$course_code");
     removeDir("$webDir/video/$course_code");
     // refresh index
+    require_once 'modules/search/classes/ConstantsUtil.php';
     require_once 'modules/search/lucene/indexer.class.php';
-    Indexer::queueAsync(Indexer::REQUEST_REMOVEALLBYCOURSE, Indexer::RESOURCE_IDX, $cid);
+    Indexer::queueAsync(ConstantsUtil::REQUEST_REMOVEALLBYCOURSE, ConstantsUtil::RESOURCE_IDX, $cid);
 
     Database::get()->query("UPDATE oai_record SET deleted = 1, datestamp = ?t WHERE course_id = ?d", gmdate('Y-m-d H:i:s'), $cid);
 }

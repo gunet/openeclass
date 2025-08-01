@@ -86,6 +86,25 @@ class SolrSearchEngine implements SearchEngineInterface {
         CurlUtil::httpPostJsonRequest($solrUrl, $idx->removeAll());
     }
 
+    public function indexResource(string $requestType, string $resourceType, int $resourceId): void {
+        if (!get_config('ext_solr_enabled')) {
+            return;
+        }
+
+        // construct Solr Url for indexing
+        $query = [
+            'commit' => 'true'
+        ];
+        $solrUrl = $this->constructSolrUrl("update", $query);
+
+        // process index request
+        $idx = new SolrIndexer();
+        $queryPostData = $idx->indexResource($requestType, $resourceType, $resourceId);
+        if (!empty($queryPostData)) {
+            CurlUtil::httpPostJsonRequest($solrUrl, $queryPostData);
+        }
+    }
+
     private function constructSolrUrl(string $action, array $params): string {
         $solrUrl = get_config('ext_solr_url', SolrApp::SOLRDEFAULTURL);
         if ($solrUrl[strlen($solrUrl) - 1] != '/') {

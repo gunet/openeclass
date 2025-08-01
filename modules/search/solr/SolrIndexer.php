@@ -126,4 +126,66 @@ class SolrIndexer {
         ];
     }
 
+    public function indexResource(string $requestType, string $resourceType, int $resourceId): ?array {
+        $varidx = null;
+        switch ($resourceType) {
+            case ConstantsUtil::RESOURCE_AGENDA:
+                $varidx = new SolrAgendaIndexer();
+                break;
+            case ConstantsUtil::RESOURCE_ANNOUNCEMENT:
+                $varidx = new SolrAnnouncementIndexer();
+                break;
+            case ConstantsUtil::RESOURCE_COURSE:
+                $varidx = new SolrCourseIndexer();
+                break;
+            case ConstantsUtil::RESOURCE_DOCUMENT:
+                $varidx = new SolrDocumentIndexer();
+                break;
+            case ConstantsUtil::RESOURCE_EXERCISE:
+                $varidx = new SolrExerciseIndexer();
+                break;
+            case ConstantsUtil::RESOURCE_FORUM:
+                $varidx = new SolrForumIndexer();
+                break;
+            case ConstantsUtil::RESOURCE_FORUMPOST:
+                $varidx = new SolrForumPostIndexer();
+                break;
+            case ConstantsUtil::RESOURCE_FORUMTOPIC:
+                $varidx = new SolrForumTopicIndexer();
+                break;
+            case ConstantsUtil::RESOURCE_IDX:
+                $varidx = $this;
+                break;
+            case ConstantsUtil::RESOURCE_LINK:
+                $varidx = new SolrLinkIndexer();
+                break;
+            case ConstantsUtil::RESOURCE_NOTE:
+                $varidx = new SolrNoteIndexer();
+                break;
+            case ConstantsUtil::RESOURCE_UNIT:
+                $varidx = new SolrUnitIndexer();
+                break;
+            case ConstantsUtil::RESOURCE_UNITRESOURCE:
+                $varidx = new SolrUnitResourceIndexer();
+                break;
+            case ConstantsUtil::RESOURCE_VIDEO:
+                $varidx = new SolrVideoIndexer();
+                break;
+            case ConstantsUtil::RESOURCE_VIDEOLINK:
+                $varidx = new SolrVideolinkIndexer();
+                break;
+            default:
+                break;
+        }
+        return $this->callVariableIndexer($varidx, $requestType, $resourceId);
+    }
+
+    private function callVariableIndexer(?AbstractSolrIndexer $idxObj, string $method, int $arg): ?array {
+        $queryPostData = null;
+        if ($idxObj !== null && is_callable(array($idxObj, $method))) {
+            $queryPostData = $idxObj->$method($arg);
+        }
+        return $queryPostData;
+    }
+
 }

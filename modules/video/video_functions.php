@@ -124,9 +124,9 @@ function delete_video($id, $table, $course_id, $course_code, $webDir) {
 
     // index and log
     if ($table == 'video') {
-        Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_VIDEO, $id);
+        Indexer::queueAsync(ConstantsUtil::REQUEST_REMOVE, ConstantsUtil::RESOURCE_VIDEO, $id);
     } elseif ($table == 'videolink') {
-        Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_VIDEOLINK, $id);
+        Indexer::queueAsync(ConstantsUtil::REQUEST_REMOVE, ConstantsUtil::RESOURCE_VIDEOLINK, $id);
     }
 
     Log::record($course_id, MODULE_ID_VIDEO, LOG_DELETE, array('id' => $id, 'title' => $title));

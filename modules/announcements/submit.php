@@ -23,6 +23,7 @@ $require_editor = true;
 include '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
 require_once 'include/log.class.php';
+require_once 'modules/search/classes/ConstantsUtil.php';
 require_once 'modules/search/lucene/indexer.class.php';
 require_once 'modules/tags/moduleElement.class.php';
 require_once 'include/action.php';
@@ -115,7 +116,7 @@ if (isset($_POST['submitAnnouncement'])) {
                 $moduleTag->syncTags($tagsArray);
             }
         }
-        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_ANNOUNCEMENT, $id);
+        Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_ANNOUNCEMENT, $id);
         $txt_content = ellipsize_html(canonicalize_whitespace(strip_tags($_POST['newContent'])), 50, '+');
         Log::record($course_id, MODULE_ID_ANNOUNCE, $log_type, array('id' => $id,
             'email' => $send_mail,

@@ -311,7 +311,7 @@ function storeDelosResources($jsonPublicObj, $jsonPrivateObj, $checkAuth) {
                         VALUES (?d, ?s, ?s, ?s, ?d, ?s, ?s, ?t)', $course_id, canonicalize_url($url), $title, $description, $submittedCategory, $creator, $publisher, $date);
                         $id = $q->lastInsertID;
                     }
-                    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_VIDEOLINK, $id);
+                    Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_VIDEOLINK, $id);
                     $txt_description = ellipsize(canonicalize_whitespace(strip_tags($description)), 50, '+');
                     Log::record($course_id, MODULE_ID_VIDEO, LOG_INSERT, array('id' => $id,
                         'url' => canonicalize_url($url),
@@ -345,7 +345,7 @@ function storeDelosResources($jsonPublicObj, $jsonPrivateObj, $checkAuth) {
                             VALUES (?d, ?s, ?s, ?s, ?d, ?s, ?s, ?t)', $course_id, canonicalize_url($url), $title, $description, $submittedCategory, $creator, $publisher, $date);
                         $id = $q->lastInsertID;
                     }
-                    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_VIDEOLINK, $id);
+                    Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_VIDEOLINK, $id);
                     $txt_description = ellipsize(canonicalize_whitespace(strip_tags($description)), 50, '+');
                     Log::record($course_id, MODULE_ID_VIDEO, LOG_INSERT, array('id' => $id,
                         'url' => canonicalize_url($url),

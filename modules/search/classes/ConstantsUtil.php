@@ -20,6 +20,7 @@
 
 class ConstantsUtil {
 
+    // FIELDS
     const FIELD_ID = 'id';
     const FIELD_PK = 'pk';
     const FIELD_PKID = 'pkid';
@@ -46,6 +47,7 @@ class ConstantsUtil {
     const FIELD_AUTHOR = 'author';
     const FIELD_PUBLIC = 'public';
 
+    // DOCTYPES
     const DOCTYPE_AGENDA = 'agenda';
     const DOCTYPE_ANNOUNCEMENT = 'announce';
     const DOCTYPE_COURSE = 'course';
@@ -60,5 +62,32 @@ class ConstantsUtil {
     const DOCTYPE_UNITRESOURCE = 'unitresource';
     const DOCTYPE_VIDEO = 'video';
     const DOCTYPE_VIDEOLINK = 'vlink';
+
+    // REQUEST TYPES
+    const REQUEST_REMOVE = 'remove';
+    const REQUEST_REMOVEALLBYCOURSE = 'removeAllByCourse';
+    const REQUEST_REMOVEBYFORUM = 'removeByForum';
+    const REQUEST_REMOVEBYTOPIC = 'removeByTopic';
+    const REQUEST_REMOVEBYUNIT = 'removeByUnit';
+    const REQUEST_REMOVEBYUSER = 'removeByUser';
+    const REQUEST_STORE = 'store';
+    const REQUEST_STOREALLBYCOURSE = 'storeAllByCourse';
+
+    // RESOURCES
+    const RESOURCE_AGENDA = 'agenda';
+    const RESOURCE_ANNOUNCEMENT = 'announcement';
+    const RESOURCE_COURSE = 'course';
+    const RESOURCE_DOCUMENT = 'document';
+    const RESOURCE_EXERCISE = 'exercise';
+    const RESOURCE_FORUM = 'forum';
+    const RESOURCE_FORUMPOST = 'forum_post';
+    const RESOURCE_FORUMTOPIC = 'forum_topic';
+    const RESOURCE_IDX = 'idx';
+    const RESOURCE_LINK = 'link';
+    const RESOURCE_NOTE = 'note';
+    const RESOURCE_UNIT = 'unit';
+    const RESOURCE_UNITRESOURCE = 'unitresource';
+    const RESOURCE_VIDEO = 'video';
+    const RESOURCE_VIDEOLINK = 'videolink';
 
 }

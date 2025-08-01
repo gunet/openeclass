@@ -56,8 +56,9 @@ class Course {
         }
         // refresh index
         global $webDir; // required for indexer
+        require_once 'modules/search/classes/ConstantsUtil.php';
         require_once 'modules/search/lucene/indexer.class.php';
-        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $id);
+        Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_COURSE, $id);
         // refresh course metadata
         require_once 'modules/course_metadata/CourseXML.php';
         CourseXMLElement::refreshCourse($id, course_id_to_code($id));

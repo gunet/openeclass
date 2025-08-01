@@ -31,6 +31,7 @@ require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
 require_once 'include/course_settings.php';
 require_once 'functions.php';
+require_once 'modules/search/classes/ConstantsUtil.php';
 require_once 'modules/search/lucene/indexer.class.php';
 
 $forum_id = isset($_REQUEST['forum_id']) ? intval($_REQUEST['forum_id']) : '';
@@ -277,7 +278,7 @@ elseif (isset($_GET['forumgosave'])) {
                                 WHERE id = ?d
                                 AND course_id = ?d"
             , $_POST['forum_name'], purify($_POST['forum_desc']), $cat_id, $forum_id, $course_id);
-    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_FORUM, $forum_id);
+    Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_FORUM, $forum_id);
 
     if (isset($_POST['to_group']) and $_POST['to_group'] > 0) {
         Database::get()->query("UPDATE `group` SET `forum_id` = ?d WHERE `id` = ?d", $forum_id, $_POST['to_group']);
@@ -303,7 +304,7 @@ elseif (isset($_GET['forumgoadd'])) {
     $forid = Database::get()->query("INSERT INTO forum (name, `desc`, cat_id, course_id)
                                 VALUES (?s, ?s, ?d, ?d)"
             , $_POST['forum_name'], $_POST['forum_desc'], $cat_id, $course_id)->lastInsertID;
-    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_FORUM, $forid);
+    Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_FORUM, $forid);
 
     if (isset($_POST['to_group']) and $_POST['to_group'] > 0) {
         Database::get()->query("UPDATE `group` SET `forum_id` = ?d WHERE `id` = ?d", $forid, $_POST['to_group']);
@@ -416,7 +417,7 @@ elseif (isset($_GET['forumcatdel'])) {
             Database::get()->query("DELETE abuse_report FROM abuse_report INNER JOIN forum_post ON abuse_report.rid = forum_post.id
                                     WHERE abuse_report.rtype = ?s AND forum_post.topic_id = ?d", 'forum_post', $topic_id);
             Database::get()->query("DELETE FROM forum_post WHERE topic_id = ?d", $topic_id);
-            Indexer::queueAsync(Indexer::REQUEST_REMOVEBYTOPIC, Indexer::RESOURCE_FORUMPOST, $topic_id);
+            Indexer::queueAsync(ConstantsUtil::REQUEST_REMOVEBYTOPIC, ConstantsUtil::RESOURCE_FORUMPOST, $topic_id);
 
             foreach ($post_authors as $author) {
                 $forum_user_stats = Database::get()->querySingle("SELECT COUNT(*) as c FROM forum_post
@@ -430,9 +431,9 @@ elseif (isset($_GET['forumcatdel'])) {
             }
         }
         Database::get()->query("DELETE FROM forum_topic WHERE forum_id = ?d", $forum_id);
-        Indexer::queueAsync(Indexer::REQUEST_REMOVEBYFORUM, Indexer::RESOURCE_FORUMTOPIC, $forum_id);
+        Indexer::queueAsync(ConstantsUtil::REQUEST_REMOVEBYFORUM, ConstantsUtil::RESOURCE_FORUMTOPIC, $forum_id);
         Database::get()->query("DELETE FROM forum_notify WHERE forum_id = ?d AND course_id = ?d", $forum_id, $course_id);
-        Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_FORUM, $forum_id);
+        Indexer::queueAsync(ConstantsUtil::REQUEST_REMOVE, ConstantsUtil::RESOURCE_FORUM, $forum_id);
     }
     Database::get()->query("DELETE FROM forum WHERE cat_id = ?d AND course_id = ?d", $cat_id, $course_id);
     Database::get()->query("DELETE FROM forum_notify WHERE cat_id = ?d AND course_id = ?d", $cat_id, $course_id);
@@ -490,7 +491,7 @@ elseif (isset($_GET['forumgodel'])) {
             Database::get()->query("DELETE rating_cache FROM rating_cache INNER JOIN forum_post on rating_cache.rid = forum_post.id
                                     WHERE rating_cache.rtype = ?s AND forum_post.topic_id = ?d", 'forum_post', $topic_id);
             Database::get()->query("DELETE FROM forum_post WHERE topic_id = ?d", $topic_id);
-            Indexer::queueAsync(Indexer::REQUEST_REMOVEBYTOPIC, Indexer::RESOURCE_FORUMPOST, $topic_id);
+            Indexer::queueAsync(ConstantsUtil::REQUEST_REMOVEBYTOPIC, ConstantsUtil::RESOURCE_FORUMPOST, $topic_id);
 
             foreach ($post_authors as $author) {
                 $forum_user_stats = Database::get()->querySingle("SELECT COUNT(*) as c FROM forum_post
@@ -505,10 +506,10 @@ elseif (isset($_GET['forumgodel'])) {
         }
     }
     Database::get()->query("DELETE FROM forum_topic WHERE forum_id = ?d", $forum_id);
-    Indexer::queueAsync(Indexer::REQUEST_REMOVEBYFORUM, Indexer::RESOURCE_FORUMTOPIC, $forum_id);
+    Indexer::queueAsync(ConstantsUtil::REQUEST_REMOVEBYFORUM, ConstantsUtil::RESOURCE_FORUMTOPIC, $forum_id);
     Database::get()->query("DELETE FROM forum_notify WHERE forum_id = ?d AND course_id = ?d", $forum_id, $course_id);
     Database::get()->query("DELETE FROM forum WHERE id = ?d AND course_id = ?d", $forum_id, $course_id);
-    Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_FORUM, $forum_id);
+    Indexer::queueAsync(ConstantsUtil::REQUEST_REMOVE, ConstantsUtil::RESOURCE_FORUM, $forum_id);
     Database::get()->query("UPDATE `group` SET forum_id = 0
                     WHERE forum_id = ?d
                     AND course_id = ?d", $forum_id, $course_id);
@@ -570,7 +571,7 @@ elseif (isset($_GET['forumgodel'])) {
 
         if ($current_forum_id != $new_forum) {
             Database::get()->query("UPDATE `forum_topic` SET `forum_id` = ?d WHERE `id` = ?d", $new_forum, $topic_id);
-            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_FORUMTOPIC, $topic_id);
+            Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_FORUMTOPIC, $topic_id);
 
             $result = Database::get()->querySingle("SELECT `last_post_id`, MAX(`topic_time`) FROM `forum_topic` WHERE `forum_id`=?d",$new_forum);
             $last_post_id = $result->last_post_id;

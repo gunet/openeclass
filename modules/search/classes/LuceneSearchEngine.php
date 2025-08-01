@@ -54,4 +54,8 @@ class LuceneSearchEngine implements SearchEngineInterface {
         Indexer::deleteAll();
     }
 
+    public function indexResource(string $requestType, string $resourceType, int $resourceId): void {
+        Indexer::queueAsync($requestType, $resourceType, $resourceId);
+    }
+
 }
