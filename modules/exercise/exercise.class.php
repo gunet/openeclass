@@ -1551,9 +1551,11 @@ if (!class_exists('Exercise')) {
                 // copy questions and answers to new course question pool
                 $old_path = "courses/$course_code/image/quiz-";
                 $new_path = 'courses/' . course_id_to_code($clone_course_id) . '/image/quiz-';
+                $old_path_predefined_dndrop = "courses/$course_code/image/answer-";
+                $new_path_predefined_dndrop = 'courses/' . course_id_to_code($clone_course_id) . '/image/answer-';
                 Database::get()->queryFunc("SELECT question_id AS id, q_position, random_criteria FROM exercise_with_questions
                         WHERE exercise_id = ?d",
-                    function ($question) use ($clone_id, $clone_course_id, $old_path, $new_path) {
+                    function ($question) use ($clone_id, $clone_course_id, $old_path, $new_path, $old_path_predefined_dndrop, $new_path_predefined_dndrop) {
                         if (is_null($question->random_criteria)) {
                             $question_clone_id = Database::get()->query("INSERT INTO exercise_question
                                 (course_id, question, description, weight, type, difficulty, category, options)
@@ -1574,6 +1576,30 @@ if (!class_exists('Exercise')) {
                         if (file_exists($old_image_path)) {
                             copy($old_image_path, $new_path . $question_clone_id);
                         }
+
+                        // Drag and drop predefined answers using images
+                        $questionType = Database::get()->querySingle("SELECT `type` FROM exercise_question WHERE id = ?d", $question->id)->type;
+                        if ($questionType == DRAG_AND_DROP_MARKERS) {
+                            $total = 0;
+                            $answer = Database::get()->querySingle("SELECT answer FROM exercise_answer WHERE question_id = ?d", $question->id);
+                            if ($answer) {
+                                $q = explode('::', $answer->answer);
+                                if (count($q) > 1) {
+                                    $res = explode(',', $q[1]);
+                                    $total = count($res);
+                                }
+                            }
+                            if ($total > 0) {
+                                for ($i = 1; $i <= $total; $i++) {
+                                    $old_dnd_img_path = $old_path_predefined_dndrop . $question->id . '-' . $i;
+                                    if (file_exists($old_dnd_img_path)) {
+                                        $new_dnd_img_path = $new_path_predefined_dndrop . $question_clone_id . '-' . $i;
+                                        copy($old_dnd_img_path, $new_dnd_img_path);
+                                    }
+                                }
+                            }
+                        }
+                        
                     },
                     $id);
             } else {
