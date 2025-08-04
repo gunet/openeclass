@@ -38,11 +38,14 @@ try {
     }
     $extension_sql = implode(' OR ', $extension_conditions);
 
-    $sql = "SELECT id, filename, path, format, title, date_modified 
-            FROM document 
-            WHERE course_id = ?d 
-            AND subsystem = 0 
-            AND visible = 1 
+    $q = Database::get()->querySingle("SELECT path FROM document WHERE course_id = ?d AND subsystem = 0 AND filename = 'Report_Images'", $course_id);
+    $path = $q->path;
+
+    $sql = "SELECT id, filename, path, format, title, date_modified
+            FROM document
+            WHERE course_id = ?d
+            AND subsystem = 0
+            AND path LIKE '%" . $path . "%'
             AND ($extension_sql)
             ORDER BY filename ASC";
 

@@ -659,6 +659,7 @@
                                         <h3>{{ trans('langCoursePrintSetting') }}</h3>
                                         <div class='col-sm-12 control-label-notes mt-3'>
                                             {{ trans('langCoursePrintHeaderImage') }}
+                                            <span class="ms-2"><small>{{ trans('langReportImageNotFound') }}</small></span>
                                             @if($print_header_image_url)
                                                 <div class="mt-2" id="printHeaderImagePreview">
                                                     <img src="{{ $print_header_image_url }}" alt="Print Header Image" style="max-width: 200px; max-height: 100px;" class="img-thumbnail">
@@ -690,6 +691,7 @@
 
                                         <div class='col-sm-12 control-label-notes mt-3'>
                                             {{ trans('langCoursePrintFooterImage') }}
+                                            <span class="ms-2"><small>{{ trans('langReportImageNotFound') }}</small></span>
                                             @if($print_footer_image_url)
                                                 <div class="mt-2" id="printFooterImagePreview">
                                                     <img src="{{ $print_footer_image_url }}" alt="Print Footer Image" style="max-width: 200px; max-height: 100px;" class="img-thumbnail">
