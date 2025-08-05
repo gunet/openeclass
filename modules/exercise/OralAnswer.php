@@ -60,7 +60,7 @@ class OralAnswer extends QuestionType
                     <button class='btn submitAdminBtnDefault' id='button-start-recording-{$questionId}'>$langStart</button>
                     <button class='btn submitAdminBtn' id='button-release-microphone-{$questionId}' disabled><i class='fa-solid fa-microphone-slash'></i></button>
                     <button class='btn deleteAdminBtn' id='button-stop-recording-{$questionId}' disabled>$langStopRecording</button>
-                    <button class='btn successAdminBtn' id='button-save-recording-{$questionId}' disabled>$langSave</button>
+                    <button class='btn successAdminBtn btnSaveRecording' id='button-save-recording-{$questionId}' disabled>$langSave</button>
                 </div>
                 <div class='col-12 d-flex justify-content-start align-items-center mt-2'>
                     <span class='help-block'>$langMaxRecAudioTime</span>
@@ -71,7 +71,7 @@ class OralAnswer extends QuestionType
 $html_content .= "<div id='recording_file_container_{$questionId}' class='col-12 $displayItems d-flex align-items-center gap-3 mt-4'>
                     <span>$langListenToRecordingAudio</span>
                     <a id='filename-link-{$questionId}' class='TextBold' href='#' data-bs-toggle='modal' data-bs-target='#audioModal_{$questionId}'>($question_number) $filename</a>
-                    <a id='deleteRecording-{$questionId}' class='deleteRecording' data-id='{$questionId}'><i class='fa-solid fa-circle-xmark fa-lg Accent-200-cl'></i></a>
+                    <a id='deleteRecording-{$questionId}' class='deleteRecording' data-id='{$questionId}' onclick='updateListenerDeleteOral({$question_number}, {$questionId})'><i class='fa-solid fa-circle-xmark fa-lg Accent-200-cl'></i></a>
                     <div class='modal fade' id='audioModal_{$questionId}' tabindex='-1' aria-labelledby='audioModalLabel_{$questionId}'>
                         <div class='modal-dialog modal-dialog-centered'>
                             <div class='modal-content'>
@@ -331,6 +331,10 @@ $html_content .= "</div>
                                 $('#filename-link-{$questionId}').text('($question_number) recording-file.mp3');
                                 $('#hidden-recording-{$questionId}').val('recording-file-{$questionId}-{$eurid}.mp3');
                                 $('#button-save-recording-{$questionId}').prop('disabled', true);
+
+                                // Check the answer as answered
+                                $('#qPanel{$questionId}  #qCheck{$question_number}').addClass('fa fa-check');
+                                
                             })
                         }
                     });

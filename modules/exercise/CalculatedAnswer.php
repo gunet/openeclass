@@ -89,7 +89,7 @@ class CalculatedAnswer extends \QuestionType
                     </div>";
             } elseif (count($answer_object_ids) == 1) { // unique answer with text
                 $html_content .= "<input type='hidden' name='answer_id_choice[$this->question_id]' value='{$answerId}'>";
-                $html_content .= "<input type='text' class='form-control' name='choice[$this->question_id]' value='{$uniqueAnswer}' style='max-width:300px;'>";
+                $html_content .= "<input type='text' class='form-control input-text-calculated' name='choice[$this->question_id]' value='{$uniqueAnswer}' onclick='updateListenerCalculated({$question_number})' style='max-width:300px;'>";
             }
         }
 

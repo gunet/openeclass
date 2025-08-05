@@ -211,11 +211,11 @@ class DragAndDropMarkersAnswer extends \QuestionType
                 if (array_key_exists('marker_answer', $value) && array_key_exists('marker_answer_with_image', $value) && $value['marker_answer'] == $an) {
                    if ($value['marker_answer_with_image'] == 1) { // predefined answer will be shown as image
                         $mID = $index;
-                        $html_content .= "<div class='draggable draggable-image' data-image-id='{$mID}' data-word='{$an}' data-pool-id='words_{$questionId}'>
+                        $html_content .= "<div class='draggable draggable-image' data-image-id='{$mID}' data-word='{$an}' data-pool-id='words_{$questionId}' onmouseup='updateListenerDragAndDrop({$question_number}, {$questionId})' onclick='updateListenerDragAndDrop({$question_number}, {$questionId})'>
                                             <img src='../../courses/$course_code/image/answer-$questionId-$mID' alt='{$an}'>
                                           </div>";
                     } else { // predefined answer will be shown as text
-                        $html_content .= "<div class='draggable' data-word='{$an}' data-pool-id='words_{$questionId}'>$an</div>";
+                        $html_content .= "<div class='draggable' data-word='{$an}' data-pool-id='words_{$questionId}' onmouseup='updateListenerDragAndDrop({$question_number}, {$questionId})' onclick='updateListenerDragAndDrop({$question_number}, {$questionId})'>$an</div>";
                     }
                 }
             }

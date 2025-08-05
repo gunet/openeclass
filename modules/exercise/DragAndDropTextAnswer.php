@@ -52,7 +52,7 @@ class DragAndDropTextAnswer extends \QuestionType
         $html_content .= "<div class='col-12'>$question_text</div>";
         $html_content .= "<div class='col-12 d-flex justify-content-start align-items-center gap-4 flex-wrap mt-4 border-top-default pt-4' id='words_{$questionId}'>";
         foreach ($list_answers as $an) {
-            $html_content .= "<div class='draggable' data-word='{$an}' data-pool-id='words_{$questionId}'>$an</div>";
+            $html_content .= "<div class='draggable' data-word='{$an}' data-pool-id='words_{$questionId}' onmouseup='updateListenerDragAndDrop({$question_number}, {$questionId})' onclick='updateListenerDragAndDrop({$question_number}, {$questionId})'>$an</div>";
         }
         $html_content .= "</div>";
         $html_content .= "<input type='hidden' name='choice[$questionId]' id='arrInput_{$questionId}'>";

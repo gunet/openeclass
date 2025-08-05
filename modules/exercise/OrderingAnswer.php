@@ -234,8 +234,8 @@ class OrderingAnswer extends \QuestionType
             $style = '';
             $bgColor = '';
             $sortingBtns = "<div class='sorting-controls d-flex gap-2'>
-                                <button type='button' class='btn submitAdminBtn move-up'><i class='fa-solid fa-up-long'></i></button>
-                                <button type='button' class='btn submitAdminBtn move-down'><i class='fa-solid fa-down-long'></i></button>
+                                <button type='button' class='btn submitAdminBtn move-up' data-question-id='{$questionId}' onclick='updateListenerOrderingBtn({$question_number}, {$questionId})'><i class='fa-solid fa-up-long'></i></button>
+                                <button type='button' class='btn submitAdminBtn move-down' data-question-id='{$questionId}' onclick='updateListenerOrderingBtn({$question_number}, {$questionId})'><i class='fa-solid fa-down-long'></i></button>
                             </div>";
             if (!in_array($i, $randomKeys)) {
                 $class = 'light-transparent';
@@ -248,7 +248,7 @@ class OrderingAnswer extends \QuestionType
                                         <div class='d-flex align-items-center gap-4'>
                                             $sortingBtns
                                             <span class='reorder-btn'>
-                                                <span class='fa $icon' data-bs-toggle='tooltip' data-bs-placement='top' title='' data-icon='{$questionId}' style='cursor: grab;'></span>
+                                                <span class='fa $icon' data-bs-toggle='tooltip' data-bs-placement='top' title='' data-icon='{$questionId}' onmousedown='updateListenerOrderingIcon({$question_number}, {$questionId})' style='cursor: grab;'></span>
                                             </span>
                                         </div>
                                     </div>
