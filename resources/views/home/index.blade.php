@@ -27,7 +27,7 @@
         @include('layouts.partials.show_alert')
 
         @if ($display_login_form != 1)
-            <div class='row m-auto'>
+            <div class='row m-auto row-jumbotron'>
                 <div class="col-12 jumbotron jumbotron-login">
 
                     @if ($VideoUploadedInJumbotron)

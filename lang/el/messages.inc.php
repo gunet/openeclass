@@ -135,6 +135,7 @@ $langVisitsStats = "Στατιστικά επισκέψεων";
 $langMonthlyReport = "Μηνιαίες αναφορές";
 $langMonthlyReportInfo = "Παρουσιάζονται συγκεντρωτικά στοιχεία (μαθήματα, χρήστες) των τελευταίων 24 μηνών.";
 $langStatsReports = "Αναφορές συμμετοχής";
+$langStatsReport = "Αναφορά συμμετοχής";
 $langStatsReportsLP = "Αναφορές συμμετοχής στις γραμμές μάθησης";
 $langStatsReportsTC = "Αναφορές συμμετοχής στη τηλεσυνεργασία";
 $langReport = "Αναφορά για το μήνα";
@@ -415,7 +416,6 @@ $langPublicDocumentManagementExplanation = 'Επιτρέπεται αποστο�
 $langPassCode = "Συνθηματικό πρόσβασης";
 $langCourseEndDate = "Ημερομηνία λήξης $langsOfCourse";
 $langExplainCourseEndDate = "Μετά την ημερομηνία λήξης το $langsOfCourse θα γίνει ανενεργό";
-
 // listreq.php
 
 $langOpenProfessorRequests = "Ανοικτές Αιτήσεις Χρηστών";
@@ -5941,6 +5941,7 @@ $langSubMenuLinkBgHoverColor = "Χρώμα Φόντου Hovered Συνδέσμο
 $langSubMenuLinkBgActive = "Χρώμα Φόντου Ενεργού Συνδέσμου Επιλογών";
 $langSubMenuLinkColorActive = "Χρώμα Συνδέσμου Ενεργού Συνδέσμου Επιλογών";
 $langBgColor = 'Χρώμα Φόντου';
+$langBorderColorLeftRight = "Χρώμα border";
 $langBgColorConfig = 'Ρυθμίσεις Φόντου';
 $langLinksCongiguration = 'Ρυθμίσεις Συνδέσμων';
 $langBgHeaderCongiguration = "Χρώμα Φόντου";
@@ -7065,3 +7066,7 @@ $langNowAllowNullDuration = "Η διάρκεια δεν μπορεί να είν
 $langDownloadPdfNotAllowed = "Μη επιτρεπτή λήψη αρχείου";
 $langDisplayRightContentInCPage = "Εμφάνιση ημερολογίου, ανακοινώσεων κ.λπ.";
 $langCoursePage = "Σελίδα $langsOfCourse";
+$langCoursePrintSetting = "Ρυθμίσεις εμφάνισης αναφορών μαθήματος";
+$langCoursePrintHeaderImage = "Εικόνα κεφαλίδας";
+$langCoursePrintFooterImage = "Εικόνα υποσέλιδου";
+$langReportImageNotFound = "Οι εικόνες πρέπει να βρίσκονται στον κατάλογο με τίτλο Report_Images στα 'Εγγραφα'";

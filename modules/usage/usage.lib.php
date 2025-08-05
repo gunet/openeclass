@@ -219,19 +219,20 @@ function get_course_activity_details($user, $course, $start = null, $end = null,
  * @param date $end the end of period to retrieve statistics for
  * @return array an array appropriate for displaying in a datatables table
 */
-function get_course_details($cid, $start = null, $end = null, $user_id = null)
+function get_course_details($cid, $start = null, $end = null, $user_id = null): array
 {
-    if (is_numeric($user_id)){
-        $q = "SELECT day, hits, duration, CONCAT(surname, ' ', givenname) uname, username, email, module_id FROM actions_daily a JOIN user u ON a.user_id=u.id WHERE course_id=?d AND day BETWEEN ?t AND ?t AND user_id=?d ORDER BY day, module_id";
+    if (is_numeric($user_id)) {
+        $q = "SELECT day, hits, duration, user_id, CONCAT(surname, ' ', givenname) uname, username, email, module_id FROM actions_daily a JOIN user u ON a.user_id=u.id WHERE course_id=?d AND day BETWEEN ?t AND ?t AND user_id=?d ORDER BY day, module_id";
         $r = Database::get()->queryArray($q, $cid, $start, $end, $user_id);
     } else {
-        $q = "SELECT day, hits, duration, CONCAT(surname, ' ', givenname) uname, username, email, module_id FROM actions_daily a JOIN user u ON a.user_id=u.id WHERE course_id=?d AND day BETWEEN ?t AND ?t ORDER BY day, module_id";
+        $q = "SELECT day, hits, duration, user_id, CONCAT(surname, ' ', givenname) uname, username, email, module_id FROM actions_daily a JOIN user u ON a.user_id=u.id WHERE course_id=?d AND day BETWEEN ?t AND ?t ORDER BY day, module_id";
         $r = Database::get()->queryArray($q, $cid, $start, $end);
     }
     $formattedr = array();
     foreach($r as $record){
        $mtitle = which_module($record->module_id);
-       $formattedr[] = array($record->day, $mtitle, $record->uname, $record->hits, $record->duration, $record->username, $record->email);
+       $usergroup = user_groups($cid, $record->user_id, 'txt');
+       $formattedr[] = array($record->day, $mtitle, $record->uname, $usergroup, $record->hits, $record->duration, $record->username, $record->email);
     }
     return $formattedr;
 }

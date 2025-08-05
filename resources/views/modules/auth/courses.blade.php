@@ -18,7 +18,7 @@
             };
 
             $(document).ready(function() {
-                dialog = $('<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal-label" aria-hidden="true"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><div class="modal-title" id="modal-label">{!! trans('langCourseMetadata') !!}</div><button type="button" class="close" data-bs-dismiss="modal"></button></div><div class="modal-body">body</div></div></div></div>');
+                dialog = $('<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal-label" aria-hidden="true"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><div class="modal-title" id="modal-label">{{ trans('langCourseMetadata') }}</div><button type="button" class="close" data-bs-dismiss="modal"></button></div><div class="modal-body">body</div></div></div></div>');
             });
 
         </script>
@@ -96,13 +96,13 @@
                                         <div class='d-flex justify-content-start align-items-start gap-3 flex-wrap'>
                                             <div>
                                                 @if ($mycourse->visible == COURSE_OPEN or $unlock_all_courses or isset($myCourses[$mycourse->id])) {{-- open course or user is registered to it --}}
-                                                    <a class='TextBold' href="../../courses/{!! urlencode($mycourse->k) !!}/">{!! $mycourse->i !!}</a>
-                                                    &nbsp;<small>({!! $mycourse->c !!})</small>
+                                                    <a class='TextBold' href="../../courses/{{ urlencode($mycourse->k) }}/">{{ $mycourse->i }}</a>
+                                                    &nbsp;<small>({{ $mycourse->c }})</small>
                                                 @else
                                                     <span @if (isset($_SESSION['uid'])) id='cid{{ $mycourse->id }}' @endif class='TextBold'>
-                                                        {!! $mycourse->i !!}
+                                                        {{ $mycourse->i }}
                                                     </span>
-                                                    &nbsp;<small>({!! $mycourse->c !!})</small>
+                                                    &nbsp;<small>({{ $mycourse->c }})</small>
                                                 @endif
                                                 <div>
                                                     <small class='vsmall-text TextRegular'>{{ $mycourse->t }}</small>
@@ -143,12 +143,12 @@
                                                                 <input type='hidden' name='uname' value='{{ $course_data[$mycourse->id]['userguest']->username }}'>
                                                                 <input type='hidden' name='pass' value=''>
                                                                 <input type='hidden' name='next' value='/courses/{{ $mycourse->k }}/'>
-                                                                <button style='height:30px;' type='submit' title='{!! trans('langGuestLogin') !!}' name='submit' data-bs-toggle='tooltip' data-bs-placement='top' aria-label="{!! trans('langGuestLogin') !!}">
+                                                                <button style='height:30px;' type='submit' title='{{ trans('langGuestLogin') }}' name='submit' data-bs-toggle='tooltip' data-bs-placement='top' aria-label="{{ trans('langGuestLogin') }}">
                                                                     <i class="fa-solid fa-right-to-bracket fa-lg"></i>
                                                                 </button>
                                                             </form>
                                                         @else
-                                                            <a role='button' href="{{ $urlAppend }}main/login_form.php?user={!! urlencode($course_data[$mycourse->id]['userguest']->username) !!}&amp;next=%2Fcourses%2F{{ $mycourse->k }}%2F" title='{!! trans('langGuestLogin') !!}' data-bs-placement='top' data-bs-toggle='tooltip' aria-label='{!! trans('langGuestLogin') !!}'>
+                                                            <a role='button' href="{{ $urlAppend }}main/login_form.php?user={{ urlencode($course_data[$mycourse->id]['userguest']->username) }}&amp;next=%2Fcourses%2F{{ $mycourse->k }}%2F" title='{{ trans('langGuestLogin') }}' data-bs-placement='top' data-bs-toggle='tooltip' aria-label='{{ trans('langGuestLogin') }}'>
                                                                 <i class="fa-solid fa-right-to-bracket fa-lg"></i>
                                                             </a>
                                                         @endif
@@ -224,7 +224,7 @@
                                     <div>
                                         @if ($isInOpenCoursesMode)
                                             {!! CourseXMLElement::getLevel($mycourse->level) !!}&nbsp;
-                                                <a href='javascript:showMetadata("{!! $mycourse->k !!}");' data-bs-toggle='tooltip' data-bs-original-title="{{ trans('langCourseMetadata') }}">
+                                                <a href='javascript:showMetadata("{{ $mycourse->k }}");' data-bs-toggle='tooltip' data-bs-original-title="{{ trans('langCourseMetadata') }}">
                                                     <img alt="{{ trans('langCourseMetadata') }}" src='{{ $urlAppend }}resources/icons/lom.png'/>
                                                 </a>
                                         @else

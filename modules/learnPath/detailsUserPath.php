@@ -330,6 +330,7 @@ if ($is_course_reviewer) {
             <h2>" . q($LPname) . "</h2>";
 
         $pdf_content .= $tool_content;
+        $pdf_content .= get_platform_logo('','footer');
         $pdf_content .= "</body></html>";
 
         $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
