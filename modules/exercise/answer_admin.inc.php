@@ -1282,7 +1282,7 @@ if (isset($_GET['modifyAnswers'])) {
             $setWeighting[1] = isset($weighting[1]) ? q($weighting[1]) : 0;
             $setWeighting[2] = isset($weighting[2]) ? q($weighting[2]) : 0;
             $tool_content .= "
-                <input type='hidden' name='reponse[1]' value='$langCorrect'>
+                <input type='hidden' name='reponse[1]' value='$langTrue'>
                 <input type='hidden' name='reponse[2]' value='$langFalse'>
                 <table class='table table-default'>
                 <tr>
