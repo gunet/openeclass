@@ -606,7 +606,7 @@ function add_attendance_other_activity($attendance_id) {
                         ),
                         array(
                             'class' => 'cancelAdminBtn ms-1',
-                            'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code"
+                            'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id={$attendance_id}"
                         )
                     ))."</div></div>";
                     if (isset($_GET['modify'])) {
@@ -1142,7 +1142,7 @@ function attendance_settings($attendance_id) {
                                     ),
                                     array(
                                         'class' => 'cancelAdminBtn ms-1',
-                                        'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id"
+                                        'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code"
                                     )
                                 ))."
 
