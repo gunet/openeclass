@@ -724,8 +724,9 @@
 
                                     {!! showSecondFactorChallenge() !!}
 
-                                    <div class='form-group mt-5 mb-1 d-flex justify-content-end align-items-center'>
+                                    <div class='form-group mt-5 mb-1 d-flex justify-content-end align-items-center gap-2 flex-wrap'>
                                         <input class='btn submitAdminBtn' type='submit' name='submit' value='{{ trans('langSubmit') }}'>
+                                        <a href='{{ $cancel_link }}' class='btn cancelAdminBtn text-nowrap'>{{ trans('langCancel') }}</a>
                                     </div>
                                 </fieldset>
                                 {!! generate_csrf_token_form_field() !!}
