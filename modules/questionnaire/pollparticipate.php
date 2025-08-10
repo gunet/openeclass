@@ -55,7 +55,6 @@ $pid = intval($_REQUEST['pid']);
 if (!$pid) {
     forbidden();
 }
-
 $query = "SELECT pid FROM poll WHERE course_id = ?d AND pid = ?d";
 $query_params[] = $course_id;
 $query_params[] = $pid;
@@ -355,8 +354,7 @@ function printPollForm() {
 
         $pollType = Database::get()->querySingle("SELECT `type` FROM poll WHERE pid = ?d", $pid)->type;
         $pollPagination = Database::get()->querySingle("SELECT `pagination` FROM poll WHERE pid = ?d", $pid)->pagination;
-        $incomplete_resubmission = isset($_SESSION["poll_answers_$pid"]);
-        $incomplete_answers = $_SESSION["poll_answers_$pid"];
+        $incomplete_answers = $_SESSION["poll_answers_$pid"] ?? [];
         unset($_SESSION["poll_answers_$pid"]);
         $i = 1;
         $page = 1;
@@ -370,9 +368,6 @@ function printPollForm() {
             $pqid = $theQuestion->pqid;
             $qtype = $theQuestion->qtype;
             $q_description = $theQuestion->description;
-            if ($incomplete_resubmission and !isset($incomplete_answers[$pqid])) {
-                $incomplete_answers[$pqid] = [];
-            }
             $user_answers = null;
             if ($qtype == QTYPE_LABEL) {
                 $tool_content .= "
@@ -402,8 +397,8 @@ function printPollForm() {
                                             WHERE a.poll_user_record_id = b.id
                                                 AND a.qid = ?d
                                                 AND b.uid = ?d", $pqid, $uid);
-                                } elseif ($incomplete_resubmission) {
-                                    $user_answers = $incomplete_answers[$pqid];
+                                } else {
+                                    $user_answers = $incomplete_answers[$pqid] ?? false;
                                 }
                                 $answers = Database::get()->queryArray("SELECT * FROM poll_question_answer
                                             WHERE pqid = ?d ORDER BY pqaid", $pqid);
@@ -415,19 +410,11 @@ function printPollForm() {
                                     $tool_content .= "<input type='hidden' name='answer[$pqid]' value='-1'>";
                                 }
                                 foreach ($answers as $theAnswer) {
-                                        $checked = '';
+                                    $checked = '';
                                     if ($user_answers) {
-                                        if (count($user_answers) > 1) { // multiple answers
-                                            foreach ($user_answers as $ua) {
-                                                if ($ua->aid == $theAnswer->pqaid) {
-                                                    $checked = 'checked';
-                                                }
-                                            }
-                                        } else {
-                                            if (count($user_answers) == 1) { // single answer
-                                                if ($user_answers[0]->aid == $theAnswer->pqaid) {
-                                                    $checked = 'checked';
-                                                }
+                                        foreach ($user_answers as $ua) {
+                                            if ($ua->aid == $theAnswer->pqaid) {
+                                                $checked = 'checked';
                                             }
                                         }
                                     }
@@ -473,7 +460,7 @@ function printPollForm() {
                                     if ($user_answers) {
                                         $slider_value = $user_answers->answer_text;
                                     }
-                                } elseif ($incomplete_resubmission and $incomplete_answers[$pqid]) {
+                                } elseif (isset($incomplete_answers[$pqid])) {
                                     $slider_value = $incomplete_answers[$pqid][0]->answer_text;
                                 }
                                 if (($pollType == POLL_COLLES) or ($pollType == POLL_ATTLS)) {
@@ -505,7 +492,7 @@ function printPollForm() {
                                     if ($user_answers) {
                                         $text = $user_answers->answer_text;
                                     }
-                                } elseif ($incomplete_resubmission and $incomplete_answers[$pqid]) {
+                                } elseif (isset($incomplete_answers[$pqid])) {
                                     $text = $incomplete_answers[$pqid][0]->answer_text;
                                 }
                                 $tool_content .= "
@@ -812,14 +799,16 @@ function submitPoll() {
         }
 
         if (!$is_complete) {
+            $session_answers = [];
             $user_answers = Database::get()->queryArray('SELECT * FROM poll_answer_record
                 WHERE poll_user_record_id = ?d', $user_record_id);
-            $session_answers = [];
-            foreach ($user_answers as $answer) {
-                if (isset($session_answers[$answer->qid])) {
-                    $session_answers[$answer->qid][] = $answer;
-                } else {
-                    $session_answers[$answer->qid] = [$answer];
+            if ($user_answers) {
+                foreach ($user_answers as $answer) {
+                    if (isset($session_answers[$answer->qid])) {
+                        $session_answers[$answer->qid][] = $answer;
+                    } else {
+                        $session_answers[$answer->qid] = [$answer];
+                    }
                 }
             }
             $_SESSION["poll_answers_$pid"] = $session_answers;
