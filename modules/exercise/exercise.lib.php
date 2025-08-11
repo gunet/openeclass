@@ -510,7 +510,7 @@ function question_result($answer_type, $question_id, $choice, $eurid, $regrade):
         case FILL_IN_BLANKS_TOLERANT:
         case FILL_IN_BLANKS:
             $answer = new FillInBlanksAnswer($question_id);
-            if (FILL_IN_BLANKS_TOLERANT) {
+            if ($answer_type == FILL_IN_BLANKS_TOLERANT) {
                 $html .= $answer->QuestionResult($choice, $eurid, $regrade, 'tolerant');
             } else {
                 $html .= $answer->QuestionResult($choice, $eurid, $regrade);

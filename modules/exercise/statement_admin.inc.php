@@ -70,6 +70,24 @@ $(function() {
     function updateFillInBlanksAnswerTypeValue(){
         $('input[name=answerType]#fill_in_blanks_selector').val($(this).val());
     }
+
+    var selectTypeAnswer = document.getElementById('answerTypeSelected');
+    var selectedOption = selectTypeAnswer.options[selectTypeAnswer.selectedIndex];
+    if (selectedOption.selected && selectedOption.value == 3) {
+        $('.fill_in_blank_strict').removeClass('d-none').addClass('d-block');
+    } else {
+        $('.fill_in_blank_strict').removeClass('d-block').addClass('d-none');
+    }
+    $('#answerTypeSelected').on('click', function () {
+        var selectTypeAnswer = document.getElementById('answerTypeSelected');
+        var selectedOption = selectTypeAnswer.options[selectTypeAnswer.selectedIndex];
+        if (selectedOption.selected && selectedOption.value == 3) {
+            $('.fill_in_blank_strict').removeClass('d-none').addClass('d-block');
+        } else {
+            $('.fill_in_blank_strict').removeClass('d-block').addClass('d-none');
+        }
+    });
+
  });
 </script>
  ";
@@ -86,6 +104,9 @@ if (isset($_POST['submitQuestion'])) {
         $questionDescription = purify($_POST['questionDescription']);
         $questionFeedback = purify($_POST['questionFeedback']);
         $answerType = intval($_POST['answerType']);
+        if ($answerType == FILL_IN_BLANKS && isset($_POST['fill_in_blank_strict'])) {
+            $answerType = intval($_POST['fill_in_blank_strict']); // strict fill in blanks 
+        }
 
         // It requires to be uploaded an image for this type of question
 
@@ -312,22 +333,33 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
                     $langAnswerType
                 </div>
                 <div class='col-12'>
-                " . selection([
-                                UNIQUE_ANSWER => $langUniqueSelect,
-                                MULTIPLE_ANSWER => $langMultipleSelect,
-                                TRUE_FALSE => $langTrueFalse,
-                                FILL_IN_BLANKS_TOLERANT => "$langFillBlanks - $langFillBlanksStrict $langFillBlanksStrictExample",
-                                FILL_IN_BLANKS => "$langFillBlanks - $langFillBlanksTolerant $langFillBlanksTolerantExample",
-                                FILL_IN_FROM_PREDEFINED_ANSWERS => "$langFillFromSelectedWords",
-                                MATCHING => $langMatching,
-                                ORDERING => $langOrdering,
-                                DRAG_AND_DROP_TEXT => "$langDragAndDropText",
-                                DRAG_AND_DROP_MARKERS => "$langDragAndDropMarkers",
-                                CALCULATED => $langCalculated,
-                                FREE_TEXT => "$langFreeText",
-                                ORAL => "$langOral",
-                            ],
-                        'answerType', (isset($answerType))? $answerType : UNIQUE_ANSWER) . " 
+                    " . selection(
+                        [
+                            UNIQUE_ANSWER => $langUniqueSelect,
+                            MULTIPLE_ANSWER => $langMultipleSelect,
+                            TRUE_FALSE => $langTrueFalse,
+                            //FILL_IN_BLANKS_TOLERANT => "$langFillBlanks - $langFillBlanksStrict $langFillBlanksStrictExample", 7
+                            FILL_IN_BLANKS => "$langFillBlanks - $langFillBlanksTolerant $langFillBlanksTolerantExample", // 3
+                            FILL_IN_FROM_PREDEFINED_ANSWERS => "$langFillFromSelectedWords",
+                            MATCHING => $langMatching,
+                            ORDERING => $langOrdering,
+                            DRAG_AND_DROP_TEXT => "$langDragAndDropText",
+                            DRAG_AND_DROP_MARKERS => "$langDragAndDropMarkers",
+                            CALCULATED => $langCalculated,
+                            FREE_TEXT => "$langFreeText",
+                            ORAL => "$langOral",
+                        ],
+                        'answerType',
+                        (isset($answerType)) ? ($answerType == FILL_IN_BLANKS_TOLERANT ? FILL_IN_BLANKS : $answerType) : UNIQUE_ANSWER,
+                        "id='answerTypeSelected'"
+                    ) . "
+                    <div class='mt-2 checkbox fill_in_blank_strict d-none'>
+                        <label class='label-container' aria-label='$langSettingSelect'>
+                            <input type='checkbox' name='fill_in_blank_strict' value=".FILL_IN_BLANKS_TOLERANT." ". ($answerType == FILL_IN_BLANKS_TOLERANT ? 'checked' : '') .">
+                            <span class='checkmark'></span>
+                            $langFillBlanksStrict $langFillBlanksStrictExample
+                        </label>
+                    </div>
                 </div>
             </div>
             ";
