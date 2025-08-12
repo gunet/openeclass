@@ -73,7 +73,7 @@ $(function() {
 
     var selectTypeAnswer = document.getElementById('answerTypeSelected');
     var selectedOption = selectTypeAnswer.options[selectTypeAnswer.selectedIndex];
-    if (selectedOption.selected && selectedOption.value == 3) {
+    if (selectedOption.selected && selectedOption.value == 7) {
         $('.fill_in_blank_strict').removeClass('d-none').addClass('d-block');
     } else {
         $('.fill_in_blank_strict').removeClass('d-block').addClass('d-none');
@@ -81,7 +81,7 @@ $(function() {
     $('#answerTypeSelected').on('click', function () {
         var selectTypeAnswer = document.getElementById('answerTypeSelected');
         var selectedOption = selectTypeAnswer.options[selectTypeAnswer.selectedIndex];
-        if (selectedOption.selected && selectedOption.value == 3) {
+        if (selectedOption.selected && selectedOption.value == 7) {
             $('.fill_in_blank_strict').removeClass('d-none').addClass('d-block');
         } else {
             $('.fill_in_blank_strict').removeClass('d-block').addClass('d-none');
@@ -104,7 +104,7 @@ if (isset($_POST['submitQuestion'])) {
         $questionDescription = purify($_POST['questionDescription']);
         $questionFeedback = purify($_POST['questionFeedback']);
         $answerType = intval($_POST['answerType']);
-        if ($answerType == FILL_IN_BLANKS && isset($_POST['fill_in_blank_strict'])) {
+        if ($answerType == FILL_IN_BLANKS_TOLERANT && isset($_POST['fill_in_blank_strict'])) {
             $answerType = intval($_POST['fill_in_blank_strict']); // strict fill in blanks 
         }
 
@@ -338,8 +338,8 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
                             UNIQUE_ANSWER => $langUniqueSelect,
                             MULTIPLE_ANSWER => $langMultipleSelect,
                             TRUE_FALSE => $langTrueFalse,
-                            //FILL_IN_BLANKS_TOLERANT => "$langFillBlanks - $langFillBlanksStrict $langFillBlanksStrictExample", 7
-                            FILL_IN_BLANKS => "$langFillBlanks - $langFillBlanksTolerant $langFillBlanksTolerantExample", // 3
+                            FILL_IN_BLANKS_TOLERANT => "$langFillBlanks - $langFillBlanksTolerant $langFillBlanksTolerantExample",  // 7
+                            //FILL_IN_BLANKS => "$langFillBlanks - $langFillBlanksStrict $langFillBlanksStrictExample", // 3
                             FILL_IN_FROM_PREDEFINED_ANSWERS => "$langFillFromSelectedWords",
                             MATCHING => $langMatching,
                             ORDERING => $langOrdering,
@@ -350,12 +350,12 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
                             ORAL => "$langOral",
                         ],
                         'answerType',
-                        (isset($answerType)) ? ($answerType == FILL_IN_BLANKS_TOLERANT ? FILL_IN_BLANKS : $answerType) : UNIQUE_ANSWER,
+                        (isset($answerType)) ? ($answerType == FILL_IN_BLANKS ? FILL_IN_BLANKS_TOLERANT : $answerType) : UNIQUE_ANSWER,
                         "id='answerTypeSelected'"
                     ) . "
                     <div class='mt-2 checkbox fill_in_blank_strict d-none'>
                         <label class='label-container' aria-label='$langSettingSelect'>
-                            <input type='checkbox' name='fill_in_blank_strict' value=".FILL_IN_BLANKS_TOLERANT." ". ($answerType == FILL_IN_BLANKS_TOLERANT ? 'checked' : '') .">
+                            <input type='checkbox' name='fill_in_blank_strict' value=".FILL_IN_BLANKS." ". ($answerType == FILL_IN_BLANKS ? 'checked' : '') .">
                             <span class='checkmark'></span>
                             $langFillBlanksStrict $langFillBlanksStrictExample
                         </label>
