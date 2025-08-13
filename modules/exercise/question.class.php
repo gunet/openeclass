@@ -702,10 +702,43 @@ if (!class_exists('Question')) {
                     } else {
                         $correct_answer_attempts = 0;
                     }
+            }
+
+            // New question types: DRAG_AND_DROP_TEXT, DRAG_AND_DROP_MARKERS, CALCULATED, ORDERING
+            $new_question_type = false;
+            if ($type == DRAG_AND_DROP_TEXT || $type == DRAG_AND_DROP_MARKERS
+                || $type == CALCULATED || $type == ORDERING) {
+
+                $new_question_type = true;
+                // total weight of question
+                $question_weight = Database::get()->querySingle("SELECT `weight` FROM exercise_question WHERE id = ?d", $id)->weight;
+
+                if ($question_weight === null) {
+                    $question_weight = 0; // Handle case if no correct answers are defined
                 }
 
-            if ($total_answer_attempts>0) {
-                $successRate = round($correct_answer_attempts/$total_answer_attempts*100, 2);
+                // Count attempts where sum of weights = question_weight
+                $q_correct_attempts_sql = "
+                    SELECT COUNT(*) AS correct_attempts_count
+                    FROM (
+                        SELECT a.eurid
+                        FROM exercise_answer_record a
+                        JOIN exercise_user_record b ON a.eurid = b.eurid
+                        WHERE a.question_id = ?d AND b.attempt_status = ?d AND a.is_answered = ?d
+                        GROUP BY a.eurid
+                        HAVING SUM(a.weight) = ?d
+                    ) AS sub_attempts";
+
+                $correct_attempts = Database::get()->querySingle($q_correct_attempts_sql, $id, ATTEMPT_COMPLETED, 1, $question_weight)->correct_attempts_count;
+            }
+
+            // Final calculation of success rate
+            if ($total_answer_attempts > 0) {
+                if ($new_question_type) {
+                    $successRate = round($correct_attempts / $total_answer_attempts * 100, 2);
+                } else {
+                    $successRate = round($correct_answer_attempts / $total_answer_attempts * 100, 2);
+                }
             } else {
                 $successRate = NULL;
             }
