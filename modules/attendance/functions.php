@@ -795,7 +795,8 @@ function attendance_book_form($attendance_id = null) {
         $title_default = '';
         $start_date_default = '';
         $end_date_default = '';
-        $limit_default = '';
+        // Assume a default of 2 classes per week, for 3 months, with two missed attendances (2*4*3)-2
+        $limit_default = '22';
 
         $action = "$_SERVER[SCRIPT_NAME]?course=$course_code";
     } else { // Edit attendance book
