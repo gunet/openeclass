@@ -775,7 +775,7 @@ function new_attendance() {
 
     global $tool_content, $course_code, $langNewAttendance2, $head_content,
            $langTitle, $langSubmit, $langInsert, $langAttendanceLimitNumber,
-           $attendance_limit, $langStart, $langEnd, $language, $langImgFormsDes;
+           $langStart, $langEnd, $language, $langImgFormsDes;
 
     load_js('bootstrap-datetimepicker');
     $head_content .= "
@@ -838,7 +838,7 @@ function new_attendance() {
                     <div class='form-group mt-4".($limit_error ? " has-error" : "")."'>
                         <label for='limit_id' class='col-12 control-label-notes'>$langAttendanceLimitNumber <span class='asterisk Accent-200-cl'>(*)</span></label>
                         <div class='col-sm-12'>
-                            <input id='limit_id' class='form-control' placeholder='$langAttendanceLimitNumber' type='text' name='limit' value='$attendance_limit'>
+                            <input id='limit_id' class='form-control' placeholder='$langAttendanceLimitNumber' type='text' name='limit' value='$limit'>
                             <span class='help-block Accent-200-cl'>$limit_error</span>
                         </div>
                     </div>
