@@ -370,8 +370,8 @@ if ($is_editor) {
         if($v->validate()) {
             $newTitle = $_POST['title'];
             $attendance_limit = intval($_POST['limit']);
-            $start_date = DateTime::createFromFormat('d-m-Y H:i', $_POST['start_date'])->format('Y-m-d H:i:s');
-            $end_date = DateTime::createFromFormat('d-m-Y H:i', $_POST['end_date'])->format('Y-m-d H:i:s');
+            $start_date = (new DateTime($_POST['start_date']))->format('Y-m-d H:i:s');
+            $end_date = (new DateTime($_POST['end_date']))->format('Y-m-d H:i:s');
             $attendance_id = Database::get()->query("INSERT INTO attendance SET course_id = ?d, `limit` = ?d, active = 1, title = ?s, start_date = ?t, end_date = ?t", $course_id, $attendance_limit, $newTitle, $start_date, $end_date)->lastInsertID;
             $log_details = array('id' => $attendance_id, 'title' => $newTitle, 'attendance_limit' => $attendance_limit, 'start_date' => $start_date, 'end_date' => $end_date);
             Log::record($course_id, MODULE_ID_ATTENDANCE, LOG_INSERT, $log_details);
@@ -615,8 +615,8 @@ if ($is_editor) {
         if($v->validate()) {
             $attendance_limit = $_POST['limit'];
             $attendance_title = $_POST['title'];
-            $start_date = DateTime::createFromFormat('d-m-Y H:i', $_POST['start_date'])->format('Y-m-d H:i:s');
-            $end_date = DateTime::createFromFormat('d-m-Y H:i', $_POST['end_date'])->format('Y-m-d H:i:s');
+            $start_date = (new DateTime($_POST['start_date']))->format('Y-m-d H:i:s');
+            $end_date = (new DateTime($_POST['end_date']))->format('Y-m-d H:i:s');
             Database::get()->querySingle("UPDATE attendance SET `title` = ?s, `limit` = ?d, `start_date` = ?t, `end_date` = ?t WHERE id = ?d ", $attendance_title, $attendance_limit, $start_date, $end_date, $attendance_id);
             $log_details = array('id' => $attendance_id, 'title' => $attendance_title, 'attendance_limit' => $attendance_limit, 'start_date' => $start_date, 'end_date' => $end_date);
             Log::record($course_id, MODULE_ID_ATTENDANCE, LOG_MODIFY, $log_details);
@@ -657,8 +657,7 @@ if ($is_editor) {
             $actTitle = isset($_POST['actTitle']) ? trim($_POST['actTitle']) : "";
             $actDesc = purify($_POST['actDesc']);
             $auto = isset($_POST['auto']) ? $_POST['auto'] : "";
-            $actDate = empty($_POST['date']) ? null :
-                DateTime::createFromFormat('d-m-Y H:i', $_POST['date'])->format('Y-m-d H:i');
+            $actDate = empty($_POST['date']) ? null : (new DateTime($_POST['date']))->format('Y-m-d H:i');
             $visible = isset($_POST['visible']) ? 1 : 0;
             if ($_POST['id']) {
                 //update
