@@ -22,6 +22,7 @@ use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
 require_once 'modules/progress/AttendanceEvent.php';
+require_once 'enums.php';
 
 /**
  * @brief admin available attendances
