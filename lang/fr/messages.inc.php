@@ -1989,6 +1989,7 @@ $langWeekly = "Hébdomadaire";
 $langMonthly = "Mensuel";
 $langYearly = "Annuel";
 $langSummary = "Summary";
+$langSynopsis = "Résumé";
 $langDurationVisits = "Durée des Visites";
 $langDurationExpl = "Duration of visits on each module is computed appoximately in minutes.";
 $langMonths[1] = "jan";

@@ -1851,6 +1851,7 @@ $langWeekly = "Settimanale";
 $langMonthly = "Mensile";
 $langYearly = "Annuale";
 $langSummary = "Totale";
+$langSynopsis = "Sommario";
 $langDurationVisits = "Durata delle Visite";
 $langDurationExpl = "La durata delle visite per ogni modulo è calcolato in minuti d' ora ed è approssimativa.";
 $langMonths[1] = "Jan";

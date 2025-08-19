@@ -1885,6 +1885,7 @@ $langWeekly = "Weekly";
 $langMonthly = "Montlhy";
 $langYearly = "Yearly";
 $langSummary = "Summary";
+$langSynopsis = "Synopsis";
 $langDurationVisits = "Time Duration of Visits";
 $langDurationExpl = "Duration of visits on each module is computed appoximately in minutes.";
 $langMonths[1] = "Jan";

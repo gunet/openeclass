@@ -1798,6 +1798,7 @@ $langWeekly = "Wöchentlich";
 $langMonthly = "Monatlich";
 $langYearly = "Jährlich";
 $langSummary = "Gesamte Anzahl";
+$langSynopsis = "Zusammenfassung";
 $langDurationVisits = "Zeitliche Dauer der Besuche";
 $langDurationExpl = "Die zeitliche Dauer der Besuche in jedem Subsystem ist in Minuten aufgerundet angegeben";
 $langMonths[1] = "Jan";
