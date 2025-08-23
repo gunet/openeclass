@@ -55,4 +55,18 @@ class AnthropicProvider extends AbstractAIProvider {
         // TODO: Implement response formatting
         return [];
     }
+
+    /**
+     * Evaluate a text response using AI
+     */
+    public function evaluateText(string $prompt, array $options = []): array {
+        throw new Exception("Anthropic provider not yet implemented");
+    }
+
+    /**
+     * Extract course data from content (syllabus text or manual prompt)
+     */
+    public function extractCourseData(string $content, string $contentType = 'prompt', array $options = []): array {
+        throw new Exception("Anthropic course data extraction not yet implemented");
+    }
 }

@@ -28,6 +28,14 @@ if ($session->status !== USER_TEACHER && !$is_departmentmanage_user) { // if we 
     redirect_to_home_page();
 }
 
+// Load AI service for course creation
+try {
+    require_once 'include/lib/ai/services/AICourseExtractionService.php';
+} catch (Exception $e) {
+    // AI service not available, continue without it
+    error_log("AI Course Service Error: " . $e->getMessage());
+}
+
 require_once 'include/log.class.php';
 require_once 'include/lib/course.class.php';
 require_once 'include/lib/user.class.php';
@@ -124,6 +132,17 @@ if (!isset($_POST['create_course'])) {
         }
         $data['image_content'] = $image_content;
         $data['default_access'] = intval(get_config('default_course_access', COURSE_REGISTRATION));
+        
+        // Check if AI service is available
+        $data['ai_available'] = false;
+        try {
+            if (class_exists('AICourseExtractionService')) {
+                $data['ai_available'] = AICourseExtractionService::isAvailable();
+            }
+        } catch (Exception $e) {
+            error_log("AI availability check failed: " . $e->getMessage());
+        }
+        
         view('modules.create_course.index', $data);
 
 } else if ($_POST['view_type'] == "flippedclassroom") {

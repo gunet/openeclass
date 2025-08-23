@@ -67,4 +67,14 @@ interface AIProviderInterface {
      * @return array AI response data
      */
     public function evaluateText(string $prompt, array $options = []): array;
+    
+    /**
+     * Extract course data from content (syllabus text or manual prompt)
+     * 
+     * @param string $content The source content (syllabus text or course description prompt)
+     * @param string $contentType Type of content ('syllabus' or 'prompt')
+     * @param array $options Configuration options for extraction
+     * @return array Extracted course data formatted for OpenEclass
+     */
+    public function extractCourseData(string $content, string $contentType = 'prompt', array $options = []): array;
 }

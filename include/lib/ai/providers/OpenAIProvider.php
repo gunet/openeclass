@@ -88,7 +88,14 @@ class OpenAIProvider extends AbstractAIProvider {
         
         if ($method === 'POST') {
             $curlOptions[CURLOPT_POST] = true;
-            $curlOptions[CURLOPT_POSTFIELDS] = json_encode($data);
+            $jsonData = json_encode($data);
+            
+            // Check if JSON encoding failed
+            if ($jsonData === false) {
+                throw new Exception('JSON encoding failed: ' . json_last_error_msg());
+            }
+            
+            $curlOptions[CURLOPT_POSTFIELDS] = $jsonData;
             $headers[] = 'Content-Type: application/json';
             $curlOptions[CURLOPT_HTTPHEADER] = $headers;
         } else {
@@ -251,6 +258,177 @@ class OpenAIProvider extends AbstractAIProvider {
         ];
 
         return $this->makeApiRequest($this->getDefaultEndpoint(), $requestData);
+    }
+
+    /**
+     * Extract course data from content (syllabus text or manual prompt)
+     * 
+     * @param string $content The source content (syllabus text or course description prompt)
+     * @param string $contentType Type of content ('syllabus' or 'prompt')
+     * @param array $options Configuration options for extraction
+     * @return array Extracted course data formatted for OpenEclass
+     */
+    public function extractCourseData(string $content, string $contentType = 'prompt', array $options = []): array {
+        $systemPrompt = $this->buildCourseExtractionSystemPrompt($contentType);
+        $userPrompt = $this->buildCourseExtractionPrompt($content, $contentType, $options);
+
+        $requestData = [
+            'model' => $this->modelName,
+            'messages' => [
+                [
+                    'role' => 'system',
+                    'content' => $systemPrompt
+                ],
+                [
+                    'role' => 'user',
+                    'content' => $userPrompt
+                ]
+            ],
+            'max_tokens' => $options['max_tokens'] ?? 2000,
+            'temperature' => $options['temperature'] ?? 0.3,
+            'tools' => [$this->getCourseExtractionToolDefinition()],
+            'tool_choice' => ['type' => 'function', 'function' => ['name' => 'extract_course_data']]
+        ];
+
+        $response = $this->makeApiRequest($this->getDefaultEndpoint(), $requestData);
+        return $this->formatCourseDataFunctionResponse($response, $options);
+    }
+
+    /**
+     * Build system prompt for course data extraction
+     */
+    private function buildCourseExtractionSystemPrompt(string $contentType): string {
+        $basePrompt = "You are an expert educational assistant that extracts structured course information for learning management systems. ";
+        
+        if ($contentType === 'syllabus') {
+            $basePrompt .= "You analyze syllabus documents and extract key course information including title, description, objectives, prerequisites, and metadata.";
+        } else {
+            $basePrompt .= "You generate comprehensive course information based on user requirements and educational best practices.";
+        }
+        
+        $basePrompt .= " Always respond with valid JSON format containing the requested course fields.";
+        
+        return $basePrompt;
+    }
+
+    /**
+     * Build user prompt for course data extraction
+     */
+    private function buildCourseExtractionPrompt(string $content, string $contentType, array $options): string {
+        if ($contentType === 'syllabus') {
+            $prompt = "Extract course information from the following syllabus content:\n\n";
+            $prompt .= "SYLLABUS CONTENT:\n" . $content . "\n\n";
+        } else {
+            $prompt = "Generate comprehensive course information based on the following requirements:\n\n";
+            $prompt .= "COURSE REQUIREMENTS:\n" . $content . "\n\n";
+        }
+        
+        $prompt .= "Guidelines:\n";
+        $prompt .= "- Extract information accurately from the provided content\n";
+        $prompt .= "- Use proper HTML formatting in the description field\n";
+        $prompt .= "- Choose appropriate view_type based on course structure\n";
+        $prompt .= "- Set formvisible to 1 (registration required) as default for academic courses\n";
+        $prompt .= "- Generate realistic course codes if not provided\n";
+        $prompt .= "- Detect and respond in the same language as the input content\n";
+        $prompt .= "- Ensure all fields are present even if extracted from context or generated\n";
+        
+        return $prompt;
+    }
+
+    /**
+     * Get the function/tool definition for course data extraction
+     */
+    private function getCourseExtractionToolDefinition(): array {
+        return [
+            'type' => 'function',
+            'function' => [
+                'name' => 'extract_course_data',
+                'description' => 'Extract or generate structured course information for a learning management system',
+                'parameters' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'title' => [
+                            'type' => 'string',
+                            'description' => 'Course title (max 255 characters)',
+                            'maxLength' => 255
+                        ],
+                        'public_code' => [
+                            'type' => 'string',
+                            'description' => 'Course code/identifier (uppercase letters and numbers only, max 20 chars)',
+                            'maxLength' => 20,
+                            'pattern' => '^[A-Z0-9]*$'
+                        ],
+                        'description' => [
+                            'type' => 'string',
+                            'description' => 'Detailed HTML course description including objectives, content, and prerequisites'
+                        ],
+                        'prof_names' => [
+                            'type' => 'string',
+                            'description' => 'Instructor names if mentioned'
+                        ],
+                        'language' => [
+                            'type' => 'string',
+                            'description' => 'Course language code',
+                            'enum' => ['el', 'en', 'fr', 'de', 'es', 'it']
+                        ],
+                        'view_type' => [
+                            'type' => 'string',
+                            'description' => 'Course format type',
+                            'enum' => ['simple', 'units', 'activity', 'wall', 'flippedclassroom']
+                        ],
+                        'formvisible' => [
+                            'type' => 'integer',
+                            'description' => 'Course access level: 2=open, 1=registration required, 0=closed',
+                            'enum' => [0, 1, 2]
+                        ],
+                        'course_license' => [
+                            'type' => 'integer',
+                            'description' => 'License type: 0=no license, 10=copyright, or CC license ID',
+                            'minimum' => 0,
+                            'maximum' => 10
+                        ],
+                        'keywords' => [
+                            'type' => 'string',
+                            'description' => 'Comma-separated relevant keywords for the course'
+                        ]
+                    ],
+                    'required' => ['title', 'description', 'language', 'view_type', 'formvisible']
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * Format course data response from OpenAI function calling
+     */
+    private function formatCourseDataFunctionResponse(array $apiResponse, array $options): array {
+        if (!isset($apiResponse['choices'][0]['message']['tool_calls'][0]['function']['arguments'])) {
+            throw new Exception("Invalid function response format from OpenAI");
+        }
+
+        $functionArgs = $apiResponse['choices'][0]['message']['tool_calls'][0]['function']['arguments'];
+        $courseData = json_decode($functionArgs, true);
+
+        if (!$courseData) {
+            throw new Exception("Invalid JSON format in OpenAI function response");
+        }
+
+        // Format and validate data according to OpenEclass requirements
+        $formattedData = [
+            'title' => $courseData['title'] ?? 'Untitled Course',
+            'public_code' => $courseData['public_code'] ?? '',
+            'description' => $courseData['description'] ?? '',
+            'prof_names' => $courseData['prof_names'] ?? '',
+            'language' => $courseData['language'] ?? 'en',
+            'view_type' => $courseData['view_type'] ?? 'units',
+            'formvisible' => intval($courseData['formvisible'] ?? 1),
+            'course_license' => intval($courseData['course_license'] ?? 0),
+            'keywords' => $courseData['keywords'] ?? '',
+            'provider' => $this->getProviderType(),
+            'generated_at' => date('Y-m-d H:i:s')
+        ];
+
+        return $formattedData;
     }
 
 }
