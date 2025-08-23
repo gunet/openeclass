@@ -6460,5 +6460,6 @@ $langHighConfidence = "High Confidence";
 $langMediumConfidence = "Medium Confidence";
 $langLowConfidence = "Low Confidence";
 $langConfidence = "Confidence";
+$langReasoning = "Reasoning";
 $langAddToExercise = "Add to Exercise";
 $langQuestionsAddedToExercise = '%d questions added to exercise';

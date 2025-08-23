@@ -189,6 +189,108 @@ if ($is_editor && ($exercise_user_record->attempt_status == ATTEMPT_PENDING || $
                         $('table.graded').show('slow');
                     });
                 });
+                
+                // AI Evaluation functionality
+                function performAIEvaluation(answerRecordId) {
+                    var statusDiv = $('#ai-eval-status-' + answerRecordId);
+                    var resultDiv = $('#ai-eval-result-' + answerRecordId);
+                    var container = $('#ai-eval-container-' + answerRecordId);
+                    
+                    // Show loading state
+                    statusDiv.html('<div class=\"d-flex align-items-center\"><div class=\"spinner-border spinner-border-sm me-2\" role=\"status\"></div>Evaluating response with AI...</div>');
+                    
+                    // Make AJAX request
+                    $.ajax({
+                        url: 'ai_evaluate.php?course=' + encodeURIComponent('$course_code'),
+                        method: 'POST',
+                        data: {
+                            answer_record_id: answerRecordId
+                        },
+                        dataType: 'json',
+                        timeout: 60000, // 60 second timeout
+                        success: function(response) {
+                            if (response.success && response.status === 'completed') {
+                                var eval = response.evaluation;
+                                var confidencePercent = Math.round(eval.confidence * 100);
+                                var confidenceClass = eval.confidence >= 0.8 ? 'text-success' : 
+                                                    (eval.confidence >= 0.5 ? 'text-warning' : 'text-danger');
+                                var confidenceText = eval.confidence >= 0.8 ? '$langHighConfidence' : 
+                                                    (eval.confidence >= 0.5 ? '$langMediumConfidence' : '$langLowConfidence');
+                                
+                                // Hide status, show results
+                                statusDiv.hide();
+                                
+                                var resultHtml = '<div class=\"row mb-2\">' +
+                                    '<div class=\"col-md-6\">' +
+                                    '<strong>$langAISuggestion: ' + eval.suggested_score + '/' + eval.max_score + '</strong>' +
+                                    '</div>' +
+                                    '<div class=\"col-md-6 text-end\">' +
+                                    '<span class=\"' + confidenceClass + '\">$langConfidence: ' + confidencePercent + '% (' + confidenceText + ')</span>' +
+                                    '</div>' +
+                                    '</div>' +
+                                    '<div class=\"mb-2\">' +
+                                    '<strong>$langReasoning:</strong><br>' +
+                                    eval.reasoning.replace(/\\n/g, '<br>') +
+                                    '</div>';
+                                
+                                resultDiv.html(resultHtml).show();
+                            } else {
+                                showAIEvaluationError(answerRecordId, response.message || 'AI evaluation failed');
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            var errorMsg = 'Unable to connect to AI service';
+                            if (status === 'timeout') {
+                                errorMsg = 'AI evaluation timed out';
+                            } else if (xhr.responseJSON && xhr.responseJSON.message) {
+                                errorMsg = xhr.responseJSON.message;
+                            }
+                            showAIEvaluationError(answerRecordId, errorMsg);
+                        }
+                    });
+                }
+                
+                function showAIEvaluationError(answerRecordId, errorMessage) {
+                    var statusDiv = $('#ai-eval-status-' + answerRecordId);
+                    var container = $('#ai-eval-container-' + answerRecordId);
+                    
+                    // Update container styling to show error
+                    container.removeClass('border-info').addClass('border-danger');
+                    container.find('h6').removeClass('text-info').addClass('text-danger');
+                    
+                    var errorHtml = '<div class=\"text-danger mb-2\">' +
+                        '<i class=\"fa fa-exclamation-triangle\"></i> ' + errorMessage +
+                        '</div>' +
+                        '<button type=\"button\" class=\"btn btn-sm btn-outline-primary\" onclick=\"retryAIEvaluation(' + answerRecordId + ')\">' +
+                        '<i class=\"fa fa-refresh\"></i> Retry AI Evaluation' +
+                        '</button>';
+                    
+                    statusDiv.html(errorHtml);
+                }
+                
+                window.retryAIEvaluation = function(answerRecordId) {
+                    var container = $('#ai-eval-container-' + answerRecordId);
+                    // Reset styling
+                    container.removeClass('border-danger').addClass('border-info');
+                    container.find('h6').removeClass('text-danger').addClass('text-info');
+                    
+                    // Retry the evaluation
+                    performAIEvaluation(answerRecordId);
+                };
+                
+                // Auto-trigger AI evaluations on page load for pending evaluations
+                $(document).ready(function() {
+                    $('.ai-eval-pending').each(function() {
+                        var answerRecordId = $(this).data('answer-id');
+                        if (answerRecordId) {
+                            // Add small delay to avoid overwhelming the server with multiple requests
+                            setTimeout(function() {
+                                performAIEvaluation(answerRecordId);
+                            }, Math.random() * 2000 + 500); // Random delay between 500ms-2.5s
+                        }
+                    });
+                });
+                
                 </script>";
 }
 
@@ -706,6 +808,26 @@ if (count($exercise_question_ids) > 0) {
                     
                     $tool_content .= "</div>";
                     $tool_content .= "</td></tr>";
+                } else {
+                    // Check if AI evaluation is enabled for this question
+                    $ai_config = Database::get()->querySingle("SELECT * FROM exercise_ai_config 
+                                                              WHERE question_id = ?d AND enabled = 1", 
+                                                              $row->question_id);
+                    if ($ai_config) {
+                        // Show AI evaluation trigger button
+                        $tool_content .= "<tr><td>";
+                        $tool_content .= "<div class='mt-3 p-3 bg-light border-start border-info border-4' id='ai-eval-container-{$row->answer_record_id}'>";
+                        $tool_content .= "<h6 class='text-info'><i class='fa fa-robot'></i> $langAIEvaluation</h6>";
+                        $tool_content .= "<div id='ai-eval-status-{$row->answer_record_id}' class='ai-eval-pending' data-answer-id='{$row->answer_record_id}'>";
+                        $tool_content .= "<div class='d-flex align-items-center'>";
+                        $tool_content .= "<div class='spinner-border spinner-border-sm me-2' role='status'></div>";
+                        $tool_content .= "Evaluating response with AI...";
+                        $tool_content .= "</div>";
+                        $tool_content .= "</div>";
+                        $tool_content .= "<div id='ai-eval-result-{$row->answer_record_id}' style='display: none;'></div>";
+                        $tool_content .= "</div>";
+                        $tool_content .= "</td></tr>";
+                    }
                 }
             }
         }

@@ -7136,6 +7136,7 @@ $langHighConfidence = "Υψηλή Εμπιστοσύνη";
 $langMediumConfidence = "Μέση Εμπιστοσύνη";
 $langLowConfidence = "Χαμηλή Εμπιστοσύνη";
 $langConfidence = "Εμπιστοσύνη";
+$langReasoning = "Αιτιολόγηση";
 $langAddToExercise = "Προσθήκη στην Άσκηση";
 $langQuestionsAddedToExercise = '%d ερωτήσεις προστέθηκαν στην άσκηση';
 $langTestConnection = "Δοκιμή Σύνδεσης";

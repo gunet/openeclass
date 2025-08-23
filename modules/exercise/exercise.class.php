@@ -1516,9 +1516,7 @@ if (!class_exists('Exercise')) {
                     return false; // Already evaluated
                 }
                 
-                // Trigger AI evaluation asynchronously to avoid blocking the submission
-                // In a production environment, this could be queued for background processing
-                $evaluation = $aiService->evaluateResponse($answer_record_id, $response_text);
+                // AI evaluation will be triggered via AJAX after page load to avoid blocking submission
                 
                 return true;
                 
