@@ -15,6 +15,6 @@
     "video.js": "^8.19"
   },
   "scripts": {
-    "postinstall": "sh ./js/build/build.sh"
+    "postinstall": "bash ./js/build/build.sh"
   }
 }
