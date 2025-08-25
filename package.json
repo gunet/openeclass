@@ -10,11 +10,11 @@
     "@uppy/locales": "^4.2.0",
     "@uppy/xhr-upload": "^4.2.1",
     "h5p-standalone": "^3.8.0",
-    "mathjax": "3",
+    "mathjax": "4",
     "recordrtc": "^5.6.2",
     "video.js": "^8.19"
   },
   "scripts": {
-    "build": "bun build ./js/build/uppy.js --outdir ./js/bundle --minify && rm js/bundle/uppy.min.css && cat node_modules/@uppy/*/dist/*.min.css >>js/bundle/uppy.min.css"
+    "postinstall": "sh ./js/build/build.sh"
   }
 }
