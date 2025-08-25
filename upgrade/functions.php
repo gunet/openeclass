@@ -3374,6 +3374,24 @@ function upgrade_to_4_2($tbl_options) : void {
     if (DBHelper::fieldExists('tc_log', 'id')) {
         Database::get()->query("ALTER TABLE tc_log CHANGE id id INT NOT NULL AUTO_INCREMENT");
     }
+
+    if (!DBHelper::tableExists('tenant')) {
+        Database::get()->query("CREATE TABLE `tenant` (
+            `id` int(11) NOT NULL AUTO_INCREMENT,
+            `name` varchar(200) NOT NULL,
+            `description` text DEFAULT NULL,
+            `department_id` int(11) NOT NULL,
+            `url` varchar(200) NOT NULL DEFAULT '',
+            `theme_id` int(11) DEFAULT NULL,
+            `created_at` DATETIME NOT NULL,
+            `updated_at` DATETIME NOT NULL,
+            `options` text DEFAULT NULL,
+            PRIMARY KEY (`id`),
+            KEY `department_id` (`department_id`),
+            KEY `theme_id` (`theme_id`),
+            CONSTRAINT FOREIGN KEY (`department_id`) REFERENCES `hierarchy` (`id`),
+            CONSTRAINT FOREIGN KEY (`theme_id`) REFERENCES `theme_options` (`id`)) $tbl_options");
+    }
 }
 
 /**

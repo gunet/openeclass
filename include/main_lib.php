@@ -3155,7 +3155,6 @@ function active_subdirs($base, $filename) {
  * @param  - $dirPath (String) - the path of the directory to delete
  * @return - boolean - true if the delete succeed, false otherwise.
  */
-
 function removeDir($dirPath) {
     global $webDir;
 
@@ -5124,6 +5123,23 @@ function module_path($path) {
         return $lti_path;
     }
     return preg_replace('|^.*modules/([^/]+)/.*$|', '\1', $path);
+}
+
+
+/**
+ * @brief Get the current tenant, if any
+ */
+function getTenant() {
+    global $require_current_course, $course_id;
+
+    if ($require_current_course and $course_id) {
+        return null;
+    }
+
+    if (!isset($_SESSION['tenant'])) {
+        $_SESSION['tenant'] = null;
+    }
+    return $_SESSION['tenant'];
 }
 
 

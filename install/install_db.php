@@ -417,7 +417,7 @@ $db->query("CREATE TABLE monthly_summary (
     `messages` int DEFAULT '0',
     `announcements` int DEFAULT '0',
     `forum_posts` int DEFAULT '0',
-    `inactive_courses` int DEFAULT '0',            
+    `inactive_courses` int DEFAULT '0',
     PRIMARY KEY (id)) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `document` (
@@ -2613,6 +2613,22 @@ $db->query("CREATE TABLE `session_user_material` (
           FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE,
           FOREIGN KEY (`session_id`) REFERENCES `mod_session` (`id`) ON DELETE CASCADE) $tbl_options");
 
+
+$db->query("CREATE TABLE `tenant` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `name` varchar(200) NOT NULL,
+    `description` text DEFAULT NULL,
+    `department_id` int(11) NOT NULL,
+    `url` varchar(200) NOT NULL DEFAULT '',
+    `theme_id` int(11) DEFAULT NULL,
+    `created_at` DATETIME NOT NULL,
+    `updated_at` DATETIME NOT NULL,
+    `options` text DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    KEY `department_id` (`department_id`),
+    KEY `theme_id` (`theme_id`),
+    CONSTRAINT FOREIGN KEY (`department_id`) REFERENCES `hierarchy` (`id`),
+    CONSTRAINT FOREIGN KEY (`theme_id`) REFERENCES `theme_options` (`id`)) $tbl_options");
 
 
 $_SESSION['theme'] = 'modern';

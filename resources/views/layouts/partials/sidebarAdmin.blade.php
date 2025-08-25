@@ -340,6 +340,11 @@
                                         {{ trans('langHierarchy') }}
                                     </a>
                                 </li>
+                                <li class="list-group-item element">
+                                    <a href="{{$urlAppend}}modules/admin/tenants.php" class='TextBold'>
+                                        {{ trans('langTenants') }}
+                                    </a>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -392,6 +397,3 @@
         </div>
     </div>
 @endif
-
-
-

@@ -1,0 +1,75 @@
+<?php
+
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
+ *
+ */
+
+$require_admin = true;
+$require_help = true;
+$helpTopic = 'tenants';
+
+require_once '../../include/baseTheme.php';
+require_once 'include/lib/hierarchy.class.php';
+
+$tree = new Hierarchy();
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) {
+        csrf_token_error();
+    }
+
+    $v = new Valitron\Validator($_POST);
+    $v->rule('required', ['name']);
+    if (!$v->validate()) {
+        Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
+        redirect_to_home_page('modules/admin/tenant_edit.php');
+    } else {
+        if ($_POST['tenant_category'] == '1') {
+            $department_id = $_POST['category'];
+        } else {
+            $department_id = $tree->addNode($_POST['name'], '', 0, '', 1, 1, 0, 0, '');
+        }
+        Database::get()->query('INSERT INTO tenant
+            (name, description, department_id, url, options, created_at, updated_at)
+            VALUES (?s, ?s, ?d, ?s, ?s, NOW(), NOW())',
+            $_POST['name'], purify($_POST['description']), $department_id, $_POST['url'], '');
+            Session::Messages($langTenantAdded, 'alert-success');
+            redirect_to_home_page('modules/admin/tenants.php');
+    }
+}
+
+$toolName = $langAdmin;
+$pageName = $langAddTenant;
+$navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
+$navigation[] = array('url' => 'tenants.php', 'name' => $langTenants);
+
+// javascript
+load_js('jstree3');
+load_js('bootstrap-datetimepicker');
+
+if (isset($_GET['id'])) {
+    $data['tenant'] = Database::get('SELECT * FROM tenant WHERE id = ?d', $_GET['id']);
+} else { // user account request
+    $data['tenant'] = null;
+}
+
+$data['description_editor'] = rich_text_editor('description', 4, 20, $data['tenant']->description ?? '');
+
+$data['categories'] = $tree->buildRootsArray();
+$data['tenants'] = Database::get()->queryArray('SELECT id, name, department_id FROM tenant ORDER BY name');
+
+view('admin.other.tenants.edit', $data);

@@ -6387,3 +6387,7 @@ $langGradebookUsers = 'Gradebook users';
 $langCoursePrintSetting = "Course report display settings";
 $langCoursePrintHeaderImage = "Header image";
 $langCoursePrintFooterImage = "Footer image";
+$langTenants = 'Tenants';
+$langNoTenants = 'No tenants defined';
+$langAddTenant = 'Add Tenant';
+$langTenantAdded = 'The tenant has been added';

@@ -265,7 +265,7 @@ if (count($res) > 0) {
                                         <div class='modal-header'>
                                         <div class='modal-title' id='myModalLabel_$key'>" . q($row->title) . "</div>
                                         <button type='button' class='close' data-bs-dismiss='modal' aria-label='$langClose'></button>
-                                      
+
                                     </div>
                                     <div class='modal-body' style='max-height: calc(100vh - 210px); overflow-y: auto;'>".
                                         standard_text_escape($row->comments)
@@ -622,7 +622,7 @@ if ($displayQuickPoll) {
                                     <input type='$type_attr' name='answer[$pqid]$name_ext' value='$theAnswer->pqaid' $checked>
                                     $checkMark
                                     ".q_math($theAnswer->answer_text)."
-                                   
+
                                 </label>
                             </div>
                         </div>
@@ -969,25 +969,25 @@ if($course_info->view_type == 'sessions' && isset($_SESSION['uid'])){
     if($is_consultant && !$is_coordinator){
         $sql_session = "AND creator = $uid";
     }elseif($is_simple_user){
-        $sql_session = "AND id IN (SELECT session_id FROM mod_session_users 
+        $sql_session = "AND id IN (SELECT session_id FROM mod_session_users
                                     WHERE participants = $uid AND is_accepted = 1)";
     }
     if(($is_consultant && !$is_coordinator) or ($is_simple_user)){
-        $data['next_session'] = Database::get()->queryArray("SELECT * FROM mod_session 
+        $data['next_session'] = Database::get()->queryArray("SELECT * FROM mod_session
                                                                 WHERE course_id = ?d
-                                                                AND start > NOW() 
+                                                                AND start > NOW()
                                                                 AND visible = 1
                                                                 $sql_session
                                                                 ORDER BY start ASC $limit",$course_id);
     }elseif($is_coordinator){
         // Get the minimum datetime from the current date
-        $minDate = Database::get()->querySingle("SELECT MIN(start) AS st FROM mod_session 
+        $minDate = Database::get()->querySingle("SELECT MIN(start) AS st FROM mod_session
                                                 WHERE course_id = ?d
                                                 AND start > NOW()
                                                 AND visible = 1", $course_id);
 
         if($minDate){
-            $data['next_session'] = Database::get()->queryArray("SELECT * FROM mod_session 
+            $data['next_session'] = Database::get()->queryArray("SELECT * FROM mod_session
                                                                 WHERE course_id = ?d
                                                                 AND start = ?t", $course_id, $minDate->st);
         }

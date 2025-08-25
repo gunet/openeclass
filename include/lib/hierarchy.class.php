@@ -327,16 +327,42 @@ class Hierarchy {
 
     /**
      * Compile an array with the root nodes (nodes of 0 depth).
+     * When a tenant restriction is active, only the tenant's root node is returned
      *
      * @return array
      */
     public function buildRootsArray() {
-        $roots = array();
-        $cb = function($row) use (&$roots) {
-            $roots[] = $row;
+        $roots = [];
+        $tenantRoot = $this->getTenantRoot();
+        $cb = function($row) use (&$roots, $tenantRoot) {
+            if (!$tenantRoot or ($row->lft >= $tenantRoot->lft and $row->rgt <= $tenantRoot->rgt)) {
+                $roots[] = $row;
+            }
         };
         $this->getNeighbourNodesByLft(1, $cb);
         return $roots;
+    }
+
+    /**
+     * Get the root node for the currently-active tenant, if any
+     * Power users / admins can see all roots in the hierarchy and aren't bound by tenant restriction
+     *
+     * @return object|null
+     */
+    public function getTenantRoot() {
+        global $uid, $is_power_user;
+
+        $tenant = getTenant();
+        if ($tenant and !$is_power_user) {
+            $root = Database::get()->querySingle('SELECT lft, rgt
+                FROM hierarchy JOIN tenant ON department_id = hierarchy.id
+                WHERE tenant.id = ?d', $tenant->id);
+            if ($root) {
+                return $root;
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -642,10 +668,10 @@ jContent;
         $html .= '<div class="modal fade" id="treeModal" tabindex="-1" role="dialog" aria-labelledby="treeModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header"> 
+                <div class="modal-header">
                     <div class="modal-title" id="treeModalLabel">' . q($langNodeAdd) . '</div>
                     <button type="button" class="close treeModalClose" aria-label="'.$langClose.'"></button>
-                   
+
                 </div>
                 <div class="modal-body">
                     <div id="js-tree"></div>
@@ -725,7 +751,7 @@ jContent;
                 <div class="modal-header">
                      <div class="modal-title" id="treeModalLabel">' . q($langNodeAdd) . '</div>
                     <button type="button" class="close treeModalClose" aria-label="'.$langClose.'"></button>
-                   
+
                 </div>
                 <div class="modal-body">
                     <div id="js-tree"></div>
