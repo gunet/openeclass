@@ -129,16 +129,17 @@ if ($total_categories > 0) {
                             $tool_content .= action_button(
                                     array(
                                         array(
-                                            'title' => $langEditChange,
-                                            'url' => "forum_admin.php?course=$course_code&amp;forumcatedit=yes&amp;cat_id=$catNum",
-                                            'icon' => 'fa-edit',
+                                            'title' => $langNewForum,
+                                            'url' => "forum_admin.php?course=$course_code&amp;forumgo=yes&amp;cat_id=$catNum",
+                                            'icon' => 'fa-plus-circle',
+                                            'level' => 'primary',
                                             'show' => $is_editor,
                                             'btn_class' => 'submitAdminBtn'
                                         ),
                                         array(
-                                            'title' => $langNewForum,
-                                            'url' => "forum_admin.php?course=$course_code&amp;forumgo=yes&amp;cat_id=$catNum",
-                                            'icon' => 'fa-plus-circle',
+                                            'title' => $langEditChange,
+                                            'url' => "forum_admin.php?course=$course_code&amp;forumcatedit=yes&amp;cat_id=$catNum",
+                                            'icon' => 'fa-edit',
                                             'show' => $is_editor,
                                             'btn_class' => 'submitAdminBtn'
                                         ),
@@ -156,7 +157,6 @@ if ($total_categories > 0) {
                                             'btn_class' => 'deleteAdminBtn',
                                             'confirm' => $langConfirmDelete,
                                             'show' => $is_editor
-
                                         )
                                     )
                                 );
@@ -219,7 +219,7 @@ if ($total_categories > 0) {
                         if (setting_get(SETTING_COURSE_FORUM_NOTIFICATIONS)) { // first lookup for course setting
                             $forum_action_notify = false;
                         } else { // if it's not set lookup user setting
-                            
+
                             $forum_action_notify = Database::get()->queryArray("SELECT * FROM forum_notify
                                         WHERE user_id = ?d 
                                         AND course_id = ?d 

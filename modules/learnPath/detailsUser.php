@@ -71,6 +71,7 @@ if ($rescnt == 0) {
 $lpList = Database::get()->queryArray("SELECT name, learnPath_id
             FROM lp_learnPath
             WHERE course_id = ?d
+            AND visible = 1
             ORDER BY `rank`", $course_id);
 
 
@@ -206,6 +207,7 @@ if (isset($_GET['xls'])) {
         <h3> " . q(uid_to_name($_REQUEST['uInfo'])) . "</h3>";
 
     $pdf_content .= $tool_content;
+    $pdf_content .= get_platform_logo('','footer');
     $pdf_content .= "</body></html>";
 
     $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();

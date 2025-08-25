@@ -38,6 +38,12 @@ var xAxisLabels = {1:langDay, 7:langWeek, 30:langMonth, 365:langYear};
 var xMinVal = null;
 var xMaxVal = null;
 var xTicks = null;
+var pdfHeaderImg = null;
+var pdfFooterImg = null;
+var pdfHeaderImgAlignment = null;
+var pdfFooterImgAlignment = null;
+var pdfHeaderImgWidth = 100;
+var pdfFooterImgWidth = 100;
 var department_details = new Array();
 var tableOptions = {
     'a': {
@@ -48,7 +54,7 @@ var tableOptions = {
         1:{'pageLength': 5, sumCols:[3,4], durCol:4, colDefs:[{'targets':4, 'render': function ( data, type, full, meta ) {return type === 'display' ? userFriendlyDuration(data): data;} }]}
     },
     'c':{
-        1:{'pageLength': 5, sumCols:[3,4], durCol:4, colDefs:[{'targets':4, 'render': function ( data, type, full, meta ) {return type === 'display' ? userFriendlyDuration(data): data;}}, {'targets':2, 'className':'mynowrap', 'render': function ( data, type, row ) {return userEmailLink(data, row[6], row[5]);} }, {"visible": false, "targets": 5}, {"visible": false, "targets": 6}]},
+        1:{'pageLength': 5, sumCols:[4,5], durCol:5, colDefs:[{'targets':5, 'render': function ( data, type, full, meta ) {return type === 'display' ? userFriendlyDuration(data): data;}}, {'targets':2, 'className':'mynowrap', 'render': function ( data, type, row ) {return userEmailLink(data, row[7], row[6]);} }, {"visible": false, "targets": 6}, {"visible": false, "targets": 7}]},
         2:{'pageLength': 5, sumCols:[], durCol:null, colDefs:[{'targets':1, 'className':'mynowrap', 'render': function ( data, type, row ) {return userEmailLink(data, row[4], row[3]);} }, {"visible": false, "targets": 3}, {"visible": false, "targets": 4}]},
         3:{'pageLength': 50, sumCols:[], durCol:null, colDefs:[{'targets':1, 'className':'mynowrap', 'render': function ( data, type, row ) {return userEmailLink(data, row[7], row[6]);} }, {'targets':3, 'className':'action', 'render': function ( data, type, row ) {return actionWithDetails(data, row[4]);} }, {"visible": false, "targets": 6}, {"visible": false, "targets": 7}, {"visible": false, "targets": 4}]}
     }
@@ -190,10 +196,57 @@ $(document).ready(function(){
             refresh_plots();
         });
     }
+    // var pdfHeaderImg = null;
+    // var pdfFooterImg = null;
+    if($('#pdfHeaderImg').length){
+        pdfHeaderImg = $('#pdfHeaderImg').val();
+    }
+    if($('#pdfFooterImg').length){
+        pdfFooterImg = $('#pdfFooterImg').val();
+    }
+    if($('#pdfHeaderImgAlignment').length){
+        const alignments = ['left', 'center', 'right'];
+        let val = $('#pdfHeaderImgAlignment').val();
+        pdfHeaderImgAlignment = alignments[val] || 'left';
+    }
+    if($('#pdfFooterImgAlignment').length){
+        const alignments = ['left', 'center', 'right'];
+        let val = $('#pdfFooterImgAlignment').val();
+        pdfFooterImgAlignment = alignments[val] || 'left';
+    }
+    if($('#pdfHeaderImgWidth').length){
+        pdfHeaderImgWidth = parseInt($('#pdfHeaderImgWidth').val(), 10);
+    }
+    if($('#pdfFooterImgWidth').length){
+        pdfFooterImgWidth = parseInt($('#pdfFooterImgWidth').val(), 10);
+    }
+
+
+
     detailsTables = new Object();
     tableTools = new Object();
 
     /*******************/
+
+    function pdfWithOptionalImages(doc) {
+        if (typeof pdfHeaderImg === 'string' && pdfHeaderImg.startsWith('data:image')) {
+            doc.content.splice(0, 0, {
+                image: pdfHeaderImg,
+                width: pdfHeaderImgWidth,
+                alignment: pdfHeaderImgAlignment,
+                margin: [0, 0, 0, 20]
+            });
+        }
+
+        if (typeof pdfFooterImg === 'string' && pdfFooterImg.startsWith('data:image')) {
+            doc.content.push({
+                image: pdfFooterImg,
+                width: pdfFooterImgWidth,
+                alignment: pdfFooterImgAlignment,
+                margin: [0, 20, 0, 0]
+            });
+        }
+    }
 
     for(tableid in tableOptions[stats]){
         tableElId = stats+'details'+tableid;
@@ -202,20 +255,23 @@ $(document).ready(function(){
         detailsTables[tableElId] = $('#'+tableElId).DataTable({
            'sPaginationType': 'full_numbers',
            'pageLength': pLength,
-           'lengthMenu': [ 5, 10, 25, 50, 75, 100 ],
-           'buttons': [{
-                        extend:'print',
-                        text: langPrint},
-                    {
-                        extend:'copyHtml5',
-                        text: langCopy},
-                    {
-                        extend: 'collection',
-                        text: langExport+'...',
-                        buttons: ['csvHtml5','excelHtml5', 'pdfHtml5']
-                    }
+           'lengthMenu': [5, 10, 20, 50, 100],
+            buttons: [
+                {
+                    extend: 'copy',
+                    text: langCopy
+                },
+                'excel',
+                {
+                    extend: 'pdfHtml5',
+                    text: 'PDF',
+                    customize: pdfWithOptionalImages
+                },
+                {
+                    extend: 'print',
+                    text: langPrint
+                }
             ],
-            columnDefs: colDefs,
             'autoWidth': true,
             'footerCallback': footerCB(tableid, tableElId),
             'columnDefs': colDefs,

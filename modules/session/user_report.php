@@ -588,6 +588,7 @@ function pdf_session_output($sid) {
 
     $pdf_content .= $output;
 
+    $pdf_content .= get_platform_logo('','footer');
     $pdf_content .= "</body></html>";
 
     $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
@@ -655,6 +656,7 @@ function pdf_user_material_output($sid,$content_m,$user_n) {
 
     $pdf_mcontent .= $content_m;
 
+    $pdf_mcontent .= get_platform_logo('','footer');
     $pdf_mcontent .= "</body></html>";
 
     $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();

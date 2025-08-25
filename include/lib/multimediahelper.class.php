@@ -288,13 +288,13 @@ class MultimediaHelper {
     public static function serveVideojs($mime, $mediaPlay, $startdiv, $enddiv) {
         global $urlAppend;
         $data_setup = [ 'responsive' => true ];
-        $css = "<link rel='stylesheet' href='{$urlAppend}node_modules/video.js/dist/video-js.min.css'>";
-        $js = "<script src='{$urlAppend}node_modules/video.js/dist/video.min.js'></script>";
+        $css = "<link rel='stylesheet' href='{$urlAppend}js/video.js/video-js.min.css'>";
+        $js = "<script src='{$urlAppend}js/video.js/video.min.js'></script>";
         if (false and strpos($mime, 'audio') !== false) {
             $element = 'audio';
-            $css .= "<link rel='stylesheet' href='{$urlAppend}node_modules/videojs-wavesurfer/dist/css/videojs.wavesurfer.css'>";
-            $js .= "<script src='{$urlAppend}node_modules/wavesurfer.js/dist/wavesurfer.js'></script>" .
-                "<script src='{$urlAppend}node_modules/videojs-wavesurfer/dist/videojs.wavesurfer.min.js'></script>";
+            $css .= "<link rel='stylesheet' href='{$urlAppend}js/videojs-wavesurfer/css/videojs.wavesurfer.css'>";
+            $js .= "<script src='{$urlAppend}js/wavesurfer.js/wavesurfer.js'></script>" .
+                "<script src='{$urlAppend}js/videojs-wavesurfer/videojs.wavesurfer.min.js'></script>";
             $data_setup['plugins'] = [
                 'wavesurfer' => [
                     'backend' => 'MediaElement',

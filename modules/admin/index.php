@@ -104,6 +104,9 @@ if (count($cronParams) > 0) {
 }
 $data['colSize'] = $colSize;
 
+// online users
+$data['onlineusers'] = getOnlineUsers();
+
 // H5P related
 $ts = get_config('h5p_update_content_ts');
 $data['ts'] = format_locale_date(strtotime($ts), 'short', false);

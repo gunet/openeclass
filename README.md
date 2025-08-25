@@ -1,4 +1,4 @@
-# The Open eClass Platform 4.1
+# The Open eClass Platform 4.2 (in progress)
 
 http://www.openeclass.org/
 
@@ -22,10 +22,10 @@ instructions as well as other manuals at the following address:
 http://docs.openeclass.org/en/start
 
 GUnet Asychronous e-Learning Group
-May 2025
+August 2025
 
 
-# Πλατφόρμα Open eClass 4.1
+# Πλατφόρμα Open eClass 4.2 (υπό ανάπτυξη)
 
 http://www.openeclass.org/
 
@@ -65,4 +65,4 @@ PHP >= 8.1 και μια βάση δεδομένων (MySQL ή MariaDB). Ανα�
 http://docs.openeclass.org/el/start
 
 Ομάδα Ασύγχρονης Τηλεκπαίδευσης GUnet
-Μάιος 2025
+Αύγουστος 2025

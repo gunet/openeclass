@@ -1,8 +1,8 @@
 @extends('layouts.default')
 
 @push('head_scripts')
-<link type="text/css" rel="stylesheet" media="all" href="{{$urlServer}}node_modules/h5p-standalone/dist/styles/h5p.css" />
-<script type="text/javascript" src="{{$urlServer}}node_modules/h5p-standalone/dist/main.bundle.js"></script>
+<link type="text/css" rel="stylesheet" media="all" href="{{$urlServer}}js/h5p-standalone/styles/h5p.css" />
+<script type="text/javascript" src="{{$urlServer}}h5p-standalone/main.bundle.js"></script>
 @endpush
 
 @section('content')

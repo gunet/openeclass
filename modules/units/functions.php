@@ -960,12 +960,12 @@ function show_video($table, $title, $comments, $resource_id, $video_id, $visibil
             return '';
         }
         if ($table == 'video') {
-            $videoplayurl = "${urlServer}modules/units/view.php?course=$course_code&amp;res_type=video&amp;id=$video_id&amp;unit=$id";
+            $videoplayurl = "{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=video&amp;id=$video_id&amp;unit=$id";
             $vObj = MediaResourceFactory::initFromVideo($row);
             $vObj->setPlayURL($videoplayurl);
             $videolink = MultimediaHelper::chooseMediaAhref($vObj);
         } else {
-            $videoplayurl = "${urlServer}modules/units/view.php?course=$course_code&amp;res_type=videolink&amp;id=$video_id&amp;unit=$id";
+            $videoplayurl = "{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=videolink&amp;id=$video_id&amp;unit=$id";
             $vObj = MediaResourceFactory::initFromVideoLink($row);
             $vObj->setPlayURL($videoplayurl);
             $videolink = MultimediaHelper::chooseMedialinkAhref($vObj);
@@ -1137,7 +1137,7 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility, $act_
             $class = $exclamation_icon = '';
         }
 
-        $link = "<a class='TextBold' href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=assignment&amp;id=$work_id&amp;unit=$id' $class>";
+        $link = "<a class='TextBold' href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=assignment&amp;id=$work_id&amp;unit=$id' $class>";
         $exlink = $link . "$title</a> $exclamation_icon";
         $imagelink = $link . "</a>".icon('fa-flask')."";
     }
@@ -1253,9 +1253,9 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
         }
         if ($pending_class) {
             enable_password_bootbox();
-            $link = "<a class='ex_settings $pending_class $link_class TextBold' href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id&amp;eurId=$eurid&amp;unit=$id'>";
+            $link = "<a class='ex_settings $pending_class $link_class TextBold' href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id&amp;eurId=$eurid&amp;unit=$id'>";
         } else {
-            $link = "<a class='ex_settings $link_class TextBold' href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id&amp;unit=$id'>";
+            $link = "<a class='ex_settings $link_class TextBold' href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id&amp;unit=$id'>";
         }
         $exlink = $link . "$title</a> $exclamation_icon $assign_to_users_message $pending_label";
         $imagelink = $link . "</a>" . icon('fa-solid fa-file-pen'). "";
@@ -1293,7 +1293,7 @@ function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility,
     $res_prereq_icon = '';
     $title = q($title);
     if ($type == 'forum') {
-        $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=forum&amp;forum=$ft_id&amp;unit=$id'>";
+        $link = "<a href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=forum&amp;forum=$ft_id&amp;unit=$id'>";
         $forumlink = $link . "$title</a>";
         $imagelink = icon('fa-comments');
     } else {
@@ -1312,7 +1312,7 @@ function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility,
                 }
             }
             $forum_id = $r->forum_id;
-            $link = "<a class='TextBold' href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=forum_topic&amp;topic=$ft_id&amp;forum=$forum_id&amp;unit=$id'>";
+            $link = "<a class='TextBold' href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=forum_topic&amp;topic=$ft_id&amp;forum=$forum_id&amp;unit=$id'>";
             $forumlink = $link . "$title</a>";
             $imagelink = icon('fa-comments'). "";
         }
@@ -1725,7 +1725,7 @@ function show_ebook_resource($title, $comments, $resource_id, $ebook_id, $displa
             $exlink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
         }
     } else {
-        $link = "<a class='TextBold' href='${urlServer}modules/ebook/show.php?$course_code/$ebook_id/$display_id/unit=$id'>";
+        $link = "<a class='TextBold' href='{$urlServer}modules/ebook/show.php?$course_code/$ebook_id/$display_id/unit=$id'>";
         $exlink = $link . q($title) . '</a>';
         if (!$module_visible) {
             $exlink .= " <i>($langInactiveModule)</i>";
@@ -1773,7 +1773,7 @@ function show_chat($title, $comments, $resource_id, $chat_id, $visibility, $act_
         if (!$is_editor and $chat->status == 'inactive') {
             return '';
         }
-        $link = "<a class='TextBold' href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=chat&amp;conference_id=$chat_id&amp;unit=$id'>";
+        $link = "<a class='TextBold' href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=chat&amp;conference_id=$chat_id&amp;unit=$id'>";
         $chatlink = $link . "$title</a>";
         $imagelink = $link . "</a>" .icon('fa-commenting') . "";
     }
@@ -1867,7 +1867,7 @@ function show_h5p($title, $comments, $resource_id, $h5p_id, $visibility, $act_na
         $typeIcon = (file_exists($typeIconPath))
             ? $urlAppend . "courses/h5p/libraries/" . $typeFolder . "/icon.svg"  // expected icon
             : $urlAppend . "resources/icons/h5p_library.svg"; // fallback icon
-        $link = "<a class='TextBold' href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=h5p&amp;id=$h5p_id&amp;unit=$id'>";
+        $link = "<a class='TextBold' href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=h5p&amp;id=$h5p_id&amp;unit=$id'>";
         $h5plink = $link . "$title</a>";
         $imagelink = $link . "</a><img src='$typeIcon' width='30px' height='30px' title='$h5p_content_type_title' alt='$h5p_content_type_title'>";
     }
@@ -2061,7 +2061,7 @@ function edit_res($resource_id) {
     $resource_type = $ru->type;
     $content = "<div class='d-lg-flex gap-4 mt-4'>
     <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>";
-    $content .= "<form class='form-horizontal' role='form' method='post' action='${urlServer}modules/units/index.php?course=$course_code'>" .
+    $content .= "<form class='form-horizontal' role='form' method='post' action='{$urlServer}modules/units/index.php?course=$course_code'>" .
             "<input type='hidden' name='id' value='$id'>" .
             "<input type='hidden' name='resource_id' value='$resource_id'>";
     if ($resource_type != 'text') {

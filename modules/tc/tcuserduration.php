@@ -89,11 +89,11 @@ if (isset($_GET['id'])) {
     }
 }
 
-if (isset($_GET['per_user']) or isset($_GET['u'])) { // all users participation in meetings
+if (isset($_GET['per_user']) or isset($_GET['u'])) { // all-users participation in meetings
     if (!$is_course_reviewer and isset($_GET['per_user'])) { // security check
         redirect_to_home_page();
     }
-    if (isset($_GET['u']) and $_GET['u']) { // participation for specific user
+    if (isset($_GET['u']) and $_GET['u']) { // participation for a specific user
         if (!$is_course_reviewer and $_GET['u'] != $_SESSION['uid']) { // security check
             redirect_to_home_page();
         }
@@ -101,7 +101,9 @@ if (isset($_GET['per_user']) or isset($_GET['u'])) { // all users participation 
         $bbb_name = uid_to_name($u, 'username');
 
         if (isset($_GET['xls'])) {
-            $data[] = [ get_config('site_name') . " - " . q($currentCourseName) . " - " . q($langParticipate) ];
+            $data[] = [ get_config('site_name') . " - " . q($currentCourseName) ];
+            $data[] = [ q($langStatsReport) ];
+            $data[] = [];
         }
 
         $result = Database::get()->queryArray("SELECT title, start_date, meetingid, bbbuserid, totaltime, date FROM tc_attendance, tc_session 
@@ -115,32 +117,45 @@ if (isset($_GET['per_user']) or isset($_GET['u'])) { // all users participation 
                                                     AND tc_session.course_id = ?d 
                                                     AND tc_attendance.bbbuserid = ?s", $course_id, $bbb_name)->totaltime;
         if (count($result) > 0) {
+            $ug_string = '';
+            $ug = user_groups($course_id, $u, 'txt');
+            if ($ug != '-') {
+                $ug_string = " - $ug";
+            }
             $tool_content .= "<div class='panel panel-default'>";
-            $tool_content .= "<div class='panel-heading'><strong>" . q(uid_to_name($u, 'surname')) . " " . q(uid_to_name($u, 'givenname')) . "</strong></div>";
+            $tool_content .= "<div class='panel-heading'><strong>" . q(uid_to_name($u, 'surname')) . " " . q(uid_to_name($u, 'givenname')) . " " . $ug_string . "</strong></div>";
             $tool_content .= "<div class='panel-body'><em>$langTotalDuration:</em> <strong>" . format_time_duration(0 + 60 * $total_time, 24, false) . "</strong></span></div><br>";
             $tool_content .= "</div>";
             if (isset($_GET['xls'])) {
-                $data[] = [ uid_to_name($u, 'surname') . " " . uid_to_name($u, 'givenname') .  " -- $langTotalDuration: " . format_time_duration(0 + 60 * $total_time, 24, false) ];
+                $data[] = [ uid_to_name($u, 'surname') . " " . uid_to_name($u, 'givenname') .  " " . $ug_string . " -- $langTotalDuration: " . format_time_duration(0 + 60 * $total_time, 24, false) ];
             }
             $data[] = [];
 
             $tool_content .= "<div class='table-responsive'><table class='table-default'>";
             $tool_content .= "<thead><tr class='list-header'>
-                              <th>$langBBB</th>
-                              <th>$langLogIn</th>
-                              <th>$langDuration</th>
+                              <th>$langBBB</th>";
+            if (isset($_GET['pdf'])) {
+                $tool_content .= "<th>$langDate</th>";
+            } else {
+                $tool_content .= "<th>$langLogIn</th>";
+            }
+            $tool_content .= "<th>$langDuration</th>
                            </tr></thead>";
             if (isset($_GET['xls'])) {
-                $data[] = [$langBBB, $langLogIn, $langDuration];
+                $data[] = [$langBBB, $langDate, $langDuration];
             }
             foreach ($result as $row) {
-                $tool_content .= "<tr>
-                        <td>$row->title</td>
-                        <td>" . format_locale_date(strtotime($row->date), 'full') . "</td>
-                        <td>" . format_time_duration(0 + 60 * $row->totaltime, 24, false) . "</td>
-                    </tr>";
+                $tool_content .= "<tr>";
+                $tool_content .= "<td>$row->title</td>";
+                if (isset($_GET['pdf'])) {
+                    $tool_content .= "<td>" . format_locale_date(strtotime($row->date), 'full', false) . "</td>";
+                } else {
+                    $tool_content .= "<td>" . format_locale_date(strtotime($row->date), 'full') . "</td>";
+                }
+                $tool_content .= "<td>" . format_time_duration(0 + 60 * $row->totaltime, 24, false) . "</td>";
+                $tool_content .= "</tr>";
                 if (isset($_GET['xls'])) {
-                    $data[] = [ $row->title, format_locale_date(strtotime($row->date), 'full'), format_time_duration(0 + 60 * $row->totaltime, 24, false)];
+                    $data[] = [ $row->title, format_locale_date(strtotime($row->date), 'full', false), format_time_duration(0 + 60 * $row->totaltime, 24, false)];
                 }
             }
             $tool_content .= "</table></div>";
@@ -159,8 +174,8 @@ if (isset($_GET['per_user']) or isset($_GET['u'])) { // all users participation 
                     </tr></thead>";
 
         if (isset($_GET['xls'])) {
-            $data[] = [ get_config('site_name') . " - " . q($currentCourseName) . " - " . q($langParticipate) ];
-            $data[] = [];
+            $data[] = [ get_config('site_name') . " - " . q($currentCourseName) ];
+            $data[] = [ q($langStatsReport) ];
             $data[] = [];
             $data[] = [ $langSurnameName , $langAm, $langGroup, $langTotalDuration ];
         }
@@ -221,10 +236,10 @@ if (isset($_GET['per_user']) or isset($_GET['u'])) { // all users participation 
     if (count($result) > 0) {
 
         if (isset($_GET['xls'])) {
-            $data[] = [ get_config('site_name') . " - " . q($currentCourseName) . " - " . q($langParticipate) ];
+            $data[] = [ get_config('site_name') . " - " . q($currentCourseName) ];
+            $data[] = [ q($langStatsReport) ];
             $data[] = [];
-            $data[] = [];
-            $data[] = [ $langSurnameName, $langBBB, $langLogIn, $langTotalDuration ];
+            $data[] = [ $langSurnameName, $langBBB, $langDate, $langTotalDuration ];
         }
         $tool_content .= "<div class='table-responsive'><table class='table-default'>";
         $temp_date = null;
@@ -237,9 +252,13 @@ if (isset($_GET['per_user']) or isset($_GET['u'])) { // all users participation 
                 $tool_content .= "<tr><td colspan='4' class='list-header text-left'><strong>$row->title</strong></td></tr>";
                 $tool_content .= "<thead><tr class='list-header'>
                                   <th class='ps-3'>$langSurnameName</th>
-                                  <th>$langBBB</th>
-                                  <th>$langLogIn</th>
-                                  <th>$langTotalDuration</th>
+                                  <th>$langBBB</th>";
+               if (isset($_GET['pdf'])) {
+                   $tool_content .= "<th>$langDate</th>";
+               } else {
+                   $tool_content .= "<th>$langLogIn</th>";
+               }
+               $tool_content .= "<th>$langTotalDuration</th>
                                </tr></thead>";
                 $temp_date = $row->start_date;
                 $first = false;
@@ -247,12 +266,16 @@ if (isset($_GET['per_user']) or isset($_GET['u'])) { // all users participation 
             $user_full_name = Database::get()->querySingle("SELECT fullName FROM tc_log
                             WHERE tc_log.bbbuserid = ?s ORDER BY id DESC LIMIT 1", $row->bbbuserid)->fullName;
             $tool_content .= "<tr><td>$user_full_name</td>                            
-                            <td>$row->title</td>
-                            <td>" . format_locale_date(strtotime($row->date), 'full') . "</td>
-                            <td>" . format_time_duration(0 + 60 * $row->totaltime, 24, false) . "</td>
+                            <td>$row->title</td>";
+            if (isset($_GET['pdf'])) {
+                $tool_content .= "<td>" . format_locale_date(strtotime($row->date), 'full', false) . "</td>";
+            } else {
+                $tool_content .= "<td>" . format_locale_date(strtotime($row->date), 'full') . "</td>";
+            }
+            $tool_content .= "<td>" . format_time_duration(0 + 60 * $row->totaltime, 24, false) . "</td>
                             </tr>";
             if (isset($_GET['xls'])) {
-                $data[] = [ $user_full_name, $row->title, format_locale_date(strtotime($row->date), 'full'), format_time_duration(0 + 60 * $row->totaltime, 24, false) ];
+                $data[] = [ $user_full_name, $row->title, format_locale_date(strtotime($row->date), 'full', false), format_time_duration(0 + 60 * $row->totaltime, 24, false) ];
             }
         }
         $tool_content .= "</table></div>";
@@ -269,7 +292,7 @@ if (isset($_GET['pdf']) and $is_course_reviewer) {
         <html lang='el'>
         <head>
           <meta charset='utf-8'>
-          <title>" . q("$currentCourseName - $langParticipate") . "</title>
+          <title>" . q("$currentCourseName - $langStatsReport") . "</title>
           <style>
             * { font-family: 'opensans'; }
             body { font-family: 'opensans'; font-size: 10pt; }
@@ -283,9 +306,12 @@ if (isset($_GET['pdf']) and $is_course_reviewer) {
           </style>
         </head>
         <body>" . get_platform_logo() .
-        "<h2> " . get_config('site_name') . " - " . q($currentCourseName) . " - " . q($langParticipate) . "</h2><p></p>";
+        "<h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
+         <h3>" . q($langStatsReport) . "</h3>
+         <p></p>";
 
     $pdf_content .= $tool_content;
+    $pdf_content .= get_platform_logo('','footer');
     $pdf_content .= "</body></html>";
 
     $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
@@ -334,7 +360,6 @@ if (isset($_GET['pdf']) and $is_course_reviewer) {
     set_content_disposition('attachment', $filename);
     $writer->save("php://output");
     exit;
-
-}else {
+} else {
     draw($tool_content, 2, null, $head_content);
 }

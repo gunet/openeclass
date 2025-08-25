@@ -238,6 +238,25 @@ if (isset($_POST['submit'])) {
             } else {
                 setting_set(SETTING_FACULTY_USERS_REGISTRATION, 0, $course_id);
             }
+            if (isset($_POST['choose_print_header_from_list'])) {
+                setting_set(SETTING_COUSE_IMAGE_PRINT_HEADER, $_POST['choose_print_header_from_list'], $course_id);
+            }
+            if (isset($_POST['choose_print_footer_from_list'])) {
+                setting_set(SETTING_COUSE_IMAGE_PRINT_FOOTER, $_POST['choose_print_footer_from_list'], $course_id);
+            }
+            if (isset($_POST['header_image_alignment'])) {
+                setting_set(SETTING_COUSE_IMAGE_PRINT_HEADER_ALIGNMENT, $_POST['header_image_alignment'], $course_id);
+            }
+            if (isset($_POST['footer_image_alignment'])) {
+                setting_set(SETTING_COUSE_IMAGE_PRINT_FOOTER_ALIGNMENT, $_POST['footer_image_alignment'], $course_id);
+            }
+            if (isset($_POST['header_image_width'])) {
+                setting_set(SETTING_COUSE_IMAGE_PRINT_HEADER_WIDTH, $_POST['header_image_width'], $course_id);
+            }
+            if (isset($_POST['footer_image_width'])) {
+                setting_set(SETTING_COUSE_IMAGE_PRINT_FOOTER_WIDTH, $_POST['footer_image_width'], $course_id);
+            }
+
             // Course settings modified, will get success message after redirect in current course language
             Session::flash('course-modify-success', true);
             redirect_to_home_page("modules/course_info/index.php?course=$course_code");

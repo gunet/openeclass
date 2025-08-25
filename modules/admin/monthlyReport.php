@@ -106,6 +106,7 @@ function export_monthly_data($report_data, $format): void
         <body>" . get_platform_logo() . "<h2> " . get_config('site_name') . "</h2>";
 
         $pdf_content .= $report_data;
+        $pdf_content .= get_platform_logo('','footer');
         $pdf_content .= "</body></html>";
 
         $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();

@@ -4121,7 +4121,7 @@ function setOpenCoursesExtraHTML() {
                                                     <i class='fa-solid fa-book-open fa-xl'></i>
                                                     <span class='text-uppercase TextBold Primary-500-cl fs-5'>$openCoursesNum</span>
                                                     <span class='text-uppercase TextBold Primary-500-cl fs-5'>
-                                                        " .(($openCoursesNum == 1)? $langCourses: $langCourse) . "
+                                                        " .(($openCoursesNum == 1)? $langCourse: $langCourses) . "
                                                     </span>
                                                 </a>
                                             </div>
@@ -4807,41 +4807,55 @@ function trans($var_name, $var_array = []) {
     }
 }
 
-function get_platform_logo($size='normal') {
-    global $themeimg, $urlAppend;
+function get_platform_logo($size = 'normal', $position = 'header') {
+    global $themeimg, $urlAppend, $course_id;
 
-    if ($size == 'small') {
-        $logo_img = $themeimg . '/eclass-new-logo.svg';
+    require_once 'include/course_settings.php';
+
+    if ($position == 'footer') {
+        $footer_path = setting_get_print_image_disk_path(SETTING_COUSE_IMAGE_PRINT_FOOTER, $course_id);
+        if (!$footer_path) {
+            return '';
+        }
+        $logo_img = imageToBase64($footer_path);
+        $image_align = setting_get(SETTING_COUSE_IMAGE_PRINT_FOOTER_ALIGNMENT, $course_id);
+        $image_align = ($image_align == 0) ? 'left' : (($image_align == 1) ? 'center' : 'right');
+        $image_width = setting_get(SETTING_COUSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id);
+        $bg_color = '#ffffff';
     } else {
-        $logo_img = $themeimg . '/eclass-new-logo.svg';
-    }
-
-    $theme_id = get_config('theme_options_id');
-    $bg_color = '#ffffff';
-    if ($theme_id) {
-        $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
-        $theme_options_styles = unserialize($theme_options->styles);
-        $bg_color = $theme_options_styles['leftNavBgColor'];
-
-        $urlThemeData = $urlAppend . 'courses/theme_data/' . $theme_id;
-        if ($size == 'small') {
-            if (isset($theme_options_styles['imageUploadSmall'])) {
-                $logo_img = "$urlThemeData/$theme_options_styles[imageUploadSmall]";
-            }
+        $header_path = setting_get_print_image_disk_path(SETTING_COUSE_IMAGE_PRINT_HEADER, $course_id);
+        if ($header_path) {
+            $logo_img = imageToBase64($header_path);
+            $image_align = setting_get(SETTING_COUSE_IMAGE_PRINT_HEADER_ALIGNMENT, $course_id);
+            $image_align = ($image_align == 0) ? 'left' : (($image_align == 1) ? 'center' : 'right');
+            $image_width = setting_get(SETTING_COUSE_IMAGE_PRINT_HEADER_WIDTH, $course_id);
+            $bg_color = '#ffffff';
         } else {
-            if (isset($theme_options_styles['imageUpload'])) {
-                $logo_img = "$urlThemeData/$theme_options_styles[imageUpload]";
+            $logo_img = $themeimg . '/eclass-new-logo.svg';
+            $image_width = 200;
+            $image_align = 'left';
+            $bg_color = '#ffffff';
+            $theme_id = get_config('theme_options_id');
+            if ($theme_id) {
+                $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
+                $theme_options_styles = unserialize($theme_options->styles);
+                $bg_color = $theme_options_styles['leftNavBgColor'];
+                $urlThemeData = $urlAppend . 'courses/theme_data/' . $theme_id;
+                if ($size == 'small' && isset($theme_options_styles['imageUploadSmall'])) {
+                    $logo_img = "$urlThemeData/{$theme_options_styles['imageUploadSmall']}";
+                } elseif (isset($theme_options_styles['imageUpload'])) {
+                    $logo_img = "$urlThemeData/{$theme_options_styles['imageUpload']}";
+                }
             }
-
         }
     }
-    $logo = "<div style='clear: right; background-color: $bg_color; padding: 1rem; margin-bottom: 2rem;'>
-                <img style='float: left; height:6rem;' src='$logo_img'>
+
+    $logo = "<div style='clear: right; background-color: $bg_color; padding: 1rem; margin-bottom: 2rem; text-align: $image_align;'>
+                <img style='width: {$image_width}px;' src='$logo_img'>
             </div>";
 
     return $logo;
 }
-
 
 /**
  * @brief Set the content disposition header for file display / download, with
@@ -12042,6 +12056,31 @@ function theme_initialization() {
                 .main-container,
                 .module-container{
                     background-color: $theme_options_styles[bgColorContentPlatform];
+                }
+            ";
+        }
+
+        if (isset($theme_options_styles['EnableBorderSidesOfMain']) && !empty($theme_options_styles['borderColorContentPlatformLeftRight'])){
+            $styles_str .= "
+                #bgr-cheat-header,
+                #bgr-cheat-footer,
+                .row-jumbotron,
+                .homepage-annnouncements-container,
+                .homepage-popoular-courses-container,
+                .homepage-testimonials-container,
+                .homepage-statistics-container,
+                .homepage-popoular-courses-container,
+                .homepage-testimonials-container,
+                .homepage-opencourses-container,
+                .homepage-texts-container,
+                .homepage-login-container,
+                .portfolio-profile-container,
+                .portfolio-courses-container,
+                .main-container,
+                .module-container,
+                .about-content {
+                    border-left:  solid 1px $theme_options_styles[borderColorContentPlatformLeftRight];
+                    border-right: solid 1px $theme_options_styles[borderColorContentPlatformLeftRight];
                 }
             ";
         }

@@ -108,8 +108,8 @@
         {!! get_config('ext_userway_code') !!}
     @endif
 
-    @if (file_exists('node_modules/mathjax/es5/tex-chtml.js'))
-        <script type="text/javascript" id="MathJax-script" async src="{{ $urlAppend }}node_modules/mathjax/es5/tex-chtml.js"></script>
+    @if (file_exists('js/mathjax/tex-chtml.js'))
+        <script type="text/javascript" id="MathJax-script" async src="{{ $urlAppend }}js/mathjax/tex-chtml.js"></script>
     @endif
 
     {{-- Override the default.css and all .css files from load_js function with the currect theme.css file --}}

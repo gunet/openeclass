@@ -33,14 +33,14 @@
                                 <div class="card-body py-0">
 
                                     <div class='d-flex justify-content-start align-items-center gap-2 flex-wrap'>
-                                        <h2 class="mb-0">{!! $c->title !!}</h2>
+                                        <h2 class="mb-0">{{ $c->title }}</h2>
                                         {!! course_access_icon($c->visible) !!}
                                         @if($c->course_license > 0)
                                             {!! copyright_info($c->id) !!}
                                         @endif
                                     </div>
 
-                                    <p class="card-text mt-2 mb-4">({!! $c->public_code !!})&nbsp;- &nbsp;{!! $c->prof_names !!}</p>
+                                    <p class="card-text mt-2 mb-4">({{ $c->public_code }})&nbsp;- &nbsp;{{ $c->prof_names }}</p>
 
                                     @if(empty($c->description))
                                         @if(!$c->is_collaborative)
@@ -59,7 +59,7 @@
                                     @endif
 
                                     <p class='form-label mb-1 mt-4'>{{ trans('langCreationDate')}}</p>
-                                    <p>{!! format_locale_date(strtotime($c->created), null, false) !!}</p>
+                                    <p>{{ format_locale_date(strtotime($c->created), null, false) }}</p>
 
                                     <div class='col-12 mt-4 d-flex justify-content-md-start justify-content-center'>
                                         <a class='btn submitAdminBtnDefault d-flex jystify-content-start align-items-center gap-2' href='{{ $urlServer }}courses/{{ $c->code }}/'>

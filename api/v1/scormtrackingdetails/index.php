@@ -79,7 +79,7 @@ function api_method($access) {
             FROM lp_learnPath
                 JOIN lp_rel_learnPath_module ON lp_learnPath.learnPath_id = lp_rel_learnPath_module.learnPath_id
                 JOIN lp_module ON lp_module.module_id = lp_rel_learnPath_module.module_id
-            WHERE lp_learnPath.course_id = ?d AND lp_module.contentType = 'SCORM'",
+            WHERE lp_learnPath.course_id = ?d AND lp_learnPath.visible = 1 AND lp_module.contentType = 'SCORM'",
             $course->id);
         $course_code = $course->code;
         foreach ($lps as $lp) {

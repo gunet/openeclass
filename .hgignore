@@ -9,6 +9,11 @@ syntax: regexp
 ^node_modules/
 ^bun\..*
 
+^js/mathjax
+^js/h5p-standalone
+^js/recordrtc
+^js/video.js
+
 ^composer\.phar
 ^storage/views/
 ^vendor/

@@ -79,68 +79,68 @@
                     <ul class='list-group list-group-flush'>
                         <li class="list-group-item list-group-item-action border-0 pb-3">
                             <i class="fa-solid fa-user-group settings-icons-lg"></i>
-                            {!! trans('langUsers') !!}
+                            {{ trans('langUsers') }}
                         </li>
                         <li class="list-group-item element">
                             <a class='TextBold' href="{{$urlAppend}}modules/admin/search_user.php">
-                                {!! trans('langSearchUser') !!}
+                                {{ trans('langSearchUser') }}
                             </a>
                         </li>
                         <li class="list-group-item element">
                             <a class='TextBold' href="{{$urlAppend}}modules/admin/newuseradmin.php">
-                                {!! trans('langCreateAccount') !!}
+                                {{ trans('langCreateAccount') }}
                             </a>
                         </li>
                         <li class="list-group-item element">
                             <a class='TextBold' href="{{$urlAppend}}modules/admin/listreq.php">
-                                {!! trans('langUserRequests') !!}
+                                {{ trans('langUserRequests') }}
                             </a>
                         </li>
                         @if ($is_admin)
                             <li class="list-group-item element">
                                 <a class='TextBold' href="{{$urlAppend}}modules/admin/auth.php">
-                                    {!! trans('langUserAuthentication') !!}
+                                    {{ trans('langUserAuthentication') }}
                                 </a>
                             </li>
                             <li class="list-group-item element">
                                 <a class='TextBold' href="{{$urlAppend}}modules/admin/mail_ver_settings.php">
-                                    {!! trans('langMailVerification') !!}
+                                    {{ trans('langMailVerification') }}
                                 </a>
                             </li>
                             <li class="list-group-item element">
                                 <a class='TextBold' href="{{$urlAppend}}modules/admin/change_user.php">
-                                    {!! trans('langChangeUser') !!}
+                                    {{ trans('langChangeUser') }}
                                 </a>
                             </li>
                             <li class="list-group-item element">
                                 <a class='TextBold' href="{{$urlAppend}}modules/admin/custom_profile_fields.php">
-                                    {!! trans('langCPFAdminSideMenuLink') !!}
+                                    {{ trans('langCPFAdminSideMenuLink') }}
                                 </a>
                             </li>
                             <li class="list-group-item element">
                                 <a class='TextBold' href="{{$urlAppend}}modules/admin/eportfolio_fields.php">
-                                    {!! trans('langEPFAdminSideMenuLink') !!}
+                                    {{ trans('langEPFAdminSideMenuLink') }}
                                 </a>
                             </li>
                         @endif
                         <li class="list-group-item element">
                             <a class='TextBold' href="{{$urlAppend}}modules/admin/multireguser.php">
-                                {!! trans('langMultiRegUser') !!}
+                                {{ trans('langMultiRegUser') }}
                             </a>
                         </li>
                         <li class="list-group-item element">
                             <a class='TextBold' href="{{$urlAppend}}modules/admin/multicourseuser.php">
-                                {!! trans('langMultiRegCourseUser') !!}
+                                {{ trans('langMultiRegCourseUser') }}
                             </a>
                         </li>
                         <li class="list-group-item element">
                             <a class='TextBold' href="{{$urlAppend}}modules/admin/multiedituser.php">
-                                {!! trans('langMultiDelUser') !!}
+                                {{ trans('langMultiDelUser') }}
                             </a>
                         </li>
                         <li class="list-group-item element">
                             <a class='TextBold' href="{{$urlAppend}}modules/admin/mailtoprof.php">
-                                {!! trans('langSendInfoMail') !!}
+                                {{ trans('langSendInfoMail') }}
                             </a>
                         </li>
                     </ul>
@@ -154,45 +154,45 @@
                         <ul class='list-group list-group-flush'>
                             <li class="list-group-item list-group-item-action border-0 pb-3">
                                 <i class="fa-solid fa-book-open settings-icons-lg"></i>
-                                {!! trans('langCourses') !!}
+                                {{ trans('langCourses') }}
                             </li>
                             <li class="list-group-item element">
                                 <a class='TextBold' href="{{$urlAppend}}modules/admin/searchcours.php">
-                                    {!! trans('langSearchCourse') !!}
+                                    {{ trans('langSearchCourse') }}
                                 </a>
                             </li>
                             <li class="list-group-item element">
                                 <a class='TextBold' href="{{$urlAppend}}modules/course_info/restore_course.php">
-                                    {!! trans('langRestoreCourse') !!}
+                                    {{ trans('langRestoreCourse') }}
                                 </a>
                             </li>
                             <li class="list-group-item element">
                                 <a class='TextBold' href="{{$urlAppend}}modules/admin/multicourse.php">
-                                    {!! trans('langMultiCourse') !!}
+                                    {{ trans('langMultiCourse') }}
                                 </a>
                             </li>
                             @if ($is_admin)
                                 <li class="list-group-item element">
                                     <a class='TextBold' href="{{$urlAppend}}modules/admin/autoenroll.php">
-                                        {!! trans('langAutoEnroll') !!}
+                                        {{ trans('langAutoEnroll') }}
                                     </a>
                                 </li>
                                 <li class="list-group-item element">
                                     <a class='TextBold' href="{{$urlAppend}}modules/admin/modules.php">
-                                        {!! trans('langDisableModules') !!}
+                                        {{ trans('langDisableModules') }}
                                     </a>
                                 </li>
                                 @if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
                                 <li class="list-group-item element">
                                     <a class='TextBold' href="{{$urlAppend}}modules/admin/certbadge.php">
-                                        {!! trans('langCertBadge') !!}
+                                        {{ trans('langCertBadge') }}
                                     </a>
                                 </li>
                                 @endif
                                 @if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
                                 <li class="list-group-item element">
                                     <a class='TextBold' href="{{$urlAppend}}modules/admin/activity.php">
-                                        {!! trans('langActivityCourse') !!}
+                                        {{ trans('langActivityCourse') }}
                                     </a>
                                 </li>
                                 @endif
@@ -209,76 +209,76 @@
                         <ul class='list-group list-group-flush'>
                             <li class="list-group-item list-group-item-action border-0 pb-3">
                                 <i class="fa-solid fa-gear settings-icons-lg"></i>
-                                {!! trans('langAdminTool') !!}
+                                {{ trans('langAdminTool') }}
                             </li>
                             <li class="list-group-item element">
                                 <a class='TextBold' href="{{$urlAppend}}modules/admin/eclassconf.php">
-                                    {!! trans('langConfig') !!}
+                                    {{ trans('langConfig') }}
                                 </a>
                             </li>
                             <li class="list-group-item element">
                                 <a class='TextBold' href="{{$urlAppend}}modules/admin/extapp.php">
-                                    {!! trans('langExtAppConfig') !!}
+                                    {{ trans('langExtAppConfig') }}
                                 </a>
                             </li>
                             <li class="list-group-item element">
                                 <a class='TextBold' href="{{$urlAppend}}modules/admin/collaboration_enable.php">
-                                    {!! trans('langCollaborationPlatform') !!}
+                                    {{ trans('langCollaborationPlatform') }}
                                 </a>
                             </li>
                             @if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
                             <li class="list-group-item element">
                                 <a class='TextBold' href="{{$urlAppend}}modules/admin/widgets.php">
-                                    {!! trans('langWidgets') !!}
+                                    {{ trans('langWidgets') }}
                                 </a>
                             </li>
                             @endif
                             @if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
                             <li class="list-group-item element">
                                 <a class='TextBold' href="{{$urlAppend}}modules/admin/coursecategory.php">
-                                    {!! trans('langCourseCategoryActions') !!}
+                                    {{ trans('langCourseCategoryActions') }}
                                 </a>
                             </li>
                             @endif
                             @if (get_config('phpMyAdminURL'))
                                 <li class="list-group-item element">
-                                    <a class='TextBold' href="{{ get_config('phpMyAdminUrl') }}">
-                                        {!! trans('langDBaseAdmin') !!}
-                                    </a>
+                                <a class='TextBold' href="{{ get_config('phpMyAdminURL') }}">
+                                    {{ trans('langDBaseAdmin') }}
+                                </a>
                                 </li>
                             @endif
                             <li class="list-group-item element">
                                 <a class='TextBold' href="{{$urlAppend}}modules/usage/index.php?t=a">
-                                    {!! trans('langUsage') !!}
+                                    {{ trans('langUsage') }}
                                 </a>
                             </li>
                             @if (get_config('enable_common_docs'))
                                 <li class="list-group-item element">
                                     <a class='TextBold' href="{{$urlAppend}}modules/admin/commondocs.php">
-                                        {!! trans('langCommonDocs') !!}
+                                        {{ trans('langCommonDocs') }}
                                     </a>
                                 </li>
                             @endif
                             <li class="list-group-item element">
                                 <a class='TextBold' href="{{$urlAppend}}modules/admin/cleanup.php">
-                                    {!! trans('langCleanUp') !!}
+                                    {{ trans('langCleanUp') }}
                                 </a>
                             </li>
                             @if (get_config('phpSysInfoURL'))
                                 <li class="list-group-item element">
                                     <a class='TextBold' href="{{ get_config('phpSysInfoURL') }}">
-                                        {!! trans('langSysInfo') !!}
+                                        {{ trans('langSysInfo') }}
                                     </a>
                                 </li>
                             @endif
                             <li class="list-group-item element">
                                 <a class='TextBold' href="{{$urlAppend}}modules/admin/phpInfo.php">
-                                    {!! trans('langPHPInfo') !!}
+                                    {{ trans('langPHPInfo') }}
                                 </a>
                             </li>
                             <li class="list-group-item element">
                                 <a class='TextBold' href="{{$urlServer}}upgrade/index.php">
-                                    {!! trans('langUpgradeBase') !!}
+                                    {{ trans('langUpgradeBase') }}
                                 </a>
                             </li>
                         </ul>
@@ -300,25 +300,25 @@
                         <ul class='list-group list-group-flush'>
                             <li class="list-group-item list-group-item-action border-0 pb-3">
                                 <i class="fa-solid fa-toolbox settings-icons-lg"></i>
-                                {!! trans('langAdministratorTools') !!}
+                                {{ trans('langAdministratorTools') }}
                             </li>
                             @if ($is_admin)
                                 <li class="list-group-item element">
                                     <a class='TextBold' href="{{$urlAppend}}modules/admin/addadmin.php">
-                                        {!! trans('langAdmins') !!}
+                                        {{ trans('langAdmins') }}
                                     </a>
                                 </li>
                             @endif
                             @if (isset($is_admin) and $is_admin)
                                 <li class="list-group-item element">
                                     <a class='TextBold' href="{{$urlAppend}}modules/admin/adminannouncements.php">
-                                        {!! trans('langAnnouncements') !!}
+                                        {{ trans('langAnnouncements') }}
                                     </a>
                                 </li>
                                 @php $manual_language = ($language == 'el')? $language: 'en'; @endphp
                                 <li class="list-group-item element">
                                     <a class='TextBold' href="http://docs.openeclass.org/{{$manual_language}}/admin">
-                                        {!! trans('langAdminManual') !!}
+                                        {{ trans('langAdminManual') }}
                                     </a>
                                 </li>
                             @endif
@@ -333,11 +333,11 @@
                             <ul class='list-group list-group-flush'>
                                 <li class="list-group-item list-group-item-action border-0 pb-3">
                                     <i class="fa-solid fa-list-ul settings-icons-lg"></i>
-                                    {!! trans('langFaculties') !!}
+                                    {{ trans('langFaculties') }}
                                 </li>
                                 <li class="list-group-item element">
                                     <a href="{{$urlAppend}}modules/admin/hierarchy.php" class='TextBold'>
-                                        {!! trans('langHierarchy') !!}
+                                        {{ trans('langHierarchy') }}
                                     </a>
                                 </li>
                             </ul>
@@ -352,36 +352,36 @@
                             <ul class='list-group list-group-flush'>
                                 <li class="list-group-item list-group-item-action border-0 pb-3">
                                     <i class="fa-solid fa-sitemap settings-icons-lg"></i>
-                                    {!! trans('langEclassThemes') !!}
+                                    {{ trans('langEclassThemes') }}
                                 </li>
                                 <li class="list-group-item element">
                                     <a href="{{$urlAppend}}modules/admin/theme_options.php" class='TextBold'>
-                                        {!! trans('langThemeSettings') !!}
+                                        {{ trans('langThemeSettings') }}
                                     </a>
                                 </li>
                                 <li class="list-group-item element">
                                     <a href="{{$urlAppend}}modules/admin/manage_home.php" class='TextBold'>
-                                        {!! trans('langAdminManageHomepage') !!}
+                                        {{ trans('langAdminManageHomepage') }}
                                     </a>
                                 </li>
                                 <li class="list-group-item element">
                                     <a href="{{$urlAppend}}modules/admin/manage_footer.php" class='TextBold'>
-                                        {!! trans('langAdminManageFooter') !!}
+                                        {{ trans('langAdminManageFooter') }}
                                     </a>
                                 </li>
                                 <li class="list-group-item element">
                                     <a href="{{$urlAppend}}modules/admin/faq_create.php" class='TextBold'>
-                                        {!! trans('langAdminCreateFaq') !!}
+                                        {{ trans('langAdminCreateFaq') }}
                                     </a>
                                 </li>
                                 <li class="list-group-item element">
                                     <a href="{{$urlAppend}}modules/admin/privacy_policy_conf.php" class='TextBold'>
-                                        {!! trans('langPrivacyPolicy') !!}
+                                        {{ trans('langPrivacyPolicy') }}
                                     </a>
                                 </li>
                                 <li class="list-group-item element">
                                     <a href="{{$urlAppend}}modules/admin/contact_info.php" class='TextBold'>
-                                        {!! trans('langUpgContact') !!}
+                                        {{ trans('langUpgContact') }}
                                     </a>
                                 </li>
                             </ul>

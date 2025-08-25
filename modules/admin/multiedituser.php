@@ -28,6 +28,7 @@ include '../../include/baseTheme.php';
 require_once 'include/lib/user.class.php';
 require_once 'include/lib/hierarchy.class.php';
 require_once 'hierarchy_validations.php';
+require_once 'modules/auth/auth.inc.php';
 
 $tree = new Hierarchy();
 $user = new User();
@@ -120,19 +121,19 @@ if (isset($_POST['submit'])) {
 
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         // get the incoming values
-        $search = isset($_POST['search']) ? $_POST['search'] : '';
+        $search = $_POST['search'] ?? '';
         $c = isset($_POST['c']) ? intval($_POST['c']) : '';
-        $lname = isset($_POST['lname']) ? $_POST['lname'] : '';
-        $fname = isset($_POST['fname']) ? $_POST['fname'] : '';
+        $lname = $_POST['lname'] ?? '';
+        $fname = $_POST['fname'] ?? '';
         $uname = isset($_POST['uname']) ? canonicalize_whitespace($_POST['uname']) : '';
         $am = isset($_POST['am']) ? $_POST['am'] : '';
         $verified_mail = isset($_POST['verified_mail']) ? intval($_POST['verified_mail']) : 3;
-        $user_type = isset($_POST['user_type']) ? $_POST['user_type'] : '';
-        $auth_type = isset($_POST['auth_type']) ? $_POST['auth_type'] : '';
+        $user_type = $_POST['user_type'] ?? '';
+        $auth_type = $_POST['auth_type'] ?? '';
         $email = isset($_POST['email']) ? mb_strtolower(trim($_POST['email'])) : '';
         $reg_flag = isset($_POST['reg_flag']) ? intval($_POST['reg_flag']) : '';
-        $user_registered_at = isset($_POST['user_registered_at']) ? $_POST['user_registered_at'] : '';
-        $user_expires_until = isset($_POST['user_expires_until']) ? $_POST['user_expires_until'] : '';
+        $user_registered_at = $_POST['user_registered_at'] ?? '';
+        $user_expires_until = $_POST['user_expires_until'] ?? '';
         // Criteria/Filters
         $criteria = array();
         $terms = array();

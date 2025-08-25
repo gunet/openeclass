@@ -28,7 +28,7 @@
                                 </div>
                             @endif
                             @include('layouts.partials.legend_view')
-                            @include('layouts.partials.show_alert') 
+                            @include('layouts.partials.show_alert')
 
                             <div class='@if(isset($module_id) and $module_id) d-lg-flex gap-4 @else row m-auto @endif mt-4'>
                                 <div class='@if(isset($module_id) and $module_id) flex-grow-1 @else col-lg-6 col-12 px-0 @endif'>
@@ -60,7 +60,7 @@
         </div>
     </div>
 
-    <script src='{{ $urlAppend }}node_modules/recordrtc/RecordRTC.min.js'></script>
+    <script src='{{ $urlAppend }}js/recordrtc/RecordRTC.min.js'></script>
     <script type='text/javascript'>
         $(document).ready(function() {
             var audio = document.querySelector('audio');

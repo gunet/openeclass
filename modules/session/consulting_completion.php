@@ -380,6 +380,7 @@ function pdf_reports_output() {
     $output = str_replace($searchVal, $replaceVal, $tool_content);
     $pdf_content .= $output;
 
+    $pdf_content .= get_platform_logo('','footer');
     $pdf_content .= "</body></html>";
 
     $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
