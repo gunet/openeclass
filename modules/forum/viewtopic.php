@@ -788,7 +788,7 @@ function pdf_forum_output($content_m,$topic_id,$forum_id) {
         <h2> " . q($topicName) . "</h2>";
 
     $pdf_mcontent .= $newContent2;
-
+    $pdf_mcontent .= get_platform_logo('','footer');
     $pdf_mcontent .= "</body></html>";
 
     $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();

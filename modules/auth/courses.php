@@ -139,7 +139,11 @@ if (count($tree->buildRootsArray()) > 1) {
     $data['buildRoots'] = $tree->buildRootsSelectForm($fc);
 }
 
-list($childCount, $childHTML) = $tree->buildDepartmentChildrenNavigationHtml($fc, 'courses', $countCallback, array('showEmpty' => $showEmpty, 'respectVisibility' => true));;
+if ($data['isInOpenCoursesMode']) {
+    list($childCount, $childHTML) = $tree->buildDepartmentChildrenNavigationHtml($fc, 'opencourses', $countCallback, array('showEmpty' => $showEmpty, 'respectVisibility' => true));;
+} else {
+    list($childCount, $childHTML) = $tree->buildDepartmentChildrenNavigationHtml($fc, 'courses', $countCallback, array('showEmpty' => $showEmpty, 'respectVisibility' => true));;
+}
 
 $queryCourseIds = '';
 $queryExtraSelect = '';

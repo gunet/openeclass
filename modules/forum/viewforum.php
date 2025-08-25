@@ -5,7 +5,7 @@
  *  * Open eClass
  *  * E-learning and Course Management System
  *  * ========================================================================
- *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  * Copyright 2003-2025, Greek Universities Network - GUnet
  *  *
  *  * Open eClass is an open platform distributed in the hope that it will
  *  * be useful (without any warranty), under the terms of the GNU (General
@@ -218,13 +218,6 @@ if ($is_editor and isset($_GET['topiclock'])) {
 
 }
 
-//$result = Database::get()->queryArray("SELECT t.*, p.post_time, t.poster_id AS topic_poster_id, p.poster_id AS poster_id, f.cat_id
-//        FROM forum_topic t
-//        LEFT JOIN forum_post p ON t.last_post_id = p.id
-//        INNER JOIN forum f ON t.forum_id = f.id
-//        WHERE t.forum_id = ?d
-//        ORDER BY topic_time DESC", $forum_id);
-
 $result = Database::get()->queryArray("SELECT t.*, p.post_time, t.poster_id AS topic_poster_id, p.poster_id AS poster_id, f.cat_id
         FROM forum_topic t
         LEFT JOIN forum_post p ON t.last_post_id = p.id
@@ -308,7 +301,7 @@ if (count($result) > 0) { // topics found
         }
         $tool_content .= "</td>";
         $sql = Database::get()->querySingle("SELECT notify_sent FROM forum_notify
-			WHERE user_id = ?d AND topic_id = ?d AND course_id = ?d", $uid, $myrow->id, $course_id);
+            WHERE user_id = ?d AND topic_id = ?d AND course_id = ?d", $uid, $myrow->id, $course_id);
         if ($sql) {
             $topic_action_notify = $sql->notify_sent;
         }

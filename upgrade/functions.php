@@ -3370,6 +3370,10 @@ function upgrade_to_4_2($tbl_options) : void {
     if (DBHelper::fieldExists('tc_attendance', 'id')) {
         Database::get()->query("ALTER TABLE tc_attendance CHANGE id id INT NOT NULL AUTO_INCREMENT");
     }
+
+    if (DBHelper::fieldExists('tc_log', 'id')) {
+        Database::get()->query("ALTER TABLE tc_log CHANGE id id INT NOT NULL AUTO_INCREMENT");
+    }
 }
 
 /**

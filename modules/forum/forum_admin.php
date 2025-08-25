@@ -284,7 +284,9 @@ elseif (isset($_GET['forumgosave'])) {
         Database::get()->query("UPDATE `group` SET `forum_id` = ?d WHERE `id` = ?d", $forum_id, $_POST['to_group']);
     }
 
-    $tool_content .= "<div class='col-sm-12'><div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$langForumDataChanged</span></div></div>";
+    Session::flash('message',$langForumDataChanged);
+    Session::flash('alert-class', 'alert-success');
+    redirect_to_home_page("modules/forum/index.php?course=$course_code");
 }
 
 // Add category to forums
@@ -547,8 +549,9 @@ elseif (isset($_GET['forumgodel'])) {
        $tool_content .= "</select></div>
        </div>
        <div class='form-group mt-4'>
-            <div class='col-12 d-flex justify-content-end align-items-center>
+            <div class='col-12 d-flex justify-content-end align-items-center gap-2'>
                 <input class='btn submitAdminBtn' type='submit' value='$langModify'>
+                <a class='btn cancelAdminBtn' href='index.php?course=$course_code'>$langCancel</a>
             </div>
         </div>
        </fieldset>
@@ -573,13 +576,17 @@ elseif (isset($_GET['forumgodel'])) {
             Database::get()->query("UPDATE `forum_topic` SET `forum_id` = ?d WHERE `id` = ?d", $new_forum, $topic_id);
             Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_FORUMTOPIC, $topic_id);
 
-            $result = Database::get()->querySingle("SELECT `last_post_id`, MAX(`topic_time`) FROM `forum_topic` WHERE `forum_id`=?d",$new_forum);
-            $last_post_id = $result->last_post_id;
+            $result = Database::get()->querySingle("SELECT `last_post_id` FROM `forum_topic` WHERE `forum_id` = ?d",$new_forum);
+            if ($result) {
+                $last_post_id = $result->last_post_id;
+            } else {
+                $last_post_id = 0;
+            }
 
             Database::get()->query("UPDATE `forum` SET `num_topics` = `num_topics`+1, `num_posts` = `num_posts`+?d, `last_post_id` = ?d
                     WHERE id = ?d",$num_replies+1, $last_post_id, $new_forum);
 
-            $result = Database::get()->querySingle("SELECT `last_post_id`, MAX(`topic_time`) FROM `forum_topic` WHERE `forum_id`=?d",$current_forum_id);
+            $result = Database::get()->querySingle("SELECT `last_post_id` FROM `forum_topic` WHERE `forum_id` = ?d",$current_forum_id);
             if ($result) {
                 $last_post_id = $result->last_post_id;
             } else {
@@ -589,7 +596,6 @@ elseif (isset($_GET['forumgodel'])) {
             Database::get()->query("UPDATE `forum` SET `num_topics` = `num_topics`-1, `num_posts` = `num_posts`-?d, `last_post_id` = ?d
                     WHERE id = ?d",$num_replies+1,$last_post_id, $current_forum_id);
         }//if user selected the current forum do nothing
-
        $tool_content .= "<div class='col-sm-12'><div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$langTopicDataChanged</span></div></div>";
     }
 
