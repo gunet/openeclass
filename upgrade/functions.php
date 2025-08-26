@@ -3362,8 +3362,8 @@ function upgrade_to_4_1($tbl_options) : void {
 function upgrade_to_4_2($tbl_options) : void {
 
     global $langResearchProfiles, $langGoogleScholarProfile, $langScopusID, $langOrcid,
-           $langEnglish, $langFrench, $langGerman, $langSpanish, $langItalian, $langLangProfLevel,
-           $langLangCEFRA1, $langLangCEFRA2, $langLangCEFRB1, $langLangCEFRB2, $langLangCEFRC1,
+           $langGreek, $langEnglish, $langAlbanian, $langArabic, $langFrench, $langGerman, $langSpanish, $langItalian, $langChinese, $langRussian, $langTurkish, 
+           $langOtherLanguages, $langePortfolioOtherLanguagesDescr, $langLangProfLevel, $langLangCEFRA1, $langLangCEFRA2, $langLangCEFRB1, $langLangCEFRB2, $langLangCEFRC1,
            $langLangCEFRC2, $langSocialActivities, $langVolunteerActivities, $langVolontSocialAct,
            $langAboutMeDescr, $langePortfolioPersonalWebsiteDescr, $langEducationDescr, $langePortfolioEmploymentDescr,
            $langePortfolioCertificatesAwardsDescr, $langePortfolioPublicationsDescr, $langePortfolioPersonalGoalsDescr,
@@ -3399,11 +3399,18 @@ function upgrade_to_4_2($tbl_options) : void {
     $eportf_cat_id = Database::get()->query("INSERT INTO eportfolio_fields_category (name, sortorder) VALUES ('$langLangProfLevel', $min_eportf_cat_order)")->lastInsertID;
     $lang_proficiency_levels = [$langLangCEFRA1, $langLangCEFRA2, $langLangCEFRB1, $langLangCEFRB2, $langLangCEFRC1, $langLangCEFRC2];
     Database::get()->query("INSERT INTO eportfolio_fields (shortname, name, description, datatype, categoryid, sortorder, required, data) VALUES
-        ('english', '$langEnglish', '', '4', $eportf_cat_id, 0, 0, '".serialize($lang_proficiency_levels)."'),
-        ('french', '$langFrench', '', '4', $eportf_cat_id, -1, 0, '".serialize($lang_proficiency_levels)."'),
-        ('german', '$langGerman', '', '4', $eportf_cat_id, -2, 0, '".serialize($lang_proficiency_levels)."'),
-        ('italian', '$langItalian', '', '4', $eportf_cat_id, -3, 0, '".serialize($lang_proficiency_levels)."'),
-        ('spanish', '$langSpanish', '', '4', $eportf_cat_id, -4, 0, '".serialize($lang_proficiency_levels)."')");
+        ('greek', '$langGreek', '', '4', $eportf_cat_id, 0, 0, '".serialize($lang_proficiency_levels)."'),
+        ('english', '$langEnglish', '', '4', $eportf_cat_id, -1, 0, '".serialize($lang_proficiency_levels)."'),
+        ('albanian', '$langAlbanian', '', '4', $eportf_cat_id, -2, 0, '".serialize($lang_proficiency_levels)."'),
+        ('arabic', '$langArabic', '', '4', $eportf_cat_id, -3, 0, '".serialize($lang_proficiency_levels)."'),
+        ('french', '$langFrench', '', '4', $eportf_cat_id, -4, 0, '".serialize($lang_proficiency_levels)."'),
+        ('german', '$langGerman', '', '4', $eportf_cat_id, -5, 0, '".serialize($lang_proficiency_levels)."'),
+        ('italian', '$langItalian', '', '4', $eportf_cat_id, -6, 0, '".serialize($lang_proficiency_levels)."'),
+        ('spanish', '$langSpanish', '', '4', $eportf_cat_id, -7, 0, '".serialize($lang_proficiency_levels)."'),
+        ('chinese', '$langChinese', '', '4', $eportf_cat_id, -8, 0, '".serialize($lang_proficiency_levels)."'),
+        ('russian', '$langRussian', '', '4', $eportf_cat_id, -9, 0, '".serialize($lang_proficiency_levels)."'),
+        ('turkish', '$langTurkish', '', '4', $eportf_cat_id, -10, 0, '".serialize($lang_proficiency_levels)."'),
+        ('other_languages', '$langOtherLanguages', '$langePortfolioOtherLanguagesDescr', '2', $eportf_cat_id, -11, 0, '')");
     $min_eportf_cat_order--;
 
     $eportf_cat_id = Database::get()->query("INSERT INTO eportfolio_fields_category (name, sortorder) VALUES ('$langVolontSocialAct', $min_eportf_cat_order)")->lastInsertID;

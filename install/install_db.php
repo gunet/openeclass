@@ -1022,13 +1022,20 @@ $db->query("INSERT INTO `eportfolio_fields` (`id`, `shortname`, `name`, `descrip
         (22, 'gscholar', '$langGoogleScholarProfile', '', '5', 6, 0, 0, ''),
         (23, 'scopus', '$langScopusID', '', '1', 6, -1, 0, ''),
         (24, 'orcid', '$langOrcid', '', '5', 6, -2, 0, ''),
-        (25, 'english', '$langEnglish', '', '4', 7, 0, 0, '".serialize($lang_proficiency_levels)."'),
-        (26, 'french', '$langFrench', '', '4', 7, -1, 0, '".serialize($lang_proficiency_levels)."'),
-        (27, 'german', '$langGerman', '', '4', 7, -2, 0, '".serialize($lang_proficiency_levels)."'),
-        (28, 'italian', '$langItalian', '', '4', 7, -3, 0, '".serialize($lang_proficiency_levels)."'),
-        (29, 'spanish', '$langSpanish', '', '4', 7, -4, 0, '".serialize($lang_proficiency_levels)."'),
-        (30, 'social_activities', '$langSocialActivities', '$langePortfolioSocialActivitiesDescr', '2', 8, 0, 0, ''),
-        (31, 'volunteer_activities', '$langVolunteerActivities', '$langePortfolioVolunteerActivitiesDescr', '2', 8, -1, 0, '')");
+        (25, 'greek', '$langGreek', '', '4', 7, 0, 0, '".serialize($lang_proficiency_levels)."'),
+        (26, 'english', '$langEnglish', '', '4', 7, -1, 0, '".serialize($lang_proficiency_levels)."'),
+        (27, 'albanian', '$langAlbanian', '', '4', 7, -2, 0, '".serialize($lang_proficiency_levels)."'),
+        (28, 'arabic', '$langArabic', '', '4', 7, -3, 0, '".serialize($lang_proficiency_levels)."'),
+        (29, 'french', '$langFrench', '', '4', 7, -4, 0, '".serialize($lang_proficiency_levels)."'),
+        (30, 'german', '$langGerman', '', '4', 7, -5, 0, '".serialize($lang_proficiency_levels)."'),
+        (31, 'italian', '$langItalian', '', '4', 7, -6, 0, '".serialize($lang_proficiency_levels)."'),
+        (32, 'spanish', '$langSpanish', '', '4', 7, -7, 0, '".serialize($lang_proficiency_levels)."'),
+        (33, 'chinese', '$langChinese', '', '4', 7, -8, 0, '".serialize($lang_proficiency_levels)."'),
+        (34, 'russian', '$langRussian', '', '4', 7, -9, 0, '".serialize($lang_proficiency_levels)."'),
+        (35, 'turkish', '$langTurkish', '', '4', 7, -10, 0, '".serialize($lang_proficiency_levels)."'),
+        (36, 'other_languages', '$langOtherLanguages', '$langePortfolioOtherLanguagesDescr', '2', 7, -11, 0, ''),
+        (37, 'social_activities', '$langSocialActivities', '$langePortfolioSocialActivitiesDescr', '2', 8, 0, 0, ''),
+        (38, 'volunteer_activities', '$langVolunteerActivities', '$langePortfolioVolunteerActivitiesDescr', '2', 8, -1, 0, '')");
 
 $db->query("CREATE TABLE IF NOT EXISTS `eportfolio_resource` (
         `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
