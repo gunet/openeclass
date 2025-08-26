@@ -5905,6 +5905,7 @@ $langTiiInstructorCustomParameters = "Custom parameters";
 $langTiiSelectContent = "Select Content";
 $langTiiSelectContentDesc = "Please use the Select Content option to set the title, the maximum grade, and the dates of the assignment; the fields will be automatically transferred from the Turnitin options.";
 $langTiiSelectedContent = "Content selected";
+$langTiiSelectContentAutoComplete = "The field will be autocompleted by the content selection procedure.";
 $langLTIOptions = "Turnitin Options";
 $langUseOfApp = "App Use";
 $langUseOfAppInfo = "Select $langsCourses that app will be used";
