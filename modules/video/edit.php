@@ -31,7 +31,7 @@ require_once 'modules/drives/clouddrive.php';
 require_once 'include/action.php';
 require_once 'include/log.class.php';
 require_once 'modules/search/classes/ConstantsUtil.php';
-require_once 'modules/search/lucene/indexer.class.php';
+require_once 'modules/search/classes/SearchEngineFactory.php';
 require_once 'modules/admin/extconfig/externals.php';
 require_once 'modules/admin/extconfig/opendelosapp.php';
 require_once 'delos_functions.php';
@@ -68,6 +68,8 @@ if (isset($_GET['form_input'])) {
 $data['form_input'] = $form_input;
 $data['form_enctype'] = $form_enctype;
 
+$searchEngine = SearchEngineFactory::create();
+
 // handle submitted data
 if (isset($_POST['edit_submit']) && isset($_POST['id'])) { // edit
     $id = $_POST['id'];
@@ -99,9 +101,9 @@ if (isset($_POST['edit_submit']) && isset($_POST['id'])) { // edit
 
     // index and log
     if ($table == 'video') {
-        Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_VIDEO, $id);
+        $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_VIDEO, $id);
     } elseif ($table == 'videolink') {
-        Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_VIDEOLINK, $id);
+        $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_VIDEOLINK, $id);
     }
     Log::record($course_id, MODULE_ID_VIDEO, LOG_MODIFY, array('id' => $id,
         'url' => canonicalize_url($_POST['url']),
@@ -128,7 +130,7 @@ if (isset($_POST['add_submit'])) { // add
             $course_id, canonicalize_url($url), $title, $_POST['description'], $_POST['selectcategory'], $_POST['creator'], $_POST['publisher'], $videodate);
         $id = $q->lastInsertID;
         // index and log
-        Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_VIDEOLINK, $id);
+        $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_VIDEOLINK, $id);
         $txt_description = ellipsize(canonicalize_whitespace(strip_tags($_POST['description'])), 50, '+');
         Log::record($course_id, MODULE_ID_VIDEO, LOG_INSERT, array('id' => $id,
             'url' => canonicalize_url($url),
@@ -199,7 +201,7 @@ if (isset($_POST['add_submit'])) { // add
             , $_POST['creator'], $_POST['publisher'], $videodate)->lastInsertID;
 
         // index and log
-        Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_VIDEO, $id);
+        $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_VIDEO, $id);
         Log::record($course_id, MODULE_ID_VIDEO, LOG_INSERT, @array('id' => $id,
             'path' => $path,
             'url' => $_POST['url'],

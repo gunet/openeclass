@@ -62,16 +62,7 @@ class NoteIndexer extends AbstractIndexer implements ResourceIndexerInterface {
      * @return object - the mysql fetched row
      */
     protected function fetch($noteId) {
-        $note = Database::get()->querySingle("SELECT * FROM note WHERE id = ?d", $noteId);
-        if (!$note) {
-            return null;
-        }
-
-        if (!is_null($note->reference_obj_course)) {
-            $note->course_id = intval($note->reference_obj_course);
-        }
-
-        return $note;
+        return FetcherUtil::fetchNote($noteId);
     }
 
     /**

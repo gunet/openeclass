@@ -24,22 +24,43 @@ require_once 'modules/search/classes/FetcherUtil.php';
 
 class SolrVideolinkIndexer extends AbstractSolrIndexer {
 
+    private function makeDoc(object $vlink): array {
+        return [
+            ConstantsUtil::FIELD_ID => 'doc_' . ConstantsUtil::DOCTYPE_VIDEOLINK . '_' . $vlink->id,
+            ConstantsUtil::FIELD_PK => ConstantsUtil::DOCTYPE_VIDEOLINK . '_' . $vlink->id,
+            ConstantsUtil::FIELD_PKID => $vlink->id,
+            ConstantsUtil::FIELD_COURSEID => $vlink->course_id,
+            ConstantsUtil::FIELD_DOCTYPE => ConstantsUtil::DOCTYPE_VIDEOLINK,
+            ConstantsUtil::FIELD_TITLE => $vlink->title,
+            ConstantsUtil::FIELD_CONTENT => strip_tags($vlink->description),
+            ConstantsUtil::FIELD_URL => $vlink->url
+        ];
+    }
+
     public function storeByCourse(int $courseId): array {
         $docs = [];
         $vlinks = FetcherUtil::fetchVideoLinks($courseId);
         foreach ($vlinks as $vlink) {
-            $docs[] = [
-                ConstantsUtil::FIELD_ID => 'doc_' . ConstantsUtil::DOCTYPE_VIDEOLINK . '_' . $video->id,
-                ConstantsUtil::FIELD_PK => ConstantsUtil::DOCTYPE_VIDEOLINK . '_' . $video->id,
-                ConstantsUtil::FIELD_PKID => $video->id,
-                ConstantsUtil::FIELD_COURSEID => $video->course_id,
-                ConstantsUtil::FIELD_DOCTYPE => ConstantsUtil::DOCTYPE_VIDEOLINK,
-                ConstantsUtil::FIELD_TITLE => $video->title,
-                ConstantsUtil::FIELD_CONTENT => strip_tags($video->description),
-                ConstantsUtil::FIELD_URL => $vlink->url
-            ];
+            $docs[] = $this->makeDoc($vlink);
         }
         return $docs;
+    }
+
+    public function store(int $id): array {
+        $docs = [];
+        $vlink = FetcherUtil::fetchVideoLink($id);
+        if (!empty($vlink)) {
+            $docs[] = $this->makeDoc($vlink);
+        }
+        return $docs;
+    }
+
+    public function remove(int $id): array {
+        return [
+            "delete" => [
+                "query" => ConstantsUtil::FIELD_ID . ":" . 'doc_' . ConstantsUtil::DOCTYPE_VIDEOLINK . '_' . $id
+            ]
+        ];
     }
 
 }

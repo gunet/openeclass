@@ -24,22 +24,43 @@ require_once 'modules/search/classes/FetcherUtil.php';
 
 class SolrLinkIndexer extends AbstractSolrIndexer {
 
+    private function makeDoc(object $link): array {
+        return [
+            ConstantsUtil::FIELD_ID => 'doc_' . ConstantsUtil::DOCTYPE_LINK . '_' . $link->id,
+            ConstantsUtil::FIELD_PK => ConstantsUtil::DOCTYPE_LINK . '_' . $link->id,
+            ConstantsUtil::FIELD_PKID => $link->id,
+            ConstantsUtil::FIELD_COURSEID => $link->course_id,
+            ConstantsUtil::FIELD_DOCTYPE => ConstantsUtil::DOCTYPE_LINK,
+            ConstantsUtil::FIELD_TITLE => $link->title,
+            ConstantsUtil::FIELD_CONTENT => strip_tags($link->description),
+            ConstantsUtil::FIELD_URL => $link->url
+        ];
+    }
+
     public function storeByCourse(int $courseId): array {
         $docs = [];
         $links = FetcherUtil::fetchLinks($courseId);
         foreach ($links as $link) {
-            $docs[] = [
-                ConstantsUtil::FIELD_ID => 'doc_' . ConstantsUtil::DOCTYPE_LINK . '_' . $link->id,
-                ConstantsUtil::FIELD_PK => ConstantsUtil::DOCTYPE_LINK . '_' . $link->id,
-                ConstantsUtil::FIELD_PKID => $link->id,
-                ConstantsUtil::FIELD_COURSEID => $link->course_id,
-                ConstantsUtil::FIELD_DOCTYPE => ConstantsUtil::DOCTYPE_LINK,
-                ConstantsUtil::FIELD_TITLE => $link->title,
-                ConstantsUtil::FIELD_CONTENT => strip_tags($link->description),
-                ConstantsUtil::FIELD_URL => $link->url
-            ];
+            $docs[] = $this->makeDoc($link);
         }
         return $docs;
+    }
+
+    public function store(int $id): array {
+        $docs = [];
+        $link = FetcherUtil::fetchLink($id);
+        if (!empty($link)) {
+            $docs[] = $this->makeDoc($link);
+        }
+        return $docs;
+    }
+
+    public function remove(int $id): array {
+        return [
+            "delete" => [
+                "query" => ConstantsUtil::FIELD_ID . ":" . 'doc_' . ConstantsUtil::DOCTYPE_LINK . '_' . $id
+            ]
+        ];
     }
 
 }

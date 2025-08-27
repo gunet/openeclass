@@ -19,7 +19,7 @@
  */
 
 require_once 'modules/search/classes/ConstantsUtil.php';
-require_once 'modules/search/lucene/indexer.class.php';
+require_once 'modules/search/classes/SearchEngineFactory.php';
 require_once 'modules/rating/class.rating.php';
 require_once 'modules/abuse_report/abuse_report.php';
 
@@ -70,7 +70,8 @@ function submit_link() {
                 $id = Database::get()->query("INSERT INTO `link` $set_sql, course_id = ?d, `order` = ?d, user_id = ?d", $terms, $course_id, $order, $uid)->lastInsertID;
                 $log_type = LOG_INSERT;
         }
-        Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_LINK, $id);
+        $searchEngine = SearchEngineFactory::create();
+        $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_LINK, $id);
         // find category name
         if ($selectcategory == -2) {
                 $category = $langSocialCategory;
@@ -151,7 +152,8 @@ function delete_link($id) {
 
     }
     Database::get()->query("DELETE FROM `link` WHERE course_id = ?d AND id = ?d", $course_id, $id);
-    Indexer::queueAsync(ConstantsUtil::REQUEST_REMOVE, ConstantsUtil::RESOURCE_LINK, $id);
+    $searchEngine = SearchEngineFactory::create();
+    $searchEngine->indexResource(ConstantsUtil::REQUEST_REMOVE, ConstantsUtil::RESOURCE_LINK, $id);
     Log::record($course_id, MODULE_ID_LINKS, LOG_DELETE, array('id' => $id,
                                                                'url' => $url,
                                                                'title' => $title));

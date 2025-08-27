@@ -24,27 +24,56 @@ require_once 'modules/search/classes/FetcherUtil.php';
 
 class SolrNoteIndexer extends AbstractSolrIndexer {
 
-    public function storeByCourse(int $courseId): array {
+    private function makeDoc(object $note): array {
         global $urlServer;
+        $doc = [
+            ConstantsUtil::FIELD_ID => 'doc_' . ConstantsUtil::DOCTYPE_NOTE . '_' . $note->id,
+            ConstantsUtil::FIELD_PK => ConstantsUtil::DOCTYPE_NOTE . '_' . $note->id,
+            ConstantsUtil::FIELD_PKID => $note->id,
+            ConstantsUtil::FIELD_USERID => $note->user_id,
+            ConstantsUtil::FIELD_DOCTYPE => ConstantsUtil::DOCTYPE_NOTE,
+            ConstantsUtil::FIELD_TITLE => $note->title,
+            ConstantsUtil::FIELD_CONTENT => strip_tags($note->content),
+            ConstantsUtil::FIELD_URL => $urlServer . 'modules/notes/index.php?an_id=' . $note->id
+        ];
+        if (isset($note->course_id)) {
+            $doc[ConstantsUtil::FIELD_COURSEID] = $note->course_id;
+        }
+        return $doc;
+    }
+
+    public function storeByCourse(int $courseId): array {
         $docs = [];
         $notes = FetcherUtil::fetchNotes($courseId);
         foreach ($notes as $note) {
-            $doc = [
-                ConstantsUtil::FIELD_ID => 'doc_' . ConstantsUtil::DOCTYPE_NOTE . '_' . $note->id,
-                ConstantsUtil::FIELD_PK => ConstantsUtil::DOCTYPE_NOTE . '_' . $note->id,
-                ConstantsUtil::FIELD_PKID => $note->id,
-                ConstantsUtil::FIELD_USERID => $note->user_id,
-                ConstantsUtil::FIELD_DOCTYPE => ConstantsUtil::DOCTYPE_NOTE,
-                ConstantsUtil::FIELD_TITLE => $note->title,
-                ConstantsUtil::FIELD_CONTENT => strip_tags($note->content),
-                ConstantsUtil::FIELD_URL => $urlServer . 'modules/notes/index.php?an_id=' . $note->id
-            ];
-            if (isset($note->course_id)) {
-                $doc[ConstantsUtil::FIELD_COURSEID] = $note->course_id;
-            }
-            $docs[] = $doc;
+            $docs[] = $this->makeDoc($note);
         }
         return $docs;
+    }
+
+    public function store(int $id): array {
+        $docs = [];
+        $note = FetcherUtil::fetchNote($id);
+        if (!empty($note)) {
+            $docs[] = $this->makeDoc($note);
+        }
+        return $docs;
+    }
+
+    public function remove(int $id): array {
+        return [
+            "delete" => [
+                "query" => ConstantsUtil::FIELD_ID . ":" . 'doc_' . ConstantsUtil::DOCTYPE_NOTE . '_' . $id
+            ]
+        ];
+    }
+
+    public function removeByUser(int $userId): array {
+        return [
+            "delete" => [
+                "query" => ConstantsUtil::FIELD_DOCTYPE . ":" . ConstantsUtil::DOCTYPE_NOTE . ' AND ' . ConstantsUtil::FIELD_USERID . ':' . $userId
+            ]
+        ];
     }
 
 }

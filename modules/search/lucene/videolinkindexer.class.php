@@ -58,13 +58,7 @@ class VideolinkIndexer extends AbstractIndexer implements ResourceIndexerInterfa
      * @return object - the mysql fetched row
      */
     protected function fetch($vlinkId) {
-
-        $vlink = Database::get()->querySingle("SELECT * FROM videolink WHERE id = ?d", $vlinkId);
-        if (!$vlink) {
-            return null;
-        }
-
-        return $vlink;
+        return FetcherUtil::fetchVideoLink($vlinkId);
     }
 
     /**

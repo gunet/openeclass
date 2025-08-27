@@ -58,12 +58,7 @@ class LinkIndexer extends AbstractIndexer implements ResourceIndexerInterface {
      * @return object - the mysql fetched row
      */
     protected function fetch($linkId) {
-        $link = Database::get()->querySingle("SELECT * FROM link WHERE id = ?d", $linkId);
-        if (!$link) {
-            return null;
-        }
-
-        return $link;
+        return FetcherUtil::fetchLink($linkId);
     }
 
     /**

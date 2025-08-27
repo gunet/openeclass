@@ -109,12 +109,36 @@ class FetcherUtil {
         return Database::get()->queryArray("SELECT * FROM link WHERE course_id = ?d", $courseId);
     }
 
+    public static function fetchLink(int $linkId): ?object {
+        $link = Database::get()->querySingle("SELECT * FROM link WHERE id = ?d", $linkId);
+        if (!$link) {
+            return null;
+        }
+        return $link;
+    }
+
     public static function fetchVideos(int $courseId): array {
         return Database::get()->queryArray("SELECT * FROM video WHERE course_id = ?d", $courseId);
     }
 
+    public static function fetchVideo(int $videoId): ?object {
+        $video = Database::get()->querySingle("SELECT * FROM video WHERE id = ?d", $videoId);
+        if (!$video) {
+            return null;
+        }
+        return $video;
+    }
+
     public static function fetchVideoLinks(int $courseId): array {
         return Database::get()->queryArray("SELECT * FROM videolink WHERE course_id = ?d", $courseId);
+    }
+
+    public static function fetchVideoLink(int $vlinkId): ?object {
+        $vlink = Database::get()->querySingle("SELECT * FROM videolink WHERE id = ?d", $vlinkId);
+        if (!$vlink) {
+            return null;
+        }
+        return $vlink;
     }
 
     public static function fetchExercises(int $courseId): array {
@@ -167,5 +191,16 @@ class FetcherUtil {
 
     public static function fetchNotes(int $courseId): array {
         return Database::get()->queryArray("SELECT * FROM note WHERE reference_obj_course = ?d", $courseId);
+    }
+
+    public static function fetchNote(int $noteId): ?object {
+        $note = Database::get()->querySingle("SELECT * FROM note WHERE id = ?d", $noteId);
+        if (!$note) {
+            return null;
+        }
+        if (!is_null($note->reference_obj_course)) {
+            $note->course_id = intval($note->reference_obj_course);
+        }
+        return $note;
     }
 }

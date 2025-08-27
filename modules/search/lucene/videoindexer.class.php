@@ -59,12 +59,7 @@ class VideoIndexer extends AbstractIndexer implements ResourceIndexerInterface {
      * @return object - the mysql fetched row
      */
     protected function fetch($videoId) {
-        $video = Database::get()->querySingle("SELECT * FROM video WHERE id = ?d", $videoId);
-        if (!$video) {
-            return null;
-        }
-
-        return $video;
+        return FetcherUtil::fetchVideo($videoId);
     }
 
     /**
