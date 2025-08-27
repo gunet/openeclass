@@ -31,4 +31,8 @@ abstract class AbstractSolrIndexer {
      */
     abstract public function storeByCourse(int $courseId): array;
 
+//    abstract public function store(int $id): array;
+
+//    abstract public function remove(int $id): array;
+
 }

@@ -60,12 +60,7 @@ class AnnouncementIndexer extends AbstractIndexer implements ResourceIndexerInte
      * @return object - the mysql fetched row
      */
     protected function fetch($announceId) {
-        $announce = Database::get()->querySingle("SELECT * FROM announcement WHERE id = ?d", $announceId);
-        if (!$announce) {
-            return null;
-        }
-
-        return $announce;
+        return FetcherUtil::fetchAnnouncement($announceId);
     }
 
     /**

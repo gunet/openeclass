@@ -93,6 +93,14 @@ class FetcherUtil {
         return Database::get()->queryArray("SELECT * FROM announcement WHERE course_id = ?d", $courseId);
     }
 
+    public static function fetchAnnouncement(int $announceId): ?object {
+        $announce = Database::get()->querySingle("SELECT * FROM announcement WHERE id = ?d", $announceId);
+        if (!$announce) {
+            return null;
+        }
+        return $announce;
+    }
+
     public static function fetchAgendas(int $courseId): array {
         return Database::get()->queryArray("SELECT * FROM agenda WHERE course_id = ?d", $courseId);
     }

@@ -109,7 +109,7 @@ class SolrIndexer {
 
         return [
             "delete" => [
-                "query" => "courseid:" . $courseId
+                "query" => ConstantsUtil::FIELD_COURSEID . ":" . $courseId
             ]
         ];
     }

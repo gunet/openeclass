@@ -24,24 +24,45 @@ require_once 'modules/search/classes/FetcherUtil.php';
 
 class SolrAnnouncementIndexer extends AbstractSolrIndexer {
 
-    public function storeByCourse(int $courseId): array {
+    private function makeDoc(object $announce): array {
         global $urlServer;
+        return [
+            ConstantsUtil::FIELD_ID => 'doc_' . ConstantsUtil::DOCTYPE_ANNOUNCEMENT . '_' . $announce->id,
+            ConstantsUtil::FIELD_PK => ConstantsUtil::DOCTYPE_ANNOUNCEMENT . '_' . $announce->id,
+            ConstantsUtil::FIELD_PKID => $announce->id,
+            ConstantsUtil::FIELD_COURSEID => $announce->course_id,
+            ConstantsUtil::FIELD_DOCTYPE => ConstantsUtil::DOCTYPE_ANNOUNCEMENT,
+            ConstantsUtil::FIELD_TITLE => $announce->title,
+            ConstantsUtil::FIELD_CONTENT => strip_tags($announce->content),
+            ConstantsUtil::FIELD_VISIBLE => $announce->visible,
+            ConstantsUtil::FIELD_URL => $urlServer . 'modules/announcements/index.php?course=' . course_id_to_code($announce->course_id) . '&amp;an_id=' . $announce->id
+        ];
+    }
+
+    public function storeByCourse(int $courseId): array {
         $docs = [];
         $announcements = FetcherUtil::fetchAnnouncements($courseId);
         foreach ($announcements as $announce) {
-            $docs[] = [
-                ConstantsUtil::FIELD_ID => 'doc_' . ConstantsUtil::DOCTYPE_ANNOUNCEMENT . '_' . $announce->id,
-                ConstantsUtil::FIELD_PK => ConstantsUtil::DOCTYPE_ANNOUNCEMENT . '_' . $announce->id,
-                ConstantsUtil::FIELD_PKID => $announce->id,
-                ConstantsUtil::FIELD_COURSEID => $announce->course_id,
-                ConstantsUtil::FIELD_DOCTYPE => ConstantsUtil::DOCTYPE_ANNOUNCEMENT,
-                ConstantsUtil::FIELD_TITLE => $announce->title,
-                ConstantsUtil::FIELD_CONTENT => strip_tags($announce->content),
-                ConstantsUtil::FIELD_VISIBLE => $announce->visible,
-                ConstantsUtil::FIELD_URL => $urlServer . 'modules/announcements/index.php?course=' . course_id_to_code($announce->course_id) . '&amp;an_id=' . $announce->id
-            ];
+            $docs[] = $this->makeDoc($announce);
         }
         return $docs;
+    }
+
+    public function store(int $id): array {
+        $docs = [];
+        $announce = FetcherUtil::fetchAnnouncement($id);
+        if (!empty($announce)) {
+            $docs[] = $this->makeDoc($announce);
+        }
+        return $docs;
+    }
+
+    public function remove(int $id): array {
+        return [
+            "delete" => [
+                "query" => ConstantsUtil::FIELD_ID . ":" . 'doc_' . ConstantsUtil::DOCTYPE_ANNOUNCEMENT . '_' . $id
+            ]
+        ];
     }
 
 }

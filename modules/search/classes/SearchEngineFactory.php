@@ -25,8 +25,7 @@ require_once 'LuceneSearchEngine.php';
 class SearchEngineFactory {
 
     public static function create(): SearchEngineInterface {
-        $engine = get_config('search_engine', 'lucene');
-        return $engine === 'solr'
+        return get_config('ext_solr_enabled')
             ? new SolrSearchEngine()
             : new LuceneSearchEngine();
     }

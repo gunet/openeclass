@@ -73,8 +73,10 @@ abstract class AbstractIndexer extends AbstractBaseIndexer {
 
         // add the resources back to the index
         $res = $this->getCourseResourcesFromDB($courseId);
-        foreach ($res as $row) {
-            $this->__index->addDocument($this->makeDoc($row));
+        if (!empty($res)) {
+            foreach ($res as $row) {
+                $this->__index->addDocument($this->makeDoc($row));
+            }
         }
 
         $this->optimizeOrCommit($optimize);
