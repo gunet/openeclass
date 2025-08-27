@@ -188,14 +188,92 @@ function hideLti13Fields() {
     $('#tii_instructorcustomparameters')
         .prop('disabled', true)
         .closest('div.form-group')
-        .addClass('hidden');
+        .addClass('hidden')
+        .tooltip('dispose');
+
+    let pickeropts = {
+        format: 'dd-mm-yyyy hh:ii',
+        pickerPosition: 'bottom-right',
+        language: '{{ $language }}',
+        autoclose: true
+    };
+
+    $('#title')
+        .prop('readonly', false)
+        .tooltip('dispose');
+    $('#max_grade')
+        .prop('readonly', false)
+        .tooltip('dispose');
+    $('#WorkStart')
+        .datetimepicker(pickeropts)
+        .prop('readonly', false)
+        .tooltip('dispose');
+    $('#WorkEnd')
+        .datetimepicker(pickeropts)
+        .prop('readonly', false)
+        .tooltip('dispose');
+    $('#tii_feedbackreleasedate')
+        .datetimepicker(pickeropts)
+        .prop('readonly', false)
+        .tooltip('dispose');
+    $('#enableWorkStart').prop('disabled', false);
+    $('#enableWorkEnd').prop('disabled', false);
+    $('#enableWorkFeedbackRelease').prop('disabled', false);
 }
 
 function showLti13Fields() {
     $('#tii_instructorcustomparameters')
         .prop('disabled', false)
+        .prop('readonly', true)
         .closest('div.form-group')
-        .removeClass('hidden');
+        .removeClass('hidden')
+        .tooltip({
+            'placement': 'top',
+            'title': '{{ trans('langTiiSelectContentAutoComplete') }}'
+        });
+
+    $('#title')
+        .prop('readonly', true)
+        .tooltip({
+        'placement': 'top',
+        'title': '{{ trans('langTiiSelectContentAutoComplete') }}'
+    });
+    $('#max_grade')
+        .prop('readonly', true)
+        .tooltip({
+            'placement': 'top',
+            'title': '{{ trans('langTiiSelectContentAutoComplete') }}'
+        });
+    $('#WorkStart')
+        .datetimepicker('remove')
+        .prop('readonly', true)
+        .tooltip({
+            'placement': 'top',
+            'title': '{{ trans('langTiiSelectContentAutoComplete') }}'
+        });
+    $('#WorkEnd')
+        .datetimepicker('remove')
+        .prop('readonly', true)
+        .tooltip({
+            'placement': 'top',
+            'title': '{{ trans('langTiiSelectContentAutoComplete') }}'
+        });
+    $('#tii_feedbackreleasedate')
+        .datetimepicker('remove')
+        .prop('readonly', true)
+        .tooltip({
+            'placement': 'top',
+            'title': '{{ trans('langTiiSelectContentAutoComplete') }}'
+        });
+    $('#enableWorkStart')
+        .prop('checked', true)
+        .prop('disabled', true);
+    $('#enableWorkEnd')
+        .prop('checked', true)
+        .prop('disabled', true);
+    $('#enableWorkFeedbackRelease')
+        .prop('checked', true)
+        .prop('disabled', true);
 }
 
 function hideLtiAllFields() {

@@ -66,7 +66,7 @@ $workspaceUrl = $urlAppend . 'courses/' . $course_code . '/h5p/content/' . $cont
 $workspaceLibs = $urlAppend . 'courses/h5p/libraries';
 
 $head_content .= "
-    <script type='text/javascript' src='" . $urlAppend . "node_modules/h5p-standalone/dist/main.bundle.js'></script>";
+    <script type='text/javascript' src='" . $urlAppend . "js/h5p-standalone/main.bundle.js'></script>";
 
 $tool_content .= "
         <div class='col-12'>
@@ -80,8 +80,8 @@ $head_content .= "
             const options = {
               h5pJsonPath:  '$workspaceUrl',
               librariesPath: '$workspaceLibs',
-              frameJs: '" . $urlAppend . "node_modules/h5p-standalone/dist/frame.bundle.js',
-              frameCss: '" . $urlAppend . "node_modules/h5p-standalone/dist/styles/h5p.css',
+              frameJs: '" . $urlAppend . "js/h5p-standalone/frame.bundle.js',
+              frameCss: '" . $urlAppend . "js/h5p-standalone/styles/h5p.css',
               frame: true,
               copyright: true,
               icon: true,
@@ -95,7 +95,7 @@ $head_content .= "
                     let ifcont = $('#h5p-container').find('iframe').first().contents()[0];
                     let jaxscr = ifcont.createElement('script');
                     jaxscr.type = 'text/javascript';
-                    jaxscr.src = '" . $urlAppend . "node_modules/mathjax/es5/tex-chtml.js';
+                    jaxscr.src = '" . $urlAppend . "js/mathjax/tex-chtml.js';
                     jaxscr.id = 'MathJax-script';
                     ifcont.head.appendChild(jaxscr);
                 }, 40);

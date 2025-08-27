@@ -6535,6 +6535,7 @@ $langTiiInstructorCustomParameters = "Προσαρμοσμένες παράμε�
 $langTiiSelectContent = "Επιλογή Περιεχομένου";
 $langTiiSelectContentDesc = "Παρακαλούμε χρησιμοποιήστε την επιλογή περιεχομένου για να ορίσετε τον τίτλο, τη μέγιστη βαθμολογία και τις ημερομηνίες της Εργασίας, τα πεδία θα μεταφερθούν αυτόματα από τις επιλογές στο Turnitin.";
 $langTiiSelectedContent = "Επιλεγμένο επιτυχώς";
+$langTiiSelectContentAutoComplete = "Το πεδίο θα συμπληρωθεί αυτόματα κατά τη διαδικασία επιλογής περιεχομένου.";
 $langLTIOptions = "Επιλογές Turnitin";
 $langUseOfApp = "Χρήση της εφαρμογής";
 $langUseOfAppInfo = "Επιλέξτε σε ποια $langsCourses θα χρησιμοποιείται η εφαρμογή";
