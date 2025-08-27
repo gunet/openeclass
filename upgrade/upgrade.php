@@ -112,7 +112,7 @@ if ($command_line or $ajax_call) {
     if (!isset($_SESSION['upgrade_started']) and version_compare($oldversion, '3.15', '>') and version_compare($oldversion, '4.0', '<')) {
         $_SESSION['upgrade_started'] = true;
     }
-    $versions = ['3.1', '3.2', '3.3', '3.4', '3.5', '3.6', '3.7', '3.8', '3.9', '3.10', '3.11', '3.12', '3.13', '3.14', '3.15', '3.16', '4.0', '4.1'];
+    $versions = ['3.1', '3.2', '3.3', '3.4', '3.5', '3.6', '3.7', '3.8', '3.9', '3.10', '3.11', '3.12', '3.13', '3.14', '3.15', '3.16', '4.0', '4.1', '4.2'];
 
     if (isset($_SESSION['upgrade_step'])) {
         $step = $_SESSION['upgrade_step'];
@@ -256,6 +256,9 @@ if ($command_line or $ajax_call) {
             } elseif ($version === '4.1') {
                 upgrade_to_4_1($tbl_options);
                 steps_finished();
+            } elseif ($version === '4.2') {
+                upgrade_to_4_2($tbl_options);
+                steps_finished();
             }
         }
         if ($command_line) {
@@ -279,7 +282,7 @@ if (!check_engine()) {
     $error_message = $langInnoDBMissing;
 }
 
-// Make sure 'video' subdirectory exists and is writable
+// Make sure the 'video' subdirectory exists and is writable
 $videoDir = $webDir . '/video';
 if (!file_exists($videoDir)) {
     if (!make_dir($videoDir)) {
