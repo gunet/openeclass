@@ -35,7 +35,7 @@ require_once 'modules/group/group_functions.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 require_once 'modules/search/classes/ConstantsUtil.php';
-require_once 'modules/search/lucene/indexer.class.php';
+require_once 'modules/search/classes/SearchEngineFactory.php';
 
 ModalBoxHelper::loadModalBox();
 /* * ** The following is added for statistics purposes ** */
@@ -155,11 +155,12 @@ if ($is_editor) {
         // construction of Exercise
         $objExerciseTmp = new Exercise();
         if ($objExerciseTmp->read($exerciseId)) {
+            $searchEngine = SearchEngineFactory::create();
             switch ($_GET['choice']) {
                 case 'delete': // deletes an exercise
                     if (!resource_belongs_to_progress_data(MODULE_ID_EXERCISE, $exerciseId)) {
                         $objExerciseTmp->delete();
-                        Indexer::queueAsync(ConstantsUtil::REQUEST_REMOVE, ConstantsUtil::RESOURCE_EXERCISE, $exerciseId);
+                        $searchEngine->indexResource(ConstantsUtil::REQUEST_REMOVE, ConstantsUtil::RESOURCE_EXERCISE, $exerciseId);
                         Session::flash('message', $langPurgeExerciseSuccess);
                         Session::flash('alert-class', 'alert-success');
                         redirect_to_home_page('modules/exercise/index.php?course=' . $course_code);
@@ -183,14 +184,14 @@ if ($is_editor) {
                 case 'enable':  // enables an exercise
                     $objExerciseTmp->enable();
                     $objExerciseTmp->save();
-                    Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_EXERCISE, $exerciseId);
+                    $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_EXERCISE, $exerciseId);
                     redirect_to_home_page('modules/exercise/index.php?course=' . $course_code);
                     break;
                 case 'disable': // disables an exercise
                     if (!resource_belongs_to_progress_data(MODULE_ID_EXERCISE, $exerciseId)) {
                         $objExerciseTmp->disable();
                         $objExerciseTmp->save();
-                        Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_EXERCISE, $exerciseId);
+                        $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_EXERCISE, $exerciseId);
                         redirect_to_home_page('modules/exercise/index.php?course=' . $course_code);
                     } else {
                         Session::flash('message', $langResourceBelongsToCert);
@@ -200,13 +201,13 @@ if ($is_editor) {
                 case 'public':  // make exercise public
                     $objExerciseTmp->makepublic();
                     $objExerciseTmp->save();
-                    Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_EXERCISE, $exerciseId);
+                    $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_EXERCISE, $exerciseId);
                     redirect_to_home_page('modules/exercise/index.php?course=' . $course_code);
                     break;
                 case 'limited':  // make exercise limited
                     $objExerciseTmp->makelimited();
                     $objExerciseTmp->save();
-                    Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_EXERCISE, $exerciseId);
+                    $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_EXERCISE, $exerciseId);
                     redirect_to_home_page('modules/exercise/index.php?course=' . $course_code);
                     break;
                 case 'clone':  // make exercise limited

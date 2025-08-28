@@ -23,7 +23,7 @@
  * @brief Create new exercise or modify an existing one
  */
 require_once 'modules/search/classes/ConstantsUtil.php';
-require_once 'modules/search/lucene/indexer.class.php';
+require_once 'modules/search/classes/SearchEngineFactory.php';
 require_once 'modules/tags/moduleElement.class.php';
 
 if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
@@ -119,7 +119,8 @@ if (isset($_POST['submitExercise'])) {
         $exerciseId = $objExercise->selectId();
 
         $objExercise->assignTo(filter_input(INPUT_POST, 'ingroup', FILTER_VALIDATE_INT, FILTER_REQUIRE_ARRAY));
-        Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_EXERCISE, $exerciseId);
+        $searchEngine = SearchEngineFactory::create();
+        $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_EXERCISE, $exerciseId);
 
         // tags
         $moduleTag = new ModuleElement($exerciseId);

@@ -24,24 +24,45 @@ require_once 'modules/search/classes/FetcherUtil.php';
 
 class SolrExerciseIndexer extends AbstractSolrIndexer {
 
-    public function storeByCourse(int $courseId): array {
+    private function makeDoc(object $exercise): array {
         global $urlServer;
+        return [
+            ConstantsUtil::FIELD_ID => 'doc_' . ConstantsUtil::DOCTYPE_EXERCISE . '_' . $exercise->id,
+            ConstantsUtil::FIELD_PK => ConstantsUtil::DOCTYPE_EXERCISE . '_' . $exercise->id,
+            ConstantsUtil::FIELD_PKID => $exercise->id,
+            ConstantsUtil::FIELD_COURSEID => $exercise->course_id,
+            ConstantsUtil::FIELD_DOCTYPE => ConstantsUtil::DOCTYPE_EXERCISE,
+            ConstantsUtil::FIELD_TITLE => $exercise->title,
+            ConstantsUtil::FIELD_CONTENT => strip_tags($exercise->description),
+            ConstantsUtil::FIELD_VISIBLE => $exercise->active,
+            ConstantsUtil::FIELD_URL => $urlServer . 'modules/exercise/exercise_submit.php?course=' . course_id_to_code($exercise->course_id) . '&amp;exerciseId=' . $exercise->id
+        ];
+    }
+
+    public function storeByCourse(int $courseId): array {
         $docs = [];
         $exercises = FetcherUtil::fetchExercises($courseId);
         foreach ($exercises as $exercise) {
-            $docs[] = [
-                ConstantsUtil::FIELD_ID => 'doc_' . ConstantsUtil::DOCTYPE_EXERCISE . '_' . $exercise->id,
-                ConstantsUtil::FIELD_PK => ConstantsUtil::DOCTYPE_EXERCISE . '_' . $exercise->id,
-                ConstantsUtil::FIELD_PKID => $exercise->id,
-                ConstantsUtil::FIELD_COURSEID => $exercise->course_id,
-                ConstantsUtil::FIELD_DOCTYPE => ConstantsUtil::DOCTYPE_EXERCISE,
-                ConstantsUtil::FIELD_TITLE => $exercise->title,
-                ConstantsUtil::FIELD_CONTENT => strip_tags($exercise->description),
-                ConstantsUtil::FIELD_VISIBLE => $exercise->active,
-                ConstantsUtil::FIELD_URL => $urlServer . 'modules/exercise/exercise_submit.php?course=' . course_id_to_code($exercise->course_id) . '&amp;exerciseId=' . $exercise->id
-            ];
+            $docs[] = $this->makeDoc($exercise);
         }
         return $docs;
+    }
+
+    public function store(int $id): array {
+        $docs = [];
+        $exercise = FetcherUtil::fetchExercise($id);
+        if (!empty($exercise)) {
+            $docs[] = $this->makeDoc($exercise);
+        }
+        return $docs;
+    }
+
+    public function remove(int $id): array {
+        return [
+            "delete" => [
+                "query" => ConstantsUtil::FIELD_ID . ":" . 'doc_' . ConstantsUtil::DOCTYPE_EXERCISE . '_' . $id
+            ]
+        ];
     }
 
 }

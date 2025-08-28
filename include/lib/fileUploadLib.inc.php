@@ -38,7 +38,7 @@
  */
 
 require_once 'modules/search/classes/ConstantsUtil.php';
-require_once 'modules/search/lucene/indexer.class.php';
+require_once 'modules/search/classes/SearchEngineFactory.php';
 
 /*
  * replaces some dangerous character in a string for HTML use
@@ -307,12 +307,13 @@ function process_extracted_file($file_in_zip) {
     $filename = array_pop($path_components);
     $file_date = date("Y\-m\-d G\:i\:s", $file_in_zip['mtime']);
     $path = make_path($uploadPath, $path_components);
+    $searchEngine = SearchEngineFactory::create();
     // is a directory ?
     if (substr($file_in_zip['name'], -1 == '/') and $file_in_zip['size'] == 0) {
         // Directory has been created by make_path(),
         // only need to update the index
         $r = Database::get()->querySingle("SELECT id FROM document WHERE $group_sql AND path = ?s", $path);
-        Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_DOCUMENT, $r->id);
+        $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_DOCUMENT, $r->id);
         return null;
     } else {
         // Check if file already exists
@@ -348,7 +349,7 @@ function process_extracted_file($file_in_zip) {
                 Database::get()->query("UPDATE document SET filename = ?s
                                                  WHERE $group_sql AND
                                                        path = ?s", $backup, $file_path);
-                Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_DOCUMENT, $old_id);
+                $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_DOCUMENT, $old_id);
             }
         }
 
@@ -376,7 +377,7 @@ function process_extracted_file($file_in_zip) {
                 , $file_creator, $file_date, $file_date, $file_subject, $file_description
                 , $file_author, $format, $file_language, $file_copyrighted)->lastInsertID;
         // Logging
-        Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_DOCUMENT, $id);
+        $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_DOCUMENT, $id);
         Log::record($course_id, MODULE_ID_DOCS, LOG_INSERT, array('id' => $id,
             'filepath' => $path,
             'filename' => $filename,

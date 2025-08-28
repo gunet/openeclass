@@ -60,12 +60,7 @@ class ExerciseIndexer extends AbstractIndexer implements ResourceIndexerInterfac
      * @return object - the mysql fetched row
      */
     protected function fetch($exerciseId) {
-        $exercise = Database::get()->querySingle("SELECT * FROM exercise WHERE id = ?d", $exerciseId);
-        if (!$exercise) {
-            return null;
-        }
-
-        return $exercise;
+        return FetcherUtil::fetchExercise($exerciseId);
     }
 
     /**

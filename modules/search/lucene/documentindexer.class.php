@@ -70,13 +70,7 @@ class DocumentIndexer extends AbstractIndexer implements ResourceIndexerInterfac
      * @return object - the mysql fetched row
      */
     protected function fetch($docId) {
-        // exclude non-main subsystems and metadata
-        $doc = Database::get()->querySingle("SELECT * FROM document WHERE id = ?d AND course_id >= 1 AND subsystem = 0 AND format <> \".meta\"", $docId);
-        if (!$doc) {
-            return null;
-        }
-
-        return $doc;
+        return FetcherUtil::fetchDocument($docId);
     }
 
     /**

@@ -145,6 +145,14 @@ class FetcherUtil {
         return Database::get()->queryArray("SELECT * FROM exercise WHERE course_id = ?d", $courseId);
     }
 
+    public static function fetchExercise(int $exerciseId): ?object {
+        $exercise = Database::get()->querySingle("SELECT * FROM exercise WHERE id = ?d", $exerciseId);
+        if (!$exercise) {
+            return null;
+        }
+        return $exercise;
+    }
+
     public static function fetchForums(int $courseId): array {
         return Database::get()->queryArray("SELECT f.* 
             FROM forum f 
@@ -177,6 +185,15 @@ class FetcherUtil {
             AND subsystem = 0 
             AND format <> \".meta\" 
             AND course_id = ?d", $courseId);
+    }
+
+    public static function fetchDocument(int $docId): ?object {
+        // exclude non-main subsystems and metadata
+        $doc = Database::get()->querySingle("SELECT * FROM document WHERE id = ?d AND course_id >= 1 AND subsystem = 0 AND format <> \".meta\"", $docId);
+        if (!$doc) {
+            return null;
+        }
+        return $doc;
     }
 
     public static function fetchUnits(int $courseId): array {
