@@ -26,12 +26,12 @@ require_once '../../include/baseTheme.php';
 require_once 'include/lib/ai/services/AICourseExtractionService.php';
 
 /**
- * Validate PDF URL (handles Unicode characters better than filter_var)
+ * Validate URL (handles Unicode characters better than filter_var)
  * 
  * @param string $url The URL to validate
  * @return bool True if valid URL
  */
-function validatePDFUrl(string $url): bool {
+function validateURL(string $url): bool {
     // Basic format check
     if (!preg_match('/^https?:\/\//', $url)) {
         return false;
@@ -57,13 +57,13 @@ function validatePDFUrl(string $url): bool {
 }
 
 /**
- * Download PDF file from URL using cURL
+ * Download content from URL using cURL (supports both PDF and HTML)
  * 
  * @param string $url The URL to download from
- * @return array Array with file_path, file_name, file_size
+ * @return array Array with file_path, file_name, file_size, content_type
  * @throws Exception If download fails
  */
-function downloadPDFFromURL(string $url): array {
+function downloadContentFromURL(string $url): array {
     global $langAIURLDownloadFailed, $langAIURLNotAccessible, $langFileSizeExceeded;
     
     // Create temporary file
@@ -121,26 +121,47 @@ function downloadPDFFromURL(string $url): array {
         throw new Exception($langAIURLDownloadFailed ?? 'Downloaded file is empty');
     }
 
-    // Validate content type and file signature
-    if ($contentType && !str_contains($contentType, 'application/pdf')) {
-        // Check file signature as backup
+    // Determine content type and validate
+    $detectedContentType = 'unknown';
+    if ($contentType) {
+        if (str_contains($contentType, 'application/pdf')) {
+            $detectedContentType = 'pdf';
+        } elseif (str_contains($contentType, 'text/html') || str_contains($contentType, 'text/plain')) {
+            $detectedContentType = 'html';
+        }
+    }
+    
+    // If content type detection failed, check file signature
+    if ($detectedContentType === 'unknown') {
         $fileHandle = fopen($tempFile, 'rb');
         $signature = fread($fileHandle, 4);
         fclose($fileHandle);
         
-        if ($signature !== '%PDF') {
-            unlink($tempFile);
-            throw new Exception('Downloaded file is not a valid PDF');
+        if ($signature === '%PDF') {
+            $detectedContentType = 'pdf';
+        } else {
+            // Assume it's HTML/text content if not PDF
+            $detectedContentType = 'html';
         }
     }
 
     // Extract filename from URL
     $parsedUrl = parse_url($url);
-    $fileName = basename($parsedUrl['path'] ?? 'syllabus.pdf');
+    $fileName = basename($parsedUrl['path'] ?? '');
     
-    // Ensure .pdf extension
-    if (!str_ends_with(strtolower($fileName), '.pdf')) {
-        $fileName .= '.pdf';
+    // Generate appropriate filename based on content type
+    if ($detectedContentType === 'pdf') {
+        if (empty($fileName)) {
+            $fileName = 'syllabus.pdf';
+        } elseif (!str_ends_with(strtolower($fileName), '.pdf')) {
+            $fileName .= '.pdf';
+        }
+    } else {
+        if (empty($fileName)) {
+            $fileName = 'content.html';
+        } elseif (!str_ends_with(strtolower($fileName), '.html') && !str_ends_with(strtolower($fileName), '.htm')) {
+            $fileName .= '.html';
+        }
     }
 
     // Decode URL-encoded filename
@@ -149,8 +170,45 @@ function downloadPDFFromURL(string $url): array {
     return [
         'file_path' => $tempFile,
         'file_name' => $fileName,
-        'file_size' => $fileSize
+        'file_size' => $fileSize,
+        'content_type' => $detectedContentType
     ];
+}
+
+/**
+ * Extract text content from HTML file
+ * 
+ * @param string $filePath Path to HTML file
+ * @return string Extracted text content
+ * @throws Exception If extraction fails
+ */
+function extractTextFromHTML(string $filePath): string {
+    $htmlContent = file_get_contents($filePath);
+    if ($htmlContent === false) {
+        throw new Exception('Failed to read HTML file');
+    }
+
+    // Remove script and style elements completely
+    $htmlContent = preg_replace('/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/mi', '', $htmlContent);
+    $htmlContent = preg_replace('/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/mi', '', $htmlContent);
+    
+    // Convert HTML entities to their corresponding characters
+    $htmlContent = html_entity_decode($htmlContent, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    
+    // Strip HTML tags but preserve line breaks
+    $htmlContent = str_replace(['</p>', '</div>', '</h1>', '</h2>', '</h3>', '</h4>', '</h5>', '</h6>', '<br>', '<br/>', '<br />'], "\n", $htmlContent);
+    $htmlContent = strip_tags($htmlContent);
+    
+    // Clean up whitespace
+    $htmlContent = preg_replace('/\n\s*\n/', "\n\n", $htmlContent); // Multiple newlines to double newlines
+    $htmlContent = preg_replace('/[ \t]+/', ' ', $htmlContent); // Multiple spaces/tabs to single space
+    $htmlContent = trim($htmlContent);
+    
+    if (empty($htmlContent)) {
+        throw new Exception('No readable text content found in HTML');
+    }
+    
+    return $htmlContent;
 }
 
 // Check permissions - only teachers and department managers can create courses
@@ -195,15 +253,16 @@ try {
         }
 
         // Validate URL format (handle Unicode characters)
-        if (!validatePDFUrl($syllabusUrl)) {
+        if (!validateURL($syllabusUrl)) {
             throw new Exception($langAIInvalidURL ?? 'Invalid URL format');
         }
 
-        // Download PDF from URL
-        $downloadResult = downloadPDFFromURL($syllabusUrl);
+        // Download content from URL (PDF or HTML)
+        $downloadResult = downloadContentFromURL($syllabusUrl);
         $pdfFilePath = $downloadResult['file_path'];
         $fileName = $downloadResult['file_name'];
         $fileSize = $downloadResult['file_size'];
+        $contentType = $downloadResult['content_type'];
         $needsCleanup = true;
 
     } else {
@@ -239,8 +298,14 @@ try {
     // Initialize AI service
     $aiService = new AICourseExtractionService();
     
-    // Extract text from PDF
-    $extractedText = $aiService->extractTextFromPDF($pdfFilePath);
+    // Extract text based on content type
+    if ($inputMethod === 'url' && isset($contentType) && $contentType === 'html') {
+        // Extract text from HTML content
+        $extractedText = extractTextFromHTML($pdfFilePath);
+    } else {
+        // Extract text from PDF (default behavior for uploads and PDF URLs)
+        $extractedText = $aiService->extractTextFromPDF($pdfFilePath);
+    }
     
     // Log successful text extraction
     $textLength = mb_strlen($extractedText);
@@ -251,7 +316,11 @@ try {
     $courseData = $aiService->extractFromSyllabus($extractedText, $options);
     
     // Add extraction metadata
-    $courseData['extraction_method'] = $inputMethod === 'url' ? 'pdf_url' : 'pdf_upload';
+    if ($inputMethod === 'url') {
+        $courseData['extraction_method'] = isset($contentType) && $contentType === 'html' ? 'web_url' : 'pdf_url';
+    } else {
+        $courseData['extraction_method'] = 'pdf_upload';
+    }
     $courseData['file_name'] = $fileName;
     $courseData['file_size'] = $fileSize;
     $courseData['text_length'] = $textLength;

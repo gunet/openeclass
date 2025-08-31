@@ -325,9 +325,11 @@
                 // Show source information
                 if (data.extraction_method) {
                     let sourceInfo = '';
-                    if (data.extraction_method === 'pdf_url_stub' && data.source_url) {
+                    if (data.extraction_method === 'web_url' && data.source_url) {
+                        sourceInfo = '{{ js_escape(trans('langAISourceWebURL')) }}: ' + escapeHtml(data.source_url);
+                    } else if (data.extraction_method === 'pdf_url' && data.source_url) {
                         sourceInfo = '{{ js_escape(trans('langAISourceDownloaded')) }}: ' + escapeHtml(data.source_url);
-                    } else if (data.extraction_method === 'pdf_upload_stub' && data.file_name) {
+                    } else if (data.extraction_method === 'pdf_upload' && data.file_name) {
                         sourceInfo = '{{ js_escape(trans('langAISourceUploaded')) }}: ' + escapeHtml(data.file_name);
                     }
                     if (sourceInfo) {
@@ -490,7 +492,7 @@
                                             <div class='mb-3' id='url_section' style='display: none;'>
                                                 <label for='syllabus_url' class='form-label'>{{ trans('langAISyllabusURL') }}</label>
                                                 <input type='url' class='form-control' id='syllabus_url' name='syllabus_url' 
-                                                       placeholder='https://example.com/syllabus.pdf'>
+                                                       placeholder='https://example.com/course-page or https://example.com/syllabus.pdf'>
                                                 <div class='form-text'>
                                                     {{ trans('langAIURLDescription') }}
                                                 </div>
