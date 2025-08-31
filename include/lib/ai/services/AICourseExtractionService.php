@@ -231,6 +231,40 @@ class AICourseExtractionService {
             ? $rawData['formvisible'] : COURSE_REGISTRATION;
         $sanitized['course_license'] = $rawData['course_license'] ?? 0;
         
+        // Pass through syllabus sections if present
+        if (isset($rawData['syllabus_sections']) && is_array($rawData['syllabus_sections'])) {
+            $sanitized['syllabus_sections'] = [];
+            foreach ($rawData['syllabus_sections'] as $key => $content) {
+                if (!empty($content) && is_string($content)) {
+                    // Sanitize each section content
+                    $sanitized['syllabus_sections'][$key] = purify(trim($content));
+                }
+            }
+        }
+        
+        // Pass through other metadata fields
+        if (isset($rawData['keywords'])) {
+            $sanitized['keywords'] = mb_substr(trim($rawData['keywords']), 0, 500);
+        }
+        if (isset($rawData['extraction_method'])) {
+            $sanitized['extraction_method'] = $rawData['extraction_method'];
+        }
+        if (isset($rawData['source_url'])) {
+            $sanitized['source_url'] = $rawData['source_url'];
+        }
+        if (isset($rawData['file_name'])) {
+            $sanitized['file_name'] = $rawData['file_name'];
+        }
+        if (isset($rawData['file_size'])) {
+            $sanitized['file_size'] = $rawData['file_size'];
+        }
+        if (isset($rawData['text_length'])) {
+            $sanitized['text_length'] = $rawData['text_length'];
+        }
+        if (isset($rawData['generated_at'])) {
+            $sanitized['generated_at'] = $rawData['generated_at'];
+        }
+        
         return $sanitized;
     }
     

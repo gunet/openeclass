@@ -48,6 +48,61 @@ $tree = new Hierarchy();
 $course = new Course();
 $user = new User();
 
+/**
+ * Save structured syllabus sections to course_description table
+ * 
+ * @param int $course_id The course ID
+ * @param array $syllabus_sections Array of syllabus sections
+ * @param string $language Course language for determining section names
+ */
+function saveSyllabusSections($course_id, $syllabus_sections, $language = 'el') {
+    // Map section keys to course_description_type IDs
+    $section_type_mapping = [
+        'objectives' => 2,        // Μαθησιακοί στόχοι / Course Objectives/Goals
+        'bibliography' => 3,      // Βιβλιογραφία / Bibliography
+        'teaching_method' => 4,   // Μέθοδοι διδασκαλίας / Instructional Methods
+        'assessment_method' => 5, // Μέθοδοι αξιολόγησης / Assessment Methods
+        'prerequisites' => 6,     // Προαπαιτούμενα / Prerequisites/Prior Knowledge
+        'instructors' => 7,       // Διδάσκοντες / Instructors
+        'target_group' => 8,      // Ομάδα στόχος / Target Group
+        'textbooks' => 9,         // Προτεινόμενα συγγράμματα / Textbooks
+        'additional_info' => 10   // Περισσότερα / Additional info
+    ];
+    
+    $order_counter = 1;
+    foreach ($syllabus_sections as $section_key => $content) {
+        if (empty($content) || !isset($section_type_mapping[$section_key])) {
+            continue;
+        }
+        
+        $type_id = $section_type_mapping[$section_key];
+        
+        // Get the section title from course_description_type
+        $type_info = Database::get()->querySingle("SELECT title FROM course_description_type WHERE id = ?d", $type_id);
+        if ($type_info) {
+            // Unserialize the title to get language-specific name
+            $titles = unserialize($type_info->title);
+            $section_title = $titles[$language] ?? $titles['en'] ?? 'Section';
+        } else {
+            $section_title = 'Section';
+        }
+        
+        // Insert the section
+        Database::get()->query("INSERT INTO course_description SET
+            course_id = ?d,
+            title = ?s,
+            comments = ?s,
+            type = ?d,
+            visible = 1,
+            `order` = ?d,
+            update_dt = " . DBHelper::timeAfter(),
+            $course_id, $section_title, $content, $type_id, $order_counter
+        );
+        
+        $order_counter++;
+    }
+}
+
 $toolName = $langPortfolio;
 $pageName = $langCourseCreate;
 
@@ -86,6 +141,7 @@ $data['title'] = Session::has('title') ? Session::get('title') : '';
 $data['public_code'] = Session::has('public_code') ? Session::get('public_code') : '';
 $description = Session::has('description') ? Session::get('description') : '';
 $data['prof_names'] = $prof_names = Session::has('prof_names') ? Session::get('prof_names') : "$_SESSION[givenname] $_SESSION[surname]";
+$data['ai_syllabus_sections'] = Session::has('ai_syllabus_sections') ? Session::get('ai_syllabus_sections') : '';
 
 // display form
 if (!isset($_POST['create_course'])) {
@@ -332,6 +388,19 @@ if (!isset($_POST['create_course'])) {
                                         reg_date = " . DBHelper::timeAfter() . ",
                                         document_timestamp = " . DBHelper::timeAfter(),
             $new_course_id, $uid);
+            
+        // Process AI-generated syllabus sections if available
+        if (!empty($_POST['ai_syllabus_sections'])) {
+            $syllabus_sections = json_decode($_POST['ai_syllabus_sections'], true);
+            if ($syllabus_sections && is_array($syllabus_sections)) {
+                try {
+                    saveSyllabusSections($new_course_id, $syllabus_sections, $language);
+                    error_log("AI Syllabus sections saved for course ID: $new_course_id");
+                } catch (Exception $e) {
+                    error_log("Failed to save AI syllabus sections for course $new_course_id: " . $e->getMessage());
+                }
+            }
+        }
 
         $course->refresh($new_course_id, $departments);
 

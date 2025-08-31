@@ -331,6 +331,11 @@ class OpenAIProvider extends AbstractAIProvider {
         $prompt .= "- Generate realistic course codes if not provided\n";
         $prompt .= "- Detect and respond in the same language as the input content\n";
         $prompt .= "- Ensure all fields are present even if extracted from context or generated\n";
+        $prompt .= "- Parse syllabus sections when available: identify and extract structured information for objectives, bibliography, teaching methods, assessment, prerequisites, instructors, target group, textbooks, and additional info\n";
+        $prompt .= "- Keep the main description focused on course overview, move detailed sections to syllabus_sections\n";
+        $prompt .= "- Look for numbered sections like '(2) ΜΑΘΗΣΙΑΚΑ ΑΠΟΤΕΛΕΣΜΑΤΑ', '(4) ΔΙΔΑΚΤΙΚΕΣ ΜΕΘΟΔΟΙ', '(5) ΒΙΒΛΙΟΓΡΑΦΙΑ'\n";
+        $prompt .= "- Also look for patterns like 'Στόχοι:', 'Βιβλιογραφία:', 'Αξιολόγηση:', 'Μέθοδοι:', 'Προαπαιτούμενα:' in Greek content\n";
+        $prompt .= "- For English content, look for 'Objectives:', 'Bibliography:', 'Assessment:', 'Methods:', 'Prerequisites:', 'Instructors:'\n";
         
         return $prompt;
     }
@@ -390,6 +395,48 @@ class OpenAIProvider extends AbstractAIProvider {
                         'keywords' => [
                             'type' => 'string',
                             'description' => 'Comma-separated relevant keywords for the course'
+                        ],
+                        'syllabus_sections' => [
+                            'type' => 'object',
+                            'description' => 'Structured syllabus sections parsed from the content',
+                            'properties' => [
+                                'objectives' => [
+                                    'type' => 'string',
+                                    'description' => 'Course learning objectives and goals'
+                                ],
+                                'bibliography' => [
+                                    'type' => 'string',
+                                    'description' => 'Bibliography, references, and required reading'
+                                ],
+                                'teaching_method' => [
+                                    'type' => 'string',
+                                    'description' => 'Teaching methods and instructional approaches'
+                                ],
+                                'assessment_method' => [
+                                    'type' => 'string',
+                                    'description' => 'Assessment and grading methods'
+                                ],
+                                'prerequisites' => [
+                                    'type' => 'string',
+                                    'description' => 'Prerequisites and prior knowledge requirements'
+                                ],
+                                'instructors' => [
+                                    'type' => 'string',
+                                    'description' => 'Instructor information and details'
+                                ],
+                                'target_group' => [
+                                    'type' => 'string',
+                                    'description' => 'Target audience and student group'
+                                ],
+                                'textbooks' => [
+                                    'type' => 'string',
+                                    'description' => 'Recommended textbooks and course materials'
+                                ],
+                                'additional_info' => [
+                                    'type' => 'string',
+                                    'description' => 'Any additional course information not covered in other sections'
+                                ]
+                            ]
                         ]
                     ],
                     'required' => ['title', 'description', 'language', 'view_type', 'formvisible']
@@ -427,6 +474,11 @@ class OpenAIProvider extends AbstractAIProvider {
             'provider' => $this->getProviderType(),
             'generated_at' => date('Y-m-d H:i:s')
         ];
+
+        // Add structured syllabus sections if present
+        if (isset($courseData['syllabus_sections']) && is_array($courseData['syllabus_sections'])) {
+            $formattedData['syllabus_sections'] = $courseData['syllabus_sections'];
+        }
 
         return $formattedData;
     }

@@ -36,6 +36,19 @@
         }
 
         $(document).ready(function() {
+            
+            // Check for existing syllabus sections on page load
+            const existingSyllabusData = $('#ai_syllabus_sections').val();
+            if (existingSyllabusData) {
+                try {
+                    const syllabusObj = JSON.parse(existingSyllabusData);
+                    const sectionCount = Object.keys(syllabusObj).length;
+                    updateSyllabusIndicator(true, sectionCount);
+                } catch (e) {
+                    // Invalid JSON, remove the field
+                    $('#ai_syllabus_sections').remove();
+                }
+            }
 
             $('#coursepassword').keyup(function() {
                 $('#result').html(checkStrength($('#coursepassword').val()))
@@ -234,6 +247,23 @@
                     }
                 }
                 
+                // Store syllabus sections in hidden form field for processing after course creation
+                if (currentAIData.syllabus_sections) {
+                    // Create or update hidden field with syllabus sections JSON
+                    let existingField = $('#ai_syllabus_sections');
+                    if (existingField.length === 0) {
+                        $('<input>').attr({
+                            type: 'hidden',
+                            id: 'ai_syllabus_sections',
+                            name: 'ai_syllabus_sections'
+                        }).appendTo('form[name="createform"]');
+                    }
+                    $('#ai_syllabus_sections').val(JSON.stringify(currentAIData.syllabus_sections));
+                    
+                    // Show indicator
+                    updateSyllabusIndicator(true, Object.keys(currentAIData.syllabus_sections).length);
+                }
+                
                 // Set course format
                 if (currentAIData.view_type) {
                     $('input[name="view_type"][value="' + currentAIData.view_type + '"]').prop('checked', true);
@@ -355,6 +385,54 @@
                     preview += '</div>';
                 }
                 
+                // Show structured syllabus sections if available
+                if (data.syllabus_sections && Object.keys(data.syllabus_sections).length > 0) {
+                    preview += '<div class="col-12 mt-3">';
+                    preview += '<strong>{{ js_escape(trans('langAISyllabusStructured')) }}:</strong>';
+                    preview += '<div class="row mt-2">';
+                    
+                    const sectionLabels = {
+                        'objectives': '{{ js_escape(trans('langAISyllabusObjectives')) }}',
+                        'bibliography': '{{ js_escape(trans('langAISyllabusBibliography')) }}',
+                        'teaching_method': '{{ js_escape(trans('langAISyllabusTeachingMethod')) }}',
+                        'assessment_method': '{{ js_escape(trans('langAISyllabusAssessmentMethod')) }}',
+                        'prerequisites': '{{ js_escape(trans('langAISyllabusPrerequisites')) }}',
+                        'instructors': '{{ js_escape(trans('langAISyllabusInstructors')) }}',
+                        'target_group': '{{ js_escape(trans('langAISyllabusTargetGroup')) }}',
+                        'textbooks': '{{ js_escape(trans('langAISyllabusTextbooks')) }}',
+                        'additional_info': '{{ js_escape(trans('langAISyllabusAdditionalInfo')) }}'
+                    };
+                    
+                    let sectionCounter = 0;
+                    for (const [sectionKey, sectionContent] of Object.entries(data.syllabus_sections)) {
+                        if (sectionContent && sectionContent.trim().length > 0) {
+                            const label = sectionLabels[sectionKey] || sectionKey;
+                            // Create a temporary element to strip HTML tags for preview
+                            const tempDiv = document.createElement('div');
+                            tempDiv.innerHTML = sectionContent;
+                            const textContent = tempDiv.textContent || tempDiv.innerText || '';
+                            const needsExpansion = textContent.length > 100;
+                            const shortContent = needsExpansion ? textContent.substring(0, 100) + '...' : textContent;
+                            const sectionId = 'section_' + sectionCounter++;
+                            
+                            preview += '<div class="col-md-6 mb-3">';
+                            preview += '<small><strong>' + escapeHtml(label) + ':</strong><br>';
+                            preview += '<span id="' + sectionId + '_short">' + escapeHtml(shortContent) + '</span>';
+                            
+                            if (needsExpansion) {
+                                preview += '<span id="' + sectionId + '_full" style="display: none;">' + escapeHtml(textContent) + '</span>';
+                                preview += '<br><button type="button" class="btn btn-link btn-sm p-0 mt-1 section-toggle" data-target="' + sectionId + '">';
+                                preview += '<i class="fa-solid fa-chevron-down me-1"></i>{{ js_escape(trans('langAIShowFullDescription')) }}';
+                                preview += '</button>';
+                            }
+                            
+                            preview += '</small></div>';
+                        }
+                    }
+                    
+                    preview += '</div></div>';
+                }
+                
                 preview += '</div>';
                 
                 $('#aiDataPreview').html(preview);
@@ -364,6 +442,27 @@
                     const $short = $('#descriptionShort');
                     const $full = $('#descriptionFull');
                     const $button = $(this);
+                    const $icon = $button.find('i');
+                    
+                    if ($full.is(':visible')) {
+                        $full.hide();
+                        $short.show();
+                        $icon.removeClass('fa-chevron-up').addClass('fa-chevron-down');
+                        $button.html('<i class="fa-solid fa-chevron-down me-1"></i>{{ js_escape(trans('langAIShowFullDescription')) }}');
+                    } else {
+                        $short.hide();
+                        $full.show();
+                        $icon.removeClass('fa-chevron-down').addClass('fa-chevron-up');
+                        $button.html('<i class="fa-solid fa-chevron-up me-1"></i>{{ js_escape(trans('langAIHideDescription')) }}');
+                    }
+                });
+                
+                // Add click handlers for syllabus section toggles
+                $(document).on('click', '.section-toggle', function() {
+                    const $button = $(this);
+                    const targetId = $button.data('target');
+                    const $short = $('#' + targetId + '_short');
+                    const $full = $('#' + targetId + '_full');
                     const $icon = $button.find('i');
                     
                     if ($full.is(':visible')) {
@@ -400,6 +499,42 @@
                 div.textContent = text;
                 return div.innerHTML;
             }
+            
+            function updateSyllabusIndicator(hasSections, sectionCount) {
+                let indicator = $('#syllabusIndicator');
+                
+                if (hasSections && sectionCount > 0) {
+                    if (indicator.length === 0) {
+                        // Create indicator if it doesn't exist
+                        const indicatorHtml = `
+                            <div id="syllabusIndicator" class="alert alert-info d-flex justify-content-between align-items-center mt-3">
+                                <div>
+                                    <i class="fa-solid fa-file-text me-2"></i>
+                                    <strong>${sectionCount} AI δομημένα τμήματα συλλάβου</strong> θα προστεθούν στο μάθημα
+                                </div>
+                                <button type="button" class="btn btn-sm btn-outline-secondary" id="clearSyllabusData">
+                                    <i class="fa-solid fa-times me-1"></i>Καθαρισμός
+                                </button>
+                            </div>
+                        `;
+                        $(indicatorHtml).insertBefore('.form-wrapper');
+                    } else {
+                        // Update existing indicator
+                        indicator.find('strong').text(sectionCount + ' AI δομημένα τμήματα συλλάβου');
+                        indicator.show();
+                    }
+                } else {
+                    indicator.hide();
+                }
+            }
+            
+            // Handle clear syllabus data
+            $(document).on('click', '#clearSyllabusData', function() {
+                if (confirm('Είστε βέβαιος ότι θέλετε να καθαρίσετε τα δομημένα τμήματα συλλάβου;')) {
+                    $('#ai_syllabus_sections').remove();
+                    updateSyllabusIndicator(false, 0);
+                }
+            });
 
         });
     </script>
@@ -822,6 +957,9 @@
                     </div>
 
                 {!! generate_csrf_token_form_field() !!}
+                @if(!empty($ai_syllabus_sections))
+                <input type="hidden" id="ai_syllabus_sections" name="ai_syllabus_sections" value="{{ $ai_syllabus_sections }}">
+                @endif
                 </fieldset>
               </form>
             </div>
