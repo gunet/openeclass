@@ -426,11 +426,7 @@ function generate_infinite_container_html($posts, $posts_per_page, $next_page, $
     $ret .= '</div></div></div>';
 
     if (count($posts) == $posts_per_page) {
-        if ($course_type == 'wall') {
-            $ret .= "<a class='infinite-more-link' href='{$urlAppend}modules/wall/loadMore.php?course=$course_code&page=$next_page'>$langMore</a>";
-        } else {
-            $ret .= "<a class='infinite-more-link' href='loadMore.php?course=$course_code&page=$next_page'>$langMore</a>";
-        }
+        $ret .= "<a class='infinite-more-link' href='{$urlAppend}modules/wall/loadMore.php?course=$course_code&page=$next_page'>$langMore</a>";
     }
 
     return $ret;

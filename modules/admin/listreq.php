@@ -44,14 +44,17 @@ switch ($show) {
         $pageName = $langReqHaveClosed;
         $pagination_link = '&amp;show=closed';
         $columns = 'null, null, null, null, null, null, { orderable: false }';
+        $order = "[5, 'desc']";
         break;
     case "rejected":
         $pageName = $langReqHaveBlocked;
         $columns = 'null, null, null, null, null, null, { orderable: false }';
+        $order = "[5, 'desc']";
         break;
     default:
         $pageName = $langUserOpenRequests;
         $columns = 'null, null, null, null, null, { orderable: false }';
+        $order = "[4, 'desc']";
         break;
 }
 
@@ -64,7 +67,7 @@ $head_content .= "<script type='text/javascript'>
                 'sPaginationType': 'full_numbers',
                 'bAutoWidth': true,
                 'searchDelay': 1000,
-                'order' : [[4, 'desc']],
+                'order' : [ $order ],
                 'oLanguage': {
                    'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
                    'sZeroRecords':  '" . $langNoResult . "',
@@ -115,9 +118,9 @@ if (isDepartmentAdmin()) {
 // Display Actions Toolbar
 $data['action_bar'] =
         action_bar(array(
-            array('title' => $langCreateAccount,
-                'url' => "newuseradmin.php$linkget",
-                'icon' => 'fa-solid fa-user',
+            array('title' => $langUserOpenRequests,
+                'url' => "$_SERVER[SCRIPT_NAME]",
+                'icon' => 'fa-solid fa-hand',
                 'level' => 'primary-label',
                 'button-class' => 'btn-success'),
             array('title' => $langReqHaveClosed,

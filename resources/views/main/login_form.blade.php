@@ -50,17 +50,13 @@
                                                 <div class='col-12 container-pages d-flex align-items-center h-100'>
 
                                                     @foreach($authLink as $authInfo)
-
-
                                                         @if ($loop->first)
                                                             <div class='col-12 page slide-page h-100'>
                                                         @else
                                                             @if ($primary_method >= 2 && count($authLink) == 2)
                                                                 @break
                                                             @endif
-
                                                             <div class='col-12 page next-page-{{ $loop->iteration-1 }} h-100'>
-
                                                         @endif
 
                                                         <div class='row h-100'>
@@ -103,10 +99,33 @@
                                                                     <div id='or' class='ms-auto me-auto mb-2' >
                                                                         {{ trans('langOr') }}
                                                                     </div>
-                                                                    <div class='d-flex gap-3 flex-wrap'>
+                                                                    <div class='d-flex justify-content-between align-items-center flex-wrap gap-2'>
                                                                         <h2 class='mb-3'>
                                                                             {{ $authLink[1][2] }}
                                                                         </h2>
+                                                                        @if (!empty($authLink[1][3])) {{-- Optional auth instructions --}}
+                                                                            <a href='#' class='text-decoration-underline mb-3' data-bs-toggle='modal' data-bs-target='#authInstruction{{ $loop->index+1 }}'>
+                                                                                {{ trans('langInstructionsAuth') }}
+                                                                            </a>
+                                                                            <div class='modal fade' id='authInstruction{{ $loop->index+1 }}' tabindex='-1' role='dialog' aria-labelledby='authInstructionLabel' aria-hidden='true'>
+                                                                                <div class='modal-dialog'>
+                                                                                    <div class='modal-content'>
+                                                                                        <div class='modal-header'>
+                                                                                            <div class='modal-title' id='authInstructionLabel'>{{ trans('langInstructionsAuth') }}</div>
+                                                                                            <button type='button' class='close' data-bs-dismiss='modal' aria-label="{{ trans('langClose') }}"></button>
+                                                                                        </div>
+                                                                                        <div class='modal-body'>
+                                                                                            <div class='col-12'>
+                                                                                                <div class='alert alert-info'>
+                                                                                                    <i class='fa-solid fa-circle-info fa-lg'></i>
+                                                                                                    <span>{{ $authLink[1][3] }}</span>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        @endif
                                                                         {!! $authLink[1][1] !!}
                                                                     </div>
                                                                 @elseif (count($authLink) > 2)
