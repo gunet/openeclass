@@ -1612,6 +1612,7 @@ $langRefreshProgress = "Ανανέωση από δραστηριότητες";
 $langRefreshProgressInfo = "Η ανανέωση αφορά μόνο τις ασκήσεις, εργασίες και τις γραμμές μάθησης.";
 $langRefreshProgressResults = "Η πρόοδος των $langsOfStudents ανανεώθηκε";
 $langCompletedIn = "Ολοκληρώθηκε στις";
+$langNoThumbnail = "Δεν υπάρχει εικονίδιο";
 //------------------------------------
 
 
