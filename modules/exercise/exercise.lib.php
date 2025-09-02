@@ -568,7 +568,7 @@ function getRandomDecimal($min, $max, $decimals = 0) {
     $minInt = (int)($min * $scale);
     $maxInt = (int)($max * $scale);
     $randInt = mt_rand($minInt, $maxInt);
-    
+
     return $randInt / $scale;
 }
 
@@ -590,7 +590,7 @@ function updateWildCardsWithRandomVariables($questionId, $exerciseType) {
 
     // If the user has not executed the current question , update the wildcards of the question with new values.
     if (!in_array($questionId, $questionDisplay)) {
-        
+
         $_SESSION['QuestionDisplayed'][$uid][] = $questionId;
 
         // Instantiate ExpressionLanguage
@@ -626,9 +626,9 @@ function updateWildCardsWithRandomVariables($questionId, $exerciseType) {
 
         $predefinedAnswers = Database::get()->queryArray("SELECT answer,r_position FROM exercise_answer WHERE question_id = ?d", $questionId);
         $q_data = Database::get()->querySingle("SELECT options FROM exercise_question WHERE id = ?d", $questionId);
-        
+
         if (!is_null($q_data->options) or !empty($q_data->options)) {
-            
+
             $newOptions = [];
             $oldOptions = json_decode($q_data->options, true);
             if (count($oldOptions) > 0) {
@@ -691,12 +691,234 @@ function updateWildCardsWithRandomVariables($questionId, $exerciseType) {
                                 return null;
                             }
 
-                        } 
+                        }
                     }
                 }
             }
-            
+
         }
 
     }
+}
+
+
+
+
+/**
+ * Removes JSON data associated with a given marker ID from the session and updates the corresponding question data in the database.
+ * Also deletes a related file if it exists.
+ *
+ * @param int $markerId The ID of the marker to be removed.
+ * @param int $questionId The ID of the question associated with the marker.
+ * @return void
+ */
+function removeJsonDataFromMarkerId($markerId,$questionId) {
+    global $webDir,$course_code;
+
+    if ($markerId > 0 && isset($_SESSION['data_shapes'][$questionId])) {
+        $jsonArray = explode('|', $_SESSION['data_shapes'][$questionId]);
+        $newJsonArray = [];
+
+        foreach ($jsonArray as $json) {
+            $jsonDecoded = json_decode($json, true);
+            if ($jsonDecoded && isset($jsonDecoded['marker_id'])) {
+                if ($jsonDecoded['marker_id'] != $markerId) {
+                    $newJsonArray[] = $json; // keep if not matching
+                }
+                // else, skip (this removes the matching marker_id)
+            } else {
+                // handle invalid JSON if needed
+                $newJsonArray[] = $json; // keep invalid JSON as is
+            }
+        }
+
+        $_SESSION['data_shapes'][$questionId] = implode('|', $newJsonArray);
+        Database::get()->query("UPDATE exercise_question SET options = ?s WHERE id = ?d", $_SESSION['data_shapes'][$questionId], $questionId);
+        $filePath = "$webDir/courses/$course_code/image/answer-$questionId-$markerId";
+        if (file_exists($filePath)) {
+            unlink($filePath);
+        }
+    }
+
+}
+
+/**
+ * Extracts and processes data markers from a JSON structure stored in the database for a specific question.
+ *
+ * @param int $questionId The ID of the question to retrieve data markers for.
+ * @return array An associative array of data markers, where each marker is indexed by its marker ID and contains
+ *               information such as shape type, coordinates, grade, and answer details.
+ */
+function getDataMarkersFromJson($questionId) {
+    global $webDir, $course_code;
+
+    $arrDataMarkers = [];
+    $jsonData = Database::get()->querySingle("SELECT options FROM exercise_question WHERE id = ?d", $questionId)->options;
+    if ($jsonData) {
+        $dataJsonMarkers = explode('|', $jsonData);
+        foreach ($dataJsonMarkers as $dataJsonValue) {
+            $markersData = json_decode($dataJsonValue, true);
+            // Loop through each item in the original array
+            foreach ($markersData as $index => $value) {
+                if (count($markersData) == 10) { // circle or rectangle
+                    $arrDataMarkers[$markersData['marker_id']] = [
+                        'marker_answer' => $markersData['marker_answer'],
+                        'marker_shape' => $markersData['shape_type'],
+                        'marker_coordinates' => $markersData['x'] . ',' . $markersData['y'],
+                        'marker_offsets' => $markersData['endX'] . ',' . $markersData['endY'],
+                        'marker_grade' => $markersData['marker_grade'],
+                        'marker_radius' => $markersData['marker_radius'],
+                        'marker_answer_with_image' => $markersData['marker_answer_with_image']
+                    ];
+                } elseif (count($markersData) == 6) { // polygon
+                    $arrDataMarkers[$markersData['marker_id']] = [
+                        'marker_answer' => $markersData['marker_answer'],
+                        'marker_shape' => $markersData['shape_type'],
+                        'marker_coordinates' => $markersData['points'],
+                        'marker_grade' => $markersData['marker_grade'],
+                        'marker_answer_with_image' => $markersData['marker_answer_with_image']
+                    ];
+                } elseif (count($markersData) == 5) { // without shape . So the defined answer is not correct
+                    $arrDataMarkers[$markersData['marker_id']] = [
+                        'marker_answer' => $markersData['marker_answer'],
+                        'marker_shape' => null,
+                        'marker_coordinates' => null,
+                        'marker_grade' => 0,
+                        'marker_answer_with_image' => $markersData['marker_answer_with_image']
+                    ];
+                }
+            }
+        }
+    }
+
+    return $arrDataMarkers;
+}
+
+/**
+ * Extracts distinct non-numeric variables enclosed within curly brackets from the given text.
+ *
+ * @param string $text The input string containing variables inside curly brackets.
+ * @return array An array of unique variable names found, excluding numeric values.
+ */
+function extractValuesInCurlyBrackets($text) {
+    // Find all occurrences of {...}
+    preg_match_all('/\{([^{}]+)\}/', $text, $matches);
+    $variables = [];
+
+    foreach ($matches[1] as $group) {
+        // For each group, split to get individual variables
+        // Variables are separated by operators or spaces, so split by non-word characters
+        preg_match_all('/\b\w+\b/', $group, $submatches);
+        foreach ($submatches[0] as $var) {
+            $variables[] = $var;
+        }
+    }
+
+    // If the value is numeric , remove it.
+    if (count($variables) > 0) {
+        for ($i = 0; $i < count($variables); $i++) {
+            if (is_numeric($variables[$i])) {
+                unset($variables[$i]);
+            }
+        }
+    }
+
+    // Remove duplicates if desired
+    return array_unique($variables);
+}
+
+/**
+ * Evaluates a mathematical expression by replacing wildcards with their corresponding values and computing the result.
+ * Wildcards are dynamically replaced based on the associated question's data.
+ *
+ * @param string $expression The mathematical expression to evaluate, which may contain wildcards.
+ * @param int $questionId The ID of the question whose data provides values for the wildcards in the expression.
+ * @return mixed The evaluated result of the expression, or null in case of errors or invalid data.
+ */
+function evaluateExpression($expression, $questionId) {
+    $options = Database::get()->querySingle("SELECT options FROM exercise_question WHERE id = ?d", $questionId)->options;
+    if ($options) {
+        // Decode JSON to array
+        $dataItems = json_decode($options, true);
+
+        // Create a key-value array for items
+        $wildCards = [];
+        foreach ($dataItems as $item) {
+            $wildCards[$item['item']] = $item['value'];
+        }
+
+        foreach ($wildCards as $key => $value) {
+            $expression = str_replace("{" . $key . "}", $value, $expression);
+        }
+
+        // Check for division by zero (simple check)
+        if (preg_match('/\/\s*0(\D|$)/', $expression)) {
+            return null; // or handle as needed
+        }
+
+        // Instantiate ExpressionLanguage
+        $expressionLanguage = new ExpressionLanguage();
+
+        // These math functions must be registered that are not supported.
+        $functions = [
+            'cos' => 'cos',
+            'sin' => 'sin',
+            'tan' => 'tan',
+            'acos' => 'acos',
+            'asin' => 'asin',
+            'atan' => 'atan',
+            'atan2' => 'atan2',
+            'pow' => 'pow',
+            'sqrt' => 'sqrt',
+            'abs' => 'abs',
+            'log' => 'log',
+            'log10' => 'log10',
+            'exp' => 'exp',
+            'max' => 'max',
+            'min' => 'min',
+            'round' => 'round',
+            'floor' => 'floor',
+            'ceil' => 'ceil',
+        ];
+
+        foreach ($functions as $name => $function) {
+            $expressionLanguage->register($name, $function, function (array $variables, ...$args) use ($function) {
+                return $function(...$args);
+            });
+        }
+
+        // Evaluate the expression
+        try {
+            $result = $expressionLanguage->evaluate($expression);
+            return $result;
+        } catch (\Exception $e) {
+            // Handle evaluation error
+            return null;
+        }
+    }
+
+    return null; // If options not found
+}
+
+
+/**
+ * Generates a random floating-point number within a specified range and with a specified number of decimal places.
+ * If the maximum value is less than the minimum, it returns 0. If the number of decimals is 0 or less, it generates a random integer.
+ *
+ * @param float $min The minimum value of the range.
+ * @param float $max The maximum value of the range.
+ * @param int $decimals The number of decimal places for the generated value.
+ * @return float|int The randomly generated floating-point number, or an integer if decimals is 0 or less.
+ */
+function getRandomFloat($min, $max, $decimals) {
+    if ($max < $min) {
+        return 0;
+    }
+    if ($decimals <= 0) {
+        // Return a random integer if decimals is 0 or less
+        return mt_rand($min, $max);
+    }
+    $scale = pow(10, $decimals);
+    $randomInt = mt_rand($min * $scale, $max * $scale);
+    return $randomInt / $scale;
 }

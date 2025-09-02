@@ -105,7 +105,7 @@ if (isset($_POST['submitQuestion'])) {
         $questionFeedback = purify($_POST['questionFeedback']);
         $answerType = intval($_POST['answerType']);
         if ($answerType == FILL_IN_BLANKS_TOLERANT && isset($_POST['fill_in_blank_strict'])) {
-            $answerType = intval($_POST['fill_in_blank_strict']); // strict fill in blanks 
+            $answerType = intval($_POST['fill_in_blank_strict']); // strict fill in blanks
         }
 
         // It requires to be uploaded an image for this type of question
@@ -338,8 +338,7 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
                             UNIQUE_ANSWER => $langUniqueSelect,
                             MULTIPLE_ANSWER => $langMultipleSelect,
                             TRUE_FALSE => $langTrueFalse,
-                            FILL_IN_BLANKS_TOLERANT => "$langFillBlanks - $langFillBlanksTolerant $langFillBlanksTolerantExample",  // 7
-                            //FILL_IN_BLANKS => "$langFillBlanks - $langFillBlanksStrict $langFillBlanksStrictExample", // 3
+                            FILL_IN_BLANKS_TOLERANT => "$langFillBlanks",
                             FILL_IN_FROM_PREDEFINED_ANSWERS => "$langFillFromSelectedWords",
                             MATCHING => $langMatching,
                             ORDERING => $langOrdering,

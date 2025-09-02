@@ -184,6 +184,8 @@ if (isset($_GET['categoryId'])) {
 
 if (isset($_GET['answerType'])) {
     $answerType = intval($_GET['answerType']);
+} else {
+    $answerType = -1;
 }
 
 // deletes a question from the data base and all exercises
@@ -323,20 +325,26 @@ $tool_content .= "<div class='form-wrapper mb-4'><form class='form-inline' role=
                             <option value='4' ".(isset($difficultyId) && $difficultyId == 4 ? "selected='selected'": "").">$langQuestionDifficult</option>
                             <option value='5' ".(isset($difficultyId) && $difficultyId == 5 ? "selected='selected'": "").">$langQuestionVeryDifficult</option>
                         </select>
-                    </div>
-                    <div class='form-group mt-3'>
-                        <select onChange = 'document.qfilter.submit();' name='answerType' class='form-select'>
-                            <option value='-1' ". (isset($answerType) && $answerType == -1 ? "selected='selected'": "") .">-- $langQuestionAllTypes --</option>                        
-                            <option value='" . UNIQUE_ANSWER ."' ". (isset($answerType) && $answerType == UNIQUE_ANSWER ? "selected='selected'": "") .">$langUniqueSelect</option>
-                            <option value='" . MULTIPLE_ANSWER ."' ".(isset($answerType) && $answerType == MULTIPLE_ANSWER ? "selected='selected'": "").">$langMultipleSelect</option>
-                            <option value='" . TRUE_FALSE ."' ".(isset($answerType) && $answerType == TRUE_FALSE ? "selected='selected'": "").">$langTrueFalse</option>
-                            <option value='" . FILL_IN_BLANKS ."' ".(isset($answerType) && $answerType == FILL_IN_BLANKS ? "selected='selected'": "").">$langFillBlanks</option>
-                            <option value='" . FILL_IN_FROM_PREDEFINED_ANSWERS ."' ".(isset($answerType) && $answerType == FILL_IN_FROM_PREDEFINED_ANSWERS ? "selected='selected'": "").">$langFillFromSelectedWords</option>
-                            <option value='" . MATCHING ."' ".(isset($answerType) && $answerType == MATCHING ? "selected='selected'": "").">$langMatching</option>                        
-                            <option value='" . FREE_TEXT ."' ".(isset($answerType) && $answerType == FREE_TEXT ? "selected='selected'": "").">$langFreeText</option>
-                            <option value='" . ORAL ."' ".(isset($answerType) && $answerType == ORAL ? "selected='selected'": "").">$langOral</option>
-                        </select>
-                    </div>                
+                    </div>";
+                    $tool_content .= "<div class='form-group mt-3'>";
+                    $tool_content .= selection([
+                                                '-1' => "-- $langQuestionAllTypes --",
+                                                UNIQUE_ANSWER => $langUniqueSelect,
+                                                MULTIPLE_ANSWER => $langMultipleSelect,
+                                                TRUE_FALSE => $langTrueFalse,
+                                                FILL_IN_BLANKS_TOLERANT => $langFillBlanks,
+                                                FILL_IN_FROM_PREDEFINED_ANSWERS => $langFillFromSelectedWords,
+                                                MATCHING => $langMatching,
+                                                ORDERING => $langOrdering,
+                                                DRAG_AND_DROP_TEXT => $langDragAndDropText,
+                                                DRAG_AND_DROP_MARKERS => $langDragAndDropMarkers,
+                                                CALCULATED => $langCalculated,
+                                                FREE_TEXT => $langFreeText,
+                                                ORAL => $langOral,
+                                            ],
+                                        'answerType', $answerType, "onChange = 'document.qfilter.submit();'class='form-select'");
+                    $tool_content .= "</div>";
+            $tool_content .= "
                 </form>
             </div>";
 //End of filtering Component
