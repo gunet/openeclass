@@ -1751,6 +1751,8 @@ $langAnswersDispEndDate = "Display correct answers after the exercisei end date"
 $langShuffleAnswers = "Display the answers to the questions in random order.";
 $langShuffleAnswersLegend = "applies only to multiple-choice questions";
 $langScoreNotDisp = "Hide scoring after exercise end";
+$langShuffleAnswers = "Display the answers to the questions in random order.";
+$langShuffleAnswersLegend = "only applies to multiple choice questions";
 $langScoreDisp = "Display scoring after exercise end";
 $langScoreDispLastAttempt = "Display score after last attempt of $langsStudent";
 $langScoreDispEndDate = "Display score after exercise's end date";
@@ -1871,6 +1873,11 @@ $langQuestionAnswers = "Question answers";
 $langNegativeScoreLegend = "If you wish, you can grade wrong question answers with negative score.
 Note, that if $langsStudent has been graded with negative score in one question, then the final grade in this question will be converted to zero.";
 $langUsedInSeveralExercises = "Warning! This question and its answers are used in several exercises. Do you want to change them?";
+$langUsedInSeveralExercises2 = "The question (and its answers) is used in several exercises.<br><br>
+<ul>
+<li>If you select <i>in all exercises</i> the change will be made to all of them.</li>
+<li>If you select <i>in the current exercise only</i> the change will be made to the current one only.</li>
+</ul>";
 $langModifyInAllExercises = "in all exercises";
 $langModifyInThisExercise = "in this exercise";
 $langModifyInQuestionPool = "only in question pool";
@@ -1892,6 +1899,11 @@ $langFillFromSelectedWords = "From selected words";
 $langMatching = "Matching";
 $langTrueFalse = "True / False";
 $langFreeText = "Free Text";
+$langOral = "Oral";
+$langSaveOralMsg = "Your answer will be temporarily saved. The final saving is completed by submitting the exercise. Do you want to proceed?";
+$langDeleteRecordingOk = "The file has been deleted successfully!";
+$langListenToRecordingAudio = "Listen to your recorded response here: ";
+$langFileUploadingOkReplaceWithNew = "The file was saved successfully. In case of a new attempt at the exercise, if you answer the same question then the old file will be replaced with the new one.";
 $langScale = "Scale";
 $langFalse = "False";
 $langAddPicture = "Add Picture";
@@ -1911,6 +1923,138 @@ $langQuestionEasy = "Easy";
 $langQuestionModerate = "Moderate";
 $langQuestionDifficult = "Difficult";
 $langQuestionVeryDifficult = "Very difficult";
+$langDragAndDropText = "Drag and Drop text";
+$langInfoDragAndDropText = 'Type the <strong class="text-dark">pronunciation</strong> of the question using brackets with their unique number. </br>
+Each bracket in the text corresponds to the corresponding choice in the table.</br></br>
+Enter the predefined answers in the text by filling in their grade.
+You can optionally add more predefined answers than the total number of correct answers in the text.
+In this way you increase the difficulty of the question as one or more predefined answers will be left over when performing the exercise.</br></br>
+<strong class="text-dark">For example</strong>, in the text `Capital of Greece is [1] while capital of Italy is [2]` we complete the following answers:</br></br>
+<ul>
+<li><strong class="text-dark">Option[1]</strong> = Athens and <strong class="text-dark">score</strong> = 1</li>
+<li><strong class="text-dark">Option[2]</strong> = Rome and <strong class="text-dark">score</strong> = 1</li>
+<li><strong class="text-dark">Option[3]</strong> = Milan and <strong class="text-dark">score</strong> = 0. The word `Milan` will be left over as an incorrect answer of text.</li>
+</ul>';
+$langPlaceholderDragAndDropText = "The capital of Greece is [1] while the capital of Germany is [2]."; ;
+$langAthens = "Αθήνα";
+$langBerlin = "Βερολίνο";
+$langErrorWithChoicesAsAnswers = "There is an error in the correspondence of the answers.";
+$langPredefinedAnswerExists = "You cannot enter the same or empty answer. Please try again.";
+$langPoint = "Point";
+$langThisAnswerIsNotCorrect = "Does not correspond to a correct answer";
+$langBracket = "Bracket";
+$langInfoDragAndDropMarkersCreation = '
+<ul class="text-dark">
+<li class="text-dark">
+Select the point for which you want to add a predefined answer.
+</li>
+<li class="text-dark">
+For example, if you want to create the answer to point [1], then in the table below
+go to the specific point and select its shape from the <strong class="text-dark">Shape</strong> field. Once you have selected it (e.g. rectangle), start forming
+the predefined answer on the image.
+</li>
+<li class="text-dark">Enter the text of the predefined answer in the <strong class="text-dark">Answer</strong> field (Required).</li>
+<li class="text-dark">If you want the predefined answer to appear via an image and not text, then fill in the <strong class="text-dark">Answer</strong> field and upload the image using the <strong class="text-dark">predefined answer will appear via an image</strong> option.</li>
+<li class="text-dark">Give a grade to the answer in the <strong class="text-dark">Grade</strong> field (optional).</li>
+<li class="text-dark">Select <strong class="text-dark">Add</strong> to temporarily save the answer.</li>
+<li class="text-dark">Select <strong class="text-dark">Delete</strong> to temporarily delete the answer.</li>
+<li class="text-dark">The process for creating predefined answers is completed by clicking <strong class="text-dark">Submit</strong>.</li>
+</ul>';
+$langItemToAdd = "Item to add:";
+$langRequiresImageUploadedForThisType = "For dragging and dropping to predefined points, an image must be uploaded.";
+$langYourOwnAnswerIs = "The answer you gave is:";
+$langCalculated = "Calculation of arithmetic operations";
+$langEditItems = "Edit items";
+$langItIsNotWildCard = "It is not an item of the exercise";
+$langItIsWildCard = "It is an item of the exercise";
+$langAddCorrectMandatoryWildCrds = "One or more of the question elements does not have a random or fixed value. Please try again.";
+$langTypeOfAnswer = "Answer type";
+$langRangeOfValues = "Range of values";
+$langItem = "Item";
+$langDecimalValues = "Decimal digits";
+$langAutoCompleteValues = "Add value";
+$langAutoCompleteWildCardInfo = 'Enter the value of the current element.</br>
+Its value can be either <strong class="text-dark">fixed</strong> or <strong class="text-dark">random</strong>.</br>
+If you choose a random value, then set its value range in the <strong class="text-dark">(minimum, maximum, decimal digits)</strong> fields. The element will appear with a different value each time the exercise is run, depending on the value range you set.';
+$langMissingFieldsInRangeOfWildCard = "You left some fields blank in the item's value range.";
+$langMissingFieldsInConstantValOfWildCard = "You left the item's fixed price field blank.";
+$langAddRandomOrConstantValOfWildCard = "You will need to enter a value in the element, either random or fixed.";
+$langCompleteTheTextOfTheQuestion = "Pronunciation text field";
+$langCompleteVariablesOfQuestionInfo = '
+<ul class="text-dark">
+<li class="text-dark">Complete the pronunciation in the <strong class="text-dark">Pronunciation</strong> text field.</li>
+<li class="text-dark">Each item should be defined within <strong class="text-dark">brackets {}</strong>.</li>
+<li class="text-dark">Complete the numerical formula that gives the result of the exercise as well as the grade in the <strong class="text-dark">Answer type</strong> and <strong class="text-dark">Grade</strong> fields respectively. The system automatically calculates the final result of the exercise based on the formula you provided.</li>
+<li class="text-dark">Enter the values of the items from the <strong class="text-dark">Edit items</strong>. You can also specify random values from the range of values.</li>
+</ul>
+<div class="mt-4 text-dark">
+For example, if we want to calculate the result of the arithmetic operation 15+30, then we follow these steps:
+<ul class="mt-3 text-dark">
+<li class="text-dark">In the <strong class="text-dark">Pronunciation</strong> field, we write the pronunciation we want, including the items if they exist. So we can give the pronunciation `Calculate the result of the arithmetic operation {X}+{Y}`.</li>
+<li class="text-dark">In the <strong class="text-dark">Answer type</strong> field, we fill in the formula that will give the final result. In our example, we write the formula {X}+{Y}.</li>
+<li class="text-dark">In the <strong class="text-dark">Grade</strong> field, we fill in the grade.</li>
+<li class="text-dark">Following from <strong class="text-dark">Edit items</strong>, we set the values of the items X = 15,Y = 30 through the <strong class="text-dark">Is an item of the exercise</strong> option.</li>
+<li class="text-dark">Finally, we click <strong class="text-dark">Submit</strong>.</li>
+</ul>
+</div>';
+$langCompleteVariablesOfQuestionWarning = '
+<strong class="text-dark">Warning!</strong></br></br>
+If the exercise <strong class="text-dark">DOES</strong> include an item and must be calculated, then in the <strong class="text-dark">Answer type</strong> field you must complete the numerical expression as you completed it in the pronunciation along with its final result separated by the colon symbol <strong>(:)</strong></br>
+<div class="mt-3 text-dark">
+For example, if we want to calculate the unknown <strong class="text-dark">x</strong> in the equation <strong class="text-dark">3x - 2 = 2x</strong> then we follow these steps:
+<ul class="mt-4 text-dark">
+<li class="text-dark">In the <strong class="text-dark">Pronunciation</strong> field we write the pronunciation we want. In our example we can write `Find the unknown <strong class="text-dark">x</strong> of the equation <strong class="text-dark">3x - 2 = 2x</strong>`.</li>
+<li class="text-dark">In the <strong class="text-dark">Answer type</strong> field we fill in the numerical expression along with the final value of <strong class="text-dark">x</strong> that we are looking for as a result separated by the symbol (<strong class="text-dark">:</strong>) that is, we write <strong class="text-dark">3x - 2 = 2x:2</strong></li>
+<li class="text-dark">In the <strong class="text-dark">Grade</strong> field we fill in its degree.</li>
+<li class="text-dark">Then in <strong class="text-dark">Edit items</strong> we press <strong class="text-dark">Submit</strong>.</li>
+</ul>
+</div>';
+$langOrdering = "Ordering";
+$langLayoutItems = "Layout items";
+$langHorizontal = "Horizontal";
+$langVertical = "Vertical";
+$langItemsSelectionType = "Item selection type";
+$langSelectAllItems = "Select all items";
+$langSelectRandomSubSetOfItems = "Select a random subset of items";
+$langSelectContiguousSubSetOfItems = "Select a contiguous subset of items";
+$langSizeOfSubset = "Size of subset";
+$langFillInTheSizeOfSubset = "Fill in the size of subset.";
+$langTheSizeOfSubsetIsBiggerThanPrAnswers = "The size of the subset is larger than the total number of predefined answers.";
+$langCorrectOrdering = "The correct ordering is: ";
+$langInfoOrderingQuestion = 'To create a correct classification of the Items, the system perceives the correct answer as the classification from the smallest to the largest item.</br></br>
+<strong class="text-dark">For example</strong>, if the question of the exercise asks to classify the numbers 1,5,3,9,7 from the largest to the smallest, then you should declare the following as the correct answer:</br>
+<ul class="mt-3">
+<li><strong class="text-dark">Item(1)</strong> = 9 and its grade as the correct answer</li>
+<li><strong class="text-dark">Item(2)</strong> = 7 and its grade as the correct answer</li>
+<li><strong class="text-dark">Item(3)</strong> = 5 and its grade as the correct answer</li>
+<li><strong class="text-dark">Item(4)</strong> = 3 and its grade as the correct answer answer</li>
+<li><strong class="text-dark">Item(5)</strong> = 1 and its grade as the correct answer</li>
+</ul></br>
+Then, you select the order of the items when performing the exercise.</br>
+If you want a specific subset of the items you defined to appear in the exercise, then
+you select the <strong class="text-dark">item selection type</strong> and the <strong class="text-dark">subset size</strong>.
+';
+
+
+$langSeperateCorrectlyTheTypeOfAnswer = "There are no {items} available in the pronunciation or in the answer types. </br>
+Therefore, in the <strong>Answer type</strong> field, you must add the numerical formula you added to the pronunciation along with its final result, separated by the symbol (<strong>:</strong>)";
+$langNoExistVariables = "The exercise pronunciation contains no data or the text field is empty.";
+$langFinalValueOfWildCard = "Value of item";
+$langCalcelDroppableItem = "You can undo your answer by left-clicking on the word.";
+$langAllowMoreDefinedAnswersThanBlanks = "The predefined answers should be more than the number of blanks.";
+$langErrorWithUniqueNumberOfBlank = "You entered the same unique number in more than one space.";
+$langDragAndDropMarkersTextAnswers = "The user replied: ";
+$langDragAndDropMarkers = "Drag and Drop markers or onto image";
+$langMarker = "Marker";
+$langShape = "Shape";
+$langRectangle = "Rectangle";
+$langCircle = "Circle";
+$langPolygon = "Polygon";
+$langAddAnswerThroughImg = "The predefined answer will be displayed via the image.";
+$langImageHasBeenDeleted = "The image has been successfully deleted.";
+$langSomethingWentWrong = "Something went wrong. Please try again.";
+$langConstantValue = "Fixed value";
+$langRandomValue = "Random value";
 $langCheckAccess = "Access Control";
 $langWeightingForEachBlank = "Enter weight for each blank";
 $langWeightingForEachBlankandChoose = "Enter weight for each blank and choose the correct answer";

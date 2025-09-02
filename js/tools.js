@@ -94,7 +94,7 @@ function course_log_controls_init() {
 
 function course_checkbox_disabled(id, state)
 {
-        $('input[type=checkbox][value='+id+']').prop('disabled', state);
+    $('input[type=checkbox][value='+id+']').prop('disabled', state);
 }
 
 function course_list_init() {
@@ -357,7 +357,73 @@ function exercise_init_countdown(params) {
                 return qids.indexOf(id) < 0;
             }));
         }
-        $('.qPanel :input').change(function () {
+
+        // Checking oral answers
+        $('.btnSaveRecording').on('click', function() {
+            var id = $(this).attr('id');
+            var parts = id.split('-');
+            if (parts.length == 4) {
+                var qid = parts[3];
+                answered[qid] = true;
+            }
+        });
+        $('.deleteRecording').on('click', function() {
+            var qid = $(this).attr('data-id');
+            answered[qid] = false;
+        });
+
+        // Checking ordering answers
+        $('.sorting-controls .move-up, .sorting-controls .move-down').on('click', function() {
+            var qid = $(this).attr('data-question-id');
+            answered[qid] = true;
+        });
+        $('.reorder-btn .fa').on('mousedown', function() {
+            var qid = $(this).attr('data-icon');
+            answered[qid] = true;
+        });
+
+        // Checking calculated through input-text answers
+        $('.input-text-calculated').on('input', function() {
+            var inputName = $(this).attr('name');
+            var match = inputName.match(/\[(\d+)\]/);
+            if (match) {
+                var self = this; // Save reference to the original element
+                var qid = match[1];
+                answered[qid] = true;
+                setTimeout(function() {
+                    var inputVal = $(self).val(); // Use self instead of this
+                    if (inputVal.trim() === '') {
+                        answered[qid] = false;
+                    }
+                }, 50); // 50ms delay
+            }
+        });
+
+        // Checking drag and drop (text,markers) answers
+        $('.draggable').on('mouseup click', function() {
+            var poolId = $(this).attr('data-pool-id');
+            var parts = poolId.split('_');
+            var qid = parts[1];
+            setTimeout(function() {
+                var questionBlanks = document.querySelectorAll('#qPanel' + qid + ' .blank');
+                answered[qid] = true; // assume answered unless a blank isn't filled
+                questionBlanks.forEach(function(blank) {
+                    // Wrap the DOM element with jQuery for convenience
+                    var $blank = $(blank);
+                    // Check if the blank contains a div with class 'draggable dropped-word'
+                    var hasDraggable = $blank.find('div.draggable.dropped-word').length > 0;
+                    // Optional: also check if the blank's text is empty
+                    var isEmpty = $.trim($blank.text()) === '';
+                    if (!hasDraggable && isEmpty) {
+                        answered[qid] = false; // Found an unanswered blank
+                    }
+                });
+            }, 50); // 50ms delay
+        });
+          
+        // Checking old question types with input texts , radio buttons and selections.
+        // Do not calculate the input texts that have been initialized by calculated question.
+        $('.qPanel :input').not('.input-text-calculated').change(function () {
             var el = $(this);
             var id = questionId(el);
             answered[id] = true;
@@ -507,6 +573,129 @@ function exercise_init_countdown(params) {
             document.cookie = 'inExercise=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
         });
     }
+}
+
+/**
+ * @brief update question number (type = oral through deleting oral answer)
+ * @param question_number
+ * @param question_id
+ */
+function updateListenerDeleteOral(question_number, question_id) {
+    setTimeout(function() {
+        var button_id = "#q_num" + question_number;
+        var qpanel_id = "#qPanel" + question_id;
+        var check_id = "#qCheck" + question_number;
+        var answered = false;
+        if (!answered) {
+            $(button_id).removeClass('btn-info').addClass('btn-default')
+                .attr('data-original-title', '').tooltip('setContent');
+            $(qpanel_id + " " + check_id).removeClass('fa fa-check');
+        }
+    }, 50); // 50ms delay
+}
+
+/**
+ * @brief update question number (type = ordering through buttons)
+ * @param question_number
+ * @param question_id
+ */
+function updateListenerOrderingBtn(question_number, question_id) {
+    setTimeout(function() {
+        var button_id = "#q_num" + question_number;
+        var qpanel_id = "#qPanel" + question_id;
+        var check_id = "#qCheck" + question_number;
+        var answered = true;
+        if (answered) {
+            $(button_id).removeClass('btn-default').addClass('btn-info')
+                .attr('data-original-title', langHasAnswered).tooltip('setContent');
+            $(qpanel_id + " " + check_id).addClass('fa fa-check');
+        }
+    }, 50); // 50ms delay
+}
+
+/**
+ * @brief update question number (type = ordering through sortable icon)
+ * @param question_number
+ * @param question_id
+ */
+function updateListenerOrderingIcon(question_number, question_id) {
+    setTimeout(function() {
+        var button_id = "#q_num" + question_number;
+        var qpanel_id = "#qPanel" + question_id;
+        var check_id = "#qCheck" + question_number;
+        var answered = true;
+        if (answered) {
+            $(button_id).removeClass('btn-default').addClass('btn-info')
+                .attr('data-original-title', langHasAnswered).tooltip('setContent');
+            $(qpanel_id + " " + check_id).addClass('fa fa-check');
+        }
+    }, 50); // 50ms delay
+}
+
+/**
+ * @brief update question number (type = calculated)
+ * @param question_number
+ */
+function updateListenerCalculated(question_number) {
+    setTimeout(function() {
+        var button_id = "#q_num" + question_number;
+        var check_id = "#qCheck" + question_number;
+        $('.input-text-calculated').on('input', function() {
+            var inputName = $(this).attr('name');
+            var match = inputName.match(/\[(\d+)\]/);
+            if (match) {
+                var qid = match[1];
+                var inputVal = $(this).val();
+                if (inputVal.trim() === '') {
+                    answered = false;
+                } else {
+                    answered = true;
+                }
+                if (answered) {
+                    $(button_id).removeClass('btn-default').addClass('btn-info')
+                        .attr('data-original-title', langHasAnswered).tooltip('setContent');
+                    $("#qPanel" + qid + " " + check_id).addClass('fa fa-check');
+                } else {
+                    $(button_id).removeClass('btn-info').addClass('btn-default')
+                        .attr('data-original-title', '').tooltip('setContent');
+                    $("#qPanel" + qid + " " + check_id).removeClass('fa fa-check');
+                }
+            }
+        });
+    }, 50); // 50ms delay
+}
+
+/**
+ * @brief update question number (type = drag and drop)
+ * @param question_number
+ * @param question_id
+ */
+function updateListenerDragAndDrop(question_number, question_id) {
+    setTimeout(function() {
+        var button_id = "#q_num" + question_number;
+        var qpanel_id = "#qPanel" + question_id;
+        var check_id = "#qCheck" + question_number;
+        var answered = true;
+        // Check all blanks (divs with class 'dropped-word')
+        const blanks = document.querySelectorAll(qpanel_id+' .blank.ui-droppable');
+        for (let blank of blanks) {
+            // Check if it contains a div with class 'dropped-word'
+            const droppedWordDiv = blank.querySelector('.dropped-word');
+            if (!droppedWordDiv) {
+                answered = false;
+                break;
+            }
+        }
+        if (answered) {
+            $(button_id).removeClass('btn-default').addClass('btn-info')
+                .attr('data-original-title', langHasAnswered).tooltip('setContent');
+            $(check_id).addClass('fa fa-check');
+        } else {
+            $(button_id).removeClass('btn-info').addClass('btn-default')
+                .attr('data-original-title', '').tooltip('setContent');
+            $(check_id).removeClass('fa fa-check');
+        }
+    }, 50); // 50ms delay
 }
 
 

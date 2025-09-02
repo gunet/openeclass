@@ -45,6 +45,9 @@ require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 ModalBoxHelper::loadModalBox();
 
+load_js('jquery-ui');
+load_js('jquery-touch');
+
 if (!add_units_navigation()) {
     $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langExercices);
 }
@@ -56,6 +59,71 @@ function unset_exercise_var($exerciseId) {
     unset($_SESSION['exerciseResult'][$exerciseId][$attempt_value]);
     unset($_SESSION['questionList'][$exerciseId][$attempt_value]);
     unset($_SESSION['password'][$exerciseId][$attempt_value]);
+}
+
+if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+
+    if (isset($_POST['delete-recording'])) {
+        $courseCode = $_GET['course'];
+        $eurID = $_GET['eurid'];
+        $delPath = Database::get()->querySingle("SELECT id,`path` FROM document WHERE course_id = ?d AND subsystem = ?d 
+                                                    AND subsystem_id = ?d AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $_POST['delete-recording'], $eurID);
+        unlink("$webDir/courses/$courseCode/image" . $delPath->path);
+        Database::get()->query("DELETE FROM document WHERE id = ?d", $delPath->id);
+    }
+     /* save audio recorded data */
+    if (isset($_FILES['audio-blob'])) {
+        $courseCode = $_GET['course'];
+        $questionId = $_POST['questionId'];
+        $file_path = '/' . safe_filename('mp3');
+        $filename = 'recording-file.mp3';
+        $eurID = $_GET['eurid'];
+        $oldFile = Database::get()->querySingle("SELECT id,`path` FROM document WHERE course_id = ?d AND subsystem = ?d 
+                                                    AND subsystem_id = ?d AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $questionId, $eurID);
+
+        if ($oldFile && file_exists("$webDir/courses/$courseCode/image" . $oldFile->path)) {
+            unlink("$webDir/courses/$courseCode/image" . $oldFile->path);
+            Database::get()->query("DELETE FROM document WHERE id = ?d", $oldFile->id);
+        }
+        if (move_uploaded_file($_FILES['audio-blob']['tmp_name'], "$webDir/courses/$courseCode/image/$file_path")) {
+            $file_creator = "$_SESSION[givenname] $_SESSION[surname]";
+            $file_date = date('Y-m-d G:i:s');
+            $file_format = 'mp3';
+            $q = Database::get()->query("INSERT INTO document SET
+                course_id = ?d,
+                subsystem = ?d,
+                subsystem_id = ?d,
+                path = ?s,
+                extra_path = '',
+                filename = ?s,
+                visible = 1,
+                comment = '',
+                category = 0,
+                title = ?s,
+                creator = ?s,
+                date = ?s,
+                date_modified = ?s,
+                subject = '',
+                description = '',
+                author = ?s,
+                format = ?s,
+                language = ?s,
+                copyrighted = 0,
+                editable = 0,
+                lock_user_id = ?d",
+                $course_id, ORAL_QUESTION, $questionId, $file_path,
+                $filename, $filename, $file_creator,
+                $file_date, $file_date, $file_creator, $file_format,
+                $language, $eurID);
+
+            if ($q) { 
+                $newFilePath = Database::get()->querySingle("SELECT `path` FROM document WHERE id = ?d", $q->lastInsertID)->path;
+                $fPath = $urlServer . "courses/$course_code/image" . $newFilePath;
+                echo json_encode(['newFilePath' => $fPath]); 
+            }
+        }
+    }
+    exit;
 }
 
 // Does nothing, just refreshes the session
@@ -173,7 +241,7 @@ if (isset($_POST['attempt_value']) && !isset($_GET['eurId'])) {
         // Regenerate eurid so that attempt can't be restarted from other browser
         unset($_SESSION['exerciseResult'][$exerciseId][$attempt_value]);
         Database::get()->transaction(function () {
-            global $eurid, $paused_attempt;
+            global $eurid, $paused_attempt, $course_id;
             $new_eurid = Database::get()->query('INSERT INTO exercise_user_record
                 (eid, uid, record_start_date, record_end_date, total_score,
                  total_weighting, attempt, attempt_status, secs_remaining,
@@ -183,10 +251,35 @@ if (isset($_POST['attempt_value']) && !isset($_GET['eurId'])) {
                        assigned_to FROM exercise_user_record WHERE eurid = ?d',
                 ATTEMPT_ACTIVE, $eurid)->lastInsertID;
             if ($new_eurid) {
+                // Replace eurid of recorded audio with new eurid in document table.
+                // Replace recorded audio of old eurid with new eurid in exercise_answer_record table.
+                // It's a special case for oral question type.
+                $old_answers = Database::get()->queryArray("SELECT answer_record_id,answer FROM exercise_answer_record WHERE eurid = ?d", $eurid);
+                if (count($old_answers) > 0) {
+                    foreach ($old_answers as $old_an) {
+                        if (strpos($old_an->answer, '.mp3') !== false) { // oral question
+                            $old_recorded = $old_an->answer;
+                            $temp_old_recorded = explode('-', $old_recorded);
+                            if (count($temp_old_recorded) == 4 && $temp_old_recorded[3] == $eurid . '.mp3') {
+                                $new_answer = $temp_old_recorded[0] . '-' . $temp_old_recorded[1] . '-' . $temp_old_recorded[2] . '-' . $new_eurid . '.mp3';
+                                Database::get()->query("UPDATE exercise_answer_record SET answer = ?s WHERE answer_record_id = ?d", $new_answer, $old_an->answer_record_id);
+                            }
+                        }
+                    }
+                }
+                $old_documents = Database::get()->queryArray("SELECT id,lock_user_id FROM document WHERE course_id = ?d 
+                                                                AND subsystem = ?d AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $eurid);
+                if (count($old_documents) > 0) {
+                    foreach ($old_documents as $old_doc) {
+                        Database::get()->query("UPDATE document SET lock_user_id = ?d WHERE id = ?d", $new_eurid, $old_doc->id);
+                    }
+                }
+                
+                /////////////////////////////////////////////////////////
                 Database::get()->query('UPDATE exercise_answer_record
                     SET eurid = ?d WHERE eurid = ?d', $new_eurid, $eurid);
                 Database::get()->query('DELETE FROM exercise_user_record
-                    WHERE eurid = ?d', $eurid);
+                    WHERE eurid = ?d', $eurid); 
                 $paused_attempt->eurid = $eurid = $new_eurid;
             }
         });
@@ -236,6 +329,8 @@ if ($ips && !$is_editor){
 // If the user has clicked on the "Cancel" button,
 // end the exercise and return to the exercise list
 if (isset($_POST['buttonCancel'])) {
+
+
     $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value];
     Database::get()->query("UPDATE exercise_user_record
         SET record_end_date = " . DBHelper::timeAfter() . ", attempt_status = ?d, total_score = 0, total_weighting = 0
@@ -245,6 +340,7 @@ if (isset($_POST['buttonCancel'])) {
         'title' => $objExercise->selectTitle(),
         'legend' => $langCancel,
         'eurid' => $eurid ]);
+    unset_session_variables_of_questions($eurid, 'cancel_exercise');
     unset_exercise_var($exerciseId);
     Session::flash('message',$langAttemptWasCanceled);
     Session::flash('alert-class', 'alert-warning');
@@ -262,6 +358,30 @@ $exerciseTempSave = $objExercise->selectTempSave();
 $exerciseTimeConstraint = $objExercise->selectTimeConstraint();
 $exerciseAllowedAttempts = $objExercise->selectAttemptsAllowed();
 $exercisetotalweight = $objExercise->selectTotalWeighting();
+
+// In this php block we have been saving the subset of predefined answers in ordering question
+// when the exercise has MULTIPLE_PAGE_TYPE type or user press the save button.
+if (($exerciseType == MULTIPLE_PAGE_TYPE || isset($_POST['buttonSave'])) && isset($_POST['choice'])) {
+    // $arrKey = question Id
+    $arrayKeys = array_keys($_POST['choice']);
+    if (count($arrayKeys) > 0) {
+        foreach ($arrayKeys as $arrKey) {
+            $CurrentQuestion = new Question();
+            $CurrentQuestion->read($arrKey);
+            if ($CurrentQuestion->selectType() == ORDERING) {
+                if (!empty($_POST['subsetKeys'][$arrKey])) {
+                    $jsonString = Database::get()->querySingle("SELECT options FROM exercise_question WHERE id = ?d", $arrKey)->options;
+                    $data = json_decode($jsonString ?? '', true);
+                    if ($data) {
+                        $data['userSubset_'.$uid] = $_POST['subsetKeys'][$arrKey];
+                        $updatedJsonString = json_encode($data);
+                        Database::get()->query("UPDATE exercise_question SET options = ?s WHERE id = ?d", $updatedJsonString, $arrKey);
+                    }
+                }
+            }
+        }
+    }
+}
 
 $questionOptions = [];
 $shuffle_answers = $objExercise->getOption('ShuffleAnswers')? 1: 0;
@@ -509,6 +629,8 @@ if (isset($_POST['formSent'])) {
 
     // if the user has made a final submission or the time has expired
     if (isset($_POST['buttonFinish']) or $time_expired) {
+
+
         if (isset($_POST['secsRemaining'])) {
             $secs_remaining = $_POST['secsRemaining'];
         } else {
@@ -548,6 +670,7 @@ if (isset($_POST['formSent'])) {
                 'legend' => $langSubmit,
                 'eurid' => $eurid ]);
         }
+        unset_session_variables_of_questions($eurid);
         unset($objExercise);
         unset_exercise_var($exerciseId);
         // if time expired set flashdata
@@ -650,7 +773,7 @@ foreach ($questionList as $k => $q_id) {
     $t_question = new Question();
     $t_question->read($q_id);
     $questions[$q_id] = $t_question;
-    if (($t_question->selectType() == UNIQUE_ANSWER or $t_question->selectType() == MULTIPLE_ANSWER or $t_question->selectType() == TRUE_FALSE)
+    if (($t_question->selectType() == UNIQUE_ANSWER or $t_question->selectType() == MULTIPLE_ANSWER or $t_question->selectType() == TRUE_FALSE or $t_question->selectType() == ORDERING)
         and array_key_exists($q_id, $exerciseResult) and $exerciseResult[$q_id] != 0) {
         $answered = true;
     } elseif (($t_question->selectType() == FILL_IN_BLANKS or $t_question->selectType() == FILL_IN_BLANKS_TOLERANT)
@@ -664,7 +787,7 @@ foreach ($questionList as $k => $q_id) {
                 }
             }
         }
-    } elseif ($t_question->selectType() == FREE_TEXT
+    } elseif (($t_question->selectType() == FREE_TEXT or $t_question->selectType() == ORAL)
         and array_key_exists($q_id, $exerciseResult) and trim($exerciseResult[$q_id]) !== '') { // button color is `blue` if we have type anything
         $answered = true;
     } elseif (($t_question->selectType() == MATCHING or $t_question->selectType() == FILL_IN_FROM_PREDEFINED_ANSWERS) and array_key_exists($q_id, $exerciseResult)) {
@@ -677,6 +800,30 @@ foreach ($questionList as $k => $q_id) {
                 }
             }
         }
+    } elseif (($t_question->selectType() == DRAG_AND_DROP_TEXT or $t_question->selectType() == DRAG_AND_DROP_MARKERS)
+        and array_key_exists($q_id, $exerciseResult)) {
+        $answered = true;
+        if (empty($exerciseResult[$q_id])) {
+            $answered = false;
+        } elseif (is_string($exerciseResult[$q_id]) && !empty($exerciseResult[$q_id])) {
+            $arrAn = json_decode($exerciseResult[$q_id], true);
+            foreach ($arrAn as $index => $value) {
+                if (empty($value['dataWord'])) {
+                    $answered = false;
+                    break;
+                }
+            }
+        } elseif (is_array($exerciseResult[$q_id])) {
+            foreach ($exerciseResult[$q_id] as $val) {
+                if ($val == '') {
+                    $answered = false;
+                    break;
+                }
+            }
+        } 
+    } elseif ($t_question->selectType() == CALCULATED and array_key_exists($q_id, $exerciseResult) 
+        and (strpos($exerciseResult[$q_id], '|') !== false)) { // This question is calculated type with unique answer as text and the user has not answered it.
+        $answered = true;
     }
     if ($answered) {
         $answeredIds[] = $q_id;
@@ -899,3 +1046,55 @@ if ($questionList) {
 }
 
 draw($tool_content, 2, null, $head_content);
+
+function unset_session_variables_of_questions($eurid, $type = '') {
+    global $course_id, $uid, $webDir, $course_code;
+
+    $question_ids = [];
+    $typeQuestion = [];
+    $qids = Database::get()->queryArray("SELECT DISTINCT exercise_question.type,exercise_answer_record.question_id
+                                         FROM exercise_answer_record 
+                                         JOIN exercise_question ON exercise_question.id=exercise_answer_record.question_id
+                                         WHERE exercise_answer_record.eurid = ?d", $eurid);
+                            
+    foreach ($qids as $q) {
+        $question_ids[] = $q->question_id;
+        $typeQuestion[$q->question_id] = $q->type;
+    }
+
+    // Remove sessions of ordering and oral questions
+    if (count($question_ids) > 0) {
+        foreach ($question_ids as $qid) {
+            // About ordering questions
+            if ($typeQuestion[$qid] == ORDERING) {
+                $jsonString = Database::get()->querySingle("SELECT options FROM exercise_question WHERE id = ?d", $qid)->options;
+                $data = json_decode($jsonString ?? '', true);
+                if ($data) {
+                    // Unset subset question of user
+                    unset($data['userSubset_'.$uid]);
+                    $updatedJsonString = json_encode($data);
+                    Database::get()->query("UPDATE exercise_question SET options = ?s WHERE id = ?d", $updatedJsonString, $qid);
+                }
+            }
+            // About oral questions
+            if ($type == 'cancel_exercise' && $typeQuestion[$qid] == ORAL) {
+                $fFile = Database::get()->querySingle("SELECT id,`path` FROM document WHERE course_id = ?d
+                                                        AND subsystem = ?d AND subsystem_id = ?d
+                                                        AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $qid, $eurid);
+                if (file_exists("$webDir/courses/$course_code/image" . $fFile->path)) {
+                    unlink("$webDir/courses/$course_code/image" . $fFile->path);
+                }
+                Database::get()->query("DELETE FROM document WHERE id = ?d", $fFile->id);
+            }
+        }
+    }
+
+    // Remove sessions of calculated question
+    if (isset($_SESSION['QuestionDisplayed'][$uid]) && count($question_ids) > 0) {
+        foreach ($_SESSION['QuestionDisplayed'][$uid] as $index => $q) {
+            if (in_array($q, $question_ids)) {
+                unset($_SESSION['QuestionDisplayed'][$uid][$index]);
+            }
+        }
+    }
+}

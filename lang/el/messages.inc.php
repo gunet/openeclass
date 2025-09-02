@@ -2132,6 +2132,11 @@ $langFillFromSelectedWords = "Επιλογή από προκαθορισμένε
 $langMatching = "Αντιστοίχιση";
 $langTrueFalse = "Σωστό / Λάθος";
 $langFreeText = "Ελεύθερου Κειμένου";
+$langOral = "Προφορικά";
+$langSaveOralMsg = "Η απάντησή σας θα αποθηκευτεί προσωρινά. Η τελική αποθήκευση ολοκληρώνεται με την υποβολή της άσκησης. Θέλετε να προχωρήσετε?";
+$langDeleteRecordingOk = "Το αρχείο διαγράφηκε επιτυχώς!";
+$langListenToRecordingAudio = "Ακούστε την ηχογραφημένη απάντησή σας εδώ: ";
+$langFileUploadingOkReplaceWithNew = "Το αρχείο αποθηκεύθηκε επιτυχώς. Σε περίπτωση νέας προσπάθειας στην άσκηση, αν απαντήσετε την ίδια ερώτηση τότε το παλιό αρχείο θα αντικατασταθεί με το καινούριο.";
 $langScale = "Κλίμακας";
 $langFalse = "Λάθος";
 $langAddPicture = "Προσθήκη εικόνας";
@@ -2152,6 +2157,141 @@ $langQuestionModerate = "Μέτρια";
 $langQuestionDifficult = "Δύσκολη";
 $langQuestionVeryDifficult = "Πολύ δύσκολη";
 $langCheckAccess = "Έλεγχος πρόσβασης";
+$langDragAndDropText = "Μεταφορά και Απόθεση σε Κείμενο ";
+$langInfoDragAndDropText = 'Πληκτρολογήστε την <strong class="text-dark">εκφώνηση</strong> της ερώτησης χρησιμοποιώντας αγκύλες με τον μοναδικό τους αριθμό. </br> 
+                            Κάθε αγκύλη του κειμένου αντιστοιχεί στην ανάλογη επιλογή του πίνακα.</br></br>
+                            Καταχωρήστε τις προκαθορισμένες απαντήσεις του κειμένου συμπληρώνοντας τον βαθμό τους. 
+                            Μπορείτε προαιρετικά να προσθέσετε περισσότερες προκαθορισμένες απαντήσεις από τον συνολικό αριθμό των σωστών απαντήσεων του κειμένου.
+                            Με αυτόν τον τρόπο αυξάνετε το βαθμό δυσκόλιας της ερώτησης καθώς μία ή περισσότερες προκαθορισμένες απαντήσεις θα περισσέψει κατα την εκτέλεση της άσκησης.</br></br>
+                            <strong class="text-dark">Για παράδειγμα</strong>, στο κείμενο `Πρωτεύουσα της Ελλάδας είναι [1] ενώ πρωτεύουσα της Ιταλίας είναι [2]` συμπληρώνουμε τις εξής απαντήσεις:</br></br>
+                            <ul>
+                                <li><strong class="text-dark">Επιλογή[1]</strong> = Αθήνα και <strong class="text-dark">βαθμό</strong> = 1</li>
+                                <li><strong class="text-dark">Επιλογή[2]</strong> = Ρώμη και <strong class="text-dark">βαθμό</strong> = 1</li>
+                                <li><strong class="text-dark">Επιλογή[3]</strong> = Μιλάνο και <strong class="text-dark">βαθμό</strong> = 0. Η λέξη `Μιλάνο` θα περισσέψει ως μη σωστή απάντηση του κειμένου.</li>
+                            </ul>';
+
+$langPlaceholderDragAndDropText = "Πρωτεύουσα της Ελλάδας είναι [1] ενώ πρωτεύουσα της Γερμανίας είναι [2] ."; ;
+$langAthens = "Αθήνα";
+$langBerlin = "Βερολίνο";
+$langErrorWithChoicesAsAnswers = "Υπάρχει λάθος στην αντιστοιχία των απαντήσεων";
+$langPredefinedAnswerExists = "Δεν μπορείτε να καταχωρήσετε την ίδια ή κενή απάντηση. Δοκιμάστε πάλι.";
+$langCalcelDroppableItem = "Μπορείτε να αναιρέσετε την απάντησή σας κάνοντας αριστερό κλικ πάνω στην λέξη.";
+$langAllowMoreDefinedAnswersThanBlanks = "Οι προκαθορισμένες απαντήσεις να είναι περισσότερες απο τον αριθμό των κενών";
+$langErrorWithUniqueNumberOfBlank = "Καταχωρήσατε τον ίδιο μοναδικό αριθμό σε παραπάνω από ένα κενά.";
+$langDragAndDropMarkersTextAnswers = "Μεταφορά και απόθεση σημείων εικόνας: ";
+
+$langDragAndDropMarkers = "Μεταφορά και απόθεση σε προκαθορισμένα σημεία ή εικόνα";
+$langMarker = "Σημείο";
+$langShape = "Σχήμα";
+$langRectangle = "Ορθογώνιο";
+$langCircle = "Κύκλος";
+$langPolygon = "Πολύγωνο";
+$langPoint = "Σημείο";
+$langThisAnswerIsNotCorrect = "Δεν αντιστοιχεί σε σωστή απάντηση";
+$langBracket = "Αγκύλη";
+
+$langAddAnswerThroughImg = "Η προκαθορισμένη απάντηση θα εμφανίζεται μέσω της εικόνας";
+$langImageHasBeenDeleted = "Η εικόνα διαγράφηκε επιτυχώς.";
+$langSomethingWentWrong = "Κάτι πήγε στραβά. Δοκιμάστε πάλι.";
+$langConstantValue = "Σταθερή τιμή";
+$langRandomValue = "Τυχαία τιμή";
+
+$langInfoDragAndDropMarkersCreation = '
+<ul class="text-dark">
+<li class="text-dark">
+    Επιλέξτε το σημείο για το οποίο θέλετε να προσθέσετε μία προκαθορισμένη απάντηση.
+</li>
+<li class="text-dark">
+    Αν για παράδειγμα θέλετε να δημιουργήσετε την απάντηση στο σημείο [1], τότε στον πίνακα παρακάτω
+    πηγαίνετε στο συγκεκριμένο σημείο και επιλέξτε το σχήμα του από το πεδίο <strong class="text-dark">Σχήμα</strong>. Αφού το επιλέξατε (π.χ ορθογώνιο), ξεκινήστε να σχηματίζετε
+    πάνω στην εικόνα την προκαθορισμένη απάντηση.
+</li>
+<li class="text-dark">Δώστε το κείμενο της προκαθορισμένης απάντησης στο πεδίο <strong class="text-dark">Απάντηση</strong> (Υποχρεωτικό).</li>
+<li class="text-dark">Αν επιθυμείτε η προκαθορισμένη απάντηση να εμφανίζεται μέσω εικόνας και όχι κειμένου τότε συμπληρώστε το πεδίο <strong class="text-dark">Απάντηση</strong> και ανεβάστε την εικόνα μέσω της επιλογής <strong class="text-dark">η προκαθορισμένη απάντηση θα εμφανίζεται μέσω της εικόνας</strong>.</li>
+<li class="text-dark">Δώστε βαθμό στην απάντηση στο πεδίο <strong class="text-dark">Βαθμός</strong> (προαιρετικό).</li>
+<li class="text-dark">Επιλέγετε <strong class="text-dark">Προσθήκη</strong> για να αποθηκεύσετε την απάντηση προσωρινά.</li>
+<li class="text-dark">Επιλέγετε <strong class="text-dark">Διαγραφή</strong> για να αφαιρέσετε την απάντηση προσωρινά.</li>
+<li class="text-dark">Η διαδικασία για την δημιουργία των προκαθορισμένων απαντήσεων ολοκληρώνεται πατώντας <strong class="text-dark">Υποβολή</strong>.</li>
+</ul>';
+$langRequiresImageUploadedForThisType = "Για την μεταφορά και απόθεση σε προκαθορισμένα σημεία απαιτείται η προσθήκη εικόνας.";
+$langYourOwnAnswerIs = "Η απάντηση που δώσατε είναι:";
+$langCalculated = "Υπολογισμός αριθμητικών πράξεων";
+$langEditItems = "Επεξεργασία στοιχείων";
+$langItIsNotWildCard = "Δεν αποτελεί στοιχείο της άσκησης";
+$langItIsWildCard = "Αποτελεί στοιχείο της άσκησης";
+$langAddCorrectMandatoryWildCrds = "Ένα ή περισσότερα στοιχεία της ερώτησης δεν διαθέτουν τυχαία ή σταθερή τιμή. Δοκιμάστε πάλι.";
+$langTypeOfAnswer = "Τύπος απάντησης";
+$langRangeOfValues = "Έυρος τιμών";
+$langItem = "Στοιχείο";
+$langDecimalValues = "Δεκαδικά ψηφία";
+$langAutoCompleteValues = "Προσθήκη τιμής";
+$langItemToAdd = "Στοιχείο για προσθήκη:";
+$langAutoCompleteWildCardInfo = 'Καταχωρήστε την τιμή του τρέχοντος στοιχείου.</br>
+Η τιμή του μπορεί να είναι είτε <strong class="text-dark">σταθερή</strong> είτε <strong class="text-dark">τυχαία</strong>.</br>
+Αν επιλέξετε μία τυχαία τιμή, τότε ορίστε το εύρος τιμών του στα πεδία <strong class="text-dark">(ελάχιστη, μέγιστη, δεκαδικά ψηφία)</strong>.Το στοιχείο θα εμφανίζεται με διαφορετική τιμή σε κάθε εκτέλεση της άσκησης ανάλογα με το εύρος τιμών που ορίσατε.';
+$langMissingFieldsInRangeOfWildCard = "Αφήσατε κενά πεδία στο εύρος τιμών του στοιχείου.";
+$langMissingFieldsInConstantValOfWildCard = "Αφήσατε κενό το πεδίο της σταθερής τιμής του στοιχείου.";
+$langAddRandomOrConstantValOfWildCard = "Θα πρέπει να καταχωρήσετε μία τυχαία ή σταθερή τιμή στο στοιχείο.";
+$langCompleteTheTextOfTheQuestion = "Εκφώνηση";
+$langCompleteVariablesOfQuestionInfo = '
+<ul class="text-dark">
+<li class="text-dark">Συμπληρώστε την εκφώνηση στο πεδίο κειμένου <strong class="text-dark">Εκφώνηση</strong>.</li> 
+<li class="text-dark">Κάθε στοιχείο θα πρέπει να ορίζεται μέσα σε <strong class="text-dark">άγκυστρα {}</strong>.</li>
+<li class="text-dark">Συμπληρώστε τον αριθμητικό τύπο που δίνει το απότελεσμα της άσκησης καθώς και τον βαθμό στα πεδία <strong class="text-dark">Τύπος απάντησης</strong> και <strong class="text-dark">Βαθμός</strong> αντίστοιχα. Το σύστημα υπολογίζει αυτόματα το τελικό αποτέλεσμα της άσκησης βασισμένο στον τύπο που δώσατε.</li>
+<li class="text-dark">Καταχωρήστε τις τιμές των στοιχείων από την <strong class="text-dark">επεξεργασία στοιχείων</strong>. Μπορείτε επίσης να ορίσετε τυχαίες τιμές από το εύρος τιμών.</li>
+</ul>
+<div class="mt-4 text-dark">
+Για παράδειγμα, αν θέλουμε να υπολογίσουμε το αποτέλεσμα της αριθμητικής πράξης 15+30 τότε ακολουθούμε τα εξής βήματα:
+<ul class="mt-3 text-dark">
+<li class="text-dark">Στο πεδίο <strong class="text-dark">Εκφώνηση</strong> γράφουμε την εκφώνηση που θέλουμε συμπεριλαμβανομένου και των στοιχείων εαν αυτά υπάρχουν. Μπορούμε λοιπόν να δώσουμε την εκφώνηση `Υπολογίστε το αποτέλεσμα της αριθμητικής πράξης {X}+{Y}`.</li>
+<li class="text-dark">Στο πεδίο <strong class="text-dark">Τύπος απάντησης</strong> συμπληρώνουμε τον τύπο που θα δώσει το τελικό αποτέλεσμα. Στο παραδειγμά μας γράφουμε τον τύπο {X}+{Y}.</li>
+<li class="text-dark">Στο πεδίο <strong class="text-dark">Βαθμός</strong> συμπληρώνουμε τον βαθμό του.</li>
+<li class="text-dark">Στην συνέχεια από την <strong class="text-dark">Επεξεργασία στοιχείων</strong>, ορίζουμε τις τιμές των στοιχείων X = 15,Y = 30 μέσω της επιλογής <strong class="text-dark">Αποτελεί στοιχείο της άσκησης</strong>.</li>
+<li class="text-dark">Τέλος, πατάμε <strong class="text-dark">Υποβολή</strong>.</li>
+</ul>
+</div>';
+$langCompleteVariablesOfQuestionWarning = '
+<strong class="text-dark">Προσοχή!</strong></br></br>
+Αν η άσκηση <strong class="text-dark">ΔΕΝ</strong> περιλαμβάνει κάποιο στοιχείο και πρέπει να υπολογιστεί, τότε θα πρέπει στον πεδίο <strong class="text-dark">Τύπος απάντησης</strong> να συμπληρώσετε την αριθμητική έκφραση όπως την συμπληρώσατε στην εκφώνηση μαζί με το τελικό της αποτέλεσμα χωρισμένα με το σύμβολο της άνω-κάτω τελείας <strong>(:)</strong></br>
+<div class="mt-3 text-dark">
+Για παράδειγμα, αν θέλουμε να υπολογίσουμε τον άγνωστο <strong class="text-dark">x</strong> στην εξίσωση <strong class="text-dark">3x - 2 = 2x</strong> τότε ακολουθούμε τα εξής βήματα:
+<ul class="mt-4 text-dark">
+<li class="text-dark">Στο πεδίο <strong class="text-dark">Εκφώνηση</strong> γράφουμε την εκφώνηση που θέλουμε. Στο παράδειγμά μας μπορούμε να γράψουμε `Βρείτε τον άγνωστο <strong class="text-dark">x</strong> της εξίσωσης <strong class="text-dark">3x - 2 = 2x</strong>`.</li>
+<li class="text-dark">Στο πεδίο <strong class="text-dark">Τύπος απάντησης</strong> συμπληρώνουμε την αριθμητική έκφραση μαζί με την τελική τιμή του <strong class="text-dark">χ</strong> που ψάχνουμε ως αποτέλεσμα χωρισμένα με το σύμβολο (<strong class="text-dark">:</strong>) δηλαδή γράφουμε <strong class="text-dark">3x - 2 = 2x:2</strong></li>
+<li class="text-dark">Στο πεδίο <strong class="text-dark">Βαθμός</strong> συμπληρώνουμε τον βαθμό του.</li>
+<li class="text-dark">Στην συνέχεια στην <strong class="text-dark">Επεξεργασία στοιχείων</strong> πατάμε <strong class="text-dark">Υποβολή</strong>.</li>
+</ul>
+</div>';
+$langNoExistVariables = "Δεν περιέχονται στοιχεία στην ερώτηση. </br> Πατήστε <strong>Υποβολή</strong> για να ολοκληρώσετε την δημιουργία της ερώτησης.";
+$langFinalValueOfWildCard = "Τιμή στοιχείου";
+$langSeperateCorrectlyTheTypeOfAnswer = "Δεν υπάρχουν διαθέσιμα {στοιχεία} στην εκφώνηση ή στους τύπους των απαντήσεων. </br>
+Συνεπώς θα πρέπει στο πεδίο <strong>Τύπος απάντησης</strong> να προσθέσετε τον αριθμητικό τύπο που προσθέσατε στην εκφώνηση μαζί με το τελικό της αποτέλεσμα, χωρισμένα με το σύμβολο (<strong>:</strong>)";
+$langOrdering = "Ταξινόμηση";
+$langLayoutItems = "Διάταξη στοιχείων";
+$langHorizontal = "Οριζόντια";
+$langVertical = "Κατακόρυφη";
+$langItemsSelectionType = "Τύπος επιλογής στοιχείου";
+$langSelectAllItems = "Επιλογή όλων των στοιχείων";
+$langSelectRandomSubSetOfItems = "Επιλογή τυχαίου υποσυνόλου στοιχείων";
+$langSelectContiguousSubSetOfItems = "Επιλογή συνεχόμενου υποσυνόλου στοιχείων";
+$langSizeOfSubset = "Μέγεθος υποσυνόλου";
+$langFillInTheSizeOfSubset = "Συμπληρώστε το μέγεθος του υποσυνόλου.";
+$langTheSizeOfSubsetIsBiggerThanPrAnswers = "Το μέγεθος του υποσυνόλου είναι μεγαλύτερο από τον συνολικό αριθμό των προκαθορισμένων απαντήσεων.";
+$langCorrectOrdering = "Η σωστή ταξινόμηση είναι: ";
+$langInfoOrderingQuestion = 'Για την δημιουργία σωστής ταξινόμησης των στοιχείων, το σύστημα αντιλαμβάνεται ως σωστή απάντηση την ταξινόμηση από το μικρότερο προς το μεγαλύτερο στοιχείο.</br></br>
+                             <strong class="text-dark">Για παράδειγμα</strong>, αν η ερώτητη της ασκήσης ζητάει την ταξινόμηση των αριθμών 1,5,3,9,7 από το μεγαλύτερο στο μικρότερο, τότε θα πρέπει να δηλώσετε τα εξής ως σωστή απάντηση:</br>
+                             <ul class="mt-3">
+                                <li><strong class="text-dark">Στοιχείο(1)</strong> = 9 και τον βαθμό του ως σωστή απάντηση</li>
+                                <li><strong class="text-dark">Στοιχείο(2)</strong> = 7 και τον βαθμό του ως σωστή απάντηση</li>
+                                <li><strong class="text-dark">Στοιχείο(3)</strong> = 5 και τον βαθμό του ως σωστή απάντηση</li>
+                                <li><strong class="text-dark">Στοιχείο(4)</strong> = 3 και τον βαθμό του ως σωστή απάντηση</li>
+                                <li><strong class="text-dark">Στοιχείο(5)</strong> = 1 και τον βαθμό του ως σωστή απάντηση</li>
+                             </ul></br>
+                             Στην συνέχεια, επιλέγετε την διάταξη των στοιχείων κατά την εκτέλεση της άσκησης.</br>
+                             Αν επιθυμείτε να εμφανίζεται στην άσκηση ένα συγκεκριμένο υποσύνολο των στοιχείων που ορίσατε τότε
+                             επιλέγετε τον <strong class="text-dark">τύπο επιλογής στοιχείου</strong> και το <strong class="text-dark">μέγεθος υποσυνόλου</strong>.
+                             ';
+
 
 // answer_admin.php
 $langWeightingForEachBlank = "Δώστε ένα βάρος σε κάθε κενό";
