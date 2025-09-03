@@ -51,6 +51,21 @@ if (isset($_GET['htopic'])) {
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
+
+$head_content .= "<script type='text/javascript'>        
+        var lang = {
+            confirmdelete: '" . js_escape($langConfirmDelete) . "',
+            confirm: '" . js_escape($langAnalyticsConfirm) . "',
+            markerdeleted: '" . js_escape($langMarkerDeleted) . "',
+            markerdeletederror: '" . js_escape($langMarkerDeletedError) . "',
+            imageuploaded: '" . js_escape($langImageUploaded) . "',
+            imagenotselected: '" . js_escape($langImageNotSelected) . "',
+            invalidanswervalue : '" . js_escape($langInvalidAnswerValue) . "',
+            blanknotempty: '" . js_escape($langBlankNotEmpty) . "',
+            blankotherquestion: '" . js_escape($langBlankOtherQuestion) . "'
+        };
+    </script>";
+
 load_js('sortable/Sortable.min.js');
 ModalBoxHelper::loadModalBox();
 

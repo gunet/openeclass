@@ -138,7 +138,7 @@ function drawPolygonWithBlank(points, color, fillColor, label, ctx, dataAttrs = 
     //     ctx.lineTo(points[i].x, points[i].y);
     // }
     // ctx.closePath();
-    //ctx.fill(); 
+    //ctx.fill();
     //ctx.stroke();
 
     // Compute simple center (average of points)
@@ -188,14 +188,14 @@ function drawPolygonWithBlank(points, color, fillColor, label, ctx, dataAttrs = 
 
     // Position the span relative to the container
     // Calculate top and left to center the blank on polygon
-    if (markerWithImage == 1) { 
+    if (markerWithImage == 1) {
         blankDiv.style.left = centerPolX - 75 + 'px';
         blankDiv.style.top = centerPolY - 75 + 'px';
     } else {
         blankDiv.style.left = centerPolX - 50 + 'px';
         blankDiv.style.top = centerPolY - 25 + 'px';
     }
-    
+
 
 }
 
@@ -351,18 +351,18 @@ function drag_and_drop_process() {
 
                 // If blank already has a word, do nothing
                 if (thisBlank.children().length > 0) {
-                    alert('The blank is not empty!');
+                    alert(lang.blanknotempty);
                     return;
                 }
 
-                // Remove the dragged word from pool immediately
+                // Remove the dragged word from the pool immediately
                 var draggedWord = ui.draggable;
 
-                // Do not drop a word to a blank of other question
+                // Do not drop a word to a blank of another question
                 var word = draggedWord.clone();
                 var poolOfWord = word.attr('data-pool-id');
                 if (thisCardOfBlank!=poolOfWord){
-                    alert('You are trying to fill in a blank to other question!');
+                    alert(lang.blankotherquestion);
                     return;
                 }
 
@@ -426,12 +426,12 @@ function drag_and_drop_process() {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // answer_admin_inc.php
-// Draw a shape of a marker during creating an answer of a question. 
+// Draw a shape of a marker during creating an answer of a question.
 
 let currentShape = null;
 let currentShapeId = null;
 let isDrawing = false;
-let startX = 0; 
+let startX = 0;
 let startY = 0;
 let vertices = [];
 let currentX = 0;
@@ -494,7 +494,7 @@ function drawPolygon(points, color, fillColor, label, ctx) {
         ctx.lineTo(points[i].x, points[i].y);
     }
     ctx.closePath();
-    ctx.fill(); 
+    ctx.fill();
     ctx.stroke();
 
     // Compute simple center (average of points)
@@ -766,7 +766,7 @@ function shapesCreationProcess() {
             e.preventDefault();
             var addValuesId = $(this).attr('id');
             isDrawing = false;
-            if (confirm('Do you want to proceed?')) {
+            if (confirm(lang.confirm)) {
                 var number = getNumberOftheText(addValuesId);
                 var markerAnswer = $('#marker-answer-'+number).val();
                 var markerGrade = $('#marker-grade-'+number).val();
@@ -822,14 +822,14 @@ function shapesCreationProcess() {
                             formData.append('questionId-image', questionId);
                             formData.append('markerId-image', number);
                             formData.append('courseCode-image', courseCode);
-                            
+
                             fetch('/modules/exercise/upload_image_as_answer.php', {
                                 method: 'POST',
                                 body: formData
                             })
                             .then(response => response.text())
                             .then(data => {
-                                alert('Image has been uploaded!')
+                                alert(lang.imageuploaded);
                                 saveShape(vertices,questionId,courseCode);
                                 window.location.reload();
                             })
@@ -841,7 +841,7 @@ function shapesCreationProcess() {
                             saveShape(vertices,questionId,courseCode);
                             window.location.reload();
                         } else {
-                            alert('Please select an image to upload.');
+                            alert(lang.imagenotselected);
                             window.location.reload();
                         }
                     } else {
@@ -849,28 +849,28 @@ function shapesCreationProcess() {
                         window.location.reload();
                     }
                 } else {
-                    alert('The value of the answer is empty OR you have added an answer that already exist.');
+                    alert(lang.invalidanswervalue);
                     window.location.reload();
                 }
             }
         });
 
         $('.delete-data-shape').on('click', function(e){
-            e.preventDefault(); 
+            e.preventDefault();
             var delValuesId = $(this).attr('id');
             isDrawing = false;
             var number = getNumberOftheText(delValuesId);
-            if (confirm('Do you want to proceed?')) {
+            if (confirm(lang.confirmdelete)) {
                 $.ajax({
                     url: 'save_dropZones.php?course_code='+courseCode+'&questionId='+questionId,
                     method: 'POST',
                     data: { marker_id: number, deleteMarker: 1 },
                     success: function(response) {
-                        alert('Marker deleted successfully!');
+                        alert(lang.markerdeleted);
                         window.location.reload();
                     },
                     error: function() {
-                        alert('Error deleting marker.');
+                        alert(lang.markerdeletederror);
                         window.location.reload();
                     }
                 });
@@ -889,9 +889,9 @@ function shapesCreationProcess() {
 // Save the user's answers after redirecting to the next or previous page.
 
 function save_user_answers(questionId) {
-    
+
     $(function() {
-        
+
         if (questionId > 0) {
             const droppedWordsByUser = $('#userHasAnswered-'+questionId).val();
             if (droppedWordsByUser) {
@@ -957,9 +957,9 @@ function save_user_answers(questionId) {
                             // Remove the div from predifined answers in the pool
                             const wordInPool = $('#words_' + questionId + ' .draggable[data-word="' + item.dataWord + '"]');
                             wordInPool.remove();
-        
+
                         }
-                        
+
                     });
                 }
             }
@@ -968,7 +968,7 @@ function save_user_answers(questionId) {
                 e.preventDefault();
                 var wordText = $(this).attr('data-word');
                 var poolId = $(this).attr('data-pool-id');
-                
+
                 // Send the word back to the pool
                 const divPoolWord = document.createElement('div');
                 if ($(this).hasClass('draggable-image')) {

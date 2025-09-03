@@ -2191,10 +2191,16 @@ $langThisAnswerIsNotCorrect = "Δεν αντιστοιχεί σε σωστή α�
 $langBracket = "Αγκύλη";
 
 $langAddAnswerThroughImg = "Η προκαθορισμένη απάντηση θα εμφανίζεται μέσω της εικόνας";
-$langImageHasBeenDeleted = "Η εικόνα διαγράφηκε επιτυχώς.";
+$langMarkerDeletedError = "Σφάλμα κατά τη διαγραφή εικόνας.";
+$langImageHasBeenDeleted = "Η εικόνα διαγράφηκε.";
+$langImageUploaded = "Η εικόνα φορτώθηκε";
+$langImageNotSelected = "Δεν έχετε επιλέξει εικόνα";
+$langInvalidAnswerValue = "Η απάντηση είναι κενή ή έχετε προσθέσει μια απάντηση που υπάρχει ήδη.";
 $langSomethingWentWrong = "Κάτι πήγε στραβά. Δοκιμάστε πάλι.";
 $langConstantValue = "Σταθερή τιμή";
 $langRandomValue = "Τυχαία τιμή";
+$langBlankNotEmpty = "Υπάρχει ήδη μια λέξη στο 'κενό'";
+$langBlankOtherQuestion = "Το 'κενό' ανήκει σε άλλη ερώτηση!";
 
 $langInfoDragAndDropMarkersCreation = '
 <ul class="text-dark">
@@ -2318,6 +2324,7 @@ $langColumnA = "Στήλη Α";
 $langColumnB = "Στήλη B";
 $langMoreLessChoices = "Προσθήκη/Αφαίρεση επιλογών";
 $langQuestionUpdated = "Τα στοιχεία της ερώτησης ενημερώθηκαν";
+$langMarkerDeleted = "Το σχήμα διαγράφηκε!";
 
 // question_list_admin.php
 $langQuestionList = "Ερωτήσεις της άσκησης";
