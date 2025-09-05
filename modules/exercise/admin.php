@@ -62,7 +62,8 @@ $head_content .= "<script type='text/javascript'>
             imagenotselected: '" . js_escape($langImageNotSelected) . "',
             invalidanswervalue : '" . js_escape($langInvalidAnswerValue) . "',
             blanknotempty: '" . js_escape($langBlankNotEmpty) . "',
-            blankotherquestion: '" . js_escape($langBlankOtherQuestion) . "'
+            blankotherquestion: '" . js_escape($langBlankOtherQuestion) . "',
+            chooseShapeAndAnswerToContinue: '" .js_escape($chooseShapeAndAnswerToContinue). "'
         };
     </script>";
 

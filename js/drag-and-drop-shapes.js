@@ -774,6 +774,18 @@ function shapesCreationProcess() {
                 var markerShape = $('#shapeType-'+number).val();
                 var markerAnswerWithImage = $('#marker-answer-with-image-'+number).val();
 
+                // User can define the answer only if has chosen a shape for drawing and has added the grade of answer. 
+                if (markerAnswer == '' || markerShape == '' || markerGrade == 0) {
+                    alert(lang.chooseShapeAndAnswerToContinue);
+                    markerAnswer = '';
+                    markerGrade = 0;
+                    markerShape = '';
+                    $('#marker-answer-'+number).val('');
+                    $('#shapeType-'+number).val('');
+                    $('#marker-grade-'+number).val(0);
+                    window.location.reload();
+                }
+
                 if (markerAnswer && !containsMarkerAnswer(markerAnswer,number)) {
                     if ((markerShape == 'circle' || markerShape == 'rectangle') && markerCoordinates) {
 
