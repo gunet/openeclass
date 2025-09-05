@@ -182,9 +182,19 @@ class AIService {
         ];
     }
 
+    /**
+     * @brief Get AI services for display
+     * @return array
+     */
     public static function getAIServices(): array {
+
+        global $langCourseCreate, $langQuestionPool, $langExercises,
+               $langEvaluationFreeText, $langSyllabus;
+
         return [
-            AI_MODULE_QUESTION_POOL => 'Question Pool',
+            AI_MODULE_QUESTION_POOL => "$langExercises - $langQuestionPool",
+            AI_MODULE_FREE_TEXT_EVALUATION => "$langExercises - $langEvaluationFreeText",
+            AI_MODULE_CREATE_COURSE => "$langCourseCreate - $langSyllabus (syllabus)"
         ];
     }
 

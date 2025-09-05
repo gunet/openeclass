@@ -36,7 +36,7 @@
         }
 
         $(document).ready(function() {
-            
+
             // Check for existing syllabus sections on page load
             const existingSyllabusData = $('#ai_syllabus_sections').val();
             if (existingSyllabusData) {
@@ -121,7 +121,7 @@
             $('#toggleAIAssistant').on('click', function() {
                 const body = $('#aiAssistantBody');
                 const icon = $(this).find('i');
-                
+
                 if (body.is(':visible')) {
                     body.slideUp();
                     icon.removeClass('fa-chevron-up').addClass('fa-chevron-down');
@@ -134,9 +134,9 @@
             // Handle Syllabus Form Submission
             $('#aiSyllabusForm').on('submit', function(e) {
                 e.preventDefault();
-                
+
                 const inputMethod = $('input[name="input_method"]:checked').val();
-                
+
                 // Validate input based on method
                 if (inputMethod === 'url') {
                     const url = $('#syllabus_url').val().trim();
@@ -159,7 +159,7 @@
                 }
 
                 const formData = new FormData(this);
-                
+
                 $.ajax({
                     url: 'ai_extract_syllabus.php',
                     type: 'POST',
@@ -194,7 +194,7 @@
             // Handle Prompt Form Submission
             $('#aiPromptForm').on('submit', function(e) {
                 e.preventDefault();
-                
+
                 const prompt = $('#course_prompt').val().trim();
                 if (prompt.length < 10) {
                     alert('{{ js_escape(trans('langPromptTooShort')) }}');
@@ -202,7 +202,7 @@
                 }
 
                 showAILoading('{{ js_escape(trans('langAIGenerating')) }}');
-                
+
                 $.ajax({
                     url: 'ai_generate_course.php',
                     type: 'POST',
@@ -230,7 +230,7 @@
             // Apply AI Data to Form
             $('#applyAIData').on('click', function() {
                 if (!currentAIData) return;
-                
+
                 // Apply data to form fields
                 if (currentAIData.title) $('#title').val(currentAIData.title);
                 if (currentAIData.public_code) $('#public_code').val(currentAIData.public_code);
@@ -246,7 +246,7 @@
                         $('textarea[name="description"]').val(currentAIData.description);
                     }
                 }
-                
+
                 // Store syllabus sections in hidden form field for processing after course creation
                 if (currentAIData.syllabus_sections) {
                     // Create or update hidden field with syllabus sections JSON
@@ -259,21 +259,21 @@
                         }).appendTo('form[name="createform"]');
                     }
                     $('#ai_syllabus_sections').val(JSON.stringify(currentAIData.syllabus_sections));
-                    
+
                     // Show indicator
                     updateSyllabusIndicator(true, Object.keys(currentAIData.syllabus_sections).length);
                 }
-                
+
                 // Set course format
                 if (currentAIData.view_type) {
                     $('input[name="view_type"][value="' + currentAIData.view_type + '"]').prop('checked', true);
                 }
-                
+
                 // Set course visibility
                 if (currentAIData.formvisible !== undefined) {
                     $('input[name="formvisible"][value="' + currentAIData.formvisible + '"]').prop('checked', true);
                 }
-                
+
                 // Set course license
                 if (currentAIData.course_license !== undefined) {
                     if (currentAIData.course_license === 0) {
@@ -285,15 +285,15 @@
                         $('#course_license_id').val(currentAIData.course_license);
                     }
                 }
-                
+
                 // Hide AI results and show success message
                 $('#aiResults').slideUp();
-                
+
                 // Scroll to form
                 $('html, body').animate({
                     scrollTop: $('#title').offset().top - 100
                 }, 500);
-                
+
                 // Highlight applied fields briefly
                 $('#title, #public_code, #prof_names').addClass('bg-success bg-opacity-25');
                 setTimeout(function() {
@@ -332,7 +332,7 @@
 
             function displayAIResults(data) {
                 let preview = '<div class="row">';
-                
+
                 if (data.title) {
                     preview += '<div class="col-md-6 mb-2"><strong>{{ js_escape(trans('langAIPreviewTitle')) }}:</strong> ' + escapeHtml(data.title) + '</div>';
                 }
@@ -351,7 +351,7 @@
                 if (data.keywords) {
                     preview += '<div class="col-12 mb-2"><strong>{{ js_escape(trans('langAIPreviewKeywords')) }}:</strong> ' + escapeHtml(data.keywords) + '</div>';
                 }
-                
+
                 // Show source information
                 if (data.extraction_method) {
                     let sourceInfo = '';
@@ -366,31 +366,31 @@
                         preview += '<div class="col-12 mb-2"><small class="text-muted"><strong>{{ js_escape(trans('langAIPreviewSource')) }}:</strong> ' + sourceInfo + '</small></div>';
                     }
                 }
-                
+
                 if (data.description) {
                     const shortDesc = data.description.length > 200 ? data.description.substring(0, 200) + '...' : data.description;
                     const needsExpansion = data.description.length > 200;
-                    
+
                     preview += '<div class="col-12">';
                     preview += '<strong>{{ js_escape(trans('langAIPreviewDescription')) }}:</strong><br>';
                     preview += '<div id="descriptionShort">' + shortDesc + '</div>';
-                    
+
                     if (needsExpansion) {
                         preview += '<div id="descriptionFull" style="display: none;">' + data.description + '</div>';
                         preview += '<button type="button" class="btn btn-link btn-sm p-0 mt-1" id="toggleDescription">';
                         preview += '<i class="fa-solid fa-chevron-down me-1"></i>{{ js_escape(trans('langAIShowFullDescription')) }}';
                         preview += '</button>';
                     }
-                    
+
                     preview += '</div>';
                 }
-                
+
                 // Show structured syllabus sections if available
                 if (data.syllabus_sections && Object.keys(data.syllabus_sections).length > 0) {
                     preview += '<div class="col-12 mt-3">';
                     preview += '<strong>{{ js_escape(trans('langAISyllabusStructured')) }}:</strong>';
                     preview += '<div class="row mt-2">';
-                    
+
                     const sectionLabels = {
                         'objectives': '{{ js_escape(trans('langAISyllabusObjectives')) }}',
                         'bibliography': '{{ js_escape(trans('langAISyllabusBibliography')) }}',
@@ -402,7 +402,7 @@
                         'textbooks': '{{ js_escape(trans('langAISyllabusTextbooks')) }}',
                         'additional_info': '{{ js_escape(trans('langAISyllabusAdditionalInfo')) }}'
                     };
-                    
+
                     let sectionCounter = 0;
                     for (const [sectionKey, sectionContent] of Object.entries(data.syllabus_sections)) {
                         if (sectionContent && sectionContent.trim().length > 0) {
@@ -414,36 +414,36 @@
                             const needsExpansion = textContent.length > 100;
                             const shortContent = needsExpansion ? textContent.substring(0, 100) + '...' : textContent;
                             const sectionId = 'section_' + sectionCounter++;
-                            
+
                             preview += '<div class="col-md-6 mb-3">';
                             preview += '<small><strong>' + escapeHtml(label) + ':</strong><br>';
                             preview += '<span id="' + sectionId + '_short">' + escapeHtml(shortContent) + '</span>';
-                            
+
                             if (needsExpansion) {
                                 preview += '<span id="' + sectionId + '_full" style="display: none;">' + escapeHtml(textContent) + '</span>';
                                 preview += '<br><button type="button" class="btn btn-link btn-sm p-0 mt-1 section-toggle" data-target="' + sectionId + '">';
                                 preview += '<i class="fa-solid fa-chevron-down me-1"></i>{{ js_escape(trans('langAIShowFullDescription')) }}';
                                 preview += '</button>';
                             }
-                            
+
                             preview += '</small></div>';
                         }
                     }
-                    
+
                     preview += '</div></div>';
                 }
-                
+
                 preview += '</div>';
-                
+
                 $('#aiDataPreview').html(preview);
-                
+
                 // Add click handler for description toggle
                 $('#toggleDescription').on('click', function() {
                     const $short = $('#descriptionShort');
                     const $full = $('#descriptionFull');
                     const $button = $(this);
                     const $icon = $button.find('i');
-                    
+
                     if ($full.is(':visible')) {
                         $full.hide();
                         $short.show();
@@ -456,7 +456,7 @@
                         $button.html('<i class="fa-solid fa-chevron-up me-1"></i>{{ js_escape(trans('langAIHideDescription')) }}');
                     }
                 });
-                
+
                 // Add click handlers for syllabus section toggles
                 $(document).on('click', '.section-toggle', function() {
                     const $button = $(this);
@@ -464,7 +464,7 @@
                     const $short = $('#' + targetId + '_short');
                     const $full = $('#' + targetId + '_full');
                     const $icon = $button.find('i');
-                    
+
                     if ($full.is(':visible')) {
                         $full.hide();
                         $short.show();
@@ -477,7 +477,7 @@
                         $button.html('<i class="fa-solid fa-chevron-up me-1"></i>{{ js_escape(trans('langAIHideDescription')) }}');
                     }
                 });
-                
+
                 $('#aiResults').slideDown();
             }
 
@@ -499,10 +499,10 @@
                 div.textContent = text;
                 return div.innerHTML;
             }
-            
+
             function updateSyllabusIndicator(hasSections, sectionCount) {
                 let indicator = $('#syllabusIndicator');
-                
+
                 if (hasSections && sectionCount > 0) {
                     if (indicator.length === 0) {
                         // Create indicator if it doesn't exist
@@ -527,7 +527,7 @@
                     indicator.hide();
                 }
             }
-            
+
             // Handle clear syllabus data
             $(document).on('click', '#clearSyllabusData', function() {
                 if (confirm('Είστε βέβαιος ότι θέλετε να καθαρίσετε τα δομημένα τμήματα συλλάβου;')) {
@@ -562,143 +562,143 @@
              </div>
 
              @if($ai_available)
-             <div class='col-12'>
-                <div class='card border-0 mb-4'>
-                    <div class='card-header bg-transparent border-0 d-flex justify-content-between align-items-center'>
-                        <h5 class='mb-0'>
-                            <i class='fa-solid fa-robot me-2'></i>{{ trans('langAICourseAssistant') }}
-                        </h5>
-                        <button type='button' class='btn btn-sm btn-outline-secondary' id='toggleAIAssistant'>
-                            <i class='fa-solid fa-chevron-down'></i> {{ trans('langAIToggleAssistant') }}
-                        </button>
-                    </div>
-                    <div class='card-body' id='aiAssistantBody' style='display: none;'>
-                        <ul class='nav nav-pills mb-3' id='aiTabs' role='tablist'>
-                            <li class='nav-item' role='presentation'>
-                                <button class='nav-link active' id='ai-syllabus-tab' data-bs-toggle='pill' data-bs-target='#ai-syllabus' type='button' role='tab'>
-                                    <i class='fa-solid fa-file-pdf me-2'></i>{{ trans('langAIExtractFromSyllabus') }}
-                                </button>
-                            </li>
-                            <li class='nav-item' role='presentation'>
-                                <button class='nav-link' id='ai-prompt-tab' data-bs-toggle='pill' data-bs-target='#ai-prompt' type='button' role='tab'>
-                                    <i class='fa-solid fa-keyboard me-2'></i>{{ trans('langAIGenerateFromPrompt') }}
-                                </button>
-                            </li>
-                        </ul>
-                        
-                        <div class='tab-content' id='aiTabContent'>
-                            <!-- Syllabus Upload Tab -->
-                            <div class='tab-pane fade show active' id='ai-syllabus' role='tabpanel'>
-                                <form id='aiSyllabusForm' enctype='multipart/form-data'>
-                                    
-                                    <!-- Input Method Selection -->
-                                    <div class='mb-4'>
-                                        <label class='form-label'>{{ trans('langAISyllabusInputMethod') }}</label>
+                 <div class='col-12'>
+                    <div class='card border-0 mb-4'>
+                        <div class='card-header bg-transparent border-0 d-flex justify-content-between align-items-center'>
+                            <h5 class='mb-0'>
+                                <i class='fa-solid fa-robot me-2'></i>{{ trans('langAIGenerateCourse') }}
+                            </h5>
+                            <button type='button' class='btn btn-sm btn-outline-secondary' id='toggleAIAssistant'>
+                                <i class='fa-solid fa-chevron-down'></i> {{ trans('langAIToggleAssistant') }}
+                            </button>
+                        </div>
+                        <div class='card-body' id='aiAssistantBody' style='display: none;'>
+                            <ul class='nav nav-pills mb-3' id='aiTabs' role='tablist'>
+                                <li class='nav-item' role='presentation'>
+                                    <button class='nav-link active' id='ai-syllabus-tab' data-bs-toggle='pill' data-bs-target='#ai-syllabus' type='button' role='tab'>
+                                        <i class='fa-solid fa-file-pdf me-2'></i>{{ trans('langAIExtractFromSyllabus') }}
+                                    </button>
+                                </li>
+                                <li class='nav-item' role='presentation'>
+                                    <button class='nav-link' id='ai-prompt-tab' data-bs-toggle='pill' data-bs-target='#ai-prompt' type='button' role='tab'>
+                                        <i class='fa-solid fa-keyboard me-2'></i>{{ trans('langAIGenerateFromPrompt') }}
+                                    </button>
+                                </li>
+                            </ul>
+
+                            <div class='tab-content' id='aiTabContent'>
+                                <!-- Syllabus Upload Tab -->
+                                <div class='tab-pane fade show active' id='ai-syllabus' role='tabpanel'>
+                                    <form id='aiSyllabusForm' enctype='multipart/form-data'>
+
+                                        <!-- Input Method Selection -->
+                                        <div class='mb-4'>
+                                            <label class='form-label'>{{ trans('langAISyllabusInputMethod') }}</label>
+                                            <div class='row'>
+                                                <div class='col-md-6'>
+                                                    <div class='form-check'>
+                                                        <input class='form-check-input' type='radio' name='input_method' id='upload_method' value='upload' checked>
+                                                        <label class='form-check-label' for='upload_method'>
+                                                            <i class='fa-solid fa-upload me-2'></i>{{ trans('langAIUploadFile') }}
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class='col-md-6'>
+                                                    <div class='form-check'>
+                                                        <input class='form-check-input' type='radio' name='input_method' id='url_method' value='url'>
+                                                        <label class='form-check-label' for='url_method'>
+                                                            <i class='fa-solid fa-link me-2'></i>{{ trans('langAIDownloadFromURL') }}
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
                                         <div class='row'>
-                                            <div class='col-md-6'>
-                                                <div class='form-check'>
-                                                    <input class='form-check-input' type='radio' name='input_method' id='upload_method' value='upload' checked>
-                                                    <label class='form-check-label' for='upload_method'>
-                                                        <i class='fa-solid fa-upload me-2'></i>{{ trans('langAIUploadFile') }}
-                                                    </label>
+                                            <div class='col-12'>
+                                                <!-- File Upload Section -->
+                                                <div class='mb-3' id='upload_section'>
+                                                    <label for='syllabus_pdf' class='form-label'>{{ trans('langAIUploadSyllabus') }}</label>
+                                                    <input type='file' class='form-control' id='syllabus_pdf' name='syllabus_pdf' accept='application/pdf'>
+                                                    <div class='form-text'>{{ trans('langAIMaxFileSize') }}</div>
                                                 </div>
-                                            </div>
-                                            <div class='col-md-6'>
-                                                <div class='form-check'>
-                                                    <input class='form-check-input' type='radio' name='input_method' id='url_method' value='url'>
-                                                    <label class='form-check-label' for='url_method'>
-                                                        <i class='fa-solid fa-link me-2'></i>{{ trans('langAIDownloadFromURL') }}
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class='row'>
-                                        <div class='col-12'>
-                                            <!-- File Upload Section -->
-                                            <div class='mb-3' id='upload_section'>
-                                                <label for='syllabus_pdf' class='form-label'>{{ trans('langAIUploadSyllabus') }}</label>
-                                                <input type='file' class='form-control' id='syllabus_pdf' name='syllabus_pdf' accept='application/pdf'>
-                                                <div class='form-text'>{{ trans('langAIMaxFileSize') }}</div>
-                                            </div>
-                                            
-                                            <!-- URL Download Section -->
-                                            <div class='mb-3' id='url_section' style='display: none;'>
-                                                <label for='syllabus_url' class='form-label'>{{ trans('langAISyllabusURL') }}</label>
-                                                <input type='url' class='form-control' id='syllabus_url' name='syllabus_url' 
-                                                       placeholder='https://example.com/course-page or https://example.com/syllabus.pdf'>
-                                                <div class='form-text'>
-                                                    {{ trans('langAIURLDescription') }}
+
+                                                <!-- URL Download Section -->
+                                                <div class='mb-3' id='url_section' style='display: none;'>
+                                                    <label for='syllabus_url' class='form-label'>{{ trans('langAISyllabusURL') }}</label>
+                                                    <input type='url' class='form-control' id='syllabus_url' name='syllabus_url'
+                                                           placeholder='https://example.com/course-page or https://example.com/syllabus.pdf'>
+                                                    <div class='form-text'>
+                                                        {{ trans('langAIURLDescription') }}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <button type='submit' class='btn btn-primary' id='extractBtn'>
-                                        <i class='fa-solid fa-magic-wand-sparkles me-2'></i>{{ trans('langAIExtractButton') }}
-                                    </button>
-                                    {!! generate_csrf_token_form_field() !!}
-                                </form>
-                            </div>
-                            
-                            <!-- Manual Prompt Tab -->
-                            <div class='tab-pane fade' id='ai-prompt' role='tabpanel'>
-                                <form id='aiPromptForm'>
-                                    <div class='row'>
-                                        <div class='col-12'>
-                                            <div class='mb-3'>
-                                                <label for='course_prompt' class='form-label'>{{ trans('langAICoursePrompt') }}</label>
-                                                <textarea class='form-control' id='course_prompt' name='course_prompt' rows='4' 
-                                                          placeholder='{{ trans('langAIPromptPlaceholder') }}' required></textarea>
-                                                <div class='form-text'>{{ trans('langAIPromptDescription') }}</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <button type='submit' class='btn btn-primary' id='generateBtn'>
-                                        <i class='fa-solid fa-magic-wand-sparkles me-2'></i>{{ trans('langAIGenerateCourse') }}
-                                    </button>
-                                    {!! generate_csrf_token_form_field() !!}
-                                </form>
-                            </div>
-                        </div>
-                        
-                        <!-- AI Results -->
-                        <div id='aiResults' class='mt-4' style='display: none;'>
-                            <div class='card border-success'>
-                                <div class='card-header bg-success border-success'>
-                                    <h6 class='mb-0 text-white'>
-                                        <i class='fa-solid fa-check-circle me-2'></i>{{ trans('langAIPreviewData') }}
-                                    </h6>
+                                        <button type='submit' class='btn btn-primary' id='extractBtn'>
+                                            <i class='fa-solid fa-magic-wand-sparkles me-2'></i>{{ trans('langAIExtractButton') }}
+                                        </button>
+                                        {!! generate_csrf_token_form_field() !!}
+                                    </form>
                                 </div>
-                                <div class='card-body'>
-                                    <div id='aiDataPreview'></div>
-                                    <div class='mt-3 d-flex flex-wrap gap-2'>
-                                        <button type='button' class='btn btn-success' id='applyAIData'>
-                                            <i class='fa-solid fa-check me-2'></i>{{ trans('langAIApplyData') }}
+
+                                <!-- Manual Prompt Tab -->
+                                <div class='tab-pane fade' id='ai-prompt' role='tabpanel'>
+                                    <form id='aiPromptForm'>
+                                        <div class='row'>
+                                            <div class='col-12'>
+                                                <div class='mb-3'>
+                                                    <label for='course_prompt' class='form-label'>{{ trans('langAICoursePrompt') }}</label>
+                                                    <textarea class='form-control' id='course_prompt' name='course_prompt' rows='4'
+                                                              placeholder='{{ trans('langAIPromptPlaceholder') }}' required></textarea>
+                                                    <div class='form-text'>{{ trans('langAIPromptDescription') }}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button type='submit' class='btn btn-primary' id='generateBtn'>
+                                            <i class='fa-solid fa-magic-wand-sparkles me-2'></i>{{ trans('langAIGenerateCourse') }}
                                         </button>
-                                        <button type='button' class='btn btn-outline-secondary' id='clearAIData'>
-                                            <i class='fa-solid fa-trash me-2'></i>{{ trans('langAIClearForm') }}
-                                        </button>
-                                        <button type='button' class='btn btn-outline-warning' id='retryAI'>
-                                            <i class='fa-solid fa-redo me-2'></i>{{ trans('langAIRetry') }}
-                                        </button>
+                                        {!! generate_csrf_token_form_field() !!}
+                                    </form>
+                                </div>
+                            </div>
+
+                            <!-- AI Results -->
+                            <div id='aiResults' class='mt-4' style='display: none;'>
+                                <div class='card border-success'>
+                                    <div class='card-header bg-success border-success'>
+                                        <h6 class='mb-0 text-white'>
+                                            <i class='fa-solid fa-check-circle me-2'></i>{{ trans('langAIPreviewData') }}
+                                        </h6>
+                                    </div>
+                                    <div class='card-body'>
+                                        <div id='aiDataPreview'></div>
+                                        <div class='mt-3 d-flex flex-wrap gap-2'>
+                                            <button type='button' class='btn btn-success' id='applyAIData'>
+                                                <i class='fa-solid fa-check me-2'></i>{{ trans('langAIApplyData') }}
+                                            </button>
+                                            <button type='button' class='btn btn-outline-secondary' id='clearAIData'>
+                                                <i class='fa-solid fa-trash me-2'></i>{{ trans('langAIClearForm') }}
+                                            </button>
+                                            <button type='button' class='btn btn-outline-warning' id='retryAI'>
+                                                <i class='fa-solid fa-redo me-2'></i>{{ trans('langAIRetry') }}
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        
-                        <!-- Loading indicator -->
-                        <div id='aiLoading' class='text-center mt-4' style='display: none;'>
-                            <div class='spinner-border text-primary' role='status'>
-                                <span class='visually-hidden'>Loading...</span>
-                            </div>
-                            <div class='mt-2'>
-                                <span id='loadingText'>{{ trans('langAIGenerating') }}</span>
+
+                            <!-- Loading indicator -->
+                            <div id='aiLoading' class='text-center mt-4' style='display: none;'>
+                                <div class='spinner-border text-primary' role='status'>
+                                    <span class='visually-hidden'>Loading...</span>
+                                </div>
+                                <div class='mt-2'>
+                                    <span id='loadingText'>{{ trans('langAIGenerating') }}</span>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-             </div>
+                 </div>
              @endif
 
               <div class='col-lg-8 col-12'>

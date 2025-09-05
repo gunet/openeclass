@@ -48,7 +48,7 @@ header('Content-Type: application/json');
 
 try {
     // Check if AI service is available
-    if (!AICourseExtractionService::isAvailable()) {
+    if (!AICourseExtractionService::isEnabled()) {
         throw new Exception($langAINotAvailable ?? 'AI service is not available');
     }
 
@@ -58,12 +58,12 @@ try {
     }
 
     $prompt = trim($_POST['course_prompt']);
-    
+
     // Validate prompt length
     if (strlen($prompt) < 10) {
         throw new Exception($langPromptTooShort ?? 'Course description is too short. Please provide more details.');
     }
-    
+
     if (strlen($prompt) > 5000) {
         throw new Exception($langPromptTooLong ?? 'Course description is too long. Please keep it under 5000 characters.');
     }
@@ -73,23 +73,23 @@ try {
 
     // Initialize AI service
     $aiService = new AICourseExtractionService();
-    
+
     // Generate course data from prompt
     $courseData = $aiService->generateFromPrompt($prompt, $options);
-    
+
     // Validate generated data
     if (!$aiService->validateCourseData($courseData)) {
         throw new Exception($langAIGenerationFailed ?? 'Generated course data is invalid');
     }
-    
+
     // Sanitize the data
     $sanitizedData = $aiService->sanitizeCourseData($courseData);
-    
+
     // Add generation metadata
     $sanitizedData['generation_method'] = 'prompt';
     $sanitizedData['original_prompt'] = substr($prompt, 0, 500); // Store first 500 chars for reference
     $sanitizedData['options_used'] = $options;
-    
+
     // Log generation activity
     $promptSample = substr($prompt, 0, 100) . (strlen($prompt) > 100 ? '...' : '');
     error_log("AI Course Generation: Prompt processed - \"$promptSample\"");
@@ -105,8 +105,8 @@ try {
 } catch (Exception $e) {
     // Log error
     error_log("AI Course Generation Error: " . $e->getMessage());
-    
-    // Return error response  
+
+    // Return error response
     http_response_code(400);
     echo json_encode([
         'success' => false,

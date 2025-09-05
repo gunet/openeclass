@@ -2150,6 +2150,7 @@ $langQuestionModerate = "Μέτρια";
 $langQuestionDifficult = "Δύσκολη";
 $langQuestionVeryDifficult = "Πολύ δύσκολη";
 $langCheckAccess = "Έλεγχος πρόσβασης";
+$langEvaluationFreeText = "Βαθμολόγηση ερωτήσεων ελεύθερου κειμένου";
 
 // answer_admin.php
 $langWeightingForEachBlank = "Δώστε ένα βάρος σε κάθε κενό";
@@ -7108,7 +7109,7 @@ $langAPIKeyNotConfigured = "Δεν είναι ρυθμισμένο το API key"
 $langProviderDisabled = "Ο πάροχος είναι απενεργοποιημένος";
 $langSelectLanguageModel = "Διαλέξτε γλωσσικό μοντέλο";
 
-// AI Course Creation  
+// AI Course Creation
 $langAICourseAssistant = 'Βοηθός Δημιουργίας Μαθήματος με Τ.Ν.';
 $langAIGenerateCourse = 'Δημιουργία Μαθήματος με Τ.Ν.';
 $langAIExtractFromSyllabus = 'Δημιουργία από αρχείο';
@@ -7120,7 +7121,7 @@ $langAIExtractButton = 'Εξαγωγή Δεδομένων Μαθήματος';
 $langAIGenerating = 'Δημιουργία δεδομένων μαθήματος...';
 $langAIExtracting = 'Εξαγωγή από αναλυτικό πρόγραμμα...';
 $langAIExtractionSuccess = 'Τα δεδομένα του μαθήματος εξήχθησαν με επιτυχία';
-$langAIGenerationSuccess = 'Τα δεδομένα του μαθήματος δημιουργήθηκαν με επιτυχία'; 
+$langAIGenerationSuccess = 'Τα δεδομένα του μαθήματος δημιουργήθηκαν με επιτυχία';
 $langAIGenerationFailed = 'Απέτυχε η δημιουργία δεδομένων μαθήματος';
 $langPromptTooShort = 'Η περιγραφή του μαθήματος είναι πολύ σύντομη';
 $langPromptTooLong = 'Η περιγραφή του μαθήματος είναι πολύ μεγάλη';
@@ -7130,7 +7131,7 @@ $langAIClearForm = 'Καθαρισμός Φόρμας';
 $langAIRetry = 'Δοκιμάστε Ξανά';
 $langAISyllabusUpload = 'Ανέβασμα Αναλυτικού Προγράμματος PDF';
 $langAIManualPrompt = 'Χειροκίνητη Περιγραφή';
-$langAIToggleAssistant = 'Εναλλαγή Βοηθού Τ.Ν.';
+$langAIToggleAssistant = 'Βοηθός Τ.Ν.';
 $langAICloseAssistant = 'Κλείσιμο Βοηθού';
 $langFileSizeExceeded = 'Το μέγεθος του αρχείου ξεπερνά το επιτρεπτό όριο';
 $langInvalidFileType = 'Μη έγκυρος τύπος αρχείου. Επιτρέπονται μόνο PDF αρχεία';

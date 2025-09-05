@@ -27,7 +27,7 @@ require_once 'include/lib/ai/services/AICourseExtractionService.php';
 
 /**
  * Validate URL (handles Unicode characters better than filter_var)
- * 
+ *
  * @param string $url The URL to validate
  * @return bool True if valid URL
  */
@@ -36,36 +36,36 @@ function validateURL(string $url): bool {
     if (!preg_match('/^https?:\/\//', $url)) {
         return false;
     }
-    
+
     // Try to parse the URL
     $parsed = parse_url($url);
     if (!$parsed || !isset($parsed['host']) || !isset($parsed['scheme'])) {
         return false;
     }
-    
+
     // Check scheme
     if (!in_array($parsed['scheme'], ['http', 'https'])) {
         return false;
     }
-    
+
     // Check if host is valid
     if (empty($parsed['host']) || !filter_var($parsed['host'], FILTER_VALIDATE_DOMAIN, FILTER_FLAG_HOSTNAME)) {
         return false;
     }
-    
+
     return true;
 }
 
 /**
  * Download content from URL using cURL (supports both PDF and HTML)
- * 
+ *
  * @param string $url The URL to download from
  * @return array Array with file_path, file_name, file_size, content_type
  * @throws Exception If download fails
  */
 function downloadContentFromURL(string $url): array {
     global $langAIURLDownloadFailed, $langAIURLNotAccessible, $langFileSizeExceeded;
-    
+
     // Create temporary file
     $tempFile = tempnam(sys_get_temp_dir(), 'ai_syllabus_');
     if (!$tempFile) {
@@ -130,13 +130,13 @@ function downloadContentFromURL(string $url): array {
             $detectedContentType = 'html';
         }
     }
-    
+
     // If content type detection failed, check file signature
     if ($detectedContentType === 'unknown') {
         $fileHandle = fopen($tempFile, 'rb');
         $signature = fread($fileHandle, 4);
         fclose($fileHandle);
-        
+
         if ($signature === '%PDF') {
             $detectedContentType = 'pdf';
         } else {
@@ -148,7 +148,7 @@ function downloadContentFromURL(string $url): array {
     // Extract filename from URL
     $parsedUrl = parse_url($url);
     $fileName = basename($parsedUrl['path'] ?? '');
-    
+
     // Generate appropriate filename based on content type
     if ($detectedContentType === 'pdf') {
         if (empty($fileName)) {
@@ -177,7 +177,7 @@ function downloadContentFromURL(string $url): array {
 
 /**
  * Extract text content from HTML file
- * 
+ *
  * @param string $filePath Path to HTML file
  * @return string Extracted text content
  * @throws Exception If extraction fails
@@ -191,23 +191,23 @@ function extractTextFromHTML(string $filePath): string {
     // Remove script and style elements completely
     $htmlContent = preg_replace('/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/mi', '', $htmlContent);
     $htmlContent = preg_replace('/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/mi', '', $htmlContent);
-    
+
     // Convert HTML entities to their corresponding characters
     $htmlContent = html_entity_decode($htmlContent, ENT_QUOTES | ENT_HTML5, 'UTF-8');
-    
+
     // Strip HTML tags but preserve line breaks
     $htmlContent = str_replace(['</p>', '</div>', '</h1>', '</h2>', '</h3>', '</h4>', '</h5>', '</h6>', '<br>', '<br/>', '<br />'], "\n", $htmlContent);
     $htmlContent = strip_tags($htmlContent);
-    
+
     // Clean up whitespace
     $htmlContent = preg_replace('/\n\s*\n/', "\n\n", $htmlContent); // Multiple newlines to double newlines
     $htmlContent = preg_replace('/[ \t]+/', ' ', $htmlContent); // Multiple spaces/tabs to single space
     $htmlContent = trim($htmlContent);
-    
+
     if (empty($htmlContent)) {
         throw new Exception('No readable text content found in HTML');
     }
-    
+
     return $htmlContent;
 }
 
@@ -234,7 +234,7 @@ header('Content-Type: application/json');
 
 try {
     // Check if AI service is available
-    if (!AICourseExtractionService::isAvailable()) {
+    if (!AICourseExtractionService::isEnabled()) {
         throw new Exception($langAINotAvailable ?? 'AI service is not available');
     }
 
@@ -247,7 +247,7 @@ try {
     if ($inputMethod === 'url') {
         // Handle URL download
         $syllabusUrl = $_POST['syllabus_url'] ?? '';
-        
+
         if (empty($syllabusUrl)) {
             throw new Exception($langAIInvalidURL ?? 'URL is required');
         }
@@ -275,12 +275,12 @@ try {
         $pdfFilePath = $uploadedFile['tmp_name'];
         $fileName = $uploadedFile['name'];
         $fileSize = $uploadedFile['size'];
-        
+
         // Validate file type for uploaded files
         $fileInfo = finfo_open(FILEINFO_MIME_TYPE);
         $mimeType = finfo_file($fileInfo, $pdfFilePath);
         finfo_close($fileInfo);
-        
+
         if ($mimeType !== 'application/pdf') {
             throw new Exception($langInvalidFileType ?? 'Only PDF files are allowed');
         }
@@ -297,7 +297,7 @@ try {
 
     // Initialize AI service
     $aiService = new AICourseExtractionService();
-    
+
     // Extract text based on content type
     if ($inputMethod === 'url' && isset($contentType) && $contentType === 'html') {
         // Extract text from HTML content
@@ -306,15 +306,15 @@ try {
         // Extract text from PDF (default behavior for uploads and PDF URLs)
         $extractedText = $aiService->extractTextFromPDF($pdfFilePath);
     }
-    
+
     // Log successful text extraction
     $textLength = mb_strlen($extractedText);
     $source = $inputMethod === 'url' ? "URL: " . ($syllabusUrl ?? '') : "Upload: " . $fileName;
     error_log("AI Course Extraction: Text extracted from PDF - " . $source . " (" . round($fileSize / 1024, 2) . "KB, {$textLength} chars)");
-    
+
     // Generate course data using AI
     $courseData = $aiService->extractFromSyllabus($extractedText, $options);
-    
+
     // Add extraction metadata
     if ($inputMethod === 'url') {
         $courseData['extraction_method'] = isset($contentType) && $contentType === 'html' ? 'web_url' : 'pdf_url';
@@ -338,10 +338,10 @@ try {
     if (!$aiService->validateCourseData($courseData)) {
         throw new Exception($langAIGenerationFailed ?? 'Generated course data is invalid');
     }
-    
+
     // Sanitize the data
     $sanitizedData = $aiService->sanitizeCourseData($courseData);
-    
+
     // Return success response
     echo json_encode([
         'success' => true,
@@ -355,10 +355,10 @@ try {
     if (isset($needsCleanup) && $needsCleanup && isset($pdfFilePath) && $pdfFilePath && file_exists($pdfFilePath)) {
         unlink($pdfFilePath);
     }
-    
+
     // Log error
     error_log("AI Syllabus Extraction Error: " . $e->getMessage());
-    
+
     // Return error response
     http_response_code(400);
     echo json_encode([

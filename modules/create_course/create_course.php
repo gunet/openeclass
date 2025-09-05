@@ -50,7 +50,7 @@ $user = new User();
 
 /**
  * Save structured syllabus sections to course_description table
- * 
+ *
  * @param int $course_id The course ID
  * @param array $syllabus_sections Array of syllabus sections
  * @param string $language Course language for determining section names
@@ -68,15 +68,15 @@ function saveSyllabusSections($course_id, $syllabus_sections, $language = 'el') 
         'textbooks' => 9,         // Προτεινόμενα συγγράμματα / Textbooks
         'additional_info' => 10   // Περισσότερα / Additional info
     ];
-    
+
     $order_counter = 1;
     foreach ($syllabus_sections as $section_key => $content) {
         if (empty($content) || !isset($section_type_mapping[$section_key])) {
             continue;
         }
-        
+
         $type_id = $section_type_mapping[$section_key];
-        
+
         // Get the section title from course_description_type
         $type_info = Database::get()->querySingle("SELECT title FROM course_description_type WHERE id = ?d", $type_id);
         if ($type_info) {
@@ -86,7 +86,7 @@ function saveSyllabusSections($course_id, $syllabus_sections, $language = 'el') 
         } else {
             $section_title = 'Section';
         }
-        
+
         // Insert the section
         Database::get()->query("INSERT INTO course_description SET
             course_id = ?d,
@@ -98,7 +98,7 @@ function saveSyllabusSections($course_id, $syllabus_sections, $language = 'el') 
             update_dt = " . DBHelper::timeAfter(),
             $course_id, $section_title, $content, $type_id, $order_counter
         );
-        
+
         $order_counter++;
     }
 }
@@ -188,17 +188,17 @@ if (!isset($_POST['create_course'])) {
         }
         $data['image_content'] = $image_content;
         $data['default_access'] = intval(get_config('default_course_access', COURSE_REGISTRATION));
-        
+
         // Check if AI service is available
         $data['ai_available'] = false;
         try {
             if (class_exists('AICourseExtractionService')) {
-                $data['ai_available'] = AICourseExtractionService::isAvailable();
+                $data['ai_available'] = AICourseExtractionService::isEnabled();
             }
         } catch (Exception $e) {
             error_log("AI availability check failed: " . $e->getMessage());
         }
-        
+
         view('modules.create_course.index', $data);
 
 } else if ($_POST['view_type'] == "flippedclassroom") {
@@ -388,7 +388,7 @@ if (!isset($_POST['create_course'])) {
                                         reg_date = " . DBHelper::timeAfter() . ",
                                         document_timestamp = " . DBHelper::timeAfter(),
             $new_course_id, $uid);
-            
+
         // Process AI-generated syllabus sections if available
         if (!empty($_POST['ai_syllabus_sections'])) {
             $syllabus_sections = json_decode($_POST['ai_syllabus_sections'], true);
