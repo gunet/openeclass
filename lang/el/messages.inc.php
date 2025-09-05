@@ -2209,6 +2209,7 @@ $langScoreDiffers = 'Η αποθηκευμένη βαθμολογία της ά�
 $langRegrade = 'Αναβαθμολόγηση';
 $langNewScoreRecorded = 'Η νέα βαθμολογία αποθηκεύτηκε';
 $langQuestionStoredScore = 'Αποθηκευμένη βαθμολογία ερώτησης';
+$langEvaluatingResponseWithAI = "Αξιολόγηση της απάντησης με χρήση Τ.Ν.";
 
 // exercise_submit.php
 $langDoAnEx = "Κάντε μια άσκηση";
@@ -7168,13 +7169,13 @@ $langLanguageModel = "Γλωσσικό Μοντέλο";
 $langLanguageModelName = "Όνομα γλωσσικού μοντέλου";
 $langAITokenDeleted =  "Διαγράφηκε το κλειδί του παρόχου Τ.Ν.";
 $langAIConfigSaved = "Η ρύθμιση του παρόχου Τ.Ν. αποθηκεύτηκε με επιτυχία";
-$langAIEvaluation = "Αξιολόγηση Τ.Ν.";
-$langEnableAIEvaluation = "Ενεργοποίηση Αξιολόγησης Τ.Ν.";
-$langAIEvaluationDescription = "Επιτρέπει στην Τ.Ν. να αξιολογεί αυτόματα και να προτείνει βαθμούς για τις απαντήσεις των φοιτητών";
+$langAIEvaluation = "Αξιολόγηση με Τ.Ν.";
+$langEnableAIEvaluation = "Ενεργοποίηση Αξιολόγησης με Τ.Ν.";
+$langAIEvaluationDescription = "Επιτρέπει στην Τ.Ν. να αξιολογεί αυτόματα και να προτείνει βαθμούς για τις απαντήσεις των $langsOfStudents.";
 $langEvaluationCriteria = "Κριτήρια Αξιολόγησης";
 $langEvaluationCriteriaPlaceholder = "Περιγράψτε τι αναζητάτε σε μια καλή απάντηση. Να είστε συγκεκριμένοι για βασικές έννοιες, παραδείγματα και δείκτες ποιότητας.";
-$langEvaluationCriteriaHelp = "Παρέχετε σαφή κριτήρια που θα χρησιμοποιήσει η Τ.Ν. για την αξιολόγηση των απαντήσεων των φοιτητών. Να είστε συγκεκριμένοι για το τι συνιστά καλή απάντηση.";
-$langMaxPoints = "Μέγιστοι Βαθμοί";
+$langEvaluationCriteriaHelp = "Συμπληρώστε σαφή κριτήρια που θα χρησιμοποιήσει η Τ.Ν. για την αξιολόγηση των απαντήσεωνν. Να είστε συγκεκριμένοι για το τι συνιστά καλή απάντηση.";
+$langMaxPoints = "Μέγιστη Βαθμολογίαί";
 $langMaxPointsHelp = "Η μέγιστη βαθμολογία που μπορεί να δοθεί για αυτή την ερώτηση";
 $langDefinedInQuestionStatement = "καθορίζεται στη διατύπωση της ερώτησης";
 $langSampleResponses = "Δείγματα Απαντήσεων (Προαιρετικό)";

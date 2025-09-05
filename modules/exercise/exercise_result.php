@@ -28,6 +28,8 @@ include '../../include/baseTheme.php';
 require_once 'modules/gradebook/functions.php';
 require_once 'game.php';
 require_once 'analytics.php';
+require_once 'include/lib/ai/services/AIService.php';
+require_once 'include/lib/ai/services/AIExerciseEvaluationService.php';
 
 $unit = isset($unit)? $unit: null;
 
@@ -197,7 +199,7 @@ if ($is_editor && ($exercise_user_record->attempt_status == ATTEMPT_PENDING || $
                     var container = $('#ai-eval-container-' + answerRecordId);
                     
                     // Show loading state
-                    statusDiv.html('<div class=\"d-flex align-items-center\"><div class=\"spinner-border spinner-border-sm me-2\" role=\"status\"></div>Evaluating response with AI...</div>');
+                    statusDiv.html('<div class=\"d-flex align-items-center\"><div class=\"spinner-border spinner-border-sm me-2\" role=\"status\"></div>$langEvaluatingResponseWithAI</div>');
                     
                     // Make AJAX request
                     $.ajax({
@@ -766,17 +768,17 @@ if (count($exercise_question_ids) > 0) {
         } else { // If FREE TEXT type
             $questionScore = $question_weight;
             $tool_content .= "<tr><td>" . purify($choice) . "</td></tr>";
-            
+
             // Check for AI evaluation if available (tutors only)
             if ($is_editor) {
                 $ai_evaluation = Database::get()->querySingle("SELECT * FROM exercise_ai_evaluation 
-                                                              WHERE answer_record_id = ?d", 
+                                                              WHERE answer_record_id = ?d",
                                                               $row->answer_record_id);
                 if ($ai_evaluation) {
                     $confidence_percent = round($ai_evaluation->ai_confidence * 100);
                     $confidence_class = '';
                     $confidence_text = '';
-                    
+
                     if ($ai_evaluation->ai_confidence >= 0.8) {
                         $confidence_class = 'text-success';
                         $confidence_text = $langHighConfidence;
@@ -787,11 +789,11 @@ if (count($exercise_question_ids) > 0) {
                         $confidence_class = 'text-danger';
                         $confidence_text = $langLowConfidence;
                     }
-                    
+
                     $tool_content .= "<tr><td>";
                     $tool_content .= "<div class='mt-3 p-3 bg-light border-start border-info border-4'>";
                     $tool_content .= "<h6 class='text-info'><i class='fa fa-robot'></i> $langAIEvaluation</h6>";
-                    
+
                     $tool_content .= "<div class='row mb-2'>";
                     $tool_content .= "<div class='col-md-6'>";
                     $tool_content .= "<strong>$langAISuggestion: {$ai_evaluation->ai_suggested_score}/{$ai_evaluation->ai_max_score}</strong>";
@@ -800,20 +802,18 @@ if (count($exercise_question_ids) > 0) {
                     $tool_content .= "<span class='$confidence_class'>$langConfidence: {$confidence_percent}% ($confidence_text)</span>";
                     $tool_content .= "</div>";
                     $tool_content .= "</div>";
-                    
+
                     $tool_content .= "<div class='mb-2'>";
                     $tool_content .= "<strong>$langReasoning:</strong><br>";
                     $tool_content .= nl2br(q($ai_evaluation->ai_reasoning));
                     $tool_content .= "</div>";
-                    
+
                     $tool_content .= "</div>";
                     $tool_content .= "</td></tr>";
                 } else {
                     // Check if AI evaluation is enabled for this question
-                    $ai_config = Database::get()->querySingle("SELECT * FROM exercise_ai_config 
-                                                              WHERE question_id = ?d AND enabled = 1", 
-                                                              $row->question_id);
-                    if ($ai_config) {
+                    $aiService = new AIExerciseEvaluationService();
+                    if ($aiService->isEnabledForCourse(AI_MODULE_QUESTION_POOL) && $aiService->isEnabledForQuestion($row->question_id, $course_id)) {
                         // Show AI evaluation trigger button
                         $tool_content .= "<tr><td>";
                         $tool_content .= "<div class='mt-3 p-3 bg-light border-start border-info border-4' id='ai-eval-container-{$row->answer_record_id}'>";
@@ -821,7 +821,7 @@ if (count($exercise_question_ids) > 0) {
                         $tool_content .= "<div id='ai-eval-status-{$row->answer_record_id}' class='ai-eval-pending' data-answer-id='{$row->answer_record_id}'>";
                         $tool_content .= "<div class='d-flex align-items-center'>";
                         $tool_content .= "<div class='spinner-border spinner-border-sm me-2' role='status'></div>";
-                        $tool_content .= "Evaluating response with AI...";
+                        $tool_content .= "$langEvaluatingResponseWithAI";
                         $tool_content .= "</div>";
                         $tool_content .= "</div>";
                         $tool_content .= "<div id='ai-eval-result-{$row->answer_record_id}' style='display: none;'></div>";

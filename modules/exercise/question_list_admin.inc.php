@@ -24,7 +24,7 @@
 // Check if AI functionality is available
 require_once 'include/lib/ai/services/AIQuestionBankService.php';
 $aiService = new AIQuestionBankService($course_id, $uid);
-$aiAvailable = $aiService->isAvailable() && $aiService->isEnabledForCourse();
+$aiAvailable = $aiService->isAvailable() && $aiService->isEnabledForCourse(AI_MODULE_QUESTION_POOL);
 
 $exerciseId = $_GET['exerciseId'];
 if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {

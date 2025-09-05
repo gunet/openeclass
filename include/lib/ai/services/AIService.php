@@ -39,11 +39,11 @@ class AIService {
      *
      * @return bool True if AI is enabled for the current course
      */
-    public function isEnabledForCourse(): bool {
+    public function isEnabledForCourse($ai_module_id): bool {
         $q = Database::get()->querySingle("SELECT ai_modules.id, ai_module_id, name, model_name, all_courses, enabled FROM ai_modules 
                     JOIN ai_providers ON ai_modules.ai_provider_id = ai_providers.id 
-                        AND ai_module_id =" . AI_MODULE_QUESTION_POOL . " 
-                        AND enabled = 1");
+                        AND ai_module_id = ?d 
+                        AND enabled = 1", $ai_module_id);
         if ($q) {
             if ($q->all_courses == 1) {
                 return true;
@@ -96,7 +96,7 @@ class AIService {
             throw new Exception("$langAIUserForbidden");
         }
 
-        if (!$this->isEnabledForCourse()) {
+        if (!$this->isEnabledForCourse(AI_MODULE_QUESTION_POOL)) {
             throw new Exception("$langAINotEnabledCourse");
         }
 

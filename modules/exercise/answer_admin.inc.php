@@ -29,10 +29,9 @@ $okPicture = file_exists($picturePath . '/quiz-' . $questionId) ? true : false;
 // Check if AI evaluation is available for FREE_TEXT questions
 $aiEvaluationAvailable = false;
 if ($answerType == FREE_TEXT) {
-    require_once 'include/lib/ai/services/AIExerciseEvaluationService.php';
-    $aiService = new AIExerciseEvaluationService($course_id, $uid);
-    $aiEvaluationAvailable = $aiService->isAvailable();
-    
+    require_once 'include/lib/ai/services/AIService.php';
+    $aiService = new AIService($course_id, $uid);
+    $aiEvaluationAvailable = $aiService->isEnabledForCourse(AI_MODULE_FREE_TEXT_EVALUATION);
     // Get existing AI configuration if it exists
     $aiConfig = Database::get()->querySingle("SELECT * FROM exercise_ai_config WHERE question_id = ?d", $questionId);
 }
@@ -68,7 +67,7 @@ if (isset($submitAIConfig) && $answerType == FREE_TEXT && $aiEvaluationAvailable
     $evaluationPrompt = trim($_POST['evaluation_prompt'] ?? '');
     $maxPoints = $objQuestion->selectWeighting(); // Use question's weight as max points
     $sampleResponses = trim($_POST['sample_responses'] ?? '');
-    
+
     // Validate AI configuration
     $aiConfigError = '';
     if ($aiEnabled && empty($evaluationPrompt)) {
@@ -76,7 +75,7 @@ if (isset($submitAIConfig) && $answerType == FREE_TEXT && $aiEvaluationAvailable
     } elseif ($aiEnabled && $maxPoints <= 0) {
         $aiConfigError = $langAIMaxPointsRequired;
     }
-    
+
     if (empty($aiConfigError)) {
         // Process sample responses if provided
         $sampleResponsesJson = null;
@@ -95,21 +94,21 @@ if (isset($submitAIConfig) && $answerType == FREE_TEXT && $aiEvaluationAvailable
                 $sampleResponsesJson = json_encode($samples);
             }
         }
-        
+
         if ($aiEnabled) {
             // Insert or update AI configuration
             if ($aiConfig) {
                 Database::get()->query("UPDATE exercise_ai_config 
                                        SET enabled = ?d, evaluation_prompt = ?s, 
                                            sample_responses = ?s, updated_at = NOW()
-                                       WHERE question_id = ?d", 
-                                       $aiEnabled, $evaluationPrompt, 
+                                       WHERE question_id = ?d",
+                                       $aiEnabled, $evaluationPrompt,
                                        $sampleResponsesJson, $questionId);
             } else {
                 Database::get()->query("INSERT INTO exercise_ai_config 
                                        (question_id, course_id, enabled, evaluation_prompt, sample_responses)
                                        VALUES (?d, ?d, ?d, ?s, ?s)",
-                                       $questionId, $course_id, $aiEnabled, $evaluationPrompt, 
+                                       $questionId, $course_id, $aiEnabled, $evaluationPrompt,
                                        $sampleResponsesJson);
             }
             $msgSuccess = $langAIConfigSaved;
@@ -120,7 +119,7 @@ if (isset($submitAIConfig) && $answerType == FREE_TEXT && $aiEvaluationAvailable
             }
             $msgSuccess = $langAIConfigDisabled;
         }
-        
+
         // Refresh AI config after save
         $aiConfig = Database::get()->querySingle("SELECT * FROM exercise_ai_config WHERE question_id = ?d", $questionId);
     }
@@ -816,7 +815,6 @@ if (isset($_GET['modifyAnswers'])) {
    } else {
        // FREE_TEXT questions - show AI evaluation configuration if available
        if ($aiEvaluationAvailable) {
-           
            // Display success/error messages
            if (!empty($aiConfigError)) {
                $tool_content .= "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$aiConfigError</span></div>";
@@ -824,12 +822,12 @@ if (isset($_GET['modifyAnswers'])) {
            if (!empty($msgSuccess)) {
                $tool_content .= "<div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$msgSuccess</span></div>";
            }
-           
+
            $aiEnabled = $aiConfig ? $aiConfig->enabled : 0;
            $evaluationPrompt = $aiConfig ? $aiConfig->evaluation_prompt : '';
            $maxPoints = $objQuestion->selectWeighting(); // Use question's weight as max points
            $sampleResponses = '';
-           
+
            if ($aiConfig && $aiConfig->sample_responses) {
                $samples = json_decode($aiConfig->sample_responses, true);
                if ($samples && is_array($samples)) {
@@ -844,7 +842,7 @@ if (isset($_GET['modifyAnswers'])) {
                    $sampleResponses = implode("\n", $lines);
                }
            }
-           
+
            $tool_content .= "
            <div class='col-12 mt-4'>
                <div class='card panelCard card-default px-lg-4 py-lg-3'>
@@ -899,7 +897,7 @@ if (isset($_GET['modifyAnswers'])) {
                    </div>
                </div>
            </div>";
-           
+
            // Show info about existing AI evaluations if any
            if ($aiEnabled && isset($exerciseId)) {
                $evaluationCount = Database::get()->querySingle("SELECT COUNT(*) as count FROM exercise_ai_evaluation WHERE question_id = ?d", $questionId)->count;
@@ -913,14 +911,6 @@ if (isset($_GET['modifyAnswers'])) {
                    </div>";
                }
            }
-       } else {
-           $tool_content .= "
-           <div class='col-12 mt-4'>
-               <div class='alert alert-info'>
-                   <i class='fa-solid fa-circle-info fa-lg'></i>
-                   <span>$langFreeTextNoAnswerConfig</span>
-               </div>
-           </div>";
        }
    }
 }
