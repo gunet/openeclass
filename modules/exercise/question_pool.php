@@ -23,6 +23,9 @@ include 'exercise.class.php';
 include 'question.class.php';
 include 'answer.class.php';
 
+// Check if AI functionality is available
+require_once '../../include/lib/ai/services/AIQuestionBankService.php';
+
 $require_editor = TRUE;
 $require_current_course = TRUE;
 $require_help = true;
@@ -31,6 +34,9 @@ $helpSubTopic = 'question_bank';
 
 include '../../include/baseTheme.php';
 require_once 'imsqtilib.php';
+
+// Initialize AI service
+$aiService = new AIQuestionBankService($course_id, $uid);
 
 load_js('datatables');
 
@@ -277,6 +283,12 @@ if ($fromExercise) {
           'icon' => 'fa-upload',
           'button-class' => 'btn-success'
         ],
+        [ 'title' => $langAIGenerateQuestions,
+          'url' => "ai_question_generation.php?course=$course_code",
+          'icon' => 'fa-magic',
+          'button-class' => 'btn-info',
+          'show' => $aiService->isEnabledForCourse()
+        ]
     ];
 }
 

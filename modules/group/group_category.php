@@ -44,7 +44,6 @@ if (isset($_GET['addcategory'])) {
     $tool_content .= "<form class = 'form-horizontal' role='form' method='post' action='index.php?course=$course_code&amp;addcategory=1'>";
 
     $form_name = $form_description = '';
-    $form_legend = $langCategoryAdd;
 
     $tool_content .= "<fieldset>
                     <legend class='mb-0' aria-label='$langForm'></legend>
@@ -63,7 +62,7 @@ if (isset($_GET['addcategory'])) {
                     </div>
                     <div class='form-group mt-5'>
                         <div class='col-12 d-flex justify-content-end align-items-center'>
-                            <input type='submit' class='btn submitAdminBtn' name='submitCategory' value='$form_legend' />
+                            <input type='submit' class='btn submitAdminBtn' name='submitCategory' value='$langSubmit' />
                             <a href='index.php?course=$course_code' class='btn cancelAdminBtn ms-2'>$langCancel</a>
                         </div>
                     </div>
@@ -78,7 +77,6 @@ if (isset($_GET['addcategory'])) {
     $id = $_GET['id'];
     category_form_defaults($id);
     $myrow = Database::get()->querySingle("SELECT name,description  FROM group_category WHERE course_id = ?d AND id = ?d", $course_id, $id);
-    $form_legend = $langCategoryMod;
     $tool_content .= "<div class='d-lg-flex gap-4 mt-4'>
     <div class='flex-grow-1'><div class = 'form-wrapper form-edit rounded'>";
     $tool_content .= "<form class = 'form-horizontal' role='form' method='post' action='index.php?course=$course_code&amp;editcategory=1'>";
@@ -100,7 +98,7 @@ if (isset($_GET['addcategory'])) {
         <input type='hidden' name='id' value='" . getIndirectReference($id) . "' />
         <div class='form-group mt-5'>
             <div class='col-12 d-flex justify-content-end align-items-center gap-2'>
-                <input type='submit' class='btn submitAdminBtn' name='submitCategory' value='$form_legend' />
+                <input type='submit' class='btn submitAdminBtn' name='submitCategory' value='$langSubmit' />
                 <a href='index.php?course=$course_code' class='btn cancelAdminBtn'>$langCancel</a>
             </div>
         </div>

@@ -279,7 +279,7 @@ if ($is_editor) {
         $data['form_buttons'] = form_buttons(array(
                             array(
                                 'class' => 'submitAdminBtn',
-                                'text' => $langSave,
+                                'text' => $langSubmit,
                                 'name' => 'submit_config',
                                 'value'=> $langSubmit
                             ),
@@ -336,7 +336,7 @@ if ($is_editor) {
             form_buttons(array(
                     array(
                         'class' => 'submitAdminBtn',
-                        'text' => $langSave,
+                        'text' => $langSubmit,
                         'value'=> $submit_value,
                         'name' => 'submit'
                     )

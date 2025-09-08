@@ -95,15 +95,9 @@ function submit_link() {
 
 /**
  * @brief Enter the modified info submitted from the category form into the database
- * @global type $course_id
- * @global type $langCategoryAdded
- * @global type $langCategoryModded
- * @global type $categoryname
- * @global type $description
  */
 function submit_category() {
-    global $course_id, $langCategoryAdded, $langCategoryModded,
-    $categoryname, $description, $course_code, $langTheFieldIsRequired, $langFormErrors;
+    global $course_id, $categoryname, $description, $course_code, $langTheFieldIsRequired, $langFormErrors;
 
     register_posted_variables(array('categoryname' => true,
                                     'description' => true), 'all', 'trim');

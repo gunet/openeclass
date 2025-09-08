@@ -1837,7 +1837,7 @@ $db->query("CREATE TABLE `tc_attendance` (
     KEY `meetingid` (`meetingid`)) $tbl_options");
 
 $db->query("CREATE TABLE `tc_log` (
-    `id` int(11) NOT NULL,
+    `id` int(11) NOT NULL AUTO_INCREMENT,
     `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     `meetingid` varchar(42) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
     `bbbuserid` varchar(255) DEFAULT NULL,
@@ -2501,6 +2501,32 @@ $db->query("CREATE TABLE api_token (
     `updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `expired` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)) $tbl_options");
+
+$db->query("CREATE TABLE ai_providers (    
+    `id` smallint NOT NULL AUTO_INCREMENT,
+    `name` text CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+    `api_key` text CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+    `model_name` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+    `provider_type` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin,
+    `endpoint_url` varchar(255) CHARACTER SET ascii COLLATE ascii_bin DEFAULT NULL,
+    `enabled` tinyint NOT NULL,
+    `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `expired` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP    
+    PRIMARY KEY (`id`)) $tbl_options");
+
+$db->query("CREATE TABLE ai_modules (
+    `id` SMALLINT NOT NULL AUTO_INCREMENT, 
+    `ai_module_id` SMALLINT NOT NULL DEFAULT 0, 
+    `ai_provider_id` SMALLINT DEFAULT 0,
+    `all_courses` TINYINT NOT NULL DEFAULT 1, 
+    PRIMARY KEY(ID)) $tbl_options");
+
+$db->query("CREATE TABLE `ai_courses` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `course_id` int NOT NULL,
+    `ai_module` int NOT NULL,
+    PRIMARY KEY (`id`), KEY (`ai_module`, `course_id`))  $tbl_options");
 
 $db->query("CREATE TABLE `course_invitation` (
     `id` int(11) NOT NULL AUTO_INCREMENT,

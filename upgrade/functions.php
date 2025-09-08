@@ -3361,6 +3361,7 @@ function upgrade_to_4_1($tbl_options) : void {
  */
 function upgrade_to_4_2($tbl_options) : void {
 
+
     if (!DBHelper::fieldExists('forum_topic', 'pin_time')) {
         Database::get()->query("ALTER TABLE forum_topic ADD pin_time DATETIME DEFAULT NULL");
     }
@@ -3372,6 +3373,37 @@ function upgrade_to_4_2($tbl_options) : void {
     }
     if (!DBHelper::fieldExists('exercise_question', 'options')) {
         Database::get()->query("ALTER TABLE exercise_question ADD options TEXT DEFAULT NULL");
+    }
+
+    if (!DBHelper::tableExists('ai_providers')) {
+        Database::get()->query("CREATE TABLE ai_providers (
+            `id` smallint NOT NULL AUTO_INCREMENT,
+            `name` text CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+            `api_key` text CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+            `model_name` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+            `provider_type` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin,
+            `endpoint_url` varchar(255) CHARACTER SET ascii COLLATE ascii_bin DEFAULT NULL,
+            `enabled` tinyint NOT NULL,
+            `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            `updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            `expired` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (`id`)) $tbl_options");
+    }
+
+    if (!DBHelper::tableExists('ai_modules')) {
+        Database::get()->query("CREATE TABLE ai_modules (
+            `id` SMALLINT NOT NULL AUTO_INCREMENT,
+            `ai_module_id` SMALLINT NOT NULL DEFAULT 0,
+            `ai_provider_id` SMALLINT DEFAULT 0,
+            `all_courses` TINYINT NOT NULL DEFAULT 1,
+            PRIMARY KEY(ID)) $tbl_options");
+    }
+    if (!DBHelper::tableExists('ai_courses')) {
+        Database::get()->query("CREATE TABLE `ai_courses` (
+            `id` int(11) NOT NULL AUTO_INCREMENT,
+            `course_id` int NOT NULL,
+            `ai_module` int NOT NULL,
+            PRIMARY KEY (`id`), KEY (`ai_module`, `course_id`))  $tbl_options");
     }
 }
 

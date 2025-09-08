@@ -1358,7 +1358,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                                         'icon' => 'fa-edit',
                                         'url' => (($question->qtype != QTYPE_LABEL) and ($question->qtype != QTYPE_FILL) and ($question->qtype != QTYPE_SCALE) and ($question->qtype != QTYPE_TABLE))?
                                                         "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;pid=$pid&amp;modifyAnswers=$question->pqid" :
-                                                        "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;pid=$pid&amp;modifyQuestion=$question->pqid"
+                                                        "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;pid=$pid&amp;modifyQuestion=$question->pqid",
                                     ),
                                     array(
                                         'title' => $langEditRowsColsTable,
