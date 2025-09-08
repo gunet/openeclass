@@ -774,91 +774,104 @@ function shapesCreationProcess() {
                 var markerShape = $('#shapeType-'+number).val();
                 var markerAnswerWithImage = $('#marker-answer-with-image-'+number).val();
 
-                // User can define the answer only if has chosen a shape for drawing and has added the grade of answer. 
-                if (markerAnswer == '' || markerShape == '' || markerGrade == 0) {
-                    alert(lang.chooseShapeAndAnswerToContinue);
-                    markerAnswer = '';
-                    markerGrade = 0;
-                    markerShape = '';
-                    $('#marker-answer-'+number).val('');
-                    $('#shapeType-'+number).val('');
-                    $('#marker-grade-'+number).val(0);
-                    window.location.reload();
-                }
-
                 if (markerAnswer && !containsMarkerAnswer(markerAnswer,number)) {
-                    if ((markerShape == 'circle' || markerShape == 'rectangle') && markerCoordinates) {
 
-                        // Replace colon with comma
-                        const replacedStr = markerCoordinates.replace(/:/g, ',');
-                        // Split the string into an array
-                        const arr = replacedStr.split(',').map(Number);
+                    // User can define the answer only if has chosen a shape for drawing and has added the grade of answer. 
+                    if (markerShape == '' || markerGrade == 0) {
+                        alert(lang.chooseShapeAndAnswerToContinue);
+                        markerAnswer = '';
+                        markerGrade = 0;
+                        markerShape = '';
+                        $('#marker-answer-'+number).val('');
+                        $('#shapeType-'+number).val('');
+                        $('#marker-grade-'+number).val(0);
+                        window.location.reload();
+                    } else {
+                        if ((markerShape == 'circle' || markerShape == 'rectangle') && markerCoordinates) {
 
-                        vertices = [
-                                        {'marker_id': number},
-                                        {'marker_answer': markerAnswer},
-                                        {'shape_type': markerShape},
-                                        {'x': arr[0]},
-                                        {'y': arr[1]},
-                                        {'endX': arr[2]},
-                                        {'endY': arr[3]},
-                                        {'marker_grade': markerGrade},
-                                        {'marker_radius': radiusOriginal},
-                                        {'marker_answer_with_image': markerAnswerWithImage}
-                                    ];
-                    } else if (markerShape == 'polygon' && markerCoordinates) {
-                        vertices = [
-                                        {'marker_id': number},
-                                        {'marker_answer': markerAnswer},
-                                        {'shape_type': markerShape},
-                                        {'points': markerCoordinates},
-                                        {'marker_grade': markerGrade},
-                                        {'marker_answer_with_image': markerAnswerWithImage}
-                                    ];
-                    } else { // You can add an answer that is not related to a specific shape
-                        vertices = [
-                                        {'marker_id': number},
-                                        {'marker_answer': markerAnswer},
-                                        {'shape_type': null},
-                                        {'marker_grade': 0},
-                                        {'marker_answer_with_image': markerAnswerWithImage}
-                                    ];
-                    }
+                            // Replace colon with comma
+                            const replacedStr = markerCoordinates.replace(/:/g, ',');
+                            // Split the string into an array
+                            const arr = replacedStr.split(',').map(Number);
 
-                    if (markerAnswerWithImage > 0) {
-                        var input = document.getElementById('hasUploadedImg_'+number);
-                        var imageUploaded = document.getElementById('imageUploaded-'+number);
-                        if (imageUploaded == null && input != null && input.files && input.files[0]) { // To be uploaded
-                            var formData = new FormData();
-                            formData.append('image_as_answer', input.files[0]);
-                            formData.append('questionId-image', questionId);
-                            formData.append('markerId-image', number);
-                            formData.append('courseCode-image', courseCode);
+                            vertices = [
+                                            {'marker_id': number},
+                                            {'marker_answer': markerAnswer},
+                                            {'shape_type': markerShape},
+                                            {'x': arr[0]},
+                                            {'y': arr[1]},
+                                            {'endX': arr[2]},
+                                            {'endY': arr[3]},
+                                            {'marker_grade': markerGrade},
+                                            {'marker_radius': radiusOriginal},
+                                            {'marker_answer_with_image': markerAnswerWithImage}
+                                        ];
+                        } else if (markerShape == 'polygon' && markerCoordinates) {
+                            vertices = [
+                                            {'marker_id': number},
+                                            {'marker_answer': markerAnswer},
+                                            {'shape_type': markerShape},
+                                            {'points': markerCoordinates},
+                                            {'marker_grade': markerGrade},
+                                            {'marker_answer_with_image': markerAnswerWithImage}
+                                        ];
+                        } else { 
+                            // // You can add an answer that is not related to a specific shape
+                            // vertices = [
+                            //                 {'marker_id': number},
+                            //                 {'marker_answer': markerAnswer},
+                            //                 {'shape_type': null},
+                            //                 {'marker_grade': 0},
+                            //                 {'marker_answer_with_image': markerAnswerWithImage}
+                            //             ];
 
-                            fetch('/modules/exercise/upload_image_as_answer.php', {
-                                method: 'POST',
-                                body: formData
-                            })
-                            .then(response => response.text())
-                            .then(data => {
-                                alert(lang.imageuploaded);
-                                saveShape(vertices,questionId,courseCode);
-                                window.location.reload();
-                            })
-                            .catch(error => {
-                                alert('Upload failed:'+error);
-                                window.location.reload();
-                            });
-                        } else if (imageUploaded != null && input == null) { // Has not been uploaded
-                            saveShape(vertices,questionId,courseCode);
-                            window.location.reload();
-                        } else {
-                            alert(lang.imagenotselected);
+                            // You have to add a shape for a specific answer in order to continue.
+                            alert(lang.chooseDrawAShapeForTheAnswerToContinue);
+                            markerAnswer = '';
+                            markerGrade = 0;
+                            markerShape = '';
+                            $('#marker-answer-'+number).val('');
+                            $('#shapeType-'+number).val('');
+                            $('#marker-grade-'+number).val(0);
                             window.location.reload();
                         }
-                    } else {
-                        saveShape(vertices,questionId,courseCode);
-                        window.location.reload();
+
+                        if (markerAnswerWithImage > 0) {
+                            var input = document.getElementById('hasUploadedImg_'+number);
+                            var imageUploaded = document.getElementById('imageUploaded-'+number);
+                            if (imageUploaded == null && input != null && input.files && input.files[0]) { // To be uploaded
+                                var formData = new FormData();
+                                formData.append('image_as_answer', input.files[0]);
+                                formData.append('questionId-image', questionId);
+                                formData.append('markerId-image', number);
+                                formData.append('courseCode-image', courseCode);
+
+                                fetch('/modules/exercise/upload_image_as_answer.php', {
+                                    method: 'POST',
+                                    body: formData
+                                })
+                                .then(response => response.text())
+                                .then(data => {
+                                    alert(lang.imageuploaded);
+                                    saveShape(vertices,questionId,courseCode);
+                                    window.location.reload();
+                                })
+                                .catch(error => {
+                                    alert('Upload failed:'+error);
+                                    window.location.reload();
+                                });
+                            } else if (imageUploaded != null && input == null) { // Has not been uploaded
+                                saveShape(vertices,questionId,courseCode);
+                                window.location.reload();
+                            } else {
+                                alert(lang.imagenotselected);
+                                window.location.reload();
+                            }
+                        } else {
+                            saveShape(vertices,questionId,courseCode);
+                            window.location.reload();
+                        }
+
                     }
                 } else {
                     alert(lang.invalidanswervalue);

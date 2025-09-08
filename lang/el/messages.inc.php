@@ -2197,6 +2197,7 @@ $langImageUploaded = "Η εικόνα φορτώθηκε";
 $langImageNotSelected = "Δεν έχετε επιλέξει εικόνα";
 $langInvalidAnswerValue = "Η απάντηση είναι κενή ή έχετε προσθέσει μια απάντηση που υπάρχει ήδη.";
 $chooseShapeAndAnswerToContinue = "Θα πρέπει να συμπληρώσετε την απάντηση στο πεδίο κειμένου και έπειτα να την ορίσετε μέσω ενός σχήματος πάνω στην εικόνα. Τέλος βαθμολογήστε την απάντηση.";
+$chooseDrawAShapeForTheAnswerToContinue = "Επιλέξτε ένα σχήμα και σχηματήστε την απάντηση πάνω στην εικόνα.";
 $langSomethingWentWrong = "Κάτι πήγε στραβά. Δοκιμάστε πάλι.";
 $langConstantValue = "Σταθερή τιμή";
 $langRandomValue = "Τυχαία τιμή";

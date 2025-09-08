@@ -2088,6 +2088,7 @@ $langImageUploaded = "Image has been uploaded!";
 $langImageNotSelected = "Please select an image to upload.";
 $langInvalidAnswerValue = "The value of the answer is empty OR you have added an answer that already exist.";
 $chooseShapeAndAnswerToContinue = "You will need to fill in the answer in the text field and then define it using a shape on the image. Finally, rate the answer.";
+$chooseDrawAShapeForTheAnswerToContinue = "You have to select a shape and draw the answer on the image.";
 $langQuestionList = "Question List";
 $langGetExistingQuestion = "Get Existing Question";
 $langWithCriteria = 'Select with criteria from question pool';
