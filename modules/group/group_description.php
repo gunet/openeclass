@@ -29,9 +29,14 @@ $pageName = $langAddDescription;
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langGroups);
 $group_id = isset($_REQUEST['group_id']) ? intval($_REQUEST['group_id']) : '';
 
+$userID = $uid;
+if (isset($_GET['editByEditor']) && $_GET['u']) {
+    $userID = intval($_GET['u']);
+}
+
 if (isset($_GET['delete'])) {
     $sql = Database::get()->query("UPDATE group_members SET description = ''
-		WHERE group_id = ?d AND user_id = ?d", $group_id, $uid);
+		WHERE group_id = ?d AND user_id = ?d", $group_id, $userID);
     if ($sql->affectedRows > 0) {
         Session::flash('message',$langBlockDeleted);
         Session::flash('alert-class', 'alert-success');
@@ -39,7 +44,7 @@ if (isset($_GET['delete'])) {
     redirect_to_home_page("modules/group/index.php?course=$course_code");
 } else if (isset($_POST['submit'])) {
     $sql = Database::get()->query("UPDATE group_members SET description = ?s
-			WHERE group_id = ?d AND user_id = ?d", $_POST['group_desc'], $group_id, $uid);
+			WHERE group_id = ?d AND user_id = ?d", $_POST['group_desc'], $group_id, $_POST['u_id']);
     if ($sql->affectedRows > 0) {
         Session::flash('message',$langRegDone);
         Session::flash('alert-class', 'alert-success');
@@ -50,7 +55,7 @@ if (isset($_GET['delete'])) {
     redirect_to_home_page("modules/group/index.php?course=$course_code");
 } else { // display form
     $description = Database::get()->querySingle("SELECT description FROM group_members
-			WHERE group_id = ?d AND user_id = ?d", $group_id, $uid)->description;
+			WHERE group_id = ?d AND user_id = ?d", $group_id, $userID)->description;
     $tool_content .= action_bar(array(
         array(
             'title' => $langBack,
@@ -63,6 +68,7 @@ if (isset($_GET['delete'])) {
         <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>
         <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
             <input type='hidden' name='group_id' value='$group_id'>
+            <input type='hidden' name='u_id' value='$userID'>
             <div class='form-group'>
                 <div class='col-sm-12'>$langGroupDescInfo</div>
             </div>
