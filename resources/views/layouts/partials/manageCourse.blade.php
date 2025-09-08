@@ -11,23 +11,40 @@
                 <li>
                     <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}modules/course_info/index.php?course={{$coursePrivateCode}}">
                         <i class="fa-solid fa-gears settings-icons"></i>
-                        {{trans('langCourseInfo')}}
+                        {{ trans('langCourseInfo') }}
                     </a>
                 </li>
-            @endif
-            @if ($is_course_admin)
                 <li>
                     <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}modules/course_description/index.php?course={{$coursePrivateCode}}">
                         <i class="fa-solid fa-pen-to-square settings-icons"></i>
-                        {{trans('langSyllabus')}}
+                        {{ trans('langSyllabus') }}
                     </a>
                 </li>
             @endif
-            @if ($is_course_admin)
+
+            @if ($course_users)
                 <li>
                     <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}modules/user/index.php?course={{$coursePrivateCode}}">
                         <i class="fa-solid fa-user settings-icons"></i>
-                        {{trans('langUsers')}}
+                        {{ trans('langUsers') }}
+                    </a>
+                </li>
+            @endif
+
+            @if (!$is_course_admin and $course_clone)
+                <li>
+                    <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}modules/course_info/clone_course.php?course={{ $course_code }}">
+                        <i class="fa-solid fa-archive settings-icons"></i>
+                        {{ trans('langCloneCourse') }}
+                    </a>
+                </li>
+            @endif
+
+            @if (!$is_course_admin and $course_backup)
+                <li>
+                    <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}modules/course_info/archive_course.php?course={{ $course_code }}&{!! generate_csrf_token_link_parameter() !!}">
+                        <i class="fa-solid fa-archive settings-icons"></i>
+                        {{ trans('langBackupCourse') }}
                     </a>
                 </li>
             @endif
@@ -35,7 +52,7 @@
             <li>
                 <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}modules/usage/index.php?course={{$coursePrivateCode}}">
                     <i class="fa-solid fa-chart-simple settings-icons"></i>
-                    {{trans('langUsage')}}
+                    {{ trans('langUsage') }}
                 </a>
             </li>
 
@@ -43,16 +60,20 @@
                 <li>
                     <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}modules/course_tools/index.php?course={{$coursePrivateCode}}">
                         <i class="fa-solid fa-screwdriver-wrench settings-icons"></i>
-                        {{trans('langTools')}}
+                        {{ trans('langTools') }}
                     </a>
                 </li>
-            @endif
-
-            @if ($is_course_admin)
                 <li>
                     <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}modules/abuse_report/index.php?course={{$coursePrivateCode}}">
                         <i class="fa-solid fa-flag settings-icons"></i>
-                        {{trans('langAbuseReports')}}
+                        {{ trans('langAbuseReports') }}
+                    </a>
+                </li>
+            @elseif ($course_tools)
+                <li>
+                    <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}modules/course_tools/index.php?course={{$coursePrivateCode}}">
+                        <i class="fa-solid fa-screwdriver-wrench settings-icons"></i>
+                        {{ trans('langTools') }}
                     </a>
                 </li>
             @endif
@@ -65,28 +86,18 @@
                             {{trans('langCoursePrerequisites')}}
                         </a>
                     </li>
-                @endif
-
-                @if ($is_course_admin)
                     <li>
                         <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}modules/course_widgets/index.php?course={{$coursePrivateCode}}">
                             <i class="fa-solid fa-wand-magic-sparkles settings-icons"></i>
                             {{trans('langWidgets')}}
                         </a>
                     </li>
-                @endif
-
-
-                @if ($is_course_admin)
                     <li>
                         <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}modules/lti_consumer/index.php?course={{$coursePrivateCode}}">
                             <i class="fa-solid fa-link settings-icons"></i>
                             {{trans('langLtiConsumer')}}
                         </a>
                     </li>
-                @endif
-
-                @if ($is_course_admin)
                     <li>
                         <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}modules/analytics/index.php?course={{$coursePrivateCode}}">
                             <i class="fa-solid fa-chart-line settings-icons"></i>

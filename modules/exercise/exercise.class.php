@@ -905,6 +905,18 @@ if (!class_exists('Exercise')) {
 
             $action = $record_type . '_answer_records';
 
+            // Special cases for both calculated and oral questions.
+            // In calculated question the user answer comes from input-text whereas
+            // in oral question the answer comes from recording-audio.
+            $choice_key = array_keys($choice);
+            if (count($choice_key) > 0) {
+                foreach ($choice_key as $k) {
+                    if (isset($_POST['answer_id_choice'][$k]) && isset($_POST['choice'][$k]) && $_POST['choice'][$k] != '') {
+                        $choice[$k] = $_POST['choice'][$k] . '|' . $_POST['answer_id_choice'][$k]; // such as 15|1
+                    }
+                }
+            }
+
             // if the user has answered at least one question
             if (is_array($choice)) {
                 // if all questions on the same page
@@ -953,18 +965,38 @@ if (!class_exists('Exercise')) {
         public function get_attempt_results_array($eurid)
         {
             $exerciseResult = array();
+            $temporaryUserAnswers = [];
             $results = Database::get()->queryArray("SELECT * FROM exercise_answer_record WHERE eurid = ?d AND is_answered <> 0 ORDER BY q_position", $eurid);
             foreach ($results as $row) {
                 $objQuestionTmp = new Question();
                 // reads question information
                 $objQuestionTmp->read($row->question_id);
                 $question_type = $objQuestionTmp->selectType();
-                if ($question_type == FREE_TEXT) {
+                if ($question_type == FREE_TEXT or $question_type == ORAL) {
                     $exerciseResult[$row->question_id] = $row->answer;
                 } elseif ($question_type == MATCHING) {
                     $exerciseResult[$row->question_id][$row->answer] = $row->answer_id;
                 } elseif ($question_type == FILL_IN_BLANKS || $question_type == FILL_IN_BLANKS_TOLERANT || $question_type == FILL_IN_FROM_PREDEFINED_ANSWERS) {
                     $exerciseResult[$row->question_id][$row->answer_id] = $row->answer;
+                } elseif ($question_type == DRAG_AND_DROP_TEXT || $question_type == DRAG_AND_DROP_MARKERS) {
+                    if (empty($row->answer)) {
+                        $row->answer = null;
+                    }
+                    $temporaryUserAnswers[$row->question_id][] = ['dataAnswer' => $row->answer_id, 'dataWord' => $row->answer];
+                    $exerciseResult[$row->question_id] = json_encode($temporaryUserAnswers[$row->question_id]);
+                } elseif ($question_type == CALCULATED) {
+                    if ($row->answer_id == 0) { // unaswered
+                        $exerciseResult[$row->question_id] = '';
+                    } else {
+                        if ($row->answer == 0) {
+                            $exerciseResult[$row->question_id] = (int)$row->answer . '|' . $row->answer_id;
+                        } else {
+                            $exerciseResult[$row->question_id] = $row->answer . '|' . $row->answer_id;
+                        }
+                    }
+                } elseif ($question_type == ORDERING) {
+                    $exerciseResult[$row->question_id][$row->answer_id] = $row->answer;
+                    ksort($exerciseResult[$row->question_id]);
                 } elseif ($question_type == MULTIPLE_ANSWER) {
                     $exerciseResult[$row->question_id][$row->answer_id] = 1;
                 } else {
@@ -1016,7 +1048,7 @@ if (!class_exists('Exercise')) {
                     } elseif ($question_type == FILL_IN_BLANKS || $question_type == FILL_IN_BLANKS_TOLERANT || $question_type == FILL_IN_FROM_PREDEFINED_ANSWERS) {
                         // construction of the Answer object
                         $objAnswerTmp = new Answer($question_id);
-                        $answer = $objAnswerTmp->selectAnswer(1);
+                        $answer = $objAnswerTmp->getTitle(1);
                         // construction of the Answer object
                         if ($question_type == FILL_IN_FROM_PREDEFINED_ANSWERS) {
                             $value = [];
@@ -1031,7 +1063,28 @@ if (!class_exists('Exercise')) {
                                 $value[$answerId] = '';
                             }
                         }
-                    } elseif ($question_type == FREE_TEXT) {
+                    } elseif ($question_type == DRAG_AND_DROP_TEXT || $question_type == DRAG_AND_DROP_MARKERS) {
+                        $objAnswer = new Answer($question_id);
+                        $totalPredefinedAnswers = $objAnswer->get_total_correct_drag_and_drop_predefined_answers();
+                        for ($i = 1; $i <= $totalPredefinedAnswers; $i++) {
+                            $value[$i] = '';
+                        }
+                        unset($objAnswer);
+                    } elseif ($question_type == CALCULATED) {
+                        $objAnswer = new Answer($question_id);
+                        $totalPredefinedAnswers = $objAnswer->get_total_calculated_predefined_answers();
+                        for ($answerId = 1; $answerId <= $totalPredefinedAnswers; $answerId++) {
+                            $value[$answerId] = '';
+                        }
+                        unset($objAnswer);
+                    } elseif ($question_type == ORDERING) {
+                        $objAnswer = new Answer($question_id);
+                        $totalPredefinedAnswers = $objAnswer->get_total_correct_ordering_predefined_answers();
+                        for ($i = 1; $i <= $totalPredefinedAnswers; $i++) {
+                            $value[$i] = '';
+                        }
+                        unset($objAnswer);
+                    } elseif ($question_type == FREE_TEXT or $question_type == ORAL) {
                         $value = '';
                     } else {
                         $value = 0;
@@ -1056,14 +1109,14 @@ if (!class_exists('Exercise')) {
             $eurid = $_SESSION['exerciseUserRecordID'][$id][$attempt_value];
             Database::get()->query("DELETE FROM exercise_answer_record
                             WHERE eurid = ?d AND question_id = ?d", $eurid, $key);
-            if ($question_type == FREE_TEXT) {
+            if ($question_type == FREE_TEXT or $question_type == ORAL) {
                 Database::get()->query("INSERT INTO exercise_answer_record
                    (eurid, question_id, answer, answer_id, weight, is_answered, q_position)
                    VALUES (?d, ?d, ?s, 0, NULL, ?d, ?d)",
                     $eurid, $key, $value, $as_answered, $q_position);
             } elseif ($question_type == FILL_IN_BLANKS || $question_type == FILL_IN_BLANKS_TOLERANT) {
                 $objAnswersTmp = new Answer($key);
-                $answer_field = $objAnswersTmp->selectAnswer(1);
+                $answer_field = $objAnswersTmp->getTitle(1);
                 list($answer, $answerWeighting) = Question::blanksSplitAnswer($answer_field);
                 // split weightings that are joined with a comma
                 $rightAnswerWeighting = explode(',', $answerWeighting);
@@ -1084,12 +1137,12 @@ if (!class_exists('Exercise')) {
                 }
             } elseif ($question_type == FILL_IN_FROM_PREDEFINED_ANSWERS) {
                 $objAnswersTmp = new Answer($key);
-                $answer = $objAnswersTmp->selectAnswer(1);
+                $answer = $objAnswersTmp->getTitle(1);
                 $answer_string = unserialize($answer);
                 $right_string = $answer_string[1]; // right answers
                 $weight_string = $answer_string[2]; // weight
                 foreach ($value as $choice_key => $choice) {
-                    if ($choice == $right_string[$choice_key-1]) {
+                    if (isset($right_string[$choice_key-1]) && $choice == $right_string[$choice_key-1]) {
                         $weight = $weight_string[$choice_key-1];
                     } else {
                         $weight = 0;
@@ -1110,7 +1163,7 @@ if (!class_exists('Exercise')) {
                 } else {
                     $objAnswersTmp = new Answer($key);
                     foreach ($value as $row_key => $row_choice) {
-                        $answer_weight = $objAnswersTmp->selectWeighting($row_key);
+                        $answer_weight = $objAnswersTmp->getWeighting($row_key);
                         Database::get()->query("INSERT INTO exercise_answer_record
                             (eurid, question_id, answer_id, weight, is_answered, q_position)
                             VALUES (?d, ?d, ?d, ?f, ?d, ?d)",
@@ -1125,7 +1178,7 @@ if (!class_exists('Exercise')) {
                     // In matching questions isCorrect() returns position of left column answers while $row_key returns right column position
                     $correct_match = $objAnswersTmp->isCorrect($row_key);
                     if ($correct_match == $row_choice) {
-                        $answer_weight = $objAnswersTmp->selectWeighting($row_key);
+                        $answer_weight = $objAnswersTmp->getWeighting($row_key);
                     } else {
                         $answer_weight = 0;
                     }
@@ -1136,10 +1189,149 @@ if (!class_exists('Exercise')) {
                         $eurid, $key, $row_key, $row_choice, $answer_weight, $as_answered, $q_position);
                     unset($answer_weight);
                 }
+            } elseif ($question_type == DRAG_AND_DROP_TEXT || $question_type == DRAG_AND_DROP_MARKERS) {
+
+                $objAnswersTmp = new Answer($key);
+                $questionWords = $objAnswersTmp->get_drag_and_drop_answer_text();
+                $questionGrades = $objAnswersTmp->get_drag_and_drop_answer_grade();
+                if (isset($_POST['choice']) && !empty($_POST['choice'][$key])) {
+                    $userAnswersAsJSON = $_POST['choice'][$key];
+                }
+
+                // Change indexes to start from 0.
+                if ($question_type == DRAG_AND_DROP_MARKERS) {
+                    $arrTmp = [];
+                    foreach ($questionGrades as $index => $value) {
+                        if ($index > 0) {
+                            $index = $index - 1;
+                            $arrTmp[$index] = $value;
+                        }
+                    }
+                    $questionGrades = $arrTmp;
+                }
+
+                if (!isset($userAnswersAsJSON)) { // User has not filled in the blanks of the question.
+                    $blank = 1;
+                    foreach ($questionWords as $word) {
+                        $weight = 0;
+                        $word = '';
+                        //$as_answered = 0;
+                        Database::get()->query("INSERT INTO exercise_answer_record
+                            (eurid, question_id, answer, answer_id, weight, is_answered, q_position)
+                            VALUES (?d, ?d, ?s, ?d, ?f, ?d, ?d)",
+                            $eurid, $key, $word, $blank, $weight, $as_answered, $q_position);
+                        $blank++;
+                    }
+
+                } else { // User has filled in at least one blank of the question.
+                    $data = json_decode($userAnswersAsJSON, true);
+                    $resultAns = [];
+                    foreach ($data as $item) {
+                        $blank = (int)$item['dataAnswer'];
+                        $value = isset($item['dataWord']) && $item['dataWord'] !== null ? $item['dataWord'] : 0;
+                        $resultAns[$blank] = $value;
+                    }
+                    foreach ($resultAns as $blank => $value) {
+                        if ($value == 0) {// User has no filled in to the specific blank.
+                            $weight = 0;
+                            $value = '';
+                        } else {
+                            if ($question_type == DRAG_AND_DROP_TEXT || $question_type == DRAG_AND_DROP_MARKERS) {
+                                $weight = ($blank > 0 && !empty($value) && $questionWords[$blank-1] == $value) ? $questionGrades[$blank-1] : 0;
+                            }
+                        }
+                        Database::get()->query("INSERT INTO exercise_answer_record
+                            (eurid, question_id, answer, answer_id, weight, is_answered, q_position)
+                            VALUES (?d, ?d, ?s, ?d, ?f, ?d, ?d)",
+                            $eurid, $key, $value, $blank, $weight, $as_answered, $q_position);
+                    }
+                }
+
+            } elseif ($question_type == CALCULATED) {
+
+                // $key = $question_id
+                $objAnswersTmp = new Answer($key);
+                $totalAnswers = $objAnswersTmp->get_total_calculated_predefined_answers();
+
+                if (isset($_POST['answer_id_choice'][$key]) && $value == '0') { // if the answer comes from text and is zero the create a string separated with answer_id
+                    $value = (int)$value . '|' . $_POST['answer_id_choice'][$key];
+                }
+
+                if (is_array($value)) { // unaswered question from multiple predefined answers
+                    for ($i = 1; $i <= count($value); $i++) {
+                        Database::get()->query("INSERT INTO exercise_answer_record
+                                (eurid, question_id, answer, answer_id, weight, is_answered, q_position)
+                                VALUES (?d, ?d, ?s, ?d, ?f, ?d, ?d)",
+                                $eurid, $key, '', 0, 0, $as_answered, $q_position);
+                    }
+                } elseif (is_string($value) && empty($value) && $value != 0) { // unaswered question from text predefined answer
+                    Database::get()->query("INSERT INTO exercise_answer_record
+                                (eurid, question_id, answer, answer_id, weight, is_answered, q_position)
+                                VALUES (?d, ?d, ?s, ?d, ?f, ?d, ?d)",
+                                $eurid, $key, '', 0, 0, $as_answered, $q_position);
+                } elseif (is_string($value) && !empty($value)) { // answered question
+                    $arrAnswer = explode('|', $value);
+                    if (count($arrAnswer) == 2) { // multiple predefined answers
+                        $user_answer = $arrAnswer[0];
+                        if (empty($user_answer) && $user_answer != '0') {
+                            $answer_id = 0;
+                        } else {
+                            $answer_id = $arrAnswer[1];
+                        }
+                        $user_got_grade = $objAnswersTmp->get_user_answer_grade($key, $user_answer);
+                    } 
+                    Database::get()->query("INSERT INTO exercise_answer_record
+                                (eurid, question_id, answer, answer_id, weight, is_answered, q_position)
+                                VALUES (?d, ?d, ?s, ?d, ?f, ?d, ?d)",
+                                $eurid, $key, $user_answer, $answer_id, $user_got_grade, $as_answered, $q_position);
+                } elseif (is_numeric($value) && $value == 0) { // unaswered question from multiple predefined answers
+                    Database::get()->query("INSERT INTO exercise_answer_record
+                                (eurid, question_id, answer, answer_id, weight, is_answered, q_position)
+                                VALUES (?d, ?d, ?s, ?d, ?f, ?d, ?d)",
+                                $eurid, $key, '', 0, 0, $as_answered, $q_position);
+                }
+                
+                unset($objAnswersTmp);
+
+            } elseif ($question_type == ORDERING) {
+
+                $objAnswersTmp = new Answer($key);
+                $ordering_answer = $objAnswersTmp->get_ordering_answers();
+                $ordering_answer_grade = $objAnswersTmp->get_ordering_answer_grade();
+
+                if (!is_string($value)) { // unaswered question
+                    for ($i = 1; $i <= count($ordering_answer); $i++) {
+                        Database::get()->query("INSERT INTO exercise_answer_record
+                                    (eurid, question_id, answer, answer_id, weight, is_answered, q_position)
+                                    VALUES (?d, ?d, ?s, ?d, ?f, ?d, ?d)",
+                                    $eurid, $key, '', $i, 0, $as_answered, $q_position);
+                    }
+                } else { // $value contains json value as string
+                    
+                    $tmp = explode('::', $value);
+                    $userAnswers = json_decode($tmp[0], true);
+                    if (count($userAnswers) > 0) {
+                        for ($i = 1; $i <= count($userAnswers)-1; $i++) { // Index 0 is null.
+                            $position = $i;
+                            $weight = 0;
+                            $val = $userAnswers[$i];
+                            if ($userAnswers[$i] == $ordering_answer[$i]) {
+                                $weight = $ordering_answer_grade[$i];
+                            }
+                            Database::get()->query("INSERT INTO exercise_answer_record
+                                (eurid, question_id, answer, answer_id, weight, is_answered, q_position)
+                                VALUES (?d, ?d, ?s, ?d, ?f, ?d, ?d)",
+                                $eurid, $key, $val, $position, $weight, $as_answered, $q_position);
+                        }
+                    }
+                }
+
+                unset($objAnswersTmp);
+
             } else {
                 if ($value) {
                     $objAnswersTmp = new Answer($key);
-                    $answer_weight = $objAnswersTmp->selectWeighting($value);
+                    $answer_weight = $objAnswersTmp->getWeighting($value);
                 } else {
                     $answer_weight = 0;
                 }
@@ -1164,7 +1356,7 @@ if (!class_exists('Exercise')) {
             $id = $this->id;
             $attempt_value = $_POST['attempt_value'];
             $eurid = $_SESSION['exerciseUserRecordID'][$id][$attempt_value];
-            if ($question_type == FREE_TEXT) {
+            if ($question_type == FREE_TEXT or $question_type == ORAL) {
                 if (!empty($value)) {
                     Database::get()->query("UPDATE exercise_answer_record SET answer = ?s, answer_id = 1, weight = NULL,
                                           is_answered = 1 WHERE eurid = ?d AND question_id = ?d", $value, $eurid, $key);
@@ -1174,7 +1366,7 @@ if (!class_exists('Exercise')) {
                 }
             } elseif ($question_type == FILL_IN_BLANKS || $question_type == FILL_IN_BLANKS_TOLERANT) {
                 $objAnswersTmp = new Answer($key);
-                $answer_field = $objAnswersTmp->selectAnswer(1);
+                $answer_field = $objAnswersTmp->getTitle(1);
                 list($answer, $answerWeighting) = Question::blanksSplitAnswer($answer_field);
                 // splits weightings that are joined with a comma
                 $rightAnswerWeighting = explode(',', $answerWeighting);
@@ -1197,7 +1389,7 @@ if (!class_exists('Exercise')) {
                     $objAnswersTmp = new Answer($key);
                     Database::get()->query("DELETE FROM exercise_answer_record WHERE eurid = ?d AND question_id = ?d", $eurid, $key);
                     foreach ($value as $row_key => $row_choice) {
-                        $answer_weight = $objAnswersTmp->selectWeighting($row_key);
+                        $answer_weight = $objAnswersTmp->getWeighting($row_key);
                         Database::get()->query("INSERT INTO exercise_answer_record (eurid, question_id, answer_id, weight, is_answered)
                             VALUES (?d, ?d, ?d, ?f, 1)", $eurid, $key, $row_key, $answer_weight);
                         unset($answer_weight);
@@ -1210,7 +1402,7 @@ if (!class_exists('Exercise')) {
                     // In matching questions isCorrect() returns position of left column answers while $row_key returns right column position
                     $correct_match = $objAnswersTmp->isCorrect($row_key);
                     if ($correct_match == $row_choice) {
-                        $answer_weight = $objAnswersTmp->selectWeighting($row_key);
+                        $answer_weight = $objAnswersTmp->getWeighting($row_key);
                     } else {
                         $answer_weight = 0;
                     }
@@ -1221,7 +1413,7 @@ if (!class_exists('Exercise')) {
             } else {
                 if ($value != 0) {
                     $objAnswersTmp = new Answer($key);
-                    $answer_weight = $objAnswersTmp->selectWeighting($value);
+                    $answer_weight = $objAnswersTmp->getWeighting($value);
                 } else {
                     $answer_weight = 0;
                 }
@@ -1236,8 +1428,24 @@ if (!class_exists('Exercise')) {
          */
         public function purge()
         {
-            global $course_id;
+            global $course_id, $webDir, $course_code;
             $id = $this->id;
+
+            // Remove oral answers from document table and courses folder
+            $userRecords = Database::get()->queryArray("SELECT eurid FROM exercise_user_record WHERE eid = ?d", $id);
+                                                        
+            foreach ($userRecords as $rec) {
+                $file = Database::get()->queryArray("SELECT id,`path` FROM document WHERE course_id = ?d
+                                                      AND subsystem = ?d AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $rec->eurid);
+                foreach ($file as $f) {
+                    if (file_exists("$webDir/courses/$course_code/image" . $f->path)) {
+                        unlink("$webDir/courses/$course_code/image" . $f->path);
+                    } 
+                    Database::get()->query("DELETE FROM document WHERE id = ?d", $f->id);
+                }
+                
+            }
+            
 
             Database::get()->query("DELETE d FROM exercise_answer_record d, exercise_user_record s
                               WHERE d.eurid = s.eurid AND s.eid = ?d", $id);
@@ -1258,7 +1466,16 @@ if (!class_exists('Exercise')) {
          */
         public function purgeAttempt($id, $eurid)
         {
-            global $course_id;
+            global $course_id, $webDir, $course_code;
+
+            // Remove oral recording audio
+            $file = Database::get()->queryArray("SELECT id,`path` FROM document WHERE course_id = ?d AND subsystem = ?d AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $eurid);
+            if ($file) {
+                foreach ($file as $f) {
+                    unlink("$webDir/courses/$course_code/image" . $f->path);
+                    Database::get()->query("DELETE FROM document WHERE id = ?d", $f->id);
+                }
+            }
 
             $exercise_title = Database::get()->querySingle("SELECT title FROM exercise WHERE id = ?d", $id)->title;
             $eurid_uid = Database::get()->querySingle("SELECT uid FROM exercise_user_record WHERE eid = ?d AND eurid = ?d", $id, $eurid)->uid;
@@ -1334,13 +1551,15 @@ if (!class_exists('Exercise')) {
                 // copy questions and answers to new course question pool
                 $old_path = "courses/$course_code/image/quiz-";
                 $new_path = 'courses/' . course_id_to_code($clone_course_id) . '/image/quiz-';
+                $old_path_predefined_dndrop = "courses/$course_code/image/answer-";
+                $new_path_predefined_dndrop = 'courses/' . course_id_to_code($clone_course_id) . '/image/answer-';
                 Database::get()->queryFunc("SELECT question_id AS id, q_position, random_criteria FROM exercise_with_questions
                         WHERE exercise_id = ?d",
-                    function ($question) use ($clone_id, $clone_course_id, $old_path, $new_path) {
+                    function ($question) use ($clone_id, $clone_course_id, $old_path, $new_path, $old_path_predefined_dndrop, $new_path_predefined_dndrop) {
                         if (is_null($question->random_criteria)) {
                             $question_clone_id = Database::get()->query("INSERT INTO exercise_question
-                                (course_id, question, description, weight, type, difficulty, category)
-                                SELECT ?d, question, description, weight, type, difficulty, 0
+                                (course_id, question, description, weight, type, difficulty, category, options)
+                                SELECT ?d, question, description, weight, type, difficulty, 0, options
                                     FROM `exercise_question` WHERE id = ?d", $clone_course_id, $question->id)->lastInsertID;
                             Database::get()->query("INSERT INTO exercise_with_questions
                                 (question_id, exercise_id, q_position, random_criteria) VALUES (?d, ?d, ?d, NULL)", $question_clone_id, $clone_id, $question->q_position);
@@ -1357,6 +1576,30 @@ if (!class_exists('Exercise')) {
                         if (file_exists($old_image_path)) {
                             copy($old_image_path, $new_path . $question_clone_id);
                         }
+
+                        // Drag and drop predefined answers using images
+                        $questionType = Database::get()->querySingle("SELECT `type` FROM exercise_question WHERE id = ?d", $question->id)->type;
+                        if ($questionType == DRAG_AND_DROP_MARKERS) {
+                            $total = 0;
+                            $answer = Database::get()->querySingle("SELECT answer FROM exercise_answer WHERE question_id = ?d", $question->id);
+                            if ($answer) {
+                                $q = explode('::', $answer->answer);
+                                if (count($q) > 1) {
+                                    $res = explode(',', $q[1]);
+                                    $total = count($res);
+                                }
+                            }
+                            if ($total > 0) {
+                                for ($i = 1; $i <= $total; $i++) {
+                                    $old_dnd_img_path = $old_path_predefined_dndrop . $question->id . '-' . $i;
+                                    if (file_exists($old_dnd_img_path)) {
+                                        $new_dnd_img_path = $new_path_predefined_dndrop . $question_clone_id . '-' . $i;
+                                        copy($old_dnd_img_path, $new_dnd_img_path);
+                                    }
+                                }
+                            }
+                        }
+                        
                     },
                     $id);
             } else {

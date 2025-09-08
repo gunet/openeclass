@@ -13,6 +13,9 @@
         "mpdf/mpdf": "^8.0",
         "hiqdev/hoa-ruler": "~1.0",
         "hiqdev/hoa-file": "~1.0",
+        "hiqdev/hoa-compiler": "~1.0",
+        "hiqdev/hoa-iterator": "~1.0",
+        "hiqdev/hoa-protocol": "~1.0",
         "egulias/email-validator": "^2.1",
         "bacon/bacon-qr-code": "^2.0",
         "phpoffice/phpspreadsheet": "^3.9",
@@ -22,7 +25,8 @@
         "snapappointments/bootstrap-select": "^1.13.18",
         "jenssegers/blade": "^1.4",
         "firebase/php-jwt": "^6.10",
-        "symfony/polyfill-php72": "^1.31"
+        "symfony/polyfill-php72": "^1.31",
+        "symfony/expression-language": "^6.4"
     },
     "repositories": [
         {

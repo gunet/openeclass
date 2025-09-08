@@ -101,7 +101,7 @@ $tool_content .= "
 foreach($questionList as $id) {
     $objQuestionTmp = new Question();
     $objQuestionTmp->read($id);
-    if ($objQuestionTmp->selectType() == FREE_TEXT) {
+    if ($objQuestionTmp->selectType() == FREE_TEXT or $objQuestionTmp->selectType() == ORAL) {
         // $tool_content .= "
         // <tr>
         //     <td>".q_math($objQuestionTmp->selectTitle())."</th>
@@ -138,7 +138,7 @@ $tool_content .= "<div class='card panelCard card-default px-lg-4 py-lg-3 mt-4'>
             . "JOIN exercise_with_questions AS exwq ON exq.id = exwq.question_id "
             . "JOIN exercise_answer_record AS ear ON ear.question_id = exq.id "
             . "JOIN exercise_user_record AS eur ON eur.eurid = ear.eurid "
-            . "WHERE eur.eid = ?d AND ear.weight IS NULL AND exq.type = ". FREE_TEXT . " "
+            . "WHERE eur.eid = ?d AND ear.weight IS NULL AND exq.type = ". FREE_TEXT . " OR exq.type = ". ORAL . " "
             . "GROUP BY exq.id, eur.eid ORDER BY exwq.q_position",$exerciseId);
 
     $questions_table = "<table id=\'my-grade-table\' class='table-default'><thead class='list-header'><tr><th>$langOpenQuestionTitle</th><th>$langChoice</th></tr></thead><tbody>";
