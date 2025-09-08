@@ -6,16 +6,19 @@
         <div class='{{ $assignment_type_radios_class }}'>
             <div class='{{ $assignment_type_eclass_div_class }}'>
                 <label>
-                    <input type='radio' name='assignment_type' value='0' @if ($assignment_type == ASSIGNMENT_TYPE_ECLASS) checked @endif>
+                    <input type='radio' name='assignment_type' value='0' @if ($assignment_type == ASSIGNMENT_TYPE_ECLASS) checked @endif @if (isset($assignment_id) && !empty($tii_selected_content)) disabled @endif>
                     {{ trans('langAssignmentTypeEclass') }}
                 </label>
             </div>
             <div class='{{ $assignment_type_turnitin_div_class }}'>
                 <label>
-                    <input type='radio' name='assignment_type' value='1' @if ($assignment_type == ASSIGNMENT_TYPE_TURNITIN) checked @endif>
+                    <input type='radio' name='assignment_type' value='1' @if ($assignment_type == ASSIGNMENT_TYPE_TURNITIN) checked @endif @if (isset($assignment_id) && !empty($tii_selected_content)) disabled @endif>
                     {{ trans('langAssignmentTypeTurnitin') }}
                 </label>
             </div>
+            @if (isset($assignment_id) && !empty($tii_selected_content))
+                <input type="hidden" name="assignment_type" value='{{ $assignment_type }}'>
+            @endif
         </div>
         <div class='{{ $help_block_div_class }}'>
             <span class='help-block'>{{ trans('langTurnitinNewAssignNotice') }}</span>
@@ -27,14 +30,19 @@
         <div class='form-group {{ $lti_hidden }} mt-4'>
             <label for='lti_templates' class='{{ $tiiapp_label_class }}'>{{ trans('langTiiApp') }}</label>
             <div class='{{ $lti_template_div_class }}'>
-                <select name='lti_template' class='form-select' id='lti_templates' {{ $lti_disabled }}>
+                <select name='lti_template' class='form-select' id='lti_templates' {{ $lti_disabled }} @if (isset($assignment_id) && !empty($tii_selected_content)) disabled @endif>
                     {!! $lti_template_options !!}
                 </select>
+                @if (isset($assignment_id) && !empty($tii_selected_content) && !empty($lti_template_options_selected_lti_template))
+                    <input type="hidden" name="lti_template" value='{{ $lti_template_options_selected_lti_template }}'>
+                @endif
             </div>
         </div>
         <div class='form-group mt-4' id='SelectContentModalDiv'>
             <div class='col-sm-12'>
+                @if (!isset($assignment_id) || empty($tii_selected_content))
                 <button type='button' class='btn submitAdminBtn' style='display: inline; margin-bottom: 10px; margin-right: 10px;' data-bs-toggle='modal' data-bs-target='#SelectContentModal'>{{ trans('langTiiSelectContent') }}</button>
+                @endif
                 <span id='tii_selected_content_span'>{!! $tii_selected_content !!}</span>
             </div>
             <div class='col-sm-12'>{{ trans('langTiiSelectContentDesc') }}</div>

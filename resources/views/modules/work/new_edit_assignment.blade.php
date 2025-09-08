@@ -681,6 +681,7 @@
                 let choice = $(this).val();
                 if (choice == 0) {
                     hideLtiAllFields();
+                    hideLti13Fields();
 
                     // user groups
                     $('#group_button')

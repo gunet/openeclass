@@ -277,11 +277,11 @@ function ltiBuildRequest(stdClass $ltiApp, stdClass $course, stdClass $stat, str
 
     // resource link
     $requestparams['resource_link_title'] = trim($ltiApp->title);
-    $requestparams['resource_link_description'] = trim($ltiApp->description);
+    //$requestparams['resource_link_description'] = trim($ltiApp->description);
     $requestparams['resource_link_id'] = "$ltiApp->id";
     if ($is_assignment) {
         $requestparams['resource_link_title'] = trim($resource->title);
-        $requestparams['resource_link_description'] = trim($ltiApp->description);
+        //$requestparams['resource_link_description'] = trim($ltiApp->description);
         $requestparams['resource_link_id'] = "$resource->id";
     }
 
@@ -323,6 +323,16 @@ function ltiBuildCustomParameters(string $resourceType, stdClass $resource): arr
     // assignment instructor custom parameters
     if ($resourceType == RESOURCE_LINK_TYPE_ASSIGNMENT && $resource->tii_instructorcustomparameters) {
         $requestparams = ltiSplitCustomParameters($resource->tii_instructorcustomparameters);
+    }
+    if ($resourceType == RESOURCE_LINK_TYPE_ASSIGNMENT && $resource->submission_date) {
+        $startdate = DateTime::createFromFormat('Y-m-d H:i:s', $resource->submission_date, new DateTimeZone('Europe/Athens'));
+        $startdate->setTimezone(new DateTimeZone('UTC'));
+        $requestparams['custom_startdate'] = $startdate->format('Y-m-d\TH:i:s\.v\Z');
+    }
+    if ($resourceType == RESOURCE_LINK_TYPE_ASSIGNMENT && $resource->deadline) {
+        $duedate = DateTime::createFromFormat('Y-m-d H:i:s', $resource->deadline, new DateTimeZone('Europe/Athens'));
+        $duedate->setTimezone(new DateTimeZone('UTC'));
+        $requestparams['custom_duedate'] = $duedate->format('Y-m-d\TH:i:s\.v\Z');
     }
     return $requestparams;
 }
@@ -1352,6 +1362,9 @@ function ltiToolConfigurationFromContentItem(int $ltiAppId, string $messagetype,
             }
             if (isset($custom->tii_setting_workflow_feedback_release_date)) {
                 $config->feedbackdate = $custom->tii_setting_workflow_feedback_release_date;
+            }
+            if (isset($custom->tii_setting_workflow_description)) {
+                $config->description = $custom->tii_setting_workflow_description;
             }
         }
     }
