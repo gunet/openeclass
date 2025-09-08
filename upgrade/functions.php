@@ -3405,6 +3405,53 @@ function upgrade_to_4_2($tbl_options) : void {
             `ai_module` int NOT NULL,
             PRIMARY KEY (`id`), KEY (`ai_module`, `course_id`))  $tbl_options");
     }
+
+    // AI Evaluation Configuration Table for Exercise Questions
+    if (!DBHelper::tableExists('exercise_ai_config')) {
+        Database::get()->query("CREATE TABLE exercise_ai_config (
+            `id` int(11) NOT NULL AUTO_INCREMENT,
+            `question_id` int(11) NOT NULL,
+            `course_id` int(11) NOT NULL,
+            `enabled` tinyint(1) DEFAULT 1,
+            `evaluation_prompt` text NOT NULL,
+            `sample_responses` text NULL,
+            `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            PRIMARY KEY (`id`),
+            UNIQUE KEY `uk_question` (`question_id`),
+            KEY `idx_course` (`course_id`),
+            KEY `idx_enabled` (`enabled`),
+            FOREIGN KEY (`question_id`) REFERENCES `exercise_question`(`id`) ON DELETE CASCADE,
+            FOREIGN KEY (`course_id`) REFERENCES `course`(`id`) ON DELETE CASCADE
+        ) $tbl_options");
+    }
+
+    if (!DBHelper::tableExists('exercise_ai_evaluation')) {
+        Database::get()->query("CREATE TABLE exercise_ai_evaluation (
+            `id` int(11) NOT NULL AUTO_INCREMENT,
+            `answer_record_id` int(11) NOT NULL COMMENT 'Reference to exercise_answer_record.answer_record_id',
+            `question_id` int(11) NOT NULL COMMENT 'Reference to exercise_question.id',
+            `exercise_id` int(11) NOT NULL COMMENT 'Reference to exercise.id for easier querying',
+            `student_record_id` int(11) NOT NULL COMMENT 'Reference to exercise_user_record.eurid',
+            `ai_suggested_score` decimal(5,2) NOT NULL COMMENT 'AI suggested score',
+            `ai_max_score` decimal(5,2) NOT NULL COMMENT 'Maximum possible score for this question',
+            `ai_reasoning` text NOT NULL COMMENT 'AI explanation of the score',
+            `ai_confidence` decimal(3,2) NOT NULL COMMENT 'AI confidence level (0.0-1.0)',
+            `ai_provider` varchar(50) NOT NULL COMMENT 'AI provider used (openai, anthropic, etc.)',
+            `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'When AI evaluation was performed',
+            PRIMARY KEY (`id`),
+            KEY `idx_answer_record` (`answer_record_id`),
+            KEY `idx_question` (`question_id`),
+            KEY `idx_exercise` (`exercise_id`),
+            KEY `idx_student_record` (`student_record_id`),
+            KEY `idx_confidence` (`ai_confidence`),
+            FOREIGN KEY (`answer_record_id`) REFERENCES `exercise_answer_record`(`answer_record_id`) ON DELETE CASCADE,
+            FOREIGN KEY (`question_id`) REFERENCES `exercise_question`(`id`) ON DELETE CASCADE,
+            FOREIGN KEY (`exercise_id`) REFERENCES `exercise`(`id`) ON DELETE CASCADE,
+            FOREIGN KEY (`student_record_id`) REFERENCES `exercise_user_record`(`eurid`) ON DELETE CASCADE
+        ) $tbl_options");
+    }
+
 }
 
 /**

@@ -58,4 +58,23 @@ interface AIProviderInterface {
      * @return array Single question data
      */
     public function generateSingleQuestion(string $content, string $questionType = 'multiple_choice', string $difficulty = 'medium'): array;
+    
+    /**
+     * Evaluate a text response using AI
+     * 
+     * @param string $prompt The evaluation prompt
+     * @param array $options Request options (temperature, max_tokens, etc.)
+     * @return array AI response data
+     */
+    public function evaluateText(string $prompt, array $options = []): array;
+    
+    /**
+     * Extract course data from content (syllabus text or manual prompt)
+     * 
+     * @param string $content The source content (syllabus text or course description prompt)
+     * @param string $contentType Type of content ('syllabus' or 'prompt')
+     * @param array $options Configuration options for extraction
+     * @return array Extracted course data formatted for OpenEclass
+     */
+    public function extractCourseData(string $content, string $contentType = 'prompt', array $options = []): array;
 }

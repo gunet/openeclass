@@ -253,3 +253,5 @@ define('JQUERY_VERSION', '-3.6.0');
 
 // ai modules
 define('AI_MODULE_QUESTION_POOL', 1);
+define('AI_MODULE_FREE_TEXT_EVALUATION', 2);
+define('AI_MODULE_CREATE_COURSE', 3);

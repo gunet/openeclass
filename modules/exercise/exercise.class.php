@@ -1109,11 +1109,17 @@ if (!class_exists('Exercise')) {
             $eurid = $_SESSION['exerciseUserRecordID'][$id][$attempt_value];
             Database::get()->query("DELETE FROM exercise_answer_record
                             WHERE eurid = ?d AND question_id = ?d", $eurid, $key);
+
             if ($question_type == FREE_TEXT or $question_type == ORAL) {
-                Database::get()->query("INSERT INTO exercise_answer_record
+                $answer_record_id = Database::get()->query("INSERT INTO exercise_answer_record
                    (eurid, question_id, answer, answer_id, weight, is_answered, q_position)
                    VALUES (?d, ?d, ?s, 0, NULL, ?d, ?d)",
-                    $eurid, $key, $value, $as_answered, $q_position);
+                    $eurid, $key, $value, $as_answered, $q_position)->lastInsertID;
+
+                // Check if AI evaluation is enabled for this question and trigger it
+                if (!empty($value) && trim($value) !== '') {
+                    $this->triggerAIEvaluation($answer_record_id, $key, $value);
+                }
             } elseif ($question_type == FILL_IN_BLANKS || $question_type == FILL_IN_BLANKS_TOLERANT) {
                 $objAnswersTmp = new Answer($key);
                 $answer_field = $objAnswersTmp->getTitle(1);
@@ -1279,7 +1285,7 @@ if (!class_exists('Exercise')) {
                             $answer_id = $arrAnswer[1];
                         }
                         $user_got_grade = $objAnswersTmp->get_user_answer_grade($key, $user_answer);
-                    } 
+                    }
                     Database::get()->query("INSERT INTO exercise_answer_record
                                 (eurid, question_id, answer, answer_id, weight, is_answered, q_position)
                                 VALUES (?d, ?d, ?s, ?d, ?f, ?d, ?d)",
@@ -1290,7 +1296,7 @@ if (!class_exists('Exercise')) {
                                 VALUES (?d, ?d, ?s, ?d, ?f, ?d, ?d)",
                                 $eurid, $key, '', 0, 0, $as_answered, $q_position);
                 }
-                
+
                 unset($objAnswersTmp);
 
             } elseif ($question_type == ORDERING) {
@@ -1307,7 +1313,7 @@ if (!class_exists('Exercise')) {
                                     $eurid, $key, '', $i, 0, $as_answered, $q_position);
                     }
                 } else { // $value contains json value as string
-                    
+
                     $tmp = explode('::', $value);
                     $userAnswers = json_decode($tmp[0], true);
                     if (count($userAnswers) > 0) {
@@ -1360,6 +1366,13 @@ if (!class_exists('Exercise')) {
                 if (!empty($value)) {
                     Database::get()->query("UPDATE exercise_answer_record SET answer = ?s, answer_id = 1, weight = NULL,
                                           is_answered = 1 WHERE eurid = ?d AND question_id = ?d", $value, $eurid, $key);
+
+                    // Get the answer_record_id for AI evaluation
+                    $answer_record = Database::get()->querySingle("SELECT answer_record_id FROM exercise_answer_record 
+                                                                 WHERE eurid = ?d AND question_id = ?d", $eurid, $key);
+                    if ($answer_record && trim($value) !== '') {
+                        $this->triggerAIEvaluation($answer_record->answer_record_id, $key, $value);
+                    }
                 } else {
                     Database::get()->query("UPDATE exercise_answer_record SET answer = ?s,
                                           answer_id = 0, weight = 0, is_answered = 1 WHERE eurid = ?d AND question_id = ?d", $value, $eurid, $key);
@@ -1433,19 +1446,19 @@ if (!class_exists('Exercise')) {
 
             // Remove oral answers from document table and courses folder
             $userRecords = Database::get()->queryArray("SELECT eurid FROM exercise_user_record WHERE eid = ?d", $id);
-                                                        
+
             foreach ($userRecords as $rec) {
                 $file = Database::get()->queryArray("SELECT id,`path` FROM document WHERE course_id = ?d
                                                       AND subsystem = ?d AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $rec->eurid);
                 foreach ($file as $f) {
                     if (file_exists("$webDir/courses/$course_code/image" . $f->path)) {
                         unlink("$webDir/courses/$course_code/image" . $f->path);
-                    } 
+                    }
                     Database::get()->query("DELETE FROM document WHERE id = ?d", $f->id);
                 }
-                
+
             }
-            
+
 
             Database::get()->query("DELETE d FROM exercise_answer_record d, exercise_user_record s
                               WHERE d.eurid = s.eurid AND s.eid = ?d", $id);
@@ -1599,7 +1612,7 @@ if (!class_exists('Exercise')) {
                                 }
                             }
                         }
-                        
+
                     },
                     $id);
             } else {
@@ -1715,6 +1728,48 @@ if (!class_exists('Exercise')) {
             }
 
             return $totalScore;
+        }
+
+        /**
+         * Trigger AI evaluation for FREE_TEXT question responses
+         */
+        private function triggerAIEvaluation($answer_record_id, $question_id, $response_text)
+        {
+            global $course_id, $uid;
+
+            try {
+                // Check if AI evaluation is available and enabled for this question
+                require_once 'include/lib/ai/services/AIExerciseEvaluationService.php';
+                $aiService = new AIService($course_id, $uid);
+                $aiEvaluationAvailable = $aiService->isEnabledForCourse(AI_MODULE_FREE_TEXT_EVALUATION);
+
+                if (!$aiEvaluationAvailable) {
+                    return false; // AI not available, silently continue
+                }
+
+                // Check if AI evaluation is enabled for this specific question
+                $aiConfig = Database::get()->querySingle("SELECT * FROM exercise_ai_config 
+                                                         WHERE question_id = ?d AND enabled = 1", $question_id);
+                if (!$aiConfig) {
+                    return false; // AI evaluation not enabled for this question
+                }
+
+                // Check if evaluation already exists (to avoid duplicates)
+                $existingEval = Database::get()->querySingle("SELECT id FROM exercise_ai_evaluation 
+                                                             WHERE answer_record_id = ?d", $answer_record_id);
+                if ($existingEval) {
+                    return false; // Already evaluated
+                }
+
+                // AI evaluation will be triggered via AJAX after page load to avoid blocking submission
+
+                return true;
+
+            } catch (Exception $e) {
+                // Log the error but don't block the submission
+                error_log("AI Evaluation Error for answer_record_id $answer_record_id: " . $e->getMessage());
+                return false;
+            }
         }
     }
 }

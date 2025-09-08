@@ -37,6 +37,19 @@
 
         $(document).ready(function() {
 
+            // Check for existing syllabus sections on page load
+            const existingSyllabusData = $('#ai_syllabus_sections').val();
+            if (existingSyllabusData) {
+                try {
+                    const syllabusObj = JSON.parse(existingSyllabusData);
+                    const sectionCount = Object.keys(syllabusObj).length;
+                    updateSyllabusIndicator(true, sectionCount);
+                } catch (e) {
+                    // Invalid JSON, remove the field
+                    $('#ai_syllabus_sections').remove();
+                }
+            }
+
             $('#coursepassword').keyup(function() {
                 $('#result').html(checkStrength($('#coursepassword').val()))
             });
@@ -86,6 +99,443 @@
                 }
             });
 
+            // AI Assistant functionality
+            let currentAIData = null;
+
+            // Handle input method change for syllabus extraction
+            $('input[name="input_method"]').change(function() {
+                if ($(this).val() === 'url') {
+                    $('#upload_section').hide();
+                    $('#url_section').show();
+                    $('#syllabus_pdf').prop('required', false);
+                    $('#syllabus_url').prop('required', true);
+                } else {
+                    $('#upload_section').show();
+                    $('#url_section').hide();
+                    $('#syllabus_pdf').prop('required', true);
+                    $('#syllabus_url').prop('required', false);
+                }
+            });
+
+            // Toggle AI Assistant
+            $('#toggleAIAssistant').on('click', function() {
+                const body = $('#aiAssistantBody');
+                const icon = $(this).find('i');
+
+                if (body.is(':visible')) {
+                    body.slideUp();
+                    icon.removeClass('fa-chevron-up').addClass('fa-chevron-down');
+                } else {
+                    body.slideDown();
+                    icon.removeClass('fa-chevron-down').addClass('fa-chevron-up');
+                }
+            });
+
+            // Handle Syllabus Form Submission
+            $('#aiSyllabusForm').on('submit', function(e) {
+                e.preventDefault();
+
+                const inputMethod = $('input[name="input_method"]:checked').val();
+
+                // Validate input based on method
+                if (inputMethod === 'url') {
+                    const url = $('#syllabus_url').val().trim();
+                    if (!url) {
+                        alert('Please enter a URL');
+                        return;
+                    }
+                    if (!isValidURL(url)) {
+                        alert('Please enter a valid URL');
+                        return;
+                    }
+                    showAILoading('{{ js_escape(trans('langAIDownloading')) }}');
+                } else {
+                    const fileInput = $('#syllabus_pdf')[0];
+                    if (!fileInput.files[0]) {
+                        alert('Please select a PDF file');
+                        return;
+                    }
+                    showAILoading('{{ js_escape(trans('langAIExtracting')) }}');
+                }
+
+                const formData = new FormData(this);
+
+                $.ajax({
+                    url: 'ai_extract_syllabus.php',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    timeout: 90000, // 90 seconds timeout for URL downloads
+                    success: function(response) {
+                        hideAILoading();
+                        if (response.success) {
+                            currentAIData = response.data;
+                            displayAIResults(response.data);
+                        } else {
+                            showAIError(response.error || 'Extraction failed');
+                        }
+                    },
+                    error: function(xhr) {
+                        hideAILoading();
+                        let errorMsg = 'Request failed';
+                        if (xhr.responseJSON && xhr.responseJSON.error) {
+                            errorMsg = xhr.responseJSON.error;
+                        } else if (xhr.status === 0) {
+                            errorMsg = 'Network error - please check your connection';
+                        } else if (xhr.status === 504) {
+                            errorMsg = 'Request timed out - the file may be too large or the server is busy';
+                        }
+                        showAIError(errorMsg);
+                    }
+                });
+            });
+
+            // Handle Prompt Form Submission
+            $('#aiPromptForm').on('submit', function(e) {
+                e.preventDefault();
+
+                const prompt = $('#course_prompt').val().trim();
+                if (prompt.length < 10) {
+                    alert('{{ js_escape(trans('langPromptTooShort')) }}');
+                    return;
+                }
+
+                showAILoading('{{ js_escape(trans('langAIGenerating')) }}');
+
+                $.ajax({
+                    url: 'ai_generate_course.php',
+                    type: 'POST',
+                    data: $(this).serialize(),
+                    success: function(response) {
+                        hideAILoading();
+                        if (response.success) {
+                            currentAIData = response.data;
+                            displayAIResults(response.data);
+                        } else {
+                            showAIError(response.error || 'Generation failed');
+                        }
+                    },
+                    error: function(xhr) {
+                        hideAILoading();
+                        let errorMsg = 'Request failed';
+                        if (xhr.responseJSON && xhr.responseJSON.error) {
+                            errorMsg = xhr.responseJSON.error;
+                        }
+                        showAIError(errorMsg);
+                    }
+                });
+            });
+
+            // Apply AI Data to Form
+            $('#applyAIData').on('click', function() {
+                if (!currentAIData) return;
+
+                // Apply data to form fields
+                if (currentAIData.title) $('#title').val(currentAIData.title);
+                if (currentAIData.public_code) $('#public_code').val(currentAIData.public_code);
+                if (currentAIData.prof_names) $('#prof_names').val(currentAIData.prof_names);
+                if (currentAIData.language) $('#lang_selected').val(currentAIData.language);
+                if (currentAIData.description) {
+                    // Handle rich text editor - check for TinyMCE first, then CKEditor fallback
+                    if (typeof tinyMCE !== 'undefined' && tinyMCE.get('description')) {
+                        tinyMCE.get('description').setContent(currentAIData.description);
+                    } else if (typeof CKEDITOR !== 'undefined' && CKEDITOR.instances.description) {
+                        CKEDITOR.instances.description.setData(currentAIData.description);
+                    } else {
+                        $('textarea[name="description"]').val(currentAIData.description);
+                    }
+                }
+
+                // Store syllabus sections in hidden form field for processing after course creation
+                if (currentAIData.syllabus_sections) {
+                    // Create or update hidden field with syllabus sections JSON
+                    let existingField = $('#ai_syllabus_sections');
+                    if (existingField.length === 0) {
+                        $('<input>').attr({
+                            type: 'hidden',
+                            id: 'ai_syllabus_sections',
+                            name: 'ai_syllabus_sections'
+                        }).appendTo('form[name="createform"]');
+                    }
+                    $('#ai_syllabus_sections').val(JSON.stringify(currentAIData.syllabus_sections));
+
+                    // Show indicator
+                    updateSyllabusIndicator(true, Object.keys(currentAIData.syllabus_sections).length);
+                }
+
+                // Set course format
+                if (currentAIData.view_type) {
+                    $('input[name="view_type"][value="' + currentAIData.view_type + '"]').prop('checked', true);
+                }
+
+                // Set course visibility
+                if (currentAIData.formvisible !== undefined) {
+                    $('input[name="formvisible"][value="' + currentAIData.formvisible + '"]').prop('checked', true);
+                }
+
+                // Set course license
+                if (currentAIData.course_license !== undefined) {
+                    if (currentAIData.course_license === 0) {
+                        $('input[name="l_radio"][value="0"]').prop('checked', true);
+                    } else if (currentAIData.course_license === 10) {
+                        $('input[name="l_radio"][value="10"]').prop('checked', true);
+                    } else {
+                        $('input[name="l_radio"][value="cc"]').prop('checked', true);
+                        $('#course_license_id').val(currentAIData.course_license);
+                    }
+                }
+
+                // Hide AI results and show success message
+                $('#aiResults').slideUp();
+
+                // Scroll to form
+                $('html, body').animate({
+                    scrollTop: $('#title').offset().top - 100
+                }, 500);
+
+                // Highlight applied fields briefly
+                $('#title, #public_code, #prof_names').addClass('bg-success bg-opacity-25');
+                setTimeout(function() {
+                    $('#title, #public_code, #prof_names').removeClass('bg-success bg-opacity-25');
+                }, 2000);
+            });
+
+            // Clear AI Data
+            $('#clearAIData').on('click', function() {
+                currentAIData = null;
+                $('#aiResults').slideUp();
+            });
+
+            // Retry AI Generation
+            $('#retryAI').on('click', function() {
+                $('#aiResults').slideUp();
+                // Trigger the active tab's form
+                if ($('#ai-syllabus-tab').hasClass('active')) {
+                    $('#aiSyllabusForm').trigger('submit');
+                } else {
+                    $('#aiPromptForm').trigger('submit');
+                }
+            });
+
+            function showAILoading(text) {
+                $('#loadingText').text(text);
+                $('#aiLoading').show();
+                $('#aiResults').hide();
+                $('#extractBtn, #generateBtn').prop('disabled', true);
+            }
+
+            function hideAILoading() {
+                $('#aiLoading').hide();
+                $('#extractBtn, #generateBtn').prop('disabled', false);
+            }
+
+            function displayAIResults(data) {
+                let preview = '<div class="row">';
+
+                if (data.title) {
+                    preview += '<div class="col-md-6 mb-2"><strong>{{ js_escape(trans('langAIPreviewTitle')) }}:</strong> ' + escapeHtml(data.title) + '</div>';
+                }
+                if (data.public_code) {
+                    preview += '<div class="col-md-6 mb-2"><strong>{{ js_escape(trans('langAIPreviewCode')) }}:</strong> ' + escapeHtml(data.public_code) + '</div>';
+                }
+                if (data.prof_names) {
+                    preview += '<div class="col-md-6 mb-2"><strong>{{ js_escape(trans('langAIPreviewInstructor')) }}:</strong> ' + escapeHtml(data.prof_names) + '</div>';
+                }
+                if (data.language) {
+                    preview += '<div class="col-md-6 mb-2"><strong>{{ js_escape(trans('langAIPreviewLanguage')) }}:</strong> ' + escapeHtml(data.language) + '</div>';
+                }
+                if (data.view_type) {
+                    preview += '<div class="col-md-6 mb-2"><strong>{{ js_escape(trans('langAIPreviewFormat')) }}:</strong> ' + escapeHtml(data.view_type) + '</div>';
+                }
+                if (data.keywords) {
+                    preview += '<div class="col-12 mb-2"><strong>{{ js_escape(trans('langAIPreviewKeywords')) }}:</strong> ' + escapeHtml(data.keywords) + '</div>';
+                }
+
+                // Show source information
+                if (data.extraction_method) {
+                    let sourceInfo = '';
+                    if (data.extraction_method === 'web_url' && data.source_url) {
+                        sourceInfo = '{{ js_escape(trans('langAISourceWebURL')) }}: ' + escapeHtml(data.source_url);
+                    } else if (data.extraction_method === 'pdf_url' && data.source_url) {
+                        sourceInfo = '{{ js_escape(trans('langAISourceDownloaded')) }}: ' + escapeHtml(data.source_url);
+                    } else if (data.extraction_method === 'pdf_upload' && data.file_name) {
+                        sourceInfo = '{{ js_escape(trans('langAISourceUploaded')) }}: ' + escapeHtml(data.file_name);
+                    }
+                    if (sourceInfo) {
+                        preview += '<div class="col-12 mb-2"><small class="text-muted"><strong>{{ js_escape(trans('langAIPreviewSource')) }}:</strong> ' + sourceInfo + '</small></div>';
+                    }
+                }
+
+                if (data.description) {
+                    const shortDesc = data.description.length > 200 ? data.description.substring(0, 200) + '...' : data.description;
+                    const needsExpansion = data.description.length > 200;
+
+                    preview += '<div class="col-12">';
+                    preview += '<strong>{{ js_escape(trans('langAIPreviewDescription')) }}:</strong><br>';
+                    preview += '<div id="descriptionShort">' + shortDesc + '</div>';
+
+                    if (needsExpansion) {
+                        preview += '<div id="descriptionFull" style="display: none;">' + data.description + '</div>';
+                        preview += '<button type="button" class="btn btn-link btn-sm p-0 mt-1" id="toggleDescription">';
+                        preview += '<i class="fa-solid fa-chevron-down me-1"></i>{{ js_escape(trans('langAIShowFullDescription')) }}';
+                        preview += '</button>';
+                    }
+
+                    preview += '</div>';
+                }
+
+                // Show structured syllabus sections if available
+                if (data.syllabus_sections && Object.keys(data.syllabus_sections).length > 0) {
+                    preview += '<div class="col-12 mt-3">';
+                    preview += '<strong>{{ js_escape(trans('langAISyllabusStructured')) }}:</strong>';
+                    preview += '<div class="row mt-2">';
+
+                    const sectionLabels = {
+                        'objectives': '{{ js_escape(trans('langAISyllabusObjectives')) }}',
+                        'bibliography': '{{ js_escape(trans('langAISyllabusBibliography')) }}',
+                        'teaching_method': '{{ js_escape(trans('langAISyllabusTeachingMethod')) }}',
+                        'assessment_method': '{{ js_escape(trans('langAISyllabusAssessmentMethod')) }}',
+                        'prerequisites': '{{ js_escape(trans('langAISyllabusPrerequisites')) }}',
+                        'instructors': '{{ js_escape(trans('langAISyllabusInstructors')) }}',
+                        'target_group': '{{ js_escape(trans('langAISyllabusTargetGroup')) }}',
+                        'textbooks': '{{ js_escape(trans('langAISyllabusTextbooks')) }}',
+                        'additional_info': '{{ js_escape(trans('langAISyllabusAdditionalInfo')) }}'
+                    };
+
+                    let sectionCounter = 0;
+                    for (const [sectionKey, sectionContent] of Object.entries(data.syllabus_sections)) {
+                        if (sectionContent && sectionContent.trim().length > 0) {
+                            const label = sectionLabels[sectionKey] || sectionKey;
+                            // Create a temporary element to strip HTML tags for preview
+                            const tempDiv = document.createElement('div');
+                            tempDiv.innerHTML = sectionContent;
+                            const textContent = tempDiv.textContent || tempDiv.innerText || '';
+                            const needsExpansion = textContent.length > 100;
+                            const shortContent = needsExpansion ? textContent.substring(0, 100) + '...' : textContent;
+                            const sectionId = 'section_' + sectionCounter++;
+
+                            preview += '<div class="col-md-6 mb-3">';
+                            preview += '<small><strong>' + escapeHtml(label) + ':</strong><br>';
+                            preview += '<span id="' + sectionId + '_short">' + escapeHtml(shortContent) + '</span>';
+
+                            if (needsExpansion) {
+                                preview += '<span id="' + sectionId + '_full" style="display: none;">' + escapeHtml(textContent) + '</span>';
+                                preview += '<br><button type="button" class="btn btn-link btn-sm p-0 mt-1 section-toggle" data-target="' + sectionId + '">';
+                                preview += '<i class="fa-solid fa-chevron-down me-1"></i>{{ js_escape(trans('langAIShowFullDescription')) }}';
+                                preview += '</button>';
+                            }
+
+                            preview += '</small></div>';
+                        }
+                    }
+
+                    preview += '</div></div>';
+                }
+
+                preview += '</div>';
+
+                $('#aiDataPreview').html(preview);
+
+                // Add click handler for description toggle
+                $('#toggleDescription').on('click', function() {
+                    const $short = $('#descriptionShort');
+                    const $full = $('#descriptionFull');
+                    const $button = $(this);
+                    const $icon = $button.find('i');
+
+                    if ($full.is(':visible')) {
+                        $full.hide();
+                        $short.show();
+                        $icon.removeClass('fa-chevron-up').addClass('fa-chevron-down');
+                        $button.html('<i class="fa-solid fa-chevron-down me-1"></i>{{ js_escape(trans('langAIShowFullDescription')) }}');
+                    } else {
+                        $short.hide();
+                        $full.show();
+                        $icon.removeClass('fa-chevron-down').addClass('fa-chevron-up');
+                        $button.html('<i class="fa-solid fa-chevron-up me-1"></i>{{ js_escape(trans('langAIHideDescription')) }}');
+                    }
+                });
+
+                // Add click handlers for syllabus section toggles
+                $(document).on('click', '.section-toggle', function() {
+                    const $button = $(this);
+                    const targetId = $button.data('target');
+                    const $short = $('#' + targetId + '_short');
+                    const $full = $('#' + targetId + '_full');
+                    const $icon = $button.find('i');
+
+                    if ($full.is(':visible')) {
+                        $full.hide();
+                        $short.show();
+                        $icon.removeClass('fa-chevron-up').addClass('fa-chevron-down');
+                        $button.html('<i class="fa-solid fa-chevron-down me-1"></i>{{ js_escape(trans('langAIShowFullDescription')) }}');
+                    } else {
+                        $short.hide();
+                        $full.show();
+                        $icon.removeClass('fa-chevron-down').addClass('fa-chevron-up');
+                        $button.html('<i class="fa-solid fa-chevron-up me-1"></i>{{ js_escape(trans('langAIHideDescription')) }}');
+                    }
+                });
+
+                $('#aiResults').slideDown();
+            }
+
+            function showAIError(message) {
+                alert('AI Error: ' + message);
+            }
+
+            function isValidURL(string) {
+                try {
+                    const url = new URL(string);
+                    return url.protocol === 'http:' || url.protocol === 'https:';
+                } catch (_) {
+                    return false;
+                }
+            }
+
+            function escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+
+            function updateSyllabusIndicator(hasSections, sectionCount) {
+                let indicator = $('#syllabusIndicator');
+
+                if (hasSections && sectionCount > 0) {
+                    if (indicator.length === 0) {
+                        // Create indicator if it doesn't exist
+                        const indicatorHtml = `
+                            <div id="syllabusIndicator" class="alert alert-info d-flex justify-content-between align-items-center mt-3">
+                                <div>
+                                    <i class="fa-solid fa-file-text me-2"></i>
+                                    <strong>${sectionCount} AI δομημένα τμήματα συλλάβου</strong> θα προστεθούν στο μάθημα
+                                </div>
+                                <button type="button" class="btn btn-sm btn-outline-secondary" id="clearSyllabusData">
+                                    <i class="fa-solid fa-times me-1"></i>Καθαρισμός
+                                </button>
+                            </div>
+                        `;
+                        $(indicatorHtml).insertBefore('.form-wrapper');
+                    } else {
+                        // Update existing indicator
+                        indicator.find('strong').text(sectionCount + ' AI δομημένα τμήματα συλλάβου');
+                        indicator.show();
+                    }
+                } else {
+                    indicator.hide();
+                }
+            }
+
+            // Handle clear syllabus data
+            $(document).on('click', '#clearSyllabusData', function() {
+                if (confirm('Είστε βέβαιος ότι θέλετε να καθαρίσετε τα δομημένα τμήματα συλλάβου;')) {
+                    $('#ai_syllabus_sections').remove();
+                    updateSyllabusIndicator(false, 0);
+                }
+            });
+
         });
     </script>
 @endpush
@@ -110,6 +560,146 @@
                     <span>{{ trans('langFieldsOptionalNote') }}</span>
                 </div>
              </div>
+
+             @if($ai_available)
+                 <div class='col-12'>
+                    <div class='card border-0 mb-4'>
+                        <div class='card-header bg-transparent border-0 d-flex justify-content-between align-items-center'>
+                            <h5 class='mb-0'>
+                                <i class='fa-solid fa-robot me-2'></i>{{ trans('langAIGenerateCourse') }}
+                            </h5>
+                            <button type='button' class='btn btn-sm btn-outline-secondary' id='toggleAIAssistant'>
+                                <i class='fa-solid fa-chevron-down'></i> {{ trans('langAIToggleAssistant') }}
+                            </button>
+                        </div>
+                        <div class='card-body' id='aiAssistantBody' style='display: none;'>
+                            <ul class='nav nav-pills mb-3' id='aiTabs' role='tablist'>
+                                <li class='nav-item' role='presentation'>
+                                    <button class='nav-link active' id='ai-syllabus-tab' data-bs-toggle='pill' data-bs-target='#ai-syllabus' type='button' role='tab'>
+                                        <i class='fa-solid fa-file-pdf me-2'></i>{{ trans('langAIExtractFromSyllabus') }}
+                                    </button>
+                                </li>
+                                <li class='nav-item' role='presentation'>
+                                    <button class='nav-link' id='ai-prompt-tab' data-bs-toggle='pill' data-bs-target='#ai-prompt' type='button' role='tab'>
+                                        <i class='fa-solid fa-keyboard me-2'></i>{{ trans('langAIGenerateFromPrompt') }}
+                                    </button>
+                                </li>
+                            </ul>
+
+                            <div class='tab-content' id='aiTabContent'>
+                                <!-- Syllabus Upload Tab -->
+                                <div class='tab-pane fade show active' id='ai-syllabus' role='tabpanel'>
+                                    <form id='aiSyllabusForm' enctype='multipart/form-data'>
+
+                                        <!-- Input Method Selection -->
+                                        <div class='mb-4'>
+                                            <label class='form-label'>{{ trans('langAISyllabusInputMethod') }}</label>
+                                            <div class='row'>
+                                                <div class='col-md-6'>
+                                                    <div class='form-check'>
+                                                        <input class='form-check-input' type='radio' name='input_method' id='upload_method' value='upload' checked>
+                                                        <label class='form-check-label' for='upload_method'>
+                                                            <i class='fa-solid fa-upload me-2'></i>{{ trans('langAIUploadFile') }}
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class='col-md-6'>
+                                                    <div class='form-check'>
+                                                        <input class='form-check-input' type='radio' name='input_method' id='url_method' value='url'>
+                                                        <label class='form-check-label' for='url_method'>
+                                                            <i class='fa-solid fa-link me-2'></i>{{ trans('langAIDownloadFromURL') }}
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class='row'>
+                                            <div class='col-12'>
+                                                <!-- File Upload Section -->
+                                                <div class='mb-3' id='upload_section'>
+                                                    <label for='syllabus_pdf' class='form-label'>{{ trans('langAIUploadSyllabus') }}</label>
+                                                    <input type='file' class='form-control' id='syllabus_pdf' name='syllabus_pdf' accept='application/pdf'>
+                                                    <div class='form-text'>{{ trans('langAIMaxFileSize') }}</div>
+                                                </div>
+
+                                                <!-- URL Download Section -->
+                                                <div class='mb-3' id='url_section' style='display: none;'>
+                                                    <label for='syllabus_url' class='form-label'>{{ trans('langAISyllabusURL') }}</label>
+                                                    <input type='url' class='form-control' id='syllabus_url' name='syllabus_url'
+                                                           placeholder='https://example.com/course-page or https://example.com/syllabus.pdf'>
+                                                    <div class='form-text'>
+                                                        {{ trans('langAIURLDescription') }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button type='submit' class='btn btn-primary' id='extractBtn'>
+                                            <i class='fa-solid fa-magic-wand-sparkles me-2'></i>{{ trans('langAIExtractButton') }}
+                                        </button>
+                                        {!! generate_csrf_token_form_field() !!}
+                                    </form>
+                                </div>
+
+                                <!-- Manual Prompt Tab -->
+                                <div class='tab-pane fade' id='ai-prompt' role='tabpanel'>
+                                    <form id='aiPromptForm'>
+                                        <div class='row'>
+                                            <div class='col-12'>
+                                                <div class='mb-3'>
+                                                    <label for='course_prompt' class='form-label'>{{ trans('langAICoursePrompt') }}</label>
+                                                    <textarea class='form-control' id='course_prompt' name='course_prompt' rows='4'
+                                                              placeholder='{{ trans('langAIPromptPlaceholder') }}' required></textarea>
+                                                    <div class='form-text'>{{ trans('langAIPromptDescription') }}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button type='submit' class='btn btn-primary' id='generateBtn'>
+                                            <i class='fa-solid fa-magic-wand-sparkles me-2'></i>{{ trans('langAIGenerateCourse') }}
+                                        </button>
+                                        {!! generate_csrf_token_form_field() !!}
+                                    </form>
+                                </div>
+                            </div>
+
+                            <!-- AI Results -->
+                            <div id='aiResults' class='mt-4' style='display: none;'>
+                                <div class='card border-success'>
+                                    <div class='card-header bg-success border-success'>
+                                        <h6 class='mb-0 text-white'>
+                                            <i class='fa-solid fa-check-circle me-2'></i>{{ trans('langAIPreviewData') }}
+                                        </h6>
+                                    </div>
+                                    <div class='card-body'>
+                                        <div id='aiDataPreview'></div>
+                                        <div class='mt-3 d-flex flex-wrap gap-2'>
+                                            <button type='button' class='btn btn-success' id='applyAIData'>
+                                                <i class='fa-solid fa-check me-2'></i>{{ trans('langAIApplyData') }}
+                                            </button>
+                                            <button type='button' class='btn btn-outline-secondary' id='clearAIData'>
+                                                <i class='fa-solid fa-trash me-2'></i>{{ trans('langAIClearForm') }}
+                                            </button>
+                                            <button type='button' class='btn btn-outline-warning' id='retryAI'>
+                                                <i class='fa-solid fa-redo me-2'></i>{{ trans('langAIRetry') }}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Loading indicator -->
+                            <div id='aiLoading' class='text-center mt-4' style='display: none;'>
+                                <div class='spinner-border text-primary' role='status'>
+                                    <span class='visually-hidden'>Loading...</span>
+                                </div>
+                                <div class='mt-2'>
+                                    <span id='loadingText'>{{ trans('langAIGenerating') }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                 </div>
+             @endif
 
               <div class='col-lg-8 col-12'>
                 <div class='form-wrapper form-edit border-0 px-0'>
@@ -367,6 +957,9 @@
                     </div>
 
                 {!! generate_csrf_token_form_field() !!}
+                @if(!empty($ai_syllabus_sections))
+                <input type="hidden" id="ai_syllabus_sections" name="ai_syllabus_sections" value="{{ $ai_syllabus_sections }}">
+                @endif
                 </fieldset>
               </form>
             </div>

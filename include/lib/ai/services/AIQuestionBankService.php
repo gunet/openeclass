@@ -192,9 +192,6 @@ class AIQuestionBankService extends AIService {
         $saved = [];
         $errors = [];
 
-//        print_a($questions);
-        //die;
-
         foreach ($questions as $question) {
             try {
                 $question_obj = new Question();
