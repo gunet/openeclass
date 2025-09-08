@@ -49,6 +49,8 @@ require_once 'modules/session/functions.php';
 doc_init();
 $tree = new Hierarchy();
 $course = new Course();
+$up = new Permissions();
+$course_users_permission = $up->has_course_users_permission();
 $pageName = ''; // delete $pageName set in doc_init.php
 
 $main_content = $cunits_content = $course_info_extra = $data['countUnits'] = "";
@@ -352,13 +354,13 @@ $data['action_bar'] = action_bar([
         'url' => "{$urlAppend}modules/user/index.php?course=$course_code",
         'icon' => 'fa-users',
         'level' => 'primary',
-        'show' => ($uid && $is_course_admin)
+        'show' => ($uid && ($is_course_admin || $course_users_permission))
     ],
     [
         'title' => "$numUsers $langRegistered",
         'url' => "{$urlAppend}modules/user/userslist.php?course=$course_code",
         'icon' => 'fa-users',
-        'show' => ($uid && !$is_course_admin && (setting_get(SETTING_USERS_LIST_ACCESS, $course_id) == 1))
+        'show' => ($uid && !$is_course_admin && !$course_users_permission && (setting_get(SETTING_USERS_LIST_ACCESS, $course_id) == 1))
     ],
     [
         'title' => $langUserEmailNotification,

@@ -26,9 +26,9 @@ function display_certificates(): void
 {
     global $course_id, $tool_content, $course_code, $urlServer, $langPurge,
            $langDeleteCourseActivities, $langConfirmDelete, $is_editor,
-           $langNoCertificates, $langActive, $langInactive,
+           $langNoCertificates, $langActive, $langInactive, $langNoThumbnail,
            $langEditChange, $langNewCertificate, $langCertificates, $langActivate,
-           $langDeactivate, $langSee, $langConfirmPurgeCert;
+           $langDeactivate, $langSee, $langConfirmPurgeCert, $webDir;
 
     // Fetch the certificate list
     $sql_cer = Database::get()->queryArray("SELECT id, title, description, active, template
@@ -37,8 +37,7 @@ function display_certificates(): void
         $tool_content .= "
                 <div class='col-12 mt-4'>
                     <div class='card panelCard card-default px-lg-4 py-lg-3'>
-                        <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-                            
+                        <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>                            
                                 <h3>
                                     $langCertificates
                                 </h3>";
@@ -60,12 +59,17 @@ function display_certificates(): void
             $template_name = key($template_details);
             $template_filename = $template_details[$template_name];
             $thumbnail_filename = preg_replace('/.html/', '_thumbnail.png', $template_filename);
-            $template_thumbnail = $urlServer . CERT_TEMPLATE_PATH . $thumbnail_filename;
-            $tool_content .= "
-            <div class='row res-table-row border-0 p-3 mt-2'>
+
+            if (!file_exists($webDir . CERT_TEMPLATE_PATH . $thumbnail_filename)) {
+                $template_thumbnail = "<i class='fa-solid fa-ban fa-xl' title='$langNoThumbnail'></i>";
+            } else {
+                $template_thumbnail = "<img class='mt-md-0 mt-4' src='$urlServer" . CERT_TEMPLATE_PATH . "$thumbnail_filename' title='$template_name'>";
+            }
+
+            $tool_content .= "<div class='row res-table-row border-0 p-3 mt-2'>
                 <div class='col-2 text-md-start text-center'>
                 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id&amp;preview=1' target=_blank>
-                    <img class='mt-md-0 mt-4' src='$template_thumbnail' title='$template_name'>
+                    $template_thumbnail
                 </a>
                 </div>
                 <div class='col-7 text-center mt-md-0 mt-3'>

@@ -21,7 +21,7 @@
         </div>
         <div class='card-body card-body-default px-0'>
             <div class='card panelCard card-default px-lg-4 py-lg-3 p-3'>
-                <div class='d-flex justify-content-between align-items-start gap-2' role='alert' style='margin: 0'>
+                <div class='d-flex flex-column justify-content-between align-items-start gap-2' role='alert' style='margin: 0'>
                     <p>{!! standard_text_escape($theQuestion->question_text) !!}</p>
                     @if ($show_results)
                         <script type = 'text/javascript'>

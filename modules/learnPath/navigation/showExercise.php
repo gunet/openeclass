@@ -362,7 +362,7 @@ function showQuestion($questionId, $onlyAnswers = false) {
     }
 
     for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
-        $answer = $objAnswerTmp->selectAnswer($answerId);
+        $answer = $objAnswerTmp->getTitle($answerId);
         $answerCorrect = $objAnswerTmp->isCorrect($answerId);
         if (in_array($answerType, [UNIQUE_ANSWER, MULTIPLE_ANSWER, MATCHING, TRUE_FALSE])) {
             $answer = standard_text_escape($answer);

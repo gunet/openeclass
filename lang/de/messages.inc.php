@@ -6294,3 +6294,4 @@ $langAddRowsColumns = "Registration";
 $langCurrentDuration = "Current duration";
 $langClearChoice = 'Clear Choice';
 $langBBBScheduleSessionInfo3 = "is now available.";
+$langReportImageNotFound = "The images should be in the directory titled Report_Images in 'Documents'";

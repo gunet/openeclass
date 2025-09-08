@@ -636,7 +636,7 @@ if ($is_editor) {
                 . "JOIN exercise_answer_record AS ear ON ear.question_id = exq.id "
                 . "JOIN exercise_user_record AS eur ON eur.eurid = ear.eurid "
                 . "WHERE eur.eid IN (".implode(',', $ids_array).") AND ear.weight IS NULL "
-                . "AND exq.type = " . FREE_TEXT . " "
+                . "AND exq.type = " . FREE_TEXT . " OR exq.type = ". ORAL. " "
                 . "GROUP BY exq.id, eur.eid, eur.eurid, ear.q_position, exq.question");
         $questionsEid = json_encode($question_types, JSON_UNESCAPED_UNICODE);
 

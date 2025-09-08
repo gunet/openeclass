@@ -1311,9 +1311,11 @@ function cert_output_to_pdf($certificate_id, $user, $certificate_title = null, $
         'margin_header' => 0,
         'margin_footer' => 0,
     ]);
+
     $mpdf->AddFontDirectory(_MPDF_TTFONTDATAPATH);
-    chdir("$webDir" . CERT_TEMPLATE_PATH);
-    $html_certificate = file_get_contents($cert_file);
+    chdir("$webDir" . CERT_TEMPLATE_PATH . dirname($cert_file));
+
+    $html_certificate = file_get_contents(basename($cert_file));
     $html_certificate = preg_replace('(%certificate_title%)', $certificate_title, $html_certificate);
     $html_certificate = preg_replace('(%student_name%)', $student_name, $html_certificate);
     $html_certificate = preg_replace('(%issuer%)', $certificate_issuer, $html_certificate);

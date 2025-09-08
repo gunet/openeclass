@@ -70,6 +70,24 @@ $(function() {
     function updateFillInBlanksAnswerTypeValue(){
         $('input[name=answerType]#fill_in_blanks_selector').val($(this).val());
     }
+
+    var selectTypeAnswer = document.getElementById('answerTypeSelected');
+    var selectedOption = selectTypeAnswer.options[selectTypeAnswer.selectedIndex];
+    if (selectedOption.selected && selectedOption.value == 7) {
+        $('.fill_in_blank_strict').removeClass('d-none').addClass('d-block');
+    } else {
+        $('.fill_in_blank_strict').removeClass('d-block').addClass('d-none');
+    }
+    $('#answerTypeSelected').on('click', function () {
+        var selectTypeAnswer = document.getElementById('answerTypeSelected');
+        var selectedOption = selectTypeAnswer.options[selectTypeAnswer.selectedIndex];
+        if (selectedOption.selected && selectedOption.value == 7) {
+            $('.fill_in_blank_strict').removeClass('d-none').addClass('d-block');
+        } else {
+            $('.fill_in_blank_strict').removeClass('d-block').addClass('d-none');
+        }
+    });
+
  });
 </script>
  ";
@@ -86,6 +104,20 @@ if (isset($_POST['submitQuestion'])) {
         $questionDescription = purify($_POST['questionDescription']);
         $questionFeedback = purify($_POST['questionFeedback']);
         $answerType = intval($_POST['answerType']);
+        if ($answerType == FILL_IN_BLANKS_TOLERANT && isset($_POST['fill_in_blank_strict'])) {
+            $answerType = intval($_POST['fill_in_blank_strict']); // strict fill in blanks
+        }
+
+        // It requires to be uploaded an image for this type of question
+
+
+        if (isset($_FILES['imageUpload']) && !is_uploaded_file($_FILES['imageUpload']['tmp_name']) && $answerType == DRAG_AND_DROP_MARKERS) {
+            $redirectURL = $urlAppend . "modules/exercise/admin.php?course=$course_code&exerciseId=$_GET[exerciseId]&newQuestion=yes";
+            Session::flash('message', $langRequiresImageUploadedForThisType);
+            Session::flash('alert-class', 'alert-warning');
+            redirect_to_home_page($redirectURL);
+        }
+
         // no name given
         if (empty($questionName)) {
             $msgErr = $langGiveQuestion;
@@ -116,6 +148,17 @@ if (isset($_POST['submitQuestion'])) {
             $objQuestion->removePicture();
         } elseif (isset($_FILES['imageUpload']) && is_uploaded_file($_FILES['imageUpload']['tmp_name'])) {
 
+            if ($answerType == DRAG_AND_DROP_MARKERS) {
+                $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/svg+xml'];
+                $fileType = mime_content_type($_FILES['imageUpload']['tmp_name']);
+                if (!in_array($_FILES['imageUpload']['type'], $allowedTypes)) {
+                    $redirectURL = $urlAppend . "modules/exercise/admin.php?course=$course_code&exerciseId=$_GET[exerciseId]&newQuestion=yes";
+                    Session::flash('message', $langRequiresImageUploadedForThisType);
+                    Session::flash('alert-class', 'alert-warning');
+                    redirect_to_home_page($redirectURL);
+                }
+            }
+
             require_once 'include/lib/fileUploadLib.inc.php';
             validateUploadedFile($_FILES['imageUpload']['name'], 2);
 
@@ -134,7 +177,7 @@ if (isset($_POST['submitQuestion'])) {
         // if the answer type is free text (which means it doesn't have predefined answers)
         // redirect to either pool or edit exercise page
         // else redirect to modify answers page in order to add answers to question
-        if ($answerType == FREE_TEXT) {
+        if ($answerType == FREE_TEXT or $answerType == ORAL) {
             $redirect_url = (isset($exerciseId)) ? "modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId&htopic=6" : "modules/exercise/question_pool.php?course=$course_code";
         } else {
             if (isset($_GET['modifyQuestion'])) { // existing question
@@ -283,78 +326,47 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
                     </div>                    
                 </div>
             ";
-        $tool_content .= "<div class='row form-group mt-4'>
-                <div class='col-12 control-label-notes mb-1'>$langAnswerType</div>
-                <div class='col-12'>
-                    <div class='radio'>
-                      <label>
-                        <input type='radio' name='answerType' value='1' ". (($answerType == UNIQUE_ANSWER) ? "checked" : "") .">
-                        $langUniqueSelect
-                      </label>
-                    </div>
-                    <div class='radio'>
-                      <label>
-                        <input type='radio' name='answerType' value='2' ". (($answerType == MULTIPLE_ANSWER) ? "checked" : "") .">
-                       $langMultipleSelect
-                      </label>
-                    </div>
-                    <div class='radio'>
-                      <label>
-                        <input type='radio' name='answerType' value='". (($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT || $answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) ? $answerType : 3) ."' id='fill_in_blanks_selector' ". (($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT || $answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) ? "checked" : "") .">
-                       $langFillBlanks
-                      </label>
-                    </div>
-                    <div class='row'>
-                        <div class='col-10 offset-2 d-flex justify-content-center'>
-                            <div class='form-group ".(($answerType != FILL_IN_BLANKS && $answerType != FILL_IN_BLANKS_TOLERANT && $answerType != FILL_IN_FROM_PREDEFINED_ANSWERS) ? "hide": "")."' id='fillInBlanksOptions'>
-                                <div class='col-12'>
-                                    <div class='radio mb-2'>
-                                        <label>
-                                            <input type='radio' name='fillInBlanksOptions' value='".FILL_IN_BLANKS."' ". (($answerType != FILL_IN_BLANKS_TOLERANT) ? "checked" : "") .">
-                                            $langFillBlanksStrict $langFillBlanksStrictExample
-                                        </label>
-                                    </div>
-                                    <div class='radio mb-2'>
-                                        <label>
-                                            <input type='radio' name='fillInBlanksOptions' value='".FILL_IN_BLANKS_TOLERANT."' ". (($answerType == FILL_IN_BLANKS_TOLERANT) ? "checked" : "") .">
-                                            $langFillBlanksTolerant $langFillBlanksTolerantExample
 
-                                        </label>
-                                    </div>
-                                    <div class='radio'>
-                                        <label>
-                                            <input type='radio' name='fillInBlanksOptions' value='".FILL_IN_FROM_PREDEFINED_ANSWERS."' ". (($answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) ? "checked" : "") .">
-                                            $langFillFromSelectedWords
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class='radio'>
-                          <label>
-                            <input type='radio' name='answerType' value='".MATCHING."' ". (($answerType == MATCHING) ? "checked" : "") .">
-                           $langMatching
-                          </label>
-                        </div>
-                        <div class='radio'>
-                          <label>
-                            <input type='radio' name='answerType' value='".TRUE_FALSE. "' ". (($answerType == TRUE_FALSE) ? "checked" : "") .">
-                           $langTrueFalse
-                          </label>
-                        </div>
-                        <div class='radio'>
-                          <label>
-                            <input type='radio' id='free_text_selector' name='answerType' value='".FREE_TEXT."' ". (($answerType == FREE_TEXT) ? "checked" : "") .">
-                           $langFreeText
-                          </label>
-                        </div>
+        $tool_content .= "
+            <div class='row form-group mt-4'>
+                <div class='col-12 control-label-notes mb-1'>
+                    $langAnswerType
+                </div>
+                <div class='col-12'>
+                    " . selection(
+                        [
+                            UNIQUE_ANSWER => $langUniqueSelect,
+                            MULTIPLE_ANSWER => $langMultipleSelect,
+                            TRUE_FALSE => $langTrueFalse,
+                            FILL_IN_BLANKS_TOLERANT => "$langFillBlanks",
+                            FILL_IN_FROM_PREDEFINED_ANSWERS => "$langFillFromSelectedWords",
+                            MATCHING => $langMatching,
+                            ORDERING => $langOrdering,
+                            DRAG_AND_DROP_TEXT => "$langDragAndDropText",
+                            DRAG_AND_DROP_MARKERS => "$langDragAndDropMarkers",
+                            CALCULATED => $langCalculated,
+                            FREE_TEXT => "$langFreeText",
+                            ORAL => "$langOral",
+                        ],
+                        'answerType',
+                        (isset($answerType)) ? ($answerType == FILL_IN_BLANKS ? FILL_IN_BLANKS_TOLERANT : $answerType) : UNIQUE_ANSWER,
+                        "id='answerTypeSelected'"
+                    ) . "
+                    <div class='mt-2 checkbox fill_in_blank_strict d-none'>
+                        <label class='label-container' aria-label='$langSettingSelect'>
+                            <input type='checkbox' name='fill_in_blank_strict' value=".FILL_IN_BLANKS." ". ($answerType == FILL_IN_BLANKS ? 'checked' : '') .">
+                            <span class='checkmark'></span>
+                            $langFillBlanksStrict $langFillBlanksStrictExample
+                        </label>
                     </div>
                 </div>
             </div>
-            <div class='row form-group ".(($answerType != FREE_TEXT) ? "hide": "")." mt-4'>
+            ";
+
+            $tool_content .= "<div class='row form-group ".(($answerType != FREE_TEXT and $answerType != ORAL) ? "hide": "")." mt-4'>
                 <label for='questionGrade' class='col-12 control-label-notes mb-1'>$langGradebookGrade</label>
                 <div class='col-12'>
-                  <input name='questionGrade' type='text' class='form-control' id='questionGrade' placeholder='$langGradebookGrade' value='$questionWeight'".(($answerType != 6) ? " disabled": "").">
+                  <input name='questionGrade' type='text' class='form-control' id='questionGrade' placeholder='$langGradebookGrade' value='$questionWeight'".(($answerType != 6 and $answerType != 13) ? " disabled": "").">
                 </div>
             </div>
             <div class='row'>

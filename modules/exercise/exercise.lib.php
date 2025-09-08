@@ -18,6 +18,20 @@
  *
  */
 
+require_once 'QuestionType.php';
+require_once 'MultipleChoiceUniqueAnswer.php';
+require_once 'MultipleChoiceMultipleAnswer.php';
+require_once 'MatchingAnswer.php';
+require_once 'FillInBlanksAnswer.php';
+require_once 'FillInPredefinedAnswer.php';
+require_once 'FreeTextAnswer.php';
+require_once 'DragAndDropTextAnswer.php';
+require_once 'DragAndDropMarkersAnswer.php';
+require_once 'CalculatedAnswer.php';
+require_once 'OrderingAnswer.php';
+require_once 'OralAnswer.php';
+
+use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 /**
  * @brief display question
@@ -28,10 +42,8 @@
  */
 function showQuestion(&$objQuestionTmp, $question_number, array $exerciseResult = [], $options = []) {
 
-    global $tool_content, $picturePath, $langNoAnswer, $langQuestion,
-            $langColumnA, $langColumnB, $langMakeCorrespond, $langInfoGrades,
-            $exerciseType, $nbrQuestions, $langInfoGrade, $langHasAnswered,
-           $langClearChoice, $langSelect;
+    global $tool_content, $picturePath, $langQuestion, $langInfoGrades,
+            $exerciseType, $nbrQuestions, $langInfoGrade, $langHasAnswered;
 
     $questionId = $objQuestionTmp->selectId();
     $questionWeight = $objQuestionTmp->selectWeighting();
@@ -53,6 +65,20 @@ function showQuestion(&$objQuestionTmp, $question_number, array $exerciseResult 
     } else {
         $qNumber = "$question_number / $nbrQuestions";
     }
+
+    $classImg = '';
+    $classContainer = '';
+    $classCanvas = '';
+    if ($answerType == DRAG_AND_DROP_MARKERS) {
+        $classImg = 'drag-and-drop-markers-img';
+        $classContainer = 'drag-and-drop-markers-container';
+        $classCanvas = 'drag-and-drop-markers-canvas';
+    } elseif ($answerType == CALCULATED) {
+        // Update variables for each wildcard if necessary.
+        require_once __DIR__ . '/../../vendor/autoload.php';
+        updateWildCardsWithRandomVariables($questionId, $exerciseType);
+    }
+
     $tool_content .= "
             <div class='card panelCard px-lg-4 py-lg-3 qPanel panelCard-exercise mt-4' id='qPanel$questionId'>
               <div class='card-header border-0 d-flex justify-content-between align-items-center'>
@@ -63,172 +89,24 @@ function showQuestion(&$objQuestionTmp, $question_number, array $exerciseResult 
             </div>
             <div class='panel-body'>
                 <div class='text-heading-h4 mb-4'>" . q_math($questionName) . "</div>";
-                if (!empty($questionDescription)) {
+                if (!empty($questionDescription) && $answerType != CALCULATED) {
                     $tool_content .= " <div class='mb-4'>$questionDescription</div>";
                 }
                 if (file_exists($picturePath . '/quiz-' . $questionId)) {
-                    $tool_content .= "<div class='mb-4'><img src='../../$picturePath/quiz-$questionId'></div>";
+                    $tool_content .= "<div class='$classContainer' id='image-container-$questionId' style='position: relative; display: inline-block;'>
+                                        <img class='$classImg' id='img-quiz-$questionId' src='../../$picturePath/quiz-$questionId' style='width: 100%;'>
+                                        <canvas id='drawingCanvas-$questionId' class='$classCanvas'></canvas>
+                                      </div>";
                 }
 
-    // construction of the Answer object
-    $objAnswerTmp = new Answer($questionId);
-    $nbrAnswers = $objAnswerTmp->selectNbrAnswers();
 
-    if ($answerType == FREE_TEXT) {
-            $text = (isset($exerciseResult[$questionId])) ? $exerciseResult[$questionId] : '';
-            $tool_content .= rich_text_editor("choice[$questionId]", 14, 90, $text, options: $options);
-    }
-    if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER ||$answerType == TRUE_FALSE) {
-         $tool_content .= "<input type='hidden' name='choice[$questionId]' value='0' />";
-    }
-    // only used for the answer type "Matching"
-    if ($answerType == MATCHING && $nbrAnswers>0) {
-        $cpt1 = 'A';
-        $cpt2 = 1;
-        $Select = array();
-        $tool_content .= "<div class='table-responsive'><table class='table-default'>
-                            <thead><tr class='list-header'>
-                              <th>$langColumnA</th>
-                              <th>$langMakeCorrespond</th>
-                              <th>$langColumnB</th>
-                            </tr></thead>";
-    }
+    // display and execute question
+    $tool_content .= answer_question($questionId, $question_number, $answerType, $exerciseResult, $options);
 
-    if ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT || $answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) {
-        $tool_content .= "<div class='container-fill-in-the-blank'>";
-    }
-
-    $answer_ids = range(1, $nbrAnswers);
-    if (in_array('shuffle_answers', $options) and ($answerType == MULTIPLE_ANSWER or $answerType == UNIQUE_ANSWER)) { // is option `shuffle answers` enabled?
-        shuffle($answer_ids);
-    }
-    foreach ($answer_ids as $answerId) {
-        $answer = $objAnswerTmp->selectAnswer($answerId);
-        if (is_null($answer) or $answer == '') {  // don't display blank or empty answers
-            continue;
-        }
-        $answerCorrect = $objAnswerTmp->isCorrect($answerId);
-        // fill in blanks
-        if ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
-            // splits text and weightings that are joined with the character '::'
-            list($answer) = Question::blanksSplitAnswer($answer);
-            // replaces [blank] by an input field
-            $replace_callback = function () use ($questionId, $exerciseResult, $question_number) {
-                    static $id = 0;
-                    $id++;
-                    $value = (isset($exerciseResult[$questionId][$id])) ? ('value = "'.q($exerciseResult[$questionId][$id]) .'"') : '';
-                    return "<input class='form-control fill-in-the-blank' type='text' name='choice[$questionId][$id]' $value onChange='questionUpdateListener(". $question_number . ",". $questionId .");'>";
-            };
-            $answer = preg_replace_callback('/\[[^]]+\]/', $replace_callback, standard_text_escape($answer));
-            $tool_content .= $answer;
-        }
-        // fill in with selected words
-        elseif ($answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) {
-            $temp_string = unserialize($answer);
-            $answer_string = $temp_string[0];
-            // replaces [choices] with `select` field
-            $replace_callback = function ($blank) use ($questionId, $exerciseResult, $question_number, $langSelect) {
-                static $id = 0;
-                $id++;
-                $selection_text = explode("|", str_replace(array('[',']'), ' ', q($blank[0])));
-                array_unshift($selection_text, "--- $langSelect ---");
-                $value = (isset($exerciseResult[$questionId][$id])) ? ($exerciseResult[$questionId][$id]) : '';
-                return selection($selection_text, "choice[$questionId][$id]", $value,"class='form-select fill-in-the-blank' onChange='questionUpdateListener($question_number, $questionId)'");
-            };
-            $answer_string = preg_replace_callback('/\[[^]]+\]/', $replace_callback, standard_text_escape($answer_string));
-            $tool_content .= $answer_string;
-        }
-        // unique answer
-        elseif ($answerType == UNIQUE_ANSWER) {
-            $checked = (isset($exerciseResult[$questionId]) && $exerciseResult[$questionId] == $answerId) ? 'checked="checked"' : '';
-            $tool_content .= "
-                        <div class='radio mb-1'>
-                          <label>
-                            <input type='radio' name='choice[$questionId]' value='$answerId' $checked onClick='updateQuestionNavButton(". $question_number . ");'>
-                            " . standard_text_escape($answer) . "
-                          </label>
-                        </div>";
-        }
-        // multiple answers
-        elseif ($answerType == MULTIPLE_ANSWER) {
-            $checked = (isset($exerciseResult[$questionId][$answerId]) && $exerciseResult[$questionId][$answerId] == 1) ? 'checked="checked"' : '';
-            $tool_content .= "
-                        <div class='checkbox mb-1'>
-                            <label class='label-container' aria-label='$langSelect'>
-                                <input type='checkbox' name='choice[$questionId][$answerId]' value='1' $checked onClick='updateQuestionNavButton(". $question_number . ");'>
-                                <span class='checkmark'></span>
-                                " . standard_text_escape($answer) . "
-                          </label>
-                        </div>";
-        }
-        // matching
-        elseif ($answerType == MATCHING) {
-            if (!$answerCorrect) {
-                // options (A, B, C, ...) that will be put into the list-box
-                $Select[$answerId]['Lettre'] = $cpt1++;
-                // answers that will be shown on the right side
-                $Select[$answerId]['Reponse'] = $answer;
-            } else {
-                $tool_content .= "<tr>
-                                  <td><strong>$cpt2.</strong> " . q($answer) . "</td>
-                                  <td><div class='text-start'>
-                                   <select class='form-select fill-predefined-answers' name='choice[$questionId][$answerId]' onChange='questionUpdateListener($question_number, $questionId);'>
-                                     <option value='0'>--</option>";
-
-                // fills the list-box
-                foreach ($Select as $key => $val) {
-                    $selected = (isset($exerciseResult[$questionId][$answerId]) && $exerciseResult[$questionId][$answerId] == $key) ? 'selected="selected"' : '';
-                    $tool_content .= "<option value=\"" . q($key) . "\" $selected>{$val['Lettre']}</option>";
-                }
-                $tool_content .= "</select></div></td><td>";
-                if (isset($Select[$cpt2])) {
-                    $tool_content .= '<strong>' . q($Select[$cpt2]['Lettre']) . '.</strong> ' . q($Select[$cpt2]['Reponse']);
-                } else {
-                    $tool_content .= '&nbsp;';
-                }
-                $tool_content .= "</td></tr>";
-                $cpt2++;
-                // if the left side of the "matching" has been completely shown
-                if ($answerId == $nbrAnswers) {
-                    // if it remains answers to shown on the right side
-                    while (isset($Select[$cpt2])) {
-                            $tool_content .= "<tr class='even'>
-                                              <td>&nbsp;</td>
-                                              <td>&nbsp;</td>
-                                              <td>" . "<strong>" . q($Select[$cpt2]['Lettre']) . ".</strong> " . q($Select[$cpt2]['Reponse']) . "</td>
-                                          </tr>";
-                        $cpt2++;
-                    } // end while()
-                }  // end if()
-            }
-        } elseif ($answerType == TRUE_FALSE) {
-            $checked = (isset($exerciseResult[$questionId]) && $exerciseResult[$questionId] == $answerId) ? 'checked="checked"' : '';
-            $tool_content .= "
-                        <div class='radio mb-1'>
-                          <label>
-                            <input type='radio' name='choice[$questionId]' value='$answerId' $checked onClick='updateQuestionNavButton($question_number);'>
-                            " . standard_text_escape($answer) . "
-                          </label>
-                        </div>";
-        }
-    } // end for()
-    if ($answerType == MATCHING && $nbrAnswers>0) {
-        $tool_content .= "</table></div>";
-    }
-    if ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT || $answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) {
-        $tool_content .= "</div>";
-    }
-    if (!$nbrAnswers && $answerType != FREE_TEXT) {
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langNoAnswer</span></div></div>";
-    }
-    if (in_array($answerType, [TRUE_FALSE, UNIQUE_ANSWER])) {
-        $tool_content .= "<button class='float-end clearSelect btn btn-outline-secondary mt-0'><i class='fa fa-solid fa-xmark'></i>&nbsp;$langClearChoice</button>";
-    }
     $tool_content .= "
                 </div>
             </div>";
-    // destruction of the Answer object
-    unset($objAnswerTmp);
+
     // destruction of the Question object
     unset($objQuestionTmp);
 
@@ -247,20 +125,19 @@ function showQuestion(&$objQuestionTmp, $question_number, array $exerciseResult 
         }
     </script>";
 
-    return $nbrAnswers;
 }
 
 
 /**
  * @brief exercise teacher view
- * @param type $exercise_id
+ * @param $exercise_id
  */
 function display_exercise($exercise_id): void
 {
 
-    global $tool_content, $head_content, $is_editor, $langQuestion, $picturePath, $langChoice, $langCorrespondsTo,
-           $langAnswer, $langComment, $langQuestionScore, $langTotalScore, $langQuestionsManagement,
-           $langScore, $course_code, $langBack, $langModify, $langExerciseExecute, $langFrom2, $action_bar,
+    global $tool_content, $head_content, $is_editor, $langQuestion, $picturePath,
+           $langQuestionScore, $langTotalScore, $langQuestionsManagement, $action_bar,
+           $course_code, $langBack, $langModify, $langExerciseExecute, $langFrom2,
            $langFromRandomCategoryQuestions, $langFromRandomDifficultyQuestions, $langQuestionFeedback,
            $langUsedInSeveralExercises, $langModifyInAllExercises, $langModifyInThisExercise;
 
@@ -326,7 +203,7 @@ function display_exercise($exercise_id): void
               <h3>" . q_math($exercise->selectTitle());
               if ($is_editor) {
                     $tool_content .= "<a class='ms-2' href='admin.php?course=$course_code&amp;exerciseId=$exercise_id&amp;modifyExercise=yes' aria-label='$langModify'>
-                      <span class='fa fa-edit' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langModify'></span>
+                      <span class='fa-solid fa-edit' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langModify'></span>
                     </a>";
                 }
               $tool_content .= "</h3>
@@ -348,7 +225,7 @@ function display_exercise($exercise_id): void
         $questionWeighting = $question->selectWeighting();
         $answerType = $question->selectType();
 
-        if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
+        if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE || $answerType == CALCULATED || $answerType == ORDERING) {
             $colspan = 3;
         } elseif ($answerType == MATCHING) {
             $colspan = 2;
@@ -401,7 +278,7 @@ function display_exercise($exercise_id): void
                     <strong class='pe-2'><u>$langQuestion</u>: $i</strong>";
             if ($is_editor) {
                 $tool_content .= "<a $modal_params href = 'admin.php?course=$course_code&amp;exerciseId=$exercise_id&amp;modifyAnswers=$qid' aria-label='$langModify'>
-                    <span class='fa fa-edit' data-bs-toggle='tooltip' data-bs-placement ='bottom' data-bs-original-title ='$langModify' ></span >
+                    <span class='fa-solid fa-edit' data-bs-toggle='tooltip' data-bs-placement ='bottom' data-bs-original-title ='$langModify' ></span >
                     </a >";
             }
                 $tool_content .= "</td>
@@ -410,102 +287,46 @@ function display_exercise($exercise_id): void
             <tr>
               <td colspan='$colspan'>";
 
+            if ($answerType == CALCULATED) {
+                $objAn = new Answer($qid);
+                $questionDescription = $objAn->replaceItemsBracesWithWildCards($questionDescription, $qid);
+                unset($objAn);
+            }
             $tool_content .= "
             <strong>" . q_math($questionName) . "</strong>
             <br>" . standard_text_escape($questionDescription) . "<br><br>
             </td></tr>";
 
+
+            $classImg = '';
+            $classContainer = '';
+            $classCanvas = '';
+            if ($answerType == DRAG_AND_DROP_MARKERS) {
+                $classImg = 'drag-and-drop-markers-img';
+                $classContainer = 'drag-and-drop-markers-container';
+                $classCanvas = 'drag-and-drop-markers-canvas';
+            }
+
             if (file_exists($picturePath . '/quiz-' . $qid)) {
-                $tool_content .= "<tr><td colspan='$colspan'><img src='../../$picturePath/quiz-" . $qid . "'></td></tr>";
+                $tool_content .= "<tr>
+                                    <td colspan='$colspan'>
+                                        <div class='$classContainer' id='image-container-$qid' style='position: relative; display: inline-block;'>
+                                            <img class='$classImg' id='img-quiz-$qid' src='../../$picturePath/quiz-" . $qid . "'>
+                                            <canvas class='$classCanvas' id='drawingCanvas-$qid'></canvas>
+                                        </div>
+                                    </td>
+                                 </tr>";
             }
 
-            if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
-                $tool_content .= "
-                <tr>
-                  <td colspan='2'><strong>$langAnswer</strong></td>
-                  <td><strong>$langComment</strong></td>
-                </tr>";
-            } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT || $answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) {
-                $tool_content .= "<tr class='active'><td><strong>$langAnswer</strong></td></tr>";
-            } elseif ($answerType == MATCHING) {
-                $tool_content .= "
-                <tr>
-                  <td><strong>$langChoice</strong></td>
-                  <td><strong>$langCorrespondsTo</strong></td>
-                </tr>";
+            if ($answerType == DRAG_AND_DROP_TEXT) {
+                $objAnswerTmp = new Answer($qid);
+                $questionText = $objAnswerTmp->get_drag_and_drop_text();
+                $tool_content .= "<tr><td>$questionText</td></tr>";
             }
 
-            if ($answerType != FREE_TEXT) {
-                $answer = new Answer($qid);
-                $nbrAnswers = $answer->selectNbrAnswers();
+            // display answers
+            $tool_content .= preview_question($qid, $answerType);
 
-                for ($answer_id = 1; $answer_id <= $nbrAnswers; $answer_id++) {
-                    $answerTitle = $answer->selectAnswer($answer_id);
-                    $answerComment = standard_text_escape($answer->selectComment($answer_id));
-                    $answerCorrect = $answer->isCorrect($answer_id);
-                    $answerWeighting = $answer->selectWeighting($answer_id);
-
-                    if ($answerType == FILL_IN_BLANKS or $answerType == FILL_IN_BLANKS_TOLERANT) {
-                        list($answerTitle, $answerWeighting) = Question::blanksSplitAnswer($answerTitle);
-                    } elseif ($answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) {
-                        if (!empty($answerTitle)) {
-                            $answer_array = unserialize($answerTitle);
-                            $answer_text = $answer_array[0]; // answer text
-                            $correct_answer = $answer_array[1]; // correct answer
-                            $answer_weight = implode(' : ', $answer_array[2]); // answer weight
-                        } else {
-                            break;
-                        }
-                    } elseif ($answerType == MATCHING) {
-                        $answerTitle = q($answerTitle);
-                    } else {
-                        $answerTitle = standard_text_escape($answerTitle);
-                    }
-                    if ($answerType != MATCHING || $answerCorrect) {
-                        if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
-                            $tool_content .= "<tr><td style='width: 70px;'><div align='start'>";
-                            if ($answerCorrect) {
-                                $icon_choice = "fa-regular fa-square-check";
-                            } else {
-                                $icon_choice = "fa-regular fa-square";
-                            }
-                            $tool_content .= icon($icon_choice) . "</div>";
-                            $tool_content .= "</td><td>" . standard_text_escape($answerTitle) . " <strong><small>($langScore: $answerWeighting)</small></strong></td>
-                                               <td style='width: 30%;'>" . $answerComment . "</td>
-                                        </tr>";
-                        } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
-                            $tool_content .= "<tr><td>" . standard_text_escape(nl2br($answerTitle)) . " <strong><small>($langScore: " . preg_replace('/,/', ' : ', "$answerWeighting") . ")</small></strong>
-                                          </td></tr>";
-                        } elseif ($answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) {
-                            $possible_answers = [];
-                            // fetch all possible answers
-                            preg_match_all('/\[[^]]+\]/', $answer_text, $out);
-                            foreach ($out[0] as $output) {
-                                $possible_answers[] = explode("|", str_replace(array('[',']'), '', q($output)));
-                            }
-                            // find correct answers
-                            foreach ($possible_answers as $possible_answer_key => $possible_answer) {
-                               $possible_answer = reindex_array_keys_from_one($possible_answer);
-                               $correct_answer_string[] = '['. $possible_answer[$correct_answer[$possible_answer_key]] . ']';
-                            }
-
-                            $formatted_answer_text = preg_replace_callback($correct_answer_string,
-                                    function ($string) {
-                                        return "<span style='color: red;'>$string[0]</span>";
-                                    },
-                                standard_text_escape(nl2br($answer_text)));
-                            // format correct answers
-                            $tool_content .= "<tr><td>" . $formatted_answer_text;
-                            $tool_content .= "&nbsp;&nbsp;&nbsp;<strong><small>($langScore: $answer_weight)</small></strong>";
-                            $tool_content .= "</td></tr>";
-                        } else {
-                            $tool_content .= "<tr><td>" . standard_text_escape($answerTitle) . "</td>";
-                            $tool_content .= "<td>" . $answer->answer[$answerCorrect] . "&nbsp;&nbsp;&nbsp;<strong><small>($langScore: $answerWeighting)</small></strong></td>";
-                            $tool_content .= "</tr>";
-                        }
-                    }
-                }
-            }
             if (!is_null($questionFeedback)) {
                 $tool_content .= "<tr><td colspan='$colspan'>";
                 $tool_content .= "<div style='margin-top: 10px;'><strong>$langQuestionFeedback:</strong><br>" . standard_text_escape($questionFeedback) . "</div>";
@@ -535,4 +356,569 @@ function display_exercise($exercise_id): void
                             </div>
                           </div>";
     }
+}
+
+function replaceBracketsWithBlanks($text,$cardId) {
+    // Use preg_replace_callback to find all brackets
+    return preg_replace_callback('/\[(\d+)\]/', function($matches) use ($cardId) {
+        $blankId = htmlspecialchars($matches[1]);
+        // Return a span element with a data-blank-id attribute
+        $card = "words_" . $cardId;
+        return "<span class='blank blank-drag-and-drop-text' data-answer='$blankId' data-blank-id='$blankId' data-card-id='$card'></span>";
+    }, $text);
+}
+
+
+/**
+ * @brief preview question
+ * @param $question_id
+ * @param $answer_type
+ * @return string
+ */
+function preview_question($question_id, $answer_type): string {
+
+    $html_content = '';
+    switch ($answer_type) {
+        case UNIQUE_ANSWER:
+        case TRUE_FALSE:
+        case MULTIPLE_ANSWER:
+            $answer = new MultipleChoiceUniqueAnswer($question_id);
+            $html_content .= $answer->PreviewQuestion();
+            break;
+        case FILL_IN_BLANKS:
+        case FILL_IN_BLANKS_TOLERANT:
+            $answer = new FillInBlanksAnswer($question_id);
+            $html_content .= $answer->PreviewQuestion();
+            break;
+        case FILL_IN_FROM_PREDEFINED_ANSWERS:
+            $answer = new FillInPredefinedAnswer($question_id);
+            $html_content .= $answer->PreviewQuestion();
+            break;
+        case MATCHING:
+            $answer = new MatchingAnswer($question_id);
+            $html_content .= $answer->PreviewQuestion();
+            break;
+        case DRAG_AND_DROP_MARKERS:
+            $answer = new DragAndDropMarkersAnswer($question_id);
+            $html_content .= $answer->PreviewQuestion();
+            break;
+        case DRAG_AND_DROP_TEXT:
+            $answer = new DragAndDropTextAnswer($question_id);
+            $html_content .= $answer->PreviewQuestion();
+            break;
+        case CALCULATED:
+            $answer = new CalculatedAnswer($question_id);
+            $html_content .= $answer->PreviewQuestion();
+            break;
+        case ORDERING:
+            $answer = new OrderingAnswer($question_id);
+            $html_content .= $answer->PreviewQuestion();
+            break;
+    }
+
+    return $html_content;
+}
+
+/**
+ * @brief display questions during exercise submission
+ * @param $question_id
+ * @param $question_number
+ * @param $exerciseResult
+ * @param $options
+ * @param $answer_type
+ * @return string
+ */
+function answer_question($question_id, $question_number, $answer_type, $exerciseResult = [], $options = []): string {
+
+    $html = '';
+    switch ($answer_type) {
+        case MULTIPLE_ANSWER:
+            $answer = new MultipleChoiceMultipleAnswer($question_id);
+            $html .= $answer->AnswerQuestion($question_number, $exerciseResult, $options);
+            break;
+        case TRUE_FALSE:
+        case UNIQUE_ANSWER:
+            $answer = new MultipleChoiceUniqueAnswer($question_id);
+            $html .= $answer->AnswerQuestion($question_number, $exerciseResult, $options);
+            break;
+        case FILL_IN_BLANKS:
+        case FILL_IN_BLANKS_TOLERANT:
+            $answer = new FillInBlanksAnswer($question_id);
+            $html .= $answer->AnswerQuestion($question_number, $exerciseResult, $options);
+            break;
+        case FILL_IN_FROM_PREDEFINED_ANSWERS:
+            $answer = new FillInPredefinedAnswer($question_id);
+            $html .= $answer->AnswerQuestion($question_number, $exerciseResult, $options);
+            break;
+        case MATCHING:
+            $answer = new MatchingAnswer($question_id);
+            $html .= $answer->AnswerQuestion($question_number, $exerciseResult, $options);
+            break;
+        case FREE_TEXT:
+            $answer = new FreeTextAnswer($question_id);
+            $html .= $answer->AnswerQuestion($question_number, $exerciseResult, $options);
+            break;
+        case ORAL:
+            $answer = new OralAnswer($question_id);
+            $html .= $answer->AnswerQuestion($question_number, $exerciseResult, $options);
+            break;
+        case DRAG_AND_DROP_TEXT:
+            $answer = new DragAndDropTextAnswer($question_id);
+            $html .= $answer->AnswerQuestion($question_number, $exerciseResult, $options);
+            break;
+        case DRAG_AND_DROP_MARKERS:
+            $answer = new DragAndDropMarkersAnswer($question_id);
+            $html .= $answer->AnswerQuestion($question_number, $exerciseResult, $options);
+            break;
+        case CALCULATED:
+            $answer = new CalculatedAnswer($question_id);
+            $html .= $answer->AnswerQuestion($question_number, $exerciseResult, $options);
+            break;
+        case ORDERING:
+            $answer = new OrderingAnswer($question_id);
+            $html .= $answer->AnswerQuestion($question_number, $exerciseResult, $options);
+            break;
+    }
+    unset($answer);
+
+    return $html;
+}
+
+/**
+ * @brief display user answer in question results
+ * @param $answer_type
+ * @param $question_id
+ * @param $choice
+ * @param $eurid
+ * @param $regrade
+ * @param $extra_type
+ * @return string
+ */
+function question_result($answer_type, $question_id, $choice, $eurid, $regrade): string {
+
+    $html = '';
+    switch ($answer_type) {
+        case MULTIPLE_ANSWER:
+            $answer = new MultipleChoiceMultipleAnswer($question_id);
+            $html .= $answer->QuestionResult($choice, $eurid, $regrade);
+            break;
+        case UNIQUE_ANSWER:
+        case TRUE_FALSE:
+            $answer = new MultipleChoiceUniqueAnswer($question_id);
+            $html .= $answer->QuestionResult($choice, $eurid, $regrade);
+            break;
+        case FILL_IN_BLANKS_TOLERANT:
+        case FILL_IN_BLANKS:
+            $answer = new FillInBlanksAnswer($question_id);
+            if ($answer_type == FILL_IN_BLANKS_TOLERANT) {
+                $html .= $answer->QuestionResult($choice, $eurid, $regrade, 'tolerant');
+            } else {
+                $html .= $answer->QuestionResult($choice, $eurid, $regrade);
+            }
+            break;
+        case FILL_IN_FROM_PREDEFINED_ANSWERS:
+            $answer = new FillInPredefinedAnswer($question_id);
+            $html .= $answer->QuestionResult($choice, $eurid, $regrade);
+            break;
+        case MATCHING:
+            $answer = new MatchingAnswer($question_id);
+            $html .= $answer->QuestionResult($choice, $eurid, $regrade);
+            break;
+        case FREE_TEXT:
+            $answer = new FreeTextAnswer($question_id);
+            $html .= $answer->QuestionResult($choice, $eurid, $regrade);
+            break;
+        case ORAL:
+            $answer = new OralAnswer($question_id);
+            $html .= $answer->QuestionResult($choice, $eurid, $regrade);
+            break;
+        case DRAG_AND_DROP_TEXT:
+            $answer = new DragAndDropTextAnswer($question_id);
+            $html .= $answer->QuestionResult($choice, $eurid, $regrade);
+            break;
+        case DRAG_AND_DROP_MARKERS:
+            $answer = new DragAndDropMarkersAnswer($question_id);
+            $html .= $answer->QuestionResult($choice, $eurid, $regrade);
+            break;
+        case CALCULATED:
+            $answer = new CalculatedAnswer($question_id);
+            $html .= $answer->QuestionResult($choice, $eurid, $regrade);
+            break;
+        case ORDERING:
+            $answer = new OrderingAnswer($question_id);
+            $html .= $answer->QuestionResult($choice, $eurid, $regrade);
+            break;
+    }
+
+    unset($answer);
+
+    return $html;
+}
+
+/**
+ * @brief Create random variable regarding the range of values of a wildcard.
+ * @param $min
+ * @param $max
+ * @param $decimals
+ * @return float|mixed
+ */
+function getRandomDecimal($min, $max, $decimals = 0) {
+
+    $scale = pow(10, $decimals);
+    $minInt = (int)($min * $scale);
+    $maxInt = (int)($max * $scale);
+    $randInt = mt_rand($minInt, $maxInt);
+
+    return $randInt / $scale;
+}
+
+
+/**
+ * @brief Update the value of a wildcard regarding its range of values.
+ * @param $questionId
+ */
+function updateWildCardsWithRandomVariables($questionId, $exerciseType) {
+
+    global $uid;
+
+    $questionDisplay = [];
+    if (isset($_SESSION['QuestionDisplayed'][$uid])) {
+        foreach ($_SESSION['QuestionDisplayed'][$uid] as $q) {
+            $questionDisplay[] = $q;
+        }
+    }
+
+    // If the user has not executed the current question , update the wildcards of the question with new values.
+    if (!in_array($questionId, $questionDisplay)) {
+
+        $_SESSION['QuestionDisplayed'][$uid][] = $questionId;
+
+        // Instantiate ExpressionLanguage
+        $expressionLanguage = new ExpressionLanguage();
+
+        // These math functions must be registered that are not supported.
+        $functions = [
+            'cos' => 'cos',
+            'sin' => 'sin',
+            'tan' => 'tan',
+            'acos' => 'acos',
+            'asin' => 'asin',
+            'atan' => 'atan',
+            'atan2' => 'atan2',
+            'pow' => 'pow',
+            'sqrt' => 'sqrt',
+            'abs' => 'abs',
+            'log' => 'log',
+            'log10' => 'log10',
+            'exp' => 'exp',
+            'max' => 'max',
+            'min' => 'min',
+            'round' => 'round',
+            'floor' => 'floor',
+            'ceil' => 'ceil',
+        ];
+
+        foreach ($functions as $name => $function) {
+            $expressionLanguage->register($name, $function, function (array $variables, ...$args) use ($function) {
+                return $function(...$args);
+            });
+        }
+
+        $predefinedAnswers = Database::get()->queryArray("SELECT answer,r_position FROM exercise_answer WHERE question_id = ?d", $questionId);
+        $q_data = Database::get()->querySingle("SELECT options FROM exercise_question WHERE id = ?d", $questionId);
+
+        if (!is_null($q_data->options) or !empty($q_data->options)) {
+
+            $newOptions = [];
+            $oldOptions = json_decode($q_data->options, true);
+            if (count($oldOptions) > 0) {
+                for ($i = 0; $i < count($oldOptions); $i++) {
+                    if ($oldOptions[$i]['type'] == 1 && is_numeric($oldOptions[$i]['minimum']) && is_numeric($oldOptions[$i]['maximum']) && is_numeric($oldOptions[$i]['decimal'])) {
+                            $value_wcard = getRandomDecimal($oldOptions[$i]['minimum'], $oldOptions[$i]['maximum'], $oldOptions[$i]['decimal']);
+                            $newOptions[] = [
+                                                'item' => $oldOptions[$i]['item'],
+                                                'minimum' => $oldOptions[$i]['minimum'],
+                                                'maximum' => $oldOptions[$i]['maximum'],
+                                                'decimal' => $oldOptions[$i]['decimal'],
+                                                'value' => $value_wcard,
+                                                'type' => $oldOptions[$i]['type']
+                                            ];
+                    } elseif ($oldOptions[$i]['type'] == 2) {
+                        $newOptions[] = [
+                                            'item' => $oldOptions[$i]['item'],
+                                            'minimum' => '',
+                                            'maximum' => '',
+                                            'decimal' => '',
+                                            'value' => $oldOptions[$i]['value'],
+                                            'type' => $oldOptions[$i]['type']
+                                        ];
+                    }
+                }
+            }
+
+            if (count($newOptions) > 0) {
+                $newJsonItems = json_encode($newOptions);
+                $q = Database::get()->query("UPDATE exercise_question SET options = ?s WHERE id = ?d", $newJsonItems, $questionId);
+                if ($q) {
+                    foreach ($predefinedAnswers as $an) {
+                        $arr = explode(':', $an->answer);
+                        if (count($arr) > 1) {
+                            $expression = $arr[0];
+                            $dataItems = json_decode($newJsonItems, true);
+
+                            // Create a key-value array for items
+                            $wildCards = [];
+                            foreach ($dataItems as $item) {
+                                $wildCards[$item['item']] = $item['value'];
+                            }
+
+                            // Get expression of predefined answer
+                            foreach ($wildCards as $key => $value) {
+                                $expression = str_replace("{" . $key . "}", $value, $expression);
+                            }
+
+                            // Check for division by zero (simple check)
+                            if (preg_match('/\/\s*0(\D|$)/', $expression)) {
+                                return null; // or handle as needed
+                            }
+
+                            try {
+                                $result = $expressionLanguage->evaluate($expression);
+                                $finalAnswer = $arr[0] . ":" . $result;
+                                Database::get()->query("UPDATE exercise_answer SET answer = ?s WHERE question_id = ?d AND r_position = ?d", $finalAnswer, $questionId, $an->r_position);
+                            } catch (\Exception $e) {
+                                // Handle evaluation error
+                                return null;
+                            }
+
+                        }
+                    }
+                }
+            }
+
+        }
+
+    }
+}
+
+
+
+
+/**
+ * Removes JSON data associated with a given marker ID from the session and updates the corresponding question data in the database.
+ * Also deletes a related file if it exists.
+ *
+ * @param int $markerId The ID of the marker to be removed.
+ * @param int $questionId The ID of the question associated with the marker.
+ * @return void
+ */
+function removeJsonDataFromMarkerId($markerId,$questionId) {
+    global $webDir,$course_code;
+
+    if ($markerId > 0 && isset($_SESSION['data_shapes'][$questionId])) {
+        $jsonArray = explode('|', $_SESSION['data_shapes'][$questionId]);
+        $newJsonArray = [];
+
+        foreach ($jsonArray as $json) {
+            $jsonDecoded = json_decode($json, true);
+            if ($jsonDecoded && isset($jsonDecoded['marker_id'])) {
+                if ($jsonDecoded['marker_id'] != $markerId) {
+                    $newJsonArray[] = $json; // keep if not matching
+                }
+                // else, skip (this removes the matching marker_id)
+            } else {
+                // handle invalid JSON if needed
+                $newJsonArray[] = $json; // keep invalid JSON as is
+            }
+        }
+
+        $_SESSION['data_shapes'][$questionId] = implode('|', $newJsonArray);
+        Database::get()->query("UPDATE exercise_question SET options = ?s WHERE id = ?d", $_SESSION['data_shapes'][$questionId], $questionId);
+        $filePath = "$webDir/courses/$course_code/image/answer-$questionId-$markerId";
+        if (file_exists($filePath)) {
+            unlink($filePath);
+        }
+    }
+
+}
+
+/**
+ * Extracts and processes data markers from a JSON structure stored in the database for a specific question.
+ *
+ * @param int $questionId The ID of the question to retrieve data markers for.
+ * @return array An associative array of data markers, where each marker is indexed by its marker ID and contains
+ *               information such as shape type, coordinates, grade, and answer details.
+ */
+function getDataMarkersFromJson($questionId) {
+    global $webDir, $course_code;
+
+    $arrDataMarkers = [];
+    $jsonData = Database::get()->querySingle("SELECT options FROM exercise_question WHERE id = ?d", $questionId)->options;
+    if ($jsonData) {
+        $dataJsonMarkers = explode('|', $jsonData);
+        foreach ($dataJsonMarkers as $dataJsonValue) {
+            $markersData = json_decode($dataJsonValue, true);
+            // Loop through each item in the original array
+            foreach ($markersData as $index => $value) {
+                if (count($markersData) == 10) { // circle or rectangle
+                    $arrDataMarkers[$markersData['marker_id']] = [
+                        'marker_answer' => $markersData['marker_answer'],
+                        'marker_shape' => $markersData['shape_type'],
+                        'marker_coordinates' => $markersData['x'] . ',' . $markersData['y'],
+                        'marker_offsets' => $markersData['endX'] . ',' . $markersData['endY'],
+                        'marker_grade' => $markersData['marker_grade'],
+                        'marker_radius' => $markersData['marker_radius'],
+                        'marker_answer_with_image' => $markersData['marker_answer_with_image']
+                    ];
+                } elseif (count($markersData) == 6) { // polygon
+                    $arrDataMarkers[$markersData['marker_id']] = [
+                        'marker_answer' => $markersData['marker_answer'],
+                        'marker_shape' => $markersData['shape_type'],
+                        'marker_coordinates' => $markersData['points'],
+                        'marker_grade' => $markersData['marker_grade'],
+                        'marker_answer_with_image' => $markersData['marker_answer_with_image']
+                    ];
+                } elseif (count($markersData) == 5) { // without shape . So the defined answer is not correct
+                    $arrDataMarkers[$markersData['marker_id']] = [
+                        'marker_answer' => $markersData['marker_answer'],
+                        'marker_shape' => null,
+                        'marker_coordinates' => null,
+                        'marker_grade' => 0,
+                        'marker_answer_with_image' => $markersData['marker_answer_with_image']
+                    ];
+                }
+            }
+        }
+    }
+
+    return $arrDataMarkers;
+}
+
+/**
+ * Extracts distinct non-numeric variables enclosed within curly brackets from the given text.
+ *
+ * @param string $text The input string containing variables inside curly brackets.
+ * @return array An array of unique variable names found, excluding numeric values.
+ */
+function extractValuesInCurlyBrackets($text) {
+    // Find all occurrences of {...}
+    preg_match_all('/\{([^{}]+)\}/', $text, $matches);
+    $variables = [];
+
+    foreach ($matches[1] as $group) {
+        // For each group, split to get individual variables
+        // Variables are separated by operators or spaces, so split by non-word characters
+        preg_match_all('/\b\w+\b/', $group, $submatches);
+        foreach ($submatches[0] as $var) {
+            $variables[] = $var;
+        }
+    }
+
+    // If the value is numeric , remove it.
+    if (count($variables) > 0) {
+        for ($i = 0; $i < count($variables); $i++) {
+            if (is_numeric($variables[$i])) {
+                unset($variables[$i]);
+            }
+        }
+    }
+
+    // Remove duplicates if desired
+    return array_unique($variables);
+}
+
+/**
+ * Evaluates a mathematical expression by replacing wildcards with their corresponding values and computing the result.
+ * Wildcards are dynamically replaced based on the associated question's data.
+ *
+ * @param string $expression The mathematical expression to evaluate, which may contain wildcards.
+ * @param int $questionId The ID of the question whose data provides values for the wildcards in the expression.
+ * @return mixed The evaluated result of the expression, or null in case of errors or invalid data.
+ */
+function evaluateExpression($expression, $questionId) {
+    $options = Database::get()->querySingle("SELECT options FROM exercise_question WHERE id = ?d", $questionId)->options;
+    if ($options) {
+        // Decode JSON to array
+        $dataItems = json_decode($options, true);
+
+        // Create a key-value array for items
+        $wildCards = [];
+        foreach ($dataItems as $item) {
+            $wildCards[$item['item']] = $item['value'];
+        }
+
+        foreach ($wildCards as $key => $value) {
+            $expression = str_replace("{" . $key . "}", $value, $expression);
+        }
+
+        // Check for division by zero (simple check)
+        if (preg_match('/\/\s*0(\D|$)/', $expression)) {
+            return null; // or handle as needed
+        }
+
+        // Instantiate ExpressionLanguage
+        $expressionLanguage = new ExpressionLanguage();
+
+        // These math functions must be registered that are not supported.
+        $functions = [
+            'cos' => 'cos',
+            'sin' => 'sin',
+            'tan' => 'tan',
+            'acos' => 'acos',
+            'asin' => 'asin',
+            'atan' => 'atan',
+            'atan2' => 'atan2',
+            'pow' => 'pow',
+            'sqrt' => 'sqrt',
+            'abs' => 'abs',
+            'log' => 'log',
+            'log10' => 'log10',
+            'exp' => 'exp',
+            'max' => 'max',
+            'min' => 'min',
+            'round' => 'round',
+            'floor' => 'floor',
+            'ceil' => 'ceil',
+        ];
+
+        foreach ($functions as $name => $function) {
+            $expressionLanguage->register($name, $function, function (array $variables, ...$args) use ($function) {
+                return $function(...$args);
+            });
+        }
+
+        // Evaluate the expression
+        try {
+            $result = $expressionLanguage->evaluate($expression);
+            return $result;
+        } catch (\Exception $e) {
+            // Handle evaluation error
+            return null;
+        }
+    }
+
+    return null; // If options not found
+}
+
+
+/**
+ * Generates a random floating-point number within a specified range and with a specified number of decimal places.
+ * If the maximum value is less than the minimum, it returns 0. If the number of decimals is 0 or less, it generates a random integer.
+ *
+ * @param float $min The minimum value of the range.
+ * @param float $max The maximum value of the range.
+ * @param int $decimals The number of decimal places for the generated value.
+ * @return float|int The randomly generated floating-point number, or an integer if decimals is 0 or less.
+ */
+function getRandomFloat($min, $max, $decimals) {
+    if ($max < $min) {
+        return 0;
+    }
+    if ($decimals <= 0) {
+        // Return a random integer if decimals is 0 or less
+        return mt_rand($min, $max);
+    }
+    $scale = pow(10, $decimals);
+    $randomInt = mt_rand($min * $scale, $max * $scale);
+    return $randomInt / $scale;
 }

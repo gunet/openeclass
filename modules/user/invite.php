@@ -20,13 +20,19 @@
 
 $require_login = true;
 $require_current_course = true;
-$require_course_admin = true;
 
 require_once '../../include/baseTheme.php';
 require_once 'include/log.class.php';
 
 if (!get_config('course_invitation')) {
     redirect_to_home_page('modules/user/index.php?course=' . $course_code);
+}
+
+$up = new Permissions();
+
+if (!$up->has_course_users_permission()) {
+    Session::Messages($langCheckCourseAdmin, 'alert-danger');
+    redirect_to_home_page('courses/'. $course_code);
 }
 
 if (isset($_POST['delete'])) {

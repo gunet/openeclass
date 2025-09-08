@@ -105,23 +105,19 @@ if (!class_exists('Answer')):
         }
 
         /**
-         * returns the question ID which the answers belong to
-         *
-         * @author - Olivier Brouckaert
-         * @return - integer - the question ID
+         * @brief get answer question id
+         * @return mixed
          */
-        public function selectQuestionId() {
+        public function getQuestionId() {
             return $this->questionId;
         }
 
         /**
-         * returns the answer title
-         *
-         * @author - Olivier Brouckaert
-         * @param - integer $id - answer ID
-         * @return - string - answer title
+         * @brief get answer title
+         * @param $id
+         * @return mixed|string
          */
-        public function selectAnswer($id) {
+        public function getTitle($id) {
             if (isset($this->answer[$id])) {
                 return $this->answer[$id];
             } else {
@@ -144,13 +140,11 @@ if (!class_exists('Answer')):
         }
 
         /**
-         * returns answer comment
-         *
-         * @author - Olivier Brouckaert
-         * @param - integer $id - answer ID
-         * @return - string - answer comment
+         * @brief get comment
+         * @param $id
+         * @return mixed|string
          */
-        public function selectComment($id) {
+        public function getComment($id) {
             if (!isset($this->comment[$id])) {
                 $this->comment[$id] = '';
             }
@@ -158,13 +152,11 @@ if (!class_exists('Answer')):
         }
 
         /**
-         * returns answer weighting
-         *
-         * @author - Olivier Brouckaert
-         * @param - integer $id - answer ID
-         * @return - float - answer weighting
+         * @brief get answer weighting
+         * @param $id
+         * @return float|mixed
          */
-        public function selectWeighting($id) {
+        public function getWeighting($id) {
             if (!isset($this->weighting[$id])) {
                 $this->weighting[$id] = 0.00;
             }
@@ -172,13 +164,11 @@ if (!class_exists('Answer')):
         }
 
         /**
-         * returns answer position
-         *
-         * @author - Olivier Brouckaert
-         * @param - integer $id - answer ID
-         * @return - integer - answer position
+         * @brief get answer position
+         * @param $id
+         * @return mixed
          */
-        public function selectPosition($id) {
+        public function getPosition($id) {
             if (!isset($this->weighting[$id])) {
                 $this->weighting[$id] = 0;
             }
@@ -223,9 +213,8 @@ if (!class_exists('Answer')):
         }
 
         /**
-         * save answers into the data base
-         *
-         * @author - Olivier Brouckaert
+         * @brief save answers
+         * @return void
          */
         public function save() {
 
@@ -259,7 +248,7 @@ if (!class_exists('Answer')):
 
             // if at least one answer
             if ($this->nbrAnswers) {
-                // inserts new answers into data base
+                // inserts new answers
                 $sql = "INSERT INTO exercise_answer (question_id, answer, correct, comment, weight, r_position) VALUES ";
 
                 for ($i = 1; $i <= $this->nbrAnswers; $i++) {
@@ -279,13 +268,593 @@ if (!class_exists('Answer')):
         }
 
         /**
-         * @brief get question type (e.g. multiple choice, matching etc)
+         * @brief get a question type (e.g., multiple choice, matching, etc)
          * @return type
          */
         private function getQuestionType() {
-
-            $question_type = Database::get()->querySingle("SELECT `type` FROM exercise_question WHERE id = ?d", $this->selectQuestionId())->type;
+            $question_type = Database::get()->querySingle("SELECT `type` FROM exercise_question WHERE id = ?d", $this->getQuestionId())->type;
             return $question_type;
+        }
+
+        /**
+         * @brief Retrieve the text that contains all the brackets with their markers.
+         * @author - Nikos Mpalamoutis
+         */
+        public function get_drag_and_drop_text() {
+
+            $questionId = $this->questionId;
+            $answer = Database::get()->querySingle("SELECT answer FROM exercise_answer WHERE question_id = ?d", $questionId);
+            if ($answer) {
+                $q = explode('::',$answer->answer);
+                if (count($q) > 0) {
+                    return $q[0];
+                }
+            }
+
+        }
+
+                /**
+         * @brief Retrieve the answers for each bracket inside the text.
+         * @author - Nikos Mpalamoutis
+         */
+        public function get_drag_and_drop_text_with_answers() {
+
+            $questionId = $this->questionId;
+            $answer = Database::get()->querySingle("SELECT answer FROM exercise_answer WHERE question_id = ?d", $questionId);
+            $TempArr = [];
+            $textWithAnswer = [];
+
+            if ($answer) {
+                $q = explode('::', $answer->answer);
+                if (count($q) > 0) {
+                    $str = $q[1];
+                    $arr = explode(',', $str);
+                    foreach ($arr as $value) {
+                        $arr2 = explode('|', $value);
+                        if (count($arr2) == 3) {
+                            $textWithAnswer[$arr2[0]+1] = $arr2[1];
+                        }
+                    }
+                }
+            }
+
+            return $textWithAnswer;
+
+        }
+
+        /**
+         * @brief Retrieve the grades for each bracket inside the text.
+         * @author - Nikos Mpalamoutis
+         */
+        public function get_drag_and_drop_text_with_grades() {
+
+            $questionId = $this->questionId;
+            $answer = Database::get()->querySingle("SELECT answer FROM exercise_answer WHERE question_id = ?d", $questionId);
+            $markerWithGrade = [];
+
+            if ($answer) {
+                $q = explode('::', $answer->answer);
+                if (count($q) > 0) {
+                    $str = $q[1];
+                    $arr = explode(',', $str);
+                    foreach ($arr as $value) {
+                        $arr2 = explode('|', $value);
+                        if (count($arr2) == 3) {
+                            $markerWithGrade[$arr2[0]+1] = $arr2[2];
+                        }
+                    }
+                }
+            }
+
+            return $markerWithGrade;
+
+        }
+
+        /**
+         * @brief Retrieve the answers for each marker inside the text.
+         * @author - Nikos Mpalamoutis
+         */
+        public function get_drag_and_drop_markers_with_answers() {
+
+            $questionId = $this->questionId;
+            $answer = Database::get()->querySingle("SELECT answer FROM exercise_answer WHERE question_id = ?d", $questionId);
+            $TempArr = [];
+            $markerWithAnswer = [];
+
+            if ($answer) {
+                $q = explode('::', $answer->answer);
+                if (count($q) > 0) {
+                    // Get the all markers from the brackets inside the text.
+                    preg_match_all('/\[(\d+)\]/', $q[0], $matches);
+                    $allTextMarkers = $matches[1];
+
+                    $str = $q[1];
+                    $arr = explode(',', $str);
+                    foreach ($arr as $value) {
+                        $arr2 = explode('|', $value);
+                        if (count($arr2) == 3) {
+                            $TempArr[$arr2[0]] = $arr2[1];
+                        }
+                    }
+
+                    foreach ($allTextMarkers as $m) {
+                        foreach ($TempArr as $index => $val) {
+                            if ($index == $m) {
+                                $markerWithAnswer[$index] = $val; 
+                            }
+                        }
+
+                    }
+                }
+            }
+
+            return $markerWithAnswer;
+
+        }
+
+        /**
+         * @brief Retrieve the grades for each marker inside the text.
+         * @author - Nikos Mpalamoutis
+         */
+        public function get_drag_and_drop_markers_with_grades() {
+
+            $questionId = $this->questionId;
+            $answer = Database::get()->querySingle("SELECT answer FROM exercise_answer WHERE question_id = ?d", $questionId);
+            $markerWithGrade = [];
+
+            if ($answer) {
+                $q = explode('::', $answer->answer);
+                if (count($q) > 0) {
+                    $str = $q[1];
+                    $arrTmp = explode(',', $str);
+                    foreach ($arrTmp as $value) {
+                        $arr2 = explode('|', $value);
+                        if (count($arr2) == 3) {
+                            $markerWithGrade[$arr2[0]] = $arr2[2];
+                        }
+                    }
+                }
+            }
+
+            return $markerWithGrade;
+        }
+
+        /**
+         * @brief Retrieve the predefined answers for each question.
+         * @author - Nikos Mpalamoutis
+         */
+        public function get_drag_and_drop_answers() {
+
+            $questionId = $this->questionId;
+            $answer = Database::get()->querySingle("SELECT answer FROM exercise_answer WHERE question_id = ?d", $questionId);
+            if ($answer) {
+                $q = explode('::',$answer->answer);
+                if (count($q) > 1) {
+                    return $q[1];
+                }
+            }
+
+        }
+
+         /**
+         * @brief Getting the total number of predefined answers.
+         * @author - Nikos Mpalamoutis
+         */
+        public function get_total_drag_and_drop_answers() {
+
+            $questionId = $this->questionId;
+            $answer = Database::get()->querySingle("SELECT answer FROM exercise_answer WHERE question_id = ?d", $questionId);
+            if ($answer) {
+                $q = explode('::',$answer->answer);
+                if (count($q) > 1) {
+                    $res = explode(',', $q[1]);
+                    return count($res);
+                }
+            } else {
+                return 2; // minimum answers
+            }
+
+        }
+
+         /**
+         * @brief Getting the total number of correct predefined answers.
+         * @author - Nikos Mpalamoutis
+         */
+        public function get_total_correct_drag_and_drop_predefined_answers() {
+
+            $questionId = $this->questionId;
+            $answer = Database::get()->querySingle("SELECT answer FROM exercise_answer WHERE question_id = ?d", $questionId);
+            $total = 0;
+            if ($answer) {
+                $q = explode('::',$answer->answer);
+                if (count($q) > 1) {
+                    $res = explode(',', $q[1]);
+                    foreach ($res as $r) {
+                        $arr = explode('|', $r);
+                        if (count($arr) == 3 && $arr[2] > 0) {
+                            $total++;
+                        } 
+                    }
+                }
+            } 
+
+            return $total;
+
+        }
+
+        /**
+        * 
+        * @author - Nikos Mpalamoutis
+        */
+        public function get_drag_and_drop_answer_text() {
+
+            $finalArray = [];
+            $questionId = $this->questionId;
+            $answer = Database::get()->querySingle("SELECT answer FROM exercise_answer WHERE question_id = ?d", $questionId);
+            if ($answer) {
+                $q = explode('::', $answer->answer);
+                if (count($q) > 1) {
+                    $items = explode(',', $q[1]);
+                    $reformattedItems = [];
+                    foreach ($items as $item) {
+                        $lastPipePos = strrpos($item, '|');
+                        if ($lastPipePos !== false) {
+                            $cleanItem = substr($item, 0, $lastPipePos);
+                            list($index, $value) = explode('|', $cleanItem);
+                            $reformattedItems[(int)$index] = $value;
+                        }
+                    }
+                    ksort($reformattedItems);
+                    $finalArray = array_values($reformattedItems);
+                }
+            }
+
+            return $finalArray;
+
+        }
+
+       /**
+       * 
+       * @author - Nikos Mpalamoutis
+       */
+        public function get_drag_and_drop_answer_grade() {
+
+            $resultArray = [];
+            $questionId = $this->questionId;
+            $answer = Database::get()->querySingle("SELECT answer FROM exercise_answer WHERE question_id = ?d", $questionId);
+            if ($answer) {
+                $q = explode('::',$answer->answer);
+                if (count($q) > 1) {
+                    $items = explode(',', $q[1]);
+                    $cleanedItems = [];
+                    foreach ($items as $item) {
+                        $item = trim($item);
+                        $parts = explode('|', $item);
+                        if (count($parts) == 3) {
+                            $cleanedItems[] = $parts[0] . "|" . $parts[2];
+                        }
+                    }
+                    $cleanedString = implode(',', $cleanedItems);
+                    foreach ($cleanedItems as $item) {
+                        $arr = explode('|', $item);
+                        $resultArray[$arr[0]] = $arr[1]; // cast to int if needed
+                    }
+                }
+            }
+
+            return $resultArray;
+
+        }
+
+       /**
+       * 
+       * @author - Nikos Mpalamoutis
+       */
+        public function get_drag_and_drop_answer_grade_as_text() {
+
+            $resultArray = [];
+            $questionId = $this->questionId;
+            $answer = Database::get()->querySingle("SELECT answer FROM exercise_answer WHERE question_id = ?d", $questionId);
+            if ($answer) {
+                $q = explode('::',$answer->answer);
+                if (count($q) > 1) {
+                    $items = explode(',', $q[1]);
+                    $cleanedItems = [];
+                    foreach ($items as $item) {
+                        $item = trim($item);
+                        $parts = explode('|', $item);
+                        if (count($parts) == 3) {
+                            $cleanedItems[] = $parts[0] . "|" . $parts[2];
+                        }
+                    }
+                    $cleanedString = implode(',', $cleanedItems);
+                    foreach ($cleanedItems as $item) {
+                        $arr = explode('|', $item);
+                        $resultArray[$arr[0]] = $arr[1]; // cast to int if needed
+                    }
+                }
+            }
+
+            return implode(',',$resultArray);
+        }
+
+
+        /**
+         * 
+         * @param $questionId
+         * @return int|mixed
+         * @author - Nikos Mpalamoutis
+         */
+        function get_total_drag_and_drop_marker_answers($questionId) {
+            global $webDir, $course_code;
+
+            $q = Database::get()->querySingle("SELECT options FROM exercise_question WHERE id = ?d", $questionId)->options;
+            $arrMarkers = [];
+            if ($q) {
+                $arrMarkers = explode('|', $q);
+            }
+            // minumun 2 answers
+            $maxValueMarker = (count($arrMarkers) > 0) ? count($arrMarkers) : 2;
+            return $maxValueMarker;
+        }
+
+        /**
+         * 
+         * @param $questionId
+         * @author - Nikos Mpalamoutis
+         */
+        function get_marker_ids($questionId) {
+            global $webDir, $course_code;
+
+            $q = Database::get()->querySingle("SELECT options FROM exercise_question WHERE id = ?d", $questionId)->options;
+            $arrMarkers = [];
+            $markerIds = [];
+            if ($q) {
+                $arrMarkers = explode('|', $q);
+                foreach ($arrMarkers as $m) {
+                    $markersData = json_decode($m, true);
+                    $markerIds[] = $markersData['marker_id'];
+                }
+            }
+            
+            return $markerIds;
+        }
+
+        /**
+         * 
+         * @param $questionId
+         * @return string|mixed
+         * @author - Nikos Mpalamoutis
+         */
+        function get_correct_calculated_answer($questionId) {
+
+            $correctAnswer = '';
+            $q = Database::get()->queryArray("SELECT answer,correct FROM exercise_answer WHERE question_id = ?d", $questionId);
+            foreach ($q as $an) {
+                if ($an->correct == 1) {
+                    $arrCorrect = explode(':', $an->answer);
+                    if (count($arrCorrect) == 2) {
+                        $correctAnswer = $arrCorrect[1];
+                    }
+                }
+            }
+
+            return $correctAnswer;
+        }
+
+        /**
+         * 
+         * @param $questionId
+         * @return int|mixed
+         * @author - Nikos Mpalamoutis
+         */
+        function get_correct_calculated_grade($questionId) {
+
+            $correctAnswerGrade = 0;
+            $q = Database::get()->queryArray("SELECT weight,correct FROM exercise_answer WHERE question_id = ?d", $questionId);
+            foreach ($q as $an) {
+                if ($an->correct == 1) {
+                    $correctAnswerGrade = $an->weight;
+                }
+            }
+
+            return $correctAnswerGrade;
+        }
+
+        /**
+         * @return int|mixed
+         * @author - Nikos Mpalamoutis
+         */
+        function get_total_calculated_predefined_answers() {
+            
+            $questionId = $this->questionId;
+            $totalAnswers = Database::get()->queryArray("SELECT answer FROM exercise_answer WHERE question_id = ?d", $questionId);
+            
+            return count($totalAnswers);
+        }
+
+         /**
+         * 
+         * @param $questionId
+         * @param $hasAnswered
+         * @return string|mixed
+         * @author - Nikos Mpalamoutis
+         */
+        function get_user_calculated_answer($questionId, $eurid) {
+
+            $userAnswer = Database::get()->querySingle("SELECT answer FROM exercise_answer_record WHERE eurid = ?d AND question_id = ?d", $eurid, $questionId)->answer;
+            $userAnswer = $userAnswer ?? '';
+            return $userAnswer;
+        }
+
+        /**
+         * 
+         * @param $questionId
+         * @param $hasAnswered
+         * @return int|mixed
+         * @author - Nikos Mpalamoutis
+         */
+        function get_user_answer_grade($questionId, $hasAnswered) {
+
+            $grade = 0;
+            $predefinedAnswer = Database::get()->queryArray("SELECT answer,weight FROM exercise_answer WHERE question_id = ?d", $questionId);
+            foreach ($predefinedAnswer as $an) {
+                $tmpArr = explode(':', $an->answer);
+                if (count($tmpArr) == 2) {
+                    if ($hasAnswered == $tmpArr[1]) {
+                        $grade = $an->weight;
+                    }
+                }
+            }
+
+            return $grade;
+        }
+
+        /**
+         * 
+         * @param $eurid
+         * @param $questionId
+         * @return int|mixed
+         * @author - Nikos Mpalamoutis
+         */
+        function get_user_grade_for_answered_calculated_question($eurid, $questionId, $answer_id) {
+            $grade = Database::get()->querySingle("SELECT weight FROM exercise_answer_record WHERE eurid = ?d AND question_id = ?d AND answer_id = ?d", $eurid, $questionId, $answer_id)->weight;
+            $grade = $grade ?? 0;
+            return $grade;
+        }
+
+        /**
+         * 
+         * @param $questionId
+         * @param $expression
+         * @return string|mixed
+         * @author - Nikos Mpalamoutis
+         */
+        function replaceItemsBracesWithWildCards($expression, $questionId) {
+            
+            $options = Database::get()->querySingle("SELECT options FROM exercise_question WHERE id = ?d", $questionId)->options;
+            if ($options) {
+                // Decode JSON to array
+                $dataItems = json_decode($options, true);
+
+                // Create a key-value array for items
+                $wildCards = [];
+                foreach ($dataItems as $item) {
+                    $wildCards[$item['item']] = $item['value'];
+                }
+
+                foreach ($wildCards as $key => $value) {
+                    $expression = str_replace("{" . $key . "}", $value, $expression);
+                }
+
+            }
+
+            return $expression;
+
+        }
+
+        /**
+        * 
+        * @author - Nikos Mpalamoutis
+        */
+        public function get_ordering_answers() {
+
+            $reformattedItems = [];
+            $questionId = $this->questionId;
+            $answer = Database::get()->querySingle("SELECT answer FROM exercise_answer WHERE question_id = ?d", $questionId);
+            if ($answer) {
+                $items = explode(',', $answer->answer);
+                foreach ($items as $item) {
+                    $lastPipePos = strrpos($item, '|');
+                    if ($lastPipePos !== false) {
+                        $cleanItem = substr($item, 0, $lastPipePos);
+                        list($index, $value) = explode('|', $cleanItem);
+                        $reformattedItems[(int)$index] = $value;
+                    }
+                }
+            }
+
+            return $reformattedItems;
+        }
+
+        /**
+       * 
+       * @author - Nikos Mpalamoutis
+       */
+        public function get_ordering_answer_grade() {
+
+            $resultArray = [];
+            $questionId = $this->questionId;
+            $answer = Database::get()->querySingle("SELECT answer FROM exercise_answer WHERE question_id = ?d", $questionId);
+            if ($answer) {
+                $items = explode(',', $answer->answer);
+                $cleanedItems = [];
+                foreach ($items as $item) {
+                    $item = trim($item);
+                    $parts = explode('|', $item);
+                    if (count($parts) == 3) {
+                        $cleanedItems[] = $parts[0] . "|" . $parts[2];
+                    }
+                }
+                $cleanedString = implode(',', $cleanedItems);
+                foreach ($cleanedItems as $item) {
+                    $arr = explode('|', $item);
+                    $resultArray[$arr[0]] = $arr[1]; // cast to int if needed
+                }
+            }
+
+            return $resultArray;
+
+        }
+
+        /**
+        * 
+        * @author - Nikos Mpalamoutis
+        */
+        public function get_total_ordering_answers() {
+
+            $questionId = $this->questionId;
+            $items = [];
+            $answer = Database::get()->querySingle("SELECT answer FROM exercise_answer WHERE question_id = ?d", $questionId);
+            if ($answer) {
+                $items = explode(',', $answer->answer);
+            }
+            
+            return count($items);
+            
+        }
+
+        /**
+        * 
+        * @author - Nikos Mpalamoutis
+        */
+        public function get_ordering_answers_by_user($qid, $eurid) {
+            $answers = Database::get()->queryArray("SELECT answer,answer_id,weight FROM exercise_answer_record WHERE question_id = ?d AND eurid = ?d", $qid, $eurid);
+            return $answers;
+        }
+
+        /**
+         * @brief Getting the total number of correct ordering predefined answers.
+         * @author - Nikos Mpalamoutis
+         */
+        public function get_total_correct_ordering_predefined_answers() {
+
+            $questionId = $this->questionId;
+            $answer = Database::get()->querySingle("SELECT answer FROM exercise_answer WHERE question_id = ?d", $questionId);
+            $total = 0;
+            if ($answer) {
+                $q = explode(',', $answer->answer);
+                if (count($q) > 0) {
+                    foreach ($q as $r) {
+                        $arr = explode('|', $r);
+                        if (count($arr) == 3 && $arr[2] > 0) {
+                            $total++;
+                        } 
+                    }
+                }
+            } 
+
+            return $total;
 
         }
 

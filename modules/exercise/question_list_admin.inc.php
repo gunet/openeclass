@@ -569,7 +569,7 @@ if ($nbrQuestions) {
                 $question_excl_legend = '';
             }
             // check if question has answers
-            if ($aType != FREE_TEXT and $aType != MATCHING and (!$objQuestionTmp->hasAnswers())) {
+            if ($aType != FREE_TEXT and $aType != ORAL and $aType != MATCHING and (!$objQuestionTmp->hasAnswers())) {
                 $question_excl_legend_2 = "&nbsp;&nbsp;<span class='fas fa-exclamation-triangle space-after-icon' 
                         data-bs-toggle='tooltip' data-bs-placement='right' data-bs-html='true' data-bs-title='$langNoQuestionAnswers'></span>";
             } else {

@@ -81,25 +81,24 @@ $head_content .= "<script type='text/javascript'>
         });
     </script>";
 
-
 $data['u'] = $u = isset($_GET['u']) ? intval($_GET['u']) : '';
 $toolName = $langAdmin;
 $pageName = "$langUserLog: " . uid_to_name($u);
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'listusers.php', 'name' => $langListUsers);
 
-if (isset($_POST['user_date_start'])) {
-    $uds = DateTime::createFromFormat('d-m-Y H:i', $_POST['user_date_start']);
+if (isset($_GET['user_date_start'])) {
+    $uds = DateTime::createFromFormat('d-m-Y H:i', $_GET['user_date_start']);
     $u_date_start = $uds->format('Y-m-d H:i');
     $data['user_date_start'] = $uds->format('d-m-Y H:i');
 } else {
     $date_start = new DateTime();
-    $date_start->sub(new DateInterval('P15D'));
+    $date_start->sub(new DateInterval('P1M'));
     $u_date_start = $date_start->format('Y-m-d H:i');
     $data['user_date_start'] = $date_start->format('d-m-Y H:i');
 }
-if (isset($_POST['user_date_end'])) {
-    $ude = DateTime::createFromFormat('d-m-Y H:i', $_POST['user_date_end']);
+if (isset($_GET['user_date_end'])) {
+    $ude = DateTime::createFromFormat('d-m-Y H:i', $_GET['user_date_end']);
     $u_date_end = $ude->format('Y-m-d H:i');
     $data['user_date_end'] = $ude->format('d-m-Y H:i');
 } else {
@@ -121,7 +120,6 @@ if (isDepartmentAdmin()) {
 $log = new Log();
 
 // display logs
-
 if (isset($_GET['submit'])) {  // display course modules logging
     if ($logtype == -2) { // all platform actions
         $data['users_login_data'] = $log->display(0, $u, 0, $logtype, $u_date_start, $u_date_end);
@@ -130,13 +128,14 @@ if (isset($_GET['submit'])) {  // display course modules logging
     }
 }
 
-$terms = array();
-$qry = "SELECT id, title FROM course";
 $data['cours_opts'][-1] = $langAllCourses;
-Database::get()->queryFunc($qry
-        , function ($row) use(&$data) {
-    $data['cours_opts'][$row->id] = $row->title;
-}, $terms);
+Database::get()->queryFunc("SELECT id, title FROM course JOIN course_user
+                            ON course.id = course_user.course_id
+                            AND course_user.user_id = ?d",
+                                function ($row) use(&$data) {
+                                    $data['cours_opts'][$row->id] = $row->title;
+                                },
+                            $u);
 
 // --------------------------------------
 // display form
@@ -153,15 +152,15 @@ $data['module_names'][MODULE_ID_ABUSE_REPORT] = $langAbuseReport;
 $i = html_entity_decode('&nbsp;&nbsp;&nbsp;', ENT_QUOTES, 'UTF-8');
 
 $data['log_types'] = [
-        -1 => $i . $langCourseActions,
-        LOG_INSERT => $i . $i . $langInsert,
-        LOG_MODIFY => $i . $i . $langModify,
-        LOG_DELETE => $i . $i . $langDelete,
-        -2 => $i . $langSystemActions,
-        LOG_PROFILE => $i . $i . $langModProfile,
-        LOG_CREATE_COURSE => $i . $i . $langFinalize,
-        LOG_DELETE_COURSE => $i . $i . $langCourseDel,
-        LOG_MODIFY_COURSE => $i . $i . $langCourseInfoEdit
-    ];
+                        -1 => $i . $langCourseActions,
+                        LOG_INSERT => $i . $i . $langInsert,
+                        LOG_MODIFY => $i . $i . $langModify,
+                        LOG_DELETE => $i . $i . $langDelete,
+                        -2 => $i . $langSystemActions,
+                        LOG_PROFILE => $i . $i . $langModProfile,
+                        LOG_CREATE_COURSE => $i . $i . $langFinalize,
+                        LOG_DELETE_COURSE => $i . $i . $langCourseDel,
+                        LOG_MODIFY_COURSE => $i . $i . $langCourseInfoEdit
+                    ];
 
 view('admin.users.userlogs', $data);

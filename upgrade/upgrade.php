@@ -282,7 +282,7 @@ if (!check_engine()) {
     $error_message = $langInnoDBMissing;
 }
 
-// Make sure 'video' subdirectory exists and is writable
+// Make sure the 'video' subdirectory exists and is writable
 $videoDir = $webDir . '/video';
 if (!file_exists($videoDir)) {
     if (!make_dir($videoDir)) {

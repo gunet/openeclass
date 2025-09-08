@@ -265,6 +265,12 @@ function load_js($file, $init='') {
             $file = 'trunk8.js';
         } elseif ($file == 'clipboard.js') {
             $file = 'clipboard.js/clipboard.min.js';
+        } elseif ($file == 'jquery-ui') {
+            $file = 'jquery-ui.min.js';
+        } elseif ($file == 'jquery-touch') {
+            $file = 'jquery.ui.touch-punch.min.js';
+        } elseif ($file == 'drag-and-drop-shapes') {
+            $file = 'drag-and-drop-shapes.js';
         }
 
         $head_content .= js_link($file);
@@ -2600,6 +2606,9 @@ function standard_text_escape($text, $mathimg = null) {
 
     if (is_null($mathimg)) {
         $mathimg = $urlAppend . 'courses/mathimg/';
+    }
+    if (is_null($text)) {
+        $text = '';
     }
     $text = preg_replace_callback('/\[m\].*?\[\/m\]/s', 'math_unescape', $text);
     $html = $purifier->purify(mathfilter($text, 12, $mathimg));
@@ -5746,9 +5755,6 @@ function theme_initialization() {
                 .label.label-success{
                     color: $theme_options_styles[ColorGreenText] !important;
                 }
-                .active-unit::after{
-                    background: $theme_options_styles[ColorGreenText] !important;
-                }
             ";
         }
 
@@ -8114,6 +8120,10 @@ function theme_initialization() {
 
                 .wallWrapper textarea:focus{
                     border-color: $theme_options_styles[clBorderInput] ;
+                }
+
+                .panelCard-exercise .blank{
+                    border: solid 1px $theme_options_styles[clBorderInput] ;
                 }
 
             ";
@@ -12181,4 +12191,41 @@ function theme_initialization() {
             unset($_SESSION['step']);
         }
     }
+}
+
+
+/**
+ * @brief display types of messages-popovers such as information message or warning message
+ * @param $type
+ * @param $message
+ * @return string
+ */
+function form_popovers($type, $message): string {
+
+    $html = '';
+    switch ($type) {
+        case 'help':
+            $html .= "<button class='btn helpAdminBtn popovers-btn' data-bs-toggle='popover' data-bs-html='true' data-bs-content='{$message}'>
+                        <i class='fa-solid fa-question-circle'></i>
+                      </button>";
+            break;
+        case 'warning':
+            $html .= "<button class='btn btn-warning popovers-btn' data-bs-toggle='popover' data-bs-html='true' data-bs-content='{$message}'>
+                        <i class='fa-solid fa-triangle-exclamation'></i>
+                      </button>";
+            break;
+        case 'success':
+            $html .= "<button class='btn successAdminBtn popovers-btn' data-bs-toggle='popover' data-bs-html='true' data-bs-content='{$message}'>
+                        <i class='fa-solid fa-circle-check'></i>
+                      </button>";
+            break;
+        case 'danger':
+            $html .= "<button class='btn deleteAdminBtn popovers-btn' data-bs-toggle='popover' data-bs-html='true' data-bs-content='{$message}'>
+                        <i class='fa-solid fa-circle-xmark'></i>
+                      </button>";
+            break;
+    }
+
+    return $html;
+
 }
