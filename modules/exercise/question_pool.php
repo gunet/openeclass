@@ -173,7 +173,7 @@ if (isset($_GET['fromExercise'])) {
     $objExercise = new Exercise();
     $fromExercise = intval($_GET['fromExercise']);
     $objExercise->read($fromExercise);
-    $navigation[] = array("url" => "admin.php?course=$course_code&amp;exerciseId=$fromExercise", "name" => $langExerciseManagement);
+    $navigation[] = array("url" => "admin.php?course=$course_code&exerciseId=$fromExercise", "name" => $langExerciseManagement);
 } else {
     $fromExercise = '';
 }
