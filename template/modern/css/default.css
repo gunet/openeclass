@@ -622,6 +622,19 @@ caption{
   color:#0073E6 !important;
 }
 
+.border-left-success{
+  border-left: 4px solid #1E7E0E !important;
+}
+.border-left-danger{
+  border-left: 4px solid #C44601 !important;
+}
+.border-left-warning{
+  border-left: 4px solid #F57600 !important;
+}
+.border-left-primary{
+  border-left: 4px solid #0073E6 !important;
+}
+
 /**********************************************************************************************************************/
 /************************************************* TYPOGRAPHY *********************************************************/
 /**********************************************************************************************************************/

@@ -507,13 +507,13 @@
                     if (indicator.length === 0) {
                         // Create indicator if it doesn't exist
                         const indicatorHtml = `
-                            <div id="syllabusIndicator" class="alert alert-info d-flex justify-content-between align-items-center mt-3">
+                            <div id="syllabusIndicator" class="alert alert-info d-flex justify-content-between align-items-center">
                                 <div>
                                     <i class="fa-solid fa-file-text me-2"></i>
                                     <strong>${sectionCount} AI δομημένα τμήματα συλλάβου</strong> θα προστεθούν στο μάθημα
                                 </div>
-                                <button type="button" class="btn btn-sm btn-outline-secondary" id="clearSyllabusData">
-                                    <i class="fa-solid fa-times me-1"></i>Καθαρισμός
+                                <button type="button" class="btn deleteAdminBtn" id="clearSyllabusData">
+                                    Καθαρισμός
                                 </button>
                             </div>
                         `;
@@ -562,27 +562,27 @@
              </div>
 
              @if($ai_available)
-                 <div class='col-12'>
-                    <div class='card border-0 mb-4'>
-                        <div class='card-header bg-transparent border-0 d-flex justify-content-between align-items-center'>
-                            <h5 class='mb-0'>
+                 <div class='col-12 mb-4'>
+                    <div class='card panelCard card-default px-lg-4 py-lg-3 h-100'>
+                        <div class='card-header border-0 d-flex justify-content-between align-items-center'>
+                            <h3 class='mb-0'>
                                 <i class='fa-solid fa-robot me-2'></i>{{ trans('langAIGenerateCourse') }}
-                            </h5>
-                            <button type='button' class='btn btn-sm btn-outline-secondary' id='toggleAIAssistant'>
-                                <i class='fa-solid fa-chevron-down'></i> {{ trans('langAIToggleAssistant') }}
+                            </h3>
+                            <button type='button' class='btn submitAdminBtnDefault' id='toggleAIAssistant'>
+                                 {{ trans('langAIToggleAssistant') }} <i class='fa-solid fa-chevron-down'></i>
                             </button>
                         </div>
                         <div class='card-body' id='aiAssistantBody' style='display: none;'>
-                            <ul class='nav nav-pills mb-3' id='aiTabs' role='tablist'>
+                            <ul class='nav nav-tabs mb-3' id='aiTabs' role='tablist'>
                                 <li class='nav-item' role='presentation'>
-                                    <button class='nav-link active' id='ai-syllabus-tab' data-bs-toggle='pill' data-bs-target='#ai-syllabus' type='button' role='tab'>
+                                    <a class='nav-link active' id='ai-syllabus-tab' data-bs-toggle='tab' href='#ai-syllabus' type='button' role='tab'>
                                         <i class='fa-solid fa-file-pdf me-2'></i>{{ trans('langAIExtractFromSyllabus') }}
-                                    </button>
+                                    </a>
                                 </li>
                                 <li class='nav-item' role='presentation'>
-                                    <button class='nav-link' id='ai-prompt-tab' data-bs-toggle='pill' data-bs-target='#ai-prompt' type='button' role='tab'>
+                                    <a class='nav-link' id='ai-prompt-tab' data-bs-toggle='tab' href='#ai-prompt' type='button' role='tab'>
                                         <i class='fa-solid fa-keyboard me-2'></i>{{ trans('langAIGenerateFromPrompt') }}
-                                    </button>
+                                    </a>
                                 </li>
                             </ul>
 
@@ -592,49 +592,43 @@
                                     <form id='aiSyllabusForm' enctype='multipart/form-data'>
 
                                         <!-- Input Method Selection -->
-                                        <div class='mb-4'>
-                                            <label class='form-label'>{{ trans('langAISyllabusInputMethod') }}</label>
-                                            <div class='row'>
-                                                <div class='col-md-6'>
-                                                    <div class='form-check'>
-                                                        <input class='form-check-input' type='radio' name='input_method' id='upload_method' value='upload' checked>
-                                                        <label class='form-check-label' for='upload_method'>
-                                                            <i class='fa-solid fa-upload me-2'></i>{{ trans('langAIUploadFile') }}
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class='col-md-6'>
-                                                    <div class='form-check'>
-                                                        <input class='form-check-input' type='radio' name='input_method' id='url_method' value='url'>
-                                                        <label class='form-check-label' for='url_method'>
-                                                            <i class='fa-solid fa-link me-2'></i>{{ trans('langAIDownloadFromURL') }}
-                                                        </label>
-                                                    </div>
-                                                </div>
+                                        <div class='form-group'>
+                                            <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langAISyllabusInputMethod') }}</div>
+                                            <div class="radio">
+                                                <label>
+                                                    <input type='radio' name='input_method' id='upload_method' value='upload' checked>
+                                                    {{ trans('langAIUploadFile') }}
+                                                </label>
+                                            </div>
+                                            <div class="radio">
+                                                <label>
+                                                    <input type='radio' name='input_method' id='url_method' value='url'>
+                                                    {{ trans('langAIDownloadFromURL') }}
+                                                </label>
                                             </div>
                                         </div>
 
-                                        <div class='row'>
-                                            <div class='col-12'>
-                                                <!-- File Upload Section -->
-                                                <div class='mb-3' id='upload_section'>
-                                                    <label for='syllabus_pdf' class='form-label'>{{ trans('langAIUploadSyllabus') }}</label>
-                                                    <input type='file' class='form-control' id='syllabus_pdf' name='syllabus_pdf' accept='application/pdf'>
-                                                    <div class='form-text'>{{ trans('langAIMaxFileSize') }}</div>
-                                                </div>
+                                        
+                                        <div class='col-12 mt-4'>
+                                            <!-- File Upload Section -->
+                                            <div class='mb-3' id='upload_section'>
+                                                <label for='syllabus_pdf' class='form-label'>{{ trans('langAIUploadSyllabus') }}</label>
+                                                <input type='file' class='form-control' id='syllabus_pdf' name='syllabus_pdf' accept='application/pdf'>
+                                                <div class='form-text'>{{ trans('langAIMaxFileSize') }}</div>
+                                            </div>
 
-                                                <!-- URL Download Section -->
-                                                <div class='mb-3' id='url_section' style='display: none;'>
-                                                    <label for='syllabus_url' class='form-label'>{{ trans('langAISyllabusURL') }}</label>
-                                                    <input type='url' class='form-control' id='syllabus_url' name='syllabus_url'
-                                                           placeholder='https://example.com/course-page or https://example.com/syllabus.pdf'>
-                                                    <div class='form-text'>
-                                                        {{ trans('langAIURLDescription') }}
-                                                    </div>
+                                            <!-- URL Download Section -->
+                                            <div class='mb-3' id='url_section' style='display: none;'>
+                                                <label for='syllabus_url' class='form-label'>{{ trans('langAISyllabusURL') }}</label>
+                                                <input type='url' class='form-control' id='syllabus_url' name='syllabus_url'
+                                                        placeholder='https://example.com/course-page or https://example.com/syllabus.pdf'>
+                                                <div class='form-text'>
+                                                    {{ trans('langAIURLDescription') }}
                                                 </div>
                                             </div>
                                         </div>
-                                        <button type='submit' class='btn btn-primary' id='extractBtn'>
+                                       
+                                        <button type='submit' class='btn btn-primary mt-4' id='extractBtn'>
                                             <i class='fa-solid fa-magic-wand-sparkles me-2'></i>{{ trans('langAIExtractButton') }}
                                         </button>
                                         {!! generate_csrf_token_form_field() !!}
@@ -664,23 +658,21 @@
 
                             <!-- AI Results -->
                             <div id='aiResults' class='mt-4' style='display: none;'>
-                                <div class='card border-success'>
-                                    <div class='card-header bg-success border-success'>
-                                        <h6 class='mb-0 text-white'>
-                                            <i class='fa-solid fa-check-circle me-2'></i>{{ trans('langAIPreviewData') }}
-                                        </h6>
+                                <div class='panel panel-success'>
+                                    <div class='panel-heading text-white'>
+                                        <i class='fa-solid fa-check-circle me-2'></i>{{ trans('langAIPreviewData') }}
                                     </div>
-                                    <div class='card-body'>
+                                    <div class='panel-body'>
                                         <div id='aiDataPreview'></div>
                                         <div class='mt-3 d-flex flex-wrap gap-2'>
-                                            <button type='button' class='btn btn-success' id='applyAIData'>
-                                                <i class='fa-solid fa-check me-2'></i>{{ trans('langAIApplyData') }}
+                                            <button type='button' class='btn successAdminBtn' id='applyAIData'>
+                                                {{ trans('langAIApplyData') }}
                                             </button>
-                                            <button type='button' class='btn btn-outline-secondary' id='clearAIData'>
-                                                <i class='fa-solid fa-trash me-2'></i>{{ trans('langAIClearForm') }}
+                                            <button type='button' class='btn deleteAdminBtn' id='clearAIData'>
+                                                {{ trans('langAIClearForm') }}
                                             </button>
-                                            <button type='button' class='btn btn-outline-warning' id='retryAI'>
-                                                <i class='fa-solid fa-redo me-2'></i>{{ trans('langAIRetry') }}
+                                            <button type='button' class='btn warningAdminBtn' id='retryAI'>
+                                                {{ trans('langAIRetry') }}
                                             </button>
                                         </div>
                                     </div>

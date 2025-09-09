@@ -5746,6 +5746,9 @@ function theme_initialization() {
                 .label.label-danger{
                     color: $theme_options_styles[ColorRedText] !important;
                 }
+                .border-left-danger{
+                    border-left: 4px solid $theme_options_styles[ColorRedText] !important;
+                }
             ";
         }
         if(!empty($theme_options_styles['ColorGreenText'])){
@@ -5754,6 +5757,9 @@ function theme_initialization() {
                 .Success-200-cl,
                 .label.label-success{
                     color: $theme_options_styles[ColorGreenText] !important;
+                }
+                .border-left-success{
+                    border-left: 4px solid $theme_options_styles[ColorGreenText] !important;
                 }
             ";
         }
@@ -5764,6 +5770,9 @@ function theme_initialization() {
                 .Primary-600-cl{
                     color: $theme_options_styles[ColorBlueText] !important;
                 }
+                .border-left-primary{
+                    border-left: 4px solid $theme_options_styles[ColorBlueText] !important;
+                }
             ";
         }
 
@@ -5773,6 +5782,9 @@ function theme_initialization() {
                 .Warning-200-cl,
                 .label.label-warning{
                     color: $theme_options_styles[ColorOrangeText] !important;
+                }
+                .border-left-warning{
+                    border-left: 4px solid $theme_options_styles[ColorOrangeText] !important;
                 }
             ";
         }

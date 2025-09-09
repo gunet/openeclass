@@ -139,84 +139,93 @@ $questionCategories = [
 ];
 
 $tool_content .= "
-    <div class='row'>
-        <div class='col-md-12'>
-            <div class='panel panel-primary'>
-                <div class='panel-heading'>
-                    <h3 class='panel-title'>$langAIQuestionGeneration" .
-                    ($exercise ? " - " . htmlspecialchars($exercise->selectTitle()) : "") . "</h3>
-                </div>
-                <div class='panel-body'>
-                    <div class='alert alert-info'>
-                        <i class='fa fa-info-circle'></i> 
-                        $langAIQuestionInfo
-                        <br><small><strong>$langProvider:</strong> {$providerInfo['name']}</small>
+    <div class='col-12'>
+        <div class='d-lg-flex gap-4 mt-4'>
+            <div class='flex-grow-1'>
+                <div class='card panelCard card-default px-lg-4 py-lg-3 h-100'>
+                    <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+                        <h3>$langAIQuestionGeneration" .
+                        ($exercise ? " - " . htmlspecialchars($exercise->selectTitle()) : "") . "</h3>
                     </div>
-                    
-                    <form method='post' class='form-horizontal'>
-                        <div class='form-group'>
-                            <label class='col-sm-2 control-label'>$langContent <span class='asterisk'>*</span></label>
-                            <div class='col-sm-10'>
-                                <textarea name='content' class='form-control' rows='8' placeholder='$langEnterContent' required>" . (isset($_POST['content']) ? htmlspecialchars($_POST['content']) : '') . "</textarea>
-                                <small class='help-block'>$langContentHelp</small>
-                            </div>
+                    <div class='card-body'>
+                        <div class='alert alert-info'>
+                            <i class='fa-solid fa-circle-info fa-lg'></i> 
+                            <span>
+                                $langAIQuestionInfo
+                                <br><br><small><strong>$langProvider:</strong> {$providerInfo['name']}</small>
+                            </span>
                         </div>
                         
-                        <div class='form-group'>
-                            <label class='col-sm-2 control-label'>$langQuestionCount</label>
-                            <div class='col-sm-3'>
-                                <select name='question_count' class='form-control'>
-                                    <option value='3'" . (($_POST['question_count'] ?? 5) == 3 ? ' selected' : '') . ">3</option>
-                                    <option value='5'" . (($_POST['question_count'] ?? 5) == 5 ? ' selected' : '') . ">5</option>
-                                    <option value='10'" . (($_POST['question_count'] ?? 5) == 10 ? ' selected' : '') . ">10</option>
-                                    <option value='15'" . (($_POST['question_count'] ?? 5) == 15 ? ' selected' : '') . ">15</option>
-                                    <option value='20'" . (($_POST['question_count'] ?? 5) == 20 ? ' selected' : '') . ">20</option>
-                                </select>
+                        <form method='post' class='form-horizontal'>
+                            <div class='form-group mt-4'>
+                                <label class='col-sm-12 control-label-notes'>$langContent <span class='asterisk'>*</span></label>
+                                <div class='col-sm-12'>
+                                    <textarea name='content' class='form-control' rows='8' placeholder='$langEnterContent' required>" . (isset($_POST['content']) ? htmlspecialchars($_POST['content']) : '') . "</textarea>
+                                    <small class='help-block'>$langContentHelp</small>
+                                </div>
                             </div>
-                        </div>
-                        
-                        <div class='form-group'>
-                            <label class='col-sm-2 control-label'>$langQuestionDiffGrade</label>
-                            <div class='col-sm-3'>
-                                <select name='difficulty' class='form-control'>";
+                            
+                            <div class='form-group mt-4'>
+                                <label class='col-sm-12 control-label-notes'>$langQuestionCount</label>
+                                <div class='col-sm-12'>
+                                    <select name='question_count' class='form-select'>
+                                        <option value='3'" . (($_POST['question_count'] ?? 5) == 3 ? ' selected' : '') . ">3</option>
+                                        <option value='5'" . (($_POST['question_count'] ?? 5) == 5 ? ' selected' : '') . ">5</option>
+                                        <option value='10'" . (($_POST['question_count'] ?? 5) == 10 ? ' selected' : '') . ">10</option>
+                                        <option value='15'" . (($_POST['question_count'] ?? 5) == 15 ? ' selected' : '') . ">15</option>
+                                        <option value='20'" . (($_POST['question_count'] ?? 5) == 20 ? ' selected' : '') . ">20</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class='form-group mt-4'>
+                                <label class='col-sm-12 control-label-notes'>$langQuestionDiffGrade</label>
+                                <div class='col-sm-12'>
+                                    <select name='difficulty' class='form-select'>";
 
-                        foreach ($availableDifficulties as $value => $label) {
-                            $selected = (($_POST['difficulty'] ?? 3) === $value) ? ' selected' : '';
-                            $tool_content .= "<option value='$value'$selected>$label</option>";
+                            foreach ($availableDifficulties as $value => $label) {
+                                $selected = (($_POST['difficulty'] ?? 3) === $value) ? ' selected' : '';
+                                $tool_content .= "<option value='$value'$selected>$label</option>";
+                            }
+
+                            $tool_content .= "
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class='form-group mt-4'>
+                                <label class='col-sm-12 control-label-notes'>" . ($langQuestionTypes ?? 'Question Types') . "</label>
+                                <div class='col-sm-12'>";
+
+                        foreach ($availableQuestionTypes as $value => $label) {
+                            $checked = (in_array($value, $_POST['question_types'] ?? [UNIQUE_ANSWER])) ? ' checked' : '';
+                            $tool_content .= "
+                                            <div class='checkbox'>
+                                                <label class='label-container' aria-label='$langSelect'>
+                                                    <input type='checkbox' name='question_types[]' value='$value'$checked> 
+                                                    <span class='checkmark'></span>
+                                                    $label
+                                                </label>
+                                            </div>";
                         }
 
                         $tool_content .= "
-                                </select>
+                                </div>
                             </div>
-                        </div>
-                        
-                        <div class='form-group'>
-                            <label class='col-sm-2 control-label'>" . ($langQuestionTypes ?? 'Question Types') . "</label>
-                            <div class='col-sm-8'>";
-
-                    foreach ($availableQuestionTypes as $value => $label) {
-                        $checked = (in_array($value, $_POST['question_types'] ?? [UNIQUE_ANSWER])) ? ' checked' : '';
-                        $tool_content .= "
-                                        <div class='checkbox'>
-                                            <label>
-                                                <input type='checkbox' name='question_types[]' value='$value'$checked> $label
-                                            </label>
-                                        </div>";
-                    }
-
-                    $tool_content .= "
+                            
+                            <div class='form-group mt-5'>
+                                <div class='col-12 d-flex justify-content-end align-items-center'>
+                                    <button type='submit' name='generate_questions' class='btn submitAdminBtn'>
+                                        $langGenerateQuestions
+                                    </button>
+                                </div>
                             </div>
-                        </div>
-                        
-                        <div class='form-group'>
-                            <div class='col-sm-offset-2 col-sm-10'>
-                                <button type='submit' name='generate_questions' class='btn btn-primary'>
-                                    <i class='fa fa-magic'></i>$langGenerateQuestions
-                                </button>
-                            </div>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
+            </div>
+            <div class='d-none d-lg-block'>
+                <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
             </div>
         </div>
     </div>";
@@ -226,28 +235,31 @@ if (!empty($_SESSION['ai_generated_questions'])) {
     $questions = $_SESSION['ai_generated_questions'];
 
     $tool_content .= "
-    <div class='row'>
-        <div class='col-md-12'>
-            <div class='panel panel-success'>
-                <div class='panel-heading'>
-                    <h3 class='panel-title'>$langGeneratedQuestions: " .  count($questions) . "</h3>
+        <div class='col-12 mt-4'>
+            <div class='card panelCard card-default px-lg-4 py-lg-3 h-100'>
+                <div class='card-header border-0 d-flex justify-content-between align-items-center'>
+                    <h3>$langGeneratedQuestions: " .  count($questions) . "</h3>
                 </div>
-                <div class='panel-body'>
+                <div class='card-body'>
                     <form method='post'>
                         <div class='alert alert-info'>
-                            <i class='fa fa-check-square-o'></i> $langSelectQuestions
+                            <i class='fa-solid fa-circle-info fa-lg'></i> 
+                            <span>
+                                $langSelectQuestions
+                            </span>
                         </div>";
 
     foreach ($questions as $index => $question) {
         $objQuestion = new Question();
         $tool_content .= "
-                <div class='panel panel-default question-preview'>
-                    <div class='panel-body'>
+                <div class='card border-left-success question-preview my-4'>
+                    <div class='card-body'>
                         <div class='checkbox'>
-                            <label>
+                            <label class='label-container' aria-label='$langSelect'>
                                 <input type='checkbox' name='selected_questions[]' value='$index' checked>
+                                <span class='checkmark'></span>
                                 <strong>$langQuestion " . ($index + 1) . ":</strong>
-                                <small>" . $objQuestion->selectTypeLegend($question['question_type']) . "&nbsp;&mdash;&nbsp;" . $objQuestion->selectDifficultyLegend($question['difficulty']) . "</small>                                
+                                <p>" . $objQuestion->selectTypeLegend($question['question_type']) . "&nbsp;&mdash;&nbsp;" . $objQuestion->selectDifficultyLegend($question['difficulty']) . "</p>               
                             </label>
                         </div>
                         <div class='question-content' style='margin-left: 20px;'>
@@ -276,9 +288,9 @@ if (!empty($_SESSION['ai_generated_questions'])) {
     }
 
     $tool_content .= "
-                        <div class='form-group' style='padding: 15px; background-color: #f9f9f9; border-radius: 5px; margin-bottom: 20px;'>
-                            <label style='margin-bottom: 10px; font-weight: bold;'>$langQuestionCategory:</label>
-                            <select name='category_id' class='form-control' style='width: 300px; margin-bottom: 15px;'>";
+                        <div class='form-group'>
+                            <label class='form-label'>$langQuestionCategory</label>
+                            <select name='category_id' class='form-select'>";
 
     foreach ($questionCategories as $catId => $catName) {
         $tool_content .= "<option value='$catId'>$catName</option>";
@@ -288,46 +300,44 @@ if (!empty($_SESSION['ai_generated_questions'])) {
                             </select>
                         </div>
                         
-                            <div class='text-center' style='padding-top: 10px; border-top: 1px solid #ddd; margin-top: 15px; white-space: nowrap;'>";
+                            <div class='form-group mt-5 d-flex justify-content-lg-end justify-content-center align-items-center gap-2 flex-wrap'>";
 
     // Show appropriate save buttons based on context
     if ($exerciseId > 0) {
         $tool_content .= "
-                                <button type='submit' name='add_to_exercise' class='btn btn-primary' style='margin-right: 10px; display: inline-block; vertical-align: middle; line-height: 1.5; padding: 8px 12px;'>
-                                    <i class='fa fa-plus-circle'></i> $langAddToExercise
+                                <button type='submit' name='add_to_exercise' class='btn submitAdminBtn'>
+                                    $langAddToExercise
                                 </button>
-                                <button type='submit' name='save_questions' class='btn btn-success' style='margin-right: 10px; display: inline-block; vertical-align: middle; line-height: 1.5; padding: 8px 12px;'>
-                                    <i class='fa fa-save'></i> $langSaveToQuestionBank
+                                <button type='submit' name='save_questions' class='btn successAdminBtn'>
+                                    $langSaveToQuestionBank
                                 </button>";
     } else {
         $tool_content .= "
-                                <button type='submit' name='save_questions' class='btn btn-success' style='margin-right: 10px; display: inline-block; vertical-align: middle; line-height: 1.5; padding: 8px 12px;'>
-                                    <i class='fa fa-save'></i> $langSaveToQuestionBank
+                                <button type='submit' name='save_questions' class='btn successAdminBtn'>
+                                    $langSaveToQuestionBank
                                 </button>";
     }
 
     $redirectUrl = $exerciseId > 0 ? "ai_question_generation.php?course=$course_code&exerciseId=$exerciseId" : "ai_question_generation.php?course=$course_code";
     $tool_content .= "
-                                <a href='$redirectUrl' class='btn btn-default' style='display: inline-block; vertical-align: middle; line-height: 1.5; padding: 8px 12px;'>
-                                    <i class='fa fa-refresh'></i> $langGenerateNew
+                                <a href='$redirectUrl' class='btn btn-default'>
+                                    $langGenerateNew
                                 </a>
                             </div>
                         </div>
                     </form>
                 </div>
             </div>
-        </div>
-    </div>";
+        </div>";
 }
 
 $tool_content .= "
-<div class='row'>
-    <div class='col-md-12'>
-        <div class='panel panel-default'>
-            <div class='panel-heading'>
-                <h4>" . ($langUsageTips ?? 'Usage Tips') . "</h4>
+    <div class='col-12 mt-4'>
+        <div class='card panelCard card-default px-lg-4 py-lg-3 h-100'>
+            <div class='card-header border-0 d-flex justify-content-between align-items-center'>
+                <h3>" . ($langUsageTips ?? 'Usage Tips') . "</h3>
             </div>
-            <div class='panel-body'>
+            <div class='card-body'>
                 <ul>
                     <li>$langTip1</li>
                     <li>$langTip2</li>
@@ -336,25 +346,7 @@ $tool_content .= "
                 </ul>
             </div>
         </div>
-    </div>
-</div>";
-
-// Add custom CSS for better styling
-$head_content .= "
-    <style>
-        .question-preview {
-            margin-bottom: 15px;
-        }
-        .question-content {
-            background-color: #f9f9f9;
-            padding: 15px;
-            border-radius: 5px;
-            border-left: 4px solid #5cb85c;
-        }
-        .asterisk {
-            color: red;
-        }
-</style>";
+    </div>";
 
 // Add JavaScript for enhanced interaction
 $head_content .= "

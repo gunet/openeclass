@@ -19,34 +19,34 @@
 
                                 <div class='form-group'>
                                     <label for="dropdown" class="form-label">{{ trans('langSelectAIProvider') }}</label>
-                                    <select id='dropdownprovider' name='provider' class='form-control'>
+                                    <select id='dropdownprovider' name='provider' class='form-select'>
                                         @foreach ($dropdownOptions as $option)
                                             <option value='{{ $option['value'] }}' @if (isset($existingConfig->provider_type) && $existingConfig->provider_type == $option['value']) selected @endif> {{ ($option['label']) }}</option>
                                         @endforeach
                                     </select>
                                 </div>
 
-                                <div class='form-group mt-3'>
+                                <div class='form-group mt-4'>
                                     <label for="api_key" class="form-label">API Key</label>
                                     <input type="text" id="api_key" name="api_key" class="form-control" placeholder="Enter API key" value="@if (isset($existingConfig->api_key)) {{ $existingConfig->api_key }} @endif">
                                 </div>
 
-                                <div id='modelDropdownContainer' class='form-group mt-3'>
+                                <div id='modelDropdownContainer' class='form-group mt-4'>
                                     <label for="modelDropdown" class="form-label">{{ trans('langLanguageModel') }}</label>
-                                    <select id="modelDropdown" name="model" class="form-control">
+                                    <select id="modelDropdown" name="model" class="form-select">
                                         <option value="{{ $currentModelName }}">{{ $currentModelName }}</option>
                                     </select>
                                 </div>
 
-                                <div class='form-group mt-3'>
-                                    <button type="button" id="testConnectionBtn" class="btn btn-outline-primary">
+                                <div class='form-group mt-4'>
+                                    <button type="button" id="testConnectionBtn" class="btn submitAdminBtn">
                                         <i class="fa fa-plug"></i> {{ trans('langTestConnection') }}
                                     </button>
                                 </div>
 
                                 <div id="connectionStatus" class="mt-2"></div>
 
-                                <div id="otherFields" class="mt-3 d-none">
+                                <div id="otherFields" class="mt-4 d-none">
                                     <div class='form-group'>
                                         <label for="apiType" class="form-label">API Type</label>
                                         <select id="apiType" name="api_type" class="form-control">
@@ -112,27 +112,27 @@
                                 @endif
                                 <div class='form-group'>
                                     <label for="dropdown" class="form-label">{{ trans('langAIService') }}</label>
-                                    <select name='module' class='form-control'>
+                                    <select name='module' class='form-select'>
                                         @foreach ($ai_services as $value => $label)
                                             <option value='{{ $value }}' @if (isset($ai_service) and $ai_service == $value) selected @endif> {{ $label }}</option>
                                         @endforeach
                                     </select>
                                 </div>
 
-                                <div class='form-group mt-3'>
+                                <div class='form-group mt-4'>
                                     <label for="modelDropdown" class="form-label">{{ trans('langProvider') }} - {{ trans('langLanguageModel') }}</label>
-                                    <select name="provider_model" class="form-control">
+                                    <select name="provider_model" class="form-select">
                                         @foreach ($provider_model_data as $id => $name)
                                             <option value='{{ $id }}' @if (isset($model_data) and $model_data == $name) selected @endif> {{ $name }}</option>"
                                          @endforeach
                                     </select>
                                 </div>
 
-                                <div class='form-group mt-3' id='courses-list'>
+                                <div class='form-group mt-4' id='courses-list'>
                                     <label for='select-courses' class='col-12 control-label-notes'>{{ trans('langUseOfService') }}&nbsp;&nbsp;
                                     <span class='fa fa-info-circle' data-bs-toggle='tooltip' data-bs-placement='right' title='{{ trans('langUseOfServiceInfo') }}'></span></label>
                                     <div class='col-12'>
-                                        <select id='select-courses' class='form-control' name='ai_courses[]' multiple>
+                                        <select id='select-courses' class='form-select' name='ai_courses[]' multiple>
                                             {!! $courses_content !!}
                                         </select>
                                         <a href='#' id='selectAll'>{{ trans('langJQCheckAll') }}</a> | <a href='#' id='removeAll'>{{ trans('langJQUncheckAll') }}</a>
