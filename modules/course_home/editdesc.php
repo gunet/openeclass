@@ -87,8 +87,9 @@ if (isset($_GET['delete_image'])) {
     Database::get()->query("UPDATE course SET description = ?s, home_layout = ?d$extra_sql WHERE id = ?d", $db_vars);
     // update index
     require_once 'modules/search/classes/ConstantsUtil.php';
-    require_once 'modules/search/lucene/indexer.class.php';
-    Indexer::queueAsync(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_COURSE, $course_id);
+    require_once 'modules/search/classes/SearchEngineFactory.php';
+    $searchEngine = SearchEngineFactory::create();
+    $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_COURSE, $course_id);
     header("Location: {$urlAppend}courses/$course_code/");
     exit;
 }

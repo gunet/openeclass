@@ -24,27 +24,56 @@ require_once 'modules/search/classes/FetcherUtil.php';
 
 class SolrUnitResourceIndexer extends AbstractSolrIndexer {
 
-    public function storeByCourse(int $courseId): array {
+    private function makeDoc(object $ures): array {
         global $urlServer;
+        return [
+            ConstantsUtil::FIELD_ID => 'doc_' . ConstantsUtil::DOCTYPE_UNITRESOURCE . '_' . $ures->id,
+            ConstantsUtil::FIELD_PK => ConstantsUtil::DOCTYPE_UNITRESOURCE . '_' . $ures->id,
+            ConstantsUtil::FIELD_PKID => $ures->id,
+            ConstantsUtil::FIELD_COURSEID => $ures->course_id,
+            ConstantsUtil::FIELD_UNITID => $ures->unit_id,
+            ConstantsUtil::FIELD_DOCTYPE => ConstantsUtil::DOCTYPE_UNITRESOURCE,
+            ConstantsUtil::FIELD_TITLE => $ures->title,
+            ConstantsUtil::FIELD_CONTENT => strip_tags($ures->comments),
+            ConstantsUtil::FIELD_VISIBLE => $ures->visible,
+            ConstantsUtil::FIELD_URL => $urlServer
+                . 'modules/units/index.php?course=' . course_id_to_code($ures->course_id)
+                . '&amp;id=' . $ures->unit_id
+        ];
+    }
+
+    public function storeByCourse(int $courseId): array {
         $docs = [];
         $ureses = FetcherUtil::fetchUnitResources($courseId);
         foreach ($ureses as $ures) {
-            $docs[] = [
-                ConstantsUtil::FIELD_ID => 'doc_' . ConstantsUtil::DOCTYPE_UNITRESOURCE . '_' . $ures->id,
-                ConstantsUtil::FIELD_PK => ConstantsUtil::DOCTYPE_UNITRESOURCE . '_' . $ures->id,
-                ConstantsUtil::FIELD_PKID => $ures->id,
-                ConstantsUtil::FIELD_COURSEID => $ures->course_id,
-                ConstantsUtil::FIELD_UNITID => $ures->unit_id,
-                ConstantsUtil::FIELD_DOCTYPE => ConstantsUtil::DOCTYPE_UNITRESOURCE,
-                ConstantsUtil::FIELD_TITLE => $ures->title,
-                ConstantsUtil::FIELD_CONTENT => strip_tags($ures->comments),
-                ConstantsUtil::FIELD_VISIBLE => $ures->visible,
-                ConstantsUtil::FIELD_URL => $urlServer
-                    . 'modules/units/index.php?course=' . course_id_to_code($ures->course_id)
-                    . '&amp;id=' . $ures->unit_id
-            ];
+            $docs[] = $this->makeDoc($ures);
         }
         return $docs;
+    }
+
+    public function store(int $id): array {
+        $docs = [];
+        $ures = FetcherUtil::fetchUnitResource($id);
+        if (!empty($ures)) {
+            $docs[] = $this->makeDoc($ures);
+        }
+        return $docs;
+    }
+
+    public function remove(int $id): array {
+        return [
+            "delete" => [
+                "query" => ConstantsUtil::FIELD_ID . ":" . 'doc_' . ConstantsUtil::DOCTYPE_UNITRESOURCE . '_' . $id
+            ]
+        ];
+    }
+
+    public function removeByUnit(int $unitId): array {
+        return [
+            "delete" => [
+                "query" => ConstantsUtil::FIELD_DOCTYPE . ":" . ConstantsUtil::DOCTYPE_UNITRESOURCE . ' AND ' . ConstantsUtil::FIELD_UNITID . ':' . $unitId
+            ]
+        ];
     }
 
 }

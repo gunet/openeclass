@@ -200,10 +200,29 @@ class FetcherUtil {
         return Database::get()->queryArray("SELECT * FROM course_units WHERE course_id = ?d", $courseId);
     }
 
+    public static function fetchUnit(int $unitId): ?object {
+        $unit = Database::get()->querySingle("SELECT * FROM course_units WHERE id = ?d", $unitId);
+        if (!$unit) {
+            return null;
+        }
+        return $unit;
+    }
+
     public static function fetchUnitResources(int $courseId): array {
         return Database::get()->queryArray("SELECT ur.*, cu.course_id 
             FROM unit_resources ur 
             JOIN course_units cu ON cu.id = ur.unit_id AND cu.course_id = ?d", $courseId);
+    }
+
+    public static function fetchUnitResource(int $uresId): ?object {
+        $ures = Database::get()->querySingle("SELECT ur.*, cu.course_id
+                                                FROM unit_resources ur 
+                                            JOIN course_units cu ON cu.id = ur.unit_id 
+                                                WHERE ur.id = ?d", $uresId);
+        if (!$ures) {
+            return null;
+        }
+        return $ures;
     }
 
     public static function fetchNotes(int $courseId): array {

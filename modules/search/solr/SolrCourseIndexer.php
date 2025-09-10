@@ -47,4 +47,8 @@ class SolrCourseIndexer extends AbstractSolrIndexer {
         return $docs;
     }
 
+    public function store(int $id): array {
+        return $this->storeByCourse($id);
+    }
+
 }

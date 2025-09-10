@@ -61,12 +61,7 @@ class UnitIndexer extends AbstractIndexer implements ResourceIndexerInterface {
      * @return object - the mysql fetched row
      */
     protected function fetch($unitId) {
-        $unit = Database::get()->querySingle("SELECT * FROM course_units WHERE id = ?d", $unitId);
-        if (!$unit) {
-            return null;
-        }
-
-        return $unit;
+        return FetcherUtil::fetchUnit($unitId);
     }
 
     /**
