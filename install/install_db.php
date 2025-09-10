@@ -1290,6 +1290,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `exercise_question` (
     `difficulty` INT(1) DEFAULT 0,
     `category` INT(11) DEFAULT 0,
     `copy_of_qid` INT(11) DEFAULT NULL,
+    `options` TEXT DEFAULT NULL,
      CONSTRAINT FOREIGN KEY (copy_of_qid)
      REFERENCES exercise_question(id) ON DELETE SET NULL) $tbl_options");
 

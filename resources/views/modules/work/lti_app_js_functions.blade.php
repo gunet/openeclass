@@ -1,7 +1,7 @@
 <script type='text/javascript'>
 //<![CDATA[
 
-// Formats a date string that can be parsed, i.e. as derived from remote LTI content selection, into specific format (DD-MM-YYYY HH:mm).
+{{-- Formats a date string that can be parsed, i.e. as derived from remote LTI content selection, into specific format (DD-MM-YYYY HH:mm). --}}
 function formatReturnDate(dt) {
     const unixtime = Date.parse(dt);
     const dtobject = new Date(unixtime);
@@ -13,13 +13,16 @@ function formatReturnDate(dt) {
     return day + '-' + month + '-' + year + ' ' + hours + ':' + minutes;
 }
 
-// populate local assignment form from remote LTI content selection and hide modal
+{{-- populate local assignment form from remote LTI content selection and hide modal --}}
 window.processContentItemReturnData = function(returnData) {
     if (returnData === undefined) {
         return;
     }
     if (returnData.title !== undefined) {
         $('#title').val(returnData.title);
+    }
+    if (returnData.description !== undefined) {
+        tinymce.get('desc').setContent(returnData.description);
     }
     if (returnData.maxscore !== undefined) {
         $('#max_grade').val(returnData.maxscore);
@@ -103,10 +106,10 @@ function hideLti1Fields() {
         .prop('disabled', true)
         .closest('div.form-group')
         .addClass('hidden');
-    /*$('#tii_institutioncheck')
+    {{-- $('#tii_institutioncheck')
         .prop('disabled', true)
         .closest('div.form-group')
-        .addClass('hidden');*/
+        .addClass('hidden'); --}}
     $('#tii_journalcheck')
         .prop('disabled', true)
         .closest('div.form-group')
@@ -123,10 +126,10 @@ function hideLti1Fields() {
         .prop('disabled', true)
         .closest('div.form-group')
         .addClass('hidden');
-    /*$('#tii_submit_papers_to')
+    {{-- $('#tii_submit_papers_to')
         .prop('disabled', true)
         .closest('div.form-group')
-        .addClass('hidden');*/
+        .addClass('hidden'); --}}
     $('#tii_use_biblio_exclusion')
         .prop('disabled', true)
         .closest('div.form-group')
@@ -146,10 +149,10 @@ function showLti1Fields() {
         .prop('disabled', false)
         .closest('div.form-group')
         .removeClass('hidden');
-    /*$('#tii_institutioncheck')
+    {{-- $('#tii_institutioncheck')
         .prop('disabled', false)
         .closest('div.form-group')
-        .removeClass('hidden');*/
+        .removeClass('hidden'); --}}
     $('#tii_journalcheck')
         .prop('disabled', false)
         .closest('div.form-group')
@@ -166,10 +169,10 @@ function showLti1Fields() {
         .prop('disabled', false)
         .closest('div.form-group')
         .removeClass('hidden');
-    /*$('#tii_submit_papers_to')
+    {{-- $('#tii_submit_papers_to')
         .prop('disabled', false)
         .closest('div.form-group')
-        .removeClass('hidden');*/
+        .removeClass('hidden'); --}}
     $('#tii_use_biblio_exclusion')
         .prop('disabled', false)
         .closest('div.form-group')
@@ -201,6 +204,7 @@ function hideLti13Fields() {
     $('#title')
         .prop('readonly', false)
         .tooltip('dispose');
+    tinymce.get('desc').setMode('design');
     $('#max_grade')
         .prop('readonly', false)
         .tooltip('dispose');
@@ -232,27 +236,8 @@ function showLti13Fields() {
             'title': '{{ trans('langTiiSelectContentAutoComplete') }}'
         });
 
-    $('#title')
-        .prop('readonly', true)
-        .tooltip({
-        'placement': 'top',
-        'title': '{{ trans('langTiiSelectContentAutoComplete') }}'
-    });
+    {{-- always locked --}}
     $('#max_grade')
-        .prop('readonly', true)
-        .tooltip({
-            'placement': 'top',
-            'title': '{{ trans('langTiiSelectContentAutoComplete') }}'
-        });
-    $('#WorkStart')
-        .datetimepicker('remove')
-        .prop('readonly', true)
-        .tooltip({
-            'placement': 'top',
-            'title': '{{ trans('langTiiSelectContentAutoComplete') }}'
-        });
-    $('#WorkEnd')
-        .datetimepicker('remove')
         .prop('readonly', true)
         .tooltip({
             'placement': 'top',
@@ -274,6 +259,31 @@ function showLti13Fields() {
     $('#enableWorkFeedbackRelease')
         .prop('checked', true)
         .prop('disabled', true);
+
+    {{-- conditionally locked: if edit and already content selected, do not lock --}}
+    @if (!isset($assignment_id) || empty($tii_selected_content))
+    $('#title')
+        .prop('readonly', true)
+        .tooltip({
+            'placement': 'top',
+            'title': '{{ trans('langTiiSelectContentAutoComplete') }}'
+        });
+    tinymce.get('desc').setMode('readonly');
+    $('#WorkStart')
+        .datetimepicker('remove')
+        .prop('readonly', true)
+        .tooltip({
+            'placement': 'top',
+            'title': '{{ trans('langTiiSelectContentAutoComplete') }}'
+        });
+    $('#WorkEnd')
+        .datetimepicker('remove')
+        .prop('readonly', true)
+        .tooltip({
+            'placement': 'top',
+            'title': '{{ trans('langTiiSelectContentAutoComplete') }}'
+        });
+    @endif
 }
 
 function hideLtiAllFields() {

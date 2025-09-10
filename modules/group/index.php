@@ -72,6 +72,15 @@ if (isset($_GET['urlview'])) {
     $urlview = '';
 }
 
+if(isset($_GET['show']) && $_GET['show'] == 'list') {
+    $_SESSION['group_show' . $course_id] = 'list';
+}
+
+if(isset($_GET['show']) && $_GET['show'] == 'card') {
+    $_SESSION['group_show' . $course_id] = 'card';
+}
+
+
 if ($is_editor) {
     if (isset($_GET['choice'])) { // change group visibility
         change_group_visibility($_GET['choice'], $_GET['group_id'], $course_id);
@@ -518,11 +527,12 @@ if ($is_editor) {
                 <tr><td class='not_visible nocategory-link'> - $langNoGroupInCategory - </td>
                 <td></td></tr></table></div></div></div>";
     } elseif ($num_of_groups > 0) {
-        if(isset($_GET['show']) && $_GET['show'] == 'list'){
-            //print_a($groupSelect);
+
+        if (isset($_SESSION['group_show' . $course_id]) && $_SESSION['group_show' . $course_id] == 'list') {
+
             // Here display the groups in a list
             $tool_content .= "<div class='col-12 mb-4'>
-                                <a class='btn submitAdminBtn d-inline-flex' href='{$urlAppend}modules/group/index.php?course={$course_code}'>$langFirstShow</a>
+                                <a class='btn submitAdminBtn d-inline-flex' href='{$urlAppend}modules/group/index.php?course={$course_code}&show=card'>$langFirstShow</a>
                             </div>";
             $tool_content .= "<div class='col-12'>
                 <div class='table-responsive'>
@@ -831,9 +841,11 @@ if ($is_editor) {
                 <tr><td class='not_visible nocategory-link'> - $langNoGroupInCategory - </td>
                 </tr></table></div></div></div>";
     } else {
-        if(isset($_GET['show']) && $_GET['show'] == 'list'){
+
+        if (isset($_SESSION['group_show' . $course_id]) && $_SESSION['group_show' . $course_id] == 'list') {
+
             $tool_content .= "<div class='col-12 mb-4'>
-                                    <a class='btn submitAdminBtn d-inline-flex' href='{$urlAppend}modules/group/index.php?course={$course_code}'>$langFirstShow</a>
+                                    <a class='btn submitAdminBtn d-inline-flex' href='{$urlAppend}modules/group/index.php?course={$course_code}&show=card'>$langFirstShow</a>
                                 </div>";
             $tool_content .= "
                                 <div class='col-12'>

@@ -36,6 +36,7 @@ if (!class_exists('Question')) {
         private $category;
         private $copy_of_qid;
         private $exerciseList;  // array with the list of exercises which this question is in
+        private $options;
 
         /**
          * constructor of the class
@@ -51,6 +52,7 @@ if (!class_exists('Question')) {
             $this->category = 0;
             $this->copy_of_qid = null;
             $this->exerciseList = array();
+            $this->options = null;
         }
 
         /**
@@ -62,7 +64,7 @@ if (!class_exists('Question')) {
         function read($id) {
             global $course_id;
 
-            $object = Database::get()->querySingle("SELECT question, description, feedback, weight, `type`, difficulty, category, copy_of_qid
+            $object = Database::get()->querySingle("SELECT question, description, feedback, weight, `type`, difficulty, category, copy_of_qid, options
                         FROM `exercise_question` WHERE course_id = ?d AND id = ?d", $course_id, $id);
             // if the question has been found
             if ($object) {
@@ -75,6 +77,7 @@ if (!class_exists('Question')) {
                 $this->difficulty = $object->difficulty;
                 $this->category = $object->category;
                 $this->copy_of_qid = $object->copy_of_qid;
+                $this->options = $object->options;
 
                 $result = Database::get()->queryArray("SELECT exercise_id FROM `exercise_with_questions` WHERE question_id = ?d", $id);
                 // fills the array with the exercises which this question is in
@@ -139,6 +142,13 @@ if (!class_exists('Question')) {
          */
         function selectDifficulty() {
             return $this->difficulty;
+        }
+
+        /**
+         * @brief returns the question options
+         */
+        function selectOptions() {
+            return $this->options;
         }
 
 
@@ -216,8 +226,10 @@ if (!class_exists('Question')) {
          */
         function selectTypeLegend($answerTypeId) {
             global $langUniqueSelect, $langMultipleSelect, $langFillBlanks,
-                   $langMatching, $langTrueFalse, $langFreeText,
-                   $langFillBlanksStrict, $langFillBlanksTolerant, $langFillFromSelectedWords;
+                   $langMatching, $langTrueFalse, $langFreeText, $langOrdering,
+                   $langFillBlanksStrict, $langFillBlanksTolerant, $langCalculated,
+                   $langFillFromSelectedWords, $langDragAndDropText, $langDragAndDropMarkers,
+                   $langOral;
 
             switch ($answerTypeId) {
                 case UNIQUE_ANSWER:
@@ -232,10 +244,21 @@ if (!class_exists('Question')) {
                     return $langTrueFalse;
                 case FREE_TEXT:
                     return $langFreeText;
+                case ORAL:
+                    return $langOral;
                 case FILL_IN_BLANKS_TOLERANT:
                     return "$langFillBlanks ($langFillBlanksTolerant)";
                 case FILL_IN_FROM_PREDEFINED_ANSWERS:
                     return "$langFillFromSelectedWords";
+                case DRAG_AND_DROP_TEXT:
+                    return "$langDragAndDropText";
+                case DRAG_AND_DROP_MARKERS:
+                    return "$langDragAndDropMarkers";
+                case CALCULATED:
+                    return $langCalculated;
+                case ORDERING:
+                    return $langOrdering;
+                break;
             }
         }
         /**
@@ -285,6 +308,15 @@ if (!class_exists('Question')) {
          */
         function updateWeighting($weighting) {
             $this->weighting = $weighting;
+        }
+
+        /**
+         * @brief update question options
+         * @param $options
+         * @return void
+         */
+        function updateOptions($options) {
+            $this->options = $options;
         }
 
         /**
@@ -405,18 +437,19 @@ if (!class_exists('Question')) {
             $difficulty = $this->difficulty;
             $category = $this->category;
             $copy_of_qid = $this->copy_of_qid;
+            $options = $this->options;
 
             // question already exists
             if ($id) {
                 Database::get()->query("UPDATE `exercise_question` SET question = ?s, description = ?s, feedback = ?s,
-                                            weight = ?f, type = ?d, difficulty = ?d, category = ?d, copy_of_qid = ?d
+                                            weight = ?f, type = ?d, difficulty = ?d, category = ?d, copy_of_qid = ?d, options = ?s
                                         WHERE course_id = $course_id AND id='$id'",
-                                    $question, $description, $feedback, $weighting, $type, $difficulty, $category, $copy_of_qid);
+                                    $question, $description, $feedback, $weighting, $type, $difficulty, $category, $copy_of_qid, $options);
             }
             // creates a new question
             else {
-                $this->id = Database::get()->query("INSERT INTO `exercise_question` (course_id, question, description, feedback, weight, type, difficulty, category)
-                VALUES (?d, ?s, ?s, ?s, ?f, ?d, ?d, ?d)", $course_id, $question, $description, $feedback, $weighting, $type, $difficulty, $category)->lastInsertID;
+                $this->id = Database::get()->query("INSERT INTO `exercise_question` (course_id, question, description, feedback, weight, type, difficulty, category, options)
+                VALUES (?d, ?s, ?s, ?s, ?f, ?d, ?d, ?d, ?s)", $course_id, $question, $description, $feedback, $weighting, $type, $difficulty, $category, $options)->lastInsertID;
             }
 
             // if the question is created in an exercise
@@ -501,13 +534,14 @@ if (!class_exists('Question')) {
             if ($answers) {
                 $i = 1;
                 foreach ($answers as $row) {
-                    if ($type == UNIQUE_ANSWER || $type == TRUE_FALSE) {
+                    if ($type == UNIQUE_ANSWER || $type == TRUE_FALSE || $type == CALCULATED) {
                         $choice = $row->answer_id;
                     } elseif ($type == MULTIPLE_ANSWER) {
                         $choice[$row->answer_id] = 1;
-                    } elseif ($type == FREE_TEXT) {
+                    } elseif ($type == FREE_TEXT or $type == ORAL) {
                         $choice = $row->answer;
-                    } elseif ($type == FILL_IN_BLANKS || $type == FILL_IN_BLANKS_TOLERANT || $type == FILL_IN_FROM_PREDEFINED_ANSWERS) {
+                    } elseif ($type == FILL_IN_BLANKS || $type == FILL_IN_BLANKS_TOLERANT || $type == FILL_IN_FROM_PREDEFINED_ANSWERS
+                                || $type == DRAG_AND_DROP_TEXT || $type == DRAG_AND_DROP_MARKERS || $type == ORDERING) {
                         $choice[$row->answer_id] = $row->answer;
                     } elseif ($type == MATCHING) {
                         $choice[$row->answer] = $row->answer_id;
@@ -533,9 +567,10 @@ if (!class_exists('Question')) {
             $difficulty = $this->difficulty;
             $category = $this->category;
             $copy_of_qid = $this->id;
+            $options = $this->options;
 
-            $id = Database::get()->query("INSERT INTO `exercise_question` (course_id, question, description, feedback, weight, `type`, difficulty, category, copy_of_qid)
-                        VALUES (?d, ?s, ?s, ?s, ?f, ?d, ?d, ?d, ?d)", $course_id, $question, $description, $feedback, $weighting, $type, $difficulty, $category, $copy_of_qid)->lastInsertID;
+            $id = Database::get()->query("INSERT INTO `exercise_question` (course_id, question, description, feedback, weight, `type`, difficulty, category, copy_of_qid, options)
+                        VALUES (?d, ?s, ?s, ?s, ?f, ?d, ?d, ?d, ?d, ?s)", $course_id, $question, $description, $feedback, $weighting, $type, $difficulty, $category, $copy_of_qid, $options)->lastInsertID;
 
             // duplicates the picture
             $this->exportPicture($id);
@@ -595,9 +630,9 @@ if (!class_exists('Question')) {
                 for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
                     if ($objAnswerTmp->isCorrect($answerId)) {
                         $q_correct_answers_sql .= ($i!=1) ? ' OR ' : '';
-                        $q_correct_answers_sql .= 'a.answer_id = '.$objAnswerTmp->selectPosition($answerId);
+                        $q_correct_answers_sql .= 'a.answer_id = '.$objAnswerTmp->getPosition($answerId);
                         $q_incorrect_answers_sql .= ($i!=1) ? ' AND ' : '';
-                        $q_incorrect_answers_sql .= 'a.answer_id != '.$objAnswerTmp->selectPosition($answerId);
+                        $q_incorrect_answers_sql .= 'a.answer_id != '.$objAnswerTmp->getPosition($answerId);
                         $i++;
                     }
                 }
@@ -617,7 +652,7 @@ if (!class_exists('Question')) {
                     }
                     $q_correct_answers_cnt = $i-1;
             } elseif ($type == FILL_IN_BLANKS || $type == FILL_IN_BLANKS_TOLERANT) { // Works Great
-               $answer_field = $objAnswerTmp->selectAnswer($nbrAnswers);
+               $answer_field = $objAnswerTmp->getTitle($nbrAnswers);
                list($answer, $answerWeighting) = $this::blanksSplitAnswer($answer_field);
                $blanks = $this::getBlanks($answer);
                $i = 1;
@@ -644,7 +679,7 @@ if (!class_exists('Question')) {
                 $q_correct_answers_cnt = 0;
             }
             //FIND CORRECT ANSWER ATTEMPTS
-            if ($type == FREE_TEXT) {
+            if ($type == FREE_TEXT or $type == ORAL) {
                 // This query gets answers which where graded with question maximum grade
                 $correct_answer_attempts = Database::get()->querySingle("SELECT COUNT(DISTINCT a.eurid) AS count
                         FROM exercise_answer_record a, exercise_user_record b, exercise_question c
@@ -667,10 +702,43 @@ if (!class_exists('Question')) {
                     } else {
                         $correct_answer_attempts = 0;
                     }
+            }
+
+            // New question types: DRAG_AND_DROP_TEXT, DRAG_AND_DROP_MARKERS, CALCULATED, ORDERING
+            $new_question_type = false;
+            if ($type == DRAG_AND_DROP_TEXT || $type == DRAG_AND_DROP_MARKERS
+                || $type == CALCULATED || $type == ORDERING) {
+
+                $new_question_type = true;
+                // total weight of question
+                $question_weight = Database::get()->querySingle("SELECT `weight` FROM exercise_question WHERE id = ?d", $id)->weight;
+
+                if ($question_weight === null) {
+                    $question_weight = 0; // Handle case if no correct answers are defined
                 }
 
-            if ($total_answer_attempts>0) {
-                $successRate = round($correct_answer_attempts/$total_answer_attempts*100, 2);
+                // Count attempts where sum of weights = question_weight
+                $q_correct_attempts_sql = "
+                    SELECT COUNT(*) AS correct_attempts_count
+                    FROM (
+                        SELECT a.eurid
+                        FROM exercise_answer_record a
+                        JOIN exercise_user_record b ON a.eurid = b.eurid
+                        WHERE a.question_id = ?d AND b.attempt_status = ?d AND a.is_answered = ?d
+                        GROUP BY a.eurid
+                        HAVING SUM(a.weight) = ?d
+                    ) AS sub_attempts";
+
+                $correct_attempts = Database::get()->querySingle($q_correct_attempts_sql, $id, ATTEMPT_COMPLETED, 1, $question_weight)->correct_attempts_count;
+            }
+
+            // Final calculation of success rate
+            if ($total_answer_attempts > 0) {
+                if ($new_question_type) {
+                    $successRate = round($correct_attempts / $total_answer_attempts * 100, 2);
+                } else {
+                    $successRate = round($correct_answer_attempts / $total_answer_attempts * 100, 2);
+                }
             } else {
                 $successRate = NULL;
             }

@@ -19,7 +19,6 @@
  */
 
 $require_current_course = true;
-$require_course_admin = true;
 $require_help = true;
 $helpTopic = 'course_tools';
 $require_login = true;
@@ -30,9 +29,14 @@ require_once 'modules/lti_consumer/lti-functions.php';
 require_once 'publish-functions.php';
 require_once 'modules/admin/extconfig/ltipublishapp.php';
 
+$up = new Permissions();
+if (!$up->has_course_modules_permission()) {
+    Session::Messages($langCheckCourseAdmin, 'alert-danger');
+    redirect_to_home_page('courses/'. $course_code);
+}
+
 $toolName = $langToolManagement;
 add_units_navigation(TRUE);
-
 load_js('tools.js');
 load_js('trunk8');
 

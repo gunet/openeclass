@@ -169,10 +169,10 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
     $nbrAnswers = $objAnswerTmp->selectNbrAnswers();
 
     for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
-        $answer = $objAnswerTmp->selectAnswer($answerId);
-        $answerComment = $objAnswerTmp->selectComment($answerId);
+        $answer = $objAnswerTmp->getTitle($answerId);
+        $answerComment = $objAnswerTmp->getComment($answerId);
         $answerCorrect = $objAnswerTmp->isCorrect($answerId);
-        $answerWeighting = $objAnswerTmp->selectWeighting($answerId);
+        $answerWeighting = $objAnswerTmp->getWeighting($answerId);
         if (in_array($answerType, [UNIQUE_ANSWER, MULTIPLE_ANSWER, MATCHING, TRUE_FALSE])) {
             $answer = standard_text_escape($answer);
         }

@@ -22,9 +22,15 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 $require_current_course = true;
-$require_course_admin = true;
 
 include '../../include/baseTheme.php';
+
+$up = new Permissions();
+
+if (!$up->has_course_users_permission()) {
+    Session::Messages($langCheckCourseAdmin, 'alert-danger');
+    redirect_to_home_page('courses/'. $course_code);
+}
 
 $spreadsheet = new Spreadsheet();
 $sheet = $spreadsheet->getActiveSheet();
