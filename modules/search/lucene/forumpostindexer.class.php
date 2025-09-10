@@ -61,16 +61,7 @@ class ForumPostIndexer extends AbstractIndexer implements ResourceIndexerInterfa
      * @return object          - the DB fetched anonymous object
      */
     protected function fetch($fpostId) {
-        $fpost = Database::get()->querySingle("SELECT fp.*, f.course_id, ft.forum_id FROM forum_post fp 
-                            JOIN forum_topic ft ON fp.topic_id = ft.id 
-                            JOIN forum f ON ft.forum_id = f.id 
-                            JOIN forum_category fc ON fc.id = f.cat_id 
-                        WHERE fc.cat_order >= 0 AND fp.id = ?d", $fpostId);
-        if (!$fpost) {
-            return null;
-        }
-
-        return $fpost;
+        return FetcherUtil::fetchForumPost($fpostId);
     }
 
     /**

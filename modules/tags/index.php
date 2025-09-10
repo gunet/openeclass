@@ -28,7 +28,6 @@ require_once 'include/sendMail.inc.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 require_once 'include/log.class.php';
-require_once 'modules/search/lucene/indexer.class.php';
 // The following is added for statistics purposes
 require_once 'include/action.php';
 

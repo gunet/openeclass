@@ -60,16 +60,7 @@ class ForumTopicIndexer extends AbstractIndexer implements ResourceIndexerInterf
      * @return object - the mysql fetched row
      */
     protected function fetch($ftopicId) {
-        $ftopic = Database::get()->querySingle("SELECT ft.*, f.course_id FROM forum_topic ft 
-                                                    JOIN forum f ON ft.forum_id = f.id 
-                                                    JOIN forum_category fc ON fc.id = f.cat_id 
-                                                WHERE fc.cat_order >= 0 AND ft.id = ?d", $ftopicId);
-
-        if (!$ftopic) {
-            return null;
-        }
-
-        return $ftopic;
+        return FetcherUtil::fetchForumTopic($ftopicId);
     }
 
     /**

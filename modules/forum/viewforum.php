@@ -26,7 +26,7 @@ require_once '../../include/baseTheme.php';
 require_once 'include/log.class.php';
 require_once 'modules/group/group_functions.php';
 require_once 'modules/search/classes/ConstantsUtil.php';
-require_once 'modules/search/lucene/indexer.class.php';
+require_once 'modules/search/classes/SearchEngineFactory.php';
 require_once 'modules/forum/functions.php';
 
 $unit = isset($_GET['unit'])? intval($_GET['unit']): null;
@@ -156,14 +156,15 @@ if (($is_editor) and isset($_GET['topicdel'])) {
             Database::get()->query("INSERT INTO forum_user_stats (user_id, num_posts, course_id) VALUES (?d,?d,?d)", $author, $forum_user_stats->c, $course_id);
         }
     }
-    Indexer::queueAsync(ConstantsUtil::REQUEST_REMOVEBYTOPIC, ConstantsUtil::RESOURCE_FORUMPOST, $topic_id);
+    $searchEngine = SearchEngineFactory::create();
+    $searchEngine->indexResource(ConstantsUtil::REQUEST_REMOVEBYTOPIC, ConstantsUtil::RESOURCE_FORUMPOST, $topic_id);
     $number_of_topics = get_total_topics($forum_id);
     $num_topics = $number_of_topics - 1;
     if ($number_of_topics < 0) {
         $num_topics = 0;
     }
     Database::get()->query("DELETE FROM forum_topic WHERE id = ?d AND forum_id = ?d", $topic_id, $forum_id);
-    Indexer::queueAsync(ConstantsUtil::REQUEST_REMOVE, ConstantsUtil::RESOURCE_FORUMTOPIC, $topic_id);
+    $searchEngine->indexResource(ConstantsUtil::REQUEST_REMOVE, ConstantsUtil::RESOURCE_FORUMTOPIC, $topic_id);
 
     $last_post = Database::get()->querySingle("SELECT MAX(last_post_id) AS last_post FROM forum_topic WHERE forum_id = ?d", $forum_id)->last_post;
     if (!$last_post) {

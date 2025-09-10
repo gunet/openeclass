@@ -24,26 +24,55 @@ require_once 'modules/search/classes/FetcherUtil.php';
 
 class SolrForumPostIndexer extends AbstractSolrIndexer {
 
-    public function storeByCourse(int $courseId): array {
+    private function makeDoc(object $fpost): array {
         global $urlServer;
+        return [
+            ConstantsUtil::FIELD_ID => 'doc_' . ConstantsUtil::DOCTYPE_FORUMPOST . '_' . $fpost->id,
+            ConstantsUtil::FIELD_PK => ConstantsUtil::DOCTYPE_FORUMPOST . '_' . $fpost->id,
+            ConstantsUtil::FIELD_PKID => $fpost->id,
+            ConstantsUtil::FIELD_COURSEID => $fpost->course_id,
+            ConstantsUtil::FIELD_TOPICID => $fpost->topic_id,
+            ConstantsUtil::FIELD_DOCTYPE => ConstantsUtil::DOCTYPE_FORUMPOST,
+            ConstantsUtil::FIELD_TITLE => $fpost->title,
+            ConstantsUtil::FIELD_CONTENT => strip_tags($fpost->post_text),
+            ConstantsUtil::FIELD_URL => $urlServer . 'modules/forum/viewtopic.php?course=' . course_id_to_code($fpost->course_id)
+                . '&amp;topic=' . intval($fpost->topic_id)
+                . '&amp;forum=' . intval($fpost->forum_id)
+        ];
+    }
+
+    public function storeByCourse(int $courseId): array {
         $docs = [];
         $fposts = FetcherUtil::fetchForumPosts($courseId);
         foreach ($fposts as $fpost) {
-            $docs[] = [
-                ConstantsUtil::FIELD_ID => 'doc_' . ConstantsUtil::DOCTYPE_FORUMPOST . '_' . $fpost->id,
-                ConstantsUtil::FIELD_PK => ConstantsUtil::DOCTYPE_FORUMPOST . '_' . $fpost->id,
-                ConstantsUtil::FIELD_PKID => $fpost->id,
-                ConstantsUtil::FIELD_COURSEID => $fpost->course_id,
-                ConstantsUtil::FIELD_TOPICID => $fpost->topic_id,
-                ConstantsUtil::FIELD_DOCTYPE => ConstantsUtil::DOCTYPE_FORUMPOST,
-                ConstantsUtil::FIELD_TITLE => $fpost->title,
-                ConstantsUtil::FIELD_CONTENT => strip_tags($fpost->post_text),
-                ConstantsUtil::FIELD_URL => $urlServer . 'modules/forum/viewtopic.php?course=' . course_id_to_code($fpost->course_id)
-                    . '&amp;topic=' . intval($fpost->topic_id)
-                    . '&amp;forum=' . intval($fpost->forum_id)
-            ];
+            $docs[] = $this->makeDoc($fpost);
         }
         return $docs;
+    }
+
+    public function store(int $id): array {
+        $docs = [];
+        $fpost = FetcherUtil::fetchForumPost($id);
+        if (!empty($fpost)) {
+            $docs[] = $this->makeDoc($fpost);
+        }
+        return $docs;
+    }
+
+    public function remove(int $id): array {
+        return [
+            "delete" => [
+                "query" => ConstantsUtil::FIELD_ID . ":" . 'doc_' . ConstantsUtil::DOCTYPE_FORUMPOST . '_' . $id
+            ]
+        ];
+    }
+
+    public function removeByTopic(int $topicId): array {
+        return [
+            "delete" => [
+                "query" => ConstantsUtil::FIELD_DOCTYPE . ":" . ConstantsUtil::DOCTYPE_FORUMPOST . ' AND ' . ConstantsUtil::FIELD_TOPICID . ':' . $topicId
+            ]
+        ];
     }
 
 }

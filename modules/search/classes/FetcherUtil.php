@@ -29,8 +29,8 @@ class FetcherUtil {
         $course->units = $course->description;
         if ($course->view_type == 'activity') {
             $res = Database::get()->queryArray("SELECT content
-                                                FROM activity_content
-                                               WHERE course_id = ?d", $courseId);
+                FROM activity_content
+                WHERE course_id = ?d", $courseId);
             foreach ($res as $row) {
                 $course->units .= $row->content . ' ';
             }
@@ -46,9 +46,9 @@ class FetcherUtil {
             }
             // visible units
             $res = Database::get()->queryArray("SELECT id, title, comments
-                                                FROM $dbtable
-                                               WHERE visible > 0
-                                                 AND course_id = ?d", $courseId);
+                FROM $dbtable
+                WHERE visible > 0
+                AND course_id = ?d", $courseId);
             $unitIds = array();
             foreach ($res as $row) {
                 $course->units .= $row->title . ' ' . $row->comments . ' ';
@@ -58,9 +58,9 @@ class FetcherUtil {
             // visible unit resources
             foreach ($unitIds as $unitId) {
                 $res = Database::get()->queryArray("SELECT title, comments
-                                                    FROM $resdbtable
-                                                   WHERE visible > 0
-                                                     AND $keyfield = ?d", $unitId);
+                    FROM $resdbtable
+                    WHERE visible > 0
+                    AND $keyfield = ?d", $unitId);
                 foreach ($res as $row) {
                     $course->units .= $row->title . ' ' . $row->comments . ' ';
                 }
@@ -69,19 +69,19 @@ class FetcherUtil {
 
         // invisible but useful units and resources
         $res = Database::get()->queryArray("SELECT id
-                                            FROM course_units
-                                           WHERE visible = 0
-                                             AND `order` = -1
-                                             AND course_id  = ?d", $courseId);
+            FROM course_units
+            WHERE visible = 0
+            AND `order` = -1
+            AND course_id  = ?d", $courseId);
         $unitIds = array();
         foreach ($res as $row) {
             $unitIds[] = $row->id;
         }
         foreach ($unitIds as $unitId) {
             $res = Database::get()->queryArray("SELECT comments
-                                                FROM unit_resources
-                                               WHERE visible >= 0
-                                                 AND unit_id = ?d", $unitId);
+                FROM unit_resources
+                WHERE visible >= 0
+                AND unit_id = ?d", $unitId);
             foreach ($res as $row) {
                 $course->units .= $row->comments . ' ';
             }
@@ -161,12 +161,35 @@ class FetcherUtil {
             AND f.course_id = ?d", $courseId);
     }
 
+    public static function fetchForum(int $forumId): ?object {
+        $forum = Database::get()->querySingle("SELECT f.*
+            FROM forum f 
+            JOIN forum_category fc ON f.cat_id = fc.id 
+            WHERE fc.cat_order >= 0 AND f.id = ?d", $forumId);
+        if (!$forum) {
+            return null;
+        }
+        return $forum;
+    }
+
     public static function fetchForumTopics(int $courseId): array {
         return Database::get()->queryArray("SELECT ft.*, f.course_id 
             FROM forum_topic ft 
             JOIN forum f ON ft.forum_id = f.id 
             JOIN forum_category fc ON fc.id = f.cat_id 
             WHERE fc.cat_order >= 0 AND f.course_id = ?d", $courseId);
+    }
+
+    public static function fetchForumTopic(int $ftopicId): ?object {
+        $ftopic = Database::get()->querySingle("SELECT ft.*, f.course_id 
+            FROM forum_topic ft 
+            JOIN forum f ON ft.forum_id = f.id 
+            JOIN forum_category fc ON fc.id = f.cat_id 
+            WHERE fc.cat_order >= 0 AND ft.id = ?d", $ftopicId);
+        if (!$ftopic) {
+            return null;
+        }
+        return $ftopic;
     }
 
     public static function fetchForumPosts(int $courseId): array {
@@ -176,6 +199,19 @@ class FetcherUtil {
             JOIN forum f ON ft.forum_id = f.id 
             JOIN forum_category fc ON fc.id = f.cat_id 
             WHERE fc.cat_order >= 0 AND f.course_id = ?d", $courseId);
+    }
+
+    public static function fetchForumPost(int $fpostId): ?object {
+        $fpost = Database::get()->querySingle("SELECT fp.*, f.course_id, ft.forum_id, ft.title 
+            FROM forum_post fp 
+            JOIN forum_topic ft ON fp.topic_id = ft.id 
+            JOIN forum f ON ft.forum_id = f.id 
+            JOIN forum_category fc ON fc.id = f.cat_id 
+            WHERE fc.cat_order >= 0 AND fp.id = ?d", $fpostId);
+        if (!$fpost) {
+            return null;
+        }
+        return $fpost;
     }
 
     public static function fetchDocuments(int $courseId): array {
@@ -216,9 +252,9 @@ class FetcherUtil {
 
     public static function fetchUnitResource(int $uresId): ?object {
         $ures = Database::get()->querySingle("SELECT ur.*, cu.course_id
-                                                FROM unit_resources ur 
-                                            JOIN course_units cu ON cu.id = ur.unit_id 
-                                                WHERE ur.id = ?d", $uresId);
+            FROM unit_resources ur 
+            JOIN course_units cu ON cu.id = ur.unit_id 
+            WHERE ur.id = ?d", $uresId);
         if (!$ures) {
             return null;
         }

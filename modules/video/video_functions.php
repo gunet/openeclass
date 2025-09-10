@@ -18,6 +18,7 @@
  *
  */
 
+require_once 'modules/search/classes/ConstantsUtil.php';
 require_once 'modules/search/classes/SearchEngineFactory.php';
 
 function headlink($label, $this_sort) {

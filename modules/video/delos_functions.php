@@ -22,6 +22,7 @@ require_once 'modules/admin/extconfig/externals.php';
 require_once 'modules/admin/extconfig/opendelosapp.php';
 require_once 'include/log.class.php';
 require_once 'include/lib/curlutil.class.php';
+require_once 'modules/search/classes/ConstantsUtil.php';
 require_once 'modules/search/classes/SearchEngineFactory.php';
 
 define('DELOSTOKEN', 'DELOSTOKEN');
