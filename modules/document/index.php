@@ -1223,7 +1223,7 @@ if ($can_upload or $user_upload) {
         if ($row and (!$uploading_as_user or $row->lock_user_id == $uid)) {
             $dialogBox = 'comment';
             $curDirPath = my_dirname($comment);
-            $backUrl = documentBackLink($curDirPath);
+            $backUrl = htmlspecialchars_decode(documentBackLink($curDirPath));
             $navigation[] = array('url' => $backUrl, 'name' => $pageName);
             foreach ($license as $license_selection) {
                 $license_title[] = $license_selection['title'];
