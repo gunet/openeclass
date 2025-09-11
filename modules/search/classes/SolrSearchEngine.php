@@ -105,6 +105,21 @@ class SolrSearchEngine implements SearchEngineInterface {
         }
     }
 
+    public function coreStatus(): array {
+        if (!get_config('ext_solr_enabled')) {
+            return [];
+        }
+
+        list($core, $solrUrl) = $this->constructSolrCoreStatusUrl();
+        list($response, $code) = CurlUtil::httpGetRequest($solrUrl);
+        if ($code !== 200) {
+            return [];
+        }
+
+        $resp = json_decode($response, true);
+        return $resp['status'][$core]['index'] ?? [];
+    }
+
     private function constructSolrUrl(string $action, array $params): string {
         $solrUrl = get_config('ext_solr_url', SolrApp::SOLRDEFAULTURL);
         if ($solrUrl[strlen($solrUrl) - 1] != '/') {
@@ -112,6 +127,21 @@ class SolrSearchEngine implements SearchEngineInterface {
         }
         $solrUrl .= $action;
         return $solrUrl . '?' . http_build_query($params);
+    }
+
+    private function constructSolrCoreStatusUrl(): array {
+        $solrUrl = get_config('ext_solr_url', SolrApp::SOLRDEFAULTURL);
+        if ($solrUrl[strlen($solrUrl) - 1] != '/') {
+            $solrUrl .= '/';
+        }
+        $parts = explode('/', trim($solrUrl, '/'));
+        $core = array_pop($parts);
+        $baseSolrUrl = implode('/', $parts) . '/';
+        $params = [
+            'action' => 'STATUS',
+            'core' => $core
+        ];
+        return [$core, $baseSolrUrl . 'admin/cores' . '?' . http_build_query($params)];
     }
 
 //    private function generateSampleDocuments(int $count = 10, int $courseId): array {

@@ -591,6 +591,7 @@ $langContactAdmin = 'For more information, please contact the platform administr
 $langEnableIndexing = "Enable search indexing";
 $langConfirmEnableIndexTitle = "Confirmation for starting indexing";
 $langConfirmEnableIndex = "The indexing process requires <strong>certain time period and computing resources</strong>, depending on the size of the DataBase.<br/><br/>The process will run in a <u>separate browser window</u>.<br/><br/>Furthermore, indexing <u>is not</u> available if platform is installed on <u>NFS filesystem</u>.<br/><br/><em>Cancel</em> your choice if you wish to start the indexing at a <u>different</u> time.";
+$langConfirmEnableIndex = "The indexing process requires <strong>certain time period and computing resources</strong>, depending on the size of the DataBase.<br/><br/>The process will run in a <u>separate browser window</u>.<br/><br/><em>Cancel</em> your choice if you wish to start the indexing at a <u>different</u> time.";
 $langIndexingNeeded = "If the indexing window is not yet open, i.e. blocked by the browser, allow it to open or press";
 $langIndexingAlert1 = "Please wait while indexing all data, this might require some time.";
 $langIndexingAlert2 = "Do not close this window or else the indexing process will be terminated.";
