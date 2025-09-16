@@ -32,7 +32,6 @@ if ($answerType == FREE_TEXT) {
     require_once 'include/lib/ai/services/AIExerciseEvaluationService.php';
     $aiService = new AIService($course_id, $uid);
     $aiEvaluationAvailable = $aiService->isEnabledForCourse(AI_MODULE_FREE_TEXT_EVALUATION);
-
     // Get existing AI configuration if it exists
     $aiConfig = Database::get()->querySingle("SELECT * FROM exercise_ai_config WHERE question_id = ?d", $questionId);
 }
@@ -1032,8 +1031,6 @@ if (isset($_GET['modifyAnswers'])) {
                                                                                 'wildcard_random_val' => $wildcard['value'] ?? '',
                                                                                 'wildcard_type' => $wildcard['type'] ?? ''
                                                                             ];
-
-
                 }
             }
         }
@@ -1074,7 +1071,6 @@ if (isset($_GET['modifyAnswers'])) {
         $classCanvas = 'drag-and-drop-markers-canvas';
     }
 
-
     $tool_content .= "<div class='col-12'><div class='card panelCard card-default px-lg-4 py-lg-3'>
                       <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                         <h3>$langQuestion &nbsp;" .
@@ -1088,8 +1084,7 @@ if (isset($_GET['modifyAnswers'])) {
                       </div>
                     </div></div>";
 
-    if ($answerType != FREE_TEXT  or $answerType != ORAL) {
-
+    if ($answerType != FREE_TEXT and $answerType != ORAL) {
         $tool_content .= "<div class='col-12 mt-4'><div class='card panelCard card-default px-lg-4 py-lg-3'>
                            <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                              <h3>$langQuestionAnswers";

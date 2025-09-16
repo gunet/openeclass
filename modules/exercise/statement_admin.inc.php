@@ -176,6 +176,9 @@ if (isset($_POST['submitQuestion'])) {
         // if the answer type is free text (which means it doesn't have predefined answers)
         // redirect to either pool or edit exercise page,
         // else redirect to modify answers page in order to add answers to question
+
+        echo 'here';
+        die;
         if ($answerType == FREE_TEXT or $answerType == ORAL) {
             $redirect_url = (isset($exerciseId)) ? "modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId&htopic=6" : "modules/exercise/question_pool.php?course=$course_code";
             if ($answerType == FREE_TEXT) {
@@ -196,6 +199,8 @@ if (isset($_POST['submitQuestion'])) {
                 $redirect_url = "modules/exercise/admin.php?course=$course_code".((isset($exerciseId))? "&exerciseId=$exerciseId" : "")."&modifyAnswers=$questionId&htopic=$answerType";
             }
         }
+        echo $redirect_url;
+        //die;
         redirect_to_home_page($redirect_url);
 
     } else {
