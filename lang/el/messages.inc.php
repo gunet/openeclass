@@ -1348,6 +1348,7 @@ $langReleaseMic = "Αποδέσμευση μικροφώνου";
 $langEnterFile = "Δώστε το όνομα αρχείου";
 $langOpenCamera = "Άνοιγμα κάμερας";
 $langMaxRecAudioTime = "μέγιστος χρόνος ηχογράφησης: 5 λεπτά";
+$langMaxRecAudioTimeInExericses = "μέγιστος χρόνος ηχογράφησης: 20 λεπτά";
 $langMaxRecVideoTime = "μέγιστος χρόνος βιντεοσκόπησης: 2 λεπτά";
 $langQRCodePresence = "Παρουσία μέσω QR code";
 $langAddPresenceSuccess = "Η παρουσία σας καταχωρήθηκε επιτυχώς.";

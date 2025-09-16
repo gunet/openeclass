@@ -15,11 +15,12 @@ class OralAnswer extends QuestionType
 
     public function AnswerQuestion($question_number, $exerciseResult = [], $options = []): string
     {
-        global $langOral, $langStart, $langStopRecording, $head_content, 
-               $langStopRecording, $urlAppend, $langReleaseMic, $langSaveInDoc, 
-               $langMaxRecAudioTime, $course_code, $urlServer, $langEnterFile, $langSave, 
-               $langSaveOralMsg, $langOk, $uid, $webDir, $course_id, 
-               $langDeleteRecordingOk, $langListenToRecordingAudio, $langFileUploadingOkReplaceWithNew, $eurid;
+        global $langOral, $langStart, $head_content,
+               $langStopRecording, $urlAppend,
+               $langMaxRecAudioTimeInExericses, $course_code, $urlServer, $langSave,
+               $langSaveOralMsg, $course_id, $langCancel, $langAnalyticsConfirm,
+               $langDeleteRecordingOk, $langListenToRecordingAudio,
+               $langFileUploadingOkReplaceWithNew, $eurid;
 
         $questionId = $this->question_id;
         $html_content = '';
@@ -43,9 +44,9 @@ class OralAnswer extends QuestionType
                     $url = $urlServer . "courses/$course_code/image" . $filePath;
                 }
             }
-            
+
             $displayItems = 'd-block';
-        } 
+        }
 
         $html_content .= "
         <ul class='nav nav-tabs' id='myTab_{$questionId}' role='tablist'>
@@ -63,7 +64,7 @@ class OralAnswer extends QuestionType
                     <button class='btn successAdminBtn btnSaveRecording' id='button-save-recording-{$questionId}' disabled>$langSave</button>
                 </div>
                 <div class='col-12 d-flex justify-content-start align-items-center mt-2'>
-                    <span class='help-block'>$langMaxRecAudioTime</span>
+                    <span class='help-block'>$langMaxRecAudioTimeInExericses</span>
                 </div>
                 <div class='col-12 d-flex justify-content-start align-item-center mt-4'>
                     <audio class='audio-{$questionId}' controls autoplay playsinline></audio>
@@ -89,11 +90,11 @@ $html_content .= "</div>
 
         $head_content .= "
         <style>.fade:not(.show) {opacity: 1;}</style>
-        <script src='{$urlAppend}node_modules/recordrtc/RecordRTC.min.js'></script>
+        <script src='{$urlAppend}js/recordrtc/RecordRTC.min.js'></script>
         <script type='text/javascript'>
             $(document).ready(function() {
 
-                $('#deleteRecording-{$questionId}').on('click', function (){
+                $('#deleteRecording-{$questionId}').on('click', function () {
                     var qID = $(this).data('id');
                     var deleteData = new FormData();
                     deleteData.append('delete-recording', qID);
@@ -116,7 +117,6 @@ $html_content .= "</div>
                         $('#recording_file_container_{$questionId}').removeClass('d-block').addClass('d-none');
                         $('#hidden-recording-{$questionId}').val('');
                     })
-
                 });
                 
 
@@ -237,8 +237,8 @@ $html_content .= "</div>
                         recorder = null;
                     }
                     recorder = RecordRTC(microphone, options);
-                    // max duration recording = 5 min
-                    recorder.setRecordingDuration(300000).onRecordingStopped(stopRecordingCallback);
+                    // max duration recording = 20 min
+                    recorder.setRecordingDuration(1200000).onRecordingStopped(stopRecordingCallback);
                     recorder.startRecording();
                     btnStopRecording.disabled = false;
                 };
@@ -277,6 +277,17 @@ $html_content .= "</div>
 
                     bootbox.confirm({
                         message: '$langSaveOralMsg',
+                        title: '<div class=\'modal-title-default text-center mb-0\'>$langAnalyticsConfirm</div>',
+                        buttons: {
+                            cancel: {
+                                label: '$langCancel',
+                                className: 'cancelAdminBtn position-center'
+                            },
+                            confirm: {
+                                label: '$langAnalyticsConfirm',
+                                className: 'submitAdminBtn position-center',
+                            }
+                        },
                         callback: function(result) {
                             if (!result) {
                                 // User clicked Cancel, do nothing
@@ -343,7 +354,7 @@ $html_content .= "</div>
             })
         </script>";
 
-        $html_content .= "</div>"; 
+        $html_content .= "</div>";
 
         return $html_content;
     }
@@ -352,14 +363,12 @@ $html_content .= "</div>
     public function QuestionResult($choice, $eurid, $regrade, $extra_type = ''): string
     {
 
-        global $questionScore, $question_weight, $course_id, $course_code, $uid, $urlServer, $is_editor;
+        global $questionScore, $question_weight, $course_id, $course_code, $urlServer;
 
         $questionId = $this->question_id;
         $questionScore = $question_weight;
-        
+
         $html_content = '';
-        $oral = '';
-        $recording = '';
         $url = '';
         $filename = '';
 
@@ -388,9 +397,6 @@ $html_content .= "</div>
                                 </div>
                                 </div>";
         }
-        
-
         return $html_content;
-
     }
 }
