@@ -109,8 +109,6 @@ if (isset($_POST['submitQuestion'])) {
         }
 
         // It requires to be uploaded an image for this type of question
-
-
         if (isset($_FILES['imageUpload']) && !is_uploaded_file($_FILES['imageUpload']['tmp_name']) && $answerType == DRAG_AND_DROP_MARKERS) {
             $redirectURL = $urlAppend . "modules/exercise/admin.php?course=$course_code&exerciseId=$_GET[exerciseId]&newQuestion=yes";
             Session::flash('message', $langRequiresImageUploadedForThisType);
@@ -176,39 +174,30 @@ if (isset($_POST['submitQuestion'])) {
         }
 
         // if the answer type is free text (which means it doesn't have predefined answers)
-        // redirect to either pool or edit exercise page
+        // redirect to either pool or edit exercise page,
         // else redirect to modify answers page in order to add answers to question
         if ($answerType == FREE_TEXT or $answerType == ORAL) {
             $redirect_url = (isset($exerciseId)) ? "modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId&htopic=6" : "modules/exercise/question_pool.php?course=$course_code";
-            // For FREE_TEXT questions with AI available, redirect to answer configuration
-            // For other question types, redirect to question list
-            $needsAnswerConfig = false;
             if ($answerType == FREE_TEXT) {
-                // Check if AI evaluation is available
                 require_once 'include/lib/ai/services/AIExerciseEvaluationService.php';
-                $aiService = new AIExerciseEvaluationService($course_id, $uid);
-                $needsAnswerConfig = $aiService->isAvailable();
-            } else {
-                // Non-FREE_TEXT questions need answer configuration
-                $needsAnswerConfig = true;
-            }
-            if ($needsAnswerConfig) {
-                // redirect to modify answers page to configure answers/AI evaluation
-                if (isset($_GET['modifyQuestion'])) { // existing question
-                    $redirect_url = "modules/exercise/admin.php?course=$course_code" . ((isset($exerciseId)) ? "&exerciseId=$exerciseId" : "") . "&modifyAnswers=$questionId";
-                } else { // new question
-                    $redirect_url = "modules/exercise/admin.php?course=$course_code" . ((isset($exerciseId)) ? "&exerciseId=$exerciseId" : "") . "&modifyAnswers=$questionId&htopic=$answerType";
+                $aiService = new AIExerciseEvaluationService(); // Check if AI evaluation is available
+                if ($aiService->isEnabledForCourse(AI_MODULE_FREE_TEXT_EVALUATION)) { // redirect to modify answers page to configure answers/AI evaluation
+                    if (isset($_GET['modifyQuestion'])) { // existing question
+                        $redirect_url = "modules/exercise/admin.php?course=$course_code" . ((isset($exerciseId)) ? "&exerciseId=$exerciseId" : "") . "&modifyAnswers=$questionId";
+                    } else { // new question
+                        $redirect_url = "modules/exercise/admin.php?course=$course_code" . ((isset($exerciseId)) ? "&exerciseId=$exerciseId" : "") . "&modifyAnswers=$questionId&htopic=$answerType";
+                    }
                 }
             }
-        } else {
-            // FREE_TEXT without AI - go back to question list
-            if (isset($exerciseId)) {
-                $redirect_url = "modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId";
-            } else {
-                $redirect_url = "modules/exercise/question_pool.php?course=$course_code";
+        } else { // all other question types
+            if (isset($_GET['modifyQuestion'])) { // existing question
+                $redirect_url = "modules/exercise/admin.php?course=$course_code".((isset($exerciseId))? "&exerciseId=$exerciseId" : "")."&modifyAnswers=$questionId";
+            } else { // new question
+                $redirect_url = "modules/exercise/admin.php?course=$course_code".((isset($exerciseId))? "&exerciseId=$exerciseId" : "")."&modifyAnswers=$questionId&htopic=$answerType";
             }
         }
         redirect_to_home_page($redirect_url);
+
     } else {
         Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
         $new_or_modif = isset($_GET['modifyQuestion']) ? "&modifyQuestion=$_GET[modifyQuestion]" : "&newQuestion=yes";
