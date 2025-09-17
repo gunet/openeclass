@@ -45,7 +45,7 @@ class aiapp extends ExtApp {
      */
     public function isEnabled() {
         try {
-            $result = Database::get()->querySingle("SELECT COUNT(*) as count FROM ai_providers WHERE enabled = 'true'");
+            $result = Database::get()->querySingle("SELECT COUNT(*) as count FROM ai_providers WHERE enabled = 1");
             return $result && $result->count > 0;
         } catch (Exception $e) {
             return false;
@@ -57,8 +57,7 @@ class aiapp extends ExtApp {
      */
     function setEnabled($status) {
         try {
-            $enabled = $status ? 'true' : 'false';
-            Database::get()->query("UPDATE ai_providers SET enabled = ?", [$enabled]);
+            Database::get()->query("UPDATE ai_providers SET enabled = ?d", [$status]);
         } catch (Exception $e) {
             error_log("Failed to update AI providers enabled status: " . $e->getMessage());
         }

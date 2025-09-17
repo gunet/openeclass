@@ -242,6 +242,8 @@
                                     <td>
                                         @if ($ai_module['all_courses'] == 1)
                                             {{ trans('langToAllCourses') }}
+                                        @else
+                                            {{ $ai_course_title }}
                                         @endif
                                     </td>
                                     <td class='option-btn-cell text-end'>
@@ -255,7 +257,8 @@
                                                       'url' => "$_SERVER[SCRIPT_NAME]?delete_service=$ai_module[id]",
                                                       'icon' => 'fa-times',
                                                       'class' => 'delete',
-                                                      'confirm' => trans('langConfirmDelete'))))
+                                                      'confirm' => trans('langConfirmDelete'))
+                                              ))
                                         !!}
                                     </td>
                                 </tr>

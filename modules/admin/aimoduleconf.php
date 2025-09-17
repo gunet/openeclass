@@ -252,8 +252,16 @@ if (isset($_GET['edit_provider'])) {
                               'all_courses' => $modules_data->all_courses,
                               'enabled' => $modules_data->enabled
                             ];
+        $r = Database::get()->queryArray("SELECT course_id FROM ai_courses WHERE ai_module = ?d", $modules_data->id);
+        $ai_course_title = '';
+        if (count($r) > 0) {
+            foreach ($r as $ai_course) {
+                $ai_courses[] = ['course_id' => $ai_course->course_id ];
+                $ai_course_title .= course_id_to_title($ai_course->course_id) . ", ";
+            }
+        }
     }
-
+    $data['ai_course_title'] = rtrim($ai_course_title, ', ');
     $data['ai_module_data'] = $ai_module_data;
 }
 
