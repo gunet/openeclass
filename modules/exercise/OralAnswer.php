@@ -64,6 +64,7 @@ class OralAnswer extends QuestionType
                 $diffSeconds = abs($dt1->getTimestamp() - $dt2->getTimestamp());
                 // Convert seconds to minutes
                 $diffMinutes = $diffSeconds / 60;
+                $diffMinutes = $diffMinutes - 1; // One minute before the exercise expires.
                 $milliseconds = $diffMinutes * 60000;
             }
         }
