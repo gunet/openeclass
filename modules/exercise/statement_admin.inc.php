@@ -83,8 +83,14 @@ $(function() {
         var selectedOption = selectTypeAnswer.options[selectTypeAnswer.selectedIndex];
         if (selectedOption.selected && selectedOption.value == 7) {
             $('.fill_in_blank_strict').removeClass('d-none').addClass('d-block');
+            hideGrade();
         } else {
             $('.fill_in_blank_strict').removeClass('d-block').addClass('d-none');
+            if (selectedOption.selected && (selectedOption.value == 6 || selectedOption.value == 13)) {
+                showGrade();
+            } else {
+                hideGrade();
+            }
         }
     });
 
