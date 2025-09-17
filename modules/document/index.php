@@ -364,7 +364,7 @@ ModalBoxHelper::loadModalBox(true);
 copyright_info_init();
 
 if (defined('EBOOK_DOCUMENTS')) {
-    $navigation[] = array('url' => 'edit.php?course=' . $course_code . '&amp;id=' . $ebook_id, 'name' => $langEBookEdit);
+    $navigation[] = array('url' => 'edit.php?course=' . $course_code . '&id=' . $ebook_id, 'name' => $langEBookEdit);
 }
 
 if (isset($_GET['showQuota'])) {
