@@ -110,10 +110,9 @@ if (isset($_POST['submitQuestion'])) {
 
         // It requires to be uploaded an image for this type of question
         if (isset($_FILES['imageUpload']) && !is_uploaded_file($_FILES['imageUpload']['tmp_name']) && $answerType == DRAG_AND_DROP_MARKERS) {
-            $redirectURL = $urlAppend . "modules/exercise/admin.php?course=$course_code&exerciseId=$_GET[exerciseId]&newQuestion=yes";
             Session::flash('message', $langRequiresImageUploadedForThisType);
             Session::flash('alert-class', 'alert-warning');
-            redirect_to_home_page($redirectURL);
+            redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=" . intval($_GET['exerciseId']) . "&newQuestion=yes");
         }
 
         // no name given
@@ -145,15 +144,13 @@ if (isset($_POST['submitQuestion'])) {
         if (isset($_POST['deletePicture'])) {
             $objQuestion->removePicture();
         } elseif (isset($_FILES['imageUpload']) && is_uploaded_file($_FILES['imageUpload']['tmp_name'])) {
-
             if ($answerType == DRAG_AND_DROP_MARKERS) {
                 $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/svg+xml'];
                 $fileType = mime_content_type($_FILES['imageUpload']['tmp_name']);
                 if (!in_array($_FILES['imageUpload']['type'], $allowedTypes)) {
-                    $redirectURL = $urlAppend . "modules/exercise/admin.php?course=$course_code&exerciseId=$_GET[exerciseId]&newQuestion=yes";
                     Session::flash('message', $langRequiresImageUploadedForThisType);
                     Session::flash('alert-class', 'alert-warning');
-                    redirect_to_home_page($redirectURL);
+                    redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=" . intval($_GET['exerciseId']) . "&newQuestion=yes");
                 }
             }
 
@@ -381,7 +378,7 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
             </div>
             <div class='row'>
                 <div class='col-12 mt-5 d-flex justify-content-end align-items-center gap-2'>                                          
-                        <input type='submit' class='btn submitAdminBtn' name='submitQuestion' value='$langCreate'>                     
+                        <input type='submit' class='btn submitAdminBtn' name='submitQuestion' value='$langCreate'>
                         <a href='$link_back' class='btn cancelAdminBtn'>$langCancel</a>                    
                 </div>
             </div>
