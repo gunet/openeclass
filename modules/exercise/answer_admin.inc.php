@@ -1376,6 +1376,7 @@ if (isset($_GET['modifyAnswers'])) {
              </tr>
            </table>";
      } elseif ($answerType == DRAG_AND_DROP_TEXT) {
+            $setId = isset($exerciseId)? "&amp;exerciseId=$exerciseId" : '';
             $tool_content .= "  <div class='col-12 d-flex justify-content-between align-items-center gap-3'>
                                     <div>
                                         <p class='text-nowrap'><span class='Accent-200-cl'>(*)</span>$langCPFFieldRequired</p>
