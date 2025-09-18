@@ -636,7 +636,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `forum` (
     `num_posts` INT(10) DEFAULT 0 NOT NULL,
     `last_post_id` INT(10) DEFAULT 0 NOT NULL,
     `cat_id` INT(10) DEFAULT 0 NOT NULL,
-    `course_id` INT(11) NOT NULL,
+    `visible` TINYINT(4) DEFAULT 1 NOT NULL,
+    `course_id` INT(11) NOT NULL,    
     PRIMARY KEY (`id`)) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `forum_category` (
@@ -676,6 +677,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `forum_topic` (
     `last_post_id` INT(10) NOT NULL DEFAULT 0,
     `forum_id` INT(10) NOT NULL DEFAULT 0,
     `locked` TINYINT DEFAULT 0 NOT NULL,
+    `visible` TINYINT DEFAULT 1 NOT NULL,
     `pin_time` DATETIME DEFAULT NULL,
     PRIMARY KEY  (`id`)) $tbl_options");
 
@@ -1643,6 +1645,16 @@ $db->query("CREATE TABLE `user_request_ext_uid` (
     UNIQUE KEY (user_request_id, auth_id),
     FOREIGN KEY (`user_request_id`) REFERENCES `user_request` (`id`) ON DELETE CASCADE)
     $tbl_options");
+
+$db->query("CREATE TABLE user_permissions (
+    `course_id` int NOT NULL DEFAULT '0',
+    `user_id` int unsigned NOT NULL DEFAULT '0',
+    `admin_modules` tinyint NOT NULL DEFAULT '0',
+    `admin_users` tinyint NOT NULL DEFAULT '0',
+    `course_backup` tinyint NOT NULL DEFAULT '0',
+    `course_clone` tinyint NOT NULL DEFAULT '0',
+    PRIMARY KEY (`course_id`,`user_id`)
+) $tbl_options");
 
 $eclass_stud_reg = intval($eclass_stud_reg);
 

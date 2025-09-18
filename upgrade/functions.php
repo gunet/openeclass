@@ -3365,6 +3365,12 @@ function upgrade_to_4_2($tbl_options) : void {
     if (!DBHelper::fieldExists('forum_topic', 'pin_time')) {
         Database::get()->query("ALTER TABLE forum_topic ADD pin_time DATETIME DEFAULT NULL");
     }
+    if (!DBHelper::fieldExists('forum_topic', 'visible')) {
+        Database::get()->query("ALTER TABLE forum_topic ADD visible TINYINT NOT NULL DEFAULT 1");
+    }
+    if (!DBHelper::fieldExists('forum', 'visible')) {
+        Database::get()->query("ALTER TABLE forum ADD visible TINYINT NOT NULL DEFAULT 1");
+    }
     if (DBHelper::fieldExists('tc_log', 'id')) {
         Database::get()->query("ALTER TABLE tc_log CHANGE id id INT NOT NULL AUTO_INCREMENT");
     }
@@ -3449,6 +3455,18 @@ function upgrade_to_4_2($tbl_options) : void {
             FOREIGN KEY (`question_id`) REFERENCES `exercise_question`(`id`) ON DELETE CASCADE,
             FOREIGN KEY (`exercise_id`) REFERENCES `exercise`(`id`) ON DELETE CASCADE,
             FOREIGN KEY (`student_record_id`) REFERENCES `exercise_user_record`(`eurid`) ON DELETE CASCADE
+        ) $tbl_options");
+    }
+
+    if (!DBHelper::tableExists('user_permissions')) {
+        Database::get()->query("CREATE TABLE user_permissions (
+            `course_id` int NOT NULL DEFAULT '0',
+            `user_id` int unsigned NOT NULL DEFAULT '0',
+            `admin_modules` tinyint NOT NULL DEFAULT '0',
+            `admin_users` tinyint NOT NULL DEFAULT '0',
+            `course_backup` tinyint NOT NULL DEFAULT '0',
+            `course_clone` tinyint NOT NULL DEFAULT '0',
+            PRIMARY KEY (`course_id`,`user_id`)
         ) $tbl_options");
     }
 
