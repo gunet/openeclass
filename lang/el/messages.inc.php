@@ -2203,8 +2203,8 @@ $chooseDrawAShapeForTheAnswerToContinue = "Επιλέξτε ένα σχήμα κ
 $langSomethingWentWrong = "Κάτι πήγε στραβά. Δοκιμάστε πάλι.";
 $langConstantValue = "Σταθερή τιμή";
 $langRandomValue = "Τυχαία τιμή";
-$langBlankNotEmpty = "Υπάρχει ήδη μια λέξη στο 'κενό'";
-$langBlankOtherQuestion = "Το 'κενό' ανήκει σε άλλη ερώτηση!";
+$langBlankNotEmpty = "Υπάρχει ήδη μια λέξη στο κενό!";
+$langBlankOtherQuestion = "Το κενό ανήκει σε άλλη ερώτηση!";
 
 $langInfoDragAndDropMarkersCreation = '
 <ul class="text-dark">

@@ -11,7 +11,10 @@ class DragAndDropMarkersAnswer extends \QuestionType
 
     public function PreviewQuestion(): string
     {
-        global $langAnswer, $langScore, $head_content, $webDir, $course_code, $langPoint, $langThisAnswerIsNotCorrect;
+        global $langAnswer, $langScore, $head_content, $webDir, $course_code, $langPoint, $langThisAnswerIsNotCorrect,
+               $langConfirmDelete, $langAnalyticsConfirm, $langMarkerDeleted, $langMarkerDeletedError, $langImageUploaded,
+               $langImageNotSelected, $langInvalidAnswerValue, $langBlankNotEmpty, $langBlankOtherQuestion, 
+               $chooseShapeAndAnswerToContinue, $chooseDrawAShapeForTheAnswerToContinue;
 
         $questionId = $this->question_id;
 
@@ -116,6 +119,21 @@ class DragAndDropMarkersAnswer extends \QuestionType
             $html_content .= "<input type='hidden' class='currentQuestion' value='{$questionId}'>
                                 <input type='hidden' id='insertedMarkersAsJson-$questionId' value='{$DataMarkersToJson}'>";
 
+            $head_content .= "<script type='text/javascript'>        
+                    var lang = {
+                        confirmdelete: '" . js_escape($langConfirmDelete) . "',
+                        confirm: '" . js_escape($langAnalyticsConfirm) . "',
+                        markerdeleted: '" . js_escape($langMarkerDeleted) . "',
+                        markerdeletederror: '" . js_escape($langMarkerDeletedError) . "',
+                        imageuploaded: '" . js_escape($langImageUploaded) . "',
+                        imagenotselected: '" . js_escape($langImageNotSelected) . "',
+                        invalidanswervalue : '" . js_escape($langInvalidAnswerValue) . "',
+                        blanknotempty: '" . js_escape($langBlankNotEmpty) . "',
+                        blankotherquestion: '" . js_escape($langBlankOtherQuestion) . "',
+                        chooseShapeAndAnswerToContinue: '" .js_escape($chooseShapeAndAnswerToContinue). "',
+                        chooseDrawAShapeForTheAnswerToContinue: '" . js_escape($chooseDrawAShapeForTheAnswerToContinue) . "'
+                    };
+                </script>";
             load_js('drag-and-drop-shapes');
 
             $head_content .= "<script>
@@ -131,7 +149,10 @@ class DragAndDropMarkersAnswer extends \QuestionType
 
     public function AnswerQuestion($question_number, $exerciseResult = [], $options = []): string
     {
-        global $webDir, $course_code, $langCalcelDroppableItem, $head_content, $uid;
+        global $webDir, $course_code, $langCalcelDroppableItem, $head_content, $uid,
+               $langConfirmDelete, $langAnalyticsConfirm, $langMarkerDeleted, $langMarkerDeletedError, $langImageUploaded,
+               $langImageNotSelected, $langInvalidAnswerValue, $langBlankNotEmpty, $langBlankOtherQuestion, 
+               $chooseShapeAndAnswerToContinue, $chooseDrawAShapeForTheAnswerToContinue;
 
         $questionId = $this->question_id;
         $question_text = $this->answer_object->get_drag_and_drop_text();
@@ -233,6 +254,21 @@ class DragAndDropMarkersAnswer extends \QuestionType
         $html_content .= "<input type='hidden' id='DataJsonFile-$questionId' value='{$DataJsonFileVal}'>";
         $html_content .= "<input type='hidden' id='typeQuestion-$questionId' value='".DRAG_AND_DROP_MARKERS."'>";
 
+        $head_content .= "<script type='text/javascript'>        
+                            var lang = {
+                                confirmdelete: '" . js_escape($langConfirmDelete) . "',
+                                confirm: '" . js_escape($langAnalyticsConfirm) . "',
+                                markerdeleted: '" . js_escape($langMarkerDeleted) . "',
+                                markerdeletederror: '" . js_escape($langMarkerDeletedError) . "',
+                                imageuploaded: '" . js_escape($langImageUploaded) . "',
+                                imagenotselected: '" . js_escape($langImageNotSelected) . "',
+                                invalidanswervalue : '" . js_escape($langInvalidAnswerValue) . "',
+                                blanknotempty: '" . js_escape($langBlankNotEmpty) . "',
+                                blankotherquestion: '" . js_escape($langBlankOtherQuestion) . "',
+                                chooseShapeAndAnswerToContinue: '" .js_escape($chooseShapeAndAnswerToContinue). "',
+                                chooseDrawAShapeForTheAnswerToContinue: '" . js_escape($chooseDrawAShapeForTheAnswerToContinue) . "'
+                            };
+                        </script>";
         load_js('drag-and-drop-shapes');
         $head_content .= "<script>
                             document.addEventListener('DOMContentLoaded', function() {

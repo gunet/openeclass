@@ -1545,6 +1545,21 @@ if (isset($_GET['modifyAnswers'])) {
                                 </div>";
         } elseif ($answerType == DRAG_AND_DROP_MARKERS) {
 
+            $head_content .= "<script type='text/javascript'>        
+                                var lang = {
+                                    confirmdelete: '" . js_escape($langConfirmDelete) . "',
+                                    confirm: '" . js_escape($langAnalyticsConfirm) . "',
+                                    markerdeleted: '" . js_escape($langMarkerDeleted) . "',
+                                    markerdeletederror: '" . js_escape($langMarkerDeletedError) . "',
+                                    imageuploaded: '" . js_escape($langImageUploaded) . "',
+                                    imagenotselected: '" . js_escape($langImageNotSelected) . "',
+                                    invalidanswervalue : '" . js_escape($langInvalidAnswerValue) . "',
+                                    blanknotempty: '" . js_escape($langBlankNotEmpty) . "',
+                                    blankotherquestion: '" . js_escape($langBlankOtherQuestion) . "',
+                                    chooseShapeAndAnswerToContinue: '" .js_escape($chooseShapeAndAnswerToContinue). "',
+                                    chooseDrawAShapeForTheAnswerToContinue: '" . js_escape($chooseDrawAShapeForTheAnswerToContinue) . "'
+                                };
+                            </script>";
             load_js('drag-and-drop-shapes');
 
             $tool_content .= "<input type='hidden' class='currentQuestionId' value='{$questionId}'>
