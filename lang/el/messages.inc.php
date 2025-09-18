@@ -2234,6 +2234,7 @@ $langTypeOfAnswer = "Τύπος απάντησης";
 $langRangeOfValues = "Έυρος τιμών";
 $langItem = "Στοιχείο";
 $langDecimalValues = "Δεκαδικά ψηφία";
+$langZeroForNoDecimal = "Value 0 to omit decimal places";
 $langAutoCompleteValues = "Προσθήκη τιμής";
 $langItemToAdd = "Στοιχείο για προσθήκη:";
 $langAutoCompleteWildCardInfo = 'Καταχωρήστε την τιμή του τρέχοντος στοιχείου.</br>

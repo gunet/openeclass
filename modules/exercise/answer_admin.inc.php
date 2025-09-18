@@ -551,10 +551,45 @@ if (isset($submitAnswers) || isset($buttonBack)) {
             }
 
             if (!$checkOk) {
+
+                // Get posted values after inserting invalid values
+                $_SESSION['calculated_question_'.$questionId] = $_POST['calculated_question'];
+                if (count($_POST['calculated_answer']) > 0) {
+                    for ($i = 1; $i <= count($_POST['calculated_answer']); $i++) {
+                        $_SESSION['calculated_answer_'.$questionId][$i] = $_POST['calculated_answer'][$i];
+                    }
+                    $_SESSION['count_calculated_answer_'.$questionId] = count($_POST['calculated_answer']);
+                }
+                if (count($_POST['calculated_answer_grade']) > 0) {
+                    for ($i = 1; $i <= count($_POST['calculated_answer_grade']); $i++) {
+                        $_SESSION['calculated_answer_grade_'.$questionId][$i] = $_POST['calculated_answer_grade'][$i];
+                    }
+                }
+                foreach($_POST['wildCardSelection'] as $wildcard_index => $val) {
+                    $_SESSION['wildCardSelection_'.$questionId][$wildcard_index] = $val;
+                }
+                foreach($_POST['chooseTheValueForWildCard'] as $wildcard_index => $val) {
+                    $_SESSION['chooseTheValueForWildCard_'.$questionId][$wildcard_index] = $val;
+                }
+                foreach($_POST['wildCard_min'] as $wildcard_index => $val) {
+                    $_SESSION['wildCard_min_'.$questionId][$wildcard_index] = $val;
+                }
+                foreach($_POST['wildCard_max'] as $wildcard_index => $val) {
+                    $_SESSION['wildCard_max_'.$questionId][$wildcard_index] = $val;
+                }
+                foreach($_POST['wildCard_decimal'] as $wildcard_index => $val) {
+                    $_SESSION['wildCard_decimal_'.$questionId][$wildcard_index] = $val;
+                }
+                foreach($_POST['wildCard_answer'] as $wildcard_index => $val) {
+                    $_SESSION['wildCard_answer_'.$questionId][$wildcard_index] = $val;
+                }
+
+                unset($_SESSION['wildCard_'.$questionId]);
+
                 $Msgerror = $checkMessages[0][$checkOkVal];
                 Session::flash('message', $Msgerror);
                 Session::flash('alert-class', 'alert-warning');
-                redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId&modifyAnswers=$_GET[modifyAnswers]&htopic=" . CALCULATED);
+                redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId&modifyAnswers=$_GET[modifyAnswers]&htopic=" . CALCULATED . "&invalid_val=true");
             } else { // Insert in db
                 $arrItems = [];
                 $wildCardOptions = false;
@@ -644,6 +679,19 @@ if (isset($submitAnswers) || isset($buttonBack)) {
                         } else {
                             $objQuestion->save();
                         }
+
+                        // Unset session posted variables
+                        unset($_SESSION['calculated_question_'.$questionId]);
+                        unset($_SESSION['calculated_answer_'.$questionId]);
+                        unset($_SESSION['calculated_answer_grade_'.$questionId]);
+                        unset($_SESSION['count_calculated_answer_'.$questionId]);
+                        unset($_SESSION['wildCardSelection_'.$questionId]);
+                        unset($_SESSION['chooseTheValueForWildCard_'.$questionId]);
+                        unset($_SESSION['wildCard_min_'.$questionId]);
+                        unset($_SESSION['wildCard_max_'.$questionId]);
+                        unset($_SESSION['wildCard_decimal_'.$questionId]);
+                        unset($_SESSION['wildCard_answer_'.$questionId]);
+                         
                     }
                 }
             }
@@ -955,6 +1003,13 @@ if (isset($_GET['modifyAnswers'])) {
 
         $calc_question = Database::get()->querySingle("SELECT * FROM exercise_question WHERE id = ?d", $questionId);
         $calculated_question = $_POST['calculated_question'] ?? strip_tags($calc_question->description);
+        if (isset($_GET['invalid_val']) && isset($_SESSION['calculated_question_'.$questionId])) { // After posting invalid values
+            $calculated_question = $_SESSION['calculated_question_'.$questionId];
+            // If the user is in invalid mode and posted new arithmetic expression, update it.
+            if (isset($_POST['calculated_question']) && $_POST['calculated_question'] != $calculated_question) {
+                $calculated_question = $_POST['calculated_question'];
+            }
+        }
         $options = $calc_question->options;
 
         $calculated_answer = [];
@@ -963,10 +1018,29 @@ if (isset($_GET['modifyAnswers'])) {
                 $calculated_answer[$index] = $answer;
             }
         }
+        if (isset($_GET['invalid_val']) && isset($_SESSION['calculated_answer_'.$questionId])) { // After posting invalid values
+            foreach ($_SESSION['calculated_answer_'.$questionId] as $index => $answer) {
+                $calculated_answer[$index] = $answer;
+                // If the user is in invalid mode and posted new predefined answers, update them.
+                if (isset($_POST['calculated_answer'][$index]) && $_POST['calculated_answer'][$index] != $calculated_answer[$index]) {
+                    $calculated_answer[$index] = $_POST['calculated_answer'][$index];
+                }
+            }
+        }
+
         $calculated_answer_grade = [];
         if (isset($_POST['calculated_answer_grade'])) {
             foreach ($_POST['calculated_answer_grade'] as $index => $grade) { // for creating question
                 $calculated_answer_grade[$index] = $grade;
+            }
+        }
+        if (isset($_GET['invalid_val']) && isset($_SESSION['calculated_answer_grade_'.$questionId])) { // After posting invalid values
+            foreach ($_SESSION['calculated_answer_grade_'.$questionId] as $index => $grade) {
+                $calculated_answer_grade[$index] = $grade;
+                // If the user is in invalid mode and posted new predefined grades, update them.
+                if (isset($_POST['calculated_answer_grade'][$index]) && $_POST['calculated_answer_grade'][$index] != $calculated_answer[$index]) {
+                    $calculated_answer_grade[$index] = $_POST['calculated_answer_grade'][$index];
+                }
             }
         }
 
@@ -987,6 +1061,9 @@ if (isset($_GET['modifyAnswers'])) {
                 if (isset($_POST['calculated_answer']) && count($_POST['calculated_answer']) > 0) {
                     $nbrAnswers = count($_POST['calculated_answer']);
                 }
+                if (isset($_GET['invalid_val']) && isset($_SESSION['count_calculated_answer_'.$questionId])) { // After inserting invalid posted variables get the session variables to show 
+                    $nbrAnswers = $_SESSION['count_calculated_answer_'.$questionId];
+                }
             }
             if ($deleteAnswer) {
                 $nbrAnswers = $_POST['nbrAnswers'] - 1;
@@ -995,7 +1072,7 @@ if (isset($_GET['modifyAnswers'])) {
                 }
             }
 
-            if (isset($totalNumberOfCalculatedAnswers) && $totalNumberOfCalculatedAnswers > 0) { // for editing question
+            if (isset($totalNumberOfCalculatedAnswers) && $totalNumberOfCalculatedAnswers > 0 && !isset($_GET['invalid_val'])) { // for editing question
                 if (!isset($_POST['backModifyCalculated'])) {
                     $predefinedAns = Database::get()->queryArray("SELECT * FROM exercise_answer WHERE question_id = ?d", $questionId);
                     foreach ($predefinedAns as $an) {
@@ -1019,7 +1096,7 @@ if (isset($_GET['modifyAnswers'])) {
             ///////////////////////////////////////////////
             // Modify the variables from the Curly brackets
             $wildCardsAll = [];
-            if (!is_null($options) or !empty($options)) { //  Items have been inserted in db - editing question
+            if ((!is_null($options) or !empty($options)) && !isset($_GET['invalid_val'])) { //  Items have been inserted in db - editing question
                 $dataItems = json_decode($options, true);
                 // Create a key-value array for items
                 foreach ($dataItems as $wildcard) {
@@ -1030,7 +1107,7 @@ if (isset($_GET['modifyAnswers'])) {
                                                                                 'wildcard_decimal_val' => $wildcard['decimal'] ?? '',
                                                                                 'wildcard_random_val' => $wildcard['value'] ?? '',
                                                                                 'wildcard_type' => $wildcard['type'] ?? ''
-                                                                            ];
+                                                                            ];                                                         
                 }
             }
         }
@@ -1579,7 +1656,12 @@ if (isset($_GET['modifyAnswers'])) {
                 $exerciseId = $_GET['fromExercise'];
             }
 
-            $tool_content .= " <form id='calculatedFormId' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId&amp;modifyAnswers=" . urlencode($_GET['modifyAnswers']) . "'>
+            $invalid_posted = '';
+            if (isset($_GET['invalid_val'])) {
+                $invalid_posted = '&invalid_val=true';
+            }
+
+            $tool_content .= " <form id='calculatedFormId' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId&amp;modifyAnswers=" . urlencode($_GET['modifyAnswers']) . "$invalid_posted'>
                                     <fieldset><legend class='mb-0' aria-label='$langForm'></legend>
                                     <input type='hidden' name='nbrAnswers' value='$nbrAnswers'>";
 
@@ -1719,29 +1801,60 @@ if (isset($_GET['modifyAnswers'])) {
                                             $displayConstantContentOfWildCard = 'd-block';
                                         }
 
+                                        $wildCardSelectionIsSet = false;
+                                        if (isset($_GET['invalid_val']) && isset($_SESSION['wildCardSelection_'.$questionId][$wildCard])) {
+                                            $wildCardSelectionIsSet = true;
+                                        }
+
                                         // Dropdown list with all possible wildcards. Select which of them will be the mandatory wildcard.
                                         $tool_content .= "<div class='col-12 my-2'>
                                                             <label class='form-label text-nowrap' for='selectWildCard_{$wildCard}'>
                                                                 <h4 class='mb-0'>$langItemToAdd {{$wildCard}}</h4>
                                                             </label>
-                                                            <select class='form-select wildcard-selected' id='selectWildCard_{$wildCard}' name='wildCardSelection[]'>
+                                                            <select class='form-select wildcard-selected' id='selectWildCard_{$wildCard}' name='wildCardSelection[$wildCard]'>
                                                                 <option value='0'>$langItIsNotWildCard</option>
-                                                                <option value='1' " . (in_array($wildCard,$wildCardsAll) ? 'selected' : '') . ">$langItIsWildCard</option>
+                                                                <option value='1' " . ((in_array($wildCard,$wildCardsAll) or $wildCardSelectionIsSet) ? 'selected' : '') . ">$langItIsWildCard</option>
                                                             </select>
                                                           </div>";
 
                                         $displaypanelWildCard = 'd-none';
-                                        if (in_array($wildCard,$wildCardsAll)) {
+                                        if (in_array($wildCard,$wildCardsAll) or $wildCardSelectionIsSet) {
                                             $displaypanelWildCard = 'd-block';
+                                        }
+
+                                        $chooseValueTypeOfWildCard = 0;
+                                        if (isset($_GET['invalid_val']) && isset($_SESSION['chooseTheValueForWildCard_'.$questionId][$wildCard])) {
+                                            $chooseValueTypeOfWildCard = $_SESSION['chooseTheValueForWildCard_'.$questionId][$wildCard];
+                                            if ($chooseValueTypeOfWildCard == 1) {
+                                                $displayRandomContentOfWildCard = 'd-block';
+                                            } elseif ($chooseValueTypeOfWildCard == 2) {
+                                                $displayConstantContentOfWildCard = 'd-block';
+                                            }
+                                        }
+
+                                        if (isset($_GET['invalid_val']) && isset($_SESSION['wildCard_min_'.$questionId][$wildCard])) {
+                                            $wildCardMinimumValue = $_SESSION['wildCard_min_'.$questionId][$wildCard];
+                                        }
+
+                                        if (isset($_GET['invalid_val']) && isset($_SESSION['wildCard_max_'.$questionId][$wildCard])) {
+                                            $wildCardMaximumValue = $_SESSION['wildCard_max_'.$questionId][$wildCard];
+                                        }
+
+                                        if (isset($_GET['invalid_val']) && isset($_SESSION['wildCard_decimal_'.$questionId][$wildCard])) {
+                                            $wildCardDecimalValue = $_SESSION['wildCard_decimal_'.$questionId][$wildCard];
+                                        }
+
+                                        if (isset($_GET['invalid_val']) && isset($_SESSION['wildCard_answer_'.$questionId][$wildCard])) {
+                                            $wildCardValue = $_SESSION['wildCard_answer_'.$questionId][$wildCard];
                                         }
 
                                         $tool_content .= "<div class='col-12 my-4 $displaypanelWildCard' id='panelCard_{$wildCard}'>";
                                         $tool_content .= "  <div class='form-group d-flex justify-content-start align-items-center gap-3'>
                                                                 " . form_popovers('help', $langAutoCompleteWildCardInfo) . "
                                                                 <select class='form-select chooseValueForWildCard' id='{$wildCard}' name='chooseTheValueForWildCard[$wildCard]'>
-                                                                    <option value='0' " . ($wildCardType == 0 ? 'selected' : '') . ">$langSelect</option>
-                                                                    <option value='1' " . ($wildCardType == 1 ? 'selected' : '') . ">$langRandomValue</option>
-                                                                    <option value='2' " . ($wildCardType == 2 ? 'selected' : '') . ">$langConstantValue</option>
+                                                                    <option value='0' " . (($wildCardType == 0 or $chooseValueTypeOfWildCard == 0) ? 'selected' : '') . ">$langSelect</option>
+                                                                    <option value='1' " . (($wildCardType == 1 or $chooseValueTypeOfWildCard == 1) ? 'selected' : '') . ">$langRandomValue</option>
+                                                                    <option value='2' " . (($wildCardType == 2 or $chooseValueTypeOfWildCard == 2) ? 'selected' : '') . ">$langConstantValue</option>
                                                                 </select>
                                                             </div>
                                                             <div class='form-group mt-4 $displayRandomContentOfWildCard' id='wildCardRandomContent_{$wildCard}'>        
@@ -1758,6 +1871,7 @@ if (isset($_GET['modifyAnswers'])) {
                                                                     <div  class='flex-fill'>
                                                                         <label class='form-label' for='wildCardDecimal_$wildCard'>$langDecimalValues</label>
                                                                         <input type='number' id='wildCardDecimal_{$wildCard}' class='form-control mt-0' name='wildCard_decimal[$wildCard]' value='{$wildCardDecimalValue}' min='0' max='10' step='1'>
+                                                                        <small>($langZeroForNoDecimal)</small>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -1790,7 +1904,7 @@ if (isset($_GET['modifyAnswers'])) {
                                 </script>";
 
             $setId = isset($exerciseId)? "&amp;exerciseId=$exerciseId" : '';
-            $tool_content .= " <form id='calculatedFormId' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code$setId&amp;modifyAnswers=" . urlencode($_GET['modifyAnswers']) . "'>
+            $tool_content .= " <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code$setId&amp;modifyAnswers=" . urlencode($_GET['modifyAnswers']) . "'>
                                     <fieldset><legend class='mb-0' aria-label='$langForm'></legend>
                                     <input type='hidden' name='nbrAnswers' value='$nbrAnswers'>";
 
