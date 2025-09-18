@@ -1974,7 +1974,7 @@ $langTypeOfAnswer = "Answer type";
 $langRangeOfValues = "Range of values";
 $langItem = "Item";
 $langDecimalValues = "Decimal digits";
-$langZeroForNoDecimal = "0 value για παράλειψη δεκαδικών";
+$langZeroForNoDecimal = "Τιμή 0 για παράλειψη δεκαδικών";
 $langAutoCompleteValues = "Add value";
 $langAutoCompleteWildCardInfo = 'Enter the value of the current element.</br>
 Its value can be either <strong class="text-dark">fixed</strong> or <strong class="text-dark">random</strong>.</br>
