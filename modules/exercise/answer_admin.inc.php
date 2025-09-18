@@ -703,6 +703,28 @@ if (isset($submitAnswers) || isset($buttonBack)) {
 
     } elseif($answerType == ORDERING) {
 
+        // Get posted variables as session posted variables
+        if (isset($_POST['ordering_answer']) && count($_POST['ordering_answer']) > 0) {
+            for ($i = 1; $i <= count($_POST['ordering_answer']); $i++) {
+                $_SESSION['ordering_answer_'.$questionId][$i] = $_POST['ordering_answer'][$i];
+            }
+            $_SESSION['count_ordering_answer_'.$questionId] = count($_POST['ordering_answer']);
+        }
+        if (isset($_POST['ordering_answer_grade']) && count($_POST['ordering_answer_grade']) > 0) {
+            for ($i = 1; $i <= count($_POST['ordering_answer_grade']); $i++) {
+                $_SESSION['ordering_answer_grade_'.$questionId][$i] = $_POST['ordering_answer_grade'][$i];
+            }
+        }
+        if (isset($_POST['layoutItems'])) {
+            $_SESSION['layoutItems_'.$questionId] = $_POST['layoutItems'];
+        }
+        if (isset($_POST['ltemsSelectionType'])) {
+            $_SESSION['ltemsSelectionType_'.$questionId] = $_POST['ltemsSelectionType'];
+        }
+        if (isset($_POST['SizeOfSubset'])) {
+            $_SESSION['SizeOfSubset_'.$questionId] = $_POST['SizeOfSubset'];
+        }
+
         $totalAnsFromOrderingChoices = [];
         $PredefinedValues = [];
         if (isset($_POST['ordering_answer'])) {
@@ -722,11 +744,11 @@ if (isset($submitAnswers) || isset($buttonBack)) {
             if (!is_numeric($SizeOfSubset)) {
                 Session::flash('message', $langFillInTheSizeOfSubset);
                 Session::flash('alert-class', 'alert-warning');
-                redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId&modifyAnswers=$_GET[modifyAnswers]&htopic=" . ORDERING);
+                redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId&modifyAnswers=$_GET[modifyAnswers]&htopic=" . ORDERING . "&invalid_mode=true");
             } elseif (is_numeric($SizeOfSubset) && ($SizeOfSubset > count($PredefinedValues) or $SizeOfSubset <= 1)) { // A subset must have at least 2 items.
                 Session::flash('message', $langTheSizeOfSubsetIsBiggerThanPrAnswers);
                 Session::flash('alert-class', 'alert-warning');
-                redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId&modifyAnswers=$_GET[modifyAnswers]&htopic=" . ORDERING);
+                redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId&modifyAnswers=$_GET[modifyAnswers]&htopic=" . ORDERING . "&invalid_mode=true");
             }
         }
         $arrOptions = [
@@ -743,7 +765,7 @@ if (isset($submitAnswers) || isset($buttonBack)) {
         if ($DuplicatesItemsOn || $EmptyItemsOn) {
             Session::flash('message', $langPredefinedAnswerExists);
             Session::flash('alert-class', 'alert-warning');
-            redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId&modifyAnswers=$_GET[modifyAnswers]&htopic=" . ORDERING);
+            redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId&modifyAnswers=$_GET[modifyAnswers]&htopic=" . ORDERING . "&invalid_mode=true");
         }
 
         $choicesOrdArr = [];
@@ -769,6 +791,13 @@ if (isset($submitAnswers) || isset($buttonBack)) {
                 $objQuestion->save();
             }
         }
+
+        unset($_SESSION['ordering_answer_'.$questionId]);
+        unset($_SESSION['count_ordering_answer_'.$questionId]);
+        unset($_SESSION['ordering_answer_grade_'.$questionId]);
+        unset($_SESSION['layoutItems_'.$questionId]);
+        unset($_SESSION['ltemsSelectionType_'.$questionId]);
+        unset($_SESSION['SizeOfSubset_'.$questionId]);
     }
 
     if (empty($msgErr) and !isset($_POST['setWeighting'])) {
@@ -1121,6 +1150,9 @@ if (isset($_GET['modifyAnswers'])) {
             if ($nbrAnswers == 0) {
                 $nbrAnswers = 2;
             }
+            if (isset($_GET['invalid_mode']) && isset($_SESSION['count_ordering_answer_'.$questionId])) {
+                $nbrAnswers = $_SESSION['count_ordering_answer_'.$questionId];
+            }
         }
         if ($deleteAnswer) {
             $nbrAnswers = $_POST['nbrAnswers'] - 1;
@@ -1135,7 +1167,17 @@ if (isset($_GET['modifyAnswers'])) {
         }
 
         $ordering_answer = $objAnswer->get_ordering_answers();
+        if (isset($_GET['invalid_mode']) && isset($_SESSION['ordering_answer_'.$questionId])) { 
+            for ($i = 1; $i <= count($_SESSION['ordering_answer_'.$questionId]); $i++) {
+                $ordering_answer[$i] = $_SESSION['ordering_answer_'.$questionId][$i];
+            }
+        }
         $ordering_answer_grade = $objAnswer->get_ordering_answer_grade();
+        if (isset($_GET['invalid_mode']) && isset($_SESSION['ordering_answer_grade_'.$questionId])) { 
+            for ($i = 1; $i <= count($_SESSION['ordering_answer_grade_'.$questionId]); $i++) {
+                $ordering_answer_grade[$i] = $_SESSION['ordering_answer_grade_'.$questionId][$i];
+            }
+        }
 
     }
 
@@ -1956,7 +1998,7 @@ if (isset($_GET['modifyAnswers'])) {
 
                 $valSizeOfSubset = (isset($arrOpts) && !empty($arrOpts['sizeOfSubset']) ? $arrOpts['sizeOfSubset'] : '');
                 $hiddenSize = 'd-none';
-                if (!empty($valSizeOfSubset)) {
+                if (!empty($valSizeOfSubset) or isset($_SESSION['SizeOfSubset_'.$questionId])) {
                     $hiddenSize = 'd-block';
                 }
 
@@ -1964,16 +2006,16 @@ if (isset($_GET['modifyAnswers'])) {
                                         <div style='flex: 1;'>
                                             <label for='layoutItemsId' class='form-label'>$langLayoutItems</label>
                                             <select class='form-select' id='layoutItemsId' name='layoutItems'>
-                                                <option value='Vertical' " . (isset($arrOpts) && $arrOpts['layoutItems'] == 'Vertical' ? 'selected' : ''). ">$langVertical</option>
-                                                <option value='Horizontal' " . (isset($arrOpts) && $arrOpts['layoutItems'] == 'Horizontal' ? 'selected' : ''). ">$langHorizontal</option>                                                
+                                                <option value='Vertical' " . (((isset($arrOpts) && $arrOpts['layoutItems'] == 'Vertical') or (isset($_SESSION['layoutItems_'.$questionId]) && $_SESSION['layoutItems_'.$questionId] == 'Vertical')) ? 'selected' : ''). ">$langVertical</option>
+                                                <option value='Horizontal' " . (((isset($arrOpts) && $arrOpts['layoutItems'] == 'Horizontal') or (isset($_SESSION['layoutItems_'.$questionId]) && $_SESSION['layoutItems_'.$questionId] == 'Horizontal')) ? 'selected' : ''). ">$langHorizontal</option>                                                
                                             </select>
                                         </div>
                                         <div style='flex: 1;'>
                                             <label for='ItemsSelectionTypeId' class='form-label'>$langItemsSelectionType</label>
                                             <select class='form-select' id='ItemsSelectionTypeId' name='ltemsSelectionType'>
-                                                <option value='1' " . (isset($arrOpts) && $arrOpts['itemsSelectionType'] == 1 ? 'selected' : ''). ">$langSelectAllItems</option>
-                                                <option value='2' " . (isset($arrOpts) && $arrOpts['itemsSelectionType'] == 2 ? 'selected' : ''). ">$langSelectRandomSubSetOfItems</option>
-                                                <option value='3' " . (isset($arrOpts) && $arrOpts['itemsSelectionType'] == 3 ? 'selected' : ''). ">$langSelectContiguousSubSetOfItems</option>
+                                                <option value='1' " . (((isset($arrOpts) && $arrOpts['itemsSelectionType'] == 1) or (isset($_SESSION['ltemsSelectionType_'.$questionId]) && $_SESSION['ltemsSelectionType_'.$questionId] == 1)) ? 'selected' : ''). ">$langSelectAllItems</option>
+                                                <option value='2' " . (((isset($arrOpts) && $arrOpts['itemsSelectionType'] == 2) or (isset($_SESSION['ltemsSelectionType_'.$questionId]) && $_SESSION['ltemsSelectionType_'.$questionId] == 2)) ? 'selected' : ''). ">$langSelectRandomSubSetOfItems</option>
+                                                <option value='3' " . (((isset($arrOpts) && $arrOpts['itemsSelectionType'] == 3) or (isset($_SESSION['ltemsSelectionType_'.$questionId]) && $_SESSION['ltemsSelectionType_'.$questionId] == 3)) ? 'selected' : ''). ">$langSelectContiguousSubSetOfItems</option>
                                             </select>
                                             <div class='SizeOfSubSetContainer $hiddenSize mt-3'>
                                                 <label for='SizeOfSubsetId' class='form-label'>$langSizeOfSubset</label>
