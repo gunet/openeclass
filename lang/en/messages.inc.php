@@ -1974,7 +1974,7 @@ $langTypeOfAnswer = "Answer type";
 $langRangeOfValues = "Range of values";
 $langItem = "Item";
 $langDecimalValues = "Decimal digits";
-$langZeroForNoDecimal = "Τιμή 0 για παράλειψη δεκαδικών";
+$langZeroForNoDecimal = "Value 0 to omit decimal places";
 $langAutoCompleteValues = "Add value";
 $langAutoCompleteWildCardInfo = 'Enter the value of the current element.</br>
 Its value can be either <strong class="text-dark">fixed</strong> or <strong class="text-dark">random</strong>.</br>
@@ -6596,7 +6596,7 @@ $langAIExtractButton = 'Extract Course Data';
 $langAIGenerating = 'Generating course data...';
 $langAIExtracting = 'Extracting from syllabus...';
 $langAIExtractionSuccess = 'Course data extracted successfully';
-$langAIGenerationSuccess = 'Course data generated successfully'; 
+$langAIGenerationSuccess = 'Course data generated successfully';
 $langAIGenerationFailed = 'Failed to generate course data';
 $langPromptTooShort = 'Course description is too short';
 $langPromptTooLong = 'Course description is too long';

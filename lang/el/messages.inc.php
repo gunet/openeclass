@@ -2160,9 +2160,9 @@ $langQuestionDifficult = "Δύσκολη";
 $langQuestionVeryDifficult = "Πολύ δύσκολη";
 $langCheckAccess = "Έλεγχος πρόσβασης";
 $langDragAndDropText = "Μεταφορά και Απόθεση σε Κείμενο ";
-$langInfoDragAndDropText = 'Πληκτρολογήστε την <strong class="text-dark">εκφώνηση</strong> της ερώτησης χρησιμοποιώντας αγκύλες με τον μοναδικό τους αριθμό. </br> 
+$langInfoDragAndDropText = 'Πληκτρολογήστε την <strong class="text-dark">εκφώνηση</strong> της ερώτησης χρησιμοποιώντας αγκύλες με τον μοναδικό τους αριθμό. </br>
                             Κάθε αγκύλη του κειμένου αντιστοιχεί στην ανάλογη επιλογή του πίνακα.</br></br>
-                            Καταχωρήστε τις προκαθορισμένες απαντήσεις του κειμένου συμπληρώνοντας τον βαθμό τους. 
+                            Καταχωρήστε τις προκαθορισμένες απαντήσεις του κειμένου συμπληρώνοντας τον βαθμό τους.
                             Μπορείτε προαιρετικά να προσθέσετε περισσότερες προκαθορισμένες απαντήσεις από τον συνολικό αριθμό των σωστών απαντήσεων του κειμένου.
                             Με αυτόν τον τρόπο αυξάνετε το βαθμό δυσκόλιας της ερώτησης καθώς μία ή περισσότερες προκαθορισμένες απαντήσεις θα περισσέψει κατα την εκτέλεση της άσκησης.</br></br>
                             <strong class="text-dark">Για παράδειγμα</strong>, στο κείμενο `Πρωτεύουσα της Ελλάδας είναι [1] ενώ πρωτεύουσα της Ιταλίας είναι [2]` συμπληρώνουμε τις εξής απαντήσεις:</br></br>
@@ -2234,7 +2234,7 @@ $langTypeOfAnswer = "Τύπος απάντησης";
 $langRangeOfValues = "Έυρος τιμών";
 $langItem = "Στοιχείο";
 $langDecimalValues = "Δεκαδικά ψηφία";
-$langZeroForNoDecimal = "Value 0 to omit decimal places";
+$langZeroForNoDecimal = "Τιμή 0 για παράλειψη δεκαδικών";
 $langAutoCompleteValues = "Προσθήκη τιμής";
 $langItemToAdd = "Στοιχείο για προσθήκη:";
 $langAutoCompleteWildCardInfo = 'Καταχωρήστε την τιμή του τρέχοντος στοιχείου.</br>
@@ -2246,7 +2246,7 @@ $langAddRandomOrConstantValOfWildCard = "Θα πρέπει να καταχωρή
 $langCompleteTheTextOfTheQuestion = "Εκφώνηση";
 $langCompleteVariablesOfQuestionInfo = '
 <ul class="text-dark">
-<li class="text-dark">Συμπληρώστε την εκφώνηση στο πεδίο κειμένου <strong class="text-dark">Εκφώνηση</strong>.</li> 
+<li class="text-dark">Συμπληρώστε την εκφώνηση στο πεδίο κειμένου <strong class="text-dark">Εκφώνηση</strong>.</li>
 <li class="text-dark">Κάθε στοιχείο θα πρέπει να ορίζεται μέσα σε <strong class="text-dark">άγκυστρα {}</strong>.</li>
 <li class="text-dark">Συμπληρώστε τον αριθμητικό τύπο που δίνει το απότελεσμα της άσκησης καθώς και τον βαθμό στα πεδία <strong class="text-dark">Τύπος απάντησης</strong> και <strong class="text-dark">Βαθμός</strong> αντίστοιχα. Το σύστημα υπολογίζει αυτόματα το τελικό αποτέλεσμα της άσκησης βασισμένο στον τύπο που δώσατε.</li>
 <li class="text-dark">Καταχωρήστε τις τιμές των στοιχείων από την <strong class="text-dark">επεξεργασία στοιχείων</strong>. Μπορείτε επίσης να ορίσετε τυχαίες τιμές από το εύρος τιμών.</li>
