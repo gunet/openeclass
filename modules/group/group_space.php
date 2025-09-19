@@ -40,8 +40,7 @@ if ((isset($_GET['selfReg']) or isset($_GET['selfUnReg'])) and isset($_GET['grou
 }
 
 if (!is_group_visible($group_id, $course_id) and !$is_editor) {
-    Session::flash('message',$langForbidden);
-    Session::flash('alert-class', 'alert-danger');
+    Session::Messages($langForbidden, 'alert-danger');
     redirect_to_home_page("modules/group/index.php?course=$course_code");
 }
 
@@ -57,8 +56,7 @@ $multi_reg = setting_get(SETTING_GROUP_MULTIPLE_REGISTRATION, $course_id);
 
 if ((!$is_editor) and ($status != USER_GUEST)) {
     if (!$is_member and !$self_reg) { // check if we are group member
-        Session::flash('message',$langForbidden);
-        Session::flash('alert-class', 'alert-danger');
+        Session::Messages($langForbidden, 'alert-danger');
         redirect_to_home_page("modules/group/index.php?course=$course_code");
     }
     if (isset($_GET['selfReg']) and $_GET['selfReg'] == 1) {
@@ -77,12 +75,10 @@ if ((!$is_editor) and ($status != USER_GUEST)) {
             $group = gid_to_name($group_id);
             Log::record($course_id, MODULE_ID_GROUPS, LOG_MODIFY, array( 'uid' => $uid, 'name' => $group));
 
-            Session::flash('message',$langGroupNowMember);
-            Session::flash('alert-class', 'alert-success');
+            Session::Messages($langGroupNowMember, 'alert-success');
             redirect_to_home_page("modules/group/group_space.php?course=$course_code&group_id=$group_id");
         } else {
-            Session::flash('message',$langForbidden);
-            Session::flash('alert-class', 'alert-danger');
+            Session::Messages($langForbidden, 'alert-danger');
             redirect_to_home_page("modules/group/index.php?course=$course_code");
         }
 
@@ -94,12 +90,10 @@ if ((!$is_editor) and ($status != USER_GUEST)) {
             $group = gid_to_name($group_id);
             Log::record($course_id, MODULE_ID_GROUPS, LOG_DELETE, array('uid' => $uid, 'name' => $group));
 
-            Session::flash('message',$langGroupNowNotMember);
-            Session::flash('alert-class', 'alert-success');
+            Session::Messages($langGroupNowNotMember, 'alert-success');
             redirect_to_home_page("modules/group/index.php?course=$course_code");
         } else {
-            Session::flash('message',$langForbidden);
-            Session::flash('alert-class', 'alert-danger');
+            Session::Messages($langForbidden, 'alert-danger');
             redirect_to_home_page("modules/group/index.php?course=$course_code");
         }
     }

@@ -30,32 +30,36 @@ $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langG
 $group_id = isset($_REQUEST['group_id']) ? intval($_REQUEST['group_id']) : '';
 
 $userID = $uid;
+if (isset($_GET['editByEditor'])) {
+    $submit_url = $urlAppend . "modules/group/group_description.php?course=$course_code&amp;editByEditor=1";
+    $return_url = "modules/group/group_space.php?course=$course_code&group_id=$group_id";
+} else {
+    $submit_url = $urlAppend . "modules/group/group_description.php?course=$course_code";
+    $return_url = "modules/group/index.php?course=$course_code";
+}
 if (isset($_GET['editByEditor']) && $_GET['u']) {
     $userID = intval($_GET['u']);
 }
 
 if (isset($_GET['delete'])) {
     $sql = Database::get()->query("UPDATE group_members SET description = ''
-		WHERE group_id = ?d AND user_id = ?d", $group_id, $userID);
+        WHERE group_id = ?d AND user_id = ?d", $group_id, $userID);
     if ($sql->affectedRows > 0) {
-        Session::flash('message',$langBlockDeleted);
-        Session::flash('alert-class', 'alert-success');
+        Session::Messages($langBlockDeleted, 'alert-success');
     }
-    redirect_to_home_page("modules/group/index.php?course=$course_code");
+    redirect_to_home_page($return_url);
 } else if (isset($_POST['submit'])) {
     $sql = Database::get()->query("UPDATE group_members SET description = ?s
-			WHERE group_id = ?d AND user_id = ?d", $_POST['group_desc'], $group_id, $_POST['u_id']);
+            WHERE group_id = ?d AND user_id = ?d", $_POST['group_desc'], $group_id, $_POST['u_id']);
     if ($sql->affectedRows > 0) {
-        Session::flash('message',$langRegDone);
-        Session::flash('alert-class', 'alert-success');
+        Session::Messages($langRegDone, 'alert-success');
     } else {
-        Session::flash('message',$langNoChanges);
-        Session::flash('alert-class', 'alert-danger');
+        Session::Messages($langNoChanges, 'alert-danger');
     }
-    redirect_to_home_page("modules/group/index.php?course=$course_code");
+    redirect_to_home_page($return_url);
 } else { // display form
     $description = Database::get()->querySingle("SELECT description FROM group_members
-			WHERE group_id = ?d AND user_id = ?d", $group_id, $userID)->description;
+            WHERE group_id = ?d AND user_id = ?d", $group_id, $userID)->description;
     $tool_content .= action_bar(array(
         array(
             'title' => $langBack,
@@ -66,7 +70,7 @@ if (isset($_GET['delete'])) {
     ))."
     <div class='d-lg-flex gap-4 mt-4'>
         <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>
-        <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
+        <form class='form-horizontal' role='form' method='post' action='$submit_url'>
             <input type='hidden' name='group_id' value='$group_id'>
             <input type='hidden' name='u_id' value='$userID'>
             <div class='form-group'>
@@ -83,7 +87,7 @@ if (isset($_GET['delete'])) {
                     <input class='btn submitAdminBtn' type='submit' name='submit' value='" . q($langAddModify) . "'>
                     <a class='btn cancelAdminBtn' href='index.php?course=$course_code'>$langCancel</a>
                 </div>
-            </div>            
+            </div>
         </form>
     </div></div><div class='d-none d-lg-block'>
     <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
