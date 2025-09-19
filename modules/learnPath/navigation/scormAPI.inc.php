@@ -1094,11 +1094,12 @@ if (isset($_GET['unit'])) {
             'Credit': '^(credit|no-credit)$',
             'Entry': '^(ab-initio|resume|^)$',
             'Interaction': '^(true-false|choice|fill-in|matching|performance|likert|sequencing|numeric)$',
-            'Result': '^(correct|wrong|unanticipated|neutral|-?([0-9]+)(\\.[0-9]+))$',
+            'Result': '^correct$|^incorrect$|^unanticipated$|^neutral$|^-?([0-9]{1,4})(\\.[0-9]{1,18})?$',
             'TimeLimitAction': '^(exit,message|exit,no message|continue,message|continue,no message)$'
         },
         'CMIString255': '^.{0,255}$',
         'CMIString4096': '^.{0,4096}$',
+        'CMILangString250': '^(\{lang=([a-zA-Z]{2,3}|i|x)(\-[a-zA-Z0-9\-]{2,8})?\})?([^\{].{0,250}$)?',
         'NAVEvent': '^previous$|^continue$|^exit$|^exitAll$|^abandon$|^abandonAll$|^suspendAll$|^\{target=\\S{0,200}[a-zA-Z0-9]\}choice|jump$'
     };
 
@@ -1315,7 +1316,7 @@ if (isset($_GET['unit'])) {
     function handleSetInteractions(ele, val, interactions) {
         let myres, elem_id, elem_attrib;
 
-        if ((myres = ele.match(/cmi.interactions.(\d+).(id|time|timestamp|type|correct_responses|weighting|student_response|result|latency|objectives)(.*)/))) {
+        if ((myres = ele.match(/cmi.interactions.(\d+).(id|time|timestamp|type|correct_responses|weighting|student_response|result|latency|objectives|description)(.*)/))) {
 
             updatetable_to_list['interactions'] = 'true';
             elem_id = myres[1];
@@ -1399,6 +1400,14 @@ if (isset($_GET['unit'])) {
                         return handleSetObjectives(ele, val, interactions[elem_id][8]);
                         //APIError("401");
                         //return "false";
+                    case "description":
+                        if (!checkDataType(val, 'CMILangString250')) {
+                            APIError("405");
+                            return "false";
+                        }
+                        interactions[elem_id][8] = val;
+                        APIError("0");
+                        return "true;"
                     default:
                         APIError("401"); // not implemented
                         return "false";
