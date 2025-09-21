@@ -161,6 +161,7 @@ function new_edit_assignment($assignment_id = null) {
         $data['submit_name'] = 'do_edit';
 
         $data['lti_template_options'] = resolve_lti_template_options($lti_templates, $row);
+        $data['lti_template_options_selected_lti_template'] = $row->lti_template;
         $lti_hidden = ($assignment_type == ASSIGNMENT_TYPE_TURNITIN) ? '' : 'hidden';
         $data['lti_hidden'] = $lti_hidden;
         $data['lti_disabled'] = ($assignment_type == ASSIGNMENT_TYPE_TURNITIN) ? '' : 'disabled';
