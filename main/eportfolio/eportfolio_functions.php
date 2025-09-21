@@ -507,7 +507,7 @@ function epf_validate(&$valitron_object) {
 
 function calculate_eportfolio_completion($user_id) {
     // language shortnames
-    $language_fields = ['greek', 'english', 'albanian', 'arabic', 'french', 'spanish', 'german', 'italian', 'chinese', 'russian', 'turkish', 'other_languages']; //this group is considered as one field
+    $language_fields = ['el', 'en', 'sq', 'ar', 'fr', 'es', 'de', 'it', 'zh', 'ru', 'tr', 'other_languages']; //this group is considered as one field
 
     // get all fields
     $all_fields = Database::get()->queryArray("SELECT id, shortname FROM eportfolio_fields");
