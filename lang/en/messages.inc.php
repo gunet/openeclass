@@ -1495,6 +1495,7 @@ $langCourseActiveShort = "Active $langsCourses";
 $langPrivateShort = "Closed (only users in 'users list')";
 $langAlertTitle = "Please fill the course title!";
 $langAlertProf = "Please fill the course ".$langsTeacher."!";
+$langFacultyUsersRegistrationLegend = "Registration is only allowed for $langsOfStudentss of the $langsOfCourse faculty.";
 $langMultiCourse = 'Multiple course creation';
 $langMultiCourseInfo = 'Enter course titles (one title per line). If you wish to add a course administrator, too then enter his username or name / surname, separated with character "|".';
 $langMultiCourseTitles = 'Courses Titles';
