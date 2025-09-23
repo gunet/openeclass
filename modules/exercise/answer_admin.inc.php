@@ -130,7 +130,6 @@ if (isset($submitAIConfig) && $answerType == FREE_TEXT && $aiEvaluationAvailable
 
 // the answer form has been submitted
 if (isset($submitAnswers) || isset($buttonBack)) {
-
     if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER) {
         $questionWeighting = $nbrGoodAnswers = 0;
         for ($i = 1; $i <= $nbrAnswers; $i++) {
@@ -691,7 +690,7 @@ if (isset($submitAnswers) || isset($buttonBack)) {
                         unset($_SESSION['wildCard_max_'.$questionId]);
                         unset($_SESSION['wildCard_decimal_'.$questionId]);
                         unset($_SESSION['wildCard_answer_'.$questionId]);
-                         
+
                     }
                 }
             }
@@ -1090,7 +1089,7 @@ if (isset($_GET['modifyAnswers'])) {
                 if (isset($_POST['calculated_answer']) && count($_POST['calculated_answer']) > 0) {
                     $nbrAnswers = count($_POST['calculated_answer']);
                 }
-                if (isset($_GET['invalid_val']) && isset($_SESSION['count_calculated_answer_'.$questionId])) { // After inserting invalid posted variables get the session variables to show 
+                if (isset($_GET['invalid_val']) && isset($_SESSION['count_calculated_answer_'.$questionId])) { // After inserting invalid posted variables get the session variables to show
                     $nbrAnswers = $_SESSION['count_calculated_answer_'.$questionId];
                 }
             }
@@ -1136,7 +1135,7 @@ if (isset($_GET['modifyAnswers'])) {
                                                                                 'wildcard_decimal_val' => $wildcard['decimal'] ?? '',
                                                                                 'wildcard_random_val' => $wildcard['value'] ?? '',
                                                                                 'wildcard_type' => $wildcard['type'] ?? ''
-                                                                            ];                                                         
+                                                                            ];
                 }
             }
         }
@@ -1167,13 +1166,13 @@ if (isset($_GET['modifyAnswers'])) {
         }
 
         $ordering_answer = $objAnswer->get_ordering_answers();
-        if (isset($_GET['invalid_mode']) && isset($_SESSION['ordering_answer_'.$questionId])) { 
+        if (isset($_GET['invalid_mode']) && isset($_SESSION['ordering_answer_'.$questionId])) {
             for ($i = 1; $i <= count($_SESSION['ordering_answer_'.$questionId]); $i++) {
                 $ordering_answer[$i] = $_SESSION['ordering_answer_'.$questionId][$i];
             }
         }
         $ordering_answer_grade = $objAnswer->get_ordering_answer_grade();
-        if (isset($_GET['invalid_mode']) && isset($_SESSION['ordering_answer_grade_'.$questionId])) { 
+        if (isset($_GET['invalid_mode']) && isset($_SESSION['ordering_answer_grade_'.$questionId])) {
             for ($i = 1; $i <= count($_SESSION['ordering_answer_grade_'.$questionId]); $i++) {
                 $ordering_answer_grade[$i] = $_SESSION['ordering_answer_grade_'.$questionId][$i];
             }

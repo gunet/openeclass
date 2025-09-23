@@ -97,9 +97,9 @@ $(function() {
  });
 </script>
  ";
+
 // the question form has been submitted
 if (isset($_POST['submitQuestion'])) {
-
     $v = new Valitron\Validator($_POST);
     $v->rule('required', array('questionName'));
     $v->labels(array(
@@ -186,7 +186,7 @@ if (isset($_POST['submitQuestion'])) {
                 $aiService = new AIExerciseEvaluationService(); // Check if AI evaluation is available
                 if ($aiService->isEnabledForCourse(AI_MODULE_FREE_TEXT_EVALUATION)) { // redirect to modify answers page to configure answers/AI evaluation
                     if (isset($_GET['modifyQuestion'])) { // existing question
-                        $redirect_url = "modules/exercise/admin.php?course=$course_code" . ((isset($exerciseId)) ? "&exerciseId=$exerciseId" : "") . "&modifyAnswers=$questionId";
+                        $redirect_url = "modules/exercise/admin.php?course=$course_code" . ((isset($exerciseId)) ? "&exerciseId=$exerciseId" : "") . "&modifyAnswers=$questionId&htopic=$answerType";
                     } else { // new question
                         $redirect_url = "modules/exercise/admin.php?course=$course_code" . ((isset($exerciseId)) ? "&exerciseId=$exerciseId" : "") . "&modifyAnswers=$questionId&htopic=$answerType";
                     }
@@ -227,13 +227,13 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
         $tool_content .= "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$msgErr</span></div>\n";
     }
 
-    if (isset($_GET['newQuestion'])){
-        $form_submit_action = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".((isset($exerciseId))? "exerciseId=$exerciseId" : "")."&amp;newQuestion=" . urlencode($_GET['newQuestion']);
+    if (isset($_GET['newQuestion'])) {
+        $form_submit_action = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;" . ((isset($exerciseId)) ? "exerciseId=$exerciseId" : "") . "&amp;newQuestion=" . urlencode($_GET['newQuestion']);
         $link_back = isset($exerciseId) ? "admin.php?course=$course_code&exerciseId=$exerciseId" : "question_pool.php?course=$course_code";
 
     } else {
-        $form_submit_action = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".((isset($exerciseId))? "exerciseId=$exerciseId" : "")."&amp;modifyQuestion=" . urlencode($_GET['modifyQuestion']);
-        $link_back = "admin.php?course=$course_code".(isset($exerciseId) ? "&exerciseId=$exerciseId" : "")."&modifyAnswers=$_GET[modifyQuestion]";
+        $form_submit_action = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;" . ((isset($exerciseId)) ? "exerciseId=$exerciseId" : "") . "&amp;modifyQuestion=" . urlencode($_GET['modifyQuestion']);
+        $link_back = "admin.php?course=$course_code" . (isset($exerciseId) ? "&exerciseId=$exerciseId" : "") . "&modifyAnswers=$_GET[modifyQuestion]";
     }
     $action_bar = action_bar(array(
         array('title' => $langBack,
@@ -242,7 +242,7 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
             'level' => 'primary'
         )
     ));
-
+    $answerType = $objQuestion->selectType();
     $tool_content .= $action_bar;
     $q_cats = Database::get()->queryArray("SELECT * FROM exercise_question_cats WHERE course_id = ?d ORDER BY question_cat_name", $course_id);
 
@@ -270,19 +270,66 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
     }
     enableCheckFileSize();
     $tool_content .= "
-    <div class='d-lg-flex gap-4 mt-4'>
+        <div class='d-lg-flex gap-4 mt-4'>
         <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>
             <form class='form-horizontal' role='form' enctype='multipart/form-data' method='post' action='$form_submit_action'> 
             <fieldset>
             <legend class='mb-0' aria-label='$langForm'></legend>                             
-            <div class='row form-group ".(Session::getError('questionName') ? "has-error" : "")."'>
+            <div class='row form-group " . (Session::getError('questionName') ? "has-error" : "") . "'>
                 <label for='questionName' class='col-12 control-label-notes mb-1'>$langQuestion <span class='asterisk Accent-200-cl'>(*)</span></label>
                 <div class='col-12'>
                       <input name='questionName' type='text' class='form-control' id='questionName' placeholder='$langQuestion' value='" . q($questionName) . "'>
-                      <span class='help-block Accent-200-cl'>".Session::getError('questionName')."</span>
+                      <span class='help-block Accent-200-cl'>" . Session::getError('questionName') . "</span>
                 </div>
-            </div>
-            <div class='row form-group mt-4'>
+            </div>";
+            if (isset($_GET['modifyQuestion'])) {
+                $answertype_hidden_input = "<input type='hidden' name='answerType' value='$answerType'>";
+                $disabled = "disabled";
+            } else {
+                $disabled = $answertype_hidden_input = "";
+            }
+
+            $tool_content .= "
+                <div class='row form-group mt-4'>
+                    <div class='col-12 control-label-notes mb-1'>$langAnswerType</div>                        
+                        <div class='col-12'>
+                            " . selection(
+                                [
+                                    UNIQUE_ANSWER => $langUniqueSelect,
+                                    MULTIPLE_ANSWER => $langMultipleSelect,
+                                    TRUE_FALSE => $langTrueFalse,
+                                    FILL_IN_BLANKS_TOLERANT => "$langFillBlanks",
+                                    FILL_IN_FROM_PREDEFINED_ANSWERS => "$langFillFromSelectedWords",
+                                    MATCHING => $langMatching,
+                                    ORDERING => $langOrdering,
+                                    DRAG_AND_DROP_TEXT => "$langDragAndDropText",
+                                    DRAG_AND_DROP_MARKERS => "$langDragAndDropMarkers",
+                                    CALCULATED => $langCalculated,
+                                    FREE_TEXT => "$langFreeText",
+                                    ORAL => "$langOral",
+                                ],
+                                'answerType',
+                                (isset($answerType)) ? ($answerType == FILL_IN_BLANKS ? FILL_IN_BLANKS_TOLERANT : $answerType) : UNIQUE_ANSWER,
+                                "id='answerTypeSelected' $disabled"
+                            ) . "
+                            $answertype_hidden_input
+                            <div class='mt-2 checkbox fill_in_blank_strict d-none'>
+                                                <label class='label-container' aria-label='$langSettingSelect'>
+                                                    <input type='checkbox' name='fill_in_blank_strict' value=".FILL_IN_BLANKS." ". ($answerType == FILL_IN_BLANKS ? 'checked' : '') .">
+                                                    <span class='checkmark'></span>$langFillBlanksStrict $langFillBlanksStrictExample
+                                                </label>
+                            </div>
+                        </div>
+                    </div>";
+
+            $tool_content .= "<div class='row form-group ".(($answerType != FREE_TEXT and $answerType != ORAL) ? "hide": "")." mt-4'>
+                <label for='questionGrade' class='col-12 control-label-notes mb-1'>$langGradebookGrade</label>
+                <div class='col-12'>
+                  <input name='questionGrade' type='text' class='form-control' id='questionGrade' placeholder='$langGradebookGrade' value='$questionWeight'".(($answerType != 6 and $answerType != 13) ? " disabled": "").">
+                </div>
+            </div>";
+
+            $tool_content .= "<div class='row form-group mt-4'>
                 <label for='imageUpload' class='col-12 control-label-notes mb-1'>".(($okPicture) ? $langReplacePicture : $langAddPicture)."</label>
                 <div class='col-12'>" .
 
@@ -291,6 +338,7 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
                   <input type='file' name='imageUpload' id='imageUpload'>
                 </div>
             </div>";
+
             if ($okPicture) {
                 $tool_content .= "
                     <div class='row form-group mt-4'>
@@ -322,12 +370,6 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
                     </div>
                 </div>
                 <div class='row form-group mt-4'>
-                    <label for='questionFeedback' class='col-12 control-label-notes mb-1'>$langQuestionFeedback</label>
-                    <div class='col-12'>
-                      ". rich_text_editor('questionFeedback', 4, 50, $questionFeedback) ."
-                    </div>
-                </div>
-                <div class='row form-group mt-4'>
                     <label for='questionDifficulty' class='col-12 control-label-notes mb-1'>$langQuestionDiffGrade</label>
                     <div class='col-12'>
                         <div class='col-sm-2'>
@@ -336,62 +378,24 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
                         <div class='col-sm-10'>
                             <span id='questionDifficultyValue' class='label label-default'></span>
                         </div>
-                    </div>                    
-                </div>
-            ";
-
-        $tool_content .= "
-            <div class='row form-group mt-4'>
-                <div class='col-12 control-label-notes mb-1'>
-                    $langAnswerType
-                </div>
-                <div class='col-12'>
-                    " . selection(
-                        [
-                            UNIQUE_ANSWER => $langUniqueSelect,
-                            MULTIPLE_ANSWER => $langMultipleSelect,
-                            TRUE_FALSE => $langTrueFalse,
-                            FILL_IN_BLANKS_TOLERANT => "$langFillBlanks",
-                            FILL_IN_FROM_PREDEFINED_ANSWERS => "$langFillFromSelectedWords",
-                            MATCHING => $langMatching,
-                            ORDERING => $langOrdering,
-                            DRAG_AND_DROP_TEXT => "$langDragAndDropText",
-                            DRAG_AND_DROP_MARKERS => "$langDragAndDropMarkers",
-                            CALCULATED => $langCalculated,
-                            FREE_TEXT => "$langFreeText",
-                            ORAL => "$langOral",
-                        ],
-                        'answerType',
-                        (isset($answerType)) ? ($answerType == FILL_IN_BLANKS ? FILL_IN_BLANKS_TOLERANT : $answerType) : UNIQUE_ANSWER,
-                        "id='answerTypeSelected'"
-                    ) . "
-                    <div class='mt-2 checkbox fill_in_blank_strict d-none'>
-                        <label class='label-container' aria-label='$langSettingSelect'>
-                            <input type='checkbox' name='fill_in_blank_strict' value=".FILL_IN_BLANKS." ". ($answerType == FILL_IN_BLANKS ? 'checked' : '') .">
-                            <span class='checkmark'></span>
-                            $langFillBlanksStrict $langFillBlanksStrictExample
-                        </label>
+                    </div>
+                </div>                    
+                <div class='row form-group mt-4'>
+                    <label for='questionFeedback' class='col-12 control-label-notes mb-1'>$langQuestionFeedback</label>
+                    <div class='col-12'>
+                      ". rich_text_editor('questionFeedback', 4, 50, $questionFeedback) ."
                     </div>
                 </div>
-            </div>
-            ";
-
-            $tool_content .= "<div class='row form-group ".(($answerType != FREE_TEXT and $answerType != ORAL) ? "hide": "")." mt-4'>
-                <label for='questionGrade' class='col-12 control-label-notes mb-1'>$langGradebookGrade</label>
-                <div class='col-12'>
-                  <input name='questionGrade' type='text' class='form-control' id='questionGrade' placeholder='$langGradebookGrade' value='$questionWeight'".(($answerType != 6 and $answerType != 13) ? " disabled": "").">
+                <div class='row'>
+                    <div class='col-12 mt-5 d-flex justify-content-end align-items-center gap-2'>                                          
+                            <input type='submit' class='btn submitAdminBtn' name='submitQuestion' value='$langCreate'>
+                            <a href='$link_back' class='btn cancelAdminBtn'>$langCancel</a>                    
+                    </div>
                 </div>
+              </fieldset>
+            </form>
+            </div></div><div class='d-none d-lg-block'>
+                <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
             </div>
-            <div class='row'>
-                <div class='col-12 mt-5 d-flex justify-content-end align-items-center gap-2'>                                          
-                        <input type='submit' class='btn submitAdminBtn' name='submitQuestion' value='$langCreate'>
-                        <a href='$link_back' class='btn cancelAdminBtn'>$langCancel</a>                    
-                </div>
-            </div>
-          </fieldset>
-        </form>
-        </div></div><div class='d-none d-lg-block'>
-            <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
-        </div>
-    </div>";
+        </div>";
 }
