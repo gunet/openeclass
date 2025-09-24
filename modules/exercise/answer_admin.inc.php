@@ -324,6 +324,23 @@ if (isset($submitAnswers) || isset($buttonBack)) {
             }
         }
     } elseif ($answerType == DRAG_AND_DROP_TEXT) {
+
+        // Get posted variables as session posted variables
+        if (isset($_POST['drag_and_drop_question'])) {
+            $_SESSION['drag_and_drop_question_'.$questionId] = purify($_POST['drag_and_drop_question']);
+        }
+        if (isset($_POST['choice_answer']) && count($_POST['choice_answer']) > 0) {
+            for ($i = 0; $i < count($_POST['choice_answer']); $i++) {
+                $_SESSION['choice_answer_'.$questionId][$i+1] = $_POST['choice_answer'][$i];
+            }
+            $_SESSION['count_choice_answer_'.$questionId] = count($_POST['choice_answer']);
+        }
+        if (isset($_POST['choice_grade']) && count($_POST['choice_grade']) > 0) {
+            for ($i = 0; $i < count($_POST['choice_grade']); $i++) {
+                $_SESSION['choice_grade_'.$questionId][$i+1] = $_POST['choice_grade'][$i];
+            }
+        }
+
         $q_text = purify($_POST['drag_and_drop_question']);
         // Use preg_match_all to find all numbers within brackets
         preg_match_all('/\[(\d+)\]/', $q_text, $matches);
@@ -349,7 +366,7 @@ if (isset($submitAnswers) || isset($buttonBack)) {
         if ($hasDuplicates) {
             Session::flash('message', $langErrorWithUniqueNumberOfBlank);
             Session::flash('alert-class', 'alert-warning');
-            redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId&modifyAnswers=$_GET[modifyAnswers]");
+            redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId&modifyAnswers=$_GET[modifyAnswers]&htopic=" . DRAG_AND_DROP_TEXT . "&invalid_posted_values=true");
         }
 
         $totalAnsFromChoices = [];
@@ -367,7 +384,7 @@ if (isset($submitAnswers) || isset($buttonBack)) {
         if ($DuplicatesOn || $EmptyOn) {
             Session::flash('message', $langPredefinedAnswerExists);
             Session::flash('alert-class', 'alert-warning');
-            redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId&modifyAnswers=$_GET[modifyAnswers]&htopic=" . DRAG_AND_DROP_TEXT);
+            redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId&modifyAnswers=$_GET[modifyAnswers]&htopic=" . DRAG_AND_DROP_TEXT . "&invalid_posted_values=true");
         }
 
         // The total number of defined answers can be the same or bigger than the total number of the question blanks.
@@ -404,6 +421,13 @@ if (isset($submitAnswers) || isset($buttonBack)) {
             } else {
                 $objQuestion->save();
             }
+
+            unset($_SESSION['drag_and_drop_question_'.$questionId]);
+            unset($_SESSION['count_choice_answer_'.$questionId]);
+            unset($_SESSION['choice_answer_'.$questionId]);
+            unset($_SESSION['choice_answer_'.$questionId]);
+            unset($_SESSION['choice_grade_'.$questionId]);
+            
         }
 
     } elseif ($answerType == DRAG_AND_DROP_MARKERS) {
@@ -971,11 +995,17 @@ if (isset($_GET['modifyAnswers'])) {
         if (empty($drag_and_drop_question)) {
             $drag_and_drop_question = $objAnswer->get_drag_and_drop_text();
         }
+        if (isset($_SESSION['drag_and_drop_question_'.$questionId])) {
+            $drag_and_drop_question = $_SESSION['drag_and_drop_question_'.$questionId];
+        }
 
         if ($newAnswer) {
             $nbrAnswers = $_POST['nbrAnswers'] + 1;
         } else {
             $nbrAnswers = $objAnswer->get_total_drag_and_drop_answers();
+            if (isset($_SESSION['count_choice_answer_'.$questionId])) {
+                $nbrAnswers = $_SESSION['count_choice_answer_'.$questionId];
+            }
         }
         if ($deleteAnswer) {
             $nbrAnswers = $_POST['nbrAnswers'] - 1;
@@ -1522,8 +1552,15 @@ if (isset($_GET['modifyAnswers'])) {
                                         <tbody>";
                                         for ($i=0; $i<$nbrAnswers; $i++) {
                                             $chAns = $i+1;
-                                            $choiceAsAnswer = ((count($choices_from_db) > 0) && array_key_exists($i,$choices_from_db)) ? $choices_from_db[$i] : $_POST['choice_answer'][$i] ?? '';
-                                            $choiceAsGrade = ((count($grades_from_db) > 0) && array_key_exists($i,$grades_from_db)) ? $grades_from_db[$i] : $_POST['choice_grade'][$i] ?? 0;
+
+                                            if (isset($_GET['invalid_posted_values'])) {
+                                                $choiceAsAnswer = isset($_SESSION['choice_answer_'.$questionId][$chAns]) ? $_SESSION['choice_answer_'.$questionId][$chAns] : '';
+                                                $choiceAsGrade = isset($_SESSION['choice_grade_'.$questionId][$chAns]) ? $_SESSION['choice_grade_'.$questionId][$chAns] : '';
+                                            } else {
+                                                $choiceAsAnswer = ((count($choices_from_db) > 0) && array_key_exists($i, $choices_from_db)) ? $choices_from_db[$i] : $_POST['choice_answer'][$i];
+                                                $choiceAsGrade = ((count($grades_from_db) > 0) && array_key_exists($i, $grades_from_db)) ? $grades_from_db[$i] : $_POST['choice_grade'][$i];
+                                            }
+
                                             $tool_content .= "
                                                 <tr>
                                                     <td>[{$chAns}]</td>
