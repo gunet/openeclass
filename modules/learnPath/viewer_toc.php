@@ -279,28 +279,27 @@ echo "<!DOCTYPE HTML>
                         <img class='img-responsive' src='$logoUrl' alt='Logo' style='height:20px;'>
                     </a>
                 </div>
-                <div>
-                    <div class='d-flex gap-3'>
-                        <div id='navigation-btns' class='d-flex justify-content-end align-items-center gap-2'>
+                <div class='d-flex gap-3'>
+                    
+                    <div class='d-flex justify-content-end progressbar-plr'>";
+
+                        if ($uid) {
+                            $path_id = (int) $_SESSION['path_id'];
+                            $lpProgress = get_learnPath_progress($path_id, $uid);
+                            update_gradebook_book($uid, $path_id, $lpProgress/100, GRADEBOOK_ACTIVITY_LP);
+                            echo disp_progress_bar($lpProgress, 1);
+                        }
+                        echo "  </div>
+                </div>
+                <div id='navigation-btns' class='d-flex justify-content-end align-items-center gap-2 pe-3'>
                             $prevNextString
                             <div id='close-btn'>
-                                <a id='close-btn-a' class='d-flex justify-content-start align-items-center gap-1 text-decoration-none' href='$returl' target='_top'>
-                                    <span class='fa-solid fa-xmark fa-sm Accent-200-cl'></span>
+                                <a id='close-btn-a' class='d-flex justify-content-start align-items-center gap-2 text-decoration-none' href='$returl' target='_top'>
+                                    <span class='fa-solid fa-person-walking-arrow-right fa-lg Accent-200-cl'></span>
                                     <span class='hidden-xs Accent-200-cl'>$langLogout</span>
                                 </a>
                             </div>
                         </div>
-                        <div class='d-flex justify-content-end progressbar-plr'>";
-
-                            if ($uid) {
-                                $path_id = (int) $_SESSION['path_id'];
-                                $lpProgress = get_learnPath_progress($path_id, $uid);
-                                update_gradebook_book($uid, $path_id, $lpProgress/100, GRADEBOOK_ACTIVITY_LP);
-                                echo disp_progress_bar($lpProgress, 1);
-                            }
-                echo "  </div>
-                    </div>
-                </div>
             </div>
         </div>
    </nav>
