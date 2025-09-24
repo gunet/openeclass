@@ -612,8 +612,10 @@ if (!class_exists('Answer')):
             if ($q) {
                 $arrMarkers = explode('|', $q);
                 foreach ($arrMarkers as $m) {
-                    $markersData = json_decode($m, true);
-                    $markerIds[] = $markersData['marker_id'];
+                    if ($m) {
+                        $markersData = json_decode($m, true);
+                        $markerIds[] = $markersData['marker_id'];
+                    }
                 }
             }
             

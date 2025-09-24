@@ -14,7 +14,8 @@ class DragAndDropMarkersAnswer extends \QuestionType
         global $langAnswer, $langScore, $head_content, $webDir, $course_code, $langPoint, $langThisAnswerIsNotCorrect,
                $langConfirmDelete, $langAnalyticsConfirm, $langMarkerDeleted, $langMarkerDeletedError, $langImageUploaded,
                $langImageNotSelected, $langInvalidAnswerValue, $langBlankNotEmpty, $langBlankOtherQuestion, 
-               $chooseShapeAndAnswerToContinue, $chooseDrawAShapeForTheAnswerToContinue;
+               $chooseShapeAndAnswerToContinue, $chooseDrawAShapeForTheAnswerToContinue, $langAddGradeToMarkerAnswer, 
+               $langNotChooseShape;
 
         $questionId = $this->question_id;
 
@@ -55,33 +56,35 @@ class DragAndDropMarkersAnswer extends \QuestionType
             foreach ($dataJsonMarkers as $dataJsonValue) {
                 $markersData = json_decode($dataJsonValue, true);
                 // Loop through each item in the original array
-                foreach ($markersData as $index => $value) {
-                    if (count($markersData) == 10) { // circle or rectangle
-                        $arrDataMarkers[$markersData['marker_id']] = [
-                                                                    'marker_answer' => $markersData['marker_answer'],
-                                                                    'marker_shape' => $markersData['shape_type'],
-                                                                    'marker_coordinates' => $markersData['x'] . ',' . $markersData['y'],
-                                                                    'marker_offsets' => $markersData['endX'] . ',' . $markersData['endY'],
-                                                                    'marker_grade' => $markersData['marker_grade'],
-                                                                    'marker_radius' => $markersData['marker_radius'],
-                                                                    'marker_answer_with_image' => $markersData['marker_answer_with_image']
-                                                                ];
-                    } elseif (count($markersData) == 6) { // polygon
-                        $arrDataMarkers[$markersData['marker_id']] = [
-                                                                    'marker_answer' => $markersData['marker_answer'],
-                                                                    'marker_shape' => $markersData['shape_type'],
-                                                                    'marker_coordinates' => $markersData['points'],
-                                                                    'marker_grade' => $markersData['marker_grade'],
-                                                                    'marker_answer_with_image' => $markersData['marker_answer_with_image']
-                                                                ];
-                    } elseif (count($markersData) == 5) { // without shape . So the defined answer is not correct
-                        $arrDataMarkers[$markersData['marker_id']] = [
-                                                                    'marker_answer' => $markersData['marker_answer'],
-                                                                    'marker_shape' => null,
-                                                                    'marker_coordinates' => null,
-                                                                    'marker_grade' => 0,
-                                                                    'marker_answer_with_image' => $markersData['marker_answer_with_image']
-                                                                ];
+                if ($markersData) {
+                    foreach ($markersData as $index => $value) {
+                        if (count($markersData) == 10) { // circle or rectangle
+                            $arrDataMarkers[$markersData['marker_id']] = [
+                                                                        'marker_answer' => $markersData['marker_answer'],
+                                                                        'marker_shape' => $markersData['shape_type'],
+                                                                        'marker_coordinates' => $markersData['x'] . ',' . $markersData['y'],
+                                                                        'marker_offsets' => $markersData['endX'] . ',' . $markersData['endY'],
+                                                                        'marker_grade' => $markersData['marker_grade'],
+                                                                        'marker_radius' => $markersData['marker_radius'],
+                                                                        'marker_answer_with_image' => $markersData['marker_answer_with_image']
+                                                                    ];
+                        } elseif (count($markersData) == 6) { // polygon
+                            $arrDataMarkers[$markersData['marker_id']] = [
+                                                                        'marker_answer' => $markersData['marker_answer'],
+                                                                        'marker_shape' => $markersData['shape_type'],
+                                                                        'marker_coordinates' => $markersData['points'],
+                                                                        'marker_grade' => $markersData['marker_grade'],
+                                                                        'marker_answer_with_image' => $markersData['marker_answer_with_image']
+                                                                    ];
+                        } elseif (count($markersData) == 5) { // without shape . So the defined answer is not correct
+                            $arrDataMarkers[$markersData['marker_id']] = [
+                                                                        'marker_answer' => $markersData['marker_answer'],
+                                                                        'marker_shape' => null,
+                                                                        'marker_coordinates' => null,
+                                                                        'marker_grade' => 0,
+                                                                        'marker_answer_with_image' => $markersData['marker_answer_with_image']
+                                                                    ];
+                        }
                     }
                 }
             }
@@ -120,19 +123,22 @@ class DragAndDropMarkersAnswer extends \QuestionType
                                 <input type='hidden' id='insertedMarkersAsJson-$questionId' value='{$DataMarkersToJson}'>";
 
             $head_content .= "<script type='text/javascript'>        
-                    var lang = {
-                        confirmdelete: '" . js_escape($langConfirmDelete) . "',
-                        confirm: '" . js_escape($langAnalyticsConfirm) . "',
-                        markerdeleted: '" . js_escape($langMarkerDeleted) . "',
-                        markerdeletederror: '" . js_escape($langMarkerDeletedError) . "',
-                        imageuploaded: '" . js_escape($langImageUploaded) . "',
-                        imagenotselected: '" . js_escape($langImageNotSelected) . "',
-                        invalidanswervalue : '" . js_escape($langInvalidAnswerValue) . "',
-                        blanknotempty: '" . js_escape($langBlankNotEmpty) . "',
-                        blankotherquestion: '" . js_escape($langBlankOtherQuestion) . "',
-                        chooseShapeAndAnswerToContinue: '" .js_escape($chooseShapeAndAnswerToContinue). "',
-                        chooseDrawAShapeForTheAnswerToContinue: '" . js_escape($chooseDrawAShapeForTheAnswerToContinue) . "'
-                    };
+                                var lang = {
+                                    confirmdelete: '" . js_escape($langConfirmDelete) . "',
+                                    confirm: '" . js_escape($langAnalyticsConfirm) . "',
+                                    markerdeleted: '" . js_escape($langMarkerDeleted) . "',
+                                    markerdeletederror: '" . js_escape($langMarkerDeletedError) . "',
+                                    imageuploaded: '" . js_escape($langImageUploaded) . "',
+                                    imagenotselected: '" . js_escape($langImageNotSelected) . "',
+                                    invalidanswervalue : '" . js_escape($langInvalidAnswerValue) . "',
+                                    blanknotempty: '" . js_escape($langBlankNotEmpty) . "',
+                                    blankotherquestion: '" . js_escape($langBlankOtherQuestion) . "',
+                                    chooseShapeAndAnswerToContinue: '" .js_escape($chooseShapeAndAnswerToContinue). "',
+                                    chooseDrawAShapeForTheAnswerToContinue: '" . js_escape($chooseDrawAShapeForTheAnswerToContinue) . "',
+                                    point: '" . js_escape($langPoint) . "',
+                                    notChooseShape: '" . js_escape($langNotChooseShape) . "',
+                                    AddGradeToMarkerAnswer: '" .js_escape($langAddGradeToMarkerAnswer) . "'
+                                };
                 </script>";
             load_js('drag-and-drop-shapes');
 
@@ -152,7 +158,8 @@ class DragAndDropMarkersAnswer extends \QuestionType
         global $webDir, $course_code, $langCalcelDroppableItem, $head_content, $uid,
                $langConfirmDelete, $langAnalyticsConfirm, $langMarkerDeleted, $langMarkerDeletedError, $langImageUploaded,
                $langImageNotSelected, $langInvalidAnswerValue, $langBlankNotEmpty, $langBlankOtherQuestion, 
-               $chooseShapeAndAnswerToContinue, $chooseDrawAShapeForTheAnswerToContinue;
+               $chooseShapeAndAnswerToContinue, $chooseDrawAShapeForTheAnswerToContinue, $langAddGradeToMarkerAnswer, 
+               $langPoint, $langNotChooseShape;
 
         $questionId = $this->question_id;
         $question_text = $this->answer_object->get_drag_and_drop_text();
@@ -256,18 +263,21 @@ class DragAndDropMarkersAnswer extends \QuestionType
 
         $head_content .= "<script type='text/javascript'>        
                             var lang = {
-                                confirmdelete: '" . js_escape($langConfirmDelete) . "',
-                                confirm: '" . js_escape($langAnalyticsConfirm) . "',
-                                markerdeleted: '" . js_escape($langMarkerDeleted) . "',
-                                markerdeletederror: '" . js_escape($langMarkerDeletedError) . "',
-                                imageuploaded: '" . js_escape($langImageUploaded) . "',
-                                imagenotselected: '" . js_escape($langImageNotSelected) . "',
-                                invalidanswervalue : '" . js_escape($langInvalidAnswerValue) . "',
-                                blanknotempty: '" . js_escape($langBlankNotEmpty) . "',
-                                blankotherquestion: '" . js_escape($langBlankOtherQuestion) . "',
-                                chooseShapeAndAnswerToContinue: '" .js_escape($chooseShapeAndAnswerToContinue). "',
-                                chooseDrawAShapeForTheAnswerToContinue: '" . js_escape($chooseDrawAShapeForTheAnswerToContinue) . "'
-                            };
+                                    confirmdelete: '" . js_escape($langConfirmDelete) . "',
+                                    confirm: '" . js_escape($langAnalyticsConfirm) . "',
+                                    markerdeleted: '" . js_escape($langMarkerDeleted) . "',
+                                    markerdeletederror: '" . js_escape($langMarkerDeletedError) . "',
+                                    imageuploaded: '" . js_escape($langImageUploaded) . "',
+                                    imagenotselected: '" . js_escape($langImageNotSelected) . "',
+                                    invalidanswervalue : '" . js_escape($langInvalidAnswerValue) . "',
+                                    blanknotempty: '" . js_escape($langBlankNotEmpty) . "',
+                                    blankotherquestion: '" . js_escape($langBlankOtherQuestion) . "',
+                                    chooseShapeAndAnswerToContinue: '" .js_escape($chooseShapeAndAnswerToContinue). "',
+                                    chooseDrawAShapeForTheAnswerToContinue: '" . js_escape($chooseDrawAShapeForTheAnswerToContinue) . "',
+                                    point: '" . js_escape($langPoint) . "',
+                                    notChooseShape: '" . js_escape($langNotChooseShape) . "',
+                                    AddGradeToMarkerAnswer: '" .js_escape($langAddGradeToMarkerAnswer) . "'
+                                };
                         </script>";
         load_js('drag-and-drop-shapes');
         $head_content .= "<script>

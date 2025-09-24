@@ -2197,14 +2197,17 @@ $langMarkerDeletedError = "Σφάλμα κατά τη διαγραφή εικό�
 $langImageHasBeenDeleted = "Η εικόνα διαγράφηκε.";
 $langImageUploaded = "Η εικόνα φορτώθηκε";
 $langImageNotSelected = "Δεν έχετε επιλέξει εικόνα";
-$langInvalidAnswerValue = "Η απάντηση είναι κενή ή έχετε προσθέσει μια απάντηση που υπάρχει ήδη.";
-$chooseShapeAndAnswerToContinue = "Θα πρέπει να συμπληρώσετε την απάντηση στο πεδίο κειμένου και έπειτα να την ορίσετε μέσω ενός σχήματος πάνω στην εικόνα. Τέλος βαθμολογήστε την απάντηση.";
-$chooseDrawAShapeForTheAnswerToContinue = "Επιλέξτε ένα σχήμα και σχηματήστε την απάντηση πάνω στην εικόνα.";
+$langInvalidAnswerValue = "Η απάντηση είναι κενή ή προσθέσατε απάντηση που υπάρχει ήδη.";
+$chooseShapeAndAnswerToContinue = "Σχηματίστε πάνω στην εικόνα της ερώτησης την απάντηση που ορίσατε στο πεδίο `απάντηση` μέσω του σχήματος που επιλέξατε.";
+$chooseDrawAShapeForTheAnswerToContinue = "Σχηματίστε την απάντηση του σημείου μέσω του σχήματος που επιλέξατε.";
 $langSomethingWentWrong = "Κάτι πήγε στραβά. Δοκιμάστε πάλι.";
 $langConstantValue = "Σταθερή τιμή";
 $langRandomValue = "Τυχαία τιμή";
 $langBlankNotEmpty = "Υπάρχει ήδη μια λέξη στο κενό!";
 $langBlankOtherQuestion = "Το κενό ανήκει σε άλλη ερώτηση!";
+$langAddGradeToMarkerAnswer = "Συμπληρώστε το βαθμό της απάντησης στο πεδίο `Βαθμός`.";
+$langNotChooseShape = "Δεν έχετε επιλέξει σχήμα από το πεδίο `Σχήμα`.";
+$langNotDrawingTheAnswer = "Δεν έχετε σχηματίσει την απάντηση στην εικόνα μέσω του σχήματος";
 
 $langInfoDragAndDropMarkersCreation = '
 <ul class="text-dark">
@@ -2218,8 +2221,8 @@ $langInfoDragAndDropMarkersCreation = '
 </li>
 <li class="text-dark">Δώστε το κείμενο της προκαθορισμένης απάντησης στο πεδίο <strong class="text-dark">Απάντηση</strong> (Υποχρεωτικό).</li>
 <li class="text-dark">Αν επιθυμείτε η προκαθορισμένη απάντηση να εμφανίζεται μέσω εικόνας και όχι κειμένου τότε συμπληρώστε το πεδίο <strong class="text-dark">Απάντηση</strong> και ανεβάστε την εικόνα μέσω της επιλογής <strong class="text-dark">η προκαθορισμένη απάντηση θα εμφανίζεται μέσω της εικόνας</strong>.</li>
-<li class="text-dark">Δώστε βαθμό στην απάντηση στο πεδίο <strong class="text-dark">Βαθμός</strong> (προαιρετικό).</li>
-<li class="text-dark">Επιλέγετε <strong class="text-dark">Προσθήκη</strong> για να αποθηκεύσετε την απάντηση προσωρινά.</li>
+<li class="text-dark">Δώστε βαθμό στην απάντηση στο πεδίο <strong class="text-dark">Βαθμός</strong> (Υποχρεωτικό).</li>
+<li class="text-dark">Επιλέγετε <strong class="text-dark">Αποθήκευση</strong> για να αποθηκεύσετε την απάντηση προσωρινά.</li>
 <li class="text-dark">Επιλέγετε <strong class="text-dark">Διαγραφή</strong> για να αφαιρέσετε την απάντηση προσωρινά.</li>
 <li class="text-dark">Η διαδικασία για την δημιουργία των προκαθορισμένων απαντήσεων ολοκληρώνεται πατώντας <strong class="text-dark">Υποβολή</strong>.</li>
 </ul>';

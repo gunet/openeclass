@@ -586,7 +586,34 @@ function saveShape(vertices,qId,cCode) {
         contentType: 'application/json',
         data: JSON.stringify(vertices),
         success: function(response) {
-            console.log(response);
+            if (response.vertices[0]['marker_id'] && response.vertices[0]['marker_id'] > 0) {
+                var pointId = response.vertices[0]['marker_id'];
+                const rows = document.querySelectorAll('.table-drag-and-drop-markers-creation tbody tr');
+                if (pointId - 1 >= 0 && pointId - 1 < rows.length) {
+                    const tableRow = rows[pointId - 1]; // get the specific row
+                    const tds = tableRow.querySelectorAll('td'); // select all <td> in that row
+                    tds.forEach(td => {
+                        td.style.backgroundColor = '#CCFFCC'; // set background for each <td>
+                    });
+                } else {
+                    console.error('pointId is out of range:', pointId);
+                }
+            }
+            // Reload inserted shapes after saving the answer.
+            // Set again the new insertedMarkersAsJson value.
+            $('#insertedMarkersAsJson').val(response.data);
+            
+            // Disable drawing for initializing a new answer shape after inserting the answer.
+            disableDrawing(qId);
+
+            updateMarkerMode('');
+
+            // Load existing shapes
+            setTimeout(function() {
+                loadShapesOnImage(qId);
+            }, 500);
+
+
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.error('Error:', textStatus, errorThrown);
@@ -698,6 +725,14 @@ function enableDrawing(currentShape,questionId) {
 
 }
 
+function disableDrawing(questionId) {
+    const canvas = $('#drawingCanvas-'+questionId);
+    // Remove all event handlers attached to the canvas
+    canvas.off();
+    isDrawing = false;
+    polygonPoints = [];
+}
+
 function redrawAllShapes(ctx) {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     if (shapes.length > 0) {
@@ -731,6 +766,28 @@ function redrawAllShapes(ctx) {
     }
 }
 
+// Function to update with selected shape
+function updateMarkerMode(shape, mid) {
+  const indicator = document.getElementById('marker_mode');
+  if (shape != '' && mid > 0) {
+    indicator.innerHTML = `
+      <div class="spinner"></div>
+      <div class="status-text">Selected shape: <strong>${shape}</strong> -- <strong>Point ${mid}</strong> -- Start drawing on the image</div>
+    `;
+  } else {
+    indicator.innerHTML = `<div class="status-text">No shape selected</div>`;
+  }
+}
+
+// Function to show loading spinner
+function showLoading() {
+  const indicator = document.getElementById('marker_mode');
+  indicator.innerHTML = `
+    <div class="spinner"></div>
+    <div class="status-text">Loading...</div>
+  `;
+}
+
 // Call the appropiate function for creating and display shapes. You can remove a shape if you want.
 function shapesCreationProcess() {
 
@@ -756,9 +813,11 @@ function shapesCreationProcess() {
             currentMarker = getNumberOftheText($(this).attr('id'));
             if (currentShape) {
                 enableDrawing(currentShape,questionId);
+                updateMarkerMode(currentShape, currentMarker);
             } else {
                 polygonPoints = [];
-                $('#drawingCanvas-'+questionId).hide();
+                updateMarkerMode('', 0);
+                //$('#drawingCanvas-'+questionId).hide();
             }
         });
 
@@ -766,8 +825,10 @@ function shapesCreationProcess() {
             e.preventDefault();
             var addValuesId = $(this).attr('id');
             isDrawing = false;
-            if (confirm(lang.confirm)) {
-                var number = getNumberOftheText(addValuesId);
+
+            var number = getNumberOftheText(addValuesId);
+            if (confirm(lang.point+' '+number+' : '+lang.confirm)) {
+                //var number = getNumberOftheText(addValuesId);
                 var markerAnswer = $('#marker-answer-'+number).val();
                 var markerGrade = $('#marker-grade-'+number).val();
                 var markerCoordinates = $('#shape-coordinates-'+number).val();
@@ -778,14 +839,11 @@ function shapesCreationProcess() {
 
                     // User can define the answer only if has chosen a shape for drawing and has added the grade of answer. 
                     if (markerShape == '' || markerGrade == 0) {
-                        alert(lang.chooseShapeAndAnswerToContinue);
-                        markerAnswer = '';
-                        markerGrade = 0;
-                        markerShape = '';
-                        $('#marker-answer-'+number).val('');
-                        $('#shapeType-'+number).val('');
-                        $('#marker-grade-'+number).val(0);
-                        window.location.reload();
+                        if (markerShape == '') {
+                            alert(lang.point+' '+number+' : '+lang.notChooseShape);
+                        } else if (markerGrade == 0) {
+                            alert(lang.point+' '+number+' : '+lang.AddGradeToMarkerAnswer);
+                        }
                     } else {
                         if ((markerShape == 'circle' || markerShape == 'rectangle') && markerCoordinates) {
 
@@ -815,25 +873,9 @@ function shapesCreationProcess() {
                                             {'marker_grade': markerGrade},
                                             {'marker_answer_with_image': markerAnswerWithImage}
                                         ];
-                        } else { 
-                            // // You can add an answer that is not related to a specific shape
-                            // vertices = [
-                            //                 {'marker_id': number},
-                            //                 {'marker_answer': markerAnswer},
-                            //                 {'shape_type': null},
-                            //                 {'marker_grade': 0},
-                            //                 {'marker_answer_with_image': markerAnswerWithImage}
-                            //             ];
-
+                        } else if (markerShape != '' && !markerCoordinates) { 
                             // You have to add a shape for a specific answer in order to continue.
-                            alert(lang.chooseDrawAShapeForTheAnswerToContinue);
-                            markerAnswer = '';
-                            markerGrade = 0;
-                            markerShape = '';
-                            $('#marker-answer-'+number).val('');
-                            $('#shapeType-'+number).val('');
-                            $('#marker-grade-'+number).val(0);
-                            window.location.reload();
+                            alert(lang.point+' '+number+' : '+lang.notDrawingAnswer+' '+markerShape);
                         }
 
                         if (markerAnswerWithImage > 0) {
@@ -853,29 +895,31 @@ function shapesCreationProcess() {
                                 .then(response => response.text())
                                 .then(data => {
                                     alert(lang.imageuploaded);
-                                    saveShape(vertices,questionId,courseCode);
-                                    window.location.reload();
+                                    if (markerCoordinates) {
+                                        saveShape(vertices,questionId,courseCode);
+                                        // Reload window for displaying uploaded images
+                                        window.location.reload();
+                                    }
                                 })
                                 .catch(error => {
                                     alert('Upload failed:'+error);
-                                    window.location.reload();
                                 });
-                            } else if (imageUploaded != null && input == null) { // Has not been uploaded
-                                saveShape(vertices,questionId,courseCode);
-                                window.location.reload();
+                            } else if (imageUploaded != null && input == null) { // Image has been uploaded
+                                if (markerCoordinates) {
+                                    saveShape(vertices,questionId,courseCode);
+                                }
                             } else {
                                 alert(lang.imagenotselected);
-                                window.location.reload();
                             }
                         } else {
-                            saveShape(vertices,questionId,courseCode);
-                            window.location.reload();
+                            if (markerCoordinates) {
+                                saveShape(vertices,questionId,courseCode);
+                            }
                         }
 
                     }
                 } else {
-                    alert(lang.invalidanswervalue);
-                    window.location.reload();
+                    alert(lang.point+' '+number+' : '+lang.invalidanswervalue);
                 }
             }
         });
@@ -1095,21 +1139,35 @@ function getMarkerIdByAnswer(qid, answer) {
 }
 
 // Function to find if exists the same marker_answer value in the json file
-function containsMarkerAnswer(answer,currentMarkerId) {
+function containsMarkerAnswer(answer, currentMarkerId) {
     const rawData = $('#dataJsonVariables').val();
     if (!rawData) return false;
+    
+    // Remove leading and trailing pipe characters if any
+    const trimmedData = rawData.startsWith('|') ? rawData.slice(1) : rawData;
+    const cleanData = trimmedData.endsWith('|') ? trimmedData.slice(0, -1) : trimmedData;
+    
+    // Split into individual JSON strings
+    const jsonStrings = cleanData.split('|');
 
-    const jsonStrings = rawData.split('|');
     for (let jsonStr of jsonStrings) {
         try {
-            const obj = JSON.parse(jsonStr);
+            // Decode HTML entities to get valid JSON string
+            const decodedStr = decodeHTMLEntities(jsonStr);
+            const obj = JSON.parse(decodedStr);
             if (obj.marker_answer === answer && obj.marker_id != currentMarkerId) {
                 return true; // Found a match
             }
         } catch (e) {
             console.error('Invalid JSON object:', jsonStr, e);
-            // Optionally continue or handle error
         }
     }
     return false; // No match found
+}
+
+// Helper function to decode HTML entities
+function decodeHTMLEntities(str) {
+    const txt = document.createElement('textarea');
+    txt.innerHTML = str;
+    return txt.value;
 }

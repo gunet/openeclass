@@ -1544,6 +1544,19 @@ if (isset($_GET['modifyAnswers'])) {
                                 </div>";
         } elseif ($answerType == DRAG_AND_DROP_MARKERS) {
 
+            // Get inserted markers of answers in order to set background in the specific row of table.
+            $markersArray = [];
+            $s_options = Database::get()->querySingle("SELECT options FROM exercise_question WHERE id = ?d AND course_id = ?d", $questionId, $course_id)->options;
+            if ($s_options) {
+                $arr = explode('|', $s_options);
+                foreach ($arr as $a) {
+                    $data = json_decode($a, true);
+                    if ($data) {
+                        $markersArray[] = $data['marker_id'];
+                    }
+                }
+            }
+
             $head_content .= "<script type='text/javascript'>        
                                 var lang = {
                                     confirmdelete: '" . js_escape($langConfirmDelete) . "',
@@ -1556,7 +1569,11 @@ if (isset($_GET['modifyAnswers'])) {
                                     blanknotempty: '" . js_escape($langBlankNotEmpty) . "',
                                     blankotherquestion: '" . js_escape($langBlankOtherQuestion) . "',
                                     chooseShapeAndAnswerToContinue: '" .js_escape($chooseShapeAndAnswerToContinue). "',
-                                    chooseDrawAShapeForTheAnswerToContinue: '" . js_escape($chooseDrawAShapeForTheAnswerToContinue) . "'
+                                    chooseDrawAShapeForTheAnswerToContinue: '" . js_escape($chooseDrawAShapeForTheAnswerToContinue) . "',
+                                    point: '" . js_escape($langPoint) . "',
+                                    notDrawingAnswer: '". js_escape($langNotDrawingTheAnswer)."',
+                                    notChooseShape: '" . js_escape($langNotChooseShape) . "',
+                                    AddGradeToMarkerAnswer: '" . js_escape($langAddGradeToMarkerAnswer) . "'
                                 };
                             </script>";
             load_js('drag-and-drop-shapes');
@@ -1599,6 +1616,8 @@ if (isset($_GET['modifyAnswers'])) {
 
             $setId = isset($exerciseId)? "&amp;exerciseId=$exerciseId" : '';
             $DataJsonFileVariables = Database::get()->querySingle("SELECT options FROM exercise_question WHERE id = ?d", $questionId)->options;
+
+            $tool_content .= "<div id='marker_mode' class='status-indicator'></div>"; 
             $tool_content .= "
                 <div class='col-12 d-flex justify-content-between align-items-center gap-3'>
                     <div>
@@ -1618,7 +1637,7 @@ if (isset($_GET['modifyAnswers'])) {
                                 <input type='hidden' id='dataJsonVariables' value='{$DataJsonFileVariables}'>
                                 <input type='hidden' id='ImgSrc' value='../../$picturePath/quiz-$questionId'>
                                 <div class='table-responsive mb-4'>
-                                    <table class='table-default'>
+                                    <table class='table-default table-drag-and-drop-markers-creation'>
                                         <thead>
                                             <tr>
                                                 <th>$langMarker</th>
@@ -1642,6 +1661,8 @@ if (isset($_GET['modifyAnswers'])) {
                                             $markerAnswerWithImageValue = $arrDataMarkers[$chAns]['marker_answer_with_image'] ?? 0;
                                             $htopic = DRAG_AND_DROP_MARKERS;
 
+                                            $insertedMarker = in_array($chAns, $markersArray) ? 'class="inserted"' : '';
+
                                             $delUploadImage = '';
                                             $anUploadImg = "$webDir/courses/$course_code/image/answer-$questionId-$chAns";
                                             if (isset($_GET['fromExercise'])) {
@@ -1658,7 +1679,7 @@ if (isset($_GET['modifyAnswers'])) {
                                             }
 
                                             $tool_content .= "
-                                            <tr>
+                                            <tr $insertedMarker>
                                                 <td>[{$chAns}]</td>
                                                 <td>
                                                     <div class='col-12'>
@@ -1693,7 +1714,7 @@ if (isset($_GET['modifyAnswers'])) {
                                                 </td>
                                                 <td>
                                                     <div class='col-12 d-flex justify-content-center align-items-center gap-3 flex-wrap'>
-                                                        <button id='add-data-shape-$chAns' class='btn submitAdminBtn add-data-shape text-nowrap'>$langAdd</button>
+                                                        <button id='add-data-shape-$chAns' class='btn submitAdminBtn add-data-shape text-nowrap'>$langSave</button>
                                                         <button id='delete-data-shape-$chAns' class='btn deleteAdminBtn delete-data-shape text-nowrap'>$langDelete</button>
                                                     </div>
                                                 </td>

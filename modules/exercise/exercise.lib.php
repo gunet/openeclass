@@ -759,33 +759,35 @@ function getDataMarkersFromJson($questionId) {
         foreach ($dataJsonMarkers as $dataJsonValue) {
             $markersData = json_decode($dataJsonValue, true);
             // Loop through each item in the original array
-            foreach ($markersData as $index => $value) {
-                if (count($markersData) == 10) { // circle or rectangle
-                    $arrDataMarkers[$markersData['marker_id']] = [
-                        'marker_answer' => $markersData['marker_answer'],
-                        'marker_shape' => $markersData['shape_type'],
-                        'marker_coordinates' => $markersData['x'] . ',' . $markersData['y'],
-                        'marker_offsets' => $markersData['endX'] . ',' . $markersData['endY'],
-                        'marker_grade' => $markersData['marker_grade'],
-                        'marker_radius' => $markersData['marker_radius'],
-                        'marker_answer_with_image' => $markersData['marker_answer_with_image']
-                    ];
-                } elseif (count($markersData) == 6) { // polygon
-                    $arrDataMarkers[$markersData['marker_id']] = [
-                        'marker_answer' => $markersData['marker_answer'],
-                        'marker_shape' => $markersData['shape_type'],
-                        'marker_coordinates' => $markersData['points'],
-                        'marker_grade' => $markersData['marker_grade'],
-                        'marker_answer_with_image' => $markersData['marker_answer_with_image']
-                    ];
-                } elseif (count($markersData) == 5) { // without shape . So the defined answer is not correct
-                    $arrDataMarkers[$markersData['marker_id']] = [
-                        'marker_answer' => $markersData['marker_answer'],
-                        'marker_shape' => null,
-                        'marker_coordinates' => null,
-                        'marker_grade' => 0,
-                        'marker_answer_with_image' => $markersData['marker_answer_with_image']
-                    ];
+            if ($markersData) {
+                foreach ($markersData as $index => $value) {
+                    if (count($markersData) == 10) { // circle or rectangle
+                        $arrDataMarkers[$markersData['marker_id']] = [
+                            'marker_answer' => $markersData['marker_answer'],
+                            'marker_shape' => $markersData['shape_type'],
+                            'marker_coordinates' => $markersData['x'] . ',' . $markersData['y'],
+                            'marker_offsets' => $markersData['endX'] . ',' . $markersData['endY'],
+                            'marker_grade' => $markersData['marker_grade'],
+                            'marker_radius' => $markersData['marker_radius'],
+                            'marker_answer_with_image' => $markersData['marker_answer_with_image']
+                        ];
+                    } elseif (count($markersData) == 6) { // polygon
+                        $arrDataMarkers[$markersData['marker_id']] = [
+                            'marker_answer' => $markersData['marker_answer'],
+                            'marker_shape' => $markersData['shape_type'],
+                            'marker_coordinates' => $markersData['points'],
+                            'marker_grade' => $markersData['marker_grade'],
+                            'marker_answer_with_image' => $markersData['marker_answer_with_image']
+                        ];
+                    } elseif (count($markersData) == 5) { // without shape . So the defined answer is not correct
+                        $arrDataMarkers[$markersData['marker_id']] = [
+                            'marker_answer' => $markersData['marker_answer'],
+                            'marker_shape' => null,
+                            'marker_coordinates' => null,
+                            'marker_grade' => 0,
+                            'marker_answer_with_image' => $markersData['marker_answer_with_image']
+                        ];
+                    }
                 }
             }
         }

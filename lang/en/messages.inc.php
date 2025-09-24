@@ -1959,7 +1959,7 @@ the predefined answer on the image.
 <li class="text-dark">Enter the text of the predefined answer in the <strong class="text-dark">Answer</strong> field (Required).</li>
 <li class="text-dark">If you want the predefined answer to appear via an image and not text, then fill in the <strong class="text-dark">Answer</strong> field and upload the image using the <strong class="text-dark">predefined answer will appear via an image</strong> option.</li>
 <li class="text-dark">Give a grade to the answer in the <strong class="text-dark">Grade</strong> field (optional).</li>
-<li class="text-dark">Select <strong class="text-dark">Add</strong> to temporarily save the answer.</li>
+<li class="text-dark">Select <strong class="text-dark">Save</strong> to temporarily save the answer.</li>
 <li class="text-dark">Select <strong class="text-dark">Delete</strong> to temporarily delete the answer.</li>
 <li class="text-dark">The process for creating predefined answers is completed by clicking <strong class="text-dark">Submit</strong>.</li>
 </ul>';
@@ -2095,6 +2095,9 @@ $chooseShapeAndAnswerToContinue = "You will need to fill in the answer in the te
 $chooseDrawAShapeForTheAnswerToContinue = "You have to select a shape and draw the answer on the image.";
 $langQuestionList = "Question List";
 $langGetExistingQuestion = "Get Existing Question";
+$langAddGradeToMarkerAnswer = "Fill in the grade of the answer!";
+$langNotChooseShape = "You have not selected a shape from the `Shape` field.";
+$langNotDrawingTheAnswer = "You have not formed the answer to the image through the shape";
 $langWithCriteria = 'Select with criteria from question pool';
 $langWithoutCriteria = 'Select from question pool';
 $langSelectionRule = 'Selection Rule';

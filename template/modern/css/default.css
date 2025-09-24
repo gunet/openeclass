@@ -6126,3 +6126,44 @@ th.grade-col a{
 .light-transparent {
   background: rgba(0,0,0,0.1);
 }
+
+.table-drag-and-drop-markers-creation tbody tr.inserted td {
+  background-color: #CCFFCC !important;
+}
+
+.status-indicator {
+  display: inline-flex;
+  align-items: center;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  padding: 8px 12px;
+  border-radius: 20px;
+  background-color: #f0f4f8;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+  min-width: 200px;
+  margin-bottom: 15px;
+}
+
+/* Text styling */
+.status-text {
+  margin-left: 10px;
+  color: #333;
+  font-weight: 600;
+}
+
+/* Spinner styles */
+.spinner {
+  border: 3px solid #e0e0e0; /* Light grey */
+  border-top: 3px solid #4CAF50; /* Green accent */
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  animation: spin 1s linear infinite;
+}
+
+/* Spin animation */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
