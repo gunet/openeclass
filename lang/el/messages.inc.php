@@ -2176,11 +2176,12 @@ $langPlaceholderDragAndDropText = "Πρωτεύουσα της Ελλάδας ε
 $langAthens = "Αθήνα";
 $langBerlin = "Βερολίνο";
 $langErrorWithChoicesAsAnswers = "Υπάρχει λάθος στην αντιστοιχία των απαντήσεων";
-$langPredefinedAnswerExists = "Δεν μπορείτε να καταχωρήσετε την ίδια ή κενή απάντηση. Δοκιμάστε πάλι.";
+$langPredefinedAnswerExists = "Δεν μπορείτε να καταχωρήσετε κενή απάντηση. Δοκιμάστε πάλι.";
 $langCalcelDroppableItem = "Μπορείτε να αναιρέσετε την απάντησή σας κάνοντας αριστερό κλικ πάνω στην λέξη.";
 $langAllowMoreDefinedAnswersThanBlanks = "Οι προκαθορισμένες απαντήσεις να είναι περισσότερες απο τον αριθμό των κενών";
 $langErrorWithUniqueNumberOfBlank = "Καταχωρήσατε τον ίδιο μοναδικό αριθμό σε παραπάνω από ένα κενά.";
 $langDragAndDropMarkersTextAnswers = "Μεταφορά και απόθεση σημείων εικόνας: ";
+$lanFieldGradeNotHasNumericValue = "Το πεδίο `βαθμός` δεν περιέχει τιμή!";
 
 $langDragAndDropMarkers = "Μεταφορά και απόθεση σε προκαθορισμένα σημεία ή εικόνα";
 $langMarker = "Σημείο";

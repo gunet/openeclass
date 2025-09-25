@@ -379,9 +379,10 @@ if (isset($submitAnswers) || isset($buttonBack)) {
         }
 
         // Check for duplicates or empty values
-        $DuplicatesOn = (count($allPredefinedValues) !== count(array_unique($allPredefinedValues)));
+        //$DuplicatesOn = (count($allPredefinedValues) !== count(array_unique($allPredefinedValues)));
         $EmptyOn = in_array("", $allPredefinedValues, true);
-        if ($DuplicatesOn || $EmptyOn) {
+        //if ($DuplicatesOn || $EmptyOn) {
+        if ($EmptyOn) {
             Session::flash('message', $langPredefinedAnswerExists);
             Session::flash('alert-class', 'alert-warning');
             redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId&modifyAnswers=$_GET[modifyAnswers]&htopic=" . DRAG_AND_DROP_TEXT . "&invalid_posted_values=true");
@@ -393,7 +394,18 @@ if (isset($submitAnswers) || isset($buttonBack)) {
         if ($totalNumberOfBlanks > $totalNumberOfDefinedAnswers) {
             Session::flash('message', $langErrorWithChoicesAsAnswers);
             Session::flash('alert-class', 'alert-warning');
-            redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId&modifyAnswers=$_GET[modifyAnswers]");
+            redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId&modifyAnswers=$_GET[modifyAnswers]&htopic=" . DRAG_AND_DROP_TEXT . "&invalid_posted_values=true");
+        }
+
+        // Check for empty grades.
+        if (isset($_POST['choice_grade']) && count($_POST['choice_grade']) > 0) {
+            foreach ($_POST['choice_grade'] as $grade) {
+                if ($grade == '') {
+                    Session::flash('message', $lanFieldGradeNotHasNumericValue);
+                    Session::flash('alert-class', 'alert-warning');
+                    redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId&modifyAnswers=$_GET[modifyAnswers]&htopic=" . DRAG_AND_DROP_TEXT . "&invalid_posted_values=true");
+                }
+            }
         }
 
         sort($totalAnsFromText);
@@ -421,14 +433,13 @@ if (isset($submitAnswers) || isset($buttonBack)) {
             } else {
                 $objQuestion->save();
             }
-
-            unset($_SESSION['drag_and_drop_question_'.$questionId]);
-            unset($_SESSION['count_choice_answer_'.$questionId]);
-            unset($_SESSION['choice_answer_'.$questionId]);
-            unset($_SESSION['choice_answer_'.$questionId]);
-            unset($_SESSION['choice_grade_'.$questionId]);
-            
         }
+
+        unset($_SESSION['drag_and_drop_question_'.$questionId]);
+        unset($_SESSION['count_choice_answer_'.$questionId]);
+        unset($_SESSION['choice_answer_'.$questionId]);
+        unset($_SESSION['choice_answer_'.$questionId]);
+        unset($_SESSION['choice_grade_'.$questionId]);
 
     } elseif ($answerType == DRAG_AND_DROP_MARKERS) {
 
@@ -995,7 +1006,7 @@ if (isset($_GET['modifyAnswers'])) {
         if (empty($drag_and_drop_question)) {
             $drag_and_drop_question = $objAnswer->get_drag_and_drop_text();
         }
-        if (isset($_SESSION['drag_and_drop_question_'.$questionId])) {
+        if (isset($_GET['invalid_posted_values']) && isset($_SESSION['drag_and_drop_question_'.$questionId])) {
             $drag_and_drop_question = $_SESSION['drag_and_drop_question_'.$questionId];
         }
 
@@ -1003,7 +1014,7 @@ if (isset($_GET['modifyAnswers'])) {
             $nbrAnswers = $_POST['nbrAnswers'] + 1;
         } else {
             $nbrAnswers = $objAnswer->get_total_drag_and_drop_answers();
-            if (isset($_SESSION['count_choice_answer_'.$questionId])) {
+            if (isset($_GET['invalid_posted_values']) && isset($_SESSION['count_choice_answer_'.$questionId])) {
                 $nbrAnswers = $_SESSION['count_choice_answer_'.$questionId];
             }
         }
@@ -1553,12 +1564,22 @@ if (isset($_GET['modifyAnswers'])) {
                                         for ($i=0; $i<$nbrAnswers; $i++) {
                                             $chAns = $i+1;
 
+                                            $choiceAsAnswer = '';
+                                            $choiceAsGrade = 0;
                                             if (isset($_GET['invalid_posted_values'])) {
                                                 $choiceAsAnswer = isset($_SESSION['choice_answer_'.$questionId][$chAns]) ? $_SESSION['choice_answer_'.$questionId][$chAns] : '';
                                                 $choiceAsGrade = isset($_SESSION['choice_grade_'.$questionId][$chAns]) ? $_SESSION['choice_grade_'.$questionId][$chAns] : '';
                                             } else {
-                                                $choiceAsAnswer = ((count($choices_from_db) > 0) && array_key_exists($i, $choices_from_db)) ? $choices_from_db[$i] : $_POST['choice_answer'][$i];
-                                                $choiceAsGrade = ((count($grades_from_db) > 0) && array_key_exists($i, $grades_from_db)) ? $grades_from_db[$i] : $_POST['choice_grade'][$i];
+                                                if (count($choices_from_db) > 0 && array_key_exists($i, $choices_from_db)) {
+                                                    $choiceAsAnswer = $choices_from_db[$i];
+                                                } elseif (isset($_POST['choice_answer'][$i])) {
+                                                    $choiceAsAnswer = $_POST['choice_answer'][$i];
+                                                }
+                                                if (count($grades_from_db) > 0 && array_key_exists($i, $grades_from_db)) {
+                                                    $choiceAsGrade = $grades_from_db[$i];
+                                                } elseif (isset($_POST['choice_grade'][$i])) {
+                                                    $choiceAsGrade = $_POST['choice_grade'][$i];
+                                                }
                                             }
 
                                             $tool_content .= "

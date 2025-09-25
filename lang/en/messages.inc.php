@@ -1942,7 +1942,7 @@ $langPlaceholderDragAndDropText = "The capital of Greece is [1] while the capita
 $langAthens = "Αθήνα";
 $langBerlin = "Βερολίνο";
 $langErrorWithChoicesAsAnswers = "There is an error in the correspondence of the answers.";
-$langPredefinedAnswerExists = "You cannot enter the same or empty answer. Please try again.";
+$langPredefinedAnswerExists = "You cannot enter an empty answer. Please try again.";
 $langPoint = "Point";
 $langThisAnswerIsNotCorrect = "Does not correspond to a correct answer";
 $langBracket = "Bracket";
@@ -1963,6 +1963,7 @@ the predefined answer on the image.
 <li class="text-dark">Select <strong class="text-dark">Delete</strong> to temporarily delete the answer.</li>
 <li class="text-dark">The process for creating predefined answers is completed by clicking <strong class="text-dark">Submit</strong>.</li>
 </ul>';
+$lanFieldGradeNotHasNumericValue = "The field `grade` does not contain a value!";
 $langItemToAdd = "Item to add:";
 $langRequiresImageUploadedForThisType = "For dragging and dropping to predefined points, an image must be uploaded.";
 $langYourOwnAnswerIs = "The answer you gave is:";
