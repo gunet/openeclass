@@ -6127,13 +6127,13 @@ th.grade-col a{
   background: rgba(0,0,0,0.1);
 }
 
-.table-drag-and-drop-markers-creation tbody tr.inserted td {
-  background-color: #CCFFCC !important;
-}
+/* .table-drag-and-drop-markers-creation tbody tr.inserted td {
+  background-color: #d1e7dd !important;
+} */
 
 .status-indicator {
   display: inline-flex;
-  align-items: center;
+  align-items: start;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-size: 14px;
   padding: 8px 12px;
@@ -6157,8 +6157,8 @@ th.grade-col a{
   border: 3px solid #e0e0e0; /* Light grey */
   border-top: 3px solid #4CAF50; /* Green accent */
   border-radius: 50%;
-  width: 16px;
-  height: 16px;
+  width: 45px;
+  height: 30px;
   animation: spin 1s linear infinite;
 }
 

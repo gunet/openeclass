@@ -1631,7 +1631,13 @@ if (isset($_GET['modifyAnswers'])) {
                                     point: '" . js_escape($langPoint) . "',
                                     notDrawingAnswer: '". js_escape($langNotDrawingTheAnswer)."',
                                     notChooseShape: '" . js_escape($langNotChooseShape) . "',
-                                    AddGradeToMarkerAnswer: '" . js_escape($langAddGradeToMarkerAnswer) . "'
+                                    AddGradeToMarkerAnswer: '" . js_escape($langAddGradeToMarkerAnswer) . "',
+                                    selectedPoint: '" . js_escape($langSelectedPoint) . "',
+                                    circle: '" . js_escape($langCircle) . "',
+                                    rectangle: '" . js_escape($langRectangle) . "',
+                                    polygon: '" . js_escape($langPolygon) . "',
+                                    startDrawing: '" . js_escape($langStartDrawing) . "',
+                                    startDrawingHelp: '" . js_escape($langStartDrawingHelp) . "'
                                 };
                             </script>";
             load_js('drag-and-drop-shapes');
@@ -1720,6 +1726,7 @@ if (isset($_GET['modifyAnswers'])) {
                                             $htopic = DRAG_AND_DROP_MARKERS;
 
                                             $insertedMarker = in_array($chAns, $markersArray) ? 'class="inserted"' : '';
+                                            $hasInsertedAns = in_array($chAns, $markersArray) ? 'd-block' : 'd-none';
 
                                             $delUploadImage = '';
                                             $anUploadImg = "$webDir/courses/$course_code/image/answer-$questionId-$chAns";
@@ -1729,8 +1736,8 @@ if (isset($_GET['modifyAnswers'])) {
                                             if (file_exists($anUploadImg)) {
                                                 $pathDel = $urlAppend . "modules/exercise/upload_image_as_answer.php?delete_image=true&course=$course_code&exerciseId=$exerciseId&modifyAnswers=$_GET[modifyAnswers]&htopic=$htopic&questionId=$questionId&markerId=$chAns";
                                                 $delUploadImage .= ' <div class="col-sm-12 d-inline-flex justify-content-start align-items-center">
-                                                                        <img id="imageUploaded-'.$chAns.'" src="../../courses/'.$course_code.'/image/answer-'.$questionId.'-'.$chAns.'" style="height:80px; width:80px;" alt="answer-'.$questionId.'-'.$chAns.'"> 
-                                                                        <a class="link-color Accent-200-cl" href="'.$pathDel.'"><i class="fa-solid fa-xmark fa-lg"></i></a>
+                                                                        <img id="imageUploaded-'.$chAns.'" src="../../courses/'.$course_code.'/image/answer-'.$questionId.'-'.$chAns.'" style="height:60px; width:60px;" alt="answer-'.$questionId.'-'.$chAns.'"> 
+                                                                        <a class="link-color Accent-200-cl ms-1" href="'.$pathDel.'"><i class="fa-solid fa-xmark fa-lg"></i></a>
                                                                     </div>';
                                             } else {
                                                 $delUploadImage .= '<input type="file" id="hasUploadedImg_'.$chAns.'" name="image_as_answer">';
@@ -1738,7 +1745,15 @@ if (isset($_GET['modifyAnswers'])) {
 
                                             $tool_content .= "
                                             <tr $insertedMarker>
-                                                <td>[{$chAns}]</td>
+                                                <td>
+                                                    <div class='d-flex justify-content-start align-items-start gap-2'>
+                                                        <div style='width:40px;'>[{$chAns}]</div>
+                                                        <div class='alert alert-success $hasInsertedAns p-2 m-0 d-flex justify-content-start align-items-start gap-2' id='marker-alert-displayed-$chAns'>
+                                                            <i class='fa-solid fa-circle-check fa-lg'></i>
+                                                            <span>$langAnswerHasBeenAdded</span>
+                                                        </div>
+                                                    </div>
+                                                </td>
                                                 <td>
                                                     <div class='col-12'>
                                                         <input type='text' id='marker-answer-$chAns' class='form-control marker-answer' name='marker_answer[$chAns]' value='{$markerAnswer}'>
@@ -1771,9 +1786,13 @@ if (isset($_GET['modifyAnswers'])) {
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <div class='col-12 d-flex justify-content-center align-items-center gap-3 flex-wrap'>
-                                                        <button id='add-data-shape-$chAns' class='btn submitAdminBtn add-data-shape text-nowrap'>$langSave</button>
-                                                        <button id='delete-data-shape-$chAns' class='btn deleteAdminBtn delete-data-shape text-nowrap'>$langDelete</button>
+                                                    <div class='col-12 d-flex justify-content-center align-items-center gap-2'>
+                                                        <button id='add-data-shape-$chAns' class='btn submitAdminBtn add-data-shape text-nowrap' data-bs-toggle='tooltip' data-bs-placement='top' title='$langSaveAnswer'>
+                                                            <i class='fa-solid fa-save'></i>
+                                                        </button>
+                                                        <button id='delete-data-shape-$chAns' class='btn deleteAdminBtn delete-data-shape text-nowrap' data-bs-toggle='tooltip' data-bs-placement='top' title='$langDeleteAnswer'>
+                                                            <i class='fa-solid fa-trash'></i>
+                                                        </button>
                                                     </div>
                                                 </td>
                                             </tr>";

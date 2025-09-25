@@ -588,16 +588,17 @@ function saveShape(vertices,qId,cCode) {
         success: function(response) {
             if (response.vertices[0]['marker_id'] && response.vertices[0]['marker_id'] > 0) {
                 var pointId = response.vertices[0]['marker_id'];
-                const rows = document.querySelectorAll('.table-drag-and-drop-markers-creation tbody tr');
-                if (pointId - 1 >= 0 && pointId - 1 < rows.length) {
-                    const tableRow = rows[pointId - 1]; // get the specific row
-                    const tds = tableRow.querySelectorAll('td'); // select all <td> in that row
-                    tds.forEach(td => {
-                        td.style.backgroundColor = '#CCFFCC'; // set background for each <td>
-                    });
-                } else {
-                    console.error('pointId is out of range:', pointId);
-                }
+                // const rows = document.querySelectorAll('.table-drag-and-drop-markers-creation tbody tr');
+                // if (pointId - 1 >= 0 && pointId - 1 < rows.length) {
+                //     const tableRow = rows[pointId - 1]; // get the specific row
+                //     const tds = tableRow.querySelectorAll('td'); // select all <td> in that row
+                //     tds.forEach(td => {
+                //         td.style.backgroundColor = '#d1e7dd'; // set background for each <td>
+                //     });
+                // } else {
+                //     console.error('pointId is out of range:', pointId);
+                // }
+                $('#marker-alert-displayed-'+pointId).removeClass('d-none').addClass('d-block');
             }
             // Reload inserted shapes after saving the answer.
             // Set again the new insertedMarkersAsJson value.
@@ -770,9 +771,21 @@ function redrawAllShapes(ctx) {
 function updateMarkerMode(shape, mid) {
   const indicator = document.getElementById('marker_mode');
   if (shape != '' && mid > 0) {
+    t_shape = '';
+    if (shape == 'circle') {
+        var t_shape = lang.circle;
+    } else if (shape == 'rectangle') {
+        var t_shape = lang.rectangle;
+    } else if (shape == 'polygon') {
+        var t_shape = lang.polygon;
+    }
     indicator.innerHTML = `
       <div class="spinner"></div>
-      <div class="status-text">Selected shape: <strong>${shape}</strong> -- <strong>Point ${mid}</strong> -- Start drawing on the image</div>
+      <div class="status-text">
+        ${lang.selectedPoint}: <strong>${t_shape}</strong> -- <strong>${lang.point} ${mid}</strong></br>
+        <p>${lang.startDrawing}</p>
+        <p>${lang.startDrawingHelp}</p>
+    </div>
     `;
   } else {
     indicator.innerHTML = `<div class="status-text">No shape selected</div>`;
@@ -835,7 +848,8 @@ function shapesCreationProcess() {
                 var markerShape = $('#shapeType-'+number).val();
                 var markerAnswerWithImage = $('#marker-answer-with-image-'+number).val();
 
-                if (markerAnswer && !containsMarkerAnswer(markerAnswer,number)) {
+                // if (markerAnswer && !containsMarkerAnswer(markerAnswer,number)) {
+                if (markerAnswer) {
 
                     // User can define the answer only if has chosen a shape for drawing and has added the grade of answer. 
                     if (markerShape == '' || markerGrade == 0) {
@@ -878,45 +892,39 @@ function shapesCreationProcess() {
                             alert(lang.point+' '+number+' : '+lang.notDrawingAnswer+' '+markerShape);
                         }
 
-                        if (markerAnswerWithImage > 0) {
-                            var input = document.getElementById('hasUploadedImg_'+number);
-                            var imageUploaded = document.getElementById('imageUploaded-'+number);
-                            if (imageUploaded == null && input != null && input.files && input.files[0]) { // To be uploaded
-                                var formData = new FormData();
-                                formData.append('image_as_answer', input.files[0]);
-                                formData.append('questionId-image', questionId);
-                                formData.append('markerId-image', number);
-                                formData.append('courseCode-image', courseCode);
-
-                                fetch('/modules/exercise/upload_image_as_answer.php', {
-                                    method: 'POST',
-                                    body: formData
-                                })
-                                .then(response => response.text())
-                                .then(data => {
-                                    alert(lang.imageuploaded);
-                                    if (markerCoordinates) {
+                        if (markerCoordinates) {
+                            if (markerAnswerWithImage > 0) {
+                                var input = document.getElementById('hasUploadedImg_'+number);
+                                var imageUploaded = document.getElementById('imageUploaded-'+number);
+                                if (imageUploaded == null && input != null && input.files && input.files[0]) { // To be uploaded
+                                    var formData = new FormData();
+                                    formData.append('image_as_answer', input.files[0]);
+                                    formData.append('questionId-image', questionId);
+                                    formData.append('markerId-image', number);
+                                    formData.append('courseCode-image', courseCode);
+                                    fetch('/modules/exercise/upload_image_as_answer.php', {
+                                        method: 'POST',
+                                        body: formData
+                                    })
+                                    .then(response => response.text())
+                                    .then(data => {
+                                        alert(lang.imageuploaded);
                                         saveShape(vertices,questionId,courseCode);
                                         // Reload window for displaying uploaded images
                                         window.location.reload();
-                                    }
-                                })
-                                .catch(error => {
-                                    alert('Upload failed:'+error);
-                                });
-                            } else if (imageUploaded != null && input == null) { // Image has been uploaded
-                                if (markerCoordinates) {
+                                    })
+                                    .catch(error => {
+                                        alert('Upload failed:'+error);
+                                    });
+                                } else if (imageUploaded != null && input == null) { // Image has been uploaded
                                     saveShape(vertices,questionId,courseCode);
+                                } else {
+                                    alert(lang.imagenotselected);
                                 }
                             } else {
-                                alert(lang.imagenotselected);
-                            }
-                        } else {
-                            if (markerCoordinates) {
                                 saveShape(vertices,questionId,courseCode);
                             }
                         }
-
                     }
                 } else {
                     alert(lang.point+' '+number+' : '+lang.invalidanswervalue);
@@ -1024,7 +1032,7 @@ function save_user_answers(questionId) {
                             }, 500);
 
                             // Remove the div from predifined answers in the pool
-                            const wordInPool = $('#words_' + questionId + ' .draggable[data-word="' + item.dataWord + '"]');
+                            const wordInPool = $('#words_' + questionId + ' .draggable[data-word="' + item.dataWord + '"]').first();
                             wordInPool.remove();
 
                         }
