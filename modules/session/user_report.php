@@ -575,8 +575,8 @@ function pdf_session_output($sid) {
             .text-danger { color: #D22B2B; }
           </style>
         </head>
-        <body>" . get_platform_logo() .
-        "<h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
+        <body><div style='height: 160px;'></div>
+        <h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
         <h2> " . q($sessionTitle) . "</h2>";
 
     // Array containing icons
@@ -587,8 +587,6 @@ function pdf_session_output($sid) {
     $output = str_replace($searchVal, $replaceVal, $tool_content);
 
     $pdf_content .= $output;
-
-    $pdf_content .= get_platform_logo('','footer');
     $pdf_content .= "</body></html>";
 
     $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
@@ -613,7 +611,19 @@ function pdf_session_output($sid) {
             ]
     ]);
 
-    $mpdf->setFooter('{DATE j-n-Y} || {PAGENO} / {nb}');
+    
+    $mpdf->SetHTMLHeader(get_platform_logo());
+    $footerHtml = '
+    <div>
+        <table width="100%" style="border: none;">
+            <tr>
+                <td style="text-align: left;">{DATE j-n-Y}</td>
+                <td style="text-align: right;">{PAGENO} / {nb}</td>
+            </tr>
+        </table>
+    </div>
+    ' . get_platform_logo('','footer') . '';
+    $mpdf->SetHTMLFooter($footerHtml);
     $mpdf->SetCreator(course_id_to_prof($course_id));
     $mpdf->SetAuthor(course_id_to_prof($course_id));
     $mpdf->WriteHTML($pdf_content);
@@ -649,14 +659,12 @@ function pdf_user_material_output($sid,$content_m,$user_n) {
             h3 { font-size: 10pt; color: #158; border-bottom: 1px solid #158; }
           </style>
         </head>
-        <body>" . get_platform_logo() .
-        "<h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
+        <body><div style='height: 160px;'></div>
+        <h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
         <h2> " . q($sessionTitle) . "</h2>
         <h3>$langMaterialForUser:&nbsp;&nbsp;" . q($nameUser) . "<h3>";
 
     $pdf_mcontent .= $content_m;
-
-    $pdf_mcontent .= get_platform_logo('','footer');
     $pdf_mcontent .= "</body></html>";
 
     $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
@@ -681,7 +689,19 @@ function pdf_user_material_output($sid,$content_m,$user_n) {
             ]
     ]);
 
-    $mpdf->setFooter('{DATE j-n-Y} || {PAGENO} / {nb}');
+    
+    $mpdf->SetHTMLHeader(get_platform_logo());
+    $footerHtml = '
+    <div>
+        <table width="100%" style="border: none;">
+            <tr>
+                <td style="text-align: left;">{DATE j-n-Y}</td>
+                <td style="text-align: right;">{PAGENO} / {nb}</td>
+            </tr>
+        </table>
+    </div>
+    ' . get_platform_logo('','footer') . '';
+    $mpdf->SetHTMLFooter($footerHtml);
     $mpdf->SetCreator(course_id_to_prof($course_id));
     $mpdf->SetAuthor(course_id_to_prof($course_id));
     $mpdf->WriteHTML($pdf_mcontent);
