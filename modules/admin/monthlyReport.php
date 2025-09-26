@@ -103,7 +103,7 @@ function export_monthly_data($report_data, $format): void
             td { text-align: left; }
           </style>
         </head>
-        <body><div style='height: 160px;'></div>
+        <body>
         <h2> " . get_config('site_name') . "</h2>";
 
         $pdf_content .= $report_data;
@@ -115,6 +115,8 @@ function export_monthly_data($report_data, $format): void
         $fontData = $defaultFontConfig['fontdata'];
 
         $mpdf = new Mpdf\Mpdf([
+            'margin_top' => 53,     // approx 200px
+            'margin_bottom' => 53,  // approx 200px
             'tempDir' => _MPDF_TEMP_PATH,
             'fontDir' => array_merge($fontDirs, [ $webDir . '/template/modern/fonts' ]),
             'fontdata' => $fontData + [

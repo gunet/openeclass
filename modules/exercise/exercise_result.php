@@ -687,7 +687,7 @@ if (isset($_GET['pdf'])) {
             }
           </style>
         </head>
-        <body><div style='height: 160px;'></div>
+        <body>
         <h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
         <h2> " . q($langExercicesResult) . "</h2>";
 
@@ -700,6 +700,8 @@ if (isset($_GET['pdf'])) {
     $fontData = $defaultFontConfig['fontdata'];
 
     $mpdf = new Mpdf\Mpdf([
+        'margin_top' => 53,     // approx 200px
+        'margin_bottom' => 53,  // approx 200px
         'tempDir' => _MPDF_TEMP_PATH,
         'fontDir' => array_merge($fontDirs, [ $webDir . '/template/modern/fonts' ]),
         'fontdata' => $fontData + [

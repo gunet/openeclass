@@ -782,7 +782,7 @@ function pdf_forum_output($content_m,$topic_id,$forum_id) {
             .card-default {border: solid 1px #000000; padding: 10px; margin-top: 15px; }
           </style>
         </head>
-        <body><div style='height: 160px;'></div>
+        <body>
         <h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
         <h2> " . q($topicName) . "</h2>";
 
@@ -795,6 +795,8 @@ function pdf_forum_output($content_m,$topic_id,$forum_id) {
     $fontData = $defaultFontConfig['fontdata'];
 
     $mpdf = new Mpdf\Mpdf([
+        'margin_top' => 53,     // approx 200px
+        'margin_bottom' => 53,  // approx 200px
         'tempDir' => _MPDF_TEMP_PATH,
         'fontDir' => array_merge($fontDirs, [ $webDir . '/template/modern/fonts' ]),
         'fontdata' => $fontData + [

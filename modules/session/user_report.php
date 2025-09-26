@@ -575,7 +575,7 @@ function pdf_session_output($sid) {
             .text-danger { color: #D22B2B; }
           </style>
         </head>
-        <body><div style='height: 160px;'></div>
+        <body>
         <h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
         <h2> " . q($sessionTitle) . "</h2>";
 
@@ -595,6 +595,8 @@ function pdf_session_output($sid) {
     $fontData = $defaultFontConfig['fontdata'];
 
     $mpdf = new Mpdf\Mpdf([
+        'margin_top' => 53,     // approx 200px
+        'margin_bottom' => 53,  // approx 200px
         'tempDir' => _MPDF_TEMP_PATH,
         'fontDir' => array_merge($fontDirs, [ $webDir . '/template/modern/fonts' ]),
         'fontdata' => $fontData + [
@@ -659,7 +661,7 @@ function pdf_user_material_output($sid,$content_m,$user_n) {
             h3 { font-size: 10pt; color: #158; border-bottom: 1px solid #158; }
           </style>
         </head>
-        <body><div style='height: 160px;'></div>
+        <body>
         <h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
         <h2> " . q($sessionTitle) . "</h2>
         <h3>$langMaterialForUser:&nbsp;&nbsp;" . q($nameUser) . "<h3>";
@@ -673,6 +675,8 @@ function pdf_user_material_output($sid,$content_m,$user_n) {
     $fontData = $defaultFontConfig['fontdata'];
 
     $mpdf = new Mpdf\Mpdf([
+        'margin_top' => 53,     // approx 200px
+        'margin_bottom' => 53,  // approx 200px
         'tempDir' => _MPDF_TEMP_PATH,
         'fontDir' => array_merge($fontDirs, [ $webDir . '/template/modern/fonts' ]),
         'fontdata' => $fontData + [
