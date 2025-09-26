@@ -791,7 +791,7 @@ function create_join_button($launch_url, $oauth_consumer_key, $secret, $resource
 }
 
 function createLtiInitiateLoginForm(stdClass $lti, string $resourceType, stdClass $resource): string {
-    global $course_id;
+    global $course_id, $langTurnitinIntegration, $langLogIn;
 
     $action = (isset($_REQUEST['action'])) ? $_REQUEST['action'] : '';
     $messagetype = 'basic-lti-launch-request';
@@ -805,15 +805,19 @@ function createLtiInitiateLoginForm(stdClass $lti, string $resourceType, stdClas
     }
 
     $params = ltiBuildLoginRequest($course, $lti, $messagetype, $resourceType, $resource);
+    $formtarget = ($resource->launchcontainer == LTI_LAUNCHCONTAINER_NEWWINDOW) ? ' target="_blank" ' : '';
 
     $r = '<form action="' . $lti->lti_provider_initiate_login_url .
         '" name="ltiInitiateLoginForm" id="ltiInitiateLoginForm" method="post" ' .
-        'encType="application/x-www-form-urlencoded">';
+        'encType="application/x-www-form-urlencoded"' . $formtarget . '>';
 
     foreach ($params as $key => $value) {
         $key = htmlspecialchars($key, ENT_COMPAT);
         $value = htmlspecialchars($value, ENT_COMPAT);
         $r .= '  <input type="hidden" name="' . $key .'" value="' . $value . '"/>';
+    }
+    if ($resource->launchcontainer == LTI_LAUNCHCONTAINER_NEWWINDOW || $resource->launchcontainer == LTI_LAUNCHCONTAINER_EXISTINGWINDOW) {
+        $r .= "<br/><br/>" . $langTurnitinIntegration . ":&nbsp;&nbsp;" . '<button class="btn submitAdminBtn" type="submit">' . $langLogIn . '</button><br/><br/>';
     }
     $r .= "</form>";
 
