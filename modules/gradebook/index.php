@@ -148,7 +148,7 @@ $(function() {
             var select_content_2 = '';
             if (type==2) {
                 for (index = 0; index < parsed_data.length; ++index) {
-                    select_content += '<option value=\"' + parsed_data[index]['id'] + '\">' + parsed_data[index]['name'] + '<\/option>';
+                    select_content += '<option value=\"' + parsed_data[index]['id'] + '\">' + parsed_data[index]['name'] + '<\/option>';                    
                 }
             }
             if (type==1) {
@@ -156,7 +156,7 @@ $(function() {
                     select_content += '<option value=\"' + parsed_data[0][index]['id'] + '\">' + parsed_data[0][index]['surname'] + ' ' + parsed_data[0][index]['givenname'] + '<\/option>';
                 }
                 for (index = 0; index < parsed_data[1].length; ++index) {
-                    select_content_2 += '<option value=\"' + parsed_data[1][index]['id'] + '\">' + parsed_data[1][index]['surname'] + ' ' + parsed_data[1][index]['givenname'] + '<\/option>';
+                    select_content_2 += '<option value=\"' + parsed_data[1][index]['id'] + '\">' + parsed_data[1][index]['surname'] + ' ' + parsed_data[1][index]['givenname'] + '<\/option>';                    
                 }
             }
             $('#users_box').find('option').remove().end().append(select_content);
@@ -245,7 +245,7 @@ if ($is_editor) {
                 $already_inserted_users = Database::get()->queryArray("SELECT uid FROM gradebook_users WHERE gradebook_id = ?d", $gradebook_id);
                 $already_inserted_ids = [];
                 foreach ($already_inserted_users as $already_inserted_user) {
-                    array_push($already_inserted_ids, $already_inserted_user->uid);
+                    $already_inserted_ids[] = $already_inserted_user->uid;
                 }
                 foreach ($ug as $u) {
                     if (!in_array($u->user_id, $already_inserted_ids)) {
@@ -325,7 +325,7 @@ if ($is_editor) {
                     . "AND DATE(course_user.reg_date) BETWEEN ?s AND ?s", $gradebook_id, $usersstart->format("Y-m-d"), $usersend->format("Y-m-d"));
             $already_inserted_ids = [];
             foreach ($already_inserted_users as $already_inserted_user) {
-                array_push($already_inserted_ids, $already_inserted_user->uid);
+                $already_inserted_ids[] = $already_inserted_user->uid;
             }
             $valid_users_for_insertion = Database::get()->queryArray("SELECT user_id
                         FROM course_user
@@ -606,7 +606,7 @@ if ($is_editor) {
         new_gradebook(); // create new grade book
         $display = FALSE;
     } elseif (isset($_GET['editUsers'])) { // edit grade book users
-        user_gradebook_settings($gradebook_id);
+        user_gradebook_settings();
         $display = FALSE;
     } elseif (isset($_GET['editSettings'])) { // grade book settings
         gradebook_settings($gradebook_id);

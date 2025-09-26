@@ -198,7 +198,7 @@ foreach ($result as $row) {
             if (uid_to_am($sid) != '') {
                 $studentam = "<p class='form-label mt-4 mb-1'>$langAmShort</p>" . uid_to_am($sid);
             }
-            $tool_content .= "<p class='form-label mb-1'>$langUser</p> " . q(uid_to_name($sid,'surname')). " " . uid_to_name($sid, 'givenname') . "
+            $tool_content .= "<p class='form-label mb-1'>$langUser</p> " . q(uid_to_name($sid,'surname')). " " . q(uid_to_name($sid, 'givenname')) . "
                             <div>$studentam<span>$user_group</span></div>";
         }
         $tool_content .= "</td>

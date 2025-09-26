@@ -17,6 +17,23 @@
  *  * ========================================================================
  *
  */
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
+ *
+ */
 
 /**
  * @file tcuserduration.php
@@ -93,6 +110,7 @@ if (isset($_GET['per_user']) or isset($_GET['u'])) { // all-users participation 
     if (!$is_course_reviewer and isset($_GET['per_user'])) { // security check
         redirect_to_home_page();
     }
+
     if (isset($_GET['u']) and $_GET['u']) { // participation for a specific user
         if (!$is_course_reviewer and $_GET['u'] != $_SESSION['uid']) { // security check
             redirect_to_home_page();
@@ -200,7 +218,7 @@ if (isset($_GET['per_user']) or isset($_GET['u'])) { // all-users participation 
             }
 
             $tool_content .= "<tr>                            
-                        <td>$user->surname $user->givenname</td>
+                        <td>"  . q($user->surname) . " " .q($user->givenname) . "</td>
                         <td>$user->am</td>
                         <td>" . $grp_name . "</td>                            
                         <td>" . format_time_duration(0 + 60 * $result->totaltime, 24, false) . "</td>

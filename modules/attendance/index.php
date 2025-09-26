@@ -207,7 +207,7 @@ if (isset($_GET['qrCode_presence'])) {
         Session::flash('alert-class', 'alert-warning');
     }
     // If the attendance tool is inactive, redirect the user to the portfolio.
-    if (isset($toolContent_ErrorExists)) { 
+    if (isset($toolContent_ErrorExists)) {
         redirect_to_home_page("main/portfolio.php");
     } else {
         redirect_to_home_page("modules/attendance/index.php?course=$course_code&attendance_id=$attendance_id");
@@ -253,17 +253,17 @@ if ($is_editor) {
 
         // Initialize URL and parameters
         $string = $urlServer . "/modules/attendance/index.php?course=" . $course_code . "&attendance_id=" . $attendance_id . "&actId=" . $actId . "&qrCode_presence=true";
-    
+
         // Create QR Code
         $renderer = new ImageRenderer(new RendererStyle(256), new SvgImageBackEnd());
         $writer = new Writer($renderer);
-        
+
         // Generate the QR image
         $qr_image = $writer->writeString($string);
-        
+
         // Base64 encode the SVG string
         $qr_image_base64 = base64_encode($qr_image);
-        
+
         // Prepare the data URL for the SVG
         $qr_image_data_url = "data:image/svg+xml;base64," . $qr_image_base64;
 
@@ -276,9 +276,9 @@ if ($is_editor) {
             unlink($qrCode_dir . '/' . $fileNameAct);
         }
         file_put_contents($qrCode_dir . '/' . $fileNameAct, $qr_image);
-        
+
         $downloadURL = $_SERVER['SCRIPT_NAME'] . "?course=$course_code&download_qrcode=$actId";
-    
+
         // Prepare JavaScript content for modal
         $head_content .= "
             <script type='text/javascript'>

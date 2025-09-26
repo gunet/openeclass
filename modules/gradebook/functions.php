@@ -453,7 +453,7 @@ function user_gradebook_settings() {
            $langAttendanceUpdate, $langGradebookInfoForUsers,
            $langRegistrationDate, $langFrom2, $langTill, $langRefreshList,
            $langUserDuration, $langGradebookAllBetweenRegDates, $langSpecificUsers, $head_content,
-           $langStudents, $langMove, $langParticipate, $gradebook, $urlAppend, $langImgFormsDes, $langForm;
+           $langStudents, $langMove, $langParticipate, $gradebook, $langImgFormsDes, $langForm;
 
     load_js('bootstrap-datetimepicker');
     $head_content .= "
