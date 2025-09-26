@@ -1104,7 +1104,7 @@ function display_submission_details($id) {
     $notice = $langSubmitted;
     $grade = $grade_comments = '';
     if (!empty($sub->grade_comments)) {
-        $grade_comments = $sub->grade_comments;
+        $grade_comments = q($sub->grade_comments);
     }
     if (!empty($sub->grade)) {
         $notice = $langSubmittedAndGraded;

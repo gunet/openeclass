@@ -3777,7 +3777,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
         } else {
             $text_class = '';
         }
-        if (isset($option['modal-class'])){
+        if (isset($option['modal-class'])) {
             $modal_class = $option['modal-class'];
         } else {
             $modal_class = '';
@@ -3899,7 +3899,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
     $pageTitleActive = "";
     if (($action_button || $out) && $i!=0) {
         if(isset($course_code) and $course_code) {
-            $titleHeader = (!empty($pageName) ? $pageName : $toolName);
+            $titleHeader = (!empty($pageName) ? q($pageName) : $toolName);
             if(!empty($titleHeader)) {
                 return "<div class='col-12 d-md-flex justify-content-md-between align-items-lg-start my-3'>
                             <div class='col-lg-5 col-md-6 col-12'><div class='action-bar-title mb-0'>$titleHeader</div></div>
@@ -3927,7 +3927,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
                         </div>";
             }
         } else {
-            $titleHeader = (!empty($pageName) ? $pageName : '');
+            $titleHeader = (!empty($pageName) ? q($pageName) : '');
             return "<div class='col-12 d-md-flex justify-content-md-between align-items-lg-start my-4'>
                         <div class='col-lg-5 col-md-6 col-12'><div class='action-bar-title mb-0'>$titleHeader</div></div>
                         <div class='col-lg-7 col-md-6 col-12 action_bar d-flex justify-content-md-end justify-content-start align-items-start px-0 mt-md-0 mt-4'>
