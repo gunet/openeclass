@@ -809,3 +809,8 @@ function formReqChecker(formID,alertMSG) {
     });
 
 }
+
+// Escape HTML special characters
+function q(str) {
+    return str.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+}
