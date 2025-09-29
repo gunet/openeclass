@@ -588,7 +588,7 @@
         e.preventDefault();
         var fileURL = $(this).attr('href');
         var downloadURL = $(this).closest('tr').find('input[type=hidden]').first().val();
-        var fileTitle = q($(this).attr('title'));
+        var fileTitle = $(this).attr('title');
 
         // BUTTONS declare
         var bts = {
