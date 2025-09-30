@@ -187,7 +187,13 @@ if (isset($_REQUEST['attendance_id'])) {
 if (isset($_GET['qrCode_presence'])) {
     $attendance_id = $_REQUEST['attendance_id'];
     $activeUser = Database::get()->querySingle("SELECT id,`uid` FROM attendance_users WHERE attendance_id = ?d AND `uid` = ?d", $attendance_id, $uid);
-    if ($activeUser) {
+    $activeAttendance = false;
+    $q_activeAttendance = Database::get()->querySingle("SELECT start_date, end_date FROM attendance WHERE id = ?d", $attendance_id);
+    $now = new DateTime();
+    if ($q_activeAttendance->start_date < $now->format('Y-m-d H:i:s') and $q_activeAttendance->end_date > $now->format('Y-m-d H:i:s')) {
+        $activeAttendance = true;
+    }
+    if ($activeUser && $activeAttendance) {
         $userID = $activeUser->uid;
         $actID = intval($_GET['actId']);
         $attend = 1;
@@ -210,7 +216,7 @@ if (isset($_GET['qrCode_presence'])) {
     if (isset($toolContent_ErrorExists)) {
         redirect_to_home_page("main/portfolio.php");
     } else {
-        redirect_to_home_page("modules/attendance/index.php?course=$course_code&attendance_id=$attendance_id");
+        redirect_to_home_page("modules/attendance/index.php?course=$course_code");
     }
 }
 
@@ -292,7 +298,7 @@ if ($is_editor) {
                                 var anchor = document.createElement('a');
                                 anchor.href = downloadURL;
                                 anchor.target = '_blank';
-                                anchor.download = '$fileNamePoll';
+                                anchor.download = '$fileNameAct';
                                 anchor.click();
                             }
                         }
