@@ -59,8 +59,8 @@ echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www
  . '<title>' . $langExercicesResult . '</title>' . "\n"
  . $head_content
  . '</head>' . "\n"
- . '<body class="body-learningPath" style="margin: 0px; padding-left: 0px; height: 100%!important; height: auto;">' . "\n"
- . '<div id="content"  style="padding:20px;">';
+ . '<body class="body-learningPath" style="margin: 0px; height: 100%!important;">' . "\n"
+ . '<div id="content">';
 
 $pageName = $langExercicesResult;
 global $qtype;

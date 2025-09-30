@@ -67,8 +67,7 @@ echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www
     
 </script>
 </head>
-<body class='body-learning-path'>
-<div class=' menu_left_learningPath'>";
+<body class='contextual-menu-body h-100'>";
 
 if ($uid) {
     $uidCheckString = "AND UMP.`user_id` = " . intval($uid);
@@ -148,9 +147,8 @@ for ($i = 0; $i < sizeof($flatElementList); $i++) {
 }
 
 $unitParam = isset($_GET['unit'])? "&amp;unit=$_GET[unit]": '';
-
 // -------------------------- learning path list header ----------------------------
-echo "<ul><li class='category'>" . q($lp_name) . "</li>";
+echo "<div class='contextual-menu contextual-menu-learningPath h-100 border-0'><ul class='list-group list-group-flush'><li class='border-0 list-group-item d-flex justify-content-center align-items-center gap-2 px-1 pe-none category' style='padding-top: 20px; padding-bottom: 20px;'>" . q($lp_name) . "</li>";
 // ----------------------- LEARNING PATH LIST DISPLAY ---------------------------------
 foreach ($flatElementList as $module) {
     //-------------visibility-----------------------------
@@ -171,20 +169,20 @@ foreach ($flatElementList as $module) {
     }
 
     if ($module['contentType'] == CTLABEL_) { // chapter head
-        echo "<li style=\"margin-left: " . $marginIndent . "px;\"><font " . $style . " style=\"font-weight: normal\">" . htmlspecialchars($module['name']) . "</font></li>";
+        echo "<li class='d-flex justify-content-start gap-2' style=\"margin-left: " . $marginIndent . "px;\">" . htmlspecialchars($module['name']) . "</li>";
     } else { // module
         if ($module['contentType'] == CTEXERCISE_) {
-            $moduleImg = "fa-edit";
+            $moduleImg = "fa-solid fa-edit";
         } else if ($module['contentType'] == CTLINK_) {
-            $moduleImg = "fa-link";
+            $moduleImg = "fa-solid fa-link";
         } else if ($module['contentType'] == CTCOURSE_DESCRIPTION_) {
-            $moduleImg = "fa-info-circle";
+            $moduleImg = "fa-solid fa-circle-info";
         } else if ($module['contentType'] == CTDOCUMENT_) {
             $moduleImg = choose_image(basename($module['path']));
         } else if ($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_) { // eidika otan einai scorm module, deixnoume allo eikonidio pou exei na kanei me thn proodo
-            $moduleImg = "fa-file-code-o";
+            $moduleImg = "fa-solid fa-file-code";
         } else if ($module['contentType'] == CTMEDIA_ || $module['contentType'] == CTMEDIALINK_) {
-            $moduleImg = "fa-film";
+            $moduleImg = "fa-solid fa-film";
         } else {
             $moduleImg = choose_image(basename($module['path']));
         }
@@ -195,28 +193,33 @@ foreach ($flatElementList as $module) {
         unset($imagePassed);
         if ($module['credit'] == 'CREDIT' || $module['lesson_status'] == 'COMPLETED' || $module['lesson_status'] == 'PASSED') {
             if ($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_) {
-                $moduleImg = 'fa-file-code-o';
-                $imagePassed = "<span style='color:green'>".icon('fa-check text-success')."</span>";
+                $moduleImg = 'fa-solid fa-file-code';
+                $imagePassed = '<i class="fas fa-check text-success"></i>';
             } else {
-                $imagePassed = "<span style='color:green'>".icon('fa-check text-success', $module['lesson_status'])."</span>";
+                $imagePassed = '<i class="fas fa-check text-success"></i>';
             }
         }
 
         if (($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_) && $module['lesson_status'] == 'FAILED') {
-            $moduleImg = 'fa-file-code-o';
-            $imagePassed = "<span style='color:red'>".icon('fa-xmark text-danger')."</span>";
+            $moduleImg = 'fa-solid fa-file-code';
+            $imagePassed = '<i class="fa-solid fa-xmark text-danger"></i>';
         }
 
-        echo "<li style=\"margin-left: " . $marginIndent . "px;\">" . icon($moduleImg);
+        echo "<li style=\"margin-left: " . $marginIndent . "px;\">";
 
         // emphasize currently displayed module or not
         if ($_SESSION['lp_module_id'] == $module['module_id']) {
-            echo "&nbsp;<em>" . htmlspecialchars($module['name']) . "</em>";
+            echo "<div class='list-group-item d-flex justify-content-start align-items-start gap-2 py-3 active'> 
+                      <i class='$moduleImg'></i> 
+                     ". htmlspecialchars($module['name']) 
+                      . $imagePassed . 
+                 "</div>";
         } else {
-            echo "&nbsp;<a href='navigation/viewModule.php?course=$course_code&amp;viewModule_id=$module[module_id]$unitParam'" . $style . " target='scoFrame'>" . htmlspecialchars($module['name']) . "</a>";
-        }
-        if (isset($imagePassed)) {
-            echo "&nbsp;&nbsp;" . $imagePassed;
+            echo "<a class='list-group-item d-flex justify-content-start align-items-start gap-2 py-3' href='navigation/viewModule.php?course=$course_code&amp;viewModule_id=$module[module_id]$unitParam'" . $style . " target='scoFrame'>
+                      <i class='$moduleImg'></i>
+                    " . htmlspecialchars($module['name']) 
+                      . $imagePassed . 
+                 "</a>";
         }
         echo "</li>";
 

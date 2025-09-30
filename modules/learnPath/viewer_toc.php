@@ -173,14 +173,30 @@ $prevNextString = "";
 if ($moduleNb > 1) {
 
     if ($previousModule != '') {
-        $prevNextString .= '<div class="prevnext"><a class="btn-next-prev" href="navigation/viewModule.php?course=' . $course_code . '&amp;viewModule_id=' . $previousModule . $unitParam . '" target="scoFrame"><span class="fa-solid fa-circle-arrow-left fa-lg prev-next-learningPath"></span> </a></div>';
+        $prevNextString .= '<div class="prevnext">
+                                <a class="btn btn-primary btn-next-prev text-decoration-none" href="navigation/viewModule.php?course=' . $course_code . '&amp;viewModule_id=' . $previousModule . $unitParam . '" target="scoFrame">
+                                    <span class="fa-solid fa-circle-arrow-left fa-lg"></span> 
+                                </a>
+                            </div>';
     } else {
-        $prevNextString .= "<div class='prevnext'><a href='#' class='inactive btn-next-prev'><span class='fa-solid fa-circle-arrow-left fa-lg prev-next-learningPath'></span></a></div>";
+        $prevNextString .= "<div class='prevnext'>
+                                <a class='btn btn-primary text-decoration-none' href='#' class='inactive btn-next-prev'>
+                                    <span class='fa-solid fa-circle-arrow-left fa-lg'></span>
+                                </a>
+                            </div>";
     }
     if ($nextModule != '') {
-        $prevNextString .= '<div class="prevnext"><a class="btn-next-prev" href="navigation/viewModule.php?course=' . $course_code . '&amp;viewModule_id=' . $nextModule . $unitParam . '" target="scoFrame"><span class="fa-solid fa-circle-arrow-right fa-lg prev-next-learningPath"></span></a></div>';
+        $prevNextString .= '<div class="prevnext">
+                                <a class="btn btn-primary btn-next-prev text-decoration-none" href="navigation/viewModule.php?course=' . $course_code . '&amp;viewModule_id=' . $nextModule . $unitParam . '" target="scoFrame">
+                                    <span class="fa-solid fa-circle-arrow-right fa-lg"></span>
+                                </a>
+                            </div>';
     } else {
-        $prevNextString .= "<div class='prevnext'><a href='#' class='inactive btn-next-prev'><span class='fa-solid fa-circle-arrow-right fa-lg prev-next-learningPath'></span></a></div>";
+        $prevNextString .= "<div class='prevnext'>
+                                <a class='btn btn-primary text-decoration-none' href='#' class='inactive btn-next-prev'>
+                                    <span class='fa-solid fa-circle-arrow-right fa-lg'></span>
+                                </a>
+                            </div>";
     }
 }
 $theme_id = isset($_SESSION['theme_options_id']) ? $_SESSION['theme_options_id'] : get_config('theme_options_id');
@@ -228,6 +244,7 @@ echo "<!DOCTYPE HTML>
     /* <![CDATA[ */
 
     $(document).ready(function() {
+
         var leftTOChiddenStatus = 0;
         if ($.cookie('leftTOChiddenStatus') !== undefined) {
             leftTOChiddenStatus = $.cookie('leftTOChiddenStatus');
@@ -237,9 +254,9 @@ echo "<!DOCTYPE HTML>
         if (Boolean(leftTOChiddenStatus) == fsJQe.hasClass('hidden')) {
             fsJQe.toggleClass('hidden');
             if (fsJQe.hasClass('hidden')) {
-                fs.cols = '0, *';
+                fs.cols = '*, 0';
             } else {
-                fs.cols = '200, *';
+                fs.cols = '*, 278';
             }
         }
         $('#leftTOCtoggler').on('click', function() {
@@ -248,10 +265,10 @@ echo "<!DOCTYPE HTML>
 
             fsJQe.toggleClass('hidden');
             if (fsJQe.hasClass('hidden')) {
-                fs.cols = '0, *';
+                fs.cols = '*, 0';
                 $.cookie('leftTOChiddenStatus', 1, { path: '/' });
             } else {
-                fs.cols = '200, *';
+                fs.cols = '*, 278';
                 $.cookie('leftTOChiddenStatus', 0, { path: '/' });
             }
         });
@@ -270,14 +287,14 @@ echo "<!DOCTYPE HTML>
     </script>
 </head>
 <body class='body-learning-path'>
-    <nav class='navbar navbar-eclass navbar-learningPath py-0 w-100'>
-        <div class='w-100 header-container-learningPath py-0'>
-            <div class='col-12 h-100 d-flex justify-content-between align-items-center'>
-                <div>
-                    <a id='leftTOCtoggler' class='btn'><span class='fa fa-bars fa-lg'></span></a>
-                    <a id='toc_logo' class='navbar-brand hidden-xs' href='#'>
-                        <img class='img-responsive' src='$logoUrl' alt='Logo' style='height:20px;'>
+    <nav class='navbar navbar-eclass navbar-learningPath py-0 w-100 h-100'>
+        
+            <div class='col-12 h-100 d-flex justify-content-between align-items-center px-3'>
+                <div class='d-flex justify-content-start align-items-center gap-3'>
+                    <a id='leftTOCtoggler' class='btn submitAdminBtn d-inline-flex text-decoration-none p-0 m-0' style='min-width: 35px !important; max-width: 35px !important; min-height 30px !important; max-height: 35px !important;'>
+                        <span class='fa-solid fa-bars fs-6 m-0 p-0'></span>
                     </a>
+                    <img class='img-responsive' src='$logoUrl' alt='Logo' style='width: 150px; height: 40px;'>
                 </div>
                 <div class='d-flex gap-3'>
                     
@@ -291,17 +308,15 @@ echo "<!DOCTYPE HTML>
                         }
                         echo "  </div>
                 </div>
-                <div id='navigation-btns' class='d-flex justify-content-end align-items-center gap-2 pe-3'>
-                            $prevNextString
-                            <div id='close-btn'>
-                                <a id='close-btn-a' class='d-flex justify-content-start align-items-center gap-2 text-decoration-none' href='$returl' target='_top'>
-                                    <span class='fa-solid fa-person-walking-arrow-right fa-lg Accent-200-cl'></span>
-                                    <span class='hidden-xs Accent-200-cl'>$langLogout</span>
-                                </a>
-                            </div>
-                        </div>
+                <div id='navigation-btns' class='d-flex justify-content-end align-items-center gap-2'>
+                    $prevNextString
+                    <a id='close-btn close-btn-a' class='btn btn-danger text-decoration-none' href='$returl' target='_top'>
+                        <span class='fa-solid fa-person-walking-arrow-right fa-lg'></span>
+                        <span class='hidden-xs'>$langLogout</span>
+                    </a>
+                </div>
             </div>
-        </div>
+        
    </nav>
 </body>
 </html>";
