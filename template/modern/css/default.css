@@ -4813,7 +4813,7 @@ body .delThemeBtn{
 
 .navbar-learningPath,
 .header-container-learningPath{
-  height: 50px;
+  height: 50px !important;
 }
 
 .progressbar-plr .progress-circle-bar{
@@ -6166,4 +6166,22 @@ th.grade-col a{
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+/******************************** LearnPath ************************************/
+
+.contextual-menu-learningPath {
+  min-width: 258px !important;
+  width: 100% !important;
+}
+.contextual-menu-learningPath li a,
+.contextual-menu-learningPath li span {
+  font-weight: 400 !important;
+}
+.contextual-menu-learningPath li div.list-group-item.active {
+  border-left: solid 2px #1E7E0E !important;
+}
+
+.body-learningPath {
+ padding: 20px !important;
 }

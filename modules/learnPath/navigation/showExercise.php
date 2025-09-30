@@ -237,8 +237,8 @@ echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Frameset//EN' 'http://www.w3.
      
      <title>$langExercice</title>" . $head_content ."
  </head>
- <body class='body-learningPath' style='margin: 0px; padding-left: 0px; height: 100% !important; height: auto;'>
- <div id='content' style='padding:20px;'>";
+ <body class='body-learningPath' style='margin: 0px; height: 100% !important;'>
+ <div id='content'>";
 
 echo "<div class='card panelCard card-default px-lg-4 py-lg-3 mb-4'>
     <div class='card-header border-0 d-flex justify-content-between align-items-center'>
@@ -362,7 +362,7 @@ function showQuestion($questionId, $onlyAnswers = false) {
     }
 
     for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
-        $answer = $objAnswerTmp->getTitle($answerId);
+        $answer = $objAnswerTmp->selectAnswer($answerId);
         $answerCorrect = $objAnswerTmp->isCorrect($answerId);
         if (in_array($answerType, [UNIQUE_ANSWER, MULTIPLE_ANSWER, MATCHING, TRUE_FALSE])) {
             $answer = standard_text_escape($answer);

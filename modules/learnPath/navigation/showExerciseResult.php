@@ -59,8 +59,8 @@ echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www
  . '<title>' . $langExercicesResult . '</title>' . "\n"
  . $head_content
  . '</head>' . "\n"
- . '<body class="body-learningPath" style="margin: 0px; padding-left: 0px; height: 100%!important; height: auto;">' . "\n"
- . '<div id="content"  style="padding:20px;">';
+ . '<body class="body-learningPath" style="margin: 0px; height: 100%!important;">' . "\n"
+ . '<div id="content">';
 
 $pageName = $langExercicesResult;
 global $qtype;
@@ -169,10 +169,10 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
     $nbrAnswers = $objAnswerTmp->selectNbrAnswers();
 
     for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
-        $answer = $objAnswerTmp->getTitle($answerId);
-        $answerComment = $objAnswerTmp->getComment($answerId);
+        $answer = $objAnswerTmp->selectAnswer($answerId);
+        $answerComment = $objAnswerTmp->selectComment($answerId);
         $answerCorrect = $objAnswerTmp->isCorrect($answerId);
-        $answerWeighting = $objAnswerTmp->getWeighting($answerId);
+        $answerWeighting = $objAnswerTmp->selectWeighting($answerId);
         if (in_array($answerType, [UNIQUE_ANSWER, MULTIPLE_ANSWER, MATCHING, TRUE_FALSE])) {
             $answer = standard_text_escape($answer);
         }

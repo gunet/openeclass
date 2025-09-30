@@ -4858,7 +4858,7 @@ function get_platform_logo($size = 'normal', $position = 'header') {
     }
 
     $logo = "<div style='clear: right; background-color: $bg_color; padding: 1rem; margin-bottom: 2rem; text-align: $image_align;'>
-                <img style='width: {$image_width}px; max-height:150px;' src='$logo_img'>
+                <img style='width: {$image_width}px;' src='$logo_img'>
             </div>";
 
     return $logo;
@@ -5759,6 +5759,12 @@ function theme_initialization() {
                 .border-left-success{
                     border-left: 4px solid $theme_options_styles[ColorGreenText] !important;
                 }
+                .active-unit::after{
+                    background: $theme_options_styles[ColorGreenText] !important;
+                }
+                .contextual-menu-learningPath li div.list-group-item.active{
+                    border-left: solid 2px $theme_options_styles[ColorGreenText] !important;
+                }
             ";
         }
 
@@ -5805,7 +5811,8 @@ function theme_initialization() {
                 }
 
                 .navbar-learningPath,
-                .header-container-learningPath{
+                .header-container-learningPath,
+                .default-title-learningPath{
                     background: $theme_options_styles[BgColorWrapperHeader];
                 }
 
@@ -7543,7 +7550,8 @@ function theme_initialization() {
 
         if (!empty($theme_options_styles['bgContextualMenu'])) {
             $styles_str .= "
-                .contextual-menu{
+                .contextual-menu,
+                .contextual-menu-body{
                     background-color: $theme_options_styles[bgContextualMenu];
                 }
 
@@ -7626,7 +7634,6 @@ function theme_initialization() {
                 .contextual-menu .list-group-item .settings-icons::before{
                     color: $theme_options_styles[clListMenu];
                 }
-
             ";
         }
 
@@ -10110,6 +10117,10 @@ function theme_initialization() {
               #blog_tree::-webkit-scrollbar-track {
                 background-color: $theme_options_styles[BgScrollBar];
               }
+
+              frame::-webkit-scrollbar-track {
+                background-color: $theme_options_styles[BgScrollBar];
+              }
             ";
         }
 
@@ -10171,6 +10182,10 @@ function theme_initialization() {
               }
 
               #blog_tree::-webkit-scrollbar-thumb {
+                background-color: $theme_options_styles[BgColorScrollBar];
+              }
+
+              frame::-webkit-scrollbar-thumb {
                 background-color: $theme_options_styles[BgColorScrollBar];
               }
 
@@ -10237,6 +10252,10 @@ function theme_initialization() {
               }
 
               #blog_tree::-webkit-scrollbar-thumb:hover {
+                background-color: $theme_options_styles[BgHoveredColorScrollBar];
+              }
+
+              frame::-webkit-scrollbar-thumb:hover {
                 background-color: $theme_options_styles[BgHoveredColorScrollBar];
               }
 
