@@ -1356,8 +1356,11 @@ function student_view_attendance($attendance_id) {
                 $tool_content .= q($details->title);
             }
 
+            $tool_content .= "</td><td>";
+            if (!empty($details->date)) {
+                $tool_content .= "<div class='smaller'>" . format_locale_date(strtotime($details->date), 'short', false) . "</div>";
+            }
             $tool_content .= "</td>"
-                    . "<td><div class='smaller'>" . format_locale_date(strtotime($details->date), 'short', false) . "</div></td>"
                     . "<td>" . $content . "</td>";
             $tool_content .= "<td class='text-center'>";
             //check user grade for this activity
