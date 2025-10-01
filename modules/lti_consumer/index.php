@@ -29,6 +29,9 @@ require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
 require_once 'lti-functions.php';
 
+require_once 'modules/lti/classes/JwksHelper.php';
+JwksHelper::verifyPrivateKeyExists();
+
 require_once 'include/lib/modalboxhelper.class.php';
 ModalBoxHelper::loadModalBox();
 
