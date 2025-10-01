@@ -156,15 +156,15 @@ $('input[id=button_groups]').click(changeAssignLabel);
             var select_content_2 = '';
             if (type==2) {
                 for (index = 0; index < parsed_data.length; ++index) {
-                    select_content += '<option value=\"' + parsed_data[index]['id'] + '\">' + parsed_data[index]['name'] + '<\/option>';
+                    select_content += '<option value=\"' + parsed_data[index]['id'] + '\">' + q(parsed_data[index]['name']) + '<\/option>';
                 }
             }
             if (type==1) {
                 for (index = 0; index < parsed_data[0].length; ++index) {
-                    select_content += '<option value=\"' + parsed_data[0][index]['id'] + '\">' + parsed_data[0][index]['surname'] + ' ' + parsed_data[0][index]['givenname'] + '<\/option>';
+                    select_content += '<option value=\"' + parsed_data[0][index]['id'] + '\">' + q(parsed_data[0][index]['surname'] + ' ' + parsed_data[0][index]['givenname']) + '<\/option>';
                 }
                 for (index = 0; index < parsed_data[1].length; ++index) {
-                    select_content_2 += '<option value=\"' + parsed_data[1][index]['id'] + '\">' + parsed_data[1][index]['surname'] + ' ' + parsed_data[1][index]['givenname'] + '<\/option>';
+                    select_content_2 += '<option value=\"' + parsed_data[1][index]['id'] + '\">' + q(parsed_data[1][index]['surname'] + ' ' + parsed_data[1][index]['givenname']) + '<\/option>';
                 }
             }
             $('#users_box').find('option').remove().end().append(select_content);
