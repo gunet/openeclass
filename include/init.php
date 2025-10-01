@@ -705,7 +705,7 @@ $admin_modules = array(
     MODULE_ID_USERS => array('title' => $langUsers, 'link' => 'user', 'image' => 'fa-user'),
     MODULE_ID_USAGE => array('title' => $langUsage, 'link' => 'usage', 'image' => 'fa-area-chart'),
     MODULE_ID_COURSE_WIDGETS => array('title' => $langWidgets, 'link' => 'course_widgets', 'image' => 'fa-magic'),
-    MODULE_ID_TOOLADMIN => array('title' => $langToolManagement, 'link' => 'course_tools', 'image' => 'fa-wrench'),
+    MODULE_ID_TOOLADMIN => array('title' => $langCourseTools, 'link' => 'course_tools', 'image' => 'fa-wrench'),
     MODULE_ID_ABUSE_REPORT => array('title' => $langAbuseReports, 'link' => 'abuse_report', 'image' => 'fa-flag'),
     MODULE_ID_COURSEPREREQUISITE => array('title' => $langCoursePrerequisites, 'link' => 'course_prerequisites', 'image' => 'fa-university'),
     MODULE_ID_LTI_CONSUMER => array('title' => $langLtiConsumer, 'link' => 'lti_consumer', 'image' => 'fa-link'),

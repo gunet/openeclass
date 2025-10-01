@@ -1331,7 +1331,6 @@ $langDescription = "Περιγραφή";
 $langWiki = "Σύστημα Wiki";
 $langWikiNoModifications = "Δεν υπάρχουν αλλαγές";
 $langWikiLastModification = "Τελευταία αλλαγή";
-$langToolManagement = "Εργαλεία";
 $langUsage = "Στατιστικά";
 $langClearStats = "Καθαρισμός στατιστικών";
 $langStatsCleared = "Τα στατιστικά καθαρίστηκαν";

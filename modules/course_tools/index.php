@@ -35,7 +35,7 @@ if (!$up->has_course_modules_permission()) {
     redirect_to_home_page('courses/'. $course_code);
 }
 
-$toolName = $langToolManagement;
+$toolName = $langCourseTools;
 add_units_navigation(TRUE);
 load_js('tools.js');
 load_js('trunk8');
@@ -127,11 +127,11 @@ if (isset($_POST['submit'])) {
     redirect_to_home_page($page_url);
 } elseif (isset($_GET['add'])) { // add external link
     $pageName = $langAddExtLink;
-    $navigation[] = array('url' => $page_url, 'name' => $langToolManagement);
+    $navigation[] = array('url' => $page_url, 'name' => $langCourseTools);
     view('modules.course_tools.external_link_store', $data);
 } elseif (isset($_GET['show_lti_template'])) {
     $pageName = $langTurnitinConfDetails;
-    $navigation[] = array('url' => "../course_tools/index.php?course=$course_code", 'name' => $langToolManagement);
+    $navigation[] = array('url' => "../course_tools/index.php?course=$course_code", 'name' => $langCourseTools);
     $appId = getDirectReference($_GET['show_lti_template']);
     $lti = Database::get()->querySingle("SELECT * FROM lti_apps WHERE id = ?d ", $appId);
     $data['lti'] = $lti;

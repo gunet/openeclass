@@ -558,7 +558,7 @@ $langModifyInfo = "Gestion du cours";
 $langDropBox = "Échange de fichiers";
 $langLearnPath = "Parcours d'apprentissage";
 $langWiki = "Système Wiki";
-$langToolManagement = "Activer les outils";
+$langCourseTools = "Activer les outils";
 $langUsage = "Statistiques d'Utilisation";
 $langVideoText = "Exemple d'un fichier RealVideo. Vous pouvez téléverser tout type de fichier audio et vidéo (.mov, .rm, .mpeg...), à condition que les $langsStudents disposent du plug-in nécessaire pour pouvoir les lire"
 ;
