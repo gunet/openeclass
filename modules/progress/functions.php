@@ -462,58 +462,6 @@ function display_activities($element, $id, $unit_id = 0) {
                         </div>";
                     }
  $tool_content .=  "</div>";
-        //     $tool_content .= "<div class='res-table-wrapper'>
-        //         <div class='row res-table-header'>
-        //             <div class='col-sm-7'>
-        //                 $langTitle
-        //             </div>
-        //             <div class='col-sm-2'>
-        //                 $langType
-        //             </div>
-        //             <div class='col-sm-2'>
-        //                 $langValue
-        //             </div>";
-        //             if ($is_editor) {
-        //                 $tool_content .= "<div class='col-sm-1 text-center'>
-        //                     <i class='fa fa-cogs'></i>
-        //                 </div>";
-        //             }
-        //     $tool_content .= "</div>";
-        // if (count($result) == 0) {
-        //     $tool_content .= "<p class='margin-top-fat text-center text-muted'>$langNoActivCert</p>";
-        // } else {
-        //     foreach ($result as $details) {
-        //         $resource_data = get_resource_details($element, $details->id);
-        //         $tool_content .= "
-        //         <div class='row res-table-row'>
-        //             <div class='col-sm-7'>".$resource_data['title']."</div>
-        //             <div class='col-sm-2'>". $resource_data['type']."</div>
-        //             <div class='col-sm-2'>";
-        //         if (!empty($details->operator)) {
-        //             $op = get_operators();
-        //             $tool_content .= $op[$details->operator];
-        //         } else {
-        //             $tool_content .= "&mdash;";
-        //         }
-        //         $tool_content .= "&nbsp;$details->threshold</div>";
-        //         if ($is_editor) {
-        //             $tool_content .= "<div class='col-sm-1 text-center'>".
-        //                 action_button(array(
-        //                     array('title' => $langEditChange,
-        //                         'icon' => 'fa-edit',
-        //                         'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;act_mod=$details->id",
-        //                         'show' => in_array($details->activity_type, criteria_with_operators())
-        //                     ),
-        //                     array('title' => $langDelete,
-        //                         'icon' => 'fa-times',
-        //                         'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;del_cert_res=$details->id",
-        //                         'confirm' => $langConfirmDelete,
-        //                         'class' => 'delete'))).
-        //                 "</div>";
-        //         }
-        //         $tool_content .= "</div>";
-        //     }
-        // }
         $tool_content .= "
                     <div class='card-body'>";
                         if (count($result) == 0) {
@@ -539,8 +487,8 @@ function display_activities($element, $id, $unit_id = 0) {
                                                         $resource_data = get_resource_details($element, $details->id);
                                                         $tool_content .= "
                                                         <tr>
-                                                            <td>".$resource_data['title']."</td>
-                                                            <td>". $resource_data['type']."</td>
+                                                            <td>" . q($resource_data['title']) . "</td>
+                                                            <td>" . $resource_data['type'] . "</td>
                                                             <td>";
                                                                 if (!empty($details->operator) && $details->activity_type != AssignmentSubmitEvent::ACTIVITY) {
                                                                     $op = get_operators();
