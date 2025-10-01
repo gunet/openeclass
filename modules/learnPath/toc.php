@@ -190,7 +190,7 @@ foreach ($flatElementList as $module) {
         $contentType_alt = selectAlt($module['contentType']);
 
         // eikonidio pou deixnei an perasame h oxi to sygkekrimeno module
-        unset($imagePassed);
+        $imagePassed = '';
         if ($module['credit'] == 'CREDIT' || $module['lesson_status'] == 'COMPLETED' || $module['lesson_status'] == 'PASSED') {
             if ($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_) {
                 $moduleImg = 'fa-solid fa-file-code';
@@ -211,14 +211,14 @@ foreach ($flatElementList as $module) {
         if ($_SESSION['lp_module_id'] == $module['module_id']) {
             echo "<div class='list-group-item d-flex justify-content-start align-items-start gap-2 py-3 active'> 
                       <i class='$moduleImg'></i> 
-                     ". htmlspecialchars($module['name']) 
-                      . $imagePassed . 
+                     ". htmlspecialchars($module['name'])
+                      . $imagePassed .
                  "</div>";
         } else {
             echo "<a class='list-group-item d-flex justify-content-start align-items-start gap-2 py-3' href='navigation/viewModule.php?course=$course_code&amp;viewModule_id=$module[module_id]$unitParam'" . $style . " target='scoFrame'>
                       <i class='$moduleImg'></i>
-                    " . htmlspecialchars($module['name']) 
-                      . $imagePassed . 
+                    " . htmlspecialchars($module['name'])
+                      . $imagePassed .
                  "</a>";
         }
         echo "</li>";
