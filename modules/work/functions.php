@@ -3562,3 +3562,16 @@ function datetimeCreateAndFormat(?string $data, ?string $default): ?string {
     }
     return $ret;
 }
+
+function check_turnitin_13_not_released(stdClass $assign): bool {
+    $ret = false;
+    if ($assign->assignment_type == ASSIGNMENT_TYPE_TURNITIN) {
+        $lti = Database::get()->querySingle("SELECT * FROM lti_apps WHERE id = ?d", $assign->lti_template);
+        $ltiversion = $lti->lti_version;
+        $cdate = date('Y-m-d H:i:s');
+        if ($ltiversion === LTI_VERSION_1_3 && $cdate < $assign->tii_feedbackreleasedate) {
+            $ret = true;
+        }
+    }
+    return $ret;
+}
