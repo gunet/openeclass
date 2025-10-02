@@ -46,7 +46,7 @@ class MultimediaHelper {
     public static function chooseMediaAhrefRaw($mediaDL, $mediaPlay, $title, $filename) {
         $title = q($title);
         $filename = q($filename);
-        $ahref = "<a href='$mediaDL' class='fileURL' target='_blank' title='".q($title)."'>" . $title . "</a>";
+        $ahref = "<a href='$mediaDL' class='fileURL' target='_blank' title='$title'>" . $title . "</a>";
         $class = '';
         $extraParams = '';
         $is_mobile = (isset($_SESSION['mobile']) && $_SESSION['mobile'] == true);

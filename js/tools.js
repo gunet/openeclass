@@ -849,7 +849,7 @@ function initialize_filemodal(lang) {
     e.preventDefault();
     var fileURL = $(this).attr('href');
     var downloadUrl = $(this).data('downloadUrl');
-    var fileTitle = $(this).text();
+    var fileTitle = q($(this).text());
     var buttons = {};
     if (!downloadUrl) {
       downloadUrl = fileURL + '&download=true';
