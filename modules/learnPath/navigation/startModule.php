@@ -214,10 +214,10 @@ if ($module->contentType == CTSCORM_ || $module->contentType == CTSCORMASSET_) {
 }
 
 echo "<frame src='../viewer_toc.php?course=$course_code$unitParam' name='tocFrame' scrolling='no' />";
-echo "<frameset border='0' cols='*, 278' frameborder='0' id='colFrameset'>";
+echo "<frameset border='0' cols='*, 0' frameborder='0' id='colFrameset'>";
 
 echo "<frame class='iframe-learningPath' src='$moduleStartAssetPage' name='scoFrame'>";
-echo "<frame class='iframe-learningPath-sideBar' src='../toc.php?course=$course_code$unitParam' name='tocleftFrame'>";
+echo "<frame class='iframe-learningPath-sideBar hidden' src='../toc.php?course=$course_code$unitParam' name='tocleftFrame'>";
 
 echo "</frameset>";
 echo "</html>";
