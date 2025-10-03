@@ -70,7 +70,6 @@ if ($is_editor) {
     }
 
     if (isset($_GET['unzip'])) {
-
         $myFile = $basedir.$_GET['unzip'];
 
         if (isset($_GET['openDir'])) {
@@ -89,6 +88,9 @@ if ($is_editor) {
             for ($i = 0; $i < $zipFile->numFiles; $i++) {
                 $stat = $zipFile->statIndex($i, ZipArchive::FL_ENC_RAW);
                 $files_in_zip[$i] = $stat['name'];
+                if (!empty(my_basename($files_in_zip[$i]))) {
+                    validateUploadedFile(my_basename($files_in_zip[$i]), 3);
+                }
             }
             // extract files
             for ($i = 0; $i < $zipFile->numFiles; $i++) {
