@@ -5879,6 +5879,9 @@ Anti-plagiarism service is a commercial product by Turnitin. For further informa
 $langLimesurveyShortDescription = "Connect with on-line statistical survey Service.
 Survey service is a commercial product by LimeSurvey GmbH. For further information take a look at <a href=\"https://www.limesurvey.org\">https://www.limesurvey.org</a>";
 $langLimesurveyLongDescription = "Connection with LimeSurvey on-line statistical survey service.";
+$langPanoptoShortDescription = "Connect with Panopto video service.
+Panopto service is a commercial production by Panopto Inc. For further information take a look at <a href=\"https://www.panopto.com\">https://www.panopto.com</a>";
+$langPanoptoLongDescription = "Connection with Panopto video service.";
 $langColmoocDescription = 'Interface with the Conversational Agent and Learning Analytics modules of the <a href="https://colmooc.eu/">colMOOC</a> project.';
 $langH5PShortDescription = "H5P Interactive Content";
 $langH5PLongDescription = "H5P Interactive Content";
@@ -6071,6 +6074,16 @@ $langNoAvailableLimesurveyTemplates = "No LTI Tools available.";
 $langLimesurveyApp = "LimeSurvey Application";
 $langLimesurveyLTIOptions = "LimeSurvey Options";
 $langLimesurveyIntegration = "LimeSurvey Integration";
+$langPanoptoConf = "$siteName \"Panopto\" settings";
+$langPanoptoConfDetails = "Panopto Tool details";
+$langPanoptoAppAddSuccessful = "Panopto Tool add was successful.";
+$langPanoptoAppDeleteSuccessful = "Panopto Tool removal was successful.";
+$langPanoptoEnabled = "Enabled";
+$langNewPanoptoTool = "Add new Panopto (LTI) Tool";
+$langNoAvailablePanoptoTemplates = "No LTI Tools available.";
+$langPanoptoApp = "Panopto Application";
+$langPanoptoLTIOptions = "Panopto Options";
+$langPanoptoIntegration = "Panopto Integration";
 $langColmooc = "colMOOC";
 $langColmoocCreateAgentFailed = "Agent Create Error Detected. Please retry.";
 $langColmoocCreateAgentSuccess = "Agent created successfully. Please instruct your students to enroll the chat.";

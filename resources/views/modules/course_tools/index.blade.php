@@ -154,25 +154,34 @@
 
                                             @foreach ($lti_apps as $app)
                                                 @if ($is_editor)
-                                                    <tr {!!($app->enabled? '': " class='not_visible'")!!}>
+                                                    <tr {!!($app->is_active_for_course ? '' : " class='not_visible'")!!}>
                                                         <td class='text-start'><p>{!! $app->title !!}</p></td>
                                                         <td><p>{!! $app->description !!}</p></td>
                                                         <td class='text-nowrap'>{!! $app->joinLink !!}</td>
                                                         <td class='option-btn-cell text-center'>
-                                                            {!! action_button([
-                                                                [ 'title' => trans('langEditChange'),
-                                                                  'url' => $app->editUrl,
-                                                                  'icon' => 'fa-edit' ],
-                                                                [ 'title' => $app->enabled? trans('langDeactivate') : trans('langActivate'),
-                                                                  'url' => $app->enableUrl,
-                                                                  'icon' => $app->enabled? 'fa-eye': 'fa-eye-slash' ],
-                                                                [ 'title' => trans('langDelete'),
-                                                                  'url' => $app->deleteUrl,
-                                                                  'icon' => 'fa-xmark',
-                                                                  'class' => 'delete',
-                                                                  'confirm' => trans('langConfirmDelete') ],
-                                                                ])
-                                                            !!}
+                                                            @if (!empty($app->is_template_panopto))
+                                                                {!! action_button([
+                                                                    [ 'title' => (isset($app->course_visible) ? intval($app->course_visible) : 1) ? trans('langDeactivate') : trans('langActivate'),
+                                                                      'url' => $app->templateEnableUrl,
+                                                                      'icon' => (isset($app->course_visible) ? intval($app->course_visible) : 1) ? 'fa-eye' : 'fa-eye-slash' ],
+                                                                    ])
+                                                                !!}
+                                                            @else
+                                                                {!! action_button([
+                                                                    [ 'title' => trans('langEditChange'),
+                                                                      'url' => $app->editUrl,
+                                                                      'icon' => 'fa-edit' ],
+                                                                    [ 'title' => $app->enabled? trans('langDeactivate') : trans('langActivate'),
+                                                                      'url' => $app->enableUrl,
+                                                                      'icon' => $app->enabled? 'fa-eye': 'fa-eye-slash' ],
+                                                                    [ 'title' => trans('langDelete'),
+                                                                      'url' => $app->deleteUrl,
+                                                                      'icon' => 'fa-xmark',
+                                                                      'class' => 'delete',
+                                                                      'confirm' => trans('langConfirmDelete') ],
+                                                                    ])
+                                                                !!}
+                                                            @endif
                                                         </td>
                                                     </tr>
                                                 @else
