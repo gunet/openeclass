@@ -151,8 +151,9 @@ function setting_get_print_image_disk_path($setting_id, $course_id=null) {
     return $webDir . "/courses/" . course_id_to_code($course_id) ."/document". $document->path;
 }
 
-function imageToBase64($imagePath) {
-    if (!file_exists($imagePath)) {
+function imageToBase64($imagePath): string
+{
+    if (is_null($imagePath) or !file_exists($imagePath)) {
         return 'not found';
     }
 
