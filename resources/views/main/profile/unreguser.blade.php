@@ -11,8 +11,8 @@
 
                 {!! $action_bar !!}
 
-                @include('layouts.partials.show_alert') 
-                
+                @include('layouts.partials.show_alert')
+
                 @if ($display_form)
                     <div class='col-12'>
                         <div class='form-wrapper form-edit rounded mt-4'>
@@ -25,7 +25,6 @@
                                 </div>
 
                                 <div class='col-12 d-flex justify-content-center align-items-center flex-wrap gap-2'>
-
                                     <button class='btn deleteAdminBtn' name='doit'>
                                         {{ trans('langUnregUser') }}
                                     </button>
@@ -33,9 +32,8 @@
                                     <a class='btn cancelAdminBtn' href='{{ $urlAppend }}main/profile/display_profile.php'>
                                         {{ trans('langCancel') }}
                                     </a>
-
                                 </div>
-
+                                {!! generate_csrf_token_form_field() !!}
                             </form>
                         </div>
                     </div>

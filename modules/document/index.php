@@ -55,6 +55,7 @@ $helpTopic = 'documents';
 
 doc_init();
 
+
 if ($is_editor) {
 
     if (isset($_GET['prevent_pdf'])) {
@@ -564,7 +565,7 @@ if ($can_upload or $user_upload) {
     $error_response = $XHRUpload? 'session': 'html';
     $extra_path = '';
     if (isset($_POST['fileCloudInfo']) or isset($_FILES['userFile'])) {
-
+        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         if (isset($_POST['fileCloudInfo'])) { // upload cloud file
             $cloudfile = CloudFile::fromJSON($_POST['fileCloudInfo']);
             $uploaded = true;
@@ -933,6 +934,7 @@ if ($can_upload or $user_upload) {
 
     // Delete file or directory
     if (isset($_GET['delete']) and isset($_GET['filePath'])) {
+        if (!isset($_REQUEST['token']) || !validate_csrf_token($_REQUEST['token'])) csrf_token_error();
         $filePath =  getDirectReference($_GET['filePath']);
         $curDirPath = my_dirname(getDirectReference($_GET['filePath']));
         // Check if file actually exists
@@ -1517,7 +1519,7 @@ foreach ($result as $row) {
                       'icon' => 'fa-star',
                       'show' => !$is_dir && $subsystem == MYDOCS && $subsystem_id == $uid && get_config('eportfolio_enable')),
                 array('title' => $langDelete,
-                      'url' => "{$base_url}filePath=$cmdDirName&amp;delete=1",
+                      'url' => "{$base_url}filePath=$cmdDirName&amp;delete=1&amp;" . generate_csrf_token_link_parameter() ,
                       'class' => 'delete',
                       'icon' => 'fa-xmark',
                       'confirm' => $langConfirmDelete . ' ' . q($row->filename))));

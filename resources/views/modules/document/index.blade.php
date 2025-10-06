@@ -72,6 +72,7 @@
                     file_copyrighted: fileCopyrighted,
                     replace: replace,
                     uncompress: uncompress,
+                    token: '{{ $_SESSION['csrf_token'] }}'
                 });
 
                 uppy.use(XHRUpload, {
@@ -89,6 +90,7 @@
                         'file_copyrighted',
                         'replace',
                         'uncompress',
+                        'token'
                     ],
                     shouldRetry: () => false,
                 })
