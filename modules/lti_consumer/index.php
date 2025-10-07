@@ -110,6 +110,12 @@ elseif(isset($_GET['choice']))
         case 'do_enable':
             enable_lti_app(getDirectReference($_GET['id']));
             break;
+        case 'do_template_disable':
+            disable_course_lti_template($course_id, getDirectReference($_GET['id']));
+            break;
+        case 'do_template_enable':
+            enable_course_lti_template($course_id, getDirectReference($_GET['id']));
+            break;
         case 'do_join':
             break;
     }

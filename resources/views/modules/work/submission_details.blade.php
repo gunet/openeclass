@@ -1,3 +1,6 @@
+@if (check_turnitin_13_not_released($row))
+    {{-- hide submission details before releasing --}}
+@else
 <div class='col-12 mt-4'>
     <div class='card panelCard border-card-left-default px-lg-4 py-lg-3'>
         <div class='card-header border-0 d-flex justify-content-between align-items-center'>
@@ -125,3 +128,5 @@
         </div>
     </div>
 </div>
+
+@endif
