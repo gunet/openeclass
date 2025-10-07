@@ -2653,6 +2653,9 @@ function upgrade_to_3_16($tbl_options) : void
     if (!DBHelper::fieldExists('certificate_template', 'all_courses')) {
         Database::get()->query("ALTER TABLE `certificate_template` ADD `all_courses` tinyint(1) NOT NULL DEFAULT 1");
     }
+    if (!DBHelper::fieldExists('course_lti_app', 'visible')) {
+        Database::get()->query("ALTER TABLE `course_lti_app` ADD `visible` TINYINT(1) NOT NULL DEFAULT 1");
+    }
 }
 
 /**

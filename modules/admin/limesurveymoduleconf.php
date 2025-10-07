@@ -60,7 +60,7 @@ if (isset($_GET['add_template'])) {
     $pageName = $langNewLimesurveyTool;
     $navigation[] = array('url' => 'limesurveymoduleconf.php', 'name' => $langLimesurveyConf);
 
-    new_lti_app(null, true, null); // TODO: can we have a default lime url?
+    new_lti_app(null, true, null);
 
 } else if (isset($_GET['delete_template'])) {
 

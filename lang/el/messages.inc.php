@@ -6507,6 +6507,10 @@ $langLimesurveyShortDescription = "Σύνδεση με υπηρεσία στατ
 Η υπηρεσία στατιστικής έρευνας είναι εμπορικό προϊόν και προσφέρεται από την εταιρεία LimeSurvey GmbH.
 Δείτε περισσότερες πληροφορίες στο <a href=\"https://www.limesurvey.org\">https://www.limesurvey.org</a>";
 $langLimesurveyLongDescription = "Σύνδεση με υπηρεσία στατιστικής έρευνας.";
+$langPanoptoShortDescription = "Σύνδεση με υπηρεσία διαχείρισης βίντεο.
+Η υπηρεσία βίντεο είναι εμπορικό προϊόν και προσφέρεται από την εταιρεία Panopto Inc.
+Δείτε περισσότερες πληροφορίες στο <a href=\"https://www.panopto.com\">https://www.panopto.com</a>";
+$langPanoptoLongDescription = "Σύνδεση με υπηρεσία διαχείρισης βίντεο.";
 $langColmoocDescription = 'Διασύνδεση με τα υποσυστήματα Conversational Agent και Learning Analytics του έργου <a href="https://colmooc.eu/">colMOOC</a>.';
 $langH5PShortDescription = "Διαδραστικό περιεχόμενου τύπου H5P";
 $langH5PLongDescription = "Διαδραστικό περιεχόμενου τύπου H5P";
@@ -6714,6 +6718,16 @@ $langNoAvailableLimesurveyTemplates = "Δεν υπάρχουν διαθέσιμ�
 $langLimesurveyApp = "Εφαρμογή LimeSurvey";
 $langLimesurveyLTIOptions = "Επιλογές LimeSurvey";
 $langLimesurveyIntegration = "Ενσωμάτωση με LimeSurvey";
+$langPanoptoConf = "Ρυθμίσεις \"Panopto\" του $siteName";
+$langPanoptoConfDetails = "Λεπτομέρειες Εφαρμογής Panopto";
+$langPanoptoAppAddSuccessful = "Η καταχώριση της Panopto Εφαρμογής ολοκληρώθηκε με επιτυχία.";
+$langPanoptoAppDeleteSuccessful = "Η διαγραφή της Panopto Εφαρμογής ολοκληρώθηκε με επιτυχία.";
+$langPanoptoEnabled = "Ενεργοποιημένο";
+$langNewPanoptoTool = "Προσθήκη νέας εφαρμογής Panopto (LTI)";
+$langNoAvailablePanoptoTemplates = "Δεν υπάρχουν διαθέσιμες εφαρμογές LTI.";
+$langPanoptoApp = "Εφαρμογή Panopto";
+$langPanoptoLTIOptions = "Επιλογές Panopto";
+$langPanoptoIntegration = "Ενσωμάτωση με Panopto";
 
 
 // Messages for colmooc
