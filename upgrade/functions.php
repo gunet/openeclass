@@ -3383,6 +3383,9 @@ function upgrade_to_4_2($tbl_options) : void {
     if (!DBHelper::fieldExists('exercise_question', 'options')) {
         Database::get()->query("ALTER TABLE exercise_question ADD options TEXT DEFAULT NULL");
     }
+    if (!DBHelper::fieldExists('h5p_content', 'creator_id')) {
+        Database::get()->query("ALTER TABLE h5p_content ADD `creator_id` INT UNSIGNED NOT NULL DEFAULT 0");
+    }
 
     if (!DBHelper::tableExists('ai_providers')) {
         Database::get()->query("CREATE TABLE ai_providers (

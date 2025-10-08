@@ -2517,6 +2517,7 @@ $db->query("CREATE TABLE h5p_content (
     course_id INT(11) NOT NULL,
     enabled TINYINT(4) NOT NULL DEFAULT 1,
     reuse_enabled TINYINT(4) NOT NULL DEFAULT 1,
+    creator_id INT UNSIGNED NOT NULL DEFAULT 0,
     PRIMARY KEY(id)) $tbl_options");
 
 $db->query("CREATE TABLE h5p_content_dependency (
