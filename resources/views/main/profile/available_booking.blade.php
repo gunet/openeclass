@@ -18,7 +18,7 @@
                 'order' : [],
                 'oLanguage': {
                     'sLengthMenu': '{{ trans('langDisplay') }} _MENU_ {{ trans('langResults2') }}',
-                    'sZeroRecords': '{{ trans('langNoResult') }}',
+                    'zeroRecords': '{{ trans('langNoResult') }}',
                     'sInfo': '{{ trans('langDisplayed') }} _START_ {{ trans('langTill') }} _END_ {{ trans('langFrom2') }} _TOTAL_ {{ trans('langTotalResults') }}',
                     'sInfoEmpty': '{{ trans('langDisplayed') }} 0 {{ trans('langTill') }} 0 {{ trans('langFrom2') }} 0 {{ trans('langResults2') }}',
                     'sInfoFiltered': '',
@@ -33,11 +33,11 @@
                     }
                 }
             });
-            $('.dataTables_filter input').attr({
+            $('.dt-search input').attr({
                 'class': 'form-control input-sm ms-0 mb-3',
                 'placeholder': '{{ trans('langSearch') }}...'
             });
-            $('.dataTables_filter label').attr('aria-label', '{{ trans('langSearch') }}'); 
+            $('.dt-search label').attr('aria-label', '{{ trans('langSearch') }}');
         });
 
     </script>
@@ -81,8 +81,8 @@
                 <div class='mt-4'></div>
             @endif
 
-            @include('layouts.partials.show_alert') 
-   
+            @include('layouts.partials.show_alert')
+
             @if(count($bookings) > 0)
                 <div class='col-12 mb-5'>
                     <table class='table-default' id='all_bookings'>
@@ -137,7 +137,7 @@
                                             ) !!}
                                         </td>
                                     @endif
-                                </tr> 
+                                </tr>
                             @endforeach
                         </tbody>
                     </table>
@@ -147,7 +147,7 @@
                     <div class='alert alert-warning'>
                         <i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langNoInfoAvailable') }}</span>
                     </div>
-                </div>                          
+                </div>
             @endif
 
 
@@ -189,21 +189,21 @@
                                                 )
                                             ) !!}
                                         </td>
-                                    </tr> 
+                                    </tr>
                                 @endforeach
                             </tbody>
                         </table>
                     @else
                         <div class='alert alert-warning'>
                             <i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langNoInfoAvailable') }}</span>
-                        </div> 
+                        </div>
                     @endif
                 </div>
             @endif
-            
+
 
         </div>
-      
+
     </div>
 </div>
 

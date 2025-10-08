@@ -32,32 +32,32 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     $tree = new Hierarchy();
     $user = new User();
     // get the incoming values
-    $search = isset($_GET['search']) ? $_GET['search'] : '';
+    $search = $_GET['search'] ?? '';
     $c = isset($_GET['c']) ? intval($_GET['c']) : ''; // course id
-    $lname = isset($_GET['lname']) ? $_GET['lname'] : '';
-    $fname = isset($_GET['fname']) ? $_GET['fname'] : '';
+    $lname = $_GET['lname'] ?? '';
+    $fname = $_GET['fname'] ?? '';
     $uname = isset($_GET['uname']) ? canonicalize_whitespace($_GET['uname']) : '';
-    $am = isset($_GET['am']) ? $_GET['am'] : '';
+    $am = $_GET['am'] ?? '';
     $verified_mail = isset($_GET['verified_mail']) ? intval($_GET['verified_mail']) : 3;
     $user_type = isset($_GET['user_type']) ? intval($_GET['user_type']) : '';
     $auth_type = isset($_GET['auth_type']) ? intval($_GET['auth_type']) : '';
     $email = isset($_GET['email']) ? mb_strtolower(trim($_GET['email'])) : '';
     $reg_flag = isset($_GET['reg_flag']) ? intval($_GET['reg_flag']) : '';
-    $user_registered_at = isset($_GET['user_registered_at']) ? $_GET['user_registered_at'] : '';
-    $user_expires_until = isset($_GET['user_expires_until']) ? $_GET['user_expires_until'] : '';
-    $user_last_login = isset($_GET['user_last_login']) ? $_GET['user_last_login'] : '';
+    $user_registered_at = $_GET['user_registered_at'] ?? '';
+    $user_expires_until = $_GET['user_expires_until'] ?? '';
+    $user_last_login = $_GET['user_last_login'] ?? '';
     $mail_ver_required = get_config('email_verification_required');
     // pagination
-    $limit = intval($_GET['iDisplayLength']);
-    $offset = intval($_GET['iDisplayStart']);
+    $limit = intval($_POST['length']);
+    $offset = intval($_POST['start']);
 
     // 'LIKE' argument prefix/postfix - default is substring search
     $l1 = $l2 = '%';
     $cs = 'COLLATE utf8mb4_general_ci';
-    if (isset($_GET['search_type'])) {
-        if ($_GET['search_type'] == 'exact') {
+    if (!empty($_POST['search']['value'])) {
+        if ($_POST['search']['value'] == 'exact') {
             $l1 = $l2 = $cs = '';
-        } elseif ($_GET['search_type'] == 'begin') {
+        } elseif ($_POST['search']['value'] == 'begin') {
             $l1 = '';
         }
     }
@@ -208,19 +208,19 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     }
 
     // user status
-    if (!empty($_GET['sSearch_0'])) {
+    if (!empty($_POST['columns'][0]['search']['value'])) {
         if ($c) { // listing course users, get user's status in this course
             $criteria[] = '(course_user.status = ?d)';
         } else { // listing all users, get user's global status
             $criteria[] = '(user.status = ?d)';
         }
-        $terms[] = $_GET['sSearch_0'];
+        $terms[] = $_POST['columns'][0]['search']['value'];
     }
 
     // internal search
-    if (!empty($_GET['sSearch'])) {
+    if (!empty($_POST['search']['value'])) {
         $criteria[] = '(surname LIKE ?s OR givenname LIKE ?s OR username LIKE ?s OR email LIKE ?s)';
-        $keywords = array_fill(0, 4, $l1 . $_GET['sSearch'] . $l2);
+        $keywords = array_fill(0, 4, $l1 . $_POST['search']['value'] . $l2);
         $terms = array_merge($terms, $keywords);
     } else {
         $keywords = array_fill(0, 4, '%');
@@ -263,8 +263,8 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     $terms_base[] = $terms;
 
     // sorting
-    if (!empty($_GET['iSortCol_0'])) {
-        switch ($_GET['iSortCol_0']) {
+    if (!empty($_POST['order'][0]['column'])) {
+        switch ($_POST['order'][0]['column']) {
             case '0': $qry .= ' ORDER BY surname ';
                 break;
             case '1': $qry .= ' ORDER BY givenname ';
@@ -272,10 +272,10 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             case '2': $qry .= ' ORDER BY username ';
                 break;
         }
-        $qry .= ($_GET['sSortDir_0'] == 'desc' ? 'DESC' : '');
+        $qry .= (isset($_POST['order'][0]['dir']) && $_POST['order'][0]['dir'] == 'desc' ? 'DESC' : '');
     } else {
         $qry .= ' ORDER BY status, surname ' .
-                ($_GET['sSortDir_0'] == 'desc' ? 'DESC' : '');
+                (isset($_POST['order'][0]['dir']) && $_POST['order'][0]['dir'] == 'desc' ? 'DESC' : '');
     }
     //pagination
     if ($limit > 0) {
@@ -299,10 +299,8 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                                                                 OR email LIKE ?s)", $keywords)->total;
     }
 
-
-
-    $data['iTotalRecords'] = $all_results;
-    $data['iTotalDisplayRecords'] = $filtered_results;
+    $data['recordsTotal'] = $all_results;
+    $data['recordsFiltered'] = $filtered_results;
     $data['aaData'] = array();
 
     foreach ($sql as $myrow) {
@@ -440,6 +438,7 @@ if (isset($_GET['action']) and isset($_GET['u'])) {
 
 load_js('tools.js');
 load_js('datatables');
+
 $head_content .= "<script>
     var csrf_token = '$_SESSION[csrf_token]';
     $(document).ready(function() {
@@ -477,11 +476,11 @@ $head_content .= "<script>
             'bProcessing': true,
             'bServerSide': true,
             'searchDelay': 1000,
-            'sAjaxSource': '$_SERVER[REQUEST_URI]',
-            'aLengthMenu': [
-               [10, 15, 20 , -1],
-               [10, 15, 20, '" . js_escape($langAllOfThem) . "'] // change per page values here
-            ],
+            ajax: {
+                url: '$_SERVER[REQUEST_URI]',
+                type: 'POST'
+            },            
+            lengthMenu: [10, 15, 20 , -1],            
             'sPaginationType': 'full_numbers',
             'bAutoWidth': false,
             'aoColumns': [
@@ -493,14 +492,16 @@ $head_content .= "<script>
                 {'bSortable' : false, 'sClass': 'text-end' },
             ],
             'oLanguage': {
+                lengthLabels: {
+                    '-1': '" . js_escape($langAllOfThem) . "'
+                },
                'sLengthMenu':   '" . js_escape("$langDisplay _MENU_ $langResults2") . "',
-               'sZeroRecords':  '" . js_escape($langNoResult) . "',
+               'zeroRecords':  '" . js_escape($langNoResult) . "',
                'sInfo':         '" . js_escape("$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults") . "',
                'sInfoEmpty':    '" . js_escape("$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2") . "',
                'sInfoFiltered': '',
                'sInfoPostFix':  '',
-               'sSearch':       '" . js_escape($langSearch) . "',
-               'sUrl':          '',
+               'sSearch':       '" . js_escape($langSearch) . "',               
                'oPaginate': {
                    'sFirst':    '&laquo;',
                    'sPrevious': '&lsaquo;',
@@ -516,7 +517,7 @@ $head_content .= "<script>
                 .search($('select#select_role').val())
                 .draw();
         });
-        $('.dataTables_filter input')
+        $('.dt-search input')
             .attr({
                     'style': 'width: 250px',
                     'placeholder': '$langName, $langSurname, Username, $langEmail'

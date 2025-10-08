@@ -48,13 +48,6 @@ $(document).ready(function(){
         javascript:window.history.back();
     });
 
-
-    /////////////////////////////////////////////////// initial datatable /////////////////////////////////////////////////
-
-    $('#courses_table_pag').DataTable();
-
-    /////////////////////////////////////////////////////// call functions /////////////////////////////////////////////////
-
     act_confirm();
     tooltip_init();
     popover_init();
@@ -387,7 +380,7 @@ function build_notification_callback(type) {
 function initialize_lesson_display (pages) {
     var languageOptions = {
         "sLengthMenu": msg.langDisplay + " _MENU_ " + msg.langResults2,
-        "sZeroRecords": msg.langNoResult,
+        "zeroRecords": msg.langNoResult,
         "sInfo": " " + msg.langDisplayed + " _START_ " + msg.langTill + " _END_ " + msg.langFrom2 + " _TOTAL_ " + msg.langTotalResults,
         "sInfoEmpty": " " + msg.langDisplayed + " 0 " + msg.langTill + " 0 " + msg.langFrom2 + " 0 " + msg.langResults2,
         "sInfoFiltered": '',

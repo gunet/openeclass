@@ -106,11 +106,11 @@
                 tooltip_init();
                 popover_init();
             },
-            sAjaxSource: '{{ $ajaxUrl }}',
-            aLengthMenu: [
-               [10, 15, 20 , -1],
-               [10, 15, 20, '{{ js_escape(trans('langAllOfThem')) }}']
-            ],
+            ajax: {
+                url: '{{ $ajaxUrl }}',
+                type: 'POST'
+            },
+            lengthMenu: [10, 15, 20 , -1],
             sPaginationType: 'full_numbers',
             aoColumnDefs: [
                 { sClass: 'option-btn-cell text-end', aTargets: [ -1 ] },
@@ -120,8 +120,11 @@
                 { bSortable: false, aTargets: [ 4 ] }
             ],
             oLanguage: {
+                lengthLabels: {
+                    '-1': '{{ trans('langAllOfThem') }}'
+                },
                 sLengthMenu: '{{ js_escape(trans('langDisplay') . ' _MENU_ ' . trans('langResults2')) }}',
-                sZeroRecords: '{{ js_escape(trans('langNoResult')) }}',
+                zeroRecords: '{{ js_escape(trans('langNoResult')) }}',
                 sInfo: '{{ js_escape(trans('langDisplayed') . ' _START_ ' .
                                      trans('langTill') . ' _END_ ' . trans('langFrom2') .
                                      ' _TOTAL_ ' . trans('langTotalResults')) }}',
@@ -130,7 +133,6 @@
                 sInfoFiltered: '',
                 sInfoPostFix:  '',
                 sSearch:       '',
-                sUrl:          '',
                 oPaginate: {
                     sFirst: '&laquo;',
                     sPrevious: '&lsaquo;',
@@ -203,11 +205,11 @@
                 }
             });
         });
-        $('.dataTables_filter input')
+        $('.dt-search input')
             .attr({ style: 'width: 200px',
                     class: 'form-control input-sm mb-3',
                     placeholder: '{{ js_escape(trans('langName') . ', Username, Email') }}' });
-        $('.dataTables_filter label').attr('aria-label', '{{ trans('langSearch') }}');
+        $('.dt-search label').attr('aria-label', '{{ trans('langSearch') }}');
         $('.success').delay(3000).fadeOut(1500);
     });
 </script>

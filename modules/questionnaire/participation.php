@@ -35,9 +35,9 @@ if (!$poll or $poll->anonymized) {
 $allUsers = [];
 if ($poll->assign_to_specific) {
     if ($poll->assign_to_specific == 1) {
-        $assign_details = $m['WorkToUser'];
+        $assign_details = $langWorkToUser;
     } elseif ($poll->assign_to_specific == 2) {
-        $assign_details = $m['WorkToGroup'] . ':<ul>';
+        $assign_details = $langWorkToAllGroups . ':<ul>';
     }
     $assign = Database::get()->queryArray('SELECT * FROM poll_to_specific
         WHERE poll_id = ?d', $poll->pid);
@@ -61,7 +61,7 @@ if ($poll->assign_to_specific) {
         $assign_details .= '</ul>';
     }
 } else {
-    $assign_details = $m['WorkToAllUsers'];
+    $assign_details = $langWorkToAllUsers;
     $allUsers = Database::get()->queryArray('SELECT user_id FROM course_user
         WHERE course_id = ?d AND editor = 0 AND status = ' . USER_STUDENT,
         $course_id);
@@ -164,7 +164,7 @@ $tool_content .= "
                     <th>$langEmail</th>
                     <th>$langAm</th>
                     <th>$langDate / $langHour</th>
-                    <th>$m[subm]</th>
+                    <th>$langSubmitted</th>
                 </tr>
             </thead>
             <tbody>";
@@ -172,7 +172,7 @@ $tool_content .= "
 foreach ($allUsers as $user_id) {
     $ok = in_array($user_id, $okUsers);
     $key = $ok? 'yes': 'no';
-    $participation_icon = icon($ok? 'fa-square-check': 'fa-square');
+    $participation_icon = icon($ok? 'fa-solid fa-check': 'fa-solid fa-xmark');
     if (isset($timestamp[$user_id])) {
         $ts = format_locale_date(strtotime($timestamp[$user_id]), 'short');
         $data_ts = " data-sort='{$timestamp[$user_id]}'";
@@ -191,7 +191,7 @@ foreach ($allUsers as $user_id) {
 }
 
 foreach ($emailUsers as $mail) {
-    $participation_icon = icon('fa-square-check');
+    $participation_icon = icon('fa-solid fa-check');
     $ts = format_locale_date(strtotime($timestamp[$email]), 'short');
     $data_ts = " data-sort='{$timestamp[$email]}'";
     $tool_content .= "
@@ -210,16 +210,16 @@ $tool_content .= "
     <script>
         $(function() {
             var table = $('#users').DataTable ({
-                'aLengthMenu': [
-                   [10, 20, 30 , -1],
-                   [10, 20, 30, '$langAllOfThem']
-                ],
+                'lengthMenu': [10, 20, 30 , -1],
                 'sPaginationType': 'full_numbers',
                 'bAutoWidth': true,
                 'order' : [[1, 'asc']],
                 'oLanguage': {
+                    'lengthLabels': {
+                   	    '-1': '$langAllOfThem'
+                    },
                    'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
-                   'sZeroRecords':  '" . $langNoResult . "',
+                   'zeroRecords':  '" . $langNoResult . "',
                    'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
                    'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
                    'sInfoFiltered': '',
@@ -234,11 +234,11 @@ $tool_content .= "
                    }
                }
             });
-            $('.dataTables_filter input').attr({
+            $('.dt-search input').attr({
                 'class' : 'form-control input-sm ms-0 mb-3',
                 'placeholder' : '$langSearch...'
             });
-            $('.dataTables_filter label').attr('aria-label', '$langSearch');  
+            $('.dt-search label').attr('aria-label', '$langSearch');  
             $('#user_filter').on('change', function () {
                 table.column(4).search($(this).val()).draw();
             });

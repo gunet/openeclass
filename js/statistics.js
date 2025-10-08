@@ -29,10 +29,7 @@ var user = null;
 var department = 1;
 var stats = 'u';
 var plotsgenerated = false;
-//var views = {plots:{class: 'fa fa-bar-chart', title: '$langPlots'}, list:{class: 'fa fa-list', title: '$langDetails'}};
 var selectedview = 'plots';
-//var maxintervals = 20;
-//var lang = $language;
 var xAxisDateFormat = {1:'%d-%m-%Y', 7:'%d-%m-%Y', 30:'%m-%Y', 365:'%Y'};
 var xAxisLabels = {1:langDay, 7:langWeek, 30:langMonth, 365:langYear};
 var xMinVal = null;
@@ -59,8 +56,6 @@ var tableOptions = {
         3:{'pageLength': 50, sumCols:[], durCol:null, colDefs:[{'targets':1, 'className':'mynowrap', 'render': function ( data, type, row ) {return userEmailLink(data, row[7], row[6]);} }, {'targets':3, 'className':'action', 'render': function ( data, type, row ) {return actionWithDetails(data, row[4]);} }, {"visible": false, "targets": 6}, {"visible": false, "targets": 7}, {"visible": false, "targets": 4}]}
     }
 };
-
-    //3:{'pageLength': 50, sumCols:[], durCol:null, colDefs:[{'targets':1, 'className':'mynowrap', 'render': function ( data, type, row ) {return userEmailLink(data, row[7], row[6]);} }, {'targets':3, 'className':'action', 'render': function ( data, type, row ) {return actionWithDetails(data, row, 4);} }, {"visible": false, "targets": 6}, {"visible": false, "targets": 7}, {"visible": false, "targets": 4}]}
 
 charts = new Object();
 piecourse = -1;
@@ -278,14 +273,14 @@ $(document).ready(function(){
             'processing': true,
             'oLanguage': {
             'sLengthMenu':   langDisplay +' _MENU_ '+ langResults,
-            'sZeroRecords':  langNoResult,
+            'zeroRecords':  langNoResult,
+            'emptyTable':   langNoResult,
             'sInfo':         langDisplayed+' _START_ '+langTill+' _END_ '+langFrom+' _TOTAL_ '+langTotalResults,
             'sInfoEmpty':    langDisplayed+' 0 '+langTill+' 0 '+langFrom+' 0 '+langResults,
             'sInfoFiltered': '',
             'sInfoPostFix':  '',
             'sSearch':       langSearch+' ',
             'searchDelay' : 1000,
-            'sUrl':          '',
             'oPaginate': {
                 'sFirst':    '&laquo;',
                 'sPrevious': '&lsaquo;',

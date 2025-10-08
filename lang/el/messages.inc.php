@@ -416,6 +416,7 @@ $langPublicDocumentManagementExplanation = 'Επιτρέπεται αποστο�
 $langPassCode = "Συνθηματικό πρόσβασης";
 $langCourseEndDate = "Ημερομηνία λήξης $langsOfCourse";
 $langExplainCourseEndDate = "Μετά την ημερομηνία λήξης το $langsOfCourse θα γίνει ανενεργό";
+$langH5PUploadingEnabled = "Δημιουργία περιεχομένου H5P από τους $langsOfStudentss";
 // listreq.php
 
 $langOpenProfessorRequests = "Ανοικτές Αιτήσεις Χρηστών";

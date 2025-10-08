@@ -5,11 +5,11 @@
                 'aoColumnDefs':[{'sClass':'option-btn-cell text-end', 'aTargets':[-1]}],
                 "bProcessing": true,
                 "bServerSide": true,
-                "sAjaxSource": "{!! $_SERVER['REQUEST_URI'] !!}",
-                "aLengthMenu": [
-                    [10, 15, 20 , -1],
-                    [10, 15, 20, "{{ trans('langAllOfThem') }}"]
-                ],
+                ajax: {
+                    url: '{!! $_SERVER['REQUEST_URI'] !!}',
+                    type: 'POST'
+                },
+                "aLengthMenu": [10, 15, 20 , -1],
                 "sPaginationType": "full_numbers",
                 "bAutoWidth": false,
                 "searchDelay": 1000,
@@ -23,14 +23,16 @@
                     popover_init();
                 },
                 "oLanguage": {
+                    'lengthLabels': {
+                        '-1': '{{ trans('langAllOfThem') }}'
+                    },
                     "sLengthMenu":   "{{ trans('langDisplay') }} _MENU_ {{ trans('langResults2') }}",
-                    "sZeroRecords":  "{{ trans('langNoResult') }}",
+                    "zeroRecords":  "{{ trans('langNoResult') }}",
                     "sInfo":         " {{ trans('langDisplayed') }} _START_ {{ trans('langTill') }} _END_ {{ trans('langFrom2') }} _TOTAL_ {{ trans('langToralResults') }}",
                     "sInfoEmpty":    " {{ trans('langDisplayed') }} 0 {{ trans('langTill') }} 0 {{ trans('langFrom2') }} 0 {{ trans('langResults2') }}",
                     "sInfoFiltered": '',
                     "sInfoPostFix":  '',
                     "sSearch":       '{{ trans('langSearch') }}',
-                    "sUrl":          '',
                     "oPaginate": {
                     "sFirst":    '&laquo;',
                         "sPrevious": '&lsaquo;',
@@ -39,7 +41,7 @@
                     }
                 }
         });
-        $('.dataTables_filter input')
+        $('.dt-search input')
             .attr({ 'style': 'width: 200px',
                 'placeholder': '{{ trans('langTitle') }}, {{ trans('langTeacher') }}'
             });
@@ -66,7 +68,7 @@
                         <div class='mt-4'></div>
                     @endif
 
-                    @include('layouts.partials.show_alert') 
+                    @include('layouts.partials.show_alert')
 
                     <div class="col-12 overflow-auto">
                         <table id='course_results_table' class='table-default display'>

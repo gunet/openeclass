@@ -28,9 +28,6 @@
     {{-- fullcalendar v3.10.2--}}
     <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}js/fullcalendar/fullcalendar.css?v={{ $cache_suffix }}"/>
 
-    {{-- DataTables 1.10.19 version --}}
-    <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/jquery.dataTables.min.css?v={{ $cache_suffix }}"/>
-
     {{-- Owl-carousel --}}
     <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/owl-carousel.css?v={{ $cache_suffix }}"/>
     <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/owl-theme-default.css?v={{ $cache_suffix }}"/>
@@ -46,14 +43,10 @@
 
     {{-- jQuery --}}
     <script type="text/javascript" src="{{ $urlAppend }}js/jquery-3.6.0.min.js"></script>
-
     {{-- Bootstrap v5 js --}}
-    <script type="text/javascript" src="{{ $urlAppend }}js/bootstrap.bundle.min.js?v={{ $cache_suffix }}"></script>
-
-    {{-- DataTables v1.10.19 and Checkitor v11.0.1 js--}}
-    <script src="{{ $urlAppend }}js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="{{ $urlAppend }}js/bootstrap.bundle.min.js?v={{ $cache_suffix }}"></script>4
+    {{--  CK Editor v11.0.1 --}}
     <script src="{{ $urlAppend }}js/classic-ckeditor.js"></script>
-
     {{-- Bootbox --}}
     <script src="{{ $urlAppend }}js/bootbox/bootboxV6.min.js"></script>
     {{-- SlimScroll --}}

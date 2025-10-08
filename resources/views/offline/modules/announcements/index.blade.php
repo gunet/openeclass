@@ -1,7 +1,7 @@
 @extends('layouts.default')
 
 @push('head_scripts')
-<script src="{{ $urlAppend }}js/datatables/media/js/jquery.dataTables.min.js"></script>
+<script src="{{ $urlAppend }}js/datatables/datatables.min.js"></script>
 <script src="{{ $urlAppend }}js/trunk8.js"></script>
 <script type='text/javascript'>
     $(document).ready(function() {
@@ -12,9 +12,13 @@
             'searchDelay': 1000,
             'sPaginationType': 'full_numbers',
             'bSort': false,
+            'lengthMenu': [10, 20, 30, -1],
             'oLanguage': {
+                'lengthLabels': {
+                    '-1': '{{ trans('langAllOfThem' }}'
+                 },
                 'sLengthMenu':   '{{ trans('langDisplay') }} _MENU_ {{ trans('langResults2') }}',
-                'sZeroRecords':  '{{ trans('langNoResult') }}',
+                'zeroRecords':  '{{ trans('langNoResult') }}',
                 'sInfo':         '{{ trans('langDisplayed') }} _START_ {{ trans('langTill') }} _END_ {{ trans('langFrom2') }} _TOTAL_ {{ trans('langTotalResults') }}',
                 'sInfoEmpty':    '{{ trans('langDisplayed') }} 0 {{ trans('langTill') }} 0 {{ trans('langFrom2') }} 0 {{ trans('langResults2') }}',
                 'sInfoFiltered': '',
@@ -33,8 +37,8 @@
     });
 </script>
 <script>
-    var readMore = '".js_escape($langReadMore)."';
-    var readLess = '".js_escape($langReadLess)."';
+    var readMore = '{{ trans('langReadMore') }}';
+    var readLess = '{{ trans('langReadLess) }}';
     $(function () { $('.trunk8').trunk8({
         lines: 3,
         fill: '&hellip; <a class="read-more" href="#">{{ js_escape($GLOBALS['langViewShow']) }}</a>',
@@ -115,7 +119,7 @@
                 </div>
             </div>
         </div>
-    
+
 </div>
 </div>
 

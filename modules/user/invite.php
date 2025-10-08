@@ -151,7 +151,7 @@ $head_content .= "
         aaSorting: [[0, 'desc']],
         oLanguage: {
           sLengthMenu:  '$langDisplay _MENU_ $langResults2',
-          sZeroRecords: '$langNoResult',
+          zeroRecords: '$langNoResult',
           sInfo:        '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
           sInfoEmpty:   '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
           sInfoFiltered: '',
@@ -228,8 +228,8 @@ $head_content .= "
 
 
       });
-      $('.dataTables_filter input').attr({style: 'width:200px', class:'form-control input-sm', placeholder: '$langName, e-mail'});
-      $('.dataTables_filter label').attr('aria-label', '$langName'); 
+      $('.dt-search input').attr({style: 'width:200px', class:'form-control input-sm', placeholder: '$langName, e-mail'});
+      $('.dt-search label').attr('aria-label', '$langName'); 
       $('.success').delay(3000).fadeOut(1500);
     });
     </script>";

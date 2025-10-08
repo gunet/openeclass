@@ -140,22 +140,18 @@ function load_js($file, $init='') {
             $head_content .= css_link('slick-master/slick/slick.css');
             $file = 'slick-master/slick/slick.min.js';
         } elseif ($file == 'datatables') {
-            $head_content .= css_link('datatables/media/css/jquery.dataTables.css');
-            $head_content .= css_link('datatables/media/css/override_jquery.dataTables.css?v=4.0-dev');
-            $file = 'datatables/media/js/jquery.dataTables.min.js';
-        } elseif ($file == 'datatables_bootstrap') {
-            $head_content .= css_link('datatables/media/css/dataTables.bootstrap.css');
-            $file = 'datatables/media/js/dataTables.bootstrap.js';
-        } elseif ($file == 'datatables_tabletools') {
+            $head_content .= css_link('datatables/datatables.min.css');
+            $file = 'datatables/datatables.min.js';
+        /*} elseif ($file == 'datatables_tabletools') {
             $head_content .= css_link('datatables/extensions/TableTools/css/dataTables.tableTools.css');
-            $file = 'datatables/extensions/TableTools/js/dataTables.tableTools.js';
+            $file = 'datatables/extensions/TableTools/js/dataTables.tableTools.js'; */
         } elseif ($file == 'jszip') {
             $file = 'jszip/dist/jszip.min.js';
         } elseif ($file == 'pdfmake') {
             $file = 'pdfmake/build/pdfmake.js';
         } elseif ($file == 'vfs_fonts') {
             $file = 'pdfmake/build/vfs_fonts.js';
-        } elseif ($file == 'datatables_buttons') {
+        /*} elseif ($file == 'datatables_buttons') {
             $file = 'datatables/extensions/Buttons/js/dataTables.buttons.js';
             $head_content .= css_link('datatables/extensions/Buttons/css/buttons.dataTables.css');
         } elseif ($file == 'datatables_buttons_jqueryui') {
@@ -174,7 +170,7 @@ function load_js($file, $init='') {
             $file = 'datatables/extensions/Buttons/js/buttons.colVis.js';
         } elseif ($file == 'datatables_buttons_foundation') {
             $file = 'datatables/extensions/Buttons/js/buttons.foundation.js';
-            $head_content .= css_link('datatables/extensions/Buttons/css/buttons.foundation.css');
+            $head_content .= css_link('datatables/extensions/Buttons/css/buttons.foundation.css'); */
         } elseif ($file == 'RateIt') {
             $file = 'jquery.rateit.min.js';
         } elseif ($file == 'autosize') {
@@ -5695,7 +5691,7 @@ function theme_initialization() {
 
 
                 .dataTables_wrapper .dataTables_length,
-                .dataTables_wrapper .dataTables_filter,
+                .dataTables_wrapper .dt-search,
                 .dataTables_wrapper .dataTables_info,
                 .dataTables_wrapper .dataTables_processing,
                 .dataTables_wrapper .dataTables_paginate {

@@ -76,22 +76,22 @@ if ($is_editor) {
 $(function() {
     var oTable = $('#users_table{$course_id}').DataTable ({
                 'columns': [ $columns ],
-                'aLengthMenu': [
-                   [10, 15, 20 , -1],
-                   [10, 15, 20, '$langAllOfThem'] // change per page values here
-               ],
-               'fnDrawCallback': function( oSettings ) {
-                    $('#users_table{$course_id}_filter label input').attr({
-                          'class' : 'form-control input-sm ms-0 mb-3',
-                          'placeholder' : '$langSearch...'
-                    });
-                    $('#users_table{$course_id}_filter label').attr('aria-label', '$langSearch');
-                },
-               'sPaginationType': 'full_numbers',
-                'bSort': true,
-                'oLanguage': {
+                'lengthMenu': [10, 15, 20 , -1],                                  
+                'fnDrawCallback': function( oSettings ) {
+                        $('#users_table{$course_id}_filter label input').attr({
+                              'class' : 'form-control input-sm ms-0 mb-3',
+                              'placeholder' : '$langSearch...'
+                        });
+                        $('#users_table{$course_id}_filter label').attr('aria-label', '$langSearch');
+                    },
+                    'sPaginationType': 'full_numbers',
+                    'bSort': true,
+                    'oLanguage': {
+                       'lengthLabels': {
+                            -1': '$langAllOfThem'
+                       },
                        'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
-                       'sZeroRecords':  '".$langNoResult."',
+                       'zeroRecords':  '".$langNoResult."',
                        'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
                        'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
                        'sInfoFiltered': '',

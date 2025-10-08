@@ -34,7 +34,7 @@ if (!$up->has_course_users_permission()) {
 }
 
 //Identifying ajax request
-if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest' && $is_editor) {
+if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest' && $up->has_course_users_permission()) {
     if (isset($_POST['action']) && $_POST['action'] == 'delete') {
         $unregister_gid = intval(getDirectReference($_POST['value']));
         $unregister_ok = true;
@@ -81,20 +81,19 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         }
         exit();
     }
+    $limit = intval($_POST['length']);
+    $offset = intval($_POST['start']);
 
-    $limit = intval($_GET['iDisplayLength']);
-    $offset = intval($_GET['iDisplayStart']);
-
-    if (!empty($_GET['sSearch'])) {
-        $search_values = array_fill(0, 4, '%' . $_GET['sSearch'] . '%');
+    if (!empty($_POST['search']['value'])) {
+        $search_values = array_fill(0, 4, '%' . $_POST['search']['value'] . '%');
         $search_sql = 'AND (user.surname LIKE ?s OR user.givenname LIKE ?s OR user.username LIKE ?s OR user.email LIKE ?s)';
     } else {
         $search_sql = '';
         $search_values = array();
     }
     // user status
-    if (!empty($_GET['sSearch_1'])) {
-        $filter = $_GET['sSearch_1'];
+    if (!empty($_POST['columns'][1]['search']['value'])) {
+        $filter = $_POST['columns'][1]['search']['value'];
         if ($filter == 'editor') {
             $search_sql .= ' AND ((course_user.editor = 1 AND course_user.status = ' . USER_STUDENT . ') OR course_user.status = ' . USER_TEACHER . ')';
         } elseif ($filter == 'teacher') {
@@ -109,12 +108,12 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             $search_sql .= ' AND course_user.reviewer = 1';
         }
     }
-
-    if (isset($_GET['iSortCol_0']) and $_GET['iSortCol_0'] == 0) {
-        $sortDir = ($_GET['sSortDir_0'] == 'desc') ? 'DESC' : '';
+    $sortDir = 'ASC';
+    if (isset($_POST['order'][0]['column']) && $_POST['order'][0]['column'] == 0) {
+        $sortDir = (isset($_POST['order'][0]['dir']) && $_POST['order'][0]['dir'] == 'desc') ? 'DESC' : '';
         $order_sql = "ORDER BY user.surname $sortDir, user.givenname $sortDir";
     } else {
-        $sortDir = ($_GET['sSortDir_0'] == 'desc') ? 'DESC' : '';
+        $sortDir = (isset($_POST['order'][0]['dir']) && $_POST['order'][0]['dir'] == 'desc') ? 'DESC' : '';
         $order_sql = "ORDER BY course_user.reg_date $sortDir";
     }
 
@@ -135,8 +134,8 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                     AND `course_user`.`course_id` = ?d
                     $search_sql $order_sql $limit_sql", $course_id, $search_values);
 
-    $data['iTotalRecords'] = $all_users;
-    $data['iTotalDisplayRecords'] = $filtered_users;
+    $data['recordsTotal'] = $all_users;
+    $data['recordsFiltered'] = $filtered_users;
     $data['aaData'] = array();
     foreach ($result as $myrow) {
         $full_name = q(sanitize_utf8($myrow->givenname . " " . $myrow->surname));

@@ -27,14 +27,14 @@
                     { "orderable": false, "targets": 'tools-col' },
                     { "type": "num", "orderDataType": "dom-text-numeric", "targets": 'grade-col' } // FIXED: No dot (.)
                 ],
-                'aLengthMenu': [
-                    [10, 20, 50 , -1],
-                    [10, 20, 50, '{{ trans('langAllOfThem') }}']
-                ],
+                'lengthMenu': [10, 20, 50, -1],
                 'searchDelay': 1000,
                 'oLanguage': {
+                    'lengthLabels': {
+                        '-1': '{{ trans('langAllOfThem') }}'
+                     },
                     'sLengthMenu': '{{ trans('langDisplay') }} _MENU_ {{ trans('langResults2') }}',
-                    'sZeroRecords': '{{ trans('langNoResult') }}',
+                    'zeroRecords': '{{ trans('langNoResult') }}',
                     'sInfo': '{{ trans('langDisplayed') }} _START_ {{ trans('langTill') }} _END_ {{ trans('langFrom2') }} _TOTAL_ {{ trans('langTotalResults') }}',
                     'sInfoEmpty': '{{ trans('langDisplayed') }} 0 {{ trans('langTill') }} 0 {{ trans('langFrom2') }} 0 {{ trans('langResults2') }}',
                     'sInfoFiltered': '',

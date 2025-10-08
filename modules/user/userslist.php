@@ -34,20 +34,19 @@ if (setting_get(SETTING_USERS_LIST_ACCESS, $course_id) == 0) {
 //Identifying ajax request
 if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
 
-    $limit = intval($_GET['iDisplayLength']);
-    $offset = intval($_GET['iDisplayStart']);
+    $limit = intval($_POST['length']);
+    $offset = intval($_POST['start']);
 
-    if (!empty($_GET['sSearch'])) {
-        $search_values = array_fill(0, 3, '%' . $_GET['sSearch'] . '%');
+    if (!empty($_POST['search']['value'])) {
+        $search_values = array_fill(0, 3, '%' . $_POST['search']['value'] . '%');
         $search_sql = 'AND (user.surname LIKE ?s OR user.givenname LIKE ?s OR user.username LIKE ?s)';
     } else {
         $search_sql = '';
         $search_values = array();
     }
 
-    $sortDir = ($_GET['sSortDir_0'] == 'desc')? 'DESC': '';
-    $order_sql = 'ORDER BY ' .
-        (($_GET['iSortCol_0'] == 0) ? "user.surname $sortDir, user.givenname $sortDir" : "course_user.status ASC");
+    $sortDir = (isset($_POST['order'][0]['dir']) && $_POST['order'][0]['dir'] == 'desc')? 'DESC': '';
+    $order_sql = 'ORDER BY ' . ((isset($_POST['order'][0]['column']) && $_POST['order'][0]['column'] == 0) ? "user.surname $sortDir, user.givenname $sortDir" : "course_user.status ASC");
 
     $limit_sql = ($limit > 0) ? "LIMIT $offset,$limit" : "";
 
@@ -68,8 +67,8 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                     AND user.expires_at > " . DBHelper::timeAfter() . "
                     $search_sql $order_sql $limit_sql", $course_id, $search_values);
 
-    $data['iTotalRecords'] = $all_users;
-    $data['iTotalDisplayRecords'] = $filtered_users;
+    $data['recordsTotal'] = $all_users;
+    $data['recordsFiltered'] = $filtered_users;
     $data['aaData'] = array();
     if(isset($is_collaborative_course) && $is_collaborative_course){
         $langIsUser = $langConsultant;
@@ -97,8 +96,10 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
 $limit = isset($_REQUEST['limit']) ? intval($_REQUEST['limit']) : 0;
 
 $toolName = $langUsers;
+
 load_js('tools.js');
 load_js('datatables');
+
 $head_content .= "
 <script type='text/javascript'>
         $(document).ready(function() {
@@ -111,24 +112,25 @@ $head_content .= "
                     tooltip_init();
                     popover_init();
                 },
-                'sAjaxSource': '$_SERVER[REQUEST_URI]',
-                'aLengthMenu': [
-                   [10, 15, 20 , -1],
-                   [10, 15, 20, '$langAllOfThem'] // change per page values here
-               ],
+                ajax: {
+                    url: '$_SERVER[REQUEST_URI]',
+                    type: 'POST'
+                },                
+                'lengthMenu': [10, 15, 20 , -1],
                 'sPaginationType': 'full_numbers',
-                'bSort': true,
-                'aaSorting': [[0, 'desc']],
+                'bSort': true,                
                 'aoColumnDefs': [{'bSortable': true, 'aTargets':[-1]}, {'bSortable': false, 'aTargets': [ 1 ] }],
                 'oLanguage': {
+                       'lengthLabels': {
+                            '-1': '$langAllOfThem'
+                        },
                        'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
-                       'sZeroRecords':  '" . $langNoResult . "',
+                       'zeroRecords':  '" . $langNoResult . "',
                        'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
                        'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
                        'sInfoFiltered': '',
                        'sInfoPostFix':  '',
-                       'sSearch':       '',
-                       'sUrl':          '',
+                       'sSearch':       '',                  
                        'oPaginate': {
                            'sFirst':    '&laquo;',
                            'sPrevious': '&lsaquo;',
@@ -137,8 +139,8 @@ $head_content .= "
                        }
                    }
             });
-            $('.dataTables_filter input').attr({style: 'width:200px', class:'form-control input-sm ms-0 mb-3', placeholder: '$langName, Username'});
-            $('.dataTables_filter label').attr('aria-label', '$langName');  
+            $('.dt-search input').attr({style: 'width:200px', class:'form-control input-sm ms-0 mb-3', placeholder: '$langName'});
+            $('.dt-search label').attr('aria-label', '$langName');  
             $('.success').delay(3000).fadeOut(1500);
         });
         </script>";
