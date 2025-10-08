@@ -60,7 +60,7 @@ if (isset($_GET['add_template'])) {
     $pageName = $langNewLimesurveyTool;
     $navigation[] = array('url' => 'limesurveymoduleconf.php', 'name' => $langLimesurveyConf);
 
-    new_lti_app(null, true, null); // TODO: can we have a default lime url?
+    new_lti_app(null, true, null);
 
 } else if (isset($_GET['delete_template'])) {
 
@@ -72,8 +72,9 @@ if (isset($_GET['add_template'])) {
 } else if (isset($_POST['new_lti_app'])) { // Create
 
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
-    add_update_lti_app($_POST['title'], $_POST['desc'], $_POST['lti_url'], $_POST['lti_key'], $_POST['lti_secret'],
-        $_POST['lti_launchcontainer'], $_POST['status'], $_POST['lti_courses'], LTI_TYPE, null, true,
+    add_update_lti_app($_POST['title'], $_POST['desc'], $_POST['lti_url'], $_POST['lti_version'], $_POST['lti_key'], $_POST['lti_secret'],
+        $_POST['lti_public_keyset_url'], $_POST['lti_initiate_login_url'], $_POST['lti_redirection_uri'], $_POST['lti_launchcontainer'],
+        $_POST['status'], $_POST['lti_courses'], LTI_TYPE, null, true,
         false, null);
     Session::flash('message',$langLimesurveyAppAddSuccessful);
     Session::flash('alert-class', 'alert-success');
@@ -82,8 +83,9 @@ if (isset($_GET['add_template'])) {
 } else if (isset($_POST['update_lti_app'])) { // Update
 
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
-    add_update_lti_app($_POST['title'], $_POST['desc'], $_POST['lti_url'], $_POST['lti_key'], $_POST['lti_secret'],
-        $_POST['lti_launchcontainer'], $_POST['status'], $_POST['lti_courses'], LTI_TYPE, null, true,
+    add_update_lti_app($_POST['title'], $_POST['desc'], $_POST['lti_url'], $_POST['lti_version'], $_POST['lti_key'], $_POST['lti_secret'],
+        $_POST['lti_public_keyset_url'], $_POST['lti_initiate_login_url'], $_POST['lti_redirection_uri'], $_POST['lti_launchcontainer'],
+        $_POST['status'], $_POST['lti_courses'], LTI_TYPE, true, LTI_TYPE,
         true, getDirectReference($_GET['id']));
     // Display result message
     Session::flash('message',$langLimesurveyAppAddSuccessful);

@@ -930,7 +930,7 @@ function ltiBuildLoginRequest(stdClass $course, stdClass $lti, string $messagety
     $launch_part = $messagetype;
     if (!empty($resource)) {
         $launch_part = $lti->id;
-        if ($resourceType == RESOURCE_LINK_TYPE_ASSIGNMENT) {
+        if ($resourceType == RESOURCE_LINK_TYPE_ASSIGNMENT || $resourceType == RESOURCE_LINK_TYPE_LTI_TOOL) {
             $resourceid = $resource->id;
             $ltihint['resourceid'] = $resourceid;
         }

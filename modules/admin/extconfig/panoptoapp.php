@@ -4,7 +4,7 @@
  *  ========================================================================
  *  * Open eClass
  *  * E-learning and Course Management System
- *  * ========================================================================
+ *  ========================================================================
  *  * Copyright 2003-2024, Greek Universities Network - GUnet
  *  *
  *  * Open eClass is an open platform distributed in the hope that it will
@@ -14,15 +14,15 @@
  *  *
  *  * Contact address: GUnet Asynchronous eLearning Group
  *  *                  e-mail: info@openeclass.org
- *  * ========================================================================
+ *  ========================================================================
  *
  */
 
 require_once 'genericparam.php';
 
-class LimesurveyApp extends ExtApp {
+class PanoptoApp extends ExtApp {
 
-    const NAME = "Limesurvey";
+    const NAME = "Panopto";
 
     public function __construct() {
         parent::__construct();
@@ -33,23 +33,24 @@ class LimesurveyApp extends ExtApp {
     }
 
     public function getShortDescription() {
-        return $GLOBALS['langLimesurveyShortDescription'];
+        return $GLOBALS['langPanoptoShortDescription'];
     }
 
     public function getLongDescription() {
-        return $GLOBALS['langLimesurveyLongDescription'];
+        return $GLOBALS['langPanoptoLongDescription'];
     }
 
     public function getConfigUrl() {
-        return 'modules/admin/limesurveymoduleconf.php';
+        return 'modules/admin/panoptomoduleconf.php';
     }
 
     /**
-     * Return true if any Limesurvey servers are enabled, else false
+     * Return true if any Panopto LTI templates are enabled, else false
      *
      * @return boolean
      */
     public function isConfigured() {
-        return Database::get()->querySingle("SELECT COUNT(*) AS count FROM lti_apps WHERE enabled = true AND is_template = true AND type = 'limesurvey' AND course_id is null")->count > 0;
+        return Database::get()->querySingle("SELECT COUNT(*) AS count FROM lti_apps WHERE enabled = true AND is_template = true AND type = 'panopto' AND course_id is null")->count > 0;
     }
 }
+

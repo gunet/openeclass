@@ -1350,6 +1350,7 @@ $db->query("CREATE TABLE `course_lti_app` (
       `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
       `course_id` int(11) NOT NULL,
       `lti_app` int(11) NOT NULL,
+      `visible` TINYINT(1) NOT NULL DEFAULT 1,
       FOREIGN KEY (`course_id`) REFERENCES `course` (`id`),
       FOREIGN KEY (`lti_app`) REFERENCES `lti_apps` (`id`))
    $tbl_options");
