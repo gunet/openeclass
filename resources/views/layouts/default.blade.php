@@ -44,7 +44,7 @@
     {{-- jQuery --}}
     <script type="text/javascript" src="{{ $urlAppend }}js/jquery-3.6.0.min.js"></script>
     {{-- Bootstrap v5 js --}}
-    <script type="text/javascript" src="{{ $urlAppend }}js/bootstrap.bundle.min.js?v={{ $cache_suffix }}"></script>4
+    <script type="text/javascript" src="{{ $urlAppend }}js/bootstrap.bundle.min.js?v={{ $cache_suffix }}"></script>
     {{--  CK Editor v11.0.1 --}}
     <script src="{{ $urlAppend }}js/classic-ckeditor.js"></script>
     {{-- Bootbox --}}

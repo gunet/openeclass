@@ -275,6 +275,7 @@ if (isset($_GET['action'])) {
         $cert_name = $cert_description = $cert_hidden_id = $cert_htmlfile = $cert_all_courses = '';
         $cert_orientation_l = 'checked';
         $cert_orientation_p = '';
+        $cert_img_path_file = '';
         if (isset($_GET['cid'])) {
             $cert_id = $_GET['cid'];
             $cert_data = Database::get()->querySingle("SELECT * FROM certificate_template WHERE id = ?d", $cert_id);
@@ -288,6 +289,11 @@ if (isset($_GET['action'])) {
                 $cert_orientation_p = 'checked';
             }
             $cert_hidden_id = "<input type='hidden' name='cert_id' value='$cert_id'>";
+
+            $cert_img_path = $webDir . "/courses/user_progress_data/cert_templates/certificate{$cert_id}_thumbnail.png";
+            if (file_exists($cert_img_path)) {
+                $cert_img_path_file = "<img style='width:60px; height:60px;' src='{$urlServer}courses/user_progress_data/cert_templates/certificate{$cert_id}_thumbnail.png'>";
+            }
         }
         $tool_content .= "
         <div class='row'>
@@ -297,10 +303,12 @@ if (isset($_GET['action'])) {
                     <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post' enctype='multipart/form-data'>
                         <fieldset>
                             <legend class='mb-0' aria-label='$langForm'></legend>
-                            <div class='form-group'>
-                                <label for='filename_id' class='col-sm-12 control-label-notes'>$langZipFile</label>
-                                <input id='filename_id' type='file' class='' name='filename' value=''>
-
+                            <div class='form-group d-flex justify-content-start align-items-center gap-2'>
+                                $cert_img_path_file
+                                <div>
+                                    <label for='filename_id' class='col-sm-12 control-label-notes'>$langZipFile</label>
+                                    <input id='filename_id' type='file' class='' name='filename' value=''>
+                                </div>
                             </div>
 
                             <div class='form-group mt-4'>
@@ -444,21 +452,33 @@ if (isset($_GET['action'])) {
     }
 } else { // display available certificates / badges
     $sql1 = Database::get()->queryArray("SELECT * FROM certificate_template");
+
     $tool_content .= "<div class='table-responsive'>
                         <table class='table-default'>
                         <thead>
                             <tr>
                                 <th style='width:30%;'>$langTitle</th>
-                                <th style='width:60%;'>$langDescription</th>
+                                <th style='width:50%;'>$langDescription</th>
+                                <th style='width:10%;'>$langIcon</th>
                                 <th style='width:10%;'></th>
                             </tr>
                         </thead>";
 
                 foreach ($sql1 as $cert_data) {
-                    //$template_link = $urlServer . CERT_TEMPLATE_PATH ."$cert_data->filename";
-                    $tool_content .= "<tr><td style='width:30%;'>$cert_data->name</td>
+
+                    $cert_image_path = $webDir . "/courses/user_progress_data/cert_templates/certificate{$cert_data->id}_thumbnail.png";
+                    $cert_image_path_file = '';
+                    if (file_exists($cert_image_path)) {
+                        $cert_image_path_file = "<img style='width:50px; height:50px;' src='{$urlServer}courses/user_progress_data/cert_templates/certificate{$cert_data->id}_thumbnail.png'>";
+                    }
+                    $tool_content .= "<tr>
+                                        <td style='width:30%;'>
+                                            $cert_data->name
+                                        </td>
                                       <td style='width:60%;'>" . ellipsize_html($cert_data->description, 100) . "</td>";
-                    $tool_content .= "<td style='width:10%;' class='text-end option-btn-cell'>".
+                    $tool_content .= "
+                            <td style='width:10%;'>$cert_image_path_file</td>
+                            <td style='width:10%;' class='text-end option-btn-cell'>".
                             action_button(array(
                                 array('title' => $langEdit,
                                     'icon' => 'fa-edit',
