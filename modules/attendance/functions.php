@@ -1647,6 +1647,7 @@ function import_attendances($attendance_id, $activity, $import = false) {
            $langImgFormsDes, $langForm;
 
     if ($import and isset($_FILES['userfile'])) { // import user attendances
+        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         $file = IOFactory::load($_FILES['userfile']['tmp_name']);
         $sheet = $file->getActiveSheet();
         $userAttendance = $errorLines = $invalidUsers = $extraUsers = [];
@@ -1767,6 +1768,7 @@ function import_attendances($attendance_id, $activity, $import = false) {
                                     </div>
                                 </div>
                             </fieldset>
+                            " . generate_csrf_token_form_field() . "
                         </form>
                     </div>
                 </div><div class='d-none d-lg-block'>

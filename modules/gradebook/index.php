@@ -546,6 +546,7 @@ if ($is_editor) {
 
     //delete grade book activity
     elseif (isset($_GET['delete'])) {
+        if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();
         $log_details = array('action' => 'delete activity',
                              'id' => $gradebook_id,
                              'title' => get_gradebook_title($gradebook_id),

@@ -168,6 +168,7 @@ if ($is_editor) {
                     }
                     break;
                 case 'purge': // purge exercise results
+                    if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();
                     if (!resource_belongs_to_progress_data(MODULE_ID_EXERCISE, $exerciseId)) {
                         $objExerciseTmp->purge();
                         $objExerciseTmp->save();
@@ -487,7 +488,7 @@ if (!$nbrExercises) {
                               'url' => "#",
                               'icon' => 'fa-copy'),
                         array('title' => $langPurgeExerciseResults,
-                              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=purge&amp;exerciseId=$row->id",
+                              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=purge&amp;exerciseId=$row->id&" . generate_csrf_token_link_parameter(),
                               'icon' => 'fa-eraser',
                               'confirm' => $langConfirmPurgeExerciseResults),
                         array('title' => $langDelete,
