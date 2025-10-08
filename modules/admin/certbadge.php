@@ -469,7 +469,22 @@ if (isset($_GET['action'])) {
                     $cert_image_path = $webDir . "/courses/user_progress_data/cert_templates/certificate{$cert_data->id}_thumbnail.png";
                     $cert_image_path_file = '';
                     if (file_exists($cert_image_path)) {
-                        $cert_image_path_file = "<img style='width:50px; height:50px;' src='{$urlServer}courses/user_progress_data/cert_templates/certificate{$cert_data->id}_thumbnail.png'>";
+                        $cert_image_path_file = "<a href='#preview_cert_{$cert_data->id}' data-bs-toggle='modal'>
+                                                    <img data-bs-toggle='tooltip' title='$langPreview' style='width:50px; height:50px;' src='{$urlServer}courses/user_progress_data/cert_templates/certificate{$cert_data->id}_thumbnail.png'>
+                                                 </a>";
+                        $cert_image_path_file .= "
+                                <div class='modal fade' id='preview_cert_{$cert_data->id}' tabindex='-1' aria-labelledby='preview_cert_{$cert_data->id}Label' aria-hidden='true'>
+                                    <div class='modal-dialog'>
+                                        <div class='modal-content'>
+                                            <div class='modal-body d-flex justify-content-center align-items-center'>
+                                                <figure class='figure m-0'>
+                                                    <img class='m-0' style='width:400px; height:300px;' src='{$urlServer}courses/user_progress_data/cert_templates/certificate{$cert_data->id}_thumbnail.png' class='figure-img img-fluid rounded' alt='{$cert_data->name}'>
+                                                    <figcaption class='figure-caption'>$cert_data->description</figcaption>
+                                                </figure>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>";
                     }
                     $tool_content .= "<tr>
                                         <td style='width:30%;'>
