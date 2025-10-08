@@ -969,7 +969,7 @@ function display_gradebook($gradebook) {
                                 'show' => (!empty($preview_link))),
                             array('title' => $langDelete,
                                 'icon' => 'fa-xmark',
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;delete=" . $activity_id,
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;delete=" . $activity_id . "&amp;" . generate_csrf_token_link_parameter() . "",
                                 'confirm' => $langConfirmDelete,
                                 'class' => 'delete')
                     )) . "</td>";
@@ -1728,6 +1728,7 @@ function import_grades($gradebook_id, $activity_id, $import = false) {
            $langImportExtraGradebookUsers, $langGradesImported, $urlAppend, $langImgFormsDes, $langForm;
 
     if ($import and isset($_FILES['userfile'])) { // import user grades
+        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         $gradebook_range = get_gradebook_range($gradebook_id);
 
         $file = IOFactory::load($_FILES['userfile']['tmp_name']);
@@ -1844,10 +1845,12 @@ function import_grades($gradebook_id, $activity_id, $import = false) {
                                     </div>
                                 </div>
                             </fieldset>
+                            " . generate_csrf_token_form_field() . "
                         </form>
                     </div>
                 </div><div class='d-none d-lg-block'>
                 <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
+                
             </div>
             </div>
             ";

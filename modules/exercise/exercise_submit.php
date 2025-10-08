@@ -509,6 +509,7 @@ if (isset($_POST['formSent'])) {
 
     // if the user has made a final submission or the time has expired
     if (isset($_POST['buttonFinish']) or $time_expired) {
+        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         if (isset($_POST['secsRemaining'])) {
             $secs_remaining = $_POST['secsRemaining'];
         } else {
@@ -811,7 +812,7 @@ if ($exerciseType != SINGLE_PAGE_TYPE) {
 }
 
 $tool_content .= $tempSaveButton . "</div>";
-
+$tool_content .=  generate_csrf_token_form_field();
 $tool_content .= "</form>";
 $tool_content .= "</div>";
 

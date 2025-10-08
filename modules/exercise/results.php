@@ -58,6 +58,7 @@ if (isset($_SESSION['objExercise'][$exerciseId])) {
 
 
 if ($is_editor && isset($_GET['purgeAttempID'])) {
+    if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();
     $eurid = $_GET['purgeAttempID'];
     $objExercise->purgeAttempt($exerciseIdIndirect, $eurid);
     Session::flash('message',$langPurgeExerciseResultsSuccess);
@@ -295,7 +296,7 @@ foreach ($result as $row) {
                     <td class='option-btn-cell text-end'>" . action_button(array(
                         array(
                             'title' => $langDelete,
-                            'url' => "results.php?course=$course_code&exerciseId=$exerciseId&purgeAttempID=$row2->eurid",
+                            'url' => "results.php?course=$course_code&exerciseId=$exerciseId&purgeAttempID=$row2->eurid&" . generate_csrf_token_link_parameter(),
                             'icon' => "fa-xmark",
                             'confirm' => $langConfirmPurgeExercises,
                             'class' => 'delete'
