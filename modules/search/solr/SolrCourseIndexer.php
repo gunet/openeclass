@@ -52,7 +52,6 @@ class SolrCourseIndexer extends AbstractSolrIndexer {
     }
 
     public static function buildSolrQuery(array $params): array {
-        error_log('search params: ' . print_r($params, true));
         if (!empty($params['search_terms'])) {
             // ------- SIMPLE SEARCH (edismax over multiple fields) -------
             $terms = trim($params['search_terms']);
@@ -60,7 +59,6 @@ class SolrCourseIndexer extends AbstractSolrIndexer {
                 // empty behavior
                 $terms = '*:*';
             }
-            error_log('solr simple search terms: ' . $terms);
 
             // fields & boosts for the simple search
             $qf = [
@@ -109,7 +107,6 @@ class SolrCourseIndexer extends AbstractSolrIndexer {
                 // OR between different fields to enforce each filled field as a constraint
                 $terms = implode(' OR ', $clauses);
             }
-            error_log('solr advanced search terms: ' . $terms);
 
             $q = [
                 // Use the classic parser since we’ve already built a Lucene query string
@@ -150,7 +147,6 @@ class SolrCourseIndexer extends AbstractSolrIndexer {
      * If multiple tokens, OR them.
      */
     private static function buildFieldClause(string $field, string $raw): ?string {
-        error_log('buildFieldClause field: ' . $field . ', raw: ' . $raw);
         $raw = trim($raw);
         if ($raw === '') return null;
 
