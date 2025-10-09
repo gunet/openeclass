@@ -22,6 +22,7 @@ require_once 'SearchEngineInterface.php';
 require_once 'SearchResult.php';
 require_once 'modules/admin/extconfig/solrapp.php';
 require_once 'modules/search/solr/SolrIndexer.php';
+require_once 'modules/search/solr/SolrCourseIndexer.php';
 
 class SolrSearchEngine implements SearchEngineInterface {
 
@@ -31,11 +32,7 @@ class SolrSearchEngine implements SearchEngineInterface {
         }
 
         // construct Solr Url for searching
-        $query = [
-            'q' => 'title:' . $params['search_terms'],
-            'wt' => 'json'
-        ];
-        $solrUrl = $this->constructSolrUrl("select", $query);
+        $solrUrl = $this->constructSolrUrl("select", SolrCourseIndexer::buildSolrQuery($params));
 
         // Perform Solr query
         list($response, $code) = CurlUtil::httpGetRequest($solrUrl);

@@ -51,4 +51,121 @@ class SolrCourseIndexer extends AbstractSolrIndexer {
         return $this->storeByCourse($id);
     }
 
+    public static function buildSolrQuery(array $params): array {
+        error_log('search params: ' . print_r($params, true));
+        if (!empty($params['search_terms'])) {
+            // ------- SIMPLE SEARCH (edismax over multiple fields) -------
+            $terms = trim($params['search_terms']);
+            if ($terms === '') {
+                // empty behavior
+                $terms = '*:*';
+            }
+            error_log('solr simple search terms: ' . $terms);
+
+            // fields & boosts for the simple search
+            $qf = [
+                'code^4',
+                'public_code^4',
+                'title^3',
+                'prof_names^2',
+                'units^1',
+            ];
+
+            // edismax Solr search (parse the text)
+            $q = [
+                'defType' => 'edismax',
+                'q'       => $terms,
+                'qf'      => implode(' ', $qf),
+                'q.op'    => 'OR',             // ← the default operator, we want anything that matches, at least one term
+                'fq'      => 'doctype:course', // ← filter to only "course" type docs
+                //'mm'      => '0%',           // ← for at least any match, this defaults to 0%
+                //'rows'    => 10,             // ← row limiter
+                'wt'      => 'json',
+            ];
+        } else {
+            // ------- ADVANCED SEARCH (fielded boolean query) -------
+            $FIELD_MAP = [
+                // map form inputs -> solr schema fields
+                'search_terms_title'       => 'title',
+                'search_terms_keywords'    => 'keywords',
+                'search_terms_instructor'  => 'prof_names',
+                'search_terms_coursecode'  => 'public_code',
+                'search_terms_description' => 'units',
+            ];
+
+            $clauses = [];
+
+            foreach ($FIELD_MAP as $formKey => $solrField) {
+                if (!empty($params[$formKey])) {
+                    $clause = self::buildFieldClause($solrField, (string)$params[$formKey]);
+                    if ($clause) $clauses[] = $clause;
+                }
+            }
+
+            if (!$clauses) {
+                // If all optional fields empty, default behavior
+                $terms = '*:*';
+            } else {
+                // OR between different fields to enforce each filled field as a constraint
+                $terms = implode(' OR ', $clauses);
+            }
+            error_log('solr advanced search terms: ' . $terms);
+
+            $q = [
+                // Use the classic parser since we’ve already built a Lucene query string
+                'defType' => 'lucene',
+                'q'       => '(' . $terms . ') AND doctype:course',
+                // 'rows'    => 10,
+                'wt'      => 'json',
+            ];
+        }
+
+        return $q;
+    }
+
+    /**
+     * Escape Lucene special characters in a single token (NOT a full query)
+     * Reference specials: + - && || ! ( ) { } [ ] ^ " ~ * ? : \ /
+     */
+    private static function solrEscapeTerm(string $term): string {
+        // Remove control chars
+        $term = preg_replace('/[\x00-\x1F\x7F]/u', '', $term);
+
+        // Escape all Lucene special characters
+        $specials = ['\\', '+', '-', '&&', '||', '!', '(', ')', '{', '}', '[', ']', '^', '"', '~', '*', '?', ':', '/',];
+        // Sort longer tokens first so && and || are handled before single &
+        usort($specials, fn($a, $b) => strlen($b) <=> strlen($a));
+        foreach ($specials as $s) {
+            $term = str_replace($s, '\\' . $s, $term);
+        }
+
+        // Also collapse multiple spaces
+        return preg_replace('/\s+/u', ' ', trim($term));
+    }
+
+
+    /**
+     * Build a clause like: field:(term1 OR term2) given a raw input string.
+     * If the input looks like a single token containing no spaces, just field:term
+     * If multiple tokens, OR them.
+     */
+    private static function buildFieldClause(string $field, string $raw): ?string {
+        error_log('buildFieldClause field: ' . $field . ', raw: ' . $raw);
+        $raw = trim($raw);
+        if ($raw === '') return null;
+
+        // Split on whitespace, keep words of length > 0
+        $parts = preg_split('/\s+/u', $raw, -1, PREG_SPLIT_NO_EMPTY);
+        if (!$parts) return null;
+
+        // Escape each token
+        $escaped = array_map('self::solrEscapeTerm', $parts);
+
+        if (count($escaped) === 1) {
+            return sprintf('%s:%s', $field, $escaped[0]);
+        }
+        // OR within the same field to broaden results; could use ' AND ' to narrow matching
+        return sprintf('%s:(%s)', $field, implode(' OR ', $escaped));
+    }
+
 }
