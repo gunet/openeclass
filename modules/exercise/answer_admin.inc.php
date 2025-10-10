@@ -1316,8 +1316,8 @@ if (isset($_GET['modifyAnswers'])) {
             $tool_content .= "<tr>
                     <td class='text-start' colspan='3'><strong>$langPollAddAnswer :</strong>
                         <div class='d-flex gap-2 flex-wrap mt-2'>
-                            <input type='submit' name='moreAnswers' value='$langMoreAnswers' />
-                            <input type='submit' name='lessAnswers' value='$langLessAnswers' />
+                            <input type='submit' name='moreAnswers' value='+'>
+                            <input type='submit' name='lessAnswers' value='-'>
                         </div>
                     </td>
                     <td colspan='2'>&nbsp;</td>
@@ -1681,7 +1681,7 @@ if (isset($_GET['modifyAnswers'])) {
             $setId = isset($exerciseId)? "&amp;exerciseId=$exerciseId" : '';
             $DataJsonFileVariables = Database::get()->querySingle("SELECT options FROM exercise_question WHERE id = ?d", $questionId)->options;
 
-            $tool_content .= "<div id='marker_mode' class='status-indicator'></div>"; 
+            $tool_content .= "<div id='marker_mode' class='status-indicator'></div>";
             $tool_content .= "
                 <div class='col-12 d-flex justify-content-between align-items-center gap-3'>
                     <div>
@@ -2164,45 +2164,46 @@ if (isset($_GET['modifyAnswers'])) {
             </div>
         </div></div>";
     } else {
-        // FREE_TEXT questions - show AI evaluation configuration if available
-        if ($aiEvaluationAvailable) {
+        if ($answerType == FREE_TEXT) {
+            // FREE_TEXT questions - show AI evaluation configuration if available
+            if ($aiEvaluationAvailable) {
 
-            // Display success/error messages
-            if (!empty($aiConfigError)) {
-                $tool_content .= "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$aiConfigError</span></div>";
-            }
-            if (!empty($msgSuccess)) {
-                $tool_content .= "<div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$msgSuccess</span></div>";
-            }
-
-            $aiEnabled = $aiConfig ? $aiConfig->enabled : 0;
-            $evaluationPrompt = $aiConfig ? $aiConfig->evaluation_prompt : '';
-            $maxPoints = $objQuestion->selectWeighting(); // Use question's weight as max points
-            $sampleResponses = '';
-
-            if ($aiConfig && $aiConfig->sample_responses) {
-                $samples = json_decode($aiConfig->sample_responses, true);
-                if ($samples && is_array($samples)) {
-                    $lines = [];
-                    foreach ($samples as $sample) {
-                        if (isset($sample['response']) && isset($sample['quality'])) {
-                            $lines[] = $sample['response'] . ' | ' . $sample['quality'];
-                        } else {
-                            $lines[] = $sample['response'];
-                        }
-                    }
-                    $sampleResponses = implode("\n", $lines);
+                // Display success/error messages
+                if (!empty($aiConfigError)) {
+                    $tool_content .= "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$aiConfigError</span></div>";
                 }
-            }
+                if (!empty($msgSuccess)) {
+                    $tool_content .= "<div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$msgSuccess</span></div>";
+                }
 
-            $tool_content .= "
+                $aiEnabled = $aiConfig ? $aiConfig->enabled : 0;
+                $evaluationPrompt = $aiConfig ? $aiConfig->evaluation_prompt : '';
+                $maxPoints = $objQuestion->selectWeighting(); // Use question's weight as max points
+                $sampleResponses = '';
+
+                if ($aiConfig && $aiConfig->sample_responses) {
+                    $samples = json_decode($aiConfig->sample_responses, true);
+                    if ($samples && is_array($samples)) {
+                        $lines = [];
+                        foreach ($samples as $sample) {
+                            if (isset($sample['response']) && isset($sample['quality'])) {
+                                $lines[] = $sample['response'] . ' | ' . $sample['quality'];
+                            } else {
+                                $lines[] = $sample['response'];
+                            }
+                        }
+                        $sampleResponses = implode("\n", $lines);
+                    }
+                }
+
+                $tool_content .= "
                <div class='col-12 mt-4'>
                    <div class='card panelCard card-default px-lg-4 py-lg-3'>
                        <div class='card-header border-0'>
                            <h3>$langAIEvaluation</h3>
                        </div>
                        <div class='card-body'>
-                           <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code".((isset($exerciseId))? "&amp;exerciseId=$exerciseId" : "")."&amp;modifyAnswers=" . urlencode($_GET['modifyAnswers']) . "'>
+                           <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code" . ((isset($exerciseId)) ? "&amp;exerciseId=$exerciseId" : "") . "&amp;modifyAnswers=" . urlencode($_GET['modifyAnswers']) . "'>
                                <input type='hidden' name='formSent' value='1'>
                                <fieldset><legend class='mb-0' aria-label='$langForm'></legend>
                                
@@ -2250,27 +2251,28 @@ if (isset($_GET['modifyAnswers'])) {
                    </div>
                </div>";
 
-            // Show info about existing AI evaluations if any
-            if ($aiEnabled && isset($exerciseId)) {
-                $evaluationCount = Database::get()->querySingle("SELECT COUNT(*) as count FROM exercise_ai_evaluation WHERE question_id = ?d", $questionId)->count;
-                if ($evaluationCount > 0) {
-                    $tool_content .= "
+                // Show info about existing AI evaluations if any
+                if ($aiEnabled && isset($exerciseId)) {
+                    $evaluationCount = Database::get()->querySingle("SELECT COUNT(*) as count FROM exercise_ai_evaluation WHERE question_id = ?d", $questionId)->count;
+                    if ($evaluationCount > 0) {
+                        $tool_content .= "
                        <div class='col-12 mt-3'>
                            <div class='alert alert-info'>
                                <i class='fa-solid fa-circle-info fa-lg'></i>
                                <span>$langAIEvaluationsFound ($evaluationCount evaluations)</span>
                            </div>
                        </div>";
+                    }
                 }
+            } else {
+                $tool_content .= "
+                   <div class='col-12 mt-4'>
+                       <div class='alert alert-info'>
+                           <i class='fa-solid fa-circle-info fa-lg'></i>
+                           <span>$langFreeTextNoAnswerConfig</span>
+                       </div>
+                   </div>";
             }
-        } else {
-            $tool_content .= "
-               <div class='col-12 mt-4'>
-                   <div class='alert alert-info'>
-                       <i class='fa-solid fa-circle-info fa-lg'></i>
-                       <span>$langFreeTextNoAnswerConfig</span>
-                   </div>
-               </div>";
         }
     }
 }
