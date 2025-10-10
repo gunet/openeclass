@@ -553,6 +553,8 @@ function printPolls() {
                         $assign_to_users_message = '';
                     }
                     $tool_content .= "<a href='pollparticipate.php?course=$course_code&amp;UseCase=1&pid=$pid'>".q($thepoll->name)."</a>$lock_icon $assign_to_users_message";
+                } elseif ($is_course_reviewer) {
+                    $tool_content .= "<a href='pollparticipate.php?course=$course_code&amp;UseCase=1&pid=$pid'>" . q($thepoll->name) . "</a>";
                 } else {
                     if  ($poll_ended == 1 || $poll_not_started == 1) { // poll out of date
                         $tool_content .= q($thepoll->name);

@@ -112,9 +112,9 @@ draw($tool_content, 2, null, $head_content);
 function printPollForm() {
     global $course_id, $course_code, $tool_content, $langSelect, $langDescription,
     $langSubmit, $langPollInactive, $langPollUnknown, $uid, $langAnswer,
-    $langPollAlreadyParticipated, $is_editor, $langBack, $langQuestion,
+    $langPollAlreadyParticipated, $is_editor, $is_course_reviewer, $langBack, $langQuestion,
     $langCancel, $head_content, $langPollParticipantInfo, $langCollesLegend,
-    $pageName, $lang_rate1, $lang_rate5, $langForm, $pid, $typeyourmessage, 
+    $pageName, $lang_rate1, $lang_rate5, $langForm, $pid, $typeyourmessage,
     $langPreviousQuestion, $langNextQuestion, $langCleanup;
 
     $unit_id = isset($_REQUEST['unit_id'])? intval($_REQUEST['unit_id']): null;
@@ -273,7 +273,7 @@ function printPollForm() {
         if (isset($_REQUEST['unit_id'])) {
             redirect_to_home_page('modules/units/index.php?course='.$course_code.'&id='.$_REQUEST['unit_id']);
         } else if (isset($_REQUEST['res_type'])) {
-            redirect_to_home_page('modules/wall/index.php?course=' . $course_code); 
+            redirect_to_home_page('modules/wall/index.php?course=' . $course_code);
         } else {
             redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);
         }
@@ -285,7 +285,7 @@ function printPollForm() {
     $temp_StartDate = mktime(substr($temp_StartDate, 11, 2), substr($temp_StartDate, 14, 2), 0, substr($temp_StartDate, 5, 2), substr($temp_StartDate, 8, 2), substr($temp_StartDate, 0, 4));
     $temp_EndDate = mktime(substr($temp_EndDate, 11, 2), substr($temp_EndDate, 14, 2), 0, substr($temp_EndDate, 5, 2), substr($temp_EndDate, 8, 2), substr($temp_EndDate, 0, 4));
     $temp_CurrentDate = mktime(substr($temp_CurrentDate, 11, 2), substr($temp_CurrentDate, 14, 2), 0, substr($temp_CurrentDate, 5, 2), substr($temp_CurrentDate, 8, 2), substr($temp_CurrentDate, 0, 4));
-    $temp_IsLime = ($thePoll->type == POLL_LIMESURVEY) ? true : false;
+    $temp_IsLime = $thePoll->type == POLL_LIMESURVEY;
 
     if ($is_editor || ($temp_CurrentDate >= $temp_StartDate) && ($temp_CurrentDate < $temp_EndDate)) {
 
@@ -524,8 +524,8 @@ function printPollForm() {
                                 if ($q_rows > 0) {
                                     $user_questions = Database::get()->queryArray("SELECT answer_text,sub_question FROM poll_question_answer
                                                                                     WHERE pqid = ?d", $pqid);
-                                                    
-                        
+
+
                                     if (count($user_questions)>0) {
                                         $sub_question_arr = [];
                                         foreach ($user_questions as $uq) {
@@ -538,7 +538,7 @@ function printPollForm() {
                                                         <tr>";
                                                             foreach ($user_questions as $q) {
                                                                 $tool_content .= "<th style='min-width:250px;'><p>" . q($q->answer_text) . "</p></th>";
-                                                            }                                            
+                                                            }
                                     $tool_content .= "</tr>
                                                     </thead>
                                                     <tbody>";
@@ -609,7 +609,27 @@ function printPollForm() {
 
         $tool_content .= "<div class='col-12 d-flex justify-content-center mt-5'>";
         if ($is_editor) {
-            $tool_content .= "<a class='btn cancelAdminBtn' href='index.php?course=$course_code'>" . q($langBack). "</a>";
+            $tool_content .= "<a class='btn cancelAdminBtn' href='index.php?course=$course_code'>" . q($langBack) . "</a>";
+        } else if ($is_course_reviewer) {
+            // is poll assigned to course_reviewer?
+            $query = "SELECT * FROM poll WHERE pid = ?d";
+            $query_params[] = $pid;
+            $gids = user_group_info($uid, $course_id);
+            if (!empty($gids)) {
+                $gids_sql_ready = implode(',',array_keys($gids));
+            } else {
+                $gids_sql_ready = "''";
+            }
+            $query .= " AND (assign_to_specific != '0' AND pid IN
+                   (SELECT poll_id FROM poll_to_specific WHERE user_id = ?d UNION SELECT poll_id FROM poll_to_specific WHERE group_id IN ($gids_sql_ready))
+                )";
+            $query_params[] = $uid;
+            $result = Database::get()->queryArray($query, $query_params);
+            if (count($result) > 0) {
+                $tool_content .= "<input class='btn submitAdminBtn blockUI' name='submit' type='submit' value='" . q($langSubmit) . "'>";
+            } else {
+                $tool_content .= "<a class='btn cancelAdminBtn' href='index.php?course=$course_code'>" . q($langBack) . "</a>";
+            }
         } else {
             if (!$temp_IsLime) {
                 $tool_content .= "<input class='btn submitAdminBtn blockUI' name='submit' type='submit' value='" . q($langSubmit) . "'>";
