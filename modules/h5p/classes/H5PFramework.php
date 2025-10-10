@@ -342,7 +342,7 @@ class H5PFramework implements H5PFrameworkInterface {
      *   Main id for the content if this is a system that supports versions
      */
     public function updateContent($content, $contentMainId = NULL) {
-        global $course_id;
+        global $course_id, $uid;
 
         // Add title to 'params' to use in the editor.
         if (!empty($content['title'])) {
@@ -352,8 +352,8 @@ class H5PFramework implements H5PFrameworkInterface {
         }
 
         if (!isset($content['id'])) {
-            $id = Database::get()->query("INSERT INTO h5p_content (main_library_id, params, course_id) VALUES (?d, ?s, ?d)",
-                $content['library']['libraryId'], $content['params'], $course_id)->lastInsertID;
+            $id = Database::get()->query("INSERT INTO h5p_content (main_library_id, params, course_id, creator_id) VALUES (?d, ?s, ?d, ?d)",
+                $content['library']['libraryId'], $content['params'], $course_id, $uid)->lastInsertID;
         } else {
             Database::get()->query("UPDATE h5p_content SET main_library_id = ?d, params = ?s WHERE id = ?d",
                 $content['library']['libraryId'], $content['params'], $content['id']);

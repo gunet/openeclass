@@ -24,13 +24,14 @@ $guest_allowed = true;
 
 require_once '../../include/baseTheme.php';
 require_once 'classes/H5PFactory.php';
+require_once 'include/course_settings.php';
 
 $toolName = $langH5p;
 
 $onlyEnabledWhere = ($is_editor) ? '' : " AND enabled = 1 ";
 $content = Database::get()->queryArray("SELECT * FROM h5p_content WHERE course_id = ?d $onlyEnabledWhere ORDER BY id ASC", $course_id);
 
-if ($is_editor) {
+if ($is_editor || setting_get(SETTING_COURSE_H5P_USERS_UPLOADING_ENABLE, $course_id) == 1) {
     $factory = new H5PFactory();
     $editorAjax = $factory->getH5PEditorAjax();
     $h5pcontenttypes = $editorAjax->getLatestLibraryVersions();
@@ -51,7 +52,7 @@ if ($is_editor) {
         foreach ($h5pcontenttypes as $h5pcontenttype) {
             if ($h5pcontenttype->enabled) {
                 if ($counter == 0) {
-                   $tool_content .= "<option selected></option>";
+                    $tool_content .= "<option selected></option>";
                 }
                 $typeTitle = $h5pcontenttype->title;
                 $typeVal = $h5pcontenttype->machine_name . " " . $h5pcontenttype->major_version . "." . $h5pcontenttype->minor_version;
@@ -65,29 +66,32 @@ if ($is_editor) {
             }
             $counter++;
         }
-
         $tool_content .= "
                 </optgroup>
             </select>";
 
         // new button group for Create Dropdown
-        $tool_content .= "</div><div class='btn-group'>";
+        $tool_content .= "</div>";
     }
+}
 
-    // Import
-    $tool_content .= "
-        <a class='btn submitAdminBtn ms-2' href='upload.php?course=$course_code' data-bs-placement='bottom' data-bs-toggle='tooltip'  title='$langImport' aria-label='$langImport'>
-            <span class='fa-solid fa-upload space-after-icon settings-icons'></span>
-            <span class='TextBold hidden-xs ps-2'>$langImport</span>
-        </a>";
+// Import
+if ($is_editor) {
+    $tool_content .= "<div class='btn-group'>
+                    <a class='btn submitAdminBtn ms-2' href='upload.php?course=$course_code' data-bs-placement='bottom' data-bs-toggle='tooltip'  title='$langImport' aria-label='$langImport'>
+                        <span class='fa-solid fa-upload space-after-icon settings-icons'></span>
+                        <span class='TextBold hidden-xs ps-2'>$langImport</span>
+                    </a>";
+    $tool_content .= "</div>";
+}
 
-    // end custom action bar
-    $tool_content .= "
-                    </div>
-                </div>
+if ($is_editor || setting_get(SETTING_COURSE_H5P_USERS_UPLOADING_ENABLE, $course_id) == 1) {
+    $tool_content .= "</div>
             </div>
         </div>";
+}
 
+if ($is_editor) {
     // Control Flags
     if (isset($_GET['choice']) && isset($_GET['id'])) {
         switch($_GET['choice']) {
@@ -125,18 +129,18 @@ if ($content) {
             <tr class='list-header'>
                 <th>$langH5pInteractiveContent</th>
                 <th>$langTypeH5P</th>";
-                if ($is_editor) {
-                    $tool_content .= "
-                        <th aria-label='$langSettingSelect'>
-                        <span class='fa fa-gears'></span>
-                    </th>";
+
+                if ($is_editor || setting_get(SETTING_COURSE_H5P_USERS_UPLOADING_ENABLE, $course_id) == 1) {
+                    $tool_content .= "<th aria-label='$langSettingSelect'><i class='fa-solid fa-gears'></i></th>";
                 }
+
     $tool_content .= "
             </tr>
         </thead>
         <tbody>";
 
     foreach ($content as $item) {
+        $can_edit = ($is_editor || (setting_get(SETTING_COURSE_H5P_USERS_UPLOADING_ENABLE, $course_id) == 1 && $item->creator_id == $_SESSION['uid'] && $item->creator_id > 0));
         $q = Database::get()->querySingle("SELECT machine_name, title, major_version, minor_version
                                             FROM h5p_library WHERE id = ?s", $item->main_library_id);
         $h5p_content_type_title = $q->title;
@@ -153,29 +157,32 @@ if ($content) {
                     <td>
                         <img src='$typeIconUrl' alt='$h5p_content_type_title' width='30px' height='30px'> <em>$h5p_content_type_title</em>
                     </td>";
-        if ($is_editor) {
+
             $tool_content .= "<td class='text-end'>";
             $tool_content .= action_button([[
                 'icon' => 'fa-edit',
                 'title' => $langEditChange,
-                'url' => "create.php?course=$course_code&amp;id=$item->id"
+                'url' => "create.php?course=$course_code&amp;id=$item->id",
+                'show' => $can_edit
             ], [
                 'icon' => $item->enabled ? 'fa-eye': 'fa-eye-slash',
                 'title' => $item->enabled ? $langDeactivate : $langActivate,
-                'url' => "index.php?course=$course_code&amp;id=$item->id&amp;choice=do_" . ($item->enabled ? 'disable' : 'enable')
+                'url' => "index.php?course=$course_code&amp;id=$item->id&amp;choice=do_" . ($item->enabled ? 'disable' : 'enable'),
+                'show' => $is_editor
             ], [
                 'icon' => $item->reuse_enabled ? 'fa-bell': 'fa-bell-slash',
                 'title' => $item->reuse_enabled ? $langReuseDeactivate : $langReuseActivate,
-                'url' => "index.php?course=$course_code&amp;id=$item->id&amp;choice=do_reuse_" . ($item->reuse_enabled ? 'disable' : 'enable')
+                'url' => "index.php?course=$course_code&amp;id=$item->id&amp;choice=do_reuse_" . ($item->reuse_enabled ? 'disable' : 'enable'),
+                'show' => $is_editor
             ], [
                 'icon' => 'fa-xmark',
                 'title' => $langDelete,
                 'url' => "delete.php?course=$course_code&amp;id=$item->id",
                 'class' => 'delete',
-                'confirm' => $langConfirmDelete
+                'confirm' => $langConfirmDelete,
+                'show' => $is_editor
             ]], false);
             $tool_content .= "</td>";
-        }
         $tool_content .= "</tr>";
     }
     $tool_content .= "</tbody></table></div></div>";
