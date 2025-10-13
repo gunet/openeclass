@@ -1080,10 +1080,12 @@ function unset_session_variables_of_questions($eurid, $type = '') {
                 $fFile = Database::get()->querySingle("SELECT id,`path` FROM document WHERE course_id = ?d
                                                         AND subsystem = ?d AND subsystem_id = ?d
                                                         AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $qid, $eurid);
-                if (file_exists("$webDir/courses/$course_code/image" . $fFile->path)) {
-                    unlink("$webDir/courses/$course_code/image" . $fFile->path);
+                if ($fFile) {
+                    if (file_exists("$webDir/courses/$course_code/image" . $fFile->path)) {
+                        unlink("$webDir/courses/$course_code/image" . $fFile->path);
+                    }
+                    Database::get()->query("DELETE FROM document WHERE id = ?d", $fFile->id);
                 }
-                Database::get()->query("DELETE FROM document WHERE id = ?d", $fFile->id);
             }
         }
     }

@@ -17,8 +17,8 @@ class OralAnswer extends QuestionType
     {
         global $langOral, $langStart, $head_content,
                $langStopRecording, $urlAppend, $langMaxRecAudioTimeTmp, $langminutes,
-               $langMaxRecAudioTimeInExericses, $course_code, $urlServer, $langSave,
-               $langSaveOralMsg, $course_id, $langCancel, $langAnalyticsConfirm,
+               $langMaxRecAudioTimeInExericses, $course_code, $urlServer,
+               $course_id, $langCancel, $langAnalyticsConfirm,
                $langDeleteRecordingOk, $langListenToRecordingAudio,
                $langFileUploadingOkReplaceWithNew, $eurid, $langConfirmDelete;
 
@@ -60,7 +60,7 @@ class OralAnswer extends QuestionType
             $dt1 = new DateTime($ex_res->start_date);
             $dt2 = new DateTime($ex_res->end_date);
             if ($dt1->format('Y-m-d') === $dt2->format('Y-m-d') && $dt2->getTimestamp() > $dt1->getTimestamp()) {
-                // Calculate difference in seconds
+                // Calculate the difference in seconds
                 $diffSeconds = abs($dt1->getTimestamp() - $dt2->getTimestamp());
                 // Convert seconds to minutes
                 $diffMinutes = $diffSeconds / 60;
@@ -81,10 +81,8 @@ class OralAnswer extends QuestionType
             <div class='tab-pane fade show active' id='oral_{$questionId}' role='tabpanel' aria-labelledby='oral-tab_{$questionId}'>
                 <input type='hidden' name='choice[$questionId]' id='hidden-recording-{$questionId}' value='{$filenameRecording}'>
                 <div class='col-12 d-flex gap-3'>
-                    <button class='btn submitAdminBtnDefault' id='button-start-recording-{$questionId}'>$langStart</button>
-                    <button class='btn submitAdminBtn' id='button-release-microphone-{$questionId}' disabled><i class='fa-solid fa-microphone-slash'></i></button>
-                    <button class='btn deleteAdminBtn' id='button-stop-recording-{$questionId}' disabled>$langStopRecording</button>
-                    <button class='btn successAdminBtn btnSaveRecording' id='button-save-recording-{$questionId}' disabled>$langSave</button>
+                    <button class='btn submitAdminBtnDefault' id='button-start-recording-{$questionId}'>$langStart</button>                    
+                    <button class='btn deleteAdminBtn' id='button-stop-recording-{$questionId}' disabled>$langStopRecording</button>                    
                 </div>
                 <div class='col-12 d-flex justify-content-start align-items-center mt-2'>
                     <span class='help-block'>" . ($milliseconds == 1200000 ? $langMaxRecAudioTimeInExericses : $langMaxRecAudioTimeTmp.$diffMinutes.' '.$langminutes) . "</span>
@@ -100,9 +98,11 @@ $html_content .= "<div id='recording_file_container_{$questionId}' class='col-12
                         <div class='modal-dialog modal-dialog-centered'>
                             <div class='modal-content'>
                                 <div class='modal-body'>
-                                    <audio id='audio_{$questionId}' controls>
-                                        <source id='audioSource_{$questionId}' src=" . htmlspecialchars($url) . " type='audio/mpeg'>
-                                    </audio>
+                                    <audio id='audio_{$questionId}' controls>";
+                                    if (!empty($url)) {
+                                        $html_content .= "<source id = 'audioSource_{$questionId}' src = " . htmlspecialchars($url) . " type = 'audio/mpeg'>";
+                                    }
+                                    $html_content .= "</audio>
                                 </div>
                             </div>
                         </div>
@@ -146,9 +146,7 @@ $html_content .= "</div>
                 
 
                 var audio = document.querySelector('audio.audio-{$questionId}');
-                function captureMicrophone(callback) {
-                    btnReleaseMicrophone.disabled = false;
-                    $('#button-release-microphone-{$questionId} i').removeClass('fa-solid fa-microphone-slash').addClass('fa-solid fa-microphone');
+                function captureMicrophone(callback) {                                        
                     if(microphone) {
                         callback(microphone);
                         return;
@@ -208,15 +206,13 @@ $html_content .= "</div>
                 var recorder; // globally accessible
                 var microphone;
                 var btnStartRecording = document.getElementById('button-start-recording-{$questionId}');
-                var btnStopRecording = document.getElementById('button-stop-recording-{$questionId}');
-                var btnReleaseMicrophone = document.querySelector('#button-release-microphone-{$questionId}');
-                var saveBtn = document.querySelector('#button-save-recording-{$questionId}');
-
+                var btnStopRecording = document.getElementById('button-stop-recording-{$questionId}');                
+                
                 btnStartRecording.onclick = function() {
                     this.disabled = true;
                     this.style.border = '';
                     this.style.fontSize = '';
-                    saveBtn.disabled = true;
+                    //saveBtn.disabled = true;
                     if (!microphone) {
                         captureMicrophone(function(mic) {
                             microphone = mic;
@@ -268,27 +264,6 @@ $html_content .= "</div>
                     btnStopRecording.disabled = false;
                 };
 
-                btnStopRecording.onclick = function() {
-                    this.disabled = true;
-                    saveBtn.disabled = false;
-                    recorder.stopRecording(stopRecordingCallback);
-                };
-
-                btnReleaseMicrophone.onclick = function() {
-                    this.disabled = true;
-                    $('#button-release-microphone-{$questionId} i').removeClass('fa-solid fa-microphone').addClass('fa-solid fa-microphone-slash');
-                    btnStartRecording.disabled = false;
-
-                    if(microphone) {
-                        microphone.stop();
-                        microphone = null;
-                    }
-
-                    if(recorder) {
-                        /* click(btnStopRecording); */
-                    }
-                };
-
                 function click(el) {
                     el.disabled = false; // make sure that element is not disabled
                     var evt = document.createEvent('Event');
@@ -296,12 +271,14 @@ $html_content .= "</div>
                     el.dispatchEvent(evt);
                 }
 
-                saveBtn.onclick = function(e) {
-
+                btnStopRecording.onclick = function(e) {
+                    this.disabled = true;                    
+                    recorder.stopRecording(stopRecordingCallback);                
+                                                
                     e.preventDefault();
 
                     bootbox.confirm({
-                        message: '$langSaveOralMsg',
+                        message: '$langFileUploadingOkReplaceWithNew',
                         title: '<div class=\'modal-title-default text-center mb-0\'>$langAnalyticsConfirm</div>',
                         buttons: {
                             cancel: {
@@ -354,8 +331,7 @@ $html_content .= "</div>
                                 processData: false,
                                 type: 'POST',
                                 dataType: 'json' // Expect JSON response
-                            }).done(function(data) {
-                                alert('$langFileUploadingOkReplaceWithNew');
+                            }).done(function(data) {                                
                                 var newFilePath = data.newFilePath;
                                 $('#recording_file_container_{$questionId}').removeClass('d-none').addClass('d-block');
 
@@ -374,7 +350,6 @@ $html_content .= "</div>
                             })
                         }
                     });
-
                 };
             })
         </script>";
