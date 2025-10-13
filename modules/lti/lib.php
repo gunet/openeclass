@@ -848,7 +848,7 @@ function ltiGetJwtClaimMapping(): array {
  * @param  string|null  $resourceId   The resource type id.
  * @return array                      The endpoint URL and parameters (including the signature).
  */
-function ltiGetLaunchData(stdClass $ltiApp, stdClass $course, stdClass $stat, string $nonce = '', string $messagetype = 'basic-lti-launch-request', ?string $resourceType, ?string $resourceId): array {
+function ltiGetLaunchData(stdClass $ltiApp, stdClass $course, stdClass $stat, ?string $resourceType, ?string $resourceId, string $messagetype = 'basic-lti-launch-request', string $nonce = ''): array {
     global $urlServer, $uid;
 
     $ltiAppId = $ltiApp->id;
@@ -993,7 +993,7 @@ function ltiBuildSourcedid(int $resourceid, int $userid, string $servicesalt, in
  * @param  string    $resourceType  Resource type.
  * @return string
  */
-function ltiInitiateLogin(stdClass $course, stdClass $ltiApp, string $messagetype = 'basic-lti-launch-request', string $resourceType): string {
+function ltiInitiateLogin(stdClass $course, stdClass $ltiApp, string $resourceType, string $messagetype = 'basic-lti-launch-request'): string {
 
     $params = ltiBuildLoginRequest($course, $ltiApp, $messagetype, $resourceType, null);
 
