@@ -63,6 +63,10 @@ class LuceneSearchEngine implements SearchEngineInterface {
         $idx->getIndex()->optimize();
     }
 
+    public function commit(): void {
+        // Lucene commits within optimize(), so nothing extra required here.
+    }
+
     public function deleteAll(): void {
         Indexer::deleteAll();
     }

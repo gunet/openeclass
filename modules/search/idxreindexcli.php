@@ -72,5 +72,6 @@ while ($n > 0) {
     echo "Remaining courses for indexing: " . $n . "\n";
 }
 
+$searchEngine->commit();
 echo "All done, exiting ...\n";
 exit();

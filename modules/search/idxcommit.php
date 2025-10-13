@@ -18,13 +18,24 @@
  *
  */
 
-interface SearchEngineInterface {
+$require_admin = true;
+require_once '../../include/baseTheme.php';
+require_once 'classes/SearchEngineFactory.php';
+header('Content-Type: application/json; charset=utf-8');
+set_time_limit(0);
 
-    public function search(array $params): array;
-    public function searchInCourse(array $params): array;
-    public function index(int $courseId): void;
-    public function commit(): void;
-    public function deleteAll(): void;
-    public function indexResource(string $requestType, string $resourceType, int $resourceId): void;
+// fetch number of courses waiting in index queue
+$n = Database::get()->querySingle("SELECT COUNT(id) AS count FROM idx_queue")->count;
 
+if ($n == 0) {
+    // commit
+    $searchEngine = SearchEngineFactory::create();
+    $searchEngine->commit();
 }
+
+$data = array(
+    "remaining" => $n
+);
+
+echo json_encode($data);
+exit();

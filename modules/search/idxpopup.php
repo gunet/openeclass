@@ -54,10 +54,21 @@ $head_content .= "
             if (data.remaining > 0) {
                 setTimeout(doProc, 0);
             } else {
+                setTimeout(doCommit, 0);
                 $('#idxinfo').attr('class', 'success');
                 $('#idxresul').html(langIndexingDone);
                 window.removeEventListener('beforeunload', confirmClose);
             }
+        })
+        .fail(function(jqxhr, textStatus, error) {
+            //console.debug('jqxhr Request Failed: ' + textStatus + ', ' + error);
+        });
+    };
+    
+    var doCommit = function() {
+        jQuery.getJSON('idxcommit.php')
+        .done(function(data) {
+            //console.debug(data);
         })
         .fail(function(jqxhr, textStatus, error) {
             //console.debug('jqxhr Request Failed: ' + textStatus + ', ' + error);

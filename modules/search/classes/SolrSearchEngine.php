@@ -78,10 +78,7 @@ class SolrSearchEngine implements SearchEngineInterface {
         }
 
         // construct Solr Url for indexing
-        $query = [
-            'commit' => 'true'
-        ];
-        $solrUrl = $this->constructSolrUrl("update", $query);
+        $solrUrl = $this->constructSolrUrl("update", []);
 
         // delete previous course contents and (re)index
         $idx = new SolrIndexer();
@@ -90,16 +87,22 @@ class SolrSearchEngine implements SearchEngineInterface {
         // CurlUtil::httpPostJsonRequest($solrUrl, $this->generateSampleDocuments(2, $courseId));
     }
 
+    public function commit(): void {
+        if (!get_config('ext_solr_enabled')) {
+            return;
+        }
+
+        $solrUrl = $this->constructSolrUrl("update", ['commit' => 'true']);
+        CurlUtil::httpPostJsonRequest($solrUrl, []);
+    }
+
     public function deleteAll(): void {
         if (!get_config('ext_solr_enabled')) {
             return;
         }
 
         // construct Solr Url for indexing
-        $query = [
-            'commit' => 'true'
-        ];
-        $solrUrl = $this->constructSolrUrl("update", $query);
+        $solrUrl = $this->constructSolrUrl("update", ['commit' => 'true']);
 
         // delete all contents
         $idx = new SolrIndexer();
