@@ -39,6 +39,19 @@ class LuceneSearchEngine implements SearchEngineInterface {
         }, $hits);
     }
 
+    public function searchInCourse(array $params): array {
+        $idx = new Indexer();
+        if (!$idx->getIndex()) {
+            return [];
+        }
+
+        $hits = $idx->searchRaw(Indexer::buildQuery($params));
+
+        return array_map(function ($hit) {
+            return new SearchResult($hit->pk, $hit->pkid, $hit->doctype, $hit->visible, $hit);
+        }, $hits);
+    }
+
     public function index(int $courseId): void {
         $idx = new Indexer();
         if (!$idx->getIndex()) {

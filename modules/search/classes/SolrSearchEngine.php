@@ -49,6 +49,29 @@ class SolrSearchEngine implements SearchEngineInterface {
         }, $hits);
     }
 
+    public function searchInCourse(array $params): array {
+        if (!get_config('ext_solr_enabled')) {
+            return [];
+        }
+
+        // construct Solr Url for searching
+        $solrUrl = $this->constructSolrUrl("select", SolrIndexer::buildSolrQuery($params));
+
+        // Perform Solr query
+        list($response, $code) = CurlUtil::httpGetRequest($solrUrl);
+        if ($code !== 200) {
+            return [];
+        }
+
+        // Handle Solr response
+        $resp = json_decode($response, false);
+        $hits = $resp->response->docs;
+
+        return array_map(function ($hit) {
+            return new SearchResult($hit->pk, $hit->pkid, $hit->doctype, $hit->visible, $hit);
+        }, $hits);
+    }
+
     public function index(int $courseId): void {
         if (!get_config('ext_solr_enabled')) {
             return;

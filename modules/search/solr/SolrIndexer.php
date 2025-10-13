@@ -188,4 +188,39 @@ class SolrIndexer {
         return $queryPostData;
     }
 
+    public static function buildSolrQuery(array $params): array {
+        $q = [];
+        if (!empty($params['search_terms']) && !empty($params['course_id'])) {
+            $terms = trim($params['search_terms']);
+            if ($terms === '') {
+                // empty behavior
+                $terms = '*:*';
+            }
+
+            // fields & boosts for the simple search
+            $qf = [
+                'title^4',
+                'content^3',
+                'filename^2',
+                'comment^1',
+                'creator^1',
+                'subject^1',
+                'author^1',
+            ];
+
+            // edismax Solr search (parse the text)
+            $q = [
+                'defType' => 'edismax',
+                'q'       => $terms,
+                'qf'      => implode(' ', $qf),
+                'q.op'    => 'OR',                               // ← the default operator, we want anything that matches, at least one term
+                'fq'      => 'courseid:' . $params['course_id'], // ← filter to only specific course id
+                //'mm'      => '0%',                             // ← for at least any match, this defaults to 0%
+                //'rows'    => 10,                               // ← row limiter
+                'wt'      => 'json',
+            ];
+        }
+        return $q;
+    }
+
 }

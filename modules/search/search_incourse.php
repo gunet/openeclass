@@ -29,19 +29,8 @@ $require_current_course = TRUE;
 $guest_allowed = true;
 require_once '../../include/baseTheme.php';
 require_once 'modules/search/classes/ConstantsUtil.php';
-require_once 'lucene/indexer.class.php';
-require_once 'lucene/announcementindexer.class.php';
-require_once 'lucene/agendaindexer.class.php';
-require_once 'lucene/linkindexer.class.php';
-require_once 'lucene/videoindexer.class.php';
-require_once 'lucene/videolinkindexer.class.php';
-require_once 'lucene/exerciseindexer.class.php';
-require_once 'lucene/forumindexer.class.php';
-require_once 'lucene/forumtopicindexer.class.php';
-require_once 'lucene/forumpostindexer.class.php';
-require_once 'lucene/documentindexer.class.php';
-require_once 'lucene/unitindexer.class.php';
-require_once 'lucene/unitresourceindexer.class.php';
+require_once 'classes/SearchEngineFactory.php';
+require_once 'classes/SearchResult.php';
 
 $pageName = $langSearch;
 
@@ -74,11 +63,6 @@ if (empty($search_terms)) {
     $_POST['course_id'] = $course_id;
     $_POST['search_terms'] = $search_terms;
 
-    $idx = new Indexer();
-    if (!$idx->getIndex()) {
-        view('modules.search_incourse.index');
-        exit();
-    }
     $data['action_bar'] = action_bar(array(
                     array('title' => $langAdvancedSearch,
                           'url' => $_SERVER['SCRIPT_NAME'],
@@ -99,8 +83,15 @@ if (empty($search_terms)) {
     $unitHits = array();
     $uresHits = array();
 
-    $idxQ = Indexer::buildQuery($_POST);
-    $allHits = $idx->searchRaw($idxQ);
+    $searchEngine = SearchEngineFactory::create();
+    $allHits = $searchEngine->searchInCourse($_POST);
+
+    // exit if not results
+    if (empty($allHits)) {
+        view('modules.search_incourse.index');
+        exit();
+    }
+
     foreach ($allHits as $hit) {
         switch ($hit->doctype) {
             case ConstantsUtil::DOCTYPE_AGENDA:
