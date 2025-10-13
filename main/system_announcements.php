@@ -108,7 +108,10 @@ if (isset($_GET['an_id'])) {
                 'sScrollX': true,
                 'responsive': true,
                 'searchDelay': 1000,
-                'sAjaxSource': '$_SERVER[REQUEST_URI]',
+                ajax: {
+                    url: '$_SERVER[REQUEST_URI]',
+                    type: 'POST'
+                },
                 'lengthMenu': [10, 15, 20 , -1],
                 'fnDrawCallback': function( oSettings ) {
                     $('.table_td_body').each(function() {
@@ -136,7 +139,6 @@ if (isset($_GET['an_id'])) {
                        'sInfoFiltered': '',
                        'sInfoPostFix':  '',
                        'sSearch':       '',
-                       'sUrl':          '',
                        'oPaginate': {
                            'sFirst':    '&laquo;',
                            'sPrevious': '&lsaquo;',
