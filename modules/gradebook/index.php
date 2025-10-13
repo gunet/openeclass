@@ -78,11 +78,11 @@ $(function() {
                 'columns': [ $columns ],
                 'lengthMenu': [10, 15, 20 , -1],                                  
                 'fnDrawCallback': function( oSettings ) {
-                        $('#users_table{$course_id}_filter label input').attr({
+                        $('#users_table{$course_id}_wrapper .dt-search input').attr({
                               'class' : 'form-control input-sm ms-0 mb-3',
                               'placeholder' : '$langSearch...'
                         });
-                        $('#users_table{$course_id}_filter label').attr('aria-label', '$langSearch');
+                        $('#users_table{$course_id}_wrapper .dt-search label').attr('aria-label', '$langSearch');
                     },
                     'sPaginationType': 'full_numbers',
                     'bSort': true,

@@ -92,7 +92,8 @@
         $('li.bulk-processing a').on('click', function(event) {
             event.preventDefault();
             $('.table-responsive').toggleClass('checkboxes-on');
-            $('.td-bulk-select').toggleClass('d-none');
+            $('.bulk_select').toggleClass('d-none');
+            $('.show-announcement-id').toggleClass('d-none');
             $('.bulk-processing-box').toggleClass('d-none');
 
             if ($(this).find('span.fa-solid.fa-check').length) {
@@ -132,7 +133,8 @@
 
         function checkCheckboxes() {
             if ($('.table-responsive').hasClass('checkboxes-on')) {
-                $('.td-bulk-select').removeClass('d-none');
+                $('.bulk_select').removeClass('d-none');
+                $('.show-announcement-id').removeClass('d-block');
             }
         }
 
@@ -142,7 +144,7 @@
             @if ($is_editor)
                 'aoColumnDefs':[
                     {'sClass':'option-btn-cell text-end','aTargets':[-1]},
-                    {'sClass':'d-none td-bulk-select','aTargets':[0]},
+                    {'sClass':'td-bulk-select','aTargets':[0]},
                 ],
                 'autoWidth': false,
             @endif
@@ -169,11 +171,11 @@
                 });
                 restoreCheckboxStates();
                 checkCheckboxes();
-                $('#ann_table{{ $course_id }}_filter label input').attr({
+                $('#ann_table{{ $course_id }}_wrapper .dt-search input').attr({
                     class : 'form-control input-sm mb-3 ms-0',
                     placeholder : '{{ trans('langSearch') }}...'
                 });
-                $('#ann_table{{ $course_id }}_filter label').attr('aria-label', '{{ trans('langSearch') }}');
+                $('#ann_table{{ $course_id }}_wrapper .dt-search label').attr('aria-label', '{{ trans('langSearch') }}');
             },
             sPaginationType: 'full_numbers',
             bSortable: true,

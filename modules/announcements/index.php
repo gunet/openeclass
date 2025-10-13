@@ -176,7 +176,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             $data['aaData'][] = array(
                 'DT_RowId' => $myrow->id,
                 'DT_RowClass' => $vis_class,
-                '0' => "<div class='bulk_select'><div class='checkbox'><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='$myrow->id' cbid='$myrow->id' /><span class='checkmark'></span></label></div></div>",
+                '0' => "<div class='d-none bulk_select'><div class='checkbox'><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='$myrow->id' cbid='$myrow->id' /><span class='checkmark'></span></label></div></div><div class='d-block show-announcement-id'>$myrow->id</div>",
                 '1' => "<div class='table_td announceContent'>
                         <div class='table_td_header announceTitleHeader clearfix'>
                             <a class='announceTitle' href='$_SERVER[SCRIPT_NAME]?course=$course_code&an_id=$myrow->id'>".q($myrow->title)."</a>

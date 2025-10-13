@@ -117,11 +117,11 @@ if (isset($_GET['an_id'])) {
                             fill: '&hellip;<div class=\"clearfix\"></div><a style=\"float:right;\" href=\"$_SERVER[SCRIPT_NAME]?an_id='+ $(this).data('id')+'\">$langMore</div>'
                         })
                     });
-                    $('#ann_table_admin_logout_filter label input').attr({
+                    $('#ann_table_admin_logout_wrapper .dt-search input').attr({
                         'class' : 'form-control input-sm ms-0 mb-3',
                         'placeholder' : '$langSearch...'
                     });
-                    $('#ann_table_admin_logout_filter label').attr('aria-label', '$langSearch');
+                    $('#ann_table_admin_logout_wrapper .dt-search label').attr('aria-label', '$langSearch');
                  },
                  'sPaginationType': 'full_numbers',
                 'bSort': false,

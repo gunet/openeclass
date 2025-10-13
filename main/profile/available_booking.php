@@ -32,7 +32,6 @@ $navigation[] = array('url' => 'display_profile.php', 'name' => $langMyProfile);
 $toolName = $langMYBookings;
 
 load_js('datatables');
-load_js('datatables_bootstrap');
 
 $data['tutor_id'] = $tutor_id = intval($_GET['user_id']);
 $data['TutorGivenname'] = $TutorGivenname = Database::get()->querySingle("SELECT `givenname` FROM user WHERE id = ?d",$data['tutor_id'])->givenname;

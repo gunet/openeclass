@@ -33,11 +33,11 @@
                     }
                 }
             });
-            $('.dataTables_filter input').attr({
+            $('.dt-container.dt-bootstrap5 .dt-search input').attr({
                 class: 'form-control input-sm ms-0 mb-3',
                 placeholder: '{{ trans('langSearch') }}...'
             });
-            $('.dataTables_filter label').attr('aria-label', '{{ trans('langSearch') }}');
+            $('.dt-container.dt-bootstrap5 .dt-search label').attr('aria-label', '{{ trans('langSearch') }}');
         });
     </script>
 @endpush

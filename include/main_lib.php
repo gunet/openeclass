@@ -5690,11 +5690,11 @@ function theme_initialization() {
                 }
 
 
-                .dataTables_wrapper .dataTables_length,
-                .dataTables_wrapper .dt-search,
-                .dataTables_wrapper .dataTables_info,
-                .dataTables_wrapper .dataTables_processing,
-                .dataTables_wrapper .dataTables_paginate {
+                .dt-container.dt-bootstrap5 .dataTables_length,
+                .dt-container.dt-bootstrap5 .dt-search,
+                .dt-container.dt-bootstrap5 .dataTables_info,
+                .dt-container.dt-bootstrap5 .dataTables_processing,
+                .dt-container.dt-bootstrap5 .dataTables_paginate {
                     color:$theme_options_styles[ColorHyperTexts] !important;
                 }
 
@@ -6350,6 +6350,10 @@ function theme_initialization() {
                     background-color:  $theme_options_styles[bgWhiteButtonColor] !important;
                 }
 
+                .dt-paging .dt-paging-button .page-link{
+                    background-color:  $theme_options_styles[bgWhiteButtonColor] !important;
+                }
+
             ";
         }
 
@@ -6439,6 +6443,10 @@ function theme_initialization() {
                     color: $theme_options_styles[whiteButtonTextColor] !important;
                 }
 
+                .dt-paging .dt-paging-button .page-link{
+                    color: $theme_options_styles[whiteButtonTextColor] !important;
+                }
+
             ";
         }
 
@@ -6505,6 +6513,10 @@ function theme_initialization() {
                 }
 
                 .btn-exercise-nav[type=submit] {
+                    border: solid 1px $theme_options_styles[whiteButtonBorderTextColor] !important;
+                }
+
+                .dt-paging .dt-paging-button .page-link{
                     border: solid 1px $theme_options_styles[whiteButtonBorderTextColor] !important;
                 }
 
@@ -6613,6 +6625,10 @@ function theme_initialization() {
                 .btn-exercise-nav[type=submit]:focus{
                     color: $theme_options_styles[whiteButtonHoveredTextColor] !important;
                 }
+
+                .dt-paging .dt-paging-button .page-link{
+                    color: $theme_options_styles[whiteButtonHoveredTextColor] !important;
+                }
             ";
         }
 
@@ -6689,6 +6705,11 @@ function theme_initialization() {
 
                 .btn-exercise-nav[type=submit]:hover,
                 .btn-exercise-nav[type=submit]:focus{
+                    border: solid 1px $theme_options_styles[whiteButtonHoveredBorderTextColor] !important;
+                }
+
+                .dt-paging .dt-paging-button .page-link:hover,
+                .dt-paging .dt-paging-button .page-link:focus{
                     border: solid 1px $theme_options_styles[whiteButtonHoveredBorderTextColor] !important;
                 }
 
@@ -6772,6 +6793,11 @@ function theme_initialization() {
 
                 .btn-exercise-nav[type=submit]:hover,
                 .btn-exercise-nav[type=submit]:focus{
+                    background-color: $theme_options_styles[whiteButtonHoveredBgColor] !important;
+                }
+
+                .dt-paging .dt-paging-button .page-link:hover,
+                .dt-paging .dt-paging-button .page-link:focus{
                     background-color: $theme_options_styles[whiteButtonHoveredBgColor] !important;
                 }
 
@@ -6896,6 +6922,12 @@ function theme_initialization() {
                         border-color: $theme_options_styles[buttonBgColor] ;
                         background-color: $theme_options_styles[buttonBgColor] ;
                     }
+                }
+
+                .dt-paging .dt-paging-button.active .page-link,
+                .dt-paging .dt-paging-button.active .page-link{
+                    border-color: $theme_options_styles[buttonBgColor] !important;
+                    background-color: $theme_options_styles[buttonBgColor] !important;
                 }
 
             ";
@@ -7055,6 +7087,12 @@ function theme_initialization() {
                         border-color: $theme_options_styles[buttonHoverBgColor] ;
                         background-color: $theme_options_styles[buttonHoverBgColor] ;
                     }
+                }
+
+                .dt-paging .dt-paging-button.active .page-link:hover,
+                .dt-paging .dt-paging-button.active .page-link:focus{
+                    border-color: $theme_options_styles[buttonHoverBgColor] !important;
+                    background-color: $theme_options_styles[buttonHoverBgColor] !important;
                 }
 
             ";
@@ -7217,6 +7255,12 @@ function theme_initialization() {
                     .header-login-text:focus, .user-menu-btn .header-login-text .fa-chevron-down::before{
                          color:$theme_options_styles[buttonTextColor];
                     }
+                }
+
+                .dt-paging .dt-paging-button.active .page-link,
+                .dt-paging .dt-paging-button.active .page-link:hover,
+                .dt-paging .dt-paging-button.active .page-link:focus{
+                    color:$theme_options_styles[buttonTextColor] !important;
                 }
 
             ";
@@ -7998,22 +8042,22 @@ function theme_initialization() {
                     background-color: $theme_options_styles[BgInput];
                 }
 
-                .dataTables_wrapper input[type='text'],
-                .dataTables_wrapper input[type='password'],
-                .dataTables_wrapper input[type='email'],
-                .dataTables_wrapper input[type='number'],
-                .dataTables_wrapper input[type='url'],
-                .dataTables_wrapper input[type='search']{
+                .dt-container.dt-bootstrap5 input[type='text'],
+                .dt-container.dt-bootstrap5 input[type='password'],
+                .dt-container.dt-bootstrap5 input[type='email'],
+                .dt-container.dt-bootstrap5 input[type='number'],
+                .dt-container.dt-bootstrap5 input[type='url'],
+                .dt-container.dt-bootstrap5 input[type='search']{
                     background-color: $theme_options_styles[BgInput] !important;
                 }
 
-                .dataTables_wrapper input[type='text']:focus,
-                .dataTables_wrapper input[type='number']:focus,
-                .dataTables_wrapper input[type='email']:focus,
-                .dataTables_wrapper input[type='url']:focus,
-                .dataTables_wrapper input[type='search']:focus,
-                .dataTables_wrapper .form-control:focus,
-                .dataTables_wrapper .uneditable-input:focus {
+                .dt-container.dt-bootstrap5 input[type='text']:focus,
+                .dt-container.dt-bootstrap5 input[type='number']:focus,
+                .dt-container.dt-bootstrap5 input[type='email']:focus,
+                .dt-container.dt-bootstrap5 input[type='url']:focus,
+                .dt-container.dt-bootstrap5 input[type='search']:focus,
+                .dt-container.dt-bootstrap5 .form-control:focus,
+                .dt-container.dt-bootstrap5 .uneditable-input:focus {
                     background-color: $theme_options_styles[BgInput] !important;
                 }
 
@@ -8102,22 +8146,22 @@ function theme_initialization() {
                 }
 
 
-                .dataTables_wrapper input[type='text'],
-                .dataTables_wrapper input[type='password'],
-                .dataTables_wrapper input[type='email'],
-                .dataTables_wrapper input[type='number'],
-                .dataTables_wrapper input[type='url'],
-                .dataTables_wrapper input[type='search']{
+                .dt-container.dt-bootstrap5 input[type='text'],
+                .dt-container.dt-bootstrap5 input[type='password'],
+                .dt-container.dt-bootstrap5 input[type='email'],
+                .dt-container.dt-bootstrap5 input[type='number'],
+                .dt-container.dt-bootstrap5 input[type='url'],
+                .dt-container.dt-bootstrap5 input[type='search']{
                     border-color: $theme_options_styles[clBorderInput] !important;
                 }
 
-                .dataTables_wrapper input[type='text']:focus,
-                .dataTables_wrapper input[type='number']:focus,
-                .dataTables_wrapper input[type='email']:focus,
-                .dataTables_wrapper input[type='url']:focus,
-                .dataTables_wrapper input[type='search']:focus,
-                .dataTables_wrapper .form-control:focus,
-                .dataTables_wrapper .uneditable-input:focus {
+                .dt-container.dt-bootstrap5 input[type='text']:focus,
+                .dt-container.dt-bootstrap5 input[type='number']:focus,
+                .dt-container.dt-bootstrap5 input[type='email']:focus,
+                .dt-container.dt-bootstrap5 input[type='url']:focus,
+                .dt-container.dt-bootstrap5 input[type='search']:focus,
+                .dt-container.dt-bootstrap5 .form-control:focus,
+                .dt-container.dt-bootstrap5 .uneditable-input:focus {
                     border-color: $theme_options_styles[clBorderInput] !important;
                 }
 
@@ -8201,26 +8245,26 @@ function theme_initialization() {
 
 
 
-                .dataTables_wrapper input::placeholder{
+                .dt-container.dt-bootstrap5 input::placeholder{
                     color: $theme_options_styles[clInputText] !important;
                 }
 
-                .dataTables_wrapper input[type='text'],
-                .dataTables_wrapper input[type='password'],
-                .dataTables_wrapper input[type='email'],
-                .dataTables_wrapper input[type='number'],
-                .dataTables_wrapper input[type='url'],
-                .dataTables_wrapper input[type='search']{
+                .dt-container.dt-bootstrap5 input[type='text'],
+                .dt-container.dt-bootstrap5 input[type='password'],
+                .dt-container.dt-bootstrap5 input[type='email'],
+                .dt-container.dt-bootstrap5 input[type='number'],
+                .dt-container.dt-bootstrap5 input[type='url'],
+                .dt-container.dt-bootstrap5 input[type='search']{
                     color: $theme_options_styles[clInputText] !important;
                 }
 
-                .dataTables_wrapper input[type='text']:focus,
-                .dataTables_wrapper input[type='number']:focus,
-                .dataTables_wrapper input[type='email']:focus,
-                .dataTables_wrapper input[type='url']:focus,
-                .dataTables_wrapper input[type='search']:focus,
-                .dataTables_wrapper .form-control:focus,
-                .dataTables_wrapper .uneditable-input:focus {
+                .dt-container.dt-bootstrap5 input[type='text']:focus,
+                .dt-container.dt-bootstrap5 input[type='number']:focus,
+                .dt-container.dt-bootstrap5 input[type='email']:focus,
+                .dt-container.dt-bootstrap5 input[type='url']:focus,
+                .dt-container.dt-bootstrap5 input[type='search']:focus,
+                .dt-container.dt-bootstrap5 .form-control:focus,
+                .dt-container.dt-bootstrap5 .uneditable-input:focus {
                     color: $theme_options_styles[clInputText] !important;
                 }
 
@@ -8248,11 +8292,11 @@ function theme_initialization() {
                     background-color: $theme_options_styles[BgSelect];
                 }
 
-                .dataTables_wrapper select {
+                .dt-container.dt-bootstrap5 select {
                     background-color: $theme_options_styles[BgSelect] !important;;
                 }
 
-                .dataTables_wrapper select:focus {
+                .dt-container.dt-bootstrap5 select:focus {
                     background-color: $theme_options_styles[BgSelect] !important;;
                 }
 
@@ -8297,11 +8341,11 @@ function theme_initialization() {
                     border-color: $theme_options_styles[clBorderSelect];
                 }
 
-                .dataTables_wrapper select {
+                .dt-container.dt-bootstrap5 select {
                     border-color: $theme_options_styles[clBorderSelect] !important;;
                 }
 
-                .dataTables_wrapper select:focus {
+                .dt-container.dt-bootstrap5 select:focus {
                     border-color: $theme_options_styles[clBorderSelect] !important;;
                 }
 
@@ -8360,15 +8404,15 @@ function theme_initialization() {
                     color: $theme_options_styles[clOptionSelect];
                 }
 
-                .dataTables_wrapper select {
+                .dt-container.dt-bootstrap5 select {
                     color: $theme_options_styles[clOptionSelect] !important;;
                 }
 
-                .dataTables_wrapper select:focus {
+                .dt-container.dt-bootstrap5 select:focus {
                     color: $theme_options_styles[clOptionSelect] !important;;
                 }
 
-                .dataTables_wrapper select option:not(:checked) {
+                .dt-container.dt-bootstrap5 select option:not(:checked) {
                     color: $theme_options_styles[clOptionSelect] !important;;
                 }
 
@@ -8421,7 +8465,7 @@ function theme_initialization() {
                     background-color: $theme_options_styles[bgHoveredSelectOption];
                 }
 
-                .dataTables_wrapper select option:hover{
+                .dt-container.dt-bootstrap5 select option:hover{
                     background-color: $theme_options_styles[bgHoveredSelectOption] !important;;
                 }
 
@@ -8455,7 +8499,7 @@ function theme_initialization() {
                     color: $theme_options_styles[clHoveredSelectOption];
                 }
 
-                .dataTables_wrapper select option:hover{
+                .dt-container.dt-bootstrap5 select option:hover{
                     color: $theme_options_styles[clHoveredSelectOption] !important;;
                 }
 
@@ -8491,7 +8535,7 @@ function theme_initialization() {
                     background-color: $theme_options_styles[bgOptionSelected];
                 }
 
-                .dataTables_wrapper select option:checked{
+                .dt-container.dt-bootstrap5 select option:checked{
                     background-color: $theme_options_styles[bgOptionSelected] !important;;
                 }
 
@@ -8531,7 +8575,7 @@ function theme_initialization() {
                     color: $theme_options_styles[clOptionSelected];
                 }
 
-                .dataTables_wrapper select option:checked{
+                .dt-container.dt-bootstrap5 select option:checked{
                     color: $theme_options_styles[clOptionSelected] !important;;
                 }
 
@@ -9794,11 +9838,14 @@ function theme_initialization() {
                 table.dataTable.no-footer {
                     border-bottom: 1px solid $theme_options_styles[BgBorderBottomRowTables] !important;
                 }
-                .dataTables_wrapper.no-footer .dataTables_scrollBody {
+                .dt-container.dt-bootstrap5 .dt-scroll-body {
                     border-bottom: 1px solid $theme_options_styles[BgBorderBottomRowTables] !important;
                 }
                 table.dataTable tfoot th, table.dataTable tfoot td {
                     border-top: 1px solid  $theme_options_styles[BgBorderBottomRowTables] !important;
+                }
+                .table>:not(:last-child)>:last-child>* {
+                    border-bottom-color: $theme_options_styles[BgBorderBottomRowTables] !important;
                 }
             ";
         }
@@ -9817,7 +9864,8 @@ function theme_initialization() {
                 table.dataTable.no-footer {
                     box-shadow: 0px 0 30px $theme_options_styles[BoxShadowRowTables] !important;
                 }
-                .dataTables_wrapper.no-footer .dataTables_scrollBody {
+                .dt-container.dt-bootstrap5 .dt-scroll-body,
+                .dt-container.dt-bootstrap5 .dt-scroll {
                     box-shadow: 0px 0 30px $theme_options_styles[BoxShadowRowTables] !important;
                 }
                 table.dataTable tfoot th, table.dataTable tfoot td {
@@ -10087,8 +10135,13 @@ function theme_initialization() {
               }
 
               .table-responsive::-webkit-scrollbar-track,
-              .dataTables_wrapper::-webkit-scrollbar-track {
+              .dt-container.dt-bootstrap5::-webkit-scrollbar-track {
                 background-color: $theme_options_styles[BgScrollBar];
+              }
+
+              .dt-scroll::-webkit-scrollbar-track,
+              .dt-scroll-body::-webkit-scrollbar-track {
+                background-color: $theme_options_styles[BgScrollBar] !important;
               }
 
               .chat-iframe::-webkit-scrollbar-track {
@@ -10154,8 +10207,13 @@ function theme_initialization() {
               }
 
               .table-responsive::-webkit-scrollbar-thumb,
-              .dataTables_wrapper::-webkit-scrollbar-thumb {
+              .dt-container.dt-bootstrap5::-webkit-scrollbar-thumb {
                 background-color: $theme_options_styles[BgColorScrollBar];
+              }
+
+              .dt-scroll-body::-webkit-scrollbar-thumb,
+              .dt-scroll::-webkit-scrollbar-thumb {
+                background-color: $theme_options_styles[BgColorScrollBar] !important;
               }
 
               .chat-iframe::-webkit-scrollbar-thumb {
@@ -10223,8 +10281,13 @@ function theme_initialization() {
               }
 
               .table-responsive::-webkit-scrollbar-thumb:hover,
-              .dataTables_wrapper::-webkit-scrollbar-thumb:hover {
+              .dt-container.dt-bootstrap5::-webkit-scrollbar-thumb:hover {
                 background-color: $theme_options_styles[BgHoveredColorScrollBar];
+              }
+
+              .dt-scroll-body::-webkit-scrollbar-thumb:hover,
+              .dt-scroll::-webkit-scrollbar-thumb:hover {
+                background-color: $theme_options_styles[BgHoveredColorScrollBar] !important;
               }
 
               .chat-iframe::-webkit-scrollbar-thumb:hover {
@@ -10563,58 +10626,58 @@ function theme_initialization() {
                     color: $theme_options_styles[linkColor] !important;
                 }
 
-                .dataTables_wrapper .dataTables_paginate .paginate_button.current,
-                .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+                .dt-container.dt-bootstrap5 .dataTables_paginate .paginate_button.current,
+                .dt-container.dt-bootstrap5 .dataTables_paginate .paginate_button.current:hover {
                     color: $theme_options_styles[linkColor] !important;
                     background: transparent !important;
                 }
 
-                .dataTables_wrapper .dataTables_paginate .paginate_button.disabled,
-                .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover,
-                .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {
+                .dt-container.dt-bootstrap5 .dataTables_paginate .paginate_button.disabled,
+                .dt-container.dt-bootstrap5 .dataTables_paginate .paginate_button.disabled:hover,
+                .dt-container.dt-bootstrap5 .dataTables_paginate .paginate_button.disabled:active {
                     color: $theme_options_styles[linkColor] !important;
                 }
 
-                .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+                .dt-container.dt-bootstrap5 .dataTables_paginate .paginate_button:hover {
                     color: $theme_options_styles[linkColor] !important;
                     background: transparent !important;
                 }
 
-                .dataTables_wrapper .dataTables_paginate .paginate_button:active {
+                .dt-container.dt-bootstrap5 .dataTables_paginate .paginate_button:active {
                     background: transparent !important;
                 }
 
-                .dataTables_wrapper .dataTables_paginate .paginate_button.next:hover,
-                .dataTables_wrapper .dataTables_paginate .paginate_button.last:hover{
+                .dt-container.dt-bootstrap5 .dataTables_paginate .paginate_button.next:hover,
+                .dt-container.dt-bootstrap5 .dataTables_paginate .paginate_button.last:hover{
                     color: $theme_options_styles[linkColor] !important;
                 }
 
-                .dataTables_wrapper .dataTables_paginate .paginate_button.next.disabled:hover,
-                .dataTables_wrapper .dataTables_paginate .paginate_button.last.disabled:hover{
+                .dt-container.dt-bootstrap5 .dataTables_paginate .paginate_button.next.disabled:hover,
+                .dt-container.dt-bootstrap5 .dataTables_paginate .paginate_button.last.disabled:hover{
                     color: $theme_options_styles[linkColor] !important;
                 }
 
-                .dataTables_wrapper .dataTables_paginate .paginate_button.previous:hover,
-                .dataTables_wrapper .dataTables_paginate .paginate_button.first:hover{
+                .dt-container.dt-bootstrap5 .dataTables_paginate .paginate_button.previous:hover,
+                .dt-container.dt-bootstrap5 .dataTables_paginate .paginate_button.first:hover{
                     color: $theme_options_styles[linkColor] !important;
                 }
 
-                .dataTables_wrapper .dataTables_paginate .paginate_button.previous.disabled:hover,
-                .dataTables_wrapper .dataTables_paginate .paginate_button.first.disabled:hover{
+                .dt-container.dt-bootstrap5 .dataTables_paginate .paginate_button.previous.disabled:hover,
+                .dt-container.dt-bootstrap5 .dataTables_paginate .paginate_button.first.disabled:hover{
                     color: $theme_options_styles[linkColor] !important;
                 }
 
-                .dataTables_wrapper .dataTables_paginate .paginate_button.previous,
-                .dataTables_wrapper .dataTables_paginate .paginate_button.first {
+                .dt-container.dt-bootstrap5 .dataTables_paginate .paginate_button.previous,
+                .dt-container.dt-bootstrap5 .dataTables_paginate .paginate_button.first {
                     color: $theme_options_styles[linkColor] !important;
                 }
 
-                .dataTables_wrapper .dataTables_paginate .paginate_button.next,
-                .dataTables_wrapper .dataTables_paginate .paginate_button.last{
+                .dt-container.dt-bootstrap5 .dataTables_paginate .paginate_button.next,
+                .dt-container.dt-bootstrap5 .dataTables_paginate .paginate_button.last{
                     color: $theme_options_styles[linkColor] !important;
                 }
 
-                .dataTables_wrapper .dataTables_paginate .paginate_button.disabled{
+                .dt-container.dt-bootstrap5 .dataTables_paginate .paginate_button.disabled{
                     color: $theme_options_styles[linkColor] !important;
                 }
 

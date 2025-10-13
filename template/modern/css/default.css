@@ -3648,14 +3648,6 @@ tr.danger > td{
 
 
 
-
-/* div.dataTables_scrollBody {
-   position: relative;
-    overflow:hidden !important;
-    width: 100%;
-} */
-
-
 table{
   table-layout: auto !important;
   width: 100% !important;
@@ -3663,6 +3655,29 @@ table{
 
 
 
+/******************************** Datatable ************************************/
+div.dt-container div.dt-search {
+   text-align: left; 
+}
+div.dt-container div.dt-paging {
+    margin-top: 15px !important;
+}
+.dt-column-title,
+.announceTitle{
+word-break: normal !important;
+}
+.dt-container.dt-bootstrap5 .row,
+.dt-container.dt-bootstrap5.dt-empty-footer .row{
+--bs-gutter-x: 0rem !important;
+}
+
+#portfolio_lessons_wrapper .dt-search {
+  text-align: left !important;
+  margin-bottom: 15px !important;
+}
+#portfolio_lessons_wrapper .dt-search input{
+  margin-left: 0px !important;
+}
 
 /**********************************************************************************************************************/
 /**************************************************** TEMP LABELS *****************************************************/

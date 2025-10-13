@@ -226,7 +226,6 @@ if (isset($_GET['id'])) {
     view('modules.request.show', $data);
 } else {
     load_js('datatables');
-    load_js('datatables_bootstrap');
     $data['action_bar'] = action_bar([
             [ 'title' => $langNewRequest,
               'url' => 'new.php?course=' . $course_code,

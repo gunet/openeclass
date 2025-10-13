@@ -37,7 +37,6 @@ if(isset($_GET['do_booking'])){
     if(isset($_GET['show_all_users'])){
         //This code refers to all available user teachers for a reservation by a simple user.
         load_js('datatables');
-        load_js('datatables_bootstrap');
         $toolName = $langDisplayAvailableUsersForBooking;
         $pageName = $toolName;
         $data['user_teachers'] = $user_teachers = Database::get()->queryArray("SELECT DISTINCT user.id,user.givenname,user.surname,user.email FROM user 
