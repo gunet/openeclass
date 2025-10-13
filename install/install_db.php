@@ -565,28 +565,38 @@ $db->query("CREATE TABLE IF NOT EXISTS `attendance` (
     `start_date` DATETIME NOT NULL,
     `end_date` DATETIME NOT NULL) $tbl_options");
 
+DBHelper::createForeignKey('attendance', 'course_id', 'course', 'id', DBHelper::FKRefOption_CASCADE);
+
 $db->query("CREATE TABLE IF NOT EXISTS `attendance_activities` (
     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `attendance_id` MEDIUMINT(11) NOT NULL,
+    `attendance_id` INT(11) NOT NULL,
     `title` VARCHAR(255) DEFAULT NULL,
     `date` DATETIME DEFAULT NULL,
     `description` TEXT NOT NULL,
-    `module_auto_id` MEDIUMINT(11) NOT NULL DEFAULT 0,
+    `module_auto_id` INT(11) NOT NULL DEFAULT 0,
     `module_auto_type` TINYINT(4) NOT NULL DEFAULT 0,
     `auto` TINYINT(4) NOT NULL DEFAULT 0) $tbl_options");
 
+DBHelper::createForeignKey('attendance_activities', 'attendance_id', 'attendance', 'id', DBHelper::FKRefOption_CASCADE);
+
 $db->query("CREATE TABLE IF NOT EXISTS `attendance_book` (
     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `attendance_activity_id` MEDIUMINT(11) NOT NULL,
-    `uid` int(11) NOT NULL DEFAULT 0,
+    `attendance_activity_id` INT(11) NOT NULL,
+    `uid` INT(11) NOT NULL DEFAULT 0,
     `attend` TINYINT(4) NOT NULL DEFAULT 0,
     `comments` TEXT NOT NULL,
      UNIQUE KEY attendance_activity_uid (attendance_activity_id, uid)) $tbl_options");
 
+DBHelper::createForeignKey('attendance_book', 'attendance_activity_id', 'attendance_activities', 'id', DBHelper::FKRefOption_CASCADE);
+DBHelper::createForeignKey('attendance_book', 'uid', 'user', 'id', DBHelper::FKRefOption_CASCADE);
+
 $db->query("CREATE TABLE IF NOT EXISTS `attendance_users` (
     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `attendance_id` INT(11) NOT NULL,
-    `uid` int(11) NOT NULL DEFAULT 0) $tbl_options");
+    `uid` INT(11) NOT NULL DEFAULT 0) $tbl_options");
+
+DBHelper::createForeignKey('attendance_users', 'attendance_id', 'attendance', 'id', DBHelper::FKRefOption_CASCADE);
+DBHelper::createForeignKey('attendance_users', 'uid', 'user', 'id', DBHelper::FKRefOption_CASCADE);
 
 $db->query("CREATE TABLE IF NOT EXISTS `link` (
     `id` INT(11) NOT NULL AUTO_INCREMENT,
