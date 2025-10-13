@@ -606,7 +606,7 @@ function add_attendance_other_activity($attendance_id) {
                         ),
                         array(
                             'class' => 'cancelAdminBtn ms-1',
-                            'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code"
+                            'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id={$attendance_id}"
                         )
                     ))."</div></div>";
                     if (isset($_GET['modify'])) {
@@ -775,7 +775,7 @@ function new_attendance() {
 
     global $tool_content, $course_code, $langNewAttendance2, $head_content,
            $langTitle, $langSubmit, $langInsert, $langAttendanceLimitNumber,
-           $attendance_limit, $langStart, $langEnd, $language, $langImgFormsDes;
+           $langStart, $langEnd, $language, $langImgFormsDes;
 
     load_js('bootstrap-datetimepicker');
     $head_content .= "
@@ -838,7 +838,7 @@ function new_attendance() {
                     <div class='form-group mt-4".($limit_error ? " has-error" : "")."'>
                         <label for='limit_id' class='col-12 control-label-notes'>$langAttendanceLimitNumber <span class='asterisk Accent-200-cl'>(*)</span></label>
                         <div class='col-sm-12'>
-                            <input id='limit_id' class='form-control' placeholder='$langAttendanceLimitNumber' type='text' name='limit' value='$attendance_limit'>
+                            <input id='limit_id' class='form-control' placeholder='$langAttendanceLimitNumber' type='text' name='limit' value='$limit'>
                             <span class='help-block Accent-200-cl'>$limit_error</span>
                         </div>
                     </div>
@@ -1142,7 +1142,7 @@ function attendance_settings($attendance_id) {
                                     ),
                                     array(
                                         'class' => 'cancelAdminBtn ms-1',
-                                        'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id"
+                                        'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code"
                                     )
                                 ))."
 
@@ -1357,7 +1357,7 @@ function student_view_attendance($attendance_id) {
             }
 
             $tool_content .= "</td>"
-                    . "<td><div class='smaller'>" . format_locale_date(strtotime($details->date), 'short', false) . "</div></td>"
+                    . "<td><div class='smaller'>" . (is_null($details->date) ? '' : format_locale_date(strtotime($details->date), 'short', false)) . "</div></td>"
                     . "<td>" . $content . "</td>";
             $tool_content .= "<td class='text-center'>";
             //check user grade for this activity

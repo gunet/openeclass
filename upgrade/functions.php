@@ -3396,6 +3396,10 @@ function upgrade_to_4_2($tbl_options) : void {
 
     DBHelper::createForeignKey('attendance_users', 'attendance_id', 'attendance', 'id', DBHelper::FKRefOption_CASCADE);
     DBHelper::createForeignKey('attendance_users', 'uid', 'user', 'id', DBHelper::FKRefOption_CASCADE);
+  
+    if (!DBHelper::fieldExists('course_lti_app', 'visible')) {
+        Database::get()->query("ALTER TABLE `course_lti_app` ADD `visible` TINYINT(1) NOT NULL DEFAULT 1");
+    }
 }
 
 /**

@@ -527,5 +527,7 @@ if (isset($_POST['submit'])) {
 
     $data['form_url'] = "$_SERVER[SCRIPT_NAME]?course_code=$course_code";
 
+    $data['cancel_link'] = "{$urlServer}courses/$course_code/";
+
     view('modules.course_info.index', $data);
 }

@@ -61,14 +61,12 @@ function lti_version_field_wraps() {
                     keysetUrlWrap.css('display', 'block');
                     initiateLoginUrlWrap.css('display', 'block');
                     redirectionUriWrap.css('display', 'block');
-                    $('#lti_url').val('https://lti.int.turnitin.com/launch/tfs');
                 } else {
                     keyWrap.css('display', 'block');
                     secretWrap.css('display', 'block');
                     keysetUrlWrap.css('display', 'none');
                     initiateLoginUrlWrap.css('display', 'none');
                     redirectionUriWrap.css('display', 'none');
-                    $('#lti_url').val('https://api.turnitin.com/api/lti/1p0/assignment');
                 }
             };
             
@@ -273,6 +271,10 @@ function add_update_lti_app($title, $desc, $url, $version, $key, $secret, $keyse
     } else {
         $all_courses = 0; // lti app is assigned to specific courses
     }
+    $visible = 1;
+    if ($type === 'panopto') {
+        $visible = 0;
+    }
     if ($update == true) {
         Database::get()->querySingle("UPDATE lti_apps SET title = ?s, description = ?s, lti_provider_url = ?s, lti_version = ?s, lti_provider_key = ?s,
                                         lti_provider_secret = ?s, lti_provider_public_keyset_url = ?s, lti_provider_initiate_login_url = ?s, lti_provider_redirection_uri = ?s,
@@ -281,7 +283,7 @@ function add_update_lti_app($title, $desc, $url, $version, $key, $secret, $keyse
         Database::get()->query("DELETE FROM course_lti_app WHERE lti_app = ?d", $session_id);
         if ($all_courses == 0) {
             foreach ($lti_courses as $data) {
-                Database::get()->query("INSERT INTO course_lti_app SET course_id = ?d, lti_app = ?d", $data, $session_id);
+                Database::get()->query("INSERT INTO course_lti_app SET course_id = ?d, lti_app = ?d, visible = ?d", $data, $session_id, $visible);
             }
         }
         if ($version === LTI_VERSION_1_3) {
@@ -303,7 +305,7 @@ function add_update_lti_app($title, $desc, $url, $version, $key, $secret, $keyse
         $lti_app_id = $q->lastInsertID;
         if ($all_courses == 0) {
             foreach ($lti_courses as $data) {
-                Database::get()->query("INSERT INTO course_lti_app SET course_id = ?d, lti_app = ?d", $data, $lti_app_id);
+                Database::get()->query("INSERT INTO course_lti_app SET course_id = ?d, lti_app = ?d, visible = ?d", $data, $lti_app_id, $visible);
             }
         }
         if ($version === LTI_VERSION_1_3) { // generate client_id
@@ -445,7 +447,7 @@ function edit_lti_app($session_id) {
                             <div class='col-sm-12'>
                                 <select class='form-select' name='lti_courses[]' multiple class='form-control' id='select-courses'>";
                                 $courses_list = Database::get()->queryArray("SELECT id, code, title FROM course
-                                                                    WHERE id NOT IN (SELECT course_id FROM course_lti_app WHERE lti_app <> ?d)
+                                                                    WHERE id NOT IN (SELECT course_id FROM course_lti_app WHERE lti_app = ?d)
                                                                     AND visible != " . COURSE_INACTIVE . "
                                                                     ORDER BY title", $session_id);
                                 if ($row->all_courses == 1) {
@@ -490,11 +492,45 @@ function edit_lti_app($session_id) {
                     //]]></script>';
 }
 
+function fetch_lti_apps(): array {
+    global $course_id, $is_editor;
+
+    $activeClause = ($is_editor) ? '' : "AND enabled = 1";
+    $courseApps = Database::get()->queryArray("SELECT * FROM lti_apps
+        WHERE course_id = ?s $activeClause AND is_template = 0 ORDER BY title ASC", $course_id);
+    foreach ($courseApps as $row) {
+        $row->is_template_panopto = false;
+        $row->course_visible = $row->enabled;
+    }
+
+    if (get_config('ext_panopto_enabled')) {
+        $panoptoTemplates = Database::get()->queryArray("SELECT la.*, cla.visible AS course_visible
+        FROM lti_apps la
+        LEFT JOIN course_lti_app cla ON cla.lti_app = la.id
+        WHERE la.all_courses = 1 AND la.is_template = 1 AND la.type = ?s
+        UNION
+        SELECT la.*, cla.visible AS course_visible
+        FROM lti_apps la
+        LEFT JOIN course_lti_app cla ON cla.lti_app = la.id
+        WHERE la.all_courses = 0 AND cla.course_id = ?d AND la.is_template = 1 AND la.type = ?s
+        ORDER BY title ASC;", 'panopto', $course_id, 'panopto');
+
+        foreach ($panoptoTemplates as $template) {
+            $template->is_template_panopto = true;
+            $template->course_visible = intval($template->course_visible);
+        }
+
+        return array_merge($courseApps, $panoptoTemplates);
+    } else {
+        return $courseApps;
+    }
+}
+
 /**
  * @brief display available lti apps (if any)
  */
-function lti_app_details() {
-    global $course_id, $tool_content, $is_editor, $course_code, $head_content,
+function lti_app_details(): void {
+    global $tool_content, $is_editor, $course_code, $head_content,
         $langConfirmDelete, $langUnitDescr, $langViewShow,
         $langTitle,$langActivate, $langDeactivate, $langActions,
         $langEditChange, $langDelete, $langNoLTIApps, $langSettingSelect;
@@ -502,9 +538,8 @@ function lti_app_details() {
     load_js('trunk8');
     $head_content .= head_content_for_modal_lti_1_3();
 
-    $activeClause = ($is_editor) ? '' : "AND enabled = 1";
-    $result = Database::get()->queryArray("SELECT * FROM lti_apps
-        WHERE course_id = ?s $activeClause AND is_template = 0 ORDER BY title ASC", $course_id);
+    $result = fetch_lti_apps();
+
     if ($result) {
         $headingsSent = false;
         $headings = "
@@ -524,9 +559,13 @@ function lti_app_details() {
             $id = $row->id;
             $title = $row->title;
 
-            $desc = isset($row->description)? $row->description: '';
+            $desc = $row->description ?? '';
 
-            $canJoin = ($row->enabled == 1 || $is_editor);
+            $templateVisible = isset($row->course_visible) ? intval($row->course_visible) : 1;
+            $isTemplatePanopto = !empty($row->is_template_panopto);
+            $isActiveForCourse = ($row->enabled == 1) && (!$isTemplatePanopto || $templateVisible == 1);
+
+            $canJoin = ($isActiveForCourse || $is_editor);
             if ($canJoin) {
                 if ($row->launchcontainer == LTI_LAUNCHCONTAINER_EMBED) {
                     $joinLink = create_launch_button($row->id);
@@ -552,20 +591,32 @@ function lti_app_details() {
                     );
                     $ltiTitle = create_a_href_for_modal_lti_1_3($row);
                 }
-                $buttonActions[] = array('title' => $langEditChange,
-                    'url' => "../lti_consumer/index.php?course=$course_code&amp;id=" . getIndirectReference($id) . "&amp;choice=edit",
-                    'icon' => 'fa-edit');
-                $buttonActions[] = array('title' => $row->enabled? $langDeactivate : $langActivate,
-                    'url' => "../lti_consumer/index.php?id=" . getIndirectReference($row->id) . "&amp;choice=do_".
-                    ($row->enabled? 'disable' : 'enable'),
-                    'icon' => $row->enabled? 'fa-eye': 'fa-eye-slash');
-                $buttonActions[] = array('title' => $langDelete,
-                    'url' => "../lti_consumer/index.php?id=" . getIndirectReference($row->id) . "&amp;choice=do_delete",
-                    'icon' => 'fa-xmark',
-                    'class' => 'delete',
-                    'confirm' => $langConfirmDelete);
+                if ($isTemplatePanopto) {
+                    $buttonActions = array();
+                    $toggleChoice = $templateVisible ? 'do_template_disable' : 'do_template_enable';
+                    $buttonActions[] = array(
+                        'title' => $templateVisible ? $langDeactivate : $langActivate,
+                        'url' => "../lti_consumer/index.php?id=" . getIndirectReference($row->id) . "&amp;choice=$toggleChoice",
+                        'icon' => $templateVisible ? 'fa-eye' : 'fa-eye-slash'
+                    );
+                } else {
+                    $buttonActions[] = array('title' => $langEditChange,
+                        'url' => "../lti_consumer/index.php?course=$course_code&amp;id=" . getIndirectReference($id) . "&amp;choice=edit",
+                        'icon' => 'fa-edit');
+                    $buttonActions[] = array('title' => $row->enabled? $langDeactivate : $langActivate,
+                        'url' => "../lti_consumer/index.php?id=" . getIndirectReference($row->id) . "&amp;choice=do_".
+                        ($row->enabled? 'disable' : 'enable'),
+                        'icon' => $row->enabled? 'fa-eye': 'fa-eye-slash');
+                    $buttonActions[] = array('title' => $langDelete,
+                        'url' => "../lti_consumer/index.php?id=" . getIndirectReference($row->id) . "&amp;choice=do_delete",
+                        'icon' => 'fa-xmark',
+                        'class' => 'delete',
+                        'confirm' => $langConfirmDelete);
+                }
 
-                $tool_content .= '<tr' . ($row->enabled? '': " class='not_visible'") . ">
+                $rowClass = $isActiveForCourse ? '' : " class='not_visible'";
+
+                $tool_content .= '<tr' . $rowClass . ">
                     <td><p>$ltiTitle</p></td>
                     <td><p>$desc</p></td>
                     <td class='text-nowrap'>$joinLink</td>
@@ -596,8 +647,7 @@ function lti_app_details() {
     }
 }
 
-function disable_lti_app($id)
-{
+function disable_lti_app($id): void {
     global $langLTIAppUpdateSuccessful, $course_code;
 
     Database::get()->querySingle("UPDATE lti_apps set enabled = 0 WHERE id = ?d",$id);
@@ -606,11 +656,33 @@ function disable_lti_app($id)
     redirect_to_home_page("modules/course_tools/index.php?course=$course_code");
 }
 
-function enable_lti_app($id)
-{
+function enable_lti_app($id): void {
     global $langLTIAppUpdateSuccessful, $course_code;
 
     Database::get()->querySingle("UPDATE lti_apps SET enabled = 1 WHERE id = ?d",$id);
+    Session::flash('message',$langLTIAppUpdateSuccessful);
+    Session::flash('alert-class', 'alert-success');
+    redirect_to_home_page("modules/course_tools/index.php?course=$course_code");
+}
+
+function set_course_lti_visibility($course_id, $lti_app_id, $visible): void {
+    Database::get()->query("INSERT INTO course_lti_app (course_id, lti_app, visible) SELECT ?d, ?d, ?d WHERE NOT EXISTS (SELECT 1 FROM course_lti_app WHERE course_id = ?d AND lti_app = ?d)", $course_id, $lti_app_id, $visible, $course_id, $lti_app_id);
+    Database::get()->query("UPDATE course_lti_app SET visible = ?d WHERE course_id = ?d AND lti_app = ?d", $visible, $course_id, $lti_app_id);
+}
+
+function disable_course_lti_template($course_id, $lti_app_id): void {
+    global $langLTIAppUpdateSuccessful, $course_code;
+
+    set_course_lti_visibility($course_id, $lti_app_id, 0);
+    Session::flash('message',$langLTIAppUpdateSuccessful);
+    Session::flash('alert-class', 'alert-success');
+    redirect_to_home_page("modules/course_tools/index.php?course=$course_code");
+}
+
+function enable_course_lti_template($course_id, $lti_app_id): void {
+    global $langLTIAppUpdateSuccessful, $course_code;
+
+    set_course_lti_visibility($course_id, $lti_app_id, 1);
     Session::flash('message',$langLTIAppUpdateSuccessful);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/course_tools/index.php?course=$course_code");
@@ -793,7 +865,7 @@ function create_join_button($launch_url, $oauth_consumer_key, $secret, $resource
 }
 
 function createLtiInitiateLoginForm(stdClass $lti, string $resourceType, stdClass $resource): string {
-    global $course_id;
+    global $course_id, $langTurnitinIntegration, $langLogIn;
 
     $action = (isset($_REQUEST['action'])) ? $_REQUEST['action'] : '';
     $messagetype = 'basic-lti-launch-request';
@@ -807,15 +879,19 @@ function createLtiInitiateLoginForm(stdClass $lti, string $resourceType, stdClas
     }
 
     $params = ltiBuildLoginRequest($course, $lti, $messagetype, $resourceType, $resource);
+    $formtarget = ($resource->launchcontainer == LTI_LAUNCHCONTAINER_NEWWINDOW) ? ' target="_blank" ' : '';
 
     $r = '<form action="' . $lti->lti_provider_initiate_login_url .
         '" name="ltiInitiateLoginForm" id="ltiInitiateLoginForm" method="post" ' .
-        'encType="application/x-www-form-urlencoded">';
+        'encType="application/x-www-form-urlencoded"' . $formtarget . '>';
 
     foreach ($params as $key => $value) {
         $key = htmlspecialchars($key, ENT_COMPAT);
         $value = htmlspecialchars($value, ENT_COMPAT);
         $r .= '  <input type="hidden" name="' . $key .'" value="' . $value . '"/>';
+    }
+    if ($resource->launchcontainer == LTI_LAUNCHCONTAINER_NEWWINDOW || $resource->launchcontainer == LTI_LAUNCHCONTAINER_EXISTINGWINDOW) {
+        $r .= "<br/><br/>" . $langTurnitinIntegration . ":&nbsp;&nbsp;" . '<button class="btn submitAdminBtn" type="submit">' . $langLogIn . '</button><br/><br/>';
     }
     $r .= "</form>";
 
@@ -994,12 +1070,10 @@ function lti_verify_extract_sourcedid($sourcedid, $ts_valid_time) {
     return array($assignment_id, $uid, $assignment, $lti, $user);
 }
 
-function getLTILinksForTools() {
-    global $course_id, $course_code, $urlServer, $is_editor;
+function getLTILinksForTools(): array {
+    global $course_code, $urlServer;
 
-    $activeClause = ($is_editor) ? '' : "AND enabled = 1";
-    $rows = Database::get()->queryArray("SELECT * FROM lti_apps
-        WHERE course_id = ?d $activeClause AND is_template = 0 ORDER BY title ASC", $course_id);
+    $rows = fetch_lti_apps();
 
     if ($rows) {
         $result = array();
@@ -1026,7 +1100,9 @@ function getLTILinksForTools() {
                     break;
             }
 
-            $result[] = $ret;
+            if (!$row->is_template_panopto || $row->course_visible) {
+                $result[] = $ret;
+            }
         }
         return $result;
     } else {
@@ -1044,7 +1120,7 @@ function is_active_external_lti_app($externalapp, $lti_type, $course_id) {
                 if ($data->all_courses == 1) { // external app is enabled for all courses
                     return true;
                 } else { // otherwise check if external app is enabled for specific course
-                    $s = Database::get()->querySingle("SELECT * FROM course_lti_app WHERE course_id = ?d AND lti_app = $data->id", $course_id);
+                    $s = Database::get()->querySingle("SELECT * FROM course_lti_app WHERE course_id = ?d AND lti_app = ?d", $course_id, $data->id);
                     if ($s) {
                         return true;
                     }
