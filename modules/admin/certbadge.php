@@ -24,6 +24,7 @@ $helpTopic = 'course_administration';
 $helpSubTopic = 'course_certbadge';
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileUploadLib.inc.php';
+require_once 'modules/progress/process_functions.php';
 
 load_js('select2');
 
@@ -73,6 +74,9 @@ $action_bar = action_bar(array(
 
 $tool_content .= $action_bar;
 
+if (isset($_GET['preview'])) { // certificate preview
+    cert_output_to_pdf(intval($_GET['certificate_id']), $uid, $langTitle, $langMessage, get_config('site_name'), time(), intval($_GET['certificate_id']));
+}
 if (isset($_GET['del_badge'])) { // delete badge icon
     $sql_badge_icon = Database::get()->querySingle("SELECT id, filename FROM badge_icon WHERE id = ?d", $_GET['del_badge']);
     $badge_icon_id = $sql_badge_icon->id;
@@ -341,14 +345,14 @@ if (isset($_GET['action'])) {
                                     " . rich_text_editor('description', 2, 60, $cert_description) . "
                                 </div>
                             </div>
-                  
+
                             <div class='form-group mt-4' id='courses-list'>
                                 <label for='select-courses' class='col-sm-12 control-label-notes'>$langWorkAssignTo:&nbsp;&nbsp;
                                 <span class='fa fa-info-circle' data-bs-toggle='tooltip' data-bs-placement='right' title='$langToAllCoursesInfo'></span></label>
                                 <div class='col-sm-12'>
                                 <select class='form-control' name='cert_template_courses[]' multiple class='form-control' id='select-courses'>";
                                 $courses_list = Database::get()->queryArray("SELECT id, code, title FROM course
-                                                                    WHERE id NOT IN (SELECT course_id FROM course_certificate_template)                                                                    
+                                                                    WHERE id NOT IN (SELECT course_id FROM course_certificate_template)
                                                                     ORDER BY title");
                                 if (isset($_GET['cid'])) {
                                     if ($cert_all_courses == '1') {
@@ -452,7 +456,7 @@ if (isset($_GET['action'])) {
     }
 } else { // display available certificates / badges
     $sql1 = Database::get()->queryArray("SELECT * FROM certificate_template");
-
+    $tool_content .= "<h3>$langCertificates</h3>";
     $tool_content .= "<div class='table-responsive'>
                         <table class='table-default'>
                         <thead>
@@ -465,26 +469,12 @@ if (isset($_GET['action'])) {
                         </thead>";
 
                 foreach ($sql1 as $cert_data) {
-
                     $cert_image_path = $webDir . "/courses/user_progress_data/cert_templates/certificate{$cert_data->id}_thumbnail.png";
                     $cert_image_path_file = '';
                     if (file_exists($cert_image_path)) {
-                        $cert_image_path_file = "<a href='#preview_cert_{$cert_data->id}' data-bs-toggle='modal'>
+                        $cert_image_path_file = "<a href='$_SERVER[SCRIPT_NAME]?certificate_id=$cert_data->id&amp;preview=1' target='_blank'>
                                                     <img data-bs-toggle='tooltip' title='$langPreview' style='width:50px; height:50px;' src='{$urlServer}courses/user_progress_data/cert_templates/certificate{$cert_data->id}_thumbnail.png'>
                                                  </a>";
-                        $cert_image_path_file .= "
-                                <div class='modal fade' id='preview_cert_{$cert_data->id}' tabindex='-1' aria-labelledby='preview_cert_{$cert_data->id}Label' aria-hidden='true'>
-                                    <div class='modal-dialog'>
-                                        <div class='modal-content'>
-                                            <div class='modal-body d-flex justify-content-center align-items-center'>
-                                                <figure class='figure m-0'>
-                                                    <img class='m-0' style='width:400px; height:300px;' src='{$urlServer}courses/user_progress_data/cert_templates/certificate{$cert_data->id}_thumbnail.png' class='figure-img img-fluid rounded' alt='{$cert_data->name}'>
-                                                    <figcaption class='figure-caption'>$cert_data->description</figcaption>
-                                                </figure>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>";
                     }
                     $tool_content .= "<tr>
                                         <td style='width:30%;'>
@@ -511,8 +501,8 @@ if (isset($_GET['action'])) {
     $tool_content .= "</div>";
 
     $sql2 = Database::get()->queryArray("SELECT * FROM badge_icon");
-
-    $tool_content .= "<div class='table-responsive mt-5'>
+    $tool_content .= "<h3 class='mt-5'>$langBadges</h3>";
+    $tool_content .= "<div class='table-responsive'>
                         <table class='table-default'>
                         <thead>
                         <tr>
