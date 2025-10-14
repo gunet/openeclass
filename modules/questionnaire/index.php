@@ -641,7 +641,7 @@ function printPolls() {
                     $tool_content .= "<td class='text-end option-btn-cell'>";
                         if ($total_participants > 0 && $thepoll->type != POLL_LIMESURVEY) {
                             $tool_content .= "<div style='padding-top:7px;padding-bottom:7px;'>
-                                            <a href='pollresults.php?course=$course_code&pid=$pid'><span class='fa fa-line-chart'></span></a>
+                                            <a href='pollresults.php?course=$course_code&pid=$pid'><span class='submitAdminBtn fa fa-line-chart'></span></a>
                                         </div>";
                         }
                         $tool_content .= "</td></tr>";
