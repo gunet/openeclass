@@ -81,7 +81,7 @@ if (isset($_POST['submit'])) {
     } else {
         $enabled = 0;
     }
-    $all_courses = (isset($_POST['api_all_courses']) && $_POST['api_all_courses'] == 'true')? 1: 0;
+    $all_courses = (($_POST['api_all_courses'] ?? '') == 'true')? 1: 0;
     $token = null;
     if (isset($_GET['edit'])) {
         if ($_POST['submit'] == 'create_token') { // generate api token
