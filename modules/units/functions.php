@@ -543,7 +543,7 @@ function show_resources($unit_id)
             load_js('screenfull/screenfull.min.js');
             $head_content .= "<script>
             $(document).ready(function(){
- 
+
                 Sortable.create(unitResources,{
                     handle: '.fa-arrows',
                     animation: 150,
@@ -924,9 +924,9 @@ function show_lp($title, $comments, $resource_id, $lp_id, $act_name): string
           <div class='unitIcon' width='1'>$imagelink</a></div>
           " . (!empty($act_name) ? "<div class='text-start'>$act_name</div>" : "") . "
           <div class='text-start'>
-            <div class='module-name'>$langLearnPath</div> 
+            <div class='module-name'>$langLearnPath</div>
                  <span class='pull-right d-flex justify-content-start align-items-center gap-3'>$link $res_prereq_icon $lp_susp_button $lp_results_button $lp_results</span>
-                 <div class='content'>$comment_box</div> 
+                 <div class='content'>$comment_box</div>
             </div>" .
 
             actions('lp', $resource_id, $status) . "</div>";
