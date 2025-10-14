@@ -2687,6 +2687,7 @@ $langAddOneModuleButton = "Add module";
 $langAlertBlockingMakedInvisible = "This module is blocked. Making it invisible will allow ".$langsStudents." to access the next module without having to complete this one. Please confirm your choice";
 $langAlertBlockingPathMadeInvisible = "This path is blocked. Making it invisible will allow ".$langsStudents." to access the next path without having to complete this one. Please confirm your choice.";
 $langAlreadyBrowsed = "Already browsed";
+$langCompleted = 'Completed';
 $langAltMakeNotBlocking = "Unblock";
 $langAltScorm = "Scorm";
 $langAreYouSureDeleteModule = "Are you sure you want to delete this module?";

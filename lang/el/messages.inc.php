@@ -3011,6 +3011,7 @@ $langAddOneModuleButton = "Προσθήκη ενότητας";
 $langAlertBlockingMakedInvisible = "Αυτή η ενότητα είναι φραγμένη. Κάνοντάς την αόρατη, θα επιτραπεί στους " . $langsOfStudentss . " η είσοδος στην επόμενη ενότητα χωρίς να χρειάζεται να ολοκληρώσουν την παρούσα. Επιβεβαιώστε την επιλογή σας";
 $langAlertBlockingPathMadeInvisible = "Αυτή η γραμμή είναι φραγμένη. Κάνοντάς την μη ορατή θα επιτραπεί στους " . $langsOfStudentss . " η είσοδος στην επόμενη γραμμή χωρίς να χρειάζεται να ολοκληρώσουν την παρούσα. Επιβεβαιώστε την επιλογή σας";
 $langAlreadyBrowsed = "Ολοκληρώθηκε";
+$langCompleted = 'Ολοκληρώθηκε';
 $langAltMakeNotBlocking = "Αποδέσμευση";
 $langAltScorm = "Scorm";
 $langAreYouSureDeleteModule = "Επιβεβαίωση διαγραφής της ενότητας";
