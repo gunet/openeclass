@@ -188,22 +188,7 @@ if (isset($_GET['mid'])) {
             e.preventDefault();
             var id = $(this).children("a").data("id");
             var string = "mid="+id+"&'. generate_csrf_token_link_parameter() .'";
-
-            // bootbox.confirm("'.js_escape($langConfirmDelete).'", function(result) {
-            //     if(result) {
-            //         $.ajax({
-            //             type: "POST",
-            //             url: "'.$ajax_url.'",
-            //             datatype: "json",
-            //             data: string,
-            //             success: function(){
-            //                 $("#out_del_msg").html("<p class=\"alert alert-success\"><i class=\"fa-solid fa-circle-check fa-lg\"></i><span>'.js_escape($langMessageDeleteSuccess).'</span></p>");
-            //                 $(".alert-success").delay(3000).fadeOut(1500);
-            //                 $("#out_msg_area").remove();
-            //         }});
-            //     }
-            // });
-
+           
             bootbox.confirm({
                 closeButton: false,
                 title: "<div class=\"icon-modal-default\"><i class=\"fa-regular fa-trash-can fa-xl Accent-200-cl\"></i></div><div class=\"modal-title-default text-center mb-0\">'.js_escape($langConfirmDelete).'</div>",
@@ -317,7 +302,7 @@ if (isset($_GET['mid'])) {
                                 '-1': '$langAllOfThem' 
                             },
                             'sLengthMenu':   '".js_escape("$langDisplay _MENU_ $langResults2")."',
-                            'zeroRecords':  '".js_escape($langNoResult)."',
+                            'zeroRecords':  '" . js_escape("$langNoResult") . "',
                             'sInfo':         '".js_escape("$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults")."',
                             'sInfoEmpty':    '".js_escape("$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2")."',
                             'sInfoFiltered': '',
@@ -337,32 +322,7 @@ if (isset($_GET['mid'])) {
                         e.preventDefault();
                         var id = $(this).data('id');
                         var string = 'mid='+id+'&". generate_csrf_token_link_parameter() ."';
-
-                        // bootbox.confirm('".js_escape($langConfirmDelete)."', function(result) {
-                        //     if (result) {
-                        //         $.ajax({
-                        //           type: 'POST',
-                        //           url: '$ajax_url',
-                        //           data: string,
-                        //           cache: false,
-                        //           success: function(){
-                        //             var num_page_records = oTable2.fnGetData().length;
-                        //             var per_page = $('#outbox_table').DataTable().page.info().length;
-                        //             var page_number = $('#outbox_table').DataTable().page.info().page;
-                        //             if(num_page_records==1){
-                        //                 if(page_number!=0) {
-                        //                     page_number--;
-                        //                 }
-                        //             }
-                        //             $('#out_del_msg').html('<p class=\'alert alert-success\'><i class=\'fa-solid fa-circle-check fa-lg\'></i><span>".js_escape($langMessageDeleteSuccess)."</span></p>');
-                        //             $('.alert-success').delay(3000).fadeOut(1500);
-                        //             $('#out_msg_area').remove();
-                        //             oTable2.fnPageChange(page_number);
-                        //           }
-                        //        });
-                        //      }
-                        // })
-
+                        
                         bootbox.confirm({
                             closeButton: false,
                             title: '<div class=\'icon-modal-default\'><i class=\'fa-regular fa-trash-can fa-xl Accent-200-cl\'></i></div><div class=\'modal-title-default text-center mb-0\'>".js_escape($langConfirmDelete)."</div>',
@@ -405,32 +365,7 @@ if (isset($_GET['mid'])) {
 
                      });
 
-                    $('.delete_all_out').click(function() {
-                        // bootbox.confirm('".js_escape($langConfirmDeleteAllMsgs)."', function(result) {
-                        //     if(result) {
-                        //         var string = 'all_outbox=1&". generate_csrf_token_link_parameter() ."';
-                        //         $.ajax({
-                        //             type: 'POST',
-                        //             url: '$ajax_url',
-                        //             data: string,
-                        //             cache: false,
-                        //             success: function(){
-                        //                 var num_page_records = oTable2.fnGetData().length;
-                        //                 var per_page = $('#outbox_table').DataTable().page.info().length;
-                        //                 var page_number = $('#outbox_table').DataTable().page.info().page;
-                        //                 if(num_page_records==1){
-                        //                 if(page_number!=0) {
-                        //                     page_number--;
-                        //                 }
-                        //                 }
-                        //                 $('#out_del_msg').html('<p class=\'alert alert-success\'><i class=\'fa-solid fa-circle-check fa-lg\'></i><span>".js_escape($langMessageDeleteAllSuccess)."</span></p>');
-                        //                 $('.alert-success').delay(3000).fadeOut(1500);
-                        //                 oTable2.fnPageChange(page_number);
-                        //             }
-                        //         });
-                        //     }
-                        // })
-
+                    $('.delete_all_out').click(function() {                        
                         bootbox.confirm({
                             closeButton: false,
                             title: '<div class=\'icon-modal-default\'><i class=\'fa-regular fa-trash-can fa-xl Accent-200-cl\'></i></div><div class=\'modal-title-default text-center mb-0\'>".js_escape($langConfirmDelete)."</div>',
@@ -457,10 +392,10 @@ if (isset($_GET['mid'])) {
                                             var num_page_records = oTable2.fnGetData().length;
                                             var per_page = $('#outbox_table').DataTable().page.info().length;
                                             var page_number = $('#outbox_table').DataTable().page.info().page;
-                                            if(num_page_records==1){
-                                            if(page_number!=0) {
-                                                page_number--;
-                                            }
+                                            if (num_page_records==1) {
+                                                if(page_number!=0) {
+                                                    page_number--;
+                                                }
                                             }
                                             $('#out_del_msg').html('<p class=\'alert alert-success\'><i class=\'fa-solid fa-circle-check fa-lg\'></i><span>".js_escape($langMessageDeleteAllSuccess)."</span></p>');
                                             $('.alert-success').delay(3000).fadeOut(1500);

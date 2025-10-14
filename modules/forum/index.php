@@ -214,11 +214,11 @@ if ($total_categories > 0) {
                         // Show link to forum if:
                         //  - user is admin of course
                         //  - forum doesn't belong to group
-                        //  - forum belongs to group and group forums are enabled and
-                        //     - user is member of group
+                        //  - forum belongs to group, and group forums are enabled and
+                        //     - user is a member of a group
                         if (setting_get(SETTING_COURSE_FORUM_NOTIFICATIONS)) { // first lookup for course setting
                             $forum_action_notify = false;
-                        } else { // if it's not set lookup user setting
+                        } else { // if it's not set, look up user setting
 
                             $forum_action_notify = Database::get()->queryArray("SELECT * FROM forum_notify
                                         WHERE user_id = ?d 
@@ -267,8 +267,6 @@ if ($total_categories > 0) {
                         }
                         $tool_content .= "<td class='text-end'>";
 
-
-
                         $tool_content .= action_button(
                             array(
                                 array(
@@ -289,25 +287,28 @@ if ($total_categories > 0) {
                                     'confirm' => $langConfirmDelete,
                                     'show' => $is_editor))
                                 );
-
-
-
-
-
                     }
 
                 } else {
                     $tool_content .= "<tr>" .
-                        "<td colspan='6' class='alert2'><span class='not_visible'> - $langNoForumsCat - </span></td>" .
+                        "<td class='alert2'><span class='not_visible'> - $langNoForumsCat - </span></td>" .
+                        "<td class='text-end'></td>".
+                        "<td class='text-end'></td>".
+                        "<td class='text-end'></td>".
+                        "<td class='text-end'></td>".
                         "</tr>";
                     break;
                 }
             }
         } else {
-            $tool_content .= "<tr><td colspan='8'><span class='not_visible'> - ".$langNoForumTopic." - </td></tr>";
+            $tool_content .= "<tr><td><span class='not_visible'> - ".$langNoForumTopic." - </td>" .
+                            "<td class='text-end'></td>".
+                            "<td class='text-end'></td>".
+                            "<td class='text-end'></td>".
+                            "<td class='text-end'></td>".
+                        "</tr>";
         }
         $tool_content .= "</tbody></table></div></div></div>";
-
 
         $tool_content .= "</div>";
 
