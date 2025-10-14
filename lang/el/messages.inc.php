@@ -190,12 +190,12 @@ $langCronInfo = "Ενημερωτικά στοιχεία για τις προγ�
 $langCronName = "Όνομα εργασίας";
 $langCronLastRun = "Τελευταία Εκτέλεση";
 $langExternalTools = 'Εξωτερικά εργαλεία';
-$langDisableModules = "Απενεργοποιημένα υποσυστήματα";
+$langDisableModules = "Απενεργοποιημένα εργαλεία";
 $langDisableModulesHelp = "Μπορείτε να επιλέξετε ποια από τα παρακάτω
-    υποσυστήματα επιθυμείτε να απενεργοποιηθούν από όλα τα $langsCourses της
+    εργαλεία επιθυμείτε να απενεργοποιηθούν από όλα τα $langsCourses της
     πλατφόρμας.";
-$langDefaultModules = 'Προκαθορισμένα υποσυστήματα';
-$langDefaultModulesHelp = "Τα παρακάτω υποσυστήματα είναι ενεργοποιημένα εξ
+$langDefaultModules = 'Προκαθορισμένα εργαλεία';
+$langDefaultModulesHelp = "Τα παρακάτω εργαλεία είναι ενεργοποιημένα εξ
     ορισμού στα νέα $langsCourses της πλατφόρμας κατά τη δημιουργία τους.";
 $langAutoEnroll = 'Αυτόματη εγγραφή';
 $langAutoEnrollNew = 'Προσθήκη κανόνα';
