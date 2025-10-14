@@ -987,15 +987,15 @@ jContent;
             }
 
             $ret .= ($c == 0) ? '' : '» ';
-            $ret .= (empty($href)) ? self::unserializeLangField($parent->name) . ' ' : "<a href='" . $href . $parent->id . "'>" . self::unserializeLangField($parent->name) . "</a> ";
+            $ret .= (empty($href)) ? q(self::unserializeLangField($parent->name)) . ' ' : "<a href='" . $href . $parent->id . "'>" . q(self::unserializeLangField($parent->name)) . "</a> ";
             $c++;
         }
 
         $ret .= ($c == 0) ? '' : '» ';
         if ($c > 0 && $accessibility_on) {
-            $ret .= "<span aria-current='" . self::unserializeLangField($node->name) ."'>".self::unserializeLangField($node->name) . ' '."</span>";
+            $ret .= "<span aria-current='" . q(self::unserializeLangField($node->name)) ."'>".q(self::unserializeLangField($node->name)) . ' '."</span>";
         } else {
-            $ret .= self::unserializeLangField($node->name) . ' ';
+            $ret .= q(self::unserializeLangField($node->name)) . ' ';
         }
 
         return $ret;

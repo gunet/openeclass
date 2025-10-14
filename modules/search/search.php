@@ -212,7 +212,7 @@ foreach ($courses as $course) {
         $i++;
     }
 
-    $course_faculty = "<div class='text-muted'>$dep</div";
+    $course_faculty = "<div class='text-muted'>$dep</div>";
     $search_result_content .= "<td>" . $courseUrl . $course_faculty . $requirepassword . $coursePrerequisites . "</td>
                       <td>" . q($course->prof_names) . "</td>
                       <td>" . q($course->keywords) . "</td>
