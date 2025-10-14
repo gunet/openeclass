@@ -1191,6 +1191,7 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
                     'delete' => array('id'),
                 ), $url_prefix_map, $backupData, $restoreHelper);
         }
+        $unit_map[0] = 0;
 
         // Certificate
         $certificate_map = restore_table($restoreThis, 'certificate', array(
@@ -1217,9 +1218,6 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
         ), $url_prefix_map, $backupData, $restoreHelper);
 
         // Badge
-        if (!isset($unit_map)) {
-            $unit_map = 0;
-        }
         $badge_map = restore_table($restoreThis, 'badge', array(
             'set' => array('course_id' => $new_course_id),
             'map' => array('unit_id' => $unit_map),
