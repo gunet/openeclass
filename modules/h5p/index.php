@@ -152,8 +152,11 @@ if ($content) {
 
         $tool_content .= "<tr" . ($item->enabled ? '' : " class='not_visible'") . ">
                     <td>
-                        <a href='view.php?course=$course_code&amp;id=$item->id'>$item->title</a>
-                    </td>
+                        <a href='view.php?course=$course_code&amp;id=$item->id'>$item->title</a>";
+        if ($is_editor && setting_get(SETTING_COURSE_H5P_USERS_UPLOADING_ENABLE, $course_id) == 1 && $item->creator_id > 0) {
+            $tool_content .= "<div class='help-block'>$langCreatedBy: " . uid_to_name($item->creator_id) . "</div>";
+        }
+        $tool_content .= "</td>
                     <td>
                         <img src='$typeIconUrl' alt='$h5p_content_type_title' width='30px' height='30px'> <em>$h5p_content_type_title</em>
                     </td>";
