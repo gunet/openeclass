@@ -108,6 +108,7 @@ $pageName = $langWall;
 
 //handle submit
 if (isset($_POST['submit'])) {
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     if (allow_to_post($course_id, $uid, $is_editor)) {
         if (!empty($_POST['message'])) {
             if (empty($_POST['extvideo'])) {
@@ -228,6 +229,7 @@ if (isset($_POST['submit'])) {
     }
     decide_wall_redirect();
 } elseif (isset($_POST['edit_submit'])) { //handle edit form submit
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $id = intval($_GET['edit']);
     if (allow_to_edit($id, $uid, $is_editor)) {
         if (!empty($_POST['message'])) {
@@ -517,6 +519,7 @@ if (isset($_GET['showPost'])) { //show comments case
                             ))
                         .'</div>
                         </fieldset>
+                        ' . generate_csrf_token_form_field() . '
                     </form>
                 </div>
             </div>

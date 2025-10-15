@@ -74,8 +74,9 @@ Class Commenting {
      * @return string
      */
     public function put($courseCode, $isEditor, $uid, $always_open = false) {
-        global $langComments, $langBlogPostUser, $langSubmit, $langModify, $langDelete,
-        $langCommentsDelConfirm, $langCommentsSaveConfirm, $urlServer, $head_content, $langClose, $langTypeOutMessage, $langSubmitComment;
+        global $langComments, $langBlogPostUser, $langModify, $langDelete,
+        $langCommentsDelConfirm, $langCommentsSaveConfirm, $urlServer, $head_content,
+        $langTypeOutMessage, $langSubmitComment;
 
         $commentsNum = $this->getCommentsNum();
 
@@ -196,9 +197,6 @@ Class Commenting {
         }
 
         if (!$always_open) {
-            // $out .= '<div class="modal-footer">
-            //             <button type="button" class="btn cancelAdminBtn" data-bs-dismiss="modal">'.$langClose.'</button>
-            //          </div>';
             $out .= '</div>';
         }
 

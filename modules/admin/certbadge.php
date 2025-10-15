@@ -74,6 +74,7 @@ $action_bar = action_bar(array(
 $tool_content .= $action_bar;
 
 if (isset($_GET['del_badge'])) { // delete badge icon
+    if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();
     $sql_badge_icon = Database::get()->querySingle("SELECT id, filename FROM badge_icon WHERE id = ?d", $_GET['del_badge']);
     $badge_icon_id = $sql_badge_icon->id;
     $cnt = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM badge WHERE icon = ?d", $badge_icon_id)->cnt;
@@ -92,6 +93,7 @@ if (isset($_GET['del_badge'])) { // delete badge icon
 }
 
 if (isset($_GET['del_cert'])) { // delete certificate template
+    if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();
     $sql_cert_template = Database::get()->querySingle("SELECT id, filename FROM certificate_template WHERE id = ?d", $_GET['del_cert']);
     $cert_template_id = $sql_cert_template->id;
     $cnt = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM certificate WHERE template = ?d", $cert_template_id)->cnt;
@@ -113,6 +115,7 @@ if (isset($_GET['del_cert'])) { // delete certificate template
 }
 
 if (isset($_POST['submit_cert_template'])) { // insert certificate template
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     if (isset($_POST['cert_template_courses'])) {
         $cert_template_courses = $_POST['cert_template_courses'];
     } else {
@@ -222,9 +225,7 @@ if (isset($_POST['submit_cert_template'])) { // insert certificate template
     }
 
 } elseif (isset($_POST['submit_badge_icon'])) { // insert / update badge icon
-    if (!isset($_POST['token']) or !validate_csrf_token($_POST['token'])) {
-        forbidden();
-    }
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $new_icon = $old_icon = $filename = null;
     $badge_id = $_POST['badge_id'] ?? null;
     if ($_FILES['icon']['size'] > 0) {
@@ -368,12 +369,13 @@ if (isset($_GET['action'])) {
                                 </div>
 
                             $cert_hidden_id
-
+                    
                             <div class='form-group mt-5 d-flex justify-content-end align-items-center gap-2'>
                                 <button class='btn submitAdminBtn' type ='submit' name='submit_cert_template'>$langUpload</button>
                                 <a class='btn cancelAdminBtn' href='index.php'>$langCancel</a>
                             </div>
                         </fieldset>
+                        ". generate_csrf_token_form_field() ."
                     </form>
                 </div>
             </div>
@@ -466,7 +468,7 @@ if (isset($_GET['action'])) {
                                     ),
                                 array('title' => $langDelete,
                                     'icon' => 'fa-xmark',
-                                    'url' => "$_SERVER[SCRIPT_NAME]?del_cert=$cert_data->id",
+                                    'url' => "$_SERVER[SCRIPT_NAME]?del_cert=$cert_data->id&" . generate_csrf_token_link_parameter() ,
                                     'confirm' => $langConfirmDelete,
                                     'class' => 'delete')
                                 )).
@@ -500,7 +502,7 @@ if (isset($_GET['action'])) {
                                     ),
                                 array('title' => $langDelete,
                                     'icon' => 'fa-xmark',
-                                    'url' => "$_SERVER[SCRIPT_NAME]?del_badge=$badge_data->id",
+                                    'url' => "$_SERVER[SCRIPT_NAME]?del_badge=$badge_data->id&" . generate_csrf_token_link_parameter() ,
                                     'confirm' => $langConfirmDelete,
                                     'class' => 'delete'))).
                             "</td></tr>";
