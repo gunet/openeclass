@@ -138,7 +138,7 @@ if (isset($_GET['unit'])) {
 
     // ====================================================
     // API Class Constructor
-    let debug_ = true;
+    let debug_ = false;
     let debug_commit_ = false;
 
     function APIClass() {
