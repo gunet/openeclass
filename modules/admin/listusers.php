@@ -394,7 +394,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                 array(
                     'title' => ($inactive_user)? "$langActivate" : "$langDeactivate",
                     'icon' => ($inactive_user)? "fa-plus-circle" : "fa-minus-circle",
-                    'url' => ($inactive_user)? "$_SERVER[SCRIPT_NAME]?&u=$myrow->id&amp;action=activate" : "$_SERVER[SCRIPT_NAME]?&u=$myrow->id&amp;action=deactivate",
+                    'url' => ($inactive_user)? "$_SERVER[SCRIPT_NAME]?&u=$myrow->id&amp;action=activate&amp;" . generate_csrf_token_link_parameter() : "$_SERVER[SCRIPT_NAME]?&u=$myrow->id&amp;action=deactivate&amp;" . generate_csrf_token_link_parameter(),
                     'show' => $show
                 ),
                 array(
@@ -420,6 +420,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
 
 // activate - deactivate user
 if (isset($_GET['action']) and isset($_GET['u'])) {
+    if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();
     switch ($_GET['action']) {
         case 'deactivate':
                 Database::get()->query("UPDATE user SET expires_at = " .DBHelper::timeAfter() . " WHERE id = ?d" , $_GET['u']);

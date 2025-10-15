@@ -205,7 +205,8 @@ function show_post_form() {
                                     )
                                 ))
                                 .'</div></div>  
-                            </fieldset>      
+                            </fieldset>
+                            ' . generate_csrf_token_form_field() . '
                         </form>
                     </div>
                 </div>
