@@ -57,11 +57,6 @@
                                                 <th style='width:10%;'>{{ trans('langDate') }}</th>
                                                 <th style='width:5%;'>&nbsp;</th>
                                             </tr>
-                                            <tr>
-                                                <th colspan="3">
-                                                    {{ trans('langOpenDelosPublicVideos') }}
-                                                </th>
-                                            </tr>
                                         </thead>
                                         <tbody>
                                             @if ($jsonPublicObj !== null && property_exists($jsonPublicObj, "resources") && count($jsonPublicObj->resources) > 0)
@@ -72,6 +67,7 @@
                                                     @endphp
                                                     <tr>
                                                         <td style='width:85%;'>
+                                                            <span class='fa-solid fa-lock-open fa-lg fa-fw m-3' data-bs-toggle='tooltip' data-bs-placement='top' data-bs-original-title='{{ trans('langOpenDelosPublicVideos') }}'></span>
                                                             <a href="{!! $url . $urltoken !!}" class="fileURL" target="_blank" title="{{ $resource->videoLecture->title }}">{{ $resource->videoLecture->title }}</a>
                                                             @if (isset($currentVideoLinks[$url]) && strtotime($resource->videoLecture->date) > strtotime($currentVideoLinks[$url]))
                                                                 <span class='fa-solid fa-exclamation ps-2' style='color: red' title data-bs-original-title='{{ trans('langDelosNewFileVersion') }}' data-bs-toggle='tooltip' data-bs-placement='bottom'></span>
@@ -83,6 +79,7 @@
                                                         <td style='width:5%;'>
                                                             <label class='label-container' aria-label='{{ trans('langSelect') }}'>
                                                                 <input name='delosResources[]' type='checkbox' value='{{ $resource->resourceID }}' @if (isset($currentVideoLinks[$url])) checked @endif>
+                                                                <span class='checkmark'></span>
                                                             </label>
                                                         </td>
                                                     </tr>
@@ -97,6 +94,7 @@
                                                         @endphp
                                                         <tr>
                                                             <td style='width:85%;'>
+                                                                <span class='fa-solid fa-lock fa-lg fa-fw m-3' data-bs-toggle='tooltip' data-bs-placement='top' data-bs-original-title='{{ trans('langOpenDelosPrivateVideos') }}'></span>
                                                                 <a href="{!! $url . $urltoken !!}" class="fileURL" target="_blank" title="{{ $resource->videoLecture->title }}">{{ $resource->videoLecture->title }}</a>
                                                                 @if (isset($currentVideoLinks[$url]) && strtotime($resource->videoLecture->date) > strtotime($currentVideoLinks[$url]))
                                                                     <span class='fa-solid fa-exclamation ps-2' style='color: red' title data-bs-original-title='{{ trans('langDelosNewFileVersion') }}' data-bs-toggle='tooltip' data-bs-placement='bottom'></span>
@@ -110,6 +108,7 @@
                                                             <td class="center">
                                                                 <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                                     <input name='delosResources[]' type='checkbox' value='{{ $resource->resourceID }}' @if (isset($currentVideoLinks[$url])) checked @endif>
+                                                                    <span class='checkmark'></span>
                                                                 </label>
                                                             </td>
                                                         </tr>

@@ -43,6 +43,7 @@ $data = array();
 // js and view
 load_js('tools.js');
 load_js('bootstrap-datetimepicker');
+load_js('datatables');
 
 // navigation
 $toolName = $langVideo;
