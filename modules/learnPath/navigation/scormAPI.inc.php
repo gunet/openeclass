@@ -85,6 +85,7 @@ if (!$uid || !$userProgressionDetails) {
     $sco['total_time'] = "0000:00:00.00";
     $sco['suspend_data'] = "";
     $sco['launch_data'] = "";
+    $sco['progress_measure'] = "";
 } else { // authenticated user and no error in query
     // set vars
     $sco['student_id'] = $uid;
@@ -107,6 +108,11 @@ if (!$uid || !$userProgressionDetails) {
         $sco['suspend_data'] = $userProgressionDetailsPrev->suspend_data;
     }
     $sco['launch_data'] = stripslashes($userProgressionDetails->launch_data);
+    if (property_exists($userProgressionDetails, 'progress_measure') && $userProgressionDetails->progress_measure !== null) {
+        $sco['progress_measure'] = $userProgressionDetails->progress_measure;
+    } else {
+        $sco['progress_measure'] = "";
+    }
 }
 
 //common vars
@@ -132,7 +138,7 @@ if (isset($_GET['unit'])) {
 
     // ====================================================
     // API Class Constructor
-    let debug_ = false;
+    let debug_ = true;
     let debug_commit_ = false;
 
     function APIClass() {
@@ -910,7 +916,7 @@ if (isset($_GET['unit'])) {
     values[46] = "<?php echo js_escape($sco['exit']); ?>";
     values[47] = "";
     values[48] = "normal";
-    values[49] = "";
+    values[49] = "<?php echo js_escape($sco['progress_measure']); ?>";
 
 
     // ====================================================
@@ -957,6 +963,7 @@ if (isset($_GET['unit'])) {
             fallbackForm.appendChild(makeHiddenInput('scoreMin', null));
             fallbackForm.appendChild(makeHiddenInput('scoreMax', null));
             fallbackForm.appendChild(makeHiddenInput('scoreScaled', null));
+            fallbackForm.appendChild(makeHiddenInput('progress_measure', null));
             fallbackForm.appendChild(makeHiddenInput('exit', null));
 
             cmiform = fallbackForm;
@@ -983,6 +990,7 @@ if (isset($_GET['unit'])) {
         cmiform.scoreMin.value = values[14];
         cmiform.scoreMax.value = values[15];
         cmiform.scoreScaled.value = values[45];
+        cmiform.progress_measure.value = values[49];
 
         let cmiformVars = $(cmiform).serialize();
         let closelocation = null;

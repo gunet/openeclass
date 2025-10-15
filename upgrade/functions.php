@@ -3476,6 +3476,10 @@ function upgrade_to_4_2($tbl_options) : void {
         ) $tbl_options");
     }
 
+    if (!DBHelper::fieldExists('lp_user_module_progress', 'progress_measure')) {
+        Database::get()->query("ALTER TABLE lp_user_module_progress ADD `progress_measure` FLOAT DEFAULT NULL AFTER `session_time`");
+    }
+
 }
 
 /**

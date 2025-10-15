@@ -800,6 +800,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `lp_user_module_progress` (
     `scoreMax` TINYINT(4) NOT NULL DEFAULT '-1',
     `total_time` VARCHAR(13) NOT NULL DEFAULT '0000:00:00.00',
     `session_time` VARCHAR(13) NOT NULL DEFAULT '0000:00:00.00',
+    `progress_measure` FLOAT DEFAULT NULL,
     `suspend_data` TEXT NOT NULL,
     `credit` enum('CREDIT','NO-CREDIT') NOT NULL DEFAULT 'NO-CREDIT',
     `attempt` int(11) NOT NULL DEFAULT 1,
