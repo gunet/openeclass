@@ -65,6 +65,7 @@ function directly_pass_lp_module($userid, $lpmid): void {
                    `lesson_status` = 'COMPLETED',
                    `scoreMin` = 0,
                    `scoreMax` = 100,
+                   `progress_measure` = 1,
                    `accessed` = " . DBHelper::timeAfter() . "
              WHERE `user_id` = ?d
                AND `learnPath_module_id` = ?d
@@ -99,8 +100,8 @@ if ($uid) { // if not anonymous
     // if never initialized : create an empty user_module_progress line
     if ($num == 0) {
         Database::get()->query("INSERT INTO `lp_user_module_progress`
-                ( `user_id` , `learnPath_id` , `learnPath_module_id`, `lesson_location`, `suspend_data`, `attempt`, `started`, `accessed` )
-                VALUES (?d , ?d, ?d, '', '', ?d, " . DBHelper::timeAfter() . ", " . DBHelper::timeAfter() . ")", $uid, $_SESSION['path_id'], $learnPathModuleId, $_SESSION['lp_attempt']);
+                ( `user_id` , `learnPath_id` , `learnPath_module_id`, `lesson_location`, `suspend_data`, `attempt`, `started`, `accessed`, `progress_measure` )
+                VALUES (?d , ?d, ?d, '', '', ?d, " . DBHelper::timeAfter() . ", " . DBHelper::timeAfter() . ", 0)", $uid, $_SESSION['path_id'], $learnPathModuleId, $_SESSION['lp_attempt']);
         triggerLPGame($course_id, $uid, $_SESSION['path_id'], LearningPathEvent::UPDPROGRESS);
         triggerLPAnalytics($course_id, $uid, $_SESSION['path_id']);
     }
