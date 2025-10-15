@@ -290,86 +290,86 @@ if (isset($_GET['edit'])) {
         }, $courses_list));
         $expirationDate = DateTime::createFromFormat("Y-m-d H:i", date('Y-m-d H:i', strtotime("now") + $duration_time));
         $tool_content .= "
-        <div class='row extapp'><div class='col-lg-6 col-12'>
-          <div class='form-wrapper form-edit border-0 px-0'>
-            <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
-                <div class='form-group'>
-                    <label for='$langExtAppName' class='col-12 control-label-notes'>$langExtAppName</label>
-                    <div class='col-12'>
-                        <input id='$langExtAppName' class='form-control' type='text' name='name'>
-                    </div>
-                </div>
-                <div class='form-group mt-4'>
-                    <label for='$langIpAddress' class='col-12 control-label-notes'>$langIpAddress</label>
-                    <div class='col-12'>
-                        <input id='$langIpAddress' class='form-control' type='text' name='remote_url'>
-                        <div class='form-text'>$langAPITokenIP</div>
-                    </div>
-                </div>
-                <div class='form-group mt-4'>
-                    <label for='$langComments' class='col-12 control-label-notes'>$langComments</label>
-                    <div class='col-12'>
-                        <textarea id='$langComments' class='form-control' rows='3' cols='40' name='comments'></textarea>
-                    </div>
-                </div>
-                <div class='input-append date form-group mt-4'>
-                    <div class='col-12 control-label-notes'>$langExpirationDate:</div>
-                    <div class='col-12'>
-                        <div class='input-group'>
-                            <input class='form-control mt-0 border-end-0' id='token_expires_at' name='token_expires_at' type='text' value='" . $expirationDate->format("d-m-Y H:i") . "'>
-                            <span class='input-group-text input-group-addon h-40px bg-input-default input-border-color'><i class='fa-regular fa-calendar'></i></span>
-                        </div>
-                    </div>
-                </div>
-                <div class='form-group mt-4'>
-                    <div class='col-sm-12 control-label-notes'>$langAPITokenAccess</div>
-                        <div class='col-sm-12 d-inline-flex'>
-                            <div class='radio'>
-                                <label>
-                                    <input type='radio' id='api_all_courses' name='api_all_courses' value='true' checked>
-                                    $langToAllCourses
-                                </label>
-                            </div>
-                            <div class='radio ms-4'>
-                                <label>
-                                    <input type='radio' id='api_some_courses' name='api_all_courses' value='false'>
-                                    $langToSomeCourses
-                                </label>
+        <div class='row extapp'>
+            <div class='col-lg-6 col-12'>
+                <div class='form-wrapper form-edit border-0 px-0'>
+                    <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
+                        <div class='form-group'>
+                            <label for='$langExtAppName' class='col-12 control-label-notes'>$langExtAppName</label>
+                            <div class='col-12'>
+                                <input id='$langExtAppName' class='form-control' type='text' name='name'>
                             </div>
                         </div>
-                    </div>
+                        <div class='form-group mt-4'>
+                            <label for='$langIpAddress' class='col-12 control-label-notes'>$langIpAddress</label>
+                            <div class='col-12'>
+                                <input id='$langIpAddress' class='form-control' type='text' name='remote_url'>
+                                <div class='form-text'>$langAPITokenIP</div>
+                            </div>
+                        </div>
+                        <div class='form-group mt-4'>
+                            <label for='$langComments' class='col-12 control-label-notes'>$langComments</label>
+                            <div class='col-12'>
+                                <textarea id='$langComments' class='form-control' rows='3' cols='40' name='comments'></textarea>
+                            </div>
+                        </div>
+                        <div class='input-append date form-group mt-4'>
+                            <div class='col-12 control-label-notes'>$langExpirationDate:</div>
+                            <div class='col-12'>
+                                <div class='input-group'>
+                                    <input class='form-control mt-0 border-end-0' id='token_expires_at' name='token_expires_at' type='text' value='" . $expirationDate->format("d-m-Y H:i") . "'>
+                                    <span class='input-group-text input-group-addon h-40px bg-input-default input-border-color'><i class='fa-regular fa-calendar'></i></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class='form-group mt-4'>
+                            <div class='col-sm-12 control-label-notes'>$langAPITokenAccess</div>
+                            <div class='col-sm-12 d-inline-flex'>
+                                <div class='radio'>
+                                    <label>
+                                        <input type='radio' id='api_all_courses' name='api_all_courses' value='true' checked>
+                                        $langToAllCourses
+                                    </label>
+                                </div>
+                                <div class='radio ms-4'>
+                                    <label>
+                                        <input type='radio' id='api_some_courses' name='api_all_courses' value='false'>
+                                        $langToSomeCourses
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div id='courses-select-field' class='form-group d-none'>
+                            <div class='col-sm-12'>
+                                <select class='form-select' name='api_courses[]' multiple class='form-control' id='select-courses'>
+                                    $listcourses
+                                </select>
+                                <a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a>
+                            </div>
+                        </div>
+                        <div class='form-group mt-4'>
+                            <div class='col-sm-offset-2 col-sm-10'>
+                                <div class='checkbox'>
+                                    <label class='label-container' aria-label='$langSettingSelect'>
+                                    <input type='checkbox' name='enabled' value='1' checked><span class='checkmark'></span>$langCEnabled</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class='form-group mt-4'>
+                            <div class='col-12 d-flex justify-content-end'>
+                                <button class='btn submitAdminBtn' type='submit' name='submit'>$langSubmit</button>
+                                &nbsp;
+                                <a href='$_SERVER[SCRIPT_NAME]' class='btn cancelAdminBtn ms-2'>$langCancel</a>
+                            </div>
+                        </div>" .
+                        generate_csrf_token_form_field() . "
+                    </form>
                 </div>
-                <div id='courses-select-field' class='form-group d-none'>
-                    <div class='col-sm-12'>
-                        <select class='form-select' name='api_courses[]' multiple class='form-control' id='select-courses'>
-                            $listcourses
-                        </select>
-                        <a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a>
-                    </div>
-                </div>
-                <div class='form-group mt-4'>
-                    <div class='col-sm-offset-2 col-sm-10'>
-                        <div class='checkbox'>
-                            <label class='label-container' aria-label='$langSettingSelect'>
-                            <input type='checkbox' name='enabled' value='1' checked><span class='checkmark'></span>$langCEnabled</label>
-                       </div>
-                    </div>
-                </div>
-                <div class='form-group mt-4'>
-                  <div class='col-12 d-flex justify-content-end'>
-                    <button class='btn submitAdminBtn' type='submit' name='submit'>$langSubmit</button>
-                    &nbsp;
-                    <a href='$_SERVER[SCRIPT_NAME]' class='btn cancelAdminBtn ms-2'>$langCancel</a>
-                  </div>
-                </div>" .
-                generate_csrf_token_form_field() . "
-            </form>
-          </div>
-        </div>
+            </div>
 
-        <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
-            <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
-        </div>
+            <div class='col-lg-6 col-12 d-none d-lg-block text-end'>
+                <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
+            </div>
 
         </div>";
 }

@@ -289,7 +289,6 @@ function create_pdf($data) {
 
     global $course_id, $currentCourseName, $webDir, $langResults, $out_filename;
 
-    print_a($data);
     $content = '';
     foreach ($data as $key => $value) {
         if (is_array($value)) {
