@@ -12271,7 +12271,7 @@ function theme_initialization() {
         $fileStyleStr = $webDir . "/courses/theme_data/$theme_id/style_str.css";
         if (!file_exists($fileStyleStr)) {
             file_put_contents($fileStyleStr, "");
-        } else if (isset($_SESSION['theme_changed'])) { // theme has changed ?
+        } else if (isset($_SESSION['theme_changed'])) { // the theme has changed?
             file_put_contents($fileStyleStr, $styles_str);
             unset($_SESSION['theme_changed']);
         } else if (isset($_SESSION['step'])) { // first time

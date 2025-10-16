@@ -29,7 +29,12 @@ require_once 'include/course_settings.php';
 $toolName = $langH5p;
 
 $onlyEnabledWhere = ($is_editor) ? '' : " AND enabled = 1 ";
-$content = Database::get()->queryArray("SELECT * FROM h5p_content WHERE course_id = ?d $onlyEnabledWhere ORDER BY id ASC", $course_id);
+$h5p_teacher_content = Database::get()->queryArray("SELECT * FROM h5p_content WHERE course_id = ?d $onlyEnabledWhere
+                          AND creator_id IN (SELECT user_id FROM course_user WHERE course_id = ?d AND (status = " . USER_TEACHER . " OR editor = 1))", $course_id, $course_id);
+$h5p_student_content = Database::get()->queryArray("SELECT * FROM h5p_content WHERE course_id = ?d $onlyEnabledWhere
+                          AND creator_id IN (SELECT user_id FROM course_user WHERE course_id = ?d AND status = " . USER_STUDENT . ")", $course_id, $course_id);
+
+$content = array_merge($h5p_teacher_content, $h5p_student_content);
 
 if ($is_editor || setting_get(SETTING_COURSE_H5P_USERS_UPLOADING_ENABLE, $course_id) == 1) {
     $factory = new H5PFactory();
@@ -124,21 +129,25 @@ if ($is_editor) {
 }
 
 if ($content) {
-   $tool_content .= "<div class='col-12 mt-4'><div class='table-responsive'><table class='table-default'>
-        <thead>
-            <tr class='list-header'>
-                <th>$langH5pInteractiveContent</th>
-                <th>$langTypeH5P</th>";
+   $tool_content .= "<div class='col-12 mt-4'><div class='table-responsive'><table class='table-default'>";
+   if (count($h5p_teacher_content) > 0) {
+        $tool_content .= "
+            <thead>
+                <tr class='list-header'>
+                    <th>$langH5pInteractiveContent</th>
+                    <th>$langTypeH5P</th>";
+        if ($is_editor || setting_get(SETTING_COURSE_H5P_USERS_UPLOADING_ENABLE, $course_id) == 1) {
+            $tool_content .= "<th aria-label='$langSettingSelect'><i class='fa-solid fa-gears'></i></th>";
+        } else {
+            $tool_content .= "<th>&nbsp;</th>";
+        }
+        $tool_content .= "
+                </tr>
+            </thead>";
+    }
+        $tool_content .= "<tbody>";
 
-                if ($is_editor || setting_get(SETTING_COURSE_H5P_USERS_UPLOADING_ENABLE, $course_id) == 1) {
-                    $tool_content .= "<th aria-label='$langSettingSelect'><i class='fa-solid fa-gears'></i></th>";
-                }
-
-    $tool_content .= "
-            </tr>
-        </thead>
-        <tbody>";
-
+    $change = false;
     foreach ($content as $item) {
         $can_edit = ($is_editor || (setting_get(SETTING_COURSE_H5P_USERS_UPLOADING_ENABLE, $course_id) == 1 && $item->creator_id == $_SESSION['uid'] && $item->creator_id > 0));
         $q = Database::get()->querySingle("SELECT machine_name, title, major_version, minor_version
@@ -150,12 +159,21 @@ if ($content) {
             ? $urlAppend . "courses/h5p/libraries/" . $typeFolder . "/icon.svg"  // expected icon
             : $urlAppend . "resources/icons/h5p_library.svg"; // fallback icon
 
-        $tool_content .= "<tr" . ($item->enabled ? '' : " class='not_visible'") . ">
-                    <td>
-                        <a href='view.php?course=$course_code&amp;id=$item->id'>$item->title</a>";
-        if ($is_editor && setting_get(SETTING_COURSE_H5P_USERS_UPLOADING_ENABLE, $course_id) == 1 && $item->creator_id > 0) {
-            $tool_content .= "<div class='help-block'>$langCreatedBy: " . uid_to_name($item->creator_id) . "</div>";
+        if (!$change) {
+            if (in_array($item->creator_id, get_course_users($course_id))) {
+                $tool_content .= "<thead><tr class='list-header alert alert-info'>
+                                    <th>$langH5pInteractiveContentByStudents</th>
+                                    <th>&nbsp;</th>
+                                    <th>&nbsp;</th>
+                                </tr></thead>";
+                $change = true;
+            }
         }
+        $tool_content .= "<tr" . ($item->enabled ? '' : " class='not_visible'") . ">
+                            <td><a href='view.php?course=$course_code&amp;id=$item->id'>$item->title</a>";
+                            if (setting_get(SETTING_COURSE_H5P_USERS_UPLOADING_ENABLE, $course_id) == 1 && $item->creator_id > 0) {
+                                $tool_content .= "<div class='help-block'>$langCreatedBy: " . uid_to_name($item->creator_id) . "</div>";
+                            }
         $tool_content .= "</td>
                     <td>
                         <img src='$typeIconUrl' alt='$h5p_content_type_title' width='30px' height='30px'> <em>$h5p_content_type_title</em>
