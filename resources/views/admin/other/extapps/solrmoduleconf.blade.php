@@ -49,7 +49,7 @@
 
                             @foreach($appParams as $param)
                                 @if($param->getType() == ExtParam::TYPE_BOOLEAN)
-                                    {!! $checked = $param->value() == 1 ? "checked" : ""; !!}
+                                    @php $checked = $param->value() == 1 ? "checked" : ""; @endphp
                                     <div class='form-group mb-4'>
                                         <div class='col-sm-offset-2 col-sm-10'>
                                             <div class='checkbox'>
