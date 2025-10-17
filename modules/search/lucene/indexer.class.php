@@ -18,6 +18,9 @@
  *
  */
 
+if (empty($webDir)) {
+    $webDir = fix_directory_separator(dirname(__FILE__, 4));
+}
 set_include_path(implode(PATH_SEPARATOR, array(
     $webDir . '/include',
     get_include_path(),
