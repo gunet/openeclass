@@ -1168,7 +1168,32 @@ b a {
   .user-menu-btn .user-name{
     white-space: nowrap;
   }
+
+  .navbar-eclass.fixed-top .box-logo {
+    padding-left: 10px;
+    padding-right: 10px;
+    min-height: 80px;
+  }
+  .navbar-eclass.fixed-top.fixed .box-logo {
+    min-height: 55px;
+  }
 }
+
+@media(max-width: 991px){
+  .navbar-eclass.fixed-top .box-logo {
+    padding-left: 10px;
+    padding-right: 10px;
+    min-height: 56px;
+  }
+  .navbar-eclass.fixed-top.fixed .box-logo {
+    min-height: 55px;
+  }
+}
+
+
+.box-logo {
+  background-color: #ffffff;
+ }
 
 
 /**********************************************************************************************************************/

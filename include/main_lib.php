@@ -5139,7 +5139,7 @@ function theme_initialization() {
            $head_content, $webDir, $theme_id, $container,
            $leftsideImg, $eclass_banner_value, $PositionFormLogin,
            $logo_img, $image_footer, $loginIMG, $themeimg, $favicon_img,
-           $logo_img_small, $VideoUploadedInJumbotron;
+           $logo_img_small, $VideoUploadedInJumbotron, $enable_box_logo;
 
     // Add Theme Options styles
     $styles_str = '';
@@ -5154,6 +5154,7 @@ function theme_initialization() {
     $loginIMG = $themeimg.'/loginIMG.png';
     $favicon_img = $urlAppend . 'resources/favicon/openeclass_128x128.png';
     $VideoUploadedInJumbotron = 0;
+    $enable_box_logo = 0;
 
     //////////////////////////////////////////  Theme creation  ///////////////////////////////////////////////
 
@@ -5220,6 +5221,37 @@ function theme_initialization() {
                   .portfolio-texts *{
                     color: $theme_options_styles[BriefProfilePortfolioTextColor] !important;
                   }
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ////// ABOUT BUTTONS (PROFILE -  ADMIN TOOL - STATISTICS)  IN PORTOFOLIO ////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['bgColorPortfolioButtons'])){
+            $styles_str .= "
+                .myProfileBtn{
+                    background-color: $theme_options_styles[bgColorPortfolioButtons] !important;
+                }
+            ";
+        }
+
+        if(!empty($theme_options_styles['textColorPortfolioButtons'])){
+            $styles_str .= "
+                .myProfileBtn{
+                    color: $theme_options_styles[textColorPortfolioButtons] !important;
+                }
+            ";
+        }
+
+        if(!empty($theme_options_styles['bgHoverColorPortfolioButtons'])){
+            $styles_str .= "
+                .myProfileBtn:hover,
+                .myProfileBtn:focus{
+                    background-color: $theme_options_styles[bgHoverColorPortfolioButtons] !important;
+                }
             ";
         }
 
@@ -5553,6 +5585,10 @@ function theme_initialization() {
                         }
                     }
                     @media(max-width:991px){
+                        .jumbotron.jumbotron-login{
+                            display: flex;
+                            align-items: top;
+                        }
                         .overlay-video-container {
                             display: flex;
                             align-items: top;
@@ -5572,6 +5608,10 @@ function theme_initialization() {
                         }
                     }
                     @media(max-width:991px){
+                        .jumbotron.jumbotron-login{
+                            display: flex;
+                            align-items: center;
+                        }
                         .overlay-video-container {
                             display: flex;
                             align-items: center;
@@ -5591,6 +5631,10 @@ function theme_initialization() {
                         }
                     }
                     @media(max-width:991px){
+                        .jumbotron.jumbotron-login{
+                            display: flex;
+                            align-items: end;
+                        }
                         .overlay-video-container {
                             display: flex;
                             align-items: end;
@@ -6003,6 +6047,24 @@ function theme_initialization() {
 
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////// BACKGROUND BOX OF HEADER LOGO //////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if (isset($theme_options_styles['enableBoxLogo']) and $theme_options_styles['enableBoxLogo']){
+            $enable_box_logo = 1;
+        }
+
+        if (!empty($theme_options_styles['BgColorContainerLogo'])) {
+            $styles_str .= "
+                .box-logo {
+                    background-color: $theme_options_styles[BgColorContainerLogo];
+                }
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////// LINKS COLOR OF FOOTER ///////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
@@ -6051,6 +6113,39 @@ function theme_initialization() {
                     color: $theme_options_styles[linkHoverColorFooter];
                 }
 
+
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////// COLOR OF COPYRIGHT LINK IN FOOTER /////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if (!empty($theme_options_styles['linkCopyrightColorFooter'])){
+            $styles_str .= "
+
+                .site-footer .copyright{
+                    color: $theme_options_styles[linkCopyrightColorFooter];
+                }
+
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////// COLOR OF HOVER LINK IN FOOTER ///////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if (!empty($theme_options_styles['linkCopyrightHoverColorFooter'])){
+            $styles_str .= "
+
+                .site-footer .copyright:hover,
+                .site-footer .copyright:focus{
+                    color: $theme_options_styles[linkCopyrightHoverColorFooter];
+                }
 
             ";
         }
@@ -12271,7 +12366,7 @@ function theme_initialization() {
         $fileStyleStr = $webDir . "/courses/theme_data/$theme_id/style_str.css";
         if (!file_exists($fileStyleStr)) {
             file_put_contents($fileStyleStr, "");
-        } else if (isset($_SESSION['theme_changed'])) { // the theme has changed?
+        } else if (isset($_SESSION['theme_changed'])) { // theme has changed ?
             file_put_contents($fileStyleStr, $styles_str);
             unset($_SESSION['theme_changed']);
         } else if (isset($_SESSION['step'])) { // first time
