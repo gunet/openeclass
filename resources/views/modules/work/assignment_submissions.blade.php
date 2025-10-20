@@ -50,6 +50,12 @@
                 }
             });
 
+            $('.dt-search input').attr({
+                'class': 'form-control input-sm ms-0 mb-3',
+                'placeholder': '{{ trans('langSearch') }}...'
+            });
+            $('.dt-search label').attr('aria-label', '{{ trans('langSearch') }}');
+
             $('.work-form').on('submit', function(e) {
                 var form = this;
 
@@ -164,239 +170,335 @@
 
                         @include('modules.work.assignment_details')
 
-                        {{--  Peer Review assignment distribution --}}
-                        @if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE && $cdate > $assign->deadline)
-                            @if ($assign->reviews_per_assignment < $count_of_assignments)
-                                <form class='form-horizontal' role='form' method='post' action='index.php?course={{ $course_code }}' enctype='multipart/form-data'>
-                                    <input type='hidden' name='assign' value='{{ $id }}'>
-                                    <div class='form-group'>
-                                        <div class='mt-3 text-center'>
-                                            <input class='btn submitAdminBtn' type='submit' name='ass_review' value='{{ trans('langAssignmentDistribution') }}'>
-                                        </div>
-                                    </div>
-                                </form>
-                            @else
-                                <div class='col-12'>
-                                    <div class='alert alert-warning'>
-                                        <i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langPeerReviewImpossible') }}</span>
-                                    </div>
+                        
+                        <div class="col-12 mt-4 d-flex">
+                            <div class="card flex-fill w-25" @if($assign->deadline && $cdate > $assign->deadline) style="opacity: 0.5;" @endif>
+                                <div class="card-header"><h4 class="mb-0"><em>Φάση υποβολής εργασιών (1)</em></h4></div>
+                                <div class="card-body">
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item px-0">
+                                            <p class="form-label mb-0">{{ trans('langStartDate') }}</p>
+                                            <p><span>{!! format_locale_date(strtotime($assign->submission_date)) !!}</span></p>
+                                        </li>
+                                        <li class="list-group-item px-0">
+                                            <p class="form-label mb-0">{{ trans('langEndDate') }}</p>
+                                            <p><span>{!! format_locale_date(strtotime($assign->deadline ?? '')) !!}</span></p>
+                                        </li>
+                                        <li class="list-group-item px-0">
+                                            @if ($cdate < $assign->submission_date)
+                                                <p class="text-warning TextBold small-text" style="line-height:14px;">Η διαδικασία υποβολής των εργασιών δεν έχει ξεκινήσει ακόμα.</p>
+                                            @elseif ($cdate >= $assign->submission_date && $cdate <= $assign->deadline)
+                                                <div class='d-flex justify-content-start align-items-center gap-2 flex-wrap'>
+                                                    <p class="text-success TextBold small-text" style="line-height:14px;">Η διαδικασία υποβολής των εργασιών βρίσκεται σε εξέλιξη...</p>
+                                                    <div>
+                                                        <div class='spinner-grow text-success spinner-grow-sm' role='status'>
+                                                            <span class='visually-hidden'></span>
+                                                        </div>
+                                                        <div class='spinner-grow text-danger spinner-grow-sm' role='status'>
+                                                            <span class='visually-hidden'></span>
+                                                        </div>
+                                                        <div class='spinner-grow text-warning spinner-grow-sm' role='status'>
+                                                            <span class='visually-hidden'></span>
+                                                        </div>
+                                                        <div class='spinner-grow text-info spinner-grow-sm' role='status'>
+                                                            <span class='visually-hidden'></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @elseif ($assign->deadline && $cdate > $assign->deadline)
+                                                <p class="text-danger TextBold small-text" style="line-height:14px;">Η διαδικασία υποβολής των εργασιών έχει λήξει.</p>
+                                            @endif
+                                        </li>
+                                    </ul>
                                 </div>
-                            @endif
-                        @endif
+                            </div>
+                            <div class="card flex-fill w-25 @if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE) d-block @else d-none @endif" @if($assign->due_date_review && $cdate > $assign->due_date_review) style="opacity: 0.5;" @endif>
+                                <div class="card-header"><h4 class="mb-0"><em>Φάση αξιολόγησης από ομότιμους (2)</em></h4></div>
+                                <div class="card-body">
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item px-0">
+                                            <p class="form-label mb-0">{{ trans('langStartDate') }}</p>
+                                            <p><span>{!! format_locale_date(strtotime($assign->start_date_review)) !!}</span></p>
+                                        </li>
+                                        <li class="list-group-item px-0">
+                                            <p class="form-label mb-0">{{ trans('langEndDate') }}</p>
+                                            <p><span>{!! format_locale_date(strtotime($assign->due_date_review)) !!}</span></p>
+                                        </li>
+                                        @if ($cdate > $assign->deadline)
+                                            <li class="list-group-item px-0">
+                                                @if ($assign->reviews_per_assignment < $count_of_assignments)
+                                                    <form class='form-horizontal mb-4' role='form' method='post' action='index.php?course={{ $course_code }}' enctype='multipart/form-data'>
+                                                        <input type='hidden' name='assign' value='{{ $id }}'>
+                                                        <div class='form-group'>
+                                                            <div class='mt-3 text-center'>
+                                                                <input style='white-space: normal; height: auto;' class='btn submitAdminBtn' type='submit' name='ass_review' value='{{ trans('langAssignmentDistribution') }}'>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                    @if ($cdate < $assign->start_date_review)
+                                                        <p class="text-warning TextBold small-text" style="line-height:14px;">Η διαδικασία αξιολόγησης από ομότιμους δεν έχει ξεκινήσει ακόμα.</p>
+                                                    @elseif ($cdate >= $assign->start_date_review && $cdate <= $assign->due_date_review)
+                                                        <div class='d-flex justify-content-start align-items-center gap-2 flex-wrap'>
+                                                            <p class="text-success TextBold small-text" style="line-height:14px;">Η διαδικασία αξιολόγησης από ομότιμους βρίσκεται σε εξέλιξη...</p>
+                                                            <div>
+                                                                <div class='spinner-grow text-success spinner-grow-sm' role='status'>
+                                                                    <span class='visually-hidden'></span>
+                                                                </div>
+                                                                <div class='spinner-grow text-danger spinner-grow-sm' role='status'>
+                                                                    <span class='visually-hidden'></span>
+                                                                </div>
+                                                                <div class='spinner-grow text-warning spinner-grow-sm' role='status'>
+                                                                    <span class='visually-hidden'></span>
+                                                                </div>
+                                                                <div class='spinner-grow text-info spinner-grow-sm' role='status'>
+                                                                    <span class='visually-hidden'></span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    @elseif ($cdate > $assign->due_date_review)
+                                                        <p class="text-danger TextBold small-text" style="line-height:14px;">Η διαδικασία αξιολόγησης από ομότιμους έχει λήξει.</p>
+                                                    @endif
+                                                @else
+                                                    <div class='col-12'>
+                                                        <div class='alert alert-warning'>
+                                                            <i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langPeerReviewImpossible') }}</span>
+                                                        </div>
+                                                    </div>
+                                                @endif
+                                            </li>
+                                        @endif
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card flex-fill" @if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE && $cdate <= $assign->due_date_review) style="opacity: 0.5;" @endif>
+                                <div class="card-header"><h4 class="mb-0"><em>@if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE) Τελική καταχώριση βαθμολογίας (3) @else Τελική καταχώριση βαθμολογίας (2) @endif</em></h4></div>
+                                <div class="card-body">
+                                    @if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE)
+                                        @if ($cdate > $assign->due_date_review)
+                                            <div class='mb-4'>
+                                                <button class='btn submitAdminBtn' href='{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}' id='transfer_grades'>{{ trans('langTransferGrades') }}</button>
+                                            </div>
+                                            <div class='d-flex justify-content-start align-items-center gap-2 flex-wrap'>
+                                                <p class="text-success TextBold small-text" style="line-height:14px;">Η διαδικασία καταχώρισης βαθμολογίας είναι ενεργή</p>
+                                                <div>
+                                                    <div class='spinner-grow text-success spinner-grow-sm' role='status'>
+                                                        <span class='visually-hidden'></span>
+                                                    </div>
+                                                    <div class='spinner-grow text-danger spinner-grow-sm' role='status'>
+                                                        <span class='visually-hidden'></span>
+                                                    </div>
+                                                    <div class='spinner-grow text-warning spinner-grow-sm' role='status'>
+                                                        <span class='visually-hidden'></span>
+                                                    </div>
+                                                    <div class='spinner-grow text-info spinner-grow-sm' role='status'>
+                                                        <span class='visually-hidden'></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @else
+                                            <p class="text-warning TextBold small-text" style="line-height:14px;">Η διαδικασία καταχώρισης βαθμού δεν έχει ξεκινήσει ακόμα.</p>
+                                        @endif
+                                    @endif
+
+                                    @if ($count_of_assignments > 0)
+                                        <div class='col-12 mt-3 bg-transparent'>
+                                            <div class='alert alert-success'>
+                                                <i class='fa-solid fa-circle-check fa-lg'></i>
+                                                <span><strong>{{ trans('langSubmissions') }}:</strong>&nbsp;{{ $count_of_assignments }}</span>
+                                            </div>
+                                        </div>
+                                    @else
+                                        <div class='col-12 mt-3 bg-transparent'>
+                                            <div class='alert alert-warning'>
+                                                <i class='fa-solid fa-triangle-exclamation fa-lg'></i>
+                                                <span>{{ trans('langNoSubmissions') }}</span>
+                                            </div>
+                                        </div>
+                                    @endif
+                                    
+                                    <form action='{{ $urlAppend }}modules/work/index.php?course={{ $course_code }}' method='post' class='form-inline work-form'>
+                                        <input type='hidden' name='grades_id' value='{{ $id }}'>
+                                        <div class='table-responsive'>
+                                            <table id ='submissions_table_{{ $course_code }}' class='table table-default'>
+                                                <thead>
+                                                    <tr class='list-header'>
+                                                        <th class="user-col">
+                                                            {{ trans('langSurnameName') }}
+                                                        </th>
+                                                        @if ($assign->submission_type == 1)
+                                                            <th>{{ trans('langWorkOnlineText') }}</th>
+                                                        @elseif ($assign->submission_type == 2)
+                                                            <th>{{ trans('langOpenCoursesFiles') }}</th>
+                                                        @else
+                                                            <th>{{ trans('langFileName') }}</th>
+                                                        @endif
+                                                        @if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE && $cdate > $assign->deadline) {{-- neo pedio vathmos aksiologhshs mono gia peer review --}}
+                                                        <th class="grade-col">
+                                                            {{ trans('langPeerReviewGrade') }}
+                                                        </th>
+                                                        @endif
+                                                        <th class="grade-col" style="width: 10%;">{{ trans('langGradebookGrade') }}</th>
+                                                    </tr>
+                                                </thead>
+
+                                                <tbody>
+                                                    @foreach ($result as $row)
+                                                        @if (isset($seen[$row->uid])) {{-- used for submission with multiple files --}}
+                                                            @continue
+                                                        @endif
+                                                    {{-- student data --}}
+                                                        <tr>
+                                                            <td class='user-col' style='width: 45%'>
+                                                                @if (empty($row->group_id))
+                                                                    {!! display_user($row->uid) !!}
+                                                                @else
+                                                                    {!! display_group($row->group_id) !!}
+                                                                @endif
+                                                                @if (!is_null(uid_to_am($row->uid)))
+                                                                    <div class='text-heading-h6 my-3'>
+                                                                        {{ trans('langAmShort') }}: {{ uid_to_am($row->uid) }}
+                                                                    </div>
+                                                                @endif
+
+                                                                {{-- peer review status message --}}
+                                                                @if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE)
+                                                                    @if ($count_of_assignments > $assign->reviews_per_assignment && $rows_assignment_grading_review)
+                                                                        {!! get_review_status_message($start_date_review, $id, $row->uid) !!}
+                                                                    @endif
+                                                                @endif
+
+                                                                    {{-- student comments --}}
+                                                                @if (trim($row->comments != ''))
+                                                                    <div class='my-3'>
+                                                                        <small> {{ $row->comments }}</small>
+                                                                    </div>
+                                                                @endif
+
+                                                                <div class='my-3'>
+                                                                    @if ($row->grade_comments or $row->grade_comments_filename) {{-- teacher comments --}}
+                                                                        <strong>
+                                                                            {{ trans('langGradeComments') }}
+                                                                        </strong>
+                                                                        @if (preg_match('/[\n\r] +\S/', trim(q_math($row->grade_comments))))
+                                                                            <div style='white-space: pre-wrap'>{!! trim(q_math($row->grade_comments)) !!}</div>
+                                                                        @else
+                                                                            &nbsp;<span>{!! nl2br(trim(q_math($row->grade_comments))) !!}</span>
+                                                                        @endif
+                                                                        <div>
+                                                                            {!! MultimediaHelper::chooseMediaAhrefRaw("$_SERVER[SCRIPT_NAME]?course=$course_code&amp;getcomment=$row->id", "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;getcomment=$row->id", $row->grade_comments_filename, $row->grade_comments_filename); !!}
+                                                                        </div>
+                                                                    @endif
+                                                                    @if ($row->grade != '') {{-- grade submission date --}}
+                                                                        <div class='text-heading-h6 mt-2'>
+                                                                            {{ trans('langGradedAt') }} {!! format_locale_date(strtotime($row->grade_submission_date), 'short', false) !!}
+                                                                        </div>
+                                                                    @endif
+                                                                </div>
+
+                                                                {{-- auto judge results --}}
+                                                                @if($autojudge->isEnabled() and $assign->auto_judge)
+                                                                    <a href='{{ $urlAppend }}modules/work/work_result_rpt.php?course={{ $course_code }}&assignment={{ $id }}&submission={{ $row->id }}'>
+                                                                        <strong>{{ trans('langAutoJudgeShowWorkResultRpt') }}</strong>
+                                                                    </a>
+                                                                @endif
+                                                            </td>
+
+                                                            {{-- submission files --}}
+                                                            <td class='filename-col text-nowrap'>
+                                                                @if ($assign->submission_type == 1)
+                                                                    <button class='onlineText btn btn-xs btn-default submitAdminBtn' data-id='{{ $row->id }}'>
+                                                                        {{ trans('langQuestionView') }}
+                                                                    </button>
+                                                                @elseif (!empty($row->file_name))
+                                                                    {!! get_user_file_submissions($assign, $result, $row) !!}
+                                                                    <br> {!! get_unplag_plagiarism_results($row->id) !!}
+                                                                @endif
+
+                                                                <div class="col-12 mt-3">
+                                                                    {!! format_locale_date(strtotime($row->submission_date)) !!}
+                                                                    @if ($row->deadline && $row->submission_date > $row->deadline)
+                                                                        <div class='Accent-200-cl'>
+                                                                            <small class='Accent-200-cl'>{{ trans('langLateSubmission') }}</small>
+                                                                        </div>
+                                                                    @endif
+                                                                </div>
+                                                            </td>
+
+                                                            {{-- Peer Review Grade results --}}
+                                                            @if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE)
+                                                                @if ($count_of_assignments > $reviews_per_assignment && $rows_assignment_grading_review)
+                                                                    <td class='col-md-1 text-center'>
+                                                                        <div class='form-group'>
+                                                                            {!! get_grade_review_field($due_date_review, $row->id, $reviews_per_assignment) !!}
+                                                                        </div>
+                                                                    </td>
+                                                                @endif
+                                                            @endif
+
+                                                            {{-- grade input text --}}
+                                                            <td>
+                                                                <div class='form-group {!! Session::getError("grade.$row->id") ? "has-error" : "" !!}'>
+                                                                    @if($row->grading_scale_id && $row->grading_type == ASSIGNMENT_RUBRIC_GRADE && empty($row->grade) && $is_editor)
+                                                                        <a class='link' href='{{ $urlAppend }}modules/work/grade_edit.php?course={{ $course_code }}&assignment={{ $id }}&submission={{ $row->id }}' aria-label='{{ trans('langSGradebookBook') }}'>
+                                                                            <span class='fa fa-fw fa-plus' data-bs-original-title='{{ trans('langSGradebookBook') }}' title='' data-bs-toggle='tooltip'></span></a>
+                                                                    @elseif ($row->grading_scale_id && $row->grading_type == ASSIGNMENT_SCALING_GRADE && $is_editor)
+                                                                        <select name='grades[{{ $row->id }}][grade]' class='form-control' id='scales'>
+                                                                            {!! get_scale_options($row->grading_scale_id, $row->grade) !!}
+                                                                        </select>
+                                                                    @else
+                                                                        <input aria-label='{{ trans('langGradebookGrade') }}' class='form-control' type='text' value='{{ $row->grade }}' name='grades[{{ $row->id }}][grade]' maxlength='4' size='3' {!! $disabled !!}>
+                                                                    @endif
+                                                                    <span class='help-block Accent-200-cl'>{!! Session::getError("grade.$row->id") !!}</span>
+                                                                </div>
+
+                                                                <div class='col-12 mt-3 d-flex justify-content-center gap-2'>
+                                                                    @if (isset($_GET['unit']))
+                                                                        <a class='link' href='../work/grade_edit.php?course={{ $course_code }}&assignment={{ $id }}&submission={{ $row->id }}' aria-label='{{ trans('langEdit') }}'>
+                                                                    @else
+                                                                        <a class='link' href='grade_edit.php?course={{ $course_code }}&assignment={{ $id }}&submission={{ $row->id }}' aria-label='{{ trans('langEdit') }}'>
+                                                                    @endif
+                                                                        <span class='fa-solid fa-edit' data-bs-original-title='{{ trans('langEdit') }}' title='' data-bs-toggle='tooltip'></span>
+                                                                    </a>
+                                                                    <a class='linkdelete' href='{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&id={{ $id }}&as_id={{ $row->id }}' aria-label='{{ trans('langDeleteSubmission') }}'>
+                                                                        <span class='fa-solid fa-xmark text-danger' data-bs-original-title='{{ trans('langDeleteSubmission') }}' title='' data-bs-toggle='tooltip'></span>
+                                                                    </a>
+                                                                </div>
+
+                                                            </td>
+                                                        </tr>
+                                                        @php
+                                                            /* used for submissions with multiple files */
+                                                            $seen[$row->uid] = true;
+                                                        @endphp
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        @if ($is_editor)
+                                            <div class='form-group mt-4'>
+                                                <div class='col-12'>
+                                                    <div class='checkbox'>
+                                                        <label class='label-container' aria-label='{{ trans('langSelect') }}'>
+                                                            <input type='checkbox' value='1' name='send_email'><span class='checkmark'></span> {{ trans('langMailToUsers') }}
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class='mt-4'>
+                                                <button class='btn submitAdminBtn' type='submit' name='submit_grades' {!! $disabled !!}>{{ trans('langGradeOk') }}</button>
+                                            </div>
+                                        @endif
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        
 
                         {{-- Turnitin Results --}}
                         @if ($assign->assignment_type == ASSIGNMENT_TYPE_TURNITIN)
                             {!! show_turnitin_integration($id) !!}
                         @endif
-
-                        {{-- list of submissions --}}
-                        @if ($count_of_assignments > 0)
-                            <form action='{{ $urlAppend }}modules/work/index.php?course={{ $course_code }}' method='post' class='form-inline work-form'>
-                                <input type='hidden' name='grades_id' value='{{ $id }}'>
-                                <br>
-                                <div class='alert alert-success'>
-                                    <i class='fa-solid fa-circle-check fa-lg'></i>
-                                    <span><strong>{{ trans('langSubmissions') }}:</strong>&nbsp;{{ $count_of_assignments }}</span>
-                                </div>
-                                {{-- button for transferring student peer review grades to teacher grades --}}
-                                @if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE && $cdate > $assign->deadline)
-                                    <div class='mt-4'>
-                                        <button class='btn submitAdminBtn' href='{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}' id='transfer_grades'>{{ trans('langTransferGrades') }}</button>
-                                    </div>
-                                @endif
-
-                                <div class='table-responsive mt-3'>
-                                    <table id ='submissions_table_{{ $course_code }}' class='table table-default'>
-                                        <thead>
-                                            <tr class='list-header'>
-                                                <th class="user-col">
-                                                    {{ trans('langSurnameName') }}
-                                                </th>
-                                                @if ($assign->submission_type == 1)
-                                                    <th>{{ trans('langWorkOnlineText') }}</th>
-                                                @elseif ($assign->submission_type == 2)
-                                                    <th>{{ trans('langOpenCoursesFiles') }}</th>
-                                                @else
-                                                    <th>{{ trans('langFileName') }}</th>
-                                                @endif
-                                                <th class="date-col">
-                                                    {{ trans('langSubDate') }}
-                                                </th>
-                                                @if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE && $cdate > $assign->deadline) {{-- neo pedio vathmos aksiologhshs mono gia peer review --}}
-                                                <th class="grade-col">
-                                                    {{ trans('langPeerReviewGrade') }}
-                                                </th>
-                                                @endif
-                                                <th class="grade-col" style="width: 10%;">{{ trans('langGradebookGrade') }}</th>
-                                                @if ($is_editor)
-                                                    <th class='tools-col' style='width:10%;' aria-label='{{ trans('langSettingSelect') }}'></th>
-                                                @endif
-                                            </tr>
-                                        </thead>
-
-                                        <tbody>
-                                            @foreach ($result as $row)
-                                                @if (isset($seen[$row->uid])) {{-- used for submission with multiple files --}}
-                                                    @continue
-                                                @endif
-                                            {{-- student data --}}
-                                                <tr>
-                                                    <td class='user-col' style='width: 45%'>
-                                                        @if (empty($row->group_id))
-                                                            {!! display_user($row->uid) !!}
-                                                        @else
-                                                            {!! display_group($row->group_id) !!}
-                                                        @endif
-                                                        @if (!is_null(uid_to_am($row->uid)))
-                                                            <div class='text-heading-h6 my-3'>
-                                                                {{ trans('langAmShort') }}: {{ uid_to_am($row->uid) }}
-                                                            </div>
-                                                        @endif
-
-                                                        {{-- peer review status message --}}
-                                                        @if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE)
-                                                            @if ($count_of_assignments > $assign->reviews_per_assignment && $rows_assignment_grading_review)
-                                                                {!! get_review_status_message($start_date_review, $id, $row->uid) !!}
-                                                            @endif
-                                                        @endif
-
-                                                            {{-- student comments --}}
-                                                        @if (trim($row->comments != ''))
-                                                            <div class='my-3'>
-                                                                <small> {{ $row->comments }}</small>
-                                                            </div>
-                                                        @endif
-
-                                                        <div class='my-3'>
-                                                            @if ($row->grade_comments or $row->grade_comments_filename) {{-- teacher comments --}}
-                                                                <strong>
-                                                                    {{ trans('langGradeComments') }}
-                                                                </strong>
-                                                                @if (preg_match('/[\n\r] +\S/', trim(q_math($row->grade_comments))))
-                                                                    <div style='white-space: pre-wrap'>{!! trim(q_math($row->grade_comments)) !!}</div>
-                                                                @else
-                                                                    &nbsp;<span>{!! nl2br(trim(q_math($row->grade_comments))) !!}</span>
-                                                                @endif
-                                                                <div>
-                                                                    {!! MultimediaHelper::chooseMediaAhrefRaw("$_SERVER[SCRIPT_NAME]?course=$course_code&amp;getcomment=$row->id", "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;getcomment=$row->id", $row->grade_comments_filename, $row->grade_comments_filename); !!}
-                                                                </div>
-                                                            @endif
-                                                            @if ($row->grade != '') {{-- grade submission date --}}
-                                                                <div class='text-heading-h6 mt-2'>
-                                                                    {{ trans('langGradedAt') }} {!! format_locale_date(strtotime($row->grade_submission_date), 'short', false) !!}
-                                                                </div>
-                                                            @endif
-                                                        </div>
-
-                                                        {{-- auto judge results --}}
-                                                        @if($autojudge->isEnabled() and $assign->auto_judge)
-                                                            <a href='{{ $urlAppend }}modules/work/work_result_rpt.php?course={{ $course_code }}&assignment={{ $id }}&submission={{ $row->id }}'>
-                                                                <strong>{{ trans('langAutoJudgeShowWorkResultRpt') }}</strong>
-                                                            </a>
-                                                        @endif
-                                                    </td>
-
-                                                    {{-- submission files --}}
-                                                    <td class='filename-col text-nowrap'>
-                                                        @if ($assign->submission_type == 1)
-                                                            <button class='onlineText btn btn-xs btn-default submitAdminBtn' data-id='{{ $row->id }}'>
-                                                                {{ trans('langQuestionView') }}
-                                                            </button>
-                                                        @elseif (!empty($row->file_name))
-                                                            {!! get_user_file_submissions($assign, $result, $row) !!}
-                                                            <br> {!! get_unplag_plagiarism_results($row->id) !!}
-                                                        @endif
-                                                    </td>
-
-                                                    {{-- submission date --}}
-                                                    <td data-sort='{{ $row->submission_date }}' class='col-md-1'>
-                                                        <small>
-                                                            {!! format_locale_date(strtotime($row->submission_date)) !!}
-                                                            @if ($row->deadline && $row->submission_date > $row->deadline)
-                                                                <div class='Accent-200-cl'>
-                                                                    <small class='Accent-200-cl'>{{ trans('langLateSubmission') }}</small>
-                                                                </div>
-                                                            @endif
-                                                        </small>
-                                                    </td>
-
-                                                    {{-- Peer Review Grade results --}}
-                                                    @if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE)
-                                                        @if ($count_of_assignments > $reviews_per_assignment && $rows_assignment_grading_review)
-                                                            <td class='col-md-1 text-center'>
-                                                                <div class='form-group'>
-                                                                    {!! get_grade_review_field($due_date_review, $row->id, $reviews_per_assignment) !!}
-                                                                </div>
-                                                            </td>
-                                                        @endif
-                                                    @endif
-
-                                                    {{-- grade input text --}}
-                                                    <td>
-                                                        <div class='form-group {!! Session::getError("grade.$row->id") ? "has-error" : "" !!}'>
-                                                            @if($row->grading_scale_id && $row->grading_type == ASSIGNMENT_RUBRIC_GRADE && empty($row->grade) && $is_editor)
-                                                                <a class='link' href='{{ $urlAppend }}modules/work/grade_edit.php?course={{ $course_code }}&assignment={{ $id }}&submission={{ $row->id }}' aria-label='{{ trans('langSGradebookBook') }}'>
-                                                                    <span class='fa fa-fw fa-plus' data-bs-original-title='{{ trans('langSGradebookBook') }}' title='' data-bs-toggle='tooltip'></span></a>
-                                                            @elseif ($row->grading_scale_id && $row->grading_type == ASSIGNMENT_SCALING_GRADE && $is_editor)
-                                                                <select name='grades[{{ $row->id }}][grade]' class='form-control' id='scales'>
-                                                                    {!! get_scale_options($row->grading_scale_id, $row->grade) !!}
-                                                                </select>
-                                                            @else
-                                                                <input aria-label='{{ trans('langGradebookGrade') }}' class='form-control' type='text' value='{{ $row->grade }}' name='grades[{{ $row->id }}][grade]' maxlength='4' size='3' {!! $disabled !!}>
-                                                            @endif
-                                                            <span class='help-block Accent-200-cl'>{!! Session::getError("grade.$row->id") !!}</span>
-                                                        </div>
-                                                    </td>
-
-                                                    {{-- edit / delete buttons --}}
-                                                    @if ($is_editor)
-                                                        <td class='text-end'>
-                                                            @if (isset($_GET['unit']))
-                                                                <a class='link' href='../work/grade_edit.php?course={{ $course_code }}&assignment={{ $id }}&submission={{ $row->id }}' aria-label='{{ trans('langEdit') }}'>
-                                                            @else
-                                                                <a class='link' href='grade_edit.php?course={{ $course_code }}&assignment={{ $id }}&submission={{ $row->id }}' aria-label='{{ trans('langEdit') }}'>
-                                                            @endif
-                                                                <span class='fa fa-fw fa-edit' data-bs-original-title='{{ trans('langEdit') }}' title='' data-bs-toggle='tooltip'></span>
-                                                            </a>&nbsp;
-                                                            <a class='linkdelete ps-2' href='{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&id={{ $id }}&as_id={{ $row->id }}' aria-label='{{ trans('langDeleteSubmission') }}'>
-                                                                <span class='fa fa-fw fa-xmark text-danger' data-bs-original-title='{{ trans('langDeleteSubmission') }}' title='' data-bs-toggle='tooltip'></span>
-                                                            </a>
-                                                        </td>
-                                                    @endif
-                                                </tr>
-                                                @php
-                                                    /* used for submissions with multiple files */
-                                                    $seen[$row->uid] = true;
-                                                @endphp
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
-
-                                @if ($is_editor)
-                                    <div class='form-group'>
-                                        <div class='col-12'>
-                                            <div class='checkbox'>
-                                                <label class='label-container' aria-label='{{ trans('langSelect') }}'>
-                                                    <input type='checkbox' value='1' name='send_email'><span class='checkmark'></span> {{ trans('langMailToUsers') }}
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class='mt-4'>
-                                        <button class='btn submitAdminBtn' type='submit' name='submit_grades' {!! $disabled !!}>{{ trans('langGradeOk') }}</button>
-                                    </div>
-                                @endif
-                            </form>
-                        @else
-                            <div class='col-12 mt-3 bg-transparent'>
-                                <p class='sub_title1 text-center TextBold mb-0 pt-2'>{{ trans('langSubmissions') }}:</p>
-                                <div class='alert alert-warning'>
-                                    <i class='fa-solid fa-triangle-exclamation fa-lg'></i>
-                                    <span>{{ trans('langNoSubmissions') }}</span>
-                                </div>
-                            </div>
-                        @endif
+                        
 
                     </div>
                 </div>
