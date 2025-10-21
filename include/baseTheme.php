@@ -28,6 +28,7 @@
  *
  */
 use Jenssegers\Blade\Blade;
+
 $navigation = array();
 $action_bar = '';
 $sectionName = '';

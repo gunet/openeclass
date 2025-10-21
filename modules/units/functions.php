@@ -2084,17 +2084,6 @@ function edit_res($resource_id) {
 }
 
 /**
- * @return string
- */
-function localhostUrl() {
-    return sprintf(
-        "%s://%s",
-        isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http',
-        $_SERVER['SERVER_NAME']
-    );
-}
-
-/**
  * @param int $unit_id
  * @param int $prereq_unit_id
  */

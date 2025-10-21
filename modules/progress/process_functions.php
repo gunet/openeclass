@@ -418,10 +418,6 @@ function add_course_completion_to_certificate($element_id) {
  * @param int $unit_id
  */
 function add_unit_completion_to_certificate($element_id, $unit_id) {
-
-    print_r("element_id: ".$element_id.", unit_id: ".$unit_id." process_fun 414");
-    exit;
-
     global $langQuotaSuccess, $course_code;
 
     $badge_id = is_unit_completion_active($unit_id); // get unit completion id
@@ -900,7 +896,7 @@ function is_unit_completion_active($unit_id) {
 
     global $course_id;
 
-    $sql = Database::get()->querySingle("SELECT id FROM badge_unit WHERE course_id = ?d AND unit_id = ?d
+    $sql = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND unit_id = ?d
                                                     AND bundle = -1 AND active = 1", $course_id, $unit_id);
     if ($sql) {
         return $sql->id;
