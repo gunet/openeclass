@@ -753,7 +753,7 @@ function display_assignment_submissions($id) {
                             $grade_counter++;
                             $g_grade = $g_grade + $g->grade;
                             $f_g_grade = $g_grade / $grade_counter;
-                            $arr[] = "<strong>" . uid_to_name($g->users_id) . "</strong> $langgrade -> " . "<span class='badge bg-info'>" . $g->grade . "</span><br>";
+                            $arr[] = "<strong>" . uid_to_name($g->users_id) . "</strong> $langgrade -> " . "<span class='TextBold fs-6 Success-200-cl'>" . $g->grade . "</span><br>";
                         }
                         $str_arr = (count($arr) > 0) ? implode('', $arr) : '';
                         $grades_info[$u->user_id] = [

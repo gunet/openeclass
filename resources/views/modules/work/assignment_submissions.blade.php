@@ -170,10 +170,15 @@
 
                         @include('modules.work.assignment_details')
 
-                        
-                        <div class="col-12 mt-4 d-flex">
-                            <div class="card flex-fill w-25" @if($assign->deadline && $cdate > $assign->deadline) style="opacity: 0.5;" @endif>
-                                <div class="card-header">
+                        <div class="col-12 d-flex justify-content-center my-4">
+                                <div class="badge Neutral-900-bg" style="border-radius:50%;">
+                                    <i class="fa-solid fa-circle-chevron-down fs-1"></i>
+                                </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="card panelCard px-lg-4 py-lg-3" @if($assign->deadline && $cdate > $assign->deadline) style="opacity: 0.5;" @endif>
+                                <div class="card-header d-flex justify-content-between align-items-center">
                                     <h3 class="mb-0" style="line-height: 14px;">
                                         <em>{{ trans('langAssignmentsSubmission')}}</em>
                                     </h3>
@@ -220,13 +225,11 @@
                                             @if ($count_of_assignments > 0)
                                                 <div class='col-12'>
                                                     <p class="TextBold Success-200-cl small-text"style="line-height:14px;">
-                                                        {{ trans('langSubmissions') }}:
-                                                    </p>
-                                                    <div class="col-12 d-flex justify-content-center align-items-center mt-3">
-                                                        <span class="badge Success-200-bg fs-6" style="border-radius: 50%;">
+                                                        {{ trans('langSubmissions') }}:&nbsp;
+                                                        <span class="badge Success-200-bg" style="border-radius: 50%;">
                                                             {{ $count_of_assignments }}
                                                         </span>
-                                                    </div>
+                                                    </p>
                                                 </div>
                                             @else
                                                 <div class='col-12'>
@@ -237,8 +240,13 @@
                                     </ul>
                                 </div>
                             </div>
-                            <div class="card flex-fill w-25 @if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE) d-block @else d-none @endif" @if($assign->due_date_review && ($cdate > $assign->due_date_review or $cdate < $assign->start_date_review)) style="opacity: 0.5;" @endif>
-                                <div class="card-header">
+                            <div class="col-12 d-flex justify-content-center my-4 @if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE) d-block @else d-none @endif">
+                                <div class="badge Neutral-900-bg" style="border-radius:50%;">
+                                    <i class="fa-solid fa-circle-chevron-down fs-1"></i>
+                                </div>
+                            </div>
+                            <div class="card panelCard px-lg-4 py-lg-3 @if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE) d-block @else d-none @endif" @if($assign->due_date_review && ($cdate > $assign->due_date_review or $cdate < $assign->start_date_review)) style="opacity: 0.5;" @endif>
+                                <div class="card-header d-flex justify-content-between align-items-center">
                                     <h3 class="mb-0" style="line-height: 14px;">
                                         <em>{{ trans('langGradeReviews') }}</em>
                                     </h3>
@@ -289,47 +297,40 @@
                                                         </div>
                                                     </form>
                                                     <div class="mt-4">
-                                                        <a class="link-color d-flex" data-bs-toggle="modal" href="#PreviewGrades" style="opacity:1 !important;">
-                                                            <i class="fa-solid fa-circle-info"></i>&nbsp;{{ trans('langPreviewGradesAssessments') }}
-                                                        </a>
-                                                        <div class="modal fade" id="PreviewGrades" aria-hidden="true" aria-labelledby="PreviewGradesLabel2" tabindex="-1">
-                                                            <div class="modal-dialog modal-dialog-centered">
-                                                                <div class="modal-content">
-                                                                    <div class="modal-header">
-                                                                        <h5 class="modal-title" id="PreviewGradesLabel2">{{ trans('langPreviewGradesAssessments') }}</h5>
-                                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                                    </div>
-                                                                <div class="modal-body">
-                                                                    @if (count($grades_info) > 0)
-                                                                        <table class="table-default">
-                                                                            <thead>
-                                                                                <tr>
-                                                                                    <th>{{ trans('langUser') }}</th>
-                                                                                    <th>{{ trans('langReceivedFrom') }}</th>
-                                                                                    <th class="text-center">{{ trans('langTotal') }}</th>
-                                                                                </tr>
-                                                                            </thead>
-                                                                            @foreach ($grades_info as $index => $g) 
-                                                                                <tr>
-                                                                                    <td>{{ uid_to_name($index) }}</td>
-                                                                                    <td>{!! $g['grade_received'] !!}</td>
-                                                                                    <td>
-                                                                                        <div class="d-flex justify-content-center">
-                                                                                            <span class='badge Success-200-bg'>{!! $g['grade_total'] !!}</span>
-                                                                                        </div>
-                                                                                    </td>
-                                                                                </tr>
-                                                                            @endforeach
-                                                                       </table>
-                                                                    @else
-                                                                        <div class="alert alert-warning">
-                                                                            <i class="fa-solid fa-triangle-exclamation fa-lg"></i>
-                                                                            <span>{{ trans('$langNoInfoAvailable') }}</span>
-                                                                        </div>
-                                                                    @endif
-                                                                </div>
+
+                                                        <h4 class="">
+                                                            <i class="fa-solid fa-circle-info"></i>
+                                                            &nbsp;{{ trans('langPreviewGradesAssessments') }}
+                                                        </h4>
+
+                                                        @if (count($grades_info) > 0)
+                                                            <table class="table-default">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>{{ trans('langUser') }}</th>
+                                                                        <th>{{ trans('langReceivedFrom') }}</th>
+                                                                        <th class="text-center">{{ trans('langTotal') }}</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                @foreach ($grades_info as $index => $g) 
+                                                                    <tr>
+                                                                        <td>{{ uid_to_name($index) }}</td>
+                                                                        <td>{!! $g['grade_received'] !!}</td>
+                                                                        <td>
+                                                                            <div class="d-flex justify-content-center">
+                                                                                <span class='TextBold Success-200-cl fs-6'>{!! $g['grade_total'] !!}</span>
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+                                                                @endforeach
+                                                            </table>
+                                                        @else
+                                                            <div class="alert alert-warning">
+                                                                <i class="fa-solid fa-triangle-exclamation fa-lg"></i>
+                                                                <span>{{ trans('langNoInfoAvailable') }}</span>
                                                             </div>
-                                                        </div>
+                                                        @endif
+                                                       
                                                     </div>
                                                 @else
                                                     <div class='col-12'>
@@ -343,8 +344,13 @@
                                     </ul>
                                 </div>
                             </div>
-                            <div class="card flex-fill" @if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE && $cdate <= $assign->due_date_review) style="opacity: 0.5;" @endif>
-                                <div class="card-header">
+                            <div class="col-12 d-flex justify-content-center my-4">
+                                <div class="badge Neutral-900-bg" style="border-radius:50%;">
+                                    <i class="fa-solid fa-circle-chevron-down fs-1"></i>
+                                </div>
+                            </div>
+                            <div class="card panelCard px-lg-4 py-lg-3" @if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE && $cdate <= $assign->due_date_review) style="opacity: 0.5;" @endif>
+                                <div class="card-header d-flex justify-content-between align-items-center">
                                     <h3 class="mb-0" style="line-height: 14px;">
                                         <em>{{ trans('langFinalGrade') }}</em>
                                     </h3>
@@ -552,7 +558,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class='mt-4'>
+                                            <div class='mt-4 d-flex justify-content-end'>
                                                 <button class='btn submitAdminBtn' type='submit' name='submit_grades' {!! $disabled !!}>{{ trans('langGradeOk') }}</button>
                                             </div>
                                         @endif
