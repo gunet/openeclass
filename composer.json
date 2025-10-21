@@ -23,11 +23,11 @@
         "h5p/h5p-core": "^1.27",
         "h5p/h5p-editor": "<1.26",
         "snapappointments/bootstrap-select": "^1.13.18",
+        "jenssegers/blade": "^1.4",
         "firebase/php-jwt": "^6.10",
         "symfony/polyfill-php72": "^1.31",
         "symfony/expression-language": "^6.4",
-        "smalot/pdfparser": "^2.0",
-        "jenssegers/blade": "^2.0"
+        "smalot/pdfparser": "^2.0"
     },
     "repositories": [
         {

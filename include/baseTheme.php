@@ -28,8 +28,6 @@
  *
  */
 use Jenssegers\Blade\Blade;
-use Jenssegers\Blade\Container;
-
 $navigation = array();
 $action_bar = '';
 $sectionName = '';
@@ -309,7 +307,7 @@ function view($view_file, $view_data = array()) {
         }
     }
 
-    $blade = new Blade($views, $cacheDir, Container::getInstance());
+    $blade = new Blade($views, $cacheDir);
 
     $cache_suffix = CACHE_SUFFIX;
 

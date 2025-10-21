@@ -122,7 +122,7 @@ $data = [
     'default_open_group' => 0
 ];
 
-$data['course_info'] = $course_info = Database::get()->querySingle("SELECT title, keywords, visible, prof_names, public_code, course_license,
+$data['course_info'] = $course_info = Database::get()->querySingle("SELECT title, keywords, visible, prof_names, public_code, course_license, 
                                                view_type, start_date, end_date, description, home_layout, course_image, password, is_collaborative
                                           FROM course WHERE id = ?d", $course_id);
 if ($course_info->description) {
@@ -158,9 +158,7 @@ $bladeData['professor'] = $course_info->prof_names;
 $bladeData['course_date'] = format_locale_date(time());
 
 use Jenssegers\Blade\Blade;
-use Jenssegers\Blade\Container;
-
-$blade = new Blade($viewsDir, $cacheDir, Container::getInstance());
+$blade = new Blade($viewsDir, $cacheDir);
 
 // course units
 $bladeData['course_units'] = $course_units = offline_course_units();
