@@ -85,6 +85,46 @@
                                             </div>
                                         </div>
 
+                                        @if($action === 'edit')
+                                            <div id="oauth-fields" style="display: none;">
+                                                <div class="form-group mt-4">
+                                                    <label for="client_id" class="col-sm-12 control-label-notes">
+                                                        {{ trans('langClientId') }}
+                                                    </label>
+                                                    <div class="col-sm-12">
+                                                        <input 
+                                                            class="form-control" 
+                                                            type="text" 
+                                                            name="client_id" 
+                                                            id="client_id" 
+                                                            value="{{ $provider ? q($provider->client_id) : '' }}"
+                                                        >
+                                                        <small class="form-text text-muted">
+                                                            {{ trans('langClientIdHelp') }}
+                                                        </small>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group mt-4">
+                                                    <label for="client_secret" class="col-sm-12 control-label-notes">
+                                                        {{ trans('langClientSecret') }}
+                                                    </label>
+                                                    <div class="col-sm-12">
+                                                        <input 
+                                                            class="form-control" 
+                                                            type="password" 
+                                                            name="client_secret" 
+                                                            id="client_secret" 
+                                                            value="{{ $provider ? q($provider->client_secret) : '' }}"
+                                                        >
+                                                        <small class="form-text text-muted">
+                                                            {{ trans('langClientSecretHelp') }}
+                                                        </small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endif
+
                                         @if($provider)
                                             <div class="form-group mt-4">
                                                 <label for="active" class="col-sm-12 control-label-notes">
@@ -137,6 +177,29 @@
     chkValidator.addValidation("provider_name", "req", "{{ trans('langProviderNameRequired') }}");
     chkValidator.addValidation("api_url", "req", "{{ trans('langApiUrlRequired') }}");
     chkValidator.addValidation("version", "req", "{{ trans('langVersionRequired') }}");
+
+    // Show/hide OAuth fields based on OpenBadge version
+    function toggleOAuthFields() {
+        const versionSelect = document.getElementById('version');
+        const oauthFields = document.getElementById('oauth-fields');
+        
+        if (versionSelect && oauthFields) {
+            const selectedVersion = versionSelect.value;
+            const shouldShow = selectedVersion.includes('v2.1') || selectedVersion.includes('v3');
+            oauthFields.style.display = shouldShow ? 'block' : 'none';
+        }
+    }
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        toggleOAuthFields();
+        
+        // Add event listener to version dropdown
+        const versionSelect = document.getElementById('version');
+        if (versionSelect) {
+            versionSelect.addEventListener('change', toggleOAuthFields);
+        }
+    });
 //]]>
 </script>
 

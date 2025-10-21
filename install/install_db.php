@@ -2186,14 +2186,17 @@ $db->query("CREATE TABLE IF NOT EXISTS `backpack_provider` (
     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `name` VARCHAR(255) NOT NULL,
     `api_url` VARCHAR(512) NOT NULL,
+    `ob_version` VARCHAR(50) DEFAULT 'OpenBadge v2.0',
     `basic_auth_access_token` VARCHAR(512) DEFAULT NULL,
     `refresh_access_token` VARCHAR(512) DEFAULT NULL,
     `client_id` VARCHAR(255) DEFAULT NULL,
     `client_secret` VARCHAR(255) DEFAULT NULL,
+    `authorization_endpoint` VARCHAR(512) DEFAULT NULL,
+    `token_endpoint` VARCHAR(512) DEFAULT NULL,
+    `registration_endpoint` VARCHAR(512) DEFAULT NULL,
     `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     `active` TINYINT(1) NOT NULL DEFAULT 1,
-    `ob_version` ENUM('2.0', '2.1', '3.0') DEFAULT '2.1',
     UNIQUE KEY (`name`)
 ) $tbl_options");
 
@@ -2201,6 +2204,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `user_backpack_connection` (
     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `user_id` INT(11) NOT NULL,
     `backpack_provider_id` INT(11) NOT NULL,
+    `email` VARCHAR(255) DEFAULT NULL,
+    `password` VARCHAR(255) DEFAULT NULL,
     `access_token` VARCHAR(512) DEFAULT NULL,
     `refresh_token` VARCHAR(512) DEFAULT NULL,
     `status` ENUM('connected', 'disconnected', 'error') DEFAULT 'disconnected',

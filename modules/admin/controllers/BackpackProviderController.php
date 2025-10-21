@@ -1,6 +1,7 @@
 <?php
 
 require_once dirname(__DIR__) . '/repositories/BackpackProviderRepository.php';
+require_once dirname(__DIR__, 2) . '/main/services/BackpackProviderService.php';
 
 /**
  * BackpackProvider Controller
@@ -10,10 +11,14 @@ require_once dirname(__DIR__) . '/repositories/BackpackProviderRepository.php';
 class BackpackProviderController
 {
     private BackpackProviderRepository $repository;
+    private BackpackProviderService $providerService;
 
-    public function __construct(?BackpackProviderRepository $repository = null)
-    {
+    public function __construct(
+        ?BackpackProviderRepository $repository = null,
+        ?BackpackProviderService $providerService = null
+    ) {
         $this->repository = $repository ?? new BackpackProviderRepository();
+        $this->providerService = $providerService ?? new BackpackProviderService();
     }
 
     public function index()
@@ -69,6 +74,18 @@ class BackpackProviderController
                 $providerData['ob_version']
             );
 
+            // Check if this is a version 2.1 provider that needs discovery and registration
+            if ($provider->isVersion21()) {
+                $processedProvider = $this->processVersion21Provider($provider);
+                
+                if (!$processedProvider) {
+                    // Error occurred during processing, redirect with error
+                    return;
+                }
+                
+                $provider = $processedProvider;
+            }
+
             $savedProvider = $this->repository->save($provider);
             
             if ($savedProvider) {
@@ -96,19 +113,84 @@ class BackpackProviderController
         }
     }
 
+    /**
+     * Process OpenBadges 2.1 provider with discovery and registration
+     */
+    private function processVersion21Provider(BackpackProvider $provider): ?BackpackProvider
+    {
+        try {
+            // Step 1: Discover provider capabilities
+            $discoveryResult = $this->providerService->discoverProvider($provider->api_url);
+            error_log('Discovery result: ' . json_encode($discoveryResult));
+            if (!$discoveryResult['success']) {
+                $this->flashAndRedirect(
+                    trans('langProviderDiscoveryFailed') . ': ' . $discoveryResult['error'],
+                    'alert-danger',
+                    $_SERVER['SCRIPT_NAME'] . '?action=create'
+                );
+                return null;
+            }
+
+            // Step 2: Check if provider is compatible
+            $compatibilityResult = $this->providerService->isProviderCompatible($discoveryResult);
+            
+            if (!$compatibilityResult['compatible']) {
+                $reasons = implode(', ', $compatibilityResult['reasons']);
+                $this->flashAndRedirect(
+                    trans('langProviderNotCompatible') . ': ' . $reasons,
+                    'alert-danger',
+                    $_SERVER['SCRIPT_NAME'] . '?action=create'
+                );
+                return null;
+            }
+
+            // Step 3: Register with the provider
+            $registrationEndpoint = $discoveryResult['config']['registration_endpoint'];
+            $registrationResult = $this->providerService->registerProvider(
+                $registrationEndpoint, 
+                $discoveryResult['config']
+            );
+            
+            if (!$registrationResult['success']) {
+                $this->flashAndRedirect(
+                    trans('langProviderRegistrationFailed') . ': ' . $registrationResult['error'],
+                    'alert-danger',
+                    $_SERVER['SCRIPT_NAME'] . '?action=create'
+                );
+                return null;
+            }
+
+            // Step 4: Update provider with OAuth configuration
+            $oauthConfig = $registrationResult['oauth_config'];
+            $oauthConfig['registration_endpoint'] = $registrationEndpoint;
+            
+            return $provider->updateWithOAuthConfig($oauthConfig);
+
+        } catch (Exception $e) {
+            error_log('Error processing version 2.1 provider: ' . $e->getMessage());
+            $this->flashAndRedirect(
+                trans('langProviderProcessingFailed') . ': ' . $e->getMessage(),
+                'alert-danger',
+                $_SERVER['SCRIPT_NAME'] . '?action=create'
+            );
+            return null;
+        }
+    }
+
     public function edit(string $id)
     {
         global $action_bar;
         
         $directId = getDirectReference($id);
         $provider = $this->repository->findById($directId);
-
+        
         if (!$provider) {
             $this->flashAndRedirect(
                 trans('langProviderNotFound'), 
                 'alert-danger', 
                 $_SERVER['SCRIPT_NAME']
             );
+            return;
         }
 
         $action_bar = action_bar([
@@ -124,7 +206,7 @@ class BackpackProviderController
             'provider' => $provider,
             'action' => 'edit',
             'method' => 'POST',
-            'submitLabel' => trans('langEditChange'),
+            'submitLabel' => trans('langUpdate'),
             'formAction' => $_SERVER['SCRIPT_NAME'] . '?action=update&id=' . $id
         ]);
     }
@@ -146,7 +228,9 @@ class BackpackProviderController
                 $providerData['name'],
                 $providerData['api_url'],
                 $providerData['ob_version'],
-                isset($_POST['active']) && $_POST['active'] == '1'
+                isset($_POST['active']) && $_POST['active'] == '1',
+                !empty($providerData['client_id']) ? $providerData['client_id'] : null,
+                !empty($providerData['client_secret']) ? $providerData['client_secret'] : null
             );
 
             $savedProvider = $this->repository->update($updatedProvider);
@@ -207,7 +291,7 @@ class BackpackProviderController
     {
         $requiredFields = ['provider_name', 'api_url', 'version'];
         
-        return array_reduce($requiredFields, function($carry, $field) {
+        $data = array_reduce($requiredFields, function($carry, $field) {
             $value = $_POST[$field] ?? '';
             $carry[str_replace('provider_', '', $field)] = trim($value);
             if ($field === 'version') {
@@ -216,6 +300,12 @@ class BackpackProviderController
             }
             return $carry;
         }, []);
+
+        // Add optional OAuth fields
+        $data['client_id'] = trim($_POST['client_id'] ?? '');
+        $data['client_secret'] = trim($_POST['client_secret'] ?? '');
+
+        return $data;
     }
 
     private function validateCsrfToken(): void

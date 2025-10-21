@@ -1034,7 +1034,7 @@ $langRefreshInfo = "If you want to create a course for a new academic year, you 
 $langRefreshInfo_A = "Choose the appropriate actions";
 $langUserDelCourseInfo = "Check the criteria based on which users will be unregistered from the $langsCourse.";
 $langUserDelCourse = "Unregister users from course";
-$langUserDelNotice = "Notice: Users will not be unregistered from other courses";
+$langUserDelNotice = "Note: Users will not be unregistered from other courses";
 $langAnnouncesDel = "Delete course announcements";
 $langAgendaDel = "Delete course agenda data";
 $langHideDocuments = "Hide course documents";
@@ -3572,7 +3572,7 @@ $langMailVerificationNoticeGuest = "Guest users cannot been modified";
 $langChangeTo = "Change to";
 $langMailVerificationChanged = "Has changed";
 $langMailVerificationChangedNo = "You haven't choosen some change";
-$langMailVerificationChangedNoAdmin = "No users or admin email address is not allowed";
+$langMailVerificationChangedNoAdmin = "No users or admin email address is allowed";
 $langCourseUserRegDone = "User registration completed successfully.";
 $langCourseUserRegError = "User registration error.";
 $langNoApiToken = "No API tokens have been created";
@@ -3612,7 +3612,7 @@ $langUName = "It is named";
 $langInfo1 = "The course backup you uploaded contains the following
 	course information.";
 $langInfo2 = "You can change the course code as well as all other
-	information (eg. description, ".$langsTeacher.", etc.)";
+	information (eg. description, ".$langsTeachers.", etc.)";
 $langCourseOldFac = "Old department";
 $langCourseVis = "Access type";
 $langCourseType = "Pre/postgraduate";
@@ -4159,6 +4159,7 @@ $langOneNonSubmission =  'One assignment has not been submitted';
 $m['more_submissions'] = '%d files have been submitted';
 $langMoreNonSubmissions = '%d files have been submitted';
 $m['more_non_submissions'] = '%d ssignments have not been submitted';
+$langMoreNonSubmissions = '%d ssignments have not been submitted';
 $m['plainview'] = 'Concise list of submissions and grades';
 $m['WorkInfo'] = 'Assignment info';
 $m['WorkView'] = 'Assignment view';
@@ -6393,4 +6394,13 @@ $langBackpackConnectedSuccessfully = "Backpack connected successfully!";
 $langBackpackConnectionFailed = "Backpack connection failed. Please try again.";
 $langBackpackDisconnectedSuccessfully = "Backpack disconnected successfully!";
 $langBackpackDisconnectionFailed = "Backpack disconnection failed. Please try again.";
-$langConfirmDisconnectBackpack = "Are you sure you want to disconnect your backpack?";
+$langConfirmDisconnectBackpack = "Are you sure you want to disconnect your backpack?";$langProviderDiscoveryFailed = "Provider discovery failed";
+$langProviderNotCompatible = "Provider is not compatible with OpenEClass";
+$langProviderRegistrationFailed = "Provider registration failed";
+$langProviderProcessingFailed = "Provider processing failed";
+
+// OAuth Client Configuration
+$langClientId = "Client ID";
+$langClientSecret = "Client Secret";
+$langClientIdHelp = "OAuth Client ID for authentication with the backpack provider";
+$langClientSecretHelp = "OAuth Client Secret for authentication with the backpack provider";
