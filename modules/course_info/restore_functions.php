@@ -208,12 +208,14 @@ function restore_table($basedir, $table, $options, $url_prefix_map, $backupData,
         }
         if (isset($options['map'])) {
             foreach ($options['map'] as $field => &$map) {
+                // Should we keep records where a mapped field is missing from the map?
+                $map_missing_keep = in_array($field, $options['map_missing_keep'] ?? []);
                 $newField = $restoreHelper->getField($table, $field);
                 // Don't pass null data through mapping
                 if (!is_null($data[$newField])) {
                     if (isset($data[$newField]) && isset($map[$data[$newField]])) { // map needs reverse resolution
                         $data[$newField] = $map[$data[$newField]];
-                    } else {
+                    } elseif (!$map_missing_keep) {
                         continue 2;
                     }
                 }
@@ -924,8 +926,12 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
         }
 
         // Polls
-        $poll_map = restore_table($restoreThis, 'poll', array('set' => array('course_id' => $new_course_id),
-            'map' => array('creator_id' => $userid_map), 'return_mapping' => 'pid', 'delete' => array('type')),
+        $poll_map = restore_table($restoreThis, 'poll', [
+            'set' => ['course_id' => $new_course_id],
+            'map' => ['creator_id' => $userid_map],
+            'map_missing_keep' => ['creator_id'],
+            'return_mapping' => 'pid',
+            'delete' => ['type']],
              $url_prefix_map, $backupData, $restoreHelper);
         $poll_to_specific_map = restore_table($restoreThis, 'poll_to_specific', array('map' => array('poll_id' => $poll_map),
             'return_mapping' => 'id'), $url_prefix_map, $backupData, $restoreHelper);
