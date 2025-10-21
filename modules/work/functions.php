@@ -691,7 +691,7 @@ function display_assignment_review($id) {
  */
 function display_assignment_submissions($id) {
 
-    global $course_id, $autojudge;
+    global $course_id, $autojudge, $langgrade;
 
     $grade_review_field = $condition = $review_message = '';
     $assign = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time,
@@ -735,6 +735,37 @@ function display_assignment_submissions($id) {
     $data['row'] = $assign;
     $data['assign'] = $assign;
     $data['cdate'] = date('Y-m-d H:i:s');
+
+
+    if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE) {
+        $grades_info = [];
+        $users_submissions = Database::get()->queryArray("SELECT user_id FROM assignment_grading_review WHERE assignment_id = ?d", $id);
+        $users_grades = Database::get()->queryArray("SELECT id,assignment_id,user_id,file_name,users_id,grade FROM assignment_grading_review WHERE assignment_id = ?d", $id);
+        if (count($users_submissions) > 0 && count($users_grades) > 0) {
+            foreach ($users_submissions as $u) {
+                $arr = [];
+                $f_g_grade = 0;
+                $g_grade = 0;
+                $grade_counter = 0;
+                foreach ($users_grades as $g) {
+                    if ($u->user_id == $g->user_id) {
+                        if ($g->grade) {
+                            $grade_counter++;
+                            $g_grade = $g_grade + $g->grade;
+                            $f_g_grade = $g_grade / $grade_counter;
+                            $arr[] = "<strong>" . uid_to_name($g->users_id) . "</strong> $langgrade -> " . "<span class='badge bg-info'>" . $g->grade . "</span><br>";
+                        }
+                        $str_arr = (count($arr) > 0) ? implode('', $arr) : '';
+                        $grades_info[$u->user_id] = [
+                            'grade_received' => $str_arr,
+                            'grade_total' => $f_g_grade
+                        ];
+                    }
+                }
+            }
+        }
+        $data['grades_info'] = $grades_info;
+    }
 
     view('modules.work.assignment_submissions', $data);
 }

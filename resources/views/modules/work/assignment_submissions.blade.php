@@ -173,23 +173,30 @@
                         
                         <div class="col-12 mt-4 d-flex">
                             <div class="card flex-fill w-25" @if($assign->deadline && $cdate > $assign->deadline) style="opacity: 0.5;" @endif>
-                                <div class="card-header"><h4 class="mb-0"><em>Φάση υποβολής εργασιών (1)</em></h4></div>
+                                <div class="card-header">
+                                    <h3 class="mb-0" style="line-height: 14px;">
+                                        <em>{{ trans('langAssignmentsSubmission')}}</em>
+                                    </h3>
+                                    <small><em>{{ trans('langPhase') }} (1)</em></small>
+                                </div>
                                 <div class="card-body">
                                     <ul class="list-group list-group-flush">
                                         <li class="list-group-item px-0">
                                             <p class="form-label mb-0">{{ trans('langStartDate') }}</p>
                                             <p><span>{!! format_locale_date(strtotime($assign->submission_date)) !!}</span></p>
                                         </li>
+                                        @if ($assign->deadline)
                                         <li class="list-group-item px-0">
                                             <p class="form-label mb-0">{{ trans('langEndDate') }}</p>
-                                            <p><span>{!! format_locale_date(strtotime($assign->deadline ?? '')) !!}</span></p>
+                                            <p><span>{!! format_locale_date(strtotime($assign->deadline)) !!}</span></p>
                                         </li>
+                                        @endif
                                         <li class="list-group-item px-0">
                                             @if ($cdate < $assign->submission_date)
-                                                <p class="text-warning TextBold small-text" style="line-height:14px;">Η διαδικασία υποβολής των εργασιών δεν έχει ξεκινήσει ακόμα.</p>
+                                                <p class="text-warning TextBold small-text" style="line-height:14px;">{{ trans('langAssignmentsSubmissionHasNoStarted') }}</p>
                                             @elseif ($cdate >= $assign->submission_date && $cdate <= $assign->deadline)
                                                 <div class='d-flex justify-content-start align-items-center gap-2 flex-wrap'>
-                                                    <p class="text-success TextBold small-text" style="line-height:14px;">Η διαδικασία υποβολής των εργασιών βρίσκεται σε εξέλιξη...</p>
+                                                    <p class="text-success TextBold small-text" style="line-height:14px;">{{ trans('langAssignmentsSubmissionInProgress') }}</p>
                                                     <div>
                                                         <div class='spinner-grow text-success spinner-grow-sm' role='status'>
                                                             <span class='visually-hidden'></span>
@@ -206,14 +213,37 @@
                                                     </div>
                                                 </div>
                                             @elseif ($assign->deadline && $cdate > $assign->deadline)
-                                                <p class="text-danger TextBold small-text" style="line-height:14px;">Η διαδικασία υποβολής των εργασιών έχει λήξει.</p>
+                                                <p class="text-danger TextBold small-text" style="line-height:14px;">{{ trans('langAssignmentsSubmissionHasExpired') }}</p>
+                                            @endif
+                                        </li>
+                                        <li class="list-group-item px-0">
+                                            @if ($count_of_assignments > 0)
+                                                <div class='col-12'>
+                                                    <p class="TextBold Success-200-cl small-text"style="line-height:14px;">
+                                                        {{ trans('langSubmissions') }}:
+                                                    </p>
+                                                    <div class="col-12 d-flex justify-content-center align-items-center mt-3">
+                                                        <span class="badge Success-200-bg fs-6" style="border-radius: 50%;">
+                                                            {{ $count_of_assignments }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            @else
+                                                <div class='col-12'>
+                                                    <span class="badge Warning-200-bg">{{ trans('langNoSubmissions') }}</span>
+                                                </div>
                                             @endif
                                         </li>
                                     </ul>
                                 </div>
                             </div>
-                            <div class="card flex-fill w-25 @if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE) d-block @else d-none @endif" @if($assign->due_date_review && $cdate > $assign->due_date_review) style="opacity: 0.5;" @endif>
-                                <div class="card-header"><h4 class="mb-0"><em>Φάση αξιολόγησης από ομότιμους (2)</em></h4></div>
+                            <div class="card flex-fill w-25 @if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE) d-block @else d-none @endif" @if($assign->due_date_review && ($cdate > $assign->due_date_review or $cdate < $assign->start_date_review)) style="opacity: 0.5;" @endif>
+                                <div class="card-header">
+                                    <h3 class="mb-0" style="line-height: 14px;">
+                                        <em>{{ trans('langGradeReviews') }}</em>
+                                    </h3>
+                                    <small><em>{{ trans('langPhase') }} (2)</em></small>
+                                </div>
                                 <div class="card-body">
                                     <ul class="list-group list-group-flush">
                                         <li class="list-group-item px-0">
@@ -227,19 +257,11 @@
                                         @if ($cdate > $assign->deadline)
                                             <li class="list-group-item px-0">
                                                 @if ($assign->reviews_per_assignment < $count_of_assignments)
-                                                    <form class='form-horizontal mb-4' role='form' method='post' action='index.php?course={{ $course_code }}' enctype='multipart/form-data'>
-                                                        <input type='hidden' name='assign' value='{{ $id }}'>
-                                                        <div class='form-group'>
-                                                            <div class='mt-3 text-center'>
-                                                                <input style='white-space: normal; height: auto;' class='btn submitAdminBtn' type='submit' name='ass_review' value='{{ trans('langAssignmentDistribution') }}'>
-                                                            </div>
-                                                        </div>
-                                                    </form>
                                                     @if ($cdate < $assign->start_date_review)
-                                                        <p class="text-warning TextBold small-text" style="line-height:14px;">Η διαδικασία αξιολόγησης από ομότιμους δεν έχει ξεκινήσει ακόμα.</p>
+                                                        <p class="text-warning TextBold small-text" style="line-height:14px;">{{ trans('langGradeReviewHasNotStarted') }}</p>
                                                     @elseif ($cdate >= $assign->start_date_review && $cdate <= $assign->due_date_review)
                                                         <div class='d-flex justify-content-start align-items-center gap-2 flex-wrap'>
-                                                            <p class="text-success TextBold small-text" style="line-height:14px;">Η διαδικασία αξιολόγησης από ομότιμους βρίσκεται σε εξέλιξη...</p>
+                                                            <p class="text-success TextBold small-text" style="line-height:14px;">{{ trans('langGradeReviewInProgress') }}</p>
                                                             <div>
                                                                 <div class='spinner-grow text-success spinner-grow-sm' role='status'>
                                                                     <span class='visually-hidden'></span>
@@ -256,8 +278,59 @@
                                                             </div>
                                                         </div>
                                                     @elseif ($cdate > $assign->due_date_review)
-                                                        <p class="text-danger TextBold small-text" style="line-height:14px;">Η διαδικασία αξιολόγησης από ομότιμους έχει λήξει.</p>
+                                                        <p class="text-danger TextBold small-text" style="line-height:14px;">{{ trans('langGradeReviewHasExpired') }}</p>
                                                     @endif
+                                                    <form class='form-horizontal mt-4' role='form' method='post' action='index.php?course={{ $course_code }}' enctype='multipart/form-data'>
+                                                        <input type='hidden' name='assign' value='{{ $id }}'>
+                                                        <div class='form-group'>
+                                                            <div class='mt-3 text-center'>
+                                                                <input style='white-space: normal; height: auto; opacity: 1 !important;' class='btn submitAdminBtn' type='submit' name='ass_review' value='{{ trans('langAssignmentDistribution') }}'>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                    <div class="mt-4">
+                                                        <a class="link-color d-flex" data-bs-toggle="modal" href="#PreviewGrades" style="opacity:1 !important;">
+                                                            <i class="fa-solid fa-circle-info"></i>&nbsp;{{ trans('langPreviewGradesAssessments') }}
+                                                        </a>
+                                                        <div class="modal fade" id="PreviewGrades" aria-hidden="true" aria-labelledby="PreviewGradesLabel2" tabindex="-1">
+                                                            <div class="modal-dialog modal-dialog-centered">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title" id="PreviewGradesLabel2">{{ trans('langPreviewGradesAssessments') }}</h5>
+                                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                    </div>
+                                                                <div class="modal-body">
+                                                                    @if (count($grades_info) > 0)
+                                                                        <table class="table-default">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th>{{ trans('langUser') }}</th>
+                                                                                    <th>{{ trans('langReceivedFrom') }}</th>
+                                                                                    <th class="text-center">{{ trans('langTotal') }}</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            @foreach ($grades_info as $index => $g) 
+                                                                                <tr>
+                                                                                    <td>{{ uid_to_name($index) }}</td>
+                                                                                    <td>{!! $g['grade_received'] !!}</td>
+                                                                                    <td>
+                                                                                        <div class="d-flex justify-content-center">
+                                                                                            <span class='badge Success-200-bg'>{!! $g['grade_total'] !!}</span>
+                                                                                        </div>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            @endforeach
+                                                                       </table>
+                                                                    @else
+                                                                        <div class="alert alert-warning">
+                                                                            <i class="fa-solid fa-triangle-exclamation fa-lg"></i>
+                                                                            <span>{{ trans('$langNoInfoAvailable') }}</span>
+                                                                        </div>
+                                                                    @endif
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 @else
                                                     <div class='col-12'>
                                                         <div class='alert alert-warning'>
@@ -271,15 +344,23 @@
                                 </div>
                             </div>
                             <div class="card flex-fill" @if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE && $cdate <= $assign->due_date_review) style="opacity: 0.5;" @endif>
-                                <div class="card-header"><h4 class="mb-0"><em>@if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE) Τελική καταχώριση βαθμολογίας (3) @else Τελική καταχώριση βαθμολογίας (2) @endif</em></h4></div>
+                                <div class="card-header">
+                                    <h3 class="mb-0" style="line-height: 14px;">
+                                        <em>{{ trans('langFinalGrade') }}</em>
+                                    </h3>
+                                    <small>
+                                        @if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE) 
+                                            <em>{{ trans('langPhase') }} (3)</em>
+                                        @else 
+                                            <em>{{ trans('langPhase') }} (2)</em>
+                                        @endif
+                                    </small>
+                                </div>
                                 <div class="card-body">
                                     @if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE)
                                         @if ($cdate > $assign->due_date_review)
-                                            <div class='mb-4'>
-                                                <button class='btn submitAdminBtn' href='{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}' id='transfer_grades'>{{ trans('langTransferGrades') }}</button>
-                                            </div>
                                             <div class='d-flex justify-content-start align-items-center gap-2 flex-wrap'>
-                                                <p class="text-success TextBold small-text" style="line-height:14px;">Η διαδικασία καταχώρισης βαθμολογίας είναι ενεργή</p>
+                                                <p class="text-success TextBold small-text" style="line-height:14px;">{{ trans('langFinalGradeProcessInProgress') }}</p>
                                                 <div>
                                                     <div class='spinner-grow text-success spinner-grow-sm' role='status'>
                                                         <span class='visually-hidden'></span>
@@ -295,25 +376,12 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div class='mt-4'>
+                                                <button class='btn submitAdminBtn' href='{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}' id='transfer_grades'>{{ trans('langTransferGrades') }}</button>
+                                            </div>
                                         @else
                                             <p class="text-warning TextBold small-text" style="line-height:14px;">Η διαδικασία καταχώρισης βαθμού δεν έχει ξεκινήσει ακόμα.</p>
                                         @endif
-                                    @endif
-
-                                    @if ($count_of_assignments > 0)
-                                        <div class='col-12 mt-3 bg-transparent'>
-                                            <div class='alert alert-success'>
-                                                <i class='fa-solid fa-circle-check fa-lg'></i>
-                                                <span><strong>{{ trans('langSubmissions') }}:</strong>&nbsp;{{ $count_of_assignments }}</span>
-                                            </div>
-                                        </div>
-                                    @else
-                                        <div class='col-12 mt-3 bg-transparent'>
-                                            <div class='alert alert-warning'>
-                                                <i class='fa-solid fa-triangle-exclamation fa-lg'></i>
-                                                <span>{{ trans('langNoSubmissions') }}</span>
-                                            </div>
-                                        </div>
                                     @endif
                                     
                                     <form action='{{ $urlAppend }}modules/work/index.php?course={{ $course_code }}' method='post' class='form-inline work-form'>
@@ -332,7 +400,7 @@
                                                         @else
                                                             <th>{{ trans('langFileName') }}</th>
                                                         @endif
-                                                        @if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE && $cdate > $assign->deadline) {{-- neo pedio vathmos aksiologhshs mono gia peer review --}}
+                                                        @if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE) {{-- neo pedio vathmos aksiologhshs mono gia peer review --}}
                                                         <th class="grade-col">
                                                             {{ trans('langPeerReviewGrade') }}
                                                         </th>
@@ -348,7 +416,7 @@
                                                         @endif
                                                     {{-- student data --}}
                                                         <tr>
-                                                            <td class='user-col' style='width: 45%'>
+                                                            <td class='user-col' style='width: 40%'>
                                                                 @if (empty($row->group_id))
                                                                     {!! display_user($row->uid) !!}
                                                                 @else
