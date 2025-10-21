@@ -37,7 +37,8 @@ if (!$cacheDir or !is_writable($cacheDir)) {
 }
 
 use Jenssegers\Blade\Blade;
-$blade = new Blade($viewsDir, $cacheDir);
+use Jenssegers\Blade\Container;
+$blade = new Blade($viewsDir, $cacheDir, Container::getInstance());
 
 $data['err'] = $_GET['err'] ?? null;
 if (!in_array($data['err'], ['config', 'db'])) {

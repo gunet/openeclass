@@ -54,7 +54,8 @@ if (!is_writable($cacheDir) or !$cacheDir) {
 }
 
 use Jenssegers\Blade\Blade;
-$blade = new Blade($viewsDir, $cacheDir);
+use Jenssegers\Blade\Container;
+$blade = new Blade($viewsDir, $cacheDir, Container::getInstance());
 
 $autoinstall = false;
 if ($command_line and getenv('BASE_URL') and getenv('MYSQL_LOCATION')) {
