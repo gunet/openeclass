@@ -2043,6 +2043,7 @@ function certificate_criterion_map_function(&$data, $maps) {
         case 'wiki': $data['resource'] = $wiki_map[$data['resource']];
                     $data['module'] = MODULE_ID_WIKI;
                     break;
+        case 'assignment-submit':
         case 'assignment': $data['resource'] = $assignments_map[$data['resource']];
                     $data['module'] = MODULE_ID_ASSIGN;
                     break;
@@ -2100,6 +2101,7 @@ function badge_criterion_map_function(&$data, $maps) {
         case 'wiki': $data['resource'] = $wiki_map[$data['resource']];
                     $data['module'] = MODULE_ID_WIKI;
                     break;
+        case 'assignment-submit':
         case 'assignment': $data['resource'] = $assignments_map[$data['resource']];
                     $data['module'] = MODULE_ID_ASSIGN;
                     break;

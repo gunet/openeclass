@@ -48,11 +48,13 @@
                                         {{ trans('langPortfolio') }}
                                     </a>
                                 </li>
+                                {{--
                                 <li class="nav-item">
                                     <a id="link-lessons" class="nav-link menu-item mx-lg-2" href="{{ $urlServer }}modules/auth/courses.php">
                                         {{ trans('langCourses') }}
                                     </a>
                                 </li>
+                                --}}
                             @endif
                             @if (!get_config('dont_display_faq_menu'))
                                 @if (faq_exist())
@@ -557,11 +559,13 @@
                                         <i class="fa-solid fa-pencil"></i>{{ trans('langPortfolio') }}
                                     </a>
                                 </p>
+                                {{--
                                 <p class='py-2 px-0'>
                                     <a id='coursesId' type='button' class='header-mobile-link d-flex justify-content-start align-items-start gap-2 flex-wrap TextBold' href="{{ $urlAppend }}modules/auth/courses.php" aria-label="{{ trans('langOtherCourses') }}">
                                         <i class="fa-solid fa-book"></i>{{ trans('langCourses') }}
                                     </a>
                                 </p>
+                                --}}
                             @endif
                             @if (!get_config('dont_display_faq_menu'))
                                 @if (faq_exist())
