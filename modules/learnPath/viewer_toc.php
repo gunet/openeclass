@@ -56,11 +56,12 @@ $action->record(MODULE_ID_LP);
 
 if (isset($_GET['unit'])) {
     $unitParam = "&amp;unit=$_GET[unit]";
-    $returl = $urlAppend . "modules/units/index.php?course=$course_code&amp;id=$_GET[unit]";
+    $returl = $urlAppend . "modules/units/index.php?course=$course_code&id=$_GET[unit]";
 } else {
     $unitParam = '';
     $returl = $urlAppend . "modules/learnPath/index.php?course=$course_code";
 }
+$returl_q = q($returl);
 
 if ($uid) {
     $uidCheckString = "AND UMP.`user_id` = $uid";
@@ -324,7 +325,7 @@ echo "<!DOCTYPE HTML>
                 </div>
                 <div id='navigation-btns' class='d-flex justify-content-end align-items-center gap-2'>
                     $prevNextString
-                    <a id='close-btn' class='btn btn-danger text-decoration-none' href='$returl' target='_top' style='min-height 30px !important; max-height: 35px !important;'>
+                    <a id='close-btn' class='btn btn-danger text-decoration-none' href='$returl_q' target='_top' style='min-height 30px !important; max-height: 35px !important;'>
                         <span class='fa-solid fa-person-walking-arrow-right fa-lg'></span>
                         <span class='hidden-xs'>$langLogout</span>
                     </a>
