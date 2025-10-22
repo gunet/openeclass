@@ -232,7 +232,7 @@ if ($is_editor) {
                                     form_buttons(array(
                                         array(
                                             'class' => 'submitAdminBtn',
-                                            'text' => $langSave,
+                                            'text' => $langSubmit,
                                             'value' => $langCreate
                                         ),
                                         array(
@@ -278,7 +278,7 @@ if ($is_editor) {
                                                 form_buttons(array(
                                                     array(
                                                         'class' => 'submitAdminBtn',
-                                                        'text' => $langSave,
+                                                        'text' => $langSubmit,
                                                         'value' => $langCreate
                                                     ),
                                                     array(
