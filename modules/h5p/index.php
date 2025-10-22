@@ -27,14 +27,18 @@ require_once 'classes/H5PFactory.php';
 require_once 'include/course_settings.php';
 
 $toolName = $langH5p;
-
+$h5p_student_content = $h5p_other_student_content = [];
 $onlyEnabledWhere = ($is_editor) ? '' : " AND enabled = 1 ";
 $h5p_teacher_content = Database::get()->queryArray("SELECT * FROM h5p_content WHERE course_id = ?d $onlyEnabledWhere
-                          AND creator_id IN (SELECT user_id FROM course_user WHERE course_id = ?d AND (status = " . USER_TEACHER . " OR editor = 1))", $course_id, $course_id);
-$h5p_student_content = Database::get()->queryArray("SELECT * FROM h5p_content WHERE course_id = ?d $onlyEnabledWhere
-                          AND creator_id IN (SELECT user_id FROM course_user WHERE course_id = ?d AND status = " . USER_STUDENT . ")", $course_id, $course_id);
+                          AND (creator_id = 0 OR creator_id IN (SELECT user_id FROM course_user WHERE course_id = ?d AND (status = " . USER_TEACHER . " OR editor = 1)))", $course_id, $course_id);
+if (setting_get(SETTING_COURSE_H5P_USERS_UPLOADING_ENABLE, $course_id) == 1) {
+    $h5p_student_content = Database::get()->queryArray("SELECT * FROM h5p_content WHERE course_id = ?d 
+                          AND creator_id IN (SELECT user_id FROM course_user WHERE course_id = ?d AND user_id = ?d AND status = " . USER_STUDENT . ")", $course_id, $course_id, $uid);
+    $h5p_other_student_content = Database::get()->queryArray("SELECT * FROM h5p_content WHERE course_id = ?d $onlyEnabledWhere
+                          AND creator_id IN (SELECT user_id FROM course_user WHERE course_id = ?d AND status = " . USER_STUDENT . " AND user_id != ?d)", $course_id, $course_id, $uid);
+}
 
-$content = array_merge($h5p_teacher_content, $h5p_student_content);
+$content = array_merge($h5p_teacher_content, $h5p_student_content, $h5p_other_student_content);
 
 if ($is_editor || setting_get(SETTING_COURSE_H5P_USERS_UPLOADING_ENABLE, $course_id) == 1) {
     $factory = new H5PFactory();
