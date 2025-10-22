@@ -47,8 +47,6 @@ load_js('tools.js');
 
 $head_content .= <<<hContent
 <script type="text/javascript">
-/* <![CDATA[ */
-
 
 $(document).ready(function() {
     var goals = document.getElementsByName('goals[]');
@@ -58,14 +56,14 @@ $(document).ready(function() {
     var j = parseInt(units.length) +1;
     $('#add_g').click(function() {
         if (i <= 20) {
-            $('#dynamic_goals').append('<div class=\"col-12 d-inline-flex mb-4"\ id=\"row_g_' + i + '\"><label for=\"goal_' + i + '\" id=\"gtitle_'+i+'\" class="control-label-notes text-nowrap mt-2">' + i + ':</label><input type=\"text\" name=\"goals[]\" class=\"form-control w-100 ms-2\" value=\"\" placeholder=\"$langGoals\"><a href=\"#!\" class=\"btn_remove text-danger mt-2\" name=\"remove_g\" id=\"rm_g_' + i + '\"><span class=\"fa fa-minus-circle\"></span></a></div>')
+            $('#dynamic_goals').append('<div class=\"col-12 d-inline-flex mb-4"\ id=\"row_g_' + i + '\"><label for=\"goal_' + i + '\" id=\"gtitle_'+i+'\" class="control-label-notes text-nowrap mt-2"></label><input type=\"text\" name=\"goals[]\" class=\"form-control w-100 ms-2\" value=\"\" placeholder=\"$langGoals\"><a href=\"#!\" class=\"btn_remove text-danger mt-2\" name=\"remove_g\" id=\"rm_g_' + i + '\"><span class=\"fa fa-minus-circle\"></span></a></div>')
             i++;
         }
         document.getElementById('goal_count').value = i-1;
     });
     $('#add_u').click(function() {
         if (j <= 20) {
-            $('#dynamic_units').append('<div id=\"row_u_' + j + '\" class="col-12 d-inline-flex mb-4"><label for=\"unit_' + j + '\" id=\"utitle_'+j+'\" class="control-label-notes text-nowrap mt-2">' + j + ':</label><input type=\"text\" name=\"units[]\" class=\"form-control ms-2\" value=\"\" placeholder=\"$langUnits\"><a href=\"#!\" class=\"btn_remove text-danger mt-2\" name=\"remove_u\" id=\"rm_u_' + j + '\"><span class=\"fa fa-minus-circle\"></span></a></div>')
+            $('#dynamic_units').append('<div id=\"row_u_' + j + '\" class="col-12 d-inline-flex mb-4"><label for=\"unit_' + j + '\" id=\"utitle_'+j+'\" class="control-label-notes text-nowrap mt-2"></label><input type=\"text\" name=\"units[]\" class=\"form-control ms-2\" value=\"\" placeholder=\"$langUnits\"><a href=\"#!\" class=\"btn_remove text-danger mt-2\" name=\"remove_u\" id=\"rm_u_' + j + '\"><span class=\"fa fa-minus-circle\"></span></a></div>')
             j++;
         }
         document.getElementById('unit_count').value = j-1;
@@ -75,7 +73,7 @@ $(document).ready(function() {
         var buttonName = $(this).attr('name');
 
         if (buttonName == "remove_g") {
-            var confirm = window.confirm('" . js_escape($langConfirmDeleteGoal) . "');
+            var confirm = window.confirm("$langConfirmDeleteGoal");
             if (confirm) {
                 var nrlz_button_id = button_id.split("_")
                 i--;
@@ -91,7 +89,7 @@ $(document).ready(function() {
                 }
             }
         } else if (buttonName == "remove_u") {
-            var confirm = window.confirm('" . js_escape($langConfirmDeleteUnit) . "');
+            var confirm = window.confirm("$langConfirmDeleteUnit");
             if(confirm){
                 var nrlz_button_id = button_id.split("_")
                 j--;
@@ -150,7 +148,6 @@ function checkedBoxes() {
     document.getElementsByName('checked_after_class').value=checked_after_class;
 }
 
-/* ]]> */
 </script>
 hContent;
 
@@ -268,7 +265,7 @@ if (!isset($_POST['next'])) {
                     foreach($q2 as $goal){
 
                         $tool_content .="<div class='col-12 d-inline-flex mb-4' id='row_g_".$count_goals."'>
-                                            <label for='goal_$count_goals' class='control-label-notes text-nowrap mt-2' id='gtitle_$count_goals'>$count_goals: </label>
+                                            <label for='goal_$count_goals' class='control-label-notes text-nowrap mt-2' id='gtitle_$count_goals'></label>
                                             <input name='goals[]' id='goal_$count_goals' type='text' class='form-control w-100 ms-2' value='".$goal->title."' placeholder='$langGoals'>
                                         ";
                                     if($count_goals > 1){
@@ -346,7 +343,7 @@ if (!isset($_POST['next'])) {
                             $tool_content .= "
                                             
                                             <div class='col-12 d-inline-flex mb-4' id='row_u_".$count_units."'>
-                                            <label for='unit_$count_units' id='utitle_$count_units' class= 'control-label-notes mt-2'>$count_units: </label>
+                                            <label for='unit_$count_units' id='utitle_$count_units' class= 'control-label-notes mt-2'></label>
                                             <input name='units[]' id='unit_$count_units' type='text' class='form-control ms-2' value='" . $unit->title . "' placeholder='$langUnits'>
                                             <input name='ids[]' type='hidden' value='$unit->id'>";
                             if ($count_units == 1) {
@@ -363,7 +360,7 @@ if (!isset($_POST['next'])) {
                         }
                     } else {
                         $tool_content .= "
-                                        <label for='unit_$count_units' id='utitle_$count_units' class='control-label mt-2'>$count_units: </label>
+                                        <label for='unit_$count_units' id='utitle_$count_units' class='control-label mt-2'></label>
                                         <div class='col-12 d-inline-flex mb-4' id='row_u_".$count_units."'>
                                         <input name='units[]' id='unit_$count_units' type='text' class='form-control w-100 ms-2' value='' placeholder='$langUnits'>";
                         $tool_content .= "<a href='#!' id='add_u'>
@@ -376,12 +373,25 @@ if (!isset($_POST['next'])) {
                     $tool_content .="
                     <div id='dynamic_units'></div>
                     <input id='unit_count' type='hidden' name='unit_count' value='1'>
-                </div>
-                <div class='form-group mt-5 d-flex justify-content-end align-items-center gap-2'>
-                            <input class='btn submitAdminBtn' type='submit' name='next' value='" . q($langNext) . "'>
+                </div>";
+
+                if (isset($_GET['fromFlipped'])) {
+                    $tool_content .= "
+                            <div class='form-group mt-5 d-flex justify-content-end align-items-center gap-2'>
+                                <input class='btn submitAdminBtn' type='submit' name='next' value='$langSubmit'>
+                                <a href='{$urlServer}courses/".$course_code."' class='btn cancelAdminBtn'>$langCancel</a>
+                            </div>
+                            ";
+                } else {
+                    $tool_content .= "
+                        <div class='form-group mt-5 d-flex justify-content-end align-items-center gap-2'>
+                            <input class='btn submitAdminBtn' type='submit' name='next' value='$langNext'>
                             <a href='{$urlServer}courses/".$course_code."' class='btn cancelAdminBtn'>$langCancel</a>
-                </div>
-            </fieldset>" . generate_csrf_token_form_field() . "
+                        </div>
+                    ";
+                }
+
+            $tool_content .= "</fieldset>" . generate_csrf_token_form_field() . "
         </form>
         </div>
         </div>
@@ -780,16 +790,22 @@ if (!isset($_POST['next'])) {
                     course_code =?s", $stunum, $lectnum, $lecthours, $homehours, $totalhours, $course_code
         );
 
-        $tool_content .= "<div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span><b>$langJustEdited:</b> " . q($_SESSION['title']) . "<br></span></div>";
-        $tool_content .= action_bar(array(
-            array(
-                'title' => $langEnter,
-                'url' => $urlAppend . "courses/$course_code/",
-                'icon' => 'fa-arrow-right',
-                'level' => 'primary-label',
-                'button-class' => 'btn-success'
-            )
-        ));
+        if (isset($_GET['fromFlipped'])) {
+            Session::flash('message', $langFlippedClassroomDataUpdated);
+            Session::flash('alert-class', 'alert-success');
+            redirect_to_home_page("modules/units/index.php?course=$course_code");
+        } else {
+            $tool_content .= "<div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span><b>$langJustEdited:</b> " . q($_SESSION['title']) . "<br></span></div>";
+            $tool_content .= action_bar(array(
+                array(
+                    'title' => $langEnter,
+                    'url' => $urlAppend . "courses/$course_code/",
+                    'icon' => 'fa-arrow-right',
+                    'level' => 'primary-label',
+                    'button-class' => 'btn-success'
+                )
+            ));
+        }
 
         // logging
         Log::record(0, 0, LOG_MODIFY_COURSE, array(
@@ -1073,16 +1089,23 @@ if (!isset($_POST['next'])) {
             }
         }
 
-        $tool_content .= "<div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span><b>$langJustEdited:</b> " . q($_SESSION['title']) . "<br></span></div>";
-        $tool_content .= action_bar(array(
-            array(
-                'title' => $langEnter,
-                'url' => $urlAppend . "courses/$course_code/",
-                'icon' => 'fa-arrow-right',
-                'level' => 'primary-label',
-                'button-class' => 'btn-success'
-            )
-        ));
+        if (isset($_GET['fromFlipped'])) {
+            Session::flash('message', $langFlippedClassroomDataUpdated);
+            Session::flash('alert-class', 'alert-success');
+            redirect_to_home_page("modules/units/index.php?course=$course_code&id=$unit_id");
+        } else {
+            $tool_content .= "<div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span><strong>$langJustEdited:</strong> " . q($_SESSION['title']) . "<br></span></div>";
+            $tool_content .= action_bar(array(
+                array(
+                    'title' => $langEnter,
+                    'url' => $urlAppend . "courses/$course_code/",
+                    'icon' => 'fa-arrow-right',
+                    'level' => 'primary-label',
+                    'button-class' => 'btn-success'
+                )
+            ));
+        }
+
 
         // logging
         Log::record(0, 0, LOG_MODIFY_COURSE, array(

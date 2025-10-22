@@ -392,7 +392,7 @@
                     preview += '<div class="row mt-2">';
 
                     const sectionLabels = {
-                        'objectives': '{{ js_escape(trans('langAISyllabusObjectives')) }}',
+                        'objectives': '{{ js_escape(trans('langGoals')) }}',
                         'bibliography': '{{ js_escape(trans('langAISyllabusBibliography')) }}',
                         'teaching_method': '{{ js_escape(trans('langAISyllabusTeachingMethod')) }}',
                         'assessment_method': '{{ js_escape(trans('langAISyllabusAssessmentMethod')) }}',
@@ -608,7 +608,7 @@
                                             </div>
                                         </div>
 
-                                        
+
                                         <div class='col-12 mt-4'>
                                             <!-- File Upload Section -->
                                             <div class='mb-3' id='upload_section'>
@@ -627,7 +627,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                       
+
                                         <button type='submit' class='btn btn-primary mt-4' id='extractBtn'>
                                             <i class='fa-solid fa-magic-wand-sparkles me-2'></i>{{ trans('langAIExtractButton') }}
                                         </button>

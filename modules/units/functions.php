@@ -1837,7 +1837,7 @@ function show_blog($title, $comments, $resource_id, $blog_id, $visibility, $act_
 function show_h5p($title, $comments, $resource_id, $h5p_id, $visibility, $act_name) {
     global $urlServer, $is_editor, $langWasDeleted, $course_id, $course_code, $id, $webDir, $urlAppend, $langH5p;
 
-    $comment_box = '';
+    $comment_box = $status = '';
     $title = q($title);
     $h5p = Database::get()->querySingle("SELECT * FROM h5p_content WHERE course_id = ?d AND id = ?d", $course_id, $h5p_id);
     if (!$h5p) { // check if it was deleted

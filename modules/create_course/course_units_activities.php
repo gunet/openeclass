@@ -37,7 +37,7 @@ require_once 'functions.php';
 
 $course = new Course();
 
-$toolName = $langCourseEdit;
+$toolName = $langActivities;
 
 load_js('tools.js');
 
@@ -173,43 +173,23 @@ if (!isset($_POST['final_submit'])) {
 
             }
 
-            $tool_content .= action_bar(array(
-                array(
-                    'title' => $langBack,
-                    'url' => $urlServer.'modules/create_course/flipped_classroom.php',
-                    'icon' => 'fa-reply',
-                    'level' => 'primary',
-                    'button-class' => 'btn-default'
-                )
-            ), false);
-
-
             $tool_content .= "
             <div class='row m-auto'>
-            <div class='col-lg-6 col-12 px-0'>
-                <div class='form-wrapper '>
-                    <form id='activities' class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]'>
-                    <div class='card panelCard card-default border-0'>
-                        <div class='card-header px-3 border-0'>
-                            $langActSelect
-                        </div>
-                    </div>
+                <div class='col-lg-8 col-12 px-0'>
+                    <div class='form-wrapper '>
+                        <form id='activities' class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]'>                    
+                        <fieldset>
+                            <legend class='mb-0' aria-label='$langForm'></legend>
+                            <div class='table-responsive'>
+                                <table class='table table-default'>
+                                <thead>
+                                <tr class='list-header'><td></td>
+                                <th class='px-0' scope='col'>$langActivities</th>
+                    ";
 
-
-                    <fieldset>
-                        <legend class='mb-0' aria-label='$langForm'></legend>
-                        <div class='table-responsive'>
-                            <table class='table table-default'>
-                            <thead>
-                            <tr class='list-header'><td></td>
-                            <th class='px-0' scope='col'>$langActivities</th>
-                ";
-                $i=1;
-                foreach ($_SESSION['units'] as $utitle) {
-                    $tool_content .= "<th class='px-0' scope='col'><div class='col-md-10 ' title='$utitle'>".$i.' '.ellipsize($utitle,20).":</div></th>";
-                    $i++;
-                }
-
+                    foreach ($_SESSION['units'] as $utitle) {
+                        $tool_content .= "<th class='px-0' scope='col'><div class='col-md-10 ' title='$utitle'>" . ellipsize($utitle,20) . ":</div></th>";
+                    }
 
                 $tool_content .= "
                                 </tr></thead>
@@ -308,7 +288,7 @@ if (!isset($_POST['final_submit'])) {
                     </div>
                     <div class='form-group mt-4'>
                         <div class='col-12 d-flex justify-content-end'>
-                            <input id='final_sub' class='btn submitAdminBtn me-2' type='submit' name='final_submit' value='" . q($langFinalSubmit) . "' onClick=\"check()\">
+                            <input id='final_sub' class='btn submitAdminBtn me-2' type='submit' name='final_submit' value='$langSubmit' onClick=\"check()\">
                             <a class='btn cancelAdminBtn' href='{$urlServer}main/portfolio.php' class='btn btn-default'>$langCancel</a>
                         </div>
                     </div>
@@ -321,21 +301,21 @@ if (!isset($_POST['final_submit'])) {
             </form>
         </div>
         </div>
-        <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
+        <div class='col-lg-4 col-12 d-none d-md-none d-lg-block text-end'>
         <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
         </div>
         </div>
         ";
 
     } else { //show activities selection when it is edit
-        $toolName = $langCourseEdit;
-        $tool_content .= action_bar(array(
+        $toolName = $langActivities;
+        $action_bar .= action_bar(array(
             array('title' => $langBack,
                 'url' => "{$urlServer}modules/units/index.php?course=$course_code&id=$unit_id",
                 'icon' => 'fa-reply',
                 'level' => 'primary')),false);
 
-
+        $tool_content .= $action_bar;
         $unit_title = Database::get()->querySingle("SELECT title FROM course_units WHERE id =?d",$unit_id);
         $_SESSION['title'] = $unit_title->title;
         $_SESSION['edit_act'] = $_GET['edit_act'];
@@ -384,17 +364,14 @@ if (!isset($_POST['final_submit'])) {
 
         $tool_content .= "<div class='form-wrapper'><fieldset><legend class='mb-0' aria-label='$langForm'></legend>
             <form class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]?course=$course_code&edit_act=$unit_id' onsubmit=\"return validateNodePickerForm();\">
-                 
-                <div class='action-bar-title'>$langActSelect</div>
-                        
+                                         
                 <fieldset>
-                    <legend class='mb-0' aria-label='$langForm'></legend>
+                    <legend class='mb-3' aria-label='$langForm'></legend>
                     <div class='table-responsive mt-0'>
                     <table class='table table-default'>
                         <thead><tr class='list-header'>
                         <td class='px-0'></td>
                         <th class='px-0' scope='col'>$langActivities</th>";
-            $i=1;
 
             $tool_content .= "<th class='px-0' scope='col'> <div class='col-md-10' title='$unit_title->title'>".ellipsize($unit_title->title,20).":</div></th>";
             $tool_content .= "
@@ -1008,16 +985,9 @@ if (!isset($_POST['final_submit'])) {
             }
         }
 
-        $tool_content .= "<div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span><b>$langUnitJustEdited:</b> " . q($_SESSION['title']) . "<br></span></div>";
-        $tool_content .= action_bar(array(
-            array(
-                'title' => $langEnter,
-                'url' => $urlAppend . "modules/units/index.php?course=$course_code&id=$unit_id",
-                'icon' => 'fa-arrow-right',
-                'level' => 'primary-label',
-                'button-class' => 'btn-success'
-            )
-        ));
+        Session::flash('message', $langUnitJustEdited);
+        Session::flash('alert-class', 'alert-success');
+        redirect_to_home_page("modules/units/index.php?course=$course_code&id=$unit_id");
     }
 }
 
