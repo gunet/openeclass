@@ -34,7 +34,55 @@ if (!$up->has_course_users_permission()) {
 }
 
 //Identifying ajax request
-if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest' && $up->has_course_users_permission()) {
+if (!empty($_SERVER['HTTP_X_REQUESTED_WITH'])
+    && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest'
+    && $up->has_course_users_permission()
+    && isset($_POST['action'])
+    && $_POST['action'] === 'updateRights') {
+
+    $userId = intval($_POST['userID'] ?? 0);
+    $adminModules = intval($_POST['userRights_CourseAdminTools'] ?? 0);
+    $adminUsers = intval($_POST['userRights_AdminUsers'] ?? 0);
+    $courseBackup = intval($_POST['userRights_ArchiveCourse'] ?? 0);
+    $courseClone = intval($_POST['userRights_CloneCourse'] ?? 0);
+
+    Database::get()->query(
+        "INSERT INTO `user_permissions` (`course_id`, `user_id`, `admin_modules`, `admin_users`, `course_backup`, `course_clone`)
+         VALUES (?d, ?d, ?d, ?d, ?d, ?d)
+         ON DUPLICATE KEY UPDATE
+            `admin_modules` = VALUES(`admin_modules`),
+            `admin_users` = VALUES(`admin_users`),
+            `course_backup` = VALUES(`course_backup`),
+            `course_clone` = VALUES(`course_clone`)",
+        $course_id, $userId, $adminModules, $adminUsers, $courseBackup, $courseClone
+    );
+
+}
+
+if (!empty($_SERVER['HTTP_X_REQUESTED_WITH'])
+    && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest'
+    && $up->has_course_users_permission()
+    && isset($_POST['action'])
+    && $_POST['action'] === 'getUserRights') {
+
+    $userId = intval($_POST['userID'] ?? 0);
+
+    $result = Database::get()->querySingle("SELECT `admin_modules`, `admin_users`, `course_backup`, `course_clone`
+                     FROM `user_permissions`
+                     WHERE `course_id` = ?d AND `user_id` = ?d", $course_id, $userId);
+
+    header('Content-Type: application/json; charset=utf-8');
+    echo json_encode($result, JSON_UNESCAPED_UNICODE);
+    exit();
+
+}
+
+//if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest' && $up->has_course_users_permission()) {
+if (!empty($_SERVER['HTTP_X_REQUESTED_WITH'])
+    && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest'
+    && $up->has_course_users_permission()
+    && !(isset($_POST['action']) && $_POST['action'] === 'updateRights')) {
+
     if (isset($_POST['action']) && $_POST['action'] == 'delete') {
         $unregister_gid = intval(getDirectReference($_POST['value']));
         $unregister_ok = true;
@@ -81,6 +129,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         }
         exit();
     }
+
     $limit = intval($_POST['length']);
     $offset = intval($_POST['start']);
 
@@ -216,6 +265,13 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                 'show' => $myrow->status != USER_GUEST,
             ),
             array(
+                'title' => $langUserPermissions,
+                'url' => "#",
+                'icon' => "fa-list-check",
+                'class' => 'rights_menu',
+                'show' => $myrow->status != USER_GUEST,
+            ),
+            array(
                 'title' => $langGiveRightReviewer,
                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;" . ($myrow->reviewer == '1' ? "remove" : "give") . "Reviewer=" . getIndirectReference($myrow->id),
                 'icon' => $myrow->reviewer != '1' ? "fa-square" : "fa-square-check",
@@ -279,7 +335,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                                 <div style='padding-left:8px; padding-top: 5px;'>$stats_icon</div>
                             </div>
                             <div class='pull-left'>
-                                <div style='padding-bottom:2px;'>".display_user($myrow->id, false, false, '', $course_code)."</div>
+                                <div data-userid='$myrow->id' style='padding-bottom:2px;'>".display_user($myrow->id, false, false, '', $course_code)."</div>
                                 <div><small><a class='text-nowrap' aria-label='".$langProfileSendMail."' href='mailto:" . q($myrow->email) . "'>" . q($myrow->email) . "</a>$email_exclamation_icon</small></div>
                                 <div class='text-muted'><small>$am_message</small></div>
                             </div>
