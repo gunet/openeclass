@@ -171,13 +171,13 @@
                         @include('modules.work.assignment_details')
 
                         <div class="col-12 d-flex justify-content-center my-4">
-                                <div class="badge Neutral-900-bg" style="border-radius:50%;">
-                                    <i class="fa-solid fa-circle-chevron-down fs-1"></i>
-                                </div>
+                            <div class="bg-transparent">
+                                <i class="fa-solid fa-circle-chevron-down fs-1 Neutral-900-cl"></i>
+                            </div>
                         </div>
 
                         <div class="col-12">
-                            <div class="card panelCard px-lg-4 py-lg-3" @if($assign->deadline && $cdate > $assign->deadline) style="opacity: 0.5;" @endif>
+                            <div class="card panelCard px-lg-4 py-lg-3" @if($assign->deadline && $cdate > $assign->deadline) style="opacity: 0.65;" @endif>
                                 <div class="card-header d-flex justify-content-between align-items-center">
                                     <h3 class="mb-0" style="line-height: 14px;">
                                         <em>{{ trans('langAssignmentsSubmission')}}</em>
@@ -241,11 +241,11 @@
                                 </div>
                             </div>
                             <div class="col-12 d-flex justify-content-center my-4 @if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE) d-block @else d-none @endif">
-                                <div class="badge Neutral-900-bg" style="border-radius:50%;">
-                                    <i class="fa-solid fa-circle-chevron-down fs-1"></i>
+                                <div class="bg-transparent">
+                                    <i class="fa-solid fa-circle-chevron-down fs-1 Neutral-900-cl"></i>
                                 </div>
                             </div>
-                            <div class="card panelCard px-lg-4 py-lg-3 @if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE) d-block @else d-none @endif" @if($assign->due_date_review && ($cdate > $assign->due_date_review or $cdate < $assign->start_date_review)) style="opacity: 0.5;" @endif>
+                            <div class="card panelCard px-lg-4 py-lg-3 @if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE) d-block @else d-none @endif" @if($assign->due_date_review && ($cdate > $assign->due_date_review or $cdate < $assign->start_date_review)) style="opacity: 0.65;" @endif>
                                 <div class="card-header d-flex justify-content-between align-items-center">
                                     <h3 class="mb-0" style="line-height: 14px;">
                                         <em>{{ trans('langGradeReviews') }}</em>
@@ -293,6 +293,9 @@
                                                         <div class='form-group'>
                                                             <div class='mt-3 text-center'>
                                                                 <input style='white-space: normal; height: auto; opacity: 1 !important;' class='btn submitAdminBtn' type='submit' name='ass_review' value='{{ trans('langAssignmentDistribution') }}'>
+                                                            </div>
+                                                            <div class="mt-2">
+                                                                <div class="help-block">(*) {{ trans('OldAssignmentsWillBeRemoved') }}</div>
                                                             </div>
                                                         </div>
                                                     </form>
@@ -345,11 +348,11 @@
                                 </div>
                             </div>
                             <div class="col-12 d-flex justify-content-center my-4">
-                                <div class="badge Neutral-900-bg" style="border-radius:50%;">
-                                    <i class="fa-solid fa-circle-chevron-down fs-1"></i>
+                                <div class="bg-transparent">
+                                    <i class="fa-solid fa-circle-chevron-down fs-1 Neutral-900-cl"></i>
                                 </div>
                             </div>
-                            <div class="card panelCard px-lg-4 py-lg-3" @if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE && $cdate <= $assign->due_date_review) style="opacity: 0.5;" @endif>
+                            <div class="card panelCard px-lg-4 py-lg-3" @if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE && $cdate <= $assign->due_date_review) style="opacity: 0.65;" @endif>
                                 <div class="card-header d-flex justify-content-between align-items-center">
                                     <h3 class="mb-0" style="line-height: 14px;">
                                         <em>{{ trans('langFinalGrade') }}</em>
@@ -386,7 +389,7 @@
                                                 <button class='btn submitAdminBtn' href='{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}' id='transfer_grades'>{{ trans('langTransferGrades') }}</button>
                                             </div>
                                         @else
-                                            <p class="text-warning TextBold small-text" style="line-height:14px;">Η διαδικασία καταχώρισης βαθμού δεν έχει ξεκινήσει ακόμα.</p>
+                                            <p class="text-warning TextBold small-text" style="line-height:14px;">{{ trans('langAddFinalGradeHasNotStartedYet') }}</p>
                                         @endif
                                     @endif
                                     
