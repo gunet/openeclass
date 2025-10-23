@@ -1250,7 +1250,7 @@ function is_module_disable_FC($module_id, $course_code, $unit_id, $act_id) {
     foreach ($q as $record) {
         $nrlz_ids = explode(" ", $record->tool_ids);
         foreach($nrlz_ids as $f_id){
-            array_push($nrlz_ids_final,$f_id);
+            $nrlz_ids_final[] = $f_id;
         }
     }
 

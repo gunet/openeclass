@@ -521,12 +521,13 @@
                                                                 'show' => !is_module_disable_FC(MODULE_ID_PROGRESS,$course_code,$id,$in_class->activity_id)),
 
                                                             array('title' => trans('langAdd') . ' ' . trans('langOfH5p'),
-                                                               'url' => $base_url . 'h5p&fc_type=0&act_name=' . $act_title . '&act_id=' . $in_class->activity_id,
+                                                               'url' => $base_url . 'h5p&fc_type=1&act_name=' . $act_title . '&act_id=' . $in_class->activity_id,
                                                                'icon' => 'fa fa-tablet',
                                                                'level' => 'secondary',
-                                                               'show' => !is_module_disable_FC(MODULE_ID_H5P, $course_code, $id, $in_class->activity_id))
+                                                               'show' => !is_module_disable_FC(MODULE_ID_H5P, $course_code, $id, $in_class->activity_id)),
+                                                            ),
+                                                            '',true) !!}
 
-                                                        ),'',true) !!}
                                                     <span class='col-sm-6'>
 
                                                     {!!
@@ -670,17 +671,29 @@
                                                         'level' => 'secondary',
                                                         'show' => !is_module_disable_FC(MODULE_ID_GRADEBOOK,$course_code,$id,$after_class->activity_id)),
 
-                                                    array('title' => trans('langAdd').' '.trans('langProgress'),
+                                                    array('title' => trans('langAdd').' '.trans('langOfProgress'),
                                                         'url' => $base_url . 'progress&fc_type=2&act_name='. $act_title. '&act_id='.$after_class->activity_id,
                                                         'icon' => 'fa-solid fa-arrow-trend-up',
                                                         'level' => 'secondary',
                                                         'show' => !is_module_disable_FC(MODULE_ID_PROGRESS,$course_code,$id,$after_class->activity_id)),
 
                                                     array('title' => trans('langAdd') . ' ' . trans('langOfH5p'),
-                                                           'url' => $base_url . 'h5p&fc_type=0&act_name=' . $act_title . '&act_id=' . $after_class->activity_id,
+                                                           'url' => $base_url . 'h5p&fc_type=2&act_name=' . $act_title . '&act_id=' . $after_class->activity_id,
                                                            'icon' => 'fa fa-tablet',
                                                            'level' => 'secondary',
-                                                           'show' => !is_module_disable_FC(MODULE_ID_H5P, $course_code, $id, $after_class->activity_id))
+                                                           'show' => !is_module_disable_FC(MODULE_ID_H5P, $course_code, $id, $after_class->activity_id)),
+
+                                                    array('title' => trans('langAdd').' '.trans('langInsertForum'),
+                                                        'url' => $base_url . 'forum&fc_type=2&act_name='. $act_title. '&act_id='.$after_class->activity_id,
+                                                        'icon' => 'fa fa-comments',
+                                                        'level' => 'secondary',
+                                                        'show' => !is_module_disable_FC(MODULE_ID_FORUM,$course_code,$id,$after_class->activity_id)),
+
+                                                    array('title' => trans('langAdd') . ' ' . trans('langInsertWork'),
+                                                            'url' => $base_url . 'work&fc_type=2&act_name=' . $act_title . '&act_id=' . $after_class->activity_id,
+                                                            'icon' => 'fa fa-upload',
+                                                            'level' => 'secondary',
+                                                            'show' => !is_module_disable_FC(MODULE_ID_ASSIGN, $course_code, $id, $after_class->activity_id)),
 
                                                 ),'',true) !!}
 

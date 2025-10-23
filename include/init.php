@@ -647,14 +647,14 @@ $icons_map = array(
 );
 
 // ----------------------------------------
-// Course activities array
+// Flipped Course activities array
 // user activities
 // ----------------------------------------
 $activities = array(
     MODULE_ID_EBOOK_READ => array('title' => $langFCEbook, 'tools' => array(MODULE_ID_EBOOK, MODULE_ID_GLOSSARY, MODULE_ID_LINKS, MODULE_ID_DOCS, MODULE_ID_WALL,MODULE_ID_H5P)),
     MODULE_ID_VIDEO_WATCH => array('title' => $langFCVideo,'tools' => array(MODULE_ID_VIDEO, MODULE_ID_WALL, MODULE_ID_LINKS,MODULE_ID_H5P)),
     MODULE_ID_VIDEO_INTERACTION => array('title' => $langFCVideoInteract,'tools' => array(MODULE_ID_LINKS, MODULE_ID_WALL,MODULE_ID_H5P)),
-    MODULE_ID_REVISION => array('title' => $langFCRevision,'tools' => array(MODULE_ID_LP, MODULE_ID_MINDMAP,MODULE_ID_H5P)),
+    MODULE_ID_REVISION => array('title' => $langFCRevision,'tools' => array(MODULE_ID_LP, MODULE_ID_MINDMAP,MODULE_ID_H5P, MODULE_ID_DOCS, MODULE_ID_LINKS)),
     MODULE_ID_GAMES => array('title' => $langFCGames,'tools' => array(MODULE_ID_LINKS,MODULE_ID_H5P)),
     MODULE_ID_DISCUSS => array('title' => $langFCDiscuss,'tools' => array(MODULE_ID_FORUM,
                                                                           MODULE_ID_CHAT,
@@ -664,7 +664,7 @@ $activities = array(
                                                                           MODULE_ID_WIKI,
                                                                           MODULE_ID_TC,
                                                                           MODULE_ID_H5P)),
-    MODULE_ID_PROJECT => array('title' => $langGroupAssignment,'tools' => array(MODULE_ID_ASSIGN,MODULE_ID_EXERCISE, MODULE_ID_WIKI, MODULE_ID_LINKS,MODULE_ID_H5P)),
+    MODULE_ID_PROJECT => array('title' => $langGroupActivities,'tools' => array(MODULE_ID_ASSIGN,MODULE_ID_EXERCISE, MODULE_ID_WIKI, MODULE_ID_LINKS,MODULE_ID_H5P)),
     MODULE_ID_BRAINSTORMING => array('title' => $langFCBrainstorming,'tools' => array(MODULE_ID_WALL, MODULE_ID_BLOG, MODULE_ID_FORUM, MODULE_ID_CHAT,MODULE_ID_H5P)),
     MODULE_ID_WORK_PAPER => array('title' => $langFCWorkPaper,'tools' => array(MODULE_ID_DOCS,
                                                                                MODULE_ID_WALL,
@@ -680,8 +680,8 @@ $activities = array(
                                                                              MODULE_ID_TC,MODULE_ID_H5P)),
     MODULE_ID_SIMULATE => array('title' => $langFCSimulate,'tools' => array(MODULE_ID_LINKS,MODULE_ID_H5P)),
     MODULE_ID_PROBLEM_SOLVING => array('title' => $langFCProblemSolving,'tools' => array(MODULE_ID_ASSIGN, MODULE_ID_WIKI, MODULE_ID_EXERCISE,MODULE_ID_H5P)),
-    MODULE_ID_MINDMAP_FC => array('title' => $langFCMindMap,'tools' => array(MODULE_ID_MINDMAP,MODULE_ID_H5P)),
-    MODULE_ID_EVALUATE=> array('title' => $langFCEvaluate,'tools' => array(MODULE_ID_QUESTIONNAIRE, MODULE_ID_LINKS, MODULE_ID_PROGRESS, MODULE_ID_GRADEBOOK,MODULE_ID_H5P)),
+    MODULE_ID_MINDMAP_FC => array('title' => $langFCMindMap,'tools' => array(MODULE_ID_MINDMAP, MODULE_ID_H5P, MODULE_ID_LINKS)),
+    MODULE_ID_EVALUATE=> array('title' => $langFCEvaluate,'tools' => array(MODULE_ID_QUESTIONNAIRE, MODULE_ID_LINKS, MODULE_ID_PROGRESS, MODULE_ID_GRADEBOOK,MODULE_ID_H5P, MODULE_ID_FORUM, MODULE_ID_ASSIGN)),
     MODULE_ID_DISCUSS_AC => array('title' => $langFCDiscuss,'tools' => array(MODULE_ID_FORUM,
                                                                              MODULE_ID_CHAT,
                                                                              MODULE_ID_LINKS,

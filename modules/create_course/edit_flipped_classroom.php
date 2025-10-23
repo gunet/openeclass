@@ -56,14 +56,14 @@ $(document).ready(function() {
     var j = parseInt(units.length) +1;
     $('#add_g').click(function() {
         if (i <= 20) {
-            $('#dynamic_goals').append('<div class=\"col-12 d-inline-flex mb-4"\ id=\"row_g_' + i + '\"><label for=\"goal_' + i + '\" id=\"gtitle_'+i+'\" class="control-label-notes text-nowrap mt-2"></label><input type=\"text\" name=\"goals[]\" class=\"form-control w-100 ms-2\" value=\"\" placeholder=\"$langGoals\"><a href=\"#!\" class=\"btn_remove text-danger mt-2\" name=\"remove_g\" id=\"rm_g_' + i + '\"><span class=\"fa fa-minus-circle\"></span></a></div>')
+            $('#dynamic_goals').append('<div class=\"col-12 d-inline-flex mb-4"\ id=\"row_g_' + i + '\"><label for=\"goal_' + i + '\" id=\"gtitle_'+i+'\" class="control-label-notes text-nowrap mt-2"></label><input type=\"text\" name=\"goals[]\" class=\"form-control w-100 ms-2\" value=\"\" placeholder=\"$langGoals\"><a href=\"#!\" class=\"btn_remove text-danger p-3\" name=\"remove_g\" id=\"rm_g_' + i + '\"><span class=\"fa fa-minus-circle\"></span></a></div>')
             i++;
         }
         document.getElementById('goal_count').value = i-1;
     });
     $('#add_u').click(function() {
         if (j <= 20) {
-            $('#dynamic_units').append('<div id=\"row_u_' + j + '\" class="col-12 d-inline-flex mb-4"><label for=\"unit_' + j + '\" id=\"utitle_'+j+'\" class="control-label-notes text-nowrap mt-2"></label><input type=\"text\" name=\"units[]\" class=\"form-control ms-2\" value=\"\" placeholder=\"$langUnits\"><a href=\"#!\" class=\"btn_remove text-danger mt-2\" name=\"remove_u\" id=\"rm_u_' + j + '\"><span class=\"fa fa-minus-circle\"></span></a></div>')
+            $('#dynamic_units').append('<div id=\"row_u_' + j + '\" class="col-12 d-inline-flex mb-4"><label for=\"unit_' + j + '\" id=\"utitle_'+j+'\" class="control-label-notes text-nowrap mt-2"></label><input type=\"text\" name=\"units[]\" class=\"form-control ms-2\" value=\"\" placeholder=\"$langUnits\"><a href=\"#!\" class=\"btn_remove text-danger p-3\" name=\"remove_u\" id=\"rm_u_' + j + '\"><span class=\"fa fa-minus-circle\"></span></a></div>')
             j++;
         }
         document.getElementById('unit_count').value = j-1;
@@ -254,29 +254,28 @@ if (!isset($_POST['next'])) {
             
                 <div class='form-group mt-4'>
                     <div class='col-12 d-inline-flex mb-2'>
-                        <div class='control-label-notes me-2'>$langGoals:</div>
-                        <a href='#!' name='add_g' id='add_g' aria-label='$langAdd'>
-                            <span class='fa fa-plus-circle add-unit-btn'>
-                            </span>
-                        </a>
+                        <div class='control-label-notes me-2'>$langGoals:</div>                        
                     </div>";
 
-                    $count_goals =1;
-                    foreach($q2 as $goal){
-
-                        $tool_content .="<div class='col-12 d-inline-flex mb-4' id='row_g_".$count_goals."'>
+                    $count_goals = 1;
+                    foreach($q2 as $goal) {
+                        $tool_content .= "<div class='col-12 d-inline-flex mb-4' id='row_g_" . $count_goals . "'>
                                             <label for='goal_$count_goals' class='control-label-notes text-nowrap mt-2' id='gtitle_$count_goals'></label>
-                                            <input name='goals[]' id='goal_$count_goals' type='text' class='form-control w-100 ms-2' value='".$goal->title."' placeholder='$langGoals'>
-                                        ";
-                                    if($count_goals > 1){
+                                            <input name='goals[]' id='goal_$count_goals' type='text' class='form-control w-100 ms-2' value='" . $goal->title . "' placeholder='$langGoals'>";
+                          if ($count_goals == 1) {
+                                    $tool_content .= "<a href='#!' name='add_g' id='add_g' aria-label='$langAdd'>
+                                        <span class='fa fa-plus-circle add-unit-btn p-3'>
+                                        </span>
+                                    </a>";
+                                }
+                                if($count_goals > 1){
+                                    $tool_content.="<a href='#!' class='btn_remove p-3' name='remove_g' id='rm_g_".$count_goals."' aria-label='$langDelete'>
+                                            <span class='fa fa-minus-circle text-danger'>
+                                            </span>
+                                        </a>";
 
-                                        $tool_content.="<a href='#!' class='btn_remove mt-2' name='remove_g' id='rm_g_".$count_goals."' aria-label='$langDelete'>
-                                                <span class='fa fa-minus-circle text-danger'>
-                                                </span>
-                                            </a>";
-
-                                    }
-                                    $tool_content .= "</div>";
+                                }
+                                $tool_content .= "</div>";
                         $count_goals +=1;
                     }
 
@@ -340,18 +339,17 @@ if (!isset($_POST['next'])) {
                     $count_units =1;
                     if (count($q5_b) > 0) {
                         foreach ($q5_b as $unit) {
-                            $tool_content .= "
-                                            
+                            $tool_content .= "                                            
                                             <div class='col-12 d-inline-flex mb-4' id='row_u_".$count_units."'>
                                             <label for='unit_$count_units' id='utitle_$count_units' class= 'control-label-notes mt-2'></label>
                                             <input name='units[]' id='unit_$count_units' type='text' class='form-control ms-2' value='" . $unit->title . "' placeholder='$langUnits'>
                                             <input name='ids[]' type='hidden' value='$unit->id'>";
                             if ($count_units == 1) {
                                 $tool_content .= "<a href='#!' id='add_u' class='mt-2' aria-label='$langAdd'>
-                                                    <span class='fa fa-plus-circle add-unit-btn'></span>
+                                                    <span class='fa fa-plus-circle add-unit-btn p-3'></span>
                                                 </a>";
                             } else {
-                                $tool_content .= "<a aria-label='$langDelete' href='#!' class='btn_remove p-0 mt-2 btn disabled' name='remove_u' id='rm_u_" . $count_units . "' disabled>
+                                $tool_content .= "<a aria-label='$langDelete' href='#!' class='btn_remove p-3 btn disabled' name='remove_u' id='rm_u_" . $count_units . "' disabled>
                                                     <span class='fa fa-minus-circle text-danger'></span>
                                                   </a>";
                             }
@@ -364,7 +362,7 @@ if (!isset($_POST['next'])) {
                                         <div class='col-12 d-inline-flex mb-4' id='row_u_".$count_units."'>
                                         <input name='units[]' id='unit_$count_units' type='text' class='form-control w-100 ms-2' value='' placeholder='$langUnits'>";
                         $tool_content .= "<a href='#!' id='add_u'>
-                                                                <span class='fa fa-plus-circle add-unit-btn'>
+                                                                <span class='fa fa-plus-circle add-unit-btn p-3'>
                                                                 </span>
                                                             </a>";
                         $tool_content .= "</div>";
@@ -624,7 +622,7 @@ if (!isset($_POST['next'])) {
                         </table>
                     </div>
                     <div class='form-group mt-5 d-flex justify-content-center align-items-center gap-2'>
-                        <input id='final_sub' class='btn submitAdminBtn' type='submit' name='final_submit' value='" . q($langFinalSubmit) . "'>
+                        <input id='final_sub' class='btn submitAdminBtn' type='submit' name='final_submit' value='" . $langSubmit . "'>
                         <a href='{$urlServer}courses/".$course_code."' class='btn cancelAdminBtn'>$langCancel</a>                       
                     </div>
                     <input type='hidden' name='next'>

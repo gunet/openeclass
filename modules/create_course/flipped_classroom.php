@@ -43,7 +43,7 @@ $head_content .= <<<hContent
         $('#add_g').click(function() {
             if (i <= 20) {
                 
-                $('#dynamic_goals').append('<div id=\"row_g_' + i + '\" class="col-12 d-inline-flex mt-3"><label for=\"goal_' + i + '\" id=\"gtitle_'+i+'\"  class= "control-label-notes text-nowrap" >' + i + ':</label><input type=\"text\" name=\"goals[]\" class=\"form-control ms-2\" value=\"\" placeholder=\"$langGoals\"><a href=\"#!\" class=\"btn_remove text-danger\" name=\"remove_g\" id=\"rm_g_' + i + '\"><span class=\"fa fa-minus-circle \"></span></a></div>')
+                $('#dynamic_goals').append('<div id=\"row_g_' + i + '\" class="col-12 d-inline-flex mt-3"><label for=\"goal_' + i + '\" id=\"gtitle_'+i+'\"  class= "control-label-notes text-nowrap"></label><input type=\"text\" name=\"goals[]\" class=\"form-control ms-2\" value=\"\" placeholder=\"$langGoals\"><a href=\"#!\" class=\"btn_remove text-danger p-3\" name=\"remove_g\" id=\"rm_g_' + i + '\"><span class=\"fa fa-minus-circle \"></span></a></div>')
                 i++;
             }
             document.getElementById('goal_count').value = i-1;
@@ -51,7 +51,7 @@ $head_content .= <<<hContent
         $('#add_u').click(function() {
             if (j <= 20) {
                 
-                $('#dynamic_units').append('<div id=\"row_u_' + j + '\" class="col-12 d-inline-flex mt-3"><label for=\"unit_' + j + '\" id=\"utitle_'+j+'\"class= "control-label-notes text-nowrap"  >' + j + ':</label><input type=\"text\" name=\"units[]\" class=\"form-control ms-2\" value=\"\" placeholder=\"$langUnits\"><a href=\"#!\" class=\"btn_remove text-danger\" name=\"remove_u\" id=\"rm_u_' + j + '\"><span class=\"fa fa-minus-circle\"></span></a></div>')
+                $('#dynamic_units').append('<div id=\"row_u_' + j + '\" class="col-12 d-inline-flex mt-3"><label for=\"unit_' + j + '\" id=\"utitle_'+j+'\"class= "control-label-notes text-nowrap"></label><input type=\"text\" name=\"units[]\" class=\"form-control ms-2\" value=\"\" placeholder=\"$langUnits\"><a href=\"#!\" class=\"btn_remove text-danger p-3\" name=\"remove_u\" id=\"rm_u_' + j + '\"><span class=\"fa fa-minus-circle\"></span></a></div>')
                 j++;
             }
             document.getElementById('unit_count').value = j-1;
@@ -208,17 +208,16 @@ if (!isset($_POST['next'])) {
                         </div>
                         <div class='form-group mt-4'>
                             <div class='col-12 d-inline-flex mb-2'>
-                                <div class='control-label-notes me-2'>$langGoals</div>
-                                <a href='#!' name='add_g' id='add_g' aria-label='$langAdd'>
-                                    <span class='fa fa-plus-circle add-unit-btn'>
-                                    </span>
-                                </a>
+                                <div class='control-label-notes me-2'>$langGoals</div>                                
                             </div>
                                 
                             <div id='row_g_1' class='col-12 d-inline-flex'>
-                                <label for='goal_1' id='gtitle_1' class= 'control-label-notes text-nowrap'>1: </label>
-                                <input name='goals[]' id='goal_1' type='text' class='form-control w-100 ms-2' value='"."' placeholder='$langGoals'>
-                            </div>   
+                                <label for='goal_1' id='gtitle_1' class= 'control-label-notes text-nowrap'></label>
+                                <input name='goals[]' id='goal_1' type='text' class='form-control w-100 p-3' value='"."' placeholder='$langGoals'>
+                                <a href='#!' name='add_g' id='add_g' aria-label='$langAdd'>
+                                    <span class='fa fa-plus-circle add-unit-btn p-3'></span>
+                                </a>
+                            </div>
                             <div id='dynamic_goals'></div>
                             <input id='goal_count' type='hidden' name='goal_count' value='1'>
                         </div>                                    
@@ -248,15 +247,15 @@ if (!isset($_POST['next'])) {
                         </div>
                         <div class='form-group mt-4'>
                             <div class='col-12 d-inline-flex mb-2'>
-                                <div class='control-label-notes me-2'>$langUnits</div>
-                                <a href='#!' name='add_u' id='add_u' aria-label='$langAdd'>
-                                    <span class='fa fa-plus-circle add-unit-btn'>
-                                    </span>
-                                </a>
+                                <div class='control-label-notes me-2'>$langUnits</div>                                
                             </div>
                             <div id='row_u_1' class='col-12 d-inline-flex'>
-                                <label for='unit_1' id='utitle_1' class='control-label-notes text-nowrap'>1: </label>
-                                <input name='units[]' id='unit_1' type='text' class='form-control w-100 ms-2' value='"."' placeholder='$langUnits'>               
+                                <label for='unit_1' id='utitle_1' class='control-label-notes text-nowrap'></label>
+                                <input name='units[]' id='unit_1' type='text' class='form-control w-100 ms-2' value='"."' placeholder='$langUnits'>
+                                <a href='#!' name='add_u' id='add_u' aria-label='$langAdd'>
+                                    <span class='fa fa-plus-circle add-unit-btn p-3'>
+                                    </span>
+                                </a>
                             </div>
         
                             <div id='dynamic_units'></div>
