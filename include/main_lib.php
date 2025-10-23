@@ -3874,13 +3874,11 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
                 "</$primaryTag>$subMenu$form_end");
         }
 
-        if (count($options) > 1) {
+        if (count($options) > 1 && !(isset($option['options']) && ($level == 'primary' or $level == 'primary-label'))) {
             array_unshift($out_secondary,
                 "<li$wrapped_class>$form_begin<a$confirm_extra  class='$text_class $modal_class $confirm_modal_class $temporary_button_class list-group-item d-flex justify-content-start align-items-start gap-2 py-3'" . $href .
                 " $link_attrs>" .
                 "<span class='fa $option[icon] settings-icons'></span> $title</a>$form_end</li>");
-        } else {
-            $out_secondary = [];
         }
         $i++;
     }

@@ -122,7 +122,7 @@ if ($ok) {
     }
 
     if ($resourceId) {
-        list($endpoint, $params) = ltiGetLaunchData($ltiApp, $course, $stat, $nonce, $messagetype, $resourceType, $resourceId);
+        list($endpoint, $params) = ltiGetLaunchData($ltiApp, $course, $stat, $resourceType, $resourceId, $messagetype, $nonce);
     } else {
         if (!$is_admin && $stat->status != USER_TEACHER && !$stat->editor && !$stat->tutor) {
             throw new Exception('LTI Error: action requires course editor access.');
