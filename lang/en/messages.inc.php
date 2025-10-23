@@ -6404,3 +6404,17 @@ $langClientId = "Client ID";
 $langClientSecret = "Client Secret";
 $langClientIdHelp = "OAuth Client ID for authentication with the backpack provider";
 $langClientSecretHelp = "OAuth Client Secret for authentication with the backpack provider";
+// Badge Collections
+$langMyBadgeCollections = "My Badge Collections";
+$langFetchCollections = "Fetch Collections";
+$langLoadingCollections = "Loading Collections";
+$langNoCollectionsFound = "No collections found";
+$langClickToFetchCollections = "Click the button above to fetch your badge collections from your connected backpack";
+$langTestConnection = "Test Connection";
+$langTestConnectionInfo = "Test the connection before saving";
+$langTesting = "Testing";
+$langTestResults = "Test Results";
+$langResponse = "Response";
+$langBackpackConnectedWantRefresh = "Backpack connected successfully! Would you like to refresh the page?";
+$langPleaseSelectProviderAndCredentials = "Please select a provider and enter your credentials";
+$langUnknown = "Unknown";

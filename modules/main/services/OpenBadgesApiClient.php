@@ -95,6 +95,7 @@ class OpenBadgesApiClient
         curl_setopt($ch, CURLOPT_MAXREDIRS, 3);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+        curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1); // Force HTTP/1.1 to avoid HTTP/2 issues
 
         $response = curl_exec($ch);
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
@@ -128,10 +129,27 @@ class OpenBadgesApiClient
         curl_setopt($ch, CURLOPT_MAXREDIRS, 3);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+        curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1); // Force HTTP/1.1 to avoid HTTP/2 issues
 
         if ($data) {
-            $jsonData = json_encode($data);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
+            // Check if this is an OAuth token request (form-urlencoded)
+            $isOAuthRequest = isset($data['grant_type']) || strpos($url, '/oauth/token') !== false || strpos($url, '/o/token') !== false;
+            
+            if ($isOAuthRequest) {
+                // OAuth endpoints expect form-urlencoded data
+                $formData = http_build_query($data);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $formData);
+                // Update content-type header for form data
+                $headers = array_filter($headers, function($h) {
+                    return stripos($h, 'Content-Type:') === false;
+                });
+                $headers[] = 'Content-Type: application/x-www-form-urlencoded';
+                curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+            } else {
+                // Regular API endpoints expect JSON
+                $jsonData = json_encode($data);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
+            }
         }
 
         $response = curl_exec($ch);
@@ -166,6 +184,7 @@ class OpenBadgesApiClient
         curl_setopt($ch, CURLOPT_MAXREDIRS, 3);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+        curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1); // Force HTTP/1.1 to avoid HTTP/2 issues
 
         if ($data) {
             $jsonData = json_encode($data);
@@ -204,6 +223,7 @@ class OpenBadgesApiClient
         curl_setopt($ch, CURLOPT_MAXREDIRS, 3);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+        curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1); // Force HTTP/1.1 to avoid HTTP/2 issues
 
         $response = curl_exec($ch);
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);

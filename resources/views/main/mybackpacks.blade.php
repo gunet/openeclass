@@ -67,6 +67,51 @@
                         </div>
                     </div>
                 </div>
+
+                {{-- User's Badge Collections Section --}}
+                <div class='col-12 mt-4'>
+                    <div class='card panelCard px-lg-4 py-lg-3 p-3'>
+                        <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+                            <h3>{{ trans('langMyBadgeCollections') }}</h3>
+                            <button type='button' class='btn btn-primary' id='fetch-collections-btn'>
+                                <i class='fa fa-sync me-1'></i>
+                                {{ trans('langFetchCollections') }}
+                            </button>
+                        </div>
+                        <div class='card-body'>
+                            {{-- Loading State --}}
+                            <div id='collections-loading' style='display: none;' class='text-center py-4'>
+                                <i class='fa fa-spinner fa-spin fa-2x text-primary'></i>
+                                <p class='mt-2'>{{ trans('langLoadingCollections') }}...</p>
+                            </div>
+
+                            {{-- Error State --}}
+                            <div id='collections-error' style='display: none;' class='alert alert-danger'>
+                                <i class='fa-solid fa-triangle-exclamation me-2'></i>
+                                <span id='collections-error-message'></span>
+                            </div>
+
+                            {{-- Empty State --}}
+                            <div id='collections-empty' style='display: none;' class='alert alert-info'>
+                                <i class='fa-solid fa-circle-info me-2'></i>
+                                <span>{{ trans('langNoCollectionsFound') }}</span>
+                            </div>
+
+                            {{-- Collections List --}}
+                            <div id='collections-list' style='display: none;'>
+                                <div class='row' id='collections-container'>
+                                    {{-- Collections will be dynamically inserted here --}}
+                                </div>
+                            </div>
+
+                            {{-- Initial State --}}
+                            <div id='collections-initial' class='text-center py-4 text-muted'>
+                                <i class='fa-solid fa-folder-open fa-3x mb-3'></i>
+                                <p>{{ trans('langClickToFetchCollections') }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             @else
                 {{-- User doesn't have a connected backpack --}}
                 <div class='col-12'>
@@ -194,6 +239,16 @@ document.addEventListener('DOMContentLoaded', function() {
     const responseStatus = document.getElementById('response-status');
     const responseContent = document.getElementById('response-content');
 
+    // Collections fetching functionality
+    const fetchCollectionsBtn = document.getElementById('fetch-collections-btn');
+    const collectionsLoading = document.getElementById('collections-loading');
+    const collectionsError = document.getElementById('collections-error');
+    const collectionsErrorMessage = document.getElementById('collections-error-message');
+    const collectionsEmpty = document.getElementById('collections-empty');
+    const collectionsList = document.getElementById('collections-list');
+    const collectionsContainer = document.getElementById('collections-container');
+    const collectionsInitial = document.getElementById('collections-initial');
+
     if (providerSelect) {
         providerSelect.addEventListener('change', function() {
             const selectedOption = this.options[this.selectedIndex];
@@ -312,6 +367,129 @@ document.addEventListener('DOMContentLoaded', function() {
                 testConnectionBtn.innerHTML = '<i class="fa fa-flask me-1"></i>{{ trans('langTestConnection') }}';
             });
         });
+    }
+
+    // Fetch Collections functionality
+    if (fetchCollectionsBtn) {
+        fetchCollectionsBtn.addEventListener('click', function() {
+            // Hide all states
+            collectionsInitial.style.display = 'none';
+            collectionsError.style.display = 'none';
+            collectionsEmpty.style.display = 'none';
+            collectionsList.style.display = 'none';
+            
+            // Show loading state
+            collectionsLoading.style.display = 'block';
+            fetchCollectionsBtn.disabled = true;
+
+            // Make API call
+            fetch('{{ $urlServer }}modules/backpack/api/collections.php', {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'same-origin'
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(data => {
+                        console.error('API Error Response:', data);
+                        const errorMsg = data.errormessage || 'Failed to fetch collections';
+                        const debugInfo = data.debug ? ` (HTTP ${data.debug.http_code})` : '';
+                        throw new Error(errorMsg + debugInfo);
+                    }).catch(jsonError => {
+                        // If JSON parsing fails, throw generic error
+                        throw new Error(`HTTP ${response.status}: Failed to fetch collections`);
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                collectionsLoading.style.display = 'none';
+                
+                if (data.success && data.data && data.data.length > 0) {
+                    // Display collections
+                    displayCollections(data.data);
+                    collectionsList.style.display = 'block';
+                } else {
+                    // No collections found
+                    collectionsEmpty.style.display = 'block';
+                }
+            })
+            .catch(error => {
+                collectionsLoading.style.display = 'none';
+                collectionsError.style.display = 'block';
+                collectionsErrorMessage.textContent = error.message;
+                console.error('Collections fetch error:', error);
+            })
+            .finally(() => {
+                fetchCollectionsBtn.disabled = false;
+            });
+        });
+
+        // Auto-fetch collections on page load if backpack is connected
+        if (fetchCollectionsBtn) {
+            // Automatically fetch collections when page loads
+            setTimeout(() => {
+                fetchCollectionsBtn.click();
+            }, 500);
+        }
+    }
+
+    /**
+     * Display collections in the UI
+     */
+    function displayCollections(collections) {
+        collectionsContainer.innerHTML = '';
+        
+        collections.forEach(collection => {
+            const collectionCard = createCollectionCard(collection);
+            collectionsContainer.appendChild(collectionCard);
+        });
+    }
+
+    /**
+     * Create a collection card element
+     */
+    function createCollectionCard(collection) {
+        const col = document.createElement('div');
+        col.className = 'col-md-6 col-lg-4 mb-3';
+        
+        // Extract collection data (handle different OpenBadges versions)
+        const name = collection.name || collection.title || 'Untitled Collection';
+        const description = collection.description || '';
+        const badgeCount = collection.badges?.length || collection.assertions?.length || 0;
+        const collectionId = collection.id || collection.entityId || '';
+        
+        col.innerHTML = `
+            <div class='card h-100 shadow-sm'>
+                <div class='card-body'>
+                    <h5 class='card-title'>
+                        <i class='fa fa-folder text-primary me-2'></i>
+                        ${escapeHtml(name)}
+                    </h5>
+                    ${description ? `<p class='card-text text-muted'>${escapeHtml(description)}</p>` : ''}
+                    <div class='mt-3'>
+                        <span class='badge bg-info'>
+                            <i class='fa fa-certificate me-1'></i>
+                            ${badgeCount} ${badgeCount === 1 ? 'Badge' : 'Badges'}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        return col;
+    }
+
+    /**
+     * Escape HTML to prevent XSS
+     */
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
     }
 });
 </script>

@@ -54,7 +54,7 @@ class OpenBadgesEndpointRegistry
                 'description' => 'Import/push badge to backpack'
             ],
             'refresh_token' => [
-                'path' => '/oauth/token',
+                'path' => '/o/token',
                 'method' => 'POST',
                 'auth_required' => false,
                 'description' => 'Refresh OAuth access token'
@@ -102,7 +102,7 @@ class OpenBadgesEndpointRegistry
                 'description' => 'Import/push badge to backpack'
             ],
             'refresh_token' => [
-                'path' => '/oauth/token',
+                'path' => '/o/token',
                 'method' => 'POST',
                 'auth_required' => false,
                 'description' => 'Refresh OAuth access token'
@@ -156,7 +156,7 @@ class OpenBadgesEndpointRegistry
                 'description' => 'Import/push credential to backpack'
             ],
             'refresh_token' => [
-                'path' => '/oauth/token',
+                'path' => '/o/token',
                 'method' => 'POST',
                 'auth_required' => false,
                 'description' => 'Refresh OAuth access token'
