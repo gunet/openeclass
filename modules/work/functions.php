@@ -735,10 +735,9 @@ function display_assignment_submissions($id) {
     $data['row'] = $assign;
     $data['assign'] = $assign;
     $data['cdate'] = date('Y-m-d H:i:s');
-
+    $data['grades_info'] = [];
 
     if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE) {
-        $grades_info = [];
         $users_submissions = Database::get()->queryArray("SELECT user_id FROM assignment_grading_review WHERE assignment_id = ?d", $id);
         $users_grades = Database::get()->queryArray("SELECT id,assignment_id,user_id,file_name,users_id,grade FROM assignment_grading_review WHERE assignment_id = ?d", $id);
         if (count($users_submissions) > 0 && count($users_grades) > 0) {
