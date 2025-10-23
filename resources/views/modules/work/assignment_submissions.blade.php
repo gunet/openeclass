@@ -34,9 +34,10 @@
                         '-1': '{{ trans('langAllOfThem') }}'
                      },
                     'sLengthMenu': '{{ trans('langDisplay') }} _MENU_ {{ trans('langResults2') }}',
-                    'zeroRecords': '{{ trans('langNoResult') }}',
+                    'sEmptyTable': '{{ trans('langNoSubmissions') }}',
+                    'zeroRecords': '{{ trans('langNoSubmissions') }}',
                     'sInfo': '{{ trans('langDisplayed') }} _START_ {{ trans('langTill') }} _END_ {{ trans('langFrom2') }} _TOTAL_ {{ trans('langTotalResults') }}',
-                    'sInfoEmpty': '{{ trans('langDisplayed') }} 0 {{ trans('langTill') }} 0 {{ trans('langFrom2') }} 0 {{ trans('langResults2') }}',
+                    'sInfoEmpty': '',
                     'sInfoFiltered': '',
                     'sInfoPostFix': '',
                     'sSearch': '',
@@ -315,7 +316,7 @@
                                                                         <th class="text-center">{{ trans('langTotal') }}</th>
                                                                     </tr>
                                                                 </thead>
-                                                                @foreach ($grades_info as $index => $g) 
+                                                                @foreach ($grades_info as $index => $g)
                                                                     <tr>
                                                                         <td>{{ uid_to_name($index) }}</td>
                                                                         <td>{!! $g['grade_received'] !!}</td>
@@ -333,7 +334,7 @@
                                                                 <span>{{ trans('langNoInfoAvailable') }}</span>
                                                             </div>
                                                         @endif
-                                                       
+
                                                     </div>
                                                 @else
                                                     <div class='col-12'>
@@ -358,9 +359,9 @@
                                         <em>{{ trans('langFinalGrade') }}</em>
                                     </h3>
                                     <small>
-                                        @if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE) 
+                                        @if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE)
                                             <em>{{ trans('langPhase') }} (3)</em>
-                                        @else 
+                                        @else
                                             <em>{{ trans('langPhase') }} (2)</em>
                                         @endif
                                     </small>
@@ -392,7 +393,7 @@
                                             <p class="text-warning TextBold small-text" style="line-height:14px;">{{ trans('langAddFinalGradeHasNotStartedYet') }}</p>
                                         @endif
                                     @endif
-                                    
+
                                     <form action='{{ $urlAppend }}modules/work/index.php?course={{ $course_code }}' method='post' class='form-inline work-form'>
                                         <input type='hidden' name='grades_id' value='{{ $id }}'>
                                         <div class='table-responsive'>
@@ -569,13 +570,13 @@
                                 </div>
                             </div>
                         </div>
-                        
+
 
                         {{-- Turnitin Results --}}
                         @if ($assign->assignment_type == ASSIGNMENT_TYPE_TURNITIN)
                             {!! show_turnitin_integration($id) !!}
                         @endif
-                        
+
 
                     </div>
                 </div>

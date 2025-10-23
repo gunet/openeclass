@@ -702,6 +702,7 @@ function display_assignment_submissions($id) {
                                                       WHERE course_id = ?d AND id = ?d", $course_id, $id);
     $data = display_assignment_details($assign);
     $count_of_assignments = countSubmissions($id);
+    $data['result'] = [];
     if ($count_of_assignments > 0) {
         $data['result'] = Database::get()->queryArray("SELECT assign.id id, assign.file_name file_name,
                                                 assign.uid uid, assign.group_id group_id,
