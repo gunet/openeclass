@@ -317,8 +317,7 @@ function printPollForm() {
                 
                 <style>
                     .invalid-checkbox {
-                      outline: 1px solid red!important;
-                      outline-offset: 1px;
+                      outline: 1px solid #B70A0A!important;
                     }
                 </style>
             
