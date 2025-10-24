@@ -247,17 +247,22 @@
                     userID: userID
                 },
                 success: function(data) {
-                    console.log(data);
-                    console.log('data',data);
-
                     let resp = (typeof data === 'string') ? (data ? JSON.parse(data) : {}) : (data || {});
 
-                    let checklist = "<form class='form-horizontal' role='form' method='post'>" +
-                        "<div class='d-flex gap-2'><input type='checkbox' id='userRights_CourseAdminTools' name='userRights_CourseAdminTools'><label for='userRights_CourseAdminTools'>{{ js_escape(trans('langCourseAdminTools')) }}</label></div>" +
-                        "<div class='d-flex gap-2'><input type='checkbox' id='userRights_AdminUsers' name='userRights_AdminUsers'><label for='userRights_AdminUsers'>{{ js_escape(trans('langAdminUsers')) }}</label></div>" +
-                        "<div class='d-flex gap-2'><input type='checkbox' id='userRights_ArchiveCourse' name='userRights_ArchiveCourse'><label for='userRights_ArchiveCourse'>{{ js_escape(trans('langArchiveCourse')) }}</label></div>" +
-                        "<div class='d-flex gap-2'><input type='checkbox' id='userRights_CloneCourse' name='userRights_CloneCourse'><label for='userRights_CloneCourse'>{{ js_escape(trans('langCloneCourse')) }}</label></div>" +
-                        "</form>";
+                    let @if (get_config('allow_teacher_clone_course'))
+                        checklist = "<form class='form-horizontal' role='form' method='post'>" +
+                            "<div class='d-flex gap-2'><input type='checkbox' id='userRights_CourseAdminTools' name='userRights_CourseAdminTools'><label for='userRights_CourseAdminTools'>{{ js_escape(trans('langCourseAdminTools')) }}</label></div>" +
+                            "<div class='d-flex gap-2'><input type='checkbox' id='userRights_AdminUsers' name='userRights_AdminUsers'><label for='userRights_AdminUsers'>{{ js_escape(trans('langAdminUsers')) }}</label></div>" +
+                            "<div class='d-flex gap-2'><input type='checkbox' id='userRights_ArchiveCourse' name='userRights_ArchiveCourse'><label for='userRights_ArchiveCourse'>{{ js_escape(trans('langArchiveCourse')) }}</label></div>" +
+                            "<div class='d-flex gap-2'><input type='checkbox' id='userRights_CloneCourse' name='userRights_CloneCourse'><label for='userRights_CloneCourse'>{{ js_escape(trans('langCloneCourse')) }}</label></div>" +
+                            "</form>";
+                    @else
+                        checklist = "<form class='form-horizontal' role='form' method='post'>" +
+                            "<div class='d-flex gap-2'><input type='checkbox' id='userRights_CourseAdminTools' name='userRights_CourseAdminTools'><label for='userRights_CourseAdminTools'>{{ js_escape(trans('langCourseAdminTools')) }}</label></div>" +
+                            "<div class='d-flex gap-2'><input type='checkbox' id='userRights_AdminUsers' name='userRights_AdminUsers'><label for='userRights_AdminUsers'>{{ js_escape(trans('langAdminUsers')) }}</label></div>" +
+                            "<div class='d-flex gap-2'><input type='checkbox' id='userRights_ArchiveCourse' name='userRights_ArchiveCourse'><label for='userRights_ArchiveCourse'>{{ js_escape(trans('langArchiveCourse')) }}</label></div>" +
+                            "</form>";
+                    @endif
 
                     bootbox.confirm({
                         closeButton: false,

@@ -269,7 +269,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH'])
                 'url' => "#",
                 'icon' => "fa-list-check",
                 'class' => 'rights_menu',
-                'show' => $myrow->status != USER_GUEST,
+                'show' => ($myrow->status != USER_TEACHER && $myrow->status != USER_GUEST),
             ),
             array(
                 'title' => $langGiveRightReviewer,
