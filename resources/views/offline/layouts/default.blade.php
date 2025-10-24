@@ -28,9 +28,8 @@
     {{-- fullcalendar v3.10.2 --}}
     <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}js/fullcalendar/fullcalendar.css"/>
 
-    {{-- DataTables 1.10.19 version --}}
-    <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/jquery.dataTables.min.css"/>
-
+    {{-- DataTables --}}
+    <link rel="stylesheet" href="{{ $urlAppend }}js/datatables/datatables.min.css">
 
     {{-- Our css modern if we need it --}}
     <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/slick.css"/>
@@ -54,8 +53,8 @@
     {{-- Bootstrap v5 js --}}
     <script type="text/javascript" src="{{ $urlAppend }}js/bootstrap.bundle.min.js"></script>
 
-    {{-- DataTables v1.10.19 and Checkitor v11.0.1 js--}}
-    <script src="{{ $urlAppend }}js/jquery.dataTables.min.js"></script>
+    {{-- DataTables and Checkitor v11.0.1 js--}}
+    <script src="{{ $urlAppend }}js/datatables/datatables.min.js"></script>
     <script src="{{ $urlAppend }}js/classic-ckeditor.js"></script>
 
     {{-- Bootbox --}}

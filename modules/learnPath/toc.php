@@ -44,10 +44,7 @@ echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www
     
     <!-- Latest compiled and minified JavaScript -->
     <script src='{$urlAppend}js/bootstrap.bundle.min.js'></script>
-
-    <!-- DataTables and Checkitor js-->
-    <script src='{$urlAppend}js/jquery.dataTables.min.js'></script>
-        
+       
     <!-- Latest compiled and minified css -->
     <link rel='stylesheet' href='{$urlAppend}template/modern/css/bootstrap.min.css'>
 

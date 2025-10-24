@@ -151,9 +151,9 @@ $head_content .= "
         aaSorting: [[0, 'desc']],
         oLanguage: {
           sLengthMenu:  '$langDisplay _MENU_ $langResults2',
-          zeroRecords: '$langNoResult',
+          sZeroRecords: '$langNoResult',
           sInfo:        '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
-          sInfoEmpty:   '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
+          sInfoEmpty:   '',
           sInfoFiltered: '',
           sInfoPostFix: '',
           sSearch:    '',

@@ -273,10 +273,9 @@ $(document).ready(function(){
             'processing': true,
             'oLanguage': {
             'sLengthMenu':   langDisplay +' _MENU_ '+ langResults,
-            'zeroRecords':  langNoResult,
-            'emptyTable':   langNoResult,
+            'sZeroRecords':   langNoResult,
             'sInfo':         langDisplayed+' _START_ '+langTill+' _END_ '+langFrom+' _TOTAL_ '+langTotalResults,
-            'sInfoEmpty':    langDisplayed+' 0 '+langTill+' 0 '+langFrom+' 0 '+langResults,
+            'sInfoEmpty':    '',
             'sInfoFiltered': '',
             'sInfoPostFix':  '',
             'sSearch':       langSearch+' ',

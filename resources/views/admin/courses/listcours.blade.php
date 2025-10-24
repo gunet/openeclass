@@ -27,9 +27,9 @@
                         '-1': '{{ trans('langAllOfThem') }}'
                     },
                     "sLengthMenu":   "{{ trans('langDisplay') }} _MENU_ {{ trans('langResults2') }}",
-                    "zeroRecords":  "{{ trans('langNoResult') }}",
+                    "sZeroRecords":  "{{ trans('langNoResult') }}",
                     "sInfo":         " {{ trans('langDisplayed') }} _START_ {{ trans('langTill') }} _END_ {{ trans('langFrom2') }} _TOTAL_ {{ trans('langToralResults') }}",
-                    "sInfoEmpty":    " {{ trans('langDisplayed') }} 0 {{ trans('langTill') }} 0 {{ trans('langFrom2') }} 0 {{ trans('langResults2') }}",
+                    "sInfoEmpty":    '',
                     "sInfoFiltered": '',
                     "sInfoPostFix":  '',
                     "sSearch":       '{{ trans('langSearch') }}',

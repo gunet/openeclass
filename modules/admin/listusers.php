@@ -497,9 +497,9 @@ $head_content .= "<script>
                     '-1': '" . js_escape($langAllOfThem) . "'
                 },
                'sLengthMenu':   '" . js_escape("$langDisplay _MENU_ $langResults2") . "',
-               'zeroRecords':  '" . js_escape($langNoResult) . "',
+               'sZeroRecords':  '" . js_escape($langNoResult) . "',
                'sInfo':         '" . js_escape("$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults") . "',
-               'sInfoEmpty':    '" . js_escape("$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2") . "',
+               'sInfoEmpty':    '',
                'sInfoFiltered': '',
                'sInfoPostFix':  '',
                'sSearch':       '" . js_escape($langSearch) . "',               

@@ -144,12 +144,11 @@
                     '-1': '{{ trans('langAllOfThem') }}'
                 },
                 sLengthMenu: '{{ js_escape(trans('langDisplay') . ' _MENU_ ' . trans('langResults2')) }}',
-                zeroRecords: '{{ js_escape(trans('langNoResult')) }}',
+                sZeroRecords: '{{ js_escape(trans('langNoResult')) }}',
                 sInfo: '{{ js_escape(trans('langDisplayed') . ' _START_ ' .
                                      trans('langTill') . ' _END_ ' . trans('langFrom2') .
                                      ' _TOTAL_ ' . trans('langTotalResults')) }}',
-                sInfoEmpty: '{{ js_escape(trans('langDisplayed') . ' 0 ' . trans('langTill') .
-                                          ' 0 ' . trans('langFrom2') . ' 0 ' . trans('langResults2')) }}',
+                sInfoEmpty: '',
                 sInfoFiltered: '',
                 sInfoPostFix:  '',
                 sSearch:       '',

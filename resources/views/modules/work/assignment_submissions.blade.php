@@ -35,7 +35,7 @@
                      },
                     'sLengthMenu': '{{ trans('langDisplay') }} _MENU_ {{ trans('langResults2') }}',
                     'sEmptyTable': '{{ trans('langNoSubmissions') }}',
-                    'zeroRecords': '{{ trans('langNoSubmissions') }}',
+                    'sZeroRecords': '{{ trans('langNoSubmissions') }}',
                     'sInfo': '{{ trans('langDisplayed') }} _START_ {{ trans('langTill') }} _END_ {{ trans('langFrom2') }} _TOTAL_ {{ trans('langTotalResults') }}',
                     'sInfoEmpty': '',
                     'sInfoFiltered': '',

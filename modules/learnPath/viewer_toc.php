@@ -223,10 +223,7 @@ echo "<!DOCTYPE HTML>
     <script type='text/javascript' src='{$urlAppend}js/custom.js'></script>
 
     <!-- SlimScroll -->
-    <script src='{$urlAppend}js/jquery.slimscroll.min.js'></script>
-
-    <!-- DataTables and Checkitor js-->
-    <script src='{$urlAppend}js/jquery.dataTables.min.js'></script>
+    <script src='{$urlAppend}js/jquery.slimscroll.min.js'></script>   
 
     <!-- Latest compiled and minified css -->
     <link rel='stylesheet' href='{$urlAppend}template/modern/css/bootstrap.min.css?v=".CACHE_SUFFIX."'>

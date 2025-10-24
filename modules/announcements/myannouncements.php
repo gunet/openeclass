@@ -123,10 +123,11 @@ $head_content .= "
                    'lengthLabels': { 
                        '-1': '$langAllOfThem' 
                     },
-                   'sLengthMenu':   '$langDisplay _MENU_ $langResults2',                   
-                   'zeroRecords':  '".js_escape($langNoResult)."',
+                   'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
+                   'sEmptyTable':  '".js_escape($langNoResult)."',                   
+                   'sZeroRecords':  '".js_escape($langNoResult)."',
                    'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
-                   'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
+                   'sInfoEmpty':    '',
                    'sInfoFiltered': '',
                    'sInfoPostFix':  '',
                    'sSearch':       '',

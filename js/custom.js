@@ -380,7 +380,7 @@ function build_notification_callback(type) {
 function initialize_lesson_display (pages) {
     var languageOptions = {
         "sLengthMenu": msg.langDisplay + " _MENU_ " + msg.langResults2,
-        "zeroRecords": msg.langNoResult,
+        "sZeroRecords": msg.langNoResult,
         "sInfo": " " + msg.langDisplayed + " _START_ " + msg.langTill + " _END_ " + msg.langFrom2 + " _TOTAL_ " + msg.langTotalResults,
         "sInfoEmpty": " " + msg.langDisplayed + " 0 " + msg.langTill + " 0 " + msg.langFrom2 + " 0 " + msg.langResults2,
         "sInfoFiltered": '',
