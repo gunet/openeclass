@@ -73,6 +73,34 @@
                                                         @elseif ($row->assign_to_specific == 2)
                                                             <a class='assigned_to' data-ass_id='{{ $row->id }}'><small class='help-block link-color'>{{ trans('langWorkAssignTo') }}: {{ trans('langWorkToGroup') }}</small></a>
                                                         @endif
+
+                                                        @if ($row->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE && $row->start_date_review && $row->due_date_review)
+                                                            <p class="TextBold mt-2 mb-0 text-decoration-underline">{{ trans('langGradeReviews')}}</p>
+                                                            <p class="TextBold mb-0">{{ trans('langStartDate') }}:&nbsp;<span>{{ format_locale_date(strtotime($row->start_date_review), 'short') }}</span></p>
+                                                            <p class="TextBold mb-0">{{ trans('langEndDate') }}:&nbsp;<span>{{ format_locale_date(strtotime($row->due_date_review), 'short') }}</span></p>
+                                                            @if ( strtotime(date("d-m-Y H:i:s")) < strtotime($row->start_date_review) )
+                                                                <p class="text-warning TextBold small-text mt-2" style="line-height:14px;">{{ trans('langGradeReviewHasNotStarted') }}</p>
+                                                            @elseif ( strtotime(date("d-m-Y H:i:s")) > strtotime($row->start_date_review) && strtotime(date("d-m-Y H:i:s")) < strtotime($row->due_date_review))
+                                                                <p class="text-success TextBold small-text mt-2" style="line-height:14px;">{{ trans('langGradeReviewInProgress') }}</p>
+                                                                <div class="mt-2">
+                                                                    <div class='spinner-grow text-success spinner-grow-sm' role='status'>
+                                                                        <span class='visually-hidden'></span>
+                                                                    </div>
+                                                                    <div class='spinner-grow text-danger spinner-grow-sm' role='status'>
+                                                                        <span class='visually-hidden'></span>
+                                                                    </div>
+                                                                    <div class='spinner-grow text-warning spinner-grow-sm' role='status'>
+                                                                        <span class='visually-hidden'></span>
+                                                                    </div>
+                                                                    <div class='spinner-grow text-info spinner-grow-sm' role='status'>
+                                                                        <span class='visually-hidden'></span>
+                                                                    </div>
+                                                                </div>
+                                                            @elseif (strtotime(date("d-m-Y H:i:s")) > strtotime($row->due_date_review))
+                                                                <p class="text-danger TextBold small-text mt-2" style="line-height:14px;">{{ trans('langGradeReviewHasExpired') }}</p>
+                                                            @endif
+                                                        @endif
+                                                        
                                                     </td>
 
                                                     <td class='text-center'>
