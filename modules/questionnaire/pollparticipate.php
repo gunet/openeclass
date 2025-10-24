@@ -258,13 +258,74 @@ function printPollForm() {
                 }
             });
         });
-    </script>";
+    </script>
+    
+    ";
 
     $pid = $_REQUEST['pid'];
     //      Get poll data
     $thePoll = Database::get()->querySingle("SELECT * FROM poll WHERE course_id = ?d AND pid = ?d ORDER BY pid",$course_id, $pid);
     $multiple_submissions = $thePoll->multiple_submissions;
     $default_answer = $thePoll->default_answer;
+
+    if ($thePoll->require_answer) {
+        $head_content .= "            
+            <script>
+                document.addEventListener('DOMContentLoaded', () => { 
+                    const form = document.getElementById('poll'); 
+                    form.querySelectorAll('input, textarea').forEach(el => {
+                        if (['radio', 'textarea'].includes(el.type) || el.tagName === 'TEXTAREA') { 
+                            el.required = true; } 
+                    }); 
+                });
+                        
+                document.addEventListener('DOMContentLoaded', () => {
+                  const form = document.getElementById('poll');
+                  if (!form) return;
+                
+                  form.addEventListener('submit', e => {
+                    let valid = true;
+                    const checkboxGroups = {};
+                    form.querySelectorAll('input[type=\\\"checkbox\\\"]').forEach(cb => {
+                      const name = cb.name;
+                      if (!checkboxGroups[name]) checkboxGroups[name] = [];
+                      checkboxGroups[name].push(cb);
+                    });
+                
+                    for (const boxes of Object.values(checkboxGroups)) {
+                      if (!boxes.some(cb => cb.checked)) {
+                        valid = false;
+                        boxes.forEach(cb => cb.classList.add('invalid-checkbox'));
+                      } else {
+                        boxes.forEach(cb => cb.classList.remove('invalid-checkbox'));
+                      }
+                    }
+                
+                    if (!valid) e.preventDefault();
+                  });
+                
+                  form.querySelectorAll('input[type=\\\"checkbox\\\"]').forEach(cb => {
+                    cb.addEventListener('change', () => {
+                      const group = form.querySelectorAll('input[name=\\\"' + cb.name + '\\\"]');
+                      if ([...group].some(g => g.checked)) {
+                        group.forEach(g => g.classList.remove('invalid-checkbox'));
+                      }
+                    });
+                  });
+                });
+                </script>
+                
+                <style>
+                    .invalid-checkbox {
+                      outline: 1px solid red!important;
+                      outline-offset: 1px;
+                    }
+                </style>
+            
+            ";
+
+    }
+
     // check if user has participated
     $has_participated = Database::get()->querySingle("SELECT COUNT(*) AS count FROM poll_user_record WHERE uid = ?d AND pid = ?d", $uid, $pid)->count;
     if ($uid && $has_participated > 0 && !$is_editor && !$multiple_submissions) {
@@ -626,13 +687,13 @@ function printPollForm() {
             $query_params[] = $uid;
             $result = Database::get()->queryArray($query, $query_params);
             if (count($result) > 0) {
-                $tool_content .= "<input class='btn submitAdminBtn blockUI' name='submit' type='submit' value='" . q($langSubmit) . "'>";
+                $tool_content .= "<input class='btn submitAdminBtn' name='submit' type='submit' value='" . q($langSubmit) . "'>";
             } else {
                 $tool_content .= "<a class='btn cancelAdminBtn' href='index.php?course=$course_code'>" . q($langBack) . "</a>";
             }
         } else {
             if (!$temp_IsLime) {
-                $tool_content .= "<input class='btn submitAdminBtn blockUI' name='submit' type='submit' value='" . q($langSubmit) . "'>";
+                $tool_content .= "<input class='btn submitAdminBtn' name='submit' type='submit' value='" . q($langSubmit) . "'>";
                 if (isset($_REQUEST['unit_id'])) {
                     $tool_content .= "<a class='btn cancelAdminBtn ms-3' href='../units/index.php?course=$course_code&amp;id=$_REQUEST[unit_id]'>" . q($langCancel) . "</a>";
                 } else {
@@ -793,6 +854,7 @@ function submitPoll() {
                 }
                 $answer_text = '';
             } elseif ($qtype == QTYPE_FILL) {
+                $_SESSION['q_answer'] = $answer;
                 $answer_text = trim($answer[$pqid]);
                 if ($answer_text === '' and !$default_answer and !$atleast_one_answer) {
                     continue;
@@ -843,8 +905,8 @@ function submitPoll() {
                 }
             }
             $_SESSION["poll_answers_$pid"] = $session_answers;
-            Database::get()->query('DELETE FROM poll_answer_record WHERE poll_user_record_id = ?d', $user_record_id);
-            Database::get()->query('DELETE FROM poll_user_record WHERE id = ?d', $user_record_id);
+//            Database::get()->query('DELETE FROM poll_answer_record WHERE poll_user_record_id = ?d', $user_record_id);
+//            Database::get()->query('DELETE FROM poll_user_record WHERE id = ?d', $user_record_id);
             Session::flash('message', $langQFillInAllQs);
             Session::flash('alert-class', 'alert-warning');
             redirect_to_home_page("modules/questionnaire/pollparticipate.php?course=$course_code&UseCase=1&pid=$pid");
