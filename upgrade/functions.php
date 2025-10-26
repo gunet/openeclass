@@ -3379,7 +3379,7 @@ function upgrade_to_4_2($tbl_options) : void {
         Database::get()->query("ALTER TABLE `course_lti_app` ADD `visible` TINYINT(1) NOT NULL DEFAULT 1");
     }
     
-    Database::get()->query("CREATE TABLE `game` (
+    Database::get()->query("CREATE TABLE `points_game` (
         `id` int(11) not null auto_increment primary key,
         `course_id` int(11) not null,
         `title` varchar(255) not null,
@@ -3389,53 +3389,57 @@ function upgrade_to_4_2($tbl_options) : void {
         `starts` datetime,
         `expires` datetime,
         `config` text,
-        index `game_course` (`course_id`),
+        index `points_game_course` (`course_id`),
         foreign key (`course_id`) references `course` (`id`)
     ) $tbl_options");
       
-    Database::get()->query("CREATE TABLE `game_criterion` (
+    Database::get()->query("CREATE TABLE `points_game_criterion` (
         `id` int(11) not null auto_increment primary key,
-        `game` int(11) not null,
+        `points_game` int(11) not null,
         `activity_type` varchar(255),
         `module` int(11),
         `resource` int(11),
         `threshold` decimal(7,2),
         `operator` varchar(20),
         `points` int(11),
-        foreign key (`game`) references `game`(`id`)
+        `criterion_type` varchar(20) not null,
+        `max_points_from_criterion` int(11),
+        `max_points_from_criterion_time_period` int(11),
+        `time_period_in_days` int(11),
+        foreign key (`points_game`) references `points_game`(`id`)
     ) $tbl_options");
       
-    Database::get()->query("CREATE TABLE `game_levels` (
+    Database::get()->query("CREATE TABLE `points_game_levels` (
         `id` int(11) not null auto_increment primary key,
-        `game` int(11) not null,
+        `points_game` int(11) not null,
         `friendly_name` varchar(255),
         `required_points` int(11) not null,
         `sortorder` int(11) not null,
-        foreign key (`game`) references `game`(`id`)
+        foreign key (`points_game`) references `points_game`(`id`)
     ) $tbl_options");
       
-    Database::get()->query("CREATE TABLE `user_game_criterion` (
+    Database::get()->query("CREATE TABLE `user_points_game_criterion` (
         `id` int(11) not null auto_increment primary key,
         `user` int(11) not null,
-        `game_criterion` int(11) not null,
+        `points_game_criterion` int(11) not null,
         `points_awarded` int(11) not null,
         `created` datetime not null DEFAULT CURRENT_TIMESTAMP,
-        unique key `user_game_criterion` (`user`, `game_criterion`),
+        unique key `user_points_game_criterion` (`user`, `points_game_criterion`),
         foreign key (`user`) references `user`(`id`),
-        foreign key (`game_criterion`) references `game_criterion`(`id`)
+        foreign key (`points_game_criterion`) references `points_game_criterion`(`id`)
     ) $tbl_options");
       
-    Database::get()->query("CREATE TABLE `user_game_points` (
+    Database::get()->query("CREATE TABLE `user_points_game_points` (
         `id` int(11) not null auto_increment primary key,
         `user` int(11) not null,
-        `game` int(11) not null,
+        `points_game` int(11) not null,
         `total_points` int(11) not null,
         `current_level` int(11) not null,
-        unique key `user_game_points` (`user`, `game`),
-        index `user_game_points_leaderboard` (`game`, `total_points` DESC),
+        unique key `user_points_game_points` (`user`, `points_game`),
+        index `user_points_game_leaderboard` (`points_game`, `total_points` DESC),
         foreign key (`user`) references `user`(`id`),
-        foreign key (`game`) references `game`(`id`),
-        foreign key (`current_level`) references `game_levels`(`id`)
+        foreign key (`points_game`) references `points_game`(`id`),
+        foreign key (`current_level`) references `points_game_levels`(`id`)
     ) $tbl_options");
 }
 
