@@ -167,16 +167,13 @@
                     </div>
 
                 @else
-                    {!! action_bar(array(
-                        array('title' => trans('langAddProvider'),
-                            'url' => "$_SERVER[SCRIPT_NAME]?add_provider",
-                            'icon' => 'fa-solid fa-plug',
-                            'level' => 'primary-label',
-                            'button-class' => 'btn-success')
-                        ));
-                    !!}
-
                 {{-- list of AI providers --}}
+                    <h3>
+                        {{ trans('langProviders') }}
+                        <a href="{{ $_SERVER['SCRIPT_NAME'] }}?add_provider">
+                            <span class="fa-solid fa-circle-plus fa-lg" title="{{ trans('langAddProvider') }}" data-bs-original-title="{{ trans('langAddProvider') }}" data-bs-toggle="tooltip" data-bs-placement="top"></span>
+                        </a>
+                    </h3>
                     <div class='table-responsive'>
                         <table class='table-default'>
                             <thead>
@@ -212,16 +209,15 @@
                     </div>
 
 
-                    {!! action_bar(array(
-                            array('title' => trans('langAssignAIToModule'),
-                                'url' => "$_SERVER[SCRIPT_NAME]?add_service",
-                                'icon' => 'fa-plus',
-                                'level' => 'primary-label',
-                                'button-class' => 'btn-success')
-                            ));
-                        !!}
+
 
                     {{-- list of AI modules --}}
+                    <h3 class='mt-4'>
+                        {{ trans('langModules') }}
+                        <a href="{{ $_SERVER['SCRIPT_NAME'] }}?add_service">
+                            <span class="fa-solid fa-circle-plus fa-lg" title="{{ trans('langAssignAIToModule') }}" data-bs-original-title="{{ trans('langAssignAIToModule') }}" data-bs-toggle="tooltip" data-bs-placement="top"></span>
+                        </a>
+                    </h3>
                     <div class='table-responsive'>
                         <table class='table-default'>
                             <thead>

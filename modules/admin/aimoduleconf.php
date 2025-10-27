@@ -26,6 +26,7 @@ require_once 'include/lib/ai/AIProviderFactory.php';
 require_once 'include/lib/ai/services/AIService.php';
 
 $toolName = $langAINode;
+
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'extapp.php', 'name' => $langExtAppConfig);
 
