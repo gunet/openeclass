@@ -304,7 +304,7 @@ foreach ($result as $row) {
                         array(
                             'title' => "$langAuthChangeto $langAttemptCompleted",
                             'url' => "results.php?course=$course_code&exerciseId=$exerciseId&modifyAttempID=$row2->eurid&status=" . ATTEMPT_COMPLETED . "",
-                            'icon' => "fa-solid fa-hourglass-end",
+                            'icon' => "fa-solid fa-check",
                             'show' => $allow_change_status,
                             'class' => 'warning-delete',
                             'confirm' => $langConfirmModifyAttemptText,

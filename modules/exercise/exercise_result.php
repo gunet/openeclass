@@ -177,6 +177,7 @@ if ($is_editor && ($exercise_user_record->attempt_status == ATTEMPT_PENDING || $
                         if (success) {
                             $('a#submitButton').removeClass('submitAdminBtn').addClass('successAdminBtn pe-none');
                             $('#text_submit').text('".js_escape($langGradebookLimit)."');
+                            $('#cancel_submit').text('".js_escape($langBack)."');
                         }
                     });
                     $('a#ungraded').click(function(e){
@@ -657,7 +658,10 @@ if ($checking) {
 }
 
 if (!isset($_GET['pdf']) and $is_editor) {
-    $tool_content .= "<div class='col-12 d-flex justify-content-start align-items-center mt-5'><a class='btn submitAdminBtn submitAdminBtnDefault' href='index.php' id='submitButton'><span id='text_submit' class='TextBold'>$langSubmit</span></a></div>";
+    $tool_content .= "<div class='col-12 d-flex justify-content-start align-items-center mt-4'>
+        <a class='btn submitAdminBtn submitAdminBtnDefault' href='index.php' id='submitButton'><span id='text_submit' class='TextBold'>$langSubmit</span></a>
+        <a class='btn cancelAdminBtn m-2' href='results.php?course=$course_code&exerciseId=" . getIndirectReference($exercise_user_record->eid) . "'' id='cancelButton'><span id='cancel_submit' class='TextBold'>$langCancel</span></a>
+    </div>";
 }
 
 if (isset($_GET['pdf'])) {
@@ -718,7 +722,7 @@ if (isset($_GET['pdf'])) {
             ]
     ]);
 
-    
+
     $mpdf->SetHTMLHeader(get_platform_logo());
     $footerHtml = '
     <div>
