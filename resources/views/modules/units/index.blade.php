@@ -336,12 +336,6 @@
                                                             'level' => 'secondary',
                                                             'show' => !is_module_disable_FC(MODULE_ID_GLOSSARY, $course_code, $id, $in_home->activity_id)),
 
-                                                        array('title' => trans('langAdd') . ' ' . trans('langInsertWall'),
-                                                            'url' => $base_url . 'wall&fc_type=0&act_name=' . $act_title . '&act_id=' . $in_home->activity_id,
-                                                            'icon' => 'fa-solid fa-quote-left',
-                                                            'level' => 'secondary',
-                                                            'show' => !is_module_disable_FC(MODULE_ID_WALL, $course_code, $id, $in_home->activity_id)),
-
                                                         array('title' => trans('langAdd') . ' ' . trans('langBlog'),
                                                             'url' => $base_url . 'blog&fc_type=0&act_name=' . $act_title . '&act_id=' . $in_home->activity_id,
                                                             'icon' => 'fa-solid fa-globe',
@@ -483,12 +477,6 @@
                                                                 'icon' => 'fa fa-list',
                                                                 'level' => 'secondary',
                                                                 'show' => !is_module_disable_FC(MODULE_ID_GLOSSARY,$course_code,$id,$in_class->activity_id)),
-
-                                                            array('title' => trans('langAdd').' '.trans('langInsertWall'),
-                                                                'url' => $base_url . 'wall&fc_type=1&act_name='. $act_title. '&act_id='.$in_class->activity_id,
-                                                                'icon' => 'fa-solid fa-quote-left',
-                                                                'level' => 'secondary',
-                                                                'show' => !is_module_disable_FC(MODULE_ID_WALL,$course_code,$id,$in_class->activity_id)),
 
                                                             array('title' => trans('langAdd').' '.trans('langGroups'),
                                                                 'url' => $base_url . 'group&fc_type=1&act_name='. $act_title. '&act_id='.$in_class->activity_id,
@@ -641,12 +629,6 @@
                                                         'level' => 'secondary',
                                                         'show' => !is_module_disable_FC(MODULE_ID_GLOSSARY,$course_code,$id,$after_class->activity_id)),
 
-                                                    array('title' => trans('langAdd').' '.trans('langInsertBlog'),
-                                                        'url' => $base_url . 'wall&fc_type=2&act_name='. $act_title. '&act_id='.$after_class->activity_id,
-                                                        'icon' => 'fa-solid fa-quote-left',
-                                                        'level' => 'secondary',
-                                                        'show' => !is_module_disable_FC(MODULE_ID_WALL,$course_code,$id,$after_class->activity_id)),
-
                                                     array('title' => trans('langAdd').' '.trans('langGroups'),
                                                         'url' => $base_url . 'group&fc_type=2&act_name=='. $act_title. '&act_id='.$after_class->activity_id,
                                                         'icon' => 'fa fa-users',
@@ -688,12 +670,6 @@
                                                         'icon' => 'fa fa-comments',
                                                         'level' => 'secondary',
                                                         'show' => !is_module_disable_FC(MODULE_ID_FORUM,$course_code,$id,$after_class->activity_id)),
-
-                                                    array('title' => trans('langAdd') . ' ' . trans('langInsertWork'),
-                                                            'url' => $base_url . 'work&fc_type=2&act_name=' . $act_title . '&act_id=' . $after_class->activity_id,
-                                                            'icon' => 'fa fa-upload',
-                                                            'level' => 'secondary',
-                                                            'show' => !is_module_disable_FC(MODULE_ID_ASSIGN, $course_code, $id, $after_class->activity_id)),
 
                                                 ),'',true) !!}
 

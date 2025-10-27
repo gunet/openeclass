@@ -110,20 +110,11 @@ if (!isset($_POST['final_submit'])) {
                 $validationFailed = true;
             }
 
-            if (empty($_SESSION['units']) or $_SESSION['goals'][0] == "") {
+            if (empty($_SESSION['units']) or $_SESSION['units'][0] == "") {
                 Session::flash('message', $langEmptyUnit);
                 Session::flash('alert-class', 'alert-warning');
                 $validationFailed = true;
             }
-
-
-            if (empty($_SESSION['stunum'])||empty($_SESSION['lectnum'])||empty($_SESSION['lecthours'])||empty($_SESSION['homehours'])) {
-                Session::flash('message', $langFieldsMissing);
-                Session::flash('alert-class', 'alert-warning');
-                $validationFailed = true;
-
-            }
-
 
             if ($validationFailed) {
                 redirect_to_home_page('modules/create_course/flipped_classroom.php');

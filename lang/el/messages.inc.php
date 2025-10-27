@@ -719,7 +719,7 @@ $langEnableUserNotifications = "Εμφάνιση ειδοποιήσεων από
 $langCustomEnableUserNotifications = "Εμφάνιση ειδοποιήσεων των";
 $langDefaultCourseAccess = 'Προεπιλεγμένος τύπος πρόσβασης';
 
-$langFlippedClassroom = "Μοντέλο Ανεστραμμένης Τάξης";
+$langFlippedClassroom = "Μοντέλο Ανεστραμμένης Μάθησης";
 $langCEnabled = "Ενεργό";
 $langGoals = "Μαθησιακοί στόχοι";
 $langGoalTitle = "Στόχος";
@@ -738,8 +738,8 @@ $langFinalSubmit = "Τελική Υποβολή";
 $langCont = "Περιεχόμενο";
 $langActivities = "Δραστηριότητες";
 $langGroupActivities = "Ομαδικές Δραστηριότητες";
-$langEmptyGoal ="Συμπληρώστε όλους τους μαθησιακούς στόχους που έχετε δημιουργήσει.";
-$langEmptyUnit ="Συμπληρώστε όλες τις θεματικές ενότητες που έχετε δημιουργήσει.";
+$langEmptyGoal ="Θα πρέπει να ορίσετε ένα τουλάχιστον μαθησιακό στόχο";
+$langEmptyUnit ="Θα πρέπει να συμπληρώσετε μια τουλάχιστον ενότητα";
 $langActSelect = "Επιλέξτε τις δραστηριότητες";
 $langActInHome = "Πριν την τάξη";
 $langActInClass = "Στην τάξη";
@@ -755,11 +755,11 @@ $langFCWorkPaper = "Φύλλα Εργασίας";
 $langFCRolePlay= "Παιχνίδι ρόλων";
 $langFCSimulate="Προσομοίωση";
 $langFCProblemSolving = "Επίλυση προβλήματος";
-$langFCMindMap="Δραστηριότητα εννοιολογικού χάρτη";
+$langFCMindMap="Δραστηριότητα νοητικού χάρτη";
 $langFCEvaluate = "Αξιολόγηση - Αναστοχασμός";
 $langFCDigitalStorytelling = "Ψηφιακή Αφήγηση";
 $langFCSupportingMaterial="Υποστηρικτικό Υλικό";
-$langFlippedEdit = "Επεξεργασία του Μοντέλου Ανεστραμμένης Τάξης";
+$langFlippedEdit = "Επεξεργασία του Μοντέλου Ανεστραμμένης Μάθησησς";
 $langJustEdited = "Μόλις ενημερώσατε το μάθημα με τίτλο ";
 $langUnitActivityDeleteConfirm= "Είστε σίγουρη/σίγουρος ότι θέλετε να διαγραφεί η συγκεκριμένη δραστηριότητα;";
 $langUnitJustEdited="Οι δραστηριότητες ενημερώθηκαν";
@@ -1307,7 +1307,7 @@ $langSubsystems = "Επιλέξτε τα υποσυστήματα που θέλ�
 $langLanguageTip = "Επιλέξτε σε ποια γλώσσα θα εμφανίζονται οι σελίδες του $langsOfCourse";
 $langAccess = "Τύπος Πρόσβασης:";
 $langAvailableTypes = "Διαθέσιμοι τύποι πρόσβασης";
-$langModules = "Υποσυστήματα:";
+$langModules = "Υποσυστήματα";
 $langTestForum = "Γενικές συζητήσεις";
 $langDelAdmin = "Περιοχή συζητήσεων για κάθε θέμα που αφορά το $langsCourse";
 $langExMessage = "Παράδειγμα Μηνύματος";
@@ -1851,7 +1851,7 @@ $langMetaMap = "Χάρτης";
 $langMetaInteractivemap = "Διαδραστικός Χάρτης";
 $langMetaExploration = "Διερεύνηση";
 $langMetaInteractivegame = "Διαδραστικό παιχνίδι";
-$langMetaConceptualmap = "Εννοιολογικός Χάρτης";
+$langMetaConceptualmap = "Νοητικός Χάρτης";
 $langMetaIndex = "Ευρετήριο";
 $langMetaProblemstatement = "Διατύπωση Προβλήματος";
 $langMetaSelfassessment = "Αυτοαξιολόγηση";
@@ -6581,7 +6581,7 @@ $langOpenMeetingsModuleKey = "Module key";
 $langOpenMeetingsWebApp = "Όνομα WebApp";
 
 // Mindmap
-$langMindmap = "Εννοιολογικός χάρτης";
+$langMindmap = "Νοητικός χάρτης";
 $langScreenshot = "Στιγμιότυπο οθόνης";
 $langOpenEx = "Άνοιγμα παραδείγματος";
 $langEditEn = "Ενεργοποίηση τροποποίησης";
@@ -6609,7 +6609,7 @@ $langThemePumpkin = "Κολοκύθα";
 $langThemePomegranate = "Ρόδι";
 $langThemeClouds = "Σύννεφα";
 $langPleaseEnterName = "Παρακαλώ εισάγετε όνομα";
-$langMindMapSaved = "Ο εννοιολογικός χάρτης αποθηκεύθηκε";
+$langMindMapSaved = "Ο νοητικός χάρτης αποθηκεύθηκε";
 
 
 /* * *********************************************
@@ -7293,6 +7293,7 @@ $langQuestionsSaved = '%d ερωτήσεις αποθηκεύτηκαν στη �
 $langSaveError = 'Σφάλμα κατά την αποθήκευση ερωτήσεων';
 $langAIQuestionInfo = 'Χρησιμοποιήστε Τ.Ν. για να δημιουργήσετε ερωτήσεις από το περιεχόμενό σας. Το AI θα αναλύσει το κείμενό σας και θα δημιουργήσει ερωτήσεις κατάλληλες για αξιολογήσεις.';
 $langProvider = 'Πάροχος';
+$langProviders = 'Πάροχοι';
 $langContent = 'Περιεχόμενο';
 $langEnterContent = 'Εισάγετε το περιεχόμενο από το οποίο θέλετε να δημιουργήσετε ερωτήσεις...';
 $langContentHelp = 'Επικολλήστε το περιεχόμενο του μαθήματος, κείμενο εγγράφου ή οποιοδήποτε εκπαιδευτικό υλικό εδώ.';
@@ -7408,7 +7409,7 @@ $langTestConnection = "Δοκιμή Σύνδεσης";
 $langDefaultFillInBlanks = "Συμπληρώστε τα κενά.";
 $langAIService = "Υποσύστημα Τ.Ν.";
 $langAddProvider = "Προσθήκη Παρόχου";
-$langAssignAIToModule = "Ανάθεση λειτουργίας Τ.Ν. σε υποσύοτημα";
+$langAssignAIToModule = "Ανάθεση λειτουργίας Τ.Ν. σε υποσύστημα";
 $langAIModuleDeleted = "Διαγράφηκε το υποσύστημα Τ.Ν.";
 
 // AI Free Text Evaluation

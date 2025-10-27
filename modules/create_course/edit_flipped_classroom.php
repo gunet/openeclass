@@ -230,25 +230,25 @@ if (!isset($_POST['next'])) {
                 <div class='form-group mt-4'>
                     <label for='lectnum' class='col-sm-12 control-label-notes mb-1'>$langLectNum</label>
                     <div class='col-sm-12'>
-                        <input name='lectnum' id='lectnum' type='number' min='1' max='50' class='form-control' value='" . (isset($q1->lessons_number)? q($q1->lessons_number) : "") . "' >
+                        <input name='lectnum' id='lectnum' type='number' class='form-control' value='" . (isset($q1->lessons_number)? q($q1->lessons_number) : "") . "' >
                     </div>
                 </div>
                 <div class='form-group mt-4'>
                     <label for='lecthours' class='col-sm-12 control-label-notes'>$langLectHours <small>($langHoursSmall)</small></label>
                     <div class='col-sm-12'>
-                        <input name='lecthours' id='lecthours' type='number' min='1' max='150' class='form-control' value='" . (isset($q1->lesson_hours)? q($q1->lesson_hours) : "") . "' onchange='hoursSum()'>
+                        <input name='lecthours' id='lecthours' type='number' class='form-control' value='" . (isset($q1->lesson_hours)? q($q1->lesson_hours) : "") . "' onchange='hoursSum()'>
                     </div>
                 </div>
                 <div class='form-group mt-4'>
                     <label for='homehours' class='col-sm-12 control-label-notes mb-1'>$langHomeHours <small>($langHoursSmall)</small></label>
                     <div class='col-sm-12'>
-                        <input name='homehours' id='homehours' type='number' min='1' max='150' class='form-control' value='" . (isset($q1->home_hours)? q($q1->home_hours) : "") . "' onchange='hoursSum()'>
+                        <input name='homehours' id='homehours' type='number' class='form-control' value='" . (isset($q1->home_hours)? q($q1->home_hours) : "") . "' onchange='hoursSum()'>
                     </div>
                 </div>        
                 <div class='form-group mt-4'>
                     <label for='totalhours' class='col-sm-12 control-label-notes mb-1'>$langTotalHours</label>
                     <div class='col-sm-12'>
-                        <input name='totalhours' id='totalhours' type='number' min='1' max='650' class='form-control' value='" . (isset($q1->total_hours)? q($q1->total_hours) : "") . "' readonly>
+                        <input name='totalhours' id='totalhours' type='number' class='form-control' value='" . (isset($q1->total_hours)? q($q1->total_hours) : "") . "' readonly>
                     </div>
                 </div>
             
@@ -410,7 +410,7 @@ if (!isset($_POST['next'])) {
 
     $_SESSION['units'] = $_POST['units'];
     $_SESSION['ids'] = $_POST['ids'];
-    $_SESSION['goals'] =$_POST['goals'];
+    $_SESSION['goals'] = $_POST['goals'];
     $_SESSION['title'] = $_POST['title'];
     $_SESSION['description'] = purify($_POST['description']);
 
@@ -418,15 +418,16 @@ if (!isset($_POST['next'])) {
 
     $num_of_new_units = count($_SESSION['units']);
 
+
     if ($num_of_new_units > $q7->num_units) { //new unit is added
 
-            if (empty($_SESSION['goals']) or array_search("",$_SESSION['goals'])) {
+            if (empty($_SESSION['goals']) or $_SESSION['goals'][0] == "") {
                 Session::flash('message', $langEmptyGoal);
                 Session::flash('alert-class', 'alert-warning');
                 $validationFailed = true;
             }
 
-            if (empty($_SESSION['units']) or array_search("",$_SESSION['units'])) {
+            if (empty($_SESSION['units']) or $_SESSION['units'][0] == "") {
                 Session::flash('message', $langEmptyUnit);
                 Session::flash('alert-class', 'alert-warning');
                 $validationFailed = true;
@@ -636,18 +637,20 @@ if (!isset($_POST['next'])) {
         ";
 
     } else {
-        if (empty($_SESSION['goals']) or array_search("",$_SESSION['goals'])) {
+
+        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+
+        if (empty($_SESSION['goals']) or $_SESSION['goals'][0] == "") {
             Session::flash('message', $langEmptyGoal);
             Session::flash('alert-class', 'alert-warning');
             $validationFailed = true;
         }
 
-        if (empty($_SESSION['units']) or array_search("",$_SESSION['units'])) {
+        if (empty($_SESSION['units']) or $_SESSION['units'][0] == "") {
             Session::flash('message', $langEmptyUnit);
             Session::flash('alert-class', 'alert-warning');
             $validationFailed = true;
         }
-
 
         if ($validationFailed) {
             redirect_to_home_page("modules/create_course/edit_flipped_classroom.php?course=$course_code&fromFlipped=1");
@@ -659,17 +662,6 @@ if (!isset($_POST['next'])) {
         $lecthours = $_SESSION['lecthours'];
         $homehours = $_SESSION['homehours'];
         $totalhours = $_SESSION['totalhours'];
-
-        $validationFailed = false;
-
-        $validationFailed = false;
-        if(empty($stunum)||empty($lectnum)||empty($lecthours)||empty($homehours)){
-            Session::flash('message', $langFieldsMissing);
-            Session::flash('alert-class', 'alert-warning');
-            $validationFailed = true;
-        }
-
-        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
 
         if (empty($_SESSION['title'])) {
             Session::flash('message', $langFieldsMissing);
@@ -815,7 +807,8 @@ if (!isset($_POST['next'])) {
         ));
 
     }
-}else if(!isset($_POST['agenda'])){
+} else if(!isset($_POST['agenda'])) {
+        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
 
         $commentsGoals = "";
 
@@ -826,16 +819,6 @@ if (!isset($_POST['next'])) {
         $totalhours = $_SESSION['totalhours'];
 
         $validationFailed = false;
-
-        $validationFailed = false;
-        if(empty($stunum)||empty($lectnum)||empty($lecthours)||empty($homehours)){
-            Session::flash('message', $langFieldsMissing);
-            Session::flash('alert-class', 'alert-warning');
-            $validationFailed = true;
-
-        }
-
-        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
 
         if (empty($_SESSION['title'])) {
             Session::flash('message', $langFieldsMissing);
