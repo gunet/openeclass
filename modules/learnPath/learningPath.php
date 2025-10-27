@@ -305,7 +305,7 @@ foreach ($flatElementList as $module) {
 
     $path_id = intval($_SESSION['path_id']);
     if (isset($_GET['unit'])) {
-        $detailsUrl = $urlAppend . "modules/units/view.php?course=$course_code&amp;res_type=lp_details&amp;path_id=$path_id&amp;unit=165";
+        $detailsUrl = $urlAppend . "modules/units/view.php?course=$course_code&amp;res_type=lp_details&amp;path_id=$path_id&amp;unit=$unit";
     } else {
         $detailsUrl = "detailsUserPath.php?course=$course_code&amp;uInfo=$uid&amp;path_id=$path_id";
     }
