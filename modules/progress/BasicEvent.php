@@ -33,6 +33,7 @@ class BasicEvent implements Sabre\Event\EventEmitterInterface {
     protected $eventData;
     protected $certificateIds;
     protected $badgeIds;
+    protected $pointsgameIds;
     protected $criterionSet;
 
     public static function trigger($eventname, $eventdata) {
@@ -76,6 +77,7 @@ class BasicEvent implements Sabre\Event\EventEmitterInterface {
             $data = $this->eventData;
             $this->certificateIds = array();
             $this->badgeIds = array();
+            $this->pointsgameIds = array();
             $this->criterionSet = new CriterionSet();
 
             // select certificates not already conquered
@@ -92,9 +94,16 @@ class BasicEvent implements Sabre\Event\EventEmitterInterface {
                 $this->badgeIds[] = $b->id;
             }, $data->courseId, $data->uid);
 
+            //select active point games
+            $pointsgamesQ = "select g.id from points_game g where g.course_id = ?d and g.active = 1 and g.starts <= NOW() and g.expires >= NOW()";
+            Database::get()->queryFunc($pointsgamesQ, function($g) {
+                $this->pointsgameIds[] = $g->id;
+            }, $data->courseId);
+
             $iter = array();
             $iter['certificate'] = $this->certificateIds;
             $iter['badge'] = $this->badgeIds;
+            $iter['points_game'] = $this->pointsgameIds;
 
             foreach ($iter as $key => $ids) {
                 // select criteria not already conquered
@@ -118,6 +127,7 @@ class BasicEvent implements Sabre\Event\EventEmitterInterface {
                         . " and c.activity_type = ?s "
                         . " and c.module = ?d "
                         . $andResource;
+                    
                     Database::get()->queryFunc($critsQ, function ($crit) {
                         $this->criterionSet->addCriterion(Criterion::initWithProperties($crit));
                     }, $args);

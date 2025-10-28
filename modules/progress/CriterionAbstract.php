@@ -27,6 +27,12 @@ abstract class CriterionAbstract {
     protected $resource;
     protected $threshold;
     protected $operator;
+    //only for points games
+    protected $points;
+    protected $criterion_type;
+    protected $max_points_from_criterion;
+    protected $max_points_from_criterion_time_period;
+    protected $time_period_in_days;
 
     protected $table;
     protected $field;
@@ -61,6 +67,14 @@ abstract class CriterionAbstract {
         $this->threshold = $properties->threshold;
         $this->operator = $properties->operator;
 
+        if ($properties->type == 'points_game') {
+            $this->points = $properties->points;
+            $this->criterion_type = $properties->criterion_type;
+            $this->max_points_from_criterion = $properties->max_points_from_criterion;
+            $this->max_points_from_criterion_time_period = $properties->max_points_from_criterion_time_period;
+            $this->time_period_in_days = $properties->time_period_in_days;
+        }
+
         $this->table = 'user_' . $properties->type . '_criterion';
         $this->field = $properties->type . '_criterion';
 
@@ -71,12 +85,16 @@ abstract class CriterionAbstract {
 
     abstract public function evaluate($context);
 
-    protected function assertedAction($context) {
+    protected function assertedAction($context, $points = null) {
         $uid = (isset($context['uid'])) ? $context['uid'] : null;
         if ($uid) {
             $exists = Database::get()->querySingle("select count(id) as cnt from $this->table where user = ?d and $this->field = ?d", $uid, $this->id)->cnt;
             if (!$exists) {
-                Database::get()->query("insert into $this->table (user, $this->field, created) values (?d, ?d, ?t)", $uid, $this->id, gmdate('Y-m-d H:i:s'));
+                if(is_null($points)) { //badge or certificate asserted action
+                    Database::get()->query("insert into $this->table (user, $this->field, created) values (?d, ?d, ?t)", $uid, $this->id, gmdate('Y-m-d H:i:s'));
+                } else { //points game one-time asserted action
+                    Database::get()->query("insert into $this->table (user, $this->field, points_awarded, created) values (?d, ?d, ?d, ?t)", $uid, $this->id, $points, gmdate('Y-m-d H:i:s'));
+                }
             }
         }
     }
