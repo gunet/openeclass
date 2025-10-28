@@ -30,6 +30,22 @@
             });
         </script>
     @endif
+
+    <!-- Badge Publication Module -->
+    @if ($uid == $id && !isset($_GET['id']) && !isset($_GET['token']))
+        <link rel="stylesheet" href="{{ $urlAppend }}modules/backpack/css/badge-publication.css">
+        <script src="{{ $urlAppend }}modules/backpack/js/badge-publication.js"></script>
+        <script>
+            // Language strings for JavaScript
+            const BADGE_SELECT_PROVIDER = "{{ trans('langSelectProvider') }}";
+            const BADGE_NO_PROVIDERS_CONNECTED = "{{ trans('langNoProvidersConnected') }}";
+            const BADGE_PUBLISH_SUCCESS = "{{ trans('langBadgePublishedSuccessfully') }}";
+            const BADGE_PUBLISH_ERROR = "{{ trans('langBadgePublishError') }}";
+            const BADGE_SELECT_PROVIDER_ALERT = "{{ trans('langSelectProviderAlert') }}";
+            const BADGE_PUBLISHING = "{{ trans('langPublishing') }}...";
+            const BADGE_PUBLISH = "{{ trans('langPublish') }}";
+        </script>
+    @endif
 @endpush
 
 @section('content')
@@ -270,7 +286,7 @@
                                     @endif
                                         @foreach ($badge_completed as $key => $badge)
                                             <div class='col'>
-                                                <div class="card h-100 border-0">
+                                                <div class="card h-100 border-0 badge-card-wrapper">
                                                     <img style='height:150px; width:150px;' src="{{ $urlServer . BADGE_TEMPLATE_PATH . get_badge_filename($badge->badge) }}" class="card-img-top ms-auto me-auto mt-3" alt="badge">
                                                     <div class="card-body">
                                                         <a href='../../modules/progress/index.php?course={{ course_id_to_code($badge->course_id) }}&amp;badge_id={{ $badge->badge }}&amp;u={{ $badge->user }}'>
@@ -285,6 +301,28 @@
                                                             </div>
                                                         </a>
                                                     </div>
+                                                    <!-- Badge Publish Button -->
+                                                    @if ($uid == $id)
+                                                    <div class='badge-card-footer'>
+                                                        <div class='badge-card-footer-text'>
+                                                            {{ trans('langPublishToBackpack') }}
+                                                        </div>
+                                                        <div class='badge-card-actions'>
+                                                            <button class='badge-publish-btn disabled' 
+                                                                    data-user-badge-id='{{ $badge->user_badge_id }}'
+                                                                    data-bs-toggle='tooltip'
+                                                                    data-bs-placement='left'
+                                                                    title='{{ trans('langPublishBadgeTooltip') }}'
+                                                                    aria-label='{{ trans('langPublishBadgeAriaLabel') }}'>
+                                                                <i class='fa fa-cloud-upload'></i>
+                                                            </button>
+                                                            <span class='badge-no-connection'>
+                                                                <i class='fa fa-exclamation-circle'></i>
+                                                                {{ trans('langNoBackpackConnected') }}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    @endif
                                                 </div>
                                             </div>
                                         @endforeach
@@ -317,5 +355,10 @@
         </div>
     </div>
 </div>
+
+<!-- Include Publish Badge Modal -->
+@if ($uid == $id && !isset($_GET['id']) && !isset($_GET['token']))
+    @include('modules.backpack.templates.publish_badge_modal')
+@endif
 
 @endsection

@@ -5848,10 +5848,6 @@ $langTurnitinIntegration = "TurnItIn Integration";
 $langTurnitinNewAssignNotice = "Notice: after creating a TurnItIn assignment, you must visit the assignment's page to connect with TurnItIn and initialize your options.";
 $langTiiFeedbackReleaseDate = "Feedback Release Date";
 $langTiiSubmissionSettings = "Submission settings";
-$langTiiSubmissionNoStore = "Do not store the submitted papers";
-$langTiiSubmissionStandard = "Standard paper repository";
-$langTiiSubmissionInstitutional = "Institutional repository";
-$langTiiCompareAgainst = "Compare against";
 $langTiiStudentPaperCheck = "Student paper repository";
 $langTiiInternetCheck = "Current and archived web site content";
 $langTiiJournalCheck = "Periodicals, journals and publications";
@@ -6394,10 +6390,29 @@ $langBackpackConnectedSuccessfully = "Backpack connected successfully!";
 $langBackpackConnectionFailed = "Backpack connection failed. Please try again.";
 $langBackpackDisconnectedSuccessfully = "Backpack disconnected successfully!";
 $langBackpackDisconnectionFailed = "Backpack disconnection failed. Please try again.";
-$langConfirmDisconnectBackpack = "Are you sure you want to disconnect your backpack?";$langProviderDiscoveryFailed = "Provider discovery failed";
+$langConfirmDisconnectBackpack = "Are you sure you want to disconnect your backpack?";
+$langProviderDiscoveryFailed = "Provider discovery failed";
 $langProviderNotCompatible = "Provider is not compatible with OpenEClass";
 $langProviderRegistrationFailed = "Provider registration failed";
 $langProviderProcessingFailed = "Provider processing failed";
+
+// Badge Publication Strings
+$langPublishBadgeToBackpack = "Publish to Backpack";
+$langSelectBackpackProvider = "Select Provider";
+$langSelectProviderHelp = "Choose a backpack provider where you want to publish this badge";
+$langSelectedProvider = "Selected Provider:";
+$langPublishBadgeInfo = "This badge will be published to your selected backpack provider.";
+$langPublish = "Publish";
+$langPublishing = "Publishing";
+$langCancel = "Cancel";
+$langPublishToBackpack = "Publish to External Backpack";
+$langPublishBadgeTooltip = "Publish this badge to your connected backpack";
+$langPublishBadgeAriaLabel = "Publish badge to backpack";
+$langNoBackpackConnected = "No backpack connected";
+$langNoProvidersConnected = "You don't have any backpack providers connected";
+$langBadgePublishedSuccessfully = "Badge published successfully!";
+$langBadgePublishError = "Failed to publish badge";
+$langSelectProviderAlert = "Please select a backpack provider";
 
 // OAuth Client Configuration
 $langClientId = "Client ID";

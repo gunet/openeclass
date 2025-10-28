@@ -7136,3 +7136,21 @@ $langResponse = "Απόκριση";
 $langBackpackConnectedWantRefresh = "Το backpack συνδέθηκε επιτυχώς! Θέλετε να ανανεώσετε τη σελίδα;";
 $langPleaseSelectProviderAndCredentials = "Παρακαλώ επιλέξτε έναν πάροχο και εισάγετε τα διαπιστευτήριά σας";
 $langUnknown = "Άγνωστο";
+
+// Badge Publication Strings
+$langPublishBadgeToBackpack = "Δημοσίευση στο Backpack";
+$langSelectBackpackProvider = "Επιλέξτε Πάροχο";
+$langSelectProviderHelp = "Επιλέξτε έναν πάροχο backpack όπου θέλετε να δημοσιεύσετε αυτό το σήμα";
+$langSelectedProvider = "Επιλεγμένος Πάροχος:";
+$langPublishBadgeInfo = "Αυτό το σήμα θα δημοσιευθεί στον επιλεγμένο πάροχο backpack σας.";
+$langPublish = "Δημοσίευση";
+$langPublishing = "Δημοσίευση";
+$langCancel = "Ακύρωση";
+$langPublishToBackpack = "Δημοσίευση σε Εξωτερικό Backpack";
+$langPublishBadgeTooltip = "Δημοσιεύστε αυτό το σήμα στο συνδεδεμένο backpack σας";
+$langPublishBadgeAriaLabel = "Δημοσίευση σήματος σε backpack";
+$langNoBackpackConnected = "Κανένα συνδεδεμένο backpack";
+$langNoProvidersConnected = "Δεν έχετε συνδέσει κανέναν πάροχο backpack";
+$langBadgePublishedSuccessfully = "Το σήμα δημοσιεύθηκε με επιτυχία!";
+$langBadgePublishError = "Αποτυχία δημοσίευσης σήματος";
+$langSelectProviderAlert = "Παρακαλώ επιλέξτε έναν πάροχο backpack";
