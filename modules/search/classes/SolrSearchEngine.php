@@ -26,6 +26,13 @@ require_once 'modules/search/solr/SolrCourseIndexer.php';
 
 class SolrSearchEngine implements SearchEngineInterface {
 
+    /** @var array<string,string> */
+    private array $facetConfig = [
+        'doctype' => 'Document Type',
+        'courseid' => 'Course',
+    ];
+    private int $rows = 10;
+
     public function search(array $params): array {
         if (!get_config('ext_solr_enabled')) {
             return [];
@@ -70,6 +77,68 @@ class SolrSearchEngine implements SearchEngineInterface {
         return array_map(function ($hit) {
             return new SearchResult($hit->pk, $hit->pkid, $hit->doctype, $hit->visible, $hit);
         }, $hits);
+    }
+
+    public function searchInCourse2(string $query, int $page, int $course_id): array {
+        $page = max(1, $page);
+        $rows = $this->rows;
+        $start = ($page - 1) * $rows;
+//        $selectedFacets = $this->sanitizeFacetSelection($selectedFacets);
+
+        $params = [
+            'q' => $query !== '' ? $query : '*:*',
+            'start' => $start,
+            'rows' => $rows,
+//            'fq' => 'courseid:' . $course_id, // ← filter to only specific course id
+            'wt' => 'json',
+            'facet' => 'true',
+            'facet.limit' => 20,
+            'facet.mincount' => 1,
+            'facet.field' => array_keys($this->facetConfig),
+        ];
+
+        if ($query !== '') {
+            $params['defType'] = 'edismax';
+            $params['qf'] = 'title^3 content^2 units code prof_names url';
+        }
+
+//        $filters = $this->buildFacetFilters($selectedFacets);
+//        if (!empty($filters)) {
+//            $params['fq'] = $filters;
+//        }
+
+        // construct Solr Url for searching
+        $solrUrl = $this->constructSolrUrl("select", $params);
+
+        // Perform Solr query
+        list($response, $code) = CurlUtil::httpGetRequest($solrUrl);
+        if ($code !== 200) {
+            return [];
+        }
+
+        // Handle Solr response
+        $payload = json_decode($response, true);
+        error_log(print_r($payload, true));
+        $numFound = (int)($payload['response']['numFound'] ?? 0);
+        $docs = $payload['response']['docs'] ?? [];
+        if (!is_array($docs)) {
+            $docs = [];
+        }
+
+//        $facets = $this->formatFacets($payload['facet_counts']['facet_fields'] ?? []);
+
+        return [
+            'docs' => $docs,
+            'numFound' => $numFound,
+            'start' => (int)($payload['response']['start'] ?? 0),
+            'rows' => $rows,
+            'totalPages' => max(1, (int)ceil($numFound / $rows)),
+//            'facets' => $facets,
+            'facets' => [],
+            'facetLabels' => $this->facetConfig,
+//            'appliedFacets' => $selectedFacets,
+            'appliedFacets' => [],
+        ];
     }
 
     public function index(int $courseId): void {
