@@ -276,7 +276,7 @@ $db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `vi
 $db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unit_id`,`module_id`) VALUES ('FC14',1,0,0,0)");
 $db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unit_id`,`module_id`) VALUES ('FC15',2,0,0,0)");
 $db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unit_id`,`module_id`) VALUES ('FC16',2,0,0,0)");
-$db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unit_id`,`module_id`) VALUES ('FC17',0,0,0,0)");
+//$db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unit_id`,`module_id`) VALUES ('FC17',0,0,0,0)");
 $db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unit_id`,`module_id`) VALUES ('FC18',1,0,0,0)");
 
 $db->query("CREATE TABLE IF NOT EXISTS `course_description` (

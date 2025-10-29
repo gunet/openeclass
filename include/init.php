@@ -688,9 +688,9 @@ $activities = array(
                                                                              MODULE_ID_COMMENTS,
                                                                              MODULE_ID_H5P)),
     MODULE_ID_DIGITAL_STORYTELLING => array('title' => $langFCDigitalStorytelling,'tools' => array(MODULE_ID_LINKS, MODULE_ID_H5P)),
-    MODULE_ID_SUPPORTING_MATERIAL => array('title' => $langFCSupportingMaterial,'tools' => array(MODULE_ID_LINKS,
-                                                                             MODULE_ID_DOCS,
-                                                                             MODULE_ID_H5P))
+    MODULE_ID_SUPPORTING_MATERIAL => array('title' => $langFCSupportingMaterial,'tools' => array(MODULE_ID_DOCS,
+                                                                            MODULE_ID_LINKS,
+                                                                            MODULE_ID_H5P))
 );
 
 // ----------------------------------------

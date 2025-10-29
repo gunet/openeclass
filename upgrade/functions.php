@@ -3501,6 +3501,9 @@ function upgrade_to_4_2($tbl_options) : void {
     if (!DBHelper::fieldExists('lp_user_module_progress', 'progress_measure')) {
         Database::get()->query("ALTER TABLE lp_user_module_progress ADD `progress_measure` FLOAT DEFAULT NULL AFTER `session_time`");
     }
+    // flipped classroom
+    Database::get()->query("ALTER TABLE course_activities ADD UNIQUE KEY(activity_id, activity_type)");
+    Database::get()->query("INSERT IGNORE INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unit_id`,`module_id`) VALUES ('FC18', 1, 0, 0, 0)");
 
 }
 
