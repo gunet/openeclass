@@ -3966,8 +3966,8 @@ function action_button($options, $secondary_menu_options = array(), $fc=false) {
             $icon_class .= " " . $option['icon-class'];
         }
         if (isset($option['confirm'])) {
-            $title = q(isset($option['confirm_title']) ? $option['confirm_title'] : $langConfirmDelete);
-            $accept = isset($option['confirm_button']) ? $option['confirm_button'] : $langDelete;
+            $title = q($option['confirm_title'] ?? $langConfirmDelete);
+            $accept = $option['confirm_button'] ?? $langDelete;
             $form_begin = "<form class='form-action-button-popover list-group-item-action list-group-item' method=post action='$option[url]'>";
             $form_end = '</form>';
             if ($level == 'primary-label' or $level == 'primary') {
@@ -4004,14 +4004,14 @@ function action_button($options, $secondary_menu_options = array(), $fc=false) {
         $primary_buttons = implode('', $out_primary);
     }
     $action_button = "";
-    $secondary_title = isset($secondary_menu_options['secondary_title']) ? $secondary_menu_options['secondary_title'] : "<span class='hidden'></span>";
+    $secondary_title = $secondary_menu_options['secondary_title'] ?? "<span class='hidden'></span>";
 
     if($fc){
-        $secondary_icon = isset($secondary_menu_options['secondary_icon']) ? $secondary_menu_options['secondary_icon'] : "fa-wrench";
+        $secondary_icon = $secondary_menu_options['secondary_icon'] ?? "fa-wrench";
     }else{
-        $secondary_icon = isset($secondary_menu_options['secondary_icon']) ? $secondary_menu_options['secondary_icon'] : "fa-solid fa-gear";
+        $secondary_icon = $secondary_menu_options['secondary_icon'] ?? "fa-solid fa-gear";
     }
-    $secondary_btn_class = isset($secondary_menu_options['secondary_btn_class']) ? $secondary_menu_options['secondary_btn_class'] : "submitAdminBtn";
+    $secondary_btn_class = $secondary_menu_options['secondary_btn_class'] ?? "submitAdminBtn";
     if (count($out_secondary)) {
         $action_list = q("<div class='list-group' id='action_button_menu'>".implode('', $out_secondary)."</div>");
         if(!empty($secondary_title)){
