@@ -3291,7 +3291,8 @@ function submit_grade_reviews($args) {
  * @brief submit grade and comment for student submission
  * @param type $args
  */
-function submit_grade_comments($args) {
+function submit_grade_comments($args): void
+{
 
     global $langGrades, $course_id, $langTheField, $course_code,
            $langFormErrors, $workPath, $langGradebookGrade;
@@ -3352,7 +3353,9 @@ function submit_grade_comments($args) {
         } else {
             $grade = $args['grade'];
         }
-        $comment = $args['comments'];
+
+        $comment = (isset($args['comments']))? $args['comments'] : '';
+
         if (isset($_FILES['comments_file']) and is_uploaded_file($_FILES['comments_file']['tmp_name'])) { // upload comments file
             $comments_filename = $_FILES['comments_file']['name'];
             validateUploadedFile($comments_filename); // check file type

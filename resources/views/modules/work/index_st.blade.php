@@ -89,9 +89,9 @@
                                                     @endif
 
                                                     @if ($row->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE && $row->start_date_review && $row->due_date_review)
-                                                        <p class="TextBold mt-2 mb-0 text-decoration-underline">{{ trans('langGradeReviews')}}</p>
-                                                        <p class="TextBold mb-0">{{ trans('langStartDate') }}:&nbsp;<span>{{ format_locale_date(strtotime($row->start_date_review), 'short') }}</span></p>
-                                                        <p class="TextBold mb-0">{{ trans('langEndDate') }}:&nbsp;<span>{{ format_locale_date(strtotime($row->due_date_review), 'short') }}</span></p>
+                                                        <p class="TextBold mt-2 mb-0 text-decoration-underline small-text">{{ trans('langGradeReviews')}}</p>
+                                                        <p class="TextBold mb-0 small-text">{{ trans('langStartDate') }}:&nbsp;<span>{{ format_locale_date(strtotime($row->start_date_review), 'short') }}</span></p>
+                                                        <p class="TextBold mb-0 small-text">{{ trans('langEndDate') }}:&nbsp;<span>{{ format_locale_date(strtotime($row->due_date_review), 'short') }}</span></p>
                                                         @if ( strtotime(date("d-m-Y H:i:s")) < strtotime($row->start_date_review) )
                                                             <p class="text-warning TextBold small-text mt-2" style="line-height:14px;">{{ trans('langGradeReviewHasNotStarted') }}</p>
                                                         @elseif ( strtotime(date("d-m-Y H:i:s")) > strtotime($row->start_date_review) && strtotime(date("d-m-Y H:i:s")) < strtotime($row->due_date_review))
