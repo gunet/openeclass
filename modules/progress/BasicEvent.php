@@ -121,13 +121,23 @@ class BasicEvent implements Sabre\Event\EventEmitterInterface {
                         // instead of blindly trusting the DB.
                         $andResource = " and c.resource is null ";
                     }
-                    $critsQ = "select c.*, '$key' as type from {$key}_criterion c"
-                        . " where c.$key in " . $inIds . " "
-                        . " and c.id not in (select {$key}_criterion from user_{$key}_criterion where user = ?d) "
-                        . " and c.activity_type = ?s "
-                        . " and c.module = ?d "
-                        . $andResource;
-                    
+
+                    if($key == 'points_game') { //points games
+                        $critsQ = "select c.*, '$key' as type from {$key}_criterion c"
+                            . " where c.$key in " . $inIds . " "
+                            . " and ((c.criterion_type = 'onetime' AND (c.id not in (select {$key}_criterion from user_{$key}_criterion where user = ?d))) OR c.criterion_type = 'recurring') "
+                            . " and c.activity_type = ?s "
+                            . " and c.module = ?d "
+                            . $andResource;
+                    } else { //badges and certificates
+                        $critsQ = "select c.*, '$key' as type from {$key}_criterion c"
+                            . " where c.$key in " . $inIds . " "
+                            . " and c.id not in (select {$key}_criterion from user_{$key}_criterion where user = ?d) "
+                            . " and c.activity_type = ?s "
+                            . " and c.module = ?d "
+                            . $andResource;
+                    }
+
                     Database::get()->queryFunc($critsQ, function ($crit) {
                         $this->criterionSet->addCriterion(Criterion::initWithProperties($crit));
                     }, $args);
