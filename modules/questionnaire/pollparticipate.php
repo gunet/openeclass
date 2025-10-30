@@ -271,19 +271,20 @@ function printPollForm() {
     if ($thePoll->require_answer) {
         $head_content .= "            
             <script>
-                document.addEventListener('DOMContentLoaded', () => { 
-                    const form = document.getElementById('poll'); 
-                    form.querySelectorAll('input, textarea').forEach(el => {
-                        if (['radio', 'textarea'].includes(el.type) || el.tagName === 'TEXTAREA') { 
-                            el.required = true; } 
-                    }); 
+                document.addEventListener('DOMContentLoaded', () => {
+                    const form = document.getElementById('poll');
+                        form.querySelectorAll('input, textarea').forEach(el => {
+                            if (['radio', 'textarea'].includes(el.type) || el.tagName === 'TEXTAREA') {
+                                el.required = true;
+                            }
+                        });
                 });
-                        
+                
                 document.addEventListener('DOMContentLoaded', () => {
                   const form = document.getElementById('poll');
                   if (!form) return;
                 
-                  form.addEventListener('submit', e => {
+                  form.addEventListener('submit', e => {                      
                     let valid = true;
                     const checkboxGroups = {};
                     form.querySelectorAll('input[type=\\\"checkbox\\\"]').forEach(cb => {
@@ -300,8 +301,10 @@ function printPollForm() {
                         boxes.forEach(cb => cb.classList.remove('invalid-checkbox'));
                       }
                     }
-                
-                    if (!valid) e.preventDefault();
+                    
+                    if (!valid) {
+                        e.preventDefault();
+                    }
                   });
                 
                   form.querySelectorAll('input[type=\\\"checkbox\\\"]').forEach(cb => {
@@ -415,9 +418,12 @@ function printPollForm() {
 
         $pollType = Database::get()->querySingle("SELECT `type` FROM poll WHERE pid = ?d", $pid)->type;
         $pollPagination = Database::get()->querySingle("SELECT `pagination` FROM poll WHERE pid = ?d", $pid)->pagination;
-        $incomplete_resubmission = isset($_SESSION["poll_answers_$pid"]);
-        $incomplete_answers = $_SESSION["poll_answers_$pid"];
-        unset($_SESSION["poll_answers_$pid"]);
+        if (isset($_SESSION["poll_answers_$pid"])) {
+            $incomplete_resubmission = $_SESSION["poll_answers_$pid"];
+            $incomplete_answers = $_SESSION["poll_answers_$pid"];
+            unset($_SESSION["poll_answers_$pid"]);
+        }
+
         $i = 1;
         $page = 1;
         $tool_content .= "<input id='current_page' type='hidden' value='$page'>";
@@ -430,7 +436,7 @@ function printPollForm() {
             $pqid = $theQuestion->pqid;
             $qtype = $theQuestion->qtype;
             $q_description = $theQuestion->description;
-            if ($incomplete_resubmission and !isset($incomplete_answers[$pqid])) {
+            if (isset($incomplete_resubmission) and !isset($incomplete_answers[$pqid])) {
                 $incomplete_answers[$pqid] = [];
             }
             $user_answers = null;
@@ -462,7 +468,7 @@ function printPollForm() {
                                             WHERE a.poll_user_record_id = b.id
                                                 AND a.qid = ?d
                                                 AND b.uid = ?d", $pqid, $uid);
-                                } elseif ($incomplete_resubmission) {
+                                } elseif (isset($incomplete_resubmission)) {
                                     $user_answers = $incomplete_answers[$pqid];
                                 }
                                 $answers = Database::get()->queryArray("SELECT * FROM poll_question_answer
@@ -533,7 +539,7 @@ function printPollForm() {
                                     if ($user_answers) {
                                         $slider_value = $user_answers->answer_text;
                                     }
-                                } elseif ($incomplete_resubmission and $incomplete_answers[$pqid]) {
+                                } elseif (isset($incomplete_resubmission) and $incomplete_answers[$pqid]) {
                                     $slider_value = $incomplete_answers[$pqid][0]->answer_text;
                                 }
                                 if (($pollType == POLL_COLLES) or ($pollType == POLL_ATTLS)) {
@@ -565,7 +571,7 @@ function printPollForm() {
                                     if ($user_answers) {
                                         $text = $user_answers->answer_text;
                                     }
-                                } elseif ($incomplete_resubmission and $incomplete_answers[$pqid]) {
+                                } elseif (isset($incomplete_resubmission) and $incomplete_answers[$pqid]) {
                                     $text = $incomplete_answers[$pqid][0]->answer_text;
                                 }
                                 $tool_content .= "
