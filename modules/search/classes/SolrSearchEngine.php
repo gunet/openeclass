@@ -118,7 +118,6 @@ class SolrSearchEngine implements SearchEngineInterface {
 
         // Handle Solr response
         $payload = json_decode($response, true);
-        error_log(print_r($payload, true));
         $numFound = (int)($payload['response']['numFound'] ?? 0);
         $docs = $payload['response']['docs'] ?? [];
         if (!is_array($docs)) {
