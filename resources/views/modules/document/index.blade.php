@@ -101,12 +101,11 @@
                 });
 
                 uppy.on('file-added', (file) => {
-                    console.log('File added:', file)
+                  //  console.log('File added:', file)
                 })
 
                 uppy.on('complete', (result) => {
                     window.location.href = '{!! $backUrl !!}';
-
                 })
                 isUppyLoaded = true;
             } catch (error) {
