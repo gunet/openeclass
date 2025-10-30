@@ -601,8 +601,9 @@ if ($is_editor) {
     // update attendance settings
     if (isset($_POST['submitAttendanceBookSettings'])) {
         $v = new Valitron\Validator($_POST);
-        $v->rule('required', array('title', 'limit', 'start_date', 'end_date'));
-        $v->rule('numeric', array('limit'));
+        $v->rule('required', array('title', 'start_date', 'end_date'));
+        $v->rule('integer', array('limit'));
+        $v->rule('min', array('limit'), 0);
         $v->rule('date', array('start_date', 'end_date'));
         if (!empty($_POST['end_date'])) {
             $v->rule('dateBefore', 'start_date', $_POST['end_date']);
