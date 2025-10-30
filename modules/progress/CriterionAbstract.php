@@ -28,6 +28,7 @@ abstract class CriterionAbstract {
     protected $threshold;
     protected $operator;
     //only for points games
+    protected $points_game;
     protected $points;
     protected $criterion_type;
     protected $max_points_from_criterion;
@@ -68,6 +69,7 @@ abstract class CriterionAbstract {
         $this->operator = $properties->operator;
 
         if ($properties->type == 'points_game') {
+            $this->points_game = $properties->points_game;
             $this->points = $properties->points;
             $this->criterion_type = $properties->criterion_type;
             $this->max_points_from_criterion = $properties->max_points_from_criterion;
@@ -94,6 +96,14 @@ abstract class CriterionAbstract {
                     Database::get()->query("insert into $this->table (user, $this->field, created) values (?d, ?d, ?t)", $uid, $this->id, gmdate('Y-m-d H:i:s'));
                 } else { //points game one-time asserted action
                     Database::get()->query("insert into $this->table (user, $this->field, points_awarded, created) values (?d, ?d, ?d, ?t)", $uid, $this->id, $points, gmdate('Y-m-d H:i:s'));
+                    //add awarded points to user
+                    $points_q = Database::get()->querySingle("select id, total_points from user_points_game_points where user = ?d and points_game = ?d", $uid, $this->points_game);
+                    if($points_q) {
+                        $total_points = $points_q->total_points + $points;
+                        Database::get()->query("update user_points_game_points set total_points = ?d where id = ?d", $total_points, $points_q->id);
+                    } else {
+                        Database::get()->query("insert into user_points_game_points (user, points_game, total_points, current_level) values (?d, ?d, ?d, ?d)", $uid, $this->points_game, $points, 1);
+                    }
                 }
             }
         }
