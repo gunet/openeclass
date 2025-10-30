@@ -352,8 +352,8 @@ if ($is_editor) {
         redirect_to_home_page("modules/attendance/index.php?course=$course_code");
     }
 
-    //add a new attendance
-    if (isset($_POST['newAttendance'])) {
+    // Create new attendance book
+    if (isset($_POST['attendanceBookCreate'])) {
         $v = new Valitron\Validator($_POST);
         $v->rule('required', array('title', 'start_date', 'end_date'));
         $v->rule('integer', array('limit'));
@@ -598,8 +598,8 @@ if ($is_editor) {
     }
     $tool_content .= "</div>";
 
-    // update attendance settings
-    if (isset($_POST['submitAttendanceBookSettings'])) {
+    // Update attendance book settings
+    if (isset($_POST['attendanceBookSettings'])) {
         $v = new Valitron\Validator($_POST);
         $v->rule('required', array('title', 'start_date', 'end_date'));
         $v->rule('integer', array('limit'));
@@ -742,14 +742,14 @@ if ($is_editor) {
         $display = FALSE;
     }
 
- elseif (isset($_GET['new'])) {
-        new_attendance(); // create new attendance
+    elseif (isset($_GET['new'])) {
+        attendance_book_form(); // create new attendance
+        $display = FALSE;
+    } elseif (isset($_GET['editSettings'])) { // attendance settings
+        attendance_book_form($attendance_id);
         $display = FALSE;
     } elseif (isset($_GET['editUsers'])) { // edit attendance users
         user_attendance_settings($attendance_id);
-        $display = FALSE;
-    } elseif (isset($_GET['editSettings'])) { // attendance settings
-        attendance_settings($attendance_id);
         $display = FALSE;
     } elseif (isset($_GET['addActivityAs'])) { //display available assignments
         attendance_display_available_assignments($attendance_id);
