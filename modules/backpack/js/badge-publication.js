@@ -63,6 +63,7 @@
         enablePublishButtons: function() {
             $('.badge-publish-btn').removeClass('disabled');
             $('.badge-publish-btn').prop('disabled', false);
+            $('.badge-publish-btn').show();
             $('.badge-no-connection').hide();
         },
 

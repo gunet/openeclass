@@ -25,6 +25,13 @@ class BackpackProviderController
     {
         global $action_bar;
         $providers = $this->repository->findAll();
+        
+        // Build array of connected users counts indexed by provider ID
+        $userCounts = [];
+        foreach ($providers as $provider) {
+            $userCounts[$provider->id] = $this->repository->countConnectedUsers($provider->id);
+        }
+        
         $action_bar = action_bar([
             [
                 'title' => trans('langNewBackpackProvider'),
@@ -36,7 +43,8 @@ class BackpackProviderController
         ]);
 
         return view('admin.other.extapps.openbadges_index', [
-            'providers' => $providers
+            'providers' => $providers,
+            'userCounts' => $userCounts
         ]);
     }
 

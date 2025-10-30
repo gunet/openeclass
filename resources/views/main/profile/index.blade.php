@@ -313,10 +313,11 @@
                                                                     data-bs-toggle='tooltip'
                                                                     data-bs-placement='left'
                                                                     title='{{ trans('langPublishBadgeTooltip') }}'
-                                                                    aria-label='{{ trans('langPublishBadgeAriaLabel') }}'>
+                                                                    aria-label='{{ trans('langPublishBadgeAriaLabel') }}'
+                                                                    style='display: none;'>
                                                                 <i class='fa fa-cloud-upload'></i>
                                                             </button>
-                                                            <span class='badge-no-connection'>
+                                                            <span class='badge-no-connection' style='display: inline-block;'>
                                                                 <i class='fa fa-exclamation-circle'></i>
                                                                 {{ trans('langNoBackpackConnected') }}
                                                             </span>

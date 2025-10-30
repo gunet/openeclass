@@ -16,6 +16,7 @@ class BackpackConnectionService
 
     /**
      * Get user's backpack connection with provider details
+     * Only returns connections for active (enabled) providers
      */
     public function getUserConnection(int $userId): ?object
     {
@@ -23,7 +24,7 @@ class BackpackConnectionService
             "SELECT ubc.*, bp.name as provider_name, bp.ob_version, bp.api_url 
              FROM user_backpack_connection ubc 
              JOIN backpack_provider bp ON ubc.backpack_provider_id = bp.id 
-             WHERE ubc.user_id = ?d AND ubc.status = 'connected'",
+             WHERE ubc.user_id = ?d AND ubc.status = 'connected' AND bp.active = 1",
             $userId
         );
         
@@ -120,14 +121,13 @@ class BackpackConnectionService
     }
 
     /**
-     * Disconnect user's backpack
+     * Disconnect user's backpack and delete connection entry
      */
     public function disconnectBackpack(int $userId): bool
     {
         try {
             $result = $this->db->query(
-                "UPDATE user_backpack_connection 
-                 SET status = 'disconnected', updated_at = NOW() 
+                "DELETE FROM user_backpack_connection 
                  WHERE user_id = ?d",
                 $userId
             );

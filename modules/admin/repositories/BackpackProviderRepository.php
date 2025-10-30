@@ -133,11 +133,16 @@ class BackpackProviderRepository
     }
 
     /**
-     * Delete a provider
+     * Delete a provider and cascade delete user connections
      */
     public function delete(int $id): bool
     {
         error_log("Repository delete called with ID: " . $id);
+        
+        // First delete all user connections for this provider
+        $this->db->query("DELETE FROM user_backpack_connection WHERE backpack_provider_id = ?d", $id);
+        
+        // Then delete the provider itself
         $result = $this->db->query("DELETE FROM backpack_provider WHERE id = ?d", $id);
         
         if ($result && is_object($result) && isset($result->affectedRows)) {
@@ -145,6 +150,20 @@ class BackpackProviderRepository
         }
         
         return false;
+    }
+
+    /**
+     * Count users connected to a provider
+     */
+    public function countConnectedUsers(int $providerId): int
+    {
+        $result = $this->db->querySingle(
+            "SELECT COUNT(*) as count FROM user_backpack_connection 
+             WHERE backpack_provider_id = ?d",
+            $providerId
+        );
+        
+        return $result ? (int)$result->count : 0;
     }
 
     /**

@@ -268,13 +268,16 @@ class OpenBadgesApiService
 
     private function getUserConnection(int $userId): ?object
     {
-        return $this->db->querySingle(
+        $result = $this->db->querySingle(
             "SELECT ubc.*, bp.name as provider_name, bp.ob_version, bp.api_url 
              FROM user_backpack_connection ubc 
              JOIN backpack_provider bp ON ubc.backpack_provider_id = bp.id 
-             WHERE ubc.user_id = ?d AND ubc.status = 'connected'",
+             WHERE ubc.user_id = ?d AND ubc.status = 'connected' AND bp.active = 1",
             $userId
         );
+        
+        // Database returns false when no rows found, convert to null for type hint
+        return $result ?: null;
     }
 
     private function getProvider(int $providerId): ?BackpackProvider

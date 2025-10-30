@@ -6362,6 +6362,8 @@ $langBackpackProviderUpdated = "Backpack provider updated successfully";
 $langBackpackProviderUpdateFailed = "Backpack provider update failed";
 $langBackpackProviderDeleted = "Backpack provider deleted successfully";
 $langBackpackProviderDeleteFailed = "Backpack provider delete failed";
+$langBackpackProviderHasConnectedUsers = "This provider has %s connected users. All their connections will be permanently deleted.";
+$langBackpackProviderDeleteConfirm = "Are you sure you want to delete this provider and all associated user connections?";
 $langOpenBadgeVersion = "Open Badge Version";
 $langEnableProvider = "Enable Provider";
 $langProviderNameRequired = "Provider name required";
@@ -6433,3 +6435,4 @@ $langResponse = "Response";
 $langBackpackConnectedWantRefresh = "Backpack connected successfully! Would you like to refresh the page?";
 $langPleaseSelectProviderAndCredentials = "Please select a provider and enter your credentials";
 $langUnknown = "Unknown";
+?>
