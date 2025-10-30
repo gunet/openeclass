@@ -836,7 +836,7 @@ function new_attendance() {
                        
                    
                     <div class='form-group mt-4".($limit_error ? " has-error" : "")."'>
-                        <label for='limit_id' class='col-12 control-label-notes'>$langAttendanceLimitNumber <span class='asterisk Accent-200-cl'>(*)</span></label>
+                        <label for='limit_id' class='col-12 control-label-notes'>$langAttendanceLimitNumber</label>
                         <div class='col-sm-12'>
                             <input id='limit_id' class='form-control' placeholder='$langAttendanceLimitNumber' type='text' name='limit' value='$attendance_limit'>
                             <span class='help-block Accent-200-cl'>$limit_error</span>
