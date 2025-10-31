@@ -18,6 +18,7 @@
  *
  */
 
+require_once 'PointsGame.php'; 
 require_once 'Criterion.php';
 require_once 'CriterionSet.php';
 require_once 'Game.php';
