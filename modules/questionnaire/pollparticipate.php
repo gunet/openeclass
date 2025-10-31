@@ -114,7 +114,7 @@ function printPollForm() {
     $langSubmit, $langPollInactive, $langPollUnknown, $uid, $langAnswer,
     $langPollAlreadyParticipated, $is_editor, $is_course_reviewer, $langBack, $langQuestion,
     $langCancel, $head_content, $langPollParticipantInfo, $langCollesLegend,
-    $pageName, $lang_rate1, $lang_rate5, $langForm, $pid, $typeyourmessage,
+    $pageName, $lang_rate1, $lang_rate5, $langForm, $pid, $langTypeOutMessage,
     $langPreviousQuestion, $langNextQuestion, $langCleanup;
 
     $unit_id = isset($_REQUEST['unit_id'])? intval($_REQUEST['unit_id']): null;
@@ -577,7 +577,7 @@ function printPollForm() {
                                 $tool_content .= "
                                     <div class='form-group margin-bottom-fat'>
                                         <div class='col-sm-12 margin-top-thin QuestionType_{$qtype} QuestionNumber_{$pqid}'>
-                                            <textarea class='form-control' name='answer[$pqid]' aria-label='$typeyourmessage'>$text</textarea>
+                                            <textarea class='form-control' name='answer[$pqid]' aria-label='$langTypeOutMessage'>$text</textarea>
                                         </div>
                                     </div>";
 
@@ -630,7 +630,7 @@ function printPollForm() {
                                                                     }
                                                                     $tool_content .= "<td>
                                                                                         <input type='hidden' name='q_row_col[]' value='$pqid,$val_row,$val_col,$ansCounter'>
-                                                                                        <textarea class='form-control' name='answer[$pqid][$ansCounter]' aria-label='$typeyourmessage'>$text</textarea>
+                                                                                        <textarea class='form-control' name='answer[$pqid][$ansCounter]' aria-label='$langTypeOutMessage'>$text</textarea>
                                                                                     </td>";
                                                                 }
                                                             $tool_content .= "</tr>";

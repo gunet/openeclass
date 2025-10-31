@@ -498,6 +498,7 @@ $head_content .= "<script>
                 },
                'sLengthMenu':   '" . js_escape("$langDisplay _MENU_ $langResults2") . "',
                'sZeroRecords':  '" . js_escape($langNoResult) . "',
+               'sEmptyTable':  '" . js_escape($langNoResult) . "',
                'sInfo':         '" . js_escape("$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults") . "',
                'sInfoEmpty':    '',
                'sInfoFiltered': '',

@@ -2686,7 +2686,6 @@ $langInfoColourEvent = "Πληροφορίες";
 
 // group - email
 $langEmailGroup = "Αποστολή μηνύματος στην ομάδα";
-$langTypeMessage = "Πληκτρολογήστε το μήνυμά σας παρακάτω";
 $langSend = "Αποστολή";
 $langEmailSuccess = "Το e-mail σας στάλθηκε με επιτυχία !";
 $langMailError = "Σφάλμα κατά την αποστολή e-mail !";
@@ -3975,7 +3974,6 @@ $mailsubject2 = "Αίτηση " . $langOfStudent . " - Υπηρεσία Τηλε
 $contactphone = "Τηλέφωνο επικοινωνίας";
 $contactpoint = "Επικοινωνία";
 $searchuser = "Αναζήτηση Καθηγητών / Χρηστών";
-$typeyourmessage = "Πληκτρολογήστε το μήνυμά σας";
 $emailsuccess = "Το e-mail στάλθηκε!";
 $langTheTeacher = 'Ο διδάσκων';
 $langTheUser = 'Ο χρήστης';
@@ -6904,7 +6902,7 @@ $langCategoryExcercise = "Άσκηση";
 $langCategoryDescription = "Περιγραφή";
 $langAnalyticsEditElements = 'Επεξεργασία Στοιχείων';
 $langViewStatics = "Στατιστικά Επισκεψιμότητας";
-$langTypeOutMessage = "Πληκτρολογήστε το μήνυμα σας...";
+$langTypeOutMessage = "Πληκτρολογήστε το μήνυμα σας ...";
 $langDateHasExpire = "Η ημερομηνία έχει παρέλθει. Δοκιμάστε πάλι.";
 $langCalculateNewDuration = "Υπολογισμός νέας διάρκειας";
 $langChooseDayAgain = "Δεν μπορείτε να επιλέξετε διαφορετικές μέρες. Δοκιμάστε πάλι.";
