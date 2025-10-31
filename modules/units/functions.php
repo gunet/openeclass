@@ -264,7 +264,7 @@ function check_admin_unit_resource($resource_id) {
  */
 function show_resources($unit_id)
 {
-    global $max_resource_id,
+    global $max_resource_id, $is_editor,
            $head_content, $langDownload, $langPrint, $langCancel,
            $langFullScreen, $langNewTab, $langActInHome, $langActInClass, $langActAfterClass, $course_code;
 
@@ -330,6 +330,15 @@ function show_resources($unit_id)
         if (count($req_in_home) > 0 || count($req_in_class) > 0 || count($req_after_class)) {
 
             load_js('screenfull/screenfull.min.js');
+            $head_content .= "<style>
+                                .classTime {
+                                  border: solid 1px rgb(205, 212, 224);
+                                  border-radius: 4px;
+                                  padding: 10px 20px;
+                                  background-color: #f8f9fa;
+                                  margin-bottom: 2rem;
+                                }
+                                </style>";
             $head_content .= "<script>
             $(document).ready(function(){
                 var count_1 = $('#unitResources_1').length;
@@ -476,13 +485,19 @@ function show_resources($unit_id)
 
             $max_resource_id = Database::get()->querySingle("SELECT id FROM unit_resources
                                     WHERE unit_id = ?d ORDER BY `order` DESC LIMIT 1", $unit_id)->id;
-            $html .= "<div class='form-group'>
-                                <label class='col-2 form-label'>$langActInHome</label>
-                            </div>
-            ";
+            $html .= "<div class='classTime'>";
+            $html .= "<div class='d-flex justify-content-between align-items-center mt-2'>
+                            <label class='col-2 form-label'>$langActInHome</label>";
+            if ($is_editor and $q->flipped_flag == 2) {
+                $html .= "<div class='btn-group btn-group-sm btn-group-default gap-2'>
+                                <div class='in_home_btn btn submitAdminBtn d-flex justify-content-center align-items-center' title='" . trans('langActInHome') . "'>
+                                    <i class='fa fa-plus'></i>
+                                </div>
+                            </div>";
+            }
+            $html .= "</div>";
             $html .= "<div class='table-responsive'>";
             $html .= "<div class='table table-striped table-hover table-default'><div id='unitResources_1'>";
-
 
             foreach ($req_in_home as $info_home) {
                 if (!is_null($info_home->comments)) {
@@ -493,17 +508,24 @@ function show_resources($unit_id)
 
             $html .= "</div></div>";
             $html .= "</div>";
+            $html .= "</div>";
 
         }
 
         if (count($req_in_class) > 0) {
             $max_resource_id = Database::get()->querySingle("SELECT id FROM unit_resources
             WHERE unit_id = ?d ORDER BY `order` DESC LIMIT 1", $unit_id)->id;
-
-            $html .= "<div class='form-group'>
-            <label class='col-2 form-label'>$langActInClass</label>
-            </div>
-            ";
+            $html .= "<div class='classTime'>";
+            $html .= "<div class='d-flex justify-content-between align-items-center mt-2'>
+                        <label class='col-2 form-label'>$langActInClass</label>";
+            if ($is_editor and $q->flipped_flag == 2) {
+                $html .= "<div class='btn-group btn-group-sm btn-group-default gap-2'>
+                            <div class='in_class_btn btn submitAdminBtn d-flex justify-content-center align-items-center' title='" . trans('langActInClass') . "'>
+                                <i class='fa fa-plus'></i>
+                            </div>
+                        </div>";
+            }
+            $html .= "</div>";
             $html .= "<div class='table-responsive'>";
             $html .= "<div class='table table-striped table-hover table-default'><div id='unitResources_2'>";
             foreach ($req_in_class as $info_class) {
@@ -514,16 +536,25 @@ function show_resources($unit_id)
             }
             $html .= "</div></div>";
             $html .= "</div>";
+            $html .= "</div>";
         }
-
+//
         if (count($req_after_class) > 0) {
             $max_resource_id = Database::get()->querySingle("SELECT id FROM unit_resources
             WHERE unit_id = ?d ORDER BY `order` DESC LIMIT 1", $unit_id)->id;
+            $html .= "<div class='classTime' style='margin-bottom:0'>";
+            $html .= "<div class='d-flex justify-content-between align-items-center mt-2'>
+                        <label class='col-2 form-label'>$langActAfterClass</label>";
+            
+            if ($is_editor and $q->flipped_flag == 2) {
+                $html .= "<div class='btn-group btn-group-sm btn-group-default gap-2'>
+                            <div class='after_class_btn btn submitAdminBtn d-flex justify-content-center align-items-center' title='" . trans('langActAfterClass') . "'>
+                                <i class='fa fa-plus'></i>
+                            </div>
+                        </div>";
+            }
 
-            $html .= "<div class='form-group'>
-            <label class='col-2 form-label'>$langActAfterClass</label>
-            </div>
-            ";
+            $html .= "</div>";
             $html .= "<div class='table-responsive'>";
             $html .= "<div class='table table-striped table-hover table-default'><div id='unitResources_3'>";
             foreach ($req_after_class as $info_after_class) {
@@ -533,6 +564,7 @@ function show_resources($unit_id)
                 $html .= show_resource($info_after_class);
             }
             $html .= "</div></div>";
+            $html .= "</div>";
             $html .= "</div>";
         }
     } else {
