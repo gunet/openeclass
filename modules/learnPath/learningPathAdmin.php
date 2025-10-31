@@ -291,33 +291,34 @@ switch ($cmd) {
                     WHERE `parent` = 0
                     AND `learnPath_id` = ?d", $_SESSION['path_id'])->max);
 
-            // create new module
+            // create a new module
             // request ID of the last inserted row (module_id in $TABLEMODULE) to add it in $TABLELEARNPATHMODULE
             $thisInsertedModuleId = Database::get()->query("INSERT INTO `lp_module`
                    (`course_id`, `name`, `comment`, `contentType`, `launch_data`)
                    VALUES (?d, ?s, '', ?s, '')", $course_id, $_POST['newLabel'], CTLABEL_)->lastInsertID;
 
-            // create new learning path module
+            // create a new learning path module
             Database::get()->query("INSERT INTO `lp_rel_learnPath_module`
                    (`learnPath_id`, `module_id`, `specificComment`, `rank`, `parent`, `visible`)
                    VALUES (?d, ?d, '', ?d, 0, 1)", $_SESSION['path_id'], $thisInsertedModuleId, $order);
-        } else {  // create form requested
+        } else {  // create the form requested
             $displayCreateLabelForm = true; // the form code comes after name and comment boxes section
-            $createLabelHTML = " <tr>
-               
-                <td>
-                  <p class='form-label'>$langLabel</p>
-                  <form action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code' method='post'>
-                    <label for='newLabel'>" . $langNewLabel . ": </label>&nbsp;
-                    <input class='form-control max-input-width'type='text' name='newLabel' id='newLabel' maxlength='255' / size='30'>
-                    <input type='hidden' name='cmd' value='createLabel' />
-                    <button class='btn submitAdminBtn mt-2' type='submit' value='" . $langCreate . "'>$langCreate</button>
-                  </form>
-                </td>
-              </tr>";
+            $createLabelHTML = "
+                <div class='panel-body'>
+                    <p class='form-label'>$langLabel</p>
+                      <div class='col-8 d-flex align-items-start flex-wrap mt-3'>
+                      <form action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code' method='post'>
+                        <input class='form-control' type='text' name='newLabel' id='newLabel' maxlength='255'>
+                        <input type='hidden' name='cmd' value='createLabel'>
+                        <div class='d-flex mt-3'>
+                            <button class='btn submitAdminBtn ms-2' type='submit' value='" . $langCreate . "'>$langCreate</button>
+                            <a class='btn cancelAdminBtn ms-2' href='learningPathAdmin.php?course=$course_code&path_id=" . $_SESSION['path_id'] . "'>$langCancel</a>
+                        </div>
+                      </form>
+                  </div>
+                </div>";
         }
         break;
-
     default:
         break;
 }
@@ -404,7 +405,7 @@ if (isset($displayChangePosForm) && $displayChangePosForm) {
                                 <input type=\"hidden\" name=\"cmdid\" value=\"" . q($_REQUEST['cmdid']) . "\" />
                                 <div class='d-flex mt-3'>
                                     <button type=\"submit\" class=\"btn submitAdminBtn\" value=\"" . $langSave . "\" >$langSave</button>
-                                    <a href=\"learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'] . "\" class=\"btn cancelAdminBtn ms-2\" value=\"" . $langCancel . "\" >$langCancel</a>
+                                    <a href=\"learningPathAdmin.php?course=$course_code&amp;path_id=" . $_SESSION['path_id'] . "\" class=\"btn cancelAdminBtn ms-2\" value=\"" . $langCancel . "\" >$langCancel</a>
                                 </div>
                             </form>
                         </div>
@@ -494,7 +495,7 @@ $result = Database::get()->queryArray($sql, $_SESSION['path_id'], $course_id);
 if (count($result) == 0) {
     // handle exceptional requirement to add label before exiting early
     if (isset($displayCreateLabelForm) && $displayCreateLabelForm) {
-        $tool_content .= "<div class='table-responsive mt-0'><table class='table-default'>" . $createLabelHTML . "</table></div></div></div>";
+        $tool_content .= "<div class='table-responsive mt-0'>" . $createLabelHTML . "</div></div></div>";
     } else {
         $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoModule</span></div></div></div>";
     }
@@ -563,6 +564,13 @@ foreach ($flatElementList as $module) {
     } else {
         $style = "";
     }
+
+    if ($module['lock'] == 'CLOSE') {
+        $block_icon = icon('fa-lock');
+    } else {
+        $block_icon = '';
+    }
+
     $spacingString = "";
     for ($i = 0; $i < $module['children']; $i++) {
         $spacingString .= "<td width='5'>&nbsp;</td>";
@@ -592,7 +600,8 @@ foreach ($flatElementList as $module) {
         }
 
         $contentType_alt = selectAlt($module['contentType']);
-        $tool_content .= "<span>" . icon($moduleImg, $contentType_alt) . "</span>&nbsp;<a href=\"viewer.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'] . "&amp;module_id=" . $module['module_id'] . "\"" . $style . ">" . htmlspecialchars($module['name']) . "</a>";
+        $tool_content .= "<span>" . icon($moduleImg, $contentType_alt) . "</span>&nbsp;<a href=\"viewer.php?course=$course_code&amp;path_id=" . $_SESSION['path_id'] . "&amp;module_id=" . $module['module_id'] . "\"" . $style . ">" . q($module['name']) . "</a>";
+        $tool_content .= "<span class='ms-2 space-after-icon' data-bs-toggle='tooltip' data-bs-placement='top' data-bs-html='true' data-bs-title='$langResourceAccessLock'>$block_icon</span>";
     }
     $tool_content .= "</td>"; // end of td of module name
 

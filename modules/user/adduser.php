@@ -23,7 +23,6 @@
  * @brief Course admin can add users to the course.
  */
 $require_current_course = true;
-$require_course_admin = true;
 $require_help = true;
 $helpTopic = 'course_users';
 
@@ -39,6 +38,13 @@ $user = new User();
 $toolName = $langUsers;
 $pageName = $langAddUser;
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langUsers);
+
+$up = new Permissions();
+
+if (!$up->has_course_users_permission()) {
+    Session::Messages($langCheckCourseAdmin, 'alert-danger');
+    redirect_to_home_page('courses/'. $course_code);
+}
 
 if (isset($_GET['add'])) {
     $uid_to_add = intval(getDirectReference($_GET['add']));

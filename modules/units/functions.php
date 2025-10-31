@@ -237,8 +237,6 @@ function unit_assign_to($unit_id, $assign_specific_type, $assignees)
  * @brief Check that a specified resource id belongs to a resource in the
           current course, and that the user is an admin in this course.
           Return the id of the unit or false if user is not an admin
- * @global type $course_id
- * @global type $is_editor
  * @param type $resource_id
  * @return boolean
  */
@@ -262,8 +260,6 @@ function check_admin_unit_resource($resource_id) {
 
 /**
  * @brief Display resources for unit with id=$id
- * @global type $tool_content
- * @global type $max_resource_id
  * @param type $unit_id
  */
 function show_resources($unit_id)
@@ -547,7 +543,7 @@ function show_resources($unit_id)
             load_js('screenfull/screenfull.min.js');
             $head_content .= "<script>
             $(document).ready(function(){
- 
+
                 Sortable.create(unitResources,{
                     handle: '.fa-arrows',
                     animation: 150,
@@ -928,9 +924,9 @@ function show_lp($title, $comments, $resource_id, $lp_id, $act_name): string
           <div class='unitIcon' width='1'>$imagelink</a></div>
           " . (!empty($act_name) ? "<div class='text-start'>$act_name</div>" : "") . "
           <div class='text-start'>
-            <div class='module-name'>$langLearnPath</div> 
+            <div class='module-name'>$langLearnPath</div>
                  <span class='pull-right d-flex justify-content-start align-items-center gap-3'>$link $res_prereq_icon $lp_susp_button $lp_results_button $lp_results</span>
-                 <div class='content'>$comment_box</div> 
+                 <div class='content'>$comment_box</div>
             </div>" .
 
             actions('lp', $resource_id, $status) . "</div>";
@@ -1002,9 +998,6 @@ function show_video($table, $title, $comments, $resource_id, $video_id, $visibil
 
 /**
  * @brief display resource video category
- * @global type $is_editor
- * @global type $course_id
- * @global type $langInactiveModule
  * @param type $title
  * @param type $comments
  * @param type $resource_id
@@ -1132,7 +1125,7 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility, $act_
             enable_password_bootbox();
             $class = 'class="password_protected"';
             $lock_description .= "</ul>";
-            $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-toggle='tooltip' data-placement='right' data-html='true' data-title='$lock_description'></span>";
+            $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-bs-toggle='tooltip' data-bs-placement='right' data-bs-html='true' title='$lock_description'></span>";
         } else {
             $class = $exclamation_icon = '';
         }
@@ -1209,7 +1202,7 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
         if ($exercise->password_lock) {
             enable_password_bootbox();
             $link_class = 'password_protected';
-            $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-toggle='tooltip' data-placement='right' data-html='true' data-title='$langPassCode'></span>";
+            $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-bs-toggle='tooltip' data-bs-placement='right' data-bs-html='true' title='$langPassCode'></span>";
         }
 
         $assign_to_users_message = '';
@@ -1844,7 +1837,7 @@ function show_blog($title, $comments, $resource_id, $blog_id, $visibility, $act_
 function show_h5p($title, $comments, $resource_id, $h5p_id, $visibility, $act_name) {
     global $urlServer, $is_editor, $langWasDeleted, $course_id, $course_code, $id, $webDir, $urlAppend, $langH5p;
 
-    $comment_box = '';
+    $comment_box = $status = '';
     $title = q($title);
     $h5p = Database::get()->querySingle("SELECT * FROM h5p_content WHERE course_id = ?d AND id = ?d", $course_id, $h5p_id);
     if (!$h5p) { // check if it was deleted
@@ -2088,17 +2081,6 @@ function edit_res($resource_id) {
     </div>
     </div>";
     return $content;
-}
-
-/**
- * @return string
- */
-function localhostUrl() {
-    return sprintf(
-        "%s://%s",
-        isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http',
-        $_SERVER['SERVER_NAME']
-    );
 }
 
 /**

@@ -52,7 +52,7 @@ $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE
 
         <title><?php echo $langCourseProgram ?></title>
     </head>
-    <body class='body-learningPath' style="margin: 0px; padding-left: 0px; height: 100%!important; height: auto;">
+    <body class='body-learningPath' style="margin: 0px; height: 100%!important; height: auto;">
         <div id="content" style="width:800px; margin: 0 auto;">
         <?php
             $q = Database::get()->queryArray("SELECT id, title, comments FROM course_description WHERE course_id = ?d ORDER BY `order`", $course_id);

@@ -18,6 +18,7 @@
  */
 
 $require_current_course = true;
+$require_editor = true;
 
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/forcedownload.php';
@@ -29,7 +30,7 @@ $content = Database::get()->querySingle("SELECT * FROM h5p_content WHERE id = ?d
 if (!$content) {
     exit;
 }
-if (!$content->reuse_enabled || !$is_editor) {
+if (!$content->reuse_enabled) {
     exit;
 }
 

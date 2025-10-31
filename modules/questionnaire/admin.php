@@ -166,17 +166,14 @@ if (isset($_POST['submitPoll'])) {
 }
 if (isset($_POST['submitQuestion'])) {
     $v = new Valitron\Validator($_POST);
-    $v->rule('required', 'questionName');
+    $v->rule('required', 'questionName')->label("$langTheField $langQuestion");
     if (isset($_POST['questionScale']) and $_POST['questionScale']) {
-        $v->rule('required', 'questionScale');
+        $v->rule('required', 'questionScale')->label("$langTheField $langScale");
         $v->rule('integer', 'questionScale');
         $v->rule('min', 'questionScale', 1);
         $v->rule('max', 'questionScale', 10);
-        $v->labels(array(
-            'questionName' => "$langTheField $langQuestion",
-            'questionScale' => "$langTheField $langScale"
-        ));
     }
+
     if($v->validate()) {
         $question_text = $_POST['questionName'];
         $qtype = $_POST['answerType'];
@@ -337,11 +334,11 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 var select_content = '';
                 if(type==1){
                     for (index = 0; index < parsed_data.length; ++index) {
-                        select_content += '<option value=\"' + parsed_data[index]['id'] + '\">' + parsed_data[index]['surname'] + ' ' + parsed_data[index]['givenname'] + '<\/option>';
+                        select_content += '<option value=\"' + parsed_data[index]['id'] + '\">' + q(parsed_data[index]['surname'] + ' ' + parsed_data[index]['givenname']) + '<\/option>';
                     }
                 } else {
                     for (index = 0; index < parsed_data.length; ++index) {
-                        select_content += '<option value=\"' + parsed_data[index]['id'] + '\">' + parsed_data[index]['name'] + '<\/option>';
+                        select_content += '<option value=\"' + parsed_data[index]['id'] + '\">' + q(parsed_data[index]['name']) + '<\/option>';
                     }
                 }
                 $('#assignee_box').find('option').remove();

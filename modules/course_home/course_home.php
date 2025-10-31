@@ -49,6 +49,13 @@ require_once 'modules/session/functions.php';
 doc_init();
 $tree = new Hierarchy();
 $course = new Course();
+
+$up = new Permissions();
+$course_users_permission = $up->has_course_users_permission();
+$allow_clone = $up->has_course_clone_permission();
+$allow_course_backup = $up->has_course_backup_permission();
+$allow_course_tools = $up->has_course_modules_permission();
+
 $pageName = ''; // delete $pageName set in doc_init.php
 
 $main_content = $cunits_content = $course_info_extra = $data['countUnits'] = "";
@@ -87,8 +94,6 @@ if (isset($_POST['submitPoll'])) {
     }
 
 }
-
-
 
 $data['course_info'] = $course_info = Database::get()->querySingle("SELECT title, keywords, visible, prof_names, public_code, course_license,
                                                view_type, start_date, end_date, description, home_layout, course_image, flipped_flag, password
@@ -352,13 +357,13 @@ $data['action_bar'] = action_bar([
         'url' => "{$urlAppend}modules/user/index.php?course=$course_code",
         'icon' => 'fa-users',
         'level' => 'primary',
-        'show' => ($uid && $is_course_admin)
+        'show' => ($uid && ($is_course_admin || $course_users_permission))
     ],
     [
         'title' => "$numUsers $langRegistered",
         'url' => "{$urlAppend}modules/user/userslist.php?course=$course_code",
         'icon' => 'fa-users',
-        'show' => ($uid && !$is_course_admin && (setting_get(SETTING_USERS_LIST_ACCESS, $course_id) == 1))
+        'show' => ($uid && !$is_course_admin && !$course_users_permission && (setting_get(SETTING_USERS_LIST_ACCESS, $course_id) == 1))
     ],
     [
         'title' => $langUserEmailNotification,
@@ -391,6 +396,24 @@ $data['action_bar'] = action_bar([
         'url' => "{$urlAppend}modules/offline/index.php?course=$course_code",
         'icon' => 'fa-download',
         'show' => $offline_course
+    ],
+    [
+        'title' => $langCourseTools,
+        'url' => "{$urlAppend}modules/course_tools/index.php?course=$course_code",
+        'icon' => 'fa-screwdriver-wrench',
+        'show' => ($uid && !$is_course_admin && $allow_course_tools)
+    ],
+    [
+        'title' => $langBackupCourse,
+        'url' => "{$urlAppend}modules/course_info/archive_course.php?course=$course_code&" . generate_csrf_token_link_parameter(),
+        'icon' => 'fa-archive',
+        'show' => ($uid && !$is_course_admin && $allow_course_backup)
+    ],
+    [
+        'title' => $langCloneCourse,
+        'url' => "{$urlAppend}modules/course_info/clone_course.php?course=$course_code",
+        'icon' => 'fa-archive',
+        'show' => ($uid && !$is_course_admin && $allow_clone)
     ],
     [
         'title' => $langCitation,

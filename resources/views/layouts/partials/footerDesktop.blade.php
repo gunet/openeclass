@@ -41,11 +41,13 @@
                             </a>
                         </div>
                     @endif
+                    {{--
                     <div>
                         <a class="a_tools_site_footer" href="{{$urlAppend}}info/terms.php" @if($_SESSION['provider'] == 'lti_publish') target="_blank" @endif>
                             {{ trans('langUsageTerms') }}
                         </a>
                     </div>
+                    --}}
                     @if (get_config('activate_privacy_policy_text'))
                         <div>
                             <a class="a_tools_site_footer" href="{{$urlAppend}}info/privacy_policy.php" @if($_SESSION['provider'] == 'lti_publish') target="_blank" @endif>
@@ -95,7 +97,9 @@
                         @if (!get_config('dont_display_manual_menu'))
                             <li class="nav-item"><a class="nav-link menu-item a_tools_site_footer px-3" href="{{ $urlAppend }}info/manual.php"  @if($_SESSION['provider'] == 'lti_publish') target="_blank" @endif>{{ trans('langManuals') }}</a></li>
                         @endif
+                        {{--
                         <li class="nav-item"><a class="nav-link menu-item a_tools_site_footer px-3" href="{{ $urlAppend }}info/terms.php"  @if($_SESSION['provider'] == 'lti_publish') target="_blank" @endif>{{ trans('langUsageTerms') }}</a></li>
+                        --}}
                         @if (get_config('activate_privacy_policy_text'))
                             <li class="nav-item"><a class="nav-link menu-item a_tools_site_footer px-3" href="{{ $urlAppend }}info/privacy_policy.php"  @if($_SESSION['provider'] == 'lti_publish') target="_blank" @endif>{{ trans('langPrivacyPolicy') }}</a>
                         @endif
@@ -169,11 +173,13 @@
                             </a>
                         </div>
                     @endif
+                    {{--
                     <div>
                         <a class="a_tools_site_footer" href="{{$urlAppend}}info/terms.php" @if($_SESSION['provider'] == 'lti_publish') target="_blank" @endif>
                             {{ trans('langUsageTerms') }}
                         </a>
                     </div>
+                    --}}
                     @if (get_config('activate_privacy_policy_text'))
                         <div>
                             <a class="a_tools_site_footer" href="{{$urlAppend}}info/privacy_policy.php" @if($_SESSION['provider'] == 'lti_publish') target="_blank" @endif>
@@ -183,7 +189,7 @@
                     @endif
                 </div>
                 <div class='col-12 border-bottom-footer'></div>
-                <div class="col-12 mt-auto d-flex justify-content-between align-items-center flex-wrap gap-3 pt-3">
+                <div class="col-12 mt-auto d-flex @if(get_config('enable_social_sharing_links') && (get_config('link_fb') || get_config('link_tw') || get_config('link_ln'))) justify-content-between @else justify-content-center @endif align-items-center flex-wrap gap-3 pt-3">
                     <a class="copyright" href='{{$urlAppend}}info/copyright.php' @if($_SESSION['provider'] == 'lti_publish') target="_blank" @endif>Copyright © {{ date('Y') }} All rights reserved</a>
                     @if(get_config('enable_social_sharing_links'))
                         <div class='d-flex gap-3 justify-content-end'>

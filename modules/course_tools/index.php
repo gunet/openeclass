@@ -19,7 +19,6 @@
  */
 
 $require_current_course = true;
-$require_course_admin = true;
 $require_help = true;
 $helpTopic = 'course_tools';
 $require_login = true;
@@ -30,9 +29,14 @@ require_once 'modules/lti_consumer/lti-functions.php';
 require_once 'publish-functions.php';
 require_once 'modules/admin/extconfig/ltipublishapp.php';
 
-$toolName = $langToolManagement;
-add_units_navigation(TRUE);
+$up = new Permissions();
+if (!$up->has_course_modules_permission()) {
+    Session::Messages($langCheckCourseAdmin, 'alert-danger');
+    redirect_to_home_page('courses/'. $course_code);
+}
 
+$toolName = $langCourseTools;
+add_units_navigation(TRUE);
 load_js('tools.js');
 load_js('trunk8');
 
@@ -123,11 +127,11 @@ if (isset($_POST['submit'])) {
     redirect_to_home_page($page_url);
 } elseif (isset($_GET['add'])) { // add external link
     $pageName = $langAddExtLink;
-    $navigation[] = array('url' => $page_url, 'name' => $langToolManagement);
+    $navigation[] = array('url' => $page_url, 'name' => $langCourseTools);
     view('modules.course_tools.external_link_store', $data);
 } elseif (isset($_GET['show_lti_template'])) {
     $pageName = $langTurnitinConfDetails;
-    $navigation[] = array('url' => "../course_tools/index.php?course=$course_code", 'name' => $langToolManagement);
+    $navigation[] = array('url' => "../course_tools/index.php?course=$course_code", 'name' => $langCourseTools);
     $appId = getDirectReference($_GET['show_lti_template']);
     $lti = Database::get()->querySingle("SELECT * FROM lti_apps WHERE id = ?d ", $appId);
     $data['lti'] = $lti;
@@ -166,16 +170,21 @@ if (isset($_POST['submit'])) {
     $ltipublishapp = ExtAppManager::getApp('ltipublish');
     $data['ltiPublishIsEnabledForCurrentCourse'] = $ltipublishapp->isEnabledForCurrentCourse();
 
-    $activeClause = $is_editor ? '' : 'AND enabled = 1';
     $data['lti_apps'] = array_map(function ($app) {
         global $course_code, $is_editor, $urlAppend;
+
+        $templateVisible = isset($app->course_visible) ? intval($app->course_visible) : 1;
+        $isTemplatePanopto = !empty($app->is_template_panopto);
+        $app->is_active_for_course = ($app->enabled == 1) && (!$isTemplatePanopto || $templateVisible == 1);
 
         $indirect_id = getIndirectReference($app->id);
         if ($is_editor) {
             $app->editUrl = "{$urlAppend}modules/lti_consumer/index.php?course=$course_code&amp;id=$indirect_id&amp;choice=edit";
-            $app->enableUrl = "{$urlAppend}modules/lti_consumer/index.php?id=$indirect_id&amp;choice=do_" .
-                ($app->enabled? 'disable' : 'enable');
+            $app->enableUrl = "{$urlAppend}modules/lti_consumer/index.php?id=$indirect_id&amp;choice=do_" . ($app->enabled ? 'disable' : 'enable');
             $app->deleteUrl = "{$urlAppend}modules/lti_consumer/index.php?id=$indirect_id&amp;choice=do_delete";
+            // toggle enable/disable
+            $toggleChoice = $templateVisible ? 'do_template_disable' : 'do_template_enable';
+            $app->templateEnableUrl = "{$urlAppend}modules/lti_consumer/index.php?id=$indirect_id&amp;choice=$toggleChoice";
         }
         if (!isset($app->description)) {
             $app->description = '';
@@ -186,22 +195,20 @@ if (isset($_POST['submit'])) {
                 $app->joinLink = create_launch_button($app->id);
             } else {
                 $app->joinLink = create_join_button(
-                    $row->lti_provider_url,
-                    $row->lti_provider_key,
-                    $row->lti_provider_secret,
-                    $row->id,
+                    $app->lti_provider_url,
+                    $app->lti_provider_key,
+                    $app->lti_provider_secret,
+                    $app->id,
                     "lti_tool",
-                    $row->title,
-                    $row->description,
-                    $row->launchcontainer);
+                    $app->title,
+                    $app->description,
+                    $app->launchcontainer);
             }
         } else {
             $app->joinLink = q($app->title);
         }
         return $app;
-    }, Database::get()->queryArray("SELECT * FROM lti_apps
-        WHERE course_id = ?d $activeClause AND is_template = 0
-        ORDER BY title ASC", $course_id));
+    }, fetch_lti_apps());
 
     $data['lti_providers'] = lti_provider_details();
 

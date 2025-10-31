@@ -212,6 +212,9 @@ if (isset($_POST['submit'])) {
             if (isset($_POST['c_radio'])) {
                 setting_set(SETTING_COURSE_COMMENT_ENABLE, $_POST['c_radio'], $course_id);
             }
+            if (isset($_POST['h5p_radio'])) {
+                setting_set(SETTING_COURSE_H5P_USERS_UPLOADING_ENABLE, $_POST['h5p_radio'], $course_id);
+            }
             if (isset($_POST['ar_radio'])) {
                 setting_set(SETTING_COURSE_ABUSE_REPORT_ENABLE, $_POST['ar_radio'], $course_id);
             }
@@ -467,6 +470,17 @@ if (isset($_POST['submit'])) {
     }
     $data['checkCommentDis'] = $checkCommentDis;
     $data['checkCommentEn'] = $checkCommentEn;
+
+    // H5P users uploading
+    if (setting_get(SETTING_COURSE_H5P_USERS_UPLOADING_ENABLE, $course_id) == 1) {
+        $checkH5PDis = '';
+        $checkH5PEn = 'checked ';
+    } else {
+        $checkH5PDis = 'checked ';
+        $checkH5PEn = '';
+    }
+    $data['checkH5PDis'] = $checkH5PDis;
+    $data['checkH5PEn'] = $checkH5PEn;
 
     // Abuse report
     if (setting_get(SETTING_COURSE_ABUSE_REPORT_ENABLE, $course_id) == 1) {

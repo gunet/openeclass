@@ -54,7 +54,7 @@ require_once 'modules/progress/AttendanceEvent.php';
 $toolName = $langManageSession;
 $element = "badge";
 $display = TRUE;
-$localhostUrl = localhostUrl();
+
 check_activation_of_collaboration();
 
 if ($is_consultant) {
@@ -73,7 +73,7 @@ if ($is_consultant) {
         $pageName = $langSessionCompletion;
         $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langSession);
         $navigation[] = array('url' => 'session_space.php?course=' . $course_code . "&session=" . $sessionID , 'name' => $sessionTitle);
-        $currentSession = Database::get()->querySingle("SELECT * FROM mod_session 
+        $currentSession = Database::get()->querySingle("SELECT * FROM mod_session
                                                     WHERE course_id = ?d AND id = ?d", $course_id, $sessionID);
     } else {
         redirect_to_home_page("courses/$course_code/");
@@ -128,54 +128,49 @@ if ($is_consultant) {
     ));
     //Top Menu End
 
-    $allCourseSessions = Database::get()->queryArray("SELECT * FROM mod_session 
+    $allCourseSessions = Database::get()->queryArray("SELECT * FROM mod_session
                                                     WHERE course_id = ?d", $course_id);
     if (!$allCourseSessions) {
-        Session::flash('message',$langNoSessions);
+        Session::flash('message', $langNoSessions);
         Session::flash('alert-class', 'alert-warning');
         redirect_to_home_page("courses/$course_code/");
     }
 
+    $base_url = "modules/session/complete.php?course=$course_code&manage=1&$sessionID";
     if (isset($_POST['mod_cert_activity'])) { // modify certificate activity
         modify_certificate_activity($element, $element_id, $_POST['activity_id']);
-        Session::flash('message',"$langQuotaSuccess");
+        Session::flash('message', $langQuotaSuccess);
         Session::flash('alert-class', 'alert-success');
-        redirect($localhostUrl.$_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&session=$sessionID");
+        redirect_to_home_page($base_url);
     }
-
-
 
     // Add resources
      elseif(isset($_POST['add_assignment'])) { // add assignment activity in certificate
         add_assignment_to_certificate($element, $element_id, AssignmentEvent::ACTIVITY);
         Session::flash('message',"$langQuotaSuccess");
         Session::flash('alert-class', 'alert-success');
-        redirect($localhostUrl.$_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&session=$sessionID");
+        redirect_to_home_page($base_url);
     } elseif (isset($_POST['add_assignment_participation'])){
         add_assignment_to_certificate($element, $element_id, AssignmentSubmitEvent::ACTIVITY);
         Session::flash('message',"$langQuotaSuccess");
         Session::flash('alert-class', 'alert-success');
-        redirect($localhostUrl.$_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&session=$sessionID");
+        redirect_to_home_page($base_url);
     } elseif (isset($_POST['add_document'])) { // add document activity in certificate
         add_document_to_certificate($element, $element_id);
         Session::flash('message',"$langQuotaSuccess");
         Session::flash('alert-class', 'alert-success');
-        redirect($localhostUrl.$_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&session=$sessionID");
+        redirect_to_home_page($base_url);
     } elseif(isset($_POST['add_submited_document'])){
         add_submitted_document_to_certificate($element, $element_id);
         Session::flash('message',"$langQuotaSuccess");
         Session::flash('alert-class', 'alert-success');
-        redirect($localhostUrl.$_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&session=$sessionID");
+        redirect_to_home_page($base_url);
     } elseif (isset($_POST['add_poll'])) { // add poll activity in certificate
         add_poll_to_certificate($element, $element_id);
         Session::flash('message',"$langQuotaSuccess");
         Session::flash('alert-class', 'alert-success');
-        redirect($localhostUrl.$_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&session=$sessionID");
+        redirect_to_home_page($base_url);
     }    // End add resources
-
-
-
-
 
     if ( isset($_GET['manage']) ) {
         if ( isset($_GET['newuc']) ) {
@@ -184,27 +179,27 @@ if ($is_consultant) {
             $badge = Database::get()->querySingle("SELECT * FROM badge WHERE course_id = ?d AND session_id=?d", $course_id, $sessionID);
             $element_id = $badge->id;
             $display = FALSE;
-            Session::flash('message',"$langSessionCompletionActivated");
+            Session::flash('message', $langSessionCompletionActivated);
             Session::flash('alert-class', 'alert-success');
-            redirect($localhostUrl.$_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&session=$sessionID&badge_id=".$element_id);
+            redirect_to_home_page("$base_url&badge_id=$element_id");
         } elseif ( isset($_GET['deluc'])) {
             Session::flash('message',"$langGlossaryDeleted");
             Session::flash('alert-class', 'alert-success');
             $badge = Database::get()->querySingle("SELECT * FROM badge WHERE course_id = ?d AND session_id = ?d", $course_id, $sessionID);
-            if($badge){
+            if ($badge) {
                 $exists_criterion = Database::get()->querySingle("SELECT * FROM badge_criterion WHERE badge = ?d",$badge->id);
-                if(!$exists_criterion){
+                if (!$exists_criterion) {
                     if (purge_certificate('badge', $badge->id, 0, $sessionID)) {
                         Session::flash('message',"$langGlossaryDeleted");
                         Session::flash('alert-class', 'alert-success');
                     }
-                }else{
+                } else {
                     Session::flash('message',"$langExistResourcesForCompletion");
                     Session::flash('alert-class', 'alert-danger');
                 }
             }
             Database::get()->query("DELETE FROM mod_session_completion WHERE course_id = ?d AND session_id = ?d",$course_id,$sessionID);
-            redirect($localhostUrl.$_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&session=$sessionID");
+            redirect_to_home_page($base_url);
         } elseif ( isset($_GET['add']) and isset($_GET['act']) ) {
             insert_session_activity($element, $element_id, $_GET['act'], $sessionID, $session_resource_id);
             $display = FALSE;
@@ -220,12 +215,12 @@ if ($is_consultant) {
             if (resource_usage($element, $_GET['del_cert_res'])) { // check if resource has been used by user
                 Session::flash('message',"$langUsedCertRes");
                 Session::flash('alert-class', 'alert-warning');
-                redirect($localhostUrl.$_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&session=$sessionID");
+                redirect_to_home_page($base_url);
             } else { // delete it otherwise
                 delete_activity($element, $element_id, $_GET['del_cert_res']);
                 Session::flash('message',"$langAttendanceDel");
                 Session::flash('alert-class', 'alert-success');
-                redirect($localhostUrl.$_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&session=$sessionID");
+                redirect_to_home_page($base_url);
             }
         }
     } elseif ( isset($_GET['prereq']) ) {
@@ -261,16 +256,16 @@ if ($is_consultant) {
             Session::flash('message',$langInfoForbiddenAddPrereq);
             Session::flash('alert-class', 'alert-warning');
         }
-        redirect($localhostUrl.$_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&session=$sessionID");
+        redirect_to_home_page($base_url);
     } elseif ( isset($_GET['del_un_prereq']) ) {
         delete_session_prerequisite($sessionID);
         Session::flash('message',"$langDelUnitPrerequisiteSuccess");
         Session::flash('alert-class', 'alert-success');
-        redirect($localhostUrl.$_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&session=$sessionID");
+        redirect_to_home_page($base_url);
     } else {
         Session::flash('message',"$langGeneralError");
         Session::flash('alert-class', 'alert-danger');
-        redirect($localhostUrl."/courses/$course_code/");
+        redirect_to_home_page("courses/$course_code/");
     }
 }
 

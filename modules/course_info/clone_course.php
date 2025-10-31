@@ -19,7 +19,7 @@
  */
 
 $require_current_course = true;
-$require_course_admin = true;
+
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'include/lib/hierarchy.class.php';
@@ -30,10 +30,10 @@ load_js('jstree3');
 $treeObj = new Hierarchy();
 $allow_clone = false;
 $allowables = null;
+
+$up = new Permissions();
 // $atleastone is set to true by init when a department admin can admin this course
-if (get_config('allow_teacher_clone_course') and $is_course_admin) {
-    $allow_clone = true;
-} elseif ($is_power_user or $is_admin) {
+if ($is_power_user or $is_admin) {
     $allow_clone = true;
 } elseif ($is_departmentmanage_user and $atleastone) {
     $allow_clone = true;
@@ -49,6 +49,8 @@ if (get_config('allow_teacher_clone_course') and $is_course_admin) {
             }
         }
     }
+} elseif ($up->has_course_clone_permission()) {
+    $allow_clone = true;
 }
 
 // access control

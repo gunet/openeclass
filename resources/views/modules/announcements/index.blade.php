@@ -1,9 +1,8 @@
 @extends('layouts.default')
 
 @push('head_scripts')
-<script src="{{ $urlServer }}/js/datatables/media/js/jquery.dataTables.min.js"></script>
-<script src="{{ $urlServer }}/js/trunk8.js"></script>
-<script type='text/javascript'>
+    <script src="{{ $urlServer }}/js/trunk8.js"></script>
+    <script type='text/javascript'>
 
     function act_confirm() {
         $('.confirmAction').on('click', function (e) {
@@ -90,12 +89,11 @@
     let checkboxStates = [];
 
     $(document).ready(function(){
-
-
         $('li.bulk-processing a').on('click', function(event) {
             event.preventDefault();
             $('.table-responsive').toggleClass('checkboxes-on');
-            $('.td-bulk-select').toggleClass('d-none');
+            $('.bulk_select').toggleClass('d-none');
+            $('.show-announcement-id').toggleClass('d-none');
             $('.bulk-processing-box').toggleClass('d-none');
 
             if ($(this).find('span.fa-solid.fa-check').length) {
@@ -135,7 +133,8 @@
 
         function checkCheckboxes() {
             if ($('.table-responsive').hasClass('checkboxes-on')) {
-                $('.td-bulk-select').removeClass('d-none');
+                $('.bulk_select').removeClass('d-none');
+                $('.show-announcement-id').removeClass('d-block');
             }
         }
 
@@ -143,11 +142,11 @@
 
         var oTable = $('#ann_table{{ $course_id }}').DataTable ({
             @if ($is_editor)
-            'aoColumnDefs':[
-                {'sClass':'option-btn-cell text-end','aTargets':[-1]},
-                {'sClass':'d-none td-bulk-select','aTargets':[0]},
-            ],
-            'autoWidth': false,
+                'aoColumnDefs':[
+                    {'sClass':'option-btn-cell text-end','aTargets':[-1]},
+                    {'sClass':'td-bulk-select','aTargets':[0]},
+                ],
+                'autoWidth': false,
             @endif
             bStateSave: true,
             bProcessing: true,
@@ -156,11 +155,11 @@
             fixedHeader: true,
             responsive: true,
             searchDelay: 1000,
-            sAjaxSource: '{{ $_SERVER['REQUEST_URI'] }}',
-            aLengthMenu: [
-                [10, 15, 20 , -1],
-                [10, 15, 20, '{{ trans('langAllOfThem') }}'] // change per page values here
-            ],
+            ajax: {
+                url: '{{ $_SERVER['REQUEST_URI'] }}',
+                type: 'POST'
+            },
+            lengthMenu: [10, 15, 20 , -1],
             fnDrawCallback: function( oSettings ) {
                 popover_init();
                 tooltip_init();
@@ -172,23 +171,25 @@
                 });
                 restoreCheckboxStates();
                 checkCheckboxes();
-                $('#ann_table{{ $course_id }}_filter label input').attr({
+                $('#ann_table{{ $course_id }}_wrapper .dt-search input').attr({
                     class : 'form-control input-sm mb-3 ms-0',
                     placeholder : '{{ trans('langSearch') }}...'
                 });
-                $('#ann_table{{ $course_id }}_filter label').attr('aria-label', '{{ trans('langSearch') }}');
+                $('#ann_table{{ $course_id }}_wrapper .dt-search label').attr('aria-label', '{{ trans('langSearch') }}');
             },
             sPaginationType: 'full_numbers',
             bSortable: true,
             oLanguage: {
+                lengthLabels: {
+                    '-1': '{{ trans('langAllOfThem') }}'
+                },
                 sLengthMenu:   '{{ trans('langDisplay') }} _MENU_ {{ trans('langResults2') }}',
                 sZeroRecords:  '{{ trans('langNoResult') }}',
                 sInfo:         '{{ trans('langDisplayed') }} _START_ {{ trans('langTill') }} _END_ {{ trans('langFrom2') }} _TOTAL_ {{ trans('langTotalResults') }}',
-                sInfoEmpty:    '{{ trans('langDisplayed') }} 0 {{ trans('langTill') }} 0 {{ trans('langFrom2') }} 0 {{ trans('langResults2') }}',
+                sInfoEmpty:    '',
                 sInfoFiltered: '',
                 sInfoPostFix:  '',
                 sSearch:       '',
-                sUrl:          '',
                 oPaginate: {
                     sFirst:    '&laquo;',
                     sPrevious: '&lsaquo;',
@@ -210,7 +211,6 @@
                     pin_announce: 1
                 },
                 beforeSend: function(){
-                    //console.log(tr_affected);
                     tr_affected.css('backgroundColor','rgba(100,100,100,0.3)');
                 },
                 success: function(data){
@@ -267,11 +267,7 @@
         });
 
         $(document).on( 'click','.vis_btn', function (g) {
-
             g.preventDefault();
-            // var vis = $(this).data('vis');
-            // var row_id = $(this).data('id');
-
             var temp_id = this.id;
             var row_id = temp_id.split("|")[0];
             var vis = temp_id.split("|")[1];
@@ -300,9 +296,6 @@
             });
         });
         $('.success').delay(3000).fadeOut(1500);
-
-
-
     });
 
 
@@ -329,10 +322,6 @@
 </script>
 @endpush
 
-@push('head_styles')
-    <link rel='stylesheet' type='text/css' href="{{ $urlServer }}/js/datatables/media/css/jquery.dataTables.css" />
-@endpush
-
 @section('content')
 
 <div class="col-12 main-section">
@@ -344,7 +333,6 @@
             <div class="col_maincontent_active">
 
                 <div class="row">
-
 
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 

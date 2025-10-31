@@ -19,13 +19,19 @@
  */
 
 $require_current_course = true;
-$require_course_admin = true;
+
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileManageLib.inc.php';
 require_once 'archive_functions.php';
 
 $pageName = $langArchiveCourse;
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langCourseInfo);
+
+$up = new Permissions();
+if (!$up->has_course_backup_permission()) {
+    Session::Messages($langCheckCourseAdmin, 'alert-danger');
+    redirect_to_home_page('courses/'. $course_code);
+}
 
 if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();
 
@@ -48,6 +54,4 @@ $data['action_bar'] =
 
     ], false);
 
-
-$data['menuTypeID'] = 2;
 view('modules.course_info.archive_course', $data);

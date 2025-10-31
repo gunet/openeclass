@@ -53,6 +53,7 @@ function setting_default($setting_id) {
         SETTING_USERS_LIST_ACCESS => 1,
         SETTING_AGENDA_ANNOUNCEMENT_COURSE_COMPLETION => 1,
         SETTING_FACULTY_USERS_REGISTRATION => 0,
+        SETTING_COURSE_H5P_USERS_UPLOADING_ENABLE => 0,
         SETTING_COUSE_IMAGE_STYLE => 0,
         SETTING_COUSE_IMAGE_PRINT_HEADER => 0,
         SETTING_COUSE_IMAGE_PRINT_FOOTER => 0,
@@ -151,8 +152,9 @@ function setting_get_print_image_disk_path($setting_id, $course_id=null) {
     return $webDir . "/courses/" . course_id_to_code($course_id) ."/document". $document->path;
 }
 
-function imageToBase64($imagePath) {
-    if (!file_exists($imagePath)) {
+function imageToBase64($imagePath): string
+{
+    if (is_null($imagePath) or !file_exists($imagePath)) {
         return 'not found';
     }
 

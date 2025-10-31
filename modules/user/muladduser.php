@@ -19,7 +19,6 @@
  */
 
 $require_current_course = true;
-$require_course_admin = true;
 $require_help = true;
 $helpTopic = 'course_users';
 
@@ -28,6 +27,13 @@ require_once 'include/log.class.php';
 
 $toolName = $langAddManyUsers;
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langUsers);
+
+$up = new Permissions();
+
+if (!$up->has_course_users_permission()) {
+    Session::Messages($langCheckCourseAdmin, 'alert-danger');
+    redirect_to_home_page('courses/'. $course_code);
+}
 
 $results = '';
 

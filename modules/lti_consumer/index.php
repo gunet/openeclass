@@ -29,6 +29,9 @@ require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
 require_once 'lti-functions.php';
 
+require_once 'modules/lti/classes/JwksHelper.php';
+JwksHelper::verifyPrivateKeyExists();
+
 require_once 'include/lib/modalboxhelper.class.php';
 ModalBoxHelper::loadModalBox();
 
@@ -38,7 +41,7 @@ $action = new action();
 $action->record(MODULE_ID_LTI_CONSUMER);
 /* * *********************************** */
 
-$toolName = $langToolManagement;
+$toolName = $langCourseTools;
 
 load_js('tools.js');
 load_js('bootstrap-datetimepicker');
@@ -74,7 +77,7 @@ if ($is_editor) {
 }
 
 if (isset($_GET['add'])) {
-    $navigation[] = array('url' => "../course_tools/index.php?course=$course_code", 'name' => $langToolManagement);
+    $navigation[] = array('url' => "../course_tools/index.php?course=$course_code", 'name' => $langCourseTools);
     new_lti_app(false, $course_code);
 }
 elseif(isset($_POST['update_lti_app']))
@@ -89,7 +92,7 @@ elseif(isset($_POST['update_lti_app']))
 }
 elseif(isset($_GET['choice']))
 {
-    $navigation[] = array('url' => "../course_tools/index.php?course=$course_code", 'name' => $langToolManagement);
+    $navigation[] = array('url' => "../course_tools/index.php?course=$course_code", 'name' => $langCourseTools);
     switch($_GET['choice'])
     {
         case 'edit':
@@ -107,6 +110,12 @@ elseif(isset($_GET['choice']))
         case 'do_enable':
             enable_lti_app(getDirectReference($_GET['id']));
             break;
+        case 'do_template_disable':
+            disable_course_lti_template($course_id, getDirectReference($_GET['id']));
+            break;
+        case 'do_template_enable':
+            enable_course_lti_template($course_id, getDirectReference($_GET['id']));
+            break;
         case 'do_join':
             break;
     }
@@ -123,7 +132,7 @@ elseif(isset($_GET['choice']))
     redirect("../course_tools/index.php?course=$course_code");
 } else if (isset($_GET['show_template'])) {
     $pageName = $langTurnitinConfDetails;
-    $navigation[] = array('url' => "../course_tools/index.php?course=$course_code", 'name' => $langToolManagement);
+    $navigation[] = array('url' => "../course_tools/index.php?course=$course_code", 'name' => $langCourseTools);
     $appId = getDirectReference($_GET['show_template']);
     $lti = Database::get()->querySingle("SELECT * FROM lti_apps WHERE id = ?d ", $appId);
     $tool_content .= create_table_for_show_lti_1_3($lti);

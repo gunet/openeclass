@@ -88,7 +88,7 @@ function getUserCourseInfo($uid): string
                         <td class='border-top-0 border-start-0 border-end-0'>
                             <div class='d-flex gap-1 flex-wrap'>
                                 <a class='TextBold' href='{$urlServer}courses/$data->code/'>" . q(ellipsize($data->title, 64)) . "</a>
-                                <small>(" .  $data->public_code . ")</small>
+                                <small>(" .  q($data->public_code) . ")</small>
                                 <a id='btnNotification_{$data->course_id}' class='invisible btn btn-notification-course text-decoration-none' data-bs-toggle='collapse' href='#notification{$data->course_id}'
                                                 role='button' aria-expanded='false' aria-controls='notification{$data->course_id}' aria-label='$langNotificationsExist'>
                                     <i class='fa-solid fa-bell link-color' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langNotificationsExist'></i>
