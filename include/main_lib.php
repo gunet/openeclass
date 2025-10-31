@@ -2996,6 +2996,18 @@ function course_status($course_id) {
 }
 
 /**
+ * @brief get course type (e.g. units, wall etc)
+ * @param $course_id
+ * @return mixed
+ */
+function course_type($course_id) {
+
+    $view_type = Database::get()->querySingle("SELECT view_type FROM course WHERE id = ?d", $course_id)->view_type;
+
+    return $view_type;
+}
+
+/**
  * @brief return message concerning course visibility
  * @param type $course_id
  * @return type
