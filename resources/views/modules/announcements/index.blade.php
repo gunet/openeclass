@@ -89,17 +89,47 @@
     let checkboxStates = [];
 
     $(document).ready(function(){
+
+        $('<style>').prop('type','text/css').html('\n.table-default{table-layout:fixed;}\n.td-bulk-select{width:48px;max-width:48px}\n.table-default th,.table-default td{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}\n').appendTo('head');
+
         $('li.bulk-processing a').on('click', function(event) {
+
             event.preventDefault();
+
             $('.table-responsive').toggleClass('checkboxes-on');
-            $('.bulk_select').toggleClass('d-none');
             $('.bulk-processing-box').toggleClass('d-none');
 
-            if ($(this).find('span.fa-solid.fa-check').length) {
-                $(this).find('span.fa-solid.fa-check').remove();
-            } else {
-                $(this).append('<span class="fa-solid fa-check text-success"></span>');
+            var tableSelector = '#ann_table{{ $course_id }}';
+
+            if ($.fn.dataTable && $.fn.dataTable.isDataTable(tableSelector)) {
+                var table = $(tableSelector).DataTable();
+                var showColumn = $('.table-responsive').hasClass('checkboxes-on');
+
+                table.column(0).visible(showColumn, false);
+
+                // recalc sizes once, then redraw
+                table.columns.adjust();
+                if (table.responsive && typeof table.responsive.recalc === 'function') {
+                    table.responsive.recalc();
+                }
+                table.draw(false);
+
+                // adjust fixedHeader position if used
+                if (table.fixedHeader && typeof table.fixedHeader.adjust === 'function') {
+                    table.fixedHeader.adjust();
+                }
             }
+
+            if ($('.table-responsive').hasClass('checkboxes-on')) {
+                if ($(this).find('span.fa-solid.fa-check').length === 0) {
+                    $(this).append('<span class="fa-solid fa-check text-success"></span>');
+                }
+            } else {
+                $(this).find('span.fa-solid.fa-check').remove();
+                $(tableSelector + ' input[type="checkbox"]').prop('checked', false);
+                $('#selectedcbids').val('');
+            }
+
         });
 
 
@@ -133,6 +163,7 @@
         function checkCheckboxes() {
             if ($('.table-responsive').hasClass('checkboxes-on')) {
                 $('.bulk_select').removeClass('d-none');
+                $('.show-announcement-id').removeClass('d-block');
             }
         }
 
@@ -140,11 +171,9 @@
 
         var oTable = $('#ann_table{{ $course_id }}').DataTable ({
             @if ($is_editor)
-                'aoColumnDefs':[
-                    {'sClass':'option-btn-cell text-end','aTargets':[-1]},
-                    {'sClass':'td-bulk-select','aTargets':[0]},
+                columnDefs: [
+                    { className: 'option-btn-cell text-end', targets: -1 },
                 ],
-                'autoWidth': false,
             @endif
             bStateSave: true,
             bProcessing: true,
@@ -158,6 +187,11 @@
                 type: 'POST'
             },
             lengthMenu: [10, 15, 20 , -1],
+            @if ($is_editor)
+            initComplete: function() {
+                this.api().column(0).visible(false);
+            },
+            @endif
             fnDrawCallback: function( oSettings ) {
                 popover_init();
                 tooltip_init();
@@ -401,7 +435,7 @@
                                 <thead>
                                     <tr>
                                         @if ($is_editor)
-                                            <th></th>
+                                            <th class="td-bulk-select">#</th>
                                         @endif
 
                                         <th class='@if($is_editor) announceContent @else announceContentStudent @endif'>{{ trans('langAnnouncement') }}</th>
