@@ -93,7 +93,6 @@
             event.preventDefault();
             $('.table-responsive').toggleClass('checkboxes-on');
             $('.bulk_select').toggleClass('d-none');
-            $('.show-announcement-id').toggleClass('d-none');
             $('.bulk-processing-box').toggleClass('d-none');
 
             if ($(this).find('span.fa-solid.fa-check').length) {
@@ -134,7 +133,6 @@
         function checkCheckboxes() {
             if ($('.table-responsive').hasClass('checkboxes-on')) {
                 $('.bulk_select').removeClass('d-none');
-                $('.show-announcement-id').removeClass('d-block');
             }
         }
 
@@ -403,7 +401,7 @@
                                 <thead>
                                     <tr>
                                         @if ($is_editor)
-                                            <th>#</th>
+                                            <th></th>
                                         @endif
 
                                         <th class='@if($is_editor) announceContent @else announceContentStudent @endif'>{{ trans('langAnnouncement') }}</th>
