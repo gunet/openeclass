@@ -107,14 +107,14 @@
 
                 table.column(0).visible(showColumn, false);
 
-                // recalc sizes once, then redraw
+                // recalc sizes once, then redraw.
                 table.columns.adjust();
                 if (table.responsive && typeof table.responsive.recalc === 'function') {
                     table.responsive.recalc();
                 }
                 table.draw(false);
 
-                // adjust fixedHeader position if used
+                // adjust fixedHeader position if used.
                 if (table.fixedHeader && typeof table.fixedHeader.adjust === 'function') {
                     table.fixedHeader.adjust();
                 }

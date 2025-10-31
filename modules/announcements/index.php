@@ -157,7 +157,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                 }
             }
 
-            //setting data tables column data
+            //setting data tables column data.
             if ($myrow->order != 0) {
                 $pinned_class = "text-danger";
                 $pinned = 0;
@@ -167,6 +167,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                                 <span class='fa fa-arrow-up float-end pe-2' data-bs-toggle='tooltip' data-bs-placement='top' title='$langAdminPinnedToTop'></span>
                             </a>";
                 }
+
             } elseif ($myrow->order == 0) {
                 $pinned_class = "not_visible";
                 $pinned = 1;
