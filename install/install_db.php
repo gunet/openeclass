@@ -2301,7 +2301,6 @@ $db->query("CREATE TABLE `points_game_levels` (
     `points_game` int(11) not null,
     `friendly_name` varchar(255),
     `required_points` int(11) not null,
-    `sortorder` int(11) not null,
     foreign key (`points_game`) references `points_game`(`id`)
 ) $tbl_options");
   
@@ -2321,7 +2320,7 @@ $db->query("CREATE TABLE `user_points_game_points` (
     `user` int(11) not null,
     `points_game` int(11) not null,
     `total_points` int(11) not null,
-    `current_level` int(11) not null,
+    `current_level` int(11),
     unique key `user_points_game_points` (`user`, `points_game`),
     index `user_points_game_leaderboard` (`points_game`, `total_points` DESC),
     foreign key (`user`) references `user`(`id`),
