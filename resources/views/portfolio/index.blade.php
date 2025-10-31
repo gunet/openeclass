@@ -538,12 +538,10 @@
 
                                             </h2>
                                             <div class='d-flex mt-md-0 mt-3'>
-                                                {{--
                                                 <a class="btn submitAdminBtn @if ($_SESSION['status'] == USER_TEACHER or $is_power_user or $is_departmentmanage_user) me-2 @endif" href="{{ $urlAppend }}modules/auth/courses.php">
                                                     <i class="fa-regular fa-pen-to-square"></i>&nbsp
                                                     {{ trans('langRegister') }}
                                                 </a>
-                                                --}}
                                                 @if ($_SESSION['status'] == USER_TEACHER or $is_power_user or $is_departmentmanage_user)
                                                     <a id="btn_create_course" class="btn submitAdminBtnDefault" href="{{ $urlAppend }}modules/create_course/create_course.php">
                                                         <i class="fa-solid fa-plus"></i>&nbsp;{{ trans('langCreate') }}
@@ -805,7 +803,6 @@
 
                                     @include('portfolio.portfolio-calendar')
 
-                                    {{--
                                     <div class='card bg-transparent card-transparent border-0 mt-5 sticky-column-course-home'>
                                         <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
                                             <h3 class='mb-0'>{{ trans('langAnnouncements') }}</h3>
@@ -839,7 +836,6 @@
                                             @endif
                                         </div>
                                     </div>
-                                    --}}
 
                                     @if($portfolio_page_sidebar_widgets)
                                         <div class='card bg-transparent card-transparent border-0 mt-5 sticky-column-course-home'>
