@@ -97,4 +97,22 @@ class PointsGame {
         ];
     }
 
+    public static function resetPointsGame($gid, $user = null) {
+        if(is_null($user)) {
+            Database::get()->query("DELETE upgc
+                FROM user_points_game_criterion AS upgc
+                JOIN points_game_criterion AS pgc 
+                ON upgc.points_game_criterion = pgc.id
+                WHERE pgc.points_game = ?d", $gid);
+            Database::get()->query("DELETE FROM user_points_game_points WHERE points_game = ?d", $gid);
+        } else {
+            Database::get()->query("DELETE upgc
+                FROM user_points_game_criterion AS upgc
+                JOIN points_game_criterion AS pgc 
+                ON upgc.points_game_criterion = pgc.id
+                WHERE pgc.points_game = ?d AND upgc.user = ?d", $gid, $user);
+            Database::get()->query("DELETE FROM user_points_game_points WHERE points_game = ?d AND user = ?d", $gid, $user);
+        }
+    }
+
 }
