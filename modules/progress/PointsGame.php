@@ -85,14 +85,14 @@ class PointsGame {
         $min = (int) $performance['current_level_min_points'];
         $max = (int) $next_q->required_points;
         $span = $max - $min;
-        $progress = $points - $min;
+        $progress = $performance['points'] - $min;
         $percent = ($span > 0) ? ($progress / $span) * 100 : 100;
         $percent = round(min(100, max(0, $percent)), 2);
 
         return [
             'current_level_id' => $performance['current_level'],
             'next_level_id' => $next_q->id,
-            'points_needed_for_next' => $max - $points,
+            'points_needed_for_next' => $max - $performance['points'],
             'progress_percentage' => $percent
         ];
     }
