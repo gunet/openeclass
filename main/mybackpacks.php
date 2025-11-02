@@ -222,13 +222,13 @@ function testBackpackConnection($provider, $email, $password, $userId, $backpack
     
     // Check if request was successful
     if ($httpCode < 200 || $httpCode >= 300) {
-        return [
+    return [
             'success' => false,
-            'status' => $httpCode,
+        'status' => $httpCode,
             'error' => 'Authentication failed',
-            'response' => $decodedResponse ?: $response,
-            'raw_response' => $response
-        ];
+        'response' => $decodedResponse ?: $response,
+        'raw_response' => $response
+    ];
     }
     
     // Validate OAuth response structure

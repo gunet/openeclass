@@ -32,6 +32,81 @@
  */
 
 require_once __DIR__ . '/../../../include/baseTheme.php';
+require_once __DIR__ . '/../../progress/process_functions.php';
+
+// Load all Event classes that get_resource_details() needs
+require_once __DIR__ . '/../../progress/ExerciseEvent.php';
+require_once __DIR__ . '/../../progress/AssignmentEvent.php';
+require_once __DIR__ . '/../../progress/AssignmentSubmitEvent.php';
+require_once __DIR__ . '/../../progress/LearningPathEvent.php';
+require_once __DIR__ . '/../../progress/LearningPathDurationEvent.php';
+require_once __DIR__ . '/../../progress/ViewingEvent.php';
+require_once __DIR__ . '/../../progress/BlogEvent.php';
+require_once __DIR__ . '/../../progress/CommentEvent.php';
+require_once __DIR__ . '/../../progress/RatingEvent.php';
+require_once __DIR__ . '/../../progress/ForumEvent.php';
+require_once __DIR__ . '/../../progress/ForumTopicEvent.php';
+require_once __DIR__ . '/../../progress/WikiEvent.php';
+require_once __DIR__ . '/../../progress/CourseParticipationEvent.php';
+require_once __DIR__ . '/../../progress/GradebookEvent.php';
+require_once __DIR__ . '/../../progress/CourseCompletionEvent.php';
+require_once __DIR__ . '/../../progress/AttendanceEvent.php';
+
+/**
+ * Get badge criteria as a formatted narrative string
+ * 
+ * @param int $badgeId Badge ID
+ * @param int $courseId Course ID (needed for get_resource_details())
+ * @param string $badgeDescription Badge description to prepend
+ * @return string Formatted criteria narrative
+ */
+function getBadgeCriteriaNarrative(int $badgeId, int $courseId, string $badgeDescription): string {
+    global $course_id;
+    
+    // Set global course_id for get_resource_details()
+    $course_id = $courseId;
+    
+    // Get badge criteria
+    $criteriaList = Database::get()->queryArray("
+        SELECT 
+            bc.id as criterion_id,
+            bc.activity_type,
+            bc.module,
+            bc.resource,
+            bc.threshold,
+            bc.operator
+        FROM badge_criterion bc
+        WHERE bc.badge = ?d
+        ORDER BY bc.id ASC
+    ", $badgeId);
+    
+    // Start with badge description
+    $narrative = $badgeDescription;
+    
+    // Add criteria details if any exist
+    if (count($criteriaList) > 0) {
+        $narrative .= "\n\n" . "Criteria to earn this badge:\n";
+        
+        foreach ($criteriaList as $index => $criterion) {
+            $resourceDetails = get_resource_details('badge', $criterion->criterion_id);
+            $criteriaLine = ($index + 1) . ". " . $resourceDetails['title'];
+            
+            // Add activity type in parentheses
+            if (!empty($resourceDetails['type'])) {
+                $criteriaLine .= " (" . $resourceDetails['type'] . ")";
+            }
+            
+            // Add threshold/operator information if present
+            if (!empty($criterion->operator) && !empty($criterion->threshold)) {
+                $criteriaLine .= " - " . $criterion->operator . " " . $criterion->threshold;
+            }
+            
+            $narrative .= "\n" . $criteriaLine;
+        }
+    }
+    
+    return $narrative;
+}
 
 // Set JSON content type
 header('Content-Type: application/json; charset=utf-8');
@@ -80,6 +155,13 @@ try {
     // Get base URL for building URLs
     $baseUrl = rtrim(get_config('base_url'), '/');
     
+    // Get badge criteria narrative using the helper function
+    $criteriaNarrative = getBadgeCriteriaNarrative(
+        $badgeId,
+        $badgeData->course_id,
+        $badgeData->description
+    );
+    
     // Build badge class JSON according to OpenBadges 2.0/2.1 specification
     $badgeClass = [
         '@context' => 'https://w3id.org/openbadges/v2',
@@ -90,7 +172,7 @@ try {
         // Point issuer to issuer endpoint with badge id (Moodle-style)
         'issuer' => $baseUrl . '/modules/backpack/api/issuer.php?id=' . $badgeData->id,
         'criteria' => [
-            'narrative' => $badgeData->description
+            'narrative' => $criteriaNarrative
         ]
     ];
     
