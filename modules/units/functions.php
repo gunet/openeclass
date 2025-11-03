@@ -480,22 +480,23 @@ function show_resources($unit_id)
             </script>";
         }
 
-
-        if (count($req_in_home) > 0) {
-
-            $max_resource_id = Database::get()->querySingle("SELECT id FROM unit_resources
-                                    WHERE unit_id = ?d ORDER BY `order` DESC LIMIT 1", $unit_id)->id;
-            $html .= "<div class='classTime'>";
-            $html .= "<div class='d-flex justify-content-between align-items-center mt-2'>
+        //in_home
+        $html .= "<div class='classTime'>";
+        $html .= "<div class='d-flex justify-content-between align-items-center mt-2'>
                             <label class='col-2 form-label'>$langActInHome</label>";
-            if ($is_editor and $q->flipped_flag == 2) {
-                $html .= "<div class='btn-group btn-group-sm btn-group-default gap-2'>
+        if ($is_editor and $q->flipped_flag == 2) {
+            $html .= "<div class='btn-group btn-group-sm btn-group-default gap-2'>
                                 <div class='in_home_btn btn submitAdminBtn d-flex justify-content-center align-items-center' title='" . trans('langActInHome') . "'>
                                     <i class='fa fa-plus'></i>
                                 </div>
                             </div>";
-            }
-            $html .= "</div>";
+        }
+        $html .= "</div>";
+        if (count($req_in_home) > 0) {
+
+            $max_resource_id = Database::get()->querySingle("SELECT id FROM unit_resources
+                                    WHERE unit_id = ?d ORDER BY `order` DESC LIMIT 1", $unit_id)->id;
+
             $html .= "<div class='table-responsive'>";
             $html .= "<div class='table table-striped table-hover table-default'><div id='unitResources_1'>";
 
@@ -508,24 +509,28 @@ function show_resources($unit_id)
 
             $html .= "</div></div>";
             $html .= "</div>";
-            $html .= "</div>";
+
 
         }
 
-        if (count($req_in_class) > 0) {
-            $max_resource_id = Database::get()->querySingle("SELECT id FROM unit_resources
-            WHERE unit_id = ?d ORDER BY `order` DESC LIMIT 1", $unit_id)->id;
-            $html .= "<div class='classTime'>";
-            $html .= "<div class='d-flex justify-content-between align-items-center mt-2'>
+        //in_class
+        $html .= "<div class='classTime'>";
+        $html .= "<div class='d-flex justify-content-between align-items-center mt-2'>
                         <label class='col-2 form-label'>$langActInClass</label>";
-            if ($is_editor and $q->flipped_flag == 2) {
-                $html .= "<div class='btn-group btn-group-sm btn-group-default gap-2'>
+        if ($is_editor and $q->flipped_flag == 2) {
+            $html .= "<div class='btn-group btn-group-sm btn-group-default gap-2'>
                             <div class='in_class_btn btn submitAdminBtn d-flex justify-content-center align-items-center' title='" . trans('langActInClass') . "'>
                                 <i class='fa fa-plus'></i>
                             </div>
                         </div>";
-            }
-            $html .= "</div>";
+        }
+        $html .= "</div>";
+
+        $html .= "</div>";
+        if (count($req_in_class) > 0) {
+            $max_resource_id = Database::get()->querySingle("SELECT id FROM unit_resources
+            WHERE unit_id = ?d ORDER BY `order` DESC LIMIT 1", $unit_id)->id;
+
             $html .= "<div class='table-responsive'>";
             $html .= "<div class='table table-striped table-hover table-default'><div id='unitResources_2'>";
             foreach ($req_in_class as $info_class) {
@@ -536,25 +541,29 @@ function show_resources($unit_id)
             }
             $html .= "</div></div>";
             $html .= "</div>";
-            $html .= "</div>";
+
         }
-//
-        if (count($req_after_class) > 0) {
-            $max_resource_id = Database::get()->querySingle("SELECT id FROM unit_resources
-            WHERE unit_id = ?d ORDER BY `order` DESC LIMIT 1", $unit_id)->id;
-            $html .= "<div class='classTime' style='margin-bottom:0'>";
-            $html .= "<div class='d-flex justify-content-between align-items-center mt-2'>
+        $html .= "</div>";
+
+        //after_class
+        $html .= "<div class='classTime' style='margin-bottom:0'>";
+        $html .= "<div class='d-flex justify-content-between align-items-center mt-2'>
                         <label class='col-2 form-label'>$langActAfterClass</label>";
-            
-            if ($is_editor and $q->flipped_flag == 2) {
-                $html .= "<div class='btn-group btn-group-sm btn-group-default gap-2'>
+
+        if ($is_editor and $q->flipped_flag == 2) {
+            $html .= "<div class='btn-group btn-group-sm btn-group-default gap-2'>
                             <div class='after_class_btn btn submitAdminBtn d-flex justify-content-center align-items-center' title='" . trans('langActAfterClass') . "'>
                                 <i class='fa fa-plus'></i>
                             </div>
                         </div>";
-            }
+        }
 
-            $html .= "</div>";
+        $html .= "</div>";
+
+        if (count($req_after_class) > 0) {
+            $max_resource_id = Database::get()->querySingle("SELECT id FROM unit_resources
+            WHERE unit_id = ?d ORDER BY `order` DESC LIMIT 1", $unit_id)->id;
+
             $html .= "<div class='table-responsive'>";
             $html .= "<div class='table table-striped table-hover table-default'><div id='unitResources_3'>";
             foreach ($req_after_class as $info_after_class) {
@@ -565,8 +574,9 @@ function show_resources($unit_id)
             }
             $html .= "</div></div>";
             $html .= "</div>";
-            $html .= "</div>";
+
         }
+        $html .= "</div>";
     } else {
         $req = Database::get()->queryArray("SELECT * FROM unit_resources WHERE unit_id = ?d AND `order` >= 0 ORDER BY `order`", $unit_id);
 
