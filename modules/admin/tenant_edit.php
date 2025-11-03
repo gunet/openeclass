@@ -62,7 +62,7 @@ load_js('jstree3');
 load_js('bootstrap-datetimepicker');
 
 if (isset($_GET['id'])) {
-    $data['tenant'] = Database::get('SELECT * FROM tenant WHERE id = ?d', $_GET['id']);
+    $data['tenant'] = Database::get()->querySingle('SELECT * FROM tenant WHERE id = ?d', $_GET['id']);
 } else { // user account request
     $data['tenant'] = null;
 }
