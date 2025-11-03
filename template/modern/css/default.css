@@ -6126,6 +6126,10 @@ th.grade-col a{
   width: 760px !important;
   height: 400px !important;
 }
+.drag-and-drop-markers-img {
+  image-rendering: auto;
+  object-fit: contain;
+}
 .drag-and-drop-markers-container-words{
   width: 760px;
 }
