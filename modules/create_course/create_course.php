@@ -202,7 +202,7 @@ if (!isset($_POST['create_course'])) {
         view('modules.create_course.index', $data);
 
 } else if ($_POST['view_type'] == "flippedclassroom") {
-    $_SESSION['title'] = $title;
+    $_SESSION['title'] =  $_POST['title'];
     $_SESSION['code'] = $departments ;
     $_SESSION['language'] = $language ;
     $_SESSION['formvisible'] = $_POST['formvisible'] ;
