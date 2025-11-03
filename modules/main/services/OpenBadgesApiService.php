@@ -151,6 +151,32 @@ class OpenBadgesApiService
     }
 
     /**
+     * Get badges within a specific collection
+     */
+    public function getCollectionBadges(int $userId, string $collectionId): OpenBadgesApiResponse
+    {
+        $connection = $this->getUserConnection($userId);
+        if (!$connection) {
+            return OpenBadgesApiResponse::error('No backpack connection found for user');
+        }
+
+        $provider = $this->getProvider($connection->backpack_provider_id);
+        if (!$provider) {
+            return OpenBadgesApiResponse::error('Backpack provider not found');
+        }
+
+        $endpoint = $this->registry->getEndpoint($provider, 'collection', ['id' => $collectionId]);
+
+        return $this->client->authenticatedRequest(
+            $endpoint,
+            'GET',
+            $connection->access_token,
+            null,
+            $provider->ob_version
+        );
+    }
+
+    /**
      * Test connection to backpack provider
      */
     public function testConnection(BackpackProvider $provider, string $accessToken): OpenBadgesApiResponse
