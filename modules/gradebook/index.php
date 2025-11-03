@@ -88,7 +88,7 @@ $(function() {
                     'bSort': true,
                     'oLanguage': {
                        'lengthLabels': {
-                            -1': '$langAllOfThem'
+                            '-1': '$langAllOfThem'
                        },
                        'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
                        'sZeroRecords':  '".$langNoResult."',
