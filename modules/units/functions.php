@@ -512,7 +512,7 @@ function show_resources($unit_id)
 
 
         }
-
+        $html .= "</div>";
         //in_class
         $html .= "<div class='classTime'>";
         $html .= "<div class='d-flex justify-content-between align-items-center mt-2'>
@@ -526,7 +526,6 @@ function show_resources($unit_id)
         }
         $html .= "</div>";
 
-        $html .= "</div>";
         if (count($req_in_class) > 0) {
             $max_resource_id = Database::get()->querySingle("SELECT id FROM unit_resources
             WHERE unit_id = ?d ORDER BY `order` DESC LIMIT 1", $unit_id)->id;
