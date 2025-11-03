@@ -804,7 +804,7 @@ if (isset($submitAnswers) || isset($buttonBack)) {
 
         $choicesOrdArr = [];
         foreach ($totalAnsFromOrderingChoices as $inde_x) {
-            $choicesOrdArr[] = $inde_x . '|' . $_POST['ordering_answer'][$inde_x] . '|' . $_POST['ordering_answer_grade'][$inde_x];
+            $choicesOrdArr[] = $inde_x . '|' . $_POST['ordering_answer'][$inde_x] . '|' . fix_float($_POST['ordering_answer_grade'][$inde_x]);
         }
         $choices_ordering_answer = '';
         if (count($choicesOrdArr) > 0) {
@@ -1589,7 +1589,7 @@ if (isset($_GET['modifyAnswers'])) {
                                                         <input type='text' class='form-control' name='choice_answer[$i]' value='{$choiceAsAnswer}'>                                        
                                                     </td>
                                                     <td>                                        
-                                                        <input type='number' class='form-control' name='choice_grade[$i]' value='{$choiceAsGrade}' min='0' step='0.05'>                                        
+                                                        <input type='text' class='form-control' name='choice_grade[$i]' value='{$choiceAsGrade}'>                                        
                                                     </td>
                                                 </tr>";
                                         }
@@ -1782,7 +1782,7 @@ if (isset($_GET['modifyAnswers'])) {
                                                 </td>
                                                 <td>
                                                     <div class='col-12'>
-                                                        <input type='number' id='marker-grade-$chAns' class='form-control' name='marker_grade[$chAns]' value='{$markerGrade}' min='0' step='0.1'>
+                                                        <input type='text' id='marker-grade-$chAns' class='form-control' name='marker_grade[$chAns]' value='{$markerGrade}'>
                                                     </div>
                                                 </td>
                                                 <td>
@@ -1850,7 +1850,7 @@ if (isset($_GET['modifyAnswers'])) {
                                                             <input type='text' class='form-control' name='calculated_answer[$i]' value='{$cal_answer}'>                                        
                                                         </td>
                                                         <td>                                        
-                                                            <input type='number' class='form-control' name='calculated_answer_grade[$i]' value='{$cal_grade}' min='0' step='any'>                                        
+                                                            <input type='text' class='form-control' name='calculated_answer_grade[$i]' value='{$cal_grade}'>                                        
                                                         </td>
                                                     </tr>";
                                             }
@@ -2093,7 +2093,7 @@ if (isset($_GET['modifyAnswers'])) {
                                                             <input type='text' class='form-control' name='ordering_answer[$i]' value='{$order_answer}'>                                        
                                                         </td>
                                                         <td>                                        
-                                                            <input type='number' class='form-control' name='ordering_answer_grade[$i]' value='{$order_grade}' min='0' step='any'>                                        
+                                                            <input type='text' class='form-control' name='ordering_answer_grade[$i]' value='{$order_grade}'>                                        
                                                         </td>
                                                     </tr>";
                                             }
