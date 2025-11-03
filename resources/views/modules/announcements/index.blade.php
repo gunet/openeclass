@@ -179,14 +179,14 @@
 
             var oTable = $('#ann_table{{ $course_id }}').DataTable ({
                 @if ($is_editor)
-                columnDefs: [
-                    { className: 'option-btn-cell text-end', targets: -1 },
-                    { targets: 1, width: '50%' } // editor: column 1 is the announcement column
-                ],
+                    columnDefs: [
+                        { className: 'option-btn-cell text-end', targets: -1 },
+                        { targets: 1, width: '50%' } // editor: column 1 is the announcement column
+                    ],
                 @else
-                columnDefs: [
-                    { targets: 0, width: '50%' } // student: column 0 is the announcement column
-                ],
+                    columnDefs: [
+                        { targets: 0, width: '50%' } // student: column 0 is the announcement column
+                    ],
                 @endif
                 bStateSave: true,
                 bProcessing: true,
@@ -230,6 +230,7 @@
                     },
                     sLengthMenu:   '{{ trans('langDisplay') }} _MENU_ {{ trans('langResults2') }}',
                     sZeroRecords:  '{{ trans('langNoResult') }}',
+                    sEmptyTable:   '{{ trans('langNoAnnounce') }}',
                     sInfo:         '{{ trans('langDisplayed') }} _START_ {{ trans('langTill') }} _END_ {{ trans('langFrom2') }} _TOTAL_ {{ trans('langTotalResults') }}',
                     sInfoEmpty:    '',
                     sInfoFiltered: '',
@@ -344,26 +345,6 @@
         });
 
 
-    </script>
-    <script>
-        var readMore = '".js_escape($langReadMore)."';
-        var readLess = '".js_escape($langReadLess)."';
-        $(function () { $('.trunk8').trunk8({
-            lines: 3,
-            fill: '&hellip; <a class="read-more" href="#">{{ js_escape($GLOBALS['langViewShow']) }}</a>',
-        });
-
-            $(document).on('click', '.read-more', function (event) {
-                $(this).parent().trunk8('revert').append(' <a class="read-less" href="#">{{ js_escape($GLOBALS['langViewHide']) }}</a>');
-                event.preventDefault();
-            });
-
-            $(document).on('click', '.read-less', function (event) {
-                $(this).parent().trunk8();
-                event.preventDefault();
-            });
-
-        });
     </script>
 @endpush
 
