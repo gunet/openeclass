@@ -804,28 +804,24 @@ function getDataMarkersFromJson($questionId) {
  */
 function extractValuesInCurlyBrackets($text) {
     // Find all occurrences of {...}
-    preg_match_all('/\{([^{}]+)\}/', $text, $matches);
+    preg_match_all('/\{([^{}]+)\}/u', $text, $matches);
     $variables = [];
 
     foreach ($matches[1] as $group) {
         // For each group, split to get individual variables
-        // Variables are separated by operators or spaces, so split by non-word characters
-        preg_match_all('/\b\w+\b/', $group, $submatches);
+        // Match all Unicode letters and numbers
+        preg_match_all('/[\p{L}\p{N}_]+/u', $group, $submatches);
         foreach ($submatches[0] as $var) {
             $variables[] = $var;
         }
     }
 
-    // If the value is numeric , remove it.
-    if (count($variables) > 0) {
-        for ($i = 0; $i < count($variables); $i++) {
-            if (is_numeric($variables[$i])) {
-                unset($variables[$i]);
-            }
-        }
-    }
+    // Remove numeric-only variables
+    $variables = array_filter($variables, function($var) {
+        return !is_numeric($var);
+    });
 
-    // Remove duplicates if desired
+    // Remove duplicates
     return array_unique($variables);
 }
 
