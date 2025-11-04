@@ -660,7 +660,7 @@ if ($checking) {
 if (!isset($_GET['pdf']) and $is_editor) {
     $tool_content .= "<div class='col-12 d-flex justify-content-start align-items-center mt-4'>
         <a class='btn submitAdminBtn submitAdminBtnDefault' href='index.php' id='submitButton'><span id='text_submit' class='TextBold'>$langSubmit</span></a>
-        <a class='btn cancelAdminBtn m-2' href='results.php?course=$course_code&exerciseId=" . getIndirectReference($exercise_user_record->eid) . "'' id='cancelButton'><span id='cancel_submit' class='TextBold'>$langCancel</span></a>
+        <a class='btn cancelAdminBtn m-2' href='results.php?course=$course_code&exerciseId=" . getIndirectReference($exercise_user_record->eid) . "' id='cancelButton'><span id='cancel_submit' class='TextBold'>$langCancel</span></a>
     </div>";
 }
 

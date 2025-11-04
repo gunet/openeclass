@@ -38,7 +38,7 @@ class FreeTextAnswer extends QuestionType
         global $questionScore, $question_weight,
                $langHighConfidence, $langMediumConfidence, $langLowConfidence,
                $langAIEvaluation, $langAISuggestion, $langConfidence,$langReasoning,
-               $langEvaluatingResponseWithAI, $course_id, $is_editor;
+               $langEvaluatingResponseWithAI, $course_id, $is_editor, $uid;
 
         $questionId = $this->question_id;
         $questionScore = $question_weight;
@@ -47,6 +47,7 @@ class FreeTextAnswer extends QuestionType
 
         $text = $choice; // plain text
         $html_content .= "<tr><td>" . purify($text). "</td></tr>";
+
         if ($is_editor) {
             $arid = Database::get()->querySingle("SELECT answer_record_id FROM exercise_answer_record WHERE eurid = ?d", $eurid)->answer_record_id;
             $ai_evaluation = Database::get()->querySingle("SELECT * FROM exercise_ai_evaluation WHERE answer_record_id = ?d", $arid);
@@ -86,8 +87,10 @@ class FreeTextAnswer extends QuestionType
                 $html_content .= "</td></tr>";
             } else {
                 // Check if AI evaluation is enabled for this question
-                $aiService = new AIExerciseEvaluationService();
-                if ($aiService->isEnabledForCourse(AI_MODULE_FREE_TEXT_EVALUATION) && $aiService->isEnabledForQuestion($questionId, $course_id)) {
+                $aiService = new AIService($course_id, $uid);
+                $aiEvaluationService = new AIExerciseEvaluationService();
+
+                if ($aiService->isEnabledForCourse(AI_MODULE_FREE_TEXT_EVALUATION) && $aiEvaluationService->isEnabledForQuestion($questionId, $course_id)) {
                     // Show AI evaluation trigger button
                     $html_content .= "<tr><td>";
                     $html_content .= "<div class='mt-3 p-3 bg-light border-start border-info border-4' id='ai-eval-container-{$arid}'>";
