@@ -115,7 +115,7 @@ if (isset($_POST['submitQuestion'])) {
         }
 
         // It requires to be uploaded an image for this type of question
-        if (isset($_FILES['imageUpload']) && !is_uploaded_file($_FILES['imageUpload']['tmp_name']) && $answerType == DRAG_AND_DROP_MARKERS) {
+        if (isset($_FILES['imageUpload']) && !is_uploaded_file($_FILES['imageUpload']['tmp_name']) && $answerType == DRAG_AND_DROP_MARKERS && !isset($_GET['modifyQuestion'])) {
             Session::flash('message', $langRequiresImageUploadedForThisType);
             Session::flash('alert-class', 'alert-warning');
             redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=" . intval($_GET['exerciseId']) . "&newQuestion=yes");

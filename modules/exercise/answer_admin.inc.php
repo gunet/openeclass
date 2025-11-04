@@ -1814,8 +1814,8 @@ if (isset($_GET['modifyAnswers'])) {
             if (isset($_GET['invalid_val'])) {
                 $invalid_posted = '&invalid_val=true';
             }
-
-            $tool_content .= " <form id='calculatedFormId' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId&amp;modifyAnswers=" . urlencode($_GET['modifyAnswers']) . "$invalid_posted'>
+            $setId = isset($exerciseId)? "&amp;exerciseId=$exerciseId" : '';
+            $tool_content .= " <form id='calculatedFormId' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code$setId&amp;modifyAnswers=" . urlencode($_GET['modifyAnswers']) . "$invalid_posted'>
                                     <fieldset><legend class='mb-0' aria-label='$langForm'></legend>
                                     <input type='hidden' name='nbrAnswers' value='$nbrAnswers'>";
 
