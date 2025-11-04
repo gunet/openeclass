@@ -344,58 +344,58 @@
                                         <div class="accordion-body">
                                             <div class="accordion-body">
                                                 @if (!is_module_disable_FC(MODULE_ID_EXERCISE, $course_code, $id, $in_class->activity_id))
-                                                    <div><a href="{{$base_url . 'exercise&fc_type=0&act_name=' . $act_title . '&act_id=' . $in_class->activity_id}}">{{trans('langAdd')}} {{trans('langInsertExercise')}}</a></div>
+                                                    <div><a href="{{$base_url . 'exercise&fc_type=1&act_name=' . $act_title . '&act_id=' . $in_class->activity_id}}">{{trans('langAdd')}} {{trans('langInsertExercise')}}</a></div>
                                                 @endif
                                                 @if (!is_module_disable_FC(MODULE_ID_DOCS, $course_code, $id, $in_class->activity_id))
-                                                    <div><a href="{{$base_url . 'doc&fc_type=0&act_name=' . $act_title . '&act_id=' . $in_class->activity_id}}">{{trans('langAdd')}} {{trans('langInsertDoc')}}</a></div>
+                                                    <div><a href="{{$base_url . 'doc&fc_type=1&act_name=' . $act_title . '&act_id=' . $in_class->activity_id}}">{{trans('langAdd')}} {{trans('langInsertDoc')}}</a></div>
                                                 @endif
                                                 @if (!is_module_disable_FC(MODULE_ID_LINKS, $course_code, $id, $in_class->activity_id))
-                                                    <div><a href="{{$base_url . 'link&fc_type=0&act_name=' . $act_title . '&act_id=' . $in_class->activity_id}}">{{trans('langAdd')}} {{trans('langInsertLink')}}</a></div>
+                                                    <div><a href="{{$base_url . 'link&fc_type=1&act_name=' . $act_title . '&act_id=' . $in_class->activity_id}}">{{trans('langAdd')}} {{trans('langInsertLink')}}</a></div>
                                                 @endif
                                                 @if (!is_module_disable_FC(MODULE_ID_LP, $course_code, $id, $in_class->activity_id))
-                                                    <div><a href="{{$base_url . 'lp&fc_type=0&act_name=' . $act_title . '&act_id=' . $in_class->activity_id}}">{{trans('langAdd')}} {{trans('langLearningPath1')}}</a></div>
+                                                    <div><a href="{{$base_url . 'lp&fc_type=1&act_name=' . $act_title . '&act_id=' . $in_class->activity_id}}">{{trans('langAdd')}} {{trans('langLearningPath1')}}</a></div>
                                                 @endif
                                                 @if (!is_module_disable_FC(MODULE_ID_VIDEO, $course_code, $id, $in_class->activity_id))
-                                                    <div><a href="{{$base_url . 'video&fc_type=0&act_name=' . $act_title . '&act_id=' . $in_class->activity_id}}">{{trans('langAdd')}} {{trans('langInsertVideo')}}</a></div>
+                                                    <div><a href="{{$base_url . 'video&fc_type=1&act_name=' . $act_title . '&act_id=' . $in_class->activity_id}}">{{trans('langAdd')}} {{trans('langInsertVideo')}}</a></div>
                                                 @endif
                                                 @if (!is_module_disable_FC(MODULE_ID_FORUM, $course_code, $id, $in_class->activity_id))
-                                                    <div><a href="{{$base_url . 'forum&fc_type=0&act_name=' . $act_title . '&act_id=' . $in_class->activity_id}}">{{trans('langAdd')}} {{trans('langInsertForum')}}</a></div>
+                                                    <div><a href="{{$base_url . 'forum&fc_type=1&act_name=' . $act_title . '&act_id=' . $in_class->activity_id}}">{{trans('langAdd')}} {{trans('langInsertForum')}}</a></div>
                                                 @endif
                                                 @if (!is_module_disable_FC(MODULE_ID_EBOOK, $course_code, $id, $in_class->activity_id))
-                                                    <div><a href="{{$base_url . 'ebook&fc_type=0&act_name=' . $act_title . '&act_id=' . $in_class->activity_id}}">{{trans('langAdd')}} {{trans('langInsertEBook')}}</a></div>
+                                                    <div><a href="{{$base_url . 'ebook&fc_type=1&act_name=' . $act_title . '&act_id=' . $in_class->activity_id}}">{{trans('langAdd')}} {{trans('langInsertEBook')}}</a></div>
                                                 @endif
                                                 @if (!is_module_disable_FC(MODULE_ID_ASSIGN, $course_code, $id, $in_class->activity_id))
-                                                    <div><a href="{{$base_url . 'work&fc_type=0&act_name=' . $act_title . '&act_id=' . $in_class->activity_id}}">{{trans('langAdd')}} {{trans('langInsertWork')}}</a></div>
+                                                    <div><a href="{{$base_url . 'work&fc_type=1&act_name=' . $act_title . '&act_id=' . $in_class->activity_id}}">{{trans('langAdd')}} {{trans('langInsertWork')}}</a></div>
                                                 @endif
                                                 @if (!is_module_disable_FC(MODULE_ID_QUESTIONNAIRE, $course_code, $id, $in_class->activity_id))
-                                                    <div><a href="{{$base_url . 'poll&fc_type=0&act_name=' . $act_title . '&act_id=' . $in_class->activity_id}}">{{trans('langAdd')}} {{trans('langInsertPoll')}}</a></div>
+                                                    <div><a href="{{$base_url . 'poll&fc_type=1&act_name=' . $act_title . '&act_id=' . $in_class->activity_id}}">{{trans('langAdd')}} {{trans('langInsertPoll')}}</a></div>
                                                 @endif
                                                 @if (!is_module_disable_FC(MODULE_ID_WIKI, $course_code, $id, $in_class->activity_id))
-                                                    <div><a href="{{$base_url . 'wiki&fc_type=0&act_name=' . $act_title . '&act_id=' . $in_class->activity_id}}">{{trans('langAdd')}} {{trans('langInsertWiki')}}</a></div>
+                                                    <div><a href="{{$base_url . 'wiki&fc_type=1&act_name=' . $act_title . '&act_id=' . $in_class->activity_id}}">{{trans('langAdd')}} {{trans('langInsertWiki')}}</a></div>
                                                 @endif
                                                 @if (!is_module_disable_FC(MODULE_ID_CHAT, $course_code, $id, $in_class->activity_id))
-                                                    <div><a href="{{$base_url . 'chat&fc_type=0&act_name=' . $act_title . '&act_id=' . $in_class->activity_id}}">{{trans('langAdd')}} {{trans('langInsertChat')}}</a></div>
+                                                    <div><a href="{{$base_url . 'chat&fc_type=1&act_name=' . $act_title . '&act_id=' . $in_class->activity_id}}">{{trans('langAdd')}} {{trans('langInsertChat')}}</a></div>
                                                 @endif
                                                 @if (!is_module_disable_FC(MODULE_ID_TC, $course_code, $id, $in_class->activity_id) && is_enabled_tc_server($course_id))
-                                                    <div><a href="{{$base_url . 'tc&fc_type=0&act_name=' . $act_title . '&act_id=' . $in_class->activity_id}}">{{trans('langAdd')}} {{trans('langInsertTcMeeting')}}</a></div>
+                                                    <div><a href="{{$base_url . 'tc&fc_type=1&act_name=' . $act_title . '&act_id=' . $in_class->activity_id}}">{{trans('langAdd')}} {{trans('langInsertTcMeeting')}}</a></div>
                                                 @endif
                                                 @if (!is_module_disable_FC(MODULE_ID_GLOSSARY, $course_code, $id, $in_class->activity_id))
-                                                    <div><a href="{{$base_url . 'glossary&fc_type=0&act_name=' . $act_title . '&act_id=' . $in_class->activity_id}}">{{trans('langAdd')}} {{trans('langInsertGlossary')}}</a></div>
+                                                    <div><a href="{{$base_url . 'glossary&fc_type=1&act_name=' . $act_title . '&act_id=' . $in_class->activity_id}}">{{trans('langAdd')}} {{trans('langInsertGlossary')}}</a></div>
                                                 @endif
                                                 @if (!is_module_disable_FC(MODULE_ID_BLOG, $course_code, $id, $in_class->activity_id))
-                                                    <div><a href="{{$base_url . 'blog&fc_type=0&act_name=' . $act_title . '&act_id=' . $in_class->activity_id}}">{{trans('langAdd')}} {{trans('langInsertBlog')}}</a></div>
+                                                    <div><a href="{{$base_url . 'blog&fc_type=1&act_name=' . $act_title . '&act_id=' . $in_class->activity_id}}">{{trans('langAdd')}} {{trans('langInsertBlog')}}</a></div>
                                                 @endif
                                                 @if (!is_module_disable_FC(MODULE_ID_COMMENTS, $course_code, $id, $in_class->activity_id))
-                                                    <div><a href="{{$base_url . 'comments&fc_type=0&act_name=' . $act_title . '&act_id=' . $in_class->activity_id}}">{{trans('langAdd')}} {{trans('langComments')}}</a></div>
+                                                    <div><a href="{{$base_url . 'comments&fc_type=1&act_name=' . $act_title . '&act_id=' . $in_class->activity_id}}">{{trans('langAdd')}} {{trans('langComments')}}</a></div>
                                                 @endif
                                                 @if (!is_module_disable_FC(MODULE_ID_GRADEBOOK, $course_code, $id, $in_class->activity_id))
-                                                    <div><a href="{{$base_url . 'gradebook&fc_type=0&act_name=' . $act_title . '&act_id=' . $in_class->activity_id}}">{{trans('langAdd')}} {{trans('langOfGradebook')}}</a></div>
+                                                    <div><a href="{{$base_url . 'gradebook&fc_type=1&act_name=' . $act_title . '&act_id=' . $in_class->activity_id}}">{{trans('langAdd')}} {{trans('langOfGradebook')}}</a></div>
                                                 @endif
                                                 @if (!is_module_disable_FC(MODULE_ID_PROGRESS, $course_code, $id, $in_class->activity_id))
-                                                    <div><a href="{{$base_url . 'progress&fc_type=0&act_name=' . $act_title . '&act_id=' . $in_class->activity_id}}">{{trans('langAdd')}} {{trans('langProgress')}}</a></div>
+                                                    <div><a href="{{$base_url . 'progress&fc_type=1&act_name=' . $act_title . '&act_id=' . $in_class->activity_id}}">{{trans('langAdd')}} {{trans('langProgress')}}</a></div>
                                                 @endif
                                                 @if (!is_module_disable_FC(MODULE_ID_H5P, $course_code, $id, $in_class->activity_id))
-                                                    <div><a href="{{$base_url . 'h5p&fc_type=0&act_name=' . $act_title . '&act_id=' . $in_class->activity_id}}">{{trans('langAdd')}} {{trans('langOfH5p')}}</a></div>
+                                                    <div><a href="{{$base_url . 'h5p&fc_type=1&act_name=' . $act_title . '&act_id=' . $in_class->activity_id}}">{{trans('langAdd')}} {{trans('langOfH5p')}}</a></div>
                                                 @endif
                                             </div>
                                         </div>
@@ -431,58 +431,58 @@
                                         <div class="accordion-body">
                                             <div class="accordion-body">
                                                 @if (!is_module_disable_FC(MODULE_ID_EXERCISE, $course_code, $id, $after_class->activity_id))
-                                                    <div><a href="{{$base_url . 'exercise&fc_type=0&act_name=' . $act_title . '&act_id=' . $after_class->activity_id}}">{{trans('langAdd')}} {{trans('langInsertExercise')}}</a></div>
+                                                    <div><a href="{{$base_url . 'exercise&fc_type=2&act_name=' . $act_title . '&act_id=' . $after_class->activity_id}}">{{trans('langAdd')}} {{trans('langInsertExercise')}}</a></div>
                                                 @endif
                                                 @if (!is_module_disable_FC(MODULE_ID_DOCS, $course_code, $id, $after_class->activity_id))
-                                                    <div><a href="{{$base_url . 'doc&fc_type=0&act_name=' . $act_title . '&act_id=' . $after_class->activity_id}}">{{trans('langAdd')}} {{trans('langInsertDoc')}}</a></div>
+                                                    <div><a href="{{$base_url . 'doc&fc_type=2&act_name=' . $act_title . '&act_id=' . $after_class->activity_id}}">{{trans('langAdd')}} {{trans('langInsertDoc')}}</a></div>
                                                 @endif
                                                 @if (!is_module_disable_FC(MODULE_ID_LINKS, $course_code, $id, $after_class->activity_id))
-                                                    <div><a href="{{$base_url . 'link&fc_type=0&act_name=' . $act_title . '&act_id=' . $after_class->activity_id}}">{{trans('langAdd')}} {{trans('langInsertLink')}}</a></div>
+                                                    <div><a href="{{$base_url . 'link&fc_type=2&act_name=' . $act_title . '&act_id=' . $after_class->activity_id}}">{{trans('langAdd')}} {{trans('langInsertLink')}}</a></div>
                                                 @endif
                                                 @if (!is_module_disable_FC(MODULE_ID_LP, $course_code, $id, $after_class->activity_id))
-                                                    <div><a href="{{$base_url . 'lp&fc_type=0&act_name=' . $act_title . '&act_id=' . $after_class->activity_id}}">{{trans('langAdd')}} {{trans('langLearningPath1')}}</a></div>
+                                                    <div><a href="{{$base_url . 'lp&fc_type=2&act_name=' . $act_title . '&act_id=' . $after_class->activity_id}}">{{trans('langAdd')}} {{trans('langLearningPath1')}}</a></div>
                                                 @endif
                                                 @if (!is_module_disable_FC(MODULE_ID_VIDEO, $course_code, $id, $after_class->activity_id))
-                                                    <div><a href="{{$base_url . 'video&fc_type=0&act_name=' . $act_title . '&act_id=' . $after_class->activity_id}}">{{trans('langAdd')}} {{trans('langInsertVideo')}}</a></div>
+                                                    <div><a href="{{$base_url . 'video&fc_type=2&act_name=' . $act_title . '&act_id=' . $after_class->activity_id}}">{{trans('langAdd')}} {{trans('langInsertVideo')}}</a></div>
                                                 @endif
                                                 @if (!is_module_disable_FC(MODULE_ID_FORUM, $course_code, $id, $after_class->activity_id))
-                                                    <div><a href="{{$base_url . 'forum&fc_type=0&act_name=' . $act_title . '&act_id=' . $after_class->activity_id}}">{{trans('langAdd')}} {{trans('langInsertForum')}}</a></div>
+                                                    <div><a href="{{$base_url . 'forum&fc_type=2&act_name=' . $act_title . '&act_id=' . $after_class->activity_id}}">{{trans('langAdd')}} {{trans('langInsertForum')}}</a></div>
                                                 @endif
                                                 @if (!is_module_disable_FC(MODULE_ID_EBOOK, $course_code, $id, $after_class->activity_id))
-                                                    <div><a href="{{$base_url . 'ebook&fc_type=0&act_name=' . $act_title . '&act_id=' . $after_class->activity_id}}">{{trans('langAdd')}} {{trans('langInsertEBook')}}</a></div>
+                                                    <div><a href="{{$base_url . 'ebook&fc_type=2&act_name=' . $act_title . '&act_id=' . $after_class->activity_id}}">{{trans('langAdd')}} {{trans('langInsertEBook')}}</a></div>
                                                 @endif
                                                 @if (!is_module_disable_FC(MODULE_ID_ASSIGN, $course_code, $id, $after_class->activity_id))
-                                                    <div><a href="{{$base_url . 'work&fc_type=0&act_name=' . $act_title . '&act_id=' . $after_class->activity_id}}">{{trans('langAdd')}} {{trans('langInsertWork')}}</a></div>
+                                                    <div><a href="{{$base_url . 'work&fc_type=2&act_name=' . $act_title . '&act_id=' . $after_class->activity_id}}">{{trans('langAdd')}} {{trans('langInsertWork')}}</a></div>
                                                 @endif
                                                 @if (!is_module_disable_FC(MODULE_ID_QUESTIONNAIRE, $course_code, $id, $after_class->activity_id))
-                                                    <div><a href="{{$base_url . 'poll&fc_type=0&act_name=' . $act_title . '&act_id=' . $after_class->activity_id}}">{{trans('langAdd')}} {{trans('langInsertPoll')}}</a></div>
+                                                    <div><a href="{{$base_url . 'poll&fc_type=2&act_name=' . $act_title . '&act_id=' . $after_class->activity_id}}">{{trans('langAdd')}} {{trans('langInsertPoll')}}</a></div>
                                                 @endif
                                                 @if (!is_module_disable_FC(MODULE_ID_WIKI, $course_code, $id, $after_class->activity_id))
-                                                    <div><a href="{{$base_url . 'wiki&fc_type=0&act_name=' . $act_title . '&act_id=' . $after_class->activity_id}}">{{trans('langAdd')}} {{trans('langInsertWiki')}}</a></div>
+                                                    <div><a href="{{$base_url . 'wiki&fc_type=2&act_name=' . $act_title . '&act_id=' . $after_class->activity_id}}">{{trans('langAdd')}} {{trans('langInsertWiki')}}</a></div>
                                                 @endif
                                                 @if (!is_module_disable_FC(MODULE_ID_CHAT, $course_code, $id, $after_class->activity_id))
-                                                    <div><a href="{{$base_url . 'chat&fc_type=0&act_name=' . $act_title . '&act_id=' . $after_class->activity_id}}">{{trans('langAdd')}} {{trans('langInsertChat')}}</a></div>
+                                                    <div><a href="{{$base_url . 'chat&fc_type=2&act_name=' . $act_title . '&act_id=' . $after_class->activity_id}}">{{trans('langAdd')}} {{trans('langInsertChat')}}</a></div>
                                                 @endif
                                                 @if (!is_module_disable_FC(MODULE_ID_TC, $course_code, $id, $after_class->activity_id) && is_enabled_tc_server($course_id))
-                                                    <div><a href="{{$base_url . 'tc&fc_type=0&act_name=' . $act_title . '&act_id=' . $after_class->activity_id}}">{{trans('langAdd')}} {{trans('langInsertTcMeeting')}}</a></div>
+                                                    <div><a href="{{$base_url . 'tc&fc_type=2&act_name=' . $act_title . '&act_id=' . $after_class->activity_id}}">{{trans('langAdd')}} {{trans('langInsertTcMeeting')}}</a></div>
                                                 @endif
                                                 @if (!is_module_disable_FC(MODULE_ID_GLOSSARY, $course_code, $id, $after_class->activity_id))
-                                                    <div><a href="{{$base_url . 'glossary&fc_type=0&act_name=' . $act_title . '&act_id=' . $after_class->activity_id}}">{{trans('langAdd')}} {{trans('langInsertGlossary')}}</a></div>
+                                                    <div><a href="{{$base_url . 'glossary&fc_type=2&act_name=' . $act_title . '&act_id=' . $after_class->activity_id}}">{{trans('langAdd')}} {{trans('langInsertGlossary')}}</a></div>
                                                 @endif
                                                 @if (!is_module_disable_FC(MODULE_ID_BLOG, $course_code, $id, $after_class->activity_id))
-                                                    <div><a href="{{$base_url . 'blog&fc_type=0&act_name=' . $act_title . '&act_id=' . $after_class->activity_id}}">{{trans('langAdd')}} {{trans('langInsertBlog')}}</a></div>
+                                                    <div><a href="{{$base_url . 'blog&fc_type=2&act_name=' . $act_title . '&act_id=' . $after_class->activity_id}}">{{trans('langAdd')}} {{trans('langInsertBlog')}}</a></div>
                                                 @endif
                                                 @if (!is_module_disable_FC(MODULE_ID_COMMENTS, $course_code, $id, $after_class->activity_id))
-                                                    <div><a href="{{$base_url . 'comments&fc_type=0&act_name=' . $act_title . '&act_id=' . $after_class->activity_id}}">{{trans('langAdd')}} {{trans('langComments')}}</a></div>
+                                                    <div><a href="{{$base_url . 'comments&fc_type=2&act_name=' . $act_title . '&act_id=' . $after_class->activity_id}}">{{trans('langAdd')}} {{trans('langComments')}}</a></div>
                                                 @endif
                                                 @if (!is_module_disable_FC(MODULE_ID_GRADEBOOK, $course_code, $id, $after_class->activity_id))
-                                                    <div><a href="{{$base_url . 'gradebook&fc_type=0&act_name=' . $act_title . '&act_id=' . $after_class->activity_id}}">{{trans('langAdd')}} {{trans('langOfGradebook')}}</a></div>
+                                                    <div><a href="{{$base_url . 'gradebook&fc_type=2&act_name=' . $act_title . '&act_id=' . $after_class->activity_id}}">{{trans('langAdd')}} {{trans('langOfGradebook')}}</a></div>
                                                 @endif
                                                 @if (!is_module_disable_FC(MODULE_ID_PROGRESS, $course_code, $id, $after_class->activity_id))
-                                                    <div><a href="{{$base_url . 'progress&fc_type=0&act_name=' . $act_title . '&act_id=' . $after_class->activity_id}}">{{trans('langAdd')}} {{trans('langProgress')}}</a></div>
+                                                    <div><a href="{{$base_url . 'progress&fc_type=2&act_name=' . $act_title . '&act_id=' . $after_class->activity_id}}">{{trans('langAdd')}} {{trans('langProgress')}}</a></div>
                                                 @endif
                                                 @if (!is_module_disable_FC(MODULE_ID_H5P, $course_code, $id, $after_class->activity_id))
-                                                    <div><a href="{{$base_url . 'h5p&fc_type=0&act_name=' . $act_title . '&act_id=' . $after_class->activity_id}}">{{trans('langAdd')}} {{trans('langOfH5p')}}</a></div>
+                                                    <div><a href="{{$base_url . 'h5p&fc_type=2&act_name=' . $act_title . '&act_id=' . $after_class->activity_id}}">{{trans('langAdd')}} {{trans('langOfH5p')}}</a></div>
                                                 @endif
                                             </div>
                                         </div>
