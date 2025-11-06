@@ -98,6 +98,13 @@ $(function() {
 </script>
  ";
 
+// Delete image of question
+if (isset($_GET['deletePicture']) && isset($_GET['modifyQuestion'])) {
+    $objQuestion->read($_GET['modifyQuestion']);
+    $objQuestion->removePicture();
+    redirect_to_home_page("$_SERVER[SCRIPT_NAME]?course=$course_code&exerciseId=$_GET[exerciseId]&modifyQuestion=$_GET[modifyQuestion]");
+}
+
 // the question form has been submitted
 if (isset($_POST['submitQuestion'])) {
     $v = new Valitron\Validator($_POST);
@@ -115,7 +122,7 @@ if (isset($_POST['submitQuestion'])) {
         }
 
         // It requires to be uploaded an image for this type of question
-        if (isset($_FILES['imageUpload']) && !is_uploaded_file($_FILES['imageUpload']['tmp_name']) && $answerType == DRAG_AND_DROP_MARKERS && !isset($_GET['modifyQuestion'])) {
+        if (isset($_FILES['imageUpload']) && !is_uploaded_file($_FILES['imageUpload']['tmp_name']) && $answerType == DRAG_AND_DROP_MARKERS) {
             Session::flash('message', $langRequiresImageUploadedForThisType);
             Session::flash('alert-class', 'alert-warning');
             redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=" . intval($_GET['exerciseId']) . "&newQuestion=yes");
@@ -146,10 +153,8 @@ if (isset($_POST['submitQuestion'])) {
             $objQuestion->save();
         }
         $questionId = $objQuestion->selectId();
-        // upload or delete picture
-        if (isset($_POST['deletePicture'])) {
-            $objQuestion->removePicture();
-        } elseif (isset($_FILES['imageUpload']) && is_uploaded_file($_FILES['imageUpload']['tmp_name'])) {
+        // upload picture
+        if (isset($_FILES['imageUpload']) && is_uploaded_file($_FILES['imageUpload']['tmp_name'])) {
             if ($answerType == DRAG_AND_DROP_MARKERS) {
                 $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/svg+xml'];
                 $fileType = mime_content_type($_FILES['imageUpload']['tmp_name']);
@@ -329,30 +334,27 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
                 </div>
             </div>";
 
-            $tool_content .= "<div class='row form-group mt-4'>
-                <label for='imageUpload' class='col-12 control-label-notes mb-1'>".(($okPicture) ? $langReplacePicture : $langAddPicture)."</label>
-                <div class='col-12'>" .
-
-                (($okPicture) ? "<img src='../../$picturePath/quiz-$questionId'><br><br>" : "") .
-                fileSizeHidenInput() . "
-                  <input type='file' name='imageUpload' id='imageUpload'>
-                </div>
-            </div>";
-
-            if ($okPicture) {
+            if (!$okPicture) {
                 $tool_content .= "
                     <div class='row form-group mt-4'>
+                        <label for='imageUpload' class='col-12 control-label-notes mb-1'>$langAddPicture</label>
                         <div class='col-12'>
-                            <div class='checkbox'>
-                                <label class='label-container' aria-label='$langSelect'>
-                                    <input type='checkbox' name='deletePicture' value='1' ".(isset($_POST['deletePicture'])? "checked":"").">
-                                    <span class='checkmark'></span>
-                                    $langDeletePicture
-                              </label>
-                            </div>
+                            " . fileSizeHidenInput() . "   
+                            <input type='file' name='imageUpload' id='imageUpload'>
                         </div>
-                    </div>";
+                    </div>
+                ";
+            } else {
+                $tool_content .= "
+                    <div class='row form-group mt-4'>
+                        <div class='col-12 d-flex justify-content-start align-items-center gap-2'>
+                            <img style='max-height:100px;max-width:150px;' src='../../$picturePath/quiz-$questionId'>
+                            <a class='btn deleteAdminBtn' href='$form_submit_action&amp;deletePicture=1'>$langDeletePicture</a>
+                        </div>
+                    </div>
+                ";
             }
+
             $tool_content .= "
                 <div class='row form-group mt-4'>
                     <label for='questionDescription' class='col-12 control-label-notes mb-1'>$langQuestionDescription</label>
