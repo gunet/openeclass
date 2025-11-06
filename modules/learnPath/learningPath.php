@@ -51,11 +51,11 @@ $action->record(MODULE_ID_LP);
 /* * *********************************** */
 
 if (isset($_GET['unit'])) {
-    $_SESSION['unit'] = intval($_GET['unit']);
+    $unit = $_SESSION['unit'] = intval($_GET['unit']);
 }
 
 if (isset($_GET['path_id'])) {
-    $_SESSION['path_id'] = intval($_GET['path_id']);
+    $path_id = $_SESSION['path_id'] = intval($_GET['path_id']);
 } elseif ((!isset($_SESSION['path_id']) || $_SESSION['path_id'] == '')) {
     // if path id not set, redirect user to the list of learning paths
     header("Location: ./index.php?course=$course_code");
@@ -64,35 +64,34 @@ if (isset($_GET['path_id'])) {
 
 $lp = Database::get()->querySingle("SELECT name, visible FROM lp_learnPath WHERE learnPath_id = ?d AND `course_id` = ?d", $_SESSION['path_id'], $course_id);
 $toolName = $langTracking;
-if (!add_units_navigation(TRUE)) {
+if (!add_units_navigation(true)) {
     $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langLearningPaths);
 }
 
-
 // permissions (only for the view-mode, there is nothing to edit here )
 if ($is_editor) {
-        // if the fct return true it means that user is a course manager and than view mode is set to COURSE_ADMIN
-        header("Location: ./learningPathAdmin.php?course=$course_code&path_id=" . $_SESSION['path_id']);
-        exit();
+    // if the fct return true it means that user is a course manager and than view mode is set to COURSE_ADMIN
+    header("Location: {$urlAppend}modules/learningPath/learningPathAdmin.php?course=$course_code&path_id=" . $_SESSION['path_id']);
+    exit();
 } else {
-        if ($lp->visible == 0) {
-            // if the learning path is invisible, don't allow users in it
-            header("Location: ./index.php?course=$course_code");
-            exit();
-        }
+    if ($lp->visible == 0) {
+        // if the learning path is invisible, don't allow users in it
+        header("Location: ./index.php?course=$course_code");
+        exit();
+    }
 
-        // check for blocked learning path
-	$lps = Database::get()->querySingle("SELECT `learnPath_id`, `rank` FROM lp_learnPath 
-                            WHERE learnPath_id = ?d AND course_id = $course_id ORDER BY `rank`", $_SESSION['path_id']);
-        $lpaths = Database::get()->queryArray("SELECT `learnPath_id`, `lock` FROM lp_learnPath WHERE course_id = ?d AND `rank` < ?d", $course_id, $lps->rank);
-        foreach ($lpaths as $lp) {
-                if ($lp->lock == 'CLOSE') {
-                    $prog = get_learnPath_progress($lp->learnPath_id, $_SESSION['uid']);
-                    if ($prog != 0) {
-                        header("Location: ./index.php?course=$course_code");
-                    }
-                }
+    // check for blocked learning path
+    $lps = Database::get()->querySingle("SELECT `learnPath_id`, `rank` FROM lp_learnPath
+        WHERE learnPath_id = ?d AND course_id = $course_id ORDER BY `rank`", $_SESSION['path_id']);
+    $lpaths = Database::get()->queryArray("SELECT `learnPath_id`, `lock` FROM lp_learnPath WHERE course_id = ?d AND `rank` < ?d", $course_id, $lps->rank);
+    foreach ($lpaths as $lp) {
+        if ($lp->lock == 'CLOSE') {
+            $prog = get_learnPath_progress($lp->learnPath_id, $_SESSION['uid']);
+            if ($prog != 0 and !isset($unit)) {
+               header("Location: ./index.php?course=$course_code");
+            }
         }
+    }
 }
 
 // main page
@@ -104,7 +103,7 @@ if ($uid) {
     $uidCheckString = "AND UMP.`user_id` IS NULL ";
 }
 
-$sql = "SELECT 
+$sql = "SELECT
     MAX(LPM.`learnPath_module_id`) as learnPath_module_id,
     MAX(LPM.`parent`) as parent,
     MAX(LPM.`lock`) as `lock`,
@@ -272,7 +271,7 @@ foreach ($flatElementList as $module) {
         $contentType_alt = selectAlt($module['contentType']);
         $tool_content .= "<span>" . icon($moduleImg, $contentType_alt) . "</span>&nbsp;";
         if (isset($_GET['unit'])) {
-            $tool_content .= "<a href='../units/view.php?course=$course_code&amp;res_type=lp&amp;unit=$_GET[unit]&amp;path_id=" . intval($_SESSION['path_id']) . "&amp;module_id=$module[module_id]'>" . q($module['name']) . "</a>";
+            $tool_content .= "<a href='../units/view.php?course=$course_code&amp;res_type=lp&amp;unit=$unit&amp;path_id=" . intval($_SESSION['path_id']) . "&amp;module_id=$module[module_id]'>" . q($module['name']) . "</a>";
         } else {
             $tool_content .= "<a href='viewer.php?course=$course_code&amp;path_id=" . intval($_SESSION['path_id']) . "&amp;module_id=$module[module_id]'>" . q($module['name']) . "</a>";
         }
@@ -304,7 +303,13 @@ foreach ($flatElementList as $module) {
         $tool_content .= "<span>" . icon($moduleImg, $contentType_alt) . "</span>" . q($module['name']);
     }
 
-    $tool_content .= "<span class='ps-2'><a href='detailsUserPath.php?course=" . $course_code . "&uInfo=" .$uid . "&path_id=" . intval($_SESSION['path_id']) . "'><span class='fa fa-line-chart' data-bs-toggle='tooltip' data-bs-placement='top' title='$langDetails'></span></a></span>";;
+    $path_id = intval($_SESSION['path_id']);
+    if (isset($_GET['unit'])) {
+        $detailsUrl = $urlAppend . "modules/units/view.php?course=$course_code&amp;res_type=lp_details&amp;path_id=$path_id&amp;unit=$unit";
+    } else {
+        $detailsUrl = "detailsUserPath.php?course=$course_code&amp;uInfo=$uid&amp;path_id=$path_id";
+    }
+    $tool_content .= "<span class='ps-2'><a href='$detailsUrl'><span class='fa fa-line-chart' data-bs-toggle='tooltip' data-bs-placement='top' title='$langDetails'></span></a></span>";
     $tool_content .= "</td>";
 
     if ($uid && ($module['contentType'] != CTLABEL_)) {
@@ -335,8 +340,8 @@ foreach ($flatElementList as $module) {
 
 if ($uid && $moduleNb > 0) {
     // add a blank line between module progression and global progression
-    $tool_content .= "<tr><td class='px-2' colspan='" . ($maxDeep + 2) . "'><strong>$langTotal</strong></td> 
-                          <td>" . disp_progress_bar(round($globalProg / ($moduleNb)), 1) . "</td> 
+    $tool_content .= "<tr><td class='px-2' colspan='" . ($maxDeep + 2) . "'><strong>$langTotal</strong></td>
+                          <td>" . disp_progress_bar(round($globalProg / ($moduleNb)), 1) . "</td>
                       </tr>";
 }
 $tool_content .= "</table></div>";

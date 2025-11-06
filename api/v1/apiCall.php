@@ -18,9 +18,6 @@
  *
  */
 
-
-//die('dead');
-
 if (!defined('COURSE_OPEN')) {
     require_once '../../include/baseTheme.php';
 }
@@ -100,5 +97,3 @@ if (function_exists('api_method')) {
     header('Content-Type: application/json');
     echo json_encode($api_methods, JSON_UNESCAPED_UNICODE);
 }
-
-

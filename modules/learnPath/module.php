@@ -306,7 +306,7 @@ if ($module->contentType != CTLABEL_) { //
         } else if ($resultBrowsed->lesson_status == "FAILED") {
             $statusToDisplay = $langFailed;
         } else if ($resultBrowsed->lesson_status == "COMPLETED") {
-            $statusToDisplay = $langAlreadyBrowsed;
+            $statusToDisplay = $langCompleted;
         } else if ($resultBrowsed->lesson_status == "BROWSED") {
             $statusToDisplay = $langAlreadyBrowsed;
         } else if ($resultBrowsed->lesson_status == "INCOMPLETE") {
@@ -345,7 +345,7 @@ if ($module->contentType != CTLABEL_) { //
             </div>
             <div class='col-md-9 col-12 title-default-line-height'>";
         if ($module->startAsset_id != "" && $asset->asset_id == $module->startAsset_id) {
-            $tool_content .= "<form action='./viewer.php?course=$course_code' method='post'> 
+            $tool_content .= "<form action='./viewer.php?course=$course_code' method='post'>
                                 <input class='btn submitAdminBtn' type='submit' value='$langStartModule'>
                             </form>";
         } else {

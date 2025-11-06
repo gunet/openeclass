@@ -763,19 +763,14 @@ function update_user_attendance_activities($attendance_id, $uid) {
 }
 
 /**
- * @brief create new attendance
- * @global string $tool_content
- * @global type $course_code
- * @global type $langNewAttendance2
- * @global type $langTitle
- * @global type $langSave
- * @global type $langInsert
+ * @brief Display attendance book form
+ * @param type $attendance_id
  */
-function new_attendance() {
+function attendance_book_form($attendance_id = null) {
 
-    global $tool_content, $course_code, $langNewAttendance2, $head_content,
-           $langTitle, $langSubmit, $langInsert, $langAttendanceLimitNumber,
-           $langStart, $langEnd, $language, $langImgFormsDes;
+    global  $tool_content, $course_code, $head_content, $langTitle, $langSubmit,
+            $langInsert, $langAttendanceLimitNumber, $langStart,
+            $langEnd, $language, $langImgFormsDes, $langAttendanceUpdate, $attendance;
 
     load_js('bootstrap-datetimepicker');
     $head_content .= "
@@ -789,78 +784,86 @@ function new_attendance() {
             });
         });
     </script>";
+
+    // Create new attendance book
+    if ($attendance_id === null) {
+        $title_default = '';
+        $start_date_default = '';
+        $end_date_default = '';
+        $limit_default = '';
+
+        $action = "$_SERVER[SCRIPT_NAME]?course=$course_code";
+    } else { // Edit attendance book
+        $title_default = $attendance->title;
+        $start_date_default = DateTime::createFromFormat('Y-m-d H:i:s', $attendance->start_date)->format('d-m-Y H:i');
+        $end_date_default = DateTime::createFromFormat('Y-m-d H:i:s', $attendance->end_date)->format('d-m-Y H:i');
+        $limit_default = get_attendance_limit($attendance_id);
+
+        $action = "$_SERVER[SCRIPT_NAME]?course=$course_code&attendance_id=$attendance_id";
+    }
+
     $title_error = Session::getError('title');
-    $title = Session::has('title') ? Session::get('title') : '';
+    $title = Session::has('title') ? Session::get('title') : $title_default;
     $start_date_error = Session::getError('start_date');
-    $start_date = Session::has('start_date') ? Session::get('start_date') : '';
+    $start_date = Session::has('start_date') ? Session::get('start_date') : $start_date_default;
     $end_date_error = Session::getError('end_date');
-    $end_date = Session::has('end_date') ? Session::get('end_date') : '';
+    $end_date = Session::has('end_date') ? Session::get('end_date') : $end_date_default;
+
     $limit_error  = Session::getError('limit');
-    $limit = Session::has('limit') ? Session::get('limit') : '';
+    $limit = Session::has('limit') ? Session::get('limit') : $limit_default;
 
     $tool_content .= "
-    <div class='d-lg-flex gap-4 mt-4'>  
+    <div class='d-lg-flex gap-4 mt-4'>
         <div class='flex-grow-1'>
             <div class='form-wrapper form-edit rounded border-0 px-0'>
-                <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit=\"return checkrequired(this, 'antitle');\">
-                    <div class='form-group'>
-                    <label for='titleID' class='col-12 control-label-notes'>$langNewAttendance2 <span class='asterisk Accent-200-cl'>(*)</span></label></div>
+                <form class='form-horizontal' role='form' method='post' action=$action>
                     <div class='form-group".($title_error ? " has-error" : "")."'>
+                        <label for='title_id' class='col-12 control-label-notes'>$langTitle <span class='asterisk Accent-200-cl'>(*)</span></label>
                         <div class='col-12'>
-                            <input id='titleID' class='form-control' type='text' placeholder='$langTitle' name='title'>
+                            <input id='title_id' class='form-control' type='text' placeholder='$langTitle' name='title' value='".q($title)."'>
                             <span class='help-block Accent-200-cl'>$title_error</span>
                         </div>
                     </div>
-                   
-                        
-                            <div class='form-group mt-4".($start_date_error ? " has-error" : "")."'>
-                                <div class='col-12'>
-                                    <label for='start_date' class='control-label-notes'>$langStart <span class='asterisk Accent-200-cl'>(*)</span></label>
-                                </div>
-                                <div class='col-12'>
-                                    <input class='form-control' placeholder='$langStart' type='text' name='start_date' id='start_date' value='$start_date'>
-                                    <span class='help-block Accent-200-cl'>$start_date_error</span>
-                                </div>
-                            </div>
-                        
-                      
-                            <div class='form-group mt-4".($end_date_error ? " has-error" : "")."'>
-                                <div class='col-12'>
-                                    <label for='end_date' class='control-label-notes'>$langEnd <span class='asterisk Accent-200-cl'>(*)</span></label>
-                                </div>
-                                <div class='col-12'>
-                                    <input class='form-control' placeholder='$langEnd' type='text' name='end_date' id='end_date' value='$end_date'>
-                                    <span class='help-block Accent-200-cl'>$end_date_error</span>
-                                </div>
-                            </div>
-                       
-                   
+                    <div class='form-group mt-4".($start_date_error ? " has-error" : "")."'>
+                        <div class='col-12'>
+                            <label for='start_date' class='control-label-notes'>$langStart <span class='asterisk Accent-200-cl'>(*)</span></label>
+                        </div>
+                        <div class='col-12'>
+                            <input class='form-control' placeholder='$langStart' type='text' name='start_date' id='start_date' value='".q($start_date)."'>
+                            <span class='help-block Accent-200-cl'>$start_date_error</span>
+                        </div>
+                    </div>
+                    <div class='form-group mt-4".($end_date_error ? " has-error" : "")."'>
+                        <div class='col-12'>
+                            <label for='end_date' class='control-label-notes'>$langEnd <span class='asterisk Accent-200-cl'>(*)</span></label>
+                        </div>
+                        <div class='col-12'>
+                            <input class='form-control' placeholder='$langEnd' type='text' name='end_date' id='end_date' value='".q($end_date)."'>
+                            <span class='help-block Accent-200-cl'>$end_date_error</span>
+                        </div>
+                    </div>
                     <div class='form-group mt-4".($limit_error ? " has-error" : "")."'>
                         <label for='limit_id' class='col-12 control-label-notes'>$langAttendanceLimitNumber <span class='asterisk Accent-200-cl'>(*)</span></label>
                         <div class='col-sm-12'>
-                            <input id='limit_id' class='form-control' placeholder='$langAttendanceLimitNumber' type='text' name='limit' value='$limit'>
+                            <input id='limit_id' class='form-control' placeholder='$langAttendanceLimitNumber' type='text' name='limit' value='".q($limit)."'>
                             <span class='help-block Accent-200-cl'>$limit_error</span>
                         </div>
                     </div>
                     <div class='form-group mt-5 d-flex justify-content-end align-items-center'>
-                        "
-
-                                    .form_buttons(array(
-                                        array(
-                                                'class'=> 'submitAdminBtn',
-                                                'text' => $langSubmit,
-                                                'name' => 'newAttendance',
-                                                'value'=> $langInsert
-                                        ),
-                                            array(
-                                                'class'=> 'cancelAdminBtn ms-1',
-                                                'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code"
-                                                )
-                                        )).
-
-
-
-                        "
+                        " . form_buttons(
+                                array(
+                                    array(
+                                        'class' => 'submitAdminBtn',
+                                        'text' => $langSubmit,
+                                        'name' => $attendance_id === null ? 'attendanceBookCreate' : 'attendanceBookSettings',
+                                        'value'=> $attendance_id === null ? $langInsert : $langAttendanceUpdate
+                                    ),
+                                    array(
+                                        'class' => 'cancelAdminBtn ms-1',
+                                        'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code"
+                                    )
+                                )
+                            )."
                     </div>
                 </form>
             </div>
@@ -870,7 +873,6 @@ function new_attendance() {
         </div>
     </div>";
 }
-
 /**
  * @brief display user presences
  * @param int $attendance_id
@@ -1053,112 +1055,6 @@ function display_all_users_presences($attendance_id) {
     }
 }
 
-/**
- * @brief insert/modify attendance settings
- * @param int $attendance_id
- */
-function attendance_settings($attendance_id) {
-
-    global $tool_content, $course_code, $language,
-           $langTitle, $langAttendanceLimitNumber,
-           $langAttendanceUpdate, $langSubmit, $head_content,
-           $attendance, $langStart, $langEnd, $langImgFormsDes;
-
-    load_js('bootstrap-datetimepicker');
-    $head_content .= "
-    <script type='text/javascript'>
-        $(function() {
-            $('#start_date, #end_date').datetimepicker({
-                format: 'dd-mm-yyyy hh:ii',
-                pickerPosition: 'bottom-right',
-                language: '".$language."',
-                autoclose: true
-            });
-        });
-    </script>";
-    $title_error = Session::getError('title');
-    $title = Session::has('title') ? Session::get('title') : $attendance->title;
-    $start_date_error = Session::getError('start_date');
-    $start_date = Session::has('start_date') ? Session::get('start_date') : DateTime::createFromFormat('Y-m-d H:i:s', $attendance->start_date)->format('d-m-Y H:i');
-    $end_date_error = Session::getError('end_date');
-    $end_date = Session::has('end_date') ? Session::get('end_date') : DateTime::createFromFormat('Y-m-d H:i:s', $attendance->end_date)->format('d-m-Y H:i');
-    $limit_error  = Session::getError('limit');
-    $limit = Session::has('limit') ? Session::get('limit') : get_attendance_limit($attendance_id);
-    // update attendance title
-    $tool_content .= "
-
-    <div class='d-lg-flex gap-4 mt-4'>
-        <div class='flex-grow-1'>
-            <div class='form-wrapper form-edit rounded border-0 px-0'>
-                <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&attendance_id=$attendance_id'>
-                    <div class='form-group".($title_error ? " has-error" : "")."'>
-                        <label for='title_id' class='col-12 control-label-notes'>$langTitle <span class='asterisk Accent-200-cl'>(*)</span></label>
-                        <div class='col-12'>
-                            <input id='title_id' class='form-control' type='text' placeholder='$langTitle' name='title' value='".q($title)."'>
-                            <span class='help-block Accent-200-cl'>$title_error</span>
-                        </div>
-                    </div>
-                    
-                       
-                            <div class='form-group".($start_date_error ? " has-error" : "")." mt-4'>
-                                <div class='col-12'>
-                                    <label for='start_date' class='control-label-notes'>$langStart <span class='asterisk Accent-200-cl'>(*)</span></label>
-                                </div>
-                                <div class='col-12'>
-                                    <input class='form-control' type='text' name='start_date' id='start_date' value='$start_date'>
-                                    <span class='help-block Accent-200-cl'>$start_date_error</span>
-                                </div>
-                            </div>
-                        
-                       
-                            <div class='form-group".($end_date_error ? " has-error" : "")." mt-4'>
-                                <div class='col-12'>
-                                    <label for='end_date' class='control-label-notes'>$langEnd <span class='asterisk Accent-200-cl'>(*)</span></label>
-                                </div>
-                                <div class='col-12'>
-                                    <input class='form-control' type='text' name='end_date' id='end_date' value='$end_date'>
-                                    <span class='help-block Accent-200-cl'>$end_date_error</span>
-                                </div>
-                            </div>
-                        
-                    
-                    <div class='form-group".($limit_error ? " has-error" : "")." mt-4'>
-                        <label for='limitId' class='col-12 control-label-notes'>$langAttendanceLimitNumber <span class='asterisk Accent-200-cl'>(*)</span></label>
-                        <div class='col-sm-12'>
-                            <input id='limitId' class='form-control' type='text' name='limit' value='$limit'/>
-                            <span class='help-block Accent-200-cl'>$limit_error</span>
-                        </div>
-                    </div>
-                    <div class='form-group mt-5 d-flex justify-content-end align-items-center'>
-
-
-
-                                 ".form_buttons(array(
-                                    array(
-                                        'class' => 'submitAdminBtn',
-                                        'text' => $langSubmit,
-                                        'name' => 'submitAttendanceBookSettings',
-                                        'value'=> $langAttendanceUpdate
-                                    ),
-                                    array(
-                                        'class' => 'cancelAdminBtn ms-1',
-                                        'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code"
-                                    )
-                                ))."
-
-
-
-
-                    </div>
-                    </fieldset>
-                </form>
-            </div>
-        </div>
-        <div class='d-none d-lg-block'>
-            <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
-        </div>
-    </div>";
-}
 
 /**
  * @brief modify user attendance settings
@@ -1644,6 +1540,7 @@ function import_attendances($attendance_id, $activity, $import = false) {
            $langImgFormsDes, $langForm;
 
     if ($import and isset($_FILES['userfile'])) { // import user attendances
+        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         $file = IOFactory::load($_FILES['userfile']['tmp_name']);
         $sheet = $file->getActiveSheet();
         $userAttendance = $errorLines = $invalidUsers = $extraUsers = [];
@@ -1764,6 +1661,7 @@ function import_attendances($attendance_id, $activity, $import = false) {
                                     </div>
                                 </div>
                             </fieldset>
+                            " . generate_csrf_token_form_field() . "
                         </form>
                     </div>
                 </div><div class='d-none d-lg-block'>

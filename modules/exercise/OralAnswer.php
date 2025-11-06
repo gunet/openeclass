@@ -15,11 +15,13 @@ class OralAnswer extends QuestionType
 
     public function AnswerQuestion($question_number, $exerciseResult = [], $options = []): string
     {
-        global $langOral, $langStart, $langStopRecording, $head_content, 
-               $langStopRecording, $urlAppend, $langReleaseMic, $langSaveInDoc, 
-               $langMaxRecAudioTime, $course_code, $urlServer, $langEnterFile, $langSave, 
-               $langSaveOralMsg, $langOk, $uid, $webDir, $course_id, 
-               $langDeleteRecordingOk, $langListenToRecordingAudio, $langFileUploadingOkReplaceWithNew, $eurid;
+        global $langOral, $langStart, $head_content,
+               $langStopRecording, $urlAppend, $langMaxRecAudioTimeTmp, $langminutes,
+               $langMaxRecAudioTimeInExericses, $course_code, $urlServer,
+               $course_id, $langCancel, $langAnalyticsConfirm,
+               $langDeleteRecordingOk, $langListenToRecordingAudio,
+               $langFileUploadingOkReplaceWithNew, $eurid, $langConfirmDelete;
+
 
         $questionId = $this->question_id;
         $html_content = '';
@@ -43,9 +45,31 @@ class OralAnswer extends QuestionType
                     $url = $urlServer . "courses/$course_code/image" . $filePath;
                 }
             }
-            
+
             $displayItems = 'd-block';
-        } 
+        }
+
+        // Calculate the duration of the exercise to add it to the maximum recorded audio range.
+        $diffMinutes = '';
+        $milliseconds = 1200000; // 20 min
+        $ex_res = Database::get()->querySingle("SELECT `start_date`,`end_date` FROM exercise 
+                                                WHERE course_id = ?d 
+                                                AND id IN (SELECT eid FROM exercise_user_record WHERE eurid = ?d)", $course_id, $eurid);
+
+        if ($ex_res && !is_null($ex_res->start_date) && !is_null($ex_res->end_date)) {
+            $dt1 = new DateTime($ex_res->start_date);
+            $dt2 = new DateTime($ex_res->end_date);
+            if ($dt1->format('Y-m-d') === $dt2->format('Y-m-d') && $dt2->getTimestamp() > $dt1->getTimestamp()) {
+                // Calculate the difference in seconds
+                $diffSeconds = abs($dt1->getTimestamp() - $dt2->getTimestamp());
+                // Convert seconds to minutes
+                $diffMinutes = $diffSeconds / 60;
+                $diffMinutes = $diffMinutes - 1; // One minute before the exercise expires.
+                $milliseconds = $diffMinutes * 60000;
+            }
+        }
+
+
 
         $html_content .= "
         <ul class='nav nav-tabs' id='myTab_{$questionId}' role='tablist'>
@@ -57,13 +81,11 @@ class OralAnswer extends QuestionType
             <div class='tab-pane fade show active' id='oral_{$questionId}' role='tabpanel' aria-labelledby='oral-tab_{$questionId}'>
                 <input type='hidden' name='choice[$questionId]' id='hidden-recording-{$questionId}' value='{$filenameRecording}'>
                 <div class='col-12 d-flex gap-3'>
-                    <button class='btn submitAdminBtnDefault' id='button-start-recording-{$questionId}'>$langStart</button>
-                    <button class='btn submitAdminBtn' id='button-release-microphone-{$questionId}' disabled><i class='fa-solid fa-microphone-slash'></i></button>
-                    <button class='btn deleteAdminBtn' id='button-stop-recording-{$questionId}' disabled>$langStopRecording</button>
-                    <button class='btn successAdminBtn btnSaveRecording' id='button-save-recording-{$questionId}' disabled>$langSave</button>
+                    <button class='btn submitAdminBtnDefault' id='button-start-recording-{$questionId}'>$langStart</button>                    
+                    <button class='btn deleteAdminBtn' id='button-stop-recording-{$questionId}' disabled>$langStopRecording</button>                    
                 </div>
                 <div class='col-12 d-flex justify-content-start align-items-center mt-2'>
-                    <span class='help-block'>$langMaxRecAudioTime</span>
+                    <span class='help-block'>" . ($milliseconds == 1200000 ? $langMaxRecAudioTimeInExericses : $langMaxRecAudioTimeTmp.$diffMinutes.' '.$langminutes) . "</span>
                 </div>
                 <div class='col-12 d-flex justify-content-start align-item-center mt-4'>
                     <audio class='audio-{$questionId}' controls autoplay playsinline></audio>
@@ -76,9 +98,11 @@ $html_content .= "<div id='recording_file_container_{$questionId}' class='col-12
                         <div class='modal-dialog modal-dialog-centered'>
                             <div class='modal-content'>
                                 <div class='modal-body'>
-                                    <audio id='audio_{$questionId}' controls>
-                                        <source id='audioSource_{$questionId}' src=" . htmlspecialchars($url) . " type='audio/mpeg'>
-                                    </audio>
+                                    <audio id='audio_{$questionId}' controls>";
+                                    if (!empty($url)) {
+                                        $html_content .= "<source id = 'audioSource_{$questionId}' src = " . htmlspecialchars($url) . " type = 'audio/mpeg'>";
+                                    }
+                                    $html_content .= "</audio>
                                 </div>
                             </div>
                         </div>
@@ -89,41 +113,40 @@ $html_content .= "</div>
 
         $head_content .= "
         <style>.fade:not(.show) {opacity: 1;}</style>
-        <script src='{$urlAppend}node_modules/recordrtc/RecordRTC.min.js'></script>
+        <script src='{$urlAppend}js/recordrtc/RecordRTC.min.js'></script>
         <script type='text/javascript'>
             $(document).ready(function() {
 
-                $('#deleteRecording-{$questionId}').on('click', function (){
-                    var qID = $(this).data('id');
-                    var deleteData = new FormData();
-                    deleteData.append('delete-recording', qID);
-                    var del_url = '{$urlAppend}modules/exercise/exercise_submit.php?course={$course_code}&eurid={$eurid}';
-                    $.ajax({
-                        url: del_url,
-                        data: deleteData,
-                        cache: false,
-                        contentType: false,
-                        processData: false,
-                        type: 'POST'
-                    }).done(function(data) {
-                        alert('$langDeleteRecordingOk');
+                $('#deleteRecording-{$questionId}').on('click', function () {
+                    if (confirm('" . js_escape($langConfirmDelete) . "')) {
+                        var qID = $(this).data('id');
+                        var deleteData = new FormData();
+                        deleteData.append('delete-recording', qID);
+                        var del_url = '{$urlAppend}modules/exercise/exercise_submit.php?course={$course_code}&eurid={$eurid}';
+                        $.ajax({
+                            url: del_url,
+                            data: deleteData,
+                            cache: false,
+                            contentType: false,
+                            processData: false,
+                            type: 'POST'
+                        }).done(function(data) {
+                            alert('" . js_escape($langDeleteRecordingOk) . "');
 
-                        // Set empty the src of current audio and load it again.
-                        $('body').find('#audioSource_{$questionId}').attr('src', '');
-                        $('#audio_{$questionId}')[0].load();
+                            // Set empty the src of current audio and load it again.
+                            $('body').find('#audioSource_{$questionId}').attr('src', '');
+                            $('#audio_{$questionId}')[0].load();
 
-                        // Hide recording link and change its value.
-                        $('#recording_file_container_{$questionId}').removeClass('d-block').addClass('d-none');
-                        $('#hidden-recording-{$questionId}').val('');
-                    })
-
+                            // Hide recording link and change its value.
+                            $('#recording_file_container_{$questionId}').removeClass('d-block').addClass('d-none');
+                            $('#hidden-recording-{$questionId}').val('');
+                        });
+                    }
                 });
                 
 
                 var audio = document.querySelector('audio.audio-{$questionId}');
-                function captureMicrophone(callback) {
-                    btnReleaseMicrophone.disabled = false;
-                    $('#button-release-microphone-{$questionId} i').removeClass('fa-solid fa-microphone-slash').addClass('fa-solid fa-microphone');
+                function captureMicrophone(callback) {                                        
                     if(microphone) {
                         callback(microphone);
                         return;
@@ -183,15 +206,13 @@ $html_content .= "</div>
                 var recorder; // globally accessible
                 var microphone;
                 var btnStartRecording = document.getElementById('button-start-recording-{$questionId}');
-                var btnStopRecording = document.getElementById('button-stop-recording-{$questionId}');
-                var btnReleaseMicrophone = document.querySelector('#button-release-microphone-{$questionId}');
-                var saveBtn = document.querySelector('#button-save-recording-{$questionId}');
-
+                var btnStopRecording = document.getElementById('button-stop-recording-{$questionId}');                
+                
                 btnStartRecording.onclick = function() {
                     this.disabled = true;
                     this.style.border = '';
                     this.style.fontSize = '';
-                    saveBtn.disabled = true;
+                    //saveBtn.disabled = true;
                     if (!microphone) {
                         captureMicrophone(function(mic) {
                             microphone = mic;
@@ -237,31 +258,10 @@ $html_content .= "</div>
                         recorder = null;
                     }
                     recorder = RecordRTC(microphone, options);
-                    // max duration recording = 5 min
-                    recorder.setRecordingDuration(300000).onRecordingStopped(stopRecordingCallback);
+                    // max duration recording = 20 min
+                    recorder.setRecordingDuration($milliseconds).onRecordingStopped(stopRecordingCallback);
                     recorder.startRecording();
                     btnStopRecording.disabled = false;
-                };
-
-                btnStopRecording.onclick = function() {
-                    this.disabled = true;
-                    saveBtn.disabled = false;
-                    recorder.stopRecording(stopRecordingCallback);
-                };
-
-                btnReleaseMicrophone.onclick = function() {
-                    this.disabled = true;
-                    $('#button-release-microphone-{$questionId} i').removeClass('fa-solid fa-microphone').addClass('fa-solid fa-microphone-slash');
-                    btnStartRecording.disabled = false;
-
-                    if(microphone) {
-                        microphone.stop();
-                        microphone = null;
-                    }
-
-                    if(recorder) {
-                        /* click(btnStopRecording); */
-                    }
                 };
 
                 function click(el) {
@@ -271,12 +271,25 @@ $html_content .= "</div>
                     el.dispatchEvent(evt);
                 }
 
-                saveBtn.onclick = function(e) {
-
+                btnStopRecording.onclick = function(e) {
+                    this.disabled = true;                    
+                    recorder.stopRecording(stopRecordingCallback);                
+                                                
                     e.preventDefault();
 
                     bootbox.confirm({
-                        message: '$langSaveOralMsg',
+                        message: '$langFileUploadingOkReplaceWithNew',
+                        title: '<div class=\'modal-title-default text-center mb-0\'>$langAnalyticsConfirm</div>',
+                        buttons: {
+                            cancel: {
+                                label: '$langCancel',
+                                className: 'cancelAdminBtn position-center'
+                            },
+                            confirm: {
+                                label: '$langAnalyticsConfirm',
+                                className: 'submitAdminBtn position-center',
+                            }
+                        },
                         callback: function(result) {
                             if (!result) {
                                 // User clicked Cancel, do nothing
@@ -318,8 +331,7 @@ $html_content .= "</div>
                                 processData: false,
                                 type: 'POST',
                                 dataType: 'json' // Expect JSON response
-                            }).done(function(data) {
-                                alert('$langFileUploadingOkReplaceWithNew');
+                            }).done(function(data) {                                
                                 var newFilePath = data.newFilePath;
                                 $('#recording_file_container_{$questionId}').removeClass('d-none').addClass('d-block');
 
@@ -338,12 +350,11 @@ $html_content .= "</div>
                             })
                         }
                     });
-
                 };
             })
         </script>";
 
-        $html_content .= "</div>"; 
+        $html_content .= "</div>";
 
         return $html_content;
     }
@@ -352,14 +363,12 @@ $html_content .= "</div>
     public function QuestionResult($choice, $eurid, $regrade, $extra_type = ''): string
     {
 
-        global $questionScore, $question_weight, $course_id, $course_code, $uid, $urlServer, $is_editor;
+        global $questionScore, $question_weight, $course_id, $course_code, $urlServer;
 
         $questionId = $this->question_id;
         $questionScore = $question_weight;
-        
+
         $html_content = '';
-        $oral = '';
-        $recording = '';
         $url = '';
         $filename = '';
 
@@ -388,9 +397,6 @@ $html_content .= "</div>
                                 </div>
                                 </div>";
         }
-        
-
         return $html_content;
-
     }
 }

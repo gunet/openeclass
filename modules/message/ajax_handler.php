@@ -36,6 +36,9 @@ require_once 'class.mailbox.php';
 
 if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
 
+    $limit = intval($_POST['length']);
+    $offset = intval($_POST['start']);
+
     $message_path = '';
     if (isset($_GET['mbox_type'])) {
         $mbox_type = $_GET['mbox_type'];
@@ -108,23 +111,18 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
 
     $mbox = new Mailbox($uid, $course_id);
 
-    $limit = intval($_GET['iDisplayLength']);
-    $offset = intval($_GET['iDisplayStart']);
-
     //Total records
-    $data['iTotalRecords'] = $mbox->MsgsNumber($mbox_type);
+    $data['recordsTotal'] = $mbox->MsgsNumber($mbox_type);
 
-    $keyword = $_GET['sSearch'];
+    $keyword = $_POST['search']['value'];
 
     if ($mbox_type == 'inbox') {
-        //Total records after applying search filter
-        $data['iTotalDisplayRecords'] = count($mbox->getInboxMsgs($keyword));
-
+        //Total records after applying a search filter
+        $data['recordsFiltered'] = count($mbox->getInboxMsgs($keyword));
         $msgs = $mbox->getInboxMsgs($keyword, $limit, $offset);
     } else {
-        //Total records after applying search filter
-        $data['iTotalDisplayRecords'] = count($mbox->getOutboxMsgs($keyword));
-
+        //Total records after applying a search filter
+        $data['recordsFiltered'] = count($mbox->getOutboxMsgs($keyword));
         $msgs = $mbox->getOutboxMsgs($keyword, $limit, $offset);
     }
 

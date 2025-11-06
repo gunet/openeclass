@@ -87,7 +87,7 @@ class Log {
      */
     public function display($course_id, $user_id, $module_id, $logtype, $date_from, $date_now) {
 
-        global $tool_content, $modules, $langToolManagement,
+        global $tool_content, $modules, $langCourseTools,
             $langNoUsersLog, $langDate, $langUser, $langAction, $langDetail, $langConfig,
             $langCourse, $langModule, $langAdminUsers, $langExternalLinks, $langCourseInfo,
             $langModifyInfo, $langAbuseReport, $langIpAddress;
@@ -185,7 +185,7 @@ class Log {
                     if ($mid == MODULE_ID_USERS) {
                         $tool_content .= "<td>" . $langAdminUsers . "</td>";
                     } elseif ($mid == MODULE_ID_TOOLADMIN) {
-                        $tool_content .= "<td>$langToolManagement / $langExternalLinks</td>";
+                        $tool_content .= "<td>$langCourseTools / $langExternalLinks</td>";
                     } elseif ($mid == MODULE_ID_SETTINGS) {
                         $tool_content .= "<td>" . $langCourseInfo . "</td>";
                     } elseif ($mid == MODULE_ID_ABUSE_REPORT) {

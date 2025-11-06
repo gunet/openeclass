@@ -37,7 +37,7 @@ function display_certificates(): void
         $tool_content .= "
                 <div class='col-12 mt-4'>
                     <div class='card panelCard card-default px-lg-4 py-lg-3'>
-                        <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>                            
+                        <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                                 <h3>
                                     $langCertificates
                                 </h3>";
@@ -135,7 +135,7 @@ function display_badges(): void
         $tool_content .= "
                 <div class='col-12 mt-4'>
                     <div class='card panelCard card-default px-lg-4 py-lg-3'>
-                        <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>                            
+                        <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                                 <h3>
                                     $langBadges
                                 </h3>";
@@ -221,7 +221,7 @@ function display_course_completion(): void
                     <div class='card panelCard card-default px-lg-4 py-lg-3'>
                         <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                             <h3>$langCourseCompletion</h3>
-                                
+
                         </div>
                         <div class='card-body'>
                             <div class='res-table-wrapper'>";
@@ -462,58 +462,6 @@ function display_activities($element, $id, $unit_id = 0) {
                         </div>";
                     }
  $tool_content .=  "</div>";
-        //     $tool_content .= "<div class='res-table-wrapper'>
-        //         <div class='row res-table-header'>
-        //             <div class='col-sm-7'>
-        //                 $langTitle
-        //             </div>
-        //             <div class='col-sm-2'>
-        //                 $langType
-        //             </div>
-        //             <div class='col-sm-2'>
-        //                 $langValue
-        //             </div>";
-        //             if ($is_editor) {
-        //                 $tool_content .= "<div class='col-sm-1 text-center'>
-        //                     <i class='fa fa-cogs'></i>
-        //                 </div>";
-        //             }
-        //     $tool_content .= "</div>";
-        // if (count($result) == 0) {
-        //     $tool_content .= "<p class='margin-top-fat text-center text-muted'>$langNoActivCert</p>";
-        // } else {
-        //     foreach ($result as $details) {
-        //         $resource_data = get_resource_details($element, $details->id);
-        //         $tool_content .= "
-        //         <div class='row res-table-row'>
-        //             <div class='col-sm-7'>".$resource_data['title']."</div>
-        //             <div class='col-sm-2'>". $resource_data['type']."</div>
-        //             <div class='col-sm-2'>";
-        //         if (!empty($details->operator)) {
-        //             $op = get_operators();
-        //             $tool_content .= $op[$details->operator];
-        //         } else {
-        //             $tool_content .= "&mdash;";
-        //         }
-        //         $tool_content .= "&nbsp;$details->threshold</div>";
-        //         if ($is_editor) {
-        //             $tool_content .= "<div class='col-sm-1 text-center'>".
-        //                 action_button(array(
-        //                     array('title' => $langEditChange,
-        //                         'icon' => 'fa-edit',
-        //                         'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;act_mod=$details->id",
-        //                         'show' => in_array($details->activity_type, criteria_with_operators())
-        //                     ),
-        //                     array('title' => $langDelete,
-        //                         'icon' => 'fa-times',
-        //                         'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;del_cert_res=$details->id",
-        //                         'confirm' => $langConfirmDelete,
-        //                         'class' => 'delete'))).
-        //                 "</div>";
-        //         }
-        //         $tool_content .= "</div>";
-        //     }
-        // }
         $tool_content .= "
                     <div class='card-body'>";
                         if (count($result) == 0) {
@@ -539,8 +487,8 @@ function display_activities($element, $id, $unit_id = 0) {
                                                         $resource_data = get_resource_details($element, $details->id);
                                                         $tool_content .= "
                                                         <tr>
-                                                            <td>".$resource_data['title']."</td>
-                                                            <td>". $resource_data['type']."</td>
+                                                            <td>" . q($resource_data['title']) . "</td>
+                                                            <td>" . $resource_data['type'] . "</td>
                                                             <td>";
                                                                 if (!empty($details->operator) && $details->activity_type != AssignmentSubmitEvent::ACTIVITY) {
                                                                     $op = get_operators();
@@ -837,7 +785,6 @@ function insert_activity($element, $element_id, $activity, $unit_id = 0, $unit_r
  * @param int $unit_id
  */
 function display_modification_activity($element, $element_id, $activity_id, $unit_id = 0) {
-
     global $tool_content, $course_code, $langModify, $langOperator, $langUsedCertRes, $langImgFormsDes;
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
@@ -845,9 +792,9 @@ function display_modification_activity($element, $element_id, $activity_id, $uni
         Session::flash('message',$langUsedCertRes);
         Session::flash('alert-class', 'alert-warning');
         if ($unit_id) {
-            redirect(localhostUrl().$_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&unit_id=$unit_id");
+            redirect_to_home_page("modules/units/manage.php?course=$course_code&manage=1&unit_id=$unit_id");
         } else {
-            redirect_to_home_page("modules/progress/index.php?course=$course_code&amp;{$element}_id=$element_id");
+            redirect_to_home_page("modules/progress/index.php?course=$course_code&{$element}_id=$element_id");
         }
 
     } else { // otherwise editing is not allowed
@@ -1007,7 +954,7 @@ function display_available_exercises($element, $element_id, $unit_id = 0, $unit_
 
     } else {
         $result = Database::get()->queryArray("SELECT * FROM exercise WHERE exercise.course_id = ?d
-                                    AND exercise.active = 1                                    
+                                    AND exercise.active = 1
                                     AND exercise.id NOT IN
                                     (SELECT resource FROM {$element}_criterion WHERE $element = ?d
                                             AND resource != ''
@@ -2230,7 +2177,7 @@ function display_settings($element, $element_id, $unit_id = 0): void
         $tool_content .= "
                 <div class='col-12'>
                     <div class='card panelCard border-card-left-default px-lg-4 py-lg-3'>
-                        <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>                            
+                        <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                                 <h3>
                                     $langProgressBasicInfo
                                 </h3>";
@@ -2493,7 +2440,7 @@ function certificate_settings($element, $element_id = 0) {
                         <textarea id='message_id' class='form-control' name='message' rows='3' maxlength='1200'>$message</textarea>
                     </div>
                 </div>
-                
+
                 <div class='form-group mt-4'>
                     <label for='issuer_id' class='col-sm-12 control-label-notes'>$langpublisher</label>
                     <div class='col-sm-12'>
@@ -2510,7 +2457,7 @@ function certificate_settings($element, $element_id = 0) {
                                     <span class='checkmark'></span>
                                 </label>
                             </span>
-                           <span class='add-on2 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>  
+                           <span class='add-on2 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
                            <input class='form-control mt-0 border-start-0' name='enddatepicker' id='enddatepicker' type='text' value='$certdeadline' $statuscertdeadline>
                        </div>
                        <span class='help-block'>&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i>$langCertDeadlineHelp</span>
@@ -2604,13 +2551,13 @@ function student_view_progress() {
                                         <i class='fa fa-trophy fa-4x' aria-hidden='true'></i>
                                     </div>
                                     <div class='col-md-4 col-12 d-flex justify-content-center align-items-center mt-md-0 mt-3'>
-                                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&badge_id=$course_completion_id&u=$uid'>$langCourseCompletion</a>                                      
+                                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&badge_id=$course_completion_id&u=$uid'>$langCourseCompletion</a>
                                     </div>
                                     <div class='col-md-4 col-12  mt-md-0 mt-3'>
-                                           
+
                                         <div class='progress progress-line'>
                                             <div class='progress-line-bar' role='progressbar' style='width: $percentage_num%;' aria-valuenow='$percentage_num' aria-valuemin='0' aria-valuemax='100'>$percentage</div>
-                                        </div>                                
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -2689,7 +2636,7 @@ function student_view_progress() {
                                         <div class='col-md-4 col-12 mt-md-0 mt-3'>
                                             <div class='progress progress-line'>
                                                 <div class='progress-line-bar' role='progressbar' style='width: $badge_percentage;' aria-valuenow='$badge_percentage_num' aria-valuemin='0' aria-valuemax='100'>$badge_percentage</div>
-                                            </div> 
+                                            </div>
                                         </div>
                                     </div>
                                 </div>";
@@ -2929,10 +2876,10 @@ function display_user_progress_details($element, $element_id, $user_id) {
                                         }
                                         $percentage = $percentage_value . '%';
                                         $tool_content .= "<div class='pn-info-text-sct text-md-end'>
-                                            
+
                                             <div class='progress progress-line'>
                                                 <div class='progress-line-bar' role='progressbar' style='width: $percentage;' aria-valuenow='$percentage_value' aria-valuemin='0' aria-valuemax='100'>$percentage</div>
-                                            </div> 
+                                            </div>
 
                                         </div>";
                             $tool_content .="</div></div>";
@@ -2978,7 +2925,7 @@ function display_user_progress_details($element, $element_id, $user_id) {
                 <div class='card-body'>
                     <div class='table-responsive mt-0'>
                     <table class='table-default'>
-                        
+
                             <thead>
                                 <tr>
                                     <th>$langTitle</th>

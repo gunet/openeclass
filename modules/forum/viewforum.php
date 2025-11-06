@@ -222,7 +222,7 @@ $result = Database::get()->queryArray("SELECT t.*, p.post_time, t.poster_id AS t
         LEFT JOIN forum_post p ON t.last_post_id = p.id
         INNER JOIN forum f ON t.forum_id = f.id
         WHERE t.forum_id = ?d
-        ORDER BY t.pin_time DESC, topic_time DESC", $forum_id);
+        ORDER BY topic_time DESC", $forum_id);
 
 if (count($result) > 0) { // topics found
     $tool_content .= "<div class='table-responsive'>
@@ -244,10 +244,6 @@ if (count($result) > 0) { // topics found
         $last_post_datetime = $myrow->post_time;
         $topic_title = $myrow->title;
         $topic_locked = $myrow->locked;
-        $pin_time = $myrow->pin_time;
-
-        $pin_action = $pin_time ? 1 : 0;
-        $pin_icon = ($pin_action == 1) ? icon('fa-thumbtack') : "";
 
         $pagination = '';
         $topiclink = "viewtopic.php?course=$course_code&amp;topic=$topic_id&amp;forum=$forum_id";
@@ -287,7 +283,7 @@ if (count($result) > 0) { // topics found
             $image_notify = '';
         }
 
-        $tool_content .= "<td><div class='d-flex justify-content-between border-0'><a href='$topiclink'>" . q($topic_title) . "</a> <span class='d-flex align-items-center gap-2'>$image_lock $image_fire $image_notify $pin_icon</span></div></td>";
+        $tool_content .= "<td><div class='d-flex justify-content-between border-0'><a href='$topiclink'>" . q($topic_title) . "</a> <span class='d-flex align-items-center gap-2'>$image_lock $image_fire $image_notify</span></div></td>";
         $tool_content .= "<td>$replies</td>";
         $tool_content .= "<td>" . q(uid_to_name($myrow->topic_poster_id)) . "</td>";
         $tool_content .= "<td>$myrow->num_views</td>";
@@ -401,7 +397,7 @@ if (count($result) > 0) { // topics found
                        'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
                        'sZeroRecords':  '" . $langNoResult . "',
                        'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
-                       'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
+                       'sInfoEmpty':    '',
                        'sInfoFiltered': '',
                        'sInfoPostFix':  '',
                        'sSearch':       '',

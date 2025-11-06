@@ -188,22 +188,7 @@ if (isset($_GET['mid'])) {
             e.preventDefault();
             var id = $(this).children("a").data("id");
             var string = "mid="+id+"&'. generate_csrf_token_link_parameter() .'";
-
-            // bootbox.confirm("'.js_escape($langConfirmDelete).'", function(result) {
-            //     if(result) {
-            //         $.ajax({
-            //             type: "POST",
-            //             url: "'.$ajax_url.'",
-            //             datatype: "json",
-            //             data: string,
-            //             success: function(){
-            //                 $("#out_del_msg").html("<p class=\"alert alert-success\"><i class=\"fa-solid fa-circle-check fa-lg\"></i><span>'.js_escape($langMessageDeleteSuccess).'</span></p>");
-            //                 $(".alert-success").delay(3000).fadeOut(1500);
-            //                 $("#out_msg_area").remove();
-            //         }});
-            //     }
-            // });
-
+           
             bootbox.confirm({
                 closeButton: false,
                 title: "<div class=\"icon-modal-default\"><i class=\"fa-regular fa-trash-can fa-xl Accent-200-cl\"></i></div><div class=\"modal-title-default text-center mb-0\">'.js_escape($langConfirmDelete).'</div>",
@@ -283,27 +268,27 @@ if (isset($_GET['mid'])) {
     $out .= "<script type='text/javascript'>
                $(document).ready(function() {
 
-                 var oTable2 = $('#outbox_table').dataTable({
+                 var oTable2 = $('#outbox_table').DataTable({
                     'aoColumnDefs':[{'sClass':'option-btn-cell text-end', 'aTargets':[-1]}],
                     'bStateSave' : true,
                     'bProcessing': true,
                     'sDom': '<\"top\"fl<\"clear\">>rt<\"bottom\"ip<\"clear\">>',
                     'bServerSide': true,
                     'searchDelay': 1000,
-                    'sAjaxSource': '$ajax_url_outbox',
-                    'aLengthMenu': [
-                       [10, 15, 20 , -1],
-                       [10, 15, 20, '".js_escape($langAllOfThem)."'] // change per page values here
-                     ],
+                    ajax: {
+                        url: '$ajax_url_outbox',
+                        type: 'POST'
+                    }, 
+                    'lengthMenu': [10, 15, 20 , -1],
                     'sPaginationType': 'full_numbers',
                     'bSort': false,
                     'bAutoWidth' : false,
                     'fnDrawCallback': function( oSettings ) {
-                        $('#outbox_table_filter label input').attr({
+                        $('#outbox_table_wrapper .dt-search input').attr({
                           'class' : 'form-control input-sm ms-0 mb-3',
                           'placeholder' : '".js_escape($langSearch)."...'
                         });
-                        $('#outbox_table_filter label').attr('aria-label', '".js_escape($langSearch)."');  
+                        $('#outbox_table_wrapper .dt-search label').attr('aria-label', '".js_escape($langSearch)."');  
                         $('.recipients').each(function(){
                             $(this).trunk8({
                                 parseHTML: 'true',
@@ -313,14 +298,17 @@ if (isset($_GET['mid'])) {
                         });
                     },
                     'oLanguage': {
+                            'lengthLabels': { 
+                                '-1': '$langAllOfThem' 
+                            },
                             'sLengthMenu':   '".js_escape("$langDisplay _MENU_ $langResults2")."',
-                            'sZeroRecords':  '".js_escape($langNoResult)."',
+                            'sZeroRecords':  '" . js_escape("$langNoResult") . "',
+                            'sEmptyTable':  '".js_escape("$langNoResult")."',
                             'sInfo':         '".js_escape("$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults")."',
-                            'sInfoEmpty':    '".js_escape("$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2")."',
+                            'sInfoEmpty':    '',
                             'sInfoFiltered': '',
                             'sInfoPostFix':  '',
                             'sSearch':       '',
-                            'sUrl':          '',
                             'oPaginate': {
                                  'sFirst':    '&laquo;',
                                  'sPrevious': '&lsaquo;',
@@ -335,32 +323,7 @@ if (isset($_GET['mid'])) {
                         e.preventDefault();
                         var id = $(this).data('id');
                         var string = 'mid='+id+'&". generate_csrf_token_link_parameter() ."';
-
-                        // bootbox.confirm('".js_escape($langConfirmDelete)."', function(result) {
-                        //     if (result) {
-                        //         $.ajax({
-                        //           type: 'POST',
-                        //           url: '$ajax_url',
-                        //           data: string,
-                        //           cache: false,
-                        //           success: function(){
-                        //             var num_page_records = oTable2.fnGetData().length;
-                        //             var per_page = $('#outbox_table').DataTable().page.info().length;
-                        //             var page_number = $('#outbox_table').DataTable().page.info().page;
-                        //             if(num_page_records==1){
-                        //                 if(page_number!=0) {
-                        //                     page_number--;
-                        //                 }
-                        //             }
-                        //             $('#out_del_msg').html('<p class=\'alert alert-success\'><i class=\'fa-solid fa-circle-check fa-lg\'></i><span>".js_escape($langMessageDeleteSuccess)."</span></p>');
-                        //             $('.alert-success').delay(3000).fadeOut(1500);
-                        //             $('#out_msg_area').remove();
-                        //             oTable2.fnPageChange(page_number);
-                        //           }
-                        //        });
-                        //      }
-                        // })
-
+                        
                         bootbox.confirm({
                             closeButton: false,
                             title: '<div class=\'icon-modal-default\'><i class=\'fa-regular fa-trash-can fa-xl Accent-200-cl\'></i></div><div class=\'modal-title-default text-center mb-0\'>".js_escape($langConfirmDelete)."</div>',
@@ -403,32 +366,7 @@ if (isset($_GET['mid'])) {
 
                      });
 
-                    $('.delete_all_out').click(function() {
-                        // bootbox.confirm('".js_escape($langConfirmDeleteAllMsgs)."', function(result) {
-                        //     if(result) {
-                        //         var string = 'all_outbox=1&". generate_csrf_token_link_parameter() ."';
-                        //         $.ajax({
-                        //             type: 'POST',
-                        //             url: '$ajax_url',
-                        //             data: string,
-                        //             cache: false,
-                        //             success: function(){
-                        //                 var num_page_records = oTable2.fnGetData().length;
-                        //                 var per_page = $('#outbox_table').DataTable().page.info().length;
-                        //                 var page_number = $('#outbox_table').DataTable().page.info().page;
-                        //                 if(num_page_records==1){
-                        //                 if(page_number!=0) {
-                        //                     page_number--;
-                        //                 }
-                        //                 }
-                        //                 $('#out_del_msg').html('<p class=\'alert alert-success\'><i class=\'fa-solid fa-circle-check fa-lg\'></i><span>".js_escape($langMessageDeleteAllSuccess)."</span></p>');
-                        //                 $('.alert-success').delay(3000).fadeOut(1500);
-                        //                 oTable2.fnPageChange(page_number);
-                        //             }
-                        //         });
-                        //     }
-                        // })
-
+                    $('.delete_all_out').click(function() {                        
                         bootbox.confirm({
                             closeButton: false,
                             title: '<div class=\'icon-modal-default\'><i class=\'fa-regular fa-trash-can fa-xl Accent-200-cl\'></i></div><div class=\'modal-title-default text-center mb-0\'>".js_escape($langConfirmDelete)."</div>',
@@ -455,10 +393,10 @@ if (isset($_GET['mid'])) {
                                             var num_page_records = oTable2.fnGetData().length;
                                             var per_page = $('#outbox_table').DataTable().page.info().length;
                                             var page_number = $('#outbox_table').DataTable().page.info().page;
-                                            if(num_page_records==1){
-                                            if(page_number!=0) {
-                                                page_number--;
-                                            }
+                                            if (num_page_records==1) {
+                                                if(page_number!=0) {
+                                                    page_number--;
+                                                }
                                             }
                                             $('#out_del_msg').html('<p class=\'alert alert-success\'><i class=\'fa-solid fa-circle-check fa-lg\'></i><span>".js_escape($langMessageDeleteAllSuccess)."</span></p>');
                                             $('.alert-success').delay(3000).fadeOut(1500);

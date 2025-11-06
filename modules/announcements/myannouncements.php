@@ -33,8 +33,8 @@ $pageName = $langMyAnnouncements;
 
 if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
 
-    $limit = intval($_GET['iDisplayLength']);
-    $offset = intval($_GET['iDisplayStart']);
+    $limit = intval($_POST['length']);
+    $offset = intval($_POST['start']);
     if (isset($_SESSION['courses'])) {
         foreach ($_SESSION['courses'] as $user_course_code => $user_course_status) {
             $lesson_ids[] = course_code_to_id($user_course_code);
@@ -42,12 +42,12 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     } else {
         $lesson_ids = array();
     }
-    $announcements = getUserAnnouncements($lesson_ids, 'more', 'to_ajax', $_GET['sSearch']);
-    $data['iTotalDisplayRecords'] =  count($announcements);
-    if (!isset($_GET['sSearch']) or $_GET['sSearch'] === '') {
-        $data['iTotalRecords'] = count(getUserAnnouncements($lesson_ids, 'more', 'to_ajax'));
+    $announcements = getUserAnnouncements($lesson_ids, 'more', 'to_ajax', $_POST['search']['value']);
+    $data['recordsFiltered'] =  count($announcements);
+    if (!isset($_POST['search']['value']) or $_POST['search']['value'] === '') {
+        $data['recordsTotal'] = count(getUserAnnouncements($lesson_ids, 'more', 'to_ajax'));
     } else {
-        $data['iTotalRecords'] = $data['iTotalDisplayRecords'];
+        $data['recordsTotal'] = $data['recordsFiltered'];
     }
 
     if ($limit > 0) {
@@ -98,11 +98,11 @@ $head_content .= "
             'sScrollX': true,
             'responsive': true,
             'searchDelay': 1000,
-            'sAjaxSource': '$_SERVER[REQUEST_URI]',
-            'aLengthMenu': [
-               [10, 15, 20 , -1],
-               [10, 15, 20, '$langAllOfThem'] // change per page values here
-           ],
+            ajax: {
+                url: '$_SERVER[REQUEST_URI]',
+                type: 'POST'
+            }, 
+            'lengthMenu': [10, 15, 20 , -1],
             'fnDrawCallback': function( oSettings ) {
                 $('.table_td_body').each(function() {
                     $(this).trunk8({
@@ -110,24 +110,27 @@ $head_content .= "
                         fill: '&hellip;<div class=\"clearfix\"></div><a class=\"float-end\" href=\"$_SERVER[SCRIPT_NAME]?more=yes&course='+$(this).data('course-code')+'&an_id='+$(this).data('id')+'\">$langMore...</div>'
                     })
                 });
-                $('#ann_table_admin_logout_filter label input').attr({
+                $('#ann_table_admin_logout_wrapper .dt-search input').attr({
                       'class' : 'form-control input-sm ms-0 mb-3',
                       'placeholder' : '$langSearch...'
                 });
-                $('#ann_table_admin_logout_filter label').attr('aria-label', '$langSearch');
-                $('#ann_table_my_ann_filter label').attr('aria-label', '$langSearch');
+                $('#ann_table_admin_logout_wrapper .dt-search label').attr('aria-label', '$langSearch');
+                $('#ann_table_my_ann_wrapper .dt-search label').attr('aria-label', '$langSearch');
              },
              'sPaginationType': 'full_numbers',
             'bSort': false,
             'oLanguage': {
+                   'lengthLabels': { 
+                       '-1': '$langAllOfThem' 
+                    },
                    'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
+                   'sEmptyTable':  '".js_escape($langNoResult)."',                   
                    'sZeroRecords':  '".js_escape($langNoResult)."',
                    'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
-                   'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
+                   'sInfoEmpty':    '',
                    'sInfoFiltered': '',
                    'sInfoPostFix':  '',
                    'sSearch':       '',
-                   'sUrl':          '',
                    'oPaginate': {
                        'sFirst':    '&laquo;',
                        'sPrevious': '&lsaquo;',

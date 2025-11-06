@@ -59,8 +59,8 @@ echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www
  . '<title>' . $langExercicesResult . '</title>' . "\n"
  . $head_content
  . '</head>' . "\n"
- . '<body class="body-learningPath" style="margin: 0px; padding-left: 0px; height: 100%!important; height: auto;">' . "\n"
- . '<div id="content"  style="padding:20px;">';
+ . '<body class="body-learningPath" style="margin: 0px; height: 100%!important;">' . "\n"
+ . '<div id="content">';
 
 $pageName = $langExercicesResult;
 global $qtype;
@@ -178,6 +178,7 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
         }
         switch ($answerType) {
             // for unique answer
+            case TRUE_FALSE:
             case UNIQUE_ANSWER : $studentChoice = ($choice == $answerId) ? 1 : 0;
                 if ($studentChoice) {
                     $questionScore+=$answerWeighting;
@@ -314,12 +315,6 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
                     }
                 } else {
                     $matching[$answerId] = $answer;
-                }
-                break;
-            case TRUE_FALSE : $studentChoice = ($choice == $answerId) ? 1 : 0;
-                if ($studentChoice) {
-                    $questionScore+=$answerWeighting;
-                    $totalScore+=$answerWeighting;
                 }
                 break;
         } // end switch()

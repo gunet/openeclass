@@ -35,7 +35,13 @@ if (!$up->has_course_modules_permission()) {
     redirect_to_home_page('courses/'. $course_code);
 }
 
-$toolName = $langToolManagement;
+$up = new Permissions();
+if (!$up->has_course_modules_permission()) {
+    Session::Messages($langCheckCourseAdmin, 'alert-danger');
+    redirect_to_home_page('courses/'. $course_code);
+}
+
+$toolName = $langCourseTools;
 add_units_navigation(TRUE);
 load_js('tools.js');
 load_js('trunk8');
@@ -127,11 +133,11 @@ if (isset($_POST['submit'])) {
     redirect_to_home_page($page_url);
 } elseif (isset($_GET['add'])) { // add external link
     $pageName = $langAddExtLink;
-    $navigation[] = array('url' => $page_url, 'name' => $langToolManagement);
+    $navigation[] = array('url' => $page_url, 'name' => $langCourseTools);
     view('modules.course_tools.external_link_store', $data);
 } elseif (isset($_GET['show_lti_template'])) {
     $pageName = $langTurnitinConfDetails;
-    $navigation[] = array('url' => "../course_tools/index.php?course=$course_code", 'name' => $langToolManagement);
+    $navigation[] = array('url' => "../course_tools/index.php?course=$course_code", 'name' => $langCourseTools);
     $appId = getDirectReference($_GET['show_lti_template']);
     $lti = Database::get()->querySingle("SELECT * FROM lti_apps WHERE id = ?d ", $appId);
     $data['lti'] = $lti;
@@ -180,7 +186,7 @@ if (isset($_POST['submit'])) {
         $indirect_id = getIndirectReference($app->id);
         if ($is_editor) {
             $app->editUrl = "{$urlAppend}modules/lti_consumer/index.php?course=$course_code&amp;id=$indirect_id&amp;choice=edit";
-            $app->enableUrl = "{$urlAppend}modules/lti_consumer/index.php?id=$indirect_id&amp;choice=do_" . ($app->enabled ? 'disable' : 'enable');
+            $app->enableUrl = "{$urlAppend}modules/lti_consumer/index.php?id=$indirect_id&amp;choice=do_" .
             $app->deleteUrl = "{$urlAppend}modules/lti_consumer/index.php?id=$indirect_id&amp;choice=do_delete";
             // toggle enable/disable
             $toggleChoice = $templateVisible ? 'do_template_disable' : 'do_template_enable';

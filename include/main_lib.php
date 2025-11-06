@@ -140,41 +140,14 @@ function load_js($file, $init='') {
             $head_content .= css_link('slick-master/slick/slick.css');
             $file = 'slick-master/slick/slick.min.js';
         } elseif ($file == 'datatables') {
-            $head_content .= css_link('datatables/media/css/jquery.dataTables.css');
-            $head_content .= css_link('datatables/media/css/override_jquery.dataTables.css?v=4.0-dev');
-            $file = 'datatables/media/js/jquery.dataTables.min.js';
-        } elseif ($file == 'datatables_bootstrap') {
-            $head_content .= css_link('datatables/media/css/dataTables.bootstrap.css');
-            $file = 'datatables/media/js/dataTables.bootstrap.js';
-        } elseif ($file == 'datatables_tabletools') {
-            $head_content .= css_link('datatables/extensions/TableTools/css/dataTables.tableTools.css');
-            $file = 'datatables/extensions/TableTools/js/dataTables.tableTools.js';
+            $head_content .= css_link('datatables/datatables.min.css');
+            $file = 'datatables/datatables.min.js';
         } elseif ($file == 'jszip') {
             $file = 'jszip/dist/jszip.min.js';
         } elseif ($file == 'pdfmake') {
             $file = 'pdfmake/build/pdfmake.js';
         } elseif ($file == 'vfs_fonts') {
             $file = 'pdfmake/build/vfs_fonts.js';
-        } elseif ($file == 'datatables_buttons') {
-            $file = 'datatables/extensions/Buttons/js/dataTables.buttons.js';
-            $head_content .= css_link('datatables/extensions/Buttons/css/buttons.dataTables.css');
-        } elseif ($file == 'datatables_buttons_jqueryui') {
-            $file = 'datatables/extensions/Buttons/js/buttons.jqueryui.js';
-            $head_content .= css_link('datatables/extensions/Buttons/css/buttons.jqueryui.css');
-        } elseif ($file == 'datatables_buttons_bootstrap') {
-            $file = 'datatables/extensions/Buttons/js/buttons.bootstrap.js';
-            $head_content .= css_link('datatables/extensions/Buttons/css/buttons.bootstrap.css');
-        } elseif ($file == 'datatables_buttons_print') {
-            $file = 'datatables/extensions/Buttons/js/buttons.print.js';
-        } elseif ($file == 'datatables_buttons_flash') {
-            $file = 'datatables/extensions/Buttons/js/buttons.flash.js';
-        } elseif ($file == 'datatables_buttons_html5') {
-            $file = 'datatables/extensions/Buttons/js/buttons.html5.js';
-        } elseif ($file == 'datatables_buttons_colVis') {
-            $file = 'datatables/extensions/Buttons/js/buttons.colVis.js';
-        } elseif ($file == 'datatables_buttons_foundation') {
-            $file = 'datatables/extensions/Buttons/js/buttons.foundation.js';
-            $head_content .= css_link('datatables/extensions/Buttons/css/buttons.foundation.css');
         } elseif ($file == 'RateIt') {
             $file = 'jquery.rateit.min.js';
         } elseif ($file == 'autosize') {
@@ -1254,7 +1227,7 @@ function is_module_disable_FC($module_id, $course_code, $unit_id, $act_id) {
     foreach ($q as $record) {
         $nrlz_ids = explode(" ", $record->tool_ids);
         foreach($nrlz_ids as $f_id){
-            array_push($nrlz_ids_final,$f_id);
+            $nrlz_ids_final[] = $f_id;
         }
     }
 
@@ -2674,13 +2647,11 @@ function glossary_expand_callback($matches) {
     if (!empty($_SESSION['glossary'][$term])) {
         $term_notes = isset($_SESSION['glossary_notes'][$term]) ? q('<hr><small class="text-muted">'.$langComments.': '.$_SESSION['glossary_notes'][$term].'</small>') : '';
         $term_url = isset($_SESSION['glossary_url'][$term]) ? q('<hr><a href="'.$_SESSION['glossary_url'][$term].'">'.$langGlossaryUrl.'</a>') : '';
-        $definition = ' title="'.$matches[0].'" data-bs-trigger="focus" data-bs-html="true" data-bs-content="' . q($_SESSION['glossary'][$term]) . $term_notes . $term_url .'"';
+        $definition = ' data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" data-bs-original-title="' . q($_SESSION['glossary'][$term]) . $term_notes . $term_url .'" data-bs-content="' . q($_SESSION['glossary'][$term]) . $term_notes . $term_url .'"';
     } else {
         $definition = '';
     }
-
-    return '<a href="#" data-bs-="popover"' .
-            $definition . '>' . $matches[0] . '</a>';
+    return '<a href="#"' . $definition . '>' . $matches[0] . '</a>';
 }
 
 function get_glossary_terms($course_id) {
@@ -3022,6 +2993,18 @@ function course_status($course_id) {
     $status = Database::get()->querySingle("SELECT visible FROM course WHERE id = ?d", $course_id)->visible;
 
     return $status;
+}
+
+/**
+ * @brief get course type (e.g. units, wall etc)
+ * @param $course_id
+ * @return mixed
+ */
+function course_type($course_id) {
+
+    $view_type = Database::get()->querySingle("SELECT view_type FROM course WHERE id = ?d", $course_id)->view_type;
+
+    return $view_type;
 }
 
 /**
@@ -3786,7 +3769,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
         } else {
             $text_class = '';
         }
-        if (isset($option['modal-class'])){
+        if (isset($option['modal-class'])) {
             $modal_class = $option['modal-class'];
         } else {
             $modal_class = '';
@@ -3906,7 +3889,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
     $pageTitleActive = "";
     if (($action_button || $out) && $i!=0) {
         if(isset($course_code) and $course_code) {
-            $titleHeader = (!empty($pageName) ? $pageName : $toolName);
+            $titleHeader = (!empty($pageName) ? q($pageName) : $toolName);
             if(!empty($titleHeader)) {
                 return "<div class='col-12 d-md-flex justify-content-md-between align-items-lg-start my-3'>
                             <div class='col-lg-5 col-md-6 col-12'><div class='action-bar-title mb-0'>$titleHeader</div></div>
@@ -3934,7 +3917,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
                         </div>";
             }
         } else {
-            $titleHeader = (!empty($pageName) ? $pageName : '');
+            $titleHeader = (!empty($pageName) ? q($pageName) : '');
             return "<div class='col-12 d-md-flex justify-content-md-between align-items-lg-start my-4'>
                         <div class='col-lg-5 col-md-6 col-12'><div class='action-bar-title mb-0'>$titleHeader</div></div>
                         <div class='col-lg-7 col-md-6 col-12 action_bar d-flex justify-content-md-end justify-content-start align-items-start px-0 mt-md-0 mt-4'>
@@ -3993,8 +3976,8 @@ function action_button($options, $secondary_menu_options = array(), $fc=false) {
             $icon_class .= " " . $option['icon-class'];
         }
         if (isset($option['confirm'])) {
-            $title = q(isset($option['confirm_title']) ? $option['confirm_title'] : $langConfirmDelete);
-            $accept = isset($option['confirm_button']) ? $option['confirm_button'] : $langDelete;
+            $title = q($option['confirm_title'] ?? $langConfirmDelete);
+            $accept = $option['confirm_button'] ?? $langDelete;
             $form_begin = "<form class='form-action-button-popover list-group-item-action list-group-item' method=post action='$option[url]'>";
             $form_end = '</form>';
             if ($level == 'primary-label' or $level == 'primary') {
@@ -4031,14 +4014,14 @@ function action_button($options, $secondary_menu_options = array(), $fc=false) {
         $primary_buttons = implode('', $out_primary);
     }
     $action_button = "";
-    $secondary_title = isset($secondary_menu_options['secondary_title']) ? $secondary_menu_options['secondary_title'] : "<span class='hidden'></span>";
+    $secondary_title = $secondary_menu_options['secondary_title'] ?? "<span class='hidden'></span>";
 
     if($fc){
-        $secondary_icon = isset($secondary_menu_options['secondary_icon']) ? $secondary_menu_options['secondary_icon'] : "fa-wrench";
+        $secondary_icon = $secondary_menu_options['secondary_icon'] ?? "fa-wrench";
     }else{
-        $secondary_icon = isset($secondary_menu_options['secondary_icon']) ? $secondary_menu_options['secondary_icon'] : "fa-solid fa-gear";
+        $secondary_icon = $secondary_menu_options['secondary_icon'] ?? "fa-solid fa-gear";
     }
-    $secondary_btn_class = isset($secondary_menu_options['secondary_btn_class']) ? $secondary_menu_options['secondary_btn_class'] : "submitAdminBtn";
+    $secondary_btn_class = $secondary_menu_options['secondary_btn_class'] ?? "submitAdminBtn";
     if (count($out_secondary)) {
         $action_list = q("<div class='list-group' id='action_button_menu'>".implode('', $out_secondary)."</div>");
         if(!empty($secondary_title)){
@@ -4857,7 +4840,7 @@ function get_platform_logo($size = 'normal', $position = 'header') {
         }
     }
 
-    $logo = "<div style='clear: right; background-color: $bg_color; padding: 1rem; margin-bottom: 2rem; text-align: $image_align;'>
+    $logo = "<div style='clear: right; background-color: $bg_color; padding: 1rem; margin-bottom: 2rem;'>
                 <img style='width: {$image_width}px;' src='$logo_img'>
             </div>";
 
@@ -5143,7 +5126,7 @@ function theme_initialization() {
            $head_content, $webDir, $theme_id, $container,
            $leftsideImg, $eclass_banner_value, $PositionFormLogin,
            $logo_img, $image_footer, $loginIMG, $themeimg, $favicon_img,
-           $logo_img_small, $VideoUploadedInJumbotron;
+           $logo_img_small, $VideoUploadedInJumbotron, $enable_box_logo;
 
     // Add Theme Options styles
     $styles_str = '';
@@ -5158,6 +5141,7 @@ function theme_initialization() {
     $loginIMG = $themeimg.'/loginIMG.png';
     $favicon_img = $urlAppend . 'resources/favicon/openeclass_128x128.png';
     $VideoUploadedInJumbotron = 0;
+    $enable_box_logo = 0;
 
     //////////////////////////////////////////  Theme creation  ///////////////////////////////////////////////
 
@@ -5224,6 +5208,37 @@ function theme_initialization() {
                   .portfolio-texts *{
                     color: $theme_options_styles[BriefProfilePortfolioTextColor] !important;
                   }
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ////// ABOUT BUTTONS (PROFILE -  ADMIN TOOL - STATISTICS)  IN PORTOFOLIO ////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['bgColorPortfolioButtons'])){
+            $styles_str .= "
+                .myProfileBtn{
+                    background-color: $theme_options_styles[bgColorPortfolioButtons] !important;
+                }
+            ";
+        }
+
+        if(!empty($theme_options_styles['textColorPortfolioButtons'])){
+            $styles_str .= "
+                .myProfileBtn{
+                    color: $theme_options_styles[textColorPortfolioButtons] !important;
+                }
+            ";
+        }
+
+        if(!empty($theme_options_styles['bgHoverColorPortfolioButtons'])){
+            $styles_str .= "
+                .myProfileBtn:hover,
+                .myProfileBtn:focus{
+                    background-color: $theme_options_styles[bgHoverColorPortfolioButtons] !important;
+                }
             ";
         }
 
@@ -5557,6 +5572,10 @@ function theme_initialization() {
                         }
                     }
                     @media(max-width:991px){
+                        .jumbotron.jumbotron-login{
+                            display: flex;
+                            align-items: top;
+                        }
                         .overlay-video-container {
                             display: flex;
                             align-items: top;
@@ -5576,6 +5595,10 @@ function theme_initialization() {
                         }
                     }
                     @media(max-width:991px){
+                        .jumbotron.jumbotron-login{
+                            display: flex;
+                            align-items: center;
+                        }
                         .overlay-video-container {
                             display: flex;
                             align-items: center;
@@ -5595,6 +5618,10 @@ function theme_initialization() {
                         }
                     }
                     @media(max-width:991px){
+                        .jumbotron.jumbotron-login{
+                            display: flex;
+                            align-items: end;
+                        }
                         .overlay-video-container {
                             display: flex;
                             align-items: end;
@@ -5694,11 +5721,11 @@ function theme_initialization() {
                 }
 
 
-                .dataTables_wrapper .dataTables_length,
-                .dataTables_wrapper .dataTables_filter,
-                .dataTables_wrapper .dataTables_info,
-                .dataTables_wrapper .dataTables_processing,
-                .dataTables_wrapper .dataTables_paginate {
+                .dt-container.dt-bootstrap5 .dataTables_length,
+                .dt-container.dt-bootstrap5 .dt-search,
+                .dt-container.dt-bootstrap5 .dataTables_info,
+                .dt-container.dt-bootstrap5 .dataTables_processing,
+                .dt-container.dt-bootstrap5 .dataTables_paginate {
                     color:$theme_options_styles[ColorHyperTexts] !important;
                 }
 
@@ -5744,6 +5771,9 @@ function theme_initialization() {
                 .label.label-danger{
                     color: $theme_options_styles[ColorRedText] !important;
                 }
+                .border-left-danger{
+                    border-left: 4px solid $theme_options_styles[ColorRedText] !important;
+                }
             ";
         }
         if(!empty($theme_options_styles['ColorGreenText'])){
@@ -5752,6 +5782,15 @@ function theme_initialization() {
                 .Success-200-cl,
                 .label.label-success{
                     color: $theme_options_styles[ColorGreenText] !important;
+                }
+                .border-left-success{
+                    border-left: 4px solid $theme_options_styles[ColorGreenText] !important;
+                }
+                .active-unit::after{
+                    background: $theme_options_styles[ColorGreenText] !important;
+                }
+                .contextual-menu-learningPath li div.list-group-item.active{
+                    border-left: solid 2px $theme_options_styles[ColorGreenText] !important;
                 }
             ";
         }
@@ -5762,6 +5801,9 @@ function theme_initialization() {
                 .Primary-600-cl{
                     color: $theme_options_styles[ColorBlueText] !important;
                 }
+                .border-left-primary{
+                    border-left: 4px solid $theme_options_styles[ColorBlueText] !important;
+                }
             ";
         }
 
@@ -5771,6 +5813,9 @@ function theme_initialization() {
                 .Warning-200-cl,
                 .label.label-warning{
                     color: $theme_options_styles[ColorOrangeText] !important;
+                }
+                .border-left-warning{
+                    border-left: 4px solid $theme_options_styles[ColorOrangeText] !important;
                 }
             ";
         }
@@ -5793,7 +5838,8 @@ function theme_initialization() {
                 }
 
                 .navbar-learningPath,
-                .header-container-learningPath{
+                .header-container-learningPath,
+                .default-title-learningPath{
                     background: $theme_options_styles[BgColorWrapperHeader];
                 }
 
@@ -5988,6 +6034,24 @@ function theme_initialization() {
 
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////// BACKGROUND BOX OF HEADER LOGO //////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if (isset($theme_options_styles['enableBoxLogo']) and $theme_options_styles['enableBoxLogo']){
+            $enable_box_logo = 1;
+        }
+
+        if (!empty($theme_options_styles['BgColorContainerLogo'])) {
+            $styles_str .= "
+                .box-logo {
+                    background-color: $theme_options_styles[BgColorContainerLogo];
+                }
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////// LINKS COLOR OF FOOTER ///////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
@@ -6036,6 +6100,39 @@ function theme_initialization() {
                     color: $theme_options_styles[linkHoverColorFooter];
                 }
 
+
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////// COLOR OF COPYRIGHT LINK IN FOOTER /////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if (!empty($theme_options_styles['linkCopyrightColorFooter'])){
+            $styles_str .= "
+
+                .site-footer .copyright{
+                    color: $theme_options_styles[linkCopyrightColorFooter];
+                }
+
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////// COLOR OF HOVER LINK IN FOOTER ///////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if (!empty($theme_options_styles['linkCopyrightHoverColorFooter'])){
+            $styles_str .= "
+
+                .site-footer .copyright:hover,
+                .site-footer .copyright:focus{
+                    color: $theme_options_styles[linkCopyrightHoverColorFooter];
+                }
 
             ";
         }
@@ -6335,6 +6432,10 @@ function theme_initialization() {
                     background-color:  $theme_options_styles[bgWhiteButtonColor] !important;
                 }
 
+                .dt-paging .dt-paging-button .page-link{
+                    background-color:  $theme_options_styles[bgWhiteButtonColor] !important;
+                }
+
             ";
         }
 
@@ -6424,6 +6525,10 @@ function theme_initialization() {
                     color: $theme_options_styles[whiteButtonTextColor] !important;
                 }
 
+                .dt-paging .dt-paging-button .page-link{
+                    color: $theme_options_styles[whiteButtonTextColor] !important;
+                }
+
             ";
         }
 
@@ -6490,6 +6595,10 @@ function theme_initialization() {
                 }
 
                 .btn-exercise-nav[type=submit] {
+                    border: solid 1px $theme_options_styles[whiteButtonBorderTextColor] !important;
+                }
+
+                .dt-paging .dt-paging-button .page-link{
                     border: solid 1px $theme_options_styles[whiteButtonBorderTextColor] !important;
                 }
 
@@ -6598,6 +6707,10 @@ function theme_initialization() {
                 .btn-exercise-nav[type=submit]:focus{
                     color: $theme_options_styles[whiteButtonHoveredTextColor] !important;
                 }
+
+                .dt-paging .dt-paging-button .page-link{
+                    color: $theme_options_styles[whiteButtonHoveredTextColor] !important;
+                }
             ";
         }
 
@@ -6674,6 +6787,11 @@ function theme_initialization() {
 
                 .btn-exercise-nav[type=submit]:hover,
                 .btn-exercise-nav[type=submit]:focus{
+                    border: solid 1px $theme_options_styles[whiteButtonHoveredBorderTextColor] !important;
+                }
+
+                .dt-paging .dt-paging-button .page-link:hover,
+                .dt-paging .dt-paging-button .page-link:focus{
                     border: solid 1px $theme_options_styles[whiteButtonHoveredBorderTextColor] !important;
                 }
 
@@ -6757,6 +6875,11 @@ function theme_initialization() {
 
                 .btn-exercise-nav[type=submit]:hover,
                 .btn-exercise-nav[type=submit]:focus{
+                    background-color: $theme_options_styles[whiteButtonHoveredBgColor] !important;
+                }
+
+                .dt-paging .dt-paging-button .page-link:hover,
+                .dt-paging .dt-paging-button .page-link:focus{
                     background-color: $theme_options_styles[whiteButtonHoveredBgColor] !important;
                 }
 
@@ -6881,6 +7004,12 @@ function theme_initialization() {
                         border-color: $theme_options_styles[buttonBgColor] ;
                         background-color: $theme_options_styles[buttonBgColor] ;
                     }
+                }
+
+                .dt-paging .dt-paging-button.active .page-link,
+                .dt-paging .dt-paging-button.active .page-link{
+                    border-color: $theme_options_styles[buttonBgColor] !important;
+                    background-color: $theme_options_styles[buttonBgColor] !important;
                 }
 
             ";
@@ -7040,6 +7169,12 @@ function theme_initialization() {
                         border-color: $theme_options_styles[buttonHoverBgColor] ;
                         background-color: $theme_options_styles[buttonHoverBgColor] ;
                     }
+                }
+
+                .dt-paging .dt-paging-button.active .page-link:hover,
+                .dt-paging .dt-paging-button.active .page-link:focus{
+                    border-color: $theme_options_styles[buttonHoverBgColor] !important;
+                    background-color: $theme_options_styles[buttonHoverBgColor] !important;
                 }
 
             ";
@@ -7202,6 +7337,12 @@ function theme_initialization() {
                     .header-login-text:focus, .user-menu-btn .header-login-text .fa-chevron-down::before{
                          color:$theme_options_styles[buttonTextColor];
                     }
+                }
+
+                .dt-paging .dt-paging-button.active .page-link,
+                .dt-paging .dt-paging-button.active .page-link:hover,
+                .dt-paging .dt-paging-button.active .page-link:focus{
+                    color:$theme_options_styles[buttonTextColor] !important;
                 }
 
             ";
@@ -7531,7 +7672,8 @@ function theme_initialization() {
 
         if (!empty($theme_options_styles['bgContextualMenu'])) {
             $styles_str .= "
-                .contextual-menu{
+                .contextual-menu,
+                .contextual-menu-body{
                     background-color: $theme_options_styles[bgContextualMenu];
                 }
 
@@ -7614,7 +7756,6 @@ function theme_initialization() {
                 .contextual-menu .list-group-item .settings-icons::before{
                     color: $theme_options_styles[clListMenu];
                 }
-
             ";
         }
 
@@ -7983,22 +8124,22 @@ function theme_initialization() {
                     background-color: $theme_options_styles[BgInput];
                 }
 
-                .dataTables_wrapper input[type='text'],
-                .dataTables_wrapper input[type='password'],
-                .dataTables_wrapper input[type='email'],
-                .dataTables_wrapper input[type='number'],
-                .dataTables_wrapper input[type='url'],
-                .dataTables_wrapper input[type='search']{
+                .dt-container.dt-bootstrap5 input[type='text'],
+                .dt-container.dt-bootstrap5 input[type='password'],
+                .dt-container.dt-bootstrap5 input[type='email'],
+                .dt-container.dt-bootstrap5 input[type='number'],
+                .dt-container.dt-bootstrap5 input[type='url'],
+                .dt-container.dt-bootstrap5 input[type='search']{
                     background-color: $theme_options_styles[BgInput] !important;
                 }
 
-                .dataTables_wrapper input[type='text']:focus,
-                .dataTables_wrapper input[type='number']:focus,
-                .dataTables_wrapper input[type='email']:focus,
-                .dataTables_wrapper input[type='url']:focus,
-                .dataTables_wrapper input[type='search']:focus,
-                .dataTables_wrapper .form-control:focus,
-                .dataTables_wrapper .uneditable-input:focus {
+                .dt-container.dt-bootstrap5 input[type='text']:focus,
+                .dt-container.dt-bootstrap5 input[type='number']:focus,
+                .dt-container.dt-bootstrap5 input[type='email']:focus,
+                .dt-container.dt-bootstrap5 input[type='url']:focus,
+                .dt-container.dt-bootstrap5 input[type='search']:focus,
+                .dt-container.dt-bootstrap5 .form-control:focus,
+                .dt-container.dt-bootstrap5 .uneditable-input:focus {
                     background-color: $theme_options_styles[BgInput] !important;
                 }
 
@@ -8087,22 +8228,22 @@ function theme_initialization() {
                 }
 
 
-                .dataTables_wrapper input[type='text'],
-                .dataTables_wrapper input[type='password'],
-                .dataTables_wrapper input[type='email'],
-                .dataTables_wrapper input[type='number'],
-                .dataTables_wrapper input[type='url'],
-                .dataTables_wrapper input[type='search']{
+                .dt-container.dt-bootstrap5 input[type='text'],
+                .dt-container.dt-bootstrap5 input[type='password'],
+                .dt-container.dt-bootstrap5 input[type='email'],
+                .dt-container.dt-bootstrap5 input[type='number'],
+                .dt-container.dt-bootstrap5 input[type='url'],
+                .dt-container.dt-bootstrap5 input[type='search']{
                     border-color: $theme_options_styles[clBorderInput] !important;
                 }
 
-                .dataTables_wrapper input[type='text']:focus,
-                .dataTables_wrapper input[type='number']:focus,
-                .dataTables_wrapper input[type='email']:focus,
-                .dataTables_wrapper input[type='url']:focus,
-                .dataTables_wrapper input[type='search']:focus,
-                .dataTables_wrapper .form-control:focus,
-                .dataTables_wrapper .uneditable-input:focus {
+                .dt-container.dt-bootstrap5 input[type='text']:focus,
+                .dt-container.dt-bootstrap5 input[type='number']:focus,
+                .dt-container.dt-bootstrap5 input[type='email']:focus,
+                .dt-container.dt-bootstrap5 input[type='url']:focus,
+                .dt-container.dt-bootstrap5 input[type='search']:focus,
+                .dt-container.dt-bootstrap5 .form-control:focus,
+                .dt-container.dt-bootstrap5 .uneditable-input:focus {
                     border-color: $theme_options_styles[clBorderInput] !important;
                 }
 
@@ -8186,26 +8327,26 @@ function theme_initialization() {
 
 
 
-                .dataTables_wrapper input::placeholder{
+                .dt-container.dt-bootstrap5 input::placeholder{
                     color: $theme_options_styles[clInputText] !important;
                 }
 
-                .dataTables_wrapper input[type='text'],
-                .dataTables_wrapper input[type='password'],
-                .dataTables_wrapper input[type='email'],
-                .dataTables_wrapper input[type='number'],
-                .dataTables_wrapper input[type='url'],
-                .dataTables_wrapper input[type='search']{
+                .dt-container.dt-bootstrap5 input[type='text'],
+                .dt-container.dt-bootstrap5 input[type='password'],
+                .dt-container.dt-bootstrap5 input[type='email'],
+                .dt-container.dt-bootstrap5 input[type='number'],
+                .dt-container.dt-bootstrap5 input[type='url'],
+                .dt-container.dt-bootstrap5 input[type='search']{
                     color: $theme_options_styles[clInputText] !important;
                 }
 
-                .dataTables_wrapper input[type='text']:focus,
-                .dataTables_wrapper input[type='number']:focus,
-                .dataTables_wrapper input[type='email']:focus,
-                .dataTables_wrapper input[type='url']:focus,
-                .dataTables_wrapper input[type='search']:focus,
-                .dataTables_wrapper .form-control:focus,
-                .dataTables_wrapper .uneditable-input:focus {
+                .dt-container.dt-bootstrap5 input[type='text']:focus,
+                .dt-container.dt-bootstrap5 input[type='number']:focus,
+                .dt-container.dt-bootstrap5 input[type='email']:focus,
+                .dt-container.dt-bootstrap5 input[type='url']:focus,
+                .dt-container.dt-bootstrap5 input[type='search']:focus,
+                .dt-container.dt-bootstrap5 .form-control:focus,
+                .dt-container.dt-bootstrap5 .uneditable-input:focus {
                     color: $theme_options_styles[clInputText] !important;
                 }
 
@@ -8233,11 +8374,11 @@ function theme_initialization() {
                     background-color: $theme_options_styles[BgSelect];
                 }
 
-                .dataTables_wrapper select {
+                .dt-container.dt-bootstrap5 select {
                     background-color: $theme_options_styles[BgSelect] !important;;
                 }
 
-                .dataTables_wrapper select:focus {
+                .dt-container.dt-bootstrap5 select:focus {
                     background-color: $theme_options_styles[BgSelect] !important;;
                 }
 
@@ -8282,11 +8423,11 @@ function theme_initialization() {
                     border-color: $theme_options_styles[clBorderSelect];
                 }
 
-                .dataTables_wrapper select {
+                .dt-container.dt-bootstrap5 select {
                     border-color: $theme_options_styles[clBorderSelect] !important;;
                 }
 
-                .dataTables_wrapper select:focus {
+                .dt-container.dt-bootstrap5 select:focus {
                     border-color: $theme_options_styles[clBorderSelect] !important;;
                 }
 
@@ -8345,15 +8486,15 @@ function theme_initialization() {
                     color: $theme_options_styles[clOptionSelect];
                 }
 
-                .dataTables_wrapper select {
+                .dt-container.dt-bootstrap5 select {
                     color: $theme_options_styles[clOptionSelect] !important;;
                 }
 
-                .dataTables_wrapper select:focus {
+                .dt-container.dt-bootstrap5 select:focus {
                     color: $theme_options_styles[clOptionSelect] !important;;
                 }
 
-                .dataTables_wrapper select option:not(:checked) {
+                .dt-container.dt-bootstrap5 select option:not(:checked) {
                     color: $theme_options_styles[clOptionSelect] !important;;
                 }
 
@@ -8406,7 +8547,7 @@ function theme_initialization() {
                     background-color: $theme_options_styles[bgHoveredSelectOption];
                 }
 
-                .dataTables_wrapper select option:hover{
+                .dt-container.dt-bootstrap5 select option:hover{
                     background-color: $theme_options_styles[bgHoveredSelectOption] !important;;
                 }
 
@@ -8440,7 +8581,7 @@ function theme_initialization() {
                     color: $theme_options_styles[clHoveredSelectOption];
                 }
 
-                .dataTables_wrapper select option:hover{
+                .dt-container.dt-bootstrap5 select option:hover{
                     color: $theme_options_styles[clHoveredSelectOption] !important;;
                 }
 
@@ -8476,7 +8617,7 @@ function theme_initialization() {
                     background-color: $theme_options_styles[bgOptionSelected];
                 }
 
-                .dataTables_wrapper select option:checked{
+                .dt-container.dt-bootstrap5 select option:checked{
                     background-color: $theme_options_styles[bgOptionSelected] !important;;
                 }
 
@@ -8516,7 +8657,7 @@ function theme_initialization() {
                     color: $theme_options_styles[clOptionSelected];
                 }
 
-                .dataTables_wrapper select option:checked{
+                .dt-container.dt-bootstrap5 select option:checked{
                     color: $theme_options_styles[clOptionSelected] !important;;
                 }
 
@@ -9779,11 +9920,14 @@ function theme_initialization() {
                 table.dataTable.no-footer {
                     border-bottom: 1px solid $theme_options_styles[BgBorderBottomRowTables] !important;
                 }
-                .dataTables_wrapper.no-footer .dataTables_scrollBody {
+                .dt-container.dt-bootstrap5 .dt-scroll-body {
                     border-bottom: 1px solid $theme_options_styles[BgBorderBottomRowTables] !important;
                 }
                 table.dataTable tfoot th, table.dataTable tfoot td {
                     border-top: 1px solid  $theme_options_styles[BgBorderBottomRowTables] !important;
+                }
+                .table>:not(:last-child)>:last-child>* {
+                    border-bottom-color: $theme_options_styles[BgBorderBottomRowTables] !important;
                 }
             ";
         }
@@ -9802,7 +9946,8 @@ function theme_initialization() {
                 table.dataTable.no-footer {
                     box-shadow: 0px 0 30px $theme_options_styles[BoxShadowRowTables] !important;
                 }
-                .dataTables_wrapper.no-footer .dataTables_scrollBody {
+                .dt-container.dt-bootstrap5 .dt-scroll-body,
+                .dt-container.dt-bootstrap5 .dt-scroll {
                     box-shadow: 0px 0 30px $theme_options_styles[BoxShadowRowTables] !important;
                 }
                 table.dataTable tfoot th, table.dataTable tfoot td {
@@ -10072,8 +10217,13 @@ function theme_initialization() {
               }
 
               .table-responsive::-webkit-scrollbar-track,
-              .dataTables_wrapper::-webkit-scrollbar-track {
+              .dt-container.dt-bootstrap5::-webkit-scrollbar-track {
                 background-color: $theme_options_styles[BgScrollBar];
+              }
+
+              .dt-scroll::-webkit-scrollbar-track,
+              .dt-scroll-body::-webkit-scrollbar-track {
+                background-color: $theme_options_styles[BgScrollBar] !important;
               }
 
               .chat-iframe::-webkit-scrollbar-track {
@@ -10096,6 +10246,10 @@ function theme_initialization() {
               }
 
               #blog_tree::-webkit-scrollbar-track {
+                background-color: $theme_options_styles[BgScrollBar];
+              }
+
+              frame::-webkit-scrollbar-track {
                 background-color: $theme_options_styles[BgScrollBar];
               }
             ";
@@ -10135,8 +10289,13 @@ function theme_initialization() {
               }
 
               .table-responsive::-webkit-scrollbar-thumb,
-              .dataTables_wrapper::-webkit-scrollbar-thumb {
+              .dt-container.dt-bootstrap5::-webkit-scrollbar-thumb {
                 background-color: $theme_options_styles[BgColorScrollBar];
+              }
+
+              .dt-scroll-body::-webkit-scrollbar-thumb,
+              .dt-scroll::-webkit-scrollbar-thumb {
+                background-color: $theme_options_styles[BgColorScrollBar] !important;
               }
 
               .chat-iframe::-webkit-scrollbar-thumb {
@@ -10159,6 +10318,10 @@ function theme_initialization() {
               }
 
               #blog_tree::-webkit-scrollbar-thumb {
+                background-color: $theme_options_styles[BgColorScrollBar];
+              }
+
+              frame::-webkit-scrollbar-thumb {
                 background-color: $theme_options_styles[BgColorScrollBar];
               }
 
@@ -10200,8 +10363,13 @@ function theme_initialization() {
               }
 
               .table-responsive::-webkit-scrollbar-thumb:hover,
-              .dataTables_wrapper::-webkit-scrollbar-thumb:hover {
+              .dt-container.dt-bootstrap5::-webkit-scrollbar-thumb:hover {
                 background-color: $theme_options_styles[BgHoveredColorScrollBar];
+              }
+
+              .dt-scroll-body::-webkit-scrollbar-thumb:hover,
+              .dt-scroll::-webkit-scrollbar-thumb:hover {
+                background-color: $theme_options_styles[BgHoveredColorScrollBar] !important;
               }
 
               .chat-iframe::-webkit-scrollbar-thumb:hover {
@@ -10225,6 +10393,10 @@ function theme_initialization() {
               }
 
               #blog_tree::-webkit-scrollbar-thumb:hover {
+                background-color: $theme_options_styles[BgHoveredColorScrollBar];
+              }
+
+              frame::-webkit-scrollbar-thumb:hover {
                 background-color: $theme_options_styles[BgHoveredColorScrollBar];
               }
 
@@ -10536,58 +10708,58 @@ function theme_initialization() {
                     color: $theme_options_styles[linkColor] !important;
                 }
 
-                .dataTables_wrapper .dataTables_paginate .paginate_button.current,
-                .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+                .dt-container.dt-bootstrap5 .dataTables_paginate .paginate_button.current,
+                .dt-container.dt-bootstrap5 .dataTables_paginate .paginate_button.current:hover {
                     color: $theme_options_styles[linkColor] !important;
                     background: transparent !important;
                 }
 
-                .dataTables_wrapper .dataTables_paginate .paginate_button.disabled,
-                .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover,
-                .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {
+                .dt-container.dt-bootstrap5 .dataTables_paginate .paginate_button.disabled,
+                .dt-container.dt-bootstrap5 .dataTables_paginate .paginate_button.disabled:hover,
+                .dt-container.dt-bootstrap5 .dataTables_paginate .paginate_button.disabled:active {
                     color: $theme_options_styles[linkColor] !important;
                 }
 
-                .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+                .dt-container.dt-bootstrap5 .dataTables_paginate .paginate_button:hover {
                     color: $theme_options_styles[linkColor] !important;
                     background: transparent !important;
                 }
 
-                .dataTables_wrapper .dataTables_paginate .paginate_button:active {
+                .dt-container.dt-bootstrap5 .dataTables_paginate .paginate_button:active {
                     background: transparent !important;
                 }
 
-                .dataTables_wrapper .dataTables_paginate .paginate_button.next:hover,
-                .dataTables_wrapper .dataTables_paginate .paginate_button.last:hover{
+                .dt-container.dt-bootstrap5 .dataTables_paginate .paginate_button.next:hover,
+                .dt-container.dt-bootstrap5 .dataTables_paginate .paginate_button.last:hover{
                     color: $theme_options_styles[linkColor] !important;
                 }
 
-                .dataTables_wrapper .dataTables_paginate .paginate_button.next.disabled:hover,
-                .dataTables_wrapper .dataTables_paginate .paginate_button.last.disabled:hover{
+                .dt-container.dt-bootstrap5 .dataTables_paginate .paginate_button.next.disabled:hover,
+                .dt-container.dt-bootstrap5 .dataTables_paginate .paginate_button.last.disabled:hover{
                     color: $theme_options_styles[linkColor] !important;
                 }
 
-                .dataTables_wrapper .dataTables_paginate .paginate_button.previous:hover,
-                .dataTables_wrapper .dataTables_paginate .paginate_button.first:hover{
+                .dt-container.dt-bootstrap5 .dataTables_paginate .paginate_button.previous:hover,
+                .dt-container.dt-bootstrap5 .dataTables_paginate .paginate_button.first:hover{
                     color: $theme_options_styles[linkColor] !important;
                 }
 
-                .dataTables_wrapper .dataTables_paginate .paginate_button.previous.disabled:hover,
-                .dataTables_wrapper .dataTables_paginate .paginate_button.first.disabled:hover{
+                .dt-container.dt-bootstrap5 .dataTables_paginate .paginate_button.previous.disabled:hover,
+                .dt-container.dt-bootstrap5 .dataTables_paginate .paginate_button.first.disabled:hover{
                     color: $theme_options_styles[linkColor] !important;
                 }
 
-                .dataTables_wrapper .dataTables_paginate .paginate_button.previous,
-                .dataTables_wrapper .dataTables_paginate .paginate_button.first {
+                .dt-container.dt-bootstrap5 .dataTables_paginate .paginate_button.previous,
+                .dt-container.dt-bootstrap5 .dataTables_paginate .paginate_button.first {
                     color: $theme_options_styles[linkColor] !important;
                 }
 
-                .dataTables_wrapper .dataTables_paginate .paginate_button.next,
-                .dataTables_wrapper .dataTables_paginate .paginate_button.last{
+                .dt-container.dt-bootstrap5 .dataTables_paginate .paginate_button.next,
+                .dt-container.dt-bootstrap5 .dataTables_paginate .paginate_button.last{
                     color: $theme_options_styles[linkColor] !important;
                 }
 
-                .dataTables_wrapper .dataTables_paginate .paginate_button.disabled{
+                .dt-container.dt-bootstrap5 .dataTables_paginate .paginate_button.disabled{
                     color: $theme_options_styles[linkColor] !important;
                 }
 

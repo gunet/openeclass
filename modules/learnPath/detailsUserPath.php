@@ -28,24 +28,35 @@
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-$require_current_course = TRUE;
+$require_current_course = true;
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/learnPathLib.inc.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
 
-$navigation[] = array("url" => "index.php?course=$course_code", "name" => $langLearningPaths);
-if ($is_course_reviewer) {
-    $navigation[] = array("url" => "details.php?course=$course_code&path_id=" . $_REQUEST['path_id'], "name" => $langTracking);
-} else {
-    $navigation[] = array("url" => "learningPath.php?course=$course_code&path_id=" . $_REQUEST['path_id'], "name" => $langTracking);
+if (isset($_GET['unit']) && !isset($_REQUEST['uInfo'])) {
+    $_REQUEST['uInfo'] = $uid;
+    $unit = intval($_GET['unit']);
 }
-
 if (empty($_REQUEST['uInfo']) || empty($_REQUEST['path_id'])) {
     header("Location: ./index.php?course=$course_code");
     exit();
 }
+$path_id = intval($_REQUEST['path_id']);
+$uInfo = intval($_REQUEST['uInfo']);
 
-if (!$is_course_reviewer && ($_REQUEST['uInfo'] != $_SESSION['uid'])) { // security check
+$navigation[] = ['url' => "index.php?course=$course_code", 'name' => $langLearningPaths];
+if (isset($_GET['unit'])) {
+    $unit = intval($_GET['unit']);
+    $navigation[] = [
+        'url' => $urlAppend . "modules/units/view.php?course=$course_code&res_type=lp_results&path_id=$path_id&unit=$unit",
+        'name' => $langTracking];
+} elseif ($is_course_reviewer) {
+    $navigation[] = ['url' => "details.php?course=$course_code&path_id=$path_id", 'name' => $langTracking];
+} else {
+    $navigation[] = ['url' => "learningPath.php?course=$course_code&path_id=$path_id", 'name' => $langTracking];
+}
+
+if (!$is_course_reviewer && $uInfo != $uid) { // security check
     header("Location: ./index.php?course=$course_code");
     exit();
 }
@@ -53,15 +64,15 @@ if (!$is_course_reviewer && ($_REQUEST['uInfo'] != $_SESSION['uid'])) { // secur
 if (!isset($_GET['pdf']) && $is_course_reviewer) {
     $action_bar .= action_bar(array(
         array('title' => $langBack,
-            'url' => "detailsUser.php?course=$course_code&amp;uInfo=$_REQUEST[uInfo]",
+            'url' => "detailsUser.php?course=$course_code&amp;uInfo=$uInfo",
             'icon' => 'fa-reply',
             'level' => 'primary'),
         array('title' => $langDumpPDF,
-            'url' => "detailsUserPath.php?course=$course_code&amp;uInfo=$_REQUEST[uInfo]&amp;path_id=$_REQUEST[path_id]&amp;pdf=true;",
+            'url' => "detailsUserPath.php?course=$course_code&amp;uInfo=$uInfo&amp;path_id=$path_id&amp;pdf=true;",
             'icon' => 'fa-file-pdf',
             'level' => 'primary-label'),
         array('title' => $langDumpExcel,
-            'url' => "detailsUserPath.php?course=$course_code&amp;uInfo=$_REQUEST[uInfo]&amp;path_id=$_REQUEST[path_id]&amp;xls=true;",
+            'url' => "detailsUserPath.php?course=$course_code&amp;uInfo=$uInfo&amp;path_id=$path_id&amp;xls=true;",
             'icon' => 'fa-file-excel',
             'level' => 'primary-label')
 
@@ -73,7 +84,7 @@ if (!isset($_GET['pdf']) && $is_course_reviewer) {
 $LPname = Database::get()->querySingle("SELECT `name`
         FROM `lp_learnPath`
         WHERE `learnPath_id` = ?d
-        AND `course_id` = ?d", $_REQUEST['path_id'], $course_id)->name;
+        AND `course_id` = ?d", $path_id, $course_id)->name;
 
 $sql = "SELECT LPM.`learnPath_module_id`, LPM.`parent`,
     LPM.`lock`, M.`module_id`,
@@ -95,7 +106,7 @@ $sql = "SELECT LPM.`learnPath_module_id`, LPM.`parent`,
         AND M.`course_id` = ?d
         ORDER BY UMP.`attempt`, LPM.`rank`";
 
-$moduleList = Database::get()->queryArray($sql, $_REQUEST['uInfo'], $_REQUEST['path_id'], $course_id);
+$moduleList = Database::get()->queryArray($sql, $uInfo, $path_id, $course_id);
 
 $maxAttempt = 1;
 $elementList = [];
@@ -135,7 +146,7 @@ $maxDeep = 1; // used to compute colspan of <td> cells - only single level depth
 
 $toolName = $LPname;
 
-$tool_content .= "<h3>" . q(uid_to_name($_REQUEST['uInfo'])) . "</h3>";
+$tool_content .= "<h3>" . q(uid_to_name($uInfo)) . "</h3>";
 
 $tool_content .= "<div class='table-responsive'>
     <table class='table-default'>
@@ -144,13 +155,13 @@ $tool_content .= "<div class='table-responsive'>
             <th colspan=" . ($maxDeep + 1) . ">$langLearningObjects</th>
             <th>$langAttempt</th>
             <th>$langStart</th>
-            <th>$langAttemptAccessed</th>            
+            <th>$langAttemptAccessed</th>
             <th>$langTotalTimeSpent</th>
             <th>$langStatement</th>
             <th>$langProgress</th>
         </tr></thead>";
 
-$data[] = [ uid_to_name($_REQUEST['uInfo']) . ": " . $LPname ];
+$data[] = [ uid_to_name($uInfo) . ": " . $LPname ];
 $data[] = [];
 $data[] = [ $langLearningObjects, $langAttempt, $langStart, $langAttemptAccessed, $langTotalTimeSpent, $langStatement, $langProgress ];
 
@@ -260,16 +271,16 @@ if ($moduleNbT == 0) {
         }
     }
 
-    $nbrOfVisibleModules = calculate_number_of_visible_modules($_REQUEST['path_id']);
+    $nbrOfVisibleModules = calculate_number_of_visible_modules($path_id);
     $bestProgress = 0;
     if (is_numeric($nbrOfVisibleModules)) {
         $bestProgress = @round($globalProg[$bestAttempt] / $nbrOfVisibleModules);
     }
-    $lpCombinedProgress = get_learnPath_combined_progress($_REQUEST['path_id'], $_REQUEST['uInfo']);
+    $lpCombinedProgress = get_learnPath_combined_progress($path_id, $uInfo);
 
     // display global stats
     $tool_content .= "<tr>
-                        <th class='ps-1' colspan='" . ($maxDeep + 4) . "'>" . ($totalTime != "0000:00:00" ? $langTotal : '&nbsp;') . "</></th>                                               
+                        <th class='ps-1' colspan='" . ($maxDeep + 4) . "'>" . ($totalTime != "0000:00:00" ? $langTotal : '&nbsp;') . "</></th>
                         <th><small>" . ($totalTime != "0000:00:00" ? $totalTime : '&nbsp;') . "</small></th>
                         <th>&nbsp;</th>
                         <th class='ms-1 p-2'>" . disp_progress_bar($lpCombinedProgress, 1) . "</th>
@@ -325,12 +336,11 @@ if ($is_course_reviewer) {
                 td { text-align: left; }
               </style>
             </head>
-            <body>" . get_platform_logo() .
-            "<h2>" . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
+            <body>
+            <h2>" . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
             <h2>" . q($LPname) . "</h2>";
 
         $pdf_content .= $tool_content;
-        $pdf_content .= get_platform_logo('','footer');
         $pdf_content .= "</body></html>";
 
         $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
@@ -339,6 +349,8 @@ if ($is_course_reviewer) {
         $fontData = $defaultFontConfig['fontdata'];
 
         $mpdf = new Mpdf\Mpdf([
+            'margin_top' => 53,     // approx 200px
+            'margin_bottom' => 53,  // approx 200px
             'tempDir' => _MPDF_TEMP_PATH,
             'fontDir' => array_merge($fontDirs, [$webDir . '/template/modern/fonts']),
             'fontdata' => $fontData + [
@@ -355,7 +367,19 @@ if ($is_course_reviewer) {
                 ]
         ]);
 
-        $mpdf->setFooter('{DATE j-n-Y} || {PAGENO} / {nb}');
+
+        $mpdf->SetHTMLHeader(get_platform_logo());
+        $footerHtml = '
+        <div>
+            <table width="100%" style="border: none;">
+                <tr>
+                    <td style="text-align: left;">{DATE j-n-Y}</td>
+                    <td style="text-align: right;">{PAGENO} / {nb}</td>
+                </tr>
+            </table>
+        </div>
+        ' . get_platform_logo('','footer') . '';
+        $mpdf->SetHTMLFooter($footerHtml);
         $mpdf->SetCreator(course_id_to_prof($course_id));
         $mpdf->SetAuthor(course_id_to_prof($course_id));
         $mpdf->WriteHTML($pdf_content);
@@ -365,4 +389,3 @@ if ($is_course_reviewer) {
 }
 
 draw($tool_content, 2, null, $head_content);
-

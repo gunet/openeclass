@@ -82,11 +82,8 @@ if ($is_editor) {
 <script type='text/javascript'>
 $(function() {
     var oTable = $('#users_table{$course_id}').DataTable ({
-                'columns': [ $columns ],
-                'aLengthMenu': [
-                   [10, 15, 20 , -1],
-                   [10, 15, 20, '$langAllOfThem'] // change per page values here
-               ],
+               'columns': [ $columns ],
+               'lengthMenu': [10, 15, 20 , -1],
                'fnDrawCallback': function( oSettings ) {
                     $('#users_table{$course_id}_wrapper label input[type=search]').attr({
                       'class' : 'form-control input-sm ms-0 mb-3',
@@ -98,10 +95,11 @@ $(function() {
                 'bSort': true,
                 'searchDelay': 1000,
                 'oLanguage': {
+                       'lengthLabels': {'-1': '$langAllOfThem'},
                        'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
                        'sZeroRecords':  '".$langNoResult."',
                        'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
-                       'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
+                       'sInfoEmpty':    '',
                        'sInfoFiltered': '',
                        'sInfoPostFix':  '',
                        'sSearch':       '',
@@ -156,15 +154,15 @@ $('input[id=button_groups]').click(changeAssignLabel);
             var select_content_2 = '';
             if (type==2) {
                 for (index = 0; index < parsed_data.length; ++index) {
-                    select_content += '<option value=\"' + parsed_data[index]['id'] + '\">' + parsed_data[index]['name'] + '<\/option>';
+                    select_content += '<option value=\"' + parsed_data[index]['id'] + '\">' + q(parsed_data[index]['name']) + '<\/option>';
                 }
             }
             if (type==1) {
                 for (index = 0; index < parsed_data[0].length; ++index) {
-                    select_content += '<option value=\"' + parsed_data[0][index]['id'] + '\">' + parsed_data[0][index]['surname'] + ' ' + parsed_data[0][index]['givenname'] + '<\/option>';
+                    select_content += '<option value=\"' + parsed_data[0][index]['id'] + '\">' + q(parsed_data[0][index]['surname'] + ' ' + parsed_data[0][index]['givenname']) + '<\/option>';
                 }
                 for (index = 0; index < parsed_data[1].length; ++index) {
-                    select_content_2 += '<option value=\"' + parsed_data[1][index]['id'] + '\">' + parsed_data[1][index]['surname'] + ' ' + parsed_data[1][index]['givenname'] + '<\/option>';
+                    select_content_2 += '<option value=\"' + parsed_data[1][index]['id'] + '\">' + q(parsed_data[1][index]['surname'] + ' ' + parsed_data[1][index]['givenname']) + '<\/option>';
                 }
             }
             $('#users_box').find('option').remove().end().append(select_content);
@@ -187,7 +185,13 @@ if (isset($_REQUEST['attendance_id'])) {
 if (isset($_GET['qrCode_presence'])) {
     $attendance_id = $_REQUEST['attendance_id'];
     $activeUser = Database::get()->querySingle("SELECT id,`uid` FROM attendance_users WHERE attendance_id = ?d AND `uid` = ?d", $attendance_id, $uid);
-    if ($activeUser) {
+    $activeAttendance = false;
+    $q_activeAttendance = Database::get()->querySingle("SELECT start_date, end_date FROM attendance WHERE id = ?d", $attendance_id);
+    $now = new DateTime();
+    if ($q_activeAttendance->start_date < $now->format('Y-m-d H:i:s') and $q_activeAttendance->end_date > $now->format('Y-m-d H:i:s')) {
+        $activeAttendance = true;
+    }
+    if ($activeUser && $activeAttendance) {
         $userID = $activeUser->uid;
         $actID = intval($_GET['actId']);
         $attend = 1;
@@ -207,10 +211,10 @@ if (isset($_GET['qrCode_presence'])) {
         Session::flash('alert-class', 'alert-warning');
     }
     // If the attendance tool is inactive, redirect the user to the portfolio.
-    if (isset($toolContent_ErrorExists)) { 
+    if (isset($toolContent_ErrorExists)) {
         redirect_to_home_page("main/portfolio.php");
     } else {
-        redirect_to_home_page("modules/attendance/index.php?course=$course_code&attendance_id=$attendance_id");
+        redirect_to_home_page("modules/attendance/index.php?course=$course_code");
     }
 }
 
@@ -253,17 +257,17 @@ if ($is_editor) {
 
         // Initialize URL and parameters
         $string = $urlServer . "/modules/attendance/index.php?course=" . $course_code . "&attendance_id=" . $attendance_id . "&actId=" . $actId . "&qrCode_presence=true";
-    
+
         // Create QR Code
         $renderer = new ImageRenderer(new RendererStyle(256), new SvgImageBackEnd());
         $writer = new Writer($renderer);
-        
+
         // Generate the QR image
         $qr_image = $writer->writeString($string);
-        
+
         // Base64 encode the SVG string
         $qr_image_base64 = base64_encode($qr_image);
-        
+
         // Prepare the data URL for the SVG
         $qr_image_data_url = "data:image/svg+xml;base64," . $qr_image_base64;
 
@@ -276,9 +280,9 @@ if ($is_editor) {
             unlink($qrCode_dir . '/' . $fileNameAct);
         }
         file_put_contents($qrCode_dir . '/' . $fileNameAct, $qr_image);
-        
+
         $downloadURL = $_SERVER['SCRIPT_NAME'] . "?course=$course_code&download_qrcode=$actId";
-    
+
         // Prepare JavaScript content for modal
         $head_content .= "
             <script type='text/javascript'>
@@ -292,7 +296,7 @@ if ($is_editor) {
                                 var anchor = document.createElement('a');
                                 anchor.href = downloadURL;
                                 anchor.target = '_blank';
-                                anchor.download = '$fileNamePoll';
+                                anchor.download = '$fileNameAct';
                                 anchor.click();
                             }
                         }
@@ -348,11 +352,12 @@ if ($is_editor) {
         redirect_to_home_page("modules/attendance/index.php?course=$course_code");
     }
 
-    //add a new attendance
-    if (isset($_POST['newAttendance'])) {
+    // Create new attendance book
+    if (isset($_POST['attendanceBookCreate'])) {
         $v = new Valitron\Validator($_POST);
-        $v->rule('required', array('title', 'limit', 'start_date', 'end_date'));
-        $v->rule('numeric', array('limit'));
+        $v->rule('required', array('title', 'start_date', 'end_date'));
+        $v->rule('integer', array('limit'));
+        $v->rule('min', array('limit'), 0);
         $v->rule('date', array('start_date', 'end_date'));
         if (!empty($_POST['end_date'])) {
             $v->rule('dateBefore', 'start_date', $_POST['end_date']);
@@ -365,7 +370,7 @@ if ($is_editor) {
         ));
         if($v->validate()) {
             $newTitle = $_POST['title'];
-            $attendance_limit = intval($_POST['limit']);
+            $attendance_limit = empty($_POST['limit']) ? 0 : intval($_POST['limit']);
             $start_date = (new DateTime($_POST['start_date']))->format('Y-m-d H:i:s');
             $end_date = (new DateTime($_POST['end_date']))->format('Y-m-d H:i:s');
             $attendance_id = Database::get()->query("INSERT INTO attendance SET course_id = ?d, `limit` = ?d, active = 1, title = ?s, start_date = ?t, end_date = ?t", $course_id, $attendance_limit, $newTitle, $start_date, $end_date)->lastInsertID;
@@ -593,11 +598,12 @@ if ($is_editor) {
     }
     $tool_content .= "</div>";
 
-    // update attendance settings
-    if (isset($_POST['submitAttendanceBookSettings'])) {
+    // Update attendance book settings
+    if (isset($_POST['attendanceBookSettings'])) {
         $v = new Valitron\Validator($_POST);
-        $v->rule('required', array('title', 'limit', 'start_date', 'end_date'));
-        $v->rule('numeric', array('limit'));
+        $v->rule('required', array('title', 'start_date', 'end_date'));
+        $v->rule('integer', array('limit'));
+        $v->rule('min', array('limit'), 0);
         $v->rule('date', array('start_date', 'end_date'));
         if (!empty($_POST['end_date'])) {
             $v->rule('dateBefore', 'start_date', $_POST['end_date']);
@@ -736,14 +742,14 @@ if ($is_editor) {
         $display = FALSE;
     }
 
- elseif (isset($_GET['new'])) {
-        new_attendance(); // create new attendance
+    elseif (isset($_GET['new'])) {
+        attendance_book_form(); // create new attendance
+        $display = FALSE;
+    } elseif (isset($_GET['editSettings'])) { // attendance settings
+        attendance_book_form($attendance_id);
         $display = FALSE;
     } elseif (isset($_GET['editUsers'])) { // edit attendance users
         user_attendance_settings($attendance_id);
-        $display = FALSE;
-    } elseif (isset($_GET['editSettings'])) { // attendance settings
-        attendance_settings($attendance_id);
         $display = FALSE;
     } elseif (isset($_GET['addActivityAs'])) { //display available assignments
         attendance_display_available_assignments($attendance_id);

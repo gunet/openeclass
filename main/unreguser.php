@@ -49,6 +49,7 @@ if (!isset($_POST['doit'])) {
         }
     }  //endif is admin
 } else {
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     if (isset($uid)) {
         $un = uid_to_name($uid, 'username');
         $n = uid_to_name($uid);

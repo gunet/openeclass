@@ -123,7 +123,7 @@ $sco['exit'] = "";
 $sco['session_time'] = "0000:00:00.00";
 
 if (isset($_GET['unit'])) {
-    $closeurl = $urlAppend . "modules/units/index.php?course=$course_code&amp;id=" . $_GET['unit'];
+    $closeurl = $urlAppend . "modules/units/index.php?course=$course_code&id=" . $_GET['unit'];
 } else {
     $closeurl = "index.php?course=$course_code";
 }

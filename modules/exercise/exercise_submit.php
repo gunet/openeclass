@@ -116,10 +116,10 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                 $file_date, $file_date, $file_creator, $file_format,
                 $language, $eurID);
 
-            if ($q) { 
+            if ($q) {
                 $newFilePath = Database::get()->querySingle("SELECT `path` FROM document WHERE id = ?d", $q->lastInsertID)->path;
                 $fPath = $urlServer . "courses/$course_code/image" . $newFilePath;
-                echo json_encode(['newFilePath' => $fPath]); 
+                echo json_encode(['newFilePath' => $fPath]);
             }
         }
     }
@@ -274,12 +274,12 @@ if (isset($_POST['attempt_value']) && !isset($_GET['eurId'])) {
                         Database::get()->query("UPDATE document SET lock_user_id = ?d WHERE id = ?d", $new_eurid, $old_doc->id);
                     }
                 }
-                
+
                 /////////////////////////////////////////////////////////
                 Database::get()->query('UPDATE exercise_answer_record
                     SET eurid = ?d WHERE eurid = ?d', $new_eurid, $eurid);
                 Database::get()->query('DELETE FROM exercise_user_record
-                    WHERE eurid = ?d', $eurid); 
+                    WHERE eurid = ?d', $eurid);
                 $paused_attempt->eurid = $eurid = $new_eurid;
             }
         });
@@ -629,8 +629,7 @@ if (isset($_POST['formSent'])) {
 
     // if the user has made a final submission or the time has expired
     if (isset($_POST['buttonFinish']) or $time_expired) {
-
-
+        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         if (isset($_POST['secsRemaining'])) {
             $secs_remaining = $_POST['secsRemaining'];
         } else {
@@ -820,8 +819,8 @@ foreach ($questionList as $k => $q_id) {
                     break;
                 }
             }
-        } 
-    } elseif ($t_question->selectType() == CALCULATED and array_key_exists($q_id, $exerciseResult) 
+        }
+    } elseif ($t_question->selectType() == CALCULATED and array_key_exists($q_id, $exerciseResult)
         and (strpos($exerciseResult[$q_id], '|') !== false)) { // This question is calculated type with unique answer as text and the user has not answered it.
         $answered = true;
     }
@@ -949,7 +948,7 @@ if ($exerciseType != SINGLE_PAGE_TYPE) {
 $tool_content .= "<div class='col-12 d-flex justify-content-end align-items-center gap-2 flex-wrap' style='margin-top:100px;'>";
 
 // "Cancel" button
-$tool_content .= "<input class='btn cancelAdminBtn' type='submit' name='buttonCancel' id='cancelButton' value='$langCancel'>";
+$tool_content .= "<input class='btn btn-default' type='submit' name='buttonCancel' id='cancelButton' value='$langCancel'>";
 
 // "Submit" button
 $tool_content .= "<input class='btn successAdminBtn blockUI' type='submit' name='buttonFinish' value='$langExerciseFinalSubmit'>";
@@ -958,7 +957,7 @@ if ($exerciseType != SINGLE_PAGE_TYPE) {
 }
 
 $tool_content .= $tempSaveButton . "</div>";
-
+$tool_content .=  generate_csrf_token_form_field();
 $tool_content .= "</form>";
 $tool_content .= "</div>";
 
@@ -1056,7 +1055,7 @@ function unset_session_variables_of_questions($eurid, $type = '') {
                                          FROM exercise_answer_record 
                                          JOIN exercise_question ON exercise_question.id=exercise_answer_record.question_id
                                          WHERE exercise_answer_record.eurid = ?d", $eurid);
-                            
+
     foreach ($qids as $q) {
         $question_ids[] = $q->question_id;
         $typeQuestion[$q->question_id] = $q->type;
@@ -1081,10 +1080,12 @@ function unset_session_variables_of_questions($eurid, $type = '') {
                 $fFile = Database::get()->querySingle("SELECT id,`path` FROM document WHERE course_id = ?d
                                                         AND subsystem = ?d AND subsystem_id = ?d
                                                         AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $qid, $eurid);
-                if (file_exists("$webDir/courses/$course_code/image" . $fFile->path)) {
-                    unlink("$webDir/courses/$course_code/image" . $fFile->path);
+                if ($fFile) {
+                    if (file_exists("$webDir/courses/$course_code/image" . $fFile->path)) {
+                        unlink("$webDir/courses/$course_code/image" . $fFile->path);
+                    }
+                    Database::get()->query("DELETE FROM document WHERE id = ?d", $fFile->id);
                 }
-                Database::get()->query("DELETE FROM document WHERE id = ?d", $fFile->id);
             }
         }
     }
