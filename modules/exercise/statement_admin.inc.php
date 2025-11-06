@@ -94,6 +94,15 @@ $(function() {
         }
     });
 
+    $('.deletePicture').on('click', function () {
+        var eid = $(this).attr('data-exercise-id');
+        var qid = $(this).attr('data-question-id');
+        let baseUrl = '{$urlServer}modules/exercise/admin.php?course={$course_code}&exerciseId=' + eid + '&modifyQuestion=' + qid + '&deletePicture=1';
+        if (confirm('$langConfirmDelete')) {
+            window.location.href = baseUrl;
+        }
+    });
+
  });
 </script>
  ";
@@ -125,7 +134,8 @@ if (isset($_POST['submitQuestion'])) {
         if (isset($_FILES['imageUpload']) && !is_uploaded_file($_FILES['imageUpload']['tmp_name']) && $answerType == DRAG_AND_DROP_MARKERS) {
             Session::flash('message', $langRequiresImageUploadedForThisType);
             Session::flash('alert-class', 'alert-warning');
-            redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=" . intval($_GET['exerciseId']) . "&newQuestion=yes");
+            $actionType = $_GET['modifyQuestion'] ? "&modifyQuestion=$_GET[modifyQuestion]" : "&newQuestion=yes";
+            redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=" . intval($_GET['exerciseId']) . $actionType);
         }
 
         // no name given
@@ -349,7 +359,7 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
                     <div class='row form-group mt-4'>
                         <div class='col-12 d-flex justify-content-start align-items-center gap-2'>
                             <img style='max-height:100px;max-width:150px;' src='../../$picturePath/quiz-$questionId'>
-                            <a class='btn deleteAdminBtn' href='$form_submit_action&amp;deletePicture=1'>$langDeletePicture</a>
+                            <a data-question-id='$_GET[modifyQuestion]' data-exercise-id='$_GET[exerciseId]' class='btn deleteAdminBtn deletePicture'>$langDeletePicture</a>
                         </div>
                     </div>
                 ";

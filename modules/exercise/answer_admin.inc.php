@@ -1029,6 +1029,16 @@ if (isset($_GET['modifyAnswers'])) {
         $grades_from_db = $objAnswer->get_drag_and_drop_answer_grade();
 
     } elseif ($answerType == DRAG_AND_DROP_MARKERS) {
+
+        // Redirect back if the question does not contain the default picture
+        $qpicturePath = "courses/$course_code/image";
+        $okQPicture = file_exists($qpicturePath . '/quiz-' . $questionId) ? true : false;
+        if (!$okQPicture && isset($_GET['modifyAnswers']) && isset($_GET['exerciseId'])) {
+            Session::flash('message', $langRequiresImageUploadedForThisType);
+            Session::flash('alert-class', 'alert-warning');
+            redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=" . intval($_GET['exerciseId']) . "&modifyQuestion=$_GET[modifyAnswers]");
+        }
+
         if ($newAnswer && !isset($_GET['remImg'])) {
             $nbrAnswers = $_POST['nbrAnswers'] + 1;
         } else { // for edit

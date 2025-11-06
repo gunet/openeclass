@@ -368,7 +368,7 @@ if (!class_exists('Answer')):
                     preg_match_all('/\[(\d+)\]/', $q[0], $matches);
                     $allTextMarkers = $matches[1];
 
-                    $str = $q[1];
+                    $str = $q[1] ?? '';
                     $arr = explode(',', $str);
                     foreach ($arr as $value) {
                         $arr2 = explode('|', $value);
@@ -405,7 +405,7 @@ if (!class_exists('Answer')):
             if ($answer) {
                 $q = explode('::', $answer->answer);
                 if (count($q) > 0) {
-                    $str = $q[1];
+                    $str = $q[1] ?? '';
                     $arrTmp = explode(',', $str);
                     foreach ($arrTmp as $value) {
                         $arr2 = explode('|', $value);
