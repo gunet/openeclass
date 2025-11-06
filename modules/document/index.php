@@ -1233,7 +1233,7 @@ if ($can_upload or $user_upload) {
 
             $dialogData = array(
                 'backUrl' => $backUrl,
-                'base_url' => $base_url,
+                'base_url' => htmlspecialchars_decode($base_url),
                 'file' => $row,
                 'is_dir' => $row->format == '.dir',
                 'selected_license_title' => $row->copyrighted,
