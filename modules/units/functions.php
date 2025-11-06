@@ -611,31 +611,45 @@ function show_resources($unit_id)
             $head_content .= "<script>
             $(document).ready(function(){
 
+                var container = document.getElementById('unitResources');
+                var header = document.querySelector('header');
+//                var header = document.getElementById('bgr-cheat-header');
+                
                 Sortable.create(unitResources,{
                     handle: '.fa-arrows',
                     animation: 150,
-                    scroll: true,
+                    scroll: container,
                     scrollSensitivity: 100,
                     scrollSpeed: 50,
-                    forceAutoScrollFallback: true,
+                    forceAutoScrollFallback: false,
+                    onStart: function () {
+                        if (header) {
+                            header.dataset._pt = header.style.pointerEvents || '';
+                            header.style.pointerEvents = 'none';
+                        }
+                    },
                     onEnd: function (evt) {
-
-                    var itemEl = $(evt.item);
-
-                    var idReorder = itemEl.attr('data-id');
-                    var prevIdReorder = itemEl.prev().attr('data-id');
-
-                    $.ajax({
-                    type: 'post',
-                    dataType: 'text',
-                    data: {
-                            toReorder: idReorder,
-                            prevReorder: prevIdReorder,
-                            }
+                        if (header) {
+                            header.style.pointerEvents = header.dataset._pt;
+                            delete header.dataset._pt;
+                        }
+                        var itemEl = $(evt.item);
+    
+                        var idReorder = itemEl.attr('data-id');
+                        var prevIdReorder = itemEl.prev().attr('data-id');
+    
+                        $.ajax({
+                            type: 'post',
+                            dataType: 'text',
+                            data: {
+                                      toReorder: idReorder,
+                                      prevReorder: prevIdReorder,
+                                  }
                         });
                     }
                 });
             });
+            
             $(function(){
                 $('.fileModal').click(function (e)
                 {
