@@ -24,7 +24,7 @@ class OrderingAnswer extends \QuestionType
         $html_content .= "<tr>
                            <td>
                                 <strong><small class='text-nowrap'>($langScore: $AnswersGrade)</small></strong>
-                                <div><strong>$langOrdering:</strong><span class='ps-2'>$Answers</span></div>";
+                                <div><strong>$langOrdering </strong><span class='ps-2'>$Answers</span></div>";
         $html_content .= "</td>
                          </tr>";
 
@@ -216,7 +216,7 @@ class OrderingAnswer extends \QuestionType
                 $result = implode(',', $arrayRes);
                 $randomKeys = explode(',', $result);
             }
-            
+
             foreach ($arr as $v) {
                 if (!empty($v)) {
                     $fullRange[] = array_search($v, $ordering_answer);
@@ -231,8 +231,6 @@ class OrderingAnswer extends \QuestionType
             $class = '';
             $icon = 'fa-arrows';
             $value = $ordering_answer[$i];
-            $style = '';
-            $bgColor = '';
             $sortingBtns = "<div class='sorting-controls d-flex gap-2'>
                                 <button type='button' class='btn submitAdminBtn move-up' data-question-id='{$questionId}' onclick='updateListenerOrderingBtn({$question_number}, {$questionId})'><i class='fa-solid fa-up-long'></i></button>
                                 <button type='button' class='btn submitAdminBtn move-down' data-question-id='{$questionId}' onclick='updateListenerOrderingBtn({$question_number}, {$questionId})'><i class='fa-solid fa-down-long'></i></button>
@@ -271,15 +269,14 @@ class OrderingAnswer extends \QuestionType
         $html_content = '';
 
         $questionId = $this->answer_object->getQuestionId();
-        $nbrAnswers = $this->answer_object->selectNbrAnswers();
         $ordering_answers = $this->answer_object->get_ordering_answers();
         $answersByUser = $this->answer_object->get_ordering_answers_by_user($questionId, $eurid);
 
-        $arr = [];
-        $arrGrade = [];
+        $arr = $arrAnId = $arrGrade = [];
         $loop = 1;
         foreach ($answersByUser as $an) {
             $arr[$loop] = $an->answer;
+            $arrAnId[$loop] = $an->answer_id;
             $arrGrade[$loop] = $an->weight;
             $loop++;
         }
@@ -309,8 +306,8 @@ class OrderingAnswer extends \QuestionType
         $correct = implode(' -> ', $ordering_answers);
         $str = implode(' -> ', $arr);
 
-        $html_content .= "<tr><td><strong>$langCorrectOrdering</strong> $correct</td></tr>";
-        $html_content .= "<tr><td><strong>$langYourOwnAnswerIs</strong> $str</td></tr>";
+        $html_content .= "<tr><td><strong>$langCorrectOrdering: </strong> $correct</td></tr>";
+        $html_content .= "<tr><td><strong>$langYourOwnAnswerIs: </strong> $str</td></tr>";
 
         return $html_content;
 

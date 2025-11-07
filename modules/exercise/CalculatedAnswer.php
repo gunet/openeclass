@@ -106,7 +106,7 @@ class CalculatedAnswer extends \QuestionType
     public function QuestionResult($choice, $eurid, $regrade, $extra_type = ''): string
     {
 
-        global $langSelect, $langCorrectS, $langIncorrectS, $questionScore, $langYourOwnAnswerIs;
+        global $langSelect, $langCorrectS, $langIncorrectS, $questionScore, $langCorrectAnswerIs;
 
         $html_content = '';
 
@@ -171,7 +171,7 @@ class CalculatedAnswer extends \QuestionType
                 $html_content .= "<span style='$style' class='$answer_icon'></span></div>";
             }
 
-            $html_content .= $answerTitle;
+            $html_content .= $this->answer_object->get_user_calculated_answer($questionId, $eurid);
             if ($answerCorrect) {
                 $html_content .= "&nbsp;<span class='text-success text-nowrap'><small class='text-success text-nowrap'>($langCorrectS)</small></span>";
             } else {
@@ -187,8 +187,9 @@ class CalculatedAnswer extends \QuestionType
         }
 
         if (count($answer_object_ids) == 1) { // unique answer as text
-            $userHasAnswered = $this->answer_object->get_user_calculated_answer($questionId, $eurid);
-            $html_content .= "<tr><td>$langYourOwnAnswerIs <span class='TextBold'>$userHasAnswered</span></td></tr>";
+            $html_content .= "<tr>
+                                <td>$langCorrectAnswerIs<span class='TextBold'>: " . $answerTitle . "</span></td>
+                             </tr>";
         }
 
         return $html_content;

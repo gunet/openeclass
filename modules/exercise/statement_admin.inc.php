@@ -233,7 +233,7 @@ if (isset($_POST['submitQuestion'])) {
         redirect_to_home_page("modules/exercise/admin.php?course={$course_code}{$exercise_or_pool}{$new_or_modif}");
     }
 } else {
-    // if we don't come here after having cancelled the warning message "used in several exercises"
+    // if we don't come here after having canceled the warning message "used in several exercises"
     if (!isset($buttonBack)) {
         $questionName = $objQuestion->selectTitle();
         $questionDescription = $objQuestion->selectDescription();
@@ -251,7 +251,7 @@ if (isset($_POST['submitQuestion'])) {
 if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
     $questionId = $objQuestion->selectId();
     // is picture set ?
-    $okPicture = file_exists($picturePath . '/quiz-' . $questionId) ? true : false;
+    $okPicture = file_exists($picturePath . '/quiz-' . $questionId);
     // if there is an error message
     if (!empty($msgErr)) {
         $tool_content .= "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$msgErr</span></div>\n";

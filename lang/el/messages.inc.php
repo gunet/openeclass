@@ -2238,7 +2238,8 @@ $langInfoDragAndDropMarkersCreation = '
 <li class="text-dark">Η διαδικασία για την δημιουργία των προκαθορισμένων απαντήσεων ολοκληρώνεται πατώντας <strong class="text-dark">Υποβολή</strong>.</li>
 </ul>';
 $langRequiresImageUploadedForThisType = "Για την μεταφορά και απόθεση σε προκαθορισμένα σημεία απαιτείται η προσθήκη εικόνας.";
-$langYourOwnAnswerIs = "Η απάντηση που δώσατε είναι:";
+$langYourOwnAnswerIs = "Η απάντηση που δώσατε είναι";
+$langCorrectAnswerIs = "Η σωστή απάντηση είναι";
 $langCalculated = "Υπολογισμός αριθμητικών πράξεων";
 $langEditItems = "Επεξεργασία στοιχείων";
 $langItIsNotWildCard = "Δεν αποτελεί στοιχείο της άσκησης";
@@ -2302,7 +2303,7 @@ $langSelectContiguousSubSetOfItems = "Επιλογή συνεχόμενου υπ
 $langSizeOfSubset = "Μέγεθος υποσυνόλου";
 $langFillInTheSizeOfSubset = "Συμπληρώστε το μέγεθος του υποσυνόλου.";
 $langTheSizeOfSubsetIsBiggerThanPrAnswers = "Το μέγεθος του υποσυνόλου είναι μεγαλύτερο από τον συνολικό αριθμό των προκαθορισμένων απαντήσεων.";
-$langCorrectOrdering = "Η σωστή ταξινόμηση είναι: ";
+$langCorrectOrdering = "Η σωστή ταξινόμηση είναι";
 $langInfoOrderingQuestion = 'Για την δημιουργία σωστής ταξινόμησης των στοιχείων, το σύστημα αντιλαμβάνεται ως σωστή απάντηση την ταξινόμηση από το μικρότερο προς το μεγαλύτερο στοιχείο.</br></br>
                              <strong class="text-dark">Για παράδειγμα</strong>, αν η ερώτητη της ασκήσης ζητάει την ταξινόμηση των αριθμών 1,5,3,9,7 από το μεγαλύτερο στο μικρότερο, τότε θα πρέπει να δηλώσετε τα εξής ως σωστή απάντηση:</br>
                              <ul class="mt-3">
@@ -6900,7 +6901,6 @@ $langSections = 'Ενότητες';
 $langCategoryEssay = "Εργασία";
 $langCategoryExcercise = "Άσκηση";
 $langCategoryDescription = "Περιγραφή";
-$langAnalyticsEditElements = 'Επεξεργασία Στοιχείων';
 $langViewStatics = "Στατιστικά Επισκεψιμότητας";
 $langTypeOutMessage = "Πληκτρολογήστε το μήνυμα σας ...";
 $langDateHasExpire = "Η ημερομηνία έχει παρέλθει. Δοκιμάστε πάλι.";
