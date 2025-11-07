@@ -124,7 +124,7 @@ class CalculatedAnswer extends \QuestionType
             }
             $answerComment = $this->answer_object->getComment($answerId);
             if ($this->answer_object->get_user_calculated_answer($questionId, $eurid) != null) {
-                if (round(floatval($this->answer_object->get_user_calculated_answer($questionId, $eurid)), 2) == $answerTitle) {
+                if (round(floatval($this->answer_object->get_user_calculated_answer($questionId, $eurid)), 2) == $answerTitle && $this->answer_object->get_correct_calculated_answer($questionId) == $answerTitle) {
                     $answerCorrect = true;
                 } else {
                     $answerCorrect = false;
@@ -171,11 +171,20 @@ class CalculatedAnswer extends \QuestionType
                 $html_content .= "<span style='$style' class='$answer_icon'></span></div>";
             }
 
-            $html_content .= $this->answer_object->get_user_calculated_answer($questionId, $eurid);
-            if ($answerCorrect) {
-                $html_content .= "&nbsp;<span class='text-success text-nowrap'><small class='text-success text-nowrap'>($langCorrectS)</small></span>";
-            } else {
-                $html_content .= "&nbsp;<span class='text-danger text-nowrap'><small class='text-danger text-nowrap'>($langIncorrectS)</small></span>";
+            if (count($answer_object_ids) > 1) { // Get the predefined answers from multiple choices
+                $html_content .= "<span>$answerTitle</span>";
+                if ($this->answer_object->get_correct_calculated_answer($questionId) == $answerTitle) {
+                    $html_content .= "&nbsp;<span class='text-success text-nowrap'><small class='text-success text-nowrap'>($langCorrectS)</small></span>";
+                } else {
+                    $html_content .= "&nbsp;<span class='text-danger text-nowrap'><small class='text-danger text-nowrap'>($langIncorrectS)</small></span>";
+                }
+            } elseif (count($answer_object_ids) == 1) {// Get the user answer from input text
+                $html_content .= "<span>" . $this->answer_object->get_user_calculated_answer($questionId, $eurid) . "</span>";
+                if ($answerCorrect) {
+                    $html_content .= "&nbsp;<span class='text-success text-nowrap'><small class='text-success text-nowrap'>($langCorrectS)</small></span>";
+                } else {
+                    $html_content .= "&nbsp;<span class='text-danger text-nowrap'><small class='text-danger text-nowrap'>($langIncorrectS)</small></span>";
+                }
             }
             $html_content .= "</div>";
             if ($studentChoice or $answerCorrect) {
