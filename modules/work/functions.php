@@ -367,7 +367,7 @@ function display_student_assignment($id, $on_behalf_of = false) {
     $submissions_exist = false;
     $submit_ok = false;
     $submission_details_data = $assignment_review_data = [];
-    $data['cdate'] = $cdate = date('Y-m-d H:i:s');
+    $cdate = date('Y-m-d H:i:s');
     $is_group_assignment = is_group_assignment($id);
     $user_group_info = user_group_info($uid, $course_id);
     if (!empty($user_group_info)) {
@@ -550,18 +550,6 @@ function display_student_assignment($id, $on_behalf_of = false) {
         $rows = Database::get()->queryArray("SELECT * FROM assignment_grading_review WHERE assignment_id = ?d ", $id);
         $data['start_date_review'] = $row->start_date_review;
         if ($grading_type == ASSIGNMENT_PEER_REVIEW_GRADE && $submissions_exist && $ass) {
-            if ($row->start_date_review < $cdate) {
-                if ($reviews_per_assignment < $count_of_assign && empty($rows)) {
-                    Session::flash('message', $langPendingPeerSubmissions);
-                    Session::flash('alert-class', 'alert-warning');
-                } elseif ($reviews_per_assignment > $count_of_assign) {
-                    Session::flash('message', $langNoPeerReview);
-                    Session::flash('alert-class', 'alert-warning');
-                }
-            } else {
-                Session::flash('message', $langPendingPeerSubmissions);
-                Session::flash('alert-class', 'alert-warning');
-            }
             $assignment_review_data = display_assignment_review($id);
         }
     } else {
@@ -573,7 +561,9 @@ function display_student_assignment($id, $on_behalf_of = false) {
     } else {
         $data = $submission_details_data+$assignment_details_data;
     }
+
     $data['row'] = $row;
+    $data['cdate'] = $cdate;
     $data['assignment_type'] = $row->assignment_type;
     $data['grading_type'] = $grading_type;
     $data['max_grade'] = $row->max_grade;
@@ -736,7 +726,7 @@ function display_assignment_submissions($id) {
     $data['row'] = $assign;
     $data['assign'] = $assign;
     $data['cdate'] = date('Y-m-d H:i:s');
-    $data['grades_info'] = [];
+    $data['grades_info'] = $grades_info = [];
 
     if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE) {
         $users_submissions = Database::get()->queryArray("SELECT user_id FROM assignment_grading_review WHERE assignment_id = ?d", $id);
@@ -1870,7 +1860,6 @@ function submit_work($id, $on_behalf_of = null) {
            $langUploadSuccess, $langUploadError, $course_code,
            $langAutoJudgeInvalidFileType, $langExerciseNotPermit, $langNoFileUploaded,
            $langAutoJudgeScenariosPassed, $autojudge, $langEmptyFaculte;
-
 
     $row = Database::get()->querySingle("SELECT id, title, group_submissions, submission_type, submission_date,
                             deadline, late_submission, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time,
