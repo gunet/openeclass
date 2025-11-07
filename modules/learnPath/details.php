@@ -52,11 +52,15 @@ $head_content .= "<script type='text/javascript'>
                 'bAutoWidth': true,
                 'searchDelay': 1000,
                 'order' : [[0, 'asc']],
+                'lengthMenu': [10, 20, 30, -1],
                 'oLanguage': {
+                   'lengthLabels': {
+                        '-1': '$langAllOfThem'
+                   },
                    'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
                    'sZeroRecords':  '" . $langNoResult . "',
                    'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
-                   'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
+                   'sInfoEmpty':    '',
                    'sInfoFiltered': '',
                    'sInfoPostFix':  '',
                    'sSearch':       '',
@@ -69,11 +73,11 @@ $head_content .= "<script type='text/javascript'>
                    }
                }
             });
-            $('.dataTables_filter input').attr({
+            $('.dt-search input').attr({
                 'class' : 'form-control input-sm ms-0 mb-3',
                 'placeholder' : '$langSearch...'
             });
-            $('.dataTables_filter label').attr('aria-label', '$langSearch');  
+            $('.dt-search label').attr('aria-label', '$langSearch');  
         });
         </script>";
 
@@ -214,13 +218,12 @@ if (isset($_GET['xls'])) {
             td { text-align: left; }
           </style>
         </head>
-        <body>" . get_platform_logo() .
-        "<h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
+        <body>
+        <h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
         <h2> " . q($langStatsOfLearnPath) . "</h2>
         <h3>" . disp_tool_title($titleTab) . "</h3>";
 
     $pdf_content .= $tool_content;
-    $pdf_content .= get_platform_logo('','footer');
     $pdf_content .= "</body></html>";
 
     $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
@@ -229,6 +232,8 @@ if (isset($_GET['xls'])) {
     $fontData = $defaultFontConfig['fontdata'];
 
     $mpdf = new Mpdf\Mpdf([
+        'margin_top' => 53,     // approx 200px
+        'margin_bottom' => 53,  // approx 200px
         'tempDir' => _MPDF_TEMP_PATH,
         'fontDir' => array_merge($fontDirs, [$webDir . '/template/modern/fonts']),
         'fontdata' => $fontData + [
@@ -245,7 +250,19 @@ if (isset($_GET['xls'])) {
             ]
     ]);
 
-    $mpdf->setFooter('{DATE j-n-Y} || {PAGENO} / {nb}');
+
+    $mpdf->SetHTMLHeader(get_platform_logo());
+    $footerHtml = '
+    <div>
+        <table width="100%" style="border: none;">
+            <tr>
+                <td style="text-align: left;">{DATE j-n-Y}</td>
+                <td style="text-align: right;">{PAGENO} / {nb}</td>
+            </tr>
+        </table>
+    </div>
+    ' . get_platform_logo('','footer') . '';
+    $mpdf->SetHTMLFooter($footerHtml);
     $mpdf->SetCreator(course_id_to_prof($course_id));
     $mpdf->SetAuthor(course_id_to_prof($course_id));
     $mpdf->WriteHTML($pdf_content);

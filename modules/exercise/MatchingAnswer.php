@@ -7,6 +7,7 @@ class MatchingAnswer extends QuestionType
     public function __destruct() {
         unset($this->answer_object);
     }
+
     public function PreviewQuestion(): string
     {
         global $langScore, $langChoice, $langCorrespondsTo;
@@ -29,7 +30,7 @@ class MatchingAnswer extends QuestionType
                 $html_content .= "
                   <tr>
                     <td>" . standard_text_escape($answerTitle) . "</td>
-                    <td>{$answerTitle[$answerCorrect]}&nbsp;&nbsp;&nbsp;<strong><small class='text-nowrap'>($langScore: $answerWeighting)</small></strong></td>
+                    <td>{$this->answer_object->answer[$answerCorrect]}&nbsp;&nbsp;&nbsp;<strong><small class='text-nowrap'>($langScore: $answerWeighting)</small></strong></td>
                   </tr>";
             }
         }

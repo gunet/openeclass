@@ -48,13 +48,6 @@ $(document).ready(function(){
         javascript:window.history.back();
     });
 
-
-    /////////////////////////////////////////////////// initial datatable /////////////////////////////////////////////////
-
-    $('#courses_table_pag').DataTable();
-
-    /////////////////////////////////////////////////////// call functions /////////////////////////////////////////////////
-
     act_confirm();
     tooltip_init();
     popover_init();
@@ -406,12 +399,12 @@ function initialize_lesson_display (pages) {
       "iDisplayLength": pages,
       "bSort": false,
       "fnDrawCallback": function (oSettings) {
-        $('#portfolio_lessons_filter label input').attr({
+        $('#portfolio_lessons_wrapper .dt-search input').attr({
           class: 'form-control input-sm searchCoursePortfolio Neutral-700-cl ms-0 mb-3',
           placeholder: msg.langSearch + '...'
         });
-        $('#portfolio_lessons_filter label').attr('aria-label', msg.langSearch);
-        $('#portfolio_lessons_filter label').prepend("<span class='sr-only'>" + msg.langSearch + "</span>")
+        $('#portfolio_lessons_wrapper .dt-search label').attr('aria-label', msg.langSearch);
+        $('#portfolio_lessons_wrapper .dt-search label').prepend("<span class='sr-only'>" + msg.langSearch + "</span>")
       },
       "initComplete": build_notification_callback('lesson'),
       "dom": "<'all_courses float-end px-0'>frtip",
@@ -423,12 +416,12 @@ function initialize_lesson_display (pages) {
       "iDisplayLength": pages,
       "bSort": false,
       "fnDrawCallback": function (oSettings) {
-        $('#portfolio_collaborations_filter label input').attr({
+        $('#portfolio_collaborations_wrapper .dt-search input').attr({
           class: 'form-control input-sm searchCoursePortfolio Neutral-700-cl ms-0 mb-3',
           placeholder: msg.langSearch + '...'
         });
-        $('#portfolio_collaborations_filter label').attr('aria-label', msg.langSearch);
-        $('#portfolio_collaborations_filter label').prepend("<span class='sr-only'>" + msg.langSearch + "</span>")
+        $('#portfolio_collaborations_wrapper .dt-search label').attr('aria-label', msg.langSearch);
+        $('#portfolio_collaborations_wrapper .dt-search label').prepend("<span class='sr-only'>" + msg.langSearch + "</span>")
       },
       "initComplete": build_notification_callback('collaboration'),
       "dom": msg.dataTablesDomParam,

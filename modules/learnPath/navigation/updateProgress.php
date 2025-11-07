@@ -57,6 +57,10 @@ if (isset($_POST['ump_id'])) {
     $scoreMin_value = (int) $_POST['scoreMin'];
     $scoreMax_value = (int) $_POST['scoreMax'];
     // $scaled_value = (float) $_POST['scoreScaled'];
+    $progress_measure = null;
+    if (isset($_POST['progress_measure']) && $_POST['progress_measure'] !== '') {
+        $progress_measure = (float) $_POST['progress_measure'];
+    }
 
     // next visit of the sco will not be the first so entry must be setted to RESUME
     $exit_value = $_POST['exit'];
@@ -104,11 +108,12 @@ if (isset($_POST['ump_id'])) {
                 `scoreMax` = ?d,
                 `total_time` = ?s,
                 `session_time` = ?s,
+                `progress_measure` = ?f,
                 `suspend_data` = ?s,
                 `credit` = ?s,
                 `accessed` = " . DBHelper::timeAfter() . "
           WHERE `user_module_progress_id` = ?d";
-    Database::get()->query($sql, $_POST['lesson_location'], $lesson_status_value, $entry_value, $raw_value, $scoreMin_value, $scoreMax_value, $total_time_value, $session_time_formatted, $_POST['suspend_data'], $credit_value, $_POST['ump_id']);
+    Database::get()->query($sql, $_POST['lesson_location'], $lesson_status_value, $entry_value, $raw_value, $scoreMin_value, $scoreMax_value, $total_time_value, $session_time_formatted, $progress_measure, $_POST['suspend_data'], $credit_value, $_POST['ump_id']);
     $lp = Database::get()->querySingle("SELECT lp.* "
             . " FROM lp_user_module_progress lump "
             . " JOIN lp_learnPath lp ON (lp.learnPath_id = lump.learnPath_id) "
@@ -151,6 +156,7 @@ if (isset($_POST['ump_id'])) {
             <input type="hidden" name="scoreMin" />
             <input type="hidden" name="scoreMax" />
             <input type="hidden" name="scoreScaled" />
+            <input type="hidden" name="progress_measure" />
             <input type="hidden" name="exit" />
         </form>
     </body>

@@ -84,18 +84,9 @@ $head_content .= "
     var langFavouriteModule = '" . js_escape($langFavourite) . "';
     var langFavouriteCourse = '" . js_escape($langFavouriteCourse) . "';
     var langLoginUser = '" . js_escape($langLoginUser) . "';
-    var langHours = '" . js_escape($langHours) . "';
+    var langHours = '" . js_escape($langHours) . "';    
 </script>";
 load_js('datatables');
-load_js('datatables_bootstrap');
-load_js('datatables_buttons');
-load_js('datatables_buttons_jqueryui');
-load_js('datatables_buttons_bootstrap');
-load_js('datatables_buttons_print');
-load_js('jszip');
-load_js('pdfmake');
-load_js('vfs_fonts');
-load_js('datatables_buttons_html5');
 load_js('statistics.js');
 //Remove space between consecutive pagination buttons if datatables
 $head_content .= "<style>

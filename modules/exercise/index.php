@@ -65,19 +65,19 @@ $head_content .= "<script type='text/javascript'>
             $('#ex').DataTable ({
                 'columns': [ $columns ],
                 'fnDrawCallback': function (settings) { typeof MathJax !== 'undefined' && MathJax.typeset(); },
-                'aLengthMenu': [
-                   [10, 20, 30 , -1],
-                   [10, 20, 30, '$langAllOfThem'] // change per page values here
-                ],
+                'lengthMenu': [10, 20, 30, -1],
                 'sPaginationType': 'full_numbers',
                 'bAutoWidth': true,
                 'searchDelay': 1000,
                 'order' : [[1, 'desc']],
                 'oLanguage': {
+                    'lengthLabels': {
+                        '-1': '$langAllOfThem'
+                    },
                    'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
                    'sZeroRecords':  '" . $langNoResult . "',
                    'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
-                   'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
+                   'sInfoEmpty':    '',
                    'sInfoFiltered': '',
                    'sInfoPostFix':  '',
                    'sSearch':       '',
@@ -90,11 +90,11 @@ $head_content .= "<script type='text/javascript'>
                    }
                }
             });
-            $('.dataTables_filter input').attr({
+            $('.dt-search input').attr({
                   'class' : 'form-control input-sm ms-0 mb-3',
                   'placeholder' : '$langSearch...'
             });
-            $('.dataTables_filter label').attr('aria-label', '$langSearch');
+            $('.dt-search label').attr('aria-label', '$langSearch');
             
             $(document).on('click', '.assigned_to', function(e) {
                   e.preventDefault();
@@ -168,6 +168,7 @@ if ($is_editor) {
                     }
                     break;
                 case 'purge': // purge exercise results
+                    if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();
                     if (!resource_belongs_to_progress_data(MODULE_ID_EXERCISE, $exerciseId)) {
                         $objExerciseTmp->purge();
                         $objExerciseTmp->save();
@@ -487,7 +488,7 @@ if (!$nbrExercises) {
                               'url' => "#",
                               'icon' => 'fa-copy'),
                         array('title' => $langPurgeExerciseResults,
-                              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=purge&amp;exerciseId=$row->id",
+                              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=purge&amp;exerciseId=$row->id&" . generate_csrf_token_link_parameter(),
                               'icon' => 'fa-eraser',
                               'confirm' => $langConfirmPurgeExerciseResults),
                         array('title' => $langDelete,

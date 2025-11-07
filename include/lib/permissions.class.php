@@ -45,6 +45,10 @@ class Permissions
     }
 
 
+    /**
+     * @brief check if user has permission to manage modules
+     * @return bool
+     */
     public function has_course_modules_permission(): bool
     {
 
@@ -65,6 +69,10 @@ class Permissions
     }
 
 
+    /**
+     * @brief check if user has permission to manage users
+     * @return bool
+     */
     public function has_course_users_permission(): bool
     {
 
@@ -83,6 +91,10 @@ class Permissions
         }
     }
 
+    /**
+     * @brief check if user has permission to clone course
+     * @return bool
+     */
     public function has_course_clone_permission(): bool
     {
 
@@ -102,6 +114,10 @@ class Permissions
         }
     }
 
+    /**
+     * @brief check if user has permission to backup course
+     * @return bool
+     */
     public function has_course_backup_permission(): bool
     {
         if ($this->course_admin) {
@@ -140,6 +156,11 @@ class Permissions
         return $arr_permissions;
     }
 
+    /**
+     * @brief get the permission legend
+     * @param $permission
+     * @return string
+     */
     public function get_permissions_legend($permission): string {
 
         global $langCourseAdminTools, $langAdminUsers, $langArchiveCourse, $langCloneCourse;
@@ -163,5 +184,4 @@ class Permissions
         }
         return $msg;
     }
-
 }

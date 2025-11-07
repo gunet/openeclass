@@ -34,7 +34,55 @@ if (!$up->has_course_users_permission()) {
 }
 
 //Identifying ajax request
-if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest' && $is_editor) {
+if (!empty($_SERVER['HTTP_X_REQUESTED_WITH'])
+    && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest'
+    && $up->has_course_users_permission()
+    && isset($_POST['action'])
+    && $_POST['action'] === 'updateRights') {
+
+    $userId = intval($_POST['userID'] ?? 0);
+    $adminModules = intval($_POST['userRights_CourseAdminTools'] ?? 0);
+    $adminUsers = intval($_POST['userRights_AdminUsers'] ?? 0);
+    $courseBackup = intval($_POST['userRights_ArchiveCourse'] ?? 0);
+    $courseClone = intval($_POST['userRights_CloneCourse'] ?? 0);
+
+    Database::get()->query(
+        "INSERT INTO `user_permissions` (`course_id`, `user_id`, `admin_modules`, `admin_users`, `course_backup`, `course_clone`)
+         VALUES (?d, ?d, ?d, ?d, ?d, ?d)
+         ON DUPLICATE KEY UPDATE
+            `admin_modules` = VALUES(`admin_modules`),
+            `admin_users` = VALUES(`admin_users`),
+            `course_backup` = VALUES(`course_backup`),
+            `course_clone` = VALUES(`course_clone`)",
+        $course_id, $userId, $adminModules, $adminUsers, $courseBackup, $courseClone
+    );
+
+}
+
+if (!empty($_SERVER['HTTP_X_REQUESTED_WITH'])
+    && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest'
+    && $up->has_course_users_permission()
+    && isset($_POST['action'])
+    && $_POST['action'] === 'getUserRights') {
+
+    $userId = intval($_POST['userID'] ?? 0);
+
+    $result = Database::get()->querySingle("SELECT `admin_modules`, `admin_users`, `course_backup`, `course_clone`
+                     FROM `user_permissions`
+                     WHERE `course_id` = ?d AND `user_id` = ?d", $course_id, $userId);
+
+    header('Content-Type: application/json; charset=utf-8');
+    echo json_encode($result, JSON_UNESCAPED_UNICODE);
+    exit();
+
+}
+
+//if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest' && $up->has_course_users_permission()) {
+if (!empty($_SERVER['HTTP_X_REQUESTED_WITH'])
+    && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest'
+    && $up->has_course_users_permission()
+    && !(isset($_POST['action']) && $_POST['action'] === 'updateRights')) {
+
     if (isset($_POST['action']) && $_POST['action'] == 'delete') {
         $unregister_gid = intval(getDirectReference($_POST['value']));
         $unregister_ok = true;
@@ -82,19 +130,19 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         exit();
     }
 
-    $limit = intval($_GET['iDisplayLength']);
-    $offset = intval($_GET['iDisplayStart']);
+    $limit = intval($_POST['length']);
+    $offset = intval($_POST['start']);
 
-    if (!empty($_GET['sSearch'])) {
-        $search_values = array_fill(0, 4, '%' . $_GET['sSearch'] . '%');
+    if (!empty($_POST['search']['value'])) {
+        $search_values = array_fill(0, 4, '%' . $_POST['search']['value'] . '%');
         $search_sql = 'AND (user.surname LIKE ?s OR user.givenname LIKE ?s OR user.username LIKE ?s OR user.email LIKE ?s)';
     } else {
         $search_sql = '';
         $search_values = array();
     }
     // user status
-    if (!empty($_GET['sSearch_1'])) {
-        $filter = $_GET['sSearch_1'];
+    if (!empty($_POST['columns'][1]['search']['value'])) {
+        $filter = $_POST['columns'][1]['search']['value'];
         if ($filter == 'editor') {
             $search_sql .= ' AND ((course_user.editor = 1 AND course_user.status = ' . USER_STUDENT . ') OR course_user.status = ' . USER_TEACHER . ')';
         } elseif ($filter == 'teacher') {
@@ -109,12 +157,12 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             $search_sql .= ' AND course_user.reviewer = 1';
         }
     }
-
-    if (isset($_GET['iSortCol_0']) and $_GET['iSortCol_0'] == 0) {
-        $sortDir = ($_GET['sSortDir_0'] == 'desc') ? 'DESC' : '';
+    $sortDir = 'ASC';
+    if (isset($_POST['order'][0]['column']) && $_POST['order'][0]['column'] == 0) {
+        $sortDir = (isset($_POST['order'][0]['dir']) && $_POST['order'][0]['dir'] == 'desc') ? 'DESC' : '';
         $order_sql = "ORDER BY user.surname $sortDir, user.givenname $sortDir";
     } else {
-        $sortDir = ($_GET['sSortDir_0'] == 'desc') ? 'DESC' : '';
+        $sortDir = (isset($_POST['order'][0]['dir']) && $_POST['order'][0]['dir'] == 'desc') ? 'DESC' : '';
         $order_sql = "ORDER BY course_user.reg_date $sortDir";
     }
 
@@ -135,8 +183,8 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                     AND `course_user`.`course_id` = ?d
                     $search_sql $order_sql $limit_sql", $course_id, $search_values);
 
-    $data['iTotalRecords'] = $all_users;
-    $data['iTotalDisplayRecords'] = $filtered_users;
+    $data['recordsTotal'] = $all_users;
+    $data['recordsFiltered'] = $filtered_users;
     $data['aaData'] = array();
     foreach ($result as $myrow) {
         $full_name = q(sanitize_utf8($myrow->givenname . " " . $myrow->surname));
@@ -217,6 +265,13 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                 'show' => $myrow->status != USER_GUEST,
             ),
             array(
+                'title' => $langUserPermissions,
+                'url' => "#",
+                'icon' => "fa-list-check",
+                'class' => 'rights_menu',
+                'show' => ($myrow->status != USER_TEACHER && $myrow->status != USER_GUEST),
+            ),
+            array(
                 'title' => $langGiveRightReviewer,
                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;" . ($myrow->reviewer == '1' ? "remove" : "give") . "Reviewer=" . getIndirectReference($myrow->id),
                 'icon' => $myrow->reviewer != '1' ? "fa-square" : "fa-square-check",
@@ -280,7 +335,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                                 <div style='padding-left:8px; padding-top: 5px;'>$stats_icon</div>
                             </div>
                             <div class='pull-left'>
-                                <div style='padding-bottom:2px;'>".display_user($myrow->id, false, false, '', $course_code)."</div>
+                                <div data-userid='$myrow->id' style='padding-bottom:2px;'>".display_user($myrow->id, false, false, '', $course_code)."</div>
                                 <div><small><a class='text-nowrap' aria-label='".$langProfileSendMail."' href='mailto:" . q($myrow->email) . "'>" . q($myrow->email) . "</a>$email_exclamation_icon</small></div>
                                 <div class='text-muted'><small>$am_message</small></div>
                             </div>

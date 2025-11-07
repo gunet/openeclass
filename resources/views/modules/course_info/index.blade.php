@@ -593,9 +593,6 @@
                                         </div>
                                     </div>
 
-
-
-
                                     <div class='form-group mt-4'>
                                         <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langCourseCommenting') }}</div>
                                         <div class='col-sm-12'>
@@ -610,6 +607,24 @@
                                                     <input type='radio' value='0' name='c_radio' {!! $checkCommentDis !!}>
                                                     {{ trans('langCommentsDis') }}
                                               </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class='form-group mt-4'>
+                                        <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langH5PUploadingEnabled') }}</div>
+                                        <div class='col-sm-12'>
+                                            <div class='radio mb-2'>
+                                                <label>
+                                                    <input type='radio' value='1' name='h5p_radio' {!! $checkH5PEn !!}>
+                                                    {{ trans('langActivate') }}
+                                                </label>
+                                            </div>
+                                            <div class='radio'>
+                                                <label>
+                                                    <input type='radio' value='0' name='h5p_radio' {!! $checkH5PDis !!}>
+                                                    {{ trans('langDeactivate') }}
+                                                </label>
                                             </div>
                                         </div>
                                     </div>
@@ -724,8 +739,9 @@
 
                                     {!! showSecondFactorChallenge() !!}
 
-                                    <div class='form-group mt-5 mb-1 d-flex justify-content-end align-items-center'>
+                                    <div class='form-group mt-5 mb-1 d-flex justify-content-end align-items-center gap-2 flex-wrap'>
                                         <input class='btn submitAdminBtn' type='submit' name='submit' value='{{ trans('langSubmit') }}'>
+                                        <a href='{{ $cancel_link }}' class='btn cancelAdminBtn text-nowrap'>{{ trans('langCancel') }}</a>
                                     </div>
                                 </fieldset>
                                 {!! generate_csrf_token_form_field() !!}

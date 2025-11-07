@@ -51,7 +51,7 @@ $tool_content .= action_bar(array(
         'icon' => 'fa-reply',
         'level' => 'primary')));
 
-$navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langToolManagement);
+$navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langCourseTools);
 
 if (isset($_POST['new_publish_ltiapp'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();

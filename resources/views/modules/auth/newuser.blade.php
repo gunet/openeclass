@@ -133,7 +133,7 @@
 
                                                     <div class='col-lg-6 col-12 px-3'>
                                                         <div class='form-group mt-4'>
-                                                            <label for='UserPass2ID' class='col-sm-12 control-label-notes'>{{ trans('langConfirmation') }}</label>
+                                                            <label for='UserPass2ID' class='col-sm-12 control-label-notes'>{{ trans('langConfirmation') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
                                                             <div class='col-sm-12'>
                                                                 <input id="UserPass2ID" class='form-control' type='password' name='password' size='30' maxlength='30' autocomplete='off'/>
                                                             </div>

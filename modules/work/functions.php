@@ -691,7 +691,7 @@ function display_assignment_review($id) {
  */
 function display_assignment_submissions($id) {
 
-    global $course_id, $autojudge;
+    global $course_id, $autojudge, $langgrade;
 
     $grade_review_field = $condition = $review_message = '';
     $assign = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time,
@@ -702,6 +702,7 @@ function display_assignment_submissions($id) {
                                                       WHERE course_id = ?d AND id = ?d", $course_id, $id);
     $data = display_assignment_details($assign);
     $count_of_assignments = countSubmissions($id);
+    $data['result'] = [];
     if ($count_of_assignments > 0) {
         $data['result'] = Database::get()->queryArray("SELECT assign.id id, assign.file_name file_name,
                                                 assign.uid uid, assign.group_id group_id,
@@ -735,6 +736,36 @@ function display_assignment_submissions($id) {
     $data['row'] = $assign;
     $data['assign'] = $assign;
     $data['cdate'] = date('Y-m-d H:i:s');
+    $data['grades_info'] = [];
+
+    if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE) {
+        $users_submissions = Database::get()->queryArray("SELECT user_id FROM assignment_grading_review WHERE assignment_id = ?d", $id);
+        $users_grades = Database::get()->queryArray("SELECT id,assignment_id,user_id,file_name,users_id,grade FROM assignment_grading_review WHERE assignment_id = ?d", $id);
+        if (count($users_submissions) > 0 && count($users_grades) > 0) {
+            foreach ($users_submissions as $u) {
+                $arr = [];
+                $f_g_grade = 0;
+                $g_grade = 0;
+                $grade_counter = 0;
+                foreach ($users_grades as $g) {
+                    if ($u->user_id == $g->user_id) {
+                        if ($g->grade) {
+                            $grade_counter++;
+                            $g_grade = $g_grade + $g->grade;
+                            $f_g_grade = $g_grade / $grade_counter;
+                            $arr[] = "<strong>" . uid_to_name($g->users_id) . "</strong> $langgrade -> " . "<span class='TextBold fs-6 Success-200-cl'>" . $g->grade . "</span><br>";
+                        }
+                        $str_arr = (count($arr) > 0) ? implode('', $arr) : '-';
+                        $grades_info[$u->user_id] = [
+                            'grade_received' => $str_arr,
+                            'grade_total' => $f_g_grade
+                        ];
+                    }
+                }
+            }
+        }
+        $data['grades_info'] = $grades_info;
+    }
 
     view('modules.work.assignment_submissions', $data);
 }
@@ -1105,7 +1136,7 @@ function display_submission_details($id) {
     $notice = $langSubmitted;
     $grade = $grade_comments = '';
     if (!empty($sub->grade_comments)) {
-        $grade_comments = $sub->grade_comments;
+        $grade_comments = q($sub->grade_comments);
     }
     if (!empty($sub->grade)) {
         $notice = $langSubmittedAndGraded;
@@ -3260,7 +3291,8 @@ function submit_grade_reviews($args) {
  * @brief submit grade and comment for student submission
  * @param type $args
  */
-function submit_grade_comments($args) {
+function submit_grade_comments($args): void
+{
 
     global $langGrades, $course_id, $langTheField, $course_code,
            $langFormErrors, $workPath, $langGradebookGrade;
@@ -3321,7 +3353,9 @@ function submit_grade_comments($args) {
         } else {
             $grade = $args['grade'];
         }
-        $comment = $args['comments'];
+
+        $comment = (isset($args['comments']))? $args['comments'] : '';
+
         if (isset($_FILES['comments_file']) and is_uploaded_file($_FILES['comments_file']['tmp_name'])) { // upload comments file
             $comments_filename = $_FILES['comments_file']['name'];
             validateUploadedFile($comments_filename); // check file type

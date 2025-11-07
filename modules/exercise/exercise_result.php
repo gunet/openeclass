@@ -29,6 +29,8 @@ require_once 'modules/exercise/exercise.lib.php';
 require_once 'modules/gradebook/functions.php';
 require_once 'game.php';
 require_once 'analytics.php';
+require_once 'include/lib/ai/services/AIService.php';
+require_once 'include/lib/ai/services/AIExerciseEvaluationService.php';
 
 $unit = $unit ?? null;
 
@@ -59,7 +61,7 @@ if (isset($_GET['eurId'])) {
     $exercise_user_record = Database::get()->querySingle("SELECT *, DATE_FORMAT(record_start_date, '%Y-%m-%d %H:%i') AS record_start_date,
                                                                       TIME_TO_SEC(TIMEDIFF(record_end_date, record_start_date)) AS time_duration
                                                                     FROM exercise_user_record WHERE eurid = ?d", $eurid);
-    $exercise_question_ids = Database::get()->queryArray("SELECT DISTINCT question_id, q_position FROM exercise_answer_record WHERE eurid = ?d ORDER BY q_position", $eurid);
+    $exercise_question_ids = Database::get()->queryArray("SELECT question_id, q_position, MAX(answer_record_id) as answer_record_id FROM exercise_answer_record WHERE eurid = ?d GROUP BY question_id, q_position ORDER BY q_position", $eurid);
     if (!$exercise_user_record) {
         // No record matches with this exercise user record id
         Session::flash('message',$langExerciseNotFound);
@@ -175,6 +177,7 @@ if ($is_editor && ($exercise_user_record->attempt_status == ATTEMPT_PENDING || $
                         if (success) {
                             $('a#submitButton').removeClass('submitAdminBtn').addClass('successAdminBtn pe-none');
                             $('#text_submit').text('".js_escape($langGradebookLimit)."');
+                            $('#cancel_submit').text('".js_escape($langBack)."');
                         }
                     });
                     $('a#ungraded').click(function(e){
@@ -190,6 +193,108 @@ if ($is_editor && ($exercise_user_record->attempt_status == ATTEMPT_PENDING || $
                         $('table.graded').show('slow');
                     });
                 });
+                
+                // AI Evaluation functionality
+                function performAIEvaluation(answerRecordId) {
+                    var statusDiv = $('#ai-eval-status-' + answerRecordId);
+                    var resultDiv = $('#ai-eval-result-' + answerRecordId);
+                    var container = $('#ai-eval-container-' + answerRecordId);
+                    
+                    // Show loading state
+                    statusDiv.html('<div class=\"d-flex align-items-center\"><div class=\"spinner-border spinner-border-sm me-2\" role=\"status\"></div>$langEvaluatingResponseWithAI</div>');
+                    
+                    // Make AJAX request
+                    $.ajax({
+                        url: 'ai_evaluate.php?course=' + encodeURIComponent('$course_code'),
+                        method: 'POST',
+                        data: {
+                            answer_record_id: answerRecordId
+                        },
+                        dataType: 'json',
+                        timeout: 60000, // 60 second timeout
+                        success: function(response) {
+                            if (response.success && response.status === 'completed') {
+                                var eval = response.evaluation;
+                                var confidencePercent = Math.round(eval.confidence * 100);
+                                var confidenceClass = eval.confidence >= 0.8 ? 'text-success' : 
+                                                    (eval.confidence >= 0.5 ? 'text-warning' : 'text-danger');
+                                var confidenceText = eval.confidence >= 0.8 ? '$langHighConfidence' : 
+                                                    (eval.confidence >= 0.5 ? '$langMediumConfidence' : '$langLowConfidence');
+                                
+                                // Hide status, show results
+                                statusDiv.hide();
+                                
+                                var resultHtml = '<div class=\"row mb-2\">' +
+                                    '<div class=\"col-md-6\">' +
+                                    '<strong>$langAISuggestion: ' + eval.suggested_score + '/' + eval.max_score + '</strong>' +
+                                    '</div>' +
+                                    '<div class=\"col-md-6 text-end\">' +
+                                    '<span class=\"' + confidenceClass + '\">$langConfidence: ' + confidencePercent + '% (' + confidenceText + ')</span>' +
+                                    '</div>' +
+                                    '</div>' +
+                                    '<div class=\"mb-2\">' +
+                                    '<strong>$langReasoning:</strong><br>' +
+                                    eval.reasoning.replace(/\\n/g, '<br>') +
+                                    '</div>';
+                                
+                                resultDiv.html(resultHtml).show();
+                            } else {
+                                showAIEvaluationError(answerRecordId, response.message || 'AI evaluation failed');
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            var errorMsg = 'Unable to connect to AI service';
+                            if (status === 'timeout') {
+                                errorMsg = 'AI evaluation timed out';
+                            } else if (xhr.responseJSON && xhr.responseJSON.message) {
+                                errorMsg = xhr.responseJSON.message;
+                            }
+                            showAIEvaluationError(answerRecordId, errorMsg);
+                        }
+                    });
+                }
+                
+                function showAIEvaluationError(answerRecordId, errorMessage) {
+                    var statusDiv = $('#ai-eval-status-' + answerRecordId);
+                    var container = $('#ai-eval-container-' + answerRecordId);
+                    
+                    // Update container styling to show error
+                    container.removeClass('border-info').addClass('border-danger');
+                    container.find('h6').removeClass('text-info').addClass('text-danger');
+                    
+                    var errorHtml = '<div class=\"text-danger mb-2\">' +
+                        '<i class=\"fa fa-exclamation-triangle\"></i> ' + errorMessage +
+                        '</div>' +
+                        '<button type=\"button\" class=\"btn btn-sm btn-outline-primary\" onclick=\"retryAIEvaluation(' + answerRecordId + ')\">' +
+                        '<i class=\"fa fa-refresh\"></i> Retry AI Evaluation' +
+                        '</button>';
+                    
+                    statusDiv.html(errorHtml);
+                }
+                
+                window.retryAIEvaluation = function(answerRecordId) {
+                    var container = $('#ai-eval-container-' + answerRecordId);
+                    // Reset styling
+                    container.removeClass('border-danger').addClass('border-info');
+                    container.find('h6').removeClass('text-danger').addClass('text-info');
+                    
+                    // Retry the evaluation
+                    performAIEvaluation(answerRecordId);
+                };
+                
+                // Auto-trigger AI evaluations on page load for pending evaluations
+                $(document).ready(function() {
+                    $('.ai-eval-pending').each(function() {
+                        var answerRecordId = $(this).data('answer-id');
+                        if (answerRecordId) {
+                            // Add small delay to avoid overwhelming the server with multiple requests
+                            setTimeout(function() {
+                                performAIEvaluation(answerRecordId);
+                            }, Math.random() * 2000 + 500); // Random delay between 500ms-2.5s
+                        }
+                    });
+                });
+                
                 </script>";
 }
 
@@ -451,21 +556,14 @@ if (count($exercise_question_ids) > 0) {
         if ($answerType == MULTIPLE_ANSWER and $questionScore < 0) {
             $questionScore = 0;
         }
-        if (!is_null($question_weight)) {
-            $rounded_weight = round($question_weight, 2);
-        } else {
-            $rounded_weight = 0;
-        }
-        
+
+        $rounded_weight = round($question_weight ?? 0, 2);
 
         if ($rounded_weight < 0 and $answerType == MULTIPLE_ANSWER) {
             $rounded_weight = 0;
         }
-        if (!is_null($questionScore)) {
-            $rounded_score = round($questionScore, 2);
-        } else {
-            $rounded_score = 0;
-        }
+        $rounded_score = round($questionScore ?? 0, 2);
+
         if ($showScore and $rounded_weight != $rounded_score) {
             $tool_content .= "<tr class='warning'>
                                 <th colspan='2' class='text-end'>
@@ -560,7 +658,10 @@ if ($checking) {
 }
 
 if (!isset($_GET['pdf']) and $is_editor) {
-    $tool_content .= "<div class='col-12 d-flex justify-content-start align-items-center mt-5'><a class='btn submitAdminBtn submitAdminBtnDefault' href='index.php' id='submitButton'><span id='text_submit' class='TextBold'>$langSubmit</span></a></div>";
+    $tool_content .= "<div class='col-12 d-flex justify-content-start align-items-center mt-4'>
+        <a class='btn submitAdminBtn submitAdminBtnDefault' href='index.php' id='submitButton'><span id='text_submit' class='TextBold'>$langSubmit</span></a>
+        <a class='btn cancelAdminBtn m-2' href='results.php?course=$course_code&exerciseId=" . getIndirectReference($exercise_user_record->eid) . "' id='cancelButton'><span id='cancel_submit' class='TextBold'>$langCancel</span></a>
+    </div>";
 }
 
 if (isset($_GET['pdf'])) {
@@ -590,12 +691,11 @@ if (isset($_GET['pdf'])) {
             }
           </style>
         </head>
-        <body>" . get_platform_logo() .
-        "<h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
+        <body>
+        <h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
         <h2> " . q($langExercicesResult) . "</h2>";
 
     $pdf_content .= $tool_content;
-    $pdf_content .= get_platform_logo('','footer');
     $pdf_content .= "</body></html>";
 
     $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
@@ -604,6 +704,8 @@ if (isset($_GET['pdf'])) {
     $fontData = $defaultFontConfig['fontdata'];
 
     $mpdf = new Mpdf\Mpdf([
+        'margin_top' => 53,     // approx 200px
+        'margin_bottom' => 53,  // approx 200px
         'tempDir' => _MPDF_TEMP_PATH,
         'fontDir' => array_merge($fontDirs, [ $webDir . '/template/modern/fonts' ]),
         'fontdata' => $fontData + [
@@ -620,7 +722,19 @@ if (isset($_GET['pdf'])) {
             ]
     ]);
 
-    $mpdf->setFooter('{DATE j-n-Y} || {PAGENO} / {nb}');
+
+    $mpdf->SetHTMLHeader(get_platform_logo());
+    $footerHtml = '
+    <div>
+        <table width="100%" style="border: none;">
+            <tr>
+                <td style="text-align: left;">{DATE j-n-Y}</td>
+                <td style="text-align: right;">{PAGENO} / {nb}</td>
+            </tr>
+        </table>
+    </div>
+    ' . get_platform_logo('','footer') . '';
+    $mpdf->SetHTMLFooter($footerHtml);
     $mpdf->SetCreator(course_id_to_prof($course_id));
     $mpdf->SetAuthor(course_id_to_prof($course_id));
     $mpdf->WriteHTML($pdf_content);
@@ -712,7 +826,7 @@ function checkMarkerImage($marker_id, $marker_answer, $questionId) {
     $dataString = Database::get()->querySingle("SELECT options FROM exercise_question WHERE id = ?d", $questionId)->options;
     if ($dataString) {
         $jsonObjects = explode('|', $dataString);
-            
+
             foreach ($jsonObjects as $jsonStr) {
                 $jsonStr = trim($jsonStr);
                 if (empty($jsonStr)) continue;

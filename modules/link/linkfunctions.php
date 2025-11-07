@@ -129,12 +129,10 @@ function submit_category() {
 
 /**
  * @brief delete link
- * @global type $course_id
- * @global type $langLinkDeleted
  * @param type $id
  */
 function delete_link($id) {
-    global $course_id, $langLinkDeleted;
+    global $course_id;
 
     $tuple = Database::get()->querySingle("SELECT url, title, category FROM link WHERE course_id = ?d AND id = ?d", $course_id, $id);
     $url = $tuple->url;
@@ -158,13 +156,10 @@ function delete_link($id) {
 
 /**
  * @brief delete category
- * @global type $course_id
- * @global type $langCategoryDeleted
- * @global type $catlinkstatus
  * @param type $id
  */
 function delete_category($id) {
-    global $course_id, $langCategoryDeleted, $catlinkstatus;
+    global $course_id;
 
     Database::get()->query("DELETE FROM `link` WHERE course_id = ?d AND category = ?d", $course_id, $id);
     $category = Database::get()->querySingle("SELECT name FROM link_category WHERE course_id = ?d AND id = ?d", $course_id, $id)->name;

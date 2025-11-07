@@ -759,33 +759,35 @@ function getDataMarkersFromJson($questionId) {
         foreach ($dataJsonMarkers as $dataJsonValue) {
             $markersData = json_decode($dataJsonValue, true);
             // Loop through each item in the original array
-            foreach ($markersData as $index => $value) {
-                if (count($markersData) == 10) { // circle or rectangle
-                    $arrDataMarkers[$markersData['marker_id']] = [
-                        'marker_answer' => $markersData['marker_answer'],
-                        'marker_shape' => $markersData['shape_type'],
-                        'marker_coordinates' => $markersData['x'] . ',' . $markersData['y'],
-                        'marker_offsets' => $markersData['endX'] . ',' . $markersData['endY'],
-                        'marker_grade' => $markersData['marker_grade'],
-                        'marker_radius' => $markersData['marker_radius'],
-                        'marker_answer_with_image' => $markersData['marker_answer_with_image']
-                    ];
-                } elseif (count($markersData) == 6) { // polygon
-                    $arrDataMarkers[$markersData['marker_id']] = [
-                        'marker_answer' => $markersData['marker_answer'],
-                        'marker_shape' => $markersData['shape_type'],
-                        'marker_coordinates' => $markersData['points'],
-                        'marker_grade' => $markersData['marker_grade'],
-                        'marker_answer_with_image' => $markersData['marker_answer_with_image']
-                    ];
-                } elseif (count($markersData) == 5) { // without shape . So the defined answer is not correct
-                    $arrDataMarkers[$markersData['marker_id']] = [
-                        'marker_answer' => $markersData['marker_answer'],
-                        'marker_shape' => null,
-                        'marker_coordinates' => null,
-                        'marker_grade' => 0,
-                        'marker_answer_with_image' => $markersData['marker_answer_with_image']
-                    ];
+            if ($markersData) {
+                foreach ($markersData as $index => $value) {
+                    if (count($markersData) == 10) { // circle or rectangle
+                        $arrDataMarkers[$markersData['marker_id']] = [
+                            'marker_answer' => $markersData['marker_answer'],
+                            'marker_shape' => $markersData['shape_type'],
+                            'marker_coordinates' => $markersData['x'] . ',' . $markersData['y'],
+                            'marker_offsets' => $markersData['endX'] . ',' . $markersData['endY'],
+                            'marker_grade' => $markersData['marker_grade'],
+                            'marker_radius' => $markersData['marker_radius'],
+                            'marker_answer_with_image' => $markersData['marker_answer_with_image']
+                        ];
+                    } elseif (count($markersData) == 6) { // polygon
+                        $arrDataMarkers[$markersData['marker_id']] = [
+                            'marker_answer' => $markersData['marker_answer'],
+                            'marker_shape' => $markersData['shape_type'],
+                            'marker_coordinates' => $markersData['points'],
+                            'marker_grade' => $markersData['marker_grade'],
+                            'marker_answer_with_image' => $markersData['marker_answer_with_image']
+                        ];
+                    } elseif (count($markersData) == 5) { // without shape . So the defined answer is not correct
+                        $arrDataMarkers[$markersData['marker_id']] = [
+                            'marker_answer' => $markersData['marker_answer'],
+                            'marker_shape' => null,
+                            'marker_coordinates' => null,
+                            'marker_grade' => 0,
+                            'marker_answer_with_image' => $markersData['marker_answer_with_image']
+                        ];
+                    }
                 }
             }
         }
@@ -802,28 +804,24 @@ function getDataMarkersFromJson($questionId) {
  */
 function extractValuesInCurlyBrackets($text) {
     // Find all occurrences of {...}
-    preg_match_all('/\{([^{}]+)\}/', $text, $matches);
+    preg_match_all('/\{([^{}]+)\}/u', $text, $matches);
     $variables = [];
 
     foreach ($matches[1] as $group) {
         // For each group, split to get individual variables
-        // Variables are separated by operators or spaces, so split by non-word characters
-        preg_match_all('/\b\w+\b/', $group, $submatches);
+        // Match all Unicode letters and numbers
+        preg_match_all('/[\p{L}\p{N}_]+/u', $group, $submatches);
         foreach ($submatches[0] as $var) {
             $variables[] = $var;
         }
     }
 
-    // If the value is numeric , remove it.
-    if (count($variables) > 0) {
-        for ($i = 0; $i < count($variables); $i++) {
-            if (is_numeric($variables[$i])) {
-                unset($variables[$i]);
-            }
-        }
-    }
+    // Remove numeric-only variables
+    $variables = array_filter($variables, function($var) {
+        return !is_numeric($var);
+    });
 
-    // Remove duplicates if desired
+    // Remove duplicates
     return array_unique($variables);
 }
 

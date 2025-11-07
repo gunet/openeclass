@@ -95,9 +95,9 @@
                             </div>
                             <div class='card-body'>
                                 @if(count($q) > 0)
-                                    <table class='table-default mb-2 bg-light'>
+                                    <table class='table-default mb-2'>
                                         @foreach($q as $externalLinks)
-                                            <tr class='bg-body'>
+                                            <tr>
                                                 <td class='text-start'>
                                                     <div class='row'>
                                                         <div class='col-10'>

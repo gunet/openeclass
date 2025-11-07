@@ -154,7 +154,7 @@ if (!$conference_activity) {
         <div class='col-12'>
             <div class='col-md-6 col-12 d-flex justify-content-start align-items-center gap-2'>
                 <div>
-                    <input aria-label='$typeyourmessage' class='form-control mt-0' type='text' placeholder='$typeyourmessage...' name='msg' size='80'>
+                    <input aria-label='$langTypeOutMessage' class='form-control mt-0' type='text' placeholder='$langTypeOutMessage' name='msg' size='80'>
                     <input type='hidden' name='chatLine'>
                 </div>
                 <div>

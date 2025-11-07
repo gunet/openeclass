@@ -42,13 +42,13 @@ if (isset($_REQUEST['u']) and isset($_REQUEST['h'])) {
     $data['change_ok'] = false;
     $data['userUID'] = intval($_REQUEST['u']);
     $valid = token_validate('password' . $data['userUID'], $_REQUEST['h'], TOKEN_VALID_TIME);
-    $res = Database::get()->querySingle("SELECT id FROM user WHERE id = ?d AND password NOT IN ('" . implode("', '", $auth_ids) . "')", $data['userUID']);
+    $res = Database::get()->querySingle("SELECT id, last_passreminder FROM user WHERE id = ?d AND password NOT IN ('" . implode("', '", $auth_ids) . "')", $data['userUID']);
     $error_messages = array();
-    if ($valid and $res) {
+    if ($valid and $res and !is_null($res->last_passreminder)) {
         $data['is_valid'] = true;
         if (isset($_POST['newpass']) and isset($_POST['newpass1']) and
                 count($error_messages = acceptable_password($_POST['newpass'], $_POST['newpass1'])) == 0) {
-                    $q1 = Database::get()->query("UPDATE user SET password = ?s WHERE id = ?d", password_hash($_POST['newpass'], PASSWORD_DEFAULT), $data['userUID']);
+                    $q1 = Database::get()->query("UPDATE user SET password = ?s, last_passreminder = null WHERE id = ?d", password_hash($_POST['newpass'], PASSWORD_DEFAULT), $data['userUID']);
             if ($q1->affectedRows > 0) {
                 Session::flash('message', $langAccountResetSuccess1);
                 Session::flash('alert-class', 'alert-success');

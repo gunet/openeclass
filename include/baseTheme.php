@@ -28,6 +28,7 @@
  *
  */
 use Jenssegers\Blade\Blade;
+
 $navigation = array();
 $action_bar = '';
 $sectionName = '';
@@ -67,7 +68,7 @@ function view($view_file, $view_data = array()) {
             $collaboration_platform, $collaboration_value, $is_enabled_collaboration, $is_collaborative_course,
             $is_consultant, $require_consultant, $is_coordinator, $is_simple_user,
             $container, $logo_img, $logo_img_small, $eclass_banner_value, $PositionFormLogin,  $image_footer,
-            $favicon_img, $theme_css, $theme_id, $langClose, $VideoUploadedInJumbotron;
+            $favicon_img, $theme_css, $theme_id, $langClose, $VideoUploadedInJumbotron, $enable_box_logo;
 
     if (!isset($course_id) or !$course_id or $course_id < 1) {
         $course_id = $course_code = null;
@@ -324,7 +325,7 @@ function view($view_file, $view_data = array()) {
             'courseLicense', 'loginIMG', 'image_footer', 'authCase', 'authNameEnabled', 'pinned_announce_id',
             'pinned_announce_title', 'pinned_announce_body','favicon_img','collaboration_platform', 'collaboration_value',
             'is_enabled_collaboration', 'is_collaborative_course', 'is_consultant', 'require_consultant', 'is_coordinator',
-            'is_simple_user', 'theme_css', 'theme_id', 'VideoUploadedInJumbotron');
+            'is_simple_user', 'theme_css', 'theme_id', 'VideoUploadedInJumbotron', 'enable_box_logo');
     $data = array_merge($global_data, $view_data);
 
     echo $blade->make($view_file, $data)->render();

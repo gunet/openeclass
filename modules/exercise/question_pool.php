@@ -23,6 +23,9 @@ include 'exercise.class.php';
 include 'question.class.php';
 include 'answer.class.php';
 
+// Check if AI functionality is available
+require_once '../../include/lib/ai/services/AIQuestionBankService.php';
+
 $require_editor = TRUE;
 $require_current_course = TRUE;
 $require_help = true;
@@ -31,6 +34,9 @@ $helpSubTopic = 'question_bank';
 
 include '../../include/baseTheme.php';
 require_once 'imsqtilib.php';
+
+// Initialize AI service
+$aiService = new AIQuestionBankService($course_id, $uid);
 
 load_js('datatables');
 
@@ -46,11 +52,15 @@ $head_content .= "
                 'bAutoWidth': true,
                 'searchDelay': 1000,
                 'order' : [[1, 'desc']],
+                'lengthMenu': [10, 20, 30, -1],
                 'oLanguage': {
+                   'lengthLabels': {
+                   	    '-1': '$langAllOfThem'
+                   },
                    'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
                    'sZeroRecords':  '" . $langNoResult . "',
                    'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
-                   'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
+                   'sInfoEmpty':    '',
                    'sInfoFiltered': '',
                    'sInfoPostFix':  '',
                    'sSearch':       '',
@@ -64,11 +74,11 @@ $head_content .= "
                }
             });
 
-            $('.dataTables_filter input').attr({
+            $('.dt-search input').attr({
                 class : 'form-control input-sm mb-3 me-3',
                 placeholder : '$langSearch...'
             });
-            $('.dataTables_filter label').attr('aria-label', '$langSearch'); 
+            $('.dt-search label').attr('aria-label', '$langSearch'); 
 
             $(document).on('click', '.warnLink', function(e){
                 var modifyAllLink = $(this).attr('href');
@@ -167,7 +177,7 @@ if (isset($_GET['fromExercise'])) {
     $objExercise = new Exercise();
     $fromExercise = intval($_GET['fromExercise']);
     $objExercise->read($fromExercise);
-    $navigation[] = array("url" => "admin.php?course=$course_code&amp;exerciseId=$fromExercise", "name" => $langExerciseManagement);
+    $navigation[] = array("url" => "admin.php?course=$course_code&exerciseId=$fromExercise", "name" => $langExerciseManagement);
 } else {
     $fromExercise = '';
 }
@@ -277,6 +287,12 @@ if ($fromExercise) {
           'icon' => 'fa-upload',
           'button-class' => 'btn-success'
         ],
+        [ 'title' => $langAIGenerateQuestions,
+          'url' => "ai_question_generation.php?course=$course_code",
+          'icon' => 'fa-magic',
+          'button-class' => 'btn-info',
+          'show' => $aiService->isEnabledForCourse(AI_MODULE_QUESTION_POOL)
+        ]
     ];
 }
 

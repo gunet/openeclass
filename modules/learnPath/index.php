@@ -263,7 +263,7 @@ if ($is_editor) {
                                     <input name='newComment' placeholder='$langDescription' type='text' class='form-control' id='newComment'>
                                     </div>
                                 </div>
-                                                   
+
                                 <div class='form-group mt-5'>
                                     <div class='col-12 d-flex justify-content-end align-items-center'>
                                     <input type='hidden' name='cmd' value='create'>
@@ -504,14 +504,14 @@ foreach ($result as $list) { // while ... learning path list
         if(!$is_editor) { // student
             $play_button = "<span class='ps-2'><a href='learningPath.php?course=".$course_code."&amp;path_id=".$list->learnPath_id."'><span class='fa fa-line-chart' data-bs-toggle='tooltip' data-bs-placement='top' title='$langLearningPathData'></span></a></span>";
             if (count($resultmodules) > 0) { // If there are modules
-                $play_url = "<a href='viewer.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "&amp;module_id=" . $resultmodules[0]->module_id . "'>" . q($list->name) . "</a>";
+                $play_url = "<a href='viewer.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "&amp;module_id=" . $resultmodules[0]->module_id . "'>" . htmlspecialchars($list->name) . "</a>";
             } else { // If there are no modules
                 $play_url = htmlspecialchars($list->name);
             }
         } else { //  admin
             $play_button = "";
             if (count($resultmodules) > 0) { // If there are modules
-                $play_url = "<a href='viewer.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "&amp;module_id=" . $resultmodules[0]->module_id . "'>" . q($list->name) . "</a>";
+                $play_url = "<a href='viewer.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "&amp;module_id=" . $resultmodules[0]->module_id . "'>" . htmlspecialchars($list->name) . "</a>";
             } else {
                 $play_url = htmlspecialchars($list->name);
             }

@@ -105,6 +105,7 @@ Class BlogPost {
      * @return boolean true on success, false on failure
      */
     public function create($title, $content, $authorId, $course_id, $commenting = NULL) {
+        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         if (!is_null($commenting)) {
             $sql = 'INSERT INTO `blog_post` (`title`, `content`, `user_id`, `course_id`, `time`, `views`, `commenting`) '
                     .'VALUES(?s,?s,?d,?d,NOW(),0,?d)';
