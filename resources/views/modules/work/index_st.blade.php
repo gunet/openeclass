@@ -87,6 +87,34 @@
                                                             </small>
                                                         </div>
                                                     @endif
+
+                                                    @if ($row->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE && $row->start_date_review && $row->due_date_review)
+                                                        <p class="TextBold mt-2 mb-0 text-decoration-underline small-text">{{ trans('langGradeReviews')}}</p>
+                                                        <p class="TextBold mb-0 small-text">{{ trans('langStartDate') }}:&nbsp;<span>{{ format_locale_date(strtotime($row->start_date_review), 'short') }}</span></p>
+                                                        <p class="TextBold mb-0 small-text">{{ trans('langEndDate') }}:&nbsp;<span>{{ format_locale_date(strtotime($row->due_date_review), 'short') }}</span></p>
+                                                        @if ( strtotime(date("d-m-Y H:i:s")) < strtotime($row->start_date_review) )
+                                                            <p class="text-warning TextBold small-text mt-2" style="line-height:14px;">{{ trans('langGradeReviewHasNotStarted') }}</p>
+                                                        @elseif ( strtotime(date("d-m-Y H:i:s")) > strtotime($row->start_date_review) && strtotime(date("d-m-Y H:i:s")) < strtotime($row->due_date_review))
+                                                            <p class="text-success TextBold small-text mt-2" style="line-height:14px;">{{ trans('langGradeReviewInProgress') }}</p>
+                                                            <div class="mt-2">
+                                                                <div class='spinner-grow text-success spinner-grow-sm' role='status'>
+                                                                    <span class='visually-hidden'></span>
+                                                                </div>
+                                                                <div class='spinner-grow text-danger spinner-grow-sm' role='status'>
+                                                                    <span class='visually-hidden'></span>
+                                                                </div>
+                                                                <div class='spinner-grow text-warning spinner-grow-sm' role='status'>
+                                                                    <span class='visually-hidden'></span>
+                                                                </div>
+                                                                <div class='spinner-grow text-info spinner-grow-sm' role='status'>
+                                                                    <span class='visually-hidden'></span>
+                                                                </div>
+                                                            </div>
+                                                        @elseif (strtotime(date("d-m-Y H:i:s")) > strtotime($row->due_date_review))
+                                                            <p class="text-danger TextBold small-text mt-2" style="line-height:14px;">{{ trans('langGradeReviewHasExpired') }}</p>
+                                                        @endif
+                                                    @endif
+
                                                 </td>
                                                 <td data-sort='{{ $loop->iteration }}'>
                                                     @if (isset($row->deadline))
@@ -181,19 +209,20 @@
                 'stateSave': true,
                 'columns': [ {{ $columns }} ],
                 'fnDrawCallback': function (settings) { typeof MathJax !== 'undefined' && MathJax.typeset(); },
-                'aLengthMenu': [
-                    [10, 20, 30 , -1],
-                    [10, 20, 30, '{{ trans('langAllOfThem') }}']
-                ],
+                'lengthMenu': [10, 20, 30 , -1],
                 'sPaginationType': 'full_numbers',
                 'bAutoWidth': true,
                 'searchDelay': 1000,
                 'order' : [ [1, 'asc'] ],
                 'oLanguage': {
+                    'lengthLabels': {
+                        '-1': '{{ trans('langAllOfThem') }}'
+                    },
                     'sLengthMenu': '{{ trans('langDisplay') }} _MENU_ {{ trans('langResults2') }}',
+                    'sEmptyTable': '{{ trans('langNoResult') }}',
                     'sZeroRecords': '{{ trans('langNoResult') }}',
                     'sInfo': '{{ trans('langDisplayed') }} _START_ {{ trans('langTill') }} _END_ {{ trans('langFrom2') }} _TOTAL_ {{ trans('langTotalResults') }}',
-                    'sInfoEmpty': '{{ trans('langDisplayed') }} 0 {{ trans('langTill') }} 0 {{ trans('langFrom2') }} 0 {{ trans('langResults2') }}',
+                    'sInfoEmpty': '',
                     'sInfoFiltered': '',
                     'sInfoPostFix': '',
                     'sSearch': '',
@@ -206,11 +235,11 @@
                     }
                 }
             });
-            $('.dataTables_filter input').attr({
+            $('.dt-search input').attr({
                 'class': 'form-control input-sm ms-0 mb-3',
                 'placeholder': '{{ trans('langSearch') }}...'
             });
-            $('.dataTables_filter label').attr('aria-label', '{{ trans('langSearch') }}');
+            $('.dt-search label').attr('aria-label', '{{ trans('langSearch') }}');
 
             $(document).on('click', '.password_protected', unit_password_bootbox);
         });

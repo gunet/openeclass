@@ -10,7 +10,7 @@
             @include('layouts.partials.left_menu')
 
             <div class="col_maincontent_active">
-                    
+
                 <div class="row">
 
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
@@ -27,11 +27,11 @@
 
 
                     @include('layouts.partials.legend_view')
-                    
+
 
                     {!! $action_bar !!}
 
-                    @include('layouts.partials.show_alert') 
+                    @include('layouts.partials.show_alert')
 
                     <div class='col-sm-12'>
                         <div class='table-responsive'>
@@ -59,14 +59,14 @@
                                 </tfoot>
                             </table>
                         </div>
-                        
+
                     </div>
-                        
+
                 </div>
             </div>
 
         </div>
-    
+
 </div>
 </div>
 
@@ -111,7 +111,7 @@
             ajax: {
                 url: '{{ $listUrl }}',
                 data: function (data) {
-                    data.show_closed = $('#closedRequests').prop('checked'); 
+                    data.show_closed = $('#closedRequests').prop('checked');
                 }
             },
             order: [[0, 'desc']],
@@ -154,11 +154,11 @@
                 }
             }
         });
-        $('.dataTables_filter input').attr({
+        $('.dt-search input').attr({
             style: 'width: 200px',
             class:'form-control input-sm'
         });
-        $('.dataTables_filter label').attr('aria-label', '{{ trans('langSearch') }}'); 
+        $('.dt-search label').attr('aria-label', '{{ trans('langSearch') }}');
         $(document).on('change', '#closedRequests', function (e) {
             if($(this).is(":checked")){
                  $('#closedRequests').attr( 'checked', true );
@@ -170,7 +170,7 @@
         $(document).on( 'click','.delete_btn', function (e) {
             e.preventDefault();
             var row_id = this.id;
-            bootbox.confirm({ 
+            bootbox.confirm({
                 closeButton: false,
                 title: "<div class='icon-modal-default'><i class='fa-regular fa-trash-can fa-xl Accent-200-cl'></i></div><div class='modal-title-default text-center mb-0'>{{ js_escape(trans('langConfirmDelete')) }}</div>",
                 message: "<p class='text-center'>{{ js_escape(trans('langConfirmDelete')) }}</p>",
@@ -206,7 +206,7 @@
                         });
                     }
                 }
-            });         
+            });
 
 
 

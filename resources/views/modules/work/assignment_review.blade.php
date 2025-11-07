@@ -3,7 +3,7 @@
 </style>
 
 <div class='margin-bottom-thin mt-3'>
-    <strong>{{ trans('langPeerSubmissions') }}:</strong>&nbsp; {{ $reviews_per_assignment }}
+    <strong>{{ trans('langPeerSubmissions') }}:</strong>&nbsp; <span class="badge Success-200-bg">{{ $reviews_per_assignment }}</span>
 </div>
 <div class='table-responsive'>
     <table class='table-default'>

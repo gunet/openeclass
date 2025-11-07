@@ -136,10 +136,11 @@ class EditorStorage implements H5peditorStorage {
             $records = Database::get()->queryArray($sql);
 
             foreach ($records as $library) {
-                $library->metadataSettings = json_decode($library->metadata_settings);
-                unset($library->metadata_settings);
-
-                $librariesout[] = $library;
+                if (!is_null($library->metadata_settings)) {
+                    $library->metadataSettings = json_decode($library->metadata_settings);
+                    unset($library->metadata_settings);
+                    $librariesout[] = $library;
+                }
             }
         }
 

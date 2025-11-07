@@ -27,7 +27,6 @@ $toolName = $langMyRequests;
 $backUrl = $urlAppend . 'main/portfolio.php';
 
 load_js('datatables');
-load_js('datatables_bootstrap');
 $data['action_bar'] = action_bar([
     [ 'title' => $langBack,
       'url' => $backUrl,

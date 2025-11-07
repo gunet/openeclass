@@ -562,7 +562,7 @@ function show_sessionResource($info) {
  */
 function show_session_poll($title, $comments, $resource_id, $poll_id, $visibility) {
 
-    global $course_id, $course_code, $is_consultant, $urlServer, $uid, $langWasDeleted, 
+    global $course_id, $course_code, $is_consultant, $urlServer, $uid, $langWasDeleted,
            $langResourceBelongsToSessionPrereq, $m, $langWorkToUser, $langWorkAssignTo, $langWorkToGroup;
 
     $res_prereq_icon = '';
@@ -818,7 +818,7 @@ function show_session_reference_doc($title, $comments, $resource_id, $file_id) {
 function show_session_work($title, $comments, $resource_id, $work_id, $visibility) {
 
     global $urlServer, $is_consultant, $uid, $m, $langResourceBelongsToSessionPrereq,
-            $langWasDeleted, $course_id, $course_code, $langPassCode, $langWorkToUser, 
+            $langWasDeleted, $course_id, $course_code, $langPassCode, $langWorkToUser,
             $langWorkAssignTo, $langWorkToGroup;
 
     $title = q($title);
@@ -1561,17 +1561,6 @@ function upload_session_doc($sid){
 }
 
 /**
- * @return string
- */
-function localhostUrl() {
-    return sprintf(
-        "%s://%s",
-        isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http',
-        $_SERVER['SERVER_NAME']
-    );
-}
-
-/**
  * @brief check if we have created unit completion badge
  * @return boolean
  * @global type $course_id
@@ -2129,13 +2118,13 @@ function display_session_activities($element, $id, $session_id = 0) {
 function display_session_modification_activity($element, $element_id, $activity_id, $session_id = 0) {
 
     global $tool_content, $course_code, $langModify, $langOperator, $langUsedCertRes, $urlAppend, $langImgFormsDes;
-
+die('ok');
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
     if (resource_usage($element, $activity_id)) { // check if resource has been used by user
         Session::flash('message',$langUsedCertRes);
         Session::flash('alert-class', 'alert-warning');
         if ($session_id) {
-            redirect(localhostUrl().$_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&session=$session_id");
+            redirect_to_home_page($_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&session=$session_id");
         } else {
             redirect_to_home_page("modules/session/complete.php?course=$course_code&session=$session_id&manage=1");
         }
@@ -2620,7 +2609,7 @@ function session_completion_without_resources($element, $element_id, $session_id
                                                 completed_criteria = ?d,
                                                 total_criteria = ?d",$p->participants,$element_id,1,1,1);
                     }
-                    
+
                     Database::get()->query("INSERT INTO user_{$element}_criterion SET
                                                 user = ?d,
                                                 created = " . DBHelper::timeAfter() . ",
@@ -3892,7 +3881,7 @@ function check_session_completion_without_activities($session_id = 0){
     if ($session_id > 0) {
         $badge = Database::get()->querySingle("SELECT id,badge FROM badge_criterion
                                                 WHERE activity_type = ?s
-                                                AND badge IN (SELECT id FROM badge 
+                                                AND badge IN (SELECT id FROM badge
                                                                 WHERE course_id = ?d AND session_id = ?d)",'noactivity',$course_id,$session_id);
 
         if ($badge) {
@@ -3904,11 +3893,11 @@ function check_session_completion_without_activities($session_id = 0){
                     $existUser = Database::get()->querySingle("SELECT id FROM user_badge_criterion WHERE user = ?d AND badge_criterion = ?d", $r->user, $badge_criterion_id);
                     if (!$existUser) {
                         Database::get()->query("INSERT INTO user_badge_criterion SET user = ?d, `created` = " . DBHelper::timeAfter() . ", badge_criterion = ?d", $r->user, $badge_criterion_id);
-                        Database::get()->query("UPDATE user_badge SET completed = 1, completed_criteria = 1, total_criteria = 1 
+                        Database::get()->query("UPDATE user_badge SET completed = 1, completed_criteria = 1, total_criteria = 1
                                                     WHERE user = ?d AND badge = ?d",$r->user, $badge_id);
                     }
                 }
-            }                                   
+            }
         }
     }
 }

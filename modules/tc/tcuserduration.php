@@ -17,6 +17,23 @@
  *  * ========================================================================
  *
  */
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
+ *
+ */
 
 /**
  * @file tcuserduration.php
@@ -93,6 +110,7 @@ if (isset($_GET['per_user']) or isset($_GET['u'])) { // all-users participation 
     if (!$is_course_reviewer and isset($_GET['per_user'])) { // security check
         redirect_to_home_page();
     }
+
     if (isset($_GET['u']) and $_GET['u']) { // participation for a specific user
         if (!$is_course_reviewer and $_GET['u'] != $_SESSION['uid']) { // security check
             redirect_to_home_page();
@@ -200,7 +218,7 @@ if (isset($_GET['per_user']) or isset($_GET['u'])) { // all-users participation 
             }
 
             $tool_content .= "<tr>                            
-                        <td>$user->surname $user->givenname</td>
+                        <td>"  . q($user->surname) . " " .q($user->givenname) . "</td>
                         <td>$user->am</td>
                         <td>" . $grp_name . "</td>                            
                         <td>" . format_time_duration(0 + 60 * $result->totaltime, 24, false) . "</td>
@@ -305,13 +323,12 @@ if (isset($_GET['pdf']) and $is_course_reviewer) {
             td { text-align: left; }
           </style>
         </head>
-        <body>" . get_platform_logo() .
-        "<h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
+        <body>
+        <h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
          <h3>" . q($langStatsReport) . "</h3>
          <p></p>";
 
     $pdf_content .= $tool_content;
-    $pdf_content .= get_platform_logo('','footer');
     $pdf_content .= "</body></html>";
 
     $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
@@ -320,6 +337,8 @@ if (isset($_GET['pdf']) and $is_course_reviewer) {
     $fontData = $defaultFontConfig['fontdata'];
 
     $mpdf = new Mpdf\Mpdf([
+        'margin_top' => 53,     // approx 200px
+        'margin_bottom' => 53,  // approx 200px
         'tempDir' => _MPDF_TEMP_PATH,
         'fontDir' => array_merge($fontDirs, [ $webDir . '/template/modern/fonts' ]),
         'fontdata' => $fontData + [
@@ -336,7 +355,19 @@ if (isset($_GET['pdf']) and $is_course_reviewer) {
             ]
     ]);
 
-    $mpdf->setFooter('{DATE j-n-Y} || {PAGENO} / {nb}');
+   
+    $mpdf->SetHTMLHeader(get_platform_logo());
+    $footerHtml = '
+    <div>
+        <table width="100%" style="border: none;">
+            <tr>
+                <td style="text-align: left;">{DATE j-n-Y}</td>
+                <td style="text-align: right;">{PAGENO} / {nb}</td>
+            </tr>
+        </table>
+    </div>
+    ' . get_platform_logo('','footer') . '';
+    $mpdf->SetHTMLFooter($footerHtml);
     $mpdf->SetCreator(course_id_to_prof($course_id));
     $mpdf->SetAuthor(course_id_to_prof($course_id));
     $mpdf->WriteHTML($pdf_content);

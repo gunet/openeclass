@@ -6,9 +6,18 @@
             <div class='d-none d-lg-block w-100 header-large-screen'>
                 <div class='col-12 h-100 d-flex justify-content-between align-items-center gap-5'>
                     <nav class='d-flex justify-content-start align-items-center h-100'>
+
+                        @if($enable_box_logo)
+                        <div class='box-logo d-flex justify-content-center align-items-center px-3'>
+                            <a href="@if($_SESSION['provider'] !== 'lti_publish'){{ $urlAppend }}@endif" aria-label="{{ trans('langHomePage') }}">
+                                <img class="eclass-nav-icon m-auto d-block" src="{{ $logo_img }}" alt="{{ trans('langLogo') }}"/>
+                            </a>
+                        </div>
+                        @else
                         <a class='me-lg-4 me-xl-5' href="@if($_SESSION['provider'] !== 'lti_publish'){{ $urlAppend }}@endif" aria-label="{{ trans('langHomePage') }}">
                             <img class="eclass-nav-icon m-auto d-block" src="{{ $logo_img }}" alt="{{ trans('langLogo') }}"/>
                         </a>
+                        @endif
 
                         @if($_SESSION['provider'] !== 'lti_publish')
                         <ul class="container-items nav">
@@ -327,9 +336,19 @@
                             <i class="fa-solid fa-ellipsis-vertical fa-lg"></i>
                         </a>
 
+                        @if($enable_box_logo)
+                        <div class='box-logo d-flex justify-content-center align-items-center px-3'>
+                            <a href="@if($_SESSION['provider'] !== 'lti_publish'){{ $urlAppend }}@endif" aria-label="{{ trans('langHomePage') }}">
+                                <img class="eclass-nav-icon m-auto d-block" src="{{ $logo_img }}" alt="{{ trans('langLogo') }}"/>
+                            </a>
+                        </div>
+                        @else
                         <a class='d-flex justify-content-start align-items-center' type="button" href="{{ $urlServer }}" aria-label="{{ trans('langHomePage') }}">
                             <img class="eclass-nav-icon px-2 bg-transparent" src="{{ $logo_img_small }}" alt="{{ trans('langLogo') }}">
                         </a>
+                        @endif
+
+
                     </div>
 
                     @if (!isset($_SESSION['uid']))
@@ -477,9 +496,18 @@
                     <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="{{ trans('langClose') }}"></button>
                 </div>
                 <div class="offcanvas-body px-4">
+
+                    @if($enable_box_logo)
+                    <div class='box-logo d-flex justify-content-center align-items-center px-3'>
+                        <img class="eclass-nav-icon m-auto d-block" src="{{ $logo_img }}" alt="{{ trans('langLogo') }}"/>
+                    </div>
+                    @else
                     <div class='col-12 d-flex justify-content-center align-items-center' aria-label="{{ trans('langLogo') }}">
                         <img src="{{ $logo_img_small }}" alt="{{ trans('langLogo') }}">
                     </div>
+                    @endif
+
+
                     @if(get_config('enable_search'))
                         <div class='col-12 mt-5'>
                             @if(isset($course_code) and $course_code)

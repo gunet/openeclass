@@ -420,7 +420,7 @@ function exercise_init_countdown(params) {
                 });
             }, 50); // 50ms delay
         });
-          
+
         // Checking old question types with input texts , radio buttons and selections.
         // Do not calculate the input texts that have been initialized by calculated question.
         $('.qPanel :input').not('.input-text-calculated').change(function () {
@@ -849,7 +849,7 @@ function initialize_filemodal(lang) {
     e.preventDefault();
     var fileURL = $(this).attr('href');
     var downloadUrl = $(this).data('downloadUrl');
-    var fileTitle = $(this).text();
+    var fileTitle = q($(this).text());
     var buttons = {};
     if (!downloadUrl) {
       downloadUrl = fileURL + '&download=true';
@@ -997,4 +997,9 @@ function formReqChecker(formID,alertMSG) {
         }
     });
 
+}
+
+// Escape HTML special characters
+function q(str) {
+    return str.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
 }

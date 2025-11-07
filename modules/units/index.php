@@ -72,8 +72,7 @@ if ($q->flipped_flag =="2"){
     // Handle unit resource reordering
     if ($is_editor and isset($_SERVER['HTTP_X_REQUESTED_WITH']) and strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
         if (isset($_POST['toReorder'])) {
-            reorder_table('unit_resources', 'unit_id', $id, $_POST['toReorder'],
-                isset($_POST['prevReorder'])? $_POST['prevReorder']: null);
+            reorder_table('unit_resources', 'unit_id', $id, $_POST['toReorder'], $_POST['prevReorder'] ?? null);
             exit;
         }
     }
@@ -93,7 +92,9 @@ if (isset($_POST['edit_submit'])) {
     handle_unit_info_edit();
 }
 
-process_actions();
+if ($is_editor) {
+    process_actions();
+}
 
 // check if we are trying to access a protected resource directly
 $access = Database::get()->querySingle("SELECT public FROM course_units WHERE id = ?d", $id);

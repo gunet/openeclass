@@ -31,17 +31,16 @@ require_once 'include/lib/multimediahelper.class.php';
 
 doc_init();
 ModalBoxHelper::loadModalBox(true);
-$head_content .= <<<EOF
-<script type='text/javascript'>
-$(document).ready(function() {
-
-    $('tr').click(function(event) {
-        if (event.target.type !== 'checkbox') {
-            $(':checkbox', this).trigger('click');
-        }
-    });
-
-});
+$head_content .=
+<<<EOF
+    <script type='text/javascript'>
+        $(document).ready(function() {    
+            $('tr').click(function(event) {                
+                if (event.target.type !== 'checkbox') {
+                    $(':checkbox', this).trigger('click');
+                }
+            });
+        });
 </script>
 EOF;
 

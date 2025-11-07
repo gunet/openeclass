@@ -24,6 +24,7 @@ $helpTopic = 'course_administration';
 $helpSubTopic = 'course_certbadge';
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileUploadLib.inc.php';
+require_once 'modules/progress/process_functions.php';
 
 load_js('select2');
 
@@ -73,7 +74,11 @@ $action_bar = action_bar(array(
 
 $tool_content .= $action_bar;
 
+if (isset($_GET['preview'])) { // certificate preview
+    cert_output_to_pdf(intval($_GET['certificate_id']), $uid, $langTitle, $langMessage, get_config('site_name'), time(), intval($_GET['certificate_id']));
+}
 if (isset($_GET['del_badge'])) { // delete badge icon
+    if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();
     $sql_badge_icon = Database::get()->querySingle("SELECT id, filename FROM badge_icon WHERE id = ?d", $_GET['del_badge']);
     $badge_icon_id = $sql_badge_icon->id;
     $cnt = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM badge WHERE icon = ?d", $badge_icon_id)->cnt;
@@ -92,6 +97,7 @@ if (isset($_GET['del_badge'])) { // delete badge icon
 }
 
 if (isset($_GET['del_cert'])) { // delete certificate template
+    if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();
     $sql_cert_template = Database::get()->querySingle("SELECT id, filename FROM certificate_template WHERE id = ?d", $_GET['del_cert']);
     $cert_template_id = $sql_cert_template->id;
     $cnt = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM certificate WHERE template = ?d", $cert_template_id)->cnt;
@@ -113,6 +119,7 @@ if (isset($_GET['del_cert'])) { // delete certificate template
 }
 
 if (isset($_POST['submit_cert_template'])) { // insert certificate template
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     if (isset($_POST['cert_template_courses'])) {
         $cert_template_courses = $_POST['cert_template_courses'];
     } else {
@@ -222,9 +229,7 @@ if (isset($_POST['submit_cert_template'])) { // insert certificate template
     }
 
 } elseif (isset($_POST['submit_badge_icon'])) { // insert / update badge icon
-    if (!isset($_POST['token']) or !validate_csrf_token($_POST['token'])) {
-        forbidden();
-    }
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $new_icon = $old_icon = $filename = null;
     $badge_id = $_POST['badge_id'] ?? null;
     if ($_FILES['icon']['size'] > 0) {
@@ -275,6 +280,7 @@ if (isset($_GET['action'])) {
         $cert_name = $cert_description = $cert_hidden_id = $cert_htmlfile = $cert_all_courses = '';
         $cert_orientation_l = 'checked';
         $cert_orientation_p = '';
+        $cert_img_path_file = '';
         if (isset($_GET['cid'])) {
             $cert_id = $_GET['cid'];
             $cert_data = Database::get()->querySingle("SELECT * FROM certificate_template WHERE id = ?d", $cert_id);
@@ -288,6 +294,11 @@ if (isset($_GET['action'])) {
                 $cert_orientation_p = 'checked';
             }
             $cert_hidden_id = "<input type='hidden' name='cert_id' value='$cert_id'>";
+
+            $cert_img_path = $webDir . "/courses/user_progress_data/cert_templates/certificate{$cert_id}_thumbnail.png";
+            if (file_exists($cert_img_path)) {
+                $cert_img_path_file = "<img style='width:60px; height:60px;' src='{$urlServer}courses/user_progress_data/cert_templates/certificate{$cert_id}_thumbnail.png'>";
+            }
         }
         $tool_content .= "
         <div class='row'>
@@ -297,10 +308,12 @@ if (isset($_GET['action'])) {
                     <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post' enctype='multipart/form-data'>
                         <fieldset>
                             <legend class='mb-0' aria-label='$langForm'></legend>
-                            <div class='form-group'>
-                                <label for='filename_id' class='col-sm-12 control-label-notes'>$langZipFile</label>
-                                <input id='filename_id' type='file' class='' name='filename' value=''>
-
+                            <div class='form-group d-flex justify-content-start align-items-center gap-2'>
+                                $cert_img_path_file
+                                <div>
+                                    <label for='filename_id' class='col-sm-12 control-label-notes'>$langZipFile</label>
+                                    <input id='filename_id' type='file' class='' name='filename' value=''>
+                                </div>
                             </div>
 
                             <div class='form-group mt-4'>
@@ -333,14 +346,14 @@ if (isset($_GET['action'])) {
                                     " . rich_text_editor('description', 2, 60, $cert_description) . "
                                 </div>
                             </div>
-                  
+
                             <div class='form-group mt-4' id='courses-list'>
                                 <label for='select-courses' class='col-sm-12 control-label-notes'>$langWorkAssignTo:&nbsp;&nbsp;
                                 <span class='fa fa-info-circle' data-bs-toggle='tooltip' data-bs-placement='right' title='$langToAllCoursesInfo'></span></label>
                                 <div class='col-sm-12'>
                                 <select class='form-control' name='cert_template_courses[]' multiple class='form-control' id='select-courses'>";
                                 $courses_list = Database::get()->queryArray("SELECT id, code, title FROM course
-                                                                    WHERE id NOT IN (SELECT course_id FROM course_certificate_template)                                                                    
+                                                                    WHERE id NOT IN (SELECT course_id FROM course_certificate_template)
                                                                     ORDER BY title");
                                 if (isset($_GET['cid'])) {
                                     if ($cert_all_courses == '1') {
@@ -368,12 +381,13 @@ if (isset($_GET['action'])) {
                                 </div>
 
                             $cert_hidden_id
-
+                    
                             <div class='form-group mt-5 d-flex justify-content-end align-items-center gap-2'>
                                 <button class='btn submitAdminBtn' type ='submit' name='submit_cert_template'>$langUpload</button>
                                 <a class='btn cancelAdminBtn' href='index.php'>$langCancel</a>
                             </div>
                         </fieldset>
+                        ". generate_csrf_token_form_field() ."
                     </form>
                 </div>
             </div>
@@ -444,21 +458,34 @@ if (isset($_GET['action'])) {
     }
 } else { // display available certificates / badges
     $sql1 = Database::get()->queryArray("SELECT * FROM certificate_template");
+    $tool_content .= "<h3>$langCertificates</h3>";
     $tool_content .= "<div class='table-responsive'>
                         <table class='table-default'>
                         <thead>
                             <tr>
                                 <th style='width:30%;'>$langTitle</th>
-                                <th style='width:60%;'>$langDescription</th>
+                                <th style='width:50%;'>$langDescription</th>
+                                <th style='width:10%;'>$langIcon</th>
                                 <th style='width:10%;'></th>
                             </tr>
                         </thead>";
 
                 foreach ($sql1 as $cert_data) {
-                    //$template_link = $urlServer . CERT_TEMPLATE_PATH ."$cert_data->filename";
-                    $tool_content .= "<tr><td style='width:30%;'>$cert_data->name</td>
+                    $cert_image_path = $webDir . "/courses/user_progress_data/cert_templates/certificate{$cert_data->id}_thumbnail.png";
+                    $cert_image_path_file = '';
+                    if (file_exists($cert_image_path)) {
+                        $cert_image_path_file = "<a href='$_SERVER[SCRIPT_NAME]?certificate_id=$cert_data->id&amp;preview=1' target='_blank'>
+                                                    <img data-bs-toggle='tooltip' title='$langPreview' style='width:50px; height:50px;' src='{$urlServer}courses/user_progress_data/cert_templates/certificate{$cert_data->id}_thumbnail.png'>
+                                                 </a>";
+                    }
+                    $tool_content .= "<tr>
+                                        <td style='width:30%;'>
+                                            $cert_data->name
+                                        </td>
                                       <td style='width:60%;'>" . ellipsize_html($cert_data->description, 100) . "</td>";
-                    $tool_content .= "<td style='width:10%;' class='text-end option-btn-cell'>".
+                    $tool_content .= "
+                            <td style='width:10%;'>$cert_image_path_file</td>
+                            <td style='width:10%;' class='text-end option-btn-cell'>".
                             action_button(array(
                                 array('title' => $langEdit,
                                     'icon' => 'fa-edit',
@@ -466,7 +493,7 @@ if (isset($_GET['action'])) {
                                     ),
                                 array('title' => $langDelete,
                                     'icon' => 'fa-xmark',
-                                    'url' => "$_SERVER[SCRIPT_NAME]?del_cert=$cert_data->id",
+                                    'url' => "$_SERVER[SCRIPT_NAME]?del_cert=$cert_data->id&" . generate_csrf_token_link_parameter() ,
                                     'confirm' => $langConfirmDelete,
                                     'class' => 'delete')
                                 )).
@@ -476,8 +503,8 @@ if (isset($_GET['action'])) {
     $tool_content .= "</div>";
 
     $sql2 = Database::get()->queryArray("SELECT * FROM badge_icon");
-
-    $tool_content .= "<div class='table-responsive mt-5'>
+    $tool_content .= "<h3 class='mt-5'>$langBadges</h3>";
+    $tool_content .= "<div class='table-responsive'>
                         <table class='table-default'>
                         <thead>
                         <tr>
@@ -500,7 +527,7 @@ if (isset($_GET['action'])) {
                                     ),
                                 array('title' => $langDelete,
                                     'icon' => 'fa-xmark',
-                                    'url' => "$_SERVER[SCRIPT_NAME]?del_badge=$badge_data->id",
+                                    'url' => "$_SERVER[SCRIPT_NAME]?del_badge=$badge_data->id&" . generate_csrf_token_link_parameter() ,
                                     'confirm' => $langConfirmDelete,
                                     'class' => 'delete'))).
                             "</td></tr>";

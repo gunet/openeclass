@@ -11,7 +11,11 @@ class DragAndDropMarkersAnswer extends \QuestionType
 
     public function PreviewQuestion(): string
     {
-        global $langAnswer, $langScore, $head_content, $webDir, $course_code, $langPoint, $langThisAnswerIsNotCorrect;
+        global $langAnswer, $langScore, $head_content, $webDir, $course_code, $langPoint, $langThisAnswerIsNotCorrect,
+               $langConfirmDelete, $langAnalyticsConfirm, $langMarkerDeleted, $langMarkerDeletedError, $langImageUploaded,
+               $langImageNotSelected, $langInvalidAnswerValue, $langBlankNotEmpty, $langBlankOtherQuestion, 
+               $chooseShapeAndAnswerToContinue, $chooseDrawAShapeForTheAnswerToContinue, $langAddGradeToMarkerAnswer, 
+               $langNotChooseShape;
 
         $questionId = $this->question_id;
 
@@ -24,6 +28,7 @@ class DragAndDropMarkersAnswer extends \QuestionType
             $markersWithAnswers = $this->answer_object->get_drag_and_drop_markers_with_answers();
             $markersWithGrades = $this->answer_object->get_drag_and_drop_markers_with_grades();
             $gradesOfAnswers = $this->answer_object->get_drag_and_drop_answer_grade();
+            ksort($gradesOfAnswers);
             $AnswersGradeArr= [];
             foreach ($gradesOfAnswers as $gr) {
                 $AnswersGradeArr[] = $gr;
@@ -52,33 +57,35 @@ class DragAndDropMarkersAnswer extends \QuestionType
             foreach ($dataJsonMarkers as $dataJsonValue) {
                 $markersData = json_decode($dataJsonValue, true);
                 // Loop through each item in the original array
-                foreach ($markersData as $index => $value) {
-                    if (count($markersData) == 10) { // circle or rectangle
-                        $arrDataMarkers[$markersData['marker_id']] = [
-                                                                    'marker_answer' => $markersData['marker_answer'],
-                                                                    'marker_shape' => $markersData['shape_type'],
-                                                                    'marker_coordinates' => $markersData['x'] . ',' . $markersData['y'],
-                                                                    'marker_offsets' => $markersData['endX'] . ',' . $markersData['endY'],
-                                                                    'marker_grade' => $markersData['marker_grade'],
-                                                                    'marker_radius' => $markersData['marker_radius'],
-                                                                    'marker_answer_with_image' => $markersData['marker_answer_with_image']
-                                                                ];
-                    } elseif (count($markersData) == 6) { // polygon
-                        $arrDataMarkers[$markersData['marker_id']] = [
-                                                                    'marker_answer' => $markersData['marker_answer'],
-                                                                    'marker_shape' => $markersData['shape_type'],
-                                                                    'marker_coordinates' => $markersData['points'],
-                                                                    'marker_grade' => $markersData['marker_grade'],
-                                                                    'marker_answer_with_image' => $markersData['marker_answer_with_image']
-                                                                ];
-                    } elseif (count($markersData) == 5) { // without shape . So the defined answer is not correct
-                        $arrDataMarkers[$markersData['marker_id']] = [
-                                                                    'marker_answer' => $markersData['marker_answer'],
-                                                                    'marker_shape' => null,
-                                                                    'marker_coordinates' => null,
-                                                                    'marker_grade' => 0,
-                                                                    'marker_answer_with_image' => $markersData['marker_answer_with_image']
-                                                                ];
+                if ($markersData) {
+                    foreach ($markersData as $index => $value) {
+                        if (count($markersData) == 10) { // circle or rectangle
+                            $arrDataMarkers[$markersData['marker_id']] = [
+                                                                        'marker_answer' => $markersData['marker_answer'],
+                                                                        'marker_shape' => $markersData['shape_type'],
+                                                                        'marker_coordinates' => $markersData['x'] . ',' . $markersData['y'],
+                                                                        'marker_offsets' => $markersData['endX'] . ',' . $markersData['endY'],
+                                                                        'marker_grade' => $markersData['marker_grade'],
+                                                                        'marker_radius' => $markersData['marker_radius'],
+                                                                        'marker_answer_with_image' => $markersData['marker_answer_with_image']
+                                                                    ];
+                        } elseif (count($markersData) == 6) { // polygon
+                            $arrDataMarkers[$markersData['marker_id']] = [
+                                                                        'marker_answer' => $markersData['marker_answer'],
+                                                                        'marker_shape' => $markersData['shape_type'],
+                                                                        'marker_coordinates' => $markersData['points'],
+                                                                        'marker_grade' => $markersData['marker_grade'],
+                                                                        'marker_answer_with_image' => $markersData['marker_answer_with_image']
+                                                                    ];
+                        } elseif (count($markersData) == 5) { // without shape . So the defined answer is not correct
+                            $arrDataMarkers[$markersData['marker_id']] = [
+                                                                        'marker_answer' => $markersData['marker_answer'],
+                                                                        'marker_shape' => null,
+                                                                        'marker_coordinates' => null,
+                                                                        'marker_grade' => 0,
+                                                                        'marker_answer_with_image' => $markersData['marker_answer_with_image']
+                                                                    ];
+                        }
                     }
                 }
             }
@@ -116,6 +123,24 @@ class DragAndDropMarkersAnswer extends \QuestionType
             $html_content .= "<input type='hidden' class='currentQuestion' value='{$questionId}'>
                                 <input type='hidden' id='insertedMarkersAsJson-$questionId' value='{$DataMarkersToJson}'>";
 
+            $head_content .= "<script type='text/javascript'>        
+                                var lang = {
+                                    confirmdelete: '" . js_escape($langConfirmDelete) . "',
+                                    confirm: '" . js_escape($langAnalyticsConfirm) . "',
+                                    markerdeleted: '" . js_escape($langMarkerDeleted) . "',
+                                    markerdeletederror: '" . js_escape($langMarkerDeletedError) . "',
+                                    imageuploaded: '" . js_escape($langImageUploaded) . "',
+                                    imagenotselected: '" . js_escape($langImageNotSelected) . "',
+                                    invalidanswervalue : '" . js_escape($langInvalidAnswerValue) . "',
+                                    blanknotempty: '" . js_escape($langBlankNotEmpty) . "',
+                                    blankotherquestion: '" . js_escape($langBlankOtherQuestion) . "',
+                                    chooseShapeAndAnswerToContinue: '" .js_escape($chooseShapeAndAnswerToContinue). "',
+                                    chooseDrawAShapeForTheAnswerToContinue: '" . js_escape($chooseDrawAShapeForTheAnswerToContinue) . "',
+                                    point: '" . js_escape($langPoint) . "',
+                                    notChooseShape: '" . js_escape($langNotChooseShape) . "',
+                                    AddGradeToMarkerAnswer: '" .js_escape($langAddGradeToMarkerAnswer) . "'
+                                };
+                </script>";
             load_js('drag-and-drop-shapes');
 
             $head_content .= "<script>
@@ -131,7 +156,11 @@ class DragAndDropMarkersAnswer extends \QuestionType
 
     public function AnswerQuestion($question_number, $exerciseResult = [], $options = []): string
     {
-        global $webDir, $course_code, $langCalcelDroppableItem, $head_content, $uid;
+        global $webDir, $course_code, $langCalcelDroppableItem, $head_content, $uid,
+               $langConfirmDelete, $langAnalyticsConfirm, $langMarkerDeleted, $langMarkerDeletedError, $langImageUploaded,
+               $langImageNotSelected, $langInvalidAnswerValue, $langBlankNotEmpty, $langBlankOtherQuestion, 
+               $chooseShapeAndAnswerToContinue, $chooseDrawAShapeForTheAnswerToContinue, $langAddGradeToMarkerAnswer, 
+               $langPoint, $langNotChooseShape;
 
         $questionId = $this->question_id;
         $question_text = $this->answer_object->get_drag_and_drop_text();
@@ -144,33 +173,35 @@ class DragAndDropMarkersAnswer extends \QuestionType
             foreach ($dataJsonMarkers as $dataJsonValue) {
                 $markersData = json_decode($dataJsonValue, true);
                 // Loop through each item in the original array
-                foreach ($markersData as $index => $value) {
-                    if (count($markersData) == 10) { // circle or rectangle
-                        $arrDataMarkers[$markersData['marker_id']] = [
-                                                                    'marker_answer' => $markersData['marker_answer'],
-                                                                    'marker_shape' => $markersData['shape_type'],
-                                                                    'marker_coordinates' => $markersData['x'] . ',' . $markersData['y'],
-                                                                    'marker_offsets' => $markersData['endX'] . ',' . $markersData['endY'],
-                                                                    'marker_grade' => $markersData['marker_grade'],
-                                                                    'marker_radius' => $markersData['marker_radius'],
-                                                                    'marker_answer_with_image' => $markersData['marker_answer_with_image']
-                                                                ];
-                    } elseif (count($markersData) == 6) { // polygon
-                        $arrDataMarkers[$markersData['marker_id']] = [
-                                                                    'marker_answer' => $markersData['marker_answer'],
-                                                                    'marker_shape' => $markersData['shape_type'],
-                                                                    'marker_coordinates' => $markersData['points'],
-                                                                    'marker_grade' => $markersData['marker_grade'],
-                                                                    'marker_answer_with_image' => $markersData['marker_answer_with_image']
-                                                                ];
-                    } elseif (count($markersData) == 5) { // without shape . So the defined answer is not correct
-                        $arrDataMarkers[$markersData['marker_id']] = [
-                                                                    'marker_answer' => $markersData['marker_answer'],
-                                                                    'marker_shape' => null,
-                                                                    'marker_coordinates' => null,
-                                                                    'marker_grade' => 0,
-                                                                    'marker_answer_with_image' => $markersData['marker_answer_with_image']
-                                                                ];
+                if ($markersData) {
+                    foreach ($markersData as $index => $value) {
+                        if (count($markersData) == 10) { // circle or rectangle
+                            $arrDataMarkers[$markersData['marker_id']] = [
+                                                                        'marker_answer' => $markersData['marker_answer'],
+                                                                        'marker_shape' => $markersData['shape_type'],
+                                                                        'marker_coordinates' => $markersData['x'] . ',' . $markersData['y'],
+                                                                        'marker_offsets' => $markersData['endX'] . ',' . $markersData['endY'],
+                                                                        'marker_grade' => $markersData['marker_grade'],
+                                                                        'marker_radius' => $markersData['marker_radius'],
+                                                                        'marker_answer_with_image' => $markersData['marker_answer_with_image']
+                                                                    ];
+                        } elseif (count($markersData) == 6) { // polygon
+                            $arrDataMarkers[$markersData['marker_id']] = [
+                                                                        'marker_answer' => $markersData['marker_answer'],
+                                                                        'marker_shape' => $markersData['shape_type'],
+                                                                        'marker_coordinates' => $markersData['points'],
+                                                                        'marker_grade' => $markersData['marker_grade'],
+                                                                        'marker_answer_with_image' => $markersData['marker_answer_with_image']
+                                                                    ];
+                        } elseif (count($markersData) == 5) { // without shape . So the defined answer is not correct
+                            $arrDataMarkers[$markersData['marker_id']] = [
+                                                                        'marker_answer' => $markersData['marker_answer'],
+                                                                        'marker_shape' => null,
+                                                                        'marker_coordinates' => null,
+                                                                        'marker_grade' => 0,
+                                                                        'marker_answer_with_image' => $markersData['marker_answer_with_image']
+                                                                    ];
+                        }
                     }
                 }
             }
@@ -206,17 +237,16 @@ class DragAndDropMarkersAnswer extends \QuestionType
 
         $html_content = "<div class='col-12 mb-4'><small class='Accent-200-cl'>(*)$langCalcelDroppableItem</small></div>";
         $html_content .= "<div class='col-12 d-flex justify-content-start align-items-center drag-and-drop-markers-container-words gap-4 flex-wrap mt-4' id='words_{$questionId}'>";
-        foreach ($list_answers as $an) {
-            foreach ($arrDataMarkers as $index => $value) {
-                if (array_key_exists('marker_answer', $value) && array_key_exists('marker_answer_with_image', $value) && $value['marker_answer'] == $an) {
-                   if ($value['marker_answer_with_image'] == 1) { // predefined answer will be shown as image
-                        $mID = $index;
-                        $html_content .= "<div class='draggable draggable-image' data-image-id='{$mID}' data-word='{$an}' data-pool-id='words_{$questionId}' onmouseup='updateListenerDragAndDrop({$question_number}, {$questionId})' onclick='updateListenerDragAndDrop({$question_number}, {$questionId})'>
-                                            <img src='../../courses/$course_code/image/answer-$questionId-$mID' alt='{$an}'>
-                                          </div>";
-                    } else { // predefined answer will be shown as text
-                        $html_content .= "<div class='draggable' data-word='{$an}' data-pool-id='words_{$questionId}' onmouseup='updateListenerDragAndDrop({$question_number}, {$questionId})' onclick='updateListenerDragAndDrop({$question_number}, {$questionId})'>$an</div>";
-                    }
+        foreach ($arrDataMarkers as $index => $value) {
+            if (array_key_exists('marker_answer', $value) && array_key_exists('marker_answer_with_image', $value)) {
+                $an = $value['marker_answer'];
+                if ($value['marker_answer_with_image'] == 1) { // predefined answer will be shown as image
+                    $mID = $index;
+                    $html_content .= "<div class='draggable draggable-image' data-image-id='{$mID}' data-word='{$an}' data-pool-id='words_{$questionId}' onmouseup='updateListenerDragAndDrop({$question_number}, {$questionId})' onclick='updateListenerDragAndDrop({$question_number}, {$questionId})'>
+                                        <img src='../../courses/$course_code/image/answer-$questionId-$mID' alt='{$an}'>
+                                        </div>";
+                } else { // predefined answer will be shown as text
+                    $html_content .= "<div class='draggable' data-word='{$an}' data-pool-id='words_{$questionId}' onmouseup='updateListenerDragAndDrop({$question_number}, {$questionId})' onclick='updateListenerDragAndDrop({$question_number}, {$questionId})'>$an</div>";
                 }
             }
         }
@@ -233,6 +263,24 @@ class DragAndDropMarkersAnswer extends \QuestionType
         $html_content .= "<input type='hidden' id='DataJsonFile-$questionId' value='{$DataJsonFileVal}'>";
         $html_content .= "<input type='hidden' id='typeQuestion-$questionId' value='".DRAG_AND_DROP_MARKERS."'>";
 
+        $head_content .= "<script type='text/javascript'>        
+                            var lang = {
+                                    confirmdelete: '" . js_escape($langConfirmDelete) . "',
+                                    confirm: '" . js_escape($langAnalyticsConfirm) . "',
+                                    markerdeleted: '" . js_escape($langMarkerDeleted) . "',
+                                    markerdeletederror: '" . js_escape($langMarkerDeletedError) . "',
+                                    imageuploaded: '" . js_escape($langImageUploaded) . "',
+                                    imagenotselected: '" . js_escape($langImageNotSelected) . "',
+                                    invalidanswervalue : '" . js_escape($langInvalidAnswerValue) . "',
+                                    blanknotempty: '" . js_escape($langBlankNotEmpty) . "',
+                                    blankotherquestion: '" . js_escape($langBlankOtherQuestion) . "',
+                                    chooseShapeAndAnswerToContinue: '" .js_escape($chooseShapeAndAnswerToContinue). "',
+                                    chooseDrawAShapeForTheAnswerToContinue: '" . js_escape($chooseDrawAShapeForTheAnswerToContinue) . "',
+                                    point: '" . js_escape($langPoint) . "',
+                                    notChooseShape: '" . js_escape($langNotChooseShape) . "',
+                                    AddGradeToMarkerAnswer: '" .js_escape($langAddGradeToMarkerAnswer) . "'
+                                };
+                        </script>";
         load_js('drag-and-drop-shapes');
         $head_content .= "<script>
                             document.addEventListener('DOMContentLoaded', function() {

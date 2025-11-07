@@ -76,24 +76,24 @@ if ($is_editor) {
 $(function() {
     var oTable = $('#users_table{$course_id}').DataTable ({
                 'columns': [ $columns ],
-                'aLengthMenu': [
-                   [10, 15, 20 , -1],
-                   [10, 15, 20, '$langAllOfThem'] // change per page values here
-               ],
-               'fnDrawCallback': function( oSettings ) {
-                    $('#users_table{$course_id}_filter label input').attr({
-                          'class' : 'form-control input-sm ms-0 mb-3',
-                          'placeholder' : '$langSearch...'
-                    });
-                    $('#users_table{$course_id}_filter label').attr('aria-label', '$langSearch');
-                },
-               'sPaginationType': 'full_numbers',
-                'bSort': true,
-                'oLanguage': {
+                'lengthMenu': [10, 15, 20 , -1],                                  
+                'fnDrawCallback': function( oSettings ) {
+                        $('#users_table{$course_id}_wrapper .dt-search input').attr({
+                              'class' : 'form-control input-sm ms-0 mb-3',
+                              'placeholder' : '$langSearch...'
+                        });
+                        $('#users_table{$course_id}_wrapper .dt-search label').attr('aria-label', '$langSearch');
+                    },
+                    'sPaginationType': 'full_numbers',
+                    'bSort': true,
+                    'oLanguage': {
+                       'lengthLabels': {
+                            '-1': '$langAllOfThem'
+                       },
                        'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
                        'sZeroRecords':  '".$langNoResult."',
                        'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
-                       'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
+                       'sInfoEmpty':    '',
                        'sInfoFiltered': '',
                        'sInfoPostFix':  '',
                        'sSearch':       '',
@@ -148,15 +148,15 @@ $(function() {
             var select_content_2 = '';
             if (type==2) {
                 for (index = 0; index < parsed_data.length; ++index) {
-                    select_content += '<option value=\"' + parsed_data[index]['id'] + '\">' + parsed_data[index]['name'] + '<\/option>';
+                    select_content += '<option value=\"' + parsed_data[index]['id'] + '\">' + q(parsed_data[index]['name']) + '<\/option>';                    
                 }
             }
             if (type==1) {
                 for (index = 0; index < parsed_data[0].length; ++index) {
-                    select_content += '<option value=\"' + parsed_data[0][index]['id'] + '\">' + parsed_data[0][index]['surname'] + ' ' + parsed_data[0][index]['givenname'] + '<\/option>';
+                    select_content += '<option value=\"' + parsed_data[0][index]['id'] + '\">' + q(parsed_data[0][index]['surname'] + ' ' + parsed_data[0][index]['givenname']) + '<\/option>';
                 }
                 for (index = 0; index < parsed_data[1].length; ++index) {
-                    select_content_2 += '<option value=\"' + parsed_data[1][index]['id'] + '\">' + parsed_data[1][index]['surname'] + ' ' + parsed_data[1][index]['givenname'] + '<\/option>';
+                    select_content_2 += '<option value=\"' + parsed_data[1][index]['id'] + '\">' + q(parsed_data[1][index]['surname'] + ' ' + parsed_data[1][index]['givenname']) + '<\/option>';                    
                 }
             }
             $('#users_box').find('option').remove().end().append(select_content);
@@ -245,7 +245,7 @@ if ($is_editor) {
                 $already_inserted_users = Database::get()->queryArray("SELECT uid FROM gradebook_users WHERE gradebook_id = ?d", $gradebook_id);
                 $already_inserted_ids = [];
                 foreach ($already_inserted_users as $already_inserted_user) {
-                    array_push($already_inserted_ids, $already_inserted_user->uid);
+                    $already_inserted_ids[] = $already_inserted_user->uid;
                 }
                 foreach ($ug as $u) {
                     if (!in_array($u->user_id, $already_inserted_ids)) {
@@ -325,7 +325,7 @@ if ($is_editor) {
                     . "AND DATE(course_user.reg_date) BETWEEN ?s AND ?s", $gradebook_id, $usersstart->format("Y-m-d"), $usersend->format("Y-m-d"));
             $already_inserted_ids = [];
             foreach ($already_inserted_users as $already_inserted_user) {
-                array_push($already_inserted_ids, $already_inserted_user->uid);
+                $already_inserted_ids[] = $already_inserted_user->uid;
             }
             $valid_users_for_insertion = Database::get()->queryArray("SELECT user_id
                         FROM course_user
@@ -546,6 +546,7 @@ if ($is_editor) {
 
     //delete grade book activity
     elseif (isset($_GET['delete'])) {
+        if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();
         $log_details = array('action' => 'delete activity',
                              'id' => $gradebook_id,
                              'title' => get_gradebook_title($gradebook_id),
@@ -606,7 +607,7 @@ if ($is_editor) {
         new_gradebook(); // create new grade book
         $display = FALSE;
     } elseif (isset($_GET['editUsers'])) { // edit grade book users
-        user_gradebook_settings($gradebook_id);
+        user_gradebook_settings();
         $display = FALSE;
     } elseif (isset($_GET['editSettings'])) { // grade book settings
         gradebook_settings($gradebook_id);

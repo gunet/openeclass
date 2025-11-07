@@ -622,6 +622,19 @@ caption{
   color:#0073E6 !important;
 }
 
+.border-left-success{
+  border-left: 4px solid #1E7E0E !important;
+}
+.border-left-danger{
+  border-left: 4px solid #C44601 !important;
+}
+.border-left-warning{
+  border-left: 4px solid #F57600 !important;
+}
+.border-left-primary{
+  border-left: 4px solid #0073E6 !important;
+}
+
 /**********************************************************************************************************************/
 /************************************************* TYPOGRAPHY *********************************************************/
 /**********************************************************************************************************************/
@@ -1155,7 +1168,32 @@ b a {
   .user-menu-btn .user-name{
     white-space: nowrap;
   }
+
+  .navbar-eclass.fixed-top .box-logo {
+    padding-left: 10px;
+    padding-right: 10px;
+    min-height: 80px;
+  }
+  .navbar-eclass.fixed-top.fixed .box-logo {
+    min-height: 55px;
+  }
 }
+
+@media(max-width: 991px){
+  .navbar-eclass.fixed-top .box-logo {
+    padding-left: 10px;
+    padding-right: 10px;
+    min-height: 56px;
+  }
+  .navbar-eclass.fixed-top.fixed .box-logo {
+    min-height: 55px;
+  }
+}
+
+
+.box-logo {
+  background-color: #ffffff;
+ }
 
 
 /**********************************************************************************************************************/
@@ -3635,14 +3673,6 @@ tr.danger > td{
 
 
 
-
-/* div.dataTables_scrollBody {
-   position: relative;
-    overflow:hidden !important;
-    width: 100%;
-} */
-
-
 table{
   table-layout: auto !important;
   width: 100% !important;
@@ -3650,6 +3680,29 @@ table{
 
 
 
+/******************************** Datatable ************************************/
+div.dt-container div.dt-search {
+   text-align: left; 
+}
+div.dt-container div.dt-paging {
+    margin-top: 15px !important;
+}
+.dt-column-title,
+.announceTitle{
+word-break: normal !important;
+}
+.dt-container.dt-bootstrap5 .row,
+.dt-container.dt-bootstrap5.dt-empty-footer .row{
+--bs-gutter-x: 0rem !important;
+}
+
+#portfolio_lessons_wrapper .dt-search {
+  text-align: left !important;
+  margin-bottom: 15px !important;
+}
+#portfolio_lessons_wrapper .dt-search input{
+  margin-left: 0px !important;
+}
 
 /**********************************************************************************************************************/
 /**************************************************** TEMP LABELS *****************************************************/
@@ -4800,7 +4853,7 @@ body .delThemeBtn{
 
 .navbar-learningPath,
 .header-container-learningPath{
-  height: 50px;
+  height: 56px !important;
 }
 
 .progressbar-plr .progress-circle-bar{
@@ -6073,6 +6126,10 @@ th.grade-col a{
   width: 760px !important;
   height: 400px !important;
 }
+.drag-and-drop-markers-img {
+  image-rendering: auto;
+  object-fit: contain;
+}
 .drag-and-drop-markers-container-words{
   width: 760px;
 }
@@ -6112,4 +6169,63 @@ th.grade-col a{
 
 .light-transparent {
   background: rgba(0,0,0,0.1);
+}
+
+/* .table-drag-and-drop-markers-creation tbody tr.inserted td {
+  background-color: #d1e7dd !important;
+} */
+
+.status-indicator {
+  display: inline-flex;
+  align-items: start;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  padding: 8px 12px;
+  border-radius: 20px;
+  background-color: #f0f4f8;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+  min-width: 200px;
+  margin-bottom: 15px;
+}
+
+/* Text styling */
+.status-text {
+  margin-left: 10px;
+  color: #333;
+  font-weight: 600;
+}
+
+/* Spinner styles */
+.spinner {
+  border: 3px solid #e0e0e0; /* Light grey */
+  border-top: 3px solid #4CAF50; /* Green accent */
+  border-radius: 50%;
+  width: 45px;
+  height: 30px;
+  animation: spin 1s linear infinite;
+}
+
+/* Spin animation */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/******************************** LearnPath ************************************/
+
+.contextual-menu-learningPath {
+  min-width: 258px !important;
+  width: 100% !important;
+}
+.contextual-menu-learningPath li a,
+.contextual-menu-learningPath li span {
+  font-weight: 400 !important;
+}
+.contextual-menu-learningPath li div.list-group-item.active {
+  border-left: solid 2px #1E7E0E !important;
+}
+
+.body-learningPath {
+ padding: 20px !important;
 }

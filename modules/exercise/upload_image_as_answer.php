@@ -13,6 +13,34 @@ if (isset($_GET['delete_image'])) {
     $filePath = "$webDir/courses/$course_code/image/answer-$questionId-$markerId";
     if (file_exists($filePath)) {
         if (unlink($filePath)) {
+            // Update marker_answer_with_image flag of marker_id
+            $options = Database::get()->querySingle("SELECT options FROM exercise_question WHERE id = ?d AND course_id = ?d", $questionId, $course_id)->options;
+            if ($options) {
+                $finalData = [];
+                $arr = explode('|', $options);
+                if ($arr) {
+                    foreach ($arr as $a) {
+                        $data = json_decode($a, true);
+                        if ($data && isset($data['marker_id'])) {
+                            if ($data['marker_id'] == $markerId) {
+                                // Update the field
+                                $data['marker_answer_with_image'] = 0;
+                            }
+                            // Encode back to JSON
+                            $json_str = json_encode($data);
+                            $finalData[] = $json_str;
+                        } else {
+                            // If decoding fails or marker_id is missing, keep original string
+                            $finalData[] = $a;
+                        }
+                    }
+
+                    if (count($finalData) > 0) {
+                        $res = implode('|', $finalData);
+                        Database::get()->query("UPDATE exercise_question SET options = ?s WHERE id = ?d AND course_id = ?d", $res, $questionId, $course_id);
+                    }
+                }
+            }
             Session::flash('message', $langImageHasBeenDeleted);
             Session::flash('alert-class', 'alert-success');
         } else {

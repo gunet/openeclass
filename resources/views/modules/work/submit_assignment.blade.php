@@ -26,17 +26,69 @@
                         {{-- Submission details --}}
                         @if ($submissions_exist)
                             @include('modules.work.submission_details')
+                            <div class="col-12 d-flex justify-content-center my-4">
+                                <div class="bg-transparent">
+                                    <i class="fa-solid fa-circle-chevron-down fs-1 Neutral-900-cl"></i>
+                                </div>
+                            </div>
                             @if ($grading_type == ASSIGNMENT_PEER_REVIEW_GRADE && $ass)
                                 @if ($start_date_review < $cdate)
                                     @if ($reviews_per_assignment < $count_of_assign && $result)
-                                        @include('modules.work.assignment_review')
+                                        <div class="col-12">
+                                            <div class="card panelCard px-lg-4 py-lg-3" @if($row->due_date_review && ($cdate > $row->due_date_review or $cdate < $row->start_date_review)) style="opacity: 0.65;" @endif>
+                                                <div class="card-header d-flex justify-content-between align-items-center">
+                                                    <h3 class="mb-0" style="line-height: 14px;">
+                                                        <em>{{ trans('langGradeReviews') }}</em>
+                                                    </h3>
+                                                </div>
+                                                <div class="card-body">
+                                                    @if ($cdate < $row->start_date_review)
+                                                        <p class="text-warning TextBold small-text" style="line-height:14px;">{{ trans('langGradeReviewHasNotStarted') }}</p>
+                                                    @elseif ($cdate >= $row->start_date_review && $cdate <= $row->due_date_review)
+                                                        <div class='d-flex justify-content-start align-items-center gap-2 flex-wrap'>
+                                                            <p class="text-success TextBold small-text" style="line-height:14px;">{{ trans('langGradeReviewInProgress') }}</p>
+                                                            <div>
+                                                                <div class='spinner-grow text-success spinner-grow-sm' role='status'>
+                                                                    <span class='visually-hidden'></span>
+                                                                </div>
+                                                                <div class='spinner-grow text-danger spinner-grow-sm' role='status'>
+                                                                    <span class='visually-hidden'></span>
+                                                                </div>
+                                                                <div class='spinner-grow text-warning spinner-grow-sm' role='status'>
+                                                                    <span class='visually-hidden'></span>
+                                                                </div>
+                                                                <div class='spinner-grow text-info spinner-grow-sm' role='status'>
+                                                                    <span class='visually-hidden'></span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    @elseif ($cdate > $row->due_date_review)
+                                                        <p class="text-danger TextBold small-text" style="line-height:14px;">{{ trans('langGradeReviewHasExpired') }}</p>
+                                                    @endif
+                                                    @include('modules.work.assignment_review')
+                                                </div>
+                                            </div>
+                                        </div>
                                     @endif
+                                @else
+                                    <div class="col-12">
+                                        <div class="card panelCard px-lg-4 py-lg-3" @if($row->due_date_review && ($cdate > $row->due_date_review or $cdate < $row->start_date_review)) style="opacity: 0.65;" @endif>
+                                            <div class="card-header d-flex justify-content-between align-items-center">
+                                                <h3 class="mb-0" style="line-height: 14px;">
+                                                    <em>{{ trans('langGradeReviews') }}</em>
+                                                </h3>
+                                            </div>
+                                            <div class="card-body">
+                                                <p class="text-warning TextBold small-text" style="line-height:14px;">{{ trans('langGradeReviewHasNotStarted') }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
                                 @endif
                             @endif
                         @endif
                         @if ($submit_ok)
                             @if ($submissions_exist)
-                                <div class='col-12 mt-3'>
+                                <div class='col-12'>
                                     <div class='alert alert-info'>
                                         <i class='fa-solid fa-circle-info fa-lg'></i>
                                         <span>
@@ -50,124 +102,135 @@
                                 </div>
                             @endif
                             @if (!$is_group_assignment || $count_user_group_info || $on_behalf_of)
-                                <div class='d-lg-flex gap-4 mt-4'>
-                                    <div class='flex-grow-1'>
-                                        <div class='form-wrapper form-edit rounded'>
+                                <div class="col-12">
+                                    <div class="card panelCard px-lg-4 py-lg-3" @if($row->deadline && $cdate > $row->deadline) style="opacity: 0.65;" @endif>
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <h3 class="mb-0" style="line-height: 14px;">
+                                                <em>{{ trans('langAssignmentsSubmission')}}</em>
+                                            </h3>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class='d-lg-flex gap-4'>
+                                                <div class='flex-grow-1'>
+                                                    <div class='form-wrapper form-edit rounded'>
+                                                        <form class='form-horizontal' enctype='multipart/form-data' action='{{ $form_link }}' method='post'>
+                                                            <input type='hidden' name='id' value='{{ $id }}'>
+                                                            {!! $group_select_hidden_input !!}
 
-                                        <form class='form-horizontal' enctype='multipart/form-data' action='{{ $form_link }}' method='post'>
-                                            <input type='hidden' name='id' value='{{ $id }}'>
-                                            {!! $group_select_hidden_input !!}
+                                                            @if (isset($_GET['unit']))
+                                                                <input type='hidden' name='unit' value='{{ $_GET['unit'] }}'>
+                                                                <input type='hidden' name='res_type' value='assignment'>
+                                                            @endif
 
-                                            @if (isset($_GET['unit']))
-                                                <input type='hidden' name='unit' value='{{ $_GET['unit'] }}'>
-                                                <input type='hidden' name='res_type' value='assignment'>
-                                            @endif
+                                                            <fieldset>
+                                                                <legend class='mb-0' aria-label='{{ trans('langForm') }}'></legend>
+                                                                {!! $group_select_form !!}
 
-                                            <fieldset>
-                                                <legend class='mb-0' aria-label='{{ trans('langForm') }}'></legend>
-                                                {!! $group_select_form !!}
+                                                                @if ($assignment_type == ASSIGNMENT_TYPE_TURNITIN)
+                                                                    {!! show_turnitin_integration($id) !!}
+                                                                @else
+                                                                    @if ($submission_type == 1)  {{-- online text submission--}}
+                                                                        <div class='form-group mt-0'>
+                                                                            <label for='submission_text' class='col-sm-6 control-label-notes'>{{ trans('langWorkOnlineText') }}:</label>
+                                                                            <div class='col-sm-12'>
+                                                                                {!! $rich_text_editor !!}
+                                                                            </div>
+                                                                        </div>
+                                                                    @elseif ($submission_type == 2) {{-- Multiple file submission --}}
+                                                                        <script>
+                                                                            $(function () { initialize_multifile_submission({{ $max_submissions }}) });
+                                                                        </script>
+                                                                        <div class='form-group mt-0'>
+                                                                            <label for='userfile' class='col-sm-12 control-label-notes'>{{ trans('langWorkFileLimit') }}: {{ $max_submissions }} </label>
+                                                                            <div class='col-sm-10 d-flex align-items-center gap-2'>
+                                                                                <div>
+                                                                                    <button class='btn submitAdminBtn btn-sm moreFiles' aria-label='Add'>
+                                                                                        <span class='fa fa-plus'></span>
+                                                                                    </button>
+                                                                                </div>
+                                                                                <input type='file' name='userfile[]' id='userfile'>
+                                                                            </div>
+                                                                        </div>
+                                                                    @else {{-- Single file submission --}}
+                                                                        <div class='form-group mt-0'>
+                                                                            <label for='userfile' class='col-sm-6 control-label-notes'>{{ trans('langWorkFile') }}:</label>
+                                                                            <div class='col-sm-10'>
+                                                                                <input type='file' name='userfile' id='userfile'>
+                                                                            </div>
+                                                                        </div>
+                                                                    @endif
 
-                                                @if ($assignment_type == ASSIGNMENT_TYPE_TURNITIN)
-                                                    {!! show_turnitin_integration($id) !!}
-                                                @else
-                                                    @if ($submission_type == 1)  {{-- online text submission--}}
-                                                        <div class='form-group mt-0'>
-                                                            <label for='submission_text' class='col-sm-6 control-label-notes'>{{ trans('langWorkOnlineText') }}:</label>
-                                                            <div class='col-sm-12'>
-                                                                {!! $rich_text_editor !!}
-                                                            </div>
-                                                        </div>
-                                                    @elseif ($submission_type == 2) {{-- Multiple file submission --}}
-                                                        <script>
-                                                            $(function () { initialize_multifile_submission({{ $max_submissions }}) });
-                                                        </script>
-                                                        <div class='form-group mt-0'>
-                                                            <label for='userfile' class='col-sm-6 control-label-notes'>{{ trans('langWorkFileLimit') }}: {{ $max_submissions }} </label>
-                                                            <div class='col-sm-10'>
-                                                                <div>
-                                                                    <button class='btn submitAdminBtn btn-sm moreFiles' aria-label='Add'>
-                                                                        <span class='fa fa-plus'></span>
-                                                                    </button>
-                                                                </div>
-                                                                <input type='file' name='userfile[]' id='userfile'>
-                                                            </div>
-                                                        </div>
-                                                    @else {{-- Single file submission --}}
-                                                        <div class='form-group mt-0'>
-                                                            <label for='userfile' class='col-sm-6 control-label-notes'>{{ trans('langWorkFile') }}:</label>
-                                                            <div class='col-sm-10'>
-                                                                <input type='file' name='userfile' id='userfile'>
-                                                            </div>
-                                                        </div>
-                                                    @endif
+                                                                    {{-- Comments --}}
+                                                                    <div class='form-group mt-3'>
+                                                                        <label for='stud_comments' class='col-sm-6 control-label-notes'>{{ trans('langComments') }}:</label>
+                                                                        <div class='col-sm-12'>
+                                                                            <textarea class='form-control' name='stud_comments' id='stud_comments' rows='5'></textarea>
+                                                                        </div>
+                                                                    </div>
 
-                                                    {{-- Comments --}}
-                                                    <div class='form-group mt-3'>
-                                                        <label for='stud_comments' class='col-sm-6 control-label-notes'>{{ trans('langComments') }}:</label>
-                                                        <div class='col-sm-12'>
-                                                            <textarea class='form-control' name='stud_comments' id='stud_comments' rows='5'></textarea>
-                                                        </div>
+                                                                    @if ($on_behalf_of)
+                                                                        <div class='form-group mt-4'>
+                                                                            <div class='col-sm-6 control-label-notes'>
+                                                                                {{ trans('langGradebookGrade') }}:
+                                                                            </div>
+                                                                            <div class='col-sm-1'>
+                                                                                {!! $grade_field !!}
+                                                                                <input type='hidden' name='on_behalf_of' value='1'>
+                                                                            </div>
+                                                                        </div>
+                                                                        @if ($grading_type == ASSIGNMENT_STANDARD_GRADE)
+                                                                            <span class="help-block">({{ trans('langMaxGrade') }}: {{ $max_grade }})</span>
+                                                                        @endif
+                                                                        <div class='form-group mt-4'>
+                                                                            <label for='stud_comments' class='col-sm-6 control-label-notes'>{{ trans('langComments') }}:</label>
+                                                                            <div class='col-sm-12'>
+                                                                                <textarea class='form-control' name='stud_comments' id='stud_comments' rows='5'></textarea>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class='form-group mt-4'>
+                                                                            <div class='col-sm-10 col-sm-offset-2'>
+                                                                                <div class='checkbox'>
+                                                                                    <label class='label-container' aria-label='{{ trans('langSelect') }}'>
+                                                                                        <input type='checkbox' name='send_email' id='email_button' value='1'>
+                                                                                        <span class='checkmark'></span>
+                                                                                        {{ trans('langEmailToUsers') }}
+                                                                                    </label>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    @endif
+
+                                                                    <div class='form-group mt-4'>
+                                                                        <div class='col-12 d-flex justify-content-end align-items-center'>
+                                                                            {!!
+                                                                                form_buttons(array(
+                                                                                    array(
+                                                                                    'class'         => 'submitAdminBtn',
+                                                                                    'text'          => trans('langSubmit'),
+                                                                                    'name'          => 'work_submit',
+                                                                                    'value'         => trans('langSubmit')
+                                                                                    ),
+                                                                                    array(
+                                                                                        'class' => 'cancelAdminBtn',
+                                                                                        'href' => $back_link
+                                                                                        )
+                                                                                ))
+                                                                            !!}
+                                                                        </div>
+                                                                    </div>
+                                                                    <small>
+                                                                        {{ trans('langMaxFileSize') }} {!! ini_get('upload_max_filesize') !!}
+                                                                    </small>
+                                                                @endif
+                                                            </fieldset>
+                                                        </form>
                                                     </div>
-
-                                                    @if ($on_behalf_of)
-                                                        <div class='form-group mt-4'>
-                                                            <div class='col-sm-6 control-label-notes'>
-                                                                {{ trans('langGradebookGrade') }}:
-                                                            </div>
-                                                            <div class='col-sm-1'>
-                                                                {!! $grade_field !!}
-                                                                <input type='hidden' name='on_behalf_of' value='1'>
-                                                            </div>
-                                                        </div>
-                                                        @if ($grading_type == ASSIGNMENT_STANDARD_GRADE)
-                                                            <span class="help-block">({{ trans('langMaxGrade') }}: {{ $max_grade }})</span>
-                                                        @endif
-                                                        <div class='form-group mt-4'>
-                                                            <label for='stud_comments' class='col-sm-6 control-label-notes'>{{ trans('langComments') }}:</label>
-                                                            <div class='col-sm-12'>
-                                                                <textarea class='form-control' name='stud_comments' id='stud_comments' rows='5'></textarea>
-                                                            </div>
-                                                        </div>
-                                                        <div class='form-group mt-4'>
-                                                            <div class='col-sm-10 col-sm-offset-2'>
-                                                                <div class='checkbox'>
-                                                                    <label class='label-container' aria-label='{{ trans('langSelect') }}'>
-                                                                        <input type='checkbox' name='send_email' id='email_button' value='1'>
-                                                                        <span class='checkmark'></span>
-                                                                        {{ trans('langEmailToUsers') }}
-                                                                    </label>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    @endif
-
-                                                    <div class='form-group mt-4'>
-                                                        <div class='col-12 d-flex justify-content-end align-items-center'>
-                                                            {!!
-                                                                form_buttons(array(
-                                                                    array(
-                                                                    'class'         => 'submitAdminBtn',
-                                                                    'text'          => trans('langSubmit'),
-                                                                    'name'          => 'work_submit',
-                                                                    'value'         => trans('langSubmit')
-                                                                    ),
-                                                                    array(
-                                                                        'class' => 'cancelAdminBtn',
-                                                                        'href' => $back_link
-                                                                        )
-                                                                ))
-                                                            !!}
-                                                        </div>
-                                                    </div>
-                                                    <small>
-                                                        {{ trans('langMaxFileSize') }} {!! ini_get('upload_max_filesize') !!}
-                                                    </small>
-                                              @endif
-                                            @endif
-                                        </fieldset>
-                                    </form>
-                                </div>
-                            </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>                                                    
+                            @endif
                         @endif
                     </div>
                 </div>

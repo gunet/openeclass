@@ -368,7 +368,7 @@ if (!class_exists('Answer')):
                     preg_match_all('/\[(\d+)\]/', $q[0], $matches);
                     $allTextMarkers = $matches[1];
 
-                    $str = $q[1];
+                    $str = $q[1] ?? '';
                     $arr = explode(',', $str);
                     foreach ($arr as $value) {
                         $arr2 = explode('|', $value);
@@ -380,7 +380,7 @@ if (!class_exists('Answer')):
                     foreach ($allTextMarkers as $m) {
                         foreach ($TempArr as $index => $val) {
                             if ($index == $m) {
-                                $markerWithAnswer[$index] = $val; 
+                                $markerWithAnswer[$index] = $val;
                             }
                         }
 
@@ -405,7 +405,7 @@ if (!class_exists('Answer')):
             if ($answer) {
                 $q = explode('::', $answer->answer);
                 if (count($q) > 0) {
-                    $str = $q[1];
+                    $str = $q[1] ?? '';
                     $arrTmp = explode(',', $str);
                     foreach ($arrTmp as $value) {
                         $arr2 = explode('|', $value);
@@ -473,17 +473,17 @@ if (!class_exists('Answer')):
                         $arr = explode('|', $r);
                         if (count($arr) == 3 && $arr[2] > 0) {
                             $total++;
-                        } 
+                        }
                     }
                 }
-            } 
+            }
 
             return $total;
 
         }
 
         /**
-        * 
+        *
         * @author - Nikos Mpalamoutis
         */
         public function get_drag_and_drop_answer_text() {
@@ -514,7 +514,7 @@ if (!class_exists('Answer')):
         }
 
        /**
-       * 
+       *
        * @author - Nikos Mpalamoutis
        */
         public function get_drag_and_drop_answer_grade() {
@@ -547,7 +547,7 @@ if (!class_exists('Answer')):
         }
 
        /**
-       * 
+       *
        * @author - Nikos Mpalamoutis
        */
         public function get_drag_and_drop_answer_grade_as_text() {
@@ -580,7 +580,7 @@ if (!class_exists('Answer')):
 
 
         /**
-         * 
+         *
          * @param $questionId
          * @return int|mixed
          * @author - Nikos Mpalamoutis
@@ -599,7 +599,7 @@ if (!class_exists('Answer')):
         }
 
         /**
-         * 
+         *
          * @param $questionId
          * @author - Nikos Mpalamoutis
          */
@@ -612,16 +612,18 @@ if (!class_exists('Answer')):
             if ($q) {
                 $arrMarkers = explode('|', $q);
                 foreach ($arrMarkers as $m) {
-                    $markersData = json_decode($m, true);
-                    $markerIds[] = $markersData['marker_id'];
+                    if ($m) {
+                        $markersData = json_decode($m, true);
+                        $markerIds[] = $markersData['marker_id'];
+                    }
                 }
             }
-            
+
             return $markerIds;
         }
 
         /**
-         * 
+         *
          * @param $questionId
          * @return string|mixed
          * @author - Nikos Mpalamoutis
@@ -643,7 +645,7 @@ if (!class_exists('Answer')):
         }
 
         /**
-         * 
+         *
          * @param $questionId
          * @return int|mixed
          * @author - Nikos Mpalamoutis
@@ -666,15 +668,15 @@ if (!class_exists('Answer')):
          * @author - Nikos Mpalamoutis
          */
         function get_total_calculated_predefined_answers() {
-            
+
             $questionId = $this->questionId;
             $totalAnswers = Database::get()->queryArray("SELECT answer FROM exercise_answer WHERE question_id = ?d", $questionId);
-            
+
             return count($totalAnswers);
         }
 
          /**
-         * 
+         *
          * @param $questionId
          * @param $hasAnswered
          * @return string|mixed
@@ -683,12 +685,11 @@ if (!class_exists('Answer')):
         function get_user_calculated_answer($questionId, $eurid) {
 
             $userAnswer = Database::get()->querySingle("SELECT answer FROM exercise_answer_record WHERE eurid = ?d AND question_id = ?d", $eurid, $questionId)->answer;
-            $userAnswer = $userAnswer ?? '';
-            return $userAnswer;
+            return $userAnswer ?? '';
         }
 
         /**
-         * 
+         *
          * @param $questionId
          * @param $hasAnswered
          * @return int|mixed
@@ -711,7 +712,7 @@ if (!class_exists('Answer')):
         }
 
         /**
-         * 
+         *
          * @param $eurid
          * @param $questionId
          * @return int|mixed
@@ -724,14 +725,14 @@ if (!class_exists('Answer')):
         }
 
         /**
-         * 
+         *
          * @param $questionId
          * @param $expression
          * @return string|mixed
          * @author - Nikos Mpalamoutis
          */
         function replaceItemsBracesWithWildCards($expression, $questionId) {
-            
+
             $options = Database::get()->querySingle("SELECT options FROM exercise_question WHERE id = ?d", $questionId)->options;
             if ($options) {
                 // Decode JSON to array
@@ -754,7 +755,7 @@ if (!class_exists('Answer')):
         }
 
         /**
-        * 
+        *
         * @author - Nikos Mpalamoutis
         */
         public function get_ordering_answers() {
@@ -778,7 +779,7 @@ if (!class_exists('Answer')):
         }
 
         /**
-       * 
+       *
        * @author - Nikos Mpalamoutis
        */
         public function get_ordering_answer_grade() {
@@ -808,7 +809,7 @@ if (!class_exists('Answer')):
         }
 
         /**
-        * 
+        *
         * @author - Nikos Mpalamoutis
         */
         public function get_total_ordering_answers() {
@@ -819,13 +820,13 @@ if (!class_exists('Answer')):
             if ($answer) {
                 $items = explode(',', $answer->answer);
             }
-            
+
             return count($items);
-            
+
         }
 
         /**
-        * 
+        *
         * @author - Nikos Mpalamoutis
         */
         public function get_ordering_answers_by_user($qid, $eurid) {
@@ -849,10 +850,10 @@ if (!class_exists('Answer')):
                         $arr = explode('|', $r);
                         if (count($arr) == 3 && $arr[2] > 0) {
                             $total++;
-                        } 
+                        }
                     }
                 }
-            } 
+            }
 
             return $total;
 

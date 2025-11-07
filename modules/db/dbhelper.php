@@ -19,6 +19,13 @@
  */
 
 abstract class DBHelper {
+    const FKRefOption_DEFAULT = 0;
+    const FKRefOption_RESTRICT = 1;
+    const FKRefOption_CASCADE = 2;
+    const FKRefOption_SET_NULL = 3;
+    const FKRefOption_NO_ACTION = 4;
+    const FKRefOption_SET_DEFAULT = 5;
+
 
     private static $helper_impl;
 
@@ -121,13 +128,15 @@ abstract class DBHelper {
      * @param type $detailFieldName The detail table's field name, which connects with master table
      * @param type $masterTableName The master table name
      * @param type $masterIDFieldName The master table's primary key field name
+     * @param int $on_delete Optional. One of FKRefOption_*. The referential action to take when a DELETE operation affects matching rows.
+     * @param int $on_update Optional. One of FKRefOption_*. The referential action to take when an UPDATE operation affects matching rows.
      */
-    public static function createForeignKey($detailTableName, $detailFieldName, $masterTableName, $masterIDFieldName = null) {
+    public static function createForeignKey($detailTableName, $detailFieldName, $masterTableName, $masterIDFieldName = null, $onDelete = DBHelper::FKRefOption_DEFAULT, $onUpdate = DBHelper::FKRefOption_DEFAULT) {
         if (is_null($masterIDFieldName))
             $masterIDFieldName = DBHelper::primaryKeyOf($masterTableName);
         if (DBHelper::foreignKeyExists($detailTableName, $detailFieldName, $masterTableName, $masterIDFieldName))
             return;
-        return DBHelper::impl()->createForeignKeyImpl($detailTableName, $detailFieldName, $masterTableName, $masterIDFieldName);
+        return DBHelper::impl()->createForeignKeyImpl($detailTableName, $detailFieldName, $masterTableName, $masterIDFieldName, $onDelete, $onUpdate);
     }
 
     /**
@@ -169,7 +178,7 @@ abstract class DBHelper {
 
     abstract protected function isColumnNullableImpl($table, $column);
 
-    abstract protected function createForeignKeyImpl($detailTableName, $detailFieldName, $masterTableName, $masterIDFieldName);
+    abstract protected function createForeignKeyImpl($detailTableName, $detailFieldName, $masterTableName, $masterIDFieldName, $onDelete, $onUpdate);
 
     abstract protected function foreignKeyExistsImpl($detailTableName, $detailFieldName, $masterTableName, $masterIDFieldName);
 }
@@ -258,12 +267,31 @@ class _DBHelper_MYSQL extends DBHelper {
         return "fk_" . $masterTableName . "_" . $detailTableName . "_" . $detailFieldName;
     }
 
-    protected function createForeignKeyImpl($detailTableName, $detailFieldName, $masterTableName, $masterIDFieldName) {
+    private function getForeignKeyConstraint(int $ref) {
+        switch($ref) {
+            case DBHelper::FKRefOption_RESTRICT:
+                return 'RESTRICT';
+            case DBHelper::FKRefOption_CASCADE:
+                return 'CASCADE';
+            case DBHelper::FKRefOption_SET_NULL:
+                return 'SET NULL';
+            case DBHelper::FKRefOption_NO_ACTION:
+                return 'NO ACTION';
+            case DBHelper::FKRefOption_SET_DEFAULT:
+            case DBHelper::FKRefOption_DEFAULT:
+            default:
+                return 'SET DEFAULT';
+        }
+    }
+
+    protected function createForeignKeyImpl($detailTableName, $detailFieldName, $masterTableName, $masterIDFieldName, $onDelete, $onUpdate) {
         Database::get()->query("
             ALTER TABLE " . $detailTableName . "
             ADD CONSTRAINT " . $this->getForeignKeyName($detailTableName, $detailFieldName, $masterTableName) . "
             FOREIGN KEY (" . $detailFieldName . ")
-            REFERENCES " . $masterTableName . "(" . $masterIDFieldName . ")");
+            REFERENCES " . $masterTableName . "(" . $masterIDFieldName . ")
+            ON UPDATE " . $this->getForeignKeyConstraint($onUpdate) . "
+            ON DELETE " . $this->getForeignKeyConstraint($onDelete));
     }
 
     protected function foreignKeyExistsImpl($detailTableName, $detailFieldName, $masterTableName, $masterIDFieldName) {

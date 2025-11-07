@@ -79,7 +79,7 @@ $tschema = "<thead><tr class='list-header'>"
     . "<th>$langEmail</th>"
     . "</tr></thead>"
     . "<tbody></tbody>"
-    . "<tfoot><tr><th>$langTotal</th><th></th><th></th><th></th><th></th><th></th></tr></tfoot>";
+    . "<tfoot><tr><th>$langTotal</th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr></tfoot>";
 $tool_content .= table_placeholder("cdetails1", "table-default table-striped table-logs", $tschema, "$langHits $langAnd $langDuration");
 $tool_content .= "</div></div>";
 

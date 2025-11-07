@@ -13,7 +13,7 @@
 
                     <div class='mt-4'></div>
 
-                    @include('layouts.partials.show_alert') 
+                    @include('layouts.partials.show_alert')
 
                     <div class='col-lg-6 col-12'>
                         <div class='form-wrapper form-edit border-0 px-0'>
@@ -29,7 +29,7 @@
                             </div>
 
                             <div class='form-group mt-4'>
-                            <label for='body_mail' class='col-sm-12 control-label-notes'>{{ trans('typeyourmessage') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
+                            <label for='body_mail' class='col-sm-12 control-label-notes'>{{ trans('langTypeOutMessage') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
                                 <div class='col-sm-12'>
                                 {!! $body_mail_rich_text !!}
                                 </div>

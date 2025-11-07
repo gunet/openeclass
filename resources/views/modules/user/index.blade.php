@@ -43,10 +43,13 @@
         });
     }
 
+    window.currentPopoverUserID = null;
+
     function popover_init() {
         $('[data-bs-toggle="popover"]').on('click',function(e){
             e.preventDefault();
         }).popover();
+
         var click_in_process = false;
         var hidePopover = function () {
             if (!click_in_process) {
@@ -57,8 +60,21 @@
             $(this).popover('toggle');
             $('#action_button_menu').parent().parent().addClass('menu-popover');
         };
-        $('.menu-popover').popover().on('click', togglePopover).on('blur', hidePopover);
+
+        $('.menu-popover').popover().on('click', function (e) {
+            window.currentPopoverUserID = $(this).closest('tr').find('[data-userid]').data('userid') || null;
+            togglePopover.call(this, e);
+        }).on('blur', hidePopover);
+
         $('.menu-popover').on('shown.bs.popover', function () {
+
+            var $trigger = $(this);
+            var userID = $trigger.closest('tr').find('[data-userid]').data('userid') || window.currentPopoverUserID || null;
+            userID = userID ? (parseInt(userID, 10) || userID) : null;
+
+            var $popover = $('.popover').last();
+            $popover.data('userid', userID);
+
             $('.popover').mousedown(function () {
                 click_in_process = true;
             });
@@ -67,6 +83,10 @@
                 $(this).popover('hide');
             });
             act_confirm();
+        });
+
+        $(document).on('hidden.bs.popover', function () {
+            window.currentPopoverUserID = null;
         });
 
     }
@@ -106,11 +126,11 @@
                 tooltip_init();
                 popover_init();
             },
-            sAjaxSource: '{{ $ajaxUrl }}',
-            aLengthMenu: [
-               [10, 15, 20 , -1],
-               [10, 15, 20, '{{ js_escape(trans('langAllOfThem')) }}']
-            ],
+            ajax: {
+                url: '{{ $ajaxUrl }}',
+                type: 'POST'
+            },
+            lengthMenu: [10, 15, 20 , -1],
             sPaginationType: 'full_numbers',
             aoColumnDefs: [
                 { sClass: 'option-btn-cell text-end', aTargets: [ -1 ] },
@@ -120,17 +140,18 @@
                 { bSortable: false, aTargets: [ 4 ] }
             ],
             oLanguage: {
+                lengthLabels: {
+                    '-1': '{{ trans('langAllOfThem') }}'
+                },
                 sLengthMenu: '{{ js_escape(trans('langDisplay') . ' _MENU_ ' . trans('langResults2')) }}',
                 sZeroRecords: '{{ js_escape(trans('langNoResult')) }}',
                 sInfo: '{{ js_escape(trans('langDisplayed') . ' _START_ ' .
                                      trans('langTill') . ' _END_ ' . trans('langFrom2') .
                                      ' _TOTAL_ ' . trans('langTotalResults')) }}',
-                sInfoEmpty: '{{ js_escape(trans('langDisplayed') . ' 0 ' . trans('langTill') .
-                                          ' 0 ' . trans('langFrom2') . ' 0 ' . trans('langResults2')) }}',
+                sInfoEmpty: '',
                 sInfoFiltered: '',
                 sInfoPostFix:  '',
                 sSearch:       '',
-                sUrl:          '',
                 oPaginate: {
                     sFirst: '&laquo;',
                     sPrevious: '&lsaquo;',
@@ -203,12 +224,110 @@
                 }
             });
         });
-        $('.dataTables_filter input')
+        $('.dt-search input')
             .attr({ style: 'width: 200px',
                     class: 'form-control input-sm mb-3',
                     placeholder: '{{ js_escape(trans('langName') . ', Username, Email') }}' });
-        $('.dataTables_filter label').attr('aria-label', '{{ trans('langSearch') }}');
+        $('.dt-search label').attr('aria-label', '{{ trans('langSearch') }}');
         $('.success').delay(3000).fadeOut(1500);
+
+        // .rights_menu
+        $(document).on('click', '.rights_menu', function (e) {
+            e.preventDefault();
+
+            let userID = window.currentPopoverUserID
+            userID = userID ? (parseInt(userID, 10) || userID) : null;
+
+            $.ajax({
+                type: 'POST',
+                url: '{{ $ajaxUrl }}',
+                datatype: 'json',
+                data: {
+                    action: 'getUserRights',
+                    userID: userID
+                },
+                success: function(data) {
+                    let resp = (typeof data === 'string') ? (data ? JSON.parse(data) : {}) : (data || {});
+
+                    let @if (get_config('allow_teacher_clone_course'))
+                        checklist = "<form class='form-horizontal' role='form' method='post'>" +
+                            "<div class='d-flex gap-2'><input type='checkbox' id='userRights_CourseAdminTools' name='userRights_CourseAdminTools'><label for='userRights_CourseAdminTools'>{{ js_escape(trans('langCourseAdminTools')) }}</label></div>" +
+                            "<div class='d-flex gap-2'><input type='checkbox' id='userRights_AdminUsers' name='userRights_AdminUsers'><label for='userRights_AdminUsers'>{{ js_escape(trans('langAdminUsers')) }}</label></div>" +
+                            "<div class='d-flex gap-2'><input type='checkbox' id='userRights_ArchiveCourse' name='userRights_ArchiveCourse'><label for='userRights_ArchiveCourse'>{{ js_escape(trans('langArchiveCourse')) }}</label></div>" +
+                            "<div class='d-flex gap-2'><input type='checkbox' id='userRights_CloneCourse' name='userRights_CloneCourse'><label for='userRights_CloneCourse'>{{ js_escape(trans('langCloneCourse')) }}</label></div>" +
+                            "</form>";
+                    @else
+                        checklist = "<form class='form-horizontal' role='form' method='post'>" +
+                            "<div class='d-flex gap-2'><input type='checkbox' id='userRights_CourseAdminTools' name='userRights_CourseAdminTools'><label for='userRights_CourseAdminTools'>{{ js_escape(trans('langCourseAdminTools')) }}</label></div>" +
+                            "<div class='d-flex gap-2'><input type='checkbox' id='userRights_AdminUsers' name='userRights_AdminUsers'><label for='userRights_AdminUsers'>{{ js_escape(trans('langAdminUsers')) }}</label></div>" +
+                            "<div class='d-flex gap-2'><input type='checkbox' id='userRights_ArchiveCourse' name='userRights_ArchiveCourse'><label for='userRights_ArchiveCourse'>{{ js_escape(trans('langArchiveCourse')) }}</label></div>" +
+                            "</form>";
+                    @endif
+
+                    bootbox.confirm({
+                        closeButton: false,
+                        title: "<div class='icon-modal-default'><i class='fa-solid fa-list-check fa-xl'></i></div><div class='modal-title-default text-center mb-0'>{{ js_escape(trans('langUserPermissions')) }}</div>",
+                        message: "<p class='text-center'>"+checklist+"</p>",
+                        buttons: {
+                            cancel: {
+                                label: "{{ js_escape(trans('langCancel')) }}",
+                                className: "cancelAdminBtn position-center"
+                            },
+                            confirm: {
+                                label: "{{ js_escape(trans('langAnalyticsConfirm')) }}",
+                                className: "submitAdminBtn position-center",
+                            }
+                        },
+                        callback: function (result) {
+                            if (result) {
+
+                                let userRights_CourseAdminTools = $('#userRights_CourseAdminTools').is(':checked') ? 1 : 0;
+                                let userRights_AdminUsers = $('#userRights_AdminUsers').is(':checked') ? 1 : 0;
+                                let userRights_ArchiveCourse = $('#userRights_ArchiveCourse').is(':checked') ? 1 : 0;
+                                let userRights_CloneCourse = $('#userRights_CloneCourse').is(':checked') ? 1 : 0;
+
+                                $.ajax({
+                                    type: 'POST',
+                                    url: '{{ $ajaxUrl }}',
+                                    datatype: 'json',
+                                    data: {
+                                        action: 'updateRights',
+                                        userID: userID,
+                                        userRights_CourseAdminTools: userRights_CourseAdminTools,
+                                        userRights_AdminUsers: userRights_AdminUsers,
+                                        userRights_ArchiveCourse: userRights_ArchiveCourse,
+                                        userRights_CloneCourse: userRights_CloneCourse
+                                    },
+                                    success: function(data) {
+                                        location.reload();
+                                    },
+                                    error: function(xhr, textStatus, error) {
+                                        console.log(xhr.statusText);
+                                        console.log(textStatus);
+                                        console.log(error);
+                                    }
+                                });
+                            }
+                        }
+                    });
+
+                    $('.modal').last().one('shown.bs.modal', function () {
+                        $('#userRights_CourseAdminTools').prop('checked', resp.admin_modules == 1);
+                        $('#userRights_AdminUsers').prop('checked', resp.admin_users == 1);
+                        $('#userRights_ArchiveCourse').prop('checked', resp.course_backup == 1);
+                        $('#userRights_CloneCourse').prop('checked', resp.course_clone == 1);
+                    });
+
+                },
+                error: function(xhr, textStatus, error) {
+                    console.log(xhr.statusText);
+                    console.log(textStatus);
+                    console.log(error);
+                }
+            });
+
+        });
+
     });
 </script>
 @endpush

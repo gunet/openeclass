@@ -26,8 +26,15 @@ $res_type = isset($_GET['res_type']);
 
 // validate
 $content_id = intval($_GET['id']);
-$onlyEnabledWhere = ($is_editor) ? '' : " AND enabled = 1 ";
-$content = Database::get()->querySingle("SELECT * FROM h5p_content WHERE id = ?d AND course_id = ?d $onlyEnabledWhere", $content_id, $course_id);
+
+if ($is_editor) {
+    $content = Database::get()->querySingle("SELECT * FROM h5p_content WHERE id = ?d AND course_id = ?d", $content_id, $course_id);
+} else {
+    $content = Database::get()->querySingle("SELECT * FROM h5p_content WHERE id = ?d 
+            AND course_id = ?d 
+            AND (enabled = 1 OR creator_id IN (SELECT user_id FROM course_user WHERE course_id = ?d AND user_id = ?d AND status = " . USER_STUDENT . "))", $content_id, $course_id, $course_id, $uid);
+}
+
 if (!$content) {
     redirect_to_home_page("modules/h5p/?course=$course_code");
 }
@@ -41,7 +48,7 @@ if (!$res_type) {
 $toolName = $langImport;
 $navigation[] = ['url' => $backUrl, 'name' => $langH5p];
 
-$tool_content .= action_bar([
+$action_bar = action_bar([
     [ 'title' => $langBack,
       'url' => $backUrl,
       'icon' => 'fa-reply',
@@ -61,6 +68,8 @@ $tool_content .= action_bar([
       'show' => ($content->reuse_enabled && $is_editor)
     ]
 ], false);
+
+$tool_content .= $action_bar;
 
 $workspaceUrl = $urlAppend . 'courses/' . $course_code . '/h5p/content/' . $content_id . '/workspace';
 $workspaceLibs = $urlAppend . 'courses/h5p/libraries';

@@ -73,14 +73,14 @@ $head_content .= "
 if ($is_editor) {
     if (isset($_GET['create'])) {
         $pageName = $langCreate;
-        $tool_content .= action_bar(array(
+        $action_bar = action_bar(array(
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
                   'icon' => 'fa-reply',
                   'level' => 'primary')
             ));
     } else {
-        $tool_content .= action_bar(array(
+        $action_bar = action_bar(array(
             array('title' => $langCreate,
                   'url' => "index.php?course=$course_code&amp;create=1",
                   'icon' => 'fa-plus-circle',
@@ -88,6 +88,8 @@ if ($is_editor) {
                   'level' => 'primary-label')
             ));
     }
+
+    $tool_content .= $action_bar;
 
     if (isset($_REQUEST['delete']) or isset($_POST['delete_x'])) {
         $id = $_REQUEST['delete'];
@@ -234,13 +236,6 @@ draw($tool_content, 2, null, $head_content);
 
 /**
  * @brief display action button
- * @global type $is_editor
- * @global type $langEditChange
- * @global type $langDelete
- * @global type $langEBookDelConfirm
- * @global type $langViewShow
- * @global type $course_code
- * @global type $langViewHide
  * @param type $id
  * @param type $vis
  * @return string

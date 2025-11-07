@@ -18,7 +18,6 @@
  *
  */
 
-use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 $questionName = $objQuestion->selectTitle();
 $answerType = $objQuestion->selectType();
@@ -26,6 +25,16 @@ $questionId = $objQuestion->selectId();
 $questionTypeWord = $objQuestion->selectTypeLegend($answerType);
 $questionDescription = standard_text_escape($objQuestion->selectDescription());
 $okPicture = file_exists($picturePath . '/quiz-' . $questionId) ? true : false;
+
+// Check if AI evaluation is available for FREE_TEXT questions
+$aiEvaluationAvailable = false;
+if ($answerType == FREE_TEXT) {
+    require_once 'include/lib/ai/services/AIExerciseEvaluationService.php';
+    $aiService = new AIService($course_id, $uid);
+    $aiEvaluationAvailable = $aiService->isEnabledForCourse(AI_MODULE_FREE_TEXT_EVALUATION);
+    // Get existing AI configuration if it exists
+    $aiConfig = Database::get()->querySingle("SELECT * FROM exercise_ai_config WHERE question_id = ?d", $questionId);
+}
 
 $newAnswer = $deleteAnswer = $modifyWildCards = false;
 
@@ -35,6 +44,9 @@ if (isset($_GET['htopic'])) { //new question
 }
 if (isset($_POST['submitAnswers'])) {
     $submitAnswers = $_POST['submitAnswers'];
+}
+if (isset($_POST['submitAIConfig'])) {
+    $submitAIConfig = $_POST['submitAIConfig'];
 }
 if (isset($_POST['buttonBack'])) {
     $buttonBack = $_POST['buttonBack'];
@@ -48,13 +60,76 @@ if (isset($_POST['lessAnswers'])) {
 if (isset($_POST['moreAnswers'])) {
     $newAnswer = true;
 }
+
 if (isset($_POST['modifyWildCards'])) {
     $modifyWildCards = true;
+}
+// Handle AI configuration form submission for FREE_TEXT questions
+if (isset($submitAIConfig) && $answerType == FREE_TEXT && $aiEvaluationAvailable) {
+    $aiEnabled = isset($_POST['ai_enabled']) ? 1 : 0;
+    $evaluationPrompt = trim($_POST['evaluation_prompt'] ?? '');
+    $maxPoints = $objQuestion->selectWeighting(); // Use question's weight as max points
+    $sampleResponses = trim($_POST['sample_responses'] ?? '');
+
+    // Validate AI configuration
+    $aiConfigError = '';
+    if ($aiEnabled && empty($evaluationPrompt)) {
+        $aiConfigError = $langAIEvaluationPromptRequired;
+    } elseif ($aiEnabled && $maxPoints <= 0) {
+        $aiConfigError = $langAIMaxPointsRequired;
+    }
+
+    if (empty($aiConfigError)) {
+        // Process sample responses if provided
+        $sampleResponsesJson = null;
+        if (!empty($sampleResponses)) {
+            $lines = array_filter(array_map('trim', explode("\n", $sampleResponses)));
+            $samples = [];
+            foreach ($lines as $line) {
+                if (strpos($line, '|') !== false) {
+                    list($response, $quality) = array_map('trim', explode('|', $line, 2));
+                    $samples[] = ['response' => $response, 'quality' => $quality];
+                } else {
+                    $samples[] = ['response' => $line, 'quality' => 'good'];
+                }
+            }
+            if (!empty($samples)) {
+                $sampleResponsesJson = json_encode($samples);
+            }
+        }
+
+        if ($aiEnabled) {
+            // Insert or update AI configuration
+            if ($aiConfig) {
+                Database::get()->query("UPDATE exercise_ai_config 
+                                       SET enabled = ?d, evaluation_prompt = ?s, 
+                                           sample_responses = ?s, updated_at = NOW()
+                                       WHERE question_id = ?d",
+                                       $aiEnabled, $evaluationPrompt,
+                                       $sampleResponsesJson, $questionId);
+            } else {
+                Database::get()->query("INSERT INTO exercise_ai_config 
+                                       (question_id, course_id, enabled, evaluation_prompt, sample_responses)
+                                       VALUES (?d, ?d, ?d, ?s, ?s)",
+                                       $questionId, $course_id, $aiEnabled, $evaluationPrompt,
+                                       $sampleResponsesJson);
+            }
+            $msgSuccess = $langAIConfigSaved;
+        } else {
+            // Disable AI evaluation
+            if ($aiConfig) {
+                Database::get()->query("UPDATE exercise_ai_config SET enabled = 0 WHERE question_id = ?d", $questionId);
+            }
+            $msgSuccess = $langAIConfigDisabled;
+        }
+
+        // Refresh AI config after save
+        $aiConfig = Database::get()->querySingle("SELECT * FROM exercise_ai_config WHERE question_id = ?d", $questionId);
+    }
 }
 
 // the answer form has been submitted
 if (isset($submitAnswers) || isset($buttonBack)) {
-
     if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER) {
         $questionWeighting = $nbrGoodAnswers = 0;
         for ($i = 1; $i <= $nbrAnswers; $i++) {
@@ -249,6 +324,23 @@ if (isset($submitAnswers) || isset($buttonBack)) {
             }
         }
     } elseif ($answerType == DRAG_AND_DROP_TEXT) {
+
+        // Get posted variables as session posted variables
+        if (isset($_POST['drag_and_drop_question'])) {
+            $_SESSION['drag_and_drop_question_'.$questionId] = purify($_POST['drag_and_drop_question']);
+        }
+        if (isset($_POST['choice_answer']) && count($_POST['choice_answer']) > 0) {
+            for ($i = 0; $i < count($_POST['choice_answer']); $i++) {
+                $_SESSION['choice_answer_'.$questionId][$i+1] = $_POST['choice_answer'][$i];
+            }
+            $_SESSION['count_choice_answer_'.$questionId] = count($_POST['choice_answer']);
+        }
+        if (isset($_POST['choice_grade']) && count($_POST['choice_grade']) > 0) {
+            for ($i = 0; $i < count($_POST['choice_grade']); $i++) {
+                $_SESSION['choice_grade_'.$questionId][$i+1] = $_POST['choice_grade'][$i];
+            }
+        }
+
         $q_text = purify($_POST['drag_and_drop_question']);
         // Use preg_match_all to find all numbers within brackets
         preg_match_all('/\[(\d+)\]/', $q_text, $matches);
@@ -274,7 +366,7 @@ if (isset($submitAnswers) || isset($buttonBack)) {
         if ($hasDuplicates) {
             Session::flash('message', $langErrorWithUniqueNumberOfBlank);
             Session::flash('alert-class', 'alert-warning');
-            redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId&modifyAnswers=$_GET[modifyAnswers]");
+            redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId&modifyAnswers=$_GET[modifyAnswers]&htopic=" . DRAG_AND_DROP_TEXT . "&invalid_posted_values=true");
         }
 
         $totalAnsFromChoices = [];
@@ -287,12 +379,13 @@ if (isset($submitAnswers) || isset($buttonBack)) {
         }
 
         // Check for duplicates or empty values
-        $DuplicatesOn = (count($allPredefinedValues) !== count(array_unique($allPredefinedValues)));
+        //$DuplicatesOn = (count($allPredefinedValues) !== count(array_unique($allPredefinedValues)));
         $EmptyOn = in_array("", $allPredefinedValues, true);
-        if ($DuplicatesOn || $EmptyOn) {
+        //if ($DuplicatesOn || $EmptyOn) {
+        if ($EmptyOn) {
             Session::flash('message', $langPredefinedAnswerExists);
             Session::flash('alert-class', 'alert-warning');
-            redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId&modifyAnswers=$_GET[modifyAnswers]&htopic=" . DRAG_AND_DROP_TEXT);
+            redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId&modifyAnswers=$_GET[modifyAnswers]&htopic=" . DRAG_AND_DROP_TEXT . "&invalid_posted_values=true");
         }
 
         // The total number of defined answers can be the same or bigger than the total number of the question blanks.
@@ -301,7 +394,18 @@ if (isset($submitAnswers) || isset($buttonBack)) {
         if ($totalNumberOfBlanks > $totalNumberOfDefinedAnswers) {
             Session::flash('message', $langErrorWithChoicesAsAnswers);
             Session::flash('alert-class', 'alert-warning');
-            redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId&modifyAnswers=$_GET[modifyAnswers]");
+            redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId&modifyAnswers=$_GET[modifyAnswers]&htopic=" . DRAG_AND_DROP_TEXT . "&invalid_posted_values=true");
+        }
+
+        // Check for empty grades.
+        if (isset($_POST['choice_grade']) && count($_POST['choice_grade']) > 0) {
+            foreach ($_POST['choice_grade'] as $grade) {
+                if ($grade == '') {
+                    Session::flash('message', $lanFieldGradeNotHasNumericValue);
+                    Session::flash('alert-class', 'alert-warning');
+                    redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId&modifyAnswers=$_GET[modifyAnswers]&htopic=" . DRAG_AND_DROP_TEXT . "&invalid_posted_values=true");
+                }
+            }
         }
 
         sort($totalAnsFromText);
@@ -330,6 +434,12 @@ if (isset($submitAnswers) || isset($buttonBack)) {
                 $objQuestion->save();
             }
         }
+
+        unset($_SESSION['drag_and_drop_question_'.$questionId]);
+        unset($_SESSION['count_choice_answer_'.$questionId]);
+        unset($_SESSION['choice_answer_'.$questionId]);
+        unset($_SESSION['choice_answer_'.$questionId]);
+        unset($_SESSION['choice_grade_'.$questionId]);
 
     } elseif ($answerType == DRAG_AND_DROP_MARKERS) {
 
@@ -475,10 +585,45 @@ if (isset($submitAnswers) || isset($buttonBack)) {
             }
 
             if (!$checkOk) {
+
+                // Get posted values after inserting invalid values
+                $_SESSION['calculated_question_'.$questionId] = $_POST['calculated_question'];
+                if (count($_POST['calculated_answer']) > 0) {
+                    for ($i = 1; $i <= count($_POST['calculated_answer']); $i++) {
+                        $_SESSION['calculated_answer_'.$questionId][$i] = $_POST['calculated_answer'][$i];
+                    }
+                    $_SESSION['count_calculated_answer_'.$questionId] = count($_POST['calculated_answer']);
+                }
+                if (count($_POST['calculated_answer_grade']) > 0) {
+                    for ($i = 1; $i <= count($_POST['calculated_answer_grade']); $i++) {
+                        $_SESSION['calculated_answer_grade_'.$questionId][$i] = $_POST['calculated_answer_grade'][$i];
+                    }
+                }
+                foreach($_POST['wildCardSelection'] as $wildcard_index => $val) {
+                    $_SESSION['wildCardSelection_'.$questionId][$wildcard_index] = $val;
+                }
+                foreach($_POST['chooseTheValueForWildCard'] as $wildcard_index => $val) {
+                    $_SESSION['chooseTheValueForWildCard_'.$questionId][$wildcard_index] = $val;
+                }
+                foreach($_POST['wildCard_min'] as $wildcard_index => $val) {
+                    $_SESSION['wildCard_min_'.$questionId][$wildcard_index] = $val;
+                }
+                foreach($_POST['wildCard_max'] as $wildcard_index => $val) {
+                    $_SESSION['wildCard_max_'.$questionId][$wildcard_index] = $val;
+                }
+                foreach($_POST['wildCard_decimal'] as $wildcard_index => $val) {
+                    $_SESSION['wildCard_decimal_'.$questionId][$wildcard_index] = $val;
+                }
+                foreach($_POST['wildCard_answer'] as $wildcard_index => $val) {
+                    $_SESSION['wildCard_answer_'.$questionId][$wildcard_index] = $val;
+                }
+
+                unset($_SESSION['wildCard_'.$questionId]);
+
                 $Msgerror = $checkMessages[0][$checkOkVal];
                 Session::flash('message', $Msgerror);
                 Session::flash('alert-class', 'alert-warning');
-                redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId&modifyAnswers=$_GET[modifyAnswers]&htopic=" . CALCULATED);
+                redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId&modifyAnswers=$_GET[modifyAnswers]&htopic=" . CALCULATED . "&invalid_val=true");
             } else { // Insert in db
                 $arrItems = [];
                 $wildCardOptions = false;
@@ -568,6 +713,19 @@ if (isset($submitAnswers) || isset($buttonBack)) {
                         } else {
                             $objQuestion->save();
                         }
+
+                        // Unset session posted variables
+                        unset($_SESSION['calculated_question_'.$questionId]);
+                        unset($_SESSION['calculated_answer_'.$questionId]);
+                        unset($_SESSION['calculated_answer_grade_'.$questionId]);
+                        unset($_SESSION['count_calculated_answer_'.$questionId]);
+                        unset($_SESSION['wildCardSelection_'.$questionId]);
+                        unset($_SESSION['chooseTheValueForWildCard_'.$questionId]);
+                        unset($_SESSION['wildCard_min_'.$questionId]);
+                        unset($_SESSION['wildCard_max_'.$questionId]);
+                        unset($_SESSION['wildCard_decimal_'.$questionId]);
+                        unset($_SESSION['wildCard_answer_'.$questionId]);
+
                     }
                 }
             }
@@ -578,6 +736,28 @@ if (isset($submitAnswers) || isset($buttonBack)) {
         }
 
     } elseif($answerType == ORDERING) {
+
+        // Get posted variables as session posted variables
+        if (isset($_POST['ordering_answer']) && count($_POST['ordering_answer']) > 0) {
+            for ($i = 1; $i <= count($_POST['ordering_answer']); $i++) {
+                $_SESSION['ordering_answer_'.$questionId][$i] = $_POST['ordering_answer'][$i];
+            }
+            $_SESSION['count_ordering_answer_'.$questionId] = count($_POST['ordering_answer']);
+        }
+        if (isset($_POST['ordering_answer_grade']) && count($_POST['ordering_answer_grade']) > 0) {
+            for ($i = 1; $i <= count($_POST['ordering_answer_grade']); $i++) {
+                $_SESSION['ordering_answer_grade_'.$questionId][$i] = $_POST['ordering_answer_grade'][$i];
+            }
+        }
+        if (isset($_POST['layoutItems'])) {
+            $_SESSION['layoutItems_'.$questionId] = $_POST['layoutItems'];
+        }
+        if (isset($_POST['ltemsSelectionType'])) {
+            $_SESSION['ltemsSelectionType_'.$questionId] = $_POST['ltemsSelectionType'];
+        }
+        if (isset($_POST['SizeOfSubset'])) {
+            $_SESSION['SizeOfSubset_'.$questionId] = $_POST['SizeOfSubset'];
+        }
 
         $totalAnsFromOrderingChoices = [];
         $PredefinedValues = [];
@@ -598,11 +778,11 @@ if (isset($submitAnswers) || isset($buttonBack)) {
             if (!is_numeric($SizeOfSubset)) {
                 Session::flash('message', $langFillInTheSizeOfSubset);
                 Session::flash('alert-class', 'alert-warning');
-                redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId&modifyAnswers=$_GET[modifyAnswers]&htopic=" . ORDERING);
+                redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId&modifyAnswers=$_GET[modifyAnswers]&htopic=" . ORDERING . "&invalid_mode=true");
             } elseif (is_numeric($SizeOfSubset) && ($SizeOfSubset > count($PredefinedValues) or $SizeOfSubset <= 1)) { // A subset must have at least 2 items.
                 Session::flash('message', $langTheSizeOfSubsetIsBiggerThanPrAnswers);
                 Session::flash('alert-class', 'alert-warning');
-                redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId&modifyAnswers=$_GET[modifyAnswers]&htopic=" . ORDERING);
+                redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId&modifyAnswers=$_GET[modifyAnswers]&htopic=" . ORDERING . "&invalid_mode=true");
             }
         }
         $arrOptions = [
@@ -619,12 +799,12 @@ if (isset($submitAnswers) || isset($buttonBack)) {
         if ($DuplicatesItemsOn || $EmptyItemsOn) {
             Session::flash('message', $langPredefinedAnswerExists);
             Session::flash('alert-class', 'alert-warning');
-            redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId&modifyAnswers=$_GET[modifyAnswers]&htopic=" . ORDERING);
+            redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId&modifyAnswers=$_GET[modifyAnswers]&htopic=" . ORDERING . "&invalid_mode=true");
         }
 
         $choicesOrdArr = [];
         foreach ($totalAnsFromOrderingChoices as $inde_x) {
-            $choicesOrdArr[] = $inde_x . '|' . $_POST['ordering_answer'][$inde_x] . '|' . $_POST['ordering_answer_grade'][$inde_x];
+            $choicesOrdArr[] = $inde_x . '|' . $_POST['ordering_answer'][$inde_x] . '|' . fix_float($_POST['ordering_answer_grade'][$inde_x]);
         }
         $choices_ordering_answer = '';
         if (count($choicesOrdArr) > 0) {
@@ -645,6 +825,13 @@ if (isset($submitAnswers) || isset($buttonBack)) {
                 $objQuestion->save();
             }
         }
+
+        unset($_SESSION['ordering_answer_'.$questionId]);
+        unset($_SESSION['count_ordering_answer_'.$questionId]);
+        unset($_SESSION['ordering_answer_grade_'.$questionId]);
+        unset($_SESSION['layoutItems_'.$questionId]);
+        unset($_SESSION['ltemsSelectionType_'.$questionId]);
+        unset($_SESSION['SizeOfSubset_'.$questionId]);
     }
 
     if (empty($msgErr) and !isset($_POST['setWeighting'])) {
@@ -819,11 +1006,17 @@ if (isset($_GET['modifyAnswers'])) {
         if (empty($drag_and_drop_question)) {
             $drag_and_drop_question = $objAnswer->get_drag_and_drop_text();
         }
+        if (isset($_GET['invalid_posted_values']) && isset($_SESSION['drag_and_drop_question_'.$questionId])) {
+            $drag_and_drop_question = $_SESSION['drag_and_drop_question_'.$questionId];
+        }
 
         if ($newAnswer) {
             $nbrAnswers = $_POST['nbrAnswers'] + 1;
         } else {
             $nbrAnswers = $objAnswer->get_total_drag_and_drop_answers();
+            if (isset($_GET['invalid_posted_values']) && isset($_SESSION['count_choice_answer_'.$questionId])) {
+                $nbrAnswers = $_SESSION['count_choice_answer_'.$questionId];
+            }
         }
         if ($deleteAnswer) {
             $nbrAnswers = $_POST['nbrAnswers'] - 1;
@@ -836,6 +1029,16 @@ if (isset($_GET['modifyAnswers'])) {
         $grades_from_db = $objAnswer->get_drag_and_drop_answer_grade();
 
     } elseif ($answerType == DRAG_AND_DROP_MARKERS) {
+
+        // Redirect back if the question does not contain the default picture
+        $qpicturePath = "courses/$course_code/image";
+        $okQPicture = file_exists($qpicturePath . '/quiz-' . $questionId) ? true : false;
+        if (!$okQPicture && isset($_GET['modifyAnswers']) && isset($_GET['exerciseId'])) {
+            Session::flash('message', $langRequiresImageUploadedForThisType);
+            Session::flash('alert-class', 'alert-warning');
+            redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=" . intval($_GET['exerciseId']) . "&modifyQuestion=$_GET[modifyAnswers]");
+        }
+
         if ($newAnswer && !isset($_GET['remImg'])) {
             $nbrAnswers = $_POST['nbrAnswers'] + 1;
         } else { // for edit
@@ -879,6 +1082,13 @@ if (isset($_GET['modifyAnswers'])) {
 
         $calc_question = Database::get()->querySingle("SELECT * FROM exercise_question WHERE id = ?d", $questionId);
         $calculated_question = $_POST['calculated_question'] ?? strip_tags($calc_question->description);
+        if (isset($_GET['invalid_val']) && isset($_SESSION['calculated_question_'.$questionId])) { // After posting invalid values
+            $calculated_question = $_SESSION['calculated_question_'.$questionId];
+            // If the user is in invalid mode and posted new arithmetic expression, update it.
+            if (isset($_POST['calculated_question']) && $_POST['calculated_question'] != $calculated_question) {
+                $calculated_question = $_POST['calculated_question'];
+            }
+        }
         $options = $calc_question->options;
 
         $calculated_answer = [];
@@ -887,10 +1097,29 @@ if (isset($_GET['modifyAnswers'])) {
                 $calculated_answer[$index] = $answer;
             }
         }
+        if (isset($_GET['invalid_val']) && isset($_SESSION['calculated_answer_'.$questionId])) { // After posting invalid values
+            foreach ($_SESSION['calculated_answer_'.$questionId] as $index => $answer) {
+                $calculated_answer[$index] = $answer;
+                // If the user is in invalid mode and posted new predefined answers, update them.
+                if (isset($_POST['calculated_answer'][$index]) && $_POST['calculated_answer'][$index] != $calculated_answer[$index]) {
+                    $calculated_answer[$index] = $_POST['calculated_answer'][$index];
+                }
+            }
+        }
+
         $calculated_answer_grade = [];
         if (isset($_POST['calculated_answer_grade'])) {
             foreach ($_POST['calculated_answer_grade'] as $index => $grade) { // for creating question
                 $calculated_answer_grade[$index] = $grade;
+            }
+        }
+        if (isset($_GET['invalid_val']) && isset($_SESSION['calculated_answer_grade_'.$questionId])) { // After posting invalid values
+            foreach ($_SESSION['calculated_answer_grade_'.$questionId] as $index => $grade) {
+                $calculated_answer_grade[$index] = $grade;
+                // If the user is in invalid mode and posted new predefined grades, update them.
+                if (isset($_POST['calculated_answer_grade'][$index]) && $_POST['calculated_answer_grade'][$index] != $calculated_answer[$index]) {
+                    $calculated_answer_grade[$index] = $_POST['calculated_answer_grade'][$index];
+                }
             }
         }
 
@@ -911,6 +1140,9 @@ if (isset($_GET['modifyAnswers'])) {
                 if (isset($_POST['calculated_answer']) && count($_POST['calculated_answer']) > 0) {
                     $nbrAnswers = count($_POST['calculated_answer']);
                 }
+                if (isset($_GET['invalid_val']) && isset($_SESSION['count_calculated_answer_'.$questionId])) { // After inserting invalid posted variables get the session variables to show
+                    $nbrAnswers = $_SESSION['count_calculated_answer_'.$questionId];
+                }
             }
             if ($deleteAnswer) {
                 $nbrAnswers = $_POST['nbrAnswers'] - 1;
@@ -919,7 +1151,7 @@ if (isset($_GET['modifyAnswers'])) {
                 }
             }
 
-            if (isset($totalNumberOfCalculatedAnswers) && $totalNumberOfCalculatedAnswers > 0) { // for editing question
+            if (isset($totalNumberOfCalculatedAnswers) && $totalNumberOfCalculatedAnswers > 0 && !isset($_GET['invalid_val'])) { // for editing question
                 if (!isset($_POST['backModifyCalculated'])) {
                     $predefinedAns = Database::get()->queryArray("SELECT * FROM exercise_answer WHERE question_id = ?d", $questionId);
                     foreach ($predefinedAns as $an) {
@@ -943,7 +1175,7 @@ if (isset($_GET['modifyAnswers'])) {
             ///////////////////////////////////////////////
             // Modify the variables from the Curly brackets
             $wildCardsAll = [];
-            if (!is_null($options) or !empty($options)) { //  Items have been inserted in db - editing question
+            if ((!is_null($options) or !empty($options)) && !isset($_GET['invalid_val'])) { //  Items have been inserted in db - editing question
                 $dataItems = json_decode($options, true);
                 // Create a key-value array for items
                 foreach ($dataItems as $wildcard) {
@@ -955,8 +1187,6 @@ if (isset($_GET['modifyAnswers'])) {
                                                                                 'wildcard_random_val' => $wildcard['value'] ?? '',
                                                                                 'wildcard_type' => $wildcard['type'] ?? ''
                                                                             ];
-
-
                 }
             }
         }
@@ -969,6 +1199,9 @@ if (isset($_GET['modifyAnswers'])) {
             $nbrAnswers = $objAnswer->get_total_ordering_answers() ?? 2; // minimum 2 answer
             if ($nbrAnswers == 0) {
                 $nbrAnswers = 2;
+            }
+            if (isset($_GET['invalid_mode']) && isset($_SESSION['count_ordering_answer_'.$questionId])) {
+                $nbrAnswers = $_SESSION['count_ordering_answer_'.$questionId];
             }
         }
         if ($deleteAnswer) {
@@ -984,7 +1217,17 @@ if (isset($_GET['modifyAnswers'])) {
         }
 
         $ordering_answer = $objAnswer->get_ordering_answers();
+        if (isset($_GET['invalid_mode']) && isset($_SESSION['ordering_answer_'.$questionId])) {
+            for ($i = 1; $i <= count($_SESSION['ordering_answer_'.$questionId]); $i++) {
+                $ordering_answer[$i] = $_SESSION['ordering_answer_'.$questionId][$i];
+            }
+        }
         $ordering_answer_grade = $objAnswer->get_ordering_answer_grade();
+        if (isset($_GET['invalid_mode']) && isset($_SESSION['ordering_answer_grade_'.$questionId])) {
+            for ($i = 1; $i <= count($_SESSION['ordering_answer_grade_'.$questionId]); $i++) {
+                $ordering_answer_grade[$i] = $_SESSION['ordering_answer_grade_'.$questionId][$i];
+            }
+        }
 
     }
 
@@ -996,7 +1239,6 @@ if (isset($_GET['modifyAnswers'])) {
         $classContainer = 'drag-and-drop-markers-container';
         $classCanvas = 'drag-and-drop-markers-canvas';
     }
-
 
     $tool_content .= "<div class='col-12'><div class='card panelCard card-default px-lg-4 py-lg-3'>
                       <div class='card-header border-0 d-flex justify-content-between align-items-center'>
@@ -1011,8 +1253,7 @@ if (isset($_GET['modifyAnswers'])) {
                       </div>
                     </div></div>";
 
-    if ($answerType != FREE_TEXT  or $answerType != ORAL) {
-
+    if ($answerType != FREE_TEXT and $answerType != ORAL) {
         $tool_content .= "<div class='col-12 mt-4'><div class='card panelCard card-default px-lg-4 py-lg-3'>
                            <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                              <h3>$langQuestionAnswers";
@@ -1085,227 +1326,226 @@ if (isset($_GET['modifyAnswers'])) {
             $tool_content .= "<tr>
                     <td class='text-start' colspan='3'><strong>$langPollAddAnswer :</strong>
                         <div class='d-flex gap-2 flex-wrap mt-2'>
-                            <input type='submit' name='moreAnswers' value='$langMoreAnswers' />
-                            <input type='submit' name='lessAnswers' value='$langLessAnswers' />
+                            <input type='submit' name='moreAnswers' value='+'>
+                            <input type='submit' name='lessAnswers' value='-'>
                         </div>
                     </td>
                     <td colspan='2'>&nbsp;</td>
                   </tr>
                 </table></div>";
         } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT || $answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) {
-            $setId = isset($exerciseId)? "&amp;exerciseId=$exerciseId" : '';
-            $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code$setId&amp;modifyAnswers=" . urlencode($_GET['modifyAnswers']) . "'>";
-            $tempSW = isset($_POST['setWeighting']) ? $_POST['setWeighting'] : '';
-            $tool_content .= "
+             $setId = isset($exerciseId)? "&amp;exerciseId=$exerciseId" : '';
+             $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code$setId&amp;modifyAnswers=" . urlencode($_GET['modifyAnswers']) . "'>";
+             $tempSW = isset($_POST['setWeighting']) ? $_POST['setWeighting'] : '';
+             $tool_content .= "
                    <input type='hidden' name='formSent' value='1' />
                    <input type='hidden' name='setWeighting' value='$tempSW'>";
-            if ($answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) {
+             if ($answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) {
                  $legend = $langUseTagForSelectedWords;
                  $defaultText = $langDefaultMissingWords;
-            } else {
+             } else {
                  $legend = $langUseTagForBlank;
                  $defaultText = $langDefaultTextInBlanks;
-            }
-            if (!isset($displayBlanks)) {
-                $str_weighting = isset($weighting)? implode(',', $weighting): '';
-                $tool_content .= "<input type='hidden' name='str_weighting' value='$str_weighting'>
-                <fieldset><legend class='mb-0' aria-label='$langForm'></legend>
-                    <table class='table table-default'>
-                    <tr>
-                        <td>$langTypeTextBelow, $langAnd $legend :<br/><br/>
-                        <textarea class='form-control' name='reponse' cols='70' rows='6'>";
-                if (!isset($submitAnswers) && empty($reponse)) {
-                    $tool_content .= $defaultText;
-                } else {
-                    $tool_content .= q($reponse);
-                }
-                $tool_content .= "</textarea></td></tr>";
-                // if there is an error message
-                if (!empty($msgErr)) {
-                    $tool_content .= "<div class='alert alert-danger text-center'>$msgErr</div>";
-                }
-                $tool_content .= "</table>";
-            } else {
-                $tool_content .= "
-                    <input type='hidden' name='blanksDefined' value='true'>
-                    <input type='hidden' name='reponse' value='" . q($_POST['reponse']) . "'>";
-                // if there is an error message
-                if (!empty($msgErr)) {
-                    $tool_content .= "
-                                <table class='table-default' cellpadding='3' align='center' width='400'>
-                                <tr><td class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$msgErr</span></td></tr>
-                                </table>";
-                } elseif ($answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) {
-                    $tool_content .= "<tr><td>$langWeightingForEachBlankandChoose</td></tr>
-                                    <table class='table table-default'>";
-                    foreach ($blanks as $i => $blank) {
-                        $blank = reindex_array_keys_from_one($blank);
-                        if (!empty($correct_answer)) {
-                            $default_selection = $correct_answer[$i];
-                        } else {
-                            $default_selection = '';
-                        }
-                        $tool_content .= "<tr>
-                                        <td class='text-end'>" . selection($blank, "correct_selected_word[".$i."]", $default_selection,'class="form-control"') . "</td>
-                                        <td><input class='form-control' type='text' name='weighting[".($i)."]' value='" . (isset($weighting[$i]) ? $weighting[$i] : 0) . "'></td>
-                                        </tr>";
-                    }
-                    $tool_content .= "</table>";
-                } else {
-                    $tool_content .= "<tr><td>$langWeightingForEachBlank</td></tr>
-                                    <table class='table table-default'>";
-                    foreach ($blanks as $i => $blank) {
-                        $tool_content .= "<tr>
-                                        <td class='text-end'><strong>[" . q($blank) . "] :</strong></td>" . "
-                                        <td><input class='form-control' type='text' name='weighting[".($i)."]' value='" . (isset($weighting[$i]) ? $weighting[$i] : 0) . "'></td>
-                                        </tr>";
-                    }
-                    $tool_content .= "</table>";
-                }
-            }
+             }
+             if (!isset($displayBlanks)) {
+                 $str_weighting = isset($weighting)? implode(',', $weighting): '';
+                 $tool_content .= "<input type='hidden' name='str_weighting' value='$str_weighting'>
+                   <fieldset><legend class='mb-0' aria-label='$langForm'></legend>
+                     <table class='table table-default'>
+                       <tr>
+                         <td>$langTypeTextBelow, $langAnd $legend :<br/><br/>
+                           <textarea class='form-control' name='reponse' cols='70' rows='6'>";
+                 if (!isset($submitAnswers) && empty($reponse)) {
+                     $tool_content .= $defaultText;
+                 } else {
+                     $tool_content .= q($reponse);
+                 }
+                 $tool_content .= "</textarea></td></tr>";
+                 // if there is an error message
+                 if (!empty($msgErr)) {
+                     $tool_content .= "<div class='alert alert-danger text-center'>$msgErr</div>";
+                 }
+                 $tool_content .= "</table>";
+             } else {
+                 $tool_content .= "
+                     <input type='hidden' name='blanksDefined' value='true'>
+                     <input type='hidden' name='reponse' value='" . q($_POST['reponse']) . "'>";
+                 // if there is an error message
+                 if (!empty($msgErr)) {
+                     $tool_content .= "
+                                 <table class='table-default' cellpadding='3' align='center' width='400'>
+                                 <tr><td class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$msgErr</span></td></tr>
+                                 </table>";
+                 } elseif ($answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) {
+                     $tool_content .= "<tr><td>$langWeightingForEachBlankandChoose</td></tr>
+                                     <table class='table table-default'>";
+                     foreach ($blanks as $i => $blank) {
+                         $blank = reindex_array_keys_from_one($blank);
+                         if (!empty($correct_answer)) {
+                             $default_selection = $correct_answer[$i];
+                         } else {
+                             $default_selection = '';
+                         }
+                         $tool_content .= "<tr>
+                                            <td class='text-end'>" . selection($blank, "correct_selected_word[".$i."]", $default_selection,'class="form-control"') . "</td>
+                                            <td><input class='form-control' type='text' name='weighting[".($i)."]' value='" . (isset($weighting[$i]) ? $weighting[$i] : 0) . "'></td>
+                                         </tr>";
+                     }
+                     $tool_content .= "</table>";
+                 } else {
+                     $tool_content .= "<tr><td>$langWeightingForEachBlank</td></tr>
+                                     <table class='table table-default'>";
+                     foreach ($blanks as $i => $blank) {
+                         $tool_content .= "<tr>
+                                            <td class='text-end'><strong>[" . q($blank) . "] :</strong></td>" . "
+                                            <td><input class='form-control' type='text' name='weighting[".($i)."]' value='" . (isset($weighting[$i]) ? $weighting[$i] : 0) . "'></td>
+                                         </tr>";
+                     }
+                     $tool_content .= "</table>";
+                 }
+             }
         } elseif ($answerType == MATCHING) {
 
-            if (!empty($msgErr)) {
-                $tool_content .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$msgErr</span></div>";
-            }
+         if (!empty($msgErr)) {
+             $tool_content .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$msgErr</span></div>";
+         }
 
-            $tool_content .= "
-            <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code".((isset($exerciseId))? "&amp;exerciseId=$exerciseId" : "")."&amp;modifyAnswers=" . urlencode($_GET['modifyAnswers']) . "'>
-                <input type='hidden' name='formSent' value='1'>
-                <input type='hidden' name='nbrOptions' value='$nbrOptions'>
-                <input type='hidden' name='nbrMatches' value='$nbrMatches'>
-                <fieldset><legend class='mb-0' aria-label='$langForm'></legend>
-                <table class='table table-default'>";
-            $optionsList = array();
-            // create an array with the option letters
-            for ($i = 1, $j = 'A'; $i <= $nbrOptions; $i++, $j++) {
-                $optionsList[$i] = $j;
-            }
+         $tool_content .= "
+         <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code".((isset($exerciseId))? "&amp;exerciseId=$exerciseId" : "")."&amp;modifyAnswers=" . urlencode($_GET['modifyAnswers']) . "'>
+             <input type='hidden' name='formSent' value='1'>
+             <input type='hidden' name='nbrOptions' value='$nbrOptions'>
+             <input type='hidden' name='nbrMatches' value='$nbrMatches'>
+             <fieldset><legend class='mb-0' aria-label='$langForm'></legend>
+             <table class='table table-default'>";
+         $optionsList = array();
+         // create an array with the option letters
+         for ($i = 1, $j = 'A'; $i <= $nbrOptions; $i++, $j++) {
+             $optionsList[$i] = $j;
+         }
 
-            $tool_content .= "<tr><td colspan='2'><b>$langDefineOptions</b></td>
-                <td colspan='2'><b>$langMakeCorrespond</b></td>
-                    </tr>
-                    <tr>
-                <td>&nbsp;</td>
-                <td>
-                        <strong>$langColumnA:</strong> 
-                        <span style='valign:middle;'>$langMoreLessChoices:</span> 
-                        <div class='d-flex gap-2 mt-2 flex-wrap'>
-                            <input type='submit' name='moreMatches' value='+' />
-                            <input type='submit' name='lessMatches' value='-' />
-                        </div>
-                    </td>
-                <td><div align='text-end'><strong>$langColumnB</strong></div></td>
-                <td>$langGradebookGrade</td>
-                </tr>";
-            $i = $objAnswer->getFirstMatchingPosition();
-            for ($j = 1; $j <= $nbrMatches; $i++, $j++) {
-                if (isset($_POST['match'][$i])) {
-                    $optionText = $_POST['match'][$i];
-                } elseif (isset($match[$i])) {
-                    $optionText = $match[$i];
-                } elseif (!count($match)) {
-                    $optionText = ${'langDefaultMakeCorrespond' . $j}; // Default example option
-                } else {
-                    $optionText = '';
-                }
-                $optionWeight = isset($weighting[$i])? q($weighting[$i]): 1;
-
-                $tool_content .= "<tr>
-                <td class='text-end'><strong>$j</strong></td>
-                <td><input class='form-control' type='text' name='match[$i]' value='" . q($optionText) . "'></td>
-                <td><div class='text-end'><select class='form-select' name='sel[$i]'>";
-                foreach ($optionsList as $key => $val) {
-                    $tool_content .= "<option value='" . q($key) . "'";
-                    if ((!isset($submitAnswers) && !isset($sel[$i]) && $j == 2 && $val == 'B') || @$sel[$i] == $key) {
-                        $tool_content .= " selected='selected'";
-                    }
-                    $tool_content .= ">" . q($val) . "</option>";
-                }
-                $tool_content .= "</select></div></td>
-                <td><input class='form-control' type='text' name='weighting[$i]' value='$optionWeight'></td>
-                </tr>";
-            }
-
-            $tool_content .= "
-            <tr>
-            <td class='text-end'>&nbsp;</td>
-            <td colspan='3'>&nbsp;</td>
-            </tr>
-            <tr>
-            <td>&nbsp;</td>
-            <td colspan='1'>
-                    <b>$langColumnB:</b> 
-                    <span style='valign:middle'>$langMoreLessChoices:</span> 
-                    <div class='d-flex gap-2 flex-wrap mt-2'>
-                        <input type='submit' name='moreOptions' value='+' />
-                        <input type='submit' name='lessOptions' value='-' />
+         $tool_content .= "<tr><td colspan='2'><b>$langDefineOptions</b></td>
+               <td colspan='2'><b>$langMakeCorrespond</b></td>
+                 </tr>
+                 <tr>
+               <td>&nbsp;</td>
+               <td>
+                    <strong>$langColumnA:</strong> 
+                    <span style='valign:middle;'>$langMoreLessChoices:</span> 
+                    <div class='d-flex gap-2 mt-2 flex-wrap'>
+                        <input type='submit' name='moreMatches' value='+' />
+                        <input type='submit' name='lessMatches' value='-' />
                     </div>
-            </td>
-            <td>&nbsp;</td>
-            </tr>";
+                </td>
+               <td><div align='text-end'><strong>$langColumnB</strong></div></td>
+               <td>$langGradebookGrade</td>
+             </tr>";
+         $i = $objAnswer->getFirstMatchingPosition();
+         for ($j = 1; $j <= $nbrMatches; $i++, $j++) {
+             if (isset($_POST['match'][$i])) {
+                 $optionText = $_POST['match'][$i];
+             } elseif (isset($match[$i])) {
+                 $optionText = $match[$i];
+             } elseif (!count($match)) {
+                 $optionText = ${'langDefaultMakeCorrespond' . $j}; // Default example option
+             } else {
+                 $optionText = '';
+             }
+             $optionWeight = isset($weighting[$i])? q($weighting[$i]): 1;
 
-            foreach ($optionsList as $key => $val) {
-                $tool_content .= "<tr>
-                        <td class='text-end'><strong>" . q($val) . "</strong></td>
-                        <td><input class='form-control' type='text' " .
-                        "name=\"option[" . $key . "]\" size='58' value=\"";
-                if (isset($_POST['option'][$key])) {
-                    $tool_content .= htmlspecialchars($_POST['option'][$key]);
-                } elseif (isset($option[$key])) {
-                    $tool_content .= htmlspecialchars($option[$key]);
-                } elseif (($val == 'A') or ($val == 'B')) { // default option
-                    $valNum = ($val == 'A')? 1: 2;
-                    $tool_content .= ${"langDefaultMatchingOpt$valNum"};
-                } else {
-                    $tool_content .= '';
-                }
+             $tool_content .= "<tr>
+               <td class='text-end'><strong>$j</strong></td>
+               <td><input class='form-control' type='text' name='match[$i]' value='" . q($optionText) . "'></td>
+               <td><div class='text-end'><select class='form-select' name='sel[$i]'>";
+             foreach ($optionsList as $key => $val) {
+                 $tool_content .= "<option value='" . q($key) . "'";
+                 if ((!isset($submitAnswers) && !isset($sel[$i]) && $j == 2 && $val == 'B') || @$sel[$i] == $key) {
+                     $tool_content .= " selected='selected'";
+                 }
+                 $tool_content .= ">" . q($val) . "</option>";
+             }
+             $tool_content .= "</select></div></td>
+               <td><input class='form-control' type='text' name='weighting[$i]' value='$optionWeight'></td>
+             </tr>";
+         }
 
-                $tool_content .= "\" /></td>
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
-                    </tr>";
-            }
-            $tool_content .= "</table>";
-        } elseif ($answerType == TRUE_FALSE) {
-            $tool_content .= "
-                        <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code".((isset($exerciseId))? "&amp;exerciseId=$exerciseId" : "")."&amp;modifyAnswers=" . urlencode($_GET['modifyAnswers']) . "'>
-                        <input type='hidden' name='formSent' value='1'>
-                        <input type='hidden' name='nbrAnswers' value='$nbrAnswers'>
-                        <fieldset><legend class='mb-0' aria-label='$langForm'></legend>";
-            // if there is an error message
-            if (!empty($msgErr)) {
-                $tool_content .= "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$msgErr</span></div>";
-            }
-            $setChecked[1] = (isset($correct) and $correct == 1) ? " checked='checked'" : '';
-            $setChecked[2] = (isset($correct) and $correct == 2) ? " checked='checked'" : '';
-            $setWeighting[1] = isset($weighting[1]) ? q($weighting[1]) : 0;
-            $setWeighting[2] = isset($weighting[2]) ? q($weighting[2]) : 0;
-            $tool_content .= "
-                <input type='hidden' name='reponse[1]' value='$langTrue'>
-                <input type='hidden' name='reponse[2]' value='$langFalse'>
-                <table class='table table-default'>
-                <tr>
-                <td style='width: 10%;' colspan='2'><strong>$langAnswer</strong></td>
-                <td><strong>$langComment</strong></td>
-                <td style='width: 15%;'><strong>$langGradebookGrade</strong></td>
-                </tr>
-                <tr>
-                <td style='width: 10%;'>$langTrue</td>
-                <td><input type='radio' value='1' name='correct'$setChecked[1]></td>
-                <td>"  . rich_text_editor('comment[1]', 4, 30, @$comment[1], true) . "</td>
-                <td style='width: 15%'><input class='form-control' type='text' name='weighting[1]' value='$setWeighting[1]'></td>
-                </tr>
-                <tr>
-                <td>$langFalse</td>
-                <td><input type='radio' value='2' name='correct'$setChecked[2]></td>
-                <td>" . rich_text_editor("comment[2]", 4, 40, @$comment[2]) . "</td>
-                <td><input class='form-control' type='text' name='weighting[2]' size='5' value='$setWeighting[2]'></td>
-                </tr>
-            </table>";
-        } elseif ($answerType == DRAG_AND_DROP_TEXT) {
+         $tool_content .= "
+         <tr>
+           <td class='text-end'>&nbsp;</td>
+           <td colspan='3'>&nbsp;</td>
+         </tr>
+         <tr>
+           <td>&nbsp;</td>
+           <td colspan='1'>
+                <b>$langColumnB:</b> 
+                <span style='valign:middle'>$langMoreLessChoices:</span> 
+                <div class='d-flex gap-2 flex-wrap mt-2'>
+                    <input type='submit' name='moreOptions' value='+' />
+                    <input type='submit' name='lessOptions' value='-' />
+                </div>
+           </td>
+           <td>&nbsp;</td>
+         </tr>";
+
+         foreach ($optionsList as $key => $val) {
+             $tool_content .= "<tr>
+                       <td class='text-end'><strong>" . q($val) . "</strong></td>
+                       <td><input class='form-control' type='text' " .
+                     "name=\"option[" . $key . "]\" size='58' value=\"";
+             if (isset($_POST['option'][$key])) {
+                 $tool_content .= htmlspecialchars($_POST['option'][$key]);
+             } elseif (isset($option[$key])) {
+                 $tool_content .= htmlspecialchars($option[$key]);
+             } elseif (($val == 'A') or ($val == 'B')) { // default option
+                 $valNum = ($val == 'A')? 1: 2;
+                 $tool_content .= ${"langDefaultMatchingOpt$valNum"};
+             } else {
+                 $tool_content .= '';
+             }
+
+             $tool_content .= "\" /></td>
+                     <td>&nbsp;</td>
+                     <td>&nbsp;</td>
+                   </tr>";
+         }
+         $tool_content .= "</table>";
+     } elseif ($answerType == TRUE_FALSE) {
+         $tool_content .= "
+                     <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code".((isset($exerciseId))? "&amp;exerciseId=$exerciseId" : "")."&amp;modifyAnswers=" . urlencode($_GET['modifyAnswers']) . "'>
+                     <input type='hidden' name='formSent' value='1'>
+                     <input type='hidden' name='nbrAnswers' value='$nbrAnswers'>
+                     <fieldset><legend class='mb-0' aria-label='$langForm'></legend>";
+         // if there is an error message
+         if (!empty($msgErr)) {
+             $tool_content .= "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$msgErr</span></div>";
+         }
+         $setChecked[1] = (isset($correct) and $correct == 1) ? " checked='checked'" : '';
+         $setChecked[2] = (isset($correct) and $correct == 2) ? " checked='checked'" : '';
+         $setWeighting[1] = isset($weighting[1]) ? q($weighting[1]) : 0;
+         $setWeighting[2] = isset($weighting[2]) ? q($weighting[2]) : 0;
+         $tool_content .= "
+             <input type='hidden' name='reponse[1]' value='$langCorrect'>
+             <input type='hidden' name='reponse[2]' value='$langFalse'>
+             <table class='table table-default'>
+             <tr>
+               <td style='width: 10%;' colspan='2'><strong>$langAnswer</strong></td>
+               <td><strong>$langComment</strong></td>
+               <td style='width: 15%;'><strong>$langGradebookGrade</strong></td>
+             </tr>
+             <tr>
+               <td style='width: 10%;'>$langTrue</td>
+               <td><input type='radio' value='1' name='correct'$setChecked[1]></td>
+               <td>"  . rich_text_editor('comment[1]', 4, 30, @$comment[1], true) . "</td>
+               <td style='width: 15%'><input class='form-control' type='text' name='weighting[1]' value='$setWeighting[1]'></td>
+             </tr>
+             <tr>
+               <td>$langFalse</td>
+               <td><input type='radio' value='2' name='correct'$setChecked[2]></td>
+               <td>" . rich_text_editor("comment[2]", 4, 40, @$comment[2]) . "</td>
+               <td><input class='form-control' type='text' name='weighting[2]' size='5' value='$setWeighting[2]'></td>
+             </tr>
+           </table>";
+     } elseif ($answerType == DRAG_AND_DROP_TEXT) {
             $setId = isset($exerciseId)? "&amp;exerciseId=$exerciseId" : '';
-
             $tool_content .= "  <div class='col-12 d-flex justify-content-between align-items-center gap-3'>
                                     <div>
                                         <p class='text-nowrap'><span class='Accent-200-cl'>(*)</span>$langCPFFieldRequired</p>
@@ -1333,8 +1573,25 @@ if (isset($_GET['modifyAnswers'])) {
                                         <tbody>";
                                         for ($i=0; $i<$nbrAnswers; $i++) {
                                             $chAns = $i+1;
-                                            $choiceAsAnswer = ((count($choices_from_db) > 0) && array_key_exists($i,$choices_from_db)) ? $choices_from_db[$i] : $_POST['choice_answer'][$i] ?? '';
-                                            $choiceAsGrade = ((count($grades_from_db) > 0) && array_key_exists($i,$grades_from_db)) ? $grades_from_db[$i] : $_POST['choice_grade'][$i] ?? 0;
+
+                                            $choiceAsAnswer = '';
+                                            $choiceAsGrade = 0;
+                                            if (isset($_GET['invalid_posted_values'])) {
+                                                $choiceAsAnswer = isset($_SESSION['choice_answer_'.$questionId][$chAns]) ? $_SESSION['choice_answer_'.$questionId][$chAns] : '';
+                                                $choiceAsGrade = isset($_SESSION['choice_grade_'.$questionId][$chAns]) ? $_SESSION['choice_grade_'.$questionId][$chAns] : '';
+                                            } else {
+                                                if (count($choices_from_db) > 0 && array_key_exists($i, $choices_from_db)) {
+                                                    $choiceAsAnswer = $choices_from_db[$i];
+                                                } elseif (isset($_POST['choice_answer'][$i])) {
+                                                    $choiceAsAnswer = $_POST['choice_answer'][$i];
+                                                }
+                                                if (count($grades_from_db) > 0 && array_key_exists($i, $grades_from_db)) {
+                                                    $choiceAsGrade = $grades_from_db[$i];
+                                                } elseif (isset($_POST['choice_grade'][$i])) {
+                                                    $choiceAsGrade = $_POST['choice_grade'][$i];
+                                                }
+                                            }
+
                                             $tool_content .= "
                                                 <tr>
                                                     <td>[{$chAns}]</td>
@@ -1342,7 +1599,7 @@ if (isset($_GET['modifyAnswers'])) {
                                                         <input type='text' class='form-control' name='choice_answer[$i]' value='{$choiceAsAnswer}'>                                        
                                                     </td>
                                                     <td>                                        
-                                                        <input type='number' class='form-control' name='choice_grade[$i]' value='{$choiceAsGrade}' min='0' step='0.05'>                                        
+                                                        <input type='text' class='form-control' name='choice_grade[$i]' value='{$choiceAsGrade}'>                                        
                                                     </td>
                                                 </tr>";
                                         }
@@ -1355,6 +1612,44 @@ if (isset($_GET['modifyAnswers'])) {
                                 </div>";
         } elseif ($answerType == DRAG_AND_DROP_MARKERS) {
 
+            // Get inserted markers of answers in order to set background in the specific row of table.
+            $markersArray = [];
+            $s_options = Database::get()->querySingle("SELECT options FROM exercise_question WHERE id = ?d AND course_id = ?d", $questionId, $course_id)->options;
+            if ($s_options) {
+                $arr = explode('|', $s_options);
+                foreach ($arr as $a) {
+                    $data = json_decode($a, true);
+                    if ($data) {
+                        $markersArray[] = $data['marker_id'];
+                    }
+                }
+            }
+
+            $head_content .= "<script type='text/javascript'>        
+                                var lang = {
+                                    confirmdelete: '" . js_escape($langConfirmDelete) . "',
+                                    confirm: '" . js_escape($langAnalyticsConfirm) . "',
+                                    markerdeleted: '" . js_escape($langMarkerDeleted) . "',
+                                    markerdeletederror: '" . js_escape($langMarkerDeletedError) . "',
+                                    imageuploaded: '" . js_escape($langImageUploaded) . "',
+                                    imagenotselected: '" . js_escape($langImageNotSelected) . "',
+                                    invalidanswervalue : '" . js_escape($langInvalidAnswerValue) . "',
+                                    blanknotempty: '" . js_escape($langBlankNotEmpty) . "',
+                                    blankotherquestion: '" . js_escape($langBlankOtherQuestion) . "',
+                                    chooseShapeAndAnswerToContinue: '" .js_escape($chooseShapeAndAnswerToContinue). "',
+                                    chooseDrawAShapeForTheAnswerToContinue: '" . js_escape($chooseDrawAShapeForTheAnswerToContinue) . "',
+                                    point: '" . js_escape($langPoint) . "',
+                                    notDrawingAnswer: '". js_escape($langNotDrawingTheAnswer)."',
+                                    notChooseShape: '" . js_escape($langNotChooseShape) . "',
+                                    AddGradeToMarkerAnswer: '" . js_escape($langAddGradeToMarkerAnswer) . "',
+                                    selectedPoint: '" . js_escape($langSelectedPoint) . "',
+                                    circle: '" . js_escape($langCircle) . "',
+                                    rectangle: '" . js_escape($langRectangle) . "',
+                                    polygon: '" . js_escape($langPolygon) . "',
+                                    startDrawing: '" . js_escape($langStartDrawing) . "',
+                                    startDrawingHelp: '" . js_escape($langStartDrawingHelp) . "'
+                                };
+                            </script>";
             load_js('drag-and-drop-shapes');
 
             $tool_content .= "<input type='hidden' class='currentQuestionId' value='{$questionId}'>
@@ -1395,6 +1690,8 @@ if (isset($_GET['modifyAnswers'])) {
 
             $setId = isset($exerciseId)? "&amp;exerciseId=$exerciseId" : '';
             $DataJsonFileVariables = Database::get()->querySingle("SELECT options FROM exercise_question WHERE id = ?d", $questionId)->options;
+
+            $tool_content .= "<div id='marker_mode' class='status-indicator'></div>";
             $tool_content .= "
                 <div class='col-12 d-flex justify-content-between align-items-center gap-3'>
                     <div>
@@ -1414,7 +1711,7 @@ if (isset($_GET['modifyAnswers'])) {
                                 <input type='hidden' id='dataJsonVariables' value='{$DataJsonFileVariables}'>
                                 <input type='hidden' id='ImgSrc' value='../../$picturePath/quiz-$questionId'>
                                 <div class='table-responsive mb-4'>
-                                    <table class='table-default'>
+                                    <table class='table-default table-drag-and-drop-markers-creation'>
                                         <thead>
                                             <tr>
                                                 <th>$langMarker</th>
@@ -1438,6 +1735,9 @@ if (isset($_GET['modifyAnswers'])) {
                                             $markerAnswerWithImageValue = $arrDataMarkers[$chAns]['marker_answer_with_image'] ?? 0;
                                             $htopic = DRAG_AND_DROP_MARKERS;
 
+                                            $insertedMarker = in_array($chAns, $markersArray) ? 'class="inserted"' : '';
+                                            $hasInsertedAns = in_array($chAns, $markersArray) ? 'd-block' : 'd-none';
+
                                             $delUploadImage = '';
                                             $anUploadImg = "$webDir/courses/$course_code/image/answer-$questionId-$chAns";
                                             if (isset($_GET['fromExercise'])) {
@@ -1446,16 +1746,24 @@ if (isset($_GET['modifyAnswers'])) {
                                             if (file_exists($anUploadImg)) {
                                                 $pathDel = $urlAppend . "modules/exercise/upload_image_as_answer.php?delete_image=true&course=$course_code&exerciseId=$exerciseId&modifyAnswers=$_GET[modifyAnswers]&htopic=$htopic&questionId=$questionId&markerId=$chAns";
                                                 $delUploadImage .= ' <div class="col-sm-12 d-inline-flex justify-content-start align-items-center">
-                                                                        <img id="imageUploaded-'.$chAns.'" src="../../courses/'.$course_code.'/image/answer-'.$questionId.'-'.$chAns.'" style="height:80px; width:80px;" alt="answer-'.$questionId.'-'.$chAns.'"> 
-                                                                        <a class="link-color Accent-200-cl" href="'.$pathDel.'"><i class="fa-solid fa-xmark fa-lg"></i></a>
+                                                                        <img id="imageUploaded-'.$chAns.'" src="../../courses/'.$course_code.'/image/answer-'.$questionId.'-'.$chAns.'" style="height:60px; width:60px;" alt="answer-'.$questionId.'-'.$chAns.'"> 
+                                                                        <a class="link-color Accent-200-cl ms-1" href="'.$pathDel.'"><i class="fa-solid fa-xmark fa-lg"></i></a>
                                                                     </div>';
                                             } else {
                                                 $delUploadImage .= '<input type="file" id="hasUploadedImg_'.$chAns.'" name="image_as_answer">';
                                             }
 
                                             $tool_content .= "
-                                            <tr>
-                                                <td>[{$chAns}]</td>
+                                            <tr $insertedMarker>
+                                                <td>
+                                                    <div class='d-flex justify-content-start align-items-start gap-2'>
+                                                        <div style='width:40px;'>[{$chAns}]</div>
+                                                        <div class='alert alert-success $hasInsertedAns p-2 m-0 d-flex justify-content-start align-items-start gap-2' id='marker-alert-displayed-$chAns'>
+                                                            <i class='fa-solid fa-circle-check fa-lg'></i>
+                                                            <span>$langAnswerHasBeenAdded</span>
+                                                        </div>
+                                                    </div>
+                                                </td>
                                                 <td>
                                                     <div class='col-12'>
                                                         <input type='text' id='marker-answer-$chAns' class='form-control marker-answer' name='marker_answer[$chAns]' value='{$markerAnswer}'>
@@ -1484,13 +1792,17 @@ if (isset($_GET['modifyAnswers'])) {
                                                 </td>
                                                 <td>
                                                     <div class='col-12'>
-                                                        <input type='number' id='marker-grade-$chAns' class='form-control' name='marker_grade[$chAns]' value='{$markerGrade}' min='0' step='0.1'>
+                                                        <input type='text' id='marker-grade-$chAns' class='form-control' name='marker_grade[$chAns]' value='{$markerGrade}'>
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <div class='col-12 d-flex justify-content-center align-items-center gap-3 flex-wrap'>
-                                                        <button id='add-data-shape-$chAns' class='btn submitAdminBtn add-data-shape text-nowrap'>$langAdd</button>
-                                                        <button id='delete-data-shape-$chAns' class='btn deleteAdminBtn delete-data-shape text-nowrap'>$langDelete</button>
+                                                    <div class='col-12 d-flex justify-content-center align-items-center gap-2'>
+                                                        <button id='add-data-shape-$chAns' class='btn submitAdminBtn add-data-shape text-nowrap' data-bs-toggle='tooltip' data-bs-placement='top' title='$langSaveAnswer'>
+                                                            <i class='fa-solid fa-save'></i>
+                                                        </button>
+                                                        <button id='delete-data-shape-$chAns' class='btn deleteAdminBtn delete-data-shape text-nowrap' data-bs-toggle='tooltip' data-bs-placement='top' title='$langDeleteAnswer'>
+                                                            <i class='fa-solid fa-trash'></i>
+                                                        </button>
                                                     </div>
                                                 </td>
                                             </tr>";
@@ -1508,7 +1820,12 @@ if (isset($_GET['modifyAnswers'])) {
                 $exerciseId = $_GET['fromExercise'];
             }
 
-            $tool_content .= " <form id='calculatedFormId' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId&amp;modifyAnswers=" . urlencode($_GET['modifyAnswers']) . "'>
+            $invalid_posted = '';
+            if (isset($_GET['invalid_val'])) {
+                $invalid_posted = '&invalid_val=true';
+            }
+            $setId = isset($exerciseId)? "&amp;exerciseId=$exerciseId" : '';
+            $tool_content .= " <form id='calculatedFormId' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code$setId&amp;modifyAnswers=" . urlencode($_GET['modifyAnswers']) . "$invalid_posted'>
                                     <fieldset><legend class='mb-0' aria-label='$langForm'></legend>
                                     <input type='hidden' name='nbrAnswers' value='$nbrAnswers'>";
 
@@ -1543,7 +1860,7 @@ if (isset($_GET['modifyAnswers'])) {
                                                             <input type='text' class='form-control' name='calculated_answer[$i]' value='{$cal_answer}'>                                        
                                                         </td>
                                                         <td>                                        
-                                                            <input type='number' class='form-control' name='calculated_answer_grade[$i]' value='{$cal_grade}' min='0' step='any'>                                        
+                                                            <input type='text' class='form-control' name='calculated_answer_grade[$i]' value='{$cal_grade}'>                                        
                                                         </td>
                                                     </tr>";
                                             }
@@ -1648,29 +1965,60 @@ if (isset($_GET['modifyAnswers'])) {
                                             $displayConstantContentOfWildCard = 'd-block';
                                         }
 
+                                        $wildCardSelectionIsSet = false;
+                                        if (isset($_GET['invalid_val']) && isset($_SESSION['wildCardSelection_'.$questionId][$wildCard])) {
+                                            $wildCardSelectionIsSet = true;
+                                        }
+
                                         // Dropdown list with all possible wildcards. Select which of them will be the mandatory wildcard.
                                         $tool_content .= "<div class='col-12 my-2'>
                                                             <label class='form-label text-nowrap' for='selectWildCard_{$wildCard}'>
                                                                 <h4 class='mb-0'>$langItemToAdd {{$wildCard}}</h4>
                                                             </label>
-                                                            <select class='form-select wildcard-selected' id='selectWildCard_{$wildCard}' name='wildCardSelection[]'>
+                                                            <select class='form-select wildcard-selected' id='selectWildCard_{$wildCard}' name='wildCardSelection[$wildCard]'>
                                                                 <option value='0'>$langItIsNotWildCard</option>
-                                                                <option value='1' " . (in_array($wildCard,$wildCardsAll) ? 'selected' : '') . ">$langItIsWildCard</option>
+                                                                <option value='1' " . ((in_array($wildCard,$wildCardsAll) or $wildCardSelectionIsSet) ? 'selected' : '') . ">$langItIsWildCard</option>
                                                             </select>
                                                           </div>";
 
                                         $displaypanelWildCard = 'd-none';
-                                        if (in_array($wildCard,$wildCardsAll)) {
+                                        if (in_array($wildCard,$wildCardsAll) or $wildCardSelectionIsSet) {
                                             $displaypanelWildCard = 'd-block';
+                                        }
+
+                                        $chooseValueTypeOfWildCard = 0;
+                                        if (isset($_GET['invalid_val']) && isset($_SESSION['chooseTheValueForWildCard_'.$questionId][$wildCard])) {
+                                            $chooseValueTypeOfWildCard = $_SESSION['chooseTheValueForWildCard_'.$questionId][$wildCard];
+                                            if ($chooseValueTypeOfWildCard == 1) {
+                                                $displayRandomContentOfWildCard = 'd-block';
+                                            } elseif ($chooseValueTypeOfWildCard == 2) {
+                                                $displayConstantContentOfWildCard = 'd-block';
+                                            }
+                                        }
+
+                                        if (isset($_GET['invalid_val']) && isset($_SESSION['wildCard_min_'.$questionId][$wildCard])) {
+                                            $wildCardMinimumValue = $_SESSION['wildCard_min_'.$questionId][$wildCard];
+                                        }
+
+                                        if (isset($_GET['invalid_val']) && isset($_SESSION['wildCard_max_'.$questionId][$wildCard])) {
+                                            $wildCardMaximumValue = $_SESSION['wildCard_max_'.$questionId][$wildCard];
+                                        }
+
+                                        if (isset($_GET['invalid_val']) && isset($_SESSION['wildCard_decimal_'.$questionId][$wildCard])) {
+                                            $wildCardDecimalValue = $_SESSION['wildCard_decimal_'.$questionId][$wildCard];
+                                        }
+
+                                        if (isset($_GET['invalid_val']) && isset($_SESSION['wildCard_answer_'.$questionId][$wildCard])) {
+                                            $wildCardValue = $_SESSION['wildCard_answer_'.$questionId][$wildCard];
                                         }
 
                                         $tool_content .= "<div class='col-12 my-4 $displaypanelWildCard' id='panelCard_{$wildCard}'>";
                                         $tool_content .= "  <div class='form-group d-flex justify-content-start align-items-center gap-3'>
                                                                 " . form_popovers('help', $langAutoCompleteWildCardInfo) . "
                                                                 <select class='form-select chooseValueForWildCard' id='{$wildCard}' name='chooseTheValueForWildCard[$wildCard]'>
-                                                                    <option value='0' " . ($wildCardType == 0 ? 'selected' : '') . ">$langSelect</option>
-                                                                    <option value='1' " . ($wildCardType == 1 ? 'selected' : '') . ">$langRandomValue</option>
-                                                                    <option value='2' " . ($wildCardType == 2 ? 'selected' : '') . ">$langConstantValue</option>
+                                                                    <option value='0' " . (($wildCardType == 0 or $chooseValueTypeOfWildCard == 0) ? 'selected' : '') . ">$langSelect</option>
+                                                                    <option value='1' " . (($wildCardType == 1 or $chooseValueTypeOfWildCard == 1) ? 'selected' : '') . ">$langRandomValue</option>
+                                                                    <option value='2' " . (($wildCardType == 2 or $chooseValueTypeOfWildCard == 2) ? 'selected' : '') . ">$langConstantValue</option>
                                                                 </select>
                                                             </div>
                                                             <div class='form-group mt-4 $displayRandomContentOfWildCard' id='wildCardRandomContent_{$wildCard}'>        
@@ -1687,6 +2035,7 @@ if (isset($_GET['modifyAnswers'])) {
                                                                     <div  class='flex-fill'>
                                                                         <label class='form-label' for='wildCardDecimal_$wildCard'>$langDecimalValues</label>
                                                                         <input type='number' id='wildCardDecimal_{$wildCard}' class='form-control mt-0' name='wildCard_decimal[$wildCard]' value='{$wildCardDecimalValue}' min='0' max='10' step='1'>
+                                                                        <small>($langZeroForNoDecimal)</small>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -1701,8 +2050,6 @@ if (isset($_GET['modifyAnswers'])) {
                                 } else {
                                     $tool_content .= "<div class='col-12 mt-4'><p>$langNoExistVariables</p></div>";
                                 }
-
-
             }
 
         } elseif ($answerType == ORDERING) {
@@ -1721,7 +2068,7 @@ if (isset($_GET['modifyAnswers'])) {
                                 </script>";
 
             $setId = isset($exerciseId)? "&amp;exerciseId=$exerciseId" : '';
-            $tool_content .= " <form id='calculatedFormId' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code$setId&amp;modifyAnswers=" . urlencode($_GET['modifyAnswers']) . "'>
+            $tool_content .= " <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code$setId&amp;modifyAnswers=" . urlencode($_GET['modifyAnswers']) . "'>
                                     <fieldset><legend class='mb-0' aria-label='$langForm'></legend>
                                     <input type='hidden' name='nbrAnswers' value='$nbrAnswers'>";
 
@@ -1756,7 +2103,7 @@ if (isset($_GET['modifyAnswers'])) {
                                                             <input type='text' class='form-control' name='ordering_answer[$i]' value='{$order_answer}'>                                        
                                                         </td>
                                                         <td>                                        
-                                                            <input type='number' class='form-control' name='ordering_answer_grade[$i]' value='{$order_grade}' min='0' step='any'>                                        
+                                                            <input type='text' class='form-control' name='ordering_answer_grade[$i]' value='{$order_grade}'>                                        
                                                         </td>
                                                     </tr>";
                                             }
@@ -1773,7 +2120,7 @@ if (isset($_GET['modifyAnswers'])) {
 
                 $valSizeOfSubset = (isset($arrOpts) && !empty($arrOpts['sizeOfSubset']) ? $arrOpts['sizeOfSubset'] : '');
                 $hiddenSize = 'd-none';
-                if (!empty($valSizeOfSubset)) {
+                if (!empty($valSizeOfSubset) or isset($_SESSION['SizeOfSubset_'.$questionId])) {
                     $hiddenSize = 'd-block';
                 }
 
@@ -1781,16 +2128,16 @@ if (isset($_GET['modifyAnswers'])) {
                                         <div style='flex: 1;'>
                                             <label for='layoutItemsId' class='form-label'>$langLayoutItems</label>
                                             <select class='form-select' id='layoutItemsId' name='layoutItems'>
-                                                <option value='Vertical' " . (isset($arrOpts) && $arrOpts['layoutItems'] == 'Vertical' ? 'selected' : ''). ">$langVertical</option>
-                                                <option value='Horizontal' " . (isset($arrOpts) && $arrOpts['layoutItems'] == 'Horizontal' ? 'selected' : ''). ">$langHorizontal</option>                                                
+                                                <option value='Vertical' " . (((isset($arrOpts) && $arrOpts['layoutItems'] == 'Vertical') or (isset($_SESSION['layoutItems_'.$questionId]) && $_SESSION['layoutItems_'.$questionId] == 'Vertical')) ? 'selected' : ''). ">$langVertical</option>
+                                                <option value='Horizontal' " . (((isset($arrOpts) && $arrOpts['layoutItems'] == 'Horizontal') or (isset($_SESSION['layoutItems_'.$questionId]) && $_SESSION['layoutItems_'.$questionId] == 'Horizontal')) ? 'selected' : ''). ">$langHorizontal</option>                                                
                                             </select>
                                         </div>
                                         <div style='flex: 1;'>
                                             <label for='ItemsSelectionTypeId' class='form-label'>$langItemsSelectionType</label>
                                             <select class='form-select' id='ItemsSelectionTypeId' name='ltemsSelectionType'>
-                                                <option value='1' " . (isset($arrOpts) && $arrOpts['itemsSelectionType'] == 1 ? 'selected' : ''). ">$langSelectAllItems</option>
-                                                <option value='2' " . (isset($arrOpts) && $arrOpts['itemsSelectionType'] == 2 ? 'selected' : ''). ">$langSelectRandomSubSetOfItems</option>
-                                                <option value='3' " . (isset($arrOpts) && $arrOpts['itemsSelectionType'] == 3 ? 'selected' : ''). ">$langSelectContiguousSubSetOfItems</option>
+                                                <option value='1' " . (((isset($arrOpts) && $arrOpts['itemsSelectionType'] == 1) or (isset($_SESSION['ltemsSelectionType_'.$questionId]) && $_SESSION['ltemsSelectionType_'.$questionId] == 1)) ? 'selected' : ''). ">$langSelectAllItems</option>
+                                                <option value='2' " . (((isset($arrOpts) && $arrOpts['itemsSelectionType'] == 2) or (isset($_SESSION['ltemsSelectionType_'.$questionId]) && $_SESSION['ltemsSelectionType_'.$questionId] == 2)) ? 'selected' : ''). ">$langSelectRandomSubSetOfItems</option>
+                                                <option value='3' " . (((isset($arrOpts) && $arrOpts['itemsSelectionType'] == 3) or (isset($_SESSION['ltemsSelectionType_'.$questionId]) && $_SESSION['ltemsSelectionType_'.$questionId] == 3)) ? 'selected' : ''). ">$langSelectContiguousSubSetOfItems</option>
                                             </select>
                                             <div class='SizeOfSubSetContainer $hiddenSize mt-3'>
                                                 <label for='SizeOfSubsetId' class='form-label'>$langSizeOfSubset</label>
@@ -1826,5 +2173,116 @@ if (isset($_GET['modifyAnswers'])) {
                 </form>
             </div>
         </div></div>";
+    } else {
+        if ($answerType == FREE_TEXT) {
+            // FREE_TEXT questions - show AI evaluation configuration if available
+            if ($aiEvaluationAvailable) {
+
+                // Display success/error messages
+                if (!empty($aiConfigError)) {
+                    $tool_content .= "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$aiConfigError</span></div>";
+                }
+                if (!empty($msgSuccess)) {
+                    $tool_content .= "<div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$msgSuccess</span></div>";
+                }
+
+                $aiEnabled = $aiConfig ? $aiConfig->enabled : 0;
+                $evaluationPrompt = $aiConfig ? $aiConfig->evaluation_prompt : '';
+                $maxPoints = $objQuestion->selectWeighting(); // Use question's weight as max points
+                $sampleResponses = '';
+
+                if ($aiConfig && $aiConfig->sample_responses) {
+                    $samples = json_decode($aiConfig->sample_responses, true);
+                    if ($samples && is_array($samples)) {
+                        $lines = [];
+                        foreach ($samples as $sample) {
+                            if (isset($sample['response']) && isset($sample['quality'])) {
+                                $lines[] = $sample['response'] . ' | ' . $sample['quality'];
+                            } else {
+                                $lines[] = $sample['response'];
+                            }
+                        }
+                        $sampleResponses = implode("\n", $lines);
+                    }
+                }
+
+                $tool_content .= "
+               <div class='col-12 mt-4'>
+                   <div class='card panelCard card-default px-lg-4 py-lg-3'>
+                       <div class='card-header border-0'>
+                           <h3>$langAIEvaluation</h3>
+                       </div>
+                       <div class='card-body'>
+                           <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code" . ((isset($exerciseId)) ? "&amp;exerciseId=$exerciseId" : "") . "&amp;modifyAnswers=" . urlencode($_GET['modifyAnswers']) . "'>
+                               <input type='hidden' name='formSent' value='1'>
+                               <fieldset><legend class='mb-0' aria-label='$langForm'></legend>
+                               
+                               <div class='form-group mb-3'>
+                                   <label class='label-container'>
+                                       <input type='checkbox' name='ai_enabled' value='1'" . ($aiEnabled ? " checked='checked'" : "") . ">
+                                       <span class='checkmark'></span>
+                                       $langEnableAIEvaluation
+                                   </label>
+                                   <small class='form-text text-muted'>$langAIEvaluationDescription</small>
+                               </div>
+                               
+                               <div class='form-group mb-3'>
+                                   <label for='evaluation_prompt' class='form-label'>$langEvaluationCriteria <span class='asterisk'>*</span></label>
+                                   <textarea name='evaluation_prompt' id='evaluation_prompt' class='form-control' rows='4' 
+                                             placeholder='$langEvaluationCriteriaPlaceholder'>" . q($evaluationPrompt) . "</textarea>
+                                   <small class='form-text text-muted'>$langEvaluationCriteriaHelp</small>
+                               </div>
+                               
+                               <div class='form-group mb-3'>
+                                   <label class='form-label'>$langMaxPoints</label>
+                                   <div class='form-control-static'>
+                                       <strong>$maxPoints</strong> <span class='text-muted'>($langDefinedInQuestionStatement)</span>
+                                   </div>
+                                   <small class='form-text text-muted'>$langMaxPointsHelp</small>
+                               </div>
+                               
+                               <div class='form-group mb-3'>
+                                   <label for='sample_responses' class='form-label'>$langSampleResponses</label>
+                                   <textarea name='sample_responses' id='sample_responses' class='form-control' rows='6'
+                                             placeholder='$langSampleResponsesPlaceholder'>" . q($sampleResponses) . "</textarea>
+                                   <small class='form-text text-muted'>$langSampleResponsesHelp</small>
+                               </div>
+                               
+                               <div class='row'>
+                                   <div class='col-12 d-flex justify-content-end align-items-center gap-2 flex-wrap'>
+                                       <input class='btn submitAdminBtn' type='submit' name='submitAIConfig' value='$langSaveAIConfig'>
+                                       <a class='btn cancelAdminBtn' href='" . (isset($exerciseId) ? "admin.php?course=$course_code&exerciseId=$exerciseId" : "question_pool.php?course=$course_code") . "'>$langCancel</a>
+                                   </div>
+                               </div>
+                               
+                               </fieldset>
+                           </form>
+                       </div>
+                   </div>
+               </div>";
+
+                // Show info about existing AI evaluations if any
+                if ($aiEnabled && isset($exerciseId)) {
+                    $evaluationCount = Database::get()->querySingle("SELECT COUNT(*) as count FROM exercise_ai_evaluation WHERE question_id = ?d", $questionId)->count;
+                    if ($evaluationCount > 0) {
+                        $tool_content .= "
+                       <div class='col-12 mt-3'>
+                           <div class='alert alert-info'>
+                               <i class='fa-solid fa-circle-info fa-lg'></i>
+                               <span>$langAIEvaluationsFound ($evaluationCount evaluations)</span>
+                           </div>
+                       </div>";
+                    }
+                }
+            } else {
+                $tool_content .= "
+                   <div class='col-12 mt-4'>
+                       <div class='alert alert-info'>
+                           <i class='fa-solid fa-circle-info fa-lg'></i>
+                           <span>$langFreeTextNoAnswerConfig</span>
+                       </div>
+                   </div>";
+            }
+        }
     }
 }

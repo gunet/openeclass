@@ -19,7 +19,7 @@
  */
 
 function modalConfirmation($id, $labelId, $title, $body, $cancelId, $okId) {
-    global $langCancel, $langOk;
+    global $langCancel, $langAnalyticsConfirm;
     return <<<htmlEOF
 <div class='modal fade' id='$id' tabindex='-1' role='dialog' aria-labelledby='$labelId' aria-hidden='true'>
     <div class='modal-dialog'>
@@ -30,7 +30,7 @@ function modalConfirmation($id, $labelId, $title, $body, $cancelId, $okId) {
             <div class='modal-body'><p>$body</p></div>
             <div class='modal-footer'>
                 <button id='$cancelId' type='button' class='btn cancelAdminBtn'>$langCancel</button>
-                <button id='$okId' type='button' class='btn submitAdminBtn ms-1'>$langOk</button>
+                <button id='$okId' type='button' class='btn submitAdminBtn ms-1'>$langAnalyticsConfirm</button>
             </div>
         </div>
     </div>

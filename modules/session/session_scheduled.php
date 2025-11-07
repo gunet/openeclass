@@ -37,7 +37,6 @@ $pageName = $langSummaryScheduledSessions;
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langSession);
 
 load_js('datatables');
-load_js('datatables_bootstrap');
 
 $sql = "";
 $data['current_time'] = $current_time = date('Y-m-d H:i:s', strtotime('now'));

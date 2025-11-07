@@ -20,7 +20,7 @@
                     'sLengthMenu': '{{ trans('langDisplay') }} _MENU_ {{ trans('langResults2') }}',
                     'sZeroRecords': '{{ trans('langNoResult') }}',
                     'sInfo': '{{ trans('langDisplayed') }} _START_ {{ trans('langTill') }} _END_ {{ trans('langFrom2') }} _TOTAL_ {{ trans('langTotalResults') }}',
-                    'sInfoEmpty': '{{ trans('langDisplayed') }} 0 {{ trans('langTill') }} 0 {{ trans('langFrom2') }} 0 {{ trans('langResults2') }}',
+                    'sInfoEmpty': '',
                     'sInfoFiltered': '',
                     'sInfoPostFix': '',
                     'sSearch': '',
@@ -33,11 +33,11 @@
                     }
                 }
             });
-            $('.dataTables_filter input').attr({
+            $('.dt-container.dt-bootstrap5 .dt-search input').attr({
                 class: 'form-control input-sm ms-0 mb-3',
                 placeholder: '{{ trans('langSearch') }}...'
             });
-            $('.dataTables_filter label').attr('aria-label', '{{ trans('langSearch') }}'); 
+            $('.dt-container.dt-bootstrap5 .dt-search label').attr('aria-label', '{{ trans('langSearch') }}');
         });
     </script>
 @endpush
@@ -51,7 +51,7 @@
             @include('layouts.partials.left_menu')
 
             <div class="col_maincontent_active">
-                    
+
                 <div class="row">
 
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
@@ -66,10 +66,10 @@
                     </div>
 
                     @include('layouts.partials.legend_view')
-                    
+
                     {!! $action_bar !!}
 
-                    @include('layouts.partials.show_alert') 
+                    @include('layouts.partials.show_alert')
 
                     <div class='col-12'>
                         @if(count($sessions) > 0)
@@ -140,7 +140,7 @@
             </div>
 
         </div>
-    
+
     </div>
 </div>
 

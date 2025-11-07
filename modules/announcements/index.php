@@ -108,14 +108,14 @@ if ($is_editor) {
 // AJAX request for DataTables
 if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
 
-    $limit = intval($_GET['iDisplayLength']);
-    $offset = intval($_GET['iDisplayStart']);
-    $keyword = '%' . $_GET['sSearch'] . '%';
+    $limit = intval($_POST['length']);
+    $offset = intval($_POST['start']);
+    $keyword = '%' . $_POST['search']['value'] . '%';
 
     $student_sql = $is_editor? '': 'AND visible = 1 AND (start_display <= NOW() OR start_display IS NULL) AND (stop_display >= NOW() OR stop_display IS NULL)';
     $all_announc = Database::get()->querySingle("SELECT COUNT(*) AS total FROM announcement WHERE course_id = ?d $student_sql", $course_id);
     $filtered_announc = Database::get()->querySingle("SELECT COUNT(*) AS total FROM announcement WHERE course_id = ?d AND title LIKE ?s $student_sql", $course_id, $keyword);
-    if ($limit>0) {
+    if ($limit > 0) {
         $extra_sql = 'LIMIT ?d, ?d';
         $extra_terms = array($offset, $limit);
     } else {
@@ -124,17 +124,15 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     }
     $result = Database::get()->queryArray("SELECT * FROM announcement WHERE course_id = ?d AND title LIKE ?s $student_sql ORDER BY `order` DESC , `date` DESC  $extra_sql", $course_id, $keyword, $extra_terms);
 
-    $data['iTotalRecords'] = $all_announc->total;
-    $data['iTotalDisplayRecords'] = $filtered_announc->total;
+    $data['recordsTotal'] = $all_announc->total;
+    $data['recordsFiltered'] = $filtered_announc->total;
     $data['aaData'] = array();
     if ($is_editor) {
         $iterator = 1;
         $now = date("Y-m-d H:i:s");
         $pinned_greater = Database::get()->querySingle("SELECT MAX(`order`) AS max_order FROM announcement WHERE course_id = ?d", $course_id)->max_order;
         foreach ($result as $myrow) {
-
             $to_top = "";
-
             //checking visible status
             if ($myrow->visible == '0') {
                 $visible = 1;
@@ -159,7 +157,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                 }
             }
 
-            //setting data tables column data
+            //setting data tables column data.
             if ($myrow->order != 0) {
                 $pinned_class = "text-danger";
                 $pinned = 0;
@@ -169,6 +167,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                                 <span class='fa fa-arrow-up float-end pe-2' data-bs-toggle='tooltip' data-bs-placement='top' title='$langAdminPinnedToTop'></span>
                             </a>";
                 }
+
             } elseif ($myrow->order == 0) {
                 $pinned_class = "not_visible";
                 $pinned = 1;
@@ -178,6 +177,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             $data['aaData'][] = array(
                 'DT_RowId' => $myrow->id,
                 'DT_RowClass' => $vis_class,
+                '0' => "<div class='d-none bulk_select'><div class='checkbox'><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='$myrow->id' cbid='$myrow->id' /><span class='checkmark'></span></label></div></div>",
                 '0' => "<div class='bulk_select'><div class='checkbox'><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='$myrow->id' cbid='$myrow->id' /><span class='checkmark'></span></label></div></div>",
                 '1' => "<div class='table_td announceContent'>
                         <div class='table_td_header announceTitleHeader clearfix'>
@@ -207,7 +207,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                         'icon' => 'fa-xmark',
                         'icon-class' => 'delete_btn',
                         'icon-extra' => "data-id='$myrow->id' id='$myrow->id'")
-                    )));
+                )));
             $iterator++;
         }
     } else {
@@ -273,18 +273,18 @@ if (isset($_GET['an_id'])) {
 } else {
     // Show index
     $data['action_bar'] = $action_bar = action_bar([
-            [ 'title' => $langAddAnn,
-              'url' => $urlAppend . "modules/announcements/new.php?course=$course_code",
-              'icon' => 'fa-plus-circle',
-              'button-class' => 'btn-success',
-              'level' => 'primary',
-              'show' => $is_editor ],
-            [ 'title' => $langBulkProcessing,
-              'class' => 'bulk-processing',
-              'icon' => 'fa-hat-wizard',
-              'button-class' => 'btn-success',
-              'show' => $is_editor ]
-        ]);
+        [ 'title' => $langAddAnn,
+            'url' => $urlAppend . "modules/announcements/new.php?course=$course_code",
+            'icon' => 'fa-plus-circle',
+            'button-class' => 'btn-success',
+            'level' => 'primary',
+            'show' => $is_editor ],
+        [ 'title' => $langBulkProcessing,
+            'class' => 'bulk-processing',
+            'icon' => 'fa-hat-wizard',
+            'button-class' => 'btn-success',
+            'show' => $is_editor ]
+    ]);
 
     $data['subscribeUrl'] = $urlAppend . 'main/profile/emailunsubscribe.php?cid=' . $course_id;
     $data['showSubscribeWarning'] = $uid && $status != USER_GUEST &&

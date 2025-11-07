@@ -56,11 +56,12 @@ $action->record(MODULE_ID_LP);
 
 if (isset($_GET['unit'])) {
     $unitParam = "&amp;unit=$_GET[unit]";
-    $returl = $urlAppend . "modules/units/index.php?course=$course_code&amp;id=$_GET[unit]";
+    $returl = $urlAppend . "modules/units/index.php?course=$course_code&id=$_GET[unit]";
 } else {
     $unitParam = '';
-    $returl = "index.php?course=$course_code";
+    $returl = $urlAppend . "modules/learnPath/index.php?course=$course_code";
 }
+$returl_q = q($returl);
 
 if ($uid) {
     $uidCheckString = "AND UMP.`user_id` = $uid";
@@ -173,14 +174,30 @@ $prevNextString = "";
 if ($moduleNb > 1) {
 
     if ($previousModule != '') {
-        $prevNextString .= '<div class="prevnext"><a class="btn-next-prev" href="navigation/viewModule.php?course=' . $course_code . '&amp;viewModule_id=' . $previousModule . $unitParam . '" target="scoFrame"><span class="fa-solid fa-circle-arrow-left fa-lg prev-next-learningPath"></span> </a></div>';
+        $prevNextString .= '<div class="prevnext">
+                                <a class="btn btn-primary btn-next-prev text-decoration-none pt-2" href="navigation/viewModule.php?course=' . $course_code . '&amp;viewModule_id=' . $previousModule . $unitParam . '" target="scoFrame" style="min-width: 35px !important; max-width: 35px !important; min-height 30px !important; max-height: 35px !important;">
+                                    <span class="fa-solid fa-circle-arrow-left fa-lg"></span> 
+                                </a>
+                            </div>';
     } else {
-        $prevNextString .= "<div class='prevnext'><a href='#' class='inactive btn-next-prev'><span class='fa-solid fa-circle-arrow-left fa-lg prev-next-learningPath'></span></a></div>";
+        $prevNextString .= "<div class='prevnext'>
+                                <a class='btn btn-primary text-decoration-none pt-2' href='#' class='inactive btn-next-prev' style='min-width: 35px !important; max-width: 35px !important; min-height 30px !important; max-height: 35px !important;'>
+                                    <span class='fa-solid fa-circle-arrow-left fa-lg'></span>
+                                </a>
+                            </div>";
     }
     if ($nextModule != '') {
-        $prevNextString .= '<div class="prevnext"><a class="btn-next-prev" href="navigation/viewModule.php?course=' . $course_code . '&amp;viewModule_id=' . $nextModule . $unitParam . '" target="scoFrame"><span class="fa-solid fa-circle-arrow-right fa-lg prev-next-learningPath"></span></a></div>';
+        $prevNextString .= '<div class="prevnext">
+                                <a class="btn btn-primary btn-next-prev text-decoration-none pt-2" href="navigation/viewModule.php?course=' . $course_code . '&amp;viewModule_id=' . $nextModule . $unitParam . '" target="scoFrame" style="min-width: 35px !important; max-width: 35px !important; min-height 30px !important; max-height: 35px !important;">
+                                    <span class="fa-solid fa-circle-arrow-right fa-lg"></span>
+                                </a>
+                            </div>';
     } else {
-        $prevNextString .= "<div class='prevnext'><a href='#' class='inactive btn-next-prev'><span class='fa-solid fa-circle-arrow-right fa-lg prev-next-learningPath'></span></a></div>";
+        $prevNextString .= "<div class='prevnext'>
+                                <a class='btn btn-primary text-decoration-none pt-2' href='#' class='inactive btn-next-prev' style='min-width: 35px !important; max-width: 35px !important; min-height 30px !important; max-height: 35px !important;'>
+                                    <span class='fa-solid fa-circle-arrow-right fa-lg'></span>
+                                </a>
+                            </div>";
     }
 }
 $theme_id = isset($_SESSION['theme_options_id']) ? $_SESSION['theme_options_id'] : get_config('theme_options_id');
@@ -206,10 +223,7 @@ echo "<!DOCTYPE HTML>
     <script type='text/javascript' src='{$urlAppend}js/custom.js'></script>
 
     <!-- SlimScroll -->
-    <script src='{$urlAppend}js/jquery.slimscroll.min.js'></script>
-
-    <!-- DataTables and Checkitor js-->
-    <script src='{$urlAppend}js/jquery.dataTables.min.js'></script>
+    <script src='{$urlAppend}js/jquery.slimscroll.min.js'></script>   
 
     <!-- Latest compiled and minified css -->
     <link rel='stylesheet' href='{$urlAppend}template/modern/css/bootstrap.min.css?v=".CACHE_SUFFIX."'>
@@ -228,41 +242,64 @@ echo "<!DOCTYPE HTML>
     /* <![CDATA[ */
 
     $(document).ready(function() {
-        var leftTOChiddenStatus = 0;
-        if ($.cookie('leftTOChiddenStatus') !== undefined) {
-            leftTOChiddenStatus = $.cookie('leftTOChiddenStatus');
+
+        var leftTOChiddenStatus = $.cookie('leftTOChiddenStatus');
+        if (leftTOChiddenStatus === null) {
+            // Default to closed
+            leftTOChiddenStatus = '1'; 
+            $.cookie('leftTOChiddenStatus', leftTOChiddenStatus, { path: '/' });
         }
+
         var fs = window.parent.document.getElementById('colFrameset');
         var fsJQe = $('#colFrameset', window.parent.document);
-        if (Boolean(leftTOChiddenStatus) == fsJQe.hasClass('hidden')) {
-            fsJQe.toggleClass('hidden');
-            if (fsJQe.hasClass('hidden')) {
-                fs.cols = '0, *';
-            } else {
-                fs.cols = '200, *';
+
+        // Apply the saved state
+        if (leftTOChiddenStatus === '1') {
+            if (!fsJQe.hasClass('hidden')) {
+                fsJQe.addClass('hidden');
             }
+            fs.cols = '*, 0'; // sidebar hidden
+        } else {
+            if (fsJQe.hasClass('hidden')) {
+                fsJQe.removeClass('hidden');
+            }
+            fs.cols = '*, 278'; // sidebar visible
         }
+
+        // Toggle button click handler
         $('#leftTOCtoggler').on('click', function() {
             var fs = window.parent.document.getElementById('colFrameset');
             var fsJQe = $('#colFrameset', window.parent.document);
 
             fsJQe.toggleClass('hidden');
+
             if (fsJQe.hasClass('hidden')) {
-                fs.cols = '0, *';
-                $.cookie('leftTOChiddenStatus', 1, { path: '/' });
+                fs.cols = '*, 0'; // hide sidebar
+                $.cookie('leftTOChiddenStatus', '1', { path: '/' });
             } else {
-                fs.cols = '200, *';
-                $.cookie('leftTOChiddenStatus', 0, { path: '/' });
+                fs.cols = '*, 278'; // show sidebar
+                $.cookie('leftTOChiddenStatus', '0', { path: '/' });
             }
         });
 
-        $('#close-btn-a').on('click', function(e) {
+        $('#close-btn').on('click', function(e) { 
+            e.preventDefault();
+
             let api = window.parent.api;
             if (typeof api !== 'undefined') {
-                e.preventDefault();
                 api.SetValue('adl.nav.request', 'exit');
                 api.LMSCommit('');
             }
+
+            fsJQe.toggleClass('hidden');
+            if (fsJQe.hasClass('hidden')) {
+                fs.cols = '*, 0'; // hide sidebar
+                $.cookie('leftTOChiddenStatus', '1', { path: '/' });
+            }
+            $.cookie('leftTOChiddenStatus', '1', { path: '/' });
+
+            // After completing your logic, redirect to the URL
+            window.top.location.href = '$returl';
         });
     });
 
@@ -270,39 +307,31 @@ echo "<!DOCTYPE HTML>
     </script>
 </head>
 <body class='body-learning-path'>
-    <nav class='navbar navbar-eclass navbar-learningPath py-0 w-100'>
-        <div class='w-100 header-container-learningPath py-0'>
-            <div class='col-12 h-100 d-flex justify-content-between align-items-center'>
-                <div>
-                    <a id='leftTOCtoggler' class='btn'><span class='fa fa-bars fa-lg'></span></a>
-                    <a id='toc_logo' class='navbar-brand hidden-xs' href='#'>
-                        <img class='img-responsive' src='$logoUrl' alt='Logo' style='height:20px;'>
+    <nav class='navbar navbar-eclass navbar-learningPath py-0 w-100 h-100'>
+        
+            <div class='col-12 h-100 d-flex justify-content-between align-items-center px-3 gap-3'>
+                <img class='img-responsive' src='$logoUrl' alt='Logo' style='max-width: 150px; max-height:50px;'>
+                <div class='progressbar-plr h-auto'>";
+                    if ($uid) {
+                        $path_id = (int) $_SESSION['path_id'];
+                        $lpProgress = get_learnPath_progress($path_id, $uid);
+                        update_gradebook_book($uid, $path_id, $lpProgress/100, GRADEBOOK_ACTIVITY_LP);
+                        echo disp_progress_bar($lpProgress, 1);
+                    }
+                    echo "
+                </div>
+                <div id='navigation-btns' class='d-flex justify-content-end align-items-center gap-2'>
+                    $prevNextString
+                    <a id='close-btn' class='btn btn-danger text-decoration-none' href='$returl_q' target='_top' style='min-height 30px !important; max-height: 35px !important;'>
+                        <span class='fa-solid fa-person-walking-arrow-right fa-lg'></span>
+                        <span class='hidden-xs'>$langLogout</span>
+                    </a>
+                    <a id='leftTOCtoggler' class='btn submitAdminBtn d-inline-flex text-decoration-none p-0 m-0' style='min-width: 35px !important; max-width: 35px !important; min-height 30px !important; max-height: 35px !important;'>
+                        <span class='fa-solid fa-bars fs-6 m-0 p-0'></span>
                     </a>
                 </div>
-                <div>
-                    <div class='d-flex gap-3'>
-                        <div id='navigation-btns' class='d-flex justify-content-end align-items-center gap-2'>
-                            $prevNextString
-                            <div id='close-btn'>
-                                <a id='close-btn-a' class='d-flex justify-content-start align-items-center gap-1 text-decoration-none' href='$returl' target='_top'>
-                                    <span class='fa-solid fa-xmark fa-sm Accent-200-cl'></span>
-                                    <span class='hidden-xs Accent-200-cl'>$langLogout</span>
-                                </a>
-                            </div>
-                        </div>
-                        <div class='d-flex justify-content-end progressbar-plr'>";
-
-                            if ($uid) {
-                                $path_id = (int) $_SESSION['path_id'];
-                                $lpProgress = get_learnPath_progress($path_id, $uid);
-                                update_gradebook_book($uid, $path_id, $lpProgress/100, GRADEBOOK_ACTIVITY_LP);
-                                echo disp_progress_bar($lpProgress, 1);
-                            }
-                echo "  </div>
-                    </div>
-                </div>
             </div>
-        </div>
+        
    </nav>
 </body>
 </html>";

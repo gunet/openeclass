@@ -6,7 +6,6 @@
             langResults2: '{{ js_escape(trans('langResults2')) }}',
             langNoResult: '{{ js_escape(trans('langNoResult')) }}',
             langDisplayed: '{{ js_escape(trans('langDisplayed')) }}',
-            langNoResult: '{{ js_escape(trans('langNoResult')) }}',
             langTill: '{{ js_escape(trans('langTill')) }}',
             langFrom2: '{{ js_escape(trans('langFrom2')) }}',
             langTotalResults: '{{ js_escape(trans('langTotalResults')) }}',

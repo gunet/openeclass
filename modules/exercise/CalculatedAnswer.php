@@ -48,7 +48,7 @@ class CalculatedAnswer extends \QuestionType
 
     public function AnswerQuestion($question_number, $exerciseResult = [], $options = []): string
     {
-        global $langClearChoice, $uid;
+        global $langClearChoice;
 
         $html_content = "";
 
@@ -78,7 +78,7 @@ class CalculatedAnswer extends \QuestionType
                     $checked = 'checked';
                 }
                 $uniqueAnswer = $arrExerResults[0];
-            } 
+            }
             if (count($answer_object_ids) > 1) { // multiple answers with radios buttons
                 $html_content .= "
                     <div class='radio mb-1'>
@@ -117,10 +117,18 @@ class CalculatedAnswer extends \QuestionType
             $answerTitle = standard_text_escape($this->answer_object->getTitle($answerId));
             $tmpArr = explode(':', $answerTitle);
             if (count($tmpArr) == 2) {
-                $answerTitle = $tmpArr[1];
+                $answerTitle = round(floatval($tmpArr[1]), 2);
             }
             $answerComment = $this->answer_object->getComment($answerId);
-            $answerCorrect = $this->answer_object->isCorrect($answerId);
+            if ($this->answer_object->get_user_calculated_answer($questionId, $eurid) != null) {
+                if (round(floatval($this->answer_object->get_user_calculated_answer($questionId, $eurid)), 2) == $answerTitle) {
+                    $answerCorrect = true;
+                } else {
+                    $answerCorrect = false;
+                }
+            } else {
+                $answerCorrect = false;
+            }
 
             $studentChoice = ($choice == $answerId) ? 1 : 0;
             if ($studentChoice) {

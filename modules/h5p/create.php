@@ -25,6 +25,7 @@ $helpSubTopic = 'h5p_objects';
 
 require_once '../../include/baseTheme.php';
 require_once 'classes/H5PFactory.php';
+require_once 'include/course_settings.php';
 
 $backUrl = $urlAppend . 'modules/h5p/index.php?course=' . $course_code;
 
@@ -56,7 +57,12 @@ if (isset($_POST['h5paction']) && $_POST['h5paction'] === 'create') {
 
 if (isset($_GET['id'])) {
     $id = intval($_GET['id']);
-
+    // security check
+    $creator_id = Database::get()->querySingle("SELECT creator_id FROM h5p_content WHERE id = ?d", $_GET['id'])->creator_id;
+    $can_edit = $is_editor || (setting_get(SETTING_COURSE_H5P_USERS_UPLOADING_ENABLE, $course_id) == 1 && $creator_id == $_SESSION['uid'] && $creator_id > 0);
+    if (!$can_edit) {
+        redirect_to_home_page();
+    }
     // init core and validator
     $coreCommonPath = 'courses/' . $course_code . '/h5p/content/' . $id . '/workspace';
     $core = new H5PCore($factory->getFramework(), $webDir . '/' . $coreCommonPath, $urlServer . $coreCommonPath, 'en', FALSE);

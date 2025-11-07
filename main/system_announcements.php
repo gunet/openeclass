@@ -108,11 +108,11 @@ if (isset($_GET['an_id'])) {
                 'sScrollX': true,
                 'responsive': true,
                 'searchDelay': 1000,
-                'sAjaxSource': '$_SERVER[REQUEST_URI]',
-                'aLengthMenu': [
-                   [10, 15, 20 , -1],
-                   [10, 15, 20, '$langAllOfThem'] // change per page values here
-               ],
+                ajax: {
+                    url: '$_SERVER[REQUEST_URI]',
+                    type: 'POST'
+                },
+                'lengthMenu': [10, 15, 20 , -1],
                 'fnDrawCallback': function( oSettings ) {
                     $('.table_td_body').each(function() {
                         $(this).trunk8({
@@ -120,23 +120,25 @@ if (isset($_GET['an_id'])) {
                             fill: '&hellip;<div class=\"clearfix\"></div><a style=\"float:right;\" href=\"$_SERVER[SCRIPT_NAME]?an_id='+ $(this).data('id')+'\">$langMore</div>'
                         })
                     });
-                    $('#ann_table_admin_logout_filter label input').attr({
+                    $('#ann_table_admin_logout_wrapper .dt-search input').attr({
                         'class' : 'form-control input-sm ms-0 mb-3',
                         'placeholder' : '$langSearch...'
                     });
-                    $('#ann_table_admin_logout_filter label').attr('aria-label', '$langSearch');
+                    $('#ann_table_admin_logout_wrapper .dt-search label').attr('aria-label', '$langSearch');
                  },
                  'sPaginationType': 'full_numbers',
                 'bSort': false,
                 'oLanguage': {
+                       'lengthLabels': {
+                            '-1': '$langAllOfThem'
+                        },                       
                        'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
                        'sZeroRecords':  '".$langNoResult."',
                        'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
-                       'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
+                       'sInfoEmpty':    '',
                        'sInfoFiltered': '',
                        'sInfoPostFix':  '',
                        'sSearch':       '',
-                       'sUrl':          '',
                        'oPaginate': {
                            'sFirst':    '&laquo;',
                            'sPrevious': '&lsaquo;',

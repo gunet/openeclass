@@ -139,16 +139,16 @@ function show_edit_form($id, $sid, $assign): void
                     $ass = Database::get()->queryArray("SELECT * FROM assignment_grading_review WHERE user_submit_id =?d ", $sid);
                     foreach($ass as $row) {
                         $uid_2_name = display_user($row->users_id);
-                        $grade = Session::has('grade') ? Session::get('grade') : $row->grade;
-                        $comments = Session::has('comments') ? Session::get('comments') : q($row->comments);
-                        //roubrika
+                        // rubric
                         $rubric = Database::get()->querySingle("SELECT * FROM rubric WHERE course_id = ?d AND id = ?d ", $course_id, $assign->grading_scale_id);
                         $criteria = unserialize($rubric->scales);
                         $submitted_grade = Database::get()->querySingle("SELECT * FROM assignment_grading_review WHERE id = ?d ", $row->id);
-                        $sel_criteria = unserialize($submitted_grade->rubric_scales);
+                        if (!is_null($submitted_grade->rubric_scales)) {
+                            $sel_criteria = unserialize($submitted_grade->rubric_scales);
+                        }
                         $criteria_list = "";
                         foreach ($criteria as $ci => $criterio ) {
-                            $criteria_list .= "<li class='list-group-item'>$criterio[title_name] <b>($criterio[crit_weight]%)</b></li>";
+                            $criteria_list .= "<li class='list-group-item'>$criterio[title_name] <strong>($criterio[crit_weight]%)</strong></li>";
                             if(is_array($criterio['crit_scales'])){
                                 $criteria_list .= "<li><ul class='list-unstyled'>";
                                 foreach ($criterio['crit_scales'] as $si=>$scale) {
@@ -187,27 +187,29 @@ function show_edit_form($id, $sid, $assign): void
                             <div class='d-lg-flex gap-4 mt-4'>
                                 <div class='flex-grow-1'>
                                     <div class='form-wrapper form-edit rounded'>
-                                        <form class='form-horizontal' role='form' method='post' enctype='multipart/form-data'>
-                                            <input type='hidden' name='assignment' value='$id' />
-                                            <input type='hidden' name='submission' value='$row->id' />
+                                        <form class='form-horizontal' role='form' method='post' action='index.php?course=$course_code'>
+                                            <input type='hidden' name='assignment' value='$id'>
+                                            <input type='hidden' name='submission' value='$row->id'>
                                             <div class='btn-group float-end'>
-                                                <a aria-label='$langDeletePeerReview' class='linkdelete btn btn-default' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;a_id=$sub->id&amp;ass_id=$row->id' data-bs-placement='bottom' data-bs-toggle='tooltip' title='$langDeletePeerReview' data-bs-original-title=''>
+                                                <a aria-label='$langDeletePeerReview' class='linkdelete btn deleteAdminBtn' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;a_id=$sub->id&amp;ass_id=$row->id' data-bs-placement='bottom' data-bs-toggle='tooltip' title='$langDeletePeerReview' data-bs-original-title=''>
                                                     <span class='fa-solid fa-xmark'></span>
                                                 </a>
                                             </div>
                                             <div class='row form-group mt-4'>
                                                 <div class='col-12 control-label-notes'>$langSurnameName</div>
                                                 $uid_2_name &nbsp; $message
-                                            </div>    
-                                            <div class='row form-group mt-4'>
-                                                <div class='col-12 control-label-notes'>
-                                                    $langSubDate
-                                                </div>
-                                                <div class='col-12'>
-                                                    <span>". format_locale_date(strtotime($row->date_submit)) . "</span>
-                                                </div>
-                                            </div>
-                                            <div class='row form-group".(Session::getError('grade') ? " has-error" : "")." mt-4'>
+                                            </div>";
+                                            if (!is_null($row->date_submit)) {
+                                                $tool_content .= "<div class='row form-group mt-4'>
+                                                    <div class='col-12 control-label-notes'>
+                                                        $langSubDate
+                                                    </div>
+                                                    <div class='col-12'>
+                                                            <span>". format_locale_date(strtotime($row->date_submit)) . "</span>
+                                                        </div>
+                                                </div>";
+                                            }
+                                            $tool_content .= "<div class='row form-group".(Session::getError('grade') ? " has-error" : "")." mt-4'>
                                                 <div class='col-12 control-label-notes'>$langGradeRubric <span class='asterisk Accent-200-cl'>(*)</span></div>
                                                 $grade_field
                                                 <span class='help-block Accent-200-cl'>".(Session::hasError('grade') ? Session::getError('grade') : "")."</span>
@@ -219,15 +221,7 @@ function show_edit_form($id, $sid, $assign): void
                                                 <div class='col-12'>
                                                     <span>".q($row->grade)."</span>
                                                 </div>
-                                            </div>
-                                            <div class='row form-group mt-4'>
-                                                <div class='col-12 control-label-notes'>
-                                                    $langGradeComments
-                                                </div>
-                                                <div class='col-12'>
-                                                    <span>". q($row->comments) . "</span>
-                                                </div>
-                                            </div>
+                                            </div>                                            
                                         </form>
                                     </div>
                                 </div>
@@ -235,34 +229,11 @@ function show_edit_form($id, $sid, $assign): void
                     }
                     $tool_content.= "
                         <div class='d-lg-flex gap-4 mt-4'>
-                            <div class='flex-grow-1'>
-                                <div class='form-wrapper form-edit rounded'>
-                                    <form class='form-horizontal' role='form' method='post' action='index.php?course=$course_code' enctype='multipart/form-data'>
-                                        <input type='hidden' name='assignment' value='$id' />
-                                        <input type='hidden' name='submission' value='$sid' />";
-
-                                        if (get_user_email_notification($sub->uid, $course_id)) {
-                                            $tool_content .= "
-                                                <div class='form-group'>
-                                                    <div class='col-sm-9 col-sm-offset-3'>
-                                                        <div class='checkbox'>
-                                                            <label class='label-container' aria-label='$langSelect'>
-                                                                <input type='checkbox' value='1' id='email_button' name='email'>
-                                                                <span class='checkmark'></span>
-                                                                $langEmailToUsers
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>";
-                                        }
-                                        $tool_content .= "
-                                            <div class='form-group mt-5'>
-                                                <div class='col-12 d-inline-flex justify-content-end gap-2'>                        
-                                                    <input class='btn submitAdminBtn' type='submit' name='grade_comments' value='$langGradeOk'>
-                                                    <a class='btn cancelAdminBtn' href='index.php?course=$course_code&id=$sub->assignment_id'>$langCancel</a>
-                                                </div>
-                                            </div>
-                                    </form>
+                            <div class='flex-grow-1'>                                                                                                                                            
+                                <div class='form-group mt-2'>
+                                    <div class='col-12 d-inline-flex justify-content-end gap-2'>
+                                        <a class='btn cancelAdminBtn' href='index.php?course=$course_code&id=$sub->assignment_id'>$langBack</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>";

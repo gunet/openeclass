@@ -225,6 +225,7 @@
                                     ))
                                 !!}
                             </div>
+                            {!! generate_csrf_token_form_field() !!}
                         </fieldset>
                     </form>
                 </div>

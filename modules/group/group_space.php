@@ -40,8 +40,7 @@ if ((isset($_GET['selfReg']) or isset($_GET['selfUnReg'])) and isset($_GET['grou
 }
 
 if (!is_group_visible($group_id, $course_id) and !$is_editor) {
-    Session::flash('message',$langForbidden);
-    Session::flash('alert-class', 'alert-danger');
+    Session::Messages($langForbidden, 'alert-danger');
     redirect_to_home_page("modules/group/index.php?course=$course_code");
 }
 
@@ -57,8 +56,7 @@ $multi_reg = setting_get(SETTING_GROUP_MULTIPLE_REGISTRATION, $course_id);
 
 if ((!$is_editor) and ($status != USER_GUEST)) {
     if (!$is_member and !$self_reg) { // check if we are group member
-        Session::flash('message',$langForbidden);
-        Session::flash('alert-class', 'alert-danger');
+        Session::Messages($langForbidden, 'alert-danger');
         redirect_to_home_page("modules/group/index.php?course=$course_code");
     }
     if (isset($_GET['selfReg']) and $_GET['selfReg'] == 1) {
@@ -77,12 +75,10 @@ if ((!$is_editor) and ($status != USER_GUEST)) {
             $group = gid_to_name($group_id);
             Log::record($course_id, MODULE_ID_GROUPS, LOG_MODIFY, array( 'uid' => $uid, 'name' => $group));
 
-            Session::flash('message',$langGroupNowMember);
-            Session::flash('alert-class', 'alert-success');
+            Session::Messages($langGroupNowMember, 'alert-success');
             redirect_to_home_page("modules/group/group_space.php?course=$course_code&group_id=$group_id");
         } else {
-            Session::flash('message',$langForbidden);
-            Session::flash('alert-class', 'alert-danger');
+            Session::Messages($langForbidden, 'alert-danger');
             redirect_to_home_page("modules/group/index.php?course=$course_code");
         }
 
@@ -94,12 +90,10 @@ if ((!$is_editor) and ($status != USER_GUEST)) {
             $group = gid_to_name($group_id);
             Log::record($course_id, MODULE_ID_GROUPS, LOG_DELETE, array('uid' => $uid, 'name' => $group));
 
-            Session::flash('message',$langGroupNowNotMember);
-            Session::flash('alert-class', 'alert-success');
+            Session::Messages($langGroupNowNotMember, 'alert-success');
             redirect_to_home_page("modules/group/index.php?course=$course_code");
         } else {
-            Session::flash('message',$langForbidden);
-            Session::flash('alert-class', 'alert-danger');
+            Session::Messages($langForbidden, 'alert-danger');
             redirect_to_home_page("modules/group/index.php?course=$course_code");
         }
     }
@@ -387,19 +381,33 @@ if (isset($_GET['group_as'])) {
                 $tool_content .= "<div class='col-12 TextBold' style='font-size:14px;'>$langSurnameName</div>";
             }
             $tool_content .= "</div></li>";
-
             foreach ($members as $member) {
                 $user_group_description = q($member->description);
                 $tool_content .= "<li class='list-group-item element'>
                                   <div class='row'>";
                 if ($is_editor or $is_tutor) {
                     $email = q($member->email);
-                    $tool_content .= "<div class='col-4 small-text'>" .
-                        display_user($member->id, false, true) .
-                        ($user_group_description ?
-                            ("<br>" . $user_group_description) : '') . "
-                                      </div>
-                                      <div class='col-4'>" .
+                    $tool_content .= "<div class='col-4'>
+                                        <div>" . display_user($member->id, false, true) . "</div>";
+                                        if ($user_group_description) {
+                                            $tool_content .= "<div class='mt-2'>
+                                                                $user_group_description &nbsp;&nbsp;
+                                                                <a href='{$urlAppend}modules/group/group_description.php?course={$course_code}&group_id={$group_id}&editByEditor=1&u={$member->id}'>
+                                                                    <span class='fa-solid fa-edit fa-md' data-bs-toogle='tooltip' data-bs-placement='bottom' title='$langEdit'></span>
+                                                                </a>&nbsp;&nbsp;
+                                                                <a href='{$urlAppend}modules/group/group_description.php?course={$course_code}&group_id={$group_id}&delete=true&editByEditor=1&u={$member->id}' aria-label='$langDelete' role='button'>
+                                                                    <span class='Accent-200-cl fa-solid fa-xmark link-delete' title='$langDelete' data-bs-toggle='tooltip' data-bs-placement='bottom'></span>
+                                                                </a>
+                                                              </div>";
+                                        } else {
+                                            $tool_content .= "<div class='mt-2'>
+                                                                <a class='TextBold' href='{$urlAppend}modules/group/group_description.php?course={$course_code}&group_id={$group_id}&editByEditor=1&u={$member->id}'>
+                                                                    $langAddDescription
+                                                                </a>
+                                                              </div>";
+                                        }
+                    $tool_content .= "</div>";
+                    $tool_content .= "<div class='col-4'>" .
                         ($member->am ? q($member->am) : '-') . "
                                       </div>
                                       <div class='col-4'>" .

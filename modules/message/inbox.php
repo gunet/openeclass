@@ -649,37 +649,39 @@ if (isset($_GET['mid'])) {
     <script type='text/javascript'>
                $(document).ready(function() {
 
-                 var oTable = $('#inbox_table').dataTable({
+                 var oTable = $('#inbox_table').DataTable({
                    'aoColumnDefs':[{'sClass':'option-btn-cell text-end', 'aTargets':[-1]}],
                    'bStateSave' : true,
                    'bProcessing': true,
                    'sDom': '<\"top\"fl<\"clear\">>rt<\"bottom\"ip<\"clear\">>',
                    'bServerSide': true,
                    'searchDelay': 1000,
-                   'sAjaxSource': '$ajax_url_inbox',
-                   'aLengthMenu': [
-                       [10, 15, 20 , -1],
-                       [10, 15, 20, '".js_escape($langAllOfThem)."'] // change per page values here
-                    ],
+                   ajax: {
+                        url: '$ajax_url_inbox',
+                        type: 'POST'
+                    }, 
+                   'lengthMenu': [10, 15, 20 , -1],
                    'sPaginationType': 'full_numbers',
                    'bSort': false,
                    'bAutoWidth' : false,
                    'fnDrawCallback': function( oSettings ) {
-                        $('#inbox_table_filter label input').attr({
+                        $('#inbox_table_wrapper .dt-search input').attr({
                           'class' : 'form-control input-sm ms-0 mb-3',
                           'placeholder' : '".js_escape($langSearch)."...'
                         });
-                        $('#inbox_table_filter label').attr('aria-label', '".js_escape($langSearch)."');  
+                        $('#inbox_table_wrapper .dt-search label').attr('aria-label', '".js_escape($langSearch)."');  
                     },
                    'oLanguage': {
-                        'sLengthMenu':   '".js_escape("$langDisplay _MENU_ $langResults2")."',
-                        'sZeroRecords':  '".js_escape($langNoResult)."',
+                        'lengthLabels': { 
+                            '-1': '" . js_escape($langAllOfThem) . "' 
+                        },
+                        'sLengthMenu':   '" . js_escape("$langDisplay _MENU_ $langResults2") . "',                                                                        
+                        'sZeroRecords':  '".js_escape("$langNoResult")."',
                         'sInfo':         '".js_escape("$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults")."',
-                        'sInfoEmpty':    '".js_escape("$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2")."',
+                        'sInfoEmpty':    '',
                         'sInfoFiltered': '',
                         'sInfoPostFix':  '',
                         'sSearch':       '',
-                        'sUrl':          '',
                         'oPaginate': {
                              'sFirst':    '&laquo;',
                              'sPrevious': '&lsaquo;',

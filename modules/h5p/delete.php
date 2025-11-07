@@ -19,6 +19,8 @@
 
 $require_login = true;
 $require_current_course = true;
+$require_editor = true;
+
 require_once '../../include/baseTheme.php';
 
 deleteContent($_GET['id']);

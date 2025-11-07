@@ -70,7 +70,7 @@ if (defined('EBOOK_DOCUMENTS')) {
 }
 
 if (defined('EBOOK_DOCUMENTS') and isset($_GET['back']) and $_GET['back'] == 'edit') {
-    $backUrl = $urlAppend . 'modules/ebook/edit.php?course=' . $course_code . '&amp;id=' . $ebook_id;
+    $backUrl = $urlAppend . 'modules/ebook/edit.php?course=' . $course_code . '&id=' . $ebook_id;
     $back = 'edit';
 } else {
     $backUrl = documentBackLink($uploadPath);

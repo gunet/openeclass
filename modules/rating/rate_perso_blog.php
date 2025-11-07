@@ -23,6 +23,7 @@ require_once '../../include/baseTheme.php';
 require_once 'modules/rating/class.rating.php';
 
 if (get_config('personal_blog_rating') == 1) {
+
     if (isset($_SESSION['uid'])) {
         $widget = $_GET['widget'];
         $rtype = $_GET['rtype'];
