@@ -46,9 +46,13 @@ $questionFeedback = $question->selectFeedback();
 $questionWeighting = $question->selectWeighting();
 $answerType = $question->selectType();
 
+$arithmetic_expression_str = '';
 if ($answerType == CALCULATED) {
+  $des_arr = unserialize($question->selectDescription());
+  $questionDescription = $des_arr['question_description'];
+  $arithmetic_expression = $des_arr['arithmetic_expression'];
   $objAn = new Answer($qid);
-  $questionDescription = $objAn->replaceItemsBracesWithWildCards($questionDescription, $qid);
+  $arithmetic_expression_str = $objAn->replaceItemsBracesWithWildCards($arithmetic_expression, $qid);
   unset($objAn);
 }
 
@@ -75,6 +79,7 @@ $tool_content .= "<div class='table-responsive'>
         <td colspan='$colspan'>
           <strong>" . q_math($questionName) . "</strong><br>" .
             standard_text_escape($questionDescription) . "<br>
+            $arithmetic_expression_str
         </td>
       </tr>";
 

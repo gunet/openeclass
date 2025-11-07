@@ -287,14 +287,19 @@ function display_exercise($exercise_id): void
             <tr>
               <td colspan='$colspan'>";
 
+              $arithmetic_expression_str = '';
             if ($answerType == CALCULATED) {
+                $des_arr = unserialize($questionDescription);
+                $questionDescription = $des_arr['question_description'];
+
                 $objAn = new Answer($qid);
-                $questionDescription = $objAn->replaceItemsBracesWithWildCards($questionDescription, $qid);
+                $arithmetic_expression = $des_arr['arithmetic_expression'];
+                $arithmetic_expression_str = $objAn->replaceItemsBracesWithWildCards($arithmetic_expression, $qid);
                 unset($objAn);
             }
             $tool_content .= "
             <strong>" . q_math($questionName) . "</strong>
-            <br>" . standard_text_escape($questionDescription) . "<br><br>
+            <br>" . standard_text_escape($questionDescription) . "<br>" . $arithmetic_expression_str ."<br><br>
             </td></tr>";
 
 

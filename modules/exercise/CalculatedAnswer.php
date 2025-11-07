@@ -58,10 +58,13 @@ class CalculatedAnswer extends \QuestionType
             shuffle($answer_object_ids);
         }
 
-        $q_data = Database::get()->querySingle("SELECT description,options FROM exercise_question WHERE id = ?d", $this->question_id);
+        $q_data = Database::get()->querySingle("SELECT `description`,options FROM exercise_question WHERE id = ?d", $this->question_id);
         if ($q_data) {
-            $question_description = $this->answer_object->replaceItemsBracesWithWildCards($q_data->description, $this->question_id);
-            $html_content .= "<div class='col-12 my-4'>$question_description</div>";
+            $des_arr = unserialize($q_data->description);
+            $question_description = $des_arr['question_description'];
+            $html_content .= "<div class='col-12 my-3'>$question_description</div>";
+            $arithmetic_expression_str = $this->answer_object->replaceItemsBracesWithWildCards($des_arr['arithmetic_expression'], $this->question_id);
+            $html_content .= "<div class='col-12 my-3'>$arithmetic_expression_str</div>";
         }
 
         $html_content .= "<input type='hidden' name='choice[{$this->question_id}]' value=''>";

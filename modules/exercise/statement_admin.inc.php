@@ -146,6 +146,17 @@ if (isset($_POST['submitQuestion'])) {
             $objQuestion->read($_GET['modifyQuestion']);
         }
         $objQuestion->updateTitle($questionName);
+
+        // If the current question is calculated type 
+        if ($answerType == CALCULATED) {
+            $des = Database::get()->querySingle("SELECT `description` FROM exercise_question WHERE id = ?d", $objQuestion->selectId());
+            $arr_des = unserialize($des->description);
+            $arrQ = [
+                'question_description' => purify($_POST['questionDescription']),
+                'arithmetic_expression' => $arr_des['arithmetic_expression'] ?? ''
+            ];
+            $questionDescription = serialize($arrQ);
+        }
         $objQuestion->updateDescription($questionDescription);
         $objQuestion->updateFeedback($questionFeedback);
         $objQuestion->updateType($answerType);
@@ -228,6 +239,10 @@ if (isset($_POST['submitQuestion'])) {
         $questionDescription = $objQuestion->selectDescription();
         $questionFeedback = $objQuestion->selectFeedback();
         $answerType = $objQuestion->selectType();
+        if ($answerType == CALCULATED) {
+            $arr_des = unserialize($objQuestion->selectDescription());
+            $questionDescription = $arr_des['question_description'];
+        }
         $difficulty = $objQuestion->selectDifficulty();
         $category = $objQuestion->selectCategory();
         $questionWeight = $objQuestion->selectWeighting();

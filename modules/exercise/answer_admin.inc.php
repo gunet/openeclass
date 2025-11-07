@@ -24,6 +24,10 @@ $answerType = $objQuestion->selectType();
 $questionId = $objQuestion->selectId();
 $questionTypeWord = $objQuestion->selectTypeLegend($answerType);
 $questionDescription = standard_text_escape($objQuestion->selectDescription());
+if ($answerType == CALCULATED) {
+    $des_array = unserialize($objQuestion->selectDescription());
+    $questionDescription = $des_array['question_description'];
+}
 $okPicture = file_exists($picturePath . '/quiz-' . $questionId) ? true : false;
 
 // Check if AI evaluation is available for FREE_TEXT questions
@@ -651,7 +655,13 @@ if (isset($submitAnswers) || isset($buttonBack)) {
                     }
                 }
 
-                $description = purify($_POST['calculated_question']);
+                $des = Database::get()->querySingle("SELECT `description` FROM exercise_question WHERE id = ?d", $objQuestion->selectId());
+                $arr_des = unserialize($des->description);
+                $arrQ = [
+                    'question_description' => $arr_des['question_description'] ?? '',
+                    'arithmetic_expression' => purify($_POST['calculated_question'])
+                ];
+                $description = serialize($arrQ);
                 $objQuestion->updateDescription($description);
                 if (count($arrItems) > 0) {
                     $jsonItems = json_encode($arrItems);
@@ -1081,7 +1091,9 @@ if (isset($_GET['modifyAnswers'])) {
     } elseif ($answerType == CALCULATED) {
 
         $calc_question = Database::get()->querySingle("SELECT * FROM exercise_question WHERE id = ?d", $questionId);
-        $calculated_question = $_POST['calculated_question'] ?? strip_tags($calc_question->description);
+        $arr_des = unserialize($calc_question->description);
+        $desQuestion = $arr_des['arithmetic_expression'] ?? '';
+        $calculated_question = $_POST['calculated_question'] ?? strip_tags($desQuestion);
         if (isset($_GET['invalid_val']) && isset($_SESSION['calculated_question_'.$questionId])) { // After posting invalid values
             $calculated_question = $_SESSION['calculated_question_'.$questionId];
             // If the user is in invalid mode and posted new arithmetic expression, update it.
