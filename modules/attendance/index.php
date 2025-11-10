@@ -348,11 +348,12 @@ if ($is_editor) {
         redirect_to_home_page("modules/attendance/index.php?course=$course_code");
     }
 
-    //add a new attendance
-    if (isset($_POST['newAttendance'])) {
+    // Create new attendance book
+    if (isset($_POST['attendanceBookCreate'])) {
         $v = new Valitron\Validator($_POST);
-        $v->rule('required', array('title', 'limit', 'start_date', 'end_date'));
-        $v->rule('numeric', array('limit'));
+        $v->rule('required', array('title', 'start_date', 'end_date'));
+        $v->rule('integer', array('limit'));
+        $v->rule('min', array('limit'), 0);
         $v->rule('date', array('start_date', 'end_date'));
         if (!empty($_POST['end_date'])) {
             $v->rule('dateBefore', 'start_date', $_POST['end_date']);
@@ -365,7 +366,7 @@ if ($is_editor) {
         ));
         if($v->validate()) {
             $newTitle = $_POST['title'];
-            $attendance_limit = intval($_POST['limit']);
+            $attendance_limit = empty($_POST['limit']) ? 0 : intval($_POST['limit']);
             $start_date = (new DateTime($_POST['start_date']))->format('Y-m-d H:i:s');
             $end_date = (new DateTime($_POST['end_date']))->format('Y-m-d H:i:s');
             $attendance_id = Database::get()->query("INSERT INTO attendance SET course_id = ?d, `limit` = ?d, active = 1, title = ?s, start_date = ?t, end_date = ?t", $course_id, $attendance_limit, $newTitle, $start_date, $end_date)->lastInsertID;
@@ -593,8 +594,8 @@ if ($is_editor) {
     }
     $tool_content .= "</div>";
 
-    // update attendance settings
-    if (isset($_POST['submitAttendanceBookSettings'])) {
+    // Update attendance book settings
+    if (isset($_POST['attendanceBookSettings'])) {
         $v = new Valitron\Validator($_POST);
         $v->rule('required', array('title', 'limit', 'start_date', 'end_date'));
         $v->rule('numeric', array('limit'));
@@ -736,14 +737,14 @@ if ($is_editor) {
         $display = FALSE;
     }
 
- elseif (isset($_GET['new'])) {
-        new_attendance(); // create new attendance
+    elseif (isset($_GET['new'])) {
+        attendance_book_form(); // create new attendance
+        $display = FALSE;
+    } elseif (isset($_GET['editSettings'])) { // attendance settings
+        attendance_book_form($attendance_id);
         $display = FALSE;
     } elseif (isset($_GET['editUsers'])) { // edit attendance users
         user_attendance_settings($attendance_id);
-        $display = FALSE;
-    } elseif (isset($_GET['editSettings'])) { // attendance settings
-        attendance_settings($attendance_id);
         $display = FALSE;
     } elseif (isset($_GET['addActivityAs'])) { //display available assignments
         attendance_display_available_assignments($attendance_id);
