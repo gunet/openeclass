@@ -2653,6 +2653,9 @@ function upgrade_to_3_16($tbl_options) : void
     if (!DBHelper::fieldExists('certificate_template', 'all_courses')) {
         Database::get()->query("ALTER TABLE `certificate_template` ADD `all_courses` tinyint(1) NOT NULL DEFAULT 1");
     }
+    if (!DBHelper::fieldExists('course_lti_app', 'visible')) {
+        Database::get()->query("ALTER TABLE `course_lti_app` ADD `visible` TINYINT(1) NOT NULL DEFAULT 1");
+    }
 }
 
 /**
@@ -3360,11 +3363,12 @@ function upgrade_to_4_1($tbl_options) : void {
  * @return void
  */
 function upgrade_to_4_2($tbl_options) : void {
+
     if (!DBHelper::fieldExists('forum_topic', 'pin_time')) {
         Database::get()->query("ALTER TABLE forum_topic ADD pin_time DATETIME DEFAULT NULL");
     }
-    if (DBHelper::fieldExists('tc_log', 'id')) {
-        Database::get()->query("ALTER TABLE tc_log CHANGE id id INT NOT NULL AUTO_INCREMENT");
+    if (!DBHelper::fieldExists('forum_topic', 'visible')) {
+        Database::get()->query("ALTER TABLE forum_topic ADD visible TINYINT NOT NULL DEFAULT 1");
     }
     if (DBHelper::fieldExists('tc_attendance', 'id')) {
         Database::get()->query("ALTER TABLE tc_attendance CHANGE id id INT NOT NULL AUTO_INCREMENT");
@@ -3403,6 +3407,134 @@ function upgrade_to_4_2($tbl_options) : void {
     if (!DBHelper::fieldExists('course_lti_app', 'visible')) {
         Database::get()->query("ALTER TABLE `course_lti_app` ADD `visible` TINYINT(1) NOT NULL DEFAULT 1");
     }
+    if (DBHelper::fieldExists('tc_attendance', 'id')) {
+        Database::get()->query("ALTER TABLE tc_attendance CHANGE id id INT NOT NULL AUTO_INCREMENT");
+    }
+    if (!DBHelper::fieldExists('exercise_question', 'options')) {
+        Database::get()->query("ALTER TABLE exercise_question ADD options TEXT DEFAULT NULL");
+    }
+    if (!DBHelper::fieldExists('h5p_content', 'creator_id')) {
+        Database::get()->query("ALTER TABLE h5p_content ADD `creator_id` INT UNSIGNED NOT NULL DEFAULT 0");
+    }
+
+    DBHelper::createForeignKey('attendance', 'course_id', 'course', 'id', DBHelper::FKRefOption_CASCADE);
+
+    if(!DBHelper::foreignKeyExists('attendance_activities', 'attendance_id', 'attendance', 'id')) {
+        // Use consistent data types before creating the foreign key
+        Database::get()->query('ALTER TABLE `attendance_activities`
+            CHANGE COLUMN `attendance_id` `attendance_id` INT NOT NULL DEFAULT 0,
+            CHANGE COLUMN `module_auto_id` `module_auto_id` INT NOT NULL DEFAULT 0');
+        DBHelper::createForeignKey('attendance_activities', 'attendance_id', 'attendance', 'id', DBHelper::FKRefOption_CASCADE);
+    }
+
+    if(!DBHelper::foreignKeyExists('attendance_book', 'attendance_activity_id', 'attendance_activities', 'id')) {
+        // Use consistent data types before creating the foreign key
+        Database::get()->query('ALTER TABLE `attendance_book` CHANGE COLUMN `attendance_activity_id` `attendance_activity_id` INT NOT NULL DEFAULT 0');
+
+        DBHelper::createForeignKey('attendance_book', 'attendance_activity_id', 'attendance_activities', 'id', DBHelper::FKRefOption_CASCADE);
+    }
+    DBHelper::createForeignKey('attendance_book', 'uid', 'user', 'id', DBHelper::FKRefOption_CASCADE);
+
+    DBHelper::createForeignKey('attendance_users', 'attendance_id', 'attendance', 'id', DBHelper::FKRefOption_CASCADE);
+    DBHelper::createForeignKey('attendance_users', 'uid', 'user', 'id', DBHelper::FKRefOption_CASCADE);
+
+
+    if (!DBHelper::tableExists('ai_providers')) {
+        Database::get()->query("CREATE TABLE ai_providers (
+            `id` smallint NOT NULL AUTO_INCREMENT,
+            `name` text CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+            `api_key` text CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+            `model_name` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+            `provider_type` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin,
+            `endpoint_url` varchar(255) CHARACTER SET ascii COLLATE ascii_bin DEFAULT NULL,
+            `enabled` tinyint NOT NULL,
+            `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            `updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            `expired` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (`id`)) $tbl_options");
+    }
+
+    if (!DBHelper::tableExists('ai_modules')) {
+        Database::get()->query("CREATE TABLE ai_modules (
+            `id` SMALLINT NOT NULL AUTO_INCREMENT,
+            `ai_module_id` SMALLINT NOT NULL DEFAULT 0,
+            `ai_provider_id` SMALLINT DEFAULT 0,
+            `all_courses` TINYINT NOT NULL DEFAULT 1,
+            PRIMARY KEY(ID)) $tbl_options");
+    }
+    if (!DBHelper::tableExists('ai_courses')) {
+        Database::get()->query("CREATE TABLE `ai_courses` (
+            `id` int(11) NOT NULL AUTO_INCREMENT,
+            `course_id` int NOT NULL,
+            `ai_module` int NOT NULL,
+            PRIMARY KEY (`id`), KEY (`ai_module`, `course_id`))  $tbl_options");
+    }
+
+    // AI Evaluation Configuration Table for Exercise Questions
+    if (!DBHelper::tableExists('exercise_ai_config')) {
+        Database::get()->query("CREATE TABLE exercise_ai_config (
+            `id` int(11) NOT NULL AUTO_INCREMENT,
+            `question_id` int(11) NOT NULL,
+            `course_id` int(11) NOT NULL,
+            `enabled` tinyint(1) DEFAULT 1,
+            `evaluation_prompt` text NOT NULL,
+            `sample_responses` text NULL,
+            `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            PRIMARY KEY (`id`),
+            UNIQUE KEY `uk_question` (`question_id`),
+            KEY `idx_course` (`course_id`),
+            KEY `idx_enabled` (`enabled`),
+            FOREIGN KEY (`question_id`) REFERENCES `exercise_question`(`id`) ON DELETE CASCADE,
+            FOREIGN KEY (`course_id`) REFERENCES `course`(`id`) ON DELETE CASCADE
+        ) $tbl_options");
+    }
+
+    if (!DBHelper::tableExists('exercise_ai_evaluation')) {
+        Database::get()->query("CREATE TABLE exercise_ai_evaluation (
+            `id` int(11) NOT NULL AUTO_INCREMENT,
+            `answer_record_id` int(11) NOT NULL COMMENT 'Reference to exercise_answer_record.answer_record_id',
+            `question_id` int(11) NOT NULL COMMENT 'Reference to exercise_question.id',
+            `exercise_id` int(11) NOT NULL COMMENT 'Reference to exercise.id for easier querying',
+            `student_record_id` int(11) NOT NULL COMMENT 'Reference to exercise_user_record.eurid',
+            `ai_suggested_score` decimal(5,2) NOT NULL COMMENT 'AI suggested score',
+            `ai_max_score` decimal(5,2) NOT NULL COMMENT 'Maximum possible score for this question',
+            `ai_reasoning` text NOT NULL COMMENT 'AI explanation of the score',
+            `ai_confidence` decimal(3,2) NOT NULL COMMENT 'AI confidence level (0.0-1.0)',
+            `ai_provider` varchar(50) NOT NULL COMMENT 'AI provider used (openai, anthropic, etc.)',
+            `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'When AI evaluation was performed',
+            PRIMARY KEY (`id`),
+            KEY `idx_answer_record` (`answer_record_id`),
+            KEY `idx_question` (`question_id`),
+            KEY `idx_exercise` (`exercise_id`),
+            KEY `idx_student_record` (`student_record_id`),
+            KEY `idx_confidence` (`ai_confidence`),
+            FOREIGN KEY (`answer_record_id`) REFERENCES `exercise_answer_record`(`answer_record_id`) ON DELETE CASCADE,
+            FOREIGN KEY (`question_id`) REFERENCES `exercise_question`(`id`) ON DELETE CASCADE,
+            FOREIGN KEY (`exercise_id`) REFERENCES `exercise`(`id`) ON DELETE CASCADE,
+            FOREIGN KEY (`student_record_id`) REFERENCES `exercise_user_record`(`eurid`) ON DELETE CASCADE
+        ) $tbl_options");
+    }
+
+    if (!DBHelper::tableExists('user_permissions')) {
+        Database::get()->query("CREATE TABLE user_permissions (
+            `course_id` int NOT NULL DEFAULT '0',
+            `user_id` int unsigned NOT NULL DEFAULT '0',
+            `admin_modules` tinyint NOT NULL DEFAULT '0',
+            `admin_users` tinyint NOT NULL DEFAULT '0',
+            `course_backup` tinyint NOT NULL DEFAULT '0',
+            `course_clone` tinyint NOT NULL DEFAULT '0',
+            PRIMARY KEY (`course_id`,`user_id`)
+        ) $tbl_options");
+    }
+
+    if (!DBHelper::fieldExists('lp_user_module_progress', 'progress_measure')) {
+        Database::get()->query("ALTER TABLE lp_user_module_progress ADD `progress_measure` FLOAT DEFAULT NULL AFTER `session_time`");
+    }
+    // flipped classroom
+    Database::get()->query("ALTER TABLE course_activities ADD UNIQUE KEY(activity_id, activity_type)");
+    Database::get()->query("INSERT IGNORE INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unit_id`,`module_id`) VALUES ('FC18', 1, 0, 0, 0)");
+
 }
 
 /**

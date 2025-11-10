@@ -41,7 +41,10 @@ class DragAndDropTextAnswer extends \QuestionType
 
     public function AnswerQuestion($question_number, $exerciseResult = [], $options = []): string
     {
-        global $langCalcelDroppableItem, $head_content, $course_code, $uid;
+        global $langCalcelDroppableItem, $head_content, $course_code, $uid,
+               $langConfirmDelete, $langAnalyticsConfirm, $langMarkerDeleted, $langMarkerDeletedError, $langImageUploaded,
+               $langImageNotSelected, $langInvalidAnswerValue, $langBlankNotEmpty, $langBlankOtherQuestion, 
+               $chooseShapeAndAnswerToContinue, $chooseDrawAShapeForTheAnswerToContinue;
 
         $questionId = $this->question_id;
         $question_text = $this->answer_object->get_drag_and_drop_text();
@@ -65,6 +68,21 @@ class DragAndDropTextAnswer extends \QuestionType
             $html_content .= "<input type='hidden' id='typeQuestion-$questionId' value='".DRAG_AND_DROP_TEXT."'>";
         }
 
+        $head_content .= "<script type='text/javascript'>        
+                                var lang = {
+                                    confirmdelete: '" . js_escape($langConfirmDelete) . "',
+                                    confirm: '" . js_escape($langAnalyticsConfirm) . "',
+                                    markerdeleted: '" . js_escape($langMarkerDeleted) . "',
+                                    markerdeletederror: '" . js_escape($langMarkerDeletedError) . "',
+                                    imageuploaded: '" . js_escape($langImageUploaded) . "',
+                                    imagenotselected: '" . js_escape($langImageNotSelected) . "',
+                                    invalidanswervalue : '" . js_escape($langInvalidAnswerValue) . "',
+                                    blanknotempty: '" . js_escape($langBlankNotEmpty) . "',
+                                    blankotherquestion: '" . js_escape($langBlankOtherQuestion) . "',
+                                    chooseShapeAndAnswerToContinue: '" .js_escape($chooseShapeAndAnswerToContinue). "',
+                                    chooseDrawAShapeForTheAnswerToContinue: '" . js_escape($chooseDrawAShapeForTheAnswerToContinue) . "'
+                                };
+                            </script>";
         load_js('drag-and-drop-shapes');
 
         $head_content .= "<script>

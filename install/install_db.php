@@ -276,7 +276,7 @@ $db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `vi
 $db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unit_id`,`module_id`) VALUES ('FC14',1,0,0,0)");
 $db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unit_id`,`module_id`) VALUES ('FC15',2,0,0,0)");
 $db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unit_id`,`module_id`) VALUES ('FC16',2,0,0,0)");
-$db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unit_id`,`module_id`) VALUES ('FC17',0,0,0,0)");
+//$db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unit_id`,`module_id`) VALUES ('FC17',0,0,0,0)");
 $db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unit_id`,`module_id`) VALUES ('FC18',1,0,0,0)");
 
 $db->query("CREATE TABLE IF NOT EXISTS `course_description` (
@@ -646,7 +646,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `forum` (
     `num_posts` INT(10) DEFAULT 0 NOT NULL,
     `last_post_id` INT(10) DEFAULT 0 NOT NULL,
     `cat_id` INT(10) DEFAULT 0 NOT NULL,
-    `course_id` INT(11) NOT NULL,
+    `visible` TINYINT(4) DEFAULT 1 NOT NULL,
+    `course_id` INT(11) NOT NULL,    
     PRIMARY KEY (`id`)) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `forum_category` (
@@ -686,6 +687,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `forum_topic` (
     `last_post_id` INT(10) NOT NULL DEFAULT 0,
     `forum_id` INT(10) NOT NULL DEFAULT 0,
     `locked` TINYINT DEFAULT 0 NOT NULL,
+    `visible` TINYINT DEFAULT 1 NOT NULL,
     `pin_time` DATETIME DEFAULT NULL,
     PRIMARY KEY  (`id`)) $tbl_options");
 
@@ -1326,6 +1328,45 @@ $db->query("CREATE TABLE IF NOT EXISTS `exercise_with_questions` (
     `q_position` INT(11) NOT NULL DEFAULT 1,
     `random_criteria` TEXT) $tbl_options");
 
+$db->query("CREATE TABLE exercise_ai_config (
+        `id` int(11) NOT NULL AUTO_INCREMENT,
+        `question_id` int(11) NOT NULL,
+        `course_id` int(11) NOT NULL,
+        `enabled` tinyint(1) DEFAULT 1,
+        `evaluation_prompt` text NOT NULL,
+        `sample_responses` text NULL,
+        `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        PRIMARY KEY (`id`),
+        UNIQUE KEY `uk_question` (`question_id`),
+        KEY `idx_course` (`course_id`),
+        KEY `idx_enabled` (`enabled`),
+        FOREIGN KEY (`question_id`) REFERENCES `exercise_question`(`id`) ON DELETE CASCADE,
+        FOREIGN KEY (`course_id`) REFERENCES `course`(`id`) ON DELETE CASCADE) $tbl_options");
+
+$db->query("CREATE TABLE exercise_ai_evaluation (
+        `id` int(11) NOT NULL AUTO_INCREMENT,
+        `answer_record_id` int(11) NOT NULL COMMENT 'Reference to exercise_answer_record.answer_record_id',
+        `question_id` int(11) NOT NULL COMMENT 'Reference to exercise_question.id',
+        `exercise_id` int(11) NOT NULL COMMENT 'Reference to exercise.id for easier querying',
+        `student_record_id` int(11) NOT NULL COMMENT 'Reference to exercise_user_record.eurid',
+        `ai_suggested_score` decimal(5,2) NOT NULL COMMENT 'AI suggested score',
+        `ai_max_score` decimal(5,2) NOT NULL COMMENT 'Maximum possible score for this question',
+        `ai_reasoning` text NOT NULL COMMENT 'AI explanation of the score',
+        `ai_confidence` decimal(3,2) NOT NULL COMMENT 'AI confidence level (0.0-1.0)',
+        `ai_provider` varchar(50) NOT NULL COMMENT 'AI provider used (openai, anthropic, etc.)',
+        `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'When AI evaluation was performed',
+        PRIMARY KEY (`id`),
+        KEY `idx_answer_record` (`answer_record_id`),
+        KEY `idx_question` (`question_id`),
+        KEY `idx_exercise` (`exercise_id`),
+        KEY `idx_student_record` (`student_record_id`),
+        KEY `idx_confidence` (`ai_confidence`),
+        FOREIGN KEY (`answer_record_id`) REFERENCES `exercise_answer_record`(`answer_record_id`) ON DELETE CASCADE,
+        FOREIGN KEY (`question_id`) REFERENCES `exercise_question`(`id`) ON DELETE CASCADE,
+        FOREIGN KEY (`exercise_id`) REFERENCES `exercise`(`id`) ON DELETE CASCADE,
+        FOREIGN KEY (`student_record_id`) REFERENCES `exercise_user_record`(`eurid`) ON DELETE CASCADE) $tbl_options");
+
 $db->query("CREATE TABLE IF NOT EXISTS lti_apps (
     `id` int(11) NOT NULL AUTO_INCREMENT,
     `course_id` INT(11) DEFAULT NULL,
@@ -1616,6 +1657,16 @@ $db->query("CREATE TABLE `user_request_ext_uid` (
     UNIQUE KEY (user_request_id, auth_id),
     FOREIGN KEY (`user_request_id`) REFERENCES `user_request` (`id`) ON DELETE CASCADE)
     $tbl_options");
+
+$db->query("CREATE TABLE user_permissions (
+    `course_id` int NOT NULL DEFAULT '0',
+    `user_id` int unsigned NOT NULL DEFAULT '0',
+    `admin_modules` tinyint NOT NULL DEFAULT '0',
+    `admin_users` tinyint NOT NULL DEFAULT '0',
+    `course_backup` tinyint NOT NULL DEFAULT '0',
+    `course_clone` tinyint NOT NULL DEFAULT '0',
+    PRIMARY KEY (`course_id`,`user_id`)
+) $tbl_options");
 
 $eclass_stud_reg = intval($eclass_stud_reg);
 
@@ -2477,6 +2528,7 @@ $db->query("CREATE TABLE h5p_content (
     course_id INT(11) NOT NULL,
     enabled TINYINT(4) NOT NULL DEFAULT 1,
     reuse_enabled TINYINT(4) NOT NULL DEFAULT 1,
+    creator_id INT UNSIGNED NOT NULL DEFAULT 0,
     PRIMARY KEY(id)) $tbl_options");
 
 $db->query("CREATE TABLE h5p_content_dependency (
@@ -2513,6 +2565,32 @@ $db->query("CREATE TABLE api_token (
     `updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `expired` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)) $tbl_options");
+
+$db->query("CREATE TABLE ai_providers (    
+    `id` smallint NOT NULL AUTO_INCREMENT,
+    `name` text CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+    `api_key` text CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+    `model_name` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+    `provider_type` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin,
+    `endpoint_url` varchar(255) CHARACTER SET ascii COLLATE ascii_bin DEFAULT NULL,
+    `enabled` tinyint NOT NULL,
+    `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `expired` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP    
+    PRIMARY KEY (`id`)) $tbl_options");
+
+$db->query("CREATE TABLE ai_modules (
+    `id` SMALLINT NOT NULL AUTO_INCREMENT, 
+    `ai_module_id` SMALLINT NOT NULL DEFAULT 0, 
+    `ai_provider_id` SMALLINT DEFAULT 0,
+    `all_courses` TINYINT NOT NULL DEFAULT 1, 
+    PRIMARY KEY(ID)) $tbl_options");
+
+$db->query("CREATE TABLE `ai_courses` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `course_id` int NOT NULL,
+    `ai_module` int NOT NULL,
+    PRIMARY KEY (`id`), KEY (`ai_module`, `course_id`))  $tbl_options");
 
 $db->query("CREATE TABLE `course_invitation` (
     `id` int(11) NOT NULL AUTO_INCREMENT,

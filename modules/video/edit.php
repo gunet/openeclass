@@ -44,6 +44,7 @@ $data = array();
 // js and view
 load_js('tools.js');
 load_js('bootstrap-datetimepicker');
+load_js('datatables');
 
 // navigation
 $toolName = $langVideo;
@@ -257,7 +258,6 @@ if ($form_input === 'opendelos') {
         list($jsonPublicObj, $jsonPrivateObj, $checkAuth) = requestDelosJSON();
         $checkAuth = true;
     }
-
     $data['jsonPublicObj'] = $jsonPublicObj;
     $data['jsonPrivateObj'] = $jsonPrivateObj;
     $data['checkAuth'] = $checkAuth;

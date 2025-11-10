@@ -628,12 +628,12 @@ function build_group_selector_cond($interval = 'month', $date_field = 'day')
             $groupby = "GROUP BY y, m";
             break;
         case 'week':
-            $select = "STR_TO_DATE(DATE_FORMAT($date_field, '%Y%u Monday'), '%X%V %W') cat_title, DATE_FORMAT($date_field,'%u') w, DATE_FORMAT($date_field, '%m') m, DATE_FORMAT($date_field, '%Y') y";
-            $groupby = "GROUP BY y, w";
+            $select = "STR_TO_DATE(DATE_FORMAT(MAX($date_field), '%Y%u Monday'), '%X%V %W') cat_title, DATE_FORMAT($date_field,'%u') w, DATE_FORMAT($date_field, '%m') m, DATE_FORMAT($date_field, '%Y') y";
+            $groupby = "GROUP BY y, m, w";
             break;
         case 'day':
             $select = "DATE_FORMAT(MAX($date_field), '%Y-%m-%d') cat_title, DATE_FORMAT($date_field,'%d') d, DATE_FORMAT($date_field,'%u') w, DATE_FORMAT($date_field, '%m') m, DATE_FORMAT($date_field, '%Y') y";
-            $groupby = "GROUP BY y, m, d";
+            $groupby = "GROUP BY y, m, w, d";
             break;
     }
     return array('groupby'=>$groupby,'select'=>$select);

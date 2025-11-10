@@ -282,7 +282,7 @@ function api_method($access) {
         exit();
     }
 
-    if ($access->all_courses) {
+    if ($access->allCourses) {
         $courses = Database::get()->queryArray("SELECT course.code AS id,
                 course.title AS name,
                 course.title AS shortname,

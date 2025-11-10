@@ -26,9 +26,8 @@
 
 class UserSettings
 {
-
     private $default_settings;
-
+    private $user_id;
     public function __construct($user_id)
     {
         $this->user_id = $user_id;

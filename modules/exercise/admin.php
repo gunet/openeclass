@@ -41,9 +41,9 @@ if (isset($_GET['htopic'])) {
         case '6': $helpSubTopic = 'free_text'; break;
         case '8': $helpSubTopic = 'fill_gaps_predefined_answers'; break;
         case '9': $helpSubTopic = 'drag_and_drop_text'; break;
-        case '10': $helpSubTopic = 'drag_and_drop_markers'; break;
+        case '10': $helpSubTopic = 'drag_and_drop_image'; break;
         case '11': $helpSubTopic = 'calculated'; break;
-        case '12': $helpSubTopic = 'ordering'; break;
+        case '12': $helpSubTopic = 'sorting'; break;
         case '13': $helpSubTopic = 'oral'; break;
     }
 }
@@ -51,20 +51,6 @@ if (isset($_GET['htopic'])) {
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
-
-$head_content .= "<script type='text/javascript'>        
-        var lang = {
-            confirmdelete: '" . js_escape($langConfirmDelete) . "',
-            confirm: '" . js_escape($langAnalyticsConfirm) . "',
-            markerdeleted: '" . js_escape($langMarkerDeleted) . "',
-            markerdeletederror: '" . js_escape($langMarkerDeletedError) . "',
-            imageuploaded: '" . js_escape($langImageUploaded) . "',
-            imagenotselected: '" . js_escape($langImageNotSelected) . "',
-            invalidanswervalue : '" . js_escape($langInvalidAnswerValue) . "',
-            blanknotempty: '" . js_escape($langBlankNotEmpty) . "',
-            blankotherquestion: '" . js_escape($langBlankOtherQuestion) . "'
-        };
-    </script>";
 
 load_js('sortable/Sortable.min.js');
 ModalBoxHelper::loadModalBox();

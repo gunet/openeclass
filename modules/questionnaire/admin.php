@@ -334,11 +334,11 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 var select_content = '';
                 if(type==1){
                     for (index = 0; index < parsed_data.length; ++index) {
-                        select_content += '<option value=\"' + parsed_data[index]['id'] + '\">' + parsed_data[index]['surname'] + ' ' + parsed_data[index]['givenname'] + '<\/option>';
+                        select_content += '<option value=\"' + parsed_data[index]['id'] + '\">' + q(parsed_data[index]['surname'] + ' ' + parsed_data[index]['givenname']) + '<\/option>';
                     }
                 } else {
                     for (index = 0; index < parsed_data.length; ++index) {
-                        select_content += '<option value=\"' + parsed_data[index]['id'] + '\">' + parsed_data[index]['name'] + '<\/option>';
+                        select_content += '<option value=\"' + parsed_data[index]['id'] + '\">' + q(parsed_data[index]['name']) + '<\/option>';
                     }
                 }
                 $('#assignee_box').find('option').remove();

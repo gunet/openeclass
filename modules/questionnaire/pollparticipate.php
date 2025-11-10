@@ -55,6 +55,7 @@ $pid = intval($_REQUEST['pid']);
 if (!$pid) {
     forbidden();
 }
+
 $query = "SELECT pid FROM poll WHERE course_id = ?d AND pid = ?d";
 $query_params[] = $course_id;
 $query_params[] = $pid;
@@ -111,9 +112,9 @@ draw($tool_content, 2, null, $head_content);
 function printPollForm() {
     global $course_id, $course_code, $tool_content, $langSelect, $langDescription,
     $langSubmit, $langPollInactive, $langPollUnknown, $uid, $langAnswer,
-    $langPollAlreadyParticipated, $is_editor, $langBack, $langQuestion,
+    $langPollAlreadyParticipated, $is_editor, $is_course_reviewer, $langBack, $langQuestion,
     $langCancel, $head_content, $langPollParticipantInfo, $langCollesLegend,
-    $pageName, $lang_rate1, $lang_rate5, $langForm, $pid, $typeyourmessage, 
+    $pageName, $lang_rate1, $lang_rate5, $langForm, $pid, $langTypeOutMessage,
     $langPreviousQuestion, $langNextQuestion, $langCleanup;
 
     $unit_id = isset($_REQUEST['unit_id'])? intval($_REQUEST['unit_id']): null;
@@ -264,6 +265,67 @@ function printPollForm() {
     $thePoll = Database::get()->querySingle("SELECT * FROM poll WHERE course_id = ?d AND pid = ?d ORDER BY pid",$course_id, $pid);
     $multiple_submissions = $thePoll->multiple_submissions;
     $default_answer = $thePoll->default_answer;
+
+    if ($thePoll->require_answer) {
+        $head_content .= "            
+            <script>
+                document.addEventListener('DOMContentLoaded', () => {
+                    const form = document.getElementById('poll');
+                        form.querySelectorAll('input, textarea').forEach(el => {
+                            if (['radio', 'textarea'].includes(el.type) || el.tagName === 'TEXTAREA') {
+                                el.required = true;
+                            }
+                        });
+                });
+                
+                document.addEventListener('DOMContentLoaded', () => {
+                  const form = document.getElementById('poll');
+                  if (!form) return;
+                
+                  form.addEventListener('submit', e => {                      
+                    let valid = true;
+                    const checkboxGroups = {};
+                    form.querySelectorAll('input[type=\\\"checkbox\\\"]').forEach(cb => {
+                      const name = cb.name;
+                      if (!checkboxGroups[name]) checkboxGroups[name] = [];
+                      checkboxGroups[name].push(cb);
+                    });
+                
+                    for (const boxes of Object.values(checkboxGroups)) {
+                      if (!boxes.some(cb => cb.checked)) {
+                        valid = false;
+                        boxes.forEach(cb => cb.classList.add('invalid-checkbox'));
+                      } else {
+                        boxes.forEach(cb => cb.classList.remove('invalid-checkbox'));
+                      }
+                    }
+                    
+                    if (!valid) {
+                        e.preventDefault();
+                    }
+                  });
+                
+                  form.querySelectorAll('input[type=\\\"checkbox\\\"]').forEach(cb => {
+                    cb.addEventListener('change', () => {
+                      const group = form.querySelectorAll('input[name=\\\"' + cb.name + '\\\"]');
+                      if ([...group].some(g => g.checked)) {
+                        group.forEach(g => g.classList.remove('invalid-checkbox'));
+                      }
+                    });
+                  });
+                });
+                </script>
+                
+                <style>
+                    .invalid-checkbox {
+                      outline: 1px solid #B70A0A!important;
+                    }
+                </style>
+            
+            ";
+
+    }
+
     // check if user has participated
     $has_participated = Database::get()->querySingle("SELECT COUNT(*) AS count FROM poll_user_record WHERE uid = ?d AND pid = ?d", $uid, $pid)->count;
     if ($uid && $has_participated > 0 && !$is_editor && !$multiple_submissions) {
@@ -272,7 +334,7 @@ function printPollForm() {
         if (isset($_REQUEST['unit_id'])) {
             redirect_to_home_page('modules/units/index.php?course='.$course_code.'&id='.$_REQUEST['unit_id']);
         } else if (isset($_REQUEST['res_type'])) {
-            redirect_to_home_page('modules/wall/index.php?course=' . $course_code); 
+            redirect_to_home_page('modules/wall/index.php?course=' . $course_code);
         } else {
             redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);
         }
@@ -284,7 +346,7 @@ function printPollForm() {
     $temp_StartDate = mktime(substr($temp_StartDate, 11, 2), substr($temp_StartDate, 14, 2), 0, substr($temp_StartDate, 5, 2), substr($temp_StartDate, 8, 2), substr($temp_StartDate, 0, 4));
     $temp_EndDate = mktime(substr($temp_EndDate, 11, 2), substr($temp_EndDate, 14, 2), 0, substr($temp_EndDate, 5, 2), substr($temp_EndDate, 8, 2), substr($temp_EndDate, 0, 4));
     $temp_CurrentDate = mktime(substr($temp_CurrentDate, 11, 2), substr($temp_CurrentDate, 14, 2), 0, substr($temp_CurrentDate, 5, 2), substr($temp_CurrentDate, 8, 2), substr($temp_CurrentDate, 0, 4));
-    $temp_IsLime = ($thePoll->type == POLL_LIMESURVEY) ? true : false;
+    $temp_IsLime = $thePoll->type == POLL_LIMESURVEY;
 
     if ($is_editor || ($temp_CurrentDate >= $temp_StartDate) && ($temp_CurrentDate < $temp_EndDate)) {
 
@@ -354,8 +416,12 @@ function printPollForm() {
 
         $pollType = Database::get()->querySingle("SELECT `type` FROM poll WHERE pid = ?d", $pid)->type;
         $pollPagination = Database::get()->querySingle("SELECT `pagination` FROM poll WHERE pid = ?d", $pid)->pagination;
-        $incomplete_answers = $_SESSION["poll_answers_$pid"] ?? [];
-        unset($_SESSION["poll_answers_$pid"]);
+        if (isset($_SESSION["poll_answers_$pid"])) {
+            $incomplete_resubmission = $_SESSION["poll_answers_$pid"];
+            $incomplete_answers = $_SESSION["poll_answers_$pid"];
+            unset($_SESSION["poll_answers_$pid"]);
+        }
+
         $i = 1;
         $page = 1;
         $tool_content .= "<input id='current_page' type='hidden' value='$page'>";
@@ -368,6 +434,9 @@ function printPollForm() {
             $pqid = $theQuestion->pqid;
             $qtype = $theQuestion->qtype;
             $q_description = $theQuestion->description;
+            if (isset($incomplete_resubmission) and !isset($incomplete_answers[$pqid])) {
+                $incomplete_answers[$pqid] = [];
+            }
             $user_answers = null;
             if ($qtype == QTYPE_LABEL) {
                 $tool_content .= "
@@ -397,8 +466,8 @@ function printPollForm() {
                                             WHERE a.poll_user_record_id = b.id
                                                 AND a.qid = ?d
                                                 AND b.uid = ?d", $pqid, $uid);
-                                } else {
-                                    $user_answers = $incomplete_answers[$pqid] ?? false;
+                                } elseif (isset($incomplete_resubmission)) {
+                                    $user_answers = $incomplete_answers[$pqid];
                                 }
                                 $answers = Database::get()->queryArray("SELECT * FROM poll_question_answer
                                             WHERE pqid = ?d ORDER BY pqaid", $pqid);
@@ -410,11 +479,19 @@ function printPollForm() {
                                     $tool_content .= "<input type='hidden' name='answer[$pqid]' value='-1'>";
                                 }
                                 foreach ($answers as $theAnswer) {
-                                    $checked = '';
+                                        $checked = '';
                                     if ($user_answers) {
-                                        foreach ($user_answers as $ua) {
-                                            if ($ua->aid == $theAnswer->pqaid) {
-                                                $checked = 'checked';
+                                        if (count($user_answers) > 1) { // multiple answers
+                                            foreach ($user_answers as $ua) {
+                                                if ($ua->aid == $theAnswer->pqaid) {
+                                                    $checked = 'checked';
+                                                }
+                                            }
+                                        } else {
+                                            if (count($user_answers) == 1) { // single answer
+                                                if ($user_answers[0]->aid == $theAnswer->pqaid) {
+                                                    $checked = 'checked';
+                                                }
                                             }
                                         }
                                     }
@@ -460,7 +537,7 @@ function printPollForm() {
                                     if ($user_answers) {
                                         $slider_value = $user_answers->answer_text;
                                     }
-                                } elseif (isset($incomplete_answers[$pqid])) {
+                                } elseif (isset($incomplete_resubmission) and $incomplete_answers[$pqid]) {
                                     $slider_value = $incomplete_answers[$pqid][0]->answer_text;
                                 }
                                 if (($pollType == POLL_COLLES) or ($pollType == POLL_ATTLS)) {
@@ -492,13 +569,13 @@ function printPollForm() {
                                     if ($user_answers) {
                                         $text = $user_answers->answer_text;
                                     }
-                                } elseif (isset($incomplete_answers[$pqid])) {
+                                } elseif (isset($incomplete_resubmission) and $incomplete_answers[$pqid]) {
                                     $text = $incomplete_answers[$pqid][0]->answer_text;
                                 }
                                 $tool_content .= "
                                     <div class='form-group margin-bottom-fat'>
                                         <div class='col-sm-12 margin-top-thin QuestionType_{$qtype} QuestionNumber_{$pqid}'>
-                                            <textarea class='form-control' name='answer[$pqid]' aria-label='$typeyourmessage'>$text</textarea>
+                                            <textarea class='form-control' name='answer[$pqid]' aria-label='$langTypeOutMessage'>$text</textarea>
                                         </div>
                                     </div>";
 
@@ -511,8 +588,8 @@ function printPollForm() {
                                 if ($q_rows > 0) {
                                     $user_questions = Database::get()->queryArray("SELECT answer_text,sub_question FROM poll_question_answer
                                                                                     WHERE pqid = ?d", $pqid);
-                                                    
-                        
+
+
                                     if (count($user_questions)>0) {
                                         $sub_question_arr = [];
                                         foreach ($user_questions as $uq) {
@@ -525,7 +602,7 @@ function printPollForm() {
                                                         <tr>";
                                                             foreach ($user_questions as $q) {
                                                                 $tool_content .= "<th style='min-width:250px;'><p>" . q($q->answer_text) . "</p></th>";
-                                                            }                                            
+                                                            }
                                     $tool_content .= "</tr>
                                                     </thead>
                                                     <tbody>";
@@ -551,7 +628,7 @@ function printPollForm() {
                                                                     }
                                                                     $tool_content .= "<td>
                                                                                         <input type='hidden' name='q_row_col[]' value='$pqid,$val_row,$val_col,$ansCounter'>
-                                                                                        <textarea class='form-control' name='answer[$pqid][$ansCounter]' aria-label='$typeyourmessage'>$text</textarea>
+                                                                                        <textarea class='form-control' name='answer[$pqid][$ansCounter]' aria-label='$langTypeOutMessage'>$text</textarea>
                                                                                     </td>";
                                                                 }
                                                             $tool_content .= "</tr>";
@@ -596,10 +673,30 @@ function printPollForm() {
 
         $tool_content .= "<div class='col-12 d-flex justify-content-center mt-5'>";
         if ($is_editor) {
-            $tool_content .= "<a class='btn cancelAdminBtn' href='index.php?course=$course_code'>" . q($langBack). "</a>";
+            $tool_content .= "<a class='btn cancelAdminBtn' href='index.php?course=$course_code'>" . q($langBack) . "</a>";
+        } else if ($is_course_reviewer) {
+            // is poll assigned to course_reviewer?
+            $query = "SELECT * FROM poll WHERE pid = ?d";
+            $query_params[] = $pid;
+            $gids = user_group_info($uid, $course_id);
+            if (!empty($gids)) {
+                $gids_sql_ready = implode(',',array_keys($gids));
+            } else {
+                $gids_sql_ready = "''";
+            }
+            $query .= " AND (assign_to_specific != '0' AND pid IN
+                   (SELECT poll_id FROM poll_to_specific WHERE user_id = ?d UNION SELECT poll_id FROM poll_to_specific WHERE group_id IN ($gids_sql_ready))
+                )";
+            $query_params[] = $uid;
+            $result = Database::get()->queryArray($query, $query_params);
+            if (count($result) > 0) {
+                $tool_content .= "<input class='btn submitAdminBtn' name='submit' type='submit' value='" . q($langSubmit) . "'>";
+            } else {
+                $tool_content .= "<a class='btn cancelAdminBtn' href='index.php?course=$course_code'>" . q($langBack) . "</a>";
+            }
         } else {
             if (!$temp_IsLime) {
-                $tool_content .= "<input class='btn submitAdminBtn blockUI' name='submit' type='submit' value='" . q($langSubmit) . "'>";
+                $tool_content .= "<input class='btn submitAdminBtn' name='submit' type='submit' value='" . q($langSubmit) . "'>";
                 if (isset($_REQUEST['unit_id'])) {
                     $tool_content .= "<a class='btn cancelAdminBtn ms-3' href='../units/index.php?course=$course_code&amp;id=$_REQUEST[unit_id]'>" . q($langCancel) . "</a>";
                 } else {
@@ -760,6 +857,7 @@ function submitPoll() {
                 }
                 $answer_text = '';
             } elseif ($qtype == QTYPE_FILL) {
+                $_SESSION['q_answer'] = $answer;
                 $answer_text = trim($answer[$pqid]);
                 if ($answer_text === '' and !$default_answer and !$atleast_one_answer) {
                     continue;
@@ -799,21 +897,19 @@ function submitPoll() {
         }
 
         if (!$is_complete) {
-            $session_answers = [];
             $user_answers = Database::get()->queryArray('SELECT * FROM poll_answer_record
                 WHERE poll_user_record_id = ?d', $user_record_id);
-            if ($user_answers) {
-                foreach ($user_answers as $answer) {
-                    if (isset($session_answers[$answer->qid])) {
-                        $session_answers[$answer->qid][] = $answer;
-                    } else {
-                        $session_answers[$answer->qid] = [$answer];
-                    }
+            $session_answers = [];
+            foreach ($user_answers as $answer) {
+                if (isset($session_answers[$answer->qid])) {
+                    $session_answers[$answer->qid][] = $answer;
+                } else {
+                    $session_answers[$answer->qid] = [$answer];
                 }
             }
             $_SESSION["poll_answers_$pid"] = $session_answers;
-            Database::get()->query('DELETE FROM poll_answer_record WHERE poll_user_record_id = ?d', $user_record_id);
-            Database::get()->query('DELETE FROM poll_user_record WHERE id = ?d', $user_record_id);
+//            Database::get()->query('DELETE FROM poll_answer_record WHERE poll_user_record_id = ?d', $user_record_id);
+//            Database::get()->query('DELETE FROM poll_user_record WHERE id = ?d', $user_record_id);
             Session::flash('message', $langQFillInAllQs);
             Session::flash('alert-class', 'alert-warning');
             redirect_to_home_page("modules/questionnaire/pollparticipate.php?course=$course_code&UseCase=1&pid=$pid");

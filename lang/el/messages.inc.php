@@ -190,12 +190,12 @@ $langCronInfo = "Ενημερωτικά στοιχεία για τις προγ�
 $langCronName = "Όνομα εργασίας";
 $langCronLastRun = "Τελευταία Εκτέλεση";
 $langExternalTools = 'Εξωτερικά εργαλεία';
-$langDisableModules = "Απενεργοποιημένα υποσυστήματα";
+$langDisableModules = "Απενεργοποιημένα εργαλεία";
 $langDisableModulesHelp = "Μπορείτε να επιλέξετε ποια από τα παρακάτω
-    υποσυστήματα επιθυμείτε να απενεργοποιηθούν από όλα τα $langsCourses της
+    εργαλεία επιθυμείτε να απενεργοποιηθούν από όλα τα $langsCourses της
     πλατφόρμας.";
-$langDefaultModules = 'Προκαθορισμένα υποσυστήματα';
-$langDefaultModulesHelp = "Τα παρακάτω υποσυστήματα είναι ενεργοποιημένα εξ
+$langDefaultModules = 'Προκαθορισμένα εργαλεία';
+$langDefaultModulesHelp = "Τα παρακάτω εργαλεία είναι ενεργοποιημένα εξ
     ορισμού στα νέα $langsCourses της πλατφόρμας κατά τη δημιουργία τους.";
 $langAutoEnroll = 'Αυτόματη εγγραφή';
 $langAutoEnrollNew = 'Προσθήκη κανόνα';
@@ -416,6 +416,7 @@ $langPublicDocumentManagementExplanation = 'Επιτρέπεται αποστο�
 $langPassCode = "Συνθηματικό πρόσβασης";
 $langCourseEndDate = "Ημερομηνία λήξης $langsOfCourse";
 $langExplainCourseEndDate = "Μετά την ημερομηνία λήξης το $langsOfCourse θα γίνει ανενεργό";
+$langH5PUploadingEnabled = "Δημιουργία περιεχομένου H5P από τους $langsOfStudentss";
 // listreq.php
 
 $langOpenProfessorRequests = "Ανοικτές Αιτήσεις Χρηστών";
@@ -719,7 +720,7 @@ $langEnableUserNotifications = "Εμφάνιση ειδοποιήσεων από
 $langCustomEnableUserNotifications = "Εμφάνιση ειδοποιήσεων των";
 $langDefaultCourseAccess = 'Προεπιλεγμένος τύπος πρόσβασης';
 
-$langFlippedClassroom = "Μοντέλο Ανεστραμμένης Τάξης";
+$langFlippedClassroom = "Μοντέλο Ανεστραμμένης Μάθησης";
 $langCEnabled = "Ενεργό";
 $langGoals = "Μαθησιακοί στόχοι";
 $langGoalTitle = "Στόχος";
@@ -737,8 +738,9 @@ $langUnitsTitle = "Ενότητα";
 $langFinalSubmit = "Τελική Υποβολή";
 $langCont = "Περιεχόμενο";
 $langActivities = "Δραστηριότητες";
-$langEmptyGoal ="Συμπληρώστε όλους τους μαθησιακούς στόχους που έχετε δημιουργήσει.";
-$langEmptyUnit ="Συμπληρώστε όλες τις θεματικές ενότητες που έχετε δημιουργήσει.";
+$langGroupActivities = "Ομαδικές Δραστηριότητες";
+$langEmptyGoal ="Θα πρέπει να ορίσετε ένα τουλάχιστον μαθησιακό στόχο";
+$langEmptyUnit ="Θα πρέπει να συμπληρώσετε μια τουλάχιστον ενότητα";
 $langActSelect = "Επιλέξτε τις δραστηριότητες";
 $langActInHome = "Πριν την τάξη";
 $langActInClass = "Στην τάξη";
@@ -746,7 +748,7 @@ $langActAfterClass = "Μετά την τάξη";
 $langFCEbook = "Μελέτη";
 $langFCVideo = "Παρακολούθηση βίντεο";
 $langFCVideoInteract = "Εκπόνηση αλληλεπιδραστικού βίντεο";
-$langFCRevision = "Επανάληψη/Σύνοψη εννοιών";
+$langFCRevision = "Επανάληψη / Σύνοψη εννοιών";
 $langFCGames = "Εκπαιδευτικό παιχνίδι";
 $langFCDiscuss = "Συζήτηση";
 $langFCBrainstorming = "Καταιγισμός ιδεών";
@@ -754,14 +756,15 @@ $langFCWorkPaper = "Φύλλα Εργασίας";
 $langFCRolePlay= "Παιχνίδι ρόλων";
 $langFCSimulate="Προσομοίωση";
 $langFCProblemSolving = "Επίλυση προβλήματος";
-$langFCMindMap="Δραστηριότητα εννοιολογικού χάρτη";
-$langFCEvaluate = "Αξιολόγηση";
+$langFCMindMap="Δραστηριότητα νοητικού χάρτη";
+$langFCEvaluate = "Αξιολόγηση - Αναστοχασμός";
 $langFCDigitalStorytelling = "Ψηφιακή Αφήγηση";
 $langFCSupportingMaterial="Υποστηρικτικό Υλικό";
-$langFlippedEdit = "Επεξεργασία του Μοντέλου Ανεστραμμένης Τάξης";
+$langFlippedEdit = "Επεξεργασία του Μοντέλου Ανεστραμμένης Μάθησησς";
 $langJustEdited = "Μόλις ενημερώσατε το μάθημα με τίτλο ";
 $langUnitActivityDeleteConfirm= "Είστε σίγουρη/σίγουρος ότι θέλετε να διαγραφεί η συγκεκριμένη δραστηριότητα;";
-$langUnitJustEdited="Μόλις ενημερώσατε την δραστηριότητα με τίτλο";
+$langUnitJustEdited="Οι δραστηριότητες ενημερώθηκαν";
+$langFlippedClassroomDataUpdated ="Οι πληροφορίες της ανεστραμμένης Τάξης ενημερώθηκαν";
 $langConfirmDeleteUnit = "Θέλετε σίγουρα να αφαιρέσετε την συγκεκριμένη ενότητα;";
 $langConfirmDeleteGoal = "Θέλετε σίγουρα να αφαιρέσετε το συγκεκριμένο μαθησιακό στόχο;";
 $langUnits = "Θεματικές Ενότητες";
@@ -1305,7 +1308,7 @@ $langSubsystems = "Επιλέξτε τα υποσυστήματα που θέλ�
 $langLanguageTip = "Επιλέξτε σε ποια γλώσσα θα εμφανίζονται οι σελίδες του $langsOfCourse";
 $langAccess = "Τύπος Πρόσβασης:";
 $langAvailableTypes = "Διαθέσιμοι τύποι πρόσβασης";
-$langModules = "Υποσυστήματα:";
+$langModules = "Υποσυστήματα";
 $langTestForum = "Γενικές συζητήσεις";
 $langDelAdmin = "Περιοχή συζητήσεων για κάθε θέμα που αφορά το $langsCourse";
 $langExMessage = "Παράδειγμα Μηνύματος";
@@ -1332,7 +1335,6 @@ $langDescription = "Περιγραφή";
 $langWiki = "Σύστημα Wiki";
 $langWikiNoModifications = "Δεν υπάρχουν αλλαγές";
 $langWikiLastModification = "Τελευταία αλλαγή";
-$langToolManagement = "Εργαλεία";
 $langUsage = "Στατιστικά";
 $langClearStats = "Καθαρισμός στατιστικών";
 $langStatsCleared = "Τα στατιστικά καθαρίστηκαν";
@@ -1349,6 +1351,8 @@ $langReleaseMic = "Αποδέσμευση μικροφώνου";
 $langEnterFile = "Δώστε το όνομα αρχείου";
 $langOpenCamera = "Άνοιγμα κάμερας";
 $langMaxRecAudioTime = "μέγιστος χρόνος ηχογράφησης: 5 λεπτά";
+$langMaxRecAudioTimeInExericses = "μέγιστος χρόνος ηχογράφησης: 20 λεπτά";
+$langMaxRecAudioTimeTmp = "μέγιστος χρόνος ηχογράφησης:";
 $langMaxRecVideoTime = "μέγιστος χρόνος βιντεοσκόπησης: 2 λεπτά";
 $langQRCodePresence = "Παρουσία μέσω QR code";
 $langAddPresenceSuccess = "Η παρουσία σας καταχωρήθηκε επιτυχώς.";
@@ -1431,7 +1435,7 @@ $langOfGradebookSettings = "ρυθμίσεων βαθμολογίου";
 $langGradebookActivityDate = "Ημερομηνία διεξαγωγής";
 $langGradebookActivityDate2 = "Ημερομηνία";
 $langGradebookActivityWeight = "Ποσοστό συμμετοχής στη βαθμολογία";
-$langGradebookActivityWeightLeft = "διαθέσιμο";
+$langGradebookActivityWeightLeft = "Διαθέσιμο";
 $langGradebookBook = "Καταχώριση βαθμών";
 $langSGradebookBook = "Καταχώριση βαθμού";
 $langGradebookBooking = "Καταχώριση";
@@ -1557,10 +1561,11 @@ $langGradeOfCourseCompletion = "Βαθμού ολοκλήρωσης $langsOfCour
 $langGradeCourseCompletion = "Βαθμός ολοκλήρωσης $langsOfCourse";
 $langOfAssignment = "Εργασίας";
 $langOfBlog = "Ιστολογίου";
-$langOfMultimediaLinks = "Πολυμεσικών συνδέσμων";
+$langOfMultimediaLinks = "πολυμεσικών συνδέσμων";
 $langOfEBook = "Ηλεκτρονικού βιβλίου";
 $langOfPoll = "Ερωτηματολογίου";
 $langOfGradebook = "Βαθμολογίου";
+$langOfProgress = "Προόδου";
 $langNumInForum = "Πλήθος δημοσιεύσεων στις συζητήσεις";
 $langNumInForumTopic = "Πλήθος δημοσιεύσεων σε θέμα συζητήσης";
 $langOfBlogComments = "Σχολίων ιστολογίου";
@@ -1847,7 +1852,7 @@ $langMetaMap = "Χάρτης";
 $langMetaInteractivemap = "Διαδραστικός Χάρτης";
 $langMetaExploration = "Διερεύνηση";
 $langMetaInteractivegame = "Διαδραστικό παιχνίδι";
-$langMetaConceptualmap = "Εννοιολογικός Χάρτης";
+$langMetaConceptualmap = "Νοητικός Χάρτης";
 $langMetaIndex = "Ευρετήριο";
 $langMetaProblemstatement = "Διατύπωση Προβλήματος";
 $langMetaSelfassessment = "Αυτοαξιολόγηση";
@@ -2137,7 +2142,7 @@ $langOral = "Προφορικά";
 $langSaveOralMsg = "Η απάντησή σας θα αποθηκευτεί προσωρινά. Η τελική αποθήκευση ολοκληρώνεται με την υποβολή της άσκησης. Θέλετε να προχωρήσετε?";
 $langDeleteRecordingOk = "Το αρχείο διαγράφηκε επιτυχώς!";
 $langListenToRecordingAudio = "Ακούστε την ηχογραφημένη απάντησή σας εδώ: ";
-$langFileUploadingOkReplaceWithNew = "Το αρχείο αποθηκεύθηκε επιτυχώς. Σε περίπτωση νέας προσπάθειας στην άσκηση, αν απαντήσετε την ίδια ερώτηση τότε το παλιό αρχείο θα αντικατασταθεί με το καινούριο.";
+$langFileUploadingOkReplaceWithNew = "Το αρχείο αποθηκεύτηκε με επιτυχία. Σε περίπτωση νέας προσπάθειας στην άσκηση, αν απαντήσετε την ίδια ερώτηση τότε το παλιό αρχείο θα αντικατασταθεί με το καινούριο.";
 $langScale = "Κλίμακας";
 $langFalse = "Λάθος";
 $langAddPicture = "Προσθήκη εικόνας";
@@ -2150,7 +2155,7 @@ $langInvalidPicture = "Μη υποστηριζόμενος τύπος εικόν
 $langQuestionDiffGrade = "Βαθμός δυσκολίας";
 $langNumQuestions = "Αρ. ερωτήσεων";
 $langQuestionAllDiffs = "Όλοι οι βαθμοί δυσκολίας";
-$langQuestionAllTypes = "'Ολοι οι τύποι ερωτήσεων";
+$langQuestionAllTypes = "Όλοι οι τύποι ερωτήσεων";
 $langQuestionNotDefined = "Μη προσδιορισμένη";
 $langQuestionVeryEasy = "Πολύ εύκολη";
 $langQuestionEasy = "Εύκολη";
@@ -2159,9 +2164,9 @@ $langQuestionDifficult = "Δύσκολη";
 $langQuestionVeryDifficult = "Πολύ δύσκολη";
 $langCheckAccess = "Έλεγχος πρόσβασης";
 $langDragAndDropText = "Μεταφορά και Απόθεση σε Κείμενο ";
-$langInfoDragAndDropText = 'Πληκτρολογήστε την <strong class="text-dark">εκφώνηση</strong> της ερώτησης χρησιμοποιώντας αγκύλες με τον μοναδικό τους αριθμό. </br> 
+$langInfoDragAndDropText = 'Πληκτρολογήστε την <strong class="text-dark">εκφώνηση</strong> της ερώτησης χρησιμοποιώντας αγκύλες με τον μοναδικό τους αριθμό. </br>
                             Κάθε αγκύλη του κειμένου αντιστοιχεί στην ανάλογη επιλογή του πίνακα.</br></br>
-                            Καταχωρήστε τις προκαθορισμένες απαντήσεις του κειμένου συμπληρώνοντας τον βαθμό τους. 
+                            Καταχωρήστε τις προκαθορισμένες απαντήσεις του κειμένου συμπληρώνοντας τον βαθμό τους.
                             Μπορείτε προαιρετικά να προσθέσετε περισσότερες προκαθορισμένες απαντήσεις από τον συνολικό αριθμό των σωστών απαντήσεων του κειμένου.
                             Με αυτόν τον τρόπο αυξάνετε το βαθμό δυσκόλιας της ερώτησης καθώς μία ή περισσότερες προκαθορισμένες απαντήσεις θα περισσέψει κατα την εκτέλεση της άσκησης.</br></br>
                             <strong class="text-dark">Για παράδειγμα</strong>, στο κείμενο `Πρωτεύουσα της Ελλάδας είναι [1] ενώ πρωτεύουσα της Ιταλίας είναι [2]` συμπληρώνουμε τις εξής απαντήσεις:</br></br>
@@ -2175,11 +2180,12 @@ $langPlaceholderDragAndDropText = "Πρωτεύουσα της Ελλάδας ε
 $langAthens = "Αθήνα";
 $langBerlin = "Βερολίνο";
 $langErrorWithChoicesAsAnswers = "Υπάρχει λάθος στην αντιστοιχία των απαντήσεων";
-$langPredefinedAnswerExists = "Δεν μπορείτε να καταχωρήσετε την ίδια ή κενή απάντηση. Δοκιμάστε πάλι.";
+$langPredefinedAnswerExists = "Δεν μπορείτε να καταχωρήσετε κενή απάντηση. Δοκιμάστε πάλι.";
 $langCalcelDroppableItem = "Μπορείτε να αναιρέσετε την απάντησή σας κάνοντας αριστερό κλικ πάνω στην λέξη.";
 $langAllowMoreDefinedAnswersThanBlanks = "Οι προκαθορισμένες απαντήσεις να είναι περισσότερες απο τον αριθμό των κενών";
 $langErrorWithUniqueNumberOfBlank = "Καταχωρήσατε τον ίδιο μοναδικό αριθμό σε παραπάνω από ένα κενά.";
 $langDragAndDropMarkersTextAnswers = "Μεταφορά και απόθεση σημείων εικόνας: ";
+$lanFieldGradeNotHasNumericValue = "Το πεδίο `βαθμός` δεν περιέχει τιμή!";
 
 $langDragAndDropMarkers = "Μεταφορά και απόθεση σε προκαθορισμένα σημεία ή εικόνα";
 $langMarker = "Σημείο";
@@ -2196,12 +2202,24 @@ $langMarkerDeletedError = "Σφάλμα κατά τη διαγραφή εικό�
 $langImageHasBeenDeleted = "Η εικόνα διαγράφηκε.";
 $langImageUploaded = "Η εικόνα φορτώθηκε";
 $langImageNotSelected = "Δεν έχετε επιλέξει εικόνα";
-$langInvalidAnswerValue = "Η απάντηση είναι κενή ή έχετε προσθέσει μια απάντηση που υπάρχει ήδη.";
+$langInvalidAnswerValue = "Υπάρχει κενή απάντηση στο πεδίο `Απάντηση`.";
+$chooseShapeAndAnswerToContinue = "Σχηματίστε πάνω στην εικόνα της ερώτησης την απάντηση που ορίσατε στο πεδίο `απάντηση` μέσω του σχήματος που επιλέξατε.";
+$chooseDrawAShapeForTheAnswerToContinue = "Σχηματίστε την απάντηση του σημείου μέσω του σχήματος που επιλέξατε.";
 $langSomethingWentWrong = "Κάτι πήγε στραβά. Δοκιμάστε πάλι.";
 $langConstantValue = "Σταθερή τιμή";
 $langRandomValue = "Τυχαία τιμή";
-$langBlankNotEmpty = "Υπάρχει ήδη μια λέξη στο 'κενό'";
-$langBlankOtherQuestion = "Το 'κενό' ανήκει σε άλλη ερώτηση!";
+$langBlankNotEmpty = "Υπάρχει ήδη μια λέξη στο κενό!";
+$langBlankOtherQuestion = "Το κενό ανήκει σε άλλη ερώτηση!";
+$langAddGradeToMarkerAnswer = "Συμπληρώστε το βαθμό της απάντησης στο πεδίο `Βαθμός`.";
+$langNotChooseShape = "Δεν έχει επιλεγεί κανένα σχήμα από το πεδίο `Σχήμα`.";
+$langNotDrawingTheAnswer = "Βεβαιωθείτε ότι έχετε συμπληρώσει την απάντηση στην εικόνα χρησιμοποιώντας το σχήμα ";
+$langSaveAnswer = "Αποθήκευση απάντησης";
+$langDeleteAnswer = "Διαγραφή απάντησης";
+$langDeleleImage = "Διαγραφή εικόνας";
+$langAnswerHasBeenAdded = "Η απάντηση προστέθηκε!";
+$langSelectedPoint = "Επιλεγμένο σημείο";
+$langStartDrawing = "Ξεκινήστε να σχηματίζετε την απάντηση πάνω στην εικόνα ...";
+$langStartDrawingHelp = "Πατώντας ΑΠΟΘΗΚΕΥΣΗ ΑΠΑΝΤΗΣΗΣ αποθηκεύεται εκ νεόυ η καινούρια απάντηση. Tο σχήμα της προηγούμενης απάντησης στην εικόνα θα διαγραφεί (αν υπάρχει) και θα αντικατασταθεί με το καινούριο.";
 
 $langInfoDragAndDropMarkersCreation = '
 <ul class="text-dark">
@@ -2215,8 +2233,8 @@ $langInfoDragAndDropMarkersCreation = '
 </li>
 <li class="text-dark">Δώστε το κείμενο της προκαθορισμένης απάντησης στο πεδίο <strong class="text-dark">Απάντηση</strong> (Υποχρεωτικό).</li>
 <li class="text-dark">Αν επιθυμείτε η προκαθορισμένη απάντηση να εμφανίζεται μέσω εικόνας και όχι κειμένου τότε συμπληρώστε το πεδίο <strong class="text-dark">Απάντηση</strong> και ανεβάστε την εικόνα μέσω της επιλογής <strong class="text-dark">η προκαθορισμένη απάντηση θα εμφανίζεται μέσω της εικόνας</strong>.</li>
-<li class="text-dark">Δώστε βαθμό στην απάντηση στο πεδίο <strong class="text-dark">Βαθμός</strong> (προαιρετικό).</li>
-<li class="text-dark">Επιλέγετε <strong class="text-dark">Προσθήκη</strong> για να αποθηκεύσετε την απάντηση προσωρινά.</li>
+<li class="text-dark">Δώστε βαθμό στην απάντηση στο πεδίο <strong class="text-dark">Βαθμός</strong> (Υποχρεωτικό).</li>
+<li class="text-dark">Επιλέγετε <strong class="text-dark">Αποθήκευση</strong> για να αποθηκεύσετε την απάντηση προσωρινά.</li>
 <li class="text-dark">Επιλέγετε <strong class="text-dark">Διαγραφή</strong> για να αφαιρέσετε την απάντηση προσωρινά.</li>
 <li class="text-dark">Η διαδικασία για την δημιουργία των προκαθορισμένων απαντήσεων ολοκληρώνεται πατώντας <strong class="text-dark">Υποβολή</strong>.</li>
 </ul>';
@@ -2231,6 +2249,7 @@ $langTypeOfAnswer = "Τύπος απάντησης";
 $langRangeOfValues = "Έυρος τιμών";
 $langItem = "Στοιχείο";
 $langDecimalValues = "Δεκαδικά ψηφία";
+$langZeroForNoDecimal = "Τιμή 0 για παράλειψη δεκαδικών";
 $langAutoCompleteValues = "Προσθήκη τιμής";
 $langItemToAdd = "Στοιχείο για προσθήκη:";
 $langAutoCompleteWildCardInfo = 'Καταχωρήστε την τιμή του τρέχοντος στοιχείου.</br>
@@ -2242,7 +2261,7 @@ $langAddRandomOrConstantValOfWildCard = "Θα πρέπει να καταχωρή
 $langCompleteTheTextOfTheQuestion = "Εκφώνηση";
 $langCompleteVariablesOfQuestionInfo = '
 <ul class="text-dark">
-<li class="text-dark">Συμπληρώστε την εκφώνηση στο πεδίο κειμένου <strong class="text-dark">Εκφώνηση</strong>.</li> 
+<li class="text-dark">Συμπληρώστε την εκφώνηση στο πεδίο κειμένου <strong class="text-dark">Εκφώνηση</strong>.</li>
 <li class="text-dark">Κάθε στοιχείο θα πρέπει να ορίζεται μέσα σε <strong class="text-dark">άγκυστρα {}</strong>.</li>
 <li class="text-dark">Συμπληρώστε τον αριθμητικό τύπο που δίνει το απότελεσμα της άσκησης καθώς και τον βαθμό στα πεδία <strong class="text-dark">Τύπος απάντησης</strong> και <strong class="text-dark">Βαθμός</strong> αντίστοιχα. Το σύστημα υπολογίζει αυτόματα το τελικό αποτέλεσμα της άσκησης βασισμένο στον τύπο που δώσατε.</li>
 <li class="text-dark">Καταχωρήστε τις τιμές των στοιχείων από την <strong class="text-dark">επεξεργασία στοιχείων</strong>. Μπορείτε επίσης να ορίσετε τυχαίες τιμές από το εύρος τιμών.</li>
@@ -2298,7 +2317,7 @@ $langInfoOrderingQuestion = 'Για την δημιουργία σωστής τ�
                              Αν επιθυμείτε να εμφανίζεται στην άσκηση ένα συγκεκριμένο υποσύνολο των στοιχείων που ορίσατε τότε
                              επιλέγετε τον <strong class="text-dark">τύπο επιλογής στοιχείου</strong> και το <strong class="text-dark">μέγεθος υποσυνόλου</strong>.
                              ';
-
+$langEvaluationFreeText = "Βαθμολόγηση ερωτήσεων ελεύθερου κειμένου";
 
 // answer_admin.php
 $langWeightingForEachBlank = "Δώστε ένα βάρος σε κάθε κενό";
@@ -2358,6 +2377,7 @@ $langScoreDiffers = 'Η αποθηκευμένη βαθμολογία της ά�
 $langRegrade = 'Αναβαθμολόγηση';
 $langNewScoreRecorded = 'Η νέα βαθμολογία αποθηκεύτηκε';
 $langQuestionStoredScore = 'Αποθηκευμένη βαθμολογία ερώτησης';
+$langEvaluatingResponseWithAI = "Αξιολόγηση της απάντησης με χρήση Τ.Ν.";
 
 // exercise_submit.php
 $langDoAnEx = "Κάντε μια άσκηση";
@@ -2616,7 +2636,7 @@ $langExistBookingForThisDateMessageDetlete = "Δεν μπορείτε να δι�
                                               Επεξεργαστείτε το αίτημα από την επιλογή -- Οι κρατήσεις μου -- και δοκιμάστε πάλι.
                                               Αν το slot που επιλέξατε είναι με πορτοκαλί χρώμα, τότε αφορά άλλον υπεύθυνο της ίδιας ομάδας και σε κάθε περίπτωση δεν μπορεί να διαγραφεί.
                                               Επικοινωνήστε με τον διαχειριστή του μαθήματος αν αντιμετωπίζετε κάποιο πρόβλημα.";
-$langDateHasExpired = "Πρόβλημα! Επιλέτε μία ημερομηνία από την τρέχων ημερομηνία και έπειτα.";
+$langDateHasExpired = "Παρακαλούμε επιλέξτε ώρα και ημερομηνία μετά την τρέχουσα.";
 $langAddDatesSuccess = "Η ημερομηνία προστέθηκε με επιτυχία.";
 $langDateMaxHour = "Η διαθέσιμη ώρα σας θα πρέπει να έχει διάρκεια μισής ή μίας ώρας";
 $langDeleteAvailableDate = "Θέλετε να προχωρήσετε στην διαγραφή της συγκεκριμένης ημερομηνίας;";
@@ -2667,7 +2687,6 @@ $langInfoColourEvent = "Πληροφορίες";
 
 // group - email
 $langEmailGroup = "Αποστολή μηνύματος στην ομάδα";
-$langTypeMessage = "Πληκτρολογήστε το μήνυμά σας παρακάτω";
 $langSend = "Αποστολή";
 $langEmailSuccess = "Το e-mail σας στάλθηκε με επιτυχία !";
 $langMailError = "Σφάλμα κατά την αποστολή e-mail !";
@@ -2995,6 +3014,7 @@ $langAddOneModuleButton = "Προσθήκη ενότητας";
 $langAlertBlockingMakedInvisible = "Αυτή η ενότητα είναι φραγμένη. Κάνοντάς την αόρατη, θα επιτραπεί στους " . $langsOfStudentss . " η είσοδος στην επόμενη ενότητα χωρίς να χρειάζεται να ολοκληρώσουν την παρούσα. Επιβεβαιώστε την επιλογή σας";
 $langAlertBlockingPathMadeInvisible = "Αυτή η γραμμή είναι φραγμένη. Κάνοντάς την μη ορατή θα επιτραπεί στους " . $langsOfStudentss . " η είσοδος στην επόμενη γραμμή χωρίς να χρειάζεται να ολοκληρώσουν την παρούσα. Επιβεβαιώστε την επιλογή σας";
 $langAlreadyBrowsed = "Ολοκληρώθηκε";
+$langCompleted = 'Ολοκληρώθηκε';
 $langAltMakeNotBlocking = "Αποδέσμευση";
 $langAltScorm = "Scorm";
 $langAreYouSureDeleteModule = "Επιβεβαίωση διαγραφής της ενότητας";
@@ -3955,7 +3975,6 @@ $mailsubject2 = "Αίτηση " . $langOfStudent . " - Υπηρεσία Τηλε
 $contactphone = "Τηλέφωνο επικοινωνίας";
 $contactpoint = "Επικοινωνία";
 $searchuser = "Αναζήτηση Καθηγητών / Χρηστών";
-$typeyourmessage = "Πληκτρολογήστε το μήνυμά σας";
 $emailsuccess = "Το e-mail στάλθηκε!";
 $langTheTeacher = 'Ο διδάσκων';
 $langTheUser = 'Ο χρήστης';
@@ -4628,9 +4647,9 @@ $langVideoDirectory = "Γενικά πολυμεσικά αρχεία";
 $langCatVideoDirectory = "Κατηγορίες πολυμεσικών αρχείων";
 $langCatVideoDirectoryCreated = "Η κατηγορία προστέθηκε";
 $langOpenDelosReplaceInfo = "Αν κάποιος επιλεγμένος σύνδεσμος ήδη υπάρχει στα πολυμέσα, θα ανανεωθεί με τα τρέχοντα στοιχεία";
-$langDelosNewFileVersion = "Υπάρχει νεώτερη έκδσοη του αρχείου στο OpenDelos.";
-$langOpenDelosPublicVideos = "Ανοικτά πολυμεσικά αρχεία";
-$langOpenDelosPrivateVideos = "Κλειστά πολυμεσικά αρχεία";
+$langDelosNewFileVersion = "Υπάρχει νεώτερη έκδοση του αρχείου στο OpenDelos.";
+$langOpenDelosPublicVideos = "Δημόσια πολυμεσικά αρχεία";
+$langOpenDelosPrivateVideos = "Ιδιωτικά πολυμεσικά αρχεία";
 $langOpenDelosRequireAuth = "Για την εμφάνιση κλειστών πολυμεσικών αρχείων απαιτείται ξεχωριστή αυθεντικοποίηση με το OpenDelos";
 $langOpenDelosRequireAuthHere = "εδώ";
 $langOpenDelosAuth = "Αυθεντικοποίηση OpenDelos";
@@ -4890,6 +4909,21 @@ $langDelTitle = "Προσοχή!";
 $langDelMany1 = "Έχουν αποσταλεί";
 $langDelMany2 = "εργασίες " . $langsOfStudents . ". Τα αρχεία αυτά θα διαγραφούν!";
 $langSubmissions = "Εργασίες που έχουν υποβληθεί";
+$langPhase = "Φάση";
+$langAssignmentsSubmission = "Υποβολή εργασιών";
+$langAssignmentsSubmissionHasNoStarted = "Η διαδικασία υποβολής των εργασιών δεν έχει ξεκινήσει ακόμα.";
+$langAssignmentsSubmissionInProgress = "Η διαδικασία υποβολής των εργασιών βρίσκεται σε εξέλιξη...";
+$langAssignmentsSubmissionHasExpired = "Η διαδικασία υποβολής των εργασιών έχει λήξει.";
+$langGradeReviewHasNotStarted = "Η διαδικασία αξιολόγησης από ομότιμους δεν έχει ξεκινήσει ακόμα.";
+$langGradeReviewInProgress = "Η διαδικασία αξιολόγησης από ομότιμους βρίσκεται σε εξέλιξη...";
+$langGradeReviewHasExpired = "Η διαδικασία αξιολόγησης από ομότιμους έχει λήξει.";
+$langFinalGrade = "Τελική βαθμολογία";
+$langFinalGradeProcessInProgress = "Η διαδικασία καταχώρησης τελικής βαθμολογίας είναι ενεργή";
+$langReceivedFrom = "Έλαβε από";
+$langgrade = "βαθμό";
+$langPreviewGradesAssessments = "Προεπισκόπηση αξιολογήσεων";
+$OldAssignmentsWillBeRemoved = "Οι παλιές αναθέσεις θα διαγραφόυν.";
+$langAddFinalGradeHasNotStartedYet = "Η διαδικασία καταχώρησης βαθμού δεν έχει ξεκινήσει ακόμα.";
 $m['WorkDelete'] = 'Διαγραφή εργασίας';
 $langDeleteSubmission = 'Διαγραφή εργασίας';
 $langNotice2 = "Ημερομηνία αποστολής";
@@ -5094,6 +5128,8 @@ $langInsertLink = "συνδέσμου";
 $langInsertEBook = "ηλεκτρονικού βιβλίου";
 $langInsertPoll = "ερωτηματολογίου";
 $langInsertTcMeeting = "τηλεσυνεργασίας";
+$langInsertGlossary =  "γλωσσαρίου";
+$langInsertWall = "τοίχου";
 $langInsertChat = "συνομιλίας";
 $langInsertBlog = "ιστολογίου";
 $langUnknownResType = "Πρόβλημα! Άγνωστος πόρος ενότητας";
@@ -6506,6 +6542,8 @@ $langGoogleMeetShortDescription = "Σύνδεση με την υπηρεσία �
 $langGoogleMeetLongDescription = "Σύνδεση με την υπηρεσία τηλεδιάσκεψης Google Meet.";
 $langMsTeamsShortDescription = "Σύνδεση με την υπηρεσία τηλεδιάσκεψης Microsoft Teams.";
 $langMsTeamsLongDescription = "Σύνδεση με την υπηρεσία τηλεδιάσκεψης Microsoft Teams.";
+$langAIShortDescription = "Υπηρεσία Τ.Ν.";
+$langAILongDescription = "Υπηρεσία Τ.Ν.";
 $langZoomShortDescription = "Σύνδεση με την υπηρεσία τηλεδιάσκεψης Zoom.";
 $langZoomLongDescription = "Σύνδεση με την υπηρεσία τηλεδιάσκεψης Zoom.";
 $langWebexShortDescription = "Σύνδεση με την υπηρεσία τηλεδιάσκεψης Webex.";
@@ -6545,7 +6583,7 @@ $langOpenMeetingsModuleKey = "Module key";
 $langOpenMeetingsWebApp = "Όνομα WebApp";
 
 // Mindmap
-$langMindmap = "Εννοιολογικός χάρτης";
+$langMindmap = "Νοητικός χάρτης";
 $langScreenshot = "Στιγμιότυπο οθόνης";
 $langOpenEx = "Άνοιγμα παραδείγματος";
 $langEditEn = "Ενεργοποίηση τροποποίησης";
@@ -6573,7 +6611,7 @@ $langThemePumpkin = "Κολοκύθα";
 $langThemePomegranate = "Ρόδι";
 $langThemeClouds = "Σύννεφα";
 $langPleaseEnterName = "Παρακαλώ εισάγετε όνομα";
-$langMindMapSaved = "Ο εννοιολογικός χάρτης αποθηκεύθηκε";
+$langMindMapSaved = "Ο νοητικός χάρτης αποθηκεύθηκε";
 
 
 /* * *********************************************
@@ -6784,12 +6822,14 @@ $langH5p = "Περιεχόμενο H5P";
 $langH5pInstall = "Εγκατάσταση πακέτων και βιβλιοθηκών διαδραστικού περιεχομένου τύπου H5P";
 $langH5pUpdateComplete = 'Η ενημέρωση των πακέτων και βιβλιοθηκών ολοκληρώθηκε!';
 $langH5pInteractiveContent = 'Διαδραστικό περιεχόμενο τύπου H5P';
+$langH5pInteractiveContentByStudents = "Διαδραστικό περιεχόμενο τύπου H5P από $langsOfStudentss";
 $langH5pNoContent = 'Δεν υπάρχει διαδραστικό περιεχόμενο τύπου H5P';
 $langH5pSaveSuccess = "Το διαδραστικό περιεχόμενο τύπου H5P αποθηκεύτηκε με επιτυχία";
 $langH5pDeleteSuccess = "Το διαδραστικό περιεχόμενο τύπου H5P διαγράφτηκε με επιτυχία";
 $langOfH5p = "διαδραστικού περιεχομένου";
 $langTypeH5P = "Τύπος H5P";
 $langImportH5P = "Μπορείτε να εισάγετε ένα έτοιμο αρχείο διαδραστικού περιεχομένου τύπου H5P μέσω της παρακάτω φόρμας.";
+$langCreatedBy = "δημιουργήθηκε από";
 $langH5pInfoUpdate = "Κάντε κλικ στο 'Ενημέρωση' έτσι ώστε οι διαθέσιμοι τύποι διαδραστικού περιεχομένου H5P
                     να ενημερωθούν με τις πιο πρόσφατες αλλαγές (αν υπάρχουν). <br>
                     Δείτε περισσότερες λεπτομέρειες στο
@@ -6866,7 +6906,7 @@ $langCategoryExcercise = "Άσκηση";
 $langCategoryDescription = "Περιγραφή";
 $langAnalyticsEditElements = 'Επεξεργασία Στοιχείων';
 $langViewStatics = "Στατιστικά Επισκεψιμότητας";
-$langTypeOutMessage = "Πληκτρολογήστε το μήνυμα σας...";
+$langTypeOutMessage = "Πληκτρολογήστε το μήνυμα σας ...";
 $langDateHasExpire = "Η ημερομηνία έχει παρέλθει. Δοκιμάστε πάλι.";
 $langCalculateNewDuration = "Υπολογισμός νέας διάρκειας";
 $langChooseDayAgain = "Δεν μπορείτε να επιλέξετε διαφορετικές μέρες. Δοκιμάστε πάλι.";
@@ -7158,6 +7198,8 @@ $langCenterPositionJumbotronText = "Κεντρική στοίχηση";
 $langBottomPositionJumbotronText = "Στοίχηση κειμένου στο κάτω μέρος";
 $langJumbotronWithVideo = "Το αρχείο που ανεβάσατε είναι τύπου .mp4 με πλήρη ονομασία << video.mp4 >>";
 $langMaxHeightMaxScreenJumbotron = "Εναλλακτικά το ύψος διαμορφώνεται ανάλογα με ύψος της τρέχουσας οθόνης.";
+$langEnableBoxLogo = "Ενεργοποίηση χρώμα φόντου στο περιεχόμενο του λογότυπου";
+$langButtonInBriefProfile = "Κουμπιά σύντομου προφίλ";
 $langMaxHeightHalfMaxScreenJumbotron = "Εναλλακτικά το ύψος διαμορφώνεται ανάλογα με ύψος της τρέχουσας οθόνης.";
 $langHelpJumbotronInfoText = "Σε περίπτωση που το επιλέξετε, το μέγιστο ύψος που είναι καταχωρημένο παύει να ισχύει.";
 $langMaxWidthTextJumbotron = "Μέγιστο πλάτος κειμένου";
@@ -7238,3 +7280,165 @@ $langCoursePrintSetting = "Ρυθμίσεις εμφάνισης αναφορώ�
 $langCoursePrintHeaderImage = "Εικόνα κεφαλίδας";
 $langCoursePrintFooterImage = "Εικόνα υποσέλιδου";
 $langReportImageNotFound = "Οι εικόνες πρέπει να βρίσκονται στον κατάλογο με τίτλο Report_Images στα 'Εγγραφα'";
+
+// AI-related language constants - Greek translations
+$langAI = "AI";
+$langAINode = "Κόμβος Τεχνητής Νοημοσύνης";
+$langAIGenerateQuestions = 'Δημιουργία Ερωτήσεων με χρήση Τ.Ν.';
+$langAIQuestionGeneration = 'Δημιουργία Ερωτήσεων με χρήση Τ.Ν.';
+$langAINotAvailable = 'Η λειτουργία Τ.Ν. δεν είναι διαθέσιμη';
+$langContentRequired = 'Το περιεχόμενο είναι απαραίτητο';
+$langQuestionsGenerated = 'Δημιουργήθηκαν με επιτυχία %d ερωτήσεις';
+$langNoQuestionsGenerated = 'Δεν δημιουργήθηκαν ερωτήσεις';
+$langAIGenerationError = 'Σφάλμα κατά τη δημιουργία ερωτήσεων';
+$langQuestionsSaved = '%d ερωτήσεις αποθηκεύτηκαν στη βάση ερωτήσεων';
+$langSaveError = 'Σφάλμα κατά την αποθήκευση ερωτήσεων';
+$langAIQuestionInfo = 'Χρησιμοποιήστε Τ.Ν. για να δημιουργήσετε ερωτήσεις από το περιεχόμενό σας. Το AI θα αναλύσει το κείμενό σας και θα δημιουργήσει ερωτήσεις κατάλληλες για αξιολογήσεις.';
+$langProvider = 'Πάροχος';
+$langProviders = 'Πάροχοι';
+$langContent = 'Περιεχόμενο';
+$langEnterContent = 'Εισάγετε το περιεχόμενο από το οποίο θέλετε να δημιουργήσετε ερωτήσεις...';
+$langContentHelp = 'Επικολλήστε το περιεχόμενο του μαθήματος, κείμενο εγγράφου ή οποιοδήποτε εκπαιδευτικό υλικό εδώ.';
+$langQuestionCount = 'Αριθμός Ερωτήσεων';
+$langDifficulty = 'Δυσκολία';
+$langQuestionTypes = 'Τύποι Ερωτήσεων';
+$langGenerateQuestions = 'Δημιουργία Ερωτήσεων';
+$langGeneratedQuestions = 'Δημιουργημένες Ερωτήσεις';
+$langSelectQuestions = 'Επιλέξτε τις ερωτήσεις που θέλετε να αποθηκεύσετε στη βάση ερωτήσεων';
+$langCorrectAnswer = 'Σωστή Απάντηση';
+$langExplanation = 'Επεξήγηση';
+$langQuestionCategory = 'Κατηγορία Ερώτησης';
+$langSaveToQuestionBank = 'Αποθήκευση στη Βάση Ερωτήσεων';
+$langGenerateNew = 'Δημιουργία Νέων Ερωτήσεων';
+$langUsageTips = 'Συμβουλές Χρήσης';
+$langTip1 = 'Παρέχετε σαφές, καλά δομημένο περιεχόμενο για καλύτερη δημιουργία ερωτήσεων';
+$langTip2 = 'Ελέγξτε όλες τις δημιουργημένες ερωτήσεις πριν την αποθήκευση για να εξασφαλίσετε την ακρίβεια';
+$langTip3 = 'Συνδυάστε διαφορετικούς τύπους ερωτήσεων για ολοκληρωμένες αξιολογήσεις';
+$langTip4 = 'Χρησιμοποιήστε κατάλληλα επίπεδα δυσκολίας ανάλογα με το επίπεδο των μαθητών σας';
+$langSelectAll = 'Επιλογή Όλων';
+$langAIUserForbidden = "Ο χρήστης δεν έχει δικαίωμα να χρησιμοποιήσει τη λειτουργία Τ.Ν.";
+$langAINotEnabledCourse = "Η λειτουργία Τ.Ν. δεν είναι ενεργοποιημένη για το $langsCourse";
+$langAPIKeyNotConfigured = "Δεν είναι ρυθμισμένο το API key";
+$langProviderDisabled = "Ο πάροχος είναι απενεργοποιημένος";
+$langSelectLanguageModel = "Διαλέξτε γλωσσικό μοντέλο";
+
+// AI Course Creation
+$langAICourseAssistant = 'Βοηθός Δημιουργίας Μαθήματος με Τ.Ν.';
+$langAIGenerateCourse = 'Δημιουργία Μαθήματος με Τ.Ν.';
+$langAIExtractFromSyllabus = 'Δημιουργία από αρχείο';
+$langAIGenerateFromPrompt = 'Δημιουργία από Περιγραφή';
+$langAIUploadSyllabus = 'Ανέβασμα αρχείου PDF με περιγραφή ή αναλυτικό πρόγραμμα μαθήματος';
+$langAICoursePrompt = 'Περιγράψτε τις απαιτήσεις του μαθήματος';
+$langAIPromptPlaceholder = 'π.χ., Δημιουργία προχωρημένου μεταπτυχιακού μαθήματος μηχανικής μάθησης για φοιτητές πληροφορικής, οργανωμένο σε εβδομαδιαίες ενότητες, που καλύπτει νευρωνικά δίκτυα, βαθιά μάθηση και πρακτικές εφαρμογές...';
+$langAIExtractButton = 'Εξαγωγή Δεδομένων Μαθήματος';
+$langAIGenerating = 'Δημιουργία δεδομένων μαθήματος...';
+$langAIExtracting = 'Εξαγωγή από αναλυτικό πρόγραμμα...';
+$langAIExtractionSuccess = 'Τα δεδομένα του μαθήματος εξήχθησαν με επιτυχία';
+$langAIGenerationSuccess = 'Τα δεδομένα του μαθήματος δημιουργήθηκαν με επιτυχία';
+$langAIGenerationFailed = 'Απέτυχε η δημιουργία δεδομένων μαθήματος';
+$langPromptTooShort = 'Η περιγραφή του μαθήματος είναι πολύ σύντομη';
+$langPromptTooLong = 'Η περιγραφή του μαθήματος είναι πολύ μεγάλη';
+$langAIPreviewData = 'Προεπισκόπηση Δημιουργημένων Δεδομένων';
+$langAIApplyData = 'Εφαρμογή στη Φόρμα';
+$langAIClearForm = 'Καθαρισμός Φόρμας';
+$langAIRetry = 'Δοκιμάστε Ξανά';
+$langAISyllabusUpload = 'Ανέβασμα Αναλυτικού Προγράμματος PDF';
+$langAIManualPrompt = 'Χειροκίνητη Περιγραφή';
+$langAIToggleAssistant = 'Βοηθός Τ.Ν.';
+$langAICloseAssistant = 'Κλείσιμο Βοηθού';
+$langFileSizeExceeded = 'Το μέγεθος του αρχείου ξεπερνά το επιτρεπτό όριο';
+$langInvalidFileType = 'Μη έγκυρος τύπος αρχείου. Επιτρέπονται μόνο PDF αρχεία';
+$langAISyllabusInputMethod = 'Μέθοδος Εισόδου';
+$langAIUploadFile = 'Ανέβασμα Αρχείου';
+$langAIDownloadFromURL = 'Λήψη από URL';
+$langAISyllabusURL = 'URL Περιεχομένου Μαθήματος';
+$langAIURLDownloadFailed = 'Απέτυχε η λήψη περιεχομένου από URL';
+$langAIInvalidURL = 'Μη έγκυρο URL';
+$langAIURLNotAccessible = 'Το URL δεν είναι προσβάσιμο';
+$langAIDownloading = 'Λήψη από URL...';
+$langAIURLDescription = 'Εισάγετε τη διεύθυνση URL μιας ιστοσελίδας ή ενός PDF αρχείου με την περιγραφή του μαθήματος. Το περιεχόμενο θα ληφθεί αυτόματα και θα επεξεργαστεί.';
+$langAIPromptDescription = 'Περιγράψτε λεπτομερώς το μάθημά σας συμπεριλαμβανομένων θεμάτων, στόχων, ομάδας-στόχου, επιπέδου και τυχόν ειδικών απαιτήσεων.';
+$langAIMaxFileSize = 'Μέγιστο μέγεθος αρχείου: 10MB. Μόνο PDF αρχεία.';
+$langAIPreviewTitle = 'Τίτλος';
+$langAIPreviewCode = 'Κωδικός';
+$langAIPreviewInstructor = 'Διδάσκων';
+$langAIPreviewLanguage = 'Γλώσσα';
+$langAIPreviewFormat = 'Μορφή';
+$langAIPreviewKeywords = 'Λέξεις Κλειδιά';
+$langAIPreviewDescription = 'Περιγραφή';
+$langAIPreviewSource = 'Πηγή';
+$langAIShowFullDescription = 'Εμφάνιση πλήρους περιγραφής';
+$langAIHideDescription = 'Απόκρυψη περιγραφής';
+$langAISourceDownloaded = 'Λήφθηκε από URL';
+$langAISourceWebURL = 'Εξήχθη από ιστοσελίδα';
+$langAISourceUploaded = 'Ανέβηκε αρχείο';
+$langAIPDFParsingFailed = 'Απέτυχε η ανάγνωση του αρχείου PDF. Το αρχείο μπορεί να είναι κατεστραμμένο, κρυπτογραφημένο ή να περιέχει μόνο εικόνες.';
+$langAIPDFNoText = 'Δεν βρέθηκε αναγνώσιμο κείμενο στο PDF. Το αρχείο μπορεί να περιέχει μόνο εικόνες ή σαρωμένο περιεχόμενο.';
+$langAIPDFTextExtractionError = 'Σφάλμα κατά την εξαγωγή κειμένου από το αρχείο PDF.';
+$langSelectAIProvider = "Διαλέξτε πάροχο Τ.Ν.";
+$langNoLangModels = "Δεν υπάρχουν διαθέσιμα γλωσσικά μοντέλα";
+$langLanguageModel = "Γλωσσικό Μοντέλο";
+$langLanguageModelName = "Όνομα γλωσσικού μοντέλου";
+$langAITokenDeleted =  "Διαγράφηκε το κλειδί του παρόχου Τ.Ν.";
+$langAIConfigSaved = "Η ρύθμιση του παρόχου Τ.Ν. αποθηκεύτηκε με επιτυχία";
+$langAIEvaluation = "Αξιολόγηση με Τ.Ν.";
+$langEnableAIEvaluation = "Ενεργοποίηση Αξιολόγησης με Τ.Ν.";
+$langAIEvaluationDescription = "Επιτρέπει στην Τ.Ν. να αξιολογεί αυτόματα και να προτείνει βαθμούς για τις απαντήσεις των $langsOfStudents.";
+$langEvaluationCriteria = "Κριτήρια Αξιολόγησης";
+$langEvaluationCriteriaPlaceholder = "Περιγράψτε τι αναζητάτε σε μια καλή απάντηση. Να είστε συγκεκριμένοι για βασικές έννοιες, παραδείγματα και δείκτες ποιότητας.";
+$langEvaluationCriteriaHelp = "Συμπληρώστε σαφή κριτήρια που θα χρησιμοποιήσει η Τ.Ν. για την αξιολόγηση των απαντήσεωνν. Να είστε συγκεκριμένοι για το τι συνιστά καλή απάντηση.";
+$langMaxPoints = "Μέγιστη Βαθμολογίαί";
+$langMaxPointsHelp = "Η μέγιστη βαθμολογία που μπορεί να δοθεί για αυτή την ερώτηση";
+$langDefinedInQuestionStatement = "καθορίζεται στη διατύπωση της ερώτησης";
+$langSampleResponses = "Δείγματα Απαντήσεων (Προαιρετικό)";
+$langSampleResponsesPlaceholder = "Παραδείγματα απαντήσεων για καθοδήγηση της αξιολόγησης Τ.Ν.:\n\nΠαράδειγμα καλής απάντησης | καλή\nΠαράδειγμα κακής απάντησης | κακή\n\nΜορφή: απάντηση | ποιότητα (καλή/κακή/μέτρια)";
+$langSampleResponsesHelp = "Παρέχετε παραδείγματα απαντήσεων με δείκτες ποιότητας. Μορφή: 'απάντηση | ποιότητα' (μία ανά γραμμή). Αυτό βοηθά την Τ.Ν. να κατανοήσει τις προσδοκίες σας.";
+$langSaveAIConfig = "Αποθήκευση Διαμόρφωσης Τ.Ν.";
+$langAIConfigDisabled = "Η αξιολόγηση Τ.Ν. απενεργοποιήθηκε";
+$langAIEvaluationsFound = "Υπάρχουν αξιολογήσεις Τ.Ν. προς επισκόπηση";
+$langReviewAIEvaluations = "Επισκόπηση Αξιολογήσεων Τ.Ν.";
+$langFreeTextNoAnswerConfig = "Οι ερωτήσεις ελεύθερου κειμένου δεν χρειάζονται διαμόρφωση απαντήσεων - μόνο ρυθμίσεις αξιολόγησης Τ.Ν. αν είναι διαθέσιμες";
+$langAIEvaluationPromptRequired = "Τα κριτήρια αξιολόγησης είναι υποχρεωτικά όταν η αξιολόγηση Τ.Ν. είναι ενεργοποιημένη";
+$langAIMaxPointsRequired = "Οι μέγιστοι βαθμοί πρέπει να είναι μεγαλύτεροι από 0";
+$langHighConfidence = "Υψηλή Εμπιστοσύνη";
+$langMediumConfidence = "Μέση Εμπιστοσύνη";
+$langLowConfidence = "Χαμηλή Εμπιστοσύνη";
+$langConfidence = "Εμπιστοσύνη";
+$langReasoning = "Αιτιολόγηση";
+$langAddToExercise = "Προσθήκη στην Άσκηση";
+$langQuestionsAddedToExercise = '%d ερωτήσεις προστέθηκαν στην άσκηση';
+$langTestConnection = "Δοκιμή Σύνδεσης";
+$langDefaultFillInBlanks = "Συμπληρώστε τα κενά.";
+$langAIService = "Υποσύστημα Τ.Ν.";
+$langAddProvider = "Προσθήκη Παρόχου";
+$langAssignAIToModule = "Ανάθεση λειτουργίας Τ.Ν. σε υποσύστημα";
+$langAIModuleDeleted = "Διαγράφηκε το υποσύστημα Τ.Ν.";
+
+// AI Free Text Evaluation
+$langAIAssistedGrading = "Αυτόματη Αξιολόγηση με Τ.Ν.";
+$langAIGradingDescription = "Ενεργοποίηση αυτόματης αξιολόγησης απαντήσεων και πρότασης βαθμών με βάση τα κριτήριά σας";
+$langAIEvaluationCriteria = "Κριτήρια Αξιολόγησης";
+$langAIEvaluationPromptPlaceholder = "Περιγράψτε τι αναζητάτε σε μια καλή απάντηση. Π.χ., 'Ο φοιτητής θα πρέπει να επιδείξει κατανόηση των βασικών εννοιών, να παρέχει συγκεκριμένα παραδείγματα και να δείχνει κριτική σκέψη.'";
+$langAIEvaluationPromptHelp = "Καθορίστε ξεκάθαρα τι συνιστά μια καλή απάντηση. Η Τ.Ν. θα χρησιμοποιήσει αυτό για να αξιολογήσει τις απαντήσεις των φοιτητών.";
+$langSampleResponses = "Δείγματα Απαντήσεων";
+$langExampleGoodResponse = "Παράδειγμα καλής απάντησης...";
+$langExampleResponse = "Παράδειγμα απάντησης...";
+$langHighQuality = "Υψηλή Ποιότητα";
+$langMediumQuality = "Μέση Ποιότητα";
+$langLowQuality = "Χαμηλή Ποιότητα";
+$langAddSample = "Προσθήκη Δείγματος";
+$langSelectScore = "Επιλογή Ποιότητας";
+$langOptional = "Προαιρετικό";
+$langScore = "Βαθμός";
+$langReasoning = "Αιτιολόγηση";
+$langAISuggestion = "Πρόταση Τ.Ν.";
+$langAISyllabusStructured = "Δομημένα Τμήματα Συλλάβου";
+$langAISyllabusBibliography = "Βιβλιογραφία";
+$langAISyllabusTeachingMethod = "Μέθοδοι Διδασκαλίας";
+$langAISyllabusAssessmentMethod = "Μέθοδοι Αξιολόγησης";
+$langAISyllabusPrerequisites = "Προαπαιτούμενα";
+$langAISyllabusInstructors = "Διδάσκοντες";
+$langAISyllabusTargetGroup = "Ομάδα Στόχος";
+$langAISyllabusTextbooks = "Προτεινόμενα Συγγράμματα";
+$langAISyllabusAdditionalInfo = "Επιπλέον Πληροφορίες";
+$langInvalidScore = "Μη έγκυρος βαθμός";

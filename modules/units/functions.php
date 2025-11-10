@@ -240,8 +240,6 @@ function unit_assign_to($unit_id, $assign_specific_type, $assignees)
  * @brief Check that a specified resource id belongs to a resource in the
           current course, and that the user is an admin in this course.
           Return the id of the unit or false if user is not an admin
- * @global type $course_id
- * @global type $is_editor
  * @param type $resource_id
  * @return boolean
  */
@@ -265,13 +263,11 @@ function check_admin_unit_resource($resource_id) {
 
 /**
  * @brief Display resources for unit with id=$id
- * @global type $tool_content
- * @global type $max_resource_id
  * @param type $unit_id
  */
 function show_resources($unit_id)
 {
-    global $max_resource_id,
+    global $max_resource_id, $is_editor,
            $head_content, $langDownload, $langPrint, $langCancel,
            $langFullScreen, $langNewTab, $langActInHome, $langActInClass, $langActAfterClass, $course_code;
 
@@ -337,6 +333,19 @@ function show_resources($unit_id)
         if (count($req_in_home) > 0 || count($req_in_class) > 0 || count($req_after_class)) {
 
             load_js('screenfull/screenfull.min.js');
+            $head_content .= "<style>
+                                .classTime {
+                                    border: solid 1px rgb(205, 212, 224);
+                                    border-radius: 4px;
+                                    padding: 10px 20px;
+                                    background-color: #f8f9fa;
+                                    margin-bottom: 2rem;
+                                }
+                                .act_label {
+                                    max-width: 125px;
+                                    min-width: 125px;
+                                }
+                                </style>";
             $head_content .= "<script>
             $(document).ready(function(){
                 var count_1 = $('#unitResources_1').length;
@@ -467,7 +476,7 @@ function show_resources($unit_id)
                         title: fileTitle,
                         message: '<div class=\"row\">'+
                                     '<div class=\"col-sm-12\">'+
-                                        '<div class=\"iframe-container\"><iframe title=\"'+fileTitle+'\" id=\"fileFrame\" src=\"'+fileURL+'\"></iframe></div>'+
+                                        '<div class=\"iframe-container\" style=\"height:500px;\"><iframe title=\"'+fileTitle+'\" id=\"fileFrame\" src=\"'+fileURL+'\" style=\"width:100%; height:500px;\"></iframe></div>'+
                                     '</div>'+
                                 '</div>',
                         buttons: buttons
@@ -479,58 +488,110 @@ function show_resources($unit_id)
         }
 
 
-        if (count($req_in_home) > 0) {
-
-            $max_resource_id = Database::get()->querySingle("SELECT id FROM unit_resources
-                                    WHERE unit_id = ?d ORDER BY `order` DESC LIMIT 1", $unit_id)->id;
-            $html .= "<div class='form-group'>
-                                <label class='col-2 form-label'>$langActInHome</label>
-                            </div>
-            ";
-            $html .= "<div class='table-responsive'>";
-            $html .= "<div class='table table-striped table-hover table-default'><div id='unitResources_1'>";
-
-
-            foreach ($req_in_home as $info_home) {
-                if (!is_null($info_home->comments)) {
-                    $info_home->comments = standard_text_escape($info_home->comments);
-                }
-                $html .= show_resource($info_home);
+        //in_home
+        $in_home_actCount = Database::get()->querySingle(
+            "SELECT COUNT(*) AS cnt FROM course_units_activities WHERE unit_id = ?d AND activity_type = ?d",
+            $unit_id, 1
+        );
+        if ($in_home_actCount->cnt > 0) {
+            $html .= "<div class='classTime'>";
+            $html .= "<div class='d-flex justify-content-between align-items-center mt-2'>
+                            <label class='form-label'>$langActInHome</label>";
+            if ($is_editor and $q->flipped_flag == 2) {
+                $html .= "<div class='btn-group btn-group-sm btn-group-default gap-2'>
+                                <div class='in_home_btn btn submitAdminBtn d-flex justify-content-center align-items-center' title='" . trans('langActInHome') . "'>
+                                    <i class='fa fa-plus'></i>
+                                </div>
+                            </div>";
             }
-
-            $html .= "</div></div>";
             $html .= "</div>";
+            if (count($req_in_home) > 0) {
 
+                $max_resource_id = Database::get()->querySingle("SELECT id FROM unit_resources
+                                    WHERE unit_id = ?d ORDER BY `order` DESC LIMIT 1", $unit_id)->id;
+
+                $html .= "<div class='table-responsive'>";
+                $html .= "<div class='table table-striped table-hover table-default'><div id='unitResources_1'>";
+
+                foreach ($req_in_home as $info_home) {
+                    if (!is_null($info_home->comments)) {
+                        $info_home->comments = standard_text_escape($info_home->comments);
+                    }
+                    $html .= show_resource($info_home);
+                }
+
+                $html .= "</div></div>";
+                $html .= "</div>";
+
+
+            }
+            $html .= "</div>";
         }
 
-        if (count($req_in_class) > 0) {
-            $max_resource_id = Database::get()->querySingle("SELECT id FROM unit_resources
+
+        //in_class
+        $in_class_actCount = Database::get()->querySingle(
+            "SELECT COUNT(*) AS cnt FROM course_units_activities WHERE unit_id = ?d AND activity_type = ?d",
+            $unit_id, 0
+        );
+        if ($in_class_actCount->cnt > 0) {
+            $html .= "<div class='classTime'>";
+            $html .= "<div class='d-flex justify-content-between align-items-center mt-2'>
+                        <label class='form-label'>$langActInClass</label>";
+            if ($is_editor and $q->flipped_flag == 2) {
+                $html .= "<div class='btn-group btn-group-sm btn-group-default gap-2'>
+                            <div class='in_class_btn btn submitAdminBtn d-flex justify-content-center align-items-center' title='" . trans('langActInClass') . "'>
+                                <i class='fa fa-plus'></i>
+                            </div>
+                        </div>";
+            }
+            $html .= "</div>";
+
+            if (count($req_in_class) > 0) {
+                $max_resource_id = Database::get()->querySingle("SELECT id FROM unit_resources
             WHERE unit_id = ?d ORDER BY `order` DESC LIMIT 1", $unit_id)->id;
 
-            $html .= "<div class='form-group'>
-            <label class='col-2 form-label'>$langActInClass</label>
-            </div>
-            ";
-            $html .= "<div class='table-responsive'>";
-            $html .= "<div class='table table-striped table-hover table-default'><div id='unitResources_2'>";
-            foreach ($req_in_class as $info_class) {
-                if (!is_null($info_class->comments)) {
-                    $info_class->comments = standard_text_escape($info_class->comments);
+                $html .= "<div class='table-responsive'>";
+                $html .= "<div class='table table-striped table-hover table-default'><div id='unitResources_2'>";
+                foreach ($req_in_class as $info_class) {
+                    if (!is_null($info_class->comments)) {
+                        $info_class->comments = standard_text_escape($info_class->comments);
+                    }
+                    $html .= show_resource($info_class);
                 }
-                $html .= show_resource($info_class);
+                $html .= "</div></div>";
+                $html .= "</div>";
+
             }
-            $html .= "</div></div>";
             $html .= "</div>";
         }
+
+        $after_class_actCount = Database::get()->querySingle(
+            "SELECT COUNT(*) AS cnt FROM course_units_activities WHERE unit_id = ?d AND activity_type = ?d",
+            $unit_id, 2
+        );
+        if ($after_class_actCount->cnt > 0) {
+            //after_class
+            $html .= "<div class='classTime' style='margin-bottom:0'>";
+            $html .= "<div class='d-flex justify-content-between align-items-center mt-2'>
+                        <label class='form-label'>$langActAfterClass</label>";
+
+            if ($is_editor and $q->flipped_flag == 2) {
+                $html .= "<div class='btn-group btn-group-sm btn-group-default gap-2'>
+                            <div class='after_class_btn btn submitAdminBtn d-flex justify-content-center align-items-center' title='" . trans('langActAfterClass') . "'>
+                                <i class='fa fa-plus'></i>
+                            </div>
+                        </div>";
+            }
+
+            $html .= "</div>";
+        }
+
 
         if (count($req_after_class) > 0) {
             $max_resource_id = Database::get()->querySingle("SELECT id FROM unit_resources
             WHERE unit_id = ?d ORDER BY `order` DESC LIMIT 1", $unit_id)->id;
 
-            $html .= "<div class='form-group'>
-            <label class='col-2 form-label'>$langActAfterClass</label>
-            </div>
-            ";
             $html .= "<div class='table-responsive'>";
             $html .= "<div class='table table-striped table-hover table-default'><div id='unitResources_3'>";
             foreach ($req_after_class as $info_after_class) {
@@ -541,7 +602,9 @@ function show_resources($unit_id)
             }
             $html .= "</div></div>";
             $html .= "</div>";
+
         }
+        $html .= "</div>";
     } else {
         $req = Database::get()->queryArray("SELECT * FROM unit_resources WHERE unit_id = ?d AND `order` >= 0 ORDER BY `order`", $unit_id);
 
@@ -550,32 +613,46 @@ function show_resources($unit_id)
             load_js('screenfull/screenfull.min.js');
             $head_content .= "<script>
             $(document).ready(function(){
- 
+
+                var container = document.getElementById('unitResources');
+                var header = document.querySelector('header');
+//                var header = document.getElementById('bgr-cheat-header');
+                
                 Sortable.create(unitResources,{
                     handle: '.fa-arrows',
                     animation: 150,
-                    scroll: true,
+                    scroll: container,
                     scrollSensitivity: 100,
                     scrollSpeed: 50,
-                    forceAutoScrollFallback: true,
+                    forceAutoScrollFallback: false,
+                    onStart: function () {
+                        if (header) {
+                            header.dataset._pt = header.style.pointerEvents || '';
+                            header.style.pointerEvents = 'none';
+                        }
+                    },
                     onEnd: function (evt) {
-
-                    var itemEl = $(evt.item);
-
-                    var idReorder = itemEl.attr('data-id');
-                    var prevIdReorder = itemEl.prev().attr('data-id');
-
-                    $.ajax({
-                    type: 'post',
-                    dataType: 'text',
-                    data: {
-                            toReorder: idReorder,
-                            prevReorder: prevIdReorder,
-                            }
+                        if (header) {
+                            header.style.pointerEvents = header.dataset._pt;
+                            delete header.dataset._pt;
+                        }
+                        var itemEl = $(evt.item);
+    
+                        var idReorder = itemEl.attr('data-id');
+                        var prevIdReorder = itemEl.prev().attr('data-id');
+    
+                        $.ajax({
+                            type: 'post',
+                            dataType: 'text',
+                            data: {
+                                      toReorder: idReorder,
+                                      prevReorder: prevIdReorder,
+                                  }
                         });
                     }
                 });
             });
+            
             $(function(){
                 $('.fileModal').click(function (e)
                 {
@@ -808,7 +885,7 @@ function show_doc($title, $comments, $resource_id, $file_id, $act_name) {
     return "
         <div$class_vis data-id='$resource_id'>
           <div class='unitIcon' width='1'>" . icon($image, '') . "</div>
-          " . (!empty($act_name) ? "<div class='text-start'>$act_name</div>" : "") . "
+          " . (!empty($act_name) ? "<div class='text-start act_label'>$act_name</div>" : "") . "
           <div class='text-start'><div class='module-name'>$langDoc</div> $download_hidden_link $link $res_prereq_icon $comment</div>" .
             actions('doc', $resource_id, $status) .
             "</div>";
@@ -827,7 +904,7 @@ function show_text($comments, $resource_id, $visibility, $act_name) {
     $content .= "
         <div$class_vis data-id='$resource_id'>";
         if(!empty($act_name)){
-            $content .= " <div class='text-start'>$act_name</div> ";
+            $content .= " <div class='text-start act_label'>$act_name</div> ";
         }
     $width = $is_editor ? 'col-10' : 'col-12';
     $content .= "<div class='text-start $width'>$comments</div>" .
@@ -847,7 +924,7 @@ function show_description($title, $comments, $id, $res_id, $visibility, $act_nam
     $comments = mathfilter($comments, 12, "../../courses/mathimg/");
     $content .= "
         <div>
-        " . (!empty($act_name) ? "<div class='text-start'>$act_name</div>" : "") . "
+        " . (!empty($act_name) ? "<div class='text-start act_label'>$act_name</div>" : "") . "
           <div colspan='2'>
             <div class='title'>" . q($title) . "</div>
             <div class='content'>$comments</div>
@@ -929,11 +1006,11 @@ function show_lp($title, $comments, $resource_id, $lp_id, $act_name): string
     return "
         <div$class_vis data-id='$resource_id'>
           <div class='unitIcon' width='1'>$imagelink</a></div>
-          " . (!empty($act_name) ? "<div class='text-start'>$act_name</div>" : "") . "
+          " . (!empty($act_name) ? "<div class='text-start act_label'>$act_name</div>" : "") . "
           <div class='text-start'>
-            <div class='module-name'>$langLearnPath</div> 
+            <div class='module-name'>$langLearnPath</div>
                  <span class='pull-right d-flex justify-content-start align-items-center gap-3'>$link $res_prereq_icon $lp_susp_button $lp_results_button $lp_results</span>
-                 <div class='content'>$comment_box</div> 
+                 <div class='content'>$comment_box</div>
             </div>" .
 
             actions('lp', $resource_id, $status) . "</div>";
@@ -998,16 +1075,13 @@ function show_video($table, $title, $comments, $resource_id, $video_id, $visibil
     return "
         <div$class_vis data-id='$resource_id'>
           <div class='unitIcon' width='1'>".icon($imagelink)."</div>
-          " . (!empty($act_name) ? "<div class='text-start'>$act_name</div>" : "") . "
+          " . (!empty($act_name) ? "<div class='text-start act_label'>$act_name</div>" : "") . "
           <div class='text-start'><div class='module-name'>$langVideo</div> $videolink $res_prereq_icon $comment_box</div>" . actions('video', $resource_id, $visibility) . "
         </div>";
 }
 
 /**
  * @brief display resource video category
- * @global type $is_editor
- * @global type $course_id
- * @global type $langInactiveModule
  * @param type $title
  * @param type $comments
  * @param type $resource_id
@@ -1031,7 +1105,7 @@ function show_videocat($title, $comments, $resource_id, $videolinkcat_id, $visib
     $content = "
         <div$class_vis data-id='$resource_id'>
           <div class='unitIcon' width='1'>".icon('fa-folder-open')."</div>
-          " . (!empty($act_name) ? "<div class='text-start'>$act_name</div>" : "") . "
+          " . (!empty($act_name) ? "<div class='text-start act_label'>$act_name</div>" : "") . "
           <div>" . q($title);
 
     if (!empty($comments)) {
@@ -1135,7 +1209,7 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility, $act_
             enable_password_bootbox();
             $class = 'class="password_protected"';
             $lock_description .= "</ul>";
-            $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-toggle='tooltip' data-placement='right' data-html='true' data-title='$lock_description'></span>";
+            $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-bs-toggle='tooltip' data-bs-placement='right' data-bs-html='true' title='$lock_description'></span>";
         } else {
             $class = $exclamation_icon = '';
         }
@@ -1154,7 +1228,7 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility, $act_
     return "
         <div$class_vis data-id='$resource_id'>
           <div class='unitIcon' width='1'>$imagelink</div>
-          " . (!empty($act_name) ? "<div class='text-start'>$act_name</div>" : "") . "
+          " . (!empty($act_name) ? "<div class='text-start act_label'>$act_name</div>" : "") . "
           <div class='text-start'><div class='module-name'>$langWorks</div> $exlink $res_prereq_icon $comment_box $assign_to_users_message</div>" .
             actions('lp', $resource_id, $visibility) . '
         </div>';
@@ -1212,7 +1286,7 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
         if ($exercise->password_lock) {
             enable_password_bootbox();
             $link_class = 'password_protected';
-            $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-toggle='tooltip' data-placement='right' data-html='true' data-title='$langPassCode'></span>";
+            $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-bs-toggle='tooltip' data-bs-placement='right' data-bs-html='true' title='$langPassCode'></span>";
         }
 
         $assign_to_users_message = '';
@@ -1274,7 +1348,7 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
     return "
         <div$class_vis data-id='$resource_id'>
           <div class='unitIcon' width='3'>$imagelink</div>
-          " . (!empty($act_name) ? "<div class='text-start'>$act_name</div>" : "") . "
+          " . (!empty($act_name) ? "<div class='text-start act_label'>$act_name</div>" : "") . "
           <div class='text-start'><div class='module-name'>$langExercises</div> $exlink $res_prereq_icon $comment_box</div>" . actions('lp', $resource_id, $visibility) . "
         </div>";
 }
@@ -1330,7 +1404,7 @@ function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility,
     return "
         <div$class_vis data-id='$resource_id'>
           <div class='unitIcon' width='1'>$imagelink</div>
-          " . (!empty($act_name) ? "<div class='text-start'>$act_name</div>" : "") . "
+          " . (!empty($act_name) ? "<div class='text-start act_label'>$act_name</div>" : "") . "
           <div class='text-start'><div class='module-name'>$langForums</div> $forumlink $res_prereq_icon $comment_box</div>" .
             actions('forum', $resource_id, $visibility) . '
         </div>';
@@ -1410,7 +1484,7 @@ function show_poll($title, $comments, $resource_id, $poll_id, $visibility, $act_
     return "
         <div$class_vis data-id='$resource_id'>
           <div class='unitIcon' width='1'>$imagelink</div>
-          " . (!empty($act_name) ? "<div class='text-start'>$act_name</div>" : "") . "
+          " . (!empty($act_name) ? "<div class='text-start act_label'>$act_name</div>" : "") . "
           <div class='text-start'><div class='module-name'>$langQuestionnaire</div> $polllink $res_prereq_icon $comment_box $assign_to_users_message</div>" .
             actions('poll', $resource_id, $visibility) . '
         </div>';
@@ -1474,7 +1548,7 @@ function show_wiki($title, $comments, $resource_id, $wiki_id, $visibility, $act_
     return "
         <div$class_vis data-id='$resource_id'>
           <div class='unitIcon' width='1'>$imagelink</div>
-          " . (!empty($act_name) ? "<div class='text-start'>$act_name</div>" : "") . "
+          " . (!empty($act_name) ? "<div class='text-start act_label'>$act_name</div>" : "") . "
           <div class='text-start'><div class='module-name'>$langWiki</div> $wikilink $res_prereq_icon $comment_box</div>" .
             actions('wiki', $resource_id, $visibility) . '
         </div>';
@@ -1522,7 +1596,7 @@ function show_link($title, $comments, $resource_id, $link_id, $visibility, $act_
     return "
         <div$class_vis data-id='$resource_id'>
           <div class='unitIcon' width='1'>$imagelink</div>
-          " . (!empty($act_name) ? "<div class='text-start'>$act_name</div>" : "") . "
+          " . (!empty($act_name) ? "<div class='text-start act_label'>$act_name</div>" : "") . "
           <div><div class='module-name'>$langLinks</div> $exlink $comment_box</div>" . actions('link', $resource_id, $visibility) . "
         </div>";
 }
@@ -1549,7 +1623,7 @@ function show_linkcat($title, $comments, $resource_id, $linkcat_id, $visibility,
         } else {
             $content = "<div class='not_visible' data-id='$resource_id'>
                         <div class='unitIcon' width='1'>" . icon('fa-folder-open') . "</div>
-                        " . (!empty($act_name) ? "<div class='text-start'>$act_name</div>" : "") . "
+                        " . (!empty($act_name) ? "<div class='text-start act_label'>$act_name</div>" : "") . "
                         <div>" . q($title) . " ($langWasDeleted)";
 
         }
@@ -1558,7 +1632,7 @@ function show_linkcat($title, $comments, $resource_id, $linkcat_id, $visibility,
             $content .= "
                         <div$class_vis data-id='$resource_id'>
                           <div class='unitIcon' width='1'>".icon('fa-folder-open')."</div>
-                          " . (!empty($act_name) ? "<div class='text-start'>$act_name</div>" : "") . "
+                          " . (!empty($act_name) ? "<div class='text-start act_label'>$act_name</div>" : "") . "
                           <div>" . q($lcat->name);
             if (!empty($lcat->description)) {
                 $comment_box = "<br><small>$lcat->description</small>";
@@ -1630,7 +1704,7 @@ function show_ebook($title, $comments, $resource_id, $ebook_id, $visibility, $ac
     return "
         <div$class_vis data-id='$resource_id'>
           <div class='unitIcon' width='3'>$imagelink</div>
-          " . (!empty($act_name) ? "<div class='text-start'>$act_name</div>" : "") . "
+          " . (!empty($act_name) ? "<div class='text-start act_label'>$act_name</div>" : "") . "
           <div class='text-start'><div class='module-name'>$langEBook</div> $exlink $res_prereq_icon $comment_box</div>" . actions('ebook', $resource_id, $visibility) . "
         </div>";
 }
@@ -1745,7 +1819,7 @@ function show_ebook_resource($title, $comments, $resource_id, $ebook_id, $displa
     return "
         <div$class_vis data-id='$resource_id'>
           <div class='unitIcon' width='3'>$imagelink</div>
-          " . (!empty($act_name) ? "<div class='text-start'>$act_name</div>" : "") . "
+          " . (!empty($act_name) ? "<div class='text-start act_label'>$act_name</div>" : "") . "
           <div>$exlink $comment_box</div>" . actions('section', $resource_id, $visibility) . "
         </div>";
 }
@@ -1789,7 +1863,7 @@ function show_chat($title, $comments, $resource_id, $chat_id, $visibility, $act_
     return "
         <div$class_vis data-id='$resource_id'>
           <div class='unitIcon' width='1'>$imagelink</div>
-          " . (!empty($act_name) ? "<div class='text-start'>$act_name</div>" : "") . "
+          " . (!empty($act_name) ? "<div class='text-start act_label'>$act_name</div>" : "") . "
           <div class='text-start'><div class='module-name'>$langChat</div> $chatlink $comment_box</div>" .
         actions('chat', $resource_id, $visibility) . '
         </div>';
@@ -1830,7 +1904,7 @@ function show_blog($title, $comments, $resource_id, $blog_id, $visibility, $act_
     return "
         <div data-id='$resource_id'>
           <div class='unitIcon' width='1'>$imagelink</div>
-          " . (!empty($act_name) ? "<div class='text-start'>$act_name</div>" : "") . "
+          " . (!empty($act_name) ? "<div class='text-start act_label'>$act_name</div>" : "") . "
           <div>$bloglink $comment_box</div>" .
         actions('blog', $resource_id, $visibility) . '
         </div>';
@@ -1847,7 +1921,7 @@ function show_blog($title, $comments, $resource_id, $blog_id, $visibility, $act_
 function show_h5p($title, $comments, $resource_id, $h5p_id, $visibility, $act_name) {
     global $urlServer, $is_editor, $langWasDeleted, $course_id, $course_code, $id, $webDir, $urlAppend, $langH5p;
 
-    $comment_box = '';
+    $comment_box = $status = '';
     $title = q($title);
     $h5p = Database::get()->querySingle("SELECT * FROM h5p_content WHERE course_id = ?d AND id = ?d", $course_id, $h5p_id);
     if (!$h5p) { // check if it was deleted
@@ -1882,7 +1956,7 @@ function show_h5p($title, $comments, $resource_id, $h5p_id, $visibility, $act_na
     return "
         <div$class_vis data-id='$resource_id'>
           <div class='unitIcon-svg'><svg width='44' height='44' version='1.1' viewBox='-301.46 -500 1166.8 2e3' xmlns='http://www.w3.org/2000/svg'><g transform='translate(-722.91 -500)'><path d='m0 1e3v-1e3h2009.7v2e3h-2009.7zm602.92 150v-90h160.78v180l185.4-0.166-5.024-2.309c-2.764-1.27-11.693-5.1-19.843-8.51-24.366-10.198-36.891-18.724-54.121-36.843-10.05-10.568-20.873-25.967-27.462-39.076-5.097-10.14-13.346-31.394-13.81-35.581l-0.324-2.937 63.809-9.228c35.095-5.076 64.939-9.247 66.321-9.27 1.974-0.031 3.158 1.05 5.527 5.048 9.524 16.075 29.045 28.375 48.934 30.835 39.402 4.873 74.132-24.163 75.907-63.462 1.417-31.358-16.291-56.906-46.942-67.723-8.19-2.89-25.607-3.543-35.585-1.334-16.562 3.667-34.105 16-41.818 29.397-1.932 3.355-3.9 6.114-4.373 6.13-1.876 0.065-131.66-18.014-132.04-18.393-0.337-0.335 56.264-250.94 59.022-261.33l0.862-3.25h-124.44v208h-160.78v-208h-152.74v488h152.74v-90zm691.35 0.086v-89.914l61.046-0.449c50.137-0.368 63.102-0.748 72.556-2.126 45.532-6.637 75.163-20.01 98.924-44.645 23.057-23.906 35.045-51.976 38.844-90.951 1.44-14.766 0.72-39.174-1.562-53-10.033-60.784-46.103-98.57-106.52-111.58-22.373-4.82-20.773-4.759-135.41-5.148l-108.27-0.368v100.1h-220.85l-3.242 13.75c-1.782 7.563-5.842 24.7-9.022 38.082-4.745 19.971-5.49 24.24-4.157 23.813 0.894-0.285 6.373-2.307 12.176-4.493 13.294-5.007 37.711-11.7 47.748-13.09 9.786-1.354 38.914-1.367 53.241-0.022 30.235 2.837 56.58 11.691 79.31 26.652 12.878 8.477 32.803 28.1 41.436 40.81 32.824 48.317 35.187 112.49 6.346 172.29-3.26 6.757-8.35 15.982-11.31 20.5-19.02 29.015-48.23 53.061-72.572 59.741-8.07 2.215-18.898 7.039-20.084 8.949-0.431 0.693 28.626 1.022 90.365 1.022h91zm0-244.09v-54h30.424c48.304 0 63.803 3.05 76.569 15.065 11.117 10.463 16.624 23.326 16.581 38.724-0.045 16.066-3.68 25.057-14.466 35.791-14.862 14.79-30.913 18.42-81.434 18.42h-27.673z'/><path d='m451.02 996.1v-243.31h150.85v209.25h163.02v-209.25h121.75l-1.307 5.474c-2.54 10.635-47.071 207.77-52.49 232.36-3.023 13.718-4.905 25.533-4.182 26.256s30.515 5.34 66.205 10.26l64.891 8.947 9.895-11.577c27.937-32.684 75.421-33.24 102.84-1.205 35.938 41.985 4.73 107.54-51.078 107.29-19.803-0.087-35.659-7.374-50.547-23.231l-11.784-12.551-64.806 9.184c-35.644 5.052-65.35 9.73-66.017 10.395-2.54 2.54 10.5 34.53 20.974 51.451 19.244 31.091 42.436 50.852 76.365 65.064 8.63 3.615 16.147 7.005 16.704 7.534 0.557 0.528-39.132 0.96-88.2 0.96h-89.213v-180.05h-163.02v180.05h-150.85z' fill='#fff' stroke='#fff' stroke-width='2.433'/><path d='m1119 1237.3c1.27-1.174 7.9-3.946 14.732-6.161 58.229-18.88 103.08-90.97 103.13-165.77 0.03-43.193-12.994-76.78-41.351-106.63-19.256-20.271-39.728-33.177-66.904-42.178-17.86-5.915-22.878-6.462-60.827-6.629-38.795-0.17-42.686 0.239-62.676 6.595-11.722 3.727-22.957 7.407-24.967 8.178-2.36 0.906-3.274 0.23-2.58-1.91 0.59-1.822 4.529-18.367 8.752-36.767l7.68-33.455h220.99v-100.35l113.75 1.212c106.04 1.13 115.07 1.563 133.21 6.383 50.455 13.403 80.167 40.402 95.377 86.67 5.616 17.082 6.423 23.631 6.6 53.527 0.151 25.428-0.884 38.073-4.082 49.878-13.928 51.405-51.002 87.442-103.98 101.07-19.48 5.01-65.583 8.178-121.05 8.317l-41.971 0.105v180.05h-88.078c-50.624 0-87.095-0.907-85.766-2.134zm261.63-281.61c16.962-5.037 32.185-19.719 36.303-35.012 7.731-28.713-8.277-57.752-36.215-65.695-4.841-1.376-26.594-3.201-48.34-4.056l-39.538-1.553v113.44l37.32-1.61c22.553-0.972 42.525-3.154 50.469-5.513z' fill='#fff' stroke='#fff' stroke-width='2.433'/></g></svg></div>
-          " . (!empty($act_name) ? "<div class='text-start'>$act_name</div>" : "") . "
+          " . (!empty($act_name) ? "<div class='text-start act_label'>$act_name</div>" : "") . "
           <div class='text-start'><div class='module-name'>$langH5p</div> $h5plink $comment_box</div>" .
         actions('h5p', $resource_id, $visibility) . '
         </div>';
@@ -1951,7 +2025,7 @@ function show_tc($title, $comments, $resource_id, $tc_id, $visibility, $act_name
     return "
         <div $class_vis data-id='$resource_id'>
           <div class='unitIcon' width='1'>$imagelink</div>
-          " . (!empty($act_name) ? "<div class='text-start'>$act_name</div>" : "") . "
+          " . (!empty($act_name) ? "<div class='text-start act_label'>$act_name</div>" : "") . "
           <div>
             <div class='module-name'>$langBBB <span class='help-block label label-warning ps-4'>$message_box</span></div>
             <a href='$tclink'>" . q($title) . "</a> $comment_box</div>
@@ -2091,17 +2165,6 @@ function edit_res($resource_id) {
     </div>
     </div>";
     return $content;
-}
-
-/**
- * @return string
- */
-function localhostUrl() {
-    return sprintf(
-        "%s://%s",
-        isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http',
-        $_SERVER['SERVER_NAME']
-    );
 }
 
 /**

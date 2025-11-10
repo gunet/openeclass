@@ -57,6 +57,7 @@ $helpTopic = 'documents';
 doc_init();
 $searchEngine = SearchEngineFactory::create();
 
+
 if ($is_editor) {
 
     if (isset($_GET['prevent_pdf'])) {
@@ -72,7 +73,6 @@ if ($is_editor) {
     }
 
     if (isset($_GET['unzip'])) {
-
         $myFile = $basedir.$_GET['unzip'];
 
         if (isset($_GET['openDir'])) {
@@ -91,6 +91,9 @@ if ($is_editor) {
             for ($i = 0; $i < $zipFile->numFiles; $i++) {
                 $stat = $zipFile->statIndex($i, ZipArchive::FL_ENC_RAW);
                 $files_in_zip[$i] = $stat['name'];
+                if (!empty(my_basename($files_in_zip[$i]))) {
+                    validateUploadedFile(my_basename($files_in_zip[$i]), 3);
+                }
             }
             // extract files
             for ($i = 0; $i < $zipFile->numFiles; $i++) {
@@ -366,7 +369,7 @@ ModalBoxHelper::loadModalBox(true);
 copyright_info_init();
 
 if (defined('EBOOK_DOCUMENTS')) {
-    $navigation[] = array('url' => 'edit.php?course=' . $course_code . '&amp;id=' . $ebook_id, 'name' => $langEBookEdit);
+    $navigation[] = array('url' => 'edit.php?course=' . $course_code . '&id=' . $ebook_id, 'name' => $langEBookEdit);
 }
 
 if (isset($_GET['showQuota'])) {
@@ -564,7 +567,7 @@ if ($can_upload or $user_upload) {
     $error_response = $XHRUpload? 'session': 'html';
     $extra_path = '';
     if (isset($_POST['fileCloudInfo']) or isset($_FILES['userFile'])) {
-
+        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         if (isset($_POST['fileCloudInfo'])) { // upload cloud file
             $cloudfile = CloudFile::fromJSON($_POST['fileCloudInfo']);
             $uploaded = true;
@@ -933,6 +936,7 @@ if ($can_upload or $user_upload) {
 
     // Delete file or directory
     if (isset($_GET['delete']) and isset($_GET['filePath'])) {
+        if (!isset($_REQUEST['token']) || !validate_csrf_token($_REQUEST['token'])) csrf_token_error();
         $filePath =  getDirectReference($_GET['filePath']);
         $curDirPath = my_dirname(getDirectReference($_GET['filePath']));
         // Check if file actually exists
@@ -1225,7 +1229,7 @@ if ($can_upload or $user_upload) {
         if ($row and (!$uploading_as_user or $row->lock_user_id == $uid)) {
             $dialogBox = 'comment';
             $curDirPath = my_dirname($comment);
-            $backUrl = documentBackLink($curDirPath);
+            $backUrl = htmlspecialchars_decode(documentBackLink($curDirPath));
             $navigation[] = array('url' => $backUrl, 'name' => $pageName);
             foreach ($license as $license_selection) {
                 $license_title[] = $license_selection['title'];
@@ -1233,7 +1237,7 @@ if ($can_upload or $user_upload) {
 
             $dialogData = array(
                 'backUrl' => $backUrl,
-                'base_url' => $base_url,
+                'base_url' => htmlspecialchars_decode($base_url),
                 'file' => $row,
                 'is_dir' => $row->format == '.dir',
                 'selected_license_title' => $row->copyrighted,
@@ -1517,7 +1521,7 @@ foreach ($result as $row) {
                       'icon' => 'fa-star',
                       'show' => !$is_dir && $subsystem == MYDOCS && $subsystem_id == $uid && get_config('eportfolio_enable')),
                 array('title' => $langDelete,
-                      'url' => "{$base_url}filePath=$cmdDirName&amp;delete=1",
+                      'url' => "{$base_url}filePath=$cmdDirName&amp;delete=1&amp;" . generate_csrf_token_link_parameter() ,
                       'class' => 'delete',
                       'icon' => 'fa-xmark',
                       'confirm' => $langConfirmDelete . ' ' . q($row->filename))));

@@ -30,7 +30,8 @@ require_once 'modules/wall/insert_poll.php';
 require_once 'modules/wall/insert_forum.php';
 require_once 'include/log.class.php';
 
-function show_post_form() {
+function show_post_form(): void
+{
     global $head_content, $tool_content, $urlServer, $course_id, $course_code, $uid, $is_editor,
            $langVideo, $langDoc, $langMyDocs, $langWallExtVideo, $langWallExtVideoLink, $langTypeOutMessage,
            $langLinks, $langExercises, $langWorks, $langChat, $langQuestionnaire, $langForum, $langSubmit, $langWall,
@@ -205,7 +206,8 @@ function show_post_form() {
                                     )
                                 ))
                                 .'</div></div>  
-                            </fieldset>      
+                            </fieldset>
+                            ' . generate_csrf_token_form_field() . '
                         </form>
                     </div>
                 </div>
