@@ -24,27 +24,29 @@ require_once 'resourceindexer.interface.php';
 require_once 'Zend/Search/Lucene/Document.php';
 require_once 'Zend/Search/Lucene/Field.php';
 require_once 'Zend/Search/Lucene/Index/Term.php';
+require_once 'modules/search/classes/ConstantsUtil.php';
+require_once 'modules/search/classes/FetcherUtil.php';
 
 class VideolinkIndexer extends AbstractIndexer implements ResourceIndexerInterface {
 
     /**
      * Construct a Zend_Search_Lucene_Document object out of a VideoLink db row.
      *
-     * @global string $urlServer
-     * @param  object  $vlink
+     * @param object $vlink
      * @return Zend_Search_Lucene_Document
+     * @global string $urlServer
      */
     protected function makeDoc($vlink) {
         $encoding = 'utf-8';
 
         $doc = new Zend_Search_Lucene_Document();
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', Indexer::DOCTYPE_VIDEOLINK . '_' . $vlink->id, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $vlink->id, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('doctype', Indexer::DOCTYPE_VIDEOLINK, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('courseid', $vlink->course_id, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('title', Indexer::phonetics($vlink->title), $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('content', Indexer::phonetics($vlink->description), $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', $vlink->url, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword(ConstantsUtil::FIELD_PK, ConstantsUtil::DOCTYPE_VIDEOLINK . '_' . $vlink->id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword(ConstantsUtil::FIELD_PKID, $vlink->id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword(ConstantsUtil::FIELD_DOCTYPE, ConstantsUtil::DOCTYPE_VIDEOLINK, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword(ConstantsUtil::FIELD_COURSEID, $vlink->course_id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text(ConstantsUtil::FIELD_TITLE, Indexer::phonetics($vlink->title), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text(ConstantsUtil::FIELD_CONTENT, Indexer::phonetics($vlink->description), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::UnIndexed(ConstantsUtil::FIELD_URL, $vlink->url, $encoding));
 
         return $doc;
     }
@@ -52,23 +54,17 @@ class VideolinkIndexer extends AbstractIndexer implements ResourceIndexerInterfa
     /**
      * Fetch a VideoLink from DB.
      *
-     * @param  int $vlinkId
+     * @param int $vlinkId
      * @return object - the mysql fetched row
      */
     protected function fetch($vlinkId) {
-
-        $vlink = Database::get()->querySingle("SELECT * FROM videolink WHERE id = ?d", $vlinkId);
-        if (!$vlink) {
-            return null;
-        }
-
-        return $vlink;
+        return FetcherUtil::fetchVideoLink($vlinkId);
     }
 
     /**
      * Get Term object for locating a unique single videolink.
      *
-     * @param  int $vlinkId - the videolink id
+     * @param int $vlinkId - the videolink id
      * @return Zend_Search_Lucene_Index_Term
      */
     protected function getTermForSingleResource($vlinkId) {
@@ -96,7 +92,7 @@ class VideolinkIndexer extends AbstractIndexer implements ResourceIndexerInterfa
     /**
      * Get Lucene query input string for locating all videolinks belonging to a given course.
      *
-     * @param  int $courseId - the given course id
+     * @param int $courseId - the given course id
      * @return string        - the string that can be used as Lucene query input
      */
     protected function getQueryInputByCourse($courseId) {
@@ -106,11 +102,11 @@ class VideolinkIndexer extends AbstractIndexer implements ResourceIndexerInterfa
     /**
      * Get all videolinks belonging to a given course from DB.
      *
-     * @param  int   $courseId - the given course id
+     * @param int $courseId - the given course id
      * @return array           - array of DB fetched anonymous objects with property names that correspond to the column names
      */
     protected function getCourseResourcesFromDB($courseId) {
-        return Database::get()->queryArray("SELECT * FROM videolink WHERE course_id = ?d", $courseId);
+        return FetcherUtil::fetchVideoLinks($courseId);
     }
 
 }

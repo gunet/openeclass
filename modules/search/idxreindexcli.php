@@ -20,7 +20,7 @@
 
 set_time_limit(0);
 require_once __DIR__ . '/../../include/baseTheme.php';
-require_once 'modules/search/indexer.class.php';
+require_once 'modules/search/classes/SearchEngineFactory.php';
 
 $command_line = (php_sapi_name() == 'cli' && !isset($_SERVER['REMOTE_ADDR']));
 if (!$command_line) {
@@ -44,8 +44,10 @@ if (!isset($argv[1]) or !in_array($argv[1], ['reindex', 'continue'])) {
     exit(1);
 }
 
+$searchEngine = SearchEngineFactory::create();
+
 if ($argv[1] == 'reindex') {
-    Indexer::deleteAll();
+    $searchEngine->deleteAll();
     Database::get()->query("DELETE FROM idx_queue");
     Database::get()->queryFunc("SELECT id FROM course", function($r) {
         Database::get()->query("INSERT INTO idx_queue (course_id) VALUES (?d)", $r->id);
@@ -54,7 +56,6 @@ if ($argv[1] == 'reindex') {
 
 // fetch number of courses waiting in index queue
 $n = Database::get()->querySingle("SELECT COUNT(id) AS count FROM idx_queue")->count;
-$idx = new Indexer();
 
 while ($n > 0) {
     // fetch next waiting course
@@ -62,10 +63,8 @@ while ($n > 0) {
 
     // re-index
     echo "Indexing course id: " . $cid . ". ";
-    echo "Removing old data. ";
-    $idx->removeAllByCourse($cid);
-    echo "Storing new data. ";
-    $idx->storeAllByCourse($cid);
+    echo "Removing old data, Storing new data, and optimizing. ";
+    $searchEngine->index($cid);
 
     // remove course from queue
     Database::get()->query("DELETE FROM idx_queue WHERE course_id = ?d", $cid);
@@ -73,8 +72,6 @@ while ($n > 0) {
     echo "Remaining courses for indexing: " . $n . "\n";
 }
 
-echo "\nOptimizing index ...\n";
-$idx->getIndex()->optimize();
-
+$searchEngine->commit();
 echo "All done, exiting ...\n";
 exit();

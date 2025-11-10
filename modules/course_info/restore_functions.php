@@ -1371,9 +1371,11 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
         removeDir($restoreThis);
 
         // index course after restoring
-        require_once 'modules/search/indexer.class.php';
-        Indexer::queueAsync(Indexer::REQUEST_REMOVEALLBYCOURSE, Indexer::RESOURCE_IDX, $new_course_id);
-        Indexer::queueAsync(Indexer::REQUEST_STOREALLBYCOURSE, Indexer::RESOURCE_IDX, $new_course_id);
+        require_once 'modules/search/classes/ConstantsUtil.php';
+        require_once 'modules/search/classes/SearchEngineFactory.php';
+        $searchEngine = SearchEngineFactory::create();
+        $searchEngine->indexResource(ConstantsUtil::REQUEST_REMOVEALLBYCOURSE, ConstantsUtil::RESOURCE_IDX, $new_course_id);
+        $searchEngine->indexResource(ConstantsUtil::REQUEST_STOREALLBYCOURSE, ConstantsUtil::RESOURCE_IDX, $new_course_id);
     });
 
     // check/cleanup video files after restore transaction

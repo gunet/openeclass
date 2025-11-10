@@ -3251,6 +3251,7 @@ $langWeekTitle = "Week title";
 $langEnableIndexing = "Enable search indexing";
 $langConfirmEnableIndexTitle = "Confirmation for starting indexing";
 $langConfirmEnableIndex = "The indexing process requires <strong>certain time period and computing resources</strong>, depending on the size of the DataBase.<br/><br/>The process will run in a <u>separate browser window</u>.<br/><br/>Furthermore, indexing <u>is not</u> available if platform is installed on <u>NFS filesystem</u>.<br/><br/><em>Cancel</em> your choice if you wish to start the indexing at a <u>different</u> time.";
+$langConfirmEnableSolrIndex = "The indexing process requires <strong>certain time period and computing resources</strong>, depending on the size of the DataBase.<br/><br/>The process will run in a <u>separate browser window</u>.<br/><br/><em>Cancel</em> your choice if you wish to start the indexing at a <u>different</u> time.";
 $langIndexingNeeded = "If the indexing window is not yet open, i.e. blocked by the browser, allow it to open or press";
 $langIndexingAlert1 = "Please wait while indexing all data, this might require some time.";
 $langIndexingAlert2 = "Do not close this window or else the indexing process will be terminated.";
@@ -5380,6 +5381,9 @@ $langWebexLongDescription = "Connect with the Webex video conference service.";
 $langJitsiShortDescription = "The open source software <a href=\"https://jitsi.org/\" target=\"_blank\">Jitsi</a> is a teleconference service. Visit the <a href=\"jitsiconf.php\">tool setings</a> to enable it. Please not that the service is recommended for meetings with up to 30 participants.";
 $langJitsiLongDescription = "Connect with the <em>Jitsi</em> teleconference service (for up to <strong>30</strong> participants).";
 $langJitsiUrl = "You can change this setting to use an alternate Jitsi server.";
+$langSolrShortDescription = "The open source software <a href=\"https://solr.apache.org/\" target=\"_blank\">Solr</a> is a search platform. Visit the <a href=\"solrconf.php\">tool setings</a> to enable it.";
+$langSolrLongDescription = "Connect with the <em>Solr</em> search platform.";
+$langSolrUrl = "You can customize this setting to point to your Solr installation server.";
 $langChooseTCServer = "Select teleconference service";
 $langGoToGoogleMeetLink = "Click on 'Go to Google Meet' below in order to visit Google's user interface and create the meeting link.
     Afterwards, please copy and paste it in the 'Link' field.";

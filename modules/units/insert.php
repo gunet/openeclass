@@ -31,7 +31,8 @@ require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
-require_once 'modules/search/indexer.class.php';
+require_once 'modules/search/classes/ConstantsUtil.php';
+require_once 'modules/search/classes/SearchEngineFactory.php';
 require_once 'modules/course_metadata/CourseXML.php';
 require_once 'include/log.class.php';
 
@@ -216,6 +217,7 @@ function insert_docs($id) {
             exit;
         }
 
+        $searchEngine = SearchEngineFactory::create();
         $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM unit_resources WHERE unit_id = ?d", $id)->maxorder;
         foreach ($_POST['document'] as $file_id) {
             $order++;
@@ -241,9 +243,9 @@ function insert_docs($id) {
                                             $id, $title, $comment, $order, $file->id);
             }
             $uresId = $q->lastInsertID;
-            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $uresId);
+            $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_UNITRESOURCE, $uresId);
         }
-        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+        $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_COURSE, $course_id);
         CourseXMLElement::refreshCourse($course_id, $course_code);
     }
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
@@ -272,8 +274,9 @@ function insert_text($id) {
                                 comments = ?s, visible=1, `order` = ?d, `date`= " . DBHelper::timeAfter() . ", res_id = 0", $id, $comments, $order);
         }
         $uresId = $q->lastInsertID;
-        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $uresId);
-        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+        $searchEngine = SearchEngineFactory::create();
+        $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_UNITRESOURCE, $uresId);
+        $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_COURSE, $course_id);
         CourseXMLElement::refreshCourse($course_id, $course_code);
     }
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
@@ -302,8 +305,9 @@ function insert_divider($id) {
                             comments = ?s, visible=1, `order` = ?d, `date`= " . DBHelper::timeAfter() . ", res_id = 0", $id, $divider, $order);
     }
     $uresId = $q->lastInsertID;
-    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $uresId);
-    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+    $searchEngine = SearchEngineFactory::create();
+    $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_UNITRESOURCE, $uresId);
+    $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_COURSE, $course_id);
     CourseXMLElement::refreshCourse($course_id, $course_code);
 
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
@@ -320,6 +324,7 @@ function insert_divider($id) {
 function insert_lp($id) {
     global $course_code, $course_id;
     if(isset($_POST['lp'])) {
+        $searchEngine = SearchEngineFactory::create();
         $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM unit_resources WHERE unit_id = ?d", $id)->maxorder;
         foreach ($_POST['lp'] as $lp_id) {
             $order++;
@@ -335,9 +340,9 @@ function insert_lp($id) {
                     $id, $lp->name, $lp->comment, $lp->visible, $order, $lp->learnPath_id);
             }
             $uresId = $q->lastInsertID;
-            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $uresId);
+            $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_UNITRESOURCE, $uresId);
         }
-        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+        $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_COURSE, $course_id);
         CourseXMLElement::refreshCourse($course_id, $course_code);
     }
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
@@ -355,6 +360,7 @@ function insert_h5p($id) {
     global $course_code, $course_id;
 
     if(isset($_POST['h5p'])) {
+        $searchEngine = SearchEngineFactory::create();
         $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM unit_resources WHERE unit_id = ?d", $id)->maxorder;
         foreach ($_POST['h5p'] as $h5p_id) {
             $order++;
@@ -369,9 +375,9 @@ function insert_h5p($id) {
                     $id, $h5p->title, $order, $h5p->id);
             }
             $uresId = $q->lastInsertID;
-            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $uresId);
+            $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_UNITRESOURCE, $uresId);
         }
-        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+        $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_COURSE, $course_id);
         CourseXMLElement::refreshCourse($course_id, $course_code);
     }
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
@@ -405,6 +411,7 @@ function insert_video($id) {
         }
     }
     if (isset($_POST['video']) and count($_POST['video']) > 0) {
+        $searchEngine = SearchEngineFactory::create();
         foreach ($_POST['video'] as $video_id) {
             $order++;
             list($table, $res_id) = explode(':', $video_id);
@@ -421,9 +428,9 @@ function insert_video($id) {
                                     $id, $row->title, $row->description, $res_id);
             }
             $uresId = $q->lastInsertID;
-            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $uresId);
+            $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_UNITRESOURCE, $uresId);
         }
-        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+        $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_COURSE, $course_id);
         CourseXMLElement::refreshCourse($course_id, $course_code);
     }
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
@@ -441,6 +448,7 @@ function insert_video($id) {
 function insert_work($id) {
     global $course_code, $course_id;
     if(isset($_POST['work'])){
+        $searchEngine = SearchEngineFactory::create();
         $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM unit_resources WHERE unit_id = ?d", $id)->maxorder;
         foreach ($_POST['work'] as $work_id) {
             $order++;
@@ -473,9 +481,9 @@ function insert_work($id) {
                                         res_id = ?d", $id, $work->title, $work->description, $visibility, $order, $work->id);
             }
             $uresId = $q->lastInsertID;
-            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $uresId);
+            $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_UNITRESOURCE, $uresId);
         }
-        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+        $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_COURSE, $course_id);
         CourseXMLElement::refreshCourse($course_id, $course_code);
     }
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
@@ -493,6 +501,7 @@ function insert_work($id) {
 function insert_exercise($id) {
     global $course_code, $course_id;
     if(isset($_POST['exercise'])){
+        $searchEngine = SearchEngineFactory::create();
         $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM unit_resources WHERE unit_id = ?d", $id)->maxorder;
         foreach ($_POST['exercise'] as $exercise_id) {
             $order++;
@@ -513,9 +522,9 @@ function insert_exercise($id) {
                             $id, $exercise->title, $exercise->description, $visibility, $order, $exercise->id);
             }
             $uresId = $q->lastInsertID;
-            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $uresId);
+            $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_UNITRESOURCE, $uresId);
         }
-        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+        $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_COURSE, $course_id);
         CourseXMLElement::refreshCourse($course_id, $course_code);
     }
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
@@ -534,6 +543,7 @@ function insert_forum($id) {
     global $course_code, $course_id;
 
     if (isset($_POST['forum'])){
+        $searchEngine = SearchEngineFactory::create();
         $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM unit_resources WHERE unit_id = ?d", $id)->maxorder;
         foreach ($_POST['forum'] as $for_id) {
             $order++;
@@ -568,9 +578,9 @@ function insert_forum($id) {
                 }
             }
             $uresId = $q->lastInsertID;
-            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $uresId);
+            $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_UNITRESOURCE, $uresId);
         }
-        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+        $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_COURSE, $course_id);
         CourseXMLElement::refreshCourse($course_id, $course_code);
     }
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
@@ -588,6 +598,7 @@ function insert_forum($id) {
 function insert_poll($id) {
     global $course_id, $course_code;
     if(isset($_POST['poll'])){
+        $searchEngine = SearchEngineFactory::create();
         $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM unit_resources WHERE unit_id = ?d", $id)->maxorder;
         foreach ($_POST['poll'] as $poll_id) {
             $order++;
@@ -602,9 +613,9 @@ function insert_poll($id) {
             $id, $poll->name, $order, $poll->pid);
             }
             $uresId = $q->lastInsertID;
-            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $uresId);
+            $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_UNITRESOURCE, $uresId);
         }
-        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+        $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_COURSE, $course_id);
         CourseXMLElement::refreshCourse($course_id, $course_code);
     }
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
@@ -621,7 +632,7 @@ function insert_poll($id) {
 function insert_wiki($id) {
     global $course_code, $course_id;
     if(isset($_POST['wiki'])){
-
+        $searchEngine = SearchEngineFactory::create();
         $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM unit_resources WHERE unit_id = ?d", $id)->maxorder;
         foreach ($_POST['wiki'] as $wiki_id) {
             $order++;
@@ -637,9 +648,9 @@ function insert_wiki($id) {
                                             $id, $wiki->title, $wiki->description, $order, $wiki->id);
             }
             $uresId = $q->lastInsertID;
-            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $uresId);
+            $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_UNITRESOURCE, $uresId);
         }
-        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+        $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_COURSE, $course_id);
         CourseXMLElement::refreshCourse($course_id, $course_code);
     }
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
@@ -656,6 +667,7 @@ function insert_wiki($id) {
  */
 function insert_link($id) {
     global $course_id, $course_code;
+    $searchEngine = SearchEngineFactory::create();
 
     $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM unit_resources WHERE unit_id = ?d", $id)->maxorder;
     // insert link categories
@@ -673,7 +685,7 @@ function insert_link($id) {
                                 $id, $linkcat->name, $linkcat->description, $order, $linkcat->id);
             }
             $uresId = $q->lastInsertID;
-            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $uresId);
+            $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_UNITRESOURCE, $uresId);
         }
     }
 
@@ -692,10 +704,10 @@ function insert_link($id) {
             }
 
             $uresId = $q->lastInsertID;
-            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $uresId);
+            $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_UNITRESOURCE, $uresId);
         }
     }
-    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+    $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_COURSE, $course_id);
     CourseXMLElement::refreshCourse($course_id, $course_code);
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
     unset($_SESSION['fc_type']);
@@ -710,6 +722,7 @@ function insert_link($id) {
  */
 function insert_ebook($id) {
     global $course_id, $course_code;
+    $searchEngine = SearchEngineFactory::create();
 
     $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM unit_resources WHERE unit_id = ?d", $id)->maxorder;
     foreach (array('ebook', 'section', 'subsection') as $type) {
@@ -726,11 +739,11 @@ function insert_ebook($id) {
                     $id, $_POST[$type . '_title'][$ebook_id], $order, $ebook_id);
                 }
                 $uresId = $q->lastInsertID;
-                Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $uresId);
+                $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_UNITRESOURCE, $uresId);
             }
         }
     }
-    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+    $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_COURSE, $course_id);
     CourseXMLElement::refreshCourse($course_id, $course_code);
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
     unset($_SESSION['fc_type']);
@@ -745,9 +758,9 @@ function insert_ebook($id) {
  * @param integer $id
  */
 function insert_chat($id) {
-
     global $course_code, $course_id;
     if(isset($_POST['chat'])){
+        $searchEngine = SearchEngineFactory::create();
         $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM unit_resources WHERE unit_id = ?d", $id)->maxorder;
         foreach ($_POST['chat'] as $chat_id) {
             $order++;
@@ -764,9 +777,9 @@ function insert_chat($id) {
             }
 
             $uresId = $q->lastInsertID;
-            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $uresId);
+            $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_UNITRESOURCE, $uresId);
         }
-        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+        $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_COURSE, $course_id);
         CourseXMLElement::refreshCourse($course_id, $course_code);
     }
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
@@ -782,9 +795,9 @@ function insert_chat($id) {
  * @param integer $id
  */
 function insert_blog($id) {
-
     global $course_code, $course_id;
     if(isset($_POST['blog'])){
+        $searchEngine = SearchEngineFactory::create();
         $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM unit_resources WHERE unit_id = ?d", $id)->maxorder;
         foreach ($_POST['blog'] as $blog_id) {
             $order++;
@@ -799,9 +812,9 @@ function insert_blog($id) {
                     $id, $blog->title, $blog->content, $order, $blog->id);
             }
             $uresId = $q->lastInsertID;
-            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $uresId);
+            $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_UNITRESOURCE, $uresId);
         }
-        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+        $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_COURSE, $course_id);
         CourseXMLElement::refreshCourse($course_id, $course_code);
     }
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
@@ -809,7 +822,6 @@ function insert_blog($id) {
     unset($_SESSION['act_name']);
     unset($_SESSION['act_id']);
     exit;
-
 }
 
 /**
@@ -820,6 +832,7 @@ function insert_tc($id) {
     global $course_code, $course_id;
 
     if(isset($_POST['tc'])){
+        $searchEngine = SearchEngineFactory::create();
         $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM unit_resources WHERE unit_id = ?d", $id)->maxorder;
         foreach ($_POST['tc'] as $tc_id) {
             $order++;
@@ -835,9 +848,9 @@ function insert_tc($id) {
                     $id, $tc->title, $tc->description, $order, $tc->id);
             }
             $uresId = $q->lastInsertID;
-            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $uresId);
+            $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_UNITRESOURCE, $uresId);
         }
-        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+        $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_COURSE, $course_id);
         CourseXMLElement::refreshCourse($course_id, $course_code);
     }
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
@@ -859,11 +872,12 @@ function insert_common_docs($file, $target_dir) {
     global $course_id, $course_code, $group_sql;
 
     $common_docs_dir_map = array();
+    $searchEngine = SearchEngineFactory::create();
 
     if ($file->format == '.dir') {
         $target_dir = make_path($target_dir, array($file->filename));
         $r = Database::get()->querySingle("SELECT id FROM document WHERE $group_sql AND path = ?s", $target_dir);
-        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $r->id);
+        $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_DOCUMENT, $r->id);
         $common_docs_dir_map[$file->path] = $target_dir;
         $q = Database::get()->queryArray("SELECT * FROM document
                                       WHERE course_id = -1 AND
@@ -875,7 +889,7 @@ function insert_common_docs($file, $target_dir) {
             if ($file->format == '.dir') {
                 $new_dir = make_path($new_target_dir, array($file->filename));
                 $r2 = Database::get()->querySingle("SELECT id FROM document WHERE $group_sql AND path = ?s", $new_dir);
-                Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $r2->id);
+                $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_DOCUMENT, $r2->id);
                 $common_docs_dir_map[$file->path] = $new_dir;
             } else {
                 insert_common_docs($file, $new_target_dir);
@@ -901,6 +915,6 @@ function insert_common_docs($file, $target_dir) {
                                 date_modified =	" . DBHelper::timeAfter() . ",
                                 format = ?s", $course_id, $path, $extra_path, $file->filename, $file->comment, $file->title, $file->format);
         $id = $q->lastInsertID;
-        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $id);
+        $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_DOCUMENT, $id);
     }
 }

@@ -24,28 +24,30 @@ require_once 'resourceindexer.interface.php';
 require_once 'Zend/Search/Lucene/Document.php';
 require_once 'Zend/Search/Lucene/Field.php';
 require_once 'Zend/Search/Lucene/Index/Term.php';
+require_once 'modules/search/classes/ConstantsUtil.php';
+require_once 'modules/search/classes/FetcherUtil.php';
 
 class VideoIndexer extends AbstractIndexer implements ResourceIndexerInterface {
 
     /**
      * Construct a Zend_Search_Lucene_Document object out of a video db row.
      *
-     * @global string $urlServer
-     * @param  object  $video
+     * @param object $video
      * @return Zend_Search_Lucene_Document
+     * @global string $urlServer
      */
     protected function makeDoc($video) {
         global $urlServer;
         $encoding = 'utf-8';
 
         $doc = new Zend_Search_Lucene_Document();
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', Indexer::DOCTYPE_VIDEO . '_' . $video->id, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $video->id, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('doctype', Indexer::DOCTYPE_VIDEO, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('courseid', $video->course_id, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('title', Indexer::phonetics($video->title), $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('content', Indexer::phonetics($video->description), $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', $urlServer . 'modules/video/file.php?course=' . course_id_to_code($video->course_id) . '&amp;id=' . $video->id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword(ConstantsUtil::FIELD_PK, ConstantsUtil::DOCTYPE_VIDEO . '_' . $video->id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword(ConstantsUtil::FIELD_PKID, $video->id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword(ConstantsUtil::FIELD_DOCTYPE, ConstantsUtil::DOCTYPE_VIDEO, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword(ConstantsUtil::FIELD_COURSEID, $video->course_id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text(ConstantsUtil::FIELD_TITLE, Indexer::phonetics($video->title), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text(ConstantsUtil::FIELD_CONTENT, Indexer::phonetics($video->description), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::UnIndexed(ConstantsUtil::FIELD_URL, $urlServer . 'modules/video/file.php?course=' . course_id_to_code($video->course_id) . '&amp;id=' . $video->id, $encoding));
 
         return $doc;
     }
@@ -53,22 +55,17 @@ class VideoIndexer extends AbstractIndexer implements ResourceIndexerInterface {
     /**
      * Fetch a Video from DB.
      *
-     * @param  int $videoId
+     * @param int $videoId
      * @return object - the mysql fetched row
      */
     protected function fetch($videoId) {
-        $video = Database::get()->querySingle("SELECT * FROM video WHERE id = ?d", $videoId);
-        if (!$video) {
-            return null;
-        }
-
-        return $video;
+        return FetcherUtil::fetchVideo($videoId);
     }
 
     /**
      * Get Term object for locating a unique single video.
      *
-     * @param  int $videoId - the video id
+     * @param int $videoId - the video id
      * @return Zend_Search_Lucene_Index_Term
      */
     protected function getTermForSingleResource($videoId) {
@@ -96,7 +93,7 @@ class VideoIndexer extends AbstractIndexer implements ResourceIndexerInterface {
     /**
      * Get Lucene query input string for locating all videos belonging to a given course.
      *
-     * @param  int $courseId - the given course id
+     * @param int $courseId - the given course id
      * @return string        - the string that can be used as Lucene query input
      */
     protected function getQueryInputByCourse($courseId) {
@@ -106,11 +103,11 @@ class VideoIndexer extends AbstractIndexer implements ResourceIndexerInterface {
     /**
      * Get all videos belonging to a given course from DB.
      *
-     * @param  int   $courseId - the given course id
+     * @param int $courseId - the given course id
      * @return array           - array of DB fetched anonymous objects with property names that correspond to the column names
      */
     protected function getCourseResourcesFromDB($courseId) {
-        return Database::get()->queryArray("SELECT * FROM video WHERE course_id = ?d", $courseId);
+        return FetcherUtil::fetchVideos($courseId);
     }
 
 }

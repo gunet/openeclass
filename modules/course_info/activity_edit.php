@@ -24,7 +24,8 @@
 $require_current_course = true;
 $require_editor = true;
 require_once '../../include/baseTheme.php';
-require_once 'modules/search/indexer.class.php';
+require_once 'modules/search/classes/ConstantsUtil.php';
+require_once 'modules/search/classes/SearchEngineFactory.php';
 require_once 'modules/units/functions.php';
 $toolName = $langActivityEdit;
 
@@ -44,7 +45,8 @@ if (isset($_POST['submit']) and isset($_POST['content'])) {
             ON DUPLICATE KEY UPDATE content = VALUES(content)',
             $id, $course_id, $content);
     }
-    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+    $searchEngine = SearchEngineFactory::create();
+    $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_COURSE, $course_id);
     Session::flash('message',$langFaqEditSuccess);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page('courses/' . $course_code . '/');

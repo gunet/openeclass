@@ -18,6 +18,9 @@
  *
  */
 
+if (empty($webDir)) {
+    $webDir = fix_directory_separator(dirname(__FILE__, 4));
+}
 set_include_path(implode(PATH_SEPARATOR, array(
     $webDir . '/include',
     get_include_path(),
@@ -28,6 +31,7 @@ require_once 'Zend/Search/Lucene/Analysis/Analyzer.php';
 require_once 'Zend/Search/Lucene/Analysis/Analyzer/Common/Utf8Num/CaseInsensitive.php';
 require_once 'Zend/Search/Lucene/Exception.php';
 require_once 'Zend/Search/Lucene/Storage/Directory/Filesystem.php';
+require_once 'modules/search/classes/ConstantsUtil.php';
 require_once 'agendaindexer.class.php';
 require_once 'announcementindexer.class.php';
 require_once 'courseindexer.class.php';
@@ -44,44 +48,6 @@ require_once 'videoindexer.class.php';
 require_once 'videolinkindexer.class.php';
 
 class Indexer {
-
-    const REQUEST_REMOVE = 'remove';
-    const REQUEST_REMOVEALLBYCOURSE = 'removeAllByCourse';
-    const REQUEST_REMOVEBYFORUM = 'removeByForum';
-    const REQUEST_REMOVEBYTOPIC = 'removeByTopic';
-    const REQUEST_REMOVEBYUNIT = 'removeByUnit';
-    const REQUEST_REMOVEBYUSER = 'removeByUser';
-    const REQUEST_STORE = 'store';
-    const REQUEST_STOREALLBYCOURSE = 'storeAllByCourse';
-
-    const RESOURCE_AGENDA = 'agenda';
-    const RESOURCE_ANNOUNCEMENT = 'announcement';
-    const RESOURCE_COURSE = 'course';
-    const RESOURCE_DOCUMENT = 'document';
-    const RESOURCE_EXERCISE = 'exercise';
-    const RESOURCE_FORUM = 'forum';
-    const RESOURCE_FORUMPOST = 'forum_post';
-    const RESOURCE_FORUMTOPIC = 'forum_topic';
-    const RESOURCE_IDX = 'idx';
-    const RESOURCE_LINK = 'link';
-    const RESOURCE_NOTE = 'note';
-    const RESOURCE_UNIT = 'unit';
-    const RESOURCE_UNITRESOURCE = 'unitresource';
-    const RESOURCE_VIDEO = 'video';
-    const RESOURCE_VIDEOLINK = 'videolink';
-
-    const DOCTYPE_AGENDA = 'agenda';
-    const DOCTYPE_ANNOUNCEMENT = 'announce';
-    const DOCTYPE_DOCUMENT = 'doc';
-    const DOCTYPE_EXERCISE = 'exercise';
-    const DOCTYPE_FORUM = 'forum';
-    const DOCTYPE_FORUMPOST = 'fpost';
-    const DOCTYPE_FORUMTOPIC = 'ftopic';
-    const DOCTYPE_LINK = 'link';
-    const DOCTYPE_UNIT = 'unit';
-    const DOCTYPE_UNITRESOURCE = 'unitresource';
-    const DOCTYPE_VIDEO = 'video';
-    const DOCTYPE_VIDEOLINK = 'vlink';
 
     const SESSION_PROCESS_AT_NEXT_DRAW = 'SESSION_PROCESS_AT_NEXT_DRAW';
 
@@ -126,8 +92,8 @@ class Indexer {
     /**
      * Convert an input string to its phonetic representation.
      *
-     * @param  string $text
-     * @param  int    $ignoreCase
+     * @param string $text
+     * @param int $ignoreCase
      * @return string
      */
     public static function phonetics($text, $ignoreCase = 1) {
@@ -141,7 +107,7 @@ class Indexer {
     /**
      * Clear/filter Lucene operators.
      *
-     * @param  string $inputStr
+     * @param string $inputStr
      * @return string
      */
     public static function filterQuery($inputStr) {
@@ -182,10 +148,10 @@ class Indexer {
         } catch (Zend_Search_Lucene_Exception $e) {
             $errorMessage = $e->getMessage();
             if ($is_admin) {
-                Session::flash('message',"$langIdxErrorPermissions $errorMessage");
+                Session::flash('message', "$langIdxErrorPermissions $errorMessage");
                 Session::flash('alert-class', 'alert-warning');
             } else {
-                Session::flash('message',$langSearchDisabled);
+                Session::flash('message', $langSearchDisabled);
                 Session::flash('alert-class', 'alert-warning');
             }
 
@@ -209,7 +175,7 @@ class Indexer {
     /**
      * Checks if a lucene index path exists.
      *
-     * @param  string  $path The lucene index path.
+     * @param string $path The lucene index path.
      * @return boolean       TRUE if the lucene index path exists else FALSE.
      */
     private function checkPath($path) {
@@ -228,7 +194,7 @@ class Indexer {
     /**
      * Filtered Search in the index.
      *
-     * @param  string $inputStr - A Lucene Query, it is filtered for Lucene operators
+     * @param string $inputStr - A Lucene Query, it is filtered for Lucene operators
      * @return array            - array of Zend_Search_Lucene_Search_QueryHit objects
      */
     public function search($inputStr) {
@@ -243,7 +209,7 @@ class Indexer {
     /**
      * Raw Search in the index.
      *
-     * @param  string $inputStr - A Lucene Query, it is NOT filtered for Lucene operators
+     * @param string $inputStr - A Lucene Query, it is NOT filtered for Lucene operators
      * @return array            - array of Zend_Search_Lucene_Search_QueryHit objects
      */
     public function searchRaw($inputStr) {
@@ -263,7 +229,7 @@ class Indexer {
     /**
      * Raw Searches in the index.
      *
-     * @param  array $inputQueries - One or more Lucene Queries, they are NOT filtered for Lucene operators
+     * @param array $inputQueries - One or more Lucene Queries, they are NOT filtered for Lucene operators
      * @return array               - array of Zend_Search_Lucene_Search_QueryHit objects
      */
     public function multiSearchRaw($inputQueries) {
@@ -275,15 +241,15 @@ class Indexer {
             $allhits = array();
             $prevHitIds = array();
 
-            foreach($inputQueries as $inputStr) {
+            foreach ($inputQueries as $inputStr) {
                 $query = Zend_Search_Lucene_Search_QueryParser::parse($inputStr, 'utf-8');
                 $hits = $this->__index->find($query);
                 $hitIds = array();
 
-                foreach($hits as $hit) {
+                foreach ($hits as $hit) {
                     $hitIds[] = intval($hit->pkid);
 
-                    if(!in_array(intval($hit->pkid), $prevHitIds)) {
+                    if (!in_array(intval($hit->pkid), $prevHitIds)) {
                         $allhits[] = $hit;
                     }
 
@@ -292,7 +258,7 @@ class Indexer {
             }
 
             return $allhits;
-        }  catch (Zend_Search_Exception $e) {
+        } catch (Zend_Search_Exception $e) {
             return array();
         }
         return array();
@@ -418,7 +384,7 @@ class Indexer {
         if (is_dir($index_path)) {
             $files = array_diff(scandir($index_path), array('.', '..'));
             foreach ($files as $file) {
-                unlink($index_path ."/" . $file);
+                unlink($index_path . "/" . $file);
             }
             rmdir($index_path);
         }
@@ -427,10 +393,10 @@ class Indexer {
     /**
      * Schedule Asynchronous Indexing.
      *
-     * @global int    $uid          - user id
-     * @param  string $requestType  - type of async request
-     * @param  string $resourceType - type of resource
-     * @param  int    $resourceId   - id of resource
+     * @param string $requestType - type of async request
+     * @param string $resourceType - type of resource
+     * @param int $resourceId - id of resource
+     * @global int $uid - user id
      */
     public static function queueAsync($requestType, $resourceType, $resourceId) {
         global $uid;
@@ -443,8 +409,8 @@ class Indexer {
     /**
      * Return JS Code for triggering Asynchronous Indexing.
      *
-     * @global string $urlAppend
      * @return string
+     * @global string $urlAppend
      */
     public static function queueAsyncJSCode() {
         global $urlAppend;
@@ -466,52 +432,52 @@ class Indexer {
     public function queueAsyncProcess() {
         global $uid;
         $resources = Database::get()->queryArray("SELECT id, request_type, resource_id, resource_type FROM idx_queue_async WHERE user_id = ?d ORDER BY id", $uid);
-        foreach($resources as $resource) {
+        foreach ($resources as $resource) {
             $varidx = null;
             switch ($resource->resource_type) {
-                case self::RESOURCE_AGENDA:
+                case ConstantsUtil::RESOURCE_AGENDA:
                     $varidx = new AgendaIndexer($this);
                     break;
-                case self::RESOURCE_ANNOUNCEMENT:
+                case ConstantsUtil::RESOURCE_ANNOUNCEMENT:
                     $varidx = new AnnouncementIndexer($this);
                     break;
-                case self::RESOURCE_COURSE:
+                case ConstantsUtil::RESOURCE_COURSE:
                     $varidx = new CourseIndexer($this);
                     break;
-                case self::RESOURCE_DOCUMENT:
+                case ConstantsUtil::RESOURCE_DOCUMENT:
                     $varidx = new DocumentIndexer($this);
                     break;
-                case self::RESOURCE_EXERCISE:
+                case ConstantsUtil::RESOURCE_EXERCISE:
                     $varidx = new ExerciseIndexer($this);
                     break;
-                case self::RESOURCE_FORUM:
+                case ConstantsUtil::RESOURCE_FORUM:
                     $varidx = new ForumIndexer($this);
                     break;
-                case self::RESOURCE_FORUMPOST:
+                case ConstantsUtil::RESOURCE_FORUMPOST:
                     $varidx = new ForumPostIndexer($this);
                     break;
-                case self::RESOURCE_FORUMTOPIC:
+                case ConstantsUtil::RESOURCE_FORUMTOPIC:
                     $varidx = new ForumTopicIndexer($this);
                     break;
-                case self::RESOURCE_IDX:
+                case ConstantsUtil::RESOURCE_IDX:
                     $varidx = $this;
                     break;
-                case self::RESOURCE_LINK:
+                case ConstantsUtil::RESOURCE_LINK:
                     $varidx = new LinkIndexer($this);
                     break;
-                case self::RESOURCE_NOTE:
+                case ConstantsUtil::RESOURCE_NOTE:
                     $varidx = new NoteIndexer($this);
                     break;
-                case self::RESOURCE_UNIT:
+                case ConstantsUtil::RESOURCE_UNIT:
                     $varidx = new UnitIndexer($this);
                     break;
-                case self::RESOURCE_UNITRESOURCE:
+                case ConstantsUtil::RESOURCE_UNITRESOURCE:
                     $varidx = new UnitResourceIndexer($this);
                     break;
-                case self::RESOURCE_VIDEO:
+                case ConstantsUtil::RESOURCE_VIDEO:
                     $varidx = new VideoIndexer($this);
                     break;
-                case self::RESOURCE_VIDEOLINK:
+                case ConstantsUtil::RESOURCE_VIDEOLINK:
                     $varidx = new VideolinkIndexer($this);
                     break;
                 default:
@@ -526,8 +492,8 @@ class Indexer {
      * Calling helper for variable indexers and methods.
      *
      * @param AbstractBaseIndexer $idxObj
-     * @param string              $method
-     * @param mixed               $arg
+     * @param string $method
+     * @param mixed $arg
      */
     private static function callVariableIndexer($idxObj, $method, $arg) {
         if ($idxObj !== null && $method !== null && is_callable(array($idxObj, $method))) {
@@ -538,12 +504,12 @@ class Indexer {
     /**
      * Build a Lucene Query.
      *
-     * @param  array   $data      - The data (normally $_POST), needs specific array keys
+     * @param array $data - The data (normally $_POST), needs specific array keys
      * @return string             - the returned query string
      */
     public static function buildQuery($data) {
         if (isset($data['search_terms']) && !empty($data['search_terms']) &&
-                isset($data['course_id']) && !empty($data['course_id'])) {
+            isset($data['course_id']) && !empty($data['course_id'])) {
             $terms = explode(' ', Indexer::filterQuery($data['search_terms']));
             $queryStr = 'courseid:' . $data['course_id'] . ' AND (';
             foreach ($terms as $term) {

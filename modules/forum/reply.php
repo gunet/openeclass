@@ -27,7 +27,8 @@ require_once 'include/sendMail.inc.php';
 require_once 'include/log.class.php';
 require_once 'modules/group/group_functions.php';
 require_once 'modules/forum/functions.php';
-require_once 'modules/search/indexer.class.php';
+require_once 'modules/search/classes/ConstantsUtil.php';
+require_once 'modules/search/classes/SearchEngineFactory.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 
 $toolName = $langForums;
@@ -139,7 +140,8 @@ if (isset($_POST['submit'])) {
     triggerForumGame($course_id, $uid, ForumEvent::NEWPOST);
     triggerTopicGame($course_id, $uid, ForumTopicEvent::NEWPOST, $topic);
     triggerForumAnalytics($course_id, $uid, ForumAnalyticsEvent::FORUMEVENT);
-    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_FORUMPOST, $this_post);
+    $searchEngine = SearchEngineFactory::create();
+    $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_FORUMPOST, $this_post);
     $forum_user_stats = Database::get()->querySingle("SELECT COUNT(*) as c FROM forum_post
                         INNER JOIN forum_topic ON forum_post.topic_id = forum_topic.id
                         INNER JOIN forum ON forum.id = forum_topic.forum_id
