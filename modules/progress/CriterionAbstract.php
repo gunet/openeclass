@@ -119,5 +119,21 @@ abstract class CriterionAbstract {
             Database::get()->query("delete from $this->table where user = ?d and $this->field = ?d", $uid, $this->id);
         }
     }
+
+    protected function assignPointsRecurringAction($uid) {
+        Database::get()->query("insert into user_points_game_criterion (user, points_game_criterion, points_awarded, created) values (?d, ?d, ?d, ?t)", $uid, $this->id, $this->points, gmdate('Y-m-d H:i:s'));
+        //add awarded points to user
+        $points_q = Database::get()->querySingle("select id, total_points, current_level from user_points_game_points where user = ?d and points_game = ?d", $uid, $this->points_game);
+        if($points_q) {
+            $total_points = $points_q->total_points + $this->points;
+            $current_level = $points_q->current_level;
+            Database::get()->query("update user_points_game_points set total_points = ?d where id = ?d", $total_points, $points_q->id);
+        } else {
+            $total_points = $this->points;
+            $current_level = NULL;
+            Database::get()->query("insert into user_points_game_points (user, points_game, total_points) values (?d, ?d, ?d)", $uid, $this->points_game, $total_points);
+        }
+        PointsGame::levelUpdate($uid, $this->points_game, $total_points, $current_level);
+    }
 }
 

@@ -45,7 +45,12 @@ class Criterion extends CriterionAbstract {
 
     public function evaluate($context) {
         if($this->criterion_type == 'recurring') {
-    
+            if(is_null($this->max_points_from_criterion) && is_null($this->max_points_from_criterion_time_period)) { //no constraints, assign the points
+                $this->assignPointsRecurringAction($context['uid']);
+                return true;
+            } else{
+
+            }
         } else { //criteria for badges, certificates and onetime criteria for points games
             if ($this->ruler->assert($this->rule, $context)) {
                 if($this->criterion_type == 'onetime') { //ponts games onetime event
