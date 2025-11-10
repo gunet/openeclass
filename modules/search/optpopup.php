@@ -31,7 +31,7 @@ session_write_close();
 ignore_user_abort(true);
 CronUtil::flush();
 
-require_once 'modules/search/indexer.class.php';
+require_once 'modules/search/lucene/indexer.class.php';
 $idx = new Indexer();
 set_time_limit(0);
 $idx->getIndex()->optimize();

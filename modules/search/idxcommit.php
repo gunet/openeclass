@@ -18,30 +18,24 @@
  *
  */
 
-interface ResourceIndexerInterface {
+$require_admin = true;
+require_once '../../include/baseTheme.php';
+require_once 'classes/SearchEngineFactory.php';
+header('Content-Type: application/json; charset=utf-8');
+set_time_limit(0);
 
-    /**
-     * Store a Resource in the Index.
-     *
-     * @param  int     $id       - the resource id
-     * @param  boolean $optimize - whether to optimize after storing
-     */
-    public function store($id, $optimize);
+// fetch number of courses waiting in index queue
+$n = Database::get()->querySingle("SELECT COUNT(id) AS count FROM idx_queue")->count;
 
-    /**
-     * Remove a Resource from the Index.
-     *
-     * @param int     $id         - the resource id
-     * @param boolean $existCheck - whether to checking existance before removing
-     * @param boolean $optimize   - whether to optimize after removing
-     */
-    public function remove($id, $existCheck, $optimize);
-
-    /**
-     * Reindex all resources.
-     *
-     * @param boolean $optimize - whether to optimize after reindexing
-     * @deprecated
-     */
-    //public function reindex();
+if ($n == 0) {
+    // commit
+    $searchEngine = SearchEngineFactory::create();
+    $searchEngine->commit();
 }
+
+$data = array(
+    "remaining" => $n
+);
+
+echo json_encode($data);
+exit();

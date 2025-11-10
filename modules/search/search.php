@@ -24,8 +24,8 @@ require_once 'include/course_settings.php';
 require_once 'include/lib/hierarchy.class.php';
 require_once 'include/lib/course.class.php';
 require_once 'include/lib/user.class.php';
-require_once 'indexer.class.php';
-require_once 'courseindexer.class.php';
+require_once 'classes/SearchEngineFactory.php';
+require_once 'classes/SearchResult.php';
 
 if (isset($_SESSION['uid'])) {
     $toolName = $langPortfolio;
@@ -39,26 +39,24 @@ $tree = new Hierarchy();
 $c = new Course();
 $user = new User();
 
-// exit if no POST data
-if (!register_posted_variables(array('search_terms' => false,
-            'search_terms_title' => false,
-            'search_terms_keywords' => false,
-            'search_terms_instructor' => false,
-            'search_terms_coursecode' => false,
-            'search_terms_description' => false), 'any')) {
+// Validate POST
+if (!register_posted_variables([
+    'search_terms' => false,
+    'search_terms_title' => false,
+    'search_terms_keywords' => false,
+    'search_terms_instructor' => false,
+    'search_terms_coursecode' => false,
+    'search_terms_description' => false
+], 'any')) {
     view('modules.search.index');
     exit();
 }
 
-$idx = new Indexer();
-if (!$idx->getIndex()) {
-    view('modules.search.index');
-    exit();
-}
+$searchEngine = SearchEngineFactory::create();
+$hits = $searchEngine->search($_POST);
 
-$hits = $idx->multiSearchRaw(CourseIndexer::buildQueries($_POST));
 // exit if not results
-if (count($hits) <= 0) {
+if (empty($hits)) {
     Session::flash('message', $langNoResult);
     Session::flash('alert-class', 'alert-warning');
     redirect_to_home_page('modules/search/search.php');

@@ -71,13 +71,15 @@
 
 namespace resources\views\main\notes;
 use Database;
-use Indexer;
+use ConstantsUtil;
+use SearchEngineFactory;
 use Log;
 use References;
 use text;
 
 require_once 'include/log.class.php';
-require_once 'modules/search/indexer.class.php';
+require_once 'modules/search/classes/ConstantsUtil.php';
+require_once 'modules/search/classes/SearchEngineFactory.php';
 
 class Notes
 {
@@ -149,7 +151,8 @@ class Notes
                                          reference_obj_type = ?s,
                                          reference_obj_id = ?d,
                                          reference_obj_course = ?d", purify($content), $title, $uid, $order, $refobjinfo['objmodule'], $refobjinfo['objtype'], $refobjinfo['objid'], $refobjinfo['objcourse'])->lastInsertID;
-        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_NOTE, $noteid);
+        $searchEngine = SearchEngineFactory::create();
+        $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_NOTE, $noteid);
         Log::record(0, MODULE_ID_NOTES, LOG_INSERT, array('user_id' => $uid, 'id' => $noteid,
             'title' => $title,
             'content' => ellipsize_html(canonicalize_whitespace(strip_tags($content)), 50, '+')));
@@ -168,7 +171,8 @@ class Notes
         global $uid;
         $refobjinfo = References::get_ref_obj_field_values($reference_obj_id);
         Database::get()->query("UPDATE note SET title = ?s, content = ?s, reference_obj_module = ?d, reference_obj_type = ?s, reference_obj_id = ?d, reference_obj_course = ?d WHERE id = ?d", $title, purify($content), $refobjinfo['objmodule'], $refobjinfo['objtype'], $refobjinfo['objid'], $refobjinfo['objcourse'], $noteid);
-        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_NOTE, $noteid);
+        $searchEngine = SearchEngineFactory::create();
+        $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_NOTE, $noteid);
         Log::record(0, MODULE_ID_NOTES, LOG_MODIFY, array('user_id' => $uid, 'id' => $noteid,
             'title' => $title,
             'content' => ellipsize_html(canonicalize_whitespace(strip_tags($content)), 50, '+')));
@@ -217,7 +221,8 @@ class Notes
         $note = Database::get()->querySingle("SELECT title, content FROM note WHERE id = ?d ", $noteid);
         $content = ellipsize_html(canonicalize_whitespace(strip_tags($note->content)), 50, '+');
         Database::get()->query("DELETE FROM note WHERE id = ?d", $noteid);
-        Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_NOTE, $noteid);
+        $searchEngine = SearchEngineFactory::create();
+        $searchEngine->indexResource(ConstantsUtil::REQUEST_REMOVE, ConstantsUtil::RESOURCE_NOTE, $noteid);
         Log::record(0, MODULE_ID_NOTES, LOG_DELETE, array('user_id' => $uid, 'id' => $noteid,
             'title' => $note->title,
             'content' => $content));
@@ -231,7 +236,8 @@ class Notes
     {
         global $uid;
         Database::get()->query("DELETE FROM note WHERE user_id = ?d", $uid);
-        Indexer::queueAsync(Indexer::REQUEST_REMOVEBYUSER, Indexer::RESOURCE_NOTE, $uid);
+        $searchEngine = SearchEngineFactory::create();
+        $searchEngine->indexResource(ConstantsUtil::REQUEST_REMOVEBYUSER, ConstantsUtil::RESOURCE_NOTE, $uid);
         Log::record(0, MODULE_ID_NOTES, LOG_DELETE, array('user_id' => $uid, 'id' => 'all'));
     }
 

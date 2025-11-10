@@ -39,8 +39,10 @@ function process_actions() {
         $langEditChange, $langViMod;
 
     // update index and refresh course metadata
-    require_once 'modules/search/indexer.class.php';
+    require_once 'modules/search/classes/ConstantsUtil.php';
+    require_once 'modules/search/classes/SearchEngineFactory.php';
     require_once 'modules/course_metadata/CourseXML.php';
+    $searchEngine = SearchEngineFactory::create();
     if (isset($_REQUEST['edit'])) {
         $res_id = intval($_GET['edit']);
         if (check_admin_unit_resource($res_id)) {
@@ -65,8 +67,8 @@ function process_actions() {
                                         title = ?s,
                                         comments = ?s
                                         WHERE unit_id = ?d AND id = ?d", $restitle, $rescomments, $id, $res_id);
-            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $res_id);
-            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+            $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_UNITRESOURCE, $res_id);
+            $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_COURSE, $course_id);
             CourseXMLElement::refreshCourse($course_id, $course_code);
         }
         Session::flash('message',$langResourceUnitModified);
@@ -77,8 +79,8 @@ function process_actions() {
         if (check_admin_unit_resource($res_id)) {
             Database::get()->query("DELETE FROM unit_resources WHERE id = ?d", $res_id);
             Database::get()->query("DELETE FROM course_units_activities WHERE id = ?d", $res_id);
-            Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_UNITRESOURCE, $res_id);
-            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+            $searchEngine->indexResource(ConstantsUtil::REQUEST_REMOVE, ConstantsUtil::RESOURCE_UNITRESOURCE, $res_id);
+            $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_COURSE, $course_id);
             CourseXMLElement::refreshCourse($course_id, $course_code);
             Session::flash('message',$langResourceCourseUnitDeleted);
             Session::flash('alert-class', 'alert-success');
@@ -89,8 +91,8 @@ function process_actions() {
         $act_id = $_GET['actid'];
         Database::get()->query("DELETE FROM course_units_activities WHERE id = ?d", $res_id);
         Database::get()->query("DELETE FROM unit_resources WHERE activity_id = ?s", $act_id);
-        //Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_UNITRESOURCE, $res_id);
-        //Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+        //$searchEngine->indexResource(ConstantsUtil::REQUEST_REMOVE, ConstantsUtil::RESOURCE_UNITRESOURCE, $res_id);
+        //$searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_COURSE, $course_id);
         //CourseXMLElement::refreshCourse($course_id, $course_code);
         Session::flash('message', $langResourceCourseUnitDeleted);
         Session::flash('alert-class', 'alert-success');
@@ -102,8 +104,8 @@ function process_actions() {
             $vis = Database::get()->querySingle("SELECT `visible` FROM unit_resources WHERE id = ?d", $res_id)->visible;
             $newvis = ($vis == 1) ? 0 : 1;
             Database::get()->query("UPDATE unit_resources SET visible = '$newvis' WHERE id = ?d", $res_id);
-            //Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $res_id);
-            //Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+            //$searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_UNITRESOURCE, $res_id);
+            //$searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_COURSE, $course_id);
             //CourseXMLElement::refreshCourse($course_id, $course_code);
             Session::flash('message',$langViMod);
             Session::flash('alert-class', 'alert-success');
@@ -116,8 +118,7 @@ function process_actions() {
         $vis = Database::get()->querySingle("SELECT `visible` FROM course_units_activities WHERE id = ?d", $res_id)->visible;
         $newvis = ($vis == 1) ? 0 : 1;
         Database::get()->query("UPDATE course_units_activities SET visible = '$newvis' WHERE id = ?d", $res_id);
-        //Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_ACTIVITYRESOURCE, $res_id);
-        //Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+        //$searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_COURSE, $course_id);
         // CourseXMLElement::refreshCourse($course_id, $course_code);
         Session::flash('message', $langViMod);
         Session::flash('alert-class', 'alert-success');
@@ -202,9 +203,11 @@ function handle_unit_info_edit() {
         }
     }
     // update index
-    require_once 'modules/search/indexer.class.php';
-    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNIT, $unit_id);
-    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+    require_once 'modules/search/classes/ConstantsUtil.php';
+    require_once 'modules/search/classes/SearchEngineFactory.php';
+    $searchEngine = SearchEngineFactory::create();
+    $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_UNIT, $unit_id);
+    $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_COURSE, $course_id);
     // refresh course metadata
     require_once 'modules/course_metadata/CourseXML.php';
     CourseXMLElement::refreshCourse($course_id, $course_code);
