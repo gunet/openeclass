@@ -47,6 +47,58 @@ class OpenBadgesApiService
     }
 
     /**
+     * Get specific badge/assertion details
+     */
+    public function getUserBadge(int $userId, string $badgeId): OpenBadgesApiResponse
+    {
+        $connection = $this->getUserConnection($userId);
+        if (!$connection) {
+            return OpenBadgesApiResponse::error('No backpack connection found for user');
+        }
+
+        $provider = $this->getProvider($connection->backpack_provider_id);
+        if (!$provider) {
+            return OpenBadgesApiResponse::error('Backpack provider not found');
+        }
+
+        $endpoint = $this->registry->getEndpoint($provider, 'badge', ['id' => $badgeId]);
+        
+        return $this->client->authenticatedRequest(
+            $endpoint,
+            'GET',
+            $connection->access_token,
+            null,
+            $provider->ob_version
+        );
+    }
+
+    /**
+     * Get specific assertion details by assertion ID
+     */
+    public function getAssertion(int $userId, string $assertionId): OpenBadgesApiResponse
+    {
+        $connection = $this->getUserConnection($userId);
+        if (!$connection) {
+            return OpenBadgesApiResponse::error('No backpack connection found for user');
+        }
+
+        $provider = $this->getProvider($connection->backpack_provider_id);
+        if (!$provider) {
+            return OpenBadgesApiResponse::error('Backpack provider not found');
+        }
+
+        $endpoint = $this->registry->getEndpoint($provider, 'assertion', ['id' => $assertionId]);
+        
+        return $this->client->authenticatedRequest(
+            $endpoint,
+            'GET',
+            $connection->access_token,
+            null,
+            $provider->ob_version
+        );
+    }
+
+    /**
      * Get specific badge details
      */
     public function getBadgeDetails(int $userId, string $badgeId): OpenBadgesApiResponse

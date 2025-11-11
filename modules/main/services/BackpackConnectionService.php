@@ -162,4 +162,63 @@ class BackpackConnectionService
 
         return $errors;
     }
+
+    /**
+     * Update the selected collection for a user's backpack connection
+     */
+    public function updateSelectedCollection(
+        int $userId, 
+        string $collectionId, 
+        string $collectionName
+    ): bool {
+        try {
+            $result = $this->db->query(
+                "UPDATE user_backpack_connection 
+                 SET selected_collection_id = ?s, 
+                     selected_collection_name = ?s,
+                     last_sync = NOW(),
+                     updated_at = NOW() 
+                 WHERE user_id = ?d",
+                $collectionId,
+                $collectionName,
+                $userId
+            );
+
+            return $result && is_object($result) && 
+                   (isset($result->affectedRows) ? $result->affectedRows > 0 : true);
+                   
+        } catch (Exception $e) {
+            error_log('Update selected collection error: ' . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Get the selected collection for a user's backpack connection
+     */
+    public function getSelectedCollection(int $userId): ?array
+    {
+        try {
+            $result = $this->db->querySingle(
+                "SELECT selected_collection_id, selected_collection_name, last_sync 
+                 FROM user_backpack_connection 
+                 WHERE user_id = ?d AND status = 'connected'",
+                $userId
+            );
+            
+            if ($result && $result->selected_collection_id) {
+                return [
+                    'id' => $result->selected_collection_id,
+                    'name' => $result->selected_collection_name,
+                    'last_sync' => $result->last_sync
+                ];
+            }
+            
+            return null;
+                   
+        } catch (Exception $e) {
+            error_log('Get selected collection error: ' . $e->getMessage());
+            return null;
+        }
+    }
 } 

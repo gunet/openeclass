@@ -332,6 +332,64 @@
                             </div>
                         </div>
                     @endif
+                    
+                    {{-- External Badges from Backpack --}}
+                    @if (isset($badge_external) && count($badge_external) > 0)
+                        <div class='col-12 mt-4'>
+                            <div class="card panelCard border-card-left-default px-3 py-2">
+                                <div class='card-header border-0 d-flex justify-content-between align-items-center'>
+                                    <h3>
+                                        {{ trans('langExternalBadges') }}
+                                        <small class='text-muted ms-2'>({{ trans('langSyncedFromBackpack') }})</small>
+                                    </h3>
+                                </div>
+                                <div class="card-body">
+                                    @if(count($badge_external) == 1)
+                                    <div class='row row-cols-1 row-cols-md-1 g-4'>
+                                    @else
+                                    <div class='row row-cols-1 row-cols-md-2 g-4'>
+                                    @endif
+                                        @foreach ($badge_external as $key => $badge)
+                                            <div class='col'>
+                                                <div class="card h-100 border-0 badge-card-wrapper external-badge">
+                                                    @if(!empty($badge->image_url))
+                                                        <img style='height:150px; width:150px; object-fit: contain;' 
+                                                             src="{{ $badge->image_url }}" 
+                                                             class="card-img-top ms-auto me-auto mt-3" 
+                                                             alt="external badge"
+                                                             onerror="this.src='{{ $urlServer }}resources/img/game/badge.png'">
+                                                    @else
+                                                        <img style='height:150px; width:150px;' 
+                                                             src="{{ $urlServer }}resources/img/game/badge.png" 
+                                                             class="card-img-top ms-auto me-auto mt-3" 
+                                                             alt="external badge">
+                                                    @endif
+                                                    <div class="card-body">
+                                                        <div class='text-heading-h5 text-center'>
+                                                            {{ ellipsize($badge->title, 40) }}
+                                                        </div>
+                                                        @if(!empty($badge->created))
+                                                            <div class='badge_date text-center text-success'>
+                                                                {!! format_locale_date(strtotime($badge->created), null, false) !!}
+                                                            </div>
+                                                        @endif
+                                                        <div class='bagde_panel_issuer text-center'>
+                                                            {{ $badge->issuer ?? trans('langUnknownIssuer') }}
+                                                        </div>
+                                                        @if(!empty($badge->description))
+                                                            <div class='badge_description text-center text-muted mt-2' style='font-size: 0.9em;'>
+                                                                {{ ellipsize($badge->description, 100) }}
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
                 @endif
             @endif
 

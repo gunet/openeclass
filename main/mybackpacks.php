@@ -90,10 +90,14 @@ $userConnection = $backpackConnectionService->getUserConnection($uid);
 // Get available backpack providers
 $availableProviders = $backpackProviderRepo->findActive();
 
+// Get user's selected collection
+$selectedCollection = $backpackConnectionService->getSelectedCollection($uid);
+
 // Prepare data for view
 $viewData = [
     'userConnection' => $userConnection,
     'availableProviders' => $availableProviders,
+    'selectedCollection' => $selectedCollection,
     'uid' => $uid,
     'urlAppend' => $urlAppend
 ];

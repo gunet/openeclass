@@ -34,6 +34,13 @@ class OpenBadgesEndpointRegistry
                 'parameters' => ['id'],
                 'description' => 'Get specific badge details'
             ],
+            'assertion' => [
+                'path' => '/v2/backpack/assertions/{id}',
+                'method' => 'GET',
+                'auth_required' => true,
+                'parameters' => ['id'],
+                'description' => 'Get specific assertion details'
+            ],
             'collections' => [
                 'path' => '/v2/backpack/collections',
                 'method' => 'GET',
@@ -45,7 +52,8 @@ class OpenBadgesEndpointRegistry
                 'method' => 'GET',
                 'auth_required' => true,
                 'parameters' => ['id'],
-                'description' => 'Get specific collection details'
+                'query_params' => ['expand' => 'assertions'],
+                'description' => 'Get specific collection details with expanded assertions'
             ],
             'push_badge' => [
                 'path' => '/v2/backpack/import',
@@ -82,6 +90,13 @@ class OpenBadgesEndpointRegistry
                 'parameters' => ['id'],
                 'description' => 'Get specific badge details'
             ],
+            'assertion' => [
+                'path' => '/v2/backpack/assertions/{id}',
+                'method' => 'GET',
+                'auth_required' => true,
+                'parameters' => ['id'],
+                'description' => 'Get specific assertion details'
+            ],
             'collections' => [
                 'path' => '/v2/backpack/collections',
                 'method' => 'GET',
@@ -93,7 +108,8 @@ class OpenBadgesEndpointRegistry
                 'method' => 'GET',
                 'auth_required' => true,
                 'parameters' => ['id'],
-                'description' => 'Get specific collection details'
+                'query_params' => ['expand' => 'assertions'],
+                'description' => 'Get specific collection details with expanded assertions'
             ],
             'push_badge' => [
                 'path' => '/v2/backpack/import',
@@ -136,6 +152,13 @@ class OpenBadgesEndpointRegistry
                 'parameters' => ['id'],
                 'description' => 'Get specific credential details'
             ],
+            'assertion' => [
+                'path' => '/v3/assertions/{id}',
+                'method' => 'GET',
+                'auth_required' => true,
+                'parameters' => ['id'],
+                'description' => 'Get specific assertion details'
+            ],
             'collections' => [
                 'path' => '/v3/collections',
                 'method' => 'GET',
@@ -147,7 +170,8 @@ class OpenBadgesEndpointRegistry
                 'method' => 'GET',
                 'auth_required' => true,
                 'parameters' => ['id'],
-                'description' => 'Get specific collection details'
+                'query_params' => ['expand' => 'assertions'],
+                'description' => 'Get specific collection details with expanded assertions'
             ],
             'push_badge' => [
                 'path' => '/v3/credentials',
@@ -230,6 +254,12 @@ class OpenBadgesEndpointRegistry
                     $url = str_replace('{' . $param . '}', urlencode($parameters[$param]), $url);
                 }
             }
+        }
+
+        // Add query parameters if defined in endpoint configuration
+        if (isset($endpoint['query_params']) && is_array($endpoint['query_params']) && !empty($endpoint['query_params'])) {
+            $queryString = http_build_query($endpoint['query_params']);
+            $url .= '?' . $queryString;
         }
 
         return $url;

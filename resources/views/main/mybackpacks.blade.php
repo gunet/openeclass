@@ -79,6 +79,48 @@
                             </button>
                         </div>
                         <div class='card-body'>
+                            {{-- Collection Selector --}}
+                            <div id='collection-selector' style='display: none;' class='mb-4'>
+                                <div class='alert alert-info mb-3'>
+                                    <i class='fa-solid fa-circle-info me-2'></i>
+                                    {{ trans('langSyncCollectionInfo') }}
+                                </div>
+                                <div class='row align-items-end'>
+                                    <div class='col-md-8'>
+                                        <label for='collection-select' class='form-label'>
+                                            <strong>{{ trans('langSelectCollectionToSync') }}</strong>
+                                        </label>
+                                        <select id='collection-select' class='form-select'>
+                                            <option value=''>-- {{ trans('langChooseCollectionToSync') }} --</option>
+                                        </select>
+                                        <small class='form-text text-muted'>{{ trans('langSelectCollectionHelpText') }}</small>
+                                    </div>
+                                    <div class='col-md-4'>
+                                        <button type='button' class='btn btn-success' id='sync-collection-btn' disabled>
+                                            <i class='fa fa-sync me-1'></i>
+                                            {{ trans('langSyncCollection') }}
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                {{-- Sync Progress --}}
+                                <div id='sync-progress' style='display: none;' class='mt-3 p-3 bg-light border rounded'>
+                                    <h6 class='mb-3'>
+                                        <i class='fa fa-spinner fa-spin me-1'></i>
+                                        {{ trans('langSyncingBadges') }}...
+                                    </h6>
+                                    <div class='progress'>
+                                        <div id='sync-progress-bar' class='progress-bar progress-bar-striped progress-bar-animated' 
+                                             role='progressbar' style='width: 0%'></div>
+                                    </div>
+                                    <p id='sync-status' class='mt-2 mb-0 text-muted'></p>
+                                </div>
+                                
+                                {{-- Sync Results --}}
+                                <div id='sync-results' style='display: none;' class='mt-3'></div>
+                            </div>
+
+
                             {{-- Loading State --}}
                             <div id='collections-loading' style='display: none;' class='text-center py-4'>
                                 <i class='fa fa-spinner fa-spin fa-2x text-primary'></i>
@@ -249,6 +291,19 @@ document.addEventListener('DOMContentLoaded', function() {
     const collectionsContainer = document.getElementById('collections-container');
     const collectionsInitial = document.getElementById('collections-initial');
 
+
+    // Collection sync UI elements
+    const collectionSelector = document.getElementById('collection-selector');
+    const collectionSelect = document.getElementById('collection-select');
+    const syncCollectionBtn = document.getElementById('sync-collection-btn');
+    const syncProgress = document.getElementById('sync-progress');
+    const syncProgressBar = document.getElementById('sync-progress-bar');
+    const syncStatus = document.getElementById('sync-status');
+    const syncResults = document.getElementById('sync-results');
+    
+    // Store fetched collections globally for sync operations
+    let fetchedCollections = [];
+
     if (providerSelect) {
         providerSelect.addEventListener('change', function() {
             const selectedOption = this.options[this.selectedIndex];
@@ -409,12 +464,23 @@ document.addEventListener('DOMContentLoaded', function() {
                 collectionsLoading.style.display = 'none';
                 
                 if (data.success && data.data && data.data.length > 0) {
+                    // Store collections globally
+                    fetchedCollections = data.data;
+                    
                     // Display collections
                     displayCollections(data.data);
                     collectionsList.style.display = 'block';
+                    
+                    // Populate and show selector
+                    populateCollectionSelector(data.data);
+                    collectionSelector.style.display = 'block';
+                    
+                    // Auto-select last used collection
+                    autoSelectLastCollection();
                 } else {
                     // No collections found
                     collectionsEmpty.style.display = 'block';
+                    collectionSelector.style.display = 'none';
                 }
             })
             .catch(error => {
@@ -463,7 +529,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const collectionId = collection.id || collection.entityId || '';
         
         col.innerHTML = `
-            <div class='card h-100 shadow-sm'>
+            <div class='card h-100 shadow-sm collection-card' data-collection-id='${escapeHtml(collectionId)}' style='cursor: pointer; transition: all 0.3s;'>
                 <div class='card-body'>
                     <h5 class='card-title'>
                         <i class='fa fa-folder text-primary me-2'></i>
@@ -480,7 +546,431 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
         `;
         
+        // Add click handler to card
+        const card = col.querySelector('.collection-card');
+        card.addEventListener('click', function() {
+            selectCollectionById(collectionId);
+        });
+        
+        // Add hover effect
+        card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-5px)';
+            this.style.boxShadow = '0 4px 8px rgba(0,0,0,0.2)';
+        });
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+            this.style.boxShadow = '';
+        });
+        
         return col;
+    }
+
+    /**
+     * Populate the collection selector dropdown
+     */
+    function populateCollectionSelector(collections) {
+        // Clear existing options (keep the default one)
+        collectionSelect.innerHTML = '<option value="">-- {{ trans('langChooseCollection') }} --</option>';
+        
+        collections.forEach((collection, index) => {
+            const name = collection.name || collection.title || 'Untitled Collection';
+            const badgeCount = collection.badges?.length || collection.assertions?.length || 0;
+            const collectionId = collection.id || collection.entityId || '';
+            
+            const option = document.createElement('option');
+            option.value = index;
+            option.textContent = `${name} (${badgeCount} ${badgeCount === 1 ? 'badge' : 'badges'})`;
+            option.setAttribute('data-collection-id', collectionId);
+            
+            collectionSelect.appendChild(option);
+        });
+    }
+
+    /**
+     * Handle collection selection from dropdown
+     */
+    if (collectionSelect) {
+        collectionSelect.addEventListener('change', function() {
+            const selectedIndex = this.value;
+            
+            if (selectedIndex === '') {
+                // No collection selected
+                syncCollectionBtn.disabled = true;
+                syncResults.style.display = 'none';
+                removeCollectionHighlights();
+            } else {
+                // Collection selected
+                const collection = fetchedCollections[selectedIndex];
+                highlightCollectionCard(collection);
+                syncCollectionBtn.disabled = false;
+                syncResults.style.display = 'none';
+            }
+        });
+    }
+
+    /**
+     * Handle "Sync Collection" button click
+     */
+    if (syncCollectionBtn) {
+        syncCollectionBtn.addEventListener('click', function() {
+            const selectedIndex = collectionSelect.value;
+            
+            if (selectedIndex !== '') {
+                const collection = fetchedCollections[selectedIndex];
+                syncCollectionToPlatform(collection);
+            }
+        });
+    }
+
+    /**
+     * Select collection by ID (when clicking on card)
+     */
+    function selectCollectionById(collectionId) {
+        const index = fetchedCollections.findIndex(c => 
+            (c.id || c.entityId) === collectionId
+        );
+        
+        if (index !== -1) {
+            collectionSelect.value = index;
+            collectionSelect.dispatchEvent(new Event('change'));
+        }
+    }
+
+    /**
+     * Highlight the selected collection card
+     */
+    function highlightCollectionCard(collection) {
+        removeCollectionHighlights();
+        
+        const collectionId = collection.id || collection.entityId || '';
+        const cards = document.querySelectorAll('.collection-card');
+        
+        cards.forEach(card => {
+            if (card.getAttribute('data-collection-id') === collectionId) {
+                card.style.border = '3px solid #28a745';
+            }
+        });
+    }
+
+    /**
+     * Remove all collection card highlights
+     */
+    function removeCollectionHighlights() {
+        const cards = document.querySelectorAll('.collection-card');
+        cards.forEach(card => {
+            card.style.border = '';
+            card.style.backgroundColor = '';
+        });
+    }
+
+    /**
+     * Sync collection badges from remote backpack to the platform
+     */
+    async function syncCollectionToPlatform(collection) {
+        const name = collection.name || collection.title || 'Untitled Collection';
+        const collectionId = collection.id || collection.entityId || '';
+        const badges = collection.badges || collection.assertions || [];
+        
+        console.log('Syncing collection:', collection);
+        
+        // Hide previous results
+        syncResults.style.display = 'none';
+        syncResults.innerHTML = '';
+        
+        // Show progress
+        syncProgress.style.display = 'block';
+        syncProgressBar.style.width = '0%';
+        syncStatus.textContent = '{{ trans('langPreparingSyncOperation') }}...';
+        
+        // Disable button during sync
+        syncCollectionBtn.disabled = true;
+        syncCollectionBtn.innerHTML = '<i class="fa fa-spinner fa-spin me-1"></i>{{ trans('langSyncing') }}...';
+        
+        try {
+            // Update progress
+            syncProgressBar.style.width = '10%';
+            syncStatus.textContent = `{{ trans('langFetchingBadgesFromCollection') }}: ${escapeHtml(name)}...`;
+            
+            // Fetch the collection details with badges
+            const collectionResponse = await fetch(`{{ $urlServer }}modules/backpack/api/collection_badges.php?collection_id=${encodeURIComponent(collectionId)}`, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'same-origin'
+            });
+            
+            if (!collectionResponse.ok) {
+                throw new Error(`HTTP ${collectionResponse.status}: Failed to fetch collection badges`);
+            }
+            
+            const collectionData = await collectionResponse.json();
+            
+            if (!collectionData.success) {
+                throw new Error(collectionData.errormessage || 'Failed to fetch collection badges');
+            }
+            
+            const remoteBadges = collectionData.data || [];
+            const totalBadges = remoteBadges.length;
+            
+            if (totalBadges === 0) {
+                throw new Error('{{ trans('langNoSyncableBadges') }}');
+            }
+            
+            syncProgressBar.style.width = '30%';
+            syncStatus.textContent = `{{ trans('langFoundBadgesToSync', ['count' => '${totalBadges}']) }}`.replace('${totalBadges}', totalBadges);
+            
+            // Sync badges one by one
+            let syncedCount = 0;
+            let skippedCount = 0;
+            let errorCount = 0;
+            const syncResultsList = [];
+            
+            for (let i = 0; i < remoteBadges.length; i++) {
+                const badge = remoteBadges[i];
+                const badgeName = badge.badgeclass?.name || badge.badge?.name || `Badge ${i + 1}`;
+                const assertionId = badge.id || badge.entityId || '';
+                
+                // Update progress
+                const progress = 30 + Math.floor((i / totalBadges) * 60);
+                syncProgressBar.style.width = `${progress}%`;
+                syncStatus.textContent = `{{ trans('langSyncingBadge') }} ${i + 1}/${totalBadges}: ${escapeHtml(badgeName)}...`;
+                
+                try {
+                    // Call sync endpoint
+                    const syncResponse = await fetch('{{ $urlServer }}modules/backpack/api/sync_badge.php', {
+                        method: 'POST',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        credentials: 'same-origin',
+                        body: JSON.stringify({
+                            assertion_id: assertionId,
+                            collection_id: collectionId,
+                            collection_name: name,
+                            badge_data: badge
+                        })
+                    });
+                    
+                    const syncResult = await syncResponse.json();
+                    
+                    if (syncResult.success) {
+                        if (syncResult.action === 'created') {
+                            syncedCount++;
+                            syncResultsList.push({
+                                name: badgeName,
+                                status: 'success',
+                                message: '{{ trans('langBadgeSyncedSuccessfully') }}'
+                            });
+                        } else if (syncResult.action === 'already_exists') {
+                            skippedCount++;
+                            syncResultsList.push({
+                                name: badgeName,
+                                status: 'info',
+                                message: '{{ trans('langBadgeAlreadyExists') }}'
+                            });
+                        }
+                    } else {
+                        errorCount++;
+                        syncResultsList.push({
+                            name: badgeName,
+                            status: 'error',
+                            message: syncResult.errormessage || '{{ trans('langBadgeSyncFailed') }}'
+                        });
+                    }
+                } catch (error) {
+                    errorCount++;
+                    syncResultsList.push({
+                        name: badgeName,
+                        status: 'error',
+                        message: error.message
+                    });
+                }
+                
+                // Small delay to avoid overwhelming the server
+                await new Promise(resolve => setTimeout(resolve, 100));
+            }
+            
+            // Sync complete
+            syncProgressBar.style.width = '100%';
+            syncStatus.textContent = '{{ trans('langSyncComplete') }}';
+            
+            // Hide progress after a moment
+            setTimeout(() => {
+                syncProgress.style.display = 'none';
+            }, 1500);
+            
+            // Display results
+            displaySyncResults(name, totalBadges, syncedCount, skippedCount, errorCount, syncResultsList);
+            
+        } catch (error) {
+            console.error('Sync error:', error);
+            
+            // Hide progress
+            syncProgress.style.display = 'none';
+            
+            // Show error
+            syncResults.style.display = 'block';
+            syncResults.innerHTML = `
+                <div class='alert alert-danger'>
+                    <h6><i class='fa fa-exclamation-triangle me-2'></i>{{ trans('langSyncFailed') }}</h6>
+                    <p class='mb-0'>${escapeHtml(error.message)}</p>
+                </div>
+            `;
+        } finally {
+            // Re-enable button
+            syncCollectionBtn.disabled = false;
+            syncCollectionBtn.innerHTML = '<i class="fa fa-sync me-1"></i>{{ trans('langSyncCollection') }}';
+        }
+    }
+    
+    /**
+     * Display sync results summary
+     */
+    function displaySyncResults(collectionName, total, synced, skipped, errors, resultsList) {
+        let html = `
+            <div class='card'>
+                <div class='card-header bg-success text-white'>
+                    <h6 class='mb-0'>
+                        <i class='fa fa-check-circle me-2'></i>
+                        {{ trans('langSyncCompletedSuccessfully') }}
+                    </h6>
+                </div>
+                <div class='card-body'>
+                    <h6 class='mb-3'>{{ trans('langCollection') }}: ${escapeHtml(collectionName)}</h6>
+                    
+                    <div class='row text-center mb-3'>
+                        <div class='col-md-3'>
+                            <div class='border rounded p-2'>
+                                <h4 class='text-primary mb-0'>${total}</h4>
+                                <small class='text-muted'>{{ trans('langTotalBadges') }}</small>
+                            </div>
+                        </div>
+                        <div class='col-md-3'>
+                            <div class='border rounded p-2'>
+                                <h4 class='text-success mb-0'>${synced}</h4>
+                                <small class='text-muted'>{{ trans('langSynced') }}</small>
+                            </div>
+                        </div>
+                        <div class='col-md-3'>
+                            <div class='border rounded p-2'>
+                                <h4 class='text-info mb-0'>${skipped}</h4>
+                                <small class='text-muted'>{{ trans('langSkipped') }}</small>
+                            </div>
+                        </div>
+                        <div class='col-md-3'>
+                            <div class='border rounded p-2'>
+                                <h4 class='text-danger mb-0'>${errors}</h4>
+                                <small class='text-muted'>{{ trans('langErrors') }}</small>
+                            </div>
+                        </div>
+                    </div>
+        `;
+        
+        // Show detailed results if there are any errors or if user wants to see details
+        if (resultsList.length > 0) {
+            html += `
+                <details class='mt-3'>
+                    <summary class='mb-2' style='cursor: pointer;'>
+                        <strong>{{ trans('langViewDetailedResults') }}</strong>
+                    </summary>
+                    <div class='mt-2' style='max-height: 300px; overflow-y: auto;'>
+            `;
+            
+            resultsList.forEach(result => {
+                let iconClass = 'fa-check-circle text-success';
+                let alertClass = 'alert-success';
+                
+                if (result.status === 'info') {
+                    iconClass = 'fa-info-circle text-info';
+                    alertClass = 'alert-info';
+                } else if (result.status === 'error') {
+                    iconClass = 'fa-exclamation-circle text-danger';
+                    alertClass = 'alert-danger';
+                }
+                
+                html += `
+                    <div class='alert ${alertClass} py-2 px-3 mb-2'>
+                        <i class='fa ${iconClass} me-2'></i>
+                        <strong>${escapeHtml(result.name)}:</strong> ${escapeHtml(result.message)}
+                    </div>
+                `;
+            });
+            
+            html += `
+                    </div>
+                </details>
+            `;
+        }
+        
+        html += `
+                    <div class='mt-3'>
+                        <a href='{{ $urlServer }}main/portfolio.php' class='btn btn-primary'>
+                            <i class='fa fa-folder-open me-1'></i>
+                            {{ trans('langViewMyPortfolio') }}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        syncResults.innerHTML = html;
+        syncResults.style.display = 'block';
+    }
+
+    /**
+     * Save the selected collection to the database
+     */
+    async function saveSelectedCollection(collectionId, collectionName) {
+        try {
+            const response = await fetch('{{ $urlServer }}modules/backpack/api/update_selected_collection.php', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'same-origin',
+                body: JSON.stringify({
+                    collection_id: collectionId,
+                    collection_name: collectionName
+                })
+            });
+            
+            if (response.ok) {
+                const result = await response.json();
+                console.log('Selected collection saved:', result);
+            } else {
+                console.warn('Failed to save selected collection:', response.status);
+            }
+        } catch (error) {
+            console.error('Error saving selected collection:', error);
+        }
+    }
+
+    /**
+     * Auto-select the last selected collection on page load
+     */
+    function autoSelectLastCollection() {
+        @if (isset($selectedCollection) && $selectedCollection)
+            const lastCollectionId = '{{ $selectedCollection['id'] ?? '' }}';
+            const lastCollectionName = '{{ $selectedCollection['name'] ?? '' }}';
+            
+            if (lastCollectionId && fetchedCollections.length > 0) {
+                // Find the collection in the fetched list
+                const index = fetchedCollections.findIndex(col => {
+                    const colId = col.id || col.entityId || '';
+                    return colId === lastCollectionId;
+                });
+                
+                if (index !== -1) {
+                    console.log('Auto-selecting last used collection:', lastCollectionName);
+                    collectionSelect.value = index;
+                    collectionSelect.dispatchEvent(new Event('change'));
+                }
+            }
+        @endif
     }
 
     /**
@@ -494,4 +984,5 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
-@endsection 
+@endsection
+

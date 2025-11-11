@@ -2210,6 +2210,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `user_backpack_connection` (
     `refresh_token` VARCHAR(512) DEFAULT NULL,
     `status` ENUM('connected', 'disconnected', 'error') DEFAULT 'disconnected',
     `last_sync` DATETIME DEFAULT NULL,
+    `selected_collection_id` VARCHAR(512) DEFAULT NULL COMMENT 'Last selected collection for sync',
+    `selected_collection_name` VARCHAR(255) DEFAULT NULL COMMENT 'Display name of selected collection',
     `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     UNIQUE KEY `user_provider` (`user_id`, `backpack_provider_id`),

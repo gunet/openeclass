@@ -196,6 +196,16 @@ if ($data['userdata']) {
             . "AND (b.expires IS NULL OR b.expires > NOW())";
     $data['badge_completed'] = Database::get()->queryArray($gameQ, $uid);
 
+    // Get external badges synced from backpack
+    $externalBadgesQ = "SELECT id as user_badge_id, "
+            . " title, description, issuer, image_url, issued_on as created, "
+            . " external_assertion_id, external_collection_id, "
+            . " created_at, updated_at "
+            . " FROM user_badge_external "
+            . " WHERE user_id = ?d "
+            . " ORDER BY issued_on DESC";
+    $data['badge_external'] = Database::get()->queryArray($externalBadgesQ, $uid);
+
 }
 
 view('main.profile.index', $data);

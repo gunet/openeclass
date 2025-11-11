@@ -20,121 +20,6 @@
 
 /**
  * Collection Badges API
- *
- * Returns badges within a specific backpack collection for the connected user.
- * Method: GET
- * Params: collection_id (required) — provider entityId of the collection
- */
-
-$require_login = true;
-require_once __DIR__ . '/../../../include/baseTheme.php';
-require_once __DIR__ . '/../../main/services/OpenBadgesApiService.php';
-
-header('Content-Type: application/json');
-
-try {
-    if (!isset($uid) || $uid <= 0) {
-        http_response_code(401);
-        echo json_encode([
-            'success' => false,
-            'errorcode' => 401,
-            'errormessage' => 'Authentication required',
-            'data' => null
-        ], JSON_UNESCAPED_UNICODE);
-        exit;
-    }
-
-    $collectionId = isset($_GET['collection_id']) ? trim($_GET['collection_id']) : '';
-    if ($collectionId === '') {
-        http_response_code(400);
-        echo json_encode([
-            'success' => false,
-            'errorcode' => 400,
-            'errormessage' => 'Missing required parameter: collection_id',
-            'data' => null
-        ], JSON_UNESCAPED_UNICODE);
-        exit;
-    }
-
-    $api = new OpenBadgesApiService();
-    $response = $api->getCollectionBadges($uid, $collectionId);
-
-    // If unauthorized, attempt one token refresh and retry
-    if (!$response->isSuccess() && (int) $response->getHttpCode() === 401) {
-        $refresh = $api->refreshAccessToken($uid);
-        if ($refresh->isSuccess()) {
-            $response = $api->getCollectionBadges($uid, $collectionId);
-        }
-    }
-
-    if ($response->isSuccess()) {
-        $data = $response->getData();
-
-        // Normalize data array for different providers
-        $badgesList = [];
-        if (is_array($data)) {
-            if (isset($data['assertions']) && is_array($data['assertions'])) {
-                $badgesList = $data['assertions'];
-            } elseif (isset($data['result']) && is_array($data['result'])) {
-                $badgesList = $data['result'];
-            } elseif (isset($data[0])) {
-                $badgesList = $data;
-            }
-        }
-
-        http_response_code(200);
-        echo json_encode([
-            'success' => true,
-            'collection_id' => $collectionId,
-            'count' => count($badgesList),
-            'data' => $badgesList,
-        ], JSON_UNESCAPED_UNICODE);
-        exit;
-    }
-
-    $http = $response->getHttpCode() ?: 500;
-    http_response_code($http);
-    echo json_encode([
-        'success' => false,
-        'errorcode' => $http,
-        'errormessage' => $response->getError() ?: 'Failed to fetch collection badges',
-        'data' => $response->getData(),
-    ], JSON_UNESCAPED_UNICODE);
-} catch (Exception $e) {
-    error_log('Collection Badges API error: ' . $e->getMessage());
-    http_response_code(500);
-    echo json_encode([
-        'success' => false,
-        'errorcode' => 500,
-        'errormessage' => 'Internal server error while fetching badges',
-        'error_details' => $e->getMessage(),
-    ], JSON_UNESCAPED_UNICODE);
-}
-
-exit;
-
-<?php
-
-/*
- *  ========================================================================
- *  * Open eClass
- *  * E-learning and Course Management System
- *  * ========================================================================
- *  * Copyright 2003-2024, Greek Universities Network - GUnet
- *  *
- *  * Open eClass is an open platform distributed in the hope that it will
- *  * be useful (without any warranty), under the terms of the GNU (General
- *  * Public License) as published by the Free Software Foundation.
- *  * The full license can be read in "/info/license/license_gpl.txt".
- *  *
- *  * Contact address: GUnet Asynchronous eLearning Group
- *  *                  e-mail: info@openeclass.org
- *  * ========================================================================
- *
- */
-
-/**
- * Collection Badges API
  * 
  * This endpoint retrieves badges from a specific collection in the user's backpack.
  * It requires the user to be authenticated and have an active backpack connection.
@@ -235,24 +120,93 @@ try {
     if ($response->isSuccess()) {
         $badges = $response->getData();
         
+        // DEBUG: Log the raw response structure
+        error_log("Collection Badges API: Raw response structure: " . json_encode($badges));
+        
         // Handle different response structures from different providers
         $badgesList = [];
         if (is_array($badges)) {
             // Check if it's a direct array of badges
             if (isset($badges[0])) {
                 $badgesList = $badges;
+                error_log("Collection Badges API: Using direct array structure");
             }
             // Check if badges are nested under a 'result' key (Badgr structure)
             elseif (isset($badges['result']) && is_array($badges['result'])) {
-                $badgesList = $badges['result'];
+                // Badgr returns the collection object in result[0]
+                // The actual badges/assertions are in result[0]['assertions']
+                if (isset($badges['result'][0]) && is_array($badges['result'][0])) {
+                    $collection = $badges['result'][0];
+                    
+                    // Check if assertions exist and are in array format
+                    if (isset($collection['assertions']) && is_array($collection['assertions']) && !empty($collection['assertions'])) {
+                        $assertions = $collection['assertions'];
+                        
+                        // Check if assertions are strings (IDs) or objects (full data)
+                        if (is_string($assertions[0])) {
+                            // Assertions are IDs - need to fetch full badge details for each
+                            error_log("Collection Badges API: Assertions are IDs, fetching full details for " . count($assertions) . " badges");
+                            
+                            $badgesList = [];
+                            $apiService = new OpenBadgesApiService();
+                            
+                            foreach ($assertions as $assertionId) {
+                                try {
+                                    $assertionResponse = $apiService->getAssertion($uid, $assertionId);
+                                    
+                                    if ($assertionResponse->isSuccess()) {
+                                        $assertionData = $assertionResponse->getData();
+                                        
+                                        // Unwrap the result array if present
+                                        if (is_array($assertionData) && isset($assertionData['result']) && is_array($assertionData['result'])) {
+                                            // Badge is in result[0]
+                                            if (isset($assertionData['result'][0])) {
+                                                $badgesList[] = $assertionData['result'][0];
+                                            }
+                                        } else {
+                                            // Already unwrapped
+                                            $badgesList[] = $assertionData;
+                                        }
+                                    } else {
+                                        error_log("Collection Badges API: Failed to fetch assertion $assertionId: " . $assertionResponse->getError());
+                                    }
+                                } catch (Exception $e) {
+                                    error_log("Collection Badges API: Exception fetching assertion $assertionId: " . $e->getMessage());
+                                }
+                            }
+                            
+                            error_log("Collection Badges API: Successfully fetched " . count($badgesList) . " out of " . count($assertions) . " badges");
+                            
+                            // DEBUG: Log the structure of the first badge
+                            if (!empty($badgesList)) {
+                                error_log("Collection Badges API: First badge structure: " . json_encode($badgesList[0]));
+                            }
+                        } else {
+                            // Assertions are already full objects
+                            $badgesList = $assertions;
+                            error_log("Collection Badges API: Using full badge objects from assertions");
+                        }
+                    } else {
+                        // Fallback: use the collection object itself
+                        $badgesList = $badges['result'];
+                        error_log("Collection Badges API: No assertions found, using result directly");
+                    }
+                } else {
+                    $badgesList = $badges['result'];
+                    error_log("Collection Badges API: Using 'result' key structure (legacy)");
+                }
             }
             // Check if badges are nested under 'data' key
             elseif (isset($badges['data']) && is_array($badges['data'])) {
                 $badgesList = $badges['data'];
+                error_log("Collection Badges API: Using 'data' key structure");
+            }
+            else {
+                error_log("Collection Badges API: Unknown structure - Keys: " . implode(', ', array_keys($badges)));
             }
         }
         
-        error_log("Collection Badges API: Found " . count($badgesList) . " badges in collection");
+        error_log("Collection Badges API: Found " . count($badgesList) . " badges/assertions in collection");
         
         http_response_code(200);
         echo json_encode([
@@ -338,4 +292,3 @@ function determineHttpCodeFromError(string $errorMessage): int {
     // Default to 500 for unknown errors
     return 500;
 }
-
