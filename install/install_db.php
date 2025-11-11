@@ -2372,7 +2372,6 @@ $db->query("CREATE TABLE `user_points_game_criterion` (
     `points_game_criterion` int(11) not null,
     `points_awarded` int(11) not null,
     `created` datetime not null DEFAULT CURRENT_TIMESTAMP,
-    unique key `user_points_game_criterion` (`user`, `points_game_criterion`),
     foreign key (`user`) references `user`(`id`),
     foreign key (`points_game_criterion`) references `points_game_criterion`(`id`)
 ) $tbl_options");
