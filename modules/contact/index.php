@@ -70,19 +70,22 @@ if (empty($userdata->email)) {
 
         if ($request_exists && !empty($request_exists->id)) {
 
-            Database::get()->query("UPDATE course_user_request SET comments = ?s WHERE id = ?d", $content, $request_exists->id);
+            //Database::get()->query("UPDATE course_user_request SET comments = ?s WHERE id = ?d", $content, $request_exists->id);
+
+            Database::get()->query("DELETE FROM course_user_request WHERE uid = ?d AND course_id = ?d AND status = 1", $_SESSION['uid'], $course_id );
+
             $title = course_id_to_title($course_id);
             $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langSendingMessage $title</span></div></div>";
         } else {
 
             $tool_content .= email_profs($course_id, $content, "$userdata->givenname $userdata->surname", $userdata->username, $userdata->email);
 
-            Database::get()->query("INSERT INTO course_user_request SET uid = ?d, course_id = ?d, 
+        }
+
+        Database::get()->query("INSERT INTO course_user_request SET uid = ?d, course_id = ?d, 
                                                         status = 1, comments = ?s, 
                                                         ts = " . DBHelper::timeAfter() . "",
-                $uid, $course_id, $content);
-
-        }
+            $uid, $course_id, $content);
 
     }
 } else {
@@ -126,10 +129,14 @@ function form($user) {
 
     $ret = "<div class='col-sm-12 mt-3'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langInfoAboutRegistration</span></div></div>";
 
-    $request_exists = Database::get()->querySingle("SELECT id FROM course_user_request WHERE uid = ?d AND course_id = ?d AND status = 1", $_SESSION['uid'], $course_id);
+    $request_exists = Database::get()->querySingle("SELECT * FROM course_user_request WHERE uid = ?d AND course_id = ?d AND status = 1 ORDER BY ts DESC, id DESC", $_SESSION['uid'], $course_id);
 
-    if ($request_exists && !empty($request_exists->id)) {
-        $ret .= "<div class='col-sm-12'><div class='alert alert-danger'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langRequestAlreadySent</span></div></div>";
+    if ($request_exists) {
+        $rawTs = $request_exists->ts;
+        $ts = is_numeric($rawTs) ? (int)$rawTs : strtotime($rawTs);
+        $reqDate = format_locale_date($ts, 'short', true);
+        $ret .= "<div class='col-sm-12'><div class='alert alert-danger'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>" .
+            q($langRequestAlreadySent) . " ($reqDate)</span></div></div>";
     }
 
     $ret .= "<div class='row m-auto'><div class='col-lg-6 col-12 px-0'><div class='form-wrapper form-edit p-0 border-0 mt-2 mb-3 rounded'>";
@@ -141,7 +148,11 @@ function form($user) {
         <div class='col-sm-12'><div class='control-label-notes mt-4'>$langSendTo:&nbsp;</div><small>$userprof</small></div>
         <div class='form-group mt-4'>
             <div class='col-sm-12'>
-              <textarea aria-label='$langRequestReasons' name='content' rows='10' cols='80' placeholder='$langRequestReasons'></textarea>
+              <textarea aria-label='$langRequestReasons' name='content' rows='10' cols='80' placeholder='$langRequestReasons'>";
+    if ($request_exists && !empty($request_exists->id)) {
+        $ret .= $request_exists->comments;
+    }
+    $ret .="</textarea>
             </div>
 	    </div>
         <div class='form-group mt-4'>
