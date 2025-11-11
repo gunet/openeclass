@@ -66,11 +66,24 @@ if (empty($userdata->email)) {
             'level' => 'primary-label')
         ));
 
-        $tool_content .= email_profs($course_id, $content, "$userdata->givenname $userdata->surname", $userdata->username, $userdata->email);
-        Database::get()->query("INSERT INTO course_user_request SET uid = ?d, course_id = ?d, 
+        $request_exists = Database::get()->querySingle("SELECT id FROM course_user_request WHERE uid = ?d AND course_id = ?d AND status = 1", $_SESSION['uid'], $course_id);
+
+        if ($request_exists && !empty($request_exists->id)) {
+
+            Database::get()->query("UPDATE course_user_request SET comments = ?s WHERE id = ?d", $content, $request_exists->id);
+            $title = course_id_to_title($course_id);
+            $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langSendingMessage $title</span></div></div>";
+        } else {
+
+            $tool_content .= email_profs($course_id, $content, "$userdata->givenname $userdata->surname", $userdata->username, $userdata->email);
+
+            Database::get()->query("INSERT INTO course_user_request SET uid = ?d, course_id = ?d, 
                                                         status = 1, comments = ?s, 
                                                         ts = " . DBHelper::timeAfter() . "",
-                                                    $uid, $course_id, $content);
+                $uid, $course_id, $content);
+
+        }
+
     }
 } else {
     $tool_content .= form("$userdata->surname $userdata->givenname");
@@ -94,7 +107,7 @@ function form($user) {
     global $course_id, $langInfoAboutRegistration, $langFrom, $langSendTo,
             $langSubmitNew, $course_code, $langRequest, $langOfCourse, $langRequestReasons, $urlAppend,
             $is_collaborative_course, $langInfoAboutCollabRegistration, $langLabelCollabUserRequest,
-            $langRequestReasonsCollab, $langTypeCollaboration, $langImgFormsDes, $langForm;
+            $langRequestReasonsCollab, $langTypeCollaboration, $langImgFormsDes, $langForm, $langRequestAlreadySent;
 
     if($is_collaborative_course){
         $langInfoAboutRegistration = $langInfoAboutCollabRegistration;
@@ -112,6 +125,13 @@ function form($user) {
     }
 
     $ret = "<div class='col-sm-12 mt-3'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langInfoAboutRegistration</span></div></div>";
+
+    $request_exists = Database::get()->querySingle("SELECT id FROM course_user_request WHERE uid = ?d AND course_id = ?d AND status = 1", $_SESSION['uid'], $course_id);
+
+    if ($request_exists && !empty($request_exists->id)) {
+        $ret .= "<div class='col-sm-12'><div class='alert alert-danger'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langRequestAlreadySent</span></div></div>";
+    }
+
     $ret .= "<div class='row m-auto'><div class='col-lg-6 col-12 px-0'><div class='form-wrapper form-edit p-0 border-0 mt-2 mb-3 rounded'>";
     $ret .= "<form class='form-horizontal' method='post' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
 	<fieldset>

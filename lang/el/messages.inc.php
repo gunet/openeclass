@@ -7442,3 +7442,4 @@ $langAISyllabusTargetGroup = "Ομάδα Στόχος";
 $langAISyllabusTextbooks = "Προτεινόμενα Συγγράμματα";
 $langAISyllabusAdditionalInfo = "Επιπλέον Πληροφορίες";
 $langInvalidScore = "Μη έγκυρος βαθμός";
+$langRequestAlreadySent = "Έχει ήδη σταλεί αίτημα εγγραφής για αυτό το μάθημα";

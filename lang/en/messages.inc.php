@@ -6756,3 +6756,4 @@ $langPanoptoApp = "Panopto Application";
 $langPanoptoLTIOptions = "Panopto Options";
 $langPanoptoIntegration = "Panopto Integration";
 $langCreatedBy = "created by";
+$langRequestAlreadySent = "A registration request has already been sent for this course";
