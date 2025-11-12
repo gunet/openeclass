@@ -742,7 +742,7 @@ function display_assignment_submissions($id) {
                         if ($g->grade) {
                             $grade_counter++;
                             $g_grade = $g_grade + $g->grade;
-                            $f_g_grade = $g_grade / $grade_counter;
+                            $f_g_grade = floor(($g_grade / $grade_counter) * 100) / 100; // truncate to 2 decimal places
                             $arr[] = "<strong>" . uid_to_name($g->users_id) . "</strong> $langgrade -> " . "<span class='TextBold fs-6 Success-200-cl'>" . $g->grade . "</span><br>";
                         }
                         $str_arr = (count($arr) > 0) ? implode('', $arr) : '-';
@@ -3237,10 +3237,8 @@ function submit_grade_reviews($args) {
     $sid = $args['submission'];//asubimision=id_submision exei topotheththei ws pedio hidden sto grade_edit_review
 
     $v = new Valitron\Validator($args);
-    $v->addRule('emptyOrNumeric', function($field, $value, array $params) {
-        if(is_numeric($value) || empty($value)) return true;
-    });
     $v->rule('numeric', array('assignment', 'submission'));
+    $v->rule('required', array('grade_rubric'));
 
     if($v->validate()) {
         $grade_rubric = serialize($args['grade_rubric']);
@@ -3270,7 +3268,7 @@ function submit_grade_reviews($args) {
         }
     } else {
         Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
-        redirect_to_home_page("modules/work/grade_edit.php?course=$course_code&assignment=$id&submission=$sid");
+        redirect_to_home_page("modules/work/grade_edit_review.php?course=$course_code&assignment=$id&submission=$sid");
     }
 
 }
