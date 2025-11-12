@@ -275,6 +275,10 @@ function printPollForm() {
                     const form = document.getElementById('poll');
                         form.querySelectorAll('input, textarea').forEach(el => {
                             if (['radio', 'textarea'].includes(el.type) || el.tagName === 'TEXTAREA') {
+                                if (el.tagName === 'TEXTAREA' && el.classList.contains('textarea-qtable')) {
+                                    // Skip adding required to textarea with class 'textarea-qtable'
+                                    return;
+                                }
                                 el.required = true;
                             }
                         });
@@ -630,7 +634,7 @@ function printPollForm() {
                                                                     }
                                                                     $tool_content .= "<td>
                                                                                         <input type='hidden' name='q_row_col[]' value='$pqid,$val_row,$val_col,$ansCounter'>
-                                                                                        <textarea class='form-control' name='answer[$pqid][$ansCounter]' aria-label='$langTypeOutMessage'>$text</textarea>
+                                                                                        <textarea class='form-control textarea-qtable' name='answer[$pqid][$ansCounter]' aria-label='$langTypeOutMessage'>$text</textarea>
                                                                                     </td>";
                                                                 }
                                                             $tool_content .= "</tr>";
