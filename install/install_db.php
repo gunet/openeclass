@@ -1663,6 +1663,8 @@ $db->query("CREATE TABLE user_permissions (
     `user_id` int unsigned NOT NULL DEFAULT '0',
     `admin_modules` tinyint NOT NULL DEFAULT '0',
     `admin_users` tinyint NOT NULL DEFAULT '0',
+    `upload_document` tinyint NOT NULL DEFAULT '0',
+    `upload_multimedia` tinyint NOT NULL DEFAULT '0',
     `course_backup` tinyint NOT NULL DEFAULT '0',
     `course_clone` tinyint NOT NULL DEFAULT '0',
     PRIMARY KEY (`course_id`,`user_id`)
