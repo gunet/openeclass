@@ -600,7 +600,7 @@ function printPolls() {
                                 'url' => "pollresults.php?course=$course_code&amp;pid=$pid",
                                 'disabled' => ($total_participants == 0 || $thepoll->type == POLL_LIMESURVEY)],
                             ['title' => $langSee,
-                                'icon' => 'fa-search',
+                                'icon' => 'fa fa-play-circle',
                                 'url' => "pollparticipate.php?course=$course_code&amp;UseCase=1&amp;pid=$pid"],
                             ['title' => $langUserDuration,
                                 'icon' => 'fa-users',
