@@ -229,8 +229,10 @@ $db->query("CREATE TABLE `course_user_request` (
     `uid` int(11) NOT NULL,
     `course_id` int(11) NOT NULL,
     `comments` text,
+    `comment_rejected` text,
     `status` int(11) NOT NULL,
     `ts` datetime NOT NULL,
+    `ts_update` datetime DEFAULT NULL,
     PRIMARY KEY (`id`))  $tbl_options");
 
 $db->query("CREATE TABLE `course_description_type` (

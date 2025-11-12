@@ -4036,6 +4036,7 @@ $langForcePasswordChange = "Αλλαγή του συνθηματικού κατ�
 // list requests
 $langDateRequest = "Ημ/νία αίτησης";
 $langDateReject = "Ημ/νία απόρριψης";
+$langDateAccept = "Ημ/νία έγκρισης";
 $langDateClosed = "Ημ/νία κλεισίματος";
 $langDateCompleted = "Ημ/νία ολοκλήρωσης";
 
@@ -7443,3 +7444,5 @@ $langAISyllabusTextbooks = "Προτεινόμενα Συγγράμματα";
 $langAISyllabusAdditionalInfo = "Επιπλέον Πληροφορίες";
 $langInvalidScore = "Μη έγκυρος βαθμός";
 $langRequestAlreadySent = "Έχει ήδη σταλεί αίτημα εγγραφής για αυτό το μάθημα";
+$langRejectedRequests = "Απορριφθείσες Αιτήσεις Χρηστών";
+$langAcceptedRequests = "Εγκεκριμένες Αιτήσεις Χρηστών";

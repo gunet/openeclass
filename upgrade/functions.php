@@ -3507,6 +3507,14 @@ function upgrade_to_4_2($tbl_options) : void {
     Database::get()->query("ALTER TABLE course_activities ADD UNIQUE KEY(activity_id, activity_type)");
     Database::get()->query("INSERT IGNORE INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unit_id`,`module_id`) VALUES ('FC18', 1, 0, 0, 0)");
 
+    // course_user_request rejected fields
+    if (!DBHelper::fieldExists('course_user_request', 'comment_rejected')) {
+        Database::get()->query("ALTER TABLE course_user_request ADD `comment_rejected` TEXT DEFAULT NULL AFTER `comments`");
+    }
+    if (!DBHelper::fieldExists('course_user_request', 'ts_update')) {
+        Database::get()->query("ALTER TABLE course_user_request ADD `ts_update` DATETIME DEFAULT NULL AFTER `ts`");
+    }
+
 }
 
 /**
