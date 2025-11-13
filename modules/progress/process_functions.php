@@ -1266,12 +1266,13 @@ function get_resource_details($element, $resource_id) {
  * @param date $certificate_date
  * @param int $certificate_template_id
  * @param string $certificate_identifier
+ * @param bool $preview
  */
-function cert_output_to_pdf($certificate_id, $user, $certificate_title = null, $certificate_message = null, $certificate_issuer = null, $certificate_date = null, $certificate_template_id = null, $certificate_identifier = null) {
+function cert_output_to_pdf($certificate_id, $user, $certificate_title = null, $certificate_message = null, $certificate_issuer = null, $certificate_date = null, $certificate_template_id = null, $certificate_identifier = null, bool $preview = false) {
 
     global $webDir, $urlServer, $langCertAuthenticity, $langpublisher;
 
-    if (!is_null($certificate_template_id)) {
+    if (isset($preview) and $preview) { // certificate preview
         $certificate_id = $certificate_template_id;
         $q = Database::get()->querySingle("SELECT * FROM certificate_template WHERE id = ?d", $certificate_id);
         $cert_file = $q->filename;
