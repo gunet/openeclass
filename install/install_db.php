@@ -1662,8 +1662,15 @@ $db->query("CREATE TABLE `user_request_ext_uid` (
 
 $db->query("CREATE TABLE `permissions` (
     `id` tinyint NOT NULL AUTO_INCREMENT,
-    `permission` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
+    `permission` VARCHAR(255),
      PRIMARY KEY (`id`)) $tbl_options");
+
+$db->query("INSERT INTO permissions(permission) VALUE('admin_course_users'), 
+             ('admin_course_modules'),
+             ('backup_course'),
+             ('clone_course'),
+             ('can_upload_document'),
+             ('can_upload_multimedia')");
 
 $db->query("CREATE TABLE user_permissions (
     `course_id` int NOT NULL DEFAULT '0',  

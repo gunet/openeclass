@@ -3489,8 +3489,15 @@ function upgrade_to_4_2($tbl_options) : void {
     if (!DBHelper::tableExists('permissions')) {
         Database::get()->query("CREATE TABLE `permissions` (
             `id` tinyint NOT NULL AUTO_INCREMENT,
-            `permission` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
+            `permission` VARCHAR(255),
              PRIMARY KEY (`id`)) $tbl_options");
+
+        Database::get()->query("INSERT INTO permissions(permission) VALUE('admin_course_users'), 
+             ('admin_course_modules'),
+             ('backup_course'),
+             ('clone_course'),
+             ('can_upload_document'),
+             ('can_upload_multimedia')");
     }
 
     if (!DBHelper::tableExists('user_permissions')) {
