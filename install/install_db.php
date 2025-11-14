@@ -1660,17 +1660,17 @@ $db->query("CREATE TABLE `user_request_ext_uid` (
     FOREIGN KEY (`user_request_id`) REFERENCES `user_request` (`id`) ON DELETE CASCADE)
     $tbl_options");
 
+$db->query("CREATE TABLE `permissions` (
+    `id` tinyint NOT NULL AUTO_INCREMENT,
+    `permission` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
+     PRIMARY KEY (`id`)) $tbl_options");
+
 $db->query("CREATE TABLE user_permissions (
-    `course_id` int NOT NULL DEFAULT '0',
+    `course_id` int NOT NULL DEFAULT '0',  
     `user_id` int unsigned NOT NULL DEFAULT '0',
-    `admin_modules` tinyint NOT NULL DEFAULT '0',
-    `admin_users` tinyint NOT NULL DEFAULT '0',
-    `upload_document` tinyint NOT NULL DEFAULT '0',
-    `upload_multimedia` tinyint NOT NULL DEFAULT '0',
-    `course_backup` tinyint NOT NULL DEFAULT '0',
-    `course_clone` tinyint NOT NULL DEFAULT '0',
-    PRIMARY KEY (`course_id`,`user_id`)
-) $tbl_options");
+    `permission_id` tinyint NOT NULL,
+    PRIMARY KEY (`course_id`,`user_id`,`permission_id`)
+  ) $tbl_options");
 
 $eclass_stud_reg = intval($eclass_stud_reg);
 
