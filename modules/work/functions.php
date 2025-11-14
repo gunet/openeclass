@@ -1035,7 +1035,7 @@ function display_assignments($editor = true) {
                             SELECT assignment_id FROM assignment_to_specific WHERE group_id != 0 AND group_id IN ($gids_sql_ready))
                         )
                     ORDER BY title
-                    DESC
+                    ASC
                     LIMIT 1000
             )
             UNION
