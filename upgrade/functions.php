@@ -3358,57 +3358,64 @@ function upgrade_to_4_1($tbl_options) : void {
 }
 
 /**
- * @brief upgrade queries for 4.2
+ * @brief upgrade queries for 4.2 (merged version)
  * @param $tbl_options
  * @return void
  */
 function upgrade_to_4_2($tbl_options) : void {
 
-
+    // forum_topic: pin_time column
     if (!DBHelper::fieldExists('forum_topic', 'pin_time')) {
         Database::get()->query("ALTER TABLE forum_topic ADD pin_time DATETIME DEFAULT NULL");
     }
+    // forum_topic: visible column
     if (!DBHelper::fieldExists('forum_topic', 'visible')) {
         Database::get()->query("ALTER TABLE forum_topic ADD visible TINYINT NOT NULL DEFAULT 1");
     }
+    // forum: visible column
     if (!DBHelper::fieldExists('forum', 'visible')) {
         Database::get()->query("ALTER TABLE forum ADD visible TINYINT NOT NULL DEFAULT 1");
     }
+    // tc_log: id column (set to AUTO_INCREMENT)
     if (DBHelper::fieldExists('tc_log', 'id')) {
         Database::get()->query("ALTER TABLE tc_log CHANGE id id INT NOT NULL AUTO_INCREMENT");
     }
+    // tc_attendance: id column (set to AUTO_INCREMENT)
     if (DBHelper::fieldExists('tc_attendance', 'id')) {
         Database::get()->query("ALTER TABLE tc_attendance CHANGE id id INT NOT NULL AUTO_INCREMENT");
     }
+    // exercise_question: options column
     if (!DBHelper::fieldExists('exercise_question', 'options')) {
         Database::get()->query("ALTER TABLE exercise_question ADD options TEXT DEFAULT NULL");
     }
+    // h5p_content: creator_id column
     if (!DBHelper::fieldExists('h5p_content', 'creator_id')) {
         Database::get()->query("ALTER TABLE h5p_content ADD `creator_id` INT UNSIGNED NOT NULL DEFAULT 0");
     }
 
+    // Foreign key for attendance table
     DBHelper::createForeignKey('attendance', 'course_id', 'course', 'id', DBHelper::FKRefOption_CASCADE);
 
+    // attendance_activities: check/create columns, foreign key
     if(!DBHelper::foreignKeyExists('attendance_activities', 'attendance_id', 'attendance', 'id')) {
-        // Use consistent data types before creating the foreign key
         Database::get()->query('ALTER TABLE `attendance_activities`
             CHANGE COLUMN `attendance_id` `attendance_id` INT NOT NULL DEFAULT 0,
             CHANGE COLUMN `module_auto_id` `module_auto_id` INT NOT NULL DEFAULT 0');
         DBHelper::createForeignKey('attendance_activities', 'attendance_id', 'attendance', 'id', DBHelper::FKRefOption_CASCADE);
     }
 
+    // attendance_book: check/create columns, foreign key
     if(!DBHelper::foreignKeyExists('attendance_book', 'attendance_activity_id', 'attendance_activities', 'id')) {
-        // Use consistent data types before creating the foreign key
         Database::get()->query('ALTER TABLE `attendance_book` CHANGE COLUMN `attendance_activity_id` `attendance_activity_id` INT NOT NULL DEFAULT 0');
-
         DBHelper::createForeignKey('attendance_book', 'attendance_activity_id', 'attendance_activities', 'id', DBHelper::FKRefOption_CASCADE);
     }
     DBHelper::createForeignKey('attendance_book', 'uid', 'user', 'id', DBHelper::FKRefOption_CASCADE);
 
+    // attendance_users: foreign keys
     DBHelper::createForeignKey('attendance_users', 'attendance_id', 'attendance', 'id', DBHelper::FKRefOption_CASCADE);
     DBHelper::createForeignKey('attendance_users', 'uid', 'user', 'id', DBHelper::FKRefOption_CASCADE);
 
-
+    // ai_providers table
     if (!DBHelper::tableExists('ai_providers')) {
         Database::get()->query("CREATE TABLE ai_providers (
             `id` smallint NOT NULL AUTO_INCREMENT,
@@ -3424,6 +3431,7 @@ function upgrade_to_4_2($tbl_options) : void {
             PRIMARY KEY (`id`)) $tbl_options");
     }
 
+    // ai_modules table
     if (!DBHelper::tableExists('ai_modules')) {
         Database::get()->query("CREATE TABLE ai_modules (
             `id` SMALLINT NOT NULL AUTO_INCREMENT,
@@ -3432,6 +3440,7 @@ function upgrade_to_4_2($tbl_options) : void {
             `all_courses` TINYINT NOT NULL DEFAULT 1,
             PRIMARY KEY(ID)) $tbl_options");
     }
+    // ai_courses table
     if (!DBHelper::tableExists('ai_courses')) {
         Database::get()->query("CREATE TABLE `ai_courses` (
             `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -3440,7 +3449,7 @@ function upgrade_to_4_2($tbl_options) : void {
             PRIMARY KEY (`id`), KEY (`ai_module`, `course_id`))  $tbl_options");
     }
 
-    // AI Evaluation Configuration Table for Exercise Questions
+    // Exercise AI Configuration Table for Exercise Questions
     if (!DBHelper::tableExists('exercise_ai_config')) {
         Database::get()->query("CREATE TABLE exercise_ai_config (
             `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -3460,6 +3469,7 @@ function upgrade_to_4_2($tbl_options) : void {
         ) $tbl_options");
     }
 
+    // exercise_ai_evaluation
     if (!DBHelper::tableExists('exercise_ai_evaluation')) {
         Database::get()->query("CREATE TABLE exercise_ai_evaluation (
             `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -3486,6 +3496,7 @@ function upgrade_to_4_2($tbl_options) : void {
         ) $tbl_options");
     }
 
+    // user_permissions table
     if (!DBHelper::tableExists('user_permissions')) {
         Database::get()->query("CREATE TABLE user_permissions (
             `course_id` int NOT NULL DEFAULT '0',
@@ -3498,36 +3509,16 @@ function upgrade_to_4_2($tbl_options) : void {
         ) $tbl_options");
     }
 
+    // lp_user_module_progress: progress_measure column
     if (!DBHelper::fieldExists('lp_user_module_progress', 'progress_measure')) {
         Database::get()->query("ALTER TABLE lp_user_module_progress ADD `progress_measure` FLOAT DEFAULT NULL AFTER `session_time`");
     }
-    // flipped classroom
+
+    // flipped classroom: index and seed data
     Database::get()->query("ALTER TABLE course_activities ADD UNIQUE KEY(activity_id, activity_type)");
     Database::get()->query("INSERT IGNORE INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unit_id`,`module_id`) VALUES ('FC18', 1, 0, 0, 0)");
 
-}
-
-/**
- * @brief upgrade queries for 4.2
- * @param $tbl_options
- * @return void
- */
-function upgrade_to_4_2($tbl_options) : void {
-    if (!DBHelper::fieldExists('forum_topic', 'pin_time')) {
-        Database::get()->query("ALTER TABLE forum_topic ADD pin_time DATETIME DEFAULT NULL");
-    }
-
-    if (DBHelper::fieldExists('tc_log', 'id')) {
-        Database::get()->query("ALTER TABLE tc_log CHANGE id id INT NOT NULL AUTO_INCREMENT");
-    }
-    if (DBHelper::fieldExists('tc_attendance', 'id')) {
-        Database::get()->query("ALTER TABLE tc_attendance CHANGE id id INT NOT NULL AUTO_INCREMENT");
-    }
-
-    if (DBHelper::fieldExists('tc_log', 'id')) {
-        Database::get()->query("ALTER TABLE tc_log CHANGE id id INT NOT NULL AUTO_INCREMENT");
-    }
-
+    // tenant table (unique to the second function)
     if (!DBHelper::tableExists('tenant')) {
         Database::get()->query("CREATE TABLE `tenant` (
             `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -3546,6 +3537,7 @@ function upgrade_to_4_2($tbl_options) : void {
             CONSTRAINT FOREIGN KEY (`theme_id`) REFERENCES `theme_options` (`id`)) $tbl_options");
     }
 }
+
 
 /**
  * @brief Create Indexes
