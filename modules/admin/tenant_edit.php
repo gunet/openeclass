@@ -41,7 +41,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($_POST['tenant_category'] == '1') {
             $department_id = $_POST['category'];
         } else {
-            $department_id = $tree->addNode($_POST['name'], '', 0, '', 1, 1, 0, 0, '');
+            $tree->addNode($_POST['name'], '', 0, '', 1, 1, 0, 0, '');
+            // Temporary workaround - for unknown reasons, adding a node using the stored procedure
+            // doesn't return the lastInsertId
+            $department_id = Database::get()->querySingle('SELECT MAX(id) AS id FROM hierarchy')->id;
         }
         Database::get()->query('INSERT INTO tenant
             (name, description, department_id, url, options, created_at, updated_at)
