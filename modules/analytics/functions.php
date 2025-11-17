@@ -28,7 +28,7 @@ require_once 'ElementTypes.php';
  */
 function display_learning_analytics() {
     global $course_id, $course_code, $tool_content, $langAnalyticsNoAnalytics, $langActive, $langInactive,
-    $langAnalyticsTotalAnalytics, $langAnalyticsViewPerUserGeneral, $langModify, $langAnalyticsEditElements, $langDeactivate,
+    $langAnalyticsTotalAnalytics, $langAnalyticsViewPerUserGeneral, $langModify, $langEditItems, $langDeactivate,
     $langActivate, $langDelete, $langAnalyticsConfirm, $langLearningAnalytics, $langAdd;
 
     $sql_data = Database::get()->queryArray("SELECT id, title, description, active, start_date, end_date, created, periodType FROM analytics WHERE courseID= ?d", $course_id);
@@ -63,7 +63,7 @@ function display_learning_analytics() {
                     array('title' => $langModify,
                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$id&amp;edit_analytics=1",
                             'icon' => 'fa-edit'),
-                    array('title' => $langAnalyticsEditElements,
+                    array('title' => $langEditItems,
                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$id&amp;mode=showElements",
                             'icon' => 'fa-edit'),
                     array('title' => $active ? $langDeactivate : $langActivate,

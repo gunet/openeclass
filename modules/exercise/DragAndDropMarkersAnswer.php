@@ -28,6 +28,7 @@ class DragAndDropMarkersAnswer extends \QuestionType
             $markersWithAnswers = $this->answer_object->get_drag_and_drop_markers_with_answers();
             $markersWithGrades = $this->answer_object->get_drag_and_drop_markers_with_grades();
             $gradesOfAnswers = $this->answer_object->get_drag_and_drop_answer_grade();
+            ksort($gradesOfAnswers);
             $AnswersGradeArr= [];
             foreach ($gradesOfAnswers as $gr) {
                 $AnswersGradeArr[] = $gr;

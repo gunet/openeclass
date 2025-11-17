@@ -191,7 +191,7 @@
                                     </ul>
                                 </div>
                             </div>
-                            @if($is_user_teacher)
+                            @if($is_user_teacher && get_config('individual_group_bookings'))
                                 <div class='card-footer border-0'>
                                     <div class='col-12'>
                                         <div class='control-label-notes mb-3'>{{ trans('langAvailableDateForUser') }}</div>

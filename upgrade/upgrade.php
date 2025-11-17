@@ -259,6 +259,9 @@ if ($command_line or $ajax_call) {
             } elseif ($version === '4.2') {
                 upgrade_to_4_2($tbl_options);
                 steps_finished();
+            } elseif ($version === '4.3') {
+                upgrade_to_4_3($tbl_options);
+                steps_finished();
             }
         }
         if ($command_line) {

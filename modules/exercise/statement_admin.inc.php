@@ -94,9 +94,25 @@ $(function() {
         }
     });
 
+    $('.deletePicture').on('click', function () {
+        var eid = $(this).attr('data-exercise-id');
+        var qid = $(this).attr('data-question-id');
+        let baseUrl = '{$urlServer}modules/exercise/admin.php?course={$course_code}&exerciseId=' + eid + '&modifyQuestion=' + qid + '&deletePicture=1';
+        if (confirm('$langConfirmDelete')) {
+            window.location.href = baseUrl;
+        }
+    });
+
  });
 </script>
  ";
+
+// Delete image of question
+if (isset($_GET['deletePicture']) && isset($_GET['modifyQuestion'])) {
+    $objQuestion->read($_GET['modifyQuestion']);
+    $objQuestion->removePicture();
+    redirect_to_home_page("$_SERVER[SCRIPT_NAME]?course=$course_code&exerciseId=$_GET[exerciseId]&modifyQuestion=$_GET[modifyQuestion]");
+}
 
 // the question form has been submitted
 if (isset($_POST['submitQuestion'])) {
@@ -118,7 +134,8 @@ if (isset($_POST['submitQuestion'])) {
         if (isset($_FILES['imageUpload']) && !is_uploaded_file($_FILES['imageUpload']['tmp_name']) && $answerType == DRAG_AND_DROP_MARKERS) {
             Session::flash('message', $langRequiresImageUploadedForThisType);
             Session::flash('alert-class', 'alert-warning');
-            redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=" . intval($_GET['exerciseId']) . "&newQuestion=yes");
+            $actionType = $_GET['modifyQuestion'] ? "&modifyQuestion=$_GET[modifyQuestion]" : "&newQuestion=yes";
+            redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=" . intval($_GET['exerciseId']) . $actionType);
         }
 
         // no name given
@@ -129,6 +146,17 @@ if (isset($_POST['submitQuestion'])) {
             $objQuestion->read($_GET['modifyQuestion']);
         }
         $objQuestion->updateTitle($questionName);
+
+        // If the current question is calculated type 
+        if ($answerType == CALCULATED) {
+            $des = Database::get()->querySingle("SELECT `description` FROM exercise_question WHERE id = ?d", $objQuestion->selectId());
+            $arr_des = unserialize($des->description);
+            $arrQ = [
+                'question_description' => purify($_POST['questionDescription']),
+                'arithmetic_expression' => $arr_des['arithmetic_expression'] ?? ''
+            ];
+            $questionDescription = serialize($arrQ);
+        }
         $objQuestion->updateDescription($questionDescription);
         $objQuestion->updateFeedback($questionFeedback);
         $objQuestion->updateType($answerType);
@@ -146,10 +174,8 @@ if (isset($_POST['submitQuestion'])) {
             $objQuestion->save();
         }
         $questionId = $objQuestion->selectId();
-        // upload or delete picture
-        if (isset($_POST['deletePicture'])) {
-            $objQuestion->removePicture();
-        } elseif (isset($_FILES['imageUpload']) && is_uploaded_file($_FILES['imageUpload']['tmp_name'])) {
+        // upload picture
+        if (isset($_FILES['imageUpload']) && is_uploaded_file($_FILES['imageUpload']['tmp_name'])) {
             if ($answerType == DRAG_AND_DROP_MARKERS) {
                 $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/svg+xml'];
                 $fileType = mime_content_type($_FILES['imageUpload']['tmp_name']);
@@ -207,12 +233,16 @@ if (isset($_POST['submitQuestion'])) {
         redirect_to_home_page("modules/exercise/admin.php?course={$course_code}{$exercise_or_pool}{$new_or_modif}");
     }
 } else {
-    // if we don't come here after having cancelled the warning message "used in several exercises"
+    // if we don't come here after having canceled the warning message "used in several exercises"
     if (!isset($buttonBack)) {
         $questionName = $objQuestion->selectTitle();
         $questionDescription = $objQuestion->selectDescription();
         $questionFeedback = $objQuestion->selectFeedback();
         $answerType = $objQuestion->selectType();
+        if ($answerType == CALCULATED) {
+            $arr_des = unserialize($objQuestion->selectDescription());
+            $questionDescription = $arr_des['question_description'];
+        }
         $difficulty = $objQuestion->selectDifficulty();
         $category = $objQuestion->selectCategory();
         $questionWeight = $objQuestion->selectWeighting();
@@ -221,7 +251,7 @@ if (isset($_POST['submitQuestion'])) {
 if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
     $questionId = $objQuestion->selectId();
     // is picture set ?
-    $okPicture = file_exists($picturePath . '/quiz-' . $questionId) ? true : false;
+    $okPicture = file_exists($picturePath . '/quiz-' . $questionId);
     // if there is an error message
     if (!empty($msgErr)) {
         $tool_content .= "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$msgErr</span></div>\n";
@@ -329,30 +359,27 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
                 </div>
             </div>";
 
-            $tool_content .= "<div class='row form-group mt-4'>
-                <label for='imageUpload' class='col-12 control-label-notes mb-1'>".(($okPicture) ? $langReplacePicture : $langAddPicture)."</label>
-                <div class='col-12'>" .
-
-                (($okPicture) ? "<img src='../../$picturePath/quiz-$questionId'><br><br>" : "") .
-                fileSizeHidenInput() . "
-                  <input type='file' name='imageUpload' id='imageUpload'>
-                </div>
-            </div>";
-
-            if ($okPicture) {
+            if (!$okPicture) {
                 $tool_content .= "
                     <div class='row form-group mt-4'>
+                        <label for='imageUpload' class='col-12 control-label-notes mb-1'>$langAddPicture</label>
                         <div class='col-12'>
-                            <div class='checkbox'>
-                                <label class='label-container' aria-label='$langSelect'>
-                                    <input type='checkbox' name='deletePicture' value='1' ".(isset($_POST['deletePicture'])? "checked":"").">
-                                    <span class='checkmark'></span>
-                                    $langDeletePicture
-                              </label>
-                            </div>
+                            " . fileSizeHidenInput() . "   
+                            <input type='file' name='imageUpload' id='imageUpload'>
                         </div>
-                    </div>";
+                    </div>
+                ";
+            } else {
+                $tool_content .= "
+                    <div class='row form-group mt-4'>
+                        <div class='col-12 d-flex justify-content-start align-items-center gap-2'>
+                            <img style='max-height:100px;max-width:150px;' src='../../$picturePath/quiz-$questionId'>
+                            <a data-question-id='$_GET[modifyQuestion]' data-exercise-id='$_GET[exerciseId]' class='btn deleteAdminBtn deletePicture'>$langDeletePicture</a>
+                        </div>
+                    </div>
+                ";
             }
+
             $tool_content .= "
                 <div class='row form-group mt-4'>
                     <label for='questionDescription' class='col-12 control-label-notes mb-1'>$langQuestionDescription</label>

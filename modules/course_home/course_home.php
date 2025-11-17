@@ -111,7 +111,9 @@ if ($is_editor and isset($_SERVER['HTTP_X_REQUESTED_WITH']) and strtolower($_SER
 // other actions in course unit
 if ($is_editor) {
     // update index and refresh course metadata
-    require_once 'modules/search/indexer.class.php';
+    require_once 'modules/search/classes/ConstantsUtil.php';
+    require_once 'modules/search/classes/SearchEngineFactory.php';
+    $searchEngine = SearchEngineFactory::create();
 
     if (isset($_REQUEST['del'])) { // delete course unit
         $id = intval(getDirectReference($_REQUEST['del']));
@@ -119,9 +121,9 @@ if ($is_editor) {
             Database::get()->query('DELETE FROM course_units WHERE id = ?d', $id);
             Database::get()->query('DELETE FROM unit_resources WHERE unit_id = ?d', $id);
             Database::get()->query("DELETE FROM course_units_to_specific WHERE unit_id = ?d", $id);
-            Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_UNIT, $id);
-            Indexer::queueAsync(Indexer::REQUEST_REMOVEBYUNIT, Indexer::RESOURCE_UNITRESOURCE, $id);
-            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+            $searchEngine->indexResource(ConstantsUtil::REQUEST_REMOVE, ConstantsUtil::RESOURCE_UNIT, $id);
+            $searchEngine->indexResource(ConstantsUtil::REQUEST_REMOVEBYUNIT, ConstantsUtil::RESOURCE_UNITRESOURCE, $id);
+            $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_COURSE, $course_id);
             CourseXMLElement::refreshCourse($course_id, $course_code);
             Session::flash('message',$langCourseUnitDeleted);
             Session::flash('alert-class', 'alert-success');
@@ -132,8 +134,8 @@ if ($is_editor) {
         $vis = Database::get()->querySingle("SELECT `visible` FROM course_units WHERE id = ?d", $id)->visible;
         $newvis = ($vis == 1) ? 0 : 1;
         Database::get()->query("UPDATE course_units SET visible = ?d WHERE id = ?d AND course_id = ?d", $newvis, $id, $course_id);
-        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNIT, $id);
-        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+        $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_UNIT, $id);
+        $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_COURSE, $course_id);
         CourseXMLElement::refreshCourse($course_id, $course_code);
         redirect_to_home_page("courses/$course_code/");
     } elseif (isset($_REQUEST['access'])) {

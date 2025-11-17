@@ -29,7 +29,7 @@ CronUtil::flush();
 
 if ($uid > 0) { // restrict anonymous access
     set_time_limit(0);
-    require_once 'modules/search/indexer.class.php';
+    require_once 'modules/search/lucene/indexer.class.php';
     $idx = new Indexer();
     $idx->queueAsyncProcess();
 }

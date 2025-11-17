@@ -843,7 +843,7 @@ function shapesCreationProcess() {
             if (confirm(lang.point+' '+number+' : '+lang.confirm)) {
                 //var number = getNumberOftheText(addValuesId);
                 var markerAnswer = $('#marker-answer-'+number).val();
-                var markerGrade = $('#marker-grade-'+number).val();
+                var markerGrade = fixFloat($('#marker-grade-'+number).val());
                 var markerCoordinates = $('#shape-coordinates-'+number).val();
                 var markerShape = $('#shapeType-'+number).val();
                 var markerAnswerWithImage = $('#marker-answer-with-image-'+number).val();
@@ -1178,4 +1178,11 @@ function decodeHTMLEntities(str) {
     const txt = document.createElement('textarea');
     txt.innerHTML = str;
     return txt.value;
+}
+
+function fixFloat(str) {
+    if (!str) {
+        return 0.0;
+    }
+    return parseFloat(str.replace(',', '.'));
 }

@@ -496,12 +496,17 @@ if (count($exercise_question_ids) > 0) {
         $tool_content .= "</td></tr></thead>";
 
         $tool_content .= "<tr><td colspan='2'>";
+        $arithmetic_expression_str = '';
         if ($answerType == CALCULATED) {
+            $des_arr = unserialize($questionDescription);
+            $questionDescription = $des_arr['question_description'];
+
             $objAn = new Answer($questionId);
-            $questionDescription = $objAn->replaceItemsBracesWithWildCards($questionDescription, $questionId);
+            $arithmetic_expression = $des_arr['arithmetic_expression'];
+            $arithmetic_expression_str = $objAn->replaceItemsBracesWithWildCards($arithmetic_expression, $questionId);
             unset($objAn);
         }
-        $tool_content .= "<p>" . q_math($questionName) . "</p>" . standard_text_escape($questionDescription);
+        $tool_content .= "<p>" . q_math($questionName) . "</p>" . standard_text_escape($questionDescription) . '<br>' . $arithmetic_expression_str;
 
         $classImg = '';
         $classContainer = '';
@@ -660,7 +665,7 @@ if ($checking) {
 if (!isset($_GET['pdf']) and $is_editor) {
     $tool_content .= "<div class='col-12 d-flex justify-content-start align-items-center mt-4'>
         <a class='btn submitAdminBtn submitAdminBtnDefault' href='index.php' id='submitButton'><span id='text_submit' class='TextBold'>$langSubmit</span></a>
-        <a class='btn cancelAdminBtn m-2' href='results.php?course=$course_code&exerciseId=" . getIndirectReference($exercise_user_record->eid) . "'' id='cancelButton'><span id='cancel_submit' class='TextBold'>$langCancel</span></a>
+        <a class='btn cancelAdminBtn m-2' href='results.php?course=$course_code&exerciseId=" . getIndirectReference($exercise_user_record->eid) . "' id='cancelButton'><span id='cancel_submit' class='TextBold'>$langCancel</span></a>
     </div>";
 }
 

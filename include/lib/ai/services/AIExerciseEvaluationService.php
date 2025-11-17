@@ -18,7 +18,7 @@ class AIExerciseEvaluationService extends AIService{
         $this->provider = $provider ?? AIProviderFactory::getPrimaryProvider();
 
         if (!$this->provider) {
-            throw new Exception('No AI provider available for course extraction');
+            return false;
         }
     }
 

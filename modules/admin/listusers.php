@@ -54,10 +54,10 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     // 'LIKE' argument prefix/postfix - default is substring search
     $l1 = $l2 = '%';
     $cs = 'COLLATE utf8mb4_general_ci';
-    if (!empty($_POST['search']['value'])) {
-        if ($_POST['search']['value'] == 'exact') {
+    if (isset($_GET['search_type'])) {
+        if ($_GET['search_type'] == 'exact') {
             $l1 = $l2 = $cs = '';
-        } elseif ($_POST['search']['value'] == 'begin') {
+        } elseif ($_GET['search_type'] == 'begin') {
             $l1 = '';
         }
     }
@@ -498,6 +498,7 @@ $head_content .= "<script>
                 },
                'sLengthMenu':   '" . js_escape("$langDisplay _MENU_ $langResults2") . "',
                'sZeroRecords':  '" . js_escape($langNoResult) . "',
+               'sEmptyTable':  '" . js_escape($langNoResult) . "',
                'sInfo':         '" . js_escape("$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults") . "',
                'sInfoEmpty':    '',
                'sInfoFiltered': '',

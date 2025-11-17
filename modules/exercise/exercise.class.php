@@ -1259,7 +1259,7 @@ if (!class_exists('Exercise')) {
                 $objAnswersTmp = new Answer($key);
                 $totalAnswers = $objAnswersTmp->get_total_calculated_predefined_answers();
 
-                if (isset($_POST['answer_id_choice'][$key]) && $value == '0') { // if the answer comes from text and is zero the create a string separated with answer_id
+                if (isset($_POST['answer_id_choice'][$key]) && $value == '0') { // if the answer comes from text and is zero then create a string separated with answer_id
                     $value = (int)$value . '|' . $_POST['answer_id_choice'][$key];
                 }
 
@@ -1278,7 +1278,7 @@ if (!class_exists('Exercise')) {
                 } elseif (is_string($value) && !empty($value)) { // answered question
                     $arrAnswer = explode('|', $value);
                     if (count($arrAnswer) == 2) { // multiple predefined answers
-                        $user_answer = $arrAnswer[0];
+                        $user_answer = fix_float($arrAnswer[0]);
                         if (empty($user_answer) && $user_answer != '0') {
                             $answer_id = 0;
                         } else {

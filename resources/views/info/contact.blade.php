@@ -122,7 +122,7 @@
                                         <div class='row row-cols-1 g-4 mb-4'>
                                             <div class='col'>
                                                 <label for="messageID" class="col-sm-12 control-label-notes">{{ trans('langMessage') }} <span class="asterisk Accent-200-cl">(*)</span></label>
-                                                <textarea id="messageID" class='form-control' placeholder="{{ trans('typeyourmessage') }}" name='contact_message'></textarea>
+                                                <textarea id="messageID" class='form-control' placeholder="{{ trans('langTypeOutMessage') }}" name='contact_message'></textarea>
                                                 @if(Session::getError('contact_message'))
                                                     <span class='help-block Accent-200-cl'>{!! Session::getError('contact_message') !!}</span>
                                                 @endif

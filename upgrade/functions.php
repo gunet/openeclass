@@ -3358,7 +3358,7 @@ function upgrade_to_4_1($tbl_options) : void {
 }
 
 /**
- * @brief upgrade queries for 4.2 (merged version)
+ * @brief upgrade queries for 4.2
  * @param $tbl_options
  * @return void
  */
@@ -3496,16 +3496,26 @@ function upgrade_to_4_2($tbl_options) : void {
         ) $tbl_options");
     }
 
-    // user_permissions table
+    if (!DBHelper::tableExists('permissions')) {
+        Database::get()->query("CREATE TABLE `permissions` (
+            `id` tinyint NOT NULL AUTO_INCREMENT,
+            `permission` VARCHAR(255),
+             PRIMARY KEY (`id`)) $tbl_options");
+
+        Database::get()->query("INSERT INTO permissions(permission) VALUE('admin_course_users'),
+             ('admin_course_modules'),
+             ('backup_course'),
+             ('clone_course'),
+             ('can_upload_document'),
+             ('can_upload_multimedia')");
+    }
+
     if (!DBHelper::tableExists('user_permissions')) {
         Database::get()->query("CREATE TABLE user_permissions (
             `course_id` int NOT NULL DEFAULT '0',
             `user_id` int unsigned NOT NULL DEFAULT '0',
-            `admin_modules` tinyint NOT NULL DEFAULT '0',
-            `admin_users` tinyint NOT NULL DEFAULT '0',
-            `course_backup` tinyint NOT NULL DEFAULT '0',
-            `course_clone` tinyint NOT NULL DEFAULT '0',
-            PRIMARY KEY (`course_id`,`user_id`)
+            `permission_id` tinyint NOT NULL,
+            PRIMARY KEY (`course_id`,`user_id`,`permission_id`)
         ) $tbl_options");
     }
 
@@ -3518,7 +3528,23 @@ function upgrade_to_4_2($tbl_options) : void {
     Database::get()->query("ALTER TABLE course_activities ADD UNIQUE KEY(activity_id, activity_type)");
     Database::get()->query("INSERT IGNORE INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unit_id`,`module_id`) VALUES ('FC18', 1, 0, 0, 0)");
 
-    // tenant table (unique to the second function)
+    // course_user_request rejected fields
+    if (!DBHelper::fieldExists('course_user_request', 'comment_rejected')) {
+        Database::get()->query("ALTER TABLE course_user_request ADD `comment_rejected` TEXT DEFAULT NULL AFTER `comments`");
+    }
+    if (!DBHelper::fieldExists('course_user_request', 'ts_update')) {
+        Database::get()->query("ALTER TABLE course_user_request ADD `ts_update` DATETIME DEFAULT NULL AFTER `ts`");
+    }
+}
+
+
+/**
+ * @brief upgrade queries for 4.3
+ * @param $tbl_options
+ * @return void
+ */
+function upgrade_to_4_3($tbl_options) : void {
+    // tenant table
     if (!DBHelper::tableExists('tenant')) {
         Database::get()->query("CREATE TABLE `tenant` (
             `id` int(11) NOT NULL AUTO_INCREMENT,

@@ -2038,8 +2038,10 @@ function delete_course($cid): void
     removeDir("$webDir/courses/$course_code");
     removeDir("$webDir/video/$course_code");
     // refresh index
-    require_once 'modules/search/indexer.class.php';
-    Indexer::queueAsync(Indexer::REQUEST_REMOVEALLBYCOURSE, Indexer::RESOURCE_IDX, $cid);
+    require_once 'modules/search/classes/ConstantsUtil.php';
+    require_once 'modules/search/classes/SearchEngineFactory.php';
+    $searchEngine = SearchEngineFactory::create();
+    $searchEngine->indexResource(ConstantsUtil::REQUEST_REMOVEALLBYCOURSE, ConstantsUtil::RESOURCE_IDX, $cid);
 
     Database::get()->query("UPDATE oai_record SET deleted = 1, datestamp = ?t WHERE course_id = ?d", gmdate('Y-m-d H:i:s'), $cid);
 }
@@ -2993,6 +2995,18 @@ function course_status($course_id) {
     $status = Database::get()->querySingle("SELECT visible FROM course WHERE id = ?d", $course_id)->visible;
 
     return $status;
+}
+
+/**
+ * @brief get course type (e.g. units, wall etc)
+ * @param $course_id
+ * @return mixed
+ */
+function course_type($course_id) {
+
+    $view_type = Database::get()->querySingle("SELECT view_type FROM course WHERE id = ?d", $course_id)->view_type;
+
+    return $view_type;
 }
 
 /**

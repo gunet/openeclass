@@ -2942,7 +2942,7 @@ function display_user_progress_details($element, $element_id, $user_id) {
         } else {
             $resource_data = get_resource_details($element, $user_criterion->certificate_criterion);
         }
-		$activity = $resource_data['title'] . "&nbsp;<small>(" .$resource_data['type'] . ")</small>";
+		$activity = q($resource_data['title']) . "&nbsp;<small>(" .$resource_data['type'] . ")</small>";
 
         if (!empty($user_criterion->operator) && $user_criterion->activity_type != AssignmentSubmitEvent::ACTIVITY) {
             $op = get_operators();
@@ -2965,7 +2965,7 @@ function display_user_progress_details($element, $element_id, $user_id) {
     // uncompleted criteria
 	foreach ($sql2 as $user_criterion) {
 		$resource_data = get_resource_details($element, $user_criterion->id);
-		$activity = $resource_data['title'] . "&nbsp;<small>(" .$resource_data['type'] . ")</small>";
+		$activity = q($resource_data['title']) . "&nbsp;<small>(" .$resource_data['type'] . ")</small>";
         if (!empty($user_criterion->operator) && $user_criterion->activity_type != AssignmentSubmitEvent::ACTIVITY) {
             $op = get_operators();
             $op_content = $op[$user_criterion->operator];

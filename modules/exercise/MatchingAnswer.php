@@ -7,6 +7,7 @@ class MatchingAnswer extends QuestionType
     public function __destruct() {
         unset($this->answer_object);
     }
+
     public function PreviewQuestion(): string
     {
         global $langScore, $langChoice, $langCorrespondsTo;
@@ -29,7 +30,7 @@ class MatchingAnswer extends QuestionType
                 $html_content .= "
                   <tr>
                     <td>" . standard_text_escape($answerTitle) . "</td>
-                    <td>{$answerTitle[$answerCorrect]}&nbsp;&nbsp;&nbsp;<strong><small class='text-nowrap'>($langScore: $answerWeighting)</small></strong></td>
+                    <td>{$this->answer_object->answer[$answerCorrect]}&nbsp;&nbsp;&nbsp;<strong><small class='text-nowrap'>($langScore: $answerWeighting)</small></strong></td>
                   </tr>";
             }
         }
@@ -127,16 +128,13 @@ class MatchingAnswer extends QuestionType
                     $grade = $answerWeighting;
                     $choice[$answerId] = q($matching[$choice[$answerId]]);
                     $icon = "<span class='fa-solid fa-check text-success'></span>";
-                    $pdf_icon = "✓";
                 } elseif (!$thisChoice) {
                     $choice[$answerId] = '<del class="text-danger">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</del>';
                     $icon = "<span class='fa-solid fa-xmark text-danger'></span>";
-                    $pdf_icon = "✓";
                 } else {
                     $choice[$answerId] = "<span class='text-danger'><del>" .
                         q($matching[$choice[$answerId]]) . "</del></span>";
                     $icon = "<span class='fa-solid fa-xmark text-danger'></span>";
-                    $pdf_icon = "✓";
                 }
             } else {
                 $icon = '';

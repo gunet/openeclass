@@ -229,8 +229,10 @@ $db->query("CREATE TABLE `course_user_request` (
     `uid` int(11) NOT NULL,
     `course_id` int(11) NOT NULL,
     `comments` text,
+    `comment_rejected` text,
     `status` int(11) NOT NULL,
     `ts` datetime NOT NULL,
+    `ts_update` datetime DEFAULT NULL,
     PRIMARY KEY (`id`))  $tbl_options");
 
 $db->query("CREATE TABLE `course_description_type` (
@@ -1658,15 +1660,24 @@ $db->query("CREATE TABLE `user_request_ext_uid` (
     FOREIGN KEY (`user_request_id`) REFERENCES `user_request` (`id`) ON DELETE CASCADE)
     $tbl_options");
 
+$db->query("CREATE TABLE `permissions` (
+    `id` tinyint NOT NULL AUTO_INCREMENT,
+    `permission` VARCHAR(255),
+     PRIMARY KEY (`id`)) $tbl_options");
+
+$db->query("INSERT INTO permissions(permission) VALUE('admin_course_users'), 
+             ('admin_course_modules'),
+             ('backup_course'),
+             ('clone_course'),
+             ('can_upload_document'),
+             ('can_upload_multimedia')");
+
 $db->query("CREATE TABLE user_permissions (
-    `course_id` int NOT NULL DEFAULT '0',
+    `course_id` int NOT NULL DEFAULT '0',  
     `user_id` int unsigned NOT NULL DEFAULT '0',
-    `admin_modules` tinyint NOT NULL DEFAULT '0',
-    `admin_users` tinyint NOT NULL DEFAULT '0',
-    `course_backup` tinyint NOT NULL DEFAULT '0',
-    `course_clone` tinyint NOT NULL DEFAULT '0',
-    PRIMARY KEY (`course_id`,`user_id`)
-) $tbl_options");
+    `permission_id` tinyint NOT NULL,
+    PRIMARY KEY (`course_id`,`user_id`,`permission_id`)
+  ) $tbl_options");
 
 $eclass_stud_reg = intval($eclass_stud_reg);
 
