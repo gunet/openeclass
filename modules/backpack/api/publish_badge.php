@@ -99,6 +99,21 @@ try {
     if ($result['success']) {
         error_log("Badge publish API: Successfully published badge $userBadgeId to provider $providerId");
         
+        // Store the external assertion ID in user_badge to track published badges
+        if (!empty($result['assertion_id'])) {
+            try {
+                Database::get()->query(
+                    "UPDATE user_badge SET external_assertion_id = ?s WHERE id = ?d",
+                    $result['assertion_id'],
+                    $userBadgeId
+                );
+                error_log("Badge publish API: Stored external assertion ID for badge $userBadgeId");
+            } catch (Exception $e) {
+                error_log("Badge publish API: Failed to store external assertion ID: " . $e->getMessage());
+                // Don't fail the request - the badge was still published successfully
+            }
+        }
+        
         http_response_code(200);
         echo json_encode([
             'success' => true,

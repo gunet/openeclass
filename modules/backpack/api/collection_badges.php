@@ -139,11 +139,16 @@ try {
                     $collection = $badges['result'][0];
                     
                     // Check if assertions exist and are in array format
-                    if (isset($collection['assertions']) && is_array($collection['assertions']) && !empty($collection['assertions'])) {
+                    if (isset($collection['assertions']) && is_array($collection['assertions'])) {
                         $assertions = $collection['assertions'];
                         
+                        // Check if assertions array is empty
+                        if (empty($assertions)) {
+                            $badgesList = [];
+                            error_log("Collection Badges API: Collection has no badges (empty assertions array)");
+                        }
                         // Check if assertions are strings (IDs) or objects (full data)
-                        if (is_string($assertions[0])) {
+                        elseif (is_string($assertions[0])) {
                             // Assertions are IDs - need to fetch full badge details for each
                             error_log("Collection Badges API: Assertions are IDs, fetching full details for " . count($assertions) . " badges");
                             
@@ -187,9 +192,9 @@ try {
                             error_log("Collection Badges API: Using full badge objects from assertions");
                         }
                     } else {
-                        // Fallback: use the collection object itself
-                        $badgesList = $badges['result'];
-                        error_log("Collection Badges API: No assertions found, using result directly");
+                        // No assertions field at all - use empty array
+                        $badgesList = [];
+                        error_log("Collection Badges API: No assertions field found in collection");
                     }
                 } else {
                     $badgesList = $badges['result'];

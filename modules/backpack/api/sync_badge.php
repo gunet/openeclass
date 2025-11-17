@@ -97,6 +97,7 @@ try {
     error_log("Sync Badge API: Badge name: $badgeName, Issuer: $issuerName");
     
     // Check if badge already exists for this user in user_badge_external
+    // Check if badge already exists in external badges
     $existingBadge = Database::get()->querySingle(
         "SELECT id FROM user_badge_external WHERE user_id = ?d AND external_assertion_id = ?s",
         $uid,
@@ -104,7 +105,7 @@ try {
     );
     
     if ($existingBadge) {
-        error_log("Sync Badge API: Badge already exists (ID: {$existingBadge->id})");
+        error_log("Sync Badge API: Badge already exists in external badges (ID: {$existingBadge->id})");
         http_response_code(200);
         echo json_encode([
             'success' => true,
@@ -115,13 +116,58 @@ try {
         exit;
     }
     
+    // Check if this badge originated from this platform (was published from here)
+    // If so, don't re-import it as an external badge
+    $originatedHere = Database::get()->querySingle(
+        "SELECT id, badge FROM user_badge WHERE user = ?d AND external_assertion_id = ?s",
+        $uid,
+        $assertionId
+    );
+    
+    if ($originatedHere) {
+        error_log("Sync Badge API: Badge originated from this platform (user_badge ID: {$originatedHere->id}, badge ID: {$originatedHere->badge}). Skipping import to prevent duplication.");
+        http_response_code(200);
+        echo json_encode([
+            'success' => true,
+            'action' => 'skipped_local_badge',
+            'user_badge_id' => $originatedHere->id,
+            'badge_id' => $originatedHere->badge,
+            'message' => 'This badge originated from this platform and already exists in your local badges. Skipped to prevent duplication.'
+        ], JSON_UNESCAPED_UNICODE);
+        exit;
+    }
+    
     // Create external badge table if it doesn't exist
     ensureExternalBadgeTableExists();
+    
+    // Get the backpack provider ID from user's active connection
+    $providerConnection = Database::get()->querySingle(
+        "SELECT backpack_provider_id FROM user_backpack_connection 
+         WHERE user_id = ?d AND status = 'connected' 
+         LIMIT 1",
+        $uid
+    );
+    
+    if (!$providerConnection || !$providerConnection->backpack_provider_id) {
+        error_log("Sync Badge API: No active backpack provider connection found for user $uid");
+        http_response_code(400);
+        echo json_encode([
+            'success' => false,
+            'errorcode' => 400,
+            'errormessage' => 'No active backpack provider connection found',
+            'data' => null
+        ], JSON_UNESCAPED_UNICODE);
+        exit;
+    }
+    
+    $providerId = $providerConnection->backpack_provider_id;
+    error_log("Sync Badge API: Using provider ID: $providerId");
     
     // Insert the badge into the external badges table
     $badgeId = Database::get()->query(
         "INSERT INTO user_badge_external (
-            user_id, 
+            user_id,
+            backpack_provider_id,
             title, 
             description, 
             image_url, 
@@ -133,9 +179,10 @@ try {
             created_at,
             updated_at
         ) VALUES (
-            ?d, ?s, ?s, ?s, ?s, ?t, ?s, ?s, ?s, NOW(), NOW()
+            ?d, ?d, ?s, ?s, ?s, ?s, ?t, ?s, ?s, ?s, NOW(), NOW()
         )",
         $uid,
+        $providerId,
         $badgeName,
         $badgeDescription,
         $badgeImage,
@@ -220,6 +267,7 @@ function ensureExternalBadgeTableExists() {
                 CREATE TABLE `user_badge_external` (
                     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                     `user_id` INT(11) NOT NULL,
+                    `backpack_provider_id` INT(11) NOT NULL,
                     `title` VARCHAR(255) NOT NULL,
                     `description` TEXT,
                     `image_url` VARCHAR(512),
@@ -232,7 +280,9 @@ function ensureExternalBadgeTableExists() {
                     `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                     UNIQUE KEY `user_assertion` (`user_id`, `external_assertion_id`),
                     INDEX `user_id_idx` (`user_id`),
-                    FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON DELETE CASCADE
+                    INDEX `backpack_provider_id_idx` (`backpack_provider_id`),
+                    FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON DELETE CASCADE,
+                    FOREIGN KEY (`backpack_provider_id`) REFERENCES `backpack_provider`(`id`) ON DELETE CASCADE
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
             ");
             

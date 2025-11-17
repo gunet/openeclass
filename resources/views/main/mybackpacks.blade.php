@@ -120,7 +120,6 @@
                                 <div id='sync-results' style='display: none;' class='mt-3'></div>
                             </div>
 
-
                             {{-- Loading State --}}
                             <div id='collections-loading' style='display: none;' class='text-center py-4'>
                                 <i class='fa fa-spinner fa-spin fa-2x text-primary'></i>
@@ -290,9 +289,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const collectionsList = document.getElementById('collections-list');
     const collectionsContainer = document.getElementById('collections-container');
     const collectionsInitial = document.getElementById('collections-initial');
-
-
-    // Collection sync UI elements
+    
+    // Collection selector elements
     const collectionSelector = document.getElementById('collection-selector');
     const collectionSelect = document.getElementById('collection-select');
     const syncCollectionBtn = document.getElementById('sync-collection-btn');
@@ -301,7 +299,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const syncStatus = document.getElementById('sync-status');
     const syncResults = document.getElementById('sync-results');
     
-    // Store fetched collections globally for sync operations
+    // Store fetched collections globally
     let fetchedCollections = [];
 
     if (providerSelect) {
@@ -527,40 +525,46 @@ document.addEventListener('DOMContentLoaded', function() {
         const description = collection.description || '';
         const badgeCount = collection.badges?.length || collection.assertions?.length || 0;
         const collectionId = collection.id || collection.entityId || '';
+        const isEmpty = badgeCount === 0;
         
         col.innerHTML = `
-            <div class='card h-100 shadow-sm collection-card' data-collection-id='${escapeHtml(collectionId)}' style='cursor: pointer; transition: all 0.3s;'>
+            <div class='card h-100 shadow-sm collection-card ${isEmpty ? 'disabled' : ''}' 
+                 data-collection-id='${escapeHtml(collectionId)}' 
+                 style='cursor: ${isEmpty ? 'not-allowed' : 'pointer'}; transition: all 0.3s; ${isEmpty ? 'opacity: 0.6;' : ''}'>
                 <div class='card-body'>
                     <h5 class='card-title'>
-                        <i class='fa fa-folder text-primary me-2'></i>
+                        <i class='fa fa-folder ${isEmpty ? 'text-muted' : 'text-primary'} me-2'></i>
                         ${escapeHtml(name)}
                     </h5>
                     ${description ? `<p class='card-text text-muted'>${escapeHtml(description)}</p>` : ''}
                     <div class='mt-3'>
-                        <span class='badge bg-info'>
+                        <span class='badge ${isEmpty ? 'bg-secondary' : 'bg-info'}'>
                             <i class='fa fa-certificate me-1'></i>
                             ${badgeCount} ${badgeCount === 1 ? 'Badge' : 'Badges'}
                         </span>
+                        ${isEmpty ? '<span class="badge bg-warning ms-2"><i class="fa fa-ban me-1"></i>{{ trans('langEmpty') }}</span>' : ''}
                     </div>
                 </div>
             </div>
         `;
         
-        // Add click handler to card
+        // Add click handler to card (only for non-empty collections)
         const card = col.querySelector('.collection-card');
-        card.addEventListener('click', function() {
-            selectCollectionById(collectionId);
-        });
-        
-        // Add hover effect
-        card.addEventListener('mouseenter', function() {
-            this.style.transform = 'translateY(-5px)';
-            this.style.boxShadow = '0 4px 8px rgba(0,0,0,0.2)';
-        });
-        card.addEventListener('mouseleave', function() {
-            this.style.transform = 'translateY(0)';
-            this.style.boxShadow = '';
-        });
+        if (!isEmpty) {
+            card.addEventListener('click', function() {
+                selectCollectionById(collectionId);
+            });
+            
+            // Add hover effect
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-5px)';
+                this.style.boxShadow = '0 4px 8px rgba(0,0,0,0.2)';
+            });
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+                this.style.boxShadow = '';
+            });
+        }
         
         return col;
     }
@@ -576,9 +580,11 @@ document.addEventListener('DOMContentLoaded', function() {
             const name = collection.name || collection.title || 'Untitled Collection';
             const badgeCount = collection.badges?.length || collection.assertions?.length || 0;
             const collectionId = collection.id || collection.entityId || '';
+            const isEmpty = badgeCount === 0;
             
             const option = document.createElement('option');
             option.value = index;
+            option.disabled = isEmpty;
             option.textContent = `${name} (${badgeCount} ${badgeCount === 1 ? 'badge' : 'badges'})`;
             option.setAttribute('data-collection-id', collectionId);
             
@@ -714,8 +720,25 @@ document.addEventListener('DOMContentLoaded', function() {
             const remoteBadges = collectionData.data || [];
             const totalBadges = remoteBadges.length;
             
+            // Handle empty collections gracefully
             if (totalBadges === 0) {
-                throw new Error('{{ trans('langNoSyncableBadges') }}');
+                // Hide progress
+                syncProgress.style.display = 'none';
+                
+                // Show info message instead of error
+                syncResults.style.display = 'block';
+                const emptyMessage = '{{ trans('langCollectionIsEmpty') }}'.replace('{name}', escapeHtml(name));
+                syncResults.innerHTML = `
+                    <div class='alert alert-info'>
+                        <h6><i class='fa fa-info-circle me-2'></i>{{ trans('langNoSyncableBadges') }}</h6>
+                        <p class='mb-0'>${emptyMessage}</p>
+                    </div>
+                `;
+                
+                // Re-enable button
+                syncCollectionBtn.disabled = false;
+                syncCollectionBtn.innerHTML = '<i class="fa fa-sync me-1"></i>{{ trans('langSyncCollection') }}';
+                return;
             }
             
             syncProgressBar.style.width = '30%';
@@ -770,6 +793,13 @@ document.addEventListener('DOMContentLoaded', function() {
                                 name: badgeName,
                                 status: 'info',
                                 message: '{{ trans('langBadgeAlreadyExists') }}'
+                            });
+                        } else if (syncResult.action === 'skipped_local_badge') {
+                            skippedCount++;
+                            syncResultsList.push({
+                                name: badgeName,
+                                status: 'warning',
+                                message: '{{ trans('langBadgeOriginatedLocally') }}'
                             });
                         }
                     } else {
@@ -984,5 +1014,4 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
-@endsection
-
+@endsection 
