@@ -203,6 +203,87 @@ function display_badges(): void
     }
 
 /**
+ * @brief display all points games -- initial screen
+ */
+function display_points_games(): void
+{
+    global $course_id, $tool_content, $course_code, $is_editor,
+           $langDeleteCourseActivities, $langConfirmDelete,
+           $langNoPointsGames, $langEditChange, $langPointsGames, $langPurge,
+           $langActivate, $langDeactivate, $langNewPointsGame,
+           $langActive, $langInactive, $urlServer, $langConfirmPurgePointsGame;
+
+    if ($is_editor) {
+        $sql_cer = Database::get()->queryArray("SELECT id, title, description, active FROM points_game WHERE course_id = ?d", $course_id);
+    } else {
+        $sql_cer = Database::get()->queryArray("SELECT id, title, description, active FROM points_game WHERE course_id = ?d AND active = 1", $course_id);
+    }
+        $tool_content .= "
+                <div class='col-12 mt-4'>
+                    <div class='card panelCard card-default px-lg-4 py-lg-3'>
+                        <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+                                <h3>
+                                    $langPointsGames
+                                </h3>";
+                                if ($is_editor) {
+                                    $tool_content .= "<div>
+                                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newpointsgame=1' class='btn submitAdminBtn'><span class='fa fa-plus'></span><span class='hidden-xs'>&nbsp;&nbsp;&nbsp;$langNewPointsGame</span></a>
+                                    </div>";
+                                }
+        $tool_content .= "
+        </div>
+        <div class='card-body'>
+            <div class='res-table-wrapper'>";
+
+    if (count($sql_cer) == 0) { // no points games
+        $tool_content .= "<p class='text-center text-muted'>$langNoPointsGames</p>";
+    } else {
+        foreach ($sql_cer as $data) {
+            $vis_status = $data->active ? "text-success" : "text-danger";
+            $vis_icon = $data->active ? "fa-eye" : "fa-eye-slash";
+            $status_msg = $data->active ? $langActive : $langInactive;
+            $tool_content .= "
+                                <div class='row res-table-row border-0 p-3 mt-2'>
+                                    <div class='col-3 text-md-start text-center'>
+                                    </div>
+                                    <div class='col-6 text-center mt-md-3 mt-1'>
+                                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;points_game_id=$data->id'>".q($data->title)."</a>
+                                        <div style='margin-top: 5px;'><span class='fa {$vis_icon}'></span>&nbsp;&nbsp;&nbsp;<span class='{$vis_status}'>$status_msg</span></div>
+                                    </div>";
+                if ($is_editor) {
+                    $tool_content .= "<div class='col-3 text-end mt-md-3 mt-1'>" .
+                        action_button(array(
+                            array('title' => $langEditChange,
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;points_game_id=$data->id&amp;edit=1",
+                                'icon' => 'fa-cogs'),
+                            array('title' => $data->active ? $langDeactivate : $langActivate,
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;points_game_id=$data->id&amp;vis=" .
+                                    ($data->active ? '0' : '1'),
+                                'icon' => $data->active ? 'fa-eye-slash' : 'fa-eye'),
+                            array('title' => $langDeleteCourseActivities,
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del_points_game=$data->id",
+                                'icon' => 'fa-xmark',
+                                'class' => 'delete',
+                                'confirm' => $langConfirmDelete),
+                            array('title' => $langPurge,
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;purge_cc=$data->id",
+                                'icon' => 'fa-xmark',
+                                'class' => 'delete',
+                                'confirm' => $langConfirmPurgePointsGame)
+                        ))
+                        . "</div>";
+                }
+            $tool_content .= "</div>";
+        }
+    }
+
+    $tool_content .= "</div>
+                        </div>
+                    </div>
+                </div>";
+    }
+
+/**
  * @brief display course completion (special type of badge)
  */
 function display_course_completion(): void

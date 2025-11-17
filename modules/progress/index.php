@@ -65,6 +65,14 @@ if (isset($_REQUEST['badge_id'])) {
     $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langProgress);
 }
 
+if (isset($_REQUEST['points_game_id'])) {
+    $param_name = 'points_game_id';
+    $element_id = $_REQUEST['points_game_id'];
+    $element = 'points_game';
+    $element_title = get_cert_title($element, $element_id);
+    $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langProgress);
+}
+
 if ($is_editor) {
 
     // Top menu
@@ -396,6 +404,7 @@ if (isset($display) and $display) {
             display_course_completion();
 	        display_badges();
 	        display_certificates();
+            display_points_games();
         }
     } else {
         check_user_details($uid); // security check
