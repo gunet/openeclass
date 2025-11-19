@@ -6408,12 +6408,13 @@ $langPublish = "Publish";
 $langPublishing = "Publishing";
 $langCancel = "Cancel";
 $langPublishToBackpack = "Publish to External Backpack";
+$langPublishedToBackpack = "Published to Backpack";
 $langPublishBadgeTooltip = "Publish this badge to your connected backpack";
 $langPublishBadgeAriaLabel = "Publish badge to backpack";
 $langNoBackpackConnected = "No backpack connected";
 $langNoProvidersConnected = "You don't have any backpack providers connected";
 $langBadgePublishedSuccessfully = "Badge published successfully!";
-$langBadgePublishError = "Failed to publish badge";
+$langBadgePublishError = "Failed to publish badge. Please make sure you have not already published this badge.";
 $langSelectProviderAlert = "Please select a backpack provider";
 
 // OAuth Client Configuration

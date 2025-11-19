@@ -216,6 +216,28 @@
     flex: 1;
 }
 
+/* Published status indicator */
+.badge-published-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 6px 12px;
+    background-color: #d4edda;
+    border-radius: 4px;
+    width: 100%;
+    justify-content: center;
+}
+
+.badge-published-status i {
+    font-size: 16px;
+}
+
+.badge-published-status span {
+    color: #155724;
+}
+
 .badge-card-actions {
     display: flex;
     gap: 8px;

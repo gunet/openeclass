@@ -10,6 +10,16 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
+                <!-- Feedback message container -->
+                <div id="publishBadgeFeedback" style="display: none;"></div>
+
+                <div class="alert alert-info" role="alert">
+                    <i class="fa fa-info-circle me-2"></i>
+                    <small>
+                        {{ trans('langPublishBadgeInfo') }}
+                    </small>
+                </div>
+
                 <div class="form-group">
                     <label for="publishBadgeProvider" class="form-label">
                         {{ trans('langSelectBackpackProvider') }}
@@ -19,20 +29,6 @@
                     </select>
                     <small class="form-text text-muted d-block mt-2">
                         {{ trans('langSelectProviderHelp') }}
-                    </small>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">{{ trans('langSelectedProvider') }}</label>
-                    <div id="selectedProviderInfo" class="py-2">
-                        --
-                    </div>
-                </div>
-
-                <div class="alert alert-info" role="alert">
-                    <i class="fa fa-info-circle me-2"></i>
-                    <small>
-                        {{ trans('langPublishBadgeInfo') }}
                     </small>
                 </div>
             </div>

@@ -32,7 +32,8 @@
             });
 
             $(document).on('change', '#publishBadgeProvider', function() {
-                BadgePublication.updateProviderInfo();
+                // Clear any previous feedback messages when provider changes
+                $('#publishBadgeFeedback').hide().empty();
             });
         },
 
@@ -119,17 +120,6 @@
             });
         },
 
-        /**
-         * Update provider information display
-         */
-        updateProviderInfo: function() {
-            const selectedProvider = $('#publishBadgeProvider').find(':selected');
-            const providerName = selectedProvider.data('provider-name');
-            
-            if (providerName) {
-                $('#selectedProviderInfo').text(providerName);
-            }
-        },
 
         /**
          * Publish badge to selected provider
@@ -157,28 +147,37 @@
                 }),
                 success: function(response) {
                     if (response.success) {
-                        BadgePublication.showSuccessMessage(response.message || BADGE_PUBLISH_SUCCESS);
-                        $('#publishBadgeModal').modal('hide');
+                        // Show success message in modal
+                        BadgePublication.showModalMessage(response.message || BADGE_PUBLISH_SUCCESS, 'success');
                         
-                        // Mark badge as published
-                        $('[data-user-badge-id="' + userBadgeId + '"]').addClass('badge-published');
-                        $('[data-user-badge-id="' + userBadgeId + '"]').find('i').addClass('badge-published-icon');
+                        // Update badge card to show published status
+                        const badgeCard = $('[data-user-badge-id="' + userBadgeId + '"]').closest('.badge-card-wrapper');
+                        const badgeFooter = badgeCard.find('.badge-card-footer');
                         
-                        // Reset modal
-                        BadgePublication.resetPublishModal();
+                        // Replace the publish button with published status
+                        if (typeof BADGE_PUBLISHED_TO_BACKPACK !== 'undefined') {
+                            badgeFooter.html(`
+                                <div class='badge-published-status'>
+                                    <i class='fa fa-check-circle text-success'></i>
+                                    <span class='text-success'>${BADGE_PUBLISHED_TO_BACKPACK}</span>
+                                </div>
+                            `);
+                        }
+                        
+                        // Close modal after showing success message
+                        setTimeout(function() {
+                            $('#publishBadgeModal').modal('hide');
+                            BadgePublication.resetPublishModal();
+                        }, 1500);
                     } else {
-                        BadgePublication.showErrorMessage(response.errormessage || BADGE_PUBLISH_ERROR);
+                        // Show generic error message in modal (keep modal open)
+                        BadgePublication.showModalMessage(BADGE_PUBLISH_ERROR, 'danger');
+                        BadgePublication.setPublishButtonState('ready');
                     }
-                    BadgePublication.setPublishButtonState('ready');
                 },
                 error: function(xhr, status, error) {
-                    let errorMessage = BADGE_PUBLISH_ERROR;
-                    
-                    if (xhr.responseJSON && xhr.responseJSON.errormessage) {
-                        errorMessage = xhr.responseJSON.errormessage;
-                    }
-                    
-                    BadgePublication.showErrorMessage(errorMessage);
+                    // Show generic error message in modal (keep modal open)
+                    BadgePublication.showModalMessage(BADGE_PUBLISH_ERROR, 'danger');
                     BadgePublication.setPublishButtonState('ready');
                 }
             });
@@ -204,45 +203,27 @@
          */
         resetPublishModal: function() {
             $('#publishBadgeProvider').val('');
-            $('#selectedProviderInfo').text('--');
+            $('#publishBadgeFeedback').hide().empty();
             this.setPublishButtonState('ready');
         },
 
         /**
-         * Show success message
+         * Show message inside the modal
          */
-        showSuccessMessage: function(message) {
-            this.showAlert(message, 'success');
-        },
-
-        /**
-         * Show error message
-         */
-        showErrorMessage: function(message) {
-            this.showAlert(message, 'danger');
-        },
-
-        /**
-         * Show alert message
-         */
-        showAlert: function(message, type) {
-            const alertId = 'badge-alert-' + Date.now();
+        showModalMessage: function(message, type) {
+            const icon = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
             const alertHtml = `
-                <div id="${alertId}" class="alert alert-${type} alert-dismissible fade show" role="alert">
+                <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                    <i class="fa ${icon} me-2"></i>
                     ${message}
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             `;
 
-            // Insert alert after the publish modal or at the top of the page
-            $('body').prepend(alertHtml);
-
-            // Auto-remove after 5 seconds
-            setTimeout(function() {
-                $('#' + alertId).fadeOut('slow', function() {
-                    $(this).remove();
-                });
-            }, 5000);
+            $('#publishBadgeFeedback').html(alertHtml).show();
+            
+            // Scroll to top of modal to show message
+            $('.modal-body').animate({ scrollTop: 0 }, 300);
         }
     };
 

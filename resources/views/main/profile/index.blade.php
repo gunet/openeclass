@@ -44,6 +44,7 @@
             const BADGE_SELECT_PROVIDER_ALERT = "{{ trans('langSelectProviderAlert') }}";
             const BADGE_PUBLISHING = "{{ trans('langPublishing') }}...";
             const BADGE_PUBLISH = "{{ trans('langPublish') }}";
+            const BADGE_PUBLISHED_TO_BACKPACK = "{{ trans('langPublishedToBackpack') }}";
         </script>
     @endif
 @endpush
@@ -301,27 +302,36 @@
                                                             </div>
                                                         </a>
                                                     </div>
-                                                    <!-- Badge Publish Button -->
+                                                    <!-- Badge Publish Status -->
                                                     @if ($uid == $id)
                                                     <div class='badge-card-footer'>
-                                                        <div class='badge-card-footer-text'>
-                                                            {{ trans('langPublishToBackpack') }}
-                                                        </div>
-                                                        <div class='badge-card-actions'>
-                                                            <button class='badge-publish-btn disabled' 
-                                                                    data-user-badge-id='{{ $badge->user_badge_id }}'
-                                                                    data-bs-toggle='tooltip'
-                                                                    data-bs-placement='left'
-                                                                    title='{{ trans('langPublishBadgeTooltip') }}'
-                                                                    aria-label='{{ trans('langPublishBadgeAriaLabel') }}'
-                                                                    style='display: none;'>
-                                                                <i class='fa fa-cloud-upload'></i>
-                                                            </button>
-                                                            <span class='badge-no-connection' style='display: inline-block;'>
-                                                                <i class='fa fa-exclamation-circle'></i>
-                                                                {{ trans('langNoBackpackConnected') }}
-                                                            </span>
-                                                        </div>
+                                                        @if (!empty($badge->external_assertion_id))
+                                                            <!-- Badge is published -->
+                                                            <div class='badge-published-status'>
+                                                                <i class='fa fa-check-circle text-success'></i>
+                                                                <span class='text-success'>{{ trans('langPublishedToBackpack') }}</span>
+                                                            </div>
+                                                        @else
+                                                            <!-- Badge not published yet -->
+                                                            <div class='badge-card-footer-text'>
+                                                                {{ trans('langPublishToBackpack') }}
+                                                            </div>
+                                                            <div class='badge-card-actions'>
+                                                                <button class='badge-publish-btn disabled' 
+                                                                        data-user-badge-id='{{ $badge->user_badge_id }}'
+                                                                        data-bs-toggle='tooltip'
+                                                                        data-bs-placement='left'
+                                                                        title='{{ trans('langPublishBadgeTooltip') }}'
+                                                                        aria-label='{{ trans('langPublishBadgeAriaLabel') }}'
+                                                                        style='display: none;'>
+                                                                    <i class='fa fa-cloud-upload'></i>
+                                                                </button>
+                                                                <span class='badge-no-connection' style='display: inline-block;'>
+                                                                    <i class='fa fa-exclamation-circle'></i>
+                                                                    {{ trans('langNoBackpackConnected') }}
+                                                                </span>
+                                                            </div>
+                                                        @endif
                                                     </div>
                                                     @endif
                                                 </div>

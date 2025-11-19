@@ -186,7 +186,7 @@ if ($data['userdata']) {
     //get completed badges
     $gameQ = "SELECT a.*, b.title,"
             . " b.description, b.issuer, b.active, b.created, b.id as badge_id, b.course_id,"
-            . " a.id as user_badge_id"
+            . " a.id as user_badge_id, a.external_assertion_id"
             . " FROM user_badge a "
             . " JOIN badge b ON (a.badge = b.id) "
             . " WHERE a.user = ?d "
