@@ -104,21 +104,23 @@ $(document).ready(function() {
                                                 @endif
                                             </td>
                                             <td class="option-btn-cell text-end p-20">
-                                                <a href="{{ $_SERVER['SCRIPT_NAME'] }}?action=edit&id={{ getIndirectReference($provider->id) }}" 
-                                                   class="btn btn-sm btn-primary" 
-                                                   title="{{ trans('langEditChange') }}"
-                                                   data-bs-toggle="tooltip">
-                                                    <i class="fa fa-edit"></i>
-                                                </a>
-                                                <a href="#" 
-                                                   class="btn btn-sm btn-danger delete-provider" 
-                                                   data-url="{{ $_SERVER['SCRIPT_NAME'] }}?action=delete&id={{ getIndirectReference($provider->id) }}"
-                                                   data-name="{{ $provider->name }}"
-                                                   data-users="{{ $userCounts[$provider->id] ?? 0 }}"
-                                                   title="{{ trans('langDelete') }}"
-                                                   data-bs-toggle="tooltip">
-                                                    <i class="fa fa-xmark"></i>
-                                                </a>
+                                                <div class="d-inline-flex gap-2">
+                                                    <a href="{{ $_SERVER['SCRIPT_NAME'] }}?action=edit&id={{ getIndirectReference($provider->id) }}" 
+                                                       class="btn btn-sm btn-primary" 
+                                                       title="{{ trans('langEditChange') }}"
+                                                       data-bs-toggle="tooltip">
+                                                        <i class="fa fa-edit"></i>
+                                                    </a>
+                                                    <a href="#" 
+                                                       class="btn btn-sm btn-danger delete-provider" 
+                                                       data-url="{{ $_SERVER['SCRIPT_NAME'] }}?action=delete&id={{ getIndirectReference($provider->id) }}"
+                                                       data-name="{{ $provider->name }}"
+                                                       data-users="{{ $userCounts[$provider->id] ?? 0 }}"
+                                                       title="{{ trans('langDelete') }}"
+                                                       data-bs-toggle="tooltip">
+                                                        <i class="fa fa-xmark"></i>
+                                                    </a>
+                                                </div>
                                             </td>
                                         </tr>
                                     @endforeach

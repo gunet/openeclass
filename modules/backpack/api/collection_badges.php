@@ -197,7 +197,7 @@ try {
                         error_log("Collection Badges API: No assertions field found in collection");
                     }
                 } else {
-                    $badgesList = $badges['result'];
+                $badgesList = $badges['result'];
                     error_log("Collection Badges API: Using 'result' key structure (legacy)");
                 }
             }
