@@ -122,10 +122,30 @@ class BackpackConnectionService
 
     /**
      * Disconnect user's backpack and delete connection entry
+     * Also removes all external badges synced from this backpack
      */
     public function disconnectBackpack(int $userId): bool
     {
         try {
+            // First, get the backpack provider ID to delete associated external badges
+            $connection = $this->db->querySingle(
+                "SELECT backpack_provider_id FROM user_backpack_connection 
+                 WHERE user_id = ?d",
+                $userId
+            );
+            
+            // Delete external badges associated with this backpack connection
+            if ($connection && $connection->backpack_provider_id) {
+                $this->db->query(
+                    "DELETE FROM user_badge_external 
+                     WHERE user_id = ?d AND backpack_provider_id = ?d",
+                    $userId,
+                    $connection->backpack_provider_id
+                );
+                error_log("Backpack disconnection: Deleted external badges for user $userId and provider {$connection->backpack_provider_id}");
+            }
+            
+            // Delete the backpack connection
             $result = $this->db->query(
                 "DELETE FROM user_backpack_connection 
                  WHERE user_id = ?d",
