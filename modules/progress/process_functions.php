@@ -964,7 +964,7 @@ function delete_certificate($element, $element_id) {
             }
         }
         Database::get()->query("DELETE FROM certificate WHERE id = ?d AND course_id = ?d", $element_id, $course_id);
-    } else {
+    } elseif ($element == 'badge') {
         $r = Database::get()->queryArray("SELECT id FROM badge_criterion WHERE badge = ?d", $element_id);
         foreach ($r as $act) { // delete badge activities
             if (!resource_usage($element, $act->id)) { // check if activity has been used by user
@@ -974,6 +974,17 @@ function delete_certificate($element, $element_id) {
             }
         }
         Database::get()->query("DELETE FROM badge WHERE id = ?d AND course_id = ?d AND unit_id = 0", $element_id, $course_id);
+    } elseif ($element == 'points_game') {
+        $r = Database::get()->queryArray("SELECT id FROM points_game_criterion WHERE points_game = ?d", $element_id);
+        foreach ($r as $act) { // delete badge activities
+            if (!resource_usage($element, $act->id)) { // check if activity has been used by user
+                delete_activity('points_game', $element_id, $act->id);
+            } else {
+                return false;
+            }
+        }
+        Database::get()->query("DELETE FROM points_game_levels WHERE points_game = ?d", $element_id);
+        Database::get()->query("DELETE FROM points_game WHERE id = ?d AND course_id = ?d", $element_id, $course_id);
     }
 
     return true;
@@ -1020,11 +1031,15 @@ function purge_certificate($element, $element_id, $unit_id = 0, $session_id = 0)
  */
 function delete_activity($element, $element_id, $activity_id) {
 
-    $query = ($element == 'certificate')?
-            "DELETE FROM certificate_criterion WHERE id = ?d AND certificate = ?d" :
-            "DELETE FROM badge_criterion WHERE id = ?d AND badge = ?d";
+    if ($element == 'certificate') {
+        $query = "DELETE FROM certificate_criterion WHERE id = ?d AND certificate = ?d";
+    } elseif ($element == 'badge') {
+        $query = "DELETE FROM badge_criterion WHERE id = ?d AND badge = ?d";
+    } else { //points_game
+        $query = "DELETE FROM points_game_criterion WHERE id = ?d AND points_game = ?d";
+    }
+    
     Database::get()->query($query, $activity_id, $element_id);
-
 }
 
 /**
@@ -1035,9 +1050,14 @@ function delete_activity($element, $element_id, $activity_id) {
  */
 function resource_usage($element, $element_resource_id) {
 
-    $query = ($element == 'certificate')?
-            "SELECT user FROM user_certificate_criterion WHERE certificate_criterion = ?d" :
-            "SELECT user FROM user_badge_criterion WHERE badge_criterion = ?d";
+    if ($element == 'certificate') {
+        $query = "SELECT user FROM user_certificate_criterion WHERE certificate_criterion = ?d";
+    } elseif ($element == 'badge') {
+        $query = "SELECT user FROM user_badge_criterion WHERE badge_criterion = ?d";
+    } else { //points_game
+        $query = "SELECT user FROM user_points_game_criterion WHERE points_game_criterion = ?d";
+    }
+    
     $sql = Database::get()->querySingle($query, $element_resource_id);
     if ($sql) {
         return true;
