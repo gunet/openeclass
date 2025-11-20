@@ -3524,6 +3524,14 @@ function upgrade_to_4_2($tbl_options) : void {
         Database::get()->query("ALTER TABLE course_user_request ADD `ts_update` DATETIME DEFAULT NULL AFTER `ts`");
     }
 
+    if (!DBHelper::fieldExists('course', 'uuid')) {
+        Database::get()->query("ALTER TABLE course ADD `uuid` VARCHAR(40) NOT NULL DEFAULT 0 AFTER `id`");
+    }
+
+    if (!DBHelper::fieldExists('user', 'uuid')) {
+        Database::get()->query("ALTER TABLE user ADD `uuid` VARCHAR(40) NOT NULL DEFAULT 0 AFTER `id`");
+    }
+
 }
 
 /**
