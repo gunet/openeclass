@@ -508,6 +508,9 @@ function calculate_learnPath_combined_progress($modules): int {
             }
 
             // in case of scorm module, progression depends on the lesson status value
+            if ($module->progressMeasureMax) {
+                $modProgress = 100 * $module->progressMeasureMax;
+            }
             if (($module->contentType == "SCORM") && ($module->scoreMax <= 0) && (( $module->lesson_status == 'COMPLETED') || ($module->lesson_status == 'PASSED'))) {
                 $modProgress = 100;
             }
@@ -599,7 +602,7 @@ function get_learnPath_progress_details($lpid, $lpUid, $total=true, $from_date =
 
     // find progression for this user in each module of the path
     $sql = "SELECT UMP.`raw` AS R, UMP.`scoreMax` AS SMax, M.`contentType` AS CTYPE, UMP.`lesson_status` AS STATUS, UMP.`total_time`,
-                   UMP.`started`, UMP.`accessed`, UMP.`attempt`
+                   UMP.`started`, UMP.`accessed`, UMP.`attempt`, UMP.`progress_measure` AS PM
              FROM `lp_learnPath` AS LP,
                   `lp_rel_learnPath_module` AS LPM,
                   `lp_user_module_progress` AS UMP,
@@ -624,10 +627,14 @@ function get_learnPath_progress_details($lpid, $lpUid, $total=true, $from_date =
     $totalStarted = $totalAccessed = $totalStatus = $maxAttempt = "";
     $totalTime = "0000:00:00";
 
+    $max_progress_measure = 0;
     if (is_array($modules) && !empty($modules)) {
         $maxAttempt = 1; // discover number of attempts
         $modsForProg = array(); // prepare sub-arrays for progression calculation
         foreach ($modules as $module) {
+            if ((float) ($module->PM ?? 0) > (float) $max_progress_measure) {
+                $max_progress_measure = $module->PM;
+            }
             if ($module->attempt > $maxAttempt) {
                 $maxAttempt = $module->attempt;
             }
@@ -696,8 +703,11 @@ function get_learnPath_progress_details($lpid, $lpUid, $total=true, $from_date =
         }
     }
 
+    $totalTime = ($totalTime == '0000:00:00') ? '00:00:00': $totalTime;
     if ($total) {
-        return array($totalProgress, $totalTime, $totalStarted, $totalAccessed, $totalStatus, $maxAttempt);
+        $score = $totalProgress;
+        $totalProgress = $max_progress_measure ? (100 * $max_progress_measure) : $totalProgress;
+        return array($totalProgress, $totalTime, $totalStarted, $totalAccessed, $totalStatus, $maxAttempt, $score);
     } else {
         $attempts = [];
         for ($i = 1; $i <= $maxAttempt; $i++) {
@@ -749,6 +759,7 @@ function get_learnPath_combined_progress($lpid, $lpUid): float {
                    MAX(UMP.`lesson_status`) as lesson_status,
                    MAX(UMP.`raw`) as raw,
                    MAX(UMP.`scoreMax`) as scoreMax,
+                   MAX(UMP.`progress_measure`) as progressMeasureMax,
                    MAX(UMP.`credit`) as credit,
                    MAX(A.`path`) as path
               FROM (`lp_module` AS M, `lp_rel_learnPath_module` AS LPM)
@@ -1443,12 +1454,12 @@ function disp_button($url, $text, $confirmMessage = '') {
 
 function disp_progress_bar($progress, $factor) {
 
-
+    $progress = round($progress, 0, PHP_ROUND_HALF_UP);
     // Progress bar not displaying in mpdf library
     if (!isset($_GET['pdf'])) {
         $progressBar = "
         <div class='progress' style='display: inline-block; width: 150px; height:auto; margin-bottom:0px;'>
-            <div class='progress-bar' role='progressbar' aria-valuenow='60' aria-valuemin='0' aria-valuemax='100' style='width: $progress%; min-width: 2em; min-height:100%;'>
+            <div class='progress-bar' role='progressbar' aria-valuenow='60' aria-valuemin='0' aria-valuemax='100' style='color: #fff; width: $progress%; min-width: 2em; min-height:100%;'>
                 $progress%
             </div>
         </div>";
@@ -1467,19 +1478,23 @@ function disp_progress_bar($progress, $factor) {
  */
 function disp_lesson_status(string $lessonStatus): string {
     if ($lessonStatus == "NOT ATTEMPTED") {
-        return $GLOBALS['langNotAttempted'];
+        //return $GLOBALS['langNotAttempted'];
+        return "";
     } else if ($lessonStatus == "PASSED") {
-        return $GLOBALS['langPassed'];
+        return $GLOBALS['langCompleted'];
     } else if ($lessonStatus == "FAILED") {
-        return $GLOBALS['langFailed'];
+        //return $GLOBALS['langFailed'];
+        return "";
     } else if ($lessonStatus == "COMPLETED") {
-        return $GLOBALS['langAlreadyBrowsed'];
+        return $GLOBALS['langCompleted'];
     } else if ($lessonStatus == "BROWSED") {
-        return $GLOBALS['langAlreadyBrowsed'];
+        //return $GLOBALS['langAlreadyBrowsed'];
+        return "";
     } else if ($lessonStatus == "INCOMPLETE") {
-        return $GLOBALS['langNeverBrowsed'];
+        return $GLOBALS['langIncomplete'];
     } else {
-        return strtolower($lessonStatus);
+        //return strtolower($lessonStatus);
+        return "";
     }
 }
 

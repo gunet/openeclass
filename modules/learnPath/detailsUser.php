@@ -80,7 +80,7 @@ $course_title = course_code_to_title($_GET['course']);
 
 $data[] = [ $user_details . ' (' . $course_title . ')' ];
 $data[] = [];
-$data[] = [ $langLearnPath, $langAttempts, $langAttemptStarted, $langAttemptAccessed, $langTotalTimeSpent, $langLessonStatus, $langProgress ];
+$data[] = [ $langLearnPath, $langAttempts, $langAttemptStarted, $langAttemptAccessed, $langTotalTimeSpent, $langLearningPathStatus, $langProgress ];
 
 if (!isset($_GET['pdf'])) {
     $action_bar = action_bar(array(
@@ -110,7 +110,7 @@ $tool_content .= "<div class='table-responsive'><table class='table-default'>
                         <th>$langAttemptStarted</th>
                         <th>$langAttemptAccessed</th>
                         <th>$langTotalTimeSpent</th>
-                        <th>$langLessonStatus</th>
+                        <th>$langLearningPathStatus</th>
                         <th>$langProgress</th>
                     </tr></thead>";
 

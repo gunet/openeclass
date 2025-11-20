@@ -80,6 +80,7 @@ $sql = "SELECT MIN(LPM.`learnPath_module_id`) AS learnPath_module_id,
                MIN(UMP.`raw`) AS `raw`,
                MIN(UMP.`scoreMax`) AS scoreMax,
                MIN(UMP.`credit`) AS credit,
+               MIN(UMP.`progress_measure`) AS progress_measure,
                MIN(A.`path`) AS path
        FROM (`lp_rel_learnPath_module` AS LPM,
              `lp_module` AS M)
@@ -109,6 +110,7 @@ foreach ($moduleList as $module) {
     $modar['module_id'] = $module->module_id;
     $modar['lesson_status'] = $module->lesson_status;
     $modar['raw'] = $module->raw;
+    $modar['progress_measure'] = $module->progress_measure;
     $modar['scoreMax'] = $module->scoreMax;
     $modar['credit'] = $module->credit;
     $extendedList[] = $modar;
@@ -316,7 +318,9 @@ echo "<!DOCTYPE HTML>
                         $path_id = (int) $_SESSION['path_id'];
                         $lpProgress = get_learnPath_progress($path_id, $uid);
                         update_gradebook_book($uid, $path_id, $lpProgress/100, GRADEBOOK_ACTIVITY_LP);
-                        echo disp_progress_bar($lpProgress, 1);
+                        if ($lpProgress == 100) {
+                            echo disp_progress_bar($lpProgress, 1);
+                        }
                     }
                     echo "
                 </div>
@@ -324,7 +328,7 @@ echo "<!DOCTYPE HTML>
                     $prevNextString
                     <a id='close-btn' class='btn btn-danger text-decoration-none' href='$returl_q' target='_top' style='min-height 30px !important; max-height: 35px !important;'>
                         <span class='fa-solid fa-person-walking-arrow-right fa-lg'></span>
-                        <span class='hidden-xs'>$langLogout</span>
+                        <span class='hidden-xs'>$langExit</span>
                     </a>
                     <a id='leftTOCtoggler' class='btn submitAdminBtn d-inline-flex text-decoration-none p-0 m-0' style='min-width: 35px !important; max-width: 35px !important; min-height 30px !important; max-height: 35px !important;'>
                         <span class='fa-solid fa-bars fs-6 m-0 p-0'></span>
