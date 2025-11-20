@@ -3387,26 +3387,33 @@ function upgrade_to_4_2($tbl_options) : void {
         Database::get()->query("ALTER TABLE h5p_content ADD `creator_id` INT UNSIGNED NOT NULL DEFAULT 0");
     }
 
-    DBHelper::createForeignKey('attendance', 'course_id', 'course', 'id', DBHelper::FKRefOption_CASCADE);
+    // Use consistent data types before creating the foreign key in attendance
+    Database::get()->query("ALTER TABLE attendance CHANGE id id INT NOT NULL AUTO_INCREMENT");
+    Database::get()->query("ALTER TABLE attendance_activities CHANGE id id INT NOT NULL AUTO_INCREMENT");
+    Database::get()->query("ALTER TABLE attendance_activities CHANGE attendance_id attendance_id INT NOT NULL");
+    Database::get()->query("ALTER TABLE attendance_book CHANGE id id INT NOT NULL AUTO_INCREMENT");
+    Database::get()->query("ALTER TABLE attendance_book CHANGE attendance_activity_id attendance_activity_id INT NOT NULL");
+    Database::get()->query("ALTER TABLE attendance_users CHANGE id id INT NOT NULL AUTO_INCREMENT");
+    Database::get()->query("ALTER TABLE attendance_users CHANGE attendance_id attendance_id INT NOT NULL");
 
-    if(!DBHelper::foreignKeyExists('attendance_activities', 'attendance_id', 'attendance', 'id')) {
-        // Use consistent data types before creating the foreign key
-        Database::get()->query('ALTER TABLE `attendance_activities`
-            CHANGE COLUMN `attendance_id` `attendance_id` INT NOT NULL DEFAULT 0,
-            CHANGE COLUMN `module_auto_id` `module_auto_id` INT NOT NULL DEFAULT 0');
+    if (!DBHelper::foreignKeyExists('attendance', 'course_id', 'course', 'id')) {
+        DBHelper::createForeignKey('attendance', 'course_id', 'course', 'id', DBHelper::FKRefOption_CASCADE);
+    }
+    if (!DBHelper::foreignKeyExists('attendance_activities', 'attendance_id', 'attendance', 'id')) {
         DBHelper::createForeignKey('attendance_activities', 'attendance_id', 'attendance', 'id', DBHelper::FKRefOption_CASCADE);
     }
-
-    if(!DBHelper::foreignKeyExists('attendance_book', 'attendance_activity_id', 'attendance_activities', 'id')) {
-        // Use consistent data types before creating the foreign key
-        Database::get()->query('ALTER TABLE `attendance_book` CHANGE COLUMN `attendance_activity_id` `attendance_activity_id` INT NOT NULL DEFAULT 0');
-
+    if (!DBHelper::foreignKeyExists('attendance_book', 'attendance_activity_id', 'attendance_activities', 'id')) {
         DBHelper::createForeignKey('attendance_book', 'attendance_activity_id', 'attendance_activities', 'id', DBHelper::FKRefOption_CASCADE);
     }
-    DBHelper::createForeignKey('attendance_book', 'uid', 'user', 'id', DBHelper::FKRefOption_CASCADE);
-
-    DBHelper::createForeignKey('attendance_users', 'attendance_id', 'attendance', 'id', DBHelper::FKRefOption_CASCADE);
-    DBHelper::createForeignKey('attendance_users', 'uid', 'user', 'id', DBHelper::FKRefOption_CASCADE);
+    if (!DBHelper::foreignKeyExists('attendance_book', 'uid', 'user', 'id')) {
+        DBHelper::createForeignKey('attendance_book', 'uid', 'user', 'id', DBHelper::FKRefOption_CASCADE);
+    }
+    if (!DBHelper::foreignKeyExists('attendance_users', 'attendance_id', 'attendance', 'id')) {
+        DBHelper::createForeignKey('attendance_users', 'attendance_id', 'attendance', 'id', DBHelper::FKRefOption_CASCADE);
+    }
+    if (!DBHelper::foreignKeyExists('attendance_users', 'uid', 'user', 'id')) {
+        DBHelper::createForeignKey('attendance_users', 'uid', 'user', 'id', DBHelper::FKRefOption_CASCADE);
+    }
 
 
     if (!DBHelper::tableExists('ai_providers')) {
