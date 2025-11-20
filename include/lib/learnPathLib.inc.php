@@ -698,9 +698,9 @@ function get_learnPath_progress_details($lpid, $lpUid, $total=true, $from_date =
         $totalStarted = $global_started[$bestAttempt];
         $totalAccessed = $global_accessed[$bestAttempt];
         $totalStatus = $global_status[$bestAttempt];
-        if ($totalStatus === "PASSED" && $totalProgress < 100) {
-            $totalStatus = "INCOMPLETE";
-        }
+        //if ($totalStatus === "PASSED" && $totalProgress < 100) {
+        //    $totalStatus = "INCOMPLETE";
+        //}
     }
 
     $totalTime = ($totalTime == '0000:00:00') ? '00:00:00': $totalTime;
