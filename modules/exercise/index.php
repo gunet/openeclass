@@ -77,6 +77,7 @@ $head_content .= "<script type='text/javascript'>
                     },
                    'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
                    'sZeroRecords':  '" . $langNoResult . "',
+                   'sEmptyTable':   '" . $langNoExercises ."',
                    'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
                    'sInfoEmpty':    '',
                    'sInfoFiltered': '',

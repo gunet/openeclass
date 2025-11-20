@@ -3328,6 +3328,9 @@ $langFinalDesc = "Αναλυτική Περιγραφή $siteName";
 $langShortDesc = "Σύντομη Περιγραφή $siteName";
 $langManS = "Εγχειρίδιο $langOfStudent";
 $langManT = "Εγχειρίδιο $langOfTeacher";
+$langVideoManS = "Οδηγοί $langOfStudent";
+$langVideoManT1 = "Οδηγοί $langOfTeacher (μέρος 1ο)";
+$langVideoManT2 = "Οδηγοί $langOfTeacher (μέρος 2ο)";
 $langOr = "ή";
 $langOrYet = "ή ακόμη";
 $langor =  "η";
@@ -3343,6 +3346,7 @@ $langAdministratorForum = 'Διαχείριση Περιοχών Συζητήσ�
 $langAdministratorGroup = 'Διαχείριση Ομάδων Εκπαιδευόμενων';
 $langCreateAccount = "Δημιουργία Λογαριασμού";
 $langAllTutorials = "Γενικοί οδηγοί";
+$langVideoTutorials = "Βίντεο - Οδηγοί";
 $langOnlyInEnglish = "Μόνο στα Αγγλικά";
 
 /* * *******************************************************
