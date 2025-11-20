@@ -3539,6 +3539,10 @@ function upgrade_to_4_2($tbl_options) : void {
         Database::get()->query("ALTER TABLE user ADD `uuid` VARCHAR(40) NOT NULL DEFAULT 0 AFTER `id`");
     }
 
+    if (!DBHelper::fieldExists('poll_user_record', 'session_id')) {
+        Database::get()->query("ALTER TABLE poll_user_record ADD `session_id` INT NOT NULL DEFAULT 0");
+    }
+
 }
 
 /**

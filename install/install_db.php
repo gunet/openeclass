@@ -1070,7 +1070,9 @@ $db->query("CREATE TABLE IF NOT EXISTS `poll_user_record` (
     `uid` INT UNSIGNED NOT NULL DEFAULT 0,
     `email` VARCHAR(255) DEFAULT NULL,
     `email_verification` TINYINT DEFAULT NULL,
-    `verification_code` VARCHAR(255) DEFAULT NULL) $tbl_options");
+    `verification_code` VARCHAR(255) DEFAULT NULL,
+    `session_id` INT NOT NULL DEFAULT 0)
+    $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `poll_answer_record` (
     `arid` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
