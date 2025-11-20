@@ -6092,82 +6092,93 @@ $langNotEnrolledToCollaborations = "You are not subscribed to partnerships";
 $langSumCollaborationEnrolled = "Collaborations I participate in";
 $langWikiEditionNoSucceed = "One or more subsystems must be enabled by default.";
 $m['password_collab'] = "Password for collaboration";
-$langLabelCollabUserRequest = 'Application for collaboration registration';
-$langInfoAboutCollabRegistration = 'The partnership you selected is closed. To register, you must
-        to complete the following application, which will be recorded and sent to the administrators of the collaboration.';
-$langRequestReasonsCollab = 'State the reasons you wish to register for the collaboration.';
-$langCollabDes = 'Collaboration description';
-$langThisCollabDescriptionIsEmpty = 'The collaboration has no description';
-$langCollabInvitation = 'Invitation to register for the collaboration';
-$langCollab = 'collaboration';
-$langSession = 'Sessions';
-$langAddSession = 'Add session';
-$langIndividualSession = 'Individual session';
-$langGroupSession = 'Group session';
-$langSelectUser = 'User choice';
-$langSelectConsultant = 'Selection of consultant';
-$langAddSessionCompleted = 'Session creation completed successfully';
-$langAddSessionNotCompleted = 'Session creation failed';
-$langAddInCorrectDateVal = 'You have entered an incorrect expiry date.';
-$langStatement = 'Condition';
-$langIndividualSessions = 'Individual sessions';
-$langGroupSessions = 'Group sessions';
-$langInProgress = 'is active...';
+$langLabelCollabUserRequest = "Application for collaboration registration";
+$langInfoAboutCollabRegistration = "The partnership you selected is closed. To register, you must
+        to complete the following application, which will be recorded and sent to the administrators of the collaboration.";
+$langRequestReasonsCollab = "State the reasons you wish to register for the collaboration.";
+$langCollabDes = "Collaboration description";
+$langThisCollabDescriptionIsEmpty = "The collaboration has no description";
+$langCollabInvitation = "Invitation to register for the collaboration";
+$langCollab = "collaboration";
+$langSession = "Sessions";
+$langAddSession = "Add session";
+$langIndividualSession = "Individual session";
+$langGroupSession = "Group session";
+$langSelectUser = "User choice";
+$langSelectConsultant = "Selection of consultant";
+$langAddSessionCompleted = "Session creation completed successfully";
+$langAddSessionNotCompleted = "Session creation failed";
+$langAddInCorrectDateVal = "You have entered an incorrect expiry date.";
+$langStatement = "Condition";
+$langIndividualSessions = "Individual sessions";
+$langGroupSessions = "Group sessions";
+$langInProgress = "is active...";
 $langSessionHasNotStarted = "It hasn't started yet...";
-$langSessionHasExpired = 'Ii has expired';
-$langLeaveSession = 'Leave the session';
-$langDelSessionSuccess = 'This session was successfully deleted';
-$langMySessions = 'My sessions';
-$langContinueToDelSession = 'Do you want to proceed with this action?';
-$langContinueToLeaveSession = 'Do you want to leave this session?';
-$langLeaveSessionSuccess = 'You have successfully abandoned this session';
-$langEditSession = 'Edit session';
-$langCompleteSession = 'Session completion';
-$langSessionResourseDeleted = 'The resource in this session was deleted successfully!';
-$langNoAvailableSessionRecourses = 'There are no resources available in this session';
-$langResourceCompleted = 'The resource updated successfully';
-$langAddResource = 'Add resource';
-$langEditResource = 'Edit resource';
-$langSSession = 'Session';
-$langTypeRemote = 'Type';
-$langNotRemote = 'Not remote';
-$langRemote = 'Remote';
-$langIndividualS = 'Individual';
-$langGroupS = 'Group';
-$langNotDisplay = 'No display';
-$langStartEndSessionDateTime = 'Session start - end time';
-$langDateMaxMinutes = 'Session duration should be 45 minutes.';
-$langConsultant = 'Consultant';
-$langDetailsSession = 'Session details';
-$langAvailableSession = 'New session';
-$langInfoNewSession = 'In the calendar you will see all the registered sessions of the collaboration if there are any.
-You cannot register a new session in these slots. You can choose the free day and time slots
-in order to make an entry. </br>
-By selecting one of them by clicking on the desired slot and after pressing the "Add" button in the new window that will appear,
-you will temporarily enter the new session start and end date. </br></br>
-<strong>The registration is completed by submitting the form using the "Submit" button.</strong>';
-$langInfoEditSession = 'In the calendar you will see all the registered sessions of the collaboration if there are any.
-The green color is for the current session you want to edit.
-By selecting a different day and time slot by clicking on the desired slot </br> and after pressing the "Add" button,
-you will temporarily enter the new session start and end date. </br></br>
-<strong>The registration is completed by submitting the form from the "Change" button.</strong>';
-$langEmptyUploadFile = 'You have not selected a file to upload.';
-$langUploadDocCompleted = 'Upload completed successfully.';
-$langSessionType = 'Session type';
-$langRemoteConference = 'Video conference';
-$langTcNotStartedYet = 'The video conference has not started yet';
-$langAddTcSession = 'Create a video conference link';
-$langPercentageSessionCompletion = 'Session completion rate';
-$langAllSessions = 'All sessions';
-$langSessionHasNotBadge = 'The session has no completion resources.';
-$langRegisteredUsers = 'Registered users';
-$langDoNotChooseResource = 'Your file should correspond to some integration activity.</br>
- If the "About" field is empty then there are no session completion resources
- and you cannot upload a file.';
-$langWithSubmittedUploadedFile = 'By submitting a deliverable';
-$langSubmittedUploadedFile = 'Submit deliverable';
-$langMyUploadedFiles = 'My deliverables';
-$langViewScreensThemes = 'View themes';
+$langSessionHasExpired = "Ii has expired";
+$langLeaveSession = "Leave the session";
+$langDelSessionSuccess = "This session was successfully deleted";
+$langMySessions = "My sessions";
+$langContinueToDelSession = "Do you want to proceed with this action?";
+$langContinueToLeaveSession = "Do you want to leave this session?";
+$langLeaveSessionSuccess = "You have successfully abandoned this session";
+$langEditSession = "Edit session";
+$langCompleteSession = "Session completion";
+$langSessionResourseDeleted = "The resource in this session was deleted successfully!";
+$langNoAvailableSessionRecourses = "There are no resources available in this session";
+$langResourceCompleted = "The resource updated successfully";
+$langAddResource = "Add resource";
+$langEditResource = "Edit resource";
+$langSSession = "Session";
+$langTypeRemote = "Type";
+$langNotRemote = "Not remote";
+$langRemote = "Remote";
+$langIndividualS = "Individual";
+$langGroupS = "Group";
+$langNotDisplay = "No display";
+$langStartEndSessionDateTime = "Session start - end time";
+$langDateMaxMinutes = "Session duration should be 45 minutes.";
+$langConsultant = "Consultant";
+$langDetailsSession = "Session details";
+$langAvailableSession = "New session";
+$langInfoNewSession = "In the calendar you will find all the sessions you have registered as a consultant in the current collaboration.
+You cannot add a new session to these slots, except for the free ones.</br>
+By selecting the desired slot and clicking the <<add>> button in the new window that will appear,
+you will temporarily register the new start and end date of the session. </br></br>
+<strong>The registration is completed by submitting the form using the <<submit>> button.</strong>";
+$langInfoNewSessionCoordinator = "The calendar displays all the sessions of the consultant you selected.
+No new sessions can be added to these slots, except for the free ones.</br>
+By selecting the desired slot and clicking the <<add>> button in the new window that will appear,
+you will temporarily register the new start and end date of the session. </br></br>
+<strong>The registration is completed by submitting the form using the <<submit>> button.</strong>";
+$langInfoEditSession = "In the calendar you will see all the sessions you have registered as a consultant for the current collaboration.
+The green color refers to the current session you want to edit.
+By selecting a different slot and after pressing the <<add>> button,
+you will temporarily register the new start and end date of the session. </br></br>
+<strong>The registration is completed by submitting the form from the <<change>> button.</strong></br></br>
+<strong>You can also change the duration of the current session by changing the size of the green slot</strong>";
+$langInfoEditSessionCoordinator = "In the calendar you will see all the sessions that the selected consultant has registered.
+The green color refers to the current session that you want to edit.
+By selecting a different slot and after pressing the <<add>> button,
+you will temporarily register the new start and end date of the session. </br></br>
+<strong>The registration is completed by submitting the form from the <<change>> button.</strong></br></br>
+<strong>You can also change the duration of the current session by changing the size of the green slot</strong>ν";
+$langEmptyUploadFile = "You have not selected a file to upload.";
+$langUploadDocCompleted = "Upload completed successfully.";
+$langSessionType = "Session type";
+$langRemoteConference = "Video conference";
+$langTcNotStartedYet = "The video conference has not started yet";
+$langAddTcSession = "Create a video conference link";
+$langPercentageSessionCompletion = "Session completion rate";
+$langAllSessions = "All sessions";
+$langSessionHasNotBadge = "The session has no completion resources.";
+$langRegisteredUsers = "Registered users";
+$langDoNotChooseResource = "Your file should correspond to some integration activity.</br>
+ If the <<About>> field is empty then there are no session completion resources
+ and you cannot upload a file.";
+$langWithSubmittedUploadedFile = "By submitting a deliverable";
+$langSubmittedUploadedFile = "Submit deliverable";
+$langMyUploadedFiles = "My deliverables";
+$langViewScreensThemes = "View themes";
 $langOldThemeInfo = "Due to changes in the platform's appearance, any old themes you may have created are not compatible. You should choose one of the following. You can click on 'View themes' to see how the platform will appear.";
 $langOldThemeInfoLocation = "Note that you will find the content of the old themes (images, logos, etc.) in the";
 $langWhatTypeOfCourse = "Type of course";
@@ -6244,24 +6255,30 @@ $langDisablePreventDownloadPdf = "Disable file download avoidance methods";
 $langPreventEnablePDF = "The process has been activated.";
 $langPreventDisablePDF = "Process disabled.";
 $langChooseContactImg = "Image selection in contact";
+$langDoubleLoginLock = 'You have logged into the platform from another device
+    with the same account. Double logins are disabled, so your current login has
+    been disconnected.';
+$langDoubleLoginLockOption = 'Forbid simultaneous logins with the same account.';
 $langNumberScaleDiffAnswers = "The maximum scale number you entered should equal the number of possible responses you provided.";
 $langInfoAddSliderLabels = "Add to the text field the possible answers that the scale will include based on its maximum number.</br>
  Each answer is separated by the symbol | .</br>
  Eg if the maximum number of the scale is 5 then you should give 5 possible answers of the form: (not at all|very little|a little|very|very much).";
 $langTableDimension = "Create the dimension of the table (N*N) by entering the number of its columns and rows.</br></br>
  <ul><li>Columns = Questions to the user</li><li>Rows = Answers from the user</li></ul>";
-$langNumberOfColumns = 'Number of columns';
-$langNumberOfRows = 'Number of lines';
-$langWriteQuestion = 'Write the question...';
-$langNumberRowColBigger = 'The number of rows and columns of the table should be greater than zero.';
-$langRowsColumnsInsertd = 'Table rows and columns were successfully entered.';
-$langSubmitQuestions = 'Ask questions';
-$langEditRowsColsTable = 'Edit table dimensions and questions';
-$langQuestionsInsertd = 'Questions added successfully.';
-$langNumberColumnsSmallerThanQ = 'The number of columns you entered is less than the available questions entered.';
-$langUserAnswer = 'User response';
-$langAddRowsColumns = 'Registration';
-$langCurrentDuration = 'Current duration';
+$langNumberOfColumns = "Number of columns";
+$langNumberOfRows = "Number of lines";
+$langWriteQuestion = "Write the question...";
+$langNumberRowColBigger = "The number of rows and columns of the table should be greater than zero.";
+$langRowsColumnsInsertd = "Table rows and columns were successfully entered.";
+$langSubmitQuestions = "Ask questions";
+$langEditRowsColsTable = "Edit table dimensions and questions";
+$langQuestionsInsertd = "Questions added successfully.";
+$langNumberColumnsSmallerThanQ = "The number of columns you entered is less than the available questions entered.";
+$langUserAnswer = "User response";
+$langAddRowsColumns = "Registration";
+$langCurrentDuration = "Current duration";
+$langMaxHeightHalfMaxScreenJumbotron = "Alternatively, the carpet will be removed from the current screen.";
+$langOfSubmitQuestionnaire = "By submitting a questionnaire";
 $langStatsReport = 'Participation report';
 $langIndexDisabled = 'The indexing engine is disabled.';
 $langReports = 'Reports';
@@ -6446,6 +6463,7 @@ $langForumCategoryNotDeleted = "The category cannot be deleted.";
 $langUsersAnswers = "User responses";
 $langEnablePagination = "Enable pagination";
 $langPreviousQuestion = "Previous";
+$langNextQuestion = "Next";
 $langEnableRequiredAnswer = "Mandatory answer to every question";
 $langGenQrCode = "QR code creation";
 $langVisibleInfo = "visible only to $langsTeachers.";
@@ -6553,7 +6571,30 @@ $langConsent = "User consent";
 $langAttendanceCriterion = "User attendance criterion";
 $langConsultingTools = "Consulting tools";
 $langChooseOtherSession = "You have selected a different session than the current one. Try again!";
+$langEditSessionSection = "Edit session";
+$langInsertTcMeetingSession = "teleconference";
+$langCompleteCriteriaSession = "Completion criteria";
+$langSelectToolsPolls = "Consulting tools";
+$langCreateReferenceNotes = "Notes";
+$langAutomaticCompletion = "With auto-completion (once the session time expires)";
+$langUserPollAnswer = "answered";
+$langStartSession = "Start session";
+$langFinishSession = "End of session";
+$langEnableRequiredAnswer = "Mandatory answer to every question";
+$langNoAnswers = "There are no answers for this question.";
+$langCriteriaBelowParticipateInCompletion = "The following criteria are involved in session completion";
+$langTheResource = "The resource";
+$langAlreadyUsed = "is being used by a user and cannot be deleted.";
+$langListCompletionCriteria = "List of criteria";
+$langUserParticipation = "User participation";
+$langFirstShow = "Initial appearance";
 $langNowAllowNullDuration = "The duration cannot be zero.";
+$langShowUnitTitle = "Show section by Title";
+$langExtAppAll = "All";
+$langExtAppGeneral = "General";
+$langExtAppTeleconference = "Teleconference";
+$langExtAppCloud = "Cloud";
+$langExtAppOther = "Other";
 $langDownloadPdfNotAllowed = "File download not allowed";
 $langDisplayRightContentInCPage = "Display calendar, announcements, widgets, course completion on the home page";
 $langCoursePage = "$langCourse page";

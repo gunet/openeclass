@@ -1002,7 +1002,7 @@ function my_basename($path) {
 
  */
 
-function format_locale_date($datetime_stamp, $format = null, $display_time = true) {
+function format_locale_date($datetime_stamp, $format = null, $display_time = true, $pattern = null) {
 
     global $language;
 
@@ -1030,9 +1030,13 @@ function format_locale_date($datetime_stamp, $format = null, $display_time = tru
         https://www.php.net/manual/en/intldateformatter.create.php
         https://www.php.net/manual/en/class.intldateformatter.php#intl.intldateformatter-constants
     */
-    $fmt = datefmt_create($locale, $format_date_style, $format_time_style, 'Europe/Athens', IntlDateFormatter::TRADITIONAL);
+    if ($pattern) {
+        $fmt = datefmt_create($locale, IntlDateFormatter::NONE, IntlDateFormatter::NONE, 'Europe/Athens', IntlDateFormatter::TRADITIONAL, $pattern);
+    } else {
+        $fmt = datefmt_create($locale, $format_date_style, $format_time_style, 'Europe/Athens', IntlDateFormatter::TRADITIONAL);
+    }
 
-    return (datefmt_format($fmt, $datetime_stamp));
+    return datefmt_format($fmt, $datetime_stamp);
 }
 
 

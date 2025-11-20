@@ -42,10 +42,10 @@ $langOfConsultant = "Consultant";
 $langConsultants = "Consultants";
 $langOfConsultants = "Consultants";
 
-$langsConsultant = "consultant";
-$langsOfConsultant = "consultant";
-$langsConsultants = "consultants";
-$langsOfConsultants = "consultants";
+$langsTeacher = "consultant";
+$langsOfTeacher = "consultant";
+$langsTeachers = "consultants";
+$langsOfTeachers = "consultants";
 
 $langCourseAdmin = "Admin";
 $langOfCourseAdmin = "Admin";
@@ -154,6 +154,7 @@ $langHelpPowerUser = "The admin assistant manages $langsCourses and users";
  * ************************************************** */
 // index
 $langSpeeSubscribe = "Register as a $langOfCourse Administrator";
+$langMonthlyReportInfo = "Aggregates (partnerships, users) of the last 12 months are presented.";
 $langListCours = "List $langOfCourses / Actions";
 $langProfReg = "Register $langOfTeacher";
 $langProfOpen = "Requests $langOfTeachers";
@@ -1332,7 +1333,7 @@ Choose one of the available forms of partnerships. </br></br>
 Specify, optionally, the distribution license of your collaboration.</br></br>
 Specify the type of access to your collaboration. </br></br>
 To complete the process of creating the collaboration, press the button with the indicator «Creating a Partnership».";
-$langMonthlyReportInfo = "Aggregates (partnerships, users) of the last 24 months are presented.";
+$langMonthlyReportInfo = "Aggregates (partnerships, users) of the last 12 months are presented.";
 $langAddingDirectoryIndex = 'Add index.html files to collaboration subdirectories';
 $langAdministratorGroup = 'Management of User Groups';
 $m['WorkToAllUsers'] = "In all the $langsOfStudentss";
@@ -1386,6 +1387,7 @@ Don't allow $langsOfCourses to be created by $langsTeachers in classes they don'
 $lang_allow_teacher_clone_course = "Allow $langsOfCourses to be cloned from $langsTeachers";
 $lang_disable_log_course_actions = "Disable logging of user actions within $langsCourses";
 $lang_disable_log_system_actions = "Disable logging of user actions outside of $langsOfCourses";
+$langUnsubscribeCourse = "Disable collaboration opt-out";
 $langDefaultInstitutionName = 'GUNet Academic Internet';
 $lang_course_metadata = "Postcomment $langOfCourses";
 /* * **********************************************************
@@ -1570,6 +1572,9 @@ $langNotExistDeliverables = "There are no deliverables";
 $langTypeOutComment = "Type your comment...";
 $langAddCommentsSuccess = "Your comment has been successfully added.";
 $langCommentsByConsultant = "Comments by consultant";
+$langSubmissionOnBehalfOfUser = "Submission on behalf of user";
+$langChooseAUser = "You did not select a user. Please try again.";
+$langProcessForFiliInTool = "You are in the process of completing the tool regarding the selected user.";
 $langInsertPassage = "Add text";
 $langSomeComments = "Update on your deliverable";
 $langSendEmailWithComments = "Upon submission of your comments, an informative email will be sent to the user about them.";
@@ -1587,15 +1592,15 @@ $langUserHasNotAcceptedSession = "The session registration was NOT accepted by t
 $langProcessCompleted = "You have successfully completed the process.";
 $langAnnouncedExistingSession = "Selected users will be notified by mail to register for the session.";
 $langNotExistUsers = "There are no users";
-$langWithConsent = "User consent for session registration?";
+$langWithConsent = "User consent for session Participation?";
 $langInfoWithConsent = "The user will be automatically logged into the session if user consent is not selected.";
-$langContinueToRegistrationSession = "You have chosen to subscribe to this session. Do you want to proceed?";
-$langCompleteRegistration = "Your registration has been completed successfully! You have entered your session area.";
+$langContinueToRegistrationSession = "You have chosen to participate to this session. Do you want to proceed?";
+$langCompleteRegistration = "Your participation has been completed successfully! You have entered your session area.";
 $langUserConsent = "About user consent";
-$langInProgressRegistration = "Pending user registration...";
-$langSubmitRegistration = "User registration";
+$langInProgressRegistration = "Pending user Participation...";
+$langSubmitRegistration = "User Participation";
 $langNoSubmitRegistration = "Unsubscribe";
-$langCancelSessionRegistration = "User registration is about to be cancelled. The user will be able to rejoin the session.
+$langCancelSessionRegistration = "User Participation is about to be cancelled. The user will be able to rejoin the session.
  The process of completing the session by that user will not be removed.
  To delete it permanently including its progress on completing the session, you can go to edit the session.</br></br>
  Do you want to continue?";
@@ -1625,7 +1630,7 @@ $langCompletedSessionMeeting = "Completion by live meeting";
 $langInfoForbiddenAddPrereq = "The operation you attempted cannot be completed as the current session is logged out by all users.";
 $langAllCompletedResources = "The session resources have been executed successfully by the user.";
 $langShowReportUserTable = "User session reports";
-$langShowReportUserCurrentSession = "Current session user report";
+$langShowReportUserCurrentSession = "Current session user attendance";
 $langCompletionResources = "Completion resources";
 $langCompletedResources = "Completed resources";
 $langResourceAsActivity = "Session completion resources";
@@ -1664,3 +1669,5 @@ $langDefaultModulesCollaborationHelp = 'The following modules are enabled by def
 $langInsertQuestionnaire = 'questionnaire';
 $infoPrereqSession = "The session you select as a prerequisite must have at least one completion criterion.</br>
  Otherwise the system will ignore the session prerequisite calculation process.";
+$langConfirmParticipation = "Confirmation";
+$langReportAttendances = "Reports - Attendance records";
