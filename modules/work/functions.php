@@ -1948,76 +1948,97 @@ function submit_work($id, $on_behalf_of = null) {
             $no_files = isset($on_behalf_of) && !isset($_FILES);
 
             if (!$no_files) {
-                // Multiple files
-                if ($row->submission_type == 2) {
-                    $maxFiles = $row->max_submissions;
-                    $totalFiles = 0;
-                    $fileInfo = [];
+
+                $files_list = [];
+
+                if (isset($_POST['uppyResult'])) {
+                    $uppyData = json_decode($_POST['uppyResult'], true);
+                    if (!empty($uppyData['successful'])) {
+                        foreach ($uppyData['successful'] as $file) {
+                            $serverPath = $file['response']['body']['url'] ?? null;
+
+                            if ($serverPath && file_exists($serverPath)) {
+                                $files_list[] = [
+                                    'name' => $file['name'],
+                                    'tmp_name' => $serverPath,
+                                    'error' => UPLOAD_ERR_OK,
+                                    'is_uppy' => true
+                                ];
+                            }
+                        }
+                    }
+                } elseif (isset($_FILES['userfile']) && is_array($_FILES['userfile']['name'])) {
                     foreach ($_FILES['userfile']['name'] as $i => $name) {
-                        $status = $_FILES['userfile']['error'][$i];
-                        if (!in_array($status, [UPLOAD_ERR_OK, UPLOAD_ERR_NO_FILE])) {
-                            Session::flash('message',$langUploadError);
-                            Session::flash('alert-class', 'alert-danger');
-                            redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
-                        }
-                        if ($status == UPLOAD_ERR_OK) {
-                            $totalFiles++;
-                        }
+                        if ($_FILES['userfile']['error'][$i] == UPLOAD_ERR_NO_FILE) continue;
+
+                        $files_list[] = [
+                            'name' => $_FILES['userfile']['name'][$i],
+                            'tmp_name' => $_FILES['userfile']['tmp_name'][$i],
+                            'error' => $_FILES['userfile']['error'][$i],
+                            'is_uppy' => false
+                        ];
                     }
-                    $fileCount = count($_FILES['userfile']['name']);
-                    if ($totalFiles > $maxFiles) {
-                        Session::flash('message',$GLOBALS['langWorkFilesCountExceeded']);
-                        Session::flash('alert-class', 'alert-danger');
-                        redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
-                    }
-                    if ($totalFiles == 1) {
-                        $format = '';
-                    } else {
-                        $destDir = $workPath . '/' . $local_name;
-                        if (!is_dir($destDir)) {
-                            mkdir($destDir, 0755);
-                        }
-                        $format = '/%0' . strlen($totalFiles) . 'd';
-                    }
-                    $j = 1;
-                    foreach ($_FILES['userfile']['name'] as $i => $file_name) {
-                        if ($_FILES['userfile']['error'][$i] == UPLOAD_ERR_NO_FILE) {
-                            continue;
-                        }
-                        validateUploadedFile($file_name, 2);
-                        $ext = get_file_extension($file_name);
-                        $filename = $local_name . sprintf($format, $j) . (empty($ext) ? '' : '.' . $ext);
-                        $file_moved = move_uploaded_file($_FILES['userfile']['tmp_name'][$i], $workPath . '/' . $filename);
-                        if (!$file_moved) {
-                            break;
-                        }
-                        $fileInfo[] = [$filename, $file_name];
-                        $files_to_keep[] = $filename;
-                        $j++;
-                    }
-                    // keep details of first file for insert into DB
-                    list($filename, $file_name) = $fileInfo[0];
-                } else {
-                    // Single file
-                    if ($_FILES['userfile']['error'] == UPLOAD_ERR_NO_FILE) {
-                        Session::flash('message', $langNoFileUploaded);
-                        Session::flash('alert-class', 'alert-warning');
-                        redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
-                    }
-                    if ($_FILES['userfile']['error'] == UPLOAD_ERR_CANT_WRITE) {
+                }
+
+                $maxFiles = $row->max_submissions;
+                $totalFiles = count($files_list);
+                $fileInfo = [];
+
+                foreach ($files_list as $file) {
+                    if ($file['error'] !== UPLOAD_ERR_OK) {
                         Session::flash('message', $langUploadError);
                         Session::flash('alert-class', 'alert-danger');
                         redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
                     }
-                    $file_name = $_FILES['userfile']['name'];
-                    validateUploadedFile($file_name, 2);
-                    $ext = get_file_extension($file_name);
-                    $filename = $local_name . (empty($ext) ? '' : '.' . $ext);
-                    $file_moved = move_uploaded_file($_FILES['userfile']['tmp_name'], $workPath . '/' . $filename);
-                    $files_to_keep = [$filename];
                 }
+
+                if ($totalFiles > $maxFiles) {
+                    Session::flash('message',$GLOBALS['langWorkFilesCountExceeded']);
+                    Session::flash('alert-class', 'alert-danger');
+                    redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
+                }
+                if ($totalFiles == 1) {
+                    $format = '';
+                } else {
+                    $destDir = $workPath . '/' . $local_name;
+                    if (!is_dir($destDir)) {
+                        mkdir($destDir, 0755);
+                    }
+                    $format = '/%0' . strlen($totalFiles) . 'd';
+                }
+                $j = 1;
+                $files_to_keep = [];
+
+                foreach ($files_list as $file) {
+                    $file_name = $file['name'];
+
+                    validateUploadedFile($file_name, 2);
+
+                    $ext = get_file_extension($file_name);
+                    $filename = $local_name . sprintf($format, $j) . (empty($ext) ? '' : '.' . $ext);
+                    $destination = $workPath . '/' . $filename;
+
+                    $file_moved = move_uploaded_file($file['tmp_name'], $destination);
+
+                    if (!$file_moved) {
+                        Session::flash('message', "Error moving file: " . $file_name);
+                        Session::flash('alert-class', 'alert-danger');
+                        break;
+                    }
+
+                    $fileInfo[] = [$filename, $file_name];
+                    $files_to_keep[] = $filename;
+                    $j++;
+                }
+
+                if (!empty($fileInfo)) {
+                    list($filename, $file_name) = $fileInfo[0];
+                }
+
+                // error here
                 if (!$file_moved) {
-                    Session::flash('message', $langUploadError);
+//                    Session::flash('message', $langUploadError);
+                    Session::flash('message', 'Error $file_moved');
                     Session::flash('alert-class', 'alert-danger');
                     redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
                 }

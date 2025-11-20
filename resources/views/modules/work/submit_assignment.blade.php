@@ -113,7 +113,7 @@
                                             <div class='d-lg-flex gap-4'>
                                                 <div class='flex-grow-1'>
                                                     <div class='form-wrapper form-edit rounded'>
-                                                        <form class='form-horizontal' enctype='multipart/form-data' action='{{ $form_link }}' method='post'>
+                                                        <form id="submit_assignment_form" class='form-horizontal' enctype='multipart/form-data' action='{{ $form_link }}' method='post'>
                                                             <input type='hidden' name='id' value='{{ $id }}'>
                                                             {!! $group_select_hidden_input !!}
 
@@ -136,37 +136,150 @@
                                                                                 {!! $rich_text_editor !!}
                                                                             </div>
                                                                         </div>
-                                                                    @elseif ($submission_type == 2) {{-- Multiple file submission --}}
-                                                                        <script>
-                                                                            $(function () { initialize_multifile_submission({{ $max_submissions }}) });
-                                                                        </script>
+                                                                    @else
+                                                                        @php
+                                                                            if ($submission_type == 0) {
+                                                                                $max_submissions = 1;
+                                                                            }
+                                                                        @endphp
                                                                         <div class='form-group mt-0'>
-                                                                            <label for='userfile' class='col-sm-12 control-label-notes'>{{ trans('langWorkFileLimit') }}: {{ $max_submissions }} </label>
-                                                                            <div class='col-sm-10 d-flex align-items-center gap-2'>
-                                                                                <div>
-                                                                                    <button class='btn submitAdminBtn btn-sm moreFiles' aria-label='Add'>
-                                                                                        <span class='fa fa-plus'></span>
-                                                                                    </button>
-                                                                                </div>
-                                                                                <input type='file' name='userfile[]' id='userfile'>
+                                                                            @push('head_styles')
+                                                                                <link href="{{ $urlAppend }}js/bundle/uppy.min.css" rel="stylesheet">
+                                                                            @endpush
+                                                                            <div>
+                                                                                <label for='userfile' class='col-sm-12 control-label-notes'>{{ trans('langWorkFileLimit') }}: {{ $max_submissions }}</label>
+                                                                                <div id="uppy"></div>
                                                                             </div>
-                                                                        </div>
-                                                                    @else {{-- Single file submission --}}
-                                                                        <div class='form-group mt-0'>
-                                                                            <label for='userfile' class='col-sm-6 control-label-notes'>{{ trans('langWorkFile') }}:</label>
-                                                                            <div class='col-sm-10'>
-                                                                                <input type='file' name='userfile' id='userfile'>
-                                                                            </div>
+                                                                            <script>
+                                                                                let isUppyLoaded = false;
+                                                                                let uppy;
+
+                                                                                async function loadUppy() {
+                                                                                    console.log('loadUppy');
+                                                                                    try {
+                                                                                        console.log('Uppy loaded');
+                                                                                        const { Uppy, Dashboard, Form, XHRUpload, English, French, German, Italian, Spanish, Greek } = await import("{{ $urlAppend }}js/bundle/uppy.js");
+
+                                                                                        const locale_map = {
+                                                                                            'de': German,
+                                                                                            'el': Greek,
+                                                                                            'en': English,
+                                                                                            'es': Spanish,
+                                                                                            'fr': French,
+                                                                                            'it': Italian,
+                                                                                        }
+
+                                                                                        const uppy = new Uppy({
+                                                                                            autoProceed: false,
+                                                                                            restrictions: {
+                                                                                                maxFileSize: {{ parseSize(ini_get('upload_max_filesize')) }},
+                                                                                                maxNumberOfFiles: {{ $max_submissions }},
+                                                                                            }
+                                                                                        })
+
+                                                                                        uppy.use(Dashboard, {
+                                                                                            target: '#uppy',
+                                                                                            inline: true,
+                                                                                            showProgressDetails: true,
+                                                                                            proudlyDisplayPoweredByUppy: false,
+                                                                                            height: 500,
+                                                                                            thumbnailWidth: 100,
+                                                                                            locale: locale_map['{{ $language }}'] || English,
+                                                                                            hideUploadButton: true
+                                                                                        });
+
+                                                                                        uppy.use(XHRUpload, {
+                                                                                            endpoint: '{{ $form_link }}',
+                                                                                            fieldName: 'userfile[]',
+                                                                                            bundle: true,
+                                                                                            getResponseData: (responseText, response) => {
+                                                                                                return { url: '' };
+                                                                                            }
+                                                                                        });
+
+                                                                                        uppy.use(Form, {
+                                                                                            target: '#submit_assignment_form',
+                                                                                            triggerUploadOnSubmit: true,
+                                                                                            submitOnSuccess: true,
+                                                                                            addResultToForm: true
+                                                                                        });
+
+
+
+
+
+                                                                                        {{--const csrfToken =--}}
+                                                                                        {{--    document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') ||--}}
+                                                                                        {{--    document.getElementById('csrf_token')?.value || '';--}}
+
+                                                                                        {{--uppy.use(XHRUpload, {--}}
+                                                                                        {{--    endpoint: document.getElementById('submit_assignment_form').action,--}}
+                                                                                        {{--    method: document.getElementById('submit_assignment_form').method || 'post',--}}
+                                                                                        {{--    formData: true,--}}
+                                                                                        {{--    bundle: true,--}}
+                                                                                        {{--    fieldName: '{{ $max_submissions > 1 ? "userfile[]" : "userfile" }}',--}}
+                                                                                        {{--    headers: csrfToken ? { 'X-CSRF-TOKEN': csrfToken } : {}--}}
+                                                                                        {{--});--}}
+
+                                                                                        isUppyLoaded = true;
+                                                                                    } catch (error) {
+                                                                                        console.log('Uppy not loaded', error);
+                                                                                        isUppyLoaded = false;
+                                                                                    }
+                                                                                }
+
+                                                                                loadUppy();
+
+                                                                                // document.addEventListener('DOMContentLoaded', () => {
+                                                                                //     const form = document.getElementById('submit_assignment_form');
+                                                                                //     form.addEventListener('submit', async (e) => {
+                                                                                //         e.preventDefault();
+                                                                                //         if (!isUppyLoaded || !uppy) {
+                                                                                //             form.submit();
+                                                                                //             return;
+                                                                                //         }
+                                                                                //         const fd = new FormData(form);
+                                                                                //         const meta = {};
+                                                                                //         fd.forEach((v, k) => { meta[k] = v; });
+                                                                                //         uppy.setMeta(meta); // now valid
+                                                                                //
+                                                                                //         const result = await uppy.upload();
+                                                                                //         if (result.failed.length) {
+                                                                                //             alert('Upload failed for some files.');
+                                                                                //             return;
+                                                                                //         }
+                                                                                //         window.location.reload();
+                                                                                //     });
+                                                                                // });
+
+                                                                            </script>
                                                                         </div>
                                                                     @endif
+{{--                                                                    @elseif ($submission_type == 2)  Multiple file submission--}}
+{{--                                                                        <script>--}}
+{{--                                                                            $(function () { initialize_multifile_submission({{ $max_submissions }}) });--}}
+{{--                                                                        </script>--}}
+{{--                                                                        <div class='form-group mt-0'>--}}
+{{--                                                                            <label for='userfile' class='col-sm-12 control-label-notes'>{{ trans('langWorkFileLimit') }}: {{ $max_submissions }} </label>--}}
+{{--                                                                            <div class='col-sm-10 d-flex align-items-center gap-2'>--}}
+{{--                                                                                <div>--}}
+{{--                                                                                    <button class='btn submitAdminBtn btn-sm moreFiles' aria-label='Add'>--}}
+{{--                                                                                        <span class='fa fa-plus'></span>--}}
+{{--                                                                                    </button>--}}
+{{--                                                                                </div>--}}
+{{--                                                                                <input type='file' name='userfile[]' id='userfile'>--}}
+{{--                                                                            </div>--}}
+{{--                                                                        </div>--}}
+{{--                                                                    @else  Single file submission--}}
+{{--                                                                        <div class='form-group mt-0'>--}}
+{{--                                                                            <label for='userfile' class='col-sm-6 control-label-notes'>{{ trans('langWorkFile') }}:</label>--}}
+{{--                                                                            <div class='col-sm-10'>--}}
+{{--                                                                                <input type='file' name='userfile' id='userfile'>--}}
+{{--                                                                            </div>--}}
+{{--                                                                        </div>--}}
+{{--                                                                    @endif--}}
 
                                                                     {{-- Comments --}}
-                                                                    <div class='form-group mt-3'>
-                                                                        <label for='stud_comments' class='col-sm-6 control-label-notes'>{{ trans('langComments') }}:</label>
-                                                                        <div class='col-sm-12'>
-                                                                            <textarea class='form-control' name='stud_comments' id='stud_comments' rows='5'></textarea>
-                                                                        </div>
-                                                                    </div>
 
                                                                     @if ($on_behalf_of)
                                                                         <div class='form-group mt-4'>
@@ -196,6 +309,13 @@
                                                                                         {{ trans('langEmailToUsers') }}
                                                                                     </label>
                                                                                 </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    @else
+                                                                        <div class='form-group mt-3'>
+                                                                            <label for='stud_comments' class='col-sm-6 control-label-notes'>{{ trans('langComments') }}:</label>
+                                                                            <div class='col-sm-12'>
+                                                                                <textarea class='form-control' name='stud_comments' id='stud_comments' rows='5'></textarea>
                                                                             </div>
                                                                         </div>
                                                                     @endif
