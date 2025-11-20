@@ -352,7 +352,7 @@ class Hierarchy {
     public function getTenantRoot() {
         global $uid, $is_power_user;
 
-        $tenant = getTenant();
+        $tenant = getCurrentTenant();
         if ($tenant and !$is_power_user) {
             $root = Database::get()->querySingle('SELECT lft, rgt
                 FROM hierarchy JOIN tenant ON department_id = hierarchy.id

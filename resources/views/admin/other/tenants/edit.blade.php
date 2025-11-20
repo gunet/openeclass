@@ -24,12 +24,18 @@
                 <div class='form-wrapper form-edit border-0 px-0'>
 
                     <form class='form-horizontal' role='form' name='edit-tenant' method='post' action='tenant_edit.php' onsubmit='return validateNodePickerForm();'>
+                        @if ($tenant)
+                            <input type="hidden" name="id" value="{{ $tenant->id }}">
+                        @endif
                         <fieldset>
                             <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                             <div class='form-group'>
                                 <label for='name' class='col-sm-12 control-label-notes'>{{ trans('langName') }} <span class="asterisk Accent-200-cl">(*)</span></label>
                                 <div class='col-sm-12'>
-                                    <input id='name' class='form-control' type='text' name='name' required>
+                                    <input id='name' class='form-control' type='text' name='name' required
+                                        @if ($tenant)
+                                            value='{{ $tenant->name }}'
+                                        @endif>
                                 </div>
                             </div>
                             <div class='form-group mt-4'>
@@ -41,19 +47,23 @@
                             <div class='form-group mt-4'>
                                 <label class='col-sm-12 control-label-notes mb-2'>Συνδεδεμένη κατηγορία</label>
                                 <div class="col-sm-12">
-                                  <div class="radio mb-2">
-                                    <label>
-                                      <input type="radio" value="0" name="tenant_category" checked>
-                                      Αυτόματη δημιουργία νέας κατηγορίας
-                                    </label>
-                                  </div>
-                                  <div class="radio">
-                                    <label>
-                                      <input type="radio" value="1" name="tenant_category">
-                                      Επιλογή υπάρχουσας κατηγορίας
-                                    </label>
-                                    <div class="help-block">Όλα τα μαθήματα και οι χρήστες του ενοίκου βρίσκονται στην κατηγορία αυτή και τις υποκατηγορίες της</div>
-                                  </div>
+                                    @if ($tenant)
+                                        <p class="form-control-static">{{ $department_name }}</p>
+                                    @else
+                                        <div class="radio mb-2">
+                                          <label>
+                                            <input type="radio" value="0" name="tenant_category" checked>
+                                            Αυτόματη δημιουργία νέας κατηγορίας
+                                          </label>
+                                        </div>
+                                        <div class="radio">
+                                          <label>
+                                            <input type="radio" value="1" name="tenant_category">
+                                            Επιλογή υπάρχουσας κατηγορίας
+                                          </label>
+                                          <div class="help-block">Όλα τα μαθήματα και οι χρήστες του ενοίκου βρίσκονται στην κατηγορία αυτή και τις υποκατηγορίες της</div>
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                             <div class='form-group mt-4 collapse' id="category-select">
@@ -66,16 +76,19 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class='form-group'>
+                            <div class='form-group mt-4'>
                                 <label for='url' class='col-sm-12 control-label-notes'>Διεύθυνση πλατφόρμας (URL)</span></label>
                                 <div class='col-sm-12'>
-                                    <input id='url' class='form-control' type='text' name='url' placeholder='https://eclass.example.com/'>
+                                    <input id='url' class='form-control' type='text' name='url' placeholder='https://eclass.example.com/'
+                                        @if ($tenant)
+                                            value='{{ $tenant->url }}'
+                                        @endif>
                                 </div>
                             </div>
                             <div class='form-group mt-2'>
                                 <div class='col-sm-12 mt-5 d-flex justify-content-end align-items-center gap-2'>
-                                  <button class='btn btn-primary' type='submit'>{{ trans('langAdd') }}</button>
                                   <a class='btn btn-default' href='tenants.php'>{{ trans('langCancel') }}</a>
+                                  <button class='btn btn-primary' type='submit'>{{ $tenant? trans('langSubmit'): trans('langAdd') }}</button>
                               </div>
                             </div>
                         </fieldset>

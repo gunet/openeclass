@@ -5123,19 +5123,59 @@ function module_path($path) {
 /**
  * @brief Get the current tenant, if any
  */
-function getTenant() {
-    global $require_current_course, $course_id;
+function getCurrentTenant() {
+    global $require_current_course, $course_id, $uid;
 
+    // If in course, get tenant of course
     if ($require_current_course and $course_id) {
+        return getCourseTenant($course_id)->id;
+    }
+
+    // If no user is logged in, there is no tenant
+    if (!$uid) {
         return null;
     }
 
-    if (!isset($_SESSION['tenant'])) {
-        $_SESSION['tenant'] = null;
+    // Get the current user's tenant and cache it in the session if found
+    if (!isset($_SESSION['current_user_tenant'])) {
+        $_SESSION['current_user_tenant'] = getUserTenant($uid)->id;
+    } else {
+        $_SESSION['current_user_tenant'] = null;
     }
-    return $_SESSION['tenant'];
+    return $_SESSION['current_user_tenant'];
 }
 
+/**
+ * @brief Get the tenant a course belongs to
+ */
+function getCourseTenant($course_id) {
+    $tenant = Database::get()->querySingle('SELECT tenant.id, hierarchy.id, hierarchy.lft, hierarchy.rgt
+       FROM tenant JOIN hierarchy ON tenant.department_id = hierarchy.id,
+            course_department JOIN hierarchy AS course_hierarchy ON department = course_hierarchy.id
+       WHERE course = ?d AND course_hierarchy.lft BETWEEN hierarchy.lft AND hierarchy.rgt',
+       $course_id);
+    if ($tenant) {
+        return $tenant;
+    } else {
+        return null;
+    }
+}
+
+/**
+ * @brief Get the tenant a user belongs to
+ */
+function getUserTenant($user_id) {
+    $tenant = Database::get()->querySingle('SELECT tenant.id, hierarchy.id, hierarchy.lft, hierarchy.rgt
+       FROM tenant JOIN hierarchy ON tenant.department_id = hierarchy.id,
+            user_department JOIN hierarchy AS user_hierarchy ON department = user_hierarchy.id
+       WHERE user = ?d AND user_hierarchy.lft BETWEEN hierarchy.lft AND hierarchy.rgt',
+       $user_id);
+    if ($tenant) {
+        return $tenant;
+    } else {
+        return null;
+    }
+}
 
 /**
  * @brief Theme initialization

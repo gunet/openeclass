@@ -6774,4 +6774,11 @@ $langPanoptoApp = "Panopto Application";
 $langPanoptoLTIOptions = "Panopto Options";
 $langPanoptoIntegration = "Panopto Integration";
 $langCreatedBy = "created by";
-(??)
+$langRequestAlreadySent = "A registration request has already been sent for this course";
+$langRejectedRequests = "Rejected User Requests";
+$langAcceptedRequests = "Accepted User Requests";
+$langTenants = 'Tenants';
+$langNoTenants = 'No tenants defined';
+$langAddTenant = 'Add Tenant';
+$langTenantAdded = 'The tenant has been added';
+$langTenantUpdated = 'Tenant information updated';
