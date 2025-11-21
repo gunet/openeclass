@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2025-10-16 11:06:45
+// Generated 2025-11-21 11:40:41
 
 $langYes = "Yes";
 $langNo = "No";
@@ -528,7 +528,6 @@ $langModifyInfo = "Course Administration";
 $langDropBox = "Messages";
 $langLearnPath = "Learning Path";
 $langWiki = "Wiki";
-$langToolManagement = "Modules";
 $langUsage = "Statistics";
 $langVideoText = "You can upload any audio and video file type (.mov, .rm, .mpeg...), as long as your ".$langsStudents." have the corresponding plug-in to read them";
 $langGoogle = "Quick and powerful search engine";
@@ -1605,7 +1604,6 @@ $langNewAccountActivation1 = '(existing account)';
 $langUserExistingAccount = 'Login';
 $langDateRequest = "Date of Request";
 $langDateReject = "Date of request rejection";
-$langDateAccept = "Date of request acceptance";
 $langDateClosed = "Date of request closure";
 $langDateCompleted = "Date of completed request";
 $langDateRequest_small = "Request";
@@ -2083,22 +2081,7 @@ $langDelTitle = "Warning!";
 $langDelMany1 = "Have submitted";
 $langDelMany2 = "".$langsStudents."assignments. These files will be deleted!";
 $langSubmissions = "".$langStudent." submissions";
-$langPhase = "Phase";
-$langAssignmentsSubmission = "Assignment submission";
-$langAssignmentsSubmissionHasNoStarted = "The submission process has not yet begun.";
-$langAssignmentsSubmissionInProgress = "The submission process is underway...";
-$langAssignmentsSubmissionHasExpired = "The submission process has ended.";
-$langGradeReviewHasNotStarted = "The peer review process has not yet begun.";
-$langGradeReviewInProgress = "The peer review process is underway...";
-$langGradeReviewHasExpired = "The peer review process has ended.";
-$langFinalGrade = "Final grade";
-$langFinalGradeProcessInProgress = "The rating entry process is active.";
-$langReceivedFrom = "Received from";
-$langgrade = "grade";
-$langPreviewGradesAssessments = "Preview assessments";
-$OldAssignmentsWillBeRemoved = "Old assignment assessments will be removed.";
 $langSubmitted = "Submitted";
-$langAddFinalGradeHasNotStartedYet = "The grade addition process has not yet started.";
 $langNotice2 = "Submission date";
 $langNotice3 = "If you submit another file, the old file will be replaced by the new one.";
 $langSubmittedAndGraded = "A submission for this assignment has been uploaded and graded.";
@@ -3252,7 +3235,6 @@ $langWeekTitle = "Week title";
 $langEnableIndexing = "Enable search indexing";
 $langConfirmEnableIndexTitle = "Confirmation for starting indexing";
 $langConfirmEnableIndex = "The indexing process requires <strong>certain time period and computing resources</strong>, depending on the size of the DataBase.<br/><br/>The process will run in a <u>separate browser window</u>.<br/><br/>Furthermore, indexing <u>is not</u> available if platform is installed on <u>NFS filesystem</u>.<br/><br/><em>Cancel</em> your choice if you wish to start the indexing at a <u>different</u> time.";
-$langConfirmEnableSolrIndex = "The indexing process requires <strong>certain time period and computing resources</strong>, depending on the size of the DataBase.<br/><br/>The process will run in a <u>separate browser window</u>.<br/><br/><em>Cancel</em> your choice if you wish to start the indexing at a <u>different</u> time.";
 $langIndexingNeeded = "If the indexing window is not yet open, i.e. blocked by the browser, allow it to open or press";
 $langIndexingAlert1 = "Please wait while indexing all data, this might require some time.";
 $langIndexingAlert2 = "Do not close this window or else the indexing process will be terminated.";
@@ -4417,7 +4399,7 @@ $langExportGrades = "Export Grades";
 $langCloudFileError = 'Error retrieving remote resource - incompatible file type.';
 $langInvisible = "Not visible";
 $langInsertedAsModule = "Module has been added.";
-$langAlreadyUsed = "Module already used in this learning path";
+$langAlreadyUsed = "is being used by a user and cannot be deleted.";
 $langPersonalSettingsMore1 = "to have a look in your personal settings";
 $langPersonalSettingsMore2 = "to register to available $langsCourses by clicking in '$langCourses' in left menu.";
 $langMailVerificationNote = "(Note: Check your mailbox junk folder, too)";
@@ -5382,9 +5364,6 @@ $langWebexLongDescription = "Connect with the Webex video conference service.";
 $langJitsiShortDescription = "The open source software <a href=\"https://jitsi.org/\" target=\"_blank\">Jitsi</a> is a teleconference service. Visit the <a href=\"jitsiconf.php\">tool setings</a> to enable it. Please not that the service is recommended for meetings with up to 30 participants.";
 $langJitsiLongDescription = "Connect with the <em>Jitsi</em> teleconference service (for up to <strong>30</strong> participants).";
 $langJitsiUrl = "You can change this setting to use an alternate Jitsi server.";
-$langSolrShortDescription = "The open source software <a href=\"https://solr.apache.org/\" target=\"_blank\">Solr</a> is a search platform. Visit the <a href=\"solrconf.php\">tool setings</a> to enable it.";
-$langSolrLongDescription = "Connect with the <em>Solr</em> search platform.";
-$langSolrUrl = "You can customize this setting to point to your Solr installation server.";
 $langChooseTCServer = "Select teleconference service";
 $langGoToGoogleMeetLink = "Click on 'Go to Google Meet' below in order to visit Google's user interface and create the meeting link.
     Afterwards, please copy and paste it in the 'Link' field.";
@@ -6145,23 +6124,12 @@ You cannot add a new session to these slots, except for the free ones.</br>
 By selecting the desired slot and clicking the <<add>> button in the new window that will appear,
 you will temporarily register the new start and end date of the session. </br></br>
 <strong>The registration is completed by submitting the form using the <<submit>> button.</strong>";
-$langInfoNewSessionCoordinator = "The calendar displays all the sessions of the consultant you selected.
-No new sessions can be added to these slots, except for the free ones.</br>
-By selecting the desired slot and clicking the <<add>> button in the new window that will appear,
-you will temporarily register the new start and end date of the session. </br></br>
-<strong>The registration is completed by submitting the form using the <<submit>> button.</strong>";
 $langInfoEditSession = "In the calendar you will see all the sessions you have registered as a consultant for the current collaboration.
 The green color refers to the current session you want to edit.
 By selecting a different slot and after pressing the <<add>> button,
 you will temporarily register the new start and end date of the session. </br></br>
 <strong>The registration is completed by submitting the form from the <<change>> button.</strong></br></br>
 <strong>You can also change the duration of the current session by changing the size of the green slot</strong>";
-$langInfoEditSessionCoordinator = "In the calendar you will see all the sessions that the selected consultant has registered.
-The green color refers to the current session that you want to edit.
-By selecting a different slot and after pressing the <<add>> button,
-you will temporarily register the new start and end date of the session. </br></br>
-<strong>The registration is completed by submitting the form from the <<change>> button.</strong></br></br>
-<strong>You can also change the duration of the current session by changing the size of the green slot</strong>ν";
 $langEmptyUploadFile = "You have not selected a file to upload.";
 $langUploadDocCompleted = "Upload completed successfully.";
 $langSessionType = "Session type";
@@ -6249,16 +6217,12 @@ $langwidthOfForm = "The form width spans % of the desktop width.";
 $langStrechedImgOfForm = "The height of the image spans the same height as the registration form.";
 $langWidthOfFormInfo = "This option does not apply to the image on the user registration form.";
 $langEnable_prevent_download_url = "Enable methods to prevent users from downloading .pdf files in the Documents tool.";
-$langFirstShow = "First appearance";
+$langFirstShow = "Initial appearance";
 $langEnablePreventDownloadPdf = "Enable file download avoidance methods";
 $langDisablePreventDownloadPdf = "Disable file download avoidance methods";
 $langPreventEnablePDF = "The process has been activated.";
 $langPreventDisablePDF = "Process disabled.";
 $langChooseContactImg = "Image selection in contact";
-$langDoubleLoginLock = 'You have logged into the platform from another device
-    with the same account. Double logins are disabled, so your current login has
-    been disconnected.';
-$langDoubleLoginLockOption = 'Forbid simultaneous logins with the same account.';
 $langNumberScaleDiffAnswers = "The maximum scale number you entered should equal the number of possible responses you provided.";
 $langInfoAddSliderLabels = "Add to the text field the possible answers that the scale will include based on its maximum number.</br>
  Each answer is separated by the symbol | .</br>
@@ -6277,8 +6241,6 @@ $langNumberColumnsSmallerThanQ = "The number of columns you entered is less than
 $langUserAnswer = "User response";
 $langAddRowsColumns = "Registration";
 $langCurrentDuration = "Current duration";
-$langMaxHeightHalfMaxScreenJumbotron = "Alternatively, the carpet will be removed from the current screen.";
-$langOfSubmitQuestionnaire = "By submitting a questionnaire";
 $langStatsReport = 'Participation report';
 $langIndexDisabled = 'The indexing engine is disabled.';
 $langReports = 'Reports';
@@ -6463,7 +6425,6 @@ $langForumCategoryNotDeleted = "The category cannot be deleted.";
 $langUsersAnswers = "User responses";
 $langEnablePagination = "Enable pagination";
 $langPreviousQuestion = "Previous";
-$langNextQuestion = "Next";
 $langEnableRequiredAnswer = "Mandatory answer to every question";
 $langGenQrCode = "QR code creation";
 $langVisibleInfo = "visible only to $langsTeachers.";
@@ -6556,8 +6517,6 @@ you will temporarily register the new start and end date of the session. </br></
 <strong>The registration is completed by submitting the form from the "Change" button.</strong></br></br>
 <strong>You can also change the duration of the current session by changing the size of the green slot</strong>';
 $langJumbotronWithVideo = 'The file you uploaded is of type .mp4 with full name "video.mp4"';
-$langEnableBoxLogo = "Enable background color to the logo container";
-$langButtonInBriefProfile = "Vutton in brief profile";
 $langMaxHeightHalfMaxScreenJumbotron = "Alternatively, the carpet will be removed from the current screen.";
 $langOfSubmitQuestionnaire = "By submitting a questionnaire";
 $langAddConsultantComments = "The consultant's comments were successfully added.";
@@ -6571,30 +6530,7 @@ $langConsent = "User consent";
 $langAttendanceCriterion = "User attendance criterion";
 $langConsultingTools = "Consulting tools";
 $langChooseOtherSession = "You have selected a different session than the current one. Try again!";
-$langEditSessionSection = "Edit session";
-$langInsertTcMeetingSession = "teleconference";
-$langCompleteCriteriaSession = "Completion criteria";
-$langSelectToolsPolls = "Consulting tools";
-$langCreateReferenceNotes = "Notes";
-$langAutomaticCompletion = "With auto-completion (once the session time expires)";
-$langUserPollAnswer = "answered";
-$langStartSession = "Start session";
-$langFinishSession = "End of session";
-$langEnableRequiredAnswer = "Mandatory answer to every question";
-$langNoAnswers = "There are no answers for this question.";
-$langCriteriaBelowParticipateInCompletion = "The following criteria are involved in session completion";
-$langTheResource = "The resource";
-$langAlreadyUsed = "is being used by a user and cannot be deleted.";
-$langListCompletionCriteria = "List of criteria";
-$langUserParticipation = "User participation";
-$langFirstShow = "Initial appearance";
 $langNowAllowNullDuration = "The duration cannot be zero.";
-$langShowUnitTitle = "Show section by Title";
-$langExtAppAll = "All";
-$langExtAppGeneral = "General";
-$langExtAppTeleconference = "Teleconference";
-$langExtAppCloud = "Cloud";
-$langExtAppOther = "Other";
 $langDownloadPdfNotAllowed = "File download not allowed";
 $langDisplayRightContentInCPage = "Display calendar, announcements, widgets, course completion on the home page";
 $langCoursePage = "$langCourse page";
@@ -6798,6 +6734,58 @@ $langPanoptoApp = "Panopto Application";
 $langPanoptoLTIOptions = "Panopto Options";
 $langPanoptoIntegration = "Panopto Integration";
 $langCreatedBy = "created by";
+$langConfirmEnableSolrIndex = "The indexing process requires <strong>certain time period and computing resources</strong>, depending on the size of the DataBase.<br/><br/>The process will run in a <u>separate browser window</u>.<br/><br/><em>Cancel</em> your choice if you wish to start the indexing at a <u>different</u> time.";
+$langGroupActivities = 'Group Activities';
+$langFlippedClassroomDataUpdated = 'Flipped classroom options updated';
+$langOfProgress = 'Progress';
+$langCorrectAnswerIs = 'The correct answer is';
+$langVideoManS = "$langStudent tutorials";
+$langVideoManT1 = "$langTeacher tutorials (part 1)";
+$langVideoManT2 = "$langTeacher tutorials (part 2)";
+$langVideoTutorials = 'Video - Tutorials';
+$langDateAccept = "Date of request acceptance";
+$langPhase = "Phase";
+$langAssignmentsSubmission = "Assignment submission";
+$langAssignmentsSubmissionHasNoStarted = "The submission process has not yet begun.";
+$langAssignmentsSubmissionInProgress = "The submission process is underway...";
+$langAssignmentsSubmissionHasExpired = "The submission process has ended.";
+$langGradeReviewHasNotStarted = "The peer review process has not yet begun.";
+$langGradeReviewInProgress = "The peer review process is underway...";
+$langGradeReviewHasExpired = "The peer review process has ended.";
+$langFinalGrade = "Final grade";
+$langFinalGradeProcessInProgress = "The rating entry process is active.";
+$langReceivedFrom = "Received from";
+$langgrade = "grade";
+$langPreviewGradesAssessments = "Preview assessments";
+$OldAssignmentsWillBeRemoved = "Old assignment assessments will be removed.";
+$langAddFinalGradeHasNotStartedYet = "The grade addition process has not yet started.";
+$langInsertGlossary = 'glossary';
+$langInsertWall = 'wall';
+$langSolrShortDescription = "The open source software <a href=\"https://solr.apache.org/\" target=\"_blank\">Solr</a> is a search platform. Visit the <a href=\"solrconf.php\">tool setings</a> to enable it.";
+$langSolrLongDescription = "Connect with the <em>Solr</em> search platform.";
+$langSolrUrl = "You can customize this setting to point to your Solr installation server.";
+$langH5pInteractiveContentByStudents = "H5P Interactive Content by $langStudents";
+$langMetaLearner = 'Learner';
+$langMetaAuthor = 'Author';
+$langEnableBoxLogo = "Enable background color to the logo container";
+$langButtonInBriefProfile = "Vutton in brief profile";
+$langProviders = 'Providers';
 $langRequestAlreadySent = "A registration request has already been sent for this course";
 $langRejectedRequests = "Rejected User Requests";
 $langAcceptedRequests = "Accepted User Requests";
+$lang_enable_user_consent = "Enable confirmation of user participation in sessions";
+$langEditSessionSection = "Edit session";
+$langInsertTcMeetingSession = "teleconference";
+$langCompleteCriteriaSession = "Completion criteria";
+$langSelectToolsPolls = "Consulting tools";
+$langSubmitParticipation = "User participation";
+$langCreateReferenceNotes = "Notes";
+$langAutomaticCompletion = "With auto-completion (once the session time expires)";
+$langUserPollAnswer = "answered";
+$langStartSession = "Start session";
+$langFinishSession = "End of session";
+$langNoAnswers = "There are no answers for this question.";
+$langCriteriaBelowParticipateInCompletion = "The following criteria are involved in session completion";
+$langTheResource = "The resource";
+$langListCompletionCriteria = "List of criteria";
+$langUserParticipation = "User participation";
