@@ -232,7 +232,7 @@
                                                                                             if (result.successful.length > 0) {
                                                                                                 console.log('Upload complete! We submitted inputs + files.');
 
-                                                                                                window.location.href = '{!! $form_link !!}';
+                                                                                                window.location.href = '{!! $assignment_link !!}';
 
                                                                                             } else {
                                                                                                 console.error('Upload failed:', result.failed);
@@ -320,6 +320,7 @@
                                                                                 <textarea class='form-control' name='stud_comments' id='stud_comments' rows='5'></textarea>
                                                                             </div>
                                                                         </div>
+                                                                        <input type='hidden' name='work_submit' value='true'>
                                                                     @endif
 
                                                                     <div class='form-group mt-4'>
@@ -351,7 +352,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>                                                    
+                                </div>
                             @endif
                         @endif
                     </div>
@@ -361,5 +362,3 @@
     </div>
 
 @endsection
-
-

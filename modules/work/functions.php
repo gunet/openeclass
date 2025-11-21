@@ -377,7 +377,7 @@ function display_student_assignment($id, $on_behalf_of = false) {
     }
 
     if ($on_behalf_of && $is_editor) {
-        $row = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time                                                         
+        $row = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
                                                      FROM assignment
                                                      WHERE course_id = ?d
                                                         AND id = ?d",
@@ -581,6 +581,9 @@ function display_student_assignment($id, $on_behalf_of = false) {
     $data['form_link'] = $form_link;
     $data['back_link'] = $back_link;
     $data['submit_ok'] = $submit_ok;
+    $data['assignment_link'] = $_GET['unit'] ?
+        "{$urlAppend}modules/units/index.php?course=$course_code&id=$unit" :
+        "{$urlAppend}modules/work/index.php?course=$course_code&id=$id";
 
     view('modules.work.submit_assignment', $data);
 }
@@ -595,8 +598,8 @@ function display_assignment_review($id) {
            $langSGradebookBook, $langEdit, $urlAppend;
 
     $assign = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
-                                                FROM assignment 
-                                                WHERE course_id = ?d 
+                                                FROM assignment
+                                                WHERE course_id = ?d
                                                 AND id = ?d",
                                             $course_id, $id);
     $i = 1;
@@ -649,9 +652,9 @@ function display_assignment_review($id) {
             $grade_field = "<a class='link' href='$grade_link' aria-label='$langSGradebookBook'><span class='fa fa-fw fa-plus' data-bs-title='$langSGradebookBook' title='' data-bs-toggle='tooltip'></span></a>";
         }
         $html_content .= "<tr>
-            <td class='text-end'>$i.</td>        
+            <td class='text-end'>$i.</td>
             <td>$filelink</td>
-            <td class='col-1'>            
+            <td class='col-1'>
               <div class='form-group ".(Session::getError("grade.$row->id") ? "has-error" : "")."'>
                 $grade_field
                 <span class='help-block Accent-200-cl'>".Session::getError("grade.$row->id")."</span>
@@ -2029,7 +2032,7 @@ function submit_work($id, $on_behalf_of = null) {
 
                 if (!$all_files_moved) {
                     // Το μήνυμα έχει μπει στο session flash μέσα στο loop
-                    // Session::flash('message', $langUploadError);
+                    Session::flash('message', $langUploadError);
                     Session::flash('alert-class', 'alert-danger');
                     redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
                     exit();
@@ -3267,7 +3270,7 @@ function submit_grade_reviews($args) {
         $grade = is_numeric($grade) ? $grade : null;
         $comment = $args['comments'];
         Database::get()->query("UPDATE assignment_grading_review
-                                    SET grade = ?f, comments =?s, date_submit = " . DBHelper::timeAfter() . ", rubric_scales = ?s 
+                                    SET grade = ?f, comments =?s, date_submit = " . DBHelper::timeAfter() . ", rubric_scales = ?s
                                     WHERE id = ?d",
                             $grade, $comment, $grade_rubric, $sid);
 
