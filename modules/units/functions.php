@@ -617,7 +617,7 @@ function show_resources($unit_id)
                 var container = document.getElementById('unitResources');
                 var header = document.querySelector('header');
 //                var header = document.getElementById('bgr-cheat-header');
-                
+
                 Sortable.create(unitResources,{
                     handle: '.fa-arrows',
                     animation: 150,
@@ -637,10 +637,10 @@ function show_resources($unit_id)
                             delete header.dataset._pt;
                         }
                         var itemEl = $(evt.item);
-    
+
                         var idReorder = itemEl.attr('data-id');
                         var prevIdReorder = itemEl.prev().attr('data-id');
-    
+
                         $.ajax({
                             type: 'post',
                             dataType: 'text',
@@ -652,7 +652,7 @@ function show_resources($unit_id)
                     }
                 });
             });
-            
+
             $(function(){
                 $('.fileModal').click(function (e)
                 {
@@ -1214,7 +1214,10 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility, $act_
             $class = $exclamation_icon = '';
         }
 
-        $link = "<a class='TextBold' href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=assignment&amp;id=$work_id&amp;unit=$id' $class>";
+        $url = $is_editor ?
+            "modules/work/?course=$course_code&amp;id=$work_id" :
+            "modules/units/view.php?course=$course_code&amp;res_type=assignment&amp;id=$work_id&amp;unit=$id";
+        $link = "<a class='TextBold' href='{$urlServer}$url' $class>";
         $exlink = $link . "$title</a> $exclamation_icon";
         $imagelink = $link . "</a>".icon('fa-flask')."";
     }
