@@ -3499,7 +3499,7 @@ function upgrade_to_4_2($tbl_options) : void {
             `permission` VARCHAR(255),
              PRIMARY KEY (`id`)) $tbl_options");
 
-        Database::get()->query("INSERT INTO permissions(permission) VALUE('admin_course_users'), 
+        Database::get()->query("INSERT INTO permissions(permission) VALUE('admin_course_users'),
              ('admin_course_modules'),
              ('backup_course'),
              ('clone_course'),
@@ -3508,8 +3508,8 @@ function upgrade_to_4_2($tbl_options) : void {
     }
 
     if (!DBHelper::tableExists('user_permissions')) {
-        Database::get()->query("CREATE TABLE user_permissions (        
-            `course_id` int NOT NULL DEFAULT '0',  
+        Database::get()->query("CREATE TABLE user_permissions (
+            `course_id` int NOT NULL DEFAULT '0',
             `user_id` int unsigned NOT NULL DEFAULT '0',
             `permission_id` tinyint NOT NULL,
             PRIMARY KEY (`course_id`,`user_id`,`permission_id`)

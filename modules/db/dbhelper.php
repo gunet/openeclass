@@ -295,12 +295,14 @@ class _DBHelper_MYSQL extends DBHelper {
     }
 
     protected function foreignKeyExistsImpl($detailTableName, $detailFieldName, $masterTableName, $masterIDFieldName) {
-        $constrInfo = Database::get()->querySingle("select CONSTRAINT_NAME as name from INFORMATION_SCHEMA.KEY_COLUMN_USAGE 
-                where TABLE_NAME = ?s 
-                and COLUMN_NAME = ?s 
-                and REFERENCED_TABLE_NAME = ?s 
-                and REFERENCED_COLUMN_NAME = ?s 
-        ", $detailTableName, $detailFieldName, $masterTableName, $masterIDFieldName);
+        $dbName = Database::get()->querySingle("SELECT DATABASE() AS db")->db;
+        $constrInfo = Database::get()->querySingle("SELECT CONSTRAINT_NAME AS name FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE
+                WHERE CONSTRAINT_SCHEMA = ?s
+                  AND TABLE_NAME = ?s
+                  AND COLUMN_NAME = ?s
+                  AND REFERENCED_TABLE_NAME = ?s
+                  AND REFERENCED_COLUMN_NAME = ?s",
+            $dbName, $detailTableName, $detailFieldName, $masterTableName, $masterIDFieldName);
         if ($constrInfo) {
             $name = $constrInfo->name;
             return is_null($name) ? false :
