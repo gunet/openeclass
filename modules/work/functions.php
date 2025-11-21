@@ -1946,36 +1946,21 @@ function submit_work($id, $on_behalf_of = null) {
             $files_to_keep = [];
             $file_name = $filename = $submission_text = '';
             $no_files = isset($on_behalf_of) && !isset($_FILES);
+            $has_uploaded_files = isset($_FILES['userfile']) && !empty($_FILES['userfile']['name'][0]);
 
-            if (!$no_files) {
+            if (!$no_files && $has_uploaded_files) {
 
                 $files_list = [];
 
-                if (isset($_POST['uppyResult'])) {
-                    $uppyData = json_decode($_POST['uppyResult'], true);
-                    if (!empty($uppyData['successful'])) {
-                        foreach ($uppyData['successful'] as $file) {
-                            $serverPath = $file['response']['body']['url'] ?? null;
-
-                            if ($serverPath && file_exists($serverPath)) {
-                                $files_list[] = [
-                                    'name' => $file['name'],
-                                    'tmp_name' => $serverPath,
-                                    'error' => UPLOAD_ERR_OK,
-                                    'is_uppy' => true
-                                ];
-                            }
-                        }
-                    }
-                } elseif (isset($_FILES['userfile']) && is_array($_FILES['userfile']['name'])) {
+                if (isset($_FILES['userfile']) && is_array($_FILES['userfile']['name'])) {
                     foreach ($_FILES['userfile']['name'] as $i => $name) {
+                        // Αν δεν υπάρχει αρχείο σε αυτή τη θέση, το προσπερνάμε
                         if ($_FILES['userfile']['error'][$i] == UPLOAD_ERR_NO_FILE) continue;
 
                         $files_list[] = [
                             'name' => $_FILES['userfile']['name'][$i],
                             'tmp_name' => $_FILES['userfile']['tmp_name'][$i],
-                            'error' => $_FILES['userfile']['error'][$i],
-                            'is_uppy' => false
+                            'error' => $_FILES['userfile']['error'][$i]
                         ];
                     }
                 }
@@ -1986,9 +1971,10 @@ function submit_work($id, $on_behalf_of = null) {
 
                 foreach ($files_list as $file) {
                     if ($file['error'] !== UPLOAD_ERR_OK) {
-                        Session::flash('message', $langUploadError);
+                        Session::flash('message', $langUploadError . ' (Code: ' . $file['error'] . ')');
                         Session::flash('alert-class', 'alert-danger');
                         redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
+                        exit();
                     }
                 }
 
@@ -1996,18 +1982,23 @@ function submit_work($id, $on_behalf_of = null) {
                     Session::flash('message',$GLOBALS['langWorkFilesCountExceeded']);
                     Session::flash('alert-class', 'alert-danger');
                     redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
+                    exit();
                 }
+
                 if ($totalFiles == 1) {
                     $format = '';
                 } else {
                     $destDir = $workPath . '/' . $local_name;
                     if (!is_dir($destDir)) {
-                        mkdir($destDir, 0755);
+                        mkdir($destDir, 0755, true);
                     }
                     $format = '/%0' . strlen($totalFiles) . 'd';
                 }
+
                 $j = 1;
                 $files_to_keep = [];
+
+                $all_files_moved = true;
 
                 foreach ($files_list as $file) {
                     $file_name = $file['name'];
@@ -2018,12 +2009,13 @@ function submit_work($id, $on_behalf_of = null) {
                     $filename = $local_name . sprintf($format, $j) . (empty($ext) ? '' : '.' . $ext);
                     $destination = $workPath . '/' . $filename;
 
-                    $file_moved = move_uploaded_file($file['tmp_name'], $destination);
+                    $moved = move_uploaded_file($file['tmp_name'], $destination);
 
-                    if (!$file_moved) {
+                    if (!$moved) {
+                        $all_files_moved = false;
                         Session::flash('message', "Error moving file: " . $file_name);
                         Session::flash('alert-class', 'alert-danger');
-                        break;
+                        break; // Σταματάμε το loop
                     }
 
                     $fileInfo[] = [$filename, $file_name];
@@ -2035,12 +2027,12 @@ function submit_work($id, $on_behalf_of = null) {
                     list($filename, $file_name) = $fileInfo[0];
                 }
 
-                // error here
-                if (!$file_moved) {
-//                    Session::flash('message', $langUploadError);
-                    Session::flash('message', 'Error $file_moved');
+                if (!$all_files_moved) {
+                    // Το μήνυμα έχει μπει στο session flash μέσα στο loop
+                    // Session::flash('message', $langUploadError);
                     Session::flash('alert-class', 'alert-danger');
                     redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
+                    exit();
                 }
             }
             $success_msgs[] = $langUploadSuccess;

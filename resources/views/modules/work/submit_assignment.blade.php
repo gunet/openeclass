@@ -152,13 +152,12 @@
                                                                             </div>
                                                                             <script>
                                                                                 let isUppyLoaded = false;
-                                                                                let uppy;
 
                                                                                 async function loadUppy() {
                                                                                     console.log('loadUppy');
                                                                                     try {
                                                                                         console.log('Uppy loaded');
-                                                                                        const { Uppy, Dashboard, Form, XHRUpload, English, French, German, Italian, Spanish, Greek } = await import("{{ $urlAppend }}js/bundle/uppy.js");
+                                                                                        const { Uppy, Dashboard, XHRUpload, English, French, German, Italian, Spanish, Greek } = await import("{{ $urlAppend }}js/bundle/uppy.js");
 
                                                                                         const locale_map = {
                                                                                             'de': German,
@@ -189,39 +188,64 @@
                                                                                         });
 
                                                                                         uppy.use(XHRUpload, {
-                                                                                            endpoint: '{{ $form_link }}',
+                                                                                            endpoint: '{!! $form_link !!}',
                                                                                             fieldName: 'userfile[]',
                                                                                             bundle: true,
+                                                                                            formData: true,
                                                                                             getResponseData: (responseText, response) => {
                                                                                                 return { url: '' };
                                                                                             }
                                                                                         });
 
-                                                                                        uppy.use(Form, {
-                                                                                            target: '#submit_assignment_form',
-                                                                                            triggerUploadOnSubmit: true,
-                                                                                            submitOnSuccess: true,
-                                                                                            addResultToForm: true
+                                                                                        const form = document.querySelector('#submit_assignment_form');
+
+                                                                                        if (form) {
+                                                                                            form.addEventListener('submit', (event) => {
+                                                                                                event.preventDefault();
+                                                                                                const files = uppy.getFiles();
+                                                                                                if (files.length === 0) {
+                                                                                                    form.submit();
+                                                                                                    return;
+                                                                                                }
+                                                                                                const formData = new FormData(form);
+                                                                                                const metaData = {};
+
+                                                                                                formData.forEach((value, key) => {
+                                                                                                    metaData[key] = value;
+                                                                                                });
+
+                                                                                                uppy.setMeta(metaData);
+
+                                                                                                const submitBtn = form.querySelector('[type="submit"]');
+                                                                                                if(submitBtn) {
+                                                                                                    submitBtn.disabled = true;
+                                                                                                    submitBtn.innerText = '{{ trans("langPleaseWait") }}...';
+                                                                                                }
+
+                                                                                                uppy.upload();
+                                                                                            });
+                                                                                        }
+
+                                                                                        uppy.on('complete', (result) => {
+                                                                                            const submitBtn = form.querySelector('[type="submit"]');
+
+                                                                                            if (result.successful.length > 0) {
+                                                                                                console.log('Upload complete! We submitted inputs + files.');
+
+                                                                                                window.location.href = '{!! $form_link !!}';
+
+                                                                                            } else {
+                                                                                                console.error('Upload failed:', result.failed);
+                                                                                                if(submitBtn) {
+                                                                                                    submitBtn.disabled = false;
+                                                                                                    submitBtn.innerText = 'Submit';
+                                                                                                }
+                                                                                                alert('An error occurred during submission.');
+                                                                                            }
                                                                                         });
 
-
-
-
-
-                                                                                        {{--const csrfToken =--}}
-                                                                                        {{--    document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') ||--}}
-                                                                                        {{--    document.getElementById('csrf_token')?.value || '';--}}
-
-                                                                                        {{--uppy.use(XHRUpload, {--}}
-                                                                                        {{--    endpoint: document.getElementById('submit_assignment_form').action,--}}
-                                                                                        {{--    method: document.getElementById('submit_assignment_form').method || 'post',--}}
-                                                                                        {{--    formData: true,--}}
-                                                                                        {{--    bundle: true,--}}
-                                                                                        {{--    fieldName: '{{ $max_submissions > 1 ? "userfile[]" : "userfile" }}',--}}
-                                                                                        {{--    headers: csrfToken ? { 'X-CSRF-TOKEN': csrfToken } : {}--}}
-                                                                                        {{--});--}}
-
                                                                                         isUppyLoaded = true;
+
                                                                                     } catch (error) {
                                                                                         console.log('Uppy not loaded', error);
                                                                                         isUppyLoaded = false;
@@ -229,28 +253,6 @@
                                                                                 }
 
                                                                                 loadUppy();
-
-                                                                                // document.addEventListener('DOMContentLoaded', () => {
-                                                                                //     const form = document.getElementById('submit_assignment_form');
-                                                                                //     form.addEventListener('submit', async (e) => {
-                                                                                //         e.preventDefault();
-                                                                                //         if (!isUppyLoaded || !uppy) {
-                                                                                //             form.submit();
-                                                                                //             return;
-                                                                                //         }
-                                                                                //         const fd = new FormData(form);
-                                                                                //         const meta = {};
-                                                                                //         fd.forEach((v, k) => { meta[k] = v; });
-                                                                                //         uppy.setMeta(meta); // now valid
-                                                                                //
-                                                                                //         const result = await uppy.upload();
-                                                                                //         if (result.failed.length) {
-                                                                                //             alert('Upload failed for some files.');
-                                                                                //             return;
-                                                                                //         }
-                                                                                //         window.location.reload();
-                                                                                //     });
-                                                                                // });
 
                                                                             </script>
                                                                         </div>
