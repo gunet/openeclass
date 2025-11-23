@@ -1009,7 +1009,7 @@ function purge_certificate($element, $element_id, $unit_id = 0, $session_id = 0)
         Database::get()->query("DELETE FROM user_badge WHERE badge IN
                                 (SELECT id FROM badge WHERE id = ?d AND course_id = ?d AND unit_id = ?d AND session_id = ?d)", $element_id, $course_id, $unit_id, $session_id);
         Database::get()->query("DELETE FROM badge WHERE id = ?d AND course_id = ?d AND unit_id = ?d AND session_id = ?d", $element_id, $course_id, $unit_id, $session_id);
-    } else { // purge certificates
+    } elseif ($element == 'certificate') { // purge certificates
         Database::get()->query("DELETE FROM user_certificate_criterion WHERE certificate_criterion IN
                             (SELECT id FROM certificate_criterion WHERE certificate IN
                             (SELECT id FROM certificate WHERE id = ?d AND course_id = ?d))", $element_id, $course_id);
@@ -1018,6 +1018,17 @@ function purge_certificate($element, $element_id, $unit_id = 0, $session_id = 0)
         Database::get()->query("DELETE FROM user_certificate WHERE certificate IN
                                  (SELECT id FROM certificate WHERE id = ?d AND course_id = ?d)", $element_id, $course_id);
         Database::get()->query("DELETE FROM certificate WHERE id = ?d AND course_id = ?d", $element_id, $course_id);
+    } else { //purge points games
+        Database::get()->query("DELETE FROM user_points_game_criterion WHERE points_game_criterion IN
+                                (SELECT id FROM points_game_criterion WHERE points_game IN
+                                (SELECT id FROM points_game WHERE id = ?d AND course_id = ?d))", $element_id, $course_id);
+        Database::get()->query("DELETE FROM user_points_game_points WHERE points_game IN
+                                (SELECT id FROM points_game WHERE id = ?d AND course_id = ?d)", $element_id, $course_id);
+        Database::get()->query("DELETE FROM points_game_criterion WHERE points_game IN
+                                (SELECT id FROM points_game WHERE id = ?d AND course_id = ?d)", $element_id, $course_id);
+        Database::get()->query("DELETE FROM points_game_levels WHERE points_game = IN
+                                (SELECT id FROM points_game WHERE id = ?d AND course_id = ?d)", $element_id, $course_id);
+        Database::get()->query("DELETE FROM points_game WHERE id = ?d AND course_id = ?d", $element_id, $course_id);
     }
     return true;
 }

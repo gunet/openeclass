@@ -266,7 +266,7 @@ function display_points_games(): void
                                 'class' => 'delete',
                                 'confirm' => $langConfirmDelete),
                             array('title' => $langPurge,
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;purge_cc=$data->id",
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;purge_points_game=$data->id",
                                 'icon' => 'fa-xmark',
                                 'class' => 'delete',
                                 'confirm' => $langConfirmPurgePointsGame)

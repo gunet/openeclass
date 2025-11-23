@@ -335,6 +335,12 @@ if ($is_editor) {
             Session::flash('alert-class', 'alert-success');
         }
         redirect_to_home_page("modules/progress/index.php?course=$course_code");
+    } elseif (isset($_GET['purge_points_game'])) {
+        if (purge_certificate('points_game', $_GET['purge_points_game'])) {
+            Session::flash('message',$langGlossaryDeleted);
+            Session::flash('alert-class', 'alert-success');
+        }
+        redirect_to_home_page("modules/progress/index.php?course=$course_code");
     } elseif (isset($_GET['newcert'])) {  // create new certificate
         certificate_settings('certificate');
         $display = FALSE;
