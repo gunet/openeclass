@@ -1026,7 +1026,7 @@ function purge_certificate($element, $element_id, $unit_id = 0, $session_id = 0)
                                 (SELECT id FROM points_game WHERE id = ?d AND course_id = ?d)", $element_id, $course_id);
         Database::get()->query("DELETE FROM points_game_criterion WHERE points_game IN
                                 (SELECT id FROM points_game WHERE id = ?d AND course_id = ?d)", $element_id, $course_id);
-        Database::get()->query("DELETE FROM points_game_levels WHERE points_game = IN
+        Database::get()->query("DELETE FROM points_game_levels WHERE points_game IN
                                 (SELECT id FROM points_game WHERE id = ?d AND course_id = ?d)", $element_id, $course_id);
         Database::get()->query("DELETE FROM points_game WHERE id = ?d AND course_id = ?d", $element_id, $course_id);
     }
