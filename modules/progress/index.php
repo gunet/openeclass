@@ -314,14 +314,11 @@ if ($is_editor) {
             Session::flash('message',$langUsedCertRes);
             Session::flash('alert-class', 'alert-warning');
         }
-    } elseif (isset($_GET['del_points_game'])) { //delete points game
-        if (delete_certificate('points_game', $_GET['del_points_game'])) {
-            Session::flash('message',$langGlossaryDeleted);
+    } elseif (isset($_GET['reset_points_game'])) { //reset points game
+        if (reset_points_game($_GET['reset_points_game'])) {
+            Session::flash('message',$langPointsGameReset);
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/progress/index.php?course=$course_code");
-        } else {
-            Session::flash('message',$langUsedCertRes);
-            Session::flash('alert-class', 'alert-warning');
         }
     } elseif (isset($_GET['purge_cc'])) { // purge badge
         if (purge_certificate('badge', $_GET['purge_cc'])) {

@@ -208,7 +208,7 @@ function display_badges(): void
 function display_points_games(): void
 {
     global $course_id, $tool_content, $course_code, $is_editor,
-           $langDeleteCourseActivities, $langConfirmDelete,
+           $langDeleteCourseActivities, $langResetPointsGame, $langConfirmResetPointsGame,
            $langNoPointsGames, $langEditChange, $langPointsGames, $langPurge,
            $langActivate, $langDeactivate, $langNewPointsGame,
            $langActive, $langInactive, $urlServer, $langConfirmPurgePointsGame;
@@ -260,11 +260,11 @@ function display_points_games(): void
                                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;points_game_id=$data->id&amp;vis=" .
                                     ($data->active ? '0' : '1'),
                                 'icon' => $data->active ? 'fa-eye-slash' : 'fa-eye'),
-                            array('title' => $langDeleteCourseActivities,
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del_points_game=$data->id",
+                            array('title' => $langResetPointsGame,
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;reset_points_game=$data->id",
                                 'icon' => 'fa-xmark',
                                 'class' => 'delete',
-                                'confirm' => $langConfirmDelete),
+                                'confirm' => $langConfirmResetPointsGame),
                             array('title' => $langPurge,
                                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;purge_points_game=$data->id",
                                 'icon' => 'fa-xmark',

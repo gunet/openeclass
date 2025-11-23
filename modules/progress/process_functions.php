@@ -974,20 +974,30 @@ function delete_certificate($element, $element_id) {
             }
         }
         Database::get()->query("DELETE FROM badge WHERE id = ?d AND course_id = ?d AND unit_id = 0", $element_id, $course_id);
-    } elseif ($element == 'points_game') {
-        $r = Database::get()->queryArray("SELECT id FROM points_game_criterion WHERE points_game = ?d", $element_id);
-        foreach ($r as $act) { // delete badge activities
-            if (!resource_usage($element, $act->id)) { // check if activity has been used by user
-                delete_activity('points_game', $element_id, $act->id);
-            } else {
-                return false;
-            }
-        }
-        Database::get()->query("DELETE FROM points_game_levels WHERE points_game = ?d", $element_id);
-        Database::get()->query("DELETE FROM points_game WHERE id = ?d AND course_id = ?d", $element_id, $course_id);
     }
 
     return true;
+}
+
+/**
+ * @brief reset points game
+ * @global type $course_id
+ * @param type $element_id
+ */
+function reset_points_game($element_id) {
+    global $course_id;
+    $pg = Database::get()->querySingle("SELECT * FROM points_game WHERE id = ?d AND course_id = ?d", $element_id, $course_id);
+    if ($pg) {
+        Database::get()->query("DELETE upgc
+                FROM user_points_game_criterion AS upgc
+                JOIN points_game_criterion AS pgc 
+                ON upgc.points_game_criterion = pgc.id
+                WHERE pgc.points_game = ?d", $element_id);
+        Database::get()->query("DELETE FROM user_points_game_points WHERE points_game = ?d", $element_id);
+
+        return true;
+    }
+    return false;
 }
 
 /**
