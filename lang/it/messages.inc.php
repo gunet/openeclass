@@ -4643,6 +4643,7 @@ $langOfCourseComments = "$langsCourse comments";
 $langOfLearningPath = "Learning Path";
 $langNoCertificateUsers = "There are no $langsStudents who participate in this certificate.";
 $langUsedCertRes = "Activity has alread been used by some $langsstudent_acc";
+$langWarningAboutUsedCert = "If you really want to delete it click the button below. Note that certificate user progress will be deleted also!";
 $langNoUserActivity = "$langStudent hasn't completed any actitivity.";
 $langTotalPercentCompleteness = "Percentage of completion";
 $langUsersCertResults = "Completed by ";

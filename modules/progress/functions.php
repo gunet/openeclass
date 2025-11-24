@@ -24,11 +24,11 @@
  */
 function display_certificates(): void
 {
-    global $course_id, $tool_content, $course_code, $urlServer, $langPurge,
-           $langDeleteCourseActivities, $langConfirmDelete, $is_editor,
+    global $course_id, $tool_content, $course_code, $urlServer,
+           $langDelete, $langConfirmDelete, $is_editor,
            $langNoCertificates, $langActive, $langInactive, $langNoThumbnail,
            $langEditChange, $langNewCertificate, $langCertificates, $langActivate,
-           $langDeactivate, $langSee, $langConfirmPurgeCert, $webDir;
+           $langDeactivate, $langSee, $webDir;
 
     // Fetch the certificate list
     $sql_cer = Database::get()->queryArray("SELECT id, title, description, active, template
@@ -92,16 +92,11 @@ function display_certificates(): void
                             array('title' => $langSee,
                                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id&amp;preview=1",
                                 'icon' => 'fa-search'),
-                            array('title' => $langDeleteCourseActivities,
+                            array('title' => $langDelete,
                                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del_cert=$data->id",
                                 'icon' => 'fa-xmark',
                                 'class' => 'delete',
-                                'confirm' => $langConfirmDelete),
-                            array('title' => $langPurge,
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;purge_cert=$data->id",
-                                'icon' => 'fa-xmark',
-                                'class' => 'delete',
-                                'confirm' => $langConfirmPurgeCert)
+                                'confirm' => $langConfirmDelete)
                         ))
                         . "</div>";
                 }
@@ -122,10 +117,10 @@ function display_certificates(): void
 function display_badges(): void
 {
     global $course_id, $tool_content, $course_code, $is_editor,
-           $langDeleteCourseActivities, $langConfirmDelete,
-           $langNoBadges, $langEditChange, $langBadges, $langPurge,
+           $langDelete, $langConfirmDelete,
+           $langNoBadges, $langEditChange, $langBadges,
            $langActivate, $langDeactivate, $langNewBadge,
-           $langActive, $langInactive, $urlServer, $langConfirmPurgeBadge;
+           $langActive, $langInactive, $urlServer;
 
     if ($is_editor) {
         $sql_cer = Database::get()->queryArray("SELECT id, title, description, active, icon FROM badge WHERE course_id = ?d AND bundle >= 0", $course_id);
@@ -179,16 +174,11 @@ function display_badges(): void
                                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id&amp;vis=" .
                                     ($data->active ? '0' : '1'),
                                 'icon' => $data->active ? 'fa-eye-slash' : 'fa-eye'),
-                            array('title' => $langDeleteCourseActivities,
+                            array('title' => $langDelete,
                                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del_badge=$data->id",
                                 'icon' => 'fa-xmark',
                                 'class' => 'delete',
-                                'confirm' => $langConfirmDelete),
-                            array('title' => $langPurge,
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;purge_cc=$data->id",
-                                'icon' => 'fa-xmark',
-                                'class' => 'delete',
-                                'confirm' => $langConfirmPurgeBadge)
+                                'confirm' => $langConfirmDelete)
                         ))
                         . "</div>";
                 }
@@ -208,9 +198,9 @@ function display_badges(): void
 function display_course_completion(): void
 {
     global $course_id, $tool_content, $course_code, $is_editor,
-           $langDeleteCourseActivities, $langConfirmDelete, $langCourseCompletion,
-           $langActivate, $langDeactivate, $langPurge,
-           $langActive, $langInactive, $langConfirmPurgeCourseCompletion;
+           $langDelete, $langConfirmDelete, $langCourseCompletion,
+           $langActivate, $langDeactivate,
+           $langActive, $langInactive;
 
     $data = Database::get()->querySingle("SELECT id, title, description, active, icon FROM badge "
                                     . "WHERE course_id = ?d AND bundle = -1 AND unit_id = 0", $course_id);
@@ -245,16 +235,11 @@ function display_course_completion(): void
                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id&amp;vis=" .
                                 ($data->active ? '0' : '1'),
                             'icon' => $data->active ? 'fa-eye-slash' : 'fa-eye'),
-                        array('title' => $langDeleteCourseActivities,
+                        array('title' => $langDelete,
                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del_badge=$data->id",
                             'icon' => 'fa-xmark',
                             'class' => 'delete',
-                            'confirm' => $langConfirmDelete),
-                        array('title' => $langPurge,
-                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;purge_cc=$data->id",
-                            'icon' => 'fa-xmark',
-                            'class' => 'delete',
-                            'confirm' => $langConfirmPurgeCourseCompletion)
+                            'confirm' => $langConfirmDelete)
                     ))
                     . "</div>";
             }
@@ -788,7 +773,7 @@ function display_modification_activity($element, $element_id, $activity_id, $uni
     global $tool_content, $course_code, $langModify, $langOperator, $langUsedCertRes, $langImgFormsDes;
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
-    if (resource_usage($element, $activity_id)) { // check if resource has been used by user
+    if (resource_usage($element, $activity_id)) { // check if a resource has been used by user
         Session::flash('message',$langUsedCertRes);
         Session::flash('alert-class', 'alert-warning');
         if ($unit_id) {
