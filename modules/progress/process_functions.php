@@ -955,6 +955,9 @@ function delete_certificate($element, $element_id) {
     global $course_id;
 
     if ($element == 'certificate') {
+        if (!Database::get()->querySingle('SELECT id FROM certificate WHERE id = ?d AND course_id = ?d', $element_id, $course_id)) {
+            forbidden();
+        }
         $delete_cert = false;
         $r = Database::get()->queryArray("SELECT id FROM certificate_criterion WHERE certificate = ?d", $element_id);
         foreach ($r as $act) {
@@ -971,6 +974,9 @@ function delete_certificate($element, $element_id) {
             Database::get()->query("DELETE FROM certificate WHERE id = ?d AND course_id = ?d", $element_id, $course_id);
         }
     } else {
+        if (!Database::get()->querySingle('SELECT id FROM badge WHERE id = ?d AND course_id = ?d', $element_id, $course_id)) {
+            forbidden();
+        }
         $delete_badge = false;
         $r = Database::get()->queryArray("SELECT id FROM badge_criterion WHERE badge = ?d", $element_id);
         foreach ($r as $act) {
