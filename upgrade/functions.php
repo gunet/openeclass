@@ -3397,22 +3397,22 @@ function upgrade_to_4_2($tbl_options) : void {
     Database::get()->query("ALTER TABLE attendance_users CHANGE attendance_id attendance_id INT NOT NULL");
 
     if (!DBHelper::foreignKeyExists('attendance', 'course_id', 'course', 'id')) {
-        DBHelper::createForeignKey('attendance', 'course_id', 'course', 'id', DBHelper::FKRefOption_CASCADE);
+        DBHelper::createForeignKey('attendance', 'course_id', 'course', 'id', DBHelper::FKRefOption_CASCADE, DBHelper::FKRefOption_CASCADE);
     }
     if (!DBHelper::foreignKeyExists('attendance_activities', 'attendance_id', 'attendance', 'id')) {
-        DBHelper::createForeignKey('attendance_activities', 'attendance_id', 'attendance', 'id', DBHelper::FKRefOption_CASCADE);
+        DBHelper::createForeignKey('attendance_activities', 'attendance_id', 'attendance', 'id', DBHelper::FKRefOption_CASCADE, DBHelper::FKRefOption_CASCADE);
     }
     if (!DBHelper::foreignKeyExists('attendance_book', 'attendance_activity_id', 'attendance_activities', 'id')) {
-        DBHelper::createForeignKey('attendance_book', 'attendance_activity_id', 'attendance_activities', 'id', DBHelper::FKRefOption_CASCADE);
+        DBHelper::createForeignKey('attendance_book', 'attendance_activity_id', 'attendance_activities', 'id', DBHelper::FKRefOption_CASCADE, DBHelper::FKRefOption_CASCADE);
     }
     if (!DBHelper::foreignKeyExists('attendance_book', 'uid', 'user', 'id')) {
-        DBHelper::createForeignKey('attendance_book', 'uid', 'user', 'id', DBHelper::FKRefOption_CASCADE);
+        DBHelper::createForeignKey('attendance_book', 'uid', 'user', 'id', DBHelper::FKRefOption_CASCADE, DBHelper::FKRefOption_CASCADE);
     }
     if (!DBHelper::foreignKeyExists('attendance_users', 'attendance_id', 'attendance', 'id')) {
-        DBHelper::createForeignKey('attendance_users', 'attendance_id', 'attendance', 'id', DBHelper::FKRefOption_CASCADE);
+        DBHelper::createForeignKey('attendance_users', 'attendance_id', 'attendance', 'id', DBHelper::FKRefOption_CASCADE, DBHelper::FKRefOption_CASCADE);
     }
     if (!DBHelper::foreignKeyExists('attendance_users', 'uid', 'user', 'id')) {
-        DBHelper::createForeignKey('attendance_users', 'uid', 'user', 'id', DBHelper::FKRefOption_CASCADE);
+        DBHelper::createForeignKey('attendance_users', 'uid', 'user', 'id', DBHelper::FKRefOption_CASCADE, DBHelper::FKRefOption_CASCADE);
     }
 
 
