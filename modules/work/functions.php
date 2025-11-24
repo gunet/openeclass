@@ -355,7 +355,7 @@ function new_edit_assignment($assignment_id = null) {
 function display_student_assignment($id, $on_behalf_of = false) {
 
     global $uid, $urlAppend, $langNoneWorkGroupNoSubmission,
-           $course_id, $course_code, $langAssignmentWillBeActive, $langOnBehalfOf,
+           $course_id, $course_code, $unit, $langAssignmentWillBeActive, $langOnBehalfOf,
            $langWrongPassword, $langIPHasNoAccess, $langNoPeerReview,
            $langNoneWorkUserNoSubmission, $langGroupSpaceLink, $langPendingPeerSubmissions,
            $is_editor, $langGroupAssignmentPublish, $langGroupAssignmentNoGroups,
@@ -534,8 +534,8 @@ function display_student_assignment($id, $on_behalf_of = false) {
         if ($is_editor) {
             $back_link = $form_link = "index.php?course=$course_code&id=$id";
         } else {
-            if (isset($_GET['unit'])) {
-                $back_link = "../units/index.php?course=$course_code&id=$_GET[unit]";
+            if (isset($unit)) {
+                $back_link = "../units/index.php?course=$course_code&id=$unit";
                 $form_link = "../units/view.php?course=$course_code";
             } else {
                 $back_link = $form_link = "{$urlAppend}modules/work/index.php?course=$course_code";
@@ -581,7 +581,7 @@ function display_student_assignment($id, $on_behalf_of = false) {
     $data['form_link'] = $form_link;
     $data['back_link'] = $back_link;
     $data['submit_ok'] = $submit_ok;
-    $data['assignment_link'] = $_GET['unit'] ?
+    $data['assignment_link'] = isset($unit) ?
         "{$urlAppend}modules/units/index.php?course=$course_code&id=$unit" :
         "{$urlAppend}modules/work/index.php?course=$course_code&id=$id";
 
@@ -1128,6 +1128,7 @@ function display_submission_details($id) {
 
     $notice = $langSubmitted;
     $grade = $grade_comments = '';
+    $data['submission_comments'] = $sub->comments;
     if (!empty($sub->grade_comments)) {
         $grade_comments = q($sub->grade_comments);
     }

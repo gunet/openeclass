@@ -20,9 +20,6 @@
 
                         @include('layouts.partials.show_alert')
 
-                        {{-- Assignment details --}}
-                        @include('modules.work.assignment_details')
-
                         {{-- Submission details --}}
                         @if ($submissions_exist)
                             @include('modules.work.submission_details')
@@ -86,6 +83,10 @@
                                 @endif
                             @endif
                         @endif
+
+                        {{-- Assignment details --}}
+                        @include('modules.work.assignment_details')
+
                         @if ($submit_ok)
                             @if ($submissions_exist)
                                 <div class='col-12'>
@@ -257,29 +258,6 @@
                                                                             </script>
                                                                         </div>
                                                                     @endif
-{{--                                                                    @elseif ($submission_type == 2)  Multiple file submission--}}
-{{--                                                                        <script>--}}
-{{--                                                                            $(function () { initialize_multifile_submission({{ $max_submissions }}) });--}}
-{{--                                                                        </script>--}}
-{{--                                                                        <div class='form-group mt-0'>--}}
-{{--                                                                            <label for='userfile' class='col-sm-12 control-label-notes'>{{ trans('langWorkFileLimit') }}: {{ $max_submissions }} </label>--}}
-{{--                                                                            <div class='col-sm-10 d-flex align-items-center gap-2'>--}}
-{{--                                                                                <div>--}}
-{{--                                                                                    <button class='btn submitAdminBtn btn-sm moreFiles' aria-label='Add'>--}}
-{{--                                                                                        <span class='fa fa-plus'></span>--}}
-{{--                                                                                    </button>--}}
-{{--                                                                                </div>--}}
-{{--                                                                                <input type='file' name='userfile[]' id='userfile'>--}}
-{{--                                                                            </div>--}}
-{{--                                                                        </div>--}}
-{{--                                                                    @else  Single file submission--}}
-{{--                                                                        <div class='form-group mt-0'>--}}
-{{--                                                                            <label for='userfile' class='col-sm-6 control-label-notes'>{{ trans('langWorkFile') }}:</label>--}}
-{{--                                                                            <div class='col-sm-10'>--}}
-{{--                                                                                <input type='file' name='userfile' id='userfile'>--}}
-{{--                                                                            </div>--}}
-{{--                                                                        </div>--}}
-{{--                                                                    @endif--}}
 
                                                                     {{-- Comments --}}
 
@@ -326,18 +304,14 @@
                                                                     <div class='form-group mt-4'>
                                                                         <div class='col-12 d-flex justify-content-end align-items-center'>
                                                                             {!!
-                                                                                form_buttons(array(
-                                                                                    array(
-                                                                                    'class'         => 'submitAdminBtn',
-                                                                                    'text'          => trans('langSubmit'),
-                                                                                    'name'          => 'work_submit',
-                                                                                    'value'         => trans('langSubmit')
-                                                                                    ),
-                                                                                    array(
-                                                                                        'class' => 'cancelAdminBtn',
-                                                                                        'href' => $back_link
-                                                                                        )
-                                                                                ))
+                                                                                form_buttons([
+                                                                                    [ 'class' => 'cancelAdminBtn',
+                                                                                      'href' => $back_link ],
+                                                                                    [ 'class' => 'submitAdminBtn',
+                                                                                      'text'          => trans('langSubmit'),
+                                                                                      'name'          => 'work_submit',
+                                                                                      'value'         => trans('langSubmit') ],
+                                                                                ])
                                                                             !!}
                                                                         </div>
                                                                     </div>
