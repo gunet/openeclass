@@ -420,7 +420,8 @@ if ($is_editor) {
 } elseif ($uid) {
     // display progression only if user is not teacher && not anonymous
     $tool_content .= "<th>$langTotalTimeSpent</th>
-                      <th>$langProgress</></th>";
+                      <th>$langProgress</></th>
+                      <th>$langScore</></th>";
 }
 // close title line
 $tool_content .= "</tr></thead><tbody id='tosort'>";
@@ -643,16 +644,19 @@ foreach ($result as $list) { // while ... learning path list
                             </div>
                         </td>";
     } elseif ($uid) {
-        list($lpProgress, $lpTotalTime, $lpTotalStarted, $lpTotalAccessed, $lpTotalStatus, $lpAttemptsNb) = get_learnPath_progress_details($list->learnPath_id, $uid);
+        list($lpProgress, $lpTotalTime, $lpTotalStarted, $lpTotalAccessed, $lpTotalStatus, $lpAttemptsNb, $lpScore) = get_learnPath_progress_details($list->learnPath_id, $uid);
         $total_lpProgress += $lpProgress;
         // time
         if (!empty($lpTotalTime)) {
             $globaltime = addScormTime($globaltime, $lpTotalTime);
         }
-        // % progress
-        $prog = get_learnPath_combined_progress($list->learnPath_id, $uid);
-        $tool_content .= "<td style='width: 15%;'>$lpTotalTime</td>";
-        $tool_content .= "<td style='width: 15%;'>" . disp_progress_bar($prog, 1) . "</td>";
+        $displayTotalTime = (empty($lpAttemptsNb) && $lpTotalTime === "00:00:00") ? "-" : q($lpTotalTime);
+        $displayProgress = (empty($lpAttemptsNb) && empty($lpProgress)) ? "-" : disp_progress_bar($lpProgress, 1);
+        $displayScore = (empty($lpAttemptsNb) && empty($lpScore)) ? "-" : $lpScore . "%";
+
+        $tool_content .= "<td style='width: 15%;'>" . $displayTotalTime . "</td>";
+        $tool_content .= "<td style='width: 15%;'>" . $displayProgress . "</td>";
+        $tool_content .= "<td>" . $displayScore . "</td>";
     }
 
     $tool_content .= "</tr>";
@@ -671,6 +675,7 @@ if (!$is_editor && $iterator != 1 && $uid) {
       <td class='text-start'><strong>$langTotal</strong>:</td>
       <td class='text-start'><strong>$globaltime</strong:</td>
       <td>" . disp_progress_bar($total, 1) . "</td>
+      <td></td>
     </tr>";
 }
 $tool_content .= "</tbody></table></div>";

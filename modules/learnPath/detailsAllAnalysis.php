@@ -46,7 +46,7 @@ $head_content .= "<script type='text/javascript'>
                 'bAutoWidth': true,
                 'searchDelay': 1000,
                 'order' : [],
-                'columns': [ { orderable: false }, { orderable: false }, { orderable: false }, { orderable: false }, { orderable: false } ],
+                'columns': [ { orderable: false }, { orderable: false }, { orderable: false }, { orderable: false }, { orderable: false }, { orderable: false } ],
                 'lengthMenu': [10, 20, 30, -1],
                 'oLanguage': {
                    'lengthLabels': {
@@ -111,6 +111,7 @@ $tool_content .= "<div class='table-responsive'>
                 <th>$langAttempts</th>
                 <th>$langTotalTimeSpent</th>
                 <th>$langProgress</th>
+                <th>$langScore</th>
             </tr>
         </thead>";
 
@@ -118,7 +119,7 @@ $course_title = course_code_to_title($_GET['course']);
 
 $data[] = [ $course_title ];
 $data[] = [];
-$data[] = [ $langSurnameName, $langLearnPath, $langAttempts, $langTotalTimeSpent, $langProgress ];
+$data[] = [ $langSurnameName, $langLearnPath, $langAttempts, $langTotalTimeSpent, $langProgress, $langScore ];
 
 $usersList = Database::get()->queryArray("SELECT U.`surname`, U.`givenname`, U.`id`, U.`email`
                 FROM `user` AS U, `course_user` AS CU
@@ -138,24 +139,29 @@ foreach ($usersList as $user) {
 
     foreach ($learningPathList as $learningPath) {
         // % progress
-        list($prog, $lpTotalTime, $lpTotalStarted, $lpTotalAccessed, $lpTotalStatus, $lpAttemptsNb) = get_learnPath_progress_details($learningPath->learnPath_id, $user->id);
+        list($prog, $lpTotalTime, $lpTotalStarted, $lpTotalAccessed, $lpTotalStatus, $lpAttemptsNb, $lpScore) = get_learnPath_progress_details($learningPath->learnPath_id, $user->id);
         if ($prog >= 0) {
             $globalprog += $prog;
         }
         if (!empty($lpTotalTime)) {
             $globaltime = addScormTime($globaltime, $lpTotalTime);
         }
+        $displayTotalTime = (empty($lpAttemptsNb) && $lpTotalTime === "00:00:00") ? "-" : q($lpTotalTime);
+        $displayProgress = (empty($lpAttemptsNb) && empty($prog)) ? "-" : disp_progress_bar($prog, 1);
+        $dataProgress = ($displayProgress === "-") ? $displayProgress : $prog . "%";
+        $displayScore = (empty($lpAttemptsNb) && empty($lpScore)) ? "-" : $lpScore . "%";
 
         // ---- xls format ----
-        $lpContent = array('', $learningPath->name, $lpAttemptsNb, $lpTotalTime, $prog);
+        $lpContent = array('', $learningPath->name, $lpAttemptsNb, $displayTotalTime, $dataProgress, $displayScore);
         $lpaths[] = $lpContent;
         // --------------------
         $lp_content .= "<tr>";
         $lp_content .= "<td></td>";
         $lp_content .= "<td><p>" . q($learningPath->name) . "</p></td>";
         $lp_content .= "<td>" . q($lpAttemptsNb) . "</td>";
-        $lp_content .= "<td>" . q($lpTotalTime) . "</td>";
-        $lp_content .= "<td>" . disp_progress_bar($prog, 1) . "</td>";
+        $lp_content .= "<td>" . $displayTotalTime . "</td>";
+        $lp_content .= "<td>" . $displayProgress . "</td>";
+        $lp_content .= "<td>" . $displayScore . "</td>";
         $lp_content .= "</tr>";
         $iterator++;
     }
@@ -168,7 +174,7 @@ foreach ($usersList as $user) {
     // ---- xls format ----
     $data[] = ["$user->surname $user->givenname ($user->email)", ' ', ' ', $globaltime, $total . '%'];
     foreach ($lpaths as $lpContent) {
-        $data[] = [$lpContent[0], $lpContent[1], $lpContent[2], $lpContent[3], $lpContent[4] . '%'];
+        $data[] = [$lpContent[0], $lpContent[1], $lpContent[2], $lpContent[3], $lpContent[4], $lpContent[5]];
     }
     // --------------------
 
@@ -184,7 +190,7 @@ foreach ($usersList as $user) {
             <td>" . q($globaltime) . "</td>
             <td>"
             . disp_progress_bar($total, 1) . "
-            </td>";
+            </td><td></td>";
     $tool_content .= "</tr>";
     $tool_content .= $lp_content;
 }

@@ -207,7 +207,9 @@ $tool_content .= "<thead><tr class='list-header'><th colspan='" . ($maxDeep + 2)
 
 // show only progress column for authenticated users
 if ($uid) {
-    $tool_content .= "<th style='width: 10%;'>$langProgress</th>";
+    $tool_content .= "<th>$langTotalTimeSpent</th>
+                      <th>$langProgress</th>
+                      <th>$langScore</th>";
 }
 
 $tool_content .= "</tr></thead>";
@@ -216,30 +218,11 @@ $tool_content .= "</tr></thead>";
 if (!isset($globalProg)) {
     $globalProg = 0;
 }
+if (!isset($globalTime)) {
+    $globalTime = "00:00:00";
+}
 
 foreach ($flatElementList as $module) {
-
-    if ($module['scoreMax'] > 0 && $module['raw'] > 0) {
-        $progress = round($module['raw'] / $module['scoreMax'] * 100);
-    } else {
-        $progress = 0;
-    }
-
-    if ($module['contentType'] == CTEXERCISE_) {
-        $passExercise = ($module['credit'] == "CREDIT");
-    } else {
-        $passExercise = false;
-    }
-
-    if ($module['contentType'] == CTSCORM_ && $module['scoreMax'] <= 0) {
-        if ($module['lesson_status'] == 'COMPLETED' || $module['lesson_status'] == 'PASSED') {
-            $progress = 100;
-            $passExercise = true;
-        } else {
-            $progress = 0;
-            $passExercise = false;
-        }
-    }
 
     // display the current module name (and link if allowed)
     $spacingString = "";
@@ -322,14 +305,23 @@ foreach ($flatElementList as $module) {
 //        if ($is_blocked) {
 //            $first_blocked = true;
 //        }
+
+        list($lpProgress, $lpTotalTime, $lpTotalStarted, $lpTotalAccessed, $lpTotalStatus, $lpAttemptsNb, $lpScore) = get_learnPath_progress_details($_SESSION['path_id'], $uid);
+        $globalProg += $lpProgress;
+        if (!empty($lpTotalTime)) {
+            $globalTime = addScormTime($globalTime, $lpTotalTime);
+        }
+        $displayTotalTime = (empty($lpAttemptsNb) && $lpTotalTime === "00:00:00") ? "-" : q($lpTotalTime);
+        $displayProgress = (empty($lpAttemptsNb) && empty($lpProgress)) ? "-" : disp_progress_bar($lpProgress, 1);
+        $displayScore = (empty($lpAttemptsNb) && empty($lpScore)) ? "-" : $lpScore . "%";
+
         // display the progress value for current module
-        $tool_content .= "<td>" . disp_progress_bar($progress, 1) . "</td>";
+        $tool_content .= "<td>" . $displayTotalTime . "</td>";
+        $tool_content .= "<td>" . $displayProgress . "</td>";
+        $tool_content .= "<td>" . $displayScore . "</td>";
     }
     elseif ($uid && $module['contentType'] == CTLABEL_) {
         $tool_content .= '<td>&nbsp;</td>';
-    }
-    if ($progress > 0) {
-        $globalProg = $globalProg + $progress;
     }
     if ($module['contentType'] != CTLABEL_) {
         $moduleNb++; // increment number of modules used to compute global progression except if the module is a title
@@ -339,9 +331,15 @@ foreach ($flatElementList as $module) {
 
 
 if ($uid && $moduleNb > 0) {
+    if ($globalTime === "00:00:00") {
+        $globalTime = "";
+    }
+
     // add a blank line between module progression and global progression
     $tool_content .= "<tr><td class='px-2' colspan='" . ($maxDeep + 2) . "'><strong>$langTotal</strong></td>
+                          <td>" . $globalTime . "</td>
                           <td>" . disp_progress_bar(round($globalProg / ($moduleNb)), 1) . "</td>
+                          <td></td>
                       </tr>";
 }
 $tool_content .= "</table></div>";

@@ -172,7 +172,7 @@ $tool_content .= "<div class='table-responsive'>
 
 $data[] = [ uid_to_name($uInfo) . ": " . $LPname ];
 $data[] = [];
-$data[] = [ $langLearningObjects, $langAttempt, $langStart, $langAttemptAccessed, $langTotalTimeSpent, $langLearningPathStatus, $langProgress ];
+$data[] = [ $langLearningObjects, $langAttempt, $langStart, $langAttemptAccessed, $langTotalTimeSpent, $langLearningPathStatus, $langProgress, $langScore ];
 
 
 // ---------------- display list of lp modules ------------------------
@@ -260,9 +260,11 @@ foreach ($elementList as $module) {
     $tool_content .= "<td>$total_time</td>";
     $tool_content .= "<td style='width:15%;'>" . disp_lesson_status($module['lesson_status']) . "</td>";
     //-- progression
+    $displayScore = ($score === 0 && $module['raw'] === -1) ? "-" : $score . "%" ;
+    $displayProgress = ($progress === 0 && is_null($module['progress_measure'])) ? "-" : disp_progress_bar($progress, 1) ;
     if ($module['contentType'] != CTLABEL_) {
         // display the progress value for current module
-        $tool_content .= "<td>" . disp_progress_bar($progress, 1) . "</td><td class='text-end'>$score%</td>";
+        $tool_content .= "<td>" . $displayProgress . "</td><td class='text-end'>" . $displayScore . "</td>";
     } else { // label
         $tool_content .= "<td>&nbsp;</td><td>&nbsp;</td>";
     }
@@ -278,9 +280,10 @@ foreach ($elementList as $module) {
     }
 
     $tool_content .= "</tr>";
+    $dataProgress = ($displayProgress === "-") ? $displayProgress : $progress . "%";
     $data[] = [ q($module['name']), q($module['attempt']), format_locale_date(strtotime($module['started']), 'short'),
-                format_locale_date(strtotime($module['accessed']), 'short'), $session_time, $total_time,
-                disp_lesson_status($module['lesson_status']), $progress . "%"
+                format_locale_date(strtotime($module['accessed']), 'short'), $total_time,
+                disp_lesson_status($module['lesson_status']), $dataProgress, $displayScore
               ];
     $totalTime = addScormTime($totalTime, $global_time[$module['attempt']]);
 }
@@ -317,10 +320,11 @@ if ($moduleNbT == 0) {
                         <th class='ms-1 p-2 text-end'>$globalScoreDisplay</th>
                     </tr>";
     $data[] = [];
-    if ($global_time[$bestAttempt] != "0000:00:00") {
-        $data[] = [ $langTimeInLearnPath, $global_time[$bestAttempt] ];
+    if ($totalTime != "0000:00:00") {
+        $data[] = [ $langTimeInLearnPath, $totalTime ];
     }
     $data[] = [ $langTotalPercentCompleteness, $lpCombinedProgress . "%" ];
+    $data[] = [ $langMaxScore, $globalScoreDisplay];
 }
 $tool_content .= "</table></div>";
 
