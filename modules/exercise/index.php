@@ -125,6 +125,7 @@ $head_content .= "<script type='text/javascript'>
               });
 
               localStorage.removeItem('openEx');
+              localStorage.removeItem('isTinyMCEFocused');
         });
         </script>";
 

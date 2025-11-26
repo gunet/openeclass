@@ -465,7 +465,12 @@ if ($is_exam && $stricterExamMode && $exerciseType == SINGLE_PAGE_TYPE) {
 
                 // Detect when the window loses focus
                 window.addEventListener('blur', function() {
-                    showCancelWarning();
+                    setTimeout(function() {
+                        let TinyMCEFocused = localStorage.getItem('isTinyMCEFocused');
+                        if (TinyMCEFocused !== 'true') {
+                            showCancelWarning();
+                        }
+                    }, 500);
                 });
 
                 // Detect specific key presses (less reliable for system shortcuts)
@@ -478,6 +483,7 @@ if ($is_exam && $stricterExamMode && $exerciseType == SINGLE_PAGE_TYPE) {
                 $('#cancelExercise').on('click', function (e) {
                     e.preventDefault();
                     localStorage.removeItem('openEx');
+                    localStorage.removeItem('isTinyMCEFocused');
                     $('#cancelButton').trigger('click');
                     $('.deleteAdminBtn.bootbox-accept').trigger('click');
                 });

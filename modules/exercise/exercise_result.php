@@ -46,6 +46,7 @@ $head_content .= "
 <script>
 $(document).ready(function() {
     localStorage.removeItem('openEx');
+    localStorage.removeItem('isTinyMCEFocused');
 });
 </script>
 ";
