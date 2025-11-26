@@ -399,21 +399,6 @@ $stricterExamMode = $objExercise->getOption('stricterExamRestriction')? 1: 0;
 if ($is_exam && $stricterExamMode && $exerciseType == SINGLE_PAGE_TYPE) {
     $head_content .= "
         <script type='text/javascript'>
-            $(function() {
-                localStorage.setItem('fullScreenOn', true);
-            });
-        </script>";
-} else {
-    $head_content .= "
-        <script type='text/javascript'>
-            $(function() {
-                localStorage.removeItem('fullScreenOn');
-            });
-        </script>";
-}
-if ($is_exam) { // disallow links outside exercise frame. disallow button quick note
-    $head_content .= "
-        <script type='text/javascript'>
 
             // Function to inform the user that the exercise will be cancelled.
             function showCancelWarning() {
@@ -422,13 +407,6 @@ if ($is_exam) { // disallow links outside exercise frame. disallow button quick 
 
             // Function for default settings in exam mode.
             function default_settings() {
-                $('.btn-quick-note').remove();
-                $('a:not(#exercise_frame a)').css('cursor', 'not-allowed');
-                $('div:not(#exercise_frame)').css('cursor', 'not-allowed');
-                $('a:not(#exercise_frame a)').on('click', function (e) {
-                    e.preventDefault();
-                    return false;
-                });
                 $('.blank').css('cursor', 'pointer');
                 $('.draggable').css('cursor', 'move');
                 $('#exercise_frame').on('contextmenu', function(e) {
@@ -443,18 +421,16 @@ if ($is_exam) { // disallow links outside exercise frame. disallow button quick 
 
             $(function() {
 
-                let fullScreenOn = localStorage.getItem('fullScreenOn');
                 let openEx = localStorage.getItem('openEx');
-                if (fullScreenOn && !openEx) {
+
+                if (!openEx) {
                     $('#exercise_frame').removeClass('d-block').addClass('d-none');
                     $('#btn-search').addClass('pe-none');
                 } else {
-                    if (fullScreenOn) {
-                        $('#fullscreenBtn').removeClass('d-block').addClass('d-none');
-                        $('#bgr-cheat-header').removeClass('d-block').addClass('d-none');
-                        $('#bgr-cheat-footer').removeClass('d-block').addClass('d-none');
-                        document.documentElement.requestFullscreen();
-                    }
+                    $('#fullscreenBtn').removeClass('d-block').addClass('d-none');
+                    $('#bgr-cheat-header').removeClass('d-block').addClass('d-none');
+                    $('#bgr-cheat-footer').removeClass('d-block').addClass('d-none');
+                    document.documentElement.requestFullscreen();
                 }
 
                 $('#fullscreenBtn').on('click', function (e) {
@@ -488,9 +464,9 @@ if ($is_exam) { // disallow links outside exercise frame. disallow button quick 
                 });
 
                 // Detect when the window loses focus
-                // window.addEventListener('blur', function() {
-                //     showCancelWarning(); 
-                // });
+                window.addEventListener('blur', function() {
+                    showCancelWarning();
+                });
 
                 // Detect specific key presses (less reliable for system shortcuts)
                 document.addEventListener('keydown', function(e) {
@@ -502,11 +478,24 @@ if ($is_exam) { // disallow links outside exercise frame. disallow button quick 
                 $('#cancelExercise').on('click', function (e) {
                     e.preventDefault();
                     localStorage.removeItem('openEx');
-                    localStorage.removeItem('fullScreenOn');
                     $('#cancelButton').trigger('click');
                     $('.deleteAdminBtn.bootbox-accept').trigger('click');
                 });
 
+            });
+        </script>";
+}
+if ($is_exam) { // disallow links outside exercise frame. disallow button quick note
+    $head_content .= "
+        <script type='text/javascript'>
+            $(function() {
+                $('.btn-quick-note').remove();
+                $('a:not(#exercise_frame a)').css('cursor', 'not-allowed');
+                $('div:not(#exercise_frame)').css('cursor', 'not-allowed');
+                $('a:not(#exercise_frame a)').on('click', function (e) {
+                    e.preventDefault();
+                    return false;
+                });
             });
     </script>";
 

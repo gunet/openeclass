@@ -124,7 +124,6 @@ $head_content .= "<script type='text/javascript'>
                   });
               });
 
-              localStorage.removeItem('fullScreenOn');
               localStorage.removeItem('openEx');
         });
         </script>";

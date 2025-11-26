@@ -45,7 +45,6 @@ if ($unit) {
 $head_content .= "
 <script>
 $(document).ready(function() {
-    localStorage.removeItem('fullScreenOn');
     localStorage.removeItem('openEx');
 });
 </script>
