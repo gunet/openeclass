@@ -417,6 +417,7 @@ $langPassCode = "Συνθηματικό πρόσβασης";
 $langCourseEndDate = "Ημερομηνία λήξης $langsOfCourse";
 $langExplainCourseEndDate = "Μετά την ημερομηνία λήξης το $langsOfCourse θα γίνει ανενεργό";
 $langH5PUploadingEnabled = "Δημιουργία περιεχομένου H5P από τους $langsOfStudentss";
+$langImportCourseCompleted = "H εισαγωγή του υλικού του $langsOfCourse ολοκληρώθηκε";
 // listreq.php
 
 $langOpenProfessorRequests = "Ανοικτές Αιτήσεις Χρηστών";
@@ -1151,6 +1152,7 @@ $langImageSelected = "Εικόνα επιλογής";
 $langCourseIden = "Ταυτότητα $langOfCourse";
 $langBackupCourse = "Αντίγραφο ασφαλείας";
 $langCloneCourse = "Κλώνος $langsOfCourse";
+$langImportCourse = "Εισαγωγή $langsOfCourse";
 $langModifDone = "Οι ρυθμίσεις του $langsOfCourse άλλαξαν.";
 $langHome = "Αρχική";
 $langCode = "Κωδικός";
