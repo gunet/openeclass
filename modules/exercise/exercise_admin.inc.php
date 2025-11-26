@@ -189,7 +189,7 @@ if (isset($_POST['submitExercise'])) {
         if ($objExercise->selectAssignToSpecific() == 2) {
             $assignees = Database::get()->queryArray("SELECT `group`.id AS id, `group`.name
                 FROM exercise_to_specific, `group`
-                WHERE `group`.id = exercise_to_specific.group_id                    
+                WHERE `group`.id = exercise_to_specific.group_id
                     AND exercise_to_specific.exercise_id = ?d", $exerciseId);
             $all_groups = Database::get()->queryArray("SELECT name, id FROM `group` WHERE course_id = ?d AND visible = 1", $course_id);
             foreach ($assignees as $assignee_row) {
@@ -355,7 +355,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                        <span class='help-block col-sm-offset-2 col-sm-10'>$langExerciseFeedbackInfo</span>
                        </div>
                  </div>
-                 
+
                  <div class='row form-group mt-4'>
                      <div class='col-12 control-label-notes mb-1'>
                         $langViewShow
@@ -381,12 +381,12 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                          </div>
                      </div>
                  </div>
-                 
+
                  <div class='row form-group mt-4'>
                         <div class='col-12'>
                             <div class='checkbox'>
                                 <label class='label-container' aria-label='$langSelect'>
-                                    <input name='shuffle_answers' type='checkbox' " . ($hasShuffleAnswers? 'checked' : '') . ">                                                                        
+                                    <input name='shuffle_answers' type='checkbox' " . ($hasShuffleAnswers? 'checked' : '') . ">
                                     <span class='checkmark'></span>
                                         $langShuffleAnswers
                                 </label>
@@ -394,7 +394,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                             </div>
                     </div>
                 </div>
-                
+
                  <div class='row form-group mt-4'>
                     <label for='exerciseRangeId' class='col-12 control-label-notes mb-1'>$langExerciseScaleGrade</label>
                     <div class='col-12'>
@@ -417,7 +417,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                                     <span class='checkmark'></span>
                                 </label>
                             </span>
-                            <span class='add-on1 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>  
+                            <span class='add-on1 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
                             <input class='form-control mt-0 border-start-0' name='exerciseStartDate' id='exerciseStartDate' type='text' value='$exerciseStartDate'".($enableStartDate ? '' : ' disabled').">
                         </div>
                         <span class='help-block'>".(Session::hasError('exerciseStartDate') ? Session::getError('exerciseStartDate') : "&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i> $langExerciseStartHelpBlock")."</span>
@@ -433,7 +433,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                                      <span class='checkmark'></span>
                                 </label>
                             </span>
-                            <span class='add-on2 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>  
+                            <span class='add-on2 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
                             <input class='form-control mt-0 border-start-0' name='exerciseEndDate' id='exerciseEndDate' type='text' value='$exerciseEndDate'".($enableEndDate ? '' : ' disabled').">
                         </div>
                         <span class='help-block'>".(Session::hasError('exerciseEndDate') ? Session::getError('exerciseEndDate') : "&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i> $langExerciseEndHelpBlock")."</span>
@@ -460,8 +460,8 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                         </div>
                      </div>
                  </div>
-                                   
-                <div class='row form-group ". ((Session::getError('exerciseTimeConstraint') or Session::getError('exerciseAttemptsAllowed'))? "has-error" : "") ." mt-4'>                    
+
+                <div class='row form-group ". ((Session::getError('exerciseTimeConstraint') or Session::getError('exerciseAttemptsAllowed'))? "has-error" : "") ." mt-4'>
                     <div class='col-12'>
                         <div class='row'>
                             <div class='col-md-6'>
@@ -472,12 +472,12 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                             <div class='col-md-6'>
                                 <label for='exerciseAttemptsAllowed' class='col-12 control-label-notes mb-1'>$langExerciseAttemptsAllowed</label>
                                 <input type='text' class='form-control' name='exerciseAttemptsAllowed' id='exerciseAttemptsAllowed' value='$exerciseAttemptsAllowed' placeholder='$langExerciseConstrain'>
-                                <span class='help-block'>".(Session::getError('exerciseAttemptsAllowed') ? Session::getError('exerciseAttemptsAllowed') : "$langExerciseAttemptsAllowedUnit ($langExerciseAttemptsAllowedExplanation)")."</span>    
+                                <span class='help-block'>".(Session::getError('exerciseAttemptsAllowed') ? Session::getError('exerciseAttemptsAllowed') : "$langExerciseAttemptsAllowedUnit ($langExerciseAttemptsAllowedExplanation)")."</span>
                             </div>
                         </div>
                     </div>
                 </div>
-                                
+
                 <div class='row form-group mt-4'>
                      <div class='col-12 control-label-notes mb-1'>$langAnswers</div>
                      <div class='col-12'>
@@ -639,20 +639,20 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                     <ul class='list-group list-group-flush'>
                         <li class='list-group-item px-0 mb-4 bg-transparent'>
                             <a class='accordion-btn d-flex justify-content-start align-items-start' role='button' data-bs-toggle='collapse' href='#CheckAccess' aria-expanded='false' aria-controls='CheckAccess'>
-                                <span class='fa-solid fa-chevron-down'></span> 
+                                <span class='fa-solid fa-chevron-down'></span>
                                 $langCheckAccess
                             </a>
                             <div id='CheckAccess' class='panel-collapse accordion-collapse collapse border-0 rounded-0' role='tabpanel' data-bs-parent='#accordionEx'>
                                 <div class='panel-body bg-transparent Neutral-900-cl p-0'>
                                     <div class='form-group ".(Session::getError('exercisePasswordLock') ? "has-error" : "")." mt-4'>
-                                        <label for='exercisePasswordLock' class='col-12 control-label-notes mb-1'>$langPassCode <span class='asterisk Accent-200-cl'>(*)</span></label>
+                                        <label for='exercisePasswordLock' class='col-12 control-label-notes mb-1'>$langPassCode</label>
                                         <div class='col-12'>
                                             <input name='exercisePasswordLock' type='text' class='form-control' id='exercisePasswordLock' value='$exercisePasswordLock' placeholder=''>
                                             <span class='help-block Accent-200-cl'>".Session::getError('exercisePasswordLock')."</span>
                                         </div>
                                     </div>
                                     <div class='form-group ".(Session::getError('exerciseIPLock') ? "has-error" : "")." mt-4'>
-                                        <label for='exerciseIPLock' class='col-12 control-label-notes mb-1'>$langIPUnlock <span class='asterisk Accent-200-cl'>(*)</span></label>
+                                        <label for='exerciseIPLock' class='col-12 control-label-notes mb-1'>$langIPUnlock</label>
                                         <div class='col-12'>
                                             <select name='exerciseIPLock[]' class='form-select' id='exerciseIPLock' multiple>
                                                 $exerciseIPLockOptions
