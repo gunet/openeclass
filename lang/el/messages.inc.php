@@ -2086,6 +2086,8 @@ $langExerciseFeedback = "Κείμενο Ολοκλήρωσης";
 $langExerciseFeedbackInfo = "εμφανίζεται μετά την ολοκλήρωση της άσκησης";
 $langExercisePreventCopy = 'Αποτροπή αντιγραφής κειμένου';
 $langExercisePreventCopyExplanation = 'Αποτροπή αντιγραφής και επικόλλησης κειμένου από την οθόνη κατά την εκτέλεση της άσκησης';
+$langStricterExamRestriction = "Αυστηρός περιορισμός";
+$langExerciseWillBeCanceledInStrictMode = "Η εξέταση ακυρώνεται σε παράλληλες ενέργειες χρηστών όπως ανακατεύθυνση σε νέα σελίδα ή άνοιγμα νέου παραθύρου";
 
 // admin.php
 $langExerciseManagement = "Διαχείριση Άσκησης";
@@ -2410,6 +2412,9 @@ $langWarnOneWayExercise = "Προσοχή: οι ερωτήσεις εμφανί�
 $langExam = "Εξέταση";
 $langRequireCourseUserLogin = "Οι χρήστες πρέπει να είναι συνδεδεμένοι στη πλατφόρμα και εγγεγραμμένοι στο $langsCourse.";
 $langExerciseRequireLogin = "Θα πρέπει να συνδεθείτε πρώτα στην πλατφόρμα έτσι ώστε να εκτελέσετε την άσκηση";
+$langWarningNewPageOpened = "<strong>Προσοχή!</strong><br>Παρακαλούμε να διατηρείτε την τρέχουσα σελίδα ανοικτή καθόλη τη διάρκεια της εξέτασης.<br> Οποιαδήποτε παράλληλη ενέργεια, όπως ανακατεύθυνση σε νέα σελίδα ή άνοιγμα νέου παραθύρου, θα οδηγήσει στην αυτόματη ακύρωση της προσπάθειάς σας.";
+$langExWillBeCanceled = "Η προσπάθειά σας θα ακυρωθεί.";
+$langGoToExam = "Εισέλθετε στην εξέταση";
 
 // exercise result.php
 $langStart = "Έναρξη";

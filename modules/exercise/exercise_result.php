@@ -42,6 +42,15 @@ if ($unit) {
     $navigation[] = ['url' => "index.php?course=$course_code", 'name' => $langExercices];
 }
 
+$head_content .= "
+<script>
+$(document).ready(function() {
+    localStorage.removeItem('fullScreenOn');
+    localStorage.removeItem('openEx');
+});
+</script>
+";
+
 # is this an AJAX request to check grades?
 $checking = false;
 $ajax_regrade = false;

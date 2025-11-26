@@ -113,6 +113,11 @@ if (isset($_POST['submitExercise'])) {
         } else {
             $objExercise->setOption('ShuffleAnswers', true);
         }
+        if (!isset($_POST['stricterExamRestriction'])) {
+            $objExercise->setOption('stricterExamRestriction', false);
+        } else {
+            $objExercise->setOption('stricterExamRestriction', true);
+        }
 
         $objExercise->save();
         // reads the exercise ID (only useful for a new exercise)
@@ -180,6 +185,7 @@ if (isset($_POST['submitExercise'])) {
         $exerciseIPLockOptions = '';
     }
     $exercisePreventCopy = Session::has('jsPreventCopy') ? Session::get('jsPreventCopy') : $objExercise->getOption('jsPreventCopy');
+    $exerciseStricterExamRestriction = Session::has('stricterExamRestriction') ? Session::get('stricterExamRestriction') : $objExercise->getOption('stricterExamRestriction');
     $exercisePasswordLock = Session::has('exercisePasswordLock') ? Session::get('exercisePasswordLock') : $objExercise->selectPasswordLock();
     $exerciseAssignToSpecific = Session::has('assign_to_specific') ? Session::get('assign_to_specific') : $objExercise->selectAssignToSpecific();
     if ($objExercise->selectAssignToSpecific()) {
@@ -295,6 +301,19 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                     $('#continueTimeField').hide('fast');
                 }
             }).change();
+
+            if ($('#isExam_').is(':checked')) {
+                $('#stricter_exam').removeClass('d-none').addClass('d-block');
+            } else {
+                $('#stricter_exam').removeClass('d-block').addClass('d-none');
+            }
+            $('#isExam_').on('click', function() {
+                if ($(this).is(':checked')) {
+                    $('#stricter_exam').removeClass('d-none').addClass('d-block');
+                } else {
+                    $('#stricter_exam').removeClass('d-block').addClass('d-none');
+                }
+            });
         });
         function ajaxAssignees()
         {
@@ -598,7 +617,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                         <div class='col-12'>
                             <div class='checkbox'>
                                 <label class='label-container' aria-label='$langSelect'>
-                                    <input name='isExam' type='checkbox' " . ($isExam? 'checked' : '') . ">
+                                    <input id='isExam_' name='isExam' type='checkbox' " . ($isExam? 'checked' : '') . ">
                                     <span class='checkmark'></span>
                                     $langExam
                                 </label>
@@ -606,7 +625,20 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                             </div>
                     </div>
                 </div>
-
+                
+                <div class='row form-group mt-4 d-none' id='stricter_exam'>
+                    <div class='col-sm-12 control-label-notes mb-1'>$langStricterExamRestriction:</div>
+                    <div class='col-12'>
+                        <div class='checkbox'>
+                            <label class='label-container' aria-label='$langSelect'>
+                                <input name='stricterExamRestriction' type='checkbox' " . ($exerciseStricterExamRestriction? 'checked' : '') . ">
+                                <span class='checkmark'></span>
+                                $langExerciseWillBeCanceledInStrictMode
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
                 <div class='row form-group mt-4'>
                     <div class='col-12 control-label-notes mb-1'>$langContinueAttempt</div>
                     <div class='col-12'>
