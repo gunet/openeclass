@@ -482,7 +482,7 @@ if ($is_exam) { // disallow links outside exercise frame. disallow button quick 
 
                 // Detect when the tab becomes hidden
                 document.addEventListener('visibilitychange', function() {
-                    if (document.visibilityState === 'hidden' && fullScreenOn) {
+                    if (document.visibilityState === 'hidden') {
                         showCancelWarning();
                     }
                 });
@@ -494,7 +494,7 @@ if ($is_exam) { // disallow links outside exercise frame. disallow button quick 
 
                 // Detect specific key presses (less reliable for system shortcuts)
                 document.addEventListener('keydown', function(e) {
-                    if ((e.ctrlKey && e.key === 'n') || (e.altKey && e.key === 'Tab') && fullScreenOn) {
+                    if ((e.ctrlKey && e.key === 'n') || (e.altKey && e.key === 'Tab')) {
                         showCancelWarning(); 
                     }
                 });
