@@ -582,7 +582,7 @@ function display_student_assignment($id, $on_behalf_of = false) {
     $data['back_link'] = $back_link;
     $data['submit_ok'] = $submit_ok;
     $data['assignment_link'] = isset($unit) ?
-        "{$urlAppend}modules/units/index.php?course=$course_code&id=$unit" :
+        "{$urlAppend}modules/units/view.php?course=$course_code&res_type=assignment&id=$id&unit=$unit" :
         "{$urlAppend}modules/work/index.php?course=$course_code&id=$id";
 
     view('modules.work.submit_assignment', $data);
