@@ -426,6 +426,7 @@ if ($is_exam && $stricterExamMode && $exerciseType == SINGLE_PAGE_TYPE) {
                 if (!openEx) {
                     $('#exercise_frame').removeClass('d-block').addClass('d-none');
                     $('#btn-search').addClass('pe-none');
+                    $('.messages_2').removeClass('d-none').addClass('d-block');
                 } else {
                     $('#fullscreenBtn').removeClass('d-block').addClass('d-none');
                     $('#bgr-cheat-header').removeClass('d-block').addClass('d-none');
@@ -440,6 +441,8 @@ if ($is_exam && $stricterExamMode && $exerciseType == SINGLE_PAGE_TYPE) {
                     $('#fullscreenBtn').removeClass('d-block').addClass('d-none');
                     $('#bgr-cheat-header').removeClass('d-block').addClass('d-none');
                     $('#bgr-cheat-footer').removeClass('d-block').addClass('d-none');
+                    $('.messages_1').removeClass('d-none').addClass('d-block');
+                    $('.messages_2').removeClass('d-block').addClass('d-none');
                     document.documentElement.requestFullscreen();
                 });
                 
@@ -515,7 +518,8 @@ if ($is_exam) { // disallow links outside exercise frame. disallow button quick 
                                 <i class='fa-solid fa-triangle-exclamation Warning-200-cl fs-2'></i>
                             </div>
                         </div>
-                        <p class='TextBold text-center'>$langWarningNewPageOpened</p>
+                        <p class='TextBold text-center messages_1 d-none'>$langWarningNewPageOpened</p>
+                        <p class='TextBold text-center messages_2 d-none'>$langWarningNewPageOpened2</p>
                         <button id='fullscreenBtn' class='btn successAdminBtn mt-4 m-auto'>
                             $langGoToExam&nbsp;&nbsp;<i class='fa-solid fa-right-to-bracket pt-0'></i>
                         </button>

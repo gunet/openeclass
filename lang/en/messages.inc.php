@@ -6412,6 +6412,7 @@ you select the <strong class="text-dark">item selection type</strong> and the <s
 ';
 $langExerciseRequireLogin = 'You must first log in to the platform in order to access the exercise';
 $langWarningNewPageOpened = "<strong>Attention!</strong><br>Please keep the current page open throughout the exam.<br> Any parallel action, such as redirecting to a new page or opening a new window, will result in the automatic cancellation of your attempt.";
+$langWarningNewPageOpened2 = "<strong>Warning!</strong><br>You have entered the examination area.<br> Any parallel action, such as redirecting to a new page or opening a new window, will lead to the automatic cancellation of your attempt.";
 $langExWillBeCanceled = "Your attempt will be canceled.";
 $langGoToExam = "Enter the exam";
 $langNoUsersForExerSubmission = 'There are no users without submission to the exercise.';
