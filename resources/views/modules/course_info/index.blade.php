@@ -95,6 +95,33 @@
                 }
             });
 
+
+            $('.importCourse').on('click', function(e) {
+                e.preventDefault();
+                bootbox.dialog({
+                    title: '{{ trans('langImportCourse') }}',
+                    message: '<form action=\"{{ $_SERVER['SCRIPT_NAME'] }}\" method=\"POST\" id=\"import_course_form\">'+
+                        '<select class=\"form-select\" id=\"course_id\" name=\"import_course_id\">'+
+                        {!! $courses_options !!}
+                        + '</select>'+
+                        '</form>',
+                    buttons: {
+                        cancel: {
+                            label: '{{ trans('langCancel') }}',
+                            className: 'cancelAdminBtn'
+                        },
+                        success: {
+                            label: '{{ trans('langImport') }}',
+                            className: 'submitAdminBtn',
+                            callback: function (d) {
+                                $('#import_course_form').attr('action', 'import_course.php?course={{ $course_code }}&do_fetch=1');
+                                $('#import_course_form').submit();
+                            }
+                        }
+                    }
+                });
+            });
+
             // Print Header Images functionality
             $('#loadPrintHeaderImages').click(function() {
                 loadPrintImages('header');
