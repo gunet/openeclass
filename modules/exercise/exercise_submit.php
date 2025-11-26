@@ -488,9 +488,9 @@ if ($is_exam) { // disallow links outside exercise frame. disallow button quick 
                 });
 
                 // Detect when the window loses focus
-                window.addEventListener('blur', function() {
-                    showCancelWarning(); 
-                });
+                // window.addEventListener('blur', function() {
+                //     showCancelWarning(); 
+                // });
 
                 // Detect specific key presses (less reliable for system shortcuts)
                 document.addEventListener('keydown', function(e) {
@@ -512,23 +512,36 @@ if ($is_exam) { // disallow links outside exercise frame. disallow button quick 
 
     if ($stricterExamMode && $exerciseType == SINGLE_PAGE_TYPE) {
         $tool_content .= "
-            <div class='col-12 d-flex justify-content-center align-items-center my-4'>
-                <button id='fullscreenBtn' class='btn submitAdminBtn w-50'>
-                    $langGoToExam&nbsp;<i class='fa-solid fa-right-to-bracket'></i>
-                </button>
+            <div class='col-12 d-flex justify-content-center align-items-center my-4 px-0'>
+                <div class='card panelCard card-default px-lg-4 py-lg-3'>
+                    <div class='card-body'>
+                        <div class='text-center'>
+                            <div class='icon-modal-default border-default'>
+                                <i class='fa-solid fa-triangle-exclamation Warning-200-cl fs-2'></i>
+                            </div>
+                        </div>
+                        <p class='TextBold text-center'>$langWarningNewPageOpened</p>
+                        <button id='fullscreenBtn' class='btn successAdminBtn mt-4 m-auto'>
+                            $langGoToExam&nbsp;&nbsp;<i class='fa-solid fa-right-to-bracket pt-0'></i>
+                        </button>
+                    </div>
+                </div>
             </div>
             <div class='modal fade modalExCancelOpen' id='cancelExModal' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' role='dialog' 
                     aria-labelledby='cancelModalLabel' aria-hidden='true'>
                 <div class='modal-dialog' role='document'>
                     <div class='modal-content'>
                         <div class='modal-header'>
-                            <h5 class='modal-title' id='cancelModalLabel'>$langDelTitle</h5>
+                            <div class='modal-title' id='cancelModalLabel'>
+                                <div class='icon-modal-default'><i class='fa-solid fa-triangle-exclamation Warning-200-cl fa-xl'></i></div>
+                                <div class='modal-title-default text-center mb-0'>$langDelTitle</div>
+                            </div>
                         </div>
-                        <div class='modal-body'>
+                        <div class='modal-body text-center py-0'>
                             $langExWillBeCanceled
                         </div>
-                        <div class='modal-footer'>
-                            <button type='button' id='cancelExercise' class='btn btn-primary'>OK</button>
+                        <div class='modal-footer d-flex justify-content-center'>
+                            <button type='button' id='cancelExercise' class='btn btn-primary' style='width: 60px;'>OK</button>
                         </div>
                     </div>
                 </div>
@@ -962,14 +975,14 @@ foreach ($questionList as $k => $q_id) {
 
 if ($questionList) {
     // Display a notification that informs the user that the exercise will be canceled.
-    if ($is_exam && $stricterExamMode && $exerciseType == SINGLE_PAGE_TYPE) {
-        $tool_content .= "<div class='col-12'>
-                            <div class='alert alert-warning'>
-                                <i class='fa-solid fa-triangle-exclamation fa-lg'></i>
-                                <span>$langWarningNewPageOpened</span>
-                            </div>
-                          </div>";
-    }
+    // if ($is_exam && $stricterExamMode && $exerciseType == SINGLE_PAGE_TYPE) {
+    //     $tool_content .= "<div class='col-12'>
+    //                         <div class='alert alert-warning'>
+    //                             <i class='fa-solid fa-triangle-exclamation fa-lg'></i>
+    //                             <span>$langWarningNewPageOpened</span>
+    //                         </div>
+    //                       </div>";
+    // }
     if ($exerciseType == SINGLE_PAGE_TYPE) {
         foreach ($questionList as $questionNumber => $questionId) {
             // show the question and its answers
