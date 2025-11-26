@@ -371,7 +371,7 @@ function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $f
                                 <div class='form-group mt-4'>
                                     <div class='col-12 control-label-notes'>$langLanguage</div>
                                     <div class='col-sm-12'>
-                                        " . lang_select_options('course_lang') . "
+                                        " . lang_select_options('course_lang', default_langcode: $lang) . "
                                     </div>
                                 </div>
                                 <div class='form-group mt-4'>
