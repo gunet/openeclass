@@ -726,6 +726,29 @@ function get_learnPath_progress_details($lpid, $lpUid, $total=true, $from_date =
     }
 }
 
+/**
+ * Common formatter for learning path progress/time/score outputs.
+ *
+ * @param int $attempts
+ * @param string $totalTime
+ * @param int $progress
+ * @param int $score
+ */
+function format_lp_progress_display($attempts, $totalTime, $progress, $score): array {
+    $hasAttempts = !empty($attempts);
+
+    $showTime = $hasAttempts || $totalTime !== "00:00:00";
+    $showProgress = $hasAttempts || !empty($progress);
+    $showScore = $hasAttempts || !empty($score);
+
+    return [
+        'time' => $showTime ? q($totalTime) : '-',
+        'progress_html' => $showProgress ? disp_progress_bar($progress, 1) : '-',
+        'progress_text' => $showProgress ? $progress . '%' : '-',
+        'score' => $showScore ? $score . '%' : '-',
+    ];
+}
+
 function get_learnPath_bestAttempt_progress($lpid, $lpUid): array {
     global $course_id;
 

@@ -650,13 +650,11 @@ foreach ($result as $list) { // while ... learning path list
         if (!empty($lpTotalTime)) {
             $globaltime = addScormTime($globaltime, $lpTotalTime);
         }
-        $displayTotalTime = (empty($lpAttemptsNb) && $lpTotalTime === "00:00:00") ? "-" : q($lpTotalTime);
-        $displayProgress = (empty($lpAttemptsNb) && empty($lpProgress)) ? "-" : disp_progress_bar($lpProgress, 1);
-        $displayScore = (empty($lpAttemptsNb) && empty($lpScore)) ? "-" : $lpScore . "%";
+        $lpDisplay = format_lp_progress_display($lpAttemptsNb, $lpTotalTime, $lpProgress, $lpScore);
 
-        $tool_content .= "<td style='width: 15%;'>" . $displayTotalTime . "</td>";
-        $tool_content .= "<td style='width: 15%;'>" . $displayProgress . "</td>";
-        $tool_content .= "<td>" . $displayScore . "</td>";
+        $tool_content .= "<td style='width: 15%;'>" . $lpDisplay['time'] . "</td>";
+        $tool_content .= "<td style='width: 15%;'>" . $lpDisplay['progress_html'] . "</td>";
+        $tool_content .= "<td>" . $lpDisplay['score'] . "</td>";
     }
 
     $tool_content .= "</tr>";

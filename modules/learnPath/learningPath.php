@@ -311,14 +311,12 @@ foreach ($flatElementList as $module) {
         if (!empty($lpTotalTime)) {
             $globalTime = addScormTime($globalTime, $lpTotalTime);
         }
-        $displayTotalTime = (empty($lpAttemptsNb) && $lpTotalTime === "00:00:00") ? "-" : q($lpTotalTime);
-        $displayProgress = (empty($lpAttemptsNb) && empty($lpProgress)) ? "-" : disp_progress_bar($lpProgress, 1);
-        $displayScore = (empty($lpAttemptsNb) && empty($lpScore)) ? "-" : $lpScore . "%";
+        $lpDisplay = format_lp_progress_display($lpAttemptsNb, $lpTotalTime, $lpProgress, $lpScore);
 
         // display the progress value for current module
-        $tool_content .= "<td>" . $displayTotalTime . "</td>";
-        $tool_content .= "<td>" . $displayProgress . "</td>";
-        $tool_content .= "<td>" . $displayScore . "</td>";
+        $tool_content .= "<td>" . $lpDisplay['time'] . "</td>";
+        $tool_content .= "<td>" . $lpDisplay['progress_html'] . "</td>";
+        $tool_content .= "<td>" . $lpDisplay['score'] . "</td>";
     }
     elseif ($uid && $module['contentType'] == CTLABEL_) {
         $tool_content .= '<td>&nbsp;</td>';

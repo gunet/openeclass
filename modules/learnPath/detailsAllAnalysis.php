@@ -146,22 +146,19 @@ foreach ($usersList as $user) {
         if (!empty($lpTotalTime)) {
             $globaltime = addScormTime($globaltime, $lpTotalTime);
         }
-        $displayTotalTime = (empty($lpAttemptsNb) && $lpTotalTime === "00:00:00") ? "-" : q($lpTotalTime);
-        $displayProgress = (empty($lpAttemptsNb) && empty($prog)) ? "-" : disp_progress_bar($prog, 1);
-        $dataProgress = ($displayProgress === "-") ? $displayProgress : $prog . "%";
-        $displayScore = (empty($lpAttemptsNb) && empty($lpScore)) ? "-" : $lpScore . "%";
+        $lpDisplay = format_lp_progress_display($lpAttemptsNb, $lpTotalTime, $prog, $lpScore);
 
         // ---- xls format ----
-        $lpContent = array('', $learningPath->name, $lpAttemptsNb, $displayTotalTime, $dataProgress, $displayScore);
+        $lpContent = array('', $learningPath->name, $lpAttemptsNb, $lpDisplay['time'], $lpDisplay['progress_text'], $lpDisplay['score']);
         $lpaths[] = $lpContent;
         // --------------------
         $lp_content .= "<tr>";
         $lp_content .= "<td></td>";
         $lp_content .= "<td><p>" . q($learningPath->name) . "</p></td>";
         $lp_content .= "<td>" . q($lpAttemptsNb) . "</td>";
-        $lp_content .= "<td>" . $displayTotalTime . "</td>";
-        $lp_content .= "<td>" . $displayProgress . "</td>";
-        $lp_content .= "<td>" . $displayScore . "</td>";
+        $lp_content .= "<td>" . $lpDisplay['time'] . "</td>";
+        $lp_content .= "<td>" . $lpDisplay['progress_html'] . "</td>";
+        $lp_content .= "<td>" . $lpDisplay['score'] . "</td>";
         $lp_content .= "</tr>";
         $iterator++;
     }

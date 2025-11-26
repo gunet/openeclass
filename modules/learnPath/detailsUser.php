@@ -128,12 +128,9 @@ if (count($lpList) == 0) {
             $totalTimeSpent = addScormTime($totalTimeSpent, $lpTotalTime);
         }
         $lp_total_status = disp_lesson_status($lpTotalStatus);
-        $displayTotalTime = (empty($lpAttemptsNb) && $lpTotalTime === "00:00:00") ? "-" : q($lpTotalTime);
-        $displayProgress = (empty($lpAttemptsNb) && empty($lpProgress)) ? "-" : disp_progress_bar($lpProgress, 1);
-        $dataProgress = ($displayProgress === "-") ? $displayProgress : $lpProgress . "%";
-        $displayScore = (empty($lpAttemptsNb) && empty($lpScore)) ? "-" : $lpScore . "%";
+        $lpDisplay = format_lp_progress_display($lpAttemptsNb, $lpTotalTime, $lpProgress, $lpScore);
         $data[] = [ $lpDetails->name, q($lpAttemptsNb), format_locale_date(strtotime($lpTotalStarted), 'short'),
-                    format_locale_date(strtotime($lpTotalAccessed), 'short'), $displayTotalTime, $lp_total_status, $dataProgress, $displayScore
+                    format_locale_date(strtotime($lpTotalAccessed), 'short'), $lpDisplay['time'], $lp_total_status, $lpDisplay['progress_text'], $lpDisplay['score']
                   ];
         $tool_content .= "<tr>";
         if (!isset($_GET['pdf'])) {
@@ -145,10 +142,10 @@ if (count($lpList) == 0) {
         $tool_content .= "<td style='text-align: center;'>" . q($lpAttemptsNb) ."</td>
                           <td>" . format_locale_date(strtotime($lpTotalStarted), 'short') . "</td>
                           <td>" . format_locale_date(strtotime($lpTotalAccessed), 'short') . "</td>
-                          <td>" . $displayTotalTime . "</td>
+                          <td>" . $lpDisplay['time'] . "</td>
                           <td>" . $lp_total_status . "</td>
-                          <td>" . $displayProgress . "</td>
-                          <td class='text-end'>" . $displayScore . "</td>
+                          <td>" . $lpDisplay['progress_html'] . "</td>
+                          <td class='text-end'>" . $lpDisplay['score'] . "</td>
                      </tr>";
     }
 
