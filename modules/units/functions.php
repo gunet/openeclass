@@ -474,6 +474,8 @@ function show_resources($unit_id)
                     bootbox.dialog({
                         size: 'large',
                         title: fileTitle,
+                        onEscape: function() {},
+                        backdrop: true,
                         message: '<div class=\"row\">'+
                                     '<div class=\"col-sm-12\">'+
                                         '<div class=\"iframe-container\" style=\"height:500px;\"><iframe title=\"'+fileTitle+'\" id=\"fileFrame\" src=\"'+fileURL+'\" style=\"width:100%; height:500px;\"></iframe></div>'+
@@ -703,6 +705,8 @@ function show_resources($unit_id)
                     bootbox.dialog({
                         size: 'large',
                         title: fileTitle,
+                        onEscape: function() {},
+                        backdrop: true,
                         message: '<div class=\"row\">'+
                                     '<div class=\"col-sm-12\">'+
                                         '<div class=\"iframe-container\" style=\"height:500px;\"><iframe title=\"'+fileTitle+'\" id=\"fileFrame\" src=\"'+fileURL+'\" style=\"width:100%; height:500px;\"></iframe></div>'+
