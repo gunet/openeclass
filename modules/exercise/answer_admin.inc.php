@@ -814,11 +814,15 @@ if (isset($submitAnswers) || isset($buttonBack)) {
 
         $choicesOrdArr = [];
         foreach ($totalAnsFromOrderingChoices as $inde_x) {
-            $choicesOrdArr[] = $inde_x . '|' . $_POST['ordering_answer'][$inde_x] . '|' . fix_float($_POST['ordering_answer_grade'][$inde_x]);
+            $choicesOrdArr[] = [
+                'index' => $inde_x,
+                'value' => $_POST['ordering_answer'][$inde_x],
+                'grade' => fix_float($_POST['ordering_answer_grade'][$inde_x])
+            ]; 
         }
         $choices_ordering_answer = '';
         if (count($choicesOrdArr) > 0) {
-            $choices_ordering_answer = implode(',', $choicesOrdArr);
+            $choices_ordering_answer = serialize($choicesOrdArr);
         }
 
         $reponse = purify($choices_ordering_answer);

@@ -762,15 +762,14 @@ if (!class_exists('Answer')):
 
             $reformattedItems = [];
             $questionId = $this->questionId;
-            $answer = Database::get()->querySingle("SELECT answer FROM exercise_answer WHERE question_id = ?d", $questionId);
-            if ($answer) {
-                $items = explode(',', $answer->answer);
-                foreach ($items as $item) {
-                    $lastPipePos = strrpos($item, '|');
-                    if ($lastPipePos !== false) {
-                        $cleanItem = substr($item, 0, $lastPipePos);
-                        list($index, $value) = explode('|', $cleanItem);
-                        $reformattedItems[(int)$index] = $value;
+            $answer_temp = Database::get()->querySingle("SELECT answer FROM exercise_answer WHERE question_id = ?d", $questionId);
+            if ($answer_temp) {
+                $arr_answer = unserialize($answer_temp->answer);
+                if (count($arr_answer) > 0) {
+                    foreach ($arr_answer as $item) {
+                        $index = $item['index'];
+                        $value = $item['value'];
+                        $reformattedItems[$index] = $value;
                     }
                 }
             }
@@ -786,21 +785,15 @@ if (!class_exists('Answer')):
 
             $resultArray = [];
             $questionId = $this->questionId;
-            $answer = Database::get()->querySingle("SELECT answer FROM exercise_answer WHERE question_id = ?d", $questionId);
-            if ($answer) {
-                $items = explode(',', $answer->answer);
-                $cleanedItems = [];
-                foreach ($items as $item) {
-                    $item = trim($item);
-                    $parts = explode('|', $item);
-                    if (count($parts) == 3) {
-                        $cleanedItems[] = $parts[0] . "|" . $parts[2];
+            $answer_temp = Database::get()->querySingle("SELECT answer FROM exercise_answer WHERE question_id = ?d", $questionId);
+            if ($answer_temp) {
+                $arr_answer = unserialize($answer_temp->answer);
+                if (count($arr_answer) > 0) {
+                    foreach ($arr_answer as $item) {
+                        $index = $item['index'];
+                        $grade = $item['grade'];
+                        $resultArray[$index] = $grade;
                     }
-                }
-                $cleanedString = implode(',', $cleanedItems);
-                foreach ($cleanedItems as $item) {
-                    $arr = explode('|', $item);
-                    $resultArray[$arr[0]] = $arr[1]; // cast to int if needed
                 }
             }
 
@@ -815,13 +808,13 @@ if (!class_exists('Answer')):
         public function get_total_ordering_answers() {
 
             $questionId = $this->questionId;
-            $items = [];
-            $answer = Database::get()->querySingle("SELECT answer FROM exercise_answer WHERE question_id = ?d", $questionId);
-            if ($answer) {
-                $items = explode(',', $answer->answer);
+            $arr_answer = [];
+            $answer_temp = Database::get()->querySingle("SELECT answer FROM exercise_answer WHERE question_id = ?d", $questionId);
+            if ($answer_temp) {
+                $arr_answer = unserialize($answer_temp->answer);
             }
 
-            return count($items);
+            return count($arr_answer);
 
         }
 
@@ -841,14 +834,13 @@ if (!class_exists('Answer')):
         public function get_total_correct_ordering_predefined_answers() {
 
             $questionId = $this->questionId;
-            $answer = Database::get()->querySingle("SELECT answer FROM exercise_answer WHERE question_id = ?d", $questionId);
+            $answer_temp = Database::get()->querySingle("SELECT answer FROM exercise_answer WHERE question_id = ?d", $questionId);
             $total = 0;
-            if ($answer) {
-                $q = explode(',', $answer->answer);
-                if (count($q) > 0) {
-                    foreach ($q as $r) {
-                        $arr = explode('|', $r);
-                        if (count($arr) == 3 && $arr[2] > 0) {
+            if ($answer_temp) {
+                $arr_answer = unserialize($answer_temp->answer);
+                if (count($arr_answer) > 0) {
+                    foreach ($arr_answer as $item) {
+                        if ($item['grade'] > 0) {
                             $total++;
                         }
                     }
