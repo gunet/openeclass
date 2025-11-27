@@ -2263,7 +2263,7 @@ $langCompleteTheTextOfTheQuestion = "Εκφώνηση";
 $langCompleteVariablesOfQuestionInfo = '
 <ul class="text-dark">
 <li class="text-dark">Συμπληρώστε την εκφώνηση στο πεδίο κειμένου <strong class="text-dark">Εκφώνηση</strong>.</li>
-<li class="text-dark">Κάθε στοιχείο θα πρέπει να ορίζεται μέσα σε <strong class="text-dark">άγκυστρα {}</strong>.</li>
+<li class="text-dark">Κάθε στοιχείο θα πρέπει να ορίζεται μέσα σε <strong class="text-dark">άγκιστρα {}</strong>.</li>
 <li class="text-dark">Συμπληρώστε τον αριθμητικό τύπο που δίνει το απότελεσμα της άσκησης καθώς και τον βαθμό στα πεδία <strong class="text-dark">Τύπος απάντησης</strong> και <strong class="text-dark">Βαθμός</strong> αντίστοιχα. Το σύστημα υπολογίζει αυτόματα το τελικό αποτέλεσμα της άσκησης βασισμένο στον τύπο που δώσατε.</li>
 <li class="text-dark">Καταχωρήστε τις τιμές των στοιχείων από την <strong class="text-dark">επεξεργασία στοιχείων</strong>. Μπορείτε επίσης να ορίσετε τυχαίες τιμές από το εύρος τιμών.</li>
 </ul>
@@ -2418,6 +2418,8 @@ $langExerciseStartHelpBlock = "Κάντε κλικ για να ορίσετε μ
 $langExerciseEndHelpBlock = "Κάντε κλικ για να ορίσετε Ημερομηνία Λήξης Άσκησης";
 $langExerciseDuration = "Διάρκεια Εκτέλεσης";
 $langExerciseConstrain = "Χρονικός περιορισμός";
+$langExerciseGradePass = "Βαθμός Επιτυχίας";
+$langExerciseGradePassLegend = "Η άσκηση θεωρείται ότι εκτελέστηκε με τπιτυχία αν ο βαθμός του $langsOfStudent είναι μεγαλύτερος ή ίσος από το βαθμό επιτυχίας";
 $langExerciseEg = "π.χ.";
 $langExerciseConstrainUnit = "λεπτά";
 $langExerciseConstrainExplanation = "0 για καθόλου περιορισμό";
@@ -4253,7 +4255,8 @@ $langTypesRegistration = "Ανοικτά με εγγραφή";
 $langTypeInactive = "Ανενεργό";
 $langAllTypes = "(όλοι οι τύποι πρόσβασης)";
 $langAllFacultes = "Σε όλες τις $langsFaculties";
-$langSuccess = "Η εγγραφή σας ως διαχειριστή έγινε με επιτυχία";
+$langSuccess = "Επιτυχία";
+$langFailure = "Αποτυχία";
 $langAuthRequest = "Απαιτείται εξακρίβωση στοιχείων";
 $langAlreadySubscribe = "Είστε ήδη εγγεγραμμένος";
 $langAs = "ως";

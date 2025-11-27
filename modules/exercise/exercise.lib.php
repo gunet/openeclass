@@ -185,6 +185,7 @@ function display_exercise($exercise_id): void
             'url' => "exercise_submit.php?course=$course_code&exerciseId=$exercise_id",
             'icon' => 'fa-play-circle',
             'button-class' => 'btn-danger',
+            'level' => 'primary',
             'show' => (!empty($question_list))
         ],
         ['title' => $langQuestionsManagement,
