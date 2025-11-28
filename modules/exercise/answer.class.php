@@ -284,12 +284,25 @@ if (!class_exists('Answer')):
 
             $questionId = $this->questionId;
             $answer = Database::get()->querySingle("SELECT answer FROM exercise_answer WHERE question_id = ?d", $questionId);
+
+            // if ($answer) {
+            //     $q = explode('::',$answer->answer);
+            //     if (count($q) > 0) {
+            //         return $q[0];
+            //     }
+            // }
+
+            $text = '';
             if ($answer) {
-                $q = explode('::',$answer->answer);
-                if (count($q) > 0) {
-                    return $q[0];
+                $arr = unserialize($answer->answer);
+                if (count($arr) > 0) {
+                    foreach ($arr as $r) {
+                        $text = $r['pr_text'];
+                    }
                 }
             }
+
+            return $text;
 
         }
 
@@ -301,18 +314,32 @@ if (!class_exists('Answer')):
 
             $questionId = $this->questionId;
             $answer = Database::get()->querySingle("SELECT answer FROM exercise_answer WHERE question_id = ?d", $questionId);
-            $TempArr = [];
             $textWithAnswer = [];
+            $predefinedAnswers = [];
+
+            // if ($answer) {
+            //     $q = explode('::', $answer->answer);
+            //     if (count($q) > 0) {
+            //         $str = $q[1];
+            //         $arr = explode(',', $str);
+            //         foreach ($arr as $value) {
+            //             $arr2 = explode('|', $value);
+            //             if (count($arr2) == 3) {
+            //                 $textWithAnswer[$arr2[0]+1] = $arr2[1];
+            //             }
+            //         }
+            //     }
+            // }
 
             if ($answer) {
-                $q = explode('::', $answer->answer);
-                if (count($q) > 0) {
-                    $str = $q[1];
-                    $arr = explode(',', $str);
-                    foreach ($arr as $value) {
-                        $arr2 = explode('|', $value);
-                        if (count($arr2) == 3) {
-                            $textWithAnswer[$arr2[0]+1] = $arr2[1];
+                $arr = unserialize($answer->answer);
+                if (count($arr) > 0) {
+                    foreach ($arr as $r) {
+                        $predefinedAnswers = unserialize($r['pr_answers']);
+                        if (count($predefinedAnswers) > 0) {
+                            foreach ($predefinedAnswers as $p) {
+                                $textWithAnswer[$p['index']+1] = $p['choice_answer'];
+                            }
                         }
                     }
                 }
@@ -331,16 +358,31 @@ if (!class_exists('Answer')):
             $questionId = $this->questionId;
             $answer = Database::get()->querySingle("SELECT answer FROM exercise_answer WHERE question_id = ?d", $questionId);
             $markerWithGrade = [];
+            $predefinedAnswers = [];
+
+            // if ($answer) {
+            //     $q = explode('::', $answer->answer);
+            //     if (count($q) > 0) {
+            //         $str = $q[1];
+            //         $arr = explode(',', $str);
+            //         foreach ($arr as $value) {
+            //             $arr2 = explode('|', $value);
+            //             if (count($arr2) == 3) {
+            //                 $markerWithGrade[$arr2[0]+1] = $arr2[2];
+            //             }
+            //         }
+            //     }
+            // }
 
             if ($answer) {
-                $q = explode('::', $answer->answer);
-                if (count($q) > 0) {
-                    $str = $q[1];
-                    $arr = explode(',', $str);
-                    foreach ($arr as $value) {
-                        $arr2 = explode('|', $value);
-                        if (count($arr2) == 3) {
-                            $markerWithGrade[$arr2[0]+1] = $arr2[2];
+                $arr = unserialize($answer->answer);
+                if (count($arr) > 0) {
+                    foreach ($arr as $r) {
+                        $predefinedAnswers = unserialize($r['pr_answers']);
+                        if (count($predefinedAnswers) > 0) {
+                            foreach ($predefinedAnswers as $p) {
+                                $markerWithGrade[$p['index']+1] = $p['choice_grade'];
+                            }
                         }
                     }
                 }
@@ -423,18 +465,18 @@ if (!class_exists('Answer')):
          * @brief Retrieve the predefined answers for each question.
          * @author - Nikos Mpalamoutis
          */
-        public function get_drag_and_drop_answers() {
+        // public function get_drag_and_drop_answers() {
 
-            $questionId = $this->questionId;
-            $answer = Database::get()->querySingle("SELECT answer FROM exercise_answer WHERE question_id = ?d", $questionId);
-            if ($answer) {
-                $q = explode('::',$answer->answer);
-                if (count($q) > 1) {
-                    return $q[1];
-                }
-            }
+        //     $questionId = $this->questionId;
+        //     $answer = Database::get()->querySingle("SELECT answer FROM exercise_answer WHERE question_id = ?d", $questionId);
+        //     if ($answer) {
+        //         $q = explode('::',$answer->answer);
+        //         if (count($q) > 1) {
+        //             return $q[1];
+        //         }
+        //     }
 
-        }
+        // }
 
          /**
          * @brief Getting the total number of predefined answers.
@@ -444,10 +486,22 @@ if (!class_exists('Answer')):
 
             $questionId = $this->questionId;
             $answer = Database::get()->querySingle("SELECT answer FROM exercise_answer WHERE question_id = ?d", $questionId);
+            // if ($answer) {
+            //     $q = explode('::',$answer->answer);
+            //     if (count($q) > 1) {
+            //         $res = explode(',', $q[1]);
+            //         return count($res);
+            //     }
+            // } else {
+            //     return 2; // minimum answers
+            // }
+
             if ($answer) {
-                $q = explode('::',$answer->answer);
-                if (count($q) > 1) {
-                    $res = explode(',', $q[1]);
+                $q = unserialize($answer->answer);
+                if (count($q) > 0) {
+                    foreach ($q as $r) {
+                        $res = unserialize($r['pr_answers']);
+                    }
                     return count($res);
                 }
             } else {
@@ -465,14 +519,30 @@ if (!class_exists('Answer')):
             $questionId = $this->questionId;
             $answer = Database::get()->querySingle("SELECT answer FROM exercise_answer WHERE question_id = ?d", $questionId);
             $total = 0;
+            // if ($answer) {
+            //     $q = explode('::',$answer->answer);
+            //     if (count($q) > 1) {
+            //         $res = explode(',', $q[1]);
+            //         foreach ($res as $r) {
+            //             $arr = explode('|', $r);
+            //             if (count($arr) == 3 && $arr[2] > 0) {
+            //                 $total++;
+            //             }
+            //         }
+            //     }
+            // }
+
             if ($answer) {
-                $q = explode('::',$answer->answer);
-                if (count($q) > 1) {
-                    $res = explode(',', $q[1]);
-                    foreach ($res as $r) {
-                        $arr = explode('|', $r);
-                        if (count($arr) == 3 && $arr[2] > 0) {
-                            $total++;
+                $q = unserialize($answer->answer);
+                if (count($q) > 0) {
+                    foreach ($q as $r) {
+                        $arr = unserialize($r['pr_answers']);
+                        if (count($arr) > 0) {
+                            foreach ($arr as $r) {
+                                if ($r['choice_grade'] > 0) {
+                                    $total++;
+                                }
+                            }
                         }
                     }
                 }
@@ -491,17 +561,33 @@ if (!class_exists('Answer')):
             $finalArray = [];
             $questionId = $this->questionId;
             $answer = Database::get()->querySingle("SELECT answer FROM exercise_answer WHERE question_id = ?d", $questionId);
+            // if ($answer) {
+            //     $q = explode('::', $answer->answer);
+            //     if (count($q) > 1) {
+            //         $items = explode(',', $q[1]);
+            //         $reformattedItems = [];
+            //         foreach ($items as $item) {
+            //             $lastPipePos = strrpos($item, '|');
+            //             if ($lastPipePos !== false) {
+            //                 $cleanItem = substr($item, 0, $lastPipePos);
+            //                 list($index, $value) = explode('|', $cleanItem);
+            //                 $reformattedItems[(int)$index] = $value;
+            //             }
+            //         }
+            //         ksort($reformattedItems);
+            //         $finalArray = array_values($reformattedItems);
+            //     }
+            // }
+
             if ($answer) {
-                $q = explode('::', $answer->answer);
-                if (count($q) > 1) {
-                    $items = explode(',', $q[1]);
-                    $reformattedItems = [];
-                    foreach ($items as $item) {
-                        $lastPipePos = strrpos($item, '|');
-                        if ($lastPipePos !== false) {
-                            $cleanItem = substr($item, 0, $lastPipePos);
-                            list($index, $value) = explode('|', $cleanItem);
-                            $reformattedItems[(int)$index] = $value;
+                $q = unserialize($answer->answer);
+                if (count($q) > 0) {
+                    foreach ($q as $r) {
+                        $arr = unserialize($r['pr_answers']);
+                        if (count($arr) > 0) {
+                            foreach ($arr as $r) {
+                                $reformattedItems[$r['index']] = $r['choice_answer'];
+                            }
                         }
                     }
                     ksort($reformattedItems);
@@ -522,22 +608,38 @@ if (!class_exists('Answer')):
             $resultArray = [];
             $questionId = $this->questionId;
             $answer = Database::get()->querySingle("SELECT answer FROM exercise_answer WHERE question_id = ?d", $questionId);
+            $predefinedAnswers = [];
+
+            // if ($answer) {
+            //     $q = explode('::',$answer->answer);
+            //     if (count($q) > 1) {
+            //         $items = explode(',', $q[1]);
+            //         $cleanedItems = [];
+            //         foreach ($items as $item) {
+            //             $item = trim($item);
+            //             $parts = explode('|', $item);
+            //             if (count($parts) == 3) {
+            //                 $cleanedItems[] = $parts[0] . "|" . $parts[2];
+            //             }
+            //         }
+            //         $cleanedString = implode(',', $cleanedItems);
+            //         foreach ($cleanedItems as $item) {
+            //             $arr = explode('|', $item);
+            //             $resultArray[$arr[0]] = $arr[1]; // cast to int if needed
+            //         }
+            //     }
+            // }
+
             if ($answer) {
-                $q = explode('::',$answer->answer);
-                if (count($q) > 1) {
-                    $items = explode(',', $q[1]);
-                    $cleanedItems = [];
-                    foreach ($items as $item) {
-                        $item = trim($item);
-                        $parts = explode('|', $item);
-                        if (count($parts) == 3) {
-                            $cleanedItems[] = $parts[0] . "|" . $parts[2];
+                $arr = unserialize($answer->answer);
+                if (count($arr) > 0) {
+                    foreach ($arr as $r) {
+                        $predefinedAnswers = unserialize($r['pr_answers']);
+                        if (count($predefinedAnswers) > 0) {
+                            foreach ($predefinedAnswers as $p) {
+                                $resultArray[$p['index']] = $p['choice_grade'];
+                            }
                         }
-                    }
-                    $cleanedString = implode(',', $cleanedItems);
-                    foreach ($cleanedItems as $item) {
-                        $arr = explode('|', $item);
-                        $resultArray[$arr[0]] = $arr[1]; // cast to int if needed
                     }
                 }
             }
@@ -550,33 +652,33 @@ if (!class_exists('Answer')):
        *
        * @author - Nikos Mpalamoutis
        */
-        public function get_drag_and_drop_answer_grade_as_text() {
+        // public function get_drag_and_drop_answer_grade_as_text() {
 
-            $resultArray = [];
-            $questionId = $this->questionId;
-            $answer = Database::get()->querySingle("SELECT answer FROM exercise_answer WHERE question_id = ?d", $questionId);
-            if ($answer) {
-                $q = explode('::',$answer->answer);
-                if (count($q) > 1) {
-                    $items = explode(',', $q[1]);
-                    $cleanedItems = [];
-                    foreach ($items as $item) {
-                        $item = trim($item);
-                        $parts = explode('|', $item);
-                        if (count($parts) == 3) {
-                            $cleanedItems[] = $parts[0] . "|" . $parts[2];
-                        }
-                    }
-                    $cleanedString = implode(',', $cleanedItems);
-                    foreach ($cleanedItems as $item) {
-                        $arr = explode('|', $item);
-                        $resultArray[$arr[0]] = $arr[1]; // cast to int if needed
-                    }
-                }
-            }
+        //     $resultArray = [];
+        //     $questionId = $this->questionId;
+        //     $answer = Database::get()->querySingle("SELECT answer FROM exercise_answer WHERE question_id = ?d", $questionId);
+        //     if ($answer) {
+        //         $q = explode('::',$answer->answer);
+        //         if (count($q) > 1) {
+        //             $items = explode(',', $q[1]);
+        //             $cleanedItems = [];
+        //             foreach ($items as $item) {
+        //                 $item = trim($item);
+        //                 $parts = explode('|', $item);
+        //                 if (count($parts) == 3) {
+        //                     $cleanedItems[] = $parts[0] . "|" . $parts[2];
+        //                 }
+        //             }
+        //             $cleanedString = implode(',', $cleanedItems);
+        //             foreach ($cleanedItems as $item) {
+        //                 $arr = explode('|', $item);
+        //                 $resultArray[$arr[0]] = $arr[1]; // cast to int if needed
+        //             }
+        //         }
+        //     }
 
-            return implode(',',$resultArray);
-        }
+        //     return implode(',',$resultArray);
+        // }
 
 
         /**

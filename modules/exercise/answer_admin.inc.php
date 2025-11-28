@@ -345,9 +345,7 @@ if (isset($submitAnswers) || isset($buttonBack)) {
             }
         }
 
-        $q_text_1 = str_replace(':', ' ', $_POST['drag_and_drop_question']);
-        $q_text_2 = str_replace(',', ' ', $q_text_1);
-        $q_text = purify($q_text_2);
+        $q_text = purify($_POST['drag_and_drop_question']);
         // Use preg_match_all to find all numbers within brackets
         preg_match_all('/\[(\d+)\]/', $q_text, $matches);
         // $matches[1] contains all the captured numbers
@@ -418,17 +416,19 @@ if (isset($submitAnswers) || isset($buttonBack)) {
         sort($totalAnsFromChoices);
         $choicesAnsArr = [];
         foreach ($totalAnsFromChoices as $inde_x) {
-            $new_value_1 = str_replace(':', ' ', $_POST['choice_answer'][$inde_x]);
-            $new_value_2 = str_replace(',', ' ', $new_value_1);
-            $choicesAnsArr[] = $inde_x . '|' . purify($new_value_2) . '|' . $_POST['choice_grade'][$inde_x];
+            $choicesAnsArr[] = [
+                'index' => $inde_x,
+                'choice_answer' => purify($_POST['choice_answer'][$inde_x]),
+                'choice_grade' => fix_float($_POST['choice_grade'][$inde_x])
+            ];
         }
-        $choices_ans = '';
-        if (count($choicesAnsArr) > 0) {
-            $choices_ans = implode(',', $choicesAnsArr);
-            $choices_ans = '::' . $choices_ans;
-        }
+        $arrResponse = [];
+        $arrResponse[] = [
+            'pr_text' => $q_text,
+            'pr_answers' => serialize($choicesAnsArr)
+        ];
 
-        $reponse = $q_text . $choices_ans;
+        $reponse = serialize($arrResponse);
         $objAnswer->createAnswer($reponse, 0, '', 0, 1);
         $objAnswer->save();
         if (isset($_POST['choice_grade'])) {
