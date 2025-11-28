@@ -842,7 +842,9 @@ function shapesCreationProcess() {
             var number = getNumberOftheText(addValuesId);
             if (confirm(lang.point+' '+number+' : '+lang.confirm)) {
                 //var number = getNumberOftheText(addValuesId);
-                var markerAnswer = $('#marker-answer-'+number).val();
+                var markerAnswerTmp = $('#marker-answer-'+number).val();
+                var new_value1 = markerAnswerTmp.replace(/:/g, ' ');
+                var markerAnswer = new_value1.replace(/,/g, ' ');
                 var markerGrade = fixFloat($('#marker-grade-'+number).val());
                 var markerCoordinates = $('#shape-coordinates-'+number).val();
                 var markerShape = $('#shapeType-'+number).val();
