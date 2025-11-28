@@ -42,6 +42,40 @@ require_once __DIR__ . '/../services/BadgePublicationService.php';
 // Set JSON content type
 header('Content-Type: application/json');
 
+// Validate CSRF token for POST requests
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $csrfToken = null;
+    
+    // Check for token in POST data
+    if (isset($_POST['token'])) {
+        $csrfToken = $_POST['token'];
+    }
+    // Check for token in custom header (for AJAX requests)
+    elseif (isset($_SERVER['HTTP_X_CSRF_TOKEN'])) {
+        $csrfToken = $_SERVER['HTTP_X_CSRF_TOKEN'];
+    }
+    // Check in JSON body
+    else {
+        $rawInput = file_get_contents('php://input');
+        if ($rawInput) {
+            $jsonData = json_decode($rawInput, true);
+            if (isset($jsonData['token'])) {
+                $csrfToken = $jsonData['token'];
+            }
+        }
+    }
+    
+    if (!$csrfToken || !validate_csrf_token($csrfToken)) {
+        http_response_code(403);
+        echo json_encode([
+            'success' => false,
+            'errorcode' => 403,
+            'errormessage' => 'CSRF token validation failed. Please refresh the page and try again.'
+        ], JSON_UNESCAPED_UNICODE);
+        exit;
+    }
+}
+
 try {
     // Check if user is logged in
     if (!isset($uid) || $uid <= 0) {

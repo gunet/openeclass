@@ -72,6 +72,11 @@ $backpackConnectionService = new BackpackConnectionService();
 
 // Handle form submissions
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Validate CSRF token
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) {
+        csrf_token_error();
+    }
+    
     if (isset($_POST['action'])) {
         switch ($_POST['action']) {
             case 'connect':

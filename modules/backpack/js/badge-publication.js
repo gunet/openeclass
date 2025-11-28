@@ -84,11 +84,12 @@
 
                 if (providers && providers.length > 0) {
                     $.each(providers, function(index, provider) {
-                        providerSelect.append(
-                            '<option value="' + provider.id + '" data-provider-name="' + provider.name + '">' +
-                            provider.name +
-                            '</option>'
-                        );
+                        // Use DOM API to prevent XSS
+                        const option = document.createElement('option');
+                        option.value = provider.id;
+                        option.setAttribute('data-provider-name', provider.name);
+                        option.textContent = provider.name; // Safely sets text content
+                        providerSelect.append(option);
                     });
                     providerSelect.prop('disabled', false);
                     $('#publishBadgeModal').modal('show');
@@ -136,14 +137,22 @@
             // Show loading state
             this.setPublishButtonState('loading');
 
+            // Get CSRF token from the page
+            const csrfToken = document.querySelector('input[name="token"]')?.value || 
+                              document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+
             $.ajax({
                 url: '/modules/backpack/api/publish_badge.php',
                 method: 'POST',
                 dataType: 'json',
                 contentType: 'application/json',
+                headers: {
+                    'X-CSRF-Token': csrfToken
+                },
                 data: JSON.stringify({
                     user_badge_id: parseInt(userBadgeId),
-                    provider_id: parseInt(providerId)
+                    provider_id: parseInt(providerId),
+                    token: csrfToken
                 }),
                 success: function(response) {
                     if (response.success) {

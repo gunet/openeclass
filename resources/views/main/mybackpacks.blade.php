@@ -59,6 +59,7 @@
                                     <hr class='my-2'>
                                     <div class='text-end'>
                                         <form method='post' class='d-inline'>
+                                            {!! generate_csrf_token_form_field() !!}
                                             <input type='hidden' name='action' value='disconnect'>
                                             <button type='submit' class='btn deleteAdminBtn' 
                                                     onclick="return confirm('{{ trans('langConfirmDisconnectBackpack') }}')">
@@ -113,7 +114,7 @@
                                 </div>
                                 
                                 {{-- Sync Progress --}}
-                                <div id='sync-progress' style='display: none;' class='mt-3 p-3 bg-light border rounded'>
+                                <div id='sync-progress' style='display: none;' class='mt-3 p-3 border rounded'>
                                     <h6 class='mb-3'>
                                         <i class='fa fa-spinner fa-spin me-1'></i>
                                         {{ trans('langSyncingBadges') }}...
@@ -172,6 +173,7 @@
                         <div class='card-body'>
                             @if(count($availableProviders) > 0)
                                 <form method='post' id='backpackConnectionForm'>
+                                    {!! generate_csrf_token_form_field() !!}
                                     <input type='hidden' name='action' value='connect'>
                                     
                                     <div class='form-group mb-4'>
@@ -325,7 +327,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Validate form
             if (!providerId) {
-                showErrorBanner('{{ trans('langBackpackProviderRequired') }}');
+                showErrorBanner('{{ js_escape(trans('langBackpackProviderRequired')) }}');
                 return;
             }
             
@@ -334,7 +336,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const obVersion = selectedOption.getAttribute('data-ob-version');
             
             if ((obVersion === 'OpenBadge v2.0' || obVersion === 'OpenBadge v2.1') && (!email || !password)) {
-                showErrorBanner('{{ trans('langBackpackCredentialsRequired') }}');
+                showErrorBanner('{{ js_escape(trans('langBackpackCredentialsRequired')) }}');
                 return;
             }
             
@@ -369,8 +371,8 @@ document.addEventListener('DOMContentLoaded', function() {
                                        ));
                     
                     const errorMessage = isAuthError 
-                        ? '{{ trans('langWrongAuth') }}'
-                        : (data.error || '{{ trans('langBackpackConnectionFailed') }}');
+                        ? '{{ js_escape(trans('langWrongAuth')) }}'
+                        : (data.error || '{{ js_escape(trans('langBackpackConnectionFailed')) }}');
                     
                     showErrorBanner(errorMessage);
                     
@@ -381,7 +383,7 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .catch(error => {
                 // Network or other error
-                showErrorBanner('{{ trans('langBackpackConnectionFailed') }}');
+                showErrorBanner('{{ js_escape(trans('langBackpackConnectionFailed')) }}');
                 
                 // Reset button state
                 connectBtn.disabled = false;
@@ -689,7 +691,7 @@ document.addEventListener('DOMContentLoaded', function() {
         try {
             // Update progress
             syncProgressBar.style.width = '10%';
-            syncStatus.textContent = `{{ trans('langFetchingBadgesFromCollection') }}: ${escapeHtml(name)}...`;
+            syncStatus.textContent = '{{ js_escape(trans('langFetchingBadgesFromCollection')) }}' + `: ${escapeHtml(name)}...`;
             
             // Fetch the collection details with badges
             const collectionResponse = await fetch(`{{ $urlServer }}modules/backpack/api/collection_badges.php?collection_id=${encodeURIComponent(collectionId)}`, {
@@ -736,7 +738,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             
             syncProgressBar.style.width = '30%';
-            syncStatus.textContent = `{{ trans('langFoundBadgesToSync', ['count' => '${totalBadges}']) }}`.replace('${totalBadges}', totalBadges);
+            const foundBadgesMsg = '{{ js_escape(trans('langFoundBadgesToSync')) }}';
+            syncStatus.textContent = foundBadgesMsg.replace(':count', totalBadges);
             
             // Sync badges one by one
             let syncedCount = 0;
@@ -752,22 +755,27 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Update progress
                 const progress = 30 + Math.floor((i / totalBadges) * 60);
                 syncProgressBar.style.width = `${progress}%`;
-                syncStatus.textContent = `{{ trans('langSyncingBadge') }} ${i + 1}/${totalBadges}: ${escapeHtml(badgeName)}...`;
+                syncStatus.textContent = '{{ js_escape(trans('langSyncingBadge')) }}' + ` ${i + 1}/${totalBadges}: ${escapeHtml(badgeName)}...`;
                 
                 try {
+                    // Get CSRF token
+                    const csrfToken = document.querySelector('input[name="token"]')?.value;
+                    
                     // Call sync endpoint
                     const syncResponse = await fetch('{{ $urlServer }}modules/backpack/api/sync_badge.php', {
                         method: 'POST',
                         headers: {
                             'Accept': 'application/json',
-                            'Content-Type': 'application/json'
+                            'Content-Type': 'application/json',
+                            'X-CSRF-Token': csrfToken
                         },
                         credentials: 'same-origin',
                         body: JSON.stringify({
                             assertion_id: assertionId,
                             collection_id: collectionId,
                             collection_name: name,
-                            badge_data: badge
+                            badge_data: badge,
+                            token: csrfToken
                         })
                     });
                     
