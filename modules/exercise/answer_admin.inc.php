@@ -577,10 +577,10 @@ if (isset($submitAnswers) || isset($buttonBack)) {
                 $checkOkVal = 1;
             }
 
-            // Check if the Answer type field contains the type of expression with the final result of it seperated by the colon symbol (:)
+            // Check if the Answer type field contains the type of expression with its final result seperated by the double vertical bar symbol (||)
             if (count($uniqueMandatoryWildCards) == 0 && count($_POST['calculated_answer']) > 0) {
                 foreach ($_POST['calculated_answer'] as $an) {
-                    $tmpArr = explode(':', $an);
+                    $tmpArr = explode('||', $an);
                     if (count($tmpArr) < 2) {
                         $checkOk = false;
                         $checkOkVal = 4;
@@ -676,13 +676,29 @@ if (isset($submitAnswers) || isset($buttonBack)) {
                 // Inserting the predefined answers for the current question in database.
                 $questionWeighting = $nbrGoodAnswers = 0;
                 for ($i = 1; $i <= count($_POST['calculated_answer']); $i++) {
-                    $reponse[$i] = purify($_POST['calculated_answer'][$i]);
+                    $cal_ans = []; 
+                    $finalResult = '';
+                    $arExpression = '';
                     if ($wildCardOptions) {
-                        $resultOfExpression = evaluateExpression($reponse[$i], $questionId);
+                        $arExpression = purify($_POST['calculated_answer'][$i]);
+                        $resultOfExpression = evaluateExpression(purify($_POST['calculated_answer'][$i]), $questionId);
                         if ($resultOfExpression or $resultOfExpression == 0) {
-                            $reponse[$i] = $reponse[$i] . ':' . $resultOfExpression;
+                            $finalResult = $resultOfExpression;
+                        }
+                    } else {
+                        // Special case when wildcard does not exist and we have added by hand the result of the arithmetic expression.
+                        // We seperate the arithmetic expression from its result using the double vertical bar symbol ||
+                        $writableResult = explode('||', purify($_POST['calculated_answer'][$i]));
+                        if (count($writableResult) > 1) {
+                            $arExpression = $writableResult[0];
+                            $finalResult = $writableResult[1];
                         }
                     }
+                    $cal_ans[] = [
+                        'expression' => $arExpression,
+                        'result' => $finalResult
+                    ]; 
+                    $reponse[$i] = serialize($cal_ans);  
                     $comment[$i] = '';
                     $weighting[$i] = fix_float($_POST['calculated_answer_grade'][$i]);
                     $goodAnswer = ((isset($_POST['calculated_answer_grade'][$i]) && $_POST['calculated_answer_grade'][$i] > 0) ? 1 : 0);
@@ -1171,12 +1187,18 @@ if (isset($_GET['modifyAnswers'])) {
                 if (!isset($_POST['backModifyCalculated'])) {
                     $predefinedAns = Database::get()->queryArray("SELECT * FROM exercise_answer WHERE question_id = ?d", $questionId);
                     foreach ($predefinedAns as $an) {
-                        $arrAns = explode(':', $an->answer);
+                        $arrAns = unserialize($an->answer);
                         if (count($arrAns) > 0) {
+                            $res_expression = '';
+                            $res_result = '';
+                            foreach ($arrAns as $r) {
+                                $res_expression = $r['expression'];
+                                $res_result = $r['result'];
+                            }
                             if (is_null($options)) {
-                                $calculated_answer[$an->r_position] = $an->answer;
+                                $calculated_answer[$an->r_position] = $res_expression . '||' . $res_result;
                             } else {
-                                $calculated_answer[$an->r_position] = $arrAns[0];
+                                $calculated_answer[$an->r_position] = $res_expression;
                             }
                         } else {
                             $calculated_answer[$an->r_position] = '';
