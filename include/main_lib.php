@@ -5119,6 +5119,31 @@ function module_path($path) {
     return preg_replace('|^.*modules/([^/]+)/.*$|', '\1', $path);
 }
 
+/**
+ * @brief Get the current tenant users, if any
+ */
+function getTenantUsers() {
+    $tenant = getCurrentTenant();
+    $ret = array();
+
+    if (!$tenant) {
+        return $ret;
+    }
+
+    $tree = new Hierarchy();
+    $tenantNodes = $tree->getTenantNodes();
+
+    $tenantNodeIds = array_map(function($obj) {
+        return $obj->id;
+    }, $tenantNodes);
+
+    $tenantUsers = Database::get()->queryArray("SELECT DISTINCT u.id, u.surname, u.givenname, u.email, u.username
+                          FROM user u, user_department ud
+                          WHERE ud.department IN (" . implode(', ', $tenantNodeIds) . ")");
+
+    return $ret;
+}
+
 
 /**
  * @brief Get the current tenant, if any
@@ -5128,7 +5153,7 @@ function getCurrentTenant() {
 
     // If in course, get tenant of course
     if ($require_current_course and $course_id) {
-        return getCourseTenant($course_id)->id;
+        return getCourseTenant($course_id);
     }
 
     // If no user is logged in, there is no tenant
@@ -5138,10 +5163,9 @@ function getCurrentTenant() {
 
     // Get the current user's tenant and cache it in the session if found
     if (!isset($_SESSION['current_user_tenant'])) {
-        $_SESSION['current_user_tenant'] = getUserTenant($uid)->id;
-    } else {
-        $_SESSION['current_user_tenant'] = null;
+        $_SESSION['current_user_tenant'] = getUserTenant($uid);
     }
+
     return $_SESSION['current_user_tenant'];
 }
 
@@ -5149,7 +5173,7 @@ function getCurrentTenant() {
  * @brief Get the tenant a course belongs to
  */
 function getCourseTenant($course_id) {
-    $tenant = Database::get()->querySingle('SELECT tenant.id, hierarchy.id, hierarchy.lft, hierarchy.rgt
+    $tenant = Database::get()->querySingle('SELECT tenant.id, hierarchy.id AS hierarchy_id, hierarchy.lft, hierarchy.rgt
        FROM tenant JOIN hierarchy ON tenant.department_id = hierarchy.id,
             course_department JOIN hierarchy AS course_hierarchy ON department = course_hierarchy.id
        WHERE course = ?d AND course_hierarchy.lft BETWEEN hierarchy.lft AND hierarchy.rgt',
@@ -5165,7 +5189,7 @@ function getCourseTenant($course_id) {
  * @brief Get the tenant a user belongs to
  */
 function getUserTenant($user_id) {
-    $tenant = Database::get()->querySingle('SELECT tenant.id, hierarchy.id, hierarchy.lft, hierarchy.rgt
+    $tenant = Database::get()->querySingle('SELECT tenant.id, hierarchy.id AS hierarchy_id, hierarchy.lft, hierarchy.rgt
        FROM tenant JOIN hierarchy ON tenant.department_id = hierarchy.id,
             user_department JOIN hierarchy AS user_hierarchy ON department = user_hierarchy.id
        WHERE user = ?d AND user_hierarchy.lft BETWEEN hierarchy.lft AND hierarchy.rgt',

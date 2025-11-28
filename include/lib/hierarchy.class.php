@@ -327,15 +327,27 @@ class Hierarchy {
 
     /**
      * Compile an array with the root nodes (nodes of 0 depth).
-     * When a tenant restriction is active, only the tenant's root node is returned
+     * When a tenant restriction is active, only the tenant's root node and tenant independent root nodes are returned.
      *
      * @return array
      */
     public function buildRootsArray() {
         $roots = [];
         $tenantRoot = $this->getTenantRoot();
-        $cb = function($row) use (&$roots, $tenantRoot) {
-            if (!$tenantRoot or ($row->lft >= $tenantRoot->lft and $row->rgt <= $tenantRoot->rgt)) {
+
+        // Fetch department ids that belong to tenants
+        $tenantDeptIds = Database::get()->queryArray("SELECT department_id FROM tenant");
+
+        // Convert array of objects to array of ids
+        $tenantDeptIds = array_map(function($obj) {
+            return $obj->department_id;
+        }, $tenantDeptIds);
+
+        $cb = function($row) use (&$roots, $tenantRoot, $tenantDeptIds) {
+            // Include root nodes that don't belong to any tenant
+            $isTenantIndependentRootNode = !in_array($row->id, $tenantDeptIds);
+
+            if (!$tenantRoot or $isTenantIndependentRootNode or ($row->lft >= $tenantRoot->lft and $row->rgt <= $tenantRoot->rgt)) {
                 $roots[] = $row;
             }
         };
@@ -363,6 +375,26 @@ class Hierarchy {
         }
 
         return null;
+    }
+
+    /**
+     * Get all the nodes of the currently-active tenant, if any
+     *
+     * @return array
+     */
+    public function getTenantNodes() {
+        $tenant = getCurrentTenant();
+
+        if (!$tenant) {
+            return [];
+        }
+
+        $tenantNodes = Database::get()->queryArray(
+            'SELECT id, name, lft, rgt FROM hierarchy WHERE lft >= ?d AND rgt <= ?d', 
+            $tenant->lft, $tenant->rgt
+        );
+
+        return $tenantNodes;
     }
 
     /**
@@ -1337,13 +1369,42 @@ jContent;
                 require_once('include/lib/user.class.php');
                 $user = new User();
                 $depIds = $user->getDepartmentIds($uid);
-                if (!in_array($nodeId, $depIds)) {
+                $nodeBelongsToTenant = $this->checkIfNodeBelongsToTenant($nodeId);
+
+                if (!in_array($nodeId, $depIds) && !$nodeBelongsToTenant) {
                     $allow = false;
                 }
             }
         }
 
         return $allow;
+    }
+
+    /**
+     * Check if a node belongs to the current tenant.
+     *
+     * @param  int     $nodeId
+     * @return boolean
+    */
+    public function checkIfNodeBelongsToTenant($nodeId) {
+        $tenantRoot = getCurrentTenant();
+
+        if (!$tenantRoot) {
+            return false;
+        }
+
+        $tenantNodes = $this->getTenantNodes();
+        $node = Database::get()->querySingle("SELECT id, name, lft, rgt FROM hierarchy WHERE id = ?d", $nodeId);
+        
+        foreach ($tenantNodes as $tenantNode) {
+            if ($tenantNode->id === $node->id) {
+                return true;
+            }
+
+            continue;
+        }
+
+        return false;
     }
 
 }
