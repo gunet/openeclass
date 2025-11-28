@@ -313,6 +313,7 @@ $displayResults = $objExercise->selectResults();
 $exerciseRange = $objExercise->selectRange();
 $canonical_score = $objExercise->canonicalize_exercise_score($exercise_user_record->total_score, $exercise_user_record->total_weighting);
 $displayScore = $objExercise->selectScore();
+$gradePass = $objExercise->getPassingGrade();
 $exerciseAttemptsAllowed = $objExercise->selectAttemptsAllowed();
 $calc_grade_method = $objExercise->getCalcGradeMethod();
 $userAttempts = Database::get()->querySingle("SELECT COUNT(*) AS count FROM exercise_user_record WHERE eid = ?d AND uid= ?d", $exercise_user_record->eid, $uid)->count;
@@ -386,15 +387,23 @@ if ($user) { // user details
 $tool_content .= "</div>";
 $tool_content .= "<div class='card-body'>";
 
-$message_range = '';
+$message_range = $grade_icon = '';
 $canonicalized_message_range = "<strong>$exercise_user_record->total_score / $exercise_user_record->total_weighting</strong>";
+
+if (!is_null($gradePass) && $gradePass > 0) {
+    if ($canonical_score >= $objExercise->canonicalize_exercise_pass_grade($gradePass, $exercise_user_record->total_weighting)) {
+        $grade_icon = "<span class='fa-solid fa-check ps-1' style='color: green;' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-title='$langSuccess'></span>";
+    } else {
+        $grade_icon = "<span class='fa-solid fa-times ps-1' style='color: red;' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-title='$langFailure'></span>";
+    }
+}
 if ($exerciseRange > 0) { // exercise grade range (if any)
     $canonicalized_message_range = "<strong><span>$canonical_score</span> / $exerciseRange</strong>";
     $message_range = "<small> (<strong>$exercise_user_record->total_score / $exercise_user_record->total_weighting</strong>)</small>";
 }
 
 if ($showScore) {
-    $tool_content .= "<p>$langTotalScore: $canonicalized_message_range&nbsp;&nbsp;$message_range</p>";
+    $tool_content .= "<p>$langTotalScore: $canonicalized_message_range&nbsp;&nbsp;$message_range $grade_icon</p>";
 }
 $tool_content .= "
     <p>$langStart: <em>" . format_locale_date(strtotime($exercise_user_record->record_start_date), 'short') . "</em>
@@ -674,7 +683,7 @@ if ($checking) {
 if (!isset($_GET['pdf']) and $is_editor) {
     $tool_content .= "<div class='col-12 d-flex justify-content-start align-items-center mt-4'>
         <a class='btn submitAdminBtn submitAdminBtnDefault' href='index.php' id='submitButton'><span id='text_submit' class='TextBold'>$langSubmit</span></a>
-        <a class='btn cancelAdminBtn m-2' href='results.php?course=$course_code&exerciseId=" . getIndirectReference($exercise_user_record->eid) . "' id='cancelButton'><span id='cancel_submit' class='TextBold'>$langCancel</span></a>
+        <a class='btn cancelAdminBtn m-2' href='results.php?course=$course_code&exerciseId=" . getIndirectReference($exercise_user_record->eid) . "' id='cancelButton'><span id='cancel_submit' class='TextBold'>$langBack</span></a>
     </div>";
 }
 

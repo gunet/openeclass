@@ -6371,12 +6371,12 @@ For example, if we want to calculate the result of the arithmetic operation 15+3
 </div>';
 $langCompleteVariablesOfQuestionWarning = '
 <strong class="text-dark">Warning!</strong></br></br>
-If the exercise <strong class="text-dark">DOES</strong> include an item and must be calculated, then in the <strong class="text-dark">Answer type</strong> field you must complete the numerical expression as you completed it in the pronunciation along with its final result separated by the colon symbol <strong>(:)</strong></br>
+If the exercise <strong class="text-dark">DOES</strong> include an item and must be calculated, then in the <strong class="text-dark">Answer type</strong> field you must complete the numerical expression as you completed it in the pronunciation along with its final result separated by the double vertical bar symbol <strong>(||)</strong></br>
 <div class="mt-3 text-dark">
 For example, if we want to calculate the unknown <strong class="text-dark">x</strong> in the equation <strong class="text-dark">3x - 2 = 2x</strong> then we follow these steps:
 <ul class="mt-4 text-dark">
 <li class="text-dark">In the <strong class="text-dark">Pronunciation</strong> field we write the pronunciation we want. In our example we can write `Find the unknown <strong class="text-dark">x</strong> of the equation <strong class="text-dark">3x - 2 = 2x</strong>`.</li>
-<li class="text-dark">In the <strong class="text-dark">Answer type</strong> field we fill in the numerical expression along with the final value of <strong class="text-dark">x</strong> that we are looking for as a result separated by the symbol (<strong class="text-dark">:</strong>) that is, we write <strong class="text-dark">3x - 2 = 2x:2</strong></li>
+<li class="text-dark">In the <strong class="text-dark">Answer type</strong> field we fill in the numerical expression along with the final value of <strong class="text-dark">x</strong> that we are looking for as a result separated by the symbol (<strong class="text-dark">||</strong>) that is, we write <strong class="text-dark">3x - 2 = 2x||2</strong></li>
 <li class="text-dark">In the <strong class="text-dark">Grade</strong> field we fill in its degree.</li>
 <li class="text-dark">Then in <strong class="text-dark">Edit items</strong> we press <strong class="text-dark">Submit</strong>.</li>
 </ul>
@@ -6384,7 +6384,7 @@ For example, if we want to calculate the unknown <strong class="text-dark">x</st
 $langNoExistVariables = "The exercise pronunciation contains no data or the text field is empty.";
 $langFinalValueOfWildCard = "Value of item";
 $langSeperateCorrectlyTheTypeOfAnswer = "There are no {items} available in the pronunciation or in the answer types. </br>
-Therefore, in the <strong>Answer type</strong> field, you must add the numerical formula you added to the pronunciation along with its final result, separated by the symbol (<strong>:</strong>)";
+Therefore, in the <strong>Answer type</strong> field, you must add the numerical formula you added to the pronunciation along with its final result, separated by the symbol (<strong>||</strong>)";
 $langOrdering = "Ordering";
 $langLayoutItems = "Layout items";
 $langHorizontal = "Horizontal";

@@ -80,6 +80,10 @@ if (isset($_POST['submitExercise'])) {
         } else {
             $objExercise->updateIPLock('');
         }
+
+        if (!is_null($_POST['exerciseGradePass']) and floatval($_POST['exerciseGradePass']) > 0) {
+            $objExercise->setPassingGrade($_POST['exerciseGradePass']);
+        }
         $objExercise->updatePasswordLock($_POST['exercisePasswordLock']);
         $startDateTime_obj = !empty($_POST['exerciseStartDate']) ?
             DateTime::createFromFormat('d-m-Y H:i', $_POST['exerciseStartDate'])->format('Y-m-d H:i:s') : NULL;
@@ -171,6 +175,7 @@ if (isset($_POST['submitExercise'])) {
     $displayScore = Session::has('dispscore') ? Session::get('dispscore') : $objExercise->selectScore();
     $continueTimeLimit = Session::has('continueTimeLimit') ? Session::get('continueTimeLimit') : $objExercise->continueTimeLimit();
     $isExam = Session::has('isExam') ? Session::get('isExam') : $objExercise->isExam();
+    $exerciseGradePass = $objExercise->getPassingGrade();
     $hasShuffleAnswers = Session::has('shuffle_answers') ? Session::get('shuffle_answers') : $objExercise->getOption(('ShuffleAnswers'));
     $continueTimeField = str_replace('[]',
         "<input type='text' class='form-control' name='continueTimeLimit' value='$continueTimeLimit' aria-label='$langminutes'>",
@@ -241,6 +246,16 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
 
     $head_content .= "<script type='text/javascript'>
         $(function() {
+            $('#exerciseRangeId').change(function() {
+               var selectedValue = $(this).val();               
+               if (selectedValue !== \"\") {
+                    $('#legend_grade_pass').text('" . js_escape($langExerciseGradePass) . "');
+               } else {
+                    $('#legend_grade_pass').text('" . js_escape($langSuccessPercentage) . "');
+               }
+            });
+
+
             $('#exerciseStartDate, #exerciseEndDate').datetimepicker({
                 format: 'dd-mm-yyyy hh:ii',
                 pickerPosition: 'bottom-right',
@@ -402,15 +417,18 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                  </div>
 
                  <div class='row form-group mt-4'>
-                        <div class='col-12'>
-                            <div class='checkbox'>
-                                <label class='label-container' aria-label='$langSelect'>
-                                    <input name='shuffle_answers' type='checkbox' " . ($hasShuffleAnswers? 'checked' : '') . ">
-                                    <span class='checkmark'></span>
-                                        $langShuffleAnswers
-                                </label>
-                                <div class='help-block'>$langShuffleAnswersLegend</div>
-                            </div>
+                    <label for='exerciseRangeId' class='col-12 control-label-notes mb-1'>
+                        $langAnswers
+                        <span class='fa-solid fa-circle-info ps-1' data-bs-toggle='tooltip' data-bs-placement='top' title='$langShuffleAnswersLegend' style='margin-bottom: 10px;'></span>
+                    </label>
+                    <div class='col-12'>
+                        <div class='checkbox'>
+                            <label class='label-container' aria-label='$langSelect'>
+                                <input name='shuffle_answers' type='checkbox' " . ($hasShuffleAnswers? 'checked' : '') . ">
+                                <span class='checkmark'></span>
+                                    $langShuffleAnswers
+                            </label>
+                        </div>
                     </div>
                 </div>
 
@@ -426,6 +444,21 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                         </select>
                     </div>
                 </div>
+
+                <div class='row form-group mt-4'>
+                    <div class='col-12'>
+                        <div class='row'>
+                            <div class='col-md-3'>
+                                <label for='exerciseTimeConstraint' class='col-12 control-label-notes mb-1'>
+                                <strong id='legend_grade_pass'>" . ($exerciseRange == 0 ? " $langSuccessPercentage" : "$langExerciseGradePass") . "</strong>
+                                <span class='fa-solid fa-circle-info ps-1' data-bs-toggle='tooltip' data-bs-placement='top' title='$langExerciseGradePassLegend' style='margin-bottom: 10px;'></span>
+                                </label>
+                                <input type='text' class='form-control' name='exerciseGradePass' id='exerciseGradePass' value='$exerciseGradePass' size='4' maxlength='4'>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                  <div class='row input-append date form-group".(Session::getError('exerciseStartDate') ? " has-error" : "")." mt-4' id='startdatepicker' data-date='$exerciseStartDate' data-date-format='dd-mm-yyyy'>
                      <label for='exerciseStartDate' class='col-12 control-label-notes mb-1'>$langStart</label>
                      <div class='col-12'>
@@ -442,6 +475,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                         <span class='help-block'>".(Session::hasError('exerciseStartDate') ? Session::getError('exerciseStartDate') : "&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i> $langExerciseStartHelpBlock")."</span>
                      </div>
                  </div>
+
                  <div class='row input-append date form-group".(Session::getError('exerciseEndDate') ? " has-error" : "")." mt-4' id='enddatepicker' data-date='$exerciseEndDate' data-date-format='dd-mm-yyyy'>
                      <label for='exerciseEndDate' class='col-12 control-label-notes mb-1'>$langFinish</label>
                      <div class='col-12'>
@@ -458,6 +492,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                         <span class='help-block'>".(Session::hasError('exerciseEndDate') ? Session::getError('exerciseEndDate') : "&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i> $langExerciseEndHelpBlock")."</span>
                      </div>
                  </div>
+
                  <div class='row form-group mt-4'>
                      <div class='col-12 control-label-notes mb-1'>
                         $langTemporarySave
@@ -484,14 +519,20 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                     <div class='col-12'>
                         <div class='row'>
                             <div class='col-md-6'>
-                                <label for='exerciseTimeConstraint' class='col-12 control-label-notes mb-1'>$langExerciseConstrain</label>
+                                <label for='exerciseTimeConstraint' class='col-12 control-label-notes mb-1'>
+                                    $langExerciseConstrain
+                                    <span class='fa-solid fa-circle-info ps-1' data-bs-toggle='tooltip' data-bs-placement='top' title='$langExerciseConstrainExplanation' style='margin-bottom: 10px;'></span>
+                                </label>
                                 <input type='text' class='form-control' name='exerciseTimeConstraint' id='exerciseTimeConstraint' value='$exerciseTimeConstraint' placeholder='$langExerciseConstrain'>
-                                <span class='help-block'>".(Session::getError('exerciseTimeConstraint') ? Session::getError('exerciseTimeConstraint') : "$langExerciseConstrainUnit ($langExerciseConstrainExplanation)")."</span>
+                                <span class='help-block'>".(Session::getError('exerciseTimeConstraint') ? Session::getError('exerciseTimeConstraint') : "$langExerciseConstrainUnit ")."</span>
                             </div>
                             <div class='col-md-6'>
-                                <label for='exerciseAttemptsAllowed' class='col-12 control-label-notes mb-1'>$langExerciseAttemptsAllowed</label>
+                                <label for='exerciseAttemptsAllowed' class='col-12 control-label-notes mb-1'>
+                                    $langExerciseAttemptsAllowed
+                                    <span class='fa-solid fa-circle-info ps-1' data-bs-toggle='tooltip' data-bs-placement='top' title='$langExerciseAttemptsAllowedExplanation' style='margin-bottom: 10px;'></span>
+                                </label>
                                 <input type='text' class='form-control' name='exerciseAttemptsAllowed' id='exerciseAttemptsAllowed' value='$exerciseAttemptsAllowed' placeholder='$langExerciseConstrain'>
-                                <span class='help-block'>".(Session::getError('exerciseAttemptsAllowed') ? Session::getError('exerciseAttemptsAllowed') : "$langExerciseAttemptsAllowedUnit ($langExerciseAttemptsAllowedExplanation)")."</span>
+                                <span class='help-block'>".(Session::getError('exerciseAttemptsAllowed') ? Session::getError('exerciseAttemptsAllowed') : "$langExerciseAttemptsAllowedUnit")."</span>
                             </div>
                         </div>
                     </div>

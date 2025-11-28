@@ -2265,7 +2265,7 @@ $langCompleteTheTextOfTheQuestion = "Εκφώνηση";
 $langCompleteVariablesOfQuestionInfo = '
 <ul class="text-dark">
 <li class="text-dark">Συμπληρώστε την εκφώνηση στο πεδίο κειμένου <strong class="text-dark">Εκφώνηση</strong>.</li>
-<li class="text-dark">Κάθε στοιχείο θα πρέπει να ορίζεται μέσα σε <strong class="text-dark">άγκυστρα {}</strong>.</li>
+<li class="text-dark">Κάθε στοιχείο θα πρέπει να ορίζεται μέσα σε <strong class="text-dark">άγκιστρα {}</strong>.</li>
 <li class="text-dark">Συμπληρώστε τον αριθμητικό τύπο που δίνει το απότελεσμα της άσκησης καθώς και τον βαθμό στα πεδία <strong class="text-dark">Τύπος απάντησης</strong> και <strong class="text-dark">Βαθμός</strong> αντίστοιχα. Το σύστημα υπολογίζει αυτόματα το τελικό αποτέλεσμα της άσκησης βασισμένο στον τύπο που δώσατε.</li>
 <li class="text-dark">Καταχωρήστε τις τιμές των στοιχείων από την <strong class="text-dark">επεξεργασία στοιχείων</strong>. Μπορείτε επίσης να ορίσετε τυχαίες τιμές από το εύρος τιμών.</li>
 </ul>
@@ -2281,12 +2281,12 @@ $langCompleteVariablesOfQuestionInfo = '
 </div>';
 $langCompleteVariablesOfQuestionWarning = '
 <strong class="text-dark">Προσοχή!</strong></br></br>
-Αν η άσκηση <strong class="text-dark">ΔΕΝ</strong> περιλαμβάνει κάποιο στοιχείο και πρέπει να υπολογιστεί, τότε θα πρέπει στον πεδίο <strong class="text-dark">Τύπος απάντησης</strong> να συμπληρώσετε την αριθμητική έκφραση όπως την συμπληρώσατε στην εκφώνηση μαζί με το τελικό της αποτέλεσμα χωρισμένα με το σύμβολο της άνω-κάτω τελείας <strong>(:)</strong></br>
+Αν η άσκηση <strong class="text-dark">ΔΕΝ</strong> περιλαμβάνει κάποιο στοιχείο και πρέπει να υπολογιστεί, τότε θα πρέπει στον πεδίο <strong class="text-dark">Τύπος απάντησης</strong> να συμπληρώσετε την αριθμητική έκφραση όπως την συμπληρώσατε στην εκφώνηση μαζί με το τελικό της αποτέλεσμα χωρισμένα με το διπλό σύμβολο Vertical Bar <strong>(||)</strong></br>
 <div class="mt-3 text-dark">
 Για παράδειγμα, αν θέλουμε να υπολογίσουμε τον άγνωστο <strong class="text-dark">x</strong> στην εξίσωση <strong class="text-dark">3x - 2 = 2x</strong> τότε ακολουθούμε τα εξής βήματα:
 <ul class="mt-4 text-dark">
 <li class="text-dark">Στο πεδίο <strong class="text-dark">Εκφώνηση</strong> γράφουμε την εκφώνηση που θέλουμε. Στο παράδειγμά μας μπορούμε να γράψουμε `Βρείτε τον άγνωστο <strong class="text-dark">x</strong> της εξίσωσης <strong class="text-dark">3x - 2 = 2x</strong>`.</li>
-<li class="text-dark">Στο πεδίο <strong class="text-dark">Τύπος απάντησης</strong> συμπληρώνουμε την αριθμητική έκφραση μαζί με την τελική τιμή του <strong class="text-dark">χ</strong> που ψάχνουμε ως αποτέλεσμα χωρισμένα με το σύμβολο (<strong class="text-dark">:</strong>) δηλαδή γράφουμε <strong class="text-dark">3x - 2 = 2x:2</strong></li>
+<li class="text-dark">Στο πεδίο <strong class="text-dark">Τύπος απάντησης</strong> συμπληρώνουμε την αριθμητική έκφραση μαζί με την τελική τιμή του <strong class="text-dark">χ</strong> που ψάχνουμε ως αποτέλεσμα χωρισμένα με το σύμβολο (<strong class="text-dark">||</strong>) δηλαδή γράφουμε <strong class="text-dark">3x - 2 = 2x||2</strong></li>
 <li class="text-dark">Στο πεδίο <strong class="text-dark">Βαθμός</strong> συμπληρώνουμε τον βαθμό του.</li>
 <li class="text-dark">Στην συνέχεια στην <strong class="text-dark">Επεξεργασία στοιχείων</strong> πατάμε <strong class="text-dark">Υποβολή</strong>.</li>
 </ul>
@@ -2294,7 +2294,7 @@ $langCompleteVariablesOfQuestionWarning = '
 $langNoExistVariables = "Δεν περιέχονται στοιχεία στην ερώτηση. </br> Πατήστε <strong>Υποβολή</strong> για να ολοκληρώσετε την δημιουργία της ερώτησης.";
 $langFinalValueOfWildCard = "Τιμή στοιχείου";
 $langSeperateCorrectlyTheTypeOfAnswer = "Δεν υπάρχουν διαθέσιμα {στοιχεία} στην εκφώνηση ή στους τύπους των απαντήσεων. </br>
-Συνεπώς θα πρέπει στο πεδίο <strong>Τύπος απάντησης</strong> να προσθέσετε τον αριθμητικό τύπο που προσθέσατε στην εκφώνηση μαζί με το τελικό της αποτέλεσμα, χωρισμένα με το σύμβολο (<strong>:</strong>)";
+Συνεπώς θα πρέπει στο πεδίο <strong>Τύπος απάντησης</strong> να προσθέσετε τον αριθμητικό τύπο που προσθέσατε στην εκφώνηση μαζί με το τελικό της αποτέλεσμα, χωρισμένα με το σύμβολο (<strong>||</strong>)";
 $langOrdering = "Ταξινόμηση";
 $langLayoutItems = "Διάταξη στοιχείων";
 $langHorizontal = "Οριζόντια";
@@ -2424,6 +2424,8 @@ $langExerciseStartHelpBlock = "Κάντε κλικ για να ορίσετε μ
 $langExerciseEndHelpBlock = "Κάντε κλικ για να ορίσετε Ημερομηνία Λήξης Άσκησης";
 $langExerciseDuration = "Διάρκεια Εκτέλεσης";
 $langExerciseConstrain = "Χρονικός περιορισμός";
+$langExerciseGradePass = "Βαθμός Επιτυχίας";
+$langExerciseGradePassLegend = "Η άσκηση θεωρείται ότι εκτελέστηκε με τπιτυχία αν ο βαθμός του $langsOfStudent είναι μεγαλύτερος ή ίσος από το βαθμό επιτυχίας";
 $langExerciseEg = "π.χ.";
 $langExerciseConstrainUnit = "λεπτά";
 $langExerciseConstrainExplanation = "0 για καθόλου περιορισμό";
@@ -4259,7 +4261,8 @@ $langTypesRegistration = "Ανοικτά με εγγραφή";
 $langTypeInactive = "Ανενεργό";
 $langAllTypes = "(όλοι οι τύποι πρόσβασης)";
 $langAllFacultes = "Σε όλες τις $langsFaculties";
-$langSuccess = "Η εγγραφή σας ως διαχειριστή έγινε με επιτυχία";
+$langSuccess = "Επιτυχία";
+$langFailure = "Αποτυχία";
 $langAuthRequest = "Απαιτείται εξακρίβωση στοιχείων";
 $langAlreadySubscribe = "Είστε ήδη εγγεγραμμένος";
 $langAs = "ως";

@@ -185,6 +185,7 @@ function display_exercise($exercise_id): void
             'url' => "exercise_submit.php?course=$course_code&exerciseId=$exercise_id",
             'icon' => 'fa-play-circle',
             'button-class' => 'btn-danger',
+            'level' => 'primary',
             'show' => (!empty($question_list))
         ],
         ['title' => $langQuestionsManagement,
@@ -666,9 +667,13 @@ function updateWildCardsWithRandomVariables($questionId, $exerciseType) {
                 $q = Database::get()->query("UPDATE exercise_question SET options = ?s WHERE id = ?d", $newJsonItems, $questionId);
                 if ($q) {
                     foreach ($predefinedAnswers as $an) {
-                        $arr = explode(':', $an->answer);
-                        if (count($arr) > 1) {
-                            $expression = $arr[0];
+                        $arr = unserialize($an->answer);
+                        if (count($arr) > 0) {
+                            $tmp_expression = '';
+                            foreach ($arr as $r) {
+                                $expression = $r['expression'];
+                                $tmp_expression = $expression;
+                            }
                             $dataItems = json_decode($newJsonItems, true);
 
                             // Create a key-value array for items
@@ -689,7 +694,12 @@ function updateWildCardsWithRandomVariables($questionId, $exerciseType) {
 
                             try {
                                 $result = $expressionLanguage->evaluate($expression);
-                                $finalAnswer = $arr[0] . ":" . $result;
+                                $tmpfinalAnswer = [];
+                                $tmpfinalAnswer[] = [
+                                    'expression' => $tmp_expression,
+                                    'result' => $result
+                                ];
+                                $finalAnswer = serialize($tmpfinalAnswer);
                                 Database::get()->query("UPDATE exercise_answer SET answer = ?s WHERE question_id = ?d AND r_position = ?d", $finalAnswer, $questionId, $an->r_position);
                             } catch (\Exception $e) {
                                 // Handle evaluation error
