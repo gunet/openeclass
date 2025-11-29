@@ -114,6 +114,37 @@ class CurlUtil {
     }
 
     /**
+     * HTTP POST method for JSON usage
+     *
+     * @param string $url
+     * @param array $postData
+     * @return array
+     */
+    public static function httpPostJsonRequest(string $url, array $postData): array {
+        $response = null;
+        $http_code = null;
+        $headers = array();
+        if (!extension_loaded('curl')) {
+            return array($response, $http_code, $headers);
+        }
+
+        $ch = curl_init($url);
+
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($postData));
+
+        $response = curl_exec($ch);
+        if(!curl_errno($ch)) {
+            $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        }
+        curl_close($ch);
+
+        return array($response, $http_code, $headers);
+    }
+
+    /**
      * Fetches content from Internet. Uses cURL extension. Only downloads from http(s) sources are supported.
      *
      * @param string $url URL starting with http(s)://

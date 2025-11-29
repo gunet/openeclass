@@ -24,29 +24,31 @@ require_once 'resourceindexer.interface.php';
 require_once 'Zend/Search/Lucene/Document.php';
 require_once 'Zend/Search/Lucene/Field.php';
 require_once 'Zend/Search/Lucene/Index/Term.php';
+require_once 'modules/search/classes/ConstantsUtil.php';
+require_once 'modules/search/classes/FetcherUtil.php';
 
 class ExerciseIndexer extends AbstractIndexer implements ResourceIndexerInterface {
 
     /**
      * Construct a Zend_Search_Lucene_Document object out of an exercise db row.
      *
-     * @global string $urlServer
-     * @param  object  $exercise
+     * @param object $exercise
      * @return Zend_Search_Lucene_Document
+     * @global string $urlServer
      */
     protected function makeDoc($exercise) {
         global $urlServer;
         $encoding = 'utf-8';
 
         $doc = new Zend_Search_Lucene_Document();
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', Indexer::DOCTYPE_EXERCISE . '_' . $exercise->id, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $exercise->id, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('doctype', Indexer::DOCTYPE_EXERCISE, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('courseid', $exercise->course_id, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('title', Indexer::phonetics($exercise->title), $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('content', Indexer::phonetics(strip_tags($exercise->description)), $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('visible', $exercise->active, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', $urlServer . 'modules/exercise/exercise_submit.php?course=' . course_id_to_code($exercise->course_id) . '&amp;exerciseId=' . $exercise->id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword(ConstantsUtil::FIELD_PK, ConstantsUtil::DOCTYPE_EXERCISE . '_' . $exercise->id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword(ConstantsUtil::FIELD_PKID, $exercise->id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword(ConstantsUtil::FIELD_DOCTYPE, ConstantsUtil::DOCTYPE_EXERCISE, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword(ConstantsUtil::FIELD_COURSEID, $exercise->course_id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text(ConstantsUtil::FIELD_TITLE, Indexer::phonetics($exercise->title), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text(ConstantsUtil::FIELD_CONTENT, Indexer::phonetics(strip_tags($exercise->description)), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text(ConstantsUtil::FIELD_VISIBLE, $exercise->active, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::UnIndexed(ConstantsUtil::FIELD_URL, $urlServer . 'modules/exercise/exercise_submit.php?course=' . course_id_to_code($exercise->course_id) . '&amp;exerciseId=' . $exercise->id, $encoding));
 
         return $doc;
     }
@@ -54,22 +56,17 @@ class ExerciseIndexer extends AbstractIndexer implements ResourceIndexerInterfac
     /**
      * Fetch an Exercise from DB.
      *
-     * @param  int $exerciseId
+     * @param int $exerciseId
      * @return object - the mysql fetched row
      */
     protected function fetch($exerciseId) {
-        $exercise = Database::get()->querySingle("SELECT * FROM exercise WHERE id = ?d", $exerciseId);
-        if (!$exercise) {
-            return null;
-        }
-
-        return $exercise;
+        return FetcherUtil::fetchExercise($exerciseId);
     }
 
     /**
      * Get Term object for locating a unique single exercise.
      *
-     * @param  int $exerciseId - the exercise id
+     * @param int $exerciseId - the exercise id
      * @return Zend_Search_Lucene_Index_Term
      */
     protected function getTermForSingleResource($exerciseId) {
@@ -97,7 +94,7 @@ class ExerciseIndexer extends AbstractIndexer implements ResourceIndexerInterfac
     /**
      * Get Lucene query input string for locating all exercises belonging to a given course.
      *
-     * @param  int $courseId - the given course id
+     * @param int $courseId - the given course id
      * @return string        - the string that can be used as Lucene query input
      */
     protected function getQueryInputByCourse($courseId) {
@@ -107,11 +104,11 @@ class ExerciseIndexer extends AbstractIndexer implements ResourceIndexerInterfac
     /**
      * Get all exercises belonging to a given course from DB.
      *
-     * @param  int   $courseId - the given course id
+     * @param int $courseId - the given course id
      * @return array           - array of DB fetched anonymous objects with property names that correspond to the column names
      */
     protected function getCourseResourcesFromDB($courseId) {
-        return Database::get()->queryArray("SELECT * FROM exercise WHERE course_id = ?d", $courseId);
+        return FetcherUtil::fetchExercises($courseId);
     }
 
 }

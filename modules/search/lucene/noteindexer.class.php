@@ -24,31 +24,33 @@ require_once 'resourceindexer.interface.php';
 require_once 'Zend/Search/Lucene/Document.php';
 require_once 'Zend/Search/Lucene/Field.php';
 require_once 'Zend/Search/Lucene/Index/Term.php';
+require_once 'modules/search/classes/ConstantsUtil.php';
+require_once 'modules/search/classes/FetcherUtil.php';
 
 class NoteIndexer extends AbstractIndexer implements ResourceIndexerInterface {
 
     /**
      * Construct a Zend_Search_Lucene_Document object out of a note db row.
      *
-     * @global string $urlServer
-     * @param  object  $note
+     * @param object $note
      * @return Zend_Search_Lucene_Document
+     * @global string $urlServer
      */
     protected function makeDoc($note) {
         global $urlServer;
         $encoding = 'utf-8';
 
         $doc = new Zend_Search_Lucene_Document();
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', 'note_' . $note->id, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $note->id, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('doctype', 'note', $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('userid', $note->user_id, $encoding));
-        if(isset($note->course_id)){
-            $doc->addField(Zend_Search_Lucene_Field::Keyword('courseid', $note->course_id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword(ConstantsUtil::FIELD_PK, ConstantsUtil::DOCTYPE_NOTE . '_' . $note->id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword(ConstantsUtil::FIELD_PKID, $note->id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword(ConstantsUtil::FIELD_DOCTYPE, ConstantsUtil::DOCTYPE_NOTE, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword(ConstantsUtil::FIELD_USERID, $note->user_id, $encoding));
+        if (isset($note->course_id)) {
+            $doc->addField(Zend_Search_Lucene_Field::Keyword(ConstantsUtil::FIELD_COURSEID, $note->course_id, $encoding));
         }
-        $doc->addField(Zend_Search_Lucene_Field::Text('title', Indexer::phonetics($note->title), $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('content', Indexer::phonetics(strip_tags($note->content)), $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', $urlServer . 'modules/notes/index.php?an_id=' . $note->id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text(ConstantsUtil::FIELD_TITLE, Indexer::phonetics($note->title), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text(ConstantsUtil::FIELD_CONTENT, Indexer::phonetics(strip_tags($note->content)), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::UnIndexed(ConstantsUtil::FIELD_URL, $urlServer . 'modules/notes/index.php?an_id=' . $note->id, $encoding));
 
         return $doc;
     }
@@ -56,26 +58,17 @@ class NoteIndexer extends AbstractIndexer implements ResourceIndexerInterface {
     /**
      * Fetch a Note from DB.
      *
-     * @param  int $noteId
+     * @param int $noteId
      * @return object - the mysql fetched row
      */
     protected function fetch($noteId) {
-        $note = Database::get()->querySingle("SELECT * FROM note WHERE id = ?d", $noteId);
-        if (!$note) {
-            return null;
-        }
-
-        if(!is_null($note->reference_obj_course)) {
-            $note->course_id = intval($note->reference_obj_course);
-        }
-
-        return $note;
+        return FetcherUtil::fetchNote($noteId);
     }
 
     /**
      * Get Term object for locating a unique single note.
      *
-     * @param  int $noteId - the note id
+     * @param int $noteId - the note id
      * @return Zend_Search_Lucene_Index_Term
      */
     protected function getTermForSingleResource($noteId) {
@@ -103,7 +96,7 @@ class NoteIndexer extends AbstractIndexer implements ResourceIndexerInterface {
     /**
      * Get Lucene query input string for locating all notes belonging to a given course.
      *
-     * @param  int $courseId - the given course id
+     * @param int $courseId - the given course id
      * @return string        - the string that can be used as Lucene query input
      */
     protected function getQueryInputByCourse($courseId) {
@@ -113,17 +106,17 @@ class NoteIndexer extends AbstractIndexer implements ResourceIndexerInterface {
     /**
      * Get all notes belonging to a given course from DB.
      *
-     * @param  int   $courseId - the given course id
+     * @param int $courseId - the given course id
      * @return array           - array of DB fetched anonymous objects with property names that correspond to the column names
      */
     protected function getCourseResourcesFromDB($courseId) {
-        return Database::get()->queryArray("SELECT * FROM note WHERE reference_obj_course = ?d", $courseId);
+        return FetcherUtil::fetchNotes($courseId);
     }
 
     /**
      * Store all Notes written by a user.
      *
-     * @param int     $userId
+     * @param int $userId
      * @param boolean $optimize
      */
     public function storeByUser($userId, $optimize = false) {
@@ -146,7 +139,7 @@ class NoteIndexer extends AbstractIndexer implements ResourceIndexerInterface {
     /**
      * Remove all Notes written by a user.
      *
-     * @param int     $userId
+     * @param int $userId
      * @param boolean $optimize
      */
     public function removeByUser($userId, $optimize = false) {
@@ -165,13 +158,13 @@ class NoteIndexer extends AbstractIndexer implements ResourceIndexerInterface {
     /**
      * Build a Lucene Query.
      *
-     * @param  array   $data      - The data (usually $_POST), needs specific array keys
-     * @param  boolean $anonymous - whether we build query for anonymous user access or not
+     * @param array $data - The data (usually $_POST), needs specific array keys
+     * @param boolean $anonymous - whether we build query for anonymous user access or not
      * @return string             - the returned query string
      */
     public static function buildQuery($data, $anonymous = true) {
         if (isset($data['search_terms']) && !empty($data['search_terms']) &&
-                isset($data['user_id']) && !empty($data['user_id'])) {
+            isset($data['user_id']) && !empty($data['user_id'])) {
             $terms = explode(' ', Indexer::filterQuery($data['search_terms']));
             $queryStr = '(';
             foreach ($terms as $term) {

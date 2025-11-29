@@ -59,7 +59,7 @@ abstract class AbstractBaseIndexer {
     /**
      * Construct a Zend_Search_Lucene_Document object out of a resource anonymous object with property names that correspond to the column names (DB fetched).
      *
-     * @param  object $resource
+     * @param object $resource
      * @return Zend_Search_Lucene_Document
      */
     abstract protected function makeDoc($resource);
@@ -67,7 +67,7 @@ abstract class AbstractBaseIndexer {
     /**
      * Fetch a Resource from DB.
      *
-     * @param  int    $id - the resource item id
+     * @param int $id - the resource item id
      * @return object     - the DB fetched anonymous object with property names that correspond to the column names
      */
     abstract protected function fetch($id);
@@ -75,7 +75,7 @@ abstract class AbstractBaseIndexer {
     /**
      * Get Term object for locating a unique single resource.
      *
-     * @param  int $id - the resource id
+     * @param int $id - the resource id
      * @return Zend_Search_Lucene_Index_Term
      */
     abstract protected function getTermForSingleResource($id);
@@ -97,8 +97,8 @@ abstract class AbstractBaseIndexer {
     /**
      * Store a Resource in the Index.
      *
-     * @param  int     $id       - the resource id
-     * @param  boolean $optimize - whether to optimize after storing
+     * @param int $id - the resource id
+     * @param boolean $optimize - whether to optimize after storing
      */
     public function store($id, $optimize = false) {
         if (!get_config('enable_indexing')) {
@@ -122,9 +122,9 @@ abstract class AbstractBaseIndexer {
     /**
      * Remove a Resource from the Index.
      *
-     * @param int     $id         - the resource id
+     * @param int $id - the resource id
      * @param boolean $existCheck - whether to checking existance before removing
-     * @param boolean $optimize   - whether to optimize after removing
+     * @param boolean $optimize - whether to optimize after removing
      */
     public function remove($id, $existCheck = false, $optimize = false) {
         if (!get_config('enable_indexing')) {
@@ -179,8 +179,8 @@ abstract class AbstractBaseIndexer {
     /**
      * Handle Write Exceptions.
      *
-     * @global string                       $urlAppend
-     * @param  Zend_Search_Lucene_Exception $e
+     * @param Zend_Search_Lucene_Exception $e
+     * @global string $urlAppend
      */
     protected function handleWriteErrors($e) {
 
@@ -188,7 +188,7 @@ abstract class AbstractBaseIndexer {
 
         if (preg_match("/too many open files/i", $e->getMessage())) {
             $errorMessage = $e->getMessage();
-            Session::flash('message',"$langSearchTooManyFiles $errorMessage");
+            Session::flash('message', "$langSearchTooManyFiles $errorMessage");
             Session::flash('alert-class', 'alert-warning');
         }
     }

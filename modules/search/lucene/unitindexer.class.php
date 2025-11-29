@@ -24,30 +24,32 @@ require_once 'resourceindexer.interface.php';
 require_once 'Zend/Search/Lucene/Document.php';
 require_once 'Zend/Search/Lucene/Field.php';
 require_once 'Zend/Search/Lucene/Index/Term.php';
+require_once 'modules/search/classes/ConstantsUtil.php';
+require_once 'modules/search/classes/FetcherUtil.php';
 
 class UnitIndexer extends AbstractIndexer implements ResourceIndexerInterface {
 
     /**
      * Construct a Zend_Search_Lucene_Document object out of a unit db row.
      *
-     * @global string $urlServer
-     * @param  object  $unit
+     * @param object $unit
      * @return Zend_Search_Lucene_Document
+     * @global string $urlServer
      */
     protected function makeDoc($unit) {
         global $urlServer;
         $encoding = 'utf-8';
 
         $doc = new Zend_Search_Lucene_Document();
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', Indexer::DOCTYPE_UNIT . '_' . $unit->id, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $unit->id, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('doctype', Indexer::DOCTYPE_UNIT, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('courseid', $unit->course_id, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('title', Indexer::phonetics($unit->title), $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('content', Indexer::phonetics(strip_tags($unit->comments)), $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('visible', $unit->visible, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', $urlServer
-                        . 'modules/units/index.php?course=' . course_id_to_code($unit->course_id) . '&amp;id=' . $unit->id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword(ConstantsUtil::FIELD_PK, ConstantsUtil::DOCTYPE_UNIT . '_' . $unit->id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword(ConstantsUtil::FIELD_PKID, $unit->id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword(ConstantsUtil::FIELD_DOCTYPE, ConstantsUtil::DOCTYPE_UNIT, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword(ConstantsUtil::FIELD_COURSEID, $unit->course_id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text(ConstantsUtil::FIELD_TITLE, Indexer::phonetics($unit->title), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text(ConstantsUtil::FIELD_CONTENT, Indexer::phonetics(strip_tags($unit->comments)), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text(ConstantsUtil::FIELD_VISIBLE, $unit->visible, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::UnIndexed(ConstantsUtil::FIELD_URL, $urlServer
+            . 'modules/units/index.php?course=' . course_id_to_code($unit->course_id) . '&amp;id=' . $unit->id, $encoding));
 
         return $doc;
     }
@@ -55,22 +57,17 @@ class UnitIndexer extends AbstractIndexer implements ResourceIndexerInterface {
     /**
      * Fetch a Unit from DB.
      *
-     * @param  int $unitId
+     * @param int $unitId
      * @return object - the mysql fetched row
      */
     protected function fetch($unitId) {
-        $unit = Database::get()->querySingle("SELECT * FROM course_units WHERE id = ?d", $unitId);
-        if (!$unit) {
-            return null;
-        }
-
-        return $unit;
+        return FetcherUtil::fetchUnit($unitId);
     }
 
     /**
      * Get Term object for locating a unique single unit.
      *
-     * @param  int $unitId - the unit id
+     * @param int $unitId - the unit id
      * @return Zend_Search_Lucene_Index_Term
      */
     protected function getTermForSingleResource($unitId) {
@@ -98,7 +95,7 @@ class UnitIndexer extends AbstractIndexer implements ResourceIndexerInterface {
     /**
      * Get Lucene query input string for locating all units belonging to a given course.
      *
-     * @param  int $courseId - the given course id
+     * @param int $courseId - the given course id
      * @return string        - the string that can be used as Lucene query input
      */
     protected function getQueryInputByCourse($courseId) {
@@ -108,11 +105,11 @@ class UnitIndexer extends AbstractIndexer implements ResourceIndexerInterface {
     /**
      * Get all units belonging to a given course from DB.
      *
-     * @param  int   $courseId - the given course id
+     * @param int $courseId - the given course id
      * @return array           - array of DB fetched anonymous objects with property names that correspond to the column names
      */
     protected function getCourseResourcesFromDB($courseId) {
-        return Database::get()->queryArray("SELECT * FROM course_units WHERE course_id = ?d", $courseId);
+        FetcherUtil::fetchUnits($courseId);
     }
 
 }

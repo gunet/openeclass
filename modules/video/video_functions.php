@@ -18,6 +18,9 @@
  *
  */
 
+require_once 'modules/search/classes/ConstantsUtil.php';
+require_once 'modules/search/classes/SearchEngineFactory.php';
+
 function headlink($label, $this_sort) {
     global $sort, $reverse, $course_code;
 
@@ -123,10 +126,11 @@ function delete_video($id, $table, $course_id, $course_code, $webDir) {
     Database::get()->query("DELETE FROM $table WHERE course_id = ?d AND id = ?d", $course_id, $id);
 
     // index and log
+    $searchEngine = SearchEngineFactory::create();
     if ($table == 'video') {
-        Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_VIDEO, $id);
+        $searchEngine->indexResource(ConstantsUtil::REQUEST_REMOVE, ConstantsUtil::RESOURCE_VIDEO, $id);
     } elseif ($table == 'videolink') {
-        Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_VIDEOLINK, $id);
+        $searchEngine->indexResource(ConstantsUtil::REQUEST_REMOVE, ConstantsUtil::RESOURCE_VIDEOLINK, $id);
     }
 
     Log::record($course_id, MODULE_ID_VIDEO, LOG_DELETE, array('id' => $id, 'title' => $title));

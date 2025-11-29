@@ -64,7 +64,7 @@ if (isset($_GET['add_template'])) {
     $pageName = $langNewTIITool;
     $navigation[] = array('url' => 'turnitinmoduleconf.php', 'name' => $langTurnitinConf);
 
-    new_lti_app(null, true, "https://lti.int.turnitin.com/launch/tfs");
+    new_lti_app(null, true);
 
 } else if (isset($_GET['delete_template'])) {
 

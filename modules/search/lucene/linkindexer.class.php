@@ -24,27 +24,29 @@ require_once 'resourceindexer.interface.php';
 require_once 'Zend/Search/Lucene/Document.php';
 require_once 'Zend/Search/Lucene/Field.php';
 require_once 'Zend/Search/Lucene/Index/Term.php';
+require_once 'modules/search/classes/ConstantsUtil.php';
+require_once 'modules/search/classes/FetcherUtil.php';
 
 class LinkIndexer extends AbstractIndexer implements ResourceIndexerInterface {
 
     /**
      * Construct a Zend_Search_Lucene_Document object out of a link db row.
      *
-     * @global string $urlServer
-     * @param  object  $link
+     * @param object $link
      * @return Zend_Search_Lucene_Document
+     * @global string $urlServer
      */
     protected function makeDoc($link) {
         $encoding = 'utf-8';
 
         $doc = new Zend_Search_Lucene_Document();
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', Indexer::DOCTYPE_LINK . '_' . $link->id, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $link->id, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('doctype', Indexer::DOCTYPE_LINK, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('courseid', $link->course_id, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('title', Indexer::phonetics($link->title), $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('content', Indexer::phonetics(strip_tags($link->description)), $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', $link->url, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword(ConstantsUtil::FIELD_PK, ConstantsUtil::DOCTYPE_LINK . '_' . $link->id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword(ConstantsUtil::FIELD_PKID, $link->id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword(ConstantsUtil::FIELD_DOCTYPE, ConstantsUtil::DOCTYPE_LINK, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword(ConstantsUtil::FIELD_COURSEID, $link->course_id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text(ConstantsUtil::FIELD_TITLE, Indexer::phonetics($link->title), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text(ConstantsUtil::FIELD_CONTENT, Indexer::phonetics(strip_tags($link->description)), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::UnIndexed(ConstantsUtil::FIELD_URL, $link->url, $encoding));
 
         return $doc;
     }
@@ -52,22 +54,17 @@ class LinkIndexer extends AbstractIndexer implements ResourceIndexerInterface {
     /**
      * Fetch a Link from DB.
      *
-     * @param  int $linkId
+     * @param int $linkId
      * @return object - the mysql fetched row
      */
     protected function fetch($linkId) {
-        $link = Database::get()->querySingle("SELECT * FROM link WHERE id = ?d", $linkId);
-        if (!$link) {
-            return null;
-        }
-
-        return $link;
+        return FetcherUtil::fetchLink($linkId);
     }
 
     /**
      * Get Term object for locating a unique single link.
      *
-     * @param  int $linkId - the link id
+     * @param int $linkId - the link id
      * @return Zend_Search_Lucene_Index_Term
      */
     protected function getTermForSingleResource($linkId) {
@@ -95,7 +92,7 @@ class LinkIndexer extends AbstractIndexer implements ResourceIndexerInterface {
     /**
      * Get Lucene query input string for locating all links belonging to a given course.
      *
-     * @param  int $courseId - the given course id
+     * @param int $courseId - the given course id
      * @return string        - the string that can be used as Lucene query input
      */
     protected function getQueryInputByCourse($courseId) {
@@ -105,11 +102,11 @@ class LinkIndexer extends AbstractIndexer implements ResourceIndexerInterface {
     /**
      * Get all links belonging to a given course from DB.
      *
-     * @param  int   $courseId - the given course id
+     * @param int $courseId - the given course id
      * @return array           - array of DB fetched anonymous objects with property names that correspond to the column names
      */
     protected function getCourseResourcesFromDB($courseId) {
-        return Database::get()->queryArray("SELECT * FROM link WHERE course_id = ?d", $courseId);
+        FetcherUtil::fetchLinks($courseId);
     }
 
 }

@@ -269,7 +269,7 @@ function ltiBuildRequest(stdClass $ltiApp, stdClass $course, stdClass $stat, str
         'user_id' => "$uid",
         'lis_person_sourcedid' => "$uid",
         'roles' => ltiGetImsRole($stat),
-        'context_id' => "$course->id",
+        'context_id' => $_SERVER['SERVER_NAME'] . ":" . "$course->id",
         'context_label' => trim($course->title),
         'context_title' => trim($course->title)
     );
@@ -278,11 +278,12 @@ function ltiBuildRequest(stdClass $ltiApp, stdClass $course, stdClass $stat, str
     // resource link
     $requestparams['resource_link_title'] = trim($ltiApp->title);
     //$requestparams['resource_link_description'] = trim($ltiApp->description);
-    $requestparams['resource_link_id'] = "$ltiApp->id";
+    $resource_link_id_prefix = (!is_null($resourceType)) ? $_SERVER['SERVER_NAME'] . ":" . $resourceType . ":" : $_SERVER['SERVER_NAME'] . ":";
+    $requestparams['resource_link_id'] = $resource_link_id_prefix . "$ltiApp->id";
     if ($is_assignment) {
         $requestparams['resource_link_title'] = trim($resource->title);
         //$requestparams['resource_link_description'] = trim($ltiApp->description);
-        $requestparams['resource_link_id'] = "$resource->id";
+        $requestparams['resource_link_id'] = $resource_link_id_prefix . "$resource->id";
     }
 
     $requestparams['context_type'] = 'CourseSection';

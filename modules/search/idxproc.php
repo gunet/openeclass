@@ -20,8 +20,9 @@
 
 $require_admin = true;
 require_once '../../include/baseTheme.php';
-require_once 'modules/search/indexer.class.php';
+require_once 'classes/SearchEngineFactory.php';
 header('Content-Type: application/json; charset=utf-8');
+set_time_limit(0);
 
 // fetch number of courses waiting in index queue
 $n = Database::get()->querySingle("SELECT COUNT(id) AS count FROM idx_queue")->count;
@@ -32,11 +33,8 @@ if ($n > 0) {
     $cid = Database::get()->querySingle("SELECT course_id FROM idx_queue LIMIT 1")->course_id;
 
     // re-index
-    $idx = new Indexer();
-    $idx->removeAllByCourse($cid);
-    $idx->storeAllByCourse($cid);
-    set_time_limit(0);
-    $idx->getIndex()->optimize();
+    $searchEngine = SearchEngineFactory::create();
+    $searchEngine->index($cid);
 
     // remove course from queue
     Database::get()->query("DELETE FROM idx_queue WHERE course_id = ?d", $cid);

@@ -139,7 +139,7 @@ function summarizeMonthlyActions() {
 function optimizeIndex() {
     error_log("cron optimizeIndex START");
     global $webDir; // required for indexer
-    require_once 'modules/search/indexer.class.php';
+    require_once 'modules/search/lucene/indexer.class.php';
     $idx = new Indexer();
     set_time_limit(0);
     $idx->getIndex()->optimize();

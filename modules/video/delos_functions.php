@@ -22,6 +22,8 @@ require_once 'modules/admin/extconfig/externals.php';
 require_once 'modules/admin/extconfig/opendelosapp.php';
 require_once 'include/log.class.php';
 require_once 'include/lib/curlutil.class.php';
+require_once 'modules/search/classes/ConstantsUtil.php';
+require_once 'modules/search/classes/SearchEngineFactory.php';
 
 define('DELOSTOKEN', 'DELOSTOKEN');
 define('DELOSTOKENTIMESTAMP', 'DELOSTOKENTIMESTAMP');
@@ -279,6 +281,7 @@ function storeDelosResources($jsonPublicObj, $jsonPrivateObj, $checkAuth) {
     global $course_id;
     $submittedResources = $_POST['delosResources'];
     $submittedCategory = $_POST['selectcategory'];
+    $searchEngine = SearchEngineFactory::create();
 
     foreach ($submittedResources as $rid) {
         $stored = Database::get()->querySingle("SELECT id
@@ -311,7 +314,7 @@ function storeDelosResources($jsonPublicObj, $jsonPrivateObj, $checkAuth) {
                         VALUES (?d, ?s, ?s, ?s, ?d, ?s, ?s, ?t)', $course_id, canonicalize_url($url), $title, $description, $submittedCategory, $creator, $publisher, $date);
                         $id = $q->lastInsertID;
                     }
-                    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_VIDEOLINK, $id);
+                    $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_VIDEOLINK, $id);
                     $txt_description = ellipsize(canonicalize_whitespace(strip_tags($description)), 50, '+');
                     Log::record($course_id, MODULE_ID_VIDEO, LOG_INSERT, array('id' => $id,
                         'url' => canonicalize_url($url),
@@ -345,7 +348,7 @@ function storeDelosResources($jsonPublicObj, $jsonPrivateObj, $checkAuth) {
                             VALUES (?d, ?s, ?s, ?s, ?d, ?s, ?s, ?t)', $course_id, canonicalize_url($url), $title, $description, $submittedCategory, $creator, $publisher, $date);
                         $id = $q->lastInsertID;
                     }
-                    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_VIDEOLINK, $id);
+                    $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_VIDEOLINK, $id);
                     $txt_description = ellipsize(canonicalize_whitespace(strip_tags($description)), 50, '+');
                     Log::record($course_id, MODULE_ID_VIDEO, LOG_INSERT, array('id' => $id,
                         'url' => canonicalize_url($url),

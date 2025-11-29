@@ -74,6 +74,7 @@ if ($is_power_user or $is_admin or ($is_departmentmanage_user and $atleastone)) 
     $allow_clone = true;
 }
 
+
 $toolName = $langCourseInfo;
 
 // if the course is `open courses` certified, disable visibility choice in form
@@ -260,12 +261,26 @@ if (isset($_POST['submit'])) {
                 setting_set(SETTING_COUSE_IMAGE_PRINT_FOOTER_WIDTH, $_POST['footer_image_width'], $course_id);
             }
 
-            // Course settings modified, will get success message after redirect in current course language
+            // Course settings modified, will get a success message after redirect in current course language
             Session::flash('course-modify-success', true);
             redirect_to_home_page("modules/course_info/index.php?course=$course_code");
         }
     }
 } else {
+    $my_courses = Database::get()->queryArray("SELECT a.course_id course_id, b.title course_title FROM course_user a, course b
+                                  WHERE a.course_id = b.id
+                                      AND a.course_id != ?d
+                                      AND a.user_id = ?d
+                                      AND a.status = " .USER_TEACHER . " 
+                                    ORDER BY course_title",
+                                $course_id, $uid);
+    $courses_options = "";
+    foreach ($my_courses as $row) {
+        $courses_options .= "'<option value=\"$row->course_id\">" . js_escape($row->course_title) . "</option>'+";
+    }
+
+    $data['courses_options'] = $courses_options;
+
     warnCourseInvalidDepartment();
 
     $data['action_bar'] = action_bar([
@@ -275,13 +290,20 @@ if (isset($_POST['submit'])) {
         ['title' => $langBackupCourse,
             'url' => "archive_course.php?course=$course_code&" . generate_csrf_token_link_parameter(),
             'icon' => 'fa-archive'],
+        ['title' => $langRefreshCourse,
+            'url' => "refresh_course.php?course=$course_code",
+            'icon' => 'fa-refresh'],
         ['title' => $langCloneCourse,
             'url' => "clone_course.php?course=$course_code",
             'icon' => 'fa-archive',
             'show' => get_config('allow_teacher_clone_course') || $allow_clone],
-        ['title' => $langRefreshCourse,
-            'url' => "refresh_course.php?course=$course_code",
-            'icon' => 'fa-refresh'],
+        ['title' => $langImportCourse,
+            'url' => "import_course.php?course=$course_code&fetch=yes",
+            'icon' => 'fa-file-import',
+            'level' => 'primary-label',
+            'modal-class' => 'importCourse',
+            'button-class' => 'btn-success'
+        ],
         ['title' => $langCourseMetadata,
             'url' => "../course_metadata/index.php?course=$course_code",
             'icon' => 'fa-file-text',

@@ -25,7 +25,7 @@ abstract class AbstractIndexer extends AbstractBaseIndexer {
     /**
      * Get Lucene query input string for locating all resources belonging to a given course.
      *
-     * @param  int $courseId - the given course id
+     * @param int $courseId - the given course id
      * @return string        - the string that can be used as Lucene query input
      */
     abstract protected function getQueryInputByCourse($courseId);
@@ -33,7 +33,7 @@ abstract class AbstractIndexer extends AbstractBaseIndexer {
     /**
      * Get all resources belonging to a given course from DB.
      *
-     * @param  int   $courseId - the given course id
+     * @param int $courseId - the given course id
      * @return array           - array of DB fetched anonymous objects with property names that correspond to the column names
      */
     abstract protected function getCourseResourcesFromDB($courseId);
@@ -41,7 +41,7 @@ abstract class AbstractIndexer extends AbstractBaseIndexer {
     /**
      * Remove all Resources belonging to a Course.
      *
-     * @param int     $courseId - the given course id
+     * @param int $courseId - the given course id
      * @param boolean $optimize - whether to optimize after removing
      */
     public function removeByCourse($courseId, $optimize = false) {
@@ -60,7 +60,7 @@ abstract class AbstractIndexer extends AbstractBaseIndexer {
     /**
      * Store all Resources belonging to a Course.
      *
-     * @param int     $courseId - the given course id
+     * @param int $courseId - the given course id
      * @param boolean $optimize - whether to optimize after removing
      */
     public function storeByCourse($courseId, $optimize = false) {
@@ -73,8 +73,10 @@ abstract class AbstractIndexer extends AbstractBaseIndexer {
 
         // add the resources back to the index
         $res = $this->getCourseResourcesFromDB($courseId);
-        foreach ($res as $row) {
-            $this->__index->addDocument($this->makeDoc($row));
+        if (!empty($res)) {
+            foreach ($res as $row) {
+                $this->__index->addDocument($this->makeDoc($row));
+            }
         }
 
         $this->optimizeOrCommit($optimize);
