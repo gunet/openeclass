@@ -92,6 +92,9 @@ if ($is_editor) {
     } elseif (isset($_GET['newbadge'])) { // new badge activity
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langProgress);
         $pageName = $langNewBadge;
+    } elseif (isset($_GET['newpointsgame'])) { // new points game activity
+        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langProgress);
+        $pageName = $langNewPointsGame;
     } elseif (isset($_GET['u'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;$param_name=$element_id", "name" => $element_title);
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;$param_name=$element_id&amp;progressall=true", "name" => $langUsers);
@@ -343,6 +346,9 @@ if ($is_editor) {
         $display = FALSE;
     }  elseif (isset($_GET['newbadge'])) {  // create new badge
         certificate_settings('badge');
+        $display = FALSE;
+    }  elseif (isset($_GET['newpointsgame'])) {  // create new points game
+        certificate_settings('pointsgame');
         $display = FALSE;
     } elseif (isset($_GET['newcc'])) { // create course completion (special type of badge)
         add_certificate('badge', $langCourseCompletion, '', $langCourseCompletionMessage, '', q(get_config('institution')), 0, -1, null);
