@@ -2581,9 +2581,10 @@ function student_view_progress() {
 
     global $uid, $course_id, $urlServer, $tool_content, $langNoCertBadge,
             $langBadges, $course_code, $langCertificates, $langPrintVers,
-           $langCourseCompletion, $head_content, $langDetail;
+           $langCourseCompletion, $head_content, $langDetail, $langPointsGames;
 
     require_once 'Game.php';
+    require_once 'PointsGame.php';
 
     $head_content .= "<style>
         #progress_circle {
@@ -2779,6 +2780,47 @@ function student_view_progress() {
                 $tool_content .= "</div>";
                 $tool_content .= "</div>";
             }
+            $tool_content .= "</div></div></div>";
+        }
+
+        //display points games
+        $points_games = array();
+        $pointsgamesq = Database::get()->queryArray("SELECT * FROM points_game WHERE course_id = ?d", $course_id);
+        foreach ($pointsgamesq as $pg) {
+            $points_games[] = $pg; 
+        }
+
+        if (count($points_games) > 0) {
+            $found = true;
+
+            $tool_content .= "
+                    <div class='col-12 mt-4'>
+                        <div class='card panelCard card-default px-lg-4 py-lg-3'>
+                            <div class='card-header border-0 d-flex justify-content-between align-items-center'>
+                                <h3>$langPointsGames</h3>
+                            </div>
+                            <div class='card-body'>";
+
+            foreach ($points_games as $points_game) {
+                $user_progress = PointsGame::getNextLevelInfo($uid,$points_game->id);
+                $current_level = !is_null($user_progress['current_level_id']) ? $user_progress['current_level_title'] : 'N/A';
+                $tool_content .= "<div class='res-table-wrapper'>
+                                    <div class='row res-table-row border-0 p-3'>
+                                        <div class='col-md-4 col-12 d-flex justify-content-center align-items-center'>
+                                            $current_level
+                                        </div>
+                                        <div class='col-md-4 col-12 d-flex justify-content-center align-items-center mt-md-0 mt-3'>
+                                            <a href='index.php?course=$course_code&amp;points_game_id=$points_game->id&amp;u=$uid'>" . ellipsize($points_game->title, 40) . "</a>
+                                        </div>
+                                        <div class='col-md-4 col-12 mt-md-0 mt-3'>
+                                            <div class='progress progress-line'>
+                                                <div class='progress-line-bar' role='progressbar' style='width: ".$user_progress['progress_percentage']."%' aria-valuenow='".$user_progress['progress_percentage']."' aria-valuemin='0' aria-valuemax='100'>".$user_progress['progress_percentage']."%</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>";
+            }
+
             $tool_content .= "</div></div></div>";
         }
 

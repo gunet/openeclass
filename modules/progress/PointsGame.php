@@ -36,19 +36,21 @@ class PointsGame {
         $points_q = Database::get()->querySingle("SELECT total_points AS p, current_level AS l FROM user_points_game_points WHERE user=?d AND points_game=?d", $uid, $gid);
         if($points_q) {
             if($points_q->l) {
-                $q = Database::get()->querySingle("SELECT required_points AS p FROM points_game_levels WHERE id=?d",$points_q->l);
+                $q = Database::get()->querySingle("SELECT friendly_name as n, required_points AS p FROM points_game_levels WHERE id=?d",$points_q->l);
             }
 
             $performance = [
                 'points' => $points_q->p,
                 'current_level' => $points_q->l,
-                'current_level_min_points' => ($points_q->l) ? $q->p : null
+                'current_level_min_points' => ($points_q->l) ? $q->p : null,
+                'current_level_title' => ($points_q->l) ? $q->n : null
             ];
         } else {
             $performance = [
                 'points' => 0,
                 'current_level' => null,
-                'current_level_min_points' => null
+                'current_level_min_points' => null,
+                'current_level_title' => null
             ];
         }
 
@@ -61,10 +63,11 @@ class PointsGame {
             $max = (int) $next_q->required_points;
             $progress = max(0, $performance['points']);
             $percent = ($max > 0) ? ($progress / $max) * 100 : 100;
-            $percent = round(min(100, max(0, $percent)), 2);
+            $percent = round(min(100, max(0, $percent)));
 
             return [
                 'current_level_id' => null,
+                'current_level_title' => null,
                 'next_level_id' => $next_q->id,
                 'points_needed_for_next' => $max - $performance['points'],
                 'progress_percentage' => $percent
@@ -75,6 +78,7 @@ class PointsGame {
         if($performance['current_level'] && !$next_q) {
             return [
                 'current_level_id' => $performance['current_level'],
+                'current_level_title' => $performance['current_level_title'],
                 'next_level_id' => null,
                 'points_needed_for_next' => null,
                 'progress_percentage' => 100
@@ -87,10 +91,11 @@ class PointsGame {
         $span = $max - $min;
         $progress = $performance['points'] - $min;
         $percent = ($span > 0) ? ($progress / $span) * 100 : 100;
-        $percent = round(min(100, max(0, $percent)), 2);
+        $percent = round(min(100, max(0, $percent)));
 
         return [
             'current_level_id' => $performance['current_level'],
+            'current_level_title' => $performance['current_level_title'],
             'next_level_id' => $next_q->id,
             'points_needed_for_next' => $max - $performance['points'],
             'progress_percentage' => $percent
