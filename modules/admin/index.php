@@ -108,6 +108,9 @@ $data['colSize'] = $colSize;
 $ts = get_config('h5p_update_content_ts');
 $data['ts'] = format_locale_date(strtotime($ts), 'short', false);
 
+// OpenBadges Statistics
+$data['badge_stats'] = getBadgeStatistics();
+
 view('admin.index', $data);
 
 /**
@@ -167,5 +170,152 @@ function check_stored_procedures()
         }
     }
     return true;
+}
+
+/**
+ * @brief get OpenBadges statistics for admin dashboard
+ * @return array
+ */
+function getBadgeStatistics()
+{
+    $stats = [];
+    
+    // 1. Users with connected backpack provider
+    $stats['users_with_backpack'] = Database::get()->querySingle(
+        "SELECT COUNT(DISTINCT user_id) AS cnt 
+         FROM user_backpack_connection 
+         WHERE status = 'connected'"
+    )->cnt ?? 0;
+    
+    // 2. Users who have imported OR exported badges
+    $stats['active_backpack_users'] = Database::get()->querySingle(
+        "SELECT COUNT(DISTINCT ubc.user_id) AS cnt 
+         FROM user_backpack_connection ubc
+         WHERE ubc.status = 'connected' 
+         AND (
+             EXISTS (
+                 SELECT 1 FROM user_badge_external ube 
+                 WHERE ube.user_id = ubc.user_id
+             ) 
+             OR EXISTS (
+                 SELECT 1 FROM user_badge ub 
+                 WHERE ub.user = ubc.user_id 
+                 AND ub.external_assertion_id IS NOT NULL
+             )
+         )"
+    )->cnt ?? 0;
+    
+    // 3. Local badges exported to external backpack
+    $stats['exported_badges'] = Database::get()->querySingle(
+        "SELECT COUNT(*) AS cnt 
+         FROM user_badge 
+         WHERE external_assertion_id IS NOT NULL"
+    )->cnt ?? 0;
+    
+    // 4. External badges imported to the system
+    $stats['imported_badges'] = Database::get()->querySingle(
+        "SELECT COUNT(*) AS cnt 
+         FROM user_badge_external"
+    )->cnt ?? 0;
+    
+    // 5. Most exported local badge (with icon)
+    $mostExportedBadge = Database::get()->querySingle(
+        "SELECT b.title, bi.filename as icon_filename, COUNT(ub.id) as export_count
+         FROM user_badge ub
+         JOIN badge b ON ub.badge = b.id
+         LEFT JOIN badge_icon bi ON b.icon = bi.id
+         WHERE ub.external_assertion_id IS NOT NULL
+         GROUP BY ub.badge, b.title, bi.filename
+         ORDER BY export_count DESC
+         LIMIT 1"
+    );
+    
+    if ($mostExportedBadge) {
+        $stats['most_exported_badge_title'] = $mostExportedBadge->title;
+        $stats['most_exported_badge_count'] = $mostExportedBadge->export_count;
+        $stats['most_exported_badge_icon'] = $mostExportedBadge->icon_filename;
+    } else {
+        $stats['most_exported_badge_title'] = null;
+        $stats['most_exported_badge_count'] = 0;
+        $stats['most_exported_badge_icon'] = null;
+    }
+    
+    // 5b. Course with most badge exports
+    $courseWithMostExports = Database::get()->querySingle(
+        "SELECT c.id as course_id, c.title, c.code, COUNT(ub.id) as export_count
+         FROM user_badge ub
+         JOIN badge b ON ub.badge = b.id
+         JOIN course c ON b.course_id = c.id
+         WHERE ub.external_assertion_id IS NOT NULL
+         GROUP BY b.course_id, c.id, c.title, c.code
+         ORDER BY export_count DESC
+         LIMIT 1"
+    );
+    
+    if ($courseWithMostExports) {
+        $stats['course_most_exports_title'] = $courseWithMostExports->title;
+        $stats['course_most_exports_code'] = $courseWithMostExports->code;
+        $stats['course_most_exports_count'] = $courseWithMostExports->export_count;
+        $stats['course_most_exports_id'] = $courseWithMostExports->course_id;
+    } else {
+        $stats['course_most_exports_title'] = null;
+        $stats['course_most_exports_code'] = null;
+        $stats['course_most_exports_count'] = 0;
+        $stats['course_most_exports_id'] = null;
+    }
+    
+    // Additional meaningful statistics
+    
+    // 6. Total local badges in the system
+    $stats['total_local_badges'] = Database::get()->querySingle(
+        "SELECT COUNT(*) AS cnt FROM badge WHERE active = 1"
+    )->cnt ?? 0;
+    
+    // 7. Users with at least one badge (local or external)
+    $stats['users_with_badges'] = Database::get()->querySingle(
+        "SELECT COUNT(DISTINCT user_id) AS cnt FROM (
+            SELECT user as user_id FROM user_badge WHERE completed = 1
+            UNION
+            SELECT user_id FROM user_badge_external
+         ) AS all_badge_users"
+    )->cnt ?? 0;
+    
+    // 8. Active backpack providers
+    $stats['active_providers'] = Database::get()->querySingle(
+        "SELECT COUNT(*) AS cnt FROM backpack_provider WHERE active = 1"
+    )->cnt ?? 0;
+    
+    // 9. Recent sync activity (last 30 days)
+    $stats['recent_syncs'] = Database::get()->querySingle(
+        "SELECT COUNT(DISTINCT user_id) AS cnt 
+         FROM user_backpack_connection 
+         WHERE last_sync IS NOT NULL 
+         AND last_sync >= DATE_SUB(NOW(), INTERVAL 30 DAY)"
+    )->cnt ?? 0;
+    
+    // 10. Total badge awards (completed badges)
+    $stats['total_badge_awards'] = Database::get()->querySingle(
+        "SELECT COUNT(*) AS cnt FROM user_badge WHERE completed = 1"
+    )->cnt ?? 0;
+    
+    // 11. Most recent import
+    $recentImport = Database::get()->querySingle(
+        "SELECT created_at FROM user_badge_external ORDER BY created_at DESC LIMIT 1"
+    );
+    $stats['last_import'] = $recentImport && $recentImport->created_at ? 
+        format_locale_date(strtotime($recentImport->created_at)) : 
+        '-';
+    
+    // 12. Most recent export
+    $recentExport = Database::get()->querySingle(
+        "SELECT ub.updated FROM user_badge ub 
+         WHERE ub.external_assertion_id IS NOT NULL 
+         ORDER BY ub.updated DESC LIMIT 1"
+    );
+    $stats['last_export'] = $recentExport && $recentExport->updated ? 
+        format_locale_date(strtotime($recentExport->updated)) : 
+        '-';
+    
+    return $stats;
 }
 

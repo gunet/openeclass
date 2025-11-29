@@ -6476,4 +6476,23 @@ $langExternalBadges = "External Badges";
 $langSyncedFromBackpack = "Synced from Backpack";
 $langExternalBadge = "External Badge";
 $langUnknownIssuer = "Unknown Issuer";
+
+// OpenBadges Admin Statistics
+$langOpenBadgesStatistics = "OpenBadges Statistics";
+$langUsersWithBackpack = "Users with Connected Backpack";
+$langActiveBackpackUsers = "Users with Import/Export Activity";
+$langExportedBadges = "Local Badges Exported";
+$langImportedBadges = "External Badges Imported";
+$langTotalLocalBadges = "Total Local Badges";
+$langTotalBadgeAwards = "Total Badge Awards";
+$langUsersWithBadges = "Users with Badges";
+$langActiveBackpackProviders = "Active Backpack Providers";
+$langMostExportedBadge = "Most Exported Badge";
+$langExports = "exports";
+$langCourseMostExports = "Course with Most Exports";
+$langRecentSyncActivity = "Recent Sync Activity";
+$langUsersLast30Days = "users in the last 30 days";
+$langLastActivity = "Last Activity";
+$langLastImport = "Last Import";
+$langLastExport = "Last Export";
 ?>
