@@ -123,6 +123,8 @@ $head_content .= "<script type='text/javascript'>
                     }
                   });
               });
+
+              localStorage.removeItem('openEx');
         });
         </script>";
 
@@ -450,8 +452,8 @@ if (!$nbrExercises) {
             } else {
                 $tool_content .= "<td>  &mdash; </td>";
             }
-            $TotalExercises = Database::get()->queryArray("SELECT eurid FROM exercise_user_record WHERE eid = ?d AND attempt_status= " . ATTEMPT_PENDING . "", $row->id);
-            $counter1 = count($TotalExercises);
+            $TotalExercises = Database::get()->querySingle("SELECT count(*) AS total FROM exercise_user_record
+                WHERE eid = ?d AND attempt_status= " . ATTEMPT_PENDING, $row->id)->total;
             $langModify_temp = htmlspecialchars($langModify);
             $langConfirmYourChoice_temp = addslashes(htmlspecialchars($langConfirmYourChoice));
             $langDelete_temp = htmlspecialchars($langDelete);
@@ -465,13 +467,13 @@ if (!$nbrExercises) {
                               'icon-extra' => "data-exerciseid= [\"$eid\",\"$row->id\"]",
                               'url' => "#",
                               'icon' => 'fa-pencil',
-                              'show' => $counter1),
+                              'show' => $TotalExercises),
                         array('title' => $langDistributeExercise,
                               'icon-class' => 'distribution',
                               'icon-extra' => "data-exerciseid= [\"$eid\",\"$row->id\"]",
                               'url' => "#",
                               'icon' => 'fa-exchange',
-                              'show' => $counter1),
+                              'show' => $TotalExercises),
                         array('title' => $row->active ?  $langViewHide : $langViewShow,
                               'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($row->active ? "choice=disable" : "choice=enable")."&amp;exerciseId=" . $row->id,
                               'icon' => $row->active ? 'fa-eye-slash' : 'fa-eye' ),
@@ -638,13 +640,12 @@ if ($is_editor) {
         $courses_options1 .= "</tbody></table>";
         $countResJs = json_encode($TotalExercises2);
 
-        $question_types = Database::get()->queryArray("SELECT exq.id, exq.question, ear.q_position, eur.eid, eur.eurid as eurid "
+        $question_types = Database::get()->queryArray("SELECT DISTINCT eur.eurid "
                 . "FROM exercise_question AS exq "
                 . "JOIN exercise_answer_record AS ear ON ear.question_id = exq.id "
                 . "JOIN exercise_user_record AS eur ON eur.eurid = ear.eurid "
                 . "WHERE eur.eid IN (".implode(',', $ids_array).") AND ear.weight IS NULL "
-                . "AND exq.type = " . FREE_TEXT . " OR exq.type = ". ORAL. " "
-                . "GROUP BY exq.id, eur.eid, eur.eurid, ear.q_position, exq.question");
+                . "AND (exq.type = " . FREE_TEXT . " OR exq.type = ". ORAL . ")");
         $questionsEid = json_encode($question_types, JSON_UNESCAPED_UNICODE);
 
         $questions_table = "<table id=\'my-grade-table\' class=\'table-default\'><thead class=\'list-header\'><tr><th>$langTitle</th><th>$langChoice</th></tr></thead><tbody> " ;
@@ -658,7 +659,7 @@ if ($is_editor) {
 
         $questions_table .= "</tbody></table>";
 
-        if ($counter1 > 0) {
+        if ($TotalExercises > 0) {
             //  distribute exercise grading
             $head_content .= "<script type='text/javascript'>
             $(document).on('click', '.distribution', function() {
@@ -727,13 +728,12 @@ if ($is_editor) {
             $(document).on('click', '.by_question', function() {
                 var exerciseid = $(this).data('exerciseid');
                 var results = {
-                'list': $questionsEid,
-                'get': function(id) {
-                    return $.grep(results.list, function(element) { return element.eid == id; })
-                            [0].eurid; // return from the first array element
+                    'list': $questionsEid,
+                    'get': function(id) {
+                        return $.grep(results.list, function(element) { return element.eid == id; })
                     }
                 };
-            var res = results.get(exerciseid[1]);
+                var res = results.get(exerciseid[1]);
                 bootbox.dialog({
                     title: '" . js_escape($landQuestionsInExercise) . "',
                     message: '" . js_escape($langCorrectionMessage) . "',
@@ -750,7 +750,7 @@ if ($is_editor) {
                                 }
                             }
                         }
-                    });
+                });
             });
             </script>";
         }
