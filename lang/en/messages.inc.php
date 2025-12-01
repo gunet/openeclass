@@ -5561,6 +5561,8 @@ $langCourseDeletedBy = "Deleted by";
 $langNoticeCourseDeleted = "If the $langsCourse was deleted by you, you can ignore this email. If the deletion was done by mistake and you wish to restore your $langsCourse, please contact the platform administrators.";
 $langExercisePreventCopy = 'Prevent Text Copying';
 $langExercisePreventCopyExplanation = 'Prevent copying and pasting text during execution of the exercise';
+$langStricterExamRestriction = "Stricter exam mode";
+$langExerciseWillBeCanceledInStrictMode = "The exam is canceled in parallel user actions";
 $langDoubleLoginLock = 'You have logged into the platform from another device
     with the same account. Double logins are disabled, so your current login has
     been disconnected.';
@@ -6409,6 +6411,10 @@ If you want a specific subset of the items you defined to appear in the exercise
 you select the <strong class="text-dark">item selection type</strong> and the <strong class="text-dark">subset size</strong>.
 ';
 $langExerciseRequireLogin = 'You must first log in to the platform in order to access the exercise';
+$langWarningNewPageOpened = "<strong>Attention!</strong><br>Please keep the current page open throughout the exam.<br> Any parallel action, such as redirecting to a new page or opening a new window, will result in the automatic cancellation of your attempt.";
+$langWarningNewPageOpened2 = "<strong>Warning!</strong><br>You have entered the examination area.<br> Any parallel action, such as redirecting to a new page or opening a new window, will lead to the automatic cancellation of your attempt.";
+$langExWillBeCanceled = "Your attempt will be canceled.";
+$langGoToExam = "Enter the exam";
 $langNoUsersForExerSubmission = 'There are no users without submission to the exercise.';
 $langNotifyUnSubmittedUsers = 'We remind you that you have not submitted your answers to the lesson exercise.';
 $langNotifyUsersViaEmail = 'Notify users at their email address to submit their responses.';

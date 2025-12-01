@@ -2323,6 +2323,38 @@ function rich_text_editor($name, $rows, $cols, $text, $onFocus = false, $options
                     parent.find('.mce-toolbar-grp, .mce-statusbar').attr('style','border:0px');
                     if (typeof tinyMceCallback !== 'undefined') {
                         tinyMceCallback(editor);
+
+                        let focusTimer;
+                        let unfocusTimer;
+                        let stopWritingTimer;
+                        const activityDelay = 2000;
+                        localStorage.setItem('isTinyMCEFocused', 'false');
+
+                        // When editor gains focus
+                        editor.on('focus', () => {
+                            // Clear unfocus timer if active
+                            clearTimeout(unfocusTimer);
+                            // Set focused state
+                            localStorage.setItem('isTinyMCEFocused', 'true');
+                        });
+
+                        // When editor loses focus
+                        editor.on('blur', function () {
+                            localStorage.setItem('isTinyMCEFocused', 'false');
+                        });
+
+                        // When user presses a key (writing)
+                        editor.on('keydown', () => {
+                            // Mark editor as focused
+                            localStorage.setItem('isTinyMCEFocused', 'true');
+                            // Reset the stop writing timer
+                            clearTimeout(stopWritingTimer);
+                            stopWritingTimer = setTimeout(() => {
+                                // User stopped writing for 2 seconds
+                                localStorage.setItem('isTinyMCEFocused', 'false');
+                            }, activityDelay);
+                        });
+
                     }";
         if ($onFocus) {
             $focus_init .= "parent.find('.mce-toolbar-grp').hide();";
