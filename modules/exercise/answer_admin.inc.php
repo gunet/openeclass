@@ -493,21 +493,31 @@ if (isset($submitAnswers) || isset($buttonBack)) {
         $markerAnsArr = [];
         if (count($arrDataMarkers) > 0) {
             foreach($arrDataMarkers as $index => $marker) {
-                $markerAnsArr[] = $index . '|' . $arrDataMarkers[$index]['marker_answer'] . '|' . $arrDataMarkers[$index]['marker_grade'];
+                //$markerAnsArr[] = $index . '|' . $arrDataMarkers[$index]['marker_answer'] . '|' . $arrDataMarkers[$index]['marker_grade'];
+                $markerAnsArr[] = [
+                    'index' => $index,
+                    'choice_answer' => purify($arrDataMarkers[$index]['marker_answer']),
+                    'choice_grade' => fix_float($arrDataMarkers[$index]['marker_grade'])
+                ];
             }
         }
 
-        $marker_ans = '';
-        if (count($markerAnsArr) > 0) {
-            $marker_ans = implode(',', $markerAnsArr);
-            $marker_ans = '::' . $marker_ans;
-        }
+        // $marker_ans = '';
+        // if (count($markerAnsArr) > 0) {
+        //     $marker_ans = implode(',', $markerAnsArr);
+        //     $marker_ans = '::' . $marker_ans;
+        // }
 
         $bracketAnswers = '';
         for ($i=1; $i <= count($markerAnsArr); $i++) {
             $bracketAnswers .= ' [' . $i . '] ';
         }
-        $reponse = $langDragAndDropMarkersTextAnswers . $bracketAnswers . $marker_ans;
+        $arrResponse = [];
+        $arrResponse[] = [
+            'pr_text' => $langDragAndDropMarkersTextAnswers . $bracketAnswers,
+            'pr_answers' => serialize($markerAnsArr)
+        ];
+        $reponse = serialize($arrResponse);
         $objAnswer->createAnswer($reponse, 0, '', 0, 1);
         $objAnswer->save();
         if (isset($_POST['marker_grade'])) {

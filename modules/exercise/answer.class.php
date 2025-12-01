@@ -295,10 +295,8 @@ if (!class_exists('Answer')):
             $text = '';
             if ($answer) {
                 $arr = unserialize($answer->answer);
-                if (count($arr) > 0) {
-                    foreach ($arr as $r) {
-                        $text = $r['pr_text'];
-                    }
+                if (is_array($arr) && count($arr) > 0) {
+                    $text = $arr[0]['pr_text'] ?? '';
                 }
             }
 
@@ -333,13 +331,11 @@ if (!class_exists('Answer')):
 
             if ($answer) {
                 $arr = unserialize($answer->answer);
-                if (count($arr) > 0) {
-                    foreach ($arr as $r) {
-                        $predefinedAnswers = unserialize($r['pr_answers']);
-                        if (count($predefinedAnswers) > 0) {
-                            foreach ($predefinedAnswers as $p) {
-                                $textWithAnswer[$p['index']+1] = $p['choice_answer'];
-                            }
+                if (is_array($arr) && count($arr) > 0) {
+                    $predefinedAnswers = unserialize($arr[0]['pr_answers'] ?? '');
+                    if (is_array($predefinedAnswers) && count($predefinedAnswers) > 0) {
+                        foreach ($predefinedAnswers as $p) {
+                            $textWithAnswer[$p['index']+1] = $p['choice_answer'];
                         }
                     }
                 }
@@ -376,13 +372,11 @@ if (!class_exists('Answer')):
 
             if ($answer) {
                 $arr = unserialize($answer->answer);
-                if (count($arr) > 0) {
-                    foreach ($arr as $r) {
-                        $predefinedAnswers = unserialize($r['pr_answers']);
-                        if (count($predefinedAnswers) > 0) {
-                            foreach ($predefinedAnswers as $p) {
-                                $markerWithGrade[$p['index']+1] = $p['choice_grade'];
-                            }
+                if (is_array($arr) && count($arr) > 0) {
+                    $predefinedAnswers = unserialize($arr[0]['pr_answers'] ?? '');
+                    if (is_array($predefinedAnswers) && count($predefinedAnswers) > 0) {
+                        foreach ($predefinedAnswers as $p) {
+                            $markerWithGrade[$p['index']+1] = $p['choice_grade'];
                         }
                     }
                 }
@@ -400,32 +394,46 @@ if (!class_exists('Answer')):
 
             $questionId = $this->questionId;
             $answer = Database::get()->querySingle("SELECT answer FROM exercise_answer WHERE question_id = ?d", $questionId);
-            $TempArr = [];
+            //$TempArr = [];
             $markerWithAnswer = [];
+            $predefinedAnswers = [];
+
+            // if ($answer) {
+            //     $q = explode('::', $answer->answer);
+            //     if (count($q) > 0) {
+            //         // Get the all markers from the brackets inside the text.
+            //         preg_match_all('/\[(\d+)\]/', $q[0], $matches);
+            //         $allTextMarkers = $matches[1];
+
+            //         $str = $q[1] ?? '';
+            //         $arr = explode(',', $str);
+            //         foreach ($arr as $value) {
+            //             $arr2 = explode('|', $value);
+            //             if (count($arr2) == 3) {
+            //                 $TempArr[$arr2[0]] = $arr2[1];
+            //             }
+            //         }
+
+            //         foreach ($allTextMarkers as $m) {
+            //             foreach ($TempArr as $index => $val) {
+            //                 if ($index == $m) {
+            //                     $markerWithAnswer[$index] = $val;
+            //                 }
+            //             }
+
+            //         }
+            //     }
+            // }
 
             if ($answer) {
-                $q = explode('::', $answer->answer);
-                if (count($q) > 0) {
-                    // Get the all markers from the brackets inside the text.
-                    preg_match_all('/\[(\d+)\]/', $q[0], $matches);
-                    $allTextMarkers = $matches[1];
-
-                    $str = $q[1] ?? '';
-                    $arr = explode(',', $str);
-                    foreach ($arr as $value) {
-                        $arr2 = explode('|', $value);
-                        if (count($arr2) == 3) {
-                            $TempArr[$arr2[0]] = $arr2[1];
+               
+                $arr = unserialize($answer->answer);
+                if (is_array($arr) && count($arr) > 0) {
+                    $predefinedAnswers = unserialize($arr[0]['pr_answers'] ?? '');
+                    if (is_array($predefinedAnswers) && count($predefinedAnswers) > 0) {
+                        foreach ($predefinedAnswers as $p) {
+                            $markerWithAnswer[$p['index']] = $p['choice_answer'];
                         }
-                    }
-
-                    foreach ($allTextMarkers as $m) {
-                        foreach ($TempArr as $index => $val) {
-                            if ($index == $m) {
-                                $markerWithAnswer[$index] = $val;
-                            }
-                        }
-
                     }
                 }
             }
@@ -442,17 +450,30 @@ if (!class_exists('Answer')):
 
             $questionId = $this->questionId;
             $answer = Database::get()->querySingle("SELECT answer FROM exercise_answer WHERE question_id = ?d", $questionId);
+            $predefinedAnswers = [];
             $markerWithGrade = [];
 
+            // if ($answer) {
+            //     $q = explode('::', $answer->answer);
+            //     if (count($q) > 0) {
+            //         $str = $q[1] ?? '';
+            //         $arrTmp = explode(',', $str);
+            //         foreach ($arrTmp as $value) {
+            //             $arr2 = explode('|', $value);
+            //             if (count($arr2) == 3) {
+            //                 $markerWithGrade[$arr2[0]] = $arr2[2];
+            //             }
+            //         }
+            //     }
+            // }
+
             if ($answer) {
-                $q = explode('::', $answer->answer);
-                if (count($q) > 0) {
-                    $str = $q[1] ?? '';
-                    $arrTmp = explode(',', $str);
-                    foreach ($arrTmp as $value) {
-                        $arr2 = explode('|', $value);
-                        if (count($arr2) == 3) {
-                            $markerWithGrade[$arr2[0]] = $arr2[2];
+                $arr = unserialize($answer->answer);
+                if (is_array($arr) && count($arr) > 0) {
+                    $predefinedAnswers = unserialize($arr[0]['pr_answers'] ?? '');
+                    if (is_array($predefinedAnswers) && count($predefinedAnswers) > 0) {
+                        foreach ($predefinedAnswers as $p) {
+                            $markerWithGrade[$p['index']] = $p['choice_grade'];
                         }
                     }
                 }
@@ -498,10 +519,8 @@ if (!class_exists('Answer')):
 
             if ($answer) {
                 $q = unserialize($answer->answer);
-                if (count($q) > 0) {
-                    foreach ($q as $r) {
-                        $res = unserialize($r['pr_answers']);
-                    }
+                if (is_array($q) && count($q) > 0) {
+                    $res = unserialize($q[0]['pr_answers'] ?? '');
                     return count($res);
                 }
             } else {
@@ -534,10 +553,10 @@ if (!class_exists('Answer')):
 
             if ($answer) {
                 $q = unserialize($answer->answer);
-                if (count($q) > 0) {
+                if (is_array($q) && count($q) > 0) {
                     foreach ($q as $r) {
                         $arr = unserialize($r['pr_answers']);
-                        if (count($arr) > 0) {
+                        if (is_array($arr) && count($arr) > 0) {
                             foreach ($arr as $r) {
                                 if ($r['choice_grade'] > 0) {
                                     $total++;
@@ -581,13 +600,12 @@ if (!class_exists('Answer')):
 
             if ($answer) {
                 $q = unserialize($answer->answer);
-                if (count($q) > 0) {
-                    foreach ($q as $r) {
-                        $arr = unserialize($r['pr_answers']);
-                        if (count($arr) > 0) {
-                            foreach ($arr as $r) {
-                                $reformattedItems[$r['index']] = $r['choice_answer'];
-                            }
+                if (is_array($q) && count($q) > 0) {
+                    $reformattedItems = [];
+                    $arr = unserialize($q[0]['pr_answers'] ?? '');
+                    if (is_array($arr) && count($arr) > 0) {
+                        foreach ($arr as $r) {
+                            $reformattedItems[$r['index']] = $r['choice_answer'];
                         }
                     }
                     ksort($reformattedItems);
@@ -632,13 +650,11 @@ if (!class_exists('Answer')):
 
             if ($answer) {
                 $arr = unserialize($answer->answer);
-                if (count($arr) > 0) {
-                    foreach ($arr as $r) {
-                        $predefinedAnswers = unserialize($r['pr_answers']);
-                        if (count($predefinedAnswers) > 0) {
-                            foreach ($predefinedAnswers as $p) {
-                                $resultArray[$p['index']] = $p['choice_grade'];
-                            }
+                if (is_array($arr) && count($arr) > 0) {
+                    $predefinedAnswers = unserialize($arr[0]['pr_answers'] ?? '');
+                    if (is_array($predefinedAnswers) && count($predefinedAnswers) > 0) {
+                        foreach ($predefinedAnswers as $p) {
+                            $resultArray[$p['index']] = $p['choice_grade'];
                         }
                     }
                 }
@@ -698,6 +714,34 @@ if (!class_exists('Answer')):
             // minumun 2 answers
             $maxValueMarker = (count($arrMarkers) > 0) ? count($arrMarkers) : 2;
             return $maxValueMarker;
+        }
+
+        /**
+         *
+         * @param $questionId
+         * @author - Nikos Mpalamoutis
+         */
+        function get_drag_and_drop_marker_answer_grade() {
+
+            $resultArray = [];
+            $questionId = $this->questionId;
+            $answer = Database::get()->querySingle("SELECT answer FROM exercise_answer WHERE question_id = ?d", $questionId);
+            $predefinedAnswers = [];
+
+            if ($answer) {
+                $arr = unserialize($answer->answer);
+                if (is_array($arr) && count($arr) > 0) {
+                    $predefinedAnswers = unserialize($arr[0]['pr_answers']);
+                    if (is_array($predefinedAnswers) && count($predefinedAnswers) > 0) {
+                        foreach ($predefinedAnswers as $p) {
+                            $resultArray[$p['index']] = $p['choice_grade'];
+                        }
+                    }
+                }
+            }
+
+            return $resultArray;
+            
         }
 
         /**

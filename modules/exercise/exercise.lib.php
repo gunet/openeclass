@@ -291,11 +291,9 @@ function display_exercise($exercise_id): void
               $arithmetic_expression_str = '';
             if ($answerType == CALCULATED) {
                 $des_arr = unserialize($questionDescription);
-                if (count($des_arr) > 0) {
-                    foreach ($des_arr as $r) {
-                        $questionDescription = $r['question_description'];
-                        $arithmetic_expression = $r['arithmetic_expression'];
-                    }
+                if (is_array($des_arr)) {
+                    $questionDescription = $des_arr['question_description'] ?? '';
+                    $arithmetic_expression = $des_arr['arithmetic_expression'] ?? '';
                 }
                 $objAn = new Answer($qid);
                 $arithmetic_expression_str = $objAn->replaceItemsBracesWithWildCards($arithmetic_expression, $qid);
