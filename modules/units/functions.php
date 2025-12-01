@@ -1161,7 +1161,7 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility, $act_
 
     global $id, $urlServer, $is_editor, $uid, $m, $langResourceBelongsToUnitPrereq,
             $langWasDeleted, $course_id, $course_code, $langPassCode, $langWorks,
-            $langWorkToUser, $langWorkAssignTo, $langWorkToGroup;
+            $langWorkToUser, $langWorkAssignTo, $langWorkToGroup, $langHasParticipated;
 
     $title = q($title);
     $res_prereq_icon = '';
@@ -1224,6 +1224,20 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility, $act_
         $link = "<a class='TextBold' href='{$urlServer}$url' $class>";
         $exlink = $link . "$title</a> $exclamation_icon";
         $imagelink = $link . "</a>".icon('fa-flask')."";
+
+        //show participation and grade
+        $submissions = Database::get()->querySingle("SELECT id, grade
+            FROM assignment_submit
+            WHERE assignment_id = ?d AND uid = ?d
+            ORDER BY id LIMIT 1", $work_id, $uid);
+
+        $hasparticipated_label = '';
+        $grade = '';
+        if ($submissions) {
+            $hasparticipated_label = "<span class='fa-solid fa-check' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-title='$langHasParticipated'></span>";
+            $grade = $submissions->grade;
+        }
+
     }
 
     if (!empty($comments)) {
@@ -1236,7 +1250,7 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility, $act_
         <div$class_vis data-id='$resource_id'>
           <div class='unitIcon' width='1'>$imagelink</div>
           " . (!empty($act_name) ? "<div class='text-start act_label'>$act_name</div>" : "") . "
-          <div class='text-start'><div class='module-name'>$langWorks</div> $exlink $res_prereq_icon $comment_box $assign_to_users_message</div>" .
+          <div class='text-start'><div class='module-name'>$langWorks</div> $exlink $res_prereq_icon $comment_box $assign_to_users_message $hasparticipated_label $grade</div>" .
             actions('lp', $resource_id, $visibility) . '
         </div>';
 }
@@ -1253,7 +1267,7 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility, $act_
 function show_exercise($title, $comments, $resource_id, $exercise_id, $visibility, $act_name) {
     global $id, $urlServer, $is_editor, $langWasDeleted, $course_id, $course_code, $langPassCode, $uid,
         $langAttemptActive, $langAttemptPausedS, $m, $langResourceBelongsToUnitPrereq, $langExercises,
-        $langWorkToUser, $langWorkAssignTo, $langWorkToGroup;
+        $langWorkToUser, $langWorkAssignTo, $langWorkToGroup, $langHasParticipated;
 
     $title = q($title);
     $link_class = $exclamation_icon = $res_prereq_icon = '';
@@ -1335,13 +1349,21 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
                 }
             }
         }
+
+        // check if user has participated
+        $hasparticipated = Database::get()->querySingle("SELECT * FROM exercise_user_record WHERE uid = ?d AND eid = ?d", $uid, $exercise_id);
+        $hasparticipated_label = '';
+        if ($hasparticipated) {
+            $hasparticipated_label = "<span class='fa-solid fa-check' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-title='$langHasParticipated'></span>";
+        }
+
         if ($pending_class) {
             enable_password_bootbox();
             $link = "<a class='ex_settings $pending_class $link_class TextBold' href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id&amp;eurId=$eurid&amp;unit=$id'>";
         } else {
             $link = "<a class='ex_settings $link_class TextBold' href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id&amp;unit=$id'>";
         }
-        $exlink = $link . "$title</a> $exclamation_icon $assign_to_users_message $pending_label";
+        $exlink = $link . "$title</a> $exclamation_icon $assign_to_users_message $pending_label $hasparticipated_label";
         $imagelink = $link . "</a>" . icon('fa-solid fa-file-pen'). "";
     }
     $class_vis = ($status == '0' or $status == 'del') ? ' class="not_visible"' : ' ';
