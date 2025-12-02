@@ -412,7 +412,8 @@ $tool_content .= "
     <table class='table-default'>
     <thead class='list-header'>
     <tr>
-      <th>$langLearningPaths</th>";
+      <th>$langLearningPaths</th>
+      <th>$langType</th>";
 
 if ($is_editor) {
     // Titles for teachers
@@ -484,7 +485,7 @@ foreach ($result as $list) { // while ... learning path list
     //Display current learning path name
     if (!$is_blocked) {
         // locate 1st module of current learning path
-        $modulessql = "SELECT M.`module_id`
+        $modulessql = "SELECT M.`module_id`, M.`contentType`
                 FROM (`lp_module` AS M,
                       `lp_rel_learnPath_module` AS LPM)
                 WHERE M.`module_id` = LPM.`module_id`
@@ -522,7 +523,7 @@ foreach ($result as $list) { // while ... learning path list
         $tool_content .= "
                     </div>
                 <div class='mt-2'><p>" . q($list->lp_comment) . "<p></div>
-            </td>";
+            </td><td>" . (($resultmodules[0]->contentType === "SCORM") ? $langAltScorm : $langLearnPath) . "</td>";
 
         // --------------TEST IF FOLLOWING PATH MUST BE BLOCKED------------------
         // ---------------------(MUST BE OPTIMIZED)------------------------------
