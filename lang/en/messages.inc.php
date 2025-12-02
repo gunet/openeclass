@@ -4346,6 +4346,7 @@ $question20 = " I spend time figuring out what's 'wrong' with things. For exampl
 $rate_scale = "The A.T.T.L.S. (Attitudes Towards Thinking Learning Survey) questionnaire is about the attitude towards the thinking
 			   and learning and it was created with success. It consists from 20 questions. Each question has as reply a number from 1 (Strongly disagree) to 5 (Strongly agree).";
 $lang_Results = "Results";
+$langShowResults = "Show results";
 $langCKW = "The student belongs in connected knowledge: ";
 $langSKW = "The student belongs in separated knowledge: ";
 $langCKW_SKW = "The student belongs both connected and separated knowledge: ";

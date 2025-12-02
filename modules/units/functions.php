@@ -1161,7 +1161,7 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility, $act_
 
     global $id, $urlServer, $is_editor, $uid, $m, $langResourceBelongsToUnitPrereq,
             $langWasDeleted, $course_id, $course_code, $langPassCode, $langWorks,
-            $langWorkToUser, $langWorkAssignTo, $langWorkToGroup, $langHasParticipated;
+            $langWorkToUser, $langWorkAssignTo, $langWorkToGroup, $langHasParticipated, $langGradebookGrade;
 
     $title = q($title);
     $res_prereq_icon = '';
@@ -1226,16 +1226,18 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility, $act_
         $imagelink = $link . "</a>".icon('fa-flask')."";
 
         //show participation and grade
-        $submissions = Database::get()->querySingle("SELECT id, grade
-            FROM assignment_submit
-            WHERE assignment_id = ?d AND uid = ?d
-            ORDER BY id LIMIT 1", $work_id, $uid);
+        $submissions = find_submissions(is_group_assignment($work_id), $uid, $work_id, user_group_info($uid, $course_id));
 
-        $hasparticipated_label = '';
-        $grade = '';
+        $hasparticipated_grade = '';
+
         if ($submissions) {
-            $hasparticipated_label = "<span class='fa-solid fa-check' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-title='$langHasParticipated'></span>";
-            $grade = $submissions->grade;
+            $hasparticipated_grade = "(";
+            $hasparticipated_grade .= "<span class='fa-solid fa-check' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-title='$langHasParticipated'></span>";
+            $item = is_array($submissions) ? reset($submissions) : $submissions;
+            if (is_object($item) && isset($item->grade)) {
+                $hasparticipated_grade .= "<span style='margin-left: 5px;'>" . $langGradebookGrade . ": " . submission_grade($item->id) . "</span>";
+            }
+            $hasparticipated_grade .= ")";
         }
 
     }
@@ -1250,11 +1252,92 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility, $act_
         <div$class_vis data-id='$resource_id'>
           <div class='unitIcon' width='1'>$imagelink</div>
           " . (!empty($act_name) ? "<div class='text-start act_label'>$act_name</div>" : "") . "
-          <div class='text-start'><div class='module-name'>$langWorks</div> $exlink $res_prereq_icon $comment_box $assign_to_users_message $hasparticipated_label $grade</div>" .
+          <div class='text-start'><div class='module-name'>$langWorks</div> $exlink $hasparticipated_grade $res_prereq_icon $comment_box $assign_to_users_message</div>" .
             actions('lp', $resource_id, $visibility) . '
         </div>';
 }
 
+function is_group_assignment($id) {
+    global $course_id;
+
+    $res = Database::get()->querySingle("SELECT group_submissions FROM assignment WHERE course_id = ?d AND id = ?d", $course_id, $id);
+    if ($res) {
+        if ($res->group_submissions == 0) {
+            return FALSE;
+        } else {
+            return TRUE;
+        }
+    } else {
+        die("Error: assignment $id doesn't exist");
+    }
+}
+
+function find_submissions($is_group_assignment, $uid, $id, $gids) {
+
+    if ($is_group_assignment AND count($gids)) {
+        $groups_sql = join(', ', array_keys($gids));
+        $res = Database::get()->queryArray("SELECT id, uid, group_id, submission_date,
+                file_path, file_name, comments, grade, grade_comments, grade_submission_date
+            FROM assignment_submit
+            WHERE assignment_id = ?d AND
+                  group_id IN ($groups_sql)", $id);
+        if (!$res) {
+            return [];
+        } else {
+            return array_filter($res, function ($item) {
+                static $seen = [];
+
+                $return = !isset($seen[$item->group_id]);
+                $seen[$item->group_id] = true;
+                return $return;
+            });
+        }
+
+    } else {
+        $res = Database::get()->querySingle("SELECT id, grade
+            FROM assignment_submit
+            WHERE assignment_id = ?d AND uid = ?d
+            ORDER BY id LIMIT 1", $id, $uid);
+        if (!$res) {
+            return [];
+        } else {
+            return [$res];
+        }
+    }
+}
+
+function submission_grade($subid) {
+    global $langYes, $course_id;
+
+    $res = Database::get()->querySingle("SELECT grade, grade_comments, assignment_id
+                                                FROM assignment_submit
+                                            WHERE id = ?d", $subid);
+    if ($res) {
+        $assignment_grading_data = Database::get()->querySingle("SELECT grading_type, grading_scale_id FROM assignment WHERE id = ?d", $res->assignment_id);
+        if ($assignment_grading_data->grading_type == ASSIGNMENT_SCALING_GRADE) {
+            $serialized_scale_data = Database::get()->querySingle("SELECT scales FROM grading_scale WHERE id = ?d AND course_id = ?d", $assignment_grading_data->grading_scale_id, $course_id)->scales;
+            $scales = unserialize($serialized_scale_data);
+            foreach ($scales as $scale) {
+                if ($res->grade == $scale['scale_item_value']) {
+                    $grade = $scale['scale_item_name'];
+                    break;
+                }
+            }
+        } else {
+            $grade = $res->grade;
+        }
+
+        if (!empty($grade)) {
+            return trim($grade);
+        } elseif (!empty($res->grade_comments)) {
+            return $langYes;
+        } else {
+            return FALSE;
+        }
+    } else {
+        return FALSE;
+    }
+}
 /**
  * @brief display resource exercise
  * @param type $title
@@ -1267,7 +1350,7 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility, $act_
 function show_exercise($title, $comments, $resource_id, $exercise_id, $visibility, $act_name) {
     global $id, $urlServer, $is_editor, $langWasDeleted, $course_id, $course_code, $langPassCode, $uid,
         $langAttemptActive, $langAttemptPausedS, $m, $langResourceBelongsToUnitPrereq, $langExercises,
-        $langWorkToUser, $langWorkAssignTo, $langWorkToGroup, $langHasParticipated;
+        $langWorkToUser, $langWorkAssignTo, $langWorkToGroup, $langHasParticipated, $langShowResults;
 
     $title = q($title);
     $link_class = $exclamation_icon = $res_prereq_icon = '';
@@ -1357,13 +1440,19 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
             $hasparticipated_label = "<span class='fa-solid fa-check' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-title='$langHasParticipated'></span>";
         }
 
+        $hasresults = Database::get()->querySingle("SELECT * FROM exercise_user_record WHERE uid = ?d AND eid = ?d AND attempt_status = ?d", $uid, $exercise_id, ATTEMPT_COMPLETED);
+        if ($hasresults) {
+            $hasresults_label = "<a href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise_results_list&amp;exerciseId=".getIndirectReference($exercise_id)."'><span class='fa-solid fa-square-poll-horizontal' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-title='$langShowResults'></span></a>";
+        }
+
+
         if ($pending_class) {
             enable_password_bootbox();
             $link = "<a class='ex_settings $pending_class $link_class TextBold' href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id&amp;eurId=$eurid&amp;unit=$id'>";
         } else {
             $link = "<a class='ex_settings $link_class TextBold' href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id&amp;unit=$id'>";
         }
-        $exlink = $link . "$title</a> $exclamation_icon $assign_to_users_message $pending_label $hasparticipated_label";
+        $exlink = $link . "$title</a> $hasparticipated_label $hasresults_label $exclamation_icon $assign_to_users_message $pending_label";
         $imagelink = $link . "</a>" . icon('fa-solid fa-file-pen'). "";
     }
     $class_vis = ($status == '0' or $status == 'del') ? ' class="not_visible"' : ' ';
