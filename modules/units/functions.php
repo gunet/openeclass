@@ -1442,7 +1442,7 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
 
         $hasresults = Database::get()->querySingle("SELECT * FROM exercise_user_record WHERE uid = ?d AND eid = ?d AND attempt_status = ?d", $uid, $exercise_id, ATTEMPT_COMPLETED);
         if ($hasresults) {
-            $hasresults_label = "<a href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise_results_list&amp;exerciseId=".getIndirectReference($exercise_id)."'><span class='fa-solid fa-square-poll-horizontal' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-title='$langShowResults'></span></a>";
+            $hasresults_label = "<a href='{$urlServer}modules/units/view.php?course=$course_code&amp;unit=$id&amp;res_type=exercise_results_list&amp;exerciseId=".getIndirectReference($exercise_id)."'><span class='fa-solid fa-square-poll-horizontal' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-title='$langShowResults'></span></a>";
         }
 
 

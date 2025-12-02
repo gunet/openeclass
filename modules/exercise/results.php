@@ -30,7 +30,15 @@ require_once 'include/lib/multimediahelper.class.php';
 ModalBoxHelper::loadModalBox();
 
 $toolName = $langResults;
-$navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langExercices);
+
+$unit = $_GET['unit'] ?? null;
+if ($unit) {
+    $unit_name = Database::get()->querySingle('SELECT title FROM course_units WHERE course_id = ?d AND id = ?d',
+        $course_id, $unit)->title;
+    $navigation[] = ['url' => "index.php?course=$course_code&id=$unit", 'name' => q($unit_name)];
+} else {
+    $navigation[] = ['url' => "index.php?course=$course_code", 'name' => $langExercices];
+}
 
 if (isset($_GET['exerciseId'])) {
     $exerciseId = getDirectReference($_GET['exerciseId']);
@@ -177,11 +185,11 @@ foreach ($result as $row) {
                 FROM exercise b
                     JOIN exercise_user_record a ON a.eid = b.id
                     LEFT JOIN exercise_answer_record ON a.eurid = exercise_answer_record.eurid
-                WHERE a.uid = ?d AND a.eid = ?d $extra_sql                
-                GROUP BY a.eurid, record_start_date, 
-                    record_end_date, attempt_status, 
-                    time_constraint, secs_remaining, 
-                    total_score, total_weighting, 
+                WHERE a.uid = ?d AND a.eid = ?d $extra_sql
+                GROUP BY a.eurid, record_start_date,
+                    record_end_date, attempt_status,
+                    time_constraint, secs_remaining,
+                    total_score, total_weighting,
                     assigned_to
                 ORDER BY record_start_date ASC", $sid, $exerciseId);
 

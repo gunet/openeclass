@@ -426,7 +426,7 @@ if (!class_exists('Answer')):
             // }
 
             if ($answer) {
-               
+
                 $arr = unserialize($answer->answer);
                 if (is_array($arr) && count($arr) > 0) {
                     $predefinedAnswers = unserialize($arr[0]['pr_answers'] ?? '');
@@ -741,7 +741,7 @@ if (!class_exists('Answer')):
             }
 
             return $resultArray;
-            
+
         }
 
         /**
@@ -915,7 +915,7 @@ if (!class_exists('Answer')):
             $answer_temp = Database::get()->querySingle("SELECT answer FROM exercise_answer WHERE question_id = ?d", $questionId);
             if ($answer_temp) {
                 $arr_answer = unserialize($answer_temp->answer);
-                if (count($arr_answer) > 0) {
+                if (is_array($arr_answer) and count($arr_answer) > 0) {
                     foreach ($arr_answer as $item) {
                         $index = $item['index'];
                         $value = $item['value'];
@@ -938,7 +938,7 @@ if (!class_exists('Answer')):
             $answer_temp = Database::get()->querySingle("SELECT answer FROM exercise_answer WHERE question_id = ?d", $questionId);
             if ($answer_temp) {
                 $arr_answer = unserialize($answer_temp->answer);
-                if (count($arr_answer) > 0) {
+                if (is_array($arr_answer) and count($arr_answer) > 0) {
                     foreach ($arr_answer as $item) {
                         $index = $item['index'];
                         $grade = $item['grade'];
