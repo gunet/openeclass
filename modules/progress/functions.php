@@ -2709,6 +2709,8 @@ function display_users_progress($element, $element_id) {
                                              JOIN user ON user.id = user_certificate.user
                                                 AND course_user.status = " .USER_STUDENT . "
                                                 AND editor = 0
+                                                AND course_reviewer = 0
+                                                AND reviewer = 0
                                                 AND course_id = ?d
                                                 AND certificate = ?d
                                             ORDER BY user.surname, user.givenname
@@ -2717,6 +2719,8 @@ function display_users_progress($element, $element_id) {
                                             JOIN course_user ON user_certificate.user=course_user.user_id
                                                 AND status = " .USER_STUDENT . "
                                                 AND editor = 0
+                                                AND course_reviewer = 0
+                                                AND reviewer = 0
                                                 AND course_id = ?d
                                                 AND completed = 1
                                                 AND certificate = ?d", $course_id,$element_id)->t;
@@ -2728,6 +2732,8 @@ function display_users_progress($element, $element_id) {
                                             JOIN user ON user.id = user_badge.user
                                                 AND course_user. status = " .USER_STUDENT . "
                                                 AND editor = 0
+                                                AND course_reviewer = 0
+                                                AND reviewer = 0
                                                 AND course_id = ?d
                                                 AND badge = ?d
                                             ORDER BY user.surname, user.givenname
@@ -2736,6 +2742,8 @@ function display_users_progress($element, $element_id) {
                                             JOIN course_user ON user_badge.user=course_user.user_id
                                                 AND status = " .USER_STUDENT . "
                                                 AND editor = 0
+                                                AND course_reviewer = 0
+                                                AND reviewer = 0
                                                 AND course_id = ?d
                                                 AND completed = 1
                                                 AND badge = ?d", $course_id, $element_id)->t;
@@ -2744,6 +2752,8 @@ function display_users_progress($element, $element_id) {
     $all_users = Database::get()->querySingle("SELECT COUNT(*) AS total FROM course_user
                                         WHERE status = " .USER_STUDENT . "
                                             AND editor = 0
+                                            AND course_reviewer = 0
+                                            AND reviewer = 0
                                             AND course_id = ?d", $course_id)->total;
 
     if (count($sql) > 0) {
