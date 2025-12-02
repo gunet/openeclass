@@ -31,6 +31,9 @@
                                 <li class="list-group-item element">
                                     <a class='TextBold' href="https://www.youtube.com/playlist?list=PLIy44c1N0HnUvby36zDp2kNkkQxsyuMkJ" target='_blank' class='mainpage'>{{ trans('langVideoManT2') }}</a>
                                 </li>
+                                <li class="list-group-item element">
+                                    <a class='TextBold' href="https://www.youtube.com/playlist?list=PLIy44c1N0HnVq-89ZxCvEvqi9Akke_Ks2" target='_blank' class='mainpage'>{{ trans('langVideoManT3') }}</a>
+                                </li>
                             </ul>
                         </div>
                         <div class='col card-manual-img d-none d-lg-block'></div>
