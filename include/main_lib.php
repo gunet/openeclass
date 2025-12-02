@@ -3990,7 +3990,7 @@ function action_button($options, $secondary_menu_options = array(), $fc=false) {
     $primary_form_begin = $primary_form_end = $primary_icon_class = '';
 
     foreach (array_reverse($options) as $option) {
-        $level = isset($option['level'])? $option['level']: 'secondary';
+        $level = $option['level'] ?? 'secondary';
         // skip items with show=false
         if (isset($option['show']) and !$option['show']) {
             continue;
