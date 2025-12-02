@@ -248,7 +248,11 @@ foreach ($result as $row) {
                     }
 
                     if ($answersCount) {
-                        $results_link = "<a href='exercise_result.php?course=$course_code&amp;eurId=$row2->eurid'>" . $total_score . "/" . $total_weighting . "</a>";
+                        if ($unit) {
+                            $results_link = "<a href='view.php?course=$course_code&amp;unit=$unit&amp;res_type=exercise_results&amp;eurId=$row2->eurid'>" . $total_score . "/" . $total_weighting . "</a>";
+                        } else {
+                            $results_link = "<a href='exercise_result.php?course=$course_code&amp;eurId=$row2->eurid'>" . $total_score . "/" . $total_weighting . "</a>";
+                        }
                     } else {
                         $results_link = $total_score . "/" . $total_weighting;
                     }
