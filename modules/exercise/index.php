@@ -468,13 +468,15 @@ if (!$nbrExercises) {
                               'icon-extra' => "data-exerciseid= [\"$eid\",\"$row->id\"]",
                               'url' => "#",
                               'icon' => 'fa-pencil',
-                              'show' => $TotalExercises),
+                              'show' => false), // to be fixed !!
+                        //'show' => $TotalExercises),
                         array('title' => $langDistributeExercise,
                               'icon-class' => 'distribution',
                               'icon-extra' => "data-exerciseid= [\"$eid\",\"$row->id\"]",
                               'url' => "#",
                               'icon' => 'fa-exchange',
-                              'show' => $TotalExercises),
+                            'show' => false), // to be fixed !!
+                              //'show' => $TotalExercises),
                         array('title' => $row->active ?  $langViewHide : $langViewShow,
                               'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($row->active ? "choice=disable" : "choice=enable")."&amp;exerciseId=" . $row->id,
                               'icon' => $row->active ? 'fa-eye-slash' : 'fa-eye' ),
@@ -603,20 +605,22 @@ if (!$nbrExercises) {
 add_units_navigation(TRUE);
 
 if ($is_editor) {
-    $my_courses1 = Database::get()->queryArray("SELECT givenname, id FROM user u "
+    /*$my_courses1 = Database::get()->queryArray("SELECT givenname, id FROM user u "
                                                 . "JOIN course_user c ON u.id = c.user_id "
                                                 . "WHERE c.status = " . USER_TEACHER . " "
                                                 . "AND c.course_id = ?d", $course_id);
-    if ($cf_result_data != 0) {
+*/
+    // to be fixed !!
+    //if ($cf_result_data != 0) {
 
-        $ids_array = array_column($cf_result_data, 'id');
+      //  $ids_array = array_column($cf_result_data, 'id');
 
         /**
          * @var array $TotalExercises2 Array of <stdClass> objects describing numbers of
          *                             unassigned answers per exercise id
          */
 
-        $TotalExercises2 = Database::get()->queryArray(
+        /*$TotalExercises2 = Database::get()->queryArray(
             "SELECT count(eurid) as answers_number, eid
              FROM exercise_user_record
              WHERE  eid
@@ -658,9 +662,10 @@ if ($is_editor) {
                 . "</tr>  ";
         }
 
-        $questions_table .= "</tbody></table>";
+        $questions_table .= "</tbody></table>"; */
 
-        if ($TotalExercises > 0) {
+        //if ($TotalExercises > 0) {
+        if (false) { // to be fixed !!
             //  distribute exercise grading
             $head_content .= "<script type='text/javascript'>
             $(document).on('click', '.distribution', function() {
@@ -755,7 +760,7 @@ if ($is_editor) {
             });
             </script>";
         }
-    }
+    //}
 
     $my_courses = Database::get()->queryArray("SELECT a.course_id Course_id, b.title Title FROM course_user a, course b WHERE a.course_id = b.id AND a.course_id != ?d AND a.user_id = ?d AND a.status = 1", $course_id, $uid);
     $courses_options = "";
@@ -763,14 +768,9 @@ if ($is_editor) {
         $courses_options .= "'<option value=\"$row->Course_id\">".js_escape($row->Title)."</option>'+";
     }
 
-
-
     $head_content .= "<script type='text/javascript'>
         $(document).on('click', '.warnLink', function() {
-            var exerciseid = $(this).data('exerciseid');
-
-           
-
+            var exerciseid = $(this).data('exerciseid');   
             bootbox.dialog({
                 closeButton: false,
                 title: '<div class=\"icon-modal-default\"><i class=\"fa-solid fa-cloud-arrow-up fa-xl Neutral-500-cl\"></i></div><div class=\"modal-title-default text-center mb-0\">" . js_escape($langCreateDuplicateIn) . "</div>',
