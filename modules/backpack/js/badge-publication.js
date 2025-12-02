@@ -23,8 +23,15 @@
         attachEventListeners: function() {
             $(document).on('click', '.badge-publish-btn', function(e) {
                 e.preventDefault();
+                // Check if button is disabled (e.g., export not allowed)
+                if ($(this).prop('disabled')) {
+                    return false;
+                }
                 const userBadgeId = $(this).data('user-badge-id');
-                BadgePublication.showPublishModal(userBadgeId);
+                // Only show modal if we have a valid badge ID
+                if (userBadgeId) {
+                    BadgePublication.showPublishModal(userBadgeId);
+                }
             });
 
             $(document).on('click', '#confirmPublishBadge', function() {
@@ -60,11 +67,14 @@
 
         /**
          * Enable publish buttons if user has backpack connections
+         * Note: Does not enable buttons that are disabled due to export restrictions
          */
         enablePublishButtons: function() {
-            $('.badge-publish-btn').removeClass('disabled');
-            $('.badge-publish-btn').prop('disabled', false);
-            $('.badge-publish-btn').show();
+            // Only enable buttons that have a user-badge-id attribute
+            // Buttons without this attribute are disabled for other reasons (e.g., allow_export=0)
+            $('.badge-publish-btn[data-user-badge-id]').removeClass('disabled');
+            $('.badge-publish-btn[data-user-badge-id]').prop('disabled', false);
+            $('.badge-publish-btn[data-user-badge-id]').show();
             $('.badge-no-connection').hide();
         },
 

@@ -7216,4 +7216,10 @@ $langUsersLast30Days = "χρήστες τις τελευταίες 30 ημέρε
 $langLastActivity = "Τελευταία Δραστηριότητα";
 $langLastImport = "Τελευταία Εισαγωγή";
 $langLastExport = "Τελευταία Εξαγωγή";
+
+// Badge Export Control
+$langAllowBadgeExport = "Επιτρέπεται η Εξαγωγή Σήματος";
+$langAllowBadgeExportHelp = "Επιτρέψτε στους φοιτητές να εξάγουν αυτό το σήμα σε εξωτερικούς παρόχους backpack";
+$langBadgeExportDisabled = "Η εξαγωγή του σήματος έχει απενεργοποιηθεί από τον εκπαιδευτή";
+$langBadgeExportDisabledShort = "Η εξαγωγή είναι απενεργοποιημένη";
 ?>

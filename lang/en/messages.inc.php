@@ -6495,4 +6495,10 @@ $langUsersLast30Days = "users in the last 30 days";
 $langLastActivity = "Last Activity";
 $langLastImport = "Last Import";
 $langLastExport = "Last Export";
+
+// Badge Export Control
+$langAllowBadgeExport = "Allow Badge Export";
+$langAllowBadgeExportHelp = "Allow students to export this badge to external backpack providers";
+$langBadgeExportDisabled = "Badge export is disabled by the instructor";
+$langBadgeExportDisabledShort = "Export disabled";
 ?>

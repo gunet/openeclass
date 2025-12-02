@@ -83,7 +83,7 @@ class BadgePublicationService
         try {
             // Step 1: Validate user owns the badge
             $userBadge = $this->db->querySingle("
-                SELECT ub.*, b.active, b.expires
+                SELECT ub.*, b.active, b.expires, b.allow_export
                 FROM user_badge ub
                 JOIN badge b ON ub.badge = b.id
                 WHERE ub.id = ?d AND ub.user = ?d AND ub.completed = 1
@@ -95,6 +95,16 @@ class BadgePublicationService
                     'success' => false,
                     'http_code' => 403,
                     'error_message' => 'You do not have permission to publish this badge.'
+                ];
+            }
+            
+            // Check if badge allows export
+            if (isset($userBadge->allow_export) && $userBadge->allow_export == 0) {
+                error_log("Badge publication: Badge $userBadge->badge has export disabled");
+                return [
+                    'success' => false,
+                    'http_code' => 403,
+                    'error_message' => 'This badge cannot be exported to external backpacks. The instructor has disabled export for this badge.'
                 ];
             }
             

@@ -1422,7 +1422,9 @@ function upgrade_to_3_6($tbl_options): void
             `created` datetime,
             `expires` datetime,
             `bundle` int(11) not null default 0,
+            `allow_export` tinyint(1) not null default 1 COMMENT 'Controls if badge can be exported to external backpack',
             index `badge_course` (`course_id`),
+            index `idx_allow_export` (`allow_export`),
             foreign key (`course_id`) references `course` (`id`)
           ) $tbl_options");
 
