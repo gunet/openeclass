@@ -365,15 +365,19 @@ function display_activities($element, $id, $unit_id = 0) {
            $langAdd, $langBack, $langUsers, $langOfGradebook,
            $langValue, $langNumInForumTopic, $langOfCourseCompletion, $langOfUnitCompletion,
            $course_id, $langUnitCompletion, $langUnitPrerequisites, $langNewUnitPrerequisite,
-           $langNoUnitPrerequisite, $langAssignmentParticipation, $langAttendance;
+           $langNoUnitPrerequisite, $langAssignmentParticipation, $langAttendance,
+           $langPointsGameRecActivities, $langPointsGameOneTimeActivities, $langPointsGameNoRecActivities,
+           $langPointsGameNoOneTimeActivities;
 
     if ($unit_id) {
         $link_id = "course=$course_code&amp;manage=1&amp;unit_id=$unit_id&amp;badge_id=$id";
     } else {
         if ($element == 'certificate') {
             $link_id = "course=$course_code&amp;certificate_id=$id";
-        } else {
+        } elseif ($element == 'badge') {
             $link_id = "course=$course_code&amp;badge_id=$id";
+        } else {
+            $link_id = "course=$course_code&amp;points_game_id=$id";
         }
     }
 
@@ -424,8 +428,12 @@ function display_activities($element, $id, $unit_id = 0) {
         }
     }
 
-    // certificate details
-    $tool_content .= display_settings($element, $id, $unit_id);
+    if ($element == 'points_game') {
+        $tool_content .= display_points_game_settings($id);
+    } else {
+        // certificate details
+        $tool_content .= display_settings($element, $id, $unit_id);
+    }
     $addActivityBtn = action_button(array(
         array('title' => $unit_id ? $langOfUnitCompletion : $langOfCourseCompletion,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=". ($unit_id ? "unitcompletion" : "coursecompletion"),
@@ -526,88 +534,263 @@ function display_activities($element, $id, $unit_id = 0) {
             'secondary_btn_class' => 'submitAdminBtn'
         ));
 
-    //get available activities
-    $result = Database::get()->queryArray("SELECT * FROM {$element}_criterion WHERE $element = ?d ORDER BY `id` DESC", $id);
+    if ($element == 'points_game') {
+        //get available recurrent activities
+        $result_recurrent = Database::get()->queryArray("SELECT * FROM points_game_criterion WHERE points_game = ?d AND criterion_type = ?s 
+                            ORDER BY `id` DESC", $id, 'recurring');
+
+        //get available one-time activities
+        $result_onetime = Database::get()->queryArray("SELECT * FROM points_game_criterion WHERE points_game = ?d AND criterion_type = ?s
+                           ORDER BY `id` DESC", $id, 'onetime');
+    } else {
+        //get available activities
+        $result = Database::get()->queryArray("SELECT * FROM {$element}_criterion WHERE $element = ?d ORDER BY `id` DESC", $id);
+    }
+    
 
     if (!$unit_id) {
-        $tool_content .= "
-            <div class='col-12 mt-4'>
-                <div class='card panelCard card-default px-lg-4 py-lg-3'>
-                    <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-                        <h3>
-                            $langAttendanceActList
-                        </h3>";
-                    if ($is_editor) {
-                        $tool_content .= "<div>
-                            $addActivityBtn
-                        </div>";
-                    }
- $tool_content .=  "</div>";
-        $tool_content .= "
-                    <div class='card-body'>";
-                        if (count($result) == 0) {
-                            $tool_content .= "<p class='margin-top-fat text-center text-muted'>$langNoActivCert</p>";
-                        } else {
-                          $tool_content .= "<div class='table-responsive mt-0'>
-                                                <table class='table-default'><thead>
-                                                    <tr class='list-header'>
-                                                        <th>
-                                                            $langTitle
-                                                        </th>
-                                                        <th>
-                                                            $langType
-                                                        </th>
-                                                        <th>
-                                                            $langValue
-                                                        </div>
-                                                        <th>
-                                                            <i class='fa fa-cogs'></i>
-                                                        </th>
-                                                    </tr></thead>";
-                                                    foreach ($result as $details) {
-                                                        $resource_data = get_resource_details($element, $details->id);
-                                                        $tool_content .= "
-                                                        <tr>
-                                                            <td>" . q($resource_data['title']) . "</td>
-                                                            <td>" . $resource_data['type'] . "</td>
-                                                            <td>";
-                                                                if (!empty($details->operator) && $details->activity_type != AssignmentSubmitEvent::ACTIVITY) {
-                                                                    $op = get_operators();
-                                                                    $tool_content .= $op[$details->operator];
-                                                                } else {
-                                                                    $tool_content .= "&mdash;";
-                                                                }
-                                                                if ($details->activity_type == AssignmentSubmitEvent::ACTIVITY) {
-                                                                    $tool_content .= "</td>";
-                                                                } else {
-                                                                    $tool_content .= "$details->threshold</td>";
-                                                                }
-                                                                $tool_content .= "<td>";
-                                                                $tool_content .= "<div class='text-end'>".
-                                                                    action_button(array(
-                                                                        array('title' => $langEditChange,
-                                                                            'icon' => 'fa-edit',
-                                                                            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;act_mod=$details->id",
-                                                                            'show' => in_array($details->activity_type, criteria_with_operators())
-                                                                        ),
-                                                                        array('title' => $langDelete,
-                                                                            'icon' => 'fa-xmark',
-                                                                            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;del_cert_res=$details->id",
-                                                                            'confirm' => $langConfirmDelete,
-                                                                            'class' => 'delete'))).
-                                                                "</div>
-                                                            </td>
-                                                        </tr>";
-                                                    }
+        if ($element == 'points_game') {
 
-                                    $tool_content .= "
-                                                </table>
-                                            </div>";
+            //recurrent activities
+            $tool_content .= "
+                <div class='col-12 mt-4'>
+                    <div class='card panelCard card-default px-lg-4 py-lg-3'>
+                        <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+                            <h3>
+                                $langPointsGameRecActivities
+                            </h3>";
+                        if ($is_editor) {
+                            $tool_content .= "<div>
+                                $addActivityBtn
+                            </div>";
                         }
-        $tool_content .= "
+            $tool_content .=  "</div>";
+            $tool_content .= "
+                        <div class='card-body'>";
+                            if (count($result_recurrent) == 0) {
+                                $tool_content .= "<p class='margin-top-fat text-center text-muted'>$langPointsGameNoRecActivities</p>";
+                            } else {
+                            $tool_content .= "<div class='table-responsive mt-0'>
+                                                    <table class='table-default'><thead>
+                                                        <tr class='list-header'>
+                                                            <th>
+                                                                $langTitle
+                                                            </th>
+                                                            <th>
+                                                                $langType
+                                                            </th>
+                                                            <th>
+                                                                $langValue
+                                                            </div>
+                                                            <th>
+                                                                <i class='fa fa-cogs'></i>
+                                                            </th>
+                                                        </tr></thead>";
+                                                        foreach ($result_recurrent as $details) {
+                                                            $resource_data = get_resource_details($element, $details->id);
+                                                            $tool_content .= "
+                                                            <tr>
+                                                                <td>" . q($resource_data['title']) . "</td>
+                                                                <td>" . $resource_data['type'] . "</td>
+                                                                <td>";
+                                                                    if (!empty($details->operator) && $details->activity_type != AssignmentSubmitEvent::ACTIVITY) {
+                                                                        $op = get_operators();
+                                                                        $tool_content .= $op[$details->operator];
+                                                                    } else {
+                                                                        $tool_content .= "&mdash;";
+                                                                    }
+                                                                    if ($details->activity_type == AssignmentSubmitEvent::ACTIVITY) {
+                                                                        $tool_content .= "</td>";
+                                                                    } else {
+                                                                        $tool_content .= "$details->threshold</td>";
+                                                                    }
+                                                                    $tool_content .= "<td>";
+                                                                    $tool_content .= "<div class='text-end'>".
+                                                                        action_button(array(
+                                                                            array('title' => $langEditChange,
+                                                                                'icon' => 'fa-edit',
+                                                                                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;act_mod=$details->id",
+                                                                                'show' => in_array($details->activity_type, criteria_with_operators())
+                                                                            ),
+                                                                            array('title' => $langDelete,
+                                                                                'icon' => 'fa-xmark',
+                                                                                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;del_cert_res=$details->id",
+                                                                                'confirm' => $langConfirmDelete,
+                                                                                'class' => 'delete'))).
+                                                                    "</div>
+                                                                </td>
+                                                            </tr>";
+                                                        }
+
+                                        $tool_content .= "
+                                                    </table>
+                                                </div>";
+                            }
+            $tool_content .= "
+                        </div>
                     </div>
-                </div>
-            </div>";
+                </div>";
+
+                //onetime activities
+                $tool_content .= "
+                <div class='col-12 mt-4'>
+                    <div class='card panelCard card-default px-lg-4 py-lg-3'>
+                        <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+                            <h3>
+                                $langPointsGameOneTimeActivities
+                            </h3>";
+                        if ($is_editor) {
+                            $tool_content .= "<div>
+                                $addActivityBtn
+                            </div>";
+                        }
+            $tool_content .=  "</div>";
+            $tool_content .= "
+                        <div class='card-body'>";
+                            if (count($result_onetime) == 0) {
+                                $tool_content .= "<p class='margin-top-fat text-center text-muted'>$langPointsGameNoOneTimeActivities</p>";
+                            } else {
+                            $tool_content .= "<div class='table-responsive mt-0'>
+                                                    <table class='table-default'><thead>
+                                                        <tr class='list-header'>
+                                                            <th>
+                                                                $langTitle
+                                                            </th>
+                                                            <th>
+                                                                $langType
+                                                            </th>
+                                                            <th>
+                                                                $langValue
+                                                            </div>
+                                                            <th>
+                                                                <i class='fa fa-cogs'></i>
+                                                            </th>
+                                                        </tr></thead>";
+                                                        foreach ($result_onetime as $details) {
+                                                            $resource_data = get_resource_details($element, $details->id);
+                                                            $tool_content .= "
+                                                            <tr>
+                                                                <td>" . q($resource_data['title']) . "</td>
+                                                                <td>" . $resource_data['type'] . "</td>
+                                                                <td>";
+                                                                    if (!empty($details->operator) && $details->activity_type != AssignmentSubmitEvent::ACTIVITY) {
+                                                                        $op = get_operators();
+                                                                        $tool_content .= $op[$details->operator];
+                                                                    } else {
+                                                                        $tool_content .= "&mdash;";
+                                                                    }
+                                                                    if ($details->activity_type == AssignmentSubmitEvent::ACTIVITY) {
+                                                                        $tool_content .= "</td>";
+                                                                    } else {
+                                                                        $tool_content .= "$details->threshold</td>";
+                                                                    }
+                                                                    $tool_content .= "<td>";
+                                                                    $tool_content .= "<div class='text-end'>".
+                                                                        action_button(array(
+                                                                            array('title' => $langEditChange,
+                                                                                'icon' => 'fa-edit',
+                                                                                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;act_mod=$details->id",
+                                                                                'show' => in_array($details->activity_type, criteria_with_operators())
+                                                                            ),
+                                                                            array('title' => $langDelete,
+                                                                                'icon' => 'fa-xmark',
+                                                                                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;del_cert_res=$details->id",
+                                                                                'confirm' => $langConfirmDelete,
+                                                                                'class' => 'delete'))).
+                                                                    "</div>
+                                                                </td>
+                                                            </tr>";
+                                                        }
+
+                                        $tool_content .= "
+                                                    </table>
+                                                </div>";
+                            }
+            $tool_content .= "
+                        </div>
+                    </div>
+                </div>";
+
+        } else {
+            $tool_content .= "
+                <div class='col-12 mt-4'>
+                    <div class='card panelCard card-default px-lg-4 py-lg-3'>
+                        <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+                            <h3>
+                                $langAttendanceActList
+                            </h3>";
+                        if ($is_editor) {
+                            $tool_content .= "<div>
+                                $addActivityBtn
+                            </div>";
+                        }
+            $tool_content .=  "</div>";
+            $tool_content .= "
+                        <div class='card-body'>";
+                            if (count($result) == 0) {
+                                $tool_content .= "<p class='margin-top-fat text-center text-muted'>$langNoActivCert</p>";
+                            } else {
+                            $tool_content .= "<div class='table-responsive mt-0'>
+                                                    <table class='table-default'><thead>
+                                                        <tr class='list-header'>
+                                                            <th>
+                                                                $langTitle
+                                                            </th>
+                                                            <th>
+                                                                $langType
+                                                            </th>
+                                                            <th>
+                                                                $langValue
+                                                            </div>
+                                                            <th>
+                                                                <i class='fa fa-cogs'></i>
+                                                            </th>
+                                                        </tr></thead>";
+                                                        foreach ($result as $details) {
+                                                            $resource_data = get_resource_details($element, $details->id);
+                                                            $tool_content .= "
+                                                            <tr>
+                                                                <td>" . q($resource_data['title']) . "</td>
+                                                                <td>" . $resource_data['type'] . "</td>
+                                                                <td>";
+                                                                    if (!empty($details->operator) && $details->activity_type != AssignmentSubmitEvent::ACTIVITY) {
+                                                                        $op = get_operators();
+                                                                        $tool_content .= $op[$details->operator];
+                                                                    } else {
+                                                                        $tool_content .= "&mdash;";
+                                                                    }
+                                                                    if ($details->activity_type == AssignmentSubmitEvent::ACTIVITY) {
+                                                                        $tool_content .= "</td>";
+                                                                    } else {
+                                                                        $tool_content .= "$details->threshold</td>";
+                                                                    }
+                                                                    $tool_content .= "<td>";
+                                                                    $tool_content .= "<div class='text-end'>".
+                                                                        action_button(array(
+                                                                            array('title' => $langEditChange,
+                                                                                'icon' => 'fa-edit',
+                                                                                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;act_mod=$details->id",
+                                                                                'show' => in_array($details->activity_type, criteria_with_operators())
+                                                                            ),
+                                                                            array('title' => $langDelete,
+                                                                                'icon' => 'fa-xmark',
+                                                                                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;del_cert_res=$details->id",
+                                                                                'confirm' => $langConfirmDelete,
+                                                                                'class' => 'delete'))).
+                                                                    "</div>
+                                                                </td>
+                                                            </tr>";
+                                                        }
+
+                                        $tool_content .= "
+                                                    </table>
+                                                </div>";
+                            }
+            $tool_content .= "
+                        </div>
+                    </div>
+                </div>";
+        }
     } else {
             $tool_content .= "<div class='main-content'>
                                 <div class='col-12'>
@@ -2217,6 +2400,71 @@ function display_available_attendances($element, $element_id, $unit_id = 0) {
         $tool_content .= "</table>" .
             "<div align='right'><input class='btn btn-primary' type='submit' name='add_attendance' value='$langAddModulesButton'></div></th></form>";
     }
+}
+
+
+/**
+ * @brief display points game settings
+ * @param type $element
+ * @param type $element_id
+ */
+function display_points_game_settings($element_id): void
+{
+    global $tool_content, $course_id, $course_code, $langProgressBasicInfo, $langEditChange, $langTitle,
+           $langDescription, $is_editor;
+
+    $data = Database::get()->querySingle("SELECT title, description, active, starts, expires, config
+                            FROM points_game WHERE id = ?d AND course_id = ?d", $element_id, $course_id);
+                            
+    $title = $data->title;
+    $description = $data->description;
+
+    $tool_content .= "
+                <div class='col-12'>
+                    <div class='card panelCard border-card-left-default px-lg-4 py-lg-3'>
+                        <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+                                <h3>
+                                    $langProgressBasicInfo
+                                </h3>";
+                            if ($is_editor) {
+                                $tool_content .= "<div><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;points_game_id=$element_id&amp;edit=1' class='btn submitAdminBtn gap-2'>"
+                                            . "<span class='fa fa-pencil'></span><span class='hidden-xs'>$langEditChange</span>
+                                            </a>
+                                        </div>";
+                            }
+                        $tool_content .= "</div>
+                        <div class='card-body'>
+                            <div class='d-flex justify-content-md-start justify-content-center align-items-start flex-wrap gap-5'>
+                                <div class='flex-grow-1'>
+                                    <ul class='list-group list-group-flush'>
+                                        <li class='list-group-item element'>
+                                            <div class='row row-cols-1 row-cols-md-2 g-1'>
+                                                <div class='col-md-3 col-12'>
+                                                    <div class='pn-info-title-sct title-default'>$langTitle</div>
+                                                </div>
+                                                <div class='col-md-9 col-12 title-default-line-height'>
+                                                    <div class='pn-info-text-sct'>$title</div>
+                                                </div>
+                                            </div>
+                                        </li>
+
+                                        <li class='list-group-item element'>
+                                            <div class='row row-cols-1 row-cols-md-2 g-1'>
+                                                <div class='col-md-3 col-12'>
+                                                    <div class='pn-info-title-sct title-default'>$langDescription</div>
+                                                </div>
+                                                <div class='col-md-9 col-12 title-default-line-height'>
+                                                    <div class='pn-info-text-sct'>$description</div>
+                                                </div>
+                                            </div>
+                                        </li>
+
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>";
 }
 
 /**
