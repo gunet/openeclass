@@ -1435,7 +1435,7 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
 
         // check if user has participated
         $hasparticipated = Database::get()->querySingle("SELECT * FROM exercise_user_record WHERE uid = ?d AND eid = ?d", $uid, $exercise_id);
-        $hasparticipated_label = '';
+        $hasparticipated_label = $hasresults_label = '';
         if ($hasparticipated) {
             $hasparticipated_label = "<span class='fa-solid fa-check' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-title='$langHasParticipated'></span>";
         }
