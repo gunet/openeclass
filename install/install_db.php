@@ -2704,7 +2704,42 @@ $db->query("CREATE TABLE `session_user_material` (
           FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE,
           FOREIGN KEY (`session_id`) REFERENCES `mod_session` (`id`) ON DELETE CASCADE) $tbl_options");
 
+// External Repositories
+$db->query("CREATE TABLE `external_repository` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `name` varchar(255) NOT NULL,
+    `type` enum('dspace','reasonable_graph','youtube','wikipedia','pixabay') NOT NULL,
+    `base_url` varchar(512) DEFAULT NULL,
+    `api_key` varchar(255) DEFAULT NULL,
+    `auth_type` enum('none','api_key','oauth') NOT NULL DEFAULT 'none',
+    `enabled` tinyint(1) NOT NULL DEFAULT 1,
+    `config` text DEFAULT NULL COMMENT 'JSON configuration for additional settings',
+    `created` datetime DEFAULT NULL,
+    `updated` datetime DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    INDEX `idx_type` (`type`),
+    INDEX `idx_enabled` (`enabled`)
+) $tbl_options");
 
+$db->query("CREATE TABLE `external_resource` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `course_id` int(11) NOT NULL,
+    `repository_id` int(11) NOT NULL,
+    `external_id` varchar(255) DEFAULT NULL COMMENT 'ID in the external system',
+    `title` varchar(512) NOT NULL,
+    `description` text DEFAULT NULL,
+    `url` varchar(1024) NOT NULL,
+    `resource_type` varchar(50) DEFAULT NULL COMMENT 'video, article, image, document',
+    `thumbnail_url` varchar(512) DEFAULT NULL,
+    `metadata` text DEFAULT NULL COMMENT 'JSON for additional data',
+    `created` datetime DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    INDEX `idx_course` (`course_id`),
+    INDEX `idx_repository` (`repository_id`),
+    INDEX `idx_external_id` (`external_id`),
+    FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`repository_id`) REFERENCES `external_repository` (`id`) ON DELETE CASCADE
+) $tbl_options");
 
 $_SESSION['theme'] = 'modern';
 

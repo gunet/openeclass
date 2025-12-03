@@ -812,6 +812,9 @@ function show_resource($info) {
         case 'tc':
             $html .= show_tc($info->title, $info->comments, $info->id, $info->res_id, $info->visible, $info->activity_title);
             break;
+        case 'extrepo':
+            $html .= show_extrepo($info->title, $info->comments, $info->id, $info->res_id, $info->visible, $info->activity_title);
+            break;
         default:
             $html .= $langUnknownResType;
     }
@@ -1598,6 +1601,96 @@ function show_link($title, $comments, $resource_id, $link_id, $visibility, $act_
           <div class='unitIcon' width='1'>$imagelink</div>
           " . (!empty($act_name) ? "<div class='text-start act_label'>$act_name</div>" : "") . "
           <div><div class='module-name'>$langLinks</div> $exlink $comment_box</div>" . actions('link', $resource_id, $visibility) . "
+        </div>";
+}
+
+/**
+ * @brief display external repository resource
+ * @param string $title Resource title
+ * @param string $comments Resource description
+ * @param int $resource_id Unit resource ID
+ * @param int $ext_resource_id External resource ID
+ * @param int $visibility Visibility status
+ * @param string $act_name Activity name
+ * @return string HTML output
+ */
+function show_extrepo($title, $comments, $resource_id, $ext_resource_id, $visibility, $act_name) {
+    global $is_editor, $langWasDeleted, $course_id, $langOpenNewTab, $langExternalResource;
+
+    $class_vis = ($visibility == 0) ? ' class="not_visible"' : ' ';
+    
+    // Get the external resource from database
+    $ext_res = Database::get()->querySingle(
+        "SELECT er.*, repo.name as repo_name, repo.type as repo_type 
+         FROM external_resource er 
+         LEFT JOIN external_repository repo ON er.repository_id = repo.id 
+         WHERE er.id = ?d AND er.course_id = ?d", 
+        $ext_resource_id, 
+        $course_id
+    );
+    
+    if (!$ext_res) { // check if it was deleted
+        if (!$is_editor) {
+            return '';
+        } else {
+            $imagelink = icon('fa-xmark link-delete');
+            $exlink = "<span class='not_visible'>" . q($title) . " ($langWasDeleted)</span>";
+        }
+    } else {
+        // Use title from unit_resources or fallback to external_resource title
+        if (empty($title)) {
+            $title = q($ext_res->title);
+        } else {
+            $title = q($title);
+        }
+        
+        // Determine icon based on resource type
+        $icon_class = 'fa-external-link';
+        switch ($ext_res->resource_type) {
+            case 'video':
+                $icon_class = 'fa-video';
+                break;
+            case 'image':
+                $icon_class = 'fa-image';
+                break;
+            case 'article':
+                $icon_class = 'fa-file-text';
+                break;
+            case 'document':
+                $icon_class = 'fa-file-alt';
+                break;
+            case 'audio':
+                $icon_class = 'fa-music';
+                break;
+        }
+        
+        $link = "<a class='TextBold' href='" . q($ext_res->url) . "' target='_blank' aria-label='$langOpenNewTab'>";
+        $exlink = $link . "$title</a>";
+        
+        // Add repository badge
+        if (!empty($ext_res->repo_name)) {
+            $exlink .= " <span class='badge bg-secondary ms-1'>" . q($ext_res->repo_name) . "</span>";
+        }
+        
+        $imagelink = icon($icon_class);
+    }
+
+    // Use comments from unit_resources or fallback to external_resource description
+    if (!empty($comments)) {
+        $comment_box = '<br />' . standard_text_escape($comments);
+    } elseif (!empty($ext_res->description)) {
+        $comment_box = '<br />' . standard_text_escape($ext_res->description);
+    } else {
+        $comment_box = '';
+    }
+    
+    $module_name = $langExternalResource ?? 'External Resource';
+
+    return "
+        <div$class_vis data-id='$resource_id'>
+          <div class='unitIcon' width='1'>$imagelink</div>
+          " . (!empty($act_name) ? "<div class='text-start act_label'>$act_name</div>" : "") . "
+          <div><div class='module-name'>$module_name</div> $exlink $comment_box</div>" . actions('extrepo', $resource_id, $visibility) . "
         </div>";
 }
 

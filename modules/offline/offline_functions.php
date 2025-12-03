@@ -666,6 +666,9 @@ function get_unit_resource_icon($type, $res_id) {
         case 'forum':
             $icon = 'fa-comments';
             break;
+        case 'extrepo':
+            $icon = 'fa-external-link';
+            break;
     }
     return "fa $icon";
 }
