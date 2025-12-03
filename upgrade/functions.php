@@ -3543,6 +3543,14 @@ function upgrade_to_4_2($tbl_options) : void {
         Database::get()->query("ALTER TABLE poll_user_record ADD `session_id` INT NOT NULL DEFAULT 0");
     }
 
+    if (!DBHelper::fieldExists('exercise', 'results_date')) {
+        Database::get()->query("ALTER TABLE exercise ADD results_date DATETIME DEFAULT NULL AFTER results");
+    }
+
+    if (!DBHelper::fieldExists('assignment', 'results_date')) {
+        Database::get()->query("ALTER TABLE assignment ADD results_date DATETIME DEFAULT NULL AFTER submission_date;");
+    }
+
 }
 
 /**
