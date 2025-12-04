@@ -146,6 +146,17 @@ if (isset($_POST['submitQuestion'])) {
             $objQuestion->read($_GET['modifyQuestion']);
         }
         $objQuestion->updateTitle($questionName);
+
+        // If the current question is calculated type 
+        if ($answerType == CALCULATED) {
+            $des = Database::get()->querySingle("SELECT `description` FROM exercise_question WHERE id = ?d", $objQuestion->selectId());
+            $arr_des = unserialize($des->description);
+            $arrQ = [
+                'question_description' => purify($_POST['questionDescription']),
+                'arithmetic_expression' => $arr_des['arithmetic_expression'] ?? ''
+            ];
+            $questionDescription = serialize($arrQ);
+        }
         $objQuestion->updateDescription($questionDescription);
         $objQuestion->updateFeedback($questionFeedback);
         $objQuestion->updateType($answerType);
@@ -222,12 +233,16 @@ if (isset($_POST['submitQuestion'])) {
         redirect_to_home_page("modules/exercise/admin.php?course={$course_code}{$exercise_or_pool}{$new_or_modif}");
     }
 } else {
-    // if we don't come here after having cancelled the warning message "used in several exercises"
+    // if we don't come here after having canceled the warning message "used in several exercises"
     if (!isset($buttonBack)) {
         $questionName = $objQuestion->selectTitle();
         $questionDescription = $objQuestion->selectDescription();
         $questionFeedback = $objQuestion->selectFeedback();
         $answerType = $objQuestion->selectType();
+        if ($answerType == CALCULATED) {
+            $arr_des = unserialize($objQuestion->selectDescription());
+            $questionDescription = $arr_des['question_description'];
+        }
         $difficulty = $objQuestion->selectDifficulty();
         $category = $objQuestion->selectCategory();
         $questionWeight = $objQuestion->selectWeighting();
@@ -236,7 +251,7 @@ if (isset($_POST['submitQuestion'])) {
 if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
     $questionId = $objQuestion->selectId();
     // is picture set ?
-    $okPicture = file_exists($picturePath . '/quiz-' . $questionId) ? true : false;
+    $okPicture = file_exists($picturePath . '/quiz-' . $questionId);
     // if there is an error message
     if (!empty($msgErr)) {
         $tool_content .= "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$msgErr</span></div>\n";

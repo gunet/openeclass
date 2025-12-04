@@ -46,7 +46,7 @@
                 <div class='mt-4'></div>
             @endif
 
-            @include('layouts.partials.show_alert') 
+            @include('layouts.partials.show_alert')
 
             <div class='col-lg-6 col-12'>
                 <div class='form-wrapper form-edit border-0 px-0'>
@@ -136,8 +136,9 @@
                             <input class='form-control' type = 'hidden' name = 'id_form' value='{{ getIndirectReference($bbb_server) }}'>
                         @endif
                         <div class='form-group mt-5'>
-                            <div class='col-12 d-flex justify-content-end align-items-center'>
-                                <input class='btn submitAdminBtn' type='submit' name='submit' value='{{ trans('langAddModify') }}'>
+                            <div class='col-12 d-flex justify-content-end align-items-center gap-2'>
+                                <input class='btn submitAdminBtn' type='submit' name='submit' value='{{ trans('langSubmit') }}'>
+                                <a class='btn cancelAdminBtn' href='{{ $_SERVER['SCRIPT_NAME'] }}'>{{ trans('langCancel') }}</a>
                             </div>
                         </div>
                     </fieldset>

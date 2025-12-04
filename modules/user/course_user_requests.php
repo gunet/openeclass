@@ -32,12 +32,21 @@ $action_bar = action_bar(array(
             'url' => "index.php?course=$course_code",
             'icon' => 'fa-users',
             'level' => 'primary-label'),
+        array('title' => "$langAcceptedRequests",
+            'url' => "course_user_requests_appr.php?course=$course_code",
+            'icon' => 'fa-users',
+            'level' => 'secondary'),
+        array('title' => "$langRejectedRequests",
+            'url' => "course_user_requests_rej.php?course=$course_code",
+            'icon' => 'fa-users',
+            'level' => 'secondary'),
         array('title' => "$langBackRequests",
             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
             'icon' => 'fa-reply',
             'level' => 'primary-label',
             'show' => isset($_GET['rid']))
         ));
+
 $tool_content .= $action_bar;
 
 if (isset($_POST['rejected_req_id'])) { // do reject course user request
@@ -56,7 +65,8 @@ if (isset($_POST['rejected_req_id'])) { // do reject course user request
     if (!send_mail_multipart($from_name, $from_address, '', $to_address, $subject, $plainMessage, $message)) {
         $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$GLOBALS[langErrorSendingMessage]</span></div></div>";
     }
-    Database::get()->query("UPDATE course_user_request SET status = 0 WHERE id = ?d", $_POST['rejected_req_id']);
+    Database::get()->query("UPDATE course_user_request SET status = 0, comment_rejected = ?s, ts_update = " . DBHelper::timeAfter() . " WHERE id = ?d", $_POST['rej_content'], $_POST['rejected_req_id']);
+
     $tool_content .= "<div class='col-sm-12'><div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$langRequestReject</span></div></div>";
 }
 
@@ -93,7 +103,7 @@ if (isset($_GET['rid'])) {
                 }
             }
             // close user request
-            Database::get()->query("UPDATE course_user_request SET status = 2 WHERE id = ?d", $_GET['rid']);
+            Database::get()->query("UPDATE course_user_request SET status = 2, ts_update = " . DBHelper::timeAfter() . " WHERE id = ?d", $_GET['rid']);
             Session::flash('message',$langCourseUserRegDone);
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page('modules/user/course_user_requests.php?course=' . $course_code);
@@ -163,6 +173,7 @@ if (isset($_GET['rid'])) {
     } else {
         $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langUserNoRequests</span></div></div>";
     }
+
 }
 
 draw($tool_content, 2);

@@ -1,24 +1,7 @@
 <?php
-/*
- *  ========================================================================
- *  * Open eClass
- *  * E-learning and Course Management System
- *  * ========================================================================
- *  * Copyright 2003-2024, Greek Universities Network - GUnet
- *  *
- *  * Open eClass is an open platform distributed in the hope that it will
- *  * be useful (without any warranty), under the terms of the GNU (General
- *  * Public License) as published by the Free Software Foundation.
- *  * The full license can be read in "/info/license/license_gpl.txt".
- *  *
- *  * Contact address: GUnet Asynchronous eLearning Group
- *  *                  e-mail: info@openeclass.org
- *  * ========================================================================
- *
- */
 
 // Message file for language es
-// Generated 2024-01-19 17:14:51
+// Generated 2025-12-02 16:31:16
 
 $langCourse = "Curso";
 $langEclass = "eClass Libre - Sistema de Administración del Curso";
@@ -54,7 +37,7 @@ $langother = "Otro";
 $langInfoAbout = "La <strong>$siteName</strong> plaforma is un sistema completo de Administración de Curson que soporta Servicios de eLearning Asincrónicos con un simple navegador Web. Su meta es la incorporación y el uso constructivo de Internet y las tecnologías de la Web en los procesos de enseañanza y aprendizaje. Soporta administración electrónica, almacenamiento y presentación de materiales para la enseñanza, independientes de los factores constrictores como el espacio y el tiempo y creando las condiciones necesarias para un entorno de enseñanza dinámico.<br><br><br><br> La introducción de e-learning en un proceso de aprendizaje tradicional proporciona nuevas capacidades y permite nuevas fuentes de interacción entre aprendices y formadores, $langsOfTeacher and $langsOfStudent, a través de entornos technologicos contemporáneos.";
 $langExtrasLeft = '';
 $langExtrasRight = '';
-$langCourses = "Cursos";
+$langCourses = "curso";
 $langGroupTutor = "Group Tutor";
 $langEditor = "Tutor auxiliar";
 $langOfEditor = "Tutor Assistant";
@@ -67,6 +50,7 @@ $langsCourse = "course";
 $langsCourses = "courses";
 $langsOfCourse = "course";
 $langsOfCourses = "courses";
+$langsOfFaculty = "category";
 $langCourseAdmin = "Admin";
 $langOfCourseAdmin = "Admin";
 $langCourseAdmins = "Admins";
@@ -87,3 +71,11 @@ $langCourseReviewer = "Reviewer";
 $langOfCourseReviewer = "Reviewer";
 $langsCourseReviewer = "reviewer";
 $langsOfCourseReviewer = "reviewer";
+$langCTeacher = "INSTRUCTOR";
+$langCStudent = "LEARNER";
+$langCStudent2 = "STUDENT";
+$langAlignment = "Alignment";
+$langWidth = "Width";
+$langAlignLeft = "Left";
+$langAlignCenter = "Center";
+$langAlignRight = "Right";

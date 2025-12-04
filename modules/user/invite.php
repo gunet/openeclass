@@ -45,24 +45,34 @@ if (isset($_POST['delete'])) {
 
 if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest' && $is_editor) {
 
-    $limit = intval($_GET['iDisplayLength'] ?? 0);
-    $offset = intval($_GET['iDisplayStart'] ?? 0);
+    $limit = intval($_POST['length']);
+    $offset = intval($_POST['start']);
 
-    if (!empty($_GET['sSearch'])) {
-        $search_values = array_fill(0, 3, '%' . $_GET['sSearch'] . '%');
+    if (!empty($_POST['search']['value'])) {
+        $search_values = array_fill(0, 3, '%' . $_POST['search']['value'] . '%');
         $search_sql = 'AND (surname LIKE ?s OR givenname LIKE ?s OR email LIKE ?s)';
     } else {
         $search_sql = '';
         $search_values = [];
     }
-    $sortDir = ($_GET['sSortDir_0'] == 'desc')? 'DESC': '';
-    switch ($_GET['iSortCol_0']) {
-        case 0: $sortCol = 'email'; break;
-        case 1: $sortCol = 'surname'; break;
-        case 2: $sortCol = 'created_at'; break;
-        case 3: $sortCol = 'expires_at'; break;
-        case 4: $sortCol = 'registered_at'; break;
-        default: $sortCol = 'created_at'; break;
+
+    $sortDir = (isset($_POST['order'][0]['dir']) && $_POST['order'][0]['dir'] == 'desc') ? 'DESC' : '';
+    $sortCol = 'created_at';
+    if (isset($_POST['order'][0]['column'])) {
+        switch ($_POST['order'][0]['column']) {
+            case 0:
+                $sortCol = 'email';
+                break;
+            case 1:
+                $sortCol = 'surname';
+                break;
+            case 3:
+                $sortCol = 'expires_at';
+                break;
+            case 4:
+                $sortCol = 'registered_at';
+                break;
+        }
     }
     $order_sql = "ORDER BY $sortCol $sortDir";
 
@@ -86,8 +96,8 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         WHERE course_id = ?d $filter_sql $search_sql $order_sql $limit_sql",
         $course_id, $search_values);
 
-    $data['iTotalRecords'] = $all_users;
-    $data['iTotalDisplayRecords'] = $filtered_users;
+    $data['recordsTotal'] = $all_users;
+    $data['recordsFiltered'] = $filtered_users;
     $data['aaData'] = [];
     foreach ($result as $myrow) {
         $id_indirect = getIndirectReference($myrow->id);
@@ -138,26 +148,28 @@ $head_content .= "
           tooltip_init();
           popover_init();
         },
-        sAjaxSource: '$_SERVER[REQUEST_URI]',
+        ajax: {
+            url: '$_SERVER[REQUEST_URI]',
+            type: 'POST'
+        },        
         fnServerParams: function (aoData) {
             aoData.push({name: 'displayFilter', value: displayFilter});
         },
-        aLengthMenu: [
-          [10, 25, 50, -1],
-          [10, 25, 50, '$langAllOfThem'] // change per page values here
-        ],
+        lengthMenu: [10, 25, 50, -1],
         sPaginationType: 'full_numbers',
         bSort: true,
         aaSorting: [[0, 'desc']],
         oLanguage: {
+            lengthLabels: {
+                '-1': '$langAllOfThem'
+            },
           sLengthMenu:  '$langDisplay _MENU_ $langResults2',
           sZeroRecords: '$langNoResult',
           sInfo:        '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
           sInfoEmpty:   '',
           sInfoFiltered: '',
           sInfoPostFix: '',
-          sSearch:    '',
-          sUrl:     '',
+          sSearch:    '',          
           oPaginate: {
             sFirst:  '&laquo;',
             sPrevious: '&lsaquo;',

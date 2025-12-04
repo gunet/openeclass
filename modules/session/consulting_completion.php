@@ -40,21 +40,66 @@ $pageName = $langTableCompletedConsulting;
 
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langSession);
 
+$head_content .= "
+    <script>
+        function choose_user_option() {
+            const option = document.getElementById('choose_user_or_consultant');
+            if (option.value == '1') { // users
+                $('.search-consultant-container').removeClass('d-block').addClass('d-none');
+                $('.search-user-container').removeClass('d-none').addClass('d-block');
+            } else if (option.value == '2') { // consultants
+                $('.search-consultant-container').removeClass('d-none').addClass('d-block');
+                $('.search-user-container').removeClass('d-block').addClass('d-none');
+            } else if (option.value == '0') { // Neither users nor consultants
+                $('.search-consultant-container').removeClass('d-block').addClass('d-none');
+                $('.search-user-container').removeClass('d-block').addClass('d-none');
+            }
+        }
+        $(function() {
+            choose_user_option();        
+        });
+    </script>
+";
+
 $users_actions = [];
 $sql_consultant = "";
 if($is_consultant && !$is_coordinator){
     $sql_consultant = "AND creator = $uid";
 }
 
+if ($is_coordinator) {
+    $users_consultants = Database::get()->queryArray("SELECT DISTINCT mod_session.creator,user.givenname,user.surname FROM mod_session
+                                                      JOIN user ON mod_session.creator=user.id
+                                                      WHERE mod_session.course_id = ?d", $course_id);
+}
+
 $forUser = "";
 $data['action_bar'] = "";
 $user_pdf = "";
 $user_selected = 0;
-if(isset($_GET['user_rep'])){
-    //$sql_consultant = "";
+$sqlSelectConsultant = '';
+$consultant_selected = 0;
+$choose_user_or_consultant = 0;
+
+if(isset($_GET['user_rep'])) {
     $user_pdf = "&amp;session=$_GET[session]&amp;user_rep=$_GET[user_rep]";
     $forUser = "AND user_id = " . $_GET['user_rep'];
     $user_selected = $_GET['user_rep'];
+
+    if ($is_coordinator && isset($_GET['user_consultant_report'])) {
+        $sqlSelectConsultant = "AND creator = $_GET[user_rep]";
+        $consultant_selected = $_GET['user_rep'];
+        $arr = [];
+        $p = Database::get()->queryArray("SELECT participants FROM mod_session_users WHERE is_accepted = ?d
+                                            AND session_id IN (SELECT id FROM mod_session 
+                                                                WHERE creator = ?d AND course_id = ?d)", 1, $_GET['user_rep'], $course_id);
+        foreach ($p as $u) {
+            $arr[] = $u->participants;
+        }
+        $str_arr = implode(',', $arr);
+        $forUser = "AND user_id IN ($str_arr)";
+    }
+
     $data['action_bar'] = action_bar([
         [ 'title' => $langBack,
           'url' => 'user_report.php?course=' . $course_code . '&session=' . $_GET['session'],
@@ -63,11 +108,36 @@ if(isset($_GET['user_rep'])){
           'level' => 'primary-label' ]
     ], false);
 }
-if(isset($_POST['form_user_report'])){
-    if($_POST['form_user_report'] == 0){
-        redirect_to_home_page("modules/session/consulting_completion.php?course=".$course_code);
-    }elseif($_POST['form_user_report'] > 0){
-        //$sql_consultant = "";
+
+// consultant mode
+if($is_consultant && !$is_coordinator && isset($_POST['form_user_report']) && $_POST['form_user_report'] > 0) {
+    $user_pdf = "&amp;user_rep=$_POST[form_user_report]";
+    $forUser = "AND user_id = " . $_POST['form_user_report'];
+    $user_selected = $_POST['form_user_report'];
+}
+
+// coordinator mode
+if ($is_coordinator && isset($_POST['choose_user_or_consultant']) && $_POST['choose_user_or_consultant'] > 0 && !isset($_GET['user_consultant_report'])) {
+    $choose_user_or_consultant = $_POST['choose_user_or_consultant'];
+    if ($choose_user_or_consultant == 1) {
+        unset($_POST['form_consultant_report']);
+    } elseif ($choose_user_or_consultant == 1) {
+        unset($_POST['form_user_report']);
+    }
+    if (isset($_POST['form_consultant_report']) && $_POST['form_consultant_report'] > 0) {
+        $sqlSelectConsultant = "AND creator = $_POST[form_consultant_report]";
+        $consultant_selected = $_POST['form_consultant_report'];
+        $arrU = [];
+        $p = Database::get()->queryArray("SELECT participants FROM mod_session_users WHERE is_accepted = ?d
+                                            AND session_id IN (SELECT id FROM mod_session 
+                                                                WHERE creator = ?d AND course_id = ?d)", 1, $_POST['form_consultant_report'], $course_id);
+        foreach ($p as $up) {
+            $arrU[] = $up->participants;
+        }
+        $str_arrU = implode(',', $arrU);
+        $forUser = "AND user_id IN ($str_arrU)";
+        $user_pdf = "&amp;user_rep=$_POST[form_consultant_report]&amp;user_consultant_report=true";
+    } elseif (isset($_POST['form_user_report']) && $_POST['form_user_report'] > 0) {
         $user_pdf = "&amp;user_rep=$_POST[form_user_report]";
         $forUser = "AND user_id = " . $_POST['form_user_report'];
         $user_selected = $_POST['form_user_report'];
@@ -77,7 +147,6 @@ if(isset($_POST['form_user_report'])){
 if(isset($_GET['user_docs'])){
     $userid = $_GET['user_docs'];
     if($userid > 0){
-        //$sql_consultant = "";
         $user_pdf = "&amp;user_rep=$_GET[user_docs]";
         $forUser = "AND user_id = " . $_GET['user_docs'];
         $user_selected = $_GET['user_docs'];
@@ -173,16 +242,15 @@ $res = Database::get()->queryFunc("SELECT user_id FROM course_user
                                    AND tutor = ?d 
                                    AND editor = ?d 
                                    AND course_reviewer = ?d
-                                   $forUser", function($result) use(&$course_id, &$users_actions, &$langSessionCondition, &$langUserHasCompletedCriteria, &$langUserHasNotCompletedCriteria, &$langPercentageSessionCompletion, &$sql_consultant, &$langAllCompletedResources)  {
+                                   $forUser", function($result) use(&$course_id, &$users_actions, &$langSessionCondition, &$langUserHasCompletedCriteria, &$langUserHasNotCompletedCriteria, &$langPercentageSessionCompletion, &$sql_consultant, &$langAllCompletedResources, &$sqlSelectConsultant)  {
 
                                         $userID = $result->user_id;
-                                        if(isset($_GET['user_rep'])){
-                                            //$sql_consultant = "";
+                                        if(isset($_GET['user_rep']) && !isset($_GET['user_consultant_report'])){
                                             $userID = $_GET['user_rep'];
                                         }
 
-                                        $user_badge_sessions = Database::get()->queryArray("SELECT id,title,start,creator FROM mod_session 
-                                                                                     WHERE course_id = ?d AND visible = ?d
+                                        $user_badge_sessions = Database::get()->queryArray("SELECT id,title,start,finish,creator FROM mod_session 
+                                                                                     WHERE course_id = ?d $sqlSelectConsultant AND visible = ?d
                                                                                      AND id IN (SELECT session_id FROM mod_session_users
                                                                                                     WHERE participants = ?d 
                                                                                                     AND is_accepted = ?d)
@@ -244,17 +312,57 @@ $tool_content .= "
                         <div class='card-body'>
                             <p class='info_completion' style='margin-bottom:25px;'>$langShowOnlySessionWithCompletionEnable</p>";
                             if(count($course_users) > 0 && !isset($_GET['user_rep'])){
-                                $tool_content .= "<div class='col-lg-6 col-12 mb-4'><form class='form-user-report' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
-                                                    <label for='form_id_user_report' class='control-label-notes'>$langSearchUser</label>
-                                                    <div class='d-flex justify-content-start align-items-center gap-2'>
-                                                    <select class='form-select mt-0' name='form_user_report' aria-label='$langSelect' id='form_id_user_report'>
-                                                    <option value='0'>$langAllUsers</option>";
-                                foreach($course_users as $u){
-                                    $is_selected = ($user_selected == $u->user_id) ? 'selected' : '';
-                                    $tool_content .= "<option value='{$u->user_id}' $is_selected>" . participant_name($u->user_id) . "</option>";
-                                }
-                                $tool_content .= "</select><button type='submit' class='btn searchGroupBtn' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langSearch' aria-label='$langSearch'>
-                                                                                    <i class='fa-solid fa-search'></i></button></div></form></div>";
+                              $tool_content .= "<div class='col-12 mb-4'>
+                                                    <form class='form-user-report' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
+                                                        <div class='d-flex justify-content-start align-items-center gap-2'>";
+
+                                            if ($is_coordinator) {
+                                          $tool_content .= "<div><label for='choose_user_or_consultant' class='control-label-notes mb-1'>$langSelect</label>";
+                                          $tool_content .= "<select style='width:200px;' class='form-select mt-0' id='choose_user_or_consultant' name='choose_user_or_consultant' onchange='choose_user_option()'>
+                                                                <option value='0' " . ($choose_user_or_consultant == 0 ? 'selected' : '') .">$langSelect</option>
+                                                                <option value='1' " . ($choose_user_or_consultant == 1 ? 'selected' : '') .">$langUsers</option>
+                                                                <option value='2' " . ($choose_user_or_consultant == 2 ? 'selected' : '') .">$langConsultants</option>
+                                                            </select></div>";
+                                            }
+
+                                            $show_search_user_container = ($is_consultant && !$is_coordinator) ? 'd-block' : 'd-none';
+                                            if ($is_consultant && !$is_coordinator) {
+
+                                            } elseif ($is_coordinator) {
+
+                                            }
+
+                                         $tool_content .= " <div class='search-user-container $show_search_user_container'>
+                                                                <label for='form_id_user_report' class='control-label-notes mb-1'>$langSearchUser</label>
+                                                                <select class='form-select mt-0' name='form_user_report' aria-label='$langSelect' id='form_id_user_report'>
+                                                                    <option value='0'>$langAllUsers</option>";
+                                                foreach($course_users as $u){
+                                                    $is_selected = ($user_selected == $u->user_id) ? 'selected' : '';
+                                                    $tool_content .= "<option value='{$u->user_id}' $is_selected>" . participant_name($u->user_id) . "</option>";
+                                                }
+                                                $tool_content .= "</select>
+                                                            </div>";
+
+                                        if ($is_coordinator) {// add filter to search the available consultants from coordinator view mode
+                                        $tool_content .= "  <div class='search-consultant-container d-none'>
+                                                                  <label for='form_id_consultant_report' class='control-label-notes mb-1'>$langSearchConsultant</label>";
+                                                $tool_content .= "<select id='form_id_consultant_report' class='form-select mt-0' name='form_consultant_report'>
+                                                                      <option value='0'>$langAllConsultants</option>";
+                                                foreach ($users_consultants as $c) {
+                                                    $consultantSelected = ($consultant_selected == $c->creator) ? 'selected' : '';
+                                                    $tool_content .= "<option value='{$c->creator}' $consultantSelected>{$c->givenname}&nbsp;{$c->surname}</option>";
+                                                }
+                                                $tool_content .= "</select>
+                                                            </div>";
+                                        }
+
+                                        $tool_content .= "  <button type='submit' class='btn searchGroupBtn mt-4' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langSearch' aria-label='$langSearch'>
+                                                                <i class='fa-solid fa-search'></i>
+                                                            </button>
+
+                                                        </div>
+                                                    </form>
+                                                </div>";
                             }
                             foreach($users_actions as $key => $val){
                 $tool_content .= "<div class='card cardReports' style='margin-bottom:25px;'>
@@ -276,7 +384,7 @@ $tool_content .= "
                                 $tool_content .= "  <tr style='border:0px !important;'>
                                                         <td style='vertical-align:top; border:0px !important; background-color: transparent;'>
                                                             <strong>{$v->title}</br>
-                                                                " .format_locale_date(strtotime($v->start), 'short', false). "
+                                                                " . format_locale_date(strtotime($v->start), 'short', false) . "&nbsp;<small>" . date('H:i', strtotime($v->start)) . "&nbsp; - &nbsp;" . date('H:i', strtotime($v->finish)) . "</small>
                                                             </strong>
                                                         </td>
                                                         <td style='vertical-align:top; border:0px !important; background-color: transparent;'>" . participant_name($v->creator) . "</td>
@@ -387,8 +495,8 @@ function pdf_reports_output() {
     $fontData = $defaultFontConfig['fontdata'];
 
     $mpdf = new Mpdf\Mpdf([
-        'margin_top' => 53,     // approx 200px
-        'margin_bottom' => 53,  // approx 200px
+        'margin_top' => 63,     // approx 200px
+        'margin_bottom' => 63,  // approx 200px
         'tempDir' => _MPDF_TEMP_PATH,
         'fontDir' => array_merge($fontDirs, [ $webDir . '/template/modern/fonts' ]),
         'fontdata' => $fontData + [

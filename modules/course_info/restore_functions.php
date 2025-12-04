@@ -5,7 +5,7 @@
  *  * Open eClass
  *  * E-learning and Course Management System
  *  * ========================================================================
- *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  * Copyright 2003-2025, Greek Universities Network - GUnet
  *  *
  *  * Open eClass is an open platform distributed in the hope that it will
  *  * be useful (without any warranty), under the terms of the GNU (General
@@ -371,7 +371,7 @@ function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $f
                                 <div class='form-group mt-4'>
                                     <div class='col-12 control-label-notes'>$langLanguage</div>
                                     <div class='col-sm-12'>
-                                        " . lang_select_options('course_lang') . "
+                                        " . lang_select_options('course_lang', default_langcode: $lang) . "
                                     </div>
                                 </div>
                                 <div class='form-group mt-4'>
@@ -628,13 +628,13 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
                 }
             }
         } else { // fetch course
-            $new_course_id = $GLOBALS['course_id']; // current course id
-            $new_course_code = $GLOBALS['course_code']; // current course code
+            $new_course_id = $GLOBALS['course_id'];
+            $new_course_code = $GLOBALS['course_code'];
             $backupData = null;
             $weekly_view = false;
             $courseDir = "$webDir/courses/$new_course_code";
             $videoDir = "$webDir/video/$new_course_code";
-            $userid_map = array(); // no users
+            $userid_map = array();
             $config_data = unserialize(file_get_contents($restoreThis . '/config_vars'));
             $restoreHelper = new RestoreHelper($config_data['version']);
             $course_file = $restoreThis . '/course';

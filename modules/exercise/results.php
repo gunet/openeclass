@@ -30,7 +30,15 @@ require_once 'include/lib/multimediahelper.class.php';
 ModalBoxHelper::loadModalBox();
 
 $toolName = $langResults;
-$navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langExercices);
+
+$unit = $_GET['unit'] ?? null;
+if ($unit) {
+    $unit_name = Database::get()->querySingle('SELECT title FROM course_units WHERE course_id = ?d AND id = ?d',
+        $course_id, $unit)->title;
+    $navigation[] = ['url' => "index.php?course=$course_code&id=$unit", 'name' => q($unit_name)];
+} else {
+    $navigation[] = ['url' => "index.php?course=$course_code", 'name' => $langExercices];
+}
 
 if (isset($_GET['exerciseId'])) {
     $exerciseId = getDirectReference($_GET['exerciseId']);
@@ -171,17 +179,17 @@ foreach ($result as $row) {
                     a.record_end_date,
                     IF (attempt_status = 1 OR b.time_constraint = 0,
                         TIME_TO_SEC(TIMEDIFF(a.record_end_date, a.record_start_date)),
-                        b.time_constraint*60-a.secs_remaining) AS time_duration,
+                        b.time_constraint*60-a.secs_remaining) AS time_duration, b.passing_grade,
                     a.total_score, a.total_weighting, a.eurid, a.attempt_status, a.assigned_to,
                     MIN(exercise_answer_record.answer_record_id) AS answers_exist
                 FROM exercise b
                     JOIN exercise_user_record a ON a.eid = b.id
                     LEFT JOIN exercise_answer_record ON a.eurid = exercise_answer_record.eurid
-                WHERE a.uid = ?d AND a.eid = ?d $extra_sql                
-                GROUP BY a.eurid, record_start_date, 
-                    record_end_date, attempt_status, 
-                    time_constraint, secs_remaining, 
-                    total_score, total_weighting, 
+                WHERE a.uid = ?d AND a.eid = ?d $extra_sql
+                GROUP BY a.eurid, record_start_date,
+                    record_end_date, attempt_status,
+                    time_constraint, secs_remaining,
+                    total_score, total_weighting,
                     assigned_to
                 ORDER BY record_start_date ASC", $sid, $exerciseId);
 
@@ -212,7 +220,7 @@ foreach ($result as $row) {
                   ". ($is_editor ? "<th>" . icon('fa-gears'). "</th>" : "") ."
                 </tr></thead>";
 
-        $k = 0;
+        $grade_icon = '';
         foreach ($result2 as $row2) {
             // check if there is exercise assigned to teacher
             if ($row2->assigned_to != $_SESSION['uid'] && isset($row2->assigned_to)) {
@@ -220,7 +228,14 @@ foreach ($result as $row) {
             }
 
             $row_class = "";
-            if ($row2->attempt_status == ATTEMPT_COMPLETED) { // IF ATTEMPT COMPLETED
+            if ($row2->attempt_status == ATTEMPT_COMPLETED) {
+                if (!is_null($row2->passing_grade) && $row2->passing_grade > 0) {
+                    if ($objExercise->canonicalize_exercise_score($row2->total_score, $row2->total_weighting) >= $objExercise->canonicalize_exercise_pass_grade($row2->passing_grade, $row2->total_weighting)) {
+                        $grade_icon = "<span class='fa-solid fa-check ps-1' style='color: green;' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-title='$langSuccess'></span>";
+                    } else {
+                        $grade_icon = "<span class='fa-solid fa-times ps-1' style='color: red;' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-title='$langFailure'></span>";
+                    }
+                }// IF ATTEMPT COMPLETED
                 $status = $langAttemptCompleted;
                 if ($showScore) {
                     $answersCount = Database::get()->querySingle("SELECT count(*) AS answers_cnt FROM `exercise_answer_record` WHERE `eurid` = ?d", $row2->eurid)->answers_cnt;
@@ -233,7 +248,11 @@ foreach ($result as $row) {
                     }
 
                     if ($answersCount) {
-                        $results_link = "<a href='exercise_result.php?course=$course_code&amp;eurId=$row2->eurid'>" . $total_score . "/" . $total_weighting . "</a>";
+                        if ($unit) {
+                            $results_link = "<a href='view.php?course=$course_code&amp;unit=$unit&amp;res_type=exercise_results&amp;eurId=$row2->eurid'>" . $total_score . "/" . $total_weighting . "</a>";
+                        } else {
+                            $results_link = "<a href='exercise_result.php?course=$course_code&amp;eurId=$row2->eurid'>" . $total_score . "/" . $total_weighting . "</a>";
+                        }
                     } else {
                         $results_link = $total_score . "/" . $total_weighting;
                     }
@@ -251,9 +270,11 @@ foreach ($result as $row) {
                     }
                 }
             } else if ($row2->attempt_status == ATTEMPT_PAUSED) {
+                $grade_icon = '';
                 $results_link = "-/-";
                 $status = $langAttemptPaused;
             } else if ($row2->attempt_status == ATTEMPT_ACTIVE) {
+                $grade_icon = '';
                 $results_link = "-/-";
                 $status = $langAttemptActive;
                 $now = new DateTime('NOW');
@@ -272,9 +293,11 @@ foreach ($result as $row) {
                 }
                 // IF ATTEMPT PENDING OR CANCELED
             } else if ($row2->attempt_status == ATTEMPT_PENDING) {
+                $grade_icon = '';
                 $results_link = q($row2->total_score) . "/" . q($row2->total_weighting);
                 $status = "<a href='exercise_result.php?course=$course_code&amp;eurId=$row2->eurid'>" . $langAttemptPending . "</a>";
             } else if ($row2->attempt_status == ATTEMPT_CANCELED) {
+                $grade_icon = '';
                 $results_link = "-/-";
                 $status = $langAttemptCanceled;
                 $row_class = " class='danger' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title='$langAttemptCanceled''";
@@ -286,7 +309,7 @@ foreach ($result as $row) {
             } else {
                 $tool_content .= "<td>" . format_time_duration($row2->time_duration) . "</td>";
             }
-            $tool_content .= "<td>$results_link</td>
+            $tool_content .= "<td>$results_link $grade_icon</td>
                               <td>$status</td>";
             if ($is_editor) {
                 $allow_change_status = $row2->attempt_status == ATTEMPT_ACTIVE ||
@@ -325,7 +348,6 @@ foreach ($result as $row) {
                     )) . "</td>";
             }
             $tool_content .= "</tr>";
-            $k++;
         }
         $tool_content .= "</table></div></div></div></div>";
     }

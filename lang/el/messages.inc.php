@@ -1575,7 +1575,8 @@ $langOfCourseComments = "Σχολίων στο $langsCourse";
 $langOfLearningPath = "Γραμμής μάθησης";
 $langOfLearningPathDuration = "Διάρκεια Γραμμής μάθησης";
 $langNoCertificateUsers = "Δεν υπάρχουν $langsStudents που συμμετέχουν στο συγκεκριμένο πιστοποιητικό.";
-$langUsedCertRes = "Η δραστηριότητα έχει ήδη χρησιμοποιηθεί από κάποιον $langsstudent_acc";
+$langUsedCertRes = "Το πιστοποιητικό περιέχει δραστηριότητες που έχουν χρησιμοποιηθεί από κάποιον $langsstudent_acc";
+$langWarningAboutUsedCert = "Αν θέλετε να το διαγράψετε κάντε κλικ παρακάτω. Σημειώστε ότι θα διαγραφεί η πρόοδος όλων των χρηστών για το πιστοποιητικό που έχετε ορίσει!";
 $langNoUserActivity = "Ο $langsStudent δεν έχει εκτελέσει καμία δραστηριότητα.";
 $langTotalPercentCompleteness = "Συνολικό ποσοστό ολοκλήρωσης";
 $langUsersCertResults = "Έχει ολοκληρωθεί από ";
@@ -1726,7 +1727,6 @@ $langRename = "Μετονομασία";
 $langReplace = "Αντικατάσταση";
 $langReplaceFile = "Αντικατάσταση %s με το";
 $langReplaceOK = "Το αρχείο αντικαταστάθηκε";
-$langOkComment = "Επικύρωση αλλαγών";
 $langResourceAccess = "Δικαίωμα πρόσβασης";
 $langResourceAccessLock = "Κλείδωμα";
 $langResourceAccessUnlock = "Ξεκλείδωμα";
@@ -2088,6 +2088,8 @@ $langExerciseFeedback = "Κείμενο Ολοκλήρωσης";
 $langExerciseFeedbackInfo = "εμφανίζεται μετά την ολοκλήρωση της άσκησης";
 $langExercisePreventCopy = 'Αποτροπή αντιγραφής κειμένου';
 $langExercisePreventCopyExplanation = 'Αποτροπή αντιγραφής και επικόλλησης κειμένου από την οθόνη κατά την εκτέλεση της άσκησης';
+$langStricterExamRestriction = "Αυστηρός περιορισμός";
+$langExerciseWillBeCanceledInStrictMode = "Η εξέταση ακυρώνεται σε παράλληλες ενέργειες χρηστών όπως ανακατεύθυνση σε νέα σελίδα ή άνοιγμα νέου παραθύρου";
 
 // admin.php
 $langExerciseManagement = "Διαχείριση Άσκησης";
@@ -2241,7 +2243,8 @@ $langInfoDragAndDropMarkersCreation = '
 <li class="text-dark">Η διαδικασία για την δημιουργία των προκαθορισμένων απαντήσεων ολοκληρώνεται πατώντας <strong class="text-dark">Υποβολή</strong>.</li>
 </ul>';
 $langRequiresImageUploadedForThisType = "Για την μεταφορά και απόθεση σε προκαθορισμένα σημεία απαιτείται η προσθήκη εικόνας.";
-$langYourOwnAnswerIs = "Η απάντηση που δώσατε είναι:";
+$langYourOwnAnswerIs = "Η απάντηση που δώσατε είναι";
+$langCorrectAnswerIs = "Η σωστή απάντηση είναι";
 $langCalculated = "Υπολογισμός αριθμητικών πράξεων";
 $langEditItems = "Επεξεργασία στοιχείων";
 $langItIsNotWildCard = "Δεν αποτελεί στοιχείο της άσκησης";
@@ -2264,7 +2267,7 @@ $langCompleteTheTextOfTheQuestion = "Εκφώνηση";
 $langCompleteVariablesOfQuestionInfo = '
 <ul class="text-dark">
 <li class="text-dark">Συμπληρώστε την εκφώνηση στο πεδίο κειμένου <strong class="text-dark">Εκφώνηση</strong>.</li>
-<li class="text-dark">Κάθε στοιχείο θα πρέπει να ορίζεται μέσα σε <strong class="text-dark">άγκυστρα {}</strong>.</li>
+<li class="text-dark">Κάθε στοιχείο θα πρέπει να ορίζεται μέσα σε <strong class="text-dark">άγκιστρα {}</strong>.</li>
 <li class="text-dark">Συμπληρώστε τον αριθμητικό τύπο που δίνει το απότελεσμα της άσκησης καθώς και τον βαθμό στα πεδία <strong class="text-dark">Τύπος απάντησης</strong> και <strong class="text-dark">Βαθμός</strong> αντίστοιχα. Το σύστημα υπολογίζει αυτόματα το τελικό αποτέλεσμα της άσκησης βασισμένο στον τύπο που δώσατε.</li>
 <li class="text-dark">Καταχωρήστε τις τιμές των στοιχείων από την <strong class="text-dark">επεξεργασία στοιχείων</strong>. Μπορείτε επίσης να ορίσετε τυχαίες τιμές από το εύρος τιμών.</li>
 </ul>
@@ -2280,12 +2283,12 @@ $langCompleteVariablesOfQuestionInfo = '
 </div>';
 $langCompleteVariablesOfQuestionWarning = '
 <strong class="text-dark">Προσοχή!</strong></br></br>
-Αν η άσκηση <strong class="text-dark">ΔΕΝ</strong> περιλαμβάνει κάποιο στοιχείο και πρέπει να υπολογιστεί, τότε θα πρέπει στον πεδίο <strong class="text-dark">Τύπος απάντησης</strong> να συμπληρώσετε την αριθμητική έκφραση όπως την συμπληρώσατε στην εκφώνηση μαζί με το τελικό της αποτέλεσμα χωρισμένα με το σύμβολο της άνω-κάτω τελείας <strong>(:)</strong></br>
+Αν η άσκηση <strong class="text-dark">ΔΕΝ</strong> περιλαμβάνει κάποιο στοιχείο και πρέπει να υπολογιστεί, τότε θα πρέπει στον πεδίο <strong class="text-dark">Τύπος απάντησης</strong> να συμπληρώσετε την αριθμητική έκφραση όπως την συμπληρώσατε στην εκφώνηση μαζί με το τελικό της αποτέλεσμα χωρισμένα με το διπλό σύμβολο Vertical Bar <strong>(||)</strong></br>
 <div class="mt-3 text-dark">
 Για παράδειγμα, αν θέλουμε να υπολογίσουμε τον άγνωστο <strong class="text-dark">x</strong> στην εξίσωση <strong class="text-dark">3x - 2 = 2x</strong> τότε ακολουθούμε τα εξής βήματα:
 <ul class="mt-4 text-dark">
 <li class="text-dark">Στο πεδίο <strong class="text-dark">Εκφώνηση</strong> γράφουμε την εκφώνηση που θέλουμε. Στο παράδειγμά μας μπορούμε να γράψουμε `Βρείτε τον άγνωστο <strong class="text-dark">x</strong> της εξίσωσης <strong class="text-dark">3x - 2 = 2x</strong>`.</li>
-<li class="text-dark">Στο πεδίο <strong class="text-dark">Τύπος απάντησης</strong> συμπληρώνουμε την αριθμητική έκφραση μαζί με την τελική τιμή του <strong class="text-dark">χ</strong> που ψάχνουμε ως αποτέλεσμα χωρισμένα με το σύμβολο (<strong class="text-dark">:</strong>) δηλαδή γράφουμε <strong class="text-dark">3x - 2 = 2x:2</strong></li>
+<li class="text-dark">Στο πεδίο <strong class="text-dark">Τύπος απάντησης</strong> συμπληρώνουμε την αριθμητική έκφραση μαζί με την τελική τιμή του <strong class="text-dark">χ</strong> που ψάχνουμε ως αποτέλεσμα χωρισμένα με το σύμβολο (<strong class="text-dark">||</strong>) δηλαδή γράφουμε <strong class="text-dark">3x - 2 = 2x||2</strong></li>
 <li class="text-dark">Στο πεδίο <strong class="text-dark">Βαθμός</strong> συμπληρώνουμε τον βαθμό του.</li>
 <li class="text-dark">Στην συνέχεια στην <strong class="text-dark">Επεξεργασία στοιχείων</strong> πατάμε <strong class="text-dark">Υποβολή</strong>.</li>
 </ul>
@@ -2293,7 +2296,7 @@ $langCompleteVariablesOfQuestionWarning = '
 $langNoExistVariables = "Δεν περιέχονται στοιχεία στην ερώτηση. </br> Πατήστε <strong>Υποβολή</strong> για να ολοκληρώσετε την δημιουργία της ερώτησης.";
 $langFinalValueOfWildCard = "Τιμή στοιχείου";
 $langSeperateCorrectlyTheTypeOfAnswer = "Δεν υπάρχουν διαθέσιμα {στοιχεία} στην εκφώνηση ή στους τύπους των απαντήσεων. </br>
-Συνεπώς θα πρέπει στο πεδίο <strong>Τύπος απάντησης</strong> να προσθέσετε τον αριθμητικό τύπο που προσθέσατε στην εκφώνηση μαζί με το τελικό της αποτέλεσμα, χωρισμένα με το σύμβολο (<strong>:</strong>)";
+Συνεπώς θα πρέπει στο πεδίο <strong>Τύπος απάντησης</strong> να προσθέσετε τον αριθμητικό τύπο που προσθέσατε στην εκφώνηση μαζί με το τελικό της αποτέλεσμα, χωρισμένα με το σύμβολο (<strong>||</strong>)";
 $langOrdering = "Ταξινόμηση";
 $langLayoutItems = "Διάταξη στοιχείων";
 $langHorizontal = "Οριζόντια";
@@ -2305,7 +2308,7 @@ $langSelectContiguousSubSetOfItems = "Επιλογή συνεχόμενου υπ
 $langSizeOfSubset = "Μέγεθος υποσυνόλου";
 $langFillInTheSizeOfSubset = "Συμπληρώστε το μέγεθος του υποσυνόλου.";
 $langTheSizeOfSubsetIsBiggerThanPrAnswers = "Το μέγεθος του υποσυνόλου είναι μεγαλύτερο από τον συνολικό αριθμό των προκαθορισμένων απαντήσεων.";
-$langCorrectOrdering = "Η σωστή ταξινόμηση είναι: ";
+$langCorrectOrdering = "Η σωστή ταξινόμηση είναι";
 $langInfoOrderingQuestion = 'Για την δημιουργία σωστής ταξινόμησης των στοιχείων, το σύστημα αντιλαμβάνεται ως σωστή απάντηση την ταξινόμηση από το μικρότερο προς το μεγαλύτερο στοιχείο.</br></br>
                              <strong class="text-dark">Για παράδειγμα</strong>, αν η ερώτητη της ασκήσης ζητάει την ταξινόμηση των αριθμών 1,5,3,9,7 από το μεγαλύτερο στο μικρότερο, τότε θα πρέπει να δηλώσετε τα εξής ως σωστή απάντηση:</br>
                              <ul class="mt-3">
@@ -2411,6 +2414,10 @@ $langWarnOneWayExercise = "Προσοχή: οι ερωτήσεις εμφανί�
 $langExam = "Εξέταση";
 $langRequireCourseUserLogin = "Οι χρήστες πρέπει να είναι συνδεδεμένοι στη πλατφόρμα και εγγεγραμμένοι στο $langsCourse.";
 $langExerciseRequireLogin = "Θα πρέπει να συνδεθείτε πρώτα στην πλατφόρμα έτσι ώστε να εκτελέσετε την άσκηση";
+$langWarningNewPageOpened = "<strong>Προσοχή!</strong><br>Παρακαλούμε να διατηρείτε την τρέχουσα σελίδα ανοικτή καθόλη τη διάρκεια της εξέτασης.<br> Οποιαδήποτε παράλληλη ενέργεια, όπως ανακατεύθυνση σε νέα σελίδα ή άνοιγμα νέου παραθύρου, θα οδηγήσει στην αυτόματη ακύρωση της προσπάθειάς σας.";
+$langWarningNewPageOpened2 = "<strong>Προσοχή!</strong><br>Έχετε εισέλθει στον χώρο της εξέτασης.<br> Οποιαδήποτε παράλληλη ενέργεια, όπως ανακατεύθυνση σε νέα σελίδα ή άνοιγμα νέου παραθύρου, θα οδηγήσει στην αυτόματη ακύρωση της προσπάθειάς σας.";
+$langExWillBeCanceled = "Η προσπάθειά σας θα ακυρωθεί.";
+$langGoToExam = "Έναρξη εξέτασης";
 
 // exercise result.php
 $langStart = "Έναρξη";
@@ -2419,6 +2426,8 @@ $langExerciseStartHelpBlock = "Κάντε κλικ για να ορίσετε μ
 $langExerciseEndHelpBlock = "Κάντε κλικ για να ορίσετε Ημερομηνία Λήξης Άσκησης";
 $langExerciseDuration = "Διάρκεια Εκτέλεσης";
 $langExerciseConstrain = "Χρονικός περιορισμός";
+$langExerciseGradePass = "Βαθμός Επιτυχίας";
+$langExerciseGradePassLegend = "Η άσκηση θεωρείται ότι εκτελέστηκε με επιτυχία αν ο βαθμός του $langsOfStudent είναι μεγαλύτερος ή ίσος από το βαθμό επιτυχίας";
 $langExerciseEg = "π.χ.";
 $langExerciseConstrainUnit = "λεπτά";
 $langExerciseConstrainExplanation = "0 για καθόλου περιορισμό";
@@ -2973,6 +2982,7 @@ $lang_user_multidep = "Να επιτρέπεται η εγγραφή χρηστ�
 $lang_restrict_owndep = "Να μην επιτρέπεται η αλλαγή τμήματος από τους χρήστες";
 $lang_restrict_teacher_owndep = "Να μην επιτρέπεται η δημιουργία $langsOfCourses από τους $langsTeachers στα τμήματα που δεν ανήκουν";
 $lang_allow_teacher_clone_course = "Να επιτρέπεται η κλωνοποίηση $langsOfCourses από τους $langsTeachers";
+$lang_enable_user_consent = "Ενεργοποίηση επιβεβαίωσης συμμετοχής των χρηστών στις συνεδρίες";
 $lang_allow_rec_video = "Να επιτρέπεται η δημιουργία βιντεοσκοπημένου αρχείου στο $langsCourse";
 $lang_allow_rec_audio = "Να επιτρέπεται η δημιουργία ηχογραφημένου αρχείου στο $langsCourse";
 $lang_openCourse_inModal = "Να εμφανίζονται οι πληροφορίες του μαθήματος σε Modal (πλαίσιο) στα ανοικτά μαθήματα";
@@ -3209,7 +3219,7 @@ $langZipError = "Το αρχείο δεν μπόρεσε να αποσυμπιε
 $langLearningPathCleanAttempt = "Ξεκινήστε από την αρχή στην επόμενη προσπάθεια";
 $langConfirmLpCleanAttemptTitle = "Επιβεβαίωση επανεκκίνησης επόμενης προσπάθειας";
 $langConfirmLpCleanAttemptBody = "Με την επιλογή αυτή η επόμενη προσπάθεια στη Γραμμή Μάθησης <u>δεν</u> θα χρησιμοποιήσει τα αποθηκευμένα δεδομένα για συνέχεια από το σημείο που την αφήσατε την τελευταία φορά.<br/><br/><em>Ακυρώστε</em> την επιλογή σας αν <u>δεν</u> επιθυμείτε να ξεκινήσετε από την αρχή την επόμενη προσπάθεια";
-
+$langShowResults = "Εμφάνιση αποτελεσμάτων";
 $langDistribute = "Διαμοιρασμός";
 $langCancelDistribute = "Ακύρωση διαμοιρασμού";
 $langCorrectByQuestion = "Διόρθωση ανά ερώτηση";
@@ -3329,6 +3339,10 @@ $langFinalDesc = "Αναλυτική Περιγραφή $siteName";
 $langShortDesc = "Σύντομη Περιγραφή $siteName";
 $langManS = "Εγχειρίδιο $langOfStudent";
 $langManT = "Εγχειρίδιο $langOfTeacher";
+$langVideoManS = "Οδηγοί $langOfStudent";
+$langVideoManT1 = "Οδηγοί $langOfTeacher (μέρος 1ο)";
+$langVideoManT2 = "Οδηγοί $langOfTeacher (μέρος 2ο)";
+$langVideoManT3 = "Οδηγοί $langOfTeacher (μέρος 3ο)";
 $langOr = "ή";
 $langOrYet = "ή ακόμη";
 $langor =  "η";
@@ -3344,6 +3358,7 @@ $langAdministratorForum = 'Διαχείριση Περιοχών Συζητήσ�
 $langAdministratorGroup = 'Διαχείριση Ομάδων Εκπαιδευόμενων';
 $langCreateAccount = "Δημιουργία Λογαριασμού";
 $langAllTutorials = "Γενικοί οδηγοί";
+$langVideoTutorials = "Βίντεο - Οδηγοί";
 $langOnlyInEnglish = "Μόνο στα Αγγλικά";
 
 /* * *******************************************************
@@ -4037,6 +4052,7 @@ $langForcePasswordChange = "Αλλαγή του συνθηματικού κατ�
 // list requests
 $langDateRequest = "Ημ/νία αίτησης";
 $langDateReject = "Ημ/νία απόρριψης";
+$langDateAccept = "Ημ/νία έγκρισης";
 $langDateClosed = "Ημ/νία κλεισίματος";
 $langDateCompleted = "Ημ/νία ολοκλήρωσης";
 
@@ -4248,7 +4264,8 @@ $langTypesRegistration = "Ανοικτά με εγγραφή";
 $langTypeInactive = "Ανενεργό";
 $langAllTypes = "(όλοι οι τύποι πρόσβασης)";
 $langAllFacultes = "Σε όλες τις $langsFaculties";
-$langSuccess = "Η εγγραφή σας ως διαχειριστή έγινε με επιτυχία";
+$langSuccess = "Επιτυχία";
+$langFailure = "Αποτυχία";
 $langAuthRequest = "Απαιτείται εξακρίβωση στοιχείων";
 $langAlreadySubscribe = "Είστε ήδη εγγεγραμμένος";
 $langAs = "ως";
@@ -6906,7 +6923,6 @@ $langSections = 'Ενότητες';
 $langCategoryEssay = "Εργασία";
 $langCategoryExcercise = "Άσκηση";
 $langCategoryDescription = "Περιγραφή";
-$langAnalyticsEditElements = 'Επεξεργασία Στοιχείων';
 $langViewStatics = "Στατιστικά Επισκεψιμότητας";
 $langTypeOutMessage = "Πληκτρολογήστε το μήνυμα σας ...";
 $langDateHasExpire = "Η ημερομηνία έχει παρέλθει. Δοκιμάστε πάλι.";
@@ -6976,6 +6992,9 @@ $langInvitationAlreadyUsed = 'Έχετε ήδη εγγραφεί στην πλα
 $langRegisterAsVisitor = 'Εγγραφή ως επισκέπτης';
 $langCourseInvitation = 'Πρόσκληση εγγραφής στο μάθημα';
 $langMetaTeacher = "Εκπαιδευτικός";
+$langMetaLearner = "Μαθητής";
+$langMetaAuthor = "Συγγραφέας";
+$langMetaManager = "Διαχειριστής";
 $langCourseInvitationReceived = 'Έχετε λάβει πρόσκληση συμμετοχής στο ανωτέρω μάθημα.';
 $langInvitationClickToAccept = 'Επιλέξτε το παρακάτω κουμπί για να εγγραφείτε και να μεταβείτε στο μάθημα.';
 $langInvitationAcceptViaCAS = 'Εφόσον <strong>διαθέτετε</strong> λογαριασμό στο <strong>κεντρικό σύστημα
@@ -7116,13 +7135,13 @@ $langDateMaxMinutes = "Η διάρκεια συνεδρίας πρέπει εί�
 $langConsultant = "Σύμβουλος";
 $langDetailsSession = "Λεπτομέρειες συνεδρίας";
 $langAvailableSession = "Νέα συνεδρία";
-$langInfoNewSession = "Στο ημερολόγιο θα βρείτε όλες τις συνεδρίες που έχει καταχωρήσει ο σύμβουλος στην τρέχουσα συνεργασία.
-                        Σε αυτά τα slots δεν μπορεί να προστεθεί κάποια καινούρια συνεδρία παρά μόνο στα ελεύθερα slots.</br>
+$langInfoNewSession = "Στο ημερολόγιο θα βρείτε όλες τις συνεδρίες που έχετε καταχωρήσει ως σύμβουλος στην τρέχουσα συνεργασία.
+                        Σε αυτά τα slots δεν μπορείτε να προσθέσετε καινούρια συνεδρία παρά μόνο στα ελεύθερα.</br>
                         Επιλέγοντας το επιθυμητό slot και αφού πατήσετε το κουμπί «προσθήκη» στο νέο παράθυρο που θα εμφανιστεί,
                         θα καταχωρίσετε προσωρινά την νέα ημερομηνία ενάρξης και λήξης της συνεδρίας. </br></br>
                         <strong>Η καταχώριση ολοκληρώνεται κάνοντας υποβολή στην φόρμα από το κουμπί «υποβολή».</strong>";
-$langInfoNewSessionCoordinator = "Στο ημερολόγιο θα βρείτε όλες τις συνεδρίες που έχετε καταχωρήσει ως σύμβουλος στην τρέχουσα συνεργασία.
-                        Σε αυτά τα slots δεν μπορεί να προστεθεί κάποια καινούρια συνεδρία παρά μόνο στα ελεύθερα slots.</br>
+$langInfoNewSessionCoordinator = "<strong>Στο ημερολόγιο εμφανίζονται όλες οι συνεδρίες του συμβούλου τον οποίο επιλέξατε ως υπεύθυνος συνεδρίας.</strong></br>
+                        Σε αυτά τα slots δεν μπορεί να προστεθεί κάποια καινούρια συνεδρία παρά μόνο στα ελεύθερα.</br>
                         Επιλέγοντας το επιθυμητό slot και αφού πατήσετε το κουμπί «προσθήκη» στο νέο παράθυρο που θα εμφανιστεί,
                         θα καταχωρίσετε προσωρινά την νέα ημερομηνία ενάρξης και λήξης της συνεδρίας. </br></br>
                         <strong>Η καταχώριση ολοκληρώνεται κάνοντας υποβολή στην φόρμα από το κουμπί «υποβολή».</strong>";
@@ -7133,12 +7152,12 @@ $langInfoEditSession = "Στο ημερολόγιο θα δείτε όλες τ�
                         θα καταχωρίσετε προσωρινά την νέα ημερομηνία ενάρξης και λήξης της συνεδρίας. </br></br>
                         <strong>Η καταχώριση ολοκληρώνεται κάνοντας υποβολή στην φόρμα από το κουμπί «αλλαγή».</strong></br></br>
                         <strong>Μπορείτε επίσης να αλλάξετε την διάρκεια της τρέχουσας συνεδρίας αλλάζοντας το μέγεθος του πράσινου slot</strong>";
-$langInfoEditSessionCoordinator = "Στο ημερολόγιο θα δείτε όλες τις συνεδρίες που έχει καταχωρήσει ο επιλεγμένος σύμβουλος στην τρέχουσα συνεργασία.
+$langInfoEditSessionCoordinator = "<strong>Στο ημερολόγιο θα δείτε όλες τις συνεδρίες που έχει καταχωρήσει ο επιλεγμένος υπεύθυνος συνεδρίας.</strong></br>
                         Το πράσινο χρώμα αφορά την τρέχων συνεδρία που θέλετε να επεξεργαστείτε.
                         Επιλέγοντας ένα διαφορετικό slot και αφού πατήσετε το κουμπί «προσθήκη»,
                         θα καταχωρίσετε προσωρινά την νέα ημερομηνία ενάρξης και λήξης της συνεδρίας. </br></br>
-                        <strong>Η καταχώριση ολοκληρώνεται κάνοντας υποβολή στην φόρμα από το κουμπί «αλλαγή».</strong></br></br>
-                        <strong>Μπορείτε επίσης να αλλάξετε την διάρκεια της τρέχουσας συνεδρίας αλλάζοντας το μέγεθος του πράσινου slot</strong>";
+                        <strong>Η καταχώριση ολοκληρώνεται κάνοντας υποβολή στην φόρμα από το κουμπί «αλλαγή».</strong></br>
+                        <strong>Μπορείτε επίσης να αλλάξετε την διάρκεια της τρέχουσας συνεδρίας αλλάζοντας το μέγεθος του πράσινου event.</strong>";
 $langEmptyUploadFile = "Δεν έχετε επιλέξει κάποιο αρχείο για ανέβασμα.";
 $langUploadDocCompleted = "Το ανέβασμα ολοκληρώθηκε με επιτυχία.";
 $langSessionType = "Μορφή συνεδρίας";
@@ -7243,7 +7262,7 @@ $langNumberScaleDiffAnswers = "Ο μέγιστος αριθμός κλίμακα
 $langInfoAddSliderLabels = "Προσθέστε στο πεδίο κειμένου τις πιθανές απαντήσεις που θα περιλαμβάνει η κλίμακα με βάση τον μέγιστο αριθμό της.</br>
                             Η κάθε απάντηση χωρίζεται με το σύμβολο | .</br>
                             Π.χ αν ο μέγιστος αριθμός της κλίμακας είναι 5 τότε θα πρέπει να δώσετε 5 πιθανές απαντήσεις της μορφής: (καθόλου|πολύ λίγο|λίγο|πολύ|πάρα πολύ).";
-$langTableDimension = "Συμπληρώστε τον αριθμό των στηλών και γραμμών του πίνακα.</br></br>
+$langTableDimension = "Δημιουργήστε την διάσταση του πίνακα (N*N) καταχωρόντας τον αριθμό των στηλών και γραμμών του.</br></br>
                        <ul><li>Στήλες = Ερωτήσεις προς τον χρήστη</li><li>Γραμμές = Απαντήσεις από τον χρήστη</li></ul>";
 $langNumberOfColumns = "Αριθμός στηλών";
 $langNumberOfRows = "Αριθμός γραμμών";
@@ -7257,14 +7276,15 @@ $langNumberColumnsSmallerThanQ = "Ο αριθμός των στηλών που �
 $langUserAnswer = "Απάντηση χρήστη";
 $langAddRowsColumns = "Καταχώριση";
 $langCurrentDuration = "Τρέχουσα διάρκεια";
-$langOfSubmitQuestionnaire = "Με υποβολή ερωτηματολογίου";
+$langMaxHeightHalfMaxScreenJumbotron = "Εναλλακτικά το ύψος διαμορφώνεται στο μισό ύψος της τρέχουσας οθόνης.";
+$langOfSubmitQuestionnaire = "Με υποβολή εργαλείου";
 $langUsersAnswers = "Απαντήσεις χρηστών";
 $langEnablePagination = "Ενεργοποίηση σελιδοποίησης";
 $langPreviousQuestion = "Προηγούμενη";
 $langNextQuestion = "Επόμενη";
 $langAddConsultantComments = "Οι παρατηρήσεις του συμβούλου προστέθηκαν με επιτυχία.";
 $langContinueToDelComment = "Θέλετε να προχωρήσετε στην διαγραφή των σχολίων για τον χρήστη?";
-$langInfoCommentsConsultant = "Σε περίπτωση που επιλέξετε χρήστη για τον οποίο έχετε υποβάλει τις παρατηρήσεις σας, τότε o <strong>τίτλος</strong> και
+$langInfoCommentsConsultant = "Σε περίπτωση που επιλέξετε χρήστη για τον οποίο έχετε υποβάλει τις παρατηρήσεις σας, τότε o <strong>τίτλος</strong> και 
                                 τα <strong>σχόλια</strong> θα διαγραφούν και θα αντικατασταθούν με τις νέες τιμές.";
 $langDelConsultantComments = "Τα σχόλια διαγράφηκαν με επιτυχία.";
 $langNotifyCommentsConsultant = "Ειδοποίηση μέσω email στον χρήστη σχετικά με τα τις παρατηρήσεις του συμβούλου";
@@ -7273,15 +7293,33 @@ $langConsent = "Συναίνεση χρήστη";
 $langAttendanceCriterion = "Κριτήριο καταχώρισης παρουσιών";
 $langConsultingTools = "Εργαλεία συμβουλευτικής";
 $langChooseOtherSession = "Έχετε επιλέξει διαφορετική συνεδρία από την τρέχουσα. Δοκιμάστε πάλι!";
-$langMaxHeightHalfMaxScreenJumbotron = "Εναλλακτικά το ύψος διαμορφώνεται στο μισό ύψος της τρέχουσας οθόνης.";
+$langEditSessionSection = "Επεξεργασία συνεδρίας";
+$langInsertTcMeetingSession = "τηλεργασίας";
+$langCompleteCriteriaSession = "Κριτήρια ολοκλήρωσης";
+$langSelectToolsPolls = "Εργαλεία συμβουλευτικής";
+$langSubmitParticipation = "Συμμετοχή χρήστη";
+$langCreateReferenceNotes = "Σημειώσεις";
+$langAutomaticCompletion = "Με αυτόματη ολοκλήρωση (μόλις παρέλθει ο χρόνος συνεδρίας)";
+$langUserPollAnswer = "απάντησε";
+$langStartSession = "Έναρξη συνεδρίας";
+$langFinishSession = "Λήξη συνεδρίας";
+$langEnableRequiredAnswer = "Υποχρεωτική απάντηση σε κάθε ερώτηση";
+$langNoAnswers = "Δεν υπάρχουν απαντήσεις για την συγκεκριμένη ερώτηση";
+$langCriteriaBelowParticipateInCompletion = "Τα παρακάτω κριτήρια συμμετέχουν στην ολοκλήρωση συνεδρίας";
+$langTheResource = "Ο πόρος";
+$langAlreadyUsed = "χρησιμοποιείται από κάποιον ωφελούμενο και δεν μπορεί να διαγραφεί.";
+$langListCompletionCriteria = "Λίστα κριτηρίων";
+$langUserParticipation = "Συμμετοχή ωφελούμενου";
+$langFirstShow = "Αρχική εμφάνιση";
 $langNowAllowNullDuration = "Η διάρκεια δεν μπορεί να είναι μηδενική.";
+$langShowUnitTitle = "Εμφάνιση σε τίτλους";
 $langDownloadPdfNotAllowed = "Μη επιτρεπτή λήψη αρχείου";
 $langDisplayRightContentInCPage = "Εμφάνιση ημερολογίου, ανακοινώσεων κ.λπ.";
 $langCoursePage = "Σελίδα $langsOfCourse";
-$langCoursePrintSetting = "Ρυθμίσεις εμφάνισης αναφορών μαθήματος";
+$langCoursePrintSetting = "Ρυθμίσεις εμφάνισης αναφορών";
 $langCoursePrintHeaderImage = "Εικόνα κεφαλίδας";
 $langCoursePrintFooterImage = "Εικόνα υποσέλιδου";
-$langReportImageNotFound = "Οι εικόνες πρέπει να βρίσκονται στον κατάλογο με τίτλο Report_Images στα 'Εγγραφα'";
+$langReportImageNotFound = "Οι εικόνες πρέπει να βρίσκονται στον κατάλογο με τίτλο Report_Images στα Εγγραφα";
 
 // AI-related language constants - Greek translations
 $langAI = "AI";
@@ -7411,10 +7449,11 @@ $langAddToExercise = "Προσθήκη στην Άσκηση";
 $langQuestionsAddedToExercise = '%d ερωτήσεις προστέθηκαν στην άσκηση';
 $langTestConnection = "Δοκιμή Σύνδεσης";
 $langDefaultFillInBlanks = "Συμπληρώστε τα κενά.";
-$langAIService = "Υποσύστημα Τ.Ν.";
+$langAIService = "Νησίδα Λειτουργικότητας Τ.Ν.";
+$langAIServices  = "Νησίδες Λειτουργικότητας Τ.Ν.";
 $langAddProvider = "Προσθήκη Παρόχου";
-$langAssignAIToModule = "Ανάθεση λειτουργίας Τ.Ν. σε υποσύστημα";
-$langAIModuleDeleted = "Διαγράφηκε το υποσύστημα Τ.Ν.";
+$langAssignAIToModule = "Ρυθμίσεις Νησίδας Λειτουργικότητας Τ.Ν.";
+$langAIModuleDeleted = "Διαγράφηκε η Νησίδα Λειτουργικότητας Τ.Ν.";
 
 // AI Free Text Evaluation
 $langAIAssistedGrading = "Αυτόματη Αξιολόγηση με Τ.Ν.";
@@ -7444,3 +7483,6 @@ $langAISyllabusTargetGroup = "Ομάδα Στόχος";
 $langAISyllabusTextbooks = "Προτεινόμενα Συγγράμματα";
 $langAISyllabusAdditionalInfo = "Επιπλέον Πληροφορίες";
 $langInvalidScore = "Μη έγκυρος βαθμός";
+$langRequestAlreadySent = "Έχει ήδη σταλεί αίτημα εγγραφής για αυτό το μάθημα";
+$langRejectedRequests = "Απορριφθείσες Αιτήσεις Χρηστών";
+$langAcceptedRequests = "Εγκεκριμένες Αιτήσεις Χρηστών";
