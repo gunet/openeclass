@@ -28,19 +28,9 @@
 $require_current_course = TRUE;
 $guest_allowed = true;
 require_once '../../include/baseTheme.php';
-require_once 'indexer.class.php';
-require_once 'announcementindexer.class.php';
-require_once 'agendaindexer.class.php';
-require_once 'linkindexer.class.php';
-require_once 'videoindexer.class.php';
-require_once 'videolinkindexer.class.php';
-require_once 'exerciseindexer.class.php';
-require_once 'forumindexer.class.php';
-require_once 'forumtopicindexer.class.php';
-require_once 'forumpostindexer.class.php';
-require_once 'documentindexer.class.php';
-require_once 'unitindexer.class.php';
-require_once 'unitresourceindexer.class.php';
+require_once 'modules/search/classes/ConstantsUtil.php';
+require_once 'classes/SearchEngineFactory.php';
+require_once 'classes/SearchResult.php';
 
 $pageName = $langSearch;
 
@@ -73,11 +63,6 @@ if (empty($search_terms)) {
     $_POST['course_id'] = $course_id;
     $_POST['search_terms'] = $search_terms;
 
-    $idx = new Indexer();
-    if (!$idx->getIndex()) {
-        view('modules.search_incourse.index');
-        exit();
-    }
     $data['action_bar'] = action_bar(array(
                     array('title' => $langAdvancedSearch,
                           'url' => $_SERVER['SCRIPT_NAME'],
@@ -98,66 +83,73 @@ if (empty($search_terms)) {
     $unitHits = array();
     $uresHits = array();
 
-    $idxQ = Indexer::buildQuery($_POST);
-    $allHits = $idx->searchRaw($idxQ);
+    $searchEngine = SearchEngineFactory::create();
+    $allHits = $searchEngine->searchInCourse($_POST);
+
+    // exit if not results
+    if (empty($allHits)) {
+        view('modules.search_incourse.index');
+        exit();
+    }
+
     foreach ($allHits as $hit) {
         switch ($hit->doctype) {
-            case Indexer::DOCTYPE_AGENDA:
+            case ConstantsUtil::DOCTYPE_AGENDA:
                 if ($agenda && $hit->visible) {
                     $agendaHits[] = $hit;
                 }
                 break;
-            case Indexer::DOCTYPE_ANNOUNCEMENT:
+            case ConstantsUtil::DOCTYPE_ANNOUNCEMENT:
                 if ($announcements && $hit->visible) {
                     $announceHits[] = $hit;
                 }
                 break;
-            case Indexer::DOCTYPE_DOCUMENT:
+            case ConstantsUtil::DOCTYPE_DOCUMENT:
                 if ($documents && $hit->visible) {
                     $documentHits[] = $hit;
                 }
                 break;
-            case Indexer::DOCTYPE_EXERCISE:
+            case ConstantsUtil::DOCTYPE_EXERCISE:
                 if ($exercises && $hit->visible) {
                     $exerciseHits[] = $hit;
                 }
                 break;
-            case Indexer::DOCTYPE_FORUM:
+            case ConstantsUtil::DOCTYPE_FORUM:
                 if ($forums) {
                     $forumHits[] = $hit;
                 }
                 break;
-            case Indexer::DOCTYPE_FORUMPOST:
+            case ConstantsUtil::DOCTYPE_FORUMPOST:
                 if ($forums) {
                     $forumPostHits[] = $hit;
                 }
                 break;
-            case Indexer::DOCTYPE_FORUMTOPIC:
+            case ConstantsUtil::DOCTYPE_FORUMTOPIC:
                 if ($forums) {
                     $forumTopicHits[] = $hit;
                 }
                 break;
-            case Indexer::DOCTYPE_LINK:
+            case ConstantsUtil::DOCTYPE_LINK:
                 if ($links) {
                     $linkHits[] = $hit;
                 }
                 break;
-            case Indexer::DOCTYPE_UNIT:
+            case ConstantsUtil::DOCTYPE_UNIT:
                 if ($course_units && $hit->visible) {
                     $unitHits[] = $hit;
                 }
                 break;
-            case Indexer::DOCTYPE_UNITRESOURCE:
+            case ConstantsUtil::DOCTYPE_UNITRESOURCE:
                 if ($course_units && $hit->visible) {
                     $uresHits[] = $hit;
                 }
                 break;
-            case Indexer::DOCTYPE_VIDEO:
+            case ConstantsUtil::DOCTYPE_VIDEO:
                 if ($video) {
                     $videoHits[] = $hit;
                 }
                 break;
-            case Indexer::DOCTYPE_VIDEOLINK:
+            case ConstantsUtil::DOCTYPE_VIDEOLINK:
                 if ($video) {
                     $vlinkHits[] = $hit;
                 }

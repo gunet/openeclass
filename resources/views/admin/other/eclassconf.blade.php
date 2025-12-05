@@ -540,6 +540,13 @@
                                                     </label>
                                                     <span class="help-block">{{ trans('lang_openCourse_inModal_Info') }}</span>
                                                 </div>
+                                                <div class='checkbox'>
+                                                    <label class='label-container' aria-label="{{ trans('langSelect') }}">
+                                                        <input type='checkbox' name='enable_user_consent' value='1' {{ $cbox_user_consent }}>
+                                                        <span class='checkmark'></span>
+                                                        {{ trans('lang_enable_user_consent') }}
+                                                    </label>
+                                                </div>
 
                                                 <div class='form-group mt-1'>
                                                     <label for='default_course_access' class='col-sm-12 control-label-notes'>{{

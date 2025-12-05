@@ -27,7 +27,7 @@
                     allDaySlot: false,
                     displayEventTime: true,
                     events: "{{ $urlAppend }}modules/session/disabled_session_slots.php?course={{ $course_id }}&show_sessions=true&from_coordinator={{ $tmp_coordinator }}&add=true&selectedConsultant="+consultant_choosen,
-                
+
                     eventRender: function( event, element, view ) {
                         var title = element.find( '.fc-title' );
                         title.html( title.text() );
@@ -49,22 +49,16 @@
                         var startDay =  moment(start).format('DD');
                         var endDay = moment(end).format('DD');
                         if(parseInt(startDay)==parseInt(endDay)){
-                            var CurrentDateTime = moment().format('YYYY-MM-DD HH:mm');
-                            var StartDateTime = moment(start).format('YYYY-MM-DD HH:mm');
-                            if(StartDateTime >= CurrentDateTime){
-                                var day_start = moment(start).format('YYYY-MM-DD HH:mm');
-                                var day_end = moment(end).format('YYYY-MM-DD HH:mm');
-                                var starttime = moment(start).format('dddd, Do MMMM YYYY, HH:mm');
-                                var endtime = moment(end).format('HH:mm');
-                                var mywhen = starttime + ' - ' + endtime;
-                                $('#startTimeTmp').val(day_start);
-                                $('#endTimeTmp').val(day_end);
-                                $('#whenTmp').val(mywhen);
-                                $('#createEventSession #when').text(mywhen);
-                                $('#createEventSession').modal('toggle');
-                            }else{
-                                alert("{{ js_escape(trans('langDateHasExpired')) }}");
-                            }
+                            var day_start = moment(start).format('YYYY-MM-DD HH:mm');
+                            var day_end = moment(end).format('YYYY-MM-DD HH:mm');
+                            var starttime = moment(start).format('dddd, Do MMMM YYYY, HH:mm');
+                            var endtime = moment(end).format('HH:mm');
+                            var mywhen = starttime + ' - ' + endtime;
+                            $('#startTimeTmp').val(day_start);
+                            $('#endTimeTmp').val(day_end);
+                            $('#whenTmp').val(mywhen);
+                            $('#createEventSession #when').text(mywhen);
+                            $('#createEventSession').modal('toggle');
                         }else{
                             alert("{{ js_escape(trans('langChooseDayAgain')) }}");
                         }
@@ -75,11 +69,15 @@
                             return false;
                         }
                     }
- 
+
                 });
 
                 $('.fc-next-button').trigger('click');
                 $('.fc-prev-button').trigger('click');
+
+                $('.popover').each(function () {
+                    $(this).removeClass('show');
+                });
             });
 
             $('#addDateTimeBtn').on('click', function(e){
@@ -99,7 +97,7 @@
                 $('#select_group_session').removeClass('d-block');
                 $('#select_group_session').addClass('d-none');
             });
-            
+
             $('#group_session').on('change',function(){
                 $('#select_users_group_session').select2();
                 $('#select_one_session').removeClass('d-block');
@@ -137,7 +135,7 @@
             @include('layouts.partials.left_menu')
 
             <div class="col_maincontent_active">
-                    
+
                 <div class="row">
 
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
@@ -152,10 +150,10 @@
                     </div>
 
                     @include('layouts.partials.legend_view')
-                    
+
                     {!! $action_bar !!}
 
-                    @include('layouts.partials.show_alert') 
+                    @include('layouts.partials.show_alert')
 
                     <div class='d-lg-flex gap-4 mt-4'>
                         <div class='flex-grow-1'>
@@ -247,7 +245,7 @@
                                             <p class='control-label-notes mb-2'>{{ trans('langStartEndSessionDateTime') }}&nbsp;<span class='asterisk Accent-200-cl'>(*)</span></p>
                                             <div class="input-group mb-3 rounded-2 border-0 gap-2">
                                                 <span class="input-group-text p-0 border-0 bg-transparent" id="start-end-datetime-session">
-                                                    <a type="button" class="btn submitAdminBtn d-inline-flex gap-1 rounded-2" 
+                                                    <a type="button" class="btn submitAdminBtn d-inline-flex gap-1 rounded-2"
                                                         data-bs-toggle="modal" data-bs-target="#staticDateTimeSession" id='openSessionCal' data-id="@if($is_coordinator) 0 @else {{ $uid }} @endif">
                                                         <i class='fa-solid fa-calendar'></i>
                                                     </a>
@@ -279,13 +277,14 @@
                                         <div class='form-group mt-4'>
                                             <div class='checkbox'>
                                                 <label class='label-container' aria-label="{{ trans('langSelect') }}">
-                                                    <input type='checkbox' name='session_visible'>
+                                                    <input type='checkbox' name='session_visible' checked>
                                                     <span class='checkmark'></span>
-                                                    {{ trans('langVisible') }}
+                                                    {{ trans('langVisibleToUser') }}
                                                 </label>
                                             </div>
                                         </div>
 
+                                        @if (get_config('enable_user_consent'))
                                         <div class='form-group mt-4'>
                                             <div class='col-12'>
                                                 <div class='checkbox'>
@@ -295,11 +294,11 @@
                                                         {{ trans('langWithConsent')}}
                                                     </label>
                                                 </div>
-                                                <small>{{ trans('langInfoWithConsent') }}</small>
                                             </div>
                                         </div>
+                                        @endif
 
-                                        {!! generate_csrf_token_form_field() !!}    
+                                        {!! generate_csrf_token_form_field() !!}
 
                                         <div class='form-group mt-5'>
                                             <div class='col-12 d-flex justify-content-end aling-items-center'>

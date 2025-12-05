@@ -9,7 +9,7 @@
 
             @include('layouts.partials.left_menu')
             <div class="col_maincontent_active">
-
+                    
                 <div class="row">
 
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
@@ -24,10 +24,10 @@
                     </div>
 
                     @include('layouts.partials.legend_view')
-
+                    
                     {!! $action_bar !!}
 
-                    @include('layouts.partials.show_alert')
+                    @include('layouts.partials.show_alert') 
 
                     <div class='d-lg-flex gap-4 mt-4'>
                         <div class='flex-grow-1'>
@@ -41,7 +41,7 @@
                                             <div>
                                                 <sup>
                                                     <small>(<span class='text-danger'>*</span>)</small>
-                                                </sup>
+                                                </sup> 
                                                 <small class='text-muted'>
                                                     {{ trans('langCPFFieldRequired') }}
                                                 </small>
@@ -63,11 +63,11 @@
                                             {!! $comments !!}
                                         </div>
 
-                                        {!! generate_csrf_token_form_field() !!}
+                                        {!! generate_csrf_token_form_field() !!}    
 
                                         <div class='form-group mt-5'>
                                             <div class='col-12 d-flex justify-content-end aling-items-center'>
-                                                <input class='btn submitAdminBtn' type='submit' name='modify_resource' value='{{ trans('langSubmit') }}'>
+                                                <input class='btn submitAdminBtn' type='submit' name='modify_resource' value='{{ trans('langModify') }}'>
                                             </div>
                                         </div>
 
@@ -84,7 +84,7 @@
             </div>
 
         </div>
-
+    
     </div>
 </div>
 

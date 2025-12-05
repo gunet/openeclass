@@ -32,7 +32,7 @@ require_once 'include/action.php';
 require_once 'include/log.class.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
-require_once 'modules/search/agendaindexer.class.php';
+require_once 'modules/search/lucene/agendaindexer.class.php';
 require_once 'modules/agenda/course_calendar.inc.php';
 ModalBoxHelper::loadModalBox();
 

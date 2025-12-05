@@ -34,7 +34,8 @@ include '../../include/baseTheme.php';
 require_once 'modules/group/group_functions.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
-require_once 'modules/search/indexer.class.php';
+require_once 'modules/search/classes/ConstantsUtil.php';
+require_once 'modules/search/classes/SearchEngineFactory.php';
 
 ModalBoxHelper::loadModalBox();
 /* * ** The following is added for statistics purposes ** */
@@ -76,6 +77,7 @@ $head_content .= "<script type='text/javascript'>
                     },
                    'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
                    'sZeroRecords':  '" . $langNoResult . "',
+                   'sEmptyTable':   '" . $langNoExercises ."',
                    'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
                    'sInfoEmpty':    '',
                    'sInfoFiltered': '',
@@ -121,6 +123,9 @@ $head_content .= "<script type='text/javascript'>
                     }
                   });
               });
+
+              localStorage.removeItem('openEx');
+              localStorage.removeItem('isTinyMCEFocused');
         });
         </script>";
 
@@ -154,11 +159,12 @@ if ($is_editor) {
         // construction of Exercise
         $objExerciseTmp = new Exercise();
         if ($objExerciseTmp->read($exerciseId)) {
+            $searchEngine = SearchEngineFactory::create();
             switch ($_GET['choice']) {
                 case 'delete': // deletes an exercise
                     if (!resource_belongs_to_progress_data(MODULE_ID_EXERCISE, $exerciseId)) {
                         $objExerciseTmp->delete();
-                        Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_EXERCISE, $exerciseId);
+                        $searchEngine->indexResource(ConstantsUtil::REQUEST_REMOVE, ConstantsUtil::RESOURCE_EXERCISE, $exerciseId);
                         Session::flash('message', $langPurgeExerciseSuccess);
                         Session::flash('alert-class', 'alert-success');
                         redirect_to_home_page('modules/exercise/index.php?course=' . $course_code);
@@ -183,14 +189,14 @@ if ($is_editor) {
                 case 'enable':  // enables an exercise
                     $objExerciseTmp->enable();
                     $objExerciseTmp->save();
-                    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_EXERCISE, $exerciseId);
+                    $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_EXERCISE, $exerciseId);
                     redirect_to_home_page('modules/exercise/index.php?course=' . $course_code);
                     break;
                 case 'disable': // disables an exercise
                     if (!resource_belongs_to_progress_data(MODULE_ID_EXERCISE, $exerciseId)) {
                         $objExerciseTmp->disable();
                         $objExerciseTmp->save();
-                        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_EXERCISE, $exerciseId);
+                        $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_EXERCISE, $exerciseId);
                         redirect_to_home_page('modules/exercise/index.php?course=' . $course_code);
                     } else {
                         Session::flash('message', $langResourceBelongsToCert);
@@ -200,13 +206,13 @@ if ($is_editor) {
                 case 'public':  // make exercise public
                     $objExerciseTmp->makepublic();
                     $objExerciseTmp->save();
-                    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_EXERCISE, $exerciseId);
+                    $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_EXERCISE, $exerciseId);
                     redirect_to_home_page('modules/exercise/index.php?course=' . $course_code);
                     break;
                 case 'limited':  // make exercise limited
                     $objExerciseTmp->makelimited();
                     $objExerciseTmp->save();
-                    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_EXERCISE, $exerciseId);
+                    $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_EXERCISE, $exerciseId);
                     redirect_to_home_page('modules/exercise/index.php?course=' . $course_code);
                     break;
                 case 'clone':  // make exercise limited
@@ -447,8 +453,8 @@ if (!$nbrExercises) {
             } else {
                 $tool_content .= "<td>  &mdash; </td>";
             }
-            $TotalExercises = Database::get()->queryArray("SELECT eurid FROM exercise_user_record WHERE eid = ?d AND attempt_status= " . ATTEMPT_PENDING . "", $row->id);
-            $counter1 = count($TotalExercises);
+            $TotalExercises = Database::get()->querySingle("SELECT count(*) AS total FROM exercise_user_record
+                WHERE eid = ?d AND attempt_status= " . ATTEMPT_PENDING, $row->id)->total;
             $langModify_temp = htmlspecialchars($langModify);
             $langConfirmYourChoice_temp = addslashes(htmlspecialchars($langConfirmYourChoice));
             $langDelete_temp = htmlspecialchars($langDelete);
@@ -462,13 +468,15 @@ if (!$nbrExercises) {
                               'icon-extra' => "data-exerciseid= [\"$eid\",\"$row->id\"]",
                               'url' => "#",
                               'icon' => 'fa-pencil',
-                              'show' => $counter1),
+                              'show' => false), // to be fixed !!
+                        //'show' => $TotalExercises),
                         array('title' => $langDistributeExercise,
                               'icon-class' => 'distribution',
                               'icon-extra' => "data-exerciseid= [\"$eid\",\"$row->id\"]",
                               'url' => "#",
                               'icon' => 'fa-exchange',
-                              'show' => $counter1),
+                            'show' => false), // to be fixed !!
+                              //'show' => $TotalExercises),
                         array('title' => $row->active ?  $langViewHide : $langViewShow,
                               'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($row->active ? "choice=disable" : "choice=enable")."&amp;exerciseId=" . $row->id,
                               'icon' => $row->active ? 'fa-eye-slash' : 'fa-eye' ),
@@ -531,7 +539,10 @@ if (!$nbrExercises) {
                     $tool_content .= "<td><a class='ex_settings paused_exercise $link_class' href='exercise_submit.php?course=$course_code&amp;exerciseId=$row->id&amp;eurId=$paused_exercises->eurid'>" . q($row->title) . "</a>"
                             . "&nbsp;&nbsp;(<span style='color:darkgrey'>$langAttemptPausedS</span>)";
                 } else {
-                    $tool_content .= "<td><div class='line-height-default'><a class='ex_settings $link_class' href='exercise_submit.php?course=$course_code&amp;exerciseId=$row->id'>" . q($row->title) . "</a>$lock_icon$exclamation_icon";
+                    if ($row->is_exam == 1) {
+                        $exam_icon .= "&nbsp;&nbsp;" . icon('fa-solid fa-chalkboard-user', $langExam);
+                    }
+                    $tool_content .= "<td><div class='line-height-default'><a class='ex_settings $link_class' href='exercise_submit.php?course=$course_code&amp;exerciseId=$row->id'>" . q($row->title) . "</a>$lock_icon$exclamation_icon$exam_icon";
                 }
 
             } elseif ($currentDate <= $temp_StartDate) { // exercise has not yet started
@@ -594,20 +605,22 @@ if (!$nbrExercises) {
 add_units_navigation(TRUE);
 
 if ($is_editor) {
-    $my_courses1 = Database::get()->queryArray("SELECT givenname, id FROM user u "
+    /*$my_courses1 = Database::get()->queryArray("SELECT givenname, id FROM user u "
                                                 . "JOIN course_user c ON u.id = c.user_id "
                                                 . "WHERE c.status = " . USER_TEACHER . " "
                                                 . "AND c.course_id = ?d", $course_id);
-    if ($cf_result_data != 0) {
+*/
+    // to be fixed !!
+    //if ($cf_result_data != 0) {
 
-        $ids_array = array_column($cf_result_data, 'id');
+      //  $ids_array = array_column($cf_result_data, 'id');
 
         /**
          * @var array $TotalExercises2 Array of <stdClass> objects describing numbers of
          *                             unassigned answers per exercise id
          */
 
-        $TotalExercises2 = Database::get()->queryArray(
+        /*$TotalExercises2 = Database::get()->queryArray(
             "SELECT count(eurid) as answers_number, eid
              FROM exercise_user_record
              WHERE  eid
@@ -632,13 +645,12 @@ if ($is_editor) {
         $courses_options1 .= "</tbody></table>";
         $countResJs = json_encode($TotalExercises2);
 
-        $question_types = Database::get()->queryArray("SELECT exq.id, exq.question, ear.q_position, eur.eid, eur.eurid as eurid "
+        $question_types = Database::get()->queryArray("SELECT DISTINCT eur.eurid "
                 . "FROM exercise_question AS exq "
                 . "JOIN exercise_answer_record AS ear ON ear.question_id = exq.id "
                 . "JOIN exercise_user_record AS eur ON eur.eurid = ear.eurid "
                 . "WHERE eur.eid IN (".implode(',', $ids_array).") AND ear.weight IS NULL "
-                . "AND exq.type = " . FREE_TEXT . " OR exq.type = ". ORAL. " "
-                . "GROUP BY exq.id, eur.eid, eur.eurid, ear.q_position, exq.question");
+                . "AND (exq.type = " . FREE_TEXT . " OR exq.type = ". ORAL . ")");
         $questionsEid = json_encode($question_types, JSON_UNESCAPED_UNICODE);
 
         $questions_table = "<table id=\'my-grade-table\' class=\'table-default\'><thead class=\'list-header\'><tr><th>$langTitle</th><th>$langChoice</th></tr></thead><tbody> " ;
@@ -650,9 +662,10 @@ if ($is_editor) {
                 . "</tr>  ";
         }
 
-        $questions_table .= "</tbody></table>";
+        $questions_table .= "</tbody></table>"; */
 
-        if ($counter1 > 0) {
+        //if ($TotalExercises > 0) {
+        if (false) { // to be fixed !!
             //  distribute exercise grading
             $head_content .= "<script type='text/javascript'>
             $(document).on('click', '.distribution', function() {
@@ -721,13 +734,12 @@ if ($is_editor) {
             $(document).on('click', '.by_question', function() {
                 var exerciseid = $(this).data('exerciseid');
                 var results = {
-                'list': $questionsEid,
-                'get': function(id) {
-                    return $.grep(results.list, function(element) { return element.eid == id; })
-                            [0].eurid; // return from the first array element
+                    'list': $questionsEid,
+                    'get': function(id) {
+                        return $.grep(results.list, function(element) { return element.eid == id; })
                     }
                 };
-            var res = results.get(exerciseid[1]);
+                var res = results.get(exerciseid[1]);
                 bootbox.dialog({
                     title: '" . js_escape($landQuestionsInExercise) . "',
                     message: '" . js_escape($langCorrectionMessage) . "',
@@ -744,11 +756,11 @@ if ($is_editor) {
                                 }
                             }
                         }
-                    });
+                });
             });
             </script>";
         }
-    }
+    //}
 
     $my_courses = Database::get()->queryArray("SELECT a.course_id Course_id, b.title Title FROM course_user a, course b WHERE a.course_id = b.id AND a.course_id != ?d AND a.user_id = ?d AND a.status = 1", $course_id, $uid);
     $courses_options = "";
@@ -756,14 +768,9 @@ if ($is_editor) {
         $courses_options .= "'<option value=\"$row->Course_id\">".js_escape($row->Title)."</option>'+";
     }
 
-
-
     $head_content .= "<script type='text/javascript'>
         $(document).on('click', '.warnLink', function() {
-            var exerciseid = $(this).data('exerciseid');
-
-           
-
+            var exerciseid = $(this).data('exerciseid');   
             bootbox.dialog({
                 closeButton: false,
                 title: '<div class=\"icon-modal-default\"><i class=\"fa-solid fa-cloud-arrow-up fa-xl Neutral-500-cl\"></i></div><div class=\"modal-title-default text-center mb-0\">" . js_escape($langCreateDuplicateIn) . "</div>',

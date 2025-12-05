@@ -128,16 +128,13 @@ class MatchingAnswer extends QuestionType
                     $grade = $answerWeighting;
                     $choice[$answerId] = q($matching[$choice[$answerId]]);
                     $icon = "<span class='fa-solid fa-check text-success'></span>";
-                    $pdf_icon = "✓";
                 } elseif (!$thisChoice) {
                     $choice[$answerId] = '<del class="text-danger">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</del>';
                     $icon = "<span class='fa-solid fa-xmark text-danger'></span>";
-                    $pdf_icon = "✓";
                 } else {
                     $choice[$answerId] = "<span class='text-danger'><del>" .
                         q($matching[$choice[$answerId]]) . "</del></span>";
                     $icon = "<span class='fa-solid fa-xmark text-danger'></span>";
-                    $pdf_icon = "✓";
                 }
             } else {
                 $icon = '';

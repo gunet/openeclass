@@ -39,8 +39,10 @@ function process_actions() {
         $langEditChange, $langViMod;
 
     // update index and refresh course metadata
-    require_once 'modules/search/indexer.class.php';
+    require_once 'modules/search/classes/ConstantsUtil.php';
+    require_once 'modules/search/classes/SearchEngineFactory.php';
     require_once 'modules/course_metadata/CourseXML.php';
+    $searchEngine = SearchEngineFactory::create();
     if (isset($_REQUEST['edit'])) {
         $res_id = intval($_GET['edit']);
         if (check_admin_unit_resource($res_id)) {
@@ -65,8 +67,8 @@ function process_actions() {
                                         title = ?s,
                                         comments = ?s
                                         WHERE unit_id = ?d AND id = ?d", $restitle, $rescomments, $id, $res_id);
-            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $res_id);
-            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+            $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_UNITRESOURCE, $res_id);
+            $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_COURSE, $course_id);
             CourseXMLElement::refreshCourse($course_id, $course_code);
         }
         Session::flash('message',$langResourceUnitModified);
@@ -77,8 +79,8 @@ function process_actions() {
         if (check_admin_unit_resource($res_id)) {
             Database::get()->query("DELETE FROM unit_resources WHERE id = ?d", $res_id);
             Database::get()->query("DELETE FROM course_units_activities WHERE id = ?d", $res_id);
-            Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_UNITRESOURCE, $res_id);
-            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+            $searchEngine->indexResource(ConstantsUtil::REQUEST_REMOVE, ConstantsUtil::RESOURCE_UNITRESOURCE, $res_id);
+            $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_COURSE, $course_id);
             CourseXMLElement::refreshCourse($course_id, $course_code);
             Session::flash('message',$langResourceCourseUnitDeleted);
             Session::flash('alert-class', 'alert-success');
@@ -89,8 +91,8 @@ function process_actions() {
         $act_id = $_GET['actid'];
         Database::get()->query("DELETE FROM course_units_activities WHERE id = ?d", $res_id);
         Database::get()->query("DELETE FROM unit_resources WHERE activity_id = ?s", $act_id);
-        //Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_UNITRESOURCE, $res_id);
-        //Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+        //$searchEngine->indexResource(ConstantsUtil::REQUEST_REMOVE, ConstantsUtil::RESOURCE_UNITRESOURCE, $res_id);
+        //$searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_COURSE, $course_id);
         //CourseXMLElement::refreshCourse($course_id, $course_code);
         Session::flash('message', $langResourceCourseUnitDeleted);
         Session::flash('alert-class', 'alert-success');
@@ -102,8 +104,8 @@ function process_actions() {
             $vis = Database::get()->querySingle("SELECT `visible` FROM unit_resources WHERE id = ?d", $res_id)->visible;
             $newvis = ($vis == 1) ? 0 : 1;
             Database::get()->query("UPDATE unit_resources SET visible = '$newvis' WHERE id = ?d", $res_id);
-            //Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $res_id);
-            //Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+            //$searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_UNITRESOURCE, $res_id);
+            //$searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_COURSE, $course_id);
             //CourseXMLElement::refreshCourse($course_id, $course_code);
             Session::flash('message',$langViMod);
             Session::flash('alert-class', 'alert-success');
@@ -116,8 +118,7 @@ function process_actions() {
         $vis = Database::get()->querySingle("SELECT `visible` FROM course_units_activities WHERE id = ?d", $res_id)->visible;
         $newvis = ($vis == 1) ? 0 : 1;
         Database::get()->query("UPDATE course_units_activities SET visible = '$newvis' WHERE id = ?d", $res_id);
-        //Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_ACTIVITYRESOURCE, $res_id);
-        //Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+        //$searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_COURSE, $course_id);
         // CourseXMLElement::refreshCourse($course_id, $course_code);
         Session::flash('message', $langViMod);
         Session::flash('alert-class', 'alert-success');
@@ -202,9 +203,11 @@ function handle_unit_info_edit() {
         }
     }
     // update index
-    require_once 'modules/search/indexer.class.php';
-    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNIT, $unit_id);
-    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+    require_once 'modules/search/classes/ConstantsUtil.php';
+    require_once 'modules/search/classes/SearchEngineFactory.php';
+    $searchEngine = SearchEngineFactory::create();
+    $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_UNIT, $unit_id);
+    $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_COURSE, $course_id);
     // refresh course metadata
     require_once 'modules/course_metadata/CourseXML.php';
     CourseXMLElement::refreshCourse($course_id, $course_code);
@@ -471,6 +474,8 @@ function show_resources($unit_id)
                     bootbox.dialog({
                         size: 'large',
                         title: fileTitle,
+                        onEscape: function() {},
+                        backdrop: true,
                         message: '<div class=\"row\">'+
                                     '<div class=\"col-sm-12\">'+
                                         '<div class=\"iframe-container\" style=\"height:500px;\"><iframe title=\"'+fileTitle+'\" id=\"fileFrame\" src=\"'+fileURL+'\" style=\"width:100%; height:500px;\"></iframe></div>'+
@@ -614,7 +619,7 @@ function show_resources($unit_id)
                 var container = document.getElementById('unitResources');
                 var header = document.querySelector('header');
 //                var header = document.getElementById('bgr-cheat-header');
-                
+
                 Sortable.create(unitResources,{
                     handle: '.fa-arrows',
                     animation: 150,
@@ -634,10 +639,10 @@ function show_resources($unit_id)
                             delete header.dataset._pt;
                         }
                         var itemEl = $(evt.item);
-    
+
                         var idReorder = itemEl.attr('data-id');
                         var prevIdReorder = itemEl.prev().attr('data-id');
-    
+
                         $.ajax({
                             type: 'post',
                             dataType: 'text',
@@ -649,7 +654,7 @@ function show_resources($unit_id)
                     }
                 });
             });
-            
+
             $(function(){
                 $('.fileModal').click(function (e)
                 {
@@ -700,6 +705,8 @@ function show_resources($unit_id)
                     bootbox.dialog({
                         size: 'large',
                         title: fileTitle,
+                        onEscape: function() {},
+                        backdrop: true,
                         message: '<div class=\"row\">'+
                                     '<div class=\"col-sm-12\">'+
                                         '<div class=\"iframe-container\" style=\"height:500px;\"><iframe title=\"'+fileTitle+'\" id=\"fileFrame\" src=\"'+fileURL+'\" style=\"width:100%; height:500px;\"></iframe></div>'+
@@ -1154,7 +1161,7 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility, $act_
 
     global $id, $urlServer, $is_editor, $uid, $m, $langResourceBelongsToUnitPrereq,
             $langWasDeleted, $course_id, $course_code, $langPassCode, $langWorks,
-            $langWorkToUser, $langWorkAssignTo, $langWorkToGroup;
+            $langWorkToUser, $langWorkAssignTo, $langWorkToGroup, $langHasParticipated, $langGradebookGrade;
 
     $title = q($title);
     $res_prereq_icon = '';
@@ -1211,9 +1218,28 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility, $act_
             $class = $exclamation_icon = '';
         }
 
-        $link = "<a class='TextBold' href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=assignment&amp;id=$work_id&amp;unit=$id' $class>";
+        $url = $is_editor ?
+            "modules/work/?course=$course_code&amp;id=$work_id" :
+            "modules/units/view.php?course=$course_code&amp;res_type=assignment&amp;id=$work_id&amp;unit=$id";
+        $link = "<a class='TextBold' href='{$urlServer}$url' $class>";
         $exlink = $link . "$title</a> $exclamation_icon";
         $imagelink = $link . "</a>".icon('fa-flask')."";
+
+        //show participation and grade
+        $submissions = find_submissions(is_group_assignment($work_id), $uid, $work_id, user_group_info($uid, $course_id));
+
+        $hasparticipated_grade = '';
+
+        if ($submissions) {
+            $hasparticipated_grade = "(";
+            $hasparticipated_grade .= "<span class='fa-solid fa-check' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-title='$langHasParticipated'></span>";
+            $item = is_array($submissions) ? reset($submissions) : $submissions;
+            if (is_object($item) && isset($item->grade)) {
+                $hasparticipated_grade .= "<span style='margin-left: 5px;'>" . $langGradebookGrade . ": " . submission_grade($item->id) . "</span>";
+            }
+            $hasparticipated_grade .= ")";
+        }
+
     }
 
     if (!empty($comments)) {
@@ -1226,11 +1252,92 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility, $act_
         <div$class_vis data-id='$resource_id'>
           <div class='unitIcon' width='1'>$imagelink</div>
           " . (!empty($act_name) ? "<div class='text-start act_label'>$act_name</div>" : "") . "
-          <div class='text-start'><div class='module-name'>$langWorks</div> $exlink $res_prereq_icon $comment_box $assign_to_users_message</div>" .
+          <div class='text-start'><div class='module-name'>$langWorks</div> $exlink $hasparticipated_grade $res_prereq_icon $comment_box $assign_to_users_message</div>" .
             actions('lp', $resource_id, $visibility) . '
         </div>';
 }
 
+function is_group_assignment($id) {
+    global $course_id;
+
+    $res = Database::get()->querySingle("SELECT group_submissions FROM assignment WHERE course_id = ?d AND id = ?d", $course_id, $id);
+    if ($res) {
+        if ($res->group_submissions == 0) {
+            return FALSE;
+        } else {
+            return TRUE;
+        }
+    } else {
+        die("Error: assignment $id doesn't exist");
+    }
+}
+
+function find_submissions($is_group_assignment, $uid, $id, $gids) {
+
+    if ($is_group_assignment AND count($gids)) {
+        $groups_sql = join(', ', array_keys($gids));
+        $res = Database::get()->queryArray("SELECT id, uid, group_id, submission_date,
+                file_path, file_name, comments, grade, grade_comments, grade_submission_date
+            FROM assignment_submit
+            WHERE assignment_id = ?d AND
+                  group_id IN ($groups_sql)", $id);
+        if (!$res) {
+            return [];
+        } else {
+            return array_filter($res, function ($item) {
+                static $seen = [];
+
+                $return = !isset($seen[$item->group_id]);
+                $seen[$item->group_id] = true;
+                return $return;
+            });
+        }
+
+    } else {
+        $res = Database::get()->querySingle("SELECT id, grade
+            FROM assignment_submit
+            WHERE assignment_id = ?d AND uid = ?d
+            ORDER BY id LIMIT 1", $id, $uid);
+        if (!$res) {
+            return [];
+        } else {
+            return [$res];
+        }
+    }
+}
+
+function submission_grade($subid) {
+    global $langYes, $course_id;
+
+    $res = Database::get()->querySingle("SELECT grade, grade_comments, assignment_id
+                                                FROM assignment_submit
+                                            WHERE id = ?d", $subid);
+    if ($res) {
+        $assignment_grading_data = Database::get()->querySingle("SELECT grading_type, grading_scale_id FROM assignment WHERE id = ?d", $res->assignment_id);
+        if ($assignment_grading_data->grading_type == ASSIGNMENT_SCALING_GRADE) {
+            $serialized_scale_data = Database::get()->querySingle("SELECT scales FROM grading_scale WHERE id = ?d AND course_id = ?d", $assignment_grading_data->grading_scale_id, $course_id)->scales;
+            $scales = unserialize($serialized_scale_data);
+            foreach ($scales as $scale) {
+                if ($res->grade == $scale['scale_item_value']) {
+                    $grade = $scale['scale_item_name'];
+                    break;
+                }
+            }
+        } else {
+            $grade = $res->grade;
+        }
+
+        if (!empty($grade)) {
+            return trim($grade);
+        } elseif (!empty($res->grade_comments)) {
+            return $langYes;
+        } else {
+            return FALSE;
+        }
+    } else {
+        return FALSE;
+    }
+}
 /**
  * @brief display resource exercise
  * @param type $title
@@ -1243,7 +1350,7 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility, $act_
 function show_exercise($title, $comments, $resource_id, $exercise_id, $visibility, $act_name) {
     global $id, $urlServer, $is_editor, $langWasDeleted, $course_id, $course_code, $langPassCode, $uid,
         $langAttemptActive, $langAttemptPausedS, $m, $langResourceBelongsToUnitPrereq, $langExercises,
-        $langWorkToUser, $langWorkAssignTo, $langWorkToGroup;
+        $langWorkToUser, $langWorkAssignTo, $langWorkToGroup, $langHasParticipated, $langShowResults;
 
     $title = q($title);
     $link_class = $exclamation_icon = $res_prereq_icon = '';
@@ -1325,13 +1432,27 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
                 }
             }
         }
+
+        // check if user has participated
+        $hasparticipated = Database::get()->querySingle("SELECT * FROM exercise_user_record WHERE uid = ?d AND eid = ?d", $uid, $exercise_id);
+        $hasparticipated_label = $hasresults_label = '';
+        if ($hasparticipated) {
+            $hasparticipated_label = "<span class='fa-solid fa-check' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-title='$langHasParticipated'></span>";
+        }
+        $hasresults_label = null;
+        $hasresults = Database::get()->querySingle("SELECT * FROM exercise_user_record WHERE uid = ?d AND eid = ?d AND attempt_status = ?d", $uid, $exercise_id, ATTEMPT_COMPLETED);
+        if ($hasresults) {
+            $hasresults_label = "<a href='{$urlServer}modules/units/view.php?course=$course_code&amp;unit=$id&amp;res_type=exercise_results_list&amp;exerciseId=".getIndirectReference($exercise_id)."'><span class='fa-solid fa-square-poll-horizontal' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-title='$langShowResults'></span></a>";
+        }
+
+
         if ($pending_class) {
             enable_password_bootbox();
             $link = "<a class='ex_settings $pending_class $link_class TextBold' href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id&amp;eurId=$eurid&amp;unit=$id'>";
         } else {
             $link = "<a class='ex_settings $link_class TextBold' href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id&amp;unit=$id'>";
         }
-        $exlink = $link . "$title</a> $exclamation_icon $assign_to_users_message $pending_label";
+        $exlink = $link . "$title</a> $hasparticipated_label $hasresults_label $exclamation_icon $assign_to_users_message $pending_label";
         $imagelink = $link . "</a>" . icon('fa-solid fa-file-pen'). "";
     }
     $class_vis = ($status == '0' or $status == 'del') ? ' class="not_visible"' : ' ';

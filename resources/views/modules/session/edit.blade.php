@@ -19,6 +19,7 @@
                         right: ''
                     },
                     defaultView: 'agendaWeek',
+                    defaultDate: '{{ $modifyStartDateEvent }}',
                     slotDuration: '00:05',
                     minTime: '08:00:00',
                     maxTime: '23:55:00',
@@ -50,22 +51,16 @@
                         var startDay =  moment(start).format('DD');
                         var endDay = moment(end).format('DD');
                         if(parseInt(startDay)==parseInt(endDay)){
-                            var CurrentDateTime = moment().format('YYYY-MM-DD HH:mm');
-                            var StartDateTime = moment(start).format('YYYY-MM-DD HH:mm');
-                            if(StartDateTime >= CurrentDateTime){
-                                var day_start = moment(start).format('YYYY-MM-DD HH:mm');
-                                var day_end = moment(end).format('YYYY-MM-DD HH:mm');
-                                var starttime = moment(start).format('dddd, Do MMMM YYYY, HH:mm');
-                                var endtime = moment(end).format('HH:mm');
-                                var mywhen = starttime + ' - ' + endtime;
-                                $('#startTimeTmp').val(day_start);
-                                $('#endTimeTmp').val(day_end);
-                                $('#whenTmp').val(mywhen);
-                                $('#createEventSession #when').text(mywhen);
-                                $('#createEventSession').modal('toggle');
-                            }else{
-                                alert("{{ js_escape(trans('langDateHasExpired')) }}");
-                            }
+                            var day_start = moment(start).format('YYYY-MM-DD HH:mm');
+                            var day_end = moment(end).format('YYYY-MM-DD HH:mm');
+                            var starttime = moment(start).format('dddd, Do MMMM YYYY, HH:mm');
+                            var endtime = moment(end).format('HH:mm');
+                            var mywhen = starttime + ' - ' + endtime;
+                            $('#startTimeTmp').val(day_start);
+                            $('#endTimeTmp').val(day_end);
+                            $('#whenTmp').val(mywhen);
+                            $('#createEventSession #when').text(mywhen);
+                            $('#createEventSession').modal('toggle');
                         }else{
                             alert("{{ js_escape(trans('langChooseDayAgain')) }}");
                         }
@@ -79,24 +74,19 @@
                             var startDay =  moment(event.start).format('DD');
                             var endDay = moment(event.end).format('DD');
                             if(parseInt(startDay)==parseInt(endDay)){
-                                var CurrentDateTime = moment().format('YYYY-MM-DD HH:mm');
-                                var StartDateTime = moment(event.start).format('YYYY-MM-DD HH:mm');
-                                if(StartDateTime >= CurrentDateTime){
-                                    var day_start = moment(event.start).format('YYYY-MM-DD HH:mm');
-                                    var day_end = moment(event.end).format('YYYY-MM-DD HH:mm');
-                                    var starttime = moment(event.start).format('dddd, Do MMMM YYYY, HH:mm');
-                                    var endtime = moment(event.end).format('HH:mm');
-                                    var mywhen = starttime + ' - ' + endtime;
-                                    $('#startTimeTmp').val(day_start);
-                                    $('#endTimeTmp').val(day_end);
-                                    $('#whenTmp').val(mywhen);
-                                    $('#createEventSession #when').text(mywhen);
-                                    $('#createEventSession').modal('toggle');
-                                }else{
-                                    alert("{{ js_escape(trans('langDateHasExpired')) }}");
-                                }
+                                var day_start = moment(event.start).format('YYYY-MM-DD HH:mm');
+                                var day_end = moment(event.end).format('YYYY-MM-DD HH:mm');
+                                var starttime = moment(event.start).format('dddd, Do MMMM YYYY, HH:mm');
+                                var endtime = moment(event.end).format('HH:mm');
+                                var mywhen = starttime + ' - ' + endtime;
+                                $('#startTimeTmp').val(day_start);
+                                $('#endTimeTmp').val(day_end);
+                                $('#whenTmp').val(mywhen);
+                                $('#createEventSession #when').text(mywhen);
+                                $('#createEventSession').modal('toggle');
                             }else{
                                 alert("{{ js_escape(trans('langChooseDayAgain')) }}");
+                                $('#openSessionCal').trigger('click');
                             }
                         }else{
                             alert("{{ js_escape(trans('langChooseOtherSession')) }}");
@@ -113,25 +103,19 @@
                             var startDay =  moment(event.start).format('DD');
                             var endDay = moment(event.end).format('DD');
                             if(parseInt(startDay)==parseInt(endDay)){
-                                var CurrentDateTime = moment().format('YYYY-MM-DD HH:mm');
-                                var StartDateTime = moment(event.start).format('YYYY-MM-DD HH:mm');
-                                if(StartDateTime >= CurrentDateTime){
-                                    var day_start = moment(event.start).format('YYYY-MM-DD HH:mm');
-                                    var day_end = moment(event.end).format('YYYY-MM-DD HH:mm');
-                                    var starttime = moment(event.start).format('dddd, Do MMMM YYYY, HH:mm');
-                                    var endtime = moment(event.end).format('HH:mm');
-                                    var mywhen = starttime + ' - ' + endtime;
-                                    $('#startTimeTmp').val(day_start);
-                                    $('#endTimeTmp').val(day_end);
-                                    $('#whenTmp').val(mywhen);
-                                    $('#createEventSession #when').text(mywhen);
-                                    $('#createEventSession').modal('toggle');
-                                }else{
-                                    alert("{{ js_escape(trans('langDateHasExpired')) }}");
-                                    $('#openSessionCal').trigger('click');
-                                }
+                                var day_start = moment(event.start).format('YYYY-MM-DD HH:mm');
+                                var day_end = moment(event.end).format('YYYY-MM-DD HH:mm');
+                                var starttime = moment(event.start).format('dddd, Do MMMM YYYY, HH:mm');
+                                var endtime = moment(event.end).format('HH:mm');
+                                var mywhen = starttime + ' - ' + endtime;
+                                $('#startTimeTmp').val(day_start);
+                                $('#endTimeTmp').val(day_end);
+                                $('#whenTmp').val(mywhen);
+                                $('#createEventSession #when').text(mywhen);
+                                $('#createEventSession').modal('toggle');
                             }else{
                                 alert("{{ js_escape(trans('langChooseDayAgain')) }}");
+                                $('#openSessionCal').trigger('click');
                             }
                         }else{
                             alert("{{ js_escape(trans('langChooseOtherSession')) }}");
@@ -149,9 +133,6 @@
                     }
 
                 });
-
-                // $('#calendarAddSessionDate').removeClass('d-none');
-                // $('#calendarAddSessionDate').removeClass('d-block');
 
                 $('.fc-next-button').trigger('click');
                 $('.fc-prev-button').trigger('click');
@@ -276,7 +257,7 @@
                                             @if(Session::getError('creators'))
                                                 <span class='help-block Accent-200-cl'>{!! Session::getError('creators') !!}</span>
                                             @endif
-                                            <input type='hidden' id='selectedConsultant' value="@if($is_coordinator) 0 @else {{ $uid }} @endif">
+                                            <input type='hidden' id='selectedConsultant' value="@if($is_coordinator) {{ $creator }} @else {{ $uid }} @endif">
                                         </div>
 
                                         <div class="form-group mt-4">
@@ -387,6 +368,7 @@
                                             </div>
                                         </div>
 
+                                        @if (get_config('enable_user_consent'))
                                         <div class='form-group mt-4'>
                                             <div class='col-12'>
                                                 <div class='checkbox'>
@@ -396,15 +378,15 @@
                                                         {{ trans('langWithConsent')}}
                                                     </label>
                                                 </div>
-                                                <small>({{ trans('langInfoWithConsent') }})</small>
                                             </div>
                                         </div>
+                                        @endif
 
                                         {!! generate_csrf_token_form_field() !!}
 
                                         <div class='form-group mt-5'>
                                             <div class='col-12 d-flex justify-content-end aling-items-center'>
-                                                <input class='btn submitAdminBtn' type='submit' name='modify' value='{{ trans('langSubmit') }}'>
+                                                <input class='btn submitAdminBtn' type='submit' name='modify' value='{{ trans('langModify') }}'>
                                             </div>
                                         </div>
 
@@ -421,6 +403,9 @@
         </div>
     </div>
 </div>
+
+
+
 
 <!-- Show Calendar for adding session datetime -->
 <div class="modal fade" id="staticDateTimeSession" tabindex="-1" aria-labelledby="staticDateTimeSessionLabel" aria-hidden="true">
@@ -441,12 +426,12 @@
                             <div class='panel-group group-section' id='accordion' role='tablist' aria-multiselectable='true'>
                                 <ul class="list-group list-group-flush mt-4">
                                     <li class="list-group-item px-0 mb-4 bg-transparent">
-                                        <a class='accordion-btn d-flex justify-content-start align-items-start' role='button' data-bs-toggle='collapse' href='#showSession' aria-expanded='true'>
+                                        <a class='accordion-btn d-flex justify-content-start align-items-start' role='button' data-bs-toggle='collapse' href='#showSession' aria-expanded='false'>
                                             <span class='fa-solid fa-chevron-down'></span>
                                             {{ trans('langViewAllSession') }}
                                         </a>
 
-                                        <div id='showSession' class='panel-collapse accordion-collapse collapse show border-0 rounded-0' role='tabpanel' data-bs-parent='#accordion'>
+                                        <div id='showSession' class='panel-collapse accordion-collapse collapse border-0 rounded-0' role='tabpanel' data-bs-parent='#accordion'>
                                             <div class='panel-body bg-transparent Neutral-900-cl px-4'>
                                                 <ul class='list-group list-group-flush'>
                                                     @foreach($view_sessions as $s)
