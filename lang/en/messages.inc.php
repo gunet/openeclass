@@ -658,6 +658,7 @@ $langDefScor = "Define scoring settings";
 $langCreateModif = "Creation/modification of questions";
 $langSub = "Sub-title";
 $langNewQu = "New Question";
+$langAddPageBreak = "Add Page Break";
 $langTrue = "True";
 $langMoreAnswers = "+answer";
 $langLessAnswers = "-answer";

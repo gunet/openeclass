@@ -1954,6 +1954,7 @@ $langCreateModif = "Δημιουργία / Αλλαγή των ερωτήσεω�
 $langSub = "Υπότιτλος";
 $langNewQu = "Νέα ερώτηση";
 $langNewLa = "Νέα ετικέτα/σχόλιο";
+$langAddPageBreak = "Προσθήκη αλλαγής σελίδας";
 $langTrue = "Σωστό";
 $langMoreAnswers = "+απάντ.";
 $langLessAnswers = "-απάντ.";

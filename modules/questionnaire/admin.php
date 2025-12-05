@@ -58,6 +58,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         reorder_table('poll_question', 'pid', $pid, $_POST['toReorder'],
             $_POST['prevReorder'] ?? null, 'pqid', 'q_position');
     }
+    updatePageBreak($pid);
     exit;
 }
 
@@ -275,6 +276,8 @@ if (isset($_GET['deleteQuestion'])) {
     }
     Database::get()->query("DELETE FROM poll_question_answer WHERE pqid = ?d", $pqid);
     Database::get()->query("DELETE FROM poll_question WHERE pqid = ?d", $pqid);
+
+    updatePageBreak($pid);
 
     redirect_to_home_page("modules/questionnaire/admin.php?course=$course_code&pid=$pid");
 }
@@ -1303,7 +1306,13 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                   'level' => 'primary-label',
                   'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&pid=$pid&newQuestion=yes&questionType=label",
                   'icon' => 'fa-tag',
-                  'button-class' => 'btn-success')
+                  'button-class' => 'btn-success'),
+            array('title' => $langAddPageBreak,
+                  'level' => 'primary-label',
+                  'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&pid=$pid&pageBreakOn=yes",
+                  'icon' => 'fa-reqular fa-square-plus',
+                  'button-class' => 'btn-success',
+                  'show' => (count($questions) > 1))
             ),false);
         if ($questions) {
 
@@ -1340,39 +1349,81 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             $i=1;
             $nbrQuestions = count($questions);
             foreach ($questions as $question) {
-                $tool_content .= "<tr class='even' data-id='$question->pqid'>
-                                <td class='text-nowrap' align='text-right' width='1'>$i.</td>
-                                <td><p>".(($question->qtype != QTYPE_LABEL) ? q($question->question_text).'<br>' : $question->question_text).
-                                $aType[$question->qtype - 1]."</p></td>
-                                <td>
-                                    <div class='d-flex justify-content-end align-items-center gap-2'>
-                                    <div class='reorder-btn pull-left' style='font-size: 16px; cursor: pointer; vertical-align: bottom;'>
-                                            <span class='fa fa-arrows' data-bs-toggle='tooltip' data-bs-placement='top' data-bs-original-title='$langReorder'></span>
-                                    </div>
-                                <div class='pull-left'>".action_button(array(
-                                    array(
-                                        'title' => $langEditChange,
-                                        'icon' => 'fa-edit',
-                                        'url' => (($question->qtype != QTYPE_LABEL) and ($question->qtype != QTYPE_FILL) and ($question->qtype != QTYPE_SCALE) and ($question->qtype != QTYPE_TABLE))?
-                                                        "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;pid=$pid&amp;modifyAnswers=$question->pqid" :
-                                                        "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;pid=$pid&amp;modifyQuestion=$question->pqid",
-                                    ),
-                                    array(
-                                        'title' => $langEditRowsColsTable,
-                                        'icon' => 'fa-edit',
-                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;pid=$pid&amp;modifyTableAnswers=$question->pqid",
-                                        'show' => ($question->qtype == QTYPE_TABLE)
-                                    ),
-                                    array(
-                                        'title' => $langDelete,
-                                        'icon' => 'fa-times',
-                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;pid=$pid&amp;deleteQuestion=$question->pqid",
-                                        'class' => 'delete',
-                                        'confirm' => $langConfirmYourChoice
-                                    )
-                                ))."</div></div></td></tr>";
+                $tool_content .= "  <tr class='even' data-id='$question->pqid'>
+                                        <td class='text-nowrap' align='text-right' width='1'>$i.</td>
+                                        <td><p>".(($question->qtype != QTYPE_LABEL) ? q($question->question_text).'<br>' : $question->question_text).
+                                            $aType[$question->qtype - 1]."</p>
+                                        </td>
+                                        <td>
+                                            <div class='d-flex justify-content-end align-items-center gap-2'>
+                                                <div class='reorder-btn pull-left' style='font-size: 16px; cursor: pointer; vertical-align: bottom;'>
+                                                    <span class='fa fa-arrows' data-bs-toggle='tooltip' data-bs-placement='top' data-bs-original-title='$langReorder'></span>
+                                                </div>
+                                                <div class='pull-left'>".action_button(array(
+                                                        array(
+                                                            'title' => $langEditChange,
+                                                            'icon' => 'fa-edit',
+                                                            'url' => (($question->qtype != QTYPE_LABEL) and ($question->qtype != QTYPE_FILL) and ($question->qtype != QTYPE_SCALE) and ($question->qtype != QTYPE_TABLE))?
+                                                                            "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;pid=$pid&amp;modifyAnswers=$question->pqid" :
+                                                                            "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;pid=$pid&amp;modifyQuestion=$question->pqid",
+                                                            'show' => $question->qtype != 0
+                                                        ),
+                                                        array(
+                                                            'title' => $langEditRowsColsTable,
+                                                            'icon' => 'fa-edit',
+                                                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;pid=$pid&amp;modifyTableAnswers=$question->pqid",
+                                                            'show' => ($question->qtype == QTYPE_TABLE)
+                                                        ),
+                                                        array(
+                                                            'title' => $langDelete,
+                                                            'icon' => 'fa-times',
+                                                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;pid=$pid&amp;deleteQuestion=$question->pqid",
+                                                            'class' => 'delete',
+                                                            'confirm' => $langConfirmYourChoice
+                                                        )
+                                                    ))."
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>";
                 $i++;
             }
+
+            if (isset($_GET['pageBreakOn'])) {
+                $maxPosition = Database::get()->querySingle("SELECT MAX(q_position) AS position FROM poll_question WHERE pid = ?d", $pid)->position;
+                $maxPosition++;
+                $insert = Database::get()->query("INSERT INTO poll_question SET
+                                                    pid = ?d,
+                                                    question_text = ?s,
+                                                    qtype = ?d,
+                                                    q_position = ?d", $pid, '--- Page Break ---', 0, $maxPosition);
+
+                $dataId = $insert->lastInsertID;
+                $tool_content .= "
+                    <tr class='page_break_td' data-id='$dataId'>
+                        <td colspan='3'>
+                            <div class='d-flex justify-content-between align-items-center gap-3'>
+                                <p>--- Page Break ---</p>
+                                <div class='d-flex justify-content-end align-items-center gap-2'>
+                                    <div class='reorder-btn pull-left' style='font-size: 16px; cursor: pointer; vertical-align: bottom;'>
+                                        <span class='fa fa-arrows' data-bs-toggle='tooltip' data-bs-placement='top' data-bs-original-title='$langReorder'></span>
+                                    </div>
+                                    <div class='pull-left'>".action_button(array(
+                                        array(
+                                            'title' => $langDelete,
+                                            'icon' => 'fa-times',
+                                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;pid=$pid&amp;deleteQuestion=$insert->lastInsertID",
+                                            'class' => 'delete',
+                                            'confirm' => $langConfirmYourChoice
+                                        )
+                                        ))."
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>";
+            }
+
             $tool_content .= "</tbody></table></div>";
         } else {
             $tool_content .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langPollEmpty</span></div>";
@@ -1459,3 +1510,17 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     }
 }
 draw($tool_content, 2, null, $head_content);
+
+
+
+function updatePageBreak($pollQuestionId) {
+    $q_res = Database::get()->queryArray("SELECT pqid,qtype,q_position FROM poll_question WHERE pid = ?d ORDER BY q_position", $pollQuestionId);
+    $page = 1;
+    foreach ($q_res as $q) {
+        if ($q->qtype == 0) {// arrive at page break
+            $page++;
+        } else {
+            Database::get()->query("UPDATE poll_question SET `page` = ?d WHERE pqid = ?d", $page, $q->pqid);
+        }
+    }
+}

@@ -501,7 +501,7 @@ function printPollForm() {
         //*****************************************************************************
         //      Get answers + questions
         //******************************************************************************/
-        $questions = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d ORDER BY q_position ASC", $pid);
+        $questions = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d AND qtype != ?d ORDER BY q_position ASC", $pid, 0);
         if (!$userDefault && !isset($_GET['printPollForUser'])) {
             $email = Session::has('participantEmail') ? Session::get('participantEmail') : '';
             $email_error = Session::getError('participantEmail') ? " has-error" : "";

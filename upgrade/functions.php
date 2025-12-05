@@ -3551,6 +3551,10 @@ function upgrade_to_4_2($tbl_options) : void {
         Database::get()->query("ALTER TABLE assignment ADD results_date DATETIME DEFAULT NULL AFTER submission_date;");
     }
 
+    if (!DBHelper::fieldExists('poll_question', 'page')) {
+        Database::get()->query("ALTER TABLE poll_question ADD `page` INT NOT NULL DEFAULT 0");
+    }
+
 }
 
 /**
