@@ -25,8 +25,13 @@ class CalculatedAnswer extends \QuestionType
 
         foreach ($answer_ids as $answer_id) {
             $answerTitle = $this->answer_object->getTitle($answer_id);
-            $arrTitle = explode(':', $answerTitle);
-            $answerVal = ((count($arrTitle) > 1) ? $arrTitle[1] : ''); // Contains the correct answer of the question
+            $res_title = unserialize($answerTitle);
+            $answerVal = '';
+            if (count($res_title) > 0) {
+                foreach ($res_title as $r) {
+                    $answerVal = $r['result'];
+                }
+            }
             $answerComment = standard_text_escape($this->answer_object->getComment($answer_id));
             $answerCorrect = $this->answer_object->isCorrect($answer_id);
             $answerWeighting = $this->answer_object->getWeighting($answer_id);
@@ -58,18 +63,26 @@ class CalculatedAnswer extends \QuestionType
             shuffle($answer_object_ids);
         }
 
-        $q_data = Database::get()->querySingle("SELECT description,options FROM exercise_question WHERE id = ?d", $this->question_id);
+        $q_data = Database::get()->querySingle("SELECT `description`,options FROM exercise_question WHERE id = ?d", $this->question_id);
         if ($q_data) {
-            $question_description = $this->answer_object->replaceItemsBracesWithWildCards($q_data->description, $this->question_id);
-            $html_content .= "<div class='col-12 my-4'>$question_description</div>";
+            $des_arr = unserialize($q_data->description);
+            $question_description = $des_arr['question_description'];
+            $html_content .= "<div class='col-12 my-3'>$question_description</div>";
+            $arithmetic_expression_str = $this->answer_object->replaceItemsBracesWithWildCards($des_arr['arithmetic_expression'], $this->question_id);
+            $html_content .= "<div class='col-12 my-3'>$arithmetic_expression_str</div>";
         }
 
         $html_content .= "<input type='hidden' name='choice[{$this->question_id}]' value=''>";
 
         foreach ($answer_object_ids as $answerId) {
             $answerTitle = $this->answer_object->getTitle($answerId);
-            $arrTitle = explode(':', $answerTitle);
-            $answerVal = ((count($arrTitle) > 1) ? $arrTitle[1] : ''); // predefined answers
+            $resTitle = unserialize($answerTitle);
+            $answerVal = '';
+            if (count($resTitle) > 0) {
+                foreach ($resTitle as $r) {
+                    $answerVal = $r['result']; 
+                }
+            }
             $checked = '';
             $uniqueAnswer = '';
             if (isset($exerciseResult[$this->question_id]) && $exerciseResult[$this->question_id] != '') {
@@ -103,7 +116,7 @@ class CalculatedAnswer extends \QuestionType
     public function QuestionResult($choice, $eurid, $regrade, $extra_type = ''): string
     {
 
-        global $langSelect, $langCorrectS, $langIncorrectS, $questionScore, $langYourOwnAnswerIs;
+        global $langSelect, $langCorrectS, $langIncorrectS, $questionScore, $langCorrectAnswerIs;
 
         $html_content = '';
 
@@ -115,13 +128,15 @@ class CalculatedAnswer extends \QuestionType
         foreach ($answer_object_ids as $answerId) {
             $grade = 0;
             $answerTitle = standard_text_escape($this->answer_object->getTitle($answerId));
-            $tmpArr = explode(':', $answerTitle);
-            if (count($tmpArr) == 2) {
-                $answerTitle = round(floatval($tmpArr[1]), 2);
+            $tmpArr = unserialize($answerTitle);
+            if (count($tmpArr) > 0) {
+                foreach ($tmpArr as $r) {
+                    $answerTitle = round(floatval($r['result']), 2);
+                }
             }
             $answerComment = $this->answer_object->getComment($answerId);
             if ($this->answer_object->get_user_calculated_answer($questionId, $eurid) != null) {
-                if (round(floatval($this->answer_object->get_user_calculated_answer($questionId, $eurid)), 2) == $answerTitle) {
+                if (round(floatval($this->answer_object->get_user_calculated_answer($questionId, $eurid)), 2) == $answerTitle && $this->answer_object->get_correct_calculated_answer($questionId) == $answerTitle) {
                     $answerCorrect = true;
                 } else {
                     $answerCorrect = false;
@@ -168,11 +183,20 @@ class CalculatedAnswer extends \QuestionType
                 $html_content .= "<span style='$style' class='$answer_icon'></span></div>";
             }
 
-            $html_content .= $answerTitle;
-            if ($answerCorrect) {
-                $html_content .= "&nbsp;<span class='text-success text-nowrap'><small class='text-success text-nowrap'>($langCorrectS)</small></span>";
-            } else {
-                $html_content .= "&nbsp;<span class='text-danger text-nowrap'><small class='text-danger text-nowrap'>($langIncorrectS)</small></span>";
+            if (count($answer_object_ids) > 1) { // Get the predefined answers from multiple choices
+                $html_content .= "<span>$answerTitle</span>";
+                if ($this->answer_object->get_correct_calculated_answer($questionId) == $answerTitle) {
+                    $html_content .= "&nbsp;<span class='text-success text-nowrap'><small class='text-success text-nowrap'>($langCorrectS)</small></span>";
+                } else {
+                    $html_content .= "&nbsp;<span class='text-danger text-nowrap'><small class='text-danger text-nowrap'>($langIncorrectS)</small></span>";
+                }
+            } elseif (count($answer_object_ids) == 1) {// Get the user answer from input text
+                $html_content .= "<span>" . $this->answer_object->get_user_calculated_answer($questionId, $eurid) . "</span>";
+                if ($answerCorrect) {
+                    $html_content .= "&nbsp;<span class='text-success text-nowrap'><small class='text-success text-nowrap'>($langCorrectS)</small></span>";
+                } else {
+                    $html_content .= "&nbsp;<span class='text-danger text-nowrap'><small class='text-danger text-nowrap'>($langIncorrectS)</small></span>";
+                }
             }
             $html_content .= "</div>";
             if ($studentChoice or $answerCorrect) {
@@ -184,8 +208,9 @@ class CalculatedAnswer extends \QuestionType
         }
 
         if (count($answer_object_ids) == 1) { // unique answer as text
-            $userHasAnswered = $this->answer_object->get_user_calculated_answer($questionId, $eurid);
-            $html_content .= "<tr><td>$langYourOwnAnswerIs <span class='TextBold'>$userHasAnswered</span></td></tr>";
+            $html_content .= "<tr>
+                                <td>$langCorrectAnswerIs<span class='TextBold'>: " . $answerTitle . "</span></td>
+                             </tr>";
         }
 
         return $html_content;

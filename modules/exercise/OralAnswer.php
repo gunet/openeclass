@@ -20,7 +20,7 @@ class OralAnswer extends QuestionType
                $langMaxRecAudioTimeInExericses, $course_code, $urlServer,
                $course_id, $langCancel, $langAnalyticsConfirm,
                $langDeleteRecordingOk, $langListenToRecordingAudio,
-               $langFileUploadingOkReplaceWithNew, $eurid, $langConfirmDelete;
+               $langFileUploadingOkReplaceWithNew, $eurid, $langConfirmDelete, $langYes, $langNo;
 
 
         $questionId = $this->question_id;
@@ -107,41 +107,81 @@ $html_content .= "<div id='recording_file_container_{$questionId}' class='col-12
                             </div>
                         </div>
                     </div>
-                </div>";
+                </div>
+                <div id='file-deleted-{$questionId}' class='d-none text-danger TextBold mt-2'>$langDeleteRecordingOk</div>";
 $html_content .= "</div>
+        </div>";
+
+        $html_content .= "
+        <div id='confirmationModal-{$questionId}' style='display:none; position:fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.5); align-items:center; justify-content:center;'>
+            <div style='background:#fff; padding:20px; border-radius:5px; max-width:300px; width:100%;'>
+                <p class='text-center TextBold' id='confirmationMessage-{$questionId}'></p>
+                <div class='d-flex justify-content-center align-items-center gap-2 mt-3'>
+                    <button id='confirmYes-{$questionId}' class='btn deleteAdminBtn'>$langYes</button>
+                    <button id='confirmNo-{$questionId}' class='btn cancelAdminBtn'>$langNo</button>
+                </div>
+            </div>
         </div>";
 
         $head_content .= "
         <style>.fade:not(.show) {opacity: 1;}</style>
         <script src='{$urlAppend}js/recordrtc/RecordRTC.min.js'></script>
         <script type='text/javascript'>
+
+            function showConfirmation(message, callback) {
+                const modal = document.getElementById('confirmationModal-{$questionId}');
+                const messagePara = document.getElementById('confirmationMessage-{$questionId}');
+                const yesBtn = document.getElementById('confirmYes-{$questionId}');
+                const noBtn = document.getElementById('confirmNo-{$questionId}');
+
+                messagePara.textContent = message;
+                modal.style.display = 'flex';
+
+                // Remove previous event handlers
+                yesBtn.onclick = () => {
+                    modal.style.display = 'none';
+                    callback(true);
+                };
+                noBtn.onclick = () => {
+                    modal.style.display = 'none';
+                    callback(false);
+                };
+            }                       
+
             $(document).ready(function() {
 
                 $('#deleteRecording-{$questionId}').on('click', function () {
-                    if (confirm('" . js_escape($langConfirmDelete) . "')) {
-                        var qID = $(this).data('id');
-                        var deleteData = new FormData();
-                        deleteData.append('delete-recording', qID);
-                        var del_url = '{$urlAppend}modules/exercise/exercise_submit.php?course={$course_code}&eurid={$eurid}';
-                        $.ajax({
-                            url: del_url,
-                            data: deleteData,
-                            cache: false,
-                            contentType: false,
-                            processData: false,
-                            type: 'POST'
-                        }).done(function(data) {
-                            alert('" . js_escape($langDeleteRecordingOk) . "');
+                    const message = '" . js_escape($langConfirmDelete) . "';
+                    showConfirmation(message, (confirmed) => {
+                        if (confirmed) {
+                            var qID = $(this).data('id');
+                            var deleteData = new FormData();
+                            deleteData.append('delete-recording', qID);
+                            var del_url = '{$urlAppend}modules/exercise/exercise_submit.php?course={$course_code}&eurid={$eurid}';
+                            $.ajax({
+                                url: del_url,
+                                data: deleteData,
+                                cache: false,
+                                contentType: false,
+                                processData: false,
+                                type: 'POST'
+                            }).done(function(data) {
+                                $('#file-deleted-{$questionId}').removeClass('d-none').addClass('d-block');
+                                // Keep it visible for 5 seconds, then hide
+                                setTimeout(function() {
+                                    $('#file-deleted-{$questionId}').removeClass('d-block').addClass('d-none');
+                                }, 5000);
 
-                            // Set empty the src of current audio and load it again.
-                            $('body').find('#audioSource_{$questionId}').attr('src', '');
-                            $('#audio_{$questionId}')[0].load();
+                                // Set empty the src of current audio and load it again.
+                                $('body').find('#audioSource_{$questionId}').attr('src', '');
+                                $('#audio_{$questionId}')[0].load();
 
-                            // Hide recording link and change its value.
-                            $('#recording_file_container_{$questionId}').removeClass('d-block').addClass('d-none');
-                            $('#hidden-recording-{$questionId}').val('');
-                        });
-                    }
+                                // Hide recording link and change its value.
+                                $('#recording_file_container_{$questionId}').removeClass('d-block').addClass('d-none');
+                                $('#hidden-recording-{$questionId}').val('');
+                            });
+                        }
+                    });
                 });
                 
 

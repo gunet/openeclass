@@ -267,7 +267,6 @@ if (isset($_GET['mid'])) {
 
     $out .= "<script type='text/javascript'>
                $(document).ready(function() {
-
                  var oTable2 = $('#outbox_table').DataTable({
                     'aoColumnDefs':[{'sClass':'option-btn-cell text-end', 'aTargets':[-1]}],
                     'bStateSave' : true,
@@ -275,9 +274,9 @@ if (isset($_GET['mid'])) {
                     'sDom': '<\"top\"fl<\"clear\">>rt<\"bottom\"ip<\"clear\">>',
                     'bServerSide': true,
                     'searchDelay': 1000,
-                    ajax: {
-                        url: '$ajax_url_outbox',
-                        type: 'POST'
+                    'ajax': {
+                        'url': '$ajax_url_outbox',
+                        'type': 'POST'
                     }, 
                     'lengthMenu': [10, 15, 20 , -1],
                     'sPaginationType': 'full_numbers',
@@ -303,7 +302,7 @@ if (isset($_GET['mid'])) {
                             },
                             'sLengthMenu':   '".js_escape("$langDisplay _MENU_ $langResults2")."',
                             'sZeroRecords':  '" . js_escape("$langNoResult") . "',
-                            'sEmptyTable':  '".js_escape("$langNoResult")."',
+                            'sEmptyTable':   '" . js_escape("$langNoResult") . "',
                             'sInfo':         '".js_escape("$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults")."',
                             'sInfoEmpty':    '',
                             'sInfoFiltered': '',
@@ -322,8 +321,7 @@ if (isset($_GET['mid'])) {
                     $(document).on( 'click','.delete_out', function (e) {
                         e.preventDefault();
                         var id = $(this).data('id');
-                        var string = 'mid='+id+'&". generate_csrf_token_link_parameter() ."';
-                        
+                        var string = 'mid='+id+'&". generate_csrf_token_link_parameter() ."';                        
                         bootbox.confirm({
                             closeButton: false,
                             title: '<div class=\'icon-modal-default\'><i class=\'fa-regular fa-trash-can fa-xl Accent-200-cl\'></i></div><div class=\'modal-title-default text-center mb-0\'>".js_escape($langConfirmDelete)."</div>',
@@ -344,26 +342,20 @@ if (isset($_GET['mid'])) {
                                         type: 'POST',
                                         url: '$ajax_url',
                                         data: string,
+                                        stateSave: true,
                                         cache: false,
-                                        success: function(){
-                                          var num_page_records = oTable2.fnGetData().length;
-                                          var per_page = $('#outbox_table').DataTable().page.info().length;
-                                          var page_number = $('#outbox_table').DataTable().page.info().page;
-                                          if(num_page_records==1){
-                                              if(page_number!=0) {
-                                                  page_number--;
-                                              }
-                                          }
+                                        success: function(){            
+                                            var info = oTable2.page.info();
+                                            var page_number = info.page;
+                                            oTable2.draw(false);
                                           $('#out_del_msg').html('<p class=\'alert alert-success\'><i class=\'fa-solid fa-circle-check fa-lg\'></i><span>".js_escape($langMessageDeleteSuccess)."</span></p>');
                                           $('.alert-success').delay(3000).fadeOut(1500);
                                           $('#out_msg_area').remove();
-                                          oTable2.fnPageChange(page_number);
                                         }
                                     });
                                 }
                             }
                         });
-
                      });
 
                     $('.delete_all_out').click(function() {                        
@@ -388,27 +380,21 @@ if (isset($_GET['mid'])) {
                                         type: 'POST',
                                         url: '$ajax_url',
                                         data: string,
+                                        stateSave: true,
                                         cache: false,
                                         success: function(){
-                                            var num_page_records = oTable2.fnGetData().length;
-                                            var per_page = $('#outbox_table').DataTable().page.info().length;
-                                            var page_number = $('#outbox_table').DataTable().page.info().page;
-                                            if (num_page_records==1) {
-                                                if(page_number!=0) {
-                                                    page_number--;
-                                                }
-                                            }
+                                            var info = oTable2.page.info();
+                                            var page_number = info.page;
+                                            oTable2.draw(false);
                                             $('#out_del_msg').html('<p class=\'alert alert-success\'><i class=\'fa-solid fa-circle-check fa-lg\'></i><span>".js_escape($langMessageDeleteAllSuccess)."</span></p>');
                                             $('.alert-success').delay(3000).fadeOut(1500);
-                                            oTable2.fnPageChange(page_number);
                                         }
                                     });
                                 }
                             }
                         });
                     });
-
-               });
-             </script>";
+                });
+         </script>";
 }
 echo $out;

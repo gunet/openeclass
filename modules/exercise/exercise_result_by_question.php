@@ -158,6 +158,10 @@ if (count($exercise_question_ids) > 0) {
         $choice = $objQuestionTmp->get_answers_record($eurid);
         $questionName = $objQuestionTmp->selectTitle();
         $questionDescription = $objQuestionTmp->selectDescription();
+        if ($objQuestionTmp->selectType() == CALCULATED) {
+            $des_arr = unserialize($objQuestionTmp->selectDescription());
+            $questionDescription = $des_arr['question_description'];
+        }
         $questionDescription_temp = mathfilter(nl2br(make_clickable($questionDescription)), 12, "../../courses/mathimg/");
         $questionWeighting = $objQuestionTmp->selectWeighting();
         // destruction of the Question object

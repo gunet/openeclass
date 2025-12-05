@@ -294,7 +294,12 @@ if ($is_editor) {
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/progress/index.php?course=$course_code");
         } else {
-            Session::flash('message',$langUsedCertRes);
+            Session::flash('message',"$langUsedCertRes 
+                <p class='mt-3'>$langWarningAboutUsedCert 
+                    <div class='col-12 d-flex justify-content-center align-items-center flex-wrap gap-2'>
+                        <a class='btn submitAdminBtn' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;purge_cert=$_GET[del_cert]'>$langDelete</a>
+                    </div>
+                </p>");
             Session::flash('alert-class', 'alert-warning');
         }
     } elseif (isset($_GET['del_badge'])) {  //  delete badge
@@ -303,7 +308,12 @@ if ($is_editor) {
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/progress/index.php?course=$course_code");
         } else {
-            Session::flash('message',$langUsedCertRes);
+            Session::flash('message',"$langUsedCertRes 
+                <p class='mt-3'>$langWarningAboutUsedCert 
+                    <div class='col-12 d-flex justify-content-center align-items-center flex-wrap gap-2'>
+                        <a class='btn submitAdminBtn' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;purge_cc=$_GET[del_badge]'>$langDelete</a>
+                    </div>
+                </p>");
             Session::flash('alert-class', 'alert-warning');
         }
     } elseif (isset($_GET['purge_cc'])) { // purge badge

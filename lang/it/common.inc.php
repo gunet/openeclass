@@ -1,24 +1,7 @@
 <?php
-/*
- *  ========================================================================
- *  * Open eClass
- *  * E-learning and Course Management System
- *  * ========================================================================
- *  * Copyright 2003-2024, Greek Universities Network - GUnet
- *  *
- *  * Open eClass is an open platform distributed in the hope that it will
- *  * be useful (without any warranty), under the terms of the GNU (General
- *  * Public License) as published by the Free Software Foundation.
- *  * The full license can be read in "/info/license/license_gpl.txt".
- *  *
- *  * Contact address: GUnet Asynchronous eLearning Group
- *  *                  e-mail: info@openeclass.org
- *  * ========================================================================
- *
- */
 
 // Message file for language it
-// Generated 2024-01-19 17:14:55
+// Generated 2025-12-02 16:31:18
 
 $langCourse = "Corso";
 $langEclass = 'Open eClass - Piattaforma di eLearning asincrona';
@@ -54,7 +37,7 @@ $langother = 'Altro';
 $langInfoAbout = "La piattaforma <strong>$siteName</strong>  è un sistema completo di gestione di corsi elettronici. Adotta la filosofia del software a codice sorgente aperto e supporta il servizio di e-learning asincrono senza limitazioni ed impegni. L'accesso al servizio si fa con l'uso di un semplice web browser senza l'esigenza di nozioni tecniche e speciali.";
 $langExtrasLeft = '';
 $langExtrasRight = '';
-$langCourses = "Corsi";
+$langCourses = "corsi";
 $langGroupTutor = "Group Tutor";
 $langEditor = "Insegnante di Sostegno";
 $langOfEditor = "Tutor Assistant";
@@ -67,7 +50,6 @@ $langsCourse = "course";
 $langsCourses = "courses";
 $langsOfCourse = "course";
 $langsOfCourses = "courses";
-$langsOfFaculty = "category";
 $langsOfFaculty = "category";
 $langCourseAdmin = "Admin";
 $langOfCourseAdmin = "Admin";
@@ -89,3 +71,11 @@ $langCourseReviewer = "Reviewer";
 $langOfCourseReviewer = "Reviewer";
 $langsCourseReviewer = "reviewer";
 $langsOfCourseReviewer = "reviewer";
+$langCTeacher = "INSTRUCTOR";
+$langCStudent = "LEARNER";
+$langCStudent2 = "STUDENT";
+$langAlignment = "Alignment";
+$langWidth = "Width";
+$langAlignLeft = "Left";
+$langAlignCenter = "Center";
+$langAlignRight = "Right";

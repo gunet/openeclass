@@ -18,7 +18,7 @@
  */
 
 // Message file for language en
-// Generated 2025-10-16 11:06:45
+// Generated 2025-12-02 16:31:16
 
 $langYes = "Yes";
 $langNo = "No";
@@ -528,7 +528,7 @@ $langSubsystems = "Select the desired enabled modules";
 $langLanguageTip = "Select the language that will be used in the course's pages";
 $langAccess = "Course Access Type:";
 $langAvailableTypes = "Course access";
-$langModules = "Modules:";
+$langModules = "Modules";
 $langTestForum = "General forum";
 $langDelAdmin = "Discussion on all topics concerning this course";
 $langExMessage = "Example message";
@@ -545,7 +545,6 @@ $langModifyInfo = "Course Administration";
 $langDropBox = "Messages";
 $langLearnPath = "Learning Path";
 $langWiki = "Wiki";
-$langToolManagement = "Modules";
 $langUsage = "Statistics";
 $langVideoText = "You can upload any audio and video file type (.mov, .rm, .mpeg...), as long as your ".$langsStudents." have the corresponding plug-in to read them";
 $langGoogle = "Quick and powerful search engine";
@@ -931,7 +930,7 @@ $langAccountInactive1 = "Inactive Account.";
 $langAccountInactive2 = "Please contact the administrator to activate your account.";
 $langMyCoursesProf = "My courses (".$langsTeachers.")";
 $langMyCoursesUser = "My registered courses (".$langStudent.")";
-$langNoCourses = "There are no courses";
+$langNoCourses = "There are no $langsCourses";
 $langCourseCreate = "Create Course";
 $langMyAgenda = "My Calendar";
 $langMyStats = "User Statistics";
@@ -1745,7 +1744,7 @@ $langTypeRegistration = "Open with registration";
 $langTypesRegistration = "Open with registration";
 $langAllTypes = "(all access types)";
 $langAllFacultes = "All $langsFaculties";
-$langSuccess = "Your registration as admin was successful";
+$langSuccess = "Success";
 $langAuthRequest = "Authentification needed";
 $langAlreadySubscribe = "already registered";
 $langAs = "as";
@@ -2100,22 +2099,7 @@ $langDelTitle = "Warning!";
 $langDelMany1 = "Have submitted";
 $langDelMany2 = "".$langsStudents."assignments. These files will be deleted!";
 $langSubmissions = "".$langStudent." submissions";
-$langPhase = "Phase";
-$langAssignmentsSubmission = "Assignment submission";
-$langAssignmentsSubmissionHasNoStarted = "The submission process has not yet begun.";
-$langAssignmentsSubmissionInProgress = "The submission process is underway...";
-$langAssignmentsSubmissionHasExpired = "The submission process has ended.";
-$langGradeReviewHasNotStarted = "The peer review process has not yet begun.";
-$langGradeReviewInProgress = "The peer review process is underway...";
-$langGradeReviewHasExpired = "The peer review process has ended.";
-$langFinalGrade = "Final grade";
-$langFinalGradeProcessInProgress = "The rating entry process is active.";
-$langReceivedFrom = "Received from";
-$langgrade = "grade";
-$langPreviewGradesAssessments = "Preview assessments";
-$OldAssignmentsWillBeRemoved = "Old assignment assessments will be removed.";
 $langSubmitted = "Submitted";
-$langAddFinalGradeHasNotStartedYet = "The grade addition process has not yet started.";
 $langNotice2 = "Submission date";
 $langNotice3 = "If you submit another file, the old file will be replaced by the new one.";
 $langSubmittedAndGraded = "A submission for this assignment has been uploaded and graded.";
@@ -2395,7 +2379,7 @@ $langMetaMap = "Map";
 $langMetaInteractivemap = "Interactive map";
 $langMetaExploration = "Exploration";
 $langMetaInteractivegame = "Interactive game";
-$langMetaConceptualmap = "Conceptual map";
+$langMetaConceptualmap = "Mind Map";
 $langMetaIndex = "Index";
 $langMetaProblemstatement = "Problem statement";
 $langMetaSelfassessment = "Self-assessment";
@@ -3304,7 +3288,7 @@ $langAttendanceAbsences = "Absence";
 $langAttendanceAbsencesFrom = "attendances of the";
 $langAttendanceAbsencesFrom2 = "required for the $langsCourse.";
 $langAttendanceAbsencesYesNo = "Presence/absence";
-$langAttendanceUsers = "Updated number of $langsOfStudents.";
+$langAttendanceUsers = "Attendance $langsOfStudents";
 $langAttendanceNoActMessageLp4 = "No learning paths to add";
 $langAttendanceInfoForUsers = 'Please select the users to be tracked in the attendence book';
 $langAttendance6Months = "Tracking $langsStudents from last six months";
@@ -3748,7 +3732,7 @@ $langEBookPages = "$langEBook $langPages";
 $langNewEBookPage = "New Page";
 $langEBookInfoEdit = "Edit e-Books' Info/Sections";
 $langDisableModules = 'Disabled Modules';
-$langDisableModulesHelp = "You can select which modules will be disabled for all $langsCourses platform-wide.";
+$langDisableModulesHelp = "You can choose which modules will be disabled for all $langsCourses platform-wide.";
 $langldap_id_attr = "Attribute for student ID";
 $langcasuserstudentid = "CAS SAML attribute for student ID";
 $langPrint = "Print";
@@ -4381,6 +4365,7 @@ $question20 = " I spend time figuring out what's 'wrong' with things. For exampl
 $rate_scale = "The A.T.T.L.S. (Attitudes Towards Thinking Learning Survey) questionnaire is about the attitude towards the thinking
 			   and learning and it was created with success. It consists from 20 questions. Each question has as reply a number from 1 (Strongly disagree) to 5 (Strongly agree).";
 $lang_Results = "Results";
+$langShowResults = "Show results";
 $langCKW = "The student belongs in connected knowledge: ";
 $langSKW = "The student belongs in separated knowledge: ";
 $langCKW_SKW = "The student belongs both connected and separated knowledge: ";
@@ -4434,7 +4419,7 @@ $langExportGrades = "Export Grades";
 $langCloudFileError = 'Error retrieving remote resource - incompatible file type.';
 $langInvisible = "Not visible";
 $langInsertedAsModule = "Module has been added.";
-$langAlreadyUsed = "Module already used in this learning path";
+$langAlreadyUsed = "is being used by a user and cannot be deleted.";
 $langPersonalSettingsMore1 = "to have a look in your personal settings";
 $langPersonalSettingsMore2 = "to register to available $langsCourses by clicking in '$langCourses' in left menu.";
 $langMailVerificationNote = "(Note: Check your mailbox junk folder, too)";
@@ -4710,7 +4695,7 @@ $langOfBlogComments = "Blog comments";
 $langOfCourseComments = "$langsCourse comments";
 $langOfLearningPath = "Learning Path";
 $langNoCertificateUsers = "There are no $langsStudents who participate in this certificate.";
-$langUsedCertRes = "Activity has alread been used by some $langsstudent_acc";
+$langUsedCertRes = "Activity has already been used by some $langsstudent_acc";
 $langNoUserActivity = "$langStudent hasn't completed any actitivity.";
 $langTotalPercentCompleteness = "Percentage of completion";
 $langUsersCertResults = "Completed by ";
@@ -4745,8 +4730,8 @@ $langLastLogin = 'Last Login';
 $langNameOfLang['icelandic'] = 'Icelandic';
 $langNameOfLang['croatian'] = 'Croatian';
 $langNameOfLang['portuguese'] = 'Portuguese';
-$langOpenDelosPublicVideos = "Open multimedia files";
-$langOpenDelosPrivateVideos = "Restricted multimedia files";
+$langOpenDelosPublicVideos = "Public multimedia files";
+$langOpenDelosPrivateVideos = "Private multimedia files";
 $langOpenDelosRequireAuth = "Separate OpenDelos authentication required";
 $langOpenDelosRequireAuthHere = "here";
 $langOpenDelosAuth = "OpenDelos authentication";
@@ -5322,12 +5307,12 @@ $langFCWorkPaper = "Worksheets";
 $langFCRolePlay = "Role game";
 $langFCSimulate = "Simulation";
 $langFCProblemSolving = "Problem Solving";
-$langFCMindMap = "Mind Map";
+$langFCMindMap = "Mind Map Activity";
 $langFCEvaluate = "Evaluation";
 $langFlippedEdit = "Edit Flipped Classroom Options";
 $langJustEdited = "You just edited the course titled ";
 $langUnitActivityDeleteConfirm = "Are you sure you want to delete this activity?";
-$langUnitJustEdited = "You just edited the unit titled ";
+$langUnitJustEdited = "Course units updated ";
 $langConfirmDeleteUnit = "Are you sure you want to remove this unit?";
 $langConfirmDeleteGoal = "Are you sure you want to remove this Intended Learning Outcome?";
 $langQuestionPreview = 'Preview of Question';
@@ -6109,82 +6094,82 @@ $langNotEnrolledToCollaborations = "You are not subscribed to partnerships";
 $langSumCollaborationEnrolled = "Collaborations I participate in";
 $langWikiEditionNoSucceed = "One or more subsystems must be enabled by default.";
 $m['password_collab'] = "Password for collaboration";
-$langLabelCollabUserRequest = 'Application for collaboration registration';
-$langInfoAboutCollabRegistration = 'The partnership you selected is closed. To register, you must
-        to complete the following application, which will be recorded and sent to the administrators of the collaboration.';
-$langRequestReasonsCollab = 'State the reasons you wish to register for the collaboration.';
-$langCollabDes = 'Collaboration description';
-$langThisCollabDescriptionIsEmpty = 'The collaboration has no description';
-$langCollabInvitation = 'Invitation to register for the collaboration';
-$langCollab = 'collaboration';
-$langSession = 'Sessions';
-$langAddSession = 'Add session';
-$langIndividualSession = 'Individual session';
-$langGroupSession = 'Group session';
-$langSelectUser = 'User choice';
-$langSelectConsultant = 'Selection of consultant';
-$langAddSessionCompleted = 'Session creation completed successfully';
-$langAddSessionNotCompleted = 'Session creation failed';
-$langAddInCorrectDateVal = 'You have entered an incorrect expiry date.';
-$langStatement = 'Condition';
-$langIndividualSessions = 'Individual sessions';
-$langGroupSessions = 'Group sessions';
-$langInProgress = 'is active...';
+$langLabelCollabUserRequest = "Application for collaboration registration";
+$langInfoAboutCollabRegistration = "The partnership you selected is closed. To register, you must
+        to complete the following application, which will be recorded and sent to the administrators of the collaboration.";
+$langRequestReasonsCollab = "State the reasons you wish to register for the collaboration.";
+$langCollabDes = "Collaboration description";
+$langThisCollabDescriptionIsEmpty = "The collaboration has no description";
+$langCollabInvitation = "Invitation to register for the collaboration";
+$langCollab = "collaboration";
+$langSession = "Sessions";
+$langAddSession = "Add session";
+$langIndividualSession = "Individual session";
+$langGroupSession = "Group session";
+$langSelectUser = "User choice";
+$langSelectConsultant = "Selection of consultant";
+$langAddSessionCompleted = "Session creation completed successfully";
+$langAddSessionNotCompleted = "Session creation failed";
+$langAddInCorrectDateVal = "You have entered an incorrect expiry date.";
+$langStatement = "Condition";
+$langIndividualSessions = "Individual sessions";
+$langGroupSessions = "Group sessions";
+$langInProgress = "is active...";
 $langSessionHasNotStarted = "It hasn't started yet...";
-$langSessionHasExpired = 'Ii has expired';
-$langLeaveSession = 'Leave the session';
-$langDelSessionSuccess = 'This session was successfully deleted';
-$langMySessions = 'My sessions';
-$langContinueToDelSession = 'Do you want to proceed with this action?';
-$langContinueToLeaveSession = 'Do you want to leave this session?';
-$langLeaveSessionSuccess = 'You have successfully abandoned this session';
-$langEditSession = 'Edit session';
-$langCompleteSession = 'Session completion';
-$langSessionResourseDeleted = 'The resource in this session was deleted successfully!';
-$langNoAvailableSessionRecourses = 'There are no resources available in this session';
-$langResourceCompleted = 'The resource updated successfully';
-$langAddResource = 'Add resource';
-$langEditResource = 'Edit resource';
-$langSSession = 'Session';
-$langTypeRemote = 'Type';
-$langNotRemote = 'Not remote';
-$langRemote = 'Remote';
-$langIndividualS = 'Individual';
-$langGroupS = 'Group';
-$langNotDisplay = 'No display';
-$langStartEndSessionDateTime = 'Session start - end time';
-$langDateMaxMinutes = 'Session duration should be 45 minutes.';
-$langConsultant = 'Consultant';
-$langDetailsSession = 'Session details';
-$langAvailableSession = 'New session';
-$langInfoNewSession = 'In the calendar you will see all the registered sessions of the collaboration if there are any.
-You cannot register a new session in these slots. You can choose the free day and time slots
-in order to make an entry. </br>
-By selecting one of them by clicking on the desired slot and after pressing the "Add" button in the new window that will appear,
-you will temporarily enter the new session start and end date. </br></br>
-<strong>The registration is completed by submitting the form using the "Submit" button.</strong>';
-$langInfoEditSession = 'In the calendar you will see all the registered sessions of the collaboration if there are any.
-The green color is for the current session you want to edit.
-By selecting a different day and time slot by clicking on the desired slot </br> and after pressing the "Add" button,
-you will temporarily enter the new session start and end date. </br></br>
-<strong>The registration is completed by submitting the form from the "Change" button.</strong>';
-$langEmptyUploadFile = 'You have not selected a file to upload.';
-$langUploadDocCompleted = 'Upload completed successfully.';
-$langSessionType = 'Session type';
-$langRemoteConference = 'Video conference';
-$langTcNotStartedYet = 'The video conference has not started yet';
-$langAddTcSession = 'Create a video conference link';
-$langPercentageSessionCompletion = 'Session completion rate';
-$langAllSessions = 'All sessions';
-$langSessionHasNotBadge = 'The session has no completion resources.';
-$langRegisteredUsers = 'Registered users';
-$langDoNotChooseResource = 'Your file should correspond to some integration activity.</br>
- If the "About" field is empty then there are no session completion resources
- and you cannot upload a file.';
-$langWithSubmittedUploadedFile = 'By submitting a deliverable';
-$langSubmittedUploadedFile = 'Submit deliverable';
-$langMyUploadedFiles = 'My deliverables';
-$langViewScreensThemes = 'View themes';
+$langSessionHasExpired = "Ii has expired";
+$langLeaveSession = "Leave the session";
+$langDelSessionSuccess = "This session was successfully deleted";
+$langMySessions = "My sessions";
+$langContinueToDelSession = "Do you want to proceed with this action?";
+$langContinueToLeaveSession = "Do you want to leave this session?";
+$langLeaveSessionSuccess = "You have successfully abandoned this session";
+$langEditSession = "Edit session";
+$langCompleteSession = "Session completion";
+$langSessionResourseDeleted = "The resource in this session was deleted successfully!";
+$langNoAvailableSessionRecourses = "There are no resources available in this session";
+$langResourceCompleted = "The resource updated successfully";
+$langAddResource = "Add resource";
+$langEditResource = "Edit resource";
+$langSSession = "Session";
+$langTypeRemote = "Type";
+$langNotRemote = "Not remote";
+$langRemote = "Remote";
+$langIndividualS = "Individual";
+$langGroupS = "Group";
+$langNotDisplay = "No display";
+$langStartEndSessionDateTime = "Session start - end time";
+$langDateMaxMinutes = "Session duration should be 45 minutes.";
+$langConsultant = "Consultant";
+$langDetailsSession = "Session details";
+$langAvailableSession = "New session";
+$langInfoNewSession = "In the calendar you will find all the sessions you have registered as a consultant in the current collaboration.
+You cannot add a new session to these slots, except for the free ones.</br>
+By selecting the desired slot and clicking the <<add>> button in the new window that will appear,
+you will temporarily register the new start and end date of the session. </br></br>
+<strong>The registration is completed by submitting the form using the <<submit>> button.</strong>";
+$langInfoEditSession = "In the calendar you will see all the sessions you have registered as a consultant for the current collaboration.
+The green color refers to the current session you want to edit.
+By selecting a different slot and after pressing the <<add>> button,
+you will temporarily register the new start and end date of the session. </br></br>
+<strong>The registration is completed by submitting the form from the <<change>> button.</strong></br></br>
+<strong>You can also change the duration of the current session by changing the size of the green slot</strong>";
+$langEmptyUploadFile = "You have not selected a file to upload.";
+$langUploadDocCompleted = "Upload completed successfully.";
+$langSessionType = "Session type";
+$langRemoteConference = "Video conference";
+$langTcNotStartedYet = "The video conference has not started yet";
+$langAddTcSession = "Create a video conference link";
+$langPercentageSessionCompletion = "Session completion rate";
+$langAllSessions = "All sessions";
+$langSessionHasNotBadge = "The session has no completion resources.";
+$langRegisteredUsers = "Registered users";
+$langDoNotChooseResource = "Your file should correspond to some integration activity.</br>
+ If the <<About>> field is empty then there are no session completion resources
+ and you cannot upload a file.";
+$langWithSubmittedUploadedFile = "By submitting a deliverable";
+$langSubmittedUploadedFile = "Submit deliverable";
+$langMyUploadedFiles = "My deliverables";
+$langViewScreensThemes = "View themes";
 $langOldThemeInfo = "Due to changes in the platform's appearance, any old themes you may have created are not compatible. You should choose one of the following. You can click on 'View themes' to see how the platform will appear.";
 $langOldThemeInfoLocation = "Note that you will find the content of the old themes (images, logos, etc.) in the";
 $langWhatTypeOfCourse = "Type of course";
@@ -6255,7 +6240,7 @@ $langwidthOfForm = "The form width spans % of the desktop width.";
 $langStrechedImgOfForm = "The height of the image spans the same height as the registration form.";
 $langWidthOfFormInfo = "This option does not apply to the image on the user registration form.";
 $langEnable_prevent_download_url = "Enable methods to prevent users from downloading .pdf files in the Documents tool.";
-$langFirstShow = "First appearance";
+$langFirstShow = "Initial appearance";
 $langEnablePreventDownloadPdf = "Enable file download avoidance methods";
 $langDisablePreventDownloadPdf = "Disable file download avoidance methods";
 $langPreventEnablePDF = "The process has been activated.";
@@ -6266,19 +6251,19 @@ $langInfoAddSliderLabels = "Add to the text field the possible answers that the 
  Each answer is separated by the symbol | .</br>
  Eg if the maximum number of the scale is 5 then you should give 5 possible answers of the form: (not at all|very little|a little|very|very much).";
 $langTableDimension = "Create the dimension of the table (N*N) by entering the number of its columns and rows.</br></br>
- <ul><li>Columns = Questions to the user</li><li>Rows = Answers from the user</li></ul>";
-$langNumberOfColumns = 'Number of columns';
-$langNumberOfRows = 'Number of lines';
-$langWriteQuestion = 'Write the question...';
-$langNumberRowColBigger = 'The number of rows and columns of the table should be greater than zero.';
-$langRowsColumnsInsertd = 'Table rows and columns were successfully entered.';
-$langSubmitQuestions = 'Ask questions';
-$langEditRowsColsTable = 'Edit table dimensions and questions';
-$langQuestionsInsertd = 'Questions added successfully.';
-$langNumberColumnsSmallerThanQ = 'The number of columns you entered is less than the available questions entered.';
-$langUserAnswer = 'User response';
-$langAddRowsColumns = 'Registration';
-$langCurrentDuration = 'Current duration';
+ <ul><li>Columns = User questions</li><li>Rows = User answers</li></ul>";
+$langNumberOfColumns = "Number of columns";
+$langNumberOfRows = "Number of lines";
+$langWriteQuestion = "Write the question...";
+$langNumberRowColBigger = "The number of rows and columns of the table should be greater than zero.";
+$langRowsColumnsInsertd = "Table rows and columns were successfully entered.";
+$langSubmitQuestions = "Ask questions";
+$langEditRowsColsTable = "Edit table dimensions and questions";
+$langQuestionsInsertd = "Questions added successfully.";
+$langNumberColumnsSmallerThanQ = "The number of columns you entered is less than the available questions entered.";
+$langUserAnswer = "User response";
+$langAddRowsColumns = "Registration";
+$langCurrentDuration = "Current duration";
 $langStatsReport = 'Participation report';
 $langIndexDisabled = 'The indexing engine is disabled.';
 $langReports = 'Reports';
@@ -6406,12 +6391,12 @@ For example, if we want to calculate the result of the arithmetic operation 15+3
 </div>';
 $langCompleteVariablesOfQuestionWarning = '
 <strong class="text-dark">Warning!</strong></br></br>
-If the exercise <strong class="text-dark">DOES</strong> include an item and must be calculated, then in the <strong class="text-dark">Answer type</strong> field you must complete the numerical expression as you completed it in the pronunciation along with its final result separated by the colon symbol <strong>(:)</strong></br>
+If the exercise <strong class="text-dark">DOES</strong> include an item and must be calculated, then in the <strong class="text-dark">Answer type</strong> field you must complete the numerical expression as you completed it in the pronunciation along with its final result separated by the double vertical bar symbol <strong>(||)</strong></br>
 <div class="mt-3 text-dark">
 For example, if we want to calculate the unknown <strong class="text-dark">x</strong> in the equation <strong class="text-dark">3x - 2 = 2x</strong> then we follow these steps:
 <ul class="mt-4 text-dark">
 <li class="text-dark">In the <strong class="text-dark">Pronunciation</strong> field we write the pronunciation we want. In our example we can write `Find the unknown <strong class="text-dark">x</strong> of the equation <strong class="text-dark">3x - 2 = 2x</strong>`.</li>
-<li class="text-dark">In the <strong class="text-dark">Answer type</strong> field we fill in the numerical expression along with the final value of <strong class="text-dark">x</strong> that we are looking for as a result separated by the symbol (<strong class="text-dark">:</strong>) that is, we write <strong class="text-dark">3x - 2 = 2x:2</strong></li>
+<li class="text-dark">In the <strong class="text-dark">Answer type</strong> field we fill in the numerical expression along with the final value of <strong class="text-dark">x</strong> that we are looking for as a result separated by the symbol (<strong class="text-dark">||</strong>) that is, we write <strong class="text-dark">3x - 2 = 2x||2</strong></li>
 <li class="text-dark">In the <strong class="text-dark">Grade</strong> field we fill in its degree.</li>
 <li class="text-dark">Then in <strong class="text-dark">Edit items</strong> we press <strong class="text-dark">Submit</strong>.</li>
 </ul>
@@ -6419,7 +6404,7 @@ For example, if we want to calculate the unknown <strong class="text-dark">x</st
 $langNoExistVariables = "The exercise pronunciation contains no data or the text field is empty.";
 $langFinalValueOfWildCard = "Value of item";
 $langSeperateCorrectlyTheTypeOfAnswer = "There are no {items} available in the pronunciation or in the answer types. </br>
-Therefore, in the <strong>Answer type</strong> field, you must add the numerical formula you added to the pronunciation along with its final result, separated by the symbol (<strong>:</strong>)";
+Therefore, in the <strong>Answer type</strong> field, you must add the numerical formula you added to the pronunciation along with its final result, separated by the symbol (<strong>||</strong>)";
 $langOrdering = "Ordering";
 $langLayoutItems = "Layout items";
 $langHorizontal = "Horizontal";
@@ -6555,8 +6540,6 @@ you will temporarily register the new start and end date of the session. </br></
 <strong>The registration is completed by submitting the form from the "Change" button.</strong></br></br>
 <strong>You can also change the duration of the current session by changing the size of the green slot</strong>';
 $langJumbotronWithVideo = 'The file you uploaded is of type .mp4 with full name "video.mp4"';
-$langEnableBoxLogo = "Enable background color to the logo container";
-$langButtonInBriefProfile = "Vutton in brief profile";
 $langMaxHeightHalfMaxScreenJumbotron = "Alternatively, the carpet will be removed from the current screen.";
 $langOfSubmitQuestionnaire = "By submitting a questionnaire";
 $langAddConsultantComments = "The consultant's comments were successfully added.";
@@ -6699,7 +6682,7 @@ $langEvaluationCriteriaHelp = "Provide clear criteria that the AI will use to ev
 $langMaxPoints = "Maximum Points";
 $langMaxPointsHelp = "The maximum score that can be awarded for this question";
 $langDefinedInQuestionStatement = "defined in question statement";
-$langSampleResponses = "Sample Responses (Optional)";
+$langSampleResponses = "Sample Responses";
 $langSampleResponsesPlaceholder = "Example responses to help guide AI evaluation:\n\nGood response example | good\nPoor response example | poor\n\nFormat: response | quality (good/poor/average)";
 $langSampleResponsesHelp = "Provide example responses with quality indicators. Format: 'response | quality' (one per line). This helps the AI understand your expectations.";
 $langSaveAIConfig = "Save AI Configuration";
@@ -6718,10 +6701,10 @@ $langAddToExercise = "Add to Exercise";
 $langQuestionsAddedToExercise = '%d questions added to exercise';
 $langTestConnection = 'Test Connection';
 $langDefaultFillInBlanks = 'Fill in the blanks';
-$langAIService = 'AI Subsystem';
+$langAIService = 'AI Node';
 $langAddProvider = 'Add Provider';
-$langAssignAIToModule = "Assign AI operation to module";
-$langAIModuleDeleted = 'AI module deleted';
+$langAssignAIToModule = "AI Nodes settings";
+$langAIModuleDeleted = 'AI node deleted';
 $langAIAssistedGrading = "AI-Assisted Grading";
 $langAIGradingDescription = "Enable AI to automatically evaluate responses and suggest grades based on your criteria";
 $langAIEvaluationCriteria = "Evaluation Criteria";
@@ -6775,3 +6758,70 @@ $langPanoptoApp = "Panopto Application";
 $langPanoptoLTIOptions = "Panopto Options";
 $langPanoptoIntegration = "Panopto Integration";
 $langCreatedBy = "created by";
+$langConfirmEnableSolrIndex = "The indexing process requires <strong>certain time period and computing resources</strong>, depending on the size of the DataBase.<br/><br/>The process will run in a <u>separate browser window</u>.<br/><br/><em>Cancel</em> your choice if you wish to start the indexing at a <u>different</u> time.";
+$langGroupActivities = 'Group Activities';
+$langFlippedClassroomDataUpdated = 'Flipped classroom options updated';
+$langOfProgress = 'Progress';
+$langCorrectAnswerIs = 'The correct answer is';
+$langVideoManS = "$langStudent tutorials";
+$langVideoManT1 = "$langTeacher tutorials (part 1)";
+$langVideoManT2 = "$langTeacher tutorials (part 2)";
+$langVideoTutorials = 'Video - Tutorials';
+$langDateAccept = "Date of request acceptance";
+$langPhase = "Phase";
+$langAssignmentsSubmission = "Assignment submission";
+$langAssignmentsSubmissionHasNoStarted = "The submission process has not yet begun.";
+$langAssignmentsSubmissionInProgress = "The submission process is underway...";
+$langAssignmentsSubmissionHasExpired = "The submission process has ended.";
+$langGradeReviewHasNotStarted = "The peer review process has not yet begun.";
+$langGradeReviewInProgress = "The peer review process is underway...";
+$langGradeReviewHasExpired = "The peer review process has ended.";
+$langFinalGrade = "Final grade";
+$langFinalGradeProcessInProgress = "The rating entry process is active.";
+$langReceivedFrom = "Received from";
+$langgrade = "grade";
+$langPreviewGradesAssessments = "Preview assessments";
+$OldAssignmentsWillBeRemoved = "Old assignment assessments will be removed.";
+$langAddFinalGradeHasNotStartedYet = "The grade addition process has not yet started.";
+$langInsertGlossary = 'glossary';
+$langInsertWall = 'wall';
+$langSolrShortDescription = "The open source software <a href=\"https://solr.apache.org/\" target=\"_blank\">Solr</a> is a search platform. Visit the <a href=\"solrconf.php\">tool setings</a> to enable it.";
+$langSolrLongDescription = "Connect with the <em>Solr</em> search platform.";
+$langSolrUrl = "You can customize this setting to point to your Solr installation server.";
+$langH5pInteractiveContentByStudents = "H5P Interactive Content by $langStudents";
+$langMetaLearner = 'Learner';
+$langMetaAuthor = 'Author';
+$langEnableBoxLogo = "Enable background color to the logo container";
+$langButtonInBriefProfile = "Vutton in brief profile";
+$langProviders = 'Providers';
+$langRequestAlreadySent = "A registration request has already been sent for this course";
+$langRejectedRequests = "Rejected User Requests";
+$langAcceptedRequests = "Accepted User Requests";
+$lang_enable_user_consent = "Enable confirmation of user participation in sessions";
+$langEditSessionSection = "Edit session";
+$langInsertTcMeetingSession = "teleconference";
+$langCompleteCriteriaSession = "Completion criteria";
+$langSelectToolsPolls = "Consulting tools";
+$langSubmitParticipation = "User participation";
+$langCreateReferenceNotes = "Notes";
+$langAutomaticCompletion = "With auto-completion (once the session time expires)";
+$langUserPollAnswer = "answered";
+$langStartSession = "Start session";
+$langFinishSession = "End of session";
+$langNoAnswers = "There are no answers for this question.";
+$langCriteriaBelowParticipateInCompletion = "The following criteria are involved in session completion";
+$langTheResource = "The resource";
+$langListCompletionCriteria = "List of criteria";
+$langUserParticipation = "User participation";
+$langWarningAboutUsedCert = "If you really want to delete it click the button below. Note that certificate user progress will be deleted also!";
+$langStricterExamRestriction = "Stricter exam mode";
+$langExerciseWillBeCanceledInStrictMode = "The exam is canceled in parallel user actions";
+$langWarningNewPageOpened = "<strong>Attention!</strong><br>Please keep the current page open throughout the exam.<br> Any parallel action, such as redirecting to a new page or opening a new window, will result in the automatic cancellation of your attempt.";
+$langWarningNewPageOpened2 = "<strong>Warning!</strong><br>You have entered the examination area.<br> Any parallel action, such as redirecting to a new page or opening a new window, will lead to the automatic cancellation of your attempt.";
+$langExWillBeCanceled = "Your attempt will be canceled.";
+$langGoToExam = "Enter the exam";
+$langExerciseGradePass = "Passing Grade";
+$langExerciseGradePassLegend = "The exercise is considered to have been successfully performed if the $langsStudent grade is greater than or equal to the pass grade";
+$langVideoManT3 = "LangOfTeacher Guides (part 3)";
+$langFailure = "Failure";
+$langAIServices = "A.I Functional Nodes";

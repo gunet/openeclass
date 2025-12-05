@@ -31,7 +31,7 @@ function metaCreateForm($metadata, $oldFilename, $real_filename) {
     $langTopicHelp, $langSubTopic, $langSubTopicHelp, $langLevel, $langLevelHelp,
     $langTypicalAgeRange, $langTypicalAgeRangeHelp, $langComment, $langCommentHelp,
     $langCopyright, $langCopyrightHelp, $langIntentedEndUserRole, $langIntentedEndUserRoleHelp,
-    $langOkComment, $langNotRequired, $langForm;
+    $langSubmit, $langNotRequired, $langForm;
 
     // variable definitions
     $metaTitle = "";
@@ -49,6 +49,7 @@ function metaCreateForm($metadata, $oldFilename, $real_filename) {
     $metaSubTopic = "";
 
     if (file_exists($real_filename . ".xml")) {
+
         $sxe = simplexml_load_file($real_filename . ".xml");
 
         if ($sxe) {
@@ -122,7 +123,7 @@ function metaCreateForm($metadata, $oldFilename, $real_filename) {
 
     $output .= "<tr>
 	    <th></th>
-	    <td class='right'><input class='btn submitAdminBtn' type='submit' value='$langOkComment' /></td>
+	    <td class='right'><input class='btn submitAdminBtn' type='submit' value='$langSubmit' /></td>
 	  </tr>
 	  <tr>
 	    <th></th>

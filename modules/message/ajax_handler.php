@@ -34,10 +34,7 @@ require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'class.msg.php';
 require_once 'class.mailbox.php';
 
-if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
-
-    $limit = intval($_POST['length']);
-    $offset = intval($_POST['start']);
+if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
 
     $message_path = '';
     if (isset($_GET['mbox_type'])) {
@@ -87,7 +84,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             $course_id = 0;
             $outbox = new Mailbox($uid, $course_id);
             $message_path = $outbox->get_mailbox_path();
-            $msgs = $outbox->getInboxMsgs();
+            $msgs = $outbox->getOutboxMsgs();
             foreach ($msgs as $msg) {
                 $message_path = $webDir . "/courses/" . course_id_to_code($msg->course_id) . "/dropbox";
                 if (!$msg->error) {
@@ -110,6 +107,9 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     }
 
     $mbox = new Mailbox($uid, $course_id);
+
+    $limit = intval($_POST['length']);
+    $offset = intval($_POST['start']);
 
     //Total records
     $data['recordsTotal'] = $mbox->MsgsNumber($mbox_type);
