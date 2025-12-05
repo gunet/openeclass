@@ -58,6 +58,11 @@ $poll_title = $p->name . " (". $langPollTotalAnswers . ": " . $total_participant
 $data[] = [ $poll_title ];
 $data[] = [];
 
+$sqlSession = '';
+if (isset($_GET['dumppoll_session'])) {
+    $sqlSession = "AND b.session_id = $_GET[session]";
+}
+
 if ($full) { // user questions results
     if ($anonymized) {
         $heading = array($langName);
@@ -119,7 +124,8 @@ if ($full) { // user questions results
                                 ON a.aid = c.pqaid
                                 WHERE a.poll_user_record_id = b.id
                                 AND (b.email_verification = 1 OR b.email_verification IS NULL)
-                                AND a.qid = ?d", $q->pqid);
+                                AND a.qid = ?d
+                                $sqlSession", $q->pqid);
             foreach ($answers as $a) {
                 $answer_text = ($a->aid < 0)? $langPollUnknown: $a->answer_text;
                 $user_identifier = $a->uid ?: $a->email;
@@ -139,6 +145,7 @@ if ($full) { // user questions results
                                                     AND a.sub_qid = ?d
                                                     AND a.poll_user_record_id = b.id
                                                     AND (b.email_verification = 1 OR b.email_verification IS NULL)
+                                                    $sqlSession
                                                     ORDER BY uid", $q->pqid, $q->sub_question);
 
             foreach ($answers as $a) {
@@ -160,6 +167,7 @@ if ($full) { // user questions results
                                 WHERE qid = ?d
                                 AND a.poll_user_record_id = b.id
                                 AND (b.email_verification = 1 OR b.email_verification IS NULL)
+                                $sqlSession
                                 ORDER BY uid", $q->pqid);
             foreach ($answers as $a) {
                 $user_identifier = $a->uid ?: $a->email;
@@ -172,7 +180,23 @@ if ($full) { // user questions results
     }
     $k = 0;
     $data[] = $heading;
+    $session_participants = [];
+    if (isset($_GET['dumppoll_session'])) {
+        $participants = Database::get()->queryArray("SELECT participants FROM mod_session_users
+                                                             WHERE session_id = $_GET[session] AND is_accepted = 1
+                                                             AND participants IN (SELECT uid FROM poll_user_record WHERE pid = $pid AND session_id = $_GET[session])");
+        if (count($participants) > 0) {
+            foreach ($participants as $p) {
+                $session_participants[] = $p->participants;
+            }
+        }
+    }
+
     foreach ($qlist as $user_identifier => $answers) {
+        // Session view
+        if (isset($_GET['dumppoll_session']) && !in_array($user_identifier,$session_participants)) {
+            continue;
+        }
         $answers_keys = array_keys($answers);
         $result = array_diff($headingQ,$answers_keys);
         if (count($result) > 0) {

@@ -5,6 +5,7 @@
   "homepage": "https://www.openeclass.org/",
   "dependencies": {
     "@uppy/core": "^4.2.2",
+    "@uppy/form": "^4.2.2",
     "@uppy/dashboard": "^4.1.1",
     "@uppy/drag-drop": "^4.0.3",
     "@uppy/locales": "^4.2.0",

@@ -416,15 +416,19 @@ if (isset($submitAnswers) || isset($buttonBack)) {
         sort($totalAnsFromChoices);
         $choicesAnsArr = [];
         foreach ($totalAnsFromChoices as $inde_x) {
-            $choicesAnsArr[] = $inde_x . '|' . purify($_POST['choice_answer'][$inde_x]) . '|' . $_POST['choice_grade'][$inde_x];
+            $choicesAnsArr[] = [
+                'index' => $inde_x,
+                'choice_answer' => purify($_POST['choice_answer'][$inde_x]),
+                'choice_grade' => fix_float($_POST['choice_grade'][$inde_x])
+            ];
         }
-        $choices_ans = '';
-        if (count($choicesAnsArr) > 0) {
-            $choices_ans = implode(',', $choicesAnsArr);
-            $choices_ans = '::' . $choices_ans;
-        }
+        $arrResponse = [];
+        $arrResponse[] = [
+            'pr_text' => $q_text,
+            'pr_answers' => serialize($choicesAnsArr)
+        ];
 
-        $reponse = $q_text . $choices_ans;
+        $reponse = serialize($arrResponse);
         $objAnswer->createAnswer($reponse, 0, '', 0, 1);
         $objAnswer->save();
         if (isset($_POST['choice_grade'])) {
@@ -489,21 +493,31 @@ if (isset($submitAnswers) || isset($buttonBack)) {
         $markerAnsArr = [];
         if (count($arrDataMarkers) > 0) {
             foreach($arrDataMarkers as $index => $marker) {
-                $markerAnsArr[] = $index . '|' . $arrDataMarkers[$index]['marker_answer'] . '|' . $arrDataMarkers[$index]['marker_grade'];
+                //$markerAnsArr[] = $index . '|' . $arrDataMarkers[$index]['marker_answer'] . '|' . $arrDataMarkers[$index]['marker_grade'];
+                $markerAnsArr[] = [
+                    'index' => $index,
+                    'choice_answer' => purify($arrDataMarkers[$index]['marker_answer']),
+                    'choice_grade' => fix_float($arrDataMarkers[$index]['marker_grade'])
+                ];
             }
         }
 
-        $marker_ans = '';
-        if (count($markerAnsArr) > 0) {
-            $marker_ans = implode(',', $markerAnsArr);
-            $marker_ans = '::' . $marker_ans;
-        }
+        // $marker_ans = '';
+        // if (count($markerAnsArr) > 0) {
+        //     $marker_ans = implode(',', $markerAnsArr);
+        //     $marker_ans = '::' . $marker_ans;
+        // }
 
         $bracketAnswers = '';
         for ($i=1; $i <= count($markerAnsArr); $i++) {
             $bracketAnswers .= ' [' . $i . '] ';
         }
-        $reponse = $langDragAndDropMarkersTextAnswers . $bracketAnswers . $marker_ans;
+        $arrResponse = [];
+        $arrResponse[] = [
+            'pr_text' => $langDragAndDropMarkersTextAnswers . $bracketAnswers,
+            'pr_answers' => serialize($markerAnsArr)
+        ];
+        $reponse = serialize($arrResponse);
         $objAnswer->createAnswer($reponse, 0, '', 0, 1);
         $objAnswer->save();
         if (isset($_POST['marker_grade'])) {
@@ -577,10 +591,10 @@ if (isset($submitAnswers) || isset($buttonBack)) {
                 $checkOkVal = 1;
             }
 
-            // Check if the Answer type field contains the type of expression with the final result of it seperated by the colon symbol (:)
+            // Check if the Answer type field contains the type of expression with its final result seperated by the double vertical bar symbol (||)
             if (count($uniqueMandatoryWildCards) == 0 && count($_POST['calculated_answer']) > 0) {
                 foreach ($_POST['calculated_answer'] as $an) {
-                    $tmpArr = explode(':', $an);
+                    $tmpArr = explode('||', $an);
                     if (count($tmpArr) < 2) {
                         $checkOk = false;
                         $checkOkVal = 4;
@@ -676,13 +690,29 @@ if (isset($submitAnswers) || isset($buttonBack)) {
                 // Inserting the predefined answers for the current question in database.
                 $questionWeighting = $nbrGoodAnswers = 0;
                 for ($i = 1; $i <= count($_POST['calculated_answer']); $i++) {
-                    $reponse[$i] = purify($_POST['calculated_answer'][$i]);
+                    $cal_ans = []; 
+                    $finalResult = '';
+                    $arExpression = '';
                     if ($wildCardOptions) {
-                        $resultOfExpression = evaluateExpression($reponse[$i], $questionId);
+                        $arExpression = purify($_POST['calculated_answer'][$i]);
+                        $resultOfExpression = evaluateExpression(purify($_POST['calculated_answer'][$i]), $questionId);
                         if ($resultOfExpression or $resultOfExpression == 0) {
-                            $reponse[$i] = $reponse[$i] . ':' . $resultOfExpression;
+                            $finalResult = $resultOfExpression;
+                        }
+                    } else {
+                        // Special case when wildcard does not exist and we have added by hand the result of the arithmetic expression.
+                        // We seperate the arithmetic expression from its result using the double vertical bar symbol ||
+                        $writableResult = explode('||', purify($_POST['calculated_answer'][$i]));
+                        if (count($writableResult) > 1) {
+                            $arExpression = $writableResult[0];
+                            $finalResult = $writableResult[1];
                         }
                     }
+                    $cal_ans[] = [
+                        'expression' => $arExpression,
+                        'result' => $finalResult
+                    ]; 
+                    $reponse[$i] = serialize($cal_ans);  
                     $comment[$i] = '';
                     $weighting[$i] = fix_float($_POST['calculated_answer_grade'][$i]);
                     $goodAnswer = ((isset($_POST['calculated_answer_grade'][$i]) && $_POST['calculated_answer_grade'][$i] > 0) ? 1 : 0);
@@ -814,11 +844,15 @@ if (isset($submitAnswers) || isset($buttonBack)) {
 
         $choicesOrdArr = [];
         foreach ($totalAnsFromOrderingChoices as $inde_x) {
-            $choicesOrdArr[] = $inde_x . '|' . $_POST['ordering_answer'][$inde_x] . '|' . fix_float($_POST['ordering_answer_grade'][$inde_x]);
+            $choicesOrdArr[] = [
+                'index' => $inde_x,
+                'value' => $_POST['ordering_answer'][$inde_x],
+                'grade' => fix_float($_POST['ordering_answer_grade'][$inde_x])
+            ]; 
         }
         $choices_ordering_answer = '';
         if (count($choicesOrdArr) > 0) {
-            $choices_ordering_answer = implode(',', $choicesOrdArr);
+            $choices_ordering_answer = serialize($choicesOrdArr);
         }
 
         $reponse = purify($choices_ordering_answer);
@@ -1167,12 +1201,18 @@ if (isset($_GET['modifyAnswers'])) {
                 if (!isset($_POST['backModifyCalculated'])) {
                     $predefinedAns = Database::get()->queryArray("SELECT * FROM exercise_answer WHERE question_id = ?d", $questionId);
                     foreach ($predefinedAns as $an) {
-                        $arrAns = explode(':', $an->answer);
+                        $arrAns = unserialize($an->answer);
                         if (count($arrAns) > 0) {
+                            $res_expression = '';
+                            $res_result = '';
+                            foreach ($arrAns as $r) {
+                                $res_expression = $r['expression'];
+                                $res_result = $r['result'];
+                            }
                             if (is_null($options)) {
-                                $calculated_answer[$an->r_position] = $an->answer;
+                                $calculated_answer[$an->r_position] = $res_expression . '||' . $res_result;
                             } else {
-                                $calculated_answer[$an->r_position] = $arrAns[0];
+                                $calculated_answer[$an->r_position] = $res_expression;
                             }
                         } else {
                             $calculated_answer[$an->r_position] = '';

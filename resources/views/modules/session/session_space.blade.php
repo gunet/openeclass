@@ -29,36 +29,53 @@
 
                     {!! 
                         action_bar(array(
-                            array('title' => trans('langUserReferences'),
-                                'url' => $urlAppend . 'modules/session/user_report.php?course=' . $course_code . '&session=' . $sessionID,
-                                'icon' => 'fa-solid fa-address-card',
+                            array('title' => trans('langUserConsent'),
+                                'url' => $urlAppend . 'modules/session/session_users.php?course=' . $course_code . '&session=' . $sessionID,
+                                'icon' => 'fa fa-users',
+                                'button-class' => 'btn-success',
                                 'level' => 'primary-label',
                                 'show' => ($is_consultant or $is_course_reviewer)
                             ),
-                            array('title' => trans('langEditUnitSection'),
+                            array('title' => trans('langEditSessionSection'),
                                 'url' => $urlAppend . 'modules/session/edit.php?course=' . $course_code . '&session=' . $sessionID,
                                 'icon' => 'fa fa-edit',
                                 'level' => 'secondary',
                                 'show' => $is_consultant
                             ),
-                            array('title' => trans('langUserConsent'),
-                                'url' => $urlAppend . 'modules/session/session_users.php?course=' . $course_code . '&session=' . $sessionID,
-                                'icon' => 'fa fa-users',
-                                'button-class' => 'btn-success',
+                            array('title' => trans('langSelect') . ' ' . trans('langInsertTcMeetingSession'),
+                                'url' => $urlAppend . 'modules/session/resource.php?course=' . $course_code . '&session=' . $sessionID . '&type=tc',
+                                'icon' => 'fa-solid fa-users-rectangle',
                                 'level' => 'secondary',
-                                'show' => ($is_consultant or $is_course_reviewer)
+                                'show' => (!is_module_disable(MODULE_ID_TC) && $is_consultant && is_remote_session($course_id,$sessionID) && get_config('ext_zoom_enabled'))
                             ),
-                            array('title' => trans('langCompleteSession'),
+                            array('title' => trans('langAdd') . ' ' . trans('langInsertTcMeetingSession'),
+                                'url' => $urlAppend . 'modules/session/resource.php?course=' . $course_code . '&session=' . $sessionID . '&type=add_tc' . '&token=' . $_SESSION['csrf_token'],
+                                'class' => "add-session",
+                                'data_action_class' => 'submitAdminBtn',
+                                'confirm' => trans('langAdd') . ' ' . trans('langInsertTcMeetingSession'),
+                                'icon' => 'fa-solid fa-users-rectangle',
+                                'confirm_title' => trans('langAddTcSession'),
+                                'confirm_button' => trans('langSubmit'),
+                                'show' => (!is_module_disable(MODULE_ID_TC) && $is_consultant && is_remote_session($course_id,$sessionID) && !get_config('ext_zoom_enabled') && get_config('ext_bigbluebutton_enabled'))
+                            ),
+                            array('title' => trans('langAdd') . ' ' . trans('langInsertTcMeetingSession'),
+                                'url' => $urlAppend . 'modules/tc/index.php?course=' . $course_code . '&new=1' . '&for_session=' . $sessionID,
+                                'class' => "add-session",
+                                'data_action_class' => 'submitAdminBtn',
+                                'icon' => 'fa-solid fa-users-rectangle',
+                                'show' => (!is_module_disable(MODULE_ID_TC) && $is_consultant && is_remote_session($course_id,$sessionID) && count($participants) > 0 && get_config('ext_zoom_enabled'))
+                            ),
+                            array('title' => trans('langCompleteCriteriaSession'),
                                 'url' => $urlAppend . 'modules/session/complete.php?course=' . $course_code . '&session=' . $sessionID . '&manage=1',
                                 'icon' => 'fa fa-trophy',
                                 'button-class' => 'btn-success',
                                 'show' => $is_consultant
                             ),
-                            array('title' => trans('langCreateReference'),
-                                'url' => $urlAppend . 'modules/session/resource.php?course=' . $course_code . '&session=' . $sessionID . '&type=doc_reference',
-                                'icon' => 'fa-regular fa-file-lines',
+                            array('title' => trans('langSelectToolsPolls'),
+                                'url' => $urlAppend . 'modules/session/resource.php?course=' . $course_code . '&session=' . $sessionID . '&type=poll',
+                                'icon' => 'fa-solid fa-question',
                                 'level' => 'secondary',
-                                'show' => (!is_module_disable(MODULE_ID_DOCS) && $is_consultant)
+                                'show' => (!is_module_disable(MODULE_ID_QUESTIONNAIRE) && $is_consultant)
                             ),
                             array('title' => trans('langCreateDeliverable'),
                                 'url' => $urlAppend . 'modules/session/resource.php?course=' . $course_code . '&session=' . $sessionID . '&type=doc_upload',
@@ -66,17 +83,11 @@
                                 'level' => 'secondary',
                                 'show' => (!is_module_disable(MODULE_ID_DOCS) && $is_consultant)
                             ),
-                            array('title' => trans('langAttendanceCriterion'),
-                                'url' => $urlAppend . 'modules/session/resource.php?course=' . $course_code . '&session=' . $sessionID . '&type=attendance',
-                                'icon' => 'fa-solid fa-clipboard-user',
+                            array('title' => trans('langCreateReferenceNotes'),
+                                'url' => $urlAppend . 'modules/session/resource.php?course=' . $course_code . '&session=' . $sessionID . '&type=doc_reference',
+                                'icon' => 'fa-regular fa-file-lines',
                                 'level' => 'secondary',
-                                'show' => $is_consultant
-                            ),
-                            array('title' => trans('langSelect') . ' ' . trans('langInsertPoll'),
-                                'url' => $urlAppend . 'modules/session/resource.php?course=' . $course_code . '&session=' . $sessionID . '&type=poll',
-                                'icon' => 'fa-solid fa-question',
-                                'level' => 'secondary',
-                                'show' => (!is_module_disable(MODULE_ID_QUESTIONNAIRE) && $is_consultant)
+                                'show' => (!is_module_disable(MODULE_ID_DOCS) && $is_consultant)
                             ),
                             array('title' => trans('langSelect') . ' ' . trans('langInsertDoc'),
                                 'url' => $urlAppend . 'modules/session/resource.php?course=' . $course_code . '&session=' . $sessionID . '&type=doc',
@@ -84,17 +95,23 @@
                                 'level' => 'secondary',
                                 'show' => (!is_module_disable(MODULE_ID_DOCS) && $is_consultant)
                             ),
-                            array('title' => trans('langSelect') . ' ' . trans('langInsertLink'),
+                            array('title' => trans('langExternalLinks'),
                                 'url' => $urlAppend . 'modules/session/resource.php?course=' . $course_code . '&session=' . $sessionID . '&type=link',
                                 'icon' => 'fa-solid fa-link',
                                 'level' => 'secondary',
                                 'show' => (!is_module_disable(MODULE_ID_LINKS) && $is_consultant)
                             ),
-                            array('title' => trans('langSelect') . ' ' . trans('langInsertTcMeeting'),
-                                'url' => $urlAppend . 'modules/session/resource.php?course=' . $course_code . '&session=' . $sessionID . '&type=tc',
-                                'icon' => 'fa-solid fa-users-rectangle',
+                            array('title' => trans('langUserReferences'),
+                                'url' => $urlAppend . 'modules/session/user_report.php?course=' . $course_code . '&session=' . $sessionID,
+                                'icon' => 'fa-solid fa-address-card',
                                 'level' => 'secondary',
-                                'show' => (!is_module_disable(MODULE_ID_TC) && $is_consultant && is_remote_session($course_id,$sessionID) && count($participants) > 0 && get_config('ext_zoom_enabled'))
+                                'show' => ($is_consultant or $is_course_reviewer)
+                            ),
+                            array('title' => trans('langAttendanceCriterion'),
+                                'url' => $urlAppend . 'modules/session/resource.php?course=' . $course_code . '&session=' . $sessionID . '&type=attendance',
+                                'icon' => 'fa-solid fa-clipboard-user',
+                                'level' => 'secondary',
+                                'show' => $is_consultant
                             ),
                             array('title' => trans('langInsertPassage'),
                                 'url' => $urlAppend . 'modules/session/resource.php?course=' . $course_code . '&session=' . $sessionID . '&type=passage',
@@ -102,23 +119,7 @@
                                 'level' => 'secondary',
                                 'show' => $is_consultant
                             ),
-                            array('title' => trans('langAdd') . ' ' . trans('langInsertTcMeeting'),
-                                'url' => $urlAppend . 'modules/session/resource.php?course=' . $course_code . '&session=' . $sessionID . '&type=add_tc' . '&token=' . $_SESSION['csrf_token'],
-                                'class' => "add-session",
-                                'data_action_class' => 'submitAdminBtn',
-                                'confirm' => trans('langAdd') . ' ' . trans('langInsertTcMeeting'),
-                                'icon' => 'fa-solid fa-users-rectangle',
-                                'confirm_title' => trans('langAddTcSession'),
-                                'confirm_button' => trans('langSubmit'),
-                                'show' => (!is_module_disable(MODULE_ID_TC) && $is_consultant && is_remote_session($course_id,$sessionID) && count($participants) > 0 && !get_config('ext_zoom_enabled') && get_config('ext_bigbluebutton_enabled'))
-                            ),
-                            array('title' => trans('langAdd') . ' ' . trans('langInsertTcMeeting'),
-                                'url' => $urlAppend . 'modules/tc/index.php?course=' . $course_code . '&new=1' . '&for_session=' . $sessionID,
-                                'class' => "add-session",
-                                'data_action_class' => 'submitAdminBtn',
-                                'icon' => 'fa-solid fa-users-rectangle',
-                                'show' => (!is_module_disable(MODULE_ID_TC) && $is_consultant && is_remote_session($course_id,$sessionID) && count($participants) > 0 && get_config('ext_zoom_enabled'))
-                            ),
+
                         ))
                     !!}
 
@@ -182,7 +183,7 @@
                         <div class="card panelCard card-default px-lg-4 py-lg-3">
                             <div class='card-header border-0'>
                                 <div class='d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-                                    <h3>{{ $pageName }} 
+                                    <h3>{{ $pageName }} <span class='small-text'>({{ $consultant_name->givenname }}&nbsp;{{ $consultant_name->surname }})</span>
                                         @if($finish_session->finish < $current_time) 
                                             &nbsp;<span class='Accent-200-cl TextBold text-decoration-underline'>{{ trans('langSessionHasExpired') }}</span>
                                         @endif

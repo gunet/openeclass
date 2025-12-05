@@ -215,6 +215,14 @@ if(isset($_GET['del'])){
         if($q->type == 'tc'){
             Database::get()->query("DELETE FROM tc_session WHERE id = ?d AND course_id = ?d AND id_session = ?d",$q->res_id,$course_id,$sessionID);
         }
+        if($q->type == 'poll'){
+            $poll = Database::get()->querySingle("SELECT session_id,res_id FROM session_resources WHERE id = ?d AND `type` = ?s",$_GET['del'],'poll');
+            if($poll){
+                Database::get()->query("DELETE FROM poll_to_specific WHERE poll_id = ?d
+                                        AND user_id IN (SELECT participants FROM mod_session_users
+                                                        WHERE session_id = ?d AND is_accepted = ?d)", $poll->res_id, $poll->session_id, 1);
+            }
+        }
         Database::get()->query("DELETE FROM session_resources WHERE id = ?d",$_GET['del']);
         Session::flash('message',$langSessionResourseDeleted);
         Session::flash('alert-class', 'alert-success');
@@ -254,6 +262,7 @@ if($is_coordinator or $is_consultant){
             // This refers to session completion for other activities.
             check_session_progress($s->id,$p);  // check session completion - call to Game.php
             check_session_completion_without_activities($s->id);
+            check_session_completion_with_expired_time($s->id);
         }
     }
 
@@ -261,6 +270,8 @@ if($is_coordinator or $is_consultant){
 
     $session_info = Database::get()->querySingle("SELECT * FROM mod_session WHERE id = ?d",$sessionID);
     if((date('Y-m-d H:i:s') < $session_info->start) or !$session_info->visible){
+        Session::flash('message',$langSessionNotStarted);
+        Session::flash('alert-class', 'alert-warning');
         redirect_to_home_page("modules/session/index.php?course=".$course_code);
     }
     $data['all_session'] = Database::get()->queryArray("SELECT * FROM mod_session
@@ -281,6 +292,7 @@ if($is_coordinator or $is_consultant){
         // This refers to session completion for other activities.
         check_session_progress($s->id,$uid);  // check session completion - call to Game.php
         check_session_completion_without_activities($s->id);
+        check_session_completion_with_expired_time($s->id);
     }
 
     $visible_sessions_id = array();
@@ -353,5 +365,11 @@ $data['prereq_session'] = Database::get()->querySingle("SELECT title FROM mod_se
                                                                      AND session_id = ?d)",$course_id,$sessionID);
 
 $data['finish_session'] = Database::get()->querySingle("SELECT finish FROM mod_session WHERE id = ?d",$sessionID);
+
+$data['consultant_name'] = Database::get()->querySingle("SELECT mod_session.creator,user.id,user.givenname,user.surname FROM mod_session
+                                                            LEFT JOIN user ON mod_session.creator=user.id
+                                                            WHERE mod_session.course_id = ?d
+                                                            AND mod_session.id = ?d", $course_id, $sessionID);
+
 
 view('modules.session.session_space', $data);

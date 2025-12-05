@@ -3387,26 +3387,33 @@ function upgrade_to_4_2($tbl_options) : void {
         Database::get()->query("ALTER TABLE h5p_content ADD `creator_id` INT UNSIGNED NOT NULL DEFAULT 0");
     }
 
-    DBHelper::createForeignKey('attendance', 'course_id', 'course', 'id', DBHelper::FKRefOption_CASCADE);
+    // Use consistent data types before creating the foreign key in attendance
+    Database::get()->query("ALTER TABLE attendance CHANGE id id INT NOT NULL AUTO_INCREMENT");
+    Database::get()->query("ALTER TABLE attendance_activities CHANGE id id INT NOT NULL AUTO_INCREMENT");
+    Database::get()->query("ALTER TABLE attendance_activities CHANGE attendance_id attendance_id INT NOT NULL");
+    Database::get()->query("ALTER TABLE attendance_book CHANGE id id INT NOT NULL AUTO_INCREMENT");
+    Database::get()->query("ALTER TABLE attendance_book CHANGE attendance_activity_id attendance_activity_id INT NOT NULL");
+    Database::get()->query("ALTER TABLE attendance_users CHANGE id id INT NOT NULL AUTO_INCREMENT");
+    Database::get()->query("ALTER TABLE attendance_users CHANGE attendance_id attendance_id INT NOT NULL");
 
-    if(!DBHelper::foreignKeyExists('attendance_activities', 'attendance_id', 'attendance', 'id')) {
-        // Use consistent data types before creating the foreign key
-        Database::get()->query('ALTER TABLE `attendance_activities`
-            CHANGE COLUMN `attendance_id` `attendance_id` INT NOT NULL DEFAULT 0,
-            CHANGE COLUMN `module_auto_id` `module_auto_id` INT NOT NULL DEFAULT 0');
-        DBHelper::createForeignKey('attendance_activities', 'attendance_id', 'attendance', 'id', DBHelper::FKRefOption_CASCADE);
+    if (!DBHelper::foreignKeyExists('attendance', 'course_id', 'course', 'id')) {
+        DBHelper::createForeignKey('attendance', 'course_id', 'course', 'id', DBHelper::FKRefOption_CASCADE, DBHelper::FKRefOption_CASCADE);
     }
-
-    if(!DBHelper::foreignKeyExists('attendance_book', 'attendance_activity_id', 'attendance_activities', 'id')) {
-        // Use consistent data types before creating the foreign key
-        Database::get()->query('ALTER TABLE `attendance_book` CHANGE COLUMN `attendance_activity_id` `attendance_activity_id` INT NOT NULL DEFAULT 0');
-
-        DBHelper::createForeignKey('attendance_book', 'attendance_activity_id', 'attendance_activities', 'id', DBHelper::FKRefOption_CASCADE);
+    if (!DBHelper::foreignKeyExists('attendance_activities', 'attendance_id', 'attendance', 'id')) {
+        DBHelper::createForeignKey('attendance_activities', 'attendance_id', 'attendance', 'id', DBHelper::FKRefOption_CASCADE, DBHelper::FKRefOption_CASCADE);
     }
-    DBHelper::createForeignKey('attendance_book', 'uid', 'user', 'id', DBHelper::FKRefOption_CASCADE);
-
-    DBHelper::createForeignKey('attendance_users', 'attendance_id', 'attendance', 'id', DBHelper::FKRefOption_CASCADE);
-    DBHelper::createForeignKey('attendance_users', 'uid', 'user', 'id', DBHelper::FKRefOption_CASCADE);
+    if (!DBHelper::foreignKeyExists('attendance_book', 'attendance_activity_id', 'attendance_activities', 'id')) {
+        DBHelper::createForeignKey('attendance_book', 'attendance_activity_id', 'attendance_activities', 'id', DBHelper::FKRefOption_CASCADE, DBHelper::FKRefOption_CASCADE);
+    }
+    if (!DBHelper::foreignKeyExists('attendance_book', 'uid', 'user', 'id')) {
+        DBHelper::createForeignKey('attendance_book', 'uid', 'user', 'id', DBHelper::FKRefOption_CASCADE, DBHelper::FKRefOption_CASCADE);
+    }
+    if (!DBHelper::foreignKeyExists('attendance_users', 'attendance_id', 'attendance', 'id')) {
+        DBHelper::createForeignKey('attendance_users', 'attendance_id', 'attendance', 'id', DBHelper::FKRefOption_CASCADE, DBHelper::FKRefOption_CASCADE);
+    }
+    if (!DBHelper::foreignKeyExists('attendance_users', 'uid', 'user', 'id')) {
+        DBHelper::createForeignKey('attendance_users', 'uid', 'user', 'id', DBHelper::FKRefOption_CASCADE, DBHelper::FKRefOption_CASCADE);
+    }
 
 
     if (!DBHelper::tableExists('ai_providers')) {
@@ -3492,7 +3499,7 @@ function upgrade_to_4_2($tbl_options) : void {
             `permission` VARCHAR(255),
              PRIMARY KEY (`id`)) $tbl_options");
 
-        Database::get()->query("INSERT INTO permissions(permission) VALUE('admin_course_users'), 
+        Database::get()->query("INSERT INTO permissions(permission) VALUE('admin_course_users'),
              ('admin_course_modules'),
              ('backup_course'),
              ('clone_course'),
@@ -3501,8 +3508,8 @@ function upgrade_to_4_2($tbl_options) : void {
     }
 
     if (!DBHelper::tableExists('user_permissions')) {
-        Database::get()->query("CREATE TABLE user_permissions (        
-            `course_id` int NOT NULL DEFAULT '0',  
+        Database::get()->query("CREATE TABLE user_permissions (
+            `course_id` int NOT NULL DEFAULT '0',
             `user_id` int unsigned NOT NULL DEFAULT '0',
             `permission_id` tinyint NOT NULL,
             PRIMARY KEY (`course_id`,`user_id`,`permission_id`)
@@ -3522,6 +3529,26 @@ function upgrade_to_4_2($tbl_options) : void {
     }
     if (!DBHelper::fieldExists('course_user_request', 'ts_update')) {
         Database::get()->query("ALTER TABLE course_user_request ADD `ts_update` DATETIME DEFAULT NULL AFTER `ts`");
+    }
+
+    if (!DBHelper::fieldExists('course', 'uuid')) {
+        Database::get()->query("ALTER TABLE course ADD `uuid` VARCHAR(40) NOT NULL DEFAULT 0 AFTER `id`");
+    }
+
+    if (!DBHelper::fieldExists('user', 'uuid')) {
+        Database::get()->query("ALTER TABLE user ADD `uuid` VARCHAR(40) NOT NULL DEFAULT 0 AFTER `id`");
+    }
+
+    if (!DBHelper::fieldExists('poll_user_record', 'session_id')) {
+        Database::get()->query("ALTER TABLE poll_user_record ADD `session_id` INT NOT NULL DEFAULT 0");
+    }
+
+    if (!DBHelper::fieldExists('exercise', 'results_date')) {
+        Database::get()->query("ALTER TABLE exercise ADD results_date DATETIME DEFAULT NULL AFTER results");
+    }
+
+    if (!DBHelper::fieldExists('assignment', 'results_date')) {
+        Database::get()->query("ALTER TABLE assignment ADD results_date DATETIME DEFAULT NULL AFTER submission_date;");
     }
 
 }

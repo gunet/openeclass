@@ -25,8 +25,13 @@ class CalculatedAnswer extends \QuestionType
 
         foreach ($answer_ids as $answer_id) {
             $answerTitle = $this->answer_object->getTitle($answer_id);
-            $arrTitle = explode(':', $answerTitle);
-            $answerVal = ((count($arrTitle) > 1) ? $arrTitle[1] : ''); // Contains the correct answer of the question
+            $res_title = unserialize($answerTitle);
+            $answerVal = '';
+            if (count($res_title) > 0) {
+                foreach ($res_title as $r) {
+                    $answerVal = $r['result'];
+                }
+            }
             $answerComment = standard_text_escape($this->answer_object->getComment($answer_id));
             $answerCorrect = $this->answer_object->isCorrect($answer_id);
             $answerWeighting = $this->answer_object->getWeighting($answer_id);
@@ -71,8 +76,13 @@ class CalculatedAnswer extends \QuestionType
 
         foreach ($answer_object_ids as $answerId) {
             $answerTitle = $this->answer_object->getTitle($answerId);
-            $arrTitle = explode(':', $answerTitle);
-            $answerVal = ((count($arrTitle) > 1) ? $arrTitle[1] : ''); // predefined answers
+            $resTitle = unserialize($answerTitle);
+            $answerVal = '';
+            if (count($resTitle) > 0) {
+                foreach ($resTitle as $r) {
+                    $answerVal = $r['result']; 
+                }
+            }
             $checked = '';
             $uniqueAnswer = '';
             if (isset($exerciseResult[$this->question_id]) && $exerciseResult[$this->question_id] != '') {
@@ -118,9 +128,11 @@ class CalculatedAnswer extends \QuestionType
         foreach ($answer_object_ids as $answerId) {
             $grade = 0;
             $answerTitle = standard_text_escape($this->answer_object->getTitle($answerId));
-            $tmpArr = explode(':', $answerTitle);
-            if (count($tmpArr) == 2) {
-                $answerTitle = round(floatval($tmpArr[1]), 2);
+            $tmpArr = unserialize($answerTitle);
+            if (count($tmpArr) > 0) {
+                foreach ($tmpArr as $r) {
+                    $answerTitle = round(floatval($r['result']), 2);
+                }
             }
             $answerComment = $this->answer_object->getComment($answerId);
             if ($this->answer_object->get_user_calculated_answer($questionId, $eurid) != null) {

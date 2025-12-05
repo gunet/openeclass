@@ -25,7 +25,7 @@
  * Defines standard functions and validates variables
  */
 
-define('ECLASS_VERSION', '4.2-dev');
+define('ECLASS_VERSION', '4.2');
 
 // mPDF library temporary file path and font path
 if (isset($webDir)) { // needed for avoiding 'notices' in some files
@@ -1002,7 +1002,7 @@ function my_basename($path) {
 
  */
 
-function format_locale_date($datetime_stamp, $format = null, $display_time = true) {
+function format_locale_date($datetime_stamp, $format = null, $display_time = true, $pattern = null) {
 
     global $language;
 
@@ -1030,9 +1030,13 @@ function format_locale_date($datetime_stamp, $format = null, $display_time = tru
         https://www.php.net/manual/en/intldateformatter.create.php
         https://www.php.net/manual/en/class.intldateformatter.php#intl.intldateformatter-constants
     */
-    $fmt = datefmt_create($locale, $format_date_style, $format_time_style, 'Europe/Athens', IntlDateFormatter::TRADITIONAL);
+    if ($pattern) {
+        $fmt = datefmt_create($locale, IntlDateFormatter::NONE, IntlDateFormatter::NONE, 'Europe/Athens', IntlDateFormatter::TRADITIONAL, $pattern);
+    } else {
+        $fmt = datefmt_create($locale, $format_date_style, $format_time_style, 'Europe/Athens', IntlDateFormatter::TRADITIONAL);
+    }
 
-    return (datefmt_format($fmt, $datetime_stamp));
+    return datefmt_format($fmt, $datetime_stamp);
 }
 
 
@@ -2319,6 +2323,38 @@ function rich_text_editor($name, $rows, $cols, $text, $onFocus = false, $options
                     parent.find('.mce-toolbar-grp, .mce-statusbar').attr('style','border:0px');
                     if (typeof tinyMceCallback !== 'undefined') {
                         tinyMceCallback(editor);
+
+                        let focusTimer;
+                        let unfocusTimer;
+                        let stopWritingTimer;
+                        const activityDelay = 2000;
+                        localStorage.setItem('isTinyMCEFocused', 'false');
+
+                        // When editor gains focus
+                        editor.on('focus', () => {
+                            // Clear unfocus timer if active
+                            clearTimeout(unfocusTimer);
+                            // Set focused state
+                            localStorage.setItem('isTinyMCEFocused', 'true');
+                        });
+
+                        // When editor loses focus
+                        editor.on('blur', function () {
+                            localStorage.setItem('isTinyMCEFocused', 'false');
+                        });
+
+                        // When user presses a key (writing)
+                        editor.on('keydown', () => {
+                            // Mark editor as focused
+                            localStorage.setItem('isTinyMCEFocused', 'true');
+                            // Reset the stop writing timer
+                            clearTimeout(stopWritingTimer);
+                            stopWritingTimer = setTimeout(() => {
+                                // User stopped writing for 2 seconds
+                                localStorage.setItem('isTinyMCEFocused', 'false');
+                            }, activityDelay);
+                        });
+
                     }";
         if ($onFocus) {
             $focus_init .= "parent.find('.mce-toolbar-grp').hide();";
@@ -3954,7 +3990,7 @@ function action_button($options, $secondary_menu_options = array(), $fc=false) {
     $primary_form_begin = $primary_form_end = $primary_icon_class = '';
 
     foreach (array_reverse($options) as $option) {
-        $level = isset($option['level'])? $option['level']: 'secondary';
+        $level = $option['level'] ?? 'secondary';
         // skip items with show=false
         if (isset($option['show']) and !$option['show']) {
             continue;
