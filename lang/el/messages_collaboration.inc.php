@@ -35,14 +35,14 @@ $langsOfTeachers = "συντονιστών";
 $langCTeacher = "ΣΥΝΤΟΝΙΣΤΗΣ";
 
 $langConsultant = "Σύμβουλος";
-$langOfConsultant = "Συμβούλου";
+$langOfConsultant = "Σύμβουλο";
 $langConsultants = "Σύμβουλους";
 $langOfConsultants = "Συμβούλων";
 
-$langsConsultant = "σύμβουλος";
-$langsOfConsultant = "συμβούλου";
-$langsConsultants = "σύμβουλοι";
-$langsOfConsultants = "συμβούλων";
+$langsTeacher = "σύμβουλος";
+$langsOfTeacher = "σύμβουλο";
+$langsTeachers = "σύμβουλοι";
+$langsOfTeachers = "σύμβούλων";
 
 $langCourseAdminTeacher = "Διαχειριστής - Συντονιστής";
 $langOfCourseAdminTeacher = "Διαχειριστή - Συντονιστή";
@@ -116,6 +116,7 @@ $langHelpPowerUser = "Ο βοηθός διαχειριστή διαχειρίζ�
  * ************************************************** */
 // index
 $langSpeeSubscribe = "Εγγραφή ως Διαχειριστής $langOfCourse";
+$langMonthlyReportInfo = "Παρουσιάζονται συγκεντρωτικά στοιχεία (συνεργασίες, χρήστες) των τελευταίων 12 μηνών.";
 $langListCours = "Λίστα $langOfCourses / Ενέργειες";
 $langProfReg = "Εγγραφή $langOfTeacher";
 $langProfOpen = "Αιτήσεις $langOfTeachers";
@@ -277,7 +278,7 @@ $langReqRegUser = "Αίτηση εγγραφής $langsOfStudent";
 $langCourseSettings = "Ρυθμίσεις $langsOfCourses";
 $langCourseOfflineSettings = "Κατέβασμα $langsOfCourse";
 $langCourseOfflineLegend = "Τα $langsStudents μπορούν να κατεβάσουν την $langsCourse στον υπολογιστή τους.";
-$langUserConsent = "Συναίνεση $langsOfStudent";
+$langUserConsent = "Συμμετοχή $langsOfStudent";
 $langUnsubscribeCourse = "Απενεργοποίηση απεγγραφής συνεργασίας";
 $langClassInfoTitle = "Στοιχεία συνεργασίας";
 $langStuNum = "Αριθμός Μελών";
@@ -1284,7 +1285,7 @@ $langCreateCourseLeftForm = "Η δημιουργία συνεργασίας εί
                              Καθορίστε, προαιρετικά, την άδεια διάθεσης της συνεργασίας σας.</br></br>
                              Καθορίστε τον τύπο πρόσβασης στην συνεργασία σας. </br></br>
                              Για να ολοκληρωθεί η διαδικασία δημιουργίας της συνεργασίας, πατήστε το κουμπί με την ένδειξη «Δημιουργία Συνεργασίας».";
-$langMonthlyReportInfo = "Παρουσιάζονται συγκεντρωτικά στοιχεία (συνεργασίες, χρήστες) των τελευταίων 24 μηνών.";
+$langMonthlyReportInfo = "Παρουσιάζονται συγκεντρωτικά στοιχεία (συνεργασίες, χρήστες) των τελευταίων 12 μηνών.";
 $langAddingDirectoryIndex = 'Προσθήκη αρχείων index.html στους υποκαταλόγους συνεργασιών';
 $langAdministratorGroup = 'Διαχείριση Ομάδων Χρηστών';
 $m['WorkToAllUsers'] = "Σε όλα τα $langsOfStudentss";
@@ -1337,6 +1338,7 @@ $lang_restrict_teacher_owndep = "Να μην επιτρέπεται η δημι�
 $lang_allow_teacher_clone_course = "Να επιτρέπεται η κλωνοποίηση $langsOfCourses από τους $langsTeachers";
 $lang_disable_log_course_actions = "Απενεργοποίηση καταγραφής ενεργειών χρηστών μέσα στα $langsCourses";
 $lang_disable_log_system_actions = "Απενεργοποίηση καταγραφής ενεργειών χρηστών εκτός $langsOfCourses";
+$langUnsubscribeCourse = "Απενεργοποίηση απεγγραφής συνεργασίας";
 $langDefaultInstitutionName = 'Ακαδημαϊκό Διαδίκτυο GUNet';
 $lang_course_metadata = "Μετασχολιασμός $langOfCourses";
 /* * **********************************************************
@@ -1487,7 +1489,7 @@ $langDelAllSessionSuccess = "Οι συνεδρίες διαγράφηκαν επ
 $langALLSessions = "Όλες";
 $langSubmitCompletion = "Υποβολή ολοκλήρωσης";
 $langContinueToUserAwarded = "Η ενέργεια αυτή σχετίζεται με την ολοκλήρωση παραδοτέου του χρήστη και αφορά την δραστηριότητα που αναγράφεται στην στήλη «Αφορά» του πίνακα.</br>
-                              Θέλετε να προχωρήσετε στην συγκεκριμένη ενέργεια;";
+                              Θέλετε να προχωρήσετε στη συγκεκριμένη ενέργεια;";
 $langDocCompletionSuccess = "Η ενέργεια ολοκληρώθηκε επιτυχώς.";
 $langNoSubmitCompletion = "Ακύρωση ολοκλήρωσης";
 $langContinueToNoSubmiCompletion = "Θέλετε να προχωρήσετε στην ακύρωση ολοκλήρωσης";
@@ -1497,7 +1499,7 @@ $langViewDeliverable = "Προβολή παραδοτέων";
 $langExistResourcesForCompletion = "Υπάρχουν πόροι προς ολοκλήρωση. Η απενεργοποίηση δεν ολοκληρώθηκε.";
 $langExistsInCompletedPrerequisite = "Υπάρχει προαπαιτούμενη συνεδρία που δεν έχει ολοκληρωθεί.";
 $langInfoForUploadedDeliverable = "Μπορείτε να διαγράψετε το παραδοτέο σας εφόσον δεν έχει ελεγχθεί από τον σύμβουλο.";
-$langUsedCertRes = "Η δραστηριότητα έχει ήδη χρησιμοποιηθεί από κάποιον ωφελούμενο.";
+$langUsedCertRes = "Η δραστηριότητα έχει ήδη χρησιμοποιηθεί από κάποιον ωφελούμενο και δεν μπορεί να αφαιρεθεί.";
 $langFileExistsWithSameName = "Υπάρχει αρχείο με το ίδιο όνομα. Το ανέβασμα δεν ολοκληρώθηκε.";
 $langAddCompletionCriteria = "Προσθήκη κριτηρίων";
 $langUserDeliverable = "Παραδοτέα χρήστη";
@@ -1511,6 +1513,9 @@ $langNotExistDeliverables = "Δεν υπάρχουν παραδοτέα";
 $langTypeOutComment = "Πληκτρολογήστε το σχόλιο σας...";
 $langAddCommentsSuccess = "Το σχόλιο σας προστέθηκε με επιτυχία.";
 $langCommentsByConsultant = "Σχόλια συμβούλου";
+$langSubmissionOnBehalfOfUser = "Διαδικασία συμπλήρωσης εργαλείου εκ μέρους του χρήστη";
+$langChooseAUser = "Δεν επιλέξατε χρήστη. Δοκιμάστε πάλι.";
+$langProcessForFiliInTool = "Βρίσκεστε στην διαδικασία ολοκλήρωσης της συμπλήρωσης του εργαλείου αναφορικά με τον επιλεγμένο χρήστη.";
 $langInsertPassage = "Προσθήκη κειμένου";
 $langSomeComments = "Ενημέρωση σχετικά με το παραδοτέο σας";
 $langSendEmailWithComments = "Με την υποβολή των σχόλιων σας, θα σταλεί ειδοποίηση στον χρήστη.";
@@ -1521,27 +1526,27 @@ $langSessionAcceptance = "Έχετε επιλεγεί να συμμετάσχε�
                           Για να ολοκληρωθεί η διαδικασία θα πρέπει να πατήσετε στο παρακάτω σύνδεσμο.
                           Ο σύνδεσμος θα σας ανακατευθύνει στην σελίδα της συνεδρίας αφού πρώτα συνδεθείτε στην πλατφόρμα.
                           Για να προχωρήσετε στην εγγραφή πατήστε υποβολή.";
-$langQuestionAcceptanceSession = "Αποδέχεστε την εγγραφή σας στην συγκεκριμένη συνεδρία;</br>
+$langQuestionAcceptanceSession = "Αποδέχεστε τη συμμετοχή σας στη συγκεκριμένη συνεδρία;</br>
                                  Ο Σύμβουλος θα ενημερωθεί με ηλεκτρονικό μήνυμα σχετικά με την επιλογής.";
 $langUserHasAcceptedSession = "ΕΓΙΝΕ αποδοχή της εγγραφής στην συνεδρία από τον χρήστη:";
 $langUserHasNotAcceptedSession = "ΔΕΝ έγινε αποδοχή της εγγραφής στην συνεδρία από τον χρήστη:";
 $langProcessCompleted = "Ολοκληρώσατε με επιτυχία την διαδικασία.";
 $langAnnouncedExistingSession = "Οι χρήστες που θα επιλεχθούν θα ενημερωθούν με σχετικό mail για να εγγραφούν στην συνεδρία.";
 $langNotExistUsers = "Δεν υπάρχουν ωφελούμενοι";
-$langWithConsent = "Να συναινέσει ο χρήστης για την συμμετοχή του στην συνεδρία;";
-$langInfoWithConsent = "Ο χρήστης θα εγγραφεί αυτόματα στην συνεδρία αν δεν επιλεχθεί η συναίνεση χρήστη.";
-$langContinueToRegistrationSession = "Η ακόλουθη διαδικασία θα οριστικοποιήσει την εγγραφή σας στην τρέχουσα συνεδρία. Θέλετε να προχωρήσετε στην συγκεκριμένη ενέργεια?";
-$langCompleteRegistration = "Η εγγραφή σας ολοκληρώθηκε με επιτυχία! Έχετε εισέλθει στον χώρο της συνεδρίας σας.";
-$langUserConsent = "Συναίνεση χρηστών";
-$langInProgressRegistration = "Εκκρεμεί η εγγραφή του χρήστη ...";
-$langSubmitRegistration = "Εγγραφή χρήστη";
+$langWithConsent = "Να ζητηθεί επιβεβαίωση του ωφελούμενου κατά την είσοδό του στη συνεδρία;";
+$langInfoWithConsent = "Αν δεν το επιλέξετε, ο χρήστης δεν θα συναινέσει και θα συμμετάσχει κανονικά στην συνεδρία.";
+$langContinueToRegistrationSession = "Η ακόλουθη διαδικασία θα οριστικοποιήσει την συμμετοχή σας στην τρέχουσα συνεδρία. Θέλετε να προχωρήσετε στην συγκεκριμένη ενέργεια?";
+$langCompleteRegistration = "Η συμμετοχή σας ολοκληρώθηκε με επιτυχία! Έχετε εισέλθει στον χώρο της συνεδρίας σας.";
+$langUserConsent = "Συμμετοχή χρηστών";
+$langInProgressRegistration = "Εκκρεμεί η συμμετοχή του χρήστη ...";
+$langSubmitRegistration = "Συμμετοχή χρήστη";
 $langNoSubmitRegistration = "Απεγγραφή";
-$langCancelSessionRegistration = "Ο χρήστης θα απεγγραφεί προσωρινά από την τρέχουσα συνεδρία αλλά θα μπορεί να εγγραφεί ξανά.
-                                  Η διαδικασία ολοκλήρωσης της συνεδρίας από τον συγκεκριμένο χρήστη δεν θα αφαιρεθεί.
+$langCancelSessionRegistration = "Ο χρήστης ΔΕ θα συμμετάσχει προσωρινά στην τρέχουσα συνεδρία αλλά θα μπορεί να συμμετάσχει ξανά.
+                                  Η διαδικασία ολοκλήρωσης της συνεδρίας από τον συγκεκριμένο χρήστη δε θα αφαιρεθεί.
                                   Για την οριστική διαγραφή του , συμπεριλαμβανομένου και της προόδου του σχετικά με την ολοκλήρωση της συνεδρίας, μπορείτε να μεταβείτε στην επιλογή <strong>επεξεργασία</strong>.</br></br>
                                   Θέλετε να συνεχίσετε?";
 $langInfoAboutDelUser = "Η αφαίρεση ενός χρήστη, θα διαγράψει οριστικά και την πρόοδο του σχετικά με την ολοκλήρωση της συνεδρίας.";
-$langUserReferences = "Αναφορές χρηστών";
+$langUserReferences = "Αποτύπωση ολοκλήρωσης συνεδρίας";
 $langUserHasCompleted = "Έχει ολοκληρώσει";
 $langNotUploadedDeliverable = "Ο χρήστης δεν έχει υποβάλει κάποιο παραδοτέο";
 $langNoCommentsAvailable = "Δεν υπάρχουν σχόλια";
@@ -1560,14 +1565,14 @@ $langSessionsHasExpired = "Έχουν παρέλθει";
 $langNoSessionInProgress =  "Δεν υπάρχει συνεδρία σε εξέλιξη";
 $langWithMeetingCompletion = "Με την ολοκλήρωση της δια ζώσης συνάντησης";
 $langContinueToCompletetionWithMeeting = "Η συνεδρία θα ολοκληρωθεί με το κριτήριο ολοκλήρωσης της προγραμματισμένης δια ζώσης συνάντησης. </br>
-                                          Θέλετε να προχωρήσετε στην συγκεκριμένη ενέργεια?";
+                                          Θέλετε να προχωρήσετε στη συγκεκριμένη ενέργεια;";
 $langCompletedSessionWithMeeting = "Με την ολοκλήρωση της δια ζώσης συνάντησης";
 $langCompletedSessionMeeting = "Ολοκλήρωση δια ζώσης συνάντησης";
 $langInfoForbiddenAddPrereq = "Η ενέργεια που επιχειρήσατε δεν μπορεί να ολοκληρώθει καθώς η τρέχουσα συνεδρία είναι ολοκλήρωμενη από όλους τους χρήστες
                                 ενώ επιλέξατε προαπαιτούμενη συνεδρία στην οποία υπάρχουν ανεκπλήρωτα κριτήρια ολοκλήρωσης.";
 $langAllCompletedResources = "Οι πόροι της συνεδρίας έχουν εκτελεστεί επιτυχώς από τον χρήστη.";
 $langShowReportUserTable = "Αναφορές συνεδριών χρήστη";
-$langShowReportUserCurrentSession = "Αναφορά χρήστη τρέχουσας συνεδρίας";
+$langShowReportUserCurrentSession = "Παρουσιολόγιο χρήστη τρέχουσας συνεδρίας";
 $langCompletionResources = "Πόροι ολοκλήρωσης";
 $langCompletedResources = "Ολοκληρωμένοι πόροι";
 $langResourceAsActivity = "Πόροι ολοκλήρωσης συνεδρίας";
@@ -1595,3 +1600,5 @@ $langInfoIfTcExists = "Η επιλογή τύπου δια ζώσης έχει �
 $langInfoIfMeetingExists = "Η επιλογή τύπου εξ αποστάσεως έχει απενεργοποιηθεί καθώς υπάρχει ενεργό το κριτήριο της ολοκλήρωσης δια ζώσης συνάντησης.";
 $infoPrereqSession = "Η συνεδρία που θα επιλέξετε ως προαπαιτούμενη θα πρέπει να διαθέτει τουλάχιστον ένα κριτήριο ολοκλήρωσης.</br>
                       Διαφορετικά το σύστημα θα αγνοήσει την διαδικασία υπολογισμού προαπαιτούμενης συνεδρίας.";
+$langConfirmParticipation = "Επιβεβαίωση συμμετοχής";
+$langReportAttendances = "Αναφορές - Παρουσιολόγια";

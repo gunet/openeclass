@@ -594,10 +594,6 @@ if (isset($_GET['mid'])) {
                                 }
                             }
                         });
-
-
-
-
                     });
 
                     $(".delete").click(function() {
@@ -647,8 +643,7 @@ if (isset($_GET['mid'])) {
     $out .= "
 
     <script type='text/javascript'>
-               $(document).ready(function() {
-
+           $(document).ready(function() {
                  var oTable = $('#inbox_table').DataTable({
                    'aoColumnDefs':[{'sClass':'option-btn-cell text-end', 'aTargets':[-1]}],
                    'bStateSave' : true,
@@ -656,9 +651,9 @@ if (isset($_GET['mid'])) {
                    'sDom': '<\"top\"fl<\"clear\">>rt<\"bottom\"ip<\"clear\">>',
                    'bServerSide': true,
                    'searchDelay': 1000,
-                   ajax: {
-                        url: '$ajax_url_inbox',
-                        type: 'POST'
+                   'ajax': {
+                        'url': '$ajax_url_inbox',
+                        'type': 'POST'
                     }, 
                    'lengthMenu': [10, 15, 20 , -1],
                    'sPaginationType': 'full_numbers',
@@ -677,6 +672,7 @@ if (isset($_GET['mid'])) {
                         },
                         'sLengthMenu':   '" . js_escape("$langDisplay _MENU_ $langResults2") . "',                                                                        
                         'sZeroRecords':  '".js_escape("$langNoResult")."',
+                        'sEmptyTable':   '" . js_escape("$langNoResult") . "',
                         'sInfo':         '".js_escape("$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults")."',
                         'sInfoEmpty':    '',
                         'sInfoFiltered': '',
@@ -715,22 +711,17 @@ if (isset($_GET['mid'])) {
                             if(result) {
                                 $.ajax({
                                     type: 'POST',
-                                    url: '$ajax_url',
-                                    datatype: 'json',
+                                    url: '$ajax_url',                                    
                                     data: string,
-                                    success: function(data){
-                                        var num_page_records = oTable.fnGetData().length;
-                                        var per_page = $('#inbox_table').DataTable().page.info().length;
-                                        var page_number = $('#inbox_table').DataTable().page.info().page;
-                                        if(num_page_records==1){
-                                            if(page_number!=0) {
-                                                page_number--;
-                                            }
-                                        }
+                                    stateSave: true,
+                                    cache: false,
+                                    success: function(data){                 
+                                        var info = oTable.page.info();
+                                        var page_number = info.page;
+                                        oTable.draw(false);                                                                                                                                                                
                                         $('#del_msg').html('<p class=\'alert alert-success\'><i class=\'fa-solid fa-circle-check fa-lg\'></i><span>".js_escape($langMessageDeleteSuccess)."</span></p>');
                                         $('.alert-success').delay(3000).fadeOut(1500);
                                         $('#msg_area').remove();
-                                        oTable.fnPageChange(page_number);
                                     },
                                     error: function(xhr, textStatus, error){
                                         console.log(xhr.statusText);
@@ -767,27 +758,19 @@ if (isset($_GET['mid'])) {
                                     data: string,
                                     cache: false,
                                     success: function(){
-                                        var num_page_records = oTable.fnGetData().length;
-                                        var per_page = $('#inbox_table').DataTable().page.info().length;
-                                        var page_number = $('#inbox_table').DataTable().page.info().page;
-                                        if(num_page_records==1){
-                                            if(page_number!=0) {
-                                                page_number--;
-                                            }
-                                        }
+                                        var info = oTable.page.info();
+                                        var page_number = info.page;
+                                        oTable.draw(false);
                                         $('#del_msg').html('<p class=\'alert alert-success\'><i class=\'fa-solid fa-circle-check fa-lg\'></i><span>".js_escape($langMessageDeleteAllSuccess)."</span></p>');
                                         $('.alert-success').delay(3000).fadeOut(1500);
-                                        oTable.fnPageChange(page_number);
                                     }
                                 });
                             }
                         }
                     });
-
                 });
-
-               });
-             </script>";
+           });
+     </script>";
 }
 
 echo $out;

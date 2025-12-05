@@ -388,7 +388,7 @@ function getUserCourseInfo($uid): string
  */
 function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') {
 
-    global $urlAppend, $langAdminAn;
+    global $urlAppend, $langAdminAn, $language;
 
     if ($type == 'more') {
         $sql_append = '';
@@ -412,11 +412,12 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
                                              admin_announcement.id
                                 FROM admin_announcement
                                 WHERE admin_announcement.visible = 1
+                                        AND lang = ?s
                                         AND (admin_announcement.begin <= " . DBHelper::timeAfter() . " OR admin_announcement.begin IS NULL)
                                         AND (admin_announcement.end >= " . DBHelper::timeAfter() . " OR admin_announcement.end IS NULL)
                                         AND admin_announcement.`date` >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH) $admin_filter_sql
                                  ORDER BY an_date DESC
-                         $sql_append", $filter_param);
+                         $sql_append", $languge, $filter_param);
     } else {
 
         $course_id_sql = implode(', ', array_fill(0, count($lesson_id), '?d'));
@@ -443,11 +444,12 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
                                              admin_announcement.id, admin_announcement.body AS content, '', ''
                                 FROM admin_announcement
                                 WHERE admin_announcement.visible = 1
+                                      AND lang = ?s
                                       AND (admin_announcement.begin <= " . DBHelper::timeAfter() . " OR admin_announcement.begin IS NULL)
                                       AND (admin_announcement.end >= " . DBHelper::timeAfter() . " OR admin_announcement.end IS NULL)
                                       AND admin_announcement.`date` >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH) $admin_filter_sql
                                 ) ORDER BY an_date DESC
-                         $sql_append", $lesson_id, $filter_param, $filter_param);
+                         $sql_append", $lesson_id, $language, $filter_param, $filter_param);
     }
 
     if ($to_ajax) {
@@ -665,7 +667,7 @@ function CountTeacherCollaborations($uid) {
                     ON course.id = course_user.course_id
             AND course_user.user_id = ?d
             AND course.is_collaborative = ?d
-            AND (course.visible != " . COURSE_INACTIVE . " OR 
+            AND (course.visible != " . COURSE_INACTIVE . " OR
                  course_user.status = " . USER_TEACHER . " OR
                  course_user.course_reviewer = 1 OR
                  course_user.editor = 1)", $uid, 1)->total;

@@ -93,7 +93,6 @@ function show_form($id, $sid, $assign) {
         } else {
             $sel_criteria = [];
         }
-
 		$criteria_list = "";
 		foreach ($criteria as $ci => $criterio ) {
 			$criteria_list .= "<li class='list-group-item'>$criterio[title_name] <b>($criterio[crit_weight]%)</b></li>";

@@ -72,12 +72,7 @@ if(isset($_POST['modify'])){
 
   if($v->validate()) {
 
-    print_r('start:'.$_POST['start_session'].'end:'.$_POST['end_session']);
-
     if(!empty($_POST['start_session'])){
-      // $start_at = DateTime::createFromFormat("d-m-Y H:i", $_POST['start_session']);
-      // $start_session = $start_at->format("Y-m-d H:i");
-      // $test_start_session = $start_at->format("Y-m-d H:i:s");
       $start_session = date('Y-m-d H:i', strtotime($_POST['start_session']));
       $test_start_session = date('Y-m-d H:i:s', strtotime($_POST['start_session']));
     }else{
@@ -85,9 +80,6 @@ if(isset($_POST['modify'])){
     }
 
     if(!empty($_POST['end_session'])){
-      // $end_at = DateTime::createFromFormat("d-m-Y H:i", $_POST['end_session']);
-      // $end_session = $end_at->format("Y-m-d H:i");
-      // $test_end_session = $end_at->format("Y-m-d H:i:s");
       $end_session = date('Y-m-d H:i', strtotime($_POST['end_session']));
       $test_end_session = date('Y-m-d H:i:s', strtotime($_POST['end_session']));
     }else{
@@ -134,7 +126,7 @@ if(isset($_POST['modify'])){
                                     start_date = ?t,
                                     end_date = ?t
                                     WHERE course_id = ?d
-                                    AND id_session = ?d", $start_session, $end_session, $course_id, $_GET['session']);
+                                    AND id_session = ?d", $start_session, null, $course_id, $_GET['session']);
     }
 
 
@@ -261,6 +253,9 @@ if(isset($_POST['modify'])){
       }
     }
 
+    // Update participants for teleconference.
+    update_tc_participants($_GET['session']);
+
     // Send notification - email to the user - participant
     if(isset($consent) && $consent){
       $course_title = course_id_to_title($course_id);
@@ -367,6 +362,7 @@ $data['sessionID'] = $_GET['session'];
 $data['session_info'] = $session_info = Database::get()->querySingle("SELECT * FROM mod_session WHERE id = ?d",$_GET['session']);
 $data['title'] = $session_info->title;
 $data['creator'] = $session_info->creator;
+$data['modifyStartDateEvent'] = date('Y-m-d',strtotime($session_info->start));
 $data['comments'] = rich_text_editor('comments', 5, 40, $session_info->comments);
 $data['session_type'] = $session_info->type;
 $startDate_obj = DateTime::createFromFormat('Y-m-d H:i:s', $session_info->start);

@@ -351,7 +351,7 @@ function drag_and_drop_process() {
 
                 // If blank already has a word, do nothing
                 if (thisBlank.children().length > 0) {
-                    alert(lang.blanknotempty);
+                    showCustomModal(lang.blanknotempty);
                     return;
                 }
 
@@ -362,7 +362,7 @@ function drag_and_drop_process() {
                 var word = draggedWord.clone();
                 var poolOfWord = word.attr('data-pool-id');
                 if (thisCardOfBlank!=poolOfWord){
-                    alert(lang.blankotherquestion);
+                    showCustomModal(lang.blankotherquestion);
                     return;
                 }
 
@@ -1185,4 +1185,55 @@ function fixFloat(str) {
         return 0.0;
     }
     return parseFloat(str.replace(',', '.'));
+}
+
+function showCustomModal(message) {
+    // Create overlay
+    const overlay = document.createElement('div');
+    overlay.style.position = 'fixed';
+    overlay.style.top = 0;
+    overlay.style.left = 0;
+    overlay.style.width = '100%';
+    overlay.style.height = '100%';
+    overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+    overlay.style.display = 'flex';
+    overlay.style.alignItems = 'center';
+    overlay.style.justifyContent = 'center';
+    overlay.style.zIndex = 1000;
+
+    // Create modal box
+    const modalBox = document.createElement('div');
+    modalBox.style.backgroundColor = '#fff';
+    modalBox.style.padding = '20px';
+    modalBox.style.borderRadius = '8px';
+    modalBox.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)';
+    modalBox.style.maxWidth = '400px';
+    modalBox.style.width = '80%';
+    modalBox.style.textAlign = 'center';
+
+    // Create message element
+    const messageEl = document.createElement('p');
+    messageEl.innerText = message;
+
+    // Create OK button
+    const okButton = document.createElement('button');
+    okButton.innerText = 'OK';
+    okButton.style.marginTop = '20px';
+    okButton.style.padding = '10px 20px';
+    okButton.style.border = 'none';
+    okButton.style.borderRadius = '4px';
+    okButton.style.backgroundColor = '#007bff';
+    okButton.style.color = '#fff';
+    okButton.style.cursor = 'pointer';
+
+    // Append elements
+    modalBox.appendChild(messageEl);
+    modalBox.appendChild(okButton);
+    overlay.appendChild(modalBox);
+    document.body.appendChild(overlay);
+
+    // When OK is clicked, remove modal
+    okButton.onclick = function() {
+        document.body.removeChild(overlay);
+    };
 }

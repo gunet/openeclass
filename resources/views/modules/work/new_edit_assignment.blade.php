@@ -156,7 +156,7 @@
                                                         </div>
                                                         <span class='help-block'>
                                                             @if (Session::hasError('WorkStart_review'))
-                                                                Session::getError('WorkStart_review')
+                                                                {{ Session::getError('WorkStart_review') }}
                                                             @else
                                                                 <i class='fa fa-share fa-rotate-270'></i> {{ trans('langReviewDateHelpBlock') }})
                                                             @endif
@@ -179,7 +179,7 @@
                                                         </div>
                                                         <span class='help-block'>
                                                             @if (Session::hasError('WorkEnd_review'))
-                                                                Session::getError('WorkEnd_review')
+                                                                {{ Session::getError('WorkEnd_review') }}
                                                             @else
                                                                 <i class='fa fa-share fa-rotate-270'></i> {{ trans('langAssignmentEndHelpBlock') }}
                                                             @endif
@@ -233,7 +233,7 @@
                                                     </div>
                                                     <span class='help-block'>
                                                         @if (Session::hasError('WorkStart'))
-                                                            Session::getError('WorkStart')
+                                                            {{ Session::getError('WorkStart') }}
                                                         @else
                                                             &nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i> {{ trans('langAssignmentStartHelpBlock') }}
                                                         @endif

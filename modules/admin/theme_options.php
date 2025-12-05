@@ -78,8 +78,8 @@ $defaults = array(
                 "" => array('fluidContainerWidth','maxHeightJumbotron','maxWidthTextJumbotron', 'sliderWidthImgForm')
             );
 $active_theme = get_config('theme_options_id');
-$preview_theme = isset($_SESSION['theme_options_id']) ? $_SESSION['theme_options_id'] : NULL;
-$theme_id = isset($preview_theme) ? $preview_theme : $active_theme;
+$preview_theme = $_SESSION['theme_options_id'] ?? NULL;
+$theme_id = $preview_theme ?? $active_theme;
 if (isset($_GET['reset_theme_options'])) {
     unset($_SESSION['theme_options_id']);
     redirect_to_home_page('modules/admin/theme_options.php');
@@ -171,7 +171,7 @@ if (isset($_POST['import'])) {
         if (move_uploaded_file($_FILES['themeFile']['tmp_name'], "courses/theme_data/$file_name")) {
             require_once 'modules/admin/extconfig/externals.php';
             $connector = AntivirusApp::getAntivirus();
-            if($connector->isEnabled() == true ){
+            if ($connector->isEnabled()) {
                 $output=$connector->check("courses/theme_data/$file_name");
                 if($output->status==$output::STATUS_INFECTED){
                     AntivirusApp::block($output->output);
@@ -179,6 +179,15 @@ if (isset($_POST['import'])) {
             }
             $archive = new ZipArchive();
             if ($archive->open("courses/theme_data/$file_name")) {
+                // validate contents of zip archive
+                for ($i = 0; $i < $archive->numFiles; $i++) {
+                    $stat = $archive->statIndex($i, ZipArchive::FL_ENC_RAW);
+                    $files_in_zip[$i] = $stat['name'];
+                    if (!empty(my_basename($files_in_zip[$i]))) {
+                        validateUploadedFile(my_basename($files_in_zip[$i]), 3);
+                    }
+                }
+                // extract zip archive
                 $archive->extractTo('courses/theme_data/temp');
                 unlink("$webDir/courses/theme_data/$file_name");
                 $base64_str = file_get_contents("$webDir/courses/theme_data/temp/theme_options.txt");

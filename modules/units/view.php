@@ -40,6 +40,9 @@ switch ($res_type) {
     case 'exercise_results':
         require_once '../exercise/exercise_result.php';
         exit;
+    case 'exercise_results_list':
+        require_once '../exercise/results.php';
+        exit;
     case 'videolink':
         require_once '../video/playlink.php';
         exit;

@@ -33,6 +33,7 @@ $helpTopic = 'add_session';
 require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
+require_once 'modules/progress/process_functions.php';
 require_once 'functions.php';
 
 check_activation_of_collaboration();
@@ -129,86 +130,117 @@ if(isset($_POST['submit'])){
     }
 
     if($insert_users){
+      $course_title = course_id_to_title($course_id);
+      $creatorName = Database::get()->querySingle("SELECT givenname FROM user WHERE id = ?d",$creator)->givenname;
+      $creatorSurname = Database::get()->querySingle("SELECT surname FROM user WHERE id = ?d",$creator)->surname;
+      $dateFrom = format_locale_date(strtotime($start_session), 'short');
+      $dateEnd = format_locale_date(strtotime($end_session), 'short');
+      $is_remote_session = (isset($type_remote) && $type_remote) ? "$langRemote" : "$langNotRemote";
+      $session_id = $insert->lastInsertID;
 
+      // Completion session automatically.
+      add_certificate('badge', $langSessionCompletion, '', $langSessionCompletionMessage,'', q(get_config('institution')), 1, -1, null, 0, $session_id);
+      Database::get()->query("INSERT INTO mod_session_completion SET course_id = ?d, session_id = ?d",$course_id, $session_id);
+      $badge = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND session_id = ?d",$course_id, $session_id);
+      if($badge){
+        $badge_id = $badge->id;
+        $b_res = Database::get()->query("INSERT INTO badge_criterion SET badge = ?d, activity_type = ?s", $badge_id, 'autocomplete');
+        $badge_criterion_id = $b_res->lastInsertID;
+        $participants = Database::get()->queryArray("SELECT participants FROM mod_session_users WHERE session_id = ?d AND is_accepted = ?d", $session_id, 1);
+        if(count($participants) > 0){
+          foreach($participants as $p){
+            Database::get()->query("INSERT INTO user_badge SET 
+                                    user = ?d, 
+                                    badge = ?d, 
+                                    completed = 0, 
+                                    completed_criteria = 0, 
+                                    total_criteria = 1, 
+                                    `updated` = " . DBHelper::timeAfter() . ", 
+                                    `assigned` = " . DBHelper::timeAfter() . "", $p->participants, $badge_id);
+          }
+        }
+      }
+      
       // Send notification - email to the user - participant if this session has consent option
+      $link_acceptance = '';
+      $link_html = '';
       if(isset($consent) && $consent){
-        $course_title = course_id_to_title($course_id);
-        $creatorName = Database::get()->querySingle("SELECT givenname FROM user WHERE id = ?d",$creator)->givenname;
-        $creatorSurname = Database::get()->querySingle("SELECT surname FROM user WHERE id = ?d",$creator)->surname;
-        $dateFrom = format_locale_date(strtotime($start_session), 'short');
-        $dateEnd = format_locale_date(strtotime($end_session), 'short');
-        $is_remote_session = (isset($type_remote) && $type_remote) ? "$langRemote" : "$langNotRemote";
-        $session_id = $insert->lastInsertID;
         $link_acceptance = $urlServer . "modules/session/session_acceptance.php?course=$course_code&session=$session_id";
+        $link_html .= "<div class='mt-4'>
+                                    <p>$langSessionAcceptance</p>
+                                    <a href='$link_acceptance' target='_blank' aria-label='$langOpenNewTab'>$link_acceptance</a>
+                                  </div>";
+      }else{
+        $link_session = $urlServer . "modules/session/session_space.php?course=$course_code&session=$session_id";
+        $link_html .= "<div class='mt-4'>
+                        <a href='$link_session' target='_blank' aria-label='$langOpenNewTab'>$link_session</a>
+                      </div>";
+      }
 
-        $emailHeader = "
-        <!-- Header Section -->
-                <div id='mail-header'>
-                    <br>
-                    <div>
-                        <div id='header-title'>$langAvailableSession&nbsp;&nbsp;<span>($course_title)</span></div>
-                    </div>
-                </div>";
+      $emailHeader = "
+      <!-- Header Section -->
+              <div id='mail-header'>
+                  <br>
+                  <div>
+                      <div id='header-title'>$langAvailableSession&nbsp;&nbsp;<span>($course_title)</span></div>
+                  </div>
+              </div>";
 
-        $emailMain = "
-        <!-- Body Section -->
-            <div id='mail-body'>
-                <br>
-                <div>$langDetailsSession</div>
-                <div id='mail-body-inner'>
-                    <div class='mb-4'>
-                      <p>$langSessionAcceptance</p>
-                      <a href='$link_acceptance' target='_blank' aria-label='$langOpenNewTab'>$link_acceptance</a>
-                    </div>
-                    <ul id='forum-category'>
-                        <li>
-                          <span><b>$langTitle: </b></span> 
-                          <span>$title</span>
-                        </li>
-                        <li>
-                          <span><b>$langConsultant: </b></span> 
-                          <span>$creatorName $creatorSurname</span>
-                        </li>
-                        <li>
-                          <span><b>$langStartDate: </b></span>
-                          <span>$dateFrom</span>
-                        </li>
-                        <li>
-                          <span><b>$langEndDate: </b></span>
-                          <span>$dateEnd</span>
-                        </li>
-                        <li>
-                          <span><b>$langTypeRemote: </b></span>
-                          <span>$is_remote_session</span>
-                        </li>
-                    </ul>
-                </div>
-                <div>
-                    <br>
-                    <p>$langProblem</p><br>" . get_config('admin_name') . "
-                    <ul id='forum-category'>
-                        <li>$langManager: $siteName</li>
-                        <li>$langTel: -</li>
-                        <li>$langEmail: " . get_config('email_helpdesk') . "</li>
-                    </ul>
-                </div>
-            </div>";
+      $emailMain = "
+      <!-- Body Section -->
+          <div id='mail-body'>
+              <br>
+              <div>$langDetailsSession</div>
+              <div id='mail-body-inner'>
+                  <ul id='forum-category'>
+                      <li>
+                        <span><b>$langTitle: </b></span> 
+                        <span>$title</span>
+                      </li>
+                      <li>
+                        <span><b>$langConsultant: </b></span> 
+                        <span>$creatorName $creatorSurname</span>
+                      </li>
+                      <li>
+                        <span><b>$langStartDate: </b></span>
+                        <span>$dateFrom</span>
+                      </li>
+                      <li>
+                        <span><b>$langEndDate: </b></span>
+                        <span>$dateEnd</span>
+                      </li>
+                      <li>
+                        <span><b>$langTypeRemote: </b></span>
+                        <span>$is_remote_session</span>
+                      </li>
+                  </ul>
+                  $link_html
+              </div>
+              <div>
+                  <br>
+                  <p>$langProblem</p><br>" . get_config('admin_name') . "
+                  <ul id='forum-category'>
+                      <li>$langManager: $siteName</li>
+                      <li>$langTel: -</li>
+                      <li>$langEmail: " . get_config('email_helpdesk') . "</li>
+                  </ul>
+              </div>
+          </div>";
 
-        $emailsubject = $siteName.':'.$langAvailableSession;
+      $emailsubject = $siteName.':'.$langAvailableSession;
 
-        $emailbody = $emailHeader.$emailMain;
+      $emailbody = $emailHeader.$emailMain;
 
-        $emailPlainBody = html2text($emailbody);
+      $emailPlainBody = html2text($emailbody);
 
-        if(isset($_POST['session_type']) and $_POST['session_type']=='one' and get_user_email_notification($_POST['one_participant'])){
-          $emailUser = Database::get()->querySingle("SELECT email FROM user WHERE id = ?d",$_POST['one_participant'])->email;
-          send_mail_multipart('', '', '', $emailUser, $emailsubject, $emailPlainBody, $emailbody);
-        }elseif(isset($_POST['session_type']) and $_POST['session_type']=='group'){
-          foreach($_POST['many_participants'] as $m){
-            if(get_user_email_notification($m)){
-              $emailUser = Database::get()->querySingle("SELECT email FROM user WHERE id = ?d",$m)->email;
-              send_mail_multipart('', '', '', $emailUser, $emailsubject, $emailPlainBody, $emailbody);
-            }
+      if(isset($_POST['session_type']) and $_POST['session_type']=='one' and get_user_email_notification($_POST['one_participant'])){
+        $emailUser = Database::get()->querySingle("SELECT email FROM user WHERE id = ?d",$_POST['one_participant'])->email;
+        send_mail_multipart('', '', '', $emailUser, $emailsubject, $emailPlainBody, $emailbody);
+      }elseif(isset($_POST['session_type']) and $_POST['session_type']=='group'){
+        foreach($_POST['many_participants'] as $m){
+          if(get_user_email_notification($m)){
+            $emailUser = Database::get()->querySingle("SELECT email FROM user WHERE id = ?d",$m)->email;
+            send_mail_multipart('', '', '', $emailUser, $emailsubject, $emailPlainBody, $emailbody);
           }
         }
       }

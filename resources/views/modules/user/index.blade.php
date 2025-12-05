@@ -247,7 +247,7 @@
                     userID: userID
                 },
                 success: function(data) {
-                    let resp = (typeof data === 'string') ? (data ? JSON.parse(data) : {}) : (data || {});
+                    let resp = (typeof data === 'array') ? (data ? JSON.parse(data) : {}) : (data || {});
 
                     let @if (get_config('allow_teacher_clone_course'))
                         checklist = "<form class='form-horizontal' role='form' method='post'>" +
@@ -312,10 +312,10 @@
                     });
 
                     $('.modal').last().one('shown.bs.modal', function () {
-                        $('#userRights_CourseAdminTools').prop('checked', resp.admin_modules == 1);
-                        $('#userRights_AdminUsers').prop('checked', resp.admin_users == 1);
-                        $('#userRights_ArchiveCourse').prop('checked', resp.course_backup == 1);
-                        $('#userRights_CloneCourse').prop('checked', resp.course_clone == 1);
+                        $('#userRights_CourseAdminTools').prop('checked', resp.includes("admin_course_modules"));
+                        $('#userRights_AdminUsers').prop('checked', resp.includes("admin_course_users"));
+                        $('#userRights_ArchiveCourse').prop('checked', resp.includes("backup_course"));
+                        $('#userRights_CloneCourse').prop('checked', resp.includes("clone_course"));
                     });
 
                 },

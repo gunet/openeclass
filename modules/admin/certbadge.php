@@ -75,7 +75,7 @@ $action_bar = action_bar(array(
 $tool_content .= $action_bar;
 
 if (isset($_GET['preview'])) { // certificate preview
-    cert_output_to_pdf(intval($_GET['certificate_id']), $uid, $langTitle, $langMessage, get_config('site_name'), time(), intval($_GET['certificate_id']));
+    cert_output_to_pdf(intval($_GET['certificate_id']), $uid, $langTitle, $langMessage, get_config('site_name'), time(), intval($_GET['certificate_id']), null, true);
 }
 if (isset($_GET['del_badge'])) { // delete badge icon
     if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();

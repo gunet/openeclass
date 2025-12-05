@@ -24,11 +24,11 @@
  */
 function display_certificates(): void
 {
-    global $course_id, $tool_content, $course_code, $urlServer, $langPurge,
-           $langDeleteCourseActivities, $langConfirmDelete, $is_editor,
+    global $course_id, $tool_content, $course_code, $urlServer,
+           $langDelete, $langConfirmDelete, $is_editor,
            $langNoCertificates, $langActive, $langInactive, $langNoThumbnail,
            $langEditChange, $langNewCertificate, $langCertificates, $langActivate,
-           $langDeactivate, $langSee, $langConfirmPurgeCert, $webDir;
+           $langDeactivate, $langSee, $webDir;
 
     // Fetch the certificate list
     $sql_cer = Database::get()->queryArray("SELECT id, title, description, active, template
@@ -92,16 +92,11 @@ function display_certificates(): void
                             array('title' => $langSee,
                                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id&amp;preview=1",
                                 'icon' => 'fa-search'),
-                            array('title' => $langDeleteCourseActivities,
+                            array('title' => $langDelete,
                                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del_cert=$data->id",
                                 'icon' => 'fa-xmark',
                                 'class' => 'delete',
-                                'confirm' => $langConfirmDelete),
-                            array('title' => $langPurge,
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;purge_cert=$data->id",
-                                'icon' => 'fa-xmark',
-                                'class' => 'delete',
-                                'confirm' => $langConfirmPurgeCert)
+                                'confirm' => $langConfirmDelete)
                         ))
                         . "</div>";
                 }
@@ -122,10 +117,10 @@ function display_certificates(): void
 function display_badges(): void
 {
     global $course_id, $tool_content, $course_code, $is_editor,
-           $langDeleteCourseActivities, $langConfirmDelete,
-           $langNoBadges, $langEditChange, $langBadges, $langPurge,
+           $langDelete, $langConfirmDelete,
+           $langNoBadges, $langEditChange, $langBadges,
            $langActivate, $langDeactivate, $langNewBadge,
-           $langActive, $langInactive, $urlServer, $langConfirmPurgeBadge;
+           $langActive, $langInactive, $urlServer;
 
     if ($is_editor) {
         $sql_cer = Database::get()->queryArray("SELECT id, title, description, active, icon FROM badge WHERE course_id = ?d AND bundle >= 0", $course_id);
@@ -179,16 +174,11 @@ function display_badges(): void
                                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id&amp;vis=" .
                                     ($data->active ? '0' : '1'),
                                 'icon' => $data->active ? 'fa-eye-slash' : 'fa-eye'),
-                            array('title' => $langDeleteCourseActivities,
+                            array('title' => $langDelete,
                                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del_badge=$data->id",
                                 'icon' => 'fa-xmark',
                                 'class' => 'delete',
-                                'confirm' => $langConfirmDelete),
-                            array('title' => $langPurge,
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;purge_cc=$data->id",
-                                'icon' => 'fa-xmark',
-                                'class' => 'delete',
-                                'confirm' => $langConfirmPurgeBadge)
+                                'confirm' => $langConfirmDelete)
                         ))
                         . "</div>";
                 }
@@ -289,9 +279,9 @@ function display_points_games(): void
 function display_course_completion(): void
 {
     global $course_id, $tool_content, $course_code, $is_editor,
-           $langDeleteCourseActivities, $langConfirmDelete, $langCourseCompletion,
-           $langActivate, $langDeactivate, $langPurge,
-           $langActive, $langInactive, $langConfirmPurgeCourseCompletion;
+           $langDelete, $langConfirmDelete, $langCourseCompletion,
+           $langActivate, $langDeactivate,
+           $langActive, $langInactive;
 
     $data = Database::get()->querySingle("SELECT id, title, description, active, icon FROM badge "
                                     . "WHERE course_id = ?d AND bundle = -1 AND unit_id = 0", $course_id);
@@ -326,16 +316,11 @@ function display_course_completion(): void
                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id&amp;vis=" .
                                 ($data->active ? '0' : '1'),
                             'icon' => $data->active ? 'fa-eye-slash' : 'fa-eye'),
-                        array('title' => $langDeleteCourseActivities,
+                        array('title' => $langDelete,
                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del_badge=$data->id",
                             'icon' => 'fa-xmark',
                             'class' => 'delete',
-                            'confirm' => $langConfirmDelete),
-                        array('title' => $langPurge,
-                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;purge_cc=$data->id",
-                            'icon' => 'fa-xmark',
-                            'class' => 'delete',
-                            'confirm' => $langConfirmPurgeCourseCompletion)
+                            'confirm' => $langConfirmDelete)
                     ))
                     . "</div>";
             }
@@ -1052,7 +1037,7 @@ function display_modification_activity($element, $element_id, $activity_id, $uni
     global $tool_content, $course_code, $langModify, $langOperator, $langUsedCertRes, $langImgFormsDes;
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
-    if (resource_usage($element, $activity_id)) { // check if resource has been used by user
+    if (resource_usage($element, $activity_id)) { // check if a resource has been used by user
         Session::flash('message',$langUsedCertRes);
         Session::flash('alert-class', 'alert-warning');
         if ($unit_id) {
@@ -3095,6 +3080,8 @@ function display_users_progress($element, $element_id) {
                                              JOIN user ON user.id = user_certificate.user
                                                 AND course_user.status = " .USER_STUDENT . "
                                                 AND editor = 0
+                                                AND course_reviewer = 0
+                                                AND reviewer = 0
                                                 AND course_id = ?d
                                                 AND certificate = ?d
                                             ORDER BY user.surname, user.givenname
@@ -3103,6 +3090,8 @@ function display_users_progress($element, $element_id) {
                                             JOIN course_user ON user_certificate.user=course_user.user_id
                                                 AND status = " .USER_STUDENT . "
                                                 AND editor = 0
+                                                AND course_reviewer = 0
+                                                AND reviewer = 0
                                                 AND course_id = ?d
                                                 AND completed = 1
                                                 AND certificate = ?d", $course_id,$element_id)->t;
@@ -3114,6 +3103,8 @@ function display_users_progress($element, $element_id) {
                                             JOIN user ON user.id = user_badge.user
                                                 AND course_user. status = " .USER_STUDENT . "
                                                 AND editor = 0
+                                                AND course_reviewer = 0
+                                                AND reviewer = 0
                                                 AND course_id = ?d
                                                 AND badge = ?d
                                             ORDER BY user.surname, user.givenname
@@ -3122,6 +3113,8 @@ function display_users_progress($element, $element_id) {
                                             JOIN course_user ON user_badge.user=course_user.user_id
                                                 AND status = " .USER_STUDENT . "
                                                 AND editor = 0
+                                                AND course_reviewer = 0
+                                                AND reviewer = 0
                                                 AND course_id = ?d
                                                 AND completed = 1
                                                 AND badge = ?d", $course_id, $element_id)->t;
@@ -3130,6 +3123,8 @@ function display_users_progress($element, $element_id) {
     $all_users = Database::get()->querySingle("SELECT COUNT(*) AS total FROM course_user
                                         WHERE status = " .USER_STUDENT . "
                                             AND editor = 0
+                                            AND course_reviewer = 0
+                                            AND reviewer = 0
                                             AND course_id = ?d", $course_id)->total;
 
     if (count($sql) > 0) {
@@ -3313,7 +3308,7 @@ function display_user_progress_details($element, $element_id, $user_id) {
         } else {
             $resource_data = get_resource_details($element, $user_criterion->certificate_criterion);
         }
-		$activity = $resource_data['title'] . "&nbsp;<small>(" .$resource_data['type'] . ")</small>";
+		$activity = q($resource_data['title']) . "&nbsp;<small>(" .$resource_data['type'] . ")</small>";
 
         if (!empty($user_criterion->operator) && $user_criterion->activity_type != AssignmentSubmitEvent::ACTIVITY) {
             $op = get_operators();
@@ -3336,7 +3331,7 @@ function display_user_progress_details($element, $element_id, $user_id) {
     // uncompleted criteria
 	foreach ($sql2 as $user_criterion) {
 		$resource_data = get_resource_details($element, $user_criterion->id);
-		$activity = $resource_data['title'] . "&nbsp;<small>(" .$resource_data['type'] . ")</small>";
+		$activity = q($resource_data['title']) . "&nbsp;<small>(" .$resource_data['type'] . ")</small>";
         if (!empty($user_criterion->operator) && $user_criterion->activity_type != AssignmentSubmitEvent::ACTIVITY) {
             $op = get_operators();
             $op_content = $op[$user_criterion->operator];

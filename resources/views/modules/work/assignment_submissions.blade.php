@@ -411,9 +411,9 @@
                                                             <th>{{ trans('langFileName') }}</th>
                                                         @endif
                                                         @if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE) {{-- neo pedio vathmos aksiologhshs mono gia peer review --}}
-                                                        <th class="grade-col">
-                                                            {{ trans('langPeerReviewGrade') }}
-                                                        </th>
+                                                            <th class="grade-col">
+                                                                {{ trans('langPeerReviewGrade') }}
+                                                            </th>
                                                         @endif
                                                         <th class="grade-col" style="width: 10%;">{{ trans('langGradebookGrade') }}</th>
                                                     </tr>
@@ -504,13 +504,11 @@
 
                                                             {{-- Peer Review Grade results --}}
                                                             @if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE)
-                                                                @if ($count_of_assignments > $reviews_per_assignment && $rows_assignment_grading_review)
-                                                                    <td class='col-md-1 text-center'>
-                                                                        <div class='form-group'>
-                                                                            {!! get_grade_review_field($due_date_review, $row->id, $reviews_per_assignment) !!}
-                                                                        </div>
-                                                                    </td>
-                                                                @endif
+                                                                <td class='col-md-1 text-center'>
+                                                                    <div class='form-group'>
+                                                                        {!! get_grade_review_field($due_date_review, $row->id, $reviews_per_assignment) !!}
+                                                                    </div>
+                                                                </td>
                                                             @endif
 
                                                             {{-- grade input text --}}

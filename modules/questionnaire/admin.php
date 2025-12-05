@@ -296,7 +296,7 @@ if (isset($_GET['pid'])) {
     $attempt_counter = 0;
 }
 // question type text array
-$aType = array($langUniqueSelect, $langFreeText, $langMultipleSelect, $langLabel.' / '.$langComment, $langScale, $langTable);
+$aType = array($langUniqueSelect, $langFreeText, $langMultipleSelect, $langLabel.'/'.$langComment, $langScale);
 // Modify/Create poll form
 if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     if (isset($_GET['modifyPoll'])) {
@@ -1023,7 +1023,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 // Number of columbs should be bigger or same than possible questions in db.
                 $countQuestionsAns = database::get()->querySingle("SELECT COUNT(*) as total FROM poll_question_answer
                                                                     WHERE pqid = ?d", $question_id)->total;
-
+                                                                
                 if ($q_column < $countQuestionsAns) {
                     Session::flash('message',$langNumberColumnsSmallerThanQ);
                     Session::flash('alert-class', 'alert-warning');

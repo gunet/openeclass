@@ -2,7 +2,6 @@
 
 class Permissions
 {
-
     public int $user_id;
     public int $course_id;
     public bool $course_admin;
@@ -22,7 +21,6 @@ class Permissions
         if (isset($GLOBALS['is_course_admin']) and $GLOBALS['is_course_admin']) {
             $this->course_admin = true;
         }
-
     }
 
     /**
@@ -56,12 +54,13 @@ class Permissions
             return true;
         }
 
-        $q = Database::get()->querySingle("SELECT admin_modules FROM user_permissions
-                                                WHERE user_id = ?d
-                                                AND course_id = ?d",
-                    $this->user_id, $this->course_id);
+        $q = Database::get()->querySingle("SELECT * FROM user_permissions JOIN permissions 
+                                            ON user_permissions.permission_id = permissions.id 
+                                            WHERE permissions.permission = 'admin_course_modules' 
+                                          AND user_id = ?d AND course_id = ?d",
+                                $this->user_id, $this->course_id);
 
-        if ($q and $q->admin_modules) {
+        if ($q) {
             return true;
         } else {
             return false;
@@ -80,11 +79,13 @@ class Permissions
             return true;
         }
 
-        $q = Database::get()->querySingle("SELECT admin_users FROM user_permissions
-                                            WHERE user_id = ?d
-                                            AND course_id = ?d",
-            $this->user_id, $this->course_id);
-        if ($q and $q->admin_users) {
+        $q = Database::get()->querySingle("SELECT * FROM user_permissions JOIN permissions 
+                                            ON user_permissions.permission_id = permissions.id 
+                                            WHERE permissions.permission = 'admin_course_users' 
+                                          AND user_id = ?d AND course_id = ?d",
+                                $this->user_id, $this->course_id);
+
+        if ($q) {
             return true;
         } else {
             return false;
@@ -102,12 +103,13 @@ class Permissions
             return true;
         }
 
-        $q = Database::get()->querySingle("SELECT course_clone FROM user_permissions
-                                            WHERE user_id = ?d
-                                            AND course_id = ?d",
-            $this->user_id, $this->course_id);
+        $q = Database::get()->querySingle("SELECT * FROM user_permissions JOIN permissions 
+                                            ON user_permissions.permission_id = permissions.id 
+                                            WHERE permissions.permission = 'clone_course' 
+                                          AND user_id = ?d AND course_id = ?d",
+                                $this->user_id, $this->course_id);
 
-        if ($q and $q->course_clone) {
+        if ($q) {
             return true;
         } else {
             return false;
@@ -123,12 +125,57 @@ class Permissions
         if ($this->course_admin) {
             return true;
         }
-        $q = Database::get()->querySingle("SELECT course_backup FROM user_permissions
-                                            WHERE user_id = ?d
-                                            AND course_id = ?d",
+        $q = Database::get()->querySingle("SELECT * FROM user_permissions JOIN permissions 
+                                            ON user_permissions.permission_id = permissions.id 
+                                            WHERE permissions.permission = 'backup_course' 
+                                          AND user_id = ?d AND course_id = ?d",
+                                $this->user_id, $this->course_id);
+
+        if ($q) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * @brief check if user has permission to upload document
+     * @return bool
+     */
+    public function can_upload_document(): bool
+    {
+        if ($this->course_admin) {
+            return true;
+        }
+        $q = Database::get()->querySingle("SELECT * FROM user_permissions JOIN permissions 
+                                            ON user_permissions.permission_id = permissions.id 
+                                            WHERE permissions.permission = 'can_upload_document' 
+                                          AND user_id = ?d AND course_id = ?d",
             $this->user_id, $this->course_id);
 
-        if ($q and $q->course_backup) {
+        if ($q) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * @brief check if user has permission to upload multimedia
+     * @return bool
+     */
+    public function can_upload_multimedia(): bool
+    {
+        if ($this->course_admin) {
+            return true;
+        }
+        $q = Database::get()->querySingle("SELECT * FROM user_permissions JOIN permissions 
+                                            ON user_permissions.permission_id = permissions.id 
+                                            WHERE permissions.permission = 'can_upload_multimedia' 
+                                          AND user_id = ?d AND course_id = ?d",
+            $this->user_id, $this->course_id);
+
+        if ($q) {
             return true;
         } else {
             return false;
@@ -139,22 +186,35 @@ class Permissions
      * @brief get all user course permissions
      * @return array
      */
-    public function get_course_permissions(): array {
-
+    public function get_course_permissions(): array
+    {
         $arr_permissions = [];
-        $q = Database::get()->querySingle("SELECT admin_modules, admin_users, course_backup, course_clone 
-                                            FROM user_permissions
-                                            WHERE user_id = ?d AND course_id = ?d",
+        $q = Database::get()->queryArray("SELECT permission 
+                                            FROM user_permissions JOIN permissions 
+                                            ON user_permissions.permission_id = permissions.id 
+                                        WHERE user_id = ?d AND course_id = ?d",
             $this->user_id, $this->course_id);
         if ($q) {
-            foreach ($q as $key => $value) {
-                if ($value == 1) {
-                    $arr_permissions[$key] = $value;
-                }
+            foreach ($q as $data) {
+                $arr_permissions[] = $data->permission;
             }
         }
         return $arr_permissions;
     }
+
+    /**
+     * @brif update user course permissions
+     * @param $permissions
+     * @return void
+     */
+    public function update_course_permissions($permissions) {
+
+        Database::get()->query("DELETE FROM user_permissions WHERE user_id = ?d AND course_id = ?d", $this->user_id, $this->course_id);
+        foreach ($permissions as $permission) {
+            Database::get()->query("INSERT INTO user_permissions (user_id, course_id, permission_id) VALUES (?d, ?d, ?d)", $this->user_id, $this->course_id, $permission);
+        }
+    }
+
 
     /**
      * @brief get the permission legend
@@ -166,16 +226,16 @@ class Permissions
         global $langCourseAdminTools, $langAdminUsers, $langArchiveCourse, $langCloneCourse;
 
         switch ($permission) {
-                case 'admin_modules':
+                case 'admin_course_modules':
                     $msg = $langCourseAdminTools;
                     break;
-                case 'admin_users':
+                case 'admin_course_users':
                     $msg = $langAdminUsers;
                     break;
-                case'course_backup':
+                case 'backup_course':
                     $msg = $langArchiveCourse;
                     break;
-                case 'course_clone':
+                case 'clone_course':
                     $msg = $langCloneCourse;
                     break;
                 default:
@@ -184,4 +244,22 @@ class Permissions
         }
         return $msg;
     }
+
+    /**
+     * @brief get the permission names
+     * @return string[]
+     */
+    public function get_permissions_names(): array
+    {
+        return [
+            1 => 'admin_course_modules',
+            2 => 'admin_course_users',
+            3 => 'backup_course',
+            4 => 'clone_course',
+            5 => 'can_upload_document',
+            6 => 'can_upload_multimedia'
+        ];
+    }
+
+
 }

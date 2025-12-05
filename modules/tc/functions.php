@@ -2359,6 +2359,7 @@ function get_bbb_servers_load_by_id()
     }
 
     foreach ($servers as $server) {
+        $arr[$server['id']]['id'] = $server['id'];
         $arr[$server['id']]['weight'] = $server['weight'];
         $arr[$server['id']]['rooms'] = $server['rooms'];
         $arr[$server['id']]['participants'] = $server['participants'];

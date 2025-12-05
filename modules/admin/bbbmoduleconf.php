@@ -45,8 +45,7 @@ if (isset($_GET['delete_tc_course']) and $_GET['list']) {
                                           AND external_server = ?d", $_GET['delete_tc_course'], $_GET['list']);
     Session::flash('message', $langBBBDeleteCourseSuccess);
     Session::flash('alert-class', 'alert-success');
-}
-if (isset($_POST['code_to_assign'])) {
+}else if (isset($_POST['code_to_assign'])) {
     $course_id_to_assign = course_code_to_id($_POST['code_to_assign']);
     if (empty($course_id_to_assign)) {
         Session::flash('message', $langBBBAddCourseFail);
@@ -67,11 +66,9 @@ if (isset($_POST['code_to_assign'])) {
 }
 
 if (isset($_GET['add_course_to_tc'])) {
-
     $data['tc_server'] = $tc_server = $_GET['tc_server'];
     view('admin.other.extapps.bbb.add_course_to_tc', $data);
-
-} else if (isset($_GET['list'])) { // list of courses with specific bbb server
+} else if (isset($_GET['list'])) { // list of courses with a specific bbb server
     $pageName = $langOtherCourses;
     $data['action_bar'] = action_bar(array(
         array('title' => $langBBBAddCourse,
@@ -118,9 +115,7 @@ if (isset($_GET['add_course_to_tc'])) {
 
     $data['tbl_cnt']   = $tbl_cnt;
     view('admin.other.extapps.bbb.list', $data);
-}
-
-if (isset($_GET['delete_server'])) {
+} else if (isset($_GET['delete_server'])) {
     $id = $_GET['delete_server'];
     Database::get()->querySingle("DELETE FROM tc_servers WHERE id=?d", $id);
     // Display result message
@@ -332,9 +327,7 @@ if (isset($_GET['delete_server'])) {
         $data['listcourses'] = $listcourses;
     }
     view('admin.other.extapps.bbb.create', $data);
-} else {    // Display config edit form
-
-    //display available BBB servers and running meetings
+} else { //display available BBB servers and running meetings
     $data['action_bar'] = action_bar(array(
         array('title' => $langBack,
             'url' => "extapp.php",
@@ -391,8 +384,9 @@ if (isset($_GET['delete_server'])) {
     }
 
     $data['q'] = $q = Database::get()->queryArray("SELECT * FROM tc_servers WHERE `type` = 'bbb' ORDER BY weight");
+
     $bbb_cnt = '';
-    if (count($q)>0) {
+    if (count($q) > 0) {
         $t_connected_users = $t_listeners = $t_mics = $t_cameras = 0;
         $t_active_rooms = 0;
         $t_max_users = 0;
@@ -402,14 +396,17 @@ if (isset($_GET['delete_server'])) {
         $servers = get_bbb_servers_load_by_id();
         foreach ($q as $srv) {
             $enabled_bbb_server = ($srv->enabled == 'true')? $langYes : $langNo;
-            $courses_note = $connected_users = $active_rooms = $server_load = $mics = $cameras = '';
+            $courses_note = '';
+            $connected_users = $active_rooms = $server_load = $mics = $cameras = '';$connected_users = $active_rooms = $mics = $cameras = 0;
             if ($srv->enabled == "true") {
-                $server_load = $servers[$srv->id]['load'];
-                $connected_users = $servers[$srv->id]['participants'];
-                $listeners = $servers[$srv->id]['listeners'];
-                $mics = $servers[$srv->id]['voice'];
-                $cameras = $servers[$srv->id]['video'];
-                $active_rooms = $servers[$srv->id]['rooms'];
+                if (isset($servers[$srv->id])) {
+                    $server_load = $servers[$srv->id]['load'];
+                    $connected_users = $servers[$srv->id]['participants'];
+                    $listeners = $servers[$srv->id]['listeners'];
+                    $mics = $servers[$srv->id]['voice'];
+                    $cameras = $servers[$srv->id]['video'];
+                    $active_rooms = $servers[$srv->id]['rooms'];
+                }
                 $t_connected_users += $connected_users;
                 $t_listeners += $listeners;
                 $t_mics += $mics;
@@ -478,10 +475,11 @@ if (isset($_GET['delete_server'])) {
         $bbb_cnt .= "<tr>" .
             "<td><strong>$langTotal:</strong></td>" .
             "<td>&nbsp;</td>" .
-            "<td class>$t_connected_users / $t_max_users</td>" .
-            "<td class>$t_active_rooms / $t_max_rooms</td>" .
-            "<td class>$t_mics / $t_cameras</td>" .
-            "<td class>$bbb_lb_algo_info</td>" .
+            "<td>$t_connected_users / $t_max_users</td>" .
+            "<td>$t_active_rooms / $t_max_rooms</td>" .
+            "<td>$t_mics / $t_cameras</td>" .
+            "<td>$bbb_lb_algo_info</td>" .
+            "<td>&nbsp;</td>" .
             "</tr>";
     }
     $data['bbb_cnt'] = $bbb_cnt;

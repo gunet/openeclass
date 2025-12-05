@@ -228,6 +228,7 @@ $availableThemes = [
     'Neutral',
     'Crimson',
     'Emerald',
+    'Green',
     'Light pink',
     'Dark',
     'Dark purple',

@@ -24,10 +24,11 @@ $helpSubTopic = 'create_course';
 
 if (isset($_GET['edit_act'])) {
     $require_current_course = true;
+    $require_editor = true;
 }
 require_once '../../include/baseTheme.php';
 
-if ($session->status !== USER_TEACHER && !$is_departmentmanage_user) { // if we are not teachers or department managers
+if (!($is_editor or $session->status == USER_TEACHER or $is_departmentmanage_user)) { // if we are not teachers or department managers
     redirect_to_home_page();
 }
 
@@ -168,7 +169,7 @@ if (!isset($_POST['final_submit'])) {
             <div class='row m-auto'>
                 <div class='col-lg-8 col-12 px-0'>
                     <div class='form-wrapper '>
-                        <form id='activities' class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]'>                    
+                        <form id='activities' class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]'>
                         <fieldset>
                             <legend class='mb-0' aria-label='$langForm'></legend>
                             <div class='table-responsive'>
@@ -355,7 +356,7 @@ if (!isset($_POST['final_submit'])) {
 
         $tool_content .= "<div class='form-wrapper'><fieldset><legend class='mb-0' aria-label='$langForm'></legend>
             <form class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]?course=$course_code&edit_act=$unit_id' onsubmit=\"return validateNodePickerForm();\">
-                                         
+
                 <fieldset>
                     <legend class='mb-3' aria-label='$langForm'></legend>
                     <div class='table-responsive mt-0'>

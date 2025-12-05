@@ -59,6 +59,8 @@ if(isset($_POST['submit_user'])){
                                 WHERE session_id = ?d AND participants = ?d",0,$sessionID,$_POST['deleteUserId']);
     }
 
+    update_tc_participants($sessionID);
+
     Session::flash('message',$langProcessCompleted);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/session/session_users.php?course=$course_code&session=$sessionID");

@@ -59,7 +59,7 @@
                                             <thead>
                                                 <tr>
                                                     <th style='min-width:200px;'>{{ trans('langUsers') }}</th>
-                                                    <th>{{ trans('langRegisteredUsers') }}</th>
+                                                    <th>{{ trans('langParticipate') }}</th>
                                                     <th aria-label="{{ trans('langSettingSelect') }}"></th>
                                                 </tr>
                                             </thead>
@@ -85,7 +85,7 @@
                                                                 {!! 
                                                                     action_button(array(
                                                                         array(
-                                                                            'title' => trans('langSubmitRegistration'),
+                                                                            'title' => trans('langSubmitParticipation'),
                                                                             'url' => "#",
                                                                             'icon' => 'fa-solid fa-check',
                                                                             'icon-class' => "user-register",
@@ -138,7 +138,7 @@
                 <div class='modal-header'>
                     <div class='modal-title'>
                         <div class='icon-modal-default'><i class='fa-solid fa-check fa-xl Neutral-500-cl'></i></div>
-                        <div class="modal-title-default text-center mb-0 mt-2" id="doRegistrationLabel">{!! trans('langSubmitRegistration') !!}</div>
+                        <div class="modal-title-default text-center mb-0 mt-2" id="doRegistrationLabel">{!! trans('langSubmitParticipation') !!}</div>
                     </div>
                 </div>
                 <div class='modal-body text-center'>

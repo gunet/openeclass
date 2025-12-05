@@ -1,3 +1,5 @@
+@extends('layouts.default')
+
 @push('head_scripts')
     <script type='text/javascript'>
         $(document).ready(function() {
@@ -6,7 +8,11 @@
                 'bAutoWidth': true,
                 'searchDelay': 1000,
                 'order': [[1, 'desc']],
+                'lengthMenu': [10, 15, 20, -1],
                 'oLanguage': {
+                    'lengthLabels': {
+                        '-1': '{{ trans('langAllOfThem') }}'
+                    },
                     'sLengthMenu': '{{ trans('langDisplay') }} _MENU_ {{ trans('langResults2') }}',
                     'sZeroRecords': '{{ trans('langNoResult') }}',
                     'sInfo': '{{ trans('langDisplayed') }} _START_ {{ trans('langTill') }} _END_ {{ trans('langFrom2') }} _TOTAL_ {{ trans('langTotalResults') }}',
@@ -32,8 +38,6 @@
 
     </script>
 @endpush
-
-@extends('layouts.default')
 
 @section('content')
 

@@ -21,7 +21,7 @@
                             </div>
 
                             <div class='form-group mt-5'>
-                                <div class='col-12 d-flex justify-content-center'>
+                                <div class='col-12 d-flex justify-content-end align-items-center gap-2'>
                                     <input class='btn submitAdminBtn' type='submit' value='{{ trans('langAdd') }}'>
                                     <a class='btn cancelAdminBtn' href='{{ $_SERVER['SCRIPT_NAME'] }}'>{{ trans('langBack') }}</a>
                                 </div>

@@ -1,24 +1,7 @@
 <?php
-/*
- *  ========================================================================
- *  * Open eClass
- *  * E-learning and Course Management System
- *  * ========================================================================
- *  * Copyright 2003-2024, Greek Universities Network - GUnet
- *  *
- *  * Open eClass is an open platform distributed in the hope that it will
- *  * be useful (without any warranty), under the terms of the GNU (General
- *  * Public License) as published by the Free Software Foundation.
- *  * The full license can be read in "/info/license/license_gpl.txt".
- *  *
- *  * Contact address: GUnet Asynchronous eLearning Group
- *  *                  e-mail: info@openeclass.org
- *  * ========================================================================
- *
- */
 
 // Message file for language de
-// Generated 2024-01-19 17:14:54
+// Generated 2025-12-02 16:31:15
 
 $langCourse = "Kurs";
 $langEclass = "Open eClass - die asynchrone E-Learning Plattform";
@@ -82,6 +65,7 @@ $langsCourse = "course";
 $langsCourses = "courses";
 $langsOfCourse = "course";
 $langsOfCourses = "courses";
+$langsOfFaculty = "category";
 $langCourseAdmin = "Admin";
 $langOfCourseAdmin = "Admin";
 $langCourseAdmins = "Admins";
@@ -102,4 +86,11 @@ $langCourseReviewer = "Reviewer";
 $langOfCourseReviewer = "Reviewer";
 $langsCourseReviewer = "reviewer";
 $langsOfCourseReviewer = "reviewer";
-
+$langCTeacher = "INSTRUCTOR";
+$langCStudent = "LEARNER";
+$langCStudent2 = "STUDENT";
+$langAlignment = "Alignment";
+$langWidth = "Width";
+$langAlignLeft = "Left";
+$langAlignCenter = "Center";
+$langAlignRight = "Right";
