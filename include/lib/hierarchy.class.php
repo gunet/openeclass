@@ -390,7 +390,7 @@ class Hierarchy {
         }
 
         $tenantNodes = Database::get()->queryArray(
-            'SELECT id, name, lft, rgt FROM hierarchy WHERE lft >= ?d AND rgt <= ?d', 
+            'SELECT id, name, lft, rgt FROM hierarchy WHERE lft >= ?d AND rgt <= ?d',
             $tenant->lft, $tenant->rgt
         );
 
@@ -1356,11 +1356,11 @@ jContent;
      * @return boolean $allow
      */
     public function checkVisibilityRestrictions($nodeId, $nodeVisibility, $options = array('respectVisibility' => true)) {
-        global $uid;
+        global $uid, $is_admin;
         $allow = true;
 
         // check access restrictions
-        if ($options['respectVisibility'] && ($uid != 1) && $nodeVisibility != NODE_OPEN) {
+        if ($options['respectVisibility'] && (!$is_admin) && $nodeVisibility != NODE_OPEN) {
             // hide if anonymous user or eponymous but node is hidden
             if ($uid < 1 || $nodeVisibility == NODE_CLOSED) {
                 $allow = false;
@@ -1395,7 +1395,7 @@ jContent;
 
         $tenantNodes = $this->getTenantNodes();
         $node = Database::get()->querySingle("SELECT id, name, lft, rgt FROM hierarchy WHERE id = ?d", $nodeId);
-        
+
         foreach ($tenantNodes as $tenantNode) {
             if ($tenantNode->id === $node->id) {
                 return true;
