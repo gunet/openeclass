@@ -5120,30 +5120,67 @@ function module_path($path) {
 }
 
 /**
- * @brief Get the current tenant users, if any
+ * @brief Get the current tenant users, optionally filtered
+ *
+ * @param array $filters Supported keys: surname, givenname, username, am
+ * @return array
  */
-function getTenantUsers() {
-    $tenant = getCurrentTenant();
-    $ret = array();
+function getTenantUsers(array $filters = [
+    'surname'   => '',
+    'givenname' => '',
+    'username'  => '',
+    'am'        => '',
+], $tenant_id = null)
+{
 
-    if (!$tenant) {
-        return $ret;
+    if ($tenant_id) {
+        $tenant = getTenantById($tenant_id);
+    } else {
+        $tenant = getCurrentTenant();
     }
 
+    if (!$tenant) {
+        return [];
+    }
+
+    // Allowed filters for the query.
+    $defaultFilters = [
+        'surname'   => '',
+        'givenname' => '',
+        'username'  => '',
+        'am'        => '',
+    ];
+
+    $filters = array_merge($defaultFilters, $filters);
+
     $tree = new Hierarchy();
-    $tenantNodes = $tree->getTenantNodes();
+    $tenantNodes = $tree->getTenantNodes($tenant_id);
 
-    $tenantNodeIds = array_map(function($obj) {
-        return $obj->id;
-    }, $tenantNodes);
+    if (!$tenantNodes) {
+        return [];
+    }
 
-    $tenantUsers = Database::get()->queryArray("SELECT DISTINCT u.id, u.surname, u.givenname, u.email, u.username
-                          FROM user u, user_department ud
-                          WHERE ud.department IN (" . implode(', ', $tenantNodeIds) . ")");
+    $tenantNodeIds = array_map(fn($node) => intval($node->id), $tenantNodes);
+    $inClause = implode(', ', $tenantNodeIds);
 
-    return $ret;
+    $query = "
+        SELECT DISTINCT u.id, u.surname, u.givenname, u.email, u.username, u.am
+        FROM user u
+        JOIN user_department ud ON ud.user = u.id
+        WHERE ud.department IN ($inClause)
+    ";
+
+    $values = [];
+
+    foreach ($filters as $field => $value) {
+        if (!empty($value)) {
+            $query .= " AND LOWER(u.$field) LIKE LOWER(?s)";
+            $values[] = '%' . $value . '%';
+        }
+    }
+
+    return Database::get()->queryArray($query, ...$values);
 }
-
 
 /**
  * @brief Get the current tenant, if any
@@ -5167,6 +5204,24 @@ function getCurrentTenant() {
     }
 
     return $_SESSION['current_user_tenant'];
+}
+
+/**
+ * @brief Get specific tenant via id
+ */
+function getTenantById($tenant_id = null)
+{
+    if (!$tenant_id) {
+        return null;
+    }
+
+    return Database::get()->querySingle(
+        'SELECT tenant.*, hierarchy.lft, hierarchy.rgt
+         FROM tenant
+         JOIN hierarchy ON hierarchy.id = tenant.department_id
+         WHERE tenant.id = ?d',
+        $tenant_id
+    );
 }
 
 /**

@@ -32,7 +32,7 @@ $up = new Permissions();
 
 if (!$up->has_course_users_permission()) {
     Session::Messages($langCheckCourseAdmin, 'alert-danger');
-    redirect_to_home_page('courses/'. $course_code);
+    redirect_to_home_page('courses/' . $course_code);
 }
 
 $results = '';
@@ -88,23 +88,36 @@ $data['results'] = $results;
 
 view('modules.user.muladduser', $data);
 
-/**
- * @brief find if user exists according to criteria
- * @param type $user
- * @param type $field
- * @return boolean
- */
-function finduser($user, $field) {
+function finduser($user, $field)
+{
+    global $is_power_user;
 
-    $result = Database::get()->querySingle("SELECT id FROM user WHERE `$field` = ?s", $user);
-    if ($result) {
-        $userid = $result->id;
-    } else {
+    if ($is_power_user) {
+        $result = Database::get()->querySingle(
+            "SELECT id FROM user WHERE `$field` = ?s",
+            $user
+        );
+        return $result ? $result->id : false;
+    }
+    $currentTenant = getCurrentTenant();
+
+    $tenantDepartment = $currentTenant->hierarchy_id ?? null;
+    if (!$tenantDepartment) {
         return false;
     }
-    return $userid;
-}
 
+    $result = Database::get()->querySingle(
+        "SELECT u.id
+         FROM user u
+         JOIN user_department ud ON ud.user = u.id
+         WHERE ud.department = ?d
+           AND u.`$field` = ?s",
+        $tenantDepartment,
+        $user
+    );
+
+    return $result ? $result->id : false;
+}
 /**
  * Add users
  * @param type $userid
@@ -119,7 +132,7 @@ function adduser($userid, $cid): bool
         return false;
     } else {
         Database::get()->query("INSERT INTO course_user (user_id, course_id, status, reg_date, document_timestamp)
-                                   VALUES (?d, ?d, " . USER_STUDENT . ", " . DBHelper::timeAfter() . ", " . DBHelper::timeAfter(). " )", $userid, $cid);
+                                   VALUES (?d, ?d, " . USER_STUDENT . ", " . DBHelper::timeAfter() . ", " . DBHelper::timeAfter() . " )", $userid, $cid);
 
         $r = Database::get()->queryArray("SELECT id FROM course_user_request WHERE uid = ?d AND course_id = ?d", $userid, $cid);
         if ($r) { // close course user request (if any)
@@ -127,9 +140,10 @@ function adduser($userid, $cid): bool
                 Database::get()->query("UPDATE course_user_request SET status = 2 WHERE id = ?d", $req->id);
             }
         }
-        Log::record($cid, MODULE_ID_USERS, LOG_INSERT, array('uid' => $userid,
-                                                             'right' => '+5'));
+        Log::record($cid, MODULE_ID_USERS, LOG_INSERT, array(
+            'uid' => $userid,
+            'right' => '+5'
+        ));
         return true;
     }
-
 }

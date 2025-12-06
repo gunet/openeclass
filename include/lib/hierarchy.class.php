@@ -382,8 +382,9 @@ class Hierarchy {
      *
      * @return array
      */
-    public function getTenantNodes() {
-        $tenant = getCurrentTenant();
+    public function getTenantNodes($tenant_id = null)
+    {
+        $tenant = $tenant_id ? getTenantById($tenant_id) : getCurrentTenant();
 
         if (!$tenant) {
             return [];
@@ -391,7 +392,8 @@ class Hierarchy {
 
         $tenantNodes = Database::get()->queryArray(
             'SELECT id, name, lft, rgt FROM hierarchy WHERE lft >= ?d AND rgt <= ?d',
-            $tenant->lft, $tenant->rgt
+            $tenant->lft,
+            $tenant->rgt
         );
 
         return $tenantNodes;

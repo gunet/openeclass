@@ -43,13 +43,13 @@ $up = new Permissions();
 
 if (!$up->has_course_users_permission()) {
     Session::Messages($langCheckCourseAdmin, 'alert-danger');
-    redirect_to_home_page('courses/'. $course_code);
+    redirect_to_home_page('courses/' . $course_code);
 }
 
 if (isset($_GET['add'])) {
     $uid_to_add = intval(getDirectReference($_GET['add']));
     $result = Database::get()->query("INSERT IGNORE INTO course_user (user_id, course_id, status, reg_date, document_timestamp)
-                                    VALUES (?d, ?d, " . USER_STUDENT . ", " . DBHelper::timeAfter() . ", " . DBHelper::timeAfter(). ")", $uid_to_add, $course_id);
+                                    VALUES (?d, ?d, " . USER_STUDENT . ", " . DBHelper::timeAfter() . ", " . DBHelper::timeAfter() . ")", $uid_to_add, $course_id);
     $r = Database::get()->queryArray("SELECT id FROM course_user_request WHERE uid = ?d AND course_id = ?d", $uid_to_add, $course_id);
     if ($r) { // close course user request (if any)
         foreach ($r as $req) {
@@ -57,10 +57,12 @@ if (isset($_GET['add'])) {
         }
     }
 
-    Log::record($course_id, MODULE_ID_USERS, LOG_INSERT, array('uid' => $uid_to_add,
-                                                               'right' => '+5'));
+    Log::record($course_id, MODULE_ID_USERS, LOG_INSERT, array(
+        'uid' => $uid_to_add,
+        'right' => '+5'
+    ));
     if ($result) {
-        Session::flash('message',$langTheU . ' ' . $langAdded);
+        Session::flash('message', $langTheU . ' ' . $langAdded);
         Session::flash('alert-class', 'alert-success');
         // notify user via email
         $email = uid_to_email($uid_to_add);
@@ -72,7 +74,7 @@ if (isset($_GET['add'])) {
             <div id='mail-header'>
                 <br>
                 <div>
-                    <div id='header-title'>$langYourReg " . course_id_to_title($course_id)."</div>
+                    <div id='header-title'>$langYourReg " . course_id_to_title($course_id) . "</div>
                 </div>
             </div>";
 
@@ -85,25 +87,28 @@ if (isset($_GET['add'])) {
                 </div>
             </div>";
 
-            $emailbody = $header_html_topic_notify.$body_html_topic_notify;
+            $emailbody = $header_html_topic_notify . $body_html_topic_notify;
 
             $plainemailbody = html2text($emailbody);
 
             send_mail_multipart("$_SESSION[givenname] $_SESSION[surname]",  $_SESSION['email'], '', $email, $emailsubject, $plainemailbody, $emailbody);
         }
     } else {
-        Session::flash('message',$langAddError);
+        Session::flash('message', $langAddError);
         Session::flash('alert-class', 'alert-warning');
     }
     redirect_to_home_page("modules/user/index.php?course=$course_code");
 } else {
-    register_posted_variables(array('search_surname' => true,
-                                    'search_givenname' => true,
-                                    'search_username' => true,
-                                    'search_am' => true), 'any');
+    register_posted_variables(array(
+        'search_surname' => true,
+        'search_givenname' => true,
+        'search_username' => true,
+        'search_am' => true
+    ), 'any');
 
     $results = '';
-    $data['search_username'] = $data['search_givenname'] = $data['search_surname']  = $data['search_am'] = '';
+    $data['search_username'] = $data['search_givenname'] = $data['search_surname'] = $data['search_am'] = '';
+
     if (isset($_POST['search_surname'])) {
         $data['search_surname'] = $_POST['search_surname'];
     }
@@ -117,25 +122,60 @@ if (isset($_GET['add'])) {
         $data['search_am'] = $_POST['search_am'];
     }
 
+    $search = [];
+    $values = [];
 
-    $search = array();
-    $values = array();
-    foreach (array('surname', 'givenname', 'username', 'am') as $term) {
+    foreach (['surname', 'givenname', 'username', 'am'] as $term) {
         $tvar = 'search_' . $term;
-        if (!empty($GLOBALS[$tvar])) {
-            $search[] = "u.$term LIKE LOWER(?s)";
-            $values[] = $GLOBALS[$tvar] . '%';
+
+        if (!empty($data[$tvar])) {
+            $search[] = "u.$term LIKE ?s";
+            $values[] = '%' . $data[$tvar] . '%';
         }
     }
+
     $query = join(' AND ', $search);
-    if (!empty($query)) {
-        Database::get()->query("CREATE TEMPORARY TABLE register_users_to_course AS
-                    SELECT user_id FROM course_user WHERE course_id = ?d", $course_id);
-        $result = Database::get()->queryArray("SELECT u.id, u.surname, u.givenname, u.username, u.am, c.user_id AS registered
-                                                FROM user u LEFT JOIN register_users_to_course c ON u.id = c.user_id
-                                                WHERE u.expires_at >= CURRENT_DATE() AND $query", $values);
-        if ($result) {
-            $results = "<div class='col-sm-12'><div class='table-responsive'><table class='table-default'>
+    if ($is_power_user) {
+
+        if (!empty($query)) {
+
+            Database::get()->query(
+                "CREATE TEMPORARY TABLE register_users_to_course AS
+                    SELECT user_id FROM course_user WHERE course_id = ?d",
+                $course_id
+            );
+
+            $baseQuery = "
+                SELECT u.id, u.surname, u.givenname, u.username, u.am, c.user_id AS registered
+                FROM user u
+                LEFT JOIN register_users_to_course c ON u.id = c.user_id
+                WHERE u.expires_at >= CURRENT_DATE()
+            ";
+
+            if (!empty($query)) {
+                $baseQuery .= " AND $query";
+            }
+
+            $result = Database::get()->queryArray($baseQuery, $values);
+
+            Database::get()->query("DROP TEMPORARY TABLE IF EXISTS register_users_to_course");
+        } else {
+            $result = [];
+        }
+    } else {
+
+        // dynamic filters for tenant
+        $tenantFilters = [
+            'surname'   => $_POST['search_surname'] ?? '',
+            'givenname' => $_POST['search_givenname'] ?? '',
+            'username'  => $_POST['search_username'] ?? '',
+            'am'        => $_POST['search_am'] ?? ''
+        ];
+
+        $result = getTenantUsers($tenantFilters);
+    }
+    if ($result) {
+        $results = "<div class='col-sm-12'><div class='table-responsive'><table class='table-default'>
                                 <thead><tr class='list-header'>
                                   <th class='count-col'>$langID</th>
                                   <th>$langName</th>
@@ -144,31 +184,31 @@ if (isset($_GET['add'])) {
                                   <th>$langFaculty</th>
                                   <th>$langActions</th>
                                 </tr></thead>";
-            $i = 1;
-            foreach ($result as $myrow) {
-                $departments = $user->getDepartmentIds($myrow->id);
-                $dep_content = '';
-                $j = 1;
-                foreach ($departments as $dep) {
-                    $br = ($j < count($departments)) ? '<br>' : '';
-                    $dep_content .= $tree->getPath($dep) . $br;
-                    $j++;
-                }
-                $results .= "<td class='count-col'>$i.</td><td>" . q($myrow->givenname) . "</td><td>" .
-                        q($myrow->surname) . "</td><td>" . q($myrow->username) . "</td><td>" .
-                        $dep_content . "</td><td class='text-center'>" .
-                        ($myrow->registered ? "<span class='not_visible'>($langUserAlreadyRegisterd)</span>" :
-                        icon('fa-sign-in', $langRegister, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;add=" . getIndirectReference($myrow->id))) .
-                        "</td></tr>";
-                $i++;
+        $i = 1;
+        foreach ($result as $myrow) {
+            $departments = $user->getDepartmentIds($myrow->id);
+            $dep_content = '';
+            $j = 1;
+            foreach ($departments as $dep) {
+                $br = ($j < count($departments)) ? '<br>' : '';
+                $dep_content .= $tree->getPath($dep) . $br;
+                $j++;
             }
-            $results .= "</table></div></div>";
-        } else {
-            $results .= "<div class='col-12'><div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langNoUsersFound</span></div></div>";
+            $results .= "<td class='count-col'>$i.</td><td>" . q($myrow->givenname) . "</td><td>" .
+                q($myrow->surname) . "</td><td>" . q($myrow->username) . "</td><td>" .
+                $dep_content . "</td><td class='text-center'>" .
+                ((isset($myrow->registered) && $myrow->registered)
+                    ? "<span class='not_visible'>($langUserAlreadyRegisterd)</span>"
+                    : icon('fa-sign-in', $langRegister, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;add=" . getIndirectReference($myrow->id))) .
+                "</td></tr>";
+            $i++;
         }
-        Database::get()->query("DROP TEMPORARY TABLE register_users_to_course");
+        $results .= "</table></div></div>";
+    } else {
+        $results .= "<div class='col-12'><div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langNoUsersFound</span></div></div>";
     }
 }
+
 
 $data['results'] = $results;
 
