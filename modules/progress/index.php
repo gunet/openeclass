@@ -174,6 +174,28 @@ if ($is_editor) {
             Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
             redirect_to_home_page("modules/progress/index.php?course=$course_code&new=1");
         }
+    } elseif (isset($_POST['newPointsGame'])) {
+        $v = new Valitron\Validator($_POST);
+        $v->rule('required', array('title', 'startdatepicker', 'enddatepicker'));
+        $v->rule('dateFormat', 'startdatepicker', 'd-m-Y H:i');
+        $v->rule('dateFormat', 'enddatepicker', 'd-m-Y H:i');
+        $v->rule('dateAfter', 'enddatepicker', 'startdatepicker');
+        $v->labels(array(
+            'title' => "$langTheField $langTitle",
+            'startdatepicker' => "$langTheField $langStartDate",
+            'enddatepicker' => "$langTheField $langEndDate",
+        ));
+        if($v->validate()) {
+            $startdate = date_format(date_create_from_format('d-m-Y H:i', $_POST['startdatepicker']), 'Y-m-d H:i');
+            $enddate = date_format(date_create_from_format('d-m-Y H:i', $_POST['enddatepicker']), 'Y-m-d H:i');
+            add_points_game($_POST['title'], $_POST['description'], $startdate, $enddate);
+            Session::flash('message',$langNewCertificateSuc);
+            Session::flash('alert-class', 'alert-success');
+            redirect_to_home_page("modules/progress/index.php?course=$course_code");
+        } else {
+            Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
+            redirect_to_home_page("modules/progress/index.php?course=$course_code&new=1");
+        }
     } elseif (isset($_POST['edit_element'])) { // modify certificate / badge
         $v = new Valitron\Validator($_POST);
         $v->rule('required', array('title'));
@@ -182,6 +204,28 @@ if ($is_editor) {
         ));
         if($v->validate()) {
             modify($element, $element_id, $_POST['title'], $_POST['description'], $_POST['message'], $_POST['template'], $_POST['issuer']);
+            Session::flash('message',$langQuotaSuccess);
+            Session::flash('alert-class', 'alert-success');
+            redirect_to_home_page("modules/progress/index.php?course=$course_code");
+        } else {
+            Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
+            redirect_to_home_page("modules/progress/index.php?course=$course_code&edit=1");
+        }
+    } elseif (isset($_POST['edit_points_game'])) {
+        $v = new Valitron\Validator($_POST);
+        $v->rule('required', array('title', 'startdatepicker', 'enddatepicker'));
+        $v->rule('dateFormat', 'startdatepicker', 'd-m-Y H:i');
+        $v->rule('dateFormat', 'enddatepicker', 'd-m-Y H:i');
+        $v->rule('dateAfter', 'enddatepicker', 'startdatepicker');
+        $v->labels(array(
+            'title' => "$langTheField $langTitle",
+            'startdatepicker' => "$langTheField $langStartDate",
+            'enddatepicker' => "$langTheField $langEndDate",
+        ));
+        if($v->validate()) {
+            $startdate = date_format(date_create_from_format('d-m-Y H:i', $_POST['startdatepicker']), 'Y-m-d H:i');
+            $enddate = date_format(date_create_from_format('d-m-Y H:i', $_POST['enddatepicker']), 'Y-m-d H:i');
+            modify_points_game($_POST['points_game_id'], $_POST['title'], $_POST['description'], $startdate, $enddate);
             Session::flash('message',$langQuotaSuccess);
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/progress/index.php?course=$course_code");
@@ -358,7 +402,7 @@ if ($is_editor) {
         certificate_settings('badge');
         $display = FALSE;
     }  elseif (isset($_GET['newpointsgame'])) {  // create new points game
-        certificate_settings('pointsgame');
+        points_game_settings();
         $display = FALSE;
     } elseif (isset($_GET['newcc'])) { // create course completion (special type of badge)
         add_certificate('badge', $langCourseCompletion, '', $langCourseCompletionMessage, '', q(get_config('institution')), 0, -1, null);
@@ -366,8 +410,12 @@ if ($is_editor) {
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/progress/index.php?course=$course_code");
         $display = FALSE;
-    } elseif (isset($_GET['edit'])) { // edit certificate / badge settings
-        certificate_settings($element, $element_id);
+    } elseif (isset($_GET['edit'])) { // edit certificate / badge / points game settings
+        if($element == 'points_game') {
+            points_game_settings($element_id);
+        } else {
+            certificate_settings($element, $element_id);
+        }
         $display = FALSE;
     } elseif (isset($_GET['add']) and isset($_GET['act'])) { // insert certificate / badge activity
         insert_activity($element, $element_id, $_GET['act']);

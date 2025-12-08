@@ -1535,6 +1535,7 @@ $langGradebookUsers = "Χρήστες του βαθμολογίου";
 $langPointsGames = "Παιχνίδια πόντων";
 $langPointsGame = "Παιχνίδι πόντων";
 $langNewPointsGame = "Νέο παιχνίδι πόντων";
+$langNewPointsGameSuc = "Το παιχνίδι πόντων δημιουργήθηκε με επιτυχία";
 $langPointsGameRecActivities = "Επαναλαμβανόμενες δραστηριότητες";
 $langPointsGameOneTimeActivities = "Δραστηριότητες μιας φοράς";
 $langPointsGameNoRecActivities = "Δεν υπάρχουν επαναλαμβανόμενες δραστηριότητες";

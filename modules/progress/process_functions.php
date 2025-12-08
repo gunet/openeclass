@@ -721,6 +721,28 @@ function has_certificate_completed($uid, $element, $element_id) {
     return true;
 }
 
+/**
+ * @brief add points game in DB
+ * @param type $title
+ * @param type $description
+ * @param type $startdate
+ * @param type $enddate
+ * @return type
+ * @global type $course_id
+ */
+function add_points_game($title, $description, $startdate, $enddate) {
+    global $course_id;
+
+    $new_id = Database::get()->query("INSERT INTO points_game
+                                SET course_id = ?d,
+                                title = ?s,
+                                description = ?s,
+                                active = ?d,
+                                starts = ?t,
+                                expires = ?t", $course_id, $title, $description, 0, $startdate, $enddate)->lastInsertID;
+
+    return $new_id;
+}
 
 /**
  * @brief add certificate in DB
@@ -781,6 +803,27 @@ function add_certificate($table, $title, $description, $message, $icon, $issuer,
     }
 
     return $new_id;
+}
+
+/**
+ * @brief modify points game settings in DB
+ * @global type $course_id
+ * @param type $points_game_id
+ * @param type $title
+ * @param type $description
+ * @param type $startdate
+ * @param type $enddate
+ */
+function modify_points_game($points_game_id, $title, $description, $startdate, $enddate) {
+
+    global $course_id;
+    Database::get()->query("UPDATE points_game SET title = ?s,
+                                                   description = ?s,
+                                                   starts = ?t,
+                                                   expires = ?t
+                                                WHERE id = ?d AND course_id = ?d",
+                                    $title, $description, $startdate, $enddate, $points_game_id, $course_id);
+
 }
 
 /**

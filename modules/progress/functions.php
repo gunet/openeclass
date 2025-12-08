@@ -2575,6 +2575,113 @@ function display_settings($element, $element_id, $unit_id = 0): void
 }
 
 
+/**
+ * @brief add / edit points game settings
+ * @param type $points_game_id
+ */
+function points_game_settings($points_game_id = 0) {
+    global $tool_content, $head_content, $course_id, $course_code,
+        $language, $langTitle, $langDescription, $langSubmit, $langImgFormsDes,
+        $langInsert, $langStartDate, $langEndDate; 
+
+    load_js('bootstrap-datetimepicker');
+
+    $head_content .= "<script type='text/javascript'>
+        $(function() {
+            $('#startdatepicker').datetimepicker({
+                format: 'dd-mm-yyyy hh:ii',
+                pickerPosition: 'bottom-right',
+                language: '".$language."',
+                autoclose: true
+            });
+            $('#enddatepicker').datetimepicker({
+                format: 'dd-mm-yyyy hh:ii',
+                pickerPosition: 'bottom-right',
+                language: '".$language."',
+                autoclose: true
+            });
+        });
+        </script>";
+
+    if ($points_game_id > 0) { //edit
+        $data = Database::get()->querySingle("SELECT * FROM points_game WHERE id = ?d AND course_id = ?d", $points_game_id, $course_id);
+        $title = $data->title;
+        $description = $data->description;
+        $startdate = date_format(date_create_from_format('Y-m-d H:i:s', $data->starts), 'd-m-Y H:i');
+        $enddate = date_format(date_create_from_format('Y-m-d H:i:s', $data->expires), 'd-m-Y H:i');
+        $points_game_hidden = "<input type='hidden' name='points_game_id' value='$points_game_id'>";
+        $name = 'edit_points_game';
+    } else { //new
+        $title = '';
+        $description = '';
+        $startdate = '';
+        $enddate = '';
+        $points_game_hidden = '';
+        $name = 'newPointsGame';
+    }
+
+    $tool_content .= "<div class='d-lg-flex gap-4 mt-4'>
+    <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>
+            <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
+                <div class='form-group'>
+                    <label for='title' class='col-sm-6 control-label-notes'>$langTitle</label>
+                    <div class='col-sm-12'>
+                        <input id='title' class='form-control' type='text' placeholder='$langTitle' name='title' value='$title'>
+                    </div>
+                </div>
+                <div class='form-group mt-4'>
+                    <label for='description' class='col-sm-6 control-label-notes'>$langDescription</label>
+                    <div class='col-sm-12'>
+                        <textarea id='description' class='form-control' name='description' rows='6'>$description</textarea>
+                    </div>
+                </div>
+
+                <div class='form-group mt-4'>
+                    <label for='startdatepicker' class='col-sm-12 control-label-notes'>$langStartDate:</label>
+                    <div class='col-sm-12'>
+                       <div class='input-group'>
+                           <span class='add-on2 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                           <input class='form-control mt-0 border-start-0' name='startdatepicker' id='startdatepicker' type='text' value='$startdate'>
+                       </div>
+                    </div>
+                    <label for='enddatepicker' class='col-sm-12 control-label-notes'>$langEndDate:</label>
+                    <div class='col-sm-12'>
+                       <div class='input-group'>
+                           <span class='add-on2 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                           <input class='form-control mt-0 border-start-0' name='enddatepicker' id='enddatepicker' type='text' value='$enddate'>
+                       </div>
+                    </div>
+                </div>
+                $points_game_hidden";
+                $tool_content .= "<div class='form-group mt-5'>
+                    <div class='col-12 d-flex justify-content-end align-items-center'>
+
+
+                           ".form_buttons(array(
+                            array(
+                                    'class' => 'submitAdminBtn',
+                                    'text' => $langSubmit,
+                                    'name' => $name,
+                                    'value'=> $langInsert
+                            ),
+                            array(
+                                'class' => 'cancelAdminBtn ms-1',
+                                'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code"
+                                )
+                            ))."
+
+
+
+                    </div>
+                </div>
+            </form>
+        </div></div><div class='d-none d-lg-block'>
+        <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
+    </div>
+    </div>";
+
+}
+
 
 /**
  * @brief add / edit certificate / badge settings

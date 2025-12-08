@@ -4611,6 +4611,7 @@ $langSGradebookBook = "Register grade";
 $langPointsGames = "Points games";
 $langPointsGame = "Points game";
 $langNewPointsGame = "New points game";
+$langNewPointsGameSuc = "New points game created succesfully";
 $langPointsGameRecActivities = "Recurring activities";
 $langPointsGameOneTimeActivities = "One-time activities";
 $langPointsGameNoRecActivities = "There are no recurring activities";
