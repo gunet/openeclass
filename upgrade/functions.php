@@ -3581,6 +3581,10 @@ function upgrade_to_4_2($tbl_options) : void {
         Database::get()->query("ALTER TABLE assignment ADD results_date DATETIME DEFAULT NULL AFTER submission_date;");
     }
 
+    if (!DBHelper::fieldExists('lp_learnPath', 'force_completed_progress')) {
+        Database::get()->query("ALTER TABLE `lp_learnPath` ADD `force_completed_progress` BOOLEAN NOT NULL DEFAULT 0 AFTER `rank`;");
+    }
+
 }
 
 /**

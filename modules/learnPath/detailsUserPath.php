@@ -87,10 +87,12 @@ if (!isset($_GET['pdf']) && $is_course_reviewer) {
     $tool_content .= $action_bar;
 }
 
-$LPname = Database::get()->querySingle("SELECT `name`
+$LP = Database::get()->querySingle("SELECT *
         FROM `lp_learnPath`
         WHERE `learnPath_id` = ?d
-        AND `course_id` = ?d", $path_id, $course_id)->name;
+        AND `course_id` = ?d", $path_id, $course_id);
+$LPname = $LP->name;
+$lpForcedProgress = $LP->force_completed_progress;
 
 $sql = "SELECT LPM.`learnPath_module_id`, LPM.`parent`,
     LPM.`lock`, M.`module_id`,
@@ -196,12 +198,8 @@ foreach ($elementList as $module) {
         $score = 0;
     }
 
-    if ($module['contentType'] == CTSCORM_ && $module['scoreMax'] <= 0) {
-        if ($module['lesson_status'] == 'COMPLETED' || $module['lesson_status'] == 'PASSED') {
-            $progress = 100;
-        } else {
-            $progress = 0;
-        }
+    if ($lpForcedProgress && $module['contentType'] == CTSCORM_ && ($module['lesson_status'] == 'COMPLETED' || $module['lesson_status'] == 'PASSED')) {
+        $totalProgressMeasure = $progress = 100;
     }
 
     // display the current module name
