@@ -727,10 +727,11 @@ function has_certificate_completed($uid, $element, $element_id) {
  * @param type $description
  * @param type $startdate
  * @param type $enddate
+ * @param type $config
  * @return type
  * @global type $course_id
  */
-function add_points_game($title, $description, $startdate, $enddate) {
+function add_points_game($title, $description, $startdate, $enddate, $config) {
     global $course_id;
 
     $new_id = Database::get()->query("INSERT INTO points_game
@@ -739,7 +740,8 @@ function add_points_game($title, $description, $startdate, $enddate) {
                                 description = ?s,
                                 active = ?d,
                                 starts = ?t,
-                                expires = ?t", $course_id, $title, $description, 0, $startdate, $enddate)->lastInsertID;
+                                expires = ?t,
+                                config = ?s", $course_id, $title, $description, 0, $startdate, $enddate, json_encode($config, JSON_UNESCAPED_UNICODE))->lastInsertID;
 
     return $new_id;
 }

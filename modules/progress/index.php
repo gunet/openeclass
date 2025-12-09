@@ -188,8 +188,12 @@ if ($is_editor) {
         if($v->validate()) {
             $startdate = date_format(date_create_from_format('d-m-Y H:i', $_POST['startdatepicker']), 'Y-m-d H:i');
             $enddate = date_format(date_create_from_format('d-m-Y H:i', $_POST['enddatepicker']), 'Y-m-d H:i');
-            add_points_game($_POST['title'], $_POST['description'], $startdate, $enddate);
-            Session::flash('message',$langNewCertificateSuc);
+            $config_arr = [
+                'enable_leaderboard' => !empty($_POST['enable_leaderboard']) ? 1 : 0,
+                'anonymize_leaderboard' => !empty($_POST['anonymize_leaderboard']) ? 1 : 0
+            ];
+            add_points_game($_POST['title'], $_POST['description'], $startdate, $enddate, $config_arr);
+            Session::flash('message',$langNewPointsGameSuc);
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/progress/index.php?course=$course_code");
         } else {

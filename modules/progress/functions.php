@@ -2582,7 +2582,7 @@ function display_settings($element, $element_id, $unit_id = 0): void
 function points_game_settings($points_game_id = 0) {
     global $tool_content, $head_content, $course_id, $course_code,
         $language, $langTitle, $langDescription, $langSubmit, $langImgFormsDes,
-        $langInsert, $langStartDate, $langEndDate; 
+        $langInsert, $langStartDate, $langEndDate, $langActivateLeaderboard, $langAnonymizeLeaderboard; 
 
     load_js('bootstrap-datetimepicker');
 
@@ -2601,6 +2601,17 @@ function points_game_settings($points_game_id = 0) {
                 autoclose: true
             });
         });
+
+        $(function() {
+            $('#enable_leaderboard').on('change', function() {
+                if ($(this).is(':checked')) {
+                    $('#anonymize_area').show();
+                } else {
+                    $('#anonymize_area').hide();
+                    $('#anonymize_leaderboard').prop('checked', false);
+                }
+            });
+        });
         </script>";
 
     if ($points_game_id > 0) { //edit
@@ -2611,6 +2622,12 @@ function points_game_settings($points_game_id = 0) {
         $enddate = date_format(date_create_from_format('Y-m-d H:i:s', $data->expires), 'd-m-Y H:i');
         $points_game_hidden = "<input type='hidden' name='points_game_id' value='$points_game_id'>";
         $name = 'edit_points_game';
+        $config = json_decode($data->config, true);
+        $enable_leaderboard = !empty($config['enable_leaderboard']);
+        $anonymize_leaderboard  = !empty($config['anonymize_leaderboard']);
+        $enable_checked = $enable_leaderboard ? 'checked' : '';
+        $display_anon = $enable_leaderboard ? '' : 'style="display:none;"';
+        $anon_checked   = $anonymize_leaderboard ? 'checked' : '';
     } else { //new
         $title = '';
         $description = '';
@@ -2618,6 +2635,9 @@ function points_game_settings($points_game_id = 0) {
         $enddate = '';
         $points_game_hidden = '';
         $name = 'newPointsGame';
+        $enable_checked = '';
+        $anon_checked   = '';
+        $display_anon = 'style="display:none;"';
     }
 
     $tool_content .= "<div class='d-lg-flex gap-4 mt-4'>
@@ -2650,6 +2670,24 @@ function points_game_settings($points_game_id = 0) {
                            <span class='add-on2 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
                            <input class='form-control mt-0 border-start-0' name='enddatepicker' id='enddatepicker' type='text' value='$enddate'>
                        </div>
+                    </div>
+                </div>
+                <div class='form-group mt-4'>
+                    <div class='col-sm-12 mb-3'>
+                        <div class='form-check'>
+                            <input class='form-check-input' type='checkbox' id='enable_leaderboard' name='enable_leaderboard' value='1' $enable_checked>
+                            <label class='form-check-label' for='enable_leaderboard'>
+                                $langActivateLeaderboard
+                            </label>
+                        </div>
+                    </div>
+                    <div class='col-sm-12 mb-3' id='anonymize_area' $display_anon>
+                        <div class='form-check'>
+                            <input class='form-check-input' type='checkbox' id='anonymize_leaderboard' name='anonymize_leaderboard' value='1' $anon_checked>
+                            <label class='form-check-label' for='anonymize_leaderboard'>
+                                $langAnonymizeLeaderboard
+                            </label>
+                        </div>
                     </div>
                 </div>
                 $points_game_hidden";
