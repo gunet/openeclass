@@ -179,7 +179,21 @@ if ($is_editor) {
         $v->rule('required', array('title', 'startdatepicker', 'enddatepicker'));
         $v->rule('dateFormat', 'startdatepicker', 'd-m-Y H:i');
         $v->rule('dateFormat', 'enddatepicker', 'd-m-Y H:i');
-        $v->rule('dateAfter', 'enddatepicker', 'startdatepicker');
+        $v->addRule('endAfterStart', function($field, $value, $params, $fields) {
+            if (empty($fields['startdatepicker']) || empty($value)) {
+                return false;
+            }
+        
+            $start = DateTime::createFromFormat('d-m-Y H:i', $fields['startdatepicker']);
+            $end   = DateTime::createFromFormat('d-m-Y H:i', $value);
+        
+            if (!$start || !$end) {
+                return false;
+            }
+
+            return $end > $start;
+        });
+        $v->rule('endAfterStart', 'enddatepicker');
         $v->labels(array(
             'title' => "$langTheField $langTitle",
             'startdatepicker' => "$langTheField $langStartDate",
@@ -220,7 +234,21 @@ if ($is_editor) {
         $v->rule('required', array('title', 'startdatepicker', 'enddatepicker'));
         $v->rule('dateFormat', 'startdatepicker', 'd-m-Y H:i');
         $v->rule('dateFormat', 'enddatepicker', 'd-m-Y H:i');
-        $v->rule('dateAfter', 'enddatepicker', 'startdatepicker');
+        $v->addRule('endAfterStart', function($field, $value, $params, $fields) {
+            if (empty($fields['startdatepicker']) || empty($value)) {
+                return false;
+            }
+        
+            $start = DateTime::createFromFormat('d-m-Y H:i', $fields['startdatepicker']);
+            $end   = DateTime::createFromFormat('d-m-Y H:i', $value);
+        
+            if (!$start || !$end) {
+                return false;
+            }
+
+            return $end > $start;
+        });
+        $v->rule('endAfterStart', 'enddatepicker');
         $v->labels(array(
             'title' => "$langTheField $langTitle",
             'startdatepicker' => "$langTheField $langStartDate",
@@ -235,7 +263,7 @@ if ($is_editor) {
             redirect_to_home_page("modules/progress/index.php?course=$course_code");
         } else {
             Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
-            redirect_to_home_page("modules/progress/index.php?course=$course_code&edit=1");
+            redirect_to_home_page("modules/progress/index.php?course=$course_code&points_game_id=".$_POST['points_game_id']."&edit=1");
         }
     } elseif (isset($_POST['mod_cert_activity'])) { // modify certificate activity
         modify_certificate_activity($element, $element_id, $_POST['activity_id']);
