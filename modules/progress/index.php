@@ -227,7 +227,7 @@ if ($is_editor) {
             redirect_to_home_page("modules/progress/index.php?course=$course_code");
         } else {
             Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
-            redirect_to_home_page("modules/progress/index.php?course=$course_code&edit=1");
+            redirect_to_home_page("modules/progress/index.php?course=$course_code&".$element."_id=".$element_id."&edit=1");
         }
     } elseif (isset($_POST['edit_points_game'])) {
         $v = new Valitron\Validator($_POST);
