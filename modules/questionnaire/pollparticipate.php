@@ -54,7 +54,24 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             // Does nothing just refreshes the session
             exit();
         }
+
+        // Delete user answer from session data for the specific question
+        if (isset($_POST['clean_question_id'])) {
+            $question_id = intval($_POST['clean_question_id']);
+            unset($_SESSION['data_answers'][$question_id]);
+            exit();
+        }
+
+        // Store user answers into session data for all questions
+        if (isset($_POST['data_answers'])) {
+            foreach ($_POST['data_answers'] as $question_key => $data) {
+                unset($_SESSION['data_answers'][$question_key]);
+                $_SESSION['data_answers'][$question_key] = $data;
+            }
+            exit();
+        }
 }
+
 if (!isset($_REQUEST['UseCase'])) {
     $_REQUEST['UseCase'] = "";
 }
@@ -126,7 +143,8 @@ function printPollForm() {
     $langCancel, $head_content, $langPollParticipantInfo, $langCollesLegend,
     $pageName, $lang_rate1, $lang_rate5, $langForm, $pid, $langTypeOutMessage,
     $langPreviousQuestion, $langNextQuestion, $langCleanup, $langForbidden, 
-    $is_consultant, $is_coordinator, $langSubmissionOnBehalfOfUser, $urlAppend, $langProcessForFiliInTool;
+    $is_consultant, $is_coordinator, $langSubmissionOnBehalfOfUser, $urlAppend, $langProcessForFiliInTool,
+    $urlServer;
 
     $unit_id = isset($_REQUEST['unit_id'])? intval($_REQUEST['unit_id']): null;
     $refresh_time = 300000; // Refresh PHP session every 5 min. (in ms)
@@ -180,72 +198,6 @@ function printPollForm() {
             }, $refresh_time);
         });
     </script>
-
-    <script>
-        $(function() {
-
-            var total_pages = $('#total_pages').val();
-            var current_page = $('#current_page').val();
-            var paginate_answers = $('#paginate_answers').val();
-           
-            if(paginate_answers > 0){
-                for(var i=2; i<=total_pages; i++){
-                    $('#q_page_'+i).css('display','none');
-                }
-            }
-            
-            if(current_page >= 2 && current_page<total_pages){
-                $('#prevBtn').css('display','block');
-                $('#nextBtn').css('display','block');
-            }else if(current_page <= 1 && total_pages>1){
-                $('#prevBtn').css('display','none');
-                $('#nextBtn').css('display','block');
-            }else if(current_page >= 2 && current_page >= total_pages){
-                $('#prevBtn').css('display','block');
-                $('#nextBtn').css('display','none');
-            }else if(current_page <= 1 && total_pages==1){
-                $('#prevBtn').css('display','none');
-                $('#nextBtn').css('display','none');
-            }
-
-            $('#prevBtn').on('click', function(e){
-                e.preventDefault();
-                current_page--;
-                $('#current_page').val(current_page);
-            });
-            $('#nextBtn').on('click', function(e){
-                e.preventDefault();
-                current_page++;
-                $('#current_page').val(current_page);
-            });
-
-            $('#prevBtn,#nextBtn').on('click', function(e){
-                e.preventDefault();
-                if(current_page >= 2 && current_page<total_pages){
-                    $('#prevBtn').css('display','block');
-                    $('#nextBtn').css('display','block');
-                }else if(current_page <= 1 && total_pages>1){
-                    $('#prevBtn').css('display','none');
-                    $('#nextBtn').css('display','block');
-                }else if(current_page >= 2 && current_page >= total_pages){
-                    $('#prevBtn').css('display','block');
-                    $('#nextBtn').css('display','none');
-                }else if(current_page <= 1 && total_pages==1){
-                    $('#prevBtn').css('display','none');
-                    $('#nextBtn').css('display','none');
-                }
-
-                for(var i=1; i<=total_pages; i++){
-                    if(i==current_page){
-                        $('#q_page_'+i).css('display','block');
-                    }else{
-                        $('#q_page_'+i).css('display','none');
-                    }
-                }
-            });
-
-        });
-    </script>
     
     <script>
         $(function() {
@@ -279,6 +231,80 @@ function printPollForm() {
                     var classQ = '.QuestionType_'+typeQ+'.QuestionNumber_'+numberQ+' textarea';
                     $(classQ).val('');
                 }
+                // Clean question from session data
+                var qQuestion = $(this).attr('data-question-clean');
+                $.ajax({
+                    url: '$_SERVER[SCRIPT_NAME]?course=$course_code&UseCase=1&pid=$pid',
+                    method: 'POST',
+                    data: { clean_question_id: qQuestion },
+                });
+            });
+        });
+    </script>
+    
+    <script>
+        $(function() {
+            function save_data() {
+                var obj = {};
+                var checkBoxesVal = [];
+                document.querySelectorAll('[data-question-type]').forEach(function(elem) {
+                    if (elem) {
+                        var qType = $(elem).attr('data-question-type');
+                        var name = elem.name;
+                        const foundNumbers = name.match(/\d+/g);
+                        if (qType == 1 || qType == 2 || qType == 5) { // radio or single text or scale
+                            if (foundNumbers.length == 1 && elem.value != '') {
+                                var qRow = foundNumbers[0];
+                                if (!obj[qRow]) {
+                                    obj[qRow] = {};
+                                }
+                                if (qType == 1 && elem.checked) {
+                                    obj[qRow] = elem.value;
+                                } else if (qType == 2 || qType == 5) {
+                                    obj[qRow] = elem.value;
+                                }
+                            }
+                        } else if (qType == 3) { // checkboxes multiple answer
+                            if (foundNumbers.length == 1 && elem.checked) {
+                                var qRow = foundNumbers[0];
+                                if (!obj[qRow]) {
+                                    obj[qRow] = {};
+                                }
+                                checkBoxesVal.push(elem.value);
+                                const result = checkBoxesVal.join(',');
+                                obj[qRow] = result;
+                            }
+                        } else if (qType == 6) { // table
+                            if (foundNumbers.length == 2 && elem.value != '') {
+                                var qRow = foundNumbers[0];
+                                var qCol = foundNumbers[1];
+                                if (!obj[qRow]) {
+                                    obj[qRow] = {};
+                                }
+                                obj[qRow][qCol] = elem.value;
+                            }
+                        }
+                    }
+                });
+                // Send data via AJAX
+                $.ajax({
+                    url: '$_SERVER[SCRIPT_NAME]?course=$course_code&UseCase=1&pid=$pid',
+                    method: 'POST',
+                    data: { data_answers: obj },
+                });
+            }
+
+            $('#prevBtn').on('click', function(e) {
+                e.preventDefault();
+                var prevLink = $('#linkPrevPage').val();
+                save_data();
+                window.location.href = prevLink;
+            });
+            $('#nextBtn').on('click', function(e) {
+                e.preventDefault();
+                var nextLink = $('#linkNextPage').val();
+                save_data();
+                window.location.href = nextLink;
             });
         });
     </script>";
@@ -501,7 +527,22 @@ function printPollForm() {
         //*****************************************************************************
         //      Get answers + questions
         //******************************************************************************/
-        $questions = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d AND qtype != ?d ORDER BY q_position ASC", $pid, 0);
+        $questions = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d AND qtype != ?d ORDER BY q_position,`page` ASC", $pid, 0);
+        $pageBreakExists = checkPageBreakOn($pid);
+        $maxPage = Database::get()->querySingle("SELECT MAX(`page`) AS max FROM poll_question WHERE pid = ?d AND qtype != ?d", $pid, 0)->max;
+        if (isset($_SESSION['current_page'])) {
+            unset($_SESSION['current_page']);
+        }
+        $_SESSION['current_page'] = $pageBreakExists ? 1 : '';
+        if ($pageBreakExists && isset($_GET['page'])) {
+            $_SESSION['current_page'] = intval($_GET['page']);
+        } elseif (!$pageBreakExists) {
+            unset($_SESSION['current_page']);
+            unset($_SESSION['data_answers']);
+            unset($_SESSION['question_ids']);
+            unset($_SESSION['q_row_columns']);
+            unset($_SESSION['loop_init_answers']);
+        }
         if (!$userDefault && !isset($_GET['printPollForUser'])) {
             $email = Session::has('participantEmail') ? Session::get('participantEmail') : '';
             $email_error = Session::getError('participantEmail') ? " has-error" : "";
@@ -523,7 +564,6 @@ function printPollForm() {
         }
 
         $pollType = Database::get()->querySingle("SELECT `type` FROM poll WHERE pid = ?d", $pid)->type;
-        $pollPagination = Database::get()->querySingle("SELECT `pagination` FROM poll WHERE pid = ?d", $pid)->pagination;
         if (isset($_SESSION["poll_answers_$pid"])) {
             $incomplete_resubmission = isset($_SESSION["poll_answers_$pid"]);
             $incomplete_answers = $_SESSION["poll_answers_$pid"];
@@ -531,10 +571,6 @@ function printPollForm() {
         }
 
         $i = 1;
-        $page = 1;
-        $tool_content .= "<input id='current_page' type='hidden' value='$page'>";
-        $tool_content .= "<input id='total_pages' type='hidden' value='".count($questions)."'>";
-        $tool_content .= "<input id='paginate_answers' type='hidden' value='$pollPagination'>";
         // Session process
         $user_answers_session = false;
         $sql_an = '';
@@ -542,10 +578,12 @@ function printPollForm() {
         if (isset($s_id) && $s_id > 0 && isset($_GET['from_session_view'])) {
             $user_answers_session = true;
         }
-        //if ($user_answers_session) {
-            $sql_an = "AND b.session_id = $s_id";
-        //}
-        
+        $sql_an = "AND b.session_id = $s_id";
+
+        if ($pageBreakExists) {
+            session_answers_init($questions, $sql_an, $userDefault);
+        }
+
         foreach ($questions as $theQuestion) {
             if ($temp_IsLime) {
                 break;
@@ -563,9 +601,16 @@ function printPollForm() {
                    <div class='alert alert-info m-0 TextBold text-center mb-4'>" . standard_text_escape($theQuestion->question_text) . "</div>
                 </div>";
             } else {
-                $page_number = (isset($pollPagination) && $pollPagination == 1) ? "id=q_page_$page" : "";
+                // Store all questions into session variables.
+                if ($pageBreakExists) {
+                    $_SESSION['question_ids'][$pqid] = $qtype;
+                }
+                // Ignore questions that appear on a new page.
+                if (isset($_SESSION['current_page']) && $theQuestion->page != $_SESSION['current_page']) {
+                    continue;
+                }
                 $tool_content .= "
-                <div $page_number class='col-12' style='display: block;'>
+                <div class='col-12'>
                     <div class='card panelCard px-lg-4 py-lg-3 h-100 panelCard-questionnaire poll-panel mb-4'>
                         <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                             <h3>$langQuestion $i</h3>
@@ -615,12 +660,24 @@ function printPollForm() {
                                             }
                                         }
                                     }
+                                    if ($qtype == QTYPE_SINGLE) {
+                                        if ($pageBreakExists && isset($_SESSION['data_answers']) && !empty($_SESSION['data_answers'][$pqid]) && $_SESSION['data_answers'][$pqid] == $theAnswer->pqaid) {
+                                            $checked = 'checked';
+                                        }
+                                    } elseif ($qtype == QTYPE_MULTIPLE) {
+                                        if ($pageBreakExists && isset($_SESSION['data_answers']) && !empty($_SESSION['data_answers'][$pqid])) {
+                                            $arrTemporaryUserAnswers = explode(',', $_SESSION['data_answers'][$pqid]);
+                                            if (in_array($theAnswer->pqaid, $arrTemporaryUserAnswers)) {
+                                                $checked = 'checked';
+                                            }
+                                        }
+                                    }
                                     $tool_content .= "
                                         <div class='form-group'>
                                             <div class='col-sm-offset-1 col-sm-11'>
                                                 <div class='$type_attr QuestionType_{$qtype} QuestionNumber_{$pqid}'>
                                                     <label class='$class_type_attr' aria-label='$langSelect'>
-                                                        <input type='$type_attr' name='answer[$pqid]$name_ext' value='$theAnswer->pqaid' $checked>
+                                                        <input type='$type_attr' name='answer[$pqid]$name_ext' value='$theAnswer->pqaid' $checked data-question-type='$qtype'>
                                                         $checkMark_class
                                                         ".q_math($theAnswer->answer_text)."
                                                     </label>
@@ -634,7 +691,7 @@ function printPollForm() {
                                             <div class='col-sm-offset-1 col-sm-11'>
                                                 <div class='$type_attr QuestionType_{$qtype} QuestionNumber_{$pqid}'>
                                                     <label class='$class_type_attr'>
-                                                        <input type='$type_attr' name='answer[$pqid]' value='-1'>
+                                                        <input type='$type_attr' name='answer[$pqid]' value='-1' data-question-type='$qtype'>
                                                         $checkMark_class
                                                         $langPollUnknown
                                                     </label>
@@ -644,7 +701,7 @@ function printPollForm() {
                                 }
 
                                 $tool_content .= "<div class='col-12 d-flex justify-content-end align-items-center mt-4'>
-                                                    <a id='{$qtype}_{$pqid}' class='btn deleteAdminBtn clearUpBtn gap-1'><i class='fa-regular fa-trash-can'></i>$langCleanup</a>
+                                                    <a id='{$qtype}_{$pqid}' class='btn deleteAdminBtn clearUpBtn gap-1' data-question-clean='$pqid'><i class='fa-regular fa-trash-can'></i>$langCleanup</a>
                                                   </div>";
                             } elseif ($qtype == QTYPE_SCALE) {
                                 $slider_value = 0;
@@ -657,6 +714,9 @@ function printPollForm() {
                                                         $sql_an", $pqid, $userDefault);
                                     if ($user_answers) {
                                         $slider_value = $user_answers->answer_text;
+                                    }
+                                    if ($pageBreakExists && isset($_SESSION['data_answers']) && !empty($_SESSION['data_answers'][$pqid])) {
+                                        $slider_value = $_SESSION['data_answers'][$pqid];
                                     }
                                 } elseif (isset($incomplete_resubmission) and $incomplete_answers[$pqid]) {
                                     $slider_value = $incomplete_answers[$pqid][0]->answer_text;
@@ -677,7 +737,7 @@ function printPollForm() {
 
                                 $tool_content .= "
                                      <div class='form-group px-4 mb-5'>
-                                        <input aria-label='$langAnswer' name='answer[$pqid]' class='grade_bar' data-answers='$countAnsScales' data-txt-answers='$ansAsString' data-slider-id='ex1Slider' type='text' data-slider-min='1' data-slider-max='$theQuestion->q_scale' data-slider-step='1' data-slider-value='$slider_value'>
+                                        <input aria-label='$langAnswer' name='answer[$pqid]' class='grade_bar' data-answers='$countAnsScales' data-txt-answers='$ansAsString' data-slider-id='ex1Slider' type='text' data-slider-min='1' data-slider-max='$theQuestion->q_scale' data-slider-step='1' data-slider-value='$slider_value' data-question-type='$qtype'>
                                     </div>";
                             } elseif ($qtype == QTYPE_FILL) {
                                 $text = '';
@@ -694,15 +754,18 @@ function printPollForm() {
                                 } elseif (isset($incomplete_resubmission) and $incomplete_answers[$pqid]) {
                                     $text = $incomplete_answers[$pqid][0]->answer_text;
                                 }
+                                if ($pageBreakExists && isset($_SESSION['data_answers']) && !empty($_SESSION['data_answers'][$pqid])) {
+                                    $text = $_SESSION['data_answers'][$pqid];
+                                }
                                 $tool_content .= "
                                     <div class='form-group margin-bottom-fat'>
                                         <div class='col-sm-12 margin-top-thin QuestionType_{$qtype} QuestionNumber_{$pqid}'>
-                                            <textarea class='form-control' name='answer[$pqid]' aria-label='$langTypeOutMessage'>$text</textarea>
+                                            <textarea class='form-control' name='answer[$pqid]' aria-label='$langTypeOutMessage' data-question-type='$qtype'>$text</textarea>
                                         </div>
                                     </div>";
 
                                     $tool_content .= "<div class='col-12 d-flex justify-content-end align-items-center mt-4'>
-                                                            <a id='{$qtype}_{$pqid}' class='btn deleteAdminBtn clearUpBtn gap-1'><i class='fa-regular fa-trash-can'></i>$langCleanup</a>
+                                                            <a id='{$qtype}_{$pqid}' class='btn deleteAdminBtn clearUpBtn gap-1' data-question-clean='$pqid'><i class='fa-regular fa-trash-can'></i>$langCleanup</a>
                                                         </div>";
                             } elseif ($qtype == QTYPE_TABLE) {
 
@@ -729,6 +792,9 @@ function printPollForm() {
                                                     </thead>
                                                     <tbody>";
                                                         $ansCounter = 0;
+                                                        if (isset($_SESSION['q_row_columns'][$pqid])) {
+                                                            unset($_SESSION['q_row_columns'][$pqid]);
+                                                        }
                                                         for ($r=0; $r<$q_rows; $r++) {
                                                             $tool_content .= "<tr>";
                                                                 for ($t=0; $t<count($user_questions); $t++) {
@@ -749,9 +815,15 @@ function printPollForm() {
                                                                             $text = $user_q->answer_text;
                                                                         }
                                                                     }
+                                                                    if ($pageBreakExists && isset($_SESSION['data_answers']) && !empty($_SESSION['data_answers'][$theQuestion->pqid][$ansCounter])) {
+                                                                        $text = $_SESSION['data_answers'][$theQuestion->pqid][$ansCounter];
+                                                                    }
+                                                                    if ($pageBreakExists) {
+                                                                        $_SESSION['q_row_columns'][$pqid][] = "$pqid,$val_row,$val_col,$ansCounter";
+                                                                    }
                                                                     $tool_content .= "<td>
                                                                                         <input type='hidden' name='q_row_col[]' value='$pqid,$val_row,$val_col,$ansCounter'>
-                                                                                        <textarea class='form-control textarea-qtable' name='answer[$pqid][$ansCounter]' aria-label='$langTypeOutMessage'>$text</textarea>
+                                                                                        <textarea class='form-control textarea-qtable' name='answer[$pqid][$ansCounter]' aria-label='$langTypeOutMessage' data-question-type='$qtype'>$text</textarea>
                                                                                     </td>";
                                                                 }
                                                             $tool_content .= "</tr>";
@@ -763,7 +835,7 @@ function printPollForm() {
                                     }
 
                                     $tool_content .= "<div class='col-12 d-flex justify-content-end align-items-center mt-4'>
-                                                            <a id='{$qtype}_{$pqid}' class='btn deleteAdminBtn clearUpBtn gap-1'><i class='fa-regular fa-trash-can'></i>$langCleanup</a>
+                                                            <a id='{$qtype}_{$pqid}' class='btn deleteAdminBtn clearUpBtn gap-1' data-question-clean='$pqid'><i class='fa-regular fa-trash-can'></i>$langCleanup</a>
                                                         </div>";
                                 }
                             }
@@ -773,17 +845,35 @@ function printPollForm() {
                 </div>";
                 $i++;
             }
-
-            $page++;
         }
 
 
         // next - prev btn
-        if (!$temp_IsLime && isset($pollPagination) && $pollPagination == 1) {
-        $tool_content .= "<div class='col-12 d-flex justify-content-between align-items-center gap-3'>
-                            <button id='prevBtn' class='btn submitAdminBtn'><i class='fa-solid fa-chevron-left'></i>$langPreviousQuestion</button>
-                            <button id='nextBtn' class='btn submitAdminBtn'>$langNextQuestion<i class='fa-solid fa-chevron-right'></i></button>
-                          </div>";
+        if (!$temp_IsLime && $pageBreakExists) {
+            $prev_page = $_SESSION['current_page'] - 1;
+            $linkPrev = "{$urlServer}modules/questionnaire/pollparticipate.php?course=$course_code&UseCase=1&pid=$pid&page=$prev_page";
+            $tool_content .= "<input id='linkPrevPage' type='hidden' value='$linkPrev'>";
+            $next_page = $_SESSION['current_page'] + 1;
+            $linkNext = "{$urlServer}modules/questionnaire/pollparticipate.php?course=$course_code&UseCase=1&pid=$pid&page=$next_page";
+            $tool_content .= "<input id='linkNextPage' type='hidden' value='$linkNext'>";
+            $tool_content .= "<div class='col-12 d-flex justify-content-between align-items-center gap-3'>";
+            $tool_content .= "<div class='flex-fill d-flex justify-content-start'>";
+                            if (isset($_GET['page']) && intval($_GET['page']) > 1) {
+                                $tool_content .= "
+                                    <button type='submit' id='prevBtn' class='btn submitAdminBtn w-100 gap-2'>
+                                        <i class='fa-solid fa-chevron-left'></i>$langPreviousQuestion
+                                    </button>";
+                            }
+            $tool_content .= "</div>";
+            $tool_content .= "<div class='flex-fill d-flex justify-content-end'>";
+                            if (!isset($_GET['page']) or (isset($_GET['page']) && intval($_GET['page']) < $maxPage)) {
+                                $tool_content .= "
+                                    <button type='submit' id='nextBtn' class='btn submitAdminBtn w-100 gap-2'>
+                                        $langNextQuestion<i class='fa-solid fa-chevron-right'></i>
+                                    </button>";
+                            }
+            $tool_content .= "</div>";
+            $tool_content .= "</div>";
         }
 
 
@@ -799,7 +889,7 @@ function printPollForm() {
             if (isset($_GET['from_session_view'])) {
                 $tool_content .= "<a class='btn cancelAdminBtn' href='../session/session_space.php?course=$course_code&amp;session=$_GET[session]'>" . q($langBack) . "</a>";
             } else {
-                $tool_content .= "<a class='btn cancelAdminBtn' href='index.php?course=$course_code'>" . q($langBack) . "</a>";
+                $tool_content .= "<a class='btn cancelAdminBtn' href='index.php?course=$course_code&cancelPoll=true'>" . q($langBack) . "</a>";
             }
         } else if ($is_course_reviewer) {
             // is poll assigned to course_reviewer?
@@ -819,7 +909,7 @@ function printPollForm() {
             if (count($result) > 0) {
                 $tool_content .= "<input class='btn submitAdminBtn' name='submit' type='submit' value='" . q($langSubmit) . "'>";
             } else {
-                $tool_content .= "<a class='btn cancelAdminBtn' href='index.php?course=$course_code'>" . q($langBack) . "</a>";
+                $tool_content .= "<a class='btn cancelAdminBtn' href='index.php?course=$course_code&cancelPoll=true'>" . q($langBack) . "</a>";
             }
         } else {
             if (!$temp_IsLime) {
@@ -830,7 +920,7 @@ function printPollForm() {
                     if (isset($_GET['from_session_view'])) {
                         $tool_content .= "<a class='btn cancelAdminBtn ms-3' href='../session/session_space.php?course=$course_code&amp;session=$_GET[session]'>" . q($langCancel). "</a>";
                     } else {
-                        $tool_content .= "<a class='btn cancelAdminBtn ms-3' href='index.php?course=$course_code'>" . q($langCancel) . "</a>";
+                        $tool_content .= "<a class='btn cancelAdminBtn ms-3' href='index.php?course=$course_code&cancelPoll=true'>" . q($langCancel) . "</a>";
                     }
                 }
             }
@@ -936,7 +1026,8 @@ function submitPoll() {
     if ($v->validate()) {
         // first populate poll_answer
         $CreationDate = date("Y-m-d H:i");
-        $answer = isset($_POST['answer'])? $_POST['answer']: array();
+        $pageBreakExists = checkPageBreakOn($pid);
+        $answer = update_submission($pid, $pageBreakExists);
         $userDefault = $_POST['onBehalfOfUserId'] ?? $uid;
 
         if ($userDefault) {
@@ -978,7 +1069,12 @@ function submitPoll() {
             send_mail_multipart('', '', '', $participantEmail, $subject, $body_plain, $body_html);
         }
 
-        $question = isset($_POST['question'])? $_POST['question']: array();
+        
+        if ($pageBreakExists && isset($_SESSION['question_ids'])) {
+            $question = $_SESSION['question_ids'];
+        } else {
+            $question = isset($_POST['question'])? $_POST['question']: array();
+        }
         foreach ($question as $pqid => $qtype) {
             $pqid = intval($pqid);
             if ($qtype == QTYPE_MULTIPLE) {
@@ -1025,9 +1121,10 @@ function submitPoll() {
                 $aid = 0;
             } elseif ($qtype == QTYPE_TABLE) {
                 $aid = 0;
-                $arr_answers = $_POST['answer'];
+                $arr_answers = $answer;
                 $empty_answers = 0;
-                foreach ($_POST['q_row_col'] as $q_an) {
+                $arrRowCols = (isset($pageBreakExists) && isset($_SESSION['q_row_columns'][$pqid])) ? $_SESSION['q_row_columns'][$pqid] : $_POST['q_row_col'];
+                foreach ($arrRowCols as $q_an) {
                     $arr_tmp = explode(',',$q_an);
                     $pqid_tmp = $arr_tmp[0];
                     $q_row = $arr_tmp[1];
@@ -1116,4 +1213,146 @@ function submitPoll() {
         Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
         redirect_to_home_page("modules/questionnaire/pollparticipate.php?course=$course_code&UseCase=1&pid=$pid");
     }
+}
+
+function checkPageBreakOn($PID) {
+    $check = false;
+    $res = Database::get()->querySingle("SELECT pqid FROM poll_question WHERE pid = ?d AND qtype = ?d AND `page` = ?d", $PID, 0, 0);
+    if ($res) {
+        $check = true;
+    }
+    return $check;
+}
+
+function session_answers_init($questions, $sql_an, $userDefault) {
+    if (!isset($_SESSION['loop_init_answers'])) {
+        $_SESSION['loop_init_answers'] = 1; 
+    }
+    if (isset($_SESSION['loop_init_answers']) && $_SESSION['loop_init_answers'] == 1) {
+        foreach ($questions as $theQuestion) {
+            $pqid = $theQuestion->pqid;
+            $qtype = $theQuestion->qtype;
+            $user_answers = null;
+            if (($qtype == QTYPE_SINGLE || $qtype == QTYPE_MULTIPLE)) {       
+                $user_answers = Database::get()->queryArray("SELECT a.aid
+                        FROM poll_user_record b, poll_answer_record a
+                        LEFT JOIN poll_question_answer c
+                            ON a.aid = c.pqaid
+                        WHERE a.poll_user_record_id = b.id
+                            AND a.qid = ?d
+                            AND b.uid = ?d
+                            $sql_an", $pqid, $userDefault);            
+                if ($user_answers && !isset($_SESSION['data_answers'][$pqid])) {
+                    $storeData = [];
+                    foreach ($user_answers as $ua) {
+                        $storeData[] = $ua->aid;
+                    }
+                    if ($qtype == QTYPE_MULTIPLE) {
+                        $_SESSION['data_answers'][$pqid] = implode(',', $storeData);
+                    } elseif ($qtype == QTYPE_SINGLE) {
+                        foreach ($storeData as $sd) {
+                            $_SESSION['data_answers'][$pqid] = $sd;
+                        }
+                    }
+                }
+            } elseif ($qtype == QTYPE_SCALE && isset($_SESSION['loop_init_answers'])) {
+                $user_answers = Database::get()->querySingle("SELECT a.answer_text
+                                    FROM poll_answer_record a, poll_user_record b
+                                WHERE qid = ?d
+                                    AND a.poll_user_record_id = b.id
+                                    AND b.uid = ?d
+                                    $sql_an", $pqid, $userDefault);
+                if ($user_answers) {
+                    $slider_value = $user_answers->answer_text;
+                    if (!isset($_SESSION['data_answers'][$pqid])) {
+                        $_SESSION['data_answers'][$pqid] = $slider_value;
+                    }
+                }
+            } elseif ($qtype == QTYPE_FILL && isset($_SESSION['loop_init_answers'])) {
+                $user_answers = Database::get()->querySingle("SELECT a.answer_text
+                                    FROM poll_answer_record a, poll_user_record b
+                                WHERE qid = ?d
+                                    AND a.poll_user_record_id = b.id
+                                    AND b.uid = ?d
+                                    $sql_an", $pqid, $userDefault);
+                if ($user_answers) {
+                    $text = $user_answers->answer_text;
+                    if (!isset($_SESSION['data_answers'][$pqid])) {
+                        $_SESSION['data_answers'][$pqid] = $text;
+                    }
+                }
+            } elseif ($qtype == QTYPE_TABLE) {
+                $s_data = [];
+                $q_res = Database::get()->querySingle("SELECT q_row,q_column FROM poll_question WHERE pqid = ?d", $pqid);
+                $length = 1;
+                for ($i = 1; $i <= $q_res->q_row; $i++) {
+                    for ($j = 1; $j <= $q_res->q_column; $j++) {
+                        $user_answers = Database::get()->querySingle("SELECT DISTINCT a.sub_qid, a.sub_qid_row, a.answer_text
+                                        FROM poll_answer_record a, poll_user_record b
+                                        WHERE qid = ?d
+                                        AND a.poll_user_record_id = b.id
+                                        AND b.uid = ?d
+                                        AND a.sub_qid = ?d
+                                        AND a.sub_qid_row = ?d
+                                        $sql_an", $pqid, $userDefault, $j, $i);
+                        
+                        if ($user_answers) {
+                            $s_data[$length] = $user_answers->answer_text;
+                        }
+                        $length++;
+                    }
+                }
+                if (count($s_data) > 0 && !isset($_SESSION['data_answers'][$pqid])) {
+                    $_SESSION['data_answers'][$pqid] = $s_data;
+                } 
+            }
+        }
+        
+        $_SESSION['loop_init_answers'] = $_SESSION['loop_init_answers'] + 1;
+    }
+}
+
+function update_submission($pid, $pageBreakExists) {
+    if ($pageBreakExists && isset($_SESSION['data_answers'])) {
+        $final_answers = [];
+        foreach ($_SESSION['data_answers'] as $question_key => $value) {
+            if (isset($final_answers[$question_key])) {
+                unset($final_answers[$question_key]);
+            }
+            $questionType = Database::get()->querySingle("SELECT qtype FROM poll_question WHERE pqid = ?d", $question_key)->qtype;
+            if ($questionType == QTYPE_MULTIPLE) {
+                $multiple_values_arr = explode(',', $value);
+                $final_answers[$question_key] = $multiple_values_arr;
+            } elseif ($questionType == QTYPE_SINGLE || $questionType == QTYPE_FILL || $questionType == QTYPE_SCALE) {
+                $final_answers[$question_key] = $value;
+            } elseif ($questionType == QTYPE_TABLE) {
+                $resDimension = Database::get()->querySingle("SELECT q_row,q_column FROM poll_question WHERE pqid = ?d", $question_key);
+                $length = $resDimension->q_row*$resDimension->q_column;
+                $q_table_arr = [];
+                for ($i = 1; $i <= $length; $i++) {
+                    if (isset($_SESSION['data_answers'][$question_key][$i])) {
+                        $q_table_arr[$i] = $_SESSION['data_answers'][$question_key][$i];
+                    } else {
+                        $q_table_arr[$i] = '';
+                    }
+                }
+                $final_answers[$question_key] = $q_table_arr;
+            }
+        }
+        if (isset($_POST['answer'])) {
+            foreach ($_POST['answer'] as $q_key => $val) {
+                if (isset($final_answers[$q_key])) {
+                    unset($final_answers[$q_key]);
+                }
+                $final_answers[$q_key] = $val; // na parei thn kainouria timh
+            }
+        }
+        $answer = $final_answers;
+        unset($_SESSION['data_answers']);
+        unset($_SESSION['loop_init_answers']);
+    } else {
+        $answer = isset($_POST['answer'])? $_POST['answer']: array();
+    }
+
+    return $answer;
 }

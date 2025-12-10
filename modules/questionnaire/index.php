@@ -121,6 +121,14 @@ $head_content .= "<script type='text/javascript'>
         });
         </script>";
 
+if (isset($_GET['cancelPoll'])) {
+    unset($_SESSION['current_page']);
+    unset($_SESSION['data_answers']);
+    unset($_SESSION['question_ids']);
+    unset($_SESSION['q_row_columns']);
+    unset($_SESSION['loop_init_answers']);
+}
+
 if (isset($_GET['verification_code'])) {
     $afftected_rows = Database::get()->query("UPDATE poll_user_record SET email_verification = 1, verification_code = NULL WHERE verification_code = ?s", $_GET['verification_code'])->affectedRows;
     if ($afftected_rows > 0) {
@@ -330,6 +338,11 @@ if ($is_editor) {
             }
         // delete poll results
         } elseif (isset($_GET['delete_results']) && $_GET['delete_results'] == 'yes') {
+            unset($_SESSION['current_page']);
+            unset($_SESSION['data_answers']);
+            unset($_SESSION['question_ids']);
+            unset($_SESSION['q_row_columns']);
+            unset($_SESSION['loop_init_answers']);
             Database::get()->query("DELETE FROM poll_user_record WHERE pid = ?d", $pid);
             $poll_title = Database::get()->querySingle("SELECT name FROM poll WHERE course_id = ?d", $course_id)->name;
             Log::record($course_id, MODULE_ID_QUESTIONNAIRE, LOG_DELETE, array('title' => $poll_title, 'legend' => 'purge_results'));

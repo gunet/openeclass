@@ -211,9 +211,10 @@ if (isset($_POST['submitQuestion'])) {
                     WHERE pqid = ?d AND pid = ?d", $query_vars);
         } else {
             $max_position = Database::get()->querySingle("SELECT MAX(q_position) AS position FROM poll_question WHERE pid = ?d", $pid)->position;
-            $query_columns = "pid, question_text, qtype, q_position, description, answer_scale";
-            $query_values = "?d, ?s, ?d, ?d, ?s, ?s";
-            $query_vars = array($pid, $question_text, $qtype, $max_position + 1, $question_description, $answerScale);
+            $max_page = Database::get()->querySingle("SELECT MAX(`page`) AS `maxpage` FROM poll_question WHERE pid = ?d", $pid)->maxpage;
+            $query_columns = "pid, question_text, qtype, q_position, description, answer_scale, page";
+            $query_values = "?d, ?s, ?d, ?d, ?s, ?s, ?d";
+            $query_vars = array($pid, $question_text, $qtype, $max_position + 1, $question_description, $answerScale, $max_page);
             if (isset($_POST['questionScale'])){
                 $query_columns .= ", q_scale";
                 $query_values .=", ?d";
