@@ -10148,9 +10148,12 @@ function theme_initialization() {
 
         if(!empty($theme_options_styles['BgTextEditor'])){
             $styles_str .= "
-                .mce-container,
-                .mce-widget,
-                .mce-widget *,
+                .mce-container {
+                    background: $theme_options_styles[BgTextEditor] !important;
+                }
+                .mce-widget {
+                    background: $theme_options_styles[BgTextEditor] !important;
+                }
                 .mce-reset {
                     background: $theme_options_styles[BgTextEditor] !important;
                 }
