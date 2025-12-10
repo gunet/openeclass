@@ -76,11 +76,11 @@
                                                         <option value='{{ getIndirectReference(0) }}'>--</option>
                                                     @endif
                                                     @if ($social_bookmarks_enabled)
-                                                        <option value='{{ getIndirectReference(-2) }}'{{ isset($category) && $category == -2 ? " selected": "" }}>{{ trans('langSocialCategory') }}</option>
+                                                        <option value='{{ getIndirectReference(-2) }}'{{ (isset($link) and $link->category == -2) ? ' selected': '' }}>{{ trans('langSocialCategory') }}</option>
                                                     @endif
                                                     @if ($is_editor)
                                                         @foreach ($categories as $row)
-                                                            <option value='{{ getIndirectReference($row->id) }}'{{ isset($category) && $category == $row->id ? " selected": "" }}>{{ $row->name }}</option>
+                                                            <option value='{{ getIndirectReference($row->id) }}'{{ (isset($link) and $category == $row->id) ? ' selected': '' }}>{{ $row->name }}</option>
                                                         @endforeach
                                                     @endif
                                                 </select>
@@ -112,4 +112,3 @@
 </div>
 </div>
 @endsection
-
