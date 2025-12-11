@@ -1684,14 +1684,119 @@ function show_extrepo($title, $comments, $resource_id, $ext_resource_id, $visibi
         $comment_box = '';
     }
     
+    // Add media preview for YouTube videos and Pixabay images
+    $media_preview = '';
+    
+    // YouTube video preview
+    if ($ext_res && $ext_res->repo_type === 'youtube' && $ext_res->resource_type === 'video') {
+        $video_id = extract_youtube_video_id($ext_res->url);
+        if ($video_id) {
+            $media_preview = "
+                <div class='mt-2 mb-2'>
+                    <div class='ratio ratio-16x9' style='max-width: 640px;'>
+                        <iframe src='https://www.youtube.com/embed/{$video_id}' 
+                                title='" . q($title) . "' 
+                                frameborder='0' 
+                                allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' 
+                                allowfullscreen>
+                        </iframe>
+                    </div>
+                </div>";
+        }
+    }
+    
+    // Pixabay image preview
+    if ($ext_res && $ext_res->repo_type === 'pixabay' && $ext_res->resource_type === 'image') {
+        // Pixabay's webformatURL and largeImageURL are temporary signed URLs that expire
+        // We need to use permanent URLs from cdn.pixabay.com or construct them from image ID
+        $image_url = null;
+        
+        // Parse metadata JSON
+        $metadata = [];
+        if (!empty($ext_res->metadata)) {
+            $decoded = json_decode($ext_res->metadata, true);
+            if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+                $metadata = $decoded;
+            }
+        }
+        
+        // Use permanent previewURL from cdn.pixabay.com (doesn't expire)
+        // Format: https://cdn.pixabay.com/photo/YYYY/MM/DD/HH/MM/image-id_640.jpg
+        if (!empty($metadata['previewURL'])) {
+            $image_url = $metadata['previewURL'];
+            // Convert 150px thumbnail to 640px if available
+            $image_url = str_replace('_150.jpg', '_640.jpg', $image_url);
+            $image_url = str_replace('_150.png', '_640.png', $image_url);
+        } elseif (!empty($ext_res->thumbnail_url)) {
+            // Use stored thumbnail and upgrade to 640px
+            $image_url = $ext_res->thumbnail_url;
+            $image_url = str_replace('_150.jpg', '_640.jpg', $image_url);
+            $image_url = str_replace('_150.png', '_640.png', $image_url);
+        } elseif (!empty($ext_res->external_id)) {
+            // Fallback: construct permanent URL from image ID
+            $image_url = "https://cdn.pixabay.com/photo/2020/01/01/00/00/image-{$ext_res->external_id}_640.jpg";
+        }
+        
+        // Display image if we found a URL
+        if ($image_url) {
+            // Clean up the URL in case it has escaped slashes
+            $image_url = str_replace('\\/', '/', $image_url);
+            
+            $media_preview = "
+                <div class='mt-2 mb-2'>
+                    <a href='" . q($ext_res->url) . "' target='_blank' rel='noopener noreferrer'>
+                        <img src='" . q($image_url) . "' 
+                             alt='" . q($title) . "' 
+                             class='img-fluid' 
+                             style='max-width: 640px; max-height: 480px; border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);'
+                             loading='lazy'
+                             onerror=\"this.onerror=null; this.style.display='none'; console.log('Pixabay image failed to load: ' + this.src);\">
+                    </a>
+                </div>";
+        }
+    }
+    
     $module_name = $langExternalResource ?? 'External Resource';
 
     return "
         <div$class_vis data-id='$resource_id'>
           <div class='unitIcon' width='1'>$imagelink</div>
           " . (!empty($act_name) ? "<div class='text-start act_label'>$act_name</div>" : "") . "
-          <div><div class='module-name'>$module_name</div> $exlink $comment_box</div>" . actions('extrepo', $resource_id, $visibility) . "
+          <div><div class='module-name'>$module_name</div> $exlink $comment_box $media_preview</div>" . actions('extrepo', $resource_id, $visibility) . "
         </div>";
+}
+
+/**
+ * Extract YouTube video ID from various YouTube URL formats
+ * 
+ * @param string $url YouTube URL
+ * @return string|null Video ID or null if not found
+ */
+function extract_youtube_video_id($url) {
+    if (empty($url)) {
+        return null;
+    }
+    
+    // Handle various YouTube URL formats:
+    // - https://www.youtube.com/watch?v=VIDEO_ID
+    // - https://youtu.be/VIDEO_ID
+    // - https://www.youtube.com/embed/VIDEO_ID
+    // - https://www.youtube.com/v/VIDEO_ID
+    
+    $patterns = [
+        '/youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/',
+        '/youtube\.com\/embed\/([a-zA-Z0-9_-]+)/',
+        '/youtube\.com\/v\/([a-zA-Z0-9_-]+)/',
+        '/youtu\.be\/([a-zA-Z0-9_-]+)/',
+    ];
+    
+    foreach ($patterns as $pattern) {
+        if (preg_match($pattern, $url, $matches)) {
+            return $matches[1];
+        }
+    }
+    
+    return null;
 }
 
 /**
