@@ -1013,14 +1013,14 @@ function show_lp($title, $comments, $resource_id, $lp_id, $act_name): string
           " . (!empty($act_name) ? "<div class='text-start act_label'>$act_name</div>" : "") . "
           <div class='text-start w-100'>
             <div class='module-name'>$langLearnPath</div>
-            <div class='pull-right row m-0'>
-                <div class='col-9 p-0 m-0 d-flex flex-column'> 
+            <div class='row m-0 flex-column flex-lg-row'>
+                <div class='col-lg-9 p-0 m-0 d-flex flex-column'> 
                     <div>$link</div> 
                     <div class='content'>$comment_box</div>
                 </div>
-                <div class='col-3 p-0 m-0 d-flex flex-column align-items-end'>
-                    <div>$res_prereq_icon $lp_susp_button $lp_results_button $lp_results</div> 
-                    <div>$lp_bar</div>
+                <div class='col-lg-3 p-0 m-0 d-flex flex-column align-items-lg-end'>
+                    <div class='mt-2'>$lp_bar</div>
+                    <div class='d-flex gap-2'>$res_prereq_icon $lp_susp_button $lp_results_button $lp_results</div> 
                 </div>
             </div>
                 
@@ -1262,12 +1262,12 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility, $act_
           " . (!empty($act_name) ? "<div class='text-start act_label'>$act_name</div>" : "") . "
           <div class='text-start w-100'>
               <div class='module-name'>$langWorks</div> 
-              <div class='pull-right row m-0'>
-                <div class='col-9 p-0 m-0 d-flex flex-column'> 
+              <div class='row m-0 flex-column flex-lg-row gap-2 gap-lg-0'>
+                <div class='col-lg-9 p-0 m-0 d-flex flex-column'> 
                     <div>$exlink</div>
                     <div class='content'>$comment_box</div>
                 </div>
-                <div class='col-3 p-0 m-0 d-flex flex-column align-items-end justify-content-start'>
+                <div class='col-lg-3 gap-2 gap-lg-0 p-0 m-0 d-flex flex-row flex-lg-column align-items-center justify-content-start align-items-lg-end justify-content-lg-end'>
                     $hasparticipated_grade $res_prereq_icon $assign_to_users_message
                 </div>
               </div>
@@ -1369,7 +1369,7 @@ function submission_grade($subid) {
 function show_exercise($title, $comments, $resource_id, $exercise_id, $visibility, $act_name) {
     global $id, $urlServer, $is_editor, $langWasDeleted, $course_id, $course_code, $langPassCode, $uid,
         $langAttemptActive, $langAttemptPausedS, $m, $langResourceBelongsToUnitPrereq, $langExercises,
-        $langWorkToUser, $langWorkAssignTo, $langWorkToGroup, $langHasParticipated, $langShowResults;
+        $langWorkToUser, $langWorkAssignTo, $langWorkToGroup, $langHasParticipated, $langResults;
 
     $title = q($title);
     $link_class = $exclamation_icon = $res_prereq_icon = '';
@@ -1461,17 +1461,17 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
         $hasresults_label = null;
         $hasresults = Database::get()->querySingle("SELECT * FROM exercise_user_record WHERE uid = ?d AND eid = ?d AND attempt_status = ?d", $uid, $exercise_id, ATTEMPT_COMPLETED);
         if ($hasresults) {
-            $hasresults_label = "<a href='{$urlServer}modules/units/view.php?course=$course_code&amp;unit=$id&amp;res_type=exercise_results_list&amp;exerciseId=".getIndirectReference($exercise_id)."'><span class='fa-solid fa-square-poll-horizontal' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-title='$langShowResults'></span></a>";
+            $hasresults_label = "<a href='{$urlServer}modules/units/view.php?course=$course_code&amp;unit=$id&amp;res_type=exercise_results_list&amp;exerciseId=".getIndirectReference($exercise_id)."'>$langResults</a>";
         }
 
 
         if ($pending_class) {
             enable_password_bootbox();
-            $link = "<div class='pull-right row m-0'><div class='col-9 p-0 m-0 d-flex flex-column'><a class='ex_settings $pending_class $link_class TextBold' href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id&amp;eurId=$eurid&amp;unit=$id'>";
+            $link = "<div class='row m-0 flex-column flex-lg-row gap-2 gap-lg-0'><div class='col-lg-9 p-0 m-0 d-flex flex-column'><a class='ex_settings $pending_class $link_class TextBold' href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id&amp;eurId=$eurid&amp;unit=$id'>";
         } else {
-            $link = "<div class='pull-right row m-0'><div class='col-9 p-0 m-0 d-flex flex-column'><a class='ex_settings $link_class TextBold' href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id&amp;unit=$id'>";
+            $link = "<div class='row m-0 flex-column flex-lg-row gap-2 gap-lg-0'><div class='col-lg-9 p-0 m-0 d-flex flex-column'><a class='ex_settings $link_class TextBold' href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id&amp;unit=$id'>";
         }
-        $exlink = $link . "$title</a></div> <div class='col-3 p-0 m-0 d-flex flex-row gap-2 align-items-center justify-content-end'>$hasparticipated_label $hasresults_label $exclamation_icon $assign_to_users_message $pending_label</div></div>";
+        $exlink = $link . "$title</a></div> <div class='col-lg-3 gap-2 gap-lg-0 p-0 m-0 d-flex flex-row flex-lg-column align-items-center justify-content-start align-items-lg-end justify-content-lg-end'>$hasparticipated_label $hasresults_label $exclamation_icon $assign_to_users_message $pending_label</div></div>";
         $imagelink = $link . "</a></div></div>" . icon('fa-solid fa-file-pen'). "";
     }
     $class_vis = ($status == '0' or $status == 'del') ? ' class="not_visible"' : ' ';
