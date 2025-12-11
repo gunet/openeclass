@@ -10510,7 +10510,9 @@ function theme_initialization() {
             $styles_str .= "
                 .tooltip.fade.show *{
                     background-color: $theme_options_styles[bgColorTooltip];
-
+                }
+                .mce-tooltip *{
+                    background-color: $theme_options_styles[bgColorTooltip] !important;
                 }
             ";
         }
@@ -10526,7 +10528,9 @@ function theme_initialization() {
             $styles_str .= "
                 .tooltip.fade.show *{
                     color: $theme_options_styles[TextColorTooltip];
-
+                }
+                .mce-tooltip *{
+                    color: $theme_options_styles[TextColorTooltip] !important;
                 }
             ";
         }
