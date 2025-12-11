@@ -1911,7 +1911,7 @@ function submit_work($id, $on_behalf_of = null) {
     if ($submit_ok) {
         $success_msgs = array();
         //Preparing variables
-        $user_id = isset($on_behalf_of) ? $on_behalf_of : $uid;
+        $user_id = $on_behalf_of ?? $uid;
         if ($row->group_submissions) {
             $group_id = isset($_POST['group_id']) ? intval($_POST['group_id']) : -1;
             $gids = user_group_info($on_behalf_of ? null : $user_id, $course_id);
@@ -1947,11 +1947,8 @@ function submit_work($id, $on_behalf_of = null) {
             $local_name = replace_dangerous_char($local_name);
             $local_name = work_secret($row->id) . '/' . $local_name;
 
-            $files_to_keep = [];
             $file_name = $filename = $submission_text = '';
-            $no_files = isset($on_behalf_of) && !isset($_FILES);
             $has_uploaded_files = isset($_FILES['userfile']) && !empty($_FILES['userfile']['name'][0]);
-
 
             if ($has_uploaded_files) {
                 $files_list = [];
