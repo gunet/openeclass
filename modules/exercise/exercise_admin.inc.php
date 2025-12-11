@@ -383,11 +383,12 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                  </div>
 
                  <div class='row form-group mt-4'>
-                   <label for='exerciseFeedback' class='col-12 control-label-notes mb-1'>$langExerciseFeedback</label>
+                   <label for='exerciseFeedback' class='col-12 control-label-notes mb-1'>$langExerciseFeedback
+                        <span class='fa-solid fa-circle-info ps-1' data-bs-toggle='tooltip' data-bs-placement='top' title='$langExerciseFeedbackInfo' style='margin-bottom: 10px;'></span>
+                   </label>
                    <div class='col-12'>
                        " . rich_text_editor('exerciseFeedback', 4, 30, $exerciseFeedback) . "
-                       <span class='help-block col-sm-offset-2 col-sm-10'>$langExerciseFeedbackInfo</span>
-                       </div>
+                   </div>
                  </div>
 
                  <div class='row form-group mt-4'>
