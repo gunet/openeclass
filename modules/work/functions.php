@@ -1952,8 +1952,8 @@ function submit_work($id, $on_behalf_of = null) {
             $no_files = isset($on_behalf_of) && !isset($_FILES);
             $has_uploaded_files = isset($_FILES['userfile']) && !empty($_FILES['userfile']['name'][0]);
 
-            if (!$no_files && $has_uploaded_files) {
 
+            if ($has_uploaded_files) {
                 $files_list = [];
 
                 if (isset($_FILES['userfile']) && is_array($_FILES['userfile']['name'])) {
@@ -2038,6 +2038,11 @@ function submit_work($id, $on_behalf_of = null) {
                     redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
                     exit();
                 }
+            } else {
+                Session::flash('message', $langNoFileUploaded);
+                Session::flash('alert-class', 'alert-danger');
+                redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
+                exit();
             }
             $success_msgs[] = $langUploadSuccess;
         }
