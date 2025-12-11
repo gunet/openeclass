@@ -949,7 +949,7 @@ function show_lp($title, $comments, $resource_id, $lp_id, $act_name): string
            $langLearningPathCleanAttempt, $langLearnPath;
 
     $title = q($title);
-    $comment_box = $res_prereq_icon = $lp_results = $lp_results_button = '';
+    $comment_box = $res_prereq_icon = $lp_results = $lp_results_button = $lp_bar = '';
     $lp = Database::get()->querySingle("SELECT * FROM lp_learnPath WHERE course_id = ?d AND learnPath_id = ?d", $course_id, $lp_id);
     if (!$lp) { // check if lp was deleted
         if (!$is_editor) {
@@ -992,8 +992,8 @@ function show_lp($title, $comments, $resource_id, $lp_id, $act_name): string
             </span>";
         } else {
                 list($lpProgress, $lpTotalTime) = get_learnPath_progress_details($lp_id, $uid);
-                $lp_results = "<span data-bs-toggle='tooltip' data-bs-placement='top' data-bs-original-title='$langTotalTimeSpent'>" . $lpTotalTime . "</span>
-                               <span style='margin-top:10px !important;' data-bs-toggle='tooltip' data-bs-placement='top' data-bs-original-title='$langTotalPercentCompleteness'>" . disp_progress_bar($lpProgress, 1) . "</span>";
+                $lp_results = "<span data-bs-toggle='tooltip' data-bs-placement='top' data-bs-original-title='$langTotalTimeSpent'>" . $lpTotalTime . "</span>";
+                $lp_bar = "<span data-bs-toggle='tooltip' data-bs-placement='top' data-bs-original-title='$langTotalPercentCompleteness'>" . disp_progress_bar($lpProgress, 1) . "</span>";
                 $lp_results_button = "<span class='pull-right' data-bs-toggle='tooltip' data-bs-placement='top' title='$langDetails'>
                     <a href=" . $urlAppend . "modules/units/view.php?course=" . $course_code . "&amp;res_type=lp_results&amp;path_id=" . $lp_id . "&amp;unit=" . $id. ">
                     <span class='fa fa-line-chart'></span>
@@ -1011,10 +1011,19 @@ function show_lp($title, $comments, $resource_id, $lp_id, $act_name): string
         <div$class_vis data-id='$resource_id'>
           <div class='unitIcon' width='1'>$imagelink</a></div>
           " . (!empty($act_name) ? "<div class='text-start act_label'>$act_name</div>" : "") . "
-          <div class='text-start'>
+          <div class='text-start w-100'>
             <div class='module-name'>$langLearnPath</div>
-                 <span class='pull-right d-flex justify-content-start align-items-center gap-3'>$link $res_prereq_icon $lp_susp_button $lp_results_button $lp_results</span>
-                 <div class='content'>$comment_box</div>
+            <div class='pull-right row m-0'>
+                <div class='col-9 p-0 m-0 d-flex flex-column'> 
+                    <div>$link</div> 
+                    <div class='content'>$comment_box</div>
+                </div>
+                <div class='col-3 p-0 m-0 d-flex flex-column align-items-end'>
+                    <div>$res_prereq_icon $lp_susp_button $lp_results_button $lp_results</div> 
+                    <div>$lp_bar</div>
+                </div>
+            </div>
+                
             </div>" .
 
             actions('lp', $resource_id, $status) . "</div>";
@@ -1183,6 +1192,9 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility, $act_
                                 )", $course_id, $work_id, $uid);
     }
 
+    $hasparticipated_grade = '';
+    $assign_to_users_message = '';
+    $status = '';
     if (!$work) { // check if it was deleted
         if (!$is_editor) {
             return '';
@@ -1195,7 +1207,7 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility, $act_
         if (!$is_editor and !$status) {
             return '';
         }
-        $assign_to_users_message = '';
+
         if ($is_editor) {
             if ($work->assign_to_specific == 1) {
                 $assign_to_users_message = "<small class='help-block'>$langWorkAssignTo: $langWorkToUser</small>";
@@ -1228,16 +1240,12 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility, $act_
         //show participation and grade
         $submissions = find_submissions(is_group_assignment($work_id), $uid, $work_id, user_group_info($uid, $course_id));
 
-        $hasparticipated_grade = '';
-
         if ($submissions) {
-            $hasparticipated_grade = "(";
-            $hasparticipated_grade .= "<span class='fa-solid fa-check' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-title='$langHasParticipated'></span>";
+            $hasparticipated_grade = "<span class='fa-solid fa-check' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-title='$langHasParticipated'></span>";
             $item = is_array($submissions) ? reset($submissions) : $submissions;
             if (is_object($item) && isset($item->grade)) {
                 $hasparticipated_grade .= "<span style='margin-left: 5px;'>" . $langGradebookGrade . ": " . submission_grade($item->id) . "</span>";
             }
-            $hasparticipated_grade .= ")";
         }
 
     }
@@ -1252,7 +1260,18 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility, $act_
         <div$class_vis data-id='$resource_id'>
           <div class='unitIcon' width='1'>$imagelink</div>
           " . (!empty($act_name) ? "<div class='text-start act_label'>$act_name</div>" : "") . "
-          <div class='text-start'><div class='module-name'>$langWorks</div> $exlink $hasparticipated_grade $res_prereq_icon $comment_box $assign_to_users_message</div>" .
+          <div class='text-start w-100'>
+              <div class='module-name'>$langWorks</div> 
+              <div class='pull-right row m-0'>
+                <div class='col-9 p-0 m-0 d-flex flex-column'> 
+                    <div>$exlink</div>
+                    <div class='content'>$comment_box</div>
+                </div>
+                <div class='col-3 p-0 m-0 d-flex flex-column align-items-end justify-content-start'>
+                    $hasparticipated_grade $res_prereq_icon $assign_to_users_message
+                </div>
+              </div>
+          </div>" .
             actions('lp', $resource_id, $visibility) . '
         </div>';
 }
@@ -1448,12 +1467,12 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
 
         if ($pending_class) {
             enable_password_bootbox();
-            $link = "<a class='ex_settings $pending_class $link_class TextBold' href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id&amp;eurId=$eurid&amp;unit=$id'>";
+            $link = "<div class='pull-right row m-0'><div class='col-9 p-0 m-0 d-flex flex-column'><a class='ex_settings $pending_class $link_class TextBold' href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id&amp;eurId=$eurid&amp;unit=$id'>";
         } else {
-            $link = "<a class='ex_settings $link_class TextBold' href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id&amp;unit=$id'>";
+            $link = "<div class='pull-right row m-0'><div class='col-9 p-0 m-0 d-flex flex-column'><a class='ex_settings $link_class TextBold' href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id&amp;unit=$id'>";
         }
-        $exlink = $link . "$title</a> $hasparticipated_label $hasresults_label $exclamation_icon $assign_to_users_message $pending_label";
-        $imagelink = $link . "</a>" . icon('fa-solid fa-file-pen'). "";
+        $exlink = $link . "$title</a></div> <div class='col-3 p-0 m-0 d-flex flex-row gap-2 align-items-center justify-content-end'>$hasparticipated_label $hasresults_label $exclamation_icon $assign_to_users_message $pending_label</div></div>";
+        $imagelink = $link . "</a></div></div>" . icon('fa-solid fa-file-pen'). "";
     }
     $class_vis = ($status == '0' or $status == 'del') ? ' class="not_visible"' : ' ';
 
@@ -1467,7 +1486,10 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
         <div$class_vis data-id='$resource_id'>
           <div class='unitIcon' width='3'>$imagelink</div>
           " . (!empty($act_name) ? "<div class='text-start act_label'>$act_name</div>" : "") . "
-          <div class='text-start'><div class='module-name'>$langExercises</div> $exlink $res_prereq_icon $comment_box</div>" . actions('lp', $resource_id, $visibility) . "
+          <div class='text-start w-100'>
+          <div class='module-name'>$langExercises</div> 
+            $exlink $res_prereq_icon $comment_box
+          </div>" . actions('lp', $resource_id, $visibility) . "
         </div>";
 }
 
