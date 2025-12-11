@@ -1097,7 +1097,9 @@ $db->query("CREATE TABLE IF NOT EXISTS `poll_question` (
     `description` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
     `answer_scale` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
     `q_row` INT NOT NULL DEFAULT 0,
-    `q_column` INT NOT NULL DEFAULT 0) $tbl_options");
+    `q_column` INT NOT NULL DEFAULT 0,
+    `page` INT NOT NULL DEFAULT 0,
+    `require_response` INT NOT NULL DEFAULT 0) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `poll_question_answer` (
     `pqaid` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,

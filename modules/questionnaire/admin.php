@@ -180,6 +180,10 @@ if (isset($_POST['submitQuestion'])) {
         $qtype = $_POST['answerType'];
         $question_description = (isset($_POST['description_question']) && $_POST['description_question'] != '' ? purify($_POST['description_question']) : '');
         $answerScale = (isset($_POST['answersScale']) && $_POST['answersScale'] != '' ? purify($_POST['answersScale']) : '');
+        $requireResponse = 0;
+        if (isset($_POST['require_response']) and $_POST['require_response'] == 'on') {
+            $requireResponse = 1;
+        }
 
         if (isset($_GET['modifyQuestion'])) {
             $pqid = intval($_GET['modifyQuestion']);
@@ -194,6 +198,7 @@ if (isset($_POST['submitQuestion'])) {
             } else {
                 $query_columns = '';
             }
+            $query_vars[] = $requireResponse;
             array_push($query_vars, $pqid, $pid);
 
             // Redirect if the number of scale is smaller or bigger than answers.
@@ -207,14 +212,14 @@ if (isset($_POST['submitQuestion'])) {
             }
 
             Database::get()->query("UPDATE poll_question
-                    SET question_text = ?s, qtype = ?d, `description` = ?s, `answer_scale` = ?s $query_columns
+                    SET question_text = ?s, qtype = ?d, `description` = ?s, `answer_scale` = ?s $query_columns , require_response = ?d
                     WHERE pqid = ?d AND pid = ?d", $query_vars);
         } else {
             $max_position = Database::get()->querySingle("SELECT MAX(q_position) AS position FROM poll_question WHERE pid = ?d", $pid)->position;
             $max_page = Database::get()->querySingle("SELECT MAX(`page`) AS `maxpage` FROM poll_question WHERE pid = ?d", $pid)->maxpage;
-            $query_columns = "pid, question_text, qtype, q_position, description, answer_scale, page";
-            $query_values = "?d, ?s, ?d, ?d, ?s, ?s, ?d";
-            $query_vars = array($pid, $question_text, $qtype, $max_position + 1, $question_description, $answerScale, $max_page);
+            $query_columns = "pid, question_text, qtype, q_position, description, answer_scale, page, require_response";
+            $query_values = "?d, ?s, ?d, ?d, ?s, ?s, ?d, ?d";
+            $query_vars = array($pid, $question_text, $qtype, $max_position + 1, $question_description, $answerScale, $max_page, $requireResponse);
             if (isset($_POST['questionScale'])){
                 $query_columns .= ", q_scale";
                 $query_values .=", ?d";
@@ -788,6 +793,11 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
 
     $description_question = (isset($_GET['newQuestion']) ? '' : $question->description);
 
+    $requiredAnswer = 0;
+    if (isset($question)) {
+        $requiredAnswer = $question->require_response;
+    }
+
     $tool_content .= "
     <div class='d-lg-flex gap-4 mt-4'>
         <div class='flex-grow-1'>
@@ -880,6 +890,15 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                     </span>
                 </div>
                 <input type='text' class='form-control' name='answersScale' id='answerScale' value='".(!empty($question->answer_scale) ? $question->answer_scale : '')."'>
+            </div>
+            <div class='form-group mt-4'>
+                <div class='checkbox'>
+                    <label class='label-container' aria-label='$langSelect'>
+                        <input type='checkbox' name='require_response' " . ($requiredAnswer ? 'checked' : '') . ">
+                        <span class='checkmark'></span>
+                        $langRequireAnswer
+                    </label>
+                </div>
             </div>
             ";
         }

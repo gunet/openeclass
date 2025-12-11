@@ -3555,6 +3555,10 @@ function upgrade_to_4_2($tbl_options) : void {
         Database::get()->query("ALTER TABLE poll_question ADD `page` INT NOT NULL DEFAULT 0");
     }
 
+    if (!DBHelper::fieldExists('poll_question', 'require_response')) {
+        Database::get()->query("ALTER TABLE poll_question ADD `require_response` INT NOT NULL DEFAULT 0");
+    }
+
 }
 
 /**

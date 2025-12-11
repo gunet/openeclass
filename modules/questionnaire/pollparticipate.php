@@ -144,7 +144,7 @@ function printPollForm() {
     $pageName, $lang_rate1, $lang_rate5, $langForm, $pid, $langTypeOutMessage,
     $langPreviousQuestion, $langNextQuestion, $langCleanup, $langForbidden, 
     $is_consultant, $is_coordinator, $langSubmissionOnBehalfOfUser, $urlAppend, $langProcessForFiliInTool,
-    $urlServer;
+    $urlServer, $langRequireAnswer;
 
     $unit_id = isset($_REQUEST['unit_id'])? intval($_REQUEST['unit_id']): null;
     $refresh_time = 300000; // Refresh PHP session every 5 min. (in ms)
@@ -570,7 +570,13 @@ function printPollForm() {
             unset($_SESSION["poll_answers_$pid"]);
         }
 
-        $i = 1;
+        if (!isset($_GET['page']) or (isset($_GET['page']) && intval($_GET['page']) == 1)) {
+            $_SESSION['q_counter'] = 1;
+        } else {
+            $totalQuestionsInPrevPages = Database::get()->querySingle("SELECT COUNT(*) as total FROM poll_question 
+                                                                       WHERE pid = ?d AND `page` < ?d AND `page` > ?d", $pid, intval($_GET['page']), 0)->total;
+            $_SESSION['q_counter'] = $totalQuestionsInPrevPages + 1;
+        }
         // Session process
         $user_answers_session = false;
         $sql_an = '';
@@ -609,11 +615,15 @@ function printPollForm() {
                 if (isset($_SESSION['current_page']) && $theQuestion->page != $_SESSION['current_page']) {
                     continue;
                 }
+                $RequiredQuestionHtml = '';
+                if ($theQuestion->require_response) {
+                    $RequiredQuestionHtml = "&nbsp; <span data-bs-toggle='tooltip' data-bs-placement='top' title='$langRequireAnswer'>(<i class='fa-solid fa-asterisk fa-lg text-danger'></i>)</span>";
+                } 
                 $tool_content .= "
                 <div class='col-12'>
                     <div class='card panelCard px-lg-4 py-lg-3 h-100 panelCard-questionnaire poll-panel mb-4'>
                         <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                            <h3>$langQuestion $i</h3>
+                            <h3>$langQuestion $_SESSION[q_counter] $RequiredQuestionHtml</h3>
                         </div>
                         <div class='card-body'>";
                             $tool_content .= "<p class='TextMedium Neutral-900-cl mb-2'>".q_math($theQuestion->question_text)."</p>";
@@ -843,7 +853,7 @@ function printPollForm() {
                         </div>
                     </div>
                 </div>";
-                $i++;
+                $_SESSION['q_counter'] = $_SESSION['q_counter'] + 1;
             }
         }
 
@@ -979,7 +989,8 @@ function show_limesurvey_integration($thePoll) {
 function submitPoll() {
     global $tool_content, $course_code, $uid, $langPollSubmitted, $langBack, $langQFillInAllQs,
            $langUsage, $langTheField, $langFormErrors, $urlServer, $langPollParticipateConfirm,
-           $langPollEmailUsed, $langPollParticipateConfirmation, $course_id, $pid, $langChooseAUser;
+           $langPollEmailUsed, $langPollParticipateConfirmation, $course_id, $pid, $langChooseAUser,
+           $langQuestionsRequireAnswers;
 
     $unit_id = isset($_REQUEST['unit_id'])? intval($_REQUEST['unit_id']): null;
     $poll = Database::get()->querySingle("SELECT * FROM poll WHERE pid = ?d", $pid);
@@ -988,11 +999,9 @@ function submitPoll() {
     $v = new Valitron\Validator($_POST);
     $atleast_one_answer = false;
     // Session process
-    $sql_u = '';
     $s_id = $_GET['session'] ?? 0;
-    //if (isset($_GET['from_session_view'])) {
-        $sql_u = "AND session_id = $s_id";
-    //}
+    $sql_u = "AND session_id = $s_id";
+
     if ($poll->require_answer) {
         $atleast_one_answer = true;
     }
@@ -1075,6 +1084,28 @@ function submitPoll() {
         } else {
             $question = isset($_POST['question'])? $_POST['question']: array();
         }
+
+        // Check if exists require answer to the specific question
+        $require_an = false;
+        $allQuestions = Database::get()->queryArray("SELECT pqid,qtype,require_response FROM poll_question WHERE pid = ?d", $pid);
+        foreach ($allQuestions as $q) {
+            if ($q->require_response && !isset($answer[$q->pqid])) {
+                $require_an = true;
+            } elseif ($q->require_response && isset($answer[$q->pqid]) && $q->qtype == QTYPE_TABLE) {
+                if (count($answer[$q->pqid]) === count(array_filter($answer[$q->pqid], function($value) {// all elements are empty strings
+                    return $value === "";
+                }))) {
+                    $require_an = true;
+                }
+            }
+        }
+        if ($require_an) {
+            $_SESSION['data_answers'] = init_session_vars($answer);
+            Session::flash('message', $langQuestionsRequireAnswers);
+            Session::flash('alert-class', 'alert-warning');
+            redirect_to_home_page("modules/questionnaire/pollparticipate.php?course=$course_code&UseCase=1&pid=$pid");
+        }
+
         foreach ($question as $pqid => $qtype) {
             $pqid = intval($pqid);
             if ($qtype == QTYPE_MULTIPLE) {
@@ -1142,6 +1173,10 @@ function submitPoll() {
                 }
             } else {
                 continue;
+            }
+
+            if (!isset($answer_text)) {
+                $answer_text = '';
             }
 
             if ($qtype != QTYPE_TABLE) {
@@ -1355,4 +1390,17 @@ function update_submission($pid, $pageBreakExists) {
     }
 
     return $answer;
+}
+
+function init_session_vars($arrAnswers) {
+    $sessionArr = [];
+    foreach ($arrAnswers as $question_key => $an) {
+        $questionType = Database::get()->querySingle("SELECT qtype FROM poll_question WHERE pqid = ?d", $question_key)->qtype;
+        if ($questionType == QTYPE_MULTIPLE && is_array($an)) {
+            $sessionArr[$question_key] = implode(',', $an);
+        } else {
+            $sessionArr[$question_key] = $an;
+        }
+    }
+    return $sessionArr;
 }

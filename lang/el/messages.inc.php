@@ -3751,6 +3751,8 @@ $langPreviousQuestion = "Προηγούμενη";
 $langNextQuestion = "Επόμενη";
 $langEnableRequiredAnswer = "Υποχρεωτική απάντηση σε κάθε ερώτηση";
 $langGenQrCode = "Δημιουργία QR code";
+$langRequireAnswer = "Υποχρεωτική απάντηση";
+$langQuestionsRequireAnswers = "Αφήσατε κενές μία η περισσότερες ερωτήσεις που απαιτείται απάντηση.";
 
 /* * **********************************************************
  * registration.php
