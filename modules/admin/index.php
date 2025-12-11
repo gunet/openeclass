@@ -80,8 +80,14 @@ if ($lastadminloginres && $lastadminloginres->when) {
     $data['lastregisteredstuds'] = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user WHERE status = " . USER_STUDENT . " AND registered_at > ?t", $lastadminlogin)->cnt;
 }
 // INDEX RELATED
-if (get_config('enable_indexing')) {
-    require_once 'modules/search/indexer.class.php';
+if (get_config('ext_solr_enabled')) {
+    require_once 'modules/search/classes/SolrSearchEngine.php';
+    $searchEngine = new SolrSearchEngine();
+    $coreStatus = $searchEngine->coreStatus();
+    $data['coreStats'] = $coreStatus;
+    $data['idxModal'] = modalConfirmation('confirmReindexDialog', 'confirmReindexLabel', $langConfirmEnableIndexTitle, $langConfirmEnableSolrIndex, 'confirmReindexCancel', 'confirmReindexOk');
+} else if (get_config('enable_indexing')) {
+    require_once 'modules/search/lucene/indexer.class.php';
     $idx = new Indexer();
 
     $data['numDocs'] = 0;
@@ -103,6 +109,9 @@ if (count($cronParams) > 0) {
     $colSize = '1';
 }
 $data['colSize'] = $colSize;
+
+// online users
+$data['onlineusers'] = getOnlineUsers();
 
 // H5P related
 $ts = get_config('h5p_update_content_ts');

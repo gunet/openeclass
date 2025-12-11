@@ -152,38 +152,28 @@ function generate_single_post_html($post) {
     if (allow_to_edit($id, $uid, $is_editor)) {
         $head_content .= '<script>
                           $(document).on("click", ".link", function(e) {
-                              var link = $(this).attr("href");
-                              e.preventDefault();
-
-                            //   bootbox.confirm("'.$langWallPostDelConfirm.'", function(result) {
-                            //       if (result) {
-                            //           document.location.href = link;
-                            //       }
-                            //   });
-
-                            bootbox.confirm({
-                                closeButton: false,
-                                title: "<div class=\"icon-modal-default\"><i class=\"fa-regular fa-trash-can fa-xl Accent-200-cl\"></i></div><div class=\"modal-title-default text-center mb-0\">'.js_escape($langConfirmDelete).'</div>",
-                                message: "<p class=\"text-center\">'.js_escape($langWallPostDelConfirm).'</p>",
-                                buttons: {
-                                    cancel: {
-                                        label: "'.js_escape($langCancel).'",
-                                        className: "cancelAdminBtn position-center"
+                                var link = $(this).attr("href");
+                                e.preventDefault();                           
+                                bootbox.confirm({
+                                    closeButton: false,
+                                    title: "<div class=\"icon-modal-default\"><i class=\"fa-regular fa-trash-can fa-xl Accent-200-cl\"></i></div><div class=\"modal-title-default text-center mb-0\">'.js_escape($langConfirmDelete).'</div>",
+                                    message: "<p class=\"text-center\">'.js_escape($langWallPostDelConfirm).'</p>",
+                                    buttons: {
+                                        cancel: {
+                                            label: "'.js_escape($langCancel).'",
+                                            className: "cancelAdminBtn position-center"
+                                        },
+                                        confirm: {
+                                            label: "'.js_escape($langDelete).'",
+                                            className: "deleteAdminBtn position-center",
+                                        }
                                     },
-                                    confirm: {
-                                        label: "'.js_escape($langDelete).'",
-                                        className: "deleteAdminBtn position-center",
+                                    callback: function (result) {
+                                        if(result) {
+                                            document.location.href = link;
+                                        }
                                     }
-                                },
-                                callback: function (result) {
-                                    if(result) {
-                                        document.location.href = link;
-                                    }
-                                }
-                            });
-
-
-
+                                });
                           });
                       </script>';
         $post_actions = '<div class="action-btns float-end mt-2 d-flex gap-3">';
@@ -426,11 +416,7 @@ function generate_infinite_container_html($posts, $posts_per_page, $next_page, $
     $ret .= '</div></div></div>';
 
     if (count($posts) == $posts_per_page) {
-        if ($course_type == 'wall') {
-            $ret .= "<a class='infinite-more-link' href='{$urlAppend}modules/wall/loadMore.php?course=$course_code&page=$next_page'>$langMore</a>";
-        } else {
-            $ret .= "<a class='infinite-more-link' href='loadMore.php?course=$course_code&page=$next_page'>$langMore</a>";
-        }
+        $ret .= "<a class='infinite-more-link' href='{$urlAppend}modules/wall/loadMore.php?course=$course_code&page=$next_page'>$langMore</a>";
     }
 
     return $ret;

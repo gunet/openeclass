@@ -19,7 +19,6 @@
  */
 
 $require_current_course = true;
-$require_course_admin = true;
 $require_help = true;
 $helpTopic = 'course_users';
 
@@ -28,6 +27,13 @@ require_once 'include/log.class.php';
 
 if (get_config('course_guest') == 'off') {
     redirect_to_home_page('modules/user/index.php?course=' . $course_code);
+}
+
+$up = new Permissions();
+
+if (!$up->has_course_users_permission()) {
+    Session::Messages($langCheckCourseAdmin, 'alert-danger');
+    redirect_to_home_page('courses/'. $course_code);
 }
 
 $toolName = $langUsers;

@@ -56,8 +56,10 @@ class Course {
         }
         // refresh index
         global $webDir; // required for indexer
-        require_once 'modules/search/indexer.class.php';
-        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $id);
+        require_once 'modules/search/classes/ConstantsUtil.php';
+        require_once 'modules/search/classes/SearchEngineFactory.php';
+        $searchEngine = SearchEngineFactory::create();
+        $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_COURSE, $id);
         // refresh course metadata
         require_once 'modules/course_metadata/CourseXML.php';
         CourseXMLElement::refreshCourse($id, course_id_to_code($id));

@@ -97,9 +97,14 @@ if ($exerciseId) { // Export questions from specific exercise
                             question_id NOT IN (SELECT question_id FROM `exercise_with_questions` WHERE exercise_id = ?d))
                             GROUP BY exercise_question.id, question, `type` ORDER BY question";
         } else {
-            $result_query = "SELECT exercise_question.id, question, `type` FROM `exercise_question` LEFT JOIN `exercise_with_questions`
-                            ON question_id = exercise_question.id WHERE course_id = ?d $extraSql
-                            GROUP BY exercise_question.id, question, type ORDER BY question";
+            $result_query = "SELECT exercise_question.id, question, `type` FROM `exercise_question`
+                            LEFT JOIN `exercise_with_questions`
+                                ON question_id = exercise_question.id
+                            LEFT JOIN exercise_question_cats
+                                ON exercise_question.category = question_cat_id
+                            WHERE exercise_question.course_id = ?d $extraSql
+                            GROUP BY exercise_question.id, question, type
+                            ORDER BY question_cat_name, question";
         }
         // forces the value to 0
         $exerciseId = 0;
@@ -113,6 +118,7 @@ foreach ($exercises as $exercise) {
 }
 
 $result = Database::get()->queryArray($result_query, $result_query_vars);
+
 $tool_content = "
 <!DOCTYPE html>
 <html lang='el'>
@@ -136,6 +142,7 @@ $tool_content = "
 </head>
 <body>
 <h1>" . q($currentCourseName) . "</h1><h2>$langQuesList</h2>";
+$last_category_legend = '';
 foreach ($result as $row) {
     $question = new Question();
     $question->read($row->id);
@@ -148,6 +155,9 @@ foreach ($result as $row) {
     }
     $question_category_legend = $question->selectCategoryName($question->selectCategory());
     if ($question_category_legend) {
+        if ($last_category_legend != $question_category_legend) {
+            $tool_content .= "<h3 style='margin-top: 2em'>$langQuestionCat: $question_category_legend</h3>";
+        }
         $question_category_legend = "<span class='label'>$langQuestionCat:</span> $question_category_legend<br>";
     }
     $question_type_legend = $question->selectTypeLegend($question->selectType());
@@ -165,7 +175,7 @@ foreach ($result as $row) {
     $picturePath = "courses/$course_code/image/quiz-{$row->id}";
     $tool_content .= "
         <h3>$question_title</h3>
-        <small>$question_type_legend &ndash; id: {$row->id}</small><br>" .
+        <small>$question_type_legend &ndash; Νο: {$row->id}</small><br>" .
         (file_exists($picturePath)? "<img class='img-responsive' src='$picturePath' alt=''>": '') .
         $question_description .
         question_html($question, $row->id) . "
@@ -211,7 +221,7 @@ function question_html($question, $qid) {
     $checkbox_empty = '<label class="label-container" aria-label="'.$langSelect.'"><input type="checkbox"><span class="checkmark"></span></label>';
 
     $answerType = $question->selectType();
-    if ($answerType == FREE_TEXT) {
+    if ($answerType == FREE_TEXT or $answerType == ORAL) {
         return '';
     }
 
@@ -237,10 +247,10 @@ function question_html($question, $qid) {
     $nbrAnswers = $answer->selectNbrAnswers();
 
     for ($answer_id = 1; $answer_id <= $nbrAnswers; $answer_id++) {
-        $answerTitle = $answer->selectAnswer($answer_id);
-        $answerComment = standard_text_escape($answer->selectComment($answer_id));
+        $answerTitle = $answer->getTitle($answer_id);
+        $answerComment = standard_text_escape($answer->getComment($answer_id));
         $answerCorrect = $answer->isCorrect($answer_id);
-        $answerWeighting = $answer->selectWeighting($answer_id);
+        $answerWeighting = $answer->getWeighting($answer_id);
 
         if ($answerType == FILL_IN_BLANKS or $answerType == FILL_IN_BLANKS_TOLERANT) {
             list($answerTitle, $answerWeighting) = Question::blanksSplitAnswer($answerTitle);

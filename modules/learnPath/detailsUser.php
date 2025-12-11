@@ -48,15 +48,13 @@ require_once 'include/lib/learnPathLib.inc.php';
 
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langLearningPaths);
 $navigation[] = array('url' => "detailsAll.php?course=$course_code", 'name' => $langTrackAllPathExplanation);
-$toolName = $langTrackUser;
-
 // user info can not be empty, return to the list of details
 if (empty($_REQUEST['uInfo'])) {
     header("Location: ./detailsAll.php?course=$course_code");
     exit();
 }
 
-// check if user is in this course
+// check if the user is in this course
 $rescnt = Database::get()->querySingle("SELECT COUNT(*) AS count
             FROM `course_user` as `cu` , `user` as `u`
             WHERE `cu`.`user_id` = `u`.`id`
@@ -68,25 +66,24 @@ if ($rescnt == 0) {
     exit();
 }
 
-// get list of learning paths of this course
+// get a list of learning paths of this course
 // list available learning paths
 $lpList = Database::get()->queryArray("SELECT name, learnPath_id
             FROM lp_learnPath
             WHERE course_id = ?d
+            AND visible = 1
             ORDER BY `rank`", $course_id);
 
-// get infos about the user
-$uDetails = Database::get()->querySingle("SELECT surname, givenname FROM `user` WHERE id = ?d", $_REQUEST['uInfo']);
-$pageName = q($uDetails->surname) . " " . q($uDetails->givenname);
 
+$pageName = $user_details = uid_to_name($_REQUEST['uInfo']);
 $course_title = course_code_to_title($_GET['course']);
-$user_details = q($uDetails->surname . " " . $uDetails->givenname);
+
 $data[] = [ $user_details . ' (' . $course_title . ')' ];
 $data[] = [];
 $data[] = [ $langLearnPath, $langAttempts, $langAttemptStarted, $langAttemptAccessed, $langTotalTimeSpent, $langLessonStatus, $langProgress ];
 
 if (!isset($_GET['pdf'])) {
-    $tool_content .= action_bar(array(
+    $action_bar = action_bar(array(
         array('title' => $langBack,
             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
             'icon' => 'fa-reply',
@@ -103,6 +100,7 @@ if (!isset($_GET['pdf'])) {
     ));
 }
 
+$tool_content .= $action_bar;
 // table header
 $tool_content .= "<div class='table-responsive'><table class='table-default'>
                     <thead>
@@ -167,7 +165,7 @@ if (isset($_GET['xls'])) {
     $sheet = $spreadsheet->getActiveSheet();
     $sheet->setTitle($langTracking);
     $sheet->getDefaultColumnDimension()->setWidth(30);
-    $filename = $course_code . " - " . htmlspecialchars($uDetails->surname . " " . $uDetails->givenname) . "_user_stats.xlsx";
+    $filename = $course_code . " - " . $user_details . "_user_stats.xlsx";
 
     $sheet->mergeCells("A1:F1");
     $sheet->getCell('A1')->getStyle()->getFont()->setItalic(true);
@@ -203,8 +201,8 @@ if (isset($_GET['xls'])) {
             td { text-align: left; }
           </style>
         </head>
-        <body>" . get_platform_logo() .
-        "<h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
+        <body><div style='height: 160px;'></div>
+        <h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
         <h2> " . q($langTrackUser) . "</h2>
         <h3> " . q(uid_to_name($_REQUEST['uInfo'])) . "</h3>";
 
@@ -233,7 +231,18 @@ if (isset($_GET['xls'])) {
             ]
     ]);
 
-    $mpdf->setFooter('{DATE j-n-Y} || {PAGENO} / {nb}');
+    
+    $footerHtml = '
+    <div>
+        <table width="100%" style="border: none;">
+            <tr>
+                <td style="text-align: left;">{DATE j-n-Y}</td>
+                <td style="text-align: right;">{PAGENO} / {nb}</td>
+            </tr>
+        </table>
+    </div>
+    ' . get_platform_logo('','footer') . '';
+    $mpdf->SetHTMLFooter($footerHtml);
     $mpdf->SetCreator(course_id_to_prof($course_id));
     $mpdf->SetAuthor(course_id_to_prof($course_id));
     $mpdf->WriteHTML($pdf_content);

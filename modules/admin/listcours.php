@@ -35,16 +35,16 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     $course = new Course();
     $user = new User();
     // A search has been submitted
-    $search = isset($_GET['search']) ? $_GET['search'] : '';
+    $search = $_GET['search'] ?? '';
     $searchurl = "&search=yes";
-    $searchtitle = isset($_GET['formsearchtitle']) ? $_GET['formsearchtitle'] : '';
-    $searchcode = isset($_GET['formsearchcode']) ? $_GET['formsearchcode'] : '';
-    $searchtype = isset($_GET['formsearchtype']) ? intval($_GET['formsearchtype']) : '-1';
+    $searchtitle = $_GET['formsearchtitle'] ?? '';
+    $searchcode = $_GET['formsearchcode'] ?? '';
+    $searchtype = isset($_GET['formsprachtype']) ? intval($_GET['formsearchtype']) : '-1';
     $searchfaculte = isset($_GET['formsearchfaculte']) ? intval($_GET['formsearchfaculte']) : '';
-    $searchprof = isset($_GET['formsearchprof']) ? $_GET['formsearchprof'] : '';
+    $searchprof = $_GET['formsearchprof'] ?? '';
     // pagination
-    $limit = intval($_GET['iDisplayLength']);
-    $offset = intval($_GET['iDisplayStart']);
+    $limit = intval($_POST['length']);
+    $offset = intval($_POST['start']);
     // Search for courses
     $query = '';
     $terms = array();
@@ -89,10 +89,10 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
 
     // Datatables internal search
     $filter_terms = array();
-    if (!empty($_GET['sSearch'])) {
+    if (!empty($_POST['search']['value'])) {
         $filter_query = ' AND (title LIKE ?s OR prof_names LIKE ?s)';
-        $filter_terms[] = '%' . $_GET['sSearch'] . '%';
-        $filter_terms[] = '%' . $_GET['sSearch'] . '%';
+        $filter_terms[] = '%' . $_POST['search']['value'] . '%';
+        $filter_terms[] = '%' . $_POST['search']['value'] . '%';
     } else {
         $filter_query = '';
     }
@@ -114,8 +114,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     }
 
     // sorting
-    $extra_query = "ORDER BY course.title " .
-            ($_GET['sSortDir_0'] == 'desc' ? 'DESC' : '');
+    $extra_query = "ORDER BY course.title " . (isset($_POST['order'][0]['dir']) && $_POST['order'][0]['dir'] == 'desc' ? 'DESC' : '');
     // pagination
     if ($limit > 0) {
         $extra_query .= " LIMIT ?d, ?d";
@@ -128,7 +127,6 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     if(get_config('show_collaboration') && get_config('show_always_collaboration')){
         $query_collaboration = ' AND course.is_collaborative = 1';
     }
-
 
     $sql = Database::get()->queryArray("SELECT DISTINCT course.code, course.title, course.prof_names, course.visible, course.id, course.created, course.popular_course
                                FROM course, course_department, hierarchy
@@ -145,9 +143,8 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                                                 AND hierarchy.id = course_department.department
                                                 $query $filter_query $query_collaboration", $terms, $filter_terms)->total;
 
-    $data['iTotalRecords'] = $all_results;
-    $data['iTotalDisplayRecords'] = $filtered_results;
-
+    $data['recordsTotal'] = $all_results;
+    $data['recordsFiltered'] = $filtered_results;
     $data['aaData'] = array();
 
     foreach ($sql as $logs) {

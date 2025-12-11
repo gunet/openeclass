@@ -85,6 +85,7 @@ if (!$uid || !$userProgressionDetails) {
     $sco['total_time'] = "0000:00:00.00";
     $sco['suspend_data'] = "";
     $sco['launch_data'] = "";
+    $sco['progress_measure'] = "";
 } else { // authenticated user and no error in query
     // set vars
     $sco['student_id'] = $uid;
@@ -107,6 +108,11 @@ if (!$uid || !$userProgressionDetails) {
         $sco['suspend_data'] = $userProgressionDetailsPrev->suspend_data;
     }
     $sco['launch_data'] = stripslashes($userProgressionDetails->launch_data);
+    if (property_exists($userProgressionDetails, 'progress_measure') && $userProgressionDetails->progress_measure !== null) {
+        $sco['progress_measure'] = $userProgressionDetails->progress_measure;
+    } else {
+        $sco['progress_measure'] = "";
+    }
 }
 
 //common vars
@@ -115,6 +121,12 @@ $sco['_children'] = "student_id,student_name,lesson_location,credit,lesson_statu
 $sco['score_children'] = "raw,min,max";
 $sco['exit'] = "";
 $sco['session_time'] = "0000:00:00.00";
+
+if (isset($_GET['unit'])) {
+    $closeurl = $urlAppend . "modules/units/index.php?course=$course_code&id=" . $_GET['unit'];
+} else {
+    $closeurl = "index.php?course=$course_code";
+}
 
 ?>
 <script type="text/javascript">
@@ -127,6 +139,7 @@ $sco['session_time'] = "0000:00:00.00";
     // ====================================================
     // API Class Constructor
     let debug_ = false;
+    let debug_commit_ = false;
 
     function APIClass() {
 
@@ -177,9 +190,6 @@ $sco['session_time'] = "0000:00:00.00";
     //    - arg must be "" (empty string)
     //    - return value : "true" or "false"
     function LMSInitialize(arg) {
-        if (debug_) {
-            console.debug("initialize");
-        }
         if (arg !== "") {
             this.APIError("201");
             return "false";
@@ -210,9 +220,6 @@ $sco['session_time'] = "0000:00:00.00";
     //    - arg must be "" (empty string)
     //    - return value : "true" or "false"
     function LMSFinish(arg) {
-        if (debug_) {
-            console.debug("LMSfinish");
-        }
         if (APIInitialized) {
             if (arg !== "") {
                 this.APIError("201");
@@ -235,9 +242,6 @@ $sco['session_time'] = "0000:00:00.00";
     // Data Transfer
     //
     function LMSGetValue(ele) {
-        if (debug_) {
-            console.debug("LMSGetValue: " + ele);
-        }
         if (APIInitialized) {
 
             // SCORM2004
@@ -277,6 +281,7 @@ $sco['session_time'] = "0000:00:00.00";
                     case 'cmi.objectives._children':
                     case 'cmi.student_data._children':
                     case 'cmi.interactions._children':
+                    case 'cmi.mode':
                         APIError("0");
                         return values[i];
                     //-----------------------------------
@@ -325,7 +330,6 @@ $sco['session_time'] = "0000:00:00.00";
                         return values[i];
                 }
             } else {
-
                 if (ele.indexOf("cmi.interactions") >= 0) {
                     return handleGetInteractions(ele, interactions);
                 }
@@ -374,10 +378,6 @@ $sco['session_time'] = "0000:00:00.00";
     }
 
     function LMSSetValue(ele, val) {
-        if (debug_) {
-            console.debug("LMSSetValue: " + ele + ": " + val);
-        }
-
         if (APIInitialized) {
 
             // SCORM2004
@@ -575,7 +575,9 @@ $sco['session_time'] = "0000:00:00.00";
                         APIError("403");
                         return "false";
                     // SCORM2004
+                    case 'cmi.progress_measure':
                     case 'cmi.learner_preference.audio_level':
+                    case 'cmi.learner_preference.delivery_speed':
                         if (!checkDataType(val, 'CMIDecimal')) {
                             APIError("406");
                             return "false";
@@ -583,7 +585,6 @@ $sco['session_time'] = "0000:00:00.00";
                             APIError("407");
                             return "false";
                         }
-
                         values[i] = val;
                         APIError("0");
                         return "true";
@@ -600,18 +601,6 @@ $sco['session_time'] = "0000:00:00.00";
                     case 'cmi.student_preference.language':
                         if (!checkDataType(val, 'CMIString255')) {
                             APIError("405");
-                            return "false";
-                        }
-                        values[i] = val;
-                        APIError("0");
-                        return "true";
-                    // SCORM2004
-                    case 'cmi.learner_preference.delivery_speed':
-                        if (!checkDataType(val, 'CMIDecimal')) {
-                            APIError("406");
-                            return "false";
-                        } else if(val < 0) {
-                            APIError("407");
                             return "false";
                         }
                         values[i] = val;
@@ -701,9 +690,6 @@ $sco['session_time'] = "0000:00:00.00";
     }
 
     function LMSCommit(arg) {
-        if (debug_) {
-            console.debug("LMScommit");
-        }
         if (APIInitialized) {
             if (arg !== "") {
                 this.APIError("201");
@@ -729,16 +715,10 @@ $sco['session_time'] = "0000:00:00.00";
     // State Management
     //
     function LMSGetLastError() {
-        if (debug_) {
-            console.debug("LMSGetLastError: " + APILastError);
-        }
         return APILastError;
     }
 
     function LMSGetErrorString(num) {
-        if (debug_) {
-            console.debug("LMSGetErrorString(" + num + ") = " + errCodes[num]);
-        }
         if (num === "") {
             return "";
         }
@@ -749,11 +729,7 @@ $sco['session_time'] = "0000:00:00.00";
     }
 
     function LMSGetDiagnostic(num) {
-        if (debug_) {
-            console.debug("LMSGetDiagnostic(" + num + ") = " + errDiagn[num]);
-        }
-
-        console.log(errDiagn[num]);
+        console.error(errDiagn[num]);
 
         if (num === "") {
             num = APILastError;
@@ -765,7 +741,7 @@ $sco['session_time'] = "0000:00:00.00";
             return "";
         }
 
-        console.log(errDiagn[num]);
+        console.error(errDiagn[num]);
 
         return errDiagn[num];
     }
@@ -894,6 +870,8 @@ $sco['session_time'] = "0000:00:00.00";
     elements[45] = 'cmi.score.scaled';
     elements[46] = 'cmi.exit';
     elements[47] = 'adl.nav.request';
+    elements[48] = 'cmi.mode';
+    elements[49] = 'cmi.progress_measure';
 
     let values = [];
     values[0] = "<?php echo js_escape($sco['_children']); ?>";
@@ -937,6 +915,8 @@ $sco['session_time'] = "0000:00:00.00";
     values[45] = "<?php echo js_escape($sco['scoreScaled']); ?>";
     values[46] = "<?php echo js_escape($sco['exit']); ?>";
     values[47] = "";
+    values[48] = "normal";
+    values[49] = "<?php echo js_escape($sco['progress_measure']); ?>";
 
 
     // ====================================================
@@ -944,13 +924,51 @@ $sco['session_time'] = "0000:00:00.00";
     //
     function do_commit() {
         let cdbg = function (val) {
-            if (debug_) {
+            if (debug_commit_) {
                 console.debug(val);
             }
         };
 
         // target form is in a hidden frame
-        let cmiform = upFrame.document.forms[0];
+        let cmiform = null;
+        let safeToUseUpFrame = false;
+        try {
+            // Try accessing the frame and its form
+            if (typeof upFrame !== 'undefined' && upFrame && upFrame.document && upFrame.document.forms.length > 0) {
+                cmiform = upFrame.document.forms[0];
+                safeToUseUpFrame = true;
+            }
+        } catch (err) {
+            // Accessing upFrame threw an exception (likely due to being destroyed or cross-origin)
+            safeToUseUpFrame = false;
+        }
+
+        if (!safeToUseUpFrame) {
+            cdbg('upFrame is not available. Constructing fallback form.');
+
+            let fallbackForm = document.createElement('form');
+            fallbackForm.method = 'POST';
+            fallbackForm.action = '<?php echo $urlAppend . "modules/learnPath/navigation/updateProgress.php?course=" . $course_code . (isset($_GET['unit'])? ('&unit=' . intval($_GET['unit'])): '') ?>';
+
+            // replicate original inputs
+            fallbackForm.appendChild(makeHiddenInput('ump_id', null));
+            fallbackForm.appendChild(makeHiddenInput('lesson_status', null));
+            fallbackForm.appendChild(makeHiddenInput('lesson_location', null));
+            fallbackForm.appendChild(makeHiddenInput('credit', null));
+            fallbackForm.appendChild(makeHiddenInput('entry', null));
+            fallbackForm.appendChild(makeHiddenInput('raw', null));
+            fallbackForm.appendChild(makeHiddenInput('total_time', null));
+            fallbackForm.appendChild(makeHiddenInput('session_time', null));
+            fallbackForm.appendChild(makeHiddenInput('suspend_data', null));
+            fallbackForm.appendChild(makeHiddenInput('scoreMin', null));
+            fallbackForm.appendChild(makeHiddenInput('scoreMax', null));
+            fallbackForm.appendChild(makeHiddenInput('scoreScaled', null));
+            fallbackForm.appendChild(makeHiddenInput('progress_measure', null));
+            fallbackForm.appendChild(makeHiddenInput('exit', null));
+
+            cmiform = fallbackForm;
+        }
+
         // user module progress id
         cmiform.ump_id.value = "<?php echo $userProgressionDetails->user_module_progress_id ?>";
 
@@ -972,9 +990,20 @@ $sco['session_time'] = "0000:00:00.00";
         cmiform.scoreMin.value = values[14];
         cmiform.scoreMax.value = values[15];
         cmiform.scoreScaled.value = values[45];
+        cmiform.progress_measure.value = values[49];
 
         let cmiformVars = $(cmiform).serialize();
-        let closelocation = tocFrame.document.getElementById('close-btn').getElementsByTagName('a')[0].href;
+        let closelocation = null;
+        let safeToUseTocFrame = false;
+        try {
+            if (typeof tocFrame !== 'undefined' && tocFrame && tocFrame.document) {
+                closelocation = tocFrame.document.getElementById('close-btn').getElementsByTagName('a')[0].href;
+                safeToUseTocFrame = true;
+            }
+        } catch (err) {
+            safeToUseTocFrame = false;
+            closelocation = '<?php echo $closeurl ?>';
+        }
         cdbg('doCommit cmiform submit');
 
         $.ajax({
@@ -1003,12 +1032,14 @@ $sco['session_time'] = "0000:00:00.00";
             }
         }).always(function() {
             cdbg('doCommit exiting...');
-            tocFrame.document.location.reload();
-            // adl.nav.request
-            if (values[47].length > 0) {
-                setTimeout(function() {
-                    window.location.href = closelocation;
-                }, 300);
+            if (safeToUseTocFrame) {
+                tocFrame.document.location.reload();
+                // adl.nav.request
+                if (values[47].length > 0) {
+                    setTimeout(function () {
+                        window.top.location.href = closelocation;
+                    }, 300);
+                }
             }
         });
     }
@@ -1020,6 +1051,14 @@ $sco['session_time'] = "0000:00:00.00";
             }
         }
         return -1;
+    }
+
+    function makeHiddenInput(name, value) {
+        let input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = name;
+        input.value = value;
+        return input;
     }
 
     // ====================================================
@@ -1045,7 +1084,8 @@ $sco['session_time'] = "0000:00:00.00";
     isSCORM2004 = false;
 
     let CMIDataModel = {
-        'CMITime': '^([0-2]{1}[0-9]{1}):([0-5]{1}[0-9]{1}):([0-5]{1}[0-9]{1})(\.[0-9]{1,2})?$',
+        //'CMITime': '^([0-2]{1}[0-9]{1}):([0-5]{1}[0-9]{1}):([0-5]{1}[0-9]{1})(\.[0-9]{1,2})?$',
+        'CMITime': '^(19[7-9]{1}[0-9]{1}|20[0-2]{1}[0-9]{1}|203[0-8]{1})((-(0[1-9]{1}|1[0-2]{1}))((-(0[1-9]{1}|[1-2]{1}[0-9]{1}|3[0-1]{1}))(T([0-1]{1}[0-9]{1}|2[0-3]{1})((:[0-5]{1}[0-9]{1})((:[0-5]{1}[0-9]{1})((\\.[0-9]{1,2})((Z|([+|-]([0-1]{1}[0-9]{1}|2[0-3]{1})))(:[0-5]{1}[0-9]{1})?)?)?)?)?)?)?)?$',
         'CMIFeedback': '',
         'CMITimespan': '^(([0-9]{2,4}):([0-9]{2}):([0-9]{2})(\.[0-9]{1,2})?)|(PT([0-9]{1,2}H)?([0-9]{1,2}M)?([0-9]{1,2}(.)?[0-9]?[0-9]?S)?)$',
         'CMIInteger': '^\\d+$',
@@ -1062,11 +1102,12 @@ $sco['session_time'] = "0000:00:00.00";
             'Credit': '^(credit|no-credit)$',
             'Entry': '^(ab-initio|resume|^)$',
             'Interaction': '^(true-false|choice|fill-in|matching|performance|likert|sequencing|numeric)$',
-            'Result': '^(correct|wrong|unanticipated|neutral|-?([0-9]+)(\\.[0-9]+))$',
+            'Result': '^correct$|^incorrect$|^unanticipated$|^neutral$|^-?([0-9]{1,4})(\\.[0-9]{1,18})?$',
             'TimeLimitAction': '^(exit,message|exit,no message|continue,message|continue,no message)$'
         },
         'CMIString255': '^.{0,255}$',
         'CMIString4096': '^.{0,4096}$',
+        'CMILangString250': '^(\{lang=([a-zA-Z]{2,3}|i|x)(\-[a-zA-Z0-9\-]{2,8})?\})?([^\{].{0,250}$)?',
         'NAVEvent': '^previous$|^continue$|^exit$|^exitAll$|^abandon$|^abandonAll$|^suspendAll$|^\{target=\\S{0,200}[a-zA-Z0-9]\}choice|jump$'
     };
 
@@ -1283,7 +1324,7 @@ $sco['session_time'] = "0000:00:00.00";
     function handleSetInteractions(ele, val, interactions) {
         let myres, elem_id, elem_attrib;
 
-        if ((myres = ele.match(/cmi.interactions.(\d+).(id|time|type|correct_responses|weighting|student_response|result|latency|objectives)(.*)/))) {
+        if ((myres = ele.match(/cmi.interactions.(\d+).(id|time|timestamp|type|correct_responses|weighting|student_response|result|latency|objectives|description)(.*)/))) {
 
             updatetable_to_list['interactions'] = 'true';
             elem_id = myres[1];
@@ -1306,6 +1347,7 @@ $sco['session_time'] = "0000:00:00.00";
                         APIError("0");
                         return "true";
                     case "time":
+                    case "timestamp":
                         if (!checkDataType(val, 'CMITime')) {
                             APIError("405");
                             return "false";
@@ -1366,6 +1408,14 @@ $sco['session_time'] = "0000:00:00.00";
                         return handleSetObjectives(ele, val, interactions[elem_id][8]);
                         //APIError("401");
                         //return "false";
+                    case "description":
+                        if (!checkDataType(val, 'CMILangString250')) {
+                            APIError("405");
+                            return "false";
+                        }
+                        interactions[elem_id][8] = val;
+                        APIError("0");
+                        return "true;"
                     default:
                         APIError("401"); // not implemented
                         return "false";
@@ -1382,7 +1432,6 @@ $sco['session_time'] = "0000:00:00.00";
 
             if (obj_id > item_objectives.length) { //objectives setting should start at 0
                 APIError("201"); // invalid argument
-                console.debug(ele);
                 return "false";
             } else {
 
@@ -1468,4 +1517,56 @@ $sco['session_time'] = "0000:00:00.00";
             return "false";
         }
     }
+
+    // debug mode
+    if (debug_) {
+        (function () {
+            // --- find API once
+            const findAPI = (win, max = 10) => {
+                let depth = 0;
+                while (!win.API_1484_11 && win.parent && win.parent !== win && depth++ < max) {
+                    win = win.parent;
+                }
+                return win.API_1484_11 || (win.opener && win.opener.API_1484_11);
+            };
+
+            const api = window.API_1484_11 || findAPI(window);
+            if (!api) { console.warn("No API_1484_11 found"); return; }
+
+            // --- helpers
+            const ts = () => new Date().toISOString();
+            const log = (...args) => console.debug(ts(), "[SCORM]", ...args);
+            const logError = (name, arg) => {
+                if (typeof api.GetLastError === "function") {
+                    const err = api.GetLastError();
+                    if (err !== "0") {
+                        const str = api.GetErrorString ? api.GetErrorString(err) : "";
+                        const diag = api.GetDiagnostic ? api.GetDiagnostic(err) : "";
+                        console.debug(ts(), "[SCORM]", `${name} error`, arg, err, str, diag);
+                    }
+                }
+            };
+
+            // --- generic method wrapper
+            const originals = {};
+            const wrap = (name) => {
+                const fn = api[name];
+                if (typeof fn !== "function") return;
+                originals[name] = fn.bind(api);
+                api[name] = function (...args) {
+                    const result = originals[name](...args);
+                    log(name, ...args, "=>", result);
+                    // pass first arg for context in error log (el/arg)
+                    logError(name, args[0]);
+                    return result;
+                };
+            };
+
+            // Wrap the SCORM calls we care about
+            ["SetValue", "GetValue", "Commit", "Initialize", "Terminate"].forEach(wrap);
+
+            console.log("SCORM API patched for debugging. Ready.");
+        })();
+    }
+
 </script>

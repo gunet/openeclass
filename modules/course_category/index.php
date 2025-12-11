@@ -26,6 +26,8 @@ include '../../include/baseTheme.php';
 require_once 'include/lib/hierarchy.class.php';
 
 $toolName = $langCourseCategoryActions;
+$navigation[] = array('url' => "../course_info/index.php?course=$course_code", 'name' => $langCourseInfo);
+
 add_units_navigation(TRUE);
 load_js('tools.js');
 

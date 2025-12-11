@@ -106,8 +106,9 @@ if ($blog_type == 'course_blog') {
 
 load_js('tools.js');
 
-$head_content .= '<script type="text/javascript">var langEmptyGroupName = "' .
-		$langEmptyBlogPostTitle . '";</script>';
+$head_content .= '<script type="text/javascript">
+                    var langEmptyGroupName = "' . $langEmptyBlogPostTitle . '";
+                  </script>';
 
 //define allowed actions
 $allowed_actions = array("showBlog", "showPost", "createPost", "editPost", "delPost", "savePost", "settings");
@@ -444,7 +445,8 @@ if ($action == "createPost") {
                                     ))
                                     ."
                         </div>
-                        <input type='hidden' name='action' value='savePost' />
+                        <input type='hidden' name='action' value='savePost'>
+                        " . generate_csrf_token_form_field() . "
                     </fieldset>
                 </form>
             </div>
@@ -454,9 +456,7 @@ if ($action == "createPost") {
         </div>
     </div>
 </div>
-
         ";
-
     } else {
         Session::flash('message',$langBlogPostNotAllowedCreate);
         Session::flash('alert-class', 'alert-danger');
@@ -522,68 +522,61 @@ if ($action == "editPost") {
             }
 
             $tool_content .= "
-<div class='col-12'>
-    <div class='$flex_content mt-4'>
-        <div class='$flex_grow'>
-            <div class='form-wrapper form-edit rounded border-0 px-0'>
-                <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?$url_params' onsubmit=\"return checkrequired(this, 'blogPostTitle');\">
-                    <fieldset>
-                        <legend class='mb-0' aria-label='$langForm'></legend>
-                        <div class='form-group'>
-                            <label for='blogPostTitle' class='col-sm-12 control-label-notes'>$langBlogPostTitle:</label>
-                            <div class='col-sm-12'>
-                                <input class='form-control' type='text' name='blogPostTitle' id='blogPostTitle' value='".q($post->getTitle())."' placeholder='$langBlogPostTitle'>
+                <div class='col-12'>
+                    <div class='$flex_content mt-4'>
+                        <div class='$flex_grow'>
+                            <div class='form-wrapper form-edit rounded border-0 px-0'>
+                                <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?$url_params' onsubmit=\"return checkrequired(this, 'blogPostTitle');\">
+                                    <fieldset>
+                                        <legend class='mb-0' aria-label='$langForm'></legend>
+                                        <div class='form-group'>
+                                            <label for='blogPostTitle' class='col-sm-12 control-label-notes'>$langBlogPostTitle:</label>
+                                            <div class='col-sm-12'>
+                                                <input class='form-control' type='text' name='blogPostTitle' id='blogPostTitle' value='".q($post->getTitle())."' placeholder='$langBlogPostTitle'>
+                                            </div>
+                                        </div>
+                
+                
+                
+                                        <div class='form-group mt-4'>
+                                            <label for='newContent' class='col-sm-12 control-label-notes'>$langBlogPostBody:</label>
+                                            <div class='col-sm-12'>
+                                                ".rich_text_editor('newContent', 4, 20, $post->getContent())."
+                                            </div>
+                                        </div>
+                                        $commenting_setting
+                
+                                        <div class='form-group mt-5 d-flex justify-content-end align-items-center'>
+                
+                
+                                                ".
+                                                form_buttons(array(
+                                                    array(
+                                                        'class' => 'submitAdminBtn',
+                                                        'text'  =>  $langSubmit,
+                                                        'name'  =>  'submitBlogPost',
+                                                        'value' =>  $langModifBlogPost
+                                                    ),
+                                                    array(
+                                                        'class' => 'cancelAdminBtn ms-1',
+                                                        'href'  =>  "$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showBlog"
+                                                    )
+                                                ))
+                                                ."
+                                        </div>
+                                        <input type='hidden' name='action' value='savePost'>
+                                        <input type='hidden' name='pId' value='".$post->getId()."'>
+                                    </fieldset>
+                                    " . generate_csrf_token_form_field() . "
+                                </form>
                             </div>
+                        </div>                
+                        <div class='$column_content d-none d-lg-block'>
+                            <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
                         </div>
-
-
-
-                        <div class='form-group mt-4'>
-                            <label for='newContent' class='col-sm-12 control-label-notes'>$langBlogPostBody:</label>
-                            <div class='col-sm-12'>
-                                ".rich_text_editor('newContent', 4, 20, $post->getContent())."
-                            </div>
-                        </div>
-                        $commenting_setting
-
-                        <div class='form-group mt-5 d-flex justify-content-end align-items-center'>
-
-
-                                ".
-                                form_buttons(array(
-                                    array(
-                                        'class' => 'submitAdminBtn',
-                                        'text'  =>  $langSubmit,
-                                        'name'  =>  'submitBlogPost',
-                                        'value' =>  $langModifBlogPost
-                                    ),
-                                    array(
-                                        'class' => 'cancelAdminBtn ms-1',
-                                        'href'  =>  "$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showBlog"
-                                    )
-                                ))
-                                ."
-
-
-
-
-                        </div>
-                        <input type='hidden' name='action' value='savePost'>
-                        <input type='hidden' name='pId' value='".$post->getId()."'>
-                    </fieldset>
-                </form>
-            </div>
-        </div>
-
-        <div class='$column_content d-none d-lg-block'>
-            <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
-        </div>
-    </div>
-</div>
-       ";
-
-
-
+                    </div>
+                    </div>
+                ";
         } else {
             Session::flash('message',$langBlogPostNotAllowedEdit);
             Session::flash('alert-class', 'alert-danger');
@@ -614,6 +607,7 @@ if ($action == "savePost") {
                 $commenting = NULL;
             }
             if ($post->create($_POST['blogPostTitle'], purify($_POST['newContent']), $uid, $course_id, $commenting)) {
+
                 Session::flash('message',$langBlogPostSaveSucc);
                 Session::flash('alert-class', 'alert-success');
                 triggerGame($course_id, $uid, BlogEvent::NEWPOST);

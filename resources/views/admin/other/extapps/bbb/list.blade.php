@@ -10,7 +10,7 @@
                     'sLengthMenu': '{{ trans('langDisplay') }} _MENU_ {{ trans('langResults2') }}',
                     'sZeroRecords': '{{ trans('langNoResult') }}',
                     'sInfo': '{{ trans('langDisplayed') }} _START_ {{ trans('langTill') }} _END_ {{ trans('langFrom2') }} _TOTAL_ {{ trans('langTotalResults') }}',
-                    'sInfoEmpty': '{{ trans('langDisplayed') }} 0 {{ trans('langTill') }} 0 {{ trans('langFrom2') }} 0 {{ trans('langResults2') }}',
+                    'sInfoEmpty': '',
                     'sInfoFiltered': '',
                     'sInfoPostFix': '',
                     'sSearch': '',
@@ -23,11 +23,11 @@
                     }
                 }
             });
-            $('.dataTables_filter input').attr({
+            $('.dt-search input').attr({
                 'class': 'form-control input-sm ms-0 mb-3',
                 'placeholder': '{{ trans('langSearch') }}...'
             });
-            $('.dataTables_filter label').attr('aria-label', '{{ trans('langSearch') }}');  
+            $('.dt-search label').attr('aria-label', '{{ trans('langSearch') }}');
         });
 
     </script>

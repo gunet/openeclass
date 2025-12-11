@@ -6,10 +6,10 @@
                 <div class='col-12 d-flex justify-content-center align-items-center gap-3 pt-3'>
                     @if(get_config('link_footer_image'))
                     <a href="{!! get_config('link_footer_image') !!}" target="_blank">
-                        <img class='footer-image' style='max-width:280px; max-height:100px;' src='{{ $image_footer }}?<?php echo time(); ?>' alt="{{ trans('langMetaImage') }}">
+                        <img class='footer-image' src='{{ $image_footer }}?<?php echo time(); ?>' alt="{{ trans('langMetaImage') }}">
                     </a>
                     @else
-                    <img class='footer-image' style='max-width:280px; max-height:100px;' src='{{ $image_footer }}?<?php echo time(); ?>' alt="{{ trans('langMetaImage') }}">
+                    <img class='footer-image' src='{{ $image_footer }}?<?php echo time(); ?>' alt="{{ trans('langMetaImage') }}">
                     @endif
                 </div>
                 @if(get_config('footer_intro'))
@@ -133,10 +133,10 @@
                     <div class='col-12 d-flex justify-content-center align-items-center pb-3 gap-3'>
                         @if(get_config('link_footer_image'))
                         <a href="{!! get_config('link_footer_image') !!}" target="_blank">
-                            <img class='footer-image' style='max-width:280px; max-height:100px;' src='{{ $image_footer }}?<?php echo time(); ?>' alt="{{ trans('langMetaImage') }}">
+                            <img class='footer-image' src='{{ $image_footer }}?<?php echo time(); ?>' alt="{{ trans('langMetaImage') }}">
                         </a>
                         @else
-                        <img class='footer-image' style='max-width:280px; max-height:100px;' src='{{ $image_footer }}?<?php echo time(); ?>' alt="{{ trans('langMetaImage') }}">
+                        <img class='footer-image' src='{{ $image_footer }}?<?php echo time(); ?>' alt="{{ trans('langMetaImage') }}">
                         @endif
                     </div>
                 @endif
@@ -183,7 +183,7 @@
                     @endif
                 </div>
                 <div class='col-12 border-bottom-footer'></div>
-                <div class="col-12 mt-auto d-flex justify-content-between align-items-center flex-wrap gap-3 pt-3">
+                <div class="col-12 mt-auto d-flex @if(get_config('enable_social_sharing_links') && (get_config('link_fb') || get_config('link_tw') || get_config('link_ln'))) justify-content-between @else justify-content-center @endif align-items-center flex-wrap gap-3 pt-3">
                     <a class="copyright" href='{{$urlAppend}}info/copyright.php' @if($_SESSION['provider'] == 'lti_publish') target="_blank" @endif>Copyright © {{ date('Y') }} All rights reserved</a>
                     @if(get_config('enable_social_sharing_links'))
                         <div class='d-flex gap-3 justify-content-end'>

@@ -19,7 +19,7 @@
  */
 
 function api_method($access) {
-    global $webDir, $username, $firstname, $lastname, $emailaddress, $adt, $password;
+    global $webDir, $username, $firstname, $lastname, $emailaddress, $auth, $adt, $password,$auth_ids,$hybridAuthMethods;
 
     if (!$access->isValid) {
         Access::error(100, "Authentication required");
@@ -33,10 +33,30 @@ function api_method($access) {
             'emailaddress' => true,
             'adt' => false,
             'password' => false,
+            'auth' => false,
         ]);
         if (!$ok) {
-            Access::error(2, 'Required parameters for user creation missing: username, firstname, lastname, emailaddress, [adt], [password]');
+            Access::error(2, 'Required parameters for user creation missing: username, firstname, lastname, emailaddress, [adt], [password], [auth]');
         }
+
+
+        if (!empty($auth)) {
+            require_once __DIR__ . '/../../../modules/auth/auth.inc.php';
+
+            $tempHybridAuthMethods = array_merge($hybridAuthMethods, ['eclass']);
+
+            $active_auth_methods = get_auth_active_methods();
+            $active_auth_names = array_map(function($id) use ($auth_ids) {
+                return isset($auth_ids[$id]) ? $auth_ids[$id] : null;
+            }, $active_auth_methods);
+
+            $allowed_auth_names = array_diff($active_auth_names, $tempHybridAuthMethods);
+
+            if (!in_array($auth, $active_auth_names) || in_array($auth, $tempHybridAuthMethods)) {
+                Access::error(2, 'Invalid authentication method. Allowed methods are: ' . implode(', ', $allowed_auth_names));
+            }
+        }
+
         if (get_config('case_insensitive_usernames')) {
             $qry = "COLLATE utf8mb4_general_ci = ?s";
         } else {
@@ -52,20 +72,29 @@ function api_method($access) {
                 Database::get()->query('UPDATE user SET surname = ?s, givenname = ?s, email = ?s
                     WHERE id = ?d',
                     $lastname, $firstname, $emailaddress, $user->id);
-                if ($password !== '') {
-                    Database::get()->query('UPDATE user SET password = ?s WHERE id = ?d',
-                        password_hash($password, PASSWORD_DEFAULT), $user->id);
+
+                if ( !empty($auth) ) {
+                    Database::get()->query('UPDATE user SET password = ?s WHERE id = ?d', $auth, $user->id);
+                } else if (!$password == '') {
+                    $password_encrypted = password_hash($password, PASSWORD_DEFAULT);
+                    Database::get()->query('UPDATE user SET password = ?s WHERE id = ?d', $password_encrypted, $user->id);
                 }
                 if (isset($_POST['adt'])) {
-                    Database::get()->query('UPDATE user SET am = ?s WHERE id = ?d',
-                        $adt, $user->id);
+                    Database::get()->query('UPDATE user SET am = ?s WHERE id = ?d', $adt, $user->id);
                 }
             }
             $statusmsg = 'updated';
             $user_id = $user->id;
         } else {
-            $password = choose_password_strength();
-            $password_encrypted = password_hash($password, PASSWORD_DEFAULT);
+            if (!empty($auth)) {
+                $password_encrypted = $auth;
+            } else {
+                if ($password == '') {
+                    $password = choose_password_strength();
+                }
+                $password_encrypted = password_hash($password, PASSWORD_DEFAULT);
+            }
+
             $user = Database::get()->query("INSERT INTO user
                 SET surname = ?s, givenname = ?s, username = ?s, password = ?s,
                     email = ?s, status = ?d, registered_at = " . DBHelper::timeAfter() . ",
@@ -82,14 +111,61 @@ function api_method($access) {
             Database::get()->query("INSERT IGNORE INTO personal_calendar_settings(user_id) VALUES (?d)", $user_id);
             $statusmsg = 'created';
         }
-        user_hook($id);
+        user_hook($user_id);
         header('Content-Type: application/json');
         $response = ['id' => $user_id, 'status' => $statusmsg];
-        if (isset($password) and $password !== '') {
+        if (!empty($auth)) {
+            $response['auth'] = $auth;
+        } elseif (isset($password) && $password !== '') {
             $response['password'] = $password;
         }
         echo json_encode($response);
         exit();
+    } elseif (isset($_GET['course_id'])) {
+        $course_id = course_code_to_id($_GET['course_id']);
+        if ($access->allCourses or in_array($course_id, $access->courseIDs)) {
+            $users = Database::get()->queryArray('SELECT user.id, username, givenname, surname, email, am
+                FROM user, course_user
+                WHERE user.id = course_user.user_id AND course_user.course_id = ?d',
+                $course_id);
+            echo json_encode(array_map(function ($user) {
+                return [
+                    'id' => $user->id,
+                    'username' => $user->username,
+                    'firstname' => $user->givenname,
+                    'lastname' => $user->surname,
+                    'emailaddress' => $user->email,
+                    'adt' => $user->am];
+            }, $users), JSON_UNESCAPED_UNICODE);
+            exit;
+        } else {
+            Access::error(403, 'Course is not valid for this API token', 403);
+        }
+    } elseif (isset($_GET['group_id'])) {
+        $course_id = Database::get()->querySingle('SELECT course_id
+            FROM `group`
+            WHERE id = ?d', $_GET['group_id']);
+        if (!$course_id) {
+            Access::error(404, "Group with id '$_GET[group_id]' not found", 404);
+        }
+        if ($course_id and $access->allCourses or in_array($course_id->course_id, $access->courseIDs)) {
+            $users = Database::get()->queryArray('SELECT user.id, username, givenname, surname, email, am
+                FROM user, group_members
+                WHERE user.id = group_members.user_id',
+                $_GET['group_id']);
+            echo json_encode(array_map(function ($user) {
+                return [
+                    'id' => $user->id,
+                    'username' => $user->username,
+                    'firstname' => $user->givenname,
+                    'lastname' => $user->surname,
+                    'emailaddress' => $user->email,
+                    'adt' => $user->am];
+            }, $users), JSON_UNESCAPED_UNICODE);
+            exit;
+        } else {
+            Access::error(403, 'Course is not valid for this API token', 403);
+        }
     } elseif (isset($_GET['id']) or isset($_GET['username'])) {
         if (isset($_GET['username'])) {
             if (get_config('case_insensitive_usernames')) {

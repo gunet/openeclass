@@ -42,10 +42,10 @@ $langOfConsultant = "Consultant";
 $langConsultants = "Consultants";
 $langOfConsultants = "Consultants";
 
-$langsTeacher = "consultant";
-$langsOfTeacher = "consultant";
-$langsTeachers = "consultants";
-$langsOfTeachers = "consultants";
+$langsConsultant = "consultant";
+$langsOfConsultant = "consultant";
+$langsConsultants = "consultants";
+$langsOfConsultants = "consultants";
 
 $langCourseAdmin = "Admin";
 $langOfCourseAdmin = "Admin";

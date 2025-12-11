@@ -29,6 +29,7 @@ require_once 'include/log.class.php';
 
 $toolName = $langSyllabus;
 $pageName = $langEditCourseProgram;
+$navigation[] = array('url' => "../course_info/index.php?course=$course_code", 'name' => $langCourseInfo);
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langSyllabus);
 
 if (isset($_REQUEST['id'])) {
@@ -61,11 +62,6 @@ foreach ($types as $type) {
     $data['types'][$type->id] = $title;
 }
 $data['titleError'] = Session::getError('editTitle') ? " has-error" : "";
-$data['action_bar'] = action_bar(array(
-            array('title' => trans('langBack'),
-                  'url' => "index.php?course=$course_code",
-                  'icon' => 'fa-reply',
-                  'level' => 'primary')));
 
 $data['text_area_comments'] = rich_text_editor('editComments', 4, 20, $comments);
 

@@ -34,6 +34,7 @@ require_once 'include/action.php';
 $action = new action();
 $action->record(MODULE_ID_DESCRIPTION);
 
+$navigation[] = array('url' => "../course_info/index.php?course=$course_code", 'name' => $langCourseInfo);
 $toolName = $langSyllabus;
 
 ModalBoxHelper::loadModalBox();
@@ -106,7 +107,7 @@ function handleType($typeId) {
 }
 
 function processActions() {
-    global $tool_content, $langResourceCourseUnitDeleted, $course_id, $course_code;
+    global $langResourceCourseUnitDeleted, $course_id, $course_code;
 
     if (isset($_REQUEST['del'])) { // delete resource from course unit
         $res_id = intval(getDirectReference($_REQUEST['del']));

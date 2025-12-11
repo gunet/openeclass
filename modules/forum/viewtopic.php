@@ -32,7 +32,8 @@ require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'include/course_settings.php';
 require_once 'include/user_settings.php';
 require_once 'include/log.class.php';
-require_once 'modules/search/indexer.class.php';
+require_once 'modules/search/classes/ConstantsUtil.php';
+require_once 'modules/search/classes/SearchEngineFactory.php';
 require_once 'modules/rating/class.rating.php';
 require_once 'modules/abuse_report/abuse_report.php';
 
@@ -198,7 +199,8 @@ if (isset($_GET['delete']) && isset($post_id) && $is_editor) {
     }
     // remove forum post entries
     Database::get()->query("DELETE FROM forum_post WHERE id = ?d", $post_id);
-    Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_FORUMPOST, $post_id);
+    $searchEngine = SearchEngineFactory::create();
+    $searchEngine->indexResource(ConstantsUtil::REQUEST_REMOVE, ConstantsUtil::RESOURCE_FORUMPOST, $post_id);
 
     //orphan replies get -1 to parent_post_id
     Database::get()->query("UPDATE forum_post SET parent_post_id = -1 WHERE parent_post_id = ?d", $post_id);
@@ -214,7 +216,7 @@ if (isset($_GET['delete']) && isset($post_id) && $is_editor) {
 
     if ($total == 1) { // if exists one post in topic
         Database::get()->query("DELETE FROM forum_topic WHERE id = ?d AND forum_id = ?d", $topic, $forum);
-        Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_FORUMTOPIC, $topic);
+        $searchEngine->indexResource(ConstantsUtil::REQUEST_REMOVE, ConstantsUtil::RESOURCE_FORUMTOPIC, $topic);
         Database::get()->query("UPDATE forum SET
                                     num_topics = num_topics-1,
                                     num_posts = num_posts-1
@@ -782,12 +784,11 @@ function pdf_forum_output($content_m,$topic_id,$forum_id) {
             .card-default {border: solid 1px #000000; padding: 10px; margin-top: 15px; }
           </style>
         </head>
-        <body>" . get_platform_logo() .
-        "<h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
+        <body>
+        <h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
         <h2> " . q($topicName) . "</h2>";
 
     $pdf_mcontent .= $newContent2;
-
     $pdf_mcontent .= "</body></html>";
 
     $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
@@ -796,6 +797,8 @@ function pdf_forum_output($content_m,$topic_id,$forum_id) {
     $fontData = $defaultFontConfig['fontdata'];
 
     $mpdf = new Mpdf\Mpdf([
+        'margin_top' => 53,     // approx 200px
+        'margin_bottom' => 53,  // approx 200px
         'tempDir' => _MPDF_TEMP_PATH,
         'fontDir' => array_merge($fontDirs, [ $webDir . '/template/modern/fonts' ]),
         'fontdata' => $fontData + [
@@ -812,7 +815,19 @@ function pdf_forum_output($content_m,$topic_id,$forum_id) {
             ]
     ]);
 
-    $mpdf->setFooter('{DATE j-n-Y} || {PAGENO} / {nb}');
+    
+    $mpdf->SetHTMLHeader(get_platform_logo());
+    $footerHtml = '
+    <div>
+        <table width="100%" style="border: none;">
+            <tr>
+                <td style="text-align: left;">{DATE j-n-Y}</td>
+                <td style="text-align: right;">{PAGENO} / {nb}</td>
+            </tr>
+        </table>
+    </div>
+    ' . get_platform_logo('','footer') . '';
+    $mpdf->SetHTMLFooter($footerHtml);
     $mpdf->SetCreator(course_id_to_prof($course_id));
     $mpdf->SetAuthor(course_id_to_prof($course_id));
     $mpdf->WriteHTML($pdf_mcontent);

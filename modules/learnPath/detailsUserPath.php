@@ -28,45 +28,64 @@
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-$require_current_course = TRUE;
-$require_course_reviewer = TRUE;
+$require_current_course = true;
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/learnPathLib.inc.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
 
-$navigation[] = array("url" => "index.php?course=$course_code", "name" => $langLearningPaths);
-$navigation[] = array("url" => "details.php?course=$course_code&amp;path_id=" . $_REQUEST['path_id'], "name" => $langStatsOfLearnPath);
-
+if (isset($_GET['unit']) && !isset($_REQUEST['uInfo'])) {
+    $_REQUEST['uInfo'] = $uid;
+    $unit = intval($_GET['unit']);
+}
 if (empty($_REQUEST['uInfo']) || empty($_REQUEST['path_id'])) {
     header("Location: ./index.php?course=$course_code");
     exit();
 }
+$path_id = intval($_REQUEST['path_id']);
+$uInfo = intval($_REQUEST['uInfo']);
 
-if (!isset($_GET['pdf'])) {
-    $tool_content .= action_bar(array(
+$navigation[] = ['url' => "index.php?course=$course_code", 'name' => $langLearningPaths];
+if (isset($_GET['unit'])) {
+    $unit = intval($_GET['unit']);
+    $navigation[] = [
+        'url' => $urlAppend . "modules/units/view.php?course=$course_code&res_type=lp_results&path_id=$path_id&unit=$unit",
+        'name' => $langTracking];
+} elseif ($is_course_reviewer) {
+    $navigation[] = ['url' => "details.php?course=$course_code&path_id=$path_id", 'name' => $langTracking];
+} else {
+    $navigation[] = ['url' => "learningPath.php?course=$course_code&path_id=$path_id", 'name' => $langTracking];
+}
+
+if (!$is_course_reviewer && $uInfo != $uid) { // security check
+    header("Location: ./index.php?course=$course_code");
+    exit();
+}
+
+if (!isset($_GET['pdf']) && $is_course_reviewer) {
+    $action_bar .= action_bar(array(
         array('title' => $langBack,
-            'url' => "detailsUser.php?course=$course_code&amp;uInfo=$_REQUEST[uInfo]",
+            'url' => "detailsUser.php?course=$course_code&amp;uInfo=$uInfo",
             'icon' => 'fa-reply',
             'level' => 'primary'),
         array('title' => $langDumpPDF,
-            'url' => "detailsUserPath.php?course=$course_code&amp;uInfo=$_REQUEST[uInfo]&amp;path_id=$_REQUEST[path_id]&amp;pdf=true;",
+            'url' => "detailsUserPath.php?course=$course_code&amp;uInfo=$uInfo&amp;path_id=$path_id&amp;pdf=true;",
             'icon' => 'fa-file-pdf',
             'level' => 'primary-label'),
         array('title' => $langDumpExcel,
-            'url' => "detailsUserPath.php?course=$course_code&amp;uInfo=$_REQUEST[uInfo]&amp;path_id=$_REQUEST[path_id]&amp;xls=true;",
+            'url' => "detailsUserPath.php?course=$course_code&amp;uInfo=$uInfo&amp;path_id=$path_id&amp;xls=true;",
             'icon' => 'fa-file-excel',
             'level' => 'primary-label')
 
     ), false);
+
+    $tool_content .= $action_bar;
 }
 
-// get infos about the learningPath
 $LPname = Database::get()->querySingle("SELECT `name`
         FROM `lp_learnPath`
         WHERE `learnPath_id` = ?d
-        AND `course_id` = ?d", $_REQUEST['path_id'], $course_id)->name;
+        AND `course_id` = ?d", $path_id, $course_id)->name;
 
-//### PREPARE LIST OF ELEMENTS TO DISPLAY #################################
 $sql = "SELECT LPM.`learnPath_module_id`, LPM.`parent`,
     LPM.`lock`, M.`module_id`,
     M.`contentType`, M.`name`,
@@ -87,7 +106,7 @@ $sql = "SELECT LPM.`learnPath_module_id`, LPM.`parent`,
         AND M.`course_id` = ?d
         ORDER BY UMP.`attempt`, LPM.`rank`";
 
-$moduleList = Database::get()->queryArray($sql, $_REQUEST['uInfo'], $_REQUEST['path_id'], $course_id);
+$moduleList = Database::get()->queryArray($sql, $uInfo, $path_id, $course_id);
 
 $maxAttempt = 1;
 $elementList = [];
@@ -125,28 +144,29 @@ for ($i = 1; $i <= $maxAttempt; $i++) {
 
 $maxDeep = 1; // used to compute colspan of <td> cells - only single level depth of modules currently used
 
-$toolName = q(uid_to_name($_REQUEST['uInfo'])) . ": " . $LPname;
+$toolName = $LPname;
+
+$tool_content .= "<h3>" . q(uid_to_name($uInfo)) . "</h3>";
+
 $tool_content .= "<div class='table-responsive'>
     <table class='table-default'>
     <thead>
         <tr class='list-header'>
             <th colspan=" . ($maxDeep + 1) . ">$langLearningObjects</th>
             <th>$langAttempt</th>
-            <th>$langAttemptStarted</th>
+            <th>$langStart</th>
             <th>$langAttemptAccessed</th>
-            <th>$langLastSessionTimeSpent</th>
             <th>$langTotalTimeSpent</th>
-            <th>$langLessonStatus</th>
+            <th>$langStatement</th>
             <th>$langProgress</th>
         </tr></thead>";
 
-$data[] = [ $toolName ];
+$data[] = [ uid_to_name($uInfo) . ": " . $LPname ];
 $data[] = [];
-$data[] = [ $langLearningObjects, $langAttempt, $langAttemptStarted, $langAttemptAccessed, $langLastSessionTimeSpent, $langTotalTimeSpent, $langLessonStatus, $langProgress ];
+$data[] = [ $langLearningObjects, $langAttempt, $langStart, $langAttemptAccessed, $langTotalTimeSpent, $langStatement, $langProgress ];
 
 
-// ---------------- display list of elements ------------------------
-
+// ---------------- display list of lp modules ------------------------
 $totalTime = "0000:00:00";
 foreach ($elementList as $module) {
     if ($module['scoreMax'] > 0) {
@@ -206,7 +226,7 @@ foreach ($elementList as $module) {
         $total_time = $module['total_time'];
         $global_time[$module['attempt']] = addScormTime($global_time[$module['attempt']], $total_time);
     } else {
-        // if no progression has been recorded for this module
+        // if no progression has been recorded for this module,
         // leave
         if ($module['lesson_status'] == "") {
             $session_time = "&nbsp;";
@@ -216,9 +236,8 @@ foreach ($elementList as $module) {
             $total_time = "-";
         }
     }
-    $tool_content .= "<td>$session_time</td>";
     $tool_content .= "<td>$total_time</td>";
-    $tool_content .= "<td>" . disp_lesson_status($module['lesson_status']) . "</td>";
+    $tool_content .= "<td style='width:15%;'>" . disp_lesson_status($module['lesson_status']) . "</td>";
     //-- progression
     if ($module['contentType'] != CTLABEL_) {
         // display the progress value for current module
@@ -252,20 +271,19 @@ if ($moduleNbT == 0) {
         }
     }
 
-    $nbrOfVisibleModules = calculate_number_of_visible_modules($_REQUEST['path_id']);
+    $nbrOfVisibleModules = calculate_number_of_visible_modules($path_id);
     $bestProgress = 0;
     if (is_numeric($nbrOfVisibleModules)) {
         $bestProgress = @round($globalProg[$bestAttempt] / $nbrOfVisibleModules);
     }
-    $lpCombinedProgress = get_learnPath_combined_progress($_REQUEST['path_id'], $_REQUEST['uInfo']);
+    $lpCombinedProgress = get_learnPath_combined_progress($path_id, $uInfo);
 
     // display global stats
     $tool_content .= "<tr>
-                        <th colspan='" . ($maxDeep + 4) . "'>&nbsp;</th>
-                        <th><small>" . ($totalTime != "0000:00:00" ? $langTimeInLearnPath : '&nbsp;') . "</small></th>
+                        <th class='ps-1' colspan='" . ($maxDeep + 4) . "'>" . ($totalTime != "0000:00:00" ? $langTotal : '&nbsp;') . "</></th>
                         <th><small>" . ($totalTime != "0000:00:00" ? $totalTime : '&nbsp;') . "</small></th>
-                        <th><small>" . $langTotalPercentCompleteness . "</small></th>
-                        <th>" . disp_progress_bar($lpCombinedProgress, 1) . "</th>
+                        <th>&nbsp;</th>
+                        <th class='ms-1 p-2'>" . disp_progress_bar($lpCombinedProgress, 1) . "</th>
                     </tr>";
     $data[] = [];
     if ($global_time[$bestAttempt] != "0000:00:00") {
@@ -275,84 +293,99 @@ if ($moduleNbT == 0) {
 }
 $tool_content .= "</table></div>";
 
-if (isset($_GET['xls'])) {
-    $course_title = course_code_to_title($_GET['course']);
-    $spreadsheet = new Spreadsheet();
-    $sheet = $spreadsheet->getActiveSheet();
-    $sheet->setTitle($course_title);
-    $sheet->getDefaultColumnDimension()->setWidth(30);
-    $filename = $course_code . " learning_path_user_report.xlsx";
+if ($is_course_reviewer) {
+    if (isset($_GET['xls'])) {
+        $course_title = course_code_to_title($_GET['course']);
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle($course_title);
+        $sheet->getDefaultColumnDimension()->setWidth(30);
+        $filename = $course_code . " learning_path_user_report.xlsx";
 
-    $sheet->mergeCells("A1:J1");
-    $sheet->getCell('A1')->getStyle()->getFont()->setItalic(true);
-    for ($i = 1; $i <= 10; $i++) {
-        $cells = [$i, 3];
-        $sheet->getCell($cells)->getStyle()->getFont()->setBold(true);
-    }
-    // create spreadsheet
-    $sheet->fromArray($data, NULL);
-    // file output
-    $writer = new Xlsx($spreadsheet);
-    header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-    set_content_disposition('attachment', $filename);
-    $writer->save("php://output");
-    exit;
+        $sheet->mergeCells("A1:J1");
+        $sheet->getCell('A1')->getStyle()->getFont()->setItalic(true);
+        for ($i = 1; $i <= 10; $i++) {
+            $cells = [$i, 3];
+            $sheet->getCell($cells)->getStyle()->getFont()->setBold(true);
+        }
+        // create spreadsheet
+        $sheet->fromArray($data, NULL);
+        // file output
+        $writer = new Xlsx($spreadsheet);
+        header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        set_content_disposition('attachment', $filename);
+        $writer->save("php://output");
+        exit;
 
-} else if (isset($_GET['pdf'])) {
-    $pdf_content = "
-        <!DOCTYPE html>
-        <html lang='el'>
-        <head>
-          <meta charset='utf-8'>
-          <title>" . q("$currentCourseName - $langStatsOfLearnPath") . "</title>
-          <style>
-            * { font-family: 'opensans'; }
-            body { font-family: 'opensans'; font-size: 10pt; }
-            small, .small { font-size: 8pt; }
-            h1, h2, h3, h4 { font-family: 'roboto'; margin: .8em 0 0; }
-            h1 { font-size: 16pt; }
-            h2 { font-size: 12pt; border-bottom: 1px solid black; }
-            h3 { font-size: 10pt; color: #158; border-bottom: 1px solid #158; }
-            th { text-align: left; border-bottom: 1px solid #999; }
-            td { text-align: left; }
-          </style>
-        </head>
-        <body>" . get_platform_logo() .
-        "<h2>" . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
-        <h2>" . q($LPname) . "</h2>
-        <h3>" . q(uid_to_name($_REQUEST['uInfo'])) . "</h3>";
+    } else if (isset($_GET['pdf'])) {
+        $pdf_content = "
+            <!DOCTYPE html>
+            <html lang='el'>
+            <head>
+              <meta charset='utf-8'>
+              <title>" . q("$currentCourseName - $langTracking") . "</title>
+              <style>
+                * { font-family: 'opensans'; }
+                body { font-family: 'opensans'; font-size: 10pt; }
+                small, .small { font-size: 8pt; }
+                h1, h2, h3, h4 { font-family: 'roboto'; margin: .8em 0 0; }
+                h1 { font-size: 16pt; }
+                h2 { font-size: 12pt; border-bottom: 1px solid black; }
+                h3 { font-size: 10pt; color: #158; border-bottom: 1px solid #158; }
+                th { text-align: left; border-bottom: 1px solid #999; }
+                td { text-align: left; }
+              </style>
+            </head>
+            <body>
+            <h2>" . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
+            <h2>" . q($LPname) . "</h2>";
 
-    $pdf_content .= $tool_content;
-    $pdf_content .= "</body></html>";
+        $pdf_content .= $tool_content;
+        $pdf_content .= "</body></html>";
 
-    $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
-    $fontDirs = $defaultConfig['fontDir'];
-    $defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
-    $fontData = $defaultFontConfig['fontdata'];
+        $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
+        $fontDirs = $defaultConfig['fontDir'];
+        $defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
+        $fontData = $defaultFontConfig['fontdata'];
 
-    $mpdf = new Mpdf\Mpdf([
-        'tempDir' => _MPDF_TEMP_PATH,
-        'fontDir' => array_merge($fontDirs, [$webDir . '/template/modern/fonts']),
-        'fontdata' => $fontData + [
-                'opensans' => [
-                    'R' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-regular.ttf',
-                    'B' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-700.ttf',
-                    'I' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-italic.ttf',
-                    'BI' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-700italic.ttf'
-                ],
-                'roboto' => [
-                    'R' => 'roboto-v15-latin_greek_cyrillic_greek-ext-regular.ttf',
-                    'I' => 'roboto-v15-latin_greek_cyrillic_greek-ext-italic.ttf',
+        $mpdf = new Mpdf\Mpdf([
+            'margin_top' => 53,     // approx 200px
+            'margin_bottom' => 53,  // approx 200px
+            'tempDir' => _MPDF_TEMP_PATH,
+            'fontDir' => array_merge($fontDirs, [$webDir . '/template/modern/fonts']),
+            'fontdata' => $fontData + [
+                    'opensans' => [
+                        'R' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-regular.ttf',
+                        'B' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-700.ttf',
+                        'I' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-italic.ttf',
+                        'BI' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-700italic.ttf'
+                    ],
+                    'roboto' => [
+                        'R' => 'roboto-v15-latin_greek_cyrillic_greek-ext-regular.ttf',
+                        'I' => 'roboto-v15-latin_greek_cyrillic_greek-ext-italic.ttf',
+                    ]
                 ]
-            ]
-    ]);
+        ]);
 
-    $mpdf->setFooter('{DATE j-n-Y} || {PAGENO} / {nb}');
-    $mpdf->SetCreator(course_id_to_prof($course_id));
-    $mpdf->SetAuthor(course_id_to_prof($course_id));
-    $mpdf->WriteHTML($pdf_content);
-    $mpdf->Output("$course_code learning_path_user_report.pdf", 'I'); // 'D' or 'I' for download / inline display
-    exit;
-} else {
-    draw($tool_content, 2, null, $head_content);
+
+        $mpdf->SetHTMLHeader(get_platform_logo());
+        $footerHtml = '
+        <div>
+            <table width="100%" style="border: none;">
+                <tr>
+                    <td style="text-align: left;">{DATE j-n-Y}</td>
+                    <td style="text-align: right;">{PAGENO} / {nb}</td>
+                </tr>
+            </table>
+        </div>
+        ' . get_platform_logo('','footer') . '';
+        $mpdf->SetHTMLFooter($footerHtml);
+        $mpdf->SetCreator(course_id_to_prof($course_id));
+        $mpdf->SetAuthor(course_id_to_prof($course_id));
+        $mpdf->WriteHTML($pdf_content);
+        $mpdf->Output("$course_code learning_path_user_report.pdf", 'I'); // 'D' or 'I' for download / inline display
+        exit;
+    }
 }
+
+draw($tool_content, 2, null, $head_content);

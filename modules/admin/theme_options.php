@@ -23,8 +23,8 @@ require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 //Default Styles
 $defaults = array(
-                'rgba(255, 255, 255, 1)' => array('leftNavBgColor','leftNavBgColorSmallScreen','bgColor','buttonTextColor', 'bgColorContentPlatform', 'clAlertInfo', 'clAlertWarning', 'clAlertSuccess', 'clAlertDanger',
-                                                    'whiteButtonHoveredBgColor','BgColorWrapperHeader', 'bgColorWrapperFooter', 'clLinkAlertInfo', 'clLinkAlertWarning', 'clLinkAlertSuccess', 'clLinkAlertDanger',
+                'rgba(255, 255, 255, 1)' => array('leftNavBgColor','leftNavBgColorSmallScreen','bgColor','buttonTextColor','textColorPortfolioButtons', 'bgColorContentPlatform', 'clAlertInfo', 'clAlertWarning', 'clAlertSuccess', 'clAlertDanger',
+                                                    'whiteButtonHoveredBgColor','BgColorWrapperHeader', 'BgColorContainerLogo', 'bgColorWrapperFooter', 'clLinkAlertInfo', 'clLinkAlertWarning', 'clLinkAlertSuccess', 'clLinkAlertDanger',
                                                     'BgColorWrapperPortfolioCourses', 'RightColumnCourseBgColor', 'BgPanels', 'BgCommentsPanels', 'BgQuestionnairePanels', 'BgReportsPanels', 'BgExercisesPanels', 'BgForms', 'BgTables', 'bgLists' ,
                                                     'bgContextualMenu', 'bgColorListMenu', 'bgWhiteButtonColor', 'BgRadios', 'ClIconRadios', 'BgCheckboxes', 'ClIconCheckboxes',
                                                     'BgInput', 'BgSelect' ,'clHoveredSelectOption' ,'clOptionSelected', 'BgModal', 'bgAgenda', 'clColorHeaderAgenda',
@@ -33,15 +33,15 @@ $defaults = array(
                                                     'BgColorAnnouncementHomepageLink','clBadgeSuccess','clBadgeWarning','clBadgeNeutral','clBadgePrimary','clBadgeAccent', 'BoxShadowPanels', 'AboutChatContainerBoxShadow', 'AboutCourseInfoContainerBoxShadow', 'AboutUnitsContainerBoxShadow', 'FormsBoxShadow',
                                                     'BoxShadowRowTables', 'bgPanelEvents', 'bgBorderHoveredPanels', 'BgColorStatisticsHomepage', 'BgColorPopularCoursesHomepage', 'BgColorTextsHomepage', 'BgColorStatisticsHomepage_gr', 'BgColorPopularCoursesHomepage_gr', 'BgColorTextsHomepage_gr', 'bgCardAnnouncementDate'),
                 'rgba(247, 249, 254, 1)' => array('BriefProfilePortfolioBgColor', 'BriefProfilePortfolioBgColor_gr', 'loginJumbotronRadialBgColor','loginJumbotronBgColor','bgRadialWrapperJumbotron','BgColorAnnouncementHomepage', 'BgColorAnnouncementHomepage_gr', 'AboutUnitsContainer', 'AboutCourseInfoContainer'),
-                'rgb(0, 115, 230, 1)' => array('leftMenuFontColor','buttonBgColor', 'whiteButtonTextColor','whiteButtonBorderTextColor', 'whiteButtonHoveredTextColor', 'whiteButtonHoveredBorderTextColor', 'BgClRadios', 'BgActiveCheckboxes', 'clHoveredMenuPopoverOption', 'clLinkImportantAnnouncement'),
+                'rgb(0, 115, 230, 1)' => array('leftMenuFontColor','buttonBgColor', 'bgColorPortfolioButtons', 'whiteButtonTextColor','whiteButtonBorderTextColor', 'whiteButtonHoveredTextColor', 'whiteButtonHoveredBorderTextColor', 'BgClRadios', 'BgActiveCheckboxes', 'clHoveredMenuPopoverOption', 'clLinkImportantAnnouncement'),
                 'rgba(43, 57, 68, 1)' => array('linkColorHeader','linkColorFooter','loginTextColor', 'leftSubMenuFontColor','ColorHyperTexts', 'clLabelForms', 'clListMenuUsername',
                                                 'clListMenu', 'BriefProfilePortfolioTextColor', 'ClRadios', 'ClCheckboxes', 'ClActiveCheckboxes', 'clTextModal',
                                                 'BgColorHeaderAgenda', 'clMenuPopoverOption', 'bgColorTooltip', 'TextColorAnnouncementHomepage','BgBadgeNeutral', 'clHoveredTextPanels', 'TextColorStatisticsHomepage', 'TextColorPopularCoursesHomepage', 'TextColorTextsHomepage', 'TextColorCardAnnouncementDate'),
-                'rgba(0, 115, 230, 1)' => array('linkColor','linkHoverColorHeader','linkHoverColorFooter','leftSubMenuHoverFontColor','linkActiveColorHeader',
+                'rgba(0, 115, 230, 1)' => array('linkColor','linkHoverColorHeader','linkHoverColorFooter','linkCopyrightColorFooter', 'linkCopyrightHoverColorFooter', 'leftSubMenuHoverFontColor','linkActiveColorHeader',
                                                 'clHoveredTabs', 'clActiveTabs', 'clHoveredAccordions', 'clActiveAccordions', 'clLists', 'clHoveredLists', 'bgHoveredSelectOption',
                                                 'bgOptionSelected', 'BgBorderBottomHeadTables', 'HoveredActiveLinkColorHeader', 'BgColorProgressBarAndText', 'clLinkImportantAnnouncement',
                                                 'clColorAnnouncementHomepageLinkElement','clHoveredColorAnnouncementHomepageLinkElement', 'ColorBlueText', 'ColorFocus'),
-                'rgba(0, 115, 230, 0.7)' => array('buttonHoverBgColor', 'clHoveredLinkImportantAnnouncement'),
+                'rgba(0, 115, 230, 0.7)' => array('buttonHoverBgColor','bgHoverColorPortfolioButtons', 'clHoveredLinkImportantAnnouncement'),
                 "rgba(77,161,228,1)" => array('leftMenuSelectedFontColor', 'leftMenuHoverFontColor'),
                 "rgba(239, 246, 255, 1)" => array('leftSubMenuHoverBgColor','leftMenuSelectedBgColor','linkActiveBgColorHeader', 'clBorderPanels', 'clBorderBgCommentsPanels', 'clBorderQuestionnairePanels', 'clBorderReportsPanels', 'clBorderExercisesPanels', 'clBorderBottomListMenu',
                                                     'clHoveredListMenu', 'bgHoveredListMenu', 'BgBorderColorAgenda', 'BgBorderBottomRowTables', 'BgBorderColorAgendaEvent',
@@ -66,7 +66,7 @@ $defaults = array(
                 "rgba(37, 70, 240, 1)" => array('BgBadgePrimary', 'bgAlertInfo'),
                 "rgba(30, 126, 14, 0.81)" => array('bgHoveredSuccessButtonColor'),
                 "rgba(155, 169, 193, 0.82)" => array('bgHoveredHelpButtonColor'),
-                "rgba(255, 255, 255, 0)" => array('bgHoveredBoxShadowPanels'),
+                "rgba(255, 255, 255, 0)" => array('bgHoveredBoxShadowPanels', 'borderColorContentPlatformLeftRight'),
                 "rgba(232, 242, 231, 1)" => array('bgContainerImportantAnnouncement'),
                 "rgba(62, 73, 101, 1)" => array('clOptionSelect', 'ClTextEditor', 'clInputText', 'clTabs', 'clAccordions', 'clColorBodyAgenda'),
                 "rgba(0, 74, 148, 1)" => array('leftMenuSelectedLinkColor'),
@@ -618,6 +618,17 @@ if (isset($_POST['optionsSave'])) {
                 if($('#view_platform_boxed').is(':checked')){
                     $('#view_platform_fluid').prop('checked',true);
                     $('#view_platform_boxed').prop('checked',false);
+                }
+            });
+
+            if($('#enableBoxLogoId').is(':checked')){
+                $('.logo-container').removeClass('d-none').addClass('d-block');
+            }
+            $('#enableBoxLogoId').change(function() {
+                if($('#enableBoxLogoId').is(':checked')){
+                    $('.logo-container').removeClass('d-none').addClass('d-block');
+                } else {
+                    $('.logo-container').removeClass('d-block').addClass('d-none');
                 }
             });
 
@@ -1238,6 +1249,23 @@ $tool_content .= "
                                     </div>
                                 </div>
                             </div>
+                            <h3 class='theme_options_legend text-decoration-underline mt-4'>$langEnableBoxLogo</h3>
+                            <div class='col-sm-12 mt-4'>
+                                <div class='checkbox'>
+                                    <label class='label-container' aria-label='$langSettingSelect'>
+                                        <input id='enableBoxLogoId' type='checkbox' name='enableBoxLogo' value='1' ".((isset($theme_options_styles['enableBoxLogo']))? 'checked' : '').">
+                                        <span class='checkmark'></span>
+                                        $langActivate
+                                    </label>
+                                </div>
+                            </div>
+                            <div class='col-sm-12 logo-container d-none mt-4'>
+                                <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                    <label for='BgColorContainerLogo' class='control-label-notes mb-2 me-2'>$langBgColor:</label>
+                                    <input name='BgColorContainerLogo' type='text' class='form-control colorpicker' id='BgColorContainerLogo' value='$theme_options_styles[BgColorContainerLogo]'>
+                                </div>
+                            </div>
+
                         </div>
                         <div class='d-flex justify-content-center align-items-start'>
                             <figure class='figure'>
@@ -1269,6 +1297,26 @@ $tool_content .= "
                             </figure>
                         </div>
                     </div>
+                    <div class='mt-4'>
+                        <h3 class='theme_options_legend text-decoration-underline'>$langBorderColorLeftRight</h3>
+                        <div class='form-group'>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                <label for='borderColorContentPlatformLeftRight' class='control-label-notes mb-2 me-2'>$langBorderColorLeftRight:</label>
+                                <input name='borderColorContentPlatformLeftRight' type='text' class='form-control colorpicker' id='borderColorContentPlatformLeftRight' value='$theme_options_styles[borderColorContentPlatformLeftRight]'>
+                            </div>
+                        </div>
+                        <div class='form-group mt-3'>
+                            <div class='col-sm-12'>
+                                <div class='checkbox'>
+                                    <label class='label-container' aria-label='$langSettingSelect'>
+                                    <input type='checkbox' name='EnableBorderSidesOfMain' value='1' ".((isset($theme_options_styles['EnableBorderSidesOfMain']))? 'checked' : '').">
+                                    <span class='checkmark'></span>
+                                    $langActivate
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -1289,6 +1337,14 @@ $tool_content .= "
                             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                                 <label for='linkHoverColorFooter' class='control-label-notes mb-2 me-2'>$langHoverLinkColorFooter:</label>
                                 <input name='linkHoverColorFooter' type='text' class='form-control colorpicker' id='linkHoverColorFooter' value='$theme_options_styles[linkHoverColorFooter]'>
+                            </div>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                <label for='linkCopyrightColorFooter' class='control-label-notes mb-2 me-2'>$langLinkColor $langCopyright:</label>
+                                <input name='linkCopyrightColorFooter' type='text' class='form-control colorpicker' id='linkCopyrightColorFooter' value='$theme_options_styles[linkCopyrightColorFooter]'>
+                            </div>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                <label for='linkCopyrightHoverColorFooter' class='control-label-notes mb-2 me-2'>$langHoverLinkColorFooter $langCopyright:</label>
+                                <input name='linkCopyrightHoverColorFooter' type='text' class='form-control colorpicker' id='linkCopyrightHoverColorFooter' value='$theme_options_styles[linkCopyrightHoverColorFooter]'>
                             </div>
                             <div class='form-group mt-4'>
                                 <div class='col-sm-12 control-label-notes mb-2'>$langFooterUploadImage:</div>
@@ -1580,6 +1636,15 @@ $tool_content .= "
                                 <div class='form-group mt-4'>
                                     <div class='col-sm-12'>
                                     $login_image_field
+                                    </div>
+                                    <div class='col-sm-12 mt-4'>
+                                        <div class='checkbox'>
+                                            <label class='label-container' aria-label='$langSettingSelect'>
+                                                <input type='checkbox' name='JumbotronWithVideo' value='1' ".((isset($theme_options_styles['JumbotronWithVideo']))? 'checked' : '').">
+                                                <span class='checkmark'></span>
+                                                $langJumbotronWithVideo
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -2046,6 +2111,22 @@ $tool_content .= "
                                 <label for='BriefProfilePortfolioTextColor' class='control-label-notes mb-2 me-2'>$langBriefProfilePortfolioTextColor:</label>
                                 <input name='BriefProfilePortfolioTextColor' type='text' class='form-control colorpicker' id='BriefProfilePortfolioTextColor' value='$theme_options_styles[BriefProfilePortfolioTextColor]'>
                             </div>
+                            <hr>
+
+                            <h3 class='theme_options_legend text-decoration-underline mt-4'>$langButtonInBriefProfile</h3>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                <label for='bgColorPortfolioButtons' class='control-label-notes mb-2 me-2'>$langBgColor:</label>
+                                <input name='bgColorPortfolioButtons' type='text' class='form-control colorpicker' id='bgColorPortfolioButtons' value='$theme_options_styles[bgColorPortfolioButtons]'>
+                            </div>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                <label for='textColorPortfolioButtons' class='control-label-notes mb-2 me-2'>$langTextColor:</label>
+                                <input name='textColorPortfolioButtons' type='text' class='form-control colorpicker' id='textColorPortfolioButtons' value='$theme_options_styles[textColorPortfolioButtons]'>
+                            </div>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                <label for='bgHoverColorPortfolioButtons' class='control-label-notes mb-2 me-2'>$langHoverWhiteColorButton:</label>
+                                <input name='bgHoverColorPortfolioButtons' type='text' class='form-control colorpicker' id='bgHoverColorPortfolioButtons' value='$theme_options_styles[bgHoverColorPortfolioButtons]'>
+                            </div>
+
                             <hr>
                             <h3 class='theme_options_legend text-decoration-underline mt-4'>$langPortfolioCoursesContainer</h3>
                             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>

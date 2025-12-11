@@ -5,7 +5,7 @@
  *  * Open eClass
  *  * E-learning and Course Management System
  *  * ========================================================================
- *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  * Copyright 2003-2025, Greek Universities Network - GUnet
  *  *
  *  * Open eClass is an open platform distributed in the hope that it will
  *  * be useful (without any warranty), under the terms of the GNU (General
@@ -25,7 +25,8 @@ $helpTopic = 'forum';
 require_once '../../include/baseTheme.php';
 require_once 'include/log.class.php';
 require_once 'modules/group/group_functions.php';
-require_once 'modules/search/indexer.class.php';
+require_once 'modules/search/classes/ConstantsUtil.php';
+require_once 'modules/search/classes/SearchEngineFactory.php';
 require_once 'modules/forum/functions.php';
 
 $unit = isset($_GET['unit'])? intval($_GET['unit']): null;
@@ -155,14 +156,15 @@ if (($is_editor) and isset($_GET['topicdel'])) {
             Database::get()->query("INSERT INTO forum_user_stats (user_id, num_posts, course_id) VALUES (?d,?d,?d)", $author, $forum_user_stats->c, $course_id);
         }
     }
-    Indexer::queueAsync(Indexer::REQUEST_REMOVEBYTOPIC, Indexer::RESOURCE_FORUMPOST, $topic_id);
+    $searchEngine = SearchEngineFactory::create();
+    $searchEngine->indexResource(ConstantsUtil::REQUEST_REMOVEBYTOPIC, ConstantsUtil::RESOURCE_FORUMPOST, $topic_id);
     $number_of_topics = get_total_topics($forum_id);
     $num_topics = $number_of_topics - 1;
     if ($number_of_topics < 0) {
         $num_topics = 0;
     }
     Database::get()->query("DELETE FROM forum_topic WHERE id = ?d AND forum_id = ?d", $topic_id, $forum_id);
-    Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_FORUMTOPIC, $topic_id);
+    $searchEngine->indexResource(ConstantsUtil::REQUEST_REMOVE, ConstantsUtil::RESOURCE_FORUMTOPIC, $topic_id);
 
     $last_post = Database::get()->querySingle("SELECT MAX(last_post_id) AS last_post FROM forum_topic WHERE forum_id = ?d", $forum_id)->last_post;
     if (!$last_post) {
@@ -186,25 +188,19 @@ if (isset($_GET['topicnotify'])) {
         $topic_id = intval($_GET['topic_id']);
     }
     $rows = Database::get()->querySingle("SELECT COUNT(*) AS count FROM forum_notify
-		WHERE user_id = ?d AND topic_id = ?d AND course_id = ?d", $uid, $topic_id, $course_id);
+        WHERE user_id = ?d AND topic_id = ?d AND course_id = ?d", $uid, $topic_id, $course_id);
     if ($rows->count > 0) {
         Database::get()->query("UPDATE forum_notify SET notify_sent = ?d
-			WHERE user_id = ?d AND topic_id = ?d AND course_id = ?d", $_GET['topicnotify'], $uid, $topic_id, $course_id);
+            WHERE user_id = ?d AND topic_id = ?d AND course_id = ?d", $_GET['topicnotify'], $uid, $topic_id, $course_id);
     } else {
         Database::get()->query("INSERT INTO forum_notify SET user_id = ?d,
-		topic_id = $topic_id, notify_sent = 1, course_id = ?d", $uid, $course_id);
+            topic_id = $topic_id, notify_sent = 1, course_id = ?d", $uid, $course_id);
     }
 }
 
 if (isset($_GET['topicpin'])) {
     if (isset($_GET['topic_id'])) {
         $topic_id = intval($_GET['topic_id']);
-    }
-
-    if ($_GET['topicpin'] == 0) {
-        Database::get()->query("UPDATE forum_topic SET pin_time = NULL WHERE id = ?d", $topic_id);
-    } else {
-        Database::get()->query("UPDATE forum_topic SET pin_time = NOW() WHERE id = ?d", $topic_id);
     }
 }
 
@@ -223,19 +219,12 @@ if ($is_editor and isset($_GET['topiclock'])) {
 
 }
 
-//$result = Database::get()->queryArray("SELECT t.*, p.post_time, t.poster_id AS topic_poster_id, p.poster_id AS poster_id, f.cat_id
-//        FROM forum_topic t
-//        LEFT JOIN forum_post p ON t.last_post_id = p.id
-//        INNER JOIN forum f ON t.forum_id = f.id
-//        WHERE t.forum_id = ?d
-//        ORDER BY topic_time DESC", $forum_id);
-
 $result = Database::get()->queryArray("SELECT t.*, p.post_time, t.poster_id AS topic_poster_id, p.poster_id AS poster_id, f.cat_id
         FROM forum_topic t
         LEFT JOIN forum_post p ON t.last_post_id = p.id
         INNER JOIN forum f ON t.forum_id = f.id
         WHERE t.forum_id = ?d
-        ORDER BY t.pin_time DESC, topic_time DESC", $forum_id);
+        ORDER BY topic_time DESC", $forum_id);
 
 if (count($result) > 0) { // topics found
     $tool_content .= "<div class='table-responsive'>
@@ -257,10 +246,6 @@ if (count($result) > 0) { // topics found
         $last_post_datetime = $myrow->post_time;
         $topic_title = $myrow->title;
         $topic_locked = $myrow->locked;
-        $pin_time = $myrow->pin_time;
-
-        $pin_action = $pin_time ? 1 : 0;
-        $pin_icon = ($pin_action == 1) ? icon('fa-thumbtack') : "";
 
         $pagination = '';
         $topiclink = "viewtopic.php?course=$course_code&amp;topic=$topic_id&amp;forum=$forum_id";
@@ -285,11 +270,11 @@ if (count($result) > 0) { // topics found
 //			WHERE user_id = ?d AND topic_id = ?d AND course_id = ?d AND notify_sent = 1", $uid, $myrow->id, $course_id);
 
         $sql_notify = Database::get()->queryArray("SELECT * FROM forum_notify
-			WHERE user_id = ?d 
-			AND course_id = ?d 
-			AND cat_id = ?d 
-			OR forum_id = ?d 
-			OR topic_id = ?d 
+			WHERE user_id = ?d
+			AND course_id = ?d
+			AND cat_id = ?d
+			OR forum_id = ?d
+			OR topic_id = ?d
 			order by topic_id DESC, forum_id DESC, cat_id DESC LIMIT 1", $uid, $course_id, $cat_id, $forum_id, $topic_id);
 
         if ($sql_notify && $sql_notify[0]->notify_sent == 1) {
@@ -300,7 +285,7 @@ if (count($result) > 0) { // topics found
             $image_notify = '';
         }
 
-        $tool_content .= "<td><div class='d-flex justify-content-between border-0'><a href='$topiclink'>" . q($topic_title) . "</a> <span class='d-flex align-items-center gap-2'>$image_lock $image_fire $image_notify $pin_icon</span></div></td>";
+        $tool_content .= "<td><div class='d-flex justify-content-between border-0'><a href='$topiclink'>" . q($topic_title) . "</a> <span class='d-flex align-items-center gap-2'>$image_lock $image_fire $image_notify</span></div></td>";
         $tool_content .= "<td>$replies</td>";
         $tool_content .= "<td>" . q(uid_to_name($myrow->topic_poster_id)) . "</td>";
         $tool_content .= "<td>$myrow->num_views</td>";
@@ -313,7 +298,7 @@ if (count($result) > 0) { // topics found
         }
         $tool_content .= "</td>";
         $sql = Database::get()->querySingle("SELECT notify_sent FROM forum_notify
-			WHERE user_id = ?d AND topic_id = ?d AND course_id = ?d", $uid, $myrow->id, $course_id);
+            WHERE user_id = ?d AND topic_id = ?d AND course_id = ?d", $uid, $myrow->id, $course_id);
         if ($sql) {
             $topic_action_notify = $sql->notify_sent;
         }
@@ -379,17 +364,10 @@ if (count($result) > 0) { // topics found
             }
         }
 
-        $link_pin = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forum=$forum_id&amp;topic_id=$myrow->id&amp;topicpin=" . ($pin_action == 1 ? 0 : 1);
-
         $dyntools[] = array('title' => $notify_action ? $langStopNotify : $langNotify,
                             'url' => $link_notify,
                             'icon' => $notify_action ? 'fa-envelope-open' : 'fa-envelope',
                             'show' => (!setting_get(SETTING_COURSE_FORUM_NOTIFICATIONS)));
-
-        $dyntools[] = array('title' => $pin_action ? $langUnpinTopic : $langPinTopic,
-                            'url' => $link_pin,
-                            'icon' => $pin_action ? 'fa-thumbtack text-danger' : 'fa-thumbtack');
-
 
         $tool_content .= action_button($dyntools);
         $tool_content .= "</td></tr>";
@@ -416,12 +394,12 @@ if (count($result) > 0) { // topics found
                             orderable: false
                         }
                     ],
-                    'searchDelay': 1000,                
+                    'searchDelay': 1000,
                     'oLanguage': {
                        'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
                        'sZeroRecords':  '" . $langNoResult . "',
                        'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
-                       'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
+                       'sInfoEmpty':    '',
                        'sInfoFiltered': '',
                        'sInfoPostFix':  '',
                        'sSearch':       '',

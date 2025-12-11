@@ -104,9 +104,11 @@ if (isset($_POST['submit'])) {
             $errors[] = sprintf($langUsersOverMaximum, $future_members, $max_members);
         }
     }
+    $errors = '<ul>' . implode('', array_map(function ($item) {
+        return '<li>' . $item . '</li>';
+    }, $errors)) . '</ul>';
     if ($errors) {
-        Session::flash('message', "$langUsersNotAdded $errors");
-        Session::flash('alert-class', 'alert-warning');
+        Session::Messages("<div>$langUsersNotAdded<br>$errors</div>", 'alert-warning');
         Session::flashPost();
         redirect_to_home_page("modules/group/muladduser.php?course=$course_code&group_id=$group_id");
     } else {

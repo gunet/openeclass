@@ -72,6 +72,7 @@
                     file_copyrighted: fileCopyrighted,
                     replace: replace,
                     uncompress: uncompress,
+                    token: '{{ $_SESSION['csrf_token'] }}'
                 });
 
                 uppy.use(XHRUpload, {
@@ -89,6 +90,7 @@
                         'file_copyrighted',
                         'replace',
                         'uncompress',
+                        'token'
                     ],
                     shouldRetry: () => false,
                 })
@@ -99,12 +101,11 @@
                 });
 
                 uppy.on('file-added', (file) => {
-                    console.log('File added:', file)
+                  //  console.log('File added:', file)
                 })
 
                 uppy.on('complete', (result) => {
                     window.location.href = '{!! $backUrl !!}';
-
                 })
                 isUppyLoaded = true;
             } catch (error) {
@@ -588,7 +589,7 @@
         e.preventDefault();
         var fileURL = $(this).attr('href');
         var downloadURL = $(this).closest('tr').find('input[type=hidden]').first().val();
-        var fileTitle = $(this).attr('title');
+        var fileTitle = q($(this).attr('title'));
 
         // BUTTONS declare
         var bts = {

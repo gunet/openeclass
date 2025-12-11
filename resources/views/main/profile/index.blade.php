@@ -77,14 +77,14 @@
                                     </div>
                                     @if(get_config('eportfolio_enable'))
                                         <p class='text-center mt-2'>
-                                            <a class='btn submitAdminBtn d-inline-flex' href='{{ $urlAppend }}main/eportfolio/index.php?id={{ $uid }}&token={{ token_generate("eportfolio" . $id) }}'>
+                                            <a class='btn submitAdminBtn d-inline-flex' href='{{ $urlAppend }}main/eportfolio/index.php?id={{ $id }}&token={{ token_generate("eportfolio" . $id) }}'>
                                                 {{ trans('langMyePortfolio') }}
                                             </a>
                                         </p>
                                     @endif
                                     @if(get_config('personal_blog'))
                                         <p class='text-center mt-2'>
-                                            <a class='btn submitAdminBtn d-inline-flex' href='{{ $urlAppend }}modules/blog/index.php?user_id={{ $uid }}&token={{ token_generate("personal_blog" . $id) }}'>
+                                            <a class='btn submitAdminBtn d-inline-flex' href='{{ $urlAppend }}modules/blog/index.php?user_id={{ $id }}&token={{ token_generate("personal_blog" . $id) }}'>
                                                 {{ trans('langUserBlog') }}
                                             </a>
                                         </p>
@@ -130,7 +130,7 @@
                                                     <div class='title-default'>{{ trans('langPhone') }}</div>
                                                 </div>
                                                 <div class='col-lg-8 col-12 title-default-line-height'>
-                                                    {{ q($userdata->phone) }}
+                                                    {{ $userdata->phone }}
                                                 </div>
                                             </div>
                                         </li>
@@ -142,7 +142,7 @@
                                                     <div class='title-default'>{{ trans('langAm') }}</div>
                                                 </div>
                                                 <div class='col-lg-8 col-12 title-default-line-height'>
-                                                    {{ q($userdata->am) }}
+                                                    {{ $userdata->am }}
                                                 </div>
                                             </div>
                                         </li>
@@ -197,7 +197,7 @@
                                             </a>
                                             <div id="AboutMe" class="panel-collapse accordion-collapse collapse border-0 rounded-0" role="tabpanel" data-bs-parent="#accordion">
                                                 <div class="panel-body bg-transparent Neutral-900-cl px-4">
-                                                    @if(!empty($userdata->description))
+                                                    @if(!empty($userdata->description) && ($userdata->pic_public || $_SESSION['status'] == USER_TEACHER || $uid == $id))
                                                         {!! $userdata->description !!}
                                                     @else
                                                         {{ trans('langNoInfoAvailable') }}
@@ -208,19 +208,19 @@
                                     </ul>
                                 </div>
                             </div>
-                            @if($is_user_teacher)
-                            <div class='card-footer border-0'>
-                                <div class='col-12'>
-                                    <div class='control-label-notes mb-3'>{{ trans('langAvailableDateForUser') }}</div>
-                                    <div id='smallCalendar{{ $id }}' class='calendarViewDatesTutorGroup'></div>
-                                    @if(isset($_GET['id']) and isset($_GET['token']) and $is_simple_user)
-                                        <a class="btn submitAdminBtnDefault w-100 m-auto mt-3" 
-                                            href="{{ $urlAppend }}main/profile/add_available_dates.php?uBook={{ $id }}&bookWith=1&do_booking=1&token={{ $_GET['token'] }}">
-                                                {{ trans('langDoBooking') }}
-                                        </a>
-                                    @endif
+                            @if($is_user_teacher && get_config('individual_group_bookings'))
+                                <div class='card-footer border-0'>
+                                    <div class='col-12'>
+                                        <div class='control-label-notes mb-3'>{{ trans('langAvailableDateForUser') }}</div>
+                                        <div id='smallCalendar{{ $id }}' class='calendarViewDatesTutorGroup'></div>
+                                        @if(isset($_GET['id']) and isset($_GET['token']) and $is_simple_user)
+                                            <a class="btn submitAdminBtnDefault w-100 m-auto mt-3"
+                                                href="{{ $urlAppend }}main/profile/add_available_dates.php?uBook={{ $id }}&bookWith=1&do_booking=1&token={{ $_GET['token'] }}">
+                                                    {{ trans('langDoBooking') }}
+                                            </a>
+                                        @endif
+                                    </div>
                                 </div>
-                            </div>
                             @endif
                         </div>
                     </div>
@@ -239,10 +239,10 @@
                                     <h3>{{ trans('langMyCertificates') }}</h3>
                                 </div>
                                 <div class="card-body">
-                                    @if(count($cert_completed) == 1)
-                                    <div class='row row-cols-1 row-cols-md-1 g-4'>
+                                    @if (count($cert_completed) == 1)
+                                        <div class='row row-cols-1 row-cols-md-1 g-4'>
                                     @else
-                                    <div class='row row-cols-1 row-cols-md-2 g-4'>
+                                        <div class='row row-cols-1 row-cols-md-2 g-4'>
                                     @endif
                                         @foreach ($cert_completed as $key => $certificate)
                                             <div class='col'>
@@ -426,10 +426,10 @@
                         <div class="card-body">
                             <p class='card-text'>{{ trans('langExplain') }}</p>
                         </div>
-                        @if($action_bar_unreg == 1)
-                        <div class='card-footer border-0 d-flex justify-content-start'>
-                            <a class='btn deleteAdminBtn' href='{{ $urlAppend }}main/unreguser.php'>{{ trans('langUnregUser')}}</a>
-                        </div>
+                        @if ($action_bar_unreg == 1)
+                            <div class='card-footer border-0 d-flex justify-content-start'>
+                                <a class='btn deleteAdminBtn' href='{{ $urlAppend }}main/unreguser.php'>{{ trans('langUnregUser')}}</a>
+                            </div>
                         @endif
                     </div>
                 </div>

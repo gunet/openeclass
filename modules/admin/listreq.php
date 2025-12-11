@@ -44,14 +44,17 @@ switch ($show) {
         $pageName = $langReqHaveClosed;
         $pagination_link = '&amp;show=closed';
         $columns = 'null, null, null, null, null, null, { orderable: false }';
+        $order = "[5, 'desc']";
         break;
     case "rejected":
         $pageName = $langReqHaveBlocked;
         $columns = 'null, null, null, null, null, null, { orderable: false }';
+        $order = "[5, 'desc']";
         break;
     default:
         $pageName = $langUserOpenRequests;
         $columns = 'null, null, null, null, null, { orderable: false }';
+        $order = "[4, 'desc']";
         break;
 }
 
@@ -60,16 +63,20 @@ load_js('datatables');
 $head_content .= "<script type='text/javascript'>
         $(document).ready(function() {
             $('#requests_table').DataTable ({
-                'columns': [ $columns ],
-                'sPaginationType': 'full_numbers',
-                'bAutoWidth': true,
-                'searchDelay': 1000,
-                'order' : [[4, 'desc']],
-                'oLanguage': {
+                   'columns': [ $columns ],
+                   'lengthMenu': [10, 15, 20, -1],
+                   'sPaginationType': 'full_numbers',
+                   'bAutoWidth': true,
+                   'searchDelay': 1000,
+                   'order' : [ $order ],
+                   'oLanguage': {
+                   'lengthLabels': {
+                       '-1': '$langAllOfThem'
+                    },                   
                    'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
                    'sZeroRecords':  '" . $langNoResult . "',
                    'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
-                   'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
+                   'sInfoEmpty':    '',
                    'sInfoFiltered': '',
                    'sInfoPostFix':  '',
                    'sSearch':       '" . $langSearch . "',
@@ -82,7 +89,7 @@ $head_content .= "<script type='text/javascript'>
                    }
                }
             });
-            $('.dataTables_filter input ms-0 mb-3').attr('placeholder', '$langName, $langSurname, $langUsername');
+            $('.dt-search input ms-0 mb-3').attr('placeholder', '$langName, $langSurname, $langUsername');
         });
         </script>";
 
@@ -115,9 +122,9 @@ if (isDepartmentAdmin()) {
 // Display Actions Toolbar
 $data['action_bar'] =
         action_bar(array(
-            array('title' => $langCreateAccount,
-                'url' => "newuseradmin.php$linkget",
-                'icon' => 'fa-solid fa-user',
+            array('title' => $langUserOpenRequests,
+                'url' => "$_SERVER[SCRIPT_NAME]",
+                'icon' => 'fa-solid fa-hand',
                 'level' => 'primary-label',
                 'button-class' => 'btn-success'),
             array('title' => $langReqHaveClosed,

@@ -31,8 +31,10 @@ require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
 require_once 'include/course_settings.php';
 require_once 'functions.php';
-require_once 'modules/search/indexer.class.php';
+require_once 'modules/search/classes/ConstantsUtil.php';
+require_once 'modules/search/classes/SearchEngineFactory.php';
 
+$searchEngine = SearchEngineFactory::create();
 $forum_id = isset($_REQUEST['forum_id']) ? intval($_REQUEST['forum_id']) : '';
 $cat_id = isset($_REQUEST['cat_id']) ? intval($_REQUEST['cat_id']) : '';
 
@@ -277,13 +279,15 @@ elseif (isset($_GET['forumgosave'])) {
                                 WHERE id = ?d
                                 AND course_id = ?d"
             , $_POST['forum_name'], purify($_POST['forum_desc']), $cat_id, $forum_id, $course_id);
-    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_FORUM, $forum_id);
+    $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_FORUM, $forum_id);
 
     if (isset($_POST['to_group']) and $_POST['to_group'] > 0) {
         Database::get()->query("UPDATE `group` SET `forum_id` = ?d WHERE `id` = ?d", $forum_id, $_POST['to_group']);
     }
 
-    $tool_content .= "<div class='col-sm-12'><div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$langForumDataChanged</span></div></div>";
+    Session::flash('message',$langForumDataChanged);
+    Session::flash('alert-class', 'alert-success');
+    redirect_to_home_page("modules/forum/index.php?course=$course_code");
 }
 
 // Add category to forums
@@ -303,7 +307,7 @@ elseif (isset($_GET['forumgoadd'])) {
     $forid = Database::get()->query("INSERT INTO forum (name, `desc`, cat_id, course_id)
                                 VALUES (?s, ?s, ?d, ?d)"
             , $_POST['forum_name'], $_POST['forum_desc'], $cat_id, $course_id)->lastInsertID;
-    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_FORUM, $forid);
+    $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_FORUM, $forid);
 
     if (isset($_POST['to_group']) and $_POST['to_group'] > 0) {
         Database::get()->query("UPDATE `group` SET `forum_id` = ?d WHERE `id` = ?d", $forid, $_POST['to_group']);
@@ -416,7 +420,7 @@ elseif (isset($_GET['forumcatdel'])) {
             Database::get()->query("DELETE abuse_report FROM abuse_report INNER JOIN forum_post ON abuse_report.rid = forum_post.id
                                     WHERE abuse_report.rtype = ?s AND forum_post.topic_id = ?d", 'forum_post', $topic_id);
             Database::get()->query("DELETE FROM forum_post WHERE topic_id = ?d", $topic_id);
-            Indexer::queueAsync(Indexer::REQUEST_REMOVEBYTOPIC, Indexer::RESOURCE_FORUMPOST, $topic_id);
+            $searchEngine->indexResource(ConstantsUtil::REQUEST_REMOVEBYTOPIC, ConstantsUtil::RESOURCE_FORUMPOST, $topic_id);
 
             foreach ($post_authors as $author) {
                 $forum_user_stats = Database::get()->querySingle("SELECT COUNT(*) as c FROM forum_post
@@ -430,9 +434,9 @@ elseif (isset($_GET['forumcatdel'])) {
             }
         }
         Database::get()->query("DELETE FROM forum_topic WHERE forum_id = ?d", $forum_id);
-        Indexer::queueAsync(Indexer::REQUEST_REMOVEBYFORUM, Indexer::RESOURCE_FORUMTOPIC, $forum_id);
+        $searchEngine->indexResource(ConstantsUtil::REQUEST_REMOVEBYFORUM, ConstantsUtil::RESOURCE_FORUMTOPIC, $forum_id);
         Database::get()->query("DELETE FROM forum_notify WHERE forum_id = ?d AND course_id = ?d", $forum_id, $course_id);
-        Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_FORUM, $forum_id);
+        $searchEngine->indexResource(ConstantsUtil::REQUEST_REMOVE, ConstantsUtil::RESOURCE_FORUM, $forum_id);
     }
     Database::get()->query("DELETE FROM forum WHERE cat_id = ?d AND course_id = ?d", $cat_id, $course_id);
     Database::get()->query("DELETE FROM forum_notify WHERE cat_id = ?d AND course_id = ?d", $cat_id, $course_id);
@@ -490,7 +494,7 @@ elseif (isset($_GET['forumgodel'])) {
             Database::get()->query("DELETE rating_cache FROM rating_cache INNER JOIN forum_post on rating_cache.rid = forum_post.id
                                     WHERE rating_cache.rtype = ?s AND forum_post.topic_id = ?d", 'forum_post', $topic_id);
             Database::get()->query("DELETE FROM forum_post WHERE topic_id = ?d", $topic_id);
-            Indexer::queueAsync(Indexer::REQUEST_REMOVEBYTOPIC, Indexer::RESOURCE_FORUMPOST, $topic_id);
+            $searchEngine->indexResource(ConstantsUtil::REQUEST_REMOVEBYTOPIC, ConstantsUtil::RESOURCE_FORUMPOST, $topic_id);
 
             foreach ($post_authors as $author) {
                 $forum_user_stats = Database::get()->querySingle("SELECT COUNT(*) as c FROM forum_post
@@ -505,10 +509,10 @@ elseif (isset($_GET['forumgodel'])) {
         }
     }
     Database::get()->query("DELETE FROM forum_topic WHERE forum_id = ?d", $forum_id);
-    Indexer::queueAsync(Indexer::REQUEST_REMOVEBYFORUM, Indexer::RESOURCE_FORUMTOPIC, $forum_id);
+    $searchEngine->indexResource(ConstantsUtil::REQUEST_REMOVEBYFORUM, ConstantsUtil::RESOURCE_FORUMTOPIC, $forum_id);
     Database::get()->query("DELETE FROM forum_notify WHERE forum_id = ?d AND course_id = ?d", $forum_id, $course_id);
     Database::get()->query("DELETE FROM forum WHERE id = ?d AND course_id = ?d", $forum_id, $course_id);
-    Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_FORUM, $forum_id);
+    $searchEngine->indexResource(ConstantsUtil::REQUEST_REMOVE, ConstantsUtil::RESOURCE_FORUM, $forum_id);
     Database::get()->query("UPDATE `group` SET forum_id = 0
                     WHERE forum_id = ?d
                     AND course_id = ?d", $forum_id, $course_id);
@@ -546,8 +550,9 @@ elseif (isset($_GET['forumgodel'])) {
        $tool_content .= "</select></div>
        </div>
        <div class='form-group mt-4'>
-            <div class='col-12 d-flex justify-content-end align-items-center>
+            <div class='col-12 d-flex justify-content-end align-items-center gap-2'>
                 <input class='btn submitAdminBtn' type='submit' value='$langModify'>
+                <a class='btn cancelAdminBtn' href='index.php?course=$course_code'>$langCancel</a>
             </div>
         </div>
        </fieldset>
@@ -570,15 +575,19 @@ elseif (isset($_GET['forumgodel'])) {
 
         if ($current_forum_id != $new_forum) {
             Database::get()->query("UPDATE `forum_topic` SET `forum_id` = ?d WHERE `id` = ?d", $new_forum, $topic_id);
-            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_FORUMTOPIC, $topic_id);
+            $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_FORUMTOPIC, $topic_id);
 
-            $result = Database::get()->querySingle("SELECT `last_post_id`, MAX(`topic_time`) FROM `forum_topic` WHERE `forum_id`=?d",$new_forum);
-            $last_post_id = $result->last_post_id;
+            $result = Database::get()->querySingle("SELECT `last_post_id` FROM `forum_topic` WHERE `forum_id` = ?d",$new_forum);
+            if ($result) {
+                $last_post_id = $result->last_post_id;
+            } else {
+                $last_post_id = 0;
+            }
 
             Database::get()->query("UPDATE `forum` SET `num_topics` = `num_topics`+1, `num_posts` = `num_posts`+?d, `last_post_id` = ?d
                     WHERE id = ?d",$num_replies+1, $last_post_id, $new_forum);
 
-            $result = Database::get()->querySingle("SELECT `last_post_id`, MAX(`topic_time`) FROM `forum_topic` WHERE `forum_id`=?d",$current_forum_id);
+            $result = Database::get()->querySingle("SELECT `last_post_id` FROM `forum_topic` WHERE `forum_id` = ?d",$current_forum_id);
             if ($result) {
                 $last_post_id = $result->last_post_id;
             } else {
@@ -588,7 +597,6 @@ elseif (isset($_GET['forumgodel'])) {
             Database::get()->query("UPDATE `forum` SET `num_topics` = `num_topics`-1, `num_posts` = `num_posts`-?d, `last_post_id` = ?d
                     WHERE id = ?d",$num_replies+1,$last_post_id, $current_forum_id);
         }//if user selected the current forum do nothing
-
        $tool_content .= "<div class='col-sm-12'><div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$langTopicDataChanged</span></div></div>";
     }
 

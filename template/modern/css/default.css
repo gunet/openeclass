@@ -213,7 +213,19 @@ iframe{
   body:has(.footer-image) .fixed-announcement .module-container{
     min-height: calc(100vh - 80px - 235px - 60px);
   }
+
+  .footer-image{
+    max-width: 425px;
+    max-height: 150px;
+  }
 }
+@media(max-width: 991px) {
+  .footer-image{
+    max-width: 280px;
+    max-height: 100px;
+  }
+}
+
 
 
 .panel-phpinfo{
@@ -608,6 +620,19 @@ caption{
 
 .text-primary{
   color:#0073E6 !important;
+}
+
+.border-left-success{
+  border-left: 4px solid #1E7E0E !important;
+}
+.border-left-danger{
+  border-left: 4px solid #C44601 !important;
+}
+.border-left-warning{
+  border-left: 4px solid #F57600 !important;
+}
+.border-left-primary{
+  border-left: 4px solid #0073E6 !important;
 }
 
 /**********************************************************************************************************************/
@@ -1143,7 +1168,32 @@ b a {
   .user-menu-btn .user-name{
     white-space: nowrap;
   }
+
+  .navbar-eclass.fixed-top .box-logo {
+    padding-left: 10px;
+    padding-right: 10px;
+    min-height: 80px;
+  }
+  .navbar-eclass.fixed-top.fixed .box-logo {
+    min-height: 55px;
+  }
 }
+
+@media(max-width: 991px){
+  .navbar-eclass.fixed-top .box-logo {
+    padding-left: 10px;
+    padding-right: 10px;
+    min-height: 56px;
+  }
+  .navbar-eclass.fixed-top.fixed .box-logo {
+    min-height: 55px;
+  }
+}
+
+
+.box-logo {
+  background-color: #ffffff;
+ }
 
 
 /**********************************************************************************************************************/
@@ -3623,14 +3673,6 @@ tr.danger > td{
 
 
 
-
-/* div.dataTables_scrollBody {
-   position: relative;
-    overflow:hidden !important;
-    width: 100%;
-} */
-
-
 table{
   table-layout: auto !important;
   width: 100% !important;
@@ -3638,6 +3680,29 @@ table{
 
 
 
+/******************************** Datatable ************************************/
+div.dt-container div.dt-search {
+   text-align: left; 
+}
+div.dt-container div.dt-paging {
+    margin-top: 15px !important;
+}
+.dt-column-title,
+.announceTitle{
+word-break: normal !important;
+}
+.dt-container.dt-bootstrap5 .row,
+.dt-container.dt-bootstrap5.dt-empty-footer .row{
+--bs-gutter-x: 0rem !important;
+}
+
+#portfolio_lessons_wrapper .dt-search {
+  text-align: left !important;
+  margin-bottom: 15px !important;
+}
+#portfolio_lessons_wrapper .dt-search input{
+  margin-left: 0px !important;
+}
 
 /**********************************************************************************************************************/
 /**************************************************** TEMP LABELS *****************************************************/
@@ -3818,6 +3883,29 @@ body .delThemeBtn{
 .jumbotron.jumbotron-login{
   background-color: #F7F9FE;
 }
+
+.jumbotron.jumbotron-login:has(video){
+  display: block;
+  align-items: stretch;
+  padding: 0px;
+  overflow: hidden;
+  position: relative;
+}
+.jumbotron.jumbotron-login video{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute; 
+  top: 0; 
+  left: 0; 
+  z-index: 1;
+}
+.jumbotron.jumbotron-login .overlay-video-container{
+  position: relative; 
+  z-index: 2;
+  height: 100%;
+}
+
 .homepage-annnouncements-container{
   background-color: #ffffff;
 }
@@ -4620,7 +4708,7 @@ body .delThemeBtn{
 /**********************************************************************************************************************/
 
 .iframeLti{
-  height: 500px !important;
+  height: 800px !important;
   border-radius:4px !important;
 }
 
@@ -4765,7 +4853,7 @@ body .delThemeBtn{
 
 .navbar-learningPath,
 .header-container-learningPath{
-  height: 50px;
+  height: 56px !important;
 }
 
 .progressbar-plr .progress-circle-bar{
@@ -5880,14 +5968,14 @@ th.grade-col a{
 #unitResources_1 .module-name,
 #unitResources_2 .module-name,
 #unitResources_3 .module-name {
-  font-size: 0.65rem;
+  font-size: 12px;
 }
 
 #unitResources .text-start p,
 #unitResources_1 .text-start p,
 #unitResources_2 .text-start p,
 #unitResources_3 .text-start p {
-  font-size: 0.75rem;
+  font-size: 14px;
 }
 
 #unitResources .not_visible .unitIcon, 
@@ -5964,4 +6052,180 @@ th.grade-col a{
 
 .viewtopicNav .pagination .active a {
   background: #E8EDF8;
+}
+
+/******************************** EXERCISE QUESTIONS ************************************/
+/* DRAG AND DROP TEXT */
+
+.panelCard-exercise .blank {
+  display: inline-block;
+  min-width: 100px;
+  height: 40px;
+  border: solid 1px #2B3944;
+  margin-top: 15px;
+  margin-left: 10px;
+  margin-right: 10px;
+  border-radius: 4px;
+}
+.panelCard-exercise .blank:has(.dropped-word){
+  background-color: #ffffff;
+}
+.panelCard-exercise .blank.ui-droppable-active.ui-droppable-hover.hovered{
+  box-shadow: 0 0 5px 5px #1E7E0E;
+}
+.panelCard-exercise .drag-and-drop-markers-canvas{
+  position: absolute; 
+  top: 0; 
+  left: 0;
+  /* z-index: 3; */
+}
+
+.panelCard-exercise .draggable {
+  display: inline-block;
+  padding: 8px 12px;
+  height: 30px;
+  margin: 5px;
+  background-color: #FFFFFF;
+  color: #2B3944;
+  cursor: move;
+  border: 2px solid #2B3944;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 50px;
+  border-radius: 4px;
+}
+.panelCard-exercise .draggable.draggable-image {
+  width: 145px !important;
+  height: 145px !important;
+  padding: 0px;
+  align-items: stretch;
+}
+.panelCard-exercise .draggable.draggable-image img{
+  width: 140px !important;
+  height: 140px !important;
+  object-fit: cover;
+}
+.panelCard-exercise .blank.ui-droppable .draggable.dropped-word{
+  border: 0px;
+}
+.panelCard-exercise .draggable.dropped-word{
+  line-height: 1;
+  padding: 0px;
+  z-index: 3;
+}
+.panelCard-exercise .draggable.draggable-image.dropped-word{
+  line-height: 0;
+  padding: 3px;
+  z-index: 3;
+  margin: 0;
+}
+.drag-and-drop-markers-container,
+.drag-and-drop-markers-img,
+.drag-and-drop-markers-canvas {
+  width: 760px !important;
+  height: 400px !important;
+}
+.drag-and-drop-markers-img {
+  image-rendering: auto;
+  object-fit: contain;
+}
+.drag-and-drop-markers-container-words{
+  width: 760px;
+}
+
+.panelCard-exercise .dropped-word.ui-draggable-dragging{
+  text-wrap: nowrap;
+  padding: 8px 12px;
+  height: 30px;
+  margin: 5px;
+  border: solid 1px #2B3944 !important;
+}
+
+.panelCard-exercise .blank-drag-and-drop-text{
+  margin-top: 10px;
+  margin-bottom: 10px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.panelCard-exercise .blank:has(.dropped-word){
+ background-color: #FFFFFF !important;
+}
+
+.popovers-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: 'Manrope', sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  height: 40px;
+  padding-top: 5px;
+  margin-top: 5px;
+}
+
+.light-transparent {
+  background: rgba(0,0,0,0.1);
+}
+
+/* .table-drag-and-drop-markers-creation tbody tr.inserted td {
+  background-color: #d1e7dd !important;
+} */
+
+.status-indicator {
+  display: inline-flex;
+  align-items: start;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  padding: 8px 12px;
+  border-radius: 20px;
+  background-color: #f0f4f8;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+  min-width: 200px;
+  margin-bottom: 15px;
+}
+
+/* Text styling */
+.status-text {
+  margin-left: 10px;
+  color: #333;
+  font-weight: 600;
+}
+
+/* Spinner styles */
+.spinner {
+  border: 3px solid #e0e0e0; /* Light grey */
+  border-top: 3px solid #4CAF50; /* Green accent */
+  border-radius: 50%;
+  width: 45px;
+  height: 30px;
+  animation: spin 1s linear infinite;
+}
+
+/* Spin animation */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/******************************** LearnPath ************************************/
+
+.contextual-menu-learningPath {
+  min-width: 258px !important;
+  width: 100% !important;
+}
+.contextual-menu-learningPath li a,
+.contextual-menu-learningPath li span {
+  font-weight: 400 !important;
+}
+.contextual-menu-learningPath li div.list-group-item.active {
+  border-left: solid 2px #1E7E0E !important;
+}
+
+.body-learningPath {
+ padding: 20px !important;
 }

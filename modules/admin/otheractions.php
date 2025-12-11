@@ -44,7 +44,7 @@ $head_content .= "<script type='text/javascript'>
                    'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
                    'sZeroRecords':  '" . $langNoResult . "',
                    'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
-                   'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
+                   'sInfoEmpty':    '',
                    'sInfoFiltered': '',
                    'sInfoPostFix':  '',
                    'sSearch':       '" . $langSearch . "',
@@ -57,7 +57,7 @@ $head_content .= "<script type='text/javascript'>
                    }
                }
             });
-            $('.dataTables_filter input ms-0 mb-3').attr('placeholder', '$langDetail');
+            $('.dt-search input ms-0 mb-3').attr('placeholder', '$langDetail');
         });
         </script>";
 

@@ -23,6 +23,9 @@ include 'exercise.class.php';
 include 'question.class.php';
 include 'answer.class.php';
 
+// Check if AI functionality is available
+require_once '../../include/lib/ai/services/AIQuestionBankService.php';
+
 $require_editor = TRUE;
 $require_current_course = TRUE;
 $require_help = true;
@@ -31,6 +34,9 @@ $helpSubTopic = 'question_bank';
 
 include '../../include/baseTheme.php';
 require_once 'imsqtilib.php';
+
+// Initialize AI service
+$aiService = new AIQuestionBankService($course_id, $uid);
 
 load_js('datatables');
 
@@ -46,11 +52,15 @@ $head_content .= "
                 'bAutoWidth': true,
                 'searchDelay': 1000,
                 'order' : [[1, 'desc']],
+                'lengthMenu': [10, 20, 30, -1],
                 'oLanguage': {
+                   'lengthLabels': {
+                   	    '-1': '$langAllOfThem'
+                   },
                    'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
                    'sZeroRecords':  '" . $langNoResult . "',
                    'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
-                   'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
+                   'sInfoEmpty':    '',
                    'sInfoFiltered': '',
                    'sInfoPostFix':  '',
                    'sSearch':       '',
@@ -64,11 +74,11 @@ $head_content .= "
                }
             });
 
-            $('.dataTables_filter input').attr({
+            $('.dt-search input').attr({
                 class : 'form-control input-sm mb-3 me-3',
                 placeholder : '$langSearch...'
             });
-            $('.dataTables_filter label').attr('aria-label', '$langSearch'); 
+            $('.dt-search label').attr('aria-label', '$langSearch'); 
 
             $(document).on('click', '.warnLink', function(e){
                 var modifyAllLink = $(this).attr('href');
@@ -167,7 +177,7 @@ if (isset($_GET['fromExercise'])) {
     $objExercise = new Exercise();
     $fromExercise = intval($_GET['fromExercise']);
     $objExercise->read($fromExercise);
-    $navigation[] = array("url" => "admin.php?course=$course_code&amp;exerciseId=$fromExercise", "name" => $langExerciseManagement);
+    $navigation[] = array("url" => "admin.php?course=$course_code&exerciseId=$fromExercise", "name" => $langExerciseManagement);
 } else {
     $fromExercise = '';
 }
@@ -184,6 +194,8 @@ if (isset($_GET['categoryId'])) {
 
 if (isset($_GET['answerType'])) {
     $answerType = intval($_GET['answerType']);
+} else {
+    $answerType = -1;
 }
 
 // deletes a question from the data base and all exercises
@@ -275,6 +287,12 @@ if ($fromExercise) {
           'icon' => 'fa-upload',
           'button-class' => 'btn-success'
         ],
+        [ 'title' => $langAIGenerateQuestions,
+          'url' => "ai_question_generation.php?course=$course_code",
+          'icon' => 'fa-magic',
+          'button-class' => 'btn-info',
+          'show' => $aiService->isEnabledForCourse(AI_MODULE_QUESTION_POOL)
+        ]
     ];
 }
 
@@ -323,19 +341,26 @@ $tool_content .= "<div class='form-wrapper mb-4'><form class='form-inline' role=
                             <option value='4' ".(isset($difficultyId) && $difficultyId == 4 ? "selected='selected'": "").">$langQuestionDifficult</option>
                             <option value='5' ".(isset($difficultyId) && $difficultyId == 5 ? "selected='selected'": "").">$langQuestionVeryDifficult</option>
                         </select>
-                    </div>
-                    <div class='form-group mt-3'>
-                        <select onChange = 'document.qfilter.submit();' name='answerType' class='form-select'>
-                            <option value='-1' ". (isset($answerType) && $answerType == -1 ? "selected='selected'": "") .">-- $langQuestionAllTypes --</option>                        
-                            <option value='" . UNIQUE_ANSWER ."' ". (isset($answerType) && $answerType == UNIQUE_ANSWER ? "selected='selected'": "") .">$langUniqueSelect</option>
-                            <option value='" . MULTIPLE_ANSWER ."' ".(isset($answerType) && $answerType == MULTIPLE_ANSWER ? "selected='selected'": "").">$langMultipleSelect</option>
-                            <option value='" . TRUE_FALSE ."' ".(isset($answerType) && $answerType == TRUE_FALSE ? "selected='selected'": "").">$langTrueFalse</option>
-                            <option value='" . FILL_IN_BLANKS ."' ".(isset($answerType) && $answerType == FILL_IN_BLANKS ? "selected='selected'": "").">$langFillBlanks</option>
-                            <option value='" . FILL_IN_FROM_PREDEFINED_ANSWERS ."' ".(isset($answerType) && $answerType == FILL_IN_FROM_PREDEFINED_ANSWERS ? "selected='selected'": "").">$langFillFromSelectedWords</option>
-                            <option value='" . MATCHING ."' ".(isset($answerType) && $answerType == MATCHING ? "selected='selected'": "").">$langMatching</option>                        
-                            <option value='" . FREE_TEXT ."' ".(isset($answerType) && $answerType == FREE_TEXT ? "selected='selected'": "").">$langFreeText</option>
-                        </select>
-                    </div>                
+                    </div>";
+                    $tool_content .= "<div class='form-group mt-3'>";
+                    $tool_content .= selection([
+                                                '-1' => "-- $langQuestionAllTypes --",
+                                                UNIQUE_ANSWER => $langUniqueSelect,
+                                                MULTIPLE_ANSWER => $langMultipleSelect,
+                                                TRUE_FALSE => $langTrueFalse,
+                                                FILL_IN_BLANKS_TOLERANT => $langFillBlanks,
+                                                FILL_IN_FROM_PREDEFINED_ANSWERS => $langFillFromSelectedWords,
+                                                MATCHING => $langMatching,
+                                                ORDERING => $langOrdering,
+                                                DRAG_AND_DROP_TEXT => $langDragAndDropText,
+                                                DRAG_AND_DROP_MARKERS => $langDragAndDropMarkers,
+                                                CALCULATED => $langCalculated,
+                                                FREE_TEXT => $langFreeText,
+                                                ORAL => $langOral,
+                                            ],
+                                        'answerType', $answerType, "onChange = 'document.qfilter.submit();'class='form-select'");
+                    $tool_content .= "</div>";
+            $tool_content .= "
                 </form>
             </div>";
 //End of filtering Component
@@ -452,7 +477,7 @@ if (isset($_GET['exportIMSQTI'])) { // export to IMS QTI xml format
                 $question_excl_legend = '';
             }
             // check if question has answers
-            if ($question_type != FREE_TEXT and $question_type != MATCHING and (!$question_temp->hasAnswers())) {
+            if ($question_type != FREE_TEXT and $question_type != ORAL and $question_type != MATCHING and (!$question_temp->hasAnswers())) {
                 $question_excl_legend_2 = "&nbsp;&nbsp;<span class='fas fa-exclamation-triangle space-after-icon' 
                         data-bs-toggle='tooltip' data-bs-placement='right' data-bs-html='true' data-bs-title='$langNoQuestionAnswers'></span>";
             } else {
@@ -460,7 +485,7 @@ if (isset($_GET['exportIMSQTI'])) { // export to IMS QTI xml format
             }
             $tool_content .= "
                 <td>
-                  <div class='float-end fw-lighter text-heading-h6'>id: {$row->id}</></div>
+                  <div class='float-end fw-lighter text-heading-h6'>No: {$row->id}</></div>
                   <a class='$class' data-qid='{$row->id}' data-nbr='$nbr' data-editurl='$editUrl' href='admin.php?course=$course_code&amp;modifyAnswers={$row->id}&amp;fromExercise=$fromExercise'>$question_title</a>
                   $question_excl_legend<br>
                   <small>$question_type_legend $question_difficulty_legend $question_category_legend $question_excl_legend_2 $exercises_used_in</small>

@@ -26,8 +26,15 @@ $res_type = isset($_GET['res_type']);
 
 // validate
 $content_id = intval($_GET['id']);
-$onlyEnabledWhere = ($is_editor) ? '' : " AND enabled = 1 ";
-$content = Database::get()->querySingle("SELECT * FROM h5p_content WHERE id = ?d AND course_id = ?d $onlyEnabledWhere", $content_id, $course_id);
+
+if ($is_editor) {
+    $content = Database::get()->querySingle("SELECT * FROM h5p_content WHERE id = ?d AND course_id = ?d", $content_id, $course_id);
+} else {
+    $content = Database::get()->querySingle("SELECT * FROM h5p_content WHERE id = ?d 
+            AND course_id = ?d 
+            AND (enabled = 1 OR creator_id IN (SELECT user_id FROM course_user WHERE course_id = ?d AND user_id = ?d AND status = " . USER_STUDENT . "))", $content_id, $course_id, $course_id, $uid);
+}
+
 if (!$content) {
     redirect_to_home_page("modules/h5p/?course=$course_code");
 }
@@ -41,7 +48,7 @@ if (!$res_type) {
 $toolName = $langImport;
 $navigation[] = ['url' => $backUrl, 'name' => $langH5p];
 
-$tool_content .= action_bar([
+$action_bar = action_bar([
     [ 'title' => $langBack,
       'url' => $backUrl,
       'icon' => 'fa-reply',
@@ -62,11 +69,13 @@ $tool_content .= action_bar([
     ]
 ], false);
 
+$tool_content .= $action_bar;
+
 $workspaceUrl = $urlAppend . 'courses/' . $course_code . '/h5p/content/' . $content_id . '/workspace';
 $workspaceLibs = $urlAppend . 'courses/h5p/libraries';
 
 $head_content .= "
-    <script type='text/javascript' src='" . $urlAppend . "node_modules/h5p-standalone/dist/main.bundle.js'></script>";
+    <script type='text/javascript' src='" . $urlAppend . "js/h5p-standalone/main.bundle.js'></script>";
 
 $tool_content .= "
         <div class='col-12'>
@@ -80,8 +89,8 @@ $head_content .= "
             const options = {
               h5pJsonPath:  '$workspaceUrl',
               librariesPath: '$workspaceLibs',
-              frameJs: '" . $urlAppend . "node_modules/h5p-standalone/dist/frame.bundle.js',
-              frameCss: '" . $urlAppend . "node_modules/h5p-standalone/dist/styles/h5p.css',
+              frameJs: '" . $urlAppend . "js/h5p-standalone/frame.bundle.js',
+              frameCss: '" . $urlAppend . "js/h5p-standalone/styles/h5p.css',
               frame: true,
               copyright: true,
               icon: true,
@@ -95,7 +104,7 @@ $head_content .= "
                     let ifcont = $('#h5p-container').find('iframe').first().contents()[0];
                     let jaxscr = ifcont.createElement('script');
                     jaxscr.type = 'text/javascript';
-                    jaxscr.src = '" . $urlAppend . "node_modules/mathjax/es5/tex-chtml.js';
+                    jaxscr.src = '" . $urlAppend . "js/mathjax/tex-chtml.js';
                     jaxscr.id = 'MathJax-script';
                     ifcont.head.appendChild(jaxscr);
                 }, 40);

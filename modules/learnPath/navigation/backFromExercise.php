@@ -41,7 +41,7 @@ $theme_id = get_config('theme_options_id') ?? 0;
         <?php } ?>
         <script src="../../../js/bootstrap.bundle.min.js"></script>
     </head>
-    <body class='body-learningPath' style="margin: 0px; padding-left: 0px; height: 100%!important; height: auto;">
+    <body class='body-learningPath' style="margin: 0px; height: 100%!important; height: auto;">
         <div id="content" style="width:800px; margin: 0 auto;">
             <br /><br /><br />
             <?php

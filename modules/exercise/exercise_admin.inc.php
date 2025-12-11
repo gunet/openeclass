@@ -22,7 +22,8 @@
  * @file exercise_admin.inc.php
  * @brief Create new exercise or modify an existing one
  */
-require_once 'modules/search/indexer.class.php';
+require_once 'modules/search/classes/ConstantsUtil.php';
+require_once 'modules/search/classes/SearchEngineFactory.php';
 require_once 'modules/tags/moduleElement.class.php';
 
 if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
@@ -43,7 +44,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
 load_js('tools.js');
 // the exercise form has been submitted
 if (isset($_POST['submitExercise'])) {
-
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $v = new Valitron\Validator($_POST);
     $v->addRule('ipORcidr', function($field, $value, array $params) {
         //matches IPv4/6 and IPv4/6 CIDR ranges
@@ -118,7 +119,8 @@ if (isset($_POST['submitExercise'])) {
         $exerciseId = $objExercise->selectId();
 
         $objExercise->assignTo(filter_input(INPUT_POST, 'ingroup', FILTER_VALIDATE_INT, FILTER_REQUIRE_ARRAY));
-        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_EXERCISE, $exerciseId);
+        $searchEngine = SearchEngineFactory::create();
+        $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_EXERCISE, $exerciseId);
 
         // tags
         $moduleTag = new ModuleElement($exerciseId);
@@ -308,11 +310,11 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                 var select_content = '';
                 if(type==1){
                     for (index = 0; index < parsed_data.length; ++index) {
-                        select_content += '<option value=\"' + parsed_data[index]['id'] + '\">' + parsed_data[index]['surname'] + ' ' + parsed_data[index]['givenname'] + '<\/option>';
+                        select_content += '<option value=\"' + parsed_data[index]['id'] + '\">' + q(parsed_data[index]['surname'] + ' ' + parsed_data[index]['givenname']) + '<\/option>';
                     }
                 } else {
                     for (index = 0; index < parsed_data.length; ++index) {
-                        select_content += '<option value=\"' + parsed_data[index]['id'] + '\">' + parsed_data[index]['name'] + '<\/option>';
+                        select_content += '<option value=\"' + parsed_data[index]['id'] + '\">' + q(parsed_data[index]['name']) + '<\/option>';
                     }
                 }
                 $('#assignee_box').find('option').remove();
@@ -684,6 +686,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                     </div>
                  </div>
              </fieldset>
+             " . generate_csrf_token_form_field() . "
              </form>
         </div></div><div class='d-none d-lg-block'>
         <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>

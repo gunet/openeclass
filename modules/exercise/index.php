@@ -34,7 +34,8 @@ include '../../include/baseTheme.php';
 require_once 'modules/group/group_functions.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
-require_once 'modules/search/indexer.class.php';
+require_once 'modules/search/classes/ConstantsUtil.php';
+require_once 'modules/search/classes/SearchEngineFactory.php';
 
 ModalBoxHelper::loadModalBox();
 /* * ** The following is added for statistics purposes ** */
@@ -65,19 +66,19 @@ $head_content .= "<script type='text/javascript'>
             $('#ex').DataTable ({
                 'columns': [ $columns ],
                 'fnDrawCallback': function (settings) { typeof MathJax !== 'undefined' && MathJax.typeset(); },
-                'aLengthMenu': [
-                   [10, 20, 30 , -1],
-                   [10, 20, 30, '$langAllOfThem'] // change per page values here
-                ],
+                'lengthMenu': [10, 20, 30, -1],
                 'sPaginationType': 'full_numbers',
                 'bAutoWidth': true,
                 'searchDelay': 1000,
                 'order' : [[1, 'desc']],
                 'oLanguage': {
+                    'lengthLabels': {
+                        '-1': '$langAllOfThem'
+                    },
                    'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
                    'sZeroRecords':  '" . $langNoResult . "',
                    'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
-                   'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
+                   'sInfoEmpty':    '',
                    'sInfoFiltered': '',
                    'sInfoPostFix':  '',
                    'sSearch':       '',
@@ -90,11 +91,11 @@ $head_content .= "<script type='text/javascript'>
                    }
                }
             });
-            $('.dataTables_filter input').attr({
+            $('.dt-search input').attr({
                   'class' : 'form-control input-sm ms-0 mb-3',
                   'placeholder' : '$langSearch...'
             });
-            $('.dataTables_filter label').attr('aria-label', '$langSearch');
+            $('.dt-search label').attr('aria-label', '$langSearch');
             
             $(document).on('click', '.assigned_to', function(e) {
                   e.preventDefault();
@@ -154,11 +155,12 @@ if ($is_editor) {
         // construction of Exercise
         $objExerciseTmp = new Exercise();
         if ($objExerciseTmp->read($exerciseId)) {
+            $searchEngine = SearchEngineFactory::create();
             switch ($_GET['choice']) {
                 case 'delete': // deletes an exercise
                     if (!resource_belongs_to_progress_data(MODULE_ID_EXERCISE, $exerciseId)) {
                         $objExerciseTmp->delete();
-                        Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_EXERCISE, $exerciseId);
+                        $searchEngine->indexResource(ConstantsUtil::REQUEST_REMOVE, ConstantsUtil::RESOURCE_EXERCISE, $exerciseId);
                         Session::flash('message', $langPurgeExerciseSuccess);
                         Session::flash('alert-class', 'alert-success');
                         redirect_to_home_page('modules/exercise/index.php?course=' . $course_code);
@@ -168,6 +170,7 @@ if ($is_editor) {
                     }
                     break;
                 case 'purge': // purge exercise results
+                    if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();
                     if (!resource_belongs_to_progress_data(MODULE_ID_EXERCISE, $exerciseId)) {
                         $objExerciseTmp->purge();
                         $objExerciseTmp->save();
@@ -182,14 +185,14 @@ if ($is_editor) {
                 case 'enable':  // enables an exercise
                     $objExerciseTmp->enable();
                     $objExerciseTmp->save();
-                    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_EXERCISE, $exerciseId);
+                    $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_EXERCISE, $exerciseId);
                     redirect_to_home_page('modules/exercise/index.php?course=' . $course_code);
                     break;
                 case 'disable': // disables an exercise
                     if (!resource_belongs_to_progress_data(MODULE_ID_EXERCISE, $exerciseId)) {
                         $objExerciseTmp->disable();
                         $objExerciseTmp->save();
-                        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_EXERCISE, $exerciseId);
+                        $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_EXERCISE, $exerciseId);
                         redirect_to_home_page('modules/exercise/index.php?course=' . $course_code);
                     } else {
                         Session::flash('message', $langResourceBelongsToCert);
@@ -199,13 +202,13 @@ if ($is_editor) {
                 case 'public':  // make exercise public
                     $objExerciseTmp->makepublic();
                     $objExerciseTmp->save();
-                    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_EXERCISE, $exerciseId);
+                    $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_EXERCISE, $exerciseId);
                     redirect_to_home_page('modules/exercise/index.php?course=' . $course_code);
                     break;
                 case 'limited':  // make exercise limited
                     $objExerciseTmp->makelimited();
                     $objExerciseTmp->save();
-                    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_EXERCISE, $exerciseId);
+                    $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_EXERCISE, $exerciseId);
                     redirect_to_home_page('modules/exercise/index.php?course=' . $course_code);
                     break;
                 case 'clone':  // make exercise limited
@@ -487,7 +490,7 @@ if (!$nbrExercises) {
                               'url' => "#",
                               'icon' => 'fa-copy'),
                         array('title' => $langPurgeExerciseResults,
-                              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=purge&amp;exerciseId=$row->id",
+                              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=purge&amp;exerciseId=$row->id&" . generate_csrf_token_link_parameter(),
                               'icon' => 'fa-eraser',
                               'confirm' => $langConfirmPurgeExerciseResults),
                         array('title' => $langDelete,
@@ -636,7 +639,7 @@ if ($is_editor) {
                 . "JOIN exercise_answer_record AS ear ON ear.question_id = exq.id "
                 . "JOIN exercise_user_record AS eur ON eur.eurid = ear.eurid "
                 . "WHERE eur.eid IN (".implode(',', $ids_array).") AND ear.weight IS NULL "
-                . "AND exq.type = " . FREE_TEXT . " "
+                . "AND exq.type = " . FREE_TEXT . " OR exq.type = ". ORAL. " "
                 . "GROUP BY exq.id, eur.eid, eur.eurid, ear.q_position, exq.question");
         $questionsEid = json_encode($question_types, JSON_UNESCAPED_UNICODE);
 

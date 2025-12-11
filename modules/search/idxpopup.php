@@ -23,8 +23,9 @@ require_once '../../include/baseTheme.php';
 load_js('jquery' . JQUERY_VERSION . '.min.js');
 
 if (isset($_GET['reindex'])) {
-    require_once 'modules/search/indexer.class.php';
-    Indexer::deleteAll();
+    require_once 'modules/search/classes/SearchEngineFactory.php';
+    $searchEngine = SearchEngineFactory::create();
+    $searchEngine->deleteAll();
     Database::get()->query("DELETE FROM idx_queue");
     Database::get()->queryFunc("SELECT id FROM course", function($r) {
         Database::get()->query("INSERT INTO idx_queue (course_id) VALUES (?d)", $r->id);
@@ -53,10 +54,21 @@ $head_content .= "
             if (data.remaining > 0) {
                 setTimeout(doProc, 0);
             } else {
+                setTimeout(doCommit, 0);
                 $('#idxinfo').attr('class', 'success');
                 $('#idxresul').html(langIndexingDone);
                 window.removeEventListener('beforeunload', confirmClose);
             }
+        })
+        .fail(function(jqxhr, textStatus, error) {
+            //console.debug('jqxhr Request Failed: ' + textStatus + ', ' + error);
+        });
+    };
+    
+    var doCommit = function() {
+        jQuery.getJSON('idxcommit.php')
+        .done(function(data) {
+            //console.debug(data);
         })
         .fail(function(jqxhr, textStatus, error) {
             //console.debug('jqxhr Request Failed: ' + textStatus + ', ' + error);

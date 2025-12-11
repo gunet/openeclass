@@ -101,7 +101,7 @@ function initialize_group_info($group_id) {
                                      WHERE group_id = ?d", $group_id);
         foreach ($res as $d) {
             if (!empty($d->description) or $d->description != '') {
-                $user_group_description .= display_user($d->user_id, false, false)."<br>$d->description<br><br>";
+                $user_group_description .= display_user($d->user_id, false, false)."$d->description<br><br>";
             }
         }
     } else {

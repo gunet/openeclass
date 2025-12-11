@@ -269,7 +269,7 @@ function ltiBuildRequest(stdClass $ltiApp, stdClass $course, stdClass $stat, str
         'user_id' => "$uid",
         'lis_person_sourcedid' => "$uid",
         'roles' => ltiGetImsRole($stat),
-        'context_id' => "$course->id",
+        'context_id' => $_SERVER['SERVER_NAME'] . ":" . "$course->id",
         'context_label' => trim($course->title),
         'context_title' => trim($course->title)
     );
@@ -277,12 +277,13 @@ function ltiBuildRequest(stdClass $ltiApp, stdClass $course, stdClass $stat, str
 
     // resource link
     $requestparams['resource_link_title'] = trim($ltiApp->title);
-    $requestparams['resource_link_description'] = trim($ltiApp->description);
-    $requestparams['resource_link_id'] = "$ltiApp->id";
+    //$requestparams['resource_link_description'] = trim($ltiApp->description);
+    $resource_link_id_prefix = (!is_null($resourceType)) ? $_SERVER['SERVER_NAME'] . ":" . $resourceType . ":" : $_SERVER['SERVER_NAME'] . ":";
+    $requestparams['resource_link_id'] = $resource_link_id_prefix . "$ltiApp->id";
     if ($is_assignment) {
         $requestparams['resource_link_title'] = trim($resource->title);
-        $requestparams['resource_link_description'] = trim($ltiApp->description);
-        $requestparams['resource_link_id'] = "$resource->id";
+        //$requestparams['resource_link_description'] = trim($ltiApp->description);
+        $requestparams['resource_link_id'] = $resource_link_id_prefix . "$resource->id";
     }
 
     $requestparams['context_type'] = 'CourseSection';
@@ -324,6 +325,16 @@ function ltiBuildCustomParameters(string $resourceType, stdClass $resource): arr
     if ($resourceType == RESOURCE_LINK_TYPE_ASSIGNMENT && $resource->tii_instructorcustomparameters) {
         $requestparams = ltiSplitCustomParameters($resource->tii_instructorcustomparameters);
     }
+    if ($resourceType == RESOURCE_LINK_TYPE_ASSIGNMENT && $resource->submission_date) {
+        $startdate = DateTime::createFromFormat('Y-m-d H:i:s', $resource->submission_date, new DateTimeZone('Europe/Athens'));
+        $startdate->setTimezone(new DateTimeZone('UTC'));
+        $requestparams['custom_startdate'] = $startdate->format('Y-m-d\TH:i:s\.v\Z');
+    }
+    if ($resourceType == RESOURCE_LINK_TYPE_ASSIGNMENT && $resource->deadline) {
+        $duedate = DateTime::createFromFormat('Y-m-d H:i:s', $resource->deadline, new DateTimeZone('Europe/Athens'));
+        $duedate->setTimezone(new DateTimeZone('UTC'));
+        $requestparams['custom_duedate'] = $duedate->format('Y-m-d\TH:i:s\.v\Z');
+    }
     return $requestparams;
 }
 
@@ -339,7 +350,7 @@ function ltiGetImsRole(stdClass $stat): string {
 
     $roles = array();
 
-    if ($stat->status == USER_TEACHER) {
+    if ($stat->status == USER_TEACHER || $stat->editor == 1 || $stat->tutor == 1) {
         $roles[] = 'Instructor';
     } else {
         $roles[] = 'Learner';
@@ -920,7 +931,7 @@ function ltiBuildLoginRequest(stdClass $course, stdClass $lti, string $messagety
     $launch_part = $messagetype;
     if (!empty($resource)) {
         $launch_part = $lti->id;
-        if ($resourceType == RESOURCE_LINK_TYPE_ASSIGNMENT) {
+        if ($resourceType == RESOURCE_LINK_TYPE_ASSIGNMENT || $resourceType == RESOURCE_LINK_TYPE_LTI_TOOL) {
             $resourceid = $resource->id;
             $ltihint['resourceid'] = $resourceid;
         }
@@ -1349,6 +1360,9 @@ function ltiToolConfigurationFromContentItem(int $ltiAppId, string $messagetype,
             }
             if (isset($custom->default_feedbackreleasedate)) {
                 $config->feedbackdate = $custom->default_feedbackreleasedate;
+            }
+            if (isset($custom->tii_setting_workflow_description)) {
+                $config->description = $custom->tii_setting_workflow_description;
             }
         }
     }

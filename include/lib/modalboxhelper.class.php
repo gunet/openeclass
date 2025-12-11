@@ -92,6 +92,7 @@ class ModalBoxHelper {
                                       }
                              });
                              $(".colorbox").colorbox({
+                                      title       : false,
                                       minWidth    : 300,
                                       minHeight   : 200,
                                       maxWidth    : "100%",

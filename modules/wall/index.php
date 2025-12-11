@@ -28,11 +28,87 @@ ModalBoxHelper::loadModalBox(false);
 $head_content .= '<link rel="stylesheet" type="text/css" href="css/wall.css">';
 
 load_js('waypoints-infinite');
+load_js('screenfull/screenfull.min.js');
+
+$head_content .= "<script>
+            $(function() {
+                var infinite = new Waypoint.Infinite({
+                  element: $('.infinite-container')[0]
+                })
+                
+                $('.coloboxframe').click(function() {
+                    $('.colorboxframe').colorbox();
+                })
+    
+                $('.colobox').click(function() {
+                    $('.colorbox').colorbox();
+                })
+                
+                $('.fileModal').click(function (e)
+                {
+                    e.preventDefault();
+                    var fileURL = $(this).attr('href');
+                    var downloadURL = $(this).prev('input').val();
+                    var fileTitle = $(this).attr('title');
+                    var buttons = {};
+                    if (downloadURL) {
+                        buttons.download = {
+                                label: '<i class=\"fa fa-download\"></i> $langDownload',
+                                className: 'submitAdminBtn gap-1',
+                                callback: function (d) {
+                                    window.location = downloadURL;
+                                }
+                        };
+                    }
+                    buttons.print = {
+                                label: '<i class=\"fa fa-print\"></i> $langPrint',
+                                className: 'submitAdminBtn gap-1',
+                                callback: function (d) {
+                                    var iframe = document.getElementById('fileFrame');
+                                    iframe.contentWindow.print();
+                                }
+                            };
+                    if (screenfull.enabled) {
+                        buttons.fullscreen = {
+                            label: '<i class=\"fa fa-arrows-alt\"></i> $langFullScreen',
+                            className: 'submitAdminBtn gap-1',
+                            callback: function() {
+                                screenfull.request(document.getElementById('fileFrame'));
+                                return false;
+                            }
+                        };
+                    }
+                    buttons.newtab = {
+                        label: '<i class=\"fa fa-plus\"></i> $langNewTab',
+                        className: 'submitAdminBtn gap-1',
+                        callback: function() {
+                            window.open(fileURL);
+                            return false;
+                        }
+                    };
+                    buttons.cancel = {
+                                label: '$langCancel',
+                                className: 'cancelAdminBtn'
+                            };
+                    bootbox.dialog({
+                        size: 'large',
+                        title: fileTitle,
+                        message: '<div class=\"row\">'+
+                                    '<div class=\"col-sm-12\">'+
+                                        '<div class=\"iframe-container\"><iframe title=\"'+fileTitle+'\" id=\"fileFrame\" src=\"'+fileURL+'\" style=\"width:100%; height:500px;\"></iframe></div>'+
+                                    '</div>'+
+                                '</div>',
+                        buttons: buttons
+                    });
+                });
+            });
+        </script>";
 
 $pageName = $langWall;
 
 //handle submit
 if (isset($_POST['submit'])) {
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     if (allow_to_post($course_id, $uid, $is_editor)) {
         if (!empty($_POST['message'])) {
             if (empty($_POST['extvideo'])) {
@@ -65,7 +141,7 @@ if (isset($_POST['submit'])) {
                 }
             }
             if (isset($id)) { //check if wall resources need to get saved
-                //save multimedia content
+                // multimedia content
                 if ($is_editor || visible_module(MODULE_ID_VIDEO)) {
                     insert_video($id);
                 }
@@ -153,6 +229,7 @@ if (isset($_POST['submit'])) {
     }
     decide_wall_redirect();
 } elseif (isset($_POST['edit_submit'])) { //handle edit form submit
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $id = intval($_GET['edit']);
     if (allow_to_edit($id, $uid, $is_editor)) {
         if (!empty($_POST['message'])) {
@@ -442,6 +519,7 @@ if (isset($_GET['showPost'])) { //show comments case
                             ))
                         .'</div>
                         </fieldset>
+                        ' . generate_csrf_token_form_field() . '
                     </form>
                 </div>
             </div>
@@ -452,7 +530,6 @@ if (isset($_GET['showPost'])) { //show comments case
 } else {
     //show post form
     show_post_form();
-
     //show wall posts
     show_wall_posts();
 }

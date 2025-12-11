@@ -24,8 +24,8 @@
     <link href="{{ $urlAppend }}template/modern/css/font-awesome-4.7.0/css/font-awesome.css" rel="stylesheet">
 
     <!-- DataTables and Checkitor -->
-    <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/jquery.dataTables.min.css">
-    <script src="{{ $urlAppend }}js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="{{ $urlAppend }}js/datatables/datatables.min.css">
+    <script src="{{ $urlAppend }}js/datatables/datatables.min.js"></script>
     <script src="{{ $urlAppend }}js/classic-ckeditor.js"></script>
 
      <!-- BootBox -->

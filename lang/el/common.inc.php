@@ -129,3 +129,9 @@ $langInfoAbout = "Η πλατφόρμα $siteName αποτελεί ένα ολο
 ";
 $langExtrasLeft = '';
 $langExtrasRight = '';
+
+$langAlignment = "Στοίχιση";
+$langWidth = "Πλάτος";
+$langAlignLeft = "Αριστερά";
+$langAlignCenter = "Κέντρο";
+$langAlignRight = "Δεξιά";

@@ -52,7 +52,6 @@
                                                 <div class='form-group'>
                                                     <div class='col-sm-12'>
                                                         <a class='link-color TextBold' type='button' href='#view_themes_screens' data-bs-toggle='modal'>{{ trans('langViewScreensThemes') }}</a></br></br>
-                                                        <p class='mb-3'><span class='control-label-notes'>{{ trans('langActiveTheme') }}:&nbsp;</span>{{ $active_theme }}</p>
                                                         <label for='themeSelection' class='control-label-notes'>{{ trans('langAvailableThemes') }}:</label>
                                                         {!! $theme_selection !!}
                                                     </div>

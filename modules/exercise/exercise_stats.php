@@ -190,25 +190,17 @@ foreach($questionList as $id) {
             $tool_content .= "</td></tr>";
         }
     } else {
-        // $tool_content .= "
-        //     <tr>
-        //         <td>".q_math($objQuestionTmp->selectTitle())."</td>
-        //         <td>
-        //             <div class='progress'>
-        //                 <div class='progress-bar progress-bar-success progress-bar-striped' role='progressbar' aria-valuenow='".$objQuestionTmp->successRate($exerciseId)."' aria-valuemin='0' aria-valuemax='100' style='width: ".$objQuestionTmp->successRate($exerciseId)."%;'>
-        //                   ".$objQuestionTmp->successRate($exerciseId)."%
-        //                 </div>
-        //             </div>
-        //         </td>
-        //     </tr>";
-
-        $tool_content .= "
-            <tr>
-                <td>".q_math($objQuestionTmp->selectTitle())."</td>
-                <td>
-                    <div class='progress-circle-bar' role='progressbar' aria-valuenow='".$objQuestionTmp->successRate($exerciseId)."' aria-valuemin='0' aria-valuemax='100' style='--value: ".$objQuestionTmp->successRate($exerciseId)."; --size: 6rem;'></div>
-                </td>                   
-            </tr>";
+         $tool_content .= "
+             <tr>
+                 <td>".q_math($objQuestionTmp->selectTitle())."</td>
+                 <td>
+                     <div class='progress'>
+                         <div class='progress-bar progress-bar-success progress-bar-striped' role='progressbar' aria-valuenow='".$objQuestionTmp->successRate($exerciseId)."' aria-valuemin='0' aria-valuemax='100' style='width: ".$objQuestionTmp->successRate($exerciseId)."%;'>
+                           ".$objQuestionTmp->successRate($exerciseId)."%
+                         </div>
+                     </div>
+                 </td>
+             </tr>";
     }
 }
 

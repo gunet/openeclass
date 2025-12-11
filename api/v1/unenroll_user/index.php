@@ -41,14 +41,22 @@ function api_method($access) {
         if (!$course) {
             Access::error(3, "Course with id '$course_id' not found");
         }
-        Database::get()->query("DELETE FROM course_user
-            WHERE course_id = ?d AND user_id = ?d",
-            $course->id, $user->id);
+        $response = Database::get()->query('DELETE FROM course_user
+                WHERE course_id = ?d AND user_id = ?d',
+                $course->id, $user->id) &&
+            Database::get()->query('DELETE FROM group_members
+                WHERE group_id IN (SELECT id FROM `group` WHERE course_id = ?d)
+                      AND user_id = ?d',
+                $course->id, $user->id);
         header('Content-Type: application/json');
-        echo json_encode(['status' => 'ok']);
+        if ($response) {
+            echo json_encode(['status' => 'ok']);
+        } else {
+            Access::error(500, "Error unenrolling user '$user_id' from course '$course_id'", 500);
+        }
         exit();
     } else {
-        Access::error(2, 'Required POST parameters for user enrolement missing: user_id, course_id, [role_id = {student|teacher|teacher_assistant}]');
+        Access::error(2, 'Required POST parameters for user unenrolement missing: user_id, course_id');
     }
 }
 

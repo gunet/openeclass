@@ -58,6 +58,7 @@ if (isset($_SESSION['objExercise'][$exerciseId])) {
 
 
 if ($is_editor && isset($_GET['purgeAttempID'])) {
+    if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();
     $eurid = $_GET['purgeAttempID'];
     $objExercise->purgeAttempt($exerciseIdIndirect, $eurid);
     Session::flash('message',$langPurgeExerciseResultsSuccess);
@@ -198,7 +199,7 @@ foreach ($result as $row) {
             if (uid_to_am($sid) != '') {
                 $studentam = "<p class='form-label mt-4 mb-1'>$langAmShort</p>" . uid_to_am($sid);
             }
-            $tool_content .= "<p class='form-label mb-1'>$langUser</p> " . q(uid_to_name($sid,'surname')). " " . uid_to_name($sid, 'givenname') . "
+            $tool_content .= "<p class='form-label mb-1'>$langUser</p> " . q(uid_to_name($sid,'surname')). " " . q(uid_to_name($sid, 'givenname')) . "
                             <div>$studentam<span>$user_group</span></div>";
         }
         $tool_content .= "</td>
@@ -295,7 +296,7 @@ foreach ($result as $row) {
                     <td class='option-btn-cell text-end'>" . action_button(array(
                         array(
                             'title' => $langDelete,
-                            'url' => "results.php?course=$course_code&exerciseId=$exerciseId&purgeAttempID=$row2->eurid",
+                            'url' => "results.php?course=$course_code&exerciseId=$exerciseId&purgeAttempID=$row2->eurid&" . generate_csrf_token_link_parameter(),
                             'icon' => "fa-xmark",
                             'confirm' => $langConfirmPurgeExercises,
                             'class' => 'delete'
@@ -303,7 +304,7 @@ foreach ($result as $row) {
                         array(
                             'title' => "$langAuthChangeto $langAttemptCompleted",
                             'url' => "results.php?course=$course_code&exerciseId=$exerciseId&modifyAttempID=$row2->eurid&status=" . ATTEMPT_COMPLETED . "",
-                            'icon' => "fa-toggle-on",
+                            'icon' => "fa-solid fa-check",
                             'show' => $allow_change_status,
                             'class' => 'warning-delete',
                             'confirm' => $langConfirmModifyAttemptText,
@@ -313,7 +314,7 @@ foreach ($result as $row) {
                         array(
                             'title' => "$langAuthChangeto $langAttemptPaused",
                             'url' => "results.php?course=$course_code&exerciseId=$exerciseId&modifyAttempID=$row2->eurid&status=" . ATTEMPT_PAUSED . "",
-                            'icon' => "fa-toggle-on",
+                            'icon' => "fa-solid fa-hourglass-half",
                             'class' => 'warning-delete',
                             'show' => $row2->attempt_status == ATTEMPT_ACTIVE ||
                                 ($row2->attempt_status == ATTEMPT_CANCELED && $row2->answers_exist),

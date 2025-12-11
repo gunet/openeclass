@@ -208,12 +208,14 @@ function restore_table($basedir, $table, $options, $url_prefix_map, $backupData,
         }
         if (isset($options['map'])) {
             foreach ($options['map'] as $field => &$map) {
+                // Should we keep records where a mapped field is missing from the map?
+                $map_missing_keep = in_array($field, $options['map_missing_keep'] ?? []);
                 $newField = $restoreHelper->getField($table, $field);
                 // Don't pass null data through mapping
                 if (!is_null($data[$newField])) {
                     if (isset($data[$newField]) && isset($map[$data[$newField]])) { // map needs reverse resolution
                         $data[$newField] = $map[$data[$newField]];
-                    } else {
+                    } elseif (!$map_missing_keep) {
                         continue 2;
                     }
                 }
@@ -456,177 +458,221 @@ function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $f
     ";
 }
 
-function create_restored_course(&$tool_content, $restoreThis, $course_code, $course_lang, $course_title, $course_desc, $course_vis, $course_prof, $clone_course = FALSE) {
+function create_restored_course(&$tool_content, $restoreThis, $course_code, $course_lang, $course_title, $course_desc, $course_vis, $course_prof, $clone_course = FALSE, $fetch_course = FALSE) {
     global $webDir, $urlServer, $urlAppend, $langEnter, $langBack, $currentCourseCode;
 
     require_once 'modules/create_course/functions.php';
     require_once 'modules/course_info/restorehelper.class.php';
     require_once 'include/lib/fileManageLib.inc.php';
-    $new_course_code = null;
-    $new_course_id = null;
-
-    Database::get()->transaction(function() use (&$new_course_code, &$new_course_id, $restoreThis, $course_code, $course_lang, $course_title, $course_desc, $course_vis, $course_prof, $webDir, &$tool_content, $urlServer, $urlAppend, $clone_course) {
-        $departments = array();
-        if (isset($_POST['department'])) {
-            foreach ($_POST['department'] as $did) {
-                $departments[] = intval($did);
-            }
-        } else {
-            $minDep = Database::get()->querySingle("SELECT MIN(id) AS min FROM hierarchy");
-            if ($minDep) {
-                $departments[0] = $minDep->min;
-            }
-        }
-
-        list($new_course_code, $new_course_id) = create_course($course_code, $course_lang, $course_title, $course_desc, $departments, $course_vis, $course_prof);
-        if (!$new_course_code) {
-            Session::flash('message',$GLOBALS['langGeneralError']);
-            Session::flash('alert-class', 'alert-danger');
-            redirect_to_home_page('modules/course_info/restore_course.php');
-        }
-
-        if (!file_exists($restoreThis)) {
-            redirect_to_home_page('modules/course_info/restore_course.php');
-        }
-        $config_data = unserialize(file_get_contents($restoreThis . '/config_vars'));
-        // If old $urlAppend didn't end in /, add it
-        if (substr($config_data['urlAppend'], -1) !== '/') {
-            $config_data['urlAppend'] .= '/';
-        }
-        $eclass_version = (isset($config_data['version'])) ? $config_data['version'] : null;
-        $backupData = null;
-        if (file_exists($restoreThis . '/backup.php')) {
-            $backupData = parse_backup_php($restoreThis . '/backup.php');
-            $eclass_version = $backupData['eclass_version'];
-        }
-        $restoreHelper = new RestoreHelper($eclass_version);
-
-        $course_file = $restoreThis . '/' . $restoreHelper->getFile('course');
-        if (file_exists($course_file)) {
-            $course_dataArr = unserialize(file_get_contents($course_file));
-            $course_data = $course_dataArr[0];
-            // update course query
-            $upd_course_sql = "UPDATE course SET keywords = ?s, doc_quota = ?f, video_quota = ?f, "
-                            . " group_quota = ?f, dropbox_quota = ?f, glossary_expand = ?d, course_license = ?d ";
-            $upd_course_args = array(
-                $course_data[$restoreHelper->getField('course', 'keywords')],
-                floatval($course_data['doc_quota']),
-                floatval($course_data['video_quota']),
-                floatval($course_data['group_quota']),
-                floatval($course_data['dropbox_quota']),
-                intval($course_data[$restoreHelper->getField('course', 'glossary_expand')]),
-                intval($course_data[$restoreHelper->getField('course', 'course_license')])
-            );
-            if (!isset($course_data['course_image'])) {
-                $course_data['course_image'] = null;
-            }
-            if (isset($course_data['home_layout'])) {
-                $upd_course_sql .= ', home_layout = ?d, course_image = ?s ';
-                $upd_course_args[] = $course_data['home_layout'];
-                $upd_course_args[] = $course_data['course_image'];
-            }
-            // Set keywords to '' if NULL
-            if (!isset($upd_course_args[0])) {
-                $upd_course_args[0] = '';
-            }
-            if ($course_data['view_type'] == 'weekly') {
-                $course_data['view_type'] = 'units';
-                $weekly_view = true;
+    Database::get()->transaction(function() use (&$new_course_code, &$new_course_id, $restoreThis, $course_code, $course_lang, $course_title, $course_desc, $course_vis, $course_prof, $webDir, &$tool_content, $urlServer, $urlAppend, $clone_course, $fetch_course) {
+        if (!$fetch_course) {
+            $departments = array();
+            if (isset($_POST['department'])) {
+                foreach ($_POST['department'] as $did) {
+                    $departments[] = intval($did);
+                }
             } else {
-                $weekly_view = false;
+                $minDep = Database::get()->querySingle("SELECT MIN(id) AS min FROM hierarchy");
+                if ($minDep) {
+                    $departments[0] = $minDep->min;
+                }
             }
-            // handle course weekly if exists
-            if (isset($course_data['view_type']) && isset($course_data['start_date']) && isset($course_data['end_date'])) {
-                if ($course_data['start_date'] == '0000-00-00') {
-                    $course_data['start_date'] = null;
-                }
-                if ($course_data['end_date'] == '0000-00-00') {
-                    $course_data['end_date'] = null;
-                }
-                $upd_course_sql .= " , view_type = ?s, start_date = ?t, end_date = ?t ";
-                array_push($upd_course_args,
-                    $course_data['view_type'],
-                    $course_data['start_date'],
-                    $course_data['end_date']
+
+            list($new_course_code, $new_course_id) = create_course($course_code, $course_lang, $course_title, $course_desc, $departments, $course_vis, $course_prof);
+            if (!$new_course_code) {
+                Session::flash('message', $GLOBALS['langGeneralError']);
+                Session::flash('alert-class', 'alert-danger');
+                redirect_to_home_page('modules/course_info/restore_course.php');
+            }
+
+            if (!file_exists($restoreThis)) {
+                redirect_to_home_page('modules/course_info/restore_course.php');
+            }
+            $config_data = unserialize(file_get_contents($restoreThis . '/config_vars'));
+            // If old $urlAppend didn't end in /, add it
+            if (substr($config_data['urlAppend'], -1) !== '/') {
+                $config_data['urlAppend'] .= '/';
+            }
+            $eclass_version = (isset($config_data['version'])) ? $config_data['version'] : null;
+            $backupData = null;
+            if (file_exists($restoreThis . '/backup.php')) {
+                $backupData = parse_backup_php($restoreThis . '/backup.php');
+                $eclass_version = $backupData['eclass_version'];
+            }
+            $restoreHelper = new RestoreHelper($eclass_version);
+
+            $course_file = $restoreThis . '/' . $restoreHelper->getFile('course');
+            if (file_exists($course_file)) {
+                $course_dataArr = unserialize(file_get_contents($course_file));
+                $course_data = $course_dataArr[0];
+                // update course query
+                $upd_course_sql = "UPDATE course SET keywords = ?s, doc_quota = ?f, video_quota = ?f, "
+                    . " group_quota = ?f, dropbox_quota = ?f, glossary_expand = ?d, course_license = ?d ";
+                $upd_course_args = array(
+                    $course_data[$restoreHelper->getField('course', 'keywords')],
+                    floatval($course_data['doc_quota']),
+                    floatval($course_data['video_quota']),
+                    floatval($course_data['group_quota']),
+                    floatval($course_data['dropbox_quota']),
+                    intval($course_data[$restoreHelper->getField('course', 'glossary_expand')]),
+                    intval($course_data[$restoreHelper->getField('course', 'course_license')])
                 );
-            } else {
-                $upd_course_sql .= " , view_type = ?s ";
-                array_push($upd_course_args, $course_data['view_type']);
+                if (!isset($course_data['course_image'])) {
+                    $course_data['course_image'] = null;
+                }
+                if (isset($course_data['home_layout'])) {
+                    $upd_course_sql .= ', home_layout = ?d, course_image = ?s ';
+                    $upd_course_args[] = $course_data['home_layout'];
+                    $upd_course_args[] = $course_data['course_image'];
+                }
+                // Set keywords to '' if NULL
+                if (!isset($upd_course_args[0])) {
+                    $upd_course_args[0] = '';
+                }
+                if ($course_data['view_type'] == 'weekly') {
+                    $course_data['view_type'] = 'units';
+                    $weekly_view = true;
+                } else {
+                    $weekly_view = false;
+                }
+                // handle course weekly if exists
+                if (isset($course_data['view_type']) && isset($course_data['start_date']) && isset($course_data['end_date'])) {
+                    if ($course_data['start_date'] == '0000-00-00') {
+                        $course_data['start_date'] = null;
+                    }
+                    if ($course_data['end_date'] == '0000-00-00') {
+                        $course_data['end_date'] = null;
+                    }
+                    $upd_course_sql .= " , view_type = ?s, start_date = ?t, end_date = ?t ";
+                    array_push($upd_course_args,
+                        $course_data['view_type'],
+                        $course_data['start_date'],
+                        $course_data['end_date']
+                    );
+                } else {
+                    $upd_course_sql .= " , view_type = ?s ";
+                    array_push($upd_course_args, $course_data['view_type']);
+                }
+                $upd_course_sql .= " WHERE id = ?d ";
+                $upd_course_args[] = intval($new_course_id);
+                Database::get()->query($upd_course_sql, $upd_course_args);
             }
-            $upd_course_sql .= " WHERE id = ?d ";
-            array_push($upd_course_args, intval($new_course_id));
-            Database::get()->query($upd_course_sql, $upd_course_args);
-        }
 
-        $userid_map = array();
-        $user_file = $restoreThis . '/user';
-        if (file_exists($user_file)) {
-            $cours_user = unserialize(file_get_contents($restoreThis . '/' . $restoreHelper->getFile('course_user')));
+            $userid_map = array();
+            $user_file = $restoreThis . '/user';
+            if (file_exists($user_file)) {
+                $cours_user = unserialize(file_get_contents($restoreThis . '/' . $restoreHelper->getFile('course_user')));
+                if ($clone_course) {
+                    $userid_map = clone_users($cours_user, $restoreHelper);
+                } else {
+                    $userid_map = restore_users(unserialize(file_get_contents($user_file)), $cours_user, $departments, $restoreHelper);
+                }
+                register_users($new_course_id, $userid_map, $cours_user, $restoreHelper);
+            }
+            $userid_map[0] = 0;
+            $userid_map[-1] = -1;
+            if (!isset($userid_map[1])) {
+                $userid_map[1] = 1;
+            }
+
+            $courseDir = "$webDir/courses/$new_course_code";
+            $videoDir = "$webDir/video/$new_course_code";
+            $oldCourseDir = $restoreThis . '/html';
+            move_dir($oldCourseDir, $courseDir);
+
             if ($clone_course) {
-                $userid_map = clone_users($cours_user, $restoreHelper);
+                recurse_copy($webDir . '/video/' . $GLOBALS['currentCourseCode'], $webDir . '/video/' . $new_course_code);
             } else {
-                $userid_map = restore_users(unserialize(file_get_contents($user_file)), $cours_user, $departments, $restoreHelper);
+                if (is_dir($restoreThis . '/video_files')) {
+                    move_dir($restoreThis . '/video_files', $videoDir);
+                }
             }
-            register_users($new_course_id, $userid_map, $cours_user, $restoreHelper);
-        }
-        $userid_map[0] = 0;
-        $userid_map[-1] = -1;
-        if (!isset($userid_map[1])) {
-            $userid_map[1] = 1;
-        }
 
-        $courseDir = "$webDir/courses/$new_course_code";
-        $videoDir = "$webDir/video/$new_course_code";
-        $oldCourseDir = $restoreThis . '/html';
-        move_dir($oldCourseDir, $courseDir);
+            course_index($new_course_code);
+            $tool_content .= "<div class='col-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>" . $GLOBALS['langCopyFiles'] . "</span></div></div>";
 
-        if ($clone_course) {
-            recurse_copy($webDir . '/video/' . $GLOBALS['currentCourseCode'], $webDir . '/video/' . $new_course_code);
-        } else {
-            if (is_dir($restoreThis . '/video_files')) {
-                move_dir($restoreThis . '/video_files', $videoDir);
+            require_once 'upgrade/functions.php';
+            load_global_messages();
+
+            $url_prefix_map = array(
+                $config_data['urlServer'] . 'modules/ebook/show.php/' . $course_data['code'] =>
+                    $urlServer . 'modules/ebook/show.php/' . $new_course_code,
+                $config_data['urlAppend'] . 'modules/ebook/show.php/' . $course_data['code'] =>
+                    $urlAppend . 'modules/ebook/show.php/' . $new_course_code,
+                $config_data['urlServer'] . 'modules/document/file.php/' . $course_data['code'] =>
+                    $urlServer . 'modules/document/file.php/' . $new_course_code,
+                $config_data['urlAppend'] . 'modules/document/file.php/' . $course_data['code'] =>
+                    $urlAppend . 'modules/document/file.php/' . $new_course_code,
+                $config_data['urlServer'] . 'courses/' . $course_data['code'] =>
+                    $urlServer . 'courses/' . $new_course_code,
+                $config_data['urlAppend'] . 'courses/' . $course_data['code'] =>
+                    $urlAppend . 'courses/' . $new_course_code,
+                $course_data['code'] =>
+                    $new_course_code);
+
+            // Update course description URLs if needed
+            $fixed_course_desc = strtr($course_desc, $url_prefix_map);
+            if ($fixed_course_desc != $course_desc) {
+                Database::get()->query('UPDATE course SET description = ?s WHERE id = ?d',
+                    $fixed_course_desc, $new_course_id);
             }
-        }
 
-        course_index($new_course_code);
-        $tool_content .= "<div class='col-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>" . $GLOBALS['langCopyFiles'] . "</span></div></div>";
-
-        require_once 'upgrade/functions.php';
-        load_global_messages();
-
-        $url_prefix_map = array(
-            $config_data['urlServer'] . 'modules/ebook/show.php/' . $course_data['code'] =>
-            $urlServer . 'modules/ebook/show.php/' . $new_course_code,
-            $config_data['urlAppend'] . 'modules/ebook/show.php/' . $course_data['code'] =>
-            $urlAppend . 'modules/ebook/show.php/' . $new_course_code,
-            $config_data['urlServer'] . 'modules/document/file.php/' . $course_data['code'] =>
-            $urlServer . 'modules/document/file.php/' . $new_course_code,
-            $config_data['urlAppend'] . 'modules/document/file.php/' . $course_data['code'] =>
-            $urlAppend . 'modules/document/file.php/' . $new_course_code,
-            $config_data['urlServer'] . 'courses/' . $course_data['code'] =>
-            $urlServer . 'courses/' . $new_course_code,
-            $config_data['urlAppend'] . 'courses/' . $course_data['code'] =>
-            $urlAppend . 'courses/' . $new_course_code,
-            $course_data['code'] =>
-            $new_course_code);
-
-        // Update course description URLs if needed
-        $fixed_course_desc = strtr($course_desc, $url_prefix_map);
-        if ($fixed_course_desc != $course_desc) {
-            Database::get()->query('UPDATE course SET description = ?s WHERE id = ?d',
-                $fixed_course_desc, $new_course_id);
-        }
-
-        if ($restoreHelper->getBackupVersion() === RestoreHelper::STYLE_3X) {
-            restore_table($restoreThis, 'course_module', array('set' => array('course_id' => $new_course_id), 'delete' => array('id')), $url_prefix_map, $backupData, $restoreHelper);
-            create_modules($new_course_id);
-        } else if ($restoreHelper->getBackupVersion() === RestoreHelper::STYLE_2X) {
-            create_modules($new_course_id);
-            foreach (get_tabledata_from_parsed('accueil', $backupData, $restoreHelper) as $accueil) {
-                Database::get()->query('UPDATE course_module SET visible = ?d WHERE course_id = ?d AND module_id = ?d',
-                    $accueil['visible'], $new_course_id, $accueil['id']);
+            if ($restoreHelper->getBackupVersion() === RestoreHelper::STYLE_3X) {
+                restore_table($restoreThis, 'course_module', array('set' => array('course_id' => $new_course_id), 'delete' => array('id')), $url_prefix_map, $backupData, $restoreHelper);
+                create_modules($new_course_id);
+            } else if ($restoreHelper->getBackupVersion() === RestoreHelper::STYLE_2X) {
+                create_modules($new_course_id);
+                foreach (get_tabledata_from_parsed('accueil', $backupData, $restoreHelper) as $accueil) {
+                    Database::get()->query('UPDATE course_module SET visible = ?d WHERE course_id = ?d AND module_id = ?d',
+                        $accueil['visible'], $new_course_id, $accueil['id']);
+                }
             }
-        }
+        } else { // fetch course
+            $new_course_id = $GLOBALS['course_id']; // current course id
+            $new_course_code = $GLOBALS['course_code']; // current course code
+            $backupData = null;
+            $weekly_view = false;
+            $courseDir = "$webDir/courses/$new_course_code";
+            $videoDir = "$webDir/video/$new_course_code";
+            $userid_map = array(); // no users
+            $config_data = unserialize(file_get_contents($restoreThis . '/config_vars'));
+            $restoreHelper = new RestoreHelper($config_data['version']);
+            $course_file = $restoreThis . '/course';
+            if (file_exists($course_file)) {
+                $course_dataArr = unserialize(file_get_contents($course_file));
+                $course_data = $course_dataArr[0];
+            }
+
+            if (file_exists($restoreThis . '/backup.php')) {
+                $backupData = parse_backup_php($restoreThis . '/backup.php');
+                $eclass_version = $backupData['eclass_version'];
+            }
+
+            // If old $urlAppend didn't end in /, add it
+            if (!str_ends_with($config_data['urlAppend'], '/')) {
+                $config_data['urlAppend'] .= '/';
+            }
+            $url_prefix_map = array(
+                $config_data['urlServer'] . 'modules/ebook/show.php/' . $course_data['code'] =>
+                    $urlServer . 'modules/ebook/show.php/' . $new_course_code,
+                $config_data['urlAppend'] . 'modules/ebook/show.php/' . $course_data['code'] =>
+                    $urlAppend . 'modules/ebook/show.php/' . $new_course_code,
+                $config_data['urlServer'] . 'modules/document/file.php/' . $course_data['code'] =>
+                    $urlServer . 'modules/document/file.php/' . $new_course_code,
+                $config_data['urlAppend'] . 'modules/document/file.php/' . $course_data['code'] =>
+                    $urlAppend . 'modules/document/file.php/' . $new_course_code,
+                $config_data['urlServer'] . 'courses/' . $course_data['code'] =>
+                    $urlServer . 'courses/' . $new_course_code,
+                $config_data['urlAppend'] . 'courses/' . $course_data['code'] =>
+                    $urlAppend . 'courses/' . $new_course_code,
+                $course_data['code'] =>
+                    $new_course_code);
+
+            move_dir($restoreThis . '/html', $webDir . '/courses/' . $new_course_code);
+            course_index($new_course_code);
+            recurse_copy($webDir . '/video/' . $course_data['code'], $webDir . '/video/' . $new_course_code);
+        } // end fetch course
+
         restore_table($restoreThis, 'announcement', array('set' => array('course_id' => $new_course_id), 'delete' => array('id', 'preview')), $url_prefix_map, $backupData, $restoreHelper);
 
         // Forums Restore
@@ -919,13 +965,19 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
 
 
         // Course_settings
-        if (file_exists("$restoreThis/course_settings")) {
-            restore_table($restoreThis, 'course_settings', array('set' => array('course_id' => $new_course_id)), $url_prefix_map, $backupData, $restoreHelper);
+        if (!$fetch_course) {
+            if (file_exists("$restoreThis/course_settings")) {
+                restore_table($restoreThis, 'course_settings', array('set' => array('course_id' => $new_course_id)), $url_prefix_map, $backupData, $restoreHelper);
+            }
         }
 
         // Polls
-        $poll_map = restore_table($restoreThis, 'poll', array('set' => array('course_id' => $new_course_id),
-            'map' => array('creator_id' => $userid_map), 'return_mapping' => 'pid', 'delete' => array('type')),
+        $poll_map = restore_table($restoreThis, 'poll', [
+            'set' => ['course_id' => $new_course_id],
+            'map' => ['creator_id' => $userid_map],
+            'map_missing_keep' => ['creator_id'],
+            'return_mapping' => 'pid',
+            'delete' => ['type']],
              $url_prefix_map, $backupData, $restoreHelper);
         $poll_to_specific_map = restore_table($restoreThis, 'poll_to_specific', array('map' => array('poll_id' => $poll_map),
             'return_mapping' => 'id'), $url_prefix_map, $backupData, $restoreHelper);
@@ -1191,6 +1243,7 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
                     'delete' => array('id'),
                 ), $url_prefix_map, $backupData, $restoreHelper);
         }
+        $unit_map[0] = 0;
 
         // Certificate
         $certificate_map = restore_table($restoreThis, 'certificate', array(
@@ -1217,9 +1270,6 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
         ), $url_prefix_map, $backupData, $restoreHelper);
 
         // Badge
-        if (!isset($unit_map)) {
-            $unit_map = 0;
-        }
         $badge_map = restore_table($restoreThis, 'badge', array(
             'set' => array('course_id' => $new_course_id),
             'map' => array('unit_id' => $unit_map),
@@ -1367,9 +1417,11 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
         removeDir($restoreThis);
 
         // index course after restoring
-        require_once 'modules/search/indexer.class.php';
-        Indexer::queueAsync(Indexer::REQUEST_REMOVEALLBYCOURSE, Indexer::RESOURCE_IDX, $new_course_id);
-        Indexer::queueAsync(Indexer::REQUEST_STOREALLBYCOURSE, Indexer::RESOURCE_IDX, $new_course_id);
+        require_once 'modules/search/classes/ConstantsUtil.php';
+        require_once 'modules/search/classes/SearchEngineFactory.php';
+        $searchEngine = SearchEngineFactory::create();
+        $searchEngine->indexResource(ConstantsUtil::REQUEST_REMOVEALLBYCOURSE, ConstantsUtil::RESOURCE_IDX, $new_course_id);
+        $searchEngine->indexResource(ConstantsUtil::REQUEST_STOREALLBYCOURSE, ConstantsUtil::RESOURCE_IDX, $new_course_id);
     });
 
     // check/cleanup video files after restore transaction
@@ -2045,6 +2097,7 @@ function certificate_criterion_map_function(&$data, $maps) {
         case 'wiki': $data['resource'] = $wiki_map[$data['resource']];
                     $data['module'] = MODULE_ID_WIKI;
                     break;
+        case 'assignment-submit':
         case 'assignment': $data['resource'] = $assignments_map[$data['resource']];
                     $data['module'] = MODULE_ID_ASSIGN;
                     break;
@@ -2102,6 +2155,7 @@ function badge_criterion_map_function(&$data, $maps) {
         case 'wiki': $data['resource'] = $wiki_map[$data['resource']];
                     $data['module'] = MODULE_ID_WIKI;
                     break;
+        case 'assignment-submit':
         case 'assignment': $data['resource'] = $assignments_map[$data['resource']];
                     $data['module'] = MODULE_ID_ASSIGN;
                     break;

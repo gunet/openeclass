@@ -810,7 +810,7 @@ function get_theme_options() {
 
 
                 .dataTables_wrapper .dataTables_length, 
-                .dataTables_wrapper .dataTables_filter, 
+                .dataTables_wrapper .dt-search, 
                 .dataTables_wrapper .dataTables_info, 
                 .dataTables_wrapper .dataTables_processing, 
                 .dataTables_wrapper .dataTables_paginate {

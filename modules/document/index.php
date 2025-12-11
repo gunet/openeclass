@@ -45,7 +45,8 @@ require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 require_once 'include/lib/mediaresource.factory.php';
-require_once 'modules/search/indexer.class.php';
+require_once 'modules/search/classes/ConstantsUtil.php';
+require_once 'modules/search/classes/SearchEngineFactory.php';
 require_once 'include/log.class.php';
 require_once 'modules/drives/clouddrive.php';
 require_once 'include/course_settings.php';
@@ -54,6 +55,8 @@ $require_help = true;
 $helpTopic = 'documents';
 
 doc_init();
+$searchEngine = SearchEngineFactory::create();
+
 
 if ($is_editor) {
 
@@ -70,7 +73,6 @@ if ($is_editor) {
     }
 
     if (isset($_GET['unzip'])) {
-
         $myFile = $basedir.$_GET['unzip'];
 
         if (isset($_GET['openDir'])) {
@@ -89,6 +91,9 @@ if ($is_editor) {
             for ($i = 0; $i < $zipFile->numFiles; $i++) {
                 $stat = $zipFile->statIndex($i, ZipArchive::FL_ENC_RAW);
                 $files_in_zip[$i] = $stat['name'];
+                if (!empty(my_basename($files_in_zip[$i]))) {
+                    validateUploadedFile(my_basename($files_in_zip[$i]), 3);
+                }
             }
             // extract files
             for ($i = 0; $i < $zipFile->numFiles; $i++) {
@@ -134,8 +139,8 @@ if ($is_editor) {
                             // remove from index if relevant (except non-main sysbsystems and metadata)
                             Database::get()->queryFunc("SELECT id FROM document WHERE course_id >= 1 AND subsystem = 0
                                                 AND format <> '.meta' AND path LIKE ?s",
-                                function ($r2) {
-                                    Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_DOCUMENT, $r2->id);
+                                function ($r2, $searchEngine) {
+                                    $searchEngine->indexResource(ConstantsUtil::REQUEST_REMOVE, ConstantsUtil::RESOURCE_DOCUMENT, $r2->id);
                                     if (resource_belongs_to_progress_data(MODULE_ID_DOCS, $r2->id)) {
                                         Session::Messages(trans('langResourceBelongsToCert'), 'alert-warning');
                                     }
@@ -169,13 +174,13 @@ if ($is_editor) {
             if ($_POST['bulk_action'] == 'visible') {
                 foreach ($cbids as $row_id) {
                     Database::get()->query("UPDATE document SET visible = ?d WHERE id = ?d", 1, $row_id);
-                    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $row_id);
+                    $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_DOCUMENT, $row_id);
                 }
             }
             if ($_POST['bulk_action'] == 'invisible') {
                 foreach ($cbids as $row_id) {
                     Database::get()->query("UPDATE document SET visible = ?d WHERE id = ?d", 0, $row_id);
-                    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $row_id);
+                    $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_DOCUMENT, $row_id);
                 }
             }
 
@@ -364,7 +369,7 @@ ModalBoxHelper::loadModalBox(true);
 copyright_info_init();
 
 if (defined('EBOOK_DOCUMENTS')) {
-    $navigation[] = array('url' => 'edit.php?course=' . $course_code . '&amp;id=' . $ebook_id, 'name' => $langEBookEdit);
+    $navigation[] = array('url' => 'edit.php?course=' . $course_code . '&id=' . $ebook_id, 'name' => $langEBookEdit);
 }
 
 if (isset($_GET['showQuota'])) {
@@ -562,7 +567,7 @@ if ($can_upload or $user_upload) {
     $error_response = $XHRUpload? 'session': 'html';
     $extra_path = '';
     if (isset($_POST['fileCloudInfo']) or isset($_FILES['userFile'])) {
-
+        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         if (isset($_POST['fileCloudInfo'])) { // upload cloud file
             $cloudfile = CloudFile::fromJSON($_POST['fileCloudInfo']);
             $uploaded = true;
@@ -739,7 +744,7 @@ if ($can_upload or $user_upload) {
                             , $_POST['file_comment'] ?? '', $_POST['file_title'] ?? ''
                             , $file_date, $file_date
                             , $file_format, $language, $_POST['file_copyrighted'], $uid)->lastInsertID;
-            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $id);
+            $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_DOCUMENT, $id);
             // Logging
             Log::record($course_id, MODULE_ID_DOCS, LOG_INSERT, [
                 'id' => $id,
@@ -844,7 +849,7 @@ if ($can_upload or $user_upload) {
                         purify($_POST['file_content']) .
                         "\n</body>\n</html>\n");
                     $session->setDocumentTimestamp($course_id);
-                    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $id);
+                    $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_DOCUMENT, $id);
                     Session::Messages($langDownloadEnd, 'alert-success');
                     if (isset($_GET['from']) and $_GET['from'] == 'ebookEdit') {
                         $redirect_url = "modules/ebook/edit.php?course=$course_code&id=$ebook_id";
@@ -931,6 +936,7 @@ if ($can_upload or $user_upload) {
 
     // Delete file or directory
     if (isset($_GET['delete']) and isset($_GET['filePath'])) {
+        if (!isset($_REQUEST['token']) || !validate_csrf_token($_REQUEST['token'])) csrf_token_error();
         $filePath =  getDirectReference($_GET['filePath']);
         $curDirPath = my_dirname(getDirectReference($_GET['filePath']));
         // Check if file actually exists
@@ -944,8 +950,8 @@ if ($can_upload or $user_upload) {
                 // remove from index if relevant (except non-main sysbsystems and metadata)
                 Database::get()->queryFunc("SELECT id FROM document WHERE course_id >= 1 AND subsystem = 0
                                                 AND format <> '.meta' AND path LIKE ?s",
-                    function ($r2) use($langResourceBelongsToCert) {
-                        Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_DOCUMENT, $r2->id);
+                    function ($r2) use($langResourceBelongsToCert, $searchEngine) {
+                        $searchEngine->indexResource(ConstantsUtil::REQUEST_REMOVE, ConstantsUtil::RESOURCE_DOCUMENT, $r2->id);
                         if (resource_belongs_to_progress_data(MODULE_ID_DOCS, $r2->id)) {
                             Session::flash('message',$langResourceBelongsToCert);
                             Session::flash('alert-class', 'alert-warning');
@@ -996,7 +1002,7 @@ if ($can_upload or $user_upload) {
 
         Database::get()->query("UPDATE document SET filename = ?s, date_modified = NOW()
                           WHERE $group_sql AND path=?s", $renameTo, $sourceFile);
-        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $r->id);
+        $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_DOCUMENT, $r->id);
         Log::record($course_id, MODULE_ID_DOCS, LOG_MODIFY, array(
             'path' => $sourceFile,
             'filename' => $r->filename,
@@ -1044,7 +1050,7 @@ if ($can_upload or $user_upload) {
             } else {
                 $session->setDocumentTimestamp($course_id);
                 $r = Database::get()->querySingle("SELECT id FROM document WHERE $group_sql AND path = ?s", $newDirPath);
-                Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $r->id);
+                $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_DOCUMENT, $r->id);
                 Session::Messages($langDirCr, 'alert-success');
             }
             $curDirPath = $_POST['newDirPath'];
@@ -1082,7 +1088,7 @@ if ($can_upload or $user_upload) {
                                               path = ?s"
                     , $_POST['file_comment'], $_POST['file_title']
                     , $_POST['file_copyrighted'], $commentPath);
-            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $res->id);
+            $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_DOCUMENT, $res->id);
             Log::record($course_id, MODULE_ID_DOCS, LOG_MODIFY, array('path' => $commentPath,
                 'filename' => $res->filename,
                 'comment' => $_POST['file_comment'],
@@ -1183,7 +1189,7 @@ if ($can_upload or $user_upload) {
                                 , ($newpath . ".xml"), ($_FILES['newFile']['name'] . ".xml"), ($oldpath . ".xml"));
                     }
                     $session->setDocumentTimestamp($course_id);
-                    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $docId);
+                    $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_DOCUMENT, $docId);
                     Log::record($course_id, MODULE_ID_DOCS, LOG_MODIFY, array('oldpath' => $oldpath,
                         'newpath' => $newpath,
                         'filename' => $_FILES['newFile']['name']));
@@ -1223,7 +1229,7 @@ if ($can_upload or $user_upload) {
         if ($row and (!$uploading_as_user or $row->lock_user_id == $uid)) {
             $dialogBox = 'comment';
             $curDirPath = my_dirname($comment);
-            $backUrl = documentBackLink($curDirPath);
+            $backUrl = htmlspecialchars_decode(documentBackLink($curDirPath));
             $navigation[] = array('url' => $backUrl, 'name' => $pageName);
             foreach ($license as $license_selection) {
                 $license_title[] = $license_selection['title'];
@@ -1231,7 +1237,7 @@ if ($can_upload or $user_upload) {
 
             $dialogData = array(
                 'backUrl' => $backUrl,
-                'base_url' => $base_url,
+                'base_url' => htmlspecialchars_decode($base_url),
                 'file' => $row,
                 'is_dir' => $row->format == '.dir',
                 'selected_license_title' => $row->copyrighted,
@@ -1283,7 +1289,7 @@ if ($can_upload or $user_upload) {
                 Database::get()->query("UPDATE document SET visible = ?d
                                                   WHERE $group_sql AND
                                                         path = ?s", $newVisibilityStatus, $visibilityPath);
-                Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $r->id);
+                $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_DOCUMENT, $r->id);
                 Session::Messages($langViMod, 'alert-success');
             }
             $curDirPath = my_dirname($visibilityPath);
@@ -1298,7 +1304,7 @@ if ($can_upload or $user_upload) {
                                               WHERE $group_sql AND
                                                     path = ?s", $new_public_status, $path);
             $r = Database::get()->querySingle("SELECT id FROM document WHERE $group_sql AND path = ?s", $path);
-            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $r->id);
+            $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_DOCUMENT, $r->id);
             Session::Messages($langViMod, 'alert-success');
             $curDirPath = my_dirname($path);
             redirect_to_current_dir();
@@ -1515,7 +1521,7 @@ foreach ($result as $row) {
                       'icon' => 'fa-star',
                       'show' => !$is_dir && $subsystem == MYDOCS && $subsystem_id == $uid && get_config('eportfolio_enable')),
                 array('title' => $langDelete,
-                      'url' => "{$base_url}filePath=$cmdDirName&amp;delete=1",
+                      'url' => "{$base_url}filePath=$cmdDirName&amp;delete=1&amp;" . generate_csrf_token_link_parameter() ,
                       'class' => 'delete',
                       'icon' => 'fa-xmark',
                       'confirm' => $langConfirmDelete . ' ' . q($row->filename))));

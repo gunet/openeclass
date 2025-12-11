@@ -35,7 +35,7 @@ require_once '../../include/baseTheme.php';
 require_once 'include/lib/learnPathLib.inc.php';
 
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langLearningPaths);
-$pageName = $langTrackAllPathExplanation;
+$toolName = $langTrackAllPathExplanation;
 
 load_js('datatables');
 
@@ -46,11 +46,15 @@ $head_content .= "<script type='text/javascript'>
                 'bAutoWidth': true,
                 'searchDelay': 1000,
                 'order' : [[2, 'desc']],
+                'lengthMenu': [10, 20, 30, -1],
                 'oLanguage': {
+                   'lengthLabels': {
+                   	    '-1': '$langAllOfThem'
+                    },
                    'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
                    'sZeroRecords':  '" . $langNoResult . "',
                    'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
-                   'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
+                   'sInfoEmpty':    '',
                    'sInfoFiltered': '',
                    'sInfoPostFix':  '',
                    'sSearch':       '',
@@ -63,16 +67,16 @@ $head_content .= "<script type='text/javascript'>
                    }
                }
             });
-            $('.dataTables_filter input').attr({
+            $('.dt-search input').attr({
                 'class' : 'form-control input-sm ms-0 mb-3',
                 'placeholder' : '$langSearch...'
             });
-            $('.dataTables_filter label').attr('aria-label', '$langSearch');  
+            $('.dt-search label').attr('aria-label', '$langSearch');  
         });
         </script>";
 
 if (!isset($_GET['pdf'])) {
-    $tool_content .= action_bar(array(
+    $action_bar = action_bar(array(
         array('title' => $langBack,
             'url' => "index.php",
             'icon' => 'fa-reply',
@@ -89,6 +93,7 @@ if (!isset($_GET['pdf'])) {
         false);
 }
 
+$tool_content .= $action_bar;
 
 $course_title = course_code_to_title($_GET['course']);
 
@@ -125,8 +130,8 @@ $usersList = Database::get()->queryArray("SELECT U.`surname`, U.`givenname`, U.`
 
 $tool_content .= "<tbody>";
 foreach ($usersList as $user) {
-    // list available learning paths
-    $learningPathList = Database::get()->queryArray("SELECT learnPath_id FROM lp_learnPath WHERE course_id = ?d", $course_id);
+    // list available visible learning paths
+    $learningPathList = Database::get()->queryArray("SELECT learnPath_id FROM lp_learnPath WHERE course_id = ?d AND visible = 1", $course_id);
     $iterator = 1;
     $globalprog = 0;
     $globaltime = "00:00:00";
@@ -213,8 +218,8 @@ if (isset($_GET['xls'])) {
             td { text-align: left; }
           </style>
         </head>
-        <body>" . get_platform_logo() .
-        "<h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
+        <body>
+        <h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
         <h2> " . q($langTrackAllPathExplanation) . "</h2>";
 
     $pdf_content .= $tool_content;
@@ -226,6 +231,8 @@ if (isset($_GET['xls'])) {
     $fontData = $defaultFontConfig['fontdata'];
 
     $mpdf = new Mpdf\Mpdf([
+        'margin_top' => 53,     // approx 200px
+        'margin_bottom' => 53,  // approx 200px
         'tempDir' => _MPDF_TEMP_PATH,
         'fontDir' => array_merge($fontDirs, [ $webDir . '/template/modern/fonts' ]),
         'fontdata' => $fontData + [
@@ -242,7 +249,19 @@ if (isset($_GET['xls'])) {
             ]
     ]);
 
-    $mpdf->setFooter('{DATE j-n-Y} || {PAGENO} / {nb}');
+
+    $mpdf->SetHTMLHeader(get_platform_logo());
+    $footerHtml = '
+    <div>
+        <table width="100%" style="border: none;">
+            <tr>
+                <td style="text-align: left;">{DATE j-n-Y}</td>
+                <td style="text-align: right;">{PAGENO} / {nb}</td>
+            </tr>
+        </table>
+    </div>
+    ' . get_platform_logo('','footer') . '';
+    $mpdf->SetHTMLFooter($footerHtml);
     $mpdf->SetCreator(course_id_to_prof($course_id));
     $mpdf->SetAuthor(course_id_to_prof($course_id));
     $mpdf->WriteHTML($pdf_content);

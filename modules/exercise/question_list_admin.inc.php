@@ -20,6 +20,12 @@
 /**
  * @file question_list_admin.inc.php
  */
+
+// Check if AI functionality is available
+require_once 'include/lib/ai/services/AIQuestionBankService.php';
+$aiService = new AIQuestionBankService($course_id, $uid);
+$aiAvailable = $aiService->isAvailable() && $aiService->isEnabledForCourse(AI_MODULE_QUESTION_POOL);
+
 $exerciseId = $_GET['exerciseId'];
 if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
     if (isset($_POST['toReorder'])) {
@@ -424,7 +430,9 @@ if ($objExercise->hasQuestionListWithRandomCriteria()) {
 
 
 $tool_content .= "<div>";
-    $tool_content .= action_bar(array(
+
+    // Build action bar buttons array
+    $actionBarButtons = array(
         array('title' => $langNewQu,
             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId&amp;newQuestion=yes",
             'icon' => 'fa-plus-circle',
@@ -444,8 +452,21 @@ $tool_content .= "<div>";
             'url' => "#",
             'modal-class' => 'questionSelection',
             'level' => 'primary-label',
-            'icon' => 'fa-building-flag')),
-        false);
+            'icon' => 'fa-building-flag')
+    );
+
+    // Add AI button if available
+    if ($aiAvailable) {
+        $actionBarButtons[] = array(
+            'title' => ($langAIGenerateQuestions ?? 'AI Generate Questions'),
+            'url' => "ai_question_generation.php?course=$course_code&exerciseId=$exerciseId",
+            'icon' => 'fa-magic',
+            'level' => 'primary-label',
+            'button-class' => 'btn-info'
+        );
+    }
+
+    $tool_content .= action_bar($actionBarButtons, false);
 $tool_content .= "</div>";
 
 if ($nbrQuestions) {
@@ -569,7 +590,7 @@ if ($nbrQuestions) {
                 $question_excl_legend = '';
             }
             // check if question has answers
-            if ($aType != FREE_TEXT and $aType != MATCHING and (!$objQuestionTmp->hasAnswers())) {
+            if ($aType != FREE_TEXT and $aType != ORAL and $aType != MATCHING and (!$objQuestionTmp->hasAnswers())) {
                 $question_excl_legend_2 = "&nbsp;&nbsp;<span class='fas fa-exclamation-triangle space-after-icon' 
                         data-bs-toggle='tooltip' data-bs-placement='right' data-bs-html='true' data-bs-title='$langNoQuestionAnswers'></span>";
             } else {

@@ -39,7 +39,6 @@ require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 require_once 'include/lib/mediaresource.factory.php';
 require_once 'include/log.class.php';
-require_once 'modules/search/indexer.class.php';
 require_once 'modules/admin/extconfig/externals.php';
 require_once 'modules/admin/extconfig/opendelosapp.php';
 require_once 'video_functions.php';
@@ -188,9 +187,8 @@ if (isset($_GET['form_input']) and $_GET['form_input'] === 'opendelos') {
     $data['jsonPublicObj'] = $jsonPublicObj;
     $data['jsonPrivateObj'] = $jsonPrivateObj;
     $data['checkAuth'] = $checkAuth;
-    $data['currentVideoLinks'] = getCurrentVideoLinks($course_id);
+    $data['currentVideoLinks'] = getCurrentVideoLinks();
     view('modules.video.editdelos', $data);
 } else {
     view('modules.video.index', $data);
 }
-

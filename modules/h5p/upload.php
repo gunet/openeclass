@@ -18,6 +18,7 @@
  */
 
 $require_current_course = true;
+$require_editor = true;
 require_once '../../include/baseTheme.php';
 
 $backUrl = $urlAppend . 'modules/h5p/index.php?course=' . $course_code;
