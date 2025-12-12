@@ -170,33 +170,56 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         add_param('search', 'wexpire');
     }
 
-    // Department search
     $depqryadd = '';
-    $dep = (isset($_GET['department'])) ? intval($_GET['department']) : 0;
+    $dep = isset($_GET['department']) ? intval($_GET['department']) : 0;
+    
+    // Filtering applies only to non-power users.
+    // Power users skip this entire block.
     if (!$is_power_user) {
-        $dep = 0;
-        // skip department block entirely
-    } else if ($dep || isDepartmentAdmin()) {
-
-        $depqryadd = ', user_department';
-
-        $subs = array();
-        if ($dep) {
-            $subs = $tree->buildSubtrees(array($dep));
-            add_param('department', $dep);
-        } else if (isDepartmentAdmin()) {
-            $subs = $user->getAdminDepartmentIds($uid);
+        // Case 1: Department Admin Users
+        // These users must be restricted only to their managed departments.
+        if (isDepartmentAdmin()) {
+            // Join with user_department table.
+            $depqryadd = ', user_department';
+            // Get IDs of departments the user administrates.
+            $adminDepartments = $user->getAdminDepartmentIds($uid);
+    
+            // If a specific department is selected, restrict results further,
+            // including any sub-departments.
+            if ($dep) {
+                add_param('department', $dep);
+                $adminDepartments = $tree->buildSubtrees([$dep]);
+            }
+    
+            // Construct the allowed department list.
+            $allowedDeps = implode(',', array_map('intval', $adminDepartments));
+    
+            // Apply filtering conditions.
+            $criteria[] = 'user.id = user_department.user';
+            $criteria[] = "department IN ($allowedDeps)";
         }
-
-        $ids = '';
-        foreach ($subs as $key => $id) {
-            $ids .= $id . ',';
-            validateNode($id, isDepartmentAdmin());
+    
+        // Case 2: Regular non-power users without department privileges
+        else {
+    
+            // Retrieve users belonging to this tenant.
+            $currentTenantUsers = getTenantUsers();
+            $tenantUserIds = array_map(fn($u) => intval($u->id), $currentTenantUsers);
+    
+            // If the tenant has no users, return an empty result set.
+            if (empty($tenantUserIds)) {
+                echo json_encode([
+                    'recordsTotal' => 0,
+                    'recordsFiltered' => 0,
+                    'aaData' => []
+                ]);
+                exit();
+            }
+    
+            // Apply tenant-level restriction.
+            $tenantIdList = implode(',', $tenantUserIds);
+            $criteria[] = "user.id IN ($tenantIdList)";
         }
-        // remove last ',' from $ids
-        $deps = substr($ids, 0, -1);
-        $criteria[] = 'user.id = user_department.user';
-        $criteria[] = 'department IN (' . $deps . ')';
     }
 
     // auth type search
