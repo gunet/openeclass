@@ -2396,13 +2396,21 @@ function display_available_attendances($element, $element_id, $unit_id = 0) {
 function display_points_game_settings($element_id): void
 {
     global $tool_content, $course_id, $course_code, $langProgressBasicInfo, $langEditChange, $langTitle,
-           $langDescription, $is_editor;
+           $langDescription, $langStartDate, $langEndDate, $langActivateLeaderboard, $langAnonymizeLeaderboard, 
+           $langYes, $langNo, $is_editor;
 
     $data = Database::get()->querySingle("SELECT title, description, active, starts, expires, config
                             FROM points_game WHERE id = ?d AND course_id = ?d", $element_id, $course_id);
                             
     $title = $data->title;
     $description = $data->description;
+    $start_date = date_format(date_create_from_format('Y-m-d H:i:s', $data->starts), 'd-m-Y H:i');;
+    $end_date = date_format(date_create_from_format('Y-m-d H:i:s', $data->expires), 'd-m-Y H:i');;
+    $config = json_decode($data->config, TRUE);
+    $enable_leaderboard = !empty($config['enable_leaderboard']);
+    $anonymize_leaderboard  = !empty($config['anonymize_leaderboard']);
+    $enable_leaderboard_str = $enable_leaderboard ? $langYes : $langNo;
+    $anonymize_leaderboard_str = $anonymize_leaderboard ? $langYes : $langNo;
 
     $tool_content .= "
                 <div class='col-12'>
@@ -2444,7 +2452,51 @@ function display_points_game_settings($element_id): void
                                             </div>
                                         </li>
 
-                                    </ul>
+                                        <li class='list-group-item element'>
+                                            <div class='row row-cols-1 row-cols-md-2 g-1'>
+                                                <div class='col-md-3 col-12'>
+                                                    <div class='pn-info-title-sct title-default'>$langStartDate</div>
+                                                </div>
+                                                <div class='col-md-9 col-12 title-default-line-height'>
+                                                    <div class='pn-info-text-sct'>$start_date</div>
+                                                </div>
+                                            </div>
+                                        </li>
+
+                                        <li class='list-group-item element'>
+                                            <div class='row row-cols-1 row-cols-md-2 g-1'>
+                                                <div class='col-md-3 col-12'>
+                                                    <div class='pn-info-title-sct title-default'>$langEndDate</div>
+                                                </div>
+                                                <div class='col-md-9 col-12 title-default-line-height'>
+                                                    <div class='pn-info-text-sct'>$end_date</div>
+                                                </div>
+                                            </div>
+                                        </li>
+
+                                        <li class='list-group-item element'>
+                                            <div class='row row-cols-1 row-cols-md-2 g-1'>
+                                                <div class='col-md-3 col-12'>
+                                                    <div class='pn-info-title-sct title-default'>$langActivateLeaderboard</div>
+                                                </div>
+                                                <div class='col-md-9 col-12 title-default-line-height'>
+                                                    <div class='pn-info-text-sct'>$enable_leaderboard_str</div>
+                                                </div>
+                                            </div>
+                                        </li>";
+                                        if ($enable_leaderboard) {
+                                        $tool_content .= "<li class='list-group-item element'>
+                                            <div class='row row-cols-1 row-cols-md-2 g-1'>
+                                                <div class='col-md-3 col-12'>
+                                                    <div class='pn-info-title-sct title-default'>$langAnonymizeLeaderboard</div>
+                                                </div>
+                                                <div class='col-md-9 col-12 title-default-line-height'>
+                                                    <div class='pn-info-text-sct'>$anonymize_leaderboard_str</div>
+                                                </div>
+                                            </div>
+                                        </li>";
+                                        }
+                    $tool_content .= "</ul>
                                 </div>
                             </div>
                         </div>
