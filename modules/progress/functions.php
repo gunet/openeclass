@@ -1277,11 +1277,16 @@ function display_available_assignments($element, $element_id, $activity_type, $u
 function display_available_exercises($element, $element_id, $unit_id = 0, $unit_resource_id = 0) {
 
     global $course_id, $course_code, $tool_content, $urlServer, $langExercices,
-            $langNoExercises, $langChoice, $langAddModulesButton,
+            $langNoExercises, $langChoice, $langAddModulesButton, $langPoints,
             $langOperator, $langGradebookGrade, $langSelect, $langPollFillText;
 
-    $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
-
+    if ($element == 'certificate') {
+        $element_name = 'certificate_id';
+    } elseif ($element == 'badge') {
+        $element_name = 'badge_id';
+    } else {
+        $element_name = 'points_game_id';
+    }
 
     if ($unit_id) {
         if ($unit_resource_id) {
@@ -1329,8 +1334,11 @@ function display_available_exercises($element, $element_id, $unit_id = 0, $unit_
                 "<thead><tr class='list-header'>" .
                 "<th class='text-start ps-2'>$langExercices</th>" .
                 "<th style='width:5px;'>$langOperator</th>" .
-                "<th style='width:50px;'>$langGradebookGrade</th>" .
-                "<th style='width:20px;'>$langChoice</th>" .
+                "<th style='width:50px;'>$langGradebookGrade</th>";
+        if ($element == 'points_game') {
+            $tool_content .= "<th style='width:50px;'>$langPoints</th>";
+        }
+        $tool_content .= "<th style='width:20px;'>$langChoice</th>" .
                 "</tr></thead>";
         foreach ($quizinfo as $entry) {
             $exercise_id = $entry['id'];
@@ -1339,6 +1347,9 @@ function display_available_exercises($element, $element_id, $unit_id = 0, $unit_
             $tool_content .= "<td><a href='{$urlServer}modules/exercise/exercise_submit.php?course=$course_code&amp;exerciseId=$exercise_id'>" . q($entry['name']) . "</a>" . $comments . "</td>";
             $tool_content .= "<td>". selection(get_operators(), "operator[$exercise_id]") . "</td>";
             $tool_content .= "<td><input aria-label='$langPollFillText' class='form-control' type='text' name='threshold[$exercise_id]' value=''></td>";
+            if ($element == 'points_game') {
+                $tool_content .= "<td><input aria-label='$langPollFillText' class='form-control' type='text' name='points[$exercise_id]' value=''></td>";
+            }
             $tool_content .= "<td><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='exercise[]' value='$exercise_id'><span class='checkmark'></span></label></td>";
             $tool_content .= "</tr>";
         }
@@ -1358,8 +1369,8 @@ function display_available_documents($element, $element_id, $unit_id = 0, $unit_
 
     global $webDir, $tool_content,
             $langDirectory, $langUp, $langName, $langSize,
-            $langDate, $langAddModulesButton, $langChoice,
-            $langNoDocuments, $course_code, $group_sql, $langSelect;
+            $langDate, $langAddModulesButton, $langChoice, $langPollFillText,
+            $langNoDocuments, $course_code, $group_sql, $langSelect, $langPoints;
 
     require_once 'modules/document/doc_init.php';
     require_once 'include/lib/mediaresource.factory.php';
@@ -1376,7 +1387,13 @@ function display_available_documents($element, $element_id, $unit_id = 0, $unit_
     $dir_setter = $dir_param ? ('&amp;dir=' . $dir_param) : '';
     $dir_html = $dir_param ? "<input type='hidden' name='dir' value='$dir_param'>" : '';
 
-    $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
+    if ($element == 'certificate') {
+        $element_name = 'certificate_id';
+    } elseif ($element == 'badge') {
+        $element_name = 'badge_id';
+    } else {
+        $element_name = 'points_game_id';
+    }
 
     if ($unit_id) {
         if ($unit_resource_id) {
@@ -1463,8 +1480,11 @@ function display_available_documents($element, $element_id, $unit_id = 0, $unit_
                 "<thead><tr class='list-header'>" .
                 "<th>$langName</th>" .
                 "<th>$langSize</th>" .
-                "<th>$langDate</th>" .
-                "<th style='width:20px;'>$langChoice</th>" .
+                "<th>$langDate</th>";
+        if ($element == 'points_game') {
+            $tool_content .= "<th>$langPoints</th>";
+        }
+        $tool_content .="<th style='width:20px;'>$langChoice</th>" .
                 "</tr></thead>";
         $counter = 0;
         foreach (array(true, false) as $is_dir) {
@@ -1512,6 +1532,9 @@ function display_available_documents($element, $element_id, $unit_id = 0, $unit_
                     $date = format_locale_date(strtotime($entry['date']), 'short', false);
                     $tool_content .= "<td>$size</td><td>$date</td>";
                 }
+                if ($element == 'points_game') {
+                    $tool_content .= "<td><input aria-label='$langPollFillText' class='form-control' type='text' name='points[$entry[id]]' value=''></td>";
+                }
                 $tool_content .= "<td><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='document[]' value='$entry[id]' /><span class='checkmark'></span></label></td>";
                 $tool_content .= "</tr>";
                 $counter++;
@@ -1534,9 +1557,15 @@ function display_available_blogs($element, $element_id, $unit_id = 0) {
 
     global $tool_content, $langAddModulesButton, $langNumOfBlogs,
            $course_code, $langTitle, $langValue, $langResourceAlreadyAdded,
-           $langChoice, $langOperator, $langSelect, $langPollFillText;
+           $langChoice, $langOperator, $langSelect, $langPollFillText, $langPoints;
 
-    $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
+    if ($element == 'certificate') {
+        $element_name = 'certificate_id';
+    } elseif ($element == 'badge') {
+        $element_name = 'badge_id';
+    } else {
+        $element_name = 'points_game_id';
+    }
 
     $res = Database::get()->queryArray("SELECT resource FROM {$element}_criterion WHERE $element = ?d
                                         AND resource IS NULL
@@ -1552,21 +1581,29 @@ function display_available_blogs($element, $element_id, $unit_id = 0) {
             $action = "index.php?course=$course_code";
         }
 
+        $width = $element == 'points_game' ? '15' : '30';
+
         $tool_content .= "<form action=$action method='post'>" .
                 "<input type='hidden' name='$element_name' value='$element_id'>" .
                 "<div class='table-responsive'><table class='table-default'>" .
                 "<thead><tr class='list-header'>" .
                 "<th style='width:70%;'>$langTitle</th>" .
                 "<th style='width:5px;'>$langOperator</th>" .
-                "<th style='width:30px;'>$langValue</th>" .
-                "<th style='width:20px;'>$langChoice</th>" .
+                "<th style='width:".$width."px;'>$langValue</th>";
+        if ($element == 'points_game') {
+            $tool_content .= "<th style='width:".$width."px;'>$langPoints</th>";;
+        }
+        $tool_content .= "<th style='width:20px;'>$langChoice</th>" .
                 "</tr></thead>";
 
             $tool_content .= "<tr>" .
                     "<td>$langNumOfBlogs</td>" .
                     "<td>". selection(get_operators(), "operator") . "</td>".
-                    "<td><input aria-label='$langPollFillText' class='form-control' type='text' name='threshold' value=''></td>" .
-                    "<td><label class='label-container' aria-label='$langSelect'><input name='blog' value='1' type='checkbox'><span class='checkmark'></span></label></td>" .
+                    "<td><input aria-label='$langPollFillText' class='form-control' type='text' name='threshold' value=''></td>";
+            if ($element == 'points_game') {
+                $tool_content .= "<td><input aria-label='$langPollFillText' class='form-control' type='text' name='points' value=''></td>";
+            }
+            $tool_content .= "<td><label class='label-container' aria-label='$langSelect'><input name='blog' value='1' type='checkbox'><span class='checkmark'></span></label></td>" .
                     "</tr>";
 
         $tool_content .= "</table></div>" .
@@ -1583,10 +1620,16 @@ function display_available_blogs($element, $element_id, $unit_id = 0) {
 function display_available_blogcomments($element, $element_id, $unit_id = 0) {
 
     global $tool_content, $langAddModulesButton, $langBlogEmpty,
-           $urlServer, $course_code, $langTitle, $langValue,
+           $urlServer, $course_code, $langTitle, $langValue, $langPoints,
            $langChoice, $langDate, $course_id, $langOperator, $langSelect, $langPollFillText;
 
-    $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
+    if ($element == 'certificate') {
+        $element_name = 'certificate_id';
+    } elseif ($element == 'badge') {
+        $element_name = 'badge_id';
+    } else {
+        $element_name = 'points_game_id';
+    }
 
     $result = Database::get()->queryArray("SELECT * FROM blog_post WHERE course_id = ?d AND id NOT IN
                                 (SELECT resource FROM {$element}_criterion WHERE $element = ?d
@@ -1604,15 +1647,20 @@ function display_available_blogcomments($element, $element_id, $unit_id = 0) {
             $action = "index.php?course=$course_code";
         }
 
+        $width = ($element == 'points_game') ? '25' : '50';
+
         $tool_content .= "<form action=$action method='post'>" .
                 "<input type='hidden' name='$element_name' value='$element_id'>" .
                 "<div class='table-responsive'><table class='table-default'>" .
                 "<thead><tr class='list-header'>" .
-                "<th style='width:50%;'>$langTitle</th>" .
+                "<th style='width:45%;'>$langTitle</th>" .
                 "<th>$langDate</th>" .
                 "<th style='width:5px;'>$langOperator</th>" .
-                "<th style='width:50px;'>$langValue</th>" .
-                "<th style='width:20px;'>$langChoice</th>" .
+                "<th style='width:".$width."px;'>$langValue</th>";
+        if ($element == 'points_game') {
+            $tool_content .= "<th style='width:".$width."px;'>$langPoints</th>";
+        }
+        $tool_content .= "<th style='width:20px;'>$langChoice</th>" .
                 "</tr></thead>";
         foreach ($result as $row) {
             $blog_id = $row->id;
@@ -1620,8 +1668,11 @@ function display_available_blogcomments($element, $element_id, $unit_id = 0) {
                     "<td><a href='{$urlServer}modules/blog/index.php?course=$course_code&amp;action=showPost&amp;pId=$blog_id#comments-title'>" . q($row->title) . "</a></td>" .
                     "<td>" . format_locale_date(strtotime($row->time), 'short') . "</td>
                     <td>". selection(get_operators(), "operator[$blog_id]") . "</td>".
-                    "<td><input aria-label='$langPollFillText' class='form-control' type='text' name='threshold[$blog_id]' value=''></td>" .
-                    "<td><label class='label-container' aria-label='$langSelect'><input name='blogcomment[]' value='$blog_id' type='checkbox'><span class='checkmark'></span></label></td>" .
+                    "<td><input aria-label='$langPollFillText' class='form-control' type='text' name='threshold[$blog_id]' value=''></td>";
+            if ($element == 'points_game') {
+                $tool_content .= "<td><input aria-label='$langPollFillText' class='form-control' type='text' name='points[$blog_id]' value=''></td>";
+            }
+            $tool_content .= "<td><label class='label-container' aria-label='$langSelect'><input name='blogcomment[]' value='$blog_id' type='checkbox'><span class='checkmark'></span></label></td>" .
                     "</tr>";
         }
         $tool_content .= "</table></div>" .
@@ -1649,9 +1700,15 @@ function display_available_forums($element, $element_id, $unit_id = 0) {
 
     global $tool_content, $langAddModulesButton, $langNumInForum,
            $course_code, $langTitle, $langValue, $langResourceAlreadyAdded,
-           $langChoice, $langOperator, $langSelect, $langPollFillText;
+           $langChoice, $langOperator, $langSelect, $langPollFillText, $langPoints;
 
-    $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
+    if ($element == 'certificate') {
+        $element_name = 'certificate_id';
+    } elseif ($element == 'badge') {
+        $element_name = 'badge_id';
+    } else {
+        $element_name = 'points_game_id';
+    }
 
     $res = Database::get()->queryArray("SELECT resource FROM {$element}_criterion WHERE $element = ?d
                                             AND resource IS NULL
@@ -1668,21 +1725,29 @@ function display_available_forums($element, $element_id, $unit_id = 0) {
             $action = "index.php?course=$course_code";
         }
 
+        $width = ($element == 'points_game') ? '20' : '30';
+
         $tool_content .= "<form action=$action method='post'>" .
                 "<input type='hidden' name='$element_name' value='$element_id'>" .
                 "<div class='table-responsive'><table class='table-default'>" .
                 "<thead><tr class='list-header'>" .
                 "<th style='width:70%;'>$langTitle</th>" .
                 "<th style='width:5px;'>$langOperator</th>" .
-                "<th style='width:30px;'>$langValue</th>" .
-                "<th style='width:20px;'>$langChoice</th>" .
+                "<th style='width:".$width."px;'>$langValue</th>";
+        if ($element == 'points_game') {
+            $tool_content .= "<th style='width:".$width."px;'>$langPoints</th>";
+        }
+        $tool_content .= "<th style='width:20px;'>$langChoice</th>" .
                 "</tr></thead>";
 
             $tool_content .= "<tr>" .
                     "<td>$langNumInForum</td>" .
                     "<td>". selection(get_operators(), "operator") . "</td>".
-                    "<td><input aria-label='$langPollFillText' class='form-control' type='text' name='threshold' value=''></td>" .
-                    "<td><label class='label-container' aria-label='$langSelect'><input name='forum' value='1' type='checkbox'><span class='checkmark'></span></label></td>" .
+                    "<td><input aria-label='$langPollFillText' class='form-control' type='text' name='threshold' value=''></td>";
+            if ($element == 'points_game') {
+                $tool_content .= "<td><input aria-label='$langPollFillText' class='form-control' type='text' name='points' value=''></td>";
+            }
+            $tool_content .= "<td><label class='label-container' aria-label='$langSelect'><input name='forum' value='1' type='checkbox'><span class='checkmark'></span></label></td>" .
                     "</tr>";
 
         $tool_content .= "</table></div>" .
@@ -1700,11 +1765,17 @@ function display_available_forums($element, $element_id, $unit_id = 0) {
 function display_available_forumtopics($element, $element_id, $unit_id = 0, $unit_resource_id = 0) {
 
     global $tool_content, $urlServer, $course_id,
-           $langAddModulesButton, $langChoice, $langNoForumTopic,
+           $langAddModulesButton, $langChoice, $langNoForumTopic, $langPoints,
            $langTopics, $course_code, $langOperator, $langValue, $langSelect, $langPollFillText;
 
-    $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
-
+    if ($element == 'certificate') {
+        $element_name = 'certificate_id';
+    } elseif ($element == 'badge') {
+        $element_name = 'badge_id';
+    } else {
+        $element_name = 'points_game_id';
+    }
+    
     if ($unit_id) {
         if ($unit_resource_id) {
             $result = Database::get()->queryArray("SELECT forum_topic.id, forum_topic.title, topic_time, forum_id
@@ -1749,14 +1820,19 @@ function display_available_forumtopics($element, $element_id, $unit_id = 0, $uni
             $action = "index.php?course=$course_code";
         }
 
+        $width = ($element == 'points_game') ? '25' : '50';
+
         $tool_content .= "<form action=$action method='post'>" .
                 "<input type='hidden' name='$element_name' value='$element_id'>" .
                 "<div class='table-responsive'><table class='table-default'>" .
                 "<thead><tr class='list-header'>" .
                 "<th>$langTopics</th>" .
                 "<th style='width:5px;'>$langOperator</th>" .
-                "<th style='width:50px;'>$langValue</th>" .
-                "<th style='width:20px;'>$langChoice</th>" .
+                "<th style='width:".$width."px;'>$langValue</th>";
+        if ($element == 'points_game') {
+            $tool_content .= "<th style='width:".$width."px;'>$langPoints</th>";
+        }
+        $tool_content .= "<th style='width:20px;'>$langChoice</th>" .
                 "</tr></thead>";
 
         foreach ($topicinfo as $topicentry) {
@@ -1766,6 +1842,9 @@ function display_available_forumtopics($element, $element_id, $unit_id = 0, $uni
             $tool_content .= "<td>&nbsp;".icon('fa-comments')."&nbsp;&nbsp;<a href='{$urlServer}modules/forum/viewtopic.php?course=$course_code&amp;topic=$topic_id&amp;forum=$forum_id'>" . q($topicentry['topic_title']) . "</a></td>";
             $tool_content .= "<td>". selection(get_operators(), "operator[$topic_id]") . "</td>";
             $tool_content .= "<td><input aria-label='$langPollFillText' class='form-control' type='text' name='threshold[$topic_id]' value=''></td>";
+            if ($element == 'points_game') {
+                $tool_content .= "<td><input aria-label='$langPollFillText' class='form-control' type='text' name='points[$topic_id]' value=''></td>";
+            }
             $tool_content .= "<td><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='forumtopic[]' value='$topic_id'><span class='checkmark'></span></label></td>";
             $tool_content .= "</tr>";
         }

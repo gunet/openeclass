@@ -86,7 +86,24 @@ function add_exercise_to_certificate($element, $element_id) {
 
     if (isset($_POST['exercise'])) {
         foreach ($_POST['exercise'] as $datakey => $data) {
-            Database::get()->query("INSERT INTO {$element}_criterion
+            if ($element == 'points_game') {
+                Database::get()->query("INSERT INTO {$element}_criterion
+                                    SET $element = ?d,
+                                        module = " . MODULE_ID_EXERCISE . ",
+                                        resource = ?d,
+                                        activity_type = '" . ExerciseEvent::ACTIVITY . "',
+                                        operator = ?s,
+                                        threshold = ?f,
+                                        points = ?d,
+                                        criterion_type = ?s",
+                $element_id,
+                $_POST['exercise'][$datakey],
+                $_POST['operator'][$data],
+                $_POST['threshold'][$data],
+                $_POST['points'][$data],
+                'onetime');
+            } else {
+                Database::get()->query("INSERT INTO {$element}_criterion
                                     SET $element = ?d,
                                         module = " . MODULE_ID_EXERCISE . ",
                                         resource = ?d,
@@ -97,6 +114,7 @@ function add_exercise_to_certificate($element, $element_id) {
                 $_POST['exercise'][$datakey],
                 $_POST['operator'][$data],
                 $_POST['threshold'][$data]);
+            }
         }
     }
     return;
@@ -113,12 +131,23 @@ function add_document_to_certificate($element, $element_id) {
 
     if (isset($_POST['document'])) {
         foreach ($_POST['document'] as $data) {
-            Database::get()->query("INSERT INTO {$element}_criterion
+            if ($element == 'points_game') {
+                Database::get()->query("INSERT INTO {$element}_criterion
+                            SET $element = ?d,
+                                module= " . MODULE_ID_DOCS . ",
+                                resource = ?d,
+                                activity_type = '" . ViewingEvent::DOCUMENT_ACTIVITY . "',
+                                points = ?d,
+                                criterion_type = ?s",
+                $element_id, $data, $_POST['points'][$data], 'onetime');
+            } else {
+                Database::get()->query("INSERT INTO {$element}_criterion
                             SET $element = ?d,
                                 module= " . MODULE_ID_DOCS . ",
                                 resource = ?d,
                                 activity_type = '" . ViewingEvent::DOCUMENT_ACTIVITY . "'",
                 $element_id, $data);
+            }
         }
     }
     return;
@@ -302,7 +331,23 @@ function add_ebook_to_certificate($element, $element_id) {
 function add_forum_to_certificate($element, $element_id) {
 
     if (isset($_POST[ForumEvent::ACTIVITY])) {
-        Database::get()->query("INSERT INTO {$element}_criterion
+        if ($element == 'points_game') {
+            Database::get()->query("INSERT INTO {$element}_criterion
+                            SET $element = ?d,
+                            module = " . MODULE_ID_FORUM . ",
+                            resource = null,
+                            activity_type = '" . ForumEvent::ACTIVITY . "',
+                            operator = ?s,
+                            threshold = ?f,
+                            points = ?d,
+                            criterion_type = ?s",
+            $element_id,
+            $_POST['operator'],
+            $_POST['threshold'],
+            $_POST['points'],
+            'onetime');
+        } else {
+            Database::get()->query("INSERT INTO {$element}_criterion
                             SET $element = ?d,
                             module = " . MODULE_ID_FORUM . ",
                             resource = null,
@@ -312,6 +357,7 @@ function add_forum_to_certificate($element, $element_id) {
             $element_id,
             $_POST['operator'],
             $_POST['threshold']);
+        }
     }
     return;
 }
@@ -326,17 +372,35 @@ function add_forum_to_certificate($element, $element_id) {
 function add_forumtopic_to_certificate($element, $element_id) {
     if (isset($_POST[ForumTopicEvent::ACTIVITY])) {
         foreach ($_POST[ForumTopicEvent::ACTIVITY] as $datakey => $data) {
-            Database::get()->query("INSERT INTO {$element}_criterion
+            if ($element == 'points_game') {
+                Database::get()->query("INSERT INTO {$element}_criterion
                                 SET $element = ?d,
                                 module = " . MODULE_ID_FORUM . ",
                                 resource = ?d,
                                 activity_type = '" . ForumTopicEvent::ACTIVITY . "',
                                 operator = ?s,
-                                threshold = ?f",
+                                threshold = ?f,
+                                points = ?d,
+                                criterion_type =?s",
                 $element_id,
                 $_POST['forumtopic'][$datakey],
                 $_POST['operator'][$data],
-                $_POST['threshold'][$data]);
+                $_POST['threshold'][$data],
+                $_POST['points'][$data],
+                'onetime');
+            } else {
+                Database::get()->query("INSERT INTO {$element}_criterion
+                                    SET $element = ?d,
+                                    module = " . MODULE_ID_FORUM . ",
+                                    resource = ?d,
+                                    activity_type = '" . ForumTopicEvent::ACTIVITY . "',
+                                    operator = ?s,
+                                    threshold = ?f",
+                    $element_id,
+                    $_POST['forumtopic'][$datakey],
+                    $_POST['operator'][$data],
+                    $_POST['threshold'][$data]);
+            }
         }
     }
     return;
@@ -350,7 +414,23 @@ function add_forumtopic_to_certificate($element, $element_id) {
 function add_blog_to_certificate($element, $element_id) {
 
     if (isset($_POST[BlogEvent::ACTIVITY])) {
-        Database::get()->query("INSERT INTO {$element}_criterion
+        if ($element == 'points_game') {
+            Database::get()->query("INSERT INTO {$element}_criterion
+                            SET $element = ?d,
+                            module = " . MODULE_ID_BLOG . ",
+                            resource = null,
+                            activity_type = '" . BlogEvent::ACTIVITY . "',
+                            operator = ?s,
+                            threshold = ?f,
+                            points = ?d,
+                            criterion_type = ?s",
+            $element_id,
+            $_POST['operator'],
+            $_POST['threshold'],
+            $_POST['points'],
+            'onetime');
+        } else {
+            Database::get()->query("INSERT INTO {$element}_criterion
                             SET $element = ?d,
                             module = " . MODULE_ID_BLOG . ",
                             resource = null,
@@ -360,6 +440,7 @@ function add_blog_to_certificate($element, $element_id) {
             $element_id,
             $_POST['operator'],
             $_POST['threshold']);
+        }
     }
 }
 
@@ -372,7 +453,24 @@ function add_blogcomment_to_certificate($element, $element_id) {
 
     if (isset($_POST['blogcomment'])) {
         foreach ($_POST['blogcomment'] as $datakey => $data) {
-            Database::get()->query("INSERT INTO {$element}_criterion
+            if ($element == 'points_game') {
+                Database::get()->query("INSERT INTO {$element}_criterion
+                                SET $element = ?d,
+                                module = " . MODULE_ID_COMMENTS . ",
+                                resource = ?d,
+                                activity_type = '" . CommentEvent::BLOG_ACTIVITY . "',
+                                operator = ?s,
+                                threshold = ?f,
+                                points = ?d,
+                                criterion_type = ?s",
+                $element_id,
+                $_POST['blogcomment'][$datakey],
+                $_POST['operator'][$data],
+                $_POST['threshold'][$data],
+                $_POST['points'][$data],
+                'onetime');
+            } else {
+                Database::get()->query("INSERT INTO {$element}_criterion
                                 SET $element = ?d,
                                 module = " . MODULE_ID_COMMENTS . ",
                                 resource = ?d,
@@ -383,6 +481,7 @@ function add_blogcomment_to_certificate($element, $element_id) {
                 $_POST['blogcomment'][$datakey],
                 $_POST['operator'][$data],
                 $_POST['threshold'][$data]);
+            }
         }
     }
 }
