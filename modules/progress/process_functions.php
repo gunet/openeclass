@@ -978,12 +978,22 @@ function modify($element, $element_id, $title, $description, $message, $value, $
  * @param type $element
  */
 function modify_certificate_activity($element, $element_id, $activity_id) {
-    Database::get()->query("UPDATE {$element}_criterion
+    if ($element == 'points_game') {
+        Database::get()->query("UPDATE {$element}_criterion
+                                SET threshold = ?f,
+                                    operator = ?s,
+                                    points = ?d
+                                WHERE id = ?d
+                                AND $element = ?d",
+                                $_POST['cert_threshold'], $_POST['cert_operator'], $_POST['points'], $activity_id, $element_id);
+    } else {
+        Database::get()->query("UPDATE {$element}_criterion
                                 SET threshold = ?f,
                                     operator = ?s
                                 WHERE id = ?d
                                 AND $element = ?d",
-        $_POST['cert_threshold'], $_POST['cert_operator'], $activity_id, $element_id);
+                                $_POST['cert_threshold'], $_POST['cert_operator'], $activity_id, $element_id);
+    }
 }
 
 

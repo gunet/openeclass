@@ -1120,9 +1120,16 @@ function insert_activity($element, $element_id, $activity, $unit_id = 0, $unit_r
  * @param int $unit_id
  */
 function display_modification_activity($element, $element_id, $activity_id, $unit_id = 0) {
-    global $tool_content, $course_code, $langModify, $langOperator, $langUsedCertRes, $langImgFormsDes;
+    global $tool_content, $course_code, $langModify, $langOperator, $langUsedCertRes, $langImgFormsDes, $langPoints, $langValue;
 
-    $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
+    if ($element == 'certificate') {
+        $element_name = 'certificate_id';
+    } elseif ($element == 'badge') {
+        $element_name = 'badge_id';
+    } else {
+        $element_name = 'points_game_id';
+    }
+    
     if (resource_usage($element, $activity_id)) { // check if a resource has been used by user
         Session::flash('message',$langUsedCertRes);
         Session::flash('alert-class', 'alert-warning');
@@ -1133,7 +1140,8 @@ function display_modification_activity($element, $element_id, $activity_id, $uni
         }
 
     } else { // otherwise editing is not allowed
-        $data = Database::get()->querySingle("SELECT threshold, operator FROM {$element}_criterion
+        $points_sql = ($element == 'points_game') ? ', points': '';
+        $data = Database::get()->querySingle("SELECT threshold, operator".$points_sql." FROM {$element}_criterion
                                             WHERE id = ?d AND $element = ?d", $activity_id, $element_id);
 
         if ($unit_id) {
@@ -1150,7 +1158,12 @@ function display_modification_activity($element, $element_id, $activity_id, $uni
         $tool_content .= "<div class='form-group mt-3'>";
         $tool_content .= "<label for='name' class='col-sm-1 control-label-notes'>$langOperator:</label>";
         $tool_content .= "<span class='col-sm-2'>" . selection($operators, 'cert_operator', $data->operator) . "</span>";
+        $tool_content .= "<label for='name' class='col-sm-1 control-label-notes'>$langValue:</label>";
         $tool_content .= "<span class='col-sm-2'><input class='form-control mt-3' type='text' name='cert_threshold' value='$data->threshold'></span>";
+        if ($element == 'points_game') {
+            $tool_content .= "<label for='name' class='col-sm-1 control-label-notes'>$langPoints:</label>";
+            $tool_content .= "<span class='col-sm-2'><input class='form-control mt-3' type='text' name='points' value='$data->points'></span>";
+        }
         $tool_content .= "</div>";
         $tool_content .= "<div class='col-sm-5 col-sm-offset-5 mt-3'>";
         $tool_content .= "<input class='btn submitAdminBtn' type='submit' name='mod_cert_activity' value='$langModify'>";
