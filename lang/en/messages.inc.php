@@ -4662,6 +4662,7 @@ $langAttendanceNoActMessageTc = "There are no conferences for automatic registra
 $langSGradebookBook = "Register grade";
 $langPointsGames = "Points games";
 $langPointsGame = "Points game";
+$langPoints = "Points";
 $langNewPointsGame = "New points game";
 $langNewPointsGameSuc = "New points game created succesfully";
 $langActivateLeaderboard = "Enable leaderboard";

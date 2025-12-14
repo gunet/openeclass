@@ -352,7 +352,7 @@ function display_activities($element, $id, $unit_id = 0) {
            $course_id, $langUnitCompletion, $langUnitPrerequisites, $langNewUnitPrerequisite,
            $langNoUnitPrerequisite, $langAssignmentParticipation, $langAttendance,
            $langPointsGameRecActivities, $langPointsGameOneTimeActivities, $langPointsGameNoRecActivities,
-           $langPointsGameNoOneTimeActivities;
+           $langPointsGameNoOneTimeActivities, $langPoints;
 
     if ($unit_id) {
         $link_id = "course=$course_code&amp;manage=1&amp;unit_id=$unit_id&amp;badge_id=$id";
@@ -423,7 +423,7 @@ function display_activities($element, $id, $unit_id = 0) {
         array('title' => $unit_id ? $langOfUnitCompletion : $langOfCourseCompletion,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=". ($unit_id ? "unitcompletion" : "coursecompletion"),
             'icon' => 'fa fa-trophy',
-            'show' => !$cc_enable),
+            'show' => !$cc_enable && $element != 'points_game'),
         array('title' => $langOfAssignment,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . AssignmentEvent::ACTIVITY,
             'icon' => 'fa fa-flask space-after-icon',
@@ -462,11 +462,13 @@ function display_activities($element, $id, $unit_id = 0) {
         array('title' => $langOfLearningPath,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=lp",
             'icon' => 'fa fa-ellipsis-h fa-fw',
-            'class' => ''),
+            'class' => '',
+            'show' => $element != 'points_game'),
         array('title' => $langOfLearningPathDuration,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=lpduration",
             'icon' => 'fa fa-ellipsis-h fa-fw',
-            'class' => ''),
+            'class' => '',
+            'show' => $element != 'points_game'),
         /*array('title' => $langOfLikesSocial,
               'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=likesocial",
               'icon' => 'fa fa-edit space-after-icon',
@@ -498,20 +500,21 @@ function display_activities($element, $id, $unit_id = 0) {
         array('title' => $langCourseParticipation,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=participation",
             'icon' => 'fa fa-area-chart fa-fw',
-            'class' => ''),
+            'class' => '',
+            'show' => $element != 'points_game'),
         array('title' => $langOfGradebook,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . GradebookEvent::ACTIVITY,
             'icon' => 'fa fa-sort-numeric-desc space-after-icon',
-            'show' => ($unit_id == 0),
+            'show' => ($unit_id == 0) && ($element != 'points_game'),
             'class' => ''),
         array('title' => $langOfCourseCompletion,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . CourseCompletionEvent::ACTIVITY,
             'icon' => 'fa fa-trophy',
-            'show' => $cc_enable && !$cc_is_current),
+            'show' => $cc_enable && !$cc_is_current && $element != 'points_game'),
         array('title' => $langAttendance,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . AttendanceEvent::ACTIVITY,
             'icon' => 'fa fa-sort-numeric-desc space-after-icon',
-            'show' => ($unit_id == 0),
+            'show' => ($unit_id == 0) && ($element != 'points_game'),
             'class' => '')),
         array(
             'secondary_title' => $langAdd,
@@ -520,6 +523,69 @@ function display_activities($element, $id, $unit_id = 0) {
         ));
 
     if ($element == 'points_game') {
+
+        $addRecActivityBtn = action_button(array(
+            array('title' => $langOfAssignment,
+                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . AssignmentEvent::ACTIVITY,
+                'icon' => 'fa fa-flask space-after-icon',
+                'class' => ''),
+            array('title' => $langAssignmentParticipation,
+                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . AssignmentSubmitEvent::ACTIVITY,
+                'icon' => 'fa fa-flask space-after-icon',
+                'class' => ''),
+            array('title' => $langExerciseAsModuleLabel,
+                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . ExerciseEvent::ACTIVITY,
+                'icon' => 'fa fa-square-pen',
+                'class' => ''),
+            array('title' => $langOfBlog,
+                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . BlogEvent::ACTIVITY,
+                'icon' => 'fa fa-columns fa-fw',
+                'show' => ($unit_id == 0),
+                'class' => ''),
+            array('title' => $langOfBlogComments,
+                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=blogcomments",
+                'icon' => 'fa fa-comment fa-fw',
+                'show' => ($unit_id == 0),
+                'class' => ''),
+            /*array('title' => $langOfCourseComments,
+                  'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=coursecomments",
+                  'icon' => 'fa fa-edit space-after-icon',
+                  'class' => ''),*/
+            array('title' => $langNumInForum,
+                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . ForumEvent::ACTIVITY,
+                'icon' => 'fa fa-comments fa-fw',
+                'show' => ($unit_id == 0),
+                'class' => ''),
+            array('title' => $langNumInForumTopic,
+                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . ForumTopicEvent::ACTIVITY,
+                'icon' => 'fa fa-comments fa-fw',
+                'class' => ''),
+            array('title' => $langDocumentAsModuleLabel,
+                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=document",
+                'icon' => 'fa fa-folder-open fa-fw',
+                'class' => ''),
+            array('title' => $langMediaAsModuleLabel,
+                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=multimedia",
+                'icon' => 'fa fa-edit space-after-icon',
+                'class' => ''),
+            array('title' => $langOfEBook,
+                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=ebook",
+                'icon' => 'fa fa-book fa-fw',
+                'class' => ''),
+            array('title' => $langOfPoll,
+                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=poll",
+                'icon' => 'fa fa-question-circle fa-fw',
+                'class' => ''),
+            array('title' => $langWiki,
+                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . WikiEvent::ACTIVITY,
+                'icon' => 'fa fa-won-sign fa-fw',
+                'class' => '')),
+            array(
+                'secondary_title' => $langAdd,
+                'secondary_icon' => 'fa-plus',
+                'secondary_btn_class' => 'submitAdminBtn'
+            ));
+
         //get available recurrent activities
         $result_recurrent = Database::get()->queryArray("SELECT * FROM points_game_criterion WHERE points_game = ?d AND criterion_type = ?s 
                             ORDER BY `id` DESC", $id, 'recurring');
@@ -546,7 +612,7 @@ function display_activities($element, $id, $unit_id = 0) {
                             </h3>";
                         if ($is_editor) {
                             $tool_content .= "<div>
-                                $addActivityBtn
+                                $addRecActivityBtn
                             </div>";
                         }
             $tool_content .=  "</div>";
@@ -648,6 +714,9 @@ function display_activities($element, $id, $unit_id = 0) {
                                                                 $langValue
                                                             </div>
                                                             <th>
+                                                                $langPoints
+                                                            </div>
+                                                            <th>
                                                                 <i class='fa fa-cogs'></i>
                                                             </th>
                                                         </tr></thead>";
@@ -669,6 +738,7 @@ function display_activities($element, $id, $unit_id = 0) {
                                                                     } else {
                                                                         $tool_content .= "$details->threshold</td>";
                                                                     }
+                                                                    $tool_content .= "<td>$details->points</td>";
                                                                     $tool_content .= "<td>";
                                                                     $tool_content .= "<div class='text-end'>".
                                                                         action_button(array(
@@ -952,10 +1022,14 @@ function insert_activity($element, $element_id, $activity, $unit_id = 0, $unit_r
 
     switch ($activity) {
         case 'coursecompletion':
-            add_course_completion_to_certificate($element_id);
+            if ($element != 'points_game') {
+                add_course_completion_to_certificate($element_id);
+            }
             break;
         case 'unitcompletion':
-            add_unit_completion_to_certificate($element_id, $unit_id);
+            if ($element != 'points_game') {
+                add_unit_completion_to_certificate($element_id, $unit_id);
+            }
             break;
         case AssignmentEvent::ACTIVITY:
         case 'work':
@@ -984,10 +1058,14 @@ function insert_activity($element, $element_id, $activity, $unit_id = 0, $unit_r
             display_available_forumtopics($element, $element_id, $unit_id, $unit_resource_id);
             break;
         case 'lp':
-            display_available_lps($element, $element_id, LearningPathEvent::ACTIVITY, $unit_id, $unit_resource_id);
+            if ($element != 'points_game') {
+                display_available_lps($element, $element_id, LearningPathEvent::ACTIVITY, $unit_id, $unit_resource_id);
+            }
             break;
         case 'lpduration':
-            display_available_lps($element, $element_id, LearningPathDurationEvent::ACTIVITY, $unit_id, $unit_resource_id);
+            if ($element != 'points_game') {
+                display_available_lps($element, $element_id, LearningPathDurationEvent::ACTIVITY, $unit_id, $unit_resource_id);
+            }
             break;
         case 'likesocial';
         case 'likeforum';
@@ -1010,16 +1088,24 @@ function insert_activity($element, $element_id, $activity, $unit_id = 0, $unit_r
             display_available_wiki($element, $element_id, $unit_id);
             break;
         case 'participation':
-            display_available_participation($element, $element_id, $unit_id);
+            if ($element != 'points_game') {
+                display_available_participation($element, $element_id, $unit_id);
+            }
             break;
         case GradebookEvent::ACTIVITY:
-            display_available_gradebooks($element, $element_id, $unit_id);
+            if ($element != 'points_game') {
+                display_available_gradebooks($element, $element_id, $unit_id);
+            }
             break;
         case CourseCompletionEvent::ACTIVITY:
-            display_available_coursecompletiongrade($element, $element_id, $unit_id);
+            if ($element != 'points_game') {
+                display_available_coursecompletiongrade($element, $element_id, $unit_id);
+            }
             break;
         case AttendanceEvent::ACTIVITY:
-            display_available_attendances($element, $element_id, $unit_id);
+            if ($element != 'points_game') {
+                display_available_attendances($element, $element_id, $unit_id);
+            }
             break;
         default: break;
         }
@@ -1088,10 +1174,17 @@ function display_available_assignments($element, $element_id, $activity_type, $u
 
     global $course_id, $tool_content, $langNoAssign, $course_code,
            $langTitle, $langGroupWorkDeadline_of_Submission,
-           $langAddModulesButton, $langChoice, $langParticipateSimple,
+           $langAddModulesButton, $langChoice, $langParticipateSimple, $langPoints,
            $langOperator, $langGradebookGrade, $urlServer, $langSelect, $langPollFillText;
 
-    $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
+    if ($element == 'certificate') {
+        $element_name = 'certificate_id';
+    } elseif ($element == 'badge') {
+        $element_name = 'badge_id';
+    } else {
+        $element_name = 'points_game_id';
+    }
+    
     $form_submit_name = 'add_assignment';
     if ($activity_type == AssignmentSubmitEvent::ACTIVITY) {
         $form_submit_name = 'add_assignment_participation';
@@ -1139,8 +1232,11 @@ function display_available_assignments($element, $element_id, $activity_type, $u
             "<th>$langTitle</th>" .
             "<th>$langGroupWorkDeadline_of_Submission</th>";
         if ($activity_type == AssignmentEvent::ACTIVITY) {
-            "<th>$langOperator</th>" .
+            $tool_content .= "<th>$langOperator</th>" .
             "<th>$langGradebookGrade</th>";
+        }
+        if ($element == 'points_game') {
+            $tool_content .= "<th>$langPoints</th>";
         }
         $tool_content .=
             "<th>$langChoice</th>" .
@@ -1155,6 +1251,9 @@ function display_available_assignments($element, $element_id, $activity_type, $u
                 $tool_content .=
                 "<td>" . selection(get_operators(), "operator[$assignment_id]") . "</td>" .
                 "<td><input aria-label='$langPollFillText' class='form-control' type='text' name='threshold[$assignment_id]' value=''></td>";
+            }
+            if ($element == 'points_game') {
+                $tool_content .= "<td><input aria-label='$langPollFillText' class='form-control' type='text' name='points[$assignment_id]' value=''></td>";
             }
             $tool_content .=
                 "<td><label class='label-container' aria-label='$langSelect'><input name='assignment[]' value='$assignment_id' type='checkbox'><span class='checkmark'></span></label></td>" .

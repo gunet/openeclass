@@ -40,18 +40,37 @@ function add_assignment_to_certificate($element, $element_id, $activity_type) {
                 $operator = $_POST['operator'][$data];
                 $threshold = $_POST['threshold'][$data];
             }
-            Database::get()->query("INSERT INTO {$element}_criterion
+            if($element == 'points_game') {
+                Database::get()->query("INSERT INTO {$element}_criterion
+                                    SET $element = ?d,
+                                        module= " . MODULE_ID_ASSIGN . ",
+                                        resource = ?d,
+                                        activity_type = ?s,
+                                        operator = ?s,
+                                        threshold = ?f,
+                                        points = ?d,
+                                        criterion_type = ?s",
+                                    $element_id,
+                                    $_POST['assignment'][$datakey],
+                                    $activity_type,
+                                    $operator,
+                                    $threshold,
+                                    $_POST['points'][$data],
+                                    'onetime');
+            } else {
+                Database::get()->query("INSERT INTO {$element}_criterion
                                     SET $element = ?d,
                                         module= " . MODULE_ID_ASSIGN . ",
                                         resource = ?d,
                                         activity_type = ?s,
                                         operator = ?s,
                                         threshold = ?f",
-                $element_id,
-                $_POST['assignment'][$datakey],
-                $activity_type,
-                $operator,
-                $threshold);
+                                    $element_id,
+                                    $_POST['assignment'][$datakey],
+                                    $activity_type,
+                                    $operator,
+                                    $threshold);
+            }
         }
     }
 }

@@ -1534,6 +1534,7 @@ $langGradebookUsers = "Χρήστες του βαθμολογίου";
 // ------------------
 $langPointsGames = "Παιχνίδια πόντων";
 $langPointsGame = "Παιχνίδι πόντων";
+$langPoints = "Πόντοι";
 $langNewPointsGame = "Νέο παιχνίδι πόντων";
 $langNewPointsGameSuc = "Το παιχνίδι πόντων δημιουργήθηκε με επιτυχία";
 $langActivateLeaderboard = "Ενεργοποίηση πίνακα κατάταξης";
