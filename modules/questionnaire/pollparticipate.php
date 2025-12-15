@@ -654,7 +654,7 @@ function printPollForm() {
                                     $tool_content .= "<input type='hidden' name='answer[$pqid]' value='-1'>";
                                 }
                                 foreach ($answers as $theAnswer) {
-                                        $checked = '';
+                                    $checked = '';
                                     if ($user_answers) {
                                         if (count($user_answers) > 1) { // multiple answers
                                             foreach ($user_answers as $ua) {
@@ -670,16 +670,14 @@ function printPollForm() {
                                             }
                                         }
                                     }
-                                    if ($qtype == QTYPE_SINGLE) {
-                                        if ($pageBreakExists && isset($_SESSION['data_answers']) && !empty($_SESSION['data_answers'][$pqid]) && $_SESSION['data_answers'][$pqid] == $theAnswer->pqaid) {
+                                    if ($qtype == QTYPE_SINGLE && $pageBreakExists && isset($_SESSION['data_answers']) 
+                                        && !empty($_SESSION['data_answers'][$pqid]) && $_SESSION['data_answers'][$pqid] == $theAnswer->pqaid) {
+                                        $checked = 'checked';
+                                    } elseif ($qtype == QTYPE_MULTIPLE && $pageBreakExists 
+                                        && isset($_SESSION['data_answers']) && !empty($_SESSION['data_answers'][$pqid])) {
+                                        $arrTemporaryUserAnswers = explode(',', $_SESSION['data_answers'][$pqid]);
+                                        if (in_array($theAnswer->pqaid, $arrTemporaryUserAnswers)) {
                                             $checked = 'checked';
-                                        }
-                                    } elseif ($qtype == QTYPE_MULTIPLE) {
-                                        if ($pageBreakExists && isset($_SESSION['data_answers']) && !empty($_SESSION['data_answers'][$pqid])) {
-                                            $arrTemporaryUserAnswers = explode(',', $_SESSION['data_answers'][$pqid]);
-                                            if (in_array($theAnswer->pqaid, $arrTemporaryUserAnswers)) {
-                                                $checked = 'checked';
-                                            }
                                         }
                                     }
                                     $tool_content .= "
@@ -696,12 +694,17 @@ function printPollForm() {
                                         </div>";
                                 }
                                 if ($qtype == QTYPE_SINGLE && $default_answer) {
+                                    $checked = '';
+                                    if ($pageBreakExists && isset($_SESSION['data_answers']) 
+                                        && !empty($_SESSION['data_answers'][$pqid]) && $_SESSION['data_answers'][$pqid] == -1) {
+                                        $checked = 'checked';
+                                    }
                                     $tool_content .= "
                                         <div class='form-group'>
                                             <div class='col-sm-offset-1 col-sm-11'>
                                                 <div class='$type_attr QuestionType_{$qtype} QuestionNumber_{$pqid}'>
                                                     <label class='$class_type_attr'>
-                                                        <input type='$type_attr' name='answer[$pqid]' value='-1' data-question-type='$qtype'>
+                                                        <input type='$type_attr' name='answer[$pqid]' value='-1' data-question-type='$qtype' $checked>
                                                         $checkMark_class
                                                         $langPollUnknown
                                                     </label>
@@ -1039,6 +1042,27 @@ function submitPoll() {
         $answer = update_submission($pid, $pageBreakExists);
         $userDefault = $_POST['onBehalfOfUserId'] ?? $uid;
 
+        // Check if exists require answer to the specific question
+        $require_an = false;
+        $allQuestions = Database::get()->queryArray("SELECT pqid,qtype,require_response FROM poll_question WHERE pid = ?d", $pid);
+        foreach ($allQuestions as $q) {
+            if ($q->require_response && !isset($answer[$q->pqid])) {
+                $require_an = true;
+            } elseif ($q->require_response && isset($answer[$q->pqid]) && $q->qtype == QTYPE_TABLE) {
+                if (count($answer[$q->pqid]) === count(array_filter($answer[$q->pqid], function($value) {// all elements are empty strings
+                    return $value === "";
+                }))) {
+                    $require_an = true;
+                }
+            }
+        }
+        if ($require_an) {
+            $_SESSION['data_answers'] = init_session_vars($answer);
+            Session::flash('message', $langQuestionsRequireAnswers);
+            Session::flash('alert-class', 'alert-warning');
+            redirect_to_home_page("modules/questionnaire/pollparticipate.php?course=$course_code&UseCase=1&pid=$pid");
+        }
+
         if ($userDefault) {
             $eventData = new stdClass();
             $eventData->courseId = $course_id;
@@ -1083,27 +1107,6 @@ function submitPoll() {
             $question = $_SESSION['question_ids'];
         } else {
             $question = isset($_POST['question'])? $_POST['question']: array();
-        }
-
-        // Check if exists require answer to the specific question
-        $require_an = false;
-        $allQuestions = Database::get()->queryArray("SELECT pqid,qtype,require_response FROM poll_question WHERE pid = ?d", $pid);
-        foreach ($allQuestions as $q) {
-            if ($q->require_response && !isset($answer[$q->pqid])) {
-                $require_an = true;
-            } elseif ($q->require_response && isset($answer[$q->pqid]) && $q->qtype == QTYPE_TABLE) {
-                if (count($answer[$q->pqid]) === count(array_filter($answer[$q->pqid], function($value) {// all elements are empty strings
-                    return $value === "";
-                }))) {
-                    $require_an = true;
-                }
-            }
-        }
-        if ($require_an) {
-            $_SESSION['data_answers'] = init_session_vars($answer);
-            Session::flash('message', $langQuestionsRequireAnswers);
-            Session::flash('alert-class', 'alert-warning');
-            redirect_to_home_page("modules/questionnaire/pollparticipate.php?course=$course_code&UseCase=1&pid=$pid");
         }
 
         foreach ($question as $pqid => $qtype) {

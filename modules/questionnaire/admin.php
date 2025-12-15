@@ -1369,9 +1369,14 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             $i=1;
             $nbrQuestions = count($questions);
             foreach ($questions as $question) {
+                if ($question->require_response) {
+                    $RequiredQuestionHtml = "<span data-bs-toggle='tooltip' data-bs-placement='top' title='$langRequireAnswer'>(<i class='fa-solid fa-asterisk text-danger'></i>)</span>&nbsp;";
+                } else {
+                    $RequiredQuestionHtml = '';
+                }
                 $tool_content .= "  <tr class='even' data-id='$question->pqid'>
                                         <td class='text-nowrap' align='text-right' width='1'>$i.</td>
-                                        <td><p>".(($question->qtype != QTYPE_LABEL) ? q($question->question_text).'<br>' : $question->question_text).
+                                        <td><p>$RequiredQuestionHtml".(($question->qtype != QTYPE_LABEL) ? q($question->question_text).'<br>' : $question->question_text).
                                             $aType[$question->qtype - 1]."</p>
                                         </td>
                                         <td>
