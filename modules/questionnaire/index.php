@@ -363,7 +363,8 @@ if ($is_editor) {
             }
             if ($ok) {
                 $poll = Database::get()->querySingle("SELECT * FROM poll WHERE pid = ?d", $pid);
-                $questions = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d ORDER BY q_position", $pid);
+                //$questions = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d ORDER BY q_position", $pid);
+                $questions = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d AND qtype != ?d ORDER BY q_position,`page` ASC", $pid, 0);
 
                 if ($clone_course_id == $course_id) {
                     $poll->name .= " ($langCopy2)";

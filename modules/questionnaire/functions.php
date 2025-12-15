@@ -24,11 +24,13 @@ define('QTYPE_MULTIPLE', 3);
 define('QTYPE_LABEL', 4);
 define('QTYPE_SCALE', 5);
 define('QTYPE_TABLE', 6);
+define('QTYPE_DATETIME', 7);
+define('QTYPE_SHORT', 8);
 
 function validate_qtype($qtype)
 {
     $qtype = intval($qtype);
-    if (in_array($qtype, array(QTYPE_SINGLE, QTYPE_MULTIPLE, QTYPE_FILL, QTYPE_LABEL, QTYPE_SCALE, QTYPE_TABLE))) {
+    if (in_array($qtype, array(QTYPE_SINGLE, QTYPE_MULTIPLE, QTYPE_FILL, QTYPE_LABEL, QTYPE_SCALE, QTYPE_TABLE, QTYPE_DATETIME, QTYPE_SHORT))) {
         return $qtype;
     } else {
         return QTYPE_LABEL;

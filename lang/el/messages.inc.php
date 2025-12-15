@@ -2148,6 +2148,7 @@ $langListenToRecordingAudio = "Ακούστε την ηχογραφημένη α
 $langFileUploadingOkReplaceWithNew = "Το αρχείο αποθηκεύτηκε με επιτυχία. Σε περίπτωση νέας προσπάθειας στην άσκηση, αν απαντήσετε την ίδια ερώτηση τότε το παλιό αρχείο θα αντικατασταθεί με το καινούριο.";
 $langScale = "Κλίμακας";
 $langFalse = "Λάθος";
+$langShortAnswer = "Σύντομη απάντηση";
 $langAddPicture = "Προσθήκη εικόνας";
 $langReplacePicture = "Αντικατάσταση της εικόνας";
 $langDeletePicture = "Διαγραφή της εικόνας";

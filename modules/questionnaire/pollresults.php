@@ -548,7 +548,7 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK) {
                     $tool_content .= $answers_table;
                 }
                 $chart_counter++;
-            } elseif ($theQuestion->qtype == QTYPE_FILL) {
+            } elseif ($theQuestion->qtype == QTYPE_FILL || $theQuestion->qtype == QTYPE_DATETIME || $theQuestion->qtype == QTYPE_SHORT) {
 
                 $sql_participants_a = '';
                 $sql_participants_c = '';

@@ -3329,6 +3329,7 @@ $langImportQTI = "IMS QTI Import";
 $langIMSQTIUploadFile = "IMS QTI file";
 $langModifyInQuestionPool = "only in question pool";
 $langScale = "Scale";
+$langShortAnswer = "Short answer";
 $langQuestionDiffGrade = "Difficulty Grade";
 $langQuestionAllDiffs = "All Difficulty Grades";
 $langQuestionNotDefined = "Not defined";
