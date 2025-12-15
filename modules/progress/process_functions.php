@@ -239,16 +239,33 @@ function add_courseparticipation_to_certificate($element, $element_id) {
 function add_wiki_to_certificate($element, $element_id) {
 
     if (isset($_POST['wiki'])) {
-        Database::get()->query("INSERT INTO {$element}_criterion
-                            SET $element = ?d,
-                            module = " . MODULE_ID_WIKI . ",
-                            resource = null,
-                            activity_type = '" . WikiEvent::ACTIVITY . "',
-                            operator = ?s,
-                            threshold = ?f",
-            $element_id,
-            $_POST['operator'],
-            $_POST['threshold']);
+        if ($element == 'points_game') {
+            Database::get()->query("INSERT INTO {$element}_criterion
+                                SET $element = ?d,
+                                module = " . MODULE_ID_WIKI . ",
+                                resource = null,
+                                activity_type = '" . WikiEvent::ACTIVITY . "',
+                                operator = ?s,
+                                threshold = ?f,
+                                points = ?d,
+                                criterion_type = ?s",
+                $element_id,
+                $_POST['operator'],
+                $_POST['threshold'],
+                $_POST['points'],
+                'onetime');
+        } else {
+            Database::get()->query("INSERT INTO {$element}_criterion
+                                SET $element = ?d,
+                                module = " . MODULE_ID_WIKI . ",
+                                resource = null,
+                                activity_type = '" . WikiEvent::ACTIVITY . "',
+                                operator = ?s,
+                                threshold = ?f",
+                $element_id,
+                $_POST['operator'],
+                $_POST['threshold']);
+        }
     }
     return;
 }

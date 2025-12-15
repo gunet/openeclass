@@ -2305,11 +2305,17 @@ function display_available_polls($element, $element_id, $unit_id = 0, int $unit_
  */
 function display_available_wiki($element, $element_id, $unit_id = 0) {
 
-    global $tool_content, $langResourceAlreadyAdded,
+    global $tool_content, $langResourceAlreadyAdded, $langPoints,
     $langAddModulesButton, $langChoice, $langTitle, $langWikiPages,
     $course_code, $langOperator, $langValue, $langSelect, $langPollFillText;
 
-    $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
+    if ($element == 'certificate') {
+        $element_name = 'certificate_id';
+    } elseif ($element == 'badge') {
+        $element_name = 'badge_id';
+    } else {
+        $element_name = 'points_game_id';
+    }
 
     $result = Database::get()->queryArray("SELECT resource FROM {$element}_criterion WHERE $element = ?d
                                             AND resource IS NULL
@@ -2331,15 +2337,21 @@ function display_available_wiki($element, $element_id, $unit_id = 0) {
                 "<thead><tr class='list-header'>" .
                 "<th style='width:70%;'>&nbsp;$langTitle</th>" .
                 "<th style='width:5px;'>$langOperator</th>" .
-                "<th style='width:30px;'>$langValue</th>" .
-                "<th style='width:20px;'>$langChoice</th>" .
+                "<th style='width:30px;'>$langValue</th>";
+        if ($element == 'points_game') {
+            $tool_content .= "<th>$langPoints</th>";
+        }
+        $tool_content .= "<th style='width:20px;'>$langChoice</th>" .
                 "</tr></thead>";
 
         $tool_content .= "<tr>
                             <td>$langWikiPages</td>
                             <td>". selection(get_operators(), "operator") . "</td>
-                            <td><input aria-label='$langPollFillText' class='form-control' type='text' name='threshold' value=''></td>
-                            <td><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='wiki' value='1'><span class='checkmark'></span></label></td>
+                            <td><input aria-label='$langPollFillText' class='form-control' type='text' name='threshold' value=''></td>";
+        if ($element == 'points_game') {
+            $tool_content .= "<td><input aria-label='$langPollFillText' class='form-control' type='text' name='points' value=''></td>";
+        }
+        $tool_content .= "<td><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='wiki' value='1'><span class='checkmark'></span></label></td>
                         </tr>";
 
         $tool_content .= "
