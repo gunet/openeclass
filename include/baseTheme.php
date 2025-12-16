@@ -268,6 +268,10 @@ function view($view_file, $view_data = array()) {
                 $announce_per_lang[$an->lang] = $an;
             }
         }
+        // Upgrade old pinned announce cookie format
+        if (($_COOKIE['CookieNotification'] ?? null) == 'true') {
+            setcookie('CookieNotification', $max_pinned_announce_id, time() + 60 * 60 * 24 * 30, $urlAppend);
+        }
         if (!(isset($_COOKIE['CookieNotification']) and $_COOKIE['CookieNotification'] >= $max_pinned_announce_id)) {
             if (isset($announce_per_lang[$language])) {
                 $pinned_announce = $announce_per_lang[$language];

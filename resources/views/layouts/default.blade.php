@@ -205,7 +205,7 @@
 
             @if ($pinned_announce)
                 $('#closeNotificationBar').click(function () {
-                    setNewCookie("CookieNotification", "{{ $max_pinned_announce_id }}", 30);
+                    setNewCookie("CookieNotification", "{{ $max_pinned_announce_id }}", 30, "{{ $urlAppend }}");
                     $('.ContentEclass').removeClass('fixed-announcement');
                     $('.notification-top-bar').hide();
                 });

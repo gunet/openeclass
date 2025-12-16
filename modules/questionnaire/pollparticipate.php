@@ -270,7 +270,7 @@ function printPollForm() {
                         var qType = $(elem).attr('data-question-type');
                         var name = elem.name;
                         const foundNumbers = name.match(/\d+/g);
-                        if (qType == 1 || qType == 2 || qType == 5) { // radio or single text or scale
+                        if (qType == 1 || qType == 2 || qType == 5 || qType == 7 || qType == 8) { // radio or single text or scale or datetime or short answer
                             if (foundNumbers.length == 1 && elem.value != '') {
                                 var qRow = foundNumbers[0];
                                 if (!obj[qRow]) {
@@ -278,7 +278,7 @@ function printPollForm() {
                                 }
                                 if (qType == 1 && elem.checked) {
                                     obj[qRow] = elem.value;
-                                } else if (qType == 2 || qType == 5) {
+                                } else if (qType == 2 || qType == 5 || qType == 7 || qType == 8) {
                                     obj[qRow] = elem.value;
                                 }
                             }
