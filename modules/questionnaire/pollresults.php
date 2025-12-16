@@ -341,7 +341,7 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK) {
                     $this_chart_data['percentage'][] = 0;
                 }
                 $set_default_answer = false;
-                $answers = Database::get()->queryArray("SELECT a.aid AS aid, MAX(b.answer_text) AS answer_text, count(a.aid) AS count
+                $answers = Database::get()->queryArray("SELECT a.aid AS aid, MAX(b.answer_text) AS answer_text, count(a.aid) AS count, b.message AS msg
                             FROM poll_user_record c, poll_answer_record a
                             LEFT JOIN poll_question_answer b
                             ON a.aid = b.pqaid
@@ -366,6 +366,7 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK) {
                                 if (!$thePoll->anonymized) {
                                     $answers_table .= "<th>$langStudents</th>";
                                 }
+                                $answers_table .= "<th>$langMessage</th>";
                             }
                             $answers_table .= "</tr></thead>";
                 foreach ($answers as $answer) {
@@ -429,7 +430,8 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK) {
                                     }
                                 }
 
-                    $answers_table .= "<td class='hidden_names' style='display:none;'><em>" . q($names_str ?? '') . "</em> <a href='#' class='trigger_names' data-type='multiple' id='hide'>$langViewHide</a></td></tr>";
+                    $answers_table .= "<td class='hidden_names' style='display:none;'><em>" . q($names_str ?? '') . "</em> <a href='#' class='trigger_names' data-type='multiple' id='hide'>$langViewHide</a></td>
+                    <td>$answer->msg</td></tr>";
                     unset($names_array);
                 }
                 $answers_table .= "</table></div><br>";

@@ -3559,6 +3559,18 @@ function upgrade_to_4_2($tbl_options) : void {
         Database::get()->query("ALTER TABLE poll_question ADD `require_response` INT NOT NULL DEFAULT 0");
     }
 
+    if (!DBHelper::fieldExists('poll_question', 'total_weight')) {
+        Database::get()->query("ALTER TABLE poll_question ADD `total_weight` FLOAT NULL");
+    }
+
+    if (!DBHelper::fieldExists('poll_question_answer', 'weight')) {
+        Database::get()->query("ALTER TABLE poll_question_answer ADD `weight` FLOAT NULL");
+    }
+
+    if (!DBHelper::fieldExists('poll_question_answer', 'message')) {
+        Database::get()->query("ALTER TABLE poll_question_answer ADD `message` TEXT DEFAULT NULL");
+    }
+
 }
 
 /**

@@ -266,12 +266,20 @@ if (isset($_POST['submitAnswers'])) {
     Database::get()->query("DELETE FROM poll_question_answer WHERE pqid IN
         (SELECT pqid FROM poll_question WHERE pid = ?d AND pqid = ?d)", $pid, $pqid);
 
-    foreach ($answers as $answer) {
+    $total_grade = 0;
+    foreach ($answers as $key => $answer) {
         if ($answer !== '') {
-            Database::get()->query("INSERT INTO poll_question_answer (pqid, answer_text)
-                            VALUES (?d, ?s)", $pqid, $answer);
+            $grade = is_numeric($_POST['grades'][$key]) ? $_POST['grades'][$key] : 0;
+            $message = $_POST['messages'][$key] ?? '';
+            $total_grade = $total_grade + $grade;
+            Database::get()->query("INSERT INTO poll_question_answer (pqid, answer_text, `weight`, `message`)
+                            VALUES (?d, ?s, ?d, ?s)", $pqid, $answer, $grade, $message);
         }
     }
+    if ($question->qtype == QTYPE_SINGLE or $question->qtype == QTYPE_MULTIPLE) {
+        Database::get()->query("UPDATE poll_question SET total_weight = ?d WHERE pid = ?d AND pqid = ?d", $total_grade, $pid, $pqid);
+    }
+
     redirect_to_home_page("modules/questionnaire/admin.php?course=$course_code&pid=$pid");
 }
 if (isset($_GET['deleteQuestion'])) {
@@ -946,7 +954,12 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     $head_content .= "
     <script>
         $(function() {
-            $(poll_init);
+            var langPoll = {
+                answer: '" . js_escape($langAnswer) . "',
+                grade: '" . js_escape($langGradebookGrade) . "',
+                message: '" . js_escape($langMessage) . "'
+            };
+            $(poll_init(langPoll));
         });
     </script>
     ";
@@ -993,8 +1006,10 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         if (count($answers) > 0) {
             foreach ($answers as $answer) {
               $tool_content .="
-              <div class='form-group input-group mt-4'>
-                    <input type='text' class='form-control mt-0' name='answers[]' value='$answer->answer_text'>
+              <div class='form-group input-group mt-3'>
+                    <input type='text' class='form-control mt-0 w-50' name='answers[]' value='$answer->answer_text' placeholder='$langAnswer'>
+                    <input class='form-control mt-0' type='text' name='grades[]' value='$answer->weight' placeholder='$langGradebookGrade'>
+                    <input class='form-control mt-0' type='text' name='messages[]' value='$answer->message' placeholder='$langMessage'>
                     <div class='form-control-static input-group-text h-40px bg-white input-border-color'>
                         " . icon('fa-xmark Accent-200-cl', $langDelete, '#', ' class="del_btn"') . "
                     </div>
@@ -1003,13 +1018,17 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         } else {
             $tool_content .="
             <div class='form-group input-group mt-3'>
-                        <input class='form-control mt-0' type='text' name='answers[]' value=''>
+                        <input class='form-control mt-0 w-50' type='text' name='answers[]' value='' placeholder='$langAnswer'>
+                        <input class='form-control mt-0' type='text' name='grades[]' value='' placeholder='$langGradebookGrade'>
+                        <input class='form-control mt-0' type='text' name='messages[]' value='$answer->message' placeholder='$langMessage'>
                         <div class='form-control-static input-group-text h-40px bg-white input-border-color'>
                             " . icon('fa-xmark Accent-200-cl', $langDelete, '#', ' class="del_btn"') . "
                         </div>
                 </div>
             <div class='form-group input-group mt-3'>
-                    <input class='form-control mt-0' type='text' name='answers[]' value=''>
+                    <input class='form-control mt-0 w-50' type='text' name='answers[]' value='' placeholder='$langAnswer'>
+                    <input class='form-control mt-0' type='text' name='grades[]' value='' placeholder='$langGradebookGrade'>
+                    <input class='form-control mt-0' type='text' name='messages[]' value='$answer->message' placeholder='$langMessage'>
                     <div class='form-control-static input-group-text h-40px bg-white input-border-color'>
                         " . icon('fa-xmark Accent-200-cl', $langDelete, '#', ' class="del_btn"') . "
                     </div>
