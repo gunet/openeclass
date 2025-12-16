@@ -124,13 +124,15 @@ class Hierarchy {
 
         if ($this->useProcedures()) {
             $row = Database::get()->querySingle("SELECT code, faculty_image FROM hierarchy WHERE id = ?d", $id);
-            Database::get()->query("CALL delete_node(?d)", $id);
-            unlink("$webDir/courses/facultyimg/$row->code/image/$row->faculty_image");
+            $result = Database::get()->query("CALL delete_node(?d)", $id);
         } else {
             $row = Database::get()->querySingle("SELECT lft, rgt, code, faculty_image FROM hierarchy WHERE id = ?d", $id);
             unlink("$webDir/courses/facultyimg/$row->code/image/$row->faculty_image");
-            Database::get()->query("DELETE FROM hierarchy WHERE id = ?d", $id);
+            $result = Database::get()->query("DELETE FROM hierarchy WHERE id = ?d", $id);
             $this->delete($row->lft, $row->rgt);
+        }
+        if ($result and $row->faculty_image) {
+            unlink("$webDir/courses/facultyimg/$row->code/image/$row->faculty_image");
         }
     }
 

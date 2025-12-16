@@ -86,17 +86,17 @@ $head_content .= "<script type='text/javascript'>
                    }
                }
             });
-            
+
             $('.dt-search input').attr({
                  'class' : 'form-control input-sm ms-0 mb-3',
                  'placeholder' : '$langSearch...'
             });
-            $('.dt-search label').attr('aria-label', '$langSearch');  
-            
+            $('.dt-search label').attr('aria-label', '$langSearch');
+
             $(document).on('click', '.assigned_to', function(e) {
                   e.preventDefault();
                   var pid = $(this).data('pid');
-                  url = '$urlAppend' + 'modules/questionnaire/index.php?poll_info_assigned_to=true&pid=' + pid;                  
+                  url = '$urlAppend' + 'modules/questionnaire/index.php?poll_info_assigned_to=true&pid=' + pid;
                   $.ajax({
                     url: url,
                     success: function(data) {
@@ -214,7 +214,7 @@ if ($is_editor) {
                             }
                         }
                     };
-    
+
                     if (screenfull.enabled) {
                         bts.fullscreen = {
                             label: '" . js_escape($langFullScreen) . "',
@@ -229,7 +229,7 @@ if ($is_editor) {
                         label: '" . js_escape($langCancel) . "',
                         className: 'cancelAdminBtn'
                     };
-    
+
                     bootbox.dialog({
                         size: 'large',
                         title: '" . js_escape($langGenQrCode) . "',
@@ -400,8 +400,8 @@ if ($is_editor) {
                     $new_pqid = Database::get()->query("INSERT INTO poll_question
                                                SET pid = ?d,
                                                    question_text = ?s,
-                                                   qtype = ?d, 
-                                                   q_position = ?d, 
+                                                   qtype = ?d,
+                                                   q_position = ?d,
                                                    q_scale = ?d,
                                                    `description` = ?s,
                                                    answer_scale = ?s,
@@ -696,7 +696,7 @@ function printPolls() {
               $(function () {
                 $(document).on('click', '.warnLink', function(e) {
                     var pid = $(this).data('pid');
-                    $('#clone_form').attr('action', '" . js_escape($_SERVER['SCRIPT_NAME']) . "?pid=' + pid);
+                    $('#clone_form').attr('action', '" . js_escape($_SERVER['SCRIPT_NAME']) . "?course=$course_code&pid=' + pid);
                     $('#cloneModal').modal('show').on('hide.bs.modal', function () {
                       if ($('#course_id').hasClass('select2-hidden-accessible')) {
                         $('#course_id').select2('destroy');

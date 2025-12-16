@@ -31,6 +31,9 @@ $coursePath = $webDir . '/courses/';
 $toolName = $langChat;
 $display = TRUE;
 
+define('COLMOOC_JSON_HEAD', "Content-Type: application/json\r\n");
+$colmoocapp = ExtAppManager::getApp(strtolower(ColmoocApp::NAME));
+
 load_js('tools.js');
 load_js('validation.js');
 load_js('select2');
@@ -101,7 +104,7 @@ if ($is_editor) {
                 </div>
             </div>
         </div>";
-        if ($colmoocapp->isEnabled()) {
+        if ($colmoocapp && $colmoocapp->isEnabled()) {
             $tool_content .= "<div class='form-group mt-4'>
                 <div class='col-sm-10 col-sm-offset-2'>
                     <div class='checkbox'>
@@ -317,7 +320,7 @@ if ($is_editor) {
             </div>
         </div>";
 
-        if ($colmoocapp->isEnabled()) {
+        if ($colmoocapp && $colmoocapp->isEnabled()) {
             $activity_status = ($conf->chat_activity == true) ? 'checked' : '';
             $tool_content .= "<div class='form-group mt-4'>
                 <div class='col-sm-10 col-sm-offset-2'>

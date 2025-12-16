@@ -338,6 +338,7 @@ if (isset($_SESSION['is_admin']) and $_SESSION['is_admin']) {
             'Neutral',
             'Crimson',
             'Emerald',
+            'Green',
             'Light pink',
             'Dark',
             'Dark purple',

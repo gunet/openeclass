@@ -947,33 +947,51 @@ function get_cert_percentage_completion($element, $element_id) {
 
 /**
  * @brief delete certificate / badge db entries
- * @global type $course_id
  * @param type $certificate_id
  * @param type $element
  */
 function delete_certificate($element, $element_id) {
 
     global $course_id;
+
     if ($element == 'certificate') {
+        if (!Database::get()->querySingle('SELECT id FROM certificate WHERE id = ?d AND course_id = ?d', $element_id, $course_id)) {
+            forbidden();
+        }
+        $delete_cert = false;
         $r = Database::get()->queryArray("SELECT id FROM certificate_criterion WHERE certificate = ?d", $element_id);
-        foreach ($r as $act) { // delete certificate activities
-            if (!resource_usage($element, $act->id)) { // check if activity has been used by user
+        foreach ($r as $act) {
+            if (!resource_usage($element, $act->id)) { // check if a user has used activity
+                $delete_cert = true;
+            } else {
+                return false;
+            }
+        }
+        if ($delete_cert) {  // delete certificate activities
+            foreach ($r as $act) {
                 delete_activity('certificate', $element_id, $act->id);
-            } else {
-                return false;
             }
+            Database::get()->query("DELETE FROM certificate WHERE id = ?d AND course_id = ?d", $element_id, $course_id);
         }
-        Database::get()->query("DELETE FROM certificate WHERE id = ?d AND course_id = ?d", $element_id, $course_id);
     } else {
+        if (!Database::get()->querySingle('SELECT id FROM badge WHERE id = ?d AND course_id = ?d', $element_id, $course_id)) {
+            forbidden();
+        }
+        $delete_badge = false;
         $r = Database::get()->queryArray("SELECT id FROM badge_criterion WHERE badge = ?d", $element_id);
-        foreach ($r as $act) { // delete badge activities
-            if (!resource_usage($element, $act->id)) { // check if activity has been used by user
-                delete_activity('badge', $element_id, $act->id);
+        foreach ($r as $act) {
+            if (!resource_usage($element, $act->id)) { // check if a user has used activity
+                $delete_badge = true;
             } else {
                 return false;
             }
         }
-        Database::get()->query("DELETE FROM badge WHERE id = ?d AND course_id = ?d AND unit_id = 0", $element_id, $course_id);
+        if ($delete_badge) {  // delete badge activities
+            foreach ($r as $act) {
+                delete_activity('badge', $element_id, $act->id);
+            }
+            Database::get()->query("DELETE FROM badge WHERE id = ?d AND course_id = ?d AND unit_id = 0", $element_id, $course_id);
+        }
     }
 
     return true;

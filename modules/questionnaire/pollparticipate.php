@@ -37,7 +37,17 @@ require_once 'modules/lti_consumer/lti-functions.php';
 load_js('bootstrap-slider');
 
 $toolName = $langQuestionnaire;
-$navigation[] = array("url" => "index.php?course=$course_code", "name" => $langQuestionnaire);
+
+if (isset($_GET['from_session_view'])) {
+    if ($is_consultant) {
+        $is_course_reviewer = true;
+    }
+    $session_title = Database::get()->querySingle("SELECT title FROM mod_session WHERE id = ?d",$_GET['session'])->title;
+    $navigation[] = array('url' => $urlServer . '/modules/session/index.php?course=' . $course_code, 'name' => $langSession);
+    $navigation[] = array('url' => $urlServer . '/modules/session/session_space.php?course=' . $course_code . "&session=" . $_GET['session'] , 'name' => $session_title);
+} else {
+    $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langQuestionnaire);
+}
 //Identifying ajax request that cancels an active attempt
 if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
         if ($_POST['action'] == 'refreshSession') {
@@ -77,7 +87,7 @@ $p = Database::get()->querySingle($query, $query_params);
 if($is_consultant){
     $is_editor = true;
 }
-if (!$p && !$is_consultant) { // check poll access
+if (!$p) { // check poll access
     redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
 }
 // check poll type (for limesurvey)
@@ -115,7 +125,8 @@ function printPollForm() {
     $langPollAlreadyParticipated, $is_editor, $is_course_reviewer, $langBack, $langQuestion,
     $langCancel, $head_content, $langPollParticipantInfo, $langCollesLegend,
     $pageName, $lang_rate1, $lang_rate5, $langForm, $pid, $langTypeOutMessage,
-    $langPreviousQuestion, $langNextQuestion, $langCleanup;
+    $langPreviousQuestion, $langNextQuestion, $langCleanup, $langForbidden, 
+    $is_consultant, $is_coordinator, $langSubmissionOnBehalfOfUser, $urlAppend, $langProcessForFiliInTool;
 
     $unit_id = isset($_REQUEST['unit_id'])? intval($_REQUEST['unit_id']): null;
     $refresh_time = 300000; // Refresh PHP session every 5 min. (in ms)
@@ -238,6 +249,18 @@ function printPollForm() {
     
     <script>
         $(function() {
+            $('#onBehalfOfSelection').change(function(e) {
+                e.preventDefault();
+                var selectedValue = $(this).val();
+                $('#onBehalfOfUserId').val(selectedValue);
+
+                $('#onBehalfOfSelectionForm').submit();
+            });
+        });
+    </script>
+    
+    <script>
+        $(function() {
             $('.clearUpBtn').on('click', function(e){
                 e.preventDefault();
                 var arr = this.id.split('_');
@@ -258,9 +281,13 @@ function printPollForm() {
                 }
             });
         });
-    </script>
-    
-    ";
+    </script>";
+
+    // If a consultant is on behalf of user mode for submitting poll.
+    $userDefault = $uid;
+    if (isset($_GET['printPollForUser'])) {
+        $userDefault = intval($_POST['userSelected']);
+    }
 
     $pid = $_REQUEST['pid'];
     //      Get poll data
@@ -333,14 +360,19 @@ function printPollForm() {
     }
 
     // check if user has participated
-    $has_participated = Database::get()->querySingle("SELECT COUNT(*) AS count FROM poll_user_record WHERE uid = ?d AND pid = ?d", $uid, $pid)->count;
-    if ($uid && $has_participated > 0 && !$is_editor && !$multiple_submissions) {
+    $has_participated = Database::get()->querySingle("SELECT COUNT(*) AS count FROM poll_user_record WHERE uid = ?d AND pid = ?d", $userDefault, $pid)->count;
+    if (($userDefault && $has_participated > 0 && !$is_editor && !$multiple_submissions) or
+        ($userDefault && $has_participated > 0 && isset($_GET['onBehalfOfUser']) && !$multiple_submissions)) {
         Session::flash('message',$langPollAlreadyParticipated);
         Session::flash('alert-class', 'alert-warning');
         if (isset($_REQUEST['unit_id'])) {
             redirect_to_home_page('modules/units/index.php?course='.$course_code.'&id='.$_REQUEST['unit_id']);
         } else if (isset($_REQUEST['res_type'])) {
-            redirect_to_home_page('modules/wall/index.php?course=' . $course_code);
+            if (isset($_GET['from_session_view'])) {
+                redirect_to_home_page('modules/session/session_space.php?course='.$course_code.'&session='.$_GET['session']);
+            }else {
+               redirect_to_home_page('modules/wall/index.php?course=' . $course_code); 
+            }
         } else {
             redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);
         }
@@ -365,6 +397,70 @@ function printPollForm() {
             $back_link = "index.php?course=$course_code";
         }
 
+        $onBehalfOfUser = '';
+        $forSession = '';
+        if (isset($_GET['from_session_view']) && isset($_GET['onBehalfOfUser'])) {
+            // Before moving on, check if the session belongs to the logged consultant.
+            $consultantId = 0;
+            if ($is_consultant && !$is_coordinator) {
+                $consultantId = $uid;
+            }
+            $ch = Database::get()->querySingle("SELECT id FROM mod_session WHERE id = ?d 
+                                                AND course_id = ?d AND creator = ?d", $_GET['session'], $course_id, $consultantId); // only for logged consultant
+            if ((!$ch && $is_consultant && !$is_coordinator) or !$is_consultant) {
+                Session::flash('message', $langForbidden);
+                Session::flash('alert-class', 'alert-warning');
+                redirect_to_home_page('modules/session/index.php?course=' . $course_code);
+            }
+
+            $onBehalfOfUser = "<input type='hidden' name='onBehalfOfUserId' id='onBehalfOfUserId' value='{$userDefault}'>";
+            $forSession = "<input type='hidden' name='forSession' value='$_GET[session]'>"; 
+            $session_participants = Database::get()->queryArray("SELECT mod_session_users.participants,user.givenname,user.surname FROM mod_session_users
+                                                                 JOIN user ON mod_session_users.participants = user.id
+                                                                 WHERE mod_session_users.session_id = ?d 
+                                                                 AND mod_session_users.is_accepted = ?d", $_GET['session'], 1);
+
+            $actionPoll = $urlAppend . "modules/units/view.php?course=$course_code&res_type=questionnaire&pid=$pid&UseCase=1&session=$_GET[session]&from_session_view=true&onBehalfOfUser=true&printPollForUser=true";
+            $tool_content .= "
+                <div class='col-12 mb-4'>
+                    <div class='card panelCard card-default px-lg-4 py-lg-3 mb-4'>
+                        <div class='card-header border-0 d-flex justify-content-between align-items-center'>
+                            <h3>$langSubmissionOnBehalfOfUser</h3>
+                        </div>
+                        <div class='card-body'>
+                            <form id='onBehalfOfSelectionForm' method='post' action='$actionPoll'>
+                                <select id='onBehalfOfSelection' class='form-select' name='userSelected'>";
+                                    $tool_content .= "<option value='0' selected>$langSelect</option>";
+                                    foreach ($session_participants as $p) {
+                                        $tool_content .= "<option value='{$p->participants}' " . ($userDefault == $p->participants ? 'selected' : '') . ">{$p->givenname}&nbsp;{$p->surname}</option>";
+                                    }
+            $tool_content .= " </select>
+                            </form>";
+                            if (isset($_GET['printPollForUser']) && $userDefault > 0) {
+                                $tool_content .= "
+                                <div class='d-flex justify-content-start align-items-center gap-3 mt-3 flex-wrap'>
+                                    $langProcessForFiliInTool
+                                    <div>
+                                        <div class='spinner-grow text-primary' role='status' style='width:15px; height:15px;'>
+                                            <span class='visually-hidden'></span>
+                                        </div>
+                                        <div class='spinner-grow text-secondary' role='status' style='width:15px; height:15px;'>
+                                            <span class='visually-hidden'>.</span>
+                                        </div>
+                                        <div class='spinner-grow text-success' role='statu' style='width:15px; height:15px;'>
+                                            <span class='visually-hidden'></span>
+                                        </div>
+                                        <div class='spinner-grow text-danger' role='status' style='width:15px; height:15px;'>
+                                            <span class='visually-hidden'></span>
+                                        </div>
+                                    </div>
+                                </div>";
+                            }
+      $tool_content .= "</div>
+                    </div>
+                </div>";
+        }
+
         if ($thePoll->description) {
             $tool_content .= "<div class='col-12 mb-4'>
                                 <div class='card panelCard card-default px-lg-4 py-lg-3 mb-4'>
@@ -380,7 +476,11 @@ function printPollForm() {
         if (isset($_REQUEST['unit_id'])) {
             $form_link = "../units/view.php?course=$course_code&amp;res_type=questionnaire&amp;id=$_REQUEST[unit_id]";
         } else if (isset($_REQUEST['res_type'])) {
-            $form_link = "../units/view.php?course=$course_code&amp;res_type=questionnaire";
+            $session_view = '';
+            if (isset($_GET['from_session_view'])) {
+                $session_view = "&amp;session=$_GET[session]&amp;from_session_view=true";
+            }
+            $form_link = "../units/view.php?course=$course_code&amp;res_type=questionnaire$session_view";
         } else {
             $form_link = "$_SERVER[SCRIPT_NAME]?course=$course_code";
         }
@@ -389,6 +489,8 @@ function printPollForm() {
             <form class='form-horizontal' role='form' action='$form_link' id='poll' method='post'>
                 <fieldset>
                 <legend class='mb-0' aria-label='$langForm'></legend>
+                $onBehalfOfUser
+                $forSession
                 <input type='hidden' value='2' name='UseCase'>
                 <input type='hidden' value='$pid' name='pid'>";
                 if (isset($_REQUEST['unit_id'])) {
@@ -400,7 +502,7 @@ function printPollForm() {
         //      Get answers + questions
         //******************************************************************************/
         $questions = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d ORDER BY q_position ASC", $pid);
-        if (!$uid) {
+        if (!$userDefault && !isset($_GET['printPollForUser'])) {
             $email = Session::has('participantEmail') ? Session::get('participantEmail') : '';
             $email_error = Session::getError('participantEmail') ? " has-error" : "";
             $tool_content .= "
@@ -423,7 +525,7 @@ function printPollForm() {
         $pollType = Database::get()->querySingle("SELECT `type` FROM poll WHERE pid = ?d", $pid)->type;
         $pollPagination = Database::get()->querySingle("SELECT `pagination` FROM poll WHERE pid = ?d", $pid)->pagination;
         if (isset($_SESSION["poll_answers_$pid"])) {
-            $incomplete_resubmission = $_SESSION["poll_answers_$pid"];
+            $incomplete_resubmission = isset($_SESSION["poll_answers_$pid"]);
             $incomplete_answers = $_SESSION["poll_answers_$pid"];
             unset($_SESSION["poll_answers_$pid"]);
         }
@@ -433,6 +535,17 @@ function printPollForm() {
         $tool_content .= "<input id='current_page' type='hidden' value='$page'>";
         $tool_content .= "<input id='total_pages' type='hidden' value='".count($questions)."'>";
         $tool_content .= "<input id='paginate_answers' type='hidden' value='$pollPagination'>";
+        // Session process
+        $user_answers_session = false;
+        $sql_an = '';
+        $s_id = $_GET['session'] ?? 0;
+        if (isset($s_id) && $s_id > 0 && isset($_GET['from_session_view'])) {
+            $user_answers_session = true;
+        }
+        //if ($user_answers_session) {
+            $sql_an = "AND b.session_id = $s_id";
+        //}
+        
         foreach ($questions as $theQuestion) {
             if ($temp_IsLime) {
                 break;
@@ -471,7 +584,8 @@ function printPollForm() {
                                                 ON a.aid = c.pqaid
                                             WHERE a.poll_user_record_id = b.id
                                                 AND a.qid = ?d
-                                                AND b.uid = ?d", $pqid, $uid);
+                                                AND b.uid = ?d
+                                                $sql_an", $pqid, $userDefault);
                                 } elseif (isset($incomplete_resubmission)) {
                                     $user_answers = $incomplete_answers[$pqid];
                                 }
@@ -539,7 +653,8 @@ function printPollForm() {
                                                         FROM poll_answer_record a, poll_user_record b
                                                     WHERE qid = ?d
                                                         AND a.poll_user_record_id = b.id
-                                                        AND b.uid = ?d", $pqid, $uid);
+                                                        AND b.uid = ?d
+                                                        $sql_an", $pqid, $userDefault);
                                     if ($user_answers) {
                                         $slider_value = $user_answers->answer_text;
                                     }
@@ -571,7 +686,8 @@ function printPollForm() {
                                                         FROM poll_answer_record a, poll_user_record b
                                                     WHERE qid = ?d
                                                         AND a.poll_user_record_id = b.id
-                                                        AND b.uid = ?d", $pqid, $uid);
+                                                        AND b.uid = ?d
+                                                        $sql_an", $pqid, $userDefault);
                                     if ($user_answers) {
                                         $text = $user_answers->answer_text;
                                     }
@@ -627,7 +743,8 @@ function printPollForm() {
                                                                                                                 AND a.poll_user_record_id = b.id
                                                                                                                 AND b.uid = ?d
                                                                                                                 AND a.sub_qid = ?d
-                                                                                                                AND a.sub_qid_row = ?d", $pqid, $uid, $val_col, $val_row);
+                                                                                                                AND a.sub_qid_row = ?d
+                                                                                                                $sql_an", $pqid, $userDefault, $val_col, $val_row);
                                                                         if ($user_q) {
                                                                             $text = $user_q->answer_text;
                                                                         }
@@ -678,8 +795,12 @@ function printPollForm() {
         }
 
         $tool_content .= "<div class='col-12 d-flex justify-content-center mt-5'>";
-        if ($is_editor) {
-            $tool_content .= "<a class='btn cancelAdminBtn' href='index.php?course=$course_code'>" . q($langBack) . "</a>";
+        if ($is_editor && !isset($_GET['onBehalfOfUser'])) {
+            if (isset($_GET['from_session_view'])) {
+                $tool_content .= "<a class='btn cancelAdminBtn' href='../session/session_space.php?course=$course_code&amp;session=$_GET[session]'>" . q($langBack) . "</a>";
+            } else {
+                $tool_content .= "<a class='btn cancelAdminBtn' href='index.php?course=$course_code'>" . q($langBack) . "</a>";
+            }
         } else if ($is_course_reviewer) {
             // is poll assigned to course_reviewer?
             $query = "SELECT * FROM poll WHERE pid = ?d";
@@ -702,11 +823,15 @@ function printPollForm() {
             }
         } else {
             if (!$temp_IsLime) {
-                $tool_content .= "<input class='btn submitAdminBtn' name='submit' type='submit' value='" . q($langSubmit) . "'>";
+                $tool_content .= "<input class='btn submitAdminBtn blockUI' name='submit' type='submit' value='" . q($langSubmit) . "'>";
                 if (isset($_REQUEST['unit_id'])) {
                     $tool_content .= "<a class='btn cancelAdminBtn ms-3' href='../units/index.php?course=$course_code&amp;id=$_REQUEST[unit_id]'>" . q($langCancel) . "</a>";
                 } else {
-                    $tool_content .= "<a class='btn cancelAdminBtn ms-3' href='index.php?course=$course_code'>" . q($langCancel) . "</a>";
+                    if (isset($_GET['from_session_view'])) {
+                        $tool_content .= "<a class='btn cancelAdminBtn ms-3' href='../session/session_space.php?course=$course_code&amp;session=$_GET[session]'>" . q($langCancel). "</a>";
+                    } else {
+                        $tool_content .= "<a class='btn cancelAdminBtn ms-3' href='index.php?course=$course_code'>" . q($langCancel) . "</a>";
+                    }
                 }
             }
         }
@@ -764,7 +889,7 @@ function show_limesurvey_integration($thePoll) {
 function submitPoll() {
     global $tool_content, $course_code, $uid, $langPollSubmitted, $langBack, $langQFillInAllQs,
            $langUsage, $langTheField, $langFormErrors, $urlServer, $langPollParticipateConfirm,
-           $langPollEmailUsed, $langPollParticipateConfirmation, $course_id, $pid;
+           $langPollEmailUsed, $langPollParticipateConfirmation, $course_id, $pid, $langChooseAUser;
 
     $unit_id = isset($_REQUEST['unit_id'])? intval($_REQUEST['unit_id']): null;
     $poll = Database::get()->querySingle("SELECT * FROM poll WHERE pid = ?d", $pid);
@@ -772,9 +897,33 @@ function submitPoll() {
     $is_complete = true;
     $v = new Valitron\Validator($_POST);
     $atleast_one_answer = false;
+    // Session process
+    $sql_u = '';
+    $s_id = $_GET['session'] ?? 0;
+    //if (isset($_GET['from_session_view'])) {
+        $sql_u = "AND session_id = $s_id";
+    //}
     if ($poll->require_answer) {
         $atleast_one_answer = true;
     }
+
+    if (isset($_POST['onBehalfOfUserId'])) {
+        $isAllowed = true;
+        $users_arr = [];
+        $users_p = Database::get()->queryArray("SELECT participants FROM mod_session_users WHERE session_id = ?d AND is_accepted = ?d", $_POST['forSession'], 1);
+        foreach ($users_p as $p) {
+            $users_arr[] = $p->participants;
+         }
+        if ($_POST['onBehalfOfUserId'] < 1 or !in_array($_POST['onBehalfOfUserId'], $users_arr)) {
+            $isAllowed = false;
+        }
+        if (!$isAllowed) {
+            Session::flash('message', $langChooseAUser);
+            Session::flash('alert-class', 'alert-warning');
+            redirect_to_home_page("modules/questionnaire/pollparticipate.php?course=$course_code&UseCase=1&pid=$pid&session=$_POST[forSession]&from_session_view=true&onBehalfOfUser=true");
+        }
+    }
+
     if (!$uid) {
         $v->addRule('unique', function($field, $value, array $params) use ($pid){
             return !Database::get()->querySingle("SELECT COUNT(*) AS count FROM poll_user_record WHERE email = ?s AND pid = ?d", $value, $pid)->count;
@@ -788,25 +937,27 @@ function submitPoll() {
         // first populate poll_answer
         $CreationDate = date("Y-m-d H:i");
         $answer = isset($_POST['answer'])? $_POST['answer']: array();
-        if ($uid) {
+        $userDefault = $_POST['onBehalfOfUserId'] ?? $uid;
+
+        if ($userDefault) {
             $eventData = new stdClass();
             $eventData->courseId = $course_id;
-            $eventData->uid = $uid;
+            $eventData->uid = $userDefault;
             $eventData->activityType = ViewingEvent::QUESTIONNAIRE_ACTIVITY;
             $eventData->module = MODULE_ID_QUESTIONNAIRE;
             $eventData->resource = intval($pid);
             ViewingEvent::trigger(ViewingEvent::NEWVIEW, $eventData);
 
             if (isset($_REQUEST['update'])) { // if poll has enabled multiple submissions first delete the previous answers
-                Database::get()->query("DELETE FROM poll_answer_record WHERE poll_user_record_id IN (SELECT id FROM poll_user_record WHERE uid = ?d AND pid = ?d)", $uid, $pid);
-                Database::get()->query("DELETE FROM poll_user_record WHERE uid = ?d AND pid = ?d", $uid, $pid);
+                Database::get()->query("DELETE FROM poll_answer_record WHERE poll_user_record_id IN (SELECT id FROM poll_user_record WHERE uid = ?d AND pid = ?d $sql_u)", $userDefault, $pid);
+                Database::get()->query("DELETE FROM poll_user_record WHERE uid = ?d AND pid = ?d $sql_u", $userDefault, $pid);
             }
-            $user_record_id = Database::get()->query("INSERT INTO poll_user_record (pid, uid) VALUES (?d, ?d)", $pid, $uid)->lastInsertID;
+            $user_record_id = Database::get()->query("INSERT INTO poll_user_record (pid, uid, session_id) VALUES (?d, ?d, ?d)", $pid, $userDefault, $s_id)->lastInsertID;
         } else {
             require_once 'include/sendMail.inc.php';
             $participantEmail = $_POST['participantEmail'];
             $verification_code = randomkeys(255);
-            $user_record_id = Database::get()->query("INSERT INTO poll_user_record (pid, uid, email, email_verification, verification_code) VALUES (?d, ?d, ?s, ?d, ?s)", $pid, $uid, $participantEmail, 0, $verification_code)->lastInsertID;
+            $user_record_id = Database::get()->query("INSERT INTO poll_user_record (pid, uid, email, email_verification, verification_code, session_id) VALUES (?d, ?d, ?s, ?d, ?s, ?d)", $pid, $userDefault, $participantEmail, 0, $verification_code, $s_id)->lastInsertID;
             $subject = $langPollParticipateConfirmation;
             $body_html = "
              <!-- Header Section -->
@@ -918,7 +1069,11 @@ function submitPoll() {
 //            Database::get()->query('DELETE FROM poll_user_record WHERE id = ?d', $user_record_id);
             Session::flash('message', $langQFillInAllQs);
             Session::flash('alert-class', 'alert-warning');
-            redirect_to_home_page("modules/questionnaire/pollparticipate.php?course=$course_code&UseCase=1&pid=$pid");
+            if(isset($_GET['from_session_view'])){
+                redirect_to_home_page("modules/units/view.php?course=$course_code&res_type=questionnaire&UseCase=1&pid=$pid&session=$_GET[session]&from_session_view=true");
+            }else{
+                redirect_to_home_page("modules/questionnaire/pollparticipate.php?course=$course_code&UseCase=1&pid=$pid");
+            }
         }
 
         Log::record($course_id, MODULE_ID_QUESTIONNAIRE, LOG_INSERT,
@@ -935,7 +1090,11 @@ function submitPoll() {
         if (isset($_REQUEST['unit_id'])) {
             $tool_content .= "<a class='btn cancelAdminBtn' href='../units/index.php?course=$course_code&amp;id=$_REQUEST[unit_id]'>$langBack</a>";
         } else if (isset($_REQUEST['res_type'])) {
-            $tool_content .= "<a class='btn btn-primary' href='../wall/index.php?course=$course_code'>$langBack</a>";
+            if (isset($_GET['from_session_view'])) {
+                $tool_content .= "<a class='btn btn-primary' href='../session/session_space.php?course=$course_code&amp;session=$_GET[session]'>$langBack</a>";
+            } else {
+                $tool_content .= "<a class='btn btn-primary' href='../wall/index.php?course=$course_code'>$langBack</a>";
+            }
         } else {
             $tool_content .= "<a class='btn cancelAdminBtn' href='index.php?course=$course_code'>$langBack</a>";
         }
@@ -943,7 +1102,11 @@ function submitPoll() {
             if (isset($_REQUEST['unit_id'])) {
                 $tool_content .= "<a class='btn submitAdminBtn ms-3' href='../units/view.php?course=$course_code&amp;res_type=questionnaire_results&amp;unit_id=$_REQUEST[unit_id]&amp;pid=$pid'>$langUsage</a>";
             } else if (isset($_REQUEST['res_type'])) {
-                $tool_content .= "<a class='btn btn-primary' href='../wall/index.php?course=$course_code'>$langUsage</a>";
+                if (isset($_GET['from_session_view'])) { 
+                    $tool_content .= "<a class='btn btn-primary ms-3' href='../questionnaire/pollresults.php?course=$course_code&session=$_GET[session]&pid=$pid&from_session_view=true'>$langUsage<a>";
+                } else {
+                    $tool_content .= "<a class='btn btn-primary' href='../wall/index.php?course=$course_code'>$langUsage</a>";
+                }
             } else {
                 $tool_content .= "<a class='btn submitAdminBtn ms-3' href='pollresults.php?course=$course_code&amp;pid=$pid'>$langUsage</a>";
             }

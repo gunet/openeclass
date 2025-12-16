@@ -8,5 +8,6 @@ import German from '@uppy/locales/lib/de_DE'
 import Italian from '@uppy/locales/lib/it_IT'
 import Spanish from '@uppy/locales/lib/es_ES'
 import Greek from '@uppy/locales/lib/el_GR'
+import Form from '@uppy/form'
 
-export { Uppy, Dashboard, DragDrop, XHRUpload, English, French, German, Italian, Spanish, Greek }
+export { Uppy, Form, Dashboard, DragDrop, XHRUpload, English, French, German, Italian, Spanish, Greek }

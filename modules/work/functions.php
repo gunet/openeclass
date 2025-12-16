@@ -352,12 +352,12 @@ function new_edit_assignment($assignment_id = null) {
  * @brief display user assignment
  * @param type $id
  */
-function display_student_assignment($id, $on_behalf_of = false) {
+function display_student_assignment($id, $on_behalf_of = false): void
+{
 
     global $uid, $urlAppend, $langNoneWorkGroupNoSubmission,
-           $course_id, $course_code, $langAssignmentWillBeActive, $langOnBehalfOf,
-           $langWrongPassword, $langIPHasNoAccess, $langNoPeerReview,
-           $langNoneWorkUserNoSubmission, $langGroupSpaceLink, $langPendingPeerSubmissions,
+           $course_id, $course_code, $unit, $langAssignmentWillBeActive, $langOnBehalfOf,
+           $langWrongPassword, $langIPHasNoAccess, $langNoneWorkUserNoSubmission, $langGroupSpaceLink,
            $is_editor, $langGroupAssignmentPublish, $langGroupAssignmentNoGroups,
            $langThisIsGroupAssignment;
 
@@ -370,6 +370,7 @@ function display_student_assignment($id, $on_behalf_of = false) {
     $cdate = date('Y-m-d H:i:s');
     $is_group_assignment = is_group_assignment($id);
     $user_group_info = user_group_info($uid, $course_id);
+
     if (!empty($user_group_info)) {
         $gids_sql_ready = implode(',',array_keys($user_group_info));
     } else {
@@ -377,7 +378,7 @@ function display_student_assignment($id, $on_behalf_of = false) {
     }
 
     if ($on_behalf_of && $is_editor) {
-        $row = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time                                                         
+        $row = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
                                                      FROM assignment
                                                      WHERE course_id = ?d
                                                         AND id = ?d",
@@ -398,12 +399,12 @@ function display_student_assignment($id, $on_behalf_of = false) {
                                                                    WHERE group_id != 0 AND group_id IN ($gids_sql_ready)))",
             $course_id, $id, $uid);
     }
-    $data['count_of_assign'] = $count_of_assign = countSubmissions($id);
+    $data['count_of_assign'] = countSubmissions($id);
     $_SESSION['has_unlocked'][$id] = true;
 
     if ($row) {
         $grading_type = $row->grading_type;
-        $data['reviews_per_assignment'] = $reviews_per_assignment = $row->reviews_per_assignment;
+        $data['reviews_per_assignment'] = $row->reviews_per_assignment;
         if ($row->password_lock !== '' and (!isset($_POST['password']) or $_POST['password'] !== $row->password_lock) and !$on_behalf_of) {
             $_SESSION['has_unlocked'][$id] = false;
             Session::flash('message',$langWrongPassword);
@@ -461,22 +462,33 @@ function display_student_assignment($id, $on_behalf_of = false) {
                 return;
             }
             if ($is_group_assignment) {
+                $user_group_assigned_info = [];
                 if (!$on_behalf_of) {
-                    if (count($user_group_info) == 1) {
-                        $gids = array_keys($user_group_info);
+                    if ($row->assign_to_specific == 2) { // is group assignment assigned to specific groups?
+                        foreach ($user_group_info as $gid => $group_name) {
+                            $q = Database::get()->querySingle("SELECT group_id FROM assignment_to_specific WHERE assignment_id = ?d AND group_id = ?d", $id, $gid);
+                            if ($q) {
+                                $user_group_assigned_info[$q->group_id] = $group_name;
+                            }
+                        }
+                    } else { // group assignment is assigned to all groups
+                        $user_group_assigned_info = $user_group_info;
+                    }
+                    if (count($user_group_assigned_info) == 1) {
+                        $gids = array_keys($user_group_assigned_info);
                         $group_select_hidden_input = "<input type='hidden' name='group_id' value='$gids[0]' />";
-                    } elseif ($user_group_info) {
+                    } elseif ($user_group_assigned_info) {
                         $group_select_form = "
                         <div class='form-group mt-4'>
                             <label for='group_id' class='col-sm-12 control-label-notes'>$langGroupSpaceLink:</label>
                             <div class='col-sm-12'>
-                              " . selection($user_group_info, 'group_id') . "
+                              " . selection($user_group_assigned_info, 'group_id') . "
                             </div>
                         </div>";
                     } else {
                         $group_link = $urlAppend . 'modules/group/';
                         $GroupWorkWarning = "<span>$langThisIsGroupAssignment<br>" .
-                            sprintf(count($user_group_info) ?
+                            sprintf(count($user_group_assigned_info) ?
                                 $langGroupAssignmentPublish :
                                 $langGroupAssignmentNoGroups, $group_link) .
                             "</span>";
@@ -534,8 +546,8 @@ function display_student_assignment($id, $on_behalf_of = false) {
         if ($is_editor) {
             $back_link = $form_link = "index.php?course=$course_code&id=$id";
         } else {
-            if (isset($_GET['unit'])) {
-                $back_link = "../units/index.php?course=$course_code&id=$_GET[unit]";
+            if (isset($unit)) {
+                $back_link = "../units/index.php?course=$course_code&id=$unit";
                 $form_link = "../units/view.php?course=$course_code";
             } else {
                 $back_link = $form_link = "{$urlAppend}modules/work/index.php?course=$course_code";
@@ -581,6 +593,9 @@ function display_student_assignment($id, $on_behalf_of = false) {
     $data['form_link'] = $form_link;
     $data['back_link'] = $back_link;
     $data['submit_ok'] = $submit_ok;
+    $data['assignment_link'] = isset($unit) ?
+        "{$urlAppend}modules/units/view.php?course=$course_code&res_type=assignment&id=$id&unit=$unit" :
+        "{$urlAppend}modules/work/index.php?course=$course_code&id=$id";
 
     view('modules.work.submit_assignment', $data);
 }
@@ -595,8 +610,8 @@ function display_assignment_review($id) {
            $langSGradebookBook, $langEdit, $urlAppend;
 
     $assign = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
-                                                FROM assignment 
-                                                WHERE course_id = ?d 
+                                                FROM assignment
+                                                WHERE course_id = ?d
                                                 AND id = ?d",
                                             $course_id, $id);
     $i = 1;
@@ -649,9 +664,9 @@ function display_assignment_review($id) {
             $grade_field = "<a class='link' href='$grade_link' aria-label='$langSGradebookBook'><span class='fa fa-fw fa-plus' data-bs-title='$langSGradebookBook' title='' data-bs-toggle='tooltip'></span></a>";
         }
         $html_content .= "<tr>
-            <td class='text-end'>$i.</td>        
+            <td class='text-end'>$i.</td>
             <td>$filelink</td>
-            <td class='col-1'>            
+            <td class='col-1'>
               <div class='form-group ".(Session::getError("grade.$row->id") ? "has-error" : "")."'>
                 $grade_field
                 <span class='help-block Accent-200-cl'>".Session::getError("grade.$row->id")."</span>
@@ -1125,6 +1140,7 @@ function display_submission_details($id) {
 
     $notice = $langSubmitted;
     $grade = $grade_comments = '';
+    $data['submission_comments'] = $sub->comments;
     if (!empty($sub->grade_comments)) {
         $grade_comments = q($sub->grade_comments);
     }
@@ -1907,7 +1923,7 @@ function submit_work($id, $on_behalf_of = null) {
     if ($submit_ok) {
         $success_msgs = array();
         //Preparing variables
-        $user_id = isset($on_behalf_of) ? $on_behalf_of : $uid;
+        $user_id = $on_behalf_of ?? $uid;
         if ($row->group_submissions) {
             $group_id = isset($_POST['group_id']) ? intval($_POST['group_id']) : -1;
             $gids = user_group_info($on_behalf_of ? null : $user_id, $course_id);
@@ -1943,84 +1959,99 @@ function submit_work($id, $on_behalf_of = null) {
             $local_name = replace_dangerous_char($local_name);
             $local_name = work_secret($row->id) . '/' . $local_name;
 
-            $files_to_keep = [];
             $file_name = $filename = $submission_text = '';
-            $no_files = isset($on_behalf_of) && !isset($_FILES);
+            $has_uploaded_files = isset($_FILES['userfile']) && !empty($_FILES['userfile']['name'][0]);
 
-            if (!$no_files) {
-                // Multiple files
-                if ($row->submission_type == 2) {
-                    $maxFiles = $row->max_submissions;
-                    $totalFiles = 0;
-                    $fileInfo = [];
+            if ($has_uploaded_files) {
+                $files_list = [];
+
+                if (isset($_FILES['userfile']) && is_array($_FILES['userfile']['name'])) {
                     foreach ($_FILES['userfile']['name'] as $i => $name) {
-                        $status = $_FILES['userfile']['error'][$i];
-                        if (!in_array($status, [UPLOAD_ERR_OK, UPLOAD_ERR_NO_FILE])) {
-                            Session::flash('message',$langUploadError);
-                            Session::flash('alert-class', 'alert-danger');
-                            redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
-                        }
-                        if ($status == UPLOAD_ERR_OK) {
-                            $totalFiles++;
-                        }
+                        // Αν δεν υπάρχει αρχείο σε αυτή τη θέση, το προσπερνάμε
+                        if ($_FILES['userfile']['error'][$i] == UPLOAD_ERR_NO_FILE) continue;
+
+                        $files_list[] = [
+                            'name' => $_FILES['userfile']['name'][$i],
+                            'tmp_name' => $_FILES['userfile']['tmp_name'][$i],
+                            'error' => $_FILES['userfile']['error'][$i]
+                        ];
                     }
-                    $fileCount = count($_FILES['userfile']['name']);
-                    if ($totalFiles > $maxFiles) {
-                        Session::flash('message',$GLOBALS['langWorkFilesCountExceeded']);
-                        Session::flash('alert-class', 'alert-danger');
-                        redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
-                    }
-                    if ($totalFiles == 1) {
-                        $format = '';
-                    } else {
-                        $destDir = $workPath . '/' . $local_name;
-                        if (!is_dir($destDir)) {
-                            mkdir($destDir, 0755);
-                        }
-                        $format = '/%0' . strlen($totalFiles) . 'd';
-                    }
-                    $j = 1;
-                    foreach ($_FILES['userfile']['name'] as $i => $file_name) {
-                        if ($_FILES['userfile']['error'][$i] == UPLOAD_ERR_NO_FILE) {
-                            continue;
-                        }
-                        validateUploadedFile($file_name, 2);
-                        $ext = get_file_extension($file_name);
-                        $filename = $local_name . sprintf($format, $j) . (empty($ext) ? '' : '.' . $ext);
-                        $file_moved = move_uploaded_file($_FILES['userfile']['tmp_name'][$i], $workPath . '/' . $filename);
-                        if (!$file_moved) {
-                            break;
-                        }
-                        $fileInfo[] = [$filename, $file_name];
-                        $files_to_keep[] = $filename;
-                        $j++;
-                    }
-                    // keep details of first file for insert into DB
-                    list($filename, $file_name) = $fileInfo[0];
-                } else {
-                    // Single file
-                    if ($_FILES['userfile']['error'] == UPLOAD_ERR_NO_FILE) {
-                        Session::flash('message', $langNoFileUploaded);
-                        Session::flash('alert-class', 'alert-warning');
-                        redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
-                    }
-                    if ($_FILES['userfile']['error'] == UPLOAD_ERR_CANT_WRITE) {
-                        Session::flash('message', $langUploadError);
-                        Session::flash('alert-class', 'alert-danger');
-                        redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
-                    }
-                    $file_name = $_FILES['userfile']['name'];
-                    validateUploadedFile($file_name, 2);
-                    $ext = get_file_extension($file_name);
-                    $filename = $local_name . (empty($ext) ? '' : '.' . $ext);
-                    $file_moved = move_uploaded_file($_FILES['userfile']['tmp_name'], $workPath . '/' . $filename);
-                    $files_to_keep = [$filename];
                 }
-                if (!$file_moved) {
+
+                $maxFiles = $row->max_submissions;
+                $totalFiles = count($files_list);
+                $fileInfo = [];
+
+                foreach ($files_list as $file) {
+                    if ($file['error'] !== UPLOAD_ERR_OK) {
+                        Session::flash('message', $langUploadError . ' (Code: ' . $file['error'] . ')');
+                        Session::flash('alert-class', 'alert-danger');
+                        redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
+                        exit();
+                    }
+                }
+
+                if ($totalFiles > $maxFiles) {
+                    Session::flash('message',$GLOBALS['langWorkFilesCountExceeded']);
+                    Session::flash('alert-class', 'alert-danger');
+                    redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
+                    exit();
+                }
+
+                if ($totalFiles == 1) {
+                    $format = '';
+                } else {
+                    $destDir = $workPath . '/' . $local_name;
+                    if (!is_dir($destDir)) {
+                        mkdir($destDir, 0755, true);
+                    }
+                    $format = '/%0' . strlen($totalFiles) . 'd';
+                }
+
+                $j = 1;
+                $files_to_keep = [];
+
+                $all_files_moved = true;
+
+                foreach ($files_list as $file) {
+                    $file_name = $file['name'];
+
+                    validateUploadedFile($file_name, 2);
+
+                    $ext = get_file_extension($file_name);
+                    $filename = $local_name . sprintf($format, $j) . (empty($ext) ? '' : '.' . $ext);
+                    $destination = $workPath . '/' . $filename;
+
+                    $moved = move_uploaded_file($file['tmp_name'], $destination);
+
+                    if (!$moved) {
+                        $all_files_moved = false;
+                        Session::flash('message', "Error moving file: " . $file_name);
+                        Session::flash('alert-class', 'alert-danger');
+                        break; // Σταματάμε το loop
+                    }
+
+                    $fileInfo[] = [$filename, $file_name];
+                    $files_to_keep[] = $filename;
+                    $j++;
+                }
+
+                if (!empty($fileInfo)) {
+                    list($filename, $file_name) = $fileInfo[0];
+                }
+
+                if (!$all_files_moved) {
+                    // Το μήνυμα έχει μπει στο session flash μέσα στο loop
                     Session::flash('message', $langUploadError);
                     Session::flash('alert-class', 'alert-danger');
                     redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
+                    exit();
                 }
+            } else {
+                Session::flash('message', $langNoFileUploaded);
+                Session::flash('alert-class', 'alert-danger');
+                redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
+                exit();
             }
             $success_msgs[] = $langUploadSuccess;
         }
@@ -3254,7 +3285,7 @@ function submit_grade_reviews($args) {
         $grade = is_numeric($grade) ? $grade : null;
         $comment = $args['comments'];
         Database::get()->query("UPDATE assignment_grading_review
-                                    SET grade = ?f, comments =?s, date_submit = " . DBHelper::timeAfter() . ", rubric_scales = ?s 
+                                    SET grade = ?f, comments =?s, date_submit = " . DBHelper::timeAfter() . ", rubric_scales = ?s
                                     WHERE id = ?d",
                             $grade, $comment, $grade_rubric, $sid);
 

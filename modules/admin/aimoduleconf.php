@@ -119,6 +119,7 @@ if (isset($_GET['edit_provider'])) {
     } else {
         $all_courses = 0;
     }
+
     if (isset($_POST['ai_service_id'])) { // update
         $q = Database::get()->query("UPDATE ai_modules SET 
                                         ai_module_id = ?d, 
@@ -136,15 +137,14 @@ if (isset($_GET['edit_provider'])) {
         }
     } else { // new
         $q = Database::get()->query("INSERT INTO ai_modules (ai_module_id, ai_provider_id, all_courses) VALUES (?d, ?d, ?d)",
-                                    $_POST['module'], $_POST['provider_model'], $all_courses);
+            $_POST['module'], $_POST['provider_model'], $all_courses);
         $ai_module = $q->lastInsertID;
-    }
-    if (($all_courses == 0) and count($_POST['ai_courses']) > 0) {
-        foreach ($_POST['ai_courses'] as $ai_course) {
-            Database::get()->query("INSERT INTO ai_courses (course_id, ai_module) VALUES (?d, ?d)", $ai_course, $ai_module);
+        if (($all_courses == 0) and count($_POST['ai_courses']) > 0) {
+            foreach ($_POST['ai_courses'] as $ai_course) {
+                Database::get()->query("INSERT INTO ai_courses (course_id, ai_module) VALUES (?d, ?d)", $ai_course, $ai_module);
+            }
         }
     }
-
     Session::Messages($langAIConfigSaved, 'alert-success');
     redirect_to_home_page('modules/admin/aimoduleconf.php');
 } else if (isset($_GET['add_provider'])) {
@@ -247,7 +247,8 @@ if (isset($_GET['edit_provider'])) {
                 ON ai_modules.ai_provider_id = ai_providers.id");
     foreach ($q as $modules_data) {
         $ai_module_data[] = [ 'id' => $modules_data->id,
-                              'module_id' => $ai_services[$modules_data->ai_module_id],
+                              'ai_module_id' => $modules_data->ai_module_id,
+                              'module_name' => $ai_services[$modules_data->ai_module_id],
                               'name' => $modules_data->name,
                               'model_name' => $modules_data->model_name,
                               'all_courses' => $modules_data->all_courses,

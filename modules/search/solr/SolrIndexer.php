@@ -180,7 +180,7 @@ class SolrIndexer {
         return $this->callVariableIndexer($varidx, $requestType, $resourceId);
     }
 
-    private function callVariableIndexer(?AbstractSolrIndexer $idxObj, string $method, int $arg): ?array {
+    private function callVariableIndexer(AbstractSolrIndexer|SolrIndexer|null $idxObj, string $method, int $arg): ?array {
         $queryPostData = null;
         if ($idxObj !== null && is_callable(array($idxObj, $method))) {
             $queryPostData = $idxObj->$method($arg);

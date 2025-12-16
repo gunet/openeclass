@@ -148,11 +148,17 @@ class OrderingAnswer extends \QuestionType
         $itemsSelectionType = (isset($arrOptions['itemsSelectionType']) ? $arrOptions['itemsSelectionType'] : '');
         $sizeOfSubset = (isset($arrOptions['sizeOfSubset']) ? $arrOptions['sizeOfSubset'] : '');
 
+        $arrow1 = '';
+        $arrow2 = '';
         $displayItems = '';
         if (isset($layoutItems) && $layoutItems == 'Horizontal') {
             $displayItems = 'd-flex justify-content-start align-items-center gap-3 flex-wrap';
+            $arrow1 = 'fa-solid fa-arrow-left';
+            $arrow2 = 'fa-solid fa-arrow-right';
         } elseif (isset($layoutItems) && $layoutItems == 'Vertical') {
             $displayItems = 'd-flex flex-column gap-3';
+            $arrow1 = 'fa-solid fa-up-long';
+            $arrow2 = 'fa-solid fa-down-long';
         }
 
         $randomKeys = array_keys($ordering_answer);
@@ -232,8 +238,8 @@ class OrderingAnswer extends \QuestionType
             $icon = 'fa-arrows';
             $value = $ordering_answer[$i];
             $sortingBtns = "<div class='sorting-controls d-flex gap-2'>
-                                <button type='button' class='btn submitAdminBtn move-up' data-question-id='{$questionId}' onclick='updateListenerOrderingBtn({$question_number}, {$questionId})'><i class='fa-solid fa-up-long'></i></button>
-                                <button type='button' class='btn submitAdminBtn move-down' data-question-id='{$questionId}' onclick='updateListenerOrderingBtn({$question_number}, {$questionId})'><i class='fa-solid fa-down-long'></i></button>
+                                <button type='button' class='btn submitAdminBtn move-up' data-question-id='{$questionId}' onclick='updateListenerOrderingBtn({$question_number}, {$questionId})'><i class='$arrow1'></i></button>
+                                <button type='button' class='btn submitAdminBtn move-down' data-question-id='{$questionId}' onclick='updateListenerOrderingBtn({$question_number}, {$questionId})'><i class='$arrow2'></i></button>
                             </div>";
             if (!in_array($i, $randomKeys)) {
                 $class = 'light-transparent';
