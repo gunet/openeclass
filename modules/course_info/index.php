@@ -227,8 +227,8 @@ if (isset($_POST['submit'])) {
             if (isset($_POST['f_radio'])) {
                 setting_set(SETTING_COURSE_FORUM_NOTIFICATIONS, $_POST['f_radio'], $course_id);
             }
-            if (isset($_POST['enable_docs_public_write'])) {
-                setting_set(SETTING_DOCUMENTS_PUBLIC_WRITE, $_POST['enable_docs_public_write'], $course_id);
+            if (isset($_POST['docs_public_write'])) {
+                setting_set(SETTING_DOCUMENTS_PUBLIC_WRITE, $_POST['docs_public_write']? '1': '0', $course_id);
             }
             if (isset($_POST['enable_access_users_list'])) {
                 setting_set(SETTING_USERS_LIST_ACCESS, $_POST['enable_access_users_list'], $course_id);
