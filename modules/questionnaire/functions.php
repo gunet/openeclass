@@ -286,23 +286,23 @@ function createEvaluationCourse($pid) {
            $qCourseEvaluation_4, $qCourseEvaluation_5, $lang_answer_scale_evaluation;
 
     Database::get()->query("INSERT INTO poll_question
-            (pid, question_text, qtype, q_position, q_scale, answer_scale)
-            VALUES (?d, ?s, ?d, ?d, ?d, ?s)", $pid, $qCourseEvaluation_1, 5, 1, 5, $lang_answer_scale_evaluation);
+            (pid, question_text, qtype, q_position, q_scale, answer_scale, `page`)
+            VALUES (?d, ?s, ?d, ?d, ?d, ?s, ?d)", $pid, $qCourseEvaluation_1, 5, 1, 5, $lang_answer_scale_evaluation, 1);
 
     Database::get()->query("INSERT INTO poll_question
-        (pid, question_text, qtype, q_position, q_scale, answer_scale)
-        VALUES (?d, ?s, ?d, ?d, ?d, ?s)", $pid, $qCourseEvaluation_2, 5, 2, 5, $lang_answer_scale_evaluation);
+        (pid, question_text, qtype, q_position, q_scale, answer_scale, `page`)
+        VALUES (?d, ?s, ?d, ?d, ?d, ?s, ?d)", $pid, $qCourseEvaluation_2, 5, 2, 5, $lang_answer_scale_evaluation, 1);
 
     Database::get()->query("INSERT INTO poll_question
-        (pid, question_text, qtype, q_position, q_scale, answer_scale)
-        VALUES (?d, ?s, ?d, ?d, ?d, ?s)", $pid, $qCourseEvaluation_3, 5, 3, 5, $lang_answer_scale_evaluation);
+        (pid, question_text, qtype, q_position, q_scale, answer_scale, `page`)
+        VALUES (?d, ?s, ?d, ?d, ?d, ?s, ?d)", $pid, $qCourseEvaluation_3, 5, 3, 5, $lang_answer_scale_evaluation, 1);
 
     Database::get()->query("INSERT INTO poll_question
-        (pid, question_text, qtype, q_position, q_scale, answer_scale)
-        VALUES (?d, ?s, ?d, ?d, ?d, ?s)", $pid, $qCourseEvaluation_4, 5, 4, 5, $lang_answer_scale_evaluation);
+        (pid, question_text, qtype, q_position, q_scale, answer_scale, `page`)
+        VALUES (?d, ?s, ?d, ?d, ?d, ?s, ?d)", $pid, $qCourseEvaluation_4, 5, 4, 5, $lang_answer_scale_evaluation, 1);
 
     Database::get()->query("INSERT INTO poll_question
-        (pid, question_text, qtype, q_position, q_scale, answer_scale)
-        VALUES (?d, ?s, ?d, ?d, ?d, ?s)", $pid, $qCourseEvaluation_5, 5, 5, 5, $lang_answer_scale_evaluation);
+        (pid, question_text, qtype, q_position, q_scale, answer_scale, `page`)
+        VALUES (?d, ?s, ?d, ?d, ?d, ?s, ?d)", $pid, $qCourseEvaluation_5, 5, 5, 5, $lang_answer_scale_evaluation, 1);
 
 }

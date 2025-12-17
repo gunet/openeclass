@@ -219,6 +219,9 @@ if (isset($_POST['submitQuestion'])) {
         } else {
             $max_position = Database::get()->querySingle("SELECT MAX(q_position) AS position FROM poll_question WHERE pid = ?d", $pid)->position;
             $max_page = Database::get()->querySingle("SELECT MAX(`page`) AS `maxpage` FROM poll_question WHERE pid = ?d", $pid)->maxpage;
+            if (is_null($max_page)) {
+                $max_page = 1;
+            }
             $query_columns = "pid, question_text, qtype, q_position, description, answer_scale, page, require_response";
             $query_values = "?d, ?s, ?d, ?d, ?s, ?s, ?d, ?d";
             $query_vars = array($pid, $question_text, $qtype, $max_position + 1, $question_description, $answerScale, $max_page, $requireResponse);
@@ -1028,7 +1031,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             <div class='form-group input-group mt-3'>
                         <input class='form-control mt-0 w-50' type='text' name='answers[]' value='' placeholder='$langAnswer'>
                         <input class='form-control mt-0' type='text' name='grades[]' value='' placeholder='$langGradebookGrade'>
-                        <input class='form-control mt-0' type='text' name='messages[]' value='$answer->message' placeholder='$langMessage'>
+                        <input class='form-control mt-0' type='text' name='messages[]' value='' placeholder='$langMessage'>
                         <div class='form-control-static input-group-text h-40px bg-white input-border-color'>
                             " . icon('fa-xmark Accent-200-cl', $langDelete, '#', ' class="del_btn"') . "
                         </div>
@@ -1036,7 +1039,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             <div class='form-group input-group mt-3'>
                     <input class='form-control mt-0 w-50' type='text' name='answers[]' value='' placeholder='$langAnswer'>
                     <input class='form-control mt-0' type='text' name='grades[]' value='' placeholder='$langGradebookGrade'>
-                    <input class='form-control mt-0' type='text' name='messages[]' value='$answer->message' placeholder='$langMessage'>
+                    <input class='form-control mt-0' type='text' name='messages[]' value='' placeholder='$langMessage'>
                     <div class='form-control-static input-group-text h-40px bg-white input-border-color'>
                         " . icon('fa-xmark Accent-200-cl', $langDelete, '#', ' class="del_btn"') . "
                     </div>
