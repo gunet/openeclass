@@ -191,7 +191,7 @@ if (isset($_GET['from_session_view'])) {
                           'level' => 'primary-label',
                           'show' => $is_course_reviewer),
                     array('title' => "$langPollPercentResults ($langDumpPDF)",
-                        'url' => "dumppollresults.php?course=$course_code&amp;pid=$pid&pdf=true",
+                        'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;pid=$pid&amp;format=poll_pdf",
                         'icon' => 'fa-file-pdf',
                         'level' => 'primary-label',
                         'show' => $is_course_reviewer),
@@ -734,7 +734,9 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COU
 if (isset($_GET['format']) and $_GET['format'] == 'pdf') { // pdf format
     $sid = $_GET['session'];
     pdf_session_poll_output($sid);
-}else{
+} elseif (isset($_GET['format']) and $_GET['format'] == 'poll_pdf') {
+    pdf_poll_output();
+} else{
     // display page
     draw($tool_content, 2, null, $head_content);
 }
@@ -742,7 +744,90 @@ if (isset($_GET['format']) and $_GET['format'] == 'pdf') { // pdf format
 
 
 
+/**
+ * @brief output to pdf file
+ * @return void
+ * @throws \Mpdf\MpdfException
+ */
+function pdf_poll_output() {
+    global $tool_content, $currentCourseName, $webDir, $course_id, $course_code;
 
+    $pdf_content = "
+        <!DOCTYPE html>
+        <html lang='el'>
+        <head>
+          <meta charset='utf-8'>
+          <title>" . q("$currentCourseName") . "</title>
+          <style>
+            * { font-family: 'opensans'; }
+            body { font-family: 'opensans'; font-size: 10pt; }
+            small, .small { font-size: 8pt; }
+            h1, h2, h3, h4 { font-family: 'roboto'; margin: .8em 0 0; }
+            h1 { font-size: 16pt; }
+            h2 { font-size: 12pt; border-bottom: 1px solid black; }
+            h3 { font-size: 10pt; color: #158; border-bottom: 1px solid #158; }
+            th { text-align: left; border-bottom: 1px solid #999; }
+            td { text-align: left; }
+            .ButtonsContent{ display: none; }
+            .hidden_names{ display: none; }
+            #hide{ display: none; }
+            em{ display: none; }
+            .hidden-element { display: none; }
+            td ul { list-style: none !important; padding-left: 0 !important; margin-left: 0 !important; }
+            ul { list-style: none !important; padding-left: 0 !important; margin-left: 0 !important; }
+            li { list-style: none !important; }
+            .card-user-answers { background-color: #eeeeee; padding: 0px 25px 20px 25px; margin-top: 15px; margin-bottom: 10px;}
+          </style>
+        </head>
+        <body>
+        <h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>";
+
+    $pdf_content .= $tool_content;
+
+    $pdf_content .= "</body></html>";
+
+    $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
+    $fontDirs = $defaultConfig['fontDir'];
+    $defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
+    $fontData = $defaultFontConfig['fontdata'];
+
+    $mpdf = new Mpdf\Mpdf([
+        'margin_top' => 63,     // approx 200px
+        'margin_bottom' => 63,  // approx 200px
+        'tempDir' => _MPDF_TEMP_PATH,
+        'fontDir' => array_merge($fontDirs, [ $webDir . '/template/modern/fonts' ]),
+        'fontdata' => $fontData + [
+                'opensans' => [
+                    'R' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-regular.ttf',
+                    'B' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-700.ttf',
+                    'I' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-italic.ttf',
+                    'BI' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-700italic.ttf'
+                ],
+                'roboto' => [
+                    'R' => 'roboto-v15-latin_greek_cyrillic_greek-ext-regular.ttf',
+                    'I' => 'roboto-v15-latin_greek_cyrillic_greek-ext-italic.ttf',
+                ]
+            ]
+    ]);
+
+    $mpdf->SetHTMLHeader(get_platform_logo());
+    $footerHtml = '
+    <div>
+        <table width="100%" style="border: none;">
+            <tr>
+                <td style="text-align: left;">{DATE j-n-Y}</td>
+                <td style="text-align: right;">{PAGENO} / {nb}</td>
+            </tr>
+        </table>
+    </div>
+    ' . get_platform_logo('','footer') . '';
+    $mpdf->SetHTMLFooter($footerHtml);
+    $mpdf->SetCreator(course_id_to_prof($course_id));
+    $mpdf->SetAuthor(course_id_to_prof($course_id));
+    $mpdf->WriteHTML($pdf_content);
+    $mpdf->Output("$course_code poll_results.pdf", 'I'); // 'D' or 'I' for download / inline display
+    exit;
+}
 
 /**
  * @brief output to pdf file
