@@ -291,7 +291,7 @@ if (isset($_GET['from_session_view'])) { //session view
     }
 }
 
-if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK) {
+if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COURSE_EVALUATION) {
     $loopTmp = 0;
     foreach ($questions as $theQuestion) {
         $ansExists = Database::get()->querySingle("SELECT arid FROM poll_answer_record WHERE qid = ?d", $theQuestion->pqid);

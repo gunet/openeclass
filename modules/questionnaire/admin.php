@@ -137,8 +137,10 @@ if (isset($_POST['submitPoll'])) {
 
             if ($PollSurveyType == POLL_COLLES) {
                 createcolles($pid);
-            }   elseif($PollSurveyType == POLL_ATTLS) {
+            } elseif ($PollSurveyType == POLL_ATTLS) {
                 createattls($pid);
+            } elseif ($PollSurveyType == POLL_COURSE_EVALUATION) {
+                createEvaluationCourse($pid);
             }
             Session::flash('message',$langPollCreated);
             Session::flash('alert-class', 'alert-success');
@@ -592,6 +594,12 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                       <label>
                         <input type='radio' id='general_type' class='poll_quick' name='survey_type' value='3'".($PollSurveyType == POLL_QUICK ? " checked" : "")." $disabled>
                         <span>$langQuickSurvey</span>
+                      </label>
+                    </div>
+                    <div class='radio mb-1'>
+                      <label>
+                        <input type='radio' id='general_type' name='survey_type' value='100'" . ($PollSurveyType == POLL_COURSE_EVALUATION ? " checked" : "") . " $disabled>
+                        <span>$langCourseEvaluationSurvey </span>
                       </label>
                     </div>
                     <div class='radio mb-1 d-flex justify-content-start align-items-center gap-2'>
@@ -1200,6 +1208,8 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         $poll_type = $langLimeSurvey." $langSurvey";
     } else if ($poll->type == POLL_QUICK) {
         $poll_type = $langQuickSurvey;
+    } else if ($poll->type == POLL_COURSE_EVALUATION) {
+        $poll_type = $langCourseEvaluationSurvey;
     }
 
     if ($poll->assign_to_specific == 1) {
@@ -1348,7 +1358,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     </div>
     ";
 
-    if ($poll->type == POLL_NORMAL) {
+    if ($poll->type == POLL_NORMAL || $poll->type == POLL_COURSE_EVALUATION) {
         $tool_content .= action_bar(array(
             array('title' => $langNewQu,
                   'level' => 'primary-label',

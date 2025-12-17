@@ -3570,6 +3570,7 @@ $langLimeSurvey = "Lime Survey";
 $langPollNoQuestions = "Στο ερωτηματολόγιο δεν έχουν οριστεί ερωτήσεις!";
 $langActivateParticipation = "Ενεργοποίηση Παρουσιολογίου";
 $langQuickSurvey = "Γρήγορη ερώτηση";
+$langCourseEvaluationSurvey = "Αξιολόγηση μαθήματος";
 
 
 //COLLES survey
@@ -3672,6 +3673,14 @@ $lang_ckw_skw_chart = "Εδώ παρουσιάζονται συνοπτικά π
 $langConnected = "Συνδεδεμένα";
 $langSeparated = "Χωρισμένα";
 $langBothWays = "Και με τους 2 τρόπους";
+
+// Course evaluation poll
+$lang_answer_scale_evaluation = "ΚΑΘΟΛΟΥ|ΠΟΛΥ ΛΙΓΟ|ΛΙΓΟ|ΠΟΛΥ|ΠΑΡΑ ΠΟΛΥ";
+$qCourseEvaluation_1 = "Πόσο ενδιαφέρον ήταν το μάθημα για εσάς;";
+$qCourseEvaluation_2 = "Πόσο κατανοητό και εύκολα προσβάσιμο ήταν το περιεχόμενο του μαθήματος;";
+$qCourseEvaluation_3 = "Πόσο χρήσιμες ήταν οι εκπαιδευτικές πηγές και το υλικό που παρέχονται κατά τη διάρκεια του μαθήματος;";
+$qCourseEvaluation_4 = "Πόσο θετικά επηρέασε η διδασκαλία την κατανόηση και το ενδιαφέρον σας για το αντικείμενο;";
+$qCourseEvaluation_5 = "Πόσο συμβάλλει το μάθημα στην επαγγελματική ή ακαδημαϊκή σας ανάπτυξη;";
 
 // polls
 $langPollsActive = "Ενεργά Ερωτηματολόγια";
