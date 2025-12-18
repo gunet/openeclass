@@ -88,23 +88,22 @@ if (isset($_POST['submitPoll'])) {
         $lti_template = $_POST['lti_template'] ?? NULL;
         $launchcontainer = $_POST['lti_launchcontainer'] ?? NULL;
         $display_position = (isset($_POST['display_position'])) ? $_POST['display_position'] : 0;
-        $display_pagination = (isset($_POST['display_pagination'])) ? $_POST['display_pagination'] : 0;
         $require_answer = (isset($_POST['require_answer'])) ? $_POST['require_answer'] : 0;
 
         if (isset($pid)) {
             $attempt_counter = Database::get()->querySingle("SELECT COUNT(*) AS `count` FROM poll_user_record WHERE pid = ?d", $pid)->count;
             if ($attempt_counter > 0) {
                 $q = Database::get()->query("UPDATE poll SET name = ?s, start_date = ?t, end_date = ?t, description = ?s,
-                        end_message = ?s, show_results = ?d, multiple_submissions = ?d, default_answer = ?d, type = ?d, assign_to_specific = ?d, lti_template = ?d, launchcontainer = ?d, display_position = ?d, pagination = ?d, require_answer = ?d
+                        end_message = ?s, show_results = ?d, multiple_submissions = ?d, default_answer = ?d, type = ?d, assign_to_specific = ?d, lti_template = ?d, launchcontainer = ?d, display_position = ?d, require_answer = ?d
                         WHERE course_id = ?d AND pid = ?d",
                             $PollName, $PollStart, $PollEnd, $PollDescription, $PollEndMessage, $PollShowResults, $MulSubmissions, $DefaultAnswer,
-                            $PollSurveyType, $PollAssignToSpecific, $lti_template, $launchcontainer, $display_position, $display_pagination, $require_answer, $course_id, $pid);
+                            $PollSurveyType, $PollAssignToSpecific, $lti_template, $launchcontainer, $display_position, $require_answer, $course_id, $pid);
             } else {
                 $q = Database::get()->query("UPDATE poll SET name = ?s, start_date = ?t, end_date = ?t, description = ?s,
-                            end_message = ?s, anonymized = ?d, show_results = ?d, multiple_submissions = ?d, default_answer = ?d, type = ?d, assign_to_specific = ?d, lti_template = ?d, launchcontainer = ?d, display_position = ?d, pagination = ?d, require_answer = ?d
+                            end_message = ?s, anonymized = ?d, show_results = ?d, multiple_submissions = ?d, default_answer = ?d, type = ?d, assign_to_specific = ?d, lti_template = ?d, launchcontainer = ?d, display_position = ?d, require_answer = ?d
                         WHERE course_id = ?d AND pid = ?d",
                             $PollName, $PollStart, $PollEnd, $PollDescription, $PollEndMessage, $PollAnonymized, $PollShowResults, $MulSubmissions, $DefaultAnswer,
-                            $PollSurveyType, $PollAssignToSpecific, $lti_template, $launchcontainer, $display_position, $display_pagination, $require_answer, $course_id, $pid);
+                            $PollSurveyType, $PollAssignToSpecific, $lti_template, $launchcontainer, $display_position, $require_answer, $course_id, $pid);
                 if ($PollSurveyType == POLL_COLLES) {
                     createcolles($pid);
                 }   elseif($PollSurveyType == POLL_ATTLS) {
@@ -124,10 +123,10 @@ if (isset($_POST['submitPoll'])) {
         } else {
             $PollActive = 1;
             $pid = Database::get()->query("INSERT INTO poll
-                            (course_id, creator_id, name, creation_date, start_date, end_date, active, description, end_message, anonymized, show_results, multiple_submissions, default_answer, type, assign_to_specific, lti_template, launchcontainer, display_position, pagination, require_answer)
-                                VALUES (?d, ?d, ?s, ". DBHelper::timeAfter() . ", ?t, ?t, ?d, ?s, ?s, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d)",
+                            (course_id, creator_id, name, creation_date, start_date, end_date, active, description, end_message, anonymized, show_results, multiple_submissions, default_answer, type, assign_to_specific, lti_template, launchcontainer, display_position, require_answer)
+                                VALUES (?d, ?d, ?s, ". DBHelper::timeAfter() . ", ?t, ?t, ?d, ?s, ?s, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d)",
                                             $course_id, $uid, $PollName, $PollStart, $PollEnd, $PollActive, $PollDescription, $PollEndMessage, $PollAnonymized, $PollShowResults,
-                                            $MulSubmissions, $DefaultAnswer, $PollSurveyType, $PollAssignToSpecific, $lti_template, $launchcontainer ,$display_position, $display_pagination, $require_answer)->lastInsertID;
+                                            $MulSubmissions, $DefaultAnswer, $PollSurveyType, $PollAssignToSpecific, $lti_template, $launchcontainer ,$display_position, $require_answer)->lastInsertID;
 
             Log::record($course_id, MODULE_ID_QUESTIONNAIRE, LOG_INSERT,
                             array('id' => $pid,
@@ -639,20 +638,6 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                             ((isset($poll->display_position) && $poll->display_position) ? ' checked' : '') . ">
                             <span class='checkmark'></span>
                             $langYes
-                        </label>
-                    </div>
-                </div>
-            </div>
-            
-            <div class='form-group mt-4'>
-                <div class='col-sm-12 control-label-notes'>$langEnablePagination</div>
-                <div class='col-sm-12'>
-                    <div class='checkbox'>
-                        <label class='label-container' aria-label='$langSelect'>
-                            <input type='checkbox' name='display_pagination' id='display_pagination' value='1'" .
-                            ((isset($poll->pagination) && $poll->pagination) ? 'checked' : '') . ">
-                            <span class='checkmark'></span>
-                            $langEnablePagination
                         </label>
                     </div>
                 </div>
@@ -1420,10 +1405,24 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 } else {
                     $RequiredQuestionHtml = '';
                 }
+                $typeText = '';
+                if (isset($aType[$question->qtype - 1])) {
+                    $typeText = $aType[$question->qtype - 1];
+                }
                 $tool_content .= "  <tr class='even' data-id='$question->pqid'>
                                         <td class='text-nowrap' align='text-right' width='1'>$i.</td>
-                                        <td><p>$RequiredQuestionHtml".(($question->qtype != QTYPE_LABEL) ? q($question->question_text).'<br>' : $question->question_text).
-                                            $aType[$question->qtype - 1]."</p>
+                                        <td>
+                                            <p>$RequiredQuestionHtml";
+                                            if ($question->qtype != QTYPE_LABEL) {
+                                                if ($question->question_text == '--- Page Break ---') {
+                                                    $tool_content .= "<strong>$question->question_text</strong>";
+                                                } else {
+                                                    $tool_content .= q($question->question_text) . "<br>" . $typeText;
+                                                }
+                                            } else {
+                                                $tool_content .= $question->question_text . "<br>" . $typeText;
+                                            }
+                      $tool_content .= "    </p>
                                         </td>
                                         <td>
                                             <div class='d-flex justify-content-end align-items-center gap-2'>
@@ -1474,7 +1473,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                     <tr class='page_break_td' data-id='$dataId'>
                         <td colspan='3'>
                             <div class='d-flex justify-content-between align-items-center gap-3'>
-                                <p>--- Page Break ---</p>
+                                <p><strong>--- Page Break ---</strong></p>
                                 <div class='d-flex justify-content-end align-items-center gap-2'>
                                     <div class='reorder-btn pull-left' style='font-size: 16px; cursor: pointer; vertical-align: bottom;'>
                                         <span class='fa fa-arrows' data-bs-toggle='tooltip' data-bs-placement='top' data-bs-original-title='$langReorder'></span>
