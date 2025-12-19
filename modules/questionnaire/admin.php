@@ -272,14 +272,22 @@ if (isset($_POST['submitAnswers'])) {
         $is_modified_q = true;
     }
 
+    $qids_arr = [];
+    $qids = Database::get()->queryArray("SELECT pqaid FROM poll_question_answer WHERE pqid = ?d", $pqid);
+    foreach ($qids as $q) {
+        $qids_arr[] = $q->pqaid;
+    }
+
     $total_grade = 0;
     $answers = $_POST['answers'];
+    $arr_keys = [];
     foreach ($answers as $key => $answer) {
+        $arr_keys[] = $key;
         if ($answer !== '') {
             $grade = is_numeric($_POST['grades'][$key]) ? $_POST['grades'][$key] : 0;
             $message = $_POST['messages'][$key] ?? '';
             $total_grade = $total_grade + $grade;
-            if (!$is_modified_q) {
+            if (!$is_modified_q or !in_array($key, $qids_arr)) {
                 Database::get()->query("INSERT INTO poll_question_answer (pqid, answer_text, `weight`, `message`)
                                         VALUES (?d, ?s, ?d, ?s)", $pqid, $answer, $grade, $message);
             } else {
@@ -287,6 +295,10 @@ if (isset($_POST['submitAnswers'])) {
                                         WHERE pqaid = ?d", $answer, $grade, $message, $key);
             }
         }
+    }
+    $del_q = array_diff($qids_arr, $arr_keys);
+    foreach ($del_q as $q) {
+        Database::get()->query("DELETE FROM poll_question_answer WHERE pqaid = ?d", $q);
     }
     if ($question->qtype == QTYPE_SINGLE or $question->qtype == QTYPE_MULTIPLE) {
         Database::get()->query("UPDATE poll_question SET total_weight = ?d WHERE pid = ?d AND pqid = ?d", $total_grade, $pid, $pqid);
