@@ -116,8 +116,8 @@ if (isset($_GET['group_as'])) {
                 <thead>
                 <tr class='list-header'>
                   <th style='width:45%;'>$langTitle</th>
-                  <th>$m[subm]</th>
-                  <th>$m[nogr]</th>
+                  <th>$langSubmShort</th>
+                  <th>$langNogrShort</th>
                   <th>$langGroupWorkDeadline_of_Submission</th>
                 </tr></thead>";
         foreach ($result as $row) {
