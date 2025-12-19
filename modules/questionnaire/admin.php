@@ -266,18 +266,26 @@ if (isset($_POST['submitAnswers'])) {
     if (!$question) {
         redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
     }
-    $answers = $_POST['answers'];
-    Database::get()->query("DELETE FROM poll_question_answer WHERE pqid IN
-        (SELECT pqid FROM poll_question WHERE pid = ?d AND pqid = ?d)", $pid, $pqid);
+
+    $is_modified_q = false;
+    if (isset($_POST['update_question'])) {
+        $is_modified_q = true;
+    }
 
     $total_grade = 0;
+    $answers = $_POST['answers'];
     foreach ($answers as $key => $answer) {
         if ($answer !== '') {
             $grade = is_numeric($_POST['grades'][$key]) ? $_POST['grades'][$key] : 0;
             $message = $_POST['messages'][$key] ?? '';
             $total_grade = $total_grade + $grade;
-            Database::get()->query("INSERT INTO poll_question_answer (pqid, answer_text, `weight`, `message`)
-                            VALUES (?d, ?s, ?d, ?s)", $pqid, $answer, $grade, $message);
+            if (!$is_modified_q) {
+                Database::get()->query("INSERT INTO poll_question_answer (pqid, answer_text, `weight`, `message`)
+                                        VALUES (?d, ?s, ?d, ?s)", $pqid, $answer, $grade, $message);
+            } else {
+                Database::get()->query("UPDATE poll_question_answer SET answer_text = ?s, `weight` = ?d, `message` = ?s
+                                        WHERE pqaid = ?d", $answer, $grade, $message, $key);
+            }
         }
     }
     if ($question->qtype == QTYPE_SINGLE or $question->qtype == QTYPE_MULTIPLE) {
@@ -1000,12 +1008,13 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                         </div>
                     </div><hr><br>";
         if (count($answers) > 0) {
+            $tool_content .= "<input type='hidden' name='update_question' value='1'>";
             foreach ($answers as $answer) {
               $tool_content .="
               <div class='form-group input-group mt-3'>
-                    <input type='text' class='form-control mt-0 w-50' name='answers[]' value='$answer->answer_text' placeholder='$langAnswer'>
-                    <input class='form-control mt-0' type='text' name='grades[]' value='$answer->weight' placeholder='$langGradebookGrade'>
-                    <input class='form-control mt-0' type='text' name='messages[]' value='$answer->message' placeholder='$langMessage'>
+                    <input type='text' class='form-control mt-0 w-50' name='answers[$answer->pqaid]' value='$answer->answer_text' placeholder='$langAnswer'>
+                    <input class='form-control mt-0' type='text' name='grades[$answer->pqaid]' value='$answer->weight' placeholder='$langGradebookGrade'>
+                    <input class='form-control mt-0' type='text' name='messages[$answer->pqaid]' value='$answer->message' placeholder='$langMessage'>
                     <div class='form-control-static input-group-text h-40px bg-white input-border-color'>
                         " . icon('fa-xmark Accent-200-cl', $langDelete, '#', ' class="del_btn"') . "
                     </div>
