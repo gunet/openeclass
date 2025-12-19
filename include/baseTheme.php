@@ -495,7 +495,7 @@ function lang_selections_Desktop($idLanguage) {
                                 $class = ($code == $session->language)? ' class="active"': '';
                                 $lang_select .=
                                     "<li role='presentation'$class>
-                                        <a class='list-group-item py-3' role='menuitem' tabindex='-1' href='$_SERVER[SCRIPT_NAME]?localize=$code'>
+                                        <a class='list-group-item py-3' role='menuitem' tabindex='0' href='$_SERVER[SCRIPT_NAME]?localize=$code'>
                                             " .q($native_language_names_init[$code]) . "
                                         </a>
                                     </li>";
