@@ -1362,13 +1362,13 @@ jContent;
      * @return boolean $allow
      */
     public function checkVisibilityRestrictions($nodeId, $nodeVisibility, $options = array('respectVisibility' => true)) {
-        global $uid, $is_admin;
+        global $uid, $is_admin, $is_departmentmanage_user;
         $allow = true;
 
         // check access restrictions
         if ($options['respectVisibility'] && (!$is_admin) && $nodeVisibility != NODE_OPEN) {
-            // hide if anonymous user or eponymous but node is hidden
-            if ($uid < 1 || $nodeVisibility == NODE_CLOSED) {
+            // hide if anonymous user or eponymous but node is hidden and user is not a deparment manage user
+            if ($uid < 1 || ($nodeVisibility == NODE_CLOSED && !$is_departmentmanage_user)) {
                 $allow = false;
             } else {
                 // for eponymous users check subscription status
