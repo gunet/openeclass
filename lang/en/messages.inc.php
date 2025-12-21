@@ -6825,4 +6825,7 @@ $langNoTenants = 'No tenants defined';
 $langAddTenant = 'Add Tenant';
 $langTenantAdded = 'The tenant has been added';
 $langTenantUpdated = 'Tenant information updated';
+$langTenantAdminNotFound = 'User could not not be found';
+$langTenantCategoryNotFound = 'The category has not been set or could not be found';
+$langTenantCategoryNotExist = 'No available category exists';
 $langTenantProfileEditNotAllowed = 'Editing this tenant\'s information is not allowed';

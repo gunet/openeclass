@@ -2532,6 +2532,9 @@ $langNoTenants = 'Δεν έχουν οριστεί ένοικοι';
 $langAddTenant = 'Προσθήκη ενοίκου';
 $langTenantAdded = 'Ο ένοικος προστέθηκε';
 $langTenantUpdated = 'Τα στοιχεία του ενοίκου ενημερώθηκαν';
+$langTenantAdminNotFound = 'Ο χρήστης δεν βρέθηκε';
+$langTenantCategoryNotFound = 'Η κατηγορία δεν έχει καθοριστεί ή δεν βρέθηκε';
+$langTenantCategoryNotExist = 'Δεν υπάρχει διαθέσιμη κατηγορία';
 $langTenantProfileEditNotAllowed = 'Δεν επιτρέπεται η επεξεργασία των στοιχείων του συγκεκριμένου ενοίκου';
 
 

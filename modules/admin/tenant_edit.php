@@ -39,11 +39,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         redirect_to_home_page('modules/admin/tenant_edit.php');
     } else {
         if ($_POST['id']) {
-            Database::get()->query('UPDATE tenant
+            Database::get()->query(
+                'UPDATE tenant
                 SET name = ?s, description = ?s, url = ?s, updated_at = NOW()
                 WHERE id = ?d',
-                $_POST['name'], purify($_POST['description']), $_POST['url'], $_POST['id']);
-                Session::Messages($langTenantUpdated, 'alert-success');
+                $_POST['name'],
+                purify($_POST['description']),
+                $_POST['url'],
+                $_POST['id']
+            );
+            Session::Messages($langTenantUpdated, 'alert-success');
         } else {
             if ($_POST['tenant_category'] == '1') {
                 $department_id = $_POST['category'];
@@ -53,11 +58,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // doesn't return the lastInsertId
                 $department_id = Database::get()->querySingle('SELECT MAX(id) AS id FROM hierarchy')->id;
             }
-            Database::get()->query('INSERT INTO tenant
+            if(!$department_id){
+                //Throw early when no department exists
+                Session::Messages($langTenantCategoryNotFound, 'alert-danger');
+                redirect_to_home_page('modules/admin/tenant_edit.php');
+            }
+            Database::get()->query(
+                'INSERT INTO tenant
                 (name, description, department_id, url, options, created_at, updated_at)
                 VALUES (?s, ?s, ?d, ?s, ?s, NOW(), NOW())',
-                $_POST['name'], purify($_POST['description']), $department_id, $_POST['url'], '');
-                Session::Messages($langTenantAdded, 'alert-success');
+                $_POST['name'],
+                purify($_POST['description']),
+                $department_id,
+                $_POST['url'],
+                ''
+            );
+
+            $adminUsername = $_POST['admin_id'][0] ?? null;
+
+            if (!empty($adminUsername)) {
+
+                $adminUser = Database::get()->querySingle(
+                    'SELECT id FROM user WHERE username = ?s',
+                    $adminUsername
+                );
+
+                if (!$adminUser) {
+                    Session::Messages($langTenantAdminNotFound, 'alert-danger');
+                    redirect_to_home_page('modules/admin/tenant_edit.php');
+                }
+
+                Database::get()->query(
+                    'INSERT INTO admin (user_id, privilege, department_id)
+                 VALUES (?d, ?d, ?d)',
+                    $adminUser->id,
+                    DEPARTMENTMANAGE_USER,
+                    $department_id
+                );
+            }
+
+            Session::Messages($langTenantAdded, 'alert-success');
         }
         redirect_to_home_page('modules/admin/tenants.php');
     }
@@ -76,14 +116,17 @@ if (isset($_GET['id'])) {
     $data['tenant'] = Database::get()->querySingle('SELECT * FROM tenant WHERE id = ?d', $_GET['id']);
     $data['department_name'] = $tree->getFullPath($data['tenant']->department_id);
 } else { // user account request
+    load_js('select2');
     $data['tenant'] = null;
     $tenant_departments = array_map(function ($tenant) {
         return $tenant->department_id;
     }, Database::get()->queryArray('SELECT department_id FROM tenant'));
-    $data['categories'] = array_filter($tree->buildRootsArray(),
+    $data['categories'] = array_filter(
+        $tree->buildRootsArray(),
         function ($node) use ($tenant_departments) {
             return !in_array($node->id, $tenant_departments);
-        });
+        }
+    );
 }
 
 $data['description_editor'] = rich_text_editor('description', 4, 20, $data['tenant']->description ?? '');

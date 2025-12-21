@@ -1,12 +1,12 @@
 @push('head_scripts')
     <script type="text/javascript">
-        $(function () {
+        $(function() {
             if ($('#managedepartmentradio').is(':checked')) {
                 $('#departmentPicker').removeClass('hidden').show();
             } else {
                 $('#departmentPicker').removeClass('hidden').hide();
             }
-            $('input[name=adminrights]').change(function (e) {
+            $('input[name=adminrights]').change(function(e) {
                 $('#departmentPicker').removeClass('hidden');
                 if ($('#managedepartmentradio').is(':checked')) {
                     $('#departmentPicker').slideDown('fast');
@@ -54,43 +54,43 @@
                             </div>
 
                             <div class='form-group mt-4'>
-                                    <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langAddRole') }} <span class='asterisk Accent-200-cl'>(*)</span></div>
-                                    <div class='col-sm-12'>
-                                        <div class='radio mb-4'>
-                                            <label>
-                                                <input type='radio' name='adminrights' value='admin' {{$checked['admin']}}>
-                                                {{ trans('langAdministrator') }}
-                                            </label>
-                                             <div class='help-block'>{{ trans('langHelpAdministrator') }}</div>
-                                        </div>
-
-                                        <div class='radio mb-4'>
-                                            <label>
-                                                <input type='radio' name='adminrights' value='poweruser' {{$checked['poweruser']}}>
-                                                {{ trans('langPowerUser') }}
-                                            </label>
-                                            <div class='help-block'>{{ trans('langHelpPowerUser') }}</div>
-                                        </div>
-
-
-                                        <div class='radio mb-4'>
-                                            <label>
-                                                <input type='radio' name='adminrights' value='manageuser' {{$checked['manageuser']}}>
-                                                {{ trans('langManageUser') }}
-                                            </label>
-                                            <div class='help-block'>{{ trans('langHelpManageUser') }}</div>
-                                        </div>
-
-
-                                        <div class='radio'>
-                                            <label>
-                                                <input type='radio' name='adminrights' value='managedepartment' id='managedepartmentradio' {{$checked['managedepartment']}}>
-                                                {{ trans('langManageDepartment') }}
-                                            </label>
-                                            <div class='help-block'>{{ trans('langHelpManageDepartment') }}</div>
-                                        </div>
-
+                                <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langAddRole') }} <span class='asterisk Accent-200-cl'>(*)</span></div>
+                                <div class='col-sm-12'>
+                                    <div class='radio mb-4'>
+                                        <label>
+                                            <input type='radio' name='adminrights' value='admin' {{$checked['admin']}}>
+                                            {{ trans('langAdministrator') }}
+                                        </label>
+                                        <div class='help-block'>{{ trans('langHelpAdministrator') }}</div>
                                     </div>
+
+                                    <div class='radio mb-4'>
+                                        <label>
+                                            <input type='radio' name='adminrights' value='poweruser' {{$checked['poweruser']}}>
+                                            {{ trans('langPowerUser') }}
+                                        </label>
+                                        <div class='help-block'>{{ trans('langHelpPowerUser') }}</div>
+                                    </div>
+
+
+                                    <div class='radio mb-4'>
+                                        <label>
+                                            <input type='radio' name='adminrights' value='manageuser' {{$checked['manageuser']}}>
+                                            {{ trans('langManageUser') }}
+                                        </label>
+                                        <div class='help-block'>{{ trans('langHelpManageUser') }}</div>
+                                    </div>
+
+
+                                    <div class='radio'>
+                                        <label>
+                                            <input type='radio' name='adminrights' value='managedepartment' id='managedepartmentradio' {{$checked['managedepartment']}}>
+                                            {{ trans('langManageDepartment') }}
+                                        </label>
+                                        <div class='help-block'>{{ trans('langHelpManageDepartment') }}</div>
+                                    </div>
+
+                                </div>
                                 </label>
                             </div>
 
@@ -120,52 +120,57 @@
             <div class='col-12'>
                 <div class='table-responsive'>
                     <table class='table-default'>
-                        <thead><tr class='list-header'>
-                            <th class='count-col'>ID</th>
-                            <th>{{ trans('langSurnameName') }}</th>
-                            <th>{{ trans('langUsername') }}</th>
-                            <th>{{ trans('langRole') }}</th>
-                            <th aria-label="{{ trans('langSettingSelect') }}">{!! icon('fa-gears') !!}</th>
-                        </tr></thead>
-
-                        @foreach ($admins as $admin)
-                            <tr>
-                                <td class='count-col'>{{ $admin->id }}</td>
-                                <td><p>{{ $admin->givenname }} {{ $admin->surname }}</p></td>
-                                <td>{{ $admin->username }}</td>
-                                <td>
-                                @if ($admin->privilege == 0)
-                                    {{ trans('langAdministrator') }}
-                                @elseif ($admin->privilege == 1)
-                                    {{ trans('langPowerUser') }}
-                                @elseif ($admin->privilege == 2)
-                                    {{ trans('langManageUser') }}
-                                @elseif ($admin->privilege == 3)
-                                    {{ trans('langManageDepartment') }}
-                                    {!! $message[$admin->user_id] !!}
-                                @endif
-                                </td>
-                                <td class='text-end'>
-                                @if ($admin->user_id != 1)
-                                    {!! action_button([
-                                            [   'title' => trans('langEditPrivilege'),
-                                                'url' => "{$urlAppend}modules/admin/addadmin.php?edit=". getIndirectReference($admin->user_id),
-                                                'icon' => 'fa-edit'
-                                            ],
-                                            [   'title' => trans('langEditUser'),
-                                                'url' => "{$urlAppend}modules/admin/edituser.php?u={$admin->user_id}",
-                                                'icon' => 'fa-edit'
-                                            ],
-                                            [
-                                                'title' => trans('langDelete'),
-                                                'url' => "$_SERVER[SCRIPT_NAME]?delete=" . getIndirectReference($admin->user_id),
-                                                'class' => 'delete',
-                                                'icon' => 'fa-xmark'
-                                            ]
-                                        ]) !!}
-                                @endif
-                                </td>
+                        <thead>
+                            <tr class='list-header'>
+                                <th class='count-col'>ID</th>
+                                <th>{{ trans('langSurnameName') }}</th>
+                                <th>{{ trans('langUsername') }}</th>
+                                <th>{{ trans('langRole') }}</th>
+                                <th aria-label="{{ trans('langSettingSelect') }}">{!! icon('fa-gears') !!}</th>
                             </tr>
+                        </thead>
+                        @foreach ($admins as $admin)
+                        <tr>
+                            <td class='count-col'>{{ $admin->id }}</td>
+                            <td>
+                                <p>{{ $admin->givenname }} {{ $admin->surname }}</p>
+                            </td>
+                            <td>{{ $admin->username }}</td>
+                            <td>
+                                @foreach ($admin->roles as $role)
+                                <p>{{ $role }}</p>
+                                @endforeach
+
+                                @if (!empty($admin->department_paths))
+                                <ul class="mt-1 mb-0">
+                                    @foreach ($admin->department_paths as $path)
+                                    <li>{{ $path }}</li>
+                                    @endforeach
+                                </ul>
+                                @endif
+                            </td>
+
+                            <td class='text-end'>
+                                @if ($admin->user_id != 1)
+                                {!! action_button([
+                                [ 'title' => trans('langEditPrivilege'),
+                                'url' => "{$urlAppend}modules/admin/addadmin.php?edit=". getIndirectReference($admin->user_id),
+                                'icon' => 'fa-edit'
+                                ],
+                                [ 'title' => trans('langEditUser'),
+                                'url' => "{$urlAppend}modules/admin/edituser.php?u={$admin->user_id}",
+                                'icon' => 'fa-edit'
+                                ],
+                                [
+                                'title' => trans('langDelete'),
+                                'url' => "$_SERVER[SCRIPT_NAME]?delete=" . getIndirectReference($admin->user_id),
+                                'class' => 'delete',
+                                'icon' => 'fa-xmark'
+                                ]
+                                ]) !!}
+                                @endif
+                            </td>
+                        </tr>
                         @endforeach
                     </table>
                 </div>

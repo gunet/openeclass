@@ -166,37 +166,57 @@ if (isset($_GET['add']) or isset($_GET['edit'])) {
 }
 
 
-$data['admins'] = $admins = Database::get()->queryArray('SELECT admin.*, user.username, user.givenname, user.surname 
-    FROM user, admin
-    WHERE user.id = admin.user_id
-    ORDER BY user_id');
+$rows = Database::get()->queryArray("
+    SELECT admin.*, user.username, user.givenname, user.surname
+    FROM user
+    JOIN admin ON user.id = admin.user_id
+    ORDER BY user.id
+");
 
-$out = [];
-foreach ($admins as $admin) {
-    if (isset($out[$admin->user_id])) {
-        $out[$admin->user_id]->department_id[] = $admin->department_id;
-    } else {
-        if (!is_null($admin->department_id)) {
-            $admin->department_id = [$admin->department_id];
-        }
-        $out[$admin->user_id] = $admin;
+$admins = [];
+
+foreach ($rows as $row) {
+    $uid = $row->user_id;
+
+    if (!isset($admins[$uid])) {
+        $admins[$uid] = (object)[
+            'id' => $row->id,
+            'user_id' => $uid,
+            'username' => $row->username,
+            'givenname' => $row->givenname,
+            'surname' => $row->surname,
+            'roles' => [],
+            'department_paths' => []
+        ];
+    }
+
+    switch ($row->privilege) {
+        case ADMIN_USER:
+            $admins[$uid]->roles[] = $langAdministrator;
+            break;
+
+        case POWER_USER:
+            $admins[$uid]->roles[] = $langPowerUser;
+            break;
+
+        case USERMANAGE_USER:
+            $admins[$uid]->roles[] = $langManageUser;
+            break;
+
+        case DEPARTMENTMANAGE_USER:
+            if (!in_array($langManageDepartment, $admins[$uid]->roles)) {
+                $admins[$uid]->roles[] = $langManageDepartment;
+            }
+        
+            if ($row->department_id) {
+                $admins[$uid]->department_paths[] = $tree->getFullPath($row->department_id);
+            }
+            break;
     }
 }
-foreach ($out as $row) {
-    $message = [
-        ADMIN_USER => $langAdministrator,
-        POWER_USER => $langPowerUser,
-        USERMANAGE_USER => $langManageUser,
-        DEPARTMENTMANAGE_USER => $langManageDepartment,
-    ][$row->privilege];
-    if ($row->privilege == DEPARTMENTMANAGE_USER) {
-        $data['message'][$row->user_id] = '<ul>' .
-            implode('', array_map(function ($department_id) use ($tree) {
-                return '<li>' . $tree->getFullPath($department_id) . '</li>';
-            }, $row->department_id)) .
-            '</ul>';
-    }
-}
+
+$data['admins'] = array_values($admins);
+$data['tree'] = $tree;
 
 view ('admin.users.addadmin', $data);
 
