@@ -51,6 +51,7 @@
                         <table id='tenants_table' class='table-default'>
                             <thead>
                                 <tr class='list-header'>
+                                    <th scope='col'>ID</th>
                                     <th scope='col'>{{ trans('langName') }}</th>
                                     <th>&nbsp;</th>
                                 </tr>
@@ -58,12 +59,16 @@
                             <tbody>
                             @foreach ($tenants as $tenant)
                                 <tr>
+                                    <td>{{ $tenant->id }}</td>
                                     <td>{{ $tenant->name }}</td>
                                     <td class='option_btn_cell text-center'>
                                         {!! action_button([
                                               [ 'title' => trans('langEditChange'),
                                                 'icon' => 'fa-edit',
-                                                'url' => "tenant_edit.php?id=$tenant->id" ]
+                                                'url' => "tenant_edit.php?id=$tenant->id" ],
+                                              [ 'title' => trans('langTenantProfile'),
+                                                'icon' => 'fa-edit',
+                                                'url' => "tenant_options.php?id=$tenant->id" ],
                                             ]) !!}
                                     </td>
                                 </tr>

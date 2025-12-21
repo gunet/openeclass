@@ -28,6 +28,7 @@ require_once 'modules/auth/auth.inc.php';
 require_once 'include/lib/user.class.php';
 require_once 'include/lib/hierarchy.class.php';
 require_once 'hierarchy_validations.php';
+require_once 'modules/admin/tenant_functions.php';
 
 global $is_power_user;
 

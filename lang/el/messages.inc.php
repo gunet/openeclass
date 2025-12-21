@@ -2527,10 +2527,12 @@ $langFacultyImage = "Φωτογραφία $langOfFaculty";
  * tenants.php
  * ********************************************* */
 $langTenants = 'Ένοικοι';
+$langTenantProfile = 'Προφίλ Ενοίκου';
 $langNoTenants = 'Δεν έχουν οριστεί ένοικοι';
 $langAddTenant = 'Προσθήκη ενοίκου';
 $langTenantAdded = 'Ο ένοικος προστέθηκε';
 $langTenantUpdated = 'Τα στοιχεία του ενοίκου ενημερώθηκαν';
+$langTenantProfileEditNotAllowed = 'Δεν επιτρέπεται η επεξεργασία των στοιχείων του συγκεκριμένου ενοίκου';
 
 
 /* * *************************************************************

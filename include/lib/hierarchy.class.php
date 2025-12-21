@@ -18,6 +18,8 @@
  *
  */
 
+require_once 'modules/admin/tenant_functions.php';
+
 /**
  * Eclass Hierarchy Coordinating Object.
  *

@@ -29,6 +29,14 @@
         </a>
     @endif
 
+    @php $tenant = getCurrentTenant() @endphp
+
+    @if(($is_admin or $is_departmentmanage_user or $is_power_user) and $tenant)
+        <a  href="tenant_options.php?id={!! $tenant->id !!}" class='quickLink'>
+            <i class="fa-solid fa-id-card settings-icon"></i>{{ trans('langTenantProfile') }}
+        </a>
+    @endif
+
     @if($is_admin)
         <a href="hierarchy.php" class='quickLink'>
             <i class="fa-solid fa-sitemap settings-icon"></i>{{ trans('langHierarchy') }}

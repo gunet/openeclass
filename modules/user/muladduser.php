@@ -24,6 +24,7 @@ $helpTopic = 'course_users';
 
 require_once '../../include/baseTheme.php';
 require_once 'include/log.class.php';
+require_once 'modules/admin/tenant_functions.php';
 
 $toolName = $langAddManyUsers;
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langUsers);
