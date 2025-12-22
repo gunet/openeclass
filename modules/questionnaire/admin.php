@@ -850,11 +850,13 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                     $('#questionScale').closest('div.form-group').removeClass('hidden');
                     $('#answerScale').prop('disabled', false);
                     $('#answerScale').closest('div.form-group').removeClass('hidden');
+                    $('.require_answer_cl').removeClass('d-block').addClass('d-none');
                 } else {
                     $('#questionScale').prop('disabled', true);
                     $('#questionScale').closest('div.form-group').addClass('hidden');
                     $('#answerScale').prop('disabled', true);
                     $('#answerScale').closest('div.form-group').addClass('hidden');
+                    $('.require_answer_cl').removeClass('d-none').addClass('d-block');
                 }
             });
         });
@@ -879,6 +881,10 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             $tool_content .= "</div></div>";
         }
         else {
+            $requireAnswerOn = '';
+            if ($answerType == QTYPE_SCALE) {
+                $requireAnswerOn = 'd-none';
+            }
             $tool_content .= "
                     <div class='radio mb-1'>
                       <label>
@@ -928,7 +934,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 </div>
                 <input type='text' class='form-control' name='answersScale' id='answerScale' value='".(!empty($question->answer_scale) ? $question->answer_scale : '')."'>
             </div>
-            <div class='form-group mt-4'>
+            <div class='form-group mt-4 require_answer_cl $requireAnswerOn'>
                 <div class='checkbox'>
                     <label class='label-container' aria-label='$langSelect'>
                         <input type='checkbox' name='require_response' " . ($requiredAnswer ? 'checked' : '') . ">

@@ -1102,6 +1102,10 @@ function submitPoll() {
         $CreationDate = date("Y-m-d H:i");
         $pageBreakExists = checkPageBreakOn($pid);
         $answer = update_submission($pid, $pageBreakExists);
+        $answeq_ids = [];
+        foreach ($answer as $q => $an) {
+            $answeq_ids[] = $q;
+        }
         $userDefault = $_POST['onBehalfOfUserId'] ?? $uid;
 
         // Check if exists require answer to the specific question
@@ -1168,6 +1172,11 @@ function submitPoll() {
 
         
         if ($pageBreakExists && isset($_SESSION['question_ids'])) {
+            foreach ($_SESSION['question_ids'] as $question_id => $qtype) {
+                if (!in_array($question_id, $answeq_ids)) {
+                    unset($_SESSION['question_ids'][$question_id]);
+                }
+            }
             $question = $_SESSION['question_ids'];
         } else {
             $question = isset($_POST['question'])? $_POST['question']: array();
