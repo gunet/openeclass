@@ -1985,10 +1985,16 @@ function display_available_multimedia($element, $element_id, $unit_id = 0, $unit
     require_once 'include/lib/multimediahelper.class.php';
 
     global $tool_content, $themeimg, $course_id,
-            $langTitle, $langDate, $langChoice,
+            $langTitle, $langDate, $langChoice, $langPoints, $langPollFillText,
             $langAddModulesButton, $langNoVideo, $course_code, $langSelect, $langOpenNewTab;
 
-    $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
+    if ($element == 'certificate') {
+        $element_name = 'certificate_id';
+    } elseif ($element == 'badge') {
+        $element_name = 'badge_id';
+    } else {
+        $element_name = 'points_game_id';
+    }
     $video_found = FALSE;
     $cnt1 = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM video WHERE course_id = ?d", $course_id)->cnt;
     $cnt2 = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM videolink WHERE course_id = ?d", $course_id)->cnt;
@@ -2007,8 +2013,11 @@ function display_available_multimedia($element, $element_id, $unit_id = 0, $unit
         $tool_content .= "<div class='table-responsive'><table class='table-default'>";
         $tool_content .= "<thead><tr class='list-header'>" .
                          "<th class='text-start ps-2'>&nbsp;$langTitle</th>" .
-                         "<th width='100'>$langDate</th>" .
-                         "<th width='80'>$langChoice</th>" .
+                         "<th width='100'>$langDate</th>";
+        if ($element == 'points_game') {
+            $tool_content .= "<th width='40px' class='text-start ps-2'>&nbsp;$langPoints</th>";
+        }
+        $tool_content .= "<th width='80'>$langChoice</th>" .
                          "</tr></thead>";
 
         foreach (array('video', 'videolink') as $table) {
@@ -2057,8 +2066,11 @@ function display_available_multimedia($element, $element_id, $unit_id = 0, $unit
                 }
                 $tool_content .= "<tr>".
                     "<td>&nbsp;".icon('fa-film')."&nbsp;&nbsp;" . $videolink . $description . "</td>".
-                    "<td>" . format_locale_date(strtotime($row->date), 'short', false) . "</td>" .
-                    "<td><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='video[]' value='$table:$row->id'><span class='checkmark'></span></label></td>" .
+                    "<td>" . format_locale_date(strtotime($row->date), 'short', false) . "</td>";
+                if ($element == 'points_game') {
+                    $tool_content .= "<td><input aria-label='$langPollFillText' class='form-control' type='text' name='points_video[$table:$row->id]' value=''></td>";
+                }
+                $tool_content .= "<td><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='video[]' value='$table:$row->id'><span class='checkmark'></span></label></td>" .
                     "</tr>";
             }
         }
@@ -2069,6 +2081,9 @@ function display_available_multimedia($element, $element_id, $unit_id = 0, $unit
                 $description = empty($videocat->description) ? '' : "<div style='margin-top: 10px;' class='text-muted'>". standard_text_escape($videocat->description). "</div>";
                 $tool_content .= "<tr>";
                 $tool_content .= "<td>".icon('fa-folder-o')."&nbsp;&nbsp;" . q($videocat->name) . $description . "</td>";
+                if ($element == 'points_game') {
+                    $tool_content .= "<td><input aria-label='$langPollFillText' class='form-control' type='text' name='points_videocatlink[$videocat->id]' value=''></td>";
+                }
                 $tool_content .= "<td align='center'><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='videocatlink[]' value='$videocat->id'><span class='checkmark'></span></label></td>";
                 $tool_content .= "</tr>";
                 foreach (array('video', 'videolink') as $table) {
@@ -2084,6 +2099,9 @@ function display_available_multimedia($element, $element_id, $unit_id = 0, $unit
                         $tool_content .= "<td>&nbsp;&nbsp;&nbsp;&nbsp;" . icon('fa-film') . "&nbsp;&nbsp;<a href='" . q($linkvideocat->url) . "' target='_blank' aria-label='$langOpenNewTab'>" .
                                 q(($linkvideocat->title == '')? $linkvideocat->url: $linkvideocat->title) . "</a>" . $linkvideocat_description . "</td>";
                         $tool_content .= "<td>" . format_locale_date(strtotime($linkvideocat->date), 'short', false) . "</td>";
+                        if ($element == 'points_game') {
+                            $tool_content .= "<td><input aria-label='$langPollFillText' class='form-control' type='text' name='points_video[$table:$linkvideocat->id]' value=''></td>";
+                        }
                         $tool_content .= "<td><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='video[]' value='$table:$linkvideocat->id'><span class='checkmark'></span></label></td>";
                         $tool_content .= "</tr>";
                     }
@@ -2113,9 +2131,15 @@ function display_available_ebooks($element, $element_id, $unit_id = 0, $unit_res
 
   global $course_id, $course_code, $tool_content, $urlServer,
     $langAddModulesButton, $langChoice, $langNoEBook,
-    $langEBook, $langSelect, $langOpenNewTab;
+    $langEBook, $langSelect, $langOpenNewTab, $langPoints, $langPollFillText;
 
-    $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
+    if ($element == 'certificate') {
+        $element_name = 'certificate_id';
+    } elseif ($element == 'badge') {
+        $element_name = 'badge_id';
+    } else {
+        $element_name = 'points_game_id';
+    }
 
     if ($unit_id) {
         if ($unit_resource_id) {
@@ -2154,13 +2178,19 @@ function display_available_ebooks($element, $element_id, $unit_id = 0, $unit_res
                 "<input type='hidden' name='$element_name' value='$element_id'>" .
                 "<div class='table-responsive'><table class='table-default'>" .
                 "<thead><tr class='list-header'>" .
-                "<th>&nbsp;$langEBook</th>" .
-                "<th style='width:20px;'>$langChoice</th>" .
+                "<th>&nbsp;$langEBook</th>";
+        if ($element == 'points_game') {
+            $tool_content .= "<th style='width:20px;'>$langPoints</th>";
+        }
+        $tool_content .= "<th style='width:20px;'>$langChoice</th>" .
                 "</tr></thead>";
         foreach ($result as $catrow) {
             $tool_content .= "<tr>";
             $tool_content .= "<td class='bold'>".icon('fa-book')."&nbsp;&nbsp;" .
                     q($catrow->title) . "</td>";
+            if ($element == 'points_game') {
+                $tool_content .= "<td><input aria-label='$langPollFillText' class='form-control' type='text' name='points_ebook[$catrow->id]' value=''></td>";
+            }
             $tool_content .= "<td>
             <label class='label-container' aria-label='$langSelect'><input type='checkbox' name='ebook[]' value='$catrow->id' /><span class='checkmark'></span></label>
                             <input type='hidden' name='ebook_title[$catrow->id]'
@@ -2196,15 +2226,21 @@ function display_available_ebooks($element, $element_id, $unit_id = 0, $unit_res
                 if ($old_sid != $sid) {
                     $tool_content .= "<tr>
                                     <td class='section'>".icon('fa-link')."&nbsp;&nbsp;
-                                        " . q($row->section_title) . "</td>
-                                    <td align='center'><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='section[]' value='$sid' /><span class='checkmark'></span></label>
+                                        " . q($row->section_title) . "</td>";
+                                    if ($element == 'points_game') {
+                                        $tool_content .= "<td><input aria-label='$langPollFillText' class='form-control' type='text' name='points_section[$sid]' value=''></td>";
+                                    }
+                                    $tool_content .= "<td align='center'><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='section[]' value='$sid' /><span class='checkmark'></span></label>
                                         <input type='hidden' name='section_title[$sid]'
                                                value='" . q($row->section_title) . "'></td></tr>";
                 }
                 $tool_content .= "<tr>
                                 <td class='subsection'>".icon('fa-link')."&nbsp;&nbsp;
-                                <a href='" . q($surl) . "' target='_blank' aria-label='$langOpenNewTab'>" . q($row->subsection_title) . "</a></td>
-                                <td align='center'><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='subsection[]' value='$ssid' /><span class='checkmark'></span></label>
+                                <a href='" . q($surl) . "' target='_blank' aria-label='$langOpenNewTab'>" . q($row->subsection_title) . "</a></td>";
+                if ($element == 'points_game') {
+                    $tool_content .= "<td><input aria-label='$langPollFillText' class='form-control' type='text' name='points_subsection[$ssid]' value=''></td>";
+                }
+                $tool_content .= "<td align='center'><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='subsection[]' value='$ssid' /><span class='checkmark'></span></label>
                                    <input type='hidden' name='subsection_title[$ssid]'
                                           value='" . q($row->subsection_title) . "'></td>
                             </tr>";
@@ -2228,10 +2264,16 @@ function display_available_ebooks($element, $element_id, $unit_id = 0, $unit_res
  */
 function display_available_polls($element, $element_id, $unit_id = 0, int $unit_resource_id = 0) {
 
-    global $course_id, $course_code, $urlServer, $tool_content,
+    global $course_id, $course_code, $urlServer, $tool_content, $langPoints, $langPollFillText,
             $langPollNone, $langQuestionnaire, $langChoice, $langAddModulesButton, $langSelect;
 
-    $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
+    if ($element == 'certificate') {
+        $element_name = 'certificate_id';
+    } elseif ($element == 'badge') {
+        $element_name = 'badge_id';
+    } else {
+        $element_name = 'points_game_id';
+    }
 
     if ($unit_id) {
         if ($unit_resource_id) {
@@ -2281,13 +2323,19 @@ function display_available_polls($element, $element_id, $unit_id = 0, int $unit_
                 "<input type='hidden' name='$element_name' value='$element_id'>" .
                 "<div class='table-responsive'><table class='table-default'>" .
                 "<thead><tr class='list-header'>" .
-                "<th>$langQuestionnaire</th>" .
-                "<th>$langChoice</th>" .
+                "<th>$langQuestionnaire</th>";
+        if ($element == 'points_game') {
+            $tool_content .= "<th>$langPoints</th>";
+        }
+        $tool_content .= "<th>$langChoice</th>" .
                 "</tr></thead>";
         foreach ($pollinfo as $entry) {
             $description = empty($entry['description']) ? '' : "<div style='margin-top: 10px;' class='text-muted'>". $entry['description']. "</div>";
             $tool_content .= "<tr>";
             $tool_content .= "<td>&nbsp;".icon('fa-question-circle')."&nbsp;&nbsp;<a href='{$urlServer}modules/questionnaire/pollresults.php?course=$course_code&amp;pid=$entry[id]'>" . q($entry['title']) . "</a>" . $description ."</td>";
+            if ($element == 'points_game') {
+                $tool_content .= "<td width='40px'><input aria-label='$langPollFillText' class='form-control' type='text' name='points[".$entry['id']."]' value=''></td>";
+            }
             $tool_content .= "<td><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='poll[]' value='$entry[id]'><span class='checkmark'></span></label></td>";
             $tool_content .= "</tr>";
         }

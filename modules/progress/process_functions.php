@@ -164,17 +164,29 @@ function add_multimedia_to_certificate($element, $element_id) {
     if (isset($_POST['video'])) {
         foreach ($_POST['video'] as $data) {
             $d = explode(":", $data);
-            Database::get()->query("INSERT INTO {$element}_criterion
-                                SET $element = ?d, module= " . MODULE_ID_VIDEO . ", resource = ?d, activity_type = ?s",
-                $element_id, $d[1], $d[0])->lastInsertID;
+            if ($element == 'points_game') {
+                Database::get()->query("INSERT INTO {$element}_criterion
+                                    SET $element = ?d, module= " . MODULE_ID_VIDEO . ", resource = ?d, activity_type = ?s, points = ?d, criterion_type = ?s",
+                    $element_id, $d[1], $d[0], $_POST['points_video'][$data], 'onetime')->lastInsertID;
+            } else {
+                Database::get()->query("INSERT INTO {$element}_criterion
+                                    SET $element = ?d, module= " . MODULE_ID_VIDEO . ", resource = ?d, activity_type = ?s",
+                    $element_id, $d[1], $d[0])->lastInsertID; 
+            }
         }
     }
     if (isset($_POST['videocatlink'])) {
         foreach ($_POST['videocatlink'] as $data) {
             $d = explode(":", $data);
-            Database::get()->query("INSERT_INTO {$element}_criterion
-                                SET $element = ?d, module = " . MODULE_ID_VIDEO . ", resource = ?d, activity_type = ?s",
-                $element_id, $d[1], $d[0])->lastInsertID;
+            if ($element == 'points_game') {
+                Database::get()->query("INSERT INTO {$element}_criterion
+                                    SET $element = ?d, module= " . MODULE_ID_VIDEO . ", resource = ?d, activity_type = ?s, points = ?d, criterion_type = ?s",
+                    $element_id, $d[1], $d[0], $_POST['points_videocatlink'][$data], 'onetime')->lastInsertID;
+            } else {
+                Database::get()->query("INSERT_INTO {$element}_criterion
+                                    SET $element = ?d, module = " . MODULE_ID_VIDEO . ", resource = ?d, activity_type = ?s",
+                    $element_id, $d[1], $d[0])->lastInsertID;
+            }
         }
     }
     return;
@@ -280,13 +292,27 @@ function add_poll_to_certificate($element, $element_id) {
 
     if (isset($_POST['poll'])) {
         foreach ($_POST['poll'] as $data) {
-            Database::get()->query("INSERT INTO {$element}_criterion
-                                    SET $element = ?d,
-                                    module= " . MODULE_ID_QUESTIONNAIRE . ",
-                                    resource = ?d,
-                                    activity_type = '" . ViewingEvent::QUESTIONNAIRE_ACTIVITY . "'",
-                $element_id,
-                $data);
+            if ($element == 'points_game') {
+                Database::get()->query("INSERT INTO {$element}_criterion
+                                        SET $element = ?d,
+                                        module= " . MODULE_ID_QUESTIONNAIRE . ",
+                                        resource = ?d,
+                                        activity_type = '" . ViewingEvent::QUESTIONNAIRE_ACTIVITY . "',
+                                        points = ?d,
+                                        criterion_type = ?s",
+                    $element_id,
+                    $data,
+                    $_POST['points'][$data],
+                    'onetime');
+            } else {
+                Database::get()->query("INSERT INTO {$element}_criterion
+                                        SET $element = ?d,
+                                        module= " . MODULE_ID_QUESTIONNAIRE . ",
+                                        resource = ?d,
+                                        activity_type = '" . ViewingEvent::QUESTIONNAIRE_ACTIVITY . "'",
+                    $element_id,
+                    $data);
+            }
         }
     }
     return;
@@ -302,35 +328,77 @@ function add_poll_to_certificate($element, $element_id) {
 function add_ebook_to_certificate($element, $element_id) {
      if (isset($_POST['ebook'])) {
          foreach ($_POST['ebook'] as $data) {
-             Database::get()->query("INSERT INTO {$element}_criterion
-                                    SET $element = ?d,
-                                    module= " . MODULE_ID_EBOOK . ",
-                                    resource = ?d,
-                                    activity_type = '" . ViewingEvent::EBOOK_ACTIVITY . "'",
-                 $element_id,
-                 $data);
+            if ($element == 'points_game') {
+                Database::get()->query("INSERT INTO {$element}_criterion
+                                        SET $element = ?d,
+                                        module= " . MODULE_ID_EBOOK . ",
+                                        resource = ?d,
+                                        activity_type = '" . ViewingEvent::EBOOK_ACTIVITY . "',
+                                        points = ?d,
+                                        criterion_type = ?s",
+                    $element_id,
+                    $data,
+                    $_POST['points_ebook'][$data],
+                    'onetime');
+            } else {
+                Database::get()->query("INSERT INTO {$element}_criterion
+                                        SET $element = ?d,
+                                        module= " . MODULE_ID_EBOOK . ",
+                                        resource = ?d,
+                                        activity_type = '" . ViewingEvent::EBOOK_ACTIVITY . "'",
+                    $element_id,
+                    $data);
+            }
          }
     }
     if (isset($_POST['section'])) {
         foreach ($_POST['section'] as $data) {
-            Database::get()->query("INSERT INTO {$element}_criterion
-                                    SET $element = ?d,
-                                    module= " . MODULE_ID_EBOOK . ",
-                                    resource = ?d,
-                                    activity_type = '" . ViewingEvent::EBOOK_ACTIVITY . "'",
-                $element_id,
-                $data);
+            if ($element == 'points_game') {
+                Database::get()->query("INSERT INTO {$element}_criterion
+                                        SET $element = ?d,
+                                        module= " . MODULE_ID_EBOOK . ",
+                                        resource = ?d,
+                                        activity_type = '" . ViewingEvent::EBOOK_ACTIVITY . "',
+                                        points = ?d,
+                                        criterion_type = ?s",
+                    $element_id,
+                    $data,
+                    $_POST['points_section'][$data],
+                    'onetime');
+            } else {
+                Database::get()->query("INSERT INTO {$element}_criterion
+                                        SET $element = ?d,
+                                        module= " . MODULE_ID_EBOOK . ",
+                                        resource = ?d,
+                                        activity_type = '" . ViewingEvent::EBOOK_ACTIVITY . "'",
+                    $element_id,
+                    $data);
+            }
         }
     }
     if (isset($_POST['subsection'])) {
         foreach ($_POST['subsection'] as $data) {
-            Database::get()->query("INSERT INTO {$element}_criterion
-                                    SET $element = ?d,
-                                    module= " . MODULE_ID_EBOOK . ",
-                                    resource = ?d,
-                                    activity_type = '" . ViewingEvent::EBOOK_ACTIVITY . "'",
-                $element_id,
-                $data);
+            if ($element == 'points_game') {
+                Database::get()->query("INSERT INTO {$element}_criterion
+                                        SET $element = ?d,
+                                        module= " . MODULE_ID_EBOOK . ",
+                                        resource = ?d,
+                                        activity_type = '" . ViewingEvent::EBOOK_ACTIVITY . "',
+                                        points = ?d,
+                                        criterion_type = ?s",
+                    $element_id,
+                    $data,
+                    $_POST['points_subsection'][$data],
+                    'onetime');
+            } else {
+                Database::get()->query("INSERT INTO {$element}_criterion
+                                        SET $element = ?d,
+                                        module= " . MODULE_ID_EBOOK . ",
+                                        resource = ?d,
+                                        activity_type = '" . ViewingEvent::EBOOK_ACTIVITY . "'",
+                    $element_id,
+                    $data);
+            }
         }
     }
 
