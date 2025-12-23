@@ -1406,6 +1406,7 @@ $langPollEnd = "End Date";
 $langPollEnded = "and ended on";
 $langPollOperations = "Operations";
 $langPollAddAnswer = "Add Answers";
+$langPollAddMsg = "Add message";
 $langPollMC = "Multiple Choice";
 $langPollFillText = "Fill in the text";
 $langPollMoreAnswers = "More answers";

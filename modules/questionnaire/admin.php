@@ -101,20 +101,34 @@ if (isset($_POST['submitPoll'])) {
         $display_position = (isset($_POST['display_position'])) ? $_POST['display_position'] : 0;
         $require_answer = (isset($_POST['require_answer'])) ? $_POST['require_answer'] : 0;
 
+        $msg_gr_arr = [];
+        if (isset($_POST['messages']) && isset($_POST['grades'])) {
+            foreach ($_POST['messages'] as $key => $val) {
+                if (!empty($val)) {
+                    $grade = $_POST['grades'][$key] ?? 0;
+                    $msg_gr_arr[] = [
+                        'message' => purify($val),
+                        'grade' => fix_float($grade)
+                    ];
+                }
+            }
+        }
+        $response = (count($msg_gr_arr) > 0 ? serialize($msg_gr_arr) : null);
+
         if (isset($pid)) {
             $attempt_counter = Database::get()->querySingle("SELECT COUNT(*) AS `count` FROM poll_user_record WHERE pid = ?d", $pid)->count;
             if ($attempt_counter > 0) {
                 $q = Database::get()->query("UPDATE poll SET name = ?s, start_date = ?t, end_date = ?t, description = ?s,
-                        end_message = ?s, show_results = ?d, multiple_submissions = ?d, default_answer = ?d, type = ?d, assign_to_specific = ?d, lti_template = ?d, launchcontainer = ?d, display_position = ?d, require_answer = ?d
+                        end_message = ?s, show_results = ?d, multiple_submissions = ?d, default_answer = ?d, type = ?d, assign_to_specific = ?d, lti_template = ?d, launchcontainer = ?d, display_position = ?d, require_answer = ?d, options = ?s
                         WHERE course_id = ?d AND pid = ?d",
                             $PollName, $PollStart, $PollEnd, $PollDescription, $PollEndMessage, $PollShowResults, $MulSubmissions, $DefaultAnswer,
-                            $PollSurveyType, $PollAssignToSpecific, $lti_template, $launchcontainer, $display_position, $require_answer, $course_id, $pid);
+                            $PollSurveyType, $PollAssignToSpecific, $lti_template, $launchcontainer, $display_position, $require_answer, $response, $course_id, $pid);
             } else {
                 $q = Database::get()->query("UPDATE poll SET name = ?s, start_date = ?t, end_date = ?t, description = ?s,
-                            end_message = ?s, anonymized = ?d, show_results = ?d, multiple_submissions = ?d, default_answer = ?d, type = ?d, assign_to_specific = ?d, lti_template = ?d, launchcontainer = ?d, display_position = ?d, require_answer = ?d
+                            end_message = ?s, anonymized = ?d, show_results = ?d, multiple_submissions = ?d, default_answer = ?d, type = ?d, assign_to_specific = ?d, lti_template = ?d, launchcontainer = ?d, display_position = ?d, require_answer = ?d, options = ?s
                         WHERE course_id = ?d AND pid = ?d",
                             $PollName, $PollStart, $PollEnd, $PollDescription, $PollEndMessage, $PollAnonymized, $PollShowResults, $MulSubmissions, $DefaultAnswer,
-                            $PollSurveyType, $PollAssignToSpecific, $lti_template, $launchcontainer, $display_position, $require_answer, $course_id, $pid);
+                            $PollSurveyType, $PollAssignToSpecific, $lti_template, $launchcontainer, $display_position, $require_answer, $response, $course_id, $pid);
                 if ($PollSurveyType == POLL_COLLES) {
                     createcolles($pid);
                 }   elseif($PollSurveyType == POLL_ATTLS) {
@@ -134,10 +148,10 @@ if (isset($_POST['submitPoll'])) {
         } else {
             $PollActive = 1;
             $pid = Database::get()->query("INSERT INTO poll
-                            (course_id, creator_id, name, creation_date, start_date, end_date, active, description, end_message, anonymized, show_results, multiple_submissions, default_answer, type, assign_to_specific, lti_template, launchcontainer, display_position, require_answer)
-                                VALUES (?d, ?d, ?s, ". DBHelper::timeAfter() . ", ?t, ?t, ?d, ?s, ?s, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d)",
+                            (course_id, creator_id, name, creation_date, start_date, end_date, active, description, end_message, anonymized, show_results, multiple_submissions, default_answer, type, assign_to_specific, lti_template, launchcontainer, display_position, require_answer, options)
+                                VALUES (?d, ?d, ?s, ". DBHelper::timeAfter() . ", ?t, ?t, ?d, ?s, ?s, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?s)",
                                             $course_id, $uid, $PollName, $PollStart, $PollEnd, $PollActive, $PollDescription, $PollEndMessage, $PollAnonymized, $PollShowResults,
-                                            $MulSubmissions, $DefaultAnswer, $PollSurveyType, $PollAssignToSpecific, $lti_template, $launchcontainer ,$display_position, $require_answer)->lastInsertID;
+                                            $MulSubmissions, $DefaultAnswer, $PollSurveyType, $PollAssignToSpecific, $lti_template, $launchcontainer ,$display_position, $require_answer, $response)->lastInsertID;
 
             Log::record($course_id, MODULE_ID_QUESTIONNAIRE, LOG_INSERT,
                             array('id' => $pid,
@@ -370,6 +384,13 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             });
             $('#assign_button_all').click(hideAssignees);
             $('#assign_button_user, #assign_button_group').click(ajaxAssignees);
+
+            var langPoll = {
+                message: '" . js_escape($langMessage) . "',
+                grade: '" . js_escape($langGradebookGrade) . "'
+            };
+            $(poll_grade(langPoll));
+
         });
         function ajaxAssignees()
         {
@@ -685,7 +706,44 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                         </label>
                     </div>
                 </div>
+            </div>
+            
+            <div class='form-group mt-4 d-flex justify-content-start align-items-center gap-2'>
+                <label for='addMsg' class='form-label'>$langPollAddMsg:</label>
+                <input id='addMsg' style='width:30px; height:30px;' class='btn submitAdminBtn' type='submit' name='MoreMessages' value='+'>
             </div>";
+
+            $poll_messages = unserialize($poll->options ?? '');
+            if (is_array($poll_messages) && count($poll_messages) > 0) {
+                foreach ($poll_messages as $opt) {
+                    $_msg = $opt['message'];
+                    $_grade = $opt['grade'];
+                    $tool_content .="
+                    <div class='form-group input-group mt-3'>
+                            <input type='text' class='form-control mt-0 w-75' name='messages[]' value='$_msg'>
+                            <input class='form-control mt-0' type='text' name='grades[]' value='$_grade'>
+                            <div class='form-control-static input-group-text h-40px bg-white input-border-color'>
+                                " . icon('fa-xmark Accent-200-cl', $langDelete, '#', ' class="del_btn"') . "
+                            </div>
+                        </div>";
+                }
+            } else {
+                $tool_content .="
+                <div class='form-group input-group mt-3'>
+                            <input class='form-control mt-0 w-75' type='text' name='messages[]' value='' placeholder='$langMessage'>
+                            <input class='form-control mt-0' type='text' name='grades[]' value='' placeholder='$langGradebookGrade'>
+                            <div class='form-control-static input-group-text h-40px bg-white input-border-color'>
+                                " . icon('fa-xmark Accent-200-cl', $langDelete, '#', ' class="del_btn"') . "
+                            </div>
+                    </div>
+                <div class='form-group input-group mt-3'>
+                        <input class='form-control mt-0 w-75' type='text' name='messages[]' value='' placeholder='$langMessage'>
+                        <input class='form-control mt-0' type='text' name='grades[]' value='' placeholder='$langGradebookGrade'>
+                        <div class='form-control-static input-group-text h-40px bg-white input-border-color'>
+                            " . icon('fa-xmark Accent-200-cl', $langDelete, '#', ' class="del_btn"') . "
+                        </div>
+                    </div>";
+            }
 
     $head_content .= "<script type='text/javascript'>
             $(document).ready(function(){

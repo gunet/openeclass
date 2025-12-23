@@ -3690,6 +3690,7 @@ $langPollEnd = "Λήξη";
 $langPollEnded = "και τελείωσε την";
 $langPollOperations = "Λειτουργίες";
 $langPollAddAnswer = "Προσθήκη απαντήσεων";
+$langPollAddMsg = "Προσθήκη μηνύματος";
 $langPollMC = "Πολλαπλής Επιλογής";
 $langPollFillText = "Συμπληρώστε το κενό";
 $langPollMoreAnswers = "+";

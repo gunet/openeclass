@@ -121,6 +121,7 @@ if (!$thePoll) {
     redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
 }
 $PollType = $thePoll->type;
+$pollOptions = !is_null($thePoll->options) ? $thePoll->options : '';
 $default_answer = $thePoll->default_answer;
 
 if (!$is_course_reviewer && !$thePoll->show_results) {
@@ -293,6 +294,30 @@ if (isset($_GET['from_session_view'])) { //session view
 
 if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COURSE_EVALUATION) {
     $loopTmp = 0;
+    $pollOptionsArr = [];
+    $gradesArr = [];
+    $MsgGradesArr = [];
+    $minMsg = '';
+    if ($pollOptions != '') {
+        $pollOptionsArr = unserialize($pollOptions);
+    }
+    if (count($pollOptionsArr) > 0) {
+        foreach ($pollOptionsArr as $opt) {
+            $gradesArr[] = $opt['grade'];
+        }
+        rsort($gradesArr);
+        $minGrade = min($gradesArr);
+        foreach ($gradesArr as $gr) {
+            foreach ($pollOptionsArr as $opt) {
+                if ($opt['grade'] == $gr) {
+                    $MsgGradesArr[$gr] = $opt['message'];
+                }
+                if ($opt['grade'] == $minGrade) {
+                    $minMsg = $opt['message'];
+                }
+            }
+        }
+    }
     foreach ($questions as $theQuestion) {
         $ansExists = Database::get()->querySingle("SELECT arid FROM poll_answer_record WHERE qid = ?d", $theQuestion->pqid);
         if (!$ansExists) {
@@ -341,7 +366,7 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COU
                     $this_chart_data['percentage'][] = 0;
                 }
                 $set_default_answer = false;
-                $answers = Database::get()->queryArray("SELECT a.aid AS aid, MAX(b.answer_text) AS answer_text, count(a.aid) AS count
+                $answers = Database::get()->queryArray("SELECT a.aid AS aid, MAX(b.answer_text) AS answer_text, count(a.aid) AS count, b.weight AS wgt
                             FROM poll_user_record c, poll_answer_record a
                             LEFT JOIN poll_question_answer b
                             ON a.aid = b.pqaid
@@ -366,6 +391,7 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COU
                                 if (!$thePoll->anonymized) {
                                     $answers_table .= "<th>$langStudents</th>";
                                 }
+                                $answers_table .= "<th>$langMessage</th>";
                             }
                             $answers_table .= "</tr></thead>";
                 foreach ($answers as $answer) {
@@ -429,8 +455,20 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COU
                                     }
                                 }
 
+                    if (count($MsgGradesArr) > 0) {
+                        foreach ($MsgGradesArr as $key_grade => $val_msg) {
+                            if ($answer->wgt >= $key_grade) {
+                                $dis_msg = $val_msg;
+                                break;
+                            }
+                        }
+                    }
+                    if (!isset($dis_msg)) {
+                        $dis_msg = $minMsg;
+                    }
+
                     $answers_table .= "<td class='hidden_names' style='display:none;'><em>" . q($names_str ?? '') . "</em> <a href='#' class='trigger_names' data-type='multiple' id='hide'>$langViewHide</a></td>
-                    </tr>";
+                    <td>$dis_msg</td></tr>";
                     unset($names_array);
                 }
                 $answers_table .= "</table></div><br>";
