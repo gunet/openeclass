@@ -34,6 +34,17 @@ load_js('tools.js');
 $toolName = $langQuestionnaire;
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langQuestionnaire);
 
+//Identifying ajax request that cancels an active attempt
+if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+    // Delete sub_question for the specific question when its type is table type
+    if (isset($_POST['remove_sub_id']) && isset($_POST['q_id'])) {
+        $sub_q = intval($_POST['remove_sub_id']);
+        $q_id = intval($_POST['q_id']);
+        Database::get()->query("DELETE FROM poll_question_answer WHERE pqid = ?d AND sub_question = ?d", $q_id, $sub_q);
+        exit();
+    }
+}
+
 if (isset($_REQUEST['pid'])) {
     $pid = intval($_REQUEST['pid']);
 }
@@ -285,14 +296,13 @@ if (isset($_POST['submitAnswers'])) {
         $arr_keys[] = $key;
         if ($answer !== '') {
             $grade = is_numeric($_POST['grades'][$key]) ? $_POST['grades'][$key] : 0;
-            $message = $_POST['messages'][$key] ?? '';
             $total_grade = $total_grade + $grade;
             if (!$is_modified_q or !in_array($key, $qids_arr)) {
-                Database::get()->query("INSERT INTO poll_question_answer (pqid, answer_text, `weight`, `message`)
-                                        VALUES (?d, ?s, ?d, ?s)", $pqid, $answer, $grade, $message);
+                Database::get()->query("INSERT INTO poll_question_answer (pqid, answer_text, `weight`)
+                                        VALUES (?d, ?s, ?d)", $pqid, $answer, $grade);
             } else {
-                Database::get()->query("UPDATE poll_question_answer SET answer_text = ?s, `weight` = ?d, `message` = ?s
-                                        WHERE pqaid = ?d", $answer, $grade, $message, $key);
+                Database::get()->query("UPDATE poll_question_answer SET answer_text = ?s, `weight` = ?d
+                                        WHERE pqaid = ?d", $answer, $grade, $key);
             }
         }
     }
@@ -978,8 +988,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         $(function() {
             var langPoll = {
                 answer: '" . js_escape($langAnswer) . "',
-                grade: '" . js_escape($langGradebookGrade) . "',
-                message: '" . js_escape($langMessage) . "'
+                grade: '" . js_escape($langGradebookGrade) . "'
             };
             $(poll_init(langPoll));
         });
@@ -1030,9 +1039,8 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             foreach ($answers as $answer) {
               $tool_content .="
               <div class='form-group input-group mt-3'>
-                    <input type='text' class='form-control mt-0 w-50' name='answers[$answer->pqaid]' value='$answer->answer_text' placeholder='$langAnswer'>
+                    <input type='text' class='form-control mt-0 w-75' name='answers[$answer->pqaid]' value='$answer->answer_text' placeholder='$langAnswer'>
                     <input class='form-control mt-0' type='text' name='grades[$answer->pqaid]' value='$answer->weight' placeholder='$langGradebookGrade'>
-                    <input class='form-control mt-0' type='text' name='messages[$answer->pqaid]' value='$answer->message' placeholder='$langMessage'>
                     <div class='form-control-static input-group-text h-40px bg-white input-border-color'>
                         " . icon('fa-xmark Accent-200-cl', $langDelete, '#', ' class="del_btn"') . "
                     </div>
@@ -1041,17 +1049,15 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         } else {
             $tool_content .="
             <div class='form-group input-group mt-3'>
-                        <input class='form-control mt-0 w-50' type='text' name='answers[]' value='' placeholder='$langAnswer'>
+                        <input class='form-control mt-0 w-75' type='text' name='answers[]' value='' placeholder='$langAnswer'>
                         <input class='form-control mt-0' type='text' name='grades[]' value='' placeholder='$langGradebookGrade'>
-                        <input class='form-control mt-0' type='text' name='messages[]' value='' placeholder='$langMessage'>
                         <div class='form-control-static input-group-text h-40px bg-white input-border-color'>
                             " . icon('fa-xmark Accent-200-cl', $langDelete, '#', ' class="del_btn"') . "
                         </div>
                 </div>
             <div class='form-group input-group mt-3'>
-                    <input class='form-control mt-0 w-50' type='text' name='answers[]' value='' placeholder='$langAnswer'>
+                    <input class='form-control mt-0 w-75' type='text' name='answers[]' value='' placeholder='$langAnswer'>
                     <input class='form-control mt-0' type='text' name='grades[]' value='' placeholder='$langGradebookGrade'>
-                    <input class='form-control mt-0' type='text' name='messages[]' value='' placeholder='$langMessage'>
                     <div class='form-control-static input-group-text h-40px bg-white input-border-color'>
                         " . icon('fa-xmark Accent-200-cl', $langDelete, '#', ' class="del_btn"') . "
                     </div>
@@ -1070,6 +1076,37 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     </div>";
 // View edit poll page
 } elseif (isset($_GET['modifyTableAnswers'])){
+    $head_content .= "
+    <script>
+        $(function() {
+            $('.del-answer').on('click', function(e){
+                e.preventDefault();
+                var sub_q = $(this).attr('data-sub-question');
+                var qid = $(this).attr('data-poll-question');
+                // Remove it
+                var qQuestion = $(this).attr('data-question-clean');
+                if (confirm('$langConfirmDelete')) {
+                    $.ajax({
+                        url: '$_SERVER[SCRIPT_NAME]?course=$course_code&UseCase=1&pid=$pid',
+                        method: 'POST',
+                        data: { 
+                            remove_sub_id: sub_q, 
+                            q_id: qid  
+                        },
+                        success: function(data){
+                            $('#element_sub_q_'+sub_q).remove();
+                            document.querySelectorAll('.element_row_q_'+sub_q).forEach(function(elem) {
+                                if (elem) {
+                                    elem.remove();
+                                }
+                            });
+                        },
+                    });
+                }
+            });
+        });
+    </script>";
+
     $question_id = $_GET['modifyTableAnswers'];
     $question = Database::get()->querySingle('SELECT * FROM poll_question WHERE pid = ?d AND pqid = ?d', $pid, $question_id);
     $answers = Database::get()->queryArray("SELECT * FROM poll_question_answer WHERE pqid = ?d ORDER BY pqaid", $question->pqid);
@@ -1121,13 +1158,16 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
 
     // Insert sub-questions of a question.
     if (isset($_POST['submit_table_questions'])) {
-        Database::get()->query("DELETE FROM poll_question_answer WHERE pqid = ?d",$question_id);
-        foreach ($_POST['table_questions'] as $answer) {
+        foreach ($_POST['table_questions'] as $key => $answer) {
             if ($answer !== '') {
-                $maxQ = Database::get()->querySingle("SELECT MAX(sub_question) as m FROM poll_question_answer WHERE pqid = ?d",$question_id)->m;
-                $maxQuestion = $maxQ + 1;
-                Database::get()->query("INSERT INTO poll_question_answer (pqid, answer_text, sub_question)
-                                VALUES (?d, ?s, ?d)", $question_id, $answer, $maxQuestion);
+                $existsSubQ = Database::get()->querySingle("SELECT pqaid FROM poll_question_answer WHERE pqid = ?d AND sub_question = ?d", $question_id, $key);
+                if ($existsSubQ) {
+                    Database::get()->query("UPDATE poll_question_answer SET answer_text = ?s 
+                                            WHERE pqid = ?d AND sub_question = ?d", $answer, $question_id, $key);
+                } else {
+                    Database::get()->query("INSERT INTO poll_question_answer (pqid, answer_text, sub_question)
+                                            VALUES (?d, ?s, ?d)", $question_id, $answer, $key);
+                }
             }
         }
         Session::flash('message',$langQuestionsInsertd);
@@ -1138,12 +1178,14 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     // Show the table with the questions for editing.
     $q_row = $question->q_row;
     $q_column = $question->q_column;
-    $all_questions = Database::get()->queryArray("SELECT answer_text FROM poll_question_answer
-                                                        WHERE pqid = ?d",$question_id);
+    $all_questions = Database::get()->queryArray("SELECT answer_text,sub_question FROM poll_question_answer
+                                                  WHERE pqid = ?d", $question_id);
 
+    $qAnswers = [];
     if (count($all_questions) > 0) {
         foreach ($all_questions as $q) {
-            $all_table_questions[] = $q->answer_text;
+            $all_table_questions[$q->sub_question] = $q->answer_text;
+            $qAnswers[] = $q->sub_question;
         }
     } else {
         $all_table_questions = [];
@@ -1177,24 +1219,39 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
 
     // Create table with rows and columns
     if ($q_row > 0 && $q_column > 0) {
+        $colCounter = 0;
         $tool_content .= "
             <div class='col-12 mt-4'>
                 <form method='post' action='".$_SERVER['SCRIPT_NAME']."?course=$course_code&pid=$pid&modifyTableAnswers=$question_id'>
                     <div class='table-responsive'>
                         <table class='table-default'>
-                            <thead>";
-                                for ($i=0; $i<$q_column; $i++) {
-                                    $val_q = ((count($all_table_questions) > 0 && $i <= (count($all_table_questions)-1)) ? $all_table_questions[$i] : '');
-                                    $tool_content .= "<th>
-                                                        <input style='width:200px;' type='text' name='table_questions[]' class='form-control' placeholder='$langWriteQuestion' value='$val_q'>
-                                                    </th>";
+                            <thead><tr>";
+                                
+                                if (count($all_table_questions) > 0) {
+                                    foreach ($all_table_questions as $sub_q => $an_text) {
+                                        $colCounter++;
+                                        $tool_content .= "
+                                            <th id='element_sub_q_{$sub_q}'>
+                                                <div style='flex-wrap: nowrap;' class='input-group'>
+                                                    <input style='width:200px; margin-top:0px;' type='text' name='table_questions[$sub_q]' class='form-control' placeholder='$langWriteQuestion' value='$an_text' aria-describedby='button-addon-$sub_q'>
+                                                    <button style='height:40px;' data-sub-question='$sub_q' data-poll-question='$question_id' class='btn btn-danger del-answer' type='button' id='button-addon-$sub_q'>$langDelete</button>
+                                                </div>
+                                            </th>";
+                                    }
                                 }
-            $tool_content .= "</thead>
+                                
+                                for ($i = 1; $i <= $q_column; $i++) {
+                                    if (!in_array($i, $qAnswers) && count($all_table_questions) < $q_column) {
+                                        $colCounter++;
+                                        $tool_content .= "<th><input style='width:200px; margin-top:0px;' type='text' name='table_questions[$i]' class='form-control' placeholder='$langWriteQuestion'></th>";
+                                    }
+                                }
+            $tool_content .= "</tr></thead>
                                 <tbody>";
                                 for ($j=0; $j<$q_row; $j++) {
                                     $tool_content .= "<tr>";
-                                                        for ($k=0; $k<$q_column; $k++) {
-                                                            $tool_content .= "<td><small>$langUserAnswer</small></td>";
+                                                        for ($k = 1; $k <= $colCounter; $k++) {
+                                                            $tool_content .= "<td class='element_row_q_{$k}'><small>$langUserAnswer</small></td>";
                                                         }
                                     $tool_content .=" </tr>";
                                 }

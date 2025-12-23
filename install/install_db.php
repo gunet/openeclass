@@ -1107,8 +1107,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `poll_question_answer` (
     `pqid` INT NOT NULL DEFAULT 0,
     `answer_text` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
     `sub_question` INT NOT NULL DEFAULT 0,
-    `weight` FLOAT NULL,
-    `message` TEXT DEFAULT NULL) $tbl_options");
+    `weight` FLOAT NULL) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `assignment` (
     `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,

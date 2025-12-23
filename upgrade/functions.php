@@ -3571,6 +3571,10 @@ function upgrade_to_4_2($tbl_options) : void {
         Database::get()->query("ALTER TABLE poll_question_answer ADD `message` TEXT DEFAULT NULL");
     }
 
+    if (DBHelper::fieldExists('poll_question_answer', 'message')) {
+        Database::get()->query("ALTER TABLE poll_question_answer DROP COLUMN `message`");
+    }
+
 }
 
 /**
