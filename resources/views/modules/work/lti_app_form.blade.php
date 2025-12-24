@@ -4,19 +4,32 @@
     <div class='row form-group mt-4'>
         <div class='col-12 control-label-notes mb-1'>{{ trans('langAssignmentType') }}</div>
         <div class='{{ $assignment_type_radios_class }}'>
+
+            @php
+                $radioDisabled = ( isset($assignment_id) && !empty($tii_selected_content) )
+                    || (($submit_name ?? '') === 'do_edit');
+                $radioDisabledAttr = $radioDisabled ? 'disabled' : '';
+            @endphp
+
             <div class='{{ $assignment_type_eclass_div_class }}'>
                 <label>
-                    <input type='radio' name='assignment_type' value='0' @if ($assignment_type == ASSIGNMENT_TYPE_ECLASS) checked @endif @if (isset($assignment_id) && !empty($tii_selected_content)) disabled @endif>
+                    <input type='radio' name='assignment_type' value='0'
+                           @if ($assignment_type == ASSIGNMENT_TYPE_ECLASS) checked @endif
+                            {!! $radioDisabledAttr !!}
+                    >
                     {{ trans('langAssignmentTypeEclass') }}
                 </label>
             </div>
             <div class='{{ $assignment_type_turnitin_div_class }}'>
                 <label>
-                    <input type='radio' name='assignment_type' value='1' @if ($assignment_type == ASSIGNMENT_TYPE_TURNITIN) checked @endif @if (isset($assignment_id) && !empty($tii_selected_content)) disabled @endif>
+                    <input type='radio' name='assignment_type' value='1'
+                           @if ($assignment_type == ASSIGNMENT_TYPE_TURNITIN) checked @endif
+                            {!! $radioDisabledAttr !!}
+                    >
                     {{ trans('langAssignmentTypeTurnitin') }}
                 </label>
             </div>
-            @if (isset($assignment_id) && !empty($tii_selected_content))
+            @if ($radioDisabled)
                 <input type="hidden" name="assignment_type" value='{{ $assignment_type }}'>
             @endif
         </div>

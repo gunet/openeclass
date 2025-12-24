@@ -43,8 +43,6 @@
                                                 <th class='text-center'>{{ trans('langGradebookGrade') }}</th>
                                                 @if (get_config('eportfolio_enable'))
                                                     <th style='width:10%;' class='text-center' aria-label='{{ trans('langSettingSelect') }}'><i class="fa-solid fa-gear"></th>
-                                                @else
-                                                    <th aria-label='{{ trans('langSettingSelect') }}'></th>
                                                 @endif
                                             </tr>
                                         </thead>

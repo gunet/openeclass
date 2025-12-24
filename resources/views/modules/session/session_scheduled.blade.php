@@ -51,7 +51,7 @@
             @include('layouts.partials.left_menu')
 
             <div class="col_maincontent_active">
-
+                    
                 <div class="row">
 
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
@@ -66,10 +66,10 @@
                     </div>
 
                     @include('layouts.partials.legend_view')
-
+                    
                     {!! $action_bar !!}
 
-                    @include('layouts.partials.show_alert')
+                    @include('layouts.partials.show_alert') 
 
                     <div class='col-12'>
                         @if(count($sessions) > 0)
@@ -140,7 +140,7 @@
             </div>
 
         </div>
-
+    
     </div>
 </div>
 

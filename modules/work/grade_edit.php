@@ -37,7 +37,7 @@ $head_content .= '
         $(function () {
             $(document).on("click", ".linkdelete", function(e) {
                 var link = $(this).attr("href");
-                e.preventDefault();               
+                e.preventDefault();
                 bootbox.confirm({
                     closeButton: false,
                     title: "<div class=\"icon-modal-default\"><i class=\"fa-regular fa-trash-can fa-xl Accent-200-cl\"></i></div><div class=\"modal-title-default text-center mb-0\">'.js_escape($langConfirmDelete).'</div>",
@@ -121,11 +121,11 @@ function show_edit_form($id, $sid, $assign): void
     if ($sub) {
         if ($grading_type == ASSIGNMENT_PEER_REVIEW_GRADE) { // peer review
             $cdate = date('Y-m-d H:i:s');
-            if($cdate < $assign->start_date_review){
+            if($cdate < $assign->start_date_review) {
                 $tool_content .= "
                     <p class='sub_title1'></p>
                     <div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langPeerReviewNoAssignments</span></div></div>";
-			}
+            }
             if ($cdate > $assign->start_date_review) {
                 $rows = Database::get()->queryArray("SELECT * FROM assignment_grading_review WHERE assignment_id = ?d ", $id);
                 if (count($rows) > 0) {
@@ -221,7 +221,7 @@ function show_edit_form($id, $sid, $assign): void
                                                 <div class='col-12'>
                                                     <span>".q($row->grade)."</span>
                                                 </div>
-                                            </div>                                            
+                                            </div>
                                         </form>
                                     </div>
                                 </div>
@@ -229,7 +229,7 @@ function show_edit_form($id, $sid, $assign): void
                     }
                     $tool_content.= "
                         <div class='d-lg-flex gap-4 mt-4'>
-                            <div class='flex-grow-1'>                                                                                                                                            
+                            <div class='flex-grow-1'>
                                 <div class='form-group mt-2'>
                                     <div class='col-12 d-inline-flex justify-content-end gap-2'>
                                         <a class='btn cancelAdminBtn' href='index.php?course=$course_code&id=$sub->assignment_id'>$langBack</a>
@@ -298,9 +298,11 @@ function show_edit_form($id, $sid, $assign): void
 						$sub->grade = closest($sub->grade, $scale_values)['value'];
 					}
 					foreach ($scales as $scale) {
-						$scale_options .= "<option value='$scale[scale_item_value]'".($sub->grade == $scale['scale_item_value'] ? " selected" : "").">$scale[scale_item_name]</option>";
+                        $grade_selected = $sub->grade == $scale['scale_item_value']? ' selected' : '';
+                        $scale_options .= "<option value='$scale[scale_item_value]'$grade_selected>" .
+                            q($scale['scale_item_name']) . '</option>';
 					}
-					$grade_field = "<div class='col-12'><select aria-label='$scale_options' name='grade' class='form-select' id='scales'>$scale_options</select></div>";
+					$grade_field = "<div class='col-12'><select aria-label='$langGradebookGrade' name='grade' class='form-select' id='scales'>$scale_options</select></div>";
 				} elseif ($grading_type == ASSIGNMENT_RUBRIC_GRADE) {
 					$rubric = Database::get()->querySingle("SELECT * FROM rubric WHERE course_id = ?d AND id = ?d ", $course_id, $assign->grading_scale_id);
 					$criteria = unserialize($rubric->scales);
@@ -370,29 +372,29 @@ function show_edit_form($id, $sid, $assign): void
                                         $uid_2_name $group_submission
                                         </div>
                                     </div>
-                
+
                                     <div class='row form-group mt-4'>
                                         <div class='col-12 control-label-notes'>$langSubDate</div>
                                         <div class='col-12'>
                                             ".format_locale_date(strtotime($sub->submission_date))."
                                         </div>
                                     </div>
-                
+
                                     $submission
-                
+
                                     <div class='row form-group".(Session::getError('grade') ? " has-error" : "")." mt-4'>
                                         <div class='col-12 control-label-notes'>$langGradebookGrade <span class='asterisk Accent-200-cl'>(*)</span></div>
                                             $grade_field
                                             <span class='help-block Accent-200-cl'>".(Session::hasError('grade') ? Session::getError('grade') : "")."</span>
                                     </div>
-                
+
                                     <div class='row form-group mt-4'>
                                         <label for='comments' class='col-12 control-label-notes'>$langGradeComments</label>
                                         <div class='col-12'>
                                             <textarea class='form-control' rows='3' name='comments'  id='comments'>$comments</textarea>
                                         </div>
                                     </div>
-                
+
                                     <div class='row form-group mt-4'>
                                         <label for='comments_file' class='col-12 control-label-notes'>$langCommentsFile</label>
                                         <div class='col-12'>

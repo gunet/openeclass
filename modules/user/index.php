@@ -32,7 +32,6 @@ if (!$up->has_course_users_permission()) {
     Session::Messages($langCheckCourseAdmin, 'alert-danger');
     redirect_to_home_page('courses/'. $course_code);
 }
-
 //Identifying ajax request
 if (!empty($_SERVER['HTTP_X_REQUESTED_WITH'])
     && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest'
@@ -40,23 +39,22 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH'])
     && isset($_POST['action'])
     && $_POST['action'] === 'updateRights') {
 
-    $userId = intval($_POST['userID'] ?? 0);
-    $adminModules = intval($_POST['userRights_CourseAdminTools'] ?? 0);
-    $adminUsers = intval($_POST['userRights_AdminUsers'] ?? 0);
-    $courseBackup = intval($_POST['userRights_ArchiveCourse'] ?? 0);
-    $courseClone = intval($_POST['userRights_CloneCourse'] ?? 0);
-
-    Database::get()->query(
-        "INSERT INTO `user_permissions` (`course_id`, `user_id`, `admin_modules`, `admin_users`, `course_backup`, `course_clone`)
-         VALUES (?d, ?d, ?d, ?d, ?d, ?d)
-         ON DUPLICATE KEY UPDATE
-            `admin_modules` = VALUES(`admin_modules`),
-            `admin_users` = VALUES(`admin_users`),
-            `course_backup` = VALUES(`course_backup`),
-            `course_clone` = VALUES(`course_clone`)",
-        $course_id, $userId, $adminModules, $adminUsers, $courseBackup, $courseClone
-    );
-
+    $new_user_permissions = array();
+    $permissions_names = $up->get_permissions_names();
+    $up->set_user_id(intval($_POST['userID']));
+    if (isset($_POST['userRights_CourseAdminTools']) && $_POST['userRights_CourseAdminTools']) {
+        $new_user_permissions[] = array_search('admin_course_modules', $permissions_names);
+    }
+    if (isset($_POST['userRights_AdminUsers']) && $_POST['userRights_AdminUsers']) {
+        $new_user_permissions[] = array_search('admin_course_users', $permissions_names);
+    }
+    if (isset($_POST['userRights_ArchiveCourse']) && $_POST['userRights_ArchiveCourse']) {
+        $new_user_permissions[] = array_search('backup_course', $permissions_names);
+    }
+    if (isset($_POST['userRights_CloneCourse']) && $_POST['userRights_CloneCourse']) {
+        $new_user_permissions[] = array_search('clone_course', $permissions_names);
+    }
+    $up->update_course_permissions($new_user_permissions);
 }
 
 if (!empty($_SERVER['HTTP_X_REQUESTED_WITH'])
@@ -67,9 +65,8 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH'])
 
     $userId = intval($_POST['userID'] ?? 0);
 
-    $result = Database::get()->querySingle("SELECT `admin_modules`, `admin_users`, `course_backup`, `course_clone`
-                     FROM `user_permissions`
-                     WHERE `course_id` = ?d AND `user_id` = ?d", $course_id, $userId);
+    $up->set_user_id($userId);
+    $result = $up->get_course_permissions();
 
     header('Content-Type: application/json; charset=utf-8');
     echo json_encode($result, JSON_UNESCAPED_UNICODE);
@@ -77,7 +74,6 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH'])
 
 }
 
-//if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest' && $up->has_course_users_permission()) {
 if (!empty($_SERVER['HTTP_X_REQUESTED_WITH'])
     && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest'
     && $up->has_course_users_permission()
@@ -317,8 +313,8 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH'])
         $user_array_permissions = $up->get_course_permissions();
         if (count($user_array_permissions) > 0) {
             $user_extra_rights = "<details><summary>$langUserPermissions</summary>";
-            foreach ($user_array_permissions as $key => $permission) {
-                $user_extra_rights .= "<div><small>". $up->get_permissions_legend($key) . "</small></div>";
+            foreach ($user_array_permissions as $index => $permission) {
+                $user_extra_rights .= "<div><small>". $up->get_permissions_legend($permission) . "</small></div>";
             }
              $user_extra_rights .= "</details>";
         }

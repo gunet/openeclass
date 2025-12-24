@@ -20,9 +20,6 @@
 
                         @include('layouts.partials.show_alert')
 
-                        {{-- Assignment details --}}
-                        @include('modules.work.assignment_details')
-
                         {{-- Submission details --}}
                         @if ($submissions_exist)
                             @include('modules.work.submission_details')
@@ -86,6 +83,10 @@
                                 @endif
                             @endif
                         @endif
+
+                        {{-- Assignment details --}}
+                        @include('modules.work.assignment_details')
+
                         @if ($submit_ok)
                             @if ($submissions_exist)
                                 <div class='col-12'>
@@ -113,7 +114,7 @@
                                             <div class='d-lg-flex gap-4'>
                                                 <div class='flex-grow-1'>
                                                     <div class='form-wrapper form-edit rounded'>
-                                                        <form class='form-horizontal' enctype='multipart/form-data' action='{{ $form_link }}' method='post'>
+                                                        <form id="submit_assignment_form" class='form-horizontal' enctype='multipart/form-data' action='{{ $form_link }}' method='post'>
                                                             <input type='hidden' name='id' value='{{ $id }}'>
                                                             {!! $group_select_hidden_input !!}
 
@@ -136,37 +137,129 @@
                                                                                 {!! $rich_text_editor !!}
                                                                             </div>
                                                                         </div>
-                                                                    @elseif ($submission_type == 2) {{-- Multiple file submission --}}
-                                                                        <script>
-                                                                            $(function () { initialize_multifile_submission({{ $max_submissions }}) });
-                                                                        </script>
+                                                                    @else
+                                                                        @php
+                                                                            if ($submission_type == 0) {
+                                                                                $max_submissions = 1;
+                                                                            }
+                                                                        @endphp
                                                                         <div class='form-group mt-0'>
-                                                                            <label for='userfile' class='col-sm-12 control-label-notes'>{{ trans('langWorkFileLimit') }}: {{ $max_submissions }} </label>
-                                                                            <div class='col-sm-10 d-flex align-items-center gap-2'>
-                                                                                <div>
-                                                                                    <button class='btn submitAdminBtn btn-sm moreFiles' aria-label='Add'>
-                                                                                        <span class='fa fa-plus'></span>
-                                                                                    </button>
-                                                                                </div>
-                                                                                <input type='file' name='userfile[]' id='userfile'>
+                                                                            @push('head_styles')
+                                                                                <link href="{{ $urlAppend }}js/bundle/uppy.min.css" rel="stylesheet">
+                                                                            @endpush
+                                                                            <div>
+                                                                                <label for='userfile' class='col-sm-12 control-label-notes'>{{ trans('langWorkFileLimit') }}: {{ $max_submissions }}</label>
+                                                                                <div id="uppy"></div>
                                                                             </div>
-                                                                        </div>
-                                                                    @else {{-- Single file submission --}}
-                                                                        <div class='form-group mt-0'>
-                                                                            <label for='userfile' class='col-sm-6 control-label-notes'>{{ trans('langWorkFile') }}:</label>
-                                                                            <div class='col-sm-10'>
-                                                                                <input type='file' name='userfile' id='userfile'>
-                                                                            </div>
+                                                                            <script>
+                                                                                let isUppyLoaded = false;
+
+                                                                                async function loadUppy() {
+                                                                                    console.log('loadUppy');
+                                                                                    try {
+                                                                                        console.log('Uppy loaded');
+                                                                                        const { Uppy, Dashboard, XHRUpload, English, French, German, Italian, Spanish, Greek } = await import("{{ $urlAppend }}js/bundle/uppy.js");
+
+                                                                                        const locale_map = {
+                                                                                            'de': German,
+                                                                                            'el': Greek,
+                                                                                            'en': English,
+                                                                                            'es': Spanish,
+                                                                                            'fr': French,
+                                                                                            'it': Italian,
+                                                                                        }
+
+                                                                                        const uppy = new Uppy({
+                                                                                            autoProceed: false,
+                                                                                            restrictions: {
+                                                                                                maxFileSize: {{ parseSize(ini_get('upload_max_filesize')) }},
+                                                                                                maxNumberOfFiles: {{ $max_submissions }},
+                                                                                            }
+                                                                                        })
+
+                                                                                        uppy.use(Dashboard, {
+                                                                                            target: '#uppy',
+                                                                                            inline: true,
+                                                                                            showProgressDetails: true,
+                                                                                            proudlyDisplayPoweredByUppy: false,
+                                                                                            height: 500,
+                                                                                            thumbnailWidth: 100,
+                                                                                            locale: locale_map['{{ $language }}'] || English,
+                                                                                            hideUploadButton: true
+                                                                                        });
+
+                                                                                        uppy.use(XHRUpload, {
+                                                                                            endpoint: '{!! $form_link !!}',
+                                                                                            fieldName: 'userfile[]',
+                                                                                            bundle: true,
+                                                                                            formData: true,
+                                                                                            getResponseData: (responseText, response) => {
+                                                                                                return { url: '' };
+                                                                                            }
+                                                                                        });
+
+                                                                                        const form = document.querySelector('#submit_assignment_form');
+
+                                                                                        if (form) {
+                                                                                            form.addEventListener('submit', (event) => {
+                                                                                                event.preventDefault();
+                                                                                                const files = uppy.getFiles();
+                                                                                                if (files.length === 0) {
+                                                                                                    form.submit();
+                                                                                                    return;
+                                                                                                }
+                                                                                                const formData = new FormData(form);
+                                                                                                const metaData = {};
+
+                                                                                                formData.forEach((value, key) => {
+                                                                                                    metaData[key] = value;
+                                                                                                });
+
+                                                                                                uppy.setMeta(metaData);
+
+                                                                                                const submitBtn = form.querySelector('[type="submit"]');
+                                                                                                if(submitBtn) {
+                                                                                                    submitBtn.disabled = true;
+                                                                                                    submitBtn.innerText = '{{ trans("langPleaseWait") }}...';
+                                                                                                }
+
+                                                                                                uppy.upload();
+                                                                                            });
+                                                                                        }
+
+                                                                                        uppy.on('complete', (result) => {
+                                                                                            const submitBtn = form.querySelector('[type="submit"]');
+
+                                                                                            if (result.successful.length > 0) {
+                                                                                                console.log('Upload complete! We submitted inputs + files.');
+
+                                                                                                window.location.href = '{!! $assignment_link !!}';
+
+                                                                                            } else {
+                                                                                                console.error('Upload failed:', result.failed);
+                                                                                                if(submitBtn) {
+                                                                                                    submitBtn.disabled = false;
+                                                                                                    submitBtn.innerText = 'Submit';
+                                                                                                }
+                                                                                                alert('An error occurred during submission.');
+                                                                                            }
+                                                                                        });
+
+                                                                                        isUppyLoaded = true;
+
+                                                                                    } catch (error) {
+                                                                                        console.log('Uppy not loaded', error);
+                                                                                        isUppyLoaded = false;
+                                                                                    }
+                                                                                }
+
+                                                                                loadUppy();
+
+                                                                            </script>
                                                                         </div>
                                                                     @endif
 
                                                                     {{-- Comments --}}
-                                                                    <div class='form-group mt-3'>
-                                                                        <label for='stud_comments' class='col-sm-6 control-label-notes'>{{ trans('langComments') }}:</label>
-                                                                        <div class='col-sm-12'>
-                                                                            <textarea class='form-control' name='stud_comments' id='stud_comments' rows='5'></textarea>
-                                                                        </div>
-                                                                    </div>
 
                                                                     @if ($on_behalf_of)
                                                                         <div class='form-group mt-4'>
@@ -198,23 +291,27 @@
                                                                                 </div>
                                                                             </div>
                                                                         </div>
+                                                                    @else
+                                                                        <div class='form-group mt-3'>
+                                                                            <label for='stud_comments' class='col-sm-6 control-label-notes'>{{ trans('langComments') }}:</label>
+                                                                            <div class='col-sm-12'>
+                                                                                <textarea class='form-control' name='stud_comments' id='stud_comments' rows='5'></textarea>
+                                                                            </div>
+                                                                        </div>
+                                                                        <input type='hidden' name='work_submit' value='true'>
                                                                     @endif
 
                                                                     <div class='form-group mt-4'>
                                                                         <div class='col-12 d-flex justify-content-end align-items-center'>
                                                                             {!!
-                                                                                form_buttons(array(
-                                                                                    array(
-                                                                                    'class'         => 'submitAdminBtn',
-                                                                                    'text'          => trans('langSubmit'),
-                                                                                    'name'          => 'work_submit',
-                                                                                    'value'         => trans('langSubmit')
-                                                                                    ),
-                                                                                    array(
-                                                                                        'class' => 'cancelAdminBtn',
-                                                                                        'href' => $back_link
-                                                                                        )
-                                                                                ))
+                                                                                form_buttons([
+                                                                                    [ 'class' => 'cancelAdminBtn',
+                                                                                      'href' => $back_link ],
+                                                                                    [ 'class' => 'submitAdminBtn',
+                                                                                      'text'          => trans('langSubmit'),
+                                                                                      'name'          => 'work_submit',
+                                                                                      'value'         => trans('langSubmit') ],
+                                                                                ])
                                                                             !!}
                                                                         </div>
                                                                     </div>
@@ -229,7 +326,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>                                                    
+                                </div>
                             @endif
                         @endif
                     </div>
@@ -239,5 +336,3 @@
     </div>
 
 @endsection
-
-

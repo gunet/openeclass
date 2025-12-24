@@ -492,7 +492,7 @@ if ($is_editor) {
     warnCourseInvalidDepartment(true);
 }
 
-if ($is_editor) {
+if ($is_editor or $is_course_reviewer) {
     $data['last_id'] = $last_id = Database::get()->querySingle("SELECT id FROM course_units
                                                    WHERE course_id = ?d AND `order` >= 0
                                                    ORDER BY `order` DESC LIMIT 1", $course_id);
@@ -505,12 +505,13 @@ if ($is_editor) {
 }
 
 $data['all_units'] = $all_units = Database::get()->queryArray($query, $course_id);
+
 foreach ($all_units as $unit) {
     check_unit_progress($unit->id);  // check unit completion - call to Game.php
 }
 
 $visible_units_id = [];
-if (!$is_editor) {
+if (!$is_editor && !$is_course_reviewer) {
     $visible_user_units = findUserVisibleUnits($uid, $all_units);
     foreach ($visible_user_units as $d) {
         $visible_units_id[] = $d->id;
@@ -690,13 +691,13 @@ if ($total_cunits > 0) {
         foreach ($all_units as $cu) {
             $not_shown = false;
             $icon = '';
-            if (!$is_editor) {
-                if (!has_access_to_units($cu->id, $cu->assign_to_specific, $uid)) { // unit has assigned to users or groups ?
+            if (!$is_editor && !$is_course_reviewer) {
+                if (!has_access_to_units($cu->id, $cu->assign_to_specific, $uid)) { // unit has assigned to users or groups?
                     $not_shown = true;
-                } else if (!(is_null($cu->start_week)) and (date('Y-m-d') < $cu->start_week)) { // unit has started ?
+                } else if (!(is_null($cu->start_week)) and (date('Y-m-d') < $cu->start_week)) { // unit has started?
                     $not_shown = true;
                     $icon = icon('fa-clock fa-md', $langUnitNotStarted);
-                } else if (!in_array($cu->id, $visible_units_id)) { //  has completed units (if any) ?
+                } else if (!in_array($cu->id, $visible_units_id)) { //  has completed units (if any)?
                     $not_shown = true;
                     $icon = icon('fa-minus-circle fa-md', $langUnitNotCompleted);
                 } else {
@@ -815,7 +816,7 @@ if ($total_cunits > 0) {
             $not_shown = false;
             $icon = '';
 
-            if (!$is_editor) {
+            if (!$is_editor && !$is_course_reviewer) {
                 if (!has_access_to_units($cu->id, $cu->assign_to_specific, $uid)) { // unit has assigned to users or groups ?
                     $not_shown = true;
                 } else if (!(is_null($cu->start_week)) and (date('Y-m-d') < $cu->start_week)) { // unit has started ?

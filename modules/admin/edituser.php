@@ -202,13 +202,13 @@ if ($u) {
     } else { // if the form was submitted then update user
 
         // get the variables from the form and initialize them
-        $fname = $_POST['fname'] ?? '';
-        $lname = $_POST['lname'] ?? '';
+        $fname = canonicalize_whitespace($_POST['fname'] ?? '');
+        $lname = canonicalize_whitespace($_POST['lname'] ?? '');
         // trim white spaces in the end and in the beginning of the word
-        $username = $_POST['username'] ?? '';
+        $username = canonicalize_whitespace($_POST['username'] ?? '');
         $email = isset($_POST['email']) ? mb_strtolower(trim($_POST['email'])) : '';
-        $phone = $_POST['phone'] ?? '';
-        $am = $_POST['am'] ?? '';
+        $phone = canonicalize_whitespace($_POST['phone'] ?? '');
+        $am = canonicalize_whitespace($_POST['am'] ?? '');
         $user_language = $_POST['user_language'] ?? '';
         $departments = $_POST['department'] ?? 'NULL';
         $newstatus = $_POST['newstatus'] ?? 'NULL';
