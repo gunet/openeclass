@@ -200,14 +200,14 @@ if ($data['userdata']) {
 
     // Get external badges synced from backpack (only if OpenBadges is enabled)
     if ($openBadgesEnabled) {
-        $externalBadgesQ = "SELECT id as user_badge_id, "
-                . " title, description, issuer, image_url, issued_on as created, "
-                . " external_assertion_id, external_collection_id, "
-                . " created_at, updated_at "
-                . " FROM user_badge_external "
-                . " WHERE user_id = ?d "
-                . " ORDER BY issued_on DESC";
-        $data['badge_external'] = Database::get()->queryArray($externalBadgesQ, $uid);
+    $externalBadgesQ = "SELECT id as user_badge_id, "
+            . " title, description, issuer, image_url, issued_on as created, "
+            . " external_assertion_id, external_collection_id, "
+            . " created_at, updated_at "
+            . " FROM user_badge_external "
+            . " WHERE user_id = ?d "
+            . " ORDER BY issued_on DESC";
+    $data['badge_external'] = Database::get()->queryArray($externalBadgesQ, $uid);
     } else {
         $data['badge_external'] = [];
     }
