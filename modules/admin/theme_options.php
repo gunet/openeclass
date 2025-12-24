@@ -236,7 +236,13 @@ if (isset($_POST['import'])) {
                 }
                 $base64_str = file_get_contents($theme_options_file);
                 unlink($theme_options_file);
-                $theme_options = json_decode(base64_decode($base64_str));
+                $theme_options = unserialize(base64_decode($base64_str));
+                /*
+                It is suggested to define a set of allowed classes:
+                $theme_options = unserialize(base64_decode($base64_str), [
+                   'allowed_classes' => ['stdClass']
+                ]);
+                */
                 if (!$theme_options || !isset($theme_options->name) || !isset($theme_options->styles) || !isset($theme_options->id)) {
                     removeDir("$webDir/courses/theme_data/temp");
                     Session::flash('message', $langUnwantedFiletype);
