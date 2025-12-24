@@ -179,20 +179,70 @@ if (isset($_POST['import'])) {
             }
             $archive = new ZipArchive();
             if ($archive->open("courses/theme_data/$file_name")) {
-                // validate contents of zip archive
+                // Allowed theme payload: metadata text plus the asset types themes already use (css/js overrides, images, icons, web fonts).
+                // Current values of $allowedExtensions and $allowedMimeTypes are not definite and should be reviewed by project maintainers.
+                $allowedExtensions = array('txt','css','js','png','jpg','jpeg','gif','svg','webp','ico','woff','woff2','ttf','eot');
+                $allowedMimeTypes = array(
+                    'text/plain', 'text/css', 'application/javascript', 'text/javascript',
+                    'image/png', 'image/jpeg', 'image/gif', 'image/webp', 'image/svg+xml', 'image/x-icon',
+                    'font/woff', 'font/woff2', 'application/font-woff', 'application/x-font-ttf', 'font/ttf',
+                    'application/x-font-eot', 'application/vnd.ms-fontobject'
+                );
+                $finfo = new finfo(FILEINFO_MIME_TYPE);
+                $invalidArchive = false;
                 for ($i = 0; $i < $archive->numFiles; $i++) {
-                    $stat = $archive->statIndex($i, ZipArchive::FL_ENC_RAW);
-                    $files_in_zip[$i] = $stat['name'];
-                    if (!empty(my_basename($files_in_zip[$i]))) {
-                        validateUploadedFile(my_basename($files_in_zip[$i]), 3);
+                    $entry = $archive->statIndex($i)['name'];
+                    $normalizedEntry = ltrim($entry, '/');
+                    if (strpos($normalizedEntry, "\0") !== false || preg_match('#(^|/)\\.\\.(/|$)#', $normalizedEntry)) {
+                        $invalidArchive = true;
+                        break;
+                    }
+                    if (substr($normalizedEntry, -1) === '/') {
+                        continue; // directory
+                    }
+                    $extension = strtolower(pathinfo($normalizedEntry, PATHINFO_EXTENSION));
+                    if ($extension === '' || !in_array($extension, $allowedExtensions)) {
+                        $invalidArchive = true;
+                        break;
+                    }
+                    $stream = $archive->getStream($entry);
+                    if ($stream === false) {
+                        $invalidArchive = true;
+                        break;
+                    }
+                    $buffer = stream_get_contents($stream, 256 * 1024);
+                    fclose($stream);
+                    $mimeType = $finfo->buffer($buffer) ?: 'application/octet-stream';
+                    if (!in_array($mimeType, $allowedMimeTypes)) {
+                        $invalidArchive = true;
+                        break;
                     }
                 }
-                // extract zip archive
+                if ($invalidArchive) {
+                    $archive->close();
+                    @unlink("courses/theme_data/$file_name");
+                    Session::flash('message',$langUnwantedFiletype);
+                    Session::flash('alert-class', 'alert-danger');
+                    redirect_to_home_page('modules/admin/theme_options.php');
+                }
                 $archive->extractTo('courses/theme_data/temp');
-                unlink("$webDir/courses/theme_data/$file_name");
-                $base64_str = file_get_contents("$webDir/courses/theme_data/temp/theme_options.txt");
-                unlink("$webDir/courses/theme_data/temp/theme_options.txt");
-                $theme_options = unserialize(base64_decode($base64_str));
+                unlink("courses/theme_data/$file_name");
+                $theme_options_file = "$webDir/courses/theme_data/temp/theme_options.txt";
+                if (!file_exists($theme_options_file)) {
+                    removeDir("$webDir/courses/theme_data/temp");
+                    Session::flash('message', $langUnwantedFiletype);
+                    Session::flash('alert-class', 'alert-danger');
+                    redirect_to_home_page('modules/admin/theme_options.php');
+                }
+                $base64_str = file_get_contents($theme_options_file);
+                unlink($theme_options_file);
+                $theme_options = json_decode(base64_decode($base64_str));
+                if (!$theme_options || !isset($theme_options->name) || !isset($theme_options->styles) || !isset($theme_options->id)) {
+                    removeDir("$webDir/courses/theme_data/temp");
+                    Session::flash('message', $langUnwantedFiletype);
+                    Session::flash('alert-class', 'alert-danger');
+                    redirect_to_home_page('modules/admin/theme_options.php');
+                }
                 $new_theme_id = Database::get()->query("INSERT INTO theme_options (name, styles, version) VALUES(?s, ?s, 4)", $theme_options->name, $theme_options->styles)->lastInsertID;
                 rename("$webDir/courses/theme_data/temp/".intval($theme_options->id), "$webDir/courses/theme_data/temp/$new_theme_id");
                 recurse_copy("$webDir/courses/theme_data/temp","$webDir/courses/theme_data");
