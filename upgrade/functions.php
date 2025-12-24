@@ -3540,6 +3540,142 @@ function upgrade_to_4_2($tbl_options) : void {
 }
 
 /**
+ * @brief OpenBadges Backpack Integration - Database Migration
+ * Creates tables and fields for external backpack provider integration
+ * 
+ * @param $tbl_options
+ * @return void
+ */
+function upgrade_openbadges_backpack($tbl_options): void
+{
+    // 1. Create backpack_provider table for managing external OpenBadges backpack providers
+    if (!DBHelper::tableExists('backpack_provider')) {
+        Database::get()->query("CREATE TABLE `backpack_provider` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `name` VARCHAR(255) NOT NULL,
+            `api_url` VARCHAR(512) NOT NULL,
+            `ob_version` VARCHAR(50) DEFAULT 'OpenBadge v2.0',
+            `basic_auth_access_token` VARCHAR(512) DEFAULT NULL,
+            `refresh_access_token` VARCHAR(512) DEFAULT NULL,
+            `client_id` VARCHAR(255) DEFAULT NULL,
+            `client_secret` VARCHAR(255) DEFAULT NULL,
+            `authorization_endpoint` VARCHAR(512) DEFAULT NULL,
+            `token_endpoint` VARCHAR(512) DEFAULT NULL,
+            `registration_endpoint` VARCHAR(512) DEFAULT NULL,
+            `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            `active` TINYINT(1) NOT NULL DEFAULT 1,
+            UNIQUE KEY `name` (`name`)
+        ) $tbl_options");
+    }
+
+    // 2. Create user_backpack_connection table for user connections to backpack providers
+    if (!DBHelper::tableExists('user_backpack_connection')) {
+        Database::get()->query("CREATE TABLE `user_backpack_connection` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `user_id` INT(11) NOT NULL,
+            `backpack_provider_id` INT(11) NOT NULL,
+            `email` VARCHAR(255) DEFAULT NULL,
+            `password` VARCHAR(255) DEFAULT NULL,
+            `access_token` VARCHAR(512) DEFAULT NULL,
+            `refresh_token` VARCHAR(512) DEFAULT NULL,
+            `status` ENUM('connected', 'disconnected', 'error') DEFAULT 'disconnected',
+            `last_sync` DATETIME DEFAULT NULL,
+            `selected_collection_id` VARCHAR(512) DEFAULT NULL COMMENT 'Last selected collection for sync',
+            `selected_collection_name` VARCHAR(255) DEFAULT NULL COMMENT 'Display name of selected collection',
+            `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            UNIQUE KEY `user_provider` (`user_id`, `backpack_provider_id`),
+            FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON DELETE CASCADE,
+            FOREIGN KEY (`backpack_provider_id`) REFERENCES `backpack_provider`(`id`) ON DELETE CASCADE
+        ) $tbl_options");
+    }
+
+    // 3. Create user_badge_external table for imported external badges
+    if (!DBHelper::tableExists('user_badge_external')) {
+        Database::get()->query("CREATE TABLE `user_badge_external` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `user_id` INT(11) NOT NULL,
+            `backpack_provider_id` INT(11) NOT NULL,
+            `title` VARCHAR(255) NOT NULL,
+            `description` TEXT,
+            `image_url` VARCHAR(512),
+            `issuer` VARCHAR(255),
+            `issued_on` DATETIME,
+            `external_assertion_id` VARCHAR(512) NOT NULL,
+            `external_collection_id` VARCHAR(512),
+            `badge_data` LONGTEXT,
+            `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            UNIQUE KEY `user_assertion` (`user_id`, `external_assertion_id`(255)),
+            INDEX `user_id_idx` (`user_id`),
+            INDEX `backpack_provider_id_idx` (`backpack_provider_id`),
+            FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON DELETE CASCADE,
+            FOREIGN KEY (`backpack_provider_id`) REFERENCES `backpack_provider`(`id`) ON DELETE CASCADE
+        ) $tbl_options");
+    }
+
+    // 4. Add external_assertion_id field to user_badge table (for tracking exported badges)
+    if (!DBHelper::fieldExists('user_badge', 'external_assertion_id')) {
+        Database::get()->query("ALTER TABLE `user_badge` 
+            ADD `external_assertion_id` VARCHAR(512) DEFAULT NULL 
+            COMMENT 'External assertion ID if published to backpack'");
+        
+        // Add index for better query performance
+        if (!DBHelper::indexExists('user_badge', 'external_assertion_idx')) {
+            Database::get()->query("CREATE INDEX `external_assertion_idx` 
+                ON `user_badge` (`external_assertion_id`(255))");
+        }
+    }
+
+    // 5. Ensure badge table has allow_export field (should exist from 3.6, but double-check)
+    if (!DBHelper::fieldExists('badge', 'allow_export')) {
+        Database::get()->query("ALTER TABLE `badge` 
+            ADD `allow_export` TINYINT(1) NOT NULL DEFAULT 1 
+            COMMENT 'Controls if badge can be exported to external backpack'");
+        
+        // Add index for filtering exportable badges
+        if (!DBHelper::indexExists('badge', 'idx_allow_export')) {
+            Database::get()->query("CREATE INDEX `idx_allow_export` 
+                ON `badge` (`allow_export`)");
+        }
+    }
+
+    // 6. Create indexes for better performance on backpack operations
+    if (!DBHelper::indexExists('user_backpack_connection', 'user_status_idx')) {
+        Database::get()->query("CREATE INDEX `user_status_idx` 
+            ON `user_backpack_connection` (`user_id`, `status`)");
+    }
+
+    if (!DBHelper::indexExists('user_backpack_connection', 'provider_status_idx')) {
+        Database::get()->query("CREATE INDEX `provider_status_idx` 
+            ON `user_backpack_connection` (`backpack_provider_id`, `status`)");
+    }
+
+    if (!DBHelper::indexExists('user_badge_external', 'collection_idx')) {
+        Database::get()->query("CREATE INDEX `collection_idx` 
+            ON `user_badge_external` (`external_collection_id`(255))");
+    }
+
+    if (!DBHelper::indexExists('user_badge_external', 'created_at_idx')) {
+        Database::get()->query("CREATE INDEX `created_at_idx` 
+            ON `user_badge_external` (`created_at`)");
+    }
+
+    // 7. Add OpenBadges extapp configuration if it doesn't exist
+    $openbadges_app = Database::get()->querySingle(
+        "SELECT * FROM extapp WHERE name = 'openbadges'"
+    );
+    
+    if (!$openbadges_app) {
+        Database::get()->query(
+            "INSERT INTO extapp (name, label, description, image_icon_name) 
+             VALUES ('openbadges', 'OpenBadges', 'Integration with OpenBadges backpack providers', 'fa-certificate')"
+        );
+    }
+}
+
+/**
  * @brief Create Indexes
  */
 
