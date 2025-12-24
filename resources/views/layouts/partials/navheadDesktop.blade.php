@@ -284,12 +284,18 @@
                                                             </a>
                                                         </li>
                                                         @endif
+                                                        @php
+                                                            $openBadgesAppNav = ExtAppManager::getApp('openbadges');
+                                                            $openBadgesEnabledNav = $openBadgesAppNav && $openBadgesAppNav->isEnabled();
+                                                        @endphp
+                                                        @if ($openBadgesEnabledNav)
                                                         <li>
                                                             <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}main/mybackpacks.php">
                                                                 <i class="fa-regular fa-file settings-icons"></i>
                                                                 Tα backpack μου
                                                             </a>
                                                         </li>
+                                                        @endif
                                                         <li>
                                                             <form method='post' action='{{ $urlAppend }}modules/auth/logout.php' style='height:40px;'>
                                                                 <input type='hidden' name='token' value='{{ $_SESSION['csrf_token'] }}'>
@@ -463,11 +469,17 @@
                                         <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}main/mycertificates.php"><i class="fa-solid fa-award settings-icons"></i> {{ trans('langMyCertificates') }}</a>
                                     </li>
                                     @endif
+                                    @php
+                                        $openBadgesAppNav2 = ExtAppManager::getApp('openbadges');
+                                        $openBadgesEnabledNav2 = $openBadgesAppNav2 && $openBadgesAppNav2->isEnabled();
+                                    @endphp
+                                    @if ($openBadgesEnabledNav2)
                                     <li>
                                         <a class="list-group-item d-flex 
                                         justify-content-start align-items-start py-3 gap-2"
                                          href="{{ $urlAppend }}main/mybackpacks.php"><i class="fa-solid fa-award settings-icons"></i> Τα backpack μου </a>
                                     </li>
+                                    @endif
                                     @if (($session->status == USER_TEACHER and get_config('mydocs_teacher_enable')) or ($session->status == USER_STUDENT and get_config('mydocs_student_enable')) or ($session->status == ADMIN_USER and get_config('mydocs_teacher_enable')))
                                     <li>
                                         <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}main/mydocs/index.php"><i class="fa-regular fa-file settings-icons"></i> {{ trans('langMyDocs') }}</a>

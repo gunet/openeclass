@@ -3548,7 +3548,7 @@ function upgrade_to_4_2($tbl_options) : void {
  */
 function upgrade_openbadges_backpack($tbl_options): void
 {
-    // 1. Create backpack_provider table for managing external OpenBadges backpack providers
+    //Create backpack_provider table for managing external OpenBadges backpack providers
     if (!DBHelper::tableExists('backpack_provider')) {
         Database::get()->query("CREATE TABLE `backpack_provider` (
             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -3569,7 +3569,7 @@ function upgrade_openbadges_backpack($tbl_options): void
         ) $tbl_options");
     }
 
-    // 2. Create user_backpack_connection table for user connections to backpack providers
+    // Create user_backpack_connection table for user connections to backpack providers
     if (!DBHelper::tableExists('user_backpack_connection')) {
         Database::get()->query("CREATE TABLE `user_backpack_connection` (
             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -3591,7 +3591,7 @@ function upgrade_openbadges_backpack($tbl_options): void
         ) $tbl_options");
     }
 
-    // 3. Create user_badge_external table for imported external badges
+    // Create user_badge_external table for imported external badges
     if (!DBHelper::tableExists('user_badge_external')) {
         Database::get()->query("CREATE TABLE `user_badge_external` (
             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -3615,7 +3615,7 @@ function upgrade_openbadges_backpack($tbl_options): void
         ) $tbl_options");
     }
 
-    // 4. Add external_assertion_id field to user_badge table (for tracking exported badges)
+    // Add external_assertion_id field to user_badge table (for tracking exported badges)
     if (!DBHelper::fieldExists('user_badge', 'external_assertion_id')) {
         Database::get()->query("ALTER TABLE `user_badge` 
             ADD `external_assertion_id` VARCHAR(512) DEFAULT NULL 
@@ -3628,7 +3628,7 @@ function upgrade_openbadges_backpack($tbl_options): void
         }
     }
 
-    // 5. Ensure badge table has allow_export field (should exist from 3.6, but double-check)
+    // Ensure badge table has allow_export field (should exist from 3.6, but double-check)
     if (!DBHelper::fieldExists('badge', 'allow_export')) {
         Database::get()->query("ALTER TABLE `badge` 
             ADD `allow_export` TINYINT(1) NOT NULL DEFAULT 1 
@@ -3641,7 +3641,7 @@ function upgrade_openbadges_backpack($tbl_options): void
         }
     }
 
-    // 6. Create indexes for better performance on backpack operations
+    // Create indexes for better performance on backpack operations
     if (!DBHelper::indexExists('user_backpack_connection', 'user_status_idx')) {
         Database::get()->query("CREATE INDEX `user_status_idx` 
             ON `user_backpack_connection` (`user_id`, `status`)");
@@ -3660,18 +3660,6 @@ function upgrade_openbadges_backpack($tbl_options): void
     if (!DBHelper::indexExists('user_badge_external', 'created_at_idx')) {
         Database::get()->query("CREATE INDEX `created_at_idx` 
             ON `user_badge_external` (`created_at`)");
-    }
-
-    // 7. Add OpenBadges extapp configuration if it doesn't exist
-    $openbadges_app = Database::get()->querySingle(
-        "SELECT * FROM extapp WHERE name = 'openbadges'"
-    );
-    
-    if (!$openbadges_app) {
-        Database::get()->query(
-            "INSERT INTO extapp (name, label, description, image_icon_name) 
-             VALUES ('openbadges', 'OpenBadges', 'Integration with OpenBadges backpack providers', 'fa-certificate')"
-        );
     }
 }
 

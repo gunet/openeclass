@@ -19,7 +19,7 @@
 
 require_once 'genericparam.php';
 
-class OpenBadgesApp extends ExtAPP
+class OpenBadgesApp extends ExtApp
 {
     const NAME = "Open Badges";
 
@@ -48,13 +48,19 @@ class OpenBadgesApp extends ExtAPP
         return 'modules/admin/openbadgeconf.php';
     }
 
+    /**
+     * Return true if any backpack providers are configured and active, else false
+     *
+     * @return boolean
+     */
     public function isConfigured()
     {
-        return FALSE;
-    }
-
-    public function isEnabled()
-    {
-        return FALSE;
+        try {
+            $result = Database::get()->querySingle("SELECT COUNT(*) AS count FROM backpack_provider WHERE active = 1");
+            return $result && $result->count > 0;
+        } catch (Exception $e) {
+            // If table doesn't exist yet, return false
+            return false;
+        }
     }
 }

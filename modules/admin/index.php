@@ -117,8 +117,9 @@ $data['onlineusers'] = getOnlineUsers();
 $ts = get_config('h5p_update_content_ts');
 $data['ts'] = format_locale_date(strtotime($ts), 'short', false);
 
-// OpenBadges Statistics
-$data['badge_stats'] = getBadgeStatistics();
+// OpenBadges Statistics (only if enabled)
+$openBadgesApp = ExtAppManager::getApp('openbadges');
+$data['badge_stats'] = ($openBadgesApp && $openBadgesApp->isEnabled()) ? getBadgeStatistics() : null;
 
 view('admin.index', $data);
 

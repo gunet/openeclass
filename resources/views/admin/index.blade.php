@@ -379,7 +379,11 @@
             </div>
 
             {{-- OpenBadges Statistics Section --}}
-            @if ($is_admin && isset($badge_stats))
+            @php
+                $openBadgesApp = ExtAppManager::getApp('openbadges');
+                $openBadgesEnabled = $openBadgesApp && $openBadgesApp->isEnabled();
+            @endphp
+            @if ($is_admin && isset($badge_stats) && $openBadgesEnabled)
                 <div class='col-12 mt-4'>
                     <div class='card panelCard border-card-left-default px-lg-4 py-lg-3'>
                         <div class='card-header border-0 px-0'>

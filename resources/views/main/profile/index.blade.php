@@ -303,7 +303,7 @@
                                                         </a>
                                                     </div>
                                                     <!-- Badge Publish Status -->
-                                                    @if ($uid == $id)
+                                                    @if ($uid == $id && isset($openBadgesEnabled) && $openBadgesEnabled)
                                                     <div class='badge-card-footer d-flex flex-wrap align-items-center justify-content-between gap-2'>
                                                         @if (!empty($badge->external_assertion_id))
                                                             <!-- Badge is published -->
@@ -357,7 +357,7 @@
                     @endif
                     
                     {{-- External Badges from Backpack --}}
-                    @if (isset($badge_external) && count($badge_external) > 0)
+                    @if (isset($openBadgesEnabled) && $openBadgesEnabled && isset($badge_external) && count($badge_external) > 0)
                         <div class='col-12 mt-4'>
                             <div class="card panelCard border-card-left-default px-3 py-2">
                                 <div class='card-header border-0 d-flex justify-content-between align-items-center'>
