@@ -3576,6 +3576,18 @@ function upgrade_to_4_3($tbl_options) : void {
             CONSTRAINT FOREIGN KEY (`department_id`) REFERENCES `hierarchy` (`id`),
             CONSTRAINT FOREIGN KEY (`theme_id`) REFERENCES `theme_options` (`id`)) $tbl_options");
     }
+
+    // course resource usage table
+    if (!DBHelper::tableExists('course_resource_usage')) {
+        Database::get()->query("CREATE TABLE `course_resource_usage` (
+            `course_id` int(11) NOT NULL,
+            `disk_size` bigint DEFAULT NULL,
+            PRIMARY KEY (`course_id`),
+            KEY `idx_disk_size` (`disk_size`),
+            CONSTRAINT FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) 
+                ON DELETE CASCADE ON UPDATE CASCADE
+            ) $tbl_options");
+    }
 }
 
 

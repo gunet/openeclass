@@ -6829,3 +6829,4 @@ $langTenantAdminNotFound = 'User could not not be found';
 $langTenantCategoryNotFound = 'The category has not been set or could not be found';
 $langTenantCategoryNotExist = 'No available category exists';
 $langTenantProfileEditNotAllowed = 'Editing this tenant\'s information is not allowed';
+$langDiskUsage = 'Resource usage';

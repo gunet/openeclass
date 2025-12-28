@@ -2536,6 +2536,7 @@ $langTenantAdminNotFound = 'Ο χρήστης δεν βρέθηκε';
 $langTenantCategoryNotFound = 'Η κατηγορία δεν έχει καθοριστεί ή δεν βρέθηκε';
 $langTenantCategoryNotExist = 'Δεν υπάρχει διαθέσιμη κατηγορία';
 $langTenantProfileEditNotAllowed = 'Δεν επιτρέπεται η επεξεργασία των στοιχείων του συγκεκριμένου ενοίκου';
+$langDiskUsage = 'Χρήση δίσκου';
 
 
 /* * *************************************************************

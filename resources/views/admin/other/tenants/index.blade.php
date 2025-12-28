@@ -3,17 +3,17 @@
 @push('bottom_scripts')
   <script>
     $(function() {
-      $('#tentants_table').DataTable ({
+      $('#tenants_table').DataTable ({
         'sPaginationType': 'full_numbers',
         'bAutoWidth': true,
         'oLanguage': {
           'sLengthMenu':   '{{ trans('langDisplay') }} _MENU_ {{ trans('langResults2') }}',
           'sZeroRecords':  '{{ trans('langNoResult') }}',
-          'sInfo':         '{{ trans('$langDisplayed') }} _START_ {{ trans('$langTill') }} _END_ {{ trans('$langFrom2') }} _TOTAL_ {{ trans('$langTotalResults') }}',
-          'sInfoEmpty':    '{{ trans('$langDisplayed') }} 0 {{ trans('$langTill') }} 0 {{ trans('$langFrom2') }} 0 {{ trans('$langResults2') }}',
+          'sInfo':         '{{ trans('langDisplayed') }} _START_ {{ trans('langTill') }} _END_ {{ trans('langFrom2') }} _TOTAL_ {{ trans('langTotalResults') }}',
+          'sInfoEmpty':    '',
           'sInfoFiltered': '',
           'sInfoPostFix':  '',
-          'sSearch':       '{{ trans('$langSearch') }}',
+          'sSearch':       '{{ trans('langSearch') }}',
           'sUrl':          '',
           'oPaginate': {
             'sFirst':    '&laquo;',
@@ -21,7 +21,13 @@
             'sNext':     '&rsaquo;',
             'sLast':     '&raquo;'
           }
-        }
+        },
+        'columnDefs': [
+            { 
+              'orderable': false, 
+              'targets': [5] 
+            }
+          ]
       });
     });
   </script>
@@ -53,14 +59,22 @@
                                 <tr class='list-header'>
                                     <th scope='col'>ID</th>
                                     <th scope='col'>{{ trans('langName') }}</th>
+                                    <th scope='col'>{{ trans('langNbUsers') }}</th>
+                                    <th scope='col'>{{ trans('langLectNum') }}</th>
+                                    <th scope='col'>{{ trans('langDiskUsage') }}</th>
                                     <th>&nbsp;</th>
                                 </tr>
                             </thead>
                             <tbody>
                             @foreach ($tenants as $tenant)
+                                @php $disk_usage = formatBytes($tenant->disk_usage); @endphp
+
                                 <tr>
                                     <td>{{ $tenant->id }}</td>
                                     <td>{{ $tenant->name }}</td>
+                                    <td>{{ $tenant->total_users }}</td>
+                                    <td>{{ $tenant->total_courses }}</td>
+                                    <td>{{ $disk_usage }}</td>
                                     <td class='option_btn_cell text-center'>
                                         {!! action_button([
                                               [ 'title' => trans('langEditChange'),

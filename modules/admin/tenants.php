@@ -31,6 +31,19 @@ $pageName = $langTenants;
 
 $navigation[] = ['url' => 'index.php', 'name' => $langAdmin];
 
-$data['tenants'] = Database::get()->queryArray('SELECT * FROM tenant');
+$data['tenants'] = Database::get()->queryArray(
+    "SELECT t.*, 
+           h.lft, h.rgt,
+           COUNT(DISTINCT ud.user) AS total_users,
+           COUNT(DISTINCT cd.course) AS total_courses,
+           COALESCE(SUM(cru.disk_size), 0) AS disk_usage
+    FROM tenant t
+    LEFT JOIN hierarchy h ON h.id = t.department_id
+    LEFT JOIN hierarchy h2 ON h2.lft BETWEEN h.lft AND h.rgt
+    LEFT JOIN user_department ud ON ud.department = h2.id
+    LEFT JOIN course_department cd ON cd.department = h2.id
+    LEFT JOIN course_resource_usage cru ON cru.course_id = cd.course
+    GROUP BY t.id"
+);
 
 view('admin.other.tenants.index', $data);

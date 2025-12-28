@@ -5065,6 +5065,26 @@ function get_tinymce_color_text() {
 }
 
 
+/**
+ * Formats bytes into human-readable string (B, KB, MB, GB, TB).
+ *
+ * @param int $bytes Bytes to format
+ * @param int $precision [optional] Decimal places (default: 2)
+ * @return string Formatted size (e.g. "1.23 MB")
+ */
+function formatBytes(int $bytes, int $precision = 2): string {
+    if ($bytes == 0) {
+        return '0 B';
+    }
+
+    $units = ['B', 'KB', 'MB', 'GB', 'TB'];
+    $bytes = abs($bytes);
+    $exp = (int) (log($bytes) / log(1024));
+    $size = $bytes / pow(1024, $exp);
+
+    return round($size, $precision) . ' ' . $units[$exp];
+}
+
 
 /**
  * @brief get user courses

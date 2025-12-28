@@ -115,6 +115,7 @@ load_js('bootstrap-datetimepicker');
 if (isset($_GET['id'])) {
     $data['tenant'] = Database::get()->querySingle('SELECT * FROM tenant WHERE id = ?d', $_GET['id']);
     $data['department_name'] = $tree->getFullPath($data['tenant']->department_id);
+    $data['categories'] = [];
 } else { // user account request
     load_js('select2');
     $data['tenant'] = null;
