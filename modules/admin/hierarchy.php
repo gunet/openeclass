@@ -254,7 +254,16 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add') {
 
         $data['visibleChecked'] = array(NODE_CLOSED => '', NODE_SUBSCRIBED => '', NODE_OPEN => '');
         $data['visibleChecked'][intval(NODE_OPEN)] = " checked='checked'";
-        list($js, $html) = $tree->buildNodePickerIndirect(array('params' => 'name="parentid"', 'tree' => array('0' => 'Top'), 'multiple' => false, 'defaults' => $user->getDepartmentIds($uid), 'allow_only_defaults' => (!$is_admin)));
+        $treeopts = [
+            'params' => 'name="newparentid"',
+	    'multiple' => false,
+	    'defaults' => $user->getDepartmentIds($uid),
+	    'allow_only_defaults' => !$is_admin,
+	];
+        if ($is_admin) {
+            $treeopts['tree'] = ['0' => 'Top'];
+        }
+        list($js, $html) = $tree->buildNodePickerIndirect($treeopts);
         $head_content .= $js;
         $data['html'] = $html;
 
@@ -269,7 +278,7 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add') {
                     <div class='col'>
                         <div class='card panelCard card-default h-100'>
                             <img style='height:200px;' class='card-img-top' src='{$urlAppend}template/modern/images/courses_images/$image' alt='image course'/>
-                            <div class='card-body'>                                
+                            <div class='card-body'>
                                 <input id='$image' type='button' class='btn submitAdminBtnDefault w-100 chooseFacultyImage mt-3' value='$langSelect'>
                             </div>
                         </div>
@@ -434,8 +443,10 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
         $treeopts = array(
             'params' => 'name="newparentid"',
             'exclude' => $id,
-            'tree' => array('0' => 'Top'),
             'multiple' => false);
+        if ($is_admin) {
+            $treeopts['tree'] = array('0' => 'Top');
+        }
         if (isset($parent) && isset($parent->id)) {
             $treeopts['defaults'] = $parent->id;
             $data['formOPid'] = $parent->id;
@@ -466,7 +477,7 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
                     <div class='col'>
                         <div class='card panelCard card-default h-100'>
                             <img style='height:200px;' class='card-img-top' src='{$urlAppend}template/modern/images/courses_images/$image' alt='image course'/>
-                            <div class='card-body'>                                
+                            <div class='card-body'>
                                 <input id='$image' type='button' class='btn submitAdminBtnDefault w-100 chooseFacultyImage mt-3' value='$langSelect'>
                             </div>
                         </div>
