@@ -1078,9 +1078,11 @@ function submitPoll() {
 //            Database::get()->query('DELETE FROM poll_user_record WHERE id = ?d', $user_record_id);
             Session::flash('message', $langQFillInAllQs);
             Session::flash('alert-class', 'alert-warning');
-            if(isset($_GET['from_session_view'])){
+            if ($unit_id) {
+                redirect_to_home_page("modules/units/view.php?course=$course_code&res_type=questionnaire&UseCase=1&pid=$pid");
+            } elseif (isset($_GET['from_session_view'])) {
                 redirect_to_home_page("modules/units/view.php?course=$course_code&res_type=questionnaire&UseCase=1&pid=$pid&session=$_GET[session]&from_session_view=true");
-            }else{
+            } else {
                 redirect_to_home_page("modules/questionnaire/pollparticipate.php?course=$course_code&UseCase=1&pid=$pid");
             }
         }
