@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language it
-// Generated 2025-12-02 16:31:18
+// Generated 2025-11-21 11:40:43
 
 $langOfConsultant = "Consultant";
 $langConsultants = "Consultants";
@@ -128,14 +128,14 @@ $langUserHasNotAcceptedSession = "The session registration was NOT accepted by t
 $langProcessCompleted = "You have successfully completed the process.";
 $langAnnouncedExistingSession = "Selected users will be notified by mail to register for the session.";
 $langNotExistUsers = "There are no users";
-$langWithConsent = "User consent for session registration?";
+$langWithConsent = "User consent for session Participation?";
 $langInfoWithConsent = "The user will be automatically logged into the session if user consent is not selected.";
-$langContinueToRegistrationSession = "You have chosen to subscribe to this session. Do you want to proceed?";
-$langCompleteRegistration = "Your registration has been completed successfully! You have entered your session area.";
-$langInProgressRegistration = "Pending user registration...";
-$langSubmitRegistration = "User registration";
+$langContinueToRegistrationSession = "You have chosen to participate to this session. Do you want to proceed?";
+$langCompleteRegistration = "Your participation has been completed successfully! You have entered your session area.";
+$langInProgressRegistration = "Pending user Participation...";
+$langSubmitRegistration = "User Participation";
 $langNoSubmitRegistration = "Unsubscribe";
-$langCancelSessionRegistration = "User registration is about to be cancelled. The user will be able to rejoin the session.
+$langCancelSessionRegistration = "User Participation is about to be cancelled. The user will be able to rejoin the session.
  The process of completing the session by that user will not be removed.
  To delete it permanently including its progress on completing the session, you can go to edit the session.</br></br>
  Do you want to continue?";
@@ -165,7 +165,7 @@ $langCompletedSessionMeeting = "Completion by live meeting";
 $langInfoForbiddenAddPrereq = "The operation you attempted cannot be completed as the current session is logged out by all users.";
 $langAllCompletedResources = "The session resources have been executed successfully by the user.";
 $langShowReportUserTable = "User session reports";
-$langShowReportUserCurrentSession = "Current session user report";
+$langShowReportUserCurrentSession = "Current session user attendance";
 $langCompletionResources = "Completion resources";
 $langCompletedResources = "Completed resources";
 $langResourceAsActivity = "Session completion resources";
@@ -196,10 +196,10 @@ $langTeacher = "Coordinator";
 $langOfTeacher = "Coordinator";
 $langTeachers = "Coordinators";
 $langOfTeachers = "Coordinators";
-$langsTeacher = "coordinator";
-$langsOfTeacher = "coordinator";
-$langsTeachers = "coordinators";
-$langsOfTeachers = "coordinators";
+$langsTeacher = "consultant";
+$langsOfTeacher = "consultant";
+$langsTeachers = "consultants";
+$langsOfTeachers = "consultants";
 $langCTeacher = "COORDINATOR";
 $langConsultant = "Consultant";
 $langCourseAdminTeacher = "Admin - Coordinator";
@@ -1013,7 +1013,7 @@ Choose one of the available forms of partnerships. </br></br>
 Specify, optionally, the distribution license of your collaboration.</br></br>
 Specify the type of access to your collaboration. </br></br>
 To complete the process of creating the collaboration, press the button with the indicator «Creating a Partnership».";
-$langMonthlyReportInfo = "Aggregates (partnerships, users) of the last 24 months are presented.";
+$langMonthlyReportInfo = "Aggregates (partnerships, users) of the last 12 months are presented.";
 $langAddingDirectoryIndex = 'Add index.html files to collaboration subdirectories';
 $langAdministratorGroup = 'Management of User Groups';
 $m['WorkToAllUsers'] = "In all the $langsOfStudentss";
@@ -1112,3 +1112,8 @@ $langResourceExists = "The resource already exists.";
 $langUsedCertRes = "The activity has already been used by a user.";
 $langUseOfAppInfo = "Choose which collaborations the app will be used in";
 $langUseOfServiceInfo = "Choose in which partnerships the service will be used";
+$langSubmissionOnBehalfOfUser = "Submission on behalf of user";
+$langChooseAUser = "You did not select a user. Please try again.";
+$langProcessForFiliInTool = "You are in the process of completing the tool regarding the selected user.";
+$langConfirmParticipation = "Confirmation";
+$langReportAttendances = "Reports - Attendance records";
