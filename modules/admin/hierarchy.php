@@ -255,11 +255,11 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add') {
         $data['visibleChecked'] = array(NODE_CLOSED => '', NODE_SUBSCRIBED => '', NODE_OPEN => '');
         $data['visibleChecked'][intval(NODE_OPEN)] = " checked='checked'";
         $treeopts = [
-            'params' => 'name="newparentid"',
-	    'multiple' => false,
-	    'defaults' => $user->getDepartmentIds($uid),
-	    'allow_only_defaults' => !$is_admin,
-	];
+            'params' => 'name="parentid"',
+            'multiple' => false,
+            'defaults' => $user->getDepartmentIds($uid),
+            'allow_only_defaults' => !$is_admin,
+        ];
         if ($is_admin) {
             $treeopts['tree'] = ['0' => 'Top'];
         }
