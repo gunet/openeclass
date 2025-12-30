@@ -626,7 +626,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `forum` (
     `last_post_id` INT DEFAULT 0 NOT NULL,
     `cat_id` INT DEFAULT 0 NOT NULL,
     `visible` TINYINT DEFAULT 1 NOT NULL,
-    `course_id` INT NOT NULL,    
+    `course_id` INT NOT NULL,
     PRIMARY KEY (`id`)) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `forum_category` (
@@ -1646,7 +1646,7 @@ $db->query("CREATE TABLE `permissions` (
     `permission` VARCHAR(255),
      PRIMARY KEY (`id`)) $tbl_options");
 
-$db->query("INSERT INTO permissions(permission) VALUE('admin_course_users'), 
+$db->query("INSERT INTO permissions(permission) VALUE('admin_course_users'),
              ('admin_course_modules'),
              ('backup_course'),
              ('clone_course'),
@@ -1654,7 +1654,7 @@ $db->query("INSERT INTO permissions(permission) VALUE('admin_course_users'),
              ('can_upload_multimedia')");
 
 $db->query("CREATE TABLE user_permissions (
-    `course_id` int NOT NULL DEFAULT '0',  
+    `course_id` int NOT NULL DEFAULT '0',
     `user_id` int unsigned NOT NULL DEFAULT '0',
     `permission_id` tinyint NOT NULL,
     PRIMARY KEY (`course_id`,`user_id`,`permission_id`)
@@ -2558,7 +2558,7 @@ $db->query("CREATE TABLE api_token (
     `expired` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)) $tbl_options");
 
-$db->query("CREATE TABLE ai_providers (    
+$db->query("CREATE TABLE ai_providers (
     `id` smallint NOT NULL AUTO_INCREMENT,
     `name` text CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
     `api_key` text CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
@@ -2572,10 +2572,10 @@ $db->query("CREATE TABLE ai_providers (
     PRIMARY KEY (`id`)) $tbl_options");
 
 $db->query("CREATE TABLE ai_modules (
-    `id` SMALLINT NOT NULL AUTO_INCREMENT, 
-    `ai_module_id` SMALLINT NOT NULL DEFAULT 0, 
+    `id` SMALLINT NOT NULL AUTO_INCREMENT,
+    `ai_module_id` SMALLINT NOT NULL DEFAULT 0,
     `ai_provider_id` SMALLINT DEFAULT 0,
-    `all_courses` TINYINT NOT NULL DEFAULT 1, 
+    `all_courses` TINYINT NOT NULL DEFAULT 1,
     PRIMARY KEY(ID)) $tbl_options");
 
 $db->query("CREATE TABLE `ai_courses` (
@@ -2713,6 +2713,14 @@ $db->query("CREATE TABLE `tenant` (
     CONSTRAINT FOREIGN KEY (`department_id`) REFERENCES `hierarchy` (`id`),
     CONSTRAINT FOREIGN KEY (`theme_id`) REFERENCES `theme_options` (`id`)) $tbl_options");
 
+$db->query("CREATE TABLE `course_resource_usage` (
+    `course_id` int(11) NOT NULL,
+    `disk_size` bigint DEFAULT NULL,
+    PRIMARY KEY (`course_id`),
+    KEY `idx_disk_size` (`disk_size`),
+    CONSTRAINT FOREIGN KEY (`course_id`) REFERENCES `course` (`id`)
+        ON DELETE CASCADE ON UPDATE CASCADE
+    ) $tbl_options");
 
 $_SESSION['theme'] = 'modern';
 
