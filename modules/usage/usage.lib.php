@@ -20,6 +20,8 @@
 
 require_once 'include/log.class.php';
 require_once 'include/lib/hierarchy.class.php';
+require_once 'include/baseTheme.php';
+
 
 /**
  * @brief Get statistics of visits and visit duration to a course. The results are depicted in first plot of course statistics
@@ -29,26 +31,26 @@ require_once 'include/lib/hierarchy.class.php';
  * @param int $cid the id of the course
  * @param int $user_id the id of the user to filter out the statistics for
  * @return array an array appropriate for displaying in a c3 plot when json encoded
-*/
+ */
 function get_course_stats($cid, $interval, $start = null, $end = null, $user_id = null)
 {
 
-    $formattedr = array('time'=> array(), 'hits'=> array(), 'duration'=> array());
-    if(!is_null($start) && !is_null($end && !empty($start) && !empty($end))){
+    $formattedr = array('time' => array(), 'hits' => array(), 'duration' => array());
+    if (!is_null($start) && !is_null($end && !empty($start) && !empty($end))) {
         $g = build_group_selector_cond($interval);
         $groupby = $g['groupby'];
         $date_components = $g['select'];
-        if(is_numeric($user_id)) {
+        if (is_numeric($user_id)) {
             $q = "SELECT $date_components, sum(hits) hits, round(sum(duration)/3600,1) dur FROM actions_daily WHERE course_id=?d AND day BETWEEN ?t AND ?t AND user_id=?d $groupby";
             $r = Database::get()->queryArray($q, $cid, $start, $end, $user_id);
         } else {
             $q = "SELECT $date_components, sum(hits) hits, round(sum(duration)/3600,1) dur FROM actions_daily WHERE course_id=?d AND day BETWEEN ?t AND ?t $groupby";
             $r = Database::get()->queryArray($q, $cid, $start, $end);
         }
-        foreach($r as $record){
-           $formattedr['time'][] = $record->cat_title;
-           $formattedr['hits'][] = $record->hits;
-           $formattedr['duration'][] = $record->dur;
+        foreach ($r as $record) {
+            $formattedr['time'][] = $record->cat_title;
+            $formattedr['hits'][] = $record->hits;
+            $formattedr['duration'][] = $record->dur;
         }
     }
     return $formattedr;
@@ -65,62 +67,62 @@ function get_course_stats($cid, $interval, $start = null, $end = null, $user_id 
  * @param int $mid the module id
  * @param int $user_id the id of the user to filter out the statistics for
  * @return array an array appropriate for displaying in a c3 plot when json encoded
-*/
-function get_course_module_stats($cid, $mid, $interval, $start = null, $end = null, $user_id = null){
+ */
+function get_course_module_stats($cid, $mid, $interval, $start = null, $end = null, $user_id = null)
+{
 
     $mtitle = which_module($mid);
     $g = build_group_selector_cond($interval);
     $groupby = $g['groupby'];
     $date_components = $g['select'];
-    if(is_numeric($user_id)){
+    if (is_numeric($user_id)) {
         $q = "SELECT $date_components, sum(hits) hits, round(sum(duration)/3600,1) dur FROM actions_daily WHERE course_id=?d AND module_id=?d AND day BETWEEN ?t AND ?t AND user_id=?d $groupby";
         $r = Database::get()->queryArray($q, $cid, $mid, $start, $end, $user_id);
-    }
-    else{
+    } else {
         $q = "SELECT $date_components, sum(hits) hits, round(sum(duration)/3600,1) dur FROM actions_daily WHERE course_id=?d AND module_id=?d AND day BETWEEN ?t AND ?t $groupby";
         $r = Database::get()->queryArray($q, $cid, $mid, $start, $end);
     }
-    $formattedr = array('time'=>array(),'hits'=>array(),'duration'=>array());
-    foreach($r as $record){
-       $formattedr['time'][] = $record->cat_title;
-       $formattedr['hits'][] = $record->hits;
-       $formattedr['duration'][] = $record->dur;
+    $formattedr = array('time' => array(), 'hits' => array(), 'duration' => array());
+    foreach ($r as $record) {
+        $formattedr['time'][] = $record->cat_title;
+        $formattedr['hits'][] = $record->hits;
+        $formattedr['duration'][] = $record->dur;
     }
-    return array('charttitle'=>$mtitle, 'chartdata'=>$formattedr);
+    return array('charttitle' => $mtitle, 'chartdata' => $formattedr);
 }
 
 /**
  * @brief Get statistics of visits and visit duration to a module of a course. The
  * results are depicted in the plot of module statistics beside the pie of the
  * course statistics page (third plot).
-  * @param date $start the start of period to retrieve statistics for
+ * @param date $start the start of period to retrieve statistics for
  * @param date $end the end of period to retrieve statistics for
  * @param int $cid the id of the course
  * @param int $user_id the id of the user to filter out the statistics for
  * @return array an array appropriate for displaying in a c3 plot when json encoded
-*/
-function get_module_preference_stats($cid, $start = null, $end = null, $user_id = null){
+ */
+function get_module_preference_stats($cid, $start = null, $end = null, $user_id = null)
+{
 
-    if(is_numeric($user_id)){
+    if (is_numeric($user_id)) {
         $q = "SELECT module_id mdl, sum(hits) hits, round(sum(duration)/3600,1) dur FROM actions_daily WHERE course_id=?d AND day BETWEEN ?t AND ?t AND user_id=?d GROUP BY module_id ORDER BY hits DESC";
         $r = Database::get()->queryArray($q, $cid, $start, $end, $user_id);
-    }
-    else{
+    } else {
         $q = "SELECT module_id mdl, sum(hits) hits, round(sum(duration)/3600,1) dur FROM actions_daily WHERE course_id=?d AND day BETWEEN ?t AND ?t GROUP BY module_id ORDER BY hits DESC";
         $r = Database::get()->queryArray($q, $cid, $start, $end);
     }
     $formattedr = array();
     $mdls = array();
     $pmid = null;
-    foreach($r as $record){
+    foreach ($r as $record) {
         $mtitle = which_module($record->mdl);
         $formattedr[$record->mdl] = $record->hits;
         $mdls[$record->mdl] = $mtitle;
-        if(is_null($pmid)){
+        if (is_null($pmid)) {
             $pmid = $record->mdl;
         }
     }
-    return array('modules'=>$mdls,'pmid' => $pmid, 'chartdata' => $formattedr);
+    return array('modules' => $mdls, 'pmid' => $pmid, 'chartdata' => $formattedr);
 }
 
 /**
@@ -131,11 +133,11 @@ function get_module_preference_stats($cid, $start = null, $end = null, $user_id 
  * @param date $start the start of period to retrieve statistics for
  * @param date $end the end of period to retrieve statistics for
  * @return array an array appropriate for displaying in a c3 plot when json encoded
-*/
+ */
 function get_course_registration_stats($cid, $interval, $start = null, $end = null)
 {
-    $formattedr = array('time'=> array(), 'regs'=> array(), 'unregs'=> array());
-    if(!is_null($start) && !is_null($end && !empty($start) && !empty($end))){
+    $formattedr = array('time' => array(), 'regs' => array(), 'unregs' => array());
+    if (!is_null($start) && !is_null($end && !empty($start) && !empty($end))) {
         $g_reg = build_group_selector_cond($interval, 'reg_date');
         $groupby_reg = $g_reg['groupby'];
         $date_components_reg = $g_reg['select'];
@@ -143,16 +145,16 @@ function get_course_registration_stats($cid, $interval, $start = null, $end = nu
         $g_unreg = build_group_selector_cond($interval, 'ts');
         $groupby_unreg = $g_unreg['groupby'];
         $date_components_unreg = $g_unreg['select'];
-        $unreg_t = "SELECT $date_components_unreg, COUNT(user_id) unregs FROM log WHERE module_id=".MODULE_ID_USERS." AND action_type=".LOG_DELETE." AND course_id=?d AND ts BETWEEN ?t AND ?t $groupby_unreg";
+        $unreg_t = "SELECT $date_components_unreg, COUNT(user_id) unregs FROM log WHERE module_id=" . MODULE_ID_USERS . " AND action_type=" . LOG_DELETE . " AND course_id=?d AND ts BETWEEN ?t AND ?t $groupby_unreg";
         $q = "SELECT cat_title, ifnull(regs,0) regs, ifnull(unregs,0) unregs FROM ((SELECT cat_title, regs, unregs FROM ($reg_t) x NATURAL LEFT JOIN ($unreg_t) y) UNION (SELECT cat_title, regs, unregs FROM ($unreg_t) x NATURAL LEFT JOIN ($reg_t) y)) z";
         $r = Database::get()->queryArray($q, $cid, $start, $end, $cid, $start, $end, $cid, $start, $end, $cid, $start, $end);
-        foreach($r as $record){
-           $formattedr['time'][] = $record->cat_title;
-           $formattedr['regs'][] = $record->regs;
-           $formattedr['unregs'][] = $record->unregs;
+        foreach ($r as $record) {
+            $formattedr['time'][] = $record->cat_title;
+            $formattedr['regs'][] = $record->regs;
+            $formattedr['unregs'][] = $record->unregs;
         }
     }
-    return array('chartdata'=>$formattedr);
+    return array('chartdata' => $formattedr);
 }
 
 /**
@@ -164,15 +166,16 @@ function get_course_registration_stats($cid, $interval, $start = null, $end = nu
  * @param date $end the end of period to retrieve statistics for
  * @param int $module the module id
  * @return array an array appropriate for displaying in a datatables table
-*/
-function get_course_activity_details($user, $course, $start = null, $end = null, $module = -1){
+ */
+function get_course_activity_details($user, $course, $start = null, $end = null, $module = -1)
+{
 
     $course_cond = " WHERE course_id = ?d";
     $pars = array($course);
 
     $user_cond1 = "";
     $user_cond2 = "";
-    if($user > 0 ){
+    if ($user > 0) {
         $user_cond1 = " AND u.id = ?d";
         $user_cond2 = " AND l.user_id = ?d";
         $pars[] = $user;
@@ -181,17 +184,16 @@ function get_course_activity_details($user, $course, $start = null, $end = null,
 
     $pars[] = $course;
 
-    if(!is_null($module) && $module > 0){
+    if (!is_null($module) && $module > 0) {
         $module_cond = " AND module_id = ?d ";
-    }
-    else {
+    } else {
         $module = 0;
         $module_cond = " AND module_id > ?d";
     }
     $pars[] = $module;
 
     $date_cond = "";
-    if(!is_null($start) && !empty($start) && !is_null($end) && !empty($end)){
+    if (!is_null($start) && !empty($start) && !is_null($end) && !empty($end)) {
         $date_cond = " AND DATE(ts) BETWEEN ?t AND ?t ";
     }
     $pars[] = $start;
@@ -205,7 +207,7 @@ function get_course_activity_details($user, $course, $start = null, $end = null,
     $r = Database::get()->queryArray($q, $pars);
     $l = new Log();
     $formattedr = array();
-    foreach($r AS $record){
+    foreach ($r as $record) {
         $formattedr[] = array($record->ts, $record->user_name, which_module($record->module_id), $l->get_action_names($record->action_type), $l->course_action_details($record->module_id, $record->details), $record->ip, $record->username, $record->email);
     }
     return $formattedr;
@@ -218,7 +220,7 @@ function get_course_activity_details($user, $course, $start = null, $end = null,
  * @param date $start the start of period to retrieve statistics for
  * @param date $end the end of period to retrieve statistics for
  * @return array an array appropriate for displaying in a datatables table
-*/
+ */
 function get_course_details($cid, $start = null, $end = null, $user_id = null): array
 {
     if (is_numeric($user_id)) {
@@ -229,10 +231,10 @@ function get_course_details($cid, $start = null, $end = null, $user_id = null): 
         $r = Database::get()->queryArray($q, $cid, $start, $end);
     }
     $formattedr = array();
-    foreach($r as $record){
-       $mtitle = which_module($record->module_id);
-       $usergroup = user_groups($cid, $record->user_id, 'txt');
-       $formattedr[] = array($record->day, $mtitle, $record->uname, $usergroup, $record->hits, $record->duration, $record->username, $record->email);
+    foreach ($r as $record) {
+        $mtitle = which_module($record->module_id);
+        $usergroup = user_groups($cid, $record->user_id, 'txt');
+        $formattedr[] = array($record->day, $mtitle, $record->uname, $usergroup, $record->hits, $record->duration, $record->username, $record->email);
     }
     return $formattedr;
 }
@@ -244,16 +246,16 @@ function get_course_details($cid, $start = null, $end = null, $user_id = null): 
  * @param date $end the end of period to retrieve statistics for
  * @param int $cid the id of the course
  * @return array an array appropriate for displaying in a datatables table
-*/
+ */
 function get_course_registration_details($cid, $start = null, $end = null)
 {
     $formattedr = array();
     $reg_t = "SELECT reg_date day, user_id, CONCAT(surname, ' ', givenname) uname, username, email, 1 action FROM course_user cu JOIN user u ON cu.user_id=u.id WHERE cu.course_id=?d AND cu.reg_date BETWEEN ?t AND ?t ORDER BY cu.reg_date";
-    $unreg_t = "SELECT ts day, user_id, CONCAT(surname, ' ', givenname) uname, username, email, 0 action FROM log l JOIN user u ON l.user_id=u.id WHERE l.module_id=".MODULE_ID_USERS." AND l.action_type=".LOG_DELETE." AND l.course_id=?d AND l.ts BETWEEN ?t AND ?t ORDER BY ts";
+    $unreg_t = "SELECT ts day, user_id, CONCAT(surname, ' ', givenname) uname, username, email, 0 action FROM log l JOIN user u ON l.user_id=u.id WHERE l.module_id=" . MODULE_ID_USERS . " AND l.action_type=" . LOG_DELETE . " AND l.course_id=?d AND l.ts BETWEEN ?t AND ?t ORDER BY ts";
     $q = "SELECT DATE_FORMAT(x.day,'%d-%m-%Y') day, uname, username, email, action FROM (($reg_t) UNION ($unreg_t)) x  ORDER BY day";
     $r = Database::get()->queryArray($q, $cid, $start, $end, $cid, $start, $end);
-    foreach($r as $record){
-       $formattedr[] = array($record->day, $record->uname, which_registration_action($record->action), $record->username, $record->email);
+    foreach ($r as $record) {
+        $formattedr[] = array($record->day, $record->uname, which_registration_action($record->action), $record->username, $record->email);
     }
     return $formattedr;
 }
@@ -269,25 +271,24 @@ function get_course_registration_details($cid, $start = null, $end = null)
  * @param int $user the id of the user to filter out the statistics for
  * @param int $course the id of the course
  * @return array an array appropriate for displaying in a c3 plot when json encoded
-*/
+ */
 function get_user_stats($user, $interval, $start = null, $end = null, $course = null)
 {
     $g = build_group_selector_cond($interval);
     $groupby = $g['groupby'];
     $date_components = $g['select'];
-    if(is_numeric($course)){
+    if (is_numeric($course)) {
         $q = "SELECT $date_components, sum(hits) hits, round(sum(duration)/3600,1) dur FROM actions_daily where user_id = ?d AND day BETWEEN ?t AND ?t AND course_id = ?d $groupby";
         $r = Database::get()->queryArray($q, $user, $start, $end, $course);
-    }
-    else{
+    } else {
         $q = "SELECT $date_components, sum(hits) hits, round(sum(duration)/3600,1) dur FROM actions_daily where user_id = ?d AND day BETWEEN ?t AND ?t $groupby";
         $r = Database::get()->queryArray($q, $user, $start, $end);
     }
-    $formattedr = array('time'=>array(),'hits'=>array(),'duration'=>array());
-    foreach($r as $record){
-       $formattedr['time'][] = $record->cat_title;
-       $formattedr['hits'][] = $record->hits;
-       $formattedr['duration'][] = $record->dur;
+    $formattedr = array('time' => array(), 'hits' => array(), 'duration' => array());
+    foreach ($r as $record) {
+        $formattedr['time'][] = $record->cat_title;
+        $formattedr['hits'][] = $record->hits;
+        $formattedr['duration'][] = $record->dur;
     }
     return $formattedr;
 }
@@ -300,29 +301,29 @@ function get_user_stats($user, $interval, $start = null, $end = null, $course = 
  * @param date $end the end of period to retrieve statistics for
  * @param int $course the id of the course
  * @return array an array appropriate for displaying in a c3 plot when json encoded
-*/
-function get_course_preference_stats($user, $start = null, $end = null, $course = null){
+ */
+function get_course_preference_stats($user, $start = null, $end = null, $course = null)
+{
 
     $courses = null;
     $pcid = null;
-    if(!is_null($course)){
+    if (!is_null($course)) {
         $formattedr = get_module_preference_stats($course, $start, $end, $user);
-    }
-    else{
+    } else {
         $q = "SELECT c.id cid, c.title, s.hits, s.dur FROM (SELECT course_id cid, sum(hits) hits, round(sum(duration)/3600,1) dur FROM actions_daily WHERE user_id=?d AND day BETWEEN ?t AND ?t GROUP BY course_id) s JOIN course c on s.cid=c.id ORDER BY hits DESC LIMIT 10";
         $r = Database::get()->queryArray($q, $user, $start, $end);
         $formattedr = array();
         $courses = array();
-        foreach($r as $record){
+        foreach ($r as $record) {
             $ctitle = $record->title;
             $formattedr[$record->cid] = $record->hits;
             $courses[$record->cid] = $ctitle;
-            if(is_null($pcid)){
+            if (is_null($pcid)) {
                 $pcid = $record->cid;
             }
         }
     }
-    return array('courses'=>$courses,'pcid' => $pcid, 'chartdata' => $formattedr);
+    return array('courses' => $courses, 'pcid' => $pcid, 'chartdata' => $formattedr);
 }
 
 /**
@@ -336,8 +337,9 @@ function get_course_preference_stats($user, $start = null, $end = null, $course 
  * @param date $start the start of period to retrieve statistics for
  * @param date $end the end of period to retrieve statistics for
  * @return array an array appropriate for displaying in a c3 plot when json encoded
-*/
-function get_user_course_stats($user, $course, $module, $interval, $start = null, $end = null) {
+ */
+function get_user_course_stats($user, $course, $module, $interval, $start = null, $end = null)
+{
     $ctitle = course_id_to_title($course);
     if (!empty($module)) {
         $formattedr = get_course_module_stats($course, $module, $interval, $start, $end);
@@ -346,7 +348,6 @@ function get_user_course_stats($user, $course, $module, $interval, $start = null
         $formattedr = get_user_stats($user, $interval, $start, $end, $course);
         return array('charttitle' => $ctitle, 'chartdata' => $formattedr);
     }
-
 }
 
 /**
@@ -357,19 +358,18 @@ function get_user_course_stats($user, $course, $module, $interval, $start = null
  * @param int $user the id of the user to filter out the statistics for
  * @param int $course the id of the course
  * @return array an array appropriate for displaying in a datatables table
-*/
+ */
 function get_user_details($user, $start = null, $end = null, $course = null)
 {
-    if(is_numeric($course)){
+    if (is_numeric($course)) {
         $q = "SELECT day, hits hits, duration dur, module_id, c.title FROM actions_daily a JOIN course c ON a.course_id=c.id WHERE user_id = ?d AND day BETWEEN ?t AND ?t AND course_id = ?d ORDER BY day";
         $r = Database::get()->queryArray($q, $user, $start, $end, $course);
-    }
-    else{
+    } else {
         $q = "SELECT day, hits hits, duration dur, c.title, module_id FROM actions_daily a JOIN course c ON a.course_id=c.id where user_id = ?d AND day BETWEEN ?t AND ?t ORDER BY day";
         $r = Database::get()->queryArray($q, $user, $start, $end);
     }
     $formattedr = array();
-    foreach($r as $record){
+    foreach ($r as $record) {
         $mtitle = which_module($record->module_id);
         $formattedr[] = array($record->day, $record->title, $mtitle, $record->hits, $record->dur);
     }
@@ -386,8 +386,9 @@ function get_user_details($user, $start = null, $end = null, $course = null)
  * @param date $end the end of period to retrieve statistics for
  * @param string $interval the time interval to aggregate statistics on, values: 'year'|'month'|'week'|'day'
  * @return array an array appropriate for displaying in a c3 plot when json encoded
-*/
-function get_user_login_stats($interval, $start = null, $end = null, $root_department = 1){
+ */
+function get_user_login_stats($interval, $start = null, $end = null, $root_department = 1)
+{
     $temp = array();
     $g = build_group_selector_cond($interval, 'date_time');
     $groupby = $g['groupby'];
@@ -395,10 +396,10 @@ function get_user_login_stats($interval, $start = null, $end = null, $root_depar
     $q = "SELECT id, lft, rgt INTO @rootid, @rootlft, @rootrgt FROM hierarchy WHERE id=?d;";
     Database::get()->query($q, $root_department);
     $q1 = "SELECT $date_components, COUNT(*) c FROM logins WHERE "
-            . "course_id IN (SELECT course FROM course_department cd JOIN hierarchy h ON cd.department=h.id where h.lft>=@rootlft and h.rgt<=@rootrgt) "
-            . "AND date_time BETWEEN ?t AND ?t $groupby";
+        . "course_id IN (SELECT course FROM course_department cd JOIN hierarchy h ON cd.department=h.id where h.lft>=@rootlft and h.rgt<=@rootrgt) "
+        . "AND date_time BETWEEN ?t AND ?t $groupby";
     $r1 = Database::get()->queryArray($q1, $start, $end);
-    foreach($r1 as $record){
+    foreach ($r1 as $record) {
         $temp[$record->cat_title]['logins'] = $record->c;
     }
 
@@ -406,18 +407,18 @@ function get_user_login_stats($interval, $start = null, $end = null, $root_depar
     $groupby = $g['groupby'];
     $date_components = $g['select'];
     $q2 = "SELECT $date_components, sum(hits) hits FROM actions_daily WHERE "
-            . "course_id IN (SELECT course FROM course_department cd JOIN hierarchy h ON cd.department=h.id where h.lft>=@rootlft and h.rgt<=@rootrgt) "
-            . "AND day BETWEEN ?t AND ?t $groupby";
+        . "course_id IN (SELECT course FROM course_department cd JOIN hierarchy h ON cd.department=h.id where h.lft>=@rootlft and h.rgt<=@rootrgt) "
+        . "AND day BETWEEN ?t AND ?t $groupby";
     $r2 = Database::get()->queryArray($q2, $start, $end);
-    foreach($r2 as $record){
+    foreach ($r2 as $record) {
         $temp[$record->cat_title]['visits'] = $record->hits;
     }
 
-    $formattedr = array('time'=>array(),'logins'=>array());
-    foreach($temp as $k=>$v){
+    $formattedr = array('time' => array(), 'logins' => array());
+    foreach ($temp as $k => $v) {
         $formattedr['time'][] = $k;
-        $formattedr['logins'][] = (isset($v['logins']))? $v['logins']:0;
-        $formattedr['visits'][] = (isset($v['visits']))? $v['visits']:0;
+        $formattedr['logins'][] = (isset($v['logins'])) ? $v['logins'] : 0;
+        $formattedr['visits'][] = (isset($v['visits'])) ? $v['visits'] : 0;
     }
     return $formattedr;
 }
@@ -430,8 +431,9 @@ function get_user_login_stats($interval, $start = null, $end = null, $root_depar
  * @param int $root_department the department id for which to show popular courses
  * @param int $k the k parameter of top-k
  * @return array an array appropriate for displaying in a c3 plot when json encoded
-*/
-function get_popular_courses_stats($start = null, $end = null, $root_department = 1, $k = 20){
+ */
+function get_popular_courses_stats($start = null, $end = null, $root_department = 1, $k = 20)
+{
     $q = "SELECT id, lft, rgt INTO @rootid, @rootlft, @rootrgt FROM hierarchy WHERE id=?d;";
     Database::get()->query($q, $root_department);
     $q = "SELECT c.id cid, c.title, s.hits FROM (SELECT course_id cid, sum(hits) hits "
@@ -441,7 +443,7 @@ function get_popular_courses_stats($start = null, $end = null, $root_department 
         . "ORDER BY hits DESC LIMIT $k";
     $r = Database::get()->queryArray($q, $start, $end);
     $formattedr = array();
-    foreach($r as $record){
+    foreach ($r as $record) {
         $formattedr['courses'][] = $record->title;
         $formattedr['hits'][] = $record->hits;
     }
@@ -455,20 +457,23 @@ function get_popular_courses_stats($start = null, $end = null, $root_department 
  * @param boolean $total if true only the total number of users will be returned
  * (used by the footer of the corresponding datatable), otherwise per subdepartment
  * @return array an array appropriate for displaying in a c3 plot when json encoded
-*/
-function get_department_user_stats($root_department = 1, $total = false){
+ */
+function get_department_user_stats($root_department = 1, $total = false)
+{
     global $langTeachers, $langStudents, $langGuests;
 
-    $statsUserStatus = array(USER_TEACHER => $langTeachers,
-        USER_STUDENT => $langStudents, USER_GUEST => $langGuests);
+    $statsUserStatus = array(
+        USER_TEACHER => $langTeachers,
+        USER_STUDENT => $langStudents,
+        USER_GUEST => $langGuests
+    );
     /*Simple case to get total users of the platform*/
     $q = "SELECT id, lft, rgt INTO @rootid, @rootlft, @rootrgt FROM hierarchy WHERE id=?d;";
     Database::get()->query($q, $root_department);
-    if($total && $root_department == 1){
+    if ($total && $root_department == 1) {
         $q = "SELECT @rootid root, @rootid did, 'platform' dname, 0 leaf, status, count(distinct user_id) users_count FROM course_user GROUP BY status;";
-    }
-    else{
-        $group_field = ($total)? "root":"toph.id";
+    } else {
+        $group_field = ($total) ? "root" : "toph.id";
         $q = "SELECT @rootid root, toph.id did, toph.name dname, IF((toph.rgt-toph.lft)>1, 0, 1) leaf, status, count(distinct user_id) users_count
         FROM (SELECT ch.id did, ch.name dname, ch.lft, ch.rgt, cu.status, cu.user_id
             FROM course_department cd
@@ -483,31 +488,30 @@ function get_department_user_stats($root_department = 1, $total = false){
               WHERE ancestor.lft>=@rootlft AND ancestor.rgt<=@rootrgt AND descendant.lft>=@rootlft AND descendant.rgt<=@rootrgt
               GROUP BY descendant.id having c=1
             ) toph ON chh.lft>=toph.lft AND chh.lft<=toph.rgt
-        GROUP BY ".$group_field.", status ORDER BY did";
+        GROUP BY " . $group_field . ", status ORDER BY did";
     }
     $r = Database::get()->queryArray($q);
-    $formattedr = array('department'=>array(),$statsUserStatus[USER_TEACHER]=>array(),$statsUserStatus[USER_STUDENT]=>array());
+    $formattedr = array('department' => array(), $statsUserStatus[USER_TEACHER] => array(), $statsUserStatus[USER_STUDENT] => array());
     $depids = array();
     $leaves = array();
     $d = '';
     $i = -1;
-    foreach($r as $record){
-        if($record->dname != $d){
+    foreach ($r as $record) {
+        if ($record->dname != $d) {
             $i++;
-            $depids[] = ($total)? $record->root:$record->did;
+            $depids[] = ($total) ? $record->root : $record->did;
             $leaves[] = $record->leaf;
             $formattedr['department'][] = hierarchy::unserializeLangField($record->dname);
             $d = $record->dname;
             $formattedr[$statsUserStatus[USER_TEACHER]][] = 0;
             $formattedr[$statsUserStatus[USER_STUDENT]][] = 0;
             $formattedr[$statsUserStatus[USER_GUEST]][] = 0;
-       }
-       if(!is_null($record->status)){
-           $formattedr[$statsUserStatus[$record->status]][$i] = $record->users_count;
-       }
+        }
+        if (!is_null($record->status)) {
+            $formattedr[$statsUserStatus[$record->status]][$i] = $record->users_count;
+        }
     }
-    return array('deps'=>$depids,'leafdeps'=>$leaves,'chartdata'=>$formattedr);
-
+    return array('deps' => $depids, 'leafdeps' => $leaves, 'chartdata' => $formattedr);
 }
 
 /**
@@ -515,14 +519,17 @@ function get_department_user_stats($root_department = 1, $total = false){
  * The results are shown in the a bar chart of the admin stats (fourth plot)
  * @param date $root_department the deprtament for which statistics will be retrieved per subdepartment
  * @return array an array appropriate for displaying in a c3 plot when json encoded
-*/
-function get_department_course_stats($root_department = 1){
+ */
+function get_department_course_stats($root_department = 1)
+{
     global $langTypesInactive, $langTypesAccessControlled, $langTypesOpen, $langTypesClosed;
 
-    $courseVisibility = array(COURSE_CLOSED => $langTypesClosed,
+    $courseVisibility = array(
+        COURSE_CLOSED => $langTypesClosed,
         COURSE_REGISTRATION => $langTypesAccessControlled,
         COURSE_OPEN => $langTypesOpen,
-        COURSE_INACTIVE => $langTypesInactive);
+        COURSE_INACTIVE => $langTypesInactive
+    );
 
     $q = "SELECT lft, rgt INTO @rootlft, @rootrgt FROM hierarchy WHERE id=?d;";
     Database::get()->query($q, $root_department);
@@ -546,18 +553,19 @@ function get_department_course_stats($root_department = 1){
 
     $r = Database::get()->queryArray($q);
 
-    $formattedr = array('department'=>array(),
-                        $courseVisibility[COURSE_CLOSED]=>array(),
-                        $courseVisibility[COURSE_REGISTRATION]=>array(),
-                        $courseVisibility[COURSE_OPEN]=>array(),
-                        $courseVisibility[COURSE_INACTIVE]=>array()
+    $formattedr = array(
+        'department' => array(),
+        $courseVisibility[COURSE_CLOSED] => array(),
+        $courseVisibility[COURSE_REGISTRATION] => array(),
+        $courseVisibility[COURSE_OPEN] => array(),
+        $courseVisibility[COURSE_INACTIVE] => array()
     );
     $depids = array();
     $leaves = array();
     $d = '';
     $i = -1;
-    foreach($r as $record) {
-        if($record->dname != $d) {
+    foreach ($r as $record) {
+        if ($record->dname != $d) {
             $i++;
             $depids[] = $record->did;
             $leaves[] = $record->leaf;
@@ -568,12 +576,11 @@ function get_department_course_stats($root_department = 1){
             $formattedr[$courseVisibility[COURSE_OPEN]][] = 0;
             $formattedr[$courseVisibility[COURSE_INACTIVE]][] = 0;
         }
-        if(!is_null($record->visible)){
-           $formattedr[$courseVisibility[$record->visible]][$i] = $record->courses_count;
+        if (!is_null($record->visible)) {
+            $formattedr[$courseVisibility[$record->visible]][$i] = $record->courses_count;
         }
     }
-    return array('deps'=>$depids,'leafdeps'=>$leaves,'chartdata'=>$formattedr);
-
+    return array('deps' => $depids, 'leafdeps' => $leaves, 'chartdata' => $formattedr);
 }
 
 /**
@@ -582,8 +589,9 @@ function get_department_course_stats($root_department = 1){
  * @param date $start the start of period to retrieve statistics for
  * @param date $end the end of period to retrieve statistics for
  * @return array an array appropriate for displaying in a datatables table
-*/
-function get_user_login_details($start = null, $end = null, $root_department = 1){
+ */
+function get_user_login_details($start = null, $end = null, $root_department = 1)
+{
     $q = "SELECT id, lft, rgt INTO @rootid, @rootlft, @rootrgt FROM hierarchy WHERE id=?d;";
     Database::get()->query($q, $root_department);
     $q = "SELECT l.date_time, concat(u.surname, ' ', u.givenname) user_name, username, email, c.title course_title, l.ip
@@ -592,15 +600,14 @@ function get_user_login_details($start = null, $end = null, $root_department = 1
             JOIN course c ON l.course_id=c.id
             WHERE l.course_id IN (SELECT course FROM course_department cd JOIN hierarchy h ON cd.department=h.id where h.lft>=@rootlft and h.rgt<=@rootrgt) ";
 
-    if(!is_null($start) && !empty($start) && !is_null($end) && !empty($end)){
+    if (!is_null($start) && !empty($start) && !is_null($end) && !empty($end)) {
         $q .= " AND l.date_time BETWEEN ?t AND ?t";
         $r = Database::get()->queryArray($q, $start, $end);
-    }
-    else {
+    } else {
         $r = Database::get()->queryArray($q);
     }
     $formattedr = array();
-    foreach($r AS $record){
+    foreach ($r as $record) {
         $formattedr[] = array($record->date_time, $record->user_name, $record->course_title, $record->ip, $record->username, $record->email);
     }
     return $formattedr;
@@ -613,12 +620,12 @@ function get_user_login_details($start = null, $end = null, $root_department = 1
  * @param string $interval a value among 'year', 'month', 'week', 'day'
  * @param string $date_field the name of the date field of the queried table
  * @return array(string, string) an array containing the 'select' and 'groupby' clauses
-*/
+ */
 function build_group_selector_cond($interval = 'month', $date_field = 'day')
 {
     $groupby = "";
     $select = "";
-    switch($interval){
+    switch ($interval) {
         case 'year':
             $select = "DATE_FORMAT(MAX($date_field), '%Y-06-30') cat_title, DATE_FORMAT($date_field, '%Y') y";
             $groupby = "GROUP BY y";
@@ -636,23 +643,30 @@ function build_group_selector_cond($interval = 'month', $date_field = 'day')
             $groupby = "GROUP BY y, m, w, d";
             break;
     }
-    return array('groupby'=>$groupby,'select'=>$select);
+    return array('groupby' => $groupby, 'select' => $select);
 }
 
 /**
  * Count users of the system based on their type
  * @param int $user_type a value among USER_TEACHER, USER_STUDENT, USER_GUEST
  * @return int the number of all the users or of specific type of the system
-*/
-function count_users($user_type = null){
-    if(is_null($user_type)){
-        return Database::get()->querySingle("SELECT COUNT(*) as count FROM user")->count;
-    }
-    elseif(!in_array($user_type,array(USER_TEACHER, USER_STUDENT, USER_GUEST))){
+ */
+function count_users($user_type = null)
+{
+    if (is_null($user_type)) {
+        if (isset($_SESSION['is_departmentmanage_user']) && $_SESSION['is_departmentmanage_user']) {
+            return count(getTenantUsers());
+        } else {
+            return Database::get()->querySingle("SELECT COUNT(*) as count FROM user")->count;
+        }
+    } elseif (!in_array($user_type, array(USER_TEACHER, USER_STUDENT, USER_GUEST))) {
         return 0;
-    }
-    else{
-        return Database::get()->querySingle("SELECT COUNT(*) as count FROM user WHERE status = ?d", $user_type)->count;
+    } else {
+        if (isset($_SESSION['is_departmentmanage_user']) && $_SESSION['is_departmentmanage_user']) {
+            return count(getTenantUsers([], null, $user_type));
+        } else {
+            return Database::get()->querySingle("SELECT COUNT(*) as count FROM user WHERE status = ?d", $user_type)->count;
+        }
     }
 }
 
@@ -660,16 +674,26 @@ function count_users($user_type = null){
  * Count courses of the system based on their type
  * @param int $course_type a value among COURSE_INACTIVE, COURSE_OPEN, COURSE_REGISTRATION, COURSE_CLOSED
  * @return int the number of all the users or of specific type of the system
-*/
-function count_courses($course_type = null){
-    if(is_null($course_type)){
-        return Database::get()->querySingle("SELECT COUNT(*) as count FROM course")->count;
-    }
-    elseif(!in_array($course_type,array(COURSE_INACTIVE, COURSE_OPEN, COURSE_REGISTRATION, COURSE_CLOSED))){
+ */
+function count_courses($course_type = null)
+{
+    if (is_null($course_type)) {
+        if (isset($_SESSION['is_departmentmanage_user']) && $_SESSION['is_departmentmanage_user']) {
+            return count(getTenantCourses());
+        } else {
+            return Database::get()->querySingle("SELECT COUNT(*) as count FROM course")->count;
+        }
+    } elseif (!in_array($course_type, array(COURSE_INACTIVE, COURSE_OPEN, COURSE_REGISTRATION, COURSE_CLOSED))) {
         return 0;
-    }
-    else{
-        return Database::get()->querySingle("SELECT COUNT(*) as count FROM course WHERE visible = ?d", $course_type)->count;
+    } else {
+        if (isset($_SESSION['is_departmentmanage_user']) && $_SESSION['is_departmentmanage_user']) {
+            return count(getTenantCourses($course_type)); // <- return εδώ
+        } else {
+            return Database::get()->querySingle(
+                "SELECT COUNT(*) as count FROM course WHERE visible = ?d",
+                intval($course_type)
+            )->count;
+        }
     }
 }
 
@@ -678,16 +702,15 @@ function count_courses($course_type = null){
  * @param int cid a value among USER_TEACHER, USER_STUDENT
  * @param int $user_type a value among USER_TEACHER, USER_STUDENT
  * @return int the number of all the users or of specific type of the system
-*/
-function count_course_users($cid, $user_type = null){
+ */
+function count_course_users($cid, $user_type = null)
+{
 
-    if(is_null($user_type)){
+    if (is_null($user_type)) {
         return Database::get()->querySingle("SELECT COUNT(*) as count FROM course_user WHERE course_id = ?d", $cid)->count;
-    }
-    elseif(!in_array($user_type,array(USER_TEACHER, USER_STUDENT, USER_GUEST))){
+    } elseif (!in_array($user_type, array(USER_TEACHER, USER_STUDENT, USER_GUEST))) {
         return 0;
-    }
-    else{
+    } else {
         return Database::get()->querySingle("SELECT COUNT(*) as count FROM course_user WHERE course_id = ?d AND status = ?d", $cid, $user_type)->count;
     }
 }
@@ -696,25 +719,27 @@ function count_course_users($cid, $user_type = null){
  * Return module title based on the course module id
  * @param int mid the id of the module
  * @return string the title of the course module
-*/
-function which_module($mid){
+ */
+function which_module($mid)
+{
     global $modules, $static_modules, $admin_modules, $deprecated_modules;
 
     if (isset($modules[$mid])) {
         $m_title = $modules[$mid]['title'];
     } elseif (isset($admin_modules[$mid])) {
         $m_title = $admin_modules[$mid]['title'];
-    }  elseif (isset($static_modules[$mid])) {
+    } elseif (isset($static_modules[$mid])) {
         $m_title = $static_modules[$mid]['title'];
     } elseif (isset($deprecated_modules[$mid]['title'])) {
         $m_title = $deprecated_modules[$mid]['title'];
     } else {
-        $m_title = 'module '.$mid;
+        $m_title = 'module ' . $mid;
     }
     return $m_title;
 }
 
-function which_registration_action($registration_action_id) {
+function which_registration_action($registration_action_id)
+{
     global $langRegistration, $langUnRegister;
 
     if ($registration_action_id == 1) {
@@ -729,8 +754,9 @@ function which_registration_action($registration_action_id) {
  * Count user groups of the course
  * @param int $cid cid the course id
  * @return int the number of user groups
-*/
-function count_course_groups($cid){
+ */
+function count_course_groups($cid)
+{
 
     return Database::get()->querySingle("SELECT COUNT(*) as count FROM `group` WHERE course_id = ?d", $cid)->count;
 }
@@ -740,8 +766,9 @@ function count_course_groups($cid){
  * @param int $cid cid the course id
  * @param int $userid userid the user id
  * @return array(int, string) an array with the number of visits and their duration formatted as h:mm:ss
-*/
-function course_hits($cid, $userid = 0){
+ */
+function course_hits($cid, $userid = 0)
+{
     if ($userid > 0) {
         $r = Database::get()->querySingle("SELECT SUM(hits) hits FROM actions_daily
                             WHERE course_id = ?d
@@ -760,7 +787,8 @@ function course_hits($cid, $userid = 0){
  * @param type $cid
  * @return type
  */
-function course_visits($cid) {
+function course_visits($cid)
+{
 
     $logins = Database::get()->querySingle("SELECT COUNT(id) AS cnt FROM logins WHERE course_id = ?d", $cid)->cnt;
 
@@ -773,7 +801,8 @@ function course_visits($cid) {
  * @param $uid
  * @return string
  */
-function get_lp_stats($cid, $uid) {
+function get_lp_stats($cid, $uid)
+{
 
     require_once 'include/lib/learnPathLib.inc.php';
 
@@ -795,16 +824,17 @@ function get_lp_stats($cid, $uid) {
  * @brief Transform seconds to h:mm:ss
  * @param int $seconds the number of seconds to be shown properly
  * @return string a formated time string
-*/
-function user_friendly_seconds($seconds){
+ */
+function user_friendly_seconds($seconds)
+{
     $hours = floor($seconds / 3600);
-    $mins = floor(($seconds - ($hours*3600)) / 60);
+    $mins = floor(($seconds - ($hours * 3600)) / 60);
     $secs = floor($seconds % 60);
-    $fd = ($hours<10)? '0'.$hours:$hours;
+    $fd = ($hours < 10) ? '0' . $hours : $hours;
     $fd .= ':';
-    $fd .= ($mins<10)? '0'.$mins:$mins;
+    $fd .= ($mins < 10) ? '0' . $mins : $mins;
     $fd .= ':';
-    $fd .= ($secs<10)? '0'.$secs:$secs;
+    $fd .= ($secs < 10) ? '0' . $secs : $secs;
     return $fd;
 }
 
@@ -814,7 +844,8 @@ function user_friendly_seconds($seconds){
  * @param $user_id
  * @return void
  */
-function get_course_user_registration($course_id, $user_id) {
+function get_course_user_registration($course_id, $user_id)
+{
     $q = Database::get()->querySingle("SELECT DATE_FORMAT(DATE(reg_date),'%e-%c-%Y') AS reg_date
                     FROM course_user
                     WHERE course_id = ?d AND user_id = ?d ORDER BY reg_date ASC LIMIT 1", $course_id, $user_id);
@@ -829,10 +860,11 @@ function get_course_user_registration($course_id, $user_id) {
  * @param string $plot_id the id of the id of the div where the plot will be drawn
  * @param string $title the caption of the plot
  * @return string a formatted element ready to display a plot
-*/
-function plot_placeholder($plot_id, $title = null){
+ */
+function plot_placeholder($plot_id, $title = null)
+{
     $p = "<div class='panel panel-default'><div class='panel-body'>";
-    if(!is_null($title)){
+    if (!is_null($title)) {
         $p .= "<div class='inner-heading'><h3 id='{$plot_id}_title'>"
             . q($title)
             . "</h3>"
@@ -851,30 +883,32 @@ function plot_placeholder($plot_id, $title = null){
  * @param string $table_schema table_schema the header and footer of the table which also specify the column number of the table
  * @param string $title title the caption of the table
  * @return string a formatted element containing the specified table
-*/
-function table_placeholder($table_id, $table_class, $table_schema, $title = null){
+ */
+function table_placeholder($table_id, $table_class, $table_schema, $title = null)
+{
     $t = "<div class='panel-body'>";
-    if(!is_null($title)){
+    if (!is_null($title)) {
         $t .= "<div class='inner-heading d-flex justify-content-between align-items-start gap-3 flex-wrap'>"
-            . "<h3 id='".$table_id."_title'>"
+            . "<h3 id='" . $table_id . "_title'>"
             . q($title)
             . "</h3>"
-            ."<div id='{$table_id}_buttons'></div>"
+            . "<div id='{$table_id}_buttons'></div>"
             . "</div>";
     }
     $t .= "<div class='table-responsive'>"
-       . "<table id='$table_id' class='$table_class'>"
-       . "$table_schema"
-       . "</table>"
-       . "</div></div>";
+        . "<table id='$table_id' class='$table_class'>"
+        . "$table_schema"
+        . "</table>"
+        . "</div></div>";
     return $t;
 }
 
 /**
  * @brief calculate user duration per course
  * @param integer $uid
-*/
-function user_duration_per_course($u) {
+ */
+function user_duration_per_course($u)
+{
 
     global $tool_content, $langDurationVisitsPerCourse, $langNotEnrolledToLessons, $langInfoUserDuration, $langTotalDuration;
 
@@ -900,35 +934,34 @@ function user_duration_per_course($u) {
 
         $totalDuration = format_time_duration(0 + $totalDuration, 24);
 
-    $tool_content .= "<div class='text-center mb-4'>
+        $tool_content .= "<div class='text-center mb-4'>
                         <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langInfoUserDuration</span></div>
                         <h3>"  . q(uid_to_name($_SESSION['uid'])) . "</h3>
                         <span><strong>$langTotalDuration:</strong> " . $totalDuration . "</span>
                         
                     </div>";
 
-    $tool_content .= "
+        $tool_content .= "
                 <div class='margin-bottom-fat margin-top-fat mb-4'>
                   <div class='col-12'>
                     <ul class='list-group list-group-flush'>
                       <li class='list-group-item list-group-item-action'>
                           <div>$langDurationVisitsPerCourse</div>
                       </li>";
-    foreach ($duration as $code => $time) {
-        $tool_content .= "
+        foreach ($duration as $code => $time) {
+            $tool_content .= "
                       <li class='list-group-item element d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                           <div>" . q(course_code_to_title($code)) . "</div>
                           <div>" . format_time_duration(0 + $time + timeToSeconds(get_lp_stats(course_code_to_id($code), $u))) . "</div>
                       </li>";
-    }
-    $tool_content .= "
+        }
+        $tool_content .= "
                     </ul>
                   </div>
                 </div>";
     } else {
         $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNotEnrolledToLessons</span></div></div>";
     }
-
 }
 
 /**
@@ -936,17 +969,21 @@ function user_duration_per_course($u) {
  * @param $u
  * @return int|string
  */
-function user_duration_course($u) {
+function user_duration_course($u)
+{
 
     global $course_id;
 
     $totalDuration = 0;
-    $q = Database::get()->querySingle("SELECT SUM(ABS(duration)) AS duration
+    $q = Database::get()->querySingle(
+        "SELECT SUM(ABS(duration)) AS duration
                                 FROM actions_daily
                                 WHERE course_id = ?d
                                 AND user_id = ?d
                                 AND actions_daily.module_id != " . MODULE_ID_TC,
-                            $course_id, $u);
+        $course_id,
+        $u
+    );
 
     if ($q) {
         $totalDuration = format_time_duration(0 + $q->duration, 24, false);
@@ -959,7 +996,8 @@ function user_duration_course($u) {
  * @brief get user 5 last logins
  * @param type $u
  */
-function user_last_logins($u) {
+function user_last_logins($u)
+{
 
     global $langLastVisits, $tool_content;
 
@@ -994,26 +1032,25 @@ function user_last_logins($u) {
  * @param date $end the end of period to retrieve statistics for
  * @param int $cid the id of the course
  * @return array an array appropriate for displaying in a c3 plot when json encoded
-*/
+ */
 function get_course_old_stats($cid, $mid, $start = null, $end = null)
 {
-    $formattedr = array('time'=> array(), 'hits'=> array(), 'duration'=> array());
-    if(!is_null($start) && !is_null($end && !empty($start) && !empty($end))){
+    $formattedr = array('time' => array(), 'hits' => array(), 'duration' => array());
+    if (!is_null($start) && !is_null($end && !empty($start) && !empty($end))) {
         $g = build_group_selector_cond('month', 'start_date');
         $groupby = $g['groupby'];
         $date_components = $g['select'];
-        if(is_numeric($mid) && $mid>0){
+        if (is_numeric($mid) && $mid > 0) {
             $q = "SELECT $date_components, SUM(visits) visits, ROUND(SUM(duration)/3600) dur FROM actions_summary WHERE course_id=?d AND start_date BETWEEN ?t AND ?t AND module_id=?d $groupby";
             $r = Database::get()->queryArray($q, $cid, $start, $end, $mid);
-        }
-        else{
+        } else {
             $q = "SELECT $date_components, SUM(visits) visits, ROUND(SUM(duration)/3600) dur FROM actions_summary WHERE course_id=?d AND start_date BETWEEN ?t AND ?t $groupby";
             $r = Database::get()->queryArray($q, $cid, $start, $end);
         }
-        foreach($r as $record){
-           $formattedr['time'][] = $record->cat_title;
-           $formattedr['hits'][] = $record->visits;
-           $formattedr['duration'][] = $record->dur;
+        foreach ($r as $record) {
+            $formattedr['time'][] = $record->cat_title;
+            $formattedr['hits'][] = $record->visits;
+            $formattedr['duration'][] = $record->dur;
         }
     }
     return $formattedr;
@@ -1022,12 +1059,12 @@ function get_course_old_stats($cid, $mid, $start = null, $end = null)
 /**
  * @brief Get old statistics of logins/logouts to the platform.
  * @return array an array appropriate for displaying in a c3 plot when json encoded
-*/
+ */
 function get_login_old_stats(): array
 {
     $formattedr = [];
     $r = get_user_login_archives();
-    foreach($r as $sql_data) {
+    foreach ($r as $sql_data) {
         $formattedr['time'][] = $sql_data[0];
         $formattedr['hits'][] = $sql_data[1];
     }
@@ -1037,42 +1074,118 @@ function get_login_old_stats(): array
 /**
  * @brief get user logins. First we seek archived logins in `login_sum` table.
  * Otherwise we seek `loginout` table and update the `login_sum`
+ * The function supports tenant filtering when the current user is department manager
  * @return array
  */
 function get_user_login_archives(): array
 {
+    global $is_departmentmanage_user, $is_admin;
+
     $content = [];
+
+    /* ---------------------------------------
+     * Tenant users resolution (if needed)
+     * ------------------------------------- */
+    $tenantUserIds = [];
+
+    if ($is_departmentmanage_user && !$is_admin) {
+
+        // Resolve tenant
+        $tenant = getCurrentTenant();
+        if (!$tenant) {
+            return [];
+        }
+
+        $users = getTenantUsers();
+        if (!$users) {
+            return [];
+        }
+
+        $tenantUserIds = array_map(fn($u) => intval($u->id), $users);
+    }
+
+    /* ---------------------------------------
+     * Date period (last 12 months)
+     * ------------------------------------- */
     $start = new DateTime('now');
     $interval = DateInterval::createFromDateString('first day of last month');
-    $period = new DatePeriod($start, $interval, 12, DatePeriod::EXCLUDE_START_DATE); // last 12 months
+    $period = new DatePeriod($start, $interval, 12, DatePeriod::EXCLUDE_START_DATE);
 
-    foreach($period as $time) {
+    foreach ($period as $time) {
         $year_month_val = $time->format("Y-m");
-        $sql_data = Database::get()->querySingle("SELECT login_sum,
-                                    DATE_FORMAT(start_date,'%Y-%m-%d') AS start_date
-                            FROM loginout_summary
-                            WHERE DATE_FORMAT(start_date,'%Y-%m') = ?s", $year_month_val);
-        if ($sql_data) {
-            $sql_data_month_year = $sql_data->start_date;
-            $content[] = [ $sql_data_month_year, $sql_data->login_sum ];
-        } else {
-            $start_date = date_create($year_month_val);
-            $formatted_start_date = $start_date->format("Y-m-d H:i:s");
-            $end_date = date_add($start_date, date_interval_create_from_date_string("30 days"));
-            $formatted_end_date = $end_date->format("Y-m-d H:i:s");
-            $q_cnt = Database::get()->querySingle("SELECT COUNT(*) AS cnt
-                            FROM loginout
-                            WHERE action='LOGIN' AND
-                        `when` BETWEEN DATE(?s) AND DATE_ADD(DATE(?s), INTERVAL 1 MONTH)",
-                $time->format("Y-m-d") , $time->format("Y-m-d"));
-            $content[] = [ $year_month_val."-01", $q_cnt->cnt ];
 
-            Database::get()->query("INSERT INTO loginout_summary (login_sum, start_date, end_date) VALUES (?s, ?s, ?s)",
-                                            $q_cnt->cnt, $formatted_start_date, $formatted_end_date);
+        /* ---------------------------------------
+         * Admin → try summary
+         * ------------------------------------- */
+        if (!$is_departmentmanage_user || $is_admin) {
+            $sql_data = Database::get()->querySingle("
+                SELECT login_sum,
+                       DATE_FORMAT(start_date,'%Y-%m-%d') AS start_date
+                FROM loginout_summary
+                WHERE DATE_FORMAT(start_date,'%Y-%m') = ?s
+            ", $year_month_val);
+
+            if ($sql_data) {
+                $content[] = [$sql_data->start_date, $sql_data->login_sum];
+                continue;
+            }
+        }
+
+        /* ---------------------------------------
+         * Count from loginout
+         * ------------------------------------- */
+        $startDate = $time->format("Y-m-d");
+
+        if ($is_departmentmanage_user && !$is_admin) {
+
+            $inUsers = implode(', ', $tenantUserIds);
+
+            $q_cnt = Database::get()->querySingle("
+                SELECT COUNT(*) AS cnt
+                FROM loginout
+                WHERE action = 'LOGIN'
+                  AND id_user IN ($inUsers)
+                  AND `when` BETWEEN DATE(?s)
+                                 AND DATE_ADD(DATE(?s), INTERVAL 1 MONTH)
+            ", $startDate, $startDate);
+
+        } else {
+
+            $q_cnt = Database::get()->querySingle("
+                SELECT COUNT(*) AS cnt
+                FROM loginout
+                WHERE action = 'LOGIN'
+                  AND `when` BETWEEN DATE(?s)
+                                 AND DATE_ADD(DATE(?s), INTERVAL 1 MONTH)
+            ", $startDate, $startDate);
+        }
+
+        $cnt = $q_cnt ? (int)$q_cnt->cnt : 0;
+        $content[] = [$year_month_val . "-01", $cnt];
+
+        /* ---------------------------------------
+         * Store summary (admin only)
+         * ------------------------------------- */
+        if (!$is_departmentmanage_user || $is_admin) {
+            $start_date = date_create($year_month_val)->format("Y-m-d H:i:s");
+            $end_date = date_create($year_month_val)
+                ->modify('+1 month')
+                ->format("Y-m-d H:i:s");
+
+            Database::get()->query(
+                "INSERT INTO loginout_summary (login_sum, start_date, end_date)
+                 VALUES (?s, ?s, ?s)",
+                $cnt,
+                $start_date,
+                $end_date
+            );
         }
     }
+
     return $content;
 }
+
+
 
 /**
  * @brief get monthly statistics (e.g. courses, users, documents, assignments etc).
@@ -1119,52 +1232,68 @@ function get_monthly_archives($fc, $details = false, $month = null): array
                     'forum_posts' => $sql_data->forum_posts
                 ];
             } else {
-                $cnt_courses = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM course JOIN course_department 
+                $cnt_courses = Database::get()->querySingle(
+                    "SELECT COUNT(*) AS cnt FROM course JOIN course_department 
                                                                 ON course.id = course_department.course 
                                                                 WHERE created <= ?t 
                                                                 AND department IN $dep_id_extra",
-                                                        $month)->cnt;
-                $cnt_courses_inactive = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM course JOIN course_department 
+                    $month
+                )->cnt;
+                $cnt_courses_inactive = Database::get()->querySingle(
+                    "SELECT COUNT(*) AS cnt FROM course JOIN course_department 
                                                                 ON course.id = course_department.course 
                                                                 WHERE created <= ?t 
                                                                 AND department IN $dep_id_extra 
-                                                                AND visible = ". COURSE_INACTIVE,
-                                                            $month)->cnt;
-                $cnt_prof = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user, user_department 
+                                                                AND visible = " . COURSE_INACTIVE,
+                    $month
+                )->cnt;
+                $cnt_prof = Database::get()->querySingle(
+                    "SELECT COUNT(*) AS cnt FROM user, user_department 
                                         WHERE status = " . USER_TEACHER . "
                                         AND registered_at <= ?t 
                                         AND expires_at > " . DBHelper::timeAfter() . "
                                         AND user_department.user = user.id
                                         AND user_department.department IN $dep_id_extra",
-                                    $month)->cnt;
-                $cnt_students = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user, user_department 
+                    $month
+                )->cnt;
+                $cnt_students = Database::get()->querySingle(
+                    "SELECT COUNT(*) AS cnt FROM user, user_department 
                                         WHERE status = " . USER_STUDENT . " 
                                         AND registered_at <= ?t 
                                         AND expires_at > " . DBHelper::timeAfter() . "
                                         AND user_department.user = user.id
                                         AND user_department.department IN $dep_id_extra",
-                                    $month)->cnt;
-                $cnt_guest = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user, user_department 
+                    $month
+                )->cnt;
+                $cnt_guest = Database::get()->querySingle(
+                    "SELECT COUNT(*) AS cnt FROM user, user_department 
                                         WHERE status = " . USER_GUEST . " 
                                         AND registered_at <= ?t AND expires_at > " . DBHelper::timeAfter() . "
                                         AND user_department.user = user.id
                                         AND user_department.department IN $dep_id_extra",
-                                    $month)->cnt;
-                $cnt_documents = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM document, course_department 
+                    $month
+                )->cnt;
+                $cnt_documents = Database::get()->querySingle(
+                    "SELECT COUNT(*) AS cnt FROM document, course_department 
                                         WHERE date <= ?t 
                                         AND document.course_id = course_department.course
                                         AND department IN $dep_id_extra",
-                                    $month)->cnt;
-                $cnt_announcements = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM announcement, course_department
+                    $month
+                )->cnt;
+                $cnt_announcements = Database::get()->querySingle(
+                    "SELECT COUNT(*) AS cnt FROM announcement, course_department
                                         WHERE date <= ?t
                                         AND announcement.course_id = course_department.course
                                         AND department IN $dep_id_extra",
-                                    $month)->cnt;
-                $cnt_messages = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM dropbox_msg, course_department 
+                    $month
+                )->cnt;
+                $cnt_messages = Database::get()->querySingle(
+                    "SELECT COUNT(*) AS cnt FROM dropbox_msg, course_department 
                                         WHERE FROM_UNIXTIME(timestamp, '%Y-%m-%d') <= ?t
                                         AND dropbox_msg.course_id = course_department.course
                                         AND department IN $dep_id_extra",
-                                    $month)->cnt;
+                    $month
+                )->cnt;
                 $cnt_exercises = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM exercise, course_department 
                                         WHERE exercise.course_id = course_department.course
                                         AND department IN $dep_id_extra")->cnt;
@@ -1192,8 +1321,22 @@ function get_monthly_archives($fc, $details = false, $month = null): array
                     'forum_posts' => $cnt_forum_posts
                 ];
 
-                Database::get()->query("INSERT INTO monthly_summary (month, teachers, students, guests, courses, dep_id, inactive_courses, documents, announcements, messages, exercises, assignments, forum_posts) VALUES (?t, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d)",
-                    $month, $cnt_prof, $cnt_students, $cnt_guest, $cnt_courses, $dep_id, $cnt_courses_inactive, $cnt_documents, $cnt_announcements, $cnt_messages, $cnt_exercises, $cnt_assignments, $cnt_forum_posts);
+                Database::get()->query(
+                    "INSERT INTO monthly_summary (month, teachers, students, guests, courses, dep_id, inactive_courses, documents, announcements, messages, exercises, assignments, forum_posts) VALUES (?t, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d)",
+                    $month,
+                    $cnt_prof,
+                    $cnt_students,
+                    $cnt_guest,
+                    $cnt_courses,
+                    $dep_id,
+                    $cnt_courses_inactive,
+                    $cnt_documents,
+                    $cnt_announcements,
+                    $cnt_messages,
+                    $cnt_exercises,
+                    $cnt_assignments,
+                    $cnt_forum_posts
+                );
             }
         }
     } else { // default view
@@ -1235,53 +1378,69 @@ function get_monthly_archives($fc, $details = false, $month = null): array
                 ];
             } else {
                 $year_month_day = $time->format("Y-m-d");
-                $cnt_courses = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM course JOIN course_department
+                $cnt_courses = Database::get()->querySingle(
+                    "SELECT COUNT(*) AS cnt FROM course JOIN course_department
                                                                 ON course.id = course_department.course
                                                                 WHERE created <= ?t
                                                                 AND department IN $dep_id_extra",
-                                                            $year_month_day)->cnt;
-                $cnt_courses_inactive = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM course JOIN course_department
+                    $year_month_day
+                )->cnt;
+                $cnt_courses_inactive = Database::get()->querySingle(
+                    "SELECT COUNT(*) AS cnt FROM course JOIN course_department
                                                                 ON course.id = course_department.course
                                                                 WHERE created <= ?t
                                                                 AND department IN $dep_id_extra
                                                                 AND visible = " . COURSE_INACTIVE,
-                                                            $year_month_day)->cnt;
-                $cnt_prof = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user, user_department
+                    $year_month_day
+                )->cnt;
+                $cnt_prof = Database::get()->querySingle(
+                    "SELECT COUNT(*) AS cnt FROM user, user_department
                                                                 WHERE status = " . USER_TEACHER . "
                                                                 AND registered_at <= ?t
                                                                 AND expires_at > " . DBHelper::timeAfter() . "
                                                                 AND user_department.user = user.id
                                                                 AND user_department.department IN $dep_id_extra",
-                                                            $year_month_day)->cnt;
-                $cnt_students = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user, user_department
+                    $year_month_day
+                )->cnt;
+                $cnt_students = Database::get()->querySingle(
+                    "SELECT COUNT(*) AS cnt FROM user, user_department
                                                                 WHERE status = " . USER_STUDENT . "
                                                                 AND registered_at <= ?t
                                                                 AND expires_at > " . DBHelper::timeAfter() . "
                                                                 AND user_department.user = user.id
                                                                 AND user_department.department IN $dep_id_extra",
-                                                            $year_month_day)->cnt;
-                $cnt_guest = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user, user_department
+                    $year_month_day
+                )->cnt;
+                $cnt_guest = Database::get()->querySingle(
+                    "SELECT COUNT(*) AS cnt FROM user, user_department
                                                                 WHERE status = " . USER_GUEST . "
                                                                 AND registered_at <= ?t
                                                                 AND expires_at > " . DBHelper::timeAfter() . "
                                                                 AND user_department.user = user.id
                                                                 AND user_department.department IN $dep_id_extra",
-                                                            $year_month_day)->cnt;
-                $cnt_documents = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM document, course_department
+                    $year_month_day
+                )->cnt;
+                $cnt_documents = Database::get()->querySingle(
+                    "SELECT COUNT(*) AS cnt FROM document, course_department
                                                                 WHERE date <= ?t
                                                                 AND document.course_id = course_department.course
                                                                 AND department IN $dep_id_extra",
-                                                            $year_month_day)->cnt;
-                $cnt_announcements = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM announcement, course_department
+                    $year_month_day
+                )->cnt;
+                $cnt_announcements = Database::get()->querySingle(
+                    "SELECT COUNT(*) AS cnt FROM announcement, course_department
                                                                 WHERE date <= ?t
                                                                 AND announcement.course_id = course_department.course
                                                                 AND department IN $dep_id_extra",
-                                                            $year_month_day)->cnt;
-                $cnt_messages = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM dropbox_msg, course_department
+                    $year_month_day
+                )->cnt;
+                $cnt_messages = Database::get()->querySingle(
+                    "SELECT COUNT(*) AS cnt FROM dropbox_msg, course_department
                                                                 WHERE FROM_UNIXTIME(timestamp, '%Y-%m-%d') <= ?t
                                                                 AND dropbox_msg.course_id = course_department.course
                                                                 AND department IN $dep_id_extra",
-                                                            $year_month_day)->cnt;
+                    $year_month_day
+                )->cnt;
                 $cnt_exercises = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM exercise, course_department
                                                                 WHERE exercise.course_id = course_department.course
                                                                 AND department IN $dep_id_extra")->cnt;
@@ -1307,8 +1466,22 @@ function get_monthly_archives($fc, $details = false, $month = null): array
                     'forum_posts' => $cnt_forum_posts
                 ];
 
-                Database::get()->query("INSERT INTO monthly_summary (month, teachers, students, guests, courses, dep_id, inactive_courses, documents, announcements, messages, exercises, assignments, forum_posts) VALUES (?t, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d)",
-                    $year_month_day, $cnt_prof, $cnt_students, $cnt_guest, $cnt_courses, $fc, $cnt_courses_inactive, $cnt_documents, $cnt_announcements, $cnt_messages, $cnt_exercises, $cnt_assignments, $cnt_forum_posts);
+                Database::get()->query(
+                    "INSERT INTO monthly_summary (month, teachers, students, guests, courses, dep_id, inactive_courses, documents, announcements, messages, exercises, assignments, forum_posts) VALUES (?t, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d)",
+                    $year_month_day,
+                    $cnt_prof,
+                    $cnt_students,
+                    $cnt_guest,
+                    $cnt_courses,
+                    $fc,
+                    $cnt_courses_inactive,
+                    $cnt_documents,
+                    $cnt_announcements,
+                    $cnt_messages,
+                    $cnt_exercises,
+                    $cnt_assignments,
+                    $cnt_forum_posts
+                );
             }
         }
     }

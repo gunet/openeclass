@@ -19,6 +19,12 @@
         <i class="fa-solid fa-user settings-icon"></i>{{ trans('langSearchUser') }}
     </a>
 
+    @if($is_departmentmanage_user and !$is_admin)
+        <a  href="{{$urlAppend}}modules/usage/index.php?t=a" class='quickLink'>
+            <i class="fa-solid fa-chart-pie settings-icon"></i>{{ trans('langUsage') }}
+        </a>
+    @endif
+
     @if($is_admin or $is_departmentmanage_user or $is_power_user)
         <a  href="searchcours.php" class='quickLink'>
             <i class="fa-solid fa-book-open settings-icon"></i>{{ trans('langSearchCourse') }}

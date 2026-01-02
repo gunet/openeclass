@@ -16,7 +16,7 @@ function getTenantUsers(array $filters = [
     'givenname' => '',
     'username'  => '',
     'am'        => '',
-], $tenant_id = null)
+], $tenant_id = null, $user_type = null)
 {
 
     if ($tenant_id) {
@@ -50,13 +50,22 @@ function getTenantUsers(array $filters = [
     $inClause = implode(', ', $tenantNodeIds);
 
     $query = "
-        SELECT DISTINCT u.id, u.surname, u.givenname, u.email, u.username, u.am
+        SELECT DISTINCT u.id, u.surname, u.givenname, u.email, u.username, u.am , u.verified_mail
         FROM user u
         JOIN user_department ud ON ud.user = u.id
         WHERE ud.department IN ($inClause)
     ";
 
     $values = [];
+
+    if (!is_null($user_type)) {
+        if (!in_array($user_type, [USER_TEACHER, USER_STUDENT, USER_GUEST])) {
+            return [];
+        }
+        $query .= " AND u.status = ?d";
+        $values[] = $user_type;
+    }
+
 
     foreach ($filters as $field => $value) {
         if (!empty($value)) {
@@ -180,4 +189,118 @@ function getUserTenant($user_id)
     } else {
         return null;
     }
+}
+
+
+/**
+ * @brief Get the current tenant courses, optionally filtered by visibility
+ *
+ * @param int|null $course_type COURSE_INACTIVE, COURSE_OPEN, COURSE_REGISTRATION, COURSE_CLOSED
+ * @param int|null $tenant_id
+ * @return array
+ */
+function getTenantCourses($course_type = null, $tenant_id = null)
+{
+    // Resolve tenant
+    if ($tenant_id) {
+        $tenant = getTenantById($tenant_id);
+    } else {
+        $tenant = getCurrentTenant();
+    }
+
+    if (!$tenant) {
+        return [];
+    }
+
+    // Get tenant hierarchy nodes
+    $tree = new Hierarchy();
+    $tenantNodes = $tree->getTenantNodes($tenant->id);
+
+    if (!$tenantNodes) {
+        return [];
+    }
+
+    $tenantNodeIds = array_map(fn($node) => intval($node->id), $tenantNodes);
+    $inClause = implode(', ', $tenantNodeIds);
+
+    $query = "
+        SELECT DISTINCT c.id, c.code, c.title, c.visible
+        FROM course c
+        JOIN course_department cd ON cd.course = c.id
+        WHERE cd.department IN ($inClause)
+    ";
+
+    $values = [];
+
+    if (!is_null($course_type)) {
+        if (!in_array($course_type, [
+            COURSE_INACTIVE,
+            COURSE_OPEN,
+            COURSE_REGISTRATION,
+            COURSE_CLOSED
+        ])) {
+            return [];
+        }
+
+        $query .= " AND c.visible = ?d";
+        $values[] = $course_type;
+    }
+
+    return Database::get()->queryArray($query, ...$values);
+}
+
+/**
+ * @brief Retrieves failed login attempts for tenants within a specified date range.
+ *
+ * This function fetches all failed login attempts from the log table for the users
+ * of a specific tenant (or all tenants if no tenant ID is provided) between
+ * the given start and end dates.
+ *
+ * @param string $date_start Start date for filtering log entries.
+ * @param string $date_end End date for filtering log entries.
+ * @param int|null $tenantId Optional tenant ID to filter users by tenant.
+ * @return array List of failed login attempts with timestamps, IPs, and details.
+ */
+
+function getTenantFailureLoginData(
+    string $date_start,
+    string $date_end,
+    ?int $tenantId = null
+) {
+    if (empty($tenantId)) {
+        $users = getTenantUsers();
+    } else {
+        $users =  getTenantUsers([], $tenantId);
+    }
+
+    $tenantUsers = getTenantUsers([], $tenantId);
+    if (empty($tenantUsers)) {
+        return [];
+    }
+
+    $usernames = array_map(fn($u) => $u->username, $users);
+
+    $rows = Database::get()->queryArray("
+        SELECT ts, ip, details
+        FROM log
+        WHERE action_type = ?d
+          AND ts BETWEEN ?t AND ?t
+        ORDER BY ts DESC
+    ", LOG_LOGIN_FAILURE, $date_start, $date_end);
+
+    $result = [];
+
+
+    foreach ($rows as $r) {
+        $details = unserialize($r->details);
+        if (empty($details['uname'])) continue;
+
+        if (in_array($details['uname'], $usernames)) {
+            $r->details = $details;
+            $result[] = $r;
+        }
+    }
+
+
+    return $result;
 }

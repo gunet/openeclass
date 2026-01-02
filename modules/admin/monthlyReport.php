@@ -21,7 +21,9 @@
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-$require_admin = true;
+$require_departmentmanage_user = true;
+$require_login = true;
+
 require_once '../../include/baseTheme.php';
 require_once 'modules/usage/usage.lib.php';
 require_once 'include/lib/hierarchy.class.php';
