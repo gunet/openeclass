@@ -27,9 +27,22 @@ if (get_config('dont_display_contact_menu')) {
     redirect_to_home_page();
 }
 
-$data['postaddress'] = nl2br(q(get_config('postaddress')));
-$data['phone'] = get_config('phone');
-$data['emailhelpdesk'] = $emailhelpdesk = get_config('email_helpdesk');
+$tenant = getCurrentTenant();
+
+if ($tenant) {
+    $tenant_options = unserialize($tenant->options);
+    $postaddress = getTenantOption($tenant_options, 'contact_address');
+    $phone = getTenantOption($tenant_options, 'contact_phone');
+    $emailhelpdesk = getTenantOption($tenant_options, 'contact_email');
+} else {
+    $postaddress = nl2br(q(get_config('postaddress')));
+    $phone = get_config('phone');
+    $emailhelpdesk = get_config('email_helpdesk');
+}
+
+$data['postaddress'] = $postaddress;
+$data['phone'] = $phone;
+$data['emailhelpdesk'] = $emailhelpdesk;
 if(!empty($data['emailhelpdesk'])){
     $data['emailhelpdesk'] = "<a href='mailto:$emailhelpdesk'>$emailhelpdesk</a>";
 }
