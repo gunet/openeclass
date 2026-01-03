@@ -159,7 +159,7 @@ function getTenantById($tenant_id = null)
 function getCourseTenant($course_id)
 {
     $tenant = Database::get()->querySingle(
-        'SELECT tenant.id, hierarchy.id AS hierarchy_id, hierarchy.lft, hierarchy.rgt
+        'SELECT tenant.id, tenant.options, hierarchy.id AS hierarchy_id, hierarchy.lft, hierarchy.rgt
        FROM tenant JOIN hierarchy ON tenant.department_id = hierarchy.id,
             course_department JOIN hierarchy AS course_hierarchy ON department = course_hierarchy.id
        WHERE course = ?d AND course_hierarchy.lft BETWEEN hierarchy.lft AND hierarchy.rgt',
