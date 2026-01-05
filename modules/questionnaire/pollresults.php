@@ -482,6 +482,9 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COU
                 $chart_counter++;
             } elseif ($theQuestion->qtype == QTYPE_SCALE) {
 
+                $answerScale = Database::get()->querySingle("SELECT answer_scale FROM poll_question WHERE pqid = ?d", $theQuestion->pqid)->answer_scale;
+                $arrAnsScale = explode('|', $answerScale);
+
                 $sql_participants_a = '';
                 $sql_participants_b = '';
                 $sql_participants_c = '';
@@ -558,7 +561,7 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COU
                     }
                     $answers_table .= "
                                 <tr>
-                                    <td>".q($answer->answer_text)."</td>";
+                                    <td>" . $arrAnsScale[$answer->answer_text-1] ?? q($answer->answer_text) . "</td>";
                             if (($totalUserAnswer > 1 && isset($_GET['from_session_view'])) or (!isset($_GET['from_session_view']))) {
                 $answers_table .= " <td>$answer->count</td>
                                     <td>$percentage%</td>"
