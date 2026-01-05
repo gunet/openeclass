@@ -988,7 +988,7 @@ function printPollForm() {
             }
         } else {
             if (!$temp_IsLime) {
-                $tool_content .= "<input class='btn submitAdminBtn blockUI' name='submit' type='submit' value='" . q($langSubmit) . "'>";
+                $tool_content .= "<input class='btn submitAdminBtn' name='submit' type='submit' value='" . q($langSubmit) . "'>";
                 if (isset($_REQUEST['unit_id'])) {
                     $tool_content .= "<a class='btn cancelAdminBtn ms-3' href='../units/index.php?course=$course_code&amp;id=$_REQUEST[unit_id]'>" . q($langCancel) . "</a>";
                 } else {
@@ -1002,7 +1002,16 @@ function printPollForm() {
         }
         $tool_content .= "</div>";
         if (!$temp_IsLime) {
-            $tool_content .= " </fieldset></form>";
+            $tool_content .= "</fieldset>
+                </form>
+                <script>
+                    $(function () {
+                        $('#poll').on('submit', function () {
+                            $(this).find('input[type=submit]').prop('disabled', true);
+                            return true;
+                        });
+                    });
+                </script>";
         }
     } else {
         Session::flash('message',$langPollInactive);

@@ -2786,27 +2786,26 @@ $langNoPgTitle = "Δεν πληκτρολογήσατε τίτλο σελίδα�
 /* * *************************************************************
  * php
  * ************************************************************* */
-$langHomePage = "Αρχική Σελίδα";
-$langInvalidId = "Λάθος στοιχεία.<br>Αν δεν είστε εγγεγραμμένος παρακαλώ συμπληρώστε τη <a href='%s'>φόρμα εγγραφής</a>.";
-$langEnterPlatform = "Για να μπείτε στην πλατφόρμα κάντε κλικ";
+$langHomePage = 'Αρχική Σελίδα';
+$langInvalidId = 'Τα στοιχεία που πληκτρολογήσατε δεν αναγνωρίζονται. Αν δεν μπορείτε να συνδεθείτε και έχετε σίγουρα λογαριασμό, δοκιμάστε να κάνετε ανάκτηση του συνθηματικού σας ή να επικοινωνήσετε με τους διαχειριστές.';
+$langEnterPlatform = 'Για να μπείτε στην πλατφόρμα κάντε κλικ';
 $langInvalidGuestAccount = "Το $langsCourse για το οποίο έχει δημιουργηθεί ο λογαριασμός 'χρήστη επισκέπτη' δεν υπάρχει πλέον.";
-$langAccountInactive1 = "Μη ενεργός λογαριασμός.";
-$langAccountInactive2 = "Παρακαλώ επικοινωνήστε με τον διαχειριστή για την ενεργοποίηση του λογαριασμού σας";
+$langAccountInactive1 = 'Μη ενεργός λογαριασμός.';
+$langAccountInactive2 = 'Παρακαλώ επικοινωνήστε με τον διαχειριστή για την ενεργοποίηση του λογαριασμού σας';
 $langAccountActivate = 'Ενεργοποίηση λογαριασμού χρήστη';
-$langAccountActivateMessage = 'Ο φοιτητής με τα παρακάτω στοιχεία επιθυμεί την
-επανενεργοποίηση του λογαριασμού του:';
+$langAccountActivateMessage = 'Ο φοιτητής με τα παρακάτω στοιχεία επιθυμεί την επανενεργοποίηση του λογαριασμού του:';
 $langMyCoursesProf = "Τα $langsCourses που υποστηρίζω";
 $langMyCoursesUser = "Τα $langsCourses που παρακολουθώ";
 $langNoCourses = "Δεν υπάρχουν $langsCourses";
 $langCourseCreate = "Δημιουργία $langsOfCourse";
-$langCreationDate = "Ημερομηνία δημιουργίας";
-$langMoreCourseInfo = "Περισσότερες πληροφορίες";
-$langMyAgenda = "Το ημερολόγιό μου";
-$langMyAnnouncements = "Οι ανακοινώσεις μου";
-$langAdmin = "Διαχείριση πλατφόρμας";
-$langPass = "Συνθηματικό (password)";
-$langHelp = "Βοήθεια";
-$langSelection = "Επιλογή";
+$langCreationDate = 'Ημερομηνία δημιουργίας';
+$langMoreCourseInfo = 'Περισσότερες πληροφορίες';
+$langMyAgenda = 'Το ημερολόγιό μου';
+$langMyAnnouncements = 'Οι ανακοινώσεις μου';
+$langAdmin = 'Διαχείριση πλατφόρμας';
+$langPass = 'Συνθηματικό (password)';
+$langHelp = 'Βοήθεια';
+$langSelection = 'Επιλογή';
 $langSelect = "Επιλογή";
 $langMenu = "Μενού";
 $langLogout = "Έξοδος";
@@ -7296,7 +7295,7 @@ $langPreviousQuestion = "Προηγούμενη";
 $langNextQuestion = "Επόμενη";
 $langAddConsultantComments = "Οι παρατηρήσεις του συμβούλου προστέθηκαν με επιτυχία.";
 $langContinueToDelComment = "Θέλετε να προχωρήσετε στην διαγραφή των σχολίων για τον χρήστη?";
-$langInfoCommentsConsultant = "Σε περίπτωση που επιλέξετε χρήστη για τον οποίο έχετε υποβάλει τις παρατηρήσεις σας, τότε o <strong>τίτλος</strong> και 
+$langInfoCommentsConsultant = "Σε περίπτωση που επιλέξετε χρήστη για τον οποίο έχετε υποβάλει τις παρατηρήσεις σας, τότε o <strong>τίτλος</strong> και
                                 τα <strong>σχόλια</strong> θα διαγραφούν και θα αντικατασταθούν με τις νέες τιμές.";
 $langDelConsultantComments = "Τα σχόλια διαγράφηκαν με επιτυχία.";
 $langNotifyCommentsConsultant = "Ειδοποίηση μέσω email στον χρήστη σχετικά με τα τις παρατηρήσεις του συμβούλου";
