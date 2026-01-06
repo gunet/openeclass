@@ -1238,38 +1238,51 @@ function display_available_assignments($element, $element_id, $activity_type, $u
         } else {
             $action = "index.php?course=$course_code";
         }
+
+        //compute columns width
+        $title_width = 40;
+        $deadline_width = 20;
+        if ($activity_type != AssignmentEvent::ACTIVITY) {
+            $title_width += 12;
+            $deadline_width += 10;
+        }
+        if ($element != 'points_game') {
+            $title_width += 8;
+            $deadline_width += 4;
+        }
+
         $tool_content .= "<form action=$action method='post'>" .
             "<input type='hidden' name = '$element_name' value='$element_id'>" .
-            "<div class='table-responsive'><table class='table-default'>" .
+            "<div class='table-responsive'><table class='table-default' style='table-layout: fixed; width:100%'>" .
             "<thead><tr class='list-header'>" .
-            "<th>$langTitle</th>" .
-            "<th>$langGroupWorkDeadline_of_Submission</th>";
+            "<th style='width: ".$title_width."%;'>$langTitle</th>" .
+            "<th style='width: ".$deadline_width."%;'>$langGroupWorkDeadline_of_Submission</th>";
         if ($activity_type == AssignmentEvent::ACTIVITY) {
-            $tool_content .= "<th>$langOperator</th>" .
-            "<th>$langGradebookGrade</th>";
+            $tool_content .= "<th style='width: 10%;'>$langOperator</th>" .
+            "<th style='width: 12%;'>$langGradebookGrade</th>";
         }
         if ($element == 'points_game') {
-            $tool_content .= "<th>$langPoints</th>";
+            $tool_content .= "<th style='width: 12%;'>$langPoints</th>";
         }
         $tool_content .=
-            "<th>$langChoice</th>" .
+            "<th style='width: 6%;'>$langChoice</th>" .
             "</tr></thead>";
         foreach ($result as $row) {
             $assignment_id = $row->id;
             $description = empty($row->description) ? '' : "<div style='margin-top: 10px;' class='text-muted'>$row->description</div>";
             $tool_content .= "<tr>" .
-                "<td><a href='{$urlServer}modules/work/index.php?course=$course_code&amp;id=$row->id'>" . q($row->title) . "</a>$description</td>" .
-                "<td>" . format_locale_date(strtotime($row->submission_date), 'short') . "</td>";
+                "<td style='width: ".$title_width."%;'><a href='{$urlServer}modules/work/index.php?course=$course_code&amp;id=$row->id'>" . q($row->title) . "</a>$description</td>" .
+                "<td style='width: ".$deadline_width."%;'>" . format_locale_date(strtotime($row->submission_date), 'short') . "</td>";
             if ($activity_type == AssignmentEvent::ACTIVITY) {
                 $tool_content .=
-                "<td>" . selection(get_operators(), "operator[$assignment_id]") . "</td>" .
-                "<td><input aria-label='$langPollFillText' class='form-control' type='text' name='threshold[$assignment_id]' value=''></td>";
+                "<td style='width: 8%;'>" . selection(get_operators(), "operator[$assignment_id]") . "</td>" .
+                "<td style='width: 12%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='text' name='threshold[$assignment_id]' value=''></td>";
             }
             if ($element == 'points_game') {
-                $tool_content .= "<td><input aria-label='$langPollFillText' class='form-control' type='text' name='points[$assignment_id]' value=''></td>";
+                $tool_content .= "<td style='width: 12%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='text' name='points[$assignment_id]' value=''></td>";
             }
             $tool_content .=
-                "<td><label class='label-container' aria-label='$langSelect'><input name='assignment[]' value='$assignment_id' type='checkbox'><span class='checkmark'></span></label></td>" .
+                "<td style='width: 6%;'><label class='label-container' aria-label='$langSelect'><input name='assignment[]' value='$assignment_id' type='checkbox'><span class='checkmark'></span></label></td>" .
                 "</tr>";
         }
         $tool_content .= "</table></div>
@@ -1341,29 +1354,34 @@ function display_available_exercises($element, $element_id, $unit_id = 0, $unit_
     } else {
         $action = $unit_id ? "manage.php?course=$course_code&manage=1&unit_id=$unit_id" : "index.php?course=$course_code";
 
+        $title_width = 60;
+        if ($element != 'points_game') {
+            $title_width += 10;
+        }
+
         $tool_content .= "<form action=$action method='post'>" .
                 "<input type='hidden' name='$element_name' value='$element_id'>" .
-                "<div class='table-responsive'><table class='table-default'>" .
+                "<div class='table-responsive'><table class='table-default' style='table-layout: fixed; width: 100%;'>" .
                 "<thead><tr class='list-header'>" .
-                "<th class='text-start ps-2'>$langExercices</th>" .
-                "<th style='width:5px;'>$langOperator</th>" .
-                "<th style='width:50px;'>$langGradebookGrade</th>";
+                "<th style='width: ".$title_width."%;' class='text-start ps-2'>$langExercices</th>" .
+                "<th style='width: 10%;'>$langOperator</th>" .
+                "<th style='width: 10%;'>$langGradebookGrade</th>";
         if ($element == 'points_game') {
-            $tool_content .= "<th style='width:50px;'>$langPoints</th>";
+            $tool_content .= "<th style='width: 10%;'>$langPoints</th>";
         }
-        $tool_content .= "<th style='width:20px;'>$langChoice</th>" .
+        $tool_content .= "<th style='width: 10%;'>$langChoice</th>" .
                 "</tr></thead>";
         foreach ($quizinfo as $entry) {
             $exercise_id = $entry['id'];
             $comments = empty($entry['comment']) ? '' : "<div style='margin-top: 10px;' class='text-muted'>". $entry['comment']. "</div>";
             $tool_content .= "<tr>";
-            $tool_content .= "<td><a href='{$urlServer}modules/exercise/exercise_submit.php?course=$course_code&amp;exerciseId=$exercise_id'>" . q($entry['name']) . "</a>" . $comments . "</td>";
-            $tool_content .= "<td>". selection(get_operators(), "operator[$exercise_id]") . "</td>";
-            $tool_content .= "<td><input aria-label='$langPollFillText' class='form-control' type='text' name='threshold[$exercise_id]' value=''></td>";
+            $tool_content .= "<td style='width: ".$title_width."%;'><a href='{$urlServer}modules/exercise/exercise_submit.php?course=$course_code&amp;exerciseId=$exercise_id'>" . q($entry['name']) . "</a>" . $comments . "</td>";
+            $tool_content .= "<td style='width: 10%;'>". selection(get_operators(), "operator[$exercise_id]") . "</td>";
+            $tool_content .= "<td style='width: 10%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='text' name='threshold[$exercise_id]' value=''></td>";
             if ($element == 'points_game') {
-                $tool_content .= "<td><input aria-label='$langPollFillText' class='form-control' type='text' name='points[$exercise_id]' value=''></td>";
+                $tool_content .= "<td style='width: 10%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='text' name='points[$exercise_id]' value=''></td>";
             }
-            $tool_content .= "<td><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='exercise[]' value='$exercise_id'><span class='checkmark'></span></label></td>";
+            $tool_content .= "<td style='width: 10%;'><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='exercise[]' value='$exercise_id'><span class='checkmark'></span></label></td>";
             $tool_content .= "</tr>";
         }
         $tool_content .= "</table></div><div class='text-end mt-3'>";
@@ -1594,29 +1612,32 @@ function display_available_blogs($element, $element_id, $unit_id = 0) {
             $action = "index.php?course=$course_code";
         }
 
-        $width = $element == 'points_game' ? '15' : '30';
+        $title_width = 60;
+        if ($element != 'points_game') {
+            $title_width += 10;
+        }
 
         $tool_content .= "<form action=$action method='post'>" .
                 "<input type='hidden' name='$element_name' value='$element_id'>" .
-                "<div class='table-responsive'><table class='table-default'>" .
+                "<div class='table-responsive'><table class='table-default' style='table-layout: fixed; width:100%'>" .
                 "<thead><tr class='list-header'>" .
-                "<th style='width:70%;'>$langTitle</th>" .
-                "<th style='width:5px;'>$langOperator</th>" .
-                "<th style='width:".$width."px;'>$langValue</th>";
+                "<th style='width: ".$title_width."%;'>$langTitle</th>" .
+                "<th style='width: 10%;'>$langOperator</th>" .
+                "<th style='width: 10%;'>$langValue</th>";
         if ($element == 'points_game') {
-            $tool_content .= "<th style='width:".$width."px;'>$langPoints</th>";;
+            $tool_content .= "<th style='width: 10%;'>$langPoints</th>";;
         }
-        $tool_content .= "<th style='width:20px;'>$langChoice</th>" .
+        $tool_content .= "<th style='width: 10%;'>$langChoice</th>" .
                 "</tr></thead>";
 
             $tool_content .= "<tr>" .
-                    "<td>$langNumOfBlogs</td>" .
-                    "<td>". selection(get_operators(), "operator") . "</td>".
-                    "<td><input aria-label='$langPollFillText' class='form-control' type='text' name='threshold' value=''></td>";
+                    "<td style='width: ".$title_width."%;'>$langNumOfBlogs</td>" .
+                    "<td style='width: 10%;'>". selection(get_operators(), "operator") . "</td>".
+                    "<td style='width: 10%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='text' name='threshold' value=''></td>";
             if ($element == 'points_game') {
-                $tool_content .= "<td><input aria-label='$langPollFillText' class='form-control' type='text' name='points' value=''></td>";
+                $tool_content .= "<td style='width: 10%;'><input aria-label='$langPollFillText' class='form-control' type='text' name='points' value=''></td>";
             }
-            $tool_content .= "<td><label class='label-container' aria-label='$langSelect'><input name='blog' value='1' type='checkbox'><span class='checkmark'></span></label></td>" .
+            $tool_content .= "<td style='width: 10%;'><label style='max-width: 80px;' class='label-container' aria-label='$langSelect'><input name='blog' value='1' type='checkbox'><span class='checkmark'></span></label></td>" .
                     "</tr>";
 
         $tool_content .= "</table></div>" .
@@ -1660,32 +1681,37 @@ function display_available_blogcomments($element, $element_id, $unit_id = 0) {
             $action = "index.php?course=$course_code";
         }
 
-        $width = ($element == 'points_game') ? '25' : '50';
+        $title_width = 40;
+        $date_width = 20;
+        if ($element != 'points_game') {
+            $title_width += 8;
+            $date_width += 4;
+        }
 
         $tool_content .= "<form action=$action method='post'>" .
                 "<input type='hidden' name='$element_name' value='$element_id'>" .
-                "<div class='table-responsive'><table class='table-default'>" .
+                "<div class='table-responsive'><table class='table-default' style='table-layout: fixed; width:100%'>" .
                 "<thead><tr class='list-header'>" .
-                "<th style='width:45%;'>$langTitle</th>" .
-                "<th>$langDate</th>" .
-                "<th style='width:5px;'>$langOperator</th>" .
-                "<th style='width:".$width."px;'>$langValue</th>";
+                "<th style='width: ".$title_width."%;'>$langTitle</th>" .
+                "<th style='width: ".$date_width."%;'>$langDate</th>" .
+                "<th style='width: 10%;'>$langOperator</th>" .
+                "<th style='width: 12%;'>$langValue</th>";
         if ($element == 'points_game') {
-            $tool_content .= "<th style='width:".$width."px;'>$langPoints</th>";
+            $tool_content .= "<th style='width: 12%;'>$langPoints</th>";
         }
-        $tool_content .= "<th style='width:20px;'>$langChoice</th>" .
+        $tool_content .= "<th style='width: 6%;'>$langChoice</th>" .
                 "</tr></thead>";
         foreach ($result as $row) {
             $blog_id = $row->id;
             $tool_content .= "<tr>" .
-                    "<td><a href='{$urlServer}modules/blog/index.php?course=$course_code&amp;action=showPost&amp;pId=$blog_id#comments-title'>" . q($row->title) . "</a></td>" .
-                    "<td>" . format_locale_date(strtotime($row->time), 'short') . "</td>
-                    <td>". selection(get_operators(), "operator[$blog_id]") . "</td>".
-                    "<td><input aria-label='$langPollFillText' class='form-control' type='text' name='threshold[$blog_id]' value=''></td>";
+                    "<td style='width: ".$title_width."%;'><a href='{$urlServer}modules/blog/index.php?course=$course_code&amp;action=showPost&amp;pId=$blog_id#comments-title'>" . q($row->title) . "</a></td>" .
+                    "<td style='width: ".$date_width."%;'>" . format_locale_date(strtotime($row->time), 'short') . "</td>
+                    <td style='width: 10%;'>". selection(get_operators(), "operator[$blog_id]") . "</td>".
+                    "<td style='width: 12%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='text' name='threshold[$blog_id]' value=''></td>";
             if ($element == 'points_game') {
-                $tool_content .= "<td><input aria-label='$langPollFillText' class='form-control' type='text' name='points[$blog_id]' value=''></td>";
+                $tool_content .= "<td style='width: 12%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='text' name='points[$blog_id]' value=''></td>";
             }
-            $tool_content .= "<td><label class='label-container' aria-label='$langSelect'><input name='blogcomment[]' value='$blog_id' type='checkbox'><span class='checkmark'></span></label></td>" .
+            $tool_content .= "<td style='width: 6%;'><label class='label-container' aria-label='$langSelect'><input name='blogcomment[]' value='$blog_id' type='checkbox'><span class='checkmark'></span></label></td>" .
                     "</tr>";
         }
         $tool_content .= "</table></div>" .
@@ -1738,29 +1764,32 @@ function display_available_forums($element, $element_id, $unit_id = 0) {
             $action = "index.php?course=$course_code";
         }
 
-        $width = ($element == 'points_game') ? '20' : '30';
+        $title_width = 50;
+        if ($element != 'points_game') {
+            $title_width += 15;
+        }
 
         $tool_content .= "<form action=$action method='post'>" .
                 "<input type='hidden' name='$element_name' value='$element_id'>" .
-                "<div class='table-responsive'><table class='table-default'>" .
+                "<div class='table-responsive'><table class='table-default' style='table-layout: fixed; width:100%'>" .
                 "<thead><tr class='list-header'>" .
-                "<th style='width:70%;'>$langTitle</th>" .
-                "<th style='width:5px;'>$langOperator</th>" .
-                "<th style='width:".$width."px;'>$langValue</th>";
+                "<th style='width: ".$title_width."%;'>$langTitle</th>" .
+                "<th style='width: 10%;'>$langOperator</th>" .
+                "<th style='width: 15%;'>$langValue</th>";
         if ($element == 'points_game') {
-            $tool_content .= "<th style='width:".$width."px;'>$langPoints</th>";
+            $tool_content .= "<th style='width: 15%;'>$langPoints</th>";
         }
-        $tool_content .= "<th style='width:20px;'>$langChoice</th>" .
+        $tool_content .= "<th style='width: 10%;'>$langChoice</th>" .
                 "</tr></thead>";
 
             $tool_content .= "<tr>" .
-                    "<td>$langNumInForum</td>" .
-                    "<td>". selection(get_operators(), "operator") . "</td>".
-                    "<td><input aria-label='$langPollFillText' class='form-control' type='text' name='threshold' value=''></td>";
+                    "<td style='width: ".$title_width."%;'>$langNumInForum</td>" .
+                    "<td style='width: 10%;'>". selection(get_operators(), "operator") . "</td>".
+                    "<td style='width: 15%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='text' name='threshold' value=''></td>";
             if ($element == 'points_game') {
-                $tool_content .= "<td><input aria-label='$langPollFillText' class='form-control' type='text' name='points' value=''></td>";
+                $tool_content .= "<td style='width: 15%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='text' name='points' value=''></td>";
             }
-            $tool_content .= "<td><label class='label-container' aria-label='$langSelect'><input name='forum' value='1' type='checkbox'><span class='checkmark'></span></label></td>" .
+            $tool_content .= "<td style='width: 10%;'><label class='label-container' aria-label='$langSelect'><input name='forum' value='1' type='checkbox'><span class='checkmark'></span></label></td>" .
                     "</tr>";
 
         $tool_content .= "</table></div>" .
@@ -1833,32 +1862,35 @@ function display_available_forumtopics($element, $element_id, $unit_id = 0, $uni
             $action = "index.php?course=$course_code";
         }
 
-        $width = ($element == 'points_game') ? '25' : '50';
+        $title_width = 50;
+        if ($element != 'points_game') {
+            $title_width += 15;
+        }
 
         $tool_content .= "<form action=$action method='post'>" .
                 "<input type='hidden' name='$element_name' value='$element_id'>" .
-                "<div class='table-responsive'><table class='table-default'>" .
+                "<div class='table-responsive'><table class='table-default' style='table-layout: fixed; width:100%'>" .
                 "<thead><tr class='list-header'>" .
-                "<th>$langTopics</th>" .
-                "<th style='width:5px;'>$langOperator</th>" .
-                "<th style='width:".$width."px;'>$langValue</th>";
+                "<th style='width: ".$title_width."%;'>$langTopics</th>" .
+                "<th style='width: 10%;'>$langOperator</th>" .
+                "<th style='width: 15%;'>$langValue</th>";
         if ($element == 'points_game') {
-            $tool_content .= "<th style='width:".$width."px;'>$langPoints</th>";
+            $tool_content .= "<th style='width: 15%;'>$langPoints</th>";
         }
-        $tool_content .= "<th style='width:20px;'>$langChoice</th>" .
+        $tool_content .= "<th style='width: 10%;'>$langChoice</th>" .
                 "</tr></thead>";
 
         foreach ($topicinfo as $topicentry) {
             $topic_id = $topicentry['topic_id'];
             $forum_id = $topicentry['forum_id'];
             $tool_content .= "<tr>";
-            $tool_content .= "<td>&nbsp;".icon('fa-comments')."&nbsp;&nbsp;<a href='{$urlServer}modules/forum/viewtopic.php?course=$course_code&amp;topic=$topic_id&amp;forum=$forum_id'>" . q($topicentry['topic_title']) . "</a></td>";
-            $tool_content .= "<td>". selection(get_operators(), "operator[$topic_id]") . "</td>";
-            $tool_content .= "<td><input aria-label='$langPollFillText' class='form-control' type='text' name='threshold[$topic_id]' value=''></td>";
+            $tool_content .= "<td style='width: ".$title_width."%;'>&nbsp;".icon('fa-comments')."&nbsp;&nbsp;<a href='{$urlServer}modules/forum/viewtopic.php?course=$course_code&amp;topic=$topic_id&amp;forum=$forum_id'>" . q($topicentry['topic_title']) . "</a></td>";
+            $tool_content .= "<td style='width: 10%;'>". selection(get_operators(), "operator[$topic_id]") . "</td>";
+            $tool_content .= "<td style='width: 15%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='text' name='threshold[$topic_id]' value=''></td>";
             if ($element == 'points_game') {
-                $tool_content .= "<td><input aria-label='$langPollFillText' class='form-control' type='text' name='points[$topic_id]' value=''></td>";
+                $tool_content .= "<td style='width: 15%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='text' name='points[$topic_id]' value=''></td>";
             }
-            $tool_content .= "<td><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='forumtopic[]' value='$topic_id'><span class='checkmark'></span></label></td>";
+            $tool_content .= "<td style='width: 10%;'><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='forumtopic[]' value='$topic_id'><span class='checkmark'></span></label></td>";
             $tool_content .= "</tr>";
         }
         $tool_content .= "</table></div>";
@@ -2174,24 +2206,30 @@ function display_available_ebooks($element, $element_id, $unit_id = 0, $unit_res
         } else {
             $action = "index.php?course=$course_code";
         }
+
+        $title_width = 70;
+        if ($element == 'points_game') {
+            $title_width += 15;
+        }
+
         $tool_content .= "<form action=$action method='post'>" .
                 "<input type='hidden' name='$element_name' value='$element_id'>" .
-                "<div class='table-responsive'><table class='table-default'>" .
+                "<div class='table-responsive'><table class='table-default' style='table-layout: fixed; width:100%'>" .
                 "<thead><tr class='list-header'>" .
-                "<th>&nbsp;$langEBook</th>";
+                "<th style='width: ".$title_width."%;'>&nbsp;$langEBook</th>";
         if ($element == 'points_game') {
-            $tool_content .= "<th style='width:20px;'>$langPoints</th>";
+            $tool_content .= "<th style='width: 15%;'>$langPoints</th>";
         }
-        $tool_content .= "<th style='width:20px;'>$langChoice</th>" .
+        $tool_content .= "<th style='width: 15%;'>$langChoice</th>" .
                 "</tr></thead>";
         foreach ($result as $catrow) {
             $tool_content .= "<tr>";
-            $tool_content .= "<td class='bold'>".icon('fa-book')."&nbsp;&nbsp;" .
+            $tool_content .= "<td style='width: ".$title_width."%;' class='bold'>".icon('fa-book')."&nbsp;&nbsp;" .
                     q($catrow->title) . "</td>";
             if ($element == 'points_game') {
-                $tool_content .= "<td><input aria-label='$langPollFillText' class='form-control' type='text' name='points_ebook[$catrow->id]' value=''></td>";
+                $tool_content .= "<td style='width: 15%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='text' name='points_ebook[$catrow->id]' value=''></td>";
             }
-            $tool_content .= "<td>
+            $tool_content .= "<td style='width: 15%;'>
             <label class='label-container' aria-label='$langSelect'><input type='checkbox' name='ebook[]' value='$catrow->id' /><span class='checkmark'></span></label>
                             <input type='hidden' name='ebook_title[$catrow->id]'
                                value='" . q($catrow->title) . "'></td>";
@@ -2225,22 +2263,22 @@ function display_available_ebooks($element, $element_id, $unit_id = 0, $unit_res
                 $surl = $ebook_url_base . $display_id . '/' . $unit_parameter;
                 if ($old_sid != $sid) {
                     $tool_content .= "<tr>
-                                    <td class='section'>".icon('fa-link')."&nbsp;&nbsp;
+                                    <td style='width: ".$title_width."%;' class='section'>".icon('fa-link')."&nbsp;&nbsp;
                                         " . q($row->section_title) . "</td>";
                                     if ($element == 'points_game') {
-                                        $tool_content .= "<td><input aria-label='$langPollFillText' class='form-control' type='text' name='points_section[$sid]' value=''></td>";
+                                        $tool_content .= "<td style='width: 15%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='text' name='points_section[$sid]' value=''></td>";
                                     }
-                                    $tool_content .= "<td align='center'><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='section[]' value='$sid' /><span class='checkmark'></span></label>
+                                    $tool_content .= "<td style='width: 15%;' align='center'><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='section[]' value='$sid' /><span class='checkmark'></span></label>
                                         <input type='hidden' name='section_title[$sid]'
                                                value='" . q($row->section_title) . "'></td></tr>";
                 }
                 $tool_content .= "<tr>
-                                <td class='subsection'>".icon('fa-link')."&nbsp;&nbsp;
+                                <td style='width: ".$title_width."%;' class='subsection'>".icon('fa-link')."&nbsp;&nbsp;
                                 <a href='" . q($surl) . "' target='_blank' aria-label='$langOpenNewTab'>" . q($row->subsection_title) . "</a></td>";
                 if ($element == 'points_game') {
-                    $tool_content .= "<td><input aria-label='$langPollFillText' class='form-control' type='text' name='points_subsection[$ssid]' value=''></td>";
+                    $tool_content .= "<td style='width: 15%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='text' name='points_subsection[$ssid]' value=''></td>";
                 }
-                $tool_content .= "<td align='center'><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='subsection[]' value='$ssid' /><span class='checkmark'></span></label>
+                $tool_content .= "<td style='width: 15%;' align='center'><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='subsection[]' value='$ssid' /><span class='checkmark'></span></label>
                                    <input type='hidden' name='subsection_title[$ssid]'
                                           value='" . q($row->subsection_title) . "'></td>
                             </tr>";
@@ -2319,24 +2357,30 @@ function display_available_polls($element, $element_id, $unit_id = 0, int $unit_
         } else {
             $action = "index.php?course=$course_code";
         }
+
+        $title_width = 70;
+        if ($element != 'points_game') {
+            $title_width += 15;
+        }
+
         $tool_content .= "<form action=$action method='post'>" .
                 "<input type='hidden' name='$element_name' value='$element_id'>" .
-                "<div class='table-responsive'><table class='table-default'>" .
+                "<div class='table-responsive'><table class='table-default' style='table-layout: fixed; width:100%'>" .
                 "<thead><tr class='list-header'>" .
-                "<th>$langQuestionnaire</th>";
+                "<th style='width: ".$title_width."%;'>$langQuestionnaire</th>";
         if ($element == 'points_game') {
-            $tool_content .= "<th>$langPoints</th>";
+            $tool_content .= "<th style='width: 15%;'>$langPoints</th>";
         }
-        $tool_content .= "<th>$langChoice</th>" .
+        $tool_content .= "<th style='width: 15%;'>$langChoice</th>" .
                 "</tr></thead>";
         foreach ($pollinfo as $entry) {
             $description = empty($entry['description']) ? '' : "<div style='margin-top: 10px;' class='text-muted'>". $entry['description']. "</div>";
             $tool_content .= "<tr>";
-            $tool_content .= "<td>&nbsp;".icon('fa-question-circle')."&nbsp;&nbsp;<a href='{$urlServer}modules/questionnaire/pollresults.php?course=$course_code&amp;pid=$entry[id]'>" . q($entry['title']) . "</a>" . $description ."</td>";
+            $tool_content .= "<td style='width: ".$title_width."%;'>&nbsp;".icon('fa-question-circle')."&nbsp;&nbsp;<a href='{$urlServer}modules/questionnaire/pollresults.php?course=$course_code&amp;pid=$entry[id]'>" . q($entry['title']) . "</a>" . $description ."</td>";
             if ($element == 'points_game') {
-                $tool_content .= "<td width='40px'><input aria-label='$langPollFillText' class='form-control' type='text' name='points[".$entry['id']."]' value=''></td>";
+                $tool_content .= "<td style='width: 15%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='text' name='points[".$entry['id']."]' value=''></td>";
             }
-            $tool_content .= "<td><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='poll[]' value='$entry[id]'><span class='checkmark'></span></label></td>";
+            $tool_content .= "<td style='width: 15%;'><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='poll[]' value='$entry[id]'><span class='checkmark'></span></label></td>";
             $tool_content .= "</tr>";
         }
         $tool_content .= "</table></div>";
@@ -2379,27 +2423,32 @@ function display_available_wiki($element, $element_id, $unit_id = 0) {
             $action = "index.php?course=$course_code";
         }
 
+        $title_width = 50;
+        if ($element != 'points_game') {
+            $title_width += 15;
+        }
+
         $tool_content .= "<form action=$action method='post'>" .
                 "<input type='hidden' name='$element_name' value='$element_id'>" .
-                "<div class='table-responsive'><table class='table-default'>" .
+                "<div class='table-responsive'><table class='table-default' style='table-layout: fixed; width:100%'>" .
                 "<thead><tr class='list-header'>" .
-                "<th style='width:70%;'>&nbsp;$langTitle</th>" .
-                "<th style='width:5px;'>$langOperator</th>" .
-                "<th style='width:30px;'>$langValue</th>";
+                "<th style='width: ".$title_width."%;'>&nbsp;$langTitle</th>" .
+                "<th style='width: 10%;'>$langOperator</th>" .
+                "<th style='width: 15%;'>$langValue</th>";
         if ($element == 'points_game') {
-            $tool_content .= "<th>$langPoints</th>";
+            $tool_content .= "<th style='width: 15%;'>$langPoints</th>";
         }
-        $tool_content .= "<th style='width:20px;'>$langChoice</th>" .
+        $tool_content .= "<th style='width: 10%;'>$langChoice</th>" .
                 "</tr></thead>";
 
         $tool_content .= "<tr>
-                            <td>$langWikiPages</td>
-                            <td>". selection(get_operators(), "operator") . "</td>
-                            <td><input aria-label='$langPollFillText' class='form-control' type='text' name='threshold' value=''></td>";
+                            <td style='width: ".$title_width."%;'>$langWikiPages</td>
+                            <td style='width: 10%;'>". selection(get_operators(), "operator") . "</td>
+                            <td style='width: 15%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='text' name='threshold' value=''></td>";
         if ($element == 'points_game') {
-            $tool_content .= "<td><input aria-label='$langPollFillText' class='form-control' type='text' name='points' value=''></td>";
+            $tool_content .= "<td style='width: 15%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='text' name='points' value=''></td>";
         }
-        $tool_content .= "<td><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='wiki' value='1'><span class='checkmark'></span></label></td>
+        $tool_content .= "<td style='width: 10%;'><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='wiki' value='1'><span class='checkmark'></span></label></td>
                         </tr>";
 
         $tool_content .= "
