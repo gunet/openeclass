@@ -78,13 +78,13 @@ if ($is_editor) {
     // Top menu
     $tool_content .= "<div class='col-sm-12'>";
     if(isset($_GET['edit'])) {
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;$param_name=$element_id", "name" => $element_title);
+        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&$param_name=$element_id", "name" => $element_title);
         $pageName = $langConfig;
     } elseif (isset($_GET['act_mod'])) { // modify certificate activity
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;$param_name=$element_id", "name" => $element_title);
+        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&$param_name=$element_id", "name" => $element_title);
         $pageName = $langEditChange;
     } elseif(isset($_GET['add'])) { // add certificate activity
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;$param_name=$element_id", "name" => $element_title);
+        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&$param_name=$element_id", "name" => $element_title);
         $pageName = "$langAdd $langOfGradebookActivity";
     } elseif (isset($_GET['newcert'])) { // new certificate activity
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langProgress);
@@ -96,8 +96,8 @@ if ($is_editor) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langProgress);
         $pageName = $langNewPointsGame;
     } elseif (isset($_GET['u'])) {
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;$param_name=$element_id", "name" => $element_title);
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;$param_name=$element_id&amp;progressall=true", "name" => $langUsers);
+        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&$param_name=$element_id", "name" => $element_title);
+        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&$param_name=$element_id&progressall=true", "name" => $langUsers);
         $pageName = uid_to_name($_GET['u']);
         $action_bar = action_bar(array(
             array('title' => $langBack,
@@ -106,7 +106,7 @@ if ($is_editor) {
                   'level' => 'primary')));
         $tool_content .= $action_bar;
     } elseif (isset($_GET['progressall'])) {
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;$param_name=$element_id", "name" => $element_title);
+        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&$param_name=$element_id", "name" => $element_title);
         $pageName = "$langProgress $langsOfStudents";
         $info_title = $langRefreshProgressInfo;
         $action_bar = action_bar(array(
@@ -469,7 +469,7 @@ if ($is_editor) {
     }
 } else if ($is_course_reviewer) {
     if (isset($_GET['progressall'])) { // display users progress (course reviewer view)
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;$param_name=$element_id", "name" => $element_title);
+        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&$param_name=$element_id", "name" => $element_title);
         $pageName = "$langProgress $langsOfStudents";
         $tool_content .= action_bar(array(
             array('title' => $langBack,
@@ -479,8 +479,8 @@ if ($is_editor) {
         display_users_progress($element, $element_id);
         $display = FALSE;
     } elseif (isset($_GET['u'])) { // display detailed user progress
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;$param_name=$element_id", "name" => $element_title);
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;$param_name=$element_id&amp;progressall=true", "name" => $langUsers);
+        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&$param_name=$element_id", "name" => $element_title);
+        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&$param_name=$element_id&progressall=true", "name" => $langUsers);
         $pageName = uid_to_name($_GET['u']);
         $action_bar = action_bar(array(
             array('title' => $langBack,
