@@ -351,7 +351,7 @@ function display_activities($element, $id, $unit_id = 0) {
            $langValue, $langNumInForumTopic, $langOfCourseCompletion, $langOfUnitCompletion,
            $course_id, $langUnitCompletion, $langUnitPrerequisites, $langNewUnitPrerequisite,
            $langNoUnitPrerequisite, $langAssignmentParticipation, $langAttendance,
-           $langPointsGameRecActivities, $langPointsGameOneTimeActivities, $langPointsGameNoRecActivities,
+           $langPointsGameRecActivities, $langPointsGameOneTimeActivities, $langPointsGameNoRecActivities, $langForumParticipation,
            $langPointsGameNoOneTimeActivities, $langPoints, $langActivityMaxPoints, $langActivityMaxPointsInPeriod, $langActivityMaxPointsTimePeriod;
 
     if ($unit_id) {
@@ -535,7 +535,7 @@ function display_activities($element, $id, $unit_id = 0) {
                 'icon' => 'fa fa-comment fa-fw',
                 'show' => ($unit_id == 0),
                 'class' => ''),
-            array('title' => $langNumInForum,
+            array('title' => $langForumParticipation,
                 'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act_rec=" . ForumEvent::ACTIVITY,
                 'icon' => 'fa fa-comments fa-fw',
                 'show' => ($unit_id == 0),
@@ -1076,6 +1076,64 @@ function insert_activity($element, $element_id, $activity, $unit_id = 0, $unit_r
         }
 }
 
+/**
+ * @brief choose activity for inserting in certificate / badge
+ * @param type $points_game_id
+ * @param type $activity
+ */
+function insert_rec_activity($points_game_id, $activity) {
+    switch ($activity) {
+        case BlogEvent::ACTIVITY;
+            //display_blog_rec_act_form($points_game_id);
+            break;
+        case 'blogcomments':
+            //display_blogcomments_rec_act_form($points_game_id);
+            break;
+        case ForumEvent::ACTIVITY:
+            //display_forums_rec_act_form($points_game_id);
+            break;
+        case 'wiki':
+            //display_wiki_rec_act_form($points_game_id);
+            break;
+        default: break;    
+    }
+}
+
+function display_modification_rec_activity($points_game_id, $activity_id) {
+    global $tool_content, $course_code, $langModify, $langPoints, $langActivityMaxPoints, $langActivityMaxPointsInPeriod,
+        $langActivityMaxPointsTimePeriod, $langUsedCertRes;
+
+    if (resource_usage('points_game', $activity_id)) { // check if a resource has been used by user
+        Session::flash('message',$langUsedCertRes);
+        Session::flash('alert-class', 'alert-warning');
+        redirect_to_home_page("modules/progress/index.php?course=$course_code&points_game_id=$points_game_id");
+    } else {
+        $data = Database::get()->querySingle("SELECT * FROM points_game_criterion
+            WHERE id = ?d AND points_game = ?d", $activity_id, $points_game_id);
+
+        if($data) {
+            $tool_content .= "<div class='d-lg-flex gap-4 mt-4'>
+                        <div class='flex-grow-1'><form action=index.php?course=$course_code method='post'><div class='form-wrapper form-edit rounded'>";
+            $tool_content .= "<input type='hidden' name='points_game_id' value='$points_game_id'>";
+            $tool_content .= "<input type='hidden' name='activity_id' value='$activity_id'>";
+            $tool_content .= "<div class='form-group mt-3'>";
+            $tool_content .= "<label for='name' class='col-sm-5 control-label-notes'>$langPoints:</label>";
+            $tool_content .= "<span class='col-sm-2'><input class='form-control mt-3' type='text' name='points' value='$data->points'></span>";
+            $tool_content .= "<label for='name' class='col-sm-5 control-label-notes'>$langActivityMaxPoints:</label>";
+            $tool_content .= "<span class='col-sm-2'><input class='form-control mt-3' type='text' name='maxpoints' value='$data->max_points_from_criterion'></span>";
+            $tool_content .= "<label for='name' class='col-sm-5 control-label-notes'>$langActivityMaxPointsInPeriod:</label>";
+            $tool_content .= "<span class='col-sm-2'><input class='form-control mt-3' type='text' name='maxpointsinperiod' value='$data->max_points_from_criterion_time_period'></span>";
+            $tool_content .= "<label for='name' class='col-sm-5 control-label-notes'>$langActivityMaxPointsTimePeriod:</label>";
+            $tool_content .= "<span class='col-sm-2'><input class='form-control mt-3' type='text' name='timeperiod' value='$data->time_period_in_days'></span>";
+            $tool_content .= "</div>";
+            $tool_content .= "<div class='col-sm-5 col-sm-offset-5 mt-3'>";
+            $tool_content .= "<input class='btn submitAdminBtn' type='submit' name='mod_points_game_rec_activity' value='$langModify'>";
+            $tool_content .= "</div>";
+            $tool_content .= "</div></form>
+                        </div>";
+        }
+    }
+}
 
 /**
  * @brief display editing form about resource

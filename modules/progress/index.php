@@ -80,7 +80,7 @@ if ($is_editor) {
     if(isset($_GET['edit'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&$param_name=$element_id", "name" => $element_title);
         $pageName = $langConfig;
-    } elseif (isset($_GET['act_mod'])) { // modify certificate activity
+    } elseif (isset($_GET['act_mod']) || isset($_GET['act_rec_mod'])) { // modify certificate activity
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&$param_name=$element_id", "name" => $element_title);
         $pageName = $langEditChange;
     } elseif(isset($_GET['add'])) { // add certificate activity
@@ -267,6 +267,11 @@ if ($is_editor) {
         }
     } elseif (isset($_POST['mod_cert_activity'])) { // modify certificate activity
         modify_certificate_activity($element, $element_id, $_POST['activity_id']);
+        Session::flash('message',$langQuotaSuccess);
+        Session::flash('alert-class', 'alert-success');
+        redirect_to_home_page("modules/progress/index.php?course=$course_code&$param_name=$element_id");
+    } elseif (isset($_POST['mod_points_game_rec_activity'])) { // modify certificate activity
+        modify_points_game_rec_activity($element_id, $_POST['activity_id']);
         Session::flash('message',$langQuotaSuccess);
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/progress/index.php?course=$course_code&$param_name=$element_id");
@@ -457,6 +462,9 @@ if ($is_editor) {
         $display = FALSE;
     } elseif (isset($_GET['act_mod'])) { // modify certificate / badge activity
         display_modification_activity($element, $element_id, $_GET['act_mod']);
+        $display = FALSE;
+    } elseif (isset($_GET['act_rec_mod'])) {
+        display_modification_rec_activity($element_id, $_GET['act_rec_mod']);
         $display = FALSE;
     } elseif (isset($_GET['progressall'])) { // display users progress (teacher view)
         display_users_progress($element, $element_id);

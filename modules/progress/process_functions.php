@@ -1081,6 +1081,16 @@ function modify_certificate_activity($element, $element_id, $activity_id) {
     }
 }
 
+function modify_points_game_rec_activity($points_game_id, $activity_id) {
+    Database::get()->query("UPDATE points_game_criterion
+                                SET points = ?d,
+                                    max_points_from_criterion = ?d,
+                                    max_points_from_criterion_time_period = ?d,
+                                    time_period_in_days = ?d
+                                WHERE id = ?d
+                                AND points_game = ?d",
+                                $_POST['points'], $_POST['maxpoints'], $_POST['maxpointsinperiod'], $_POST['timeperiod'], $activity_id, $points_game_id);
+}
 
 /**
  * @brief check if certificate / badge has activities
