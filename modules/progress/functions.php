@@ -1498,9 +1498,15 @@ function display_available_documents($element, $element_id, $unit_id = 0, $unit_
         } else {
             $action = "index.php?course=$course_code";
         }
+
+        $title_width = 50;
+        if ($element != 'points_game') {
+            $title_width += 15;
+        }
+
         $tool_content .= "<form action=$action method='post'>" .
                 "<input type='hidden' name='$element_name' value='$element_id'>" .
-                "<div class='table-responsive'><table class='table-default'>";
+                "<div class='table-responsive'><table class='table-default' style='table-layout: fixed; width:100%'>";
         if( !empty($path)) {
         $tool_content .=
                 "<tr>" .
@@ -1509,13 +1515,13 @@ function display_available_documents($element, $element_id, $unit_id = 0, $unit_
         }
         $tool_content .=
                 "<thead><tr class='list-header'>" .
-                "<th>$langName</th>" .
-                "<th>$langSize</th>" .
-                "<th>$langDate</th>";
+                "<th style='width: ".$title_width."%;'>$langName</th>" .
+                "<th style='width: 10%;'>$langSize</th>" .
+                "<th style='width: 15%;'>$langDate</th>";
         if ($element == 'points_game') {
-            $tool_content .= "<th>$langPoints</th>";
+            $tool_content .= "<th style='width: 15%;'>$langPoints</th>";
         }
-        $tool_content .="<th style='width:20px;'>$langChoice</th>" .
+        $tool_content .="<th style='width: 10%;'>$langChoice</th>" .
                 "</tr></thead>";
         $counter = 0;
         foreach (array(true, false) as $is_dir) {
@@ -1546,7 +1552,7 @@ function display_available_documents($element, $element_id, $unit_id = 0, $unit_
                     $vis = '';
                 }
                 $tool_content .= "<tr class='$vis'>";
-                $tool_content .= "<td>" . icon($image, '')."&nbsp;&nbsp;&nbsp;$link_href";
+                $tool_content .= "<td style='width: ".$title_width."%;'>" . icon($image, '')."&nbsp;&nbsp;&nbsp;$link_href";
 
                 /* * * comments ** */
                 if (!empty($entry['comment'])) {
@@ -1557,16 +1563,16 @@ function display_available_documents($element, $element_id, $unit_id = 0, $unit_
                 $tool_content .= "</td>";
                 if ($is_dir) {
                     // skip display of date and time for directories
-                    $tool_content .= "<td>&nbsp;</td><td>&nbsp;</td>";
+                    $tool_content .= "<td style='width: 10%;'>&nbsp;</td><td style='width: 15%;'>&nbsp;</td>";
                 } else {
                     $size = format_file_size($entry['size']);
                     $date = format_locale_date(strtotime($entry['date']), 'short', false);
-                    $tool_content .= "<td>$size</td><td>$date</td>";
+                    $tool_content .= "<td style='width: 10%;'>$size</td><td style='width: 15%;'>$date</td>";
                 }
                 if ($element == 'points_game') {
-                    $tool_content .= "<td><input aria-label='$langPollFillText' class='form-control' type='text' name='points[$entry[id]]' value=''></td>";
+                    $tool_content .= "<td style='width: 15%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='text' name='points[$entry[id]]' value=''></td>";
                 }
-                $tool_content .= "<td><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='document[]' value='$entry[id]' /><span class='checkmark'></span></label></td>";
+                $tool_content .= "<td style='width: 10%;'><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='document[]' value='$entry[id]' /><span class='checkmark'></span></label></td>";
                 $tool_content .= "</tr>";
                 $counter++;
             }
@@ -2040,16 +2046,21 @@ function display_available_multimedia($element, $element_id, $unit_id = 0, $unit
             $action = "index.php?course=$course_code";
         }
 
+        $title_width = 60;
+        if ($element != 'points_game') {
+            $title_width += 15;
+        }
+
         $tool_content .= "<form action=$action method='post'>" .
                          "<input type='hidden' name='$element_name' value='$element_id'>";
-        $tool_content .= "<div class='table-responsive'><table class='table-default'>";
+        $tool_content .= "<div class='table-responsive'><table class='table-default' style='table-layout: fixed; width:100%'>";
         $tool_content .= "<thead><tr class='list-header'>" .
-                         "<th class='text-start ps-2'>&nbsp;$langTitle</th>" .
-                         "<th width='100'>$langDate</th>";
+                         "<th style='width: ".$title_width."%;' class='text-start ps-2'>&nbsp;$langTitle</th>" .
+                         "<th style='width: 15%;'>$langDate</th>";
         if ($element == 'points_game') {
-            $tool_content .= "<th width='40px' class='text-start ps-2'>&nbsp;$langPoints</th>";
+            $tool_content .= "<th style='width: 15%;' class='text-start ps-2'>&nbsp;$langPoints</th>";
         }
-        $tool_content .= "<th width='80'>$langChoice</th>" .
+        $tool_content .= "<th style='width: 10%;'>$langChoice</th>" .
                          "</tr></thead>";
 
         foreach (array('video', 'videolink') as $table) {
@@ -2097,12 +2108,12 @@ function display_available_multimedia($element, $element_id, $unit_id = 0, $unit
                     $videolink = MultimediaHelper::chooseMedialinkAhref($vObj);
                 }
                 $tool_content .= "<tr>".
-                    "<td>&nbsp;".icon('fa-film')."&nbsp;&nbsp;" . $videolink . $description . "</td>".
-                    "<td>" . format_locale_date(strtotime($row->date), 'short', false) . "</td>";
+                    "<td style='width: ".$title_width."%;'>&nbsp;".icon('fa-film')."&nbsp;&nbsp;" . $videolink . $description . "</td>".
+                    "<td style='width: 15%;'>" . format_locale_date(strtotime($row->date), 'short', false) . "</td>";
                 if ($element == 'points_game') {
-                    $tool_content .= "<td><input aria-label='$langPollFillText' class='form-control' type='text' name='points_video[$table:$row->id]' value=''></td>";
+                    $tool_content .= "<td style='width: 15%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='text' name='points_video[$table:$row->id]' value=''></td>";
                 }
-                $tool_content .= "<td><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='video[]' value='$table:$row->id'><span class='checkmark'></span></label></td>" .
+                $tool_content .= "<td style='width: 15%;'><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='video[]' value='$table:$row->id'><span class='checkmark'></span></label></td>" .
                     "</tr>";
             }
         }
@@ -2112,11 +2123,12 @@ function display_available_multimedia($element, $element_id, $unit_id = 0, $unit
             foreach ($sql as $videocat) {
                 $description = empty($videocat->description) ? '' : "<div style='margin-top: 10px;' class='text-muted'>". standard_text_escape($videocat->description). "</div>";
                 $tool_content .= "<tr>";
-                $tool_content .= "<td>".icon('fa-folder-o')."&nbsp;&nbsp;" . q($videocat->name) . $description . "</td>";
+                $tool_content .= "<td style='width: ".$title_width."%;'>".icon('fa-folder-o')."&nbsp;&nbsp;" . q($videocat->name) . $description . "</td>";
+                $tool_content .= "<td style='width: 15%;'>&nbsp;</td>";
                 if ($element == 'points_game') {
-                    $tool_content .= "<td><input aria-label='$langPollFillText' class='form-control' type='text' name='points_videocatlink[$videocat->id]' value=''></td>";
+                    $tool_content .= "<td style='width: 15%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='text' name='points_videocatlink[$videocat->id]' value=''></td>";
                 }
-                $tool_content .= "<td align='center'><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='videocatlink[]' value='$videocat->id'><span class='checkmark'></span></label></td>";
+                $tool_content .= "<td style='width: 10%;' align='center'><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='videocatlink[]' value='$videocat->id'><span class='checkmark'></span></label></td>";
                 $tool_content .= "</tr>";
                 foreach (array('video', 'videolink') as $table) {
                     $sql2 = Database::get()->queryArray("SELECT * FROM $table WHERE category = ?d
@@ -2128,13 +2140,13 @@ function display_available_multimedia($element, $element_id, $unit_id = 0, $unit
                     foreach ($sql2 as $linkvideocat) {
                         $linkvideocat_description = empty($linkvideocat->description) ? '' : "<div style='margin-top: 10px;' class='text-muted'>". standard_text_escape($linkvideocat->description). "</div>";
                         $tool_content .= "<tr>";
-                        $tool_content .= "<td>&nbsp;&nbsp;&nbsp;&nbsp;" . icon('fa-film') . "&nbsp;&nbsp;<a href='" . q($linkvideocat->url) . "' target='_blank' aria-label='$langOpenNewTab'>" .
+                        $tool_content .= "<td style='width: ".$title_width."%;'>&nbsp;&nbsp;&nbsp;&nbsp;" . icon('fa-film') . "&nbsp;&nbsp;<a href='" . q($linkvideocat->url) . "' target='_blank' aria-label='$langOpenNewTab'>" .
                                 q(($linkvideocat->title == '')? $linkvideocat->url: $linkvideocat->title) . "</a>" . $linkvideocat_description . "</td>";
-                        $tool_content .= "<td>" . format_locale_date(strtotime($linkvideocat->date), 'short', false) . "</td>";
+                        $tool_content .= "<td style='width: 15%;'>" . format_locale_date(strtotime($linkvideocat->date), 'short', false) . "</td>";
                         if ($element == 'points_game') {
-                            $tool_content .= "<td><input aria-label='$langPollFillText' class='form-control' type='text' name='points_video[$table:$linkvideocat->id]' value=''></td>";
+                            $tool_content .= "<td style='width: 15%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='text' name='points_video[$table:$linkvideocat->id]' value=''></td>";
                         }
-                        $tool_content .= "<td><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='video[]' value='$table:$linkvideocat->id'><span class='checkmark'></span></label></td>";
+                        $tool_content .= "<td style='width: 10%;'><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='video[]' value='$table:$linkvideocat->id'><span class='checkmark'></span></label></td>";
                         $tool_content .= "</tr>";
                     }
                 }
