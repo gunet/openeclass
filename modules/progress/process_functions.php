@@ -1379,12 +1379,18 @@ function get_resource_details($element, $resource_id) {
             $langPersoValue, $langCourseSocialBookmarks, $langForumRating, $langCourseHoursParticipation, $langGradebook,
             $langGradeCourseCompletion, $langCourseCompletion, $langOfLearningPathDuration, $langAssignmentParticipation,
             $langAttendance, $langCompletedSessionWithoutActivity, $langSubmittedUploadedFile, $langFileName, $langTCComplited,
-            $langCompletedSessionWithMeeting, $langWithAttendanceRegistrationByConsultant;
+            $langCompletedSessionWithMeeting, $langWithAttendanceRegistrationByConsultant, $langBlogPost, $langForumParticipation;
 
     $data = array('type' => '', 'title' => '');
     $type = $title = '';
 
-    $res_data = Database::get()->querySingle("SELECT activity_type, module, resource FROM {$element}_criterion WHERE id = ?d", $resource_id);
+    $criterion_type = '';
+    if($element == 'points_game') {
+        $res_data = Database::get()->querySingle("SELECT activity_type, module, resource, criterion_type FROM {$element}_criterion WHERE id = ?d", $resource_id);
+        $criterion_type = $res_data->criterion_type;
+    } else {
+        $res_data = Database::get()->querySingle("SELECT activity_type, module, resource FROM {$element}_criterion WHERE id = ?d", $resource_id);
+    }
 
     $resource = $res_data->resource;
     $resource_type = $res_data->activity_type;
@@ -1475,15 +1481,24 @@ function get_resource_details($element, $resource_id) {
                 $type = $langMetaQuestionnaire;
             break;
         case BlogEvent::ACTIVITY:
-                $title = $langNumOfBlogs;
+                if ($criterion_type == 'recurring') {
+                    $title = $langBlogPost;
+                } else {
+                    $title = $langNumOfBlogs;
+                }
                 $type = $langBlog;
             break;
         case CommentEvent::BLOG_ACTIVITY:
-                $q = Database::get()->querySingle("SELECT title FROM blog_post WHERE blog_post.course_id = ?d AND blog_post.id = ?d", $course_id, $resource);
-                if ($q) {
-                    $title = $q->title;
+                if ($criterion_type == 'recurring') {
+                    $title = $langCommentsBlog;
+                    $type = $langBlog;
+                } else {
+                    $q = Database::get()->querySingle("SELECT title FROM blog_post WHERE blog_post.course_id = ?d AND blog_post.id = ?d", $course_id, $resource);
+                    if ($q) {
+                        $title = $q->title;
+                    }
+                    $type = $langCommentsBlog;
                 }
-                $type = $langCommentsBlog;
             break;
         case CommentEvent::COURSE_ACTIVITY:
                 $type = $langComments;
@@ -1494,7 +1509,11 @@ function get_resource_details($element, $resource_id) {
                 $title = $langPersoValu;
             break;
         case ForumEvent::ACTIVITY:
-                $title = $langNumOfForums;
+                if ($criterion_type == 'recurring') {
+                    $title = $langForumParticipation;
+                } else {
+                    $title = $langNumOfForums;
+                }
                 $type = $langForums;
             break;
         case ForumTopicEvent::ACTIVITY:

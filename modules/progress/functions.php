@@ -352,7 +352,7 @@ function display_activities($element, $id, $unit_id = 0) {
            $course_id, $langUnitCompletion, $langUnitPrerequisites, $langNewUnitPrerequisite,
            $langNoUnitPrerequisite, $langAssignmentParticipation, $langAttendance,
            $langPointsGameRecActivities, $langPointsGameOneTimeActivities, $langPointsGameNoRecActivities,
-           $langPointsGameNoOneTimeActivities, $langPoints;
+           $langPointsGameNoOneTimeActivities, $langPoints, $langActivityMaxPoints, $langActivityMaxPointsInPeriod, $langActivityMaxPointsTimePeriod;
 
     if ($unit_id) {
         $link_id = "course=$course_code&amp;manage=1&amp;unit_id=$unit_id&amp;badge_id=$id";
@@ -525,59 +525,23 @@ function display_activities($element, $id, $unit_id = 0) {
     if ($element == 'points_game') {
 
         $addRecActivityBtn = action_button(array(
-            array('title' => $langOfAssignment,
-                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . AssignmentEvent::ACTIVITY,
-                'icon' => 'fa fa-flask space-after-icon',
-                'class' => ''),
-            array('title' => $langAssignmentParticipation,
-                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . AssignmentSubmitEvent::ACTIVITY,
-                'icon' => 'fa fa-flask space-after-icon',
-                'class' => ''),
-            array('title' => $langExerciseAsModuleLabel,
-                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . ExerciseEvent::ACTIVITY,
-                'icon' => 'fa fa-square-pen',
-                'class' => ''),
             array('title' => $langOfBlog,
-                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . BlogEvent::ACTIVITY,
+                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act_rec=" . BlogEvent::ACTIVITY,
                 'icon' => 'fa fa-columns fa-fw',
                 'show' => ($unit_id == 0),
                 'class' => ''),
             array('title' => $langOfBlogComments,
-                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=blogcomments",
+                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act_rec=blogcomments",
                 'icon' => 'fa fa-comment fa-fw',
                 'show' => ($unit_id == 0),
                 'class' => ''),
-            /*array('title' => $langOfCourseComments,
-                  'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=coursecomments",
-                  'icon' => 'fa fa-edit space-after-icon',
-                  'class' => ''),*/
             array('title' => $langNumInForum,
-                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . ForumEvent::ACTIVITY,
+                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act_rec=" . ForumEvent::ACTIVITY,
                 'icon' => 'fa fa-comments fa-fw',
                 'show' => ($unit_id == 0),
                 'class' => ''),
-            array('title' => $langNumInForumTopic,
-                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . ForumTopicEvent::ACTIVITY,
-                'icon' => 'fa fa-comments fa-fw',
-                'class' => ''),
-            array('title' => $langDocumentAsModuleLabel,
-                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=document",
-                'icon' => 'fa fa-folder-open fa-fw',
-                'class' => ''),
-            array('title' => $langMediaAsModuleLabel,
-                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=multimedia",
-                'icon' => 'fa fa-edit space-after-icon',
-                'class' => ''),
-            array('title' => $langOfEBook,
-                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=ebook",
-                'icon' => 'fa fa-book fa-fw',
-                'class' => ''),
-            array('title' => $langOfPoll,
-                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=poll",
-                'icon' => 'fa fa-question-circle fa-fw',
-                'class' => ''),
             array('title' => $langWiki,
-                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . WikiEvent::ACTIVITY,
+                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act_rec=" . WikiEvent::ACTIVITY,
                 'icon' => 'fa fa-won-sign fa-fw',
                 'class' => '')),
             array(
@@ -622,18 +586,27 @@ function display_activities($element, $id, $unit_id = 0) {
                                 $tool_content .= "<p class='margin-top-fat text-center text-muted'>$langPointsGameNoRecActivities</p>";
                             } else {
                             $tool_content .= "<div class='table-responsive mt-0'>
-                                                    <table class='table-default'><thead>
+                                                    <table class='table-default' style='table-layout: fixed; width:100%'><thead>
                                                         <tr class='list-header'>
-                                                            <th>
+                                                            <th style='width: 35%;'>
                                                                 $langTitle
                                                             </th>
-                                                            <th>
+                                                            <th style='width: 10%;'>
                                                                 $langType
                                                             </th>
-                                                            <th>
-                                                                $langValue
-                                                            </div>
-                                                            <th>
+                                                            <th style='width: 10%;'>
+                                                                $langPoints
+                                                            </th>
+                                                            <th style='width: 10%;'>
+                                                                $langActivityMaxPoints
+                                                            </th>
+                                                            <th style='width: 15%;'>
+                                                                $langActivityMaxPointsInPeriod
+                                                            </th>
+                                                            <th style='width: 15%;'>
+                                                                $langActivityMaxPointsTimePeriod
+                                                            </th>
+                                                            <th style='width: 5%;'>
                                                                 <i class='fa fa-cogs'></i>
                                                             </th>
                                                         </tr></thead>";
@@ -643,24 +616,16 @@ function display_activities($element, $id, $unit_id = 0) {
                                                             <tr>
                                                                 <td>" . q($resource_data['title']) . "</td>
                                                                 <td>" . $resource_data['type'] . "</td>
-                                                                <td>";
-                                                                    if (!empty($details->operator) && $details->activity_type != AssignmentSubmitEvent::ACTIVITY) {
-                                                                        $op = get_operators();
-                                                                        $tool_content .= $op[$details->operator];
-                                                                    } else {
-                                                                        $tool_content .= "&mdash;";
-                                                                    }
-                                                                    if ($details->activity_type == AssignmentSubmitEvent::ACTIVITY) {
-                                                                        $tool_content .= "</td>";
-                                                                    } else {
-                                                                        $tool_content .= "$details->threshold</td>";
-                                                                    }
-                                                                    $tool_content .= "<td>";
-                                                                    $tool_content .= "<div class='text-end'>".
+                                                                <td>" . $details->points . "</td>
+                                                                <td>" . $details->max_points_from_criterion . "</td>
+                                                                <td>" . $details->max_points_from_criterion_time_period . "</td>
+                                                                <td>" . $details->time_period_in_days . "</td>
+                                                                <td>
+                                                                    <div class='text-end'>".
                                                                         action_button(array(
                                                                             array('title' => $langEditChange,
                                                                                 'icon' => 'fa-edit',
-                                                                                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;act_mod=$details->id",
+                                                                                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;act_rec_mod=$details->id",
                                                                                 'show' => in_array($details->activity_type, criteria_with_operators())
                                                                             ),
                                                                             array('title' => $langDelete,
@@ -712,10 +677,10 @@ function display_activities($element, $id, $unit_id = 0) {
                                                             </th>
                                                             <th>
                                                                 $langValue
-                                                            </div>
+                                                            </th>
                                                             <th>
                                                                 $langPoints
-                                                            </div>
+                                                            </th>
                                                             <th>
                                                                 <i class='fa fa-cogs'></i>
                                                             </th>

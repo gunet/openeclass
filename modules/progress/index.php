@@ -449,8 +449,11 @@ if ($is_editor) {
             certificate_settings($element, $element_id);
         }
         $display = FALSE;
-    } elseif (isset($_GET['add']) and isset($_GET['act'])) { // insert certificate / badge activity
+    } elseif (isset($_GET['add']) and isset($_GET['act'])) { // insert certificate / badge / points_game activity
         insert_activity($element, $element_id, $_GET['act']);
+        $display = FALSE;
+    } elseif(isset($_GET['add']) and isset($_GET['act_rec'])) { // insert points_game recurrent activity
+        insert_rec_activity($points_game_id, $_GET['act_rec']);
         $display = FALSE;
     } elseif (isset($_GET['act_mod'])) { // modify certificate / badge activity
         display_modification_activity($element, $element_id, $_GET['act_mod']);
