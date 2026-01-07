@@ -1084,18 +1084,188 @@ function insert_activity($element, $element_id, $activity, $unit_id = 0, $unit_r
 function insert_rec_activity($points_game_id, $activity) {
     switch ($activity) {
         case BlogEvent::ACTIVITY;
-            //display_blog_rec_act_form($points_game_id);
+            display_blog_rec_act_form($points_game_id);
             break;
         case 'blogcomments':
-            //display_blogcomments_rec_act_form($points_game_id);
+            display_blogcomments_rec_act_form($points_game_id);
             break;
         case ForumEvent::ACTIVITY:
-            //display_forums_rec_act_form($points_game_id);
+            display_forums_rec_act_form($points_game_id);
             break;
         case 'wiki':
-            //display_wiki_rec_act_form($points_game_id);
+            display_wiki_rec_act_form($points_game_id);
             break;
         default: break;    
+    }
+}
+
+function display_blog_rec_act_form($points_game_id) {
+    global $tool_content, $langResourceAlreadyAdded, $langPoints, $langAddModulesButton,  $course_code, $langPollFillText, $langTitle,
+        $langActivityMaxPoints, $langActivityMaxPointsInPeriod, $langActivityMaxPointsTimePeriod, $langBlogPost;
+
+    $result = Database::get()->queryArray("SELECT resource FROM points_game_criterion WHERE points_game = ?d
+                                            AND resource IS NULL
+                                            AND criterion_type = 'recurring'
+                                            AND activity_type = '" . BlogEvent::ACTIVITY . "'
+                                            AND module = " . MODULE_ID_BLOG . "", $points_game_id);
+
+    if (count($result) > 0) {
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langResourceAlreadyAdded</span></div></div>";
+    } else {
+
+        $tool_content .= "<form action=index.php?course=$course_code method='post'>" .
+                "<input type='hidden' name='points_game_id' value='$points_game_id'>" .
+                "<input type='hidden' name='blog' value='1'>" .
+                "<div class='table-responsive'><table class='table-default' style='table-layout: fixed; width:100%'>" .
+                "<thead><tr class='list-header'>" .
+                "<th style='width: 45%;'>&nbsp;$langTitle</th>" .
+                "<th style='width: 10%;'>$langPoints</th>" .
+                "<th style='width: 15%;'>$langActivityMaxPoints</th>" .
+                "<th style='width: 15%;'>$langActivityMaxPointsInPeriod</th>" .
+                "<th style='width: 15%;'>$langActivityMaxPointsTimePeriod</th>" .
+                "</tr></thead>";
+
+        $tool_content .= "<tr>
+                            <td style='width: 45%'>$langBlogPost</td>
+                            <td style='width: 10%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='text' name='points' value=''></td>
+                            <td style='width: 15%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='text' name='max_points_from_criterion' value=''></td>
+                            <td style='width: 15%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='text' name='max_points_from_criterion_time_period' value=''></td>
+                            <td style='width: 15%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='text' name='time_period_in_days' value=''></td>
+                        </tr>";
+
+        $tool_content .= "
+                    </table></div>
+                <div class='text-end mt-3'>
+                    <input class='btn submitAdminBtn' type='submit' name='add_rec_blog' value='$langAddModulesButton'>
+                </div></form>";
+
+    }
+        
+}
+
+function display_blogcomments_rec_act_form($points_game_id) {
+    global $tool_content, $langResourceAlreadyAdded, $langPoints, $langAddModulesButton,  $course_code, $langPollFillText, $langTitle, 
+        $langActivityMaxPoints, $langActivityMaxPointsInPeriod, $langActivityMaxPointsTimePeriod, $langCommentsBlog;;
+
+    $result = Database::get()->queryArray("SELECT resource FROM points_game_criterion WHERE points_game = ?d
+                                            AND resource IS NULL
+                                            AND criterion_type = 'recurring'
+                                            AND activity_type = '" . CommentEvent::BLOG_ACTIVITY . "'
+                                            AND module = " . MODULE_ID_COMMENTS . "", $points_game_id);
+
+    if (count($result) > 0) {
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langResourceAlreadyAdded</span></div></div>";
+    } else {
+        $tool_content .= "<form action=index.php?course=$course_code method='post'>" .
+                "<input type='hidden' name='points_game_id' value='$points_game_id'>" .
+                "<input type='hidden' name='blogcomment' value='1'>" .
+                "<div class='table-responsive'><table class='table-default' style='table-layout: fixed; width:100%'>" .
+                "<thead><tr class='list-header'>" .
+                "<th style='width: 45%;'>&nbsp;$langTitle</th>" .
+                "<th style='width: 10%;'>$langPoints</th>" .
+                "<th style='width: 15%;'>$langActivityMaxPoints</th>" .
+                "<th style='width: 15%;'>$langActivityMaxPointsInPeriod</th>" .
+                "<th style='width: 15%;'>$langActivityMaxPointsTimePeriod</th>" .
+                "</tr></thead>";
+
+        $tool_content .= "<tr>
+                            <td style='width: 45%'>$langCommentsBlog</td>
+                            <td style='width: 10%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='text' name='points' value=''></td>
+                            <td style='width: 15%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='text' name='max_points_from_criterion' value=''></td>
+                            <td style='width: 15%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='text' name='max_points_from_criterion_time_period' value=''></td>
+                            <td style='width: 15%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='text' name='time_period_in_days' value=''></td>
+                        </tr>";
+
+        $tool_content .= "
+                    </table></div>
+                <div class='text-end mt-3'>
+                    <input class='btn submitAdminBtn' type='submit' name='add_rec_blogcomment' value='$langAddModulesButton'>
+                </div></form>";
+    }  
+}
+
+function display_forums_rec_act_form($points_game_id) {
+    global $tool_content, $langResourceAlreadyAdded, $langPoints, $langAddModulesButton,  $course_code, $langForumParticipation, $langTitle,
+        $langActivityMaxPoints, $langActivityMaxPointsInPeriod, $langActivityMaxPointsTimePeriod, $langPollFillText;
+
+    $result = Database::get()->queryArray("SELECT resource FROM points_game_criterion WHERE points_game = ?d
+                                            AND resource IS NULL
+                                            AND criterion_type = 'recurring'
+                                            AND activity_type = '" . ForumEvent::ACTIVITY . "'
+                                            AND module = " . MODULE_ID_FORUM . "", $points_game_id);
+
+    if (count($result) > 0) {
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langResourceAlreadyAdded</span></div></div>";
+    } else {
+        $tool_content .= "<form action=index.php?course=$course_code method='post'>" .
+                "<input type='hidden' name='points_game_id' value='$points_game_id'>" .
+                "<input type='hidden' name='forum' value='1'>" .
+                "<div class='table-responsive'><table class='table-default' style='table-layout: fixed; width:100%'>" .
+                "<thead><tr class='list-header'>" .
+                "<th style='width: 45%;'>&nbsp;$langTitle</th>" .
+                "<th style='width: 10%;'>$langPoints</th>" .
+                "<th style='width: 15%;'>$langActivityMaxPoints</th>" .
+                "<th style='width: 15%;'>$langActivityMaxPointsInPeriod</th>" .
+                "<th style='width: 15%;'>$langActivityMaxPointsTimePeriod</th>" .
+                "</tr></thead>";
+
+        $tool_content .= "<tr>
+                            <td style='width: 45%'>$langForumParticipation</td>
+                            <td style='width: 10%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='text' name='points' value=''></td>
+                            <td style='width: 15%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='text' name='max_points_from_criterion' value=''></td>
+                            <td style='width: 15%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='text' name='max_points_from_criterion_time_period' value=''></td>
+                            <td style='width: 15%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='text' name='time_period_in_days' value=''></td>
+                        </tr>";
+
+        $tool_content .= "
+                    </table></div>
+                <div class='text-end mt-3'>
+                    <input class='btn submitAdminBtn' type='submit' name='add_rec_forum' value='$langAddModulesButton'>
+                </div></form>";
+    }
+    
+}
+
+function display_wiki_rec_act_form($points_game_id) {
+    global $tool_content, $langResourceAlreadyAdded, $langPoints, $langAddModulesButton,  $course_code, $langWikiCreateWiki, $langTitle,
+        $langActivityMaxPoints, $langActivityMaxPointsInPeriod, $langActivityMaxPointsTimePeriod, $langPollFillText;
+
+    $result = Database::get()->queryArray("SELECT resource FROM points_game_criterion WHERE points_game = ?d
+                                            AND resource IS NULL
+                                            AND criterion_type = 'recurring'
+                                            AND activity_type = '" . WikiEvent::ACTIVITY . "'
+                                            AND module = " . MODULE_ID_WIKI . "", $points_game_id);
+
+    if (count($result) > 0) {
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langResourceAlreadyAdded</span></div></div>";
+    } else {
+
+        $tool_content .= "<form action=index.php?course=$course_code method='post'>" .
+                "<input type='hidden' name='points_game_id' value='$points_game_id'>" .
+                "<input type='hidden' name='wiki' value='1'>" .
+                "<div class='table-responsive'><table class='table-default' style='table-layout: fixed; width:100%'>" .
+                "<thead><tr class='list-header'>" .
+                "<th style='width: 45%;'>&nbsp;$langTitle</th>" .
+                "<th style='width: 10%;'>$langPoints</th>" .
+                "<th style='width: 15%;'>$langActivityMaxPoints</th>" .
+                "<th style='width: 15%;'>$langActivityMaxPointsInPeriod</th>" .
+                "<th style='width: 15%;'>$langActivityMaxPointsTimePeriod</th>" .
+                "</tr></thead>";
+
+        $tool_content .= "<tr>
+                            <td style='width: 45%'>$langWikiCreateWiki</td>
+                            <td style='width: 10%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='text' name='points' value=''></td>
+                            <td style='width: 15%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='text' name='max_points_from_criterion' value=''></td>
+                            <td style='width: 15%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='text' name='max_points_from_criterion_time_period' value=''></td>
+                            <td style='width: 15%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='text' name='time_period_in_days' value=''></td>
+                        </tr>";
+
+        $tool_content .= "
+                    </table></div>
+                <div class='text-end mt-3'>
+                    <input class='btn submitAdminBtn' type='submit' name='add_rec_wiki' value='$langAddModulesButton'>
+                </div></form>";
+
     }
 }
 

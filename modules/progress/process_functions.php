@@ -283,6 +283,33 @@ function add_wiki_to_certificate($element, $element_id) {
 }
 
 /**
+ * @brief add wiki recurring activities in criterion
+ * @param type $points_game_id
+ */
+function add_rec_wiki_to_points_game($points_game_id) {
+    if (isset($_POST['wiki'])) {
+        Database::get()->query("INSERT INTO points_game_criterion
+                                SET points_game = ?d,
+                                module = " . MODULE_ID_WIKI . ",
+                                resource = null,
+                                activity_type = '" . WikiEvent::ACTIVITY . "',
+                                operator = null,
+                                threshold = null,
+                                points = ?d,
+                                criterion_type = ?s,
+                                max_points_from_criterion = ?d,
+                                max_points_from_criterion_time_period = ?d,
+                                time_period_in_days = ?d",
+                                $points_game_id,
+                                $_POST['points'],
+                                'recurring',
+                                $_POST['max_points_from_criterion'],
+                                $_POST['max_points_from_criterion_time_period'],
+                                $_POST['time_period_in_days']);
+    }
+}
+
+/**
  * @brief add poll db entries in criterion
  * @param type $element
  * @param type $element_id
@@ -447,6 +474,32 @@ function add_forum_to_certificate($element, $element_id) {
     return;
 }
 
+/**
+ * @brief add forum recurring activities in criterion
+ * @param type $points_game_id
+ */
+function add_rec_forum_to_points_game($points_game_id) {
+    if (isset($_POST[ForumEvent::ACTIVITY])) {
+        Database::get()->query("INSERT INTO points_game_criterion
+                                SET points_game = ?d,
+                                module = " . MODULE_ID_FORUM . ",
+                                resource = null,
+                                activity_type = '" . ForumEvent::ACTIVITY . "',
+                                operator = null,
+                                threshold = null,
+                                points = ?d,
+                                criterion_type = ?s,
+                                max_points_from_criterion = ?d,
+                                max_points_from_criterion_time_period = ?d,
+                                time_period_in_days = ?d",
+                                $points_game_id,
+                                $_POST['points'],
+                                'recurring',
+                                $_POST['max_points_from_criterion'],
+                                $_POST['max_points_from_criterion_time_period'],
+                                $_POST['time_period_in_days']);
+    }
+}
 
 /**
  * @brief add forum topic db entries in criterion
@@ -530,6 +583,33 @@ function add_blog_to_certificate($element, $element_id) {
 }
 
 /**
+ * @brief add blog post recurring activities in criterion
+ * @param type $points_game_id
+ */
+function add_rec_blog_to_points_game($points_game_id) {
+    if (isset($_POST[BlogEvent::ACTIVITY])) {
+        Database::get()->query("INSERT INTO points_game_criterion
+                                SET points_game = ?d,
+                                module = " . MODULE_ID_BLOG . ",
+                                resource = null,
+                                activity_type = '" . BlogEvent::ACTIVITY . "',
+                                operator = null,
+                                threshold = null,
+                                points = ?d,
+                                criterion_type = ?s,
+                                max_points_from_criterion = ?d,
+                                max_points_from_criterion_time_period = ?d,
+                                time_period_in_days = ?d",
+                                $points_game_id,
+                                $_POST['points'],
+                                'recurring',
+                                $_POST['max_points_from_criterion'],
+                                $_POST['max_points_from_criterion_time_period'],
+                                $_POST['time_period_in_days']);
+    }
+}
+
+/**
  * @brief add blog comment db entries in criterion
  * @param type $element
  * @param type $element_id
@@ -568,6 +648,33 @@ function add_blogcomment_to_certificate($element, $element_id) {
                 $_POST['threshold'][$data]);
             }
         }
+    }
+}
+
+/**
+ * @brief add blog comment recurring activities in criterion
+ * @param type $points_game_id
+ */
+function add_rec_blogcomment_to_points_game($points_game_id) {
+    if (isset($_POST['blogcomment'])) {
+        Database::get()->query("INSERT INTO points_game_criterion
+                                SET points_game = ?d,
+                                module = " . MODULE_ID_COMMENTS . ",
+                                resource = null,
+                                activity_type = '" . CommentEvent::BLOG_ACTIVITY . "',
+                                operator = null,
+                                threshold = null,
+                                points = ?d,
+                                criterion_type = ?s,
+                                max_points_from_criterion = ?d,
+                                max_points_from_criterion_time_period = ?d,
+                                time_period_in_days = ?d",
+                                $points_game_id,
+                                $_POST['points'],
+                                'recurring',
+                                $_POST['max_points_from_criterion'],
+                                $_POST['max_points_from_criterion_time_period'],
+                                $_POST['time_period_in_days']);
     }
 }
 
@@ -1384,7 +1491,7 @@ function get_resource_details($element, $resource_id) {
 
     global $course_id, $langExercise, $langAssignment, $langLearnPath, $langNumOfForums,
             $langDocument, $langVideo, $langsetvideo, $langEBook, $langMetaQuestionnaire,
-            $langBlog, $langForums, $langWikiPages, $langNumOfBlogs, $langCourseParticipation,
+            $langBlog, $langForums, $langWikiPages, $langWikiCreateWiki, $langNumOfBlogs, $langCourseParticipation,
             $langWiki, $langAllActivities, $langComments, $langCommentsBlog, $langCommentsCourse,
             $langPersoValue, $langCourseSocialBookmarks, $langForumRating, $langCourseHoursParticipation, $langGradebook,
             $langGradeCourseCompletion, $langCourseCompletion, $langOfLearningPathDuration, $langAssignmentParticipation,
@@ -1538,8 +1645,12 @@ function get_resource_details($element, $resource_id) {
                 $title = $langPersoValue;
             break;
         case WikiEvent::ACTIVITY:
+                if ($criterion_type == 'recurring') {
+                    $title = $langWikiCreateWiki;
+                } else {
+                    $title = $langWikiPages;
+                }
                 $type = $langWiki;
-                $title = $langWikiPages;
             break;
         case CourseParticipationEvent::ACTIVITY:
                 $type = $langCourseParticipation;

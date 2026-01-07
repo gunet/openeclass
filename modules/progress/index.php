@@ -322,6 +322,11 @@ if ($is_editor) {
         Session::flash('message',$langQuotaSuccess);
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/progress/index.php?course=$course_code&$param_name=$element_id");
+    } elseif (isset($_POST['add_rec_wiki'])) {
+        add_rec_wiki_to_points_game($element_id);
+        Session::flash('message',$langQuotaSuccess);
+        Session::flash('alert-class', 'alert-success');
+        redirect_to_home_page("modules/progress/index.php?course=$course_code&$param_name=$element_id");
     } elseif (isset($_POST['add_ebook'])) { // add ebook activity in certificate
         add_ebook_to_certificate($element, $element_id);
         Session::flash('message',$langQuotaSuccess);
@@ -329,6 +334,11 @@ if ($is_editor) {
         redirect_to_home_page("modules/progress/index.php?course=$course_code&$param_name=$element_id");
     } elseif (isset($_POST['add_forum'])) { // add forum activity in certificate
         add_forum_to_certificate($element, $element_id);
+        Session::flash('message',$langQuotaSuccess);
+        Session::flash('alert-class', 'alert-success');
+        redirect_to_home_page("modules/progress/index.php?course=$course_code&$param_name=$element_id");
+    } elseif (isset($_POST['add_rec_forum'])) {
+        add_rec_forum_to_points_game($element_id);
         Session::flash('message',$langQuotaSuccess);
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/progress/index.php?course=$course_code&$param_name=$element_id");
@@ -342,8 +352,18 @@ if ($is_editor) {
         Session::flash('message',$langQuotaSuccess);
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/progress/index.php?course=$course_code&$param_name=$element_id");
+    } elseif (isset($_POST['add_rec_blog'])) {
+        add_rec_blog_to_points_game($element_id);
+        Session::flash('message',$langQuotaSuccess);
+        Session::flash('alert-class', 'alert-success');
+        redirect_to_home_page("modules/progress/index.php?course=$course_code&$param_name=$element_id");
     } elseif (isset($_POST['add_blogcomment'])) {
         add_blogcomment_to_certificate($element, $element_id);
+        Session::flash('message',$langQuotaSuccess);
+        Session::flash('alert-class', 'alert-success');
+        redirect_to_home_page("modules/progress/index.php?course=$course_code&$param_name=$element_id");
+    } elseif (isset($_POST['add_rec_blogcomment'])) {
+        add_rec_blogcomment_to_points_game($element_id);
         Session::flash('message',$langQuotaSuccess);
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/progress/index.php?course=$course_code&$param_name=$element_id");
@@ -458,7 +478,7 @@ if ($is_editor) {
         insert_activity($element, $element_id, $_GET['act']);
         $display = FALSE;
     } elseif(isset($_GET['add']) and isset($_GET['act_rec'])) { // insert points_game recurrent activity
-        insert_rec_activity($points_game_id, $_GET['act_rec']);
+        insert_rec_activity($element_id, $_GET['act_rec']);
         $display = FALSE;
     } elseif (isset($_GET['act_mod'])) { // modify certificate / badge activity
         display_modification_activity($element, $element_id, $_GET['act_mod']);
