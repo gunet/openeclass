@@ -394,6 +394,106 @@ if ($exercisePreventCopy) {
 }
 
 $is_exam = $objExercise->isExam();
+$stricterExamMode = $objExercise->getOption('stricterExamRestriction')? 1: 0;
+// Fullscreen when showing exercise in single page in exam mode
+if ($is_exam && $stricterExamMode && $exerciseType == SINGLE_PAGE_TYPE) {
+    $head_content .= "
+        <script type='text/javascript'>
+
+            // Function to inform the user that the exercise will be cancelled.
+            function showCancelWarning() {
+                $('#cancelExModal').modal('show');
+            }
+
+            // Function for default settings in exam mode.
+            function default_settings() {
+                $('.blank').css('cursor', 'pointer');
+                $('.draggable').css('cursor', 'move');
+                $('#exercise_frame').on('contextmenu', function(e) {
+                    if ($(this).has('.draggable.ui-draggable').length) {
+                        e.preventDefault();
+                        return false;
+                    }
+                });
+                $('#background-cheat-leftnav').addClass('d-none');
+                $('.col_maincontent_active').css('border-left', 'none');
+            }
+
+            $(function() {
+
+                let openEx = localStorage.getItem('openEx');
+
+                if (!openEx) {
+                    $('#exercise_frame').removeClass('d-block').addClass('d-none');
+                    $('#btn-search').addClass('pe-none');
+                    $('.messages_2').removeClass('d-none').addClass('d-block');
+                } else {
+                    $('#fullscreenBtn').removeClass('d-block').addClass('d-none');
+                    $('#bgr-cheat-header').removeClass('d-block').addClass('d-none');
+                    $('#bgr-cheat-footer').removeClass('d-block').addClass('d-none');
+                    document.documentElement.requestFullscreen();
+                }
+
+                $('#fullscreenBtn').on('click', function (e) {
+                    e.preventDefault();
+                    $('#exercise_frame').removeClass('d-none').addClass('d-block');
+                    localStorage.setItem('openEx', true);
+                    $('#fullscreenBtn').removeClass('d-block').addClass('d-none');
+                    $('#bgr-cheat-header').removeClass('d-block').addClass('d-none');
+                    $('#bgr-cheat-footer').removeClass('d-block').addClass('d-none');
+                    $('.messages_1').removeClass('d-none').addClass('d-block');
+                    $('.messages_2').removeClass('d-block').addClass('d-none');
+                    document.documentElement.requestFullscreen();
+                });
+                
+                $('body').on('contextmenu', function(e) {
+                    if ($(this).has('.show.modalExCancelOpen').length) {
+                        e.preventDefault();
+                        return false;
+                    }
+                    if ($(this).has('.course-wrapper').length) {
+                        e.preventDefault();
+                        return false;
+                    }
+                });
+
+                default_settings();
+
+                // Detect when the tab becomes hidden
+                document.addEventListener('visibilitychange', function() {
+                    if (document.visibilityState === 'hidden') {
+                        showCancelWarning();
+                    }
+                });
+
+                // Detect when the window loses focus
+                window.addEventListener('blur', function() {
+                    setTimeout(function() {
+                        let TinyMCEFocused = localStorage.getItem('isTinyMCEFocused');
+                        if (TinyMCEFocused !== 'true') {
+                            showCancelWarning();
+                        }
+                    }, 500);
+                });
+
+                // Detect specific key presses (less reliable for system shortcuts)
+                document.addEventListener('keydown', function(e) {
+                    if ((e.ctrlKey && e.key === 'n') || (e.altKey && e.key === 'Tab')) {
+                        showCancelWarning(); 
+                    }
+                });
+
+                $('#cancelExercise').on('click', function (e) {
+                    e.preventDefault();
+                    localStorage.removeItem('openEx');
+                    localStorage.removeItem('isTinyMCEFocused');
+                    $('#cancelButton').trigger('click');
+                    $('.deleteAdminBtn.bootbox-accept').trigger('click');
+                });
+
+            });
+        </script>";
+}
 if ($is_exam) { // disallow links outside exercise frame. disallow button quick note
     $head_content .= "
         <script type='text/javascript'>
@@ -407,6 +507,47 @@ if ($is_exam) { // disallow links outside exercise frame. disallow button quick 
                 });
             });
     </script>";
+
+    if ($stricterExamMode && $exerciseType == SINGLE_PAGE_TYPE) {
+        $tool_content .= "
+            <div class='col-12 d-flex justify-content-center align-items-center my-4 px-0'>
+                <div class='card panelCard card-default px-lg-4 py-lg-3'>
+                    <div class='card-body'>
+                        <div class='text-center'>
+                            <div class='icon-modal-default border-default'>
+                                <i class='fa-solid fa-triangle-exclamation Warning-200-cl fs-2'></i>
+                            </div>
+                        </div>
+                        <p class='TextBold text-center messages_1 d-none'>$langWarningNewPageOpened</p>
+                        <p class='TextBold text-center messages_2 d-none'>$langWarningNewPageOpened2</p>
+                        <button id='fullscreenBtn' class='btn successAdminBtn mt-4 m-auto'>
+                            $langGoToExam&nbsp;&nbsp;<i class='fa-solid fa-right-to-bracket pt-0'></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class='modal fade modalExCancelOpen' id='cancelExModal' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' role='dialog' 
+                    aria-labelledby='cancelModalLabel' aria-hidden='true'>
+                <div class='modal-dialog' role='document'>
+                    <div class='modal-content'>
+                        <div class='modal-header'>
+                            <div class='modal-title' id='cancelModalLabel'>
+                                <div class='icon-modal-default'><i class='fa-solid fa-triangle-exclamation Warning-200-cl fa-xl'></i></div>
+                                <div class='modal-title-default text-center mb-0'>$langDelTitle</div>
+                            </div>
+                        </div>
+                        <div class='modal-body text-center py-0'>
+                            $langExWillBeCanceled
+                        </div>
+                        <div class='modal-footer d-flex justify-content-center'>
+                            <button type='button' id='cancelExercise' class='btn btn-primary' style='width: 60px;'>OK</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            ";
+    }
+
 }
 
 $temp_CurrentDate = $recordStartDate = time();
@@ -832,6 +973,15 @@ foreach ($questionList as $k => $q_id) {
 }
 
 if ($questionList) {
+    // Display a notification that informs the user that the exercise will be canceled.
+    // if ($is_exam && $stricterExamMode && $exerciseType == SINGLE_PAGE_TYPE) {
+    //     $tool_content .= "<div class='col-12'>
+    //                         <div class='alert alert-warning'>
+    //                             <i class='fa-solid fa-triangle-exclamation fa-lg'></i>
+    //                             <span>$langWarningNewPageOpened</span>
+    //                         </div>
+    //                       </div>";
+    // }
     if ($exerciseType == SINGLE_PAGE_TYPE) {
         foreach ($questionList as $questionNumber => $questionId) {
             // show the question and its answers

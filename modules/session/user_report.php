@@ -51,18 +51,11 @@ $navigation[] = array('url' => 'session_space.php?course=' . $course_code . "&se
 $pageName = $langUserReferences;
 
 if(isset($_POST['delete_material'])){
-    $session_ids = Database::get()->queryArray("SELECT id FROM mod_session 
-                                                WHERE course_id = ?d
-                                                AND creator = ?d
-                                                AND id IN (SELECT session_id FROM mod_session_users 
-                                                            WHERE participants = ?d 
-                                                            AND is_accepted = ?d)", $course_id, $_POST['aboutTutor'], $_POST['aboutU'], 1);
-    foreach($session_ids as $s){
-            Database::get()->query("DELETE FROM session_user_material 
-                                    WHERE course_id = ?d
-                                    AND session_id = ?d
-                                    AND user_id = ?d", $course_id, $s->id, $_POST['aboutU']);
-    }
+
+    Database::get()->query("DELETE FROM session_user_material 
+                            WHERE course_id = ?d
+                            AND session_id = ?d
+                            AND user_id = ?d", $course_id, $sessionID, $_POST['aboutU']);
 
     Session::flash('message',$langDelMaterialSuccess);
     Session::flash('alert-class', 'alert-success');
@@ -80,31 +73,23 @@ if(isset($_GET['material_pdf'])){
 }
 
 if(isset($_POST['add_material'])){
-    $session_ids = Database::get()->queryArray("SELECT id FROM mod_session 
-                                                WHERE course_id = ?d
-                                                AND creator = ?d
-                                                AND id IN (SELECT session_id FROM mod_session_users 
-                                                            WHERE participants = ?d 
-                                                            AND is_accepted = ?d)", $course_id, $_POST['aboutTutor'], $_POST['aboutU'], 1);
 
-    foreach($session_ids as $s){
-        $existsMaterial = Database::get()->querySingle("SELECT * FROM session_user_material
-                                                        WHERE course_id = ?d
-                                                        AND session_id = ?d
-                                                        AND user_id = ?d", $course_id, $s->id, $_POST['aboutU']);
+    $existsMaterial = Database::get()->querySingle("SELECT * FROM session_user_material
+                                                    WHERE course_id = ?d
+                                                    AND session_id = ?d
+                                                    AND user_id = ?d", $course_id, $_POST['aboutSession'], $_POST['aboutU']);
 
-        if(!$existsMaterial){
-            Database::get()->query("INSERT INTO session_user_material 
-                                    SET content = ?s,
-                                    course_id = ?d,
-                                    session_id = ?d,
-                                    user_id = ?d",$_POST['addContent'], $course_id, $s->id, $_POST['aboutU']);
-        }else{
-            Database::get()->query("UPDATE session_user_material SET content = ?s
-                                    WHERE course_id = ?d
-                                    AND session_id = ?d
-                                    AND user_id = ?d",$_POST['addContent'], $course_id, $s->id, $_POST['aboutU']);
-        }
+    if(!$existsMaterial){
+        Database::get()->query("INSERT INTO session_user_material 
+                                SET content = ?s,
+                                course_id = ?d,
+                                session_id = ?d,
+                                user_id = ?d",$_POST['addContent'], $course_id, $_POST['aboutSession'], $_POST['aboutU']);
+    }else{
+        Database::get()->query("UPDATE session_user_material SET content = ?s
+                                WHERE course_id = ?d
+                                AND session_id = ?d
+                                AND user_id = ?d",$_POST['addContent'], $course_id, $_POST['aboutSession'], $_POST['aboutU']);
     }
 
     Session::flash('message',$langRegDone);
@@ -128,7 +113,7 @@ if (isset($_GET['u'])) { //  stats per user
     <div class='col-12'>
         <div class='card panelCard border-card-left-default px-lg-4 py-lg-3'>
             <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>                            
-                    <h3>$langRefernce</h3>";
+                    <h3>$langAttendance</h3>";
                     if(($is_consultant or $is_course_reviewer) && !isset($_GET['format'])){
                         $tool_content .= "<a class='btn submitAdminBtn' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;session=$sessionID&amp;u=$_GET[u]&amp;format=pdf' target='_blank' aria-label='$langOpenNewTab'>$langDumpPDF</a>";
                     }
@@ -162,6 +147,17 @@ if (isset($_GET['u'])) { //  stats per user
                                         <li class='list-group-item element'>
                                             <div class='row row-cols-1 row-cols-md-2 g-1'>
                                                 <div class='col-md-3 col-12'>
+                                                    <strong class='title-default'>$langConsultant</strong>
+                                                </div>
+                                                <div class='col-md-9 col-12 title-default-line-height'>
+                                                    " . $user_information['tutor'] . "
+                                                </div>
+                                            </div>
+                                        </li>
+
+                                        <li class='list-group-item element'>
+                                            <div class='row row-cols-1 row-cols-md-2 g-1'>
+                                                <div class='col-md-3 col-12'>
                                                     <strong class='title-default'>$langType</strong>
                                                 </div>
                                                 <div class='col-md-9 col-12 title-default-line-height'>
@@ -184,7 +180,7 @@ if (isset($_GET['u'])) { //  stats per user
                                         <li class='list-group-item element'>
                                             <div class='row row-cols-1 row-cols-md-2 g-1'>
                                                 <div class='col-md-3 col-12'>
-                                                    <strong class='title-default'>$langStart</strong>
+                                                    <strong class='title-default'>$langStartSession</strong>
                                                 </div>
                                                 <div class='col-md-9 col-12 title-default-line-height'>
                                                     " . $user_information['start_date'] . "
@@ -195,7 +191,7 @@ if (isset($_GET['u'])) { //  stats per user
                                         <li class='list-group-item element'>
                                             <div class='row row-cols-1 row-cols-md-2 g-1'>
                                                 <div class='col-md-3 col-12'>
-                                                    <strong class='title-default'>$langFinish</strong>
+                                                    <strong class='title-default'>$langFinishSession</strong>
                                                 </div>
                                                 <div class='col-md-9 col-12 title-default-line-height'>
                                                     " . $user_information['end_date'] . "
@@ -287,10 +283,15 @@ if (isset($_GET['u'])) { //  stats per user
                 $tutorSession = Database::get()->querySingle("SELECT creator FROM mod_session WHERE id = ?d", $sessionID)->creator;
             }
 
+            // $contentInfo = Database::get()->queryArray("SELECT content FROM session_user_material 
+            //                                             WHERE course_id = ?d
+            //                                             AND session_id IN (SELECT id FROM mod_session WHERE creator = ?d)
+            //                                             AND user_id = ?d", $course_id, $tutorSession, $row->id);
+
             $contentInfo = Database::get()->queryArray("SELECT content FROM session_user_material 
                                                         WHERE course_id = ?d
-                                                        AND session_id IN (SELECT id FROM mod_session WHERE creator = ?d)
-                                                        AND user_id = ?d", $course_id, $tutorSession, $row->id);
+                                                        AND session_id = ?d
+                                                        AND user_id = ?d", $course_id, $sessionID, $row->id);
 
             if(count($contentInfo) > 0){
                 foreach($contentInfo as $c){
@@ -420,6 +421,7 @@ if (isset($_GET['u'])) { //  stats per user
 
             check_session_progress($sid,$r->id);
             check_session_completion_without_activities($sid);
+            check_session_completion_with_expired_time($sid);
             if(isset($badge_id)){
                 $per = get_cert_percentage_completion_by_user('badge',$badge_id,$r->id);
             }else{
@@ -448,7 +450,8 @@ if (isset($_GET['u'])) { //  stats per user
     global $langIndividualSession, $langGroupSession, $langNotRemote, $langRemote,
            $langDate, $langPercentageSessionCompletion, $langTools, $langRefernce,
            $langUserHasCompleted, $langNotUploadedDeliverable, $langCommentsByConsultant,
-           $langNoCommentsAvailable, $langCompletedSessionWithoutActivity, $langCompletedSessionMeeting;
+           $langNoCommentsAvailable, $langCompletedSessionWithoutActivity, 
+           $langCompletedSessionMeeting, $langAutomaticCompletion;
 
     $session_info = Database::get()->querySingle("SELECT * FROM mod_session WHERE course_id = ?d AND id = ?d",$cid, $sid);
     $user_name = participant_name($u);
@@ -495,6 +498,9 @@ if (isset($_GET['u'])) { //  stats per user
                 }elseif($c->activity_type == 'meeting-completed'){
                     $titleCr = $langCompletedSessionMeeting;
                     $tools_completed[] = $titleCr;
+                }elseif($c->activity_type == 'autocomplete'){
+                    $titleCr = $langAutomaticCompletion;
+                    $tools_completed[] = $titleCr;
                 }
                 $criteria .= "<li>$titleCr</li>";
             }
@@ -519,16 +525,22 @@ if (isset($_GET['u'])) { //  stats per user
 
     check_session_progress($sid,$u);
     check_session_completion_without_activities($sid);
+    check_session_completion_with_expired_time($sid);
     if(isset($badge_id)){
         $per = get_cert_percentage_completion_by_user('badge',$badge_id,$u);
     }else{
         $per = 0;
     }
 
+    $infoTutor = Database::get()->querySingle("SELECT user.id,user.givenname,user.surname,mod_session.creator FROM mod_session
+                                                    LEFT JOIN user ON user.id=mod_session.creator
+                                                    WHERE mod_session.course_id = ?d
+                                                    AND mod_session.id = ?d", $cid, $sid);
 
     $userInfo = [
         'username' => $user_name,
         'title' => $titleSession,
+        'tutor' => $infoTutor->givenname . '&nbsp;' . $infoTutor->surname,
         'type' => $typeSession,
         'date' => format_locale_date(strtotime($session_info->start), 'short', false),
         'start_date' => date("H:i", strtotime($session_info->start)),
@@ -595,8 +607,8 @@ function pdf_session_output($sid) {
     $fontData = $defaultFontConfig['fontdata'];
 
     $mpdf = new Mpdf\Mpdf([
-        'margin_top' => 53,     // approx 200px
-        'margin_bottom' => 53,  // approx 200px
+        'margin_top' => 63,     // approx 200px
+        'margin_bottom' => 63,  // approx 200px
         'tempDir' => _MPDF_TEMP_PATH,
         'fontDir' => array_merge($fontDirs, [ $webDir . '/template/modern/fonts' ]),
         'fontdata' => $fontData + [
@@ -640,10 +652,18 @@ function pdf_session_output($sid) {
  * @throws \Mpdf\MpdfException
  */
 function pdf_user_material_output($sid,$content_m,$user_n) {
-    global $currentCourseName, $webDir, $course_id, $course_code, $language, $langMaterialForUser;
+    global $currentCourseName, $webDir, $course_id, $course_code, 
+           $language, $langMaterialForUser, $langConsultant;
 
     $sessionTitle = title_session($course_id,$sid);
+    $start_finish = Database::get()->querySingle("SELECT `start`,finish FROM mod_session WHERE id = ?d AND course_id = ?d", $sid, $course_id);
+    $startSession = date('d-m-Y H:i', strtotime($start_finish->start));
+    $finishSession = date('H:i', strtotime($start_finish->finish));
     $nameUser = participant_name($user_n);
+    $infoConsultant = Database::get()->querySingle("SELECT user.id,user.givenname,user.surname,mod_session.creator FROM mod_session
+                                                    LEFT JOIN user ON user.id=mod_session.creator
+                                                    WHERE mod_session.course_id = ?d
+                                                    AND mod_session.id = ?d", $course_id, $sid);
 
     $pdf_mcontent = "
         <!DOCTYPE html>
@@ -663,10 +683,12 @@ function pdf_user_material_output($sid,$content_m,$user_n) {
         </head>
         <body>
         <h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
-        <h2> " . q($sessionTitle) . "</h2>
+        <h2> " . q($sessionTitle) . "&nbsp;&nbsp;&nbsp;($startSession - $finishSession)</h2>
+        <h3>$langConsultant:&nbsp;&nbsp;$infoConsultant->givenname&nbsp;$infoConsultant->surname</h3>
         <h3>$langMaterialForUser:&nbsp;&nbsp;" . q($nameUser) . "<h3>";
 
     $pdf_mcontent .= $content_m;
+
     $pdf_mcontent .= "</body></html>";
 
     $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
@@ -675,8 +697,8 @@ function pdf_user_material_output($sid,$content_m,$user_n) {
     $fontData = $defaultFontConfig['fontdata'];
 
     $mpdf = new Mpdf\Mpdf([
-        'margin_top' => 53,     // approx 200px
-        'margin_bottom' => 53,  // approx 200px
+        'margin_top' => 63,     // approx 200px
+        'margin_bottom' => 63,  // approx 200px
         'tempDir' => _MPDF_TEMP_PATH,
         'fontDir' => array_merge($fontDirs, [ $webDir . '/template/modern/fonts' ]),
         'fontdata' => $fontData + [
@@ -693,7 +715,6 @@ function pdf_user_material_output($sid,$content_m,$user_n) {
             ]
     ]);
 
-    
     $mpdf->SetHTMLHeader(get_platform_logo());
     $footerHtml = '
     <div>

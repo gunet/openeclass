@@ -112,7 +112,7 @@
                                 @endif
                                 <div class='form-group'>
                                     <label for="dropdown" class="form-label">{{ trans('langAIService') }}</label>
-                                    <select name='module' class='form-select'>
+                                    <select name='module' class='form-select' id="module">
                                         @foreach ($ai_services as $value => $label)
                                             <option value='{{ $value }}' @if (isset($ai_service) and $ai_service == $value) selected @endif> {{ $label }}</option>
                                         @endforeach
@@ -213,7 +213,7 @@
 
                     {{-- list of AI modules --}}
                     <h3 class='mt-4'>
-                        {{ trans('langModules') }}
+                        {{ trans('langAIServices') }}
                         <a href="{{ $_SERVER['SCRIPT_NAME'] }}?add_service">
                             <span class="fa-solid fa-circle-plus fa-lg" title="{{ trans('langAssignAIToModule') }}" data-bs-original-title="{{ trans('langAssignAIToModule') }}" data-bs-toggle="tooltip" data-bs-placement="top"></span>
                         </a>
@@ -232,14 +232,18 @@
 
                             @foreach ($ai_module_data as $ai_module)
                                 <tr @if ($ai_module['enabled'] == 0) class="not_visible" @endif>
-                                    <td>{{ $ai_module['module_id'] }}</td>
+                                    <td>{{ $ai_module['module_name'] }}</td>
                                     <td>{{ $ai_module['name'] }}</td>
                                     <td>{{ $ai_module['model_name'] }}</td>
                                     <td>
-                                        @if ($ai_module['all_courses'] == 1)
-                                            {{ trans('langToAllCourses') }}
+                                        @if ($ai_module['ai_module_id'] !== AI_MODULE_CREATE_COURSE)
+                                            @if ($ai_module['all_courses'] == 1)
+                                                {{ trans('langToAllCourses') }}
+                                            @else
+                                                {{ $ai_course_title }}
+                                            @endif
                                         @else
-                                            {{ $ai_course_title }}
+                                            &nbsp;
                                         @endif
                                     </td>
                                     <td class='option-btn-cell text-end'>
@@ -360,6 +364,14 @@
                     loadModels(provider);
                 }
             });
+
+            $('#module').change(function () {
+                if ($('#module').val() == 3) {
+                    $('#courses-list').hide();
+                } else {
+                    $('#courses-list').show();
+                }
+            }).change();
 
             // Handle test connection button
             $('#testConnectionBtn').on('click', function() {

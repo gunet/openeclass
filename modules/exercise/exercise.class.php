@@ -66,6 +66,7 @@ if (!class_exists('Exercise')) {
         private $totalweight;
         private $options;
         private $is_exam;
+        private $passing_grade;
 
         /**
          * constructor of the class
@@ -99,6 +100,7 @@ if (!class_exists('Exercise')) {
             $this->calc_grade_method = 1;
             $this->options = [];
             $this->is_exam = 0;
+            $this->passing_grade = null;
         }
 
         /**
@@ -114,7 +116,7 @@ if (!class_exists('Exercise')) {
 
             $object = Database::get()->querySingle("SELECT title, description, general_feedback, type, `range`, start_date, end_date, temp_save, time_constraint,
                                                     attempts_allowed, random, shuffle, active, public, results, score, ip_lock, password_lock,
-                                                    assign_to_specific, calc_grade_method, continue_time_limit, options, is_exam
+                                                    assign_to_specific, calc_grade_method, continue_time_limit, options, is_exam, passing_grade
                                                 FROM `exercise` WHERE course_id = ?d AND id = ?d", $course_id, $id);
 
             // if the exercise has been found
@@ -143,6 +145,7 @@ if (!class_exists('Exercise')) {
                 $this->continueTimeLimit = $object->continue_time_limit;
                 $this->options = $object->options? json_decode($object->options, true): [];
                 $this->is_exam = $object->is_exam;
+                $this->passing_grade = $object->passing_grade;
 
                 $result = Database::get()->queryArray("SELECT question_id, q_position, random_criteria
                     FROM `exercise_with_questions`
@@ -352,6 +355,11 @@ if (!class_exists('Exercise')) {
         public function isExam()
         {
             return $this->is_exam;
+        }
+
+        public function getPassingGrade()
+        {
+            return $this->passing_grade;
         }
 
         /**
@@ -739,6 +747,11 @@ if (!class_exists('Exercise')) {
             $this->is_exam = $is_exam;
         }
 
+        public function setPassingGrade($passing_grade)
+        {
+            $this->passing_grade = $passing_grade;
+        }
+
         /**
          * @brief updates the exercise in the database
          *
@@ -775,6 +788,7 @@ if (!class_exists('Exercise')) {
             $calc_grade_method = $this->calc_grade_method;
             $options = $this->options? json_encode($this->options): '';
             $is_exam = $this->is_exam;
+            $passing_grade = $this->passing_grade;
             // exercise already exists
             if ($id) {
                 $q = Database::get()->query("UPDATE `exercise`
@@ -783,14 +797,14 @@ if (!class_exists('Exercise')) {
                         attempts_allowed = ?d, random = ?d, shuffle = ?d, active = ?d, public = ?d,
                         results = ?d, score = ?d, ip_lock = ?s, password_lock = ?s,
                         assign_to_specific = ?d, continue_time_limit = ?d, calc_grade_method = ?d,
-                        general_feedback = ?s, options = ?s, is_exam = ?d
+                        general_feedback = ?s, options = ?s, is_exam = ?d, passing_grade = ?f
                     WHERE course_id = ?d AND id = ?d",
                     $exercise, $description, $type, $range,
                     $startDate, $endDate, $tempSave, $timeConstraint,
                     $attemptsAllowed, $random, $shuffle, $active, $public,
                     $results, $score, $ip_lock, $password_lock,
                     $assign_to_specific, $this->continueTimeLimit,
-                    $calc_grade_method, $general_feedback, $options, $is_exam,
+                    $calc_grade_method, $general_feedback, $options, $is_exam, $passing_grade,
                     $course_id, $id)->affectedRows;
                     Log::record($course_id, MODULE_ID_EXERCISE, LOG_MODIFY,
                         array('id' => $id,
@@ -801,13 +815,13 @@ if (!class_exists('Exercise')) {
                     (course_id, title, description, type, `range`, start_date, end_date,
                      temp_save, time_constraint, attempts_allowed,
                      random, shuffle, active, results, score, ip_lock, password_lock,
-                     assign_to_specific, continue_time_limit, calc_grade_method, general_feedback, options, is_exam)
-                    VALUES (?d, ?s, ?s, ?d, ?d, ?t, ?t, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?s, ?s, ?d, ?d, ?d, ?s, ?s, ?d)",
+                     assign_to_specific, continue_time_limit, calc_grade_method, general_feedback, options, is_exam, passing_grade)
+                    VALUES (?d, ?s, ?s, ?d, ?d, ?t, ?t, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?s, ?s, ?d, ?d, ?d, ?s, ?s, ?d, ?f)",
                     $course_id, $exercise, $description, $type, $range, $startDate, $endDate,
                     $tempSave, $timeConstraint, $attemptsAllowed,
                     $random, $shuffle, $active, $results, $score, $ip_lock, $password_lock,
                     $assign_to_specific, $this->continueTimeLimit, $calc_grade_method,
-                    $general_feedback, $options, $is_exam)->lastInsertID;
+                    $general_feedback, $options, $is_exam, $passing_grade)->lastInsertID;
 
                 Log::record($course_id, MODULE_ID_EXERCISE, LOG_INSERT, array('id' => $this->id,
                                                                               'title' => $exercise,
@@ -1676,6 +1690,21 @@ if (!class_exists('Exercise')) {
                 $score = round($user_score, 2);
             }
             return $score;
+        }
+
+        /**
+         * @brief canonicalize pass grade (if defined). If exercise has not a range, then stored pass grade is a percentage.
+         * @param $grade_pass
+         * @param $total_score
+         * @return float|mixed
+         */
+        public function canonicalize_exercise_pass_grade($grade_pass, $total_score)
+        {
+            if ($this->range > 0) {
+                return $grade_pass;
+            } else {
+                return round(($grade_pass / 100) * $total_score, 2);
+            }
         }
 
         /**

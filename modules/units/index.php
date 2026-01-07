@@ -41,7 +41,7 @@ require_once 'modules/tc/functions.php';
 require_once 'modules/admin/extconfig/externals.php';
 require_once 'modules/admin/extconfig/externalreposapp.php';
 
-if ($is_editor) {
+if ($is_editor or $is_course_reviewer) {
     $helpSubTopic = 'units_actions';
 } else {
     $assign_to_specific = Database::get()->querySingle("SELECT assign_to_specific FROM course_units WHERE id = ?d", $_GET['id'])->assign_to_specific;
@@ -151,7 +151,7 @@ if (!isset($info) or !$info) {
 
 $all_units = Database::get()->queryArray($query, $course_id);
 
-if (!$is_editor) {
+if (!$is_editor && !$is_course_reviewer) {
     $user_units = findUserVisibleUnits($uid, $all_units);
 } else {
     $user_units = $all_units;

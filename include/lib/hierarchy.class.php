@@ -124,13 +124,15 @@ class Hierarchy {
 
         if ($this->useProcedures()) {
             $row = Database::get()->querySingle("SELECT code, faculty_image FROM hierarchy WHERE id = ?d", $id);
-            Database::get()->query("CALL delete_node(?d)", $id);
-            unlink("$webDir/courses/facultyimg/$row->code/image/$row->faculty_image");
+            $result = Database::get()->query("CALL delete_node(?d)", $id);
         } else {
             $row = Database::get()->querySingle("SELECT lft, rgt, code, faculty_image FROM hierarchy WHERE id = ?d", $id);
             unlink("$webDir/courses/facultyimg/$row->code/image/$row->faculty_image");
-            Database::get()->query("DELETE FROM hierarchy WHERE id = ?d", $id);
+            $result = Database::get()->query("DELETE FROM hierarchy WHERE id = ?d", $id);
             $this->delete($row->lft, $row->rgt);
+        }
+        if ($result and $row->faculty_image) {
+            unlink("$webDir/courses/facultyimg/$row->code/image/$row->faculty_image");
         }
     }
 
@@ -642,10 +644,10 @@ jContent;
         $html .= '<div class="modal fade" id="treeModal" tabindex="-1" role="dialog" aria-labelledby="treeModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header"> 
+                <div class="modal-header">
                     <div class="modal-title" id="treeModalLabel">' . q($langNodeAdd) . '</div>
                     <button type="button" class="close treeModalClose" aria-label="'.$langClose.'"></button>
-                   
+
                 </div>
                 <div class="modal-body">
                     <div id="js-tree"></div>
@@ -725,7 +727,7 @@ jContent;
                 <div class="modal-header">
                      <div class="modal-title" id="treeModalLabel">' . q($langNodeAdd) . '</div>
                     <button type="button" class="close treeModalClose" aria-label="'.$langClose.'"></button>
-                   
+
                 </div>
                 <div class="modal-body">
                     <div id="js-tree"></div>
