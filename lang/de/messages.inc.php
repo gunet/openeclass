@@ -1324,7 +1324,6 @@ $langSurveyCreationError = "Fehler bei der Erzeugung des Fragebogens. Bitte vers
 $langSurveyDeleted = "Die Erhebung über das Profil der Studenten wurde erfolgreich gelöscht.";
 $langSurveyDeactivated = "Die Erhebung über das Profil der Studenten wurde erfolgreich deaktiviert.";
 $langSurveyActivated = "Die Erhebung über das Profil der Studenten wurde erfolgreich aktiviert.";
-$langSurveySubmitted = "Danke für Ihre Teilnahme";
 $langSurveyTotalAnswers = "Gesamte Anzahl von Antworten";
 $langSurveyNone = "Es gibt keine Erhebungen über das Profil der Studenten für diesen Kurs.";
 $langSurveyInactive = "Die Erhebung über das Profil der Studenten ist abgelaufen oder wurde noch nicht aktiviert.";

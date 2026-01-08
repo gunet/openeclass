@@ -1109,19 +1109,6 @@ function submitPoll() {
         } else {
             $tool_content .= "<a class='btn cancelAdminBtn' href='index.php?course=$course_code'>$langBack</a>";
         }
-        if ($poll->show_results) {
-            if (isset($_REQUEST['unit_id'])) {
-                $tool_content .= "<a class='btn submitAdminBtn ms-3' href='../units/view.php?course=$course_code&amp;res_type=questionnaire_results&amp;unit_id=$_REQUEST[unit_id]&amp;pid=$pid'>$langUsage</a>";
-            } else if (isset($_REQUEST['res_type'])) {
-                if (isset($_GET['from_session_view'])) {
-                    $tool_content .= "<a class='btn btn-primary ms-3' href='../questionnaire/pollresults.php?course=$course_code&session=$_GET[session]&pid=$pid&from_session_view=true'>$langUsage<a>";
-                } else {
-                    $tool_content .= "<a class='btn btn-primary' href='../wall/index.php?course=$course_code'>$langUsage</a>";
-                }
-            } else {
-                $tool_content .= "<a class='btn submitAdminBtn ms-3' href='pollresults.php?course=$course_code&amp;pid=$pid'>$langUsage</a>";
-            }
-        }
         $tool_content .= "</div>";
     } else {
         Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());

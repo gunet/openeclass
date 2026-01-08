@@ -3544,7 +3544,6 @@ $langSurveyCreationError = "Σφάλμα κατά την δημιουργία τ
 $langSurveyDeleted = "Η Έρευνα Μαθησιακού Προφίλ διαγράφηκε με επιτυχία.";
 $langSurveyDeactivated = "Η Έρευνα Μαθησιακού Προφίλ απενεργοποιήθηκε με επιτυχία.";
 $langSurveyActivated = "Η Έρευνα Μαθησιακού Προφίλ ενεργοποιήθηκε με επιτυχία.";
-$langSurveySubmitted = "Ευχαριστούμε για την συμμετοχή σας!";
 $langSurveyTotalAnswers = "Συνολικές απαντήσεις";
 $langSurveyNone = "Δεν έχουν δημιουργηθεί έρευνες μαθησιακού προφίλ για το $langsCourse";
 $langSurveyInactive = "Η Έρευνα Μαθησιακού Προφίλ έχει λήξει ή δεν έχει ενεργοποιηθεί ακόμα.";

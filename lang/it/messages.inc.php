@@ -1353,7 +1353,6 @@ $langSurveyCreationError = "Errore durante la creazione del questionario. Prego,
 $langSurveyDeleted = "L' indagine sui Profili degli Studenti è eliminata con successo.";
 $langSurveyDeactivated = "L' indagine sui Profili degli Studenti è disattivata con successo.";
 $langSurveyActivated = "L' indagine sui Profili degli Studenti è attivata con successo.";
-$langSurveySubmitted = "Grazie per la tua partecipazione!";
 $langSurveyTotalAnswers = "Numero totale di risposte";
 $langSurveyNone = "Non si sono create delle indagini sui Profili degli Studenti per questo corso.";
 $langSurveyInactive = "L' indagine sui Profili degli Studenti non è ancora attivato.";
