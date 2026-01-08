@@ -3137,9 +3137,9 @@ function display_settings($element, $element_id, $unit_id = 0): void
  * @param type $points_game_id
  */
 function points_game_settings($points_game_id = 0) {
-    global $tool_content, $head_content, $course_id, $course_code,
-        $language, $langTitle, $langDescription, $langSubmit, $langImgFormsDes,
-        $langInsert, $langStartDate, $langEndDate, $langActivateLeaderboard, $langAnonymizeLeaderboard; 
+    global $tool_content, $head_content, $course_id, $course_code, $langAdd, $langPointsGameLevelName, $langPointsGameLevelRequiredPoints,
+        $language, $langTitle, $langDescription, $langSubmit, $langImgFormsDes, $langPointsGameLevels, $langSettingSelect,
+        $langInsert, $langStartDate, $langEndDate, $langActivateLeaderboard, $langAnonymizeLeaderboard, $langDelete; 
 
     load_js('bootstrap-datetimepicker');
 
@@ -3169,10 +3169,34 @@ function points_game_settings($points_game_id = 0) {
                 }
             });
         });
-        </script>";
+
+        $(function() {
+            $('#addLevel').on('click', function() {
+                $('#levels_table tbody').append(
+                    '<tr>'+
+                    '<td class=\'form-group\'>'+
+                    '<input aria-label=\'$langPointsGameLevelName\' type=\'text\' name=\'level_item_name[]\' class=\'form-control\' value=\'\' required>'+
+                    '</td>'+
+                    '<td class=\'form-group\'>'+
+                    '<input aria-label=\'$langPointsGameLevelRequiredPoints\' type=\'number\' name=\'level_item_req_points[]\' class=\'form-control\' value=\'\' min=\'0\' required>'+
+                    '</td>'+
+                    '<td class=\'text-center\'>'+
+                    '<a href=\'#\' aria-label=\'$langDelete\' class=\'removeLevel\'><span class=\'fa-solid fa-xmark\' style=\'color:red\'></span></a>'+
+                    '</td>'+
+                    '</tr>'
+                );
+            });
+
+            $('#levels_table').on('click', '.removeLevel', function (e) {
+                e.preventDefault();
+                $(this).closest('tr').remove();
+            });
+        });
+    </script>";
 
     if ($points_game_id > 0) { //edit
         $data = Database::get()->querySingle("SELECT * FROM points_game WHERE id = ?d AND course_id = ?d", $points_game_id, $course_id);
+        $levels = Database::get()->queryArray("SELECT * FROM points_game_levels WHERE points_game=?d ORDER BY required_points ASC", $points_game_id);
         $title = $data->title;
         $description = $data->description;
         $startdate = date_format(date_create_from_format('Y-m-d H:i:s', $data->starts), 'd-m-Y H:i');
@@ -3203,7 +3227,7 @@ function points_game_settings($points_game_id = 0) {
                 <div class='form-group'>
                     <label for='title' class='col-sm-6 control-label-notes'>$langTitle</label>
                     <div class='col-sm-12'>
-                        <input id='title' class='form-control' type='text' placeholder='$langTitle' name='title' value='$title'>
+                        <input id='title' class='form-control' type='text' placeholder='$langTitle' name='title' value='$title' required>
                     </div>
                 </div>
                 <div class='form-group mt-4'>
@@ -3248,6 +3272,86 @@ function points_game_settings($points_game_id = 0) {
                     </div>
                 </div>
                 $points_game_hidden";
+
+                //Game levels
+                if ($points_game_id > 0) {
+                    $tool_content .= "
+                        <div class='form-group mt-4'>
+                            <div class='col-sm-12 control-label-notes'>$langPointsGameLevels:</div>
+                            <div class='col-sm-12'>
+                                <div class='table-responsive mt-0'>
+                                    <table class='table-default' id='levels_table'>
+                                        <thead>
+                                            <tr>
+                                                <th style='width:47%'>$langPointsGameLevelName</th>
+                                                <th style='width:47%'>$langPointsGameLevelRequiredPoints</th>
+                                                <th class='text-center option-btn-cell'  style='width:5%' aria-label='$langSettingSelect'>" . icon('fa-gears') . "</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>";
+                                        $level_i = 1;
+                                        foreach ($levels as $level) {
+                                            $tool_content .= "<tr>
+                                                <td class='form-group'>
+                                                    <input aria-label='$langPointsGameLevelName' type='text' name='level_item_name[]' class='form-control' value='".$level->friendly_name."' required>
+                                                </td>
+                                                <td class='form-group'>
+                                                    <input aria-label='$langPointsGameLevelRequiredPoints' type='number' name='level_item_req_points[]' class='form-control' value='".$level->required_points."' min='0' required>
+                                                </td>";
+                                                if ($level_i == 1) {
+                                                    $tool_content .= "<td class='text-center'>
+                                                    </td>";
+                                                } else {
+                                                    $tool_content .= "<td class='text-center'>
+                                                        <a href='#' aria-label='$langDelete' class='removeLevel'><span class='fa-solid fa-xmark' style='color:red;'></span></a>
+                                                    </td>";
+                                                }
+                                            $tool_content .= "</tr>";
+                                            $level_i ++;
+                                        }
+                    $tool_content .= "</tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class='col-12 mt-5 d-flex justify-content-center'>
+                                <a class='btn submitAdminBtn' id='addLevel'>$langAdd</a>
+                            </div>
+                        </div>";
+                } else {
+                    $tool_content .= "
+                        <div class='form-group mt-4'>
+                            <div class='col-sm-12 control-label-notes'>$langPointsGameLevels:</div>
+                            <div class='col-sm-12'>
+                                <div class='table-responsive mt-0'>
+                                    <table class='table-default' id='levels_table'>
+                                        <thead>
+                                            <tr>
+                                                <th style='width:47%'>$langPointsGameLevelName</th>
+                                                <th style='width:47%'>$langPointsGameLevelRequiredPoints</th>
+                                                <th class='text-center option-btn-cell'  style='width:5%' aria-label='$langSettingSelect'>" . icon('fa-gears') . "</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td class='form-group'>
+                                                    <input aria-label='$langPointsGameLevelName' type='text' name='level_item_name[]' class='form-control' value='' required>
+                                                </td>
+                                                <td class='form-group'>
+                                                    <input aria-label='$langPointsGameLevelRequiredPoints' type='number' name='level_item_req_points[]' class='form-control' value='' min='0' required>
+                                                </td>
+                                                <td class='text-center'>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class='col-12 mt-5 d-flex justify-content-center'>
+                                <a class='btn submitAdminBtn' id='addLevel'>$langAdd</a>
+                            </div>
+                        </div>";
+                }
+
                 $tool_content .= "<div class='form-group mt-5'>
                     <div class='col-12 d-flex justify-content-end align-items-center'>
 

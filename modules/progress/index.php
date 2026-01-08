@@ -176,6 +176,24 @@ if ($is_editor) {
         }
     } elseif (isset($_POST['newPointsGame'])) {
         $v = new Valitron\Validator($_POST);
+        $v->addRule('ascendingLevels', function ($field, $value, $params, $fields) {
+            $prev = null;
+    
+            foreach ($fields['level_item_req_points'] as $points) {
+                if (!is_numeric($points)) {
+                    return false;
+                }
+        
+                if ($prev !== null && $points < $prev) {
+                    return false;
+                }
+        
+                $prev = $points;
+            }
+        
+            return true;
+        });
+        $v->rule('ascendingLevels', 'level_item_req_points');
         $v->rule('required', array('title', 'startdatepicker', 'enddatepicker'));
         $v->rule('dateFormat', 'startdatepicker', 'd-m-Y H:i');
         $v->rule('dateFormat', 'enddatepicker', 'd-m-Y H:i');
@@ -206,7 +224,7 @@ if ($is_editor) {
                 'enable_leaderboard' => !empty($_POST['enable_leaderboard']) ? 1 : 0,
                 'anonymize_leaderboard' => !empty($_POST['anonymize_leaderboard']) ? 1 : 0
             ];
-            add_points_game($_POST['title'], $_POST['description'], $startdate, $enddate, $config_arr);
+            add_points_game($_POST['title'], $_POST['description'], $startdate, $enddate, $_POST['level_item_name'], $_POST['level_item_req_points'], $config_arr);
             Session::flash('message',$langNewPointsGameSuc);
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/progress/index.php?course=$course_code");
@@ -231,6 +249,24 @@ if ($is_editor) {
         }
     } elseif (isset($_POST['edit_points_game'])) {
         $v = new Valitron\Validator($_POST);
+        $v->addRule('ascendingLevels', function ($field, $value, $params, $fields) {
+            $prev = null;
+    
+            foreach ($fields['level_item_req_points'] as $points) {
+                if (!is_numeric($points)) {
+                    return false;
+                }
+        
+                if ($prev !== null && $points < $prev) {
+                    return false;
+                }
+        
+                $prev = $points;
+            }
+        
+            return true;
+        });
+        $v->rule('ascendingLevels', 'level_item_req_points');
         $v->rule('required', array('title', 'startdatepicker', 'enddatepicker'));
         $v->rule('dateFormat', 'startdatepicker', 'd-m-Y H:i');
         $v->rule('dateFormat', 'enddatepicker', 'd-m-Y H:i');
@@ -257,7 +293,11 @@ if ($is_editor) {
         if($v->validate()) {
             $startdate = date_format(date_create_from_format('d-m-Y H:i', $_POST['startdatepicker']), 'Y-m-d H:i');
             $enddate = date_format(date_create_from_format('d-m-Y H:i', $_POST['enddatepicker']), 'Y-m-d H:i');
-            modify_points_game($_POST['points_game_id'], $_POST['title'], $_POST['description'], $startdate, $enddate);
+            $config_arr = [
+                'enable_leaderboard' => !empty($_POST['enable_leaderboard']) ? 1 : 0,
+                'anonymize_leaderboard' => !empty($_POST['anonymize_leaderboard']) ? 1 : 0
+            ];
+            modify_points_game($_POST['points_game_id'], $_POST['title'], $_POST['description'], $startdate, $enddate, $_POST['level_item_name'], $_POST['level_item_req_points'], $config_arr);
             Session::flash('message',$langQuotaSuccess);
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/progress/index.php?course=$course_code");
