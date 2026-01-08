@@ -2902,10 +2902,11 @@ function display_points_game_settings($element_id): void
 {
     global $tool_content, $course_id, $course_code, $langProgressBasicInfo, $langEditChange, $langTitle,
            $langDescription, $langStartDate, $langEndDate, $langActivateLeaderboard, $langAnonymizeLeaderboard, 
-           $langYes, $langNo, $is_editor;
+           $langYes, $langNo, $is_editor, $langPointsGameLevels, $langPointsGameLevelName, $langPointsGameLevelRequiredPoints;
 
     $data = Database::get()->querySingle("SELECT title, description, active, starts, expires, config
                             FROM points_game WHERE id = ?d AND course_id = ?d", $element_id, $course_id);
+    $levels = Database::get()->queryArray("SELECT * FROM points_game_levels WHERE points_game=?d ORDER BY required_points ASC", $element_id);
                             
     $title = $data->title;
     $description = $data->description;
@@ -3001,6 +3002,41 @@ function display_points_game_settings($element_id): void
                                             </div>
                                         </li>";
                                         }
+                    $tool_content .= "<li class='list-group-item element'>
+                                        <div class='row row-cols-1 row-cols-md-2 g-1'>
+                        
+                                            <div class='col-md-3 col-12'>
+                                                <div class='pn-info-title-sct title-default'>
+                                                    $langPointsGameLevels
+                                                </div>
+                                            </div>
+                                            <div class='col-md-9 col-12 title-default-line-height'>
+                                                <div class='pn-info-text-sct'>
+
+                                                    <div class='table-responsive'>
+                                                        <table class='table table-sm table-borderless text-center mb-0'>
+                                                            <thead>
+                                                                <tr>
+                                                                    <th class='text-start'>$langPointsGameLevelName</th>
+                                                                    <th>$langPointsGameLevelRequiredPoints</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>";
+                                        foreach ($levels as $level) {
+                                            $tool_content .= "<tr>
+                                                                <td class='text-start'>".$level->friendly_name."</td>
+                                                                <td>".$level->required_points."</td>
+                                                            </tr>";
+                                        }
+                    $tool_content .= "                      </tbody>
+                                                        </table>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </li>";
                     $tool_content .= "</ul>
                                 </div>
                             </div>
