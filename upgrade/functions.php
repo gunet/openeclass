@@ -3364,7 +3364,6 @@ function upgrade_to_4_1($tbl_options) : void {
  */
 function upgrade_to_4_2($tbl_options) : void {
 
-
     if (!DBHelper::fieldExists('forum_topic', 'pin_time')) {
         Database::get()->query("ALTER TABLE forum_topic ADD pin_time DATETIME DEFAULT NULL");
     }
@@ -3414,7 +3413,6 @@ function upgrade_to_4_2($tbl_options) : void {
     if (!DBHelper::foreignKeyExists('attendance_users', 'uid', 'user', 'id')) {
         DBHelper::createForeignKey('attendance_users', 'uid', 'user', 'id', DBHelper::FKRefOption_CASCADE, DBHelper::FKRefOption_CASCADE);
     }
-
 
     if (!DBHelper::tableExists('ai_providers')) {
         Database::get()->query("CREATE TABLE ai_providers (
@@ -3519,7 +3517,8 @@ function upgrade_to_4_2($tbl_options) : void {
     if (!DBHelper::fieldExists('lp_user_module_progress', 'progress_measure')) {
         Database::get()->query("ALTER TABLE lp_user_module_progress ADD `progress_measure` FLOAT DEFAULT NULL AFTER `session_time`");
     }
-    // flipped classroom
+
+    // flipped classroom: index and seed data
     Database::get()->query("ALTER TABLE course_activities ADD UNIQUE KEY(activity_id, activity_type)");
     Database::get()->query("INSERT IGNORE INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unit_id`,`module_id`) VALUES ('FC18', 1, 0, 0, 0)");
 
@@ -3550,7 +3549,15 @@ function upgrade_to_4_2($tbl_options) : void {
     if (!DBHelper::fieldExists('assignment', 'results_date')) {
         Database::get()->query("ALTER TABLE assignment ADD results_date DATETIME DEFAULT NULL AFTER submission_date;");
     }
+}
 
+
+/**
+ * @brief upgrade queries for 4.3
+ * @param $tbl_options
+ * @return void
+ */
+function upgrade_to_4_3($tbl_options) : void {
     if (!DBHelper::fieldExists('poll_question', 'page')) {
         Database::get()->query("ALTER TABLE poll_question ADD `page` INT NOT NULL DEFAULT 0");
     }
@@ -3574,7 +3581,6 @@ function upgrade_to_4_2($tbl_options) : void {
     if (DBHelper::fieldExists('poll_question_answer', 'message')) {
         Database::get()->query("ALTER TABLE poll_question_answer DROP COLUMN `message`");
     }
-
 }
 
 /**
