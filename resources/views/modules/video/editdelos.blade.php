@@ -72,8 +72,12 @@
                                                             @if (isset($currentVideoLinks[$url]) && strtotime($resource->videoLecture->date) > strtotime($currentVideoLinks[$url]))
                                                                 <span class='fa-solid fa-exclamation ps-2' style='color: red' title data-bs-original-title='{{ trans('langDelosNewFileVersion') }}' data-bs-toggle='tooltip' data-bs-placement='bottom'></span>
                                                             @endif
-                                                            <div class="help-block">{{ $resource->videoLecture->description }}</div>
-                                                            <div class="help-block mt-2">{{ trans('langCreator') }}: {{ $resource->videoLecture->rights->creator->name }}</div>
+                                                            <div class="help-block">
+                                                                {{ $resource->videoLecture->description }}
+                                                            </div>
+                                                            <div class="help-block mt-2">
+                                                                {{ trans('langCreator') }}: {{ $resource->videoLecture->rights->creator->name }} &mdash; {{ trans('langCourse') }}: {{ $resource->videoLecture->relation->course->title }}
+                                                            </div>
                                                         </td>
                                                         <td style='width:10%;'>{{ format_locale_date(strtotime($resource->videoLecture->date), 'short', false) }}</td>
                                                         <td style='width:5%;'>
@@ -99,8 +103,12 @@
                                                                 @if (isset($currentVideoLinks[$url]) && strtotime($resource->videoLecture->date) > strtotime($currentVideoLinks[$url]))
                                                                     <span class='fa-solid fa-exclamation ps-2' style='color: red' title data-bs-original-title='{{ trans('langDelosNewFileVersion') }}' data-bs-toggle='tooltip' data-bs-placement='bottom'></span>
                                                                 @endif
-                                                                <div class="help-block">{{ $resource->videoLecture->description }}</div>
-                                                                <div class="help-block mt-2">{{ trans('langCreator') }}: {{ $resource->videoLecture->rights->creator->name }}</div>
+                                                                <div class="help-block">
+                                                                    {{ $resource->videoLecture->description }}
+                                                                </div>
+                                                                <div class="help-block mt-2">
+                                                                    {{ trans('langCreator') }}: {{ $resource->videoLecture->rights->creator->name }} &mdash; {{ trans('langCourse') }}: {{ $resource->videoLecture->relation->course->title }}
+                                                                </div>
                                                             </td>
                                                             <td>
                                                                 {{ format_locale_date(strtotime($resource->videoLecture->date), 'short', false) }}

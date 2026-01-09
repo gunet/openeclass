@@ -1361,7 +1361,6 @@ $langSurveyCreationError = "Creación de encuesta con error. Por favor prueba ot
 $langSurveyDeleted = "Encuesta borrada con éxito.";
 $langSurveyDeactivated = "Encuesta desactivada con éxito.";
 $langSurveyActivated = "Encuesta activada con éxito.";
-$langSurveySubmitted = "!Gracias por tu participación!";
 $langSurveyTotalAnswers = "Número total de respuestas";
 $langSurveyNone = "No hay Encuestas para este actual curso.";
 $langSurveyInactive = "La encuesta ha expirado o no ha empezado aún.";

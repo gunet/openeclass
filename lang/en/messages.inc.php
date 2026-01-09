@@ -1384,7 +1384,6 @@ $langSurveyCreationError = "Survey creation error. Please try again.";
 $langSurveyDeleted = "Survey deleted successfully.";
 $langSurveyDeactivated = "Survey deactivated successfully.";
 $langSurveyActivated = "Survey activated successfully.";
-$langSurveySubmitted = "Thank you for your participation!";
 $langSurveyTotalAnswers = "Total number of answers";
 $langSurveyNone = "There are no Surveys for the current course.";
 $langSurveyInactive = "Survey has expired or has not started yet.";

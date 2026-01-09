@@ -4745,7 +4745,7 @@ function showSecondFactorChallenge(){
  */
 function checkSecondFactorChallenge(){
     $connector = secondfaApp::getsecondfa();
-    if($connector->isEnabled() == true ){
+    if($connector->isEnabled()){
         return secondfaApp::checkChallenge($_SESSION['uid']);
     } else {
         return "";
