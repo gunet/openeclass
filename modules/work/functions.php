@@ -722,7 +722,7 @@ function display_assignment_submissions($id) {
                                                 assignment.grading_type
                                                FROM assignment_submit AS assign, user, assignment
                                                WHERE assign.assignment_id = ?d AND assign.assignment_id = assignment.id AND user.id = assign.uid
-                                               ORDER BY surname", $id);
+                                               ORDER BY surname, uid, id", $id);
 
         $data['rows_assignment_grading_review'] = Database::get()->queryArray("SELECT * FROM assignment_grading_review WHERE assignment_id = ?d ", $id);
     }
