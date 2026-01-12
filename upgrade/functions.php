@@ -3573,14 +3573,6 @@ function upgrade_to_4_3($tbl_options) : void {
     if (!DBHelper::fieldExists('poll_question_answer', 'weight')) {
         Database::get()->query("ALTER TABLE poll_question_answer ADD `weight` FLOAT NULL");
     }
-
-    if (!DBHelper::fieldExists('poll_question_answer', 'message')) {
-        Database::get()->query("ALTER TABLE poll_question_answer ADD `message` TEXT DEFAULT NULL");
-    }
-
-    if (DBHelper::fieldExists('poll_question_answer', 'message')) {
-        Database::get()->query("ALTER TABLE poll_question_answer DROP COLUMN `message`");
-    }
 }
 
 /**

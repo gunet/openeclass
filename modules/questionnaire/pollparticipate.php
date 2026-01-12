@@ -262,7 +262,7 @@ function printPollForm() {
     
     <script>
         $(function() {
-            function save_data() {
+            function save_data(callback) {
                 var obj = {};
                 var checkBoxesVal = [];
                 document.querySelectorAll('[data-question-type]').forEach(function(elem) {
@@ -309,20 +309,29 @@ function printPollForm() {
                     url: '$_SERVER[SCRIPT_NAME]?course=$course_code&UseCase=1&pid=$pid',
                     method: 'POST',
                     data: { data_answers: obj },
+                    success: function(response) {
+                        if (callback) callback();
+                    },
+                    error: function() {
+                        // handle error if needed
+                        if (callback) callback();
+                    }
                 });
             }
 
             $('#prevBtn').on('click', function(e) {
                 e.preventDefault();
                 var prevLink = $('#linkPrevPage').val();
-                save_data();
-                window.location.href = prevLink;
+                save_data(function() {
+                    window.location.href = prevLink;
+                });
             });
             $('#nextBtn').on('click', function(e) {
                 e.preventDefault();
                 var nextLink = $('#linkNextPage').val();
-                save_data();
-                window.location.href = nextLink;
+                save_data(function() {
+                    window.location.href = nextLink;
+                });
             });
         });
     </script>";
