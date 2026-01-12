@@ -298,6 +298,7 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COU
     $gradesArr = [];
     $MsgGradesArr = [];
     $minMsg = '';
+    $isEnabledGrade = pollHasGrade($pid);
     if ($pollOptions != '') {
         $pollOptionsArr = unserialize($pollOptions);
     }
@@ -391,7 +392,9 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COU
                                 if (!$thePoll->anonymized) {
                                     $answers_table .= "<th>$langStudents</th>";
                                 }
-                                $answers_table .= "<th>$langMessage</th>";
+                                if ($isEnabledGrade) {
+                                 $answers_table .= "<th>$langMessage</th>";
+                                }
                             }
                             $answers_table .= "</tr></thead>";
                 foreach ($answers as $answer) {
@@ -467,8 +470,11 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COU
                         $dis_msg = $minMsg;
                     }
 
-                    $answers_table .= "<td class='hidden_names' style='display:none;'><em>" . q($names_str ?? '') . "</em> <a href='#' class='trigger_names' data-type='multiple' id='hide'>$langViewHide</a></td>
-                    <td>$dis_msg</td></tr>";
+                    $answers_table .= "<td class='hidden_names' style='display:none;'><em>" . q($names_str ?? '') . "</em> <a href='#' class='trigger_names' data-type='multiple' id='hide'>$langViewHide</a></td>";
+                    if ($isEnabledGrade) {
+                        $answers_table .= "<td>$dis_msg</td>";
+                    }
+                    $answers_table .= "</tr>";
                     unset($names_array);
                 }
                 $answers_table .= "</table></div><br>";

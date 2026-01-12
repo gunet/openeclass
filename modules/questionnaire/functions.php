@@ -306,3 +306,23 @@ function createEvaluationCourse($pid) {
         VALUES (?d, ?s, ?d, ?d, ?d, ?s, ?d)", $pid, $qCourseEvaluation_5, 5, 5, 5, $lang_answer_scale_evaluation, 1);
 
 }
+
+/**
+ * @brief Check if the poll has grade
+ * @param type $pid
+ */
+function pollHasGrade($pid) {
+    $isEnabledGrade = false;
+    $opt_poll = Database::get()->querySingle("SELECT `options` FROM poll WHERE pid = ?d", $pid)->options;
+    if (!is_null($opt_poll)) {
+        $opt_res = unserialize($opt_poll);
+        foreach ($opt_res as $op) {
+            foreach ($op as $key => $val) {
+                if ($key === 'grade' && $val !== '') {
+                    $isEnabledGrade = true;
+                }
+            }
+        }
+    }
+    return $isEnabledGrade;
+}

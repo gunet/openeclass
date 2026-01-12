@@ -1064,6 +1064,9 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         'url' => "admin.php?course=$course_code&amp;pid=$pid",
         'name' => $langPollManagement
     );
+
+    $isEnabledGrade = pollHasGrade($pid);
+
     $tool_content .= "
     <div class='col-12 mt-4'>
         <div class='card panelCard card-default px-lg-4 py-lg-3'>
@@ -1095,24 +1098,28 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         if (count($answers) > 0) {
             $tool_content .= "<input type='hidden' name='update_question' value='1'>";
             foreach ($answers as $answer) {
-              $tool_content .="
-              <div class='form-group input-group mt-3'>
-                    <input type='text' class='form-control mt-0 w-75' name='answers[$answer->pqaid]' value='$answer->answer_text' placeholder='$langAnswer'>
-                    <input class='form-control mt-0' type='text' name='grades[$answer->pqaid]' value='$answer->weight' placeholder='$langGradebookGrade'>
-                    <div class='form-control-static input-group-text h-40px bg-white input-border-color'>
-                        " . icon('fa-xmark Accent-200-cl', $langDelete, '#', ' class="del_btn"') . "
-                    </div>
+            $tool_content .="
+                <div class='form-group input-group mt-3'>
+                              <input type='text' class='form-control mt-0 w-75' name='answers[$answer->pqaid]' value='$answer->answer_text' placeholder='$langAnswer'>";
+                    if ($isEnabledGrade) {
+            $tool_content .= "<input class='form-control mt-0' type='text' name='grades[$answer->pqaid]' value='$answer->weight' placeholder='$langGradebookGrade'>";
+                    }
+            $tool_content .= "<div class='form-control-static input-group-text h-40px bg-white input-border-color'>
+                                " . icon('fa-xmark Accent-200-cl', $langDelete, '#', ' class="del_btn"') . "
+                              </div>
                 </div>";
               }
         } else {
             $tool_content .="
             <div class='form-group input-group mt-3'>
-                        <input class='form-control mt-0 w-75' type='text' name='answers[]' value='' placeholder='$langAnswer'>
-                        <input class='form-control mt-0' type='text' name='grades[]' value='' placeholder='$langGradebookGrade'>
-                        <div class='form-control-static input-group-text h-40px bg-white input-border-color'>
+                              <input class='form-control mt-0 w-75' type='text' name='answers[]' value='' placeholder='$langAnswer'>";
+                if ($isEnabledGrade) {
+            $tool_content .= "<input class='form-control mt-0' type='text' name='grades[]' value='' placeholder='$langGradebookGrade'>";
+                }     
+            $tool_content .= "<div class='form-control-static input-group-text h-40px bg-white input-border-color'>
                             " . icon('fa-xmark Accent-200-cl', $langDelete, '#', ' class="del_btn"') . "
-                        </div>
-                </div>
+                              </div>
+            </div>
             <div class='form-group input-group mt-3'>
                     <input class='form-control mt-0 w-75' type='text' name='answers[]' value='' placeholder='$langAnswer'>
                     <input class='form-control mt-0' type='text' name='grades[]' value='' placeholder='$langGradebookGrade'>
