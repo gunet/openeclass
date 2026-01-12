@@ -630,8 +630,13 @@ function printPollForm() {
             $user_answers = null;
             if ($qtype == QTYPE_LABEL) {
                 $tool_content .= "
-                <div class='col-12'>
-                   <div class='alert alert-info m-0 TextBold text-center mb-4'>" . standard_text_escape($theQuestion->question_text) . "</div>
+                <div class='col-12 mb-4'>
+                    <div class='card panelCard px-lg-4 py-lg-3 h-100'>
+                        <div class='card-body'>" . standard_text_escape($theQuestion->question_text) . "";
+                        if (!empty($theQuestion->description)) {
+                            $tool_content .= standard_text_escape($theQuestion->description);
+                        }
+      $tool_content .= "</div></div>
                 </div>";
             } else {
                 // Store all questions into session variables.
