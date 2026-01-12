@@ -206,11 +206,18 @@ class DSpaceRepository extends AbstractExternalRepo
         $authors = $this->getMetadataValues($metadata, 'dc.contributor.author');
         $date = $this->getMetadataValue($metadata, 'dc.date.issued');
 
-        // Build item URL
-        $handle = $data['handle'] ?? null;
-        $url = $handle 
-            ? $this->baseUrl . '/handle/' . $handle 
-            : $this->baseUrl . '/items/' . $id;
+        // Build item URL - prefer dc.identifier.uri from metadata (canonical public URL)
+        $url = $this->getMetadataValue($metadata, 'dc.identifier.uri');
+        
+        // Fallback: construct URL from handle or UUID if dc.identifier.uri not available
+        if (!$url) {
+            $handle = $data['handle'] ?? null;
+            // Try to derive public URL by removing '-api' from baseUrl
+            $publicUrl = preg_replace('/-api\./', '.', $this->baseUrl);
+            $url = $handle 
+                ? $publicUrl . '/handle/' . $handle 
+                : $publicUrl . '/items/' . $id;
+        }
 
         // Get thumbnail URL
         $thumbnail = $this->getThumbnailUrl($data);

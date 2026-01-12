@@ -1874,6 +1874,117 @@ function show_extrepo($title, $comments, $resource_id, $ext_resource_id, $visibi
         }
     }
     
+    // DSpace preview (thumbnail or PDF embed)
+    if ($ext_res && $ext_res->repo_type === 'dspace') {
+        // Parse metadata JSON
+        $metadata = [];
+        if (!empty($ext_res->metadata)) {
+            $decoded = json_decode($ext_res->metadata, true);
+            if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+                $metadata = $decoded;
+            }
+        }
+        
+        // Show thumbnail if available
+        if (!empty($ext_res->thumbnail_url)) {
+            $media_preview = "
+                <div class='mt-2 mb-2'>
+                    <a href='" . q($ext_res->url) . "' target='_blank' rel='noopener noreferrer'>
+                        <img src='" . q($ext_res->thumbnail_url) . "' 
+                             alt='" . q($title) . "' 
+                             class='img-fluid' 
+                             style='max-width: 400px; max-height: 300px; border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);'
+                             loading='lazy'
+                             onerror=\"this.onerror=null; this.style.display='none';\">
+                    </a>
+                </div>";
+        }
+        
+        // If it's a PDF document, offer embedded preview option
+        if ($ext_res->resource_type === 'document' && !empty($metadata['handle'])) {
+            // Try to find PDF bitstream URL from metadata
+            if (!empty($metadata['bitstreams'])) {
+                foreach ($metadata['bitstreams'] as $bitstream) {
+                    if (isset($bitstream['format']) && strpos(strtolower($bitstream['format']), 'pdf') !== false) {
+                        $pdf_url = $bitstream['url'] ?? null;
+                        if ($pdf_url) {
+                            $media_preview .= "
+                                <div class='mt-2 mb-2'>
+                                    <button type='button' class='btn btn-sm btn-secondary' onclick='togglePdfPreview_{$resource_id}()'>
+                                        <i class='fa fa-file-pdf'></i> Toggle PDF Preview
+                                    </button>
+                                    <div id='pdf_preview_{$resource_id}' style='display:none;' class='mt-2'>
+                                        <iframe src='" . q($pdf_url) . "' 
+                                                style='width:100%; height:600px; border:1px solid #ddd;'
+                                                title='PDF Preview'>
+                                        </iframe>
+                                    </div>
+                                    <script>
+                                        function togglePdfPreview_{$resource_id}() {
+                                            var preview = document.getElementById('pdf_preview_{$resource_id}');
+                                            preview.style.display = (preview.style.display === 'none') ? 'block' : 'none';
+                                        }
+                                    </script>
+                                </div>";
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    // ReasonableGraph preview (images and embeds)
+    if ($ext_res && $ext_res->repo_type === 'reasonable_graph') {
+        // Parse metadata JSON
+        $metadata = [];
+        if (!empty($ext_res->metadata)) {
+            $decoded = json_decode($ext_res->metadata, true);
+            if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+                $metadata = $decoded;
+            }
+        }
+        
+        // Show thumbnail or main image if available
+        $image_url = null;
+        if (!empty($ext_res->thumbnail_url)) {
+            $image_url = $ext_res->thumbnail_url;
+        } elseif (!empty($metadata['display']['thumbnail'])) {
+            $image_url = $metadata['display']['thumbnail'];
+        } elseif (!empty($metadata['display']['image'])) {
+            $image_url = $metadata['display']['image'];
+        }
+        
+        if ($image_url && $ext_res->resource_type === 'image') {
+            $media_preview = "
+                <div class='mt-2 mb-2'>
+                    <a href='" . q($ext_res->url) . "' target='_blank' rel='noopener noreferrer'>
+                        <img src='" . q($image_url) . "' 
+                             alt='" . q($title) . "' 
+                             class='img-fluid' 
+                             style='max-width: 640px; max-height: 480px; border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);'
+                             loading='lazy'
+                             onerror=\"this.onerror=null; this.style.display='none'; console.log('ReasonableGraph image failed to load: ' + this.src);\">
+                    </a>
+                </div>";
+        }
+        
+        // Show embed URL if available (for multimedia content)
+        if (!empty($metadata['display']['embed_url']) && in_array($ext_res->resource_type, ['video', 'audio'])) {
+            $embed_url = $metadata['display']['embed_url'];
+            $media_preview = "
+                <div class='mt-2 mb-2'>
+                    <div class='ratio ratio-16x9' style='max-width: 640px;'>
+                        <iframe src='" . q($embed_url) . "' 
+                                title='" . q($title) . "' 
+                                frameborder='0' 
+                                allowfullscreen>
+                        </iframe>
+                    </div>
+                </div>";
+        }
+    }
+    
     $module_name = $langExternalResource ?? 'External Resource';
 
     return "

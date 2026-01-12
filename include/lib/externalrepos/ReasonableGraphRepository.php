@@ -251,7 +251,7 @@ class ReasonableGraphRepository extends AbstractExternalRepo
         
         // Build URL to the item
         $item_id = $vid ?? $id;
-        $url = $this->baseUrl . '/item/' . $item_id;
+        $url = $this->baseUrl . '/archive/item/' . $item_id;
         
         // Get thumbnail URLs - they're already full URLs from the API
         $thumbnail = null;
