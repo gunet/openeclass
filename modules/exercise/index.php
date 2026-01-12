@@ -76,7 +76,7 @@ if ($is_course_reviewer) {
         foreach ($q as $user_data) {
             if (is_null($user_data->user_id)) { // assigned to group
                 $group_name = Database::get()->querySingle("SELECT name FROM `group` WHERE id = ?d", $user_data->group_id)->name;
-                echo "<li>$group_name</li>";
+                echo "<li>" .q($group_name) . "</li>";
             } else { // assigned to user
                 echo "<li>" . q(uid_to_name($user_data->user_id)) . "</li>";
             }
