@@ -502,6 +502,7 @@ if ($is_editor or $is_course_reviewer) {
     $query = "SELECT id, title, start_week, finish_week, comments, visible, public, `order`, assign_to_specific FROM course_units WHERE course_id = ?d AND `order` >= 0 ORDER BY `order`";
 } else {
     $query = "SELECT id, title, start_week, finish_week, comments, visible, public, `order`, assign_to_specific FROM course_units WHERE course_id = ?d AND visible = 1 AND `order` >= 0 ORDER BY `order`";
+//    $query = "SELECT id, title, start_week, finish_week, comments, visible, public, `order`, assign_to_specific FROM course_units WHERE course_id = ?d AND (visible = 1 OR visible = 2) AND `order` >= 0 ORDER BY `order`";
 }
 
 $data['all_units'] = $all_units = Database::get()->queryArray($query, $course_id);
@@ -513,6 +514,7 @@ foreach ($all_units as $unit) {
 $visible_units_id = [];
 if (!$is_editor && !$is_course_reviewer) {
     $visible_user_units = findUserVisibleUnits($uid, $all_units);
+
     foreach ($visible_user_units as $d) {
         $visible_units_id[] = $d->id;
     }
@@ -721,7 +723,7 @@ if ($total_cunits > 0) {
             }
             $access = $cu->public;
             $vis = $cu->visible;
-            $class_vis = ($vis == 0 or $not_shown) ? 'not_visible' : '';
+            $class_vis = ($vis == 0 or $vis == 2 or $not_shown) ? 'not_visible' : '';
             $cu_indirect = getIndirectReference($cu->id);
 
             if($counterUnits == 0){
@@ -861,9 +863,13 @@ if ($total_cunits > 0) {
 
             $cunits_content .= "<div class='item-title-container d-flex flex-column justify-content-center'>";
             if ($not_shown) {
-                $cunits_content .= q($cu->title) ;
+                $cunits_content .= q($cu->title);
             } else {
-                $cunits_content .= "<div class='line-height-default'><a class='TextBold fs-6 $class_vis' href='{$urlServer}modules/units/index.php?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a></div>";
+                if ($vis == 2) {
+                    $cunits_content .= "<div class='line-height-default'><div class='TextBold fs-5'>" . q($cu->title) . "</div></div>";
+                } else {
+                    $cunits_content .= "<div class='line-height-default'><a class='TextBold fs-6 $class_vis' href='{$urlServer}modules/units/index.php?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a></div>";
+                }
             }
 
             if (!(is_null($cu->start_week)) || !(is_null($cu->finish_week))) {

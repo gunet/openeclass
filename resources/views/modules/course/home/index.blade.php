@@ -368,6 +368,12 @@
                                                                 {{ trans('langAddUnit') }}
                                                             </a>
                                                         </li>
+                                                        <li>
+                                                            <a href='{{ $urlServer }}modules/units/info.php?course={{ $course_code }}&divider=1' class='list-group-item d-flex justify-content-start align-items-start gap-2 py-3'>
+                                                                <i class='fa-solid fa-plus settings-icon'></i>
+                                                                {{ trans('langAdd') }} {{ trans('langInsertDivider') }}
+                                                            </a>
+                                                        </li>
                                                         @if($course_info->flipped_flag == 2)
                                                             <li>
                                                                 <a href='{{ $urlServer }}modules/create_course/edit_flipped_classroom.php?course={{ $course_code }}&fromFlipped=1' class='list-group-item d-flex justify-content-start align-items-start gap-2 py-3'>
@@ -407,7 +413,6 @@
                                 </div>
                             </div>
                         @endif
-
 
                         @if($course_info->view_type == 'activity')
                             @if($is_editor)
