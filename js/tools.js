@@ -936,7 +936,7 @@ function unit_password_bootbox(e) {
       '</form>';
     passwordCallback = function () {
       var password = $('#password').val();
-      if (password != '') {
+      if (password !== '') {
         $('#password_form').submit();
       } else {
         if (!$('#password').siblings('.help-block').length) {
