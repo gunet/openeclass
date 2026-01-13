@@ -674,6 +674,28 @@
                                         </div>
                                     </div>
 
+                                    @if (get_config('enable_docs_public_write'))
+                                    <div class='form-group mt-4'>
+                                        <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langEnableDocsPublicWrite') }}</div>
+                                        <div class='col-sm-12'>
+                                            <div class='radio'>
+                                                <label>
+                                                    <input type='radio' value='1' name='docs_public_write'
+                                                        @if (setting_get(SETTING_DOCUMENTS_PUBLIC_WRITE)) checked @endif>
+                                                    {{ trans('langPublicDocumentManagementExplanation') }}
+                                                </label>
+                                            </div>
+                                            <div class='radio'>
+                                                <label>
+                                                    <input type='radio' value='0' name='docs_public_write'
+                                                        @if (!setting_get(SETTING_DOCUMENTS_PUBLIC_WRITE)) checked @endif>
+                                                    {{ trans('langDeactivate') }}
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @endif
+
                                     <div class='form-group mt-4'>
                                         <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langDisplayRightContentInCPage') }}</div>
                                         <div class='col-sm-12'>

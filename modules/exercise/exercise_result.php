@@ -553,7 +553,7 @@ if (count($exercise_question_ids) > 0) {
 
         if ($questionFeedback !== '') {
             $tool_content .= "<tr><td>";
-            $tool_content .= "<div><strong>$langQuestionFeedback:</strong><br>" . standard_text_escape($questionFeedback) . "</div>";
+            $tool_content .= "<div class='text-primary'><strong>$langComment:</strong><br>" . standard_text_escape($questionFeedback) . "</div>";
             $tool_content .= "</td></tr>";
         }
 

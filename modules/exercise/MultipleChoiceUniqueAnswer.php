@@ -129,13 +129,13 @@ class MultipleChoiceUniqueAnswer extends QuestionType
 
             $html_content .= $answerTitle;
             if ($answerCorrect) {
-                $html_content .= "&nbsp;<span class='text-success text-nowrap'><small class='text-success text-nowrap'>($langCorrectS)</small></span>";
+                $html_content .= "&nbsp;<span><small class='text-success text-nowrap'>($langCorrectS)</small></span>";
             } else {
-                $html_content .= "&nbsp;<span class='text-danger text-nowrap'><small class='text-danger text-nowrap'>($langIncorrectS)</small></span>";
+                $html_content .= "&nbsp;<span><small class='text-danger text-nowrap'>($langIncorrectS)</small></span>";
             }
             $html_content .= "</div>";
-            if ($studentChoice or $answerCorrect) {
-                $html_content .= "<div class='d-flex align-items-center'><small><span class='help-block'>" . standard_text_escape(nl2br($answerComment)) . "</span></small></div>";
+            if ($studentChoice && $answerComment != '') {
+                $html_content .= "<div style='background-color: #e9ecef' class='p-1 ps-4'>" . standard_text_escape(nl2br($answerComment)) . "</div>";
             }
             $html_content .= "</div>";
             $html_content .= "</td></tr>";

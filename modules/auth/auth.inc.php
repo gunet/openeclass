@@ -678,7 +678,7 @@ function process_login() {
             }
         }
 
-        $invalidIdMessage = sprintf($langInvalidId, $urlAppend . 'modules/auth/registration.php');
+        $invalidIdMessage = $langInvalidId;
         if (!isset($_SESSION['uid'])) {
             switch ($auth_allow) {
                 case 1:
@@ -902,7 +902,7 @@ function hybridauth_login() {
             if (in_array($auth_id, $auth_methods)) {
                 $auth_allow = login($myrow, null, null, $provider, $user_data);
             } else {
-                Session::flash('message',$langInvalidAuth);
+                Session::flash('message', $langInvalidAuth);
                 Session::flash('alert-class', 'alert-danger');
                 redirect_to_home_page();
             }

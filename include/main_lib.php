@@ -4743,7 +4743,7 @@ function showSecondFactorChallenge(){
  */
 function checkSecondFactorChallenge(){
     $connector = secondfaApp::getsecondfa();
-    if($connector->isEnabled() == true ){
+    if ($connector->isEnabled()) {
         return secondfaApp::checkChallenge($_SESSION['uid']);
     } else {
         return "";
@@ -4878,7 +4878,7 @@ function get_platform_logo($size = 'normal', $position = 'header') {
         }
     }
 
-    $logo = "<div style='clear: right; background-color: $bg_color; padding: 1rem; margin-bottom: 2rem;'>
+    $logo = "<div style='clear: right; background-color: $bg_color; padding: 1rem; margin-bottom: 2rem; text-align: $image_align;'>
                 <img style='width: {$image_width}px;' src='$logo_img'>
             </div>";
 
@@ -10146,9 +10146,12 @@ function theme_initialization() {
 
         if(!empty($theme_options_styles['BgTextEditor'])){
             $styles_str .= "
-                .mce-container,
-                .mce-widget,
-                .mce-widget *,
+                .mce-container {
+                    background: $theme_options_styles[BgTextEditor] !important;
+                }
+                .mce-widget {
+                    background: $theme_options_styles[BgTextEditor] !important;
+                }
                 .mce-reset {
                     background: $theme_options_styles[BgTextEditor] !important;
                 }
@@ -10505,7 +10508,9 @@ function theme_initialization() {
             $styles_str .= "
                 .tooltip.fade.show *{
                     background-color: $theme_options_styles[bgColorTooltip];
-
+                }
+                .mce-tooltip *{
+                    background-color: $theme_options_styles[bgColorTooltip] !important;
                 }
             ";
         }
@@ -10521,7 +10526,9 @@ function theme_initialization() {
             $styles_str .= "
                 .tooltip.fade.show *{
                     color: $theme_options_styles[TextColorTooltip];
-
+                }
+                .mce-tooltip *{
+                    color: $theme_options_styles[TextColorTooltip] !important;
                 }
             ";
         }

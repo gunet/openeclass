@@ -2,7 +2,7 @@
     "require": {
         "vlucas/valitron": "^1.4.2",
         "apereo/phpcas": "^1.6",
-        "ezyang/htmlpurifier": "^4.15",
+        "ezyang/htmlpurifier": "^4.19",
         "pragmarx/google2fa":"^8.0",
         "swiftmailer/swiftmailer": "^6.3.0",
         "sabre/dav": "~3.2.0",

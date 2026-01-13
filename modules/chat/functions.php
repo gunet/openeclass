@@ -21,10 +21,6 @@
 require_once 'modules/admin/extconfig/externals.php';
 require_once 'modules/admin/extconfig/colmoocapp.php';
 
-define('COLMOOC_JSON_HEAD', "Content-Type: application/json\r\n");
-
-$colmoocapp = ExtAppManager::getApp(strtolower(ColmoocApp::NAME));
-
 /**
  * @brief checks if user has chat access permissions
  * @global type $is_editor

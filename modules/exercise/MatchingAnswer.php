@@ -117,12 +117,12 @@ class MatchingAnswer extends QuestionType
         $answer_object_ids = range(1, $nbrAnswers);
         foreach ($answer_object_ids as $answerId) {
             $grade = 0;
-            $answer = standard_text_escape($this->answer_object->getTitle($answerId));
+            $answer = $this->answer_object->getTitle($answerId);
             $answerCorrect = $this->answer_object->isCorrect($answerId);
             $answerWeighting = $this->answer_object->getWeighting($answerId);
 
             if ($answerCorrect) {
-                $thisChoice = isset($choice[$answerId]) ? $choice[$answerId] : null;
+                $thisChoice = $choice[$answerId] ?? null;
                 if ($answerCorrect == $thisChoice) {
                     $questionScore += $answerWeighting;
                     $grade = $answerWeighting;
