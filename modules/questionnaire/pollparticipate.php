@@ -125,7 +125,7 @@ function printPollForm() {
     $langPollAlreadyParticipated, $is_editor, $is_course_reviewer, $langBack, $langQuestion,
     $langCancel, $head_content, $langPollParticipantInfo, $langCollesLegend,
     $pageName, $lang_rate1, $lang_rate5, $langForm, $pid, $langTypeOutMessage,
-    $langPreviousQuestion, $langNextQuestion, $langCleanup, $langForbidden, 
+    $langPreviousQuestion, $langNextQuestion, $langCleanup, $langForbidden,
     $is_consultant, $is_coordinator, $langSubmissionOnBehalfOfUser, $urlAppend, $langProcessForFiliInTool;
 
     $unit_id = isset($_REQUEST['unit_id'])? intval($_REQUEST['unit_id']): null;
@@ -135,9 +135,9 @@ function printPollForm() {
         .slider.slider-horizontal{
             width: 500px;
         }
-        .slider-tick-label { 
-            font-size: 12px; 
-            white-space: normal; 
+        .slider-tick-label {
+            font-size: 12px;
+            white-space: normal;
         }
     </style>
     <script>
@@ -187,13 +187,13 @@ function printPollForm() {
             var total_pages = $('#total_pages').val();
             var current_page = $('#current_page').val();
             var paginate_answers = $('#paginate_answers').val();
-           
+
             if(paginate_answers > 0){
                 for(var i=2; i<=total_pages; i++){
                     $('#q_page_'+i).css('display','none');
                 }
             }
-            
+
             if(current_page >= 2 && current_page<total_pages){
                 $('#prevBtn').css('display','block');
                 $('#nextBtn').css('display','block');
@@ -246,7 +246,7 @@ function printPollForm() {
 
         });
     </script>
-    
+
     <script>
         $(function() {
             $('#onBehalfOfSelection').change(function(e) {
@@ -258,7 +258,7 @@ function printPollForm() {
             });
         });
     </script>
-    
+
     <script>
         $(function() {
             $('.clearUpBtn').on('click', function(e){
@@ -296,7 +296,7 @@ function printPollForm() {
     $default_answer = $thePoll->default_answer;
 
     if ($thePoll->require_answer) {
-        $head_content .= "            
+        $head_content .= "
             <script>
                 document.addEventListener('DOMContentLoaded', () => {
                     const form = document.getElementById('poll');
@@ -310,12 +310,12 @@ function printPollForm() {
                             }
                         });
                 });
-                
+
                 document.addEventListener('DOMContentLoaded', () => {
                   const form = document.getElementById('poll');
                   if (!form) return;
-                
-                  form.addEventListener('submit', e => {                      
+
+                  form.addEventListener('submit', e => {
                     let valid = true;
                     const checkboxGroups = {};
                     form.querySelectorAll('input[type=\\\"checkbox\\\"]').forEach(cb => {
@@ -323,7 +323,7 @@ function printPollForm() {
                       if (!checkboxGroups[name]) checkboxGroups[name] = [];
                       checkboxGroups[name].push(cb);
                     });
-                
+
                     for (const boxes of Object.values(checkboxGroups)) {
                       if (!boxes.some(cb => cb.checked)) {
                         valid = false;
@@ -332,12 +332,12 @@ function printPollForm() {
                         boxes.forEach(cb => cb.classList.remove('invalid-checkbox'));
                       }
                     }
-                    
+
                     if (!valid) {
                         e.preventDefault();
                     }
                   });
-                
+
                   form.querySelectorAll('input[type=\\\"checkbox\\\"]').forEach(cb => {
                     cb.addEventListener('change', () => {
                       const group = form.querySelectorAll('input[name=\\\"' + cb.name + '\\\"]');
@@ -348,13 +348,13 @@ function printPollForm() {
                   });
                 });
                 </script>
-                
+
                 <style>
                     .invalid-checkbox {
                       outline: 1px solid #B70A0A!important;
                     }
                 </style>
-            
+
             ";
 
     }
@@ -371,7 +371,7 @@ function printPollForm() {
             if (isset($_GET['from_session_view'])) {
                 redirect_to_home_page('modules/session/session_space.php?course='.$course_code.'&session='.$_GET['session']);
             }else {
-               redirect_to_home_page('modules/wall/index.php?course=' . $course_code); 
+               redirect_to_home_page('modules/wall/index.php?course=' . $course_code);
             }
         } else {
             redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);
@@ -405,7 +405,7 @@ function printPollForm() {
             if ($is_consultant && !$is_coordinator) {
                 $consultantId = $uid;
             }
-            $ch = Database::get()->querySingle("SELECT id FROM mod_session WHERE id = ?d 
+            $ch = Database::get()->querySingle("SELECT id FROM mod_session WHERE id = ?d
                                                 AND course_id = ?d AND creator = ?d", $_GET['session'], $course_id, $consultantId); // only for logged consultant
             if ((!$ch && $is_consultant && !$is_coordinator) or !$is_consultant) {
                 Session::flash('message', $langForbidden);
@@ -414,10 +414,10 @@ function printPollForm() {
             }
 
             $onBehalfOfUser = "<input type='hidden' name='onBehalfOfUserId' id='onBehalfOfUserId' value='{$userDefault}'>";
-            $forSession = "<input type='hidden' name='forSession' value='$_GET[session]'>"; 
+            $forSession = "<input type='hidden' name='forSession' value='$_GET[session]'>";
             $session_participants = Database::get()->queryArray("SELECT mod_session_users.participants,user.givenname,user.surname FROM mod_session_users
                                                                  JOIN user ON mod_session_users.participants = user.id
-                                                                 WHERE mod_session_users.session_id = ?d 
+                                                                 WHERE mod_session_users.session_id = ?d
                                                                  AND mod_session_users.is_accepted = ?d", $_GET['session'], 1);
 
             $actionPoll = $urlAppend . "modules/units/view.php?course=$course_code&res_type=questionnaire&pid=$pid&UseCase=1&session=$_GET[session]&from_session_view=true&onBehalfOfUser=true&printPollForUser=true";
@@ -545,7 +545,7 @@ function printPollForm() {
         //if ($user_answers_session) {
             $sql_an = "AND b.session_id = $s_id";
         //}
-        
+
         foreach ($questions as $theQuestion) {
             if ($temp_IsLime) {
                 break;
@@ -823,7 +823,7 @@ function printPollForm() {
             }
         } else {
             if (!$temp_IsLime) {
-                $tool_content .= "<input class='btn submitAdminBtn blockUI' name='submit' type='submit' value='" . q($langSubmit) . "'>";
+                $tool_content .= "<input class='btn submitAdminBtn' name='submit' type='submit' value='" . q($langSubmit) . "'>";
                 if (isset($_REQUEST['unit_id'])) {
                     $tool_content .= "<a class='btn cancelAdminBtn ms-3' href='../units/index.php?course=$course_code&amp;id=$_REQUEST[unit_id]'>" . q($langCancel) . "</a>";
                 } else {
@@ -837,7 +837,16 @@ function printPollForm() {
         }
         $tool_content .= "</div>";
         if (!$temp_IsLime) {
-            $tool_content .= " </fieldset></form>";
+            $tool_content .= "</fieldset>
+                </form>
+                <script>
+                    $(function () {
+                        $('#poll').on('submit', function () {
+                            $(this).find('input[type=submit]').prop('disabled', true);
+                            return true;
+                        });
+                    });
+                </script>";
         }
     } else {
         Session::flash('message',$langPollInactive);
@@ -1069,9 +1078,11 @@ function submitPoll() {
 //            Database::get()->query('DELETE FROM poll_user_record WHERE id = ?d', $user_record_id);
             Session::flash('message', $langQFillInAllQs);
             Session::flash('alert-class', 'alert-warning');
-            if(isset($_GET['from_session_view'])){
+            if ($unit_id) {
+                redirect_to_home_page("modules/units/view.php?course=$course_code&res_type=questionnaire&UseCase=1&pid=$pid");
+            } elseif (isset($_GET['from_session_view'])) {
                 redirect_to_home_page("modules/units/view.php?course=$course_code&res_type=questionnaire&UseCase=1&pid=$pid&session=$_GET[session]&from_session_view=true");
-            }else{
+            } else {
                 redirect_to_home_page("modules/questionnaire/pollparticipate.php?course=$course_code&UseCase=1&pid=$pid");
             }
         }
@@ -1097,19 +1108,6 @@ function submitPoll() {
             }
         } else {
             $tool_content .= "<a class='btn cancelAdminBtn' href='index.php?course=$course_code'>$langBack</a>";
-        }
-        if ($poll->show_results) {
-            if (isset($_REQUEST['unit_id'])) {
-                $tool_content .= "<a class='btn submitAdminBtn ms-3' href='../units/view.php?course=$course_code&amp;res_type=questionnaire_results&amp;unit_id=$_REQUEST[unit_id]&amp;pid=$pid'>$langUsage</a>";
-            } else if (isset($_REQUEST['res_type'])) {
-                if (isset($_GET['from_session_view'])) { 
-                    $tool_content .= "<a class='btn btn-primary ms-3' href='../questionnaire/pollresults.php?course=$course_code&session=$_GET[session]&pid=$pid&from_session_view=true'>$langUsage<a>";
-                } else {
-                    $tool_content .= "<a class='btn btn-primary' href='../wall/index.php?course=$course_code'>$langUsage</a>";
-                }
-            } else {
-                $tool_content .= "<a class='btn submitAdminBtn ms-3' href='pollresults.php?course=$course_code&amp;pid=$pid'>$langUsage</a>";
-            }
         }
         $tool_content .= "</div>";
     } else {

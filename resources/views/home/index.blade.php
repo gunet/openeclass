@@ -2,11 +2,11 @@
 
 @section('content')
 
-<div class="col-12 main-section">
+<div class="col-12 main-section qqe">
 
         @if($warning)
             <input id='showWarningModal' type='hidden' value='1'>
-            <div class="modal fade" id="WarningModal" aria-hidden="true" tabindex="-1">
+            <div class="modal fade" id="WarningModal" aria-hidden="true" tabindex="0">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content shadow-sm border-0 p-0">
                         <div class="modal-header d-flex justify-content-between align-items-center">

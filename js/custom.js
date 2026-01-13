@@ -446,3 +446,22 @@ function about_animation(){
         })
     }
 }
+
+function setNewCookie(name, value, days, path) {
+    var date = new Date(), expires = '';
+    if (!path) {
+        path = '/';
+    }
+    if (days) {
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        if (typeof(date.toUTCString) === 'function') {
+            expires = '; expires=' + date.toUTCString();
+        } else {
+            //deprecated
+            expires = '; expires=' + date.toGMTString();
+        }
+    } else {
+        expires = '';
+    }
+    document.cookie = name + '=' + value + expires + '; path=' + path + '; samesite=strict';
+}
