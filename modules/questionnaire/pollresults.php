@@ -476,6 +476,7 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COU
                     }
                     $answers_table .= "</tr>";
                     unset($names_array);
+                    unset($dis_msg);
                 }
                 $answers_table .= "</table></div><br>";
                 $tool_content .= "<script type = 'text/javascript'>pollChartData.push(".json_encode($this_chart_data).");</script>";
