@@ -1774,7 +1774,7 @@ function findUserVisibleUnits($uid, $all_units, $course_id = null) {
                                                           INNER JOIN user_badge ub ON (b.id = ub.badge)
                                                           WHERE ub.user = ?d
                                                           AND cu.course_id = ?d
-                                                          AND cu.visible = 1
+                                                          AND (cu.visible = 1 OR cu.visible = 2)
                                                           AND cu.public = 1
                                                           AND cu.order >= 0", $uid, $course_id);
     if ( isset($userInBadges) and $userInBadges ) {
