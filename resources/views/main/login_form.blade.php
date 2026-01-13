@@ -8,12 +8,12 @@
             @include('layouts.partials.show_alert')
 
             @if (Session::has('login_error'))
-                <div class='modal show' id='warning-modal' tabindex='-1'>
+                <div class='modal show' id='warning-modal' tabindex='0'>
                     <div class='modal-dialog modal-dialog-centered'>
                         <div class='modal-content border-0 p-0'>
                             <div class='modal-header d-flex justify-content-between align-items-center'>
-                                <div class='modal-title'>{{ trans('langError') }}</div>
-                                <button aria-label="{{ trans('langClose') }}" type='button' class='close' data-bs-dismiss='modal'></button>
+                                <h2 class='modal-title'>{{ trans('langError') }}</h2>
+                                <button aria-label="{{ trans('langClose') }}" type='button' class='close' data-bs-dismiss='modal' id="closeBtn"></button>
                             </div>
                             <div class='modal-body'>
                                 <div class='alert alert-warning'>
@@ -27,7 +27,11 @@
                 @push('bottom_scripts')
                     <script>
                         var warningModal = new bootstrap.Modal(document.getElementById('warning-modal'), {});
-                        warningModal.toggle();
+                        const focusTarget = document.getElementById('closeBtn');
+                        warningModal.show();
+                        document.getElementById('warning-modal').addEventListener('shown.bs.modal', function () {
+                            focusTarget.focus();
+                        });
                         document.body.addEventListener('keydown', function(e) {
                           if (e.key == "Escape") {
                             warningModal.hide();

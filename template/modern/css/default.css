@@ -712,6 +712,14 @@ span{
   font-style: normal;
   margin-bottom: 0px;
 }
+strong p,
+strong span {
+  font-weight: 700;
+}
+em p,
+em span {
+  font-style: italic;
+}
 
 
 /************************* ABOUT LINKS ***************************/

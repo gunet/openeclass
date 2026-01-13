@@ -326,6 +326,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
 $diskUsed = dir_total_space($basedir);
 
 $user_upload = $uid && $subsystem == MAIN && get_config('enable_docs_public_write') && setting_get(SETTING_DOCUMENTS_PUBLIC_WRITE);
+
 $uploading_as_user = !$can_upload && $user_upload;
 
 if (defined('COMMON_DOCUMENTS')) {
@@ -1586,6 +1587,7 @@ $data['diskQuotaDocument'] = $diskQuotaDocument = $diskQuotaDocument * 1024 / 10
 $data['diskUsed'] = $diskUsed;
 
 if (($can_upload or $user_upload) and !$is_in_tinymce) {
+
     // available actions
     if (isset($_GET['rename'])) {
         $pageName = $langRename;
@@ -1621,7 +1623,8 @@ if (($can_upload or $user_upload) and !$is_in_tinymce) {
             'level' => 'primary'),
         array('title' => $langBulkProcessing,
             'class' => 'bulk-processing',
-            'icon' => 'fa-hat-wizard'),
+            'icon' => 'fa-hat-wizard',
+            'show' => $is_editor),
         array('title' => $langUploadRecAudio,
             'url' => "rec_audio.php?course=$course_code",
             'icon' => 'fa-microphone',
@@ -1678,6 +1681,7 @@ $data['course_id'] = $course_id;
 $data['course_code'] = $course_code;
 $data['is_editor'] = $is_editor;
 $data['can_upload'] = $can_upload;
+$data['user_upload'] = $user_upload;
 view('modules.document.index', $data);
 
 function select_proper_filters($requestDocsFilter) {

@@ -255,16 +255,37 @@ if (isset($_POST['submitAnswers'])) {
     if (!$question) {
         redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
     }
-    $answers = $_POST['answers'];
-    Database::get()->query("DELETE FROM poll_question_answer WHERE pqid IN
-        (SELECT pqid FROM poll_question WHERE pid = ?d AND pqid = ?d)", $pid, $pqid);
 
-    foreach ($answers as $answer) {
+    $is_modified_q = false;
+    if (isset($_POST['update_question'])) {
+        $is_modified_q = true;
+    }
+
+    $qids_arr = [];
+    $qids = Database::get()->queryArray("SELECT pqaid FROM poll_question_answer WHERE pqid = ?d", $pqid);
+    foreach ($qids as $q) {
+        $qids_arr[] = $q->pqaid;
+    }
+
+    $answers = $_POST['answers'];
+    $arr_keys = [];
+    foreach ($answers as $key => $answer) {
+        $arr_keys[] = $key;
         if ($answer !== '') {
-            Database::get()->query("INSERT INTO poll_question_answer (pqid, answer_text)
-                            VALUES (?d, ?s)", $pqid, $answer);
+            if (!$is_modified_q or !in_array($key, $qids_arr)) {
+                Database::get()->query("INSERT INTO poll_question_answer (pqid, answer_text)
+                                        VALUES (?d, ?s)", $pqid, $answer);
+            } else {
+                Database::get()->query("UPDATE poll_question_answer SET answer_text = ?s
+                                        WHERE pqaid = ?d", $answer, $key);
+            }
         }
     }
+    $del_q = array_diff($qids_arr, $arr_keys);
+    foreach ($del_q as $q) {
+        Database::get()->query("DELETE FROM poll_question_answer WHERE pqaid = ?d", $q);
+    }
+
     redirect_to_home_page("modules/questionnaire/admin.php?course=$course_code&pid=$pid");
 }
 if (isset($_GET['deleteQuestion'])) {
@@ -954,10 +975,11 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                         </div>
                     </div><hr><br>";
         if (count($answers) > 0) {
+            $tool_content .= "<input type='hidden' name='update_question' value='1'>";
             foreach ($answers as $answer) {
               $tool_content .="
               <div class='form-group input-group mt-4'>
-                    <input type='text' class='form-control mt-0' name='answers[]' value='$answer->answer_text'>
+                    <input type='text' class='form-control mt-0' name='answers[$answer->pqaid]' value='$answer->answer_text'>
                     <div class='form-control-static input-group-text h-40px bg-white input-border-color'>
                         " . icon('fa-xmark Accent-200-cl', $langDelete, '#', ' class="del_btn"') . "
                     </div>

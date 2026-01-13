@@ -243,6 +243,7 @@ $data['resultcategories'] = Database::get()->queryArray("SELECT * FROM video_cat
 if ($form_input === 'opendelos') {
     $jsonPublicObj = $jsonPrivateObj = $authUrl = '';
     $checkAuth = false;
+    list($jsonPublicObj) = requestDelosJSON();
     if (!$checkAuth) {
         $authUrl = (isCASUser()) ? getDelosURL() . getDelosRLoginCASAPI() : getDelosURL() . getDelosRLoginAPI();
         $authUrl .= "?token=" . getDelosSignedToken();
@@ -262,7 +263,7 @@ if ($form_input === 'opendelos') {
     $data['jsonPrivateObj'] = $jsonPrivateObj;
     $data['checkAuth'] = $checkAuth;
     $data['authUrl'] = $authUrl;
-    $data['currentVideoLinks'] = getCurrentVideoLinks($course_id);
+    $data['currentVideoLinks'] = getCurrentVideoLinks();
     $head_content .= getDelosJavaScript();
     view('modules.video.editdelos', $data);
 } else {

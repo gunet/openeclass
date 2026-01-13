@@ -300,7 +300,7 @@
                             {!! $metaDataBox !!}
                         </div>
                     @endif
-                    @if ($can_upload)
+                    @if ($can_upload or $user_upload)
                         <div class="col-12 drag_and_drop_container d-none mb-3">
                             <input type="hidden" name="uploadPath" value="{{ $curDirPath }}">
                             <input type='hidden' name='file_creator' value='{{ $_SESSION['givenname'] . ' ' . $_SESSION['surname'] }}' size='40'>

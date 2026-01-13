@@ -1,4 +1,4 @@
-# The Open eClass Platform 4.2 (in progress)
+# The Open eClass Platform 4.3 (in progress)
 
 http://www.openeclass.org/
 
@@ -8,12 +8,12 @@ solution offered by the Greek Academic Network (GUnet) to support asynchronous
 elearning services. Its goal is the incorporation and constructive use of the
 Internet and web technologies in the teaching and learning process.
 
-Distribution of the platform started on March 2003 and, since then, it has
-been designed and developed by the GUnet Asychronous eLearning group as an
-open source software (under the GNU GPL Licence). Many developers and users
-have contributed a great amount of work and ideas and we would like to express
-our gratitude to all of them for their support. A complete list of
-contributors can be found in the CREDITS.txt file.
+Distribution of the platform started on March 2003 and, since then, it has been
+designed and developed by the GUnet eLearning group as open source software
+under the GNU GPL Licence. Many developers and users have contributed a great
+amount of work and ideas and we would like to express our gratitude to all of
+them for their support. A complete list of contributors can be found in the
+CREDITS.txt file.
 
 Installation of Open eClass requires a web server with support for PHP >= 8.1
 and a database server (MySQL or MariaDB). You can find detailed installation
@@ -21,19 +21,19 @@ instructions as well as other manuals at the following address:
 
 http://docs.openeclass.org/en/start
 
-GUnet Asychronous e-Learning Group
-August 2025
+GUnet eLearning Group
+January 2026
 
 
-# Πλατφόρμα Open eClass 4.2 (υπό ανάπτυξη)
+# Πλατφόρμα Open eClass 4.3 (υπό ανάπτυξη)
 
 http://www.openeclass.org/
 
 Η πλατφόρμα Open eClass (παλιότερη ονομασία: GUnet eClass) είναι ένα
 ολοκληρωμένο Σύστημα Διαχείρισης Ηλεκτρονικών Μαθημάτων και αποτελεί την
 πρόταση του Ακαδημαϊκού Διαδικτύου GUnet για την υποστήριξη της Υπηρεσίας
-Ασύγχρονης Τηλεκπαίδευσης. Αναπτύχθηκε από την Ομάδα Ασύγχρονης Τηλεκπαίδευσης
-του Ακαδημαϊκού Διαδικτύου, υποστηρίζεται κεντρικά από το GUnet και διανέμεται
+Ασύγχρονης Τηλεκπαίδευσης. Αναπτύχθηκε από την Ομάδα Τηλεκπαίδευσης του
+Ακαδημαϊκού Διαδικτύου, υποστηρίζεται κεντρικά από το GUnet και διανέμεται
 ελεύθερα ως Λογισμικό Ανοικτού Κώδικα.
 
 Η διάθεση της πλατφόρμας ξεκίνησε το Μάρτιο του 2003 και, στα χρόνια που
@@ -56,7 +56,7 @@ http://www.openeclass.org/
 τους μας δίνει τη δύναμη να συνεχίσουμε την προσπάθεια.
 
 Παράλληλα θα θέλαμε να ευχαριστούμε θερμά όλους αυτούς που συνέβαλλαν στην ανάπτυξη
-και βελτίωση της πλατφόρμας. (Περισσότερες πληροφορίες στο αρχείο CREDITS.txt)
+και βελτίωση της πλατφόρμας. Στο αρχείο CREDITS.txt θα βρείτε περισσότερες πληροφορίες.
 
 Για την εγκατάσταση της πλατφόρμας απαιτείται ένας εξυπηρετητής web με υποστήριξη
 PHP >= 8.1 και μια βάση δεδομένων (MySQL ή MariaDB). Αναλυτικές οδηγίες εγκατάστασης
@@ -64,5 +64,5 @@ PHP >= 8.1 και μια βάση δεδομένων (MySQL ή MariaDB). Ανα�
 
 http://docs.openeclass.org/el/start
 
-Ομάδα Ασύγχρονης Τηλεκπαίδευσης GUnet
-Αύγουστος 2025
+Ομάδα Τηλεκπαίδευσης GUnet
+Ιανουάριος 2026

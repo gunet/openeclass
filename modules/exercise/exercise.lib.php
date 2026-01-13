@@ -43,7 +43,7 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 function showQuestion(&$objQuestionTmp, $question_number, array $exerciseResult = [], $options = []) {
 
     global $tool_content, $picturePath, $langQuestion, $langInfoGrades,
-            $exerciseType, $nbrQuestions, $langInfoGrade, $langHasAnswered;
+            $exerciseType, $nbrQuestions, $langGradebookGrade, $langHasAnswered;
 
     $questionId = $objQuestionTmp->selectId();
     $questionWeight = $objQuestionTmp->selectWeighting();
@@ -54,7 +54,7 @@ function showQuestion(&$objQuestionTmp, $question_number, array $exerciseResult 
         $questionWeight = intval($questionWeight);
     }
     if ($questionWeight == 1) {
-        $message = $langInfoGrade;
+        $message = $langGradebookGrade;
     }
 
     $questionName = $objQuestionTmp->selectTitle();
