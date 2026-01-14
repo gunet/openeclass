@@ -269,12 +269,22 @@ if (isset($_POST['submitQuestion'])) {
                         ($query_columns)
                         VALUES ($query_values)", $query_vars)->lastInsertID;
         }
+
+        $subQOn = '';
+        if (isset($_POST['submit_sub_question'])) {
+            $subQOn = "&subQOn=true";
+            Database::get()->query("UPDATE poll_question SET has_sub_question = ?d WHERE pqid = ?d", -1, $pqid); // -1 means that the question is sub-question
+            Database::get()->query("UPDATE poll_question_answer SET sub_qid = ?d WHERE pqaid = ?d", $pqid, $_POST['sub_pr_ans']);
+            $tmpPqid = Database::get()->querySingle("SELECT pqid FROM poll_question_answer WHERE pqaid = ?d", $_POST['sub_pr_ans'])->pqid;
+            Database::get()->query("UPDATE poll_question_answer SET sub_qid = ?d WHERE pqaid != ?d AND pqid = ?d", 0, $_POST['sub_pr_ans'], $tmpPqid);
+        }
+
         if ($qtype == QTYPE_FILL || $qtype == QTYPE_LABEL || $qtype == QTYPE_SCALE || $qtype == QTYPE_DATETIME || $qtype == QTYPE_SHORT) {
             redirect_to_home_page("modules/questionnaire/admin.php?course=$course_code&pid=$pid");
         } elseif ($qtype == QTYPE_TABLE) {
             redirect_to_home_page("modules/questionnaire/admin.php?course=$course_code&pid=$pid&modifyTableAnswers=$pqid");
         } else {
-            redirect_to_home_page("modules/questionnaire/admin.php?course=$course_code&pid=$pid&modifyAnswers=$pqid");
+            redirect_to_home_page("modules/questionnaire/admin.php?course=$course_code&pid=$pid&modifyAnswers=$pqid$subQOn");
         }
     } else {
         Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
@@ -328,7 +338,18 @@ if (isset($_POST['submitAnswers'])) {
         Database::get()->query("UPDATE poll_question SET total_weight = ?d WHERE pid = ?d AND pqid = ?d", $total_grade, $pid, $pqid);
     }
 
-    redirect_to_home_page("modules/questionnaire/admin.php?course=$course_code&pid=$pid");
+    $redirectToSubQuestion = '';
+    $hasSubQ = 0;
+    if (isset($_POST['add_subquestion']) and $_POST['add_subquestion'] == 'on') {
+        $hasSubQ = 1;
+        $redirectToSubQuestion = "&qid=$pqid&sub_question=1";
+    }
+    Database::get()->query("UPDATE poll_question SET has_sub_question = ?d WHERE pid = ?d AND pqid = ?d", $hasSubQ, $pid, $pqid);
+    if (isset($_GET['subQOn'])) {
+        Database::get()->query("UPDATE poll_question SET has_sub_question = ?d WHERE pqid = ?d", -1, $pqid); // -1 means that the question is sub-question
+    }
+
+    redirect_to_home_page("modules/questionnaire/admin.php?course=$course_code&pid=$pid$redirectToSubQuestion");
 }
 if (isset($_GET['deleteQuestion'])) {
     $pqid = intval($_GET['deleteQuestion']);
@@ -1081,6 +1102,11 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         </div>
     </div>";
 
+    $subQOn_ = '';
+    if (isset($_GET['subQOn'])) {
+        $subQOn_ = "&subQOn=true";
+    }
+
     $tool_content .= "
     <div class='col-12 mt-4'>
         <div class='card panelCard card-default px-lg-4 py-lg-3'>
@@ -1088,7 +1114,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 <h3>$langQuestionAnswers</h3>
             </div>
             <div class='card-body'>
-                    <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;pid=$pid&amp;modifyAnswers=$question_id' method='post'>
+                    <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;pid=$pid&amp;modifyAnswers=$question_id$subQOn_' method='post'>
                     <div class='form-group'>
                         <div class='col-12 control-label-notes'>$langPollAddAnswer:</div>
                         <div class='col-12 mt-2'>
@@ -1128,6 +1154,21 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                     </div>
                 </div>";
         }
+        // Add subquestion to the specific predefined answer
+        if (!isset($_GET['subQOn'])) {
+        $subQuestionChecked = $question->has_sub_question ? 'checked' : '';
+        $tool_content .= "<div class='form-group mt-4'>
+                            <div class='checkbox'>
+                                <label class='label-container' aria-label='$langSelect'>
+                                    <input type='checkbox' name='add_subquestion' $subQuestionChecked>
+                                    <span class='checkmark'></span>
+                                    $langAddSubQuestion
+                                </label>
+                            </div>
+                          </div>";
+        }
+
+
         $tool_content .= "
                     <div class='form-group mt-4'>
                         <div class='col-12 d-flex justify-content-center align-items-center gap-2'>
@@ -1330,6 +1371,99 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             </div>
         ";
     }
+} elseif (isset($_GET['sub_question'])) {
+    $qid = intval($_GET['qid']);
+    $q_answers = Database::get()->queryArray("SELECT * FROM poll_question_answer WHERE pqid = ?d", $qid);
+    $newOrEditQ = "&newQuestion=yes";
+    $qText = '';
+    $qTypeSubQuestion = 0;
+    foreach ($q_answers as $q) {
+        if ($q->sub_qid > 0) {
+            $qText = Database::get()->querySingle("SELECT question_text FROM poll_question WHERE pqid = ?d", $q->sub_qid)->question_text;
+            $qTypeSubQuestion = Database::get()->querySingle("SELECT qtype FROM poll_question WHERE pqid = ?d", $q->sub_qid)->qtype;
+            $newOrEditQ = "&modifyQuestion=$q->sub_qid";
+        }
+    }
+
+    $tool_content .= "
+    <div class='card panelCard card-default px-lg-4 py-lg-3'>
+        <div class='card-header border-0 d-flex justify-content-between align-items-center'>
+            <h3>$langAddSubQuestion</h3>
+        </div>
+        <div class='card-body'>
+            <form method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&pid=$pid$newOrEditQ'>
+
+                <input type='hidden' name='submit_sub_question' value='1'>
+
+                <div class='form-group'>
+                    <label class='form-label' for='ans_id'>$langReferencedObject <span class='asterisk Accent-200-cl'>(*)</span></label>
+                    <select class='form-select' id='ans_id' name='sub_pr_ans'>
+                        <option>$langSelect</option>";
+                    foreach ($q_answers as $q) {
+                        $tool_content .= "<option value='$q->pqaid' " . ($q->sub_qid > 0 ? 'selected' : '') . ">$q->answer_text</option>";
+                    }
+        $tool_content .= "</select></div>
+
+                <div class='form-group mt-4'>
+                    <label for='questionName' class='form-label'>$langQuestion <span class='asterisk Accent-200-cl'>(*)</span></label>
+                    <input type='text' class='form-control' id='questionName' name='questionName' value='$qText'>
+                </div>
+
+                <div class='form-group mt-4'>
+                    <label class='form-label'>$langType</label>
+                    <div class='radio mb-1'>
+                      <label>
+                        <input type='radio' name='answerType' class='answerType' value='".QTYPE_SINGLE."' ".($qTypeSubQuestion == QTYPE_SINGLE ? 'checked' : '').">
+                        ". $aType[QTYPE_SINGLE - 1] . "
+                      </label>
+                    </div>
+                    <div class='radio mb-1'>
+                      <label>
+                        <input type='radio' name='answerType' class='answerType' value='".QTYPE_MULTIPLE."' ".($qTypeSubQuestion == QTYPE_MULTIPLE ? 'checked' : '').">
+                        ". $aType[QTYPE_MULTIPLE - 1] . "
+                      </label>
+                    </div>
+                    <div class='radio mb-1'>
+                        <label>
+                        <input type='radio' name='answerType' class='answerType' value='".QTYPE_FILL."' ".($qTypeSubQuestion == QTYPE_FILL ? 'checked' : '').">
+                        ". $aType[QTYPE_FILL - 1] . "
+                        </label>
+                    </div>
+                    <div class='radio mb-1'>
+                        <label>
+                        <input type='radio' name='answerType' class='answerType' value='".QTYPE_SCALE."' ".($qTypeSubQuestion == QTYPE_SCALE ? 'checked' : '').">
+                        ". $aType[QTYPE_SCALE - 1] . "
+                        </label>
+                    </div>
+                    <div class='radio mb-1'>
+                        <label>
+                        <input type='radio' name='answerType' class='answerType' value='".QTYPE_TABLE."' ".($qTypeSubQuestion == QTYPE_TABLE ? 'checked' : '').">
+                        ". $aType[QTYPE_TABLE - 1] . "
+                        </label>
+                    </div>
+                    <div class='radio mb-1'>
+                        <label>
+                        <input type='radio' name='answerType' class='answerType' value='".QTYPE_DATETIME."' ".($qTypeSubQuestion == QTYPE_DATETIME ? 'checked' : '').">
+                        ". $aType[QTYPE_DATETIME - 1] . "
+                        </label>
+                    </div>
+                    <div class='radio mb-1'>
+                        <label>
+                        <input type='radio' name='answerType' class='answerType' value='".QTYPE_SHORT."' ".($qTypeSubQuestion == QTYPE_SHORT ? 'checked' : '').">
+                        ". $aType[QTYPE_SHORT - 1] . "
+                        </label>
+                    </div>
+                </div>
+
+                <div class='d-flex justify-content-center align-items-center gap-2'>
+                    <button class='btn submitAdminBtn mt-4' type='submit' name='submitQuestion'>$langNextStep</button>
+                    <a class='btn cancelAdminBtn mt-4' href='".$_SERVER['SCRIPT_NAME']."?course=$course_code&pid=$pid&modifyAnswers=$qid'>$langPrevStep</a>
+                </div>
+
+            </form>
+        </div>
+    </div>";
+
 } else {
 
     $pageName = $langEditChange;
@@ -1357,7 +1491,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         $assign_to_users_message = "$langWorkToAllUsers";
     }
 
-    $questions = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d ORDER BY q_position", $pid);
+    $questions = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d AND has_sub_question != ?d ORDER BY q_position", $pid, -1);
 
     $action_bar = action_bar(array(
         array('title' => $langSee,
@@ -1570,6 +1704,9 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                                                 }
                                             } else {
                                                 $tool_content .= $question->question_text . "<br>" . $typeText;
+                                            }
+                                            if ($question->has_sub_question) {
+                                                $tool_content .= "<br><span class='help-block text-info'>$langSubQuestionExists</span>";
                                             }
                       $tool_content .= "    </p>
                                         </td>

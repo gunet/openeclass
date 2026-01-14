@@ -334,7 +334,28 @@ function printPollForm() {
                 });
             });
         });
-    </script>";
+    </script>
+    
+    
+    <script>
+        $(function() {
+            $('.single_type_answer:checked').each(function() {
+                var valId = $(this).val();
+                $('.sub_question_temp').removeClass('d-block').addClass('d-none');
+                $('.sub_question_'+valId).removeClass('d-none').addClass('d-block');
+            });
+            $('.single_type_answer').change(function() {
+                var valId = $(this).val();
+                $('.sub_question_temp').removeClass('d-block').addClass('d-none');
+                $('.sub_question_'+valId).removeClass('d-none').addClass('d-block');
+            });
+
+
+        });
+    </script>
+    
+    
+    ";
 
     // If a consultant is on behalf of user mode for submitting poll.
     $userDefault = $uid;
@@ -554,7 +575,7 @@ function printPollForm() {
         //*****************************************************************************
         //      Get answers + questions
         //******************************************************************************/
-        $questions = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d AND qtype != ?d ORDER BY q_position,`page` ASC", $pid, 0);
+        $questions = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d AND qtype != ?d AND has_sub_question != ?d ORDER BY q_position,`page` ASC", $pid, 0, -1);
         $pageBreakExists = checkPageBreakOn($pid);
         $maxPage = Database::get()->querySingle("SELECT MAX(`page`) AS max FROM poll_question WHERE pid = ?d AND qtype != ?d", $pid, 0)->max;
         if (isset($_SESSION['current_page'])) {
@@ -717,13 +738,59 @@ function printPollForm() {
                                             <div class='col-sm-offset-1 col-sm-11'>
                                                 <div class='$type_attr QuestionType_{$qtype} QuestionNumber_{$pqid}'>
                                                     <label class='$class_type_attr' aria-label='$langSelect'>
-                                                        <input type='$type_attr' name='answer[$pqid]$name_ext' value='$theAnswer->pqaid' $checked data-question-type='$qtype'>
+                                                        <input class='single_type_answer' type='$type_attr' name='answer[$pqid]$name_ext' value='$theAnswer->pqaid' $checked data-question-type='$qtype'>
                                                         $checkMark_class
                                                         ".q_math($theAnswer->answer_text)."
                                                     </label>
                                                 </div>
                                             </div>
                                         </div>";
+
+                                    /*****************************************************************/
+                                    /*****************************************************************/
+                                    /*****************************************************************/
+                                    if ($theAnswer->sub_qid) {// the answer contains the sub-question
+                                        
+                                        $qTypeSubQuestion = Database::get()->querySingle("SELECT qtype FROM poll_question WHERE pqid = ?d", $theAnswer->sub_qid)->qtype;
+                                        $resSubQAnswers = Database::get()->queryArray("SELECT * FROM poll_question_answer WHERE pqid = ?d", $theAnswer->sub_qid);
+                                        $tool_content .= "<div class='col-12 col-lg-6 m-auto sub_question_temp sub_question_{$theAnswer->pqaid} d-none'>";
+                                        if ($qTypeSubQuestion == QTYPE_SINGLE) {
+                                            foreach ($resSubQAnswers as $an) {
+                                                        $checkedSubQ = '';
+                                                        if (isset($_SESSION['data_answers'][$an->pqid]) && $_SESSION['data_answers'][$an->pqid] == $an->pqaid) {
+                                                            $checkedSubQ = 'checked';
+                                                        }
+                                                        $tool_content .= "
+                                                        <div class='form-group'>
+                                                            <div class='col-sm-offset-1 col-sm-11'>
+                                                                <div class='radio QuestionType_{$qTypeSubQuestion} QuestionNumber_{$an->pqid}'>
+                                                                    <label class='radio-label' aria-label='$langSelect'>
+                                                                        <input type='radio' name='answer[$an->pqid]' value='$an->pqaid' $checkedSubQ data-question-type='$qTypeSubQuestion'>
+                                                                        ".q_math($an->answer_text)."
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        </div>";
+                                            }
+                                        } elseif ($qTypeSubQuestion == QTYPE_MULTIPLE) {
+
+                                        } elseif ($qTypeSubQuestion == QTYPE_FILL) {
+
+                                        } elseif ($qTypeSubQuestion == QTYPE_SCALE) {
+
+                                        } elseif ($qTypeSubQuestion == QTYPE_TABLE) {
+
+                                        } elseif ($qTypeSubQuestion == QTYPE_DATETIME) {
+
+                                        } elseif ($qTypeSubQuestion == QTYPE_SHORT) {
+
+                                        }
+
+                                        $tool_content .= "</div>";
+                                    }
+                                    /*****************************************************************/
+                                    /*****************************************************************/
+                                    /*****************************************************************/
                                 }
                                 if ($qtype == QTYPE_SINGLE && $default_answer) {
                                     $checked = '';
