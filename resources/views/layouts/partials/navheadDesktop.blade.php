@@ -134,7 +134,7 @@
                                 @endif
                                 @if(isset($_SESSION['uid']))
                                     <div class='d-flex justify-content-end p-0 h-80px'>
-                                        <div class="btn-group" role="group" aria-label="{{ trans('langMenu') }}">
+                                        <div class="btn-group" role="group" aria-label="{{ trans('langOpenUserMenu') }}">
                                             <div class="btn-group" role="group">
                                                 @if($_SESSION['provider'] !== 'lti_publish')
                                                 <button id="btnGroupDrop1" type="button" class="btn user-menu-btn rounded-0 d-flex justify-content-center align-items-center gap-2 rounded-0" data-bs-toggle="dropdown" aria-expanded="false">

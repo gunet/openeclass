@@ -67,9 +67,9 @@
 
 <div class='card bg-transparent card-transparent border-0 sticky-column-course-home mb-3'>
     <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
-        <h3 class='mb-0'>
+        <h2 class='text-heading-h3 mb-0'>
             {{ trans('langAgenda') }}
-        </h3>
+        </h2>
         <a class='text-decoration-underline vsmall-text' href="{{$urlAppend}}main/personal_calendar/index.php">
             {{ trans('langDetails') }}
         </a>

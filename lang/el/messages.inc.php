@@ -7483,3 +7483,4 @@ $langInvalidScore = "Μη έγκυρος βαθμός";
 $langRequestAlreadySent = "Έχει ήδη σταλεί αίτημα εγγραφής για αυτό το μάθημα";
 $langRejectedRequests = "Απορριφθείσες Αιτήσεις Χρηστών";
 $langAcceptedRequests = "Εγκεκριμένες Αιτήσεις Χρηστών";
+$langOpenUserMenu = "Άνοιγμα μενού επιλογών χρήστη";
