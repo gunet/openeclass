@@ -3860,7 +3860,7 @@ function student_view_progress() {
 
         //display points games
         $points_games = array();
-        $pointsgamesq = Database::get()->queryArray("SELECT * FROM points_game WHERE course_id = ?d", $course_id);
+        $pointsgamesq = Database::get()->queryArray("SELECT * FROM points_game WHERE course_id = ?d AND active = ?d", $course_id, 1);
         foreach ($pointsgamesq as $pg) {
             $points_games[] = $pg; 
         }
