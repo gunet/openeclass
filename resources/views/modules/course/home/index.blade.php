@@ -21,7 +21,7 @@
                         }
                     },
                 onAfterViewLoad: function(view) {
-                    $("#current-month").text(this.getTitle());
+                    $("#current-month").text(this.getTitle()).attr("aria-label", this.getTitle());
                     $(".btn-group button").removeClass("active");
                     $("button[data-calendar-view=\'" + view + "\']").addClass("active");
                 }
@@ -84,7 +84,7 @@
                 }
                 bootbox.confirm({
                     closeButton: false,
-                    title: "<div class='icon-modal-default'>"+$actionIcon+"</div>"+"<div class='modal-title-default text-center mb-0'>"+"{{ js_escape(trans('langEmailUnsubscribe')) }}"+"</div>",
+                    title: "<div class='icon-modal-default'>"+$actionIcon+"</div>"+"<h2 class='modal-title-default text-center mb-0'>"+"{{ js_escape(trans('langEmailUnsubscribe')) }}"+"</h2>",
                     message: "<p class='text-center'>"+info_message+"</p>",
                     buttons: {
                         confirm: {
@@ -638,19 +638,19 @@
                             <div class='d-flex justify-content-start align-items-center flex-wrap px-0 py-3'>
                                 <div class='d-flex align-items-center px-2 py-1'>
                                     <span class='event event-important'></span>
-                                    <span class='agenda-comment'>{{ trans('langAgendaDueDay') }}</span>
+                                    <span class='agenda-comment' aria-label="{{ trans('langAgendaDueDay') }}">{{ trans('langAgendaDueDay') }}</span>
                                 </div>
                                 <div class='d-flex align-items-center px-2 py-1'>
                                     <span class='event event-info'></span>
-                                    <span class='agenda-comment'>{{ trans('langAgendaCourseEvent') }}</span>
+                                    <span class='agenda-comment' aria-label="{{ trans('langAgendaCourseEvent') }}">{{ trans('langAgendaCourseEvent') }}</span>
                                 </div>
                                 <div class='d-flex align-items-center px-2 py-1'>
                                     <span class='event event-success'></span>
-                                    <span class='agenda-comment'>{{ trans('langAgendaSystemEvent') }}</span>
+                                    <span class='agenda-comment' aria-label="{{ trans('langAgendaSystemEvent') }}">{{ trans('langAgendaSystemEvent') }}</span>
                                 </div>
                                 <div class='d-flex align-items-center px-2 py-1'>
                                     <span class='event event-special'></span>
-                                    <span class='agenda-comment'>{{ trans('langAgendaPersonalEvent') }}</span>
+                                    <span class='agenda-comment' aria-label="{{ trans('langAgendaPersonalEvent') }}">{{ trans('langAgendaPersonalEvent') }}</span>
                                 </div>
                             </div>
                         </div>

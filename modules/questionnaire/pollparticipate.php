@@ -619,8 +619,8 @@ function printPollForm() {
                                         <div class='form-group'>
                                             <div class='col-sm-offset-1 col-sm-11'>
                                                 <div class='$type_attr QuestionType_{$qtype} QuestionNumber_{$pqid}'>
-                                                    <label class='$class_type_attr' aria-label='$langSelect'>
-                                                        <input type='$type_attr' name='answer[$pqid]$name_ext' value='$theAnswer->pqaid' $checked>
+                                                    <label class='$class_type_attr' aria-label='$langSelect' for='option_{$theAnswer->pqaid}'>
+                                                        <input id='option_{$theAnswer->pqaid}' type='$type_attr' name='answer[$pqid]$name_ext' value='$theAnswer->pqaid' $checked>
                                                         $checkMark_class
                                                         ".q_math($theAnswer->answer_text)."
                                                     </label>
@@ -644,7 +644,7 @@ function printPollForm() {
                                 }
 
                                 $tool_content .= "<div class='col-12 d-flex justify-content-end align-items-center mt-4'>
-                                                    <a id='{$qtype}_{$pqid}' class='btn deleteAdminBtn clearUpBtn gap-1'><i class='fa-regular fa-trash-can'></i>$langCleanup</a>
+                                                    <a id='{$qtype}_{$pqid}' class='btn deleteAdminBtn clearUpBtn gap-1' tabindex='0' role='button'><i class='fa-regular fa-trash-can'></i>$langCleanup</a>
                                                   </div>";
                             } elseif ($qtype == QTYPE_SCALE) {
                                 $slider_value = 0;
@@ -702,7 +702,7 @@ function printPollForm() {
                                     </div>";
 
                                     $tool_content .= "<div class='col-12 d-flex justify-content-end align-items-center mt-4'>
-                                                            <a id='{$qtype}_{$pqid}' class='btn deleteAdminBtn clearUpBtn gap-1'><i class='fa-regular fa-trash-can'></i>$langCleanup</a>
+                                                            <a id='{$qtype}_{$pqid}' class='btn deleteAdminBtn clearUpBtn gap-1' tabindex='0' role='button'><i class='fa-regular fa-trash-can'></i>$langCleanup</a>
                                                         </div>";
                             } elseif ($qtype == QTYPE_TABLE) {
 
@@ -763,7 +763,7 @@ function printPollForm() {
                                     }
 
                                     $tool_content .= "<div class='col-12 d-flex justify-content-end align-items-center mt-4'>
-                                                            <a id='{$qtype}_{$pqid}' class='btn deleteAdminBtn clearUpBtn gap-1'><i class='fa-regular fa-trash-can'></i>$langCleanup</a>
+                                                            <a id='{$qtype}_{$pqid}' class='btn deleteAdminBtn clearUpBtn gap-1' tabindex='0' role='button'><i class='fa-regular fa-trash-can'></i>$langCleanup</a>
                                                         </div>";
                                 }
                             }

@@ -257,7 +257,7 @@ if (isset($_GET['u'])) { //  stats per user
                 $tool_content .= "<td>
                                     <a class='link-color d-flex justify-content-start align-items-center gap-2' href='" . $linkReport . "&user_rep=$row->id" . "' aria-label='".participant_name($row->id)."'
                                         data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langShowReportUserTable'>
-                                        <img class='user-icon-filename' src='".user_icon($row->id, IMAGESIZE_SMALL)."' alt='$langUser:".participant_name($row->id)."'>
+                                        <img class='user-icon-filename' src='".user_icon($row->id, IMAGESIZE_SMALL)."' alt='$langProfileImage:".participant_name($row->id)."'>
                                         <span>" . participant_name($row->id) . "</span>
                                     </a>
                                  </td>";
@@ -324,7 +324,7 @@ if (isset($_GET['u'])) { //  stats per user
                             <div class='modal-header'>
                                 <div class='modal-title'>
                                     <div class='icon-modal-default'><i class='fa-solid fa-cloud-arrow-up fa-xl Neutral-500-cl'></i></div>
-                                    <div class='modal-title-default text-center mb-0 mt-2' id='materialForUser{$row->id}Label'>$langMaterialForUser</div>
+                                    <h2 class='modal-title-default text-center mb-0 mt-2' id='materialForUser{$row->id}Label'>$langMaterialForUser</h2>
                                 </div>
                             </div>
                             <div class='modal-body text-center'>
@@ -352,7 +352,7 @@ if (isset($_GET['u'])) { //  stats per user
                             <div class='modal-header'>
                                 <div class='modal-title'>
                                     <div class='icon-modal-default'><i class='fa-regular fa-trash-can fa-xl Accent-200-cl'></i></div>
-                                    <div class='modal-title-default text-center mb-0' id='deleteMaterialForUser{$row->id}Label'>$langConfirmDelete</div>
+                                    <h2 class='modal-title-default text-center mb-0' id='deleteMaterialForUser{$row->id}Label'>$langConfirmDelete</h2>
                                 </div>
                             </div>
                             <div class='modal-body text-center'>
