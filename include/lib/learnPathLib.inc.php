@@ -641,8 +641,9 @@ function get_learnPath_progress_details($lpid, $lpUid, $total=true, $from_date =
             $modsForProg[$module->attempt][] = $module;
         }
 
-        $global_progress = $global_started = $global_accessed = $global_status = $global_time = array();
+        $global_progress = $global_score_max = $global_started = $global_accessed = $global_status = $global_time = array();
         for ($i = 1; $i <= $maxAttempt; $i++) {
+            $global_score_max[$i] = "";
             $global_started[$i] = "";
             $global_accessed[$i] = "";
             $global_status[$i] = "";
@@ -652,6 +653,10 @@ function get_learnPath_progress_details($lpid, $lpUid, $total=true, $from_date =
         }
 
         foreach ($modules as $module) {
+            if (!empty($module->SMax)) {
+                $global_score_max[$module->attempt] = $module->SMax;
+            }
+
             // total time calculation
             $mtt = preg_replace('/\.[0-9]{0,2}/', '', $module->total_time ?? '');
             $global_time[$module->attempt] = addScormTime($global_time[$module->attempt], $mtt);
@@ -695,6 +700,7 @@ function get_learnPath_progress_details($lpid, $lpUid, $total=true, $from_date =
         }
 
         $totalProgress = $global_progress[$bestAttempt];
+        $totalScoreMax = $global_score_max[$bestAttempt];
         $totalStarted = $global_started[$bestAttempt];
         $totalAccessed = $global_accessed[$bestAttempt];
         $totalStatus = $global_status[$bestAttempt];
@@ -707,7 +713,7 @@ function get_learnPath_progress_details($lpid, $lpUid, $total=true, $from_date =
     if ($total) {
         $score = $totalProgress;
         $totalProgress = $max_progress_measure ? (100 * $max_progress_measure) : $totalProgress;
-        return array($totalProgress, $totalTime, $totalStarted, $totalAccessed, $totalStatus, $maxAttempt, $score);
+        return array($totalProgress, $totalTime, $totalStarted, $totalAccessed, $totalStatus, $maxAttempt, $score, $totalScoreMax);
     } else {
         $attempts = [];
         for ($i = 1; $i <= $maxAttempt; $i++) {
@@ -733,13 +739,14 @@ function get_learnPath_progress_details($lpid, $lpUid, $total=true, $from_date =
  * @param string $totalTime
  * @param int $progress
  * @param int $score
+ * @param int $scoreMax
  */
-function format_lp_progress_display($attempts, $totalTime, $progress, $score): array {
+function format_lp_progress_display($attempts, $totalTime, $progress, $score, $scoreMax): array {
     $hasAttempts = !empty($attempts);
 
     $showTime = $hasAttempts || $totalTime !== "00:00:00";
     $showProgress = $hasAttempts || !empty($progress);
-    $showScore = $hasAttempts || !empty($score);
+    $showScore = ($hasAttempts || !empty($score)) && (!empty($scoreMax) && $scoreMax > 0);
 
     return [
         'time' => $showTime ? q($totalTime) : '-',

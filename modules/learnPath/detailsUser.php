@@ -122,13 +122,13 @@ if (count($lpList) == 0) {
     $totalTimeSpent = "0000:00:00";
     // display each learning path with the corresponding progression of the user
     foreach ($lpList as $lpDetails) {
-        list($lpProgress, $lpTotalTime, $lpTotalStarted, $lpTotalAccessed, $lpTotalStatus, $lpAttemptsNb, $lpScore) = get_learnPath_progress_details($lpDetails->learnPath_id, $_GET['uInfo']);
+        list($lpProgress, $lpTotalTime, $lpTotalStarted, $lpTotalAccessed, $lpTotalStatus, $lpAttemptsNb, $lpScore, $lpScoreMax) = get_learnPath_progress_details($lpDetails->learnPath_id, $_GET['uInfo']);
         $totalProgress += $lpProgress;
         if (!empty($lpTotalTime)) {
             $totalTimeSpent = addScormTime($totalTimeSpent, $lpTotalTime);
         }
         $lp_total_status = disp_lesson_status($lpTotalStatus);
-        $lpDisplay = format_lp_progress_display($lpAttemptsNb, $lpTotalTime, $lpProgress, $lpScore);
+        $lpDisplay = format_lp_progress_display($lpAttemptsNb, $lpTotalTime, $lpProgress, $lpScore, $lpScoreMax);
         $data[] = [ $lpDetails->name, q($lpAttemptsNb), format_locale_date(strtotime($lpTotalStarted), 'short'),
                     format_locale_date(strtotime($lpTotalAccessed), 'short'), $lpDisplay['time'], $lp_total_status, $lpDisplay['progress_text'], $lpDisplay['score']
                   ];

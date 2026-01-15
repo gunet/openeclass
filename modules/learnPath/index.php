@@ -645,13 +645,13 @@ foreach ($result as $list) { // while ... learning path list
                             </div>
                         </td>";
     } elseif ($uid) {
-        list($lpProgress, $lpTotalTime, $lpTotalStarted, $lpTotalAccessed, $lpTotalStatus, $lpAttemptsNb, $lpScore) = get_learnPath_progress_details($list->learnPath_id, $uid);
+        list($lpProgress, $lpTotalTime, $lpTotalStarted, $lpTotalAccessed, $lpTotalStatus, $lpAttemptsNb, $lpScore, $lpScoreMax) = get_learnPath_progress_details($list->learnPath_id, $uid);
         $total_lpProgress += $lpProgress;
         // time
         if (!empty($lpTotalTime)) {
             $globaltime = addScormTime($globaltime, $lpTotalTime);
         }
-        $lpDisplay = format_lp_progress_display($lpAttemptsNb, $lpTotalTime, $lpProgress, $lpScore);
+        $lpDisplay = format_lp_progress_display($lpAttemptsNb, $lpTotalTime, $lpProgress, $lpScore, $lpScoreMax);
 
         $tool_content .= "<td style='width: 15%;'>" . $lpDisplay['time'] . "</td>";
         $tool_content .= "<td style='width: 15%;'>" . $lpDisplay['progress_html'] . "</td>";

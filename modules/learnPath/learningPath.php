@@ -306,12 +306,12 @@ foreach ($flatElementList as $module) {
 //            $first_blocked = true;
 //        }
 
-        list($lpProgress, $lpTotalTime, $lpTotalStarted, $lpTotalAccessed, $lpTotalStatus, $lpAttemptsNb, $lpScore) = get_learnPath_progress_details($_SESSION['path_id'], $uid);
+        list($lpProgress, $lpTotalTime, $lpTotalStarted, $lpTotalAccessed, $lpTotalStatus, $lpAttemptsNb, $lpScore, $lpScoreMax) = get_learnPath_progress_details($_SESSION['path_id'], $uid);
         $globalProg += $lpProgress;
         if (!empty($lpTotalTime)) {
             $globalTime = addScormTime($globalTime, $lpTotalTime);
         }
-        $lpDisplay = format_lp_progress_display($lpAttemptsNb, $lpTotalTime, $lpProgress, $lpScore);
+        $lpDisplay = format_lp_progress_display($lpAttemptsNb, $lpTotalTime, $lpProgress, $lpScore, $lpScoreMax);
 
         // display the progress value for current module
         $tool_content .= "<td>" . $lpDisplay['time'] . "</td>";

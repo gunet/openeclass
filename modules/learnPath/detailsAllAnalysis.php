@@ -139,14 +139,14 @@ foreach ($usersList as $user) {
 
     foreach ($learningPathList as $learningPath) {
         // % progress
-        list($prog, $lpTotalTime, $lpTotalStarted, $lpTotalAccessed, $lpTotalStatus, $lpAttemptsNb, $lpScore) = get_learnPath_progress_details($learningPath->learnPath_id, $user->id);
+        list($prog, $lpTotalTime, $lpTotalStarted, $lpTotalAccessed, $lpTotalStatus, $lpAttemptsNb, $lpScore, $lpScoreMax) = get_learnPath_progress_details($learningPath->learnPath_id, $user->id);
         if ($prog >= 0) {
             $globalprog += $prog;
         }
         if (!empty($lpTotalTime)) {
             $globaltime = addScormTime($globaltime, $lpTotalTime);
         }
-        $lpDisplay = format_lp_progress_display($lpAttemptsNb, $lpTotalTime, $prog, $lpScore);
+        $lpDisplay = format_lp_progress_display($lpAttemptsNb, $lpTotalTime, $prog, $lpScore, $lpScoreMax);
 
         // ---- xls format ----
         $lpContent = array('', $learningPath->name, $lpAttemptsNb, $lpDisplay['time'], $lpDisplay['progress_text'], $lpDisplay['score']);
