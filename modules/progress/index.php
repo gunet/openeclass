@@ -171,7 +171,13 @@ if ($is_editor) {
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/progress/index.php?course=$course_code");
         } else {
-            Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
+            $errors = array($langFormErrors);
+            foreach ($v->errors() as $field_error) {
+                foreach ($field_error as $error) {
+                    $errors[] = $error;
+                }
+            }
+            Session::flashPost()->Messages($errors, 'alert-danger');
             redirect_to_home_page("modules/progress/index.php?course=$course_code&new=1");
         }
     } elseif (isset($_POST['newPointsGame'])) {
@@ -216,6 +222,7 @@ if ($is_editor) {
             'title' => "$langTheField $langTitle",
             'startdatepicker' => "$langTheField $langStartDate",
             'enddatepicker' => "$langTheField $langEndDate",
+            'level_item_req_points' => "$langTheField $langPointsGameLevelRequiredPoints",
         ));
         if($v->validate()) {
             $startdate = date_format(date_create_from_format('d-m-Y H:i', $_POST['startdatepicker']), 'Y-m-d H:i');
@@ -229,7 +236,13 @@ if ($is_editor) {
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/progress/index.php?course=$course_code");
         } else {
-            Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
+            $errors = array($langFormErrors);
+            foreach ($v->errors() as $field_error) {
+                foreach ($field_error as $error) {
+                    $errors[] = $error;
+                }
+            }
+            Session::flashPost()->Messages($errors, 'alert-danger');
             redirect_to_home_page("modules/progress/index.php?course=$course_code&new=1");
         }
     } elseif (isset($_POST['edit_element'])) { // modify certificate / badge
