@@ -1508,23 +1508,19 @@ function disp_progress_bar($progress, $factor) {
  */
 function disp_lesson_status(string $lessonStatus): string {
     if ($lessonStatus == "NOT ATTEMPTED") {
-        //return $GLOBALS['langNotAttempted'];
-        return "";
+        return $GLOBALS['langIncomplete'];
     } else if ($lessonStatus == "PASSED") {
         return $GLOBALS['langCompleted'];
     } else if ($lessonStatus == "FAILED") {
-        //return $GLOBALS['langFailed'];
-        return "";
+        return $GLOBALS['langIncomplete'];
     } else if ($lessonStatus == "COMPLETED") {
         return $GLOBALS['langCompleted'];
     } else if ($lessonStatus == "BROWSED") {
-        //return $GLOBALS['langAlreadyBrowsed'];
-        return "";
+        return $GLOBALS['langIncomplete'];
     } else if ($lessonStatus == "INCOMPLETE") {
         return $GLOBALS['langIncomplete'];
     } else {
-        //return strtolower($lessonStatus);
-        return "";
+        return $GLOBALS['langIncomplete'];
     }
 }
 
