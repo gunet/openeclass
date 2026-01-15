@@ -1127,10 +1127,10 @@ function display_blog_rec_act_form($points_game_id) {
 
         $tool_content .= "<tr>
                             <td style='width: 45%'>$langBlogPost</td>
-                            <td style='width: 10%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='text' name='points' value=''></td>
-                            <td style='width: 15%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='text' name='max_points_from_criterion' value=''></td>
-                            <td style='width: 15%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='text' name='max_points_from_criterion_time_period' value=''></td>
-                            <td style='width: 15%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='text' name='time_period_in_days' value=''></td>
+                            <td style='width: 10%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='number' min='1' step='1' name='points' value='' required></td>
+                            <td style='width: 15%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='number' min='1' step='1' name='max_points_from_criterion' value=''></td>
+                            <td style='width: 15%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='number' min='1' step='1' name='max_points_from_criterion_time_period' value=''></td>
+                            <td style='width: 15%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='number' min='1' step='1' name='time_period_in_days' value=''></td>
                         </tr>";
 
         $tool_content .= "
@@ -1170,10 +1170,10 @@ function display_blogcomments_rec_act_form($points_game_id) {
 
         $tool_content .= "<tr>
                             <td style='width: 45%'>$langCommentsBlog</td>
-                            <td style='width: 10%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='text' name='points' value=''></td>
-                            <td style='width: 15%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='text' name='max_points_from_criterion' value=''></td>
-                            <td style='width: 15%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='text' name='max_points_from_criterion_time_period' value=''></td>
-                            <td style='width: 15%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='text' name='time_period_in_days' value=''></td>
+                            <td style='width: 10%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='number' min='1' step='1' name='points' value='' required></td>
+                            <td style='width: 15%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='number' min='1' step='1' name='max_points_from_criterion' value=''></td>
+                            <td style='width: 15%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='number' min='1' step='1' name='max_points_from_criterion_time_period' value=''></td>
+                            <td style='width: 15%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='number' min='1' step='1' name='time_period_in_days' value=''></td>
                         </tr>";
 
         $tool_content .= "
@@ -1211,10 +1211,10 @@ function display_forums_rec_act_form($points_game_id) {
 
         $tool_content .= "<tr>
                             <td style='width: 45%'>$langForumParticipation</td>
-                            <td style='width: 10%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='text' name='points' value=''></td>
-                            <td style='width: 15%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='text' name='max_points_from_criterion' value=''></td>
-                            <td style='width: 15%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='text' name='max_points_from_criterion_time_period' value=''></td>
-                            <td style='width: 15%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='text' name='time_period_in_days' value=''></td>
+                            <td style='width: 10%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='number' min='1' step='1' name='points' value='' required></td>
+                            <td style='width: 15%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='number' min='1' step='1' name='max_points_from_criterion' value=''></td>
+                            <td style='width: 15%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='number' min='1' step='1' name='max_points_from_criterion_time_period' value=''></td>
+                            <td style='width: 15%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='number' min='1' step='1' name='time_period_in_days' value=''></td>
                         </tr>";
 
         $tool_content .= "
@@ -1254,10 +1254,10 @@ function display_wiki_rec_act_form($points_game_id) {
 
         $tool_content .= "<tr>
                             <td style='width: 45%'>$langWikiCreateWiki</td>
-                            <td style='width: 10%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='text' name='points' value=''></td>
-                            <td style='width: 15%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='text' name='max_points_from_criterion' value=''></td>
-                            <td style='width: 15%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='text' name='max_points_from_criterion_time_period' value=''></td>
-                            <td style='width: 15%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='text' name='time_period_in_days' value=''></td>
+                            <td style='width: 10%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='number' min='1' step='1' name='points' value='' required></td>
+                            <td style='width: 15%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='number' min='1' step='1' name='max_points_from_criterion' value=''></td>
+                            <td style='width: 15%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='number' min='1' step='1' name='max_points_from_criterion_time_period' value=''></td>
+                            <td style='width: 15%;'><input style='max-width: 80px;' aria-label='$langPollFillText' class='form-control' type='number' min='1' step='1' name='time_period_in_days' value=''></td>
                         </tr>";
 
         $tool_content .= "
@@ -1288,13 +1288,13 @@ function display_modification_rec_activity($points_game_id, $activity_id) {
             $tool_content .= "<input type='hidden' name='activity_id' value='$activity_id'>";
             $tool_content .= "<div class='form-group mt-3'>";
             $tool_content .= "<label for='name' class='col-sm-5 control-label-notes'>$langPoints:</label>";
-            $tool_content .= "<span class='col-sm-2'><input class='form-control mt-3' type='text' name='points' value='$data->points'></span>";
+            $tool_content .= "<span class='col-sm-2'><input class='form-control mt-3' type='number' min='1' step='1' name='points' value='$data->points' required></span>";
             $tool_content .= "<label for='name' class='col-sm-5 control-label-notes'>$langActivityMaxPoints:</label>";
-            $tool_content .= "<span class='col-sm-2'><input class='form-control mt-3' type='text' name='maxpoints' value='$data->max_points_from_criterion'></span>";
+            $tool_content .= "<span class='col-sm-2'><input class='form-control mt-3' type='number' min='1' step='1' name='maxpoints' value='$data->max_points_from_criterion'></span>";
             $tool_content .= "<label for='name' class='col-sm-5 control-label-notes'>$langActivityMaxPointsInPeriod:</label>";
-            $tool_content .= "<span class='col-sm-2'><input class='form-control mt-3' type='text' name='maxpointsinperiod' value='$data->max_points_from_criterion_time_period'></span>";
+            $tool_content .= "<span class='col-sm-2'><input class='form-control mt-3' type='number' min='1' step='1' name='maxpointsinperiod' value='$data->max_points_from_criterion_time_period'></span>";
             $tool_content .= "<label for='name' class='col-sm-5 control-label-notes'>$langActivityMaxPointsTimePeriod:</label>";
-            $tool_content .= "<span class='col-sm-2'><input class='form-control mt-3' type='text' name='timeperiod' value='$data->time_period_in_days'></span>";
+            $tool_content .= "<span class='col-sm-2'><input class='form-control mt-3' type='number' min='1' step='1' name='timeperiod' value='$data->time_period_in_days'></span>";
             $tool_content .= "</div>";
             $tool_content .= "<div class='col-sm-5 col-sm-offset-5 mt-3'>";
             $tool_content .= "<input class='btn submitAdminBtn' type='submit' name='mod_points_game_rec_activity' value='$langModify'>";
