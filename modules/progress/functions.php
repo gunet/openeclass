@@ -606,9 +606,11 @@ function display_activities($element, $id, $unit_id = 0) {
                                                             <th style='width: 15%;'>
                                                                 $langActivityMaxPointsTimePeriod
                                                             </th>
-                                                            <th style='width: 5%;'>
-                                                                <i class='fa fa-cogs'></i>
-                                                            </th>
+                                                            <th style='width: 5%;'>";
+                                                            if ($is_editor) {
+                                                                $tool_content .= "<i class='fa fa-cogs'></i>";
+                                                            }
+                            $tool_content .=                "</th>
                                                         </tr></thead>";
                                                         foreach ($result_recurrent as $details) {
                                                             $resource_data = get_resource_details($element, $details->id);
@@ -620,8 +622,9 @@ function display_activities($element, $id, $unit_id = 0) {
                                                                 <td>" . $details->max_points_from_criterion . "</td>
                                                                 <td>" . $details->max_points_from_criterion_time_period . "</td>
                                                                 <td>" . $details->time_period_in_days . "</td>
-                                                                <td>
-                                                                    <div class='text-end'>".
+                                                                <td>";
+                                                            if ($is_editor) {
+                                                                $tool_content .= "<div class='text-end'>".
                                                                         action_button(array(
                                                                             array('title' => $langEditChange,
                                                                                 'icon' => 'fa-edit',
@@ -633,7 +636,9 @@ function display_activities($element, $id, $unit_id = 0) {
                                                                                 'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;del_cert_res=$details->id",
                                                                                 'confirm' => $langConfirmDelete,
                                                                                 'class' => 'delete'))).
-                                                                    "</div>
+                                                                    "</div>";
+                                                            }
+                                                            $tool_content .= "
                                                                 </td>
                                                             </tr>";
                                                         }
@@ -681,9 +686,11 @@ function display_activities($element, $id, $unit_id = 0) {
                                                             <th>
                                                                 $langPoints
                                                             </th>
-                                                            <th>
-                                                                <i class='fa fa-cogs'></i>
-                                                            </th>
+                                                            <th style='width: 5%;'>";
+                                                            if ($is_editor) {
+                                                                $tool_content .= "<i class='fa fa-cogs'></i>";
+                                                            }
+                            $tool_content .=                "</th>
                                                         </tr></thead>";
                                                         foreach ($result_onetime as $details) {
                                                             $resource_data = get_resource_details($element, $details->id);
@@ -705,20 +712,23 @@ function display_activities($element, $id, $unit_id = 0) {
                                                                     }
                                                                     $tool_content .= "<td>$details->points</td>";
                                                                     $tool_content .= "<td>";
-                                                                    $tool_content .= "<div class='text-end'>".
-                                                                        action_button(array(
-                                                                            array('title' => $langEditChange,
-                                                                                'icon' => 'fa-edit',
-                                                                                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;act_mod=$details->id",
-                                                                                'show' => in_array($details->activity_type, criteria_with_operators())
-                                                                            ),
-                                                                            array('title' => $langDelete,
-                                                                                'icon' => 'fa-xmark',
-                                                                                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;del_cert_res=$details->id",
-                                                                                'confirm' => $langConfirmDelete,
-                                                                                'class' => 'delete'))).
-                                                                    "</div>
-                                                                </td>
+                                                                    if ($is_editor) {
+                                                                        $tool_content .= "<div class='text-end'>".
+                                                                                action_button(array(
+                                                                                    array('title' => $langEditChange,
+                                                                                        'icon' => 'fa-edit',
+                                                                                        'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;act_rec_mod=$details->id",
+                                                                                        'show' => in_array($details->activity_type, criteria_with_operators())
+                                                                                    ),
+                                                                                    array('title' => $langDelete,
+                                                                                        'icon' => 'fa-xmark',
+                                                                                        'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;del_cert_res=$details->id",
+                                                                                        'confirm' => $langConfirmDelete,
+                                                                                        'class' => 'delete'))).
+                                                                            "</div>";
+                                                                    }
+                                                                    $tool_content .= "
+                                                                        </td>
                                                             </tr>";
                                                         }
 

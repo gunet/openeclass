@@ -315,7 +315,13 @@ if ($is_editor) {
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/progress/index.php?course=$course_code");
         } else {
-            Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
+            $errors = array($langFormErrors);
+            foreach ($v->errors() as $field_error) {
+                foreach ($field_error as $error) {
+                    $errors[] = $error;
+                }
+            }
+            Session::flashPost()->Messages($errors, 'alert-danger');
             redirect_to_home_page("modules/progress/index.php?course=$course_code&points_game_id=".$_POST['points_game_id']."&edit=1");
         }
     } elseif (isset($_POST['mod_cert_activity'])) { // modify certificate activity
@@ -581,7 +587,7 @@ if ($is_editor) {
 	              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&$param_name=$element_id&u=".$_GET['u']."&p=1",
 	              'icon' => 'fa-print',
 	              'level' => 'primary-label',
-	              'show' => has_certificate_completed($_GET['u'], $element, $element_id) and $element == "certificate")
+	              'show' => $element == "certificate" && has_certificate_completed($_GET['u'], $element, $element_id))
             ));
         $tool_content .= $action_bar;
 }
@@ -601,22 +607,26 @@ if (isset($display) and $display) {
     } else {
         check_user_details($uid); // security check
         if (isset($element_id)) {
-            $certificate_expiration_date = get_cert_expiration_day($element, $element_id); // security check
-            if (!is_null($certificate_expiration_date) and $certificate_expiration_date < date('Y-m-d H:i:s')) {
-                redirect_to_home_page();
-            }
-            if (isset($_GET['p']) and $_GET['p']) { // printable view
-                if (!has_certificate_completed($uid, $element, $element_id)) { // security check
-                    redirect_to_home_page();
-                }
-                cert_output_to_pdf($element_id, $uid, null, null, null, null, null, null);
+            if ($element == 'points_game') {
+                display_activities($element, $element_id);
             } else {
-                if (!is_cert_visible($element, $element_id)) { // security check
+                $certificate_expiration_date = get_cert_expiration_day($element, $element_id); // security check
+                if (!is_null($certificate_expiration_date) and $certificate_expiration_date < date('Y-m-d H:i:s')) {
                     redirect_to_home_page();
                 }
-                $pageName = $element_title;
-                // display detailed user progress
-                display_user_progress_details($element, $element_id, $uid);
+                if (isset($_GET['p']) and $_GET['p']) { // printable view
+                    if (!has_certificate_completed($uid, $element, $element_id)) { // security check
+                        redirect_to_home_page();
+                    }
+                    cert_output_to_pdf($element_id, $uid, null, null, null, null, null, null);
+                } else {
+                    if (!is_cert_visible($element, $element_id)) { // security check
+                        redirect_to_home_page();
+                    }
+                    $pageName = $element_title;
+                    // display detailed user progress
+                    display_user_progress_details($element, $element_id, $uid);
+                }
             }
         } else {
             // display certificate (student view)
