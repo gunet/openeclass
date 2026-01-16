@@ -288,6 +288,10 @@ function add_wiki_to_certificate($element, $element_id) {
  */
 function add_rec_wiki_to_points_game($points_game_id) {
     if (isset($_POST['wiki'])) {
+        $_POST['max_points_from_criterion'] = empty($_POST['max_points_from_criterion']) ? NULL : $_POST['max_points_from_criterion'];
+        $_POST['max_points_from_criterion_time_period'] = empty($_POST['max_points_from_criterion_time_period']) ? NULL : $_POST['max_points_from_criterion_time_period'];
+        $_POST['time_period_in_days'] = empty($_POST['time_period_in_days']) ? NULL : $_POST['time_period_in_days'];
+
         Database::get()->query("INSERT INTO points_game_criterion
                                 SET points_game = ?d,
                                 module = " . MODULE_ID_WIKI . ",
@@ -480,6 +484,10 @@ function add_forum_to_certificate($element, $element_id) {
  */
 function add_rec_forum_to_points_game($points_game_id) {
     if (isset($_POST[ForumEvent::ACTIVITY])) {
+        $_POST['max_points_from_criterion'] = empty($_POST['max_points_from_criterion']) ? NULL : $_POST['max_points_from_criterion'];
+        $_POST['max_points_from_criterion_time_period'] = empty($_POST['max_points_from_criterion_time_period']) ? NULL : $_POST['max_points_from_criterion_time_period'];
+        $_POST['time_period_in_days'] = empty($_POST['time_period_in_days']) ? NULL : $_POST['time_period_in_days'];
+
         Database::get()->query("INSERT INTO points_game_criterion
                                 SET points_game = ?d,
                                 module = " . MODULE_ID_FORUM . ",
@@ -588,6 +596,10 @@ function add_blog_to_certificate($element, $element_id) {
  */
 function add_rec_blog_to_points_game($points_game_id) {
     if (isset($_POST[BlogEvent::ACTIVITY])) {
+        $_POST['max_points_from_criterion'] = empty($_POST['max_points_from_criterion']) ? NULL : $_POST['max_points_from_criterion'];
+        $_POST['max_points_from_criterion_time_period'] = empty($_POST['max_points_from_criterion_time_period']) ? NULL : $_POST['max_points_from_criterion_time_period'];
+        $_POST['time_period_in_days'] = empty($_POST['time_period_in_days']) ? NULL : $_POST['time_period_in_days'];
+
         Database::get()->query("INSERT INTO points_game_criterion
                                 SET points_game = ?d,
                                 module = " . MODULE_ID_BLOG . ",
@@ -657,6 +669,10 @@ function add_blogcomment_to_certificate($element, $element_id) {
  */
 function add_rec_blogcomment_to_points_game($points_game_id) {
     if (isset($_POST['blogcomment'])) {
+        $_POST['max_points_from_criterion'] = empty($_POST['max_points_from_criterion']) ? NULL : $_POST['max_points_from_criterion'];
+        $_POST['max_points_from_criterion_time_period'] = empty($_POST['max_points_from_criterion_time_period']) ? NULL : $_POST['max_points_from_criterion_time_period'];
+        $_POST['time_period_in_days'] = empty($_POST['time_period_in_days']) ? NULL : $_POST['time_period_in_days'];
+
         Database::get()->query("INSERT INTO points_game_criterion
                                 SET points_game = ?d,
                                 module = " . MODULE_ID_COMMENTS . ",
@@ -1204,6 +1220,10 @@ function modify_certificate_activity($element, $element_id, $activity_id) {
 }
 
 function modify_points_game_rec_activity($points_game_id, $activity_id) {
+    $_POST['maxpoints'] = empty($_POST['maxpoints']) ? NULL : $_POST['maxpoints'];
+    $_POST['maxpointsinperiod'] = empty($_POST['maxpointsinperiod']) ? NULL : $_POST['maxpointsinperiod'];
+    $_POST['timeperiod'] = empty($_POST['timeperiod']) ? NULL : $_POST['timeperiod'];
+    
     Database::get()->query("UPDATE points_game_criterion
                                 SET points = ?d,
                                     max_points_from_criterion = ?d,
