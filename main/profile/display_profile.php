@@ -150,7 +150,11 @@ if ($data['userdata']) {
                       'icon' => 'fa-solid fa-book',
                       'button-class' => 'submitAdminBtn',
                       'level' => 'primary-label',
-                      'show' => (get_config('individual_group_bookings')))
+                      'show' => (get_config('individual_group_bookings'))),
+                array('title' => $langThemeSettings,
+                      'url' => 'theme_settings.php',
+                      'icon' => 'fa-solid fa-palette',
+                      'level' => 'secondary')
                 ));
 
         $data['action_bar_unreg'] = 1;

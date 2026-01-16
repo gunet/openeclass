@@ -36,6 +36,44 @@ $pageName = '';
 $toolName = '';
 require_once 'init.php';
 
+// User theme override: Apply user-selected theme images and styles
+// Priority: Session (preview) > Cookie (saved) > Default
+$user_selected_theme_id = 0;
+if (isset($_SESSION['user_theme_preview_id'])) {
+    $user_selected_theme_id = intval($_SESSION['user_theme_preview_id']);
+} elseif (isset($_COOKIE['user_theme_selection'])) {
+    $user_selected_theme_id = intval($_COOKIE['user_theme_selection']);
+}
+
+// Override theme images and styles if user has selected a custom theme
+if ($user_selected_theme_id > 0) {
+    $user_theme_data = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $user_selected_theme_id);
+    
+    if ($user_theme_data) {
+        $theme_id = $user_selected_theme_id;
+        $theme_options_styles = unserialize($user_theme_data->styles);
+
+        // Override image paths for user-selected theme
+        $theme_path = $urlAppend . "courses/theme_data/" . $theme_id . "/";
+
+        if (!empty($theme_options_styles['imageUpload'])) {
+            $logo_img = $theme_path . $theme_options_styles['imageUpload'];
+        }
+        if (!empty($theme_options_styles['imageUploadSmall'])) {
+            $logo_img_small = $theme_path . $theme_options_styles['imageUploadSmall'];
+        }
+        if (!empty($theme_options_styles['faviconUpload'])) {
+            $favicon_img = $theme_path . $theme_options_styles['faviconUpload'];
+        }
+        if (!empty($theme_options_styles['imageUploadFooter'])) {
+            $image_footer = $theme_path . $theme_options_styles['imageUploadFooter'];
+        }
+        if (!empty($theme_options_styles['loginImg'])) {
+            $loginIMG = $theme_path . $theme_options_styles['loginImg'];
+        }
+    }
+}
+
 if (isset($toolContent_ErrorExists)) {
     Session::flash('message',$toolContent_ErrorExists);
     Session::flash('alert-class', 'alert-warning');
