@@ -920,7 +920,22 @@ get_tinymce_color_text();
 
 // Theme initialization only if not running via cli
 if (php_sapi_name() != 'cli' or isset($_SERVER['REMOTE_ADDR'])) {
-    $theme_id = $_SESSION['theme_options_id'] ?? get_config('theme_options_id');
+    // User theme override: Check for preview (session) or saved selection (cookie)
+    // Must happen BEFORE theme_initialization() to ensure correct CSS generation
+    $user_selected_theme_id = 0;
+    if (isset($_SESSION['user_theme_preview_id'])) {
+        $user_selected_theme_id = intval($_SESSION['user_theme_preview_id']);
+    } elseif (isset($_COOKIE['user_theme_selection'])) {
+        $user_selected_theme_id = intval($_COOKIE['user_theme_selection']);
+    }
+    
+    // Apply user theme if set, otherwise use admin default theme
+    if ($user_selected_theme_id > 0) {
+        $theme_id = $user_selected_theme_id;
+    } else {
+        $theme_id = $_SESSION['theme_options_id'] ?? get_config('theme_options_id');
+    }
+    
     $theme_css = "courses/theme_data/{$theme_id}/style_str.css";
     theme_initialization();
 }
