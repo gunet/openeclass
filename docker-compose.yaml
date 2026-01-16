@@ -1,45 +1,47 @@
 services:
-    eclass:
-        image: ghcr.io/gunet/openeclass
-        depends_on:
-            db:
-                condition: service_healthy
-        ports:
-            - "80:80"
-        volumes:
-            - config_data:/var/www/html/config
-            - courses_data:/var/www/html/courses
-            - video_data:/var/www/html/video
-        environment:
-            - MYSQL_LOCATION=db
-            - MYSQL_ROOT_USER=root
-            - MYSQL_ROOT_PASSWORD=secret
-            - MYSQL_DB=eclass
-            - ADMIN_USERNAME=admin
-            # Can be used to set the admin password
-            # - ADMIN_PASSWORD=secret
-            - PHP_MAX_UPLOAD=256M
-    db:   # The location of the database
-        image: mariadb:10.11
-        environment:
-            - MYSQL_ROOT_PASSWORD=secret
-            - MYSQL_DATABASE=eclass
-        command:
-        - --innodb-buffer-pool-size=120M
-        - --innodb_flush_log_at_trx_commit=2
-        - --wait-timeout=86400
-        - --max_allowed_packet=67108864
-        volumes:
-            - db_data:/var/lib/mysql
-        healthcheck:
-            test: mysql --user=root --password=$$MYSQL_ROOT_PASSWORD -e 'show databases;' | grep -q $$MYSQL_DATABASE || exit 1
-            interval: 10s
-            timeout: 3s
-            retries: 10
-            start_period: 5s
+  eclass:
+    image: ghcr.io/gunet/openeclass
+    restart: unless-stopped
+    ports:
+      - 80:80
+    volumes:
+      - config_data:/var/www/html/config
+      - courses_data:/var/www/html/courses
+      - video_data:/var/www/html/video
+    environment:
+      - MYSQL_LOCATION=db
+      - MYSQL_ROOT_USER=root
+      - MYSQL_ROOT_PASSWORD=secret
+      - MYSQL_DB=eclass
+      - ADMIN_USERNAME=admin
+      # Can be used to set the admin password
+      # - ADMIN_PASSWORD=secret
+      - PHP_MAX_UPLOAD=256M
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: mariadb:10.11
+    environment:
+      - MYSQL_ROOT_PASSWORD=secret
+      - MYSQL_DATABASE=eclass
+    command:
+      - --innodb-buffer-pool-size=120M
+      - --innodb_flush_log_at_trx_commit=2
+      - --wait-timeout=86400
+      - --max_allowed_packet=67108864
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: mysql --user=root --password=$$MYSQL_ROOT_PASSWORD -e 'show databases;' | grep -q $$MYSQL_DATABASE || exit 1
+      interval: 10s
+      timeout: 3s
+      retries: 10
+      start_period: 5s
 
 volumes:
-    config_data:
-    courses_data:
-    video_data:
-    db_data:
+  config_data:
+  courses_data:
+  video_data:
+  db_data:
