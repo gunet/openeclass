@@ -555,6 +555,8 @@ titles of the $langsOfCourses you wish to create, with each
 title on a separate line. If you want it to be added automatically
 moderator in $langsCourse, enter first name or username
 of after the title, separated by the character \"|\".";
+$langMultiCourseDeleteInfo = "Enter a list of them in the area below
+codes of the $langsOfCourses you wish to delete.";
 $langMultiCourseTitles = "Titles / Moderators $langOfCourses";
 $langMultiCourseData = "Data $langOfCourses";
 $langMultiCourseCreated = "$langsCourse was created";

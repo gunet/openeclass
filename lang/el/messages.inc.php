@@ -1695,14 +1695,20 @@ $langFacultyUsersRegistrationLegend = "Η εγγραφή επιτρέπεται 
 
 // Admin mutiple course creation
 $langMultiCourse = "Μαζική δημιουργία $langsOfCourses";
+$langMultiCourseDelete = "Μαζική διαγραφή $langsOfCourses";
 $langMultiCourseInfo = "Εισαγάγετε στην παρακάτω περιοχή μια λίστα με τους
 τίτλους των $langsOfCourses που επιθυμείτε να δημιουργηθούν, με τον κάθε
 τίτλο σε ξεχωριστή γραμμή. Αν επιθυμείτε να προστεθεί αυτόματα
 καθηγητής στο $langsCourse, σημπληρώστε το ονοματεπώνυμο ή το όνομα χρήστη
 του μετά τον τίτλο, διαχωρισμένο με το χαρακτήρα \"|\".";
+$langMultiCourseDeleteInfo = "Εισαγάγετε στην παρακάτω περιοχή μια λίστα με τους
+κωδικούς των $langsOfCourses που επιθυμείτε να διαγραφούν.";
 $langMultiCourseTitles = "Τίτλοι / Καθηγητές $langOfCourses";
+$langMultiCourseCodes = "Κωδικοί $langOfCourses";
 $langMultiCourseData = "Στοιχεία $langOfCourses";
 $langMultiCourseCreated = "το $langsCourse δημιουργήθηκε";
+$langMultiCourseDeleted = "το $langsCourse διαγράφηκε";
+$langMultiCourseNotDeleted = "$langsCourse δεν διαγράφηκε";
 
 /* * ****************************************************
  * document.php
@@ -6135,6 +6141,7 @@ $langSiteDescr = 'Περιγραφή αρχικής σελίδας';
 $langActiveTheme = 'Ενεργό Θέμα';
 $langPreviewState = 'Βρίσκετε σε κατάσταση προεπισκόπησης του θέματος';
 $langThemeInstalled = 'Το θέμα εγκαταστάθηκε με επιτυχία';
+$langThemeEditNotAllowed = 'Δεν έχετε δικαίωμα επεξεργασίας/διαγραφής στο συγκεκριμένο θέμα';
 $langAvailableThemes = 'Διαθέσιμα Θέματα';
 $langDefaultThemeSettings = 'Open eClass Default';
 $langThemeSettingsDelete = 'Είστε σίγουρος ότι θέλετε να διαγράψετε το συγκεκριμένο θέμα?';

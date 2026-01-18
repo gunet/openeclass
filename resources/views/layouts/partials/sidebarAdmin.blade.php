@@ -185,6 +185,11 @@
                                     {{ trans('langMultiCourse') }}
                                 </a>
                             </li>
+                            <li class="list-group-item element">
+                                <a class='TextBold' href="{{$urlAppend}}modules/admin/multicoursedel.php">
+                                    {{ trans('langMultiCourseDelete') }}
+                                </a>
+                            </li>
                             @if ($is_admin)
                                 <li class="list-group-item element">
                                     <a class='TextBold' href="{{$urlAppend}}modules/admin/autoenroll.php">
