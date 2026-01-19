@@ -154,7 +154,8 @@ if ($data['userdata']) {
                 array('title' => $langThemeSettings,
                       'url' => 'theme_settings.php',
                       'icon' => 'fa-solid fa-palette',
-                      'level' => 'secondary')
+                      'level' => 'secondary',
+                      'show' => get_config('enable_user_theme_customization', 0))
                 ));
 
         $data['action_bar_unreg'] = 1;

@@ -39,10 +39,29 @@ require_once 'init.php';
 // User theme override: Apply user-selected theme images and styles
 // Priority: Session (preview) > Cookie (saved) > Default
 $user_selected_theme_id = 0;
-if (isset($_SESSION['user_theme_preview_id'])) {
-    $user_selected_theme_id = intval($_SESSION['user_theme_preview_id']);
-} elseif (isset($_COOKIE['user_theme_selection'])) {
-    $user_selected_theme_id = intval($_COOKIE['user_theme_selection']);
+$user_theme_customization_enabled = get_config('enable_user_theme_customization', 0);
+
+if ($user_theme_customization_enabled) {
+    if (isset($_SESSION['user_theme_preview_id'])) {
+        $user_selected_theme_id = intval($_SESSION['user_theme_preview_id']);
+    } elseif (isset($_COOKIE['user_theme_selection'])) {
+        $cookie_theme_id = intval($_COOKIE['user_theme_selection']);
+        
+        // Verify theme is in admin's allowed list
+        $user_selectable_themes_str = get_config('user_selectable_themes', '');
+        $allowed = true;
+        if ($cookie_theme_id > 0 && !empty($user_selectable_themes_str)) {
+            $allowed_theme_ids = array_map('intval', explode(',', $user_selectable_themes_str));
+            $allowed_theme_ids = array_filter($allowed_theme_ids);
+            if (!empty($allowed_theme_ids) && !in_array($cookie_theme_id, $allowed_theme_ids)) {
+                $allowed = false;
+            }
+        }
+        
+        if ($allowed) {
+            $user_selected_theme_id = $cookie_theme_id;
+        }
+    }
 }
 
 // Override theme images and styles if user has selected a custom theme

@@ -194,12 +194,14 @@
                                                             </a>
                                                         </li>
 
+                                                        @if (get_config('enable_user_theme_customization'))
                                                         <li>
                                                             <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}main/profile/theme_settings.php">
                                                                 <i class="fa-solid fa-palette settings-icons"></i>
                                                                 {{ trans('langThemeSettings')}} 
                                                             </a>
                                                         </li>
+                                                        @endif
 
                                                         <li>
                                                             <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}main/my_courses.php">
@@ -457,11 +459,13 @@
                                     <li>
                                         <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}main/profile/display_profile.php"><i class="fa-solid fa-user settings-icons"></i> {{ trans('langMyProfile') }}</a>
                                     </li>
+                                    @if (get_config('enable_user_theme_customization'))
                                     <li>
                                         <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}main/profile/theme_settings.php">
                                             <i class="fa-solid fa-palette settings-icons"></i> {{ trans('langThemeSettings')}} 
                                         </a>
                                     </li>
+                                    @endif
                                     @if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
                                     <li>
                                         <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}main/my_widgets.php"><i class="fa-solid fa-layer-group settings-icons"></i> {{ trans('langMyWidgets') }}</a>

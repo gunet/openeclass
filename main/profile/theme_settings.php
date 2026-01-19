@@ -27,6 +27,14 @@
 $require_login = true;
 include '../../include/baseTheme.php';
 
+// Check if user theme customization is enabled by admin
+if (!get_config('enable_user_theme_customization', 0)) {
+    Session::flash('message', $langUserThemeCustomizationDisabled);
+    Session::flash('alert-class', 'alert-warning');
+    redirect_to_home_page('main/profile/display_profile.php');
+    exit;
+}
+
 $toolName = $langThemeSettings;
 $navigation[] = array('url' => 'display_profile.php', 'name' => $langMyProfile);
 
@@ -42,7 +50,19 @@ if (isset($_POST['submit_theme'])) {
     if ($selected_id > 0) {
         // Verify theme exists and is version 4 (available for users)
         $exists = Database::get()->querySingle("SELECT id FROM theme_options WHERE id = ?d AND version = 4", $selected_id);
-        if ($exists) {
+        
+        // Also verify theme is in admin's allowed list
+        $user_selectable_themes_str = get_config('user_selectable_themes', '');
+        $allowed = true;
+        if (!empty($user_selectable_themes_str)) {
+            $allowed_theme_ids = array_map('intval', explode(',', $user_selectable_themes_str));
+            $allowed_theme_ids = array_filter($allowed_theme_ids);
+            if (!empty($allowed_theme_ids) && !in_array($selected_id, $allowed_theme_ids)) {
+                $allowed = false;
+            }
+        }
+        
+        if ($exists && $allowed) {
             setcookie('user_theme_selection', $selected_id, time() + (86400 * 365), $urlAppend);
             Session::flash('message', $langThemeSaved);
             Session::flash('alert-class', 'alert-success');
@@ -121,6 +141,28 @@ if (isset($_POST['cancel_preview'])) {
 
 // Fetch available themes (version 4 = user-selectable)
 $all_themes = Database::get()->queryArray("SELECT * FROM theme_options WHERE version = 4 ORDER BY name ASC");
+
+// Filter themes based on admin selection
+$user_selectable_themes_str = get_config('user_selectable_themes', '');
+if (!empty($user_selectable_themes_str)) {
+    $allowed_theme_ids = array_map('intval', explode(',', $user_selectable_themes_str));
+    $allowed_theme_ids = array_filter($allowed_theme_ids);
+    
+    if (!empty($allowed_theme_ids)) {
+        $filtered_themes = array();
+        foreach ($all_themes as $theme_item) {
+            if (in_array(intval($theme_item->id), $allowed_theme_ids)) {
+                $filtered_themes[] = $theme_item;
+            }
+        }
+        $all_themes = $filtered_themes;
+    } else {
+        // If admin enabled feature but selected no themes, show none
+        $all_themes = array();
+    }
+} else {
+    $all_themes = array();
+}
 
 // Determine current selection: preview (session) takes priority over saved (cookie)
 $preview_mode = isset($_SESSION['user_theme_preview_id']);
@@ -206,7 +248,23 @@ foreach ($all_themes as $th) {
     </div>";
 }
 
-$content = "
+// Check if any themes are available
+if (empty($all_themes)) {
+    $content = "
+    <div class='row'>
+        <div class='col-12'>
+            $action_bar
+            
+            <div class='form-wrapper form-edit rounded'>
+                <div class='alert alert-warning'>
+                    <i class='fa-solid fa-triangle-exclamation me-2'></i>
+                    <span>$langNoThemesAvailable</span>
+                </div>
+            </div>
+        </div>
+    </div>";
+} else {
+    $content = "
 <style>
     .pagination-custom .page-link { color: #333; border: 1px solid #dee2e6; margin: 0 4px; border-radius: 4px; cursor: pointer; }
     .pagination-custom .page-item.active .page-link { background-color: #0d6efd; border-color: #0d6efd; color: white; }
@@ -367,6 +425,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 ";
+    }
 
 draw($content, $toolName, null);
 ?>
