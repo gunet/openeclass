@@ -54,7 +54,7 @@ class PointsGame {
             ];
         }
 
-        $next_q = Database::get()->querySingle("SELECT id, required_points FROM points_game_levels 
+        $next_q = Database::get()->querySingle("SELECT id, friendly_name, required_points FROM points_game_levels 
                                                 WHERE points_game = ?d AND required_points > ?d
                                                 ORDER BY required_points ASC LIMIT 1", $gid, $performance['points']);
 
@@ -66,9 +66,11 @@ class PointsGame {
             $percent = round(min(100, max(0, $percent)));
 
             return [
+                'current_points' => $performance['points'],
                 'current_level_id' => null,
                 'current_level_title' => null,
                 'next_level_id' => $next_q->id,
+                'next_level_title' => $next_q->firendly_name,
                 'points_needed_for_next' => $max - $performance['points'],
                 'progress_percentage' => $percent
             ];
@@ -77,6 +79,7 @@ class PointsGame {
         //user is in max level
         if($performance['current_level'] && !$next_q) {
             return [
+                'current_points' => $performance['points'],
                 'current_level_id' => $performance['current_level'],
                 'current_level_title' => $performance['current_level_title'],
                 'next_level_id' => null,
@@ -94,9 +97,11 @@ class PointsGame {
         $percent = round(min(100, max(0, $percent)));
 
         return [
+            'current_points' => $performance['points'],
             'current_level_id' => $performance['current_level'],
             'current_level_title' => $performance['current_level_title'],
             'next_level_id' => $next_q->id,
+            'next_level_title' => $next_q->firendly_name,
             'points_needed_for_next' => $max - $performance['points'],
             'progress_percentage' => $percent
         ];

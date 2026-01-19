@@ -3898,6 +3898,7 @@ function student_view_progress() {
             foreach ($points_games as $points_game) {
                 $user_progress = PointsGame::getNextLevelInfo($uid,$points_game->id);
                 $current_level = !is_null($user_progress['current_level_id']) ? $user_progress['current_level_title'] : 'N/A';
+                $next_level = !is_null($user_progress['next_level_id']) ? $user_progress['next_level_title'] : 'N/A';
                 $tool_content .= "<div class='res-table-wrapper'>
                                     <div class='row res-table-row border-0 p-3'>
                                         <div class='col-md-4 col-12 d-flex justify-content-center align-items-center'>
@@ -3907,8 +3908,15 @@ function student_view_progress() {
                                             <a href='index.php?course=$course_code&amp;points_game_id=$points_game->id&amp;u=$uid'>" . ellipsize($points_game->title, 40) . "</a>
                                         </div>
                                         <div class='col-md-4 col-12 mt-md-0 mt-3'>
+                                            <div class='small fw-semibold text-primary text-center'>
+                                                ".$user_progress['current_points']." pts
+                                            </div>
                                             <div class='progress progress-line'>
                                                 <div class='progress-line-bar' role='progressbar' style='width: ".$user_progress['progress_percentage']."%' aria-valuenow='".$user_progress['progress_percentage']."' aria-valuemin='0' aria-valuemax='100'>".$user_progress['progress_percentage']."%</div>
+                                            </div>
+                                            <div class='d-flex justify-content-between small text-muted mb-1'>
+                                                <span>$current_level</span>
+                                                <span>$next_level</span>
                                             </div>
                                         </div>
                                     </div>
@@ -4228,6 +4236,20 @@ function display_user_progress_details($element, $element_id, $user_id) {
     </div></div></div>";
 }
 
+/**
+ * @brief return the list of activities that offered points to a user during a points game
+ * @param type $user_id
+ * @param type $points_game_id
+ * @return array
+ */
+function points_game_get_user_activity ($user_id, $points_game_id) {
+    $res = Database::get()->queryArray("SELECT upgc.created, upgc.points_awarded, pgc.activity_type, pgc.module, pgc.criterion_type 
+                            FROM user_points_game_criterion AS upgc, points_game_criterion AS pgc 
+                            WHERE upgc.points_game_criterion = pgc.id AND pgc.points_game = ?d AND upgc.user = ?d
+                            ORDER BY upgc.created ASC", $points_game_id, $user_id);
+    return $res;
+
+}
 
 /**
  * @brief return an array of operators
