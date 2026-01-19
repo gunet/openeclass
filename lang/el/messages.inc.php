@@ -766,7 +766,7 @@ $langUnitJustEdited="Οι δραστηριότητες ενημερώθηκαν"
 $langFlippedClassroomDataUpdated ="Οι πληροφορίες της ανεστραμμένης Τάξης ενημερώθηκαν";
 $langConfirmDeleteUnit = "Θέλετε σίγουρα να αφαιρέσετε την συγκεκριμένη ενότητα;";
 $langConfirmDeleteGoal = "Θέλετε σίγουρα να αφαιρέσετε το συγκεκριμένο μαθησιακό στόχο;";
-$langUnits = "Θεματικές Ενότητες";
+$langUnits = "Εμφάνιση όλων των ενοτήτων";
 $langDoubleLoginLockOption = 'Αποκλεισμός ταυτόχρονων συνδέσεων με τον ίδιο λογαριασμό.';
 
 // admin announcements
@@ -5127,7 +5127,7 @@ $langUnitTitle = "Τίτλος ενότητας";
 $langUnitDescr = "Σύντομη περιγραφή";
 $langUnitUnknown = "Άγνωστη ενότητα";
 $langEmptyUnitTitle = "Παρακαλώ πληκτρολογήστε τον τίτλο της ενότητας";
-$langCourseUnits = "Ενότητες";
+$langCourseUnits = "Ενότητες $langsOfCourse";
 $langCourseUnitDeleteConfirm = "Είστε σίγουρος/η ότι Θέλετε να διαγράψετε την συγκεκριμένη ενότητα?";
 $langCourseUnitDeleted = "Η ενότητα διαγράφηκε";
 $langCourseUnitAdded = "Η ενότητα προστέθηκε";

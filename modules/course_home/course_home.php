@@ -878,7 +878,7 @@ if ($total_cunits > 0) {
                 $cunits_content .= q($cu->title);
             } else {
                 if ($vis == 2) {
-                    $cunits_content .= "<div class='line-height-default'><div class='TextBold fs-6'>" . q($cu->title) . "</div></div>";
+                    $cunits_content .= "<div class='line-height-default'><div class='TextBold fs-6' style='margin-left:-25px;'>" . q($cu->title) . "</div></div>";
                 } else {
                     $unit_legend = '';
                     if ($is_editor) {
