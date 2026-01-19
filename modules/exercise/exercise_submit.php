@@ -533,7 +533,7 @@ if ($is_exam) { // disallow links outside exercise frame. disallow button quick 
                         <div class='modal-header'>
                             <div class='modal-title' id='cancelModalLabel'>
                                 <div class='icon-modal-default'><i class='fa-solid fa-triangle-exclamation Warning-200-cl fa-xl'></i></div>
-                                <div class='modal-title-default text-center mb-0'>$langDelTitle</div>
+                                <h2 class='modal-title-default text-center mb-0'>$langDelTitle</h2>
                             </div>
                         </div>
                         <div class='modal-body text-center py-0'>

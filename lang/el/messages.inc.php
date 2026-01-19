@@ -1068,13 +1068,12 @@ $langEditAgent = "Επεξεργασία Agent";
  * **************************************************************** */
 $langCopyright = "Πληροφορίες Πνευματικών Δικαιωμάτων";
 $langCopyrightNotice = '
-<a href="http://www.openeclass.org" target=_blank>Open eClass</a> © 2003 - 2024<br>&nbsp;<br>
-Η πλατφόρμα ' . $siteName . ' βασίζεται στην ανοικτή πλατφόρμα <a href="http://www.openeclass.org" target=_blank>Open eClass</a>
+<a class="text-decoration-underline" href="http://www.openeclass.org" target=_blank>Open eClass</a> © 2003 - 2024<br>&nbsp;<br>
+Η πλατφόρμα ' . $siteName . ' βασίζεται στην ανοικτή πλατφόρμα <a class="text-decoration-underline" href="http://www.openeclass.org" target=_blank>Open eClass</a>
 η οποία είναι ένα ολοκληρωμένο Σύστημα Διαχείρισης Ηλεκτρονικών '.$langOfCourses.' και αποτελεί
 την πρόταση του Ακαδημαϊκού Διαδικτύου GUnet για την υποστήριξη της Υπηρεσίας
 Ασύγχρονης Τηλεκπαίδευσης. Aναπτύχθηκε και υποστηρίζεται ενεργά από την Ομάδα
-Ασύγχρονης Τηλεκπαίδευσης του GUnet και <a
-href="http://download.eclass.gunet.gr" target="_blank">διανέμεται ελεύθερα</a>
+Ασύγχρονης Τηλεκπαίδευσης του GUnet και <a class="text-decoration-underline" href="http://download.eclass.gunet.gr" target="_blank">διανέμεται ελεύθερα</a>
 ως Λογισμικό Ανοικτού Κώδικα σύμφωνα με τη γενική δημόσια άδεια GNU General
 Public License (GNU GPL).<br><br>
 Το περιεχόμενο των ηλεκτρονικών ' . $langsOfCourses . ' που φιλοξενεί η πλατφόρμα ' . $siteName . ',
@@ -3401,6 +3400,7 @@ $langDuration = "Διάρκεια";
 $langClassic = "Συνοπτικό";
 $langModern = "Αναλυτικό";
 $langFavorite = "Αγαπημένο";
+$langNoFavorite = "Μη αγαπημένο";
 
 /* * *********************************************************
  * forum.php
@@ -6957,8 +6957,8 @@ $langCreateCourseLeftForm = "Η δημιουργία μαθήματος είνα
 
 $langEclassInfo = "Η πλατφόρμα Open eClass αποτελεί ένα ολοκληρωμένο Σύστημα Διαχείρισης Ηλεκτρονικών Μαθημάτων. Ακολουθεί τη φιλοσοφία του λογισμικού ανοικτού κώδικα και υποστηρίζει την υπηρεσία Ασύγχρονης Τηλεκπαίδευσης χωρίς περιορισμούς και δεσμεύσεις. Η πρόσβαση στην υπηρεσία γίνεται με τη χρήση ενός απλού φυλλομετρητή (web browser) χωρίς την απαίτηση εξειδικευμένων τεχνικών γνώσεων.";
 $langSaidForUs = "Είπαν για εμάς";
-$langCloseOptions = "Κλείσιμο επιλογών";
-$langOpenOptions = "Άνοιγμα επιλογών";
+$langCloseOptions = "Κλείσιμο υπό-μενου μαθήματος";
+$langOpenOptions = "Άνοιγμα υπό-μενού μαθήματος";
 $langShowOnlyLoginScreen = "Εμφάνιση μόνο της φόρμας σύνδεσης";
 $langHomepageTexts = "Κείμενα αρχικής σελίδας";
 $langAccountStatus = "Κατάσταση λογαριασμού";
@@ -7214,7 +7214,7 @@ $langOpenNewTab = "Άνοιγμα σε νέα καρτέλα";
 $langCurrentMonth = "Τρέχων μήνα";
 $langPagination = "Σελιδοποίηση";
 $langOpenCloseTools = "Άνοιγμα - κλείσιμο εργαλείων";
-$langBreadcrumb = "Πλοήγηση";
+$langBreadcrumb = "Διαδρομή πλοήγησης";
 $langSelectedLang = "Επιλογή γλώσσας";
 $langCourseSelection = "Επιλογή μαθήματος";
 $langFillInField = "Συμπληρώστε το πεδίο";
@@ -7499,3 +7499,11 @@ $langInvalidScore = "Μη έγκυρος βαθμός";
 $langRequestAlreadySent = "Έχει ήδη σταλεί αίτημα εγγραφής για αυτό το μάθημα";
 $langRejectedRequests = "Απορριφθείσες Αιτήσεις Χρηστών";
 $langAcceptedRequests = "Εγκεκριμένες Αιτήσεις Χρηστών";
+$langOpenUserMenu = "Άνοιγμα μενού επιλογών χρήστη";
+$langOpenMenu = "Άνοιγμα κεντρικού μενού πλοήγησης";
+$langDialogBox = "Παράθυρο διαλόγου";
+$langUsersAndBibliographicReference = "Χρήστες και βιβλιογραφική αναφορά";
+$langNextUnit = "Μετάβαση στην επόμενη ενότητα με τίτλο:";
+$langPrevUnit = "Μετάβαση στην προηγούμενη ενότητα με τίτλο:";
+$langCloseBox = "Κλείσιμο παραθύρου διαλόγου";
+$langMoveToPrevFolder = "Μετάβαση στον προηγούμενο φάκελο";

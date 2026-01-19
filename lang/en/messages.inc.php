@@ -404,12 +404,12 @@ $langSaveErrorMessage = "Error. Chat could not be saved.";
 $langNoGuest = "Guest Users cannot access 'Chat'";
 $langCopyright = "Copyright Notice";
 $langCopyrightNotice = '
-Copyright © 2003 - 2013 <a href="http://www.openeclass.org" target=_blank>Open eClass</a>.<br>&nbsp;<br>
-Platform '.$siteName.' is based on the <a href="http://www.openeclass.org" target=_blank>Open eClass platform</a>
+Copyright © 2003 - 2013 <a class="text-decoration-underline" href="http://www.openeclass.org" target=_blank>Open eClass</a>.<br>&nbsp;<br>
+Platform '.$siteName.' is based on the <a class="text-decoration-underline" href="http://www.openeclass.org" target=_blank>Open eClass platform</a>
 which is a complete Electronic Course Management System and is GUnet\'s
 proposition for an Asynchronous eLearning Service infrastructure.
 It was developed and is actively supported by the GUnet Asynchronous
-eLearning Group, and is <a href="http://download.eclass.gunet.gr" target="_blank">distributed freely</a>
+eLearning Group, and is <a class="text-decoration-underline" href="http://download.eclass.gunet.gr" target="_blank">distributed freely</a>
 as Open Source Software under the GNU General Public License (GNU GPL).<br><br>
 The content of Electronic Courses hosted on the Open eClass platform, as well as
 all copyrights of this content, belongs to the authors of the courses and
@@ -5253,6 +5253,7 @@ $langReuseDeactivate = "Deactivate Reuse";
 $langGradebookAllBetweenRegDates = "All enrolled in the $langsCourse during the following period";
 $langQuestionUpdated = "The question was updated";
 $langFavorite = "Favourite";
+$langNoFavorite = "No favourite";
 $langOnlySubmissions = 'Only participants';
 $langOnlyNonSubmissions = 'Only non-participants';
 $langCreator = "Creator";
@@ -6018,8 +6019,8 @@ Optionally specify the distribution license of your course.</br></br>
 Specify the type of access to your course. </br></br>";
 $langEclassInfo = "The Open eClass platform is a complete Electronic Course Management System. It follows the philosophy of open source software and supports the Asynchronous Distance Learning service without limitations and commitments. Access to the service is done using a simple web browser without requiring specialized technical knowledge.";
 $langSaidForUs = "They said about us";
-$langCloseOptions = "Close options";
-$langOpenOptions = "Open options";
+$langCloseOptions = "Close course submenu";
+$langOpenOptions = "Open course submenu";
 $langShowOnlyLoginScreen = "Display only login screen";
 $langHomepageTexts = "Homepage Texts";
 $langAvailableDateForUser = "My available days";
@@ -6180,7 +6181,7 @@ $langOpenNewTab = "Open in new tab";
 $langCurrentMonth = "Current month";
 $langPagination = "Pagination";
 $langOpenCloseTools = "Open - close tools";
-$langBreadcrumb = "Navigation";
+$langBreadcrumb = "Navigation path";
 $langSelectedLang = "Language selection";
 $langCourseSelection = "Course selection";
 $langFillInField = "Fill in the field";
@@ -6800,3 +6801,11 @@ $langCriteriaBelowParticipateInCompletion = "The following criteria are involved
 $langTheResource = "The resource";
 $langListCompletionCriteria = "List of criteria";
 $langUserParticipation = "User participation";
+$langOpenUserMenu = "Open user menu";
+$langOpenMenu = "Open main navigation menu";
+$langDialogBox = "Dialog box";
+$langUsersAndBibliographicReference = "Users and bibliographic reference";
+$langNextUnit = "Go to the next unit titled:";
+$langPrevUnit = "Go to the previous unit titled";
+$langCloseBox = "Close dialog box";
+$langMoveToPrevFolder = "Move to previous folder";
