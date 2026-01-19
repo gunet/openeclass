@@ -742,7 +742,14 @@ if ($total_cunits > 0) {
             if ($not_shown) {
                 $cunits_content .= q($cu->title) ;
             } else {
-                $cunits_content .= "<div class='line-height-default'><a class='TextBold fs-6 $class_vis' href='{$urlServer}modules/units/index.php?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a></div>";
+                $unit_legend = '';
+                if ($is_editor) {
+                    $sql_badge = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND unit_id = ?d", $course_id, $cu->id);
+                    if ($sql_badge) {
+                        $unit_legend = "&nbsp;&nbsp;<span class='fas fa-exclamation-triangle space-after-icon' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-html='true' data-bs-title='$langUnitCompletionLegend' data-bs-original-title='' title=''>";
+                    }
+                }
+                $cunits_content .= "<div class='line-height-default'><a class='TextBold fs-6 $class_vis' href='{$urlServer}modules/units/index.php?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a>$unit_legend</div>";
             }
 
             $cunits_content .= "<p><small><span class='help-block'>";
@@ -871,9 +878,16 @@ if ($total_cunits > 0) {
                 $cunits_content .= q($cu->title);
             } else {
                 if ($vis == 2) {
-                    $cunits_content .= "<div class='line-height-default'><div class='TextBold fs-5'>" . q($cu->title) . "</div></div>";
+                    $cunits_content .= "<div class='line-height-default'><div class='TextBold fs-6'>" . q($cu->title) . "</div></div>";
                 } else {
-                    $cunits_content .= "<div class='line-height-default'><a class='TextBold fs-6 $class_vis' href='{$urlServer}modules/units/index.php?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a></div>";
+                    $unit_legend = '';
+                    if ($is_editor) {
+                        $sql_badge = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND unit_id = ?d", $course_id, $cu->id);
+                        if ($sql_badge) {
+                            $unit_legend = "&nbsp;&nbsp;<span class='fas fa-exclamation-triangle space-after-icon' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-html='true' data-bs-title='$langUnitCompletionLegend' data-bs-original-title='' title=''>";
+                        }
+                    }
+                    $cunits_content .= "<div class='line-height-default'><a class='TextBold fs-6 $class_vis' href='{$urlServer}modules/units/index.php?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a>$unit_legend</div>";
                 }
             }
 
@@ -932,7 +946,11 @@ if ($total_cunits > 0) {
         }
     }
 } else {
-    $cunits_content .= "<div class='not_visible text-center'> - $langNoUnits - </div>";
+    if ($is_editor) {
+        $cunits_content .= "<div class='col-12 text-center'>
+                                <div class='alert alert-warning'>" . $langNoUnits . "</div>
+                            </div>";
+    }
 }
 
 $data['cunits_content'] = $cunits_content;

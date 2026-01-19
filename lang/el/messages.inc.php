@@ -684,7 +684,6 @@ $langViaAltAuthMethods = "μέσω εναλλακτικών τρόπων πισ�
 $langMonthsUnit = "σε μήνες";
 $langMinPasswordLen = "Ελάχιστο μέγεθος συνθηματικού";
 $langCourseSettings = "Ρυθμίσεις $langsOfCourses";
-$langCourseOfflineSettings = "Κατέβασμα $langsOfCourse";
 $langCourseOfflineLegend = "Οι $langsOfStudents μπορούν να κατεβάσουν το $langsCourse στον υπολογιστή τους.";
 $langLoginFailCheck = "Έλεγχος αποτυχημένων εισόδων";
 $langEnableLoginFailCheck = "Ενεργοποίηση ελέγχου αποτυχημένων εισόδων";
@@ -1135,7 +1134,7 @@ $langCourseInvalidDepartmentPrompt = "Παρακαλούμε %s μεταφέρε
 $langReadMore = "Περισσότερα";
 $langReadLess = "Λιγότερα";
 $langNoInfoAvailable = "Δεν υπάρχουν διαθέσιμες πληροφορίες";
-$langDownloadCourse = "Κατέβασμα του μαθήματος";
+$langDownloadCourse = "Λήψη $langsOfCourse";
 $langConfEnableMailNotification = "Θέλετε να ενεργοποιήσετε τη λήψη ειδοποιήσεων του $langsOfCourse μέσω email;";
 $langConfDisableMailNotification = "Θέλετε να απενεργοποιήσετε τη λήψη ειδοποιήσεων του $langsOfCourse μέσω email;";
 $langOfNotifications = "ειδοποιήσεων";
@@ -2087,6 +2086,9 @@ $langExercisePreventCopy = 'Αποτροπή αντιγραφής κειμένο
 $langExercisePreventCopyExplanation = 'Αποτροπή αντιγραφής και επικόλλησης κειμένου από την οθόνη κατά την εκτέλεση της άσκησης';
 $langStricterExamRestriction = "Αυστηρός περιορισμός";
 $langExerciseWillBeCanceledInStrictMode = "Η εξέταση ακυρώνεται σε παράλληλες ενέργειες χρηστών όπως ανακατεύθυνση σε νέα σελίδα ή άνοιγμα νέου παραθύρου";
+$langExerciseNoCalcGradeMethod = "Κανονικός";
+$langExerciseCBCalcGradeMethod = "Με βαθμό βεβαιότητας";
+$langExerciseCalcGradeMethod = "Τρόπος Βαθμολόγησης";
 
 // admin.php
 $langExerciseManagement = "Διαχείριση Άσκησης";
@@ -3238,6 +3240,7 @@ $langQuestionCorrectionTitle2 = "Υπολείπονται ";
 $langUngradedAnswers = " αβαθμολόγητες απαντήσεις.";
 $langDistributeError = "Ο συνολικός αριθμός διαμοιρασμού δεν πρέπει να είναι μεγαλύτερος από το σύνολο των ασκήσεων.";
 $langGradeCorrect = 'Διόρθωση';
+$langAddFeedback = "Προσθήκη ανατροφοδότησης";
 
 /* * ***********************************************
  * lessontools.php
@@ -4919,7 +4922,7 @@ $langValue = 'Τιμή';
 $langNewGradeScale = "Προσθήκη βαθμολογικής κλίμακας";
 $langWorkSubType = "Τύπος Υποβολής";
 $langWorkOnlineText = "Online Κείμενο";
-$langZipDownload = "Κατέβασμα των εργασιών";
+$langZipDownload = "Λήψη των εργασιών";
 $langDelWarn2 = "Έχει αποσταλεί μία εργασία " . $langsOfStudent . ". Το αρχείο αυτό θα διαγραφεί!";
 $langDelTitle = "Προσοχή!";
 $langDelMany1 = "Έχουν αποσταλεί";
@@ -5160,6 +5163,7 @@ $langInactiveModule = "ανενεργό υποσύστημα";
 $langAvailableUnitResources = "Εκπαιδευτικό υλικό";
 $langNoUnits = "Δεν υπάρχουν ενότητες";
 $langGoTo = "Μετάβαση σε";
+$langUnitCompletionLegend = "Η ολοκλήρωση της ενότητας είναι ενεργοποιημένη ή η ενότητα έχει πρααπαιτούμενα";
 
 /* * ********************************************************************
   units_prerequisites
