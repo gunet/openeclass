@@ -232,9 +232,19 @@ function printPollForm() {
                 var arr = this.id.split('_');
                 var typeQ = arr[0];
                 var numberQ = arr[1];
+                var sSubq = $(this).attr('data-sub-question');
                 if(typeQ == 1) {
                     var classQ = '.QuestionType_'+typeQ+'.QuestionNumber_'+numberQ+' input[type=radio]';
                     $(classQ).prop('checked', false);
+                    if (sSubq > 0) { // clear the subquestion
+                        var classSubQ = '.QuestionType_'+typeQ+'.QuestionNumber_'+sSubq+' input[type=radio]';
+                        $(classSubQ).prop('checked', false);
+                        $.ajax({
+                            url: '$_SERVER[SCRIPT_NAME]?course=$course_code&UseCase=1&pid=$pid',
+                            method: 'POST',
+                            data: { clean_question_id: sSubq },
+                        });
+                    }
                 } else if(typeQ == 2) {
                     var classQ = '.QuestionType_'+typeQ+'.QuestionNumber_'+numberQ+' textarea';
                     $(classQ).val('');
@@ -575,7 +585,7 @@ function printPollForm() {
         //*****************************************************************************
         //      Get answers + questions
         //******************************************************************************/
-        $questions = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d AND qtype != ?d AND has_sub_question != ?d ORDER BY q_position,`page` ASC", $pid, 0, -1);
+        $questions = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d AND qtype != ?d ORDER BY q_position,`page` ASC", $pid, 0);
         $pageBreakExists = checkPageBreakOn($pid);
         $maxPage = Database::get()->querySingle("SELECT MAX(`page`) AS max FROM poll_question WHERE pid = ?d AND qtype != ?d", $pid, 0)->max;
         if (isset($_SESSION['current_page'])) {
@@ -645,6 +655,7 @@ function printPollForm() {
             $pqid = $theQuestion->pqid;
             $qtype = $theQuestion->qtype;
             $q_description = $theQuestion->description;
+            $qHasSubQ = $theQuestion->has_sub_question;
             if (isset($incomplete_resubmission) and !isset($incomplete_answers[$pqid])) {
                 $incomplete_answers[$pqid] = [];
             }
@@ -664,6 +675,17 @@ function printPollForm() {
                 if ($pageBreakExists) {
                     $_SESSION['question_ids'][$pqid] = $qtype;
                 }
+
+                // Do not display the subquestion as main question
+                if ($theQuestion->has_sub_question == -1) {
+                    continue;
+                }
+
+                $sSubQ = 0;
+                if ($qHasSubQ) {
+                    $sSubQ = Database::get()->querySingle("SELECT sub_qid FROM poll_question_answer WHERE pqid = ?d AND sub_qid > ?d", $pqid, 0)->sub_qid;
+                }
+
                 // Ignore questions that appear on a new page.
                 if (isset($_SESSION['current_page']) && $theQuestion->page != $_SESSION['current_page']) {
                     continue;
@@ -703,6 +725,7 @@ function printPollForm() {
                                 $type_attr = ($qtype == QTYPE_SINGLE)? "radio": "checkbox";
                                 $class_type_attr = ($qtype == QTYPE_SINGLE)? "radio-label": "label-container";
                                 $checkMark_class = ($qtype == QTYPE_SINGLE)? "": "<span class='checkmark'></span>";
+
                                 if ($qtype == QTYPE_MULTIPLE) {
                                     $tool_content .= "<input type='hidden' name='answer[$pqid]' value='-1'>";
                                 }
@@ -813,7 +836,7 @@ function printPollForm() {
                                 }
 
                                 $tool_content .= "<div class='col-12 d-flex justify-content-end align-items-center mt-4'>
-                                                    <a id='{$qtype}_{$pqid}' class='btn deleteAdminBtn clearUpBtn gap-1' data-question-clean='$pqid'><i class='fa-regular fa-trash-can'></i>$langCleanup</a>
+                                                    <a id='{$qtype}_{$pqid}' class='btn deleteAdminBtn clearUpBtn gap-1' data-question-clean='$pqid' data-sub-question='$sSubQ'><i class='fa-regular fa-trash-can'></i>$langCleanup</a>
                                                   </div>";
                             } elseif ($qtype == QTYPE_SCALE) {
                                 $slider_value = 0;
@@ -892,6 +915,7 @@ function printPollForm() {
                                         foreach ($user_questions as $uq) {
                                             $sub_question_arr[] = $uq->sub_question;
                                         }
+                                        sort($sub_question_arr);
                                         $tool_content .= "
                                             <div class='table-responsive'>
                                                 <table class='table-default QuestionType_{$qtype} QuestionNumber_{$pqid}'>
@@ -908,9 +932,9 @@ function printPollForm() {
                                                             unset($_SESSION['q_row_columns'][$pqid]);
                                                         }
                                                         for ($r=0; $r<$q_rows; $r++) {
+                                                            $val_row = $r+1;
                                                             $tool_content .= "<tr>";
                                                                 for ($t=0; $t<count($user_questions); $t++) {
-                                                                    $val_row = $r+1;
                                                                     $val_col = $sub_question_arr[$t];
                                                                     $ansCounter = $ansCounter+1;
                                                                     $text = '';
@@ -923,7 +947,7 @@ function printPollForm() {
                                                                                                                 AND a.sub_qid = ?d
                                                                                                                 AND a.sub_qid_row = ?d
                                                                                                                 $sql_an", $pqid, $userDefault, $val_col, $val_row);
-                                                                        if ($user_q) {
+                                                                        if ($user_q && !isset($_SESSION['data_answers'][$theQuestion->pqid][$ansCounter])) {
                                                                             $text = $user_q->answer_text;
                                                                         }
                                                                     }
@@ -1321,6 +1345,18 @@ function submitPoll() {
                 $arr_answers = $answer;
                 $empty_answers = 0;
                 $arrRowCols = (isset($pageBreakExists) && isset($_SESSION['q_row_columns'][$pqid])) ? $_SESSION['q_row_columns'][$pqid] : $_POST['q_row_col'];
+                if (!isset($arrRowCols)) {
+                    $row_cols = Database::get()->querySingle("SELECT q_row,q_column FROM poll_question WHERE pqid = ?d", $pqid);
+                    $total_row = $row_cols->q_row;
+                    $total_cols = $row_cols->q_column;
+                    $div = 0;
+                    for ($i = 1; $i <= $total_row; $i++) {
+                        for ($j = 1; $j <= $total_cols; $j++) {
+                            $div++;
+                            $arrRowCols[] = "$pqid,$i,$j,$div";
+                        }
+                    }
+                }
                 foreach ($arrRowCols as $q_an) {
                     $arr_tmp = explode(',',$q_an);
                     $pqid_tmp = $arr_tmp[0];

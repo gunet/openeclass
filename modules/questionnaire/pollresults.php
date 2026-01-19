@@ -329,6 +329,11 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COU
             $tool_content .= "<div class='col-12 mt-3'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$theQuestion->question_text</span></div></div>";
         } else {
 
+            // Do not display the sub-question if exists.
+            if ($theQuestion->has_sub_question == -1) {
+                continue;
+            }
+
             $totalUserAnswer = total_number_of_users_answer_per_question($theQuestion->pqid);
 
             if ($totalUserAnswer == 1 && isset($_GET['from_session_view']) && isset($_GET['session']) && $loopTmp == 0) {
@@ -443,9 +448,25 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COU
                             $ellipsized_names_str = q(ellipsize($names_str, 60));
                         }
                     }
+
+                    // Display the answers from sub-question if exist.
+                    $subAnswerText = '';
+                    $TheSubQuestion = Database::get()->querySingle("SELECT sub_qid FROM poll_question_answer WHERE pqaid = ?d", $answer->aid)->sub_qid;
+                    if ($TheSubQuestion > 0) { // exists sub-question
+                        $subArid = Database::get()->queryArray("SELECT aid FROM poll_answer_record 
+                                                                 LEFT JOIN poll_user_record ON poll_answer_record.poll_user_record_id=poll_user_record.id 
+                                                                 WHERE qid = ?d", $TheSubQuestion);
+                        if (count($subArid) > 0) {
+                            foreach ($subArid as $an) {
+                                $res_subq = Database::get()->querySingle("SELECT answer_text FROM poll_question_answer WHERE pqaid = ?d", $an->aid)->answer_text;
+                                $subAnswerText .= "<br><small>" . $res_subq . "</small>";
+                            }
+                        }
+                    }
+
                     $answers_table .= "
                         <tr>
-                                <td>$q_answer</td>";
+                                <td>$q_answer $subAnswerText</td>";
                                 if (($totalUserAnswer > 1 && isset($_GET['from_session_view'])) or (!isset($_GET['from_session_view']))) {
                                     $answers_table .= "<td>$answer->count</td>";
                                     $answers_table .= "<td>$percentage%</td>";
