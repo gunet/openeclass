@@ -1799,16 +1799,19 @@ function display_available_blogs($element, $element_id, $unit_id = 0) {
            $course_code, $langTitle, $langValue, $langResourceAlreadyAdded,
            $langChoice, $langOperator, $langSelect, $langPollFillText, $langPoints;
 
+    $pg_sql = "";
     if ($element == 'certificate') {
         $element_name = 'certificate_id';
     } elseif ($element == 'badge') {
         $element_name = 'badge_id';
     } else {
         $element_name = 'points_game_id';
+        $pg_sql = " AND criterion_type = 'onetime'";
     }
 
     $res = Database::get()->queryArray("SELECT resource FROM {$element}_criterion WHERE $element = ?d
-                                        AND resource IS NULL
+                                        AND resource IS NULL".
+                                        $pg_sql."
                                         AND activity_type = '" . BlogEvent::ACTIVITY . "'
                                         AND module = " . MODULE_ID_BLOG, $element_id);
 
@@ -1950,16 +1953,19 @@ function display_available_forums($element, $element_id, $unit_id = 0) {
            $course_code, $langTitle, $langValue, $langResourceAlreadyAdded,
            $langChoice, $langOperator, $langSelect, $langPollFillText, $langPoints;
 
+    $pg_sql = "";
     if ($element == 'certificate') {
         $element_name = 'certificate_id';
     } elseif ($element == 'badge') {
         $element_name = 'badge_id';
     } else {
         $element_name = 'points_game_id';
+        $pg_sql = " AND criterion_type = 'onetime'";
     }
 
     $res = Database::get()->queryArray("SELECT resource FROM {$element}_criterion WHERE $element = ?d
-                                            AND resource IS NULL
+                                            AND resource IS NULL".
+                                            $pg_sql."
                                             AND activity_type = '" . ForumEvent::ACTIVITY . "'
                                             AND module = " . MODULE_ID_FORUM . "", $element_id);
 
@@ -2616,16 +2622,19 @@ function display_available_wiki($element, $element_id, $unit_id = 0) {
     $langAddModulesButton, $langChoice, $langTitle, $langWikiPages,
     $course_code, $langOperator, $langValue, $langSelect, $langPollFillText;
 
+    $pg_sql = "";
     if ($element == 'certificate') {
         $element_name = 'certificate_id';
     } elseif ($element == 'badge') {
         $element_name = 'badge_id';
     } else {
         $element_name = 'points_game_id';
+        $pg_sql = " AND criterion_type = 'onetime'";
     }
 
     $result = Database::get()->queryArray("SELECT resource FROM {$element}_criterion WHERE $element = ?d
-                                            AND resource IS NULL
+                                            AND resource IS NULL".
+                                            $pg_sql."
                                             AND activity_type = '" . WikiEvent::ACTIVITY . "'
                                             AND module = " . MODULE_ID_WIKI . "", $element_id);
 
