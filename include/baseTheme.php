@@ -76,19 +76,19 @@ if ($user_selected_theme_id > 0) {
         $theme_path = $urlAppend . "courses/theme_data/" . $theme_id . "/";
 
         if (!empty($theme_options_styles['imageUpload'])) {
-            $logo_img = $theme_path . $theme_options_styles['imageUpload'];
+            $logo_img = $theme_path . basename($theme_options_styles['imageUpload']);
         }
         if (!empty($theme_options_styles['imageUploadSmall'])) {
-            $logo_img_small = $theme_path . $theme_options_styles['imageUploadSmall'];
+            $logo_img_small = $theme_path . basename($theme_options_styles['imageUploadSmall']);
         }
         if (!empty($theme_options_styles['faviconUpload'])) {
-            $favicon_img = $theme_path . $theme_options_styles['faviconUpload'];
+            $favicon_img = $theme_path . basename($theme_options_styles['faviconUpload']);
         }
         if (!empty($theme_options_styles['imageUploadFooter'])) {
-            $image_footer = $theme_path . $theme_options_styles['imageUploadFooter'];
+            $image_footer = $theme_path . basename($theme_options_styles['imageUploadFooter']);
         }
         if (!empty($theme_options_styles['loginImg'])) {
-            $loginIMG = $theme_path . $theme_options_styles['loginImg'];
+            $loginIMG = $theme_path . basename($theme_options_styles['loginImg']);
         }
     }
 }
