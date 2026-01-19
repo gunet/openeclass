@@ -187,17 +187,19 @@ $card_class = ($current_selection == 0) ? 'border-primary bg-light' : '';
 $theme_cards .= "
 <div class='col-xl-4 col-md-6 mb-4 theme-item'>
     <div class='card h-100 theme-card $card_class' style='cursor:pointer;' onclick='selectTheme(0)'>
-        <div class='card-body text-center d-flex flex-column'>
+        <div class='card-body d-flex flex-column'>
             <div class='theme-preview mb-3 d-flex align-items-center justify-content-center rounded' style='height:180px; background:#f5f5f5; border:1px solid #ddd;'>
-                <div class='text-muted'>
+                <div class='text-muted text-center'>
                     <i class='fa-solid fa-desktop fa-3x mb-2'></i><br>
                     $langDefaultThemeSettings
                 </div>
             </div>
-            <h5 class='card-title mt-auto'>$langDefaultThemeSettings</h5>
-            <div class='form-check d-inline-block mt-2'>
-                <input class='form-check-input' type='radio' name='selected_theme_id' id='theme_def' value='0' $is_def_checked>
-                <label class='form-check-label' for='theme_def'>$langSelect</label>
+            <h5 class='card-title mt-auto text-center'>$langDefaultThemeSettings</h5>
+            <div class='text-center mt-2'>
+                <div class='form-check d-inline-block'>
+                    <input class='form-check-input' type='radio' name='selected_theme_id' id='theme_def' value='0' $is_def_checked>
+                    <label class='form-check-label' for='theme_def' style='cursor:pointer;'>$langSelect</label>
+                </div>
             </div>
         </div>
     </div>
@@ -234,14 +236,16 @@ foreach ($all_themes as $th) {
     $theme_cards .= "
     <div class='col-xl-4 col-md-6 mb-4 theme-item'>
         <div class='card h-100 theme-card $border_class' style='cursor:pointer;' onclick='selectTheme($t_id)'>
-            <div class='card-body text-center d-flex flex-column'>
+            <div class='card-body d-flex flex-column'>
                 <div class='theme-preview mb-3 d-flex align-items-center justify-content-center' style='height:180px; background:#fff; border:1px solid #eee;'>
                     $preview_img
                 </div>
-                <h5 class='card-title mt-auto'>$t_name</h5>
-                <div class='form-check d-inline-block mt-2'>
-                    <input class='form-check-input' type='radio' name='selected_theme_id' id='theme_$t_id' value='$t_id' $is_checked>
-                    <label class='form-check-label' for='theme_$t_id'>$langSelect</label>
+                <h5 class='card-title mt-auto text-center'>$t_name</h5>
+                <div class='text-center mt-2'>
+                    <div class='form-check d-inline-block'>
+                        <input class='form-check-input' type='radio' name='selected_theme_id' id='theme_$t_id' value='$t_id' $is_checked>
+                        <label class='form-check-label' for='theme_$t_id' style='cursor:pointer;'>$langSelect</label>
+                    </div>
                 </div>
             </div>
         </div>
