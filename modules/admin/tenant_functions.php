@@ -135,6 +135,32 @@ function getCurrentTenant()
     return $_SESSION['current_user_tenant'];
 }
 
+
+/**
+ * @brief Get themes for a specific tenant
+ * @param int|null $tenant_id Optional tenant ID (defaults to current tenant)
+ * @return array Array of theme option records, or empty array if tenant not found
+ */
+function getTenantThemes($tenant_id = null)
+{
+    if ($tenant_id) {
+        $tenant = getTenantById($tenant_id);
+    } else {
+        $tenant = getCurrentTenant();
+    }
+
+    if (!$tenant) {
+        return [];
+    }
+
+    return Database::get()->queryArray(
+        'SELECT *
+         FROM theme_options
+         WHERE tenant_id = ?d',
+        $tenant->id
+    );
+}
+
 /**
  * @brief Get specific tenant via id
  */
@@ -159,7 +185,7 @@ function getTenantById($tenant_id = null)
 function getCourseTenant($course_id)
 {
     $tenant = Database::get()->querySingle(
-        'SELECT tenant.id, tenant.options, hierarchy.id AS hierarchy_id, hierarchy.lft, hierarchy.rgt
+        'SELECT tenant.id, tenant.options, hierarchy.id AS hierarchy_id, hierarchy.lft, hierarchy.rgt, tenant.theme_id
        FROM tenant JOIN hierarchy ON tenant.department_id = hierarchy.id,
             course_department JOIN hierarchy AS course_hierarchy ON department = course_hierarchy.id
        WHERE course = ?d AND course_hierarchy.lft BETWEEN hierarchy.lft AND hierarchy.rgt',
@@ -178,7 +204,7 @@ function getCourseTenant($course_id)
 function getUserTenant($user_id)
 {
     $tenant = Database::get()->querySingle(
-        'SELECT tenant.id, tenant.options, hierarchy.id AS hierarchy_id, hierarchy.lft, hierarchy.rgt
+        'SELECT tenant.id, tenant.options, hierarchy.id AS hierarchy_id, hierarchy.lft, hierarchy.rgt, tenant.theme_id
        FROM tenant JOIN hierarchy ON tenant.department_id = hierarchy.id,
             user_department JOIN hierarchy AS user_hierarchy ON department = user_hierarchy.id
        WHERE user = ?d AND user_hierarchy.lft BETWEEN hierarchy.lft AND hierarchy.rgt',

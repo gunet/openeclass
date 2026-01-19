@@ -2011,8 +2011,10 @@ $db->query("CREATE TABLE IF NOT EXISTS `theme_options` (
     `id` INT NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
     `styles` LONGTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
+    `tenant_id` int(11) DEFAULT NULL,
     `version` TINYINT,
-    PRIMARY KEY (`id`)) $tbl_options");
+    PRIMARY KEY (`id`)
+    CONSTRAINT FOREIGN KEY (`tenant_id`) REFERENCES `tenant` (`id`)) $tbl_options");
 
 // Tags tables
 $db->query("CREATE TABLE IF NOT EXISTS `tag_element_module` (

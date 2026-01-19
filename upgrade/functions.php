@@ -3588,6 +3588,16 @@ function upgrade_to_4_3($tbl_options) : void {
                 ON DELETE CASCADE ON UPDATE CASCADE
             ) $tbl_options");
     }
+
+    if (!DBHelper::fieldExists('theme_options', 'tenant_id')) {
+        Database::get()->query("
+            ALTER TABLE theme_options 
+            ADD tenant_id INT, 
+            ADD CONSTRAINT `tenant_id`
+            FOREIGN KEY (`tenant_id`)
+            REFERENCES `tenant`(`id`)
+        ");
+    }
 }
 
 

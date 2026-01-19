@@ -920,7 +920,16 @@ get_tinymce_color_text();
 
 // Theme initialization only if not running via cli
 if (php_sapi_name() != 'cli' or isset($_SERVER['REMOTE_ADDR'])) {
-    $theme_id = $_SESSION['theme_options_id'] ?? get_config('theme_options_id');
+    $tenant = getCurrentTenant();
+
+    if (isset($_SESSION['theme_options_id'])) {
+        $theme_id = $_SESSION['theme_options_id'];
+    } elseif ($tenant && $tenant->theme_id) {
+        $theme_id = $tenant->theme_id;
+    } else {
+        $theme_id = get_config('theme_options_id');
+    }
+
     $theme_css = "courses/theme_data/{$theme_id}/style_str.css";
     theme_initialization();
 }

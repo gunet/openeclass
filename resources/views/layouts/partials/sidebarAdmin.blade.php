@@ -43,6 +43,16 @@
         </a>
     @endif
 
+    @if($is_admin or $is_departmentmanage_user)
+        <a href="theme_options.php" class='quickLink'>
+            <i class="fa-solid fa-display settings-icon"></i>{{ trans('langThemeSettings') }}
+        </a>
+    @else
+        <a tabindex="0" role="button" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="focus" title="{{trans('langForbidden')}}" class='quickLink opacity-help'>
+            <i class="fa-solid fa-display settings-icon"></i>{{ trans('langThemeSettings') }}
+        </a>
+    @endif
+
     @if($is_admin)
         <a href="hierarchy.php" class='quickLink'>
             <i class="fa-solid fa-sitemap settings-icon"></i>{{ trans('langHierarchy') }}
@@ -60,16 +70,6 @@
     @else
         <a tabindex="0" role="button" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="focus" title="{{trans('langForbidden')}}" class='quickLink opacity-help'>
             <i class="fa-solid fa-gear settings-icon"></i>{{ trans('langConfig') }}
-        </a>
-    @endif
-
-    @if($is_admin)
-        <a href="theme_options.php" class='quickLink'>
-            <i class="fa-solid fa-display settings-icon"></i>{{ trans('langThemeSettings') }}
-        </a>
-    @else
-        <a tabindex="0" role="button" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="focus" title="{{trans('langForbidden')}}" class='quickLink opacity-help'>
-            <i class="fa-solid fa-display settings-icon"></i>{{ trans('langThemeSettings') }}
         </a>
     @endif
 
