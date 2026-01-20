@@ -367,6 +367,22 @@ if (isset($_POST['optionsSave'])) {
         }
     }
 
+    // Save user theme customization setting
+    if (isset($_POST['enable_user_theme_customization'])) {
+        set_config('enable_user_theme_customization', 1);
+        
+        // Save selected themes for users
+        $selected_themes = array();
+        if (isset($_POST['user_selectable_themes']) && is_array($_POST['user_selectable_themes'])) {
+            $selected_themes = array_map('intval', $_POST['user_selectable_themes']);
+            $selected_themes = array_filter($selected_themes); // Remove empty values
+        }
+        set_config('user_selectable_themes', implode(',', $selected_themes));
+    } else {
+        set_config('enable_user_theme_customization', 0);
+        set_config('user_selectable_themes', ''); // Clear selection when disabled
+    }
+
     clear_default_settings();
     $serialized_data = serialize($_POST);
     Database::get()->query("UPDATE theme_options SET styles = ?s WHERE id = ?d", $serialized_data, $theme_id);
@@ -696,6 +712,15 @@ if (isset($_POST['optionsSave'])) {
                     $('.logo-container').removeClass('d-block').addClass('d-none');
                 }
             });
+            
+            // Show/hide user selectable themes section based on checkbox
+            $('#enable_user_theme_customization').change(function() {
+                if($(this).is(':checked')){
+                    $('#user_selectable_themes_section').removeClass('d-none');
+                } else {
+                    $('#user_selectable_themes_section').addClass('d-none');
+                }
+            });
 
         });
     </script>";
@@ -710,6 +735,40 @@ if (isset($_POST['optionsSave'])) {
         $theme_options_styles = unserialize($theme_options->styles);
     }
     initialize_settings();
+    
+    // Get user theme customization setting
+    $enable_user_theme_customization = get_config('enable_user_theme_customization', 0);
+    
+    // Get selected themes for users
+    $user_selectable_themes_str = get_config('user_selectable_themes', '');
+    $user_selectable_themes = array();
+    if (!empty($user_selectable_themes_str)) {
+        $user_selectable_themes = array_map('intval', explode(',', $user_selectable_themes_str));
+        $user_selectable_themes = array_filter($user_selectable_themes);
+    }
+    
+    // Build theme checkboxes HTML
+    $theme_checkboxes_html = "";
+    if (!empty($all_themes)) {
+        foreach ($all_themes as $theme_item) {
+            $theme_item_id = intval($theme_item->id);
+            $theme_item_name = isset($theme_item->name) ? htmlspecialchars($theme_item->name, ENT_QUOTES, 'UTF-8') : '';
+            $is_checked = in_array($theme_item_id, $user_selectable_themes) ? 'checked' : '';
+            
+            if (!empty($theme_item_name)) {
+                $theme_checkboxes_html .= "
+                                    <div class='col-md-6 col-lg-4 mb-3'>
+                                        <div class='checkbox'>
+                                            <label class='label-container' aria-label='".htmlspecialchars($theme_item_name, ENT_QUOTES, 'UTF-8')."'>
+                                                <input type='checkbox' name='user_selectable_themes[]' value='".intval($theme_item_id)."' ".$is_checked.">
+                                                <span class='checkmark'></span>
+                                                ".htmlspecialchars($theme_item_name, ENT_QUOTES, 'UTF-8')."
+                                            </label>
+                                        </div>
+                                    </div>";
+            }
+        }
+    }
 
 
 
@@ -3174,6 +3233,31 @@ $tool_content .= "
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='ColorFocus' class='control-label-notes mb-2 me-2'>$langColorFocus:</label>
                         <input name='ColorFocus' type='text' class='form-control colorpicker' id='ColorFocus' value='$theme_options_styles[ColorFocus]'>
+                    </div>
+                    <hr>
+                    <div class='d-flex justify-content-between align-items-start flex-wrap gap-3'>
+                        <div class='w-100'>
+                            <h3 class='theme_options_legend text-decoration-underline mt-4'>$langUserThemeCustomization</h3>
+                            <div class='form-group mt-4'>
+                                <div class='checkbox'>
+                                    <label class='label-container' aria-label='$langEnableUserThemeCustomization'>
+                                        <input type='checkbox' name='enable_user_theme_customization' id='enable_user_theme_customization' value='1' ".($enable_user_theme_customization ? 'checked' : '').">
+                                        <span class='checkmark'></span>
+                                        $langEnableUserThemeCustomization
+                                    </label>
+                                    <small class='ms-5 d-block mt-2'>$langEnableUserThemeCustomizationHelp</small>
+                                </div>
+                            </div>
+                            
+                            <!-- Theme Selection Section (shown when checkbox is enabled) -->
+                            <div id='user_selectable_themes_section' class='form-group mt-4 ".($enable_user_theme_customization ? '' : 'd-none')."'>
+                                <h4 class='theme_options_legend text-decoration-underline mt-3 mb-3'>$langSelectThemesForUsers</h4>
+                                <p class='mb-3'>$langSelectThemesForUsersHelp</p>
+                                <div class='row'>".
+                                    $theme_checkboxes_html ."
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
