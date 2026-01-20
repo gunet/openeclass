@@ -129,6 +129,7 @@ $db->query("CREATE TABLE `announcement` (
 $db->query("CREATE TABLE `admin_announcement` (
     `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `title` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
+    `tenant_id` INT DEFAULT NULL,
     `body` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci,
     `date` DATETIME NOT NULL,
     `begin` DATETIME DEFAULT NULL,

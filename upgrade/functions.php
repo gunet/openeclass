@@ -3598,6 +3598,13 @@ function upgrade_to_4_3($tbl_options) : void {
             REFERENCES `tenant`(`id`)
         ");
     }
+
+    if (DBHelper::tableExists('admin_announcement')) {
+        Database::get()->query("ALTER TABLE `admin_announcement` 
+                                ADD `tenant_id` INT(11) DEFAULT NULL AFTER `id`");
+
+        Database::get()->query("ALTER TABLE `admin_announcement` 
+                                ADD INDEX `idx_tenantId` (`tenantId`)");
 }
 
 

@@ -23,15 +23,30 @@ $pageName = $langAdminAn;
 
 if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
 
-    $limit = intval($_GET['iDisplayLength']);
-    $offset = intval($_GET['iDisplayStart']);
+    $limit = intval($_GET['iDisplayLength'] ?? 10);
+    $offset = intval($_GET['iDisplayStart'] ?? 0);
     if (isset($_GET['sSearch']) and $_GET['sSearch'] != '') {
         $keyword = '%' . $_GET['sSearch'] . '%';
     } else {
         $keyword = [];
     }
 
-    $announcement_total = Database::get()->querySingle("SELECT COUNT(*) AS total FROM admin_announcement WHERE visible = 1 AND important = 0")->total;
+    if ($is_departmentmanage_user && !$is_admin) {
+        $announcement_total = Database::get()->querySingle("SELECT COUNT(*) AS total 
+                                    FROM admin_announcement 
+                                    WHERE visible = 1 
+                                    AND important = 0 
+                                    AND (
+                                        tenant_id = ?d
+                                        OR tenant_id IS NULL
+                                    )",
+                                    getCurrentTenant()->id)->total;
+    } else {
+        $announcement_total = Database::get()->querySingle("SELECT COUNT(*) AS total 
+                                    FROM admin_announcement 
+                                    WHERE visible = 1 
+                                    AND important = 0")->total;
+    }
     if ($limit > 0) {
         $extra_sql = 'LIMIT ?d, ?d';
         $extra_terms = [$offset, $limit];
@@ -40,14 +55,41 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         $extra_terms = [];
     }
 
-    $student_sql = ($keyword? 'title LIKE ?s AND': '') .
+    $student_sql = ($keyword ? 'title LIKE ?s AND' : '') .
         ' visible = 1 AND important = 0 AND (`begin` <= NOW() OR `begin` IS NULL) AND (`end` >= NOW() OR `end` IS NULL)';
-    $result = Database::get()->queryArray("SELECT * FROM admin_announcement WHERE $student_sql
-        ORDER BY `order` DESC , `date` DESC $extra_sql", $keyword, $extra_terms);
+    if ($is_departmentmanage_user && !$is_admin) {
+        $result = Database::get()->queryArray("SELECT * FROM admin_announcement WHERE $student_sql            
+        AND (
+            tenant_id = ?d
+            OR tenant_id IS NULL
+        )
+        ORDER BY `order` DESC , `date` DESC $extra_sql", $keyword, getCurrentTenant()->id, $extra_terms);
+    } else {
+        $result = Database::get()->queryArray("SELECT * FROM admin_announcement WHERE $student_sql
+            ORDER BY `order` DESC , `date` DESC $extra_sql", $keyword, $extra_terms);
+    }
 
     if ($keyword) {
-        $filtered_total = Database::get()->querySingle("SELECT COUNT(*) AS total
-            FROM admin_announcement WHERE $student_sql", $keyword)->total;
+        if ($is_departmentmanage_user && !$is_admin) {
+            $filtered_total = Database::get()->querySingle(
+                "SELECT COUNT(*) AS total
+                FROM admin_announcement 
+                WHERE ($student_sql)   
+                AND (
+                tenant_id = ?d
+                OR tenant_id IS NULL
+                )",
+                $keyword,
+                getCurrentTenant()->id
+            )->total;
+        } else {
+            $filtered_total = Database::get()->querySingle(
+                "SELECT COUNT(*) AS total
+                FROM admin_announcement 
+                WHERE $student_sql",
+                $keyword
+            )->total;
+        }
     } else {
         $filtered_total = $announcement_total;
     }
@@ -80,7 +122,24 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
 
 if (isset($_GET['an_id'])) {
 
-    $row = Database::get()->querySingle("SELECT * FROM admin_announcement WHERE id = ?d", $_GET['an_id']);
+    if ($is_departmentmanage_user && !$is_admin) {
+        $row = Database::get()->querySingle(
+            "SELECT * FROM admin_announcement 
+                                            WHERE id = ?d 
+                                            AND (
+                                            tenant_id = ?d
+                                            OR tenant_id IS NULL
+                                        )",
+            $_GET['an_id'],
+            getCurrentTenant()->id
+        );
+    } else {
+        $row = Database::get()->querySingle(
+            "SELECT * FROM admin_announcement 
+                                             WHERE id = ?d",
+            $_GET['an_id']
+        );
+    }
     if (!$row) {
         redirect_to_home_page("main/system_announcements/");
     }
@@ -133,7 +192,7 @@ if (isset($_GET['an_id'])) {
                             '-1': '$langAllOfThem'
                         },                       
                        'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
-                       'sZeroRecords':  '".$langNoResult."',
+                       'sZeroRecords':  '" . $langNoResult . "',
                        'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
                        'sInfoEmpty':    '',
                        'sInfoFiltered': '',
