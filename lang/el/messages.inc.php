@@ -684,7 +684,6 @@ $langViaAltAuthMethods = "μέσω εναλλακτικών τρόπων πισ�
 $langMonthsUnit = "σε μήνες";
 $langMinPasswordLen = "Ελάχιστο μέγεθος συνθηματικού";
 $langCourseSettings = "Ρυθμίσεις $langsOfCourses";
-$langCourseOfflineSettings = "Κατέβασμα $langsOfCourse";
 $langCourseOfflineLegend = "Οι $langsOfStudents μπορούν να κατεβάσουν το $langsCourse στον υπολογιστή τους.";
 $langLoginFailCheck = "Έλεγχος αποτυχημένων εισόδων";
 $langEnableLoginFailCheck = "Ενεργοποίηση ελέγχου αποτυχημένων εισόδων";
@@ -767,7 +766,7 @@ $langUnitJustEdited="Οι δραστηριότητες ενημερώθηκαν"
 $langFlippedClassroomDataUpdated ="Οι πληροφορίες της ανεστραμμένης Τάξης ενημερώθηκαν";
 $langConfirmDeleteUnit = "Θέλετε σίγουρα να αφαιρέσετε την συγκεκριμένη ενότητα;";
 $langConfirmDeleteGoal = "Θέλετε σίγουρα να αφαιρέσετε το συγκεκριμένο μαθησιακό στόχο;";
-$langUnits = "Θεματικές Ενότητες";
+$langUnits = "Εμφάνιση όλων των ενοτήτων";
 $langDoubleLoginLockOption = 'Αποκλεισμός ταυτόχρονων συνδέσεων με τον ίδιο λογαριασμό.';
 
 // admin announcements
@@ -1135,7 +1134,7 @@ $langCourseInvalidDepartmentPrompt = "Παρακαλούμε %s μεταφέρε
 $langReadMore = "Περισσότερα";
 $langReadLess = "Λιγότερα";
 $langNoInfoAvailable = "Δεν υπάρχουν διαθέσιμες πληροφορίες";
-$langDownloadCourse = "Κατέβασμα του μαθήματος";
+$langDownloadCourse = "Λήψη $langsOfCourse";
 $langConfEnableMailNotification = "Θέλετε να ενεργοποιήσετε τη λήψη ειδοποιήσεων του $langsOfCourse μέσω email;";
 $langConfDisableMailNotification = "Θέλετε να απενεργοποιήσετε τη λήψη ειδοποιήσεων του $langsOfCourse μέσω email;";
 $langOfNotifications = "ειδοποιήσεων";
@@ -2088,6 +2087,9 @@ $langExercisePreventCopy = 'Αποτροπή αντιγραφής κειμένο
 $langExercisePreventCopyExplanation = 'Αποτροπή αντιγραφής και επικόλλησης κειμένου από την οθόνη κατά την εκτέλεση της άσκησης';
 $langStricterExamRestriction = "Αυστηρός περιορισμός";
 $langExerciseWillBeCanceledInStrictMode = "Η εξέταση ακυρώνεται σε παράλληλες ενέργειες χρηστών όπως ανακατεύθυνση σε νέα σελίδα ή άνοιγμα νέου παραθύρου";
+$langExerciseNoCalcGradeMethod = "Κανονικός";
+$langExerciseCBCalcGradeMethod = "Με βαθμό βεβαιότητας";
+$langExerciseCalcGradeMethod = "Τρόπος Βαθμολόγησης";
 
 // admin.php
 $langExerciseManagement = "Διαχείριση Άσκησης";
@@ -3240,6 +3242,7 @@ $langQuestionCorrectionTitle2 = "Υπολείπονται ";
 $langUngradedAnswers = " αβαθμολόγητες απαντήσεις.";
 $langDistributeError = "Ο συνολικός αριθμός διαμοιρασμού δεν πρέπει να είναι μεγαλύτερος από το σύνολο των ασκήσεων.";
 $langGradeCorrect = 'Διόρθωση';
+$langAddFeedback = "Προσθήκη ανατροφοδότησης";
 
 /* * ***********************************************
  * lessontools.php
@@ -4902,6 +4905,7 @@ $langGroupWorkIntro = "
 $langAssignmentPasswordModalTitle = "Παρακαλώ πληκτρολογήστε τον κωδικό της εργασίας";
 $langWillStartAt = 'έναρξη στις';
 $langWillStart = 'θα ξεκινήσει σε';
+$langWillEnd = 'θα τελειώσει σε';
 $langGroupWorkSubmitted = "Έχει υποβληθεί";
 $langGroupWorkDeadline_of_Submission = "Προθεσμία";
 $langEmptyAsTitle = "Δεν συμπληρώσατε τον τίτλο της εργασίας";
@@ -4935,7 +4939,7 @@ $langValue = 'Τιμή';
 $langNewGradeScale = "Προσθήκη βαθμολογικής κλίμακας";
 $langWorkSubType = "Τύπος Υποβολής";
 $langWorkOnlineText = "Online Κείμενο";
-$langZipDownload = "Κατέβασμα των εργασιών";
+$langZipDownload = "Λήψη των εργασιών";
 $langDelWarn2 = "Έχει αποσταλεί μία εργασία " . $langsOfStudent . ". Το αρχείο αυτό θα διαγραφεί!";
 $langDelTitle = "Προσοχή!";
 $langDelMany1 = "Έχουν αποσταλεί";
@@ -5140,7 +5144,7 @@ $langUnitTitle = "Τίτλος ενότητας";
 $langUnitDescr = "Σύντομη περιγραφή";
 $langUnitUnknown = "Άγνωστη ενότητα";
 $langEmptyUnitTitle = "Παρακαλώ πληκτρολογήστε τον τίτλο της ενότητας";
-$langCourseUnits = "Ενότητες";
+$langCourseUnits = "Ενότητες $langsOfCourse";
 $langCourseUnitDeleteConfirm = "Είστε σίγουρος/η ότι Θέλετε να διαγράψετε την συγκεκριμένη ενότητα?";
 $langCourseUnitDeleted = "Η ενότητα διαγράφηκε";
 $langCourseUnitAdded = "Η ενότητα προστέθηκε";
@@ -5176,6 +5180,7 @@ $langInactiveModule = "ανενεργό υποσύστημα";
 $langAvailableUnitResources = "Εκπαιδευτικό υλικό";
 $langNoUnits = "Δεν υπάρχουν ενότητες";
 $langGoTo = "Μετάβαση σε";
+$langUnitCompletionLegend = "Η ολοκλήρωση της ενότητας είναι ενεργοποιημένη ή η ενότητα έχει πρααπαιτούμενα";
 
 /* * ********************************************************************
   units_prerequisites
