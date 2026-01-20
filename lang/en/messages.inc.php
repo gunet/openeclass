@@ -6481,6 +6481,7 @@ $langWorkUserGroupNoSubmission = 'Users/groups without submission';
 $langLateSubmission = "Late Submission";
 $langSubDate = "Date submission";
 $langWillStart = 'will start in';
+$langWillEnd = 'will end in';
 $langShowUnitTitle = "Show section by Title";
 $langInsertDivider = "separator";
 $langBBBScheduleSessionInfo3 = "is now available.";
