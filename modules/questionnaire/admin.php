@@ -1155,7 +1155,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 </div>";
         }
         // Add subquestion to the specific predefined answer
-        if (!isset($_GET['subQOn'])) {
+        if (!isset($_GET['subQOn']) && $question->qtype == QTYPE_SINGLE) {
         $subQuestionChecked = $question->has_sub_question ? 'checked' : '';
         $tool_content .= "<div class='form-group mt-4'>
                             <div class='checkbox'>
@@ -1427,30 +1427,6 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                         <label>
                         <input type='radio' name='answerType' class='answerType' value='".QTYPE_FILL."' ".($qTypeSubQuestion == QTYPE_FILL ? 'checked' : '').">
                         ". $aType[QTYPE_FILL - 1] . "
-                        </label>
-                    </div>
-                    <div class='radio mb-1'>
-                        <label>
-                        <input type='radio' name='answerType' class='answerType' value='".QTYPE_SCALE."' ".($qTypeSubQuestion == QTYPE_SCALE ? 'checked' : '').">
-                        ". $aType[QTYPE_SCALE - 1] . "
-                        </label>
-                    </div>
-                    <div class='radio mb-1'>
-                        <label>
-                        <input type='radio' name='answerType' class='answerType' value='".QTYPE_TABLE."' ".($qTypeSubQuestion == QTYPE_TABLE ? 'checked' : '').">
-                        ". $aType[QTYPE_TABLE - 1] . "
-                        </label>
-                    </div>
-                    <div class='radio mb-1'>
-                        <label>
-                        <input type='radio' name='answerType' class='answerType' value='".QTYPE_DATETIME."' ".($qTypeSubQuestion == QTYPE_DATETIME ? 'checked' : '').">
-                        ". $aType[QTYPE_DATETIME - 1] . "
-                        </label>
-                    </div>
-                    <div class='radio mb-1'>
-                        <label>
-                        <input type='radio' name='answerType' class='answerType' value='".QTYPE_SHORT."' ".($qTypeSubQuestion == QTYPE_SHORT ? 'checked' : '').">
-                        ". $aType[QTYPE_SHORT - 1] . "
                         </label>
                     </div>
                 </div>

@@ -64,7 +64,7 @@ if (isset($_GET['from_session_view'])) {
 }
 //Identifying ajax request that cancels an active attempt
 if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
-        if ($_POST['action'] == 'refreshSession') {
+        if (isset($_POST['action']) && $_POST['action'] == 'refreshSession') {
             // Does nothing just refreshes the session
             exit();
         }
@@ -237,8 +237,19 @@ function printPollForm() {
                     var classQ = '.QuestionType_'+typeQ+'.QuestionNumber_'+numberQ+' input[type=radio]';
                     $(classQ).prop('checked', false);
                     if (sSubq > 0) { // clear the subquestion
-                        var classSubQ = '.QuestionType_'+typeQ+'.QuestionNumber_'+sSubq+' input[type=radio]';
+                        // single type
+                        var classSubQ = '.QuestionType_1.QuestionNumber_'+sSubq+' input[type=radio]';
                         $(classSubQ).prop('checked', false);
+
+                        // multiple type
+                        var classSubQMultiple = '.QuestionType_3.QuestionNumber_'+sSubq+' input[type=checkbox]';
+                        $(classSubQMultiple).prop('checked', false);
+
+                        // free text type
+                        var classSubQFrText = '.QuestionType_2.QuestionNumber_'+sSubq+' textarea';
+                        $(classSubQFrText).val('');
+
+                        // Clear sub-question answer
                         $.ajax({
                             url: '$_SERVER[SCRIPT_NAME]?course=$course_code&UseCase=1&pid=$pid',
                             method: 'POST',
@@ -349,18 +360,12 @@ function printPollForm() {
     
     <script>
         $(function() {
-            $('.single_type_answer:checked').each(function() {
-                var valId = $(this).val();
-                $('.sub_question_temp').removeClass('d-block').addClass('d-none');
-                $('.sub_question_'+valId).removeClass('d-none').addClass('d-block');
-            });
             $('.single_type_answer').change(function() {
+                var mainQ = $(this).attr('data-main-question');
                 var valId = $(this).val();
-                $('.sub_question_temp').removeClass('d-block').addClass('d-none');
+                $('.sub_question_temp_'+mainQ).removeClass('d-block').addClass('d-none');
                 $('.sub_question_'+valId).removeClass('d-none').addClass('d-block');
             });
-
-
         });
     </script>
     
@@ -644,9 +649,8 @@ function printPollForm() {
         }
         $sql_an = "AND b.session_id = $s_id";
 
-        if ($pageBreakExists) {
-            session_answers_init($questions, $sql_an, $userDefault);
-        }
+        // Initialize the user answers from db
+        user_answers_from_db($questions, $sql_an, $userDefault);
 
         foreach ($questions as $theQuestion) {
             if ($temp_IsLime) {
@@ -672,9 +676,7 @@ function printPollForm() {
                 </div>";
             } else {
                 // Store all questions into session variables.
-                if ($pageBreakExists) {
-                    $_SESSION['question_ids'][$pqid] = $qtype;
-                }
+                $_SESSION['question_ids'][$pqid] = $qtype;
 
                 // Do not display the subquestion as main question
                 if ($theQuestion->has_sub_question == -1) {
@@ -707,18 +709,6 @@ function printPollForm() {
                                             }
                             $tool_content .= "<input type='hidden' name='question[$pqid]' value='$qtype'>";
                             if ($qtype == QTYPE_SINGLE || $qtype == QTYPE_MULTIPLE) {
-                                if ($multiple_submissions) { // get user answers (if any)
-                                    $user_answers = Database::get()->queryArray("SELECT a.aid
-                                            FROM poll_user_record b, poll_answer_record a
-                                            LEFT JOIN poll_question_answer c
-                                                ON a.aid = c.pqaid
-                                            WHERE a.poll_user_record_id = b.id
-                                                AND a.qid = ?d
-                                                AND b.uid = ?d
-                                                $sql_an", $pqid, $userDefault);
-                                } elseif (isset($incomplete_resubmission)) {
-                                    $user_answers = $incomplete_answers[$pqid];
-                                }
                                 $answers = Database::get()->queryArray("SELECT * FROM poll_question_answer
                                             WHERE pqid = ?d ORDER BY pqaid", $pqid);
                                 $name_ext = ($qtype == QTYPE_SINGLE)? '': '[]';
@@ -731,26 +721,9 @@ function printPollForm() {
                                 }
                                 foreach ($answers as $theAnswer) {
                                     $checked = '';
-                                    if ($user_answers) {
-                                        if (count($user_answers) > 1) { // multiple answers
-                                            foreach ($user_answers as $ua) {
-                                                if ($ua->aid == $theAnswer->pqaid) {
-                                                    $checked = 'checked';
-                                                }
-                                            }
-                                        } else {
-                                            if (count($user_answers) == 1) { // single answer
-                                                if ($user_answers[0]->aid == $theAnswer->pqaid) {
-                                                    $checked = 'checked';
-                                                }
-                                            }
-                                        }
-                                    }
-                                    if ($qtype == QTYPE_SINGLE && $pageBreakExists && isset($_SESSION['data_answers']) 
-                                        && !empty($_SESSION['data_answers'][$pqid]) && $_SESSION['data_answers'][$pqid] == $theAnswer->pqaid) {
+                                    if ($qtype == QTYPE_SINGLE && isset($_SESSION['data_answers']) && !empty($_SESSION['data_answers'][$pqid]) && $_SESSION['data_answers'][$pqid] == $theAnswer->pqaid) {
                                         $checked = 'checked';
-                                    } elseif ($qtype == QTYPE_MULTIPLE && $pageBreakExists 
-                                        && isset($_SESSION['data_answers']) && !empty($_SESSION['data_answers'][$pqid])) {
+                                    } elseif ($qtype == QTYPE_MULTIPLE && isset($_SESSION['data_answers']) && !empty($_SESSION['data_answers'][$pqid])) {
                                         $arrTemporaryUserAnswers = explode(',', $_SESSION['data_answers'][$pqid]);
                                         if (in_array($theAnswer->pqaid, $arrTemporaryUserAnswers)) {
                                             $checked = 'checked';
@@ -761,7 +734,7 @@ function printPollForm() {
                                             <div class='col-sm-offset-1 col-sm-11'>
                                                 <div class='$type_attr QuestionType_{$qtype} QuestionNumber_{$pqid}'>
                                                     <label class='$class_type_attr' aria-label='$langSelect'>
-                                                        <input class='single_type_answer' type='$type_attr' name='answer[$pqid]$name_ext' value='$theAnswer->pqaid' $checked data-question-type='$qtype'>
+                                                        <input class='single_type_answer' type='$type_attr' name='answer[$pqid]$name_ext' value='$theAnswer->pqaid' $checked data-question-type='$qtype' data-main-question='$pqid'>
                                                         $checkMark_class
                                                         ".q_math($theAnswer->answer_text)."
                                                     </label>
@@ -773,40 +746,76 @@ function printPollForm() {
                                     /*****************************************************************/
                                     /*****************************************************************/
                                     if ($theAnswer->sub_qid) {// the answer contains the sub-question
-                                        
+                                        $subQDisplay = 'd-none';
+                                        if (isset($_SESSION['data_answers'][$pqid])) {
+                                            $theCheckedSubQ = Database::get()->querySingle("SELECT sub_qid FROM poll_question_answer WHERE pqaid = ?d", $_SESSION['data_answers'][$pqid])->sub_qid;
+                                            if ($theCheckedSubQ > 0) {
+                                                $subQDisplay = "d-block";
+                                            }
+                                        }
                                         $qTypeSubQuestion = Database::get()->querySingle("SELECT qtype FROM poll_question WHERE pqid = ?d", $theAnswer->sub_qid)->qtype;
-                                        $resSubQAnswers = Database::get()->queryArray("SELECT * FROM poll_question_answer WHERE pqid = ?d", $theAnswer->sub_qid);
-                                        $tool_content .= "<div class='col-12 col-lg-6 m-auto sub_question_temp sub_question_{$theAnswer->pqaid} d-none'>";
+                                        $SubQuestionText = Database::get()->querySingle("SELECT question_text FROM poll_question WHERE pqid = ?d", $theAnswer->sub_qid)->question_text;
+                                        $tool_content .= "<div class='col-12 col-lg-6 m-auto sub_question_temp_{$pqid} sub_question_{$theAnswer->pqaid} $subQDisplay'>";
                                         if ($qTypeSubQuestion == QTYPE_SINGLE) {
+                                            $resSubQAnswers = Database::get()->queryArray("SELECT * FROM poll_question_answer WHERE pqid = ?d", $theAnswer->sub_qid);
+                                            $tool_content .= "<p class='mb-2'>$SubQuestionText</p>";
                                             foreach ($resSubQAnswers as $an) {
-                                                        $checkedSubQ = '';
-                                                        if (isset($_SESSION['data_answers'][$an->pqid]) && $_SESSION['data_answers'][$an->pqid] == $an->pqaid) {
-                                                            $checkedSubQ = 'checked';
-                                                        }
-                                                        $tool_content .= "
-                                                        <div class='form-group'>
-                                                            <div class='col-sm-offset-1 col-sm-11'>
-                                                                <div class='radio QuestionType_{$qTypeSubQuestion} QuestionNumber_{$an->pqid}'>
-                                                                    <label class='radio-label' aria-label='$langSelect'>
-                                                                        <input type='radio' name='answer[$an->pqid]' value='$an->pqaid' $checkedSubQ data-question-type='$qTypeSubQuestion'>
-                                                                        ".q_math($an->answer_text)."
-                                                                    </label>
-                                                                </div>
-                                                            </div>
-                                                        </div>";
+                                                $checkedSubQ = '';
+                                                if (isset($_SESSION['data_answers'][$an->pqid]) && $_SESSION['data_answers'][$an->pqid] == $an->pqaid) {
+                                                    $checkedSubQ = 'checked';
+                                                }
+                                                $tool_content .= "
+                                                <div class='form-group'>
+                                                    <div class='col-sm-offset-1 col-sm-11'>
+                                                        <div class='radio QuestionType_{$qTypeSubQuestion} QuestionNumber_{$an->pqid}'>
+                                                            <label class='radio-label' aria-label='$langSelect'>
+                                                                <input type='radio' name='answer[$an->pqid]' value='$an->pqaid' $checkedSubQ data-question-type='$qTypeSubQuestion'>
+                                                                ".q_math($an->answer_text)."
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>";
                                             }
                                         } elseif ($qTypeSubQuestion == QTYPE_MULTIPLE) {
-
+                                            $qTypeSubQuestion = Database::get()->querySingle("SELECT qtype FROM poll_question WHERE pqid = ?d", $theAnswer->sub_qid)->qtype;
+                                            $resSubQAnswers = Database::get()->queryArray("SELECT * FROM poll_question_answer WHERE pqid = ?d", $theAnswer->sub_qid);
+                                            $tool_content .= "<input type='hidden' name='question[$theAnswer->sub_qid]' value='$qTypeSubQuestion'>
+                                                              <input type='hidden' name='answer[$theAnswer->sub_qid]' value='-1'>";
+                                            $tool_content .= "<p class='mb-2'>$SubQuestionText</p>";
+                                            foreach ($resSubQAnswers as $an) {
+                                                $checkedSubQ = '';
+                                                if (isset($_SESSION['data_answers'][$an->pqid])) {
+                                                    $arrAnSubQ = explode(',', $_SESSION['data_answers'][$an->pqid]);
+                                                    if (in_array($an->pqaid, $arrAnSubQ)) {
+                                                        $checkedSubQ = 'checked';
+                                                    }
+                                                }
+                                                $tool_content .= "
+                                                <div class='form-group'>
+                                                    <div class='col-sm-offset-1 col-sm-11'>
+                                                        <div class='checkbox QuestionType_{$qTypeSubQuestion} QuestionNumber_{$an->pqid}'>
+                                                            <label class='label-container' aria-label='$langSelect'>
+                                                                <input class='single_type_answer' type='checkbox' name='answer[$an->pqid][]' value='$an->pqaid' $checkedSubQ data-question-type='$qTypeSubQuestion'>
+                                                                <span class='checkmark'></span>
+                                                                ".q_math($an->answer_text)."
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>";
+                                            }
                                         } elseif ($qTypeSubQuestion == QTYPE_FILL) {
-
-                                        } elseif ($qTypeSubQuestion == QTYPE_SCALE) {
-
-                                        } elseif ($qTypeSubQuestion == QTYPE_TABLE) {
-
-                                        } elseif ($qTypeSubQuestion == QTYPE_DATETIME) {
-
-                                        } elseif ($qTypeSubQuestion == QTYPE_SHORT) {
-
+                                            $text = '';
+                                            $QText = Database::get()->querySingle("SELECT question_text FROM poll_question WHERE pqid = ?d", $theAnswer->sub_qid)->question_text;
+                                            if (isset($_SESSION['data_answers']) && !empty($_SESSION['data_answers'][$theAnswer->sub_qid])) {
+                                                $text = $_SESSION['data_answers'][$theAnswer->sub_qid];
+                                            }
+                                            $tool_content .= "
+                                            <p class='TextMedium Neutral-900-cl mb-2'>$QText</p>
+                                            <div class='form-group margin-bottom-fat'>
+                                                <div class='col-sm-12 margin-top-thin QuestionType_{$qTypeSubQuestion} QuestionNumber_{$theAnswer->sub_qid}'>
+                                                    <textarea class='form-control' name='answer[$theAnswer->sub_qid]' aria-label='$langTypeOutMessage' data-question-type='$qTypeSubQuestion'>$text</textarea>
+                                                </div>
+                                            </div>";
                                         }
 
                                         $tool_content .= "</div>";
@@ -817,8 +826,7 @@ function printPollForm() {
                                 }
                                 if ($qtype == QTYPE_SINGLE && $default_answer) {
                                     $checked = '';
-                                    if ($pageBreakExists && isset($_SESSION['data_answers']) 
-                                        && !empty($_SESSION['data_answers'][$pqid]) && $_SESSION['data_answers'][$pqid] == -1) {
+                                    if (isset($_SESSION['data_answers']) && !empty($_SESSION['data_answers'][$pqid]) && $_SESSION['data_answers'][$pqid] == -1) {
                                         $checked = 'checked';
                                     }
                                     $tool_content .= "
@@ -840,21 +848,8 @@ function printPollForm() {
                                                   </div>";
                             } elseif ($qtype == QTYPE_SCALE) {
                                 $slider_value = 0;
-                                if ($multiple_submissions) { // get user answers (if any)
-                                    $user_answers = Database::get()->querySingle("SELECT a.answer_text
-                                                        FROM poll_answer_record a, poll_user_record b
-                                                    WHERE qid = ?d
-                                                        AND a.poll_user_record_id = b.id
-                                                        AND b.uid = ?d
-                                                        $sql_an", $pqid, $userDefault);
-                                    if ($user_answers) {
-                                        $slider_value = $user_answers->answer_text;
-                                    }
-                                    if ($pageBreakExists && isset($_SESSION['data_answers']) && !empty($_SESSION['data_answers'][$pqid])) {
-                                        $slider_value = $_SESSION['data_answers'][$pqid];
-                                    }
-                                } elseif (isset($incomplete_resubmission) and $incomplete_answers[$pqid]) {
-                                    $slider_value = $incomplete_answers[$pqid][0]->answer_text;
+                                if (isset($_SESSION['data_answers']) && !empty($_SESSION['data_answers'][$pqid])) {
+                                    $slider_value = $_SESSION['data_answers'][$pqid];
                                 }
                                 if (($pollType == POLL_COLLES) or ($pollType == POLL_ATTLS)) {
                                     $tool_content .= "<div style='margin-bottom: 0.5em;'><small>".q($langCollesLegend)."</small></div>";
@@ -876,20 +871,7 @@ function printPollForm() {
                                     </div>";
                             } elseif ($qtype == QTYPE_FILL) {
                                 $text = '';
-                                if ($multiple_submissions) { // get user answers (if any)
-                                    $user_answers = Database::get()->querySingle("SELECT a.answer_text
-                                                        FROM poll_answer_record a, poll_user_record b
-                                                    WHERE qid = ?d
-                                                        AND a.poll_user_record_id = b.id
-                                                        AND b.uid = ?d
-                                                        $sql_an", $pqid, $userDefault);
-                                    if ($user_answers) {
-                                        $text = $user_answers->answer_text;
-                                    }
-                                } elseif (isset($incomplete_resubmission) and $incomplete_answers[$pqid]) {
-                                    $text = $incomplete_answers[$pqid][0]->answer_text;
-                                }
-                                if ($pageBreakExists && isset($_SESSION['data_answers']) && !empty($_SESSION['data_answers'][$pqid])) {
+                                if (isset($_SESSION['data_answers']) && !empty($_SESSION['data_answers'][$pqid])) {
                                     $text = $_SESSION['data_answers'][$pqid];
                                 }
                                 $tool_content .= "
@@ -938,20 +920,7 @@ function printPollForm() {
                                                                     $val_col = $sub_question_arr[$t];
                                                                     $ansCounter = $ansCounter+1;
                                                                     $text = '';
-                                                                    if ($multiple_submissions) { // get user answers (if any)
-                                                                        $user_q = Database::get()->querySingle("SELECT a.answer_text
-                                                                                                                FROM poll_answer_record a, poll_user_record b
-                                                                                                                WHERE qid = ?d
-                                                                                                                AND a.poll_user_record_id = b.id
-                                                                                                                AND b.uid = ?d
-                                                                                                                AND a.sub_qid = ?d
-                                                                                                                AND a.sub_qid_row = ?d
-                                                                                                                $sql_an", $pqid, $userDefault, $val_col, $val_row);
-                                                                        if ($user_q && !isset($_SESSION['data_answers'][$theQuestion->pqid][$ansCounter])) {
-                                                                            $text = $user_q->answer_text;
-                                                                        }
-                                                                    }
-                                                                    if ($pageBreakExists && isset($_SESSION['data_answers']) && !empty($_SESSION['data_answers'][$theQuestion->pqid][$ansCounter])) {
+                                                                    if (isset($_SESSION['data_answers']) && !empty($_SESSION['data_answers'][$theQuestion->pqid][$ansCounter])) {
                                                                         $text = $_SESSION['data_answers'][$theQuestion->pqid][$ansCounter];
                                                                     }
                                                                     if ($pageBreakExists) {
@@ -976,20 +945,7 @@ function printPollForm() {
                                 }
                             } elseif ($qtype == QTYPE_DATETIME || $qtype == QTYPE_SHORT) {
                                 $text = '';
-                                if ($multiple_submissions) { // get user answers (if any)
-                                    $user_answers = Database::get()->querySingle("SELECT a.answer_text
-                                                        FROM poll_answer_record a, poll_user_record b
-                                                    WHERE qid = ?d
-                                                        AND a.poll_user_record_id = b.id
-                                                        AND b.uid = ?d
-                                                        $sql_an", $pqid, $userDefault);
-                                    if ($user_answers) {
-                                        $text = $user_answers->answer_text;
-                                    }
-                                } elseif (isset($incomplete_resubmission) and $incomplete_answers[$pqid]) {
-                                    $text = $incomplete_answers[$pqid][0]->answer_text;
-                                }
-                                if ($pageBreakExists && isset($_SESSION['data_answers']) && !empty($_SESSION['data_answers'][$pqid])) {
+                                if (isset($_SESSION['data_answers']) && !empty($_SESSION['data_answers'][$pqid])) {
                                     $text = $_SESSION['data_answers'][$pqid];
                                 }
 
@@ -1215,7 +1171,7 @@ function submitPoll() {
         // first populate poll_answer
         $CreationDate = date("Y-m-d H:i");
         $pageBreakExists = checkPageBreakOn($pid);
-        $answer = update_submission($pid, $pageBreakExists);
+        $answer = update_submission($pid);
         $answeq_ids = [];
         foreach ($answer as $q => $an) {
             $answeq_ids[] = $q;
@@ -1239,7 +1195,7 @@ function submitPoll() {
             }
         }
         if ($require_an) {
-            $_SESSION['data_answers'] = init_session_vars($answer);
+            //$_SESSION['data_answers'] = init_session_vars($answer);
             Session::flash('message', $langQuestionsRequireAnswers);
             Session::flash('alert-class', 'alert-warning');
             redirect_to_home_page("modules/questionnaire/pollparticipate.php?course=$course_code&UseCase=1&pid=$pid");
@@ -1285,7 +1241,7 @@ function submitPoll() {
         }
 
         
-        if ($pageBreakExists && isset($_SESSION['question_ids'])) {
+        if (isset($_SESSION['question_ids'])) {
             foreach ($_SESSION['question_ids'] as $question_id => $qtype) {
                 if (!in_array($question_id, $answeq_ids)) {
                     unset($_SESSION['question_ids'][$question_id]);
@@ -1461,7 +1417,7 @@ function checkPageBreakOn($PID) {
     return $check;
 }
 
-function session_answers_init($questions, $sql_an, $userDefault) {
+function user_answers_from_db($questions, $sql_an, $userDefault) {
     if (!isset($_SESSION['loop_init_answers'])) {
         $_SESSION['loop_init_answers'] = 1; 
     }
@@ -1549,8 +1505,8 @@ function session_answers_init($questions, $sql_an, $userDefault) {
     }
 }
 
-function update_submission($pid, $pageBreakExists) {
-    if ($pageBreakExists && isset($_SESSION['data_answers'])) {
+function update_submission($pid) {
+    if (isset($_SESSION['data_answers'])) {
         $final_answers = [];
         foreach ($_SESSION['data_answers'] as $question_key => $value) {
             if (isset($final_answers[$question_key])) {
@@ -1595,15 +1551,15 @@ function update_submission($pid, $pageBreakExists) {
     return $answer;
 }
 
-function init_session_vars($arrAnswers) {
-    $sessionArr = [];
-    foreach ($arrAnswers as $question_key => $an) {
-        $questionType = Database::get()->querySingle("SELECT qtype FROM poll_question WHERE pqid = ?d", $question_key)->qtype;
-        if ($questionType == QTYPE_MULTIPLE && is_array($an)) {
-            $sessionArr[$question_key] = implode(',', $an);
-        } else {
-            $sessionArr[$question_key] = $an;
-        }
-    }
-    return $sessionArr;
-}
+// function init_session_vars($arrAnswers) {
+//     $sessionArr = [];
+//     foreach ($arrAnswers as $question_key => $an) {
+//         $questionType = Database::get()->querySingle("SELECT qtype FROM poll_question WHERE pqid = ?d", $question_key)->qtype;
+//         if ($questionType == QTYPE_MULTIPLE && is_array($an)) {
+//             $sessionArr[$question_key] = implode(',', $an);
+//         } else {
+//             $sessionArr[$question_key] = $an;
+//         }
+//     }
+//     return $sessionArr;
+// }

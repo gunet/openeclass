@@ -451,16 +451,30 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COU
 
                     // Display the answers from sub-question if exist.
                     $subAnswerText = '';
+                    $userSubAnswer = '';
                     $TheSubQuestion = Database::get()->querySingle("SELECT sub_qid FROM poll_question_answer WHERE pqaid = ?d", $answer->aid)->sub_qid;
                     if ($TheSubQuestion > 0) { // exists sub-question
-                        $subArid = Database::get()->queryArray("SELECT aid FROM poll_answer_record 
+                        $subArid = Database::get()->queryArray("SELECT arid,poll_user_record_id,qid,aid FROM poll_answer_record 
                                                                  LEFT JOIN poll_user_record ON poll_answer_record.poll_user_record_id=poll_user_record.id 
                                                                  WHERE qid = ?d", $TheSubQuestion);
                         if (count($subArid) > 0) {
+                            $subAnswerText .= "<ul>";
                             foreach ($subArid as $an) {
-                                $res_subq = Database::get()->querySingle("SELECT answer_text FROM poll_question_answer WHERE pqaid = ?d", $an->aid)->answer_text;
-                                $subAnswerText .= "<br><small>" . $res_subq . "</small>";
+                                $typeSubQ = Database::get()->querySingle("SELECT qtype FROM poll_question WHERE pqid = ?d", $an->qid)->qtype;
+                                if ($typeSubQ == QTYPE_SINGLE || $typeSubQ == QTYPE_MULTIPLE) {
+                                    $res_subq = Database::get()->querySingle("SELECT answer_text FROM poll_question_answer WHERE pqaid = ?d", $an->aid)->answer_text;
+                                } elseif ($typeSubQ == QTYPE_FILL) {
+                                    $res_subq = Database::get()->querySingle("SELECT answer_text FROM poll_answer_record WHERE arid = ?d", $an->arid)->answer_text;
+                                }
+                                if ($thePoll->anonymized != 1) {
+                                    $userSubAnswer = Database::get()->querySingle("SELECT CONCAT(user.surname, ' ', user.givenname) AS fullname FROM user
+                                                                                   LEFT JOIN poll_user_record ON user.id=poll_user_record.uid
+                                                                                   WHERE poll_user_record.id = ?d", $an->poll_user_record_id)->fullname;
+                                }
+                                
+                                $subAnswerText .= "<li><small>" . $res_subq . "&nbsp;<strong>(" . $userSubAnswer . ")</strong>" . "</small></li>";
                             }
+                            $subAnswerText .= "</ul>";
                         }
                     }
 
