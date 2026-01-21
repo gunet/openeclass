@@ -59,6 +59,7 @@
                                 <tr class='list-header'>
                                     <th scope='col'>ID</th>
                                     <th scope='col'>{{ trans('langName') }}</th>
+                                    <th scope='col'>{{ trans('langTenantURL') }}</th>
                                     <th scope='col'>{{ trans('langNbUsers') }}</th>
                                     <th scope='col'>{{ trans('langLectNum') }}</th>
                                     <th scope='col'>{{ trans('langDiskUsage') }}</th>
@@ -72,6 +73,7 @@
                                 <tr>
                                     <td>{{ $tenant->id }}</td>
                                     <td>{{ $tenant->name }}</td>
+                                    <td>{{ $tenant->url }}</td>
                                     <td>{{ $tenant->total_users }}</td>
                                     <td>{{ $tenant->total_courses }}</td>
                                     <td>{{ $disk_usage }}</td>

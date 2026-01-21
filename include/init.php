@@ -184,7 +184,22 @@ if ($extra_messages) {
     include $extra_messages;
 }
 
+// Check if user connected to a tenant URL
+$main_host = parse_url($urlServer, PHP_URL_HOST);
+$http_host = isset($_SERVER['HTTP_HOST'])? $_SERVER['HTTP_HOST']: $main_host;
 
+// localhost is used for tenant domain validity check by web server
+if ($http_host != $main_host and $http_host != 'localhost') {
+    $tenant = Database::get()->querySingle('SELECT * FROM tenant
+        WHERE url REGEXP ?s', "/$http_host(/|$)");
+
+    if ($tenant) {
+        $urlServer = $tenant->url;
+        $_SESSION['current_user_tenant'] = $tenant;
+    } else {
+        redirect_to_home_page();
+    }
+}
 
 if (!isset($_SESSION['csrf_token']) || empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = generate_csrf_token();
@@ -924,8 +939,8 @@ if (php_sapi_name() != 'cli' or isset($_SERVER['REMOTE_ADDR'])) {
 
     if (isset($_SESSION['theme_options_id'])) {
         $theme_id = $_SESSION['theme_options_id'];
-    } elseif ($tenant && $tenant->theme_id) {
-        $theme_id = $tenant->theme_id;
+    } elseif (isset($_SESSION['current_user_tenant']) && $_SESSION['current_user_tenant']->theme_id) {
+        $theme_id = $_SESSION['current_user_tenant']->theme_id;
     } else {
         $theme_id = get_config('theme_options_id');
     }

@@ -41,11 +41,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($_POST['id']) {
             Database::get()->query(
                 'UPDATE tenant
-                SET name = ?s, description = ?s, url = ?s, updated_at = NOW()
+                SET name = ?s, description = ?s, updated_at = NOW()
                 WHERE id = ?d',
                 $_POST['name'],
                 purify($_POST['description']),
-                $_POST['url'],
                 $_POST['id']
             );
             Session::Messages($langTenantUpdated, 'alert-success');
@@ -65,12 +64,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             Database::get()->query(
                 'INSERT INTO tenant
-                (name, description, department_id, url, options, created_at, updated_at)
-                VALUES (?s, ?s, ?d, ?s, ?s, NOW(), NOW())',
+                (name, description, department_id, options, created_at, updated_at)
+                VALUES (?s, ?s, ?d, ?s, NOW(), NOW())',
                 $_POST['name'],
                 purify($_POST['description']),
                 $department_id,
-                $_POST['url'],
                 ''
             );
 

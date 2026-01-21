@@ -27,7 +27,7 @@ if (get_config('dont_display_contact_menu')) {
     redirect_to_home_page();
 }
 
-$tenant = getCurrentTenant();
+$tenant = $_SESSION['current_user_tenant'] ?: null;
 
 if ($tenant) {
     $tenant_options = unserialize($tenant->options);

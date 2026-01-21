@@ -5178,6 +5178,33 @@ function module_path($path) {
 }
 
 /**
+ * Replace placeholders in a message with corresponding values.
+ *
+ * This function takes a message string containing placeholders in the format {name}
+ * and replaces them with corresponding values provided in the substitution array.
+ *
+ * @param string $message The original message containing placeholders.
+ * @param array $subst An associative array of substitutions, where keys are placeholder names
+ *                     (without curly braces) and values are their replacements.
+ * @return string The message with all placeholders replaced by their corresponding values.
+ *
+ * @example
+ * $message = "Hello, {name}! You are {age} years old.";
+ * $subst = ['name' => 'John', 'age' => 30];
+ * $result = varmsg($message, $subst);
+ * // Result: "Hello, John! You are 30 years old."
+ */
+function varmsg($message, $subst)
+{
+    $keys = $values = [];
+    foreach ($subst as $key => $value) {
+        $keys[] = '{' . $key . '}';
+        $values[] = q($value);
+    }
+    return str_replace($keys, $values, $message);
+}
+
+/**
  * @brief Theme initialization
 */
 function theme_initialization() {
@@ -5198,6 +5225,10 @@ function theme_initialization() {
     $forms_image = 'form-image-modules';
 
     $tenant = getCurrentTenant();
+
+    if (isset($_SESSION['current_user_tenant'])) {
+        $tenant = $_SESSION['current_user_tenant'];
+    }
 
     $tenantLogo = $tenantLogoSmall = $tenantFavicon = null;
 

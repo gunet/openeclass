@@ -51,6 +51,13 @@ if (!$is_admin) {
 $tenant = getTenantById($tenant_id);
 $tenantOptions = $tenant->options ? unserialize($tenant->options) : [];
 
+$urlMessage = '';
+$urlStatus = '';
+$tenantUrl = q($tenant->url);
+$customUrlEnabled = false;
+$checkModal = '';
+$tenantName = $tenant->name;
+$tenantUrlActive = $tenant->url_active;
 $tenantLogo = getTenantOption($tenantOptions, 'imageUpload');
 $tenantLogoSmall = getTenantOption($tenantOptions, 'imageUploadSmall');
 $tenantFavicon = getTenantOption($tenantOptions, 'faviconUpload');
@@ -92,6 +99,50 @@ if (isset($_POST['optionsSave'])) {
 
             $tenantInfo[$var] = $value;
         }
+    }
+
+    // platform URL
+    $validUrl = true;
+
+    if (isset($_POST['url']) and $_POST['url']) {
+        $newUrl = strtolower(trim($_POST['url']));
+
+        if ($tenantUrl != $newUrl) {
+            if (!preg_match('|^https://[.a-zA-Z0-9-]+/?$|', $newUrl)) {
+                if (preg_match('|^[.a-zA-Z0-9-]+$|', $newUrl) and !preg_match('/\.\.|--/', $newUrl)) {
+                    $newUrl = "https://$newUrl/";
+                } else {
+                    Session::Messages(sprintf($langTenantInvalidURL, q($_POST['url'])), 'alert-danger');
+                    $validUrl = false;
+                }
+            }
+            if (substr($newUrl, -1) != '/') {
+                $newUrl .= '/';
+            }
+            if ($validUrl) {
+                Database::get()->query("UPDATE tenant SET url = ?s, url_active = 0 WHERE id = ?d", $newUrl, $tenant_id);
+                $subject = $langTenantURLChange;
+                $body = varmsg(
+                    $langTenantURLChangeText,
+                    ['name' => $tenantName, 'oldurl' => $tenantUrl, 'newurl' => $newUrl]
+                );
+                send_mail('', '', '', get_config('email_helpdesk'), $subject, $body);
+                if ($tenantUrl) {
+                    Session::Messages($langTenantURLRegisterInfo, 'alert-info');
+                } else {
+                    Session::Messages($langTenantURLRegisterActivate, 'alert-success');
+                }
+            }
+        }
+    } elseif ($tenantUrl) {
+        Database::get()->query("UPDATE tenant SET url = '', url_active = 0 WHERE id = ?d", $tenant_id);
+        $subject = $langTenantURLDelete;
+        $body = varmsg(
+            $langTenantURLDeleteText,
+            ['name' => $tenantName, 'url' => $tenantUrl]
+        );
+        send_mail('', '', '', get_config('email_helpdesk'), $subject, $body);
+        Session::Messages(sprintf($langTenantURLDeleted, $tenantUrl), 'alert-info');
     }
 
     if (!empty($tenantInfo)) {
@@ -172,6 +223,88 @@ if ($tenantFavicon) {
 
 load_js('datatables');
 
+if ($tenantUrl) {
+    $host = parse_url($tenantUrl, PHP_URL_HOST);
+    if ($tenantUrlActive) {
+        $urlStatus = 'has-success';
+        $urlMessage = "<p class='text-success small'>$langTenantURLActivated</p>";
+        $customUrlEnabled = true;
+    } else {
+        $server = q(parse_url($urlServer, PHP_URL_HOST));
+        $zone = q(preg_replace('/^[^.]+\./', '', $host));
+        $hostName = q(preg_replace('/\..*$/', '', $host));
+        $urlStatus = 'has-warning';
+        $urlMessage = "
+            <p class='text-warning small'>
+                $langTenantURLActivationInfo1
+            </p>
+            <p class='text-warning small'>" .
+            sprintf($langTenantURLActivationInfo2, q($host), $zone) . "
+            </p>
+            <code class='d-block p-2 my-2 bg-light text-muted'>
+                $hostName CNAME $server.
+            </code>
+            <p class='small'>
+                <button type='button' class='btn btn-warning' data-bs-toggle='modal' data-bs-target='#checkModal'>$langTenantURLCheckActivate</button>
+            </p>";
+        $customerUrl = $tenantUrl . 'modules/auth/redirect.php?token=' . session_id();
+        $checkModal = "
+        <div class='modal fade' id='checkModal' tabindex='-1' aria-labelledby='checkModalLabel' aria-hidden='true'>
+          <div class='modal-dialog'>
+            <div class='modal-content'>
+              <div class='modal-header'>
+                <h5 class='modal-title' id='checkModalLabel'>$langTenantActivateURL</h5>
+                <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+              </div>
+              <div class='modal-body text-center'>
+                <p id='dns-check-result'>
+                    <span class='spinner-border spinner-border-sm' role='status' aria-hidden='true'></span>
+                    $langTenantURLChecking
+                </p>
+              </div>
+              <div class='modal-footer'>
+                <button type='button' class='btn btn-secondary' data-bs-dismiss='modal' id='modal-close-btn'>$langCancel</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <script>
+            var checkServer = function () {
+                $.get('{$urlAppend}modules/admin/check_server.php', function (data) {
+                    var msg;
+                    if (data == 'OK') {
+                        msg = '$langTenantURLCheckSuccess<br><span class=\"spinner-border spinner-border-sm\" role=\"status\" aria-hidden=\"true\"></span> $langTenantURLActivating';
+                        setTimeout(checkServer, 5000); // Poll every 5 seconds
+                    } else if (data == 'ENABLED') {
+                        msg = '$langTenantURLActivated';
+                        $('#modal-close-btn')
+                            .removeClass('btn-secondary')
+                            .addClass('btn-primary')
+                            .html('$langTenantGotoURL')
+                            .click(function () {
+                                window.location.href = '{$customerUrl}';
+                            });
+                    } else {
+                        $('#dns-check-result').removeClass('text-center');
+                        msg = '" .
+            varmsg(
+                $GLOBALS['langTenantURLCheckFail'],
+                ['host' => $host, 'server' => $server]
+            ) . "';
+                    }
+                    $('#dns-check-result').html('<p>' + msg + '</p>');
+                });
+            };
+            $(function () {
+                var checkModal = document.getElementById('checkModal');
+                checkModal.addEventListener('shown.bs.modal', function () {
+                    checkServer();
+                });
+            });
+        </script>";
+    }
+}
+
 $tool_content .= action_bar([
     [
         'title' => $langBack,
@@ -221,6 +354,15 @@ $tool_content .= action_bar([
       <div class='col-md-9'>
         <textarea id='contact_address' name='contact_address' class='form-control' rows='3'>$contact_address</textarea>
       </div>
+    </div>
+    
+    <div class='form-group mt-4'>
+      <label for='urlField' class='col-md-3 col-form-label'>$langTenantURL</label>
+      <div class='col-md-9'>
+        <small class='d-block text-muted'>$langTenantURLText</small>
+        <input type='text' class='form-control' name='url' id='urlField' placeholder='https://eclass.example.com/' value='$tenantUrl'>
+        $urlMessage
+      </div>
     </div>";
 
 $tool_content .= "
@@ -230,7 +372,7 @@ $tool_content .= "
       </div>
     </div>
   </div>" . generate_csrf_token_form_field() . "
-</form>";
+</form>" . $checkModal;
 
 $head_content .= "<script type='text/javascript'>
     $(document).ready(function() {

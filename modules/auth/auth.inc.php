@@ -643,9 +643,55 @@ function process_login() {
             } else {
                 $sqlLogin = "COLLATE utf8mb4_bin = ?s";
             }
-            $myrow = Database::get()->querySingle("SELECT id, surname, givenname, password,
-                                    username, status, email, lang, verified_mail, am, options
-                                FROM user WHERE username $sqlLogin", $posted_uname);
+
+            if (isset($_SESSION['current_user_tenant'])) {
+                // We are at a tenant's custom domain - allow only users from that tenant
+                $node = Database::get()->querySingle(
+                    'SELECT lft, rgt FROM hierarchy WHERE id = ?d',
+                    $_SESSION['current_user_tenant']->department_id
+                );
+
+                $myrow = Database::get()->querySingle(
+                    "SELECT user.id, surname, givenname, password,
+                            username, status, email, lang, verified_mail, am
+                        FROM user, user_department, hierarchy
+                        WHERE username $sqlLogin AND
+                              user.id = user_department.user AND
+                              user_department.department = hierarchy.id AND
+                              hierarchy.lft BETWEEN ?d AND ?d",
+                    $posted_uname,
+                    $node->lft,
+                    $node->rgt
+                );
+
+
+                if (!$myrow) {
+                    $myrow = Database::get()->querySingle(
+                        "SELECT user.id, surname, givenname, password,
+                            username, status, email, lang, verified_mail, am
+                        FROM user, user_department, hierarchy
+                        WHERE email = ?s AND
+                            user.id = user_department.user AND
+                            user_department.department = hierarchy.id AND
+                            hierarchy.lft BETWEEN ?d AND ?d",
+                        $posted_uname,
+                        $node->lft,
+                        $node->rgt
+                    );
+                    $posted_uname = $myrow ? $myrow->username : '';
+                }
+            } else {
+                $myrow = Database::get()->querySingle("SELECT id, surname, givenname, password,
+                                                        username, status, email, lang, verified_mail, am
+                                                    FROM user WHERE username $sqlLogin", $posted_uname);
+                if (!$myrow) {
+                    $myrow = Database::get()->querySingle("SELECT id, surname, givenname, password,
+                                                                username, status, email, lang, verified_mail, am
+                                                            FROM user WHERE email = ?s", $posted_uname);
+                    $posted_uname = $myrow ? $myrow->username : '';
+                }
+            }
+
             $guest_user = get_config('course_guest') != 'off' && $myrow && $myrow->status == USER_GUEST;
 
             // cas might have alternative authentication defined
@@ -1054,7 +1100,7 @@ function hybridauth_login() {
  * @return int
  */
 function login($user_info_object, $posted_uname, $pass, $provider=null, $user_data=null) {
-    global $session, $auth_ids;
+    global $session, $auth_ids, $urlServer;
 
     $_SESSION['canChangePassword'] = false;
     $_SESSION['provider'] = $provider;
@@ -1147,6 +1193,20 @@ function login($user_info_object, $posted_uname, $pass, $provider=null, $user_da
             user_hook($user_info_object->id);
             $session->setLoginTimestamp();
             $session->setLoginMethod('eclass');
+
+            $tenant = getCurrentTenant();
+
+            // Check whether user belongs to a tenant with custom URL
+            if (!isset($_SESSION['current_user_tenant'])) {
+                $GLOBALS['uid'] = $_SESSION['uid'];
+                $tenant = getUserTenant($_SESSION['uid']);
+
+                if ($tenant and $tenant->url and $tenant->url_active and $tenant->url != $urlServer) {
+                    header("HTTP/1.1 303 See Other");
+                    header("Location: {$tenant->url}modules/auth/redirect.php?token=" . session_id());
+                    exit;
+                }
+            }
         } else {
             $auth_allow = 3;
             $GLOBALS['inactive_uid'] = $user_info_object->id;

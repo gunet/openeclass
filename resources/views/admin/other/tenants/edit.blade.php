@@ -127,15 +127,6 @@
                                 </div>
                             </div>
 
-                            <div class='form-group mt-4'>
-                                <label for='url' class='col-sm-12 control-label-notes'>Διεύθυνση πλατφόρμας (URL)</span></label>
-                                <div class='col-sm-12'>
-                                    <input id='url' class='form-control' type='text' name='url' placeholder='https://eclass.example.com/'
-                                        @if ($tenant)
-                                        value='{{ $tenant->url }}'
-                                        @endif>
-                                </div>
-                            </div>
                             @if (!$tenant)
                             <div class="form-group mt-4" id="user-select-wrapper">
                                 <label for="admin_id" class="col-sm-12 control-label-notes">

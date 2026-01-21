@@ -2706,6 +2706,7 @@ $db->query("CREATE TABLE `tenant` (
     `description` text DEFAULT NULL,
     `department_id` int(11) NOT NULL,
     `url` varchar(200) NOT NULL DEFAULT '',
+    `url_active` tinyint(1) NOT NULL DEFAULT '0',
     `theme_id` int(11) DEFAULT NULL,
     `created_at` DATETIME NOT NULL,
     `updated_at` DATETIME NOT NULL,

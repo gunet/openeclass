@@ -3605,6 +3605,12 @@ function upgrade_to_4_3($tbl_options) : void {
 
         Database::get()->query("ALTER TABLE `admin_announcement` 
                                 ADD INDEX `idx_tenantId` (`tenantId`)");
+
+    if (!DBHelper::fieldExists('tenant', 'url_active')) {
+        Database::get()->query("ALTER TABLE tenant 
+            ADD url_active TINYINT(1) NOT NULL DEFAULT '0', 
+        ");
+    }
 }
 
 
