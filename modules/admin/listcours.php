@@ -39,7 +39,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     $searchurl = "&search=yes";
     $searchtitle = $_GET['formsearchtitle'] ?? '';
     $searchcode = $_GET['formsearchcode'] ?? '';
-    $searchtype = isset($_GET['formsprachtype']) ? intval($_GET['formsearchtype']) : '-1';
+    $searchtype = isset($_GET['formsearchtype']) ? intval($_GET['formsearchtype']) : '-1';
     $searchfaculte = isset($_GET['formsearchfaculte']) ? intval($_GET['formsearchfaculte']) : '';
     $searchprof = $_GET['formsearchprof'] ?? '';
     // pagination
@@ -66,8 +66,8 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             $query .= ' AND course.visible = ?d';
             $terms[] = $searchtype;
         }
-
     }
+
     if ($searchprof !== '') {
         $query .= ' AND course.prof_names LIKE ?s';
         $terms[] = '%' . $searchprof . '%';
