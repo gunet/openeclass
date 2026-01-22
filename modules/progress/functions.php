@@ -3931,6 +3931,75 @@ function student_view_progress() {
     }
 }
 
+/**
+ * @brief display users points game progress (teacher view)
+ * @param type $points_game_id
+ */
+function display_users_points_game_progress ($points_game_id) {
+    global $tool_content, $course_code, $course_id, $langNoUserList, $langSurnameName, $langID, $langProgress;
+
+    $sql = Database::get()->queryArray("SELECT u.id, u.surname, u.givenname, COALESCE(upp.total_points, 0) AS total_points
+                                        FROM course_user cu
+                                        JOIN user u ON u.id = cu.user_id
+                                        LEFT JOIN user_points_game_points upp
+                                            ON upp.user = u.id
+                                            AND upp.points_game = ?d
+                                        WHERE cu.course_id = ?d AND cu.tutor = 0 AND cu.editor = 0 AND cu.course_reviewer = 0 AND cu.reviewer = 0
+                                        ORDER BY
+                                            CASE
+                                                WHEN upp.total_points IS NULL OR upp.total_points = 0 THEN 1
+                                                ELSE 0
+                                            END,
+                                            upp.total_points DESC,
+                                            u.surname ASC,
+                                            u.givenname ASC", $points_game_id, $course_id);
+    if (count($sql) > 0) {
+        $tool_content .= "<div class='col-sm-12'><div class='table-responsive'><table class='table-default custom_list_order'>";
+            $tool_content .= "<thead>
+                        <tr class='list-header'>
+                          <th class='count-col'>$langID</th>
+                          <th>$langSurnameName</th>
+                          <th class='text-center'>$langProgress</th>
+                        </tr>
+                    </thead>
+                    <tbody>";
+        $cnt = 1;
+        foreach ($sql as $user_data) {
+            $info = 'N/A';
+            if ($user_data->total_points > 0) {
+                $user_progress = PointsGame::getNextLevelInfo($user_data->id,$points_game_id);
+                $current_level = !is_null($user_progress['current_level_id']) ? $user_progress['current_level_title'] : 'N/A';
+                $next_level = !is_null($user_progress['next_level_id']) ? $user_progress['next_level_title'] : 'N/A';
+                $info = "<div class='res-table-wrapper'>
+                                    <div class='row res-table-row border-0 p-3'>
+                                        <div style='width: 100%;'>
+                                            <div class='small fw-semibold text-primary text-center'>
+                                                ".$user_progress['current_points']." pts
+                                            </div>
+                                            <div class='progress progress-line'>
+                                                <div class='progress-line-bar' role='progressbar' style='width: ".$user_progress['progress_percentage']."%' aria-valuenow='".$user_progress['progress_percentage']."' aria-valuemin='0' aria-valuemax='100'>".$user_progress['progress_percentage']."%</div>
+                                            </div>
+                                            <div class='d-flex justify-content-between small text-muted mb-1'>
+                                                <span>$current_level</span>
+                                                <span>$next_level</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>";
+            }
+
+
+            $tool_content .= "<tr>
+                <td>". $cnt++ . "</td>
+                <td>" . display_user($user_data->id) ."</td>
+                <td class='text-center'>".$info."</td></tr>";
+        }
+        $tool_content .= "</tbody></table></div></div>";
+    } else {
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langNoUserList</span></div></div>";
+    }
+    
+}
 
 /**
  * @brief display users progress (teacher view)

@@ -118,11 +118,13 @@ if ($is_editor) {
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;$param_name=$element_id&amp;refresh=true",
                   'icon' => 'fa-refresh',
                   'link-attrs' => "title='$info_title'",
-                  'level' => 'primary-label'),
+                  'level' => 'primary-label',
+                  'show' => $element != 'points_game'),
             array('title' => "$langExport",
                 'url' => "dumpcertificateresults.php?course=$course_code&amp;$param_name=$element_id",
                 'icon' => 'fa-file-excel',
-                'level' => 'primary-label')
+                'level' => 'primary-label',
+                'show' => $element != 'points_game')
             ));
         $tool_content .= $action_bar;
 
@@ -546,7 +548,11 @@ if ($is_editor) {
         display_modification_rec_activity($element_id, $_GET['act_rec_mod']);
         $display = FALSE;
     } elseif (isset($_GET['progressall'])) { // display users progress (teacher view)
-        display_users_progress($element, $element_id);
+        if ($element == 'points_game') {
+            display_users_points_game_progress($element_id);
+        } else {
+            display_users_progress($element, $element_id);
+        }
         $display = FALSE;
     } elseif (isset($_GET['u'])) { // display detailed user progress
         display_user_progress_details($element, $element_id, $_GET['u']);
