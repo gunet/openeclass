@@ -3394,6 +3394,7 @@ function upgrade_to_4_2($tbl_options) : void {
     Database::get()->query("ALTER TABLE attendance_book CHANGE attendance_activity_id attendance_activity_id INT NOT NULL");
     Database::get()->query("ALTER TABLE attendance_users CHANGE id id INT NOT NULL AUTO_INCREMENT");
     Database::get()->query("ALTER TABLE attendance_users CHANGE attendance_id attendance_id INT NOT NULL");
+    Database::get()->query("ALTER TABLE attendance_users MODIFY uid INT NOT NULL DEFAULT 0");
 
     if (!DBHelper::foreignKeyExists('attendance', 'course_id', 'course', 'id')) {
         DBHelper::createForeignKey('attendance', 'course_id', 'course', 'id', DBHelper::FKRefOption_CASCADE, DBHelper::FKRefOption_CASCADE);
