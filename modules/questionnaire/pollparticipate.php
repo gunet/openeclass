@@ -70,9 +70,11 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         }
 
         // Delete user answer from session data for the specific question
-        if (isset($_POST['clean_question_id'])) {
+        if (isset($_POST['clean_question_id']) or isset($_POST['clean_sub_question_id'])) {
             $question_id = intval($_POST['clean_question_id']);
+            $squestion_id = intval($_POST['clean_sub_question_id']);
             unset($_SESSION['data_answers'][$question_id]);
+            unset($_SESSION['data_answers'][$squestion_id]);
             exit();
         }
 
@@ -248,13 +250,6 @@ function printPollForm() {
                         // free text type
                         var classSubQFrText = '.QuestionType_2.QuestionNumber_'+sSubq+' textarea';
                         $(classSubQFrText).val('');
-
-                        // Clear sub-question answer
-                        $.ajax({
-                            url: '$_SERVER[SCRIPT_NAME]?course=$course_code&UseCase=1&pid=$pid',
-                            method: 'POST',
-                            data: { clean_question_id: sSubq },
-                        });
                     }
                 } else if(typeQ == 2) {
                     var classQ = '.QuestionType_'+typeQ+'.QuestionNumber_'+numberQ+' textarea';
@@ -275,7 +270,7 @@ function printPollForm() {
                 $.ajax({
                     url: '$_SERVER[SCRIPT_NAME]?course=$course_code&UseCase=1&pid=$pid',
                     method: 'POST',
-                    data: { clean_question_id: qQuestion },
+                    data: { clean_question_id: qQuestion, clean_sub_question_id: sSubq },
                 });
             });
         });
@@ -384,69 +379,69 @@ function printPollForm() {
     $multiple_submissions = $thePoll->multiple_submissions;
     $default_answer = $thePoll->default_answer;
 
-    if ($thePoll->require_answer) {
-        $head_content .= "            
-            <script>
-                document.addEventListener('DOMContentLoaded', () => {
-                    const form = document.getElementById('poll');
-                        form.querySelectorAll('input, textarea').forEach(el => {
-                            if (['radio', 'textarea'].includes(el.type) || el.tagName === 'TEXTAREA') {
-                                if (el.tagName === 'TEXTAREA' && el.classList.contains('textarea-qtable')) {
-                                    // Skip adding required to textarea with class 'textarea-qtable'
-                                    return;
-                                }
-                                el.required = true;
-                            }
-                        });
-                });
+    // if ($thePoll->require_answer) {
+    //     $head_content .= "            
+    //         <script>
+    //             document.addEventListener('DOMContentLoaded', () => {
+    //                 const form = document.getElementById('poll');
+    //                     form.querySelectorAll('input, textarea').forEach(el => {
+    //                         if (['radio', 'textarea'].includes(el.type) || el.tagName === 'TEXTAREA') {
+    //                             if (el.tagName === 'TEXTAREA' && el.classList.contains('textarea-qtable')) {
+    //                                 // Skip adding required to textarea with class 'textarea-qtable'
+    //                                 return;
+    //                             }
+    //                             el.required = true;
+    //                         }
+    //                     });
+    //             });
                 
-                document.addEventListener('DOMContentLoaded', () => {
-                  const form = document.getElementById('poll');
-                  if (!form) return;
+    //             document.addEventListener('DOMContentLoaded', () => {
+    //               const form = document.getElementById('poll');
+    //               if (!form) return;
                 
-                  form.addEventListener('submit', e => {                      
-                    let valid = true;
-                    const checkboxGroups = {};
-                    form.querySelectorAll('input[type=\\\"checkbox\\\"]').forEach(cb => {
-                      const name = cb.name;
-                      if (!checkboxGroups[name]) checkboxGroups[name] = [];
-                      checkboxGroups[name].push(cb);
-                    });
+    //               form.addEventListener('submit', e => {                      
+    //                 let valid = true;
+    //                 const checkboxGroups = {};
+    //                 form.querySelectorAll('input[type=\\\"checkbox\\\"]').forEach(cb => {
+    //                   const name = cb.name;
+    //                   if (!checkboxGroups[name]) checkboxGroups[name] = [];
+    //                   checkboxGroups[name].push(cb);
+    //                 });
                 
-                    for (const boxes of Object.values(checkboxGroups)) {
-                      if (!boxes.some(cb => cb.checked)) {
-                        valid = false;
-                        boxes.forEach(cb => cb.classList.add('invalid-checkbox'));
-                      } else {
-                        boxes.forEach(cb => cb.classList.remove('invalid-checkbox'));
-                      }
-                    }
+    //                 for (const boxes of Object.values(checkboxGroups)) {
+    //                   if (!boxes.some(cb => cb.checked)) {
+    //                     valid = false;
+    //                     boxes.forEach(cb => cb.classList.add('invalid-checkbox'));
+    //                   } else {
+    //                     boxes.forEach(cb => cb.classList.remove('invalid-checkbox'));
+    //                   }
+    //                 }
                     
-                    if (!valid) {
-                        e.preventDefault();
-                    }
-                  });
+    //                 if (!valid) {
+    //                     e.preventDefault();
+    //                 }
+    //               });
                 
-                  form.querySelectorAll('input[type=\\\"checkbox\\\"]').forEach(cb => {
-                    cb.addEventListener('change', () => {
-                      const group = form.querySelectorAll('input[name=\\\"' + cb.name + '\\\"]');
-                      if ([...group].some(g => g.checked)) {
-                        group.forEach(g => g.classList.remove('invalid-checkbox'));
-                      }
-                    });
-                  });
-                });
-                </script>
+    //               form.querySelectorAll('input[type=\\\"checkbox\\\"]').forEach(cb => {
+    //                 cb.addEventListener('change', () => {
+    //                   const group = form.querySelectorAll('input[name=\\\"' + cb.name + '\\\"]');
+    //                   if ([...group].some(g => g.checked)) {
+    //                     group.forEach(g => g.classList.remove('invalid-checkbox'));
+    //                   }
+    //                 });
+    //               });
+    //             });
+    //             </script>
                 
-                <style>
-                    .invalid-checkbox {
-                      outline: 1px solid #B70A0A!important;
-                    }
-                </style>
+    //             <style>
+    //                 .invalid-checkbox {
+    //                   outline: 1px solid #B70A0A!important;
+    //                 }
+    //             </style>
             
-            ";
+    //         ";
 
-    }
+    // }
 
     // check if user has participated
     $has_participated = Database::get()->querySingle("SELECT COUNT(*) AS count FROM poll_user_record WHERE uid = ?d AND pid = ?d", $userDefault, $pid)->count;
@@ -651,6 +646,30 @@ function printPollForm() {
 
         // Initialize the user answers from db
         user_answers_from_db($questions, $sql_an, $userDefault);
+        // If the user has left an empty required question
+        if (isset($_GET['emptyQ']) && isset($_SESSION['temp_data_answers'])) {
+            foreach ($_SESSION['temp_data_answers'] as $Qid => $val) {
+                $typeQ = Database::get()->querySingle("SELECT qtype FROM poll_question WHERE pqid = ?d", $Qid)->qtype;
+                if ($typeQ == QTYPE_MULTIPLE && is_array($val)) {
+                    $multipleData = [];
+                    foreach ($val as $v) {
+                        $multipleData[] = $v; 
+                    }
+                    $str_multipleData = implode(',', $multipleData);
+                    $_SESSION['data_answers'][$Qid] = $str_multipleData;
+                } else {
+                    $_SESSION['data_answers'][$Qid] = $val;
+                }
+            }
+            if (isset($_SESSION['unanswered_required_qids'])) {
+                foreach ($_SESSION['unanswered_required_qids'] as $q) {
+                    unset($_SESSION['data_answers'][$q]);
+                }
+            }
+            unset($_SESSION['temp_data_answers']);
+            unset($_SESSION['unanswered_required_qids']);
+        }
+        
 
         foreach ($questions as $theQuestion) {
             if ($temp_IsLime) {
@@ -1180,25 +1199,32 @@ function submitPoll() {
 
         // Check if exists require answer to the specific question
         $require_an = false;
-        $allQuestions = Database::get()->queryArray("SELECT pqid,qtype,require_response FROM poll_question WHERE pid = ?d", $pid);
+        $allQuestions = Database::get()->queryArray("SELECT pqid,qtype,require_response,has_sub_question FROM poll_question WHERE pid = ?d", $pid);
         foreach ($allQuestions as $q) {
             if ($q->require_response && !isset($answer[$q->pqid])) {
                 $require_an = true;
+                $_SESSION['unanswered_required_qids'][] = $q->pqid;
+                // Add the unanswered sub-question
+                if ($q->has_sub_question && $q->qtype == QTYPE_SINGLE) {
+                    $_SESSION['unanswered_required_qids'][] = Database::get()->querySingle("SELECT sub_qid FROM poll_question_answer WHERE pqid = ?d AND sub_qid > ?d", $q->pqid, 0)->sub_qid;
+                }
             } elseif ($q->require_response && isset($answer[$q->pqid]) && $q->qtype == QTYPE_TABLE) {
                 if (count($answer[$q->pqid]) === count(array_filter($answer[$q->pqid], function($value) {// all elements are empty strings
                     return $value === "";
                 }))) {
                     $require_an = true;
+                    $_SESSION['unanswered_required_qids'][] = $q->pqid;
                 }
             } elseif ($q->require_response && isset($answer[$q->pqid]) && empty($answer[$q->pqid]) && ($q->qtype == QTYPE_DATETIME or $q->qtype == QTYPE_SHORT)) {
                 $require_an = true;
+                $_SESSION['unanswered_required_qids'][] = $q->pqid;
             }
         }
         if ($require_an) {
-            //$_SESSION['data_answers'] = init_session_vars($answer);
+            $_SESSION['temp_data_answers'] = $answer;
             Session::flash('message', $langQuestionsRequireAnswers);
             Session::flash('alert-class', 'alert-warning');
-            redirect_to_home_page("modules/questionnaire/pollparticipate.php?course=$course_code&UseCase=1&pid=$pid");
+            redirect_to_home_page("modules/questionnaire/pollparticipate.php?course=$course_code&UseCase=1&pid=$pid&emptyQ=1");
         }
 
         if ($userDefault) {
@@ -1550,16 +1576,3 @@ function update_submission($pid) {
 
     return $answer;
 }
-
-// function init_session_vars($arrAnswers) {
-//     $sessionArr = [];
-//     foreach ($arrAnswers as $question_key => $an) {
-//         $questionType = Database::get()->querySingle("SELECT qtype FROM poll_question WHERE pqid = ?d", $question_key)->qtype;
-//         if ($questionType == QTYPE_MULTIPLE && is_array($an)) {
-//             $sessionArr[$question_key] = implode(',', $an);
-//         } else {
-//             $sessionArr[$question_key] = $an;
-//         }
-//     }
-//     return $sessionArr;
-// }
