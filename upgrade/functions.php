@@ -3581,6 +3581,60 @@ function upgrade_to_4_3($tbl_options) : void {
     if (!DBHelper::fieldExists('poll_question_answer', 'sub_qid')) {
         Database::get()->query("ALTER TABLE poll_question_answer ADD `sub_qid` INT NOT NULL DEFAULT 0");
     }
+
+    // About pagination: If the poll has enabled the pagination option.
+    // add page break and display each question per page.
+    $poll_ids = Database::get()->queryArray("SELECT pid FROM poll WHERE pagination = ?d", 1);
+    if (count($poll_ids) > 0) {
+        foreach ($poll_ids as $poll) {
+            $question_ids = Database::get()->queryArray("SELECT pqid,q_position,`page` FROM poll_question WHERE pid = ?d ORDER BY q_position", $poll->pid);
+            if (count($question_ids) > 0) {
+                $c = 0;
+                $page = 1;
+                $pos = 0;
+                foreach ($question_ids as $question) {
+                    if ($c >= 1) {
+                        $pos++;
+                        $page++;
+                        Database::get()->query("UPDATE poll_question SET
+                                                q_position = ?d, `page` = ?d WHERE pqid = ?d", $pos, $page, $question->pqid);
+                        if ($c < count($question_ids) - 1) {
+                            $pos++;
+                            Database::get()->query("INSERT INTO poll_question SET
+                                                    pid = ?d,
+                                                    question_text = ?s,
+                                                    qtype = ?d,
+                                                    q_position = ?d", $poll->pid, '--- Page Break ---', 0, $pos);
+                        }
+                    } else {
+                        Database::get()->query("UPDATE poll_question SET `page` = ?d WHERE pqid = ?d", $page, $question->pqid);
+                        $pos = $question->q_position+1;
+                        Database::get()->query("INSERT INTO poll_question SET
+                                                pid = ?d,
+                                                question_text = ?s,
+                                                qtype = ?d,
+                                                q_position = ?d", $poll->pid, '--- Page Break ---', 0, $pos);
+                    }
+                    $c++;
+                }
+            }
+        }
+    }
+
+    // About require answer: If the poll has enabled the require answer for each question.
+    // Add require answer option for each question.
+    $poll_ids = Database::get()->queryArray("SELECT pid FROM poll WHERE require_answer = ?d", 1);
+    if (count($poll_ids) > 0) {
+        foreach ($poll_ids as $poll) {
+            $question_ids = Database::get()->queryArray("SELECT pqid FROM poll_question WHERE pid = ?d AND qtype != ?d", $poll->pid, 0);
+            if (count($question_ids) > 0) {
+                foreach ($question_ids as $question) {
+                    Database::get()->query("UPDATE poll_question SET require_response = ?d WHERE pqid = ?d", 1, $question->pqid);
+                }
+            }
+        }
+    }
+
 }
 
 /**
