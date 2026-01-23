@@ -353,12 +353,17 @@ if (isset($_POST['submitAnswers'])) {
 }
 if (isset($_GET['deleteQuestion'])) {
     $pqid = intval($_GET['deleteQuestion']);
+    $subQuestionId = Database::get()->querySingle("SELECT sub_qid FROM poll_question_answer WHERE pqid = ?d AND sub_qid > ?d", $pqid, 0)->sub_qid;
     $poll = Database::get()->querySingle("SELECT * FROM poll_question WHERE pid = ?d and pqid = ?d", $pid,$pqid);
     if(!$poll){
         redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
     }
     Database::get()->query("DELETE FROM poll_question_answer WHERE pqid = ?d", $pqid);
     Database::get()->query("DELETE FROM poll_question WHERE pqid = ?d", $pqid);
+    if ($subQuestionId) {// delete the sub-question of the main question
+        Database::get()->query("DELETE FROM poll_question_answer WHERE pqid = ?d", $subQuestionId);
+        Database::get()->query("DELETE FROM poll_question WHERE pqid = ?d", $subQuestionId);
+    }
 
     updatePageBreak($pid);
 
@@ -1062,6 +1067,14 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
 
 //Modify Answers
 } elseif (isset($_GET['modifyAnswers'])) {
+    $question_id = $_GET['modifyAnswers'];
+    $question = Database::get()->querySingle('SELECT * FROM poll_question WHERE pid = ?d AND pqid = ?d', $pid, $question_id);
+
+    $isSubQuestion = false;
+    if ($question->has_sub_question == -1) {
+        $isSubQuestion = true;
+    }
+
     $head_content .= "
     <script>
         $(function() {
@@ -1069,12 +1082,10 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 answer: '" . js_escape($langAnswer) . "',
                 grade: '" . js_escape($langGradebookGrade) . "'
             };
-            $(poll_init(langPoll));
+            $(poll_init(langPoll, $isSubQuestion));
         });
-    </script>
-    ";
-    $question_id = $_GET['modifyAnswers'];
-    $question = Database::get()->querySingle('SELECT * FROM poll_question WHERE pid = ?d AND pqid = ?d', $pid, $question_id);
+    </script>";
+
     $answers = Database::get()->queryArray("SELECT * FROM poll_question_answer
                     WHERE pqid = ?d ORDER BY pqaid", $question->pqid);
     if(!$question || $question->qtype == QTYPE_LABEL || $question->qtype == QTYPE_FILL || $question->qtype == QTYPE_SCALE
@@ -1127,7 +1138,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             $tool_content .="
                 <div class='form-group input-group mt-3'>
                               <input type='text' class='form-control mt-0 w-75' name='answers[$answer->pqaid]' value='$answer->answer_text' placeholder='$langAnswer'>";
-                    if ($isEnabledGrade) {
+                    if ($isEnabledGrade && !$isSubQuestion) {
             $tool_content .= "<input class='form-control mt-0' type='text' name='grades[$answer->pqaid]' value='$answer->weight' placeholder='$langGradebookGrade'>";
                     }
             $tool_content .= "<div class='form-control-static input-group-text h-40px bg-white input-border-color'>
@@ -1139,7 +1150,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             $tool_content .="
             <div class='form-group input-group mt-3'>
                               <input class='form-control mt-0 w-75' type='text' name='answers[]' value='' placeholder='$langAnswer'>";
-                if ($isEnabledGrade) {
+                if ($isEnabledGrade && !$isSubQuestion) {
             $tool_content .= "<input class='form-control mt-0' type='text' name='grades[]' value='' placeholder='$langGradebookGrade'>";
                 }     
             $tool_content .= "<div class='form-control-static input-group-text h-40px bg-white input-border-color'>
@@ -1147,9 +1158,11 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                               </div>
             </div>
             <div class='form-group input-group mt-3'>
-                    <input class='form-control mt-0 w-75' type='text' name='answers[]' value='' placeholder='$langAnswer'>
-                    <input class='form-control mt-0' type='text' name='grades[]' value='' placeholder='$langGradebookGrade'>
-                    <div class='form-control-static input-group-text h-40px bg-white input-border-color'>
+                            <input class='form-control mt-0 w-75' type='text' name='answers[]' value='' placeholder='$langAnswer'>";
+                if ($isEnabledGrade && !$isSubQuestion) {
+            $tool_content .= "<input class='form-control mt-0' type='text' name='grades[]' value='' placeholder='$langGradebookGrade'>";
+                    }
+        $tool_content .= "<div class='form-control-static input-group-text h-40px bg-white input-border-color'>
                         " . icon('fa-xmark Accent-200-cl', $langDelete, '#', ' class="del_btn"') . "
                     </div>
                 </div>";
