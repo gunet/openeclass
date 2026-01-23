@@ -364,8 +364,7 @@ if ($is_editor) {
             }
             if ($ok) {
                 $poll = Database::get()->querySingle("SELECT * FROM poll WHERE pid = ?d", $pid);
-                //$questions = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d ORDER BY q_position", $pid);
-                $questions = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d AND qtype != ?d ORDER BY q_position,`page` ASC", $pid, 0);
+                $questions = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d ORDER BY q_position", $pid);
 
                 if ($clone_course_id == $course_id) {
                     $poll->name .= " ($langCopy2)";
@@ -385,7 +384,10 @@ if ($is_editor) {
                     $poll->assign_to_specific,
                     $poll->show_results,
                     $poll->multiple_submissions,
-                    $poll->default_answer
+                    $poll->default_answer,
+                    $poll->pagination,
+                    $poll->require_answer,
+                    $poll->options
                 );
                 $new_pid = Database::get()->query("INSERT INTO poll
                                     SET creator_id = ?d,
@@ -401,7 +403,10 @@ if ($is_editor) {
                                         show_results = ?d,
                                         multiple_submissions = ?d,
                                         default_answer = ?d,
-                                        active = 1", $poll_data)->lastInsertID;
+                                        active = 1,
+                                        pagination = ?d,
+                                        require_answer = ?d,
+                                        options = ?s", $poll_data)->lastInsertID;
                 if ($poll->assign_to_specific) {
                     Database::get()->query("INSERT INTO `poll_to_specific` (user_id, group_id, poll_id)
                                             SELECT user_id, group_id, ?d FROM `poll_to_specific`
@@ -412,6 +417,7 @@ if ($is_editor) {
                     $answer_scales = !empty($question->answer_scale) ? $question->answer_scale : '';
                     $q_row = $question->q_row;
                     $q_column = $question->q_column;
+                    $total_weight = !is_null($question->total_weight) ? $question->total_weight : 0;
                     $new_pqid = Database::get()->query("INSERT INTO poll_question
                                                SET pid = ?d,
                                                    question_text = ?s,
@@ -421,15 +427,55 @@ if ($is_editor) {
                                                    `description` = ?s,
                                                    answer_scale = ?s,
                                                    q_row = ?d,
-                                                   q_column = ?d", $new_pid, $question->question_text, $question->qtype, $question->q_position, $question->q_scale, $q_description, $answer_scales, $q_row, $q_column)->lastInsertID;
+                                                   q_column = ?d,
+                                                   `page` = ?d,
+                                                   require_response = ?d,
+                                                   total_weight = ?d,
+                                                   has_sub_question = ?d", 
+                                                   $new_pid, $question->question_text, $question->qtype, 
+                                                   $question->q_position, $question->q_scale, $q_description, 
+                                                   $answer_scales, $q_row, $q_column,
+                                                   $question->page, $question->require_response, $total_weight, $question->has_sub_question)->lastInsertID;
                     $answers = Database::get()->queryArray("SELECT * FROM poll_question_answer WHERE pqid = ?d ORDER BY pqaid", $question->pqid);
                     foreach ($answers as $answer) {
                         Database::get()->query("INSERT INTO poll_question_answer
                                                 SET pqid = ?d,
                                                     answer_text = ?s,
-                                                    sub_question = ?d", $new_pqid, $answer->answer_text, $answer->sub_question);
+                                                    sub_question = ?d,
+                                                    `weight` = ?d,
+                                                    sub_qid = ?d", $new_pqid, $answer->answer_text, $answer->sub_question, $answer->weight, $answer->sub_qid);
                     }
                 }
+
+                // Update the sub-question ids from poll_question_answer table.
+                $newQidsWithSubQ = Database::get()->queryArray("SELECT pqid FROM poll_question WHERE pid = ?d AND has_sub_question = ?d", $new_pid, 1);
+                $newSubQids = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d AND has_sub_question = ?d", $new_pid, -1);
+                $assocArrQ = [];
+                if (count($newSubQids) > 0) {
+                    foreach ($newSubQids as $q) {
+                        $oldQidWithSubQ = Database::get()->querySingle("SELECT pqid FROM poll_question 
+                                                                 WHERE pid = ?d
+                                                                 AND question_text = ?s
+                                                                 AND qtype = ?d
+                                                                 AND q_position = ?d
+                                                                 AND `page` = ?d
+                                                                 AND has_sub_question = ?d", $pid, $q->question_text, $q->qtype, $q->q_position, $q->page, $q->has_sub_question)->pqid;
+                        $assocArrQ[$oldQidWithSubQ] = $q->pqid;
+                    }
+                }
+                if (count($assocArrQ) > 0 && count($newQidsWithSubQ) > 0) {
+                    foreach ($newQidsWithSubQ as $q) {
+                        $new_answers = Database::get()->queryArray("SELECT pqaid,sub_qid FROM poll_question_answer WHERE pqid = ?d", $q->pqid);
+                        if (count($new_answers) > 0) {
+                            foreach ($new_answers as $an) {
+                                if (isset($assocArrQ[$an->sub_qid]) && $an->sub_qid > 0) {
+                                    Database::get()->query("UPDATE poll_question_answer SET sub_qid = ?d WHERE pqaid = ?d", $assocArrQ[$an->sub_qid], $an->pqaid);
+                                }
+                            }
+                        }
+                    }
+                }
+
                 $message = $langCopySuccess;
                 if (isset($clone_course)) {
                     $clone_code = q($clone_course->code);
