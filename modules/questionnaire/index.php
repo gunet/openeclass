@@ -127,6 +127,7 @@ if (isset($_GET['cancelPoll'])) {
     unset($_SESSION['question_ids']);
     unset($_SESSION['q_row_columns']);
     unset($_SESSION['loop_init_answers']);
+    unset($_SESSION['emptyQuestions']);
 }
 
 if (isset($_GET['verification_code'])) {

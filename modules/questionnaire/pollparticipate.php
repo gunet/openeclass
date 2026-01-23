@@ -663,6 +663,7 @@ function printPollForm() {
             }
             if (isset($_SESSION['unanswered_required_qids'])) {
                 foreach ($_SESSION['unanswered_required_qids'] as $q) {
+                    $_SESSION['emptyQuestions'][] = $q;
                     unset($_SESSION['data_answers'][$q]);
                 }
             }
@@ -714,10 +715,16 @@ function printPollForm() {
                 $RequiredQuestionHtml = '';
                 if ($theQuestion->require_response) {
                     $RequiredQuestionHtml = "&nbsp; <span data-bs-toggle='tooltip' data-bs-placement='top' title='$langRequireAnswer'>(<i class='fa-solid fa-asterisk fa-lg text-danger'></i>)</span>";
-                } 
+                }
+
+                // Highlight to the card question only if is empty.
+                $emptyQuestionStyle = '';
+                if (isset($_SESSION['emptyQuestions']) && is_array($_SESSION['emptyQuestions']) && in_array($pqid, $_SESSION['emptyQuestions'])) {
+                    $emptyQuestionStyle = "style='border: solid 2px red !important;'";
+                }
                 $tool_content .= "
                 <div class='col-12'>
-                    <div class='card panelCard px-lg-4 py-lg-3 h-100 panelCard-questionnaire poll-panel mb-4'>
+                    <div class='card panelCard px-lg-4 py-lg-3 h-100 panelCard-questionnaire poll-panel mb-4' $emptyQuestionStyle>
                         <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                             <h3>$langQuestion $_SESSION[q_counter] $RequiredQuestionHtml</h3>
                         </div>
@@ -1572,6 +1579,10 @@ function update_submission($pid) {
         unset($_SESSION['loop_init_answers']);
     } else {
         $answer = isset($_POST['answer'])? $_POST['answer']: array();
+    }
+
+    if (isset($_SESSION['emptyQuestions'])) {
+        unset($_SESSION['emptyQuestions']);
     }
 
     return $answer;
