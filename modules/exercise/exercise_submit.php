@@ -254,10 +254,10 @@ if (isset($_POST['attempt_value']) && !isset($_GET['eurId'])) {
                 // Replace eurid of recorded audio with new eurid in document table.
                 // Replace recorded audio of old eurid with new eurid in exercise_answer_record table.
                 // It's a special case for oral question type.
-                $old_answers = Database::get()->queryArray("SELECT answer_record_id,answer FROM exercise_answer_record WHERE eurid = ?d", $eurid);
+                $old_answers = Database::get()->queryArray("SELECT answer_record_id, answer FROM exercise_answer_record WHERE eurid = ?d", $eurid);
                 if (count($old_answers) > 0) {
                     foreach ($old_answers as $old_an) {
-                        if (strpos($old_an->answer, '.mp3') !== false) { // oral question
+                        if (isset($old_an->answer) && str_contains($old_an->answer, '.mp3')) { // oral question
                             $old_recorded = $old_an->answer;
                             $temp_old_recorded = explode('-', $old_recorded);
                             if (count($temp_old_recorded) == 4 && $temp_old_recorded[3] == $eurid . '.mp3') {
@@ -299,7 +299,7 @@ if (isset($_POST['attempt_value']) && !isset($_GET['eurId'])) {
 
 
 if (!isset($_POST['acceptAttempt']) and (!isset($_POST['formSent']))) {
-    // If the exercise is password protected
+    // If the exercise is password-protected
     $password = $objExercise->selectPasswordLock();
     if ($password && !$is_editor) {
         if(!isset($_SESSION['password'][$exerciseId][$attempt_value])) {
@@ -315,7 +315,7 @@ if (!isset($_POST['acceptAttempt']) and (!isset($_POST['formSent']))) {
 }
 
 
-// If the exercise is IP protected
+// If the exercise is IP-protected
 $ips = $objExercise->selectIPLock();
 if ($ips && !$is_editor){
     $user_ip = Log::get_client_ip();
@@ -329,8 +329,6 @@ if ($ips && !$is_editor){
 // If the user has clicked on the "Cancel" button,
 // end the exercise and return to the exercise list
 if (isset($_POST['buttonCancel'])) {
-
-
     $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value];
     Database::get()->query("UPDATE exercise_user_record
         SET record_end_date = " . DBHelper::timeAfter() . ", attempt_status = ?d, total_score = 0, total_weighting = 0
@@ -358,6 +356,7 @@ $exerciseTempSave = $objExercise->selectTempSave();
 $exerciseTimeConstraint = $objExercise->selectTimeConstraint();
 $exerciseAllowedAttempts = $objExercise->selectAttemptsAllowed();
 $exercisetotalweight = $objExercise->selectTotalWeighting();
+$exerciseCalcGradeMethod = $objExercise->getCalcGradeMethod();
 
 // In this php block we have been saving the subset of predefined answers in ordering question
 // when the exercise has MULTIPLE_PAGE_TYPE type or user press the save button.
@@ -561,8 +560,9 @@ $exercise_StartDate = new DateTime($objExercise->selectStartDate());
 $exercise_EndDate = $objExercise->selectEndDate();
 $exercise_EndDate = isset($exercise_EndDate) ? new DateTime($objExercise->selectEndDate()) : $exercise_EndDate;
 $choice = $_POST['choice'] ?? '';
+$certainty = $_POST['certainty'] ?? '';
 
-// If there are answers in the session get them
+// If there are answers in the session, get them
 if (isset($_SESSION['exerciseResult'][$exerciseId][$attempt_value])) {
     $exerciseResult = $_SESSION['exerciseResult'][$exerciseId][$attempt_value];
 } else {
@@ -590,7 +590,7 @@ if ($temp_CurrentDate < $exercise_StartDate->getTimestamp()
             $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value];
             $record_end_date = date('Y-m-d H:i:s', time());
             $objExercise->save_unanswered();
-            $objExercise->record_answers($choice, $exerciseResult, 'update');
+            $objExercise->record_answers($choice, $certainty, $exerciseResult, 'update');
             $totalScore = Database::get()->querySingle("SELECT SUM(weight) AS weight FROM exercise_answer_record WHERE eurid = ?d", $eurid)->weight;
             $totalWeighting = Database::get()->querySingle("SELECT SUM(weight) AS weight FROM exercise_question WHERE id IN (
                                           SELECT question_id FROM exercise_answer_record WHERE eurid = ?d)", $eurid)->weight;
@@ -629,7 +629,7 @@ if ($temp_CurrentDate < $exercise_StartDate->getTimestamp()
 }
 
 
-// If question list exists in the Session get it for there
+// If a question list exists in the Session get it for there
 // else get it using the appropriate object method and save it to the session
 if (isset($_SESSION['questionList'][$exerciseId][$attempt_value])) {
     $questionList = $_SESSION['questionList'][$exerciseId][$attempt_value];
@@ -758,6 +758,7 @@ if ($exercise_EndDate) {
 $questionNum = count($exerciseResult) + 1;
 // if the user has submitted the form
 if (isset($_POST['formSent'])) {
+
     $time_expired = false;
     // check if user's time expired
     if (isset($timeleft) and $timeleft <= 0) {
@@ -766,7 +767,7 @@ if (isset($_POST['formSent'])) {
 
     // insert answers in the database and add them in the $exerciseResult array which is returned
     $action = isset($paused_attempt) ? 'update' : 'insert';
-    $exerciseResult = $objExercise->record_answers($choice, $exerciseResult, $action);
+    $exerciseResult = $objExercise->record_answers($choice, $certainty, $exerciseResult, $action);
     $questionNum = count($exerciseResult) + 1;
     Database::get()->query('UPDATE exercise_user_record
         SET record_end_date = ' . DBHelper::timeAfter() . ', secs_remaining = ?d
@@ -784,7 +785,7 @@ if (isset($_POST['formSent'])) {
         }
         $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value];
         $totalScore = $objExercise->calculate_total_score($eurid);
-        $exerciseFeedback = $objExercise->selectFeedback();
+        $exerciseFeedback = $objExercise->getEndMessage();
 
         if ($objExercise->isRandom() or $objExercise->hasQuestionListWithRandomCriteria()) {
             $totalWeighting = Database::get()->querySingle("SELECT SUM(weight) AS weight FROM exercise_question WHERE id IN (

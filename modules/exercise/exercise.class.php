@@ -35,7 +35,7 @@ if (file_exists('include/log.class.php')) {
 if (!class_exists('Exercise')) {
 
     /**
-     * @brief This class allows to instantiate an object of type Exercise
+     * @brief This class allows instantiating an object of type Exercise
      */
     class Exercise
     {
@@ -43,7 +43,8 @@ if (!class_exists('Exercise')) {
         private $id;
         private $exercise;
         private $description;
-        private $general_feedback;
+        private $end_message;
+        private $feedback;
         private $type;
         private $range;
         private $startDate;
@@ -78,7 +79,8 @@ if (!class_exists('Exercise')) {
             $this->id = 0;
             $this->exercise = '';
             $this->description = '';
-            $this->general_feedback = '';
+            $this->end_message = '';
+            $this->feedback = null;
             $this->type = MULTIPLE_PAGE_TYPE;
             $this->range = 0;
             $this->startDate = date("Y-m-d H:i:s");
@@ -97,7 +99,7 @@ if (!class_exists('Exercise')) {
             $this->password_lock = null;
             $this->questionList = array();
             $this->continueTimeLimit = 5; // minutes
-            $this->calc_grade_method = 1;
+            $this->calc_grade_method = 1; // standard
             $this->options = [];
             $this->is_exam = 0;
             $this->passing_grade = null;
@@ -114,7 +116,7 @@ if (!class_exists('Exercise')) {
         {
             global $course_id;
 
-            $object = Database::get()->querySingle("SELECT title, description, general_feedback, type, `range`, start_date, end_date, temp_save, time_constraint,
+            $object = Database::get()->querySingle("SELECT title, description, end_message, feedback, type, `range`, start_date, end_date, temp_save, time_constraint,
                                                     attempts_allowed, random, shuffle, active, public, results, score, ip_lock, password_lock,
                                                     assign_to_specific, calc_grade_method, continue_time_limit, options, is_exam, passing_grade
                                                 FROM `exercise` WHERE course_id = ?d AND id = ?d", $course_id, $id);
@@ -124,7 +126,8 @@ if (!class_exists('Exercise')) {
                 $this->id = $id;
                 $this->exercise = $object->title;
                 $this->description = $object->description;
-                $this->general_feedback = $object->general_feedback;
+                $this->end_message = $object->end_message;
+                $this->feedback = $object->feedback;
                 $this->type = $object->type;
                 $this->range = $object->range;
                 $this->startDate = $object->start_date;
@@ -217,12 +220,21 @@ if (!class_exists('Exercise')) {
         }
 
         /**
-         * @brief returns exercise feedback
+         * @brief get exercise end message
          * @return mixed
          */
-        public function selectFeedback()
+        public function getEndMessage()
         {
-            return $this->general_feedback;
+            return $this->end_message;
+        }
+
+        public function getFeedback()
+        {
+            if (!is_null($this->feedback)) {
+                return unserialize($this->feedback);
+            } else {
+                return [];
+            }
         }
 
         /**
@@ -559,38 +571,30 @@ if (!class_exists('Exercise')) {
             return in_array($questionId, $this->questionList);
         }
 
-        /**
-         * changes the exercise title
-         *
-         * @param - string $title - exercise title
-         * @author - Olivier Brouckaert
-         */
         public function updateTitle($title)
         {
             $this->exercise = $title;
         }
 
-        /**
-         * changes the exercise description
-         *
-         * @param - string $description - exercise description
-         * @author - Olivier Brouckaert
-         */
         public function updateDescription($description)
         {
             $this->description = $description;
         }
 
-        public function updateFeedback($feedback)
+        public function setEndMessage($end_message)
         {
-            $this->general_feedback = $feedback;
+            $this->end_message = $end_message;
         }
-        /**
-         * changes the exercise type
-         *
-         * @param - integer $type - exercise type
-         * @author - Olivier Brouckaert
-         */
+
+        public function setFeedback($feedback_text, $feedback_grade) {
+
+            $feedback = [];
+            for ($i = 1; $i <= count($feedback_text); $i++) {
+                $feedback[$i] = array('feedback_text' => $feedback_text[$i], 'grade' => $feedback_grade[$i]);
+            }
+            $this->feedback = serialize($feedback);
+        }
+
         public function updateType($type)
         {
             $this->type = $type;
@@ -654,9 +658,9 @@ if (!class_exists('Exercise')) {
             $this->password_lock = (empty($password)) ? null : $password;
         }
 
-        public function setCalcGradeMethod()
+        public function setCalcGradeMethod($calc_grade_method)
         {
-            $this->calc_grade_method = 1;
+            $this->calc_grade_method = $calc_grade_method;
         }
 
         public function updateAssignToSpecific($assign_to_specific)
@@ -768,7 +772,8 @@ if (!class_exists('Exercise')) {
             } else {
                 $description = $this->description;
             }
-            $general_feedback = purify($this->general_feedback);
+            $end_message = purify($this->end_message);
+            $feedback = $this->feedback;
             $type = $this->type;
             $range = $this->range;
             $startDate = $this->startDate;
@@ -797,14 +802,14 @@ if (!class_exists('Exercise')) {
                         attempts_allowed = ?d, random = ?d, shuffle = ?d, active = ?d, public = ?d,
                         results = ?d, score = ?d, ip_lock = ?s, password_lock = ?s,
                         assign_to_specific = ?d, continue_time_limit = ?d, calc_grade_method = ?d,
-                        general_feedback = ?s, options = ?s, is_exam = ?d, passing_grade = ?f
+                        end_message = ?s, options = ?s, is_exam = ?d, passing_grade = ?f, feedback = ?s
                     WHERE course_id = ?d AND id = ?d",
                     $exercise, $description, $type, $range,
                     $startDate, $endDate, $tempSave, $timeConstraint,
                     $attemptsAllowed, $random, $shuffle, $active, $public,
                     $results, $score, $ip_lock, $password_lock,
                     $assign_to_specific, $this->continueTimeLimit,
-                    $calc_grade_method, $general_feedback, $options, $is_exam, $passing_grade,
+                    $calc_grade_method, $end_message, $options, $is_exam, $passing_grade, $feedback,
                     $course_id, $id)->affectedRows;
                     Log::record($course_id, MODULE_ID_EXERCISE, LOG_MODIFY,
                         array('id' => $id,
@@ -815,13 +820,13 @@ if (!class_exists('Exercise')) {
                     (course_id, title, description, type, `range`, start_date, end_date,
                      temp_save, time_constraint, attempts_allowed,
                      random, shuffle, active, results, score, ip_lock, password_lock,
-                     assign_to_specific, continue_time_limit, calc_grade_method, general_feedback, options, is_exam, passing_grade)
-                    VALUES (?d, ?s, ?s, ?d, ?d, ?t, ?t, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?s, ?s, ?d, ?d, ?d, ?s, ?s, ?d, ?f)",
+                     assign_to_specific, continue_time_limit, calc_grade_method, end_message, options, is_exam, passing_grade, feedback)
+                    VALUES (?d, ?s, ?s, ?d, ?d, ?t, ?t, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?s, ?s, ?d, ?d, ?d, ?s, ?s, ?d, ?f, ?s)",
                     $course_id, $exercise, $description, $type, $range, $startDate, $endDate,
                     $tempSave, $timeConstraint, $attemptsAllowed,
                     $random, $shuffle, $active, $results, $score, $ip_lock, $password_lock,
                     $assign_to_specific, $this->continueTimeLimit, $calc_grade_method,
-                    $general_feedback, $options, $is_exam, $passing_grade)->lastInsertID;
+                    $end_message, $options, $is_exam, $passing_grade, $feedback)->lastInsertID;
 
                 Log::record($course_id, MODULE_ID_EXERCISE, LOG_INSERT, array('id' => $this->id,
                                                                               'title' => $exercise,
@@ -891,12 +896,9 @@ if (!class_exists('Exercise')) {
         }
 
         /**
-         * @brief  deletes the exercise from the database
-         * Notice: leaves the question in the database
-         *
-         * @author - Olivier Brouckaert
+         * @brief deletes the exercise
          */
-        public function delete()
+        public function delete(): void
         {
             global $course_id;
 
@@ -914,14 +916,11 @@ if (!class_exists('Exercise')) {
         /**
          * @brief keeps record of user answers
          */
-        public function record_answers($choice, $exerciseResult, $record_type = 'insert')
+        public function record_answers($choice, $certainty, $exerciseResult, $record_type = 'insert')
         {
-
-            $action = $record_type . '_answer_records';
-
             // Special cases for both calculated and oral questions.
-            // In calculated question the user answer comes from input-text whereas
-            // in oral question the answer comes from recording-audio.
+            // In the calculated question the user answer comes from input-text, whereas in the
+            //  oral question the answer comes from recording-audio.
             $choice_key = array_keys($choice);
             if (count($choice_key) > 0) {
                 foreach ($choice_key as $k) {
@@ -931,31 +930,45 @@ if (!class_exists('Exercise')) {
                 }
             }
 
-            // if the user has answered at least one question
-            if (is_array($choice)) {
-                // if all questions on the same page
-                if ($this->selectType() == SINGLE_PAGE_TYPE) {
+            if (is_array($choice)) { // if the user has answered at least one question
+                if ($this->selectType() == SINGLE_PAGE_TYPE) { // if all questions on the same page
                     // $exerciseResult receives the content of the form.
                     // Each choice of the student is stored into the array $choice
                     $exerciseResult = $choice;
                     $q_position = 1;
                     foreach ($exerciseResult as $key => $value) {
-                        $this->$action($key, $value, 1, $q_position);
+                        if (isset($certainty[$key])) { // user certainty value
+                            $certainty_value = $certainty[$key];
+                        } else {
+                            $certainty_value = 0; // default value;
+                        }
+                        if ($record_type == 'update') {
+                            $this->update_answer_records($key, $value, $certainty_value);
+                        } else {
+                            $this->insert_answer_records($key, $value, 1, $q_position, $certainty_value);
+                        }
                         $q_position++;
                     }
-                    // else if one question per page
-                } else {
+                } else { // else if one question per page
                     // gets the question ID from $choice. It is the key of the array
                     list($key) = array_keys($choice);
                     // if the user didn't already answer this question
-                    if (!isset($exerciseResult[$key]) or $exerciseResult[$key] != $choice[$key]) {
+                    if (!isset($exerciseResult[$key]) or $exerciseResult[$key] != $choice[$key] or isset($certainty[$key])) {
                         // stores the user answer into the array
                         $value = $exerciseResult[$key] = $choice[$key];
-                        $this->$action($key, $value, 1, $this->getAnswerPosition($key));
+                        if (isset($certainty[$key])) { // user certainty value
+                            $certainty_value = $certainty[$key];
+                        } else {
+                            $certainty_value = 0; // default value;
+                        }
+                        if ($record_type == 'update') {
+                            $this->update_answer_records($key, $value, $certainty_value);
+                        } else {
+                            $this->insert_answer_records($key, $value, 1, $this->getAnswerPosition($key), $certainty_value);
+                        }
                     }
                 }
             }
-
             return $exerciseResult;
         }
 
@@ -1024,7 +1037,7 @@ if (!class_exists('Exercise')) {
          * Save User Unanswered Questions either as unanswered (default behaviour)
          * or as answered by passing parameter 1 to the function
          * (Used for sequential exercises on time expiration
-         * and when student wants to temporary save his answers)
+         * and when a student wants to temporarily save his answers)
          */
         public function save_unanswered($as_answered = 0)
         {
@@ -1052,7 +1065,7 @@ if (!class_exists('Exercise')) {
                         $objAnswerTmp = new Answer($question_id);
                         $nbrAnswers = $objAnswerTmp->selectNbrAnswers();
                         for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
-                            // must get answer id ONLY where correct value exists
+                            // must get answer id ONLY where the correct value exists
                             $answerCorrect = $objAnswerTmp->isCorrect($answerId);
                             if ($answerCorrect) {
                                 $value[$answerId] = 0;
@@ -1113,7 +1126,7 @@ if (!class_exists('Exercise')) {
         /**
          * Insert user answers
          */
-        private function insert_answer_records($key, $value, $as_answered, $q_position)
+        private function insert_answer_records($key, $value, $as_answered, $q_position, $certainty_value = 0)
         {
             $objQuestionTmp = new Question();
             $objQuestionTmp->read($key);
@@ -1142,7 +1155,7 @@ if (!class_exists('Exercise')) {
                 $rightAnswerWeighting = explode(',', $answerWeighting);
                 $blanks = Question::getBlanks($answer);
                 foreach ($value as $row_key => $row_choice) {
-                    // if user's choice is right assign rightAnswerWeight else 0
+                    // if the user's choice is right, assign rightAnswerWeight else 0
                     // Some more coding should be done if blank can have multiple answers
                     $canonical_choice = canonicalize_whitespace($objQuestionTmp->selectType() == FILL_IN_BLANKS_TOLERANT ?
                         remove_accents($row_choice) : $row_choice);
@@ -1195,7 +1208,7 @@ if (!class_exists('Exercise')) {
             } elseif ($question_type == MATCHING) {
                 $objAnswersTmp = new Answer($key);
                 foreach ($value as $row_key => $row_choice) {
-                    // In matching questions isCorrect() returns position of left column answers while $row_key returns right column position
+                    // In matching questions isCorrect() returns position of left column answers while $row_key returns the right column position
                     $correct_match = $objAnswersTmp->isCorrect($row_key);
                     if ($correct_match == $row_choice) {
                         $answer_weight = $objAnswersTmp->getWeighting($row_key);
@@ -1356,9 +1369,9 @@ if (!class_exists('Exercise')) {
                     $answer_weight = 0;
                 }
                 Database::get()->query("INSERT INTO exercise_answer_record
-                    (eurid, question_id, answer_id, weight, is_answered, q_position)
-                    VALUES (?d, ?d, ?d, ?f, ?d, ?d)",
-                    $eurid, $key, $value, $answer_weight, $as_answered, $q_position);
+                    (eurid, question_id, answer_id, weight, certainty, is_answered, q_position)
+                    VALUES (?d, ?d, ?d, ?f, ?d, ?d, ?d)",
+                    $eurid, $key, $value, $answer_weight, $certainty_value, $as_answered, $q_position);
             }
             unset($objQuestionTmp);
         }
@@ -1366,7 +1379,7 @@ if (!class_exists('Exercise')) {
         /**
          * Update user answers
          */
-        private function update_answer_records($key, $value, $dummy1, $dummy2)
+        private function update_answer_records($key, $value, $certainty_value = 0)
         {
             // construction of the Question object
             $objQuestionTmp = new Question();
@@ -1444,8 +1457,13 @@ if (!class_exists('Exercise')) {
                 } else {
                     $answer_weight = 0;
                 }
-                Database::get()->query("UPDATE exercise_answer_record SET answer_id = ?d, weight = ?f , is_answered = 1
-                    WHERE eurid = ?d AND question_id = ?d", $value, $answer_weight, $eurid, $key);
+                Database::get()->query("UPDATE exercise_answer_record SET 
+                                  answer_id = ?d, 
+                                  weight = ?f,
+                                  certainty = ?d, 
+                                  is_answered = 1
+                            WHERE eurid = ?d AND question_id = ?d",
+                        $value, $answer_weight, $certainty_value, $eurid, $key);
             }
             unset($objQuestionTmp);
         }
@@ -1477,8 +1495,6 @@ if (!class_exists('Exercise')) {
             Database::get()->query("DELETE d FROM exercise_answer_record d, exercise_user_record s
                               WHERE d.eurid = s.eurid AND s.eid = ?d", $id);
             Database::get()->query("DELETE FROM exercise_user_record WHERE eid = ?d", $id);
-            $this->setCalcGradeMethod();
-
             $exercise_title = Database::get()->querySingle("SELECT title FROM exercise WHERE id = ?d", $id)->title;
 
             Log::record($course_id, MODULE_ID_EXERCISE, LOG_DELETE, array('title' => $exercise_title,
@@ -1758,6 +1774,28 @@ if (!class_exists('Exercise')) {
 
             return $totalScore;
         }
+
+        /**
+         * @brief calculate feedback depending on user score
+         * @param $score
+         * @return mixed|string
+         */
+        public function calculate_feedback($score)
+        {
+            $message = '';
+            $feedback_data = $this->getFeedback();
+            uasort($feedback_data, function ($a, $b) { // sort by grade in descending order
+                return $b['grade'] <=> $a['grade'];
+            });
+            foreach ($feedback_data as $feedback) {
+                if ($score >= $feedback['grade']) {
+                    $message = $feedback['feedback_text'];
+                    break;
+                }
+            }
+            return $message;
+        }
+
 
         /**
          * Trigger AI evaluation for FREE_TEXT question responses
