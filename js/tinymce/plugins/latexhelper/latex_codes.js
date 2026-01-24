@@ -200,10 +200,10 @@ window.latexSymbolsData = {
         
         { symbol: '\\lim_{x \\to \\infty}', code: '\\lim_{x \\to \\infty}', name: 'Limit to infinity' },
         
-        { symbol: '(x)', code: '\\left(\\right)', name: 'Parentheses (auto-size)' },
-        { symbol: '[x]', code: '\\left[\\right]', name: 'Brackets (auto-size)' },
-        { symbol: '\\{x\\}', code: '\\left\\{\\right\\}', name: 'Braces (auto-size)' },
-        { symbol: '|x|', code: '\\left|\\right|', name: 'Absolute value' },
+        { symbol: '(x)', code: '(x)', name: 'Parentheses (auto-size)' },
+        { symbol: '[x]', code: '[x]', name: 'Brackets (auto-size)' },
+        { symbol: '\\{x\\}', code: '\\{x\\}', name: 'Braces (auto-size)' },
+        { symbol: '|x|', code: '|x|', name: 'Absolute value' },
         
         // Matrices/Cases need dummy content to look good in the button
         { symbol: '\\begin{pmatrix} x & y \\\\ z & t \\end{pmatrix}', code: '\\begin{pmatrix} x & y \\\\ z & t \\end{pmatrix}', name: 'Matrix (parentheses)' },
