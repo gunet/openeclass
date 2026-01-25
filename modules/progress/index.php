@@ -555,7 +555,11 @@ if ($is_editor) {
         }
         $display = FALSE;
     } elseif (isset($_GET['u'])) { // display detailed user progress
-        display_user_progress_details($element, $element_id, $_GET['u']);
+        if ($element != "points_game") {
+            display_user_progress_details($element, $element_id, $_GET['u']);
+        } else {
+            display_user_points_game_details($element_id, $_GET['u']);
+        }
         $display = FALSE;
     } elseif (isset($_GET['refresh'])) {
         refresh_user_progress($element, $element_id);

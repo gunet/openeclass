@@ -3968,13 +3968,18 @@ function display_users_points_game_progress ($points_game_id) {
             $info = 'N/A';
             if ($user_data->total_points > 0) {
                 $user_progress = PointsGame::getNextLevelInfo($user_data->id,$points_game_id);
+                if ($user_progress['current_points'] > 0) {
+                    $points_str = "<a href='index.php?course=$course_code&amp;points_game_id=$points_game_id&amp;u=$user_data->id'>".$user_progress['current_points']." pts</a>";
+                } else {
+                    $points_str = $user_progress['current_points']." pts";
+                }
                 $current_level = !is_null($user_progress['current_level_id']) ? $user_progress['current_level_title'] : 'N/A';
                 $next_level = !is_null($user_progress['next_level_id']) ? $user_progress['next_level_title'] : 'N/A';
                 $info = "<div class='res-table-wrapper'>
-                                    <div class='row res-table-row border-0 p-3'>
+                                    <div class='row res-table-row border-0'>
                                         <div style='width: 100%;'>
-                                            <div class='small fw-semibold text-primary text-center'>
-                                                ".$user_progress['current_points']." pts
+                                            <div class='fw-semibold text-primary text-center'>
+                                                $points_str
                                             </div>
                                             <div class='progress progress-line'>
                                                 <div class='progress-line-bar' role='progressbar' style='width: ".$user_progress['progress_percentage']."%' aria-valuenow='".$user_progress['progress_percentage']."' aria-valuemin='0' aria-valuemax='100'>".$user_progress['progress_percentage']."%</div>
@@ -4101,6 +4106,126 @@ function display_users_progress($element, $element_id) {
         $tool_content .= "</tbody></table></div></div>";
     } else {
         $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langNoCertificateUsers</span></div></div>";
+    }
+}
+
+function display_user_points_game_details($points_game_id, $user_id) {
+    global $tool_content, $langNoUserActivity, $langPoints, $langDescription, $langLevel, $langAttendanceActivity, $langTitle, $langDate,
+        $langType, $langPointsGameRecActivities, $langPointsGameOneTimeActivities;
+
+    $sql = Database::get()->queryArray("SELECT * FROM points_game_criterion AS pgc, user_points_game_criterion AS upgc
+                                        WHERE upgc.points_game_criterion = pgc.id AND pgc.points_game = ?d AND upgc.user = ?d
+                                        ORDER BY upgc.created ASC", $points_game_id, $user_id);
+
+    if (count($sql) == 0) {
+        $tool_content .= "<div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoUserActivity</span></div></div>";
+    } else {
+        $element_title = get_cert_title("points_game", $points_game_id);
+        $user_progress = PointsGame::getNextLevelInfo($user_id, $points_game_id);
+        $tool_content .= "
+            <div class='col-12'>
+                <div class='card panelCard card-default px-lg-4 py-lg-3'>
+                    <div class='card-header border-0 d-flex justify-content-between align-items-center'>
+                        <h3>$element_title</h3>
+                    </div>
+                    <div class='card-body'>
+                        <div class='row'>
+                            <div class='col-sm-12'>
+                                <div class='row p-2'>
+                                    <div class='col-md-6 col-12'>
+                                        <div class='pn-info-title-sct title-default'>$langPoints:</div>
+                                    </div>
+                                    <div class='col-md-6 col-12'>
+                                        <div class='pn-info-text-sct text-md-end'>
+                                            ".$user_progress['current_points']."
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class='row p-2'>
+                                    <div class='col-md-6 col-12'>
+                                        <div class='pn-info-title-sct title-default'>$langLevel:</div>
+                                    </div>
+                                    <div class='col-md-6 col-12'>
+                                        <div class='pn-info-text-sct text-md-end'>
+                                            ".$user_progress['current_level_title']."
+                                        </div>
+                                    </div>
+                                </div>";
+                            $cert_desc = get_cert_desc("points_game", $points_game_id);
+                            if (!empty($cert_desc)) {
+                                $tool_content .= "
+                                    <div class='row p-2'>
+                                        <div class='col-md-6 col-12'>
+                                            <div class='pn-info-title-sct title-default'>$langDescription:</div>
+                                        </div>
+                                        <div class='col-md-6 col-12'>
+                                            <div class='pn-info-text-sct text-md-end'>" . $cert_desc . "</div>
+                                        </div>
+                                    </div>";
+                                }
+                                
+                                $tool_content .= "
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>";
+
+        $tool_content .= "
+        <div class='col-12 mt-4'>
+            <div class='card panelCard card-default px-lg-4 py-lg-3'>
+                <div class='card-header border-0 d-flex justify-content-between align-items-center'>
+                    <h3>$langAttendanceActivity</h3>
+                </div>
+                <div class='card-body'>
+                    <div class='table-responsive mt-0'>
+                    <table class='table-default'>
+                        <thead>
+                            <tr>
+                                <th>$langTitle</th>
+                                <th>$langType</th>
+                                <th>$langPoints</th>
+                                <th>$langDate</th>
+                            </tr>
+                        </thead>
+                        <tbody>";
+                    foreach ($sql as $user_criterion) {
+                        $resource_data = get_resource_details("points_game", $user_criterion->points_game_criterion);
+                        $activity = q($resource_data['title']) . "&nbsp;<small>(" .$resource_data['type'] . ")</small>";
+
+                        if($user_criterion->criterion_type == 'onetime') {
+                            $activity_type = $langPointsGameOneTimeActivities;
+                            if (!empty($user_criterion->operator) && $user_criterion->activity_type != AssignmentSubmitEvent::ACTIVITY) {
+                                $op = get_operators();
+                                $op_content = $op[$user_criterion->operator];
+                            } else {
+                                $op_content = "&mdash;";
+                            }
+                            $threshold = $user_criterion->threshold;
+                            if ($user_criterion->activity_type == AssignmentSubmitEvent::ACTIVITY) {
+                                $threshold = "";
+                            } else {
+                                if( ($int = (int)$threshold) == $threshold) {
+                                    $threshold = $int;
+                                }
+                            }
+                            $activity .= " ".$op_content." ".$threshold;
+                        } else {
+                            $activity_type = $langPointsGameRecActivities;
+                        }
+
+                        $tool_content.= "<tr>
+                                            <td>".$activity."</td>
+                                            <td>".$activity_type."<td>
+                                            <td>".$user_criterion->points."</td>
+                                            <td>".format_locale_date(strtotime($user_criterion->created))."</td>
+                                        </tr>";
+                    }
+        $tool_content .="</tbody>
+                    </table>
+                </div>
+            </div>
+        </div>";
     }
 }
 
