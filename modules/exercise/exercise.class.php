@@ -1796,6 +1796,39 @@ if (!class_exists('Exercise')) {
             return $message;
         }
 
+        /**
+         * @brief get user certainty based grade
+         * see https://docs.moodle.org/501/en/Using_certainty-based_marking
+         * @param $eurid
+         * @return float|int|mixed
+         */
+        public function get_user_certainty_based_grade($eurid) {
+
+            $q = Database::get()->queryArray("SELECT weight, certainty FROM exercise_answer_record WHERE eurid = ?d", $eurid);
+            $total = 0;
+            if ($q) {
+                foreach ($q as $item) {
+                    switch ($item->certainty) {
+                        case 1: $total += $item->weight;
+                            break;
+                        case 2: if ($item->weight == 1) {
+                            $total = $item->weight * 2;
+                        } else if ($item->weight == 0) {
+                            $total = $total-2;
+                        }
+                            break;
+                        case 3: if ($item->weight == 1) {
+                            $total = $item->weight * 3;
+                        } else if ($item->weight == 0) {
+                            $total = $total-6;
+                        }
+                            break;
+                    }
+                }
+            }
+            return $total;
+        }
+
 
         /**
          * Trigger AI evaluation for FREE_TEXT question responses
