@@ -43,7 +43,7 @@ class MultipleChoiceUniqueAnswer extends QuestionType
 
     public function AnswerQuestion($question_number, $exerciseResult = [], $options = []): string
     {
-        global $langClearChoice;
+        global $langClearChoice, $eurid;
 
         $nbrAnswers = $this->answer_object->selectNbrAnswers();
         $answer_object_ids = range(1, $nbrAnswers);
@@ -69,6 +69,13 @@ class MultipleChoiceUniqueAnswer extends QuestionType
                 </div>";
         }
         $html_content .= "<button class='float-end clearSelect btn btn-outline-secondary mt-0'><i class='fa fa-solid fa-xmark'></i>&nbsp;$langClearChoice</button>";
+        if (isset($eurid)) {
+            $certainty_user_choice = $this->answer_object->get_user_certainty_answer_choice($this->question_id, $eurid);
+        } else {
+            $certainty_user_choice = null;
+        }
+        $html_content .= $this->CertaintyBasedButtons($this->question_id, $certainty_user_choice);
+
         return $html_content;
     }
 

@@ -195,6 +195,10 @@ define('ATTEMPT_PENDING', 2);
 define('ATTEMPT_PAUSED', 3);
 define('ATTEMPT_CANCELED', 4);
 
+// exercise grade method
+define('CALC_GRADE_METHOD_STANDARD', 1);
+define('CALC_GRADE_METHOD_CERTAINTY_BASED', 2);
+
 // Widget Areas
 define('HOME_PAGE_MAIN', 1);
 define('HOME_PAGE_SIDEBAR', 2);

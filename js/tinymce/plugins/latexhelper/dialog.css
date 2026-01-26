@@ -1,0 +1,320 @@
+/**
+ * LaTeX Helper Plugin Styles
+ */
+
+.mce-container-body {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.latexhelper-picker {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    font-family: Manrope, sans-serif;
+    overflow: hidden;
+    min-height: 0;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.latexhelper-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    border-bottom: 1px solid #ddd;
+    background: #f8f9fa;
+    flex-shrink: 0;
+}
+
+.latexhelper-tab {
+    padding: 12px 20px;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    border-bottom: 2px solid transparent;
+    font-weight: 500;
+    font-size: 14px;
+    color: #666;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.latexhelper-tab:hover {
+    background: #e9ecef;
+    color: #333;
+}
+
+.latexhelper-tab.active {
+    color: #2196F3;
+    border-bottom-color: #2196F3;
+    background: #fff;
+    font-weight: 600;
+}
+
+.latexhelper-symbols-container {
+    flex: 1;
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    min-height: 300px;
+    position: relative;
+}
+
+.latexhelper-editor-preview-row {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    border-top: 1px solid #ddd;
+    min-height: 200px;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+}
+
+.latexhelper-tab-content {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 15px;
+    box-sizing: border-box;
+}
+
+.latexhelper-tab-content.active {
+    display: block;
+}
+
+.latexhelper-symbols-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(85px, 1fr));
+    gap: 10px;
+    padding-bottom: 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.latexhelper-symbol-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    cursor: pointer;
+    background: #fff;
+    transition: all 0.2s ease;
+    min-height: 80px;
+    box-sizing: border-box;
+    overflow: visible;
+}
+
+.latexhelper-symbol-item:hover {
+    background: #f0f7ff;
+    border-color: #2196F3;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.latexhelper-symbol-item.selected {
+    background: #e3f2fd;
+    border-color: #2196F3;
+    box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.3);
+}
+
+.latexhelper-symbol {
+    width: 100%;
+    text-align: center;
+    color: #333;
+    overflow: visible;
+    pointer-events: none;
+    margin: 0 !important;
+    padding: 0;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    white-space: normal;
+}
+
+/* MathJax Specific Overrides within the helper */
+.latexhelper-picker mjx-container,
+.latexhelper-picker [class*="mjx-c"],
+.latexhelper-symbol mjx-container,
+.latexhelper-symbol [class*="mjx-c"],
+.latexhelper-preview-content mjx-container,
+.latexhelper-preview-content [class*="mjx-c"] {
+    padding: 0 !important;
+    display: inline-block !important;
+    vertical-align: middle !important;
+    text-align: center !important;
+}
+
+/* Preview specific styles */
+.latexhelper-preview-content mjx-container {
+    margin: 0 auto !important;
+}
+
+.latexhelper-editor-section {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    background: #fcfcfc;
+    border-right: 1px solid #ddd;
+    box-sizing: border-box;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.latexhelper-preview-section {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    background: #fcfcfc;
+    box-sizing: border-box;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.latexhelper-editor-label,
+.latexhelper-preview-label {
+    font-weight: 600;
+    font-size: 13px;
+    color: #444;
+    margin-bottom: 8px;
+    margin-top: 15px;
+    flex-shrink: 0;
+}
+
+.latexhelper-editor-label {
+    margin-top: 0;
+}
+
+.latexhelper-preview-label {
+    margin-top: 0;
+}
+
+.latexhelper-editor {
+    width: 100%;
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-family: Manrope, monospace;
+    font-size: 14px;
+    resize: none;
+    background: #fff;
+    color: #333;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+.latexhelper-editor:focus {
+    outline: none;
+    border-color: #2196F3;
+    box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2);
+}
+
+.latexhelper-preview {
+    flex: 1;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: #fff;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: auto;
+    box-sizing: border-box;
+    min-height: 100px;
+}
+
+.latexhelper-preview-content {
+    color: #000;
+    margin: 0;
+    padding: 0;
+    display: block;
+    width: 100%;
+    text-align: center;
+}
+
+.latexhelper-preview-empty {
+    color: #999;
+    font-style: italic;
+    font-size: 13px;
+}
+
+/* Custom Scrollbars */
+.latexhelper-tab-content::-webkit-scrollbar,
+.latexhelper-editor::-webkit-scrollbar,
+.latexhelper-preview::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+    -webkit-appearance: none;
+}
+
+.latexhelper-tab-content::-webkit-scrollbar-track,
+.latexhelper-editor::-webkit-scrollbar-track,
+.latexhelper-preview::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.latexhelper-tab-content::-webkit-scrollbar-thumb,
+.latexhelper-editor::-webkit-scrollbar-thumb,
+.latexhelper-preview::-webkit-scrollbar-thumb {
+    background: #bbb;
+    border-radius: 4px;
+    border: 2px solid #f1f1f1;
+}
+
+.latexhelper-tab-content::-webkit-scrollbar-thumb:hover,
+.latexhelper-editor::-webkit-scrollbar-thumb:hover,
+.latexhelper-preview::-webkit-scrollbar-thumb:hover {
+    background: #999;
+}
+
+.latexhelper-tab-content,
+.latexhelper-editor,
+.latexhelper-preview {
+    scrollbar-width: thin;
+    scrollbar-color: #bbb #f1f1f1;
+}
+
+@media (max-width: 900px) {
+    .latexhelper-editor-preview-row {
+        flex-direction: column;
+        flex: 1;
+        min-height: 200px;
+    }
+    
+    .latexhelper-symbols-container {
+        border-bottom: 1px solid #ddd;
+        min-height: 150px;
+    }
+    
+    .latexhelper-editor-section {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid #ddd;
+        padding: 15px;
+    }
+    
+    .latexhelper-preview-section {
+        width: 100%;
+        padding: 15px;
+    }
+}
