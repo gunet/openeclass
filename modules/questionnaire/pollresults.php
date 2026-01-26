@@ -292,33 +292,137 @@ if (isset($_GET['from_session_view'])) { //session view
     }
 }
 
-if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COURSE_EVALUATION) {
-    $loopTmp = 0;
-    $pollOptionsArr = [];
-    $gradesArr = [];
-    $MsgGradesArr = [];
-    $minMsg = '';
-    $isEnabledGrade = pollHasGrade($pid);
-    if ($pollOptions != '') {
-        $pollOptionsArr = unserialize($pollOptions);
-    }
-    if (count($pollOptionsArr) > 0) {
-        foreach ($pollOptionsArr as $opt) {
-            $gradesArr[] = $opt['grade'];
+// If the poll has enabled the grade option, display the user's grades.
+$isEnabledGrade = pollHasGrade($pid);
+if ($isEnabledGrade) {
+    $grade_answers = Database::get()->queryArray("SELECT a.aid AS aid, b.weight AS wgt, a.poll_user_record_id AS poll_user_id
+                                FROM poll_user_record c, poll_answer_record a
+                                LEFT JOIN poll_question_answer b
+                                ON a.aid = b.pqaid
+                                WHERE a.qid IN (SELECT pqid FROM poll_question WHERE pid = $pid AND qtype = 1 OR QTYPE = 3)
+                                AND a.poll_user_record_id = c.id
+                                AND (c.email_verification = 1 OR c.email_verification IS NULL)");
+
+    if (count($grade_answers) > 0) {
+        $userGrades = [];
+        $totalUserGrade = 0;
+        $user_ids_arr = [];
+        $pollOptionsArr = [];
+        $gradesArr = [];
+        $MsgGradesArr = [];
+        $minMsg = '';
+        foreach ($grade_answers as $gr) {
+            $userId = Database::get()->querySingle("SELECT `uid` FROM poll_user_record WHERE id = ?d", $gr->poll_user_id)->uid;
+            if (!in_array($userId, $user_ids_arr)) {
+                $totalUserGrade = 0;
+            }
+            $totalUserGrade = $totalUserGrade + $gr->wgt;
+            $userGrades[$userId] = $totalUserGrade;
+            $user_ids_arr[] = $userId;
         }
-        rsort($gradesArr);
-        $minGrade = min($gradesArr);
-        foreach ($gradesArr as $gr) {
+        if ($pollOptions != '') {
+            $pollOptionsArr = unserialize($pollOptions);
+        }
+        if (count($pollOptionsArr) > 0) {
             foreach ($pollOptionsArr as $opt) {
-                if ($opt['grade'] == $gr) {
-                    $MsgGradesArr[$gr] = $opt['message'];
-                }
-                if ($opt['grade'] == $minGrade) {
-                    $minMsg = $opt['message'];
+                $gradesArr[] = $opt['grade'];
+            }
+            rsort($gradesArr);
+            $minGrade = min($gradesArr);
+            foreach ($gradesArr as $gr) {
+                foreach ($pollOptionsArr as $opt) {
+                    if ($opt['grade'] == $gr) {
+                        $MsgGradesArr[$gr] = $opt['message'];
+                    }
+                    if ($opt['grade'] == $minGrade) {
+                        $minMsg = $opt['message'];
+                    }
                 }
             }
         }
+        if (count($MsgGradesArr) > 0 && count($userGrades) > 0) {
+            $tool_content .= "<div class='col-12 mt-4'>";
+            $tool_content .= "<div class='card panelCard border-card-left-default px-lg-4 py-lg-3'>";
+            $tool_content .= "<div class='card-body'>";
+            $tool_content .= "<div class='panel'><div class='panel-group group-section' id='accordion' role='tablist' aria-multiselectable='true'>
+                            <ul class='list-group list-group-flush'>
+                            <li class='list-group-item px-0 bg-transparent'>
+                            <a class='accordion-btn d-flex justify-content-start align-items-start fs-6' role='button' data-bs-toggle='collapse' href='#ugrade' aria-expanded='false' aria-controls='#'>
+                                <span class='fa-solid fa-chevron-down'></span>
+                                $langUserGradesPoll
+                            </a>
+                            <div id='ugrade' class='panel-collapse accordion-collapse collapse border-0 rounded-0' role='tabpanel' data-bs-parent='#accordion'>
+                            <div class='panel-body bg-transparent Neutral-900-cl px-4'>
+                            <ul class='list-group list-group-flush'>";
+            $list_counter = 0;
+            foreach ($userGrades as $user_key => $ugr) {
+                $lowGrade = 0;
+                $userFullName = Database::get()->querySingle("SELECT CONCAT(user.surname, ' ', user.givenname) AS fullname FROM user WHERE id = ?d", $user_key)->fullname;
+                if ($thePoll->anonymized == 1) {
+                    $userFullName = $langUser;
+                }
+                foreach ($MsgGradesArr as $key_grade => $val_msg) {
+                    if ($ugr >= $key_grade) {
+                        $tool_content .= "
+                        <li class='list-group-item element'>
+                            <div class='row row-cols-1 row-cols-md-2 g-1'>
+                                <div class='col-md-3 col-12'>
+                                    <div class='title-default'><strong>$userFullName</strong></div>
+                                </div>
+                                <div class='col-md-9 col-12 title-default-line-height'>
+                                    $val_msg
+                                </div>
+                            </div>
+                        </li>";
+                        $lowGrade++;
+                        break;
+                    }
+                }
+                if ($lowGrade == 0) {
+                    $tool_content .= "
+                    <li class='list-group-item element'>
+                        <div class='row row-cols-1 row-cols-md-2 g-1'>
+                            <div class='col-md-3 col-12'>
+                                <div class='title-default'><strong>$userFullName</strong></div>
+                            </div>
+                            <div class='col-md-9 col-12 title-default-line-height'>
+                                $minMsg
+                            </div>
+                        </div>
+                    </li>";
+                }
+            }
+            $tool_content .= "</ul></div></div></li></ul></div></div></div></div></div>";
+        }
     }
+}
+
+if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COURSE_EVALUATION) {
+    $loopTmp = 0;
+    // $pollOptionsArr = [];
+    // $gradesArr = [];
+    // $MsgGradesArr = [];
+    // $minMsg = '';
+    // if ($pollOptions != '') {
+    //     $pollOptionsArr = unserialize($pollOptions);
+    // }
+    // if (count($pollOptionsArr) > 0) {
+    //     foreach ($pollOptionsArr as $opt) {
+    //         $gradesArr[] = $opt['grade'];
+    //     }
+    //     rsort($gradesArr);
+    //     $minGrade = min($gradesArr);
+    //     foreach ($gradesArr as $gr) {
+    //         foreach ($pollOptionsArr as $opt) {
+    //             if ($opt['grade'] == $gr) {
+    //                 $MsgGradesArr[$gr] = $opt['message'];
+    //             }
+    //             if ($opt['grade'] == $minGrade) {
+    //                 $minMsg = $opt['message'];
+    //             }
+    //         }
+    //     }
+    // }
     foreach ($questions as $theQuestion) {
         $ansExists = Database::get()->querySingle("SELECT arid FROM poll_answer_record WHERE qid = ?d", $theQuestion->pqid);
         if (!$ansExists) {
@@ -397,9 +501,9 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COU
                                 if (!$thePoll->anonymized) {
                                     $answers_table .= "<th>$langStudents</th>";
                                 }
-                                if ($isEnabledGrade) {
-                                 $answers_table .= "<th>$langMessage</th>";
-                                }
+                                // if ($isEnabledGrade) {
+                                //  $answers_table .= "<th>$langMessage</th>";
+                                // }
                             }
                             $answers_table .= "</tr></thead>";
                 foreach ($answers as $answer) {
@@ -511,22 +615,22 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COU
                                     }
                                 }
 
-                    if (count($MsgGradesArr) > 0) {
-                        foreach ($MsgGradesArr as $key_grade => $val_msg) {
-                            if ($answer->wgt >= $key_grade) {
-                                $dis_msg = $val_msg;
-                                break;
-                            }
-                        }
-                    }
-                    if (!isset($dis_msg)) {
-                        $dis_msg = $minMsg;
-                    }
+                    // if (count($MsgGradesArr) > 0) {
+                    //     foreach ($MsgGradesArr as $key_grade => $val_msg) {
+                    //         if ($answer->wgt >= $key_grade) {
+                    //             $dis_msg = $val_msg;
+                    //             break;
+                    //         }
+                    //     }
+                    // }
+                    // if (!isset($dis_msg)) {
+                    //     $dis_msg = $minMsg;
+                    // }
 
                     $answers_table .= "<td class='hidden_names' style='display:none;'><em>" . q($names_str ?? '') . "</em> <a href='#' class='trigger_names' data-type='multiple' id='hide'>$langViewHide</a></td>";
-                    if ($isEnabledGrade) {
-                        $answers_table .= "<td>$dis_msg</td>";
-                    }
+                    // if ($isEnabledGrade) {
+                    //     $answers_table .= "<td>$dis_msg</td>";
+                    // }
                     $answers_table .= "</tr>";
                     unset($names_array);
                     unset($dis_msg);
