@@ -121,6 +121,7 @@ if (!$thePoll) {
     redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
 }
 $PollType = $thePoll->type;
+$pollOptions = !is_null($thePoll->options) ? $thePoll->options : '';
 $default_answer = $thePoll->default_answer;
 
 if (!$is_course_reviewer && !$thePoll->show_results) {
@@ -191,7 +192,7 @@ if (isset($_GET['from_session_view'])) {
                           'level' => 'primary-label',
                           'show' => $is_course_reviewer),
                     array('title' => "$langPollPercentResults ($langDumpPDF)",
-                        'url' => "dumppollresults.php?course=$course_code&amp;pid=$pid&pdf=true",
+                        'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;pid=$pid&amp;format=poll_pdf",
                         'icon' => 'fa-file-pdf',
                         'level' => 'primary-label',
                         'show' => $is_course_reviewer),
@@ -291,8 +292,33 @@ if (isset($_GET['from_session_view'])) { //session view
     }
 }
 
-if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK) {
+if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COURSE_EVALUATION) {
     $loopTmp = 0;
+    $pollOptionsArr = [];
+    $gradesArr = [];
+    $MsgGradesArr = [];
+    $minMsg = '';
+    $isEnabledGrade = pollHasGrade($pid);
+    if ($pollOptions != '') {
+        $pollOptionsArr = unserialize($pollOptions);
+    }
+    if (count($pollOptionsArr) > 0) {
+        foreach ($pollOptionsArr as $opt) {
+            $gradesArr[] = $opt['grade'];
+        }
+        rsort($gradesArr);
+        $minGrade = min($gradesArr);
+        foreach ($gradesArr as $gr) {
+            foreach ($pollOptionsArr as $opt) {
+                if ($opt['grade'] == $gr) {
+                    $MsgGradesArr[$gr] = $opt['message'];
+                }
+                if ($opt['grade'] == $minGrade) {
+                    $minMsg = $opt['message'];
+                }
+            }
+        }
+    }
     foreach ($questions as $theQuestion) {
         $ansExists = Database::get()->querySingle("SELECT arid FROM poll_answer_record WHERE qid = ?d", $theQuestion->pqid);
         if (!$ansExists) {
@@ -302,6 +328,11 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK) {
         if ($theQuestion->qtype == QTYPE_LABEL) {
             $tool_content .= "<div class='col-12 mt-3'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$theQuestion->question_text</span></div></div>";
         } else {
+
+            // Do not display the sub-question if exists.
+            if ($theQuestion->has_sub_question == -1) {
+                continue;
+            }
 
             $totalUserAnswer = total_number_of_users_answer_per_question($theQuestion->pqid);
 
@@ -341,7 +372,7 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK) {
                     $this_chart_data['percentage'][] = 0;
                 }
                 $set_default_answer = false;
-                $answers = Database::get()->queryArray("SELECT a.aid AS aid, MAX(b.answer_text) AS answer_text, count(a.aid) AS count
+                $answers = Database::get()->queryArray("SELECT a.aid AS aid, MAX(b.answer_text) AS answer_text, count(a.aid) AS count, b.weight AS wgt
                             FROM poll_user_record c, poll_answer_record a
                             LEFT JOIN poll_question_answer b
                             ON a.aid = b.pqaid
@@ -365,6 +396,9 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK) {
                                 $answers_table .= "<th>$langPercentage</th>";
                                 if (!$thePoll->anonymized) {
                                     $answers_table .= "<th>$langStudents</th>";
+                                }
+                                if ($isEnabledGrade) {
+                                 $answers_table .= "<th>$langMessage</th>";
                                 }
                             }
                             $answers_table .= "</tr></thead>";
@@ -414,9 +448,57 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK) {
                             $ellipsized_names_str = q(ellipsize($names_str, 60));
                         }
                     }
+
+                    // Display the answers from sub-question if exist.
+                    $subAnswerText = '';
+                    $usersSubAnswer = [];
+                    $TheSubQuestion = Database::get()->querySingle("SELECT sub_qid FROM poll_question_answer WHERE pqaid = ?d", $answer->aid)->sub_qid;
+                    if ($TheSubQuestion > 0) { // exists sub-question
+                        $typeSubQ = Database::get()->querySingle("SELECT qtype FROM poll_question WHERE pqid = ?d", $TheSubQuestion)->qtype;
+                        if ($typeSubQ == QTYPE_SINGLE || $typeSubQ == QTYPE_MULTIPLE) {
+                            $predSubAnswers = Database::get()->queryArray("SELECT pqaid FROM poll_question_answer WHERE pqid = ?d", $TheSubQuestion);
+                            foreach ($predSubAnswers as $pred_an) {
+                                $u_ids = [];
+                                $pu_ids = Database::get()->queryArray("SELECT `uid` FROM poll_user_record
+                                                                       LEFT JOIN poll_answer_record ON poll_user_record.id=poll_answer_record.poll_user_record_id 
+                                                                       WHERE poll_answer_record.qid = ?d AND poll_answer_record.aid = ?d", $TheSubQuestion, $pred_an->pqaid);
+                                foreach ($pu_ids as $u) {
+                                    $u_ids[] = $u->uid;
+                                }
+                                $usersSubAnswer[$pred_an->pqaid] = $u_ids;
+                            }
+                            foreach ($usersSubAnswer as $pqaid => $u) {
+                                if ($u) {
+                                    $uNames = [];
+                                    $an_text = Database::get()->querySingle("SELECT answer_text FROM poll_question_answer WHERE pqaid = ?d", $pqaid)->answer_text;
+                                    foreach ($u as $usr) {
+                                        $uNames[] = Database::get()->querySingle("SELECT CONCAT(user.surname, ' ', user.givenname) AS fullname FROM user WHERE id = ?d", $usr)->fullname;
+                                    }
+                                    $uNames_str = implode(',', $uNames);
+                                    $subAnswerText .= "<div><strong><u><small>$an_text</small></u></strong></div>";
+                                    if ($thePoll->anonymized != 1) {
+                                        $subAnswerText .= "<div><small>[" . $uNames_str . "]</small></div>";
+                                    }
+                                }
+                            }
+                        } elseif ($typeSubQ == QTYPE_FILL) {
+                            $res = Database::get()->queryArray("SELECT poll_user_record_id,answer_text FROM poll_answer_record WHERE qid = ?d", $TheSubQuestion);
+                            foreach ($res as $an) {
+                                $uName = Database::get()->querySingle("SELECT CONCAT(user.surname, ' ', user.givenname) AS fullname FROM user 
+                                                                       LEFT JOIN poll_user_record ON user.id=poll_user_record.uid 
+                                                                       WHERE poll_user_record.id = ?d", $an->poll_user_record_id)->fullname;
+                                
+                                if ($thePoll->anonymized != 1) {
+                                    $subAnswerText .= "<div><strong><u><small>$uName</small></u></strong></div>";
+                                }
+                                $subAnswerText .= "<div><small>[" . $an->answer_text . "]</small></div>";
+                            }
+                        }
+                    }
+
                     $answers_table .= "
                         <tr>
-                                <td>$q_answer</td>";
+                                <td>$q_answer $subAnswerText</td>";
                                 if (($totalUserAnswer > 1 && isset($_GET['from_session_view'])) or (!isset($_GET['from_session_view']))) {
                                     $answers_table .= "<td>$answer->count</td>";
                                     $answers_table .= "<td>$percentage%</td>";
@@ -429,8 +511,25 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK) {
                                     }
                                 }
 
-                    $answers_table .= "<td class='hidden_names' style='display:none;'><em>" . q($names_str ?? '') . "</em> <a href='#' class='trigger_names' data-type='multiple' id='hide'>$langViewHide</a></td></tr>";
+                    if (count($MsgGradesArr) > 0) {
+                        foreach ($MsgGradesArr as $key_grade => $val_msg) {
+                            if ($answer->wgt >= $key_grade) {
+                                $dis_msg = $val_msg;
+                                break;
+                            }
+                        }
+                    }
+                    if (!isset($dis_msg)) {
+                        $dis_msg = $minMsg;
+                    }
+
+                    $answers_table .= "<td class='hidden_names' style='display:none;'><em>" . q($names_str ?? '') . "</em> <a href='#' class='trigger_names' data-type='multiple' id='hide'>$langViewHide</a></td>";
+                    if ($isEnabledGrade) {
+                        $answers_table .= "<td>$dis_msg</td>";
+                    }
+                    $answers_table .= "</tr>";
                     unset($names_array);
+                    unset($dis_msg);
                 }
                 $answers_table .= "</table></div><br>";
                 $tool_content .= "<script type = 'text/javascript'>pollChartData.push(".json_encode($this_chart_data).");</script>";
@@ -442,6 +541,9 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK) {
                 $tool_content .= $answers_table;
                 $chart_counter++;
             } elseif ($theQuestion->qtype == QTYPE_SCALE) {
+
+                $answerScale = Database::get()->querySingle("SELECT answer_scale FROM poll_question WHERE pqid = ?d", $theQuestion->pqid)->answer_scale;
+                $arrAnsScale = explode('|', $answerScale);
 
                 $sql_participants_a = '';
                 $sql_participants_b = '';
@@ -519,7 +621,7 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK) {
                     }
                     $answers_table .= "
                                 <tr>
-                                    <td>".q($answer->answer_text)."</td>";
+                                    <td>" . $arrAnsScale[$answer->answer_text-1] ?? q($answer->answer_text) . "</td>";
                             if (($totalUserAnswer > 1 && isset($_GET['from_session_view'])) or (!isset($_GET['from_session_view']))) {
                 $answers_table .= " <td>$answer->count</td>
                                     <td>$percentage%</td>"
@@ -548,7 +650,7 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK) {
                     $tool_content .= $answers_table;
                 }
                 $chart_counter++;
-            } elseif ($theQuestion->qtype == QTYPE_FILL) {
+            } elseif ($theQuestion->qtype == QTYPE_FILL || $theQuestion->qtype == QTYPE_DATETIME || $theQuestion->qtype == QTYPE_SHORT) {
 
                 $sql_participants_a = '';
                 $sql_participants_c = '';
@@ -732,7 +834,9 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK) {
 if (isset($_GET['format']) and $_GET['format'] == 'pdf') { // pdf format
     $sid = $_GET['session'];
     pdf_session_poll_output($sid);
-}else{
+} elseif (isset($_GET['format']) and $_GET['format'] == 'poll_pdf') {
+    pdf_poll_output();
+} else{
     // display page
     draw($tool_content, 2, null, $head_content);
 }
@@ -740,7 +844,90 @@ if (isset($_GET['format']) and $_GET['format'] == 'pdf') { // pdf format
 
 
 
+/**
+ * @brief output to pdf file
+ * @return void
+ * @throws \Mpdf\MpdfException
+ */
+function pdf_poll_output() {
+    global $tool_content, $currentCourseName, $webDir, $course_id, $course_code;
 
+    $pdf_content = "
+        <!DOCTYPE html>
+        <html lang='el'>
+        <head>
+          <meta charset='utf-8'>
+          <title>" . q("$currentCourseName") . "</title>
+          <style>
+            * { font-family: 'opensans'; }
+            body { font-family: 'opensans'; font-size: 10pt; }
+            small, .small { font-size: 8pt; }
+            h1, h2, h3, h4 { font-family: 'roboto'; margin: .8em 0 0; }
+            h1 { font-size: 16pt; }
+            h2 { font-size: 12pt; border-bottom: 1px solid black; }
+            h3 { font-size: 10pt; color: #158; border-bottom: 1px solid #158; }
+            th { text-align: left; border-bottom: 1px solid #999; }
+            td { text-align: left; }
+            .ButtonsContent{ display: none; }
+            .hidden_names{ display: none; }
+            #hide{ display: none; }
+            em{ display: none; }
+            .hidden-element { display: none; }
+            td ul { list-style: none !important; padding-left: 0 !important; margin-left: 0 !important; }
+            ul { list-style: none !important; padding-left: 0 !important; margin-left: 0 !important; }
+            li { list-style: none !important; }
+            .card-user-answers { background-color: #eeeeee; padding: 0px 25px 20px 25px; margin-top: 15px; margin-bottom: 10px;}
+          </style>
+        </head>
+        <body>
+        <h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>";
+
+    $pdf_content .= $tool_content;
+
+    $pdf_content .= "</body></html>";
+
+    $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
+    $fontDirs = $defaultConfig['fontDir'];
+    $defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
+    $fontData = $defaultFontConfig['fontdata'];
+
+    $mpdf = new Mpdf\Mpdf([
+        'margin_top' => 63,     // approx 200px
+        'margin_bottom' => 63,  // approx 200px
+        'tempDir' => _MPDF_TEMP_PATH,
+        'fontDir' => array_merge($fontDirs, [ $webDir . '/template/modern/fonts' ]),
+        'fontdata' => $fontData + [
+                'opensans' => [
+                    'R' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-regular.ttf',
+                    'B' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-700.ttf',
+                    'I' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-italic.ttf',
+                    'BI' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-700italic.ttf'
+                ],
+                'roboto' => [
+                    'R' => 'roboto-v15-latin_greek_cyrillic_greek-ext-regular.ttf',
+                    'I' => 'roboto-v15-latin_greek_cyrillic_greek-ext-italic.ttf',
+                ]
+            ]
+    ]);
+
+    $mpdf->SetHTMLHeader(get_platform_logo());
+    $footerHtml = '
+    <div>
+        <table width="100%" style="border: none;">
+            <tr>
+                <td style="text-align: left;">{DATE j-n-Y}</td>
+                <td style="text-align: right;">{PAGENO} / {nb}</td>
+            </tr>
+        </table>
+    </div>
+    ' . get_platform_logo('','footer') . '';
+    $mpdf->SetHTMLFooter($footerHtml);
+    $mpdf->SetCreator(course_id_to_prof($course_id));
+    $mpdf->SetAuthor(course_id_to_prof($course_id));
+    $mpdf->WriteHTML($pdf_content);
+    $mpdf->Output("$course_code poll_results.pdf", 'I'); // 'D' or 'I' for download / inline display
+    exit;
+}
 
 /**
  * @brief output to pdf file

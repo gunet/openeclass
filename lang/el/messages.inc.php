@@ -1952,6 +1952,7 @@ $langCreateModif = "Δημιουργία / Αλλαγή των ερωτήσεω�
 $langSub = "Υπότιτλος";
 $langNewQu = "Νέα ερώτηση";
 $langNewLa = "Νέα ετικέτα/σχόλιο";
+$langAddPageBreak = "Προσθήκη αλλαγής σελίδας";
 $langTrue = "Σωστό";
 $langMoreAnswers = "+απάντ.";
 $langLessAnswers = "-απάντ.";
@@ -2148,6 +2149,7 @@ $langListenToRecordingAudio = "Ακούστε την ηχογραφημένη α
 $langFileUploadingOkReplaceWithNew = "Το αρχείο αποθηκεύτηκε με επιτυχία. Σε περίπτωση νέας προσπάθειας στην άσκηση, αν απαντήσετε την ίδια ερώτηση τότε το παλιό αρχείο θα αντικατασταθεί με το καινούριο.";
 $langScale = "Κλίμακας";
 $langFalse = "Λάθος";
+$langShortAnswer = "Σύντομη απάντηση";
 $langAddPicture = "Προσθήκη εικόνας";
 $langReplacePicture = "Αντικατάσταση της εικόνας";
 $langDeletePicture = "Διαγραφή της εικόνας";
@@ -3570,6 +3572,8 @@ $langLimeSurvey = "Lime Survey";
 $langPollNoQuestions = "Στο ερωτηματολόγιο δεν έχουν οριστεί ερωτήσεις!";
 $langActivateParticipation = "Ενεργοποίηση Παρουσιολογίου";
 $langQuickSurvey = "Γρήγορη ερώτηση";
+$langCourseEvaluationSurvey = "Αξιολόγηση μαθήματος";
+$langPageBreak = "Αλλαγή σελίδας";
 
 
 //COLLES survey
@@ -3673,6 +3677,14 @@ $langConnected = "Συνδεδεμένα";
 $langSeparated = "Χωρισμένα";
 $langBothWays = "Και με τους 2 τρόπους";
 
+// Course evaluation poll
+$lang_answer_scale_evaluation = "ΚΑΘΟΛΟΥ|ΠΟΛΥ ΛΙΓΟ|ΛΙΓΟ|ΠΟΛΥ|ΠΑΡΑ ΠΟΛΥ";
+$qCourseEvaluation_1 = "Πόσο ενδιαφέρον ήταν το μάθημα για εσάς;";
+$qCourseEvaluation_2 = "Πόσο κατανοητό και εύκολα προσβάσιμο ήταν το περιεχόμενο του μαθήματος;";
+$qCourseEvaluation_3 = "Πόσο χρήσιμες ήταν οι εκπαιδευτικές πηγές και το υλικό που παρέχονται κατά τη διάρκεια του μαθήματος;";
+$qCourseEvaluation_4 = "Πόσο θετικά επηρέασε η διδασκαλία την κατανόηση και το ενδιαφέρον σας για το αντικείμενο;";
+$qCourseEvaluation_5 = "Πόσο συμβάλλει το μάθημα στην επαγγελματική ή ακαδημαϊκή σας ανάπτυξη;";
+
 // polls
 $langPollsActive = "Ενεργά Ερωτηματολόγια";
 $langPollsInactive = "Ανενεργά Ερωτηματολόγια";
@@ -3681,6 +3693,7 @@ $langPollEnd = "Λήξη";
 $langPollEnded = "και τελείωσε την";
 $langPollOperations = "Λειτουργίες";
 $langPollAddAnswer = "Προσθήκη απαντήσεων";
+$langPollAddMsg = "Προσθήκη μηνύματος";
 $langPollMC = "Πολλαπλής Επιλογής";
 $langPollFillText = "Συμπληρώστε το κενό";
 $langPollMoreAnswers = "+";
@@ -3752,6 +3765,10 @@ $langPreviousQuestion = "Προηγούμενη";
 $langNextQuestion = "Επόμενη";
 $langEnableRequiredAnswer = "Υποχρεωτική απάντηση σε κάθε ερώτηση";
 $langGenQrCode = "Δημιουργία QR code";
+$langRequireAnswer = "Υποχρεωτική απάντηση";
+$langQuestionsRequireAnswers = "Παρακαλείσθε να συμπληρώσετε όλες τις υποχρεωτικές ερωτήσεις που έχουν επισημανθεί με κόκκινο περίγραμμα καθώς διαπιστώθηκε ότι μία ή περισσότερες από αυτές δεν έχουν απαντηθεί.";
+$langAddSubQuestion = "Προσθήκη υπο-ερώτησης σε συγκεκριμένη προκαθορισμένη απάντηση";
+$langSubQuestionExists = "Περιλαμβάνεται υπό-ερώτηση";
 
 /* * **********************************************************
  * registration.php
