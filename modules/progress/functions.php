@@ -3944,7 +3944,7 @@ function display_users_points_game_progress ($points_game_id) {
                                         LEFT JOIN user_points_game_points upp
                                             ON upp.user = u.id
                                             AND upp.points_game = ?d
-                                        WHERE cu.course_id = ?d AND cu.tutor = 0 AND cu.editor = 0 AND cu.course_reviewer = 0 AND cu.reviewer = 0
+                                        WHERE cu.course_id = ?d AND cu.editor = 0 AND cu.course_reviewer = 0 AND cu.reviewer = 0
                                         ORDER BY
                                             CASE
                                                 WHEN upp.total_points IS NULL OR upp.total_points = 0 THEN 1
@@ -4216,7 +4216,7 @@ function display_user_points_game_details($points_game_id, $user_id) {
 
                         $tool_content.= "<tr>
                                             <td>".$activity."</td>
-                                            <td>".$activity_type."<td>
+                                            <td>".$activity_type."</td>
                                             <td>".$user_criterion->points."</td>
                                             <td>".format_locale_date(strtotime($user_criterion->created))."</td>
                                         </tr>";
