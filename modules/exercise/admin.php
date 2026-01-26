@@ -144,14 +144,14 @@ if ($is_editor) {
             );
             include 'statement_admin.inc.php';
         }
-    } elseif (isset($_GET['importIMSQTI'])) {
+    } elseif (isset($_GET['importIMSQTI'])) { // import from QTI format
         $pageName = $langNewQu;
         $navigation[] = array(
             'url' => (isset($exerciseId) ? "admin.php?course=$course_code&exerciseId=$exerciseId" : "question_pool.php?course=$course_code&exerciseId=0"),
             'name' => (isset($exerciseId) ? $langExerciseManagement : $langQuestionPool)
         );
         include 'imsqti.inc.php';
-    } elseif (isset($_GET['importAiken'])) {
+    } elseif (isset($_GET['importAiken'])) { // import from aiken format
         $navigation[] = array(
             'url' => (isset($exerciseId) ? "admin.php?course=$course_code&exerciseId=$exerciseId" : "question_pool.php?course=$course_code&exerciseId=0"),
             'name' => (isset($exerciseId) ? $langExerciseManagement : $langQuestionPool)
@@ -160,20 +160,17 @@ if ($is_editor) {
     } elseif (isset($_GET['preview'])) { // exercise preview
             $toolName = $langSee;
             display_exercise($exerciseId);
-    } else {
+    } else if (isset($_GET['NewExercise']) || isset($_GET['modifyExercise'])) { // exercise management
         if (isset($_GET['NewExercise'])) {
             $pageName = $langNewEx;
         } elseif (isset($_GET['modifyExercise'])) {
             $pageName = $langInfoExercise;
             $navigation[] = array('url' => "admin.php?course=$course_code&exerciseId=$exerciseId", 'name' => $langExerciseManagement);
-        } else {
-            $pageName = $langExercise;
         }
         include 'exercise_admin.inc.php';
-        if (!isset($_GET['NewExercise']) && !isset($_GET['modifyExercise'])) {
-            $pageName = $langQuestions;
-            include 'question_list_admin.inc.php';
-        }
+    } else { // question list
+        $pageName = $langQuestions;
+        include 'question_list_admin.inc.php';
     }
 } else if ($is_course_reviewer) {
     if (isset($_GET['preview'])) { // exercise preview
