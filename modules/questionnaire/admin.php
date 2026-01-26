@@ -1152,7 +1152,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                               <input class='form-control mt-0 w-75' type='text' name='answers[]' value='' placeholder='$langAnswer'>";
                 if ($isEnabledGrade && !$isSubQuestion) {
             $tool_content .= "<input class='form-control mt-0' type='text' name='grades[]' value='' placeholder='$langGradebookGrade'>";
-                }     
+                }
             $tool_content .= "<div class='form-control-static input-group-text h-40px bg-white input-border-color'>
                             " . icon('fa-xmark Accent-200-cl', $langDelete, '#', ' class="del_btn"') . "
                               </div>
@@ -1258,7 +1258,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 // Number of columbs should be bigger or same than possible questions in db.
                 $countQuestionsAns = database::get()->querySingle("SELECT COUNT(*) as total FROM poll_question_answer
                                                                     WHERE pqid = ?d", $question_id)->total;
-                                                                
+
                 if ($q_column < $countQuestionsAns) {
                     Session::flash('message',$langNumberColumnsSmallerThanQ);
                     Session::flash('alert-class', 'alert-warning');
@@ -1345,7 +1345,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                     <div class='table-responsive'>
                         <table class='table-default'>
                             <thead><tr>";
-                                
+
                                 if (count($all_table_questions) > 0) {
                                     foreach ($all_table_questions as $sub_q => $an_text) {
                                         $colCounter++;
@@ -1358,7 +1358,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                                             </th>";
                                     }
                                 }
-                                
+
                                 for ($i = 1; $i <= $q_column; $i++) {
                                     if (!in_array($i, $qAnswers) && count($all_table_questions) < $q_column) {
                                         $colCounter++;
@@ -1633,7 +1633,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             array('title' => $langAddPageBreak,
                   'level' => 'primary-label',
                   'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&pid=$pid&pageBreakOn=yes",
-                  'icon' => 'fa-reqular fa-square-plus',
+                  'icon' => 'fa-regular fa-file',
                   'button-class' => 'btn-success',
                   'show' => (count($questions) > 1))
             ),false);
@@ -1687,7 +1687,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                                             <p>$RequiredQuestionHtml";
                                             if ($question->qtype != QTYPE_LABEL) {
                                                 if ($question->question_text == '--- Page Break ---') {
-                                                    $tool_content .= "<strong>$question->question_text</strong>";
+                                                    $tool_content .= "<strong>$langPageBreak</strong>";
                                                 } else {
                                                     $tool_content .= q($question->question_text) . "<br>" . $typeText;
                                                 }

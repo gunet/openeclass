@@ -3573,6 +3573,7 @@ $langPollNoQuestions = "Στο ερωτηματολόγιο δεν έχουν ο
 $langActivateParticipation = "Ενεργοποίηση Παρουσιολογίου";
 $langQuickSurvey = "Γρήγορη ερώτηση";
 $langCourseEvaluationSurvey = "Αξιολόγηση μαθήματος";
+$langPageBreak = "Αλλαγή σελίδας";
 
 
 //COLLES survey

@@ -3559,6 +3559,7 @@ function upgrade_to_4_2($tbl_options) : void {
  * @return void
  */
 function upgrade_to_4_3($tbl_options) : void {
+
     if (!DBHelper::fieldExists('poll_question', 'page')) {
         Database::get()->query("ALTER TABLE poll_question ADD `page` INT NOT NULL DEFAULT 0");
     }
@@ -3571,12 +3572,12 @@ function upgrade_to_4_3($tbl_options) : void {
         Database::get()->query("ALTER TABLE poll_question ADD `total_weight` FLOAT NULL");
     }
 
-    if (!DBHelper::fieldExists('poll_question_answer', 'weight')) {
-        Database::get()->query("ALTER TABLE poll_question_answer ADD `weight` FLOAT NULL");
-    }
-
     if (!DBHelper::fieldExists('poll_question', 'has_sub_question')) {
         Database::get()->query("ALTER TABLE poll_question ADD `has_sub_question` INT NOT NULL DEFAULT 0");
+    }
+
+    if (!DBHelper::fieldExists('poll_question_answer', 'weight')) {
+        Database::get()->query("ALTER TABLE poll_question_answer ADD `weight` FLOAT NULL");
     }
 
     if (!DBHelper::fieldExists('poll_question_answer', 'sub_qid')) {
