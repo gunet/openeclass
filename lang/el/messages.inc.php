@@ -1344,6 +1344,7 @@ $langVideoText = "Παράδειγμα ενός αρχείου RealVideo. Μπο
 $langGoogle = "Μηχανή αναζήτησης";
 $langIntroductionText = "Εισαγωγικό κείμενο του $langsOfCourse. Αντικαταστήστε το με το δικό σας, κάνοντας κλίκ στην <strong>Αλλαγή</strong>.";
 $langJustCreated = "Μόλις δημιουργήσατε με επιτυχία το $langsCourse με τίτλο ";
+$langCourseCreated = "Το $langsCourse δημιουργήθηκε με επιτυχία!";
 $langCreateCourseNotAllowedNode = "Επιλέξατε μη επιτρεπτές $langsFaculties. Παρακαλώ ξαναπροσπαθήστε.";
 $langUploadRecAudio = "Ηχογράφηση";
 $langUploadRecVideo = "Βιντεοσκόπηση";
@@ -1671,7 +1672,7 @@ $langAllGroups = "Όλες οι ομάδες";
 $langAllGroupsWithoutCategory = "Ομάδες που δεν ανήκουν σε κατηγορία";
 
 //neos odhgos dhmiourgias mathimaton
-$langEnterMetadata = "Μπορείτε να αλλάξετε τις ρυθμίσεις του $langsOfCourse μέσα από τη 'Διαχείριση $langOfCourse'";
+$langEnterMetadata = "Μπορείτε να αλλάξετε τις ρυθμίσεις του $langsOfCourse κάνοντας κλικ στο 'Διαχείριση $langOfCourse'";
 $langCreateCourse = "Οδηγός δημιουργίας $langsOfCourse";
 $langCreateCourseStep = "Βήμα";
 $langCreateCourseStep2 = "από";
@@ -2084,8 +2085,8 @@ $langQuestionPoolPurgeSuccess = "Η διαγραφή των αχρησιμοπο
 $langShuffleQuestions = "Ανακάτεμα όλων των ερωτήσεων";
 $langClear = 'Εκκαθάριση';
 $langClearChoice = 'Εκκαθάριση επιλογής';
-$langExerciseFeedback = "Μήνυμα ολοκλήρωσης";
-$langExerciseFeedbackInfo = "εμφανίζεται μετά την ολοκλήρωση της άσκησης";
+$langEndMessage = "Μήνυμα ολοκλήρωσης";
+$langEndMessageInfo = "εμφανίζεται μετά την ολοκλήρωση της άσκησης";
 $langExercisePreventCopy = 'Αποτροπή αντιγραφής κειμένου';
 $langExercisePreventCopyExplanation = 'Αποτροπή αντιγραφής και επικόλλησης κειμένου από την οθόνη κατά την εκτέλεση της άσκησης';
 $langStricterExamRestriction = "Αυστηρός περιορισμός";

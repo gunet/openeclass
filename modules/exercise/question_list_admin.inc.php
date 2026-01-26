@@ -20,6 +20,7 @@
 /**
  * @file question_list_admin.inc.php
  */
+require_once 'modules/tags/moduleElement.class.php';
 
 // Check if AI functionality is available
 require_once 'include/lib/ai/services/AIQuestionBankService.php';
@@ -428,9 +429,176 @@ if ($objExercise->hasQuestionListWithRandomCriteria()) {
     $disabled = ' disabled';
 }
 
+// exercise info
+$displayResults = $objExercise->selectResults();
+$displayScore = $objExercise->selectScore();
+$exerciseAssignToSpecific = $objExercise->selectAssignToSpecific();
+$exerciseTitle = $objExercise->selectTitle();
+$exerciseDescription = $objExercise->selectDescription();
+$exerciseType = $objExercise->selectType();
+$exerciseStartDate = $objExercise->selectStartDate();
+if (is_null($exerciseStartDate)) {
+    $exerciseStartDate = '';
+} else {
+    $startDateTime = DateTime::createFromFormat('Y-m-d H:i:s', $exerciseStartDate);
+    $exerciseStartDate = $startDateTime->format('d-m-Y H:i');
+}
+$exerciseEndDate = $objExercise->selectEndDate();
+if (is_null($exerciseEndDate)) {
+    $exerciseEndDate = '';
+} else {
+    $endDateTime = DateTime::createFromFormat('Y-m-d H:i:s', $exerciseEndDate);
+    $exerciseEndDate = $endDateTime->format('d-m-Y H:i');
+}
+$enableStartDate = ($exerciseStartDate ? 1 : 0);
+$enableEndDate = ($exerciseEndDate ? 1 : 0);
+$exerciseTimeConstraint = $objExercise->selectTimeConstraint();
+$exerciseAttemptsAllowed = $objExercise->selectAttemptsAllowed();
+$exerciseTempSave = $objExercise->selectTempSave();
+
+switch ($displayResults) {
+    case 0:
+        $disp_results_message = $langAnswersNotDisp;
+        break;
+    case 1:
+        $disp_results_message = $langAnswersDisp;
+        break;
+    case 3:
+        $disp_results_message = $langAnswersDispLastAttempt;
+        break;
+    case 4:
+        $disp_results_message = $langAnswersDispEndDate;
+        break;
+}
+switch ($displayScore) {
+    case 0:
+        $disp_score_message = $langScoreNotDisp;
+        break;
+    case 1:
+        $disp_score_message = $langScoreDisp;
+        break;
+    case 3:
+        $disp_score_message = $langScoreDispLastAttempt;
+        break;
+    case 4:
+        $disp_score_message = $langScoreDispEndDate;
+        break;
+}
+switch ($exerciseAssignToSpecific) {
+    case 1: $assign_to_users_message = $langWorkToUser;
+        break;
+    case 2: $assign_to_users_message = $langWorkToGroup;
+        break;
+}
+
+if ($exerciseType == MULTIPLE_PAGE_TYPE) {
+    $exerciseType = $langSequentialExercise;
+} elseif ($exerciseType == ONE_WAY_TYPE) {
+    $exerciseType = $langOneWayExercise;
+} else {
+    $exerciseType = $langSimpleExercise;
+}
+
+$moduleTag = new ModuleElement($exerciseId);
 
 $tool_content .= "<div>";
+$tool_content .= action_bar([
+    [ 'title' => $langBack,
+        'url' => "index.php?course=$course_code",
+        'icon' => 'fa-reply',
+        'level' => 'primary' ],
+    [ 'title' => $langExerciseExecute,
+        'url' => "exercise_submit.php?course=$course_code&amp;exerciseId=$exerciseId",
+        'icon' => 'fa-play-circle',
+        'level' => 'primary',
+        'button-class' => 'btn-danger' ],
+    [ 'title' => $langCourseInfo,
+        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId&amp;modifyExercise=yes",
+        'icon' => 'fa-edit',
+        'level' => 'primary',
+        'button-class' => 'btn btn-success' ]
+]);
+$tool_content .= "</div>";
 
+$exerciseDescription = trim($exerciseDescription);
+if ($exerciseDescription !== '') {
+    $exerciseDescription = "<div class='col-sm-12'>" .
+        standard_text_escape($exerciseDescription) . '</div><hr>';
+}
+
+$startParts = explode(' ', $exerciseStartDate);
+$endParts = explode(' ', $exerciseEndDate);
+if ($exerciseStartDate and $exerciseEndDate) {
+    $startWeekDay = $langDay_of_weekNames['long'][$startDateTime->format('w')];
+    $periodLabel = "$langExercisePeriod:";
+    if ($startParts[0] == $endParts[0]) { // start and end on same date
+        $timeDuration = format_time_duration($endDateTime->getTimestamp() - $startDateTime->getTimestamp());
+        $periodInfo = "$startWeekDay, $startParts[0] $startParts[1] &ndash; $endParts[1] <small>($timeDuration)</small>";
+    } else {
+        $endWeekDay = $langDay_of_weekNames['long'][$endDateTime->format('w')];
+        $periodInfo = "$startWeekDay, $exerciseStartDate &ndash; $endWeekDay, $exerciseEndDate";
+    }
+} elseif ($exerciseStartDate) {
+    $periodLabel = "<span class='text-success'>$langStart:</span>";
+    $periodInfo = $langDay_of_weekNames['long'][$startDateTime->format('w')] . ', ' . $exerciseStartDate;
+} elseif ($exerciseEndDate) {
+    $periodLabel = "<span class='text-danger'>$langFinish:</span>";
+    $periodInfo = $langDay_of_weekNames['long'][$endDateTime->format('w')] . ', ' . $exerciseEndDate;
+} else {
+    $periodLabel = null;
+}
+$period = $periodLabel? "<div class='col-12'>$periodLabel <b>$periodInfo</b></div>": '';
+
+$tool_content .= "
+    <div class='col-12 mb-4'>
+        <div class='card panelCard border-card-left-default px-3 py-2 h-100'>
+            <div class='card-header border-0 d-flex justify-content-between align-items-center'>
+                <h3>" . q($exerciseTitle) . "</h3>
+            </div>
+            <div class='card-body'>
+                <div class='row row-cols-1 g-3'>
+                    $exerciseDescription
+                    $period
+                    <div class='col-sm-12'>
+                        $exerciseType
+                    </div>";
+
+if ($exerciseTempSave == 1) {
+    $tool_content .= "<div class='col-12 '><b>$langTemporarySave:</b> $langYes</div>";
+}
+if ($exerciseTimeConstraint > 0) {
+    if ($exerciseTimeConstraint == 1) {
+        $langExerciseConstrainUnit = $langminute;
+    }
+    $tool_content .= "<div class='col-12 '>$langExerciseConstrain: <b>$exerciseTimeConstraint $langExerciseConstrainUnit</b></div>";
+}
+if ($exerciseAttemptsAllowed > 0) {
+    $tool_content .= "<div class='col-12 '>$langExerciseAttemptsAllowed: <b>$exerciseAttemptsAllowed $langExerciseAttemptsAllowedUnit</b></div>";
+}
+
+$tool_content .= "
+                    <div class='col-sm-12 '>$disp_results_message</div>
+                    <div class='col-sm-12 '>$disp_score_message</div>";
+
+if ($exerciseAssignToSpecific > 0) {
+    $tool_content .= "<div class='col-sm-12 '>$langWorkAssignTo: <b>$assign_to_users_message</b></div>";
+}
+
+$tags_list = $moduleTag->showTags();
+if ($tags_list) {
+    $tool_content .= "
+                    <div class='col-sm-12 '>
+                        $langTags: $tags_list
+                    </div>";
+}
+$tool_content .= "
+                </div>
+            </div>
+        </div></div>";
+
+
+
+$tool_content .= "<div>";
     // Build action bar buttons array
     $actionBarButtons = array(
         array('title' => $langNewQu,
@@ -466,7 +634,8 @@ $tool_content .= "<div>";
         );
     }
 
-    $tool_content .= action_bar($actionBarButtons, false);
+$pageName = $toolName = '';
+$tool_content .= action_bar($actionBarButtons, false);
 $tool_content .= "</div>";
 
 if ($nbrQuestions) {
