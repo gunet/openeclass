@@ -617,6 +617,7 @@ if (isset($display) and $display) {
     } else {
         check_user_details($uid); // security check
         if (isset($element_id)) {
+            check_element_enabled($element, $element_id);
             if ($element == 'points_game') {
                 display_activities($element, $element_id);
             } else {

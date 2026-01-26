@@ -1009,6 +1009,20 @@ function check_user_details($uid) {
 }
 
 /**
+ * @brief check if we are trying to access a disabled gamification element
+ * @param type element
+ * @param type element_id
+ */
+function check_element_enabled($element, $element_id) {
+    global $course_id;
+
+    $sql = Database::get()->querySingle("SELECT count(id) as cnt FROM $element WHERE course_id = ?d and id = ?d AND active = ?d", $course_id, $element_id, 1);
+    if ($sql->cnt == 0) {
+        redirect_to_home_page();
+    }
+}
+
+/**
  * @brief check if certificate / badge is active
  * @param type $element
  * @param type $element_id
