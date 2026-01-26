@@ -3905,11 +3905,11 @@ function student_view_progress() {
                                             $current_level
                                         </div>
                                         <div class='col-md-4 col-12 d-flex justify-content-center align-items-center mt-md-0 mt-3'>
-                                            <a href='index.php?course=$course_code&amp;points_game_id=$points_game->id&amp;u=$uid'>" . ellipsize($points_game->title, 40) . "</a>
+                                            <a href='index.php?course=$course_code&amp;points_game_id=$points_game->id'>" . ellipsize($points_game->title, 40) . "</a>
                                         </div>
                                         <div class='col-md-4 col-12 mt-md-0 mt-3'>
                                             <div class='small fw-semibold text-primary text-center'>
-                                                ".$user_progress['current_points']." pts
+                                            <a href='index.php?course=$course_code&amp;points_game_id=$points_game->id&amp;u=$uid'>".$user_progress['current_points']." pts</a>
                                             </div>
                                             <div class='progress progress-line'>
                                                 <div class='progress-line-bar' role='progressbar' style='width: ".$user_progress['progress_percentage']."%' aria-valuenow='".$user_progress['progress_percentage']."' aria-valuemin='0' aria-valuemax='100'>".$user_progress['progress_percentage']."%</div>

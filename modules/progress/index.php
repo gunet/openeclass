@@ -617,9 +617,13 @@ if (isset($display) and $display) {
     } else {
         check_user_details($uid); // security check
         if (isset($element_id)) {
-            check_element_enabled($element, $element_id);
+            check_element_enabled($element, $element_id); //security check
             if ($element == 'points_game') {
-                display_activities($element, $element_id);
+                if (isset($_GET['u'])) {
+                    display_user_points_game_details($element_id, $_GET['u']);
+                } else {
+                    display_activities($element, $element_id);
+                }
             } else {
                 $certificate_expiration_date = get_cert_expiration_day($element, $element_id); // security check
                 if (!is_null($certificate_expiration_date) and $certificate_expiration_date < date('Y-m-d H:i:s')) {
