@@ -347,7 +347,7 @@
 
                         <div class='col-12  @if($dialogBox or $metaDataBox) mt-4 @endif'>
 
-                            <div class='d-flex justify-content-between gap-lg-5 gap-3 flex-wrap'>
+                            <div class='d-flex justify-content-between gap-lg-5 gap-3 flex-wrap' aria-label="{{ trans('langNavigationInDocs') }}">
                                         <div class='d-flex justify-content-start align-items-center flex-wrap'>
                                             {!! make_clickable_path($curDirPath) !!}
                                             @if ($downloadPath)

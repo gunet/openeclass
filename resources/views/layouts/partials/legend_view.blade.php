@@ -152,7 +152,7 @@
                                                class='btn helpAdminBtn text-decoration-none' data-bs-toggle='tooltip'
                                                data-bs-placement='bottom'
                                                title data-bs-original-title="{{ trans('langHelp') }}"
-                                               aria-label="{{ trans('langHelp') }}" tabindex="-1" role="button">
+                                               aria-label="{{ trans('langHelp') }}" role="button">
                                                 <i class="fas fa-question-circle"></i>
                                             </a>
                                         @endif

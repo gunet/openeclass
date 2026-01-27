@@ -2858,7 +2858,7 @@ function icon($name, $title = null, $link = null, $link_attrs = '', $with_title 
 
     if (isset($title)) {
         $title = q($title);
-        $extra = "title data-bs-original-title='$title' data-bs-toggle='tooltip' data-bs-placement='bottom'";
+        $extra = "title data-bs-original-title='$title' data-bs-toggle='tooltip' data-bs-placement='bottom' tabindex='0'";
     } else {
         $extra = '';
     }
@@ -2867,8 +2867,12 @@ function icon($name, $title = null, $link = null, $link_attrs = '', $with_title 
     } else {
         $img = "<span class='fa $name' $extra></span>";
     }
+    $tabIndex = '';
+    if (isset($extra) && !empty($extra)) {
+        $tabIndex = "tabindex='-1'";
+    }
     if (isset($link)) {
-        return "<a href='$link'$link_attrs aria-label='$title' aria-pressed='$pressed' role='button'>$img</a>";
+        return "<a href='$link'$link_attrs aria-label='$title' aria-pressed='$pressed' role='button' $tabIndex>$img</a>";
     } else {
         return $img;
     }

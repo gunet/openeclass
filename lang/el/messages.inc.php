@@ -1314,6 +1314,8 @@ $langAnonymous = "Ανώνυμος";
 $langExerciceEx = "Υπόδειγμα άσκησης";
 $langManyAnswers = "(περισσότερες από μία απαντήσεις μπορεί να είναι σωστές)";
 $langDoc = "Έγγραφα";
+$langNewDoc = "Νέο έγγραφο";
+$langNavigationInDocs = "Διαδρομή πλοήγησης στα έγγραφα";
 $langVideoLinks = "Βιντεοσκοπημένα $langCourses";
 $langWorks = "Εργασίες";
 $langForums = "Συζητήσεις";
@@ -1327,6 +1329,7 @@ $langModifyInfo = "Διαχείριση $langOfCourse";
 $langDropBox = "Μηνύματα";
 $langDropBoxInbox = "Εισερχόμενα";
 $langDropBoxOutbox = "Εξερχόμενα";
+$langNewMessage = "Νέο μήνυμα";
 $langMyDropBox = "Τα μηνύματά μου";
 $langLearnPath = "Γραμμή μάθησης";
 $langDescription = "Περιγραφή";
@@ -5896,6 +5899,8 @@ $langRatingAnonEn = "Επιτρέπεται η αξιολόγηση ";
 $langRatingAnonDis = "Δεν επιτρέπεται η αξιολόγηση";
 $langRatingAnonDisCourse = "Η αξιολόγηση από ανώνυμους χρήστες είναι απενεργοποιημένη για $langsCourses με μη ελεύθερη πρόσβαση χωρίς εγγραφή.";
 $langRateIt = "Αξιολόγησέ το";
+$langRatePositively = "Αξιολόγησέ το θετικά";
+$langRateNegatively = "Αξιολόγησέ το αρνητικά";
 
 /* * ***********************************************************
  * sharing

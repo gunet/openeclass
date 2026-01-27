@@ -123,7 +123,8 @@ function lessonToolsMenu(bool $rich=true): array
 {
     global $uid, $is_editor, $is_course_admin, $is_course_reviewer,
            $course_code, $modules, $urlAppend, $status, $course_id, $langCourseOptions,
-           $langActiveTools, $langInactiveTools, $langLocale, $is_collaborative_course;
+           $langActiveTools, $langInactiveTools, $langLocale, $is_collaborative_course,
+           $langNewMessage, $langNewDoc;
 
     $current_module_dir = module_path($_SERVER['REQUEST_URI']);
 
@@ -199,8 +200,9 @@ function lessonToolsMenu(bool $rich=true): array
                     $mbox = new Mailbox($uid, course_code_to_id($course_code));
                     $new_msgs = $mbox->unreadMsgsNumber();
                     if ($new_msgs != 0) {
-                        $sideMenuText[] = '<b class=>' . q($modules[$mid]['title']) .
-                            " $mail_status<span class='badge Neutral-900-bg new-badge-item rounded-circle float-end d-flex justify-content-center align-items-center'>$new_msgs</span></b>";
+                        $sideMenuText[] = '<b>' . q($modules[$mid]['title']) .
+                            " $mail_status<span tabindex='0' class='badge Neutral-900-bg new-badge-item rounded-circle float-end d-flex justify-content-center align-items-center' 
+                                                                    data-bs-toggle='tooltip' data-bs-placement='top' title='$langNewMessage:$new_msgs'>$new_msgs</span></b>";
 
                     } else {
                         $sideMenuText[] = q($modules[$mid]['title']) . ' ' . $mail_status;
@@ -209,8 +211,9 @@ function lessonToolsMenu(bool $rich=true): array
                     $sideMenuText[] = q($modules[$mid]['title']) . ' ' . $mail_status;
                 }
             } elseif ($rich and $mid == MODULE_ID_DOCS and ($new_docs = get_new_document_count($course_id))) {
-                $sideMenuText[] = '<b class=>' . q($modules[$mid]['title']) .
-                    "<span class='badge Neutral-900-bg new-badge-item rounded-circle float-end d-flex justify-content-center align-items-center'>$new_docs</span></b>";
+                $sideMenuText[] = '<b>' . q($modules[$mid]['title']) .
+                    "<span tabindex='0' class='badge Neutral-900-bg new-badge-item rounded-circle float-end d-flex justify-content-center align-items-center'
+                        data-bs-toggle='tooltip' data-bs-placement='top' title='$langNewDoc:$new_docs'>$new_docs</span></b>";
             } else {
                 $sideMenuText[] = q($modules[$mid]['title']);
             }

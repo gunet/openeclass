@@ -371,7 +371,7 @@ Class Rating {
     }
 
     public function put($isEditor, $uid, $courseId) {
-        global $langUserHasRated, $langRatingVote, $langRatingVotes, $langRatingAverage, $langRateIt, $urlServer;
+        global $langUserHasRated, $langRatingVote, $langRatingVotes, $langRatingAverage, $langRateIt, $urlServer, $langRatePositively, $langRateNegatively;
 
         $this->rating_add_js();
 
@@ -411,9 +411,9 @@ Class Rating {
                 $img_down = 'thumbs_down_inactive.png';
             }
 
-            $out .= "<img alt=\"".$langRateIt."\" id=\"rate_".$this->rid."_img_up\" src=\"".$urlServer."modules/rating/".$img_up."\" ".$onclick_up."/>&nbsp;";
+            $out .= "<img alt=\"".$langRatePositively."\" id=\"rate_".$this->rid."_img_up\" src=\"".$urlServer."modules/rating/".$img_up."\" ".$onclick_up."/>&nbsp;";
             $out .= "<span id=\"rate_".$this->rid."_up\">".$this->getUpRating()."</span>&nbsp;&nbsp;";
-            $out .= "<img alt=\"".$langRateIt."\" id=\"rate_".$this->rid."_img_down\" src=\"".$urlServer."modules/rating/".$img_down."\" ".$onclick_down."/>&nbsp;";
+            $out .= "<img alt=\"".$langRateNegatively."\" id=\"rate_".$this->rid."_img_down\" src=\"".$urlServer."modules/rating/".$img_down."\" ".$onclick_down."/>&nbsp;";
             $out .= "<span id=\"rate_".$this->rid."_down\">".$this->getDownRating()."</span>";
             $out .= "<div class=\"smaller hidden-xs\" id=\"rate_msg_".$this->rid."\">";
 
