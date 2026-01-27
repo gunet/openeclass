@@ -3574,6 +3574,7 @@ $langActivateParticipation = "Ενεργοποίηση Παρουσιολογί�
 $langQuickSurvey = "Γρήγορη ερώτηση";
 $langCourseEvaluationSurvey = "Αξιολόγηση μαθήματος";
 $langPageBreak = "Αλλαγή σελίδας";
+$langUserGradesPoll = "Βαθμολογίες χρηστών";
 
 
 //COLLES survey

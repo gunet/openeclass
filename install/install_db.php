@@ -1100,13 +1100,14 @@ $db->query("CREATE TABLE IF NOT EXISTS `poll_question` (
     `q_column` INT NOT NULL DEFAULT 0,
     `page` INT NOT NULL DEFAULT 0,
     `require_response` INT NOT NULL DEFAULT 0,
-    `total_weight` FLOAT NULL) $tbl_options");
+    `total_weight` FLOAT NULL,
+    `has_sub_question` INT NOT NULL DEFAULT 0) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `poll_question_answer` (
     `pqaid` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `pqid` INT NOT NULL DEFAULT 0,
     `answer_text` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
-    `sub_question` INT NOT NULL DEFAULT 0,
+    `sub_qid` INT NOT NULL DEFAULT 0,
     `weight` FLOAT NULL) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `assignment` (

@@ -5506,6 +5506,7 @@ $langParticipateSimple = "Simple Participation";
 $langQuickSurvey = "Quick Poll";
 $langCourseEvaluationSurvey = "Course Evaluation";
 $langPageBreak = "Page Break";
+$langUserGradesPoll = "User grades";
 $langShowFront = 'Show in home page';
 $langGiveRightCourseReviewer = "Add $langsOfCourseReviewer right";
 $langRemoveRightCourseReviewer = "Remove $langsOfCourseReviewer right";
