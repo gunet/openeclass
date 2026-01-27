@@ -294,7 +294,7 @@ if (isset($_GET['from_session_view'])) { //session view
 
 // If the poll has enabled the grade option, display the user's grades.
 $isEnabledGrade = pollHasGrade($pid);
-if ($isEnabledGrade) {
+if ($isEnabledGrade && $is_editor) {
     $grade_answers = Database::get()->queryArray("SELECT a.aid AS aid, b.weight AS wgt, a.poll_user_record_id AS poll_user_id
                                 FROM poll_user_record c, poll_answer_record a
                                 LEFT JOIN poll_question_answer b
@@ -750,9 +750,7 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COU
                 $tool_content .= "<div class='col-lg-12'>";
                 $tool_content .= plot_placeholder("poll_chart$chart_counter", q($theQuestion->question_text));
                 $tool_content .= "</div></div>";
-                if ($is_editor) {
-                    $tool_content .= $answers_table;
-                }
+                $tool_content .= $answers_table;
                 $chart_counter++;
             } elseif ($theQuestion->qtype == QTYPE_FILL || $theQuestion->qtype == QTYPE_DATETIME || $theQuestion->qtype == QTYPE_SHORT) {
 
@@ -811,7 +809,7 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COU
                         $ellipsized_names_str = q(ellipsize($names_str, 60));
                     }
                     $row_class = ($k>3) ? 'class="hidden_row" style="display:none;"' : '';
-                    $extra_column = (!$thePoll->anonymized and $is_editor)?
+                    $extra_column = (!$thePoll->anonymized)?
                         "<td>"
                         . $ellipsized_names_str
                         . (($ellipsized_names_str != $names_str) ? ' <a href="#" class="trigger_names" data-type="multiple" id="show">'.$langViewShow.'</a>' : '').
@@ -879,15 +877,13 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COU
                             }
                         }
                         if ($displayUser) {
-                            $tool_content .="<div class='card panelCard card-default card-user-answers mb-4'>
-                                                <div class='card-header'>";
-                                                    if ($thePoll->anonymized or (!$is_editor)) {
-                                                        $tool_content .= "$langAnswer";
-                                                    } else {
-                                                        $tool_content .= "<h3 style='margin-bottom:0px;'>$p->givenname&nbsp;$p->surname</h3>";
-                                                    }
-                            $tool_content .= "  </div>
-                                                <div class='card-body'>";   
+                            $tool_content .="<div class='card panelCard card-default card-user-answers mb-4'>";
+                            if (!$thePoll->anonymized) {
+                                $tool_content .= "<div class='card-header'>
+                                                    <h3 style='margin-bottom:0px;'>$p->givenname&nbsp;$p->surname</h3>
+                                                  </div>";
+                            }       
+                            $tool_content .= " <div class='card-body'>";   
                                     $tool_content .= "  <table class='table-default'><tr>";
                                                             foreach ($sub_questions as $s) {
                                                                 $displayItem = false;
