@@ -781,7 +781,7 @@ function printPollForm() {
                                         }
                                         $qTypeSubQuestion = Database::get()->querySingle("SELECT qtype FROM poll_question WHERE pqid = ?d", $theAnswer->sub_qid)->qtype;
                                         $SubQuestionText = Database::get()->querySingle("SELECT question_text FROM poll_question WHERE pqid = ?d", $theAnswer->sub_qid)->question_text;
-                                        $tool_content .= "<div class='col-12 col-lg-6 m-auto sub_question_temp_{$pqid} sub_question_{$theAnswer->pqaid} $subQDisplay'>";
+                                        $tool_content .= "<div class='col-12 sub_question_temp_{$pqid} sub_question_{$theAnswer->pqaid} $subQDisplay' style='border-top: solid 1px rgb(30, 43, 52) !important; padding-top: 25px; margin-top: 25px;'>";
                                         if ($qTypeSubQuestion == QTYPE_SINGLE) {
                                             $resSubQAnswers = Database::get()->queryArray("SELECT * FROM poll_question_answer WHERE pqid = ?d", $theAnswer->sub_qid);
                                             $tool_content .= "<p class='mb-2'>$SubQuestionText</p>";
@@ -1212,7 +1212,7 @@ function submitPoll() {
                 $require_an = true;
                 $_SESSION['unanswered_required_qids'][] = $q->pqid;
                 // Add the unanswered sub-question
-                if ($q->has_sub_question && $q->qtype == QTYPE_SINGLE) {
+                if ($q->has_sub_question == 1 && $q->qtype == QTYPE_SINGLE) {
                     $_SESSION['unanswered_required_qids'][] = Database::get()->querySingle("SELECT sub_qid FROM poll_question_answer WHERE pqid = ?d AND sub_qid > ?d", $q->pqid, 0)->sub_qid;
                 }
             } elseif ($q->require_response && isset($answer[$q->pqid]) && $q->qtype == QTYPE_TABLE) {

@@ -1169,7 +1169,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         }
         // Add subquestion to the specific predefined answer
         if (!isset($_GET['subQOn']) && $question->qtype == QTYPE_SINGLE) {
-        $subQuestionChecked = $question->has_sub_question ? 'checked' : '';
+        $subQuestionChecked = (($question->has_sub_question == 1) ? 'checked' : '');
         $tool_content .= "<div class='form-group mt-4'>
                             <div class='checkbox'>
                                 <label class='label-container' aria-label='$langSelect'>
@@ -1681,12 +1681,15 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 if (isset($aType[$question->qtype - 1])) {
                     $typeText = $aType[$question->qtype - 1];
                 }
+                if ($question->qtype == 0) { // page break
+                    $i = $i - 1;
+                }
                 $tool_content .= "  <tr class='even' data-id='$question->pqid'>
-                                        <td class='text-nowrap' align='text-right' width='1'>$i.</td>
+                                        <td class='text-nowrap' align='text-right' width='1'>" . ($question->qtype == 0 ? '' : $i.'.') . "</td>
                                         <td>
                                             <p>$RequiredQuestionHtml";
                                             if ($question->qtype != QTYPE_LABEL) {
-                                                if ($question->question_text == '--- Page Break ---') {
+                                                if ($question->qtype == 0) { // page break
                                                     $tool_content .= "<strong>$langPageBreak</strong>";
                                                 } else {
                                                     $tool_content .= q($question->question_text) . "<br>" . $typeText;
@@ -1694,8 +1697,11 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                                             } else {
                                                 $tool_content .= $question->question_text . "<br>" . $typeText;
                                             }
-                                            if ($question->has_sub_question) {
+                                            if ($question->has_sub_question == 1) {
                                                 $tool_content .= "<br><span class='help-block text-info'>$langSubQuestionExists</span>";
+                                                $subQid = Database::get()->querySingle("SELECT sub_qid FROM poll_question_answer WHERE pqid = ?d AND sub_qid > ?d", $question->pqid, 0)->sub_qid;
+                                                $subQtitle = Database::get()->querySingle("SELECT question_text FROM poll_question WHERE pqid = ?d", $subQid)->question_text;
+                                                $tool_content .= "<br><ul><li>" . q($subQtitle) . "</li></ul>";
                                             }
                       $tool_content .= "    </p>
                                         </td>
