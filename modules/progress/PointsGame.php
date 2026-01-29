@@ -70,7 +70,7 @@ class PointsGame {
                 'current_level_id' => null,
                 'current_level_title' => null,
                 'next_level_id' => $next_q->id,
-                'next_level_title' => $next_q->firendly_name,
+                'next_level_title' => $next_q->friendly_name,
                 'points_needed_for_next' => $max - $performance['points'],
                 'progress_percentage' => $percent
             ];
