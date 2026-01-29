@@ -7493,3 +7493,18 @@ $langInvalidScore = "Μη έγκυρος βαθμός";
 $langRequestAlreadySent = "Έχει ήδη σταλεί αίτημα εγγραφής για αυτό το μάθημα";
 $langRejectedRequests = "Απορριφθείσες Αιτήσεις Χρηστών";
 $langAcceptedRequests = "Εγκεκριμένες Αιτήσεις Χρηστών";
+
+// LaTeX / Math editor dialog (TinyMCE latexhelper)
+$langLatexDialogTitle = "Εισαγωγή LaTeX";
+$langLatexInput = "Είσοδος LaTeX:";
+$langLatexPreview = "Προεπισκόπηση";
+$langLatexCatGreekLetters = "Ελληνικά Γράμματα";
+$langLatexCatOperators = "Τελεστές";
+$langLatexCatRelations = "Σχέσεις";
+$langLatexCatArrows = "Βέλη";
+$langLatexCatDelimiters = "Οριοθέτες";
+$langLatexCatAccents = "Τόνοι";
+$langLatexCatFunctions = "Συναρτήσεις";
+$langLatexCatMathStructures = "Μαθηματικές Δομές";
+$langLatexCatMiscellaneous = "Διάφορα";
+$langLatexCatChemicalSymbols = "Χημικά Σύμβολα";

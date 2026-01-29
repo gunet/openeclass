@@ -62,18 +62,18 @@
 
     <div class="editor-split">
         <div class="pane">
-            <label class="pane-label">LaTeX Input:</label>
+            <label class="pane-label" id="label-latex-input">LaTeX Input:</label>
             <textarea id="latex-input" class="pane-content" placeholder="\sqrt{x}" spellcheck="false"></textarea>
         </div>
         <div class="pane">
-            <label class="pane-label">Προεπισκόπηση:</label>
+            <label class="pane-label" id="label-preview">Preview</label>
             <div id="preview" class="pane-content empty"></div>
         </div>
     </div>
 
     <div class="footer">
-        <button class="btn mce-widget mce-btn mce-primary mce-abs-layout-item mce-btn-has-text" onclick="insertContent()">Εισαγωγή</button>
-        <button class="btn mce-widget mce-btn mce-primary mce-abs-layout-item mce-btn-has-text" onclick="cancelContent()">Ακύρωση</button>
+        <button class="btn mce-widget mce-btn mce-primary mce-abs-layout-item mce-btn-has-text" id="btn-insert" onclick="insertContent()">Insert</button>
+        <button class="btn mce-widget mce-btn mce-primary mce-abs-layout-item mce-btn-has-text" id="btn-cancel" onclick="cancelContent()">Cancel</button>
     </div>
 </div>
 
@@ -112,21 +112,29 @@
 
     // Initialization
     window.addEventListener('load', () => {
-        // 1. Get parameters from TinyMCE Parent
+        var args = {};
         try {
-            var args = top.tinymce.activeEditor.windowManager.getParams();
-            if (args && args.initialCode) {
-                inputArea.value = args.initialCode;
-            }
+            args = top.tinymce.activeEditor.windowManager.getParams() || {};
         } catch(e) {
-            console.log("Could not retrieve initial content.");
+            console.log("Could not retrieve dialog params.");
         }
+
+        if (args.initialCode) {
+            inputArea.value = args.initialCode;
+        }
+
+        // Apply translations (from messages.inc.php via plugin)
+        var lang = args.latexLang || {};
+        document.getElementById('label-latex-input').textContent = lang.latexInput || 'LaTeX Input:';
+        document.getElementById('label-preview').textContent = lang.preview || 'Preview';
+        document.getElementById('btn-insert').textContent = lang.insert || 'Insert';
+        document.getElementById('btn-cancel').textContent = lang.cancel || 'Cancel';
 
         // Load Symbols (Check both variable names just in case)
         const data = latexSymbols;
         
         if (data) {
-            buildInterface(data);
+            buildInterface(data, lang.categories);
         } else {
             console.error("latex_codes.js loaded but no symbol data found.");
             panelsContainer.innerHTML = '<div style="padding:10px; color:red">Error loading symbols.</div>';
@@ -138,8 +146,8 @@
         }
     });
 
-    // Interface Builder 
-    function buildInterface(data) {
+    // Interface Builder (categoryLabels: optional map of category key -> translated name)
+    function buildInterface(data, categoryLabels) {
         const categories = Object.keys(data);
         let firstTab = true;
 
@@ -147,7 +155,7 @@
             // Create Tab Button
             const tabBtn = document.createElement('button');
             tabBtn.className = 'tab-btn';
-            tabBtn.textContent = cat;
+            tabBtn.textContent = (categoryLabels && categoryLabels[cat]) ? categoryLabels[cat] : cat;
             tabBtn.dataset.target = `panel-${index}`;
             
             if(firstTab) {
