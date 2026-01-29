@@ -237,19 +237,6 @@ textarea.pane-content:focus {
     font-weight: 500;
 }
 
-.btn-primary {
-    background-color: var(--primary-blue);
-    color: white;
-}
-.btn-primary:hover { background-color: #0069d9; }
-
-.btn-secondary {
-    background-color: #fff;
-    border-color: #ced4da;
-    color: #333;
-}
-.btn-secondary:hover { background-color: #e2e6ea; }
-
 /* Scrollbar styling */
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-thumb { background: #ced4da; border-radius: 3px; }
