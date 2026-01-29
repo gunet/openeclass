@@ -6803,3 +6803,17 @@ $langNextUnit = "Go to the next unit titled:";
 $langPrevUnit = "Go to the previous unit titled";
 $langCloseBox = "Close dialog box";
 $langMoveToPrevFolder = "Move to previous folder";
+// LaTeX / Math editor dialog (TinyMCE latexhelper)
+$langLatexDialogTitle = "Insert LaTeX";
+$langLatexInput = "LaTeX Input:";
+$langLatexPreview = "Preview";
+$langLatexCatGreekLetters = "Greek Letters";
+$langLatexCatOperators = "Operators";
+$langLatexCatRelations = "Relations";
+$langLatexCatArrows = "Arrows";
+$langLatexCatDelimiters = "Delimiters";
+$langLatexCatAccents = "Accents";
+$langLatexCatFunctions = "Functions";
+$langLatexCatMathStructures = "Math Structures";
+$langLatexCatMiscellaneous = "Miscellaneous";
+$langLatexCatChemicalSymbols = "Chemical Symbols";
