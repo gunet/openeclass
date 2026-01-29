@@ -3,9 +3,11 @@
 chdir(get_base_path());
 require_once 'include/main_lib.php';
 
+$webDir = '.';
+
 $command_line = (php_sapi_name() == 'cli' && !isset($_SERVER['REMOTE_ADDR']));
 if (!$command_line) {
-    forbidden();
+    exit;
 }
 
 if (exec('bun build js/build/uppy.js --outdir js/bundle --minify', $output) === false) {

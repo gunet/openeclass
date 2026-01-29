@@ -3196,7 +3196,7 @@ function removeDir($dirPath) {
     }
 
     // Try to remove the directory recursively if it exists
-    if (!file_exists($dirPath)) {
+    if (!(file_exists($dirPath) or is_dir($dirPath))) {
         return true;
     } else {
         $files = new RecursiveIteratorIterator(
