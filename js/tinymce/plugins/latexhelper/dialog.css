@@ -1,320 +1,256 @@
-/**
- * LaTeX Helper Plugin Styles
- */
-
-.mce-container-body {
-    margin: 0 !important;
-    padding: 0 !important;
+:root {
+    --primary-blue: #007bff;
+    --border-color: #dee2e6;
+    --bg-gray: #f8f9fa;
+    --text-color: #212529;
 }
 
-.latexhelper-picker {
-    display: flex;
-    flex-direction: column;
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    margin: 0;
+    padding: 15px;
+    color: var(--text-color);
+    background-color: #fff;
+    box-sizing: border-box;
+    height: 100vh;
+    overflow: hidden; 
+}
+
+.container {
+    max-width: 100%;
     height: 100%;
-    padding: 0;
-    margin: 0;
-    font-family: Manrope, sans-serif;
-    overflow: hidden;
-    min-height: 0;
-    box-sizing: border-box;
-    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
-.latexhelper-tabs {
+/* Tabs Navigation Wrapper */
+.tabs-wrapper {
     display: flex;
-    flex-wrap: wrap;
-    border-bottom: 1px solid #ddd;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
     background: #f8f9fa;
-    flex-shrink: 0;
-}
-
-.latexhelper-tab {
-    padding: 12px 20px;
-    cursor: pointer;
-    border: none;
-    background: transparent;
-    border-bottom: 2px solid transparent;
-    font-weight: 500;
-    font-size: 14px;
-    color: #666;
-    transition: all 0.2s ease;
-    white-space: nowrap;
-    flex-shrink: 0;
-}
-
-.latexhelper-tab:hover {
-    background: #e9ecef;
-    color: #333;
-}
-
-.latexhelper-tab.active {
-    color: #2196F3;
-    border-bottom-color: #2196F3;
-    background: #fff;
-    font-weight: 600;
-}
-
-.latexhelper-symbols-container {
-    flex: 1;
-    overflow: hidden;
-    padding: 0;
-    margin: 0;
-    border-bottom: 1px solid #ddd;
-    display: flex;
-    flex-direction: column;
-    background: #fff;
-    min-height: 300px;
     position: relative;
+    padding: 0;
+    flex-shrink: 0;
+    width: 100%;
+    box-sizing: border-box;
 }
 
-.latexhelper-editor-preview-row {
+.tabs-nav {
     display: flex;
-    flex-direction: row;
+    flex-wrap: nowrap;
+    overflow-x: auto;
     flex: 1;
-    border-top: 1px solid #ddd;
-    min-height: 200px;
-    overflow: hidden;
-    margin: 0;
-    padding: 0;
+    gap: 5px;
+    padding: 0 5px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    scroll-behavior: smooth;
 }
 
-.latexhelper-tab-content {
-    display: none;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    overflow-y: auto;
-    overflow-x: hidden;
-    padding: 15px;
-    box-sizing: border-box;
+.tabs-nav::-webkit-scrollbar { 
+    display: none; 
 }
 
-.latexhelper-tab-content.active {
-    display: block;
-}
-
-.latexhelper-symbols-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(85px, 1fr));
-    gap: 10px;
-    padding-bottom: 20px;
-    width: 100%;
-    box-sizing: border-box;
-}
-
-.latexhelper-symbol-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 8px;
-    border: 1px solid #e0e0e0;
-    border-radius: 4px;
+/* Tab Buttons */
+.tab-btn {
+    flex-shrink: 0;
+    white-space: nowrap;
+    background: none;
+    border: none;
+    padding: 12px 15px;
     cursor: pointer;
+    font-size: 14px;
+    color: #6c757d;
+    position: relative;
+    transition: color 0.2s;
+    outline: none;
+    border-bottom: 2px solid transparent;
+}
+
+.tab-btn:hover { 
+    color: var(--primary-blue); 
+    background-color: rgba(0,0,0,0.02);
+}
+
+.tab-btn.active {
+    color: var(--primary-blue);
+    font-weight: 600;
+    border-bottom-color: var(--primary-blue);
+}
+
+/* Navigation Arrows */
+.nav-arrow {
     background: #fff;
-    transition: all 0.2s ease;
-    min-height: 80px;
-    box-sizing: border-box;
-    overflow: visible;
-}
-
-.latexhelper-symbol-item:hover {
-    background: #f0f7ff;
-    border-color: #2196F3;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-}
-
-.latexhelper-symbol-item.selected {
-    background: #e3f2fd;
-    border-color: #2196F3;
-    box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.3);
-}
-
-.latexhelper-symbol {
-    width: 100%;
-    text-align: center;
-    color: #333;
-    overflow: visible;
-    pointer-events: none;
-    margin: 0 !important;
-    padding: 0;
-    line-height: 1;
+    border: none;
+    border-left: 1px solid #e9ecef;
+    border-right: 1px solid #e9ecef;
+    color: #555;
+    cursor: pointer;
+    padding: 0 12px;
+    height: 45px;
+    font-size: 16px;
+    font-weight: bold;
+    z-index: 2;
     display: flex;
     align-items: center;
     justify-content: center;
-    white-space: normal;
-}
-
-/* MathJax Specific Overrides within the helper */
-.latexhelper-picker mjx-container,
-.latexhelper-picker [class*="mjx-c"],
-.latexhelper-symbol mjx-container,
-.latexhelper-symbol [class*="mjx-c"],
-.latexhelper-preview-content mjx-container,
-.latexhelper-preview-content [class*="mjx-c"] {
-    padding: 0 !important;
-    display: inline-block !important;
-    vertical-align: middle !important;
-    text-align: center !important;
-}
-
-/* Preview specific styles */
-.latexhelper-preview-content mjx-container {
-    margin: 0 auto !important;
-}
-
-.latexhelper-editor-section {
-    width: 50%;
-    display: flex;
-    flex-direction: column;
-    padding: 15px;
-    background: #fcfcfc;
-    border-right: 1px solid #ddd;
-    box-sizing: border-box;
-    min-height: 0;
-    overflow: hidden;
-}
-
-.latexhelper-preview-section {
-    width: 50%;
-    display: flex;
-    flex-direction: column;
-    padding: 15px;
-    background: #fcfcfc;
-    box-sizing: border-box;
-    min-height: 0;
-    overflow: hidden;
-}
-
-.latexhelper-editor-label,
-.latexhelper-preview-label {
-    font-weight: 600;
-    font-size: 13px;
-    color: #444;
-    margin-bottom: 8px;
-    margin-top: 15px;
+    transition: all 0.2s;
     flex-shrink: 0;
 }
 
-.latexhelper-editor-label {
-    margin-top: 0;
+.nav-arrow:hover {
+    background-color: #e2e6ea;
+    color: var(--primary-blue);
 }
 
-.latexhelper-preview-label {
-    margin-top: 0;
-}
+#scroll-left { border-right: 1px solid #dee2e6; border-left: none; }
+#scroll-right { border-left: 1px solid #dee2e6; border-right: none; }
 
-.latexhelper-editor {
-    width: 100%;
+/* Symbols Grid Area */
+.symbols-viewport {
+    border: 1px solid var(--border-color);
     flex: 1;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-family: Manrope, monospace;
-    font-size: 14px;
-    resize: none;
-    background: #fff;
-    color: #333;
-    box-sizing: border-box;
     overflow-y: auto;
-}
-
-.latexhelper-editor:focus {
-    outline: none;
-    border-color: #2196F3;
-    box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2);
-}
-
-.latexhelper-preview {
-    flex: 1;
-    border: 1px solid #ddd;
-    border-radius: 4px;
     background: #fff;
-    padding: 10px;
+    padding: 8px;
+    border-radius: 4px;
+    min-height: 200px;
+}
+
+.symbol-panel { display: none; }
+.symbol-panel.active {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+    gap: 8px;
+}
+
+/* Wide Grid for Chemistry */
+.symbol-panel.active.wide-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+}
+
+.wide-grid .symbol-btn {
+    padding: 0 10px; 
+}
+
+.symbol-btn {
+    height: 60px;
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: auto;
-    box-sizing: border-box;
-    min-height: 100px;
+    background: #fff;
+    border: 1px solid #e9ecef;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    overflow: hidden;
 }
 
-.latexhelper-preview-content {
-    color: #000;
-    margin: 0;
-    padding: 0;
-    display: block;
-    width: 100%;
-    text-align: center;
+.symbol-btn:hover {
+    background-color: #e3f2fd;
+    border-color: var(--primary-blue);
 }
 
-.latexhelper-preview-empty {
-    color: #999;
-    font-style: italic;
+/* Ensure MathJax inside buttons doesn't break layout */
+.symbol-btn mjx-container {
+    margin: 0 !important;
+    font-size: 110% !important;
+}
+
+/* Split Editor Area */
+.editor-split {
+    display: flex;
+    gap: 15px;
+    height: 220px;
+    flex-shrink: 0;
+    border-top: 1px solid var(--border-color);
+    padding-top: 10px;
+}
+
+.pane {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+}
+
+.pane-label {
+    font-weight: 600;
     font-size: 13px;
+    margin-bottom: 5px;
+    color: #495057;
 }
 
-/* Custom Scrollbars */
-.latexhelper-tab-content::-webkit-scrollbar,
-.latexhelper-editor::-webkit-scrollbar,
-.latexhelper-preview::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-    -webkit-appearance: none;
-}
-
-.latexhelper-tab-content::-webkit-scrollbar-track,
-.latexhelper-editor::-webkit-scrollbar-track,
-.latexhelper-preview::-webkit-scrollbar-track {
-    background: #f1f1f1;
+.pane-content {
+    flex: 1;
+    border: 1px solid var(--border-color);
     border-radius: 4px;
+    padding: 10px;
+    font-size: 16px;
+    overflow: auto;
 }
 
-.latexhelper-tab-content::-webkit-scrollbar-thumb,
-.latexhelper-editor::-webkit-scrollbar-thumb,
-.latexhelper-preview::-webkit-scrollbar-thumb {
-    background: #bbb;
+textarea.pane-content {
+    resize: none;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    color: #333;
+}
+
+textarea.pane-content:focus {
+    outline: none;
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 2px rgba(0,123,255, 0.25);
+}
+
+#preview {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fafafa;
+}
+
+#preview.empty::after {
+    content: 'Προεπισκόπηση...';
+    color: #adb5bd;
+    font-size: 13px;
+    font-style: italic;
+}
+
+/* Footer */
+.footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    border-top: 1px solid var(--border-color);
+    padding-top: 10px;
+    flex-shrink: 0;
+}
+
+.btn {
+    padding: 8px 20px;
+    font-size: 14px;
     border-radius: 4px;
-    border: 2px solid #f1f1f1;
+    cursor: pointer;
+    border: 1px solid transparent;
+    font-weight: 500;
 }
 
-.latexhelper-tab-content::-webkit-scrollbar-thumb:hover,
-.latexhelper-editor::-webkit-scrollbar-thumb:hover,
-.latexhelper-preview::-webkit-scrollbar-thumb:hover {
-    background: #999;
+.btn-primary {
+    background-color: var(--primary-blue);
+    color: white;
 }
+.btn-primary:hover { background-color: #0069d9; }
 
-.latexhelper-tab-content,
-.latexhelper-editor,
-.latexhelper-preview {
-    scrollbar-width: thin;
-    scrollbar-color: #bbb #f1f1f1;
+.btn-secondary {
+    background-color: #fff;
+    border-color: #ced4da;
+    color: #333;
 }
+.btn-secondary:hover { background-color: #e2e6ea; }
 
-@media (max-width: 900px) {
-    .latexhelper-editor-preview-row {
-        flex-direction: column;
-        flex: 1;
-        min-height: 200px;
-    }
-    
-    .latexhelper-symbols-container {
-        border-bottom: 1px solid #ddd;
-        min-height: 150px;
-    }
-    
-    .latexhelper-editor-section {
-        width: 100%;
-        border-right: none;
-        border-bottom: 1px solid #ddd;
-        padding: 15px;
-    }
-    
-    .latexhelper-preview-section {
-        width: 100%;
-        padding: 15px;
-    }
-}
+/* Scrollbar styling */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-thumb { background: #ced4da; border-radius: 3px; }
+::-webkit-scrollbar-track { background: transparent; }
