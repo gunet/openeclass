@@ -7518,3 +7518,18 @@ $langNextUnit = "Μετάβαση στην επόμενη ενότητα με τ
 $langPrevUnit = "Μετάβαση στην προηγούμενη ενότητα με τίτλο:";
 $langCloseBox = "Κλείσιμο παραθύρου διαλόγου";
 $langMoveToPrevFolder = "Μετάβαση στον προηγούμενο φάκελο";
+
+// LaTeX / Math editor dialog (TinyMCE latexhelper)
+$langLatexDialogTitle = "Εισαγωγή LaTeX";
+$langLatexInput = "Είσοδος LaTeX:";
+$langLatexPreview = "Προεπισκόπηση";
+$langLatexCatGreekLetters = "Ελληνικά Γράμματα";
+$langLatexCatOperators = "Τελεστές";
+$langLatexCatRelations = "Σχέσεις";
+$langLatexCatArrows = "Βέλη";
+$langLatexCatDelimiters = "Οριοθέτες";
+$langLatexCatAccents = "Τόνοι";
+$langLatexCatFunctions = "Συναρτήσεις";
+$langLatexCatMathStructures = "Μαθηματικές Δομές";
+$langLatexCatMiscellaneous = "Διάφορα";
+$langLatexCatChemicalSymbols = "Χημικά Σύμβολα";

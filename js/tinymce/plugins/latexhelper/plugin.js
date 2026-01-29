@@ -12,17 +12,20 @@
             var content = editor.selection.getContent({format: 'text'});
             content = content.replace(/^\\\(|\\\)$/g, '').replace(/^\[m\]|\[\/m\]$/g, '');
 
+            // Translations from PHP
+            var lang = (typeof window.latexHelperLang !== 'undefined') ? window.latexHelperLang : {};
+
             // Open dialog.html in an Iframe
             var win = editor.windowManager.open({
-                title: 'Εισαγωγή LaTeX',
+                title: lang.title || 'Insert LaTeX',
                 url: url + '/dialog.html',
                 width: 900,
                 height: 700,
                 buttons: [], // Dialog handles its own buttons
                 inline: 1
             }, {
-                // Pass data to the iframe
-                initialCode: content
+                initialCode: content,
+                latexLang: lang
             });
         }
 
