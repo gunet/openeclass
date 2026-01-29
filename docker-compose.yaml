@@ -20,7 +20,7 @@ services:
             # - ADMIN_PASSWORD=secret
             - PHP_MAX_UPLOAD=256M
     db:   # The location of the database
-        image: mariadb:10.11
+        image: docker.io/mariadb:10.11
         environment:
             - MYSQL_ROOT_PASSWORD=secret
             - MYSQL_DATABASE=eclass
