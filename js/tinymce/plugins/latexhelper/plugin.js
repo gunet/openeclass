@@ -1,281 +1,66 @@
 /**
  * LaTeX Helper Plugin for TinyMCE
- * Requires MathJax 4
+ * Iframe Wrapper Version (Secure & Isolated)
  */
-
 (function() {
     'use strict';
 
     tinymce.PluginManager.add('latexhelper', function(editor, url) {
-        var latexSymbols = {};
-        var currentLaTeXCode = '';
-
-        function loadSymbols(callback) {
-            if (typeof window.latexSymbols !== 'undefined') {
-                latexSymbols = window.latexSymbols;
-                callback();
-                return;
-            }
-
-            var script = document.createElement('script');
-            script.src = url + '/latex_codes.js';
-            script.onload = function() {
-                latexSymbols = window.latexSymbols || {};
-                callback();
-            };
-            script.onerror = function() {
-                console.error('Failed to load LaTeX symbols file');
-                callback();
-            };
-            document.head.appendChild(script);
-        }
-
-        editor.on('init', function() {
-            if (!document.getElementById('latexhelper-styles')) {
-                var link = document.createElement('link');
-                link.id = 'latexhelper-styles';
-                link.rel = 'stylesheet';
-                link.type = 'text/css';
-                link.href = url + '/dialog.css';
-                document.getElementsByTagName('head')[0].appendChild(link);
-            }
-        });
-
-        loadSymbols(function() { });
-
-        function updatePreview(laTeXCode, previewElement) {
-            if (!previewElement) return;
         
-            previewElement.innerHTML = '';
-            
-            if (!laTeXCode || laTeXCode.trim() === '') {
-                previewElement.innerHTML = '<div class="latexhelper-preview-empty">Προεπισκόπηση...</div>';
-                return;
-            }
-        
-            var cleanLaTeX = laTeXCode.trim();
-            cleanLaTeX = cleanLaTeX.replace(/^\\\(|\\\)$/g, '');
-            
-            var wrapper = document.createElement('p');
-            wrapper.className = 'latexhelper-preview-content text-heading-h4';
-            wrapper.innerHTML = '\\(\\displaystyle ' + cleanLaTeX + '\\)';
-            previewElement.appendChild(wrapper);
-            
-            requestAnimationFrame(function() {
-                if (!window.MathJax || !window.MathJax.startup || !window.MathJax.startup.promise) return;
-                
-                window.MathJax.startup.promise.then(function() {
-                    window.MathJax.typesetPromise([wrapper]);
-                });
-            });
-        }
+        function openDialog() {
+            // Get current content
+            var content = editor.selection.getContent({format: 'text'});
+            content = content.replace(/^\\\(|\\\)$/g, '').replace(/^\[m\]|\[\/m\]$/g, '');
 
-        function openSymbolPicker() {
-            if (typeof window.latexSymbols !== 'undefined') {
-                latexSymbols = window.latexSymbols;
-            }
-
-            if (!latexSymbols || Object.keys(latexSymbols).length === 0) {
-                editor.windowManager.alert('Loading symbols...');
-                return;
-            }
-
-            var categories = Object.keys(latexSymbols);
-            
-            var tabsHTML = '';
-            categories.forEach(function(category, index) {
-                var isActive = index === 0 ? 'active' : '';
-                tabsHTML += '<div class="latexhelper-tab ' + isActive + '" data-category="' + 
-                    tinymce.DOM.encode(category) + '">' + tinymce.DOM.encode(category) + '</div>';
-            });
-
-            var symbolsHTML = '';
-            categories.forEach(function(category, index) {
-                var isActive = index === 0 ? 'active' : '';
-                var symbols = latexSymbols[category];
-                symbolsHTML += '<div class="latexhelper-tab-content ' + isActive + '" data-category="' + 
-                    tinymce.DOM.encode(category) + '">';
-                symbolsHTML += '<div class="latexhelper-symbols-grid">';
-
-                symbols.forEach(function(item) {
-                    var symbolDisplay = '\\(\\displaystyle ' + item.symbol + '\\)';
-                    
-                    symbolsHTML += '<div class="latexhelper-symbol-item" ' +
-                            'data-code="' + tinymce.DOM.encode(item.code) + '" ' +
-                            'title="' + tinymce.DOM.encode(item.name || item.code) + '">';
-                    
-                    symbolsHTML += '<p class="latexhelper-symbol latexhelper-render text-heading-h4" data-latex="' + tinymce.DOM.encode(item.symbol) + '">' + symbolDisplay + '</p>';
-                    symbolsHTML += '</div>';
-                });
-
-                symbolsHTML += '</div></div>';
-            });
-
-            var mainHTML = '<div class="latexhelper-picker">' +
-                '<div class="latexhelper-tabs">' + tabsHTML + '</div>' +
-                '<div class="latexhelper-symbols-container">' + symbolsHTML + '</div>' +
-                '<div class="latexhelper-editor-preview-row">' +
-                    '<div class="latexhelper-editor-section">' +
-                        '<div class="latexhelper-editor-label">Επεξεργασία LaTeX:</div>' +
-                        '<textarea class="latexhelper-editor" id="latex-editor" placeholder="Γράψτε LaTeX εδώ..."></textarea>' +
-                    '</div>' +
-                    '<div class="latexhelper-preview-section">' +
-                        '<div class="latexhelper-preview-label">Προεπισκόπηση:</div>' +
-                        '<div class="latexhelper-preview" id="latex-preview"></div>' +
-                    '</div>' +
-                '</div>' +
-            '</div>';
-
-            var dialog = editor.windowManager.open({
+            // Open dialog.html in an Iframe
+            var win = editor.windowManager.open({
                 title: 'Εισαγωγή LaTeX',
+                url: url + '/dialog.html',
                 width: 900,
                 height: 700,
-                body: {
-                    type: 'container',
-                    html: mainHTML,
-                    style: 'padding: 0;'
-                },
-                buttons: [
-                    {
-                        text: 'Εισαγωγή',
-                        subtype: 'primary',
-                        onclick: function() {
-                            var editorBox = document.getElementById('latex-editor');
-                            var codeToInsert = editorBox ? editorBox.value : currentLaTeXCode;
-                            
-                            if (codeToInsert && codeToInsert.trim() !== '') {
-                                insertLaTeXCode(codeToInsert);
-                                dialog.close();
-                            } else {
-                                editor.windowManager.alert('Παρακαλώ εισάγετε κώδικα.');
-                            }
-                        }
-                    },
-                    {
-                        text: 'Ακύρωση',
-                        onclick: function() { dialog.close(); }
-                    }
-                ],
-                onOpen: function() {
-                    var dialogEl = dialog.getEl();
-            
-                    var editorBox = document.getElementById('latex-editor') || dialogEl.querySelector('.latexhelper-editor');
-                    var previewBox = document.getElementById('latex-preview') || dialogEl.querySelector('.latexhelper-preview');
-                    var tabs = dialogEl.querySelectorAll('.latexhelper-tab');
-                    var tabContents = dialogEl.querySelectorAll('.latexhelper-tab-content');
-
-                    tabs.forEach(function(tab) {
-                        tab.addEventListener('click', function() {
-                            var category = this.getAttribute('data-category');
-                            tabs.forEach(function(t) { t.classList.remove('active'); });
-                            this.classList.add('active');
-                            tabContents.forEach(function(c) {
-                                c.classList.toggle('active', c.getAttribute('data-category') === category);
-                            });
-                            setTimeout(renderSymbols, 100);
-                        });
-                    });
-
-                    var symbolItems = dialogEl.querySelectorAll('.latexhelper-symbol-item');
-                    symbolItems.forEach(function(item) {
-                        item.addEventListener('click', function() {
-                            var code = this.getAttribute('data-code');
-                            symbolItems.forEach(function(i) { i.classList.remove('selected'); });
-                            this.classList.add('selected');
-
-                            var currentValue = editorBox.value;
-                            var start = editorBox.selectionStart;
-                            var end = editorBox.selectionEnd;
-                            
-                            var before = currentValue.substring(0, start);
-                            var after = currentValue.substring(end);
-                            
-                            if (start !== end && code.indexOf('{}') !== -1) {
-                                code = code.replace('{}', '{' + currentValue.substring(start, end) + '}');
-                                editorBox.value = before + code + after;
-                                editorBox.selectionStart = editorBox.selectionEnd = before.length + code.length;
-                            } else {
-                                editorBox.value = before + code + after;
-                                var braceIdx = code.indexOf('{}');
-                                if (braceIdx !== -1) {
-                                    editorBox.selectionStart = editorBox.selectionEnd = start + braceIdx + 1;
-                                } else {
-                                    editorBox.selectionStart = editorBox.selectionEnd = start + code.length;
-                                }
-                            }
-                            
-                            currentLaTeXCode = editorBox.value;
-                            updatePreview(currentLaTeXCode, previewBox);
-                            editorBox.focus();
-                        });
-                    });
-
-                    var previewTimeout;
-                    editorBox.addEventListener('input', function() {
-                        currentLaTeXCode = this.value;
-                        if (previewTimeout) {
-                            clearTimeout(previewTimeout);
-                        }
-                        previewTimeout = setTimeout(function() {
-                            updatePreview(currentLaTeXCode, previewBox);
-                        }, 300);
-                    });
-
-                    var content = editor.selection.getContent({format: 'text'});
-                    content = content.replace(/^\\\(|\\\)$/g, '').replace(/^\[m\]|\[\/m\]$/g, '');
-                    
-                    if (content) {
-                        editorBox.value = content;
-                        currentLaTeXCode = content;
-                        updatePreview(content, previewBox);
-                    } else {
-                        updatePreview('', previewBox);
-                    }
-
-                    function renderSymbols() {
-                        var activeTab = dialogEl.querySelector('.latexhelper-tab-content.active');
-                        
-                        if (!activeTab || !window.MathJax || !window.MathJax.startup || !window.MathJax.startup.promise) return;
-                        
-                        var symbolElements = activeTab.querySelectorAll('.latexhelper-symbol.latexhelper-render');
-                        if (symbolElements.length === 0) return;
-                        
-                        var elementsArray = Array.prototype.slice.call(symbolElements);
-                        
-                        window.MathJax.startup.promise.then(function() {
-                            if (window.MathJax.typesetPromise) {
-                                window.MathJax.typesetPromise(elementsArray).catch(function(err) {
-                                    console.error('MathJax typeset failed:', err);
-                                });
-                            }
-                        });
-                    }
-                    setTimeout(renderSymbols, 150);
-                }
+                buttons: [], // Dialog handles its own buttons
+                inline: 1
+            }, {
+                // Pass data to the iframe
+                initialCode: content
             });
         }
 
-        function insertLaTeXCode(code) {
-            editor.focus();
-            var cleanCode = code.trim();
-            cleanCode = cleanCode.replace(/^\\\(|\\\)$/g, '').replace(/^\[m\]|\[\/m\]$/g, '');
-            
-            if (cleanCode !== '') {
-                editor.insertContent('\\(' + cleanCode + '\\)');
+        window.addEventListener('message', function(event) {
+            if (event.origin !== window.location.origin) {
+                return;
             }
-        }
+
+            var data = event.data;
+
+            if (data.mceAction === 'latexhelper-insert') {
+                var cleanCode = data.content.trim();
+                
+                // Basic Sanitization
+                cleanCode = cleanCode.replace(/<\/?[^>]+(>|$)/g, "");
+
+                if (cleanCode !== '') {
+                    editor.insertContent('\\(' + cleanCode + '\\)');
+                }
+                editor.windowManager.close();
+            }
+
+            if (data.mceAction === 'latexhelper-cancel') {
+                editor.windowManager.close();
+            }
+        });
 
         editor.addButton('latexhelper', {
             text: 'LaTeX',
             tooltip: 'Insert Math',
-            onclick: openSymbolPicker
+            onclick: openDialog
         });
         
         editor.addMenuItem('latexhelper', {
             icon: 'latex',
             text: 'LaTeX Math',
             context: 'insert',
-            onclick: openSymbolPicker
+            onclick: openDialog
         });
 
         return {
