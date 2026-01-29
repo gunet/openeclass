@@ -503,7 +503,7 @@ function inIdsFromHits($hits) {
 function urlsFromHits($hits) {
     $hitUrls = array();
     foreach ($hits as $hit) {
-        $hitUrls[$hit->pkid] = $hit->url;
+        $hitUrls[$hit->pkid] = $hit->raw->url;
     }
     return $hitUrls;
 }
