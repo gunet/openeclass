@@ -6682,3 +6682,18 @@ $langCriteriaBelowParticipateInCompletion = "The following criteria are involved
 $langTheResource = "The resource";
 $langListCompletionCriteria = "List of criteria";
 $langUserParticipation = "User participation";
+
+// LaTeX / Math editor dialog (TinyMCE latexhelper)
+$langLatexDialogTitle = "LaTeX einfügen";
+$langLatexInput = "LaTeX-Eingabe:";
+$langLatexPreview = "Vorschau";
+$langLatexCatGreekLetters = "Griechische Buchstaben";
+$langLatexCatOperators = "Operatoren";
+$langLatexCatRelations = "Relationen";
+$langLatexCatArrows = "Pfeile";
+$langLatexCatDelimiters = "Begrenzer";
+$langLatexCatAccents = "Akzente";
+$langLatexCatFunctions = "Funktionen";
+$langLatexCatMathStructures = "Mathematische Strukturen";
+$langLatexCatMiscellaneous = "Verschiedenes";
+$langLatexCatChemicalSymbols = "Chemische Symbole";
