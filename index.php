@@ -26,6 +26,36 @@
  */
 
 use Widgets\WidgetArea;
+
+// --- Session lifetime tuning (make login persist across browser restarts) ---
+// Configure the session cookie to last 7 days (604800 seconds).
+// IMPORTANT: Server-side session storage must also last at least this long.
+// If PHP's GC cleans up earlier than the cookie, users will appear logged out.
+// We set both cookie lifetime and gc_maxlifetime here for app-scoped control.
+// Adjust $lifetime to taste (e.g., 86400 for 24h, 2592000 for 30d).
+$lifetime = 604800; // 7 days in seconds
+
+// Detect HTTPS to set the 'secure' flag safely
+$is_https = (
+    (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ||
+    (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443) ||
+    (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https')
+);
+
+// For widest compatibility (PHP 7.3+ supports both samesite ini and array API)
+@ini_set('session.gc_maxlifetime', (string) $lifetime);
+@ini_set('session.cookie_lifetime', (string) $lifetime);
+@ini_set('session.cookie_secure', $is_https ? '1' : '0');
+@ini_set('session.cookie_httponly', '1');
+@ini_set('session.cookie_samesite', 'Lax'); // change to 'Strict' or 'None' if needed
+
+session_set_cookie_params([
+    'lifetime' => $lifetime,
+    'path'     => '/',
+    'secure'   => $is_https,
+    'httponly' => true,
+    'samesite' => 'Lax',
+]);
 session_start();
 
 if (isset($_POST['admin_login'])) {
