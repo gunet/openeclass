@@ -1288,7 +1288,7 @@ function get_resource_details($element, $resource_id) {
  */
 function cert_output_to_pdf($certificate_id, $user, $certificate_title = null, $certificate_message = null, $certificate_issuer = null, $certificate_date = null, $certificate_template_id = null, $certificate_identifier = null, bool $preview = false) {
 
-    global $webDir, $urlServer, $langCertAuthenticity, $langpublisher;
+    global $webDir, $urlServer, $langCertAuthenticity, $langpublisher, $siteName;
 
     if (isset($preview) and $preview) { // certificate preview
         $certificate_id = $certificate_template_id;
@@ -1322,6 +1322,25 @@ function cert_output_to_pdf($certificate_id, $user, $certificate_title = null, $
         $cert_link = $langCertAuthenticity . ":&nbsp;&nbsp;&nbsp;" . $urlServer . "main/out.php?i=" .$certificate_identifier;
         $student_name = $user;
     }
+
+    $logo = "<img src='{$webDir}/resources/img/logo-eclass-small-theme.svg'>";
+    $platform_title = $siteName;
+
+    if (isset($_SESSION['current_user_tenant'])) {
+        $tenant = $_SESSION['current_user_tenant'];
+        $tenantOptions = $tenant->options ? unserialize($tenant->options) : [];
+        $tenantLogo = getTenantOption($tenantOptions, 'imageUpload');
+        $tenantPlatformTitle = getTenantOption($tenantOptions, 'platform_title');
+
+        if ($tenantLogo) {
+            $logo = "<img src='{$webDir}$tenantLogo'>";
+        }
+
+        if ($tenantPlatformTitle) {
+            $platform_title = $tenantPlatformTitle;
+        }
+    }
+
     // init pdf
     $mpdf = new \Mpdf\Mpdf([
         'mode' => 'utf-8',
@@ -1345,6 +1364,8 @@ function cert_output_to_pdf($certificate_id, $user, $certificate_title = null, $
     $html_certificate = preg_replace('(%message%)', $certificate_message, $html_certificate);
     $html_certificate = preg_replace('(%date%)', $certificate_date, $html_certificate);
     $html_certificate = preg_replace('(%link%)', $cert_link, $html_certificate);
+    $html_certificate = preg_replace('(%logo%)', $logo, $html_certificate);
+    $html_certificate = preg_replace('(%platform_title%)', $platform_title, $html_certificate);
 
     $mpdf->WriteHTML($html_certificate);
     $mpdf->Output();
