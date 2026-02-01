@@ -79,7 +79,16 @@ function view($view_file, $view_data = array())
     if (!isset($_SESSION['provider'])) {
         $_SESSION['provider'] = null;
     }
+
     $pageTitle = $siteName;
+
+    if (isset($_SESSION['current_user_tenant'])) {
+        $tenant = $_SESSION['current_user_tenant'];
+        $tenantOptions = $tenant->options ? unserialize($tenant->options) : [];
+        $tenant_platform_title = getTenantOption($tenantOptions, 'platform_title');
+        $pageTitle = $tenant_platform_title;
+    }
+
     $is_mobile = (isset($_SESSION['mobile']) && $_SESSION['mobile'] == true);
 
     $toolArr = [];

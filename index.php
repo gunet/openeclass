@@ -80,7 +80,7 @@ $warning = '';
 $Selected_Language = '';
 foreach ($session->active_ui_languages as $code) {
     if ($code == $session->language) {
-        $data['language_code'] = $code;
+        $data['language_code'] = $language_code = $code;
     }
 }
 
@@ -377,6 +377,24 @@ if (!$upgrade_begin and $uid and !isset($_GET['redirect_home'])) {
             $digit_separator = ',';
         }
         $data['digit_separator'] = $digit_separator;
+    }
+
+    $data['platform_title'] = get_config('homepage_title_' . $language_code);
+    $data['platform_intro'] = get_config('homepage_intro_' . $language_code);
+
+    if (isset($_SESSION['current_user_tenant'])) {
+        $tenant = $_SESSION['current_user_tenant'];
+        $tenantOptions = $tenant->options ? unserialize($tenant->options) : [];
+        $tenant_platform_title = getTenantOption($tenantOptions, 'platform_title');
+        $tenant_platform_intro = getTenantOption($tenantOptions, 'platform_intro');
+
+        if ($tenant_platform_title) {
+            $data['platform_title'] = $tenant_platform_title;
+        }
+
+        if ($tenant_platform_intro) {
+            $data['platform_intro'] = $tenant_platform_intro;
+        }
     }
 
     view('home.index', $data);

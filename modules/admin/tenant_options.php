@@ -64,6 +64,8 @@ $tenantFavicon = getTenantOption($tenantOptions, 'faviconUpload');
 $contact_phone = q(getTenantOption($tenantOptions, 'contact_phone'));
 $contact_address = q(getTenantOption($tenantOptions, 'contact_address'));
 $contact_email = q(getTenantOption($tenantOptions, 'contact_email'));
+$platform_title = q(getTenantOption($tenantOptions, 'platform_title'));
+$platform_intro = q(getTenantOption($tenantOptions, 'platform_intro'));
 
 if (isset($_GET['delete_image'])) {
     global $webDir, $tenant, $tenantOptions;
@@ -90,7 +92,16 @@ if (isset($_POST['optionsSave'])) {
 
     $tenantInfo = upload_images($tenantInfo);
 
-    foreach (['contact_phone', 'contact_address', 'contact_email', 'imageUpload', 'imageUploadSmall', 'faviconUpload'] as $var) {
+    foreach ([
+        'contact_phone', 
+        'contact_address', 
+        'contact_email', 
+        'imageUpload', 
+        'imageUploadSmall', 
+        'faviconUpload', 
+        'platform_title', 
+        'platform_intro'
+    ] as $var) {
         if (isset($_POST[$var])) {
             $value = trim($_POST[$var]);
             if ($var == 'contact_email' and $value and !valid_email($value)) {
@@ -353,6 +364,20 @@ $tool_content .= action_bar([
       <label for='contact_address' class='col-md-3 col-form-label'>$langPostMail</label>
       <div class='col-md-9'>
         <textarea id='contact_address' name='contact_address' class='form-control' rows='3'>$contact_address</textarea>
+      </div>
+    </div>
+
+    <div class='form-group mt-4'>
+      <label for='platform_title' class='col-md-3 col-form-label'>$langSiteTitle</label>
+      <div class='col-md-9'>
+        <input type='text' class='form-control' name='platform_title' id='platform_title' value='$platform_title'>
+      </div>
+    </div>
+
+    <div class='form-group mt-4'>
+      <label for='platform_intro' class='col-md-3 col-form-label'>$langSiteDescr</label>
+      <div class='col-md-9'>
+        " . rich_text_editor('platform_intro', 4, 50, $platform_intro) . "
       </div>
     </div>
     

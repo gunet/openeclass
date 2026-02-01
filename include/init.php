@@ -190,8 +190,12 @@ $http_host = isset($_SERVER['HTTP_HOST'])? $_SERVER['HTTP_HOST']: $main_host;
 
 // localhost is used for tenant domain validity check by web server
 if ($http_host != $main_host and $http_host != 'localhost') {
-    $tenant = Database::get()->querySingle('SELECT * FROM tenant
-        WHERE url REGEXP ?s', "/$http_host(/|$)");
+    $tenant = Database::get()->querySingle('
+        SELECT tenant.*, hierarchy.lft, hierarchy.rgt 
+        FROM tenant 
+        JOIN hierarchy ON hierarchy.id = tenant.department_id 
+        WHERE url REGEXP ?s', "/$http_host(/|$)"
+    );
 
     if ($tenant) {
         $urlServer = $tenant->url;
