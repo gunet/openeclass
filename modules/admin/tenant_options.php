@@ -161,7 +161,11 @@ if (isset($_POST['optionsSave'])) {
         Database::get()->query("UPDATE tenant SET options = ?s WHERE id = ?d", $serialized, $tenant_id);
     }
 
-    $_SESSION['current_user_tenant'] = getTenantById($tenant_id);
+    // Update the session’s current-tenant cache only for regular users.
+    // Admins can manage any tenant, so we avoid binding their session to one tenant record.
+    if (!$is_admin) {
+        $_SESSION['current_user_tenant'] = getTenantById($tenant_id);
+    }
 
     Session::flash('message', $langTenantUpdated);
     Session::flash('alert-class', 'alert-success');
