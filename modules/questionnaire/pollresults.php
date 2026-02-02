@@ -28,9 +28,9 @@ require_once 'functions.php';
 require_once 'modules/usage/usage.lib.php';
 
 $head_content .= "
-<link rel='stylesheet' type='text/css' href='{$urlAppend}js/c3-0.4.10/c3.css' />";
+<link rel='stylesheet' type='text/css' href='{$urlAppend}js/c3-0.7.20/c3.css' />";
 load_js('d3/d3.min.js');
-load_js('c3-0.4.10/c3.min.js');
+load_js('c3-0.7.20/c3.min.js');
 
 $toolName = $langQuestionnaire;
 $pageName = $langPollCharts;
@@ -359,7 +359,7 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK) {
                 $answers_table = "
                     <div class='table-responsive'><table class='table-default'>
                         <thead><tr class='list-header'>
-                            <th>$langAnswer</th>";  
+                            <th>$langAnswer</th>";
                             if (($totalUserAnswer > 1 && isset($_GET['from_session_view'])) or (!isset($_GET['from_session_view']))) {
                                 $answers_table .= "<th>$langSurveyTotalAnswers</th>";
                                 $answers_table .= "<th>$langPercentage</th>";
@@ -650,7 +650,7 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK) {
                                                                poll_question_answer.sub_question FROM poll_answer_record
                                                                 INNER JOIN poll_user_record ON poll_answer_record.poll_user_record_id=poll_user_record.id
                                                                 INNER JOIN poll_question_answer ON poll_answer_record.sub_qid=poll_question_answer.sub_question
-                                                                WHERE poll_answer_record.qid = ?d 
+                                                                WHERE poll_answer_record.qid = ?d
                                                                 AND poll_user_record.pid = ?d
                                                                 AND poll_user_record.session_id = ?d
                                                                 AND poll_question_answer.pqid = ?d", $theQuestion->pqid, $pid, $s_id, $theQuestion->pqid);
@@ -681,7 +681,7 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK) {
                                                         $tool_content .= "<h3 style='margin-bottom:0px;'>$p->givenname&nbsp;$p->surname</h3>";
                                                     }
                             $tool_content .= "  </div>
-                                                <div class='card-body'>";   
+                                                <div class='card-body'>";
                                     $tool_content .= "  <table class='table-default'><tr>";
                                                             foreach ($sub_questions as $s) {
                                                                 $displayItem = false;
@@ -699,16 +699,16 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK) {
                                                 $tool_content .= "<td><ul class='list-group list-group-flush w-100'>
                                                                         <h5 style='margin-bottom:0px; word-break: normal; overflow-wrap: break-word;'>$s->answer_text</h5>";
                                                                     foreach ($answers as $a) {
-                                                                        if ($p->participants == $a->uid && $theQuestion->pqid == $a->qid && 
+                                                                        if ($p->participants == $a->uid && $theQuestion->pqid == $a->qid &&
                                                                                 $s->sub_question == $a->sub_question) {
                                                                                     $tool_content .= "<li class='list-group-item element px-0'>$a->answer_text</li>";
                                                                         }
                                                                     }
                                                 $tool_content .= "</ul></td>";
                                                                 }
-                                                            }                           
-                            $tool_content .= "          
-                                                        </tr></table>    
+                                                            }
+                            $tool_content .= "
+                                                        </tr></table>
                                                 </div>
                                             </div>";
                         }
