@@ -2273,7 +2273,10 @@ function register_posted_variables($var_array, $what = 'all', $callback = null) 
  * @return type
  */
 function rich_text_editor($name, $rows, $cols, $text, $onFocus = false, $options = []) {
-    global $head_content, $language, $urlAppend, $course_code, $langPopUp, $langPopUpFrame, $is_editor, $is_admin, $langResourceBrowser, $langMore, $tinymce_color_text, $langInputTextEditor;
+    global $head_content, $language, $urlAppend, $course_code, $langPopUp, $langPopUpFrame, $is_editor, $is_admin, $langResourceBrowser, $langMore, $tinymce_color_text, $langInputTextEditor,
+        $langLatexDialogTitle, $langLatexInput, $langLatexPreview, $langInsert, $langCancel,
+        $langLatexCatGreekLetters, $langLatexCatOperators, $langLatexCatRelations, $langLatexCatArrows, $langLatexCatDelimiters,
+        $langLatexCatAccents, $langLatexCatFunctions, $langLatexCatMathStructures, $langLatexCatMiscellaneous, $langLatexCatChemicalSymbols;
     static $init_done = false;
     if (!$init_done) {
         $init_done = true;
@@ -2399,8 +2402,28 @@ function rich_text_editor($name, $rows, $cols, $text, $onFocus = false, $options
             $copy_paste = '| pastetext cut copy paste ';
             $paste_plugin = $paste_preprocess = '';
         }
+        $latex_helper_categories = array(
+            'Greek Letters' => $langLatexCatGreekLetters,
+            'Operators' => $langLatexCatOperators,
+            'Relations' => $langLatexCatRelations,
+            'Arrows' => $langLatexCatArrows,
+            'Delimiters' => $langLatexCatDelimiters,
+            'Accents' => $langLatexCatAccents,
+            'Functions' => $langLatexCatFunctions,
+            'Math Structures' => $langLatexCatMathStructures,
+            'Miscellaneous' => $langLatexCatMiscellaneous,
+            'Chemical Symbols' => $langLatexCatChemicalSymbols
+        );
         $head_content .= "
 <script type='text/javascript'>
+window.latexHelperLang = {
+    title: '" . js_escape($langLatexDialogTitle) . "',
+    latexInput: '" . js_escape($langLatexInput) . "',
+    preview: '" . js_escape($langLatexPreview) . "',
+    insert: '" . js_escape($langInsert) . "',
+    cancel: '" . js_escape($langCancel) . "',
+    categories: " . json_encode($latex_helper_categories, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) . "
+};
 
 function editorToggleSecondToolbar(editor) {
     return function() {
