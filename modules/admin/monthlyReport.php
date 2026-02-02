@@ -46,8 +46,10 @@ if (count($tree->buildRootsArray()) > 1) { // multiple root tree
 
 if (isset($_GET['d'])) {  // detailed statistics per faculty
     $monthly_data = get_monthly_archives($fc, true, $_GET['m']);
+    $link = "$_SERVER[SCRIPT_NAME]?fc=$fc&amp;d=$_GET[d]&amp;m=$_GET[m]&amp;format=xls";
 } else {
     $monthly_data = get_monthly_archives($fc);
+    $link = "$_SERVER[SCRIPT_NAME]?fc=$fc&amp;format=xls";
 }
 
 if (isset($_GET['format'])) {
@@ -66,9 +68,9 @@ $data['action_bar'] = action_bar(array(
         'url' => "$_SERVER[SCRIPT_NAME]?fc=$fc&amp;format=pdf",
         'icon' => 'fa-file-pdf',
         'level' => 'primary-label',
-        'show' => false),
+        'show' => false), // to be FIXED !!
     array('title' => $langDumpExcel,
-        'url' => "$_SERVER[SCRIPT_NAME]?fc=$fc&amp;format=xls",
+        'url' => "$link",
         'icon' => 'fa-file-excel',
         'level' => 'primary-label')
 ));
@@ -158,11 +160,22 @@ function export_monthly_data($report_data, $format): void
         $filename = "monthly_report.xlsx";
 
         $data[] = [ "$langFaculty: $fc_name" ];
-        $data[] = [ $langMonth, $langTeachers, $langStudents, $langCourses, $langDoc,$langExercises, $langWorks, $langAnnouncements, $langMessages, $langForums ];
+        if (isset($_GET['d'])) {
+            $data[] = [ "$langMonth: " . date_format(date_create($_GET['m']), "n / Y") ];
+            $first_column_legend = "$langFaculty";
+        } else {
+            $first_column_legend = "$langMonth";
+        }
+        $data[] = [ $first_column_legend, $langTeachers, $langStudents, $langCourses, $langDoc,$langExercises, $langWorks, $langAnnouncements, $langMessages, $langForums ];
 
         foreach ($report_data as $monthly_report_data) {
+            if (isset($_GET['d'])) {
+                $first_column_data = $monthly_report_data['faculty'];
+            } else{
+                $first_column_data = date_format(date_create($monthly_report_data['month']), "n / Y");
+            }
             $data[] = [
-                date_format(date_create($monthly_report_data['month']), "n / Y"),
+                $first_column_data,
                 $monthly_report_data['teachers'],
                 $monthly_report_data['students'],
                 $monthly_report_data['courses'],
