@@ -4,7 +4,7 @@
  */
 
 // Export to window for plugin access
-window.latexSymbolsData = {
+window.latexSymbols = {
     'Greek Letters': [
         { symbol: '\\alpha', code: '\\alpha', name: 'Alpha' },
         { symbol: '\\beta', code: '\\beta', name: 'Beta' },
@@ -30,21 +30,21 @@ window.latexSymbolsData = {
         { symbol: '\\chi', code: '\\chi', name: 'Chi' },
         { symbol: '\\psi', code: '\\psi', name: 'Psi' },
         { symbol: '\\omega', code: '\\omega', name: 'Omega' },
-        { symbol: 'A', code: 'A', name: 'Alpha (capital)' },
-        { symbol: 'B', code: 'B', name: 'Beta (capital)' },
+        { symbol: '\\mathrm{A}', code: '\\mathrm{A}', name: 'Alpha (capital)' },
+        { symbol: '\\mathrm{B}', code: '\\mathrm{B}', name: 'Beta (capital)' },
         { symbol: '\\Gamma', code: '\\Gamma', name: 'Gamma (capital)' },
         { symbol: '\\Delta', code: '\\Delta', name: 'Delta (capital)' },
-        { symbol: 'E', code: 'E', name: 'Epsilon (capital)'},
-        { symbol: 'Z', code: 'Z', name: 'Zeta (capital)'},
-        { symbol: 'H', code: 'H', name: 'Eta (capital)'},
+        { symbol: '\\mathrm{E}', code: '\\mathrm{E}', name: 'Epsilon (capital)'},
+        { symbol: '\\Z', code: 'Z', name: 'Zeta (capital)'},
+        { symbol: '\\mathrm{H}', code: '\\mathrm{H}', name: 'Eta (capital)'},
         { symbol: '\\Theta', code: '\\Theta', name: 'Theta (capital)' },
-        { symbol: 'I', code: 'I', name: 'Iota (capital)'},
-        { symbol: 'K', code: 'K', name: 'Kappa (capital)'},
+        { symbol: '\\mathrm{I}', code: '\\mathrm{I}', name: 'Iota (capital)'},
+        { symbol: '\\mathrm{K}', code: '\\mathrm{K}', name: 'Kappa (capital)'},
         { symbol: 'Λ', code: '\\Lambda', name: 'Lambda (capital)' },
-        { symbol: 'M', code: 'M', name: 'Mu (capital)'},
-        { symbol: 'N', code: 'N', name: 'Nu (capital)'},
+        { symbol: '\\mathrm{M}', code: '\\mathrm{M}', name: 'Mu (capital)'},
+        { symbol: '\\mathrm{N}', code: '\\mathrm{N}', name: 'Nu (capital)'},
         { symbol: 'Ξ', code: '\\Xi', name: 'Xi (capital)' },
-        { symbol: 'O', code: 'O', name: 'Omicron (capital)'},
+        { symbol: '\\mathrm{O}', code: '\\mathrm{O}', name: 'Omicron (capital)'},
         { symbol: '\\Pi', code: '\\Pi', name: 'Pi (capital)' },
         { symbol: '\\Sigma', code: '\\Sigma', name: 'Sigma (capital)' },
         { symbol: 'Φ', code: '\\Phi', name: 'Phi (capital)' },
@@ -205,7 +205,6 @@ window.latexSymbolsData = {
         { symbol: '\\{x\\}', code: '\\{x\\}', name: 'Braces (auto-size)' },
         { symbol: '|x|', code: '|x|', name: 'Absolute value' },
         
-        // Matrices/Cases need dummy content to look good in the button
         { symbol: '\\begin{pmatrix} x & y \\\\ z & t \\end{pmatrix}', code: '\\begin{pmatrix} x & y \\\\ z & t \\end{pmatrix}', name: 'Matrix (parentheses)' },
         { symbol: '\\begin{bmatrix} x & y \\\\ z & t \\end{bmatrix}', code: '\\begin{bmatrix} x & y \\\\ z & t \\end{bmatrix}', name: 'Matrix (brackets)' },
         { symbol: '\\begin{cases} x \\\\ y \\end{cases}', code: '\\begin{cases} x \\\\ y \\end{cases}', name: 'Cases' },
@@ -230,8 +229,37 @@ window.latexSymbolsData = {
         { symbol: '\\clubsuit', code: '\\clubsuit', name: 'Clubs' },
         { symbol: '\\heartsuit', code: '\\heartsuit', name: 'Hearts' },
         { symbol: '\\diamondsuit', code: '\\diamondsuit', name: 'Diamonds' }
+    ],
+    'Chemical Symbols': [
+        { symbol: '\\ce{H2O}', code: '\\ce{H2O}', name: 'Water' },
+        { symbol: '\\ce{CO2}', code: '\\ce{CO2}', name: 'Carbon dioxide' },
+        { symbol: '\\ce{NaCl}', code: '\\ce{NaCl}', name: 'Sodium chloride' },
+        { symbol: '\\ce{H2SO4}', code: '\\ce{H2SO4}', name: 'Sulfuric acid' },
+        { symbol: '\\ce{NH3}', code: '\\ce{NH3}', name: 'Ammonia' },
+        { symbol: '\\ce{CH4}', code: '\\ce{CH4}', name: 'Methane' },
+        { symbol: '\\ce{C6H12O6}', code: '\\ce{C6H12O6}', name: 'Glucose' },
+        { symbol: '\\ce{H+}', code: '\\ce{H+}', name: 'Hydrogen ion' },
+        { symbol: '\\ce{OH-}', code: '\\ce{OH-}', name: 'Hydroxide ion' },
+        { symbol: '\\ce{Fe^{2+}}', code: '\\ce{Fe^{2+}}', name: 'Iron(II) ion' },
+        { symbol: '\\ce{Fe^{3+}}', code: '\\ce{Fe^{3+}}', name: 'Iron(III) ion' },
+        { symbol: '\\ce{SO4^{2-}}', code: '\\ce{SO4^{2-}}', name: 'Sulfate ion' },
+        { symbol: '\\ce{NO3-}', code: '\\ce{NO3-}', name: 'Nitrate ion' },
+        { symbol: '\\ce{CO3^{2-}}', code: '\\ce{CO3^{2-}}', name: 'Carbonate ion' },
+        { symbol: '\\ce{PO4^{3-}}', code: '\\ce{PO4^{3-}}', name: 'Phosphate ion' },
+        { symbol: '\\ce{H2O -> H+ + OH-}', code: '\\ce{H2O -> H+ + OH-}', name: 'Water dissociation' },
+        { symbol: '\\ce{2H2 + O2 -> 2H2O}', code: '\\ce{2H2 + O2 -> 2H2O}', name: 'Water formation' },
+        { symbol: '\\ce{CaCO3 <=> Ca^{2+} + CO3^{2-}}', code: '\\ce{CaCO3 <=> Ca^{2+} + CO3^{2-}}', name: 'Equilibrium reaction' },
+        { symbol: '\\ce{CH3COOH}', code: '\\ce{CH3COOH}', name: 'Acetic acid' },
+        { symbol: '\\ce{C2H5OH}', code: '\\ce{C2H5OH}', name: 'Ethanol' },
+        { symbol: '\\ce{NH4+}', code: '\\ce{NH4+}', name: 'Ammonium ion' },
+        { symbol: '\\ce{CuSO4}', code: '\\ce{CuSO4}', name: 'Copper sulfate' },
+        { symbol: '\\ce{NaOH}', code: '\\ce{NaOH}', name: 'Sodium hydroxide' },
+        { symbol: '\\ce{HCl}', code: '\\ce{HCl}', name: 'Hydrochloric acid' },
+        { symbol: '\\ce{HNO3}', code: '\\ce{HNO3}', name: 'Nitric acid' },
+        { symbol: '\\ce{KMnO4}', code: '\\ce{KMnO4}', name: 'Potassium permanganate' },
+        { symbol: '\\ce{Al2O3}', code: '\\ce{Al2O3}', name: 'Aluminum oxide' },
+        { symbol: '\\ce{Fe2O3}', code: '\\ce{Fe2O3}', name: 'Iron(III) oxide' },
+        { symbol: '\\ce{Ca(OH)2}', code: '\\ce{Ca(OH)2}', name: 'Calcium hydroxide' },
+        { symbol: '\\ce{MgCl2}', code: '\\ce{MgCl2}', name: 'Magnesium chloride' }
     ]
 };
-
-// Also keep backward compatibility
-var latexSymbols = window.latexSymbolsData;

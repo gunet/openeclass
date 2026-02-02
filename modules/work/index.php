@@ -62,7 +62,7 @@ load_js('tools.js');
 if ($is_editor and isset($_GET['id']) and isset($_GET['disp_results'])) {
     require_once 'modules/usage/usage.lib.php';
     load_js('d3/d3.min.js');
-    load_js('c3-0.4.10/c3.min.js');
+    load_js('c3-0.7.20/c3.min.js');
 }
 
 $workPath = $webDir . "/courses/" . $course_code . "/work";

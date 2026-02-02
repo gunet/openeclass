@@ -26,6 +26,7 @@ require_once 'Zend/Search/Lucene/Field.php';
 require_once 'Zend/Search/Lucene/Index/Term.php';
 require_once 'modules/search/classes/ConstantsUtil.php';
 require_once 'modules/search/classes/FetcherUtil.php';
+require_once 'modules/search/classes/SearchEngineUtil.php';
 
 class DocumentIndexer extends AbstractIndexer implements ResourceIndexerInterface {
 
@@ -37,7 +38,6 @@ class DocumentIndexer extends AbstractIndexer implements ResourceIndexerInterfac
      * @global string $urlServer
      */
     protected function makeDoc($docu) {
-        global $urlServer;
         $encoding = 'utf-8';
 
         $doc = new Zend_Search_Lucene_Document();
@@ -55,10 +55,8 @@ class DocumentIndexer extends AbstractIndexer implements ResourceIndexerInterfac
         $doc->addField(Zend_Search_Lucene_Field::Text(ConstantsUtil::FIELD_VISIBLE, $docu->visible, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Text(ConstantsUtil::FIELD_PUBLIC, $docu->public, $encoding));
 
-        $urlAction = ($docu->format == '.dir') ? 'openDir' : 'download';
-        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', $urlServer
-            . 'modules/document/index.php?course=' . course_id_to_code($docu->course_id)
-            . '&amp;' . $urlAction . '=' . $docu->path, $encoding));
+        $fieldUrl = SearchEngineUtil::makeDocumentFieldUrl($docu->course_id, $docu->filename, $docu->format, $docu->path);
+        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', $fieldUrl, $encoding));
 
         return $doc;
     }

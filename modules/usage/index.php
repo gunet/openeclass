@@ -48,9 +48,9 @@ require_once 'modules/usage/usage.lib.php';
 
 load_js('tools.js');
 load_js('bootstrap-datetimepicker');
-$head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/c3-0.4.10/c3.css' />";
+$head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/c3-0.7.20/c3.css' />";
 load_js('d3/d3.min.js');
-load_js('c3-0.4.10/c3.min.js');
+load_js('c3-0.7.20/c3.min.js');
 load_js('bootstrap-datepicker');
 
 $head_content .= "
@@ -69,7 +69,7 @@ $head_content .= "
     var views = {plots:{class: 'fa fa-bar-chart', title: '" . js_escape($langCharts) . "'}, list:{class: 'fa fa-list', title: '" . js_escape($langDetails) . "'}};
     var langNoResult = '" . js_escape($langNoResult) . "';
     var langDisplay ='" . js_escape($langDisplay) . "';
-    var langResults = '" . js_escape($langResults2) . "';    
+    var langResults = '" . js_escape($langResults2) . "';
     var langTotalResults = '" . js_escape($langTotalResults) . "';
     var langDisplayed= '" . js_escape($langDisplayed) . "';
     var langTill = '" . js_escape($langTill) . "';
@@ -84,7 +84,7 @@ $head_content .= "
     var langFavouriteModule = '" . js_escape($langFavourite) . "';
     var langFavouriteCourse = '" . js_escape($langFavouriteCourse) . "';
     var langLoginUser = '" . js_escape($langLoginUser) . "';
-    var langHours = '" . js_escape($langHours) . "';    
+    var langHours = '" . js_escape($langHours) . "';
 </script>";
 load_js('datatables');
 load_js('statistics.js');

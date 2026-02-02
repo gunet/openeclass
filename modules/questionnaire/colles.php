@@ -28,9 +28,9 @@ require_once 'functions.php';
 require_once 'modules/usage/usage.lib.php';
 
 $head_content .= "
-<link rel='stylesheet' type='text/css' href='{$urlAppend}js/c3-0.4.10/c3.css' />";
+<link rel='stylesheet' type='text/css' href='{$urlAppend}js/c3-0.7.20/c3.css' />";
 load_js('d3/d3.min.js');
-load_js('c3-0.4.10/c3.min.js');
+load_js('c3-0.7.20/c3.min.js');
 
 $toolName = $langQuestionnaire;
 $pageName = $langPollCharts;
@@ -142,7 +142,7 @@ if ($is_editor) {
     $export_box .= "
     <div class='col-12 mb-4'>
         <div class='card panelCard card-default px-lg-4 py-lg-3'>
-            <div class='card-header border-0 d-flex justify-content-between align-items-center'>                   
+            <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                 <h3>$langDumpUserDurationToFile</h3>
             </div>
             <div class='card-body'>
