@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LaTeX Editor</title>
-    
+
     <link rel="stylesheet" href="dialog.css">
 
     <!-- Security Checks -->
@@ -39,7 +39,7 @@
             },
             startup: {
                 // We handle typesetting manually for performance and precision
-                typeset: false 
+                typeset: false
             },
             loader: {
                 load: ['[tex]/mhchem']
@@ -47,7 +47,7 @@
         };
     </script>
     <!-- Adjust path to point to MathJax installation -->
-    <script src="/js/mathjax/tex-chtml.js" id="MathJax-script" async></script>
+    <script src="../../../mathjax/tex-chtml.js" id="MathJax-script" async></script>
 </head>
 <body>
 
@@ -57,7 +57,7 @@
         <div class="tabs-nav" id="tabs-container"></div>
         <button id="scroll-right" class="nav-arrow" type="button">&#10095;</button>
     </div>
-    
+
     <div class="symbols-viewport" id="panels-container"></div>
 
     <div class="editor-split">
@@ -83,7 +83,7 @@
     const previewArea = document.getElementById('preview');
     const tabsContainer = document.getElementById('tabs-container');
     const panelsContainer = document.getElementById('panels-container');
-    
+
     // Tabs Scrolling Logic
     const tabsBox = document.getElementById('tabs-container');
     const leftBtn = document.getElementById('scroll-left');
@@ -132,7 +132,7 @@
 
         // Load Symbols (Check both variable names just in case)
         const data = latexSymbols;
-        
+
         if (data) {
             buildInterface(data, lang.categories);
         } else {
@@ -157,7 +157,7 @@
             tabBtn.className = 'tab-btn';
             tabBtn.textContent = (categoryLabels && categoryLabels[cat]) ? categoryLabels[cat] : cat;
             tabBtn.dataset.target = `panel-${index}`;
-            
+
             if(firstTab) {
                 tabBtn.classList.add('active');
             }
@@ -180,10 +180,10 @@
                 const btn = document.createElement('div');
                 btn.className = 'symbol-btn';
                 btn.title = item.name || item.code;
-                
+
                 const renderSpan = document.createElement('span');
                 renderSpan.className = 'mj-render-target';
-                
+
                 btn.appendChild(renderSpan);
                 btn.addEventListener('click', () => insertAtCursor(item.code));
                 panel.appendChild(btn);
@@ -205,12 +205,12 @@
         }
 
         const options = window.MathJax.getMetricsFor(element);
-        options.display = true; 
+        options.display = true;
 
         window.MathJax.tex2chtmlPromise(tex, options).then((node) => {
             element.innerHTML = '';
             element.appendChild(node);
-            
+
             // Clear MathJax internal document to prevent memory bloat
             if (window.MathJax.startup.document) {
                 window.MathJax.startup.document.clear();
@@ -230,14 +230,14 @@
 
     function updatePreview() {
         const tex = inputArea.value.trim();
-        
+
         if (!tex) {
             previewArea.innerHTML = '';
             previewArea.classList.add('empty');
             return;
         }
         previewArea.classList.remove('empty');
-        
+
         if (window.MathJax && window.MathJax.tex2chtmlPromise) {
             const options = window.MathJax.getMetricsFor(previewArea);
             options.display = true;
@@ -261,7 +261,7 @@
         // Remove active class from all tabs and panels
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
         document.querySelectorAll('.symbol-panel').forEach(p => p.classList.remove('active'));
-        
+
         // Activate clicked
         clickedTab.classList.add('active');
         const targetId = clickedTab.dataset.target;
@@ -273,14 +273,14 @@
         const start = inputArea.selectionStart;
         const end = inputArea.selectionEnd;
         const val = inputArea.value;
-        
+
         const before = val.substring(0, start);
         const after = val.substring(end);
-        
+
         inputArea.value = before + text + after;
-        
+
         let newPos = start + text.length;
-        
+
         // Smart cursor placement for {}
         if (text.indexOf('{}') !== -1) {
             newPos = start + text.indexOf('{}') + 1;
@@ -301,10 +301,10 @@
             content: inputArea.value
         }, targetOrigin);
     }
-    
+
     function cancelContent() {
         const targetOrigin = window.location.origin;
-        
+
         window.parent.postMessage({
             mceAction: 'latexhelper-cancel'
         }, targetOrigin);
