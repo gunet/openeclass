@@ -29,7 +29,7 @@ abstract class QuestionType {
             return "<div class='card-footer d-flex flex-wrap bg-light justify-content-center border-0 mt-8 p-0 gap-2'>
                                 <div class='radio d-flex align-items-center mt-1'>
                                     <span class='pe-4 fw-bold'>
-                                        Είσαι βέβαιος;
+                                        Είσαι σίγουρος;
                                     </span>
                                     <div class='form-check form-check-inline mb-0'>
                                         <input class='form-check-input' type='radio' name='certainty[$qid]' value='1' $choice[1]>
@@ -41,7 +41,7 @@ abstract class QuestionType {
                                     </div>
                                     <div class='form-check form-check-inline mb-0'>
                                         <input class='form-check-input' type='radio' name='certainty[$qid]' value='3' $choice[3]>
-                                        <label class='form-check-label'>Φυσικά!</label>
+                                        <label class='form-check-label'>Πολύ σίγουρος</label>
                                     </div>
                                 </div>
                              </div>";
