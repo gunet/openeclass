@@ -134,11 +134,18 @@ if (!$is_course_reviewer && !$thePoll->show_results) {
     redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);
 }
 
-$sqlParticipants = '';
 if (isset($_GET['from_session_view'])) {
-    $sqlParticipants = "AND uid IN (SELECT participants FROM mod_session_users WHERE session_id = $_GET[session] AND is_accepted = 1) AND session_id = $_GET[session]";
+    $total_participants = Database::get()->querySingle("SELECT COUNT(*) AS total FROM poll_user_record WHERE pid = ?d 
+                                                            AND (email_verification = 1 OR email_verification IS NULL) 
+                                                            AND uid IN
+                                                             (
+                                                                SELECT participants FROM mod_session_users WHERE session_id = ?d AND is_accepted = 1
+                                                             ) 
+                                                            AND session_id = ?d", $pid, $_GET['session'], $_GET['session'])->total;
+} else {
+    $total_participants = Database::get()->querySingle("SELECT COUNT(*) AS total FROM poll_user_record WHERE pid = ?d AND (email_verification = 1 OR email_verification IS NULL)", $pid)->total;
 }
-$total_participants = Database::get()->querySingle("SELECT COUNT(*) AS total FROM poll_user_record WHERE pid = ?d AND (email_verification = 1 OR email_verification IS NULL) $sqlParticipants", $pid)->total;
+
 if (!$total_participants) {
     redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
 }
@@ -348,8 +355,8 @@ $all_participants = [];
 if (isset($_GET['from_session_view'])) { //session view
     $all_participants = Database::get()->queryArray("SELECT user.id,user.givenname,user.surname,mod_session_users.participants FROM mod_session_users
                                                      LEFT JOIN user ON user.id=mod_session_users.participants
-                                                     WHERE mod_session_users.session_id = $_GET[session] AND mod_session_users.is_accepted = 1
-                                                     AND mod_session_users.participants IN (SELECT uid FROM poll_user_record WHERE pid = $pid AND session_id = $_GET[session])");
+                                                     WHERE mod_session_users.session_id = ?d AND mod_session_users.is_accepted = 1
+                                                     AND mod_session_users.participants IN (SELECT uid FROM poll_user_record WHERE pid = ?d AND session_id = ?d)", $_GET['session'], $pid, $_GET['session']);
 } else { // course view
     if (isset($_GET['res_per_u'])) {
         $uName = Database::get()->querySingle("SELECT givenname,surname FROM user WHERE id = ?d", intval($_GET['res_per_u']));
@@ -371,9 +378,9 @@ if ($isEnabledGrade && $is_editor && !isset($_GET['res_per_u']) && !isset($_GET[
                                 FROM poll_user_record c, poll_answer_record a
                                 LEFT JOIN poll_question_answer b
                                 ON a.aid = b.pqaid
-                                WHERE a.qid IN (SELECT pqid FROM poll_question WHERE pid = $pid AND qtype = 1 OR QTYPE = 3)
+                                WHERE a.qid IN (SELECT pqid FROM poll_question WHERE pid = ?d AND qtype = 1 OR QTYPE = 3)
                                 AND a.poll_user_record_id = c.id
-                                AND (c.email_verification = 1 OR c.email_verification IS NULL)");
+                                AND (c.email_verification = 1 OR c.email_verification IS NULL)", $pid);
 
     if (count($grade_answers) > 0) {
         $userGrades = [];
@@ -504,20 +511,29 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COU
                     </div>
                     <div class='card-body'>";
                         if ($theQuestion->qtype == QTYPE_MULTIPLE || $theQuestion->qtype == QTYPE_SINGLE) {
+
                             $sql_participants_a = '';
                             $sql_participants_b = '';
                             $sql_participants_c = '';
                             if (isset($_GET['from_session_view'])) {
-                                $sql_participants_a = "AND c.uid IN (SELECT participants FROM mod_session_users WHERE session_id = $_GET[session] AND is_accepted = 1) AND c.session_id = $_GET[session]";
-                                $sql_participants_b = "AND uid IN (SELECT participants FROM mod_session_users WHERE session_id = $_GET[session] AND is_accepted = 1) AND session_id = $_GET[session]";
-                                $sql_participants_c = "AND poll_user_record.uid IN (SELECT participants FROM mod_session_users WHERE session_id = $_GET[session] AND is_accepted = 1) AND poll_user_record.session_id = $_GET[session]";
+                                $sql_participants_a = "AND c.uid IN (SELECT participants FROM mod_session_users WHERE session_id = ?d AND is_accepted = 1) AND c.session_id = ?d";
+                                $sql_participants_b = "AND uid IN (SELECT participants FROM mod_session_users WHERE session_id = ?d AND is_accepted = 1) AND session_id = ?d";
+                                $sql_participants_c = "AND poll_user_record.uid IN (SELECT participants FROM mod_session_users WHERE session_id = ?d AND is_accepted = 1) AND poll_user_record.session_id = ?d";
+                                $args_array = [$_GET['session'], $_GET['session']];
+                            } else {
+                                $args_array = [];
                             }
 
                             $sql_participants_d = '';
                             $sql_participants_e = '';
                             if (isset($_GET['res_per_u'])) {
-                                $sql_participants_d = "AND c.uid=$_GET[res_per_u]";
-                                $sql_participants_e = "AND poll_user_record.uid=$_GET[res_per_u]";
+                                $sql_participants_d = "AND c.uid=?d";
+                                $sql_participants_e = "AND poll_user_record.uid=?d";
+                                $args_array_d = [$_GET['res_per_u']];
+                                $args_array_e = [$_GET['res_per_u']];
+                            } else {
+                                $args_array_d = [];
+                                $args_array_e = [];
                             }
 
                             $names_array = [];
@@ -536,12 +552,12 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COU
                                         AND (c.email_verification = 1 OR c.email_verification IS NULL)
                                         $sql_participants_a
                                         $sql_participants_d
-                                        GROUP BY a.aid ORDER BY MIN(a.submit_date) DESC", $theQuestion->pqid);
+                                        GROUP BY a.aid ORDER BY MIN(a.submit_date) DESC", $theQuestion->pqid, $args_array, $args_array_d);
                             $answer_total = Database::get()->querySingle("SELECT COUNT(*) AS total FROM poll_answer_record, poll_user_record
                                                                                     WHERE poll_user_record_id = id
                                                                                     AND (email_verification=1 OR email_verification IS NULL)
                                                                                     $sql_participants_b
-                                                                                    AND qid= ?d", $theQuestion->pqid)->total;
+                                                                                    AND qid = ?d",  $args_array, $theQuestion->pqid)->total;
 
                             $answers_table = "
                                 <p>$theQuestion->question_text</p>
@@ -594,7 +610,7 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COU
                                                                     AND poll_user_record.email_verification = 1
                                                                     AND poll_answer_record.poll_user_record_id = poll_user_record.id)
                                                                 ORDER BY s DESC
-                                                            ", $theQuestion->pqid, $aid, $theQuestion->pqid, $aid);
+                                                            ", $theQuestion->pqid, $aid,  $args_array, $args_array_e, $theQuestion->pqid, $aid);
                                     if (count($names) > 0) {
                                         foreach($names as $name) {
                                             $names_array[] = $name->fullname;
@@ -636,7 +652,7 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COU
                             } else {
                                 $tool_content .= $answers_table;
                             }
-                            
+
                         } elseif ($theQuestion->qtype == QTYPE_SCALE) {
 
                             $answerScale = Database::get()->querySingle("SELECT answer_scale FROM poll_question WHERE pqid = ?d", $theQuestion->pqid)->answer_scale;
@@ -646,16 +662,24 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COU
                             $sql_participants_b = '';
                             $sql_participants_c = '';
                             if (isset($_GET['from_session_view'])) {
-                                $sql_participants_a = "AND b.uid IN (SELECT participants FROM mod_session_users WHERE session_id = $_GET[session] AND is_accepted = 1) AND b.session_id = $_GET[session]";
-                                $sql_participants_b = "AND uid IN (SELECT participants FROM mod_session_users WHERE session_id = $_GET[session] AND is_accepted = 1) AND session_id = $_GET[session]";
-                                $sql_participants_c = "AND poll_user_record.uid IN (SELECT participants FROM mod_session_users WHERE session_id = $_GET[session] AND is_accepted = 1) AND poll_user_record.session_id = $_GET[session]";
+                                $sql_participants_a = "AND b.uid IN (SELECT participants FROM mod_session_users WHERE session_id = ?d AND is_accepted = 1) AND b.session_id = ?d";
+                                $sql_participants_b = "AND uid IN (SELECT participants FROM mod_session_users WHERE session_id = ?d AND is_accepted = 1) AND session_id = ?d";
+                                $sql_participants_c = "AND poll_user_record.uid IN (SELECT participants FROM mod_session_users WHERE session_id = ?d AND is_accepted = 1) AND poll_user_record.session_id = ?d";
+                                $args_array = [$_GET['session'], $_GET['session']];
+                            } else {
+                                $args_array = [];
                             }
 
                             $sql_participants_d = '';
                             $sql_participants_e = '';
                             if (isset($_GET['res_per_u'])) {
-                                $sql_participants_d = "AND b.uid=$_GET[res_per_u]";
-                                $sql_participants_e = "AND poll_user_record.uid=$_GET[res_per_u]";
+                                $sql_participants_d = "AND b.uid=?d";
+                                $sql_participants_e = "AND poll_user_record.uid=?d";
+                                $args_array_d = [$_GET['res_per_u']];
+                                $args_array_e = [$_GET['res_per_u']];
+                            } else {
+                                $args_array_d = [];
+                                $args_array_e = [];
                             }
 
                             $names_array = array();
@@ -675,12 +699,12 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COU
                                     $sql_participants_a
                                     $sql_participants_d
                                     AND (b.email_verification = 1 OR b.email_verification IS NULL)
-                                    GROUP BY a.answer_text ORDER BY MIN(a.submit_date) DESC", $theQuestion->pqid);
+                                    GROUP BY a.answer_text ORDER BY MIN(a.submit_date) DESC", $theQuestion->pqid, $args_array, $args_array_d);
                             $answer_total = Database::get()->querySingle("SELECT COUNT(*) AS total FROM poll_answer_record, poll_user_record
                                                                                     WHERE poll_user_record_id = id
                                                                                     AND (email_verification=1 OR email_verification IS NULL)
                                                                                     $sql_participants_b
-                                                                                    AND qid= ?d", $theQuestion->pqid)->total;
+                                                                                    AND qid = ?d", $args_array, $theQuestion->pqid)->total;
 
                             $answers_table = "
                                 <p>$theQuestion->question_text</p>
@@ -721,7 +745,7 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COU
                                                                     AND poll_user_record.email_verification = 1
                                                                     AND poll_answer_record.poll_user_record_id = poll_user_record.id)
                                                                 ORDER BY s DESC
-                                                            ", $theQuestion->pqid, $answer->answer_text, $theQuestion->pqid, $answer->answer_text);
+                                                            ", $theQuestion->pqid, $answer->answer_text, $args_array, $args_array_e, $theQuestion->pqid, $answer->answer_text);
                                     if (count($names) > 0) {
                                         foreach ($names as $name) {
                                             $names_array[] = $name->fullname;
@@ -762,21 +786,29 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COU
                             } else {
                                 $tool_content .= $answers_table;
                             }
-                            
+
                         } elseif ($theQuestion->qtype == QTYPE_FILL || $theQuestion->qtype == QTYPE_DATETIME || $theQuestion->qtype == QTYPE_SHORT) {
 
                             $sql_participants_a = '';
                             $sql_participants_c = '';
                             if (isset($_GET['from_session_view'])) {
-                                $sql_participants_a = "AND b.uid IN (SELECT participants FROM mod_session_users WHERE session_id = $_GET[session] AND is_accepted = 1) AND b.session_id = $_GET[session]";
-                                $sql_participants_c = "AND poll_user_record.uid IN (SELECT participants FROM mod_session_users WHERE session_id = $_GET[session] AND is_accepted = 1) AND poll_user_record.session_id = $_GET[session]";
+                                $sql_participants_a = "AND b.uid IN (SELECT participants FROM mod_session_users WHERE session_id = ?d AND is_accepted = 1) AND b.session_id = ?d";
+                                $sql_participants_c = "AND poll_user_record.uid IN (SELECT participants FROM mod_session_users WHERE session_id = ?d AND is_accepted = 1) AND poll_user_record.session_id = ?d";
+                                $args_array = [$_GET['session'], $_GET['session']];
+                            } else {
+                                $args_array = [];
                             }
 
                             $sql_participants_d = '';
                             $sql_participants_e = '';
                             if (isset($_GET['res_per_u'])) {
-                                $sql_participants_d = "AND b.uid=$_GET[res_per_u]";
-                                $sql_participants_e = "AND poll_user_record.uid=$_GET[res_per_u]";
+                                $sql_participants_d = "AND b.uid=?d";
+                                $sql_participants_e = "AND poll_user_record.uid=?d";
+                                $args_array_d = [$_GET['res_per_u']];
+                                $args_array_e = [$_GET['res_per_u']];
+                            } else {
+                                $args_array_d = [];
+                                $args_array_e = [];
                             }
 
                             // $tool_content .= "<div class='panel-body'>";
@@ -790,7 +822,7 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COU
                                                         $sql_participants_a
                                                         $sql_participants_d
                                                         AND (b.email_verification = 1 OR b.email_verification IS NULL)
-                                                        GROUP BY a.answer_text ORDER BY MIN(a.submit_date) DESC", $theQuestion->pqid);
+                                                        GROUP BY a.answer_text ORDER BY MIN(a.submit_date) DESC", $theQuestion->pqid, $args_array, $args_array_d);
                             $answers_table = "<p>$theQuestion->question_text</p><div class='table-responsive'><table class='table-default'>
                                     <tbody>
                                     <tr class='list-header'>
@@ -821,7 +853,7 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COU
                                                                     AND poll_user_record.email_verification = 1
                                                                     AND poll_answer_record.poll_user_record_id = poll_user_record.id)
                                                                 ORDER BY s DESC
-                                                            ", $theQuestion->pqid, $answer->answer_text, $theQuestion->pqid, $answer->answer_text);
+                                                            ", $theQuestion->pqid, $answer->answer_text, $args_array, $args_array_e, $theQuestion->pqid, $answer->answer_text);
                                     foreach($names as $name) {
                                         $names_array[] = $name->fullname;
                                     }
@@ -870,7 +902,10 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COU
 
                             $sql_participants_d = '';
                             if (isset($_GET['res_per_u'])) {
-                                $sql_participants_d = "AND poll_user_record.uid=$_GET[res_per_u]";
+                                $sql_participants_d = "AND poll_user_record.uid=?d";
+                                $args_array_d = [$_GET['res_per_u']];
+                            } else {
+                                $args_array_d = [];
                             }
 
                             $s_id = $_GET['session'] ?? 0;
@@ -890,7 +925,7 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COU
                                                                             AND poll_user_record.pid = ?d
                                                                             $sql_participants_d
                                                                             AND poll_user_record.session_id = ?d
-                                                                            AND poll_question_answer.pqid = ?d", $theQuestion->pqid, $pid, $s_id, $theQuestion->pqid);
+                                                                            AND poll_question_answer.pqid = ?d", $theQuestion->pqid, $pid, $args_array_d, $s_id, $theQuestion->pqid);
 
                             if (count($all_participants) > 0 && count($answers) > 0) {
                                 $sub_questions = Database::get()->queryArray("SELECT * FROM poll_question_answer WHERE pqid = ?d",$theQuestion->pqid);
