@@ -59,8 +59,22 @@ $data[] = [ $poll_title ];
 $data[] = [];
 
 $sqlSession = '';
+$args_s = [];
 if (isset($_GET['dumppoll_session'])) {
-    $sqlSession = "AND b.session_id = $_GET[session]";
+    $sqlSession = "AND b.session_id =?d";
+    $args_s = [$_GET['session']];
+}
+
+$res_per_user = '';
+$sql_per_user = '';
+$sql_per_user_2 = '';
+$args_u = [];
+if (isset($_GET['res_per_u'])) {
+    $u = intval($_GET['res_per_u']);
+    $res_per_user = "AND uid = ?d";
+    $sql_per_user = "AND b.uid = ?d";
+    $sql_per_user_2 = "AND a.uid = ?d";
+    $args_u = [$u];
 }
 
 if ($full) { // user questions results
@@ -74,13 +88,14 @@ if ($full) { // user questions results
     $users = Database::get()->queryArray("SELECT uid AS user_identifier
                                             FROM poll_user_record
                                                 WHERE pid = ?d
+                                                $res_per_user
                                                 AND uid != 0
                                             UNION
                                                 SELECT email AS user_identifier
                                                 FROM poll_user_record
                                                 WHERE pid = ?d
                                                 AND email_verification = 1",
-                                        $pid, $pid);
+                                        $pid, $args_u, $pid);
 
     $q_counter = 0;
     foreach ($questions as $q) {
@@ -125,7 +140,8 @@ if ($full) { // user questions results
                                 WHERE a.poll_user_record_id = b.id
                                 AND (b.email_verification = 1 OR b.email_verification IS NULL)
                                 AND a.qid = ?d
-                                $sqlSession", $q->pqid);
+                                $sql_per_user
+                                $sqlSession", $q->pqid, $args_u, $args_s);
 
             foreach ($answers as $a) {
 
@@ -186,8 +202,9 @@ if ($full) { // user questions results
                                                     AND a.sub_qid = ?d
                                                     AND a.poll_user_record_id = b.id
                                                     AND (b.email_verification = 1 OR b.email_verification IS NULL)
+                                                    $sql_per_user
                                                     $sqlSession
-                                                    ORDER BY uid", $q->pqid, $q->sub_question);
+                                                    ORDER BY uid", $q->pqid, $q->sub_question, $args_u, $args_s);
 
             foreach ($answers as $a) {
                 $answer_text = $a->answer_text;
@@ -208,8 +225,9 @@ if ($full) { // user questions results
                                 WHERE qid = ?d
                                 AND a.poll_user_record_id = b.id
                                 AND (b.email_verification = 1 OR b.email_verification IS NULL)
+                                $sql_per_user
                                 $sqlSession
-                                ORDER BY uid", $q->pqid);
+                                ORDER BY uid", $q->pqid, $args_u, $args_s);
             foreach ($answers as $a) {
                 $user_identifier = $a->uid ?: $a->email;
                 $qlist[$user_identifier][$q->pqid] = $a->answer_text;
@@ -224,8 +242,9 @@ if ($full) { // user questions results
     $session_participants = [];
     if (isset($_GET['dumppoll_session'])) {
         $participants = Database::get()->queryArray("SELECT participants FROM mod_session_users
-                                                             WHERE session_id = $_GET[session] AND is_accepted = 1
-                                                             AND participants IN (SELECT uid FROM poll_user_record WHERE pid = $pid AND session_id = $_GET[session])");
+                                                             WHERE session_id = ?d AND is_accepted = 1
+                                                             AND participants IN (SELECT uid FROM poll_user_record 
+                                                                                    WHERE pid = ?d AND session_id = ?d)", $_GET['session'], $pid, $_GET['session']);
         if (count($participants) > 0) {
             foreach ($participants as $p) {
                 $session_participants[] = $p->participants;
@@ -281,15 +300,17 @@ if ($full) { // user questions results
                                     ON b.aid = c.pqaid
                                     WHERE b.qid = ?d
                                     AND b.poll_user_record_id = a.id
+                                    $sql_per_user_2
                                     AND (a.email_verification = 1 OR a.email_verification IS NULL)
-                                    GROUP BY b.aid, c.answer_text", $q->pqid);
+                                    GROUP BY b.aid, c.answer_text", $q->pqid, $args_u);
             } else {
                 $answers = Database::get()->queryArray("SELECT COUNT(a.arid) AS count, a.answer_text
                                                         FROM poll_answer_record a, poll_user_record b
                                                         WHERE a.qid = ?d
                                                         AND a.poll_user_record_id = b.id
+                                                        $sql_per_user
                                                         AND (b.email_verification = 1 OR b.email_verification IS NULL)
-                                                        GROUP BY a.answer_text", $q->pqid);
+                                                        GROUP BY a.answer_text", $q->pqid, $args_u);
             }
             $answer_counts = array();
             $answer_text = array();
