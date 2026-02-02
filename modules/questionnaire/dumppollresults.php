@@ -63,6 +63,16 @@ if (isset($_GET['dumppoll_session'])) {
     $sqlSession = "AND b.session_id = $_GET[session]";
 }
 
+$res_per_user = '';
+$sql_per_user = '';
+$sql_per_user_2 = '';
+if (isset($_GET['res_per_u'])) {
+    $u = intval($_GET['res_per_u']);
+    $res_per_user = "AND uid = $u";
+    $sql_per_user = "AND b.uid = $u";
+    $sql_per_user_2 = "AND a.uid = $u";
+}
+
 if ($full) { // user questions results
     if ($anonymized) {
         $heading = array($langName);
@@ -74,6 +84,7 @@ if ($full) { // user questions results
     $users = Database::get()->queryArray("SELECT uid AS user_identifier
                                             FROM poll_user_record
                                                 WHERE pid = ?d
+                                                $res_per_user
                                                 AND uid != 0
                                             UNION
                                                 SELECT email AS user_identifier
@@ -125,6 +136,7 @@ if ($full) { // user questions results
                                 WHERE a.poll_user_record_id = b.id
                                 AND (b.email_verification = 1 OR b.email_verification IS NULL)
                                 AND a.qid = ?d
+                                $sql_per_user
                                 $sqlSession", $q->pqid);
 
             foreach ($answers as $a) {
@@ -186,6 +198,7 @@ if ($full) { // user questions results
                                                     AND a.sub_qid = ?d
                                                     AND a.poll_user_record_id = b.id
                                                     AND (b.email_verification = 1 OR b.email_verification IS NULL)
+                                                    $sql_per_user
                                                     $sqlSession
                                                     ORDER BY uid", $q->pqid, $q->sub_question);
 
@@ -208,6 +221,7 @@ if ($full) { // user questions results
                                 WHERE qid = ?d
                                 AND a.poll_user_record_id = b.id
                                 AND (b.email_verification = 1 OR b.email_verification IS NULL)
+                                $sql_per_user
                                 $sqlSession
                                 ORDER BY uid", $q->pqid);
             foreach ($answers as $a) {
@@ -281,6 +295,7 @@ if ($full) { // user questions results
                                     ON b.aid = c.pqaid
                                     WHERE b.qid = ?d
                                     AND b.poll_user_record_id = a.id
+                                    $sql_per_user_2
                                     AND (a.email_verification = 1 OR a.email_verification IS NULL)
                                     GROUP BY b.aid, c.answer_text", $q->pqid);
             } else {
@@ -288,6 +303,7 @@ if ($full) { // user questions results
                                                         FROM poll_answer_record a, poll_user_record b
                                                         WHERE a.qid = ?d
                                                         AND a.poll_user_record_id = b.id
+                                                        $sql_per_user
                                                         AND (b.email_verification = 1 OR b.email_verification IS NULL)
                                                         GROUP BY a.answer_text", $q->pqid);
             }
