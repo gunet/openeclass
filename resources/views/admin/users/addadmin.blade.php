@@ -1,21 +1,21 @@
 @push('head_scripts')
-    <script type="text/javascript">
-        $(function() {
+<script type="text/javascript">
+    $(function() {
+        if ($('#managedepartmentradio').is(':checked')) {
+            $('#departmentPicker').removeClass('hidden').show();
+        } else {
+            $('#departmentPicker').removeClass('hidden').hide();
+        }
+        $('input[name=adminrights]').change(function(e) {
+            $('#departmentPicker').removeClass('hidden');
             if ($('#managedepartmentradio').is(':checked')) {
-                $('#departmentPicker').removeClass('hidden').show();
+                $('#departmentPicker').slideDown('fast');
             } else {
-                $('#departmentPicker').removeClass('hidden').hide();
+                $('#departmentPicker').slideUp('fast');
             }
-            $('input[name=adminrights]').change(function(e) {
-                $('#departmentPicker').removeClass('hidden');
-                if ($('#managedepartmentradio').is(':checked')) {
-                    $('#departmentPicker').slideDown('fast');
-                } else {
-                    $('#departmentPicker').slideUp('fast');
-                }
-            });
         });
-    </script>
+    });
+</script>
 @endpush
 
 @extends('layouts.default')
@@ -31,9 +31,9 @@
             @include('layouts.partials.legend_view')
 
             @if(isset($action_bar) and !empty($action_bar))
-                {!! $action_bar !!}
+            {!! $action_bar !!}
             @else
-                <div class='mt-4'></div>
+            <div class='mt-4'></div>
             @endif
 
             @include('layouts.partials.show_alert')
@@ -54,51 +54,52 @@
                             </div>
 
                             <div class='form-group mt-4'>
-                                <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langAddRole') }} <span class='asterisk Accent-200-cl'>(*)</span></div>
-                                <div class='col-sm-12'>
-                                    <div class='radio mb-4'>
-                                        <label>
-                                            <input type='radio' name='adminrights' value='admin' {{$checked['admin']}}>
-                                            {{ trans('langAdministrator') }}
-                                        </label>
-                                        <div class='help-block'>{{ trans('langHelpAdministrator') }}</div>
+                                @if(!($is_departmentmanage_user && !$is_admin))
+                                    <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langAddRole') }} <span class='asterisk Accent-200-cl'>(*)</span></div>
+                                    <div class='col-sm-12'>
+                                        <div class='radio mb-4'>
+                                            <label>
+                                                <input type='radio' name='adminrights' value='admin' {{$checked['admin']}}>
+                                                {{ trans('langAdministrator') }}
+                                            </label>
+                                            <div class='help-block'>{{ trans('langHelpAdministrator') }}</div>
+                                        </div>
+
+                                        <div class='radio mb-4'>
+                                            <label>
+                                                <input type='radio' name='adminrights' value='poweruser' {{$checked['poweruser']}}>
+                                                {{ trans('langPowerUser') }}
+                                            </label>
+                                            <div class='help-block'>{{ trans('langHelpPowerUser') }}</div>
+                                        </div>
+
+
+                                        <div class='radio mb-4'>
+                                            <label>
+                                                <input type='radio' name='adminrights' value='manageuser' {{$checked['manageuser']}}>
+                                                {{ trans('langManageUser') }}
+                                            </label>
+                                            <div class='help-block'>{{ trans('langHelpManageUser') }}</div>
+                                        </div>
+
+
+                                        <div class='radio'>
+                                            <label>
+                                                <input type='radio' name='adminrights' value='managedepartment' id='managedepartmentradio' {{$checked['managedepartment']}}>
+                                                {{ trans('langManageDepartment') }}
+                                            </label>
+                                            <div class='help-block'>{{ trans('langHelpManageDepartment') }}</div>
+                                        </div>
                                     </div>
-
-                                    <div class='radio mb-4'>
-                                        <label>
-                                            <input type='radio' name='adminrights' value='poweruser' {{$checked['poweruser']}}>
-                                            {{ trans('langPowerUser') }}
-                                        </label>
-                                        <div class='help-block'>{{ trans('langHelpPowerUser') }}</div>
-                                    </div>
-
-
-                                    <div class='radio mb-4'>
-                                        <label>
-                                            <input type='radio' name='adminrights' value='manageuser' {{$checked['manageuser']}}>
-                                            {{ trans('langManageUser') }}
-                                        </label>
-                                        <div class='help-block'>{{ trans('langHelpManageUser') }}</div>
-                                    </div>
-
-
-                                    <div class='radio'>
-                                        <label>
-                                            <input type='radio' name='adminrights' value='managedepartment' id='managedepartmentradio' {{$checked['managedepartment']}}>
-                                            {{ trans('langManageDepartment') }}
-                                        </label>
-                                        <div class='help-block'>{{ trans('langHelpManageDepartment') }}</div>
-                                    </div>
-
+                                    </label>
                                 </div>
-                                </label>
-                            </div>
 
-                            <div class='form-group hidden' id='departmentPicker'>
-                                <div class='col-sm-12 mt-2'>
-                                    {!! $pickerHtml !!}
+                                <div class='form-group hidden' id='departmentPicker'>
+                                    <div class='col-sm-12 mt-2'>
+                                        {!! $pickerHtml !!}
+                                    </div>
                                 </div>
-                            </div>
+                            @endif
 
                             {!! showSecondFactorChallenge() !!}
 

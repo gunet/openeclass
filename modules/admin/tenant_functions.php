@@ -330,3 +330,51 @@ function getTenantFailureLoginData(
 
     return $result;
 }
+
+/**
+ * @brief Return user if belongs to tenant, otherwise false
+ *
+ * @param int|string $user User ID (int) or username (string)
+ * @param int|null $tenant_id Optional tenant ID (defaults to current tenant)
+ * @return object|false
+ */
+function getTenantUserIfBelongs($user, $tenant_id = null)
+{
+    // Resolve tenant
+    $tenant = $tenant_id ? getTenantById($tenant_id) : getCurrentTenant();
+
+    if (!$tenant) {
+        return false;
+    }
+
+    // Get tenant hierarchy nodes
+    $tree = new Hierarchy();
+    $tenantNodes = $tree->getTenantNodes($tenant->id);
+
+    if (empty($tenantNodes)) {
+        return false;
+    }
+
+    $tenantNodeIds = array_map(fn($n) => intval($n->id), $tenantNodes);
+    $inClause = implode(', ', $tenantNodeIds);
+
+    // User condition
+    if (is_int($user) || ctype_digit($user)) {
+        $userCondition = 'u.id = ?d';
+        $value = (int) $user;
+    } else {
+        $userCondition = 'u.username = ?s';
+        $value = $user;
+    }
+
+    $result = Database::get()->querySingle("
+        SELECT DISTINCT u.*
+        FROM user u
+        JOIN user_department ud ON ud.user = u.id
+        WHERE $userCondition
+          AND ud.department IN ($inClause)
+        LIMIT 1
+    ", $value);
+
+    return $result ?: false;
+}
