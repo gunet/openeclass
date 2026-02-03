@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LaTeX Editor</title>
+
+    <link rel="stylesheet" href="dialog.css">
+
+    <!-- Security Checks -->
+    <script>
+        (function() {
+            try {
+                // 1. Block if not inside an iframe
+                if (window.self === window.top) {
+                    document.documentElement.innerHTML = '<div style="padding:20px;color:red;font-family:sans-serif;">Access Denied: This tool must be loaded via the Editor.</div>';
+                    throw new Error('Direct access denied');
+                }
+                // 2. Block if parent is different origin (Basic protection)
+                if (window.parent.location.origin !== window.location.origin) {
+                    throw new Error('Cross-origin access denied');
+                }
+            } catch (e) {
+                // Stop execution if checks fail
+                window.stop();
+                console.error(e);
+            }
+        })();
+    </script>
+
+    <script src="latex_codes.js"></script>
+
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                packages: {'[+]': ['mhchem']}
+            },
+            startup: {
+                // We handle typesetting manually for performance and precision
+                typeset: false
+            },
+            loader: {
+                load: ['[tex]/mhchem']
+            }
+        };
+    </script>
+    <!-- Adjust path to point to MathJax installation -->
+    <script src="../../../mathjax/tex-chtml.js" id="MathJax-script" async></script>
+</head>
+<body>
+
+<div class="container">
+    <div class="tabs-wrapper">
+        <button id="scroll-left" class="nav-arrow" type="button">&#10094;</button>
+        <div class="tabs-nav" id="tabs-container"></div>
+        <button id="scroll-right" class="nav-arrow" type="button">&#10095;</button>
+    </div>
+
+    <div class="symbols-viewport" id="panels-container"></div>
+
+    <div class="editor-split">
+        <div class="pane">
+            <label class="pane-label" id="label-latex-input">LaTeX Input:</label>
+            <textarea id="latex-input" class="pane-content" placeholder="\sqrt{x}" spellcheck="false"></textarea>
+        </div>
+        <div class="pane">
+            <label class="pane-label" id="label-preview">Preview</label>
+            <div id="preview" class="pane-content empty"></div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <button class="btn mce-widget mce-btn mce-primary mce-abs-layout-item mce-btn-has-text" id="btn-insert" onclick="insertContent()">Insert</button>
+        <button class="btn mce-widget mce-btn mce-primary mce-abs-layout-item mce-btn-has-text" id="btn-cancel" onclick="cancelContent()">Cancel</button>
+    </div>
+</div>
+
+<script>
+    // Elements
+    const inputArea = document.getElementById('latex-input');
+    const previewArea = document.getElementById('preview');
+    const tabsContainer = document.getElementById('tabs-container');
+    const panelsContainer = document.getElementById('panels-container');
+
+    // Tabs Scrolling Logic
+    const tabsBox = document.getElementById('tabs-container');
+    const leftBtn = document.getElementById('scroll-left');
+    const rightBtn = document.getElementById('scroll-right');
+    let scrollInterval;
+    const SCROLL_SPEED = 5;
+
+    function startScroll(direction) {
+        stopScroll();
+        scrollInterval = setInterval(() => {
+            tabsBox.scrollLeft += (direction * SCROLL_SPEED);
+        }, 10);
+    }
+
+    function stopScroll() {
+        if (scrollInterval) {
+            clearInterval(scrollInterval);
+            scrollInterval = null;
+        }
+    }
+
+    leftBtn.addEventListener('mouseenter', () => startScroll(-1));
+    leftBtn.addEventListener('mouseleave', stopScroll);
+    rightBtn.addEventListener('mouseenter', () => startScroll(1));
+    rightBtn.addEventListener('mouseleave', stopScroll);
+
+    // Initialization
+    window.addEventListener('load', () => {
+        var args = {};
+        try {
+            args = top.tinymce.activeEditor.windowManager.getParams() || {};
+        } catch(e) {
+            console.log("Could not retrieve dialog params.");
+        }
+
+        if (args.initialCode) {
+            inputArea.value = args.initialCode;
+        }
+
+        // Apply translations (from messages.inc.php via plugin)
+        var lang = args.latexLang || {};
+        document.getElementById('label-latex-input').textContent = lang.latexInput || 'LaTeX Input:';
+        document.getElementById('label-preview').textContent = lang.preview || 'Preview';
+        document.getElementById('btn-insert').textContent = lang.insert || 'Insert';
+        document.getElementById('btn-cancel').textContent = lang.cancel || 'Cancel';
+
+        // Load Symbols (Check both variable names just in case)
+        const data = latexSymbols;
+
+        if (data) {
+            buildInterface(data, lang.categories);
+        } else {
+            console.error("latex_codes.js loaded but no symbol data found.");
+            panelsContainer.innerHTML = '<div style="padding:10px; color:red">Error loading symbols.</div>';
+        }
+
+        // Initial Preview
+        if (inputArea.value) {
+            updatePreview();
+        }
+    });
+
+    // Interface Builder (categoryLabels: optional map of category key -> translated name)
+    function buildInterface(data, categoryLabels) {
+        const categories = Object.keys(data);
+        let firstTab = true;
+
+        categories.forEach((cat, index) => {
+            // Create Tab Button
+            const tabBtn = document.createElement('button');
+            tabBtn.className = 'tab-btn';
+            tabBtn.textContent = (categoryLabels && categoryLabels[cat]) ? categoryLabels[cat] : cat;
+            tabBtn.dataset.target = `panel-${index}`;
+
+            if(firstTab) {
+                tabBtn.classList.add('active');
+            }
+
+            tabBtn.addEventListener('click', (e) => switchTab(e.currentTarget));
+            tabsContainer.appendChild(tabBtn);
+
+            // Create Panel
+            const panel = document.createElement('div');
+            panel.id = `panel-${index}`;
+            panel.className = `symbol-panel ${firstTab ? 'active' : ''}`;
+
+            // Checks if category name contains "chem" (case-insensitive)
+            if (cat.toLowerCase().indexOf('chem') !== -1) {
+                panel.classList.add('wide-grid');
+            }
+
+            // Populate Symbols
+            data[cat].forEach(item => {
+                const btn = document.createElement('div');
+                btn.className = 'symbol-btn';
+                btn.title = item.name || item.code;
+
+                const renderSpan = document.createElement('span');
+                renderSpan.className = 'mj-render-target';
+
+                btn.appendChild(renderSpan);
+                btn.addEventListener('click', () => insertAtCursor(item.code));
+                panel.appendChild(btn);
+
+                renderSymbolInGrid(renderSpan, item.symbol);
+            });
+
+            panelsContainer.appendChild(panel);
+            firstTab = false;
+        });
+    }
+
+    // MathJax Rendering Logic
+
+    function renderSymbolInGrid(element, tex) {
+        if (!window.MathJax || !window.MathJax.tex2chtmlPromise) {
+            setTimeout(() => renderSymbolInGrid(element, tex), 100);
+            return;
+        }
+
+        const options = window.MathJax.getMetricsFor(element);
+        options.display = true;
+
+        window.MathJax.tex2chtmlPromise(tex, options).then((node) => {
+            element.innerHTML = '';
+            element.appendChild(node);
+
+            // Clear MathJax internal document to prevent memory bloat
+            if (window.MathJax.startup.document) {
+                window.MathJax.startup.document.clear();
+                window.MathJax.startup.document.updateDocument();
+            }
+        }).catch(err => {
+            console.error("MJ Render Error: ", err);
+        });
+    }
+
+    // Preview Logic
+    let previewTimeout;
+    inputArea.addEventListener('input', () => {
+        clearTimeout(previewTimeout);
+        previewTimeout = setTimeout(updatePreview, 150);
+    });
+
+    function updatePreview() {
+        const tex = inputArea.value.trim();
+
+        if (!tex) {
+            previewArea.innerHTML = '';
+            previewArea.classList.add('empty');
+            return;
+        }
+        previewArea.classList.remove('empty');
+
+        if (window.MathJax && window.MathJax.tex2chtmlPromise) {
+            const options = window.MathJax.getMetricsFor(previewArea);
+            options.display = true;
+
+            window.MathJax.tex2chtmlPromise(tex, options).then(node => {
+                previewArea.innerHTML = '';
+                previewArea.appendChild(node);
+                if (window.MathJax.startup.document) {
+                    window.MathJax.startup.document.clear();
+                    window.MathJax.startup.document.updateDocument();
+                }
+            }).catch(err => {
+                // Silent catch or show minimal error
+                previewArea.innerHTML = '<span style="color: #d9534f;">Invalid LaTeX</span>';
+            });
+        }
+    }
+
+    // Tab Switching
+    function switchTab(clickedTab) {
+        // Remove active class from all tabs and panels
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.symbol-panel').forEach(p => p.classList.remove('active'));
+
+        // Activate clicked
+        clickedTab.classList.add('active');
+        const targetId = clickedTab.dataset.target;
+        document.getElementById(targetId).classList.add('active');
+    }
+
+    // Text Insertion Utility
+    function insertAtCursor(text) {
+        const start = inputArea.selectionStart;
+        const end = inputArea.selectionEnd;
+        const val = inputArea.value;
+
+        const before = val.substring(0, start);
+        const after = val.substring(end);
+
+        inputArea.value = before + text + after;
+
+        let newPos = start + text.length;
+
+        // Smart cursor placement for {}
+        if (text.indexOf('{}') !== -1) {
+            newPos = start + text.indexOf('{}') + 1;
+        }
+
+        inputArea.focus();
+        inputArea.setSelectionRange(newPos, newPos);
+        updatePreview();
+    }
+
+    // Communication with TinyMCE
+
+    function insertContent() {
+        const targetOrigin = window.location.origin;
+
+        window.parent.postMessage({
+            mceAction: 'latexhelper-insert',
+            content: inputArea.value
+        }, targetOrigin);
+    }
+
+    function cancelContent() {
+        const targetOrigin = window.location.origin;
+
+        window.parent.postMessage({
+            mceAction: 'latexhelper-cancel'
+        }, targetOrigin);
+    }
+</script>
+
+</body>
+</html>

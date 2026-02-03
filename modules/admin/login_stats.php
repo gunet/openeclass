@@ -25,10 +25,10 @@ require_once 'modules/usage/usage.lib.php';
 
 load_js('tools.js');
 
-$head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/c3-0.4.10/c3.css' />";
+$head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/c3-0.7.20/c3.css' />";
 
 load_js('d3/d3.min.js');
-load_js('c3-0.4.10/c3.min.js');
+load_js('c3-0.7.20/c3.min.js');
 
 $head_content .= "<script type='text/javascript'>
     $(document).ready(function() {

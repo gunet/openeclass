@@ -2,7 +2,7 @@
 @extends('layouts.default')
 
 @push('head_styles')
-    <link rel='stylesheet' type='text/css' href='{{ $urlAppend }}js/c3-0.4.10/c3.css' />
+    <link rel='stylesheet' type='text/css' href='{{ $urlAppend }}js/c3-0.7.20/c3.css' />
 @endpush
 
 @push('head_scripts')
@@ -87,4 +87,3 @@
     </div>
 
 @endsection
-
