@@ -511,6 +511,12 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     $link_back = isset($_GET['modifyPoll']) ? "admin.php?course=$course_code&amp;pid=$pid" : "index.php?course=$course_code";
     $pageName = isset($_GET['modifyPoll']) ? "$langEditPoll" : "$langCreatePoll";
 
+    $disabledAssign = '';
+    $rec_check = Database::get()->querySingle("SELECT id FROM poll_user_record WHERE pid = ?d AND session_id = ?d", $pid, 0);
+    if ($rec_check) {
+        $disabledAssign = 'disabled';
+    }
+
     $tool_content .= "
     <div class='d-lg-flex gap-4 mt-4'>
     <div class='flex-grow-1'>
@@ -608,19 +614,19 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 <div class='col-sm-12'>
                     <div class='radio mb-1'>
                       <label>
-                        <input type='radio' id='assign_button_all' name='assign_to_specific' value='0'".($PollAssignToSpecific == 0 ? " checked" : "").">
+                        <input type='radio' id='assign_button_all' name='assign_to_specific' value='0'".($PollAssignToSpecific == 0 ? " checked" : "")." $disabledAssign>
                         <span>$langWorkToAllUsers</span>
                       </label>
                     </div>
                     <div class='radio mb-1'>
                       <label>
-                        <input type='radio' id='assign_button_user' name='assign_to_specific' value='1'".($PollAssignToSpecific == 1 ? " checked" : "").">
+                        <input type='radio' id='assign_button_user' name='assign_to_specific' value='1'".($PollAssignToSpecific == 1 ? " checked" : "")." $disabledAssign>
                         <span>$langWorkToUser</span>
                       </label>
                     </div>
                     <div class='radio'>
                       <label>
-                        <input type='radio' id='assign_button_group' name='assign_to_specific' value='2'".($PollAssignToSpecific == 2 ? " checked" : "").">
+                        <input type='radio' id='assign_button_group' name='assign_to_specific' value='2'".($PollAssignToSpecific == 2 ? " checked" : "")." $disabledAssign>
                         <span>$langWorkToGroup</span>
                       </label>
                     </div>

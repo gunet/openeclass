@@ -227,7 +227,7 @@ if (isset($_GET['from_session_view'])) {
                           'url' => "pollresults_per_user.php?course=$course_code&amp;pid=$pid",
                           'icon' => 'fa-address-card',
                           'level' => 'primary-label',
-                          'show' => !isset($_GET['chart']) && !isset($_GET['res_per_u'])),
+                          'show' => !isset($_GET['chart']) && !isset($_GET['res_per_u']) && $is_editor),
                     array('title' => "$langPollPercentResults ($langDumpExcel)",
                           'url' => "dumppollresults.php?course=$course_code&amp;pid=$pid$res_per_user",
                           'icon' => 'fa-file-excel',

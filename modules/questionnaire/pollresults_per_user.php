@@ -39,6 +39,12 @@ if ($thePoll->assign_to_specific == 1) { // specific users
     $r_users = Database::get()->queryArray("SELECT group_members.group_id,group_members.user_id FROM group_members 
                                             LEFT JOIN poll_to_specific ON poll_to_specific.group_id=group_members.group_id
                                             WHERE poll_to_specific.poll_id = ?d AND poll_to_specific.group_id > ?d", $pid, 0);
+} else {
+    $r_users = Database::get()->queryArray("SELECT user_id FROM course_user 
+                                            WHERE course_id = ?d AND
+                                            status = " . USER_STUDENT . " AND tutor = 0 AND
+                                            editor = 0 AND reviewer = 0", $course_id);
+
 }
 
 $action_bar = action_bar(array(
@@ -65,7 +71,7 @@ $tool_content .= "
                     <tbody>";
                         foreach ($r_users as $u) {
                             $groupName = '-';
-                            if ($u->group_id) {
+                            if (isset($u->group_id)) {
                                 $groupName = Database::get()->querySingle("SELECT `name` FROM group WHERE id = ?d", $u->group_id)->name;
                             }
                             $tool_content .= "<tr>
