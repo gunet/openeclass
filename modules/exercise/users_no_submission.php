@@ -21,10 +21,10 @@
 $require_current_course = TRUE;
 $require_editor = true;
 
-include '../../include/baseTheme.php';
+require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
-include 'exercise.class.php';
-include 'question.class.php';
+require_once 'exercise.class.php';
+require_once 'question.class.php';
 
 $exerciseId = $_GET['exerciseId'];
 $objExercise = new Exercise();

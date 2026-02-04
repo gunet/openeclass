@@ -19,9 +19,9 @@
  */
 
 
-include 'exercise.class.php';
-include 'question.class.php';
-include 'answer.class.php';
+require_once 'exercise.class.php';
+require_once 'question.class.php';
+require_once 'answer.class.php';
 
 // Check if AI functionality is available
 require_once '../../include/lib/ai/services/AIQuestionBankService.php';
@@ -32,7 +32,7 @@ $require_help = true;
 $helpTopic = 'exercises';
 $helpSubTopic = 'question_bank';
 
-include '../../include/baseTheme.php';
+require_once '../../include/baseTheme.php';
 require_once 'imsqtilib.php';
 
 // Initialize AI service
@@ -52,7 +52,7 @@ $head_content .= "
                 'bAutoWidth': true,
                 'searchDelay': 1000,
                 'order' : [[1, 'desc']],
-                'lengthMenu': [10, 20, 30, -1],
+                'lengthMenu': [10, 20, 30, -1], 
                 'oLanguage': {
                    'lengthLabels': {
                    	    '-1': '$langAllOfThem'

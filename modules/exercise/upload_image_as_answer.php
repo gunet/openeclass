@@ -1,7 +1,7 @@
 <?php
 
 $require_current_course = TRUE;
-include '../../include/baseTheme.php';
+require_once '../../include/baseTheme.php';
 
 if (isset($_GET['delete_image'])) {
     $course_code = $_GET['course'];

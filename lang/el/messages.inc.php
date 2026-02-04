@@ -685,7 +685,6 @@ $langViaAltAuthMethods = "μέσω εναλλακτικών τρόπων πισ�
 $langMonthsUnit = "σε μήνες";
 $langMinPasswordLen = "Ελάχιστο μέγεθος συνθηματικού";
 $langCourseSettings = "Ρυθμίσεις $langsOfCourses";
-$langCourseOfflineSettings = "Κατέβασμα $langsOfCourse";
 $langCourseOfflineLegend = "Οι $langsOfStudents μπορούν να κατεβάσουν το $langsCourse στον υπολογιστή τους.";
 $langLoginFailCheck = "Έλεγχος αποτυχημένων εισόδων";
 $langEnableLoginFailCheck = "Ενεργοποίηση ελέγχου αποτυχημένων εισόδων";
@@ -1137,7 +1136,7 @@ $langCourseInvalidDepartmentPrompt = "Παρακαλούμε %s μεταφέρε
 $langReadMore = "Περισσότερα";
 $langReadLess = "Λιγότερα";
 $langNoInfoAvailable = "Δεν υπάρχουν διαθέσιμες πληροφορίες";
-$langDownloadCourse = "Κατέβασμα του μαθήματος";
+$langDownloadCourse = "Λήψη $langsOfCourse";
 $langConfEnableMailNotification = "Θέλετε να ενεργοποιήσετε τη λήψη ειδοποιήσεων του $langsOfCourse μέσω email;";
 $langConfDisableMailNotification = "Θέλετε να απενεργοποιήσετε τη λήψη ειδοποιήσεων του $langsOfCourse μέσω email;";
 $langOfNotifications = "ειδοποιήσεων";
@@ -1344,7 +1343,6 @@ $langVideoText = "Παράδειγμα ενός αρχείου RealVideo. Μπο
 $langGoogle = "Μηχανή αναζήτησης";
 $langIntroductionText = "Εισαγωγικό κείμενο του $langsOfCourse. Αντικαταστήστε το με το δικό σας, κάνοντας κλίκ στην <strong>Αλλαγή</strong>.";
 $langJustCreated = "Μόλις δημιουργήσατε με επιτυχία το $langsCourse με τίτλο ";
-$langCourseCreated = "Το $langsCourse δημιουργήθηκε με επιτυχία!";
 $langCreateCourseNotAllowedNode = "Επιλέξατε μη επιτρεπτές $langsFaculties. Παρακαλώ ξαναπροσπαθήστε.";
 $langUploadRecAudio = "Ηχογράφηση";
 $langUploadRecVideo = "Βιντεοσκόπηση";
@@ -1673,7 +1671,7 @@ $langAllGroups = "Όλες οι ομάδες";
 $langAllGroupsWithoutCategory = "Ομάδες που δεν ανήκουν σε κατηγορία";
 
 //neos odhgos dhmiourgias mathimaton
-$langEnterMetadata = "Μπορείτε να αλλάξετε τις ρυθμίσεις του $langsOfCourse κάνοντας κλικ στο 'Διαχείριση $langOfCourse'";
+$langEnterMetadata = "Μπορείτε να αλλάξετε τις ρυθμίσεις του $langsOfCourse μέσα από τη 'Διαχείριση $langOfCourse'";
 $langCreateCourse = "Οδηγός δημιουργίας $langsOfCourse";
 $langCreateCourseStep = "Βήμα";
 $langCreateCourseStep2 = "από";
@@ -2092,6 +2090,9 @@ $langExercisePreventCopy = 'Αποτροπή αντιγραφής κειμένο
 $langExercisePreventCopyExplanation = 'Αποτροπή αντιγραφής και επικόλλησης κειμένου από την οθόνη κατά την εκτέλεση της άσκησης';
 $langStricterExamRestriction = "Αυστηρός περιορισμός";
 $langExerciseWillBeCanceledInStrictMode = "Η εξέταση ακυρώνεται σε παράλληλες ενέργειες χρηστών όπως ανακατεύθυνση σε νέα σελίδα ή άνοιγμα νέου παραθύρου";
+$langExerciseNoCalcGradeMethod = "Κανονικός";
+$langExerciseCBCalcGradeMethod = "Με βαθμό βεβαιότητας";
+$langExerciseCalcGradeMethod = "Τρόπος Βαθμολόγησης";
 
 // admin.php
 $langExerciseManagement = "Διαχείριση Άσκησης";
@@ -2161,7 +2162,7 @@ $langInvalidPicture = "Μη υποστηριζόμενος τύπος εικόν
 $langQuestionDiffGrade = "Βαθμός δυσκολίας";
 $langNumQuestions = "Αρ. ερωτήσεων";
 $langQuestionAllDiffs = "Όλοι οι βαθμοί δυσκολίας";
-$langQuestionAllTypes = "Όλοι οι τύποι ερωτήσεων";
+$langQuestionAllTypes = "'Όλοι οι τύποι ερωτήσεων";
 $langQuestionNotDefined = "Μη προσδιορισμένη";
 $langQuestionVeryEasy = "Πολύ εύκολη";
 $langQuestionEasy = "Εύκολη";
@@ -2385,6 +2386,10 @@ $langRegrade = 'Αναβαθμολόγηση';
 $langNewScoreRecorded = 'Η νέα βαθμολογία αποθηκεύτηκε';
 $langQuestionStoredScore = 'Αποθηκευμένη βαθμολογία ερώτησης';
 $langEvaluatingResponseWithAI = "Αξιολόγηση της απάντησης με χρήση Τ.Ν.";
+$langCertaintyPercentage = "Ποσοστό Βεβαιότητας";
+$langSure = "Σίγουρος";
+$langNotSure = "Δεν είμαι σίγουρος";
+$langNotKnow = "Δεν γνωρίζω";
 
 // exercise_submit.php
 $langDoAnEx = "Κάντε μια άσκηση";
@@ -2421,6 +2426,10 @@ $langWarningNewPageOpened = "<strong>Προσοχή!</strong><br>Παρακαλ�
 $langWarningNewPageOpened2 = "<strong>Προσοχή!</strong><br>Έχετε εισέλθει στον χώρο της εξέτασης.<br> Οποιαδήποτε παράλληλη ενέργεια, όπως ανακατεύθυνση σε νέα σελίδα ή άνοιγμα νέου παραθύρου, θα οδηγήσει στην αυτόματη ακύρωση της προσπάθειάς σας.";
 $langExWillBeCanceled = "Η προσπάθειά σας θα ακυρωθεί.";
 $langGoToExam = "Έναρξη εξέτασης";
+$langNotKnow = "Δεν γνωρίζω";
+$langNotSure = "Δεν είμαι σίγουρος";
+$langSure = "Είμαι σίγουρος";
+$langCertainty = "Βεβαιότητα";
 
 // exercise result.php
 $langStart = "Έναρξη";
@@ -3246,6 +3255,7 @@ $langQuestionCorrectionTitle2 = "Υπολείπονται ";
 $langUngradedAnswers = " αβαθμολόγητες απαντήσεις.";
 $langDistributeError = "Ο συνολικός αριθμός διαμοιρασμού δεν πρέπει να είναι μεγαλύτερος από το σύνολο των ασκήσεων.";
 $langGradeCorrect = 'Διόρθωση';
+$langAddFeedback = "Προσθήκη ανατροφοδότησης";
 
 /* * ***********************************************
  * lessontools.php
@@ -3406,6 +3416,7 @@ $langDuration = "Διάρκεια";
 $langClassic = "Συνοπτικό";
 $langModern = "Αναλυτικό";
 $langFavorite = "Αγαπημένο";
+$langNoFavorite = "Μη αγαπημένο";
 
 /* * *********************************************************
  * forum.php
@@ -4926,7 +4937,7 @@ $langValue = 'Τιμή';
 $langNewGradeScale = "Προσθήκη βαθμολογικής κλίμακας";
 $langWorkSubType = "Τύπος Υποβολής";
 $langWorkOnlineText = "Online Κείμενο";
-$langZipDownload = "Κατέβασμα των εργασιών";
+$langZipDownload = "Λήψη των εργασιών";
 $langDelWarn2 = "Έχει αποσταλεί μία εργασία " . $langsOfStudent . ". Το αρχείο αυτό θα διαγραφεί!";
 $langDelTitle = "Προσοχή!";
 $langDelMany1 = "Έχουν αποσταλεί";
@@ -5167,6 +5178,7 @@ $langInactiveModule = "ανενεργό υποσύστημα";
 $langAvailableUnitResources = "Εκπαιδευτικό υλικό";
 $langNoUnits = "Δεν υπάρχουν ενότητες";
 $langGoTo = "Μετάβαση σε";
+$langUnitCompletionLegend = "Η ολοκλήρωση της ενότητας είναι ενεργοποιημένη ή η ενότητα έχει πρααπαιτούμενα";
 
 /* * ********************************************************************
   units_prerequisites
@@ -5890,7 +5902,7 @@ $langBlogRating = "Αξιολόγηση αναρτήσεων ιστολογίο�
 $langRatingEn = "Ενεργοποιημένη αξιολόγηση";
 $langRatingDis = "Απενεργοποιημένη αξιολόγηση";
 $langUserHasRated = "Έχετε υποβάλει την αξιολόγησή σας";
-$langRatingAverage = "Μέση Βαθμολογία: ";
+$langRatingAverage = "Μέση Βαθμολογία";
 $langRatingVote = " αξιολόγηση";
 $langRatingVotes = " αξιολογήσεις";
 $langCourseAnonymousRating = "Αξιολόγηση $langsOfCourse από ανώνυμους χρήστες";
@@ -7481,7 +7493,6 @@ $langLowQuality = "Χαμηλή Ποιότητα";
 $langAddSample = "Προσθήκη Δείγματος";
 $langSelectScore = "Επιλογή Ποιότητας";
 $langOptional = "Προαιρετικό";
-$langScore = "Βαθμός";
 $langReasoning = "Αιτιολόγηση";
 $langAISuggestion = "Πρόταση Τ.Ν.";
 $langAISyllabusStructured = "Δομημένα Τμήματα Συλλάβου";
@@ -7512,3 +7523,11 @@ $langLatexCatFunctions = "Συναρτήσεις";
 $langLatexCatMathStructures = "Μαθηματικές Δομές";
 $langLatexCatMiscellaneous = "Διάφορα";
 $langLatexCatChemicalSymbols = "Χημικά Σύμβολα";
+$langOpenUserMenu = "Άνοιγμα μενού επιλογών χρήστη";
+$langOpenMenu = "Άνοιγμα κεντρικού μενού πλοήγησης";
+$langDialogBox = "Παράθυρο διαλόγου";
+$langUsersAndBibliographicReference = "Χρήστες και βιβλιογραφική αναφορά";
+$langNextUnit = "Μετάβαση στην επόμενη ενότητα με τίτλο:";
+$langPrevUnit = "Μετάβαση στην προηγούμενη ενότητα με τίτλο:";
+$langCloseBox = "Κλείσιμο παραθύρου διαλόγου";
+$langMoveToPrevFolder = "Μετάβαση στον προηγούμενο φάκελο";

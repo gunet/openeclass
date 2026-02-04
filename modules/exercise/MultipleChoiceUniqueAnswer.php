@@ -69,11 +69,7 @@ class MultipleChoiceUniqueAnswer extends QuestionType
                 </div>";
         }
         $html_content .= "<button class='float-end clearSelect btn btn-outline-secondary mt-0'><i class='fa fa-solid fa-xmark'></i>&nbsp;$langClearChoice</button>";
-        if (isset($eurid)) {
-            $certainty_user_choice = $this->answer_object->get_user_certainty_answer_choice($this->question_id, $eurid);
-        } else {
-            $certainty_user_choice = null;
-        }
+        $certainty_user_choice = $this->answer_object->get_user_certainty_answer_choice($this->question_id, $eurid);
         $html_content .= $this->CertaintyBasedButtons($this->question_id, $certainty_user_choice);
 
         return $html_content;
@@ -141,6 +137,7 @@ class MultipleChoiceUniqueAnswer extends QuestionType
                 $html_content .= "&nbsp;<span><small class='text-danger text-nowrap'>($langIncorrectS)</small></span>";
             }
             $html_content .= "</div>";
+
             if ($studentChoice && $answerComment != '') {
                 $html_content .= "<div style='background-color: #e9ecef' class='p-1 ps-4'>" . standard_text_escape(nl2br($answerComment)) . "</div>";
             }

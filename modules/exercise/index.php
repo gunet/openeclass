@@ -30,7 +30,7 @@ $guest_allowed = TRUE;
 $require_help = TRUE;
 $helpTopic = 'exercises';
 
-include '../../include/baseTheme.php';
+require_once '../../include/baseTheme.php';
 require_once 'modules/group/group_functions.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
