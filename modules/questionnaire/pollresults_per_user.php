@@ -34,17 +34,20 @@ $thePoll = Database::get()->querySingle("SELECT * FROM poll WHERE course_id = ?d
 // Results per user
 $r_users = [];
 if ($thePoll->assign_to_specific == 1) { // specific users
-    $r_users = Database::get()->queryArray("SELECT user_id,group_id FROM poll_to_specific WHERE poll_id = ?d AND group_id IS NULL", $pid);
+    $r_users = Database::get()->queryArray("SELECT DISTINCT poll_to_specific.user_id,poll_to_specific.group_id FROM poll_to_specific
+                                            INNER JOIN poll_user_record ON poll_user_record.uid=poll_to_specific.user_id
+                                            WHERE poll_to_specific.poll_id = ?d AND poll_to_specific.group_id IS NULL", $pid);
 } elseif ($thePoll->assign_to_specific == 2) { // specific groups
-    $r_users = Database::get()->queryArray("SELECT group_members.group_id,group_members.user_id FROM group_members 
-                                            LEFT JOIN poll_to_specific ON poll_to_specific.group_id=group_members.group_id
-                                            WHERE poll_to_specific.poll_id = ?d AND poll_to_specific.group_id > ?d", $pid, 0);
+    $r_users = Database::get()->queryArray("SELECT DISTINCT group_members.group_id,group_members.user_id FROM group_members 
+                                            INNER JOIN poll_user_record ON poll_user_record.uid=group_members.user_id
+                                            WHERE group_members.group_id IN (SELECT group_id FROM poll_to_specific WHERE poll_id = ?d AND user_id IS NULL)", $pid);
 } else {
-    $r_users = Database::get()->queryArray("SELECT user_id FROM course_user 
-                                            WHERE course_id = ?d AND
-                                            status = " . USER_STUDENT . " AND tutor = 0 AND
-                                            editor = 0 AND reviewer = 0", $course_id);
-
+    $r_users = Database::get()->queryArray("SELECT course_user.user_id FROM course_user 
+                                            LEFT JOIN poll_user_record ON poll_user_record.uid=course_user.user_id
+                                            WHERE course_user.course_id = ?d AND
+                                            course_user.status = " . USER_STUDENT . " AND course_user.tutor = 0 AND
+                                            course_user.editor = 0 AND course_user.reviewer = 0
+                                            AND poll_user_record.pid = ?d", $course_id, $pid);
 }
 
 $action_bar = action_bar(array(
