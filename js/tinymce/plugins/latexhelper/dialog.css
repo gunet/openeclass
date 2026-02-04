@@ -1,0 +1,256 @@
+:root {
+    --primary-blue: #007bff;
+    --border-color: #dee2e6;
+    --bg-gray: #f8f9fa;
+    --text-color: #212529;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    margin: 0;
+    padding: 15px;
+    color: var(--text-color);
+    background-color: #fff;
+    box-sizing: border-box;
+    height: 100vh;
+    overflow: hidden; 
+}
+
+.container {
+    max-width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Tabs Navigation Wrapper */
+.tabs-wrapper {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+    background: #f8f9fa;
+    position: relative;
+    padding: 0;
+    flex-shrink: 0;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.tabs-nav {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    flex: 1;
+    gap: 5px;
+    padding: 0 5px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    scroll-behavior: smooth;
+}
+
+.tabs-nav::-webkit-scrollbar { 
+    display: none; 
+}
+
+/* Tab Buttons */
+.tab-btn {
+    flex-shrink: 0;
+    white-space: nowrap;
+    background: none;
+    border: none;
+    padding: 12px 15px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #6c757d;
+    position: relative;
+    transition: color 0.2s;
+    outline: none;
+    border-bottom: 2px solid transparent;
+}
+
+.tab-btn:hover { 
+    color: var(--primary-blue); 
+    background-color: rgba(0,0,0,0.02);
+}
+
+.tab-btn.active {
+    color: var(--primary-blue);
+    font-weight: 600;
+    border-bottom-color: var(--primary-blue);
+}
+
+/* Navigation Arrows */
+.nav-arrow {
+    background: #fff;
+    border: none;
+    border-left: 1px solid #e9ecef;
+    border-right: 1px solid #e9ecef;
+    color: #555;
+    cursor: pointer;
+    padding: 0 12px;
+    height: 45px;
+    font-size: 16px;
+    font-weight: bold;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    flex-shrink: 0;
+}
+
+.nav-arrow:hover {
+    background-color: #e2e6ea;
+    color: var(--primary-blue);
+}
+
+#scroll-left { border-right: 1px solid #dee2e6; border-left: none; }
+#scroll-right { border-left: 1px solid #dee2e6; border-right: none; }
+
+/* Symbols Grid Area */
+.symbols-viewport {
+    border: 1px solid var(--border-color);
+    flex: 1;
+    overflow-y: auto;
+    background: #fff;
+    padding: 8px;
+    border-radius: 4px;
+    min-height: 200px;
+}
+
+.symbol-panel { display: none; }
+.symbol-panel.active {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+    gap: 8px;
+}
+
+/* Wide Grid for Chemistry */
+.symbol-panel.active.wide-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+}
+
+.wide-grid .symbol-btn {
+    padding: 0 10px; 
+}
+
+.symbol-btn {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    border: 1px solid #e9ecef;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    overflow: hidden;
+}
+
+.symbol-btn:hover {
+    background-color: #e3f2fd;
+    border-color: var(--primary-blue);
+}
+
+/* Ensure MathJax inside buttons doesn't break layout */
+.symbol-btn mjx-container {
+    margin: 0 !important;
+    font-size: 110% !important;
+}
+
+/* Split Editor Area */
+.editor-split {
+    display: flex;
+    gap: 15px;
+    height: 220px;
+    flex-shrink: 0;
+    border-top: 1px solid var(--border-color);
+    padding-top: 10px;
+}
+
+.pane {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+}
+
+.pane-label {
+    font-weight: 600;
+    font-size: 13px;
+    margin-bottom: 5px;
+    color: #495057;
+}
+
+.pane-content {
+    flex: 1;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 10px;
+    font-size: 16px;
+    overflow: auto;
+}
+
+textarea.pane-content {
+    resize: none;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    color: #333;
+}
+
+textarea.pane-content:focus {
+    outline: none;
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 2px rgba(0,123,255, 0.25);
+}
+
+#preview {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fafafa;
+}
+
+#preview.empty::after {
+    content: 'Προεπισκόπηση...';
+    color: #adb5bd;
+    font-size: 13px;
+    font-style: italic;
+}
+
+/* Footer */
+.footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    border-top: 1px solid var(--border-color);
+    padding-top: 10px;
+    flex-shrink: 0;
+}
+
+.btn {
+    padding: 8px 20px;
+    font-size: 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    font-weight: 500;
+}
+
+.btn-primary {
+    background-color: var(--primary-blue);
+    color: white;
+}
+.btn-primary:hover { background-color: #0069d9; }
+
+.btn-secondary {
+    background-color: #fff;
+    border-color: #ced4da;
+    color: #333;
+}
+.btn-secondary:hover { background-color: #e2e6ea; }
+
+/* Scrollbar styling */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-thumb { background: #ced4da; border-radius: 3px; }
+::-webkit-scrollbar-track { background: transparent; }
