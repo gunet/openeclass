@@ -3558,8 +3558,16 @@ function upgrade_to_4_2($tbl_options) : void {
  * @param $tbl_options
  * @return void
  */
-function upgrade_to_4_3($tbl_options) : void {
+function upgrade_to_4_3() : void {
 
+    // Exercises
+    if (DBHelper::fieldExists('exercise', 'general_feedback')) {
+        Database::get()->query("ALTER TABLE exercise CHANGE general_feedback end_message TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
+    }
+    if (!DBHelper::fieldExists('exercise', 'feedback')) {
+        Databse::get()->query("ALTER TABLE exercise ADD feedback TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
+    }
+    // Questionnaires
     if (!DBHelper::fieldExists('poll_question', 'page')) {
         Database::get()->query("ALTER TABLE poll_question ADD `page` INT NOT NULL DEFAULT 0");
     }
