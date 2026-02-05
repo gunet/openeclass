@@ -27,30 +27,45 @@ function display_certificates(): void
     global $course_id, $tool_content, $course_code, $urlServer,
            $langDelete, $langConfirmDelete, $is_editor,
            $langNoCertificates, $langActive, $langInactive, $langNoThumbnail,
-           $langEditChange, $langNewCertificate, $langCertificates, $langActivate,
-           $langDeactivate, $langSee, $webDir;
+           $langEditChange, $langNewCertificate, $langActivate,
+           $langDeactivate, $langSee, $webDir, $langTitle, $langActions;
 
-    // Fetch the certificate list
     $sql_cer = Database::get()->queryArray("SELECT id, title, description, active, template
                                                     FROM certificate WHERE course_id = ?d", $course_id);
 
-        $tool_content .= "
-                <div class='col-12 mt-4'>
-                    <div class='card panelCard card-default px-lg-4 py-lg-3'>
-                        <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-                                <h3>
-                                    $langCertificates
-                                </h3>";
-                        if ($is_editor) {
-                            $tool_content .= "<div><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newcert=1' class='btn submitAdminBtn'><span class='fa fa-plus' ></span><span class='hidden-xs'>&nbsp;&nbsp;&nbsp;$langNewCertificate </span></a></div>";
-                        }
-                        $tool_content .= "</div>
-                        <div class='card-body'>
-
-                            <div class='res-table-wrapper'>";
-    if (count($sql_cer) == 0) { // If no certificates
+    $tool_content .= "
+        <div class='col-12 mt-4'>
+            <div class='card panelCard card-default px-lg-4 py-lg-3'>
+                <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>";
+                if ($is_editor) {
+                    $tool_content .= "<div class='ms-auto'>
+                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newcert=1' class='btn submitAdminBtn'><span class='fa fa-plus'></span><span class='hidden-xs'>&nbsp;&nbsp;&nbsp;$langNewCertificate</span></a>
+                    </div>";
+                }
+    $tool_content .= "
+                </div>
+                <div class='card-body'>
+                    <div class='table-responsive mt-0'>";
+    
+    if (count($sql_cer) == 0) {
         $tool_content .= "<p class='text-center text-muted'>$langNoCertificates</p>";
-    } else { // If there are certificates
+    } else {
+        $tool_content .= "
+                        <table class='table-default'>
+                            <thead>
+                                <tr class='list-header'>
+                                    <th style='width: 100px;'></th>
+                                    <th>$langTitle</th>
+                                    <th class='text-center'>$langActive</th>";
+        if ($is_editor) {
+            $tool_content .= "
+                                    <th class='text-center'>$langActions</th>";
+        }
+        $tool_content .= "
+                                </tr>
+                            </thead>
+                            <tbody>";
+        
         foreach ($sql_cer as $data) {
             $vis_status = $data->active ? "text-success" : "text-danger";
             $vis_icon = $data->active ? "fa-eye" : "fa-eye-slash";
@@ -63,47 +78,46 @@ function display_certificates(): void
             if (!file_exists($webDir . CERT_TEMPLATE_PATH . $thumbnail_filename)) {
                 $template_thumbnail = "<i class='fa-solid fa-ban fa-xl' title='$langNoThumbnail'></i>";
             } else {
-                $template_thumbnail = "<img class='mt-md-0 mt-4' src='$urlServer" . CERT_TEMPLATE_PATH . "$thumbnail_filename' title='$template_name'>";
+                $template_thumbnail = "<img style='max-width: 80px;' src='$urlServer" . CERT_TEMPLATE_PATH . "$thumbnail_filename' title='$template_name'>";
             }
-
-            $tool_content .= "<div class='row res-table-row border-0 p-3 mt-2'>
-                <div class='col-2 text-md-start text-center'>
-                <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id&amp;preview=1' target=_blank>
-                    $template_thumbnail
-                </a>
-                </div>
-                <div class='col-7 text-center mt-md-0 mt-3'>
-                    <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id'>".q($data->title)."</a>
-                    <div style='margin-top: 5px;'><span class='fa {$vis_icon}'></span>&nbsp;&nbsp;&nbsp;"
-                    . "<span class='{$vis_status}'>$status_msg</span>
-                    </div>
-
-                </div>";
-                if ($is_editor) {
-                    $tool_content .= "<div class='col-3 text-end mt-md-0 mt-3'>" .
-                        action_button(array(
-                            array('title' => $langEditChange,
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id&amp;edit=1",
-                                'icon' => 'fa-edit'),
-                            array('title' => $data->active ? $langDeactivate : $langActivate,
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id&amp;vis=" .
-                                    ($data->active ? '0' : '1'),
-                                'icon' => $data->active ? 'fa-eye-slash' : 'fa-eye'),
-                            array('title' => $langSee,
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id&amp;preview=1",
-                                'icon' => 'fa-search'),
-                            array('title' => $langDelete,
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del_cert=$data->id",
-                                'icon' => 'fa-xmark',
-                                'class' => 'delete',
-                                'confirm' => $langConfirmDelete)
-                        ))
-                        . "</div>";
-                }
-            $tool_content .= "</div>";
-        }
-    }
+            
             $tool_content .= "
+                                <tr>
+                                    <td><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id&amp;preview=1' target='_blank'>$template_thumbnail</a></td>
+                                    <td><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id'>".q($data->title)."</a></td>
+                                    <td class='text-center'><span class='fa {$vis_icon} {$vis_status}'></span> <span class='{$vis_status}'>$status_msg</span></td>";
+            if ($is_editor) {
+                $tool_content .= "
+                                    <td class='text-center'>" .
+                    action_button(array(
+                        array('title' => $langEditChange,
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id&amp;edit=1",
+                            'icon' => 'fa-edit'),
+                        array('title' => $data->active ? $langDeactivate : $langActivate,
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id&amp;vis=" .
+                                ($data->active ? '0' : '1'),
+                            'icon' => $data->active ? 'fa-eye-slash' : 'fa-eye'),
+                        array('title' => $langSee,
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id&amp;preview=1",
+                            'icon' => 'fa-search'),
+                        array('title' => $langDelete,
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del_cert=$data->id",
+                            'icon' => 'fa-xmark',
+                            'class' => 'delete',
+                            'confirm' => $langConfirmDelete)
+                    ))
+                    . "</td>";
+            }
+            $tool_content .= "
+                                </tr>";
+        }
+        
+        $tool_content .= "
+                            </tbody>
+                        </table>";
+    }
+
+    $tool_content .= "
                     </div>
                 </div>
             </div>
@@ -118,35 +132,49 @@ function display_badges(): void
 {
     global $course_id, $tool_content, $course_code, $is_editor,
            $langDelete, $langConfirmDelete,
-           $langNoBadges, $langEditChange, $langBadges,
+           $langNoBadges, $langEditChange,
            $langActivate, $langDeactivate, $langNewBadge,
-           $langActive, $langInactive, $urlServer;
+           $langActive, $langInactive, $urlServer, $langTitle, $langActions;
 
     if ($is_editor) {
         $sql_cer = Database::get()->queryArray("SELECT id, title, description, active, icon FROM badge WHERE course_id = ?d AND bundle >= 0", $course_id);
     } else {
         $sql_cer = Database::get()->queryArray("SELECT id, title, description, active, icon FROM badge WHERE course_id = ?d AND active = 1 AND bundle >= 0 ", $course_id);
     }
-        $tool_content .= "
-                <div class='col-12 mt-4'>
-                    <div class='card panelCard card-default px-lg-4 py-lg-3'>
-                        <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-                                <h3>
-                                    $langBadges
-                                </h3>";
-                                if ($is_editor) {
-                                    $tool_content .= "<div>
-                                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newbadge=1' class='btn submitAdminBtn'><span class='fa fa-plus'></span><span class='hidden-xs'>&nbsp;&nbsp;&nbsp;$langNewBadge</span></a>
-                                    </div>";
-                                }
-        $tool_content .= "
-        </div>
-        <div class='card-body'>
-            <div class='res-table-wrapper'>";
+    
+    $tool_content .= "
+        <div class='col-12 mt-4'>
+            <div class='card panelCard card-default px-lg-4 py-lg-3'>
+                <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>";
+                if ($is_editor) {
+                    $tool_content .= "<div class='ms-auto'>
+                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newbadge=1' class='btn submitAdminBtn'><span class='fa fa-plus'></span><span class='hidden-xs'>&nbsp;&nbsp;&nbsp;$langNewBadge</span></a>
+                    </div>";
+                }
+    $tool_content .= "
+                </div>
+                <div class='card-body'>
+                    <div class='table-responsive mt-0'>";
 
-    if (count($sql_cer) == 0) { // no badges
+    if (count($sql_cer) == 0) {
         $tool_content .= "<p class='text-center text-muted'>$langNoBadges</p>";
     } else {
+        $tool_content .= "
+                        <table class='table-default'>
+                            <thead>
+                                <tr class='list-header'>
+                                    <th style='width: 60px;'></th>
+                                    <th>$langTitle</th>
+                                    <th class='text-center'>$langActive</th>";
+        if ($is_editor) {
+            $tool_content .= "
+                                    <th class='text-center'>$langActions</th>";
+        }
+        $tool_content .= "
+                                </tr>
+                            </thead>
+                            <tbody>";
+        
         foreach ($sql_cer as $data) {
             $vis_status = $data->active ? "text-success" : "text-danger";
             $vis_icon = $data->active ? "fa-eye" : "fa-eye-slash";
@@ -155,42 +183,46 @@ function display_badges(): void
             $badge_name = key($badge_details);
             $badge_icon = $badge_details[$badge_name];
             $icon_link = $urlServer . BADGE_TEMPLATE_PATH . "$badge_icon";
+            
             $tool_content .= "
-                                <div class='row res-table-row border-0 p-3 mt-2'>
-                                    <div class='col-3 text-md-start text-center'>
-                                        <img class='' src='$icon_link'>
-                                    </div>
-                                    <div class='col-6 text-center mt-md-3 mt-1'>
-                                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id'>".q($data->title)."</a>
-                                        <div style='margin-top: 5px;'><span class='fa {$vis_icon}'></span>&nbsp;&nbsp;&nbsp;<span class='{$vis_status}'>$status_msg</span></div>
-                                    </div>";
-                if ($is_editor) {
-                    $tool_content .= "<div class='col-3 text-end mt-md-3 mt-1'>" .
-                        action_button(array(
-                            array('title' => $langEditChange,
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id&amp;edit=1",
-                                'icon' => 'fa-cogs'),
-                            array('title' => $data->active ? $langDeactivate : $langActivate,
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id&amp;vis=" .
-                                    ($data->active ? '0' : '1'),
-                                'icon' => $data->active ? 'fa-eye-slash' : 'fa-eye'),
-                            array('title' => $langDelete,
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del_badge=$data->id",
-                                'icon' => 'fa-xmark',
-                                'class' => 'delete',
-                                'confirm' => $langConfirmDelete)
-                        ))
-                        . "</div>";
-                }
-            $tool_content .= "</div>";
+                                <tr>
+                                    <td><img style='max-width: 48px;' src='$icon_link'></td>
+                                    <td><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id'>".q($data->title)."</a></td>
+                                    <td class='text-center'><span class='fa {$vis_icon} {$vis_status}'></span> <span class='{$vis_status}'>$status_msg</span></td>";
+            if ($is_editor) {
+                $tool_content .= "
+                                    <td class='text-center'>" .
+                    action_button(array(
+                        array('title' => $langEditChange,
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id&amp;edit=1",
+                            'icon' => 'fa-cogs'),
+                        array('title' => $data->active ? $langDeactivate : $langActivate,
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id&amp;vis=" .
+                                ($data->active ? '0' : '1'),
+                            'icon' => $data->active ? 'fa-eye-slash' : 'fa-eye'),
+                        array('title' => $langDelete,
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del_badge=$data->id",
+                            'icon' => 'fa-xmark',
+                            'class' => 'delete',
+                            'confirm' => $langConfirmDelete)
+                    ))
+                    . "</td>";
+            }
+            $tool_content .= "
+                                </tr>";
         }
+        
+        $tool_content .= "
+                            </tbody>
+                        </table>";
     }
 
-    $tool_content .= "</div>
-                        </div>
+    $tool_content .= "
                     </div>
-                </div>";
-    }
+                </div>
+            </div>
+        </div>";
+}
 
 /**
  * @brief display all points games -- initial screen
@@ -199,79 +231,101 @@ function display_points_games(): void
 {
     global $course_id, $tool_content, $course_code, $is_editor,
            $langDeleteCourseActivities, $langResetPointsGame, $langConfirmResetPointsGame,
-           $langNoPointsGames, $langEditChange, $langPointsGames, $langPurge,
+           $langNoPointsGames, $langEditChange, $langPurge,
            $langActivate, $langDeactivate, $langNewPointsGame,
-           $langActive, $langInactive, $urlServer, $langConfirmPurgePointsGame;
+           $langActive, $langInactive, $urlServer, $langConfirmPurgePointsGame,
+           $langTitle, $langStartDate, $langEndDate, $langActions;
 
     if ($is_editor) {
-        $sql_cer = Database::get()->queryArray("SELECT id, title, description, active FROM points_game WHERE course_id = ?d", $course_id);
+        $sql_cer = Database::get()->queryArray("SELECT id, title, description, active, starts, expires FROM points_game WHERE course_id = ?d", $course_id);
     } else {
-        $sql_cer = Database::get()->queryArray("SELECT id, title, description, active FROM points_game WHERE course_id = ?d AND active = 1", $course_id);
+        $sql_cer = Database::get()->queryArray("SELECT id, title, description, active, starts, expires FROM points_game WHERE course_id = ?d AND active = 1", $course_id);
     }
-        $tool_content .= "
-                <div class='col-12 mt-4'>
-                    <div class='card panelCard card-default px-lg-4 py-lg-3'>
-                        <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-                                <h3>
-                                    $langPointsGames
-                                </h3>";
-                                if ($is_editor) {
-                                    $tool_content .= "<div>
-                                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newpointsgame=1' class='btn submitAdminBtn'><span class='fa fa-plus'></span><span class='hidden-xs'>&nbsp;&nbsp;&nbsp;$langNewPointsGame</span></a>
-                                    </div>";
-                                }
-        $tool_content .= "
-        </div>
-        <div class='card-body'>
-            <div class='res-table-wrapper'>";
+    
+    $tool_content .= "
+        <div class='col-12 mt-4'>
+            <div class='card panelCard card-default px-lg-4 py-lg-3'>
+                <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>";
+                if ($is_editor) {
+                    $tool_content .= "<div class='ms-auto'>
+                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newpointsgame=1' class='btn submitAdminBtn'><span class='fa fa-plus'></span><span class='hidden-xs'>&nbsp;&nbsp;&nbsp;$langNewPointsGame</span></a>
+                    </div>";
+                }
+    $tool_content .= "
+                </div>
+                <div class='card-body'>
+                    <div class='table-responsive mt-0'>";
 
-    if (count($sql_cer) == 0) { // no points games
+    if (count($sql_cer) == 0) {
         $tool_content .= "<p class='text-center text-muted'>$langNoPointsGames</p>";
     } else {
+        $tool_content .= "
+                        <table class='table-default'>
+                            <thead>
+                                <tr class='list-header'>
+                                    <th>$langTitle</th>
+                                    <th>$langStartDate - $langEndDate</th>
+                                    <th class='text-center'>$langIsActive</th>";
+        if ($is_editor) {
+            $tool_content .= "
+                                    <th class='text-center'>$langActions</th>";
+        }
+        $tool_content .= "
+                                </tr>
+                            </thead>
+                            <tbody>";
+        
         foreach ($sql_cer as $data) {
             $vis_status = $data->active ? "text-success" : "text-danger";
             $vis_icon = $data->active ? "fa-eye" : "fa-eye-slash";
             $status_msg = $data->active ? $langActive : $langInactive;
+            $start_date = format_locale_date(strtotime($data->starts), 'short');
+            $end_date = format_locale_date(strtotime($data->expires), 'short');
+            
             $tool_content .= "
-                                <div class='row res-table-row border-0 p-3 mt-2'>
-                                    <div class='col-3 text-md-start text-center'>
-                                    </div>
-                                    <div class='col-6 text-center mt-md-3 mt-1'>
-                                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;points_game_id=$data->id'>".q($data->title)."</a>
-                                        <div style='margin-top: 5px;'><span class='fa {$vis_icon}'></span>&nbsp;&nbsp;&nbsp;<span class='{$vis_status}'>$status_msg</span></div>
-                                    </div>";
-                if ($is_editor) {
-                    $tool_content .= "<div class='col-3 text-end mt-md-3 mt-1'>" .
-                        action_button(array(
-                            array('title' => $langEditChange,
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;points_game_id=$data->id&amp;edit=1",
-                                'icon' => 'fa-cogs'),
-                            array('title' => $data->active ? $langDeactivate : $langActivate,
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;points_game_id=$data->id&amp;vis=" .
-                                    ($data->active ? '0' : '1'),
-                                'icon' => $data->active ? 'fa-eye-slash' : 'fa-eye'),
-                            array('title' => $langResetPointsGame,
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;reset_points_game=$data->id",
-                                'icon' => 'fa-xmark',
-                                'class' => 'delete',
-                                'confirm' => $langConfirmResetPointsGame),
-                            array('title' => $langPurge,
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;purge_points_game=$data->id",
-                                'icon' => 'fa-xmark',
-                                'class' => 'delete',
-                                'confirm' => $langConfirmPurgePointsGame)
-                        ))
-                        . "</div>";
-                }
-            $tool_content .= "</div>";
+                                <tr>
+                                    <td><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;points_game_id=$data->id'>".q($data->title)."</a></td>
+                                    <td>$start_date - $end_date</td>
+                                    <td class='text-center'><span class='fa {$vis_icon} {$vis_status}'></span> <span class='{$vis_status}'>$status_msg</span></td>";
+            if ($is_editor) {
+                $tool_content .= "
+                                    <td class='text-center'>" .
+                    action_button(array(
+                        array('title' => $langEditChange,
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;points_game_id=$data->id&amp;edit=1",
+                            'icon' => 'fa-cogs'),
+                        array('title' => $data->active ? $langDeactivate : $langActivate,
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;points_game_id=$data->id&amp;vis=" .
+                                ($data->active ? '0' : '1'),
+                            'icon' => $data->active ? 'fa-eye-slash' : 'fa-eye'),
+                        array('title' => $langResetPointsGame,
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;reset_points_game=$data->id",
+                            'icon' => 'fa-xmark',
+                            'class' => 'delete',
+                            'confirm' => $langConfirmResetPointsGame),
+                        array('title' => $langPurge,
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;purge_points_game=$data->id",
+                            'icon' => 'fa-xmark',
+                            'class' => 'delete',
+                            'confirm' => $langConfirmPurgePointsGame)
+                    ))
+                    . "</td>";
+            }
+            $tool_content .= "
+                                </tr>";
         }
+        
+        $tool_content .= "
+                            </tbody>
+                        </table>";
     }
 
-    $tool_content .= "</div>
-                        </div>
+    $tool_content .= "
                     </div>
-                </div>";
-    }
+                </div>
+            </div>
+        </div>";
+}
 
 /**
  * @brief display course completion (special type of badge)

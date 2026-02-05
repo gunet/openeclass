@@ -6229,3 +6229,140 @@ th.grade-col a{
 .body-learningPath {
  padding: 20px !important;
 }
+/* Πόντοι Παιχνιδιών - EXACT */
+.points-game-carousel {
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    overflow: hidden;
+    background: white;
+}
+
+.carousel-nav-header {
+    background: #4a5568;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.carousel-nav-header .nav-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 0;
+}
+
+.carousel-nav-header .nav-btn:disabled {
+    opacity: 0.3;
+    cursor: default;
+}
+
+.carousel-nav-header .game-name {
+    color: white;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.carousel-slides {
+    padding: 20px;
+}
+
+.slide-item {
+    display: none;
+}
+
+.slide-item.active {
+    display: block;
+}
+
+.game-box {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    background: #fafafa;
+}
+
+.badge-col {
+    flex-shrink: 0;
+}
+
+.badge-circle {
+    width: 50px;
+    height: 50px;
+    border: 2px solid #d0d0d0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+}
+
+.badge-circle i {
+    font-size: 24px;
+    color: transparent;
+    -webkit-text-stroke: 1.5px #888;
+}
+
+.points-col {
+    text-align: center;
+    padding-right: 20px;
+    border-right: 1px solid #d0d0d0;
+}
+
+.points-num {
+    font-size: 28px;
+    font-weight: 700;
+    color: #333;
+    line-height: 1;
+}
+
+.points-txt {
+    font-size: 14px;
+    color: #666;
+    margin-top: 4px;
+}
+
+.progress-col {
+    flex: 1;
+    text-align: right;
+}
+
+.progress-label {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 4px;
+}
+
+.progress-percent {
+    font-size: 28px;
+    font-weight: 700;
+    color: #5b7ad6;
+    line-height: 1;
+}
+
+.progress-level {
+    font-size: 13px;
+    color: #555;
+    margin-top: 2px;
+}
+
+@media (max-width: 768px) {
+    .game-box {
+        flex-direction: column;
+        text-align: center;
+    }
+    .points-col {
+        border-right: none;
+        border-bottom: 1px solid #d0d0d0;
+        padding: 0 0 15px 0;
+    }
+    .progress-col {
+        text-align: center;
+    }
+}

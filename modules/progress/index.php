@@ -48,6 +48,257 @@ $toolName = $langProgress;
 
 load_js('tools.js');
 
+// Initialize tool_content
+$tool_content = '';
+
+// ALWAYS SHOW TAB NAVIGATION FIRST (except in special cases like PDF, preview, progressall)
+$show_tabs = !isset($_GET['p']) && !isset($_GET['preview']) && !isset($_GET['progressall']) && !isset($_GET['u']);
+
+if ($show_tabs) {
+    // Determine active tab
+    $active_tab = isset($_GET['tab']) ? $_GET['tab'] : 'course_completion';
+    
+    // Add navigation tabs at the very beginning
+    $tool_content .= "
+    <div class='progress-nav-container'>
+        <div class='progress-nav-tabs'>
+            <button class='progress-nav-tab " . ($active_tab == 'course_completion' ? 'active' : '') . "' data-tab='course_completion'>
+                Ολοκλήρωση μαθήματος
+            </button>
+            <button class='progress-nav-tab " . ($active_tab == 'badges' ? 'active' : '') . "' data-tab='badges'>
+                Επιβραβεύσεις
+            </button>
+            <button class='progress-nav-tab " . ($active_tab == 'certificates' ? 'active' : '') . "' data-tab='certificates'>
+                Πιστοποιητικά
+            </button>
+            <button class='progress-nav-tab " . ($active_tab == 'points' ? 'active' : '') . "' data-tab='points'>
+                Παιχνίδια πόντων
+            </button>
+        </div>
+    </div>
+    ";
+}
+
+// Add CSS styles for tab navigation
+$head_content .= "
+<style>
+.progress-nav-container {
+    background: white;
+    border-bottom: 1px solid #e5e7eb;
+    margin: 0 0 30px 0;
+    padding: 0;
+}
+
+.progress-nav-tabs {
+    display: flex;
+    gap: 0;
+    position: relative;
+    overflow-x: auto;
+    padding-left: 0;
+    margin-left: 0;
+}
+
+.progress-nav-tab {
+    padding: 16px 24px;
+    background: transparent;
+    border: 1px;
+    border-bottom: 3px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    color: #6b7280;
+
+    font-size: 15px;
+    font-weight: 500;
+    white-space: nowrap;
+    position: relative;
+}
+
+.progress-nav-tab:hover {
+    color: #374151;
+    background: #f9fafb;
+}
+
+.progress-nav-tab.active {
+    color: #2563eb;
+    border-bottom-color: #2563eb;
+}
+
+.progress-section {
+    display: none;
+}
+
+.progress-section.active {
+    display: block;
+}
+
+/* Hide redundant section headers when tabs are visible */
+.progress-nav-container ~ .row h3:first-of-type,
+.progress-nav-container ~ h3:first-of-type,
+.progress-nav-container ~ div h3:first-of-type,
+.panel-body > h3:first-child {
+    display: none !important;
+}
+
+/* Leaderboard accordion styles */
+.leaderboard-accordion-header {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px 4px 0 0;
+    padding: 18px 20px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.2s ease;
+    margin-top: 20px;
+}
+
+.leaderboard-accordion-header:hover {
+    background: #ebebeb;
+}
+
+.leaderboard-accordion-header h4 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 800;
+    color: #555;
+}
+
+.leaderboard-accordion-header h4 i {
+    margin-right: 15px;
+    color: #374151;
+}
+
+.leaderboard-accordion-icon {
+    transition: transform 0.3s ease;
+    color: #777;
+    font-size: 14px;
+}
+
+.leaderboard-accordion-icon.open {
+    transform: rotate(180deg);
+}
+
+.leaderboard-accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+    border: 1px solid #ddd;
+    border-top: none;
+    border-radius: 0 0 4px 4px;
+    background: #fff;
+    margin-bottom: 20px;
+}
+
+.leaderboard-accordion-content.open {
+    max-height: 3000px;
+}
+
+.leaderboard-accordion-body {
+    padding: 30px;
+    background: #fff;
+}
+
+.leaderboard-accordion-body .table {
+    margin-bottom: 0;
+}
+
+.leaderboard-accordion-body .table tr.info .progress {
+    background-color: #e8f4f8;
+    border: 1px solid #bee5eb;
+}
+
+.leaderboard-accordion-body .table tr.current-user {
+    background: #4D5B75;
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.leaderboard-accordion-body .table tr.current-user td {
+    color: #ffffff !important;
+}
+
+.leaderboard-accordion-body .table tr.current-user i {
+    color: #ffffff !important;
+}
+
+.leaderboard-accordion-body .table tr.current-user .progress {
+    background-color: rgba(255,255,255,0.25);
+    border: 1px solid rgba(255,255,255,0.35);
+}
+
+.leaderboard-accordion-body .table tr.current-user .progress-bar {
+    background-color: #ffffff !important;
+    color: #4D5B75;
+    font-weight: 700;
+}
+
+.leaderboard-accordion-body .table tr.current-user .progress-bar {
+    mix-blend-mode: normal;
+}
+
+
+@media (max-width: 768px) {
+    .progress-nav-tabs {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .progress-nav-tab {
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+}
+</style>
+";
+
+// Add JavaScript for tab switching
+$head_content .= "
+<script>
+$(document).ready(function() {
+    var currentTab = '" . (isset($_GET['tab']) ? $_GET['tab'] : 'course_completion') . "';
+    
+    $('.progress-nav-tab').click(function(e) {
+        e.preventDefault();
+        var tab = $(this).data('tab');
+        
+        // Navigate to URL with tab parameter
+        window.location.href = '$_SERVER[SCRIPT_NAME]?course=$course_code&tab=' + tab;
+    });
+    
+    // Add tab parameter to ALL internal progress links
+    $('a[href*=\"progress/index.php\"], a[href*=\"progress?course\"], a[href^=\"?course=' + '$course_code' + '\"]').each(function() {
+        var href = $(this).attr('href');
+        if (href && !href.includes('&tab=') && !href.includes('?tab=')) {
+            var separator = href.includes('?') ? '&' : '?';
+            $(this).attr('href', href + separator + 'tab=' + currentTab);
+        }
+    });
+    
+    // Add tab parameter to ALL forms that submit to progress
+    $('form').each(function() {
+        var action = $(this).attr('action');
+        if (!action || action.includes('progress')) {
+            // Add hidden input with tab parameter
+            if ($(this).find('input[name=\"tab\"]').length === 0) {
+                $(this).append('<input type=\"hidden\" name=\"tab\" value=\"' + currentTab + '\">');
+            }
+        }
+    });
+    
+    // Leaderboard accordion toggle
+    $('.leaderboard-accordion-header').click(function() {
+        var content = $(this).next('.leaderboard-accordion-content');
+        var icon = $(this).find('.leaderboard-accordion-icon');
+        
+        content.toggleClass('open');
+        icon.toggleClass('open');
+    });
+});
+</script>
+";
+
 $display = TRUE;
 if (isset($_REQUEST['certificate_id'])) {
     $param_name = 'certificate_id';
@@ -99,17 +350,16 @@ if ($is_editor) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&$param_name=$element_id", "name" => $element_title);
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&$param_name=$element_id&progressall=true", "name" => $langUsers);
         $pageName = uid_to_name($_GET['u']);
-        $action_bar = action_bar(array(
+        action_bar(array(
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;$param_name=$element_id&amp;progressall=true",
                   'icon' => 'fa-reply',
                   'level' => 'primary')));
-        $tool_content .= $action_bar;
     } elseif (isset($_GET['progressall'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&$param_name=$element_id", "name" => $element_title);
         $pageName = "$langProgress $langsOfStudents";
         $info_title = $langRefreshProgressInfo;
-        $action_bar = action_bar(array(
+        action_bar(array(
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;$param_name=$element_id",
                   'icon' => 'fa-reply',
@@ -124,19 +374,17 @@ if ($is_editor) {
                 'icon' => 'fa-file-excel',
                 'level' => 'primary-label')
             ));
-        $tool_content .= $action_bar;
 
     } elseif (isset($_GET['preview'])) { // certificate preview
         cert_output_to_pdf($element_id, $uid, null, null, null, null, null, null);
     } elseif (!(isset($_REQUEST['certificate_id']) or (isset($_REQUEST['badge_id'])))) {
-        $action_bar = action_bar(array(
+        action_bar(array(
             array('title' => $langCourseCompletion,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newcc=1",
                   'icon' => 'fa-navicon',
                   'level' => 'primary-label',
                   'show' => !is_course_completion_enabled())
             ));
-        $tool_content .= $action_bar;
     }
     $tool_content .= "</div>";
     //end of the top menu
@@ -150,7 +398,15 @@ if ($is_editor) {
             Session::flash('message',$langNotActivated);
             Session::flash('alert-class', 'alert-warning');
         }
-        redirect_to_home_page("modules/progress/index.php?course=$course_code");
+        $redirect_url = "modules/progress/index.php?course=$course_code";
+        if ($element == 'badge') {
+            $redirect_url .= "&tab=badges";
+        } elseif ($element == 'certificate') {
+            $redirect_url .= "&tab=certificates";
+        } elseif ($element == 'points_game') {
+            $redirect_url .= "&tab=points";
+        }
+        redirect_to_home_page($redirect_url);
     }
     if (isset($_POST['newCertificate']) or isset($_POST['newBadge'])) {  // add a new certificate / badge
         $v = new Valitron\Validator($_POST);
@@ -169,10 +425,15 @@ if ($is_editor) {
             add_certificate($table, $_POST['title'], $_POST['description'], $_POST['message'], $icon, $_POST['issuer'], 0, 0, $expires);
             Session::flash('message',$langNewCertificateSuc);
             Session::flash('alert-class', 'alert-success');
-            redirect_to_home_page("modules/progress/index.php?course=$course_code");
+            $tab_param = ($table == 'certificate') ? 'certificates' : 'badges';
+            if (isset($_POST['tab'])) {
+                $tab_param = $_POST['tab'];
+            }
+            redirect_to_home_page("modules/progress/index.php?course=$course_code&tab=$tab_param");
         } else {
             Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
-            redirect_to_home_page("modules/progress/index.php?course=$course_code&new=1");
+            $tab_redirect = isset($_POST['tab']) ? '&tab=' . $_POST['tab'] : '';
+            redirect_to_home_page("modules/progress/index.php?course=$course_code&new=1$tab_redirect");
         }
     } elseif (isset($_POST['newPointsGame'])) {
         $v = new Valitron\Validator($_POST);
@@ -227,7 +488,7 @@ if ($is_editor) {
             add_points_game($_POST['title'], $_POST['description'], $startdate, $enddate, $_POST['level_item_name'], $_POST['level_item_req_points'], $config_arr);
             Session::flash('message',$langNewPointsGameSuc);
             Session::flash('alert-class', 'alert-success');
-            redirect_to_home_page("modules/progress/index.php?course=$course_code");
+            redirect_to_home_page("modules/progress/index.php?course=$course_code&tab=points");
         } else {
             Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
             redirect_to_home_page("modules/progress/index.php?course=$course_code&new=1");
@@ -242,7 +503,8 @@ if ($is_editor) {
             modify($element, $element_id, $_POST['title'], $_POST['description'], $_POST['message'], $_POST['template'], $_POST['issuer']);
             Session::flash('message',$langQuotaSuccess);
             Session::flash('alert-class', 'alert-success');
-            redirect_to_home_page("modules/progress/index.php?course=$course_code");
+            $tab_param = ($element == 'certificate') ? '&tab=certificates' : '&tab=badges';
+            redirect_to_home_page("modules/progress/index.php?course=$course_code$tab_param");
         } else {
             Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
             redirect_to_home_page("modules/progress/index.php?course=$course_code&".$element."_id=".$element_id."&edit=1");
@@ -300,7 +562,7 @@ if ($is_editor) {
             modify_points_game($_POST['points_game_id'], $_POST['title'], $_POST['description'], $startdate, $enddate, $_POST['level_item_name'], $_POST['level_item_req_points'], $config_arr);
             Session::flash('message',$langQuotaSuccess);
             Session::flash('alert-class', 'alert-success');
-            redirect_to_home_page("modules/progress/index.php?course=$course_code");
+            redirect_to_home_page("modules/progress/index.php?course=$course_code&tab=points");
         } else {
             Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
             redirect_to_home_page("modules/progress/index.php?course=$course_code&points_game_id=".$_POST['points_game_id']."&edit=1");
@@ -444,54 +706,64 @@ if ($is_editor) {
         if (delete_certificate('certificate', $_GET['del_cert'])) {
             Session::flash('message',$langGlossaryDeleted);
             Session::flash('alert-class', 'alert-success');
-            redirect_to_home_page("modules/progress/index.php?course=$course_code");
+            redirect_to_home_page("modules/progress/index.php?course=$course_code&tab=certificates");
         } else {
-            Session::flash('message',"$langUsedCertRes 
-                <p class='mt-3'>$langWarningAboutUsedCert 
-                    <div class='col-12 d-flex justify-content-center align-items-center flex-wrap gap-2'>
-                        <a class='btn submitAdminBtn' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;purge_cert=$_GET[del_cert]'>$langDelete</a>
-                    </div>
-                </p>");
+            $del_cert_param = $_GET['del_cert'];
+            $warning_html = <<<HTML
+$langUsedCertRes 
+<p class='mt-3'>$langWarningAboutUsedCert 
+    <div class='col-12 d-flex justify-content-center align-items-center flex-wrap gap-2'>
+        <a class='btn submitAdminBtn' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;purge_cert=$del_cert_param'>$langDelete</a>
+    </div>
+</p>
+HTML;
+            Session::flash('message', $warning_html);
             Session::flash('alert-class', 'alert-warning');
+            redirect_to_home_page("modules/progress/index.php?course=$course_code&tab=certificates");
         }
     } elseif (isset($_GET['del_badge'])) {  //  delete badge
         if (delete_certificate('badge', $_GET['del_badge'])) {
             Session::flash('message',$langGlossaryDeleted);
             Session::flash('alert-class', 'alert-success');
-            redirect_to_home_page("modules/progress/index.php?course=$course_code");
+            redirect_to_home_page("modules/progress/index.php?course=$course_code&tab=badges");
         } else {
-            Session::flash('message',"$langUsedCertRes 
-                <p class='mt-3'>$langWarningAboutUsedCert 
-                    <div class='col-12 d-flex justify-content-center align-items-center flex-wrap gap-2'>
-                        <a class='btn submitAdminBtn' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;purge_cc=$_GET[del_badge]'>$langDelete</a>
-                    </div>
-                </p>");
+            $del_badge_param = $_GET['del_badge'];
+            $warning_html = <<<HTML
+$langUsedCertRes 
+<p class='mt-3'>$langWarningAboutUsedCert 
+    <div class='col-12 d-flex justify-content-center align-items-center flex-wrap gap-2'>
+        <a class='btn submitAdminBtn' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;purge_cc=$del_badge_param'>$langDelete</a>
+    </div>
+</p>
+HTML;
+            Session::flash('message', $warning_html);
             Session::flash('alert-class', 'alert-warning');
+            redirect_to_home_page("modules/progress/index.php?course=$course_code&tab=badges");
         }
     } elseif (isset($_GET['reset_points_game'])) { //reset points game
         if (reset_points_game($_GET['reset_points_game'])) {
             Session::flash('message',$langPointsGameReset);
             Session::flash('alert-class', 'alert-success');
-            redirect_to_home_page("modules/progress/index.php?course=$course_code");
+            redirect_to_home_page("modules/progress/index.php?course=$course_code&tab=points");
         }
     } elseif (isset($_GET['purge_cc'])) { // purge badge
         if (purge_certificate('badge', $_GET['purge_cc'])) {
             Session::flash('message',$langGlossaryDeleted);
             Session::flash('alert-class', 'alert-success');
         }
-        redirect_to_home_page("modules/progress/index.php?course=$course_code");
+        redirect_to_home_page("modules/progress/index.php?course=$course_code&tab=badges");
     } elseif (isset($_GET['purge_cert'])) { // purge certificate
         if (purge_certificate('certificate', $_GET['purge_cert'])) {
             Session::flash('message',$langGlossaryDeleted);
             Session::flash('alert-class', 'alert-success');
         }
-        redirect_to_home_page("modules/progress/index.php?course=$course_code");
+        redirect_to_home_page("modules/progress/index.php?course=$course_code&tab=certificates");
     } elseif (isset($_GET['purge_points_game'])) {
         if (purge_certificate('points_game', $_GET['purge_points_game'])) {
             Session::flash('message',$langGlossaryDeleted);
             Session::flash('alert-class', 'alert-success');
         }
-        redirect_to_home_page("modules/progress/index.php?course=$course_code");
+        redirect_to_home_page("modules/progress/index.php?course=$course_code&tab=points");
     } elseif (isset($_GET['newcert'])) {  // create new certificate
         certificate_settings('certificate');
         $display = FALSE;
@@ -505,7 +777,7 @@ if ($is_editor) {
         add_certificate('badge', $langCourseCompletion, '', $langCourseCompletionMessage, '', q(get_config('institution')), 0, -1, null);
         Session::flash('message',$langCourseCompletionCreated);
         Session::flash('alert-class', 'alert-success');
-        redirect_to_home_page("modules/progress/index.php?course=$course_code");
+        redirect_to_home_page("modules/progress/index.php?course=$course_code&tab=course_completion");
         $display = FALSE;
     } elseif (isset($_GET['edit'])) { // edit certificate / badge / points game settings
         if($element == 'points_game') {
@@ -542,7 +814,7 @@ if ($is_editor) {
     if (isset($_GET['progressall'])) { // display users progress (course reviewer view)
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&$param_name=$element_id", "name" => $element_title);
         $pageName = "$langProgress $langsOfStudents";
-        $tool_content .= action_bar(array(
+        action_bar(array(
             array('title' => $langBack,
                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;$param_name=$element_id",
                 'icon' => 'fa-reply',
@@ -553,40 +825,62 @@ if ($is_editor) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&$param_name=$element_id", "name" => $element_title);
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&$param_name=$element_id&progressall=true", "name" => $langUsers);
         $pageName = uid_to_name($_GET['u']);
-        $action_bar = action_bar(array(
+        action_bar(array(
             array('title' => $langBack,
                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;$param_name=$element_id&amp;progressall=true",
                 'icon' => 'fa-reply',
                 'level' => 'primary-label')));
-        $tool_content .= $action_bar;
         display_user_progress_details($element, $element_id, $_GET['u']);
         $display = FALSE;
     }
 } elseif (isset($_GET['u'])) { // student view
-        $action_bar = action_bar(array(
-	        array('title' => $langPrint,
-	              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&$param_name=$element_id&u=".$_GET['u']."&p=1",
-	              'icon' => 'fa-print',
-	              'level' => 'primary-label',
-	              'show' => has_certificate_completed($_GET['u'], $element, $element_id) and $element == "certificate")
-            ));
-        $tool_content .= $action_bar;
+    action_bar(array(
+        array('title' => $langPrint,
+              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&$param_name=$element_id&u=".$_GET['u']."&p=1",
+              'icon' => 'fa-print',
+              'level' => 'primary-label',
+              'show' => has_certificate_completed($_GET['u'], $element, $element_id) and $element == "certificate")
+    ));
 }
 
 if (isset($display) and $display) {
     if ($is_course_reviewer) {
         if (isset($element_id)) {
             $pageName = $element_title;
+            
+            // Normal detail view
+            $action_buttons = array(
+                array('title' => $langBack,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&tab=" . (isset($_GET['tab']) ? $_GET['tab'] : 'course_completion'),
+                      'icon' => 'fa-reply',
+                      'level' => 'primary-label')
+            );
+            
+            action_bar($action_buttons, false);
+            
             // display certificate settings and resources
             display_activities($element, $element_id);
-        } else { // display all certificate
-            display_course_completion();
-	        display_badges();
-	        display_certificates();
-            display_points_games();
+            
+            // Add leaderboard accordion for points games
+            if ($element == 'points_game') {
+                display_leaderboard_accordion($element_id);
+            }
+        } else { 
+            // Display content based on active tab - only call the relevant display function
+            $active_tab = isset($_GET['tab']) ? $_GET['tab'] : 'course_completion';
+            if ($active_tab == 'course_completion') {
+                display_course_completion();
+            } elseif ($active_tab == 'badges') {
+                display_badges();
+            } elseif ($active_tab == 'certificates') {
+                display_certificates();
+            } elseif ($active_tab == 'points') {
+                display_points_games();
+            }
         }
     } else {
         check_user_details($uid); // security check
+        
         if (isset($element_id)) {
             $certificate_expiration_date = get_cert_expiration_day($element, $element_id); // security check
             if (!is_null($certificate_expiration_date) and $certificate_expiration_date < date('Y-m-d H:i:s')) {
@@ -602,14 +896,128 @@ if (isset($display) and $display) {
                     redirect_to_home_page();
                 }
                 $pageName = $element_title;
+                
+                // Normal detail view
+                $action_buttons = array(
+                    array('title' => $langBack,
+                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&tab=" . (isset($_GET['tab']) ? $_GET['tab'] : 'course_completion'),
+                          'icon' => 'fa-reply',
+                          'level' => 'primary-label')
+                );
+                
+                action_bar($action_buttons, false);
+                
                 // display detailed user progress
                 display_user_progress_details($element, $element_id, $uid);
+                
+                // Add leaderboard accordion for points games
+                if ($element == 'points_game') {
+                    display_leaderboard_accordion($element_id);
+                }
             }
         } else {
-            // display certificate (student view)
-            student_view_progress();
+            // Display content based on active tab - same as admin view
+            $active_tab = isset($_GET['tab']) ? $_GET['tab'] : 'course_completion';
+            if ($active_tab == 'course_completion') {
+                display_course_completion();
+            } elseif ($active_tab == 'badges') {
+                display_badges();
+            } elseif ($active_tab == 'certificates') {
+                display_certificates();
+            } elseif ($active_tab == 'points') {
+                display_points_games();
+            }
         }
     }
+}
+
+/**
+ * Display leaderboard accordion for a points game
+ */
+function display_leaderboard_accordion($points_game_id) {
+    global $tool_content, $course_id, $uid;
+    
+    // Use dummy data for now since tables don't exist
+    $leaderboard_enabled = true;
+    $anonymize = false;
+    
+    // Start accordion with proper width
+    $tool_content .= "
+            <div class='leaderboard-accordion-header'>
+                <h4><i class='fa fa-trophy'></i> Προβολή πίνακα κατάταξης</h4>
+                <i class='fa fa-chevron-down leaderboard-accordion-icon'></i>
+            </div>
+            <div class='leaderboard-accordion-content'>";
+    
+    // Dummy data for demonstration
+    $leaderboard = array(
+        (object)['user_id' => 1, 'surname' => 'user', 'givenname' => '4', 'points' => 350, 'level_name' => 'gm1'],
+        (object)['user_id' => 2, 'surname' => 'user', 'givenname' => '6', 'points' => 300, 'level_name' => 'gm1'],
+        (object)['user_id' => 3, 'surname' => 'user', 'givenname' => '23', 'points' => 240, 'level_name' => 'gm1'],
+        (object)['user_id' => 4, 'surname' => 'user', 'givenname' => '1', 'points' => 150, 'level_name' => null],
+        (object)['user_id' => 5, 'surname' => 'user', 'givenname' => '2', 'points' => 150, 'level_name' => null],
+        (object)['user_id' => 6, 'surname' => 'user', 'givenname' => '13', 'points' => 60, 'level_name' => null],
+        (object)['user_id' => 7, 'surname' => 'user', 'givenname' => '9', 'points' => 60, 'level_name' => null],
+    );
+    
+    $max_points = 380;
+    
+    $tool_content .= "
+                    <div class='leaderboard-accordion-body'>
+                        <div class='table-responsive'>
+                            <table class='table table-striped table-hover'>
+                                <thead>
+                                    <tr>
+                                        <th>Θέση</th>
+                                        <th>Επίπεδο</th>
+                                        <th>Ονοματεπώνυμο</th>
+                                        <th>Πόντοι</th>
+                                        <th>Πρόοδος</th>
+                                    </tr>
+                                </thead>
+                                <tbody>";
+    
+    $rank = 1;
+    foreach ($leaderboard as $entry) {
+        $display_name = $anonymize ? "user" . $entry->user_id : q($entry->surname . ' ' . $entry->givenname);
+        $level_display = $entry->level_name ? q($entry->level_name) : '-';
+        $progress_percentage = $max_points > 0 ? round(($entry->points / $max_points) * 100) : 0;
+        
+        // Highlight current user's row 
+        $row_class = '';
+        $progress_bar_class = 'progress-bar-success';
+
+        if ($entry->user_id == $uid) {
+            $row_class = 'class="current-user"';
+        }
+        
+        $tool_content .= "
+                                    <tr $row_class>
+                                        <td>" . $rank . "</td>
+                                        <td>" . icon('fa-star') . " " . $level_display . "</td>
+                                        <td>" . $display_name . "</td>
+                                        <td>" . intval($entry->points) . "</td>
+                                        <td>
+                                            <div class='progress' style='margin-bottom: 0; height: 20px; background-color: #f0f0f0;'>
+                                                <div class='progress-bar  progress-bar-success' role='progressbar' 
+                                                     aria-valuenow='" . $progress_percentage . "' 
+                                                     aria-valuemin='0' 
+                                                     aria-valuemax='100' 
+                                                     style='width: " . $progress_percentage . "%; line-height: 20px;'>
+                                                    " . $progress_percentage . "%
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>";
+        $rank++;
+    }
+    
+    $tool_content .= "
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+    </div>";
 }
 
 draw($tool_content, 2, null, $head_content);

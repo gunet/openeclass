@@ -43,6 +43,7 @@ require_once 'modules/document/doc_init.php';
 require_once 'main/personal_calendar/calendar_events.class.php';
 require_once 'modules/course_metadata/CourseXML.php';
 require_once 'modules/progress/process_functions.php';
+require_once 'modules/progress/game_points_widget.php';
 require_once 'modules/wall/wall_wrapper.php';
 require_once 'modules/session/functions.php';
 
@@ -55,6 +56,8 @@ $course_users_permission = $up->has_course_users_permission();
 $allow_clone = $up->has_course_clone_permission();
 $allow_course_backup = $up->has_course_backup_permission();
 $allow_course_tools = $up->has_course_modules_permission();
+
+$is_student_user = ($uid && !$is_editor && !$is_course_admin && $_SESSION['status'] == USER_STUDENT);
 
 $pageName = ''; // delete $pageName set in doc_init.php
 
@@ -960,6 +963,7 @@ $course_home_page_sidebar = new WidgetArea(COURSE_HOME_PAGE_SIDEBAR);
 foreach ($course_home_page_sidebar->getCourseAndAdminWidgets($course_id) as $key => $widget) {
     $data['course_home_sidebar_widgets'] .= $widget->run($key);
 }
+$data['points_game_widget'] = course_points_game_widget($uid, $course_id);
 
 $data['registered'] = false;
 if ($uid) {
