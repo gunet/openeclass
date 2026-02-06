@@ -489,7 +489,7 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COU
         } else {
 
             if (isset($_GET['chart']) && 
-                ($theQuestion->qtype == QTYPE_FILL || $theQuestion->qtype == QTYPE_DATETIME || $theQuestion->qtype == QTYPE_SHORT || $theQuestion->qtype == QTYPE_TABLE)) {
+                ($theQuestion->qtype == QTYPE_FILL || $theQuestion->qtype == QTYPE_DATETIME || $theQuestion->qtype == QTYPE_SHORT || $theQuestion->qtype == QTYPE_TABLE || $theQuestion->qtype == QTYPE_FILE)) {
                 continue;
             }
 
@@ -787,7 +787,7 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COU
                                 $tool_content .= $answers_table;
                             }
 
-                        } elseif ($theQuestion->qtype == QTYPE_FILL || $theQuestion->qtype == QTYPE_DATETIME || $theQuestion->qtype == QTYPE_SHORT) {
+                        } elseif ($theQuestion->qtype == QTYPE_FILL || $theQuestion->qtype == QTYPE_DATETIME || $theQuestion->qtype == QTYPE_SHORT || $theQuestion->qtype == QTYPE_FILE) {
 
                             $sql_participants_a = '';
                             $sql_participants_c = '';
@@ -815,14 +815,14 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COU
                             // $tool_content .= "<div class='inner-heading'>$theQuestion->question_text</div>";
                             // $tool_content .= "</div>";
                             $names_array = [];
-                            $answers = Database::get()->queryArray("SELECT COUNT(a.arid) AS count, a.answer_text
+                            $answers = Database::get()->queryArray("SELECT COUNT(a.arid) AS count, a.answer_text, b.uid
                                                         FROM poll_answer_record a, poll_user_record b
                                                         WHERE a.qid = ?d
                                                         AND a.poll_user_record_id = b.id
                                                         $sql_participants_a
                                                         $sql_participants_d
                                                         AND (b.email_verification = 1 OR b.email_verification IS NULL)
-                                                        GROUP BY a.answer_text ORDER BY MIN(a.submit_date) DESC", $theQuestion->pqid, $args_array, $args_array_d);
+                                                        GROUP BY a.answer_text, b.uid ORDER BY MIN(a.submit_date) DESC", $theQuestion->pqid, $args_array, $args_array_d);
                             $answers_table = "<p>$theQuestion->question_text</p><div class='table-responsive'><table class='table-default'>
                                     <tbody>
                                     <tr class='list-header'>
@@ -870,9 +870,21 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COU
                                     . q($names_str) .
                                     "</em> <a href='#' class='trigger_names' data-type='multiple' id='hide'>".$langViewHide."</a>
                                     </td>" : "";
+                                $uAnswerText = q($answer->answer_text);
+                                if ($theQuestion->qtype == QTYPE_FILE) {
+                                    $arrFile = unserialize($answer->answer_text);
+                                    $filename = $arrFile['filename'];
+                                    $filepath = $arrFile['filepath'];
+                                    $userID = $uid;
+                                    if ($is_editor) {
+                                        $userID = $answer->uid;
+                                    }
+                                    $Qid = $theQuestion->pqid;
+                                    $uAnswerText = "<a target='_blank' href='{$urlServer}courses/$course_code/poll_$pid/$userID/$Qid$filepath'>$filename</a>";
+                                }
                                 $answers_table .= "
                                     <tr $row_class>
-                                            <td>".q($answer->answer_text)."</td>
+                                            <td>$uAnswerText</td>
                                             <td>$answer->count</td>
                                             $extra_column
                                     </tr>";

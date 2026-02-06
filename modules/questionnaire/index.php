@@ -344,6 +344,8 @@ if ($is_editor) {
             unset($_SESSION['question_ids']);
             unset($_SESSION['q_row_columns']);
             unset($_SESSION['loop_init_answers']);
+            $folder = "$webDir/courses/$course_code/poll_$pid";
+            deleteFolderContents($folder);
             Database::get()->query("DELETE FROM poll_user_record WHERE pid = ?d", $pid);
             $poll_title = Database::get()->querySingle("SELECT name FROM poll WHERE course_id = ?d", $course_id)->name;
             Log::record($course_id, MODULE_ID_QUESTIONNAIRE, LOG_DELETE, array('title' => $poll_title, 'legend' => 'purge_results'));
@@ -785,4 +787,31 @@ function printPolls() {
             </script>";
         load_js('select2');
     }
+}
+
+// Delete all uploaded files from the current poll
+function deleteFolderContents($folder) {
+    if (!is_dir($folder)) {
+        return false;
+    }
+
+    $items = scandir($folder);
+    foreach ($items as $item) {
+        if ($item === '.' || $item === '..') {
+            continue;
+        }
+
+        $itemPath = $folder . DIRECTORY_SEPARATOR . $item;
+
+        if (is_dir($itemPath)) {
+            // Recursively delete subdirectory contents
+            deleteFolderContents($itemPath);
+            // Remove the empty directory
+            rmdir($itemPath);
+        } else {
+            // Delete file
+            unlink($itemPath);
+        }
+    }
+    return true;
 }
