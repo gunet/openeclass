@@ -128,8 +128,8 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) and strtolower($_SERVER['HTTP_X_RE
         } else {
             update_gradebook_book($data->uid, $data->eid, $data->total_score / $data->total_weighting, GRADEBOOK_ACTIVITY_EXERCISE);
         }
-        triggerGame($course_id, $data->uid, $data->eid);
-        triggerExerciseAnalytics($course_id, $data->uid, $data->eid);
+        //triggerGame($course_id, $data->uid, $data->eid);
+        //triggerExerciseAnalytics($course_id, $data->uid, $data->eid);
         exit();
     }
 }
@@ -316,6 +316,7 @@ $displayScore = $objExercise->selectScore();
 $gradePass = $objExercise->getPassingGrade();
 $exerciseAttemptsAllowed = $objExercise->selectAttemptsAllowed();
 $calc_grade_method = $objExercise->getCalcGradeMethod();
+$exerciseFeedback = $objExercise->getFeedback();
 $userAttempts = Database::get()->querySingle("SELECT COUNT(*) AS count FROM exercise_user_record WHERE eid = ?d AND uid= ?d", $exercise_user_record->eid, $uid)->count;
 
 $cur_date = new DateTime("now");
@@ -384,6 +385,12 @@ if ($user) { // user details
     }
     $tool_content .= "</h3>";
 }
+// exercise duration details
+$tool_content .= "<p><small>$langStart: <em>" . format_locale_date(strtotime($exercise_user_record->record_start_date), 'short') . "</em>
+$langDuration: <em>" . format_time_duration($exercise_user_record->time_duration) . "</em></p>" .
+    ($user && $exerciseAttemptsAllowed ? "<p>$langAttempt: <em>{$exercise_user_record->attempt}</em></p>" : '');
+$tool_content .= "</small>";
+
 $tool_content .= "</div>";
 $tool_content .= "<div class='card-body'>";
 
@@ -403,12 +410,16 @@ if ($exerciseRange > 0) { // exercise grade range (if any)
 }
 
 if ($showScore) {
-    $tool_content .= "<p>$langTotalScore: $canonicalized_message_range&nbsp;&nbsp;$message_range $grade_icon</p>";
+    // exercise score
+    $tool_content .= "<p>";
+    $tool_content .= "$langTotalScore: $canonicalized_message_range&nbsp;&nbsp;$message_range $grade_icon";
+    // exercise feedback
+    if (!empty($objExercise->calculate_feedback($canonical_score))) {
+        $tool_content .= "<h5 class='p-3 m-1 border border-info rounded-3' style='color: blue; text-align:center;'>" . $objExercise->calculate_feedback($canonical_score) . "</h5>";
+    }
+    $tool_content .= "</p>";
 }
 $tool_content .= "
-    <p>$langStart: <em>" . format_locale_date(strtotime($exercise_user_record->record_start_date), 'short') . "</em>
-    $langDuration: <em>" . format_time_duration($exercise_user_record->time_duration) . "</em></p>" .
-    ($user && $exerciseAttemptsAllowed ? "<p>$langAttempt: <em>{$exercise_user_record->attempt}</em></p>" : '') . "
   </div></div>
 </div>
 ";
