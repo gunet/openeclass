@@ -279,7 +279,7 @@ if (isset($_POST['submitQuestion'])) {
             Database::get()->query("UPDATE poll_question_answer SET sub_qid = ?d WHERE pqaid != ?d AND pqid = ?d", 0, $_POST['sub_pr_ans'], $tmpPqid);
         }
 
-        if ($qtype == QTYPE_FILL || $qtype == QTYPE_LABEL || $qtype == QTYPE_SCALE || $qtype == QTYPE_DATETIME || $qtype == QTYPE_SHORT) {
+        if ($qtype == QTYPE_FILL || $qtype == QTYPE_LABEL || $qtype == QTYPE_SCALE || $qtype == QTYPE_DATETIME || $qtype == QTYPE_SHORT || $qtype == QTYPE_FILE) {
             redirect_to_home_page("modules/questionnaire/admin.php?course=$course_code&pid=$pid");
         } elseif ($qtype == QTYPE_TABLE) {
             redirect_to_home_page("modules/questionnaire/admin.php?course=$course_code&pid=$pid&modifyTableAnswers=$pqid");
@@ -387,7 +387,7 @@ if (isset($_GET['pid'])) {
     $attempt_counter = 0;
 }
 // question type text array
-$aType = array($langUniqueSelect, $langFreeText, $langMultipleSelect, $langLabel.'/'.$langComment, $langScale, $langTable, $langDateTime, $langShortAnswer);
+$aType = array($langUniqueSelect, $langFreeText, $langMultipleSelect, $langLabel.'/'.$langComment, $langScale, $langTable, $langDateTime, $langShortAnswer, $langAIUploadFile);
 // Modify/Create poll form
 if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     if (isset($_GET['modifyPoll'])) {
@@ -891,7 +891,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         }
         $pageName = $langModify;
         if (($question->qtype != QTYPE_LABEL) and ($question->qtype != QTYPE_FILL) and ($question->qtype != QTYPE_SCALE)
-                and ($question->qtype != QTYPE_DATETIME) and ($question->qtype != QTYPE_SHORT)) {
+                and ($question->qtype != QTYPE_DATETIME) and ($question->qtype != QTYPE_SHORT) and ($question->qtype != QTYPE_FILE)) {
             $navigation[] = array(
                 'url' => "admin.php?course=$course_code&amp;pid=$pid&amp;modifyAnswers=$question->pqid",
                 'name' => $langPollManagement
@@ -1016,6 +1016,12 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                         ". $aType[QTYPE_SHORT - 1] . "
                       </label>
                     </div>
+                    <div class='radio mb-1'>
+                      <label>
+                        <input type='radio' name='answerType' class='answerType' value='".QTYPE_FILE."' ".($answerType == QTYPE_FILE ? 'checked' : '').">
+                        ". $aType[QTYPE_FILE - 1] . "
+                      </label>
+                    </div>
                 </div>
             </div>
             <div class='form-group$questionScaleErrorClass$questionScaleShowHide mt-4'>
@@ -1095,7 +1101,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     $answers = Database::get()->queryArray("SELECT * FROM poll_question_answer
                     WHERE pqid = ?d ORDER BY pqaid", $question->pqid);
     if(!$question || $question->qtype == QTYPE_LABEL || $question->qtype == QTYPE_FILL || $question->qtype == QTYPE_SCALE
-        || $question->qtype == QTYPE_DATETIME || $question->qtype == QTYPE_SHORT) {
+        || $question->qtype == QTYPE_DATETIME || $question->qtype == QTYPE_SHORT || $question->qtype == QTYPE_FILE) {
         redirect_to_home_page("modules/questionnaire/admin.php?course=$course_code&pid=$pid");
     }
     $navigation[] = array(
@@ -1720,7 +1726,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                                                         array(
                                                             'title' => $langEditChange,
                                                             'icon' => 'fa-edit',
-                                                            'url' => (($question->qtype != QTYPE_LABEL) and ($question->qtype != QTYPE_FILL) and ($question->qtype != QTYPE_SCALE) and ($question->qtype != QTYPE_TABLE) and ($question->qtype != QTYPE_DATETIME) and ($question->qtype != QTYPE_SHORT))?
+                                                            'url' => (($question->qtype != QTYPE_LABEL) and ($question->qtype != QTYPE_FILL) and ($question->qtype != QTYPE_SCALE) and ($question->qtype != QTYPE_TABLE) and ($question->qtype != QTYPE_DATETIME) and ($question->qtype != QTYPE_SHORT) and ($question->qtype != QTYPE_FILE))?
                                                                             "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;pid=$pid&amp;modifyAnswers=$question->pqid" :
                                                                             "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;pid=$pid&amp;modifyQuestion=$question->pqid",
                                                             'show' => $question->qtype != 0
@@ -1846,7 +1852,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                         array(
                             'title' => $langEditChange,
                             'icon' => 'fa-edit',
-                            'url' => (($question->qtype != QTYPE_LABEL) and ($question->qtype != QTYPE_FILL) and ($question->qtype != QTYPE_SCALE) and ($question->qtype != QTYPE_DATETIME) and ($question->qtype != QTYPE_SHORT))?
+                            'url' => (($question->qtype != QTYPE_LABEL) and ($question->qtype != QTYPE_FILL) and ($question->qtype != QTYPE_SCALE) and ($question->qtype != QTYPE_DATETIME) and ($question->qtype != QTYPE_SHORT) and ($question->qtype != QTYPE_FILE))?
                                 "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;pid=$pid&amp;modifyAnswers=$question->pqid" :
                                 "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;pid=$pid&amp;modifyQuestion=$question->pqid",
                         ),

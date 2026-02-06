@@ -230,7 +230,12 @@ if ($full) { // user questions results
                                 ORDER BY uid", $q->pqid, $args_u, $args_s);
             foreach ($answers as $a) {
                 $user_identifier = $a->uid ?: $a->email;
-                $qlist[$user_identifier][$q->pqid] = $a->answer_text;
+                $u_answer_text = $a->answer_text;
+                if ($q->qtype == QTYPE_FILE) {
+                    $arrFile = unserialize($a->answer_text);
+                    $u_answer_text = $arrFile['filename'];
+                }
+                $qlist[$user_identifier][$q->pqid] = $u_answer_text;
                 if (!isset($submit_date[$user_identifier])) {
                     $submit_date[$user_identifier] = format_locale_date(strtotime($a->submit_date), 'short');
                 }

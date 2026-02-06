@@ -33,6 +33,7 @@ require_once 'functions.php';
 require_once 'modules/group/group_functions.php';
 require_once 'modules/progress/ViewingEvent.php';
 require_once 'modules/lti_consumer/lti-functions.php';
+require_once 'include/lib/fileUploadLib.inc.php';
 
 load_js('bootstrap-slider');
 load_js('bootstrap-datetimepicker');
@@ -86,6 +87,82 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             }
             exit();
         }
+
+        // File has uploaded from uppy
+        if (isset($_POST['file_uploaded']) && !$is_editor) {
+            header('Content-Type: application/json');
+            $questionID = $_POST['question_id'];
+            $docInfo = ['filename' => $_POST['file_name'], 'filepath' => $_POST['file_path']];
+            $_SESSION['data_answers'][$questionID] = serialize($docInfo);
+            echo json_encode(['upload_success' => true]);
+            exit();
+        }
+
+        // File has removed from uppy
+        if (isset($_POST['file_removed']) && !$is_editor) {
+            if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();
+
+            $questionID = $_POST['question_id'];
+            unset($_SESSION['data_answers'][$questionID]);
+            
+            $c = $_GET['course'];
+            $pollId = intval($_GET['pid']);
+            $fpath = $_POST['fPath'];
+            $file = "$webDir/courses/$c/poll_$pollId/$uid/$questionID$fpath";
+            if (file_exists($file)) {
+                unlink($file);
+                Database::get()->query("DELETE poll_answer_record FROM poll_answer_record
+                                        INNER JOIN poll_user_record ON poll_user_record.id=poll_answer_record.poll_user_record_id
+                                        WHERE poll_answer_record.qid = ?d
+                                        AND poll_user_record.uid = ?d
+                                        AND poll_user_record.pid = ?d", $questionID, $uid, $pollId);
+
+            }
+            exit();
+        }
+}
+
+// Save uploaded file from uppy - only for users
+if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['answer']) && !$is_editor) {
+    if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();
+
+    header('Content-Type: application/json');
+    
+    $pid = intval($_GET['pid']);
+    $qid = intval($_GET['qid']);
+    $filename = $_FILES['answer']['name'];
+    validateUploadedFile($filename); // check file type
+    $filename = add_ext_on_mime($filename);
+    // File name used in file system and path field
+    $safe_filename = safe_filename(get_file_extension($filename));
+    $dir = "$webDir/courses/$course_code/poll_$pid/$uid/$qid/";
+    if (!file_exists($dir)) {
+        mkdir("$webDir/courses/$course_code/poll_$pid/$uid/$qid/", 0755, true);
+    } else {// delete prev file
+        $folder = "$webDir/courses/$course_code/poll_$pid/$uid/$qid";
+        if (is_dir($folder)) {
+            $files = scandir($folder);
+            foreach ($files as $file) {
+                if ($file !== '.' && $file !== '..') {
+                    $filePath = $folder . DIRECTORY_SEPARATOR . $file;
+                    if (is_file($filePath)) {
+                        unlink($filePath); // Delete the file
+                    }
+                }
+            }
+        }
+    }
+    $pathfile = "$webDir/courses/$course_code/poll_$pid/$uid/$qid/$safe_filename";
+    if (move_uploaded_file($_FILES['answer']['tmp_name'], $pathfile)) {
+        @chmod($pathfile, 0644);
+        $real_filename = $_FILES['answer']['name'];
+        $filepath = '/' . $safe_filename;
+        $info_file = pathinfo($filename);
+        echo json_encode(['success' => true, 'fileInfo' => $info_file, 'filePath' => $filepath]);
+    } else {
+        echo json_encode(['success' => false, 'error' => 'Failed to save uploaded file.']);
+    }
+    exit();
 }
 
 if (!isset($_REQUEST['UseCase'])) {
@@ -570,7 +647,7 @@ function printPollForm() {
         }
         if (!$temp_IsLime) {
             $tool_content .= "
-            <form class='form-horizontal' role='form' action='$form_link' id='poll' method='post'>
+            <form class='form-horizontal' role='form' action='$form_link' id='poll' method='post' enctype='multipart/form-data'>
                 <fieldset>
                 <legend class='mb-0' aria-label='$langForm'></legend>
                 $onBehalfOfUser
@@ -1000,6 +1077,8 @@ function printPollForm() {
                                     $tool_content .= "<div class='col-12 d-flex justify-content-end align-items-center mt-4'>
                                                             <a id='{$qtype}_{$pqid}' class='btn deleteAdminBtn clearUpBtn gap-1' data-question-clean='$pqid'><i class='fa-regular fa-trash-can'></i>$langCleanup</a>
                                                         </div>";
+                            } elseif ($qtype == QTYPE_FILE) {
+                                poll_upload_file($pid, $form_link, $qtype, $pqid);
                             }
                 $tool_content .= "
                         </div>
@@ -1222,7 +1301,7 @@ function submitPoll() {
                     $require_an = true;
                     $_SESSION['unanswered_required_qids'][] = $q->pqid;
                 }
-            } elseif ($q->require_response && isset($answer[$q->pqid]) && empty($answer[$q->pqid]) && ($q->qtype == QTYPE_DATETIME or $q->qtype == QTYPE_SHORT)) {
+            } elseif ($q->require_response && isset($answer[$q->pqid]) && empty($answer[$q->pqid]) && ($q->qtype == QTYPE_DATETIME or $q->qtype == QTYPE_SHORT or $q->qtype == QTYPE_FILE)) {
                 $require_an = true;
                 $_SESSION['unanswered_required_qids'][] = $q->pqid;
             }
@@ -1319,7 +1398,7 @@ function submitPoll() {
                     $aid = -1;
                 }
                 $answer_text = '';
-            } elseif ($qtype == QTYPE_FILL || $qtype == QTYPE_DATETIME || $qtype == QTYPE_SHORT) {
+            } elseif ($qtype == QTYPE_FILL || $qtype == QTYPE_DATETIME || $qtype == QTYPE_SHORT || $qtype == QTYPE_FILE) {
                 $_SESSION['q_answer'] = $answer;
                 $answer_text = trim($answer[$pqid]);
                 if ($answer_text === '' and !$default_answer and !$atleast_one_answer) {
@@ -1494,7 +1573,7 @@ function user_answers_from_db($questions, $sql_an, $userDefault) {
                         $_SESSION['data_answers'][$pqid] = $slider_value;
                     }
                 }
-            } elseif (($qtype == QTYPE_FILL or $qtype == QTYPE_DATETIME or $qtype == QTYPE_SHORT) && isset($_SESSION['loop_init_answers'])) {
+            } elseif (($qtype == QTYPE_FILL or $qtype == QTYPE_DATETIME or $qtype == QTYPE_SHORT or $qtype == QTYPE_FILE) && isset($_SESSION['loop_init_answers'])) {
                 $user_answers = Database::get()->querySingle("SELECT a.answer_text
                                     FROM poll_answer_record a, poll_user_record b
                                 WHERE qid = ?d
@@ -1550,7 +1629,7 @@ function update_submission($pid) {
                 $multiple_values_arr = explode(',', $value);
                 $final_answers[$question_key] = $multiple_values_arr;
             } elseif ($questionType == QTYPE_SINGLE || $questionType == QTYPE_FILL || $questionType == QTYPE_SCALE
-                        || $questionType == QTYPE_DATETIME || $questionType == QTYPE_SHORT) {
+                        || $questionType == QTYPE_DATETIME || $questionType == QTYPE_SHORT || $questionType == QTYPE_FILE) {
                 $final_answers[$question_key] = $value;
             } elseif ($questionType == QTYPE_TABLE) {
                 $resDimension = Database::get()->querySingle("SELECT q_row,q_column FROM poll_question WHERE pqid = ?d", $question_key);
@@ -1586,4 +1665,137 @@ function update_submission($pid) {
     }
 
     return $answer;
+}
+
+function poll_upload_file($pid, $form_link, $qtype, $pqid) {
+    global $tool_content, $head_content, $course_code, $urlAppend, $langPleaseWait, 
+           $language, $langFileName, $langDelete, $langConfirmDelete, $urlServer, 
+           $uid, $webDir;
+
+    $token = $_SESSION['csrf_token'];
+
+    $del_file = '';
+    $filename = '';
+    $filepath = '';
+    if (isset($_SESSION['data_answers']) && !empty($_SESSION['data_answers'][$pqid])) {
+        $arrFile = unserialize($_SESSION['data_answers'][$pqid]);
+        $filename = $arrFile['filename'];
+        $filepath = $arrFile['filepath'];
+    }
+
+    if (!empty($filename)) {
+        $del_file .= "
+        <div class='d-flex align-items-center gap-2 mb-4'>
+            <p id='fileName_{$pqid}' class='TextBold'>$langFileName: <a target='_blank' href='{$urlServer}courses/$course_code/poll_$pid/$uid/$pqid$filepath'>$filename</a></p>
+            <a id='del_file_{$pqid}' class='text-danger' data-bs-toggle='tooltip' data-bs-placement='top' title='$langDelete'><i class='fa-solid fa-xmark'></i></a>
+        </div>
+        ";
+    }
+
+    $head_content .= "<link href='{$urlAppend}js/bundle/uppy.min.css' rel='stylesheet'>";
+    $tool_content .= "<div class='form-group margin-bottom-fat'>
+                        <div class='col-sm-12 margin-top-thin QuestionType_{$qtype} QuestionNumber_{$pqid}'>
+                            $del_file
+                            <div id='uppy_{$pqid}'></div>
+                        </div>
+                      </div>";
+
+    $head_content .= "
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            let isUppyLoaded = false;
+
+            async function loadUppy() {
+                try {
+                    console.log('Uppy loaded');
+                    const { Uppy, Dashboard, XHRUpload, English, French, German, Italian, Spanish, Greek } = await import('{$urlAppend}js/bundle/uppy.js');
+
+                    const locale_map = {
+                        'de': German,
+                        'el': Greek,
+                        'en': English,
+                        'es': Spanish,
+                        'fr': French,
+                        'it': Italian,
+                    }
+
+                    const uppy = new Uppy({
+                        autoProceed: true,
+                        restrictions: {
+                            maxFileSize: '" . parseSize(ini_get('upload_max_filesize')) . "',
+                            maxNumberOfFiles: 1,
+                        }
+                    })
+
+                    uppy.use(Dashboard, {
+                        target: '#uppy_{$pqid}',
+                        inline: true,
+                        showProgressDetails: true,
+                        proudlyDisplayPoweredByUppy: false,
+                        height: 500,
+                        thumbnailWidth: 100,
+                        locale: locale_map['{$language}'] || English,
+                        hideUploadButton: true
+                    });
+
+                    uppy.use(XHRUpload, {
+                        endpoint: '{$urlAppend}modules/questionnaire/pollparticipate.php?course={$course_code}&pid={$pid}&qid={$pqid}&token={$token}',
+                        fieldName: 'answer',
+                        formData: true,
+                        getResponseData: (responseText, response) => {
+                            try {
+                                const data = JSON.parse(responseText.responseText);
+                                if (data.success) {
+                                    $.ajax({
+                                        url: '{$urlAppend}modules/questionnaire/pollparticipate.php?course=$course_code&UseCase=1&pid=$pid',
+                                        method: 'POST',
+                                        data: { file_uploaded: 1, file_name: data.fileInfo.basename, file_path: data.filePath, question_id: $pqid },
+                                        success: function(res) {
+                                            if (res.upload_success) {
+                                                setInterval(() => {
+                                                    window.location.reload();
+                                                }, 500);
+                                            }
+                                        }
+                                    });
+                                }
+                                return { url: '' };
+                            } catch(e) {
+                                console.error('Failed to parse response:', e); 
+                                return { url: '' };
+                            }
+                        }
+                    });
+
+                    isUppyLoaded = true;
+
+                } catch (error) {
+                    console.log('Uppy not loaded', error);
+                    isUppyLoaded = false;
+                }
+            }
+
+            loadUppy();
+
+            $('#del_file_{$pqid}').on('click', function (e) {
+                e.preventDefault();
+                if (confirm('$langConfirmDelete')) {
+                    $.ajax({
+                        url: '{$urlAppend}modules/questionnaire/pollparticipate.php?course=$course_code&UseCase=1&pid=$pid&token={$token}',
+                        method: 'POST',
+                        data: { 
+                            file_removed: 1,
+                            fPath: '{$filepath}',
+                            question_id: '{$pqid}'
+                        },
+                        success: function(response) {
+                            $('#fileName_{$pqid}').remove();
+                            $('#del_file_{$pqid}').remove();
+                        },
+                    });
+                }
+            });
+        });
+    </script>";
+    
 }
