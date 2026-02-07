@@ -18,7 +18,7 @@
  *
  */
 
-$require_admin = TRUE;
+$require_departmentmanage_user = true;
 $require_help = true;
 $helpTopic = 'users_administration';
 $helpSubTopic = 'administrators';
@@ -34,54 +34,82 @@ $tree = new Hierarchy;
 // Initialize the incoming variables
 $username = isset($_POST['username']) ? trim($_POST['username']) : null;
 
-if (isset($_POST['submit']) and isset($_POST['adminrights']) and $username) {
+if (isset($_POST['submit']) and $username) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
-    $res = Database::get()->querySingle("SELECT id FROM user WHERE username = ?s", $username);
+    if (!$is_admin && $is_departmentmanage_user) {
+        $res = getTenantUserIfBelongs($username);
+    } else {
+        $res = Database::get()->querySingle("SELECT id FROM user WHERE username = ?s", $username);
+    }
     if ($res) {
         $user_id = $res->id;
         if ($user_id == $uid) {
-            Session::flash('message',$langErrorAddaAdmin);
+            Session::flash('message', $langErrorAddaAdmin);
             Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page('modules/admin/addadmin.php');
         }
-        $privilege = [
-            'admin' => ADMIN_USER,
-            'poweruser' => POWER_USER,
-            'manageuser' => USERMANAGE_USER,
-            'managedepartment' => DEPARTMENTMANAGE_USER,
-        ][$_POST['adminrights']];
+        if(isset($_POST['adminrights'])){
+            $privilege = [
+                'admin' => ADMIN_USER,
+                'poweruser' => POWER_USER,
+                'manageuser' => USERMANAGE_USER,
+                'managedepartment' => DEPARTMENTMANAGE_USER,
+            ][$_POST['adminrights']];
+        }
+        if (!$is_admin && $is_departmentmanage_user) {
+            $privilege = DEPARTMENTMANAGE_USER;
+        }
         if (!is_null($privilege)) {
             Database::get()->query('DELETE FROM admin WHERE user_id = ?d', $user_id);
             if ($privilege == DEPARTMENTMANAGE_USER) {
-                if (!isset($_POST['adminDeps']) or !$_POST['adminDeps']) {
-                    Session::flash('message',$langEmptyAddNode);
-                    Session::flash('alert-class', 'alert-danger');
-                    redirect_to_home_page('modules/admin/addadmin.php?add=add');
-                }
                 $affected = 1;
-                foreach ($_POST['adminDeps'] as $dep_id) {
+                if (!$is_admin && $is_departmentmanage_user) {
+                    $dep_id = getCurrentTenant()->department_id;
                     validateNode($dep_id, false);
-                    $affected *= Database::get()->query('INSERT INTO admin
+                    $affected *= Database::get()->query(
+                        'INSERT INTO admin
                         SET user_id = ?d, privilege = ?d, department_id = ?d',
-                        $user_id, $privilege, $dep_id)->affectedRows;
+                        $user_id,
+                        $privilege,
+                        $dep_id
+                    )->affectedRows;
+                } else {
+                    if (!isset($_POST['adminDeps']) or !$_POST['adminDeps']) {
+                        Session::flash('message', $langEmptyAddNode);
+                        Session::flash('alert-class', 'alert-danger');
+                        redirect_to_home_page('modules/admin/addadmin.php?add=add');
+                    }
+                    foreach ($_POST['adminDeps'] as $dep_id) {
+                        validateNode($dep_id, false);
+                        $affected *= Database::get()->query(
+                            'INSERT INTO admin
+                            SET user_id = ?d, privilege = ?d, department_id = ?d',
+                            $user_id,
+                            $privilege,
+                            $dep_id
+                        )->affectedRows;
+                    }
                 }
             } else {
-                $affected = Database::get()->query('INSERT INTO admin
+                $affected = Database::get()->query(
+                    'INSERT INTO admin
                     SET user_id = ?d, privilege = ?d',
-                    $user_id, $privilege)->affectedRows;
+                    $user_id,
+                    $privilege
+                )->affectedRows;
             }
             if ($affected) {
-                Session::flash('message',"$langTheUser <b>" . q($username) . "</b> $langDone");
+                Session::flash('message', "$langTheUser <b>" . q($username) . "</b> $langDone");
                 Session::flash('alert-class', 'alert-success');
                 redirect_to_home_page('modules/admin/addadmin.php');
             }
         } else {
-            Session::flash('message',$langError);
+            Session::flash('message', $langError);
             Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page('modules/admin/addadmin.php?add=add');
         }
     } else {
-        Session::flash('message',"$langTheUser " . q($username) . " $langNotFound");
+        Session::flash('message', "$langTheUser " . q($username) . " $langNotFound");
         Session::flash('alert-class', 'alert-danger');
         redirect_to_home_page('modules/admin/addadmin.php?add=add');
     }
@@ -89,14 +117,14 @@ if (isset($_POST['submit']) and isset($_POST['adminrights']) and $username) {
     $aid = getDirectReference($_GET['delete']);
     if ($aid != 1) { // admin user (with id = 1) cannot be deleted
         if (Database::get()->query("DELETE FROM admin WHERE user_id = ?d", $aid)->affectedRows > 0) {
-            Session::flash('message',$langNotAdmin);
+            Session::flash('message', $langNotAdmin);
             Session::flash('alert-class', 'alert-success');
         } else {
-            Session::flash('message',"$langDeleteAdmin " . q($aid) . " $langNotFeasible");
+            Session::flash('message', "$langDeleteAdmin " . q($aid) . " $langNotFeasible");
             Session::flash('alert-class', 'alert-danger');
         }
     } else {
-        Session::flash('message',$langCannotDeleteAdmin);
+        Session::flash('message', $langCannotDeleteAdmin);
         Session::flash('alert-class', 'alert-danger');
     }
     redirect_to_home_page('modules/admin/addadmin.php');
@@ -111,16 +139,25 @@ if (isset($_GET['add']) or isset($_GET['edit'])) {
         $toolName = $langAdmin;
         $pageName = $langEditPrivilege;
         $user_id = getDirectReference($_GET['edit']);
-        $user = Database::get()->querySingle('SELECT * FROM user WHERE id = ?d', $user_id);
+        if (!$is_admin && $is_departmentmanage_user) {
+            $user = getTenantUserIfBelongs($user_id);
+        } else {
+            $user = Database::get()->querySingle('SELECT * FROM user WHERE id = ?d', $user_id);
+        }
+        if (!$user) {
+            Session::flash('message', "$langTheUser " . q($username) . " $langNotFound");
+            Session::flash('alert-class', 'alert-danger');
+            redirect_to_home_page('modules/admin/addadmin.php');
+        }
         $username = q($user->username);
         $usernameValue = " readonly value='$username'";
         $roles = Database::get()->queryArray('SELECT * FROM admin WHERE user_id = ?d', $user_id);
         $privilege = $roles[0]->privilege;
         $data['checked'] = [
-            'admin' => $privilege == ADMIN_USER? ' checked': '',
-            'poweruser' => $privilege == POWER_USER? ' checked': '',
-            'manageuser' => $privilege == USERMANAGE_USER? ' checked': '',
-            'managedepartment' => $privilege == DEPARTMENTMANAGE_USER? ' checked': '',
+            'admin' => $privilege == ADMIN_USER ? ' checked' : '',
+            'poweruser' => $privilege == POWER_USER ? ' checked' : '',
+            'manageuser' => $privilege == USERMANAGE_USER ? ' checked' : '',
+            'managedepartment' => $privilege == DEPARTMENTMANAGE_USER ? ' checked' : '',
         ];
         if ($privilege == DEPARTMENTMANAGE_USER) {
             $adminDeps = array_map(function ($item) {
@@ -144,23 +181,25 @@ if (isset($_GET['add']) or isset($_GET['edit'])) {
     list($pickerJs, $pickerHtml) = $tree->buildNodePicker([
         'params' => 'name="adminDeps[]"',
         'multiple' => true,
-        'defaults' => $adminDeps]);
+        'defaults' => $adminDeps
+    ]);
     $head_content .= $pickerJs;
 
     $data['pickerHtml'] = $pickerHtml;
 
     $data['showFormAdmin'] = true;
-
-}else {
+} else {
     $toolName = $langAdmin;
     $pageName = $langAdmins;
     $data['showFormAdmin'] = false;
     $data['action_bar'] = action_bar([
-        [ 'title' => $langAdd,
-          'url' => 'addadmin.php?add=admin',
-          'icon' => 'fa-plus-circle',
-          'button-class' => 'btn-success',
-          'level' => 'primary-label' ]
+        [
+            'title' => $langAdd,
+            'url' => 'addadmin.php?add=admin',
+            'icon' => 'fa-plus-circle',
+            'button-class' => 'btn-success',
+            'level' => 'primary-label'
+        ]
 
     ]);
 }
@@ -177,6 +216,12 @@ $admins = [];
 
 foreach ($rows as $row) {
     $uid = $row->user_id;
+
+    if (!$is_admin && $is_departmentmanage_user) {
+        if (!getTenantUserIfBelongs($uid)) {
+            continue;
+        }
+    }
 
     if (!isset($admins[$uid])) {
         $admins[$uid] = (object)[
@@ -207,7 +252,7 @@ foreach ($rows as $row) {
             if (!in_array($langManageDepartment, $admins[$uid]->roles)) {
                 $admins[$uid]->roles[] = $langManageDepartment;
             }
-        
+                 
             if ($row->department_id) {
                 $admins[$uid]->department_paths[] = $tree->getFullPath($row->department_id);
             }
@@ -218,5 +263,4 @@ foreach ($rows as $row) {
 $data['admins'] = array_values($admins);
 $data['tree'] = $tree;
 
-view ('admin.users.addadmin', $data);
-
+view('admin.users.addadmin', $data);
