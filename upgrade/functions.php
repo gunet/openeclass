@@ -3611,6 +3611,13 @@ function upgrade_to_4_3($tbl_options) : void {
             ADD url_active TINYINT(1) NOT NULL DEFAULT '0', 
         ");
     }
+
+    if (!DBHelper::fieldExists('api_token', 'department_id')) {
+        Database::get()->query('ALTER TABLE `api_token` 
+            ADD `department_id` INT(11)
+            FOREIGN KEY (department_id) REFERENCES hierarchy(id) ON DELETE CASCADE'
+        );
+    }
 }
 
 

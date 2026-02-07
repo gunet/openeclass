@@ -1,5 +1,6 @@
 <?php
 
+
 /*
  *  ========================================================================
  *  * Open eClass
@@ -18,8 +19,11 @@
  *
  */
 
-function api_method($access) {
+
+function api_method($access)
+{
     global $user_id, $group_id, $course_id, $role_id;
+
 
     $help_text = 'Required parameters for user enrolement missing: user_id, {course_id|group_id}, [role_id = {student|teacher|teacher_assistant}]';
     if (!$access->isValid) {
@@ -42,11 +46,22 @@ function api_method($access) {
         if (!$user) {
             Access::error(3, "User with id '$user_id' not found");
         }
+
+        // Check if user belongs to allowed departments
+        if (!Access::checkUserDepartmentAccess($user->id, $access->allowedDepartments)) {
+            Access::error(403, 'Error: user is not in an allowed department', 403);
+        }
+
         if ($course_id) {
             $course = Database::get()->querySingle('SELECT id FROM course
                 WHERE code = ?s', $course_id);
             if (!$course) {
                 Access::error(3, "Course with id '$course_id' not found");
+            }
+
+            // Check if course belongs to allowed departments
+            if (!Access::checkCourseDepartmentAccess($course->id, $access->allowedDepartments)) {
+                Access::error(403, 'Error: course is not in an allowed department', 403);
             }
         } else {
             $course = null;
@@ -57,6 +72,12 @@ function api_method($access) {
             if (!$group) {
                 Access::error(3, "Group with id '$group_id' not found");
             }
+
+            // Check if group's course belongs to allowed departments
+            if (!Access::checkCourseDepartmentAccess($group->course_id, $access->allowedDepartments)) {
+                Access::error(403, 'Error: course is not in an allowed department', 403);
+            }
+
             if ($course and $course->id != $group->course_id) {
                 Access::error(4, "Group with id '$group_id' doesn't belong to course '$course_id'");
             }
@@ -72,22 +93,32 @@ function api_method($access) {
             if ($role_id == 'teacher_assistant') {
                 $is_editor = 1;
             }
-            $role_id = ($role_id == 'teacher'? USER_TEACHER: USER_STUDENT);
+            $role_id = ($role_id == 'teacher' ? USER_TEACHER : USER_STUDENT);
         }
         if ($course) {
             $course_id = $course->id;
         } else {
             $course_id = $group->course_id;
         }
-        Database::get()->query("INSERT IGNORE INTO course_user
+        Database::get()->query(
+            "INSERT IGNORE INTO course_user
             SET course_id = ?d, user_id = ?d, status = ?d, editor = ?d,
                 reg_date = NOW(), receive_mail = 1, document_timestamp = NOW()
             ON DUPLICATE KEY UPDATE status = ?d, editor = ?d",
-                $course_id, $user->id, $role_id, $is_editor, $role_id, $is_editor);
+            $course_id,
+            $user->id,
+            $role_id,
+            $is_editor,
+            $role_id,
+            $is_editor
+        );
         if ($group) {
-            Database::get()->query("INSERT IGNORE INTO group_members
+            Database::get()->query(
+                "INSERT IGNORE INTO group_members
                 SET group_id = ?d, user_id = ?d, is_tutor = 0, description = ''",
-                    $group->id, $user->id);
+                $group->id,
+                $user->id
+            );
         }
         header('Content-Type: application/json');
         echo json_encode(['status' => 'ok']);
@@ -96,6 +127,7 @@ function api_method($access) {
         Access::error(2, $help_text);
     }
 }
+
 
 chdir('..');
 require_once 'apiCall.php';

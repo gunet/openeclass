@@ -17,7 +17,9 @@
  *
  */
 
-function api_method($access) {
+
+function api_method($access)
+{
     if (!$access->isValid) {
         Access::error(100, "Authentication required");
     }
@@ -25,17 +27,24 @@ function api_method($access) {
         Access::error(2, 'Required parameter user_id missing');
     }
     $user_id = $_REQUEST['user_id'];
-    $user = Database::get()->querySingle('SELECT id, username, expires_at > NOW() FROM user
+    $user = Database::get()->querySingle('SELECT id, username, expires_at > NOW() as active FROM user
         WHERE id = ?d', $user_id);
     if (!$user) {
         Access::error(3, "User with id '$user_id' not found");
     }
+
+    // Check if user belongs to allowed departments
+    if (!Access::checkUserDepartmentAccess($user->id, $access->allowedDepartments)) {
+        Access::error(403, 'Error: user is not in an allowed department', 403);
+    }
+
     $login_url = $GLOBALS['urlServer'] . 'modules/auth/sso.php?user=' . urlencode($user->username) .
         '&token=' . token_generate("login user={$user->username}", true);
     header('Content-Type: application/json');
     echo json_encode(['url' => $login_url], JSON_UNESCAPED_UNICODE);
     exit();
 }
+
 
 chdir('..');
 require_once 'apiCall.php';

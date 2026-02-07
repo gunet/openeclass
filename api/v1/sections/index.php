@@ -1,5 +1,6 @@
 <?php
 
+
 /*
  *  ========================================================================
  *  * Open eClass
@@ -18,20 +19,31 @@
  *
  */
 
-function api_method($access) {
+
+function api_method($access)
+{
     if (!isset($_GET['course_id'])) {
         Access::error(2, 'Required parameter course_id missing');
     }
     $course_id = $_GET['course_id'];
-    $course = Database::get()->querySingle('SELECT id, code, visible FROM course
+    $course = Database::get()->querySingle(
+        'SELECT id, code, visible FROM course
         WHERE code = ?s AND visible <> ?d',
-        $course_id, COURSE_INACTIVE);
+        $course_id,
+        COURSE_INACTIVE
+    );
     if (!$course) {
         Access::error(3, "Course with id '$course_id' not found");
     }
     if (!($access->isValid or $course->visible == COURSE_OPEN)) {
         Access::error(100, "Authentication required");
     }
+
+    // Check if course belongs to allowed departments
+    if ($access->isValid && !Access::checkCourseDepartmentAccess($course->id, $access->allowedDepartments)) {
+        Access::error(403, "Error: course with code '$course_id' is not in an allowed department", 403);
+    }
+
     $units = Database::get()->queryArray('SELECT id, title AS name, comments AS summary
         FROM course_units
         WHERE course_id = ?d AND visible = 1
@@ -40,6 +52,7 @@ function api_method($access) {
     echo json_encode($units, JSON_UNESCAPED_UNICODE);
     exit();
 }
+
 
 chdir('..');
 require_once 'apiCall.php';

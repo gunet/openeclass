@@ -2553,12 +2553,14 @@ $db->query("CREATE TABLE api_token (
     `id` smallint NOT NULL AUTO_INCREMENT,
     `token` text CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
     `name` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+    `department_id` int(11) NOT NULL,
     `comments` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
     `ip` varchar(45) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
     `enabled` tinyint NOT NULL,
     `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `expired` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT FOREIGN KEY (`department_id`) REFERENCES `hierarchy` (`id`),
     PRIMARY KEY (`id`)) $tbl_options");
 
 $db->query("CREATE TABLE ai_providers (
