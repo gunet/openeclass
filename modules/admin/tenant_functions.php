@@ -39,24 +39,16 @@ function getTenantUsers(array $filters = [
 
     $filters = array_merge($defaultFilters, $filters);
 
-    $tree = new Hierarchy();
-    $tenantNodes = $tree->getTenantNodes($tenant_id);
-
-    if (!$tenantNodes) {
-        return [];
-    }
-
-    $tenantNodeIds = array_map(fn($node) => intval($node->id), $tenantNodes);
-    $inClause = implode(', ', $tenantNodeIds);
+    $departmentId = (int) $tenant->department_id;
 
     $query = "
-        SELECT DISTINCT u.id, u.surname, u.givenname, u.email, u.username, u.am , u.verified_mail
+        SELECT DISTINCT u.id, u.surname, u.givenname, u.email, u.username, u.am, u.verified_mail
         FROM user u
         JOIN user_department ud ON ud.user = u.id
-        WHERE ud.department IN ($inClause)
+        WHERE ud.department = ?d
     ";
 
-    $values = [];
+    $values = [$departmentId];
 
     if (!is_null($user_type)) {
         if (!in_array($user_type, [USER_TEACHER, USER_STUDENT, USER_GUEST])) {
@@ -342,39 +334,33 @@ function getTenantUserIfBelongs($user, $tenant_id = null)
 {
     // Resolve tenant
     $tenant = $tenant_id ? getTenantById($tenant_id) : getCurrentTenant();
-
-    if (!$tenant) {
+    if (!$tenant || empty($tenant->department_id)) {
         return false;
     }
 
-    // Get tenant hierarchy nodes
-    $tree = new Hierarchy();
-    $tenantNodes = $tree->getTenantNodes($tenant->id);
-
-    if (empty($tenantNodes)) {
-        return false;
-    }
-
-    $tenantNodeIds = array_map(fn($n) => intval($n->id), $tenantNodes);
-    $inClause = implode(', ', $tenantNodeIds);
+    $departmentId = (int) $tenant->department_id;
 
     // User condition
     if (is_int($user) || ctype_digit($user)) {
         $userCondition = 'u.id = ?d';
-        $value = (int) $user;
+        $userValue     = (int) $user;
     } else {
         $userCondition = 'u.username = ?s';
-        $value = $user;
+        $userValue     = $user;
     }
 
-    $result = Database::get()->querySingle("
+    $result = Database::get()->querySingle(
+        "
         SELECT DISTINCT u.*
         FROM user u
         JOIN user_department ud ON ud.user = u.id
         WHERE $userCondition
-          AND ud.department IN ($inClause)
+          AND ud.department = ?d
         LIMIT 1
-    ", $value);
+        ",
+        $userValue,
+        $departmentId
+    );
 
     return $result ?: false;
 }

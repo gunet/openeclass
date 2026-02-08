@@ -177,23 +177,14 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     // Filtering applies only to non-power users.
     // Power users skip this entire block.
     if (!$is_power_user) {
+        $tenant = getCurrentTenant();
         // Case 1: Department Admin Users
         // These users must be restricted only to their managed departments.
-        if (isDepartmentAdmin()) {
+        if (isDepartmentAdmin() && !$tenant) {
             // Join with user_department table.
             $depqryadd = ', user_department';
 
-            $tenant = getCurrentTenant();
-
-            if ($tenant) {
-                // If user belongs to a tenant, include all nodes related to the tenant.
-                $tenant_nodes = $tree->getTenantNodes();
-                $adminDepartments = array_map(fn($d) => intval($d->id), $tenant_nodes);
-            } else {
-                // Get IDs of departments the user administrates.
-                $adminDepartments = $user->getAdminDepartmentIds($uid);
-            }
-
+            $adminDepartments = $user->getAdminDepartmentIds($uid);
             // If a specific department is selected, restrict results further,
             // including any sub-departments.
             if ($dep) {

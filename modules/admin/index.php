@@ -33,9 +33,9 @@ $col_size = '';
 if (isset($is_admin) and $is_admin) {
     $data['is_admin'] = $is_admin;
     $col_size = '3';
-} else if($is_power_user or $is_departmentmanage_user) {
+} else if ($is_power_user or $is_departmentmanage_user) {
     $col_size = '2';
-} else if($is_usermanage_user) {
+} else if ($is_usermanage_user) {
     $col_size = '1';
 }
 $data['col_size'] = $col_size;
@@ -43,14 +43,19 @@ $data['col_size'] = $col_size;
 $data['release_info'] = get_eclass_release();
 
 // Construct a table with platform identification info
-$data['action_bar'] = action_bar(array(
-        [ 'title' => $langMaintenanceOff,
-          'url' => "maintenance_config.php",
-          'icon' => 'fa-unlock',
-          'button-class' => 'btn-success',
-          'level' => 'primary-label',
-          'show' => get_config('maintenance') != 0 ]),
-        false);
+$data['action_bar'] = action_bar(
+    array(
+        [
+            'title' => $langMaintenanceOff,
+            'url' => "maintenance_config.php",
+            'icon' => 'fa-unlock',
+            'button-class' => 'btn-success',
+            'level' => 'primary-label',
+            'show' => get_config('maintenance') != 0
+        ]
+    ),
+    false
+);
 
 $data['serverVersion'] = Database::get()->attributes()->serverVersion();
 $data['siteName'] = $siteName;
@@ -60,25 +65,124 @@ if (!check_stored_procedures()) {
     Session::flash('alert-class', 'alert-danger');
 }
 
+$is_saek_admin  = $is_departmentmanage_user && !$is_admin;
+$department_id = getCurrentTenant() ? getCurrentTenant()->department_id : 0;
+
+
 // Count prof requests with status = 1
 $data['count_prof_requests'] = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user_request WHERE state = 1 AND status = " . USER_TEACHER)->cnt;
 // Find last course created
 $data['lastCreatedCourse'] = Database::get()->querySingle("SELECT code, title, prof_names FROM course ORDER BY id DESC LIMIT 0, 1");
 // Find last prof registration
-$data['lastProfReg'] = Database::get()->querySingle("SELECT givenname, surname, username, registered_at FROM user WHERE status = " . USER_TEACHER . " ORDER BY id DESC LIMIT 0,1");
-// Find last stud registration
-$data['lastStudReg'] = Database::get()->querySingle("SELECT givenname, surname, username, registered_at FROM user WHERE status = " . USER_STUDENT . " ORDER BY id DESC LIMIT 0,1");
+if ($is_saek_admin) {
+    $data['lastProfReg'] = Database::get()->querySingle(
+        "
+        SELECT u.givenname, u.surname, u.username, u.registered_at
+        FROM user u
+        JOIN user_department ud ON ud.user = u.id
+        WHERE ud.department = ?d
+          AND u.status = ?d
+        ORDER BY u.registered_at DESC
+        LIMIT 1
+        ",
+        $department_id,
+        USER_TEACHER
+    );
+    $data['lastStudReg'] = Database::get()->querySingle(
+        "
+        SELECT u.givenname, u.surname, u.username, u.registered_at
+        FROM user u
+        JOIN user_department ud ON ud.user = u.id
+        WHERE ud.department = ?d
+          AND u.status = ?d
+        ORDER BY u.registered_at DESC
+        LIMIT 1
+        ",
+        $department_id,
+        USER_STUDENT
+    );
+} else {
+    $data['lastProfReg'] = Database::get()->querySingle(
+        "
+        SELECT givenname, surname, username, registered_at
+        FROM user
+        WHERE status = ?d
+        ORDER BY registered_at DESC
+        LIMIT 1
+        ",
+        USER_TEACHER
+    );
+
+    $data['lastStudReg'] = Database::get()->querySingle(
+        "
+        SELECT givenname, surname, username, registered_at
+        FROM user
+        WHERE status = ?d
+        ORDER BY registered_at DESC
+        LIMIT 1
+        ",
+        USER_STUDENT
+    );
+}
 // Find admin's last login
 $lastadminloginres = Database::get()->querySingle("SELECT `when` FROM loginout WHERE id_user = ?d AND action = 'LOGIN' ORDER BY `when` DESC LIMIT 1,1", $uid);
 $data['lastregisteredprofs'] = 0;
 $data['lastregisteredstuds'] = 0;
 if ($lastadminloginres && $lastadminloginres->when) {
     $lastadminlogin = $lastadminloginres->when;
-    // Count profs registered after last login
-    $data['lastregisteredprofs'] = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user WHERE status = " . USER_TEACHER . " AND registered_at > ?t", $lastadminlogin)->cnt;
-    // Count studs registered after last login
-    $data['lastregisteredstuds'] = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user WHERE status = " . USER_STUDENT . " AND registered_at > ?t", $lastadminlogin)->cnt;
+    if ($is_saek_admin) {
+        $data['lastregisteredprofs'] = Database::get()->querySingle(
+            "
+            SELECT COUNT(DISTINCT u.id) AS cnt
+            FROM user u
+            JOIN user_department ud ON ud.user = u.id
+            WHERE ud.department = ?d
+              AND u.status = ?d
+              AND u.registered_at > ?t
+            ",
+            $department_id,
+            USER_TEACHER,
+            $lastadminlogin
+        )->cnt;
+        $data['lastregisteredstuds'] = Database::get()->querySingle(
+            "
+            SELECT COUNT(DISTINCT u.id) AS cnt
+            FROM user u
+            JOIN user_department ud ON ud.user = u.id
+            WHERE ud.department = ?d
+              AND u.status = ?d
+              AND u.registered_at > ?t
+            ",
+            $department_id,
+            USER_STUDENT,
+            $lastadminlogin
+        )->cnt;
+    } else {
+
+        $data['lastregisteredprofs'] = Database::get()->querySingle(
+            "
+            SELECT COUNT(*) AS cnt
+            FROM user
+            WHERE status = ?d
+              AND registered_at > ?t
+            ",
+            USER_TEACHER,
+            $lastadminlogin
+        )->cnt;
+
+        $data['lastregisteredstuds'] = Database::get()->querySingle(
+            "
+            SELECT COUNT(*) AS cnt
+            FROM user
+            WHERE status = ?d
+              AND registered_at > ?t
+            ",
+            USER_STUDENT,
+            $lastadminlogin
+        )->cnt;
+    }
 }
+
 // INDEX RELATED
 if (get_config('ext_solr_enabled')) {
     require_once 'modules/search/classes/SolrSearchEngine.php';
@@ -123,7 +227,8 @@ view('admin.index', $data);
  * @brief get eclass latest version
  * @return mixed|null
  */
-function get_eclass_release() {
+function get_eclass_release()
+{
     $ts = get_config('eclass_release_timestamp');
     if (!$ts or time() - $ts > 24 * 3600) {
         set_config('eclass_release_timestamp', time());
@@ -153,16 +258,18 @@ function check_stored_procedures()
 {
     global $mysqlMainDb;
 
-    $procedure_names = ['add_node',
-                        'delete_node',
-                        'delete_nodes',
-                        'get_maxrgt',
-                        'get_parent',
-                        'move_nodes',
-                        'shift_end',
-                        'shift_left',
-                        'shift_right',
-                        'update_node'];
+    $procedure_names = [
+        'add_node',
+        'delete_node',
+        'delete_nodes',
+        'get_maxrgt',
+        'get_parent',
+        'move_nodes',
+        'shift_end',
+        'shift_left',
+        'shift_right',
+        'update_node'
+    ];
 
     $db_procedures = Database::get()->queryArray("SHOW PROCEDURE STATUS WHERE Db='$mysqlMainDb'");
 
@@ -177,4 +284,3 @@ function check_stored_procedures()
     }
     return true;
 }
-
