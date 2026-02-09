@@ -991,11 +991,12 @@ function show_lp($title, $comments, $resource_id, $lp_id, $act_name): string
                 </a>
             </span>";
         } else {
+                $lp_details_url = $urlAppend . "modules/units/view.php?course=$course_code&amp;res_type=lp_details&amp;path_id=$lp_id&amp;unit=$id";
                 list($lpProgress, $lpTotalTime) = get_learnPath_progress_details($lp_id, $uid);
                 $lp_results = "<span data-bs-toggle='tooltip' data-bs-placement='top' data-bs-original-title='$langTotalTimeSpent'>" . $lpTotalTime . "</span>";
                 $lp_bar = "<span data-bs-toggle='tooltip' data-bs-placement='top' data-bs-original-title='$langTotalPercentCompleteness'>" . disp_progress_bar($lpProgress, 1) . "</span>";
                 $lp_results_button = "<span class='pull-right' data-bs-toggle='tooltip' data-bs-placement='top' title='$langDetails'>
-                    <a href=" . $urlAppend . "modules/units/view.php?course=" . $course_code . "&amp;res_type=lp_results&amp;path_id=" . $lp_id . "&amp;unit=" . $id. ">
+                    <a href='$lp_details_url'>
                     <span class='fa fa-line-chart'></span>
                     </a>
                 </span>";
@@ -2186,7 +2187,7 @@ function actions($res_type, $resource_id, $status, $res_id = false) {
     global $is_editor, $langEditChange, $langDelete,
     $langAddToCourseHome, $langConfirmDelete, $course_code,
     $langViewHide, $langViewShow, $langReorder, $langAlreadyBrowsed,
-    $langNeverBrowsed, $langAddToUnitCompletion;
+    $langNeverBrowsed, $langAddToUnitCompletion, $langCompleted;
 
     $res_types_units_completion = ['exercise', 'work', 'lp', 'doc', 'topic', 'video', 'ebook', 'poll', 'wiki'];
     if (in_array($res_type, $res_types_units_completion)) {
@@ -2199,12 +2200,12 @@ function actions($res_type, $resource_id, $status, $res_id = false) {
             $activity_result = unit_resource_completion($_GET['id'], $resource_id);
             switch ($activity_result) {
                 case 1: $content = "<div class='' style='padding: 10px 0; width: 85px;'>
-                                    <span class='fa fa-check-circle' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langAlreadyBrowsed'></span>
+                                    <span class='fa fa-check-circle' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langCompleted'></span>
                                     </div>";
                     break;
                 case 0:
                     $content = "<div class='' style='padding: 10px 0; width: 85px;'>
-                                <span class='fa fa-hourglass-2' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langNeverBrowsed'></span>
+                                <span class='fa fa-hourglass-2' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langAlreadyBrowsed'></span>
                                 </div>";
                     break;
                 default:

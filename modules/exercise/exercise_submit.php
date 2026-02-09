@@ -18,15 +18,15 @@
  *
  */
 
-include 'exercise.class.php';
-include 'question.class.php';
-include 'answer.class.php';
-include 'exercise.lib.php';
+require_once 'exercise.class.php';
+require_once 'question.class.php';
+require_once 'answer.class.php';
+require_once 'exercise.lib.php';
 
 $require_current_course = true;
 $guest_allowed = true;
 
-include '../../include/baseTheme.php';
+require_once '../../include/baseTheme.php';
 require_once 'modules/gradebook/functions.php';
 require_once 'modules/attendance/functions.php';
 require_once 'modules/group/group_functions.php';

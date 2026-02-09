@@ -121,8 +121,9 @@ if ($learnPathName) {
                             <th>$langAttemptStarted</th>
                             <th>$langAttemptAccessed</th>
                             <th>$langTotalTimeSpent</th>
-                            <th>$langLessonStatus</th>
-                            <th>$langProgress</th>
+                            <th>$langLearningPathStatus</th>
+                            <th class='text-start'>$langProgress</th>
+                            <th class='text-end'>$langMaxScore</th>
                         </tr>
                     </thead>";
 
@@ -130,7 +131,7 @@ if ($learnPathName) {
     $data[] = [ $currentCourseName ];
     $data[] = [ $learnPathName->name ];
     $data[] = [];
-    $data[] = [ $langSurnameName, $langEmail, $langAm, $langGroup, $langAttempts, $langAttemptStarted, $langAttemptAccessed, $langTotalTimeSpent, $langLessonStatus, $langProgress ];
+    $data[] = [ $langSurnameName, $langEmail, $langAm, $langGroup, $langAttempts, $langAttemptStarted, $langAttemptAccessed, $langTotalTimeSpent, $langLearningPathStatus, $langProgress ];
 
     $usersList = Database::get()->queryArray("SELECT U.`surname`, U.`givenname`, U.`id`, U.`email`, U.`am`
                         FROM `user` AS U,
@@ -143,7 +144,7 @@ if ($learnPathName) {
 
     $tool_content .= "<tbody>";
     foreach ($usersList as $user) {
-        list($lpProgress, $lpTotalTime, $lpTotalStarted, $lpTotalAccessed, $lpTotalStatus, $lpAttemptsNb) = get_learnPath_progress_details($path_id, $user->id);
+        list($lpProgress, $lpTotalTime, $lpTotalStarted, $lpTotalAccessed, $lpTotalStatus, $lpAttemptsNb, $lpScore) = get_learnPath_progress_details($path_id, $user->id);
         $lpCombinedProgress = get_learnPath_combined_progress($path_id, $user->id);
         $tool_content .= "<tr>";
         if (!isset($_GET['pdf'])) {
@@ -164,7 +165,8 @@ if ($learnPathName) {
                             <td>" . $lp_total_accessed . "</td>
                             <td>" . q($lpTotalTime) . "</td>
                             <td>" . $lp_total_status . "</td>
-                            <td>" . disp_progress_bar($lpCombinedProgress, 1) . "</td>";
+                            <td>" . disp_progress_bar(max($lpCombinedProgress, $lpProgress), 1) . "</td>
+                            <td>$lpScore%</td>";
 
         $tool_content .= "</tr>";
 

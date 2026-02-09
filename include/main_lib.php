@@ -1594,7 +1594,7 @@ function format_time_duration($sec, $hourLimit = 24, $display_days = true) {
         return append_units($sec, $langsecond, $langseconds);
     }
     $min = floor($sec / 60);
-    $sec = $sec % 60;
+    $sec = intval($sec) % 60;
     if ($min < 2) {
         return append_units($min, $langminute, $langminutes) .
                 (($sec == 0) ? '' : (' ' . append_units($sec, $langsecond, $langseconds)));
