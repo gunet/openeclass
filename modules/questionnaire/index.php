@@ -124,6 +124,7 @@ $head_content .= "<script type='text/javascript'>
 if (isset($_GET['cancelPoll'])) {
     unset($_SESSION['current_page']);
     unset($_SESSION['data_answers']);
+    unset($_SESSION['data_file_answer']);
     unset($_SESSION['question_ids']);
     unset($_SESSION['q_row_columns']);
     unset($_SESSION['loop_init_answers']);
@@ -341,6 +342,7 @@ if ($is_editor) {
         } elseif (isset($_GET['delete_results']) && $_GET['delete_results'] == 'yes') {
             unset($_SESSION['current_page']);
             unset($_SESSION['data_answers']);
+            unset($_SESSION['data_file_answer']);
             unset($_SESSION['question_ids']);
             unset($_SESSION['q_row_columns']);
             unset($_SESSION['loop_init_answers']);
