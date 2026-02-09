@@ -3584,15 +3584,15 @@ function upgrade_to_4_3($tbl_options) : void {
             `disk_size` bigint DEFAULT NULL,
             PRIMARY KEY (`course_id`),
             KEY `idx_disk_size` (`disk_size`),
-            CONSTRAINT FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) 
+            CONSTRAINT FOREIGN KEY (`course_id`) REFERENCES `course` (`id`)
                 ON DELETE CASCADE ON UPDATE CASCADE
             ) $tbl_options");
     }
 
     if (!DBHelper::fieldExists('theme_options', 'tenant_id')) {
         Database::get()->query("
-            ALTER TABLE theme_options 
-            ADD tenant_id INT, 
+            ALTER TABLE theme_options
+            ADD tenant_id INT,
             ADD CONSTRAINT `tenant_id`
             FOREIGN KEY (`tenant_id`)
             REFERENCES `tenant`(`id`)
@@ -3600,20 +3600,19 @@ function upgrade_to_4_3($tbl_options) : void {
     }
 
     if (DBHelper::tableExists('admin_announcement')) {
-        Database::get()->query("ALTER TABLE `admin_announcement` 
+        Database::get()->query("ALTER TABLE `admin_announcement`
                                 ADD `tenant_id` INT(11) DEFAULT NULL AFTER `id`");
 
-        Database::get()->query("ALTER TABLE `admin_announcement` 
+        Database::get()->query("ALTER TABLE `admin_announcement`
                                 ADD INDEX `idx_tenantId` (`tenantId`)");
 
     if (!DBHelper::fieldExists('tenant', 'url_active')) {
-        Database::get()->query("ALTER TABLE tenant 
-            ADD url_active TINYINT(1) NOT NULL DEFAULT '0', 
-        ");
+        Database::get()->query("ALTER TABLE tenant
+            ADD url_active TINYINT(1) NOT NULL DEFAULT 0");
     }
 
     if (!DBHelper::fieldExists('api_token', 'department_id')) {
-        Database::get()->query('ALTER TABLE `api_token` 
+        Database::get()->query('ALTER TABLE `api_token`
             ADD `department_id` INT(11)
             FOREIGN KEY (department_id) REFERENCES hierarchy(id) ON DELETE CASCADE'
         );
