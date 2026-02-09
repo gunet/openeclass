@@ -88,22 +88,24 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             exit();
         }
 
-        // File has uploaded from uppy
+        // File has been uploaded from uppy
         if (isset($_POST['file_uploaded']) && !$is_editor) {
             header('Content-Type: application/json');
             $questionID = $_POST['question_id'];
             $docInfo = ['filename' => $_POST['file_name'], 'filepath' => $_POST['file_path']];
             $_SESSION['data_answers'][$questionID] = serialize($docInfo);
+            $_SESSION['data_file_answer'][$questionID] = serialize($docInfo);
             echo json_encode(['upload_success' => true]);
             exit();
         }
 
-        // File has removed from uppy
+        // File has been removed from uppy
         if (isset($_POST['file_removed']) && !$is_editor) {
             if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();
 
             $questionID = $_POST['question_id'];
             unset($_SESSION['data_answers'][$questionID]);
+            unset($_SESSION['data_file_answer'][$questionID]);
             
             $c = $_GET['course'];
             $pollId = intval($_GET['pid']);
@@ -669,11 +671,20 @@ function printPollForm() {
             unset($_SESSION['current_page']);
         }
         $_SESSION['current_page'] = $pageBreakExists ? 1 : '';
+        if ($pageBreakExists && isset($_SESSION['data_file_answer'])) {
+            unset($_SESSION['data_file_answer']);
+        }
         if ($pageBreakExists && isset($_GET['page'])) {
             $_SESSION['current_page'] = intval($_GET['page']);
         } elseif (!$pageBreakExists) {
             unset($_SESSION['current_page']);
             unset($_SESSION['data_answers']);
+            // When page break is off and the user has uploaded a file from uppy
+            if (isset($_SESSION['data_file_answer'])) {
+                foreach ($_SESSION['data_file_answer'] as $questionID => $val) {
+                    $_SESSION['data_answers'][$questionID] = $val;
+                }
+            }
             unset($_SESSION['question_ids']);
             unset($_SESSION['q_row_columns']);
             unset($_SESSION['loop_init_answers']);
@@ -1687,7 +1698,7 @@ function poll_upload_file($pid, $form_link, $qtype, $pqid) {
         $del_file .= "
         <div class='d-flex align-items-center gap-2 mb-4'>
             <p id='fileName_{$pqid}' class='TextBold'>$langFileName: <a target='_blank' href='{$urlServer}courses/$course_code/poll_$pid/$uid/$pqid$filepath'>$filename</a></p>
-            <a id='del_file_{$pqid}' class='text-danger' data-bs-toggle='tooltip' data-bs-placement='top' title='$langDelete'><i class='fa-solid fa-xmark'></i></a>
+            <a id='del_file_{$pqid}' class='btn deleteAdminBtn' data-bs-toggle='tooltip' data-bs-placement='top' title='$langDelete' style='width: 25px; height: 25px;'><i class='fa-solid fa-trash'></i></a>
         </div>
         ";
     }
