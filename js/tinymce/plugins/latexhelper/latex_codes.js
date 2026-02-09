@@ -35,7 +35,7 @@ window.latexSymbols = {
         { symbol: '\\Gamma', code: '\\Gamma', name: 'Gamma (capital)' },
         { symbol: '\\Delta', code: '\\Delta', name: 'Delta (capital)' },
         { symbol: '\\mathrm{E}', code: '\\mathrm{E}', name: 'Epsilon (capital)'},
-        { symbol: '\\Z', code: 'Z', name: 'Zeta (capital)'},
+        { symbol: '\\mathrm{Z}', code: '\\mathrm{Z}', name: 'Zeta (capital)'},
         { symbol: '\\mathrm{H}', code: '\\mathrm{H}', name: 'Eta (capital)'},
         { symbol: '\\Theta', code: '\\Theta', name: 'Theta (capital)' },
         { symbol: '\\mathrm{I}', code: '\\mathrm{I}', name: 'Iota (capital)'},
