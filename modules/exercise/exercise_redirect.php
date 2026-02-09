@@ -18,16 +18,14 @@
  *
  */
 
-
-
-include('exercise.class.php');
-include('question.class.php');
-include('answer.class.php');
-include('exercise.lib.php');
+require_once 'exercise.class.php';
+require_once 'question.class.php';
+require_once 'answer.class.php';
+require_once 'exercise.lib.php';
 
 $require_current_course = TRUE;
 
-include '../../include/baseTheme.php';
+require_once '../../include/baseTheme.php';
 require_once 'game.php';
 require_once 'analytics.php';
 
@@ -97,5 +95,3 @@ $tool_content .= "<table class='Exercise' width='99%'>
 
 $tool_content .= $tool_content_extra;
 draw($tool_content, 2);
-
-

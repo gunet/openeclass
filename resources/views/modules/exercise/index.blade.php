@@ -283,7 +283,7 @@
                                                                 @if ($row->time_constraint > 0)
                                                                     <div>
                                                                         {{ trans('langDuration') }}
-                                                                        : {{ format_locale_date(strtotime($row->end_date), 'short') }} {{ trans('langExerciseConstrainUnit') }}
+                                                                        : {{ $row->time_constraint }} {{ trans('langExerciseConstrainUnit') }}
                                                                     </div>
                                                                 @endif
                                                                 {{-- hom many attempts we have? --}}

@@ -24,7 +24,7 @@
                         <div class='col-12 mb-4'>
                             <div class='card panelCard border-card-left-default px-3 py-2 h-100'>
                                 <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                    <h3> {{ $exerciseTitle }}</h3>
+                                    <h3>{{ $exerciseTitle }}</h3>
                                 </div>
                                 <div class='card-body'>
                                     <div class='row row-cols-1 g-3'>
