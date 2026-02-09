@@ -80,7 +80,7 @@ $course_title = course_code_to_title($_GET['course']);
 
 $data[] = [ $user_details . ' (' . $course_title . ')' ];
 $data[] = [];
-$data[] = [ $langLearnPath, $langAttempts, $langAttemptStarted, $langAttemptAccessed, $langTotalTimeSpent, $langLessonStatus, $langProgress ];
+$data[] = [ $langLearnPath, $langAttempts, $langAttemptStarted, $langAttemptAccessed, $langTotalTimeSpent, $langLearningPathStatus, $langProgress, $langScore ];
 
 if (!isset($_GET['pdf'])) {
     $action_bar = action_bar(array(
@@ -110,8 +110,9 @@ $tool_content .= "<div class='table-responsive'><table class='table-default'>
                         <th>$langAttemptStarted</th>
                         <th>$langAttemptAccessed</th>
                         <th>$langTotalTimeSpent</th>
-                        <th>$langLessonStatus</th>
+                        <th>$langLearningPathStatus</th>
                         <th>$langProgress</th>
+                        <th>$langScore</th>
                     </tr></thead>";
 
 if (count($lpList) == 0) {
@@ -121,14 +122,15 @@ if (count($lpList) == 0) {
     $totalTimeSpent = "0000:00:00";
     // display each learning path with the corresponding progression of the user
     foreach ($lpList as $lpDetails) {
-        list($lpProgress, $lpTotalTime, $lpTotalStarted, $lpTotalAccessed, $lpTotalStatus, $lpAttemptsNb) = get_learnPath_progress_details($lpDetails->learnPath_id, $_GET['uInfo']);
+        list($lpProgress, $lpTotalTime, $lpTotalStarted, $lpTotalAccessed, $lpTotalStatus, $lpAttemptsNb, $lpScore, $lpScoreMax) = get_learnPath_progress_details($lpDetails->learnPath_id, $_GET['uInfo']);
         $totalProgress += $lpProgress;
         if (!empty($lpTotalTime)) {
             $totalTimeSpent = addScormTime($totalTimeSpent, $lpTotalTime);
         }
         $lp_total_status = disp_lesson_status($lpTotalStatus);
+        $lpDisplay = format_lp_progress_display($lpAttemptsNb, $lpTotalTime, $lpProgress, $lpScore, $lpScoreMax);
         $data[] = [ $lpDetails->name, q($lpAttemptsNb), format_locale_date(strtotime($lpTotalStarted), 'short'),
-                    format_locale_date(strtotime($lpTotalAccessed), 'short'), q($lpTotalTime), $lp_total_status, $lpProgress . '%'
+                    format_locale_date(strtotime($lpTotalAccessed), 'short'), $lpDisplay['time'], $lp_total_status, $lpDisplay['progress_text'], $lpDisplay['score']
                   ];
         $tool_content .= "<tr>";
         if (!isset($_GET['pdf'])) {
@@ -140,9 +142,10 @@ if (count($lpList) == 0) {
         $tool_content .= "<td style='text-align: center;'>" . q($lpAttemptsNb) ."</td>
                           <td>" . format_locale_date(strtotime($lpTotalStarted), 'short') . "</td>
                           <td>" . format_locale_date(strtotime($lpTotalAccessed), 'short') . "</td>
-                          <td>" . q($lpTotalTime) . "</td>
+                          <td>" . $lpDisplay['time'] . "</td>
                           <td>" . $lp_total_status . "</td>
-                          <td>" . disp_progress_bar($lpProgress, 1) . "</td>
+                          <td>" . $lpDisplay['progress_html'] . "</td>
+                          <td class='text-end'>" . $lpDisplay['score'] . "</td>
                      </tr>";
     }
 
@@ -153,6 +156,7 @@ if (count($lpList) == 0) {
                         <td>" . q($totalTimeSpent) . "</td>
                         <td></td>
                         <td>" . disp_progress_bar($total_progress, 1) . "</td>
+                        <td></td>
                       </tr>";
     $data[] = [];
     $data[] = [ $langTotal, '', '', '', $totalTimeSpent, '', $total_progress . '%' ];

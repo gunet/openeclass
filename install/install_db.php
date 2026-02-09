@@ -753,7 +753,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `lp_learnPath` (
     `comment` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
     `lock` enum('OPEN','CLOSE') CHARACTER SET ascii COLLATE ascii_bin NOT NULL DEFAULT 'OPEN',
     `visible` TINYINT NOT NULL DEFAULT 0,
-    `rank` INT NOT NULL DEFAULT 0) $tbl_options");
+    `rank` INT NOT NULL DEFAULT 0,
+    `force_completed_progress` BOOLEAN NOT NULL DEFAULT 0) $tbl_options");
 
 // COMMENT='This table links module to the learning path using them';
 $db->query("CREATE TABLE IF NOT EXISTS `lp_rel_learnPath_module` (

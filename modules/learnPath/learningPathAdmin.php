@@ -84,6 +84,17 @@ if (!$is_editor) {
 
 load_js('tools.js');
 
+$forceCompletedProgress = 0;
+if (isset($_SESSION['path_id'])) {
+    $lpForceProgress = Database::get()->querySingle("SELECT `force_completed_progress`
+        FROM `lp_learnPath`
+        WHERE `learnPath_id` = ?d
+            AND `course_id` = ?d", $_SESSION['path_id'], $course_id);
+    if ($lpForceProgress) {
+        $forceCompletedProgress = (int) $lpForceProgress->force_completed_progress;
+    }
+}
+
 $cmd = ( isset($_REQUEST['cmd']) ) ? $_REQUEST['cmd'] : '';
 
 switch ($cmd) {
@@ -319,6 +330,15 @@ switch ($cmd) {
                 </div>";
         }
         break;
+    case "updateForceCompletedProgress" :
+        if (isset($_SESSION['path_id'])) {
+            $forceCompletedProgress = isset($_POST['force_completed_progress']) ? 1 : 0;
+            Database::get()->query("UPDATE `lp_learnPath`
+                SET `force_completed_progress` = ?d
+                WHERE `learnPath_id` = ?d
+                    AND `course_id` = ?d", $forceCompletedProgress, $_SESSION['path_id'], $course_id);
+        }
+        break;
     default:
         break;
 }
@@ -384,6 +404,16 @@ if ($cmd == "updatecomment") {
 } else {
     $tool_content .= commentBox(LEARNINGPATH_, DISPLAY_);
 }
+$tool_content .= "<div class='card-body'>
+    <form method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code'>
+        <div class='form-check form-switch'>
+            <input class='form-check-input' type='checkbox' id='forceCompletedProgress' name='force_completed_progress' value='1' onchange='this.form.submit();' " . ($forceCompletedProgress ? 'checked' : '') . ">
+            <label class='form-check-label' for='forceCompletedProgress'>$langForceCompletedProgress</label>
+        </div>
+        <p class='help-block small text-muted mb-0'>$langForceCompletedProgressInfo</p>
+        <input type='hidden' name='cmd' value='updateForceCompletedProgress'>
+    </form>
+</div>";
 
 $tool_content .= "</div></div>";
 

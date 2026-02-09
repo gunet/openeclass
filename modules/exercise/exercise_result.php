@@ -18,13 +18,13 @@
  */
 
 
-include 'exercise.class.php';
-include 'question.class.php';
-include 'answer.class.php';
+require_once 'exercise.class.php';
+require_once 'question.class.php';
+require_once 'answer.class.php';
 
 $require_current_course = TRUE;
 $guest_allowed = true;
-include '../../include/baseTheme.php';
+require_once '../../include/baseTheme.php';
 require_once 'modules/exercise/exercise.lib.php';
 require_once 'modules/gradebook/functions.php';
 require_once 'game.php';
@@ -315,7 +315,7 @@ $canonical_score = $objExercise->canonicalize_exercise_score($exercise_user_reco
 $displayScore = $objExercise->selectScore();
 $gradePass = $objExercise->getPassingGrade();
 $exerciseAttemptsAllowed = $objExercise->selectAttemptsAllowed();
-$calc_grade_method = $objExercise->getCalcGradeMethod();
+$exerciseCalcGradeMethod = $objExercise->getCalcGradeMethod();
 $exerciseFeedback = $objExercise->getFeedback();
 $userAttempts = Database::get()->querySingle("SELECT COUNT(*) AS count FROM exercise_user_record WHERE eid = ?d AND uid= ?d", $exercise_user_record->eid, $uid)->count;
 
@@ -412,10 +412,6 @@ if ($showScore) { // exercise score
     }
     // message score
     $tool_content .= "$langTotalScore: $canonicalized_message_range&nbsp;&nbsp;$message_range $grade_icon";
-    // certainty grade (if any)
-    if ($calc_grade_method == CALC_GRADE_METHOD_CERTAINTY_BASED) {
-        $tool_content .= "Βαθμολογία βεβαιότητας: <strong>" . $objExercise->get_user_certainty_based_grade($eurid) . " / " . $exercise_user_record->total_weighting . "</strong>";
-    }
     // exercise feedback (if any)
     if (!empty($objExercise->calculate_feedback($canonical_score))) {
         $tool_content .= "<h5 class='p-3 m-1 border border-info rounded-3' style='color: blue; text-align:center;'>" . $objExercise->calculate_feedback($canonical_score) . "</h5>";
@@ -487,12 +483,9 @@ if (count($exercise_question_ids) > 0) {
                 $urlAppend . "modules/exercise/admin.php?course=$course_code&amp;modifyAnswers=$questionId&fromExercise=$exercise_id");
         }
 
-        // destruction of the Question object
-        unset($objQuestionTmp);
         // check if the question has been graded
         $question_weight = Database::get()->querySingle("SELECT SUM(weight) AS weight FROM exercise_answer_record WHERE question_id = ?d AND eurid = ?d", $row->question_id, $eurid)->weight;
         $question_graded = !is_null($question_weight);
-
 
         $tool_content .= "<div class='table-responsive'>";
         $tool_content .= "
@@ -512,7 +505,7 @@ if (count($exercise_question_ids) > 0) {
             }
         } else {
              if (($showScore) and (!is_null($choice))) {
-                 if ($answerType == MULTIPLE_ANSWER && $question_weight < 0 && $calc_grade_method == 1) {
+                 if ($answerType == MULTIPLE_ANSWER && $question_weight < 0 && $exerciseCalcGradeMethod == CALC_GRADE_METHOD_STANDARD) {
                      $qw_legend1 = "<span class='Accent-200-cl'>$question_weight</span>";
                      $qw_legend2 = " $langConvertedTo <strong>0 / $questionWeighting</strong>";
                  } else {
@@ -521,9 +514,9 @@ if (count($exercise_question_ids) > 0) {
                  }
                  $tool_content .= " <span class='fw-light m-1'>
                                         <small>($langGradebookGrade: <strong>$qw_legend1 / $questionWeighting</strong>$qw_legend2";
-                 if ($calc_grade_method == CALC_GRADE_METHOD_CERTAINTY_BASED) {
+                 if ($exerciseCalcGradeMethod == CALC_GRADE_METHOD_CERTAINTY_BASED) {
                      $question_certainty = Database::get()->querySingle("SELECT certainty FROM exercise_answer_record WHERE question_id = ?d AND eurid = ?d", $row->question_id, $eurid)->certainty;
-                     $tool_content .= ", Βαθμός Βεβαιότητας: <strong>$question_certainty</strong>";
+                     $tool_content .= ", $langCertainty: <strong>" . $objQuestionTmp->getCertaintyLegend($question_certainty) . "</strong>";
                  }
                  $tool_content .= ")</small>
                                     </span>";
@@ -531,6 +524,8 @@ if (count($exercise_question_ids) > 0) {
         }
         $tool_content .= "<span class='fw-lighter m-2'><small>($questionType$qid_display)</small></span>$edit_link"; // question type
         $tool_content .= "</td></tr></thead>";
+        // destruction of the Question object
+        unset($objQuestionTmp);
 
         $tool_content .= "<tr><td colspan='2'>";
         $arithmetic_expression_str = '';

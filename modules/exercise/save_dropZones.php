@@ -1,7 +1,7 @@
 <?php
 
 $require_current_course = TRUE;
-include '../../include/baseTheme.php';
+require_once '../../include/baseTheme.php';
 
 // Path to the JSON file
 $course_code = $_GET['course_code'];
@@ -117,7 +117,7 @@ exit;
 
 // Remove marker id with its values if needs
 function remove_json_marker_id_if_exists($markerId, $questionId) {
-   
+
     if ($markerId > 0 && isset($_SESSION['data_shapes'][$questionId])) {
         $jsonArray = explode('|', $_SESSION['data_shapes'][$questionId]);
         $newJsonArray = [];

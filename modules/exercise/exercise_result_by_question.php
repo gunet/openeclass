@@ -18,9 +18,9 @@
  *
  */
 
-include 'exercise.class.php';
-include 'question.class.php';
-include 'answer.class.php';
+require_once 'exercise.class.php';
+require_once 'question.class.php';
+require_once 'answer.class.php';
 
 $require_current_course = TRUE;
 $require_editor = TRUE;
