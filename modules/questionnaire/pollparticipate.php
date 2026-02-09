@@ -100,7 +100,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         }
 
         // File has been removed from uppy
-        if (isset($_POST['file_removed']) && !$is_editor) {
+        if (isset($_POST['file_removed'])) {
             if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();
 
             $questionID = $_POST['question_id'];
