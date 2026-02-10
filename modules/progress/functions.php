@@ -3273,6 +3273,9 @@ function points_game_settings($points_game_id = 0) {
         $enable_checked = $enable_leaderboard ? 'checked' : '';
         $display_anon = $enable_leaderboard ? '' : 'style="display:none;"';
         $anon_checked   = $anonymize_leaderboard ? 'checked' : '';
+
+        $check_levels = Database::get()->querySingle("SELECT count(id) as cnt FROM user_points_game_points WHERE points_game = ?d AND current_level IS NOT NULL", $points_game_id);
+        $levels_used = $check_levels->cnt > 0 ? true : false; 
     } else { //new
         $title = '';
         $description = '';
@@ -3353,16 +3356,20 @@ function points_game_settings($points_game_id = 0) {
                                             </tr>
                                         </thead>
                                         <tbody>";
+                                        $attr = "required";
+                                        if ($levels_used) {
+                                            $attr = "disabled";
+                                        }
                                         $level_i = 1;
                                         foreach ($levels as $level) {
                                             $tool_content .= "<tr>
                                                 <td class='form-group'>
-                                                    <input aria-label='$langPointsGameLevelName' type='text' name='level_item_name[]' class='form-control' value='".$level->friendly_name."' required>
+                                                    <input aria-label='$langPointsGameLevelName' type='text' name='level_item_name[]' class='form-control' value='".$level->friendly_name."' $attr>
                                                 </td>
                                                 <td class='form-group'>
-                                                    <input aria-label='$langPointsGameLevelRequiredPoints' type='number' name='level_item_req_points[]' class='form-control' value='".$level->required_points."' min='0' required>
+                                                    <input aria-label='$langPointsGameLevelRequiredPoints' type='number' name='level_item_req_points[]' class='form-control' value='".$level->required_points."' min='0' $attr>
                                                 </td>";
-                                                if ($level_i == 1) {
+                                                if ($level_i == 1 || $levels_used) {
                                                     $tool_content .= "<td class='text-center'>
                                                     </td>";
                                                 } else {
@@ -3376,11 +3383,13 @@ function points_game_settings($points_game_id = 0) {
                     $tool_content .= "</tbody>
                                     </table>
                                 </div>
-                            </div>
-                            <div class='col-12 mt-5 d-flex justify-content-center'>
+                            </div>";
+                    if (!$levels_used) {
+                        $tool_content .= "<div class='col-12 mt-5 d-flex justify-content-center'>
                                 <a class='btn submitAdminBtn' id='addLevel'>$langAdd</a>
-                            </div>
-                        </div>";
+                            </div>";
+                    }
+                    $tool_content .= "</div>";
                 } else {
                     $tool_content .= "
                         <div class='form-group mt-4'>

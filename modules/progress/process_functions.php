@@ -1174,12 +1174,15 @@ function modify_points_game($points_game_id, $title, $description, $startdate, $
                                                 WHERE id = ?d AND course_id = ?d",
                                     $title, $description, $startdate, $enddate, json_encode($config, JSON_UNESCAPED_UNICODE), $points_game_id, $course_id);
 
-    Database::get()->query("DELETE FROM points_game_levels WHERE points_game = ?d", $points_game_id);
-    foreach ($level_names as $level_name) {
-        $level_req_points = current($level_required_points);
-        next($level_required_points);
-        Database::get()->query("INSERT INTO points_game_levels (points_game, friendly_name, required_points) VALUES (?d,?s,?d)", 
-            $points_game_id, $level_name, $level_req_points);
+    $check_levels = Database::get()->querySingle("SELECT count(id) as cnt FROM user_points_game_points WHERE points_game = ?d AND current_level IS NOT NULL", $points_game_id);
+    if ($check_levels->cnt == 0) {
+        Database::get()->query("DELETE FROM points_game_levels WHERE points_game = ?d", $points_game_id);
+        foreach ($level_names as $level_name) {
+            $level_req_points = current($level_required_points);
+            next($level_required_points);
+            Database::get()->query("INSERT INTO points_game_levels (points_game, friendly_name, required_points) VALUES (?d,?s,?d)", 
+                $points_game_id, $level_name, $level_req_points);
+        }
     }
 }
 
