@@ -3557,7 +3557,8 @@ function upgrade_to_4_2($tbl_options) : void {
  * @param $tbl_options
  * @return void
  */
-function upgrade_to_4_3($tbl_options) : void {
+function upgrade_to_4_3($tbl_options): void
+{
     // tenant table
     if (!DBHelper::tableExists('tenant')) {
         Database::get()->query("CREATE TABLE `tenant` (
@@ -3606,16 +3607,18 @@ function upgrade_to_4_3($tbl_options) : void {
         Database::get()->query("ALTER TABLE `admin_announcement`
                                 ADD INDEX `idx_tenantId` (`tenantId`)");
 
-    if (!DBHelper::fieldExists('tenant', 'url_active')) {
-        Database::get()->query("ALTER TABLE tenant
+        if (!DBHelper::fieldExists('tenant', 'url_active')) {
+            Database::get()->query("ALTER TABLE tenant
             ADD url_active TINYINT(1) NOT NULL DEFAULT 0");
-    }
+        }
 
-    if (!DBHelper::fieldExists('api_token', 'department_id')) {
-        Database::get()->query('ALTER TABLE `api_token`
+        if (!DBHelper::fieldExists('api_token', 'department_id')) {
+            Database::get()->query(
+                'ALTER TABLE `api_token`
             ADD `department_id` INT(11)
             FOREIGN KEY (department_id) REFERENCES hierarchy(id) ON DELETE CASCADE'
-        );
+            );
+        }
     }
 }
 
