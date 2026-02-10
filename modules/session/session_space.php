@@ -61,6 +61,16 @@ $pageName = title_session($course_id,$sessionID);
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langSession);
 $toolName = $langSession;
 
+if (isset($_GET['cancelPoll'])) {
+    unset($_SESSION['current_page']);
+    unset($_SESSION['data_answers']);
+    unset($_SESSION['data_file_answer']);
+    unset($_SESSION['question_ids']);
+    unset($_SESSION['q_row_columns']);
+    unset($_SESSION['loop_init_answers']);
+    unset($_SESSION['emptyQuestions']);
+}
+
 $data['current_time'] = $current_time = date('Y-m-d H:i:s', strtotime('now'));
 
 if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
@@ -249,22 +259,22 @@ if($is_coordinator or $is_consultant){
     }
 
     // calculating session completion
-    foreach ($data['all_session'] as $s) {
-        $all_participants_ids = session_participants_ids($s->id);
-        foreach($all_participants_ids as $p){
-            if(!$s->type_remote){
-                // This refers to session completion with completed meeting.
-                check_session_completion_by_meeting_completed($s->id,$p);
-            }elseif($s->type_remote){
-                // This refers to session completion with completed tc.
-                check_session_completion_by_tc_completed($s->id,$p);
-            }
-            // This refers to session completion for other activities.
-            check_session_progress($s->id,$p);  // check session completion - call to Game.php
-            check_session_completion_without_activities($s->id);
-            check_session_completion_with_expired_time($s->id);
-        }
-    }
+    // foreach ($data['all_session'] as $s) {
+    //     $all_participants_ids = session_participants_ids($s->id);
+    //     foreach($all_participants_ids as $p){
+    //         if(!$s->type_remote){
+    //             // This refers to session completion with completed meeting.
+    //             check_session_completion_by_meeting_completed($s->id,$p);
+    //         }elseif($s->type_remote){
+    //             // This refers to session completion with completed tc.
+    //             check_session_completion_by_tc_completed($s->id,$p);
+    //         }
+    //         // This refers to session completion for other activities.
+    //         check_session_progress($s->id,$p);  // check session completion - call to Game.php
+    //         check_session_completion_without_activities($s->id);
+    //         check_session_completion_with_expired_time($s->id);
+    //     }
+    // }
 
 }else{// is simple user
 

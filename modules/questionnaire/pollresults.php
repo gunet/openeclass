@@ -507,7 +507,7 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COU
             <div class='col-12 mt-4'>
                 <div class='card panelCard card-default px-lg-4 py-lg-3'>
                     <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                        <h3>$langQuestion " . (isset($_GET['from_session_view']) ? $theQuestion->q_position : $theQuestion->qnumber) . "</h3>
+                        <h3>$langQuestion $theQuestion->qnumber</h3>
                     </div>
                     <div class='card-body'>";
                         if ($theQuestion->qtype == QTYPE_MULTIPLE || $theQuestion->qtype == QTYPE_SINGLE) {

@@ -89,7 +89,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         }
 
         // File has been uploaded from uppy
-        if (isset($_POST['file_uploaded']) && !$is_editor) {
+        if (isset($_POST['file_uploaded'])) {
             header('Content-Type: application/json');
             $questionID = $_POST['question_id'];
             $docInfo = ['filename' => $_POST['file_name'], 'filepath' => $_POST['file_path']];
@@ -108,40 +108,47 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             unset($_SESSION['data_file_answer'][$questionID]);
             
             $c = $_GET['course'];
+            $currentUser = $_POST['current_user'];
             $pollId = intval($_GET['pid']);
             $fpath = $_POST['fPath'];
-            $file = "$webDir/courses/$c/poll_$pollId/$uid/$questionID$fpath";
-            if (file_exists($file)) {
-                unlink($file);
-                Database::get()->query("DELETE poll_answer_record FROM poll_answer_record
-                                        INNER JOIN poll_user_record ON poll_user_record.id=poll_answer_record.poll_user_record_id
-                                        WHERE poll_answer_record.qid = ?d
-                                        AND poll_user_record.uid = ?d
-                                        AND poll_user_record.pid = ?d", $questionID, $uid, $pollId);
-
-            }
+            $file = "$webDir/courses/$c/poll_$pollId/$currentUser/$questionID$fpath";
+            $_SESSION['user_removed_file'][$currentUser] = [
+                'poll_id' => $pollId,
+                'question_id' => $questionID,
+                'file_path' => $file
+            ];
             exit();
         }
 }
 
 // Save uploaded file from uppy - only for users
-if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['answer']) && !$is_editor) {
+if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['answer'])) {
     if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();
+
+    // Na mhn anevasei o editor diko tou file . Mono ean einai ek merous tou xrhsth apo sunedria
+    if (isset($_GET['behalf_of_user_mode']) && $_GET['behalf_of_user_mode'] == 0 && $is_editor) {
+        forbidden();
+    }
+    // Na mhn anevasei o editor diko tou file an den exei epilexei xrhsth
+    if (isset($_GET['behalf_of_user_mode']) && $_GET['behalf_of_user_mode'] == 1 && isset($_GET['session_u']) && $_GET['session_u'] == 0) {
+        forbidden();
+    }
 
     header('Content-Type: application/json');
     
     $pid = intval($_GET['pid']);
     $qid = intval($_GET['qid']);
+    $currentUser = intval($_GET['u']);
     $filename = $_FILES['answer']['name'];
     validateUploadedFile($filename); // check file type
     $filename = add_ext_on_mime($filename);
     // File name used in file system and path field
     $safe_filename = safe_filename(get_file_extension($filename));
-    $dir = "$webDir/courses/$course_code/poll_$pid/$uid/$qid/";
+    $dir = "$webDir/courses/$course_code/poll_$pid/$currentUser/$qid/";
     if (!file_exists($dir)) {
-        mkdir("$webDir/courses/$course_code/poll_$pid/$uid/$qid/", 0755, true);
+        mkdir("$webDir/courses/$course_code/poll_$pid/$currentUser/$qid/", 0755, true);
     } else {// delete prev file
-        $folder = "$webDir/courses/$course_code/poll_$pid/$uid/$qid";
+        $folder = "$webDir/courses/$course_code/poll_$pid/$currentUser/$qid";
         if (is_dir($folder)) {
             $files = scandir($folder);
             foreach ($files as $file) {
@@ -154,7 +161,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['answer']) && !$is_edi
             }
         }
     }
-    $pathfile = "$webDir/courses/$course_code/poll_$pid/$uid/$qid/$safe_filename";
+    $pathfile = "$webDir/courses/$course_code/poll_$pid/$currentUser/$qid/$safe_filename";
     if (move_uploaded_file($_FILES['answer']['tmp_name'], $pathfile)) {
         @chmod($pathfile, 0644);
         $real_filename = $_FILES['answer']['name'];
@@ -448,8 +455,14 @@ function printPollForm() {
 
     // If a consultant is on behalf of user mode for submitting poll.
     $userDefault = $uid;
-    if (isset($_GET['printPollForUser'])) {
+    $sessionUserSelected = 0;
+    if (isset($_POST['userSelected'])) {
         $userDefault = intval($_POST['userSelected']);
+        $sessionUserSelected = $userDefault;
+    }
+    if (isset($_GET['su'])) {
+        $userDefault = intval($_GET['su']);
+        $sessionUserSelected = $userDefault;
     }
 
     $pid = $_REQUEST['pid'];
@@ -584,6 +597,10 @@ function printPollForm() {
                                                                  AND mod_session_users.is_accepted = ?d", $_GET['session'], 1);
 
             $actionPoll = $urlAppend . "modules/units/view.php?course=$course_code&res_type=questionnaire&pid=$pid&UseCase=1&session=$_GET[session]&from_session_view=true&onBehalfOfUser=true&printPollForUser=true";
+            $disabledUserSelection = '';
+            if (isset($_GET['emptyQ'])) {
+                $disabledUserSelection = 'disabled';
+            }
             $tool_content .= "
                 <div class='col-12 mb-4'>
                     <div class='card panelCard card-default px-lg-4 py-lg-3 mb-4'>
@@ -592,7 +609,7 @@ function printPollForm() {
                         </div>
                         <div class='card-body'>
                             <form id='onBehalfOfSelectionForm' method='post' action='$actionPoll'>
-                                <select id='onBehalfOfSelection' class='form-select' name='userSelected'>";
+                                <select id='onBehalfOfSelection' class='form-select' name='userSelected' $disabledUserSelection>";
                                     $tool_content .= "<option value='0' selected>$langSelect</option>";
                                     foreach ($session_participants as $p) {
                                         $tool_content .= "<option value='{$p->participants}' " . ($userDefault == $p->participants ? 'selected' : '') . ">{$p->givenname}&nbsp;{$p->surname}</option>";
@@ -643,7 +660,15 @@ function printPollForm() {
             if (isset($_GET['from_session_view'])) {
                 $session_view = "&amp;session=$_GET[session]&amp;from_session_view=true";
             }
-            $form_link = "../units/view.php?course=$course_code&amp;res_type=questionnaire$session_view";
+            $onBehalfOfUserView = '';
+            if (isset($_GET['onBehalfOfUser'])) {
+                $onBehalfOfUserView = "&amp;onBehalfOfUser=true";
+            }
+            $printPollForUserView = '';
+            if (isset($_GET['printPollForUser'])) {
+                $printPollForUserView = "&amp;printPollForUser=true";
+            }
+            $form_link = "../units/view.php?course=$course_code&amp;res_type=questionnaire$session_view$onBehalfOfUserView$printPollForUserView";
         } else {
             $form_link = "$_SERVER[SCRIPT_NAME]?course=$course_code";
         }
@@ -733,7 +758,7 @@ function printPollForm() {
         $sql_an = "AND b.session_id = $s_id";
 
         // Initialize the user answers from db
-        user_answers_from_db($questions, $sql_an, $userDefault);
+        user_answers_from_db($questions, $sql_an, $userDefault, $sessionUserSelected);
         // If the user has left an empty required question
         if (isset($_GET['emptyQ']) && isset($_SESSION['temp_data_answers'])) {
             foreach ($_SESSION['temp_data_answers'] as $Qid => $val) {
@@ -1089,7 +1114,7 @@ function printPollForm() {
                                                             <a id='{$qtype}_{$pqid}' class='btn deleteAdminBtn clearUpBtn gap-1' data-question-clean='$pqid'><i class='fa-regular fa-trash-can'></i>$langCleanup</a>
                                                         </div>";
                             } elseif ($qtype == QTYPE_FILE) {
-                                poll_upload_file($pid, $form_link, $qtype, $pqid);
+                                poll_upload_file($pid, $form_link, $qtype, $pqid, $userDefault, $sessionUserSelected);
                             }
                 $tool_content .= "
                         </div>
@@ -1102,11 +1127,27 @@ function printPollForm() {
 
         // next - prev btn
         if (!$temp_IsLime && $pageBreakExists) {
+            $session_mode = '';
+            $onBehalfOfUserMode = '';
+            $printPollForUserMode = '';
+            $emptyQMode = '';
+            if (isset($_GET['from_session_view']) && isset($_GET['session']) && isset($_GET['res_type'])) {
+                $session_mode = "&res_type=$_GET[res_type]&session=$_GET[session]&from_session_view=true";
+            }
+            if (isset($_GET['onBehalfOfUser'])) {
+                $onBehalfOfUserMode = "&onBehalfOfUser=true&su=$userDefault";
+            }
+            if (isset($_GET['printPollForUser'])) {
+                $printPollForUserMode = "&printPollForUser=true";
+            }
+            if (isset($_GET['emptyQ'])) {
+                $emptyQMode = "&emptyQ=1";
+            }
             $prev_page = $_SESSION['current_page'] - 1;
-            $linkPrev = "{$urlServer}modules/questionnaire/pollparticipate.php?course=$course_code&UseCase=1&pid=$pid&page=$prev_page";
+            $linkPrev = "{$urlServer}modules/questionnaire/pollparticipate.php?course=$course_code&UseCase=1&pid=$pid&page=$prev_page$session_mode$onBehalfOfUserMode$printPollForUserMode$emptyQMode";
             $tool_content .= "<input id='linkPrevPage' type='hidden' value='$linkPrev'>";
             $next_page = $_SESSION['current_page'] + 1;
-            $linkNext = "{$urlServer}modules/questionnaire/pollparticipate.php?course=$course_code&UseCase=1&pid=$pid&page=$next_page";
+            $linkNext = "{$urlServer}modules/questionnaire/pollparticipate.php?course=$course_code&UseCase=1&pid=$pid&page=$next_page$session_mode$onBehalfOfUserMode$printPollForUserMode$emptyQMode";
             $tool_content .= "<input id='linkNextPage' type='hidden' value='$linkNext'>";
             $tool_content .= "<div class='col-12 d-flex justify-content-between align-items-center gap-3'>";
             $tool_content .= "<div class='flex-fill d-flex justify-content-start'>";
@@ -1139,11 +1180,11 @@ function printPollForm() {
         $tool_content .= "<div class='col-12 d-flex justify-content-center mt-5'>";
         if ($is_editor && !isset($_GET['onBehalfOfUser'])) {
             if (isset($_GET['from_session_view'])) {
-                $tool_content .= "<a class='btn cancelAdminBtn' href='../session/session_space.php?course=$course_code&amp;session=$_GET[session]'>" . q($langBack) . "</a>";
+                $tool_content .= "<a class='btn cancelAdminBtn' href='../session/session_space.php?course=$course_code&amp;cancelPoll=true&amp;session=$_GET[session]'>" . q($langBack) . "</a>";
             } else {
                 $tool_content .= "<a class='btn cancelAdminBtn' href='index.php?course=$course_code&cancelPoll=true'>" . q($langBack) . "</a>";
             }
-        } else if ($is_course_reviewer) {
+        } else if ($is_course_reviewer && !isset($_GET['onBehalfOfUser'])) {
             // is poll assigned to course_reviewer?
             $query = "SELECT * FROM poll WHERE pid = ?d";
             $query_params[] = $pid;
@@ -1170,7 +1211,7 @@ function printPollForm() {
                     $tool_content .= "<a class='btn cancelAdminBtn ms-3' href='../units/index.php?course=$course_code&amp;id=$_REQUEST[unit_id]'>" . q($langCancel) . "</a>";
                 } else {
                     if (isset($_GET['from_session_view'])) {
-                        $tool_content .= "<a class='btn cancelAdminBtn ms-3' href='../session/session_space.php?course=$course_code&amp;session=$_GET[session]'>" . q($langCancel). "</a>";
+                        $tool_content .= "<a class='btn cancelAdminBtn ms-3' href='../session/session_space.php?course=$course_code&amp;cancelPoll=true&amp;session=$_GET[session]'>" . q($langCancel). "</a>";
                     } else {
                         $tool_content .= "<a class='btn cancelAdminBtn ms-3' href='index.php?course=$course_code&cancelPoll=true'>" . q($langCancel) . "</a>";
                     }
@@ -1318,10 +1359,22 @@ function submitPoll() {
             }
         }
         if ($require_an) {
+            $fromSessionView = '';
+            if (isset($_GET['from_session_view'])) {
+                $fromSessionView = "&res_type=questionnaire&session=$_GET[session]&from_session_view=true";
+            }
+            $onBehalfOfUserView = '';
+            if (isset($_GET['onBehalfOfUser'])) {
+                $onBehalfOfUserView = "&onBehalfOfUser=true";
+            }
+            $printPollForUserView = '';
+            if (isset($_GET['printPollForUser'])) {
+                $printPollForUserView = "&printPollForUser=true";
+            }
             $_SESSION['temp_data_answers'] = $answer;
             Session::flash('message', $langQuestionsRequireAnswers);
             Session::flash('alert-class', 'alert-warning');
-            redirect_to_home_page("modules/questionnaire/pollparticipate.php?course=$course_code&UseCase=1&pid=$pid&emptyQ=1");
+            redirect_to_home_page("modules/questionnaire/pollparticipate.php?course=$course_code&UseCase=1&pid=$pid&su=$userDefault&emptyQ=1$fromSessionView$onBehalfOfUserView$printPollForUserView");
         }
 
         if ($userDefault) {
@@ -1373,6 +1426,21 @@ function submitPoll() {
             $question = $_SESSION['question_ids'];
         } else {
             $question = isset($_POST['question'])? $_POST['question']: array();
+        }
+
+        // After submitting the form and the user has removed the uploaded file , delete it.
+        if (isset($_SESSION['user_removed_file'])) {
+            foreach ($_SESSION['user_removed_file'] as $user => $dataFile) {
+                if (file_exists($dataFile['file_path'])) {
+                    unlink($dataFile['file_path']);
+                    Database::get()->query("DELETE poll_answer_record FROM poll_answer_record
+                                            INNER JOIN poll_user_record ON poll_user_record.id=poll_answer_record.poll_user_record_id
+                                            WHERE poll_answer_record.qid = ?d
+                                            AND poll_user_record.uid = ?d
+                                            AND poll_user_record.pid = ?d", $dataFile['question_id'], $user, $dataFile['poll_id']);
+                }
+            }
+            unset($_SESSION['user_removed_file']);
         }
 
         foreach ($question as $pqid => $qtype) {
@@ -1540,9 +1608,14 @@ function checkPageBreakOn($PID) {
     return $check;
 }
 
-function user_answers_from_db($questions, $sql_an, $userDefault) {
-    if (!isset($_SESSION['loop_init_answers'])) {
-        $_SESSION['loop_init_answers'] = 1; 
+function user_answers_from_db($questions, $sql_an, $userDefault, $sessionUserSelected) {
+    if (!isset($_SESSION['loop_init_answers']) or isset($_GET['onBehalfOfUser'])) {
+        $_SESSION['loop_init_answers'] = 1;
+        // on behalf of user is active but user has not been selected
+        if (isset($_GET['onBehalfOfUser']) && $sessionUserSelected == 0) {
+            $userDefault = $sessionUserSelected;
+            $_SESSION['data_answers'] = [];
+        }
     }
     if (isset($_SESSION['loop_init_answers']) && $_SESSION['loop_init_answers'] == 1) {
         foreach ($questions as $theQuestion) {
@@ -1557,8 +1630,8 @@ function user_answers_from_db($questions, $sql_an, $userDefault) {
                         WHERE a.poll_user_record_id = b.id
                             AND a.qid = ?d
                             AND b.uid = ?d
-                            $sql_an", $pqid, $userDefault);            
-                if ($user_answers && !isset($_SESSION['data_answers'][$pqid])) {
+                            $sql_an", $pqid, $userDefault);          
+                if ($user_answers) {
                     $storeData = [];
                     foreach ($user_answers as $ua) {
                         $storeData[] = $ua->aid;
@@ -1571,7 +1644,7 @@ function user_answers_from_db($questions, $sql_an, $userDefault) {
                         }
                     }
                 }
-            } elseif ($qtype == QTYPE_SCALE && isset($_SESSION['loop_init_answers'])) {
+            } elseif ($qtype == QTYPE_SCALE) {
                 $user_answers = Database::get()->querySingle("SELECT a.answer_text
                                     FROM poll_answer_record a, poll_user_record b
                                 WHERE qid = ?d
@@ -1580,11 +1653,9 @@ function user_answers_from_db($questions, $sql_an, $userDefault) {
                                     $sql_an", $pqid, $userDefault);
                 if ($user_answers) {
                     $slider_value = $user_answers->answer_text;
-                    if (!isset($_SESSION['data_answers'][$pqid])) {
-                        $_SESSION['data_answers'][$pqid] = $slider_value;
-                    }
+                    $_SESSION['data_answers'][$pqid] = $slider_value;
                 }
-            } elseif (($qtype == QTYPE_FILL or $qtype == QTYPE_DATETIME or $qtype == QTYPE_SHORT or $qtype == QTYPE_FILE) && isset($_SESSION['loop_init_answers'])) {
+            } elseif ($qtype == QTYPE_FILL or $qtype == QTYPE_DATETIME or $qtype == QTYPE_SHORT or $qtype == QTYPE_FILE) {
                 $user_answers = Database::get()->querySingle("SELECT a.answer_text
                                     FROM poll_answer_record a, poll_user_record b
                                 WHERE qid = ?d
@@ -1593,9 +1664,7 @@ function user_answers_from_db($questions, $sql_an, $userDefault) {
                                     $sql_an", $pqid, $userDefault);
                 if ($user_answers) {
                     $text = $user_answers->answer_text;
-                    if (!isset($_SESSION['data_answers'][$pqid])) {
-                        $_SESSION['data_answers'][$pqid] = $text;
-                    }
+                    $_SESSION['data_answers'][$pqid] = $text;
                 }
             } elseif ($qtype == QTYPE_TABLE) {
                 $s_data = [];
@@ -1618,7 +1687,7 @@ function user_answers_from_db($questions, $sql_an, $userDefault) {
                         $length++;
                     }
                 }
-                if (count($s_data) > 0 && !isset($_SESSION['data_answers'][$pqid])) {
+                if (count($s_data) > 0) {
                     $_SESSION['data_answers'][$pqid] = $s_data;
                 } 
             }
@@ -1678,7 +1747,7 @@ function update_submission($pid) {
     return $answer;
 }
 
-function poll_upload_file($pid, $form_link, $qtype, $pqid) {
+function poll_upload_file($pid, $form_link, $qtype, $pqid, $currentUser, $sessionUserSelected) {
     global $tool_content, $head_content, $course_code, $urlAppend, $langPleaseWait, 
            $language, $langFileName, $langDelete, $langConfirmDelete, $urlServer, 
            $uid, $webDir;
@@ -1694,10 +1763,12 @@ function poll_upload_file($pid, $form_link, $qtype, $pqid) {
         $filepath = $arrFile['filepath'];
     }
 
+    $is_onBehalfOfUser_mode = isset($_GET['onBehalfOfUser']) ? 1 : 0;
+
     if (!empty($filename)) {
         $del_file .= "
         <div class='d-flex align-items-center gap-2 mb-4'>
-            <p id='fileName_{$pqid}' class='TextBold'>$langFileName: <a target='_blank' href='{$urlServer}courses/$course_code/poll_$pid/$uid/$pqid$filepath'>$filename</a></p>
+            <p id='fileName_{$pqid}' class='TextBold'>$langFileName: <a target='_blank' href='{$urlServer}courses/$course_code/poll_$pid/$currentUser/$pqid$filepath'>$filename</a></p>
             <a id='del_file_{$pqid}' class='btn deleteAdminBtn' data-bs-toggle='tooltip' data-bs-placement='top' title='$langDelete' style='width: 25px; height: 25px;'><i class='fa-solid fa-trash'></i></a>
         </div>
         ";
@@ -1750,7 +1821,7 @@ function poll_upload_file($pid, $form_link, $qtype, $pqid) {
                     });
 
                     uppy.use(XHRUpload, {
-                        endpoint: '{$urlAppend}modules/questionnaire/pollparticipate.php?course={$course_code}&pid={$pid}&qid={$pqid}&token={$token}',
+                        endpoint: '{$urlAppend}modules/questionnaire/pollparticipate.php?course={$course_code}&pid={$pid}&qid={$pqid}&u={$currentUser}&behalf_of_user_mode={$is_onBehalfOfUser_mode}&session_u={$sessionUserSelected}&token={$token}',
                         fieldName: 'answer',
                         formData: true,
                         getResponseData: (responseText, response) => {
@@ -1758,7 +1829,7 @@ function poll_upload_file($pid, $form_link, $qtype, $pqid) {
                                 const data = JSON.parse(responseText.responseText);
                                 if (data.success) {
                                     $.ajax({
-                                        url: '{$urlAppend}modules/questionnaire/pollparticipate.php?course=$course_code&UseCase=1&pid=$pid',
+                                        url: '{$urlAppend}modules/questionnaire/pollparticipate.php?course={$course_code}&UseCase=1&pid={$pid}&behalf_of_user_mode={$is_onBehalfOfUser_mode}',
                                         method: 'POST',
                                         data: { file_uploaded: 1, file_name: data.fileInfo.basename, file_path: data.filePath, question_id: $pqid },
                                         success: function(res) {
@@ -1797,7 +1868,8 @@ function poll_upload_file($pid, $form_link, $qtype, $pqid) {
                         data: { 
                             file_removed: 1,
                             fPath: '{$filepath}',
-                            question_id: '{$pqid}'
+                            question_id: '{$pqid}',
+                            current_user: '{$currentUser}'
                         },
                         success: function(response) {
                             $('#fileName_{$pqid}').remove();

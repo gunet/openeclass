@@ -1230,10 +1230,10 @@ function session_actions($res_type, $resource_id, $status, $res_id = false) {
                                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;session=$_GET[session]&amp;res_id=$resource_id&amp;vis_res=$vis_res_val",
                                         'icon' => $showorhideIcon,
                                         'show' => ($res_type != 'doc_reference')),
-                                    array('title' => $langSubmissionOnBehalfOfUser,
-                                          'url' => $urlServer . "modules/questionnaire/pollparticipate.php?course=$course_code&amp;UseCase=1&amp;session=$_GET[session]&amp;pid=$poll_id&amp;res_type=questionnaire&amp;from_session_view=true&amp;onBehalfOfUser=true",
-                                          'icon' => 'fa-solid fa-user-plus',
-                                          'show' => ($res_type == 'poll')),
+                                    // array('title' => $langSubmissionOnBehalfOfUser,
+                                    //       'url' => $urlServer . "modules/questionnaire/pollparticipate.php?course=$course_code&amp;UseCase=1&amp;session=$_GET[session]&amp;pid=$poll_id&amp;res_type=questionnaire&amp;from_session_view=true&amp;onBehalfOfUser=true",
+                                    //       'icon' => 'fa-solid fa-user-plus',
+                                    //       'show' => ($res_type == 'poll')),
                                     array('title' => $langUsersAnswers,
                                         'url' => $urlServer . "modules/questionnaire/pollresults.php?course=$course_code&amp;session=$_GET[session]&amp;pid=$poll_id&amp;from_session_view=true",
                                         'icon' => 'fa-line-chart',
@@ -3377,7 +3377,7 @@ function get_cert_percentage_completion_by_user($element, $element_id, $userId) 
     
     $allCr = Database::get()->queryArray("SELECT * FROM badge_criterion WHERE badge = ?d", $element_id);
     $sid = Database::get()->querySingle("SELECT session_id FROM badge WHERE id = ?d", $element_id);
-    if (count($allCr)) {
+    if (count($allCr) > 0) {
         foreach ($allCr as $c) {
             if ($c->activity_type == 'questionnaire') {
                 $badgeCrId = $c->id;

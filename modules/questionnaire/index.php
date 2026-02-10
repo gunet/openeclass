@@ -129,6 +129,7 @@ if (isset($_GET['cancelPoll'])) {
     unset($_SESSION['q_row_columns']);
     unset($_SESSION['loop_init_answers']);
     unset($_SESSION['emptyQuestions']);
+    unset($_SESSION['user_removed_file']);
 }
 
 if (isset($_GET['verification_code'])) {
@@ -346,6 +347,7 @@ if ($is_editor) {
             unset($_SESSION['question_ids']);
             unset($_SESSION['q_row_columns']);
             unset($_SESSION['loop_init_answers']);
+            unset($_SESSION['user_removed_file']);
             $folder = "$webDir/courses/$course_code/poll_$pid";
             deleteFolderContents($folder);
             Database::get()->query("DELETE FROM poll_user_record WHERE pid = ?d", $pid);

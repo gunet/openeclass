@@ -168,7 +168,7 @@
                                     <option value='one' {!! $sessionType=='one' ? 'selected' : '' !!}>{{ trans('langIndividualS') }}</option>
                                     <option value='group' {!! $sessionType=='group' ? 'selected' : '' !!}>{{ trans('langGroupS') }}</option>
                                 </select>
-                                <button class='w-75 mt-0 gap-1' type='submit'>{{ trans('langSearch') }}</button>
+                                <button class='w-75 mt-0 gap-1' type='submit' name='submit_search'>{{ trans('langSearch') }}</button>
                             </form>
                         </div>
                     </div>
