@@ -86,7 +86,10 @@ if (isset($_GET['reset_theme_options'])) {
 }
 if (isset($_GET['delete_image'])) {
         $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
-        $theme_options_styles = unserialize($theme_options->styles);
+        $theme_options_styles = unserialize($theme_options->styles, [
+            'allowed_classes' => ['stdClass'],
+            'max_depth' => 0,
+        ]);
         $logo_type = $_GET['delete_image'];
         unlink("$webDir/courses/theme_data/$theme_id/{$theme_options_styles[$logo_type]}");
         unset($theme_options_styles[$logo_type]);
@@ -192,7 +195,16 @@ if (isset($_POST['import'])) {
                 unlink("$webDir/courses/theme_data/$file_name");
                 $base64_str = file_get_contents("$webDir/courses/theme_data/temp/theme_options.txt");
                 unlink("$webDir/courses/theme_data/temp/theme_options.txt");
-                $theme_options = unserialize(base64_decode($base64_str));
+                $theme_options = unserialize(base64_decode($base64_str), [
+                    'allowed_classes' => ['stdClass'],
+                    'max_depth' => 0,
+                ]);
+                if (!$theme_options || !isset($theme_options->name) || !isset($theme_options->styles) || !isset($theme_options->id)) {
+                    unset($theme_options);
+                    removeDir("$webDir/courses/theme_data/temp");
+                    Session::Messages($langUnwantedFiletype, 'alert-danger');
+                    redirect_to_home_page('modules/admin/theme_options.php');
+                }
                 $new_theme_id = Database::get()->query("INSERT INTO theme_options (name, styles, version) VALUES(?s, ?s, 4)", $theme_options->name, $theme_options->styles)->lastInsertID;
                 rename("$webDir/courses/theme_data/temp/".intval($theme_options->id), "$webDir/courses/theme_data/temp/$new_theme_id");
                 recurse_copy("$webDir/courses/theme_data/temp","$webDir/courses/theme_data");
@@ -319,7 +331,10 @@ if (isset($_POST['optionsSave'])) {
 } elseif (isset($_GET['delThemeId'])) {
     $theme_id = intval($_GET['delThemeId']);
     $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
-    $theme_options_styles = unserialize($theme_options->styles);
+    $theme_options_styles = unserialize($theme_options->styles, [
+        'allowed_classes' => ['stdClass'],
+        'max_depth' => 0,
+    ]);
     @removeDir("$webDir/courses/theme_data/$theme_id");
     Database::get()->query("DELETE FROM theme_options WHERE id = ?d", $theme_id);
     if($_GET['delThemeId'] == $active_theme) {
@@ -391,7 +406,7 @@ if (isset($_POST['optionsSave'])) {
                 }
             });
 
-            
+
             if($('#strechedImgOfFormId').is(':checked')){
                 $('.streched_repeaded_img_form_class').css('display','block');
             }else{
@@ -651,7 +666,10 @@ if (isset($_POST['optionsSave'])) {
 
     if ($theme_id) {
         $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
-        $theme_options_styles = unserialize($theme_options->styles);
+        $theme_options_styles = unserialize($theme_options->styles, [
+            'allowed_classes' => ['stdClass'],
+            'max_depth' => 0,
+        ]);
     }
     initialize_settings();
 
@@ -1716,14 +1734,14 @@ $tool_content .= "
                                     <div class='radio mb-2'>
                                         <label>
                                             <input type='radio' name='PositionJumbotronText' value='0' ".((isset($theme_options_styles['PositionJumbotronText']) and $theme_options_styles['PositionJumbotronText'] == '0')? 'checked' : '').">
-                                            $langTopPositionJumbotronText  
+                                            $langTopPositionJumbotronText
                                         </label>
                                     </div>
 
                                     <div class='radio mb-2'>
                                         <label>
                                             <input type='radio' name='PositionJumbotronText' value='1' ".((isset($theme_options_styles['PositionJumbotronText']) and $theme_options_styles['PositionJumbotronText'] == '1')? 'checked' : '').">
-                                            $langCenterPositionJumbotronText 
+                                            $langCenterPositionJumbotronText
                                         </label>
                                     </div>
 
@@ -1787,7 +1805,7 @@ $tool_content .= "
                                     <figcaption class='figure-caption'>$langDisplayOptionsImg</figcaption>
                                 </figure>
                             </div>
-                        </div> 
+                        </div>
                     </fieldset>
                     <hr>
                     <div class='d-flex justify-content-between align-items-start flex-wrap gap-3'>
@@ -2631,13 +2649,13 @@ $tool_content .= "
                                 <div class='radio mb-2'>
                                     <label>
                                         <input type='radio' name='TypeImageForm' value='repeated' ".((isset($theme_options_styles['TypeImageForm']) && $theme_options_styles['TypeImageForm'] == 'repeated')? 'checked' : '').">
-                                        $langRepeatedImg 
+                                        $langRepeatedImg
                                     </label>
                                 </div>
                                 <div class='radio mb-2'>
                                     <label>
                                         <input type='radio' name='TypeImageForm' value='streched' ".((isset($theme_options_styles['TypeImageForm']) && $theme_options_styles['TypeImageForm'] == 'streched')? 'checked' : '').">
-                                        $langStretchedImg 
+                                        $langStretchedImg
                                     </label>
                                 </div>
                             </div>
@@ -2945,12 +2963,12 @@ $tool_content .= "
                                 <label for='bgHoveredListMenu' class='control-label-notes mb-2 me-2'>$langbgHoveredListMenu:</label>
                                 <input name='bgHoveredListMenu' type='text' class='form-control colorpicker' id='bgHoveredListMenu' value='$theme_options_styles[bgHoveredListMenu]'>
                             </div>
-                            
+
                             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                                 <label for='clBorderBottomListMenu' class='control-label-notes mb-2 me-2'>$langclBorderBottomListMenu:</label>
                                 <input name='clBorderBottomListMenu' type='text' class='form-control colorpicker' id='clBorderBottomListMenu' value='$theme_options_styles[clBorderBottomListMenu]'>
                             </div>
-                            
+
                             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                                 <label for='clListMenu' class='control-label-notes mb-2 me-2'>$langclListMenu:</label>
                                 <input name='clListMenu' type='text' class='form-control colorpicker' id='clListMenu' value='$theme_options_styles[clListMenu]'>
@@ -3021,7 +3039,7 @@ $tool_content .= "
                         <div>
                             <h3 class='theme_options_legend text-decoration-underline mt-4'>$langAboutFaqImageUpload</h3>
                             <div class='form-group mt-4'>
-                                
+
                                 <div class='col-sm-12'>
                                     $faq_image_fieldL
                                 </div>
