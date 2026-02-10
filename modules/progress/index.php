@@ -621,6 +621,17 @@ if (isset($display) and $display) {
             if ($element == 'points_game') {
                 if (isset($_GET['u'])) {
                     display_user_points_game_details($element_id, $_GET['u']);
+                } elseif (isset($_GET['progressall'])) {
+                    $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&$param_name=$element_id", "name" => $element_title);
+                    $pageName = "$langProgress $langsOfStudents";
+                    $action_bar = action_bar(array(
+                        array('title' => $langBack,
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;$param_name=$element_id",
+                            'icon' => 'fa-reply',
+                            'level' => 'primary')
+                    ));
+                    $tool_content .= $action_bar;
+                    display_users_points_game_progress($element_id);
                 } else {
                     display_activities($element, $element_id);
                 }

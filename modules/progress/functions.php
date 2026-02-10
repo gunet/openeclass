@@ -356,13 +356,22 @@ function display_activities($element, $id, $unit_id = 0) {
 
     if ($unit_id) {
         $link_id = "course=$course_code&amp;manage=1&amp;unit_id=$unit_id&amp;badge_id=$id";
+        $show_users = false;
     } else {
+        $show_users = true;
         if ($element == 'certificate') {
             $link_id = "course=$course_code&amp;certificate_id=$id";
         } elseif ($element == 'badge') {
             $link_id = "course=$course_code&amp;badge_id=$id";
         } else {
             $link_id = "course=$course_code&amp;points_game_id=$id";
+            if (!$is_editor) {
+                $pg_config = Database::get()->querySingle("SELECT config FROM points_game WHERE id = ?d", $id);
+                $config = json_decode($pg_config->config, TRUE);
+                if (empty($config['enable_leaderboard'])) {
+                    $show_users = false;
+                }
+            }
         }
     }
 
@@ -377,7 +386,7 @@ function display_activities($element, $id, $unit_id = 0) {
                     'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;progressall=true",
                     'icon' => 'fa-users',
                     'level' => 'primary-label',
-                    'show'  =>  $unit_id ? false : true)
+                    'show'  =>  $show_users)
             ),
             false
         );
@@ -3932,11 +3941,27 @@ function student_view_progress() {
 }
 
 /**
- * @brief display users points game progress (teacher view)
+ * @brief display users points game progress
  * @param type $points_game_id
  */
 function display_users_points_game_progress ($points_game_id) {
-    global $tool_content, $course_code, $course_id, $langNoUserList, $langSurnameName, $langID, $langProgress;
+    global $tool_content, $course_code, $course_id, $langNoUserList, $langSurnameName, $langID, $langProgress, $is_editor, $uid, $langAnonymous;
+
+    $anon = false;
+    if (!$is_editor) {
+        $pg_config = Database::get()->querySingle("SELECT config FROM points_game WHERE id = ?d", $points_game_id);
+        $config = json_decode($pg_config->config, TRUE);
+        $enable_leaderboard = !empty($config['enable_leaderboard']);
+        $anonymize_leaderboard  = !empty($config['anonymize_leaderboard']);
+        
+        if (!$enable_leaderboard) {
+            return;
+        }
+
+        if ($anonymize_leaderboard) {
+            $anon = true;
+        }
+    }
 
     $sql = Database::get()->queryArray("SELECT u.id, u.surname, u.givenname, COALESCE(upp.total_points, 0) AS total_points
                                         FROM course_user cu
@@ -3969,7 +3994,11 @@ function display_users_points_game_progress ($points_game_id) {
             if ($user_data->total_points > 0) {
                 $user_progress = PointsGame::getNextLevelInfo($user_data->id,$points_game_id);
                 if ($user_progress['current_points'] > 0) {
-                    $points_str = "<a href='index.php?course=$course_code&amp;points_game_id=$points_game_id&amp;u=$user_data->id'>".$user_progress['current_points']." pts</a>";
+                    if ($is_editor || $user_data->id == $uid) {
+                        $points_str = "<a href='index.php?course=$course_code&amp;points_game_id=$points_game_id&amp;u=$user_data->id'>".$user_progress['current_points']." pts</a>";
+                    } else {
+                        $points_str = $user_progress['current_points']." pts";
+                    }
                 } else {
                     $points_str = $user_progress['current_points']." pts";
                 }
@@ -3994,9 +4023,15 @@ function display_users_points_game_progress ($points_game_id) {
             }
 
 
+            if ($anon && $user_data->id != $uid) {
+                $user_info = $langAnonymous;
+            } else {
+                $user_info = display_user($user_data->id);
+            }
+
             $tool_content .= "<tr>
                 <td>". $cnt++ . "</td>
-                <td>" . display_user($user_data->id) ."</td>
+                <td>" . $user_info ."</td>
                 <td class='text-center'>".$info."</td></tr>";
         }
         $tool_content .= "</tbody></table></div></div>";
