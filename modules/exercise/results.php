@@ -399,7 +399,7 @@ if ($is_editor) {
                                 regradeCallback(itemsToRegrade.shift());
                             });
                         } else {
-                            window.location.replace('" . str_replace("'", "\\'", $_SERVER['REQUEST_URI']) . "');
+                            window.location.replace('{$urlAppend}modules/exercise/results.php?course=$course_code&exerciseId=$exerciseIdIndirect');
                         }
                 };
                 var gradeCallback = function (url) {
