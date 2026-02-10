@@ -74,6 +74,18 @@ if ($is_power_user or $is_admin or ($is_departmentmanage_user and $atleastone)) 
     $allow_clone = true;
 }
 
+$tenant = getCurrentTenant();
+
+if ($tenant) {
+    $tenantOptions = $tenant->options ? unserialize($tenant->options) : [];
+    $allow_clone = $allow_clone || getTenantOption(
+        $tenantOptions,
+        'allow_teacher_clone_course'
+    );
+} else {
+    $allow_clone = $allow_clone || get_config('allow_teacher_clone_course');
+}
+
 $toolName = $langCourseInfo;
 
 // if the course is `open courses` certified, disable visibility choice in form
@@ -278,7 +290,7 @@ if (isset($_POST['submit'])) {
         ['title' => $langCloneCourse,
             'url' => "clone_course.php?course=$course_code",
             'icon' => 'fa-archive',
-            'show' => get_config('allow_teacher_clone_course') || $allow_clone],
+            'show' => $allow_clone],
         ['title' => $langRefreshCourse,
             'url' => "refresh_course.php?course=$course_code",
             'icon' => 'fa-refresh'],

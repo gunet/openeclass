@@ -5280,6 +5280,7 @@ $langGlossaryUrl = 'URL ορισμού';
 $langGlossaryExpand = "Εμφάνιση ορισμών στις σελίδες του $langsOfCourse";
 $langGlossaryIndex = 'Αλφαβητικό ευρετήριο όρων';
 $langConfig = 'Ρυθμίσεις';
+$langTenantConfig = 'Γενικές Ρυθμίσεις Ενοίκου';
 $langGlossaryOverLimit = "Το πλήθος όρων του γλωσσαρίου υπερβαίνει το όριο (%s), ως εκ τούτου οι ορισμοί των όρων δεν θα εμφανίζονται στις σελίδες του $langsOfCourse.";
 $langNoGlossary = "Δεν υπάρχει γλωσσάριο";
 

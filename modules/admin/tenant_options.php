@@ -67,6 +67,9 @@ $contact_email = q(getTenantOption($tenantOptions, 'contact_email'));
 $platform_title = q(getTenantOption($tenantOptions, 'platform_title'));
 $platform_intro = q(getTenantOption($tenantOptions, 'platform_intro'));
 
+$allow_teacher_clone_course = getTenantOption($tenantOptions, 'allow_teacher_clone_course');
+$cbox_allow_teacher_clone_course = $allow_teacher_clone_course ? 'checked' : '';
+
 if (isset($_GET['delete_image'])) {
     global $webDir, $tenant, $tenantOptions;
 
@@ -91,17 +94,21 @@ if (isset($_POST['optionsSave'])) {
     $tenantInfo = [];
 
     $tenantInfo = upload_images($tenantInfo);
+    $tenantInfo['allow_teacher_clone_course'] = isset($_POST['allow_teacher_clone_course']) ? 1 : 0;
 
-    foreach ([
-        'contact_phone', 
-        'contact_address', 
-        'contact_email', 
-        'imageUpload', 
-        'imageUploadSmall', 
-        'faviconUpload', 
-        'platform_title', 
-        'platform_intro'
-    ] as $var) {
+    foreach (
+        [
+            'contact_phone',
+            'contact_address',
+            'contact_email',
+            'imageUpload',
+            'imageUploadSmall',
+            'faviconUpload',
+            'platform_title',
+            'platform_intro',
+            'allow_teacher_clone_course',
+        ] as $var
+    ) {
         if (isset($_POST[$var])) {
             $value = trim($_POST[$var]);
             if ($var == 'contact_email' and $value and !valid_email($value)) {
@@ -392,6 +399,24 @@ $tool_content .= action_bar([
         <input type='text' class='form-control' name='url' id='urlField' placeholder='https://eclass.example.com/' value='$tenantUrl'>
         $urlMessage
       </div>
+    </div>";
+
+$tool_content .= "
+    <div class='form-group mt-5'>
+        <div class='col-sm-12'>
+            <h4 class='mb-3'>$langTenantConfig</h4>
+
+            <div class='checkbox'>
+                <label class='label-container'>
+                    <input type='checkbox'
+                           name='allow_teacher_clone_course'
+                           value='1'
+                           $cbox_allow_teacher_clone_course>
+                    <span class='checkmark'></span>
+                    $lang_allow_teacher_clone_course
+                </label>
+            </div>
+        </div>
     </div>";
 
 $tool_content .= "

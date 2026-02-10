@@ -2336,6 +2336,7 @@ $langInsertEBook = "e-book";
 $langAddToCourseHome = "Display / Don't display in course home page";
 $langGlossaryExpand = 'Display glossary terms in course pages';
 $langConfig = 'Config settings';
+$langTenantConfig = 'Tenant Config settings';
 $langSections = 'Sections';
 $langJQSelectNum = 'Selected # from #';
 $langJQNoneSelected = 'Select';
