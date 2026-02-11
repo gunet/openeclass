@@ -2091,7 +2091,8 @@ $langExercisePreventCopyExplanation = 'Αποτροπή αντιγραφής κ�
 $langStricterExamRestriction = "Αυστηρός περιορισμός";
 $langExerciseWillBeCanceledInStrictMode = "Η εξέταση ακυρώνεται σε παράλληλες ενέργειες χρηστών όπως ανακατεύθυνση σε νέα σελίδα ή άνοιγμα νέου παραθύρου";
 $langExerciseNoCalcGradeMethod = "Κανονικός";
-$langExerciseCBCalcGradeMethod = "Με βαθμό βεβαιότητας";
+$langExerciseCBCalcGradeMethod = "Βαθμός βεβαιότητας";
+$langExerciseCBCalcGradeMethodLegend = "Κατά την εκτέλεση της άσκησης θα πρέπει να επιλεγεί ο βαθμός βεβαιότητας της απάντησης. Ισχύει μόνο για τις ερωτήσεις 'Πολλαπλής επιλογής' και 'Σωστό / Λάθος'";
 $langExerciseCalcGradeMethod = "Τρόπος Βαθμολόγησης";
 
 // admin.php

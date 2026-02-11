@@ -86,7 +86,10 @@ if (isset($_GET['reset_theme_options'])) {
 }
 if (isset($_GET['delete_image'])) {
         $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
-        $theme_options_styles = unserialize($theme_options->styles);
+        $theme_options_styles = unserialize($theme_options->styles, [
+            'allowed_classes' => ['stdClass'],
+            'max_depth' => 0,
+        ]);
         $logo_type = $_GET['delete_image'];
         unlink("$webDir/courses/theme_data/$theme_id/{$theme_options_styles[$logo_type]}");
         unset($theme_options_styles[$logo_type]);
@@ -221,8 +224,7 @@ if (isset($_POST['import'])) {
                 if ($invalidArchive) {
                     $archive->close();
                     @unlink("courses/theme_data/$file_name");
-                    Session::flash('message',$langUnwantedFiletype);
-                    Session::flash('alert-class', 'alert-danger');
+                    Session::Messages($langUnwantedFiletype, 'alert-danger');
                     redirect_to_home_page('modules/admin/theme_options.php');
                 }
                 $archive->extractTo('courses/theme_data/temp');
@@ -230,39 +232,34 @@ if (isset($_POST['import'])) {
                 $theme_options_file = "$webDir/courses/theme_data/temp/theme_options.txt";
                 if (!file_exists($theme_options_file)) {
                     removeDir("$webDir/courses/theme_data/temp");
-                    Session::flash('message', $langUnwantedFiletype);
-                    Session::flash('alert-class', 'alert-danger');
+                    Session::Messages($langUnwantedFiletype, 'alert-danger');
                     redirect_to_home_page('modules/admin/theme_options.php');
                 }
                 $base64_str = file_get_contents($theme_options_file);
                 unlink($theme_options_file);
-                $theme_options = unserialize(base64_decode($base64_str));
-                /*
-                It is suggested to define a set of allowed classes:
                 $theme_options = unserialize(base64_decode($base64_str), [
-                   'allowed_classes' => ['stdClass']
+                    'allowed_classes' => ['stdClass'],
+                    'max_depth' => 0,
                 ]);
-                */
                 if (!$theme_options || !isset($theme_options->name) || !isset($theme_options->styles) || !isset($theme_options->id)) {
+                    unset($theme_options);
                     removeDir("$webDir/courses/theme_data/temp");
-                    Session::flash('message', $langUnwantedFiletype);
-                    Session::flash('alert-class', 'alert-danger');
+                    Session::Messages($langUnwantedFiletype, 'alert-danger');
                     redirect_to_home_page('modules/admin/theme_options.php');
                 }
-                $new_theme_id = Database::get()->query("INSERT INTO theme_options (name, styles, version) VALUES(?s, ?s, 4)", $theme_options->name, $theme_options->styles)->lastInsertID;
+                $new_theme_id = Database::get()->query("INSERT INTO theme_options (name, styles, version)
+                    VALUES (?s, ?s, 4)", $theme_options->name, $theme_options->styles)->lastInsertID;
                 rename("$webDir/courses/theme_data/temp/".intval($theme_options->id), "$webDir/courses/theme_data/temp/$new_theme_id");
                 recurse_copy("$webDir/courses/theme_data/temp","$webDir/courses/theme_data");
                 removeDir("$webDir/courses/theme_data/temp");
-                Session::flash('message',$langThemeInstalled);
-                Session::flash('alert-class', 'alert-success');
+                Session::Messages($langThemeInstalled, 'alert-success');
             } else {
                 die("Error while unzipping file !");
             }
             $archive->close();
         }
     } else {
-        Session::flash('message',$langUnwantedFiletype);
-        Session::flash('alert-class', 'alert-danger');
+        Session::Messages($langUnwantedFiletype, 'alert-danger');
     }
     redirect_to_home_page('modules/admin/theme_options.php');
 }
@@ -370,7 +367,7 @@ if (isset($_POST['optionsSave'])) {
     // Save user theme customization setting
     if (isset($_POST['enable_user_theme_customization'])) {
         set_config('enable_user_theme_customization', 1);
-        
+
         // Save selected themes for users
         $selected_themes = array();
         if (isset($_POST['user_selectable_themes']) && is_array($_POST['user_selectable_themes'])) {
@@ -463,7 +460,6 @@ if (isset($_POST['optionsSave'])) {
                 }
             });
 
-            
             if($('#strechedImgOfFormId').is(':checked')){
                 $('.streched_repeaded_img_form_class').css('display','block');
             }else{
@@ -712,7 +708,7 @@ if (isset($_POST['optionsSave'])) {
                     $('.logo-container').removeClass('d-block').addClass('d-none');
                 }
             });
-            
+
             // Show/hide user selectable themes section based on checkbox
             $('#enable_user_theme_customization').change(function() {
                 if($(this).is(':checked')){
@@ -735,10 +731,10 @@ if (isset($_POST['optionsSave'])) {
         $theme_options_styles = unserialize($theme_options->styles);
     }
     initialize_settings();
-    
+
     // Get user theme customization setting
     $enable_user_theme_customization = get_config('enable_user_theme_customization', 0);
-    
+
     // Get selected themes for users
     $user_selectable_themes_str = get_config('user_selectable_themes', '');
     $user_selectable_themes = array();
@@ -746,7 +742,7 @@ if (isset($_POST['optionsSave'])) {
         $user_selectable_themes = array_map('intval', explode(',', $user_selectable_themes_str));
         $user_selectable_themes = array_filter($user_selectable_themes);
     }
-    
+
     // Build theme checkboxes HTML
     $theme_checkboxes_html = "";
     if (!empty($all_themes)) {
@@ -754,7 +750,7 @@ if (isset($_POST['optionsSave'])) {
             $theme_item_id = intval($theme_item->id);
             $theme_item_name = isset($theme_item->name) ? htmlspecialchars($theme_item->name, ENT_QUOTES, 'UTF-8') : '';
             $is_checked = in_array($theme_item_id, $user_selectable_themes) ? 'checked' : '';
-            
+
             if (!empty($theme_item_name)) {
                 $theme_checkboxes_html .= "
                                     <div class='col-md-6 col-lg-4 mb-3'>
@@ -1831,14 +1827,14 @@ $tool_content .= "
                                     <div class='radio mb-2'>
                                         <label>
                                             <input type='radio' name='PositionJumbotronText' value='0' ".((isset($theme_options_styles['PositionJumbotronText']) and $theme_options_styles['PositionJumbotronText'] == '0')? 'checked' : '').">
-                                            $langTopPositionJumbotronText  
+                                            $langTopPositionJumbotronText
                                         </label>
                                     </div>
 
                                     <div class='radio mb-2'>
                                         <label>
                                             <input type='radio' name='PositionJumbotronText' value='1' ".((isset($theme_options_styles['PositionJumbotronText']) and $theme_options_styles['PositionJumbotronText'] == '1')? 'checked' : '').">
-                                            $langCenterPositionJumbotronText 
+                                            $langCenterPositionJumbotronText
                                         </label>
                                     </div>
 
@@ -1902,7 +1898,7 @@ $tool_content .= "
                                     <figcaption class='figure-caption'>$langDisplayOptionsImg</figcaption>
                                 </figure>
                             </div>
-                        </div> 
+                        </div>
                     </fieldset>
                     <hr>
                     <div class='d-flex justify-content-between align-items-start flex-wrap gap-3'>
@@ -2746,13 +2742,13 @@ $tool_content .= "
                                 <div class='radio mb-2'>
                                     <label>
                                         <input type='radio' name='TypeImageForm' value='repeated' ".((isset($theme_options_styles['TypeImageForm']) && $theme_options_styles['TypeImageForm'] == 'repeated')? 'checked' : '').">
-                                        $langRepeatedImg 
+                                        $langRepeatedImg
                                     </label>
                                 </div>
                                 <div class='radio mb-2'>
                                     <label>
                                         <input type='radio' name='TypeImageForm' value='streched' ".((isset($theme_options_styles['TypeImageForm']) && $theme_options_styles['TypeImageForm'] == 'streched')? 'checked' : '').">
-                                        $langStretchedImg 
+                                        $langStretchedImg
                                     </label>
                                 </div>
                             </div>
@@ -3060,12 +3056,12 @@ $tool_content .= "
                                 <label for='bgHoveredListMenu' class='control-label-notes mb-2 me-2'>$langbgHoveredListMenu:</label>
                                 <input name='bgHoveredListMenu' type='text' class='form-control colorpicker' id='bgHoveredListMenu' value='$theme_options_styles[bgHoveredListMenu]'>
                             </div>
-                            
+
                             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                                 <label for='clBorderBottomListMenu' class='control-label-notes mb-2 me-2'>$langclBorderBottomListMenu:</label>
                                 <input name='clBorderBottomListMenu' type='text' class='form-control colorpicker' id='clBorderBottomListMenu' value='$theme_options_styles[clBorderBottomListMenu]'>
                             </div>
-                            
+
                             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                                 <label for='clListMenu' class='control-label-notes mb-2 me-2'>$langclListMenu:</label>
                                 <input name='clListMenu' type='text' class='form-control colorpicker' id='clListMenu' value='$theme_options_styles[clListMenu]'>
@@ -3136,7 +3132,7 @@ $tool_content .= "
                         <div>
                             <h3 class='theme_options_legend text-decoration-underline mt-4'>$langAboutFaqImageUpload</h3>
                             <div class='form-group mt-4'>
-                                
+
                                 <div class='col-sm-12'>
                                     $faq_image_fieldL
                                 </div>
@@ -3248,7 +3244,7 @@ $tool_content .= "
                                     <small class='ms-5 d-block mt-2'>$langEnableUserThemeCustomizationHelp</small>
                                 </div>
                             </div>
-                            
+
                             <!-- Theme Selection Section (shown when checkbox is enabled) -->
                             <div id='user_selectable_themes_section' class='form-group mt-4 ".($enable_user_theme_customization ? '' : 'd-none')."'>
                                 <h4 class='theme_options_legend text-decoration-underline mt-3 mb-3'>$langSelectThemesForUsers</h4>

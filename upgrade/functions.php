@@ -253,7 +253,10 @@ function installTheme($themesDir, $file_name) {
     } else {
         $base64_str = file_get_contents("$tempdir/theme_options.txt");
         unlink("$tempdir/theme_options.txt");
-        $theme_options = unserialize(base64_decode($base64_str));
+        $theme_options = unserialize(base64_decode($base64_str), [
+            'allowed_classes' => ['stdClass'],
+            'max_depth' => 0,
+        ]);
         $exists = Database::get()->querySingle('SELECT id FROM theme_options
             WHERE name = ?s', $theme_options->name);
         if (!$exists) {
@@ -3400,7 +3403,7 @@ function upgrade_to_4_2($tbl_options) : void {
 
     DBHelper::createForeignKey('attendance_users', 'attendance_id', 'attendance', 'id', DBHelper::FKRefOption_CASCADE);
     DBHelper::createForeignKey('attendance_users', 'uid', 'user', 'id', DBHelper::FKRefOption_CASCADE);
-  
+
     if (!DBHelper::fieldExists('lp_user_module_progress', 'progress_measure')) {
         Database::get()->query("ALTER TABLE lp_user_module_progress ADD `progress_measure` FLOAT DEFAULT NULL AFTER `session_time`");
     }
