@@ -11,7 +11,7 @@
 
                 bootbox.confirm({
                     closeButton: false,
-                    title: "<div class='icon-modal-default'><i class='fa-regular fa-trash-can fa-xl Accent-200-cl'></i></div><div class='modal-title-default text-center mb-0'>{{ js_escape(trans('langConfirmDelete')) }}</div>",
+                    title: "<div class='icon-modal-default'><i class='fa-regular fa-trash-can fa-xl Accent-200-cl'></i></div><h2 class='modal-title-default text-center mb-0'>{{ js_escape(trans('langConfirmDelete')) }}</h2>",
                     message: "<p class='text-center'>{{ js_escape(trans('langConfirmDelete')) }}</p>",
                     buttons: {
                         cancel: {

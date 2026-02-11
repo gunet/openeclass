@@ -154,7 +154,7 @@ if (!$conference_activity) {
         <div class='col-12'>
             <div class='col-md-6 col-12 d-flex justify-content-start align-items-center gap-2'>
                 <div>
-                    <input aria-label='$langTypeOutMessage' class='form-control mt-0' type='text' placeholder='$langTypeOutMessage' name='msg' size='80'>
+                    <input aria-label='$langTypeOutMessage' class='form-control mt-0' type='text' placeholder='$langTypeOutMessage' name='msg' size='80' autocomplete='off'>
                     <input type='hidden' name='chatLine'>
                 </div>
                 <div>
@@ -164,7 +164,7 @@ if (!$conference_activity) {
                 </div>
             </div>
             <div class='embed-responsive embed-responsive-4by3 chat-iframe margin-top-fat mt-3'>
-              <iframe title='$langFrameOpens' class='embed-responsive-item' id='iframe' src='$iframe_file' name='messageList'></iframe>
+              <iframe title='$langDialogBox' class='embed-responsive-item' id='iframe' src='$iframe_file' name='messageList'></iframe>
             </div>
         </div>
        </fieldset>

@@ -145,7 +145,7 @@
                     <div class="modal-header">
                         <div class='modal-title'>
                             <div class='icon-modal-default'><i class='fa-solid fa-cloud-arrow-up fa-xl Neutral-500-cl'></i></div>
-                            <div class='modal-title-default text-center mb-0'>{{ trans('langQuickNotesSide') }}</div>
+                            <h2 class='modal-title-default text-center mb-0'>{{ trans('langQuickNotesSide') }}</h2>
                         </div>
                     </div>
                     <div class="modal-body">

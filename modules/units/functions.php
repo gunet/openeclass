@@ -178,15 +178,19 @@ function handle_unit_info_edit() {
         $successmsg = $langCourseUnitModified;
     } else { // add new course unit
         $order = units_get_maxorder()+1;
+        $visible = 1;
+        if (isset($_REQUEST['divider'])) {
+            $visible = 2;
+        }
         $q = Database::get()->query("INSERT INTO course_units SET
                                   title = ?s,
                                   comments = ?s,
                                   start_week = ?s,
                                   finish_week = ?s,
-                                  visible = 1,
+                                  visible = ?d,
                                   assign_to_specific = ?d,
                                  `order` = ?d, course_id = ?d",
-            $title, $descr, $unitdurationfrom, $unitdurationto, $assign_to_specific, $order, $course_id);
+            $title, $descr, $unitdurationfrom, $unitdurationto, $visible, $assign_to_specific, $order, $course_id);
 
         $unit_id = $q->lastInsertID;
         // course unit assigned info (if any)
@@ -196,6 +200,7 @@ function handle_unit_info_edit() {
             Database::get()->query("UPDATE course SET view_units = 1 WHERE id = ?d", $course_id);
         }
         $successmsg = $langCourseUnitAdded;
+
         // tags
         if (isset($_POST['tags'])) {
             $moduleTag = new ModuleElement($unit_id);
@@ -214,7 +219,12 @@ function handle_unit_info_edit() {
 
     Session::flash('message',$successmsg);
     Session::flash('alert-class', 'alert-success');
-    redirect_to_home_page("modules/units/index.php?course=$course_code&id=$unit_id");
+    if (isset($_REQUEST['divider'])) {
+        redirect_to_home_page("modules/units/index.php?course=$course_code");
+    } else {
+        redirect_to_home_page("modules/units/index.php?course=$course_code&id=$unit_id");
+    }
+
 }
 
 
@@ -1565,9 +1575,9 @@ function show_poll($title, $comments, $resource_id, $poll_id, $visibility, $act_
 
     global $course_id, $course_code, $is_editor, $urlServer, $id,
            $uid, $langWasDeleted, $langResourceBelongsToUnitPrereq,
-           $m, $langQuestionnaire, $langWorkToUser, $langWorkAssignTo, $langWorkToGroup;
+           $langQuestionnaire, $langWorkToUser, $langWorkAssignTo, $langWorkToGroup;
 
-    $res_prereq_icon = '';
+    $res_prereq_icon = $assign_to_users_message = '';
 
     $title = q($title);
     if ($is_editor) {
@@ -1588,10 +1598,6 @@ function show_poll($title, $comments, $resource_id, $poll_id, $visibility, $act_
                     )";
         $poll = Database::get()->querySingle($query, $course_id, $poll_id, $uid);
     }
-    $status = $poll->active;
-    if (!$is_editor and !$status) {
-        return '';
-    }
     if (!$poll) { // check if it was deleted
         if (!$is_editor) {
             return '';
@@ -1600,7 +1606,6 @@ function show_poll($title, $comments, $resource_id, $poll_id, $visibility, $act_
             $polllink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
         }
     } else {
-        $assign_to_users_message = '';
         if ($is_editor) {
             if ($poll->assign_to_specific == 1) {
                 $assign_to_users_message = "<small class='help-block'>$langWorkAssignTo: $langWorkToUser</small>";
@@ -1621,7 +1626,8 @@ function show_poll($title, $comments, $resource_id, $poll_id, $visibility, $act_
     } else {
         $comment_box = '';
     }
-    $class_vis = ($status == 0 ) ? ' class="not_visible"' : ' ';
+    $class_vis = (!$poll or !$poll->active) ? ' class="not_visible"' : ' ';
+
     return "
         <div$class_vis data-id='$resource_id'>
           <div class='unitIcon' width='1'>$imagelink</div>

@@ -21,7 +21,7 @@
                         }
                     },
                 onAfterViewLoad: function(view) {
-                    $("#current-month").text(this.getTitle());
+                    $("#current-month").text(this.getTitle()).attr("aria-label", this.getTitle());
                     $(".btn-group button").removeClass("active");
                     $("button[data-calendar-view=\'" + view + "\']").addClass("active");
                 }
@@ -84,7 +84,7 @@
                 }
                 bootbox.confirm({
                     closeButton: false,
-                    title: "<div class='icon-modal-default'>"+$actionIcon+"</div>"+"<div class='modal-title-default text-center mb-0'>"+"{{ js_escape(trans('langEmailUnsubscribe')) }}"+"</div>",
+                    title: "<div class='icon-modal-default'>"+$actionIcon+"</div>"+"<h2 class='modal-title-default text-center mb-0'>"+"{{ js_escape(trans('langEmailUnsubscribe')) }}"+"</h2>",
                     message: "<p class='text-center'>"+info_message+"</p>",
                     buttons: {
                         confirm: {
@@ -340,44 +340,45 @@
                             </div>
                         @endif
 
-
                         @if($course_info->view_type == 'units')
                             <div class='card panelCard card-transparent px-0 py-0 mt-4 border-0 mb-5'>
-                                <div class='card-header card-header-default border-0 d-flex justify-content-between align-items-center px-0 py-0 mb-3'>
-                                    <h3>
-                                        <div class='d-flex gap-2'>
-                                            {{ trans('langCourseUnits') }}
-                                        </div>
-                                    </h3>
-
-                                    <div class='d-flex gap-2 flex-wrap'>
-                                        <a id='cu-help-btn' class='helpAdminBtn' href='{{ $urlServer }}modules/help/help.php?language={{$language}}&topic=course_units' class='add-unit-btn d-flex align-items-center' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langHelp') }}" aria-label="{{ trans('langHelp') }}" role="button">
-                                            <i class="fa-solid fa-circle-question"></i>
-                                        </a>
-                                        @if($is_editor)
+                                @if ($is_editor)
+                                    <div class='card-header card-header-default border-0 d-flex justify-content-between align-items-center px-0 py-0 mb-3'>
+                                        <h3>
+                                            <div class='d-flex gap-2'>
+                                                {{ trans('langCourseUnits') }}
+                                            </div>
+                                        </h3>
+                                        <div class='d-flex gap-2 flex-wrap'>
+                                            <a id='cu-help-btn' class='helpAdminBtn' href='{{ $urlServer }}modules/help/help.php?language={{$language}}&topic=course_units' class='add-unit-btn d-flex align-items-center' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langHelp') }}" aria-label="{{ trans('langHelp') }}" role="button">
+                                                <i class="fa-solid fa-circle-question"></i>
+                                            </a>
                                             <button class="btn submitAdminBtn" type="button" id="dropdownToolsUnit" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-expanded="false" aria-label="{{ trans('langCourseInfo') }}" role="button">
                                                 <i class="fa-solid fa-ellipsis-vertical"></i>
                                             </button>
-
                                             <div class="m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-border" aria-labelledby="dropdownToolsUnit" style='z-index:1;'>
                                                 <ul class="list-group list-group-flush">
-                                                    @if ($is_editor)
+                                                    <li>
+                                                        <a href='{{ $urlServer }}modules/units/info.php?course={{ $course_code }}' class='list-group-item d-flex justify-content-start align-items-start gap-2 py-3'>
+                                                            <i class='fa-solid fa-plus settings-icon'></i>
+                                                            {{ trans('langAddUnit') }}
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href='{{ $urlServer }}modules/units/info.php?course={{ $course_code }}&divider=1' class='list-group-item d-flex justify-content-start align-items-start gap-2 py-3'>
+                                                            <i class='fa-solid fa-plus settings-icon'></i>
+                                                            {{ trans('langAdd') }} {{ trans('langInsertDivider') }}
+                                                        </a>
+                                                    </li>
+                                                    @if($course_info->flipped_flag == 2)
                                                         <li>
-                                                            <a href='{{ $urlServer }}modules/units/info.php?course={{ $course_code }}' class='list-group-item d-flex justify-content-start align-items-start gap-2 py-3'>
-                                                                <i class='fa-solid fa-plus settings-icon'></i>
-                                                                {{ trans('langAddUnit') }}
+                                                            <a href='{{ $urlServer }}modules/create_course/edit_flipped_classroom.php?course={{ $course_code }}&fromFlipped=1' class='list-group-item d-flex justify-content-start align-items-start gap-2 py-3'>
+                                                                <i class='fa-solid fa-pen-to-square settings-icon'></i>
+                                                                {{ trans('langFlippedEdit') }}
                                                             </a>
                                                         </li>
-                                                        @if($course_info->flipped_flag == 2)
-                                                            <li>
-                                                                <a href='{{ $urlServer }}modules/create_course/edit_flipped_classroom.php?course={{ $course_code }}&fromFlipped=1' class='list-group-item d-flex justify-content-start align-items-start gap-2 py-3'>
-                                                                    <i class='fa-solid fa-pen-to-square settings-icon'></i>
-                                                                    {{ trans('langFlippedEdit') }}
-                                                                </a>
-                                                            </li>
-                                                        @endif
                                                     @endif
-                                                    @if($total_cunits > 0 and $is_editor)
+                                                    @if($total_cunits > 0)
                                                         <li>
                                                             <a href='{{ $urlServer }}modules/course_home/course_home.php?course={{ $course_code }}&viewUnit=0' class='list-group-item d-flex justify-content-start align-items-start gap-2 py-3'>
                                                                 <i class="fa-solid fa-table-cells-large settings-icon"></i>
@@ -399,15 +400,14 @@
                                                     @endif
                                                 </ul>
                                             </div>
-                                        @endif
+                                        </div>
                                     </div>
-                                </div>
+                                @endif
                                 <div class='card-body card-body-default px-0 pt-0' id='boxlistSort'>
                                     {!! $cunits_content !!}
                                 </div>
                             </div>
                         @endif
-
 
                         @if($course_info->view_type == 'activity')
                             @if($is_editor)
@@ -633,19 +633,19 @@
                             <div class='d-flex justify-content-start align-items-center flex-wrap px-0 py-3'>
                                 <div class='d-flex align-items-center px-2 py-1'>
                                     <span class='event event-important'></span>
-                                    <span class='agenda-comment'>{{ trans('langAgendaDueDay') }}</span>
+                                    <span class='agenda-comment' aria-label="{{ trans('langAgendaDueDay') }}">{{ trans('langAgendaDueDay') }}</span>
                                 </div>
                                 <div class='d-flex align-items-center px-2 py-1'>
                                     <span class='event event-info'></span>
-                                    <span class='agenda-comment'>{{ trans('langAgendaCourseEvent') }}</span>
+                                    <span class='agenda-comment' aria-label="{{ trans('langAgendaCourseEvent') }}">{{ trans('langAgendaCourseEvent') }}</span>
                                 </div>
                                 <div class='d-flex align-items-center px-2 py-1'>
                                     <span class='event event-success'></span>
-                                    <span class='agenda-comment'>{{ trans('langAgendaSystemEvent') }}</span>
+                                    <span class='agenda-comment' aria-label="{{ trans('langAgendaSystemEvent') }}">{{ trans('langAgendaSystemEvent') }}</span>
                                 </div>
                                 <div class='d-flex align-items-center px-2 py-1'>
                                     <span class='event event-special'></span>
-                                    <span class='agenda-comment'>{{ trans('langAgendaPersonalEvent') }}</span>
+                                    <span class='agenda-comment' aria-label="{{ trans('langAgendaPersonalEvent') }}">{{ trans('langAgendaPersonalEvent') }}</span>
                                 </div>
                             </div>
                         </div>

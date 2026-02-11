@@ -875,12 +875,8 @@ function user_app_exists($login) {
  * @return type
  */
 function html2text($string) {
-    //$trans_tbl = get_html_translation_table(HTML_ENTITIES);
-    //$trans_tbl = array_flip($trans_tbl);
-    $string = html_entity_decode(strip_tags($string));
-    $text = preg_replace('/<(div|p|pre|br)[^>]*>/i', "\n", $string);
-    return canonicalize_whitespace(strip_tags($text));
-    // return strtr (strip_tags($string), $trans_tbl);
+    $text = preg_replace("/<(\/div|\/p|\/pre|br)[^>]*>\s*\n?/i", "\n", $string);
+    return html_entity_decode(strip_tags($text));
 }
 
 
@@ -1536,20 +1532,20 @@ function course_access_icon($visibility) {
 
     switch ($visibility) {
         case COURSE_OPEN: {
-            $access_icon = "<span class='fa fa-lock-open fa-lg fa-fw' data-bs-toggle='tooltip' data-bs-placement='top' title='$langTypeOpen'></span>";
+            $access_icon = "<span class='fa fa-lock-open fa-lg fa-fw' data-bs-toggle='tooltip' data-bs-placement='top' title='$langTypeOpen' aria-label='$langTypeOpen'></span>";
             break;
         }
         case COURSE_REGISTRATION: {
             $access_icon = "<div class='d-inline-flex align-items-center'><span class='fa fa-lock fa-lg fa-fw access' data-bs-toggle='tooltip' data-bs-placement='top' title='$langTypeRegistration'></span>
-            <span class='fa fa-pencil text-danger fa-custom-lock mt-0' data-bs-toggle='tooltip' data-bs-placement='top' title='$langTypeRegistration' style='margin-left:-5px;'></span></div>";
+            <span class='fa fa-pencil text-danger fa-custom-lock mt-0' data-bs-toggle='tooltip' data-bs-placement='top' title='$langTypeRegistration' aria-label='$langTypeRegistration' style='margin-left:-5px;'></span></div>";
             break;
         }
         case COURSE_CLOSED: {
-            $access_icon = "<span class='fa fa-lock fa-lg fa-fw fa-access' data-bs-toggle='tooltip' data-bs-placement='top' title='$langTypeClosed'></span>";
+            $access_icon = "<span class='fa fa-lock fa-lg fa-fw fa-access' data-bs-toggle='tooltip' data-bs-placement='top' title='$langTypeClosed' aria-label='$langTypeClosed'></span>";
             break;
         }
         case COURSE_INACTIVE: {
-            $access_icon = "<span class='fa fa-ban fa-lg fa-fw' data-bs-toggle='tooltip' data-bs-placement='top' title='$langTypeInactive'></span>";
+            $access_icon = "<span class='fa fa-ban fa-lg fa-fw' data-bs-toggle='tooltip' data-bs-placement='top' title='$langTypeInactive' aria-label='$langTypeInactive'></span>";
             break;
         }
     }
@@ -1774,7 +1770,7 @@ function findUserVisibleUnits($uid, $all_units, $course_id = null) {
                                                           INNER JOIN user_badge ub ON (b.id = ub.badge)
                                                           WHERE ub.user = ?d
                                                           AND cu.course_id = ?d
-                                                          AND cu.visible = 1
+                                                          AND (cu.visible = 1 OR cu.visible = 2)
                                                           AND cu.public = 1
                                                           AND cu.order >= 0", $uid, $course_id);
     if ( isset($userInBadges) and $userInBadges ) {
@@ -2881,7 +2877,7 @@ function copy_resized_image($source_file, $type, $maxwidth, $maxheight, $target_
 }
 
 // Produce HTML source for an icon
-function icon($name, $title = null, $link = null, $link_attrs = '', $with_title = false, $sr_only = false) {
+function icon($name, $title = null, $link = null, $link_attrs = '', $with_title = false, $sr_only = false, $pressed = false) {
 
     if (isset($title)) {
         $title = q($title);
@@ -2895,7 +2891,7 @@ function icon($name, $title = null, $link = null, $link_attrs = '', $with_title 
         $img = "<span class='fa $name' $extra></span>";
     }
     if (isset($link)) {
-        return "<a href='$link'$link_attrs aria-label='$title' role='button'>$img</a>";
+        return "<a href='$link'$link_attrs aria-label='$title' aria-pressed='$pressed' role='button'>$img</a>";
     } else {
         return $img;
     }
@@ -2910,7 +2906,7 @@ function icon($name, $title = null, $link = null, $link_attrs = '', $with_title 
  */
 
 function profile_image($user_id, $size, $class=null) {
-    global $urlServer, $themeimg, $uid, $course_id, $is_editor, $langUser;
+    global $urlServer, $themeimg, $uid, $course_id, $is_editor, $langProfileImage;
 
     if (isset($_SESSION['profile_image_cache_buster'])) {
         $suffix = '?v=' . $_SESSION['profile_image_cache_buster'];
@@ -2946,7 +2942,7 @@ function profile_image($user_id, $size, $class=null) {
     if (!$imageurl) {
         $imageurl = "$themeimg/default_$size.png";
     }
-    return "<img src='$imageurl$suffix' $class_attr alt='$langUser:$username' $size_width>";
+    return "<img src='$imageurl$suffix' $class_attr alt='$langProfileImage:$username' $size_width>";
 }
 
 /**
@@ -3451,11 +3447,11 @@ function copyright_info($id, $noImg = 1, $type = 'course'): string
             } else {
                 $link_suffix = '';
             }
-            $link = "<a href='" . $license[$lic]['link'] . "$link_suffix' target='_blank' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title='" . q($license[$lic]['title']) . "' aria-label='$langOpenNewTab'>
+            $link = "<a href='" . $license[$lic]['link'] . "$link_suffix' target='_blank' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title='" . q($license[$lic]['title']) . "' aria-label='" . q($license[$lic]['title']) . "'>
                         <span class='" . $license[$lic]['image'] . "'></span>
                     </a>";
         } else if ($lic == 10) {
-            $link = "<span data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title='" . q($license[$lic]['title']) . "' class='" . $license[$lic]['image'] . "'></span>";
+            $link = "<span data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title='" . q($license[$lic]['title']) . "' class='" . $license[$lic]['image'] . "' aria-label='" . q($license[$lic]['title']) . "'></span>";
         }
     }
     return $link;
@@ -3953,7 +3949,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
             $titleHeader = (!empty($pageName) ? q($pageName) : $toolName);
             if(!empty($titleHeader)) {
                 return "<div class='col-12 d-md-flex justify-content-md-between align-items-lg-start my-3'>
-                            <div class='col-lg-5 col-md-6 col-12'><div class='action-bar-title mb-0'>$titleHeader</div></div>
+                            <div class='col-lg-5 col-md-6 col-12'><h2 class='action-bar-title mb-0'>$titleHeader</h2></div>
                             <div class='col-lg-7 col-md-6 col-12 action_bar d-flex justify-content-md-end justify-content-start align-items-start px-0 mt-md-0 mt-4'>
                                 <div class='margin-top-thin margin-bottom-fat hidden-print w-100'>
                                     <div class='ButtonsContent d-flex justify-content-end align-items-center flex-wrap gap-2'>
@@ -3980,7 +3976,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
         } else {
             $titleHeader = (!empty($pageName) ? q($pageName) : '');
             return "<div class='col-12 d-md-flex justify-content-md-between align-items-lg-start my-4'>
-                        <div class='col-lg-5 col-md-6 col-12'><div class='action-bar-title mb-0'>$titleHeader</div></div>
+                        <div class='col-lg-5 col-md-6 col-12'><h2 class='action-bar-title mb-0'>$titleHeader</h2></div>
                         <div class='col-lg-7 col-md-6 col-12 action_bar d-flex justify-content-md-end justify-content-start align-items-start px-0 mt-md-0 mt-4'>
                             <div class='margin-top-thin margin-bottom-fat hidden-print w-100'>
                                 <div class='ButtonsContent d-flex justify-content-end align-items-center flex-wrap gap-2'>

@@ -61,9 +61,9 @@
                                                     <div class="card panelCard card-default px-lg-4 py-lg-3 h-100">
                                                         <div class="card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap">
 
-                                                                <a class='ViewGroup TextBold' href='{{ $base_url."&id=" . $glossary_term->id }}'>
+                                                                <h3><a class='ViewGroup TextBold' href='{{ $base_url."&id=" . $glossary_term->id }}'>
                                                                     {{ $glossary_term->term }}
-                                                                </a>
+                                                                </a></h3>
 
                                                             @if($is_editor)
                                                                 <div>
@@ -106,7 +106,7 @@
                                                                 <p class='mb-0 TextBold'>URL</p>
                                                                 <p class='small-text'>
                                                                     @if ($glossary_term->url)
-                                                                        <a href='{{ $glossary_term->url }}' target='_black'>
+                                                                        <a class="text-decoration-underline" href='{{ $glossary_term->url }}' target='_black'>
                                                                             {{ $glossary_term->url }}
                                                                         </a>
                                                                     @else

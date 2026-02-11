@@ -24,11 +24,14 @@ define('QTYPE_MULTIPLE', 3);
 define('QTYPE_LABEL', 4);
 define('QTYPE_SCALE', 5);
 define('QTYPE_TABLE', 6);
+define('QTYPE_DATETIME', 7);
+define('QTYPE_SHORT', 8);
+define('QTYPE_FILE', 9);
 
 function validate_qtype($qtype)
 {
     $qtype = intval($qtype);
-    if (in_array($qtype, array(QTYPE_SINGLE, QTYPE_MULTIPLE, QTYPE_FILL, QTYPE_LABEL, QTYPE_SCALE, QTYPE_TABLE))) {
+    if (in_array($qtype, array(QTYPE_SINGLE, QTYPE_MULTIPLE, QTYPE_FILL, QTYPE_LABEL, QTYPE_SCALE, QTYPE_TABLE, QTYPE_DATETIME, QTYPE_SHORT, QTYPE_FILE))) {
         return $qtype;
     } else {
         return QTYPE_LABEL;
@@ -273,4 +276,54 @@ function createattls($pid) {
     Database::get()->query("INSERT INTO poll_question
         (pid, question_text, qtype, q_position, q_scale)
         VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $question20, 5, 20, 5);
+}
+
+/**
+ * @brief create course evaluation questions
+ * @param type $pid
+ */
+function createEvaluationCourse($pid) {
+    global $qCourseEvaluation_1, $qCourseEvaluation_2, $qCourseEvaluation_3, 
+           $qCourseEvaluation_4, $qCourseEvaluation_5, $lang_answer_scale_evaluation;
+
+    Database::get()->query("INSERT INTO poll_question
+            (pid, question_text, qtype, q_position, q_scale, answer_scale, `page`)
+            VALUES (?d, ?s, ?d, ?d, ?d, ?s, ?d)", $pid, $qCourseEvaluation_1, 5, 1, 5, $lang_answer_scale_evaluation, 1);
+
+    Database::get()->query("INSERT INTO poll_question
+        (pid, question_text, qtype, q_position, q_scale, answer_scale, `page`)
+        VALUES (?d, ?s, ?d, ?d, ?d, ?s, ?d)", $pid, $qCourseEvaluation_2, 5, 2, 5, $lang_answer_scale_evaluation, 1);
+
+    Database::get()->query("INSERT INTO poll_question
+        (pid, question_text, qtype, q_position, q_scale, answer_scale, `page`)
+        VALUES (?d, ?s, ?d, ?d, ?d, ?s, ?d)", $pid, $qCourseEvaluation_3, 5, 3, 5, $lang_answer_scale_evaluation, 1);
+
+    Database::get()->query("INSERT INTO poll_question
+        (pid, question_text, qtype, q_position, q_scale, answer_scale, `page`)
+        VALUES (?d, ?s, ?d, ?d, ?d, ?s, ?d)", $pid, $qCourseEvaluation_4, 5, 4, 5, $lang_answer_scale_evaluation, 1);
+
+    Database::get()->query("INSERT INTO poll_question
+        (pid, question_text, qtype, q_position, q_scale, answer_scale, `page`)
+        VALUES (?d, ?s, ?d, ?d, ?d, ?s, ?d)", $pid, $qCourseEvaluation_5, 5, 5, 5, $lang_answer_scale_evaluation, 1);
+
+}
+
+/**
+ * @brief Check if the poll has grade
+ * @param type $pid
+ */
+function pollHasGrade($pid) {
+    $isEnabledGrade = false;
+    $opt_poll = Database::get()->querySingle("SELECT `options` FROM poll WHERE pid = ?d", $pid)->options;
+    if (!is_null($opt_poll)) {
+        $opt_res = unserialize($opt_poll);
+        foreach ($opt_res as $op) {
+            foreach ($op as $key => $val) {
+                if ($key === 'grade' && $val !== '') {
+                    $isEnabledGrade = true;
+                }
+            }
+        }
+    }
+    return $isEnabledGrade;
 }

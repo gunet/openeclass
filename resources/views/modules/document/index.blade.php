@@ -359,7 +359,7 @@
                                         </div>
                                         <div>
                                             @if ($curDirName)
-                                                <a href='{{$parentLink}}' type='button' class='btn submitAdminBtn'>
+                                                <a href='{{$parentLink}}' type='button' class='btn submitAdminBtn' aria-label="{{ trans('langMoveToPrevFolder') }}">
                                                     <span class='fa fa-level-up'></span><span class='hidden-xs TextBold text-nowrap'>{{ trans('langUp') }}</span>
                                                 </a>
                                             @endif
@@ -450,15 +450,15 @@
                                                     <div class='d-flex justify-content-start align-items-start gap-3'>
                                                         @if($file->visible == 1)
                                                             @if ($file->is_dir)
-                                                                <span class='visibleFile file-icon'>{!! icon('fa-regular fa-folder-open', trans('langDirectory')) !!} </span>
+                                                                <span class='visibleFile file-icon' aria-label="{{ trans('langDirectory') }}">{!! icon('fa-regular fa-folder-open', trans('langDirectory')) !!} </span>
                                                             @else
-                                                                <span class='visibleFile file-icon'>{!! icon(choose_image('.' . $file->format), trans('langFileName') . " " . $file->format) !!} </span>
+                                                                <span class='visibleFile file-icon' aria-label="{{ trans('langFileName') }}">{!! icon(choose_image('.' . $file->format), trans('langFileName') . " " . $file->format) !!} </span>
                                                             @endif
                                                         @else
                                                             @if ($file->is_dir)
-                                                                <span class='invisibleFile file-icon'>{!! icon('fa-regular fa-folder-open', trans('langDirectory')) !!} </span>
+                                                                <span class='invisibleFile file-icon' aria-label="{{ trans('langDirectory') }}">{!! icon('fa-regular fa-folder-open', trans('langDirectory')) !!} </span>
                                                             @else
-                                                                <span class='invisibleFile file-icon'>{!! icon(choose_image('.' . $file->format), trans('langFileName') . " " . $file->format) !!} </span>
+                                                                <span class='invisibleFile file-icon' aria-label="{{ trans('langFileName') }}">{!! icon(choose_image('.' . $file->format), trans('langFileName') . " " . $file->format) !!} </span>
                                                         @endif
                                                         @endif
 
