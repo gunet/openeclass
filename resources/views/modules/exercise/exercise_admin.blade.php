@@ -108,12 +108,18 @@
                                         </div>
 
                                         <div class='row form-group mt-4'>
-                                            <label for='exerciseCalcGradeMethod' class='col-12 control-label-notes mb-1'>{{ trans('langExerciseCalcGradeMethod') }}</label>
+                                            <label for='exerciseRangeId' class='col-12 control-label-notes mb-1'>
+                                                {{ trans('langExerciseCBCalcGradeMethod') }}
+                                                <span class='fa-solid fa-circle-info ps-1' data-bs-toggle='tooltip' data-bs-placement='top' title='{{ trans('langExerciseCBCalcGradeMethodLegend') }}' style='margin-bottom: 10px;'></span>
+                                            </label>
                                             <div class='col-12'>
-                                                <select name='exerciseCalcGradeMethod' class='form-select'>
-                                                    <option value='1' @if ($exerciseCalcGradeMethod == CALC_GRADE_METHOD_STANDARD) selected @endif>{{ trans('langExerciseNoCalcGradeMethod') }}</option>
-                                                    <option value='2'  @if ($exerciseCalcGradeMethod == CALC_GRADE_METHOD_CERTAINTY_BASED) selected @endif>{{ trans('langExerciseCBCalcGradeMethod') }}</option>
-                                                </select>
+                                                <div class='checkbox'>
+                                                    <label class='label-container' aria-label='{{ trans('langSelect') }}'>
+                                                     <input type="checkbox" name="exerciseCalcGradeMethod" @if ($exerciseCalcGradeMethod == CALC_GRADE_METHOD_CERTAINTY_BASED) checked @endif>
+                                                        <span class='checkmark'></span>
+                                                        {{ trans('langActivate') }}
+                                                    </label>
+                                                </div>
                                             </div>
                                         </div>
 
