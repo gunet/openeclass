@@ -1182,7 +1182,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         // Add subquestion to the specific predefined answer
         if (!isset($_GET['subQOn']) && $question->qtype == QTYPE_SINGLE) {
         $subQuestionChecked = (($question->has_sub_question == 1) ? 'checked' : '');
-        $tool_content .= "<div class='form-group mt-4'>
+        $tool_content .= "<div class='input-group mt-4'>
                             <div class='checkbox'>
                                 <label class='label-container' aria-label='$langSelect'>
                                     <input type='checkbox' name='add_subquestion' $subQuestionChecked>

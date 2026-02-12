@@ -1417,7 +1417,8 @@ function submitPoll() {
                                             INNER JOIN poll_user_record ON poll_user_record.id=poll_answer_record.poll_user_record_id
                                             WHERE poll_answer_record.qid = ?d
                                             AND poll_user_record.uid = ?d
-                                            AND poll_user_record.pid = ?d", $dataFile['question_id'], $user, $dataFile['poll_id']);
+                                            AND poll_user_record.pid = ?d
+                                            AND poll_user_record.session_id = ?d", $dataFile['question_id'], $user, $dataFile['poll_id'], $s_id);
                 }
             }
             unset($_SESSION['user_removed_file']);
@@ -1733,9 +1734,11 @@ function update_submission($pid) {
 function poll_upload_file($pid, $form_link, $qtype, $pqid, $currentUser) {
     global $tool_content, $head_content, $course_code, $urlAppend, $langPleaseWait, 
            $language, $langFileName, $langDelete, $langConfirmDelete, $urlServer, 
-           $uid, $webDir;
+           $uid, $webDir, $langInfoPollUploadedFile;
 
     $token = $_SESSION['csrf_token'];
+    $is_onBehalfOfUser_mode = isset($_GET['onBehalfOfUser']) ? 1 : 0;
+    $sessionID = $_GET['session'] ?? 0;
 
     $del_file = '';
     $filename = '';
@@ -1746,15 +1749,36 @@ function poll_upload_file($pid, $form_link, $qtype, $pqid, $currentUser) {
         $filepath = $arrFile['filepath'];
     }
 
-    $is_onBehalfOfUser_mode = isset($_GET['onBehalfOfUser']) ? 1 : 0;
-
-    if (!empty($filename)) {
+    if (!empty($filename) && file_exists("$webDir/courses/$course_code/poll_$pid/$currentUser/$pqid$filepath")) {
         $del_file .= "
-        <div class='d-flex align-items-center gap-2 mb-4'>
+        <div class='d-flex align-items-center gap-2 mb-1'>
             <p id='fileName_{$pqid}' class='TextBold'>$langFileName: <a target='_blank' href='{$urlServer}courses/$course_code/poll_$pid/$currentUser/$pqid$filepath'>$filename</a></p>
             <a id='del_file_{$pqid}' class='btn deleteAdminBtn' data-bs-toggle='tooltip' data-bs-placement='top' title='$langDelete' style='width: 25px; height: 25px;'><i class='fa-solid fa-trash'></i></a>
         </div>
+        <div id='info_uploaded_file_{$pqid}' class='mb-4'><p class='text-warning'>$langInfoPollUploadedFile</p></div>
         ";
+    } else {
+        // If the user has uploaded a file and the user has canceled the poll, 
+        // remove the uploaded file for the current question.
+        $folderPath = "$webDir/courses/$course_code/poll_$pid/$currentUser/$pqid";
+        if (is_dir($folderPath)) {
+            $files = scandir($folderPath);
+            foreach ($files as $file) {
+                if ($file === '.' || $file === '..') continue;
+                $fileNPath = $folderPath . DIRECTORY_SEPARATOR . $file;
+                // Delete files
+                if (is_file($fileNPath)) {
+                    unlink($fileNPath);
+                    unset($_SESSION['data_answers'][$pqid]);
+                    Database::get()->query("DELETE poll_answer_record FROM poll_answer_record
+                                            INNER JOIN poll_user_record ON poll_user_record.id=poll_answer_record.poll_user_record_id
+                                            WHERE poll_answer_record.qid = ?d
+                                            AND poll_user_record.uid = ?d
+                                            AND poll_user_record.pid = ?d
+                                            AND poll_user_record.session_id = ?d", $pqid, $currentUser, $pid, $sessionID);
+                }
+            }
+        }
     }
 
     $head_content .= "<link href='{$urlAppend}js/bundle/uppy.min.css' rel='stylesheet'>";
@@ -1857,6 +1881,7 @@ function poll_upload_file($pid, $form_link, $qtype, $pqid, $currentUser) {
                         success: function(response) {
                             $('#fileName_{$pqid}').remove();
                             $('#del_file_{$pqid}').remove();
+                            $('#info_uploaded_file_{$pqid}').remove();
                         },
                     });
                 }
