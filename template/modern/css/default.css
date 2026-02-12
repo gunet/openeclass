@@ -6014,6 +6014,7 @@ th.grade-col a{
 #unitResources_3 .unit-divider {
   background-color: #000;
   height: 1px;
+  margin-bottom: 30px;
 }
 
 #unitResources .fileURL,
@@ -6244,3 +6245,45 @@ th.grade-col a{
 .body-learningPath {
  padding: 20px !important;
 }
+
+/****** exercise dont delete ******/
+/*.question-container span.fa-regular {*/
+/*    font-size: 18px;*/
+/*}*/
+
+/*.correct_div {*/
+/*    border-left: 5px solid #28a745;*/
+/*}*/
+
+/*.correct_answer {*/
+/*    background-color: #28a74515!important;*/
+/*    border-radius: 5px;*/
+/*}*/
+
+/*.wrong_div {*/
+/*    border-left: 5px solid #dc3545;*/
+/*}*/
+
+/*.wrong_answer {*/
+/*    background-color: #dc354515!important;*/
+/*    border-radius: 5px;*/
+/*}*/
+/*.partial_div {*/
+/*    border-left: 5px solid #ffc107;*/
+/*}*/
+
+/*.partial_answer {*/
+/*    background-color: #ffc10720;*/
+/*}*/
+/*.questionName p {*/
+/*    font-size: 16px;*/
+/*}*/
+/*.questionDescription p {*/
+/*    color: #6c757d;*/
+/*    font-size: 14px;*/
+/*}*/
+
+/*.selected {*/
+/*    box-shadow: 0 8px 6px -1px rgba(0, 0, 0, 0.1), 4px 2px 4px -2px rgba(0, 0, 0, 0.06);*/
+/*    transition: transform 0.2s ease;*/
+/*}*/

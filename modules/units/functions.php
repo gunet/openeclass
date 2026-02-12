@@ -764,6 +764,7 @@ function show_resource($info) {
         case 'doc':
             $html .= show_doc($info->title, $info->comments, $info->id, $info->res_id, $info->activity_title);
             break;
+        case 'dvdr':
         case 'text':
             $html .= show_text($info->comments, $info->id, $info->visible, $info->activity_title);
             break;
