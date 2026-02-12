@@ -1342,7 +1342,9 @@ class CourseXMLElement extends SimpleXMLElement {
                                       FROM course_units
                                      WHERE visible > 0 AND course_id = ?d", function($unit) use (&$data, &$unitsCount) {
             $data['course_unit_title'][$unitsCount] = $unit->title;
-            $data['course_unit_description'][$unitsCount] = strip_tags($unit->comments);
+            if (!is_null($unit->comments)) {
+                $data['course_unit_description'][$unitsCount] = strip_tags($unit->comments);
+            }
             $unitsCount++; // also serves as array index, starting from 0
         }, $courseId);
         $data['course_numberOfUnits'] = $unitsCount;

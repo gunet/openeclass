@@ -492,7 +492,7 @@ if ($is_editor) {
     warnCourseInvalidDepartment(true);
 }
 
-if ($is_editor or $is_course_reviewer) {
+if ($is_editor or $is_course_reviewer) { // teacher or course reviewer
     $data['last_id'] = $last_id = Database::get()->querySingle("SELECT id FROM course_units
                                                    WHERE course_id = ?d AND `order` >= 0
                                                    ORDER BY `order` DESC LIMIT 1", $course_id);
@@ -500,8 +500,8 @@ if ($is_editor or $is_course_reviewer) {
         $last_id = $last_id->id;
     }
     $query = "SELECT id, title, start_week, finish_week, comments, visible, public, `order`, assign_to_specific FROM course_units WHERE course_id = ?d AND `order` >= 0 ORDER BY `order`";
-} else {
-    $query = "SELECT id, title, start_week, finish_week, comments, visible, public, `order`, assign_to_specific FROM course_units WHERE course_id = ?d AND visible = 1 AND `order` >= 0 ORDER BY `order`";
+} else { // student
+    $query = "SELECT id, title, start_week, finish_week, comments, visible, public, `order`, assign_to_specific FROM course_units WHERE course_id = ?d AND (visible = 1 OR visible = 2) AND `order` >= 0 ORDER BY `order`";
 }
 
 $data['all_units'] = $all_units = Database::get()->queryArray($query, $course_id);
@@ -519,7 +519,7 @@ if (!$is_editor && !$is_course_reviewer) {
 }
 
 /****************** CAROUSEL OR ROW UNITS PREFERENCE ******************/
-if ($is_editor){
+if ($is_editor) {
     if (isset($_GET['viewUnit'])){
         Database::get()->query("UPDATE course SET view_units = ?d  WHERE id = ?d", $_GET['viewUnit'], $course_id);
     }
@@ -670,10 +670,10 @@ if ($total_cunits > 0) {
     $countUnits = count($all_units);
     $data['countUnits'] = $countUnits;
 
-    if($carousel_or_row == 0){
+    if($carousel_or_row == 0) {
         $cunits_content .= "<div class='card panelCard card-default px-lg-2 py-lg-2 h-100'><div class='card-body'><div id='carouselUnitsControls' class='carousel slide' data-bs-ride='carousel'>";
 
-        //this is foreach for indicators carousel-units
+        //this is foreach for indicator carousel-units
         $counterIndicator = 0;
 
         $cunits_content .=  "<div class='carousel-indicators h-auto mb-1'>";
@@ -689,6 +689,11 @@ if ($total_cunits > 0) {
 
         $cunits_content .= "<div class='carousel-inner'>";
         foreach ($all_units as $cu) {
+            $access = $cu->public;
+            $vis = $cu->visible;
+            if ($vis == 2) { // don't display divider
+                continue;
+            }
             $not_shown = false;
             $icon = '';
             if (!$is_editor && !$is_course_reviewer) {
@@ -716,11 +721,9 @@ if ($total_cunits > 0) {
                 }
             }
             // check visibility
-            if ($cu->visible == 1) {
+            if ($vis == 1) {
                 $count_index++;
             }
-            $access = $cu->public;
-            $vis = $cu->visible;
             $class_vis = ($vis == 0 or $not_shown) ? 'not_visible' : '';
             $cu_indirect = getIndirectReference($cu->id);
 
@@ -739,7 +742,14 @@ if ($total_cunits > 0) {
             if ($not_shown) {
                 $cunits_content .= q($cu->title) ;
             } else {
-                $cunits_content .= "<div class='line-height-default'><a class='TextBold fs-6 $class_vis' href='{$urlServer}modules/units/index.php?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a></div>";
+                $unit_legend = '';
+                if ($is_editor) {
+                    $sql_badge = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND unit_id = ?d", $course_id, $cu->id);
+                    if ($sql_badge) {
+                        $unit_legend = "&nbsp;&nbsp;<span class='fas fa-exclamation-triangle space-after-icon' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-html='true' data-bs-title='$langUnitCompletionLegend' data-bs-original-title='' title=''>";
+                    }
+                }
+                $cunits_content .= "<div class='line-height-default'><a class='TextBold fs-6 $class_vis' href='{$urlServer}modules/units/index.php?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a>$unit_legend</div>";
             }
 
             $cunits_content .= "<p><small><span class='help-block'>";
@@ -849,21 +859,36 @@ if ($total_cunits > 0) {
             $class_vis = ($vis == 0 or $not_shown) ? 'not_visible' : '';
             $cu_indirect = getIndirectReference($cu->id);
             $legendViewContent = '';
-            if($counter_hr < $countUnits){
+            if ($counter_hr < $countUnits){
                 $legendViewContent = 'legendViewContent';
             }
-            $cunits_content .= "
-            <div id='unit_$cu_indirect' class='col-12 $legendViewContent my-3' data-id='$cu->id'>
-                <div class='card panelCard card-default px-lg-2 py-lg-2 h-100'><div class='card-body'>
-                    <div class='item-content'>
+
+            $cunits_content .= "<div id='unit_$cu_indirect' class='col-12 $legendViewContent my-3' data-id='$cu->id'>";
+            if ($vis == 2) {
+                $cunits_content .= "<div class='px-lg-2 py-lg-2 h-100'><div class='card-body'>";
+            } else {
+                $cunits_content .= "<div class='card panelCard card-default px-lg-2 py-lg-2 h-100'><div class='card-body'>";
+            }
+            $cunits_content .= "<div class='item-content'>
                         <div class='item-header clearfix'>
                             <div class='item-title d-flex justify-content-between $class_vis gap-3'>";
 
             $cunits_content .= "<div class='item-title-container d-flex flex-column justify-content-center'>";
             if ($not_shown) {
-                $cunits_content .= q($cu->title) ;
+                $cunits_content .= q($cu->title);
             } else {
-                $cunits_content .= "<div class='line-height-default'><a class='TextBold fs-6 $class_vis' href='{$urlServer}modules/units/index.php?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a></div>";
+                if ($vis == 2) {
+                    $cunits_content .= "<div class='line-height-default'><div class='TextBold fs-6' style='margin-left:-25px;'>" . q($cu->title) . "</div></div>";
+                } else {
+                    $unit_legend = '';
+                    if ($is_editor) {
+                        $sql_badge = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND unit_id = ?d", $course_id, $cu->id);
+                        if ($sql_badge) {
+                            $unit_legend = "&nbsp;&nbsp;<span class='fas fa-exclamation-triangle space-after-icon' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-html='true' data-bs-title='$langUnitCompletionLegend' data-bs-original-title='' title=''>";
+                        }
+                    }
+                    $cunits_content .= "<div class='line-height-default'><a class='TextBold fs-6 $class_vis' href='{$urlServer}modules/units/index.php?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a>$unit_legend</div>";
+                }
             }
 
             if (!(is_null($cu->start_week)) || !(is_null($cu->finish_week))) {
@@ -887,11 +912,12 @@ if ($total_cunits > 0) {
 
                                         ".action_button(array(
                                                 array('title' => $langEditChange,
-                                                    'url' => $urlAppend . "modules/units/info.php?course=$course_code&amp;edit=$cu->id",
+                                                    'url' => $urlAppend . "modules/units/info.php?course=$course_code&amp;edit=$cu->id" . (($vis == 2) ? "&amp;divider=1" : ""),
                                                     'icon' => 'fa-edit'),
-                                                array('title' => $vis == 1? $langViewHide : $langViewShow,
+                                                array('title' => ($vis == 1)? $langViewHide : $langViewShow,
                                                     'url' => $urlAppend . "modules/course_home/course_home.php?course=$course_code&amp;vis=$cu_indirect",
-                                                    'icon' => $vis == 1? 'fa-eye-slash' : 'fa-eye'),
+                                                    'icon' => $vis == 1? 'fa-eye-slash' : 'fa-eye',
+                                                    'show' => ($vis != 2)),
                                                 array('title' => $access == 1? $langResourceAccessLock : $langResourceAccessUnlock,
                                                     'url' => $urlAppend . "modules/course_home/course_home.php?course=$course_code&amp;access=$cu_indirect",
                                                     'icon' => $access == 1? 'fa-lock' : 'fa-unlock',
@@ -907,7 +933,6 @@ if ($total_cunits > 0) {
                     $cunits_content .= $icon;
                 $cunits_content .= "</span>";
             }
-
             $cunits_content .= "</div>";
             $cunits_content .= "</div>";
             if ($carousel_or_row == 1) {
@@ -915,14 +940,17 @@ if ($total_cunits > 0) {
                 $cunits_content .= ($cu->comments == ' ')? '': standard_text_escape($cu->comments);
                 $cunits_content .= "</div>";
             }
-
             $cunits_content .= "</div></div></div></div>";
+
+
         }
-
     }
-
 } else {
-    $cunits_content .= "<div class='not_visible text-center'> - $langNoUnits - </div>";
+    if ($is_editor) {
+        $cunits_content .= "<div class='col-12 text-center'>
+                                <div class='alert alert-warning'>" . $langNoUnits . "</div>
+                            </div>";
+    }
 }
 
 $data['cunits_content'] = $cunits_content;

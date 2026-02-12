@@ -51,7 +51,7 @@ abstract class QuestionType {
                                     <div class='form-check form-check-inline mb-0'>
                                         <input class='form-check-input' type='radio' name='certainty[$qid]' value='1' $choice[1]>
                                         <label class='form-check-label'>$langNotKnow</label>
-                                    </div>                                                                        
+                                    </div>
                                     <div class='form-check form-check-inline mb-0'>
                                         <input class='form-check-input' type='radio' name='certainty[$qid]' value='2' $choice[2]>
                                         <label class='form-check-label'>$langNotSure</label>

@@ -56,7 +56,7 @@
                                                 <span class='term-url'>
                                                     <small>
                                                         <a href='{{ $data->url }}' target='_blank' aria-label="{{ trans('langOpenNewTab') }}">{{ $data->url }}&nbsp;&nbsp;
-                                                        <i class='fa fa-external-link' style='color:#444;'></i></a>
+                                                        <i class='fa fa-external-link'></i></a>
                                                     </small>
                                                 </span>
                                             </div>

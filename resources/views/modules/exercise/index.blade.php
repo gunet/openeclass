@@ -418,7 +418,7 @@
                 var exerciseid = $(this).data('exerciseid');
                 bootbox.dialog({
                     closeButton: false,
-                    title: "<div class='icon-modal-default'><i class='fa-solid fa-cloud-arrow-up fa-xl Neutral-500-cl'></i></div><div class='modal-title-default text-center mb-0'>{{ js_escape(trans('langCreateDuplicateIn')) }}</div>",
+                    title: "<div class='icon-modal-default'><i class='fa-solid fa-cloud-arrow-up fa-xl Neutral-500-cl'></i></div><h2 class='modal-title-default text-center mb-0'>{{ js_escape(trans('langCreateDuplicateIn')) }}</h2>",
                     message: "<form action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post' id='clone_form'>"+
                                 "<select class='form-select' id='course_id' name='clone_to_course_id'>"+
                                 "<option value='{{ $course_id  }}'>--- {{ js_escape(trans('langCurrentCourse')) }} ---</option>"+
