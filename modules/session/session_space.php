@@ -68,7 +68,9 @@ if (isset($_GET['cancelPoll'])) {
     unset($_SESSION['question_ids']);
     unset($_SESSION['q_row_columns']);
     unset($_SESSION['loop_init_answers']);
+    unset($_SESSION['loop_init_answers_session']);
     unset($_SESSION['emptyQuestions']);
+    unset($_SESSION['onBehalfOfUserId']);
 }
 
 $data['current_time'] = $current_time = date('Y-m-d H:i:s', strtotime('now'));

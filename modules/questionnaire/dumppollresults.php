@@ -227,7 +227,7 @@ if ($full) { // user questions results
                                 AND (b.email_verification = 1 OR b.email_verification IS NULL)
                                 $sql_per_user
                                 $sqlSession
-(??)                                ORDER BY uid", $q->pqid);
+                                ORDER BY uid", $q->pqid, $args_u, $args_s);
             foreach ($answers as $a) {
                 $user_identifier = $a->uid ?: $a->email;
                 $u_answer_text = $a->answer_text;

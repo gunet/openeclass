@@ -47,6 +47,37 @@ if (isset($_GET['from_session_view'])) {
     $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langQuestionnaire);
 }
 
+$head_content .= "<script type = 'text/javascript'>
+    $(document).ready(function(){
+      $('a.trigger_names').click(function(e){
+        e.preventDefault();
+        var action = $(this).attr('id');
+        var field_type = $(this).data('type');
+        if (action == 'show') {
+            if (field_type == 'multiple') {
+                var hidden_field = $(this).parent().next();
+                $(this).parent().hide();
+                hidden_field.show();
+            } else {
+                $(this).closest('tr').siblings('.hidden_row').show('slow');
+                $(this).text('$langViewHide');
+                $(this).attr('id', 'hide');
+            }
+        } else {
+            if (field_type == 'multiple') {
+                var hidden_field = $(this).parent();
+                hidden_field.hide();
+                hidden_field.prev().show();
+            } else {
+                $(this).closest('tr').siblings('.hidden_row').hide('slow');
+                $(this).text('$langViewShow');
+                $(this).attr('id', 'show');
+            }
+        }
+      });
+    });
+</script>";
+
 $head_content .= "<script type='text/javascript'>
         pollChartData = new Array();
 
