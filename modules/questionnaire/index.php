@@ -130,7 +130,6 @@ if (isset($_GET['cancelPoll'])) {
     unset($_SESSION['loop_init_answers']);
     unset($_SESSION['loop_init_answers_session']);
     unset($_SESSION['emptyQuestions']);
-    unset($_SESSION['user_removed_file']);
     unset($_SESSION['onBehalfOfUserId']);
 }
 
@@ -350,7 +349,6 @@ if ($is_editor) {
             unset($_SESSION['q_row_columns']);
             unset($_SESSION['loop_init_answers']);
             unset($_SESSION['loop_init_answers_session']);
-            unset($_SESSION['user_removed_file']);
             unset($_SESSION['onBehalfOfUserId']);
             $folder = "$webDir/courses/$course_code/poll_$pid";
             deleteFolderContents($folder);

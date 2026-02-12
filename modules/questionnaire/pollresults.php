@@ -876,11 +876,19 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COU
                                     $filename = $arrFile['filename'];
                                     $filepath = $arrFile['filepath'];
                                     $userID = $uid;
-                                    if ($is_editor) {
+                                    if ($is_editor or $is_consultant) {
                                         $userID = $answer->uid;
                                     }
                                     $Qid = $theQuestion->pqid;
-                                    $uAnswerText = "<a target='_blank' href='{$urlServer}courses/$course_code/poll_$pid/$userID/$Qid$filepath'>$filename</a>";
+                                    if ($is_editor or $is_consultant) {
+                                        if (!file_exists("$webDir/courses/$course_code/poll_$pid/$userID/$Qid$filepath")) {
+                                            $uAnswerText = "<p class='text-decoration-line-through text-danger'>$filename</p>";
+                                        } else {
+                                            $uAnswerText = "<a target='_blank' href='{$urlServer}courses/$course_code/poll_$pid/$userID/$Qid$filepath'>$filename</a>";
+                                        }
+                                    } else {
+                                        $uAnswerText = "<a target='_blank' href='{$urlServer}courses/$course_code/poll_$pid/$userID/$Qid$filepath'>$filename</a>";
+                                    }
                                 }
                                 $answers_table .= "
                                     <tr $row_class>

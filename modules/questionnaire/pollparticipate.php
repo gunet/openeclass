@@ -108,15 +108,20 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             unset($_SESSION['data_file_answer'][$questionID]);
             
             $c = $_GET['course'];
+            $s = $_GET['session'];
             $currentUser = $_POST['current_user'];
             $pollId = intval($_GET['pid']);
             $fpath = $_POST['fPath'];
             $file = "$webDir/courses/$c/poll_$pollId/$currentUser/$questionID$fpath";
-            $_SESSION['user_removed_file'][$currentUser] = [
-                'poll_id' => $pollId,
-                'question_id' => $questionID,
-                'file_path' => $file
-            ];
+            if (file_exists($file)) {
+                unlink($file);
+                Database::get()->query("DELETE poll_answer_record FROM poll_answer_record
+                                        INNER JOIN poll_user_record ON poll_user_record.id=poll_answer_record.poll_user_record_id
+                                        WHERE poll_answer_record.qid = ?d
+                                        AND poll_user_record.uid = ?d
+                                        AND poll_user_record.pid = ?d
+                                        AND poll_user_record.session_id = ?d", $questionID, $currentUser, $pollId, $s);
+            } 
             exit();
         }
 }
@@ -1408,22 +1413,6 @@ function submitPoll() {
             $question = isset($_POST['question'])? $_POST['question']: array();
         }
 
-        // After submitting the form and the user has removed the uploaded file , delete it.
-        if (isset($_SESSION['user_removed_file'])) {
-            foreach ($_SESSION['user_removed_file'] as $user => $dataFile) {
-                if (file_exists($dataFile['file_path'])) {
-                    unlink($dataFile['file_path']);
-                    Database::get()->query("DELETE poll_answer_record FROM poll_answer_record
-                                            INNER JOIN poll_user_record ON poll_user_record.id=poll_answer_record.poll_user_record_id
-                                            WHERE poll_answer_record.qid = ?d
-                                            AND poll_user_record.uid = ?d
-                                            AND poll_user_record.pid = ?d
-                                            AND poll_user_record.session_id = ?d", $dataFile['question_id'], $user, $dataFile['poll_id'], $s_id);
-                }
-            }
-            unset($_SESSION['user_removed_file']);
-        }
-
         foreach ($question as $pqid => $qtype) {
             $pqid = intval($pqid);
             if ($qtype == QTYPE_MULTIPLE) {
@@ -1733,7 +1722,7 @@ function update_submission($pid) {
 
 function poll_upload_file($pid, $form_link, $qtype, $pqid, $currentUser) {
     global $tool_content, $head_content, $course_code, $urlAppend, $langPleaseWait, 
-           $language, $langFileName, $langDelete, $langConfirmDelete, $urlServer, 
+           $language, $langFileName, $langDelete, $langConfirmDeletePermantly, $urlServer, 
            $uid, $webDir, $langInfoPollUploadedFile;
 
     $token = $_SESSION['csrf_token'];
@@ -1752,10 +1741,10 @@ function poll_upload_file($pid, $form_link, $qtype, $pqid, $currentUser) {
     if (!empty($filename) && file_exists("$webDir/courses/$course_code/poll_$pid/$currentUser/$pqid$filepath")) {
         $del_file .= "
         <div class='d-flex align-items-center gap-2 mb-1'>
-            <p id='fileName_{$pqid}' class='TextBold'>$langFileName: <a target='_blank' href='{$urlServer}courses/$course_code/poll_$pid/$currentUser/$pqid$filepath'>$filename</a></p>
+            <p id='fileName_{$pqid}' class='TextBold'>$langFileName: <a class='TextBold' target='_blank' href='{$urlServer}courses/$course_code/poll_$pid/$currentUser/$pqid$filepath'>$filename</a></p>
             <a id='del_file_{$pqid}' class='btn deleteAdminBtn' data-bs-toggle='tooltip' data-bs-placement='top' title='$langDelete' style='width: 25px; height: 25px;'><i class='fa-solid fa-trash'></i></a>
         </div>
-        <div id='info_uploaded_file_{$pqid}' class='mb-4'><p class='text-warning'>$langInfoPollUploadedFile</p></div>
+        <div id='info_uploaded_file_{$pqid}' class='mb-4 mt-2'>$langInfoPollUploadedFile</div>
         ";
     } else {
         // If the user has uploaded a file and the user has canceled the poll, 
@@ -1868,9 +1857,9 @@ function poll_upload_file($pid, $form_link, $qtype, $pqid, $currentUser) {
 
             $('#del_file_{$pqid}').on('click', function (e) {
                 e.preventDefault();
-                if (confirm('$langConfirmDelete')) {
+                if (confirm('$langConfirmDeletePermantly')) {
                     $.ajax({
-                        url: '{$urlAppend}modules/questionnaire/pollparticipate.php?course=$course_code&UseCase=1&pid=$pid&token={$token}',
+                        url: '{$urlAppend}modules/questionnaire/pollparticipate.php?course=$course_code&UseCase=1&pid=$pid&session={$sessionID}&token={$token}',
                         method: 'POST',
                         data: { 
                             file_removed: 1,
