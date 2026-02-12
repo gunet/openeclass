@@ -2282,7 +2282,7 @@ function display_session_activities($element, $id, $session_id = 0) {
                                         <div class='modal-header'>
                                             <div class='modal-title'>
                                                 <div class='icon-modal-default'><i class='fa-solid fa-circle-info fa-xl Neutral-500-cl'></i></div>
-                                                <div class='modal-title-default text-center mb-0 mt-2' id='CompletionWithoutActivitiesLabel'>$langSessionCompletion</div>
+                                                <h2 class='modal-title-default text-center mb-0 mt-2' id='CompletionWithoutActivitiesLabel'>$langSessionCompletion</h2>
                                             </div>
                                         </div>
                                         <div class='modal-body text-center'>
@@ -2304,7 +2304,7 @@ function display_session_activities($element, $id, $session_id = 0) {
                                     <div class='modal-header'>
                                         <div class='modal-title'>
                                             <div class='icon-modal-default'><i class='fa-solid fa-circle-info fa-xl Neutral-500-cl'></i></div>
-                                            <div class='modal-title-default text-center mb-0 mt-2' id='WithCompletedTcLabel'>$langSessionCompletion</div>
+                                            <h2 class='modal-title-default text-center mb-0 mt-2' id='WithCompletedTcLabel'>$langSessionCompletion</h2>
                                         </div>
                                     </div>
                                     <div class='modal-body text-center'>
@@ -2326,7 +2326,7 @@ function display_session_activities($element, $id, $session_id = 0) {
                                     <div class='modal-header'>
                                         <div class='modal-title'>
                                             <div class='icon-modal-default'><i class='fa-solid fa-circle-info fa-xl Neutral-500-cl'></i></div>
-                                            <div class='modal-title-default text-center mb-0 mt-2' id='WithCompletedLiveMeetingLabel'>$langSessionCompletion</div>
+                                            <h2 class='modal-title-default text-center mb-0 mt-2' id='WithCompletedLiveMeetingLabel'>$langSessionCompletion</h2>
                                         </div>
                                     </div>
                                     <div class='modal-body text-center'>
@@ -3377,7 +3377,7 @@ function get_cert_percentage_completion_by_user($element, $element_id, $userId) 
     
     $allCr = Database::get()->queryArray("SELECT * FROM badge_criterion WHERE badge = ?d", $element_id);
     $sid = Database::get()->querySingle("SELECT session_id FROM badge WHERE id = ?d", $element_id);
-    if (count($allCr)) {
+    if (count($allCr) > 0) {
         foreach ($allCr as $c) {
             if ($c->activity_type == 'questionnaire') {
                 $badgeCrId = $c->id;

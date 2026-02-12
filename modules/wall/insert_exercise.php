@@ -19,10 +19,15 @@
  */
 
 function list_exercises($id = NULL) {
-    global $course_id, $course_code, $urlServer, $langDescription, $langChoice, $langExercices, $langNoExercises, $langSelect;
+    global $course_id, $is_editor, $course_code, $urlServer, $langDescription, $langChoice, $langExercices, $langNoExercises, $langSelect;
 
     $ret_string = '';
-    $result = Database::get()->queryArray("SELECT * FROM exercise WHERE course_id = ?d", $course_id);
+    if ($is_editor) {
+        $result = Database::get()->queryArray("SELECT * FROM exercise WHERE course_id = ?d", $course_id);
+    } else {
+        $result = Database::get()->queryArray("SELECT * FROM exercise WHERE course_id = ?d AND active = 1", $course_id);
+    }
+
     $quizinfo = array();
     foreach ($result as $row) {
         $quizinfo[] = array(

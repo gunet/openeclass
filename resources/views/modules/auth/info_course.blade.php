@@ -44,21 +44,21 @@
 
                                     @if(empty($c->description))
                                         @if(!$c->is_collaborative)
-                                        <p class='form-label mb-1'>{{ trans('langCourseProgram')}}</p>
+                                        <h3 class='form-label mb-1'>{{ trans('langCourseProgram')}}</h3>
                                         @else
-                                        <p class='form-label mb-1'>{{ trans('langCollabDes')}}</p>
+                                        <h3 class='form-label mb-1'>{{ trans('langCollabDes')}}</h3>
                                         @endif
                                         <p>{{ trans('langThisCourseDescriptionIsEmpty') }}</p>
                                     @else
                                         @if(!$c->is_collaborative)
-                                        <p class='form-label mb-1'>{{ trans('langCourseProgram')}}</p>
+                                        <h3 class='form-label mb-1'>{{ trans('langCourseProgram')}}</h3>
                                         @else
-                                        <p class='form-label mb-1'>{{ trans('langCollabDes')}}</p>
+                                        <h3 class='form-label mb-1'>{{ trans('langCollabDes')}}</h3>
                                         @endif
                                         <p>{!! $c->description !!}</p>
                                     @endif
 
-                                    <p class='form-label mb-1 mt-4'>{{ trans('langCreationDate')}}</p>
+                                    <h3 class='form-label mb-1 mt-4'>{{ trans('langCreationDate')}}</h3>
                                     <p>{{ format_locale_date(strtotime($c->created), null, false) }}</p>
 
                                     <div class='col-12 mt-4 d-flex justify-content-md-start justify-content-center'>
@@ -86,12 +86,12 @@
                                 <ul class="list-group list-group-flush">
                                     <li class="list-group-item px-0 mb-4 bg-transparent">
 
-                                        <div class='d-flex justify-content-between border-bottom-default'>
+                                        <h3 class='d-flex justify-content-between border-bottom-default'>
                                             <a class='accordion-btn d-flex justify-content-start align-items-start gap-2 py-2' role='button' id='btn-syllabus' data-bs-toggle='collapse' href='#collapseDescriptionc' aria-expanded='true' aria-controls='collapseDescriptionc'>
                                                 <i class='fa-solid fa-chevron-down settings-icon'></i>
                                                 {{ trans('langSyllabus') }}
                                             </a>
-                                        </div>
+                                        </h3>
                                         <div class='panel-collapse accordion-collapse collapse border-0 rounded-0 mt-3 show' id='collapseDescriptionc' data-bs-parent='#accordionDesC'>
                                             @if(count($course_descriptions) == 0)
                                                 <div class='col-12 mb-4'>

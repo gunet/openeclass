@@ -34,10 +34,10 @@
 
                     <div class='col-sm-12'>
                         <div class='table-responsive mb-4'>
-                            <table class='table-default nocategory-links'>
+                            <table class='table-default nocategory-links' role='presentation'>
                             @if (count($general_category->links) > 0)
                                 <thead><tr class='list-header'>
-                                    <th class='text-start'>{{ trans('langNoCategory') }}</th>
+                                    <th class='text-start'><h3 class='mb-0 form-label'>{{ trans('langNoCategory') }}</h3></th>
                                     @if ($display_tools)
                                     <th>{!! icon('fa-cogs') !!}</th>
                                     @endif
@@ -45,7 +45,7 @@
                                 @include('modules.link.common.linkList', ['category' => $general_category])
                             @else
                                 <thead><tr class='list-header'>
-                                    <th class='text-start'>{{ trans('langNoCategory') }}</th>
+                                    <th class='text-start'><h3 class='mb-0 form-label'>{{ trans('langNoCategory') }}</h3></th>
                                 </tr></thead>
                                 <tr>
                                     <td class='text-start not_visible nocategory-link'> - {{ trans('langNoLinkInCategory') }} - </td>
@@ -94,9 +94,9 @@
 
                     <div class='col-sm-12'>
                         <div class='table-responsive mb-4'>
-                            <table class='table-default category-links'>
+                            <table class='table-default category-links' role='presentation'>
                             <thead><tr class='list-header'>
-                                    <th>{{ trans('langCategorisedLinks').'   ' }}
+                                    <th><h3 class='mb-0 form-label'>{{ trans('langCategorisedLinks').'   ' }}
                                     @if ($categories)
                                         @if (intval($urlview) == 0)
                                             <a href='index.php?course={{ $course_code }}&amp;urlview={{ str_repeat('1', count($categories)) . $tinymce_params . $socialview_param }}'>
@@ -107,7 +107,7 @@
                                                 {!! icon('fa-folder-open', trans('langViewHide')) !!}
                                             </a>
                                         @endif
-                                    @endif
+                                    @endif</h3>
                                     </th>
                                     @if ($categories && $display_tools)
                                         <th style='width:109px;'>{!! icon('fa-cogs') !!}</th>
@@ -122,7 +122,7 @@
                                         ?>
                                         <tr class='link-subcategory-title'>
                                             <th class = 'text-start category-link' style='padding-left:12px;'> {!! icon('fa-folder-open', trans('langViewHide')) !!}
-                                                <a href='index.php?course={{ $course_code }}&amp;urlview={{ $newurlview.$tinymce_params.$socialview_param }}' class='open-category'>
+                                                <a role='button' href='index.php?course={{ $course_code }}&amp;urlview={{ $newurlview.$tinymce_params.$socialview_param }}' class='open-category'>
                                                     {{ $category->name }}
                                                 </a>
                                                 @if (!empty($description))
@@ -169,7 +169,7 @@
                                     @else
                                         <tr class='link-subcategory-title'>
                                             <th class = 'text-start category-link' style='padding-left:12px;'>{!! icon('fa-folder-open', trans('langViewShow')) !!}
-                                                <a href='index.php?course={{ $course_code }}&amp;urlview={{ empty($urlview) ? makedefaultviewcode($key, count($categories)) : substr_replace($urlview, '1', $key, 1) }}{{ $tinymce_params }}' class='open-category'>
+                                                <a role='button' href='index.php?course={{ $course_code }}&amp;urlview={{ empty($urlview) ? makedefaultviewcode($key, count($categories)) : substr_replace($urlview, '1', $key, 1) }}{{ $tinymce_params }}' class='open-category'>
                                                     {{ $category->name }}
                                                 </a>
                                                 @if (!empty($description))

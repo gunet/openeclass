@@ -199,7 +199,7 @@ if (isset($_GET['u'])) { //  stats per user
                                             </div>
                                         </li>
 
-                                        <li class='list-group-item element'>
+                                        <li class='list-group-item element completed_resources'>
                                             <div class='row row-cols-1 row-cols-md-2 g-1'>
                                                 <div class='col-md-3 col-12'>
                                                     <strong class='title-default'>$langCompletionResources</strong>
@@ -251,15 +251,13 @@ if (isset($_GET['u'])) { //  stats per user
 
     $result = users_session($sessionID);
     if (count($result) > 0) {
-        $linkReport = $urlServer . "modules/session/consulting_completion.php?course=$course_code&session=$sessionID";
         foreach ($result as $row) {
             $tool_content .= "<tr>";
                 $tool_content .= "<td>
-                                    <a class='link-color d-flex justify-content-start align-items-center gap-2' href='" . $linkReport . "&user_rep=$row->id" . "' aria-label='".participant_name($row->id)."'
-                                        data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langShowReportUserTable'>
+                                    <p>
                                         <img class='user-icon-filename' src='".user_icon($row->id, IMAGESIZE_SMALL)."' alt='$langUser:".participant_name($row->id)."'>
                                         <span>" . participant_name($row->id) . "</span>
-                                    </a>
+                                    </p>
                                  </td>";
                 $tool_content .= "<td>$row->percentage</td>";
                 $tool_content .= "<td class='text-center'>" . icon('fa-line-chart', $langShowReportUserCurrentSession, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;u=$row->id&amp;session=$sessionID") . "</td>";
@@ -324,7 +322,7 @@ if (isset($_GET['u'])) { //  stats per user
                             <div class='modal-header'>
                                 <div class='modal-title'>
                                     <div class='icon-modal-default'><i class='fa-solid fa-cloud-arrow-up fa-xl Neutral-500-cl'></i></div>
-                                    <div class='modal-title-default text-center mb-0 mt-2' id='materialForUser{$row->id}Label'>$langMaterialForUser</div>
+                                    <h2 class='modal-title-default text-center mb-0 mt-2' id='materialForUser{$row->id}Label'>$langMaterialForUser</h2>
                                 </div>
                             </div>
                             <div class='modal-body text-center'>
@@ -352,7 +350,7 @@ if (isset($_GET['u'])) { //  stats per user
                             <div class='modal-header'>
                                 <div class='modal-title'>
                                     <div class='icon-modal-default'><i class='fa-regular fa-trash-can fa-xl Accent-200-cl'></i></div>
-                                    <div class='modal-title-default text-center mb-0' id='deleteMaterialForUser{$row->id}Label'>$langConfirmDelete</div>
+                                    <h2 class='modal-title-default text-center mb-0' id='deleteMaterialForUser{$row->id}Label'>$langConfirmDelete</h2>
                                 </div>
                             </div>
                             <div class='modal-body text-center'>
@@ -585,6 +583,7 @@ function pdf_session_output($sid) {
             td { text-align: left; }
             .text-success { color: #228B22; }
             .text-danger { color: #D22B2B; }
+            .completed_resources { display: none; }
           </style>
         </head>
         <body>

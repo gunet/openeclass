@@ -151,11 +151,14 @@ $data['sessionType'] = $sessionType;
 
 $for_consultant = 0;
 $sql_consultant = '';
+$sql_consultant_args = [];
 $data['all_consultants'] = [];
 if($is_coordinator){
     if(isset($_POST['forConsultant']) && $_POST['forConsultant'] > 0){
         $for_consultant = $_POST['forConsultant'];
-        $sql_consultant = "AND creator = $for_consultant";
+        $sql_consultant = "AND creator = ?d";
+        $sql_consultant_args = [$for_consultant];
+        $sql_users_args = [];
     }
 }
 $data['for_consultant'] = $for_consultant;
@@ -163,6 +166,7 @@ $data['for_consultant'] = $for_consultant;
 // About searching users from coordinator view
 $data['chooseSelectionVal'] = 0;
 $sql_users = '';
+$sql_users_args = [];
 $searchUserId = 0;
 if (isset($_POST['chooseSelection']) or isset($_POST['showSelection'])) {
     $data['chooseSelectionVal'] = $_POST['chooseSelection'] ?? '';
@@ -171,14 +175,19 @@ if (isset($_POST['chooseSelection']) or isset($_POST['showSelection'])) {
         $sql_session = '';
         $sql_consultant = '';
         $sql_users = '';
+        $sql_consultant_args = [];
+        $sql_users_args = [];
     } elseif ($data['chooseSelectionVal'] == 1) { // search specific consultant
         $sql_users = '';
     } elseif ($data['chooseSelectionVal'] == 2 or isset($_POST['showSelection'])) {  // search specific user
         $sql_consultant = '';
-        $sql_users = "AND id IN (SELECT session_id FROM mod_session_users WHERE participants = $_POST[forUserSearch] AND is_accepted = 1)";
+        $sql_users = "AND id IN (SELECT session_id FROM mod_session_users WHERE participants = ?d AND is_accepted = 1)";
+        $sql_users_args = [$_POST['forUserSearch']];
+        $sql_consultant_args = [];
         $searchUserId = $_POST['forUserSearch'] ?? 0;
         if ($searchUserId == 0) {
             $sql_users = '';
+            $sql_users_args = [];
         }
     }
 }
@@ -211,6 +220,42 @@ if(isset($_POST['leave_session'])){
     redirect_to_home_page("modules/session/index.php?course=".$course_code);
 }
 
+if (!isset($_GET['searchOn']) && !isset($_POST['submit_search'])) {
+    $_SESSION['sql_remote'] = '';
+    $_SESSION['sql_consultant'] = '';
+    $_SESSION['sql_session'] = '';
+    $_SESSION['sql_users'] = '';
+
+    $_SESSION['sql_consultant_args'] = [];
+    $_SESSION['sql_users_args'] = [];
+}
+
+if (isset($_POST['submit_search'])) {
+    $_SESSION['sql_remote'] = $sql_remote;
+    $_SESSION['sql_consultant'] = $sql_consultant;
+    $_SESSION['sql_session'] = $sql_session;
+    $_SESSION['sql_users'] = $sql_users;
+
+    $_SESSION['sql_consultant_args'] = $sql_consultant_args;
+    $_SESSION['sql_users_args'] = $sql_users_args;
+
+    $_SESSION['chooseSelectionVal_Session'] = $data['chooseSelectionVal'];
+    $_SESSION['for_consultant_Session'] = $data['for_consultant'];
+    $_SESSION['searchUserId_Session'] = $data['searchUserId'];
+    $_SESSION['remoteType_Session'] = $data['remoteType'];
+    $_SESSION['sessionType_Session'] = $data['sessionType'];
+
+    redirect_to_home_page("modules/session/index.php?course=$course_code&searchOn=true");
+}
+
+if (isset($_GET['searchOn'])) {
+    $data['chooseSelectionVal'] = $_SESSION['chooseSelectionVal_Session'];
+    $data['for_consultant'] = $_SESSION['for_consultant_Session'];
+    $data['searchUserId'] = $_SESSION['searchUserId_Session'];
+    $data['remoteType'] = $_SESSION['remoteType_Session'];
+    $data['sessionType'] = $_SESSION['sessionType_Session'];
+}
+
 // An consultant can create a session
 if($is_coordinator or $is_consultant){
 
@@ -225,7 +270,7 @@ if($is_coordinator or $is_consultant){
         ],
         [
             'title' => $langReportAttendances,
-            'url' => $urlAppend . "modules/session/consulting_completion.php?course=" . $course_code,
+            'url' => $urlAppend . "modules/session/consulting_completion.php?course=" . $course_code . "&percentage_calculation=true",
             'icon' => 'fa-solid fa-users',
             'button-class' => 'btn-success',
             'level' => 'primary-label',
@@ -257,11 +302,11 @@ if($is_coordinator or $is_consultant){
     if($is_coordinator){ // is tutor course
         $data['individuals_group_sessions'] = Database::get()->queryArray("SELECT * FROM mod_session
                                                                         WHERE course_id = ?d
-                                                                        $sql_remote
-                                                                        $sql_session
-                                                                        $sql_consultant
-                                                                        $sql_users
-                                                                        ORDER BY `start` DESC",$course_id);
+                                                                        $_SESSION[sql_remote]
+                                                                        $_SESSION[sql_session]
+                                                                        $_SESSION[sql_consultant]
+                                                                        $_SESSION[sql_users]
+                                                                        ORDER BY `start` DESC",$course_id, $_SESSION['sql_consultant_args'], $_SESSION['sql_users_args']);
 
         $data['all_consultants'] = Database::get()->queryArray("SELECT DISTINCT user.id,user.givenname,user.surname,mod_session.creator FROM mod_session 
                                                                 LEFT JOIN user ON mod_session.creator=user.id
@@ -276,10 +321,10 @@ if($is_coordinator or $is_consultant){
         $data['individuals_group_sessions'] = Database::get()->queryArray("SELECT * FROM mod_session
                                                                     WHERE course_id = ?d
                                                                     AND creator = ?d
-                                                                    $sql_remote
-                                                                    $sql_session
-                                                                    $sql_users
-                                                                    ORDER BY `start` DESC",$course_id,$uid);
+                                                                    $_SESSION[sql_remote]
+                                                                    $_SESSION[sql_session]
+                                                                    $_SESSION[sql_users]
+                                                                    ORDER BY `start` DESC",$course_id,$uid,$_SESSION['sql_users_args']);
 
         $data['usersInConsultantView'] = Database::get()->queryArray("SELECT DISTINCT mod_session_users.participants,user.id,user.givenname,user.surname FROM mod_session_users
                                                                       LEFT JOIN user ON mod_session_users.participants=user.id
@@ -293,38 +338,40 @@ if($is_coordinator or $is_consultant){
         $participants = array();
         foreach ($data['individuals_group_sessions'] as $s) {
 
-            $all_participants_ids = session_participants_ids($s->id);
-            foreach($all_participants_ids as $p){
-                if(!$s->type_remote){
-                    // This refers to session completion with completed meeting.
-                    check_session_completion_by_meeting_completed($s->id,$p);
-                }elseif($s->type_remote){
-                    // This refers to session completion with completed tc.
-                    check_session_completion_by_tc_completed($s->id,$p);
-                }
+            // Calculate sessions copletion
+            // $all_participants_ids = session_participants_ids($s->id);
+            // foreach($all_participants_ids as $p){
+            //     if(!$s->type_remote){
+            //         // This refers to session completion with completed meeting.
+            //         check_session_completion_by_meeting_completed($s->id,$p);
+            //     }elseif($s->type_remote){
+            //         // This refers to session completion with completed tc.
+            //         check_session_completion_by_tc_completed($s->id,$p);
+            //     }
 
-                // This refers to session completion for other activities.
-                check_session_progress($s->id,$p);  // check session completion - call to Game.php
-                check_session_completion_without_activities($s->id);
-                check_session_completion_with_expired_time($s->id);
-            }
+            //     // This refers to session completion for other activities.
+            //     check_session_progress($s->id,$p);  // check session completion - call to Game.php
+            //     check_session_completion_without_activities($s->id);
+            //     check_session_completion_with_expired_time($s->id);
+            // }
 
-            $sql_badge = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND session_id = ?d", $course_id, $s->id);
-            $per = $has_badge = 0;
-            if ($sql_badge) {
-                $badge_id = $sql_badge->id;
-                $has_badge = $badge_id;
-                $participants = Database::get()->queryArray("SELECT participants FROM mod_session_users WHERE session_id = ?d AND is_accepted = ?d",$s->id,1);
-                if(count($participants) > 0){
-                    foreach($participants as $p){
-                        $per = $per + get_cert_percentage_completion_by_user('badge',$badge_id,$p->participants);
-                    }
-                }
+            // $sql_badge = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND session_id = ?d", $course_id, $s->id);
+            // $per = $has_badge = 0;
+            // if ($sql_badge) {
+            //     $badge_id = $sql_badge->id;
+            //     $has_badge = $badge_id;
+            //     $participants = Database::get()->queryArray("SELECT participants FROM mod_session_users WHERE session_id = ?d AND is_accepted = ?d",$s->id,1);
+            //     if(count($participants) > 0){
+            //         foreach($participants as $p){
+            //             $per = $per + get_cert_percentage_completion_by_user('badge',$badge_id,$p->participants);
+            //         }
+            //     }
 
-            }
-            $number_percentage = (count($participants) > 0) ? $per/count($participants) : $per;
-            $s->percentage = round($number_percentage);
-            $s->has_badge = $has_badge;
+            // }
+            // $number_percentage = (count($participants) > 0) ? $per/count($participants) : $per;
+            // $s->percentage = round($number_percentage);
+            // $s->has_badge = $has_badge;
+
             $s->consultant = participant_name($s->creator);
             $s->user_participant = session_participants_ids($s->id);
         }
@@ -352,8 +399,8 @@ if($is_coordinator or $is_consultant){
     $data['individuals_group_sessions'] = Database::get()->queryArray("SELECT * FROM mod_session
                                             WHERE visible = ?d
                                             AND course_id = ?d
-                                            $sql_remote
-                                            $sql_session
+                                            $_SESSION[sql_remote]
+                                            $_SESSION[sql_session]
                                             AND id IN (SELECT session_id FROM mod_session_users
                                                         WHERE participants = ?d)
                                             ORDER BY `start` DESC",1,$course_id,$uid);
@@ -428,10 +475,15 @@ $data['next_session'] = array();
 $data['current_sessions'] = array();
 
 if($is_consultant && !$is_coordinator){
-    $sql_session = "AND creator = $uid";
+    $sql_session = "AND creator = ?d";
 }elseif($is_simple_user){
     $sql_session = "AND id IN (SELECT session_id FROM mod_session_users 
-                                WHERE participants = $uid AND is_accepted = 1)";
+                                WHERE participants = ?d AND is_accepted = 1)";
+}
+if (!empty($sql_session)) {
+    $query_vars = [$course_id,$uid];
+} else {
+    $query_vars = [$course_id];
 }
 
 if(($is_consultant && !$is_coordinator) or ($is_simple_user)){
@@ -440,7 +492,7 @@ if(($is_consultant && !$is_coordinator) or ($is_simple_user)){
                                                             AND `start` > NOW() 
                                                             AND visible = 1
                                                             $sql_session
-                                                            ORDER BY `start` ASC $limit",$course_id);
+                                                            ORDER BY `start` ASC $limit", $query_vars);
 }elseif($is_coordinator){
     $minDate = Database::get()->querySingle("SELECT MIN(`start`) AS st FROM mod_session 
                                             WHERE course_id = ?d
@@ -454,10 +506,15 @@ if(($is_consultant && !$is_coordinator) or ($is_simple_user)){
     }
 }
 
+if (!empty($sql_session)) {
+    $query_vars = [$course_id,1,$uid];
+} else {
+    $query_vars = [$course_id,1];
+}
 $data['current_sessions'] = $course_sessions = Database::get()->queryArray("SELECT * FROM mod_session
                                                                             WHERE course_id = ?d
                                                                             AND visible = ?d
                                                                             $sql_session
-                                                                            ORDER BY `start` ASC",$course_id,1);
+                                                                            ORDER BY `start` ASC", $query_vars);
                                                                             
 view('modules.session.index', $data);

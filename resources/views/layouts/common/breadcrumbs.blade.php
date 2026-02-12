@@ -33,8 +33,8 @@
                                 </a>
                             </li>
                         @else
-                            <li class="breadcrumb-item active d-flex justify-content-center align-items-center TextMedium" aria-current="{{ $item['bread_text'] }}">
-                                <span>{{ $item['bread_text'] }}</span>
+                            <li class="breadcrumb-item active d-flex justify-content-center align-items-center TextMedium">
+                                <span aria-current="{{ $item['bread_text'] }}">{{ $item['bread_text'] }}</span>
                             </li>
                         @endif
                     @endforeach

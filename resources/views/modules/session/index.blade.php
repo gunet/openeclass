@@ -168,7 +168,7 @@
                                     <option value='one' {!! $sessionType=='one' ? 'selected' : '' !!}>{{ trans('langIndividualS') }}</option>
                                     <option value='group' {!! $sessionType=='group' ? 'selected' : '' !!}>{{ trans('langGroupS') }}</option>
                                 </select>
-                                <button class='w-75 mt-0 gap-1' type='submit'>{{ trans('langSearch') }}</button>
+                                <button class='w-75 mt-0 gap-1' type='submit' name='submit_search'>{{ trans('langSearch') }}</button>
                             </form>
                         </div>
                     </div>
@@ -381,7 +381,7 @@
                 <div class='modal-header'>
                     <div class='modal-title'>
                         <div class='icon-modal-default'><i class='fa-solid fa-comments fa-xl Neutral-500-cl'></i></div>
-                        <div class="modal-title-default text-center mb-0 mt-2" id="RegistrationInSessionLabel">{!! trans('langParticipate') !!}</div>
+                        <h2 class="modal-title-default text-center mb-0 mt-2" id="RegistrationInSessionLabel">{!! trans('langParticipate') !!}</h2>
                     </div>
                 </div>
                 <div class='modal-body text-start'>
@@ -407,7 +407,7 @@
                 <div class='modal-header'>
                     <div class='modal-title'>
                         <div class='icon-modal-default'><i class='fa-regular fa-trash-can fa-xl Accent-200-cl'></i></div>
-                        <div class="modal-title-default text-center mb-0 mt-2" id="SessionDeleteLabel">{!! trans('langDelete') !!}</div>
+                        <h2 class="modal-title-default text-center mb-0 mt-2" id="SessionDeleteLabel">{!! trans('langDelete') !!}</h2>
                     </div>
                 </div>
                 <div class='modal-body text-center'>
@@ -432,7 +432,7 @@
                 <div class='modal-header'>
                     <div class='modal-title'>
                         <div class='icon-modal-default'><i class='fa-regular fa-trash-can fa-xl Accent-200-cl'></i></div>
-                        <div class="modal-title-default text-center mb-0 mt-2" id="SessionLeaveLabel">{!! trans('langLeaveSession') !!}</div>
+                        <h2 class="modal-title-default text-center mb-0 mt-2" id="SessionLeaveLabel">{!! trans('langLeaveSession') !!}</h2>
                     </div>
                 </div>
                 <div class='modal-body text-center'>

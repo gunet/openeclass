@@ -41,7 +41,7 @@ function getUserCourseInfo($uid): string
            $langThisCourseDescriptionIsEmpty, $langSyllabus,
            $langMyCollaborations, $langPreviewCollaboration, $langUnregCollaboration, $langNotEnrolledToCollaborations,
            $langWelcomeStudCollab, $langWelcomeProfCollab, $langThisCollabDescriptionIsEmpty,
-           $mine_courses, $mine_collaborations, $langNotificationsExist, $langCourseImage, $langClose;
+           $mine_courses, $mine_collaborations, $langNotificationsExist, $langCourseImage, $langClose, $langNoFavorite;
 
     if(!get_config('show_always_collaboration')){
         $myCourses = $mine_courses = getUserCourses($uid);
@@ -71,13 +71,15 @@ function getUserCourseInfo($uid): string
                     $visclass = "not_visible";
                 }
                 if (isset($data->favorite)) {
-                    $favorite_icon = 'fa-star Primary-500-cl';
+                    $favorite_icon = 'fa-star Primary-500-cl fa-lg';
                     $fav_status = 0;
-                    $fav_message = '';
-                } else {
-                    $favorite_icon = 'fa-regular fa-star';
-                    $fav_status = 1;
                     $fav_message = $langFavorite;
+                    $pressed = 'true';
+                } else {
+                    $favorite_icon = 'fa-regular fa-star fa-lg';
+                    $fav_status = 1;
+                    $fav_message = $langNoFavorite;
+                    $pressed = 'false';
                 }
                 $license = '';
                 if($data->course_license > 0){
@@ -107,8 +109,8 @@ function getUserCourseInfo($uid): string
                             <div class='col-12 portfolio-tools'>
                                 <div class='d-inline-flex'>";
 
-                $lesson_content .= "<a class='ClickCoursePortfolio me-3' href='javascript:void(0);' id='CourseTable_{$data->code}' role='button' data-bs-toggle='tooltip' data-bs-placement='top' title='$langPreview&nbsp;$langOfCourse' aria-label='$langPreview&nbsp;$langOfCourse'>
-                                    <i class='fa-solid fa-display'></i>
+                $lesson_content .= "<a class='ClickCoursePortfolio portfolio-course-links me-3' href='javascript:void(0);' id='CourseTable_{$data->code}' role='button' data-bs-toggle='tooltip' data-bs-placement='top' title='$langPreview&nbsp;$langOfCourse' aria-label='$langPreview&nbsp;$langOfCourse'>
+                                    <i class='fa-solid fa-display fa-lg'></i>
                                 </a>
 
                                 <div id='PortfolioModal{$data->code}' class='modal'>
@@ -182,13 +184,13 @@ function getUserCourseInfo($uid): string
                 $lesson_content .= "</div>
                                 </div>";
 
-                $lesson_content .= icon($favorite_icon, $fav_message, "course_favorite.php?course=" . $data->code . "&amp;fav=$fav_status");
+                $lesson_content .= icon($favorite_icon, $fav_message, "course_favorite.php?course=" . $data->code . "&amp;fav=$fav_status", "class='portfolio-course-links'", false, false, $pressed);
                 if ($data->status == USER_STUDENT) {
                     if (get_config('disable_student_unregister_cours') == 0) {
-                        $lesson_content .= icon('fa-minus-circle ms-3', $langUnregCourse, "{$urlServer}main/unregcours.php?cid=$data->course_id&amp;uid=$uid");
+                        $lesson_content .= icon('fa-minus-circle fa-lg ms-3', $langUnregCourse, "{$urlServer}main/unregcours.php?cid=$data->course_id&amp;uid=$uid", "class='portfolio-course-links'");
                     }
                 } elseif ($data->status == USER_TEACHER) {
-                    $lesson_content .= icon('fa-wrench ms-3', $langAdm, "{$urlServer}modules/course_info/index.php?from_home=true&amp;course=" . $data->code, '', true, true);
+                    $lesson_content .= icon('fa-wrench ms-3 fa-lg', $langAdm, "{$urlServer}modules/course_info/index.php?from_home=true&amp;course=" . $data->code, "class='portfolio-course-links'", true, true);
                 }
                 $lesson_content .= "</div>
                             </div>
@@ -234,13 +236,15 @@ function getUserCourseInfo($uid): string
                         $visclass = "not_visible";
                     }
                     if (isset($data->favorite)) {
-                        $favorite_icon = 'fa-star Primary-500-cl';
+                        $favorite_icon = 'fa-star Primary-500-cl fa-lg';
                         $fav_status = 0;
-                        $fav_message = '';
-                    } else {
-                        $favorite_icon = 'fa-regular fa-star';
-                        $fav_status = 1;
                         $fav_message = $langFavorite;
+                        $pressed = 'true';
+                    } else {
+                        $favorite_icon = 'fa-regular fa-star fa-lg';
+                        $fav_status = 1;
+                        $fav_message = $langNoFavorite;
+                        $pressed = 'false';
                     }
                     $license = '';
                     if($data->course_license > 0){
@@ -271,8 +275,8 @@ function getUserCourseInfo($uid): string
                                 <div class='col-12 portfolio-tools'>
                                     <div class='d-inline-flex'>";
 
-                    $lesson_content .= "<a class='ClickCoursePortfolio me-3' href='javascript:void(0);' id='CourseTable_{$data->code}' role='button' data-bs-toggle='tooltip' data-bs-placement='top' title='$langPreview&nbsp;$langPreviewCollaboration' aria-label='$langPreview&nbsp;$langOfCourse'>
-                                        <i class='fa-solid fa-display'></i>
+                    $lesson_content .= "<a class='ClickCoursePortfolio portfolio-course-links me-3' href='javascript:void(0);' id='CourseTable_{$data->code}' role='button' data-bs-toggle='tooltip' data-bs-placement='top' title='$langPreview&nbsp;$langPreviewCollaboration' aria-label='$langPreview&nbsp;$langOfCourse'>
+                                        <i class='fa-solid fa-display fa-lg'></i>
                                     </a>
 
                                     <div id='PortfolioModal{$data->code}' class='modal'>
@@ -347,13 +351,13 @@ function getUserCourseInfo($uid): string
                     $lesson_content .= "</div>
                                     </div>";
 
-                    $lesson_content .= icon($favorite_icon, $fav_message, "course_favorite.php?course=" . $data->code . "&amp;fav=$fav_status");
+                    $lesson_content .= icon($favorite_icon, $fav_message, "course_favorite.php?course=" . $data->code . "&amp;fav=$fav_status", "class='portfolio-course-links'", false, false, $pressed);
                     if ($data->status == USER_STUDENT) {
                         if (get_config('disable_student_unregister_cours') == 0) {
-                            $lesson_content .= icon('fa-minus-circle ms-3', $langUnregCollaboration, "{$urlServer}main/unregcours.php?cid=$data->course_id&amp;uid=$uid");
+                            $lesson_content .= icon('fa-minus-circle fa-lg ms-3', $langUnregCollaboration, "{$urlServer}main/unregcours.php?cid=$data->course_id&amp;uid=$uid", "class='portfolio-course-links'");
                         }
                     } elseif ($data->status == USER_TEACHER) {
-                        $lesson_content .= icon('fa-wrench ms-3', $langAdm, "{$urlServer}modules/course_info/index.php?from_home=true&amp;course=" . $data->code, '', true, true);
+                        $lesson_content .= icon('fa-wrench ms-3 fa-lg', $langAdm, "{$urlServer}modules/course_info/index.php?from_home=true&amp;course=" . $data->code, "class='portfolio-course-links'", true, true);
                     }
                     $lesson_content .= "</div>
                                 </div>

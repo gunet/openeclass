@@ -214,7 +214,7 @@
                 <div class="modal-header">
                     <div class='modal-title'>
                         <div class='icon-modal-default'><i class='fa-solid fa-cloud-arrow-up fa-xl Neutral-500-cl'></i></div>
-                        <div class='modal-title-default text-center mb-0 mt-2' id="BookingAcceptLabel">{!! trans('langAcceptBooking') !!}</div>
+                        <h2 class='modal-title-default text-center mb-0 mt-2' id="BookingAcceptLabel">{!! trans('langAcceptBooking') !!}</h2>
                     </div>
                 </div>
                 <div class="modal-body text-center">
@@ -239,7 +239,7 @@
                 <div class='modal-header'>
                     <div class='modal-title'>
                         <div class='icon-modal-default'><i class='fa-regular fa-trash-can fa-xl Accent-200-cl'></i></div>
-                        <div class="modal-title-default text-center mb-0 mt-2" id="BookingDeleteLabel">{!! trans('langCancelBooking') !!}</div>
+                        <h2 class="modal-title-default text-center mb-0 mt-2" id="BookingDeleteLabel">{!! trans('langCancelBooking') !!}</h2>
                     </div>
                 </div>
                 <div class='modal-body text-center'>
@@ -264,7 +264,7 @@
                 <div class='modal-header'>
                     <div class='modal-title'>
                         <div class='icon-modal-default'><i class='fa-regular fa-trash-can fa-xl Accent-200-cl'></i></div>
-                        <div class="modal-title-default text-center mb-0 mt-2" id="BookingHistoryDeleteLabel">{!! trans('langDelete') !!}</div>
+                        <h2 class="modal-title-default text-center mb-0 mt-2" id="BookingHistoryDeleteLabel">{!! trans('langDelete') !!}</h2>
                     </div>
                 </div>
                 <div class='modal-body text-center'>
