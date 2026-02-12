@@ -85,7 +85,7 @@ window.latexSymbols = {
         { symbol: '\\oiiint', code: '\\oiiint', name: 'Volume integral' }
     ],
     'Relations': [
-        { symbol: '\\=', code: '\\=', name: 'Equals' },
+        { symbol: '=', code: '=', name: 'Equals' },
         { symbol: '\\neq', code: '\\neq', name: 'Not equals' },
         { symbol: '\\approx', code: '\\approx', name: 'Approximately' },
         { symbol: '\\equiv', code: '\\equiv', name: 'Equivalent' },
