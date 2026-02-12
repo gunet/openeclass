@@ -103,7 +103,7 @@
                                 </div>
                             @endif
                             @if (!$is_group_assignment || $count_user_group_info || $on_behalf_of)
-                                <div class="col-12">
+                                <div class="col-12 mt-4">
                                     <div class="card panelCard px-lg-4 py-lg-3" @if($row->deadline && $cdate > $row->deadline) style="opacity: 0.65;" @endif>
                                         <div class="card-header d-flex justify-content-between align-items-center">
                                             <h3 class="mb-0" style="line-height: 14px;">

@@ -3,7 +3,7 @@
                                     <td class='nocategory-link'>
                                         <a href='{!! $link->url !!}' {!! $is_in_tinymce ? " class='fileURL' " : '' !!} target='_blank' aria-label="{{ trans('langOpenNewTab') }}">
                                             {{ $link->title ?: $link->url }}
-                                            <i class='fa fa-external-link' style='color:#444'></i>
+                                            <i class='fa fa-external-link'></i>
                                         </a>
                                         @if ($category->id == -2 && $link->user_id != 0)
                                             <small> - {{ trans('langLinkSubmittedBy') }} {!! display_user($link->user_id, false, false) !!}</small>

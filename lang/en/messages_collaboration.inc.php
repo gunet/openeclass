@@ -1117,3 +1117,4 @@ $langChooseAUser = "You did not select a user. Please try again.";
 $langProcessForFiliInTool = "You are in the process of completing the tool regarding the selected user.";
 $langConfirmParticipation = "Confirmation";
 $langReportAttendances = "Reports - Attendance records";
+$langUpdatePercentage = "Update session percentage of users";

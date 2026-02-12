@@ -69,7 +69,11 @@ class MultipleChoiceUniqueAnswer extends QuestionType
                 </div>";
         }
         $html_content .= "<button class='float-end clearSelect btn btn-outline-secondary mt-0'><i class='fa fa-solid fa-xmark'></i>&nbsp;$langClearChoice</button>";
-        $certainty_user_choice = $this->answer_object->get_user_certainty_answer_choice($this->question_id, $eurid);
+        if (isset($eurid)) {
+            $certainty_user_choice = $this->answer_object->get_user_certainty_answer_choice($this->question_id, $eurid);
+        } else {
+            $certainty_user_choice = null;
+        }
         $html_content .= $this->CertaintyBasedButtons($this->question_id, $certainty_user_choice);
 
         return $html_content;
