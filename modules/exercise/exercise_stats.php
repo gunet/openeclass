@@ -125,11 +125,6 @@ $tool_content .= "
 
                             foreach($questionList as $id) {
                                 $objQuestionTmp = new Question();
-                                if (!is_array($id)) {
-                                    $objQuestionTmp->read($id);
-                                    $correctCertaintyBased = $objQuestionTmp->certaintyBasedResults($exerciseId, true);
-                                    $wrongCertaintyBased = $objQuestionTmp->certaintyBasedResults($exerciseId, false, true);
-                                }
                                 if (is_array($id)) { // placeholder for random questions (if any)
                                     if ($id['criteria'] == 'difficulty') {
                                         next($id);
@@ -156,7 +151,10 @@ $tool_content .= "
                                         $tool_content .= "</td></tr>";
                                     }
                                 } else {
-                                     $tool_content .= "
+                                    $objQuestionTmp->read($id);
+                                    $correctCertaintyBased = $objQuestionTmp->certaintyBasedResults($exerciseId, true);
+                                    $wrongCertaintyBased = $objQuestionTmp->certaintyBasedResults($exerciseId, false, true);
+                                    $tool_content .= "
                                          <tr>
                                              <td>" . q_math($objQuestionTmp->selectTitle()) . "</td>";
                                                 if ($exerciseCalcGradeMethod == CALC_GRADE_METHOD_CERTAINTY_BASED) {

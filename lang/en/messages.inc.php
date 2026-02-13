@@ -3776,7 +3776,8 @@ $langEmailInfo = 'You can enter an email address in the following form.';
 $langUpgradeInProgress = 'Use is temporary restricted, because the platform is
     being upgraded since %s ago. Please wait for the upgrade to finish before trying
     to login.';
-$langAddOpenDelosVideoLink = "Add OpenDelos video link";
+$langAddOpenDelosVideoLink = "Add OpenDelos link";
+$langAddUniFlixVideoLink = "Add UniFlix link";
 $langOpenDelosReplaceInfo = "<p>Already existing links will be refreshed with current metadata.</p><p><span style='color:red'>*</span> The link already exists in $langsCourse videolinks.</p><p><span style='color:red'>**</span> The link already exists, but OpenDelos platform holds a newer version.</p>";
 $langWorkSubType = "Submission Type";
 $langWorkOnlineText = "Online Text";
@@ -4758,6 +4759,9 @@ $langOpenDelosRequireAuthHere = "here";
 $langOpenDelosAuth = "OpenDelos authentication";
 $langOpenDelosPrivateNote = "Note: If your course is open and you want to add multimedia files, then these will be visible to non logged-in users, too.";
 $langOpenDelosHttpsError = "Open Delos connectivity cannot be activated, because your server uses HTTPS protocol and Open Delos uses HTTP protocol. Newest broswer versions disallow mixing of protocols .";
+$langUniFlixAuth = "UniFlix authentication";
+$langUniFlixNewFileVersion = "There is a newwer verion of file in UniFlix.";
+$langUniFlixRequireAuth = ", UniFlix authentication is required, in order to display private multimedia files";
 $langGradeNumber = "Number";
 $langGradeScale = "Scale grade";
 $langDeleteSubmission = 'Submission delete';

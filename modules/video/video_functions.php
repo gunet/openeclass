@@ -216,3 +216,24 @@ function getQuotaInfo($course_code, $webDir) {
 
     return array($diskQuotaVideo, $updir, $diskUsed);
 }
+
+
+function isCASUser() {
+    global $uid;
+    $ret = false;
+    $q = Database::get()->querySingle("SELECT password FROM user WHERE id = ?d", $uid);
+    if ($q && $q->password == 'cas') {
+        $ret = true;
+    }
+    return $ret;
+}
+
+
+function getCurrentVideoLinks() {
+    global $course_id;
+    $current = array();
+    Database::get()->queryFunc("SELECT url, date FROM videolink WHERE course_id = ?d", function($vl) use (&$current) {
+        $current[$vl->url] = $vl->date;
+    }, $course_id);
+    return $current;
+}

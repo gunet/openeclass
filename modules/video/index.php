@@ -41,8 +41,10 @@ require_once 'include/lib/mediaresource.factory.php';
 require_once 'include/log.class.php';
 require_once 'modules/admin/extconfig/externals.php';
 require_once 'modules/admin/extconfig/opendelosapp.php';
+require_once 'modules/admin/extconfig/uniflixapp.php';
 require_once 'video_functions.php';
 require_once 'delos_functions.php';
+require_once 'uniflix_functions.php';
 
 $toolName = $langVideo;
 $data = array();
@@ -156,6 +158,13 @@ if ($display_tools) {
             'url' => $urlAppend . "modules/video/index.php?course=" . $course_code . "&amp;showQuota=true",
             'icon' => 'fa-pie-chart')
     );
+    if (isUniFlixEnabled()) {
+        $actionBarArray[] = array('title' => $langAddUniFlixVideoLink,
+            'url' => $urlAppend . "modules/video/edit.php?course=" . $course_code . "&amp;form_input=uniflix",
+            'icon' => 'fa-plus-circle',
+            'level' => 'primary-label',
+            'button-class' => 'btn-success');
+    }
     if (isDelosEnabled()) {
         $actionBarArray[] = array('title' => $langAddOpenDelosVideoLink,
             'url' => $urlAppend . "modules/video/edit.php?course=" . $course_code . "&amp;form_input=opendelos",
@@ -189,6 +198,14 @@ if (isset($_GET['form_input']) and $_GET['form_input'] === 'opendelos') {
     $data['checkAuth'] = $checkAuth;
     $data['currentVideoLinks'] = getCurrentVideoLinks();
     view('modules.video.editdelos', $data);
+} else if (isset($_GET['form_input']) and $_GET['form_input'] === 'uniflix') {
+    load_js('datatables');
+    list($jsonPublicObj, $jsonPrivateObj, $checkAuth) = requestUniFlixJSON();
+    $data['jsonPublicObj'] = $jsonPublicObj;
+    $data['jsonPrivateObj'] = $jsonPrivateObj;
+    $data['checkAuth'] = $checkAuth;
+    $data['currentVideoLinks'] = getCurrentVideoLinks();
+    view('modules.video.edituniflix', $data);
 } else {
     view('modules.video.index', $data);
 }
