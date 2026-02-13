@@ -34,7 +34,9 @@ require_once 'modules/search/classes/ConstantsUtil.php';
 require_once 'modules/search/classes/SearchEngineFactory.php';
 require_once 'modules/admin/extconfig/externals.php';
 require_once 'modules/admin/extconfig/opendelosapp.php';
+require_once 'modules/admin/extconfig/uniflixapp.php';
 require_once 'delos_functions.php';
+require_once 'uniflix_functions.php';
 require_once 'video_functions.php';
 
 $action = new action();
@@ -266,6 +268,32 @@ if ($form_input === 'opendelos') {
     $data['currentVideoLinks'] = getCurrentVideoLinks();
     $head_content .= getDelosJavaScript();
     view('modules.video.editdelos', $data);
+} else if ($form_input === 'uniflix') {
+    $jsonPublicObj = $jsonPrivateObj = $authUrl = '';
+    $checkAuth = false;
+    list($jsonPublicObj) = requestUniFlixJSON();
+    if (!$checkAuth) {
+        $authUrl = (isCASUser()) ? getUniFlixURL() . getUniFlixRLoginCASAPI() : getUniFlixURL() . getUniFlixRLoginAPI();
+        $authUrl .= "?token=" . getUniFlixSignedToken();
+        $data['action_bar'] = action_bar([
+            [
+                'title' => $langUniFlixAuth,
+                'url' => $authUrl,
+                'icon' => 'fa-film',
+                'level' => 'primary'
+            ]
+        ]);
+    } else {
+        list($jsonPublicObj, $jsonPrivateObj, $checkAuth) = requestUniFlixJSON();
+        $checkAuth = true;
+    }
+    $data['jsonPublicObj'] = $jsonPublicObj;
+    $data['jsonPrivateObj'] = $jsonPrivateObj;
+    $data['checkAuth'] = $checkAuth;
+    $data['authUrl'] = $authUrl;
+    $data['currentVideoLinks'] = getCurrentVideoLinks();
+    $head_content .= getDelosJavaScript();
+    view('modules.video.edituniflix', $data);
 } else {
     view('modules.video.edit', $data);
 }

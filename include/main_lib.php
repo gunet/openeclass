@@ -879,6 +879,13 @@ function html2text($string) {
     return html_entity_decode(strip_tags($text));
 }
 
+function base64url_encode($data) {
+    return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
+}
+
+function base64url_decode($data) {
+    return base64_decode(str_pad(strtr($data, '-_', '+/'), strlen($data) % 4, '=', STR_PAD_RIGHT));
+}
 
 /**
  * @brie   completes url contained in the text with "<a href ...".
