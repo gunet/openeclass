@@ -4655,6 +4655,7 @@ $langDelF = "Το αρχείο διαγράφηκε";
 $langAddV = "Προσθήκη αρχείου";
 $langAddVideoLink = "Σύνδεσμος βίντεο";
 $langAddOpenDelosVideoLink = "Σύνδεσμος OpenDelos";
+$langAddUniFlixVideoLink = "Σύνδεσμος UniFlix";
 $langsendV = "Αποστολή αρχείου ήχου ή βίντεο";
 $langDelList = "Διαγραφή όλων";
 $langVideoMod = "Τα στοιχεία του συνδέσμου τροποποιήθηκαν";
@@ -4675,9 +4676,13 @@ $langOpenDelosPrivateVideos = "Ιδιωτικά πολυμεσικά αρχεί�
 $langOpenDelosRequireAuth = "Για την εμφάνιση κλειστών πολυμεσικών αρχείων απαιτείται ξεχωριστή αυθεντικοποίηση με το OpenDelos";
 $langOpenDelosRequireAuthHere = "εδώ";
 $langOpenDelosAuth = "Αυθεντικοποίηση OpenDelos";
+$langOpenDelosHttpsError = "Η συνδεσιμότητα με το Open Delos δεν μπορεί να ενεργοποιηθεί γιατί ο τοπικός server χρησιμοποιεί HTTPS πρωτόκολλο, ενώ το Open Delos χρησιμοποιεί HTTP πρωτόκολλο. Οι νεότερες εκδόσεις των web browsers δεν επιτρέπουν μικτή χρήση των πρωτοκόλλων.";
 $langOpenDelosPrivateNote = "Σημείωση: Αν το μάθημά σας είναι 'ανοικτό' τότε τα κλειστά πολυμεσικά αρχεία θα είναι ορατά σε όλους τους χρήστες.";
 $langOpenDelosHttpsError = "Η συνδεσιμότητα με το Open Delos δεν μπορεί να ενεργοποιηθεί γιατί ο τοπικός server χρησιμοποιεί HTTPS πρωτόκολλο, ενώ το Open Delos χρησιμοποιεί HTTP πρωτόκολλο. Οι νεότερες εκδόσεις των web browsers δεν επιτρέπουν μικτή χρήση των πρωτοκόλλων.";
-
+$langUniFlixHttpsError = "Η συνδεσιμότητα με το Uni Flix δεν μπορεί να ενεργοποιηθεί γιατί ο τοπικός server χρησιμοποιεί HTTPS πρωτόκολλο, ενώ το Uni Flix χρησιμοποιεί HTTP πρωτόκολλο. Οι νεότερες εκδόσεις των web browsers δεν επιτρέπουν μικτή χρήση των πρωτοκόλλων.";
+$langUniFlixAuth = "Αυθεντικοποίηση με UniFlix";
+$langUniFlixNewFileVersion = "Υπάρχει νεώτερη έκδοση του αρχείου στο UniFlix.";
+$langUniFlixRequireAuth = "Για την εμφάνιση κλειστών πολυμεσικών αρχείων απαιτείται ξεχωριστή αυθεντικοποίηση με το UniFlix";
 
 /* * ***********************************************************
  * wiki.php
@@ -6525,6 +6530,7 @@ $langUserWayShortDescription = "<p>Επιλογές προσβασιμότητα
 $langUserWayLongDescription = "<p>Επιλογές προσβασιμότητας μέσω της υπηρεσίας UserWay. Δείτε περισσότερες πληροφορίες στο <a href='https://userway.org/'>https://userway.org/</a></p>";
 $langOpenDelosDescription = "<p>Το OpenDelos είναι η πλατφόρμα ανοικτού λογισμικού που σχεδιάζει το GUNET για τη Διαχείριση, Καταγραφή και Μετάδοση Βιντεοδιαλέξεων.</p>
 <p>Η πλατφόρμα υποστηρίζει τη δράση <a href='http://ocw-project.gunet.gr/'>Ανοικτών Ακαδημαϊκών $langOfCourses</a> σε συνδυασμό με την <a href='http://openeclass.org/'>πλατφόρμα Open eClass</a> και την εθνική πύλη αναζήτησης $langsOfCourses που επίσης αναπτύσσει το GUNET.</p>";
+$langUniFlixDescription = "<p>Το UniFlix είναι η πλατφόρμα ανοικτού λογισμικού που έχει σχεδιαστεί και απαπτυχθεί από το GUNET για τη Διαχείριση, Καταγραφή και Μετάδοση Βιντεοδιαλέξεων.</p>";
 $langBBBDescription = "Το ανοικτό λογισμικό <a href=\"https://www.bigbluebutton.org/\" target=\"_blank\">BigBlueButton</a> αποτελεί  ένα πλήρες σύστημα άμεσης web-based επικοινωνίας και συνεργασίας $langsOfTeachers και $langsOfStudents.</p>
 <p>Δεν απαιτείται εγκατάσταση πρόσθετου υλικού (Software ή Hardware) και εκτελείται απευθείας από τον πλοηγό διαδικτύου (Internet Explorer, Firefox, Chrome, Safari, κ.α)r. Για τη σύνδεση του Open eClass με μία εγκατεστημένη πλατφόρμα BigBlueButton επιλέξτε <a href=\"bbbmoduleconf.php\">Ρυθμίσεις</a>.</p>";
 $langBBBLongDescription = "Σύνδεση με την υπηρεσία τηλεδιάσκεψης BigBlueButton.";
