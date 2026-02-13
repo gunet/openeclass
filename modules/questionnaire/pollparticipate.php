@@ -752,7 +752,7 @@ function printPollForm() {
         $sql_an = "AND b.session_id = $s_id";
 
         // Initialize the user answers from db
-        user_answers_from_db($questions, $sql_an, $userDefault); 
+        user_answers_from_db($questions, $sql_an, $userDefault, $pageBreakExists); 
         // If the user has left an empty required question
         if (isset($_GET['emptyQ']) && isset($_SESSION['temp_data_answers'])) {
             foreach ($_SESSION['temp_data_answers'] as $Qid => $val) {
@@ -1579,7 +1579,7 @@ function checkPageBreakOn($PID) {
     return $check;
 }
 
-function user_answers_from_db($questions, $sql_an, $userDefault) {
+function user_answers_from_db($questions, $sql_an, $userDefault, $pageBreakExists) {
     if (!isset($_SESSION['loop_init_answers'])) {
         $_SESSION['loop_init_answers'] = 1;
     }
@@ -1637,6 +1637,9 @@ function user_answers_from_db($questions, $sql_an, $userDefault) {
                 if ($user_answers) {
                     $text = $user_answers->answer_text;
                     $_SESSION['data_answers'][$pqid] = $text;
+                }
+                if ($qtype == QTYPE_FILE && !$pageBreakExists && isset($_SESSION['data_file_answer'][$pqid])) {
+                    $_SESSION['data_answers'][$pqid] = $_SESSION['data_file_answer'][$pqid];
                 }
             } elseif ($qtype == QTYPE_TABLE) {
                 $s_data = [];
