@@ -391,13 +391,15 @@ if (isset($_GET['from_session_view'])) { //session view
 // If the poll has enabled the grade option, display the user's grades.
 $isEnabledGrade = pollHasGrade($pid);
 if ($isEnabledGrade && $is_editor && !isset($_GET['res_per_u']) && !isset($_GET['chart'])) {
+    $sSession = $_GET['session'] ?? 0;
     $grade_answers = Database::get()->queryArray("SELECT a.aid AS aid, b.weight AS wgt, a.poll_user_record_id AS poll_user_id
                                 FROM poll_user_record c, poll_answer_record a
                                 LEFT JOIN poll_question_answer b
                                 ON a.aid = b.pqaid
                                 WHERE a.qid IN (SELECT pqid FROM poll_question WHERE pid = ?d AND qtype = 1 OR QTYPE = 3)
                                 AND a.poll_user_record_id = c.id
-                                AND (c.email_verification = 1 OR c.email_verification IS NULL)", $pid);
+                                AND (c.email_verification = 1 OR c.email_verification IS NULL)
+                                AND c.session_id = ?d", $pid, $sSession);
 
     if (count($grade_answers) > 0) {
         $userGrades = [];
