@@ -36,7 +36,9 @@ $toolName = $langQuestionnaire;
 $pageName = $langPollCharts;
 
 // view statistics by a consultant
+$sID = 0;
 if (isset($_GET['from_session_view'])) {
+    $sID = $_GET['session'] ?? 0;
     if ($is_consultant) {
         $is_course_reviewer = true;
     }
@@ -308,7 +310,22 @@ $tool_content .= "<div class='col-12'>
                         $total_participants
                     </div>
                 </div>
-            </li>
+            </li>";
+            if ($sID > 0) {
+                $tool_content .= "
+                    <li class='list-group-item element $hidden_elements'>
+                        <div class='row row-cols-1 row-cols-md-2 g-1'>
+                            <div class='col-md-3 col-12'>
+                                <div class='title-default'>$langSSession:</div>
+                            </div>
+                            <div class='col-md-9 col-12 title-default-line-height'>
+                                $session_title
+                            </div>
+                        </div>
+                    </li>
+                ";
+            }
+$tool_content .= "
         </ul>
     </div>
 </div>
@@ -881,13 +898,17 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COU
                                     }
                                     $Qid = $theQuestion->pqid;
                                     if ($is_editor or $is_consultant) {
-                                        if (!file_exists("$webDir/courses/$course_code/poll_$pid/$userID/$Qid$filepath")) {
+                                        if (!file_exists("$webDir/courses/$course_code/poll_$pid/$userID/$Qid/$sID$filepath")) {
                                             $uAnswerText = "<p class='text-decoration-line-through text-danger'>$filename</p>";
                                         } else {
-                                            $uAnswerText = "<a target='_blank' href='{$urlServer}courses/$course_code/poll_$pid/$userID/$Qid$filepath'>$filename</a>";
+                                            $uAnswerText = "<a target='_blank' href='{$urlServer}courses/$course_code/poll_$pid/$userID/$Qid/$sID$filepath'>$filename</a>";
                                         }
                                     } else {
-                                        $uAnswerText = "<a target='_blank' href='{$urlServer}courses/$course_code/poll_$pid/$userID/$Qid$filepath'>$filename</a>";
+                                        if (!file_exists("$webDir/courses/$course_code/poll_$pid/$userID/$Qid/$sID$filepath")) {
+                                            $uAnswerText = "<p>$filename</p>";
+                                        } else {
+                                            $uAnswerText = "<a target='_blank' href='{$urlServer}courses/$course_code/poll_$pid/$userID/$Qid/$sID$filepath'>$filename</a>";
+                                        }
                                     }
                                 }
                                 $answers_table .= "

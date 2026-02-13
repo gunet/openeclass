@@ -523,6 +523,18 @@ if (isset($require_current_course) and $require_current_course) {
             }
         }
         $_SESSION['courses'][$course_code] = $courses[$course_code] = $status;
+        // Clear session data about polls in course or session mode
+        if (!isset($_GET['pid']) && !isset($_GET['from_poll'])) {
+            unset($_SESSION['current_page']);
+            unset($_SESSION['data_answers']);
+            unset($_SESSION['data_file_answer']);
+            unset($_SESSION['question_ids']);
+            unset($_SESSION['q_row_columns']);
+            unset($_SESSION['loop_init_answers']);
+            unset($_SESSION['loop_init_answers_session']);
+            unset($_SESSION['emptyQuestions']);
+            unset($_SESSION['onBehalfOfUserId']);
+        }
     }
 
     # force a specific interface language

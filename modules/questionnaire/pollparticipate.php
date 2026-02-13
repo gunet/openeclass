@@ -112,7 +112,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             $currentUser = $_POST['current_user'];
             $pollId = intval($_GET['pid']);
             $fpath = $_POST['fPath'];
-            $file = "$webDir/courses/$c/poll_$pollId/$currentUser/$questionID$fpath";
+            $file = "$webDir/courses/$c/poll_$pollId/$currentUser/$questionID/$s$fpath";
             if (file_exists($file)) {
                 unlink($file);
                 Database::get()->query("DELETE poll_answer_record FROM poll_answer_record
@@ -143,17 +143,18 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['answer'])) {
     
     $pid = intval($_GET['pid']);
     $qid = intval($_GET['qid']);
+    $sid = intval($_GET['session']);
     $currentUser = intval($_GET['u']);
     $filename = $_FILES['answer']['name'];
     validateUploadedFile($filename); // check file type
     $filename = add_ext_on_mime($filename);
     // File name used in file system and path field
     $safe_filename = safe_filename(get_file_extension($filename));
-    $dir = "$webDir/courses/$course_code/poll_$pid/$currentUser/$qid/";
+    $dir = "$webDir/courses/$course_code/poll_$pid/$currentUser/$qid/$sid/";
     if (!file_exists($dir)) {
-        mkdir("$webDir/courses/$course_code/poll_$pid/$currentUser/$qid/", 0755, true);
+        mkdir("$webDir/courses/$course_code/poll_$pid/$currentUser/$qid/$sid/", 0755, true);
     } else {// delete prev file
-        $folder = "$webDir/courses/$course_code/poll_$pid/$currentUser/$qid";
+        $folder = "$webDir/courses/$course_code/poll_$pid/$currentUser/$qid/$sid";
         if (is_dir($folder)) {
             $files = scandir($folder);
             foreach ($files as $file) {
@@ -166,7 +167,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['answer'])) {
             }
         }
     }
-    $pathfile = "$webDir/courses/$course_code/poll_$pid/$currentUser/$qid/$safe_filename";
+    $pathfile = "$webDir/courses/$course_code/poll_$pid/$currentUser/$qid/$sid/$safe_filename";
     if (move_uploaded_file($_FILES['answer']['tmp_name'], $pathfile)) {
         @chmod($pathfile, 0644);
         $real_filename = $_FILES['answer']['name'];
@@ -654,7 +655,7 @@ function printPollForm() {
                              </div>";
         }
         if (isset($_REQUEST['unit_id'])) {
-            $form_link = "../units/view.php?course=$course_code&amp;res_type=questionnaire&amp;id=$_REQUEST[unit_id]";
+            $form_link = "../units/view.php?course=$course_code&amp;res_type=questionnaire&amp;id=$_REQUEST[unit_id]&amp;from_poll=true";
         } else if (isset($_REQUEST['res_type'])) {
             $session_view = '';
             if (isset($_GET['from_session_view'])) {
@@ -664,9 +665,9 @@ function printPollForm() {
             if (isset($_GET['onBehalfOfUser'])) {
                 $onBehalfOfUserView = "&amp;onBehalfOfUser=true";
             }
-            $form_link = "../units/view.php?course=$course_code&amp;res_type=questionnaire$session_view$onBehalfOfUserView";
+            $form_link = "../units/view.php?course=$course_code&amp;from_poll=true&amp;res_type=questionnaire$session_view$onBehalfOfUserView";
         } else {
-            $form_link = "$_SERVER[SCRIPT_NAME]?course=$course_code";
+            $form_link = "$_SERVER[SCRIPT_NAME]?course=$course_code&from_poll=true";
         }
         if (!$temp_IsLime) {
             $tool_content .= "
@@ -1738,10 +1739,10 @@ function poll_upload_file($pid, $form_link, $qtype, $pqid, $currentUser) {
         $filepath = $arrFile['filepath'];
     }
 
-    if (!empty($filename) && file_exists("$webDir/courses/$course_code/poll_$pid/$currentUser/$pqid$filepath")) {
+    if (!empty($filename) && file_exists("$webDir/courses/$course_code/poll_$pid/$currentUser/$pqid/$sessionID$filepath")) {
         $del_file .= "
         <div class='d-flex align-items-center gap-2 mb-1'>
-            <p id='fileName_{$pqid}' class='TextBold'>$langFileName: <a class='TextBold' target='_blank' href='{$urlServer}courses/$course_code/poll_$pid/$currentUser/$pqid$filepath'>$filename</a></p>
+            <p id='fileName_{$pqid}' class='TextBold'>$langFileName: <a class='TextBold' target='_blank' href='{$urlServer}courses/$course_code/poll_$pid/$currentUser/$pqid/$sessionID$filepath'>$filename</a></p>
             <a id='del_file_{$pqid}' class='btn deleteAdminBtn' data-bs-toggle='tooltip' data-bs-placement='top' title='$langDelete' style='width: 25px; height: 25px;'><i class='fa-solid fa-trash'></i></a>
         </div>
         <div id='info_uploaded_file_{$pqid}' class='mb-4 mt-2'>$langInfoPollUploadedFile</div>
@@ -1749,7 +1750,7 @@ function poll_upload_file($pid, $form_link, $qtype, $pqid, $currentUser) {
     } else {
         // If the user has uploaded a file and the user has canceled the poll, 
         // remove the uploaded file for the current question.
-        $folderPath = "$webDir/courses/$course_code/poll_$pid/$currentUser/$pqid";
+        $folderPath = "$webDir/courses/$course_code/poll_$pid/$currentUser/$pqid/$sessionID";
         if (is_dir($folderPath)) {
             $files = scandir($folderPath);
             foreach ($files as $file) {
@@ -1817,7 +1818,7 @@ function poll_upload_file($pid, $form_link, $qtype, $pqid, $currentUser) {
                     });
 
                     uppy.use(XHRUpload, {
-                        endpoint: '{$urlAppend}modules/questionnaire/pollparticipate.php?course={$course_code}&pid={$pid}&qid={$pqid}&u={$currentUser}&behalf_of_user_mode={$is_onBehalfOfUser_mode}&token={$token}',
+                        endpoint: '{$urlAppend}modules/questionnaire/pollparticipate.php?course={$course_code}&pid={$pid}&session={$sessionID}&qid={$pqid}&u={$currentUser}&behalf_of_user_mode={$is_onBehalfOfUser_mode}&token={$token}',
                         fieldName: 'answer',
                         formData: true,
                         getResponseData: (responseText, response) => {
