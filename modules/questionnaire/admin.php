@@ -99,7 +99,10 @@ if (isset($_POST['submitPoll'])) {
         $lti_template = $_POST['lti_template'] ?? NULL;
         $launchcontainer = $_POST['lti_launchcontainer'] ?? NULL;
         $display_position = (isset($_POST['display_position'])) ? $_POST['display_position'] : 0;
-        $require_answer = (isset($_POST['require_answer'])) ? $_POST['require_answer'] : 0;
+        //$require_answer = (isset($_POST['require_answer'])) ? $_POST['require_answer'] : 0;
+        
+        // We have added require answer for a specific question
+        $require_answer = 0;
 
         $msg_gr_arr = [];
         if (isset($_POST['messages']) && isset($_POST['grades'])) {
@@ -724,23 +727,23 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                         </label>
                     </div>
                 </div>
-            </div>
+            </div>";
             
-            <div class='form-group mt-4'>
-                <div class='col-sm-12 control-label-notes'>$langQuestions</div>
-                <div class='col-sm-12'>
-                    <div class='checkbox'>
-                        <label class='label-container' aria-label='$langSelect'>
-                            <input type='checkbox' name='require_answer' id='require_answer' value='1'" .
-                            ((isset($poll->require_answer) && $poll->require_answer) ? 'checked' : '') . ">
-                            <span class='checkmark'></span>
-                            $langEnableRequiredAnswer
-                        </label>
-                    </div>
-                </div>
-            </div>
+            // <div class='form-group mt-4'>
+            //     <div class='col-sm-12 control-label-notes'>$langQuestions</div>
+            //     <div class='col-sm-12'>
+            //         <div class='checkbox'>
+            //             <label class='label-container' aria-label='$langSelect'>
+            //                 <input type='checkbox' name='require_answer' id='require_answer' value='1'" .
+            //                 ((isset($poll->require_answer) && $poll->require_answer) ? 'checked' : '') . ">
+            //                 <span class='checkmark'></span>
+            //                 $langEnableRequiredAnswer
+            //             </label>
+            //         </div>
+            //     </div>
+            // </div>
             
-            <div class='form-group mt-4 d-flex justify-content-start align-items-center gap-2'>
+$tool_content .= "<div class='form-group mt-4 d-flex justify-content-start align-items-center gap-2'>
                 <label for='addMsg' class='form-label'>$langPollAddMsg:</label>
                 <input id='addMsg' style='width:30px; height:30px;' class='btn submitAdminBtn' type='submit' name='MoreMessages' value='+'>
             </div>";
