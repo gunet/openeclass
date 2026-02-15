@@ -51,6 +51,10 @@
                     'button-class' => 'btn-success' ],
                 ]) !!}
 
+            @if (!$disk_usage_cron_running)
+                @include('admin.other.tenants.tenants_cron_modal')
+            @endif
+
             <div class='col-12'>
                 @if ($tenants)
                     <div class='table-responsive'>

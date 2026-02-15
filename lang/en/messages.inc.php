@@ -6855,3 +6855,17 @@ $langTenantGotoURL = 'Go to your URL';
 $langTenantURLCheckFail = 'The check failed. Please verify that the address <b>{host}</b> points to the service server ({server}) and try again. Note that due to DNS record caching, it may take several hours until your change becomes visible to the system.';
 $langTenantURLActivationInfo1 = 'Your URL is not yet active. Before activation, you must perform the following required actions.';
 $langTenantURLActivationInfo2 = 'In order for the platform to work at your organization\'s URL, the DNS address %s must be mapped to the service server address. The following record should be added by the technicians managing the DNS zone %s:';
+$langTenantsCronEnableTitle = 'Instructions for enabling automatic disk usage logging';
+$langTenantsCronEnableInstructions = '
+<p>If the service is hosted in a Unix / Linux environment, you can add the following command as a cron job on the server by entering <code>crontab -e</code>:</p>
+<pre>
+* * * * *  /usr/bin/php {webRoot}/cron-disk-usage.php
+</pre>
+<p>Depending on the hosting system, you may need to modify the full path to the php command.</p>
+<p>Alternatively, you can enable loading of the address / URL:<br>
+<code>{cronURL}</code><br>
+For example, this can be done through an external webcron system.</p>';
+$langTenantsCronRunning = 'Automatic disk usage logging is active.';
+$langTenantsCronStopped = 'Warning! Automatic disk usage logging has stopped! {Check the settings}';
+$langTenantsCronEnable = 'Note: You can enable automatic disk usage logging without additional actions from administrators (opening the logging window). {Read more}';
+

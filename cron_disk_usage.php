@@ -3,6 +3,16 @@
 require_once 'include/baseTheme.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 
+// update disk-usage cron timestamp
+$ts = date('Y-m-d H:i', time());
+Database::get()->querySingle(
+    "INSERT INTO config
+        SET `key` = 'disk_usage_cron_ts', value = ?s
+        ON DUPLICATE KEY UPDATE value = ?s",
+    $ts,
+    $ts
+);
+
 $courses = Database::get()->queryArray("SELECT id, code FROM course");
 $upsert_commands = [];
 
