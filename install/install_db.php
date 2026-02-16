@@ -1101,6 +1101,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `poll_question` (
     `q_column` INT NOT NULL DEFAULT 0,
     `page` INT NOT NULL DEFAULT 0,
     `require_response` INT NOT NULL DEFAULT 0,
+    `require_grade` INT NOT NULL DEFAULT 0,
     `total_weight` FLOAT NULL,
     `has_sub_question` INT NOT NULL DEFAULT 0) $tbl_options");
 

@@ -37,6 +37,7 @@ require_once 'include/lib/fileUploadLib.inc.php';
 
 load_js('bootstrap-slider');
 load_js('bootstrap-datetimepicker');
+load_js('bootstrap-datepicker');
 
 $toolName = $langQuestionnaire;
 
@@ -45,6 +46,12 @@ $head_content .= "
         $(function() {
             $('.datetimeAnswer').datetimepicker({
                 format: 'dd-mm-yyyy hh:ii',
+                pickerPosition: 'bottom-right',
+                language: '".$language."',
+                autoclose: true
+            });
+            $('.dateAnswer').datepicker({
+                format: 'dd-mm-yyyy',
                 pickerPosition: 'bottom-right',
                 language: '".$language."',
                 autoclose: true
@@ -356,6 +363,8 @@ function printPollForm() {
                     $('#dateTimeAnswer_'+numberQ).val('');
                 } else if (typeQ == 8) {
                     $('#shortAnswer_'+numberQ).val('');
+                } else if(typeQ == 10) {
+                    $('#dateAnswer_'+numberQ).val('');
                 }
                 // Clean question from session data
                 var qQuestion = $(this).attr('data-question-clean');
@@ -378,7 +387,7 @@ function printPollForm() {
                         var qType = $(elem).attr('data-question-type');
                         var name = elem.name;
                         const foundNumbers = name.match(/\d+/g);
-                        if (qType == 1 || qType == 2 || qType == 5 || qType == 7 || qType == 8) { // radio or single text or scale or datetime or short answer
+                        if (qType == 1 || qType == 2 || qType == 5 || qType == 7 || qType == 8 || qType == 10) { // radio or single text or scale or datetime or short answer
                             if (foundNumbers.length == 1 && elem.value != '') {
                                 var qRow = foundNumbers[0];
                                 if (!obj[qRow]) {
@@ -386,7 +395,7 @@ function printPollForm() {
                                 }
                                 if (qType == 1 && elem.checked) {
                                     obj[qRow] = elem.value;
-                                } else if (qType == 2 || qType == 5 || qType == 7 || qType == 8) {
+                                } else if (qType == 2 || qType == 5 || qType == 7 || qType == 8 || qType == 10) {
                                     obj[qRow] = elem.value;
                                 }
                             }
@@ -1076,7 +1085,7 @@ function printPollForm() {
                                                             <a id='{$qtype}_{$pqid}' class='btn deleteAdminBtn clearUpBtn gap-1' data-question-clean='$pqid'><i class='fa-regular fa-trash-can'></i>$langCleanup</a>
                                                         </div>";
                                 }
-                            } elseif ($qtype == QTYPE_DATETIME || $qtype == QTYPE_SHORT) {
+                            } elseif ($qtype == QTYPE_DATETIME || $qtype == QTYPE_SHORT || $qtype == QTYPE_DATE) {
                                 $text = '';
                                 if (isset($_SESSION['data_answers']) && !empty($_SESSION['data_answers'][$pqid])) {
                                     $text = $_SESSION['data_answers'][$pqid];
@@ -1091,6 +1100,18 @@ function printPollForm() {
                                                     <i class='fa-regular fa-calendar Neutral-600-cl'></i>
                                                 </span>
                                                 <input id='dateTimeAnswer_$pqid' class='datetimeAnswer form-control mt-0 border-start-0' name='answer[$pqid]' type='text' data-question-type='$qtype' value='$text'>
+                                            </div>
+                                        </div>
+                                    </div>";
+                                } elseif ($qtype == QTYPE_DATE) {
+                                    $tool_content .= "
+                                    <div class='form-group margin-bottom-fat'>
+                                        <div class='col-sm-12 margin-top-thin QuestionType_{$qtype} QuestionNumber_{$pqid}'>
+                                            <div class='input-group'>
+                                                <span class='add-on1 input-group-text h-40px input-border-color border-end-0'>
+                                                    <i class='fa-regular fa-calendar Neutral-600-cl'></i>
+                                                </span>
+                                                <input id='dateAnswer_$pqid' class='dateAnswer form-control mt-0 border-start-0' name='answer[$pqid]' type='text' data-question-type='$qtype' value='$text'>
                                             </div>
                                         </div>
                                     </div>";
@@ -1343,7 +1364,7 @@ function submitPoll() {
                     $require_an = true;
                     $_SESSION['unanswered_required_qids'][] = $q->pqid;
                 }
-            } elseif ($q->require_response && isset($answer[$q->pqid]) && empty($answer[$q->pqid]) && ($q->qtype == QTYPE_DATETIME or $q->qtype == QTYPE_SHORT or $q->qtype == QTYPE_FILE)) {
+            } elseif ($q->require_response && isset($answer[$q->pqid]) && empty($answer[$q->pqid]) && ($q->qtype == QTYPE_DATETIME or $q->qtype == QTYPE_SHORT or $q->qtype == QTYPE_FILE or $q->qtype == QTYPE_DATE)) {
                 $require_an = true;
                 $_SESSION['unanswered_required_qids'][] = $q->pqid;
             }
@@ -1448,7 +1469,7 @@ function submitPoll() {
                     $aid = -1;
                 }
                 $answer_text = '';
-            } elseif ($qtype == QTYPE_FILL || $qtype == QTYPE_DATETIME || $qtype == QTYPE_SHORT || $qtype == QTYPE_FILE) {
+            } elseif ($qtype == QTYPE_FILL || $qtype == QTYPE_DATETIME || $qtype == QTYPE_SHORT || $qtype == QTYPE_FILE || $qtype == QTYPE_DATE) {
                 $_SESSION['q_answer'] = $answer;
                 $answer_text = trim($answer[$pqid]);
                 if ($answer_text === '' and !$default_answer and !$atleast_one_answer) {
@@ -1627,7 +1648,7 @@ function user_answers_from_db($questions, $sql_an, $userDefault, $pageBreakExist
                     $slider_value = $user_answers->answer_text;
                     $_SESSION['data_answers'][$pqid] = $slider_value;
                 }
-            } elseif ($qtype == QTYPE_FILL or $qtype == QTYPE_DATETIME or $qtype == QTYPE_SHORT or $qtype == QTYPE_FILE) {
+            } elseif ($qtype == QTYPE_FILL or $qtype == QTYPE_DATETIME or $qtype == QTYPE_SHORT or $qtype == QTYPE_FILE or $qtype == QTYPE_DATE) {
                 $user_answers = Database::get()->querySingle("SELECT a.answer_text
                                     FROM poll_answer_record a, poll_user_record b
                                 WHERE qid = ?d
@@ -1684,7 +1705,7 @@ function update_submission($pid) {
                 $multiple_values_arr = explode(',', $value);
                 $final_answers[$question_key] = $multiple_values_arr;
             } elseif ($questionType == QTYPE_SINGLE || $questionType == QTYPE_FILL || $questionType == QTYPE_SCALE
-                        || $questionType == QTYPE_DATETIME || $questionType == QTYPE_SHORT || $questionType == QTYPE_FILE) {
+                        || $questionType == QTYPE_DATETIME || $questionType == QTYPE_SHORT || $questionType == QTYPE_FILE || $questionType == QTYPE_DATE) {
                 $final_answers[$question_key] = $value;
             } elseif ($questionType == QTYPE_TABLE) {
                 $resDimension = Database::get()->querySingle("SELECT q_row,q_column FROM poll_question WHERE pqid = ?d", $question_key);
