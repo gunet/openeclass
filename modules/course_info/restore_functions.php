@@ -551,8 +551,14 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
                     );
                 } else {
                     $upd_course_sql .= " , view_type = ?s ";
-                    array_push($upd_course_args, $course_data['view_type']);
+                    $upd_course_args[] = $course_data['view_type'];
                 }
+
+                if (isset($course_data['is_collaborative'])) {
+                    $upd_course_sql .= " , is_collaborative = ?d ";
+                    $upd_course_args[] = $course_data['is_collaborative'];
+                }
+
                 $upd_course_sql .= " WHERE id = ?d ";
                 $upd_course_args[] = intval($new_course_id);
                 Database::get()->query($upd_course_sql, $upd_course_args);
