@@ -259,9 +259,10 @@ function requestDelosJSON() {
     return array($jsonPublicObj, $jsonPrivateObj, $checkAuth);
 }
 
-function storeDelosResources($jsonPublicObj, $jsonPrivateObj, $checkAuth) {
+function storeResources($jsonPublicObj, $jsonPrivateObj, $submittedResources) {
+
     global $course_id;
-    $submittedResources = $_POST['delosResources'];
+
     $submittedCategory = $_POST['selectcategory'];
     $searchEngine = SearchEngineFactory::create();
 
