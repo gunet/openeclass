@@ -485,7 +485,7 @@
                                                             {{-- submission files --}}
                                                             <td data-sort='{{ $row->submission_date }}' class='filename-col text-nowrap text-center'>
                                                                 @if ($assign->submission_type == 1)
-                                                                    <button class='onlineText btn btn-xs btn-default submitAdminBtn' data-id='{{ $row->id }}'>
+                                                                    <button class='onlineText btn btn-xs btn-default submitAdminBtn' data-id='{{ getIndirectReference($row->id) }}'>
                                                                         {{ trans('langQuestionView') }}
                                                                     </button>
                                                                 @elseif (!empty($row->file_name))

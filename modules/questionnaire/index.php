@@ -438,12 +438,13 @@ if ($is_editor) {
                                                    q_column = ?d,
                                                    `page` = ?d,
                                                    require_response = ?d,
+                                                   require_grade = ?d,
                                                    total_weight = ?d,
                                                    has_sub_question = ?d", 
                                                    $new_pid, $question->question_text, $question->qtype, 
                                                    $question->q_position, $question->q_scale, $q_description, 
                                                    $answer_scales, $q_row, $q_column,
-                                                   $question->page, $question->require_response, $total_weight, $question->has_sub_question)->lastInsertID;
+                                                   $question->page, $question->require_response, $question->require_grade, $total_weight, $question->has_sub_question)->lastInsertID;
                     $answers = Database::get()->queryArray("SELECT * FROM poll_question_answer WHERE pqid = ?d ORDER BY pqaid", $question->pqid);
                     foreach ($answers as $answer) {
                         Database::get()->query("INSERT INTO poll_question_answer

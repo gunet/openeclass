@@ -41,14 +41,14 @@ if (isset($_GET['all'])) {
 
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langGroups);
 
+load_js('tools');
 load_js('select2');
 
 $head_content .= "<script type='text/javascript'>
     $(document).ready(function () {
         $('#select-tutor').select2();
     });
-    </script>
-    <script type='text/javascript' src='{$urlAppend}js/tools.js'></script>\n
+    </script>    
 ";
 
 //check if social bookmarking is enabled for this course
@@ -59,62 +59,63 @@ $group_quantity_value = Session::has('group_quantity') ? Session::get('group_qua
 
 if (isset($_GET['all'])) {
     $tool_content .= "
-    <div class='d-lg-flex gap-4 mt-4'>
-        <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>
-        <form class='form-horizontal' role='form' method='post' action='index.php?course=$course_code'>
-        <fieldset>
-        <legend class='mb-0' aria-label='$langForm'></legend>
-        <div class='form-group".(Session::getError('group_quantity') ? " has-error":"")."'>
-            <label for='group_quantity' class='col-sm-12 control-label-notes'>$langNewGroups <span class='asterisk Accent-200-cl'>(*)</span></label>
-            <div class='col-sm-12'>
-                <input name='group_quantity' type='text' class='form-control' id='group_quantity' value='$group_quantity_value' placeholder='$langNewGroups'>
-                <span class='help-block Accent-200-cl'>".Session::getError('group_quantity')."</span>
+            <div class='d-lg-flex gap-4 mt-4'>
+                <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>
+                <form class='form-horizontal' role='form' method='post' action='index.php?course=$course_code'>
+                <fieldset>
+                <legend class='mb-0' aria-label='$langForm'></legend>
+                <div class='form-group".(Session::getError('group_quantity') ? " has-error":"")."'>
+                    <label for='group_quantity' class='col-sm-12 control-label-notes'>$langNewGroups <span class='asterisk Accent-200-cl'>(*)</span></label>
+                    <div class='col-sm-12'>
+                        <input name='group_quantity' type='text' class='form-control' id='group_quantity' value='$group_quantity_value' placeholder='$langNewGroups'>
+                        <span class='help-block Accent-200-cl'>".Session::getError('group_quantity')."</span>
+                    </div>
+                </div>
+                <div class='form-group".(Session::getError('group_max') ? " has-error":"")." mt-4'>
+                    <label for='group_max' class='col-sm-12 control-label-notes'>$langNewGroupMembers <span class='asterisk Accent-200-cl'>(*)</span></label>
+                    <div class='col-sm-12'>
+                        <input name='group_max' type='text' class='form-control' id='group_max' value='$group_max_value' placeholder='$langNewGroupMembers'>
+                        <span class='help-block Accent-200-cl'>".(Session::getError('group_max') ?: "$langGroupInfiniteUsers")."</span>
+                    </div>
+                </div>
+                <div class='form-group mt-4'>
+                    <label for='selectcategory' class='col-sm-12 control-label-notes'>$langCategory:</label>
+                    <div class='col-12'>
+                        <select class='form-select' name='selectcategory' id='selectcategory'>
+                        <option value='0'>--</option>";
+                if ($social_bookmarks_enabled) {
+                    $tool_content .= "<option value='-2'";
+                    if (isset($category) and $category == -2) {
+                        $tool_content .= " selected='selected'";
+                    }
+                    $tool_content .= ">$langSocialCategory</option>";
+                }
+                $resultcategories = Database::get()->queryArray("SELECT * FROM group_category WHERE course_id = ?d ORDER BY `name`", $course_id);
+                foreach ($resultcategories as $myrow) {
+                    $tool_content .= "<option value='" . $myrow->id . "'";
+                    if (isset($category) and $myrow->id == $category) {
+                        $tool_content .= " selected='selected'";
+                    }
+                    $tool_content .= '>' . q($myrow->name) . "</option>";
+                }
+                $tool_content .= "
+                    </select>
+                    </div>
+                </div>";
+                $tool_content .= "<input type='hidden' name='all' value='1'>";
+                $tool_content .= "<div class='form-group mt-5'>
+                                <div class='col-12 d-flex justify-content-end align-items-center gap-2'>
+                                    <input class='btn submitAdminBtn' type='submit' value='$langSubmit' name='creation'>
+                                    <a class='btn cancelAdminBtn' href='index.php?course=$course_code'>$langCancel</a>
+                                </div>
+                                </div>
+                </fieldset>
+                </form>
+            </div></div>
+            <div class='d-none d-lg-block'>
+                <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
             </div>
-        </div>
-        <div class='form-group".(Session::getError('group_max') ? " has-error":"")." mt-4'>
-            <label for='group_max' class='col-sm-12 control-label-notes'>$langNewGroupMembers <span class='asterisk Accent-200-cl'>(*)</span></label>
-            <div class='col-sm-12'>
-                <input name='group_max' type='text' class='form-control' id='group_max' value='$group_max_value' placeholder='$langNewGroupMembers'>
-                <span class='help-block Accent-200-cl'>".(Session::getError('group_max') ?: "$langGroupInfiniteUsers")."</span>
-            </div>
-        </div>
-        <div class='form-group mt-4'>
-            <label for='selectcategory' class='col-sm-12 control-label-notes'>$langCategory:</label>
-            <div class='col-12'>
-                <select class='form-select' name='selectcategory' id='selectcategory'>
-                <option value='0'>--</option>";
-        if ($social_bookmarks_enabled) {
-            $tool_content .= "<option value='-2'";
-            if (isset($category) and $category == -2) {
-                $tool_content .= " selected='selected'";
-            }
-            $tool_content .= ">$langSocialCategory</option>";
-        }
-        $resultcategories = Database::get()->queryArray("SELECT * FROM group_category WHERE course_id = ?d ORDER BY `name`", $course_id);
-        foreach ($resultcategories as $myrow) {
-            $tool_content .= "<option value='" . $myrow->id . "'";
-            if (isset($category) and $myrow->id == $category) {
-                $tool_content .= " selected='selected'";
-            }
-            $tool_content .= '>' . q($myrow->name) . "</option>";
-        }
-        $tool_content .= "
-            </select>
-            </div>
-        </div>";
-        $tool_content .= "<input type='hidden' name='all' value='$_GET[all]'>";
-        $tool_content .= "<div class='form-group mt-5'>
-        <div class='col-12 d-flex justify-content-end align-items-center gap-2'>
-            <input class='btn submitAdminBtn' type='submit' value='$langSubmit' name='creation'>
-            <a class='btn cancelAdminBtn' href='index.php?course=$course_code'>$langCancel</a>
-        </div>
-        </div>
-        </fieldset>
-        </form>
-    </div></div><div class='d-none d-lg-block'>
-    <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
-</div>
-</div>";
+    </div>";
 } else {
     if ($is_editor) {
             $tool_content_tutor = "<select name='tutor[]' multiple id='select-tutor' class='form-select h-100 rounded-0'>";
@@ -165,8 +166,7 @@ if (isset($_GET['all'])) {
                     <div class='col-sm-12'>
                         $tool_content_tutor
                     </div>
-                </div>
-            
+                </div>            
         ";
 
     $multi_reg = setting_get(SETTING_GROUP_MULTIPLE_REGISTRATION, $course_id);
