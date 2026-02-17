@@ -702,7 +702,7 @@ function printPollForm() {
             unset($_SESSION['current_page']);
         }
         $_SESSION['current_page'] = $pageBreakExists ? 1 : '';
-        if ($pageBreakExists && isset($_SESSION['data_file_answer'])) {
+        if ($pageBreakExists && isset($_SESSION['data_file_answer']) && !isset($_GET['onBehalfOfUser'])) {
             unset($_SESSION['data_file_answer']);
         }
         if ($pageBreakExists && isset($_GET['page'])) {
@@ -1660,6 +1660,9 @@ function user_answers_from_db($questions, $sql_an, $userDefault, $pageBreakExist
                     $_SESSION['data_answers'][$pqid] = $text;
                 }
                 if ($qtype == QTYPE_FILE && !$pageBreakExists && isset($_SESSION['data_file_answer'][$pqid])) {
+                    $_SESSION['data_answers'][$pqid] = $_SESSION['data_file_answer'][$pqid];
+                }
+                if ($qtype == QTYPE_FILE && $pageBreakExists && isset($_SESSION['data_file_answer'][$pqid]) && isset($_GET['onBehalfOfUser'])) {
                     $_SESSION['data_answers'][$pqid] = $_SESSION['data_file_answer'][$pqid];
                 }
             } elseif ($qtype == QTYPE_TABLE) {
