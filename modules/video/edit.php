@@ -225,7 +225,18 @@ if (isset($_POST['add_submit'])) { // add
 if (isset($_POST['add_submit_delos'])) {
     if (isset($_POST['delosResources'])) {
         list($jsonPublicObj, $jsonPrivateObj, $checkAuth) = requestDelosJSON();
-        storeDelosResources($jsonPublicObj, $jsonPrivateObj, $checkAuth);
+        storeResources($jsonPublicObj, $jsonPrivateObj, $_POST['delosResources'] );
+    }
+    Session::flash('message', $langLinksAdded);
+    Session::flash('alert-class', 'alert-success');
+    redirect_to_home_page("modules/video/index.php?course=" . $course_code);
+}
+
+// handle UniFlix submitted data
+if (isset($_POST['add_submit_uniflix'])) {
+    if (isset($_POST['uniflixResources'])) {
+        list($jsonPublicObj, $jsonPrivateObj, $checkAuth) = requestUniFlixJSON();
+        storeResources($jsonPublicObj, $jsonPrivateObj, $_POST['uniflixResources']);
     }
     Session::flash('message', $langLinksAdded);
     Session::flash('alert-class', 'alert-success');

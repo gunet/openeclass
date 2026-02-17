@@ -109,6 +109,26 @@
         <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}courses/theme_data/{{ $theme_id }}/style_str.css?v={{ $cache_suffix }}"/>
     @endif
 
+    <script>
+        $(function() {
+            $('.action-button-dropdown').on('click', function () {
+                // Close all other open dropdowns except the one being opened
+                $('.action-button-dropdown.show').not(this).each(function() {
+                    $(this).dropdown('hide');
+                });
+                $('.table-responsive').addClass('no-overflow');
+                $('.dt-scroll-head').addClass('no-overflow');
+                $('.dt-scroll-body').addClass('no-overflow');
+            });
+
+            $('.action-button-dropdown').on('hide.bs.dropdown', function () {
+                $('.table-responsive').removeClass('no-overflow');
+                $('.dt-scroll-head').removeClass('no-overflow');
+                $('.dt-scroll-body').removeClass('no-overflow');
+            });
+        });
+    </script>
+
 </head>
 
 <body>

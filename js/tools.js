@@ -759,12 +759,15 @@ function secondsToHms(d) {
 }
 
 // Questionnaire / Poll
-function poll_init(langPoll, isSubQuestion) {
+function poll_init(langPoll, isSubQuestion, isGradeOn) {
     delete_init();
     $('input[type=submit][value="+"]').on('click', function (e) {
         e.preventDefault();
         var disQ = 'd-block';
         if (isSubQuestion) {
+            var disQ = 'd-none';
+        }
+        if (isGradeOn == 0) {
             var disQ = 'd-none';
         }
         var last_form_group = $('div.form-group.input-group').last();
