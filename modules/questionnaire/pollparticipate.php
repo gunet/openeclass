@@ -459,6 +459,8 @@ function printPollForm() {
             $('.single_type_answer').change(function() {
                 var mainQ = $(this).attr('data-main-question');
                 var valId = $(this).val();
+                $('.sub_question_temp_'+mainQ+' input[type=radio]').prop('checked', false);
+                $('.sub_question_temp_'+mainQ+' input[type=checkbox]').prop('checked', false);
                 $('.sub_question_temp_'+mainQ).removeClass('d-block').addClass('d-none');
                 $('.sub_question_'+valId).removeClass('d-none').addClass('d-block');
             });
