@@ -2406,7 +2406,8 @@ input[type="submit"].warningAdminBtn:hover {
   letter-spacing: 0px;
   line-height: 16px;
 }
-.delete.confirmAction{
+.delete.confirmAction,
+.delete.delete_btn{
   height: auto;
 }
 .btn.btn-danger:hover,
