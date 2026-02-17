@@ -43,7 +43,13 @@ if (isset($_REQUEST['course_id']) and (!empty($_REQUEST['course_id']))) {
     redirect_to_home_page();
 }
 
-$userdata = Database::get()->querySingle("SELECT username, givenname, surname, email FROM user WHERE id = ?d", $uid);
+$userdata = Database::get()->querySingle(
+    "SELECT u.username, u.givenname, u.surname, u.email, u.am,
+            h.name AS department_name
+     FROM user u
+     LEFT JOIN user_department ud ON ud.user = u.id
+     LEFT JOIN hierarchy h ON h.id = ud.department
+     WHERE u.id = ?d", $uid);
 
 if (empty($userdata->email)) {
     if ($uid) {
@@ -54,40 +60,32 @@ if (empty($userdata->email)) {
 } elseif (isset($_POST['content'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $content = trim($_POST['content']);
-    if (empty($content)) {
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langEmptyMessage</span></div></div>";
-        $tool_content .= form("$userdata->surname $userdata->givenname");
-    } else {
 
-        $tool_content .= action_bar(array(
+    $tool_content .= action_bar(array(
         array('title' => "$langBack",
             'url' => "../auth/courses.php",
             'icon' => 'fa-reply',
             'level' => 'primary-label')
-        ));
+    ));
 
-        $request_exists = Database::get()->querySingle("SELECT id FROM course_user_request WHERE uid = ?d AND course_id = ?d AND status = 1", $_SESSION['uid'], $course_id);
+    $request_exists = Database::get()->querySingle("SELECT id FROM course_user_request WHERE uid = ?d AND course_id = ?d AND status = 1", $_SESSION['uid'], $course_id);
 
-        if ($request_exists && !empty($request_exists->id)) {
-
-            //Database::get()->query("UPDATE course_user_request SET comments = ?s WHERE id = ?d", $content, $request_exists->id);
-
-            Database::get()->query("DELETE FROM course_user_request WHERE uid = ?d AND course_id = ?d AND status = 1", $_SESSION['uid'], $course_id );
-
-            $title = course_id_to_title($course_id);
-            $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langSendingMessage $title</span></div></div>";
-        } else {
-
-            $tool_content .= email_profs($course_id, $content, "$userdata->givenname $userdata->surname", $userdata->username, $userdata->email);
-
-        }
-
-        Database::get()->query("INSERT INTO course_user_request SET uid = ?d, course_id = ?d, 
-                                                        status = 1, comments = ?s, 
-                                                        ts = " . DBHelper::timeAfter() . "",
-            $uid, $course_id, $content);
-
+    if ($request_exists && !empty($request_exists->id)) {
+		
+        Database::get()->query("DELETE FROM course_user_request WHERE uid = ?d AND course_id = ?d AND status = 1", $_SESSION['uid'], $course_id);
+		
+        $title = course_id_to_title($course_id);
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langSendingMessage $title</span></div></div>";
+    } else {
+        $tool_content .= email_profs($course_id, $content, "$userdata->givenname $userdata->surname",
+            $userdata->username, $userdata->email, $userdata->am, $userdata->department_name);
     }
+
+    Database::get()->query("INSERT INTO course_user_request SET uid = ?d, course_id = ?d, 
+                                                    status = 1, comments = ?s, 
+                                                    ts = " . DBHelper::timeAfter() . "",
+        $uid, $course_id, $content);
+	
 } else {
     $tool_content .= form("$userdata->surname $userdata->givenname");
 }
@@ -184,7 +182,7 @@ function form($user) {
  * @param type $from_address
  * @return type
  */
-function email_profs($course_id, $content, $from_name, $from_username, $from_address) {
+function email_profs($course_id, $content, $from_name, $from_username, $from_address, $from_am, $from_department) {
     global $langSendingMessage, $langLabelCourseUserRequest, $langContactIntro,
             $langHere, $urlServer, $langNote, $langMessage, $langContactIntroFooter;
 
@@ -201,12 +199,14 @@ function email_profs($course_id, $content, $from_name, $from_username, $from_add
 
     $mailHeader = "
     <!-- Header Section -->
-	<div id='mail-header'>
-		<div>
-			<br>
-			<div id='header-title'>".q(sprintf($langContactIntro, $from_name, $from_username, $from_address))."</div>
-		</div>
-	</div>";
+    <div id='mail-header'>
+        <div>
+            <br>
+            <div id='header-title'>".q(sprintf($langContactIntro, $from_name, $from_username, $from_address))."</div>
+            <div><b>$langAm:</b> " . q($from_am) . "</div>
+            <div><b>$langFaculty:</b> " . q($from_department) . "</div>
+        </div>
+    </div>";
 
     $mailMain = "
     <!-- Body Section -->
