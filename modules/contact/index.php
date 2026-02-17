@@ -184,7 +184,8 @@ function form($user) {
  */
 function email_profs($course_id, $content, $from_name, $from_username, $from_address, $from_am, $from_department) {
     global $langSendingMessage, $langLabelCourseUserRequest, $langContactIntro,
-            $langHere, $urlServer, $langNote, $langMessage, $langContactIntroFooter;
+            $langHere, $urlServer, $langNote, $langMessage, $langContactIntroFooter,
+			$langAm, $langFaculty;
 
     $c_code = course_id_to_code($course_id);
     $title = course_id_to_title($course_id);
