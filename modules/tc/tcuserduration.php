@@ -90,7 +90,18 @@ if (isset($_GET['id'])) {
             $xls_url = "tcuserduration.php?course=$course_code&xls=true";
             $back_url = "index.php?course=$course_code";
         }
+
+        if (isset($_GET['u'])) {
+            $back_link = "tcuserduration.php?course=$course_code&per_user=true";
+            $navigation[] = array('url' => $back_link, 'name' => $langUserDuration);
+        } else {
+            $back_link = "index.php?course=$course_code";
+        }
         $action_bar = action_bar(array(
+            array('title' => $langBack,
+                'url' => "$back_link",
+                'icon' => 'fa-reply',
+                'level' => 'primary'),
             array('title' => $langDumpPDF,
                 'url' => "$url",
                 'icon' => 'fa-file-pdf',
@@ -101,7 +112,7 @@ if (isset($_GET['id'])) {
                 'icon' => 'fa-file-excel',
                 'level' => 'primary-label',
                 'show' => $is_course_reviewer)
-        ));
+            ));
         $tool_content .= $action_bar;
     }
 }
@@ -115,8 +126,10 @@ if (isset($_GET['per_user']) or isset($_GET['u'])) { // all-users participation 
         if (!$is_course_reviewer and $_GET['u'] != $_SESSION['uid']) { // security check
             redirect_to_home_page();
         }
+
         $u = $_GET['u'];
         $bbb_name = uid_to_name($u, 'username');
+
 
         if (isset($_GET['xls'])) {
             $data[] = [ get_config('site_name') . " - " . q($currentCourseName) ];
@@ -355,7 +368,7 @@ if (isset($_GET['pdf']) and $is_course_reviewer) {
             ]
     ]);
 
-   
+
     $mpdf->SetHTMLHeader(get_platform_logo());
     $footerHtml = '
     <div>

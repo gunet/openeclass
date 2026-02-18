@@ -29,6 +29,7 @@
                 ],
                 'lengthMenu': [10, 20, 50, -1],
                 'searchDelay': 1000,
+                'order' : [[1, 'desc']],
                 'oLanguage': {
                     'lengthLabels': {
                         '-1': '{{ trans('langAllOfThem') }}'
@@ -113,7 +114,7 @@
                 e.preventDefault();
                 bootbox.confirm({
                     closeButton: false,
-                    title: '<div class=\'icon-modal-default\'><i class=\'fa-regular fa-trash-can fa-xl Accent-200-cl\'></i></div><div class=\'modal-title-default text-center mb-0\'> {{ trans('langConfirmDelete') }}</div>',
+                    title: '<div class=\'icon-modal-default\'><i class=\'fa-regular fa-trash-can fa-xl Accent-200-cl\'></i></div><h2 class=\'modal-title-default text-center mb-0\'> {{ trans('langConfirmDelete') }}</h2>',
                     message: '<p class=\'text-center\'> {{ trans('langDelWarnUserAssignment') }}</p>',
                     buttons: {
                         cancel: {
@@ -404,11 +405,11 @@
                                                             {{ trans('langSurnameName') }}
                                                         </th>
                                                         @if ($assign->submission_type == 1)
-                                                            <th>{{ trans('langWorkOnlineText') }}</th>
+                                                            <th class="text-center">{{ trans('langWorkOnlineText') }}</th>
                                                         @elseif ($assign->submission_type == 2)
-                                                            <th>{{ trans('langOpenCoursesFiles') }}</th>
+                                                            <th class="text-center">{{ trans('langOpenCoursesFiles') }}</th>
                                                         @else
-                                                            <th>{{ trans('langFileName') }}</th>
+                                                            <th class="text-center">{{ trans('langFileName') }}</th>
                                                         @endif
                                                         @if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE) {{-- neo pedio vathmos aksiologhshs mono gia peer review --}}
                                                             <th class="grade-col">
@@ -482,9 +483,9 @@
                                                             </td>
 
                                                             {{-- submission files --}}
-                                                            <td class='filename-col text-nowrap'>
+                                                            <td data-sort='{{ $row->submission_date }}' class='filename-col text-nowrap text-center'>
                                                                 @if ($assign->submission_type == 1)
-                                                                    <button class='onlineText btn btn-xs btn-default submitAdminBtn' data-id='{{ $row->id }}'>
+                                                                    <button class='onlineText btn btn-xs btn-default submitAdminBtn' data-id='{{ getIndirectReference($row->id) }}'>
                                                                         {{ trans('langQuestionView') }}
                                                                     </button>
                                                                 @elseif (!empty($row->file_name))

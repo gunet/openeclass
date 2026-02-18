@@ -739,7 +739,7 @@ if ($is_editor) {
                                             <div class='col-12 d-flex justify-content-center mt-2 mb-3'>
                                                 <nav aria-label='Page navigation example w-100'>
                                                     <ul class='pagination mycourses-pagination w-100 mb-0'>
-                                                        <li class='page-item page-item-previous'>
+                                                        <li class='page-item page-item-previous' aria-label='$langPreviousPage'>
                                                             <a class='page-link' aria-label='$langPreviousPage'><span class='fa-solid fa-chevron-left'></span></a>
                                                         </li>";
                                                         if($pagesPag >=12 ){
@@ -791,7 +791,7 @@ if ($is_editor) {
                                                             }
                                                         }
 
-                                        $tool_content .="<li class='page-item page-item-next'>
+                                        $tool_content .="<li class='page-item page-item-next' aria-label='$langNextPage'>
                                                             <a class='page-link' aria-label='$langNextPage'><span class='fa-solid fa-chevron-right'></span></a>
                                                         </li>
                                                     </ul>

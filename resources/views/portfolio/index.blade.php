@@ -465,7 +465,7 @@
                 <div class='row row-cols-xl-3 row-cols-md-2 row-cols-1'>
                     <div class='col-xl-4 col-md-6 d-flex col-12 justify-content-md-start justify-content-center align-items-center'>
                         <div class='d-flex justify-content-md-start justify-content-center align-items-center flex-wrap gap-3'>
-                            <img class="user-detals-photo ms-auto me-auto" src="{{ user_icon($uid, IMAGESIZE_LARGE) }}" alt="{{ trans('langUser') }}: {{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }}">
+                            <img class="user-detals-photo ms-auto me-auto" src="{{ user_icon($uid, IMAGESIZE_LARGE) }}" alt="{{ trans('langProfileImage') }}: {{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }}">
                             <div>
                                 <div class='mb-0 portofolio-text-intro portfolio-username TextBold normal-text'> {{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }} </div>
                                 <p class='small-text Neutral-900-cl mb-0 portofolio-text-intro'>
@@ -690,7 +690,7 @@
                                                                                     <div class="modal-header">
                                                                                         <div class='modal-title'>
                                                                                             <div class='icon-modal-default'><i class='fa-solid fa-cloud-arrow-up fa-xl Neutral-500-cl'></i></div>
-                                                                                            <div class='modal-title-default text-center mb-0' id="notificationCardLabel{{ $course->course_id }}">{{ trans('langNotesNotifications') }}</div>
+                                                                                            <h2 class='modal-title-default text-center mb-0' id="notificationCardLabel{{ $course->course_id }}">{{ trans('langNotesNotifications') }}</h2>
                                                                                         </div>
                                                                                     </div>
                                                                                     <div class="modal-body">
@@ -805,7 +805,7 @@
 
                                     <div class='card bg-transparent card-transparent border-0 mt-5 sticky-column-course-home'>
                                         <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
-                                            <h3 class='mb-0'>{{ trans('langAnnouncements') }}</h3>
+                                            <h2 class='text-heading-h3 mb-0'>{{ trans('langAnnouncements') }}</h2>
                                             <a class='text-decoration-underline vsmall-text' href="{{$urlAppend}}modules/announcements/myannouncements.php">
                                                 {{ trans('langAllAnnouncements') }}
                                             </a>
@@ -822,7 +822,7 @@
                                     <div class='card bg-transparent card-transparent border-0 mt-5 sticky-column-course-home'>
                                         <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
 
-                                            <h3 class='mb-0'>{{ trans('langMessages') }}</h3>
+                                            <h2 class='text-heading-h3 mb-0'>{{ trans('langMessages') }}</h2>
                                             <a class='text-decoration-underline vsmall-text' href="{{$urlAppend}}modules/message/index.php">
                                                 {{ trans('langAllMessages') }}
                                             </a>
@@ -840,7 +840,7 @@
                                     @if($portfolio_page_sidebar_widgets)
                                         <div class='card bg-transparent card-transparent border-0 mt-5 sticky-column-course-home'>
                                             <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
-                                                <h3>{{ trans('langMyWidgets') }}</h3>
+                                                <h2 class='text-heading-h3'>{{ trans('langMyWidgets') }}</h2>
                                             </div>
                                             <div class='card-body px-0'>
                                                 {!! html_entity_decode($portfolio_page_sidebar_widgets) !!}

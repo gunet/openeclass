@@ -124,8 +124,8 @@ if ($is_consultant) {
                                     $res_cr_type = 'doc';
                                 }
                                 if ($res_type != 'consultant-completion') {
-                                    $titleR = Database::get()->querySingle("SELECT title FROM session_resources WHERE session_id = $_GET[session]
-                                                                        AND type = ?s AND res_id = ?d", $res_cr_type, $res_id)->title;
+                                    $titleR = Database::get()->querySingle("SELECT title FROM session_resources WHERE session_id = ?d
+                                                                        AND type = ?s AND res_id = ?d", $_GET['session'], $res_cr_type, $res_id)->title;
                                 } else {
                                     $titleR = "$langWithAttendanceRegistrationByConsultant";
                                 }
@@ -222,7 +222,7 @@ if ($is_consultant) {
         $pageName = $langSessionCompletion;
         $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langSession);
         $navigation[] = array('url' => 'session_space.php?course=' . $course_code . "&session=" . $sessionID , 'name' => $sessionTitle);
-        $currentSession = Database::get()->querySingle("SELECT * FROM mod_session
+        $currentSession = Database::get()->querySingle("SELECT * FROM mod_session 
                                                     WHERE course_id = ?d AND id = ?d", $course_id, $sessionID);
     } else {
         redirect_to_home_page("courses/$course_code/");
@@ -277,7 +277,7 @@ if ($is_consultant) {
     ));
     //Top Menu End
 
-    $allCourseSessions = Database::get()->queryArray("SELECT * FROM mod_session
+    $allCourseSessions = Database::get()->queryArray("SELECT * FROM mod_session 
                                                     WHERE course_id = ?d", $course_id);
     if (!$allCourseSessions) {
         Session::flash('message', $langNoSessions);

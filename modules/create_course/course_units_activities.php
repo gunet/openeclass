@@ -841,19 +841,6 @@ if (!isset($_POST['final_submit'])) {
                                     course_id = ?d", $langForumDefaultCat, $new_course_id);
 
             $_SESSION['courses'][$code] = USER_TEACHER;
-
-            $tool_content .= "<div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span><b>$langJustCreated:</b> " . q($_SESSION['title']) . "<br>
-                                <span class='smaller'>$langEnterMetadata</span></span></div>";
-            $tool_content .= action_bar(array(
-                array(
-                    'title' => $langEnter,
-                    'url' => $urlAppend . "courses/$code/",
-                    'icon' => 'fa-arrow-right',
-                    'level' => 'primary-label',
-                    'button-class' => 'btn-success'
-                )
-            ));
-
             // logging
             Log::record(0, 0, LOG_CREATE_COURSE, array(
                 'id' => $new_course_id,
@@ -862,6 +849,13 @@ if (!isset($_POST['final_submit'])) {
                 'language' => $language,
                 'visible' => $_SESSION['formvisible']
             ));
+
+            Session::flash('message', $langCourseCreated . "<div class='smaller'>$langEnterMetadata</div>");
+            Session::flash('alert-class', 'alert-success');
+            redirect_to_home_page("courses/" . $code . "/index.php");
+
+            $tool_content .= "<div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span><b>$langJustCreated:</b> " . q($_SESSION['title']) . "<br>
+                                    <span class='smaller'>$langEnterMetadata</span></span></div>";
 
     } else {      //complete actions if it is edit course activities
         $validationFailed = false;

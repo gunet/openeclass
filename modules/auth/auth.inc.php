@@ -1786,7 +1786,7 @@ function gunet_idp_hook($options) {
             }
         }
         if ($new_departments) {
-            if ($status == USER_STUDENT) {
+            if ($options['status'] == USER_STUDENT) {
                 $options['departments'] = $new_departments;
             } else {
                 $options['departments'] = array_unique(array_merge($options['departments'], $new_departments));

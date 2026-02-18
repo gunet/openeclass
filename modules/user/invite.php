@@ -167,6 +167,7 @@ $head_content .= "
           sZeroRecords: '$langNoResult',
           sInfo:        '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
           sInfoEmpty:   '',
+          sEmptyTable:  '$langNoResult',
           sInfoFiltered: '',
           sInfoPostFix: '',
           sSearch:    '',          
@@ -192,7 +193,7 @@ $head_content .= "
         var row_id = $(this).closest('tr').attr('id');
         bootbox.confirm({ 
             closeButton: false,
-            title: '<div class=\'icon-modal-default\'><i class=\'fa-regular fa-trash-can fa-xl Accent-200-cl\'></i></div><div class=\'modal-title-default text-center mb-0\'>".js_escape($langConfirmDelete)."</div>',
+            title: '<div class=\'icon-modal-default\'><i class=\'fa-regular fa-trash-can fa-xl Accent-200-cl\'></i></div><h2 class=\'modal-title-default text-center mb-0\'>".js_escape($langConfirmDelete)."</h2>',
             message: '<p class=\'text-center\'>".js_escape($langDeleteInvitation)."</p>',
             buttons: {
                 cancel: {
@@ -235,10 +236,6 @@ $head_content .= "
                 }
             }
         });
-
-
-
-
       });
       $('.dt-search input').attr({style: 'width:200px', class:'form-control input-sm', placeholder: '$langName, e-mail'});
       $('.dt-search label').attr('aria-label', '$langName'); 
@@ -246,19 +243,21 @@ $head_content .= "
     });
     </script>";
 
-$tool_content .=
+$action_bar .=
         action_bar([
             [ 'title' => $langOneUser,
               'url' => "invite_one.php?course=$course_code",
-              'icon' => 'fa-plus-circle',
+              'icon' => 'fa-envelope',
               'button-class' => 'btn-success',
               'level' => 'primary-label' ],
             [ 'title' => $langManyUsers,
               'url' => "invite_many.php?course=$course_code",
-              'icon' => 'fa-plus-circle',
+              'icon' => 'fa-envelopes-bulk',
               'button-class' => 'btn-success',
               'level' => 'primary-label' ],
         ]);
+
+$tool_content .= $action_bar;
 
 $tool_content .= "
     <table id='invite_table{$course_id}' class='table-default table-course-invitation'>
@@ -284,4 +283,5 @@ $tool_content .= "
             </tr>
         </tfoot>
     </table>";
+
 draw($tool_content, 2, null, $head_content);

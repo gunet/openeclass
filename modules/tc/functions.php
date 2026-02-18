@@ -1297,7 +1297,7 @@ function tc_session_details() {
 
     global $course_id, $tool_content, $is_editor, $course_code, $uid,
         $langParticipants,$langConfirmDelete, $langHasExpiredS,
-        $langNote, $langBBBNoteEnableJoin, $langTitle,
+        $langNote, $langBBBNoteEnableJoin, $langTitle, $langWillEnd,
         $langActivate, $langDeactivate, $langEditChange, $langDelete, $langParticipate,
         $langNoBBBSesssions, $langBBBNotServerAvailableStudent,
         $langBBBNotServerAvailableTeacher, $langWillStart,
@@ -1385,7 +1385,7 @@ function tc_session_details() {
                 $timeLabel = '&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;';
             }
             if ($timeLeft > 0 and date_diff_in_minutes($start_date, date('Y-m-d H:i:s')) < 0) {
-                $timeLabel .= "<br><span><small class='label label-warning'>$langWillStart " .
+                $timeLabel .= "<br><span><small class='label label-warning'>$langWillEnd " .
                     format_time_duration($timeLeft * 60) .
                     "</small></span>";
             } elseif (isset($end_date) and ($timeLeft < 0)) {

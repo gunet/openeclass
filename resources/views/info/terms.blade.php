@@ -10,7 +10,7 @@
                         </div>
 
                         <div class='col-12 mt-4'>
-                                {!! $terms !!}<
+                                {!! $terms !!}
                         </div>
                 </div>
         </div>

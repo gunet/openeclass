@@ -317,6 +317,7 @@ $gradePass = $objExercise->getPassingGrade();
 $exerciseAttemptsAllowed = $objExercise->selectAttemptsAllowed();
 $exerciseCalcGradeMethod = $objExercise->getCalcGradeMethod();
 $exerciseFeedback = $objExercise->getFeedback();
+$exerciseFeedback = $objExercise->getFeedback();
 $userAttempts = Database::get()->querySingle("SELECT COUNT(*) AS count FROM exercise_user_record WHERE eid = ?d AND uid= ?d", $exercise_user_record->eid, $uid)->count;
 
 $cur_date = new DateTime("now");

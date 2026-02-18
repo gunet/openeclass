@@ -63,7 +63,7 @@ $(document).ready(function() {
     });
     $('#add_u').click(function() {
         if (j <= 20) {
-            $('#dynamic_units').append('<div id=\"row_u_' + j + '\" class="col-12 d-inline-flex mb-4"><label for=\"unit_' + j + '\" id=\"utitle_'+j+'\" class="control-label-notes text-nowrap mt-2"></label><input type=\"text\" name=\"units[]\" class=\"form-control ms-2\" value=\"\" placeholder=\"$langUnits\"><a href=\"#!\" class=\"btn_remove text-danger p-3\" name=\"remove_u\" id=\"rm_u_' + j + '\"><span class=\"fa fa-minus-circle\"></span></a></div>')
+            $('#dynamic_units').append('<div id=\"row_u_' + j + '\" class="col-12 d-inline-flex mb-4"><label for=\"unit_' + j + '\" id=\"utitle_'+j+'\" class="control-label-notes text-nowrap mt-2"></label><input type=\"text\" name=\"units[]\" class=\"form-control ms-2\" value=\"\" placeholder=\"$langCourseUnits\"><a href=\"#!\" class=\"btn_remove text-danger p-3\" name=\"remove_u\" id=\"rm_u_' + j + '\"><span class=\"fa fa-minus-circle\"></span></a></div>')
             j++;
         }
         document.getElementById('unit_count').value = j-1;
@@ -209,7 +209,7 @@ if (!isset($_POST['next'])) {
      $tool_content .= "
      <h2 aria-label='$langEdit'></h2>
      <div class='row'>
-        
+
         <div class='col-lg-6 col-12'>
         <div class='form-wrapper form-edit border-0 px-0'>
         <form class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]?fromFlipped=1' onsubmit=\"return validateNodePickerForm();\">
@@ -244,17 +244,17 @@ if (!isset($_POST['next'])) {
                     <div class='col-sm-12'>
                         <input name='homehours' id='homehours' type='number' class='form-control' value='" . (isset($q1->home_hours)? q($q1->home_hours) : "") . "' onchange='hoursSum()'>
                     </div>
-                </div>        
+                </div>
                 <div class='form-group mt-4'>
                     <label for='totalhours' class='col-sm-12 control-label-notes mb-1'>$langTotalHours</label>
                     <div class='col-sm-12'>
                         <input name='totalhours' id='totalhours' type='number' class='form-control' value='" . (isset($q1->total_hours)? q($q1->total_hours) : "") . "' readonly>
                     </div>
                 </div>
-            
+
                 <div class='form-group mt-4'>
                     <div class='col-12 d-inline-flex mb-2'>
-                        <div class='control-label-notes me-2'>$langGoals:</div>                        
+                        <div class='control-label-notes me-2'>$langGoals:</div>
                     </div>";
 
                     $count_goals = 1;
@@ -281,10 +281,10 @@ if (!isset($_POST['next'])) {
 
                     $tool_content.="
                         <div id='dynamic_goals'></div>
-                            
+
                         <input id='goal_count' type='hidden' name='goal_count' value='1'>
                     </div>
-                    
+
                 <div class='form-group mt-4'>
                     <label for='description' class='col-sm-12 control-label-notes mb-1'>$langCont <small>$langOptional</small>:</label>
                     <div class='col-sm-12'>
@@ -331,7 +331,7 @@ if (!isset($_POST['next'])) {
             $tool_content .="
                     <div class='form-group mt-4'>
                         <div class='col-12 mb-2'>
-                            <div class='control-label-notes'>$langUnits:</div>
+                            <div class='control-label-notes'>$langCourseUnits:</div>
                         </div>
                     </div>
                     <div class='form-group'>
@@ -339,11 +339,10 @@ if (!isset($_POST['next'])) {
                     $count_units =1;
                     if (count($q5_b) > 0) {
                         foreach ($q5_b as $unit) {
-                            $tool_content .= "                                            
+                            $tool_content .= "
                                             <div class='col-12 d-inline-flex mb-4' id='row_u_".$count_units."'>
                                             <label for='unit_$count_units' id='utitle_$count_units' class= 'control-label-notes mt-2'></label>
-                                            <input name='units[]' id='unit_$count_units' type='text' class='form-control ms-2' value='" . $unit->title . "' placeholder='$langUnits'>
-                                            <input name='ids[]' type='hidden' value='$unit->id'>";
+                                            <input name='units[]' id='unit_$count_units' type='text' class='form-control ms-2' value='" . q($unit->title) . "' placeholder='$langCourseUnits'> <input name='ids[]' type='hidden' value='$unit->id'>";
                             if ($count_units == 1) {
                                 $tool_content .= "<a href='#!' id='add_u' class='mt-2' aria-label='$langAdd'>
                                                     <span class='fa fa-plus-circle add-unit-btn p-3'></span>
@@ -359,8 +358,8 @@ if (!isset($_POST['next'])) {
                     } else {
                         $tool_content .= "
                                         <label for='unit_$count_units' id='utitle_$count_units' class='control-label mt-2'></label>
-                                        <div class='col-12 d-inline-flex mb-4' id='row_u_".$count_units."'>
-                                        <input name='units[]' id='unit_$count_units' type='text' class='form-control w-100 ms-2' value='' placeholder='$langUnits'>";
+                                        <div class='col-12 d-inline-flex mb-4' id='row_u_$count_units'>
+                                        <input name='units[]' id='unit_$count_units' type='text' class='form-control w-100 ms-2' value='' placeholder='$langCourseUnits'>";
                         $tool_content .= "<a href='#!' id='add_u'>
                                                                 <span class='fa fa-plus-circle add-unit-btn p-3'>
                                                                 </span>
@@ -481,15 +480,15 @@ if (!isset($_POST['next'])) {
             }
 
             $tool_content .= "<h2 aria-label='$langEdit'></h2> <div class='form-wrapper'>
-                <form class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]?fromFlipped=1' onsubmit=\"return validateNodePickerForm();\">        
+                <form class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]?fromFlipped=1' onsubmit=\"return validateNodePickerForm();\">
                 <div class='card border-0'>
                     <div class='card-header border-0 px-0'>
                         <h3>
                             $langActSelect
                         </h3>
                     </div>
-                </div>    
-               
+                </div>
+
                 <fieldset>
                     <legend class='mb-0' aria-label='$langForm'></legend>
                     <div class='table-responsive mt-0'>
@@ -624,14 +623,14 @@ if (!isset($_POST['next'])) {
                     </div>
                     <div class='form-group mt-5 d-flex justify-content-center align-items-center gap-2'>
                         <input id='final_sub' class='btn submitAdminBtn' type='submit' name='final_submit' value='" . $langSubmit . "'>
-                        <a href='{$urlServer}courses/".$course_code."' class='btn cancelAdminBtn'>$langCancel</a>                       
+                        <a href='{$urlServer}courses/".$course_code."' class='btn cancelAdminBtn'>$langCancel</a>
                     </div>
                     <input type='hidden' name='next'>
                     <input name='checked_in_class' type='hidden' value='1'></input>
                     <input name='checked_in_home' type='hidden' value='2'></input>
                     <input name='checked_after_class' type='hidden' value='3'></input>
 
-                </fieldset>". generate_csrf_token_form_field() ." 
+                </fieldset>". generate_csrf_token_form_field() ."
             </form>
         </div>
         ";

@@ -523,6 +523,18 @@ if (isset($require_current_course) and $require_current_course) {
             }
         }
         $_SESSION['courses'][$course_code] = $courses[$course_code] = $status;
+        // Clear session data about polls in course or session mode
+        if (!isset($_GET['pid']) && !isset($_GET['from_poll'])) {
+            unset($_SESSION['current_page']);
+            unset($_SESSION['data_answers']);
+            unset($_SESSION['data_file_answer']);
+            unset($_SESSION['question_ids']);
+            unset($_SESSION['q_row_columns']);
+            unset($_SESSION['loop_init_answers']);
+            unset($_SESSION['loop_init_answers_session']);
+            unset($_SESSION['emptyQuestions']);
+            unset($_SESSION['onBehalfOfUserId']);
+        }
     }
 
     # force a specific interface language
@@ -721,7 +733,7 @@ $static_modules = array(
     MODULE_ID_COURSEINFO => array('title' => $langCourseInfo, 'link' => 'course_info'),
     MODULE_ID_COURSE_WIDGETS => array('title' => $langWidgets, 'link' => 'course_widgets'),
     MODULE_ID_TOOLADMIN => array('title' => $langCourseTools, 'link' => 'course_tools'),
-    MODULE_ID_UNITS => array('title' => $langUnits, 'link' => 'units'),
+    MODULE_ID_UNITS => array('title' => $langCourseUnits, 'link' => 'units'),
     MODULE_ID_SEARCH => array('title' => $langSearch, 'link' => 'search'),
     MODULE_ID_CONTACT => array('title' => $langContact, 'link' => 'contact'),
     MODULE_ID_COMMENTS => array('title' => $langComments, 'link' => 'comments'),
@@ -924,13 +936,13 @@ if (php_sapi_name() != 'cli' or isset($_SERVER['REMOTE_ADDR'])) {
     // Must happen BEFORE theme_initialization() to ensure correct CSS generation
     $user_selected_theme_id = 0;
     $user_theme_customization_enabled = get_config('enable_user_theme_customization', 0);
-    
+
     if ($user_theme_customization_enabled) {
         if (isset($_SESSION['user_theme_preview_id'])) {
             $user_selected_theme_id = intval($_SESSION['user_theme_preview_id']);
         } elseif (isset($_COOKIE['user_theme_selection'])) {
             $cookie_theme_id = intval($_COOKIE['user_theme_selection']);
-            
+
             // Verify theme is in admin's allowed list
             $user_selectable_themes_str = get_config('user_selectable_themes', '');
             $allowed = true;
@@ -941,20 +953,20 @@ if (php_sapi_name() != 'cli' or isset($_SERVER['REMOTE_ADDR'])) {
                     $allowed = false;
                 }
             }
-            
+
             if ($allowed) {
                 $user_selected_theme_id = $cookie_theme_id;
             }
         }
     }
-    
+
     // Apply user theme if set, otherwise use admin default theme
     if ($user_selected_theme_id > 0) {
         $theme_id = $user_selected_theme_id;
     } else {
         $theme_id = $_SESSION['theme_options_id'] ?? get_config('theme_options_id');
     }
-    
+
     $theme_css = "courses/theme_data/{$theme_id}/style_str.css";
     theme_initialization();
 }

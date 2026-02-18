@@ -21,9 +21,19 @@
 load_js('bootstrap-slider');
 load_js('select2');
 
-$head_content .= "
-<script>
+$head_content .= "<script>
 $(function() {
+    const textarea = $('#questionName');
+    if (textarea.length) {
+        const adjustHeight = function() {
+            $(this).css('height', 'auto').css('height', this.scrollHeight + 'px');
+        };
+        textarea.on('input', adjustHeight);
+        setTimeout(() => {
+            textarea.trigger('input');
+        }, 100);
+    }
+
     $('#questionCat').select2();
     var diffArray = ['$langQuestionNotDefined','$langQuestionVeryEasy', '$langQuestionEasy', '$langQuestionModerate', '$langQuestionDifficult', '$langQuestionVeryDifficult']
     $('#questionDifficulty').slider({
@@ -147,7 +157,7 @@ if (isset($_POST['submitQuestion'])) {
         }
         $objQuestion->updateTitle($questionName);
 
-        // If the current question is calculated type 
+        // If the current question is calculated type
         if ($answerType == CALCULATED) {
             $des = Database::get()->querySingle("SELECT `description` FROM exercise_question WHERE id = ?d", $objQuestion->selectId());
             $arr_des = unserialize($des->description);
@@ -308,7 +318,7 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
             <div class='row form-group " . (Session::getError('questionName') ? "has-error" : "") . "'>
                 <label for='questionName' class='col-12 control-label-notes mb-1'>$langQuestion <span class='asterisk Accent-200-cl'>(*)</span></label>
                 <div class='col-12'>
-                      <input name='questionName' type='text' class='form-control' id='questionName' placeholder='$langQuestion' value='" . q($questionName) . "'>
+                    <textarea name='questionName' class='form-control auto-expand' id='questionName' rows='1' placeholder='$langQuestion' style='resize: none; overflow: hidden; min-height: 38px;'>" . q($questionName) . "</textarea>
                       <span class='help-block Accent-200-cl'>" . Session::getError('questionName') . "</span>
                 </div>
             </div>";

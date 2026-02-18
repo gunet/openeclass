@@ -418,13 +418,6 @@ if (!isset($_POST['create_course'])) {
 
         $_SESSION['courses'][$code] = USER_TEACHER;
 
-        $data['action_bar'] = action_bar(array(
-            array('title' => $langEnter,
-                'url' => $urlAppend . "courses/$code/",
-                'icon' => 'fa-arrow-right',
-                'level' => 'primary',
-                'button-class' => 'btn-success')));
-
         // logging
         Log::record(0, 0, LOG_CREATE_COURSE, array('id' => $new_course_id,
             'code' => $code,
@@ -436,5 +429,7 @@ if (!isset($_POST['create_course'])) {
         Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
         redirect_to_home_page('modules/create_course/create_course.php');
     }
-    view('modules.create_course.create_course', $data);
+    Session::flash('message', $langCourseCreated . "<div class='smaller'>$langEnterMetadata</div>");
+    Session::flash('alert-class', 'alert-success');
+    redirect_to_home_page("courses/" . $code . "/index.php");
 } // end of submit

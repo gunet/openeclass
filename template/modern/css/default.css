@@ -2406,6 +2406,10 @@ input[type="submit"].warningAdminBtn:hover {
   letter-spacing: 0px;
   line-height: 16px;
 }
+.delete.confirmAction,
+.delete.delete_btn{
+  height: auto;
+}
 .btn.btn-danger:hover,
 .delete.confirmAction:hover,
 .delete.delete_btn:hover{
@@ -2595,6 +2599,9 @@ body .form-action-button-mydropdowns{
 }
 
 
+.contextual-menu-action-button .list-group-item{
+  border-radius: 0px !important;
+}
 
 
 /**********************************************************************************************************************/
@@ -3598,7 +3605,13 @@ body .form-action-button-popover{
   background-color: #B4BED1;
 } */
 
-
+.table-responsive.no-overflow {
+  overflow-x: visible !important;
+}
+.dt-scroll-head.no-overflow,
+.dt-scroll-body.no-overflow {
+  overflow: visible !important;
+}
 
 
 
@@ -3880,6 +3893,13 @@ body .delThemeBtn{
 .btn-portfolio-notifications:hover{
   opacity: 0.7;
   cursor:  url(../images/pointer.png), auto;
+}
+
+.portfolio-course-links i::before,
+.portfolio-course-links span::before{
+  display: block !important;
+  width: 24px !important;
+  height: 24px !important;
 }
 
 
@@ -5702,7 +5722,7 @@ textarea:focus-visible{
 .truncate-announcement{
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  /* -webkit-line-clamp: 2; */
+  -webkit-line-clamp: 2;
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -6007,6 +6027,7 @@ th.grade-col a{
 #unitResources_3 .unit-divider {
   background-color: #000;
   height: 1px;
+  margin-bottom: 30px;
 }
 
 #unitResources .fileURL,
@@ -6237,140 +6258,49 @@ th.grade-col a{
 .body-learningPath {
  padding: 20px !important;
 }
-/* Πόντοι Παιχνιδιών - EXACT */
-.points-game-carousel {
-    border: 1px solid #e0e0e0;
-    border-radius: 6px;
-    overflow: hidden;
-    background: white;
-}
 
-.carousel-nav-header {
-    background: #4a5568;
-    padding: 12px 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
-}
+/****** exercise dont delete ******/
+/*.question-container span.fa-regular {*/
+/*    font-size: 18px;*/
+/*}*/
 
-.carousel-nav-header .nav-btn {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-    padding: 0;
-}
+/*.correct_div {*/
+/*    border-left: 5px solid #28a745;*/
+/*}*/
 
-.carousel-nav-header .nav-btn:disabled {
-    opacity: 0.3;
-    cursor: default;
-}
+/*.correct_answer {*/
+/*    background-color: #28a74515!important;*/
+/*    border-radius: 5px;*/
+/*}*/
 
-.carousel-nav-header .game-name {
-    color: white;
-    font-size: 15px;
-    font-weight: 500;
-}
+/*.wrong_div {*/
+/*    border-left: 5px solid #dc3545;*/
+/*}*/
 
-.carousel-slides {
-    padding: 20px;
-}
+/*.wrong_answer {*/
+/*    background-color: #dc354515!important;*/
+/*    border-radius: 5px;*/
+/*}*/
+/*.partial_div {*/
+/*    border-left: 5px solid #ffc107;*/
+/*}*/
 
-.slide-item {
-    display: none;
-}
+/*.partial_answer {*/
+/*    background-color: #ffc10720;*/
+/*}*/
+/*.questionName p {*/
+/*    font-size: 16px;*/
+/*}*/
+/*.questionDescription p {*/
+/*    color: #6c757d;*/
+/*    font-size: 14px;*/
+/*}*/
 
-.slide-item.active {
-    display: block;
-}
+/*.selected {*/
+/*    box-shadow: 0 8px 6px -1px rgba(0, 0, 0, 0.1), 4px 2px 4px -2px rgba(0, 0, 0, 0.06);*/
+/*    transition: transform 0.2s ease;*/
+/*}*/
 
-.game-box {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    padding: 20px;
-    border: 1px solid #e0e0e0;
-    border-radius: 6px;
-    background: #fafafa;
-}
-
-.badge-col {
-    flex-shrink: 0;
-}
-
-.badge-circle {
-    width: 50px;
-    height: 50px;
-    border: 2px solid #d0d0d0;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: white;
-}
-
-.badge-circle i {
-    font-size: 24px;
-    color: transparent;
-    -webkit-text-stroke: 1.5px #888;
-}
-
-.points-col {
-    text-align: center;
-    padding-right: 20px;
-    border-right: 1px solid #d0d0d0;
-}
-
-.points-num {
-    font-size: 28px;
-    font-weight: 700;
-    color: #333;
-    line-height: 1;
-}
-
-.points-txt {
-    font-size: 14px;
-    color: #666;
-    margin-top: 4px;
-}
-
-.progress-col {
-    flex: 1;
-    text-align: right;
-}
-
-.progress-label {
-    font-size: 13px;
-    color: #666;
-    margin-bottom: 4px;
-}
-
-.progress-percent {
-    font-size: 28px;
-    font-weight: 700;
-    color: #5b7ad6;
-    line-height: 1;
-}
-
-.progress-level {
-    font-size: 13px;
-    color: #555;
-    margin-top: 2px;
-}
-
-@media (max-width: 768px) {
-    .game-box {
-        flex-direction: column;
-        text-align: center;
-    }
-    .points-col {
-        border-right: none;
-        border-bottom: 1px solid #d0d0d0;
-        padding: 0 0 15px 0;
-    }
-    .progress-col {
-        text-align: center;
-    }
+.page-item.active .page-link {
+  z-index: 1 !important;
 }
