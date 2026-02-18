@@ -2602,6 +2602,9 @@ body .form-action-button-mydropdowns{
 .contextual-menu-action-button .list-group-item{
   border-radius: 0px !important;
 }
+.contextual-menu-action-button .list-group-item.disabled{
+  opacity: 0.5;
+}
 
 
 /**********************************************************************************************************************/
