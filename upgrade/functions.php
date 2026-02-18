@@ -3599,7 +3599,7 @@ function upgrade_to_4_3() : void {
         Database::get()->query("ALTER TABLE exercise CHANGE general_feedback end_message TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
     }
     if (!DBHelper::fieldExists('exercise', 'feedback')) {
-        Databse::get()->query("ALTER TABLE exercise ADD feedback TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
+        Database::get()->query("ALTER TABLE exercise ADD feedback TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
     }
     // Questionnaires
     if (!DBHelper::fieldExists('poll_question', 'page')) {
@@ -3608,6 +3608,10 @@ function upgrade_to_4_3() : void {
 
     if (!DBHelper::fieldExists('poll_question', 'require_response')) {
         Database::get()->query("ALTER TABLE poll_question ADD `require_response` INT NOT NULL DEFAULT 0");
+    }
+
+    if (!DBHelper::fieldExists('poll_question', 'require_grade')) {
+        Database::get()->query("ALTER TABLE poll_question ADD `require_grade` INT NOT NULL DEFAULT 0");
     }
 
     if (!DBHelper::fieldExists('poll_question', 'total_weight')) {

@@ -110,6 +110,8 @@ if ($is_editor && !$is_in_tinymce) { // admin actions
             foreach ($q1 as $a) {
                 if (!resource_belongs_to_progress_data(MODULE_ID_VIDEO, $a->id)) {
                     delete_video($a->id, 'video', $course_id, $course_code, $webDir);
+                    Session::flash('message', $langDelWithSuccess);
+                    Session::flash('alert-class', 'alert-success');
                 }   else {
                     Session::flash('message',$langResourceBelongsToCert);
                     Session::flash('alert-class', 'alert-warning');
@@ -125,11 +127,14 @@ if ($is_editor && !$is_in_tinymce) { // admin actions
             $table = select_table($_GET['table']);
             if (!resource_belongs_to_progress_data(MODULE_ID_VIDEO, $_GET['id'])) {
                 delete_video($_GET['id'], $table, $course_id, $course_code, $webDir);
+                Session::flash('message', $langDelWithSuccess);
+                Session::flash('alert-class', 'alert-success');
             } else {
                 Session::flash('message',$langResourceBelongsToCert);
                 Session::flash('alert-class', 'alert-warning');
             }
         }
+        redirect_to_home_page("modules/video/index.php?course=" . $course_code);
     }
 } // end of admin actions
 

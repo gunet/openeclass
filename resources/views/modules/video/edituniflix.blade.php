@@ -76,7 +76,7 @@
                                                                 {{ $resource->videoLecture->description }}
                                                             </div>
                                                             <div class="help-block mt-2">
-                                                                {{ trans('langCreator') }}: {{ $resource->videoLecture->rights->creator->name }} &mdash; {{ trans('langCourse') }}: {{ $resource->videoLecture->relation->course->title }}
+                                                                {{ trans('langCreator') }}: {{ $resource->videoLecture->rights->creator->name }}
                                                             </div>
                                                         </td>
                                                         <td style='width:10%;'>{{ format_locale_date(strtotime($resource->videoLecture->date), 'short', false) }}</td>
@@ -107,7 +107,7 @@
                                                                     {{ $resource->videoLecture->description }}
                                                                 </div>
                                                                 <div class="help-block mt-2">
-                                                                    {{ trans('langCreator') }}: {{ $resource->videoLecture->rights->creator->name }} &mdash; {{ trans('langCourse') }}: {{ $resource->videoLecture->relation->course->title }}
+                                                                    {{ trans('langCreator') }}: {{ $resource->videoLecture->rights->creator->name }}
                                                                 </div>
                                                             </td>
                                                             <td>
@@ -140,7 +140,7 @@
                                         </div>
                                         <div class='form-group mt-5'>
                                             <div class='col-12 d-flex justify-content-end align-items-center gap-2'>
-                                                <input class='btn submitAdminBtn' type='submit' name='add_submit_delos' value='{{ trans('langAddModulesButton') }}'>
+                                                <input class='btn submitAdminBtn' type='submit' name='add_submit_uniflix' value='{{ trans('langAddModulesButton') }}'>
                                                 <a href='index.php?course={{ $course_code }}' class='btn cancelAdminBtn'>{{ trans('langCancel') }}</a>
                                             </div>
                                         </div>

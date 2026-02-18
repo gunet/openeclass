@@ -193,7 +193,7 @@
                 bServerSide: true,
                 sScrollX: true,
                 fixedHeader: true,
-                responsive: false,
+                responsive: true,
                 searchDelay: 1000,
                 ajax: {
                     url: '{{ $_SERVER['REQUEST_URI'] }}',
@@ -342,6 +342,23 @@
                 });
             });
             $('.success').delay(3000).fadeOut(1500);
+
+            $(document).on('click', '.action-button-dropdown', function (g) {
+                g.preventDefault();
+                // Close all other open dropdowns except the one being opened
+                $('.action-button-dropdown.show').not(this).each(function() {
+                    $(this).dropdown('hide');
+                });
+                $('.table-responsive').addClass('no-overflow');
+                $('.dt-scroll-head').addClass('no-overflow');
+                $('.dt-scroll-body').addClass('no-overflow');
+            });
+            $(document).on('hide.bs.dropdown', '.action-button-dropdown', function () {
+                $('.table-responsive').removeClass('no-overflow');
+                $('.dt-scroll-head').removeClass('no-overflow');
+                $('.dt-scroll-body').removeClass('no-overflow');
+            });
+      
         });
 
 
@@ -424,7 +441,7 @@
                                 </div>
                             @endif
 
-                            <div class="table-responsive">
+                            
                                 <table id='ann_table{{ $course_id }}' class='table-default table-announcements-indexes'>
                                     <thead>
                                     <tr>
@@ -442,7 +459,7 @@
                                     </thead>
                                     <tbody></tbody>
                                 </table>
-                            </div>
+                            
                         </div>
 
 

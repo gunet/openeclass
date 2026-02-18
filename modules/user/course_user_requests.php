@@ -111,31 +111,31 @@ if (isset($_GET['rid'])) {
             $tool_content .= "<div class='col-sm-12'><div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langCourseUserRegError</span></div></div>";
         }
     } else {
-        $tool_content .= "<div class='d-lg-flex gap-4 mt-4'>
-        <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>";
-        $tool_content .= "<form class='form-horizontal' method='post' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
-    <fieldset>
-        <legend class='mb-0' aria-label='$langForm'></legend>
-        <div class='col-sm-12'><div class='control-label-notes'>$langReasonReject</div></div>
-        <div class='col-sm-12'><div class='control-label-notes'>$langFrom:&nbsp;</div><small>" . q(uid_to_name($uid, 'fullname')) . "</small></div>
-        <div class='col-sm-12'><div class='control-label-notes'>$langSendTo:&nbsp;</div><small>" . q(uid_to_name($_GET['u'], 'fullname')) . "</small></div>
-        <div class='form-group mt-3'>
-            <div class='col-sm-12'>
-              <textarea aria-label='$langTypeOutMessage' name='rej_content' rows='8' cols='80'></textarea>
-            </div>
-    </div>
-        <div class='form-group mt-3'>
-            <div class='col-sm-offset-1 col-sm-11'>
-                <input class='btn submitAdminBtn' type='submit' name='submit' value='" . q($langRejectRequest) . "'>
-            </div>
-        </div>
-        ". generate_csrf_token_form_field() ."
-        <input type='hidden' name='rejected_req_id' value='$_GET[rid]'>
-            <input type='hidden' name='rejected_uid' value='$_GET[u]'>
-    </fieldset></form></div></div><div class='d-none d-lg-block'>
-    <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
-</div>
-</div>";
+            $tool_content .= "<div class='d-lg-flex gap-4 mt-4'>
+                    <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>
+                        <form class='form-horizontal' method='post' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
+                        <fieldset>
+                            <legend class='mb-0' aria-label='$langForm'></legend>
+                            <div class='col-sm-12'><div class='control-label-notes'>$langReasonReject</div></div>
+                            <div class='col-sm-12'><div class='control-label-notes'>$langFrom:&nbsp;</div><small>" . q(uid_to_name($uid, 'fullname')) . "</small></div>
+                            <div class='col-sm-12'><div class='control-label-notes'>$langSendTo:&nbsp;</div><small>" . q(uid_to_name($_GET['u'], 'fullname')) . "</small></div>
+                            <div class='form-group mt-3'>
+                                <div class='col-sm-12'>
+                                  <textarea aria-label='$langTypeOutMessage' name='rej_content' rows='8' cols='80'></textarea>
+                                </div>
+                            </div>
+                            <div class='form-group mt-3'>
+                                <div class='col-sm-offset-1 col-sm-11'>
+                                    <input class='btn submitAdminBtn' type='submit' name='submit' value='" . q($langRejectRequest) . "'>
+                                </div>
+                            </div>
+                            ". generate_csrf_token_form_field() ."
+                            <input type='hidden' name='rejected_req_id' value='" . intval($_GET['rid']) . "'>
+                            <input type='hidden' name='rejected_uid' value='" . intval($_GET['u']) . "'>
+                            </fieldset></form></div></div><div class='d-none d-lg-block'>
+                            <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
+                        </div>
+                    </div>";
     }
 } else { // display course user requests
     $sql = Database::get()->queryArray("SELECT id, uid, course_id, comments, ts FROM course_user_request WHERE course_id = ?d AND status = 1", $course_id);

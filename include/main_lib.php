@@ -4015,34 +4015,24 @@ function action_button($options, $secondary_menu_options = array(), $fc=false) {
 
     foreach (array_reverse($options) as $option) {
         $level = $option['level'] ?? 'secondary';
-        // skip items with show=false
         if (isset($option['show']) and !$option['show']) {
             continue;
         }
-        if (isset($option['class'])) {
-            $class = ' ' . $option['class'];
-        } else {
-            $class = '';
-        }
-        if (isset($option['btn_class'])) {
-            $btn_class = ' ' . $option['btn_class'];
-        } else {
-            $btn_class = ' submitAdminBtn';
-        }
-        if (isset($option['link-attrs'])) {
-            $link_attrs = ' ' . $option['link-attrs'];
-        } else {
-            $link_attrs = '';
-        }
-        $disabled = isset($option['disabled']) && $option['disabled'] ? ' disabled' : '';
-        $icon_class = "class='list-group-item $class$disabled";
+        $class = isset($option['class']) ? ' ' . $option['class'] : '';
+        $btn_class = isset($option['btn_class']) ? ' ' . $option['btn_class'] : ' submitAdminBtn';
+        $link_attrs = isset($option['link-attrs']) ? ' ' . $option['link-attrs'] : '';
+
+        $disabled = (isset($option['disabled']) && $option['disabled']) ? ' disabled' : '';
+
+        $icon_class = "class='list-group-item d-flex justify-content-start align-items-start gap-2 py-3$class$disabled";
         if (isset($option['icon-class'])) {
             $icon_class .= " " . $option['icon-class'];
         }
+
         if (isset($option['confirm'])) {
             $title = q($option['confirm_title'] ?? $langConfirmDelete);
             $accept = $option['confirm_button'] ?? $langDelete;
-            $form_begin = "<form class='form-action-button-popover list-group-item-action list-group-item' method=post action='$option[url]'>";
+            $form_begin = "<form class='form-action-button-mydropdowns mb-0' method=post action='$option[url]'>";
             $form_end = '</form>';
             if ($level == 'primary-label' or $level == 'primary') {
                 $primary_form_begin = $form_begin;
@@ -4059,8 +4049,9 @@ function action_button($options, $secondary_menu_options = array(), $fc=false) {
         } else {
             $icon_class .= "'";
             $confirm_extra = $form_begin = $form_end = '';
-            $url = isset($option['url'])? $option['url']: '#';
+            $url = isset($option['url']) ? $option['url'] : '#';
         }
+
         if (isset($option['icon-extra'])) {
             $icon_class .= ' ' . $option['icon-extra'];
         }
@@ -4070,13 +4061,15 @@ function action_button($options, $secondary_menu_options = array(), $fc=false) {
         } elseif ($level == 'primary') {
             array_unshift($out_primary, "<a aria-label='" . q($option['title']) . "' data-bs-placement='bottom' data-bs-toggle='tooltip' title data-bs-original-title='" . q($option['title']) . "' href='$url' class='btn $btn_class$disabled' $link_attrs><span class='fa $option[icon]$primary_icon_class'></span><span class='hidden'></span></a>");
         } else {
-            array_unshift($out_secondary, $form_begin . icon($option['icon'], $option['title'], $url, $icon_class.$link_attrs, true) . $form_end);
+            array_unshift($out_secondary, '<li>' . $form_begin . icon($option['icon'], $option['title'], $url, $icon_class.$link_attrs, true) . $form_end . '</li>');
         }
     }
+
     $primary_buttons = "";
     if (count($out_primary)) {
         $primary_buttons = implode('', $out_primary);
     }
+
     $action_button = "";
     $secondary_title = $secondary_menu_options['secondary_title'] ?? "<span class='hidden'></span>";
 
@@ -4086,19 +4079,21 @@ function action_button($options, $secondary_menu_options = array(), $fc=false) {
         $secondary_icon = $secondary_menu_options['secondary_icon'] ?? "fa-solid fa-gear";
     }
     $secondary_btn_class = $secondary_menu_options['secondary_btn_class'] ?? "submitAdminBtn";
-    if (count($out_secondary)) {
-        $action_list = q("<div class='list-group' id='action_button_menu'>".implode('', $out_secondary)."</div>");
-        if(!empty($secondary_title)){
-            $tmp_class_title = "<span class='hidden-xs'>$secondary_title</span>";
-        }else{
-            $tmp_class_title = "";
-        }
-        $action_button = "
-                <a tabindex='0' role='button' class='menu-popover btn $secondary_btn_class d-flex justify-content-center align-items-center' data-bs-toogle='popover' data-bs-container='body' data-bs-placement='left' data-bs-html='true' data-bs-trigger='manual' data-bs-content='$action_list' aria-label='$langListChoices'>
-                    <span class='fa $secondary_icon'></span>
-                    $tmp_class_title
 
-                </a>";
+    // Instead of a popover menu, display list items directly
+    if (count($out_secondary)) {
+        $list_items = implode('', $out_secondary);
+        $tmp_class_title = !empty($secondary_title) ? "<span class='hidden-xs'>$secondary_title</span>" : "";
+        $action_button = "
+            <button style='border-radius: 4px;' class='btn $secondary_btn_class action-button-dropdown' type='button' id='actionDropdown' data-bs-toggle='dropdown' aria-expanded='false' aria-label='$langListChoices'>
+                <span class='fa $secondary_icon'></span> 
+                $tmp_class_title
+            </button>
+            <div class='m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-border contextual-menu-action-button' aria-labelledby='actionDropdown'>
+                <ul class='list-group list-group-flush'>
+                    $list_items
+                </ul>
+            </div>";
     }
 
     return $primary_form_begin .
