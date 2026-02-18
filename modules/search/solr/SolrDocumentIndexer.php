@@ -21,12 +21,11 @@
 require_once 'AbstractSolrIndexer.php';
 require_once 'modules/search/classes/ConstantsUtil.php';
 require_once 'modules/search/classes/FetcherUtil.php';
+require_once 'modules/search/classes/SearchEngineUtil.php';
 
 class SolrDocumentIndexer extends AbstractSolrIndexer {
 
     private function makeDoc(object $docu): array {
-        global $urlServer;
-        $urlAction = ($docu->format == '.dir') ? 'openDir' : 'download';
         return [
             ConstantsUtil::FIELD_ID => 'doc_' . ConstantsUtil::DOCTYPE_DOCUMENT . '_' . $docu->id,
             ConstantsUtil::FIELD_PK => ConstantsUtil::DOCTYPE_DOCUMENT . '_' . $docu->id,
@@ -42,9 +41,7 @@ class SolrDocumentIndexer extends AbstractSolrIndexer {
             ConstantsUtil::FIELD_AUTHOR => $docu->author,
             ConstantsUtil::FIELD_VISIBLE => $docu->visible,
             ConstantsUtil::FIELD_PUBLIC => $docu->public,
-            ConstantsUtil::FIELD_URL => $urlServer
-                . 'modules/document/index.php?course=' . course_id_to_code($docu->course_id)
-                . '&amp;' . $urlAction . '=' . $docu->path
+            ConstantsUtil::FIELD_URL => SearchEngineUtil::makeDocumentFieldUrl($docu->course_id, $docu->filename, $docu->format, $docu->path)
         ];
     }
 

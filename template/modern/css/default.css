@@ -712,6 +712,14 @@ span{
   font-style: normal;
   margin-bottom: 0px;
 }
+strong p,
+strong span {
+  font-weight: 700;
+}
+em p,
+em span {
+  font-style: italic;
+}
 
 
 /************************* ABOUT LINKS ***************************/
@@ -5694,7 +5702,7 @@ textarea:focus-visible{
 .truncate-announcement{
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
+  /* -webkit-line-clamp: 2; */
   overflow: hidden;
   text-overflow: ellipsis;
 }

@@ -23,20 +23,20 @@
                         <ul class="container-items nav">
                             @if(!get_config('hide_login_link'))
                                 <li class="nav-item">
-                                    <a id="link-home" class="nav-link menu-item mx-lg-2 @if (!isset($_SESSION['uid']) && empty($pageName)) active2 @endif" href="{{ $urlServer }}?show_home=true">
+                                    <a id="link-home" class="nav-link menu-item mx-lg-2 @if (!isset($_SESSION['uid']) && empty($pageName)) active2 @endif" href="{{ $urlServer }}?show_home=true" aria-label="{{ trans('langHome') }}">
                                         {{ trans('langHome') }}
                                     </a>
                                 </li>
                             @endif
                             @if (!isset($_SESSION['uid']))
                                 <li class="nav-item">
-                                    <a id="link-register" class="nav-link menu-item mx-lg-2 @if(get_config('registration_link')=='hide') d-none @endif" href="{{ $urlServer }}modules/auth/registration.php">
+                                    <a id="link-register" class="nav-link menu-item mx-lg-2 @if(get_config('registration_link')=='hide') d-none @endif" href="{{ $urlServer }}modules/auth/registration.php" aria-label="{{ trans('langRegistration') }}">
                                         {{ trans('langRegistration') }}
                                     </a>
                                 </li>
                                 @if (!get_config('dont_display_courses_menu'))
                                     <li class="nav-item">
-                                        <a id="link-lessons" class="nav-link menu-item mx-lg-2" href="{{ $urlServer }}modules/auth/listfaculties.php">
+                                        <a id="link-lessons" class="nav-link menu-item mx-lg-2" href="{{ $urlServer }}modules/auth/listfaculties.php" aria-label="{{ trans('langCourses') }}">
                                             {{ trans('langCourses') }}
                                         </a>
                                     </li>
@@ -44,12 +44,12 @@
                             @endif
                             @if (isset($_SESSION['uid']))
                                 <li class="nav-item">
-                                    <a id="link-portfolio" class="nav-link menu-item mx-lg-2" href="{{ $urlServer }}main/portfolio.php">
+                                    <a id="link-portfolio" class="nav-link menu-item mx-lg-2" href="{{ $urlServer }}main/portfolio.php" aria-label="{{ trans('langPortfolio') }}">
                                         {{ trans('langPortfolio') }}
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a id="link-lessons" class="nav-link menu-item mx-lg-2" href="{{ $urlServer }}modules/auth/courses.php">
+                                    <a id="link-lessons" class="nav-link menu-item mx-lg-2" href="{{ $urlServer }}modules/auth/courses.php" aria-label="{{ trans('langCourses') }}">
                                         {{ trans('langCourses') }}
                                     </a>
                                 </li>
@@ -57,7 +57,7 @@
                             @if (!get_config('dont_display_faq_menu'))
                                 @if (faq_exist())
                                     <li class="nav-item">
-                                        <a id="link-faq" class="nav-link menu-item mx-lg-2 " href="{{$urlAppend}}info/faq.php">
+                                        <a id="link-faq" class="nav-link menu-item mx-lg-2 " href="{{$urlAppend}}info/faq.php" aria-label="{{ trans('langFaqAbbrev') }}">
                                             {{ trans('langFaqAbbrev') }}
                                         </a>
                                     </li>
@@ -193,6 +193,15 @@
                                                                 {{ trans('langMyProfile') }}
                                                             </a>
                                                         </li>
+
+                                                        @if (get_config('enable_user_theme_customization'))
+                                                        <li>
+                                                            <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}main/profile/theme_settings.php">
+                                                                <i class="fa-solid fa-palette settings-icons"></i>
+                                                                {{ trans('langThemeSettings')}} 
+                                                            </a>
+                                                        </li>
+                                                        @endif
 
                                                         <li>
                                                             <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}main/my_courses.php">
@@ -450,6 +459,13 @@
                                     <li>
                                         <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}main/profile/display_profile.php"><i class="fa-solid fa-user settings-icons"></i> {{ trans('langMyProfile') }}</a>
                                     </li>
+                                    @if (get_config('enable_user_theme_customization'))
+                                    <li>
+                                        <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}main/profile/theme_settings.php">
+                                            <i class="fa-solid fa-palette settings-icons"></i> {{ trans('langThemeSettings')}} 
+                                        </a>
+                                    </li>
+                                    @endif
                                     @if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
                                     <li>
                                         <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}main/my_widgets.php"><i class="fa-solid fa-layer-group settings-icons"></i> {{ trans('langMyWidgets') }}</a>
@@ -538,14 +554,14 @@
                             @if (!isset($_SESSION['uid']))
                                 @if(get_config('registration_link')!='hide')
                                     <p class='py-2 px-0'>
-                                        <a id='registrationId' type="button" class='header-mobile-link d-flex justify-content-start align-items-start gap-2 flex-wrap TextBold' href="{{ $urlAppend }}modules/auth/registration.php" aria-label='Registration'>
+                                        <a id='registrationId' type="button" class='header-mobile-link d-flex justify-content-start align-items-start gap-2 flex-wrap TextBold' href="{{ $urlAppend }}modules/auth/registration.php" aria-label="{{ trans('langRegistration') }}">
                                             <i class="fa-solid fa-pencil"></i>{{ trans('langRegistration') }}
                                         </a>
                                     </p>
                                 @endif
                                 @if (!get_config('dont_display_courses_menu'))
                                     <p class='py-2 px-0'>
-                                        <a id='coursesId' type='button' class='header-mobile-link d-flex justify-content-start align-items-start gap-2 flex-wrap TextBold' href="{{ $urlAppend }}modules/auth/listfaculties.php" aria-label="{{ trans('langOtherCourses') }}">
+                                        <a id='coursesId' type='button' class='header-mobile-link d-flex justify-content-start align-items-start gap-2 flex-wrap TextBold' href="{{ $urlAppend }}modules/auth/listfaculties.php" aria-label="{{ trans('langCourses') }}">
                                             <i class="fa-solid fa-book"></i>{{ trans('langCourses') }}
                                         </a>
                                     </p>
@@ -553,12 +569,12 @@
                             @endif
                             @if (isset($_SESSION['uid']))
                                 <p class='py-2 px-0'>
-                                    <a id='portfolioId' type="button" class='header-mobile-link d-flex justify-content-start align-items-start gap-2 flex-wrap TextBold' href="{{ $urlAppend }}main/portfolio.php" aria-label="{{ trans('langRegistration') }}">
+                                    <a id='portfolioId' type="button" class='header-mobile-link d-flex justify-content-start align-items-start gap-2 flex-wrap TextBold' href="{{ $urlAppend }}main/portfolio.php" aria-label="{{ trans('langPortfolio') }}">
                                         <i class="fa-solid fa-pencil"></i>{{ trans('langPortfolio') }}
                                     </a>
                                 </p>
                                 <p class='py-2 px-0'>
-                                    <a id='coursesId' type='button' class='header-mobile-link d-flex justify-content-start align-items-start gap-2 flex-wrap TextBold' href="{{ $urlAppend }}modules/auth/courses.php" aria-label="{{ trans('langOtherCourses') }}">
+                                    <a id='coursesId' type='button' class='header-mobile-link d-flex justify-content-start align-items-start gap-2 flex-wrap TextBold' href="{{ $urlAppend }}modules/auth/courses.php" aria-label="{{ trans('langCourses') }}">
                                         <i class="fa-solid fa-book"></i>{{ trans('langCourses') }}
                                     </a>
                                 </p>

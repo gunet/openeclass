@@ -43,7 +43,7 @@ class MultipleChoiceUniqueAnswer extends QuestionType
 
     public function AnswerQuestion($question_number, $exerciseResult = [], $options = []): string
     {
-        global $langClearChoice;
+        global $langClearChoice, $eurid;
 
         $nbrAnswers = $this->answer_object->selectNbrAnswers();
         $answer_object_ids = range(1, $nbrAnswers);
@@ -69,6 +69,9 @@ class MultipleChoiceUniqueAnswer extends QuestionType
                 </div>";
         }
         $html_content .= "<button class='float-end clearSelect btn btn-outline-secondary mt-0'><i class='fa fa-solid fa-xmark'></i>&nbsp;$langClearChoice</button>";
+        $certainty_user_choice = $this->answer_object->get_user_certainty_answer_choice($this->question_id, $eurid);
+        $html_content .= $this->CertaintyBasedButtons($this->question_id, $certainty_user_choice);
+
         return $html_content;
     }
 
@@ -129,13 +132,14 @@ class MultipleChoiceUniqueAnswer extends QuestionType
 
             $html_content .= $answerTitle;
             if ($answerCorrect) {
-                $html_content .= "&nbsp;<span class='text-success text-nowrap'><small class='text-success text-nowrap'>($langCorrectS)</small></span>";
+                $html_content .= "&nbsp;<span><small class='text-success text-nowrap'>($langCorrectS)</small></span>";
             } else {
-                $html_content .= "&nbsp;<span class='text-danger text-nowrap'><small class='text-danger text-nowrap'>($langIncorrectS)</small></span>";
+                $html_content .= "&nbsp;<span><small class='text-danger text-nowrap'>($langIncorrectS)</small></span>";
             }
             $html_content .= "</div>";
-            if ($studentChoice or $answerCorrect) {
-                $html_content .= "<div class='d-flex align-items-center'><small><span class='help-block'>" . standard_text_escape(nl2br($answerComment)) . "</span></small></div>";
+
+            if ($studentChoice && $answerComment != '') {
+                $html_content .= "<div style='background-color: #e9ecef' class='p-1 ps-4'>" . standard_text_escape(nl2br($answerComment)) . "</div>";
             }
             $html_content .= "</div>";
             $html_content .= "</td></tr>";

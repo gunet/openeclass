@@ -35,7 +35,7 @@ require_once 'include/lib/fileDisplayLib.inc.php';
 
 if (isset($_GET['unit']) && !isset($_REQUEST['uInfo'])) {
     $_REQUEST['uInfo'] = $uid;
-    $unit = intval($_GET['unit']);
+    $unit = $_SESSION['unit'] = intval($_GET['unit']);
 }
 if (empty($_REQUEST['uInfo']) || empty($_REQUEST['path_id'])) {
     header("Location: ./index.php?course=$course_code");
@@ -44,16 +44,22 @@ if (empty($_REQUEST['uInfo']) || empty($_REQUEST['path_id'])) {
 $path_id = intval($_REQUEST['path_id']);
 $uInfo = intval($_REQUEST['uInfo']);
 
-$navigation[] = ['url' => "index.php?course=$course_code", 'name' => $langLearningPaths];
-if (isset($_GET['unit'])) {
-    $unit = intval($_GET['unit']);
-    $navigation[] = [
-        'url' => $urlAppend . "modules/units/view.php?course=$course_code&res_type=lp_results&path_id=$path_id&unit=$unit",
-        'name' => $langTracking];
-} elseif ($is_course_reviewer) {
-    $navigation[] = ['url' => "details.php?course=$course_code&path_id=$path_id", 'name' => $langTracking];
+$toolName = $langTracking;
+if (add_units_navigation()) {
+    $tool_content .= action_bar([
+        [ 'title' => $langBack,
+          'url' => "index.php?course=$course_code&id=$unit",
+          'icon' => 'fa-reply',
+          'level' => 'primary'
+        ]
+    ], false);
 } else {
-    $navigation[] = ['url' => "learningPath.php?course=$course_code&path_id=$path_id", 'name' => $langTracking];
+    $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langLearningPaths);
+    if ($is_course_reviewer) {
+        $navigation[] = ['url' => "details.php?course=$course_code&path_id=$path_id", 'name' => $langTracking];
+    } else {
+        $navigation[] = ['url' => "learningPath.php?course=$course_code&path_id=$path_id", 'name' => $langTracking];
+    }
 }
 
 if (!$is_course_reviewer && $uInfo != $uid) { // security check
@@ -81,10 +87,12 @@ if (!isset($_GET['pdf']) && $is_course_reviewer) {
     $tool_content .= $action_bar;
 }
 
-$LPname = Database::get()->querySingle("SELECT `name`
+$LP = Database::get()->querySingle("SELECT *
         FROM `lp_learnPath`
         WHERE `learnPath_id` = ?d
-        AND `course_id` = ?d", $path_id, $course_id)->name;
+        AND `course_id` = ?d", $path_id, $course_id);
+$LPname = $LP->name;
+$lpForcedProgress = $LP->force_completed_progress;
 
 $sql = "SELECT LPM.`learnPath_module_id`, LPM.`parent`,
     LPM.`lock`, M.`module_id`,
@@ -92,7 +100,7 @@ $sql = "SELECT LPM.`learnPath_module_id`, LPM.`parent`,
     UMP.`lesson_status`, UMP.`raw`,
     UMP.`scoreMax`, UMP.`credit`,
     UMP.`session_time`, UMP.`total_time`, UMP.`attempt`,
-    UMP.`started`, UMP.`accessed`, A.`path`
+    UMP.`started`, UMP.`accessed`, UMP.`progress_measure`, A.`path`
     FROM `lp_user_module_progress` AS UMP
     LEFT JOIN `lp_rel_learnPath_module` AS LPM
         ON UMP.`learnPath_module_id` = LPM.`learnPath_module_id`
@@ -121,6 +129,7 @@ foreach ($moduleList as $module) {
         'name' => $module->name,
         'lesson_status' => $module->lesson_status,
         'raw' => $module->raw,
+        'progress_measure' => $module->progress_measure,
         'scoreMax' => $module->scoreMax,
         'credit' => $module->credit,
         'session_time' => $module->session_time,
@@ -136,6 +145,7 @@ foreach ($moduleList as $module) {
 }
 
 $moduleNbT = 0;
+$globalScore = null;
 $globalProg = $global_time = array();
 for ($i = 1; $i <= $maxAttempt; $i++) {
     $globalProg[$i] = 0;
@@ -157,30 +167,39 @@ $tool_content .= "<div class='table-responsive'>
             <th>$langStart</th>
             <th>$langAttemptAccessed</th>
             <th>$langTotalTimeSpent</th>
-            <th>$langStatement</th>
+            <th>$langLearningPathStatus</th>
             <th>$langProgress</th>
+            <th>$langScore</th>
         </tr></thead>";
 
 $data[] = [ uid_to_name($uInfo) . ": " . $LPname ];
 $data[] = [];
-$data[] = [ $langLearningObjects, $langAttempt, $langStart, $langAttemptAccessed, $langTotalTimeSpent, $langStatement, $langProgress ];
+$data[] = [ $langLearningObjects, $langAttempt, $langStart, $langAttemptAccessed, $langTotalTimeSpent, $langLearningPathStatus, $langProgress, $langScore ];
 
 
 // ---------------- display list of lp modules ------------------------
 $totalTime = "0000:00:00";
+$totalProgressMeasure = 0;
 foreach ($elementList as $module) {
-    if ($module['scoreMax'] > 0) {
+    if (!is_null($module['progress_measure'])) {
+        $progress = $module['progress_measure'] * 100;
+        if ($progress > $totalProgressMeasure) {
+            $totalProgressMeasure = $progress;
+        }
+    } elseif ($module['scoreMax'] > 0) {
         $progress = @round($module['raw'] / $module['scoreMax'] * 100);
     } else {
         $progress = 0;
     }
 
-    if ($module['contentType'] == CTSCORM_ && $module['scoreMax'] <= 0) {
-        if ($module['lesson_status'] == 'COMPLETED' || $module['lesson_status'] == 'PASSED') {
-            $progress = 100;
-        } else {
-            $progress = 0;
-        }
+    if ($module['scoreMax'] > 0) {
+        $score = @round($module['raw'] / $module['scoreMax'] * 100);
+    } else {
+        $score = 0;
+    }
+
+    if ($lpForcedProgress && $module['contentType'] == CTSCORM_ && ($module['lesson_status'] == 'COMPLETED' || $module['lesson_status'] == 'PASSED')) {
+        $totalProgressMeasure = $progress = 100;
     }
 
     // display the current module name
@@ -239,24 +258,30 @@ foreach ($elementList as $module) {
     $tool_content .= "<td>$total_time</td>";
     $tool_content .= "<td style='width:15%;'>" . disp_lesson_status($module['lesson_status']) . "</td>";
     //-- progression
+    $displayScore = ($score === 0 && $module['raw'] <= 0 && $module['scoreMax'] <= 0) ? "-" : $score . "%" ;
+    $displayProgress = ($progress === 0 && is_null($module['progress_measure'])) ? "-" : disp_progress_bar($progress, 1) ;
     if ($module['contentType'] != CTLABEL_) {
         // display the progress value for current module
-        $tool_content .= "<td>" . disp_progress_bar($progress, 1) . "</td>";
+        $tool_content .= "<td>" . $displayProgress . "</td><td class='text-end'>" . $displayScore . "</td>";
     } else { // label
-        $tool_content .= "<td>&nbsp;</td>";
+        $tool_content .= "<td>&nbsp;</td><td>&nbsp;</td>";
     }
 
     if ($progress > 0) {
         $globalProg[$module['attempt']] += $progress;
+    }
+    if ($score > 0 and $score > ($globalScore ?? 0)) {
+        $globalScore = $score;
     }
     if ($module['contentType'] != CTLABEL_) {
         $moduleNbT++;
     }
 
     $tool_content .= "</tr>";
+    $dataProgress = ($displayProgress === "-") ? $displayProgress : $progress . "%";
     $data[] = [ q($module['name']), q($module['attempt']), format_locale_date(strtotime($module['started']), 'short'),
-                format_locale_date(strtotime($module['accessed']), 'short'), $session_time, $total_time,
-                disp_lesson_status($module['lesson_status']), $progress . "%"
+                format_locale_date(strtotime($module['accessed']), 'short'), $total_time,
+                disp_lesson_status($module['lesson_status']), $dataProgress, $displayScore
               ];
     $totalTime = addScormTime($totalTime, $global_time[$module['attempt']]);
 }
@@ -276,7 +301,13 @@ if ($moduleNbT == 0) {
     if (is_numeric($nbrOfVisibleModules)) {
         $bestProgress = @round($globalProg[$bestAttempt] / $nbrOfVisibleModules);
     }
-    $lpCombinedProgress = get_learnPath_combined_progress($path_id, $uInfo);
+    if ($totalProgressMeasure) {
+        $lpCombinedProgress = $totalProgressMeasure;
+    } else {
+        $lpCombinedProgress = get_learnPath_combined_progress($path_id, $uInfo);
+    }
+
+    $globalScoreDisplay = $globalScore? "$globalScore%": '-';
 
     // display global stats
     $tool_content .= "<tr>
@@ -284,12 +315,14 @@ if ($moduleNbT == 0) {
                         <th><small>" . ($totalTime != "0000:00:00" ? $totalTime : '&nbsp;') . "</small></th>
                         <th>&nbsp;</th>
                         <th class='ms-1 p-2'>" . disp_progress_bar($lpCombinedProgress, 1) . "</th>
+                        <th class='ms-1 p-2 text-end'>$globalScoreDisplay</th>
                     </tr>";
     $data[] = [];
-    if ($global_time[$bestAttempt] != "0000:00:00") {
-        $data[] = [ $langTimeInLearnPath, $global_time[$bestAttempt] ];
+    if ($totalTime != "0000:00:00") {
+        $data[] = [ $langTimeInLearnPath, $totalTime ];
     }
     $data[] = [ $langTotalPercentCompleteness, $lpCombinedProgress . "%" ];
+    $data[] = [ $langMaxScore, $globalScoreDisplay];
 }
 $tool_content .= "</table></div>";
 

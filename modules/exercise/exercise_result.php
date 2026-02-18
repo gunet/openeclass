@@ -18,13 +18,13 @@
  */
 
 
-include 'exercise.class.php';
-include 'question.class.php';
-include 'answer.class.php';
+require_once 'exercise.class.php';
+require_once 'question.class.php';
+require_once 'answer.class.php';
 
 $require_current_course = TRUE;
 $guest_allowed = true;
-include '../../include/baseTheme.php';
+require_once '../../include/baseTheme.php';
 require_once 'modules/exercise/exercise.lib.php';
 require_once 'modules/gradebook/functions.php';
 require_once 'game.php';
@@ -128,8 +128,8 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) and strtolower($_SERVER['HTTP_X_RE
         } else {
             update_gradebook_book($data->uid, $data->eid, $data->total_score / $data->total_weighting, GRADEBOOK_ACTIVITY_EXERCISE);
         }
-        triggerGame($course_id, $data->uid, $data->eid);
-        triggerExerciseAnalytics($course_id, $data->uid, $data->eid);
+        //triggerGame($course_id, $data->uid, $data->eid);
+        //triggerExerciseAnalytics($course_id, $data->uid, $data->eid);
         exit();
     }
 }
@@ -315,7 +315,8 @@ $canonical_score = $objExercise->canonicalize_exercise_score($exercise_user_reco
 $displayScore = $objExercise->selectScore();
 $gradePass = $objExercise->getPassingGrade();
 $exerciseAttemptsAllowed = $objExercise->selectAttemptsAllowed();
-$calc_grade_method = $objExercise->getCalcGradeMethod();
+$exerciseCalcGradeMethod = $objExercise->getCalcGradeMethod();
+$exerciseFeedback = $objExercise->getFeedback();
 $userAttempts = Database::get()->querySingle("SELECT COUNT(*) AS count FROM exercise_user_record WHERE eid = ?d AND uid= ?d", $exercise_user_record->eid, $uid)->count;
 
 $cur_date = new DateTime("now");
@@ -384,34 +385,41 @@ if ($user) { // user details
     }
     $tool_content .= "</h3>";
 }
+// exercise duration details
+$tool_content .= "<p><small>$langStart: <em>" . format_locale_date(strtotime($exercise_user_record->record_start_date), 'short') . "</em>
+$langDuration: <em>" . format_time_duration($exercise_user_record->time_duration) . "</em></p>" .
+    ($user && $exerciseAttemptsAllowed ? "<p>$langAttempt: <em>{$exercise_user_record->attempt}</em></p>" : '');
+$tool_content .= "</small>";
+
 $tool_content .= "</div>";
 $tool_content .= "<div class='card-body'>";
 
 $message_range = $grade_icon = '';
-$canonicalized_message_range = "<strong>$exercise_user_record->total_score / $exercise_user_record->total_weighting</strong>";
-
-if (!is_null($gradePass) && $gradePass > 0) {
-    if ($canonical_score >= $objExercise->canonicalize_exercise_pass_grade($gradePass, $exercise_user_record->total_weighting)) {
-        $grade_icon = "<span class='fa-solid fa-check ps-1' style='color: green;' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-title='$langSuccess'></span>";
-    } else {
-        $grade_icon = "<span class='fa-solid fa-times ps-1' style='color: red;' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-title='$langFailure'></span>";
+if ($showScore) { // exercise score
+    $tool_content .= "<p>";
+    $canonicalized_message_range = "<strong>$exercise_user_record->total_score / $exercise_user_record->total_weighting</strong>";
+    if ($exerciseRange > 0) { // exercise grade range (if any)
+        $canonicalized_message_range = "<strong><span>$canonical_score</span> / $exerciseRange</strong>";
+        $message_range = "<small> (<strong>$exercise_user_record->total_score / $exercise_user_record->total_weighting</strong>)</small>";
     }
-}
-if ($exerciseRange > 0) { // exercise grade range (if any)
-    $canonicalized_message_range = "<strong><span>$canonical_score</span> / $exerciseRange</strong>";
-    $message_range = "<small> (<strong>$exercise_user_record->total_score / $exercise_user_record->total_weighting</strong>)</small>";
+    // passing grade (if any)
+    if (!is_null($gradePass) && $gradePass > 0) {
+        if ($canonical_score >= $objExercise->canonicalize_exercise_pass_grade($gradePass, $exercise_user_record->total_weighting)) {
+            $grade_icon = "<span class='fa-solid fa-check ps-1' style='color: green;' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-title='$langSuccess'></span>";
+        } else {
+            $grade_icon = "<span class='fa-solid fa-times ps-1' style='color: red;' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-title='$langFailure'></span>";
+        }
+    }
+    // message score
+    $tool_content .= "$langTotalScore: $canonicalized_message_range&nbsp;&nbsp;$message_range $grade_icon";
+    // exercise feedback (if any)
+    if (!empty($objExercise->calculate_feedback($canonical_score))) {
+        $tool_content .= "<h5 class='p-3 m-1 border border-info rounded-3' style='color: blue; text-align:center;'>" . $objExercise->calculate_feedback($canonical_score) . "</h5>";
+    }
+    $tool_content .= "</p>";
 }
 
-if ($showScore) {
-    $tool_content .= "<p>$langTotalScore: $canonicalized_message_range&nbsp;&nbsp;$message_range $grade_icon</p>";
-}
-$tool_content .= "
-    <p>$langStart: <em>" . format_locale_date(strtotime($exercise_user_record->record_start_date), 'short') . "</em>
-    $langDuration: <em>" . format_time_duration($exercise_user_record->time_duration) . "</em></p>" .
-    ($user && $exerciseAttemptsAllowed ? "<p>$langAttempt: <em>{$exercise_user_record->attempt}</em></p>" : '') . "
-  </div></div>
-</div>
-";
+$tool_content .= "</div></div></div>";
 
 $tool_content .= "<div class='col-12 mt-4'><div class='card panelCard card-default px-lg-4 py-lg-3'>
                       <div class='card-header border-0 d-flex justify-content-between align-items-center'>
@@ -475,12 +483,9 @@ if (count($exercise_question_ids) > 0) {
                 $urlAppend . "modules/exercise/admin.php?course=$course_code&amp;modifyAnswers=$questionId&fromExercise=$exercise_id");
         }
 
-        // destruction of the Question object
-        unset($objQuestionTmp);
         // check if the question has been graded
-        $question_weight = Database::get()->querySingle("SELECT SUM(weight) AS weight FROM exercise_answer_record WHERE question_id = ?d AND eurid =?d", $row->question_id, $eurid)->weight;
+        $question_weight = Database::get()->querySingle("SELECT SUM(weight) AS weight FROM exercise_answer_record WHERE question_id = ?d AND eurid = ?d", $row->question_id, $eurid)->weight;
         $question_graded = !is_null($question_weight);
-
 
         $tool_content .= "<div class='table-responsive'>";
         $tool_content .= "
@@ -500,18 +505,27 @@ if (count($exercise_question_ids) > 0) {
             }
         } else {
              if (($showScore) and (!is_null($choice))) {
-                 if ($answerType == MULTIPLE_ANSWER && $question_weight < 0 && $calc_grade_method == 1) {
+                 if ($answerType == MULTIPLE_ANSWER && $question_weight < 0 && $exerciseCalcGradeMethod == CALC_GRADE_METHOD_STANDARD) {
                      $qw_legend1 = "<span class='Accent-200-cl'>$question_weight</span>";
                      $qw_legend2 = " $langConvertedTo <strong>0 / $questionWeighting</strong>";
                  } else {
                      $qw_legend1 = "$question_weight";
                      $qw_legend2 = "";
                  }
-                 $tool_content .= " <span class='fw-light m-1'><small>($langGradebookGrade: <strong>$qw_legend1 / $questionWeighting</strong>$qw_legend2)</small></span>";
+                 $tool_content .= " <span class='fw-light m-1'>
+                                        <small>($langGradebookGrade: <strong>$qw_legend1 / $questionWeighting</strong>$qw_legend2";
+                 if ($exerciseCalcGradeMethod == CALC_GRADE_METHOD_CERTAINTY_BASED) {
+                     $question_certainty = Database::get()->querySingle("SELECT certainty FROM exercise_answer_record WHERE question_id = ?d AND eurid = ?d", $row->question_id, $eurid)->certainty;
+                     $tool_content .= ", $langCertainty: <strong>" . $objQuestionTmp->getCertaintyLegend($question_certainty) . "</strong>";
+                 }
+                 $tool_content .= ")</small>
+                                    </span>";
              }
         }
         $tool_content .= "<span class='fw-lighter m-2'><small>($questionType$qid_display)</small></span>$edit_link"; // question type
         $tool_content .= "</td></tr></thead>";
+        // destruction of the Question object
+        unset($objQuestionTmp);
 
         $tool_content .= "<tr><td colspan='2'>";
         $arithmetic_expression_str = '';
@@ -553,7 +567,7 @@ if (count($exercise_question_ids) > 0) {
 
         if ($questionFeedback !== '') {
             $tool_content .= "<tr><td>";
-            $tool_content .= "<div><strong>$langQuestionFeedback:</strong><br>" . standard_text_escape($questionFeedback) . "</div>";
+            $tool_content .= "<div class='text-primary'><strong>$langComment:</strong><br>" . standard_text_escape($questionFeedback) . "</div>";
             $tool_content .= "</td></tr>";
         }
 

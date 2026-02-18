@@ -288,6 +288,10 @@ function add_wiki_to_certificate($element, $element_id) {
  */
 function add_rec_wiki_to_points_game($points_game_id) {
     if (isset($_POST['wiki'])) {
+        $_POST['max_points_from_criterion'] = empty($_POST['max_points_from_criterion']) ? NULL : $_POST['max_points_from_criterion'];
+        $_POST['max_points_from_criterion_time_period'] = empty($_POST['max_points_from_criterion_time_period']) ? NULL : $_POST['max_points_from_criterion_time_period'];
+        $_POST['time_period_in_days'] = empty($_POST['time_period_in_days']) ? NULL : $_POST['time_period_in_days'];
+
         Database::get()->query("INSERT INTO points_game_criterion
                                 SET points_game = ?d,
                                 module = " . MODULE_ID_WIKI . ",
@@ -480,6 +484,10 @@ function add_forum_to_certificate($element, $element_id) {
  */
 function add_rec_forum_to_points_game($points_game_id) {
     if (isset($_POST[ForumEvent::ACTIVITY])) {
+        $_POST['max_points_from_criterion'] = empty($_POST['max_points_from_criterion']) ? NULL : $_POST['max_points_from_criterion'];
+        $_POST['max_points_from_criterion_time_period'] = empty($_POST['max_points_from_criterion_time_period']) ? NULL : $_POST['max_points_from_criterion_time_period'];
+        $_POST['time_period_in_days'] = empty($_POST['time_period_in_days']) ? NULL : $_POST['time_period_in_days'];
+
         Database::get()->query("INSERT INTO points_game_criterion
                                 SET points_game = ?d,
                                 module = " . MODULE_ID_FORUM . ",
@@ -588,6 +596,10 @@ function add_blog_to_certificate($element, $element_id) {
  */
 function add_rec_blog_to_points_game($points_game_id) {
     if (isset($_POST[BlogEvent::ACTIVITY])) {
+        $_POST['max_points_from_criterion'] = empty($_POST['max_points_from_criterion']) ? NULL : $_POST['max_points_from_criterion'];
+        $_POST['max_points_from_criterion_time_period'] = empty($_POST['max_points_from_criterion_time_period']) ? NULL : $_POST['max_points_from_criterion_time_period'];
+        $_POST['time_period_in_days'] = empty($_POST['time_period_in_days']) ? NULL : $_POST['time_period_in_days'];
+
         Database::get()->query("INSERT INTO points_game_criterion
                                 SET points_game = ?d,
                                 module = " . MODULE_ID_BLOG . ",
@@ -657,6 +669,10 @@ function add_blogcomment_to_certificate($element, $element_id) {
  */
 function add_rec_blogcomment_to_points_game($points_game_id) {
     if (isset($_POST['blogcomment'])) {
+        $_POST['max_points_from_criterion'] = empty($_POST['max_points_from_criterion']) ? NULL : $_POST['max_points_from_criterion'];
+        $_POST['max_points_from_criterion_time_period'] = empty($_POST['max_points_from_criterion_time_period']) ? NULL : $_POST['max_points_from_criterion_time_period'];
+        $_POST['time_period_in_days'] = empty($_POST['time_period_in_days']) ? NULL : $_POST['time_period_in_days'];
+
         Database::get()->query("INSERT INTO points_game_criterion
                                 SET points_game = ?d,
                                 module = " . MODULE_ID_COMMENTS . ",
@@ -993,6 +1009,20 @@ function check_user_details($uid) {
 }
 
 /**
+ * @brief check if we are trying to access a disabled gamification element
+ * @param type element
+ * @param type element_id
+ */
+function check_element_enabled($element, $element_id) {
+    global $course_id;
+
+    $sql = Database::get()->querySingle("SELECT count(id) as cnt FROM $element WHERE course_id = ?d and id = ?d AND active = ?d", $course_id, $element_id, 1);
+    if ($sql->cnt == 0) {
+        redirect_to_home_page();
+    }
+}
+
+/**
  * @brief check if certificate / badge is active
  * @param type $element
  * @param type $element_id
@@ -1144,12 +1174,15 @@ function modify_points_game($points_game_id, $title, $description, $startdate, $
                                                 WHERE id = ?d AND course_id = ?d",
                                     $title, $description, $startdate, $enddate, json_encode($config, JSON_UNESCAPED_UNICODE), $points_game_id, $course_id);
 
-    Database::get()->query("DELETE FROM points_game_levels WHERE points_game = ?d", $points_game_id);
-    foreach ($level_names as $level_name) {
-        $level_req_points = current($level_required_points);
-        next($level_required_points);
-        Database::get()->query("INSERT INTO points_game_levels (points_game, friendly_name, required_points) VALUES (?d,?s,?d)", 
-            $points_game_id, $level_name, $level_req_points);
+    $check_levels = Database::get()->querySingle("SELECT count(id) as cnt FROM user_points_game_points WHERE points_game = ?d AND current_level IS NOT NULL", $points_game_id);
+    if ($check_levels->cnt == 0) {
+        Database::get()->query("DELETE FROM points_game_levels WHERE points_game = ?d", $points_game_id);
+        foreach ($level_names as $level_name) {
+            $level_req_points = current($level_required_points);
+            next($level_required_points);
+            Database::get()->query("INSERT INTO points_game_levels (points_game, friendly_name, required_points) VALUES (?d,?s,?d)", 
+                $points_game_id, $level_name, $level_req_points);
+        }
     }
 }
 
@@ -1204,6 +1237,10 @@ function modify_certificate_activity($element, $element_id, $activity_id) {
 }
 
 function modify_points_game_rec_activity($points_game_id, $activity_id) {
+    $_POST['maxpoints'] = empty($_POST['maxpoints']) ? NULL : $_POST['maxpoints'];
+    $_POST['maxpointsinperiod'] = empty($_POST['maxpointsinperiod']) ? NULL : $_POST['maxpointsinperiod'];
+    $_POST['timeperiod'] = empty($_POST['timeperiod']) ? NULL : $_POST['timeperiod'];
+    
     Database::get()->query("UPDATE points_game_criterion
                                 SET points = ?d,
                                     max_points_from_criterion = ?d,
@@ -1348,13 +1385,12 @@ function delete_certificate($element, $element_id) {
         if (!Database::get()->querySingle('SELECT id FROM certificate WHERE id = ?d AND course_id = ?d', $element_id, $course_id)) {
             forbidden();
         }
-        $delete_cert = false;
+        $delete_cert = true;
         $r = Database::get()->queryArray("SELECT id FROM certificate_criterion WHERE certificate = ?d", $element_id);
         foreach ($r as $act) {
-            if (!resource_usage($element, $act->id)) { // check if a user has used activity
-                $delete_cert = true;
-            } else {
-                return false;
+            if (resource_usage($element, $act->id)) { // check if a user has used activity
+                $delete_cert = false;
+                break;
             }
         }
         if ($delete_cert) {  // delete certificate activities
@@ -1367,13 +1403,12 @@ function delete_certificate($element, $element_id) {
         if (!Database::get()->querySingle('SELECT id FROM badge WHERE id = ?d AND course_id = ?d', $element_id, $course_id)) {
             forbidden();
         }
-        $delete_badge = false;
+        $delete_badge = true;
         $r = Database::get()->queryArray("SELECT id FROM badge_criterion WHERE badge = ?d", $element_id);
         foreach ($r as $act) {
-            if (!resource_usage($element, $act->id)) { // check if a user has used activity
-                $delete_badge = true;
-            } else {
-                return false;
+            if (resource_usage($element, $act->id)) { // check if a user has used activity
+                $delete_badge = false;
+                break;
             }
         }
         if ($delete_badge) {  // delete badge activities

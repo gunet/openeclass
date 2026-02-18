@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language es
-// Generated 2025-12-02 16:31:16
+// Generated 2025-11-21 11:40:41
 
 $langYes = "Si";
 $langNo = "No";
@@ -1111,7 +1111,7 @@ $langLearningPathList = "Rutas de aprendizaje disponibles";
 $langLearningPathData = "Fecha de la ruta de aprendizaje:";
 $langLearningObjectData = "Datos del objeto de aprendizaje";
 $langLearningPathNotFound = "Ruta de aprendizaje no encontrada";
-$langLessonStatus = "Estado del módulo";
+$langLearningPathStatus = "Estado";
 $langLinkAsModule = "Usa un enlace";
 $langLinkAsModuleLabel = "Enlace";
 $langLogin = "Iniciar sesión";
@@ -1361,7 +1361,6 @@ $langSurveyCreationError = "Creación de encuesta con error. Por favor prueba ot
 $langSurveyDeleted = "Encuesta borrada con éxito.";
 $langSurveyDeactivated = "Encuesta desactivada con éxito.";
 $langSurveyActivated = "Encuesta activada con éxito.";
-$langSurveySubmitted = "!Gracias por tu participación!";
 $langSurveyTotalAnswers = "Número total de respuestas";
 $langSurveyNone = "No hay Encuestas para este actual curso.";
 $langSurveyInactive = "La encuesta ha expirado o no ha empezado aún.";
@@ -2337,7 +2336,7 @@ $langMetaMap = "Map";
 $langMetaInteractivemap = "Interactive map";
 $langMetaExploration = "Exploration";
 $langMetaInteractivegame = "Interactive game";
-$langMetaConceptualmap = "Mind Map";
+$langMetaConceptualmap = "Conceptual map";
 $langMetaIndex = "Index";
 $langMetaProblemstatement = "Problem statement";
 $langMetaSelfassessment = "Self-assessment";
@@ -3245,7 +3244,7 @@ $langAttendanceAbsences = "Absence";
 $langAttendanceAbsencesFrom = "attendances of the";
 $langAttendanceAbsencesFrom2 = "required for the $langsCourse.";
 $langAttendanceAbsencesYesNo = "Presence/absence";
-$langAttendanceUsers = "Attendance $langsOfStudents";
+$langAttendanceUsers = "Updated number of $langsOfStudents.";
 $langAttendanceNoActMessageLp4 = "No learning paths to add";
 $langAttendanceInfoForUsers = 'Please select the users to be tracked in the attendence book';
 $langAttendance6Months = "Tracking $langsStudents from last six months";
@@ -3689,7 +3688,7 @@ $langEBookPages = "$langEBook $langPages";
 $langNewEBookPage = "New Page";
 $langEBookInfoEdit = "Edit e-Books' Info/Sections";
 $langDisableModules = 'Disabled Modules';
-$langDisableModulesHelp = "You can choose which modules will be disabled for all $langsCourses platform-wide.";
+$langDisableModulesHelp = "You can select which modules will be disabled for all $langsCourses platform-wide.";
 $langldap_id_attr = "Attribute for student ID";
 $langcasuserstudentid = "CAS SAML attribute for student ID";
 $langPrint = "Imprimir";
@@ -4669,7 +4668,7 @@ $langOfBlogComments = "Blog comments";
 $langOfCourseComments = "$langsCourse comments";
 $langOfLearningPath = "Learning Path";
 $langNoCertificateUsers = "There are no $langsStudents who participate in this certificate.";
-$langUsedCertRes = "Activity has already been used by some $langsstudent_acc";
+$langUsedCertRes = "Activity has alread been used by some $langsstudent_acc";
 $langNoUserActivity = "$langStudent hasn't completed any actitivity.";
 $langTotalPercentCompleteness = "Percentage of completion";
 $langUsersCertResults = "Completed by ";
@@ -4704,8 +4703,8 @@ $langLastLogin = 'Last Login';
 $langNameOfLang['icelandic'] = 'Icelandic';
 $langNameOfLang['croatian'] = 'Croatian';
 $langNameOfLang['portuguese'] = 'Portuguese';
-$langOpenDelosPublicVideos = "Public multimedia files";
-$langOpenDelosPrivateVideos = "Private multimedia files";
+$langOpenDelosPublicVideos = "Open multimedia files";
+$langOpenDelosPrivateVideos = "Restricted multimedia files";
 $langOpenDelosRequireAuth = "Separate OpenDelos authentication required";
 $langOpenDelosRequireAuthHere = "here";
 $langOpenDelosAuth = "OpenDelos authentication";
@@ -5285,12 +5284,12 @@ $langFCWorkPaper = "Worksheets";
 $langFCRolePlay = "Role game";
 $langFCSimulate = "Simulation";
 $langFCProblemSolving = "Problem Solving";
-$langFCMindMap = "Mind Map Activity";
+$langFCMindMap = "Mind Map";
 $langFCEvaluate = "Evaluation";
 $langFlippedEdit = "Edit Flipped Classroom Options";
 $langJustEdited = "You just edited the course titled ";
 $langUnitActivityDeleteConfirm = "Are you sure you want to delete this activity?";
-$langUnitJustEdited = "Course units updated ";
+$langUnitJustEdited = "You just edited the unit titled ";
 $langConfirmDeleteUnit = "Are you sure you want to remove this unit?";
 $langConfirmDeleteGoal = "Are you sure you want to remove this Intended Learning Outcome?";
 $langQuestionPreview = 'Preview of Question';
@@ -6226,7 +6225,7 @@ $langInfoAddSliderLabels = "Add to the text field the possible answers that the 
  Each answer is separated by the symbol | .</br>
  Eg if the maximum number of the scale is 5 then you should give 5 possible answers of the form: (not at all|very little|a little|very|very much).";
 $langTableDimension = "Create the dimension of the table (N*N) by entering the number of its columns and rows.</br></br>
- <ul><li>Columns = User questions</li><li>Rows = User answers</li></ul>";
+ <ul><li>Columns = Questions to the user</li><li>Rows = Answers from the user</li></ul>";
 $langNumberOfColumns = "Number of columns";
 $langNumberOfRows = "Number of lines";
 $langWriteQuestion = "Write the question...";
@@ -6366,12 +6365,12 @@ For example, if we want to calculate the result of the arithmetic operation 15+3
 </div>';
 $langCompleteVariablesOfQuestionWarning = '
 <strong class="text-dark">Warning!</strong></br></br>
-If the exercise <strong class="text-dark">DOES</strong> include an item and must be calculated, then in the <strong class="text-dark">Answer type</strong> field you must complete the numerical expression as you completed it in the pronunciation along with its final result separated by the double vertical bar symbol <strong>(||)</strong></br>
+If the exercise <strong class="text-dark">DOES</strong> include an item and must be calculated, then in the <strong class="text-dark">Answer type</strong> field you must complete the numerical expression as you completed it in the pronunciation along with its final result separated by the colon symbol <strong>(:)</strong></br>
 <div class="mt-3 text-dark">
 For example, if we want to calculate the unknown <strong class="text-dark">x</strong> in the equation <strong class="text-dark">3x - 2 = 2x</strong> then we follow these steps:
 <ul class="mt-4 text-dark">
 <li class="text-dark">In the <strong class="text-dark">Pronunciation</strong> field we write the pronunciation we want. In our example we can write `Find the unknown <strong class="text-dark">x</strong> of the equation <strong class="text-dark">3x - 2 = 2x</strong>`.</li>
-<li class="text-dark">In the <strong class="text-dark">Answer type</strong> field we fill in the numerical expression along with the final value of <strong class="text-dark">x</strong> that we are looking for as a result separated by the symbol (<strong class="text-dark">||</strong>) that is, we write <strong class="text-dark">3x - 2 = 2x||2</strong></li>
+<li class="text-dark">In the <strong class="text-dark">Answer type</strong> field we fill in the numerical expression along with the final value of <strong class="text-dark">x</strong> that we are looking for as a result separated by the symbol (<strong class="text-dark">:</strong>) that is, we write <strong class="text-dark">3x - 2 = 2x:2</strong></li>
 <li class="text-dark">In the <strong class="text-dark">Grade</strong> field we fill in its degree.</li>
 <li class="text-dark">Then in <strong class="text-dark">Edit items</strong> we press <strong class="text-dark">Submit</strong>.</li>
 </ul>
@@ -6379,7 +6378,7 @@ For example, if we want to calculate the unknown <strong class="text-dark">x</st
 $langNoExistVariables = "The exercise pronunciation contains no data or the text field is empty.";
 $langFinalValueOfWildCard = "Value of item";
 $langSeperateCorrectlyTheTypeOfAnswer = "There are no {items} available in the pronunciation or in the answer types. </br>
-Therefore, in the <strong>Answer type</strong> field, you must add the numerical formula you added to the pronunciation along with its final result, separated by the symbol (<strong>||</strong>)";
+Therefore, in the <strong>Answer type</strong> field, you must add the numerical formula you added to the pronunciation along with its final result, separated by the symbol (<strong>:</strong>)";
 $langOrdering = "Ordering";
 $langLayoutItems = "Layout items";
 $langHorizontal = "Horizontal";
@@ -6657,7 +6656,7 @@ $langEvaluationCriteriaHelp = "Provide clear criteria that the AI will use to ev
 $langMaxPoints = "Maximum Points";
 $langMaxPointsHelp = "The maximum score that can be awarded for this question";
 $langDefinedInQuestionStatement = "defined in question statement";
-$langSampleResponses = "Sample Responses";
+$langSampleResponses = "Sample Responses (Optional)";
 $langSampleResponsesPlaceholder = "Example responses to help guide AI evaluation:\n\nGood response example | good\nPoor response example | poor\n\nFormat: response | quality (good/poor/average)";
 $langSampleResponsesHelp = "Provide example responses with quality indicators. Format: 'response | quality' (one per line). This helps the AI understand your expectations.";
 $langSaveAIConfig = "Save AI Configuration";
@@ -6676,10 +6675,10 @@ $langAddToExercise = "Add to Exercise";
 $langQuestionsAddedToExercise = '%d questions added to exercise';
 $langTestConnection = 'Test Connection';
 $langDefaultFillInBlanks = 'Fill in the blanks';
-$langAIService = 'AI Node';
+$langAIService = 'AI Subsystem';
 $langAddProvider = 'Add Provider';
-$langAssignAIToModule = "AI Nodes settings";
-$langAIModuleDeleted = 'AI node deleted';
+$langAssignAIToModule = "Assign AI operation to module";
+$langAIModuleDeleted = 'AI module deleted';
 $langAIAssistedGrading = "AI-Assisted Grading";
 $langAIGradingDescription = "Enable AI to automatically evaluate responses and suggest grades based on your criteria";
 $langAIEvaluationCriteria = "Evaluation Criteria";
@@ -6717,6 +6716,7 @@ $langSelectedPoint = "Selected point";
 $langStartDrawing = "Start drawing the answer on the image...";
 $langStartDrawingHelp = "By clicking SAVE ANSWER the new answer is saved again. </br> The shape of the previous answer in the image will be deleted (if any) and replaced with the new one.";
 $langCompleted = 'Completed';
+$langIncomplete = 'Incomplete';
 $langPanoptoShortDescription = "Connect with Panopto video service.
 Panopto service is a commercial production by Panopto Inc. For further information take a look at <a href=\"https://www.panopto.com\">https://www.panopto.com</a>";
 $langPanoptoLongDescription = "Connection with Panopto video service.";
@@ -6787,15 +6787,18 @@ $langCriteriaBelowParticipateInCompletion = "The following criteria are involved
 $langTheResource = "The resource";
 $langListCompletionCriteria = "List of criteria";
 $langUserParticipation = "User participation";
-$langWarningAboutUsedCert = "If you really want to delete it click the button below. Note that certificate user progress will be deleted also!";
-$langStricterExamRestriction = "Stricter exam mode";
-$langExerciseWillBeCanceledInStrictMode = "The exam is canceled in parallel user actions";
-$langWarningNewPageOpened = "<strong>Attention!</strong><br>Please keep the current page open throughout the exam.<br> Any parallel action, such as redirecting to a new page or opening a new window, will result in the automatic cancellation of your attempt.";
-$langWarningNewPageOpened2 = "<strong>Warning!</strong><br>You have entered the examination area.<br> Any parallel action, such as redirecting to a new page or opening a new window, will lead to the automatic cancellation of your attempt.";
-$langExWillBeCanceled = "Your attempt will be canceled.";
-$langGoToExam = "Enter the exam";
-$langExerciseGradePass = "Passing Grade";
-$langExerciseGradePassLegend = "The exercise is considered to have been successfully performed if the $langsStudent grade is greater than or equal to the pass grade";
-$langVideoManT3 = "LangOfTeacher Guides (part 3)";
-$langFailure = "Failure";
-$langAIServices = "A.I Functional Nodes";
+
+// LaTeX / Math editor dialog (TinyMCE latexhelper)
+$langLatexDialogTitle = "Insertar LaTeX";
+$langLatexInput = "Entrada LaTeX:";
+$langLatexPreview = "Vista previa";
+$langLatexCatGreekLetters = "Letras griegas";
+$langLatexCatOperators = "Operadores";
+$langLatexCatRelations = "Relaciones";
+$langLatexCatArrows = "Flechas";
+$langLatexCatDelimiters = "Delimitadores";
+$langLatexCatAccents = "Acentos";
+$langLatexCatFunctions = "Funciones";
+$langLatexCatMathStructures = "Estructuras matemáticas";
+$langLatexCatMiscellaneous = "Varios";
+$langLatexCatChemicalSymbols = "Símbolos químicos";

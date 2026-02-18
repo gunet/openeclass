@@ -123,8 +123,9 @@ foreach ($resultex as $listex) {
                   AND course_id = ?d", $insertedAsset_id, $insertedExercice_id, $course_id);
 
             insertInLearningPath($insertedExercice_id, $order);
-            Session::flash('message',$langInsertedAsModule);
+            Session::flash('message', $langInsertedAsModule);
             Session::flash('alert-class', 'alert-info');
+            redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course=' . $course_code);
         } else {
             // exercise is already used as a module in another learning path , so reuse its reference
             // check if this is this LP that used this exercise as a module
@@ -143,9 +144,11 @@ foreach ($resultex as $listex) {
                 insertInLearningPath($thisExerciseModule->module_id, $order);
                 Session::flash('message',$langInsertedAsModule);
                 Session::flash('alert-class', 'alert-info');
+                redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course=' . $course_code);
             } else {
                 Session::flash('message',$langAlreadyUsed);
                 Session::flash('alert-class', 'alert-warning');
+                redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course=' . $course_code);
             }
         }
     } // end if request
@@ -164,7 +167,7 @@ draw($tool_content, 2, null, $head_content);
 function insertInLearningPath($module_id, $rank) {
     global $langDefaultModuleAddedComment;
 
-    // finally : insert in learning path
+    // finally: insert in learning path
     Database::get()->query("INSERT INTO lp_rel_learnPath_module
         (learnPath_id, module_id, specificComment, `rank`, `lock`, `visible`)
         VALUES (?d, ?d, ?s, ?d, ?s, ?d)", $_SESSION['path_id'], $module_id, $langDefaultModuleAddedComment, $rank, 'OPEN', 1);

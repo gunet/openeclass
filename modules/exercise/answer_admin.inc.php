@@ -28,7 +28,7 @@ if ($answerType == CALCULATED) {
     $des_array = unserialize($objQuestion->selectDescription());
     $questionDescription = $des_array['question_description'];
 }
-$okPicture = file_exists($picturePath . '/quiz-' . $questionId) ? true : false;
+$okPicture = file_exists($picturePath . '/quiz-' . $questionId);
 
 // Check if AI evaluation is available for FREE_TEXT questions
 $aiEvaluationAvailable = false;
@@ -43,6 +43,7 @@ if ($answerType == FREE_TEXT) {
 $newAnswer = $deleteAnswer = $modifyWildCards = false;
 
 $htopic = 0;
+
 if (isset($_GET['htopic'])) { //new question
     $htopic = $_GET['htopic'];
 }
@@ -690,7 +691,7 @@ if (isset($submitAnswers) || isset($buttonBack)) {
                 // Inserting the predefined answers for the current question in database.
                 $questionWeighting = $nbrGoodAnswers = 0;
                 for ($i = 1; $i <= count($_POST['calculated_answer']); $i++) {
-                    $cal_ans = []; 
+                    $cal_ans = [];
                     $finalResult = '';
                     $arExpression = '';
                     if ($wildCardOptions) {
@@ -711,8 +712,8 @@ if (isset($submitAnswers) || isset($buttonBack)) {
                     $cal_ans[] = [
                         'expression' => $arExpression,
                         'result' => $finalResult
-                    ]; 
-                    $reponse[$i] = serialize($cal_ans);  
+                    ];
+                    $reponse[$i] = serialize($cal_ans);
                     $comment[$i] = '';
                     $weighting[$i] = fix_float($_POST['calculated_answer_grade'][$i]);
                     $goodAnswer = ((isset($_POST['calculated_answer_grade'][$i]) && $_POST['calculated_answer_grade'][$i] > 0) ? 1 : 0);
@@ -848,7 +849,7 @@ if (isset($submitAnswers) || isset($buttonBack)) {
                 'index' => $inde_x,
                 'value' => $_POST['ordering_answer'][$inde_x],
                 'grade' => fix_float($_POST['ordering_answer_grade'][$inde_x])
-            ]; 
+            ];
         }
         $choices_ordering_answer = '';
         if (count($choicesOrdArr) > 0) {
@@ -1456,7 +1457,7 @@ if (isset($_GET['modifyAnswers'])) {
                      $tool_content .= "</table>";
                  }
              }
-        } elseif ($answerType == MATCHING) {
+    } elseif ($answerType == MATCHING) {
 
          if (!empty($msgErr)) {
              $tool_content .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$msgErr</span></div>";
@@ -1469,7 +1470,7 @@ if (isset($_GET['modifyAnswers'])) {
              <input type='hidden' name='nbrMatches' value='$nbrMatches'>
              <fieldset><legend class='mb-0' aria-label='$langForm'></legend>
              <table class='table table-default'>";
-         $optionsList = array();
+         $optionsList = $optionsWeight = array();
          // create an array with the option letters
          for ($i = 1, $j = 'A'; $i <= $nbrOptions; $i++, $j++) {
              $optionsList[$i] = $j;
@@ -1502,7 +1503,10 @@ if (isset($_GET['modifyAnswers'])) {
              } else {
                  $optionText = '';
              }
-             $optionWeight = isset($weighting[$i])? q($weighting[$i]): 1;
+
+             if (isset($_POST['sel'])) {
+                 $sel = $_POST['sel'];
+             }
 
              $tool_content .= "<tr>
                <td class='text-end'><strong>$j</strong></td>
@@ -1510,13 +1514,23 @@ if (isset($_GET['modifyAnswers'])) {
                <td><div class='text-end'><select class='form-select' name='sel[$i]'>";
              foreach ($optionsList as $key => $val) {
                  $tool_content .= "<option value='" . q($key) . "'";
-                 if ((!isset($submitAnswers) && !isset($sel[$i]) && $j == 2 && $val == 'B') || @$sel[$i] == $key) {
+                 if ((!isset($submitAnswers) && !isset($sel[$i]) && $j == 2 && $val == 'B') || (isset($sel[$i]) && $sel[$i] == $key)) {
                      $tool_content .= " selected='selected'";
                  }
                  $tool_content .= ">" . q($val) . "</option>";
              }
              $tool_content .= "</select></div></td>
-               <td><input class='form-control' type='text' name='weighting[$i]' value='$optionWeight'></td>
+               <td>";
+
+             if (isset($_POST['weighting'][$i])) {
+                 $optionWeight = q(fix_float($_POST['weighting'][$i]));
+             } else if (isset($weighting[$i])) {
+                 $optionWeight = q($weighting[$i]);
+             } else {
+                 $optionWeight = 1;
+             }
+              $tool_content .= "<input class='form-control' type='text' name='weighting[$i]' value='$optionWeight'>";
+              $tool_content .= "</td>
              </tr>";
          }
 
@@ -2225,39 +2239,37 @@ if (isset($_GET['modifyAnswers'])) {
             </div>
         </div></div>";
     } else {
-        if ($answerType == FREE_TEXT) {
-            // FREE_TEXT questions - show AI evaluation configuration if available
-            if ($aiEvaluationAvailable) {
+        // display AI evaluation configuration if available in FREE TEXT questions.
+        if ($answerType == FREE_TEXT && $aiEvaluationAvailable) {
+            // Display success/error messages
+            if (!empty($aiConfigError)) {
+                $tool_content .= "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$aiConfigError</span></div>";
+            }
+            if (!empty($msgSuccess)) {
+                $tool_content .= "<div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$msgSuccess</span></div>";
+            }
 
-                // Display success/error messages
-                if (!empty($aiConfigError)) {
-                    $tool_content .= "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$aiConfigError</span></div>";
-                }
-                if (!empty($msgSuccess)) {
-                    $tool_content .= "<div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$msgSuccess</span></div>";
-                }
+            $aiEnabled = $aiConfig ? $aiConfig->enabled : 0;
+            $evaluationPrompt = $aiConfig ? $aiConfig->evaluation_prompt : '';
+            $maxPoints = $objQuestion->selectWeighting(); // Use question's weight as max points
+            $sampleResponses = '';
 
-                $aiEnabled = $aiConfig ? $aiConfig->enabled : 0;
-                $evaluationPrompt = $aiConfig ? $aiConfig->evaluation_prompt : '';
-                $maxPoints = $objQuestion->selectWeighting(); // Use question's weight as max points
-                $sampleResponses = '';
-
-                if ($aiConfig && $aiConfig->sample_responses) {
-                    $samples = json_decode($aiConfig->sample_responses, true);
-                    if ($samples && is_array($samples)) {
-                        $lines = [];
-                        foreach ($samples as $sample) {
-                            if (isset($sample['response']) && isset($sample['quality'])) {
-                                $lines[] = $sample['response'] . ' | ' . $sample['quality'];
-                            } else {
-                                $lines[] = $sample['response'];
-                            }
+            if ($aiConfig && $aiConfig->sample_responses) {
+                $samples = json_decode($aiConfig->sample_responses, true);
+                if ($samples && is_array($samples)) {
+                    $lines = [];
+                    foreach ($samples as $sample) {
+                        if (isset($sample['response']) && isset($sample['quality'])) {
+                            $lines[] = $sample['response'] . ' | ' . $sample['quality'];
+                        } else {
+                            $lines[] = $sample['response'];
                         }
-                        $sampleResponses = implode("\n", $lines);
                     }
+                    $sampleResponses = implode("\n", $lines);
                 }
+            }
 
-                $tool_content .= "
+           $tool_content .= "
                <div class='col-12 mt-4'>
                    <div class='card panelCard card-default px-lg-4 py-lg-3'>
                        <div class='card-header border-0'>
@@ -2312,27 +2324,18 @@ if (isset($_GET['modifyAnswers'])) {
                    </div>
                </div>";
 
-                // Show info about existing AI evaluations if any
-                if ($aiEnabled && isset($exerciseId)) {
-                    $evaluationCount = Database::get()->querySingle("SELECT COUNT(*) as count FROM exercise_ai_evaluation WHERE question_id = ?d", $questionId)->count;
-                    if ($evaluationCount > 0) {
-                        $tool_content .= "
-                       <div class='col-12 mt-3'>
-                           <div class='alert alert-info'>
-                               <i class='fa-solid fa-circle-info fa-lg'></i>
-                               <span>$langAIEvaluationsFound ($evaluationCount evaluations)</span>
-                           </div>
-                       </div>";
-                    }
-                }
-            } else {
-                $tool_content .= "
-                   <div class='col-12 mt-4'>
+            // Show info about existing AI evaluations, if any
+            if ($aiEnabled && isset($exerciseId)) {
+                $evaluationCount = Database::get()->querySingle("SELECT COUNT(*) as count FROM exercise_ai_evaluation WHERE question_id = ?d", $questionId)->count;
+                if ($evaluationCount > 0) {
+                    $tool_content .= "
+                   <div class='col-12 mt-3'>
                        <div class='alert alert-info'>
                            <i class='fa-solid fa-circle-info fa-lg'></i>
-                           <span>$langFreeTextNoAnswerConfig</span>
+                           <span>$langAIEvaluationsFound ($evaluationCount evaluations)</span>
                        </div>
                    </div>";
+                }
             }
         }
     }

@@ -51,6 +51,9 @@ load_js('tools.js');
 // Initialize tool_content
 $tool_content = '';
 
+// WRAP in progress-module div
+$tool_content .= "<div class='progress-module'>";
+
 // ALWAYS SHOW TAB NAVIGATION FIRST (except in special cases like PDF, preview, progressall)
 $show_tabs = !isset($_GET['p']) && !isset($_GET['preview']) && !isset($_GET['progressall']) && !isset($_GET['u']);
 
@@ -79,17 +82,20 @@ if ($show_tabs) {
     ";
 }
 
-// Add CSS styles for tab navigation
+// Add CSS styles - SCOPED TO .progress-module ONLY
 $head_content .= "
 <style>
-.progress-nav-container {
+/* ============================================
+   TAB NAVIGATION - SCOPED
+   ============================================ */
+.progress-module .progress-nav-container {
     background: white;
     border-bottom: 1px solid #e5e7eb;
     margin: 0 0 30px 0;
     padding: 0;
 }
 
-.progress-nav-tabs {
+.progress-module .progress-nav-tabs {
     display: flex;
     gap: 0;
     position: relative;
@@ -98,158 +104,391 @@ $head_content .= "
     margin-left: 0;
 }
 
-.progress-nav-tab {
+.progress-module .progress-nav-tab {
     padding: 16px 24px;
     background: transparent;
-    border: 1px;
+    border: none;
     border-bottom: 3px solid transparent;
     cursor: pointer;
     transition: all 0.2s ease;
     text-decoration: none;
     color: #6b7280;
-
     font-size: 15px;
     font-weight: 500;
     white-space: nowrap;
     position: relative;
 }
 
-.progress-nav-tab:hover {
+.progress-module .progress-nav-tab:hover {
     color: #374151;
     background: #f9fafb;
 }
 
-.progress-nav-tab.active {
+.progress-module .progress-nav-tab.active {
     color: #2563eb;
     border-bottom-color: #2563eb;
 }
 
-.progress-section {
-    display: none;
+/* ============================================
+   CARD STYLING - ALL CARDS IN PROGRESS MODULE
+   ============================================ */
+
+/* Main card containers - NORMAL BORDER EVERYWHERE */
+.progress-module .progress-card,
+.progress-module .panel,
+.progress-module .panel-default,
+.progress-module .panel-success,
+.progress-module .panel-info,
+.progress-module .panel-body-progress,
+.progress-module .card,
+.progress-module .card-default,
+.progress-module div[class*='panel'],
+.progress-module > div > .panel,
+.progress-module .row > div > .panel {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    border-radius: 12px !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05) !important;
+    margin-bottom: 25px !important;
 }
 
-.progress-section.active {
-    display: block;
+/* ONLY panels WITH heading get blue border */
+.progress-module .panel:has(.panel-heading),
+.progress-module .card:has(.card-header) {
+    border-left: 4px solid #3b82f6 !important;
 }
 
-/* Hide redundant section headers when tabs are visible */
-.progress-nav-container ~ .row h3:first-of-type,
-.progress-nav-container ~ h3:first-of-type,
-.progress-nav-container ~ div h3:first-of-type,
-.panel-body > h3:first-child {
-    display: none !important;
+/* Card headers styling */
+.progress-module .panel-heading,
+.progress-module .card-header,
+.progress-module h3.panel-title {
+    background: transparent !important;
+    border: none !important;
+    border-radius: 12px 12px 0 0 !important;
+    padding: 20px 24px !important;
+    margin: 0 !important;
 }
 
-/* Leaderboard accordion styles */
-.leaderboard-accordion-header {
-    background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 4px 4px 0 0;
-    padding: 18px 20px;
+.progress-module .progress-card-header h4,
+.progress-module .panel-heading h4,
+.progress-module .panel-heading h3,
+.progress-module .panel-title,
+.progress-module h3.panel-title {
+    font-weight: 700 !important;
+    color: #1f2937 !important;
+    margin: 0 !important;
+    font-size: 16px !important;
+}
+
+.progress-module .progress-card-header i,
+.progress-module .panel-heading h4 i,
+.progress-module .panel-heading h3 i {
+    margin-right: 10px;
+    color: #3b82f6;
+}
+
+/* Card body - ALL TYPES */
+.progress-module .panel-body,
+.progress-module .card-body,
+.progress-module .panel-body-progress {
+    padding: 24px !important;
+    background: transparent !important;
+}
+
+/* Tables in cards */
+.progress-module .table-default,
+.progress-module .table,
+.progress-module table {
+    margin-bottom: 0 !important;
+    background: transparent !important;
+}
+
+.progress-module .table-default thead,
+.progress-module .table thead,
+.progress-module table thead {
+    background: #f9fafb !important;
+}
+
+.progress-module .table-default th,
+.progress-module .table th,
+.progress-module table th {
+    font-weight: 600 !important;
+    color: #374151 !important;
+    padding: 12px 15px !important;
+    font-size: 13px !important;
+}
+
+.progress-module .table-default td,
+.progress-module .table td,
+.progress-module table td {
+    padding: 15px !important;
+    color: #4b5563 !important;
+    vertical-align: middle !important;
+}
+
+.progress-module .table-default tbody tr,
+.progress-module .table tbody tr,
+.progress-module table tbody tr {
+    transition: background-color 0.2s ease !important;
+}
+
+.progress-module .table-default tbody tr:hover,
+.progress-module .table tbody tr:hover,
+.progress-module table tbody tr:hover {
+    background-color: #f9fafb !important;
+}
+
+/* Form groups and content inside cards */
+.progress-module .form-group {
+    margin-bottom: 15px;
+}
+
+.progress-module .form-group label {
+    font-weight: 600;
+    color: #374151;
+}
+
+/* ============================================
+   LEADERBOARD ACCORDION - SCOPED
+   ============================================ */
+
+.progress-module .leaderboard-accordion-header {
+    background: #fff !important;
+    border: 1px solid #e5e7eb !important;
+    border-radius: 12px 12px 0 0 !important;
+    padding: 20px 24px !important;
     cursor: pointer;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    transition: background-color 0.2s ease;
-    margin-top: 20px;
+    transition: all 0.2s ease;
+    margin-top: 40px !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05) !important;
 }
 
-.leaderboard-accordion-header:hover {
-    background: #ebebeb;
+.progress-module .leaderboard-accordion-header:hover {
+    background: #f9fafb !important;
 }
 
-.leaderboard-accordion-header h4 {
-    margin: 0;
-    font-size: 15px;
-    font-weight: 800;
-    color: #555;
+.progress-module .leaderboard-accordion-header h4 {
+    margin: 0 !important;
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    color: #1f2937 !important;
 }
 
-.leaderboard-accordion-header h4 i {
-    margin-right: 15px;
-    color: #374151;
+.progress-module .leaderboard-accordion-header h4 i {
+    margin-right: 12px;
+    color: #3b82f6;
 }
 
-.leaderboard-accordion-icon {
+.progress-module .leaderboard-accordion-icon {
     transition: transform 0.3s ease;
-    color: #777;
-    font-size: 14px;
+    color: #6b7280;
+    font-size: 16px;
 }
 
-.leaderboard-accordion-icon.open {
+.progress-module .leaderboard-accordion-icon.open {
     transform: rotate(180deg);
 }
 
-.leaderboard-accordion-content {
+.progress-module .leaderboard-accordion-content {
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.4s ease;
-    border: 1px solid #ddd;
-    border-top: none;
-    border-radius: 0 0 4px 4px;
-    background: #fff;
-    margin-bottom: 20px;
+    border: 1px solid #e5e7eb !important;
+    border-top: none !important;
+    border-radius: 0 0 12px 12px !important;
+    background: #fff !important;
+    margin-bottom: 25px !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05) !important;
 }
 
-.leaderboard-accordion-content.open {
+.progress-module .leaderboard-accordion-content.open {
     max-height: 3000px;
 }
 
-.leaderboard-accordion-body {
-    padding: 30px;
-    background: #fff;
+.progress-module .leaderboard-accordion-body {
+    padding: 24px !important;
+    background: #fff !important;
 }
 
-.leaderboard-accordion-body .table {
-    margin-bottom: 0;
+/* ============================================
+   LEADERBOARD ACCORDION - SCOPED
+   ============================================ */
+
+.progress-module .leaderboard-accordion-header {
+    background: #fff !important;
+    border: 1px solid #e5e7eb !important;
+    border-radius: 12px 12px 0 0 !important;
+    padding: 20px 24px !important;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.2s ease;
+    margin-top: 40px !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05) !important;
 }
 
-.leaderboard-accordion-body .table tr.info .progress {
-    background-color: #e8f4f8;
-    border: 1px solid #bee5eb;
+.progress-module .leaderboard-accordion-header:hover {
+    background: #f9fafb !important;
 }
 
-.leaderboard-accordion-body .table tr.current-user {
-    background: #4D5B75;
-    color: #ffffff;
+.progress-module .leaderboard-accordion-header h4 {
+    margin: 0 !important;
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    color: #1f2937 !important;
+}
+
+.progress-module .leaderboard-accordion-header h4 i {
+    margin-right: 12px;
+    color: #3b82f6;
+}
+
+.progress-module .leaderboard-accordion-icon {
+    transition: transform 0.3s ease;
+    color: #6b7280;
+    font-size: 16px;
+}
+
+.progress-module .leaderboard-accordion-icon.open {
+    transform: rotate(180deg);
+}
+
+.progress-module .leaderboard-accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+    border: 1px solid #e5e7eb !important;
+    border-top: none !important;
+    border-radius: 0 0 12px 12px !important;
+    background: #fff !important;
+    margin-bottom: 25px !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05) !important;
+}
+
+.progress-module .leaderboard-accordion-content.open {
+    max-height: 3000px;
+}
+
+.progress-module .leaderboard-accordion-body {
+    padding: 24px !important;
+    background: #fff !important;
+}
+
+/* ============================================
+   LEADERBOARD TABLE - CLEAN DESIGN
+   ============================================ */
+
+.progress-module .leaderboard-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 0 !important;
+    background: transparent !important;
+}
+
+.progress-module .leaderboard-table thead {
+    background: #f9fafb !important;
+    border-bottom: 2px solid #e5e7eb !important;
+}
+
+.progress-module .leaderboard-table th {
+    padding: 14px 16px !important;
+    font-weight: 600 !important;
+    color: #374151 !important;
+    font-size: 13px !important;
+    text-align: left !important;
+    border: none !important;
+}
+
+.progress-module .leaderboard-table tbody tr {
+    background-color: transparent;
+    border-bottom: 1px solid #f3f4f6;
+    transition: background-color 0.2s ease;
+}
+
+.progress-module .leaderboard-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.progress-module .leaderboard-table tbody tr:hover {
+    background-color: #f9fafb !important;
+}
+
+.progress-module .leaderboard-table td {
+    padding: 16px !important;
+    color: #4b5563 !important;
+    vertical-align: middle !important;
+    border: none !important;
+}
+
+/* Current user highlight - simple underline */
+.progress-module .leaderboard-table tr.current-user-student {
+    background: transparent !important;
+    border-left: 3px solid #3b82f6 !important;
+}
+
+.progress-module .leaderboard-table tr.current-user-student td {
+    color: #1f2937 !important;
+    font-weight: 600 !important;
+}
+
+/* Leaderboard specific elements */
+.progress-module .rank-number {
+    font-weight: 700;
+    color: #6b7280;
+    font-size: 15px;
+}
+
+.progress-module .level-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: #fef3c7;
+    color: #92400e;
+    border-radius: 20px;
+    font-size: 12px;
     font-weight: 600;
 }
 
-.leaderboard-accordion-body .table tr.current-user td {
-    color: #ffffff !important;
+.progress-module .user-name {
+    font-weight: 500;
+    color: #1f2937;
 }
 
-.leaderboard-accordion-body .table tr.current-user i {
-    color: #ffffff !important;
-}
-
-.leaderboard-accordion-body .table tr.current-user .progress {
-    background-color: rgba(255,255,255,0.25);
-    border: 1px solid rgba(255,255,255,0.35);
-}
-
-.leaderboard-accordion-body .table tr.current-user .progress-bar {
-    background-color: #ffffff !important;
-    color: #4D5B75;
+.progress-module .points-badge {
+    display: inline-block;
+    padding: 6px 14px;
+    background: #dbeafe;
+    color: #1e40af;
+    border-radius: 20px;
     font-weight: 700;
+    font-size: 13px;
 }
 
-.leaderboard-accordion-body .table tr.current-user .progress-bar {
-    mix-blend-mode: normal;
+.progress-module .leaderboard-table .progress {
+    height: 8px;
+    margin-bottom: 6px;
+    background-color: #e5e7eb;
+    border-radius: 10px;
+    overflow: hidden;
 }
 
-
-@media (max-width: 768px) {
-    .progress-nav-tabs {
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-    }
-    
-    .progress-nav-tab {
-        padding: 14px 20px;
-        font-size: 14px;
-    }
+.progress-module .leaderboard-table .progress-bar {
+    background-color: #3b82f6;
+    height: 100%;
+    transition: width 0.3s ease;
 }
+
+.progress-module .leaderboard-table .progress-text {
+    font-size: 11px;
+    color: #6b7280;
+    font-weight: 500;
+}
+
 </style>
 ";
 
@@ -368,23 +607,20 @@ if ($is_editor) {
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;$param_name=$element_id&amp;refresh=true",
                   'icon' => 'fa-refresh',
                   'link-attrs' => "title='$info_title'",
-                  'level' => 'primary-label'),
+                  'level' => 'primary-label',
+                  'show' => $element != 'points_game'),
             array('title' => "$langExport",
                 'url' => "dumpcertificateresults.php?course=$course_code&amp;$param_name=$element_id",
                 'icon' => 'fa-file-excel',
-                'level' => 'primary-label')
+                'level' => 'primary-label',
+                'show' => $element != 'points_game')
             ));
 
     } elseif (isset($_GET['preview'])) { // certificate preview
         cert_output_to_pdf($element_id, $uid, null, null, null, null, null, null);
-    } elseif (!(isset($_REQUEST['certificate_id']) or (isset($_REQUEST['badge_id'])))) {
-        action_bar(array(
-            array('title' => $langCourseCompletion,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newcc=1",
-                  'icon' => 'fa-navicon',
-                  'level' => 'primary-label',
-                  'show' => !is_course_completion_enabled())
-            ));
+    } elseif (!(isset($_REQUEST['certificate_id']) or (isset($_REQUEST['badge_id'])) or isset($_REQUEST['points_game_id']))) {
+        action_bar(array());
+    
     }
     $tool_content .= "</div>";
     //end of the top menu
@@ -431,9 +667,18 @@ if ($is_editor) {
             }
             redirect_to_home_page("modules/progress/index.php?course=$course_code&tab=$tab_param");
         } else {
-            Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
-            $tab_redirect = isset($_POST['tab']) ? '&tab=' . $_POST['tab'] : '';
-            redirect_to_home_page("modules/progress/index.php?course=$course_code&new=1$tab_redirect");
+          // Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
+            // $tab_redirect = isset($_POST['tab']) ? '&tab=' . $_POST['tab'] : '';
+            // redirect_to_home_page("modules/progress/index.php?course=$course_code&new=1$tab_redirect");
+
+            $errors = array($langFormErrors);
+            foreach ($v->errors() as $field_error) {
+                foreach ($field_error as $error) {
+                    $errors[] = $error;
+                }
+            }
+            Session::flashPost()->Messages($errors, 'alert-danger');
+            redirect_to_home_page("modules/progress/index.php?course=$course_code&new=1");
         }
     } elseif (isset($_POST['newPointsGame'])) {
         $v = new Valitron\Validator($_POST);
@@ -477,6 +722,7 @@ if ($is_editor) {
             'title' => "$langTheField $langTitle",
             'startdatepicker' => "$langTheField $langStartDate",
             'enddatepicker' => "$langTheField $langEndDate",
+            'level_item_req_points' => "$langTheField $langPointsGameLevelRequiredPoints",
         ));
         if($v->validate()) {
             $startdate = date_format(date_create_from_format('d-m-Y H:i', $_POST['startdatepicker']), 'Y-m-d H:i');
@@ -490,7 +736,13 @@ if ($is_editor) {
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/progress/index.php?course=$course_code&tab=points");
         } else {
-            Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
+            $errors = array($langFormErrors);
+            foreach ($v->errors() as $field_error) {
+                foreach ($field_error as $error) {
+                    $errors[] = $error;
+                }
+            }
+            Session::flashPost()->Messages($errors, 'alert-danger');
             redirect_to_home_page("modules/progress/index.php?course=$course_code&new=1");
         }
     } elseif (isset($_POST['edit_element'])) { // modify certificate / badge
@@ -564,7 +816,13 @@ if ($is_editor) {
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/progress/index.php?course=$course_code&tab=points");
         } else {
-            Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
+            $errors = array($langFormErrors);
+            foreach ($v->errors() as $field_error) {
+                foreach ($field_error as $error) {
+                    $errors[] = $error;
+                }
+            }
+            Session::flashPost()->Messages($errors, 'alert-danger');
             redirect_to_home_page("modules/progress/index.php?course=$course_code&points_game_id=".$_POST['points_game_id']."&edit=1");
         }
     } elseif (isset($_POST['mod_cert_activity'])) { // modify certificate activity
@@ -799,10 +1057,18 @@ HTML;
         display_modification_rec_activity($element_id, $_GET['act_rec_mod']);
         $display = FALSE;
     } elseif (isset($_GET['progressall'])) { // display users progress (teacher view)
-        display_users_progress($element, $element_id);
+        if ($element == 'points_game') {
+            display_users_points_game_progress($element_id);
+        } else {
+            display_users_progress($element, $element_id);
+        }
         $display = FALSE;
     } elseif (isset($_GET['u'])) { // display detailed user progress
-        display_user_progress_details($element, $element_id, $_GET['u']);
+        if ($element != "points_game") {
+            display_user_progress_details($element, $element_id, $_GET['u']);
+        } else {
+            display_user_points_game_details($element_id, $_GET['u']);
+        }
         $display = FALSE;
     } elseif (isset($_GET['refresh'])) {
         refresh_user_progress($element, $element_id);
@@ -834,13 +1100,24 @@ HTML;
         $display = FALSE;
     }
 } elseif (isset($_GET['u'])) { // student view
-    action_bar(array(
-        array('title' => $langPrint,
-              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&$param_name=$element_id&u=".$_GET['u']."&p=1",
-              'icon' => 'fa-print',
-              'level' => 'primary-label',
-              'show' => has_certificate_completed($_GET['u'], $element, $element_id) and $element == "certificate")
-    ));
+
+    // action_bar(array(
+    //     array('title' => $langPrint,
+    //           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&$param_name=$element_id&u=".$_GET['u']."&p=1",
+    //           'icon' => 'fa-print',
+    //           'level' => 'primary-label',
+    //           'show' => has_certificate_completed($_GET['u'], $element, $element_id) and $element == "certificate")
+    // ));
+
+        $action_bar = action_bar(array(
+	        array('title' => $langPrint,
+	              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&$param_name=$element_id&u=".$_GET['u']."&p=1",
+	              'icon' => 'fa-print',
+	              'level' => 'primary-label',
+	              'show' => $element == "certificate" && has_certificate_completed($_GET['u'], $element, $element_id))
+            ));
+        $tool_content .= $action_bar;
+
 }
 
 if (isset($display) and $display) {
@@ -867,9 +1144,8 @@ if (isset($display) and $display) {
             }
         } else { 
             // Display content based on active tab - only call the relevant display function
-            $active_tab = isset($_GET['tab']) ? $_GET['tab'] : 'course_completion';
             if ($active_tab == 'course_completion') {
-                display_course_completion();
+                display_course_completion();      
             } elseif ($active_tab == 'badges') {
                 display_badges();
             } elseif ($active_tab == 'certificates') {
@@ -882,37 +1158,52 @@ if (isset($display) and $display) {
         check_user_details($uid); // security check
         
         if (isset($element_id)) {
-            $certificate_expiration_date = get_cert_expiration_day($element, $element_id); // security check
-            if (!is_null($certificate_expiration_date) and $certificate_expiration_date < date('Y-m-d H:i:s')) {
-                redirect_to_home_page();
-            }
-            if (isset($_GET['p']) and $_GET['p']) { // printable view
-                if (!has_certificate_completed($uid, $element, $element_id)) { // security check
-                    redirect_to_home_page();
+            check_element_enabled($element, $element_id); //security check
+            if ($element == 'points_game') {
+                if (isset($_GET['u'])) {
+                    display_user_points_game_details($element_id, $_GET['u']);
+                } elseif (isset($_GET['progressall'])) {
+                    $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&$param_name=$element_id", "name" => $element_title);
+                    $pageName = "$langProgress $langsOfStudents";
+                    $action_bar = action_bar(array(
+                        array('title' => $langBack,
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;$param_name=$element_id",
+                            'icon' => 'fa-reply',
+                            'level' => 'primary')
+                    ));
+                    $tool_content .= $action_bar;
+                    display_users_points_game_progress($element_id);
+                } else {
+                    display_activities($element, $element_id);
+    
+                    // Show leaderboard accordion if enabled by teacher
+                    $game_config = Database::get()->querySingle("SELECT config FROM points_game WHERE id = ?d", $element_id);
+                    if ($game_config) {
+                        $config = json_decode($game_config->config, true);
+                        $leaderboard_enabled = isset($config['enable_leaderboard']) && $config['enable_leaderboard'];
+                        
+                        if ($leaderboard_enabled) {
+                            display_leaderboard_accordion($element_id);
+                        }
+                    }
                 }
-                cert_output_to_pdf($element_id, $uid, null, null, null, null, null, null);
             } else {
-                if (!is_cert_visible($element, $element_id)) { // security check
+                $certificate_expiration_date = get_cert_expiration_day($element, $element_id); // security check
+                if (!is_null($certificate_expiration_date) and $certificate_expiration_date < date('Y-m-d H:i:s')) {
                     redirect_to_home_page();
                 }
-                $pageName = $element_title;
-                
-                // Normal detail view
-                $action_buttons = array(
-                    array('title' => $langBack,
-                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&tab=" . (isset($_GET['tab']) ? $_GET['tab'] : 'course_completion'),
-                          'icon' => 'fa-reply',
-                          'level' => 'primary-label')
-                );
-                
-                action_bar($action_buttons, false);
-                
-                // display detailed user progress
-                display_user_progress_details($element, $element_id, $uid);
-                
-                // Add leaderboard accordion for points games
-                if ($element == 'points_game') {
-                    display_leaderboard_accordion($element_id);
+                if (isset($_GET['p']) and $_GET['p']) { // printable view
+                    if (!has_certificate_completed($uid, $element, $element_id)) { // security check
+                        redirect_to_home_page();
+                    }
+                    cert_output_to_pdf($element_id, $uid, null, null, null, null, null, null);
+                } else {
+                    if (!is_cert_visible($element, $element_id)) { // security check
+                        redirect_to_home_page();
+                    }
+                    $pageName = $element_title;
+                    // display detailed user progress
+                    display_user_progress_details($element, $element_id, $uid);
                 }
             }
         } else {
@@ -935,89 +1226,82 @@ if (isset($display) and $display) {
  * Display leaderboard accordion for a points game
  */
 function display_leaderboard_accordion($points_game_id) {
-    global $tool_content, $course_id, $uid;
+    global $tool_content, $uid, $is_editor;
     
-    // Use dummy data for now since tables don't exist
-    $leaderboard_enabled = true;
-    $anonymize = false;
-    
-    // Start accordion with proper width
+    // Start accordion
     $tool_content .= "
             <div class='leaderboard-accordion-header'>
                 <h4><i class='fa fa-trophy'></i> Προβολή πίνακα κατάταξης</h4>
                 <i class='fa fa-chevron-down leaderboard-accordion-icon'></i>
             </div>
-            <div class='leaderboard-accordion-content'>";
+            <div class='leaderboard-accordion-content'>
+                <div class='leaderboard-accordion-body'>";
     
-    // Dummy data for demonstration
-    $leaderboard = array(
-        (object)['user_id' => 1, 'surname' => 'user', 'givenname' => '4', 'points' => 350, 'level_name' => 'gm1'],
-        (object)['user_id' => 2, 'surname' => 'user', 'givenname' => '6', 'points' => 300, 'level_name' => 'gm1'],
-        (object)['user_id' => 3, 'surname' => 'user', 'givenname' => '23', 'points' => 240, 'level_name' => 'gm1'],
-        (object)['user_id' => 4, 'surname' => 'user', 'givenname' => '1', 'points' => 150, 'level_name' => null],
-        (object)['user_id' => 5, 'surname' => 'user', 'givenname' => '2', 'points' => 150, 'level_name' => null],
-        (object)['user_id' => 6, 'surname' => 'user', 'givenname' => '13', 'points' => 60, 'level_name' => null],
-        (object)['user_id' => 7, 'surname' => 'user', 'givenname' => '9', 'points' => 60, 'level_name' => null],
-    );
+    // TEMPORARY: Dummy data for preview
+    // TODO: Replace with: display_users_points_game_progress($points_game_id);
     
-    $max_points = 380;
+    $dummy_data = [
+        ['rank' => 1, 'name' => 'Παπαδόπουλος Γιώργος', 'level' => 'Grandmaster', 'progress' => 90],
+        ['rank' => 2, 'name' => 'Οικονόμου Μαρία', 'level' => 'Expert', 'progress' => 76],
+        ['rank' => 3, 'name' => 'Κωνσταντίνου Νίκος', 'level' => 'Expert', 'progress' => 64],
+        ['rank' => 4, 'name' => 'Αλεξίου Ελένη', 'level' => 'Advanced', 'progress' => 55, 'current' => true],
+        ['rank' => 5, 'name' => 'Δημητρίου Πέτρος', 'level' => 'Advanced', 'progress' => 48],
+        ['rank' => 6, 'name' => 'Γεωργίου Άννα', 'level' => 'Intermediate', 'progress' => 36],
+        ['rank' => 7, 'name' => 'Βασιλείου Κώστας', 'level' => 'Intermediate', 'progress' => 30],
+        ['rank' => 8, 'name' => 'Χριστοδούλου Σοφία', 'level' => 'Beginner', 'progress' => 19],
+        ['rank' => 9, 'name' => 'Μιχαηλίδης Θανάσης', 'level' => 'Beginner', 'progress' => 14],
+        ['rank' => 10, 'name' => 'Παναγιώτου Ειρήνη', 'level' => null, 'progress' => 9],
+        ['rank' => 11, 'name' => 'Νικολάου Μάρκος', 'level' => null, 'progress' => 4],
+    ];
     
     $tool_content .= "
-                    <div class='leaderboard-accordion-body'>
-                        <div class='table-responsive'>
-                            <table class='table table-striped table-hover'>
-                                <thead>
-                                    <tr>
-                                        <th>Θέση</th>
-                                        <th>Επίπεδο</th>
-                                        <th>Ονοματεπώνυμο</th>
-                                        <th>Πόντοι</th>
-                                        <th>Πρόοδος</th>
-                                    </tr>
-                                </thead>
-                                <tbody>";
+        <div class='table-responsive'>
+            <table class='leaderboard-table'>
+                <thead>
+                    <tr>
+                        <th>Θέση</th>
+                        <th>Επίπεδο</th>
+                        <th>Ονοματεπώνυμο</th>
+                        <th style='width: 250px;'>Πρόοδος</th>
+                    </tr>
+                </thead>
+                <tbody>";
     
-    $rank = 1;
-    foreach ($leaderboard as $entry) {
-        $display_name = $anonymize ? "user" . $entry->user_id : q($entry->surname . ' ' . $entry->givenname);
-        $level_display = $entry->level_name ? q($entry->level_name) : '-';
-        $progress_percentage = $max_points > 0 ? round(($entry->points / $max_points) * 100) : 0;
+    foreach ($dummy_data as $row) {
+        $is_current = isset($row['current']) && $row['current'];
+        $row_class = (!$is_editor && $is_current) ? 'current-user-student' : '';
         
-        // Highlight current user's row 
-        $row_class = '';
-        $progress_bar_class = 'progress-bar-success';
-
-        if ($entry->user_id == $uid) {
-            $row_class = 'class="current-user"';
+        if ($row['level']) {
+            $level_display = "<span class='level-badge'><i class='fa fa-star' style='color:#f59e0b;'></i> " . q($row['level']) . "</span>";
+        } else {
+            $level_display = "<span class='level-badge'>Νέος Παίκτης</span>";
         }
         
         $tool_content .= "
-                                    <tr $row_class>
-                                        <td>" . $rank . "</td>
-                                        <td>" . icon('fa-star') . " " . $level_display . "</td>
-                                        <td>" . $display_name . "</td>
-                                        <td>" . intval($entry->points) . "</td>
-                                        <td>
-                                            <div class='progress' style='margin-bottom: 0; height: 20px; background-color: #f0f0f0;'>
-                                                <div class='progress-bar  progress-bar-success' role='progressbar' 
-                                                     aria-valuenow='" . $progress_percentage . "' 
-                                                     aria-valuemin='0' 
-                                                     aria-valuemax='100' 
-                                                     style='width: " . $progress_percentage . "%; line-height: 20px;'>
-                                                    " . $progress_percentage . "%
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>";
-        $rank++;
+                    <tr class='{$row_class}'>
+                        <td><span class='rank-number'># {$row['rank']}</span></td>
+                        <td>{$level_display}</td>
+                        <td><span class='user-name'>" . q($row['name']) . "</span></td>
+                        <td>
+                            <div class='progress'>
+                                <div class='progress-bar' style='width: {$row['progress']}%;'></div>
+                            </div>
+                            <span class='progress-text'>{$row['progress']}% ολοκλήρωση</span>
+                        </td>
+                    </tr>";
     }
     
     $tool_content .= "
-                            </tbody>
-                        </table>
-                    </div>
+                </tbody>
+            </table>
+        </div>";
+    
+    $tool_content .= "
                 </div>
-    </div>";
+            </div>";
 }
+
+// CLOSE progress-module wrapper
+$tool_content .= "</div>";
 
 draw($tool_content, 2, null, $head_content);

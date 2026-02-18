@@ -126,10 +126,18 @@ class BasicEvent implements Sabre\Event\EventEmitterInterface {
                     if($key == 'points_game') { //points games
                         $critsQ = "select c.*, '$key' as type from {$key}_criterion c"
                             . " where c.$key in " . $inIds . " "
-                            . " and ((c.criterion_type = 'onetime' AND (c.id not in (select {$key}_criterion from user_{$key}_criterion where user = ?d))) OR c.criterion_type = 'recurring') "
+                            . " and c.criterion_type = 'onetime' AND (c.id not in (select {$key}_criterion from user_{$key}_criterion where user = ?d))"
                             . " and c.activity_type = ?s "
                             . " and c.module = ?d "
-                            . $andResource;
+                            . $andResource
+                            . "UNION "
+                            . "select c.*, '$key' as type from {$key}_criterion c"
+                            . " where c.$key in " . $inIds . " "
+                            . " and c.criterion_type = 'recurring' "
+                            . " and c.activity_type = ?s "
+                            . " and c.module = ?d ";
+                        $args[] = $data->activityType;
+                        $args[] = $data->module;
                     } else { //badges and certificates
                         $critsQ = "select c.*, '$key' as type from {$key}_criterion c"
                             . " where c.$key in " . $inIds . " "
