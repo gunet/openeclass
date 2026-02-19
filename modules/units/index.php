@@ -172,6 +172,7 @@ foreach (array('previous', 'next') as $i) {
     $q = Database::get()->querySingle("SELECT id, title, start_week, finish_week, public FROM course_units
                        WHERE course_id = ?d
                              AND id <> ?d
+                             AND visible < 2
                              AND `order` $op $info->order
                              AND `order` >= 0
                              $visibility_check
