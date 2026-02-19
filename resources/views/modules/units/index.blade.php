@@ -133,7 +133,7 @@
                                     <ul class="tree-units">
                                         <li>
                                             <details>
-                                                <summary><h3 class='mb-0'>{{ trans('langUnits')}}</h3></summary>
+                                                <summary><h3 class='mb-0'>{{ trans('langDisplayAllUnits')}}</h3></summary>
                                                 <ul>
                                                     @foreach ($units as $cu)
                                                         <li {{ $cu->id == $id ? "class=active-unit" : "" }}>

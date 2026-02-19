@@ -396,6 +396,9 @@ function process_extracted_file($file_in_zip) {
 function make_path($path, $path_components) {
     global $basedir, $givenname, $surname, $path_already_exists, $course_id, $group_sql, $subsystem, $subsystem_id;
 
+    if (str_contains($path, '..')) {
+        forbidden();
+    }
     $path_already_exists = true;
     foreach ($path_components as $component) {
         $q = Database::get()->querySingle("SELECT path FROM document

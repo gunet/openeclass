@@ -193,7 +193,7 @@
                 bServerSide: true,
                 sScrollX: true,
                 fixedHeader: true,
-                responsive: false,
+                responsive: true,
                 searchDelay: 1000,
                 ajax: {
                     url: '{{ $_SERVER['REQUEST_URI'] }}',
@@ -441,7 +441,7 @@
                                 </div>
                             @endif
 
-                            <div class="table-responsive">
+                            
                                 <table id='ann_table{{ $course_id }}' class='table-default table-announcements-indexes'>
                                     <thead>
                                     <tr>
@@ -459,7 +459,7 @@
                                     </thead>
                                     <tbody></tbody>
                                 </table>
-                            </div>
+                            
                         </div>
 
 

@@ -65,6 +65,7 @@ $head_content .= "<script type='text/javascript'>
                 'sPaginationType': 'full_numbers',
                 'bAutoWidth': true,
                 'searchDelay': 1000,
+                'responsive': true,
                 'order' : [[1, 'desc']],
                 'oLanguage': {
                    'lengthLabels': {
@@ -561,7 +562,7 @@ function printPolls() {
     } else {
         // Print active polls
         $tool_content .= "<div class='col-sm-12'>
-                    <div class='table-responsive'>
+                    
               <table id='polls' class='table-default'>
               <thead>
                 <tr class='list-header'>
@@ -736,7 +737,7 @@ function printPolls() {
             }
         }
 
-        $tool_content .= "</tbody></table></div></div>
+        $tool_content .= "</tbody></table></div>
 
             <div class='modal fade' tabindex='-1' role='dialog' id='cloneModal'>
               <div class='modal-dialog' role='document'>
