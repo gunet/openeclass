@@ -136,9 +136,9 @@
                                                 <summary><h3 class='mb-0'>{{ trans('langDisplayAllUnits')}}</h3></summary>
                                                 <ul>
                                                     @foreach ($units as $cu)
-                                                        <li {{ $cu->id == $id ? "class=active-unit" : "" }}>
-                                                            <a class='TextBold{{ $cu->id != $id ? "" : " Success-200-cl" }}' href='{{ $urlServer }}modules/units/index.php?course={{ $course_code }}&amp;id={{ $cu->id }}' @if($cu->id == $id) aria-current="{{ $cu->title }}" @endif>
-                                                                {{ $cu->title }}
+                                                        <li {{ $cu->id == $id ? "class=active-unit" : "" }} @if($cu->visible >= 2) style="cursor: default;" @endif>
+{{--                                                            <a class='TextBold{{ $cu->id != $id ? "" : " Success-200-cl" }}' href='{{ $urlServer }}modules/units/index.php?course={{ $course_code }}&amp;id={{ $cu->id }}' @if($cu->id == $id) aria-current="{{ $cu->title }}" @endif @if($cu->visible == 2) disabled="" @endif>--}}
+                                                            <a class="TextBold{{ $cu->id == $id ? ' Success-200-cl' : '' }}{{ $cu->visible >= 2 ? ' disabled' : '' }}" @if($cu->visible < 2) href="{{ $urlServer }}modules/units/index.php?course={{ $course_code }}&amp;id={{ $cu->id }}" @endif @if($cu->id == $id) aria-current="{{ $cu->title }}" @endif @if($cu->visible >= 2) style="pointer-events: none; cursor: default; opacity: 0.6;" @endif>                                                                {{ $cu->title }}
                                                             </a>
                                                             <br>
                                                             @if (!is_null($cu->start_week))
@@ -223,7 +223,7 @@
                                         <label class='control-label-notes' for='id' style="min-width: 130px;"></span>&nbsp;{{ trans('langGoTo') }}:</label>
                                         <select name='id' id='id' class='form-select' onchange='document.unitselect.submit()'>
                                             @foreach ($units as $unit)
-                                                <option value='{{ $unit->id }}' {{ $unit->id == $unitId ? 'selected' : '' }}>
+                                                <option value='{{ $unit->id }}' {{ $unit->id == $unitId ? 'selected' : '' }} {{ $unit->visible >= 2 ? 'disabled' : '' }}>
                                                     {{ ellipsize($unit->title, 50) }}
                                                 </option>
                                             @endforeach
