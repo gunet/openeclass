@@ -1222,84 +1222,189 @@ if (isset($display) and $display) {
     }
 }
 
+
 /**
  * Display leaderboard accordion for a points game
  */
 function display_leaderboard_accordion($points_game_id) {
-    global $tool_content, $uid, $is_editor;
-    
-    // Start accordion
-    $tool_content .= "
+    global $tool_content, $course_code, $course_id, $langNoUserList, $langSurnameName, $langID, $langProgress, $is_editor, $uid, $langAnonymous;
+
+    $anon = false;
+    if (!$is_editor) {
+        $pg_config = Database::get()->querySingle("SELECT config FROM points_game WHERE id = ?d", $points_game_id);
+        $config = json_decode($pg_config->config, TRUE);
+        $enable_leaderboard = !empty($config['enable_leaderboard']);
+        $anonymize_leaderboard  = !empty($config['anonymize_leaderboard']);
+        
+        if (!$enable_leaderboard) {
+            return;
+        }
+
+        if ($anonymize_leaderboard) {
+            $anon = true;
+        }
+    }
+
+    $sql = Database::get()->queryArray("SELECT u.id, u.surname, u.givenname, COALESCE(upp.total_points, 0) AS total_points
+                                        FROM course_user cu
+                                        JOIN user u ON u.id = cu.user_id
+                                        LEFT JOIN user_points_game_points upp
+                                            ON upp.user = u.id
+                                            AND upp.points_game = ?d
+                                        WHERE cu.course_id = ?d AND cu.status != 1 AND cu.editor = 0 AND cu.course_reviewer = 0
+                                        ORDER BY
+                                            CASE
+                                                WHEN upp.total_points IS NULL OR upp.total_points = 0 THEN 1
+                                                ELSE 0
+                                            END,
+                                            upp.total_points DESC,
+                                            u.surname ASC,
+                                            u.givenname ASC", $points_game_id, $course_id);
+    if (count($sql) > 0) {
+            // Start accordion
+        $tool_content .= "
             <div class='leaderboard-accordion-header'>
                 <h4><i class='fa fa-trophy'></i> Προβολή πίνακα κατάταξης</h4>
                 <i class='fa fa-chevron-down leaderboard-accordion-icon'></i>
             </div>
             <div class='leaderboard-accordion-content'>
-                <div class='leaderboard-accordion-body'>";
-    
-    // TEMPORARY: Dummy data for preview
-    // TODO: Replace with: display_users_points_game_progress($points_game_id);
-    
-    $dummy_data = [
-        ['rank' => 1, 'name' => 'Παπαδόπουλος Γιώργος', 'level' => 'Grandmaster', 'progress' => 90],
-        ['rank' => 2, 'name' => 'Οικονόμου Μαρία', 'level' => 'Expert', 'progress' => 76],
-        ['rank' => 3, 'name' => 'Κωνσταντίνου Νίκος', 'level' => 'Expert', 'progress' => 64],
-        ['rank' => 4, 'name' => 'Αλεξίου Ελένη', 'level' => 'Advanced', 'progress' => 55, 'current' => true],
-        ['rank' => 5, 'name' => 'Δημητρίου Πέτρος', 'level' => 'Advanced', 'progress' => 48],
-        ['rank' => 6, 'name' => 'Γεωργίου Άννα', 'level' => 'Intermediate', 'progress' => 36],
-        ['rank' => 7, 'name' => 'Βασιλείου Κώστας', 'level' => 'Intermediate', 'progress' => 30],
-        ['rank' => 8, 'name' => 'Χριστοδούλου Σοφία', 'level' => 'Beginner', 'progress' => 19],
-        ['rank' => 9, 'name' => 'Μιχαηλίδης Θανάσης', 'level' => 'Beginner', 'progress' => 14],
-        ['rank' => 10, 'name' => 'Παναγιώτου Ειρήνη', 'level' => null, 'progress' => 9],
-        ['rank' => 11, 'name' => 'Νικολάου Μάρκος', 'level' => null, 'progress' => 4],
-    ];
-    
-    $tool_content .= "
-        <div class='table-responsive'>
-            <table class='leaderboard-table'>
-                <thead>
-                    <tr>
-                        <th>Θέση</th>
-                        <th>Επίπεδο</th>
-                        <th>Ονοματεπώνυμο</th>
-                        <th style='width: 250px;'>Πρόοδος</th>
-                    </tr>
-                </thead>
-                <tbody>";
-    
-    foreach ($dummy_data as $row) {
-        $is_current = isset($row['current']) && $row['current'];
-        $row_class = (!$is_editor && $is_current) ? 'current-user-student' : '';
-        
-        if ($row['level']) {
-            $level_display = "<span class='level-badge'><i class='fa fa-star' style='color:#f59e0b;'></i> " . q($row['level']) . "</span>";
-        } else {
-            $level_display = "<span class='level-badge'>Νέος Παίκτης</span>";
+                <div class='leaderboard-accordion-body'>
+                    <div class='table-responsive'>
+                        <table class='leaderboard-table'>
+                            <thead>
+                                <tr>
+                                <th>Θέση</th>
+                                <th>Επίπεδο</th>
+                                <th>Ονοματεπώνυμο</th>
+                                <th style='width: 250px;'>Πρόοδος</th>
+                                </tr>
+                            </thead>
+                            <tbody>";
+        $cnt = 1;
+        foreach ($sql as $user_data) {
+            // STYLING CHANGE: Add current user highlighting
+            $is_current_user = (!$is_editor && $user_data->id == $uid);
+            $row_class = $is_current_user ? 'current-user-student' : '';
+            
+            $info = '';
+            $current_level = $next_level = '';
+            if ($user_data->total_points > 0) {
+                $user_progress = PointsGame::getNextLevelInfo($user_data->id,$points_game_id);
+                if ($user_progress['current_points'] > 0) {
+                    if ($is_editor || $user_data->id == $uid) {
+                        $points_str = "<a class='small-text' href='index.php?course=$course_code&amp;points_game_id=$points_game_id&amp;u=$user_data->id'>".$user_progress['current_points']." pts</a>";
+                    } else {
+                        $points_str = "<span class='small-text'>" . $user_progress['current_points'] . " pts</span>";
+                    }
+                } else {
+                    $points_str = "<span class='small-text'>" . $user_progress['current_points'] . " pts</span>";
+                }
+                $current_level = !is_null($user_progress['current_level_id']) ? $user_progress['current_level_title'] : 'N/A';
+                $next_level = !is_null($user_progress['next_level_id']) ? $user_progress['next_level_title'] : 'N/A';
+                
+                // STYLING CHANGE: Use progress bar classes from leaderboard CSS
+                $info = "<div class='progress'>
+                            <div class='progress-bar' style='width: ".$user_progress['progress_percentage']."%'></div>
+                         </div>
+                         <span class='progress-text'>" . $user_progress['progress_percentage'] . "% ολοκλήρωση</span>
+                         <div>$points_str</div>";
+            }
+
+
+            if ($anon && $user_data->id != $uid) {
+                $user_info = $langAnonymous;
+            } else {
+                $user_info = display_user($user_data->id);
+            }
+
+            // STYLING CHANGE: Add row_class for current user highlighting
+            $tool_content .= "<tr class='{$row_class}'>
+                <td><span class='rank-number'>#". $cnt++ . "</span></td>
+                <td><span class='level-badge'><i class='fa fa-star' style='color:#f59e0b;'></i>" . ((empty($current_level) && empty($next_level)) ? 'Νεος παίχτης' : $current_level) . (!empty($next_level) ? '<br>'.$next_level : '') . "</span></td>
+                <td><span class='user-name'>" . $user_info . "</span></td>
+                <td>".$info."</td></tr>";
         }
-        
-        $tool_content .= "
-                    <tr class='{$row_class}'>
-                        <td><span class='rank-number'># {$row['rank']}</span></td>
-                        <td>{$level_display}</td>
-                        <td><span class='user-name'>" . q($row['name']) . "</span></td>
-                        <td>
-                            <div class='progress'>
-                                <div class='progress-bar' style='width: {$row['progress']}%;'></div>
-                            </div>
-                            <span class='progress-text'>{$row['progress']}% ολοκλήρωση</span>
-                        </td>
-                    </tr>";
+        $tool_content .= "</tbody></table></div></div></div>";
+    } else {
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langNoUserList</span></div></div>";
     }
-    
-    $tool_content .= "
-                </tbody>
-            </table>
-        </div>";
-    
-    $tool_content .= "
-                </div>
-            </div>";
 }
+
+
+// /**
+//  * Display leaderboard accordion for a points game
+//  */
+// function display_leaderboard_accordion($points_game_id) {
+//     global $tool_content, $uid, $is_editor;
+    
+//     // Start accordion
+//     $tool_content .= "
+//             <div class='leaderboard-accordion-header'>
+//                 <h4><i class='fa fa-trophy'></i> Προβολή πίνακα κατάταξης</h4>
+//                 <i class='fa fa-chevron-down leaderboard-accordion-icon'></i>
+//             </div>
+//             <div class='leaderboard-accordion-content'>
+//                 <div class='leaderboard-accordion-body'>";
+    
+//     // TEMPORARY: Dummy data for preview
+//     // TODO: Replace with: display_users_points_game_progress($points_game_id);
+    
+//     $dummy_data = [
+//         ['rank' => 1, 'name' => 'user 1', 'level' => 'level 2', 'progress' => 90],
+//         ['rank' => 2, 'name' => 'user 8', 'level' => 'level 2', 'progress' => 76],
+//         ['rank' => 3, 'name' => 'user 5', 'level' => 'level 2', 'progress' => 64],
+//         ['rank' => 4, 'name' => 'user user', 'level' => 'level 1', 'progress' => 55, 'current' => true],
+//         ['rank' => 5, 'name' => 'user 4', 'level' => 'level 1', 'progress' => 48],
+//         ['rank' => 6, 'name' => 'user 2', 'level' => 'level 1', 'progress' => 36],
+//         ['rank' => 7, 'name' => 'user 7', 'level' => 'le', 'progress' => 30]
+//     ];
+    
+//     $tool_content .= "
+//         <div class='table-responsive'>
+//             <table class='leaderboard-table'>
+//                 <thead>
+//                     <tr>
+//                         <th>Θέση</th>
+//                         <th>Επίπεδο</th>
+//                         <th>Ονοματεπώνυμο</th>
+//                         <th style='width: 250px;'>Πρόοδος</th>
+//                     </tr>
+//                 </thead>
+//                 <tbody>";
+    
+//     foreach ($dummy_data as $row) {
+//         $is_current = isset($row['current']) && $row['current'];
+//         $row_class = (!$is_editor && $is_current) ? 'current-user-student' : '';
+        
+//         if ($row['level']) {
+//             $level_display = "<span class='level-badge'><i class='fa fa-star' style='color:#f59e0b;'></i> " . q($row['level']) . "</span>";
+//         } else {
+//             $level_display = "<span class='level-badge'>Νέος Παίκτης</span>";
+//         }
+        
+//         $tool_content .= "
+//                     <tr class='{$row_class}'>
+//                         <td><span class='rank-number'># {$row['rank']}</span></td>
+//                         <td>{$level_display}</td>
+//                         <td><span class='user-name'>" . q($row['name']) . "</span></td>
+//                         <td>
+//                             <div class='progress'>
+//                                 <div class='progress-bar' style='width: {$row['progress']}%;'></div>
+//                             </div>
+//                             <span class='progress-text'>{$row['progress']}% ολοκλήρωση</span>
+//                         </td>
+//                     </tr>";
+//     }
+    
+//     $tool_content .= "
+//                 </tbody>
+//             </table>
+//         </div>";
+    
+//     $tool_content .= "
+//                 </div>
+//             </div>";
+// }
 
 // CLOSE progress-module wrapper
 $tool_content .= "</div>";
