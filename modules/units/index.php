@@ -197,7 +197,7 @@ foreach (array('previous', 'next') as $i) {
 $moduleTag = new ModuleElement($id);
 $data['id'] = $id;
 $data['tags_list'] = $moduleTag->showTags();
-$data['units'] = Database::get()->queryArray("SELECT id, title, start_week FROM course_units
+$data['units'] = Database::get()->queryArray("SELECT id, title, start_week, visible FROM course_units
              WHERE course_id = ?d AND `order` >= 0
                    $visibility_check $check_start_week
              ORDER BY `order`", $course_id);
