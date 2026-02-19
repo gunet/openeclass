@@ -3790,6 +3790,8 @@ $langConfirmDeletePermantly = "Το αρχείο θα διαγραφεί ορι�
 $langScore = "Σκορ";
 $langScoreOn = "Ενεργό σκορ";
 $langScoreActivation = "Ενεργοποίηση σκορ";
+$langDateAndTime = "Ημερομηνία και ώρα";
+$langDateOnly = "Ημερομηνία";
 
 /* * **********************************************************
  * registration.php

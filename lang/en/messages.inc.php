@@ -1453,6 +1453,8 @@ $langPollEmpty = "<p class='caution'>Please add more Questionnaire questions!</p
 $langScore = "Score";
 $langScoreOn = "Score is active";
 $langScoreActivation = "Score activation";
+$langDateAndTime = "Datetime";
+$langDateOnly = "Date";
 $langSee = "Preview";
 $langCourseName = "Course name";
 $langNoCoursesAvailable = "There are no available courses for registration";
