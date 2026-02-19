@@ -477,6 +477,7 @@ $head_content .= "<script>
             'bProcessing': true,
             'bServerSide': true,
             'searchDelay': 1000,
+            'responsive': true,
             ajax: {
                 url: '$_SERVER[REQUEST_URI]',
                 type: 'POST'
