@@ -71,27 +71,28 @@ function update_db_info($dbTable, $action, $oldPath, $filename, $newPath = "") {
     if ($action == "delete") {
         Database::get()->query("DELETE FROM `$dbTable`
                                  WHERE $group_sql AND
-                                       path LIKE ?s", ($oldPath . '%'));
+                                       path LIKE ?s", "$oldPath%");
         if ($subsystem == COMMON) {
             // For common documents, delete all references
             Database::get()->query("DELETE FROM `$dbTable`
-                                         WHERE extra_path LIKE ?s", ('common:' . $oldPath . '%'));
+                                         WHERE extra_path LIKE ?s", "common:$oldPath%");
         }
         Log::record($course_id, MODULE_ID_DOCS, LOG_DELETE, array('path' => $oldPath,
                                                                   'filename' => $filename));
     } elseif ($action == "update") {
         Database::get()->query("UPDATE `$dbTable`
-                                 SET path = CONCAT('$newPath', SUBSTRING(path, LENGTH('$oldPath')+1))
-                                 WHERE $group_sql AND path LIKE ?s", ($oldPath . '%'));
+                                 SET path = CONCAT(?s, SUBSTRING(path, ?d))
+                                 WHERE $group_sql AND path LIKE ?s",
+            $newPath, strlen($oldPath) + 1, "$oldPath%");
         if ($subsystem == COMMON) {
             // For common documents, update all references
             Database::get()->query("UPDATE `$dbTable`
-                                         SET extra_path = CONCAT('common:$newPath',
-                                                                 SUBSTRING(extra_path, LENGTH('common:$oldPath')+1))
-                                         WHERE extra_path LIKE ?s", ('common:' . $oldPath . '%'));
+                                         SET extra_path = CONCAT(?s, SUBSTRING(extra_path, ?d))
+                                         WHERE extra_path LIKE ?s",
+                "common:$newPath", strlen("common:$oldPath") + 1, "common:$oldPath%");
         }
-        $newencodepath = Database::get()->querySingle("SELECT SUBSTRING(path, 1, LENGTH(path) - LENGTH('$oldPath')) as value
-                                FROM $dbTable WHERE path=?s", $newPath)->value;
+        $newencodepath = Database::get()->querySingle("SELECT SUBSTRING(path, 1, LENGTH(path) - ?d) as value
+                                FROM $dbTable WHERE path = ?s", strlen($oldPath), $newPath)->value;
         $newpath = Database::get()->querySingle("SELECT filename FROM $dbTable
                                         WHERE path = ?s", $newencodepath);
         if ($newpath) {
@@ -354,7 +355,7 @@ function create_map_to_real_filename($downloadDir, $include_invisible) {
     $hidden_dirs = array();
     $sql = Database::get()->queryArray("SELECT path, filename, visible, format, extra_path, public FROM document
                                 WHERE $group_sql AND
-                                      path LIKE '$downloadDir%'");
+                                      path LIKE ?s", "$downloadDir%");
     foreach ($sql as $files) {
         if ($cpath = common_doc_path($files->extra_path, true)) {
             if ($GLOBALS['common_doc_visible'] and ($include_invisible or $files->visible == 1)) {

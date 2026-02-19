@@ -33,7 +33,7 @@
 
                         @if (count($result) > 0)
                             <div class='col-sm-12'>
-                                <div class='table-responsive'>
+                                
                                     <table id='assignment_table_{{ $course_code }}' class='table-default'>
                                         <thead>
                                             <tr class='list-header'>
@@ -184,7 +184,7 @@
                                             @endforeach
                                         </tbody>
                                     </table>
-                                </div>
+                                
                             </div>
                         @else
                             <div class='col-sm-12'>
@@ -211,6 +211,7 @@
                 'sPaginationType': 'full_numbers',
                 'bAutoWidth': true,
                 'searchDelay': 1000,
+                'responsive': true,
                 'order' : [ [1, 'asc'] ],
                 'oLanguage': {
                     'lengthLabels': {

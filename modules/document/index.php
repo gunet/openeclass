@@ -1074,7 +1074,7 @@ if ($can_upload or $user_upload) {
         // check if file exists
         $res = Database::get()->querySingle("SELECT * FROM document
                                              WHERE $group_sql AND
-                                                   path=?s", $commentPath);
+                                                   path = ?s", $commentPath);
         if ($res and (!$uploading_as_user or $res->lock_user_id == $uid)) {
             if ($res->format == '.dir') {
                 Database::get()->query("UPDATE document SET comment = ?s
@@ -1762,7 +1762,7 @@ function make_clickable_path($path) {
         } else {
             $cur .= rawurlencode("/$component");
             $row = Database::get()->querySingle("SELECT filename FROM document
-                                        WHERE path LIKE '%/$component' AND $group_sql");
+                                        WHERE path LIKE ?s AND $group_sql", "%/$component");
             $dirname = $row->filename;
             $out .= " <span class='fa-solid fa-chevron-right px-2 small-text'></span> <a href='{$base_url}openDir=$cur'>".q($dirname)."</a>";
         }

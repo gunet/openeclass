@@ -182,6 +182,14 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH'])
     $data['recordsTotal'] = $all_users;
     $data['recordsFiltered'] = $filtered_users;
     $data['aaData'] = array();
+
+    $new_status_user_message = false;
+    $q = Database::get()->querySingle("SELECT view_type, is_collaborative FROM course WHERE id = ?d", $course_id);
+    if ($q) {
+        if ($q->view_type == 'sessions' && $q->is_collaborative == 1) {
+            $new_status_user_message = true;
+        }
+    }
     foreach ($result as $myrow) {
         $full_name = q(sanitize_utf8($myrow->givenname . " " . $myrow->surname));
         $am = trim(q(sanitize_utf8($myrow->am)));
@@ -293,7 +301,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH'])
             $user_roles = [$langCourseAdminTeacher];
         } elseif ($myrow->status == USER_GUEST) {
             $user_roles = [$langGuestName];
-        } elseif ($myrow->status == USER_STUDENT and $myrow->tutor == '1' and $myrow->editor == '0') {
+        } elseif ($new_status_user_message && $myrow->status == USER_STUDENT && $myrow->tutor == '1' && $myrow->editor == '0') {
             $user_roles = [$langConsultant];
         } else {
             $user_roles = [$langStudent];
