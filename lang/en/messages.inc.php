@@ -4717,6 +4717,7 @@ $langBadgeDetails = "Badge details";
 $langCourseParticipation = "Participation duration";
 $langCourseHoursParticipation = "Hours of participation";
 $langNoCertBadge = "There are no certificates or badges.";
+$langNotAllowedCertBadge = "You do not have permission to edit the certificate or badge.";
 $langResourceBelongsToCert = "Resource belongs to certificate or badge.";
 $langTemplateBelongsToCert = "Template has been used by certificate.";
 $langIconBelongsToBadge = "The icon has beed used by some badge.";

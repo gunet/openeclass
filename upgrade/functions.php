@@ -3606,19 +3606,30 @@ function upgrade_to_4_3($tbl_options): void
 
         Database::get()->query("ALTER TABLE `admin_announcement`
                                 ADD INDEX `idx_tenantId` (`tenantId`)");
+    }
 
-        if (!DBHelper::fieldExists('tenant', 'url_active')) {
-            Database::get()->query("ALTER TABLE tenant
-            ADD url_active TINYINT(1) NOT NULL DEFAULT 0");
-        }
+    if (!DBHelper::fieldExists('tenant', 'url_active')) {
+        Database::get()->query("ALTER TABLE tenant
+        ADD url_active TINYINT(1) NOT NULL DEFAULT 0");
+    }
 
-        if (!DBHelper::fieldExists('api_token', 'department_id')) {
-            Database::get()->query(
-                'ALTER TABLE `api_token`
-            ADD `department_id` INT(11)
-            FOREIGN KEY (department_id) REFERENCES hierarchy(id) ON DELETE CASCADE'
-            );
-        }
+    if (!DBHelper::fieldExists('api_token', 'department_id')) {
+        Database::get()->query(
+            'ALTER TABLE `api_token`
+        ADD `department_id` INT(11)
+        FOREIGN KEY (department_id) REFERENCES hierarchy(id) ON DELETE CASCADE'
+        );
+    }
+
+    if (!DBHelper::fieldExists('certificate_template', 'department_id')) {
+        Database::get()->query(
+            'ALTER TABLE `certificate_template`
+            ADD `department_id` INT(11) DEFAULT NULL,
+            ADD CONSTRAINT `fk_certificate_template_hierarchy` 
+                FOREIGN KEY (`department_id`) REFERENCES `hierarchy`(`id`) 
+                ON DELETE SET NULL 
+                ON UPDATE CASCADE'
+        );
     }
 }
 

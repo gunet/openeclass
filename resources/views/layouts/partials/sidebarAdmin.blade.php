@@ -189,6 +189,13 @@
                                 {{ trans('langMultiCourseDelete') }}
                             </a>
                         </li>
+                        @if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
+                        <li class="list-group-item element">
+                            <a class='TextBold' href="{{$urlAppend}}modules/admin/certbadge.php">
+                                {{ trans('langCertBadge') }}
+                            </a>
+                        </li>
+                        @endif
                         @if ($is_admin)
                         <li class="list-group-item element">
                             <a class='TextBold' href="{{$urlAppend}}modules/admin/autoenroll.php">
@@ -200,13 +207,6 @@
                                 {{ trans('langDisableModules') }}
                             </a>
                         </li>
-                        @if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
-                        <li class="list-group-item element">
-                            <a class='TextBold' href="{{$urlAppend}}modules/admin/certbadge.php">
-                                {{ trans('langCertBadge') }}
-                            </a>
-                        </li>
-                        @endif
                         @if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
                         <li class="list-group-item element">
                             <a class='TextBold' href="{{$urlAppend}}modules/admin/activity.php">

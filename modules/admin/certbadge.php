@@ -18,7 +18,7 @@
  *
  */
 
-$require_admin = true;
+$require_departmentmanage_user = true;
 $require_help = true;
 $helpTopic = 'course_administration';
 $helpSubTopic = 'course_certbadge';
@@ -27,6 +27,33 @@ require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'modules/progress/process_functions.php';
 
 load_js('select2');
+
+function has_full_rights_on_certificate($certificate_department_id) {
+    global $is_admin, $is_departmentmanage_user;
+
+    if ($is_admin) {
+        return true;
+    }
+
+    $is_tenant_admin = $is_departmentmanage_user && !$is_admin;    
+    $tenant = getCurrentTenant();
+
+    return $is_tenant_admin && $tenant && $tenant->department_id === $certificate_department_id;
+}
+
+function has_full_rights_on_badge() {
+    global $is_admin;
+
+    if ($is_admin) {
+        return true;
+    }
+
+    return false;
+}
+
+$is_tenant_admin = $is_departmentmanage_user && !$is_admin;
+$tenant = getCurrentTenant();
+$tenant_department_id = $tenant ? $tenant->department_id : null;
 
 $head_content .= "<script type='text/javascript'>
 $(document).ready(function() {   
@@ -69,7 +96,9 @@ $action_bar = action_bar(array(
               'url' => "$_SERVER[SCRIPT_NAME]?action=add_badge",
               'icon' => 'fa-solid fa-id-badge',
               'level' => 'primary-label',
-              'button-class' => 'btn-success')
+              'button-class' => 'btn-success',
+              'show' => $is_admin
+            )
         ));
 
 $tool_content .= $action_bar;
@@ -77,9 +106,17 @@ $tool_content .= $action_bar;
 if (isset($_GET['preview'])) { // certificate preview
     cert_output_to_pdf(intval($_GET['certificate_id']), $uid, $langTitle, $langMessage, get_config('site_name'), time(), intval($_GET['certificate_id']), null, true);
 }
+
 if (isset($_GET['del_badge'])) { // delete badge icon
     if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();
     $sql_badge_icon = Database::get()->querySingle("SELECT id, filename FROM badge_icon WHERE id = ?d", $_GET['del_badge']);
+
+    if (!has_full_rights_on_badge()) {
+        Session::flash('message', $langNotAllowedCertBadge);
+        Session::flash('alert-class', 'alert-warning');
+        redirect_to_home_page('modules/admin/certbadge.php');
+    }
+
     $badge_icon_id = $sql_badge_icon->id;
     $cnt = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM badge WHERE icon = ?d", $badge_icon_id)->cnt;
 
@@ -98,8 +135,15 @@ if (isset($_GET['del_badge'])) { // delete badge icon
 
 if (isset($_GET['del_cert'])) { // delete certificate template
     if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();
-    $sql_cert_template = Database::get()->querySingle("SELECT id, filename FROM certificate_template WHERE id = ?d", $_GET['del_cert']);
+    $sql_cert_template = Database::get()->querySingle("SELECT id, filename, department_id FROM certificate_template WHERE id = ?d", $_GET['del_cert']);
     $cert_template_id = $sql_cert_template->id;
+
+    if (!has_full_rights_on_certificate($sql_cert_template->department_id)) {
+        Session::flash('message', $langNotAllowedCertBadge);
+        Session::flash('alert-class', 'alert-warning');
+        redirect_to_home_page('modules/admin/certbadge.php');
+    }
+
     $cnt = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM certificate WHERE template = ?d", $cert_template_id)->cnt;
     if ($cnt > 0) { // don't delete it if it's used by a certificate (foreign key constrain)
         Session::flash('message',$langTemplateBelongsToCert);
@@ -212,7 +256,8 @@ if (isset($_POST['submit_cert_template'])) { // insert certificate template
                                         description = ?s,
                                         filename = ?s,
                                         orientation = ?s,
-                                        all_courses = ?s", $_POST['name'], $_POST['description'], $certificate_directory . $_POST['certhtmlfile'], $_POST['orientation'], $allcourses);
+                                        all_courses = ?s,
+                                        department_id=?d", $_POST['name'], $_POST['description'], $certificate_directory . $_POST['certhtmlfile'], $_POST['orientation'], $allcourses, $tenant_department_id);
                     $cert_template_id = $q->lastInsertID;
                     if ($allcourses == 0) {
                         foreach ($cert_template_courses as $cert_template_course_id) {
@@ -230,6 +275,13 @@ if (isset($_POST['submit_cert_template'])) { // insert certificate template
 
 } elseif (isset($_POST['submit_badge_icon'])) { // insert / update badge icon
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+
+    if (!has_full_rights_on_badge()) {
+        Session::flash('message', $langNotAllowedCertBadge);
+        Session::flash('alert-class', 'alert-warning');
+        redirect_to_home_page('modules/admin/certbadge.php');
+    }
+
     $new_icon = $old_icon = $filename = null;
     $badge_id = $_POST['badge_id'] ?? null;
     if ($_FILES['icon']['size'] > 0) {
@@ -284,6 +336,13 @@ if (isset($_GET['action'])) {
         if (isset($_GET['cid'])) {
             $cert_id = $_GET['cid'];
             $cert_data = Database::get()->querySingle("SELECT * FROM certificate_template WHERE id = ?d", $cert_id);
+
+            if (!has_full_rights_on_certificate($cert_data->department_id)) {
+                Session::flash('message', $langNotAllowedCertBadge);
+                Session::flash('alert-class', 'alert-warning');
+                redirect_to_home_page('modules/admin/certbadge.php');
+            }
+
             $cert_name = $cert_data->name;
             $cert_description = $cert_data->description;
             $cert_htmlfile = $cert_data->filename;
@@ -396,6 +455,13 @@ if (isset($_GET['action'])) {
             </div>
         </div>";
     } elseif (($_GET['action'] == 'add_badge') or  ($_GET['action'] == 'edit_badge')) { // add badge icons
+
+        if (!$is_admin) {
+            Session::flash('message', $langNotAllowed);
+            Session::flash('alert-class', 'alert-warning');
+            redirect_to_home_page('modules/admin/certbadge.php');
+        }
+
         $badge_name = $badge_description = $badge_hidden_id = '';
         if (isset($_GET['bid'])) {
             $badge_id = $_GET['bid'];
@@ -471,6 +537,7 @@ if (isset($_GET['action'])) {
                         </thead>";
 
                 foreach ($sql1 as $cert_data) {
+                    $is_allowed_to_configure_certificate = has_full_rights_on_certificate($cert_data->department_id);
                     $cert_image_path = $webDir . "/courses/user_progress_data/cert_templates/certificate{$cert_data->id}_thumbnail.png";
                     $cert_image_path_file = '';
                     if (file_exists($cert_image_path)) {
@@ -484,20 +551,26 @@ if (isset($_GET['action'])) {
                                         </td>
                                       <td style='width:60%;'>" . ellipsize_html($cert_data->description, 100) . "</td>";
                     $tool_content .= "
-                            <td style='width:10%;'>$cert_image_path_file</td>
-                            <td style='width:10%;' class='text-end option-btn-cell'>".
-                            action_button(array(
-                                array('title' => $langEdit,
-                                    'icon' => 'fa-edit',
-                                    'url' => "$_SERVER[SCRIPT_NAME]?action=edit_cert&amp;cid=$cert_data->id"
-                                    ),
-                                array('title' => $langDelete,
-                                    'icon' => 'fa-xmark',
-                                    'url' => "$_SERVER[SCRIPT_NAME]?del_cert=$cert_data->id&" . generate_csrf_token_link_parameter() ,
-                                    'confirm' => $langConfirmDelete,
-                                    'class' => 'delete')
-                                )).
-                            "</td></tr>";
+                            <td style='width:10%;'>$cert_image_path_file</td>";
+                    if ($is_allowed_to_configure_certificate) {
+                        $tool_content .= "<td style='width:10%;' class='text-end option-btn-cell'>".
+                                    action_button(array(
+                                        array('title' => $langEdit,
+                                            'icon' => 'fa-edit',
+                                            'url' => "$_SERVER[SCRIPT_NAME]?action=edit_cert&amp;cid=$cert_data->id"
+                                            ),
+                                        array('title' => $langDelete,
+                                            'icon' => 'fa-xmark',
+                                            'url' => "$_SERVER[SCRIPT_NAME]?del_cert=$cert_data->id&" . generate_csrf_token_link_parameter() ,
+                                            'confirm' => $langConfirmDelete,
+                                            'class' => 'delete')
+                                        )).
+                                    "</td>";
+                    } else {
+                        $tool_content .= "<td style='width:10%;'></td>";
+                    }
+                    $tool_content .= "</tr>";
+
                 }
     $tool_content .= "</table>";
     $tool_content .= "</div>";
@@ -515,11 +588,15 @@ if (isset($_GET['action'])) {
                         </tr>
                         </thead>";
                 foreach ($sql2 as $badge_data) {
+                    // NOTE: this check might need to change in the future, so that tenant admins will also be able to configure badges
+                    $is_allowed_to_configure_badge = has_full_rights_on_badge();
                     $icon_link = $urlServer . BADGE_TEMPLATE_PATH ."$badge_data->filename";
                     $tool_content .= "<tr><td style='width:30%;'>$badge_data->name</td>
                                       <td style='width:50%;'>" . ellipsize_html($badge_data->description, 100) . "</td>
                                       <td style='width:10%;' ><img src='$icon_link' width='50' height='50' alt='$badge_data->name'></td>";
-                    $tool_content .= "<td style='width:10%;' class='text-end option-btn-cell'>".
+
+                    if ($is_allowed_to_configure_badge) {
+                        $tool_content .= "<td style='width:10%;' class='text-end option-btn-cell'>".
                             action_button(array(
                                 array('title' => $langEdit,
                                     'icon' => 'fa-edit',
@@ -530,7 +607,11 @@ if (isset($_GET['action'])) {
                                     'url' => "$_SERVER[SCRIPT_NAME]?del_badge=$badge_data->id&" . generate_csrf_token_link_parameter() ,
                                     'confirm' => $langConfirmDelete,
                                     'class' => 'delete'))).
-                            "</td></tr>";
+                            "</td>";
+                    } else {                     
+                        $tool_content .= "<td style='width:10%;'></td>";
+                    }
+                    $tool_content .= "</tr>";
                 }
     $tool_content .= "</table>";
     $tool_content .= "</div>";

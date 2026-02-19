@@ -2178,7 +2178,13 @@ $db->query("CREATE TABLE `certificate_template` (
     `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci,
     `filename` varchar(255),
     `orientation` varchar(10),
-    `all_courses` TINYINT not null default 1
+    `all_courses` TINYINT not null default 1,
+    `department_id` int(11) default null,
+    KEY `fk_certificate_template_hierarchy` (`department_id`),
+    CONSTRAINT `fk_certificate_template_hierarchy` 
+        FOREIGN KEY (`department_id`) REFERENCES `hierarchy` (`id`) 
+        ON DELETE SET NULL 
+        ON UPDATE CASCADE
 ) $tbl_options");
 
 $db->query("CREATE TABLE `badge_icon` (
