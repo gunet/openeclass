@@ -1,6 +1,7 @@
 <?php
 
 require_once 'PointsGame.php';
+require_once 'Game.php';
 
 function course_points_game_widget($uid, $course_id) {
     global $is_editor, $is_course_admin, $urlAppend, $course_code;
@@ -8,6 +9,9 @@ function course_points_game_widget($uid, $course_id) {
     if (!$uid || $is_editor || $is_course_admin || $_SESSION['status'] != USER_STUDENT) {
         return '';
     }
+
+    // CHECK FOR COMPLETENESS - Ελέγχει και ενημερώνει τους πόντους του χρήστη
+    Game::checkCompleteness($uid, $course_id);
 
     $games = Database::get()->queryArray("
         SELECT id, title 
@@ -24,32 +28,36 @@ function course_points_game_widget($uid, $course_id) {
     foreach ($games as $game) {
         $info = PointsGame::getNextLevelInfo($uid, $game->id);
         
-        $points_record = Database::get()->querySingle("
-            SELECT total_points 
-            FROM user_points_game_points 
-            WHERE user = ?d AND points_game = ?d
-        ", $uid, $game->id);
-
-        $total_points = $points_record ? $points_record->total_points : 0;
-        $percent = $info['progress_percentage'] ?? 0;
+        // Use current_points from getNextLevelInfo (this is total_points)
+        $total_points = $info['current_points'];
+        $percent = isset($info['progress_percentage']) ? round($info['progress_percentage']) : 0;
         
-        $level_number = 1; 
-        if ($info['current_level_id']) {
-            $level_info = Database::get()->querySingle("
+        // Get current level name
+        $current_level = 'Level 1';
+        
+        // If user has reached a level, use that
+        if (isset($info['current_level_title']) && !empty($info['current_level_title'])) {
+            $current_level = $info['current_level_title'];
+        } 
+        // If no level yet, get the first level name
+        else {
+            $first_level = Database::get()->querySingle("
                 SELECT friendly_name 
                 FROM points_game_levels 
-                WHERE id = ?d
-            ", $info['current_level_id']);
+                WHERE points_game = ?d
+                ORDER BY required_points ASC 
+                LIMIT 1
+            ", $game->id);
             
-            if ($level_info && preg_match('/(\d+)/', $level_info->friendly_name, $matches)) {
-                $level_number = $matches[1];
+            if ($first_level && !empty($first_level->friendly_name)) {
+                $current_level = $first_level->friendly_name;
             }
         }
 
         $games_data[] = [
             'title' => $game->title,
             'points' => $total_points,
-            'level' => $level_number,
+            'level' => $current_level,
             'percent' => $percent
         ];
     }
@@ -94,7 +102,7 @@ function course_points_game_widget($uid, $course_id) {
                     <div class='progress-col'>
                         <div class='progress-label'>ολοκλήρωση</div>
                         <div class='progress-percent'>{$game['percent']}%</div>
-                        <div class='progress-level'>του level {$game['level']}</div>
+                        <div class='progress-level'>του " . htmlspecialchars($game['level']) . "</div>
                     </div>
                 </div>
             </div>";

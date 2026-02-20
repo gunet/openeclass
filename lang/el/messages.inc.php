@@ -1958,6 +1958,7 @@ $langMaj = "Ενημέρωση";
 $langEvalSet = "Ρυθμίσεις βαθμολογίας";
 $langExercice = "Άσκηση";
 $langActive = "ενεργό";
+$langState = "Κατάσταση";
 $langInactive = "μη ενεργό";
 $langNewEx = "Νέα Άσκηση";
 $langExerciseType = "Τύπος Άσκησης";

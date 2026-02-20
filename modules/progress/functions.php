@@ -25,7 +25,7 @@
 function display_certificates(): void
 {
     global $course_id, $tool_content, $course_code, $urlServer,
-           $langDelete, $langConfirmDelete, $is_editor,
+           $langDelete, $langConfirmDelete, $is_editor, $langState,
            $langNoCertificates, $langActive, $langInactive, $langNoThumbnail,
            $langEditChange, $langNewCertificate, $langActivate,
            $langDeactivate, $langSee, $webDir, $langTitle, $langActions;
@@ -56,7 +56,7 @@ function display_certificates(): void
                                 <tr class='list-header'>
                                     <th style='width: 100px;'></th>
                                     <th>$langTitle</th>
-                                    <th class='text-center'>$langActive</th>";
+                                    <th class='text-center'>$langState</th>";
         if ($is_editor) {
             $tool_content .= "
                                     <th class='text-center'>$langActions</th>";
@@ -132,7 +132,7 @@ function display_badges(): void
 {
     global $course_id, $tool_content, $course_code, $is_editor,
            $langDelete, $langConfirmDelete,
-           $langNoBadges, $langEditChange,
+           $langNoBadges, $langEditChange, $langState,
            $langActivate, $langDeactivate, $langNewBadge,
            $langActive, $langInactive, $urlServer, $langTitle, $langActions;
 
@@ -165,7 +165,7 @@ function display_badges(): void
                                 <tr class='list-header'>
                                     <th style='width: 60px;'></th>
                                     <th>$langTitle</th>
-                                    <th class='text-center'>$langActive</th>";
+                                    <th class='text-center'>$langState</th>";
         if ($is_editor) {
             $tool_content .= "
                                     <th class='text-center'>$langActions</th>";
@@ -229,10 +229,10 @@ function display_badges(): void
  */
 function display_points_games(): void
 {
-    global $course_id, $tool_content, $course_code, $is_editor, $langIsActive,
+    global $course_id, $tool_content, $course_code, $is_editor, 
            $langDeleteCourseActivities, $langResetPointsGame, $langConfirmResetPointsGame,
            $langNoPointsGames, $langEditChange, $langPurge,
-           $langActivate, $langDeactivate, $langNewPointsGame,
+           $langActivate, $langDeactivate, $langNewPointsGame, $langState,
            $langActive, $langInactive, $urlServer, $langConfirmPurgePointsGame,
            $langTitle, $langStartDate, $langEndDate, $langActions;
 
@@ -265,7 +265,7 @@ function display_points_games(): void
                                 <tr class='list-header'>
                                     <th>$langTitle</th>
                                     <th>$langStartDate - $langEndDate</th>
-                                    <th class='text-center'>$langIsActive</th>";
+                                    <th class='text-center'>$langState</th>";
         if ($is_editor) {
             $tool_content .= "
                                     <th class='text-center'>$langActions</th>";
@@ -327,65 +327,7 @@ function display_points_games(): void
         </div>";
 }
 
-// /**
-//  * @brief display course completion (special type of badge)
-//  */
-// function display_course_completion(): void
-// {
-//     global $course_id, $tool_content, $course_code, $is_editor,
-//            $langDelete, $langConfirmDelete, $langCourseCompletion,
-//            $langActivate, $langDeactivate,
-//            $langActive, $langInactive;
 
-//     $data = Database::get()->querySingle("SELECT id, title, description, active, icon FROM badge "
-//                                     . "WHERE course_id = ?d AND bundle = -1 AND unit_id = 0", $course_id);
-
-//     if ($data) {
-//         $tool_content .= "
-//                 <div class='col-12'>
-//                     <div class='card panelCard card-default px-lg-4 py-lg-3'>
-//                         <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-//                             <h3>$langCourseCompletion</h3>
-
-//                         </div>
-//                         <div class='card-body'>
-//                             <div class='res-table-wrapper'>";
-
-//             $vis_status = $data->active ? "text-success" : "text-danger";
-//             $vis_icon = $data->active ? "fa-eye" : "fa-eye-slash";
-//             $status_msg = $data->active ? $langActive : $langInactive;
-//             $tool_content .= "
-//                 <div class='row res-table-row border-0 p-3'>
-//                     <div class='col-3 text-md-start text-center'>
-//                         <i class='fa fa-trophy fa-3x' aria-hidden='true'></i>
-//                     </div>
-//                     <div class='col-6 text-center mt-0'>
-//                         <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id'>".q($data->title)."</a>
-//                         <div style='margin-top: 5px;'><span class='fa {$vis_icon}'></span>&nbsp;&nbsp;&nbsp;<span class='{$vis_status}'>$status_msg</span></div>
-//                 </div>";
-//             if ($is_editor) {
-//                 $tool_content .= "<div class='col-3 text-end mt-0'>" .
-//                     action_button(array(
-//                         array('title' => $data->active ? $langDeactivate : $langActivate,
-//                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id&amp;vis=" .
-//                                 ($data->active ? '0' : '1'),
-//                             'icon' => $data->active ? 'fa-eye-slash' : 'fa-eye'),
-//                         array('title' => $langDelete,
-//                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del_badge=$data->id",
-//                             'icon' => 'fa-xmark',
-//                             'class' => 'delete',
-//                             'confirm' => $langConfirmDelete)
-//                     ))
-//                     . "</div>";
-//             }
-//         $tool_content .= "</div>";
-//         $tool_content .= "
-//                             </div>
-//                         </div>
-//                     </div>
-//                 </div>";
-//     }
-// }
 
 /**
  * @brief display course completion (special type of badge)
@@ -404,49 +346,47 @@ function display_course_completion(): void
         return;
     }
 
+    $tool_content .= "<div class='col-12 mt-4'>";
+    $tool_content .= "<div class='card panelCard card-default px-lg-4 py-lg-3' style='border-left: 4px solid #3b82f6 !important;'>";
+    $tool_content .= "<div class='card-body'>";
+
     if (!$data) {
-        // Editor και δεν υπάρχει badge ακόμα
         $tool_content .= "
-        <div class='col-12 mt-4'>
-            <div class='card panelCard card-default px-lg-4 py-lg-3'>
-                <div class='card-body d-flex flex-column align-items-center justify-content-center py-5 gap-3'>
-                    <i class='fa fa-trophy fa-3x text-muted' aria-hidden='true'></i>
-                    <p class='text-muted mb-2'>Η ολοκλήρωση μαθήματος δεν έχει ενεργοποιηθεί ακόμα.</p>
-                    <a href='{$_SERVER['SCRIPT_NAME']}?course={$course_code}&amp;tab=course_completion&amp;newcc=1' class='btn submitAdminBtn'>
-                        <span class='fa fa-power-off'></span>&nbsp;&nbsp;Ενεργοποίηση Ολοκλήρωσης Μαθήματος
-                    </a>
-                </div>
-            </div>
-        </div>";
+            <div class='d-flex flex-column align-items-center justify-content-center py-4 gap-3'>
+                <i class='fa fa-trophy fa-3x text-muted' aria-hidden='true'></i>
+                <p class='text-muted mb-2'>Η ολοκλήρωση μαθήματος δεν έχει ενεργοποιηθεί ακόμα.</p>
+                <a href='{$_SERVER['SCRIPT_NAME']}?course={$course_code}&amp;tab=course_completion&amp;newcc=1' class='btn submitAdminBtn'>
+                    <span class='fa fa-power-off'></span>&nbsp;&nbsp;Ενεργοποίηση Ολοκλήρωσης Μαθήματος
+                </a>
+            </div>";
     } else {
-        // Υπάρχει badge - με μπλε border
         $vis_status = $data->active ? "text-success" : "text-danger";
         $vis_icon = $data->active ? "fa-eye" : "fa-eye-slash";
         $status_msg = $data->active ? $langActive : $langInactive;
-        
+
         $tool_content .= "
-        <div class='col-12 mt-4'>
-            <div class='panel panel-default' style='border-left: 4px solid #3b82f6 !important;'>
-                <div class='panel-body' style='padding: 40px 30px !important;'>
-                    <div class='row align-items-center'>
-                        <div class='col-auto'>
-                            <i class='fa fa-trophy' style='font-size: 4rem; color: #3b82f6;' aria-hidden='true'></i>
-                        </div>
-                        <div class='col'>
-                            <h3 class='mb-2' style='font-size: 20px; font-weight: 600;'>
-                                <a href='{$_SERVER['SCRIPT_NAME']}?course={$course_code}&amp;tab=course_completion&amp;badge_id={$data->id}'>
-                                    " . q($data->title) . "
-                                </a>
-                            </h3>
-                            <div class='mt-2'>
-                                <span class='fa {$vis_icon} {$vis_status}'></span>
-                                <span class='{$vis_status} ms-2' style='font-size: 15px;'>{$status_msg}</span>
-                            </div>
-                        </div>";
+            <div class='table-responsive mt-0'>
+                <table class='table' style='border: none; margin-bottom: 0;'>
+                    <tbody>
+                        <tr style='border: none;'>
+                            <td style='width: 60px; border: none; vertical-align: middle;'>
+                                <i class='fa fa-trophy' style='font-size: 2.5rem; color: #3b82f6;'></i>
+                            </td>
+                            <td style='border: none; vertical-align: middle;'>
+                                <h3 class='mb-0' style='font-size: 16px; font-weight: 600;'>
+                                    <a href='{$_SERVER['SCRIPT_NAME']}?course={$course_code}&amp;tab=course_completion&amp;badge_id={$data->id}'>
+                                        " . q($data->title) . "
+                                    </a>
+                                </h3>
+                                <div class='mt-1'>
+                                    <span class='fa {$vis_icon} {$vis_status} small'></span>
+                                    <span class='{$vis_status} ms-1' style='font-size: 13px;'>{$status_msg}</span>
+                                </div>
+                            </td>";
         
         if ($is_editor) {
             $tool_content .= "
-                        <div class='col-auto'>" .
+                            <td class='text-end' style='border: none; vertical-align: middle;'>" .
                 action_button(array(
                     array('title' => $data->active ? $langDeactivate : $langActivate,
                         'url' => "{$_SERVER['SCRIPT_NAME']}?course={$course_code}&amp;tab=course_completion&amp;badge_id={$data->id}&amp;vis=" .
@@ -462,11 +402,13 @@ function display_course_completion(): void
         }
         
         $tool_content .= "
-                    </div>
-                </div>
-            </div>
-        </div>";
+                        </tr>
+                    </tbody>
+                </table>
+            </div>";
     }
+
+    $tool_content .= "</div></div></div>";
 }
 
 /**
