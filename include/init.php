@@ -23,11 +23,6 @@
  *        It is included in every file via baseTheme.php
  */
 
-
-//ini_set('display_errors', 1);
-// ini_set('display_startup_errors', 1);
-// error_reporting(E_ALL);
-
 /**
  * Escape HTML entities in a string.
  *
