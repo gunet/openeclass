@@ -2393,10 +2393,24 @@ $langSure = "Σίγουρος";
 $langNotSure = "Δεν είμαι σίγουρος";
 $langNotKnow = "Δεν γνωρίζω";
 
+$langMastery = "Πλήρης κατανόηση";
+$langMasteryTooltip = "Απάντησαν σωστά και με βεβαιότητα.";
+$langUnderconfident = "Διστακτικότητα";
+$langUnderconfidentTooltip = "Απάντησαν σωστά, αλλά δεν ένιωθαν σιγουριά.";
+$langGuessingRight = "Σωστή εικασία";
+$langGuessingRightTooltip = "Απάντησαν σωστά στην τύχη.";
+$langMisconception = "Παρανόηση";
+$langMisconceptionTooltip = "Απάντησαν λάθος, ενώ πίστευαν πως ήταν σωστό.";
+$langGuessingWrong = "Λάθος εικασία";
+$langGuessingWrongTooltip = "Απάντησαν στην τύχη και ήταν λάθος.";
+$langKnownGap = "Επίγνωση άγνοιας";
+$langKnownGapTooltip = "Απάντησαν λάθος, έχοντας δηλώσει πως δεν το γνωρίζουν.";
+
 // exercise_submit.php
 $langDoAnEx = "Κάντε μια άσκηση";
 $langCorrect = "Σωστό";
 $langIncorrect = "Λάθος";
+$langPartiallyCorrect = "Μερικώς Σωστό";
 $langCorrectS = "σωστό";
 $langIncorrectS = "λάθος";
 $langExerciseNotFound = "Η άσκηση δεν βρέθηκε";
@@ -2462,6 +2476,7 @@ $langNotRecorded = "μη καταγεγραμμένη";
 $langHasExpiredS = "έχει λήξει";
 $langHasExpired = "Έχει λήξει";
 $langSuccessPercentage = "Ποσοστό επιτυχίας";
+$langGradeMethod = "Κατανομή Βεβαιότητας";
 
 // import exercise.php
 $langImportExercise = "Εισαγωγή Άσκησης";
