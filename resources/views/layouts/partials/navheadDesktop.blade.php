@@ -1,5 +1,5 @@
 <header>
-    <div id="bgr-cheat-header" class="navbar navbar-eclass py-0 fixed-top">
+    <div id="bgr-cheat-header" class="navbar navbar-eclass py-0 fixed-topret">
         <div class='{{ $container }} header-container py-0'>
 
 

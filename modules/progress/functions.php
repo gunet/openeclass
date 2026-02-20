@@ -229,7 +229,7 @@ function display_badges(): void
  */
 function display_points_games(): void
 {
-    global $course_id, $tool_content, $course_code, $is_editor,
+    global $course_id, $tool_content, $course_code, $is_editor, $langIsActive,
            $langDeleteCourseActivities, $langResetPointsGame, $langConfirmResetPointsGame,
            $langNoPointsGames, $langEditChange, $langPurge,
            $langActivate, $langDeactivate, $langNewPointsGame,
