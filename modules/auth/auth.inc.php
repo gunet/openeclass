@@ -1310,17 +1310,16 @@ function shib_cas_login($type) {
             $_SESSION['shib_auth_test'] = true;
             redirect_to_home_page('modules/admin/auth_test.php?auth=7');
         }
-        $givenname = $shib['givenname'];
-        $surname = $shib['surname'];
-        $email = $shib['email'];
-        $am = $shib['studentid'];
+        $givenname = $shib['givenname'] ?? '';
+        $surname = $shib['surname'] ?? '';
+        $email = $shib['email'] ?? '';
+        $am = $shib['studentid'] ?? '';
     } elseif ($type == 'cas') {
-        $uname = $surname = $givenname = '';
-        $uname = $_SESSION['cas_uname'];
-        $surname = $_SESSION['cas_surname'];
-        $givenname = $_SESSION['cas_givenname'];
-        $email = isset($_SESSION['cas_email']) ? $_SESSION['cas_email'] : '';
-        $am = isset($_SESSION['cas_userstudentid']) ? $_SESSION['cas_userstudentid'] : '';
+        $uname = $_SESSION['cas_uname'] ?? '';
+        $surname = $_SESSION['cas_surname'] ?? '';
+        $givenname = $_SESSION['cas_givenname'] ?? '';
+        $email = $_SESSION['cas_email'] ?? '';
+        $am = $_SESSION['cas_userstudentid'] ?? '';
     } elseif ($type == 'oauth2') {
         $uname = $_SESSION['auth_id'] ?? '';
         $surname = $_SESSION['auth_surname'] ?? '';
