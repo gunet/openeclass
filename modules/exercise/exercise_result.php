@@ -128,8 +128,8 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) and strtolower($_SERVER['HTTP_X_RE
         } else {
             update_gradebook_book($data->uid, $data->eid, $data->total_score / $data->total_weighting, GRADEBOOK_ACTIVITY_EXERCISE);
         }
-        //triggerGame($course_id, $data->uid, $data->eid);
-        //triggerExerciseAnalytics($course_id, $data->uid, $data->eid);
+        triggerGame($course_id, $data->uid, $data->eid);
+        triggerExerciseAnalytics($course_id, $data->uid, $data->eid);
         exit();
     }
 }
@@ -315,8 +315,7 @@ $canonical_score = $objExercise->canonicalize_exercise_score($exercise_user_reco
 $displayScore = $objExercise->selectScore();
 $gradePass = $objExercise->getPassingGrade();
 $exerciseAttemptsAllowed = $objExercise->selectAttemptsAllowed();
-$exerciseCalcGradeMethod = $objExercise->getCalcGradeMethod();
-$exerciseFeedback = $objExercise->getFeedback();
+$calc_grade_method = $objExercise->getCalcGradeMethod();
 $exerciseFeedback = $objExercise->getFeedback();
 $userAttempts = Database::get()->querySingle("SELECT COUNT(*) AS count FROM exercise_user_record WHERE eid = ?d AND uid= ?d", $exercise_user_record->eid, $uid)->count;
 
@@ -377,51 +376,6 @@ if (!isset($_GET['pdf'])) {
     $tool_content .= $action_bar;
 }
 
-$tool_content .= "<div class='col-sm-12'><div class='card panelCard card-default px-lg-4 py-lg-3'>";
-$tool_content .= "<div class='card-header border-0 d-flex justify-content-between align-items-center'>";
-if ($user) { // user details
-    $tool_content .= "<h3>" . q($user->surname) . " " . q($user->givenname);
-    if ($user->am) {
-        $tool_content .= " ($langAmShort: " . q($user->am) . ")";
-    }
-    $tool_content .= "</h3>";
-}
-// exercise duration details
-$tool_content .= "<p><small>$langStart: <em>" . format_locale_date(strtotime($exercise_user_record->record_start_date), 'short') . "</em>
-$langDuration: <em>" . format_time_duration($exercise_user_record->time_duration) . "</em></p>" .
-    ($user && $exerciseAttemptsAllowed ? "<p>$langAttempt: <em>{$exercise_user_record->attempt}</em></p>" : '');
-$tool_content .= "</small>";
-
-$tool_content .= "</div>";
-$tool_content .= "<div class='card-body'>";
-
-$message_range = $grade_icon = '';
-if ($showScore) { // exercise score
-    $tool_content .= "<p>";
-    $canonicalized_message_range = "<strong>$exercise_user_record->total_score / $exercise_user_record->total_weighting</strong>";
-    if ($exerciseRange > 0) { // exercise grade range (if any)
-        $canonicalized_message_range = "<strong><span>$canonical_score</span> / $exerciseRange</strong>";
-        $message_range = "<small> (<strong>$exercise_user_record->total_score / $exercise_user_record->total_weighting</strong>)</small>";
-    }
-    // passing grade (if any)
-    if (!is_null($gradePass) && $gradePass > 0) {
-        if ($canonical_score >= $objExercise->canonicalize_exercise_pass_grade($gradePass, $exercise_user_record->total_weighting)) {
-            $grade_icon = "<span class='fa-solid fa-check ps-1' style='color: green;' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-title='$langSuccess'></span>";
-        } else {
-            $grade_icon = "<span class='fa-solid fa-times ps-1' style='color: red;' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-title='$langFailure'></span>";
-        }
-    }
-    // message score
-    $tool_content .= "$langTotalScore: $canonicalized_message_range&nbsp;&nbsp;$message_range $grade_icon";
-    // exercise feedback (if any)
-    if (!empty($objExercise->calculate_feedback($canonical_score))) {
-        $tool_content .= "<h5 class='p-3 m-1 border border-info rounded-3' style='color: blue; text-align:center;'>" . $objExercise->calculate_feedback($canonical_score) . "</h5>";
-    }
-    $tool_content .= "</p>";
-}
-
-$tool_content .= "</div></div></div>";
-
 $tool_content .= "<div class='col-12 mt-4'><div class='card panelCard card-default px-lg-4 py-lg-3'>
                       <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                             <h3>" . q_math($exerciseTitle) . "</h3>
@@ -446,6 +400,114 @@ $tool_content .= "
     </div>
   </div>";
 
+$tool_content .= "<div class='col-sm-12'>";
+
+    $tool_content .= "<div class='card panelCard card-default px-lg-4 py-lg-3'>"; //panelCard
+
+    $tool_content .= "<div class='card-header border-0 d-flex justify-content-between align-items-center'>"; //card-header
+
+    if ($user) { // user details
+        $tool_content .= "<h3>" . q($user->surname) . " " . q($user->givenname);
+        if ($user->am) {
+            $tool_content .= " ($langAmShort: " . q($user->am) . ")";
+        }
+        $tool_content .= "</h3>";
+    }
+    $tool_content .= "</div>"; //card-header end
+
+    $tool_content .= "<div class='card-body row'>"; // card-body
+    $tool_content .= "<div class='col-md-6'>";
+
+    $message_range = $grade_icon = '';
+//    $canonicalized_message_range = "<strong>$exercise_user_record->total_score / $exercise_user_record->total_weighting</strong>";
+    $canonicalized_message_range = "
+        <div class='gauge-container'>
+          <div class='gauge-wrap' aria-label='Score gauge'>
+            <div class='gauge-clip'>
+              <div class='gauge-arc'></div>
+              <div class='gauge-mask'></div>
+            </div>
+            <div class='gauge-needle-group' id='needleGroup'>
+              <div class='gauge-needle'></div>
+              <div class='needle-value' id='avgNeedleValue'>$exercise_user_record->total_score</div>
+            </div>
+            <div class='gauge-center'></div>
+            <div class='gauge-extreme left' id='minGaugeValue'>0.00</div>
+            <div class='gauge-extreme right' id='maxGaugeValue'>$exercise_user_record->total_weighting</div>
+          </div>
+        </div>
+    ";
+
+    $canonicalized_message_range .= "
+    
+    <script>
+      const minGaugeValueEl = document.getElementById('minGaugeValue');
+      const maxGaugeValueEl = document.getElementById('maxGaugeValue');
+      const avgNeedleValueEl = document.getElementById('avgNeedleValue');
+      const needleGroupEl = document.getElementById('needleGroup');
+
+      const formatScore = (value) => Number(value).toFixed(2);
+
+      function updateGauge(value, min, max) {
+        minGaugeValueEl.textContent = formatScore(min);
+        maxGaugeValueEl.textContent = formatScore(max);
+        avgNeedleValueEl.textContent = formatScore(value);
+
+        const span = max - min;
+        const relativeValue = span > 0 ? (value - min) / span : 0.5;
+        const needleRatio = Math.min(Math.max(relativeValue, 0), 1);
+        
+        // The gauge is a semi-circle (180 degrees). We map the value to a rotation
+        // from -90 degrees (minimum) to +90 degrees (maximum).
+        const needleDeg = -90 + needleRatio * 180;
+        
+        if (needleGroupEl) {
+          needleGroupEl.style.transform = 'translateX(-50%) rotate(' + needleDeg + 'deg)';
+        }
+      }
+
+      // Fixed values
+      const fixedMin = 0;
+      const fixedMax = " . $exercise_user_record->total_weighting . ";
+      const fixedScore = " . $exercise_user_record->total_score . ";
+
+      // Run on page load with fixed values
+      function initializeGauge() {
+        updateGauge(fixedScore, fixedMin, fixedMax);
+      }
+      
+      initializeGauge();
+    </script>
+    
+    ";
+
+    if (!is_null($gradePass) && $gradePass > 0) {
+        if ($canonical_score >= $objExercise->canonicalize_exercise_pass_grade($gradePass, $exercise_user_record->total_weighting)) {
+            $grade_icon = "<span class='fa-solid fa-check ps-1' style='color: green;' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-title='$langSuccess'></span>";
+        } else {
+            $grade_icon = "<span class='fa-solid fa-times ps-1' style='color: red;' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-title='$langFailure'></span>";
+        }
+    }
+    if ($exerciseRange > 0) { // exercise grade range (if any)
+        $canonicalized_message_range = "<strong><span>$canonical_score</span> / $exerciseRange</strong>";
+        $message_range = "<small> (<strong>$exercise_user_record->total_score / $exercise_user_record->total_weighting</strong>)</small>";
+    }
+
+    if ($showScore) {
+        $tool_content .= "<p><h5>$langTotalScore</h5> $canonicalized_message_range&nbsp;&nbsp;$message_range $grade_icon</p>";
+    }
+
+    $tool_content .= "</div>"; // leftt end
+    $tool_content .= "<div class='col-md-6'>"; // right
+    $tool_content .= "
+            <p><h5>$langStart</h5><em>" . format_locale_date(strtotime($exercise_user_record->record_start_date), 'short') . "</em><br><br>
+            <h5>$langDuration</h5><em>" . format_time_duration($exercise_user_record->time_duration) . "</em></p>" .
+        ($user && $exerciseAttemptsAllowed ? "<p>$langAttempt: <em>{$exercise_user_record->attempt}</em></p>" : '');
+
+$tool_content .= "</div>"; // right end
+    $tool_content .= "</div>"; // card-body end
+    $tool_content .= "</div>"; // card end
+$tool_content .= "</div>";
 
 if ($is_editor and in_array($exercise_user_record->attempt_status, [ATTEMPT_COMPLETED, ATTEMPT_PENDING]) and isset($_POST['regrade'])) {
     $regrade = true;
@@ -484,51 +546,22 @@ if (count($exercise_question_ids) > 0) {
                 $urlAppend . "modules/exercise/admin.php?course=$course_code&amp;modifyAnswers=$questionId&fromExercise=$exercise_id");
         }
 
-        // check if the question has been graded
-        $question_weight = Database::get()->querySingle("SELECT SUM(weight) AS weight FROM exercise_answer_record WHERE question_id = ?d AND eurid = ?d", $row->question_id, $eurid)->weight;
-        $question_graded = !is_null($question_weight);
-
-        $tool_content .= "<div class='table-responsive'>";
-        $tool_content .= "
-            <table class='table ".(($question_graded)? 'graded' : 'ungraded')." table-default table-exercise table-exercise-secondary mb-4'>
-            <thead><tr class='active'>
-              <td class='w-75'>
-                <strong class='fs-6'><u>$langQuestion</u>: $i</strong>";
-
-        if ($answerType == FREE_TEXT or $answerType == ORAL) {
-            $choice = purify($choice);
-            if (!empty($choice)) {
-                if (!$question_graded) {
-                    $tool_content .= " <small class='text-danger'>(<span class='text-danger'>$langAnswerUngraded</span>) </small>";
-                } else {
-                    $tool_content .= " <small>($langGradebookGrade: <strong>$question_weight</strong></span>)</small>";
-                }
-            }
-        } else {
-             if (($showScore) and (!is_null($choice))) {
-                 if ($answerType == MULTIPLE_ANSWER && $question_weight < 0 && $exerciseCalcGradeMethod == CALC_GRADE_METHOD_STANDARD) {
-                     $qw_legend1 = "<span class='Accent-200-cl'>$question_weight</span>";
-                     $qw_legend2 = " $langConvertedTo <strong>0 / $questionWeighting</strong>";
-                 } else {
-                     $qw_legend1 = "$question_weight";
-                     $qw_legend2 = "";
-                 }
-                 $tool_content .= " <span class='fw-light m-1'>
-                                        <small>($langGradebookGrade: <strong>$qw_legend1 / $questionWeighting</strong>$qw_legend2";
-                 if ($exerciseCalcGradeMethod == CALC_GRADE_METHOD_CERTAINTY_BASED) {
-                     $question_certainty = Database::get()->querySingle("SELECT certainty FROM exercise_answer_record WHERE question_id = ?d AND eurid = ?d", $row->question_id, $eurid)->certainty;
-                     $tool_content .= ", $langCertainty: <strong>" . $objQuestionTmp->getCertaintyLegend($question_certainty) . "</strong>";
-                 }
-                 $tool_content .= ")</small>
-                                    </span>";
-             }
-        }
-        $tool_content .= "<span class='fw-lighter m-2'><small>($questionType$qid_display)</small></span>$edit_link"; // question type
-        $tool_content .= "</td></tr></thead>";
         // destruction of the Question object
         unset($objQuestionTmp);
+        // check if the question has been graded
+        $question_weight = Database::get()->querySingle("SELECT SUM(weight) AS weight FROM exercise_answer_record WHERE question_id = ?d AND eurid =?d", $row->question_id, $eurid)->weight;
+        $question_graded = !is_null($question_weight);
 
-        $tool_content .= "<tr><td colspan='2'>";
+        $answer_class = ($question_weight == $questionWeighting) ? 'correct_div' : (($question_weight > 0) ? 'partial_div' : 'wrong_div');
+        $answer_text = ($question_weight == $questionWeighting) ? $langTrue : (($question_weight > 0) ? $langPartiallyCorrect : $langIncorrect);
+
+        $tool_content .= "<div class='table-responsive question-container mb-5 $answer_class' style='border-radius: 10px;overflow: hidden;'>";
+        $tool_content .= "
+            <table class='table ".(($question_graded)? 'graded' : 'ungraded')." table-default table-exercise table-exercise-secondary' style='margin: 0;'>
+            <thead><tr class='active'>
+              <td class='d-flex justify-content-between'>
+                <div class='col-10'>
+                <strong class='fs-6'>$i. $questionName</strong>";
         $arithmetic_expression_str = '';
         if ($answerType == CALCULATED) {
             $des_arr = unserialize($questionDescription);
@@ -539,7 +572,8 @@ if (count($exercise_question_ids) > 0) {
             $arithmetic_expression_str = $objAn->replaceItemsBracesWithWildCards($arithmetic_expression, $questionId);
             unset($objAn);
         }
-        $tool_content .= "<p>" . q_math($questionName) . "</p>" . standard_text_escape($questionDescription) . '<br>' . $arithmetic_expression_str;
+//        $tool_content .= "<div class='questionName'><p>" . q_math($questionName) . "</p></div><div class='questionDescription'>" . standard_text_escape($questionDescription) . "</div>" . $arithmetic_expression_str;
+        $tool_content .= "<div class='questionDescription'>" . standard_text_escape($questionDescription) . "</div>" . $arithmetic_expression_str;
 
         $classImg = '';
         $classContainer = '';
@@ -555,12 +589,71 @@ if (count($exercise_question_ids) > 0) {
                                 <canvas id='drawingCanvas-$row->question_id' class='$classCanvas'></canvas>
                               </div>";
         }
+//        $tool_content .= "<span class='fw-lighter m-2'><small>($questionType$qid_display)</small></span>$edit_link"; // question type
 
-        $tool_content .= "</td></tr>";
-
-        if (!is_null($choice)) {
-            $tool_content .= "<tr class='active'><th colspan='2'><u>$langAnswer</u></th></tr>";
+        $tool_content .= "</div><div class='col-2 text-end d-flex flex-column'>" . $answer_text;
+        if ($answerType == FREE_TEXT or $answerType == ORAL) {
+            $choice = purify($choice);
+            if (!empty($choice)) {
+                if (!$question_graded) {
+                    $tool_content .= " <small class='text-danger'>(<span class='text-danger'>$langAnswerUngraded</span>) </small>";
+                } else {
+                    $tool_content .= " <small>($langGradebookGrade: <strong>$question_weight</strong></span>)</small>";
+                }
+            }
+        } else {
+            if (($showScore) and (!is_null($choice))) {
+                if ($answerType == MULTIPLE_ANSWER && $question_weight < 0 && $calc_grade_method == 1) {
+                    $qw_legend1 = "<span class='Accent-200-cl'>$question_weight</span>";
+                    $qw_legend2 = " $langConvertedTo <strong>0 / $questionWeighting</strong>";
+                } else {
+                    $qw_legend1 = "$question_weight";
+                    $qw_legend2 = "";
+                }
+//                $tool_content .= " <span class='fw-light m-1'><small>($langGradebookGrade: <strong>$qw_legend1 / $questionWeighting</strong>$qw_legend2)</small></span>";
+                $tool_content .= " <span class='fw-light m-1'><strong>$qw_legend1 / $questionWeighting</strong></span>";
+            }
         }
+        $tool_content .= "</div>";
+        $tool_content .= "</td></tr></thead>";
+
+        if ($questionDescription) {
+
+        }
+//        $tool_content .= "<tr><td colspan='2' class='question-text d-flex flex-column gap-2'>";
+//        $arithmetic_expression_str = '';
+//        if ($answerType == CALCULATED) {
+//            $des_arr = unserialize($questionDescription);
+//            $questionDescription = $des_arr['question_description'];
+//
+//            $objAn = new Answer($questionId);
+//            $arithmetic_expression = $des_arr['arithmetic_expression'];
+//            $arithmetic_expression_str = $objAn->replaceItemsBracesWithWildCards($arithmetic_expression, $questionId);
+//            unset($objAn);
+//        }
+////        $tool_content .= "<div class='questionName'><p>" . q_math($questionName) . "</p></div><div class='questionDescription'>" . standard_text_escape($questionDescription) . "</div>" . $arithmetic_expression_str;
+//        $tool_content .= "<div class='questionDescription'>" . standard_text_escape($questionDescription) . "</div>" . $arithmetic_expression_str;
+//
+//        $classImg = '';
+//        $classContainer = '';
+//        $classCanvas = '';
+//        if ($answerType == DRAG_AND_DROP_MARKERS) {
+//            $classImg = 'drag-and-drop-markers-img';
+//            $classContainer = 'drag-and-drop-markers-container';
+//            $classCanvas = 'drag-and-drop-markers-canvas';
+//        }
+//        if (file_exists($picturePath . '/quiz-' . $row->question_id)) {
+//            $tool_content .= "<div class='$classContainer' id='image-container-$row->question_id' style='position: relative; display: inline-block;'>
+//                                <img class='$classImg' id='img-quiz-$row->question_id' src='../../$picturePath/quiz-$row->question_id' style='width: 100%;'>
+//                                <canvas id='drawingCanvas-$row->question_id' class='$classCanvas'></canvas>
+//                              </div>";
+//        }
+//
+//        $tool_content .= "</td></tr>";
+
+//        if (!is_null($choice)) {
+//            $tool_content .= "<tr class='active'><th colspan='2'><u>$langAnswer</u></th></tr>";
+//        }
         $questionScore = 0;
 
         // display results

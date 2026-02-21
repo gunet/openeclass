@@ -5049,6 +5049,15 @@ body .delThemeBtn{
   background-position : calc(-2 * var(--radius)) 0;
 }
 
+.tree-units .disable-branch {
+    cursor: auto;
+}
+
+.tree-units .disable-branch::after,
+.tree-sessions .disable-branch::after {
+    display: none;
+}
+
 /**********************************************************************************************************************/
 /********************************************** PROGRESS CIRCLE *******************************************************/
 /**********************************************************************************************************************/
@@ -6262,47 +6271,226 @@ th.grade-col a{
  padding: 20px !important;
 }
 
-/****** exercise dont delete ******/
-/*.question-container span.fa-regular {*/
-/*    font-size: 18px;*/
-/*}*/
+/****** exercise ******/
+.question-container span.fa-regular {
+    font-size: 18px;
+}
 
-/*.correct_div {*/
-/*    border-left: 5px solid #28a745;*/
-/*}*/
+.correct_div {
+    border-left: 5px solid #28a745;
+}
 
-/*.correct_answer {*/
-/*    background-color: #28a74515!important;*/
-/*    border-radius: 5px;*/
-/*}*/
+.correct_answer {
+    background-color: #28a74515!important;
+    border-radius: 5px;
+    overflow: hidden;
+}
 
-/*.wrong_div {*/
-/*    border-left: 5px solid #dc3545;*/
-/*}*/
+.wrong_div {
+    border-left: 5px solid #dc3545;
+}
 
-/*.wrong_answer {*/
-/*    background-color: #dc354515!important;*/
-/*    border-radius: 5px;*/
-/*}*/
-/*.partial_div {*/
-/*    border-left: 5px solid #ffc107;*/
-/*}*/
+.wrong_answer {
+    background-color: #dc354515!important;
+    border-radius: 5px;
+    overflow: hidden;
+}
+.partial_div {
+    border-left: 5px solid #ffc107;
+}
 
-/*.partial_answer {*/
-/*    background-color: #ffc10720;*/
-/*}*/
-/*.questionName p {*/
-/*    font-size: 16px;*/
-/*}*/
-/*.questionDescription p {*/
-/*    color: #6c757d;*/
-/*    font-size: 14px;*/
-/*}*/
+.partial_answer {
+    background-color: #ffc10720;
+}
+.questionName p {
+    font-size: 16px;
+}
+.questionDescription p {
+    color: #6c757d;
+    font-size: 14px;
+}
 
-/*.selected {*/
-/*    box-shadow: 0 8px 6px -1px rgba(0, 0, 0, 0.1), 4px 2px 4px -2px rgba(0, 0, 0, 0.06);*/
-/*    transition: transform 0.2s ease;*/
-/*}*/
+.correct_answer.selected {
+    border: 1px dashed #28a745;
+}
+
+.wrong_answer.selected {
+    border: 1px dashed #dc3545;
+}
+
+/*Gauge Meter*/
+
+.gauge-container {
+    padding: 2.5rem 1rem;
+    text-align: center;
+}
+
+.gauge-wrap {
+    position: relative;
+    width: 220px;
+    height: 120px;
+    margin: 0 auto;
+}
+
+.gauge-clip {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+}
+
+.gauge-arc {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    background: conic-gradient(
+            from 270deg,
+            #ef4444 0deg 40deg,
+            transparent 40deg 46deg,
+            #f59e0b 46deg 86deg,
+            transparent 86deg 92deg,
+            #facc15 92deg 132deg,
+            transparent 132deg 138deg,
+            #22c55e 138deg 180deg,
+            #e2e8f0 180deg 360deg
+    );
+}
+
+.gauge-mask {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: #ffffff;
+}
+
+.gauge-needle-group {
+    position: absolute;
+    left: 50%;
+    bottom: 10px;
+    width: 0;
+    height: 0;
+    transform-origin: bottom center;
+    transform: translateX(-50%) rotate(0deg);
+    transition: transform 600ms cubic-bezier(0.19, 1, 0.22, 1);
+    z-index: 3;
+}
+
+.gauge-needle {
+    position: absolute;
+    left: -1px;
+    bottom: 0;
+    width: 2px;
+    height: 80px;
+    background: #0f172a;
+    border-radius: 5px 5px 0 0;
+}
+
+.gauge-center {
+    position: absolute;
+    left: 50%;
+    bottom: 2px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #0f172a;
+    transform: translateX(-50%);
+    z-index: 2;
+}
+
+.needle-value {
+    position: absolute;
+    left: 0;
+    bottom: 80px;
+    transform: translate(-50%, -8px);
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #0f172a;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    padding: 2px 8px;
+    border-radius: 999px;
+    pointer-events: none;
+    z-index: 4;
+    transition: opacity 200ms ease;
+}
+
+.gauge-needle-group:hover .needle-value {
+    opacity: 1;
+}
+
+
+.gauge-extreme {
+    position: absolute;
+    bottom: -6px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #0f172a;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    padding: 2px 8px;
+    border-radius: 999px;
+}
+
+.gauge-extreme.left {
+    left: 0;
+    transform: translateX(-10%);
+}
+
+.gauge-extreme.right {
+    right: 0;
+    transform: translateX(10%);
+}
+
+.gauge-corner-label {
+    position: absolute;
+    left: 0;
+    bottom: -26px;
+    font-size: 0.75rem;
+    color: #64748b;
+    text-align: center;
+    transform: translateX(-50%);
+}
+
+.gauge-corner-label.right {
+    left: auto;
+    right: 0;
+    text-align: center;
+    transform: translateX(50%);
+}
+
+.gauge-marker {
+    position: absolute;
+    left: 50%;
+    bottom: 10px;
+    width: 0;
+    height: 0;
+    transform-origin: bottom center;
+    z-index: 1;
+}
+
+.marker-line {
+    position: absolute;
+    left: -1px;
+    bottom: 100px;
+    width: 2px;
+    height: 12px;
+    background: #0f172a;
+}
+
+.marker-label {
+    position: absolute;
+    left: 0;
+    bottom: 115px;
+    transform: translateX(-50%);
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #0f172a;
+}
 
 .page-item.active .page-link {
   z-index: 1 !important;

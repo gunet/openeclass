@@ -395,7 +395,7 @@ if (isset($_GET['pid'])) {
     $attempt_counter = 0;
 }
 // question type text array
-$aType = array($langUniqueSelect, $langFreeText, $langMultipleSelect, $langLabel.'/'.$langComment, $langScale, $langTable, $langDateTime, $langShortAnswer, $langAIUploadFile, $langDay);
+$aType = array($langUniqueSelect, $langFreeText, $langMultipleSelect, $langLabel.'/'.$langComment, $langScale, $langTable, $langDateAndTime, $langShortAnswer, $langAIUploadFile, $langDateOnly);
 // Modify/Create poll form
 if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     if (isset($_GET['modifyPoll'])) {
@@ -520,9 +520,11 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     $pageName = isset($_GET['modifyPoll']) ? "$langEditPoll" : "$langCreatePoll";
 
     $disabledAssign = '';
-    $rec_check = Database::get()->querySingle("SELECT id FROM poll_user_record WHERE pid = ?d AND session_id = ?d", $pid, 0);
-    if ($rec_check) {
-        $disabledAssign = 'disabled';
+    if (isset($pid)) {
+        $rec_check = Database::get()->querySingle("SELECT id FROM poll_user_record WHERE pid = ?d AND session_id = ?d", $pid, 0);
+        if ($rec_check) {
+            $disabledAssign = 'disabled';
+        }
     }
 
     $tool_content .= "
@@ -982,111 +984,176 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             });
         });
         </script>";
-        $tool_content .= "
-            <div class='form-group mt-4'>
-                <div class='col-sm-12 control-label-notes'>$langType</div>
-                <div class='col-sm-12'>
-                    <div class='radio mb-1'>
-                      <label>
-                        <input type='radio' name='answerType' class='answerType' value='".QTYPE_SINGLE."' ".($answerType == QTYPE_SINGLE || !isset($question) ? 'checked' : '').">
-                        ". $aType[QTYPE_SINGLE - 1] . "
-                      </label>
-                    </div>
-                    <div class='radio mb-1'>
-                      <label>
-                        <input type='radio' name='answerType' class='answerType' value='".QTYPE_MULTIPLE."' ".($answerType == QTYPE_MULTIPLE ? 'checked' : '').">
-                        ". $aType[QTYPE_MULTIPLE - 1] . "
-                      </label>
-                    </div>";
-        if (isset($_GET['quickpoll'])) {
-            $tool_content .= "</div></div>";
+
+        $questionTypes = [
+            array('text' => $aType[QTYPE_SINGLE - 1], 'value' => QTYPE_SINGLE, 'show' => true, 'state' => ($answerType == QTYPE_SINGLE || !isset($question) ? 'selected' : '')),
+            array('text' => $aType[QTYPE_MULTIPLE - 1], 'value' => QTYPE_MULTIPLE, 'show' => true, 'state' => ($answerType == QTYPE_MULTIPLE ? 'selected' : '')),
+            array('text' => $aType[QTYPE_FILL - 1], 'value' => QTYPE_FILL, 'show' => (!isset($_GET['quickpoll']) ? true : false), 'state' => ($answerType == QTYPE_FILL ? 'selected' : '')),
+            array('text' => $aType[QTYPE_SCALE - 1], 'value' => QTYPE_SCALE, 'show' => (!isset($_GET['quickpoll']) ? true : false), 'state' => ($answerType == QTYPE_SCALE ? 'selected' : '')),
+            array('text' => $aType[QTYPE_TABLE - 1], 'value' => QTYPE_TABLE, 'show' => (!isset($_GET['quickpoll']) ? true : false), 'state' => ($answerType == QTYPE_TABLE ? 'selected' : '')),
+            array('text' => $aType[QTYPE_DATETIME - 1], 'value' => QTYPE_DATETIME, 'show' => (!isset($_GET['quickpoll']) ? true : false), 'state' => ($answerType == QTYPE_DATETIME ? 'selected' : '')),
+            array('text' => $aType[QTYPE_DATE - 1], 'value' => QTYPE_DATE, 'show' => (!isset($_GET['quickpoll']) ? true : false), 'state' => ($answerType == QTYPE_DATE ? 'selected' : '')),
+            array('text' => $aType[QTYPE_SHORT - 1], 'value' => QTYPE_SHORT, 'show' => (!isset($_GET['quickpoll']) ? true : false), 'state' => ($answerType == QTYPE_SHORT ? 'selected' : '')),
+            array('text' => $aType[QTYPE_FILE - 1], 'value' => QTYPE_FILE, 'show' => (!isset($_GET['quickpoll']) ? true : false), 'state' => ($answerType == QTYPE_FILE ? 'selected' : ''))
+        ];
+
+        $requireAnswerOn = '';
+        if ($answerType == QTYPE_SCALE) {
+            $requireAnswerOn = 'd-none';
         }
-        else {
-            $requireAnswerOn = '';
-            if ($answerType == QTYPE_SCALE) {
-                $requireAnswerOn = 'd-none';
-            }
-            $tool_content .= "
-                    <div class='radio mb-1'>
-                      <label>
-                        <input type='radio' name='answerType' class='answerType' value='".QTYPE_FILL."' ".($answerType == QTYPE_FILL ? 'checked' : '').">
-                        ". $aType[QTYPE_FILL - 1] . "
-                      </label>
-                    </div>
-                    <div class='radio mb-1'>
-                      <label>
-                        <input type='radio' name='answerType' class='answerType' value='".QTYPE_SCALE."' ".($answerType == QTYPE_SCALE ? 'checked' : '').">
-                        ". $aType[QTYPE_SCALE - 1] . "
-                      </label>
-                    </div>
-                    <div class='radio mb-1'>
-                      <label>
-                        <input type='radio' name='answerType' class='answerType' value='".QTYPE_TABLE."' ".($answerType == QTYPE_TABLE ? 'checked' : '').">
-                        ". $aType[QTYPE_TABLE - 1] . "
-                      </label>
-                    </div>
-                    <div class='radio mb-1'>
-                      <label>
-                        <input type='radio' name='answerType' class='answerType' value='".QTYPE_DATETIME."' ".($answerType == QTYPE_DATETIME ? 'checked' : '').">
-                        ". $aType[QTYPE_DATETIME - 1] . "
-                      </label>
-                    </div>
-                    <div class='radio mb-1'>
-                      <label>
-                        <input type='radio' name='answerType' class='answerType' value='".QTYPE_DATE."' ".($answerType == QTYPE_DATE ? 'checked' : '').">
-                        ". $aType[QTYPE_DATE - 1] . "
-                      </label>
-                    </div>
-                    <div class='radio mb-1'>
-                      <label>
-                        <input type='radio' name='answerType' class='answerType' value='".QTYPE_SHORT."' ".($answerType == QTYPE_SHORT ? 'checked' : '').">
-                        ". $aType[QTYPE_SHORT - 1] . "
-                      </label>
-                    </div>
-                    <div class='radio mb-1'>
-                      <label>
-                        <input type='radio' name='answerType' class='answerType' value='".QTYPE_FILE."' ".($answerType == QTYPE_FILE ? 'checked' : '').">
-                        ". $aType[QTYPE_FILE - 1] . "
-                      </label>
-                    </div>
-                </div>
-            </div>
-            <div class='form-group$questionScaleErrorClass$questionScaleShowHide mt-4'>
-                <label for='questionScale' class='col-sm-12 control-label-notes'>$langMax $langScale (1-10):</label>
-                <div class='col-12'>
-                    <input type='text' class='form-control' name='questionScale' id='questionScale' value='".q($questionScale)."'>
-                    <span class='help-block Accent-200-cl'>$questionScaleError</span>
-                </div>
-            </div>
-            <div class='form-group$questionScaleErrorClass$questionScaleShowHide mt-4'>
-                <div class='alert alert-info'>
-                    <i class='fa-solid fa-circle-info fa-lg'></i>
-                    <span>
-                        $langInfoAddSliderLabels
-                    </span>
-                </div>
-                <input type='text' class='form-control' name='answersScale' id='answerScale' value='".(!empty($question->answer_scale) ? $question->answer_scale : '')."'>
-            </div>
-            <div class='form-group mt-4 require_answer_cl $requireAnswerOn'>
-                <div class='checkbox'>
-                    <label class='label-container' aria-label='$langSelect'>
-                        <input type='checkbox' name='require_response' " . ($requiredAnswer ? 'checked' : '') . ">
-                        <span class='checkmark'></span>
-                        $langRequireAnswer
-                    </label>
-                </div>
-            </div>
-            <div class='form-group mt-3 require_grade_cl d-none'>
-                <div class='checkbox'>
-                    <label class='label-container' aria-label='$langSelect'>
-                        <input type='checkbox' name='require_grade' " . ($requiredGrade ? 'checked' : '') . ">
-                        <span class='checkmark'></span>
-                        $langScoreActivation
-                    </label>
-                </div>
-            </div>
-            ";
-        }
+
+        $tool_content .= "  <div class='form-group mt-4'>
+                                <label class='form-label' for='questionTypeId'>$langType</label>
+                                <select id='questionTypeId' class='form-select answerType' name='answerType'>";
+                                    foreach ($questionTypes as $type) {
+                                        if ($type['show']) {
+                                            $tool_content .= "<option value='". $type['value'] ."' " . $type['state'] . ">" . $type['text'] . "</option>";
+                                        }
+                                    }
+        $tool_content .= "      </select>
+                            </div>
+                            <div class='form-group$questionScaleErrorClass$questionScaleShowHide mt-4'>
+                                <label for='questionScale' class='col-sm-12 control-label-notes'>$langMax $langScale (1-10):</label>
+                                <div class='col-12'>
+                                    <input type='text' class='form-control' name='questionScale' id='questionScale' value='".q($questionScale)."'>
+                                    <span class='help-block Accent-200-cl'>$questionScaleError</span>
+                                </div>
+                            </div>
+                            <div class='form-group$questionScaleErrorClass$questionScaleShowHide mt-4'>
+                                <div class='alert alert-info'>
+                                    <i class='fa-solid fa-circle-info fa-lg'></i>
+                                    <span>
+                                        $langInfoAddSliderLabels
+                                    </span>
+                                </div>
+                                <input type='text' class='form-control' name='answersScale' id='answerScale' value='".(!empty($question->answer_scale) ? $question->answer_scale : '')."'>
+                            </div>
+                            <div class='form-group mt-4 require_answer_cl $requireAnswerOn'>
+                                <div class='checkbox'>
+                                    <label class='label-container' aria-label='$langSelect'>
+                                        <input type='checkbox' name='require_response' " . ($requiredAnswer ? 'checked' : '') . ">
+                                        <span class='checkmark'></span>
+                                        $langRequireAnswer
+                                    </label>
+                                </div>
+                            </div>
+                            <div class='form-group mt-2 require_grade_cl d-none'>
+                                <div class='checkbox'>
+                                    <label class='label-container' aria-label='$langSelect'>
+                                        <input type='checkbox' name='require_grade' " . ($requiredGrade ? 'checked' : '') . ">
+                                        <span class='checkmark'></span>
+                                        $langScoreActivation
+                                    </label>
+                                </div>
+                            </div>
+                          ";
+
+
+            // $tool_content .= "
+            //     <div class='form-group mt-4'>
+            //         <div class='col-sm-12 control-label-notes'>$langType</div>
+            //         <div class='col-sm-12'>
+            //             <div class='radio mb-1'>
+            //               <label>
+            //                 <input type='radio' name='answerType' class='answerType' value='".QTYPE_SINGLE."' ".($answerType == QTYPE_SINGLE || !isset($question) ? 'checked' : '').">
+            //                 ". $aType[QTYPE_SINGLE - 1] . "
+            //               </label>
+            //             </div>
+            //             <div class='radio mb-1'>
+            //               <label>
+            //                 <input type='radio' name='answerType' class='answerType' value='".QTYPE_MULTIPLE."' ".($answerType == QTYPE_MULTIPLE ? 'checked' : '').">
+            //                 ". $aType[QTYPE_MULTIPLE - 1] . "
+            //               </label>
+            //             </div>";
+            // if (isset($_GET['quickpoll'])) {
+            //     $tool_content .= "</div></div>";
+            // }
+            // else {
+            //     $requireAnswerOn = '';
+            //     if ($answerType == QTYPE_SCALE) {
+            //         $requireAnswerOn = 'd-none';
+            //     }
+            //     $tool_content .= "
+            //             <div class='radio mb-1'>
+            //               <label>
+            //                 <input type='radio' name='answerType' class='answerType' value='".QTYPE_FILL."' ".($answerType == QTYPE_FILL ? 'checked' : '').">
+            //                 ". $aType[QTYPE_FILL - 1] . "
+            //               </label>
+            //             </div>
+            //             <div class='radio mb-1'>
+            //               <label>
+            //                 <input type='radio' name='answerType' class='answerType' value='".QTYPE_SCALE."' ".($answerType == QTYPE_SCALE ? 'checked' : '').">
+            //                 ". $aType[QTYPE_SCALE - 1] . "
+            //               </label>
+            //             </div>
+            //             <div class='radio mb-1'>
+            //               <label>
+            //                 <input type='radio' name='answerType' class='answerType' value='".QTYPE_TABLE."' ".($answerType == QTYPE_TABLE ? 'checked' : '').">
+            //                 ". $aType[QTYPE_TABLE - 1] . "
+            //               </label>
+            //             </div>
+            //             <div class='radio mb-1'>
+            //               <label>
+            //                 <input type='radio' name='answerType' class='answerType' value='".QTYPE_DATETIME."' ".($answerType == QTYPE_DATETIME ? 'checked' : '').">
+            //                 ". $aType[QTYPE_DATETIME - 1] . "
+            //               </label>
+            //             </div>
+            //             <div class='radio mb-1'>
+            //               <label>
+            //                 <input type='radio' name='answerType' class='answerType' value='".QTYPE_DATE."' ".($answerType == QTYPE_DATE ? 'checked' : '').">
+            //                 ". $aType[QTYPE_DATE - 1] . "
+            //               </label>
+            //             </div>
+            //             <div class='radio mb-1'>
+            //               <label>
+            //                 <input type='radio' name='answerType' class='answerType' value='".QTYPE_SHORT."' ".($answerType == QTYPE_SHORT ? 'checked' : '').">
+            //                 ". $aType[QTYPE_SHORT - 1] . "
+            //               </label>
+            //             </div>
+            //             <div class='radio mb-1'>
+            //               <label>
+            //                 <input type='radio' name='answerType' class='answerType' value='".QTYPE_FILE."' ".($answerType == QTYPE_FILE ? 'checked' : '').">
+            //                 ". $aType[QTYPE_FILE - 1] . "
+            //               </label>
+            //             </div>
+            //         </div>
+            //     </div>
+            //     <div class='form-group$questionScaleErrorClass$questionScaleShowHide mt-4'>
+            //         <label for='questionScale' class='col-sm-12 control-label-notes'>$langMax $langScale (1-10):</label>
+            //         <div class='col-12'>
+            //             <input type='text' class='form-control' name='questionScale' id='questionScale' value='".q($questionScale)."'>
+            //             <span class='help-block Accent-200-cl'>$questionScaleError</span>
+            //         </div>
+            //     </div>
+            //     <div class='form-group$questionScaleErrorClass$questionScaleShowHide mt-4'>
+            //         <div class='alert alert-info'>
+            //             <i class='fa-solid fa-circle-info fa-lg'></i>
+            //             <span>
+            //                 $langInfoAddSliderLabels
+            //             </span>
+            //         </div>
+            //         <input type='text' class='form-control' name='answersScale' id='answerScale' value='".(!empty($question->answer_scale) ? $question->answer_scale : '')."'>
+            //     </div>
+            //     <div class='form-group mt-4 require_answer_cl $requireAnswerOn'>
+            //         <div class='checkbox'>
+            //             <label class='label-container' aria-label='$langSelect'>
+            //                 <input type='checkbox' name='require_response' " . ($requiredAnswer ? 'checked' : '') . ">
+            //                 <span class='checkmark'></span>
+            //                 $langRequireAnswer
+            //             </label>
+            //         </div>
+            //     </div>
+            //     <div class='form-group mt-3 require_grade_cl d-none'>
+            //         <div class='checkbox'>
+            //             <label class='label-container' aria-label='$langSelect'>
+            //                 <input type='checkbox' name='require_grade' " . ($requiredGrade ? 'checked' : '') . ">
+            //                 <span class='checkmark'></span>
+            //                 $langScoreActivation
+            //             </label>
+            //         </div>
+            //     </div>
+            //     ";
+            // }
     }
 
     $tool_content .= "

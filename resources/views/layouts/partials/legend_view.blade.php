@@ -9,14 +9,14 @@
 @endphp
 
 @if (!isset($_GET['fromFlipped']))
-    <h1 class='sr-only'>
+    <h1 class='visually-hidden'>
         @if($course_code)
             {{ trans('langCourse') }} : {{ $currentCourseName }}
         @elseif($pageTitle)
             {{ $pageTitle }}
         @endif
     </h1>
-    <h2 class='sr-only'>
+    <h2 class='visually-hidden'>
         @if($course_code)
             {{ trans('langCode') }} : {{ $course_code }}
         @elseif($pageName)

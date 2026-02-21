@@ -87,11 +87,11 @@ function login_form($format='main') {
                     'title' => empty($l->auth_title)? "$langLogInWith<br>Credentials": q(getSerializedMessage($l->auth_title)),
                     'html' => "<form action='$urlServer' method='post'>
                              <div class='form-group'>
-                                <label for='uname' class='sr-only'>$langUsername</label>
+                                <label for='uname' class='visually-hidden'>$langUsername</label>
                                 <input type='text' id='uname' name='uname' placeholder='$langUsername' $autofocus><span class='col-xs-2 col-sm-2 col-md-2 fa fa-user'></span>
                              </div>
                              <div class='form-group'>
-                                <label for='pass' class='sr-only'>$langPass</label>
+                                <label for='pass' class='visually-hidden'>$langPass</label>
                                 <input type='password' id='pass' name='pass' placeholder='$langPass'><span id='revealPass' class='fa fa-eye' style='margin-left: -20px; color: black;'></span>&nbsp;&nbsp;<span class='col-xs-2 col-sm-2 col-md-2 fa fa-lock'></span>
                              </div>
                              <button type='submit' name='submit' class='btn btn-login'>$langEnter</button>

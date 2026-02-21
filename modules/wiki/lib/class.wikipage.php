@@ -37,6 +37,7 @@ class WikiPage {
     var $lastEditorId = 0;      // attr_accessor:
     var $lastEditTime = '';     // attr_reader:
     var $lastVersionId = 0;     // attr_reader:
+    var $currentVersionId = 0;
     var $wikiId = 0;            // attr_reader:
     var $currentVersionMtime = '1970-01-01 00:00:01'; // attr_reader:
     var $currentVersionEditorId = 0; // attr_reader:
