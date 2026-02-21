@@ -54,7 +54,7 @@ function getUserCourseInfo($uid): string
     if(!get_config('show_always_collaboration')){
         if ($myCourses) {
             $lesson_content .= "<table id='portfolio_lessons' class='table portfolio-courses-table'>";
-            $lesson_content .= "<thead class='sr-only'><tr><th>$langCourse</th><th>$langActions</th></tr></thead>";
+            $lesson_content .= "<thead class='visually-hidden'><tr><th>$langCourse</th><th>$langActions</th></tr></thead>";
             foreach ($myCourses as $data) {
 
                 $courses[$data->code] = $data->status;
@@ -219,7 +219,7 @@ function getUserCourseInfo($uid): string
             </div>";}
         if($myCollaborations){
                 $lesson_content .= "<table id='portfolio_collaborations' class='table portfolio-collaborations-table'>";
-                $lesson_content .= "<thead class='sr-only'><tr><th>$langCourse</th><th>$langActions</th></tr></thead>";
+                $lesson_content .= "<thead class='visually-hidden'><tr><th>$langCourse</th><th>$langActions</th></tr></thead>";
                 foreach ($myCollaborations as $data) {
 
                     $collaborations[$data->code] = $data->status;

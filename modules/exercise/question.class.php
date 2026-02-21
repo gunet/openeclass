@@ -818,6 +818,25 @@ class Question {
             }
         }
 
+        public function getCertaintyLegend2($cw ,$certainty)
+        {
+            global $langMastery, $langUnderconfident, $langGuessingRight, $langMisconception, $langGuessingWrong, $langKnownGap;
+
+            if ($cw == 1) {
+                switch ($certainty) {
+                    case 1: return $langMastery;
+                    case 2: return $langUnderconfident;
+                    case 3: return $langGuessingRight;
+                }
+            } else {
+                switch ($certainty) {
+                    case 1: return $langMisconception;
+                    case 2: return $langGuessingWrong;
+                    case 3: return $langKnownGap;
+                }
+            }
+
+        }
 
         /**
          * @brief Calculate success rate only in FREE TEXT type questions

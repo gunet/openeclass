@@ -652,7 +652,7 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COU
                                                     $answers_table .= "<td>$answer->wgt</td>";
                                                 }
                                                 if (!$thePoll->anonymized) {
-                                                    $answers_table .= "<td>" . $ellipsized_names_str;
+                                                    $answers_table .= "<td>" . ((isset($_GET['format']) && $_GET['format'] == 'poll_pdf') ? $names_str : $ellipsized_names_str);
                                                     if ($ellipsized_names_str != $names_str) {
                                                         $answers_table .= ' <a href="#" class="trigger_names" data-type="multiple" id="show">' . $langViewShow . '</a>';
                                                     }
@@ -786,7 +786,7 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COU
                                                 <td>$percentage%</td>"
                                             . (($thePoll->anonymized == 1) ?
                                                 '' :
-                                                '<td>'.$ellipsized_names_str.
+                                                '<td>'.((isset($_GET['format']) && $_GET['format'] == 'poll_pdf') ? $names_str : $ellipsized_names_str).
                                                 (($ellipsized_names_str != $names_str)? ' <a href="#" class="trigger_names" data-type="multiple" id="show">'.$langViewShow.'</a>' : '').
                                                 '</td>
                                                 <td class="hidden_names" style="display:none;"><em>'
@@ -887,7 +887,7 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COU
                                 $row_class = ($k>3) ? 'class="hidden_row" style="display:none;"' : '';
                                 $extra_column = (!$thePoll->anonymized)?
                                     "<td>"
-                                    . $ellipsized_names_str
+                                    . ((isset($_GET['format']) && $_GET['format'] == 'poll_pdf') ? $names_str : $ellipsized_names_str)
                                     . (($ellipsized_names_str != $names_str) ? ' <a href="#" class="trigger_names" data-type="multiple" id="show">'.$langViewShow.'</a>' : '').
                                     "</td>
                                         <td class='hidden_names' style='display:none;'><em>"
@@ -1092,6 +1092,7 @@ function pdf_poll_output() {
             td { text-align: left; }
             .ButtonsContent{ display: none; }
             .hidden_names{ display: none; }
+            .trigger_names{display: none;}
             #hide{ display: none; }
             em{ display: none; }
             .hidden-element { display: none; }
