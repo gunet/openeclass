@@ -50,11 +50,13 @@ $grade_stats = Database::get()->querySingle("SELECT COUNT(DISTINCT uid) AS uniqu
                                                 MAX(total_score) AS max_grade 
                                             FROM exercise_user_record WHERE eid = ?d 
                                                 AND attempt_status = ?d", $exerciseId, ATTEMPT_COMPLETED);
+$total_grade = $objExercise->selectTotalWeighting();
 $max_grade = $grade_stats->max_grade;
 $min_grade = $grade_stats->min_grade;
 $avg_grade = $grade_stats->avg_grade;
 $avg_time = $grade_stats->avg_time;
 $unique_users = $grade_stats->unique_users;
+$total_users = Database::get()->querySingle("SELECT COUNT(DISTINCT uid) AS count FROM exercise_user_record WHERE eid = ?d", $exerciseId)->count;
 
 //average number of attempts
 //avg completion time
@@ -64,37 +66,162 @@ $tool_content .= "
         <div class='card-header border-0 d-flex justify-content-between align-items-center'>
             <h3>" . $objExercise->selectTitle() . "</h3>
         </div>
-        <div class='card-body'>
-            <div class='row row-cols-1 g-3'>
-                <div class='col-12'>
-                <h5>$langAttempts ($total_attempts $langSumFrom)</h5>
-                    $langAttemptsCompleted: <strong>$completedAttempts</strong>,                            
-                    $langAttemptsPaused: <strong>$pausedAttempts</strong>,
-                    $langAttemptPending: <strong>$pendingAttempts</strong>,
-                    $langAttemptsCanceled: <strong>$cancelledAttempts</strong>                   
-                </div>                          
+        <div class='row g-3'>
+        
+            <div class='col-12 col-md-4'>
+              <div class='border rounded p-2 h-100'>
+                <div class='row row-cols-1 g-3'>
+                    <div class='col-12'>
+                        <h5>$langAttempts ($total_attempts $langSumFrom)</h5>
+                        <div class='progress mb-3' style='height: 30px;'>
+                            <div class='progress-bar bg-success' role='progressbar'
+                                 style='width: " . ($completedAttempts + $pausedAttempts + $pendingAttempts > 0 ? round(($completedAttempts / ($completedAttempts + $pausedAttempts + $pendingAttempts)) * 100, 1) : 0) . "%;'
+                                 aria-valuenow='$completedAttempts' aria-valuemin='0' aria-valuemax='" . ($completedAttempts + $pausedAttempts + $pendingAttempts) . "'>
+                                $completedAttempts
+                            </div>
+                            <div class='progress-bar bg-warning' role='progressbar'
+                                 style='width: " . ($completedAttempts + $pausedAttempts + $pendingAttempts > 0 ? round(($pausedAttempts / ($completedAttempts + $pausedAttempts + $pendingAttempts)) * 100, 1) : 0) . "%;'
+                                 aria-valuenow='$pausedAttempts' aria-valuemin='0' aria-valuemax='" . ($completedAttempts + $pausedAttempts + $pendingAttempts) . "'>
+                                $pausedAttempts
+                            </div>
+                            <div class='progress-bar bg-info' role='progressbar'
+                                 style='width: " . ($completedAttempts + $pausedAttempts + $pendingAttempts > 0 ? round(($pendingAttempts / ($completedAttempts + $pausedAttempts + $pendingAttempts)) * 100, 1) : 0) . "%;'
+                                 aria-valuenow='$pendingAttempts' aria-valuemin='0' aria-valuemax='" . ($completedAttempts + $pausedAttempts + $pendingAttempts) . "'>
+                                $pendingAttempts
+                            </div>
+                        </div>
+                        $langAttemptsCompleted: <strong>$completedAttempts</strong><br>
+                        $langAttemptsPaused: <strong>$pausedAttempts</strong><br>
+                        $langAttemptPending: <strong>$pendingAttempts</strong><br>
+                        $langAttemptsCanceled: <strong>$cancelledAttempts</strong><br>
+                    </div>                          
+                </div>
+              </div>
             </div>
-        </div>
-        <div class='card-body'>
-            <div class='row row-cols-1 g-3'>
-                <div class='col-12'>
-                <h5>$langScore</h5>
-                    $langHighestGrade: <strong>$max_grade</strong>,                            
-                    $langLowestGrade: <strong>$min_grade</strong>,
-                    $langRatingAverage: <strong>$avg_grade</strong>                   
-                </div>                          
+            
+            <div class='col-12 col-md-4'>
+              <div class='border rounded p-2 h-100'>
+                <div class='row row-cols-1 g-3'>
+                    <div class='col-12'>
+                    <h5>$langScore</h5>
+                    
+                    <div class='gauge-container'>
+                      <div class='gauge-wrap' aria-label='Score gauge'>
+                        <div class='gauge-clip'>
+                          <div class='gauge-arc'></div>
+                          <div class='gauge-mask'></div>
+                        </div>
+                        <div class='gauge-needle-group' id='needleGroup'>
+                          <div class='gauge-needle'></div>
+                          <div class='needle-value' id='avgNeedleValue'>$avg_grade</div>
+                        </div>
+                        <div class='gauge-marker' id='sminMarker'>
+                          <div class='marker-line'></div>
+                          <div class='marker-label'>$min_grade</div>
+                        </div>
+                        <div class='gauge-marker' id='smaxMarker'>
+                          <div class='marker-line'></div>
+                          <div class='marker-label'>$max_grade</div>
+                        </div>
+                        <div class='gauge-center'></div>
+                        <div class='gauge-extreme left' id='minGaugeValue'>0.00</div>
+                        <div class='gauge-extreme right' id='maxGaugeValue'>$total_grade</div>
+                    </div>
+                    <script>
+                      const minGaugeValueEl = document.getElementById('minGaugeValue');
+                      const maxGaugeValueEl = document.getElementById('maxGaugeValue');
+                      const avgNeedleValueEl = document.getElementById('avgNeedleValue');
+                      const needleGroupEl = document.getElementById('needleGroup');
+                
+                      const formatScore = (value) => Number(value).toFixed(2);
+                
+                      function updateMarkers(smin, smax, min, max) {
+                        const sminMarkerEl = document.getElementById('sminMarker');
+                        const smaxMarkerEl = document.getElementById('smaxMarker');
+                        const span = max - min;
+                
+                        if (sminMarkerEl) {
+                          const sminRatio = span > 0 ? (smin - min) / span : 0;
+                          const sminDeg = -90 + Math.min(Math.max(sminRatio, 0), 1) * 180;
+                          sminMarkerEl.style.transform = 'translateX(-50%) rotate(' + sminDeg + 'deg)';
+                          sminMarkerEl.querySelector('.marker-label').textContent = smin;
+                        }
+                
+                        if (smaxMarkerEl) {
+                          const smaxRatio = span > 0 ? (smax - min) / span : 0;
+                          const smaxDeg = -90 + Math.min(Math.max(smaxRatio, 0), 1) * 180;
+                          smaxMarkerEl.style.transform = 'translateX(-50%) rotate(' + smaxDeg + 'deg)';
+                          smaxMarkerEl.querySelector('.marker-label').textContent = smax;
+                        }
+                      }
+                      
+                      function updateGauge(value, min, max) {
+                        minGaugeValueEl.textContent = formatScore(min);
+                        maxGaugeValueEl.textContent = formatScore(max);
+                        avgNeedleValueEl.textContent = formatScore(value);
+                
+                        const span = max - min;
+                        const relativeValue = span > 0 ? (value - min) / span : 0.5;
+                        const needleRatio = Math.min(Math.max(relativeValue, 0), 1);
+                        
+                        // The gauge is a semi-circle (180 degrees). We map the value to a rotation
+                        // from -90 degrees (minimum) to +90 degrees (maximum).
+                        const needleDeg = -90 + needleRatio * 180;
+                        
+                        if (needleGroupEl) {
+                          needleGroupEl.style.transform = 'translateX(-50%) rotate(' + needleDeg + 'deg)';
+                        }
+                      }
+                
+                      const fixedMin = 0;
+                      const fixedMax = " . $total_grade . ";
+                      const fixedScore = " . $avg_grade . ";
+                      const fixedSMin = " . $min_grade . ";
+                      const fixedSMax = " . $max_grade . ";
+                
+                      // Run on page load with fixed values
+                      function initializeGauge() {
+                        updateGauge(fixedScore, fixedMin, fixedMax);
+                        updateMarkers(fixedSMin, fixedSMax, fixedMin, fixedMax);
+                      }
+                      
+                      initializeGauge();
+                    </script>
+                      
+                    </div>
+                        $langLowestGrade: <strong>$min_grade</strong><br>
+                        $langHighestGrade: <strong>$max_grade</strong>             
+                    </div>                          
+                </div>
+              </div>
             </div>
+            
+            <div class='col-12 col-md-4'>
+                <div class='d-flex flex-column gap-2 h-100'>
+                    
+                    <div class='border p-3 flex-fill bg-white rounded'>
+                        <h5 class='text-muted'>$langStudentsExerciseCompleted</h5>
+                        <div class='h5 fw-bold mb-0'>
+                            $unique_users
+                        </div>
+                        <h5 class='text-muted mt-4'>$langStudents</h5>
+                        <div class='h5 fw-bold mb-0'>
+                            $total_users
+                        </div>
+                    </div>
+                    
+                    <div class='border p-3 flex-fill bg-white rounded'>
+                        <h5 class='text-muted mb-2'>$langAverage $langExerciseDuration</h5>
+                        <div class='h5 fw-bold mb-0'>
+                            " . format_time_duration($avg_time) . "
+                        </div>
+                    </div>
+            
+                </div>
+            </div>
+           
         </div>
         
-        <div class='card-body'>
-            <div class='row row-cols-1 g-3'>
-                <div class='col-12'>
-                <h5>$langStudents</h5>
-                    $langStudentsExerciseCompleted: <strong>$unique_users</strong>,                            
-                    $langAverage $langExerciseDuration: <strong>" . format_time_duration($avg_time) . "</strong>,                                   
-                </div>                          
-            </div>
-        </div>        
     </div>
 ";
 
@@ -106,18 +233,21 @@ $tool_content .= "
     <div class='col-12 mt-4'>
         <div class='card panelCard card-default px-lg-4 py-lg-3'>
             <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                <h3>$langQuestions</h3>                
-            </div>
+                <h3>$langQuestions</h3>";
+                if ($exerciseCalcGradeMethod == CALC_GRADE_METHOD_CERTAINTY_BASED) {
+                    $tool_content .= "
+                                <div class='d-flex gap-1'>
+                                    <button class='btn submitAdminBtn gradeMethodBtn'>".$langGradeMethod."</button>
+                                </div>";
+                }
+$tool_content .= "</div>
             <div class='card-body'>            
                 <div class='table-responsive mt-0'>
                     <table class='table-default'>
                         <thead>
                             <tr class='list-header'>
                                 <th>$langTitle</th>
-                                <th>$langSuccessPercentage</th>";
-                                if ($exerciseCalcGradeMethod == CALC_GRADE_METHOD_CERTAINTY_BASED) {
-                                    $tool_content .= "<th>$langCertaintyPercentage</th>";
-                                }
+                                <th style='width: 200px;'>$langSuccessPercentage</th>";
                             $tool_content .= "
                             </tr>
                         </thead>
@@ -157,28 +287,36 @@ $tool_content .= "
                                     $tool_content .= "
                                          <tr>
                                              <td>" . q_math($objQuestionTmp->selectTitle()) . "</td>";
-                                                if ($exerciseCalcGradeMethod == CALC_GRADE_METHOD_CERTAINTY_BASED) {
-                                                    $tool_content .= "<td style='width: 10%';><strong>" . $objQuestionTmp->successRate($exerciseId) . "</strong> %</td>";
-                                                    $tool_content .= "<td>";
-                                                    $tool_content .= "<span class='p-2' style='color: green;'>$langCorrect</span>";
-                                                    foreach ($correctCertaintyBased as $data) {
-                                                        $tool_content .= "&nbsp;&nbsp;" . $objQuestionTmp->getCertaintyLegend($data['certainty']) . ":&nbsp;" . $data['count'] . "&nbsp;";
-                                                    }
-                                                    $tool_content .= "<br><span class='p-2' style='color: red;'>$langIncorrect</span>";
-                                                    foreach ($wrongCertaintyBased as $key => $data) {
-                                                        $tool_content .= "&nbsp;&nbsp;" . $objQuestionTmp->getCertaintyLegend($data['certainty']) . ":&nbsp; " . $data['count'] . "&nbsp;";
-                                                    }
-                                                    $tool_content .= "</td>";
-                                                } else {
-                                                    $tool_content .= "<td>
+                                                $tool_content .= "<td>
                                                              <div class='progress'>
                                                                  <div class='progress-bar progress-bar-success progress-bar-striped' role='progressbar' aria-valuenow='" . $objQuestionTmp->successRate($exerciseId) . "' aria-valuemin='0' aria-valuemax='100' style='width: " . $objQuestionTmp->successRate($exerciseId) . "%;'>
                                                                    " . $objQuestionTmp->successRate($exerciseId) . "%
                                                                  </div>
-                                                             </div>
-                                                         </td>";
-                                                }
+                                                             </div>";
+                                                $tool_content .= "</td>";
                                              $tool_content .= "</tr>";
+                                            if ($exerciseCalcGradeMethod == CALC_GRADE_METHOD_CERTAINTY_BASED) {
+                                                $tool_content .= "<tr class='certaintyPercentageTR d-none'><td colspan='2'><div class='d-flex align-items-center'>";
+                                                $tool_content .= "<div>".$langGradeMethod.":</div><div class='flex-grow-1 d-flex'>";
+                                                $total_answers = 0;
+
+                                                foreach ($correctCertaintyBased as $data) {
+                                                    $total_answers += $data['count'];
+                                                }
+                                                foreach ($wrongCertaintyBased as $data) {
+                                                    $total_answers += $data['count'];
+                                                }
+
+                                                foreach ($correctCertaintyBased as $data) {
+                                                    $percentage = $total_answers > 0 ? round(($data['count'] / $total_answers) * 100, 1) : 0;
+                                                    $tool_content .= "<div class='bg-success text-white text-center rounded px-2 mx-1 d-flex justify-content-center align-items-center' style='font-size: 12px;width: " . $percentage . "%;'>" . $objQuestionTmp->getCertaintyLegend2(1, $data['certainty']) . " " . $percentage . "% (" . $data['count'] . ")</div>";
+                                                }
+                                                foreach ($wrongCertaintyBased as $key => $data) {
+                                                    $percentage = $total_answers > 0 ? round(($data['count'] / $total_answers) * 100, 1) : 0;
+                                                    $tool_content .= "<div class='bg-danger text-white text-center rounded px-2 mx-1 d-flex justify-content-center align-items-center' style='font-size: 12px;width: " . $percentage . "%;'>" . $objQuestionTmp->getCertaintyLegend2(0, $data['certainty']) . " " . $percentage . "% (" . $data['count'] . ")</div>";
+                                                }
+                                                $tool_content .= "</div></div></td></tr>";
+                                            }
                                 }
                             }
 
@@ -189,5 +327,21 @@ $tool_content .= "
             </div>
         </div>
     </div>";
+
+if ($exerciseCalcGradeMethod == CALC_GRADE_METHOD_CERTAINTY_BASED) {
+    $tool_content .= "
+        <script>
+            const gradeMethodBtn = document.querySelector('.gradeMethodBtn');
+            const certaintyPercentageTR = document.querySelectorAll('.certaintyPercentageTR');
+            gradeMethodBtn.addEventListener('click', () => {
+                gradeMethodBtn.classList.toggle('submitAdminBtnDefault');
+                gradeMethodBtn.classList.toggle('submitAdminBtn');
+                certaintyPercentageTR.forEach((el) => {
+                    el.classList.toggle('d-none');
+                });
+            });
+            
+        </script>";
+}
 
 draw($tool_content, 2, null, $head_content);

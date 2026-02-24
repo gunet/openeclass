@@ -2893,7 +2893,7 @@ function icon($name, $title = null, $link = null, $link_attrs = '', $with_title 
         $extra = '';
     }
     if (isset($title) && $with_title) {
-        $img = $sr_only ? "<span class='fa $name' $extra></span><span class='sr-only'>$title</span>" : "<span class='fa $name' $extra></span> $title";
+        $img = $sr_only ? "<span class='fa $name' $extra></span><span class='visually-hidden'>$title</span>" : "<span class='fa $name' $extra></span> $title";
     } else {
         $img = "<span class='fa $name' $extra></span>";
     }
