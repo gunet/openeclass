@@ -31,6 +31,10 @@ $pageName = $langIndividuals;
 $pid = intval($_GET['pid']);
 $thePoll = Database::get()->querySingle("SELECT * FROM poll WHERE course_id = ?d AND pid = ?d ORDER BY pid", $course_id, $pid);
 
+if (!$thePoll or $thePoll->anonymized) {
+    redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
+}
+
 // Results per user
 $r_users = [];
 if ($thePoll->assign_to_specific == 1) { // specific users
