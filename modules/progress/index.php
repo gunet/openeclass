@@ -490,7 +490,7 @@ $head_content .= "
 }
 
 /* ============================================
-                PROGRESS BAR 
+                        PROGRESS BAR 
    ============================================ */
 
 .progress-module .card .progress {
@@ -1142,7 +1142,12 @@ if (isset($display) and $display) {
     if ($is_course_reviewer) {
         if (isset($element_id)) {
             $pageName = $element_title;
-            
+            if ($is_editor && $element == 'badge') {
+                $bundle_check = Database::get()->querySingle("SELECT bundle FROM badge WHERE id = ?d", $element_id);
+                if ($bundle_check && $bundle_check->bundle == -1) {
+                    $pageName = '  ';
+                }
+            }
             // Normal detail view
             $action_buttons = array(
                 array('title' => $langBack,

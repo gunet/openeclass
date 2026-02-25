@@ -3257,8 +3257,8 @@ function display_settings($element, $element_id, $unit_id = 0): void
                         </div>
                     </div>
                 </div>";
-    } else { // course completion
-        if (!$unit_id) {
+    }  else { 
+        if (!$unit_id && !$is_editor) {
             $tool_content .= "
             <div class='col-12'>
                 <div class='card panelCard card-default px-lg-4 py-lg-3'>
