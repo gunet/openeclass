@@ -2394,7 +2394,7 @@ $langSure = "Σίγουρος";
 $langNotSure = "Δεν είμαι σίγουρος";
 $langNotKnow = "Δεν γνωρίζω";
 
-$langMastery = "Πλήρης κατανόηση";
+$langMastery = "Κατανόηση";
 $langMasteryTooltip = "Απάντησαν σωστά και με βεβαιότητα.";
 $langUnderconfident = "Διστακτικότητα";
 $langUnderconfidentTooltip = "Απάντησαν σωστά, αλλά δεν ένιωθαν σιγουριά.";
@@ -2404,7 +2404,7 @@ $langMisconception = "Παρανόηση";
 $langMisconceptionTooltip = "Απάντησαν λάθος, ενώ πίστευαν πως ήταν σωστό.";
 $langGuessingWrong = "Λάθος εικασία";
 $langGuessingWrongTooltip = "Απάντησαν στην τύχη και ήταν λάθος.";
-$langKnownGap = "Επίγνωση άγνοιας";
+$langKnownGap = "Άγνοια";
 $langKnownGapTooltip = "Απάντησαν λάθος, έχοντας δηλώσει πως δεν το γνωρίζουν.";
 
 // exercise_submit.php

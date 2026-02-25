@@ -306,7 +306,7 @@ $tool_content .= "</div>
                                              $tool_content .= "</tr>";
                                     if ($exerciseCalcGradeMethod == CALC_GRADE_METHOD_CERTAINTY_BASED) {
 
-                                        $tool_content .= "<tr class='certaintyPercentageTR d-none' style='border: none !important;'><td colspan='2' style='padding-top: 0;'>
+                                        $tool_content .= "<tr class='certaintyPercentageTR d-none' style='border: none !important;'><td colspan='2' style='padding: 0px 10px 15px;'>
                                                         <div class='row g-1 w-100 m-0'>";
 
                                         $total_answers = 0;
