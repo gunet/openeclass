@@ -204,22 +204,19 @@ if (isset($_GET['from_session_view'])) {
                         'url' => "$back_link",
                         'icon' => 'fa-reply',
                         'level' => 'primary',
-                        'show' => isset($_REQUEST['unit_id'])
-                    ),
+                        'show' => isset($_REQUEST['unit_id'])),
                     array(
                         'title' => $langBack,
                         'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;pid=$pid",
                         'icon' => 'fa-reply',
                         'level' => 'primary',
-                        'show' => isset($_GET['chart'])
-                    ),
+                        'show' => isset($_GET['chart'])),
                     array(
                         'title' => $langBack,
                         'url' => "pollresults_per_user.php?course=$course_code&amp;pid=$pid",
                         'icon' => 'fa-reply',
                         'level' => 'primary',
-                        'show' => isset($_GET['res_per_u'])
-                    ),
+                        'show' => isset($_GET['res_per_u']) && $thePoll->show_results),
                     array('title' => "$langCharts",
                           'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;pid=$pid&amp;chart=true",
                           'icon' => 'fa-solid fa-chart-area',
@@ -229,7 +226,7 @@ if (isset($_GET['from_session_view'])) {
                           'url' => "pollresults_per_user.php?course=$course_code&amp;pid=$pid",
                           'icon' => 'fa-address-card',
                           'level' => 'primary-label',
-                          'show' => !isset($_GET['chart']) && !isset($_GET['res_per_u']) && $is_editor),
+                          'show' => !isset($_GET['chart']) && !isset($_GET['res_per_u']) && $thePoll->show_results && $is_editor),
                     array('title' => "$langPollPercentResults ($langDumpExcel)",
                           'url' => "dumppollresults.php?course=$course_code&amp;pid=$pid$res_per_user",
                           'icon' => 'fa-file-excel',
