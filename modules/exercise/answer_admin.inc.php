@@ -2225,6 +2225,59 @@ if (isset($_GET['modifyAnswers'])) {
         if ($answerType == CALCULATED && !$modifyWildCards) {
             $hiddenClass = 'd-none';
         }
+        $tool_content .= "
+            <script>
+            $(document).ready(function() {
+                function validateAllWeightings() {
+                    var hasProblem = false;
+            
+                    // Ελέγχουμε όλα τα inputs που το όνομά τους ξεκινάει από weighting
+                    $('input[name^=\"weighting\"]').each(function() {
+                        var weightInput = $(this);
+                        var weightValue = parseFloat(weightInput.val());
+                        
+                        // Παίρνουμε το ID από το name π.χ. weighting[2] -> 2
+                        var nameAttr = weightInput.attr('name');
+                        var id = nameAttr.match(/\\d+/)[0];
+                        
+                        // Ελέγχουμε αν το αντίστοιχο radio είναι επιλεγμένο
+                        var isRadioSelected = $('input[name=\"correct\"][value=\"' + id + '\"]').is(':checked');
+            
+                        if (weightValue > 0 && !isRadioSelected) {
+                            weightInput.css('border', '2px solid orange');
+                            hasProblem = true; // Βρέθηκε τουλάχιστον ένα πρόβλημα
+                        } else {
+                            weightInput.css('border', '');
+                        }
+                    });
+            
+                    // Εμφάνιση ή απόκρυψη του μοναδικού div με βάση το αποτέλεσμα
+                    if (hasProblem) {
+                        $('.negativeAnswer').removeClass('d-none');
+                    } else {
+                        $('.negativeAnswer').addClass('d-none');
+                    }
+                }
+            
+                // Όταν αλλάζει οποιοδήποτε weighting input
+                $(document).on('input', 'input[name^=\"weighting\"]', function() {
+                    validateAllWeightings();
+                });
+            
+                // Όταν αλλάζει η επιλογή στο radio button
+                $(document).on('change', 'input[name=\"correct\"]', function() {
+                    validateAllWeightings();
+                });
+                
+                // Προαιρετικό: Έλεγχος και κατά το φόρτωμα της σελίδας
+                validateAllWeightings();
+            });
+            </script>
+            
+            <div class='negativeAnswer col-12 d-flex justify-content-between align-items-center gap-3 flex-wrap d-none' style='background-color: #fff3cd; color: #856404; padding: 15px; border: 1px solid #ffeeba; border-radius: 4px; margin-top: 10px;'>
+                $langNegativeGrading
+            </div>
+            ";
 
         $tool_content .= "
                         <div class='col-12 d-flex justify-content-between align-items-center gap-3 flex-wrap $hiddenClass mt-4'>

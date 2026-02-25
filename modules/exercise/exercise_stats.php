@@ -285,7 +285,7 @@ $tool_content .= "</div>
                                     $correctCertaintyBased = $objQuestionTmp->certaintyBasedResults($exerciseId, true);
                                     $wrongCertaintyBased = $objQuestionTmp->certaintyBasedResults($exerciseId, false, true);
                                     $tool_content .= "
-                                         <tr>
+                                         <tr style='border-top: solid 1px #EFF6FF;border-bottom: none!important;'>
                                              <td>" . q_math($objQuestionTmp->selectTitle()) . "</td>";
                                                 $tool_content .= "<td>
                                                              <div class='progress'>
@@ -296,8 +296,8 @@ $tool_content .= "</div>
                                                 $tool_content .= "</td>";
                                              $tool_content .= "</tr>";
                                             if ($exerciseCalcGradeMethod == CALC_GRADE_METHOD_CERTAINTY_BASED) {
-                                                $tool_content .= "<tr class='certaintyPercentageTR d-none'><td colspan='2'><div class='d-flex align-items-center'>";
-                                                $tool_content .= "<div>".$langGradeMethod.":</div><div class='flex-grow-1 d-flex'>";
+                                                $tool_content .= "<tr class='certaintyPercentageTR d-none' style='border: none !important;'><td colspan='2'><div class='d-flex align-items-center'>";
+//                                                $tool_content .= "<div>".$langGradeMethod.":</div><div class='flex-grow-1 d-flex'>";
                                                 $total_answers = 0;
 
                                                 foreach ($correctCertaintyBased as $data) {
@@ -309,11 +309,11 @@ $tool_content .= "</div>
 
                                                 foreach ($correctCertaintyBased as $data) {
                                                     $percentage = $total_answers > 0 ? round(($data['count'] / $total_answers) * 100, 1) : 0;
-                                                    $tool_content .= "<div class='bg-success text-white text-center rounded px-2 mx-1 d-flex justify-content-center align-items-center' style='font-size: 12px;width: " . $percentage . "%;'>" . $objQuestionTmp->getCertaintyLegend2(1, $data['certainty']) . " " . $percentage . "% (" . $data['count'] . ")</div>";
+                                                    $tool_content .= "<div class='text-black text-center rounded px-2 mx-1 d-flex justify-content-center align-items-center' style='font-size: 10px;width: 16%;border: solid 1px #198754;background-color: #19875435;'>" . $objQuestionTmp->getCertaintyLegend2(1, $data['certainty']) . " " . $percentage . "%</div>";
                                                 }
                                                 foreach ($wrongCertaintyBased as $key => $data) {
                                                     $percentage = $total_answers > 0 ? round(($data['count'] / $total_answers) * 100, 1) : 0;
-                                                    $tool_content .= "<div class='bg-danger text-white text-center rounded px-2 mx-1 d-flex justify-content-center align-items-center' style='font-size: 12px;width: " . $percentage . "%;'>" . $objQuestionTmp->getCertaintyLegend2(0, $data['certainty']) . " " . $percentage . "% (" . $data['count'] . ")</div>";
+                                                    $tool_content .= "<div class='text-black text-center rounded px-2 mx-1 d-flex justify-content-center align-items-center' style='font-size: 10px;width: 16%;border: solid 1px #dc3545;background-color: #dc354535;'>" . $objQuestionTmp->getCertaintyLegend2(0, $data['certainty']) . " " . $percentage . "%</div>";
                                                 }
                                                 $tool_content .= "</div></div></td></tr>";
                                             }

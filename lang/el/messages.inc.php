@@ -2094,6 +2094,7 @@ $langExerciseWillBeCanceledInStrictMode = "Η εξέταση ακυρώνετα�
 $langExerciseNoCalcGradeMethod = "Κανονικός";
 $langExerciseCBCalcGradeMethod = "Με βαθμό βεβαιότητας";
 $langExerciseCalcGradeMethod = "Τρόπος Βαθμολόγησης";
+$langNegativeGrading = "Προσοχή, έχετε δώσει θετικό βαθμό σε λανθασμένη απάντηση. Αν επιθυμείτε αρνητική βαθμολόγηση βάλτε αρνητικό αριθμό.";
 
 // admin.php
 $langExerciseManagement = "Διαχείριση Άσκησης";
