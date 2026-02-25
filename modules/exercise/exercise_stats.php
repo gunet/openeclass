@@ -305,8 +305,7 @@ $tool_content .= "</div>
                                                 $tool_content .= "</td>";
                                              $tool_content .= "</tr>";
                                     if ($exerciseCalcGradeMethod == CALC_GRADE_METHOD_CERTAINTY_BASED) {
-                                        // 1. Το κεντρικό container γίνεται 'row'.
-                                        // Το 'g-2' προσθέτει ομοιόμορφα κενά (gaps) ανάμεσα στα κουτάκια, τόσο οριζόντια όσο και κάθετα.
+
                                         $tool_content .= "<tr class='certaintyPercentageTR d-none' style='border: none !important;'><td colspan='2' style='padding-top: 0;'>
                                                         <div class='row g-1 w-100 m-0'>";
 
@@ -323,8 +322,6 @@ $tool_content .= "</div>
                                             $percentage = $total_answers > 0 ? round(($data['count'] / $total_answers) * 100, 1) : 0;
                                             $legendInfo = $objQuestionTmp->getCertaintyLegend2(1, $data['certainty']);
 
-                                            // 2. Εξωτερικό div: col-12 (πιάνει 100% στο κινητό) και col-md-2 (πιάνει 1/6 σε desktop)
-                                            // 3. Εσωτερικό div: Έχει τα χρώματα, τα borders και το tooltip. Το h-100 εξασφαλίζει ίδιο ύψος.
                                             $tool_content .= "
                                             <div class='col-12 col-md-2'>
                                                 <div class='text-black text-center rounded px-2 h-100 py-1 d-flex justify-content-center align-items-center' 
@@ -341,7 +338,6 @@ $tool_content .= "</div>
                                             $percentage = $total_answers > 0 ? round(($data['count'] / $total_answers) * 100, 1) : 0;
                                             $legendInfo = $objQuestionTmp->getCertaintyLegend2(0, $data['certainty']);
 
-                                            // Αντίστοιχη δομή με το col-12 col-md-2 και για τις λάθος απαντήσεις
                                             $tool_content .= "
                                             <div class='col-12 col-md-2'>
                                                 <div class='text-black text-center rounded px-2 h-100 py-1 d-flex justify-content-center align-items-center' 
