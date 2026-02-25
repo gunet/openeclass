@@ -10515,6 +10515,9 @@ function theme_initialization() {
                     white-space: nowrap;
                     background-color: $theme_options_styles[BgColorProgressBarAndText];
                 }
+                .poll-border-left {
+                    border-left: solid 4px $theme_options_styles[BgColorProgressBarAndText] !important;
+                }
             ";
         }
 

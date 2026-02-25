@@ -3808,6 +3808,8 @@ $langScoreOn = "Ενεργό σκορ";
 $langScoreActivation = "Ενεργοποίηση σκορ";
 $langDateAndTime = "Ημερομηνία και ώρα";
 $langDateOnly = "Ημερομηνία";
+$langPollUsersParticipation = "Συμμετείχαν";
+$langPollNoUsersParticipation = "Δεν συμμετείχαν";
 
 /* * **********************************************************
  * registration.php
