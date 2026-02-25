@@ -75,16 +75,25 @@ $tool_content .= "
                         <h5>$langAttempts ($total_attempts $langSumFrom)</h5>
                         <div class='progress mb-3' style='height: 30px;'>
                             <div class='progress-bar bg-success' role='progressbar'
+                                 data-bs-toggle='tooltip' 
+                                 data-bs-placement='top' 
+                                 title='" . htmlspecialchars($langAttemptsCompleted, ENT_QUOTES) . ": $completedAttempts'
                                  style='width: " . ($completedAttempts + $pausedAttempts + $pendingAttempts > 0 ? round(($completedAttempts / ($completedAttempts + $pausedAttempts + $pendingAttempts)) * 100, 1) : 0) . "%;'
                                  aria-valuenow='$completedAttempts' aria-valuemin='0' aria-valuemax='" . ($completedAttempts + $pausedAttempts + $pendingAttempts) . "'>
                                 $completedAttempts
                             </div>
                             <div class='progress-bar bg-warning' role='progressbar'
+                                 data-bs-toggle='tooltip' 
+                                 data-bs-placement='top' 
+                                 title='" . htmlspecialchars($langAttemptsPaused, ENT_QUOTES) . ": $pausedAttempts'
                                  style='width: " . ($completedAttempts + $pausedAttempts + $pendingAttempts > 0 ? round(($pausedAttempts / ($completedAttempts + $pausedAttempts + $pendingAttempts)) * 100, 1) : 0) . "%;'
                                  aria-valuenow='$pausedAttempts' aria-valuemin='0' aria-valuemax='" . ($completedAttempts + $pausedAttempts + $pendingAttempts) . "'>
                                 $pausedAttempts
                             </div>
                             <div class='progress-bar bg-info' role='progressbar'
+                                 data-bs-toggle='tooltip' 
+                                 data-bs-placement='top' 
+                                 title='" . htmlspecialchars($langAttemptPending, ENT_QUOTES) . ": $pendingAttempts'
                                  style='width: " . ($completedAttempts + $pausedAttempts + $pendingAttempts > 0 ? round(($pendingAttempts / ($completedAttempts + $pausedAttempts + $pendingAttempts)) * 100, 1) : 0) . "%;'
                                  aria-valuenow='$pendingAttempts' aria-valuemin='0' aria-valuemax='" . ($completedAttempts + $pausedAttempts + $pendingAttempts) . "'>
                                 $pendingAttempts
@@ -295,45 +304,58 @@ $tool_content .= "</div>
                                                              </div>";
                                                 $tool_content .= "</td>";
                                              $tool_content .= "</tr>";
-                                            if ($exerciseCalcGradeMethod == CALC_GRADE_METHOD_CERTAINTY_BASED) {
-                                                $tool_content .= "<tr class='certaintyPercentageTR d-none' style='border: none !important;'><td colspan='2'><div class='d-flex align-items-center'>";
-                                                $total_answers = 0;
+                                    if ($exerciseCalcGradeMethod == CALC_GRADE_METHOD_CERTAINTY_BASED) {
+                                        // 1. Το κεντρικό container γίνεται 'row'.
+                                        // Το 'g-2' προσθέτει ομοιόμορφα κενά (gaps) ανάμεσα στα κουτάκια, τόσο οριζόντια όσο και κάθετα.
+                                        $tool_content .= "<tr class='certaintyPercentageTR d-none' style='border: none !important;'><td colspan='2' style='padding-top: 0;'>
+                                                        <div class='row g-1 w-100 m-0'>";
 
-                                                foreach ($correctCertaintyBased as $data) {
-                                                    $total_answers += $data['count'];
-                                                }
-                                                foreach ($wrongCertaintyBased as $data) {
-                                                    $total_answers += $data['count'];
-                                                }
+                                        $total_answers = 0;
 
-                                                foreach ($correctCertaintyBased as $data) {
-                                                    $percentage = $total_answers > 0 ? round(($data['count'] / $total_answers) * 100, 1) : 0;
+                                        foreach ($correctCertaintyBased as $data) {
+                                            $total_answers += $data['count'];
+                                        }
+                                        foreach ($wrongCertaintyBased as $data) {
+                                            $total_answers += $data['count'];
+                                        }
 
-                                                    $legendInfo = $objQuestionTmp->getCertaintyLegend2(1, $data['certainty']);
+                                        foreach ($correctCertaintyBased as $data) {
+                                            $percentage = $total_answers > 0 ? round(($data['count'] / $total_answers) * 100, 1) : 0;
+                                            $legendInfo = $objQuestionTmp->getCertaintyLegend2(1, $data['certainty']);
 
-                                                    $tool_content .= "<div 
-                                                        class='text-black text-center rounded px-2 mx-1 d-flex justify-content-center align-items-center' 
-                                                        data-bs-toggle='tooltip' 
-                                                        data-bs-placement='top' 
-                                                        title='" . htmlspecialchars($legendInfo['tooltip'], ENT_QUOTES) . "' 
-                                                        style='font-size: 10px;width: 16%;border: solid 1px #198754;background-color: #19875435;'>" .
-                                                            $legendInfo['text'] . " " . $percentage . "%</div>";
-                                                    }
-                                                foreach ($wrongCertaintyBased as $key => $data) {
-                                                    $percentage = $total_answers > 0 ? round(($data['count'] / $total_answers) * 100, 1) : 0;
+                                            // 2. Εξωτερικό div: col-12 (πιάνει 100% στο κινητό) και col-md-2 (πιάνει 1/6 σε desktop)
+                                            // 3. Εσωτερικό div: Έχει τα χρώματα, τα borders και το tooltip. Το h-100 εξασφαλίζει ίδιο ύψος.
+                                            $tool_content .= "
+                                            <div class='col-12 col-md-2'>
+                                                <div class='text-black text-center rounded px-2 h-100 py-1 d-flex justify-content-center align-items-center' 
+                                                    data-bs-toggle='tooltip' 
+                                                    data-bs-placement='top' 
+                                                    title='" . htmlspecialchars($legendInfo['tooltip'], ENT_QUOTES) . "' 
+                                                    style='font-size: 10px; border: solid 1px #198754; background-color: #19875435;'>" .
+                                                                                    $legendInfo['text'] . " " . $percentage . "%
+                                                </div>
+                                            </div>";
+                                        }
 
-                                                    $legendInfo = $objQuestionTmp->getCertaintyLegend2(0, $data['certainty']);
+                                        foreach ($wrongCertaintyBased as $key => $data) {
+                                            $percentage = $total_answers > 0 ? round(($data['count'] / $total_answers) * 100, 1) : 0;
+                                            $legendInfo = $objQuestionTmp->getCertaintyLegend2(0, $data['certainty']);
 
-                                                    $tool_content .= "<div 
-                                                        class='text-black text-center rounded px-2 mx-1 d-flex justify-content-center align-items-center' 
-                                                        data-bs-toggle='tooltip' 
-                                                        data-bs-placement='top' 
-                                                        title='" . htmlspecialchars($legendInfo['tooltip'], ENT_QUOTES) . "' 
-                                                        style='font-size: 10px;width: 16%;border: solid 1px #dc3545;background-color: #dc354535;'>" .
-                                                        $legendInfo['text'] . " " . $percentage . "%</div>";
-                                                }
-                                                $tool_content .= "</div></div></td></tr>";
-                                            }
+                                            // Αντίστοιχη δομή με το col-12 col-md-2 και για τις λάθος απαντήσεις
+                                            $tool_content .= "
+                                            <div class='col-12 col-md-2'>
+                                                <div class='text-black text-center rounded px-2 h-100 py-1 d-flex justify-content-center align-items-center' 
+                                                    data-bs-toggle='tooltip' 
+                                                    data-bs-placement='top' 
+                                                    title='" . htmlspecialchars($legendInfo['tooltip'], ENT_QUOTES) . "' 
+                                                    style='font-size: 10px; border: solid 1px #dc3545; background-color: #dc354535;'>" .
+                                                                                    $legendInfo['text'] . " " . $percentage . "%
+                                                </div>
+                                            </div>";
+                                        }
+
+                                        $tool_content .= "</div></td></tr>";
+                                    }
                                 }
                             }
 
