@@ -3601,6 +3601,9 @@ function upgrade_to_4_3() : void {
     if (!DBHelper::fieldExists('exercise', 'feedback')) {
         Database::get()->query("ALTER TABLE exercise ADD feedback TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
     }
+    if (!DBHelper::fieldExists('exercise_answer_record', 'certainty')) {
+        Database::get()->query("ALTER TABLE exercise_answer_record ADD certainty INT DEFAULT 0 AFTER weight");
+    }
     // Questionnaires
     if (!DBHelper::fieldExists('poll_question', 'page')) {
         Database::get()->query("ALTER TABLE poll_question ADD `page` INT NOT NULL DEFAULT 0");
