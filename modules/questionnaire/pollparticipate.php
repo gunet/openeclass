@@ -899,7 +899,11 @@ function printPollForm() {
                                         }
                                         $qTypeSubQuestion = Database::get()->querySingle("SELECT qtype FROM poll_question WHERE pqid = ?d", $theAnswer->sub_qid)->qtype;
                                         $SubQuestionText = Database::get()->querySingle("SELECT question_text FROM poll_question WHERE pqid = ?d", $theAnswer->sub_qid)->question_text;
-                                        $tool_content .= "<div class='col-12 sub_question_temp_{$pqid} sub_question_{$theAnswer->pqaid} $subQDisplay' style='border-top: solid 1px rgb(30, 43, 52) !important; padding-top: 25px; margin-top: 25px;'>";
+                                        $borderBottom = '';
+                                        if ($default_answer) {
+                                            $borderBottom = "border-bottom: solid 1px rgb(30, 43, 52) !important; padding-bottom: 25px; margin-bottom: 25px;";
+                                        }
+                                        $tool_content .= "<div class='col-12 sub_question_temp_{$pqid} sub_question_{$theAnswer->pqaid} $subQDisplay' style='border-top: solid 1px rgb(30, 43, 52) !important; $borderBottom padding-top: 25px; margin-top: 25px;'>";
                                         if ($qTypeSubQuestion == QTYPE_SINGLE) {
                                             $resSubQAnswers = Database::get()->queryArray("SELECT * FROM poll_question_answer WHERE pqid = ?d", $theAnswer->sub_qid);
                                             $tool_content .= "<p class='mb-2'>$SubQuestionText</p>";
@@ -978,7 +982,7 @@ function printPollForm() {
                                             <div class='col-sm-offset-1 col-sm-11'>
                                                 <div class='$type_attr QuestionType_{$qtype} QuestionNumber_{$pqid}'>
                                                     <label class='$class_type_attr'>
-                                                        <input type='$type_attr' name='answer[$pqid]' value='-1' data-question-type='$qtype' $checked>
+                                                        <input class='single_type_answer' type='$type_attr' name='answer[$pqid]' value='-1' data-question-type='$qtype' data-main-question='$pqid' $checked>
                                                         $checkMark_class
                                                         $langPollUnknown
                                                     </label>
