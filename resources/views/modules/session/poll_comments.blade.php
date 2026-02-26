@@ -185,7 +185,7 @@
                 <div class='modal-header'>
                     <div class='modal-title'>
                         <div class='icon-modal-default'><i class='fa-regular fa-trash-can fa-xl Accent-200-cl'></i></div>
-                        <div class="modal-title-default text-center mb-0 mt-2" id="docDeleteLabel">{!! trans('langDelete') !!}</div>
+                        <h2 class="modal-title-default text-center mb-0 mt-2" id="docDeleteLabel">{!! trans('langDelete') !!}</h2>
                     </div>
                 </div>
                 <div class='modal-body text-center'>

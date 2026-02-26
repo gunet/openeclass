@@ -298,10 +298,10 @@ function insert_divider($id) {
 //    $divider = purify($comments);
     $divider = '<div class="unit-divider"></div>';
     if(isset($_SESSION['fc_type']) && isset($_SESSION['act_name'])){
-        $q = Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type='text', title='',
+        $q = Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type='dvdr', title='',
                             comments = ?s, visible=1, `order` = ?d, `date`= " . DBHelper::timeAfter() . ", res_id = 0,fc_type=?d,activity_title=?s,activity_id=?s", $id, $divider, $order,$_SESSION['fc_type'],$_SESSION['act_name'],$_SESSION['act_id']);
     }else{
-        $q = Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type='text', title='',
+        $q = Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type='dvdr', title='',
                             comments = ?s, visible=1, `order` = ?d, `date`= " . DBHelper::timeAfter() . ", res_id = 0", $id, $divider, $order);
     }
     $uresId = $q->lastInsertID;

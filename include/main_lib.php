@@ -878,14 +878,17 @@ function user_app_exists($login) {
  * @return type
  */
 function html2text($string) {
-    //$trans_tbl = get_html_translation_table(HTML_ENTITIES);
-    //$trans_tbl = array_flip($trans_tbl);
-    $string = html_entity_decode(strip_tags($string));
-    $text = preg_replace('/<(div|p|pre|br)[^>]*>/i', "\n", $string);
-    return canonicalize_whitespace(strip_tags($text));
-    // return strtr (strip_tags($string), $trans_tbl);
+    $text = preg_replace("/<(\/div|\/p|\/pre|br)[^>]*>\s*\n?/i", "\n", $string);
+    return html_entity_decode(strip_tags($text));
 }
 
+function base64url_encode($data) {
+    return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
+}
+
+function base64url_decode($data) {
+    return base64_decode(str_pad(strtr($data, '-_', '+/'), strlen($data) % 4, '=', STR_PAD_RIGHT));
+}
 
 /**
  * @brie   completes url contained in the text with "<a href ...".
@@ -1539,20 +1542,20 @@ function course_access_icon($visibility) {
 
     switch ($visibility) {
         case COURSE_OPEN: {
-            $access_icon = "<span class='fa fa-lock-open fa-lg fa-fw' data-bs-toggle='tooltip' data-bs-placement='top' title='$langTypeOpen'></span>";
+            $access_icon = "<span class='fa fa-lock-open fa-lg fa-fw' data-bs-toggle='tooltip' data-bs-placement='top' title='$langTypeOpen' aria-label='$langTypeOpen'></span>";
             break;
         }
         case COURSE_REGISTRATION: {
             $access_icon = "<div class='d-inline-flex align-items-center'><span class='fa fa-lock fa-lg fa-fw access' data-bs-toggle='tooltip' data-bs-placement='top' title='$langTypeRegistration'></span>
-            <span class='fa fa-pencil text-danger fa-custom-lock mt-0' data-bs-toggle='tooltip' data-bs-placement='top' title='$langTypeRegistration' style='margin-left:-5px;'></span></div>";
+            <span class='fa fa-pencil text-danger fa-custom-lock mt-0' data-bs-toggle='tooltip' data-bs-placement='top' title='$langTypeRegistration' aria-label='$langTypeRegistration' style='margin-left:-5px;'></span></div>";
             break;
         }
         case COURSE_CLOSED: {
-            $access_icon = "<span class='fa fa-lock fa-lg fa-fw fa-access' data-bs-toggle='tooltip' data-bs-placement='top' title='$langTypeClosed'></span>";
+            $access_icon = "<span class='fa fa-lock fa-lg fa-fw fa-access' data-bs-toggle='tooltip' data-bs-placement='top' title='$langTypeClosed' aria-label='$langTypeClosed'></span>";
             break;
         }
         case COURSE_INACTIVE: {
-            $access_icon = "<span class='fa fa-ban fa-lg fa-fw' data-bs-toggle='tooltip' data-bs-placement='top' title='$langTypeInactive'></span>";
+            $access_icon = "<span class='fa fa-ban fa-lg fa-fw' data-bs-toggle='tooltip' data-bs-placement='top' title='$langTypeInactive' aria-label='$langTypeInactive'></span>";
             break;
         }
     }
@@ -1777,7 +1780,7 @@ function findUserVisibleUnits($uid, $all_units, $course_id = null) {
                                                           INNER JOIN user_badge ub ON (b.id = ub.badge)
                                                           WHERE ub.user = ?d
                                                           AND cu.course_id = ?d
-                                                          AND cu.visible = 1
+                                                          AND (cu.visible = 1 OR cu.visible = 2)
                                                           AND cu.public = 1
                                                           AND cu.order >= 0", $uid, $course_id);
     if ( isset($userInBadges) and $userInBadges ) {
@@ -2884,7 +2887,7 @@ function copy_resized_image($source_file, $type, $maxwidth, $maxheight, $target_
 }
 
 // Produce HTML source for an icon
-function icon($name, $title = null, $link = null, $link_attrs = '', $with_title = false, $sr_only = false) {
+function icon($name, $title = null, $link = null, $link_attrs = '', $with_title = false, $sr_only = false, $pressed = false) {
 
     if (isset($title)) {
         $title = q($title);
@@ -2893,12 +2896,12 @@ function icon($name, $title = null, $link = null, $link_attrs = '', $with_title 
         $extra = '';
     }
     if (isset($title) && $with_title) {
-        $img = $sr_only ? "<span class='fa $name' $extra></span><span class='sr-only'>$title</span>" : "<span class='fa $name' $extra></span> $title";
+        $img = $sr_only ? "<span class='fa $name' $extra></span><span class='visually-hidden'>$title</span>" : "<span class='fa $name' $extra></span> $title";
     } else {
         $img = "<span class='fa $name' $extra></span>";
     }
     if (isset($link)) {
-        return "<a href='$link'$link_attrs aria-label='$title' role='button'>$img</a>";
+        return "<a href='$link'$link_attrs aria-label='$title' aria-pressed='$pressed' role='button'>$img</a>";
     } else {
         return $img;
     }
@@ -2913,7 +2916,7 @@ function icon($name, $title = null, $link = null, $link_attrs = '', $with_title 
  */
 
 function profile_image($user_id, $size, $class=null) {
-    global $urlServer, $themeimg, $uid, $course_id, $is_editor, $langUser;
+    global $urlServer, $themeimg, $uid, $course_id, $is_editor, $langProfileImage;
 
     if (isset($_SESSION['profile_image_cache_buster'])) {
         $suffix = '?v=' . $_SESSION['profile_image_cache_buster'];
@@ -2949,7 +2952,7 @@ function profile_image($user_id, $size, $class=null) {
     if (!$imageurl) {
         $imageurl = "$themeimg/default_$size.png";
     }
-    return "<img src='$imageurl$suffix' $class_attr alt='$langUser:$username' $size_width>";
+    return "<img src='$imageurl$suffix' $class_attr alt='$langProfileImage:$username' $size_width>";
 }
 
 /**
@@ -3454,11 +3457,11 @@ function copyright_info($id, $noImg = 1, $type = 'course'): string
             } else {
                 $link_suffix = '';
             }
-            $link = "<a href='" . $license[$lic]['link'] . "$link_suffix' target='_blank' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title='" . q($license[$lic]['title']) . "' aria-label='$langOpenNewTab'>
+            $link = "<a href='" . $license[$lic]['link'] . "$link_suffix' target='_blank' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title='" . q($license[$lic]['title']) . "' aria-label='" . q($license[$lic]['title']) . "'>
                         <span class='" . $license[$lic]['image'] . "'></span>
                     </a>";
         } else if ($lic == 10) {
-            $link = "<span data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title='" . q($license[$lic]['title']) . "' class='" . $license[$lic]['image'] . "'></span>";
+            $link = "<span data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title='" . q($license[$lic]['title']) . "' class='" . $license[$lic]['image'] . "' aria-label='" . q($license[$lic]['title']) . "'></span>";
         }
     }
     return $link;
@@ -3956,7 +3959,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
             $titleHeader = (!empty($pageName) ? q($pageName) : $toolName);
             if(!empty($titleHeader)) {
                 return "<div class='col-12 d-md-flex justify-content-md-between align-items-lg-start my-3'>
-                            <div class='col-lg-5 col-md-6 col-12'><div class='action-bar-title mb-0'>$titleHeader</div></div>
+                            <div class='col-lg-5 col-md-6 col-12'><h2 class='action-bar-title mb-0'>$titleHeader</h2></div>
                             <div class='col-lg-7 col-md-6 col-12 action_bar d-flex justify-content-md-end justify-content-start align-items-start px-0 mt-md-0 mt-4'>
                                 <div class='margin-top-thin margin-bottom-fat hidden-print w-100'>
                                     <div class='ButtonsContent d-flex justify-content-end align-items-center flex-wrap gap-2'>
@@ -3983,7 +3986,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
         } else {
             $titleHeader = (!empty($pageName) ? q($pageName) : '');
             return "<div class='col-12 d-md-flex justify-content-md-between align-items-lg-start my-4'>
-                        <div class='col-lg-5 col-md-6 col-12'><div class='action-bar-title mb-0'>$titleHeader</div></div>
+                        <div class='col-lg-5 col-md-6 col-12'><h2 class='action-bar-title mb-0'>$titleHeader</h2></div>
                         <div class='col-lg-7 col-md-6 col-12 action_bar d-flex justify-content-md-end justify-content-start align-items-start px-0 mt-md-0 mt-4'>
                             <div class='margin-top-thin margin-bottom-fat hidden-print w-100'>
                                 <div class='ButtonsContent d-flex justify-content-end align-items-center flex-wrap gap-2'>
@@ -4015,34 +4018,24 @@ function action_button($options, $secondary_menu_options = array(), $fc=false) {
 
     foreach (array_reverse($options) as $option) {
         $level = $option['level'] ?? 'secondary';
-        // skip items with show=false
         if (isset($option['show']) and !$option['show']) {
             continue;
         }
-        if (isset($option['class'])) {
-            $class = ' ' . $option['class'];
-        } else {
-            $class = '';
-        }
-        if (isset($option['btn_class'])) {
-            $btn_class = ' ' . $option['btn_class'];
-        } else {
-            $btn_class = ' submitAdminBtn';
-        }
-        if (isset($option['link-attrs'])) {
-            $link_attrs = ' ' . $option['link-attrs'];
-        } else {
-            $link_attrs = '';
-        }
-        $disabled = isset($option['disabled']) && $option['disabled'] ? ' disabled' : '';
-        $icon_class = "class='list-group-item $class$disabled";
+        $class = isset($option['class']) ? ' ' . $option['class'] : '';
+        $btn_class = isset($option['btn_class']) ? ' ' . $option['btn_class'] : ' submitAdminBtn';
+        $link_attrs = isset($option['link-attrs']) ? ' ' . $option['link-attrs'] : '';
+
+        $disabled = (isset($option['disabled']) && $option['disabled']) ? ' disabled' : '';
+
+        $icon_class = "class='list-group-item d-flex justify-content-start align-items-start gap-2 py-3$class$disabled";
         if (isset($option['icon-class'])) {
             $icon_class .= " " . $option['icon-class'];
         }
+
         if (isset($option['confirm'])) {
             $title = q($option['confirm_title'] ?? $langConfirmDelete);
             $accept = $option['confirm_button'] ?? $langDelete;
-            $form_begin = "<form class='form-action-button-popover list-group-item-action list-group-item' method=post action='$option[url]'>";
+            $form_begin = "<form class='form-action-button-mydropdowns mb-0' method=post action='$option[url]'>";
             $form_end = '</form>';
             if ($level == 'primary-label' or $level == 'primary') {
                 $primary_form_begin = $form_begin;
@@ -4059,8 +4052,9 @@ function action_button($options, $secondary_menu_options = array(), $fc=false) {
         } else {
             $icon_class .= "'";
             $confirm_extra = $form_begin = $form_end = '';
-            $url = isset($option['url'])? $option['url']: '#';
+            $url = isset($option['url']) ? $option['url'] : '#';
         }
+
         if (isset($option['icon-extra'])) {
             $icon_class .= ' ' . $option['icon-extra'];
         }
@@ -4070,13 +4064,15 @@ function action_button($options, $secondary_menu_options = array(), $fc=false) {
         } elseif ($level == 'primary') {
             array_unshift($out_primary, "<a aria-label='" . q($option['title']) . "' data-bs-placement='bottom' data-bs-toggle='tooltip' title data-bs-original-title='" . q($option['title']) . "' href='$url' class='btn $btn_class$disabled' $link_attrs><span class='fa $option[icon]$primary_icon_class'></span><span class='hidden'></span></a>");
         } else {
-            array_unshift($out_secondary, $form_begin . icon($option['icon'], $option['title'], $url, $icon_class.$link_attrs, true) . $form_end);
+            array_unshift($out_secondary, '<li>' . $form_begin . icon($option['icon'], $option['title'], $url, $icon_class.$link_attrs, true) . $form_end . '</li>');
         }
     }
+
     $primary_buttons = "";
     if (count($out_primary)) {
         $primary_buttons = implode('', $out_primary);
     }
+
     $action_button = "";
     $secondary_title = $secondary_menu_options['secondary_title'] ?? "<span class='hidden'></span>";
 
@@ -4086,19 +4082,21 @@ function action_button($options, $secondary_menu_options = array(), $fc=false) {
         $secondary_icon = $secondary_menu_options['secondary_icon'] ?? "fa-solid fa-gear";
     }
     $secondary_btn_class = $secondary_menu_options['secondary_btn_class'] ?? "submitAdminBtn";
-    if (count($out_secondary)) {
-        $action_list = q("<div class='list-group' id='action_button_menu'>".implode('', $out_secondary)."</div>");
-        if(!empty($secondary_title)){
-            $tmp_class_title = "<span class='hidden-xs'>$secondary_title</span>";
-        }else{
-            $tmp_class_title = "";
-        }
-        $action_button = "
-                <a tabindex='0' role='button' class='menu-popover btn $secondary_btn_class d-flex justify-content-center align-items-center' data-bs-toogle='popover' data-bs-container='body' data-bs-placement='left' data-bs-html='true' data-bs-trigger='manual' data-bs-content='$action_list' aria-label='$langListChoices'>
-                    <span class='fa $secondary_icon'></span>
-                    $tmp_class_title
 
-                </a>";
+    // Instead of a popover menu, display list items directly
+    if (count($out_secondary)) {
+        $list_items = implode('', $out_secondary);
+        $tmp_class_title = !empty($secondary_title) ? "<span class='hidden-xs'>$secondary_title</span>" : "";
+        $action_button = "
+            <button style='border-radius: 4px;' class='btn $secondary_btn_class action-button-dropdown' type='button' id='actionDropdown' data-bs-toggle='dropdown' aria-expanded='false' aria-label='$langListChoices'>
+                <span class='fa $secondary_icon'></span> 
+                $tmp_class_title
+            </button>
+            <div class='m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-border contextual-menu-action-button' aria-labelledby='actionDropdown'>
+                <ul class='list-group list-group-flush'>
+                    $list_items
+                </ul>
+            </div>";
     }
 
     return $primary_form_begin .

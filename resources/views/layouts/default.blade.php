@@ -109,6 +109,26 @@
         <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}courses/theme_data/{{ $theme_id }}/style_str.css?v={{ $cache_suffix }}"/>
     @endif
 
+    <script>
+        $(function() {
+            $('.action-button-dropdown').on('click', function () {
+                // Close all other open dropdowns except the one being opened
+                $('.action-button-dropdown.show').not(this).each(function() {
+                    $(this).dropdown('hide');
+                });
+                $('.table-responsive').addClass('no-overflow');
+                $('.dt-scroll-head').addClass('no-overflow');
+                $('.dt-scroll-body').addClass('no-overflow');
+            });
+
+            $('.action-button-dropdown').on('hide.bs.dropdown', function () {
+                $('.table-responsive').removeClass('no-overflow');
+                $('.dt-scroll-head').removeClass('no-overflow');
+                $('.dt-scroll-body').removeClass('no-overflow');
+            });
+        });
+    </script>
+
 </head>
 
 <body>
@@ -145,7 +165,7 @@
                     <div class="modal-header">
                         <div class='modal-title'>
                             <div class='icon-modal-default'><i class='fa-solid fa-cloud-arrow-up fa-xl Neutral-500-cl'></i></div>
-                            <div class='modal-title-default text-center mb-0'>{{ trans('langQuickNotesSide') }}</div>
+                            <h2 class='modal-title-default text-center mb-0'>{{ trans('langQuickNotesSide') }}</h2>
                         </div>
                     </div>
                     <div class="modal-body">
@@ -180,28 +200,72 @@
     <script>
         $(function() {
             $(".datetimepicker table > thead > tr").find("th.prev").each(function() {
-                $(this).attr("aria-label", "{{ trans('langPrevious') }}");
+                if ($(this).find('.visually-hidden').length === 0) {
+                    $(this).append('<span class="visually-hidden">{{ trans("langPrevious") }}</span>');
+                }
             });
+
             $(".datetimepicker table > thead > tr").find("th.next").each(function() {
-                $(this).attr("aria-label", "{{ trans('langNext') }}");
+                if ($(this).find('.visually-hidden').length === 0) {
+                    $(this).append('<span class="visually-hidden">{{ trans("langNext") }}</span>');
+                }
             });
+
             $(".datepicker table > thead > tr").find("th.prev").each(function() {
-                $(this).attr("aria-label", "{{ trans('langPrevious') }}");
+                if ($(this).find('.visually-hidden').length === 0) {
+                    $(this).append('<span class="visually-hidden">{{ trans("langPrevious") }}</span>');
+                }
             });
+
             $(".datepicker table > thead > tr").find("th.next").each(function() {
-                $(this).attr("aria-label", "{{ trans('langNext') }}");
+                if ($(this).find('.visually-hidden').length === 0) {
+                    $(this).append('<span class="visually-hidden">{{ trans("langNext") }}</span>');
+                }
             });
-            $("#cboxPrevious").attr("aria-label","{{ trans('langPrevious') }}");
-            $("#cboxNext").attr("aria-label","{{ trans('langNext') }}");
-            $("#cboxSlideshow").attr("aria-label","{{ trans('langShowTo') }}");
-            $(".table-default thead tr th:last-child:has(.fa-gears)").attr("aria-label","{{ trans('langCommands') }}");
-            $(".table-default thead tr th:last-child:has(.fa-cogs)").attr("aria-label","{{ trans('langCommands') }}");
-            $(".table-default thead tr th:last-child:not(:has(.fa-gears))").attr("aria-label","{{ trans('langCommands') }} / {{ trans('langResults') }}");
-            $(".table-default thead tr th:last-child:not(:has(.fa-cogs))").attr("aria-label","{{ trans('langCommands') }} / {{ trans('langResults') }}");
-            $(".sp-input-container .sp-input").attr("aria-label","{{ trans('langOptForColor') }}");
-            $("ul").find(".select2-search__field").attr("aria-label","{{ trans('langSearch') }}");
-            $("#cal-slide-content ul li .event-item").attr("aria-label","{{ trans('langEvent') }}");
-            $("#cal-day-box .event-item").attr("aria-label","{{ trans('langEvent') }}");
+
+            if ($("#cboxPrevious").find('.visually-hidden').length === 0) {
+                $("#cboxPrevious").append('<span class="visually-hidden">{{ trans("langPrevious") }}</span>');
+            }
+
+            if ($("#cboxNext").find('.visually-hidden').length === 0) {
+                $("#cboxNext").append('<span class="visually-hidden">{{ trans("langNext") }}</span>');
+            }
+
+            if ($("#cboxSlideshow").find('.visually-hidden').length === 0) {
+                $("#cboxSlideshow").append('<span class="visually-hidden">{{ trans("langShowTo") }}</span>');
+            }
+
+            if ($(".table-default thead tr th:last-child:has(.fa-gears)").find('.visually-hidden').length === 0) {
+                $(".table-default thead tr th:last-child:has(.fa-gears)").append('<span class="visually-hidden">{{ trans("langSettingSelect") }}</span>');
+            }
+
+            if ($(".table-default thead tr th:last-child:has(.fa-cogs)").find('.visually-hidden').length === 0) {
+                $(".table-default thead tr th:last-child:has(.fa-cogs)").append("<span class='visually-hidden'>{{ trans('langSettingSelect') }}</span>");
+            }
+
+            if ($(".table-default thead tr th:last-child:not(:has(.fa-gears))").find('.visually-hidden').length === 0) {
+                $(".table-default thead tr th:last-child:not(:has(.fa-gears))").append("<span class='visually-hidden'>{{ trans('langSettingSelect') }} / {{ trans('langResults') }}</span>");
+            }
+
+            if ($(".table-default thead tr th:last-child:not(:has(.fa-cogs))").find('.visually-hidden').length === 0) {
+                $(".table-default thead tr th:last-child:not(:has(.fa-cogs))").append("<span class='visually-hidden'>{{ trans('langSettingSelect') }} / {{ trans('langResults') }}</span>");
+            }
+
+            if ($(".sp-input-container .sp-input").find('.visually-hidden').length === 0) {
+                $(".sp-input-container .sp-input").append("<span class='visually-hidden'>{{ trans('langOptForColor') }}</span>");
+            }
+
+            if ($("ul").find(".select2-search__field").find('.visually-hidden').length === 0) {
+                $("ul").find(".select2-search__field").append("<span class='visually-hidden'>{{ trans('langSearch') }}</span>");
+            }
+
+            if ($("#cal-slide-content ul li .event-item").find('.visually-hidden').length === 0) {
+                $("#cal-slide-content ul li .event-item").append("<span class='visually-hidden'>{{ trans('langEvent') }}</span>");
+            }
+
+            if ($("#cal-day-box .event-item").find('.svisually-hidden').length === 0) {
+                $("#cal-day-box .event-item").append("<span class='visually-hidden'>{{ trans('langEvent') }}</span>");
+            }
 
             @if ($pinned_announce)
                 $('#closeNotificationBar').click(function () {

@@ -26,7 +26,7 @@
                 bootbox.dialog({
                     closeButton: false,
                     message: "<p class='text-center'>"+message+"</p>",
-                    title: $icon+"<div class='modal-title-default text-center mb-0'>"+title+"</div>",
+                    title: $icon+"<h2 class='modal-title-default text-center mb-0'>"+title+"</h2>",
                     buttons: {
                         cancel_btn: {
                             label: cancel_text,
@@ -193,7 +193,7 @@
                 bServerSide: true,
                 sScrollX: true,
                 fixedHeader: true,
-                responsive: false,
+                responsive: true,
                 searchDelay: 1000,
                 ajax: {
                     url: '{{ $_SERVER['REQUEST_URI'] }}',
@@ -270,7 +270,7 @@
                 var row_id = (this.id);
                 bootbox.confirm({
                     closeButton: false,
-                    title: "<div class='icon-modal-default'><i class='fa-regular fa-trash-can fa-xl Accent-200-cl'></i></div><div class='modal-title-default text-center mb-0'>{{ js_escape(trans('langConfirmDelete')) }}</div>",
+                    title: "<div class='icon-modal-default'><i class='fa-regular fa-trash-can fa-xl Accent-200-cl'></i></div><h2 class='modal-title-default text-center mb-0'>{{ js_escape(trans('langConfirmDelete')) }}</h2>",
                     message: "<p class='text-center'>{{ js_escape(trans('langSureToDelAnnounce')) }}</p>",
                     buttons: {
                         cancel: {
@@ -342,6 +342,23 @@
                 });
             });
             $('.success').delay(3000).fadeOut(1500);
+
+            $(document).on('click', '.action-button-dropdown', function (g) {
+                g.preventDefault();
+                // Close all other open dropdowns except the one being opened
+                $('.action-button-dropdown.show').not(this).each(function() {
+                    $(this).dropdown('hide');
+                });
+                $('.table-responsive').addClass('no-overflow');
+                $('.dt-scroll-head').addClass('no-overflow');
+                $('.dt-scroll-body').addClass('no-overflow');
+            });
+            $(document).on('hide.bs.dropdown', '.action-button-dropdown', function () {
+                $('.table-responsive').removeClass('no-overflow');
+                $('.dt-scroll-head').removeClass('no-overflow');
+                $('.dt-scroll-body').removeClass('no-overflow');
+            });
+      
         });
 
 
@@ -424,7 +441,7 @@
                                 </div>
                             @endif
 
-                            <div class="table-responsive">
+                            
                                 <table id='ann_table{{ $course_id }}' class='table-default table-announcements-indexes'>
                                     <thead>
                                     <tr>
@@ -442,7 +459,7 @@
                                     </thead>
                                     <tbody></tbody>
                                 </table>
-                            </div>
+                            
                         </div>
 
 

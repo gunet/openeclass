@@ -418,14 +418,14 @@ if ($action == "createPost") {
                                     <div class='form-group'>
                                         <label for='blogPostTitle' class='col-sm-12 control-label-notes'>$langBlogPostTitle <span class='asterisk Accent-200-cl'>(*)</span></label>
                                         <div class='col-sm-12'>
-                                            <input class='form-control' type='text' name='blogPostTitle' id='blogPostTitle' placeholder='$langBlogPostTitle'>
+                                            <input class='form-control' type='text' name='blogPostTitle' id='blogPostTitle' placeholder='$langBlogPostTitle' autocomplete='off' required>
                                         </div>
                                     </div>
             
                                     <div class='form-group mt-4'>
                                         <label for='newContent' class='col-sm-12 control-label-notes'>$langBlogPostBody</label>
                                         <div class='col-sm-12'>
-                                            ".rich_text_editor('newContent', 4, 20, '')."
+                                            ".rich_text_editor('newContent', 4, 20, 'id="newContent"')."
                                         </div>
                                     </div>
                                     $commenting_setting            
@@ -840,7 +840,7 @@ if ($action == "showBlog") {
 
 
 
-                                        <a class='TextBold fs-6' href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."'>".q($post->getTitle())."</a>
+                                        <h2><a class='TextBold fs-6' href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."'>".q($post->getTitle())."</a></h2>
 
 
                                         <div>

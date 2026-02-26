@@ -672,6 +672,7 @@ if (!$is_editor && $iterator != 1 && $uid) {
     $tool_content .= "
     <tr>
       <td class='text-start'><strong>$langTotal</strong>:</td>
+      <td></td>
       <td class='text-start'><strong>$globaltime</strong:</td>
       <td>" . disp_progress_bar($total, 1) . "</td>
       <td></td>

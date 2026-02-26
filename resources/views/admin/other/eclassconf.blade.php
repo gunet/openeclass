@@ -508,7 +508,7 @@
                                                     <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                         <input type='checkbox' name='offline_course' value='1' {{ $cbox_offline_course }}>
                                                         <span class='checkmark'></span>
-                                                        {{ trans('langCourseOfflineSettings') }}
+                                                        {{ trans('langDownloadCourse') }}
                                                     </label>
                                                 </div>
                                                 <div class='checkbox'>

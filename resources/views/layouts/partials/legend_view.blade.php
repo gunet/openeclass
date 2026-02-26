@@ -9,14 +9,14 @@
 @endphp
 
 @if (!isset($_GET['fromFlipped']))
-    <h1 class='sr-only'>
+    <h1 class='visually-hidden'>
         @if($course_code)
             {{ trans('langCourse') }} : {{ $currentCourseName }}
         @elseif($pageTitle)
             {{ $pageTitle }}
         @endif
     </h1>
-    <h2 class='sr-only'>
+    <h2 class='visually-hidden'>
         @if($course_code)
             {{ trans('langCode') }} : {{ $course_code }}
         @elseif($pageName)
@@ -56,12 +56,12 @@
                                     @if (!isset($action_bar) or empty($action_bar))
                                         <div class="col-12 d-md-flex justify-content-md-between align-items-lg-start my-3">
                                             <div class='col-12 d-inline-flex'>
-                                                <div class="action-bar-title mb-0">
+                                                <h2 class="action-bar-title mb-0">
                                                     {{ $toolName }}
                                                     @if ($pageName and ($pageName != $toolName))
                                                         - {{ $pageName }}
                                                     @endif
-                                                </div>
+                                                </h2>
                                             </div>
                                         </div>
                                     @endif

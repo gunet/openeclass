@@ -133,12 +133,14 @@
                                     <ul class="tree-units">
                                         <li>
                                             <details>
-                                                <summary><h3 class='mb-0'>{{ trans('langUnits')}}</h3></summary>
+                                                <summary><h3 class='mb-0'>{{ trans('langDisplayAllUnits')}}</h3></summary>
                                                 <ul>
                                                     @foreach ($units as $cu)
-                                                        <li {{ $cu->id == $id ? "class=active-unit" : "" }}>
-                                                            <a class='TextBold{{ $cu->id != $id ? "" : " Success-200-cl" }}' href='{{ $urlServer }}modules/units/index.php?course={{ $course_code }}&amp;id={{ $cu->id }}'>
-                                                                {{ $cu->title }}
+                                                        <li @class([
+                                                            'active-unit' => $cu->id == $id,
+                                                            'disable-branch' => $cu->visible >= 2
+                                                        ])>
+                                                            <a class="TextBold{{ $cu->id == $id ? ' Success-200-cl' : '' }}{{ $cu->visible >= 2 ? ' disabled' : '' }}" @if($cu->visible < 2) href="{{ $urlServer }}modules/units/index.php?course={{ $course_code }}&amp;id={{ $cu->id }}" @endif @if($cu->id == $id) aria-current="{{ $cu->title }}" @endif @if($cu->visible >= 2) style="pointer-events: none; cursor: default; opacity: 0.6;" @endif>                                                                {{ $cu->title }}
                                                             </a>
                                                             <br>
                                                             @if (!is_null($cu->start_week))
@@ -181,13 +183,13 @@
                                 @if ($previousLink or $nextLink)
                                     <div class='col-12 d-flex justify-content-between align-items-center gap-3 flex-wrap mb-4 @if($comments) border-bottom-default pb-4 @endif'>
                                         @if ($previousLink)
-                                            <a class='TextBold' title='{{ $previousTitle }}' href='{{ $previousLink}}'>
+                                            <a class='TextBold' title='{{ $previousTitle }}' href='{{ $previousLink}}' aria-label="{{ trans('langPrevUnit') }}{{ $previousTitle }}">
                                                 <i class='fa fa-arrow-left space-after-icon'></i>
                                                 {{ ellipsize($previousTitle, 30) }}
                                             </a>
                                         @endif
                                         @if ($nextLink)
-                                            <a class='TextBold ms-auto' title='{{ $nextTitle }}' href='{{ $nextLink}}'>
+                                            <a class='TextBold ms-auto' title='{{ $nextTitle }}' href='{{ $nextLink}}' aria-label="{{ trans('langNextUnit') }}{{ $nextTitle }}">
                                                 {{ ellipsize($nextTitle, 30) }}
                                                 <i class='fa fa-arrow-right space-before-icon'></i>
                                             </a>
@@ -223,7 +225,7 @@
                                         <label class='control-label-notes' for='id' style="min-width: 130px;"></span>&nbsp;{{ trans('langGoTo') }}:</label>
                                         <select name='id' id='id' class='form-select' onchange='document.unitselect.submit()'>
                                             @foreach ($units as $unit)
-                                                <option value='{{ $unit->id }}' {{ $unit->id == $unitId ? 'selected' : '' }}>
+                                                <option value='{{ $unit->id }}' {{ $unit->id == $unitId ? 'selected' : '' }} {{ $unit->visible >= 2 ? 'disabled' : '' }}>
                                                     {{ ellipsize($unit->title, 50) }}
                                                 </option>
                                             @endforeach

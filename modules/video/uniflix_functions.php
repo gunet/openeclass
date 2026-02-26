@@ -19,72 +19,81 @@
  */
 
 require_once 'modules/admin/extconfig/externals.php';
-require_once 'modules/admin/extconfig/opendelosapp.php';
+require_once 'modules/admin/extconfig/uniflixapp.php';
 require_once 'include/log.class.php';
 require_once 'include/lib/curlutil.class.php';
 require_once 'modules/search/classes/ConstantsUtil.php';
 require_once 'modules/search/classes/SearchEngineFactory.php';
 
-define('DELOSTOKEN', 'DELOSTOKEN');
-define('DELOSTOKENTIMESTAMP', 'DELOSTOKENTIMESTAMP');
-define('DELOSTOKENEXPIRE', 60);
+define('UNIFLIXTOKEN', 'UNIFLIXTOKEN');
+define('UNIFLIXTOKENTIMESTAMP', 'UNIFLIXTOKENTIMESTAMP');
+define('UNIFLIXTOKENEXPIRE', 60);
 
-$opendelosapp = ExtAppManager::getApp(strtolower(OpenDelosApp::NAME));
+$uniflixapp = ExtAppManager::getApp(strtolower(UniFlixApp::NAME));
 
-function getDelosExtEnabled() {
-    global $opendelosapp;
-    return $opendelosapp->isEnabled();
+function getUniFlixExtEnabled() {
+    global $uniflixapp;
+
+    return $uniflixapp->isEnabled();
 }
 
-function getDelosURL() {
-    global $opendelosapp;
-    return $opendelosapp->getParam(OpenDelosApp::URL)->value();
+function getUniFlixURL() {
+    global $uniflixapp;
+
+    return $uniflixapp->getParam(UniFlixApp::URL)->value();
 }
 
-function getDelosPublicAPI() {
-    global $opendelosapp;
-    return $opendelosapp->getParam(OpenDelosApp::PUBLIC_API)->value();
+function getUniFlixPublicAPI() {
+    global $uniflixapp;
+
+    return $uniflixapp->getParam(UniFlixApp::PUBLIC_API)->value();
 }
 
-function getDelosPrivateAPI() {
-    global $opendelosapp;
-    return $opendelosapp->getParam(OpenDelosApp::PRIVATE_API)->value();
+function getUniFlixPrivateAPI() {
+    global $uniflixapp;
+
+    return $uniflixapp->getParam(UniFlixApp::PRIVATE_API)->value();
 }
 
-function getDelosRLoginAPI() {
-    global $opendelosapp;
-    return $opendelosapp->getParam(OpenDelosApp::RLOGIN_API)->value();
+function getUniFlixRLoginAPI() {
+    global $uniflixapp;
+
+    return $uniflixapp->getParam(UniFlixApp::RLOGIN_API)->value();
 }
 
-function getDelosRLoginCASAPI() {
-    global $opendelosapp;
-    return $opendelosapp->getParam(OpenDelosApp::RLOGINCAS_API)->value();
+function getUniFlixRLoginCASAPI() {
+    global $uniflixapp;
+
+    return $uniflixapp->getParam(UniFlixApp::RLOGINCAS_API)->value();
 }
 
-function getDelosLmsURL() {
-    global $opendelosapp;
-    return $opendelosapp->getParam(OpenDelosApp::LMS_URL)->value();
+function getUniFlixLmsURL() {
+    global $uniflixapp;
+
+    return $uniflixapp->getParam(UniFlixApp::LMS_URL)->value();
 }
 
-function getDelosSecret() {
-    global $opendelosapp;
-    return $opendelosapp->getParam(OpenDelosApp::SECRET)->value();
+function getUniFlixSecret() {
+    global $uniflixapp;
+
+    return $uniflixapp->getParam(UniFlixApp::SECRET)->value();
 }
 
-function isDelosEnabled() {
-    global $opendelosapp;
-    if ($opendelosapp && getDelosExtEnabled() && getDelosURL() && getDelosPublicAPI()
-        && getDelosPrivateAPI() && getDelosRLoginAPI() && getDelosRLoginCASAPI()
-        && getDelosLmsURL() && getDelosSecret()) {
+function isUniFlixEnabled() {
+    global $uniflixapp;
+
+    if ($uniflixapp && getUniFlixExtEnabled() && getUniFlixURL() && getUniFlixPublicAPI()
+        && getUniFlixPrivateAPI() && getUniFlixRLoginAPI() && getUniFlixRLoginCASAPI()
+        && getUniFlixLmsURL() && getUniFlixSecret()) {
         return true;
     }
     return false;
 }
 
-function getDelosJavaScript() {
+function getUniFlixJavaScript() {
     global $langOk;
     $head = '';
-    if (isset($_GET['form_input']) && $_GET['form_input'] === 'opendelos') {
+    if (isset($_GET['form_input']) && $_GET['form_input'] === 'uniflix') {
         $head .= <<<hContent
 <script type='text/javascript'>
 $(document).ready(function() {
@@ -128,33 +137,34 @@ hContent;
     return $head;
 }
 
-function getDelosButton() {
-    global $course_code, $langAddOpenDelosVideoLink;
-    return array('title' => $langAddOpenDelosVideoLink,
-        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;form_input=opendelos",
+function getUniFlixButton() {
+    global $course_code, $langAddUniFlixVideoLink;
+
+    return array('title' => $langAddUniFlixVideoLink,
+        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;form_input=uniflix",
         'icon' => 'fa-plus-circle',
         'level' => 'primary-label',
         'button-class' => 'btn-success');
 }
 
-function getDelosSignedToken() {
+function getUniFlixSignedToken() {
     global $course_code;
 
     $reuse = false;
-    if (isset($_SESSION[DELOSTOKENTIMESTAMP][$course_code]) && isset($_SESSION[DELOSTOKEN][$course_code])) {
-        if (time() < $_SESSION[DELOSTOKENTIMESTAMP][$course_code]) {
+    if (isset($_SESSION[UNIFLIXTOKENTIMESTAMP][$course_code]) && isset($_SESSION[UNIFLIXTOKEN][$course_code])) {
+        if (time() < $_SESSION[UNIFLIXTOKENTIMESTAMP][$course_code]) {
             $reuse = true;
         }
     }
 
     if ($reuse) {
-        return $_SESSION[DELOSTOKEN][$course_code];
+        return $_SESSION[UNIFLIXTOKEN][$course_code];
     } else {
-        return generateDelosSignedToken();
+        return generateUniFlixSignedToken();
     }
 }
 
-function generateDelosSignedToken() {
+function generateUniFlixSignedToken() {
     global $course_code;
 
     // encrypt token header
@@ -166,30 +176,30 @@ function generateDelosSignedToken() {
     $encodedHeader = base64url_encode($stringifiedHeader);
 
     // Set token expiration time to X minutes from now
-    $exp_time_in_seconds = time() + DELOSTOKENEXPIRE * 60;
+    $exp_time_in_seconds = time() + UNIFLIXTOKENEXPIRE * 60;
 
     // encrypt token data
     $data = array(
-        "url" => getDelosLmsURL(),
+        "url" => getUniFlixLmsURL(),
         "rid" => $course_code,
         "exp" => $exp_time_in_seconds,
-        "redirect_url" => $GLOBALS['urlServer'] . "modules/video/index.php?course=$course_code&amp;form_input=opendelos",
+        "redirect_url" => $GLOBALS['urlServer'] . "modules/video/index.php?course=$course_code&amp;form_input=uniflix",
     );
     $stringifiedData = json_encode($data);
     $encodedData = base64url_encode($stringifiedData);
 
     // encrypt token and encode token
     $token = $encodedHeader . "." . $encodedData;
-    $signature = base64url_encode(hash_hmac('sha256', $token, getDelosSecret(), true));
+    $signature = base64url_encode(hash_hmac('sha256', $token, getUniFlixSecret(), true));
     $signedToken = $token . "." . $signature;
 
-    $_SESSION[DELOSTOKEN][$course_code] = $signedToken;
-    $_SESSION[DELOSTOKENTIMESTAMP][$course_code] = $exp_time_in_seconds;
+    $_SESSION[UNIFLIXTOKEN][$course_code] = $signedToken;
+    $_SESSION[UNIFLIXTOKENTIMESTAMP][$course_code] = $exp_time_in_seconds;
 
     return $signedToken;
 }
 
-function getDelosSignedTokenForVideo($rid) {
+function getUniFlixSignedTokenForVideo($rid) {
     // encrypt token header
     $header = array(
         "alg" => "HS256",
@@ -199,11 +209,11 @@ function getDelosSignedTokenForVideo($rid) {
     $encodedHeader = base64url_encode($stringifiedHeader);
 
     // Set token expiration time to X minutes from now
-    $exp_time_in_seconds = time() + DELOSTOKENEXPIRE * 60;
+    $exp_time_in_seconds = time() + UNIFLIXTOKENEXPIRE * 60;
 
     // encrypt token data
     $data = array(
-        "url" => getDelosLmsURL(),
+        "url" => getUniFlixLmsURL(),
         "rid" => $rid,
         "exp" => $exp_time_in_seconds,
     );
@@ -212,43 +222,43 @@ function getDelosSignedTokenForVideo($rid) {
 
     // encrypt token and encode token
     $token = $encodedHeader . "." . $encodedData;
-    $signature = base64url_encode(hash_hmac('sha256', $token, getDelosSecret(), true));
+    $signature = base64url_encode(hash_hmac('sha256', $token, getUniFlixSecret(), true));
     $signedToken = $token . "." . $signature;
 
     return $signedToken;
 }
 
-function requestDelosJSON() {
+function requestUniFlixJSON() {
     global $course_code;
     $jsonPublicObj = null;
     $jsonPrivateObj = null;
     $checkAuth = false;
 
-    if (isDelosEnabled()) {
+    if (isUniFlixEnabled()) {
         // construct proper url for public resources
-        $delospublicurl = getDelosURL() . getDelosPublicAPI();
-        $delospublicurl .= (stringEndsWith($delospublicurl, "/")) ? '' : '/';
-        $jsonpublicurl = $delospublicurl . $course_code;
+        $uniflixpublicurl = getUniFlixURL() . getUniFlixPublicAPI();
+        $uniflixpublicurl .= (stringEndsWith($uniflixpublicurl, "/")) ? '' : '/';
+        $jsonpublicurl = $uniflixpublicurl . $course_code;
 
         // construct http headers
         $headers = array(
             'Accept: application/json',
             'Content-Type: application/json',
-            'X-CustomToken: ' . getDelosSignedToken(),
-            'Referer: http://' . getDelosLmsURL()
+            'X-CustomToken: ' . getUniFlixSignedToken(),
+            'Referer: http://' . getUniFlixLmsURL()
         );
 
-        // request public json from opendelos
+        // request public json from uniflix
         list($jsonpublic, $codepublic) = CurlUtil::httpGetRequest($jsonpublicurl, $headers);
         $jsonPublicObj = ($jsonpublic && $codepublic == 200) ? json_decode($jsonpublic) : null;
 
         // private resources
         // construct proper url for private resources
-        $delosprivateurl = getDelosURL() . getDelosPrivateAPI();
-        $delosprivateurl .= (stringEndsWith($delosprivateurl, "/")) ? '' : '/';
-        $jsonprivateurl = $delosprivateurl . $course_code;
+        $uniflixprivateurl = getUniFlixURL() . getUniFlixPrivateAPI();
+        $uniflixprivateurl .= (stringEndsWith($uniflixprivateurl, "/")) ? '' : '/';
+        $jsonprivateurl = $uniflixprivateurl . $course_code;
 
-        // request private json from opendelos
+        // request private json from uniflix
         list($jsonprivate, $codeprivate) = CurlUtil::httpGetRequest($jsonprivateurl, $headers);
         if ($codeprivate == 200) {
             $checkAuth = true;
@@ -259,10 +269,9 @@ function requestDelosJSON() {
     return array($jsonPublicObj, $jsonPrivateObj, $checkAuth);
 }
 
-function storeResources($jsonPublicObj, $jsonPrivateObj, $submittedResources) {
-
+function storeUniFlixResources($jsonPublicObj, $jsonPrivateObj, $checkAuth) {
     global $course_id;
-
+    $submittedResources = $_POST['UniFlixResources'];
     $submittedCategory = $_POST['selectcategory'];
     $searchEngine = SearchEngineFactory::create();
 

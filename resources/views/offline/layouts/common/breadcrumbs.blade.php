@@ -32,7 +32,7 @@
                                                 </a>
                                             </li>
                                         @else
-                                            <li class="breadcrumb-item active d-flex justify-content-center align-items-center TextMedium" aria-current="page"><a class='pe-none Neutral-900-cl vsmall-text'>{!! $item['bread_text'] !!}</a></li>
+                                            <li class="breadcrumb-item active d-flex justify-content-center align-items-center TextMedium"><a class='pe-none Neutral-900-cl vsmall-text' aria-current="{!! $item['bread_text'] !!}">{!! $item['bread_text'] !!}</a></li>
                                         @endif
                                     @endforeach
                                 </ol>

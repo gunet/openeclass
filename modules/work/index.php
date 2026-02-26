@@ -97,7 +97,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     }
     $data = [];
     if (isset($_POST['sid'])) {
-        $sid = $_POST['sid'];
+        $sid = getDirectReference($_POST['sid']);
         $data['submission_text'] = Database::get()->querySingle("SELECT submission_text FROM assignment_submit WHERE id = ?d", $sid)->submission_text;
     } elseif (isset($_POST['assign_g_type'])) {
         if ($_POST['assign_g_type'] == 2) {

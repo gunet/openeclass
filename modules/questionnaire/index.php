@@ -65,6 +65,7 @@ $head_content .= "<script type='text/javascript'>
                 'sPaginationType': 'full_numbers',
                 'bAutoWidth': true,
                 'searchDelay': 1000,
+                'responsive': true,
                 'order' : [[1, 'desc']],
                 'oLanguage': {
                    'lengthLabels': {
@@ -120,6 +121,18 @@ $head_content .= "<script type='text/javascript'>
             });
         });
         </script>";
+
+if (isset($_GET['cancelPoll'])) {
+    unset($_SESSION['current_page']);
+    unset($_SESSION['data_answers']);
+    unset($_SESSION['data_file_answer']);
+    unset($_SESSION['question_ids']);
+    unset($_SESSION['q_row_columns']);
+    unset($_SESSION['loop_init_answers']);
+    unset($_SESSION['loop_init_answers_session']);
+    unset($_SESSION['emptyQuestions']);
+    unset($_SESSION['onBehalfOfUserId']);
+}
 
 if (isset($_GET['verification_code'])) {
     $afftected_rows = Database::get()->query("UPDATE poll_user_record SET email_verification = 1, verification_code = NULL WHERE verification_code = ?s", $_GET['verification_code'])->affectedRows;
@@ -330,6 +343,16 @@ if ($is_editor) {
             }
         // delete poll results
         } elseif (isset($_GET['delete_results']) && $_GET['delete_results'] == 'yes') {
+            unset($_SESSION['current_page']);
+            unset($_SESSION['data_answers']);
+            unset($_SESSION['data_file_answer']);
+            unset($_SESSION['question_ids']);
+            unset($_SESSION['q_row_columns']);
+            unset($_SESSION['loop_init_answers']);
+            unset($_SESSION['loop_init_answers_session']);
+            unset($_SESSION['onBehalfOfUserId']);
+            $folder = "$webDir/courses/$course_code/poll_$pid";
+            deleteFolderContents($folder);
             Database::get()->query("DELETE FROM poll_user_record WHERE pid = ?d", $pid);
             $poll_title = Database::get()->querySingle("SELECT name FROM poll WHERE course_id = ?d", $course_id)->name;
             Log::record($course_id, MODULE_ID_QUESTIONNAIRE, LOG_DELETE, array('title' => $poll_title, 'legend' => 'purge_results'));
@@ -370,7 +393,10 @@ if ($is_editor) {
                     $poll->assign_to_specific,
                     $poll->show_results,
                     $poll->multiple_submissions,
-                    $poll->default_answer
+                    $poll->default_answer,
+                    $poll->pagination,
+                    $poll->require_answer,
+                    $poll->options
                 );
                 $new_pid = Database::get()->query("INSERT INTO poll
                                     SET creator_id = ?d,
@@ -386,7 +412,10 @@ if ($is_editor) {
                                         show_results = ?d,
                                         multiple_submissions = ?d,
                                         default_answer = ?d,
-                                        active = 1", $poll_data)->lastInsertID;
+                                        active = 1,
+                                        pagination = ?d,
+                                        require_answer = ?d,
+                                        options = ?s", $poll_data)->lastInsertID;
                 if ($poll->assign_to_specific) {
                     Database::get()->query("INSERT INTO `poll_to_specific` (user_id, group_id, poll_id)
                                             SELECT user_id, group_id, ?d FROM `poll_to_specific`
@@ -397,6 +426,7 @@ if ($is_editor) {
                     $answer_scales = !empty($question->answer_scale) ? $question->answer_scale : '';
                     $q_row = $question->q_row;
                     $q_column = $question->q_column;
+                    $total_weight = !is_null($question->total_weight) ? $question->total_weight : 0;
                     $new_pqid = Database::get()->query("INSERT INTO poll_question
                                                SET pid = ?d,
                                                    question_text = ?s,
@@ -406,15 +436,56 @@ if ($is_editor) {
                                                    `description` = ?s,
                                                    answer_scale = ?s,
                                                    q_row = ?d,
-                                                   q_column = ?d", $new_pid, $question->question_text, $question->qtype, $question->q_position, $question->q_scale, $q_description, $answer_scales, $q_row, $q_column)->lastInsertID;
+                                                   q_column = ?d,
+                                                   `page` = ?d,
+                                                   require_response = ?d,
+                                                   require_grade = ?d,
+                                                   total_weight = ?d,
+                                                   has_sub_question = ?d", 
+                                                   $new_pid, $question->question_text, $question->qtype, 
+                                                   $question->q_position, $question->q_scale, $q_description, 
+                                                   $answer_scales, $q_row, $q_column,
+                                                   $question->page, $question->require_response, $question->require_grade, $total_weight, $question->has_sub_question)->lastInsertID;
                     $answers = Database::get()->queryArray("SELECT * FROM poll_question_answer WHERE pqid = ?d ORDER BY pqaid", $question->pqid);
                     foreach ($answers as $answer) {
                         Database::get()->query("INSERT INTO poll_question_answer
                                                 SET pqid = ?d,
                                                     answer_text = ?s,
-                                                    sub_question = ?d", $new_pqid, $answer->answer_text, $answer->sub_question);
+                                                    sub_question = ?d,
+                                                    `weight` = ?d,
+                                                    sub_qid = ?d", $new_pqid, $answer->answer_text, $answer->sub_question, $answer->weight, $answer->sub_qid);
                     }
                 }
+
+                // Update the sub-question ids from poll_question_answer table.
+                $newQidsWithSubQ = Database::get()->queryArray("SELECT pqid FROM poll_question WHERE pid = ?d AND has_sub_question = ?d", $new_pid, 1);
+                $newSubQids = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d AND has_sub_question = ?d", $new_pid, -1);
+                $assocArrQ = [];
+                if (count($newSubQids) > 0) {
+                    foreach ($newSubQids as $q) {
+                        $oldQidWithSubQ = Database::get()->querySingle("SELECT pqid FROM poll_question 
+                                                                 WHERE pid = ?d
+                                                                 AND question_text = ?s
+                                                                 AND qtype = ?d
+                                                                 AND q_position = ?d
+                                                                 AND `page` = ?d
+                                                                 AND has_sub_question = ?d", $pid, $q->question_text, $q->qtype, $q->q_position, $q->page, $q->has_sub_question)->pqid;
+                        $assocArrQ[$oldQidWithSubQ] = $q->pqid;
+                    }
+                }
+                if (count($assocArrQ) > 0 && count($newQidsWithSubQ) > 0) {
+                    foreach ($newQidsWithSubQ as $q) {
+                        $new_answers = Database::get()->queryArray("SELECT pqaid,sub_qid FROM poll_question_answer WHERE pqid = ?d", $q->pqid);
+                        if (count($new_answers) > 0) {
+                            foreach ($new_answers as $an) {
+                                if (isset($assocArrQ[$an->sub_qid]) && $an->sub_qid > 0) {
+                                    Database::get()->query("UPDATE poll_question_answer SET sub_qid = ?d WHERE pqaid = ?d", $assocArrQ[$an->sub_qid], $an->pqaid);
+                                }
+                            }
+                        }
+                    }
+                }
+
                 $message = $langCopySuccess;
                 if (isset($clone_course)) {
                     $clone_code = q($clone_course->code);
@@ -491,7 +562,7 @@ function printPolls() {
     } else {
         // Print active polls
         $tool_content .= "<div class='col-sm-12'>
-                    <div class='table-responsive'>
+                    
               <table id='polls' class='table-default'>
               <thead>
                 <tr class='list-header'>
@@ -666,7 +737,7 @@ function printPolls() {
             }
         }
 
-        $tool_content .= "</tbody></table></div></div>
+        $tool_content .= "</tbody></table></div>
 
             <div class='modal fade' tabindex='-1' role='dialog' id='cloneModal'>
               <div class='modal-dialog' role='document'>
@@ -724,4 +795,31 @@ function printPolls() {
             </script>";
         load_js('select2');
     }
+}
+
+// Delete all uploaded files from the current poll
+function deleteFolderContents($folder) {
+    if (!is_dir($folder)) {
+        return false;
+    }
+
+    $items = scandir($folder);
+    foreach ($items as $item) {
+        if ($item === '.' || $item === '..') {
+            continue;
+        }
+
+        $itemPath = $folder . DIRECTORY_SEPARATOR . $item;
+
+        if (is_dir($itemPath)) {
+            // Recursively delete subdirectory contents
+            deleteFolderContents($itemPath);
+            // Remove the empty directory
+            rmdir($itemPath);
+        } else {
+            // Delete file
+            unlink($itemPath);
+        }
+    }
+    return true;
 }

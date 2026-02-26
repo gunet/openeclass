@@ -504,11 +504,18 @@ if ($is_exam) { // disallow links outside exercise frame. disallow button quick 
                     e.preventDefault();
                     return false;
                 });
+
+                $('#cancelExercise,.noAcceptAttempt').css('cursor', 'pointer');
+                $('.noAcceptAttempt').on('click', function (e) {
+                    e.preventDefault();
+                    window.location.href='$urlServer'+'modules/exercise/index.php?course=$course_code';
+                });
             });
     </script>";
 
-    if ($stricterExamMode && $exerciseType == SINGLE_PAGE_TYPE) {
-        $tool_content .= "
+    if ($stricterExamMode && $exerciseType == SINGLE_PAGE_TYPE &&
+        ($objExercise->selectAttemptsAllowed() == 0 or isset($_POST['acceptAttempt']))) {
+            $tool_content .= "
             <div class='col-12 d-flex justify-content-center align-items-center my-4 px-0'>
                 <div class='card panelCard card-default px-lg-4 py-lg-3'>
                     <div class='card-body'>
@@ -532,7 +539,7 @@ if ($is_exam) { // disallow links outside exercise frame. disallow button quick 
                         <div class='modal-header'>
                             <div class='modal-title' id='cancelModalLabel'>
                                 <div class='icon-modal-default'><i class='fa-solid fa-triangle-exclamation Warning-200-cl fa-xl'></i></div>
-                                <div class='modal-title-default text-center mb-0'>$langDelTitle</div>
+                                <h2 class='modal-title-default text-center mb-0'>$langDelTitle</h2>
                             </div>
                         </div>
                         <div class='modal-body text-center py-0'>
@@ -543,8 +550,7 @@ if ($is_exam) { // disallow links outside exercise frame. disallow button quick 
                         </div>
                     </div>
                 </div>
-            </div>
-            ";
+            </div>";
     }
 
 }
@@ -701,15 +707,15 @@ if (isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value]) || iss
                 $form_next_link = "{$urlAppend}modules/exercise/exercise_submit.php?course=$course_code&exerciseId=$exerciseId";
                 $form_cancel_link = "{$urlAppend}modules/exercise/index.php?course=$course_code";
             }
-            $tool_content .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>" .
-                ($left_attempts == 1 ? $langExerciseAttemptLeft : sprintf($langExerciseAttemptsLeft, $left_attempts)) .
-                ' ' . $langExerciseAttemptContinue . "</span></div>
-                <form action='$form_next_link' method='post'>
-                    <div class='col-12 d-flex justify-content-center align-items-center gap-2 flex-wrap' style='margin-top:70px;'>
-                            <input class='btn successAdminBtn' style='float: right;' id='submit' type='submit' name='acceptAttempt' value='$langContinue'>
-                            <a href='$form_cancel_link' class='btn cancelAdminBtn'>$langCancel</a>
-                    </div>
-                </form>";
+            $tool_content .= "<div class='alert alert-warning d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+                                <span>" . ($left_attempts == 1 ? $langExerciseAttemptLeft : sprintf($langExerciseAttemptsLeft, $left_attempts)) . ' ' . $langExerciseAttemptContinue . "</span>
+                                <form class='mt-0' action='$form_next_link' method='post'>
+                                    <div class='col-12 d-flex justify-content-center align-items-center gap-2 flex-wrap'>
+                                        <a href='$form_cancel_link' class='btn cancelAdminBtn noAcceptAttempt text-nowrap text-decoration-none'>$langCancel</a>
+                                        <input class='btn successAdminBtn' style='float: right;' id='submit' type='submit' name='acceptAttempt' value='$langContinue'>
+                                    </div>
+                                </form>
+                             </div>";
             unset_exercise_var($exerciseId);
             draw($tool_content, 2, null, $head_content);
             exit;

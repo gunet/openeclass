@@ -767,7 +767,7 @@ $langUnitJustEdited="Οι δραστηριότητες ενημερώθηκαν"
 $langFlippedClassroomDataUpdated ="Οι πληροφορίες της ανεστραμμένης Τάξης ενημερώθηκαν";
 $langConfirmDeleteUnit = "Θέλετε σίγουρα να αφαιρέσετε την συγκεκριμένη ενότητα;";
 $langConfirmDeleteGoal = "Θέλετε σίγουρα να αφαιρέσετε το συγκεκριμένο μαθησιακό στόχο;";
-$langUnits = "Θεματικές Ενότητες";
+$langDisplayAllUnits = "Εμφάνιση όλων των ενοτήτων";
 $langDoubleLoginLockOption = 'Αποκλεισμός ταυτόχρονων συνδέσεων με τον ίδιο λογαριασμό.';
 
 // admin announcements
@@ -1068,13 +1068,12 @@ $langEditAgent = "Επεξεργασία Agent";
  * **************************************************************** */
 $langCopyright = "Πληροφορίες Πνευματικών Δικαιωμάτων";
 $langCopyrightNotice = '
-<a href="http://www.openeclass.org" target=_blank>Open eClass</a> © 2003 - 2024<br>&nbsp;<br>
-Η πλατφόρμα ' . $siteName . ' βασίζεται στην ανοικτή πλατφόρμα <a href="http://www.openeclass.org" target=_blank>Open eClass</a>
+<a class="text-decoration-underline" href="http://www.openeclass.org" target=_blank>Open eClass</a> © 2003 - 2024<br>&nbsp;<br>
+Η πλατφόρμα ' . $siteName . ' βασίζεται στην ανοικτή πλατφόρμα <a class="text-decoration-underline" href="http://www.openeclass.org" target=_blank>Open eClass</a>
 η οποία είναι ένα ολοκληρωμένο Σύστημα Διαχείρισης Ηλεκτρονικών '.$langOfCourses.' και αποτελεί
 την πρόταση του Ακαδημαϊκού Διαδικτύου GUnet για την υποστήριξη της Υπηρεσίας
 Ασύγχρονης Τηλεκπαίδευσης. Aναπτύχθηκε και υποστηρίζεται ενεργά από την Ομάδα
-Ασύγχρονης Τηλεκπαίδευσης του GUnet και <a
-href="http://download.eclass.gunet.gr" target="_blank">διανέμεται ελεύθερα</a>
+Ασύγχρονης Τηλεκπαίδευσης του GUnet και <a class="text-decoration-underline" href="http://download.eclass.gunet.gr" target="_blank">διανέμεται ελεύθερα</a>
 ως Λογισμικό Ανοικτού Κώδικα σύμφωνα με τη γενική δημόσια άδεια GNU General
 Public License (GNU GPL).<br><br>
 Το περιεχόμενο των ηλεκτρονικών ' . $langsOfCourses . ' που φιλοξενεί η πλατφόρμα ' . $siteName . ',
@@ -1343,6 +1342,7 @@ $langVideoText = "Παράδειγμα ενός αρχείου RealVideo. Μπο
 $langGoogle = "Μηχανή αναζήτησης";
 $langIntroductionText = "Εισαγωγικό κείμενο του $langsOfCourse. Αντικαταστήστε το με το δικό σας, κάνοντας κλίκ στην <strong>Αλλαγή</strong>.";
 $langJustCreated = "Μόλις δημιουργήσατε με επιτυχία το $langsCourse με τίτλο ";
+$langCourseCreated = "Το $langsCourse δημιουργήθηκε με επιτυχία!";
 $langCreateCourseNotAllowedNode = "Επιλέξατε μη επιτρεπτές $langsFaculties. Παρακαλώ ξαναπροσπαθήστε.";
 $langUploadRecAudio = "Ηχογράφηση";
 $langUploadRecVideo = "Βιντεοσκόπηση";
@@ -1671,7 +1671,7 @@ $langAllGroups = "Όλες οι ομάδες";
 $langAllGroupsWithoutCategory = "Ομάδες που δεν ανήκουν σε κατηγορία";
 
 //neos odhgos dhmiourgias mathimaton
-$langEnterMetadata = "Μπορείτε να αλλάξετε τις ρυθμίσεις του $langsOfCourse μέσα από τη 'Διαχείριση $langOfCourse'";
+$langEnterMetadata = "Μπορείτε να αλλάξετε τις ρυθμίσεις του $langsOfCourse κάνοντας κλικ στο 'Διαχείριση $langOfCourse'";
 $langCreateCourse = "Οδηγός δημιουργίας $langsOfCourse";
 $langCreateCourseStep = "Βήμα";
 $langCreateCourseStep2 = "από";
@@ -1956,6 +1956,7 @@ $langCreateModif = "Δημιουργία / Αλλαγή των ερωτήσεω�
 $langSub = "Υπότιτλος";
 $langNewQu = "Νέα ερώτηση";
 $langNewLa = "Νέα ετικέτα/σχόλιο";
+$langAddPageBreak = "Προσθήκη αλλαγής σελίδας";
 $langTrue = "Σωστό";
 $langMoreAnswers = "+απάντ.";
 $langLessAnswers = "-απάντ.";
@@ -2093,9 +2094,9 @@ $langCodeExerciseLang = 'Γλώσσα προγραμματισμού';
 $langStricterExamRestriction = "Αυστηρός περιορισμός";
 $langExerciseWillBeCanceledInStrictMode = "Η εξέταση ακυρώνεται σε παράλληλες ενέργειες χρηστών όπως ανακατεύθυνση σε νέα σελίδα ή άνοιγμα νέου παραθύρου";
 $langExerciseNoCalcGradeMethod = "Κανονικός";
-$langExerciseCBCalcGradeMethod = "Βαθμός βεβαιότητας";
-$langExerciseCBCalcGradeMethodLegend = "Κατά την εκτέλεση της άσκησης θα πρέπει να επιλεγεί ο βαθμός βεβαιότητας της απάντησης. Ισχύει μόνο για τις ερωτήσεις 'Πολλαπλής επιλογής' και 'Σωστό / Λάθος'";
+$langExerciseCBCalcGradeMethod = "Με βαθμό βεβαιότητας";
 $langExerciseCalcGradeMethod = "Τρόπος Βαθμολόγησης";
+$langNegativeGrading = "Προσοχή, έχετε δώσει θετικό βαθμό σε λανθασμένη απάντηση. Αν επιθυμείτε αρνητική βαθμολόγηση βάλτε αρνητικό αριθμό.";
 
 // admin.php
 $langExerciseManagement = "Διαχείριση Άσκησης";
@@ -2155,6 +2156,7 @@ $langListenToRecordingAudio = "Ακούστε την ηχογραφημένη α
 $langFileUploadingOkReplaceWithNew = "Το αρχείο αποθηκεύτηκε με επιτυχία. Σε περίπτωση νέας προσπάθειας στην άσκηση, αν απαντήσετε την ίδια ερώτηση τότε το παλιό αρχείο θα αντικατασταθεί με το καινούριο.";
 $langScale = "Κλίμακας";
 $langFalse = "Λάθος";
+$langShortAnswer = "Σύντομη απάντηση";
 $langAddPicture = "Προσθήκη εικόνας";
 $langReplacePicture = "Αντικατάσταση της εικόνας";
 $langDeletePicture = "Διαγραφή της εικόνας";
@@ -2165,7 +2167,7 @@ $langInvalidPicture = "Μη υποστηριζόμενος τύπος εικόν
 $langQuestionDiffGrade = "Βαθμός δυσκολίας";
 $langNumQuestions = "Αρ. ερωτήσεων";
 $langQuestionAllDiffs = "Όλοι οι βαθμοί δυσκολίας";
-$langQuestionAllTypes = "'Όλοι οι τύποι ερωτήσεων";
+$langQuestionAllTypes = "Όλοι οι τύποι ερωτήσεων";
 $langQuestionNotDefined = "Μη προσδιορισμένη";
 $langQuestionVeryEasy = "Πολύ εύκολη";
 $langQuestionEasy = "Εύκολη";
@@ -2394,10 +2396,24 @@ $langSure = "Σίγουρος";
 $langNotSure = "Δεν είμαι σίγουρος";
 $langNotKnow = "Δεν γνωρίζω";
 
+$langMastery = "Πλήρης κατανόηση";
+$langMasteryTooltip = "Απάντησαν σωστά και με βεβαιότητα.";
+$langUnderconfident = "Διστακτικότητα";
+$langUnderconfidentTooltip = "Απάντησαν σωστά, αλλά δεν ένιωθαν σιγουριά.";
+$langGuessingRight = "Σωστή εικασία";
+$langGuessingRightTooltip = "Απάντησαν σωστά στην τύχη.";
+$langMisconception = "Παρανόηση";
+$langMisconceptionTooltip = "Απάντησαν λάθος, ενώ πίστευαν πως ήταν σωστό.";
+$langGuessingWrong = "Λάθος εικασία";
+$langGuessingWrongTooltip = "Απάντησαν στην τύχη και ήταν λάθος.";
+$langKnownGap = "Επίγνωση άγνοιας";
+$langKnownGapTooltip = "Απάντησαν λάθος, έχοντας δηλώσει πως δεν το γνωρίζουν.";
+
 // exercise_submit.php
 $langDoAnEx = "Κάντε μια άσκηση";
 $langCorrect = "Σωστό";
 $langIncorrect = "Λάθος";
+$langPartiallyCorrect = "Μερικώς Σωστό";
 $langCorrectS = "σωστό";
 $langIncorrectS = "λάθος";
 $langExerciseNotFound = "Η άσκηση δεν βρέθηκε";
@@ -2463,6 +2479,7 @@ $langNotRecorded = "μη καταγεγραμμένη";
 $langHasExpiredS = "έχει λήξει";
 $langHasExpired = "Έχει λήξει";
 $langSuccessPercentage = "Ποσοστό επιτυχίας";
+$langGradeMethod = "Κατανομή Βεβαιότητας";
 
 // import exercise.php
 $langImportExercise = "Εισαγωγή Άσκησης";
@@ -3588,6 +3605,9 @@ $langLimeSurvey = "Lime Survey";
 $langPollNoQuestions = "Στο ερωτηματολόγιο δεν έχουν οριστεί ερωτήσεις!";
 $langActivateParticipation = "Ενεργοποίηση Παρουσιολογίου";
 $langQuickSurvey = "Γρήγορη ερώτηση";
+$langCourseEvaluationSurvey = "Αξιολόγηση μαθήματος";
+$langPageBreak = "Αλλαγή σελίδας";
+$langUserGradesPoll = "Βαθμολογίες χρηστών";
 
 
 //COLLES survey
@@ -3691,6 +3711,14 @@ $langConnected = "Συνδεδεμένα";
 $langSeparated = "Χωρισμένα";
 $langBothWays = "Και με τους 2 τρόπους";
 
+// Course evaluation poll
+$lang_answer_scale_evaluation = "ΚΑΘΟΛΟΥ|ΠΟΛΥ ΛΙΓΟ|ΛΙΓΟ|ΠΟΛΥ|ΠΑΡΑ ΠΟΛΥ";
+$qCourseEvaluation_1 = "Πόσο ενδιαφέρον ήταν το μάθημα για εσάς;";
+$qCourseEvaluation_2 = "Πόσο κατανοητό και εύκολα προσβάσιμο ήταν το περιεχόμενο του μαθήματος;";
+$qCourseEvaluation_3 = "Πόσο χρήσιμες ήταν οι εκπαιδευτικές πηγές και το υλικό που παρέχονται κατά τη διάρκεια του μαθήματος;";
+$qCourseEvaluation_4 = "Πόσο θετικά επηρέασε η διδασκαλία την κατανόηση και το ενδιαφέρον σας για το αντικείμενο;";
+$qCourseEvaluation_5 = "Πόσο συμβάλλει το μάθημα στην επαγγελματική ή ακαδημαϊκή σας ανάπτυξη;";
+
 // polls
 $langPollsActive = "Ενεργά Ερωτηματολόγια";
 $langPollsInactive = "Ανενεργά Ερωτηματολόγια";
@@ -3699,6 +3727,7 @@ $langPollEnd = "Λήξη";
 $langPollEnded = "και τελείωσε την";
 $langPollOperations = "Λειτουργίες";
 $langPollAddAnswer = "Προσθήκη απαντήσεων";
+$langPollAddMsg = "Προσθήκη μηνύματος";
 $langPollMC = "Πολλαπλής Επιλογής";
 $langPollFillText = "Συμπληρώστε το κενό";
 $langPollMoreAnswers = "+";
@@ -3770,6 +3799,17 @@ $langPreviousQuestion = "Προηγούμενη";
 $langNextQuestion = "Επόμενη";
 $langEnableRequiredAnswer = "Υποχρεωτική απάντηση σε κάθε ερώτηση";
 $langGenQrCode = "Δημιουργία QR code";
+$langRequireAnswer = "Υποχρεωτική απάντηση";
+$langQuestionsRequireAnswers = "Παρακαλείσθε να συμπληρώσετε όλες τις υποχρεωτικές ερωτήσεις που έχουν επισημανθεί με κόκκινο περίγραμμα καθώς διαπιστώθηκε ότι μία ή περισσότερες από αυτές δεν έχουν απαντηθεί.";
+$langAddSubQuestion = "Προσθήκη υπο-ερώτησης σε συγκεκριμένη προκαθορισμένη απάντηση";
+$langSubQuestionExists = "Περιλαμβάνεται υπό-ερώτηση";
+$langInfoPollUploadedFile = "<ul><li>Η διαδικασία ανεβάσματος ολοκληρώνεται με την υποβολή του ερωτηματολογίου.</li><li>Σε περίπτωση αντικατάστασης του παλαιού αρχείου με νέο, και εφόσον το ερωτηματολόγιο δεν υποβληθεί, τα αρχεία θα διαγραφούν οριστικά.</li></ul>";
+$langConfirmDeletePermantly = "Το αρχείο θα διαγραφεί οριστικά. Θέλετε να συνεχίσετε?";
+$langScore = "Σκορ";
+$langScoreOn = "Ενεργό σκορ";
+$langScoreActivation = "Ενεργοποίηση σκορ";
+$langDateAndTime = "Ημερομηνία και ώρα";
+$langDateOnly = "Ημερομηνία";
 
 /* * **********************************************************
  * registration.php
@@ -4530,6 +4570,8 @@ $langUserDuration = "Συμμετοχή χρηστών";
 $langStartDate = "Ημερομηνία Έναρξης";
 $langEndDate = "Ημερομηνία Λήξης";
 $langAllUsers = "Όλοι οι χρήστες";
+$langSearchConsultant = "Αναζήτηση συμβούλου";
+$langAllConsultants = "Όλοι οι σύμβουλοι";
 $langAllAuthTypes = "Όλοι οι τρόποι πιστοποίησης";
 $langAllCourses = "Όλα τα $langsCourses";
 $langSubmit = "Υποβολή";
@@ -4670,6 +4712,7 @@ $langDelF = "Το αρχείο διαγράφηκε";
 $langAddV = "Προσθήκη αρχείου";
 $langAddVideoLink = "Σύνδεσμος βίντεο";
 $langAddOpenDelosVideoLink = "Σύνδεσμος OpenDelos";
+$langAddUniFlixVideoLink = "Σύνδεσμος UniFlix";
 $langsendV = "Αποστολή αρχείου ήχου ή βίντεο";
 $langDelList = "Διαγραφή όλων";
 $langVideoMod = "Τα στοιχεία του συνδέσμου τροποποιήθηκαν";
@@ -4690,9 +4733,13 @@ $langOpenDelosPrivateVideos = "Ιδιωτικά πολυμεσικά αρχεί�
 $langOpenDelosRequireAuth = "Για την εμφάνιση κλειστών πολυμεσικών αρχείων απαιτείται ξεχωριστή αυθεντικοποίηση με το OpenDelos";
 $langOpenDelosRequireAuthHere = "εδώ";
 $langOpenDelosAuth = "Αυθεντικοποίηση OpenDelos";
+$langOpenDelosHttpsError = "Η συνδεσιμότητα με το Open Delos δεν μπορεί να ενεργοποιηθεί γιατί ο τοπικός server χρησιμοποιεί HTTPS πρωτόκολλο, ενώ το Open Delos χρησιμοποιεί HTTP πρωτόκολλο. Οι νεότερες εκδόσεις των web browsers δεν επιτρέπουν μικτή χρήση των πρωτοκόλλων.";
 $langOpenDelosPrivateNote = "Σημείωση: Αν το μάθημά σας είναι 'ανοικτό' τότε τα κλειστά πολυμεσικά αρχεία θα είναι ορατά σε όλους τους χρήστες.";
 $langOpenDelosHttpsError = "Η συνδεσιμότητα με το Open Delos δεν μπορεί να ενεργοποιηθεί γιατί ο τοπικός server χρησιμοποιεί HTTPS πρωτόκολλο, ενώ το Open Delos χρησιμοποιεί HTTP πρωτόκολλο. Οι νεότερες εκδόσεις των web browsers δεν επιτρέπουν μικτή χρήση των πρωτοκόλλων.";
-
+$langUniFlixHttpsError = "Η συνδεσιμότητα με το Uni Flix δεν μπορεί να ενεργοποιηθεί γιατί ο τοπικός server χρησιμοποιεί HTTPS πρωτόκολλο, ενώ το Uni Flix χρησιμοποιεί HTTP πρωτόκολλο. Οι νεότερες εκδόσεις των web browsers δεν επιτρέπουν μικτή χρήση των πρωτοκόλλων.";
+$langUniFlixAuth = "Αυθεντικοποίηση με UniFlix";
+$langUniFlixNewFileVersion = "Υπάρχει νεώτερη έκδοση του αρχείου στο UniFlix.";
+$langUniFlixRequireAuth = "Για την εμφάνιση κλειστών πολυμεσικών αρχείων απαιτείται ξεχωριστή αυθεντικοποίηση με το UniFlix";
 
 /* * ***********************************************************
  * wiki.php
@@ -4907,6 +4954,7 @@ $langGroupWorkIntro = "
 $langAssignmentPasswordModalTitle = "Παρακαλώ πληκτρολογήστε τον κωδικό της εργασίας";
 $langWillStartAt = 'έναρξη στις';
 $langWillStart = 'θα ξεκινήσει σε';
+$langWillEnd = 'θα τελειώσει σε';
 $langGroupWorkSubmitted = "Έχει υποβληθεί";
 $langGroupWorkDeadline_of_Submission = "Προθεσμία";
 $langEmptyAsTitle = "Δεν συμπληρώσατε τον τίτλο της εργασίας";
@@ -5145,7 +5193,7 @@ $langUnitTitle = "Τίτλος ενότητας";
 $langUnitDescr = "Σύντομη περιγραφή";
 $langUnitUnknown = "Άγνωστη ενότητα";
 $langEmptyUnitTitle = "Παρακαλώ πληκτρολογήστε τον τίτλο της ενότητας";
-$langCourseUnits = "Ενότητες";
+$langCourseUnits = "Ενότητες $langsOfCourse";
 $langCourseUnitDeleteConfirm = "Είστε σίγουρος/η ότι Θέλετε να διαγράψετε την συγκεκριμένη ενότητα?";
 $langCourseUnitDeleted = "Η ενότητα διαγράφηκε";
 $langCourseUnitAdded = "Η ενότητα προστέθηκε";
@@ -6544,6 +6592,7 @@ $langUserWayShortDescription = "<p>Επιλογές προσβασιμότητα
 $langUserWayLongDescription = "<p>Επιλογές προσβασιμότητας μέσω της υπηρεσίας UserWay. Δείτε περισσότερες πληροφορίες στο <a href='https://userway.org/'>https://userway.org/</a></p>";
 $langOpenDelosDescription = "<p>Το OpenDelos είναι η πλατφόρμα ανοικτού λογισμικού που σχεδιάζει το GUNET για τη Διαχείριση, Καταγραφή και Μετάδοση Βιντεοδιαλέξεων.</p>
 <p>Η πλατφόρμα υποστηρίζει τη δράση <a href='http://ocw-project.gunet.gr/'>Ανοικτών Ακαδημαϊκών $langOfCourses</a> σε συνδυασμό με την <a href='http://openeclass.org/'>πλατφόρμα Open eClass</a> και την εθνική πύλη αναζήτησης $langsOfCourses που επίσης αναπτύσσει το GUNET.</p>";
+$langUniFlixDescription = "<p>Το UniFlix είναι η πλατφόρμα ανοικτού λογισμικού που έχει σχεδιαστεί και απαπτυχθεί από το GUNET για τη Διαχείριση, Καταγραφή και Μετάδοση Βιντεοδιαλέξεων.</p>";
 $langBBBDescription = "Το ανοικτό λογισμικό <a href=\"https://www.bigbluebutton.org/\" target=\"_blank\">BigBlueButton</a> αποτελεί  ένα πλήρες σύστημα άμεσης web-based επικοινωνίας και συνεργασίας $langsOfTeachers και $langsOfStudents.</p>
 <p>Δεν απαιτείται εγκατάσταση πρόσθετου υλικού (Software ή Hardware) και εκτελείται απευθείας από τον πλοηγό διαδικτύου (Internet Explorer, Firefox, Chrome, Safari, κ.α)r. Για τη σύνδεση του Open eClass με μία εγκατεστημένη πλατφόρμα BigBlueButton επιλέξτε <a href=\"bbbmoduleconf.php\">Ρυθμίσεις</a>.</p>";
 $langBBBLongDescription = "Σύνδεση με την υπηρεσία τηλεδιάσκεψης BigBlueButton.";
@@ -6970,8 +7019,8 @@ $langCreateCourseLeftForm = "Η δημιουργία μαθήματος είνα
 
 $langEclassInfo = "Η πλατφόρμα Open eClass αποτελεί ένα ολοκληρωμένο Σύστημα Διαχείρισης Ηλεκτρονικών Μαθημάτων. Ακολουθεί τη φιλοσοφία του λογισμικού ανοικτού κώδικα και υποστηρίζει την υπηρεσία Ασύγχρονης Τηλεκπαίδευσης χωρίς περιορισμούς και δεσμεύσεις. Η πρόσβαση στην υπηρεσία γίνεται με τη χρήση ενός απλού φυλλομετρητή (web browser) χωρίς την απαίτηση εξειδικευμένων τεχνικών γνώσεων.";
 $langSaidForUs = "Είπαν για εμάς";
-$langCloseOptions = "Κλείσιμο επιλογών";
-$langOpenOptions = "Άνοιγμα επιλογών";
+$langCloseOptions = "Κλείσιμο υπομενού μαθήματος";
+$langOpenOptions = "Άνοιγμα υπομενού μαθήματος";
 $langShowOnlyLoginScreen = "Εμφάνιση μόνο της φόρμας σύνδεσης";
 $langHomepageTexts = "Κείμενα αρχικής σελίδας";
 $langAccountStatus = "Κατάσταση λογαριασμού";
@@ -7511,6 +7560,14 @@ $langInvalidScore = "Μη έγκυρος βαθμός";
 $langRequestAlreadySent = "Έχει ήδη σταλεί αίτημα εγγραφής για αυτό το μάθημα";
 $langRejectedRequests = "Απορριφθείσες Αιτήσεις Χρηστών";
 $langAcceptedRequests = "Εγκεκριμένες Αιτήσεις Χρηστών";
+$langOpenUserMenu = "Άνοιγμα μενού επιλογών χρήστη";
+$langOpenMenu = "Άνοιγμα κεντρικού μενού πλοήγησης";
+$langDialogBox = "Παράθυρο διαλόγου";
+$langUsersAndBibliographicReference = "Χρήστες και βιβλιογραφική αναφορά";
+$langNextUnit = "Μετάβαση στην επόμενη ενότητα με τίτλο:";
+$langPrevUnit = "Μετάβαση στην προηγούμενη ενότητα με τίτλο:";
+$langCloseBox = "Κλείσιμο παραθύρου διαλόγου";
+$langMoveToPrevFolder = "Μετάβαση στον προηγούμενο φάκελο";
 
 // LaTeX / Math editor dialog (TinyMCE latexhelper)
 $langLatexDialogTitle = "Εισαγωγή LaTeX";
@@ -7526,11 +7583,3 @@ $langLatexCatFunctions = "Συναρτήσεις";
 $langLatexCatMathStructures = "Μαθηματικές Δομές";
 $langLatexCatMiscellaneous = "Διάφορα";
 $langLatexCatChemicalSymbols = "Χημικά Σύμβολα";
-$langOpenUserMenu = "Άνοιγμα μενού επιλογών χρήστη";
-$langOpenMenu = "Άνοιγμα κεντρικού μενού πλοήγησης";
-$langDialogBox = "Παράθυρο διαλόγου";
-$langUsersAndBibliographicReference = "Χρήστες και βιβλιογραφική αναφορά";
-$langNextUnit = "Μετάβαση στην επόμενη ενότητα με τίτλο:";
-$langPrevUnit = "Μετάβαση στην προηγούμενη ενότητα με τίτλο:";
-$langCloseBox = "Κλείσιμο παραθύρου διαλόγου";
-$langMoveToPrevFolder = "Μετάβαση στον προηγούμενο φάκελο";

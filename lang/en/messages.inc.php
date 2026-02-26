@@ -421,12 +421,12 @@ $langSaveErrorMessage = "Error. Chat could not be saved.";
 $langNoGuest = "Guest Users cannot access 'Chat'";
 $langCopyright = "Copyright Notice";
 $langCopyrightNotice = '
-Copyright © 2003 - 2013 <a href="http://www.openeclass.org" target=_blank>Open eClass</a>.<br>&nbsp;<br>
-Platform '.$siteName.' is based on the <a href="http://www.openeclass.org" target=_blank>Open eClass platform</a>
+Copyright © 2003 - 2013 <a class="text-decoration-underline" href="http://www.openeclass.org" target=_blank>Open eClass</a>.<br>&nbsp;<br>
+Platform '.$siteName.' is based on the <a class="text-decoration-underline" href="http://www.openeclass.org" target=_blank>Open eClass platform</a>
 which is a complete Electronic Course Management System and is GUnet\'s
 proposition for an Asynchronous eLearning Service infrastructure.
 It was developed and is actively supported by the GUnet Asynchronous
-eLearning Group, and is <a href="http://download.eclass.gunet.gr" target="_blank">distributed freely</a>
+eLearning Group, and is <a class="text-decoration-underline" href="http://download.eclass.gunet.gr" target="_blank">distributed freely</a>
 as Open Source Software under the GNU General Public License (GNU GPL).<br><br>
 The content of Electronic Courses hosted on the Open eClass platform, as well as
 all copyrights of this content, belongs to the authors of the courses and
@@ -676,6 +676,7 @@ $langDefScor = "Define scoring settings";
 $langCreateModif = "Creation/modification of questions";
 $langSub = "Sub-title";
 $langNewQu = "New Question";
+$langAddPageBreak = "Add Page Break";
 $langTrue = "True";
 $langMoreAnswers = "+answer";
 $langLessAnswers = "-answer";
@@ -1411,6 +1412,12 @@ $langSurveyCharts = "Survey results";
 $langHasParticipated = "Already participated";
 $langQQuestionNotGiven = "You have not entered the text for the last question.";
 $langQFillInAllQs = "Please answer all questions.";
+$lang_answer_scale_evaluation = "NOT AT ALL|VERY LITTLE|LITTLE|MUCH|TOO MUCH";
+$qCourseEvaluation_1 = "How interesting was the course for you?";
+$qCourseEvaluation_2 = "How understandable and easily accessible was the course content?";
+$qCourseEvaluation_3 = "How useful were the educational resources and materials provided during the course?";
+$qCourseEvaluation_4 = "How positively did the teaching affect your understanding and interest in the subject?";
+$qCourseEvaluation_5 = "How much does the course contribute to your professional or academic development?";
 $langPollsActive = "Active Questionnaires";
 $langPollsInactive = "Inactive Questionnaires";
 $langPollStart = "Inception";
@@ -1419,6 +1426,7 @@ $langPollEnd = "End Date";
 $langPollEnded = "and ended on";
 $langPollOperations = "Operations";
 $langPollAddAnswer = "Add Answers";
+$langPollAddMsg = "Add message";
 $langPollMC = "Multiple Choice";
 $langPollFillText = "Fill in the text";
 $langPollMoreAnswers = "More answers";
@@ -1442,6 +1450,11 @@ $langCollectiveCharts = "Aggregate results";
 $langHasNotParticipated = "Have not participated";
 $langThereAreParticipants = "Some participants have already responded. Changing the questionnaire might make the results invalid!";
 $langPollEmpty = "<p class='caution'>Please add more Questionnaire questions!</p>";
+$langScore = "Score";
+$langScoreOn = "Score is active";
+$langScoreActivation = "Score activation";
+$langDateAndTime = "Datetime";
+$langDateOnly = "Date";
 $langSee = "Preview";
 $langCourseName = "Course name";
 $langNoCoursesAvailable = "There are no available courses for registration";
@@ -1868,8 +1881,12 @@ $langUserDuration = "User participation";
 $langStartDate = "Start Date";
 $langEndDate = "End Date";
 $langAllUsers = "All Users";
+$langSearchConsultant = "Search consultant";
+$langAllConsultants = "All consultants";
+$langAllAuthTypes = "All authentication methods";
 $langAllCourses = "All Courses";
 $langSubmit = "Submit";
+$langCheck = "Check";
 $langModule = "Module";
 $langAllModules = "All Modules";
 $langValueType = "Statistics Type";
@@ -2156,7 +2173,7 @@ $langUnitTitle = "Unit title";
 $langUnitDescr = "Short description";
 $langUnitUnknown = "Unknown $langCourseS unit";
 $langEmptyUnitTitle = "Please enter the title of the $langCourseS unit";
-$langCourseUnits = "Units";
+$langCourseUnits = "Course Units";
 $langCourseUnitDeleted = "$langCourse unit has been deleted";
 $langCourseUnitAdded = "$langCourse unit has been added";
 $langCourseUnitModified = "$langCourse unit details modified";
@@ -3349,6 +3366,7 @@ $langImportQTI = "IMS QTI Import";
 $langIMSQTIUploadFile = "IMS QTI file";
 $langModifyInQuestionPool = "only in question pool";
 $langScale = "Scale";
+$langShortAnswer = "Short answer";
 $langQuestionDiffGrade = "Difficulty Grade";
 $langQuestionAllDiffs = "All Difficulty Grades";
 $langQuestionNotDefined = "Not defined";
@@ -3763,7 +3781,8 @@ $langEmailInfo = 'You can enter an email address in the following form.';
 $langUpgradeInProgress = 'Use is temporary restricted, because the platform is
     being upgraded since %s ago. Please wait for the upgrade to finish before trying
     to login.';
-$langAddOpenDelosVideoLink = "Add OpenDelos video link";
+$langAddOpenDelosVideoLink = "Add OpenDelos link";
+$langAddUniFlixVideoLink = "Add UniFlix link";
 $langOpenDelosReplaceInfo = "<p>Already existing links will be refreshed with current metadata.</p><p><span style='color:red'>*</span> The link already exists in $langsCourse videolinks.</p><p><span style='color:red'>**</span> The link already exists, but OpenDelos platform holds a newer version.</p>";
 $langWorkSubType = "Submission Type";
 $langWorkOnlineText = "Online Text";
@@ -4188,7 +4207,7 @@ $langUsageCoursesHeader = "Total $langsOfCourses";
 $langUsageUsers = "Total users";
 $langStatOfFaculty = "Statistics of $langOfFaculty";
 $langRecordLog = "Log actions";
-$langUnits = "Units";
+$langDisplayAllUnits = "Display all units";
 $langRegistrationLink = 'User registration link';
 $langRegistrationShowText = 'Show instructions instead of links';
 $langRegistrationInfo = 'Registration instructions';
@@ -4745,6 +4764,9 @@ $langOpenDelosRequireAuthHere = "here";
 $langOpenDelosAuth = "OpenDelos authentication";
 $langOpenDelosPrivateNote = "Note: If your course is open and you want to add multimedia files, then these will be visible to non logged-in users, too.";
 $langOpenDelosHttpsError = "Open Delos connectivity cannot be activated, because your server uses HTTPS protocol and Open Delos uses HTTP protocol. Newest broswer versions disallow mixing of protocols .";
+$langUniFlixAuth = "UniFlix authentication";
+$langUniFlixNewFileVersion = "There is a newwer verion of file in UniFlix.";
+$langUniFlixRequireAuth = ", UniFlix authentication is required, in order to display private multimedia files";
 $langGradeNumber = "Number";
 $langGradeScale = "Scale grade";
 $langDeleteSubmission = 'Submission delete';
@@ -5273,6 +5295,7 @@ $langReuseDeactivate = "Deactivate Reuse";
 $langGradebookAllBetweenRegDates = "All enrolled in the $langsCourse during the following period";
 $langQuestionUpdated = "The question was updated";
 $langFavorite = "Favourite";
+$langNoFavorite = "No favourite";
 $langOnlySubmissions = 'Only participants';
 $langOnlyNonSubmissions = 'Only non-participants';
 $langCreator = "Creator";
@@ -5526,6 +5549,9 @@ $langConfirmLpCleanAttemptBody = "With this option the next attempt of the Learn
 $langAssignmentParticipation = "Assignment Participation";
 $langParticipateSimple = "Simple Participation";
 $langQuickSurvey = "Quick Poll";
+$langCourseEvaluationSurvey = "Course Evaluation";
+$langPageBreak = "Page Break";
+$langUserGradesPoll = "User grades";
 $langShowFront = 'Show in home page';
 $langGiveRightCourseReviewer = "Add $langsOfCourseReviewer right";
 $langRemoveRightCourseReviewer = "Remove $langsOfCourseReviewer right";
@@ -6042,8 +6068,8 @@ Optionally specify the distribution license of your course.</br></br>
 Specify the type of access to your course. </br></br>";
 $langEclassInfo = "The Open eClass platform is a complete Electronic Course Management System. It follows the philosophy of open source software and supports the Asynchronous Distance Learning service without limitations and commitments. Access to the service is done using a simple web browser without requiring specialized technical knowledge.";
 $langSaidForUs = "They said about us";
-$langCloseOptions = "Close options";
-$langOpenOptions = "Open options";
+$langCloseOptions = "Close course submenu";
+$langOpenOptions = "Open course submenu";
 $langShowOnlyLoginScreen = "Display only login screen";
 $langHomepageTexts = "Homepage Texts";
 $langAvailableDateForUser = "My available days";
@@ -6204,7 +6230,7 @@ $langOpenNewTab = "Open in new tab";
 $langCurrentMonth = "Current month";
 $langPagination = "Pagination";
 $langOpenCloseTools = "Open - close tools";
-$langBreadcrumb = "Navigation";
+$langBreadcrumb = "Navigation path";
 $langSelectedLang = "Language selection";
 $langCourseSelection = "Course selection";
 $langFillInField = "Fill in the field";
@@ -6460,6 +6486,12 @@ $langEnablePagination = "Enable pagination";
 $langPreviousQuestion = "Previous";
 $langEnableRequiredAnswer = "Mandatory answer to every question";
 $langGenQrCode = "QR code creation";
+$langRequireAnswer = "Require answer";
+$langQuestionsRequireAnswers = "Please complete all mandatory questions marked with a red outline as it was found that one or more of them have not been answered.";
+$langAddSubQuestion = "Add a sub-question to a specific predefined answer";
+$langSubQuestionExists = "Sub-question included";
+$langInfoPollUploadedFile = "<ul><li>The upload process is completed with the submission of the questionnaire</li><li>In case of replacing the old file with a new one, and if the questionnaire is not submitted, the files will be permanently deleted.</li></ul>";
+$langConfirmDeletePermantly = "The file will be permanently deleted. Do you want to continue?";
 $langVisibleInfo = "visible only to $langsTeachers.";
 $langConfirmMonthlyReport = 'Attention! Report generation may run slowly if it is run for the first time in the current month.';
 $langConfirmChartReport = 'Attention! The chart generation process may run slowly.';
@@ -6514,6 +6546,7 @@ $langWorkUserGroupNoSubmission = 'Users/groups without submission';
 $langLateSubmission = "Late Submission";
 $langSubDate = "Date submission";
 $langWillStart = 'will start in';
+$langWillEnd = 'will end in';
 $langShowUnitTitle = "Show section by Title";
 $langInsertDivider = "separator";
 $langBBBScheduleSessionInfo3 = "is now available.";
@@ -6823,7 +6856,14 @@ $langCriteriaBelowParticipateInCompletion = "The following criteria are involved
 $langTheResource = "The resource";
 $langListCompletionCriteria = "List of criteria";
 $langUserParticipation = "User participation";
-
+$langOpenUserMenu = "Open user menu";
+$langOpenMenu = "Open main navigation menu";
+$langDialogBox = "Dialog box";
+$langUsersAndBibliographicReference = "Users and bibliographic reference";
+$langNextUnit = "Go to the next unit titled:";
+$langPrevUnit = "Go to the previous unit titled";
+$langCloseBox = "Close dialog box";
+$langMoveToPrevFolder = "Move to previous folder";
 // LaTeX / Math editor dialog (TinyMCE latexhelper)
 $langLatexDialogTitle = "Insert LaTeX";
 $langLatexInput = "LaTeX Input:";

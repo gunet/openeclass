@@ -1,5 +1,4 @@
 <?php
-
 /*
  *  ========================================================================
  *  * Open eClass
@@ -26,12 +25,10 @@ $helpSubTopic = 'open_delos';
 require_once '../../include/baseTheme.php';
 require_once 'modules/auth/auth.inc.php';
 require_once 'modules/admin/extconfig/externals.php';
-require_once 'modules/admin/extconfig/opendelosapp.php';
+require_once 'modules/admin/extconfig/uniflixapp.php';
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
-// code from extapp.php
-
-$app = ExtAppManager::getApp('opendelos');
+$app = ExtAppManager::getApp('uniflix');
 
 if (isset($_POST['submit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
@@ -55,10 +52,10 @@ if (isset($_POST['submit'])) {
 
     // http vs https check
     $server_https = isset($_SERVER['HTTPS']);
-    $delos_https = preg_match('/^https/i', $app->getParam(OpenDelosApp::URL)->value());
+    $uniflix_https = preg_match('/^https/i', $app->getParam(UniFlixApp::URL)->value());
 
-    if ($server_https && !$delos_https) {
-        Session::flash('message',$langOpenDelosHttpsError);
+    if ($server_https && !$uniflix_https) {
+        Session::flash('message',$langUniFlixHttpsError);
         Session::flash('alert-class', 'alert-danger');
         $app->setEnabled(0);
     }
@@ -114,3 +111,4 @@ $tool_content .= "</form></div></div>
         </div></div>";
 
 draw($tool_content, 3, null);
+

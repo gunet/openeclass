@@ -3428,6 +3428,7 @@ function upgrade_to_4_2($tbl_options) : void {
     Database::get()->query("ALTER TABLE attendance_book CHANGE attendance_activity_id attendance_activity_id INT NOT NULL");
     Database::get()->query("ALTER TABLE attendance_users CHANGE id id INT NOT NULL AUTO_INCREMENT");
     Database::get()->query("ALTER TABLE attendance_users CHANGE attendance_id attendance_id INT NOT NULL");
+    Database::get()->query("ALTER TABLE attendance_users MODIFY uid INT NOT NULL DEFAULT 0");
 
     if (!DBHelper::foreignKeyExists('attendance', 'course_id', 'course', 'id')) {
         DBHelper::createForeignKey('attendance', 'course_id', 'course', 'id', DBHelper::FKRefOption_CASCADE, DBHelper::FKRefOption_CASCADE);
@@ -3447,7 +3448,6 @@ function upgrade_to_4_2($tbl_options) : void {
     if (!DBHelper::foreignKeyExists('attendance_users', 'uid', 'user', 'id')) {
         DBHelper::createForeignKey('attendance_users', 'uid', 'user', 'id', DBHelper::FKRefOption_CASCADE, DBHelper::FKRefOption_CASCADE);
     }
-
 
     if (!DBHelper::tableExists('ai_providers')) {
         Database::get()->query("CREATE TABLE ai_providers (
@@ -3552,7 +3552,8 @@ function upgrade_to_4_2($tbl_options) : void {
     if (!DBHelper::fieldExists('lp_user_module_progress', 'progress_measure')) {
         Database::get()->query("ALTER TABLE lp_user_module_progress ADD `progress_measure` FLOAT DEFAULT NULL AFTER `session_time`");
     }
-    // flipped classroom
+
+    // flipped classroom: index and seed data
     Database::get()->query("ALTER TABLE course_activities ADD UNIQUE KEY(activity_id, activity_type)");
     Database::get()->query("INSERT IGNORE INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unit_id`,`module_id`) VALUES ('FC18', 1, 0, 0, 0)");
 
@@ -3582,6 +3583,107 @@ function upgrade_to_4_2($tbl_options) : void {
 
     if (!DBHelper::fieldExists('assignment', 'results_date')) {
         Database::get()->query("ALTER TABLE assignment ADD results_date DATETIME DEFAULT NULL AFTER submission_date;");
+    }
+}
+
+
+/**
+ * @brief upgrade queries for 4.3
+ * @param $tbl_options
+ * @return void
+ */
+function upgrade_to_4_3() : void {
+
+    // Exercises
+    if (DBHelper::fieldExists('exercise', 'general_feedback')) {
+        Database::get()->query("ALTER TABLE exercise CHANGE general_feedback end_message TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
+    }
+    if (!DBHelper::fieldExists('exercise', 'feedback')) {
+        Database::get()->query("ALTER TABLE exercise ADD feedback TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
+    }
+    if (!DBHelper::fieldExists('exercise_answer_record', 'certainty')) {
+        Database::get()->query("ALTER TABLE exercise_answer_record ADD certainty INT DEFAULT 0 AFTER weight");
+    }
+    // Questionnaires
+    if (!DBHelper::fieldExists('poll_question', 'page')) {
+        Database::get()->query("ALTER TABLE poll_question ADD `page` INT NOT NULL DEFAULT 0");
+    }
+
+    if (!DBHelper::fieldExists('poll_question', 'require_response')) {
+        Database::get()->query("ALTER TABLE poll_question ADD `require_response` INT NOT NULL DEFAULT 0");
+    }
+
+    if (!DBHelper::fieldExists('poll_question', 'require_grade')) {
+        Database::get()->query("ALTER TABLE poll_question ADD `require_grade` INT NOT NULL DEFAULT 0");
+    }
+
+    if (!DBHelper::fieldExists('poll_question', 'total_weight')) {
+        Database::get()->query("ALTER TABLE poll_question ADD `total_weight` FLOAT NULL");
+    }
+
+    if (!DBHelper::fieldExists('poll_question', 'has_sub_question')) {
+        Database::get()->query("ALTER TABLE poll_question ADD `has_sub_question` INT NOT NULL DEFAULT 0");
+    }
+
+    if (!DBHelper::fieldExists('poll_question_answer', 'weight')) {
+        Database::get()->query("ALTER TABLE poll_question_answer ADD `weight` FLOAT NULL");
+    }
+
+    if (!DBHelper::fieldExists('poll_question_answer', 'sub_qid')) {
+        Database::get()->query("ALTER TABLE poll_question_answer ADD `sub_qid` INT NOT NULL DEFAULT 0");
+    }
+
+    // About pagination: If the poll has enabled the pagination option.
+    // add page break and display each question per page.
+    $poll_ids = Database::get()->queryArray("SELECT pid FROM poll WHERE pagination = ?d", 1);
+    if (count($poll_ids) > 0) {
+        foreach ($poll_ids as $poll) {
+            $question_ids = Database::get()->queryArray("SELECT pqid,q_position,`page` FROM poll_question WHERE pid = ?d ORDER BY q_position", $poll->pid);
+            if (count($question_ids) > 0) {
+                $c = 0;
+                $page = 1;
+                $pos = 0;
+                foreach ($question_ids as $question) {
+                    if ($c >= 1) {
+                        $pos++;
+                        $page++;
+                        Database::get()->query("UPDATE poll_question SET
+                                                q_position = ?d, `page` = ?d WHERE pqid = ?d", $pos, $page, $question->pqid);
+                        if ($c < count($question_ids) - 1) {
+                            $pos++;
+                            Database::get()->query("INSERT INTO poll_question SET
+                                                    pid = ?d,
+                                                    question_text = ?s,
+                                                    qtype = ?d,
+                                                    q_position = ?d", $poll->pid, '--- Page Break ---', 0, $pos);
+                        }
+                    } else {
+                        Database::get()->query("UPDATE poll_question SET `page` = ?d WHERE pqid = ?d", $page, $question->pqid);
+                        $pos = $question->q_position+1;
+                        Database::get()->query("INSERT INTO poll_question SET
+                                                pid = ?d,
+                                                question_text = ?s,
+                                                qtype = ?d,
+                                                q_position = ?d", $poll->pid, '--- Page Break ---', 0, $pos);
+                    }
+                    $c++;
+                }
+            }
+        }
+    }
+
+    // About require answer: If the poll has enabled the require answer for each question.
+    // Add require answer option for each question.
+    $poll_ids = Database::get()->queryArray("SELECT pid FROM poll WHERE require_answer = ?d", 1);
+    if (count($poll_ids) > 0) {
+        foreach ($poll_ids as $poll) {
+            $question_ids = Database::get()->queryArray("SELECT pqid FROM poll_question WHERE pid = ?d AND qtype != ?d", $poll->pid, 0);
+            if (count($question_ids) > 0) {
+                foreach ($question_ids as $question) {
+                    Database::get()->query("UPDATE poll_question SET require_response = ?d WHERE pqid = ?d", 1, $question->pqid);
+                }
+            }
+        }
     }
 
     if (!DBHelper::fieldExists('lp_learnPath', 'force_completed_progress')) {

@@ -128,7 +128,7 @@
                                 <div class='title-default'>{{ trans(('langWorkOnlineText')) }}</div>
                             </div>
                             <div class='col-sm-9 col-12 title-default-line-height'>
-                                <a href='#' class='onlineText btn submitAdminBtn d-inline-flex' data-id='{{ $submission_id }}'>{{ trans('langQuestionView') }}</a>
+                                <a href='#' class='onlineText btn submitAdminBtn d-inline-flex' data-id='{{ getIndirectReference($submission_id) }}'>{{ trans('langQuestionView') }}</a>
                             </div>
                         </div>
                     </li>
