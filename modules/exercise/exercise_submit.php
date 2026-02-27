@@ -979,6 +979,89 @@ foreach ($questionList as $k => $q_id) {
     }
 }
 
+// Check if any FREE_TEXT question is a code exercise
+$hasCodeExercise = false;
+$codeEditors = [];
+foreach ($questionList as $q_id) {
+    $t_question = $questions[$q_id] ?? null;
+    if ($t_question && $t_question->selectType() == FREE_TEXT) {
+        $qOptions = $t_question->selectOptions();
+        $qOpts = json_decode($qOptions ?? '', true);
+        if (($qOpts['code_exercise'] ?? false) === true) {
+            $hasCodeExercise = true;
+            $codeEditors[] = [
+                'id' => $q_id,
+                'language' => $qOpts['code_language'] ?? 'javascript'
+            ];
+        }
+    }
+}
+
+// Load CodeMirror if needed (only the mode(s) for the selected language(s))
+if ($hasCodeExercise) {
+    require_once __DIR__ . '/code_exercise_languages.inc.php';
+    load_js('codemirror');
+    $head_content .= '<link rel="stylesheet" href="' . $urlAppend . 'js/codemirror/lib/codemirror.css">';
+    $head_content .= '
+    <style>
+    .code-exercise-header-bar{ 
+        height: 30px; 
+        background: #F7F7F7; 
+        border:1px solid #ddd; 
+        border-bottom:none; 
+        border-radius:4px 4px 0 0; 
+    }
+    </style>';
+    $languagesToLoad = array_unique(array_column($codeEditors, 'language'));
+    $loadedModes = [];
+    foreach ($languagesToLoad as $lang) {
+        $opts = $CODE_EXERCISE_LANGUAGES[$lang] ?? null;
+        if ($opts) {
+            if (!in_array($opts['mode'], $loadedModes)) {
+                $head_content .= js_link('codemirror/mode/' . $opts['mode']);
+                $loadedModes[] = $opts['mode'];
+            }
+            if (!empty($opts['extra'])) {
+                foreach ($opts['extra'] as $extra) {
+                    if (!in_array($extra, $loadedModes)) {
+                        $head_content .= js_link('codemirror/mode/' . $extra);
+                        $loadedModes[] = $extra;
+                    }
+                }
+            }
+        }
+    }
+    // Add initialization script
+    $head_content .= "
+    <script>
+    $(document).ready(function() {
+        document.querySelectorAll('.code-exercise-editor').forEach(function(textarea) {
+            var questionId = textarea.id.replace('code_editor_', '');
+            var language = textarea.getAttribute('data-language') || 'javascript';
+            var editor = CodeMirror.fromTextArea(textarea, {
+                lineNumbers: true,
+                mode: language
+            });
+            var wrapper = textarea.nextElementSibling;
+            if (wrapper && wrapper.classList.contains('CodeMirror')) {
+                var headerBar = document.createElement('div');
+                headerBar.className = 'code-exercise-header-bar';
+                wrapper.parentNode.insertBefore(headerBar, wrapper);
+            }
+            editor.on('change', function() {
+                if (editor.getValue().trim() !== '') {
+                    var qPanel = $('#qPanel' + questionId);
+                    var qCheck = qPanel.find('span').first();
+                    var qButton = $('#' + qCheck.attr('id').replace('qCheck', 'q_num'));
+                    qCheck.addClass('fa fa-check');
+                    qButton.removeClass('btn-default').addClass('btn-info');
+                }
+            });
+        });
+    });
+    </script>";
+}
+
 if ($questionList) {
     // Display a notification that informs the user that the exercise will be canceled.
     // if ($is_exam && $stricterExamMode && $exerciseType == SINGLE_PAGE_TYPE) {

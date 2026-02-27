@@ -5619,6 +5619,8 @@ $langCourseDeletedBy = "Deleted by";
 $langNoticeCourseDeleted = "If the $langsCourse was deleted by you, you can ignore this email. If the deletion was done by mistake and you wish to restore your $langsCourse, please contact the platform administrators.";
 $langExercisePreventCopy = 'Prevent Text Copying';
 $langExercisePreventCopyExplanation = 'Prevent copying and pasting text during execution of the exercise';
+$langCodeExercise = 'Code Exercise';
+$langCodeExerciseLang = 'Programming Language';
 $langDoubleLoginLock = 'You have logged into the platform from another device
     with the same account. Double logins are disabled, so your current login has
     been disconnected.';

@@ -13,7 +13,8 @@
     "h5p-standalone": "^3.8.0",
     "mathjax": "4",
     "recordrtc": "^5.6.2",
-    "video.js": "^8.19"
+    "video.js": "^8.19",
+    "codemirror": "^5.65.20"
   },
   "scripts": {
     "postinstall": "php ./js/build/build.php"
