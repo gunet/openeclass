@@ -3011,6 +3011,7 @@ $lang_user_multidep = "Να επιτρέπεται η εγγραφή χρηστ�
 $lang_restrict_owndep = "Να μην επιτρέπεται η αλλαγή τμήματος από τους χρήστες";
 $lang_restrict_teacher_owndep = "Να μην επιτρέπεται η δημιουργία $langsOfCourses από τους $langsTeachers στα τμήματα που δεν ανήκουν";
 $lang_allow_teacher_clone_course = "Να επιτρέπεται η κλωνοποίηση $langsOfCourses από τους $langsTeachers";
+$lang_allow_teacher_import_course = "Να επιτρέπεται η εισαγωγή υλικού $langsOfCourses από τους $langsTeachers";
 $lang_enable_user_consent = "Ενεργοποίηση επιβεβαίωσης συμμετοχής των χρηστών στις συνεδρίες";
 $lang_allow_rec_video = "Να επιτρέπεται η δημιουργία βιντεοσκοπημένου αρχείου στο $langsCourse";
 $lang_allow_rec_audio = "Να επιτρέπεται η δημιουργία ηχογραφημένου αρχείου στο $langsCourse";
