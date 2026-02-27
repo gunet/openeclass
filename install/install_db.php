@@ -1279,6 +1279,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `exercise_answer_record` (
     `answer` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci,
     `answer_id` INT NOT NULL,
     `weight` float(11,2) DEFAULT NULL,
+    `certainty` INT DEFAULT 0,
     `is_answered` TINYINT NOT NULL DEFAULT 1,
     `q_position` INT NOT NULL DEFAULT 1) $tbl_options");
 

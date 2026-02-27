@@ -27,6 +27,11 @@ require_once 'restore_functions.php';
 
 $toolName = $langImportCourse;
 
+if (!($is_admin || get_config('allow_teacher_import_course'))) {
+    header("Location:" . $urlServer . "index.php");
+    exit();
+}
+
 if (isset($_GET['do_fetch'])) {
     set_time_limit(0);
     $old_course_id = $_POST['import_course_id'];

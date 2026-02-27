@@ -340,7 +340,12 @@ function deleteAll($dir) {
  */
 function delete_session($sid = 0){
 
-    global $course_code, $webDir, $course_id;
+    global $course_code, $webDir, $course_id, $is_coordinator;
+
+    // Check if uid is the coordinator or the consultant of the current session.
+    if (!$is_coordinator && !is_session_consultant($sid,$course_id)) {
+        forbidden();
+    }
 
     if($sid){
         $sqlbadge = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND session_id = ?d", $course_id, $sid);
