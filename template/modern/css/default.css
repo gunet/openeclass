@@ -6495,3 +6495,27 @@ th.grade-col a{
 .page-item.active .page-link {
   z-index: 1 !important;
 }
+
+/******************************** poll results ************************************/
+
+.card-poll-results{
+ border-radius: 10px;
+}
+
+.poll-border-left {
+  border-left: solid 4px #0073E6 !important;
+}
+.pollTotalAnswers{
+  display: none;
+}
+.level-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: #fef3c7;
+    color: #92400e;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}

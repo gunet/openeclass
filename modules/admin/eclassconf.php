@@ -130,6 +130,7 @@ if (isset($_POST['submit'])) {
         'user_multidep' => true,
         'restrict_owndep' => true,
         'restrict_teacher_owndep' => true,
+        'allow_teacher_import_course' => true,
         'allow_teacher_clone_course' => true,
         'disable_cron_jobs' => true,
         'disable_log_actions' => true,
@@ -295,6 +296,7 @@ else {     // Display config.php edit form
     $data['cbox_restrict_owndep']  = get_config('restrict_owndep') ? 'checked' : '';
     $data['cbox_restrict_teacher_owndep']  = get_config('restrict_teacher_owndep') ? 'checked' : '';
     $data['cbox_allow_teacher_clone_course']  = get_config('allow_teacher_clone_course') ? 'checked' : '';
+    $data['cbox_allow_teacher_import_course']  = get_config('allow_teacher_import_course') ? 'checked' : '';
     $data['town_dis']  = get_config('restrict_owndep') ? '' : 'disabled';
     $data['cbox_insert_xml_metadata']  = get_config('insert_xml_metadata') ? 'checked' : '';
     $data['cbox_course_metadata']  = get_config('course_metadata') ? 'checked' : '';

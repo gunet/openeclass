@@ -284,6 +284,7 @@ function generate_infinite_container_html($posts, $posts_per_page, $next_page, $
 
                           });
                       </script>';
+    //<div class="card panelCard card-transparent border-0 mt-5" style="background-color: #f0f2f5; padding: 20px 25px 0;">
     $ret = '
         <div class="card panelCard card-transparent border-0 mt-5">
           <div class="card-header card-header-default px-0 py-0 border-0 d-md-flex justify-content-md-between align-items-md-center">
@@ -300,7 +301,9 @@ function generate_infinite_container_html($posts, $posts_per_page, $next_page, $
         $content = $post->content;
         $pinned = $post->pinned;
         $token = token_generate($user_id, true);
-        $datetime = format_locale_date(strtotime($post->datetime));
+//        $datetime = format_locale_date(strtotime($post->datetime));
+        $datetime = $post->datetime;
+        $postedAgo = time_ago($post->datetime);
         $extvideo = $post->extvideo;
         if ($extvideo == '') {
             $shared = $langWallSharedPost;
@@ -323,7 +326,7 @@ function generate_infinite_container_html($posts, $posts_per_page, $next_page, $
         $rating_content = $rating->put($is_editor, $uid, $course_id);
 
         $comm = new Commenting('wallpost', $id);
-        $comm_content = "<a class='commentPress float-end' href='".$urlServer."modules/wall/index.php?course=$course_code&amp;showPost=".$id."#comments_title'>
+        $comm_content = "<a class='commentPress href='".$urlServer."modules/wall/index.php?course=$course_code&amp;showPost=".$id."#comments_title'>
                             <span class='vsmall-text'>$langComments (".$comm->getCommentsNum().")</span>
                         </a>";
 
@@ -378,32 +381,27 @@ function generate_infinite_container_html($posts, $posts_per_page, $next_page, $
               <div class="infinite-item ">
                 <div class="row margin-right-thin margin-left-thin margin-top-thin">
                   <div class="col-12 mb-4">
-                    <div class="card panelCard px-lg-4 py-lg-3">
-                      <div class="card-header border-0 d-flex justify-content-between align-items-center gap-4">
-                        <div class="media-left d-flex justify-content-start align-items-start gap-1 px-0">
+                    <div class="card panelCard px-lg-2 py-lg-2" style="border-color: #e8edf8;background-color: #FCFCFC;">
+                      <div class="card-header border-0 d-flex justify-content-between gap-4 pb-0">
+                        <div class="media-left d-flex justify-content-start align-items-center gap-3 px-0">
                             <div style="min-width:32px;">'. profile_image($user_id, IMAGESIZE_SMALL, 'img-circle rounded-circle') . '</div>
-                            <div class="d-flex justify-content-start align-items-start gap-1 flex-wrap" style="margin-top:8px; line-height:16px;">
-                                <div>'.$langWallUser.'</div>
-                                <div style="margin-top:0px;">'.display_user($user_id, false, false).'</div>'.
-                                '<div>'.$shared.'</div>
+                            <div class="d-flex flex-column justify-content-start align-items-start gap-1 flex-wrap">
+                                <div style="margin-top:0px;">'.display_user($user_id, false, false).'</div>
+                                <div class="text-muted" data-bs-toggle="tooltip" title="'.$datetime.'">'.$postedAgo.'</div>
                             </div>
                         </div>' .
                         $post_actions . '
                       </div>
 
-                      <div class="card-body bubble overflow-auto Borders">
-                        <p class="TextBold">'.$datetime.'</p>
-
-                        <div class="margin-top-thin" style="padding:20px">' .
-                          $extvideo_block . '
-                        <div class="userContent title-default">'.nl2br(standard_text_escape($content)).'</div>
-                      </div>' .
-                      show_resources($id) . '
-                      <div class="row">
-                        <div class="col-lg-8 col-md-9 col-12">' .
-                          $rating_content . '
-                        </div>
-                        <div class="col-lg-4 col-md-3 col-12 mt-md-0 mt-3">' .
+                      <div class="card-body bubble overflow-auto Borders pt-0 pb-1">
+                        <div class="margin-top-thin">
+                            <div class="userContent title-default pb-4">'.nl2br(standard_text_escape($content)).'</div>
+                            ' . $extvideo_block . '
+                        </div>' .
+                        show_resources($id) . '
+                      <div class="d-flex flex-row justify-content-around align-items-center pt-2" style="border-top: 1px solid #e8edf8;">
+                        ' . $rating_content . '
+                        <div>' .
                           $comm_content.'
                         </div>
                       </div>
@@ -549,9 +547,8 @@ function show_resources($post_id) {
 
     $req = Database::get()->queryArray("SELECT * FROM wall_post_resources WHERE post_id = ?d", $post_id);
     if (count($req) > 0) {
-        $ret_str .= '<div class="table-responsive">';
-        $ret_str .= '<table class="table table-default">';
-        $ret_str .= '<thead><tr><th colspan="2"><span style="font-size:12px">'.$langWallAttachedResources.'</span></th></tr></thead>';
+        $ret_str .= '<div class="table-responsive mt-0">';
+        $ret_str .= '<table class="table table-default mb-0" style="border-top: 1px solid #e8edf8;">';
         foreach ($req as $info) {
             $ret_str .= show_resource($info);
         }
@@ -828,4 +825,43 @@ function file_url_replacement($path, $filename, $subsystem, $uid) {
     return htmlspecialchars($urlServer .
             "modules/document/file.php?$course_code" .
             public_file_path($path, $filename), ENT_QUOTES);
+}
+
+function time_ago($datetime) {
+
+    global $langsecond, $langseconds,
+           $langminute, $langminutes,
+           $langhour, $langhours,
+           $langDay, $langDays,
+           $langsWeek, $langWeeks,
+           $langsMonth, $langMonthsAbstract,
+           $langsYear, $langsYears,
+           $langAgo;
+
+    $timestamp = is_numeric($datetime) ? $datetime : strtotime($datetime);
+    $diff = time() - $timestamp;
+
+    if ($diff < 60) {
+        $value = $diff;
+        $unit = ($value == 1) ? $langsecond : $langseconds;
+    } elseif ($diff < 3600) {
+        $value = floor($diff / 60);
+        $unit = ($value == 1) ? $langminute : $langminutes;
+    } elseif ($diff < 86400) {
+        $value = floor($diff / 3600);
+        $unit = ($value == 1) ? $langhour : $langhours;
+    } elseif ($diff < 604800) {
+        $value = floor($diff / 86400);
+        $unit = ($value == 1) ? $langDay : $langDays;
+    } elseif ($diff < 2592000) {
+        $value = floor($diff / 604800);
+        $unit = ($value == 1) ? $langsWeek : $langWeeks;
+    } elseif ($diff < 31536000) {
+        $value = floor($diff / 2592000);
+        $unit = ($value == 1) ? $langsMonth : $langMonthsAbstract;
+    } else {
+        $value = floor($diff / 31536000);
+        $unit = ($value == 1) ? $langsYear : $langsYears;
+    }
+    return $value . ' ' . $unit . ' ' . $langAgo;
 }

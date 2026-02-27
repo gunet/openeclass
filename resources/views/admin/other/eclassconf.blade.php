@@ -499,6 +499,13 @@
                                                 </div>
                                                 <div class='checkbox'>
                                                     <label class='label-container' aria-label="{{ trans('langSelect') }}">
+                                                        <input type='checkbox' name='allow_teacher_import_course' value='1' {{ $cbox_allow_teacher_import_course }}>
+                                                        <span class='checkmark'></span>
+                                                        {{ trans('lang_allow_teacher_import_course') }}
+                                                    </label>
+                                                </div>
+                                                <div class='checkbox'>
+                                                    <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                         <input type='checkbox' name='allow_teacher_clone_course' value='1' {{ $cbox_allow_teacher_clone_course }}>
                                                         <span class='checkmark'></span>
                                                         {{ trans('lang_allow_teacher_clone_course') }}
