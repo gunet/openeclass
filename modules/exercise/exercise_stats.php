@@ -324,7 +324,7 @@ $tool_content .= "</div>
 
                                             $tool_content .= "
                                             <div class='col-12 col-md-2'>
-                                                <div class='text-black text-center rounded px-2 h-100 py-1 d-flex justify-content-center align-items-center' 
+                                                <div class='text-black text-center rounded px-2 h-100 d-flex justify-content-center align-items-center' 
                                                     data-bs-toggle='tooltip' 
                                                     data-bs-placement='top' 
                                                     title='" . htmlspecialchars($legendInfo['tooltip'], ENT_QUOTES) . "' 
@@ -340,7 +340,7 @@ $tool_content .= "</div>
 
                                             $tool_content .= "
                                             <div class='col-12 col-md-2'>
-                                                <div class='text-black text-center rounded px-2 h-100 py-1 d-flex justify-content-center align-items-center' 
+                                                <div class='text-black text-center rounded px-2 h-100 d-flex justify-content-center align-items-center' 
                                                     data-bs-toggle='tooltip' 
                                                     data-bs-placement='top' 
                                                     title='" . htmlspecialchars($legendInfo['tooltip'], ENT_QUOTES) . "' 
