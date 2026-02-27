@@ -203,7 +203,11 @@ if(isset($_POST['delete_session'])){
 
 // Delete all sessions from course tutor
 if(isset($_GET['delete_all_sessions'])){
-    $session_ids = Database::get()->queryArray("SELECT id FROM mod_session");
+    if (!$is_coordinator) {
+        forbidden();
+    }
+
+    $session_ids = Database::get()->queryArray("SELECT id FROM mod_session WHERE course_id = ?d", $course_id);
     foreach($session_ids as $s){
         delete_session($s->id);
     }

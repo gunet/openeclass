@@ -19,7 +19,6 @@
 
 class wiki2xhtml {
 
-    var $__version__ = '3.1d';
     var $T;
     var $opt;
     var $line;
@@ -30,7 +29,7 @@ class wiki2xhtml {
     var $all_tags;
     var $tag_pattern;
     var $escape_table;
-    var $allowed_inline = array();
+    var $acro_table;
 
     public function __construct() {
         # Mise en place des options
@@ -770,8 +769,8 @@ class wiki2xhtml {
                     $v = trim($v);
                     if ($v != '') {
                         $p = strpos($v, ':');
-                        $K = (string) trim(substr($v, 0, $p));
-                        $V = (string) trim(substr($v, ($p + 1)));
+                        $K = trim(substr($v, 0, $p));
+                        $V = trim(substr($v, ($p + 1)));
 
                         if ($K) {
                             $res[$K] = $V;
