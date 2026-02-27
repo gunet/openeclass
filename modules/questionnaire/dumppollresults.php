@@ -26,11 +26,23 @@ $require_current_course = true;
 $require_course_reviewer = true;
 require_once '../../include/baseTheme.php';
 require_once 'modules/questionnaire/functions.php';
+require_once 'modules/session/functions.php';
 
 if (!isset($_GET['pid'])) {
     redirect_to_home_page();
 } else {
     $pid = intval($_GET['pid']);
+}
+
+// Check if uid is the coordinator or the consultant of the current session.
+if (isset($_GET['session'])) {
+    $check = Database::get()->querySingle("SELECT user_id FROM course_user 
+        WHERE user_id = ?d AND course_id = ?d AND status = ?d AND tutor = ?d", $uid, $course_id, USER_STUDENT, 1);
+    if ($check && !is_session_consultant($_GET['session'],$course_id)) {
+        Session::flash('message', $langForbidden);
+        Session::flash('alert-class', 'alert-warning');
+        redirect_to_home_page("modules/session/index.php?course=$course_code");
+    }
 }
 
 $full = isset($_GET['full']) && $_GET['full'];

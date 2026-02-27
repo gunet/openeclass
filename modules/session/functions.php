@@ -19,16 +19,20 @@
  */
 
 function check_user_belongs_in_session($sid){
-    global $course_id, $course_code, $is_consultant, $is_coordinator, $is_simple_user, $uid;
+    global $course_id, $course_code, $is_consultant, $is_coordinator, $is_simple_user, $uid, $langForbidden;
 
     if($is_consultant && !$is_coordinator){
         $check = Database::get()->querySingle("SELECT creator FROM mod_session WHERE id = ?d AND course_id = ?d",$sid, $course_id);
         if($check && $check->creator != $uid){
+            Session::flash('message', $langForbidden);
+            Session::flash('alert-class', 'alert-warning');
             redirect_to_home_page("modules/session/index.php?course=$course_code");
         }
     }elseif($is_simple_user){
         $check = Database::get()->querySingle("SELECT id FROM mod_session_users WHERE session_id = ?d AND participants = ?d AND is_accepted = ?d",$sid, $uid, 1);
         if(!$check){
+            Session::flash('message', $langForbidden);
+            Session::flash('alert-class', 'alert-warning');
             redirect_to_home_page("modules/session/index.php?course=$course_code");
         }
     }
@@ -340,11 +344,13 @@ function deleteAll($dir) {
  */
 function delete_session($sid = 0){
 
-    global $course_code, $webDir, $course_id, $is_coordinator;
+    global $course_code, $webDir, $course_id, $is_coordinator, $langForbidden;
 
     // Check if uid is the coordinator or the consultant of the current session.
     if (!$is_coordinator && !is_session_consultant($sid,$course_id)) {
-        forbidden();
+        Session::flash('message', $langForbidden);
+        Session::flash('alert-class', 'alert-warning');
+        redirect_to_home_page("modules/session/index.php?course=$course_code");
     }
 
     if($sid){
@@ -1429,7 +1435,7 @@ function upload_session_doc($sid){
             $langFormErrors, $langTheField , $langTitle, $langEmptyUploadFile,
             $langUploadDocCompleted, $sessionID, $langFileExists, $is_consultant,
             $langDoNotChooseResource, $langPreviousDocDeleted, $langFileExistsWithSameName,
-            $langNotExistUsers, $langResourceNoExists, $langDoNotOverrideDeliverable;
+            $langNotExistUsers, $langResourceNoExists, $langDoNotOverrideDeliverable, $langForbidden;
 
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
 
@@ -1470,10 +1476,30 @@ function upload_session_doc($sid){
         }
     }
 
-    if(!$is_consultant && !isset($_POST['refers_to_resource']) && isset($_POST['fromUser']) > 0){
+    if(!$is_consultant && !isset($_POST['refers_to_resource']) && isset($_POST['fromUser']) && $_POST['fromUser'] > 0){
         Session::flash('message',$langDoNotChooseResource);
         Session::flash('alert-class', 'alert-danger');
         redirect_to_home_page("modules/session/resource_space.php?course=".$course_code."&session=".$sid."&resource_id=".$_POST['for_deliverable']."&file_id=".$_POST['for_file']);
+    }
+
+    // Check if users are participated in the current session
+    if (isset($_POST['fromUser']) && $_POST['fromUser'] > 0) {
+        $partipants_ids = array();
+        $res = Database::get()->queryArray("SELECT participants FROM mod_session_users WHERE session_id = ?d AND is_accepted = ?d", $sid, 1);
+        if(count($res) > 0){
+            foreach($res as $r) {
+                $partipants_ids[] = $r->participants;
+            }
+            if (!in_array($_POST['fromUser'], $partipants_ids)) {
+                Session::flash('message', $langForbidden);
+                Session::flash('alert-class', 'alert-warning');
+                redirect_to_home_page("modules/session/index.php?course=$course_code");
+            }
+        } else {
+            Session::flash('message', $langForbidden);
+            Session::flash('alert-class', 'alert-warning');
+            redirect_to_home_page("modules/session/index.php?course=$course_code");
+        }
     }
 
     // If uploaded file exists do not continue.
