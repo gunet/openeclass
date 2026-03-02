@@ -43,6 +43,7 @@ require_once 'modules/document/doc_init.php';
 require_once 'main/personal_calendar/calendar_events.class.php';
 require_once 'modules/course_metadata/CourseXML.php';
 require_once 'modules/progress/process_functions.php';
+require_once 'modules/progress/game_points_widget.php';
 require_once 'modules/wall/wall_wrapper.php';
 require_once 'modules/session/functions.php';
 
@@ -55,6 +56,8 @@ $course_users_permission = $up->has_course_users_permission();
 $allow_clone = $up->has_course_clone_permission();
 $allow_course_backup = $up->has_course_backup_permission();
 $allow_course_tools = $up->has_course_modules_permission();
+
+$is_student_user = ($uid && !$is_editor && !$is_course_admin && $_SESSION['status'] == USER_STUDENT);
 
 $pageName = ''; // delete $pageName set in doc_init.php
 
@@ -431,34 +434,34 @@ $data['action_bar'] = action_bar([
     ]
 ]);
 
-if ($uid) {
-    $data['course_completion_id'] = $course_completion_id = is_course_completion_active(); // is course completion active?
-    if ($course_completion_id) {
-        if ($is_editor) {
-            $data['studentUsers'] = $student_users = Database::get()->querySingle("SELECT COUNT(*) AS studentUsers FROM course_user
-                                        WHERE status = " .USER_STUDENT . "
-                                            AND editor = 0
-                                            AND course_id = ?d", $course_id)->studentUsers;
-            $data['certified_users'] = Database::get()->querySingle("SELECT COUNT(*) AS t FROM user_badge
-                                                              JOIN course_user ON user_badge.user=course_user.user_id
-                                                                    AND status = " .USER_STUDENT . "
-                                                                    AND editor = 0
-                                                                    AND course_id = ?d
-                                                                    AND completed = 1
-                                                                    AND badge = ?d", $course_id, $course_completion_id)->t;
-            if ($student_users == 0) {
-                $data['percentage_t'] = $percentage_t = 0;
-                $data['angle'] = 0;
-            } else {
-                $data['percentage_t'] = $percentage_t = round($data['certified_users'] / $data['studentUsers'] * 100, 0);
-                $data['angle'] = $percentage_t * 100 / 360;
-            }
-        } else {
-            $course_completion_status = has_certificate_completed($uid, 'badge', $course_completion_id);
-            $data['percentage'] = $percentage = get_cert_percentage_completion('badge', $course_completion_id);
-        }
-    }
-}
+// if ($uid) {
+//     $data['course_completion_id'] = $course_completion_id = is_course_completion_active(); // is course completion active?
+//     if ($course_completion_id) {
+//         if ($is_editor) {
+//             $data['studentUsers'] = $student_users = Database::get()->querySingle("SELECT COUNT(*) AS studentUsers FROM course_user
+//                                         WHERE status = " .USER_STUDENT . "
+//                                             AND editor = 0
+//                                             AND course_id = ?d", $course_id)->studentUsers;
+//             $data['certified_users'] = Database::get()->querySingle("SELECT COUNT(*) AS t FROM user_badge
+//                                                               JOIN course_user ON user_badge.user=course_user.user_id
+//                                                                     AND status = " .USER_STUDENT . "
+//                                                                     AND editor = 0
+//                                                                     AND course_id = ?d
+//                                                                     AND completed = 1
+//                                                                     AND badge = ?d", $course_id, $course_completion_id)->t;
+//             if ($student_users == 0) {
+//                 $data['percentage_t'] = $percentage_t = 0;
+//                 $data['angle'] = 0;
+//             } else {
+//                 $data['percentage_t'] = $percentage_t = round($data['certified_users'] / $data['studentUsers'] * 100, 0);
+//                 $data['angle'] = $percentage_t * 100 / 360;
+//             }
+//         } else {
+//             $course_completion_status = has_certificate_completed($uid, 'badge', $course_completion_id);
+//             $data['percentage'] = $percentage = get_cert_percentage_completion('badge', $course_completion_id);
+//         }
+//     }
+// }
 
 
 // display open-courses level in bar
@@ -988,6 +991,11 @@ $course_home_page_sidebar = new WidgetArea(COURSE_HOME_PAGE_SIDEBAR);
 foreach ($course_home_page_sidebar->getCourseAndAdminWidgets($course_id) as $key => $widget) {
     $data['course_home_sidebar_widgets'] .= $widget->run($key);
 }
+
+$head_content .= "
+<link rel='stylesheet' type='text/css' href='{$urlAppend}template/default/CSS/default.css' />
+";
+$data['points_game_widget'] = course_points_game_widget($uid, $course_id);
 
 $data['registered'] = false;
 if ($uid) {
