@@ -61,11 +61,11 @@ if(isset($_POST['action']) or isset($_GET['view'])) {
         }
 
         header('Content-Type: application/json');
+        header('X-Content-Type-Options: nosniff');
 
         echo json_encode($eventArr);
 
         exit();
-
     }
 
     // add new event section
