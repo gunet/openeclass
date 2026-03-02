@@ -7387,7 +7387,6 @@ $langEnableRequiredAnswer = "Υποχρεωτική απάντηση σε κάθ
 $langNoAnswers = "Δεν υπάρχουν απαντήσεις για την συγκεκριμένη ερώτηση";
 $langCriteriaBelowParticipateInCompletion = "Τα παρακάτω κριτήρια συμμετέχουν στην ολοκλήρωση συνεδρίας";
 $langTheResource = "Ο πόρος";
-$langAlreadyUsed = "χρησιμοποιείται από κάποιον ωφελούμενο και δεν μπορεί να διαγραφεί.";
 $langListCompletionCriteria = "Λίστα κριτηρίων";
 $langUserParticipation = "Συμμετοχή ωφελούμενου";
 $langFirstShow = "Αρχική εμφάνιση";
