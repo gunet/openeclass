@@ -139,8 +139,11 @@ if ($is_editor) {
                             // remove from index if relevant (except non-main sysbsystems and metadata)
                             Database::get()->queryFunc("SELECT id FROM document WHERE course_id >= 1 AND subsystem = 0
                                                 AND format <> '.meta' AND path LIKE ?s",
-                                function ($r2, $searchEngine) {
-                                    $searchEngine->indexResource(ConstantsUtil::REQUEST_REMOVE, ConstantsUtil::RESOURCE_DOCUMENT, $r2->id);
+                                function ($r2) {
+                                    global $searchEngine;
+                                    if ($searchEngine) {
+                                        $searchEngine->indexResource(ConstantsUtil::REQUEST_REMOVE, ConstantsUtil::RESOURCE_DOCUMENT, $r2->id);
+                                    }
                                     if (resource_belongs_to_progress_data(MODULE_ID_DOCS, $r2->id)) {
                                         Session::Messages(trans('langResourceBelongsToCert'), 'alert-warning');
                                     }
