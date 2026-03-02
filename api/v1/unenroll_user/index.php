@@ -49,6 +49,7 @@ function api_method($access) {
                       AND user_id = ?d',
                 $course->id, $user->id);
         header('Content-Type: application/json');
+        header('X-Content-Type-Options: nosniff');
         if ($response) {
             echo json_encode(['status' => 'ok']);
         } else {

@@ -47,6 +47,7 @@ function api_method($access) {
             $secret_directory);
         if ($group) {
             header('Content-Type: application/json');
+            header('X-Content-Type-Options: nosniff');
             echo json_encode(['id' => $group->lastInsertID]);
             exit();
         } else {
@@ -65,6 +66,7 @@ function api_method($access) {
                 ];
             }
             header('Content-Type: application/json');
+            header('X-Content-Type-Options: nosniff');
             echo json_encode($group_data, JSON_UNESCAPED_UNICODE);
             exit();
         } elseif (isset($_GET['course_id'])) {
@@ -87,6 +89,7 @@ function api_method($access) {
                 }, $groups);
             }
             header('Content-Type: application/json');
+            header('X-Content-Type-Options: nosniff');
             echo json_encode($group_data, JSON_UNESCAPED_UNICODE);
             exit();
         } else {

@@ -113,6 +113,7 @@ function api_method($access) {
         }
         user_hook($user_id);
         header('Content-Type: application/json');
+        header('X-Content-Type-Options: nosniff');
         $response = ['id' => $user_id, 'status' => $statusmsg];
         if (!empty($auth)) {
             $response['auth'] = $auth;
@@ -184,6 +185,7 @@ function api_method($access) {
             }
         }
         header('Content-Type: application/json');
+        header('X-Content-Type-Options: nosniff');
         echo json_encode([
             'id' => $user->id,
             'username' => $user->username,

@@ -53,6 +53,7 @@ function api_method($access) {
             $lp_data['sco_id'] = $sco_id;
         }
         header('Content-Type: application/json');
+        header('X-Content-Type-Options: nosniff');
         echo json_encode($lp_data, JSON_UNESCAPED_UNICODE);
         exit();
     }
@@ -126,6 +127,7 @@ function api_method($access) {
         }, $lps));
     }
     header('Content-Type: application/json');
+    header('X-Content-Type-Options: nosniff');
     echo json_encode($lp_data, JSON_UNESCAPED_UNICODE);
     exit();
 }

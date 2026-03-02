@@ -154,6 +154,7 @@ function api_method($access) {
     }
 
     header('Content-Type: application/json');
+    header('X-Content-Type-Options: nosniff');
     echo json_encode($tracking_data, JSON_UNESCAPED_UNICODE);
     exit();
 }

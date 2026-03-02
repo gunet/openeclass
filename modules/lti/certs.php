@@ -24,6 +24,7 @@ require_once '../../include/baseTheme.php';
 require_once 'modules/lti/classes/JwksHelper.php';
 
 header('Content-Type: application/json; charset=utf-8');
+header('X-Content-Type-Options: nosniff');
 
 echo json_encode(JwksHelper::getJwks(), JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
 exit();

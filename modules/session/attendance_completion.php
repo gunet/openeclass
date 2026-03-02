@@ -114,8 +114,32 @@ function list_session_attendance($sid,$cid) {
  * @param integer $sid
  */
 function insert_session_attendance($sid) {
-    global $course_id, $course_code, $langCompleteAttendUser;
+    global $course_id, $course_code, $langCompleteAttendUser, $langForbidden;
     if(isset($_POST['submit_attendance'])){
+
+        // Check if users are participated in the current session
+        $partipants_ids = array();
+        $res = Database::get()->queryArray("SELECT participants FROM mod_session_users WHERE session_id = ?d AND is_accepted = ?d", $sid, 1);
+        if(count($res) > 0){
+            foreach($res as $r){
+                $partipants_ids[] = $r->participants;
+            }
+            if (count($_POST['submit_attendance']) > 0) {
+                foreach ($_POST['submit_attendance'] as $u) {
+                    if (!in_array($u, $partipants_ids)) {
+                        Session::flash('message', $langForbidden);
+                        Session::flash('alert-class', 'alert-warning');
+                        redirect_to_home_page("modules/session/index.php?course=$course_code");
+                    }
+                }
+            }
+        } else {
+            Session::flash('message', $langForbidden);
+            Session::flash('alert-class', 'alert-warning');
+            redirect_to_home_page("modules/session/index.php?course=$course_code");
+        }
+        
+
         $old_users = array();
         $old_users_badge = Database::get()->queryArray("SELECT user FROM user_badge_criterion WHERE badge_criterion = ?d",$_POST['badgeCrId']);
         if(count($old_users_badge) > 0){

@@ -74,6 +74,12 @@ if(isset($_GET['material_pdf'])){
 
 if(isset($_POST['add_material'])){
 
+    if (isset($_POST['aboutSession']) && isset($_GET['session']) && $_POST['aboutSession'] != $_GET['session']) {
+        Session::flash('message', $langForbidden);
+        Session::flash('alert-class', 'alert-warning');
+        redirect_to_home_page("modules/session/index.php?course=$course_code");
+    }
+
     $existsMaterial = Database::get()->querySingle("SELECT * FROM session_user_material
                                                     WHERE course_id = ?d
                                                     AND session_id = ?d

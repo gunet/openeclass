@@ -183,6 +183,7 @@ function submitForm() {
                 for ($i = 0; $i < count($_FILES[$bkey]['tmp_name']); $i++) {
                     if (is_uploaded_file($_FILES[$bkey]['tmp_name'][$i])
                             && isValidImage($_FILES[$bkey]['type'][$i])) {
+                        validateUploadedFile($_FILES[$bkey]['name'][$i]);
                         // convert to resized jpg if possible
                         $uploaded = $_FILES[$bkey]['tmp_name'][$i];
                         $copied = $_FILES[$bkey]['tmp_name'][$i] . '.new';
@@ -206,6 +207,7 @@ function submitForm() {
             if (isset($_FILES[$bkey])
                     && is_uploaded_file($_FILES[$bkey]['tmp_name'])
                     && isValidImage($_FILES[$bkey]['type'])) {
+                validateUploadedFile($_FILES[$bkey]['name']);
                 // convert to resized jpg if possible
                 $uploaded = $_FILES[$bkey]['tmp_name'];
                 $copied = $_FILES[$bkey]['tmp_name'] . '.new';

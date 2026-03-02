@@ -26,6 +26,7 @@ $helpTopic = 'questionnaire';
 require_once '../../include/baseTheme.php';
 require_once 'functions.php';
 require_once 'modules/usage/usage.lib.php';
+require_once 'modules/session/functions.php';
 
 $head_content .= "
 <link rel='stylesheet' type='text/css' href='{$urlAppend}js/c3-0.7.20/c3.css' />";
@@ -39,6 +40,9 @@ $pageName = $langPollCharts;
 $sID = 0;
 if (isset($_GET['from_session_view'])) {
     $sID = $_GET['session'] ?? 0;
+    if (isset($_GET['session'])) {
+        check_user_belongs_in_session($_GET['session']);
+    }
     if ($is_consultant) {
         $is_course_reviewer = true;
     }

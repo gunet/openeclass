@@ -132,6 +132,16 @@
 
                 bootbox.prompt({
                     title: '{{ js_escape(trans('langEnterFile')) }}',
+                    buttons: {
+                        confirm: {
+                            label: '{{ trans('langConfirm') }}',
+                            className: 'btn submitAdminBtn'
+                        },
+                        cancel: {
+                            label: '{{ trans('langCancel') }}',
+                            className: 'btn cancelAdminBtn'
+                        }
+                    },
                     callback: function(result) {
                         this.disabled = true;
                         if(!recorder || !recorder.getBlob()) return;

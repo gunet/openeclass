@@ -204,7 +204,9 @@ if(isset($_POST['delete_session'])){
 // Delete all sessions from course tutor
 if(isset($_GET['delete_all_sessions'])){
     if (!$is_coordinator) {
-        forbidden();
+        Session::flash('message', $langForbidden);
+        Session::flash('alert-class', 'alert-warning');
+        redirect_to_home_page("modules/session/index.php?course=$course_code");
     }
 
     $session_ids = Database::get()->queryArray("SELECT id FROM mod_session WHERE course_id = ?d", $course_id);

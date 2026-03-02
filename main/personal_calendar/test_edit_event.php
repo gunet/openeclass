@@ -76,6 +76,7 @@ if(isset($_GET['eventID'])){
     }
     
     header('Content-Type: application/json');
+    header('X-Content-Type-Options: nosniff');
 
     echo json_encode($eventArr);
 

@@ -20,7 +20,7 @@
 
                                 <div class='form-group'>
                                     <div class='col-12 control-label-notes mb-4'>
-                                        {{ trans('langConfirm') }}
+                                        {{ trans('langConfirmDelAccount') }}
                                     </div>
                                 </div>
 

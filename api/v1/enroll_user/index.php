@@ -90,6 +90,7 @@ function api_method($access) {
                     $group->id, $user->id);
         }
         header('Content-Type: application/json');
+        header('X-Content-Type-Options: nosniff');
         echo json_encode(['status' => 'ok']);
         exit();
     } else {

@@ -450,6 +450,8 @@ function validateUploadedFile($filename, $menuTypeID = 2, $response = 'html') {
         } elseif ($response == 'json') {
             $data = ['message' => "$langUploadedFileNotAllowed '" . q($filename) . "'"];
             http_response_code(400);
+            header('Content-Type: application/json; charset=utf-8');
+            header('X-Content-Type-Options: nosniff');
             echo json_encode($data);
         } elseif ($response == 'session') {
             $_SESSION['upload_errors'][] = "$langUploadedFileNotAllowed <b>" . q($filename) . "</b>";
