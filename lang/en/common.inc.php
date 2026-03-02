@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2025-12-02 16:31:16
+// Generated 2026-03-02 10:50:46
 
 $langCourse = "Course";
 $langEclass = "E-Learning Platform";
@@ -34,7 +34,7 @@ $langsFaculties = "categories";
 $langpre = "Undergraduate";
 $langpost = "Postgraduate";
 $langother = "Other";
-$langInfoAbout = "The <strong>$siteName</strong> platform is a complete Course Management System that supports Asynchronous eLearning Services via a simple web browser. Its goal is the incorporation and constructive use of the Internet and web technologies in the teaching and learning process. It supports the electronic management, storage and presentation of teaching materials, independently of the spatial and time limiting factors of conventional teaching and creating the necessary conditions for a dynamic teaching environment.";
+$langInfoAbout = 'The <strong>$siteName</strong> platform is a complete Course Management System that supports Asynchronous eLearning Services via a web browser. It aims to incorporate and support constructive use of the Internet and web technologies in the teaching and learning process, supporting the electronic management, storage and presentation of teaching materials and creating the necessary conditions for a dynamic learning environment.';
 $langExtrasLeft = '';
 $langExtrasRight = '';
 $langCourses = "Courses";

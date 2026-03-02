@@ -4580,9 +4580,10 @@ $langWelcomeTo = "Καλως Ήρθατε στην ";
 $langBackHome = "Επιστροφή στην αρχική σελίδα";
 $langAdminNo = "Ο λογαριασμός του διαχειριστή της πλατφόρμας δεν μπορεί να διαγραφεί!";
 $langExplain = "Για να διαγραφείτε από την πλατφόρμα, πρέπει πρώτα να απεγγραφείτε από τα $langsCourses που είστε εγγεγραμμένος.";
-$langConfirm = "Επιβεβαίωση διαγραφής λογαριασμού";
+$langConfirmDelAccount = "Επιβεβαίωση διαγραφής λογαριασμού";
 $langDelSuccess = "Ο λογαριασμός σας έχει διαγραφεί.";
 $langThanks = "Ευχαριστούμε για τη χρήση της πλατφόρμας!";
+$langConfirm = "Επιβεβαίωση";
 
 //unregcours.php
 $langCoursDelSuccess = "Η απεγγραφή σας από το $langsCourse έγινε με επιτυχία";
@@ -7411,7 +7412,6 @@ $langEnableRequiredAnswer = "Υποχρεωτική απάντηση σε κάθ
 $langNoAnswers = "Δεν υπάρχουν απαντήσεις για την συγκεκριμένη ερώτηση";
 $langCriteriaBelowParticipateInCompletion = "Τα παρακάτω κριτήρια συμμετέχουν στην ολοκλήρωση συνεδρίας";
 $langTheResource = "Ο πόρος";
-$langAlreadyUsed = "χρησιμοποιείται από κάποιον ωφελούμενο και δεν μπορεί να διαγραφεί.";
 $langListCompletionCriteria = "Λίστα κριτηρίων";
 $langUserParticipation = "Συμμετοχή ωφελούμενου";
 $langFirstShow = "Αρχική εμφάνιση";

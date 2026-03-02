@@ -184,6 +184,7 @@ function api_method($access) {
         course_index($code);
 
         header('Content-Type: application/json');
+        header('X-Content-Type-Options: nosniff');
         echo json_encode([
             'id'                => $new_course_id,
             'title'             => $title,
@@ -252,6 +253,7 @@ function api_method($access) {
         }
 
         header('Content-Type: application/json');
+        header('X-Content-Type-Options: nosniff');
         echo json_encode($result, JSON_UNESCAPED_UNICODE);
         exit();
     }
@@ -263,6 +265,7 @@ function api_method($access) {
         $course = Database::get()->queryArray("SELECT * FROM course WHERE code = ?s",$courseCode );
 
         header('Content-Type: application/json');
+        header('X-Content-Type-Options: nosniff');
         echo json_encode($course, JSON_UNESCAPED_UNICODE);
         exit();
     }
@@ -278,6 +281,7 @@ function api_method($access) {
                         WHERE cu.status = 1 AND u.username = ?s",$userName );
 
         header('Content-Type: application/json');
+        header('X-Content-Type-Options: nosniff');
         echo json_encode($course, JSON_UNESCAPED_UNICODE);
         exit();
     }
@@ -316,6 +320,7 @@ function api_method($access) {
     }
 
     header('Content-Type: application/json');
+    header('X-Content-Type-Options: nosniff');
     echo json_encode($courses, JSON_UNESCAPED_UNICODE);
     exit();
 }

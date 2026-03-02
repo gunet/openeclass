@@ -41,6 +41,7 @@ function api_method($access) {
         }, $categories);
 
         header('Content-Type: application/json');
+        header('X-Content-Type-Options: nosniff');
         echo json_encode($categories, JSON_UNESCAPED_UNICODE);
         exit;
     }
@@ -94,6 +95,7 @@ function api_method($access) {
         }, $categories);
     }
     header('Content-Type: application/json');
+    header('X-Content-Type-Options: nosniff');
     echo json_encode($categories, JSON_UNESCAPED_UNICODE);
     exit();
 }

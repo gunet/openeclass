@@ -37,6 +37,12 @@ require_once 'functions.php';
 
 check_activation_of_collaboration();
 
+if ($is_simple_user) {
+    Session::flash('message', $langForbidden);
+    Session::flash('alert-class', 'alert-warning');
+    redirect_to_home_page("modules/session/index.php?course=$course_code");
+}
+
 $pageName = $langTableCompletedConsulting;
 
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langSession);

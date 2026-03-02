@@ -97,6 +97,7 @@ class OpenAIProvider extends AbstractAIProvider {
             
             $curlOptions[CURLOPT_POSTFIELDS] = $jsonData;
             $headers[] = 'Content-Type: application/json';
+            $headers[] = 'X-Content-Type-Options: nosniff';
             $curlOptions[CURLOPT_HTTPHEADER] = $headers;
         } else {
             $curlOptions[CURLOPT_HTTPGET] = true;
