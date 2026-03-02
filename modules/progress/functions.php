@@ -4028,6 +4028,134 @@ function student_view_progress() {
 }
 
 /**
+ * Display leaderboard accordion for a points game
+ */
+function display_leaderboard_accordion($points_game_id) {
+    global $tool_content, $course_code, $course_id, $langNoUserList, $langSurnameName, $langAutoJudgeRank, $langLevel, $langProgress, 
+        $langViewLeaderboard, $langCompletion, $is_editor, $uid, $langAnonymous;
+
+    $anon = false;
+    if (!$is_editor) {
+        $pg_config = Database::get()->querySingle("SELECT config FROM points_game WHERE id = ?d", $points_game_id);
+        $config = json_decode($pg_config->config, TRUE);
+        $enable_leaderboard = !empty($config['enable_leaderboard']);
+        $anonymize_leaderboard  = !empty($config['anonymize_leaderboard']);
+        
+        if (!$enable_leaderboard) {
+            return;
+        }
+
+        if ($anonymize_leaderboard) {
+            $anon = true;
+        }
+    }
+
+    // Get first level for this points game
+    $first_level = Database::get()->querySingle("SELECT friendly_name 
+                                                 FROM points_game_levels 
+                                                 WHERE points_game = ?d 
+                                                 ORDER BY required_points ASC 
+                                                 LIMIT 1", $points_game_id);
+    $first_level_name = $first_level ? $first_level->friendly_name : 'Level 1';
+
+    $sql = Database::get()->queryArray("SELECT u.id, u.surname, u.givenname, COALESCE(upp.total_points, 0) AS total_points
+                                        FROM course_user cu
+                                        JOIN user u ON u.id = cu.user_id
+                                        LEFT JOIN user_points_game_points upp
+                                            ON upp.user = u.id
+                                            AND upp.points_game = ?d
+                                        WHERE cu.course_id = ?d AND cu.status != 1 AND cu.editor = 0 AND cu.course_reviewer = 0
+                                        ORDER BY
+                                            CASE
+                                                WHEN upp.total_points IS NULL OR upp.total_points = 0 THEN 1
+                                                ELSE 0
+                                            END,
+                                            upp.total_points DESC,
+                                            u.surname ASC,
+                                            u.givenname ASC", $points_game_id, $course_id);
+    if (count($sql) > 0) {
+            // Start accordion
+        $tool_content .= "
+            <div class='leaderboard-accordion-header'>
+                <h4><i class='fa fa-trophy'></i> $langViewLeaderboard</h4>
+                <i class='fa fa-chevron-down leaderboard-accordion-icon'></i>
+            </div>
+            <div class='leaderboard-accordion-content'>
+                <div class='leaderboard-accordion-body'>
+                    <div class='table-responsive'>
+                        <table class='leaderboard-table'>
+                            <thead>
+                                <tr>
+                                <th>$langAutoJudgeRank</th>
+                                <th>$langLevel</th>
+                                <th>$langSurnameName</th>
+                                <th style='width: 250px;'>$langProgress</th>
+                                </tr>
+                            </thead>
+                            <tbody>";
+        $cnt = 1;
+        foreach ($sql as $user_data) {
+            // STYLING CHANGE: Add current user highlighting
+            $is_current_user = (!$is_editor && $user_data->id == $uid);
+            $row_class = $is_current_user ? 'current-user-student' : '';
+            
+            $current_level_display = $first_level_name; // Default to first level
+            
+            if ($user_data->total_points > 0) {
+                $user_progress = PointsGame::getNextLevelInfo($user_data->id,$points_game_id);
+                
+                // Points display
+                if ($user_progress['current_points'] > 0) {
+                    if ($is_editor || $user_data->id == $uid) {
+                        $points_str = "<a class='small-text' href='index.php?course=$course_code&amp;points_game_id=$points_game_id&amp;u=$user_data->id'>".$user_progress['current_points']." pts</a>";
+                    } else {
+                        $points_str = "<span class='small-text'>" . $user_progress['current_points'] . " pts</span>";
+                    }
+                } else {
+                    $points_str = "<span class='small-text'>" . $user_progress['current_points'] . " pts</span>";
+                }
+                
+                // Current level display - show current level or first level if none reached
+                if (!is_null($user_progress['current_level_id']) && !empty($user_progress['current_level_title'])) {
+                    $current_level_display = $user_progress['current_level_title'];
+                }
+                
+                // Progress bar with data
+                $info = "<div class='progress'>
+                            <div class='progress-bar' style='width: ".$user_progress['progress_percentage']."%'></div>
+                         </div>
+                         <span class='progress-text'>" . $user_progress['progress_percentage'] . "% $langCompletion</span>
+                         <div>$points_str</div>";
+            } else {
+                // No progress - show first level with 0% and 0 pts
+                $info = "<div class='progress'>
+                            <div class='progress-bar' style='width: 0%'></div>
+                         </div>
+                         <span class='progress-text'>0% $langCompletion</span>
+                         <div><span class='small-text'>0 pts</span></div>";
+            }
+
+
+            if ($anon && $user_data->id != $uid) {
+                $user_info = $langAnonymous;
+            } else {
+                $user_info = display_user($user_data->id);
+            }
+
+            // Display ONLY current level (or first level if no progress)
+            $tool_content .= "<tr class='{$row_class}'>
+                <td><span class='rank-number'>#". $cnt++ . "</span></td>
+                <td><span class='level-badge'><i class='fa fa-star' style='color:#f59e0b;'></i> " . $current_level_display . "</span></td>
+                <td><span class='user-name'>" . $user_info . "</span></td>
+                <td>".$info."</td></tr>";
+        }
+        $tool_content .= "</tbody></table></div></div></div>";
+    } else {
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langNoUserList</span></div></div>";
+    }
+}
+
+/**
  * @brief display users points game progress
  * @param type $points_game_id
  */
