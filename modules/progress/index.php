@@ -66,16 +66,16 @@ if ($show_tabs) {
     <div class='progress-nav-container'>
         <div class='progress-nav-tabs'>
             <button class='progress-nav-tab " . ($active_tab == 'course_completion' ? 'active' : '') . "' data-tab='course_completion'>
-                Ολοκλήρωση μαθήματος
+                $langCourseCompletion
             </button>
             <button class='progress-nav-tab " . ($active_tab == 'badges' ? 'active' : '') . "' data-tab='badges'>
-                Επιβραβεύσεις
+                $langBadges
             </button>
             <button class='progress-nav-tab " . ($active_tab == 'certificates' ? 'active' : '') . "' data-tab='certificates'>
-                Πιστοποιητικά
+                $langCertificates
             </button>
             <button class='progress-nav-tab " . ($active_tab == 'points' ? 'active' : '') . "' data-tab='points'>
-                Παιχνίδια πόντων
+                $langPointsGames
             </button>
         </div>
     </div>
