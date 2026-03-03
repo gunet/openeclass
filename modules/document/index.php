@@ -335,6 +335,9 @@ if (defined('COMMON_DOCUMENTS')) {
     $toolName = $langCommonDocs;
     $diskQuotaDocument = $diskUsed + parseSize(ini_get('upload_max_filesize'));
 } elseif (defined('MY_DOCUMENTS')) {
+    if ($session->status == USER_GUEST) {
+        redirect_to_home_page();
+    }
     if ($session->status == USER_TEACHER and !get_config('mydocs_teacher_enable')) {
         redirect_to_home_page();
     }
