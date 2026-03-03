@@ -35,7 +35,7 @@ window.latexSymbols = {
         { symbol: '\\Gamma', code: '\\Gamma', name: 'Gamma (capital)' },
         { symbol: '\\Delta', code: '\\Delta', name: 'Delta (capital)' },
         { symbol: '\\mathrm{E}', code: '\\mathrm{E}', name: 'Epsilon (capital)'},
-        { symbol: '\\Z', code: 'Z', name: 'Zeta (capital)'},
+        { symbol: '\\mathrm{Z}', code: '\\mathrm{Z}', name: 'Zeta (capital)'},
         { symbol: '\\mathrm{H}', code: '\\mathrm{H}', name: 'Eta (capital)'},
         { symbol: '\\Theta', code: '\\Theta', name: 'Theta (capital)' },
         { symbol: '\\mathrm{I}', code: '\\mathrm{I}', name: 'Iota (capital)'},
@@ -85,7 +85,7 @@ window.latexSymbols = {
         { symbol: '\\oiiint', code: '\\oiiint', name: 'Volume integral' }
     ],
     'Relations': [
-        { symbol: '\\=', code: '\\=', name: 'Equals' },
+        { symbol: '=', code: '=', name: 'Equals' },
         { symbol: '\\neq', code: '\\neq', name: 'Not equals' },
         { symbol: '\\approx', code: '\\approx', name: 'Approximately' },
         { symbol: '\\equiv', code: '\\equiv', name: 'Equivalent' },
