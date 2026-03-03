@@ -72,8 +72,10 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         foreach ($options as $option) {
             $option_data[$option['name']] = purify($option['value']);
         }
-        \Database::get()->query("UPDATE `widget_widget_area` SET `options` = ?s WHERE id = ?d", serialize($option_data), $widget_widget_area_id);
+        Database::get()->query("UPDATE `widget_widget_area` SET `options` = ?s WHERE id = ?d", serialize($option_data), $widget_widget_area_id);
     }
+    header('Content-Type: application/json; charset=utf-8');
+    header('X-Content-Type-Options: nosniff');
     echo json_encode($data);
     exit;
 }

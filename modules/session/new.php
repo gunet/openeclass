@@ -83,6 +83,12 @@ if(isset($_POST['submit'])){
       redirect_to_home_page("modules/session/new.php?course=".$course_code);
     }
     $creator = isset($_POST['creators']) ? $_POST['creators'] : 0;
+    // Not allow consultant creates a session for other user ids
+    if ($is_consultant && !$is_coordinator && $creator != $uid) {
+      Session::flash('message', $langForbidden);
+      Session::flash('alert-class', 'alert-warning');
+      redirect_to_home_page("modules/session/index.php?course=$course_code");
+    }
     $title = isset($_POST['title']) ? q($_POST['title']) : '';
     $comments = isset($_POST['comments']) ? purify($_POST['comments']) : null;
     $type_session = $_POST['session_type'];

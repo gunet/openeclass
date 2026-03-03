@@ -68,6 +68,8 @@ function api_method($access) {
                     FROM document WHERE course_id = ?d AND subsystem = 0
                     ORDER BY path',
                     $course_id));
+                header('Content-Type: application/json');
+                header('X-Content-Type-Options: nosniff');
                 echo json_encode($documents, JSON_UNESCAPED_UNICODE);
             }
             exit;

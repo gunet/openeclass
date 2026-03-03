@@ -100,6 +100,7 @@ class Access {
     public static function error($code, $message, $http_response = 400) {
         http_response_code($http_response);
         header('Content-Type: application/json');
+        header('X-Content-Type-Options: nosniff');
         echo json_encode([
             'errorcode' => $code,
             'errormessage' => $message,

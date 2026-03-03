@@ -22,7 +22,7 @@
  * display available forums (if any)
  */
 function list_forums() {
-    global $id, $tool_content, $urlServer, $course_id,
+    global $id, $tool_content, $urlServer, $course_id, $langCancel,
            $langAddModulesButton, $langChoice, $langNoForums, $langForums, $course_code, $langSelect;
 
     // select topics from forums (not from group forums)
@@ -68,8 +68,9 @@ function list_forums() {
             }
         }
         $tool_content .= "</table></div>";
-        $tool_content .= "<div class='d-flex justify-content-start mt-4'>
-                            <input class='btn submitAdminBtn' type='submit' name='submit_forum' value='$langAddModulesButton' />
-                        </div></form>";
+        $tool_content .= "<div class='d-flex justify-content-start mt-4'><input class='btn submitAdminBtn' type='submit' name='submit_forum' value='$langAddModulesButton'>                
+                            <a href='index.php?course=$course_code&id=$id'><input class='btn cancelAdminBtn ms-2' value='$langCancel' /></a>
+                        </div>";
+        $tool_content .= "</form>";
     }
 }

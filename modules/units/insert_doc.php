@@ -31,7 +31,7 @@ doc_init();
 function list_docs() {
     global $id, $webDir, $tool_content,
     $group_sql, $langDirectory, $langUp, $langName, $langSize,
-    $langDate, $langAddModulesButton, $langChoice,
+    $langDate, $langAddModulesButton, $langChoice, $langCancel,
     $langNoDocuments, $course_code, $langCommonDocs, $pageName, $langSelect;
 
     $basedir = $webDir . '/courses/' . $course_code . '/document';
@@ -109,7 +109,6 @@ function list_docs() {
                 "<th>$langSize</th>" .
                 "<th>$langDate</th>" .
                 "</tr></thead>";
-        $counter = 0;
         foreach (array(true, false) as $is_dir) {
             foreach ($fileinfo as $entry) {
                 if ($entry['is_dir'] != $is_dir) {
@@ -157,12 +156,13 @@ function list_docs() {
                     $tool_content .= "<td>$size</td><td>$date</td>";
                 }
                 $tool_content .= "</tr>";
-                $counter++;
             }
         }
         $tool_content .= "</table></div>";
-        $tool_content .= "<div class='d-flex justify-content-start mt-4'>";
-        $tool_content .= "<input class='btn submitAdminBtn' type='submit' name='submit_doc' value='$langAddModulesButton' /></div>$dir_html</form>";
+        $tool_content .= "<div class='d-flex justify-content-start mt-4'><input class='btn submitAdminBtn' type='submit' name='submit_doc' value='$langAddModulesButton'>                
+                            <a href='index.php?course=$course_code&id=$id'><input class='btn cancelAdminBtn ms-2' value='$langCancel' /></a>
+                        </div>";
+        $tool_content .= "$dir_html</form>";
 
     }
 }

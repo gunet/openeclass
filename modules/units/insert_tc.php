@@ -30,7 +30,7 @@
 function list_tcs() {
     global $id, $course_id, $tool_content,
            $langAddModulesButton, $langChoice, $langNoBBBSesssions,
-           $course_code, $langBBB, $langSelect;
+           $course_code, $langBBB, $langSelect, $langCancel;
 
     $result = Database::get()->queryArray("SELECT * FROM tc_session WHERE course_id = ?d ORDER BY title", $course_id);
     $tcinfo = array();
@@ -70,7 +70,9 @@ function list_tcs() {
             $tool_content .= "</tr>";
         }
         $tool_content .= "</table></div>";
-        $tool_content .= "<div class='d-flex justify-content-start mt-4'>";
-        $tool_content .= "<input class='btn submitAdminBtn' type='submit' name='submit_tc' value='$langAddModulesButton'></div></form>";
+        $tool_content .= "<div class='d-flex justify-content-start mt-4'><input class='btn submitAdminBtn' type='submit' name='submit_tc' value='$langAddModulesButton'>                
+                            <a href='index.php?course=$course_code&id=$id'><input class='btn cancelAdminBtn ms-2' value='$langCancel' /></a>
+                        </div>";
+        $tool_content .= "</form>";
     }
 }

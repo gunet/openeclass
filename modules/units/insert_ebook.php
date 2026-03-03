@@ -22,7 +22,7 @@
  * @brief display available ebooks
  */
 function list_ebooks() {
-    global $id, $course_id, $tool_content,
+    global $id, $course_id, $tool_content, $langCancel,
     $langAddModulesButton, $langChoice, $langNoEBook,
     $langEBook, $course_code, $langSelect;
 
@@ -49,7 +49,9 @@ function list_ebooks() {
         }
         $tool_content .=
                 "</table></div>
-                <div class='d-flex justify-content-start mt-4'>
-                <input class='btn submitAdminBtn' type='submit' name='submit_ebook' value='$langAddModulesButton' /></div></form>";
+                <div class='d-flex justify-content-start mt-4'><input class='btn submitAdminBtn' type='submit' name='submit_ebook value='$langAddModulesButton'>                
+                        <a href='index.php?course=$course_code&id=$id'><input class='btn cancelAdminBtn ms-2' value='$langCancel' /></a>
+                </div>                
+            </form>";
     }
 }

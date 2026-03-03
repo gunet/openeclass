@@ -71,6 +71,7 @@ if (isset($_GET['view']) and isset($_GET['show_tutor'])) {
         }
     }
     header('Content-Type: application/json');
+    header('X-Content-Type-Options: nosniff');
     echo json_encode($eventArr);
     exit();
 }
