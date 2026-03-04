@@ -309,8 +309,6 @@ class MultimediaHelper {
             $element = 'video';
             $extra = '';
         }
-        header('Content-Type: application/json; charset=utf-8');
-        header('X-Content-Type-Options: nosniff');
         $data_setup = json_encode($data_setup);
         $ret = $css . $js . $startdiv .
                '<div style="max-width: ' . (self::getObjectWidth() - 4) . 'px">' .
