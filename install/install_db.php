@@ -396,7 +396,7 @@ $db->query("CREATE TABLE monthly_summary (
     `messages` int DEFAULT '0',
     `announcements` int DEFAULT '0',
     `forum_posts` int DEFAULT '0',
-    `inactive_courses` int DEFAULT '0',            
+    `inactive_courses` int DEFAULT '0',
     PRIMARY KEY (id)) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `document` (
@@ -626,7 +626,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `forum` (
     `last_post_id` INT DEFAULT 0 NOT NULL,
     `cat_id` INT DEFAULT 0 NOT NULL,
     `visible` TINYINT DEFAULT 1 NOT NULL,
-    `course_id` INT NOT NULL,    
+    `course_id` INT NOT NULL,
     PRIMARY KEY (`id`)) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `forum_category` (
@@ -1057,7 +1057,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `poll` (
     `lti_template` INT DEFAULT NULL,
     `launchcontainer` TINYINT DEFAULT NULL,
     `pagination` INT NOT NULL DEFAULT 0,
-    `require_answer` INT NOT NULL DEFAULT 0) $tbl_options");
+    `require_answer` INT NOT NULL DEFAULT 0,
+    `options` TEXT DEFAULT NULL) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `poll_to_specific` (
     `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -1654,7 +1655,7 @@ $db->query("CREATE TABLE `permissions` (
     `permission` VARCHAR(255),
      PRIMARY KEY (`id`)) $tbl_options");
 
-$db->query("INSERT INTO permissions(permission) VALUE('admin_course_users'), 
+$db->query("INSERT INTO permissions(permission) VALUE('admin_course_users'),
              ('admin_course_modules'),
              ('backup_course'),
              ('clone_course'),
@@ -1662,7 +1663,7 @@ $db->query("INSERT INTO permissions(permission) VALUE('admin_course_users'),
              ('can_upload_multimedia')");
 
 $db->query("CREATE TABLE user_permissions (
-    `course_id` int NOT NULL DEFAULT '0',  
+    `course_id` int NOT NULL DEFAULT '0',
     `user_id` int unsigned NOT NULL DEFAULT '0',
     `permission_id` tinyint NOT NULL,
     PRIMARY KEY (`course_id`,`user_id`,`permission_id`)
@@ -2627,7 +2628,7 @@ $db->query("CREATE TABLE api_token (
     `expired` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)) $tbl_options");
 
-$db->query("CREATE TABLE ai_providers (    
+$db->query("CREATE TABLE ai_providers (
     `id` smallint NOT NULL AUTO_INCREMENT,
     `name` text CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
     `api_key` text CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
@@ -2641,10 +2642,10 @@ $db->query("CREATE TABLE ai_providers (
     PRIMARY KEY (`id`)) $tbl_options");
 
 $db->query("CREATE TABLE ai_modules (
-    `id` SMALLINT NOT NULL AUTO_INCREMENT, 
-    `ai_module_id` SMALLINT NOT NULL DEFAULT 0, 
+    `id` SMALLINT NOT NULL AUTO_INCREMENT,
+    `ai_module_id` SMALLINT NOT NULL DEFAULT 0,
     `ai_provider_id` SMALLINT DEFAULT 0,
-    `all_courses` TINYINT NOT NULL DEFAULT 1, 
+    `all_courses` TINYINT NOT NULL DEFAULT 1,
     PRIMARY KEY(ID)) $tbl_options");
 
 $db->query("CREATE TABLE `ai_courses` (

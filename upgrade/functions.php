@@ -3641,6 +3641,10 @@ function upgrade_to_4_3() : void {
         Database::get()->query("ALTER TABLE exercise_answer_record ADD certainty INT DEFAULT 0 AFTER weight");
     }
     // Questionnaires
+    if (!DBHelper::fieldExists('poll', 'options')) {
+        Database::get()->query("ALTER TABLE poll ADD `options` TEXT DEFAULT NULL");
+    }
+
     if (!DBHelper::fieldExists('poll_question', 'page')) {
         Database::get()->query("ALTER TABLE poll_question ADD `page` INT NOT NULL DEFAULT 0");
     }

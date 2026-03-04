@@ -682,8 +682,7 @@ HTML;
         $display = FALSE;
     } elseif (isset($_GET['refresh'])) {
         refresh_user_progress($element, $element_id);
-        Session::flash('message', $langRefreshProgressResults);
-        Session::flash('alert-class', 'alert-success');
+        Session::Messages($langRefreshProgressResults, 'alert-success');
         redirect_to_home_page("modules/progress/index.php?course=$course_code&$param_name=$element_id&progressall=true");
     }
 } else if ($is_course_reviewer) {
