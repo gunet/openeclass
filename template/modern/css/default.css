@@ -4748,6 +4748,14 @@ body .delThemeBtn{
 /*************************************************** EXERCISE *********************************************************/
 /**********************************************************************************************************************/
 
+.displayExerciseTable .table-default tbody tr td:first-child:not([colspan]) {
+    width: 1%;
+}
+
+.displayExerciseTable .table-default tbody tr td:last-child:not([colspan]) {
+    text-align: right;
+}
+
 .table-exercise td, .table-exercise th{
   background-color: #ffffff;
   padding: 10px 15px;
