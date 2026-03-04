@@ -1365,14 +1365,14 @@ if (isset($_GET['modifyAnswers'])) {
                 }
 
                 if (isset($_POST['reponse'][$i])) {
-                    $tool_content .= "<td style='width:42%'>" . rich_text_editor("reponse[$i]", 7, 40, $_POST['reponse'][$i], true) . "</td>";
+                    $tool_content .= "<td style='width:41%'>" . rich_text_editor("reponse[$i]", 7, 40, $_POST['reponse'][$i], true) . "</td>";
                 } else {
-                    $tool_content .= "<td style='width:42%'>" . rich_text_editor("reponse[$i]", 7, 40, $reponse[$i], true) . "</td>";
+                    $tool_content .= "<td style='width:41%'>" . rich_text_editor("reponse[$i]", 7, 40, $reponse[$i], true) . "</td>";
                 }
                 if (isset($_POST['comment'][$i])) {
-                    $tool_content .= "<td style='width:42%'>" . rich_text_editor("comment[$i]", 7, 40, $_POST['comment'][$i], true) . "</td>";
+                    $tool_content .= "<td style='width:40%'>" . rich_text_editor("comment[$i]", 7, 40, $_POST['comment'][$i], true) . "</td>";
                 } else {
-                    $tool_content .= "<td style='width:42%'>" . rich_text_editor("comment[$i]", 7, 40, $comment[$i], true) . "</td>";
+                    $tool_content .= "<td style='width:40%'>" . rich_text_editor("comment[$i]", 7, 40, $comment[$i], true) . "</td>";
                 }
                 $tool_content .= "<td><input class='form-control' type='text' name='weighting[$i]' value='$thisWeighting'></td></tr>";
             }

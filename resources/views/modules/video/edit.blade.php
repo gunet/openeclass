@@ -117,64 +117,58 @@
                                             </div>
                                         </div>
 
-
-
-
-
-                                                <div class='form-group mt-4'>
-                                                    <label for='Creator' class='col-sm-12 control-label-notes'>{{ trans('langCreator') }}</label>
-                                                    <div class='col-sm-12'>
-                                                        @if (isset($form_input))
-                                                            <input class='form-control' type='text' name='creator' value='{{ $nick }}' id='Creator'>
-                                                        @elseif (isset($_GET['id']) && isset($_GET['table_edit']))
-                                                            <input class='form-control' type='text' name='creator' value='{{ $edititem->creator }}' id='Creator'>
-                                                        @endif
-                                                    </div>
+                                            <div class='form-group mt-4'>
+                                                <label for='Creator' class='col-sm-12 control-label-notes'>{{ trans('langCreator') }}</label>
+                                                <div class='col-sm-12'>
+                                                    <input class='form-control' type='text' name='creator'
+                                                       @if($form_input == 'file' or $form_input == 'url')
+                                                           value='{{ $nick }}'
+                                                       @elseif (isset($_GET['id']) && isset($_GET['table_edit']))
+                                                           value = '{{ $edititem->creator }}'
+                                                       @endif
+                                                       id='Creator'>
                                                 </div>
+                                            </div>
 
 
-                                                <div class='form-group mt-4'>
-                                                    <label for='Publisher' class='col-sm-12 control-label-notes'>{{ trans('langpublisher') }}</label>
-                                                    <div class='col-sm-12'>
-                                                        @if (isset($form_input))
-                                                            <input class='form-control' type='text' name='publisher' value='{{ $nick }}' id='Publisher'>
-                                                        @elseif (isset($_GET['id']) && isset($_GET['table_edit']))
-                                                            <input class='form-control' type='text' name='publisher' value='{{ $edititem->publisher }}' id='Publisher'>
-                                                        @endif
-                                                    </div>
+                                            <div class='form-group mt-4'>
+                                                <label for='Publisher' class='col-sm-12 control-label-notes'>{{ trans('langpublisher') }}</label>
+                                                <div class='col-sm-12'>
+                                                    @if($form_input == 'file' or $form_input == 'url')
+                                                        <input class='form-control' type='text' name='publisher' value='{{ $nick }}' id='Publisher'>
+                                                    @elseif (isset($_GET['id']) && isset($_GET['table_edit']))
+                                                        <input class='form-control' type='text' name='publisher' value='{{ $edititem->publisher }}' id='Publisher'>
+                                                    @endif
                                                 </div>
+                                            </div>
 
 
-                                            @if (isset($form_input))
+                                            @if($form_input == 'file' or $form_input == 'url')
                                                 <div class="form-group mt-4 @if(isset($_GET['table_edit'])) d-none @endif">
                                                     <label for='videodate' class='col-sm-6 control-label-notes'>{{ trans('langDate') }}</label>
                                                     <div class='col-sm-12'><input id='videodate' class='form-control' type='text' name='date' value='{{ date('Y-m-d G:i') }}'></div>
                                                 </div>
                                             @endif
 
-                                                <div class='form-group mt-4'>
-                                                    <label for='Category' class='col-sm-6 control-label-notes'>{{ trans('langCategory') }}</label>
-                                                    <div class='col-sm-12'>
-                                                        <select class='form-select' name='selectcategory' id='Category'>
-                                                            <option value='0'>--</option>
-                                                        @foreach ($resultcategories as $cat)
-                                                            <?php
-                                                                if (isset($form_input)) {
-                                                                    $selected = '';
-                                                                } else if (isset($_GET['id']) && isset($_GET['table_edit'])) {
-                                                                    $selected = '';
-                                                                    if (isset($edititem->category) && $edititem->category == $cat->id) {
-                                                                        $selected = " selected='selected'";
-                                                                    }
+                                            <div class='form-group mt-4'>
+                                                <label for='Category' class='col-sm-6 control-label-notes'>{{ trans('langCategory') }}</label>
+                                                <div class='col-sm-12'>
+                                                    <select class='form-select' name='selectcategory' id='Category'>
+                                                        <option value='0'>--</option>
+                                                    @foreach ($resultcategories as $cat)
+                                                        @php
+                                                            if (isset($_GET['id']) && isset($_GET['table_edit'])) {
+                                                                $selected = '';
+                                                                if (isset($edititem->category) && $edititem->category == $cat->id) {
+                                                                    $selected = "selected";
                                                                 }
-                                                            ?>
-                                                            <option value='{{ $cat->id }}' {{ $selected }}>{{ $cat->name }}</option>
-                                                        @endforeach
-                                                        </select>
-                                                    </div>
+                                                            }
+                                                        @endphp
+                                                        <option value='{{ $cat->id }}' {!! $selected !!}>{{ $cat->name }}</option>
+                                                    @endforeach
+                                                    </select>
                                                 </div>
-
-
+                                            </div>
 
                                         <div class='form-group mt-5'>
                                             <div class='col-12 d-flex justify-content-end align-items-center'>
@@ -252,7 +246,6 @@
                                         </div>
                                     </fieldset>
                                     @if ($form_input === 'file')
-
                                         <div class='form-group mt-3'>
                                             <div class='col-sm-offset-2 col-sm-10'>
                                                 <div class='smaller right'>{{ trans('langMaxFileSize') }} {{ ini_get('upload_max_filesize') }}</div>

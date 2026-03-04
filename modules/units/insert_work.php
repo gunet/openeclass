@@ -23,7 +23,7 @@
  * @brief display list of available assignments (if any)
  */
 function list_assignments() {
-    global $id, $tool_content, $langWorks, $langChoice, $langGroupWorkDeadline_of_Submission,
+    global $id, $tool_content, $langWorks, $langChoice, $langGroupWorkDeadline_of_Submission, $langCancel,
     $langAddModulesButton, $langNoAssign, $langPassCode, $course_id, $course_code, $urlServer, $langSelect;
 
     $result = Database::get()->queryArray("SELECT * FROM assignment WHERE course_id = ?d ORDER BY title", $course_id);
@@ -37,7 +37,6 @@ function list_assignments() {
                 "<th>$langChoice</th>" .
                 "<th>$langWorks</th>" .
                 "<th>$langGroupWorkDeadline_of_Submission</th>" .
-
                 "</tr></thead>";
         foreach ($result as $row) {
             if ($row->password_lock) {
@@ -53,13 +52,17 @@ function list_assignments() {
             $description = empty($row->description) ? '' :
                     "<div>" . mathfilter($row->description, 12 , "../../courses/mathimg/"). "</div>";
             $tool_content .= "<tr class='$vis'>" .
-                    "<td><label class='label-container' aria-label='$langSelect'><input name='work[]' value='$row->id' type='checkbox' /><span class='checkmark'></span></label></td>" .
+                    "<td><label class='label-container' aria-label='$langSelect'><input name='work[]' value='$row->id' type='checkbox'><span class='checkmark'></span></label></td>" .
                     "<td><a href='{$urlServer}modules/work/index.php?course=$course_code&amp;id=$row->id'>" . q($row->title) . "</a>$exclamation_icon $description</td>" .
                     "<td>".format_locale_date(strtotime($row->submission_date), 'short')."</td>" .
                     "</tr>";
         }
         $tool_content .=
-                "</table></div>" .
-                "<div class='d-flex justify-content-start mt-4'><input class='btn submitAdminBtn' type='submit' name='submit_work' value='$langAddModulesButton' /></div></th></form>";
+                "</table></div>
+                <div class='d-flex justify-content-start mt-4'><input class='btn submitAdminBtn' type='submit' name='submit_work' value='$langAddModulesButton'>                
+                    <a href='index.php?course=$course_code&id=$id'><input class='btn cancelAdminBtn ms-2' value='$langCancel' /></a>
+                </div>
+            </th>
+            </form>";
     }
 }

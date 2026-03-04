@@ -24,7 +24,7 @@
 function list_exercises() {
     global $id, $course_id, $tool_content, $urlServer, $langPassCode,
             $langAddModulesButton, $langChoice, $langNoExercises,
-            $langExercices, $course_code, $langSelect;
+            $langExercices, $course_code, $langSelect, $langCancel;
 
     $result = Database::get()->queryArray("SELECT * FROM exercise WHERE course_id = ?d", $course_id);
     $quizinfo = [];
@@ -62,9 +62,10 @@ function list_exercises() {
                 . $exclamation_icon . mathfilter($entry['comment'], 12 , "../../courses/mathimg/") . "</td>";
             $tool_content .= "</tr>";
         }
-        $tool_content .= "</table></div>
-                    <div class='d-flex justify-content-start mt-4'>";
-        $tool_content .= "<input class='btn submitAdminBtn' type='submit' name='submit_exercise' value='$langAddModulesButton'></div>
-                </form>";
+        $tool_content .= "</table></div>";
+        $tool_content .= "<div class='d-flex justify-content-start mt-4'><input class='btn submitAdminBtn' type='submit' name='submit_exercise' value='$langAddModulesButton'>                
+                            <a href='index.php?course=$course_code&id=$id'><input class='btn cancelAdminBtn ms-2' value='$langCancel' /></a>
+                        </div>";
+        $tool_content .= "</form>";
     }
 }

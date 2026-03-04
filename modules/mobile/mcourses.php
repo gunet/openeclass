@@ -34,6 +34,7 @@ if ($_SESSION['status'] == USER_TEACHER or $_SESSION['status'] == USER_STUDENT) 
                course.visible,
                course.prof_names,
                course.public_code,
+               course.description,
                course_user.status AS status,
                course_user.favorite favorite
           FROM course JOIN course_user 
@@ -75,7 +76,6 @@ function createCoursesDom($coursesArr) {
         $this_status = 0;
 
         foreach ($coursesArr as $course) {
-
             $old_status = $this_status;
             $this_status = $course->status;
 
@@ -88,11 +88,11 @@ function createCoursesDom($coursesArr) {
             $c = $cg->appendChild($dom->createElement('course'));
 
             $titleStr = ($course->code === $course->public_code) ? $course->title : $course->title . ' - ' . $course->public_code;
+            $descriptionStr = ellipsize(html2text($course->description), 80);
 
             $c->appendChild(new DOMAttr('code', $course->code));
             $c->appendChild(new DOMAttr('title', $titleStr));
-            $c->appendChild(new DOMAttr('description', ""));
-
+            $c->appendChild(new DOMAttr('description', $descriptionStr));
             $k++;
         }
     }

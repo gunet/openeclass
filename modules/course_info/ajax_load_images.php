@@ -6,7 +6,7 @@ require_once 'include/lib/fileDisplayLib.inc.php';
 
 // Set JSON header
 header('Content-Type: application/json');
-
+header('X-Content-Type-Options: nosniff');
 // Check if required parameters are present
 if (!isset($_GET['course_id']) || !isset($_GET['type'])) {
     echo json_encode(['success' => false, 'error' => 'Missing required parameters']);
