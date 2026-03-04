@@ -55,11 +55,21 @@ $tool_content = '';
 $tool_content .= "<div class='progress-module'>";
 
 // ALWAYS SHOW TAB NAVIGATION FIRST (except in special cases like PDF, preview, progressall)
-$show_tabs = !isset($_GET['p']) && !isset($_GET['preview']) && !isset($_GET['progressall']) && !isset($_GET['u']);
+$show_tabs = !isset($_GET['p']) && !isset($_GET['preview']) && !isset($_GET['progressall']);
 
 if ($show_tabs) {
     // Determine active tab
-    $active_tab = isset($_GET['tab']) ? $_GET['tab'] : 'course_completion';
+    if (isset($_GET['tab'])) {
+    $active_tab = $_GET['tab'];
+    } elseif (isset($_GET['points_game_id'])) {
+        $active_tab = 'points';
+    } elseif (isset($_GET['certificate_id'])) {
+        $active_tab = 'certificates';
+    } elseif (isset($_GET['badge_id'])) {
+        $active_tab = 'badges';
+    } else {
+        $active_tab = 'course_completion';
+    }
     
     // Add navigation tabs at the very beginning
     $tool_content .= "
@@ -86,7 +96,7 @@ if ($show_tabs) {
 $head_content .= "
 <script>
 $(document).ready(function() {
-    var currentTab = '" . (isset($_GET['tab']) ? $_GET['tab'] : 'course_completion') . "';
+    var currentTab = '" . (isset($_GET['tab']) ? $_GET['tab'] : (isset($_GET['points_game_id']) ? 'points' : (isset($_GET['certificate_id']) ? 'certificates' : (isset($_GET['badge_id']) ? 'badges' : 'course_completion')))) . "';
     
     $('.progress-nav-tab').click(function(e) {
         e.preventDefault();
@@ -179,11 +189,21 @@ if ($is_editor) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&$param_name=$element_id", "name" => $element_title);
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&$param_name=$element_id&progressall=true", "name" => $langUsers);
         $pageName = uid_to_name($_GET['u']);
-        action_bar(array(
-            array('title' => $langBack,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;$param_name=$element_id&amp;progressall=true",
-                  'icon' => 'fa-reply',
-                  'level' => 'primary')));
+        if ($element == 'points_game') {
+            $back_bar = action_bar(array(
+                array('title' => $langBack,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&points_game_id=$element_id&tab=points",
+                      'icon' => 'fa-reply',
+                      'level' => 'primary')
+            ), false);
+            $tool_content .= $back_bar;
+        } else {
+            action_bar(array(
+                array('title' => $langBack,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;$param_name=$element_id&amp;progressall=true",
+                      'icon' => 'fa-reply',
+                      'level' => 'primary')));
+        }
     } elseif (isset($_GET['progressall'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&$param_name=$element_id", "name" => $element_title);
         $pageName = "$langProgress $langsOfStudents";
@@ -756,6 +776,13 @@ if (isset($display) and $display) {
             check_element_enabled($element, $element_id); //security check
             if ($element == 'points_game') {
                 if (isset($_GET['u'])) {
+                    $back_bar = action_bar(array(
+                    array('title' => $langBack,
+                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;points_game_id=$element_id&amp;tab=points",
+                        'icon' => 'fa-reply',
+                        'level' => 'primary')
+                    ), false);
+                    $tool_content .= $back_bar;
                     display_user_points_game_details($element_id, $_GET['u']);
                 } elseif (isset($_GET['progressall'])) {
                     $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&$param_name=$element_id", "name" => $element_title);
@@ -803,7 +830,18 @@ if (isset($display) and $display) {
             }
         } else {
             // Display content based on active tab - same as admin view
-            $active_tab = isset($_GET['tab']) ? $_GET['tab'] : 'course_completion';
+           if (isset($_GET['tab'])) {
+                $active_tab = $_GET['tab'];
+            } elseif (isset($_GET['points_game_id'])) {
+                $active_tab = 'points';
+            } elseif (isset($_GET['certificate_id'])) {
+                $active_tab = 'certificates';
+            } elseif (isset($_GET['badge_id'])) {
+                $active_tab = 'badges';
+            } else {
+                $active_tab = 'course_completion';
+            }
+            
             if ($active_tab == 'course_completion') {
                 display_course_completion();
             } elseif ($active_tab == 'badges') {
