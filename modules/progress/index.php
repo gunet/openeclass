@@ -827,20 +827,14 @@ if (isset($display) and $display) {
             }
         } else {
             // Display content based on active tab - same as admin view
-           if (isset($_GET['tab'])) {
-                $active_tab = $_GET['tab'];
-            } elseif (isset($_GET['points_game_id'])) {
-                $active_tab = 'points';
-                display_points_games();
-            } elseif (isset($_GET['certificate_id'])) {
-                $active_tab = 'certificates';
-                display_certificates();
-            } elseif (isset($_GET['badge_id'])) {
-                $active_tab = 'badges';
-                display_badges();
-            } else {
-                $active_tab = 'course_completion';
+            if (($active_tab == 'course_completion') && is_course_completion_enabled()) {
                 display_course_completion();
+            } elseif ($active_tab == 'points') {
+                display_points_games();
+            } elseif ($active_tab == 'badges') {
+                display_badges();    
+            } else {
+                display_certificates();
             }
             
         }
