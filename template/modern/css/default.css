@@ -4748,11 +4748,11 @@ body .delThemeBtn{
 /*************************************************** EXERCISE *********************************************************/
 /**********************************************************************************************************************/
 
-.displayExerciseTable .table-default tbody tr td:first-child:not([colspan]) {
+.displayExerciseTable .table-default tbody tr td:first-child:not([colspan]):not(:only-child) {
     width: 1%;
 }
 
-.displayExerciseTable .table-default tbody tr td:last-child:not([colspan]) {
+.displayExerciseTable .table-default tbody tr td:last-child:not([colspan]):not(:only-child) {
     text-align: right;
 }
 
