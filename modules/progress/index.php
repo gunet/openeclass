@@ -56,20 +56,23 @@ $tool_content .= "<div class='progress-module'>";
 
 // ALWAYS SHOW TAB NAVIGATION FIRST (except in special cases like PDF, preview, progressall)
 $show_tabs = !isset($_GET['p']) && !isset($_GET['preview']) && !isset($_GET['progressall']);
+$tab_q = '';
 
 if ($show_tabs) {
     // Determine active tab
-    if (isset($_GET['tab'])) {
-    $active_tab = $_GET['tab'];
-    } elseif (isset($_GET['points_game_id'])) {
+    if (isset($_REQUEST['tab'])) {
+        $active_tab = $_REQUEST['tab'];
+    } elseif (isset($_REQUEST['points_game_id'])) {
         $active_tab = 'points';
-    } elseif (isset($_GET['certificate_id'])) {
+    } elseif (isset($_REQUEST['certificate_id'])) {
         $active_tab = 'certificates';
-    } elseif (isset($_GET['badge_id'])) {
+    } elseif (isset($_REQUEST['badge_id'])) {
         $active_tab = 'badges';
     } else {
         $active_tab = 'course_completion';
     }
+
+    $tab_q = "&tab=".$active_tab;
     
     // Add navigation tabs at the very beginning
     $tool_content .= "
@@ -271,11 +274,7 @@ if ($is_editor) {
             add_certificate($table, $_POST['title'], $_POST['description'], $_POST['message'], $icon, $_POST['issuer'], 0, 0, $expires);
             Session::flash('message',$langNewCertificateSuc);
             Session::flash('alert-class', 'alert-success');
-            $tab_param = ($table == 'certificate') ? 'certificates' : 'badges';
-            if (isset($_POST['tab'])) {
-                $tab_param = $_POST['tab'];
-            }
-            redirect_to_home_page("modules/progress/index.php?course=$course_code&tab=$tab_param");
+            redirect_to_home_page("modules/progress/index.php?course=$course_code".$tab_q);
         } else {
           // Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
             // $tab_redirect = isset($_POST['tab']) ? '&tab=' . $_POST['tab'] : '';
@@ -288,7 +287,7 @@ if ($is_editor) {
                 }
             }
             Session::flashPost()->Messages($errors, 'alert-danger');
-            redirect_to_home_page("modules/progress/index.php?course=$course_code&new=1");
+            redirect_to_home_page("modules/progress/index.php?course=$course_code&new=1$tab_q");
         }
     } elseif (isset($_POST['newPointsGame'])) {
         $v = new Valitron\Validator($_POST);
@@ -353,7 +352,7 @@ if ($is_editor) {
                 }
             }
             Session::flashPost()->Messages($errors, 'alert-danger');
-            redirect_to_home_page("modules/progress/index.php?course=$course_code&new=1");
+            redirect_to_home_page("modules/progress/index.php?course=$course_code&tab=points&new=1");
         }
     } elseif (isset($_POST['edit_element'])) { // modify certificate / badge
         $v = new Valitron\Validator($_POST);
@@ -365,8 +364,7 @@ if ($is_editor) {
             modify($element, $element_id, $_POST['title'], $_POST['description'], $_POST['message'], $_POST['template'], $_POST['issuer']);
             Session::flash('message',$langQuotaSuccess);
             Session::flash('alert-class', 'alert-success');
-            $tab_param = ($element == 'certificate') ? '&tab=certificates' : '&tab=badges';
-            redirect_to_home_page("modules/progress/index.php?course=$course_code$tab_param");
+            redirect_to_home_page("modules/progress/index.php?course=$course_code$tab_q");
         } else {
             Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
             redirect_to_home_page("modules/progress/index.php?course=$course_code&".$element."_id=".$element_id."&edit=1");
@@ -833,23 +831,18 @@ if (isset($display) and $display) {
                 $active_tab = $_GET['tab'];
             } elseif (isset($_GET['points_game_id'])) {
                 $active_tab = 'points';
+                display_points_games();
             } elseif (isset($_GET['certificate_id'])) {
                 $active_tab = 'certificates';
+                display_certificates();
             } elseif (isset($_GET['badge_id'])) {
                 $active_tab = 'badges';
+                display_badges();
             } else {
                 $active_tab = 'course_completion';
+                display_course_completion();
             }
             
-            if ($active_tab == 'course_completion') {
-                display_course_completion();
-            } elseif ($active_tab == 'badges') {
-                display_badges();
-            } elseif ($active_tab == 'certificates') {
-                display_certificates();
-            } elseif ($active_tab == 'points') {
-                display_points_games();
-            }
         }
     }
 }
