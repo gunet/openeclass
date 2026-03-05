@@ -69,7 +69,21 @@ if ($show_tabs) {
     } elseif (isset($_REQUEST['badge_id'])) {
         $active_tab = 'badges';
     } else {
-        $active_tab = 'course_completion';
+        if(!$is_editor && !$is_course_reviewer && !is_course_completion_active()) {
+            $active_tab = 'badges';
+        } else {
+            $active_tab = 'course_completion';
+        }
+    }
+
+    if(!$is_editor && !$is_course_reviewer && !is_course_completion_active()) {
+        $course_completion_tab = "";
+    } else {
+        $course_completion_tab = "
+            <button class='progress-nav-tab " . ($active_tab == 'course_completion' ? 'active' : '') . "' data-tab='course_completion'>
+                $langCourseCompletion
+            </button>
+        ";
     }
 
     $tab_q = "&tab=".$active_tab;
@@ -78,9 +92,7 @@ if ($show_tabs) {
     $tool_content .= "
     <div class='progress-nav-container'>
         <div class='progress-nav-tabs'>
-            <button class='progress-nav-tab " . ($active_tab == 'course_completion' ? 'active' : '') . "' data-tab='course_completion'>
-                $langCourseCompletion
-            </button>
+            $course_completion_tab
             <button class='progress-nav-tab " . ($active_tab == 'badges' ? 'active' : '') . "' data-tab='badges'>
                 $langBadges
             </button>
@@ -827,14 +839,14 @@ if (isset($display) and $display) {
             }
         } else {
             // Display content based on active tab - same as admin view
-            if (($active_tab == 'course_completion') && is_course_completion_enabled()) {
+            if (($active_tab == 'course_completion') && is_course_completion_active()) {
                 display_course_completion();
             } elseif ($active_tab == 'points') {
                 display_points_games();
-            } elseif ($active_tab == 'badges') {
-                display_badges();    
+            } elseif ($active_tab == 'certificates') {
+                display_certificates();    
             } else {
-                display_certificates();
+                display_badges();
             }
             
         }
