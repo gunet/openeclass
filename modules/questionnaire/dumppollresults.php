@@ -451,8 +451,8 @@ function create_pdf($data) {
     $defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
     $fontData = $defaultFontConfig['fontdata'];
 
-    $image_height_header = setting_get(SETTING_COUSE_IMAGE_PRINT_HEADER_WIDTH, $course_id);
-    $image_height_footer = setting_get(SETTING_COUSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id);
+    $image_height_header = setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_WIDTH, $course_id);
+    $image_height_footer = setting_get(SETTING_COURSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id);
     $mpdf = new Mpdf\Mpdf([
         'margin_top' => $image_height_header+15,     // mm
         'margin_bottom' => $image_height_footer,  // mm
