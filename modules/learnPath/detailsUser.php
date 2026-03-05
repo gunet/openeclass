@@ -224,7 +224,7 @@ if (isset($_GET['xls'])) {
 
     $mpdf = new Mpdf\Mpdf([
         'margin_top' => $image_height_header+15,     // mm
-        'margin_bottom' => $image_height_footer,  // mm
+        'margin_bottom' => $image_height_footer+15,  // mm
         'tempDir' => _MPDF_TEMP_PATH,
         'fontDir' => array_merge($fontDirs, [$webDir . '/template/modern/fonts']),
         'fontdata' => $fontData + [
