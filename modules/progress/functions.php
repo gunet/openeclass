@@ -3166,7 +3166,7 @@ function display_points_game_settings($element_id): void
                                                             <tbody>";
                                         foreach ($levels as $level) {
                                             $tool_content .= "<tr>
-                                                                <td class='text-start'>".$level->friendly_name."</td>
+                                                                <td class='text-start'><span class='level-badge'><i class='fa fa-star' style='color:#f59e0b;'></i> ".$level->friendly_name."</span></td>
                                                                 <td>".$level->required_points."</td>
                                                             </tr>";
                                         }
