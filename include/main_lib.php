@@ -4899,8 +4899,8 @@ function get_platform_logo($size = 'normal', $position = 'header') {
         }
     }
 
-    $logo = "<div style='clear: right; background-color: $bg_color; padding: 1rem; margin-bottom: 2rem; text-align: $image_align;'>
-                <img style='width: {$image_width}px;' src='$logo_img'>
+    $logo = "<div style='clear: right; background-color: $bg_color; padding: 1rem; text-align: $image_align;'>
+                <img style='height: {$image_width}mm;' src='$logo_img'>
             </div>";
 
     return $logo;
