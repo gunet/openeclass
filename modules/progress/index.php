@@ -243,9 +243,6 @@ if ($is_editor) {
 
     } elseif (isset($_GET['preview'])) { // certificate preview
         cert_output_to_pdf($element_id, $uid, null, null, null, null, null, null);
-    } elseif (!(isset($_REQUEST['certificate_id']) or (isset($_REQUEST['badge_id'])) or isset($_REQUEST['points_game_id']))) {
-        action_bar(array());
-    
     }
     $tool_content .= "</div>";
     //end of the top menu
