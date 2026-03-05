@@ -566,8 +566,8 @@ if (isset($_GET['u'])) { //  stats per user
  * @throws \Mpdf\MpdfException
  */
 function pdf_session_output($sid) {
-    global $tool_content, $langUserDuration, $currentCourseName,
-           $webDir, $course_id, $course_code, $language, $langHasParticipatedInTool,
+    global $tool_content, $currentCourseName,
+           $webDir, $course_id, $course_code, $langHasParticipatedInTool,
            $langHasNotParticipatedInTool;
 
     $sessionTitle = title_session($course_id,$sid);
@@ -704,9 +704,11 @@ function pdf_user_material_output($sid,$content_m,$user_n) {
     $defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
     $fontData = $defaultFontConfig['fontdata'];
 
+    $image_height_header = setting_get(SETTING_COUSE_IMAGE_PRINT_HEADER_WIDTH, $course_id);
+    $image_height_footer = setting_get(SETTING_COUSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id);
     $mpdf = new Mpdf\Mpdf([
-        'margin_top' => 63,     // approx 200px
-        'margin_bottom' => 63,  // approx 200px
+        'margin_top' => $image_height_header+15,     // mm
+        'margin_bottom' => $image_height_footer,  // mm
         'tempDir' => _MPDF_TEMP_PATH,
         'fontDir' => array_merge($fontDirs, [ $webDir . '/template/modern/fonts' ]),
         'fontdata' => $fontData + [
