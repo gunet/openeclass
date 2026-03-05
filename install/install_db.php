@@ -1249,10 +1249,11 @@ $db->query("CREATE TABLE IF NOT EXISTS `exercise` (
     `password_lock` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
     `continue_time_limit` INT NOT NULL DEFAULT 0,
     `calc_grade_method` TINYINT DEFAULT 1,
-    `general_feedback` TEXT DEFAULT NULL,
+    `end_message` TEXT DEFAULT NULL,
     `options` TEXT DEFAULT NULL,
     `is_exam` INT DEFAULT 0 NULL,
-     passing_grade FLOAT NULL) $tbl_options");
+     passing_grade FLOAT NULL,
+     feedback TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `exercise_to_specific` (
     `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
