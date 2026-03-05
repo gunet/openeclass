@@ -1443,6 +1443,15 @@ function refresh_user_progress($element, $element_id): void
                 case AttendanceEvent::ACTIVITY:
                         triggerAttendanceGame($course_id, $u, $data->resource, AttendanceEvent::UPDATE);
                     break;
+                case CourseCompletionEvent::ACTIVITY:
+                    $eventData = new stdClass();
+                    $eventData->courseId = $course_id;
+                    $eventData->uid = $u;
+                    $eventData->unit_id = 0;
+                    $eventData->activityType = CourseCompletionEvent::ACTIVITY;
+                    $eventData->module = MODULE_ID_PROGRESS;
+                    CourseCompletionEvent::trigger(CourseCompletionEvent::COMPLCRITCHANGE, $eventData);
+                    break;
             }
         }
     }

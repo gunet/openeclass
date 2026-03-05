@@ -28,6 +28,7 @@ $require_login = true;
 $require_current_course = true;
 
 require_once '../../include/baseTheme.php';
+require_once 'include/course_settings.php';
 require_once 'include/sendMail.inc.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'functions.php';
@@ -317,9 +318,11 @@ function pdf_comment_output($sid,$content_m) {
     $defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
     $fontData = $defaultFontConfig['fontdata'];
 
+    $image_height_header = setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_WIDTH, $course_id);
+    $image_height_footer = setting_get(SETTING_COURSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id);
     $mpdf = new Mpdf\Mpdf([
-        'margin_top' => 63,     // approx 200px
-        'margin_bottom' => 63,  // approx 200px
+        'margin_top' => $image_height_header+15,     // mm
+        'margin_bottom' => $image_height_footer+15,  // mm
         'tempDir' => _MPDF_TEMP_PATH,
         'fontDir' => array_merge($fontDirs, [ $webDir . '/template/modern/fonts' ]),
         'fontdata' => $fontData + [

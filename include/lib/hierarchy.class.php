@@ -449,8 +449,6 @@ class Hierarchy {
 
         $params = $options['params'];
         $offset = (isset($options['defaults']) && is_array($options['defaults'])) ? count($options['defaults']) : 0; // The number of the parents that the editing child already belongs to (mainly for edit forms)
-        header('Content-Type: application/json; charset=utf-8');
-        header('X-Content-Type-Options: nosniff');
         $joptions = json_encode($options);
 
         if ($offset > 0) {

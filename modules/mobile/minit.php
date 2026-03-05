@@ -25,6 +25,7 @@ define('RESPONSE_EXPIRED', 'EXPIRED');
 define('RESPONSE_NOTENABLED', 'NOTENABLED');
 define('RESPONSE_USERNOTACTIVE', 'USERNOTACTIVE');
 define('M_INIT', 1);
+define("RESPONSE_NO_COURSE_UNITS", "NO_COURSE_UNITS");
 header('Content-Type: application/xml; charset=utf-8');
 
 if (isset($require_noerrors) && $require_noerrors) {

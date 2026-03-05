@@ -32,6 +32,7 @@ $require_current_course = TRUE;
 $require_course_reviewer = TRUE;
 
 require_once '../../include/baseTheme.php';
+require_once 'include/course_settings.php';
 require_once 'include/lib/learnPathLib.inc.php';
 
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langLearningPaths);
@@ -230,9 +231,11 @@ if (isset($_GET['xls'])) {
     $defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
     $fontData = $defaultFontConfig['fontdata'];
 
+    $image_height_header = setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_WIDTH, $course_id);
+    $image_height_footer = setting_get(SETTING_COURSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id);
     $mpdf = new Mpdf\Mpdf([
-        'margin_top' => 53,     // approx 200px
-        'margin_bottom' => 53,  // approx 200px
+        'margin_top' => $image_height_header+15,     // mm
+        'margin_bottom' => $image_height_footer+15,  // mm
         'tempDir' => _MPDF_TEMP_PATH,
         'fontDir' => array_merge($fontDirs, [ $webDir . '/template/modern/fonts' ]),
         'fontdata' => $fontData + [

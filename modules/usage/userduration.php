@@ -34,6 +34,7 @@ $helpTopic = 'course_stats';
 $helpSubTopic = 'users_participation';
 
 require_once '../../include/baseTheme.php';
+require_once 'include/course_settings.php';
 require_once 'modules/group/group_functions.php';
 require_once 'modules/usage/usage.lib.php';
 
@@ -582,9 +583,11 @@ function pdf_output() {
     $defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
     $fontData = $defaultFontConfig['fontdata'];
 
+    $image_height_header = setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_WIDTH, $course_id);
+    $image_height_footer = setting_get(SETTING_COURSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id);
     $mpdf = new Mpdf\Mpdf([
-        'margin_top' => 53,     // approx 200px
-        'margin_bottom' => 53,  // approx 200px
+        'margin_top' => $image_height_header+15,     // mm
+        'margin_bottom' => $image_height_footer+15,  // mm
         'tempDir' => _MPDF_TEMP_PATH,
         'fontDir' => array_merge($fontDirs, [ $webDir . '/template/modern/fonts' ]),
         'fontdata' => $fontData + [
@@ -600,7 +603,6 @@ function pdf_output() {
                 ]
             ]
     ]);
-
 
     $mpdf->SetHTMLHeader(get_platform_logo());
     $footerHtml = '

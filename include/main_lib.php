@@ -4862,22 +4862,22 @@ function get_platform_logo($size = 'normal', $position = 'header') {
     require_once 'include/course_settings.php';
 
     if ($position == 'footer') {
-        $footer_path = setting_get_print_image_disk_path(SETTING_COUSE_IMAGE_PRINT_FOOTER, $course_id);
+        $footer_path = setting_get_print_image_disk_path(SETTING_COURSE_IMAGE_PRINT_FOOTER, $course_id);
         if (!$footer_path) {
             return '';
         }
         $logo_img = imageToBase64($footer_path);
-        $image_align = setting_get(SETTING_COUSE_IMAGE_PRINT_FOOTER_ALIGNMENT, $course_id);
+        $image_align = setting_get(SETTING_COURSE_IMAGE_PRINT_FOOTER_ALIGNMENT, $course_id);
         $image_align = ($image_align == 0) ? 'left' : (($image_align == 1) ? 'center' : 'right');
-        $image_width = setting_get(SETTING_COUSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id);
+        $image_width = setting_get(SETTING_COURSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id);
         $bg_color = '#ffffff';
     } else {
-        $header_path = setting_get_print_image_disk_path(SETTING_COUSE_IMAGE_PRINT_HEADER, $course_id);
+        $header_path = setting_get_print_image_disk_path(SETTING_COURSE_IMAGE_PRINT_HEADER, $course_id);
         if ($header_path) {
             $logo_img = imageToBase64($header_path);
-            $image_align = setting_get(SETTING_COUSE_IMAGE_PRINT_HEADER_ALIGNMENT, $course_id);
+            $image_align = setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_ALIGNMENT, $course_id);
             $image_align = ($image_align == 0) ? 'left' : (($image_align == 1) ? 'center' : 'right');
-            $image_width = setting_get(SETTING_COUSE_IMAGE_PRINT_HEADER_WIDTH, $course_id);
+            $image_width = setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_WIDTH, $course_id);
             $bg_color = '#ffffff';
         } else {
             $logo_img = $themeimg . '/eclass-new-logo.svg';
@@ -4899,8 +4899,8 @@ function get_platform_logo($size = 'normal', $position = 'header') {
         }
     }
 
-    $logo = "<div style='clear: right; background-color: $bg_color; padding: 1rem; margin-bottom: 2rem; text-align: $image_align;'>
-                <img style='width: {$image_width}px;' src='$logo_img'>
+    $logo = "<div style='clear: right; background-color: $bg_color; padding: 1rem; text-align: $image_align;'>
+                <img style='height: {$image_width}mm;' src='$logo_img'>
             </div>";
 
     return $logo;

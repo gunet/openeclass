@@ -235,7 +235,7 @@ function display_exercise($exercise_id): void
             $colspan = 1;
         }
 
-        $tool_content .= "<div class='col-12 mb-4'><div class='table-responsive'><table class='table-default'>";
+        $tool_content .= "<div class='col-12 mb-4'><div class='table-responsive displayExerciseTable'><table class='table-default w-100'>";
         if (is_array($qid)) { // placeholder for random questions (if any)
             $hasRandomQuestions = true;
             $tool_content .= "<tr class='active'>
@@ -287,7 +287,7 @@ function display_exercise($exercise_id): void
                 </tr>
             </thead>
             <tr>
-              <td colspan='$colspan'>";
+              <td colspan='$colspan'><div class='d-flex flex-column'>";
 
               $arithmetic_expression_str = '';
             if ($answerType == CALCULATED) {
@@ -301,9 +301,14 @@ function display_exercise($exercise_id): void
                 unset($objAn);
             }
             $tool_content .= "
-            <strong>" . q_math($questionName) . "</strong>
-            <br>" . standard_text_escape($questionDescription) . "<br>" . $arithmetic_expression_str ."<br><br>
-            </td></tr>";
+            <strong>" . q_math($questionName) . "</strong>";
+            if (!empty($questionDescription)) {
+                $tool_content .= "<br>" . standard_text_escape($questionDescription) . "<br>";
+            }
+            if (!empty($arithmetic_expression_str)) {
+                $tool_content .= $arithmetic_expression_str ."<br>";
+            }
+            $tool_content .= "</div></td></tr>";
 
 
             $classImg = '';
