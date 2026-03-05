@@ -26,7 +26,7 @@ function display_certificates(): void
 {
     global $course_id, $tool_content, $course_code, $urlServer,
            $langDelete, $langConfirmDelete, $is_editor, $langState,
-           $langNoCertificates, $langActive, $langInactive, $langNoThumbnail,
+           $langNoCertificates, $langNoCertificatesStud, $langActive, $langInactive, $langNoThumbnail,
            $langEditChange, $langNewCertificate, $langActivate,
            $langDeactivate, $langSee, $webDir, $langTitle, $langActions;
 
@@ -48,7 +48,11 @@ function display_certificates(): void
                     <div class='table-responsive mt-0'>";
     
     if (count($sql_cer) == 0) {
-        $tool_content .= "<p class='text-center text-muted'>$langNoCertificates</p>";
+        if ($is_editor) {
+            $tool_content .= "<p class='text-center text-muted'>$langNoCertificates</p>";
+        } else {
+            $tool_content .= "<p class='text-center text-muted'>$langNoCertificatesStud</p>";
+        }
     } else {
         $tool_content .= "
                         <table class='table-default'>
@@ -132,7 +136,7 @@ function display_badges(): void
 {
     global $course_id, $tool_content, $course_code, $is_editor,
            $langDelete, $langConfirmDelete,
-           $langNoBadges, $langEditChange, $langState,
+           $langNoBadges, $langNoBadgesStud, $langEditChange, $langState,
            $langActivate, $langDeactivate, $langNewBadge,
            $langActive, $langInactive, $urlServer, $langTitle, $langActions;
 
@@ -157,7 +161,11 @@ function display_badges(): void
                     <div class='table-responsive mt-0'>";
 
     if (count($sql_cer) == 0) {
-        $tool_content .= "<p class='text-center text-muted'>$langNoBadges</p>";
+        if ($is_editor) {
+            $tool_content .= "<p class='text-center text-muted'>$langNoBadges</p>";
+        } else {
+            $tool_content .= "<p class='text-center text-muted'>$langNoBadgesStud</p>";
+        }
     } else {
         $tool_content .= "
                         <table class='table-default'>
@@ -231,7 +239,7 @@ function display_points_games(): void
 {
     global $course_id, $tool_content, $course_code, $is_editor, 
            $langDeleteCourseActivities, $langResetPointsGame, $langConfirmResetPointsGame,
-           $langNoPointsGames, $langEditChange, $langPurge,
+           $langNoPointsGames, $langNoPointsGamesStud, $langEditChange, $langPurge,
            $langActivate, $langDeactivate, $langNewPointsGame, $langState,
            $langActive, $langInactive, $urlServer, $langConfirmPurgePointsGame,
            $langTitle, $langStartDate, $langEndDate, $langActions;
@@ -257,7 +265,11 @@ function display_points_games(): void
                     <div class='table-responsive mt-0'>";
 
     if (count($sql_cer) == 0) {
-        $tool_content .= "<p class='text-center text-muted'>$langNoPointsGames</p>";
+        if ($is_editor) {
+            $tool_content .= "<p class='text-center text-muted'>$langNoPointsGames</p>";
+        } else {
+            $tool_content .= "<p class='text-center text-muted'>$langNoPointsGamesStud</p>";
+        }
     } else {
         $tool_content .= "
                         <table class='table-default'>
@@ -3549,9 +3561,7 @@ function points_game_settings($points_game_id = 0) {
                     </div>
                 </div>
             </form>
-        </div></div><div class='d-none d-lg-block'>
-        <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
-    </div>
+        </div></div>
     </div>";
 
 }

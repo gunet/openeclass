@@ -69,14 +69,14 @@ if ($show_tabs) {
     } elseif (isset($_REQUEST['badge_id'])) {
         $active_tab = 'badges';
     } else {
-        if(!$is_editor && !$is_course_reviewer && !is_course_completion_active()) {
+        if(!$is_editor && !is_course_completion_active()) {
             $active_tab = 'badges';
         } else {
             $active_tab = 'course_completion';
         }
     }
 
-    if(!$is_editor && !$is_course_reviewer && !is_course_completion_active()) {
+    if(!$is_editor && !is_course_completion_active()) {
         $course_completion_tab = "";
     } else {
         $course_completion_tab = "
