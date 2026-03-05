@@ -49,6 +49,7 @@ $require_help = true;
 $helpTopic = 'tc';
 
 require_once '../../include/baseTheme.php';
+require_once 'include/course_settings.php';
 
 if (isset($_GET['per_user'])) {
     $toolName = $langUserDuration;

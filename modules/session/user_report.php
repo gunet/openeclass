@@ -31,6 +31,7 @@ $require_current_course = true;
 $require_login = true;
 
 require_once '../../include/baseTheme.php';
+require_once 'include/course_settings.php';
 require_once 'modules/progress/process_functions.php';
 require_once 'functions.php';
 

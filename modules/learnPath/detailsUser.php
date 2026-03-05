@@ -44,6 +44,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 $require_current_course = TRUE;
 $require_course_reviewer = TRUE;
 require_once '../../include/baseTheme.php';
+require_once 'include/course_settings.php';
 require_once 'include/lib/learnPathLib.inc.php';
 
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langLearningPaths);

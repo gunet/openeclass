@@ -24,6 +24,7 @@ $require_help = true;
 $helpTopic = 'questionnaire';
 
 require_once '../../include/baseTheme.php';
+require_once 'include/course_settings.php';
 require_once 'functions.php';
 require_once 'modules/usage/usage.lib.php';
 require_once 'modules/session/functions.php';
