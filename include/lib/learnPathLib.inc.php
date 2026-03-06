@@ -708,6 +708,7 @@ function get_learnPath_progress_details($lpid, $lpUid, $total=true, $from_date =
         //    $totalStatus = "INCOMPLETE";
         //}
     }
+    $totalScoreMax = $totalScoreMax ?? null;
 
     $totalTime = ($totalTime == '0000:00:00') ? '00:00:00': $totalTime;
     if ($total) {
@@ -1678,6 +1679,85 @@ function check_LPM_validity($is_editor, $course_code, $extraQuery = false, $extr
             }
         }
     }
+}
+
+/**
+ * AJAX-safe module validity check.
+ *
+ * Similar to check_LPM_validity() but designed for AJAX requests:
+ * - Does NOT redirect (header("Location:...")) on failure
+ * - Sets $_SESSION['lp_module_id'] to the requested module on success
+ * - Returns an array ['ok' => true/false, 'error' => string, 'code' => string]
+ *
+ * @param int    $moduleId    The requested module ID
+ * @param bool   $is_editor   Whether user is course editor
+ * @return array              ['ok' => true] on success, ['ok' => false, 'error' => ..., 'code' => ...] on failure
+ */
+function check_LPM_validity_ajax(int $moduleId, bool $is_editor): array {
+    global $course_id;
+
+    if (empty($_SESSION['path_id']) || empty($moduleId)) {
+        return ['ok' => false, 'error' => 'Missing path or module id', 'code' => 'LP_BAD_REQUEST'];
+    }
+
+    // Check learning path visibility
+    $lp = Database::get()->querySingle("SELECT visible FROM lp_learnPath WHERE learnPath_id = ?d AND `course_id` = ?d", $_SESSION['path_id'], $course_id);
+    if (!$lp) {
+        return ['ok' => false, 'error' => 'Learning path not found', 'code' => 'LP_NOT_FOUND'];
+    }
+    if (!$is_editor && $lp->visible == 0) {
+        return ['ok' => false, 'error' => 'Learning path not accessible', 'code' => 'LP_FORBIDDEN'];
+    }
+
+    // Check blocked learning paths (prerequisite paths)
+    if (!$is_editor) {
+        $rank0 = Database::get()->querySingle("SELECT `rank` FROM lp_learnPath
+                            WHERE learnPath_id = ?d AND `course_id` = ?d ORDER BY `rank` LIMIT 1", $_SESSION['path_id'], $course_id);
+        if ($rank0) {
+            $lps = Database::get()->queryArray("SELECT `learnPath_id`, `lock` FROM lp_learnPath WHERE `course_id` = ?d AND `rank` < ?d", $course_id, $rank0->rank);
+            foreach ($lps as $prereqLp) {
+                if ($prereqLp->lock == 'CLOSE') {
+                    $prog = get_learnPath_progress($prereqLp->learnPath_id, $_SESSION['uid']);
+                    if ($prog < 100) {
+                        return ['ok' => false, 'error' => 'Prerequisite learning path not completed', 'code' => 'LP_FORBIDDEN'];
+                    }
+                }
+            }
+        }
+    }
+
+    // Check module exists in path and is visible
+    $lpm = Database::get()->querySingle("SELECT visible, `lock`, `rank` FROM lp_rel_learnPath_module
+        WHERE learnPath_id = ?d AND module_id = ?d", $_SESSION['path_id'], $moduleId);
+    if (!$lpm) {
+        return ['ok' => false, 'error' => 'Module not found in this learning path', 'code' => 'LP_NOT_FOUND'];
+    }
+    if (!$is_editor && $lpm->visible == 0) {
+        return ['ok' => false, 'error' => 'Module not accessible', 'code' => 'LP_FORBIDDEN'];
+    }
+
+    // Check lock enforcement for non-editors
+    if (!$is_editor && $lpm->lock == 'CLOSE') {
+        $predecessors = Database::get()->queryArray("SELECT learnPath_module_id
+                                        FROM lp_rel_learnPath_module
+                                       WHERE learnPath_id = ?d
+                                         AND `rank` < ?d", $_SESSION['path_id'], $lpm->rank);
+        foreach ($predecessors as $m) {
+            $progress = Database::get()->querySingle("SELECT credit, lesson_status
+                                                FROM lp_user_module_progress
+                                               WHERE learnPath_module_id = ?d
+                                                 AND learnPath_id = ?d
+                                                 AND user_id = ?d", $m->learnPath_module_id, $_SESSION['path_id'], $_SESSION['uid']);
+            if (!$progress || ($progress->credit != 'CREDIT' || ($progress->lesson_status != 'COMPLETED' && $progress->lesson_status != 'PASSED'))) {
+                return ['ok' => false, 'error' => 'Module is locked', 'code' => 'LP_FORBIDDEN'];
+            }
+        }
+    }
+
+    // All checks passed — update session
+    $_SESSION['lp_module_id'] = $moduleId;
+
+    return ['ok' => true];
 }
 
 function deleteLearningPath($pathId) {

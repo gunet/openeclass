@@ -1,0 +1,1631 @@
+<?php
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
+ *
+ */
+
+/**
+ * @var integer $uid
+ * @var integer $course_id
+ * @var bool $isAnonymous
+ */
+
+require_once __DIR__ . '/scormData.php';
+
+if (!isset($isAnonymous)) {
+    $isAnonymous = !$uid;
+}
+
+// Build SCORM data using the extracted helper (reusable by prepareModule endpoint)
+// Caller (viewer) must set $lp_pathId, $lp_moduleId, $lp_attempt, $lp_attemptClean
+$scormData = buildScormApiData(
+    $lp_pathId,
+    $lp_moduleId,
+    $lp_attempt,
+    $uid,
+    $course_id,
+    $lp_attemptClean
+);
+$sco = $scormData['sco'];
+$umpId = $scormData['ump_id'];
+$isAnonymous = $scormData['isAnonymous'];
+
+if (isset($_GET['unit'])) {
+    $closeurl = $urlAppend . "modules/units/index.php?course=$course_code&id=" . $_GET['unit'];
+} else {
+    $closeurl = "index.php?course=$course_code";
+}
+
+// Compute the commit URL (may be overridden by caller via $lp_update_url)
+$commitUrl = $lp_update_url
+    ?? $urlAppend . "modules/learnPath/viewer_noframes.php?course=" . $course_code . (isset($_GET['unit']) ? ('&unit=' . intval($_GET['unit'])) : '') . "&action=updateProgress";
+
+?>
+<script type="text/javascript">
+
+    let init_total_time = "<?php echo $sco['total_time']; ?>";
+    let item_objectives = [];
+    let updatetable_to_list = [];
+    let interactions = [];
+
+    // ====================================================
+    // Mutable commit state (updated by resetScormApi/deactivateScormApi)
+    let _commitUrl = '<?php echo $commitUrl; ?>';
+    let _umpId = '<?php echo $umpId; ?>';
+
+    // ====================================================
+    // API Class Constructor
+    let debug_ = false;
+    let debug_commit_ = false;
+
+    function APIClass() {
+
+        //SCORM 1.2
+
+        // Execution State
+        this.LMSInitialize = LMSInitialize;
+        this.LMSFinish = LMSFinish;
+
+        // Data Transfer
+        this.LMSGetValue = LMSGetValue;
+        this.LMSSetValue = LMSSetValue;
+        this.LMSCommit = LMSCommit;
+
+        // State Management
+        this.LMSGetLastError = LMSGetLastError;
+        this.LMSGetErrorString = LMSGetErrorString;
+        this.LMSGetDiagnostic = LMSGetDiagnostic;
+
+        // Private
+        this.APIError = APIError;
+
+        // SCORM 2004
+
+        // Execution State
+        this.Initialize = LMSInitialize2004;
+        this.Terminate = LMSFinish;
+
+        // Data Transfer
+        this.GetValue = LMSGetValue;
+        this.SetValue = LMSSetValue;
+        this.Commit = LMSCommit;
+
+        // State Management
+        this.GetLastError = LMSGetLastError;
+        this.GetErrorString = LMSGetErrorString;
+        this.GetDiagnostic = LMSGetDiagnostic;
+
+    }
+
+
+    // ====================================================
+    // Execution State
+    //
+
+    // Initialize
+    // According to SCORM 1.2 reference :
+    //    - arg must be "" (empty string)
+    //    - return value : "true" or "false"
+    function LMSInitialize(arg) {
+        if (arg !== "") {
+            this.APIError("201");
+            return "false";
+        }
+        if (APIInitialized === true) {
+            if (isSCORM2004) {
+                this.APIError("103");
+                return "false";
+            } else {
+            this.APIError("101");
+            return "false";
+            }
+        }
+
+        this.APIError("0");
+        APIInitialized = true;
+
+        return "true";
+    }
+
+    function LMSInitialize2004(arg) {
+        isSCORM2004 = true;
+        return LMSInitialize(arg);
+    }
+
+    // Finish
+    // According to SCORM 1.2 reference
+    //    - arg must be "" (empty string)
+    //    - return value : "true" or "false"
+    function LMSFinish(arg) {
+        if (APIInitialized) {
+            if (arg !== "") {
+                this.APIError("201");
+                return "false";
+            }
+            this.APIError("0");
+
+            // Use sendBeacon for the final commit — it survives page unload,
+            // unlike $.ajax which gets killed if the page navigates away.
+            if (!(window.eclassLP && window.eclassLP.isAnonymous)
+                && navigator && navigator.sendBeacon) {
+                let payload = _buildCommitPayload();
+                let params = new URLSearchParams();
+                for (let key in payload) {
+                    if (payload.hasOwnProperty(key)) {
+                        params.append(key, payload[key]);
+                    }
+                }
+                navigator.sendBeacon(_commitUrl, params);
+                _beaconCommitted = true;
+            } else {
+                do_commit();
+            }
+
+            APIInitialized = false;
+            _terminated = true;
+            return "true";
+        } else {
+            this.APIError("301"); // not initialized
+            return "false";
+        }
+    }
+
+
+    // ====================================================
+    // Data Transfer
+    //
+    function LMSGetValue(ele) {
+        if (APIInitialized) {
+
+            // SCORM2004
+            if (ele === "" && isSCORM2004) {
+                APIError("301"); // read only
+                return "false";
+            }
+
+            let i = array_indexOf(elements, ele);
+            if (i !== -1) { // ele is implemented -> handle it
+                switch (ele) {
+                    case 'cmi._version':
+                        APIError("0");
+                        return "1.0";
+                    case 'cmi.core._children':
+                    case 'cmi.learner_id':
+                    case 'cmi.core.student_id':
+                    case 'cmi.learner_name':
+                    case 'cmi.core.student_name':
+                    case 'cmi.location':
+                    case 'cmi.core.lesson_location':
+                    case 'cmi.core.credit':
+                    case 'cmi.core.lesson_status':
+                    case 'cmi.core.entry':
+                    case 'cmi.core.score._children':
+                    case 'cmi.core.score.raw':
+                    case 'cmi.score.raw':
+                    case 'cmi.core.score.min':
+                    case 'cmi.score.min':
+                    case 'cmi.core.score.max':
+                    case 'cmi.score.max':
+                    case 'cmi.score.scaled':
+                    case 'cmi.core.total_time':
+                    case 'cmi.suspend_data':
+                    case 'cmi.launch_data':
+                    case 'cmi.core.lesson_mode':
+                    case 'cmi.objectives._children':
+                    case 'cmi.student_data._children':
+                    case 'cmi.interactions._children':
+                    case 'cmi.mode':
+                        APIError("0");
+                        return values[i];
+                    //-----------------------------------
+                    //deal with SCORM 2004 new elements :
+                    //-----------------------------------
+                    case 'cmi.completion_status':
+                    case 'cmi.success_status':
+                        APIError("0");
+                        ele = 'cmi.core.lesson_status';
+                        return values[i];
+                    //-----------------------------------
+                    case 'cmi.core.exit':
+                    case 'cmi.core.session_time':
+                    case 'cmi.session_time':
+                    case 'cmi.exit':
+                        APIError("404"); // write only
+                        return "";
+                    case 'cmi.objectives._count':
+                        APIError("0");
+                        values[i] = item_objectives.length;
+                        return item_objectives.length;
+                    case 'cmi.interactions._count':
+                        APIError("0");
+                        values[i] = interactions.length;
+                        return interactions.length;
+
+                    // SCORM2004
+                    case 'cmi.learner_preference._children':
+                        APIError("0"); // not implemented
+                        return "language,delivery_speed,audio_captioning,audio_level";
+                    case 'cmi.student_preference._children':
+                        APIError("401"); // not implemented
+                        return "";
+                    case 'cmi.learner_preference.audio_level':
+                    case 'cmi.student_preference.audio':
+                    case 'cmi.learner_preference.language':
+                    case 'cmi.student_preference.language':
+                    case 'cmi.learner_preference.delivery_speed':
+                    case 'cmi.student_preference.speed':
+                    case 'cmi.learner_preference.audio_captioning':
+                    case 'cmi.student_preference.text':
+                    case 'cmi.comments':
+                    case 'cmi.comments_from_lms':
+                    case 'adl.nav.request':
+                        APIError("0");
+                        return values[i];
+                }
+            } else {
+                if (ele.indexOf("cmi.interactions") >= 0) {
+                    return handleGetInteractions(ele, interactions);
+                }
+                // cmi.objectives
+                if (ele.substring(0, 15) === 'cmi.objectives.') {
+                    return handleGetObjectives(ele, item_objectives);
+                }
+
+                // ignore _children if not explicitly defined
+
+                /*
+                if (ele.indexOf("_children") >= 0) {
+                    APIError("202");
+                    return "";
+                }
+                // ignore _count if not explicitly defined
+                if (ele.indexOf("_count") >= 0) {
+                    APIError("203");
+                    return "";
+                }
+                */
+                // ignore cmi.core.none
+                if (ele.indexOf("cmi.core.none") >= 0) {
+                    APIError("201");
+                    return "";
+                }
+
+                // not implemented error
+                if (isSCORM2004) {
+                    this.APIError("401");
+                    return "";
+                } else {
+                    APIError("401");
+                    return "";
+                }
+            }
+        } else { // not initialized error
+            if (isSCORM2004) {
+                this.APIError("122");
+                return "";
+            } else {
+                this.APIError("301");
+                return "";
+            }
+        }
+    }
+
+    function LMSSetValue(ele, val) {
+        if (APIInitialized) {
+
+            // SCORM2004
+            if (ele === "" && isSCORM2004) {
+                APIError("351"); // read only
+                return "false";
+            }
+
+            let i = array_indexOf(elements, ele);
+            if (i !== -1) { // ele is implemented -> handle it
+                let upperCaseVal;
+                switch (ele) {
+                    case 'cmi._version':
+                        APIError("404");
+                        return "1.0";
+                    case 'cmi.core._children':
+                    case 'cmi.core.student_id':
+                    case 'cmi.core.student_name':
+                    case 'cmi.core.credit':
+                    case 'cmi.core.entry':
+                    case 'cmi.core.score._children':
+                    case 'cmi.core.total_time':
+                    case 'cmi.launch_data':
+                    case 'cmi.objectives._children':
+                    case 'cmi.objectives._count':
+                    case 'cmi.interactions._children':
+                    case 'cmi.interactions._count':
+                    case 'cmi.student_data._children':
+                    // SCORM2004
+                    case 'cmi.learner_preference._children':
+                        APIError("404"); // read only
+                        return "false";
+                    case 'cmi.student_preference._children':
+                        APIError("403"); // read only
+                        return "false";
+                    // SCORM2004
+                    case 'cmi.location':
+                    case 'cmi.core.lesson_location':
+                        if(!checkDataType(val, 'CMIIdentifier') && !isSCORM2004) {
+                            APIError("405");
+                            return "false";
+                        }
+                        values[i] = val;
+                        APIError("0");
+                        return "true";
+                    case 'cmi.core.lesson_status':
+                        if (val === 'not attempted' || !checkDataType(val, 'CMIVocabulary', 'Status')) {
+                            APIError("405");
+                            return "false";
+                        }
+                    /*
+                        upperCaseVal = val.toUpperCase();
+                        if (upperCaseVal != "PASSED" && upperCaseVal != "FAILED"
+                                && upperCaseVal != "COMPLETED" && upperCaseVal != "INCOMPLETE"
+                       && upperCaseVal != "BROWSED" /*&& upperCaseVal != "NOT ATTEMPTED" )
+                        {
+                            APIError("405");
+                            return "false";
+                    }*/
+
+                        values[i] = val;
+                        APIError("0");
+                        return "true";
+                    //-------------------------------
+                    // Deal with SCORM 2004 element :
+                    // completion_status and success_status are new element,
+                    // we use them together with the old element lesson_status in the DB
+                    //-------------------------------
+                    case 'cmi.completion_status':
+                        upperCaseVal = val.toUpperCase();
+                        if (upperCaseVal !== "PASSED" && upperCaseVal !== "FAILED" && upperCaseVal !== "COMPLETED" && upperCaseVal !== "INCOMPLETE" && upperCaseVal !== "BROWSED" && upperCaseVal !== "NOT ATTEMPTED" && upperCaseVal !== "UNKNOWN") {
+                            APIError("405");
+                            return "false";
+                        }
+                        ele = 'cmi.core.lesson_status';
+                        values[4] = val; // deal with lesson_status element from scorm 1.2 instead
+                        values[i] = val;
+                        APIError("0");
+                        return "true";
+                    case 'cmi.success_status':
+                        upperCaseVal = val.toUpperCase();
+                        if (upperCaseVal !== "PASSED" && upperCaseVal !== "FAILED" && upperCaseVal !== "COMPLETED" && upperCaseVal !== "INCOMPLETE" && upperCaseVal !== "BROWSED" && upperCaseVal !== "NOT ATTEMPTED" && upperCaseVal !== "UNKNOWN") {
+                            APIError("405");
+                            return "false";
+                        }
+                        ele = 'cmi.core.lesson_status';
+                        values[4] = val; // deal with lesson_status element from scorm 1.2 instead
+                        values[i] = val;
+                        APIError("0");
+                        return "true";
+                    //-------------------------------
+                    case 'cmi.core.score.raw':
+                        if (isNaN(parseInt(val)) || (val < 0) || (val > 100)) {
+                            APIError("405");
+                            return "false";
+                        }
+                        values[i] = val;
+                        APIError("0");
+                        return "true";
+                    case 'cmi.score.raw':
+                        if (isNaN(parseInt(val)) || (val < 0) || (val > 100)) {
+                            APIError("405");
+                            return "false";
+                        }
+                        values[8] = val; // SCORM 2004, we deal with the old element
+                        values[i] = val;
+                        APIError("0");
+                        return "true";
+                    case 'cmi.core.score.min':
+                        if (isNaN(parseInt(val)) || (val < 0) || (val > 100)) {
+                            APIError("405");
+                            return "false";
+                        }
+                        values[i] = val;
+                        APIError("0");
+                        return "true";
+                    case 'cmi.score.min':
+                        if (isNaN(parseInt(val)) || (val < 0) || (val > 100)) {
+                            APIError("405");
+                            return "false";
+                        }
+                        values[14] = val;
+                        values[i] = val;
+                        APIError("0");
+                        return "true";
+                    case 'cmi.core.score.max':
+                        if (isNaN(parseInt(val)) || (val < 0) || (val > 100)) {
+                            APIError("405");
+                            return "false";
+                        }
+                        values[i] = val;
+                        APIError("0");
+                        return "true";
+                    case 'cmi.score.max':
+                        if (isNaN(parseInt(val)) || (val < 0) || (val > 100)) {
+                            APIError("405");
+                            return "false";
+                        }
+                        values[15] = val;
+                        values[i] = val;
+                        APIError("0");
+                        return "true";
+                    case 'cmi.score.scaled':
+                        if (isNaN(parseFloat(val)) || (val < 0.0) || (val > 1.0)) {
+                            APIError("405");
+                            return "false";
+                        }
+                        values[i] = val;
+                        APIError("0");
+                        return "true";
+                    case 'cmi.core.exit':
+                        if (!checkDataType(val, 'CMIVocabulary', 'Exit')) {
+                            APIError("405");
+                            return "false";
+                        }
+                        values[i] = val;
+                        APIError("0");
+                        return "true";
+                    case 'cmi.exit':
+                        if (!checkDataType(val, 'CMIVocabulary', 'Exit')) {
+                            APIError("405");
+                            return "false";
+                        }
+                        values[10] = val; // SCORM 2004, use together with the old element
+                        values[i] = val;
+                        APIError("0");
+                        return "true";
+                    case 'cmi.core.session_time':
+                        if (!checkDataType(val, 'CMITimespan')) {
+                            APIError("405");
+                            return "false";
+                        }
+                        values[i] = val;
+                        APIError("0");
+                        return "true";
+                    case 'cmi.session_time':
+                        if (!checkDataType(val, 'CMITimespan')) {
+                            APIError("405");
+                            return "false";
+                        }
+                        values[11] = val; // SCORM 2004, use together with the old element
+                        values[i] = val;
+                        APIError("0");
+                        return "true";
+                    case 'cmi.suspend_data':
+                        if (val.length > 4096) {
+                            APIError("405");
+                            return "false";
+                        }
+                        values[i] = val;
+                        APIError("0");
+                        return "true";
+                    case 'cmi.core.lesson_mode':
+                        values[i] = val;
+                        APIError("403");
+                        return "false";
+                    // SCORM2004
+                    case 'cmi.progress_measure':
+                    case 'cmi.learner_preference.audio_level':
+                    case 'cmi.learner_preference.delivery_speed':
+                        if (!checkDataType(val, 'CMIDecimal')) {
+                            APIError("406");
+                            return "false";
+                        } else if(val < 0) {
+                            APIError("407");
+                            return "false";
+                        }
+                        values[i] = val;
+                        APIError("0");
+                        return "true";
+                    case 'cmi.student_preference.audio':
+                        if (!checkDataType(val, 'CMISInteger') || val < -1 || val > 100) {
+                            APIError("405");
+                            return "false";
+                        }
+                        values[i] = val;
+                        APIError("0");
+                        return "true";
+                    // SCORM2004
+                    case 'cmi.learner_preference.language':
+                    case 'cmi.student_preference.language':
+                        if (!checkDataType(val, 'CMIString255')) {
+                            APIError("405");
+                            return "false";
+                        }
+                        values[i] = val;
+                        APIError("0");
+                        return "true";
+                    case 'cmi.student_preference.speed':
+                        if (!checkDataType(val, 'CMISInteger') || val < -100 || val > 100) {
+                            APIError("405");
+                            return "false";
+                        }
+                        values[i] = val;
+                        APIError("0");
+                        return "true";
+                    // SCORM2004
+                    case 'cmi.learner_preference.audio_captioning':
+                        if (!checkDataType(val, 'CMISInteger') || val < -1 || val > 1) {
+                            APIError("406");
+                            return "false";
+                        }
+                        values[i] = val;
+                        APIError("0");
+                        return "true";
+                    case 'cmi.student_preference.text':
+                        if (!checkDataType(val, 'CMISInteger') || val < -1 || val > 1) {
+                            APIError("405");
+                            return "false";
+                        }
+                        values[i] = val;
+                        APIError("0");
+                        return "true";
+                    case 'cmi.comments':
+                        if (!checkDataType(val, 'CMIString4096')) {
+                            APIError("405");
+                            return "false";
+                        }
+                        values[i] = val;
+                        APIError("0");
+                        return "true";
+                    case 'cmi.comments_from_lms':
+                        APIError("403");
+                        return "false";
+                    case 'adl.nav.request':
+                        if (!checkDataType(val, 'NAVEvent')) {
+                            APIError("405");
+                            return "false";
+                        }
+                        values[i] = val;
+                        APIError("0");
+                        return "true";
+                }
+            } else {
+                if (ele.substring(0, 17) === 'cmi.interactions.') {
+                    return handleSetInteractions(ele, val, interactions);
+                } // end of interactions
+
+                // cmi.objectives
+                if (ele.substring(0, 15) === 'cmi.objectives.') {
+                    updatetable_to_list['objectives'] = 'true';
+                    return handleSetObjectives(ele, val, item_objectives);
+                } // end of cmi.objectives
+
+                // ignore cmi.core.none
+                if (ele.indexOf("cmi.core.none") >= 0) {
+                    APIError("201");
+                    return "false";
+                }
+
+                // not implemented error
+                if (isSCORM2004) {
+                    this.APIError("401");
+                    return "false";
+                } else {
+                    APIError("401");
+                    return "false";
+                }
+            }
+        } else {
+            if (isSCORM2004) {
+                this.APIError("132");
+                return "false";
+            } else {
+                // not initialized error
+                this.APIError("301");
+                return "";
+            }
+        }
+    }
+
+    function LMSCommit(arg) {
+        if (APIInitialized) {
+            if (arg !== "") {
+                this.APIError("201");
+                return "false";
+            } else {
+                this.APIError("0");
+                do_commit();
+                return "true";
+            }
+        } else {
+            if (isSCORM2004) {
+                this.APIError("142");
+                return "false";
+            } else {
+                this.APIError("301");
+                return "false";
+            }
+        }
+    }
+
+
+    // ====================================================
+    // State Management
+    //
+    function LMSGetLastError() {
+        return APILastError;
+    }
+
+    function LMSGetErrorString(num) {
+        if (num === "") {
+            return "";
+        }
+        if (errCodes[num] == null) {
+            return "";
+        }
+        return errCodes[num];
+    }
+
+    function LMSGetDiagnostic(num) {
+        console.error(errDiagn[num]);
+
+        if (num === "") {
+            num = APILastError;
+        }
+        if (num === "") {
+            return "";
+        }
+        if (errDiagn[num] == null) {
+            return "";
+        }
+
+        console.error(errDiagn[num]);
+
+        return errDiagn[num];
+    }
+
+
+    // ====================================================
+    // Private
+    //
+    function APIError(num) {
+        APILastError = num;
+    }
+
+    // ====================================================
+    // Error codes and Error diagnostics
+    //
+    let errCodes = [];
+    errCodes["0"] = "No Error";
+    errCodes["101"] = "General Exception";
+    errCodes["102"] = "General Initialization Failure";
+    errCodes["103"] = "Already Initialized";
+    errCodes["104"] = "Content Instance Terminated";
+    errCodes["111"] = "General Termination Failure";
+    errCodes["112"] = "Termination Before Initialization";
+    errCodes["113"] = "Termination After Termination";
+    errCodes["122"] = "Retrieve Data Before Initialization";
+    errCodes["123"] = "Retrieve Data After Termination";
+    errCodes["132"] = "Store Data Before Initialization";
+    errCodes["133"] = "Store Data After Termination";
+    errCodes["142"] = "Commit Before Initialization";
+    errCodes["143"] = "Commit After Termination";
+    errCodes["201"] = "Invalid Argument Error";
+    errCodes["202"] = "Element cannot have children";
+    errCodes["203"] = "Element not an array - Cannot have count";
+    errCodes["406"] = "General Get Failure";
+    errCodes["351"] = "General Set Failure";
+    errCodes["391"] = "General Commit Failure";
+    errCodes["401"] = "Not implemented error";
+    errCodes["402"] = "Invalid set value, element is a keyword";
+    errCodes["301"] = "Not initialized";
+    errCodes["403"] = "Element is read only";
+    errCodes["404"] = "Element is write only";
+    errCodes["405"] = "Incorrect Data Type";
+    errCodes["407"] = "Data Model Element Value Out Of Range";
+
+    let errDiagn = [];
+    errDiagn["0"] = "No Error";
+    errDiagn["101"] = "General Exception";
+    errDiagn["102"] = "General Initialization Failure";
+    errDiagn["103"] = "Already Initialized";
+    errDiagn["104"] = "Content Instance Terminated";
+    errDiagn["111"] = "General Termination Failure";
+    errDiagn["112"] = "Termination Before Initialization";
+    errDiagn["113"] = "Termination After Termination";
+    errDiagn["122"] = "Retrieve Data Before Initialization";
+    errDiagn["123"] = "Retrieve Data After Termination";
+    errDiagn["132"] = "Store Data Before Initialization";
+    errDiagn["133"] = "Store Data After Termination";
+    errDiagn["142"] = "Commit Before Initialization";
+    errDiagn["143"] = "Commit After Termination";
+    errDiagn["201"] = "Invalid Argument Error";
+    errDiagn["202"] = "Element cannot have children";
+    errDiagn["203"] = "Element not an array - Cannot have count";
+    errDiagn["406"] = "General Get Failure";
+    errDiagn["351"] = "General Set Failure";
+    errDiagn["391"] = "General Commit Failure";
+    errDiagn["401"] = "Not implemented error";
+    errDiagn["402"] = "Invalid set value, element is a keyword";
+    errDiagn["301"] = "Not initialized";
+    errDiagn["403"] = "Element is read only";
+    errDiagn["404"] = "Element is write only";
+    errDiagn["405"] = "Incorrect Data Type";
+    errDiagn["407"] = "Data Model Element Value Out Of Range";
+
+    // ====================================================
+    // CMI Elements and Values
+    //
+    let elements = [];
+    elements[0] = "cmi.core._children";
+    elements[1] = "cmi.core.student_id";
+    elements[2] = "cmi.core.student_name";
+    elements[3] = "cmi.core.lesson_location";
+    elements[4] = "cmi.core.lesson_status";
+    elements[5] = "cmi.core.credit";
+    elements[6] = "cmi.core.entry";
+    elements[7] = "cmi.core.score._children";
+    elements[8] = "cmi.core.score.raw";
+    elements[9] = "cmi.core.total_time";
+    elements[10] = "cmi.core.exit";
+    elements[11] = "cmi.core.session_time";
+    elements[12] = "cmi.suspend_data";
+    elements[13] = "cmi.launch_data";
+    elements[14] = "cmi.core.score.min";
+    elements[15] = "cmi.core.score.max";
+    elements[16] = "cmi.completion_status";
+    elements[17] = "cmi.success_status";
+    elements[18] = "cmi.session_time";
+    elements[19] = "cmi.score.raw";
+    elements[20] = "cmi.score.min";
+    elements[21] = "cmi.score.max";
+    elements[22] = "cmi.core.lesson_mode";
+    elements[23] = "cmi.objectives._children";
+    elements[24] = "cmi.objectives._count";
+    elements[25] = "cmi.student_data._children";
+    elements[26] = "cmi.student_preference._children";
+    elements[27] = "cmi.interactions._children";
+    elements[28] = "cmi.interactions._count";
+    elements[29] = "cmi.student_preference.audio";
+    elements[30] = "cmi.student_preference.language";
+    elements[31] = "cmi.student_preference.speed";
+    elements[32] = "cmi.student_preference.text";
+    elements[33] = "cmi.comments";
+    elements[34] = "cmi.comments";
+
+    elements[35] = "cmi.comments_from_lms";
+    elements[36] = "cmi._version";
+    elements[37] = "cmi.location";
+    elements[38] = "cmi.learner_id";
+    elements[39] = "cmi.learner_name";
+
+    elements[40] = "cmi.learner_preference._children";
+    elements[41] = "cmi.learner_preference.audio_level";
+    elements[42] = "cmi.learner_preference.language";
+    elements[43] = "cmi.learner_preference.delivery_speed";
+    elements[44] = "cmi.learner_preference.audio_captioning";
+
+    elements[45] = 'cmi.score.scaled';
+    elements[46] = 'cmi.exit';
+    elements[47] = 'adl.nav.request';
+    elements[48] = 'cmi.mode';
+    elements[49] = 'cmi.progress_measure';
+
+    let values = [];
+    values[0] = "<?php echo js_escape($sco['_children']); ?>";
+    values[1] = "<?php echo js_escape($sco['student_id']); ?>";
+    values[2] = "<?php echo js_escape($sco['student_name']); ?>";
+    values[3] = "<?php echo js_escape($sco['lesson_location']); ?>";
+    values[4] = "<?php echo js_escape($sco['lesson_status']); ?>";
+    values[5] = "<?php echo js_escape($sco['credit']); ?>";
+    values[6] = "<?php echo js_escape($sco['entry']); ?>";
+    values[7] = "<?php echo js_escape($sco['score_children']); ?>";
+    values[8] = "<?php echo js_escape($sco['raw']); ?>";
+    values[9] = "<?php echo js_escape($sco['total_time']); ?>";
+    values[10] = "<?php echo js_escape($sco['exit']); ?>";
+    values[11] = "<?php echo js_escape($sco['session_time']); ?>";
+    values[12] = "<?php echo js_escape($sco['suspend_data']); ?>";
+    values[13] = "<?php echo js_escape($sco['launch_data']); ?>";
+    values[14] = "<?php echo js_escape($sco['scoreMin']); ?>";
+    values[15] = "<?php echo js_escape($sco['scoreMax']); ?>";
+    values[16] = "<?php echo js_escape($sco['lesson_status']); ?>"; //we do deal the completion_status element with the old lesson_status element
+    values[17] = "<?php echo js_escape($sco['lesson_status']); ?>"; //we do deal the sucess_status element with the old lesson_status element
+    values[18] = "<?php echo js_escape($sco['session_time']); ?>"; // we do deal the session_time element with the old element
+    values[19] = "<?php echo js_escape($sco['raw']); ?>"; // we do deal the score.raw element with the old element
+    values[20] = "<?php echo js_escape($sco['scoreMin']); ?>"; // we do deal the score.min element with the old element
+    values[21] = "<?php echo js_escape($sco['scoreMax']); ?>"; // we do deal the score.max element with the old element
+    values[22] = "<?php echo js_escape($sco['lesson_mode']); ?>";
+    values[23] = "id,score,status";
+    values[24] = item_objectives.length;
+    values[25] = "mastery_score,max_time_allowed";
+    values[26] = "";
+    values[27] = "id,time,type,correct_responses,weighting,student_response,result,latency";
+    values[28] = interactions.length;
+
+    // SCORM2004
+    values[37] = "<?php echo js_escape($sco['lesson_location']); ?>";
+    values[38] = "<?php echo js_escape($sco['student_id']); ?>";
+    values[39] = "<?php echo js_escape($sco['student_name']); ?>";
+    values[41] = 1;
+    values[43] = 1;
+    values[44] = 0;
+
+    values[45] = "<?php echo js_escape($sco['scoreScaled']); ?>";
+    values[46] = "<?php echo js_escape($sco['exit']); ?>";
+    values[47] = "";
+    values[48] = "normal";
+    values[49] = "<?php echo js_escape($sco['progress_measure']); ?>";
+
+
+    // ====================================================
+    // Commit functions
+    //
+
+    /**
+     * _buildCommitPayload — build the key/value object for SCORM commit.
+     * Used by do_commit, do_commit_beacon, and doCommitAwaitable.
+     */
+    function _buildCommitPayload() {
+        return {
+            'ump_id': _umpId,
+            'lesson_location': isSCORM2004 ? values[37] : values[3],
+            'lesson_status': values[4],
+            'credit': values[5],
+            'entry': values[6],
+            'raw': values[8],
+            'total_time': values[9],
+            'exit': values[10],
+            'session_time': values[11],
+            'suspend_data': values[12],
+            'scoreMin': values[14],
+            'scoreMax': values[15],
+            'scoreScaled': values[45],
+            'progress_measure': values[49]
+        };
+    }
+
+    function do_commit() {
+        if (_terminated) { return; }
+        if (window.eclassLP && window.eclassLP.isAnonymous) { return; }
+
+        let cdbg = function (val) {
+            if (debug_commit_) {
+                console.debug(val);
+            }
+        };
+
+        let payload = _buildCommitPayload();
+        cdbg('doCommit submitting');
+
+        let closelocation = (window.eclassLP && window.eclassLP.closeUrl) ? window.eclassLP.closeUrl : '<?php echo $closeurl ?>';
+
+        $.ajax({
+            type: 'POST',
+            url: _commitUrl,
+            data: payload
+        }).done(function(resp) {
+            cdbg('doCommit ajax XHR OK');
+            if (window.eclassLP && typeof window.eclassLP.onCommit === 'function') {
+                window.eclassLP.onCommit(resp || { ok: true });
+            }
+        }).fail(function() {
+            cdbg('doCommit ajax XHR failed, falling back to navigator.sendBeacon API');
+            if (navigator && navigator.sendBeacon) {
+                let params = new URLSearchParams();
+                for (let key in payload) {
+                    if (payload.hasOwnProperty(key)) {
+                        params.append(key, payload[key]);
+                    }
+                }
+                let result = navigator.sendBeacon(_commitUrl, params);
+                let resultMsg = (result) ? 'doCommit navigator.sendBeacon OK' : 'doCommit Failed to utilize navigator.sendBeacon API';
+                cdbg(resultMsg);
+            } else {
+                cdbg('doCommit navigator.sendBeacon not available');
+            }
+        }).always(function() {
+            cdbg('doCommit exiting...');
+            if (values[47].length > 0) {
+                setTimeout(function () {
+                    window.top.location.href = closelocation;
+                }, 300);
+            }
+        });
+    }
+
+    /**
+     * do_commit_beacon — fire-and-forget commit via navigator.sendBeacon.
+     * Used exclusively from the beforeunload handler. Skipped when the SCO
+     * already called LMSFinish/Terminate (_terminated) or for anonymous users.
+     */
+    function do_commit_beacon() {
+        if (_terminated || _beaconCommitted) { return; }
+        if (window.eclassLP && window.eclassLP.isAnonymous) { return; }
+        if (!navigator || !navigator.sendBeacon) { return; }
+
+        let payload = _buildCommitPayload();
+        let params = new URLSearchParams();
+        for (let key in payload) {
+            if (payload.hasOwnProperty(key)) {
+                params.append(key, payload[key]);
+            }
+        }
+
+        navigator.sendBeacon(_commitUrl, params);
+    }
+
+    /**
+     * doCommitAwaitable — returns a Promise that resolves after SCORM commit completes.
+     * Used by AJAX navigation to await commit before switching modules.
+     * If SCORM is inactive or user is anonymous, resolves immediately.
+     */
+    function doCommitAwaitable() {
+        if (_terminated) { return Promise.resolve(); }
+        if (window.eclassLP && window.eclassLP.isAnonymous) { return Promise.resolve(); }
+        if (!(window.eclassLP && window.eclassLP.isScorm)) { return Promise.resolve(); }
+
+        let payload = _buildCommitPayload();
+
+        return new Promise(function(resolve) {
+            $.ajax({
+                type: 'POST',
+                url: _commitUrl,
+                data: payload,
+                timeout: 5000
+            }).done(function(resp) {
+                if (window.eclassLP && typeof window.eclassLP.onCommit === 'function') {
+                    window.eclassLP.onCommit(resp || { ok: true });
+                }
+                resolve();
+            }).fail(function() {
+                // Best-effort: try beacon as fallback, then resolve anyway
+                if (navigator && navigator.sendBeacon) {
+                    let params = new URLSearchParams();
+                    for (let key in payload) {
+                        if (payload.hasOwnProperty(key)) {
+                            params.append(key, payload[key]);
+                        }
+                    }
+                    navigator.sendBeacon(_commitUrl, params);
+                }
+                resolve();
+            });
+        });
+    }
+
+    /**
+     * resetScormApi — re-initialize SCORM API state for a new SCORM module.
+     * Called during AJAX navigation when switching between SCORM modules.
+     * The API objects (window.API, window.API_1484_11) persist; only internal state is reset.
+     *
+     * @param {Object} data - Object with keys: sco (CMI values), ump_id, commitUrl
+     */
+    function resetScormApi(data) {
+        let sco = data.sco;
+
+        // Reset execution state
+        APIInitialized = false;
+        APILastError = "0";
+        _terminated = false;
+        _beaconCommitted = false;
+        isSCORM2004 = false;
+
+        // Reset runtime arrays
+        item_objectives = [];
+        updatetable_to_list = [];
+        interactions = [];
+
+        // Update mutable commit state
+        _umpId = String(data.ump_id || 0);
+        if (data.commitUrl) {
+            _commitUrl = data.commitUrl;
+        }
+
+        // Reset CMI values from server data
+        init_total_time = sco.total_time || "0000:00:00.00";
+
+        values[0] = sco._children || "student_id,student_name,lesson_location,credit,lesson_status,entry,score,total_time,exit,session_time";
+        values[1] = String(sco.student_id || "");
+        values[2] = sco.student_name || "";
+        values[3] = sco.lesson_location || "";
+        values[4] = sco.lesson_status || "";
+        values[5] = sco.credit || "";
+        values[6] = sco.entry || "";
+        values[7] = sco.score_children || "raw,min,max";
+        values[8] = sco.raw || "";
+        values[9] = sco.total_time || "0000:00:00.00";
+        values[10] = sco.exit || "";
+        values[11] = sco.session_time || "0000:00:00.00";
+        values[12] = sco.suspend_data || "";
+        values[13] = sco.launch_data || "";
+        values[14] = sco.scoreMin || "";
+        values[15] = sco.scoreMax || "";
+        values[16] = sco.lesson_status || ""; // completion_status
+        values[17] = sco.lesson_status || ""; // success_status
+        values[18] = sco.session_time || "0000:00:00.00";
+        values[19] = sco.raw || ""; // score.raw (2004)
+        values[20] = sco.scoreMin || ""; // score.min (2004)
+        values[21] = sco.scoreMax || ""; // score.max (2004)
+        values[22] = sco.lesson_mode || "normal";
+        values[23] = "id,score,status";
+        values[24] = 0;
+        values[25] = "mastery_score,max_time_allowed";
+        values[26] = "";
+        values[27] = "id,time,type,correct_responses,weighting,student_response,result,latency";
+        values[28] = 0;
+        // SCORM2004
+        values[37] = sco.lesson_location || "";
+        values[38] = String(sco.student_id || "");
+        values[39] = sco.student_name || "";
+        values[41] = 1;
+        values[43] = 1;
+        values[44] = 0;
+        values[45] = (sco.scoreScaled !== undefined && sco.scoreScaled !== null) ? String(sco.scoreScaled) : "";
+        values[46] = sco.exit || "";
+        values[47] = "";
+        values[48] = "normal";
+        values[49] = (sco.progress_measure !== undefined && sco.progress_measure !== null) ? String(sco.progress_measure) : "";
+
+        // Mark SCORM as active
+        window.eclassLP.isScorm = true;
+    }
+
+    /**
+     * deactivateScormApi — disable SCORM API for non-SCORM modules.
+     * Called during AJAX navigation when switching from SCORM to non-SCORM.
+     * The API objects remain defined (no errors if SCO tries to call them),
+     * but commits become non operable and isScorm is set to false.
+     */
+    function deactivateScormApi() {
+        APIInitialized = false;
+        _terminated = true; // prevents any commit attempts
+        window.eclassLP.isScorm = false;
+    }
+
+    function array_indexOf (arr, val) {
+        for (let i = 0; i < arr.length; i++) {
+            if (arr[i] === val) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    function makeHiddenInput(name, value) {
+        let input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = name;
+        input.value = value;
+        return input;
+    }
+
+    // ====================================================
+    // Final Setup
+    //
+
+    APIInitialized = false;
+    APILastError = "0";
+    _terminated = false;
+    let _beaconCommitted = false;
+
+    // Declare Scorm API object for 1.2
+
+    API = new APIClass();
+    api = new APIClass();
+
+    // Declare Scorm API object for 2004
+
+    API_1484_11 = new APIClass();
+    api_1484_11 = new APIClass();
+
+    API_1484_11.version = "1.0";
+    api_1484_11.version = "1.0";
+
+    isSCORM2004 = false;
+
+    // Expose flags for viewer (beforeunload, presence recorder)
+    window.eclassLP = window.eclassLP || {};
+    window.eclassLP.isScorm = true;
+    window.eclassLP.isAnonymous = <?php echo $isAnonymous ? 'true' : 'false'; ?>;
+
+    let CMIDataModel = {
+        //'CMITime': '^([0-2]{1}[0-9]{1}):([0-5]{1}[0-9]{1}):([0-5]{1}[0-9]{1})(\.[0-9]{1,2})?$',
+        'CMITime': '^(19[7-9]{1}[0-9]{1}|20[0-2]{1}[0-9]{1}|203[0-8]{1})((-(0[1-9]{1}|1[0-2]{1}))((-(0[1-9]{1}|[1-2]{1}[0-9]{1}|3[0-1]{1}))(T([0-1]{1}[0-9]{1}|2[0-3]{1})((:[0-5]{1}[0-9]{1})((:[0-5]{1}[0-9]{1})((\\.[0-9]{1,2})((Z|([+|-]([0-1]{1}[0-9]{1}|2[0-3]{1})))(:[0-5]{1}[0-9]{1})?)?)?)?)?)?)?)?$',
+        'CMIFeedback': '',
+        'CMITimespan': '^(([0-9]{2,4}):([0-9]{2}):([0-9]{2})(\.[0-9]{1,2})?)|(PT([0-9]{1,2}H)?([0-9]{1,2}M)?([0-9]{1,2}(.)?[0-9]?[0-9]?S)?)$',
+        'CMIInteger': '^\\d+$',
+        'CMISInteger': '^-?([0-9]+)$',
+        'CMIDecimal': '^-?([0-9]+)(\\.[0-9]+)?$',
+        'CMIIdentifier': '^.{1,255}$',
+        'CMIShortIdentifier': '^(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\\?([^#]*))?(#(.*))?$',
+        'CMILongIdentifier': '^(?:(?!urn:)\\S{1,4000}|urn:[A-Za-z0-9-]{1,31}:\\S{1,4000})$',
+        'CMIBlank': '^$',
+        'CMIVocabulary': {
+            'Mode': '^(normal|review|browse)$',
+            'Status': '^(passed|completed|failed|incomplete|browsed|not attempted)$',
+            'Exit': '^(time-out|suspend|logout|normal|^)$',
+            'Credit': '^(credit|no-credit)$',
+            'Entry': '^(ab-initio|resume|^)$',
+            'Interaction': '^(true-false|choice|fill-in|matching|performance|likert|sequencing|numeric)$',
+            'Result': '^correct$|^incorrect$|^unanticipated$|^neutral$|^-?([0-9]{1,4})(\\.[0-9]{1,18})?$',
+            'TimeLimitAction': '^(exit,message|exit,no message|continue,message|continue,no message)$'
+        },
+        'CMIString255': '^.{0,255}$',
+        'CMIString4096': '^.{0,4096}$',
+        'CMILangString250': '^(\{lang=([a-zA-Z]{2,3}|i|x)(\-[a-zA-Z0-9\-]{2,8})?\})?([^\{].{0,250}$)?',
+        'NAVEvent': '^previous$|^continue$|^exit$|^exitAll$|^abandon$|^abandonAll$|^suspendAll$|^\{target=\\S{0,200}[a-zA-Z0-9]\}choice|jump$'
+    };
+
+    function checkDataType(value, data_type, sub_type) {
+        let expression;
+
+        if (typeof sub_type === 'undefined') {
+            expression = new RegExp(CMIDataModel[data_type]);
+        } else {
+            expression = new RegExp(CMIDataModel[data_type][sub_type]);
+        }
+
+        value = value + '';
+        return expression.test(value);
+    }
+
+    function handleGetInteractions(ele, interactions) {
+        let myres, elem_id, req_type;
+
+        if ((myres = ele.match(/cmi.interactions.(\d+).(id|time|type|correct_responses|weighting|student_response|result|latency|objectives)(.*)/))) {
+            elem_id = myres[1];
+            req_type = myres[2];
+
+            if (interactions[elem_id] == null) {
+
+                myres = ele.match(/objectives.(_children|_count)/);
+                if (myres != null) {
+                    if (myres[1] === "_count") {
+                        APIError("0");
+                        return 0;
+                    }
+                }
+
+                myres = ele.match(/correct_responses.(_count)/);
+                if (myres != null) {
+                    if (myres[1] === "_count") {
+                        APIError("0");
+                        return 0;
+                    }
+                }
+
+                APIError("404");
+                return "";
+
+            } else {
+                if (req_type === 'correct_responses') {
+                    myres = ele.match(/correct_responses.(_count)/);
+                    if (myres != null) {
+                        if (myres[1] === "_count") {
+                            APIError("0");
+
+                            if(interactions[elem_id][3] !== []) {
+                                return interactions[elem_id][3].length;
+                            } else {
+                                APIError("402");
+                                return "";
+                            }
+                        }
+                    }
+                }
+                if (req_type === 'objectives') {
+                    return handleGetObjectives(ele, interactions[elem_id][8]);
+                } else {
+                    APIError("0");
+                    return interactions[elem_id];
+                }
+            }
+        }
+    }
+
+    function handleGetObjectives(ele, item_objectives) {
+        let myres, obj_id, req_type;
+
+        if ((myres = ele.match(/objectives.(\d+).(id|score|status|_children|_count)(.*)/))) {
+            obj_id = myres[1];
+            req_type = myres[2];
+
+            if (item_objectives[obj_id] == null) {
+                if (req_type === 'id') {
+                    APIError("404");
+                    return "";
+                } else if (req_type === '_children') {
+                    APIError("0");
+                    return "id,score,status";
+                } else if (req_type === 'score') {
+                    if (myres[3] == null) {
+                        APIError("401"); // not implemented
+                        return "";
+                    } else if (myres[3] === '._children') {
+                        APIError("0");
+                        return "raw,min,max"; // non-standard
+                    } else if (myres[3] === '.raw') {
+                        APIError("0");
+                        return "";
+                    } else if (myres[3] === '.max') {
+                        APIError("0");
+                        return "";
+                    } else if (myres[3] === '.min') {
+                        APIError("0");
+                        return "";
+                    } else {
+                        APIError("401"); // not implemented
+                        return "";
+                    }
+                } else if (req_type === 'status') {
+                    APIError("0");
+                    return "not attempted";
+                }
+            } else {
+                //the object is not null
+                if (req_type === 'id') {
+                    APIError("0");
+                    return item_objectives[obj_id][0];
+                } else if (req_type === '_children') {
+                    APIError("0");
+                    return "id,score,status";
+                } else if (req_type === 'score') {
+                    if (myres[3] == null) {
+                        APIError("401"); // not implemented
+                        return "";
+                    } else if (myres[3] === '._children') {
+                        APIError("0");
+                        return "raw,min,max"; // non-standard
+                    } else if (myres[3] === '.raw') {
+                        if (item_objectives[obj_id][2] != null) {
+                            APIError("0");
+                            return item_objectives[obj_id][2];
+                        } else {
+                            APIError("0");
+                            return "";
+                        }
+                    } else if (myres[3] === '.max') {
+                        if (item_objectives[obj_id][3] != null) {
+                            APIError("0");
+                            return item_objectives[obj_id][3];
+                        } else {
+                            APIError("0");
+                            return "";
+                        }
+                    } else if (myres[3] === '.min') {
+                        if (item_objectives[obj_id][4] != null) {
+                            APIError("0");
+                            return item_objectives[obj_id][4];
+                        } else {
+                            APIError("0");
+                            return "";
+                        }
+                    } else {
+                        APIError("401"); // not implemented
+                        return "";
+                    }
+                } else if (req_type === 'status') {
+
+                    if (item_objectives[obj_id][1] != null) {
+                        APIError("0");
+                        return item_objectives[obj_id][1];
+                    } else {
+                        APIError("0");
+                        return "not attempted";
+                    }
+                }
+            }
+        }
+
+        myres = ele.match(/objectives.(_count)/);
+
+        if (myres != null) {
+            if (item_objectives == null) {
+                APIError("0");
+                return 0;
+            } else {
+                APIError("0");
+                return item_objectives.length;
+            }
+        }
+    }
+
+    function handleSetCorrectResponses(ele, val, correct_responses) {
+        let myres, elem_id, elem_attrib;
+
+        if ((myres = ele.match(/correct_responses.(\d+).(pattern)(.*)/))) {
+
+            updatetable_to_list['correct_responses'] = 'true';
+            elem_id = myres[1];
+            elem_attrib = myres[2];
+
+            if (elem_id > correct_responses.length) { // objectives setting should start at 0
+                APIError("201"); // invalid argument
+                return "false";
+            } else {
+                if (correct_responses[elem_id] == null) {
+                    correct_responses[elem_id] = [];
+                }
+                switch (elem_attrib) {
+                    case "pattern":
+                        if (!checkDataType(val, 'CMIString255')) {
+                            APIError("405");
+                            return "false";
+                        }
+                        correct_responses[elem_id][0] = val;
+                        APIError("0");
+                        return "true";
+                    default:
+                        APIError("401"); // not implemented
+                        return "false";
+                }
+            }
+        } else {
+            APIError("402");
+            return "false";
+        }
+    }
+
+    function handleSetInteractions(ele, val, interactions) {
+        let myres, elem_id, elem_attrib;
+
+        if ((myres = ele.match(/cmi.interactions.(\d+).(id|time|timestamp|type|correct_responses|weighting|student_response|result|latency|objectives|description)(.*)/))) {
+
+            updatetable_to_list['interactions'] = 'true';
+            elem_id = myres[1];
+            elem_attrib = myres[2];
+
+            if (elem_id > interactions.length) { // objectives setting should start at 0
+                APIError("201"); // invalid argument
+                return "false";
+            } else {
+                if (interactions[elem_id] == null) {
+                    interactions[elem_id] = ['', '', '', [], '', '', '', '', []];
+                }
+                switch (elem_attrib) {
+                    case "id":
+                        if (!checkDataType(val, 'CMIIdentifier')) {
+                            APIError("405");
+                            return "false";
+                        }
+                        interactions[elem_id][0] = val;
+                        APIError("0");
+                        return "true";
+                    case "time":
+                    case "timestamp":
+                        if (!checkDataType(val, 'CMITime')) {
+                            APIError("405");
+                            return "false";
+                        }
+                        interactions[elem_id][2] = val;
+                        APIError("0");
+                        return "true";
+                    case "type":
+                        if (!checkDataType(val, 'CMIVocabulary', 'Interaction')) {
+                            APIError("405");
+                            return "false";
+                        }
+                        interactions[elem_id][1] = val;
+                        APIError("0");
+                        return "true";
+                    case "correct_responses":
+                        // do nothing yet
+                        // not supported to push
+                        // interactions[elem_id][4].push(val);
+
+                        return handleSetCorrectResponses(ele, val, interactions[elem_id][3]);
+
+                        //APIError("0");
+                        //return "true";
+                        //break;
+                    case "weighting":
+                        if (!checkDataType(val, 'CMIDecimal')) {
+                            APIError("405");
+                            return "false";
+                        }
+                        interactions[elem_id][3] = val;
+                        APIError("0");
+                        return "true";
+                    case "student_response":
+                        interactions[elem_id][5] = '' + val;
+                        APIError("0");
+                        return "true";
+                    case "result":
+                        if (!checkDataType(val, 'CMIVocabulary', 'Result')) {
+                            APIError("405");
+                            return "false";
+                        }
+                        interactions[elem_id][6] = val;
+                        APIError("0");
+                        return "true";
+                    case "latency":
+                        if (!checkDataType(val, 'CMITimespan')) {
+                            APIError("405");
+                            return "false";
+                        }
+                        interactions[elem_id][7] = val;
+                        APIError("0");
+                        return "true";
+                    case "objectives":
+                        //let myres = '';
+                        //let item_objectives = new Array();
+                        //interactions[elem_id][8] = new Array();
+                        return handleSetObjectives(ele, val, interactions[elem_id][8]);
+                        //APIError("401");
+                        //return "false";
+                    case "description":
+                        if (!checkDataType(val, 'CMILangString250')) {
+                            APIError("405");
+                            return "false";
+                        }
+                        interactions[elem_id][8] = val;
+                        APIError("0");
+                        return "true;"
+                    default:
+                        APIError("401"); // not implemented
+                        return "false";
+                }
+            }
+        }
+    }
+
+    function handleSetObjectives(ele, val, item_objectives) {
+        let myres, obj_id, req_type;
+
+        if ((myres = ele.match(/objectives.(\d+).(id|score|status)(.*)/))) {
+            obj_id = myres[1];
+
+            if (obj_id > item_objectives.length) { //objectives setting should start at 0
+                APIError("201"); // invalid argument
+                return "false";
+            } else {
+
+                if (item_objectives[obj_id] == null) {
+                    item_objectives[obj_id] = ['', '', '', '', ''];
+                }
+                req_type = myres[2];
+                if (obj_id == null || obj_id === '') { // do nothing
+                    APIError("0");
+                    return "true";
+                } else {
+
+                    if (req_type === "id") {
+                        if (!checkDataType(val, 'CMIIdentifier')) {
+                            APIError("405");
+                            return "false";
+                        }
+                        item_objectives[obj_id][0] = val;
+                        APIError("0");
+                        return "true";
+                    } else if (req_type === "score") {
+                        if (myres[3] === '._children') {
+                            APIError("402"); // invalid set value
+                            return "false";
+                        } else if (myres[3] === '.raw') {
+                            /*
+                            if(val<0) {
+                                APIError("405"); // invalid set value
+                                return "false";
+                            }*/
+                            if ((!checkDataType(val, 'CMIDecimal') || val < 0 || val > 100) && !checkDataType(val, 'CMIBlank')) {
+                                APIError("405");
+                                return "false";
+                            }
+
+                            APIError("0");
+                            item_objectives[obj_id][2] = val;
+                            APIError("0");
+                            return "true";
+                        } else if (myres[3] === '.max') {
+
+                            if ((!checkDataType(val, 'CMIDecimal') || val < 0 || val > 100) && !checkDataType(val, 'CMIBlank')) {
+                                APIError("405");
+                                return "false";
+                            }
+
+                            item_objectives[obj_id][3] = val;
+                            APIError("0");
+                            return "true";
+                        } else if (myres[3] === '.min') {
+
+                            if ((!checkDataType(val, 'CMIDecimal') || val < 0 || val > 100) && !checkDataType(val, 'CMIBlank')) {
+                                APIError("405");
+                                return "false";
+                            }
+
+                            item_objectives[obj_id][4] = val;
+
+                            APIError("0");
+                            return "true";
+                        } else {
+                            APIError("401"); // not implemented
+                            return "";
+                        }
+                    } else if (req_type === "status") {
+
+                        if (!checkDataType(val, 'CMIVocabulary', 'Status')) {
+                            APIError("405");
+                            return "false";
+                        }
+
+                        item_objectives[obj_id][1] = val;
+                        APIError("0");
+                        return "true";
+                    } else {
+                        APIError("401"); // not implemented
+                        return "false";
+                    }
+                }
+            }
+        } else {
+            APIError("403"); // read only
+            return "false";
+        }
+    }
+
+    // Allow runtime activation: window.eclassLP.debugScorm = true
+    if (window.eclassLP && window.eclassLP.debugScorm) {
+        debug_ = true;
+        debug_commit_ = true;
+    }
+
+    // debug mode
+    if (debug_) {
+        (function () {
+            // --- find API once
+            const findAPI = (win, max = 10) => {
+                let depth = 0;
+                while (!win.API_1484_11 && win.parent && win.parent !== win && depth++ < max) {
+                    win = win.parent;
+                }
+                return win.API_1484_11 || (win.opener && win.opener.API_1484_11);
+            };
+
+            const api = window.API_1484_11 || findAPI(window);
+            if (!api) { console.warn("No API_1484_11 found"); return; }
+
+            // --- helpers
+            const ts = () => new Date().toISOString();
+            const log = (...args) => console.debug(ts(), "[SCORM]", ...args);
+            const logError = (name, arg) => {
+                if (typeof api.GetLastError === "function") {
+                    const err = api.GetLastError();
+                    if (err !== "0") {
+                        const str = api.GetErrorString ? api.GetErrorString(err) : "";
+                        const diag = api.GetDiagnostic ? api.GetDiagnostic(err) : "";
+                        console.debug(ts(), "[SCORM]", `${name} error`, arg, err, str, diag);
+                    }
+                }
+            };
+
+            // --- generic method wrapper
+            const originals = {};
+            const wrap = (name) => {
+                const fn = api[name];
+                if (typeof fn !== "function") return;
+                originals[name] = fn.bind(api);
+                api[name] = function (...args) {
+                    const result = originals[name](...args);
+                    log(name, ...args, "=>", result);
+                    // pass first arg for context in error log (el/arg)
+                    logError(name, args[0]);
+                    return result;
+                };
+            };
+
+            // Wrap the SCORM calls we care about
+            ["SetValue", "GetValue", "Commit", "Initialize", "Terminate"].forEach(wrap);
+
+            console.log("SCORM API patched for debugging. Ready.");
+        })();
+    }
+
+</script>
