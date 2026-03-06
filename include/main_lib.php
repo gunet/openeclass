@@ -205,6 +205,19 @@ function load_js($file, $init='') {
         } elseif ($file == 'bootstrap-combobox') {
             $head_content .= css_link('bootstrap-combobox/css/bootstrap-combobox.css');
             $file = 'bootstrap-combobox/js/bootstrap-combobox.js';
+        } elseif ($file == 'bootstrap-table') {
+            $head_content .= css_link('bootstrap-table/bootstrap-table.min.css');
+            if ($language != 'en') {
+                switch ($language) {
+                    case 'el': $file = 'bootstrap-table/locale/bootstrap-table-el-GR.min.js'; break;
+                    case 'fr': $file = 'bootstrap-table/locale/bootstrap-table-fr-FR.min.js'; break;
+                    case 'de': $file = 'bootstrap-table/locale/bootstrap-table-de-DE.min.js'; break;
+                    case 'it': $file = 'bootstrap-table/locale/bootstrap-table-it-IT.min.js'; break;
+                    case 'es': $file = 'bootstrap-table/locale/bootstrap-table-es-ES.min.js'; break;
+                    default: break;
+                }
+            }
+            $head_content .= js_link('bootstrap-table/bootstrap-table.min.js');
         } elseif ($file == 'spectrum') {
             $head_content .= css_link('spectrum/spectrum.css');
             $file = 'spectrum/spectrum.js';
