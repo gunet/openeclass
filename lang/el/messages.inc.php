@@ -2103,6 +2103,7 @@ $langStricterExamRestriction = "Αυστηρός περιορισμός";
 $langExerciseWillBeCanceledInStrictMode = "Η εξέταση ακυρώνεται σε παράλληλες ενέργειες χρηστών όπως ανακατεύθυνση σε νέα σελίδα ή άνοιγμα νέου παραθύρου";
 $langExerciseNoCalcGradeMethod = "Κανονικός";
 $langExerciseCBCalcGradeMethod = "Με βαθμό βεβαιότητας";
+$langExerciseCBCalcGradeMethodLegend = "Κατά την εκτέλεση της άσκησης ο $langsStudent θα πρέπει να επιλέξει επιπλέον τον βαθμό βεβαιότητας της απάντησης του. Ισχύει μόνο για τις ερωτήσεις 'Πολλαπλής επιλογής' και 'Σωστό / Λάθος'";
 $langExerciseCalcGradeMethod = "Τρόπος Βαθμολόγησης";
 $langNegativeGrading = "Προσοχή, έχετε δώσει θετικό βαθμό σε λανθασμένη απάντηση. Αν επιθυμείτε αρνητική βαθμολόγηση βάλτε αρνητικό αριθμό.";
 
@@ -3285,6 +3286,7 @@ $langUngradedAnswers = " αβαθμολόγητες απαντήσεις.";
 $langDistributeError = "Ο συνολικός αριθμός διαμοιρασμού δεν πρέπει να είναι μεγαλύτερος από το σύνολο των ασκήσεων.";
 $langGradeCorrect = 'Διόρθωση';
 $langAddFeedback = "Προσθήκη ανατροφοδότησης";
+$langExit = "Έξοδος";
 
 /* * ***********************************************
  * lessontools.php
