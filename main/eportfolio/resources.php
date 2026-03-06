@@ -86,8 +86,10 @@ if (!isset($_GET['token']) || !token_validate('eportfolio' . $id, $_GET['token']
 }
 
 $token = token_generate('eportfolio' . $id);
-$navigation[] = array("url" => "{$urlAppend}main/profile/display_profile.php", "name" => $langMyProfile);
-$navigation[] = array("url" => "{$urlAppend}main/eportfolio/index.php?id=$id&token=$token", "name" => $navigation_msg);
+if ($uid == $id) {
+    $navigation[] = array("url" => "{$urlAppend}main/profile/display_profile.php", "name" => $langMyProfile);
+    $navigation[] = array("url" => "{$urlAppend}main/eportfolio/index.php?id=$id&token=$token", "name" => $langMyePortfolio);
+}
 
 $userdata = Database::get()->querySingle("SELECT surname, givenname, eportfolio_enable
                                           FROM user WHERE id = ?d", $id);
@@ -449,7 +451,11 @@ if ($userdata) {
                       'url' => "{$urlAppend}main/eportfolio/index.php?action=get_bio&amp;id=$id&amp;token=$token",
                       'icon' => 'fa-download',
                       'level' => 'primary-label',
-                      'show' => file_exists("$webDir/courses/eportfolio/userbios/$id/bio.pdf"))
+                      'show' => file_exists("$webDir/courses/eportfolio/userbios/$id/bio.pdf")),
+                array('title' => $langBack,
+                      'url' => "{$urlAppend}main/eportfolio/index.php?id=$id&amp;token=$token",
+                      'icon' => 'fa-reply',
+                      'level' => 'primary-label')
             ));
         $tool_content .= $action_bar;
     }
