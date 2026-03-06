@@ -64,20 +64,22 @@ if (!get_config('eportfolio_enable')) {
 
 if (isset($_GET['id']) && intval($_GET['id']) > 0) {
     $id = intval($_GET['id']);
-    //$navigation_msg = $langUserePortfolio
-    $navigation_msg = $langMyePortfolio;
+    if (isset($_SESSION['uid']) && ($id == $_SESSION['uid'])) {
+        $toolName = $langMyePortfolio;
+        $pageName = $langResourcesCollection;
+    } else {
+        $toolName = $langUserePortfolio.' - '.$langResourcesCollection;
+        $pageName = q(uid_to_name($id));
+    }
 } else {
     if ($session->status == 0) {
         redirect_to_home_page();
         exit;
     } else {
         $id = $uid;
-        $navigation_msg = $langMyePortfolio;
+        $toolName = $langUserePortfolio.' - '.$langResourcesCollection;
     }
 }
-
-$toolName = $langMyePortfolio;
-$pageName = $langResourcesCollection;
 
 if (!isset($_GET['token']) || !token_validate('eportfolio' . $id, $_GET['token'])) {
     redirect_to_home_page();
