@@ -4658,6 +4658,8 @@ function display_user_points_game_details($points_game_id, $user_id) {
     global $tool_content, $langNoUserActivity, $langPoints, $langDescription, $langLevel, $langAttendanceActivity, $langTitle, $langDate,
         $langType, $langPointsGameRecActivities, $langPointsGameOneTimeActivities;
 
+    load_js('bootstrap-table');
+
     $sql = Database::get()->queryArray("SELECT * FROM points_game_criterion AS pgc, user_points_game_criterion AS upgc
                                         WHERE upgc.points_game_criterion = pgc.id AND pgc.points_game = ?d AND upgc.user = ?d
                                         ORDER BY upgc.created ASC", $points_game_id, $user_id);
@@ -4692,7 +4694,7 @@ function display_user_points_game_details($points_game_id, $user_id) {
                                     </div>
                                     <div class='col-md-6 col-12'>
                                         <div class='pn-info-text-sct text-md-end'>
-                                            ".$user_progress['current_level_title']."
+                                            <span class='level-badge'><i class='fa fa-star' style='color:#f59e0b;'></i> ".$user_progress['current_level_title']."</span>
                                         </div>
                                     </div>
                                 </div>";
@@ -4724,7 +4726,10 @@ function display_user_points_game_details($points_game_id, $user_id) {
                 </div>
                 <div class='card-body'>
                     <div class='table-responsive mt-0'>
-                    <table class='table-default'>
+                    <table class='table'
+                    data-toggle='table'
+                    data-pagination='true'
+                    data-page-size='5'>
                         <thead>
                             <tr>
                                 <th>$langTitle</th>
