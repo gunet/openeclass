@@ -35,6 +35,7 @@ function api_method($access) {
 
 
         header('Content-Type: application/json');
+        header('X-Content-Type-Options: nosniff');
         echo json_encode($course, JSON_UNESCAPED_UNICODE);
         exit();
     }

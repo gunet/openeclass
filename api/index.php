@@ -28,6 +28,7 @@
 require_once '../include/init.php';
 
 header('Content-Type: application/json');
+header('X-Content-Type-Options: nosniff');
 if (!get_config('ext_apitoken_enabled')) {
     echo json_encode([
             'errorcode' => 999,
