@@ -2471,6 +2471,7 @@ tinymce.init({
         '{$urlAppend}template/modern/css/default.css',
     ],
     content_style: 'body { margin: 8px; background: none !important; color: $tinymce_color_text;  }',
+    fontsize_formats: '8pt 9pt 10pt 11pt 12pt 14pt 16pt 18pt 20pt 24pt 30pt 36pt',
     extended_valid_elements: 'span[*]',
     noneditable_noneditable_class: 'fa',
     language: '$language',
@@ -12466,5 +12467,30 @@ function form_popovers($type, $message): string {
     }
 
     return $html;
+
+}
+
+/**
+ * Retrieve a specific style value from the theme options.
+ *
+ * This function fetches the theme options from the database for the current theme
+ * and retrieves the value of a specific style based on the provided style name.
+ *
+ * @param string $style_name The name of the style to retrieve.
+ *
+ * @global int $theme_id The ID of the current theme.
+ *
+ * @return mixed|null The value of the requested style if it exists, or null if not found.
+ */
+function get_style($style_name) {
+    global $theme_id;
+
+    $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
+
+    if ($theme_options) {
+        $theme_options_styles = unserialize($theme_options->styles);
+    }
+
+    return $theme_options_styles[$style_name] ?? null;
 
 }
