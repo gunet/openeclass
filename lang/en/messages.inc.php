@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2026-03-02 10:50:47
+// Generated 2026-03-09 14:39:58
 
 $langYes = "Yes";
 $langNo = "No";
@@ -1223,7 +1223,6 @@ $langAllCategoryDel = "Delete all categories and all links";
 $langAllCategoryDeleted = "All categories and all links have been deleted";
 $langGiveURL = "Please give the link URL";
 $langGiveCategoryName = "Please give the category name";
-$langNoCategory = "No category";
 $langCategorisedLinks = "Categorised links";
 $langProfNoLinksExist = "No links exist! <br /><p align=\"center\">You may use the tool operations to add links.";
 $langNoLinksExist = "No links exist!";
@@ -1836,7 +1835,6 @@ $langBackHome = "Back to home page";
 $langAdminNo = "Admin account cannot be deleted!";
 $langExplain = "In order to delete your account, you must unregister from your courses.";
 $langConfirm = "Confirmation";
-$langConfirmDelAccount = "Delete account confirmation";
 $langDelSuccess = "Your account has been deleted.";
 $langThanks = "Thank you for using platform!";
 $langCoursDelSuccess = "Course unregistration was successful";
@@ -4400,7 +4398,7 @@ $langExportGrades = "Export Grades";
 $langCloudFileError = 'Error retrieving remote resource - incompatible file type.';
 $langInvisible = "Not visible";
 $langInsertedAsModule = "Module has been added.";
-$langAlreadyUsed = "is being used by a user and cannot be deleted.";
+$langAlreadyUsed = "Already used as a module in the learning path";
 $langPersonalSettingsMore1 = "to have a look in your personal settings";
 $langPersonalSettingsMore2 = "to register to available $langsCourses by clicking in '$langCourses' in left menu.";
 $langMailVerificationNote = "(Note: Check your mailbox junk folder, too)";
@@ -6547,7 +6545,7 @@ you will temporarily register the new start and end date of the session. </br></
 <strong>The registration is completed by submitting the form from the "Change" button.</strong></br></br>
 <strong>You can also change the duration of the current session by changing the size of the green slot</strong>';
 $langJumbotronWithVideo = 'The file you uploaded is of type .mp4 with full name "video.mp4"';
-$langMaxHeightHalfMaxScreenJumbotron = "Alternatively, the carpet will be removed from the current screen.";
+$langMaxHeightHalfMaxScreenJumbotron = "Alternatively, the height is set to half the height of the current screen.";
 $langOfSubmitQuestionnaire = "By submitting a questionnaire";
 $langAddConsultantComments = "The consultant's comments were successfully added.";
 $langContinueToDelComment = "Do you want to proceed with deleting comments for the user?";
@@ -6689,7 +6687,7 @@ $langEvaluationCriteriaHelp = "Provide clear criteria that the AI will use to ev
 $langMaxPoints = "Maximum Points";
 $langMaxPointsHelp = "The maximum score that can be awarded for this question";
 $langDefinedInQuestionStatement = "defined in question statement";
-$langSampleResponses = "Sample Responses (Optional)";
+$langSampleResponses = "Sample Responses";
 $langSampleResponsesPlaceholder = "Example responses to help guide AI evaluation:\n\nGood response example | good\nPoor response example | poor\n\nFormat: response | quality (good/poor/average)";
 $langSampleResponsesHelp = "Provide example responses with quality indicators. Format: 'response | quality' (one per line). This helps the AI understand your expectations.";
 $langSaveAIConfig = "Save AI Configuration";
@@ -6932,3 +6930,16 @@ $langLatexCatFunctions = "Functions";
 $langLatexCatMathStructures = "Math Structures";
 $langLatexCatMiscellaneous = "Miscellaneous";
 $langLatexCatChemicalSymbols = "Chemical Symbols";
+$langsMonth = "month";
+$langsYear = "year";
+$langsYears = "years";
+$langAgo = "ago";
+$langAlignment = "Alignment";
+$langWidth = "Width";
+$langHeight = "Height";
+$langAlignLeft = "Left";
+$langAlignCenter = "Center";
+$langAlignRight = "Right";
+$langExerciseCBCalcGradeMethodLegend = "When performing the exercise, the $langsStudent must also select the degree of certainty of his/her answer. It applies only to 'Multiple choice' and 'True/False' questions.";
+$langExit = "Exit";
+$langConfirmDelAccount = "Delete account confirmation";

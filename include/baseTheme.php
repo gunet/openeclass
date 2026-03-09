@@ -372,10 +372,8 @@ function view($view_file, $view_data = array()) {
 
     $views = $webDir . '/resources/views/';
     $cacheDir = $webDir . '/storage/views/';
-
     if (!is_dir($cacheDir)) {
         $tempDir = $cacheDir;
-        $cacheDir = null;
         if (mkdir($tempDir, 0755, true)) {
             $cacheDir = $tempDir;
         }

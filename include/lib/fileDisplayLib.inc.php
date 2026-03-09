@@ -161,20 +161,21 @@ function public_file_path($disk_path, $filename = null) {
 /**
  * @brief Generate download URL for documents
  * @global type $course_code
- * @global type $urlServer
+ * @global type $urlAppend
  * @global type $group_id
  * @global type $ebook_id
  * @param type $path
  * @param type $filename
  * @param type $courseCode
+ * @param type $extra_path
  * @return type
  */
-function file_url($path, $filename = null, $courseCode = null) {
-    global $course_code, $urlServer, $group_id, $ebook_id, $uid;
+function file_url($path, $filename = null, $courseCode = null, $extra_path = null) {
+    global $course_code, $group_id, $ebook_id, $uid, $urlAppend;
     $courseCode = ($courseCode == null) ? $course_code : $courseCode;
 
     if (defined('EBOOK_DOCUMENTS')) {
-        return htmlspecialchars($urlServer .
+        return htmlspecialchars($urlAppend .
                 "modules/ebook/show.php/$courseCode/$ebook_id/_" .
                 public_file_path($path, $filename), ENT_QUOTES);
     } else {
@@ -190,7 +191,13 @@ function file_url($path, $filename = null, $courseCode = null) {
             $gid = '';
         }
 
-        return htmlspecialchars($urlServer .
+        if ($extra_path and preg_match('/^https?:\/\//i', $extra_path)) {
+            return "{$urlAppend}modules/document/ext.php?course=$courseCode&amp;path=$path" .
+                (defined('MY_DOCUMENTS')? "&amp;uid=$uid": '') .
+                (defined('GROUP_DOCUMENTS')? "&amp;group=$group_id": '');
+        }
+
+        return htmlspecialchars($urlAppend .
                 "modules/document/file.php/$courseCode$gid" .
                 public_file_path($path, $filename), ENT_QUOTES);
     }

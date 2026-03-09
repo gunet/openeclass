@@ -419,7 +419,7 @@
                                     <thead>
                                         <tr class="list-header">
                                             <th style='width:5%;' class='checkbox_th d-none' aria-label='{{ trans('langIcon') }}'></th>
-                                            <th style='width:50%;'>{!! headlink(trans('langName'), 'name') !!}</th>
+                                            <th style='width:50%;'>{!! headlink(trans('langFileName'), 'name') !!}</th>
 
                                             <th style='width:15%;'>{{ trans('langSize') }}</th>
                                             <th style='width:15%;'>{!! headlink(trans('langDate'), 'date') !!}</th>

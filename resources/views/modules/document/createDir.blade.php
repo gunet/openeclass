@@ -7,7 +7,7 @@
                 <div class='form-group'>
                     <label for='newDirName' class='col-sm-12 control-label-notes'>{{ trans('langNameDir') }}</label>
                     <div class='col-12'>
-                        <input type='text' class='form-control' placeholder="{{ trans('langName') }} ..." id='newDirName' name='newDirName'>
+                        <input type='text' class='form-control' placeholder="{{ trans('langNameDir') }} ..." id='newDirName' name='newDirName'>
                     </div>
                 </div>
 

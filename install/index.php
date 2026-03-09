@@ -41,12 +41,12 @@ $viewsDir = 'resources/views/install';
 $cacheDir = 'storage/views/';
 if (!is_dir($cacheDir)) {
     $tempDir = $cacheDir;
-    $cacheDir = null;
     if (mkdir($tempDir, 0755, true)) {
         $cacheDir = $tempDir;
     }
 }
-if (!is_writable($cacheDir) or !$cacheDir) {
+
+if (!is_writable($cacheDir)) {
     $cacheDir = sys_get_temp_dir() . '/storage';
     if (!(is_dir($cacheDir) or mkdir($cacheDir, 0755, true))) {
         die("Error: Unable to find a writable storage directory - tried '$cacheDir'.");

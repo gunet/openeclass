@@ -1088,15 +1088,30 @@ if ($can_upload or $user_upload) {
                 Database::get()->query("UPDATE document SET comment = ?s
                      WHERE $group_sql AND path = ?s", $_POST['file_comment'], $commentPath);
             } else {
+                if (isset($_POST['external_url'])) {
+                    $ext_url_sql = ', extra_path = ?s';
+                    $ext_url_arg = $_POST['external_url'];
+                    if (!preg_match('/^https?:\/\//i', $ext_url_arg)) {
+                        Session::Messages($langUnwantedFiletype . ': ' . q($ext_url_arg), 'alert-warning');
+                        Session::flashPost();
+                        http_response_code(303);
+                        $base_url = html_entity_decode($base_url);
+                        header("Location: {$base_url}comment=" . getIndirectReference($commentPath));
+                        exit;
+                    }
+                } else {
+                    $ext_url_sql = '';
+                    $ext_url_arg = [];
+                }
                 Database::get()->query("UPDATE document SET
                                                 comment = ?s,
                                                 title = ?s,
                                                 date_modified = " . DBHelper::timeAfter() . ",
-                                                copyrighted = ?d
+                                                copyrighted = ?d $ext_url_sql
                                         WHERE $group_sql AND
                                               path = ?s"
                     , $_POST['file_comment'], $_POST['file_title']
-                    , $_POST['file_copyrighted'], $commentPath);
+                    , $_POST['file_copyrighted'], $ext_url_arg, $commentPath);
             $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_DOCUMENT, $res->id);
             Log::record($course_id, MODULE_ID_DOCS, LOG_MODIFY, array('path' => $commentPath,
                 'filename' => $res->filename,
@@ -1252,6 +1267,11 @@ if ($can_upload or $user_upload) {
                 'selected_license_title' => $row->copyrighted,
                 'license_title' => $license_title
             );
+            if ($row->extra_path and preg_match('/^https?:\/\//i', $row->extra_path)) {
+                $dialogData['external_url'] = $row->extra_path;
+            } else {
+                $dialogData['external_url'] = false;
+            }
             view('modules.document.comment', $dialogData);
         } else {
             Session::Messages($langFileNotFound, 'alert-danger');
@@ -1550,7 +1570,7 @@ foreach ($result as $row) {
         $dirs[] = (object) $info;
     } else {
         $info['icon'] = choose_image('.' . $row->format);
-        $info['url'] = file_url($row->path, $row->filename);
+        $info['url'] = file_url($row->path, $row->filename, extra_path: $row->extra_path);
         $dObj = MediaResourceFactory::initFromDocument($row);
         $dObj->setAccessURL($info['url']);
         if ($is_in_tinymce && !$compatiblePlugin) {
@@ -1646,7 +1666,8 @@ if (($can_upload or $user_upload) and !$is_in_tinymce) {
               'icon' => 'fa-file'),
         array('title' => $langExternalFile,
               'url' => "upload.php?course=$course_code&amp;{$groupset}uploadPath=$curDirPath&amp;ext=true",
-              'icon' => 'fa-link'),
+              'icon' => 'fa-link',
+              'show' => !defined('EBOOK_DOCUMENTS')),
         array('title' => $langMindmap,
               'url' => "../mindmap/index.php?course=$course_code",
               'icon' => 'fa-solid fa-sitemap'),

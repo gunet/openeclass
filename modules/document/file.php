@@ -39,69 +39,86 @@ if (isset($_SESSION['student_view'])) {
     define('old_student_view', $_SESSION['student_view']);
 }
 
-// lpmode is used for learning path
-$is_in_lpmode = false;
-if (isset($_SESSION['FILE_PHP__LP_MODE']) && $_SESSION['FILE_PHP__LP_MODE'] == true) {
-    $is_in_lpmode = true;
-}
-
-if(!$is_in_playmode){
-    $_SERVER['REQUEST_URI'] = str_replace("file.php?", "file.php/", $_SERVER['REQUEST_URI'] ?? '');
-    $uri = preg_replace('/\?[^?]*$/', '', $_SERVER['REQUEST_URI']);
-}
-else{
-    $_SERVER['REQUEST_URI'] = str_replace("play.php?", "play.php/", $_SERVER['REQUEST_URI'] ?? '');
-    $uri = preg_replace('/\?[^?]*$/', '', $_SERVER['REQUEST_URI']);
-}
-
-
-// If URI contains backslashes, redirect to forward slashes
-if (stripos($uri, '%5c') !== false) {
-    header('HTTP/1.1 301 Moved Permanently');
-    header('Location: ' . str_ireplace('%5c', '/', $uri));
-    exit;
-}
-
-$uri = (!$is_in_playmode) ? str_replace('//', chr(1), preg_replace('/^.*file\.php\??\//', '', $uri)) : str_replace('//', chr(1), preg_replace('/^.*play\.php\??\//', '', $uri));
-$path_components = explode('/', $uri);
-
-$count = 0;
-foreach($path_components as $p){
-    if($count == 0){
-        $course_code = $p;
-    }
-    $count++;
-}
-
-
-
-// temporary course change
-$cinfo = addslashes(array_shift($path_components));
-$cinfo_components = explode(',', $cinfo);
-if ($cinfo_components[0] == 'common') {
-    define('COMMON_DOCUMENTS', true);
-} elseif ($cinfo_components[0] == 'user') {
-    define('MY_DOCUMENTS', true);
-    $mydocs_uid = $cinfo_components[1];
-} elseif ($cinfo_components[0] == 'session'){
-    $require_current_course = true;
-    $_SESSION['fileSessionId'] = $cinfo_components[1];
-} elseif ($cinfo_components[0] == 'uploaded_doc'){
-    $require_current_course = true;
-    $_SESSION['CurrentSessionId'] = $cinfo_components[1];
-    $_SESSION['userId_uploader'] = $cinfo_components[2];
-} elseif ($cinfo_components[0] == 'reference_doc') {
-    $require_current_course = true;
-    $_SESSION['CurrentReferenceSessionId'] = $cinfo_components[1];
-    $_SESSION['userId__reference_uploader'] = $cinfo_components[2];
-} else {
-    $require_current_course = true;
-    $_SESSION['dbname'] = $cinfo_components[0];
-    if (isset($cinfo_components[1])) {
-        $group_id = intval($cinfo_components[1]);
-        define('GROUP_DOCUMENTS', true);
+if (defined('EXTERNAL_FILE')) { // accessed via ext.php
+    if ($course == 'common') {
+        define('COMMON_DOCUMENTS', true);
+    } elseif ($course == 'user') {
+        define('MY_DOCUMENTS', true);
+        $mydocs_uid = $_GET['uid'] ?? null;
+        if (!$mydocs_uid) {
+            http_response_code(400); // Bad request
+            exit;
+        }
     } else {
-        unset($group_id);
+        $require_current_course = true;
+        $course_code = $_SESSION['dbname'] = $course;
+        if ($_GET['group']) {
+            $group_id = intval($_GET['group']);
+            define('GROUP_DOCUMENTS', true);
+        }
+    }
+} else {
+    // lpmode is used for learning path
+    $is_in_lpmode = false;
+    if (isset($_SESSION['FILE_PHP__LP_MODE']) && $_SESSION['FILE_PHP__LP_MODE'] == true) {
+        $is_in_lpmode = true;
+    }
+
+    if(!$is_in_playmode){
+        $_SERVER['REQUEST_URI'] = str_replace("file.php?", "file.php/", $_SERVER['REQUEST_URI'] ?? '');
+        $uri = preg_replace('/\?[^?]*$/', '', $_SERVER['REQUEST_URI']);
+    }
+    else{
+        $_SERVER['REQUEST_URI'] = str_replace("play.php?", "play.php/", $_SERVER['REQUEST_URI'] ?? '');
+        $uri = preg_replace('/\?[^?]*$/', '', $_SERVER['REQUEST_URI']);
+    }
+
+    // If URI contains backslashes, redirect to forward slashes
+    if (stripos($uri, '%5c') !== false) {
+        header('HTTP/1.1 301 Moved Permanently');
+        header('Location: ' . str_ireplace('%5c', '/', $uri));
+        exit;
+    }
+
+    $uri = (!$is_in_playmode) ? str_replace('//', chr(1), preg_replace('/^.*file\.php\??\//', '', $uri)) : str_replace('//', chr(1), preg_replace('/^.*play\.php\??\//', '', $uri));
+    $path_components = explode('/', $uri);
+
+    $count = 0;
+    foreach($path_components as $p){
+        if($count == 0){
+            $course_code = $p;
+        }
+        $count++;
+    }
+
+    // temporary course change
+    $cinfo = addslashes(array_shift($path_components));
+    $cinfo_components = explode(',', $cinfo);
+    if ($cinfo_components[0] == 'common') {
+        define('COMMON_DOCUMENTS', true);
+    } elseif ($cinfo_components[0] == 'user') {
+        define('MY_DOCUMENTS', true);
+        $mydocs_uid = $cinfo_components[1];
+    } elseif ($cinfo_components[0] == 'session'){
+        $require_current_course = true;
+        $_SESSION['fileSessionId'] = $cinfo_components[1];
+    } elseif ($cinfo_components[0] == 'uploaded_doc'){
+        $require_current_course = true;
+        $_SESSION['CurrentSessionId'] = $cinfo_components[1];
+        $_SESSION['userId_uploader'] = $cinfo_components[2];
+    } elseif ($cinfo_components[0] == 'reference_doc') {
+        $require_current_course = true;
+        $_SESSION['CurrentReferenceSessionId'] = $cinfo_components[1];
+        $_SESSION['userId__reference_uploader'] = $cinfo_components[2];
+    } else {
+        $require_current_course = true;
+        $_SESSION['dbname'] = $cinfo_components[0];
+        if (isset($cinfo_components[1])) {
+            $group_id = intval($cinfo_components[1]);
+            define('GROUP_DOCUMENTS', true);
+        } else {
+            unset($group_id);
+        }
     }
 }
 
@@ -118,9 +135,9 @@ if (defined('old_student_view')) {
 }
 
 if (!(defined('COMMON_DOCUMENTS') or defined('MY_DOCUMENTS'))) {
-    // check user's access to cours
-    check_cours_access();
-    // record file access
+    // Can the user access this course?
+    check_course_access();
+    // Record file access
     if ($uid) {
         $action = new action();
         $action->record(MODULE_ID_DOCS);
@@ -146,7 +163,12 @@ if (defined('GROUP_DOCUMENTS')) {
     }
 }
 
-$file_info = public_path_to_disk_path($path_components);
+if (defined('EXTERNAL_FILE')) {
+    $file_info = Database::get()->querySingle("SELECT * FROM document
+        WHERE $group_sql AND path = ?s", $path);
+} else {
+    $file_info = public_path_to_disk_path($path_components);
+}
 
 if (!isset($file_info->visible) or (!isset($file_info->public))) {
     forbidden();
@@ -194,7 +216,7 @@ if (file_exists($disk_path)) {
         if ($is_in_lpmode && $is_android) {
             require_once 'include/lib/fileDisplayLib.inc.php';
             //$dl_url = $urlServer . 'modules/document/index.php?course=' . $course_code . '&amp;download=' . $file_info->path;
-            $dl_url = file_url($file_info->path);
+            $dl_url = file_url($course_code, $file_info->path);
             echo $langMailVerificationClick . " " . "<a href='" . $dl_url . "'>". $langDownload . "</a>";
             unset($_SESSION['FILE_PHP__LP_MODE']);
             exit();
@@ -205,7 +227,7 @@ if (file_exists($disk_path)) {
         require_once 'include/lib/fileDisplayLib.inc.php';
         require_once 'include/lib/multimediahelper.class.php';
 
-        $mediaPath = file_url($file_info->path, $file_info->filename);
+        $mediaPath = file_url($course_code, $file_info->path, $file_info->filename);
         $mediaURL = $urlServer . 'modules/document/index.php?course=' . $course_code . '&amp;download=' . $file_info->path;
         if (defined('GROUP_DOCUMENTS')) {
             $mediaURL = $urlServer . 'modules/group/index.php?course=' . $course_code . '&amp;group_id=' . $group_id . '&amp;download=' . $file_info->path;
@@ -221,7 +243,7 @@ if (file_exists($disk_path)) {
     not_found(preg_replace('/^.*file\.php/', '', $uri));
 }
 
-function check_cours_access() {
+function check_course_access() {
     global $course_code, $uid, $uri, $urlAppend;
 
     if (!$uid && !isset($course_code)) {
