@@ -1550,7 +1550,7 @@ foreach ($result as $row) {
         $dirs[] = (object) $info;
     } else {
         $info['icon'] = choose_image('.' . $row->format);
-        $info['url'] = file_url($row->path, $row->filename);
+        $info['url'] = file_url($row->path, $row->filename, extra_path: $row->extra_path);
         $dObj = MediaResourceFactory::initFromDocument($row);
         $dObj->setAccessURL($info['url']);
         if ($is_in_tinymce && !$compatiblePlugin) {
@@ -1646,7 +1646,8 @@ if (($can_upload or $user_upload) and !$is_in_tinymce) {
               'icon' => 'fa-file'),
         array('title' => $langExternalFile,
               'url' => "upload.php?course=$course_code&amp;{$groupset}uploadPath=$curDirPath&amp;ext=true",
-              'icon' => 'fa-link'),
+              'icon' => 'fa-link',
+              'show' => !defined('EBOOK_DOCUMENTS')),
         array('title' => $langMindmap,
               'url' => "../mindmap/index.php?course=$course_code",
               'icon' => 'fa-solid fa-sitemap'),
