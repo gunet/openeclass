@@ -156,9 +156,13 @@ if ($data['userdata']) {
                       'url' => 'theme_settings.php',
                       'icon' => 'fa-solid fa-palette',
                       'level' => 'secondary',
-                      'show' => get_config('enable_user_theme_customization', 0))
+                      'show' => get_config('enable_user_theme_customization', 0)),
+                array('title' => $langUnregUser,
+                    'url' => '../unreguser.php',
+                    'icon' => 'fa-times',
+                    'level' => 'secondary',
+                    'show' => ($uid == $id))
                 ));
-
         $data['action_bar_unreg'] = 1;
 
     } else {

@@ -80,6 +80,7 @@ function list_documents($sid, $cid) {
             'name' => htmlspecialchars($row->filename),
             'format' => $row->format,
             'path' => $row->path,
+            'extra_path' => $row->extra_path,
             'visible' => $row->visible,
             'comment' => $row->comment,
             'copyrighted' => $row->copyrighted,
@@ -129,7 +130,7 @@ function list_documents($sid, $cid) {
                     $link_href = "<a href='$file_url'>$link_text</a>";
                 } else {
                     $image = choose_image('.' . $entry['format']);
-                    $file_url = file_url($entry['path'], $entry['name'], $common_docs ? 'common' : $course_code);
+                    $file_url = file_url($entry['path'], $entry['name'], $common_docs ? 'common' : $course_code, extra_path: $entry['extra_path']);
 
                     $dObj = $entry['object'];
                     $dObj->setAccessURL($file_url);
@@ -192,7 +193,7 @@ function upload_file($sid){
             }
         }
 
-        $tool_content .= "  
+        $tool_content .= "
                             <div class='d-lg-flex gap-4 mt-4'>
                                 <div class='flex-grow-1'>
                                     <div class='form-wrapper form-edit rounded'>
@@ -240,7 +241,7 @@ function upload_file($sid){
                                                     </div>
                                                 </div>
 
-                                                " . generate_csrf_token_form_field() . "    
+                                                " . generate_csrf_token_form_field() . "
 
                                             </fieldset>
                                         </form>
@@ -250,9 +251,9 @@ function upload_file($sid){
                                     <img class='form-image-modules' src='" . get_form_image() . "' alt='$langImgFormsDes'>
                                 </div>
                             </div>
-                            
-                            
-                            
+
+
+
                             ";
 
     return $tool_content;
@@ -275,7 +276,7 @@ function upload_file_reference($sid){
                     var selectBox = document.getElementById('selectBox');
                     var selectedValue = selectBox.options[selectBox.selectedIndex].value;
                     document.getElementById('method-uploading').value = selectedValue;
-                   
+
                     if(selectedValue == 2){
                         $('.create-file').css('display','block');
                         $('.uploadFile').css('display','none');
@@ -286,10 +287,10 @@ function upload_file_reference($sid){
                 }
 
             </script>
-        
+
         ";
 
-        $tool_content .= "  
+        $tool_content .= "
                             <div class='d-lg-flex gap-4 mt-4'>
                                 <div class='flex-grow-1'>
                                     <div class='form-wrapper form-edit rounded'>
@@ -339,7 +340,7 @@ function upload_file_reference($sid){
                                                     </div>
                                                 </div>
 
-                                                " . generate_csrf_token_form_field() . "    
+                                                " . generate_csrf_token_form_field() . "
 
                                             </fieldset>
                                         </form>
@@ -349,9 +350,9 @@ function upload_file_reference($sid){
                                     <img class='form-image-modules' src='" . get_form_image() . "' alt='$langImgFormsDes'>
                                 </div>
                             </div>
-                            
-                            
-                            
+
+
+
                             ";
 
     return $tool_content;

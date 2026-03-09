@@ -50,7 +50,12 @@
                                                     @endif
                                                 </div>
                                                 <div class='col-sm-12'>
-                                                    <p class='form-control-static'>{{ $file->filename }}</p>
+                                                    @if ($external_url)
+                                                        <label for='fileURL' class='col-12 control-label-notes'>{{ trans('langExternalFileInfo') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
+                                                        <input type='text' class='form-control' id='fileURL' name='external_url' value='{{ $external_url }}'>
+                                                    @else
+                                                        <p class='form-control-static'>{{ $file->filename }}</p>
+                                                    @endif
                                                 </div>
                                             </div>
 
@@ -58,7 +63,7 @@
                                                 <div class='form-group mt-4'>
                                                     <label for='inputFileTitle' class='col-12 control-label-notes'>{{ trans('langTitle') }}:</label>
                                                     <div class='col-12'>
-                                                        <input type='text' class='form-control' id='inputFileTitle' placeholder='{{ trans('langTitle') }}' name='file_title' value='{{ $file->title }}'>
+                                                        <input type='text' class='form-control' id='inputFileTitle' placeholder='{{ trans('langTitle') }}' name='file_title' value='{{ Session::has('file_title')? Session::get('file_title'): $file->title }}'>
                                                     </div>
                                                 </div>
                                             @endunless
@@ -66,7 +71,7 @@
                                             <div class='form-group mt-4'>
                                                 <label for='inputFileComment' class='col-12 control-label-notes'>{{ trans('langComment') }}:</label>
                                                 <div class='col-12'>
-                                                    <input type='text' class='form-control' id='inputFileComment' placeholder='{{ trans('langComment') }}' name='file_comment' value='{{ $file->comment }}'>
+                                                    <input type='text' class='form-control' id='inputFileComment' placeholder='{{ trans('langComment') }}' name='file_comment' value='{{ Session::has('file_comment')? Session::get('file_comment'): $file->comment }}'>
                                                 </div>
                                             </div>
 

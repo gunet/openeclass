@@ -252,9 +252,11 @@ function generate_single_post_html($post) {
 
 
 function generate_infinite_container_html($posts, $posts_per_page, $next_page, $course_type = '') {
-    global $urlServer, $langWallSharedPost, $langWallSharedVideo, $langWallUser, $langComments,
+    global $theme_id, $urlServer, $langWallSharedPost, $langWallSharedVideo, $langWallUser, $langComments,
     $course_code, $langMore, $is_editor, $uid, $course_id, $langModify, $langDelete, $head_content, $langWallPostDelConfirm,
     $langWallPinPost, $langWallUnPinPost, $langWallPostsShow, $langConfirmDelete, $langCancel, $urlAppend;
+
+    $theme_border_color = get_style('BorderLeftToRightColumnCourseBgColor');
 
     $head_content .= '<script>
                           $(document).on("click", ".link", function(e) {
@@ -381,7 +383,7 @@ function generate_infinite_container_html($posts, $posts_per_page, $next_page, $
               <div class="infinite-item ">
                 <div class="row margin-right-thin margin-left-thin margin-top-thin">
                   <div class="col-12 mb-4">
-                    <div class="card panelCard px-lg-2 py-lg-2" style="border-color: #e8edf8;background-color: #FCFCFC;">
+                    <div class="card panelCard px-lg-2 py-lg-2" style="border-color: '.$theme_border_color.';">
                       <div class="card-header border-0 d-flex justify-content-between gap-4 pb-0">
                         <div class="media-left d-flex justify-content-start align-items-center gap-3 px-0">
                             <div style="min-width:32px;">'. profile_image($user_id, IMAGESIZE_SMALL, 'img-circle rounded-circle') . '</div>
