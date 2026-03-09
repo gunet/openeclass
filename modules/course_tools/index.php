@@ -133,7 +133,7 @@ if (isset($_POST['submit'])) {
     redirect_to_home_page($page_url);
 } elseif (isset($_GET['add'])) { // add external link
     $pageName = $langAddExtLink;
-    $navigation[] = array('url' => $page_url, 'name' => $langCourseTools);
+    $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langCourseTools);
     view('modules.course_tools.external_link_store', $data);
 } elseif (isset($_GET['show_lti_template'])) {
     $pageName = $langTurnitinConfDetails;

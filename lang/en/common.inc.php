@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2026-03-02 10:50:46
+// Generated 2026-03-09 14:39:58
 
 $langCourse = "Course";
 $langEclass = "E-Learning Platform";

@@ -2,14 +2,14 @@
 
 @section('content')
 
-<div class="col-12 main-section">
-<div class='{{ $container }} module-container py-lg-0'>
-        <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
+    <div class="col-12 main-section">
+        <div class='{{ $container }} module-container py-lg-0'>
+            <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
 
                 @include('layouts.partials.left_menu')
 
                 <div class="col_maincontent_active">
-                
+
                     <div class="row">
 
                         @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
@@ -22,18 +22,20 @@
                                 @include('layouts.partials.sidebar',['is_editor' => $is_editor])
                             </div>
                         </div>
-                                
+
                         @include('layouts.partials.legend_view')
 
-                        {!! isset($action_bar) ?  $action_bar : '' !!}
+                        @if (isset($action_bar))
+                            {!!  $action_bar !!}
+                        @endif
 
-                        @include('layouts.partials.show_alert') 
+                        @include('layouts.partials.show_alert')
 
                         @if ($course_descs)
-                            @foreach ($course_descs as $key => $course_desc)    
-                                <div class='col-12 mb-4'>      
+                            @foreach ($course_descs as $key => $course_desc)
+                                <div class='col-12 mb-4'>
                                     <div class='card panelCard card-default px-lg-4 py-lg-3'>
-                                        <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>                                 
+                                        <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                                             <h3>
                                                 {{ $course_desc->title}}
                                                 @if ($course_desc->visible && $is_editor)
@@ -43,7 +45,7 @@
                                                 @endif
                                             </h3>
                                             @if ($is_editor)
-                                            
+
                                                 <div>
                                                     {!! action_button(
                                                         array(
@@ -70,37 +72,37 @@
                                                                 'url' => "index.php?course=$course_code&amp;del=" . getIndirectReference($course_desc->id),
                                                                 'icon' => 'fa-xmark',
                                                                 'class' => 'delete',
-                                                                'confirm' => trans('langConfirmDelete'))                            
+                                                                'confirm' => trans('langConfirmDelete'))
                                                         )
                                                     ) !!}
                                                 </div>
-                                            
+
                                             @endif
-                                            
+
                                         </div>
                                         <div class='card-body'>
-                                            {!! handleType($course_desc->type) !!} 
+                                            {!! handleType($course_desc->type) !!}
                                             @if(!empty($course_desc->type))
                                                 <br>
                                                 <br>
                                             @endif
                                             <div class='col-12'>
-                                                {!! standard_text_escape($course_desc->comments) !!} 
+                                                {!! standard_text_escape($course_desc->comments) !!}
                                             </div>
-                                        </div>            
+                                        </div>
                                     </div>
                                 </div>
                             @endforeach
                         @else
-                            <div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langThisCourseDescriptionIsEmpty') }}</span></div></div>
+                            <div class='col-12'>
+                                <div class='alert alert-warning'>
+                                    <i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langNoSyllabus') }}</span>
+                                </div>
+                            </div>
                         @endif
-
                     </div>
                 </div>
-
-
+            </div>
         </div>
-    
-</div>
-</div>
+    </div>
 @endsection

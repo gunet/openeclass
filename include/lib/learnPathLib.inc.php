@@ -624,7 +624,7 @@ function get_learnPath_progress_details($lpid, $lpUid, $total=true, $from_date =
 
     $modules = Database::get()->queryArray($sql, ...$params);
     $totalProgress = 0;
-    $totalStarted = $totalAccessed = $totalStatus = $maxAttempt = "";
+    $totalStarted = $totalAccessed = $totalStatus = $maxAttempt = $totalScoreMax = "";
     $totalTime = "0000:00:00";
 
     $max_progress_measure = 0;

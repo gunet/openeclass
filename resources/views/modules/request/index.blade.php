@@ -137,12 +137,10 @@
             paginationType: 'full_numbers',
             language: {
                 lengthMenu: '{{ trans('langDisplay') . ' _MENU_ ' . trans('langResults2') }}',
-                zeroRecords: '{{ trans('langNoResult') }}',
-                info: '{{ trans('langDisplayed') . ' _START_ ' . trans('langTill') .
-                            ' _END_ ' . trans('langFrom2') . ' _TOTAL_ ' . trans('langTotalResults') }}',
-                infoEmpty: '{{ trans('langDisplayed') . ' 0 ' . trans('langTill') . ' 0 ' .
-                                trans('langFrom2') . ' 0 ' . trans('langResults2') }}',
-                infoFiltered: '',
+                info: '{{ trans('langDisplayed') . ' _START_ ' . trans('langTill') .' _END_ ' . trans('langFrom2') . ' _TOTAL_ ' . trans('langTotalResults') }}',
+                infoEmpty: '',
+                infoFiltered: '{{ trans('langDisplayed') . ' _START_ ' . trans('langTill') .' _END_ ' . trans('langFrom2') . ' _TOTAL_ ' . trans('langTotalResults') }}',
+                emptyTable: '{{ trans('langNoResult') }}',
                 infoPostFix: '',
                 search: '{{ trans('langSearch') . ': ' }}',
                 searchPlaceholder: '{{ trans('langTitle') . ', ' . trans('langUser') }}',
