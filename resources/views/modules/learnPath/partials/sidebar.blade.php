@@ -36,7 +36,7 @@
                             {{ $module['name'] }}{!! $imagePassed !!}
                         </div>
                     @else
-                        <a class="list-group-item d-flex justify-content-start align-items-start gap-2 py-3 lp-nav-link" href="viewer_noframes.php?course={{ $course_code }}&amp;path_id={{ $module['learnPath_id'] }}&amp;module_id={{ $module['module_id'] }}{!! $unitParam !!}"{!! $style !!}>
+                        <a class="list-group-item d-flex justify-content-start align-items-start gap-2 py-3 lp-nav-link" href="{{ $urlAppend }}modules/learnPath/viewer_noframes.php?course={{ $course_code }}&amp;path_id={{ $module['learnPath_id'] }}&amp;module_id={{ $module['module_id'] }}{!! $unitParam !!}"{!! $style !!}>
                             <i class="{{ $moduleImg }}"></i>
                             {{ $module['name'] }}{!! $imagePassed !!}
                         </a>

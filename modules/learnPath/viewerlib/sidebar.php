@@ -22,7 +22,7 @@ require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'modules/learnPath/viewerlib/render_helpers.php';
 
 function sidebar_fragment(int $pathId, int $moduleId, int $attempt): string {
-    global $course_code, $course_id, $uid, $is_editor, $langNoModule;
+    global $course_code, $course_id, $uid, $is_editor, $langNoModule, $urlAppend;
 
     if ($uid) {
         $uidCheckString = 'AND UMP.`user_id` = ' . intval($uid);
@@ -112,5 +112,6 @@ function sidebar_fragment(int $pathId, int $moduleId, int $attempt): string {
         'course_code'     => $course_code,
         'unitParam'       => $unitParam,
         'currentModuleId' => $moduleId,
+        'urlAppend'       => $urlAppend,
     ]);
 }

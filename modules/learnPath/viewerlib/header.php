@@ -30,13 +30,13 @@ function header_fragment(int $pathId, int $moduleId): string {
     $action->record(MODULE_ID_LP);
 
     if (isset($_GET['unit'])) {
-        $unitParam = "&amp;unit=$_GET[unit]";
-        $returl = $urlAppend . "modules/units/index.php?course=$course_code&id=$_GET[unit]";
+        $unitParam = "&amp;unit=" . $_GET['unit'];
+        $returl = $urlAppend . "modules/units/index.php?course=$course_code&id=" . $_GET['unit'];
     } else {
         $unitParam = '';
         $returl = $urlAppend . "modules/learnPath/index.php?course=$course_code";
     }
-    $returl_q = q($returl);
+
 
     if ($uid) {
         $uidCheckString = "AND UMP.`user_id` = $uid";
@@ -145,7 +145,7 @@ function header_fragment(int $pathId, int $moduleId): string {
     $progressAttr = $progressValue !== null ? $progressValue : 0;
 
     return render_lp_partial('modules.learnPath.partials.header', [
-        'returl_q'       => $returl_q,
+        'returl'         => $returl,
         'prevModuleAttr' => $prevModuleAttr,
         'nextModuleAttr' => $nextModuleAttr,
         'progressAttr'   => $progressAttr,
@@ -158,5 +158,6 @@ function header_fragment(int $pathId, int $moduleId): string {
         'previousModule' => $previousModule,
         'nextModule'     => $nextModule,
         'path_id'        => $pathId,
+        'urlAppend'      => $urlAppend,
     ]);
 }

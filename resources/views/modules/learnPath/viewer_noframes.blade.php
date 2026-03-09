@@ -155,7 +155,7 @@
 
     function refreshHeader() {
         _refreshFragment(
-            'viewer_noframes.php?course={{ $course_code }}&fragment=header{{ $unitParamPlain }}',
+            '{{ $urlAppend }}modules/learnPath/viewer_noframes.php?course={{ $course_code }}&fragment=header{!! $unitParamPlain !!}',
             'lp-header',
             function() {
                 window.eclassLP.closeUrl = document.querySelector('#lp-header [data-close-url]')?.getAttribute('data-close-url') || '';
@@ -166,7 +166,7 @@
 
     function refreshToc() {
         _refreshFragment(
-            'viewer_noframes.php?course={{ $course_code }}&fragment=toc{{ $unitParamPlain }}',
+            '{{ $urlAppend }}modules/learnPath/viewer_noframes.php?course={{ $course_code }}&fragment=toc{!! $unitParamPlain !!}',
             'lp-sidebar'
         );
     }
@@ -197,7 +197,7 @@
      * Build the prepareModule endpoint URL for a given module_id
      */
     function _buildPrepareUrl(moduleId) {
-        return 'viewer_noframes.php?course={{ $course_code }}{{ $unitParamPlain }}&action=prepareModule&module_id=' + moduleId;
+        return '{{ $urlAppend }}modules/learnPath/viewer_noframes.php?course={{ $course_code }}{!! $unitParamPlain !!}&action=prepareModule&module_id=' + moduleId;
     }
 
     /**

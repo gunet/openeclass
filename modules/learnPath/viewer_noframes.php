@@ -49,8 +49,8 @@ $moduleId = (int) $_SESSION['lp_module_id'];
 $attempt = (int) ($_SESSION['lp_attempt'] ?? 1);
 $attemptClean = !empty($_SESSION['lp_attempt_clean']);
 
-$unitParam = isset($_GET['unit']) ? "&amp;unit=$_GET[unit]" : '';
-$unitParamPlain = isset($_GET['unit']) ? "&unit=$_GET[unit]" : '';
+$unitParam = isset($_GET['unit']) ? "&amp;unit=" . intval($_GET['unit']) : '';
+$unitParamPlain = isset($_GET['unit']) ? "&unit=" . intval($_GET['unit']) : '';
 
 $fragment = $_GET['fragment'] ?? '';
 if ($fragment === 'header') {
