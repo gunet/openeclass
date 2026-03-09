@@ -2108,7 +2108,9 @@ function deleteUser($id, $log) {
             if (count($assignment_data) > 0) { // if assignments found
                 foreach ($assignment_data as $data) {
                     $courseid = Database::get()->querySingle("SELECT course_id FROM assignment WHERE id = $data->assignment_id")->course_id;
-                    unlink($webDir . "/courses/". course_id_to_code($courseid) . "/work/" . $data->file_path);
+                    if (isset($data->file_path)) {
+                        unlink($webDir . "/courses/". course_id_to_code($courseid) . "/work/" . $data->file_path);
+                    }
                 }
             }
             Database::get()->query("DELETE FROM user_badge_criterion WHERE user = ?d", $u);

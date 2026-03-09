@@ -1223,7 +1223,6 @@ $langAllCategoryDel = "Delete all categories and all links";
 $langAllCategoryDeleted = "All categories and all links have been deleted";
 $langGiveURL = "Please give the link URL";
 $langGiveCategoryName = "Please give the category name";
-$langNoCategory = "No category";
 $langCategorisedLinks = "Categorised links";
 $langProfNoLinksExist = "No links exist! <br /><p align=\"center\">You may use the tool operations to add links.";
 $langNoLinksExist = "No links exist!";
