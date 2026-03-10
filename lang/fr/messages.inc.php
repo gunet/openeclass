@@ -4831,6 +4831,7 @@ $langActivateLeaderboard = "Enable leaderboard";
 $langAnonymizeLeaderboard = "Anonymize leaderboard";
 $langViewLeaderboard = "View leaderboard";
 $langCompletion = "completion";
+$langToNextLevel = "to next level";
 $langPointsGameRecActivities = "Recurring activities";
 $langPointsGameOneTimeActivities = "One-time activities";
 $langPointsGameNoRecActivities = "There are no recurring activities";

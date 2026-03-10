@@ -1550,6 +1550,7 @@ $langActivateLeaderboard = "Ενεργοποίηση πίνακα κατάταξ
 $langAnonymizeLeaderboard = "Ανωνυμοποίηση πίνακα κατάταξης";
 $langViewLeaderboard = "Προβολή πίνακα κατάταξης";
 $langCompletion = "ολοκλήρωση";
+$langToNextLevel = "του επόμενου επιπέδου";
 $langPointsGameRecActivities = "Επαναλαμβανόμενες δραστηριότητες";
 $langPointsGameOneTimeActivities = "Δραστηριότητες μιας φοράς";
 $langPointsGameNoRecActivities = "Δεν υπάρχουν επαναλαμβανόμενες δραστηριότητες";

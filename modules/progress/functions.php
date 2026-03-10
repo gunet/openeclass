@@ -4066,7 +4066,7 @@ function student_view_progress() {
  */
 function display_leaderboard_accordion($points_game_id) {
     global $tool_content, $course_code, $course_id, $langNoUserList, $langSurnameName, $langAutoJudgeRank, $langLevel, $langProgress, 
-        $langViewLeaderboard, $langCompletion, $is_editor, $uid, $langAnonymous;
+        $langViewLeaderboard, $langCompletion, $is_editor, $uid, $langAnonymous, $langStart, $langToNextLevel;
 
     $anon = false;
     if (!$is_editor) {
@@ -4083,14 +4083,6 @@ function display_leaderboard_accordion($points_game_id) {
             $anon = true;
         }
     }
-
-    // Get first level for this points game
-    $first_level = Database::get()->querySingle("SELECT friendly_name 
-                                                 FROM points_game_levels 
-                                                 WHERE points_game = ?d 
-                                                 ORDER BY required_points ASC 
-                                                 LIMIT 1", $points_game_id);
-    $first_level_name = $first_level ? $first_level->friendly_name : 'Level 1';
 
     $sql = Database::get()->queryArray("SELECT u.id, u.surname, u.givenname, COALESCE(upp.total_points, 0) AS total_points
                                         FROM course_user cu
@@ -4133,11 +4125,16 @@ function display_leaderboard_accordion($points_game_id) {
             $is_current_user = (!$is_editor && $user_data->id == $uid);
             $row_class = $is_current_user ? 'current-user-student' : '';
             
-            $current_level_display = $first_level_name; // Default to first level
-            
+            $current_level_display = $langStart; // Default to first level
+            $langForNext = $langToNextLevel;
+
             if ($user_data->total_points > 0) {
                 $user_progress = PointsGame::getNextLevelInfo($user_data->id,$points_game_id);
                 
+                if (is_null($user_progress['next_level_id'])) {
+                    $langForNext = $langCompletion;
+                }
+
                 // Points display
                 if ($user_progress['current_points'] > 0) {
                     if ($is_editor || $user_data->id == $uid) {
@@ -4158,14 +4155,14 @@ function display_leaderboard_accordion($points_game_id) {
                 $info = "<div class='progress'>
                             <div class='progress-bar' style='width: ".$user_progress['progress_percentage']."%'></div>
                          </div>
-                         <span class='progress-text'>" . $user_progress['progress_percentage'] . "% $langCompletion</span>
+                         <span class='progress-text'>" . $user_progress['progress_percentage'] . "% $langForNext</span>
                          <div>$points_str</div>";
             } else {
                 // No progress - show first level with 0% and 0 pts
                 $info = "<div class='progress'>
                             <div class='progress-bar' style='width: 0%'></div>
                          </div>
-                         <span class='progress-text'>0% $langCompletion</span>
+                         <span class='progress-text'>0% $langForNext</span>
                          <div><span class='small-text'>0 pts</span></div>";
             }
 
