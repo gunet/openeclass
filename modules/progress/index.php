@@ -67,7 +67,12 @@ if ($show_tabs) {
     } elseif (isset($_REQUEST['certificate_id'])) {
         $active_tab = 'certificates';
     } elseif (isset($_REQUEST['badge_id'])) {
-        $active_tab = 'badges';
+        $ccmpl = Database::get()->querySingle("SELECT count(*) as cnt FROM badge WHERE course_id = ?d AND bundle = -1 AND id = ?d", $course_id, $_REQUEST['badge_id']);
+        if ($ccmpl->cnt == 0) {
+            $active_tab = 'badges';
+        } else {
+            $active_tab = 'course_completion';
+        }
     } else {
         if(!$is_editor && !is_course_completion_active()) {
             $active_tab = 'badges';
@@ -256,14 +261,7 @@ if ($is_editor) {
             Session::flash('message',$langNotActivated);
             Session::flash('alert-class', 'alert-warning');
         }
-        $redirect_url = "modules/progress/index.php?course=$course_code";
-        if ($element == 'badge') {
-            $redirect_url .= "&tab=badges";
-        } elseif ($element == 'certificate') {
-            $redirect_url .= "&tab=certificates";
-        } elseif ($element == 'points_game') {
-            $redirect_url .= "&tab=points";
-        }
+        $redirect_url = "modules/progress/index.php?course=$course_code".$tab_q;
         redirect_to_home_page($redirect_url);
     }
     if (isset($_POST['newCertificate']) or isset($_POST['newBadge'])) {  // add a new certificate / badge
@@ -743,18 +741,9 @@ if (isset($display) and $display) {
             if ($is_editor && $element == 'badge') {
                 $bundle_check = Database::get()->querySingle("SELECT bundle FROM badge WHERE id = ?d", $element_id);
                 if ($bundle_check && $bundle_check->bundle == -1) {
-                    $pageName = '  ';
+                    $pageName = '';
                 }
             }
-            // Normal detail view
-            $action_buttons = array(
-                array('title' => $langBack,
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&tab=" . (isset($_GET['tab']) ? $_GET['tab'] : 'course_completion'),
-                      'icon' => 'fa-reply',
-                      'level' => 'primary-label')
-            );
-            
-            action_bar($action_buttons, false);
             
             // display certificate settings and resources
             display_activities($element, $element_id);
