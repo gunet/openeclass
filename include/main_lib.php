@@ -1179,7 +1179,7 @@ function display_activation_link($module_id) {
     global $modules;
 
     $script = preg_replace('|.*/|', '', $_SERVER['SCRIPT_NAME']);
-    if (!defined('STATIC_MODULE') and $module_id and array_key_exists($module_id, $modules) and $script == 'index.php' and count($_GET) == 1 and isset($_GET['course']) and $_SERVER['REQUEST_METHOD'] == 'GET') {
+    if (!defined('STATIC_MODULE') and $module_id and array_key_exists($module_id, $modules) and $script == 'index.php' and (count($_GET) == 1 or ($module_id == MODULE_ID_PROGRESS and count($_GET) == 2 and isset($_GET['tab']))) and isset($_GET['course']) and $_SERVER['REQUEST_METHOD'] == 'GET') {
         return true;
     } else {
         return false;
