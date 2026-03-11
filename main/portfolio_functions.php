@@ -421,7 +421,7 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
                                         AND (admin_announcement.end >= " . DBHelper::timeAfter() . " OR admin_announcement.end IS NULL)
                                         AND admin_announcement.`date` >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH) $admin_filter_sql
                                  ORDER BY an_date DESC
-                         $sql_append", $languge, $filter_param);
+                         $sql_append", $language, $filter_param);
     } else {
 
         $course_id_sql = implode(', ', array_fill(0, count($lesson_id), '?d'));
@@ -453,7 +453,7 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
                                       AND (admin_announcement.end >= " . DBHelper::timeAfter() . " OR admin_announcement.end IS NULL)
                                       AND admin_announcement.`date` >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH) $admin_filter_sql
                                 ) ORDER BY an_date DESC
-                         $sql_append", $lesson_id, $language, $filter_param, $filter_param);
+                         $sql_append", $lesson_id, $filter_param,  $language, $filter_param);
     }
 
     if ($to_ajax) {

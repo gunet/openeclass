@@ -480,7 +480,7 @@ $data['email_form'] = q($myrow->email);
 $data['am_form'] = q($myrow->am);
 $data['phone_form'] = q($myrow->phone);
 $data['phone_public'] = q($myrow->phone_public);
-$data['desc_form'] = $myrow->description;
+$data['desc_form'] = purify($myrow->description);
 $data['userLang'] = $myrow->lang;
 $data['icon'] = $myrow->has_icon;
 $data['email_public_selected'] = $data['am_public_selected'] = $data['phone_public_selected'] = $data['pic_public_selected'] = '';

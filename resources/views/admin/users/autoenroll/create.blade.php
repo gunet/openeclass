@@ -75,7 +75,7 @@
                                         <div class='modal-dialog'>
                                             <div class='modal-content'>
                                                 <div class='modal-header'>
-                                                    <div class='modal-title' id='treeCourseModalLabel'>{{ trans('langNodeAdd') }}</div>
+                                                    <h2 class='modal-title' id='treeCourseModalLabel'>{{ trans('langNodeAdd') }}</h2>
                                                     <button type='button' class='close treeCourseModalClose' aria-label="{{ trans('langClose') }}">
                                                     </button>
 

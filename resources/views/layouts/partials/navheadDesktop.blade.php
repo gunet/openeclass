@@ -20,22 +20,22 @@
                         @endif
 
                         @if($_SESSION['provider'] !== 'lti_publish')
-                        <ul class="container-items nav">
+                        <ul class="container-items nav" role="navigation" aria-label="{{ trans('langHeaderLinks') }}">
                             @if(!get_config('hide_login_link'))
-                                <li class="nav-item">
+                                <li class="nav-item" aria-label="{{ trans('langHome') }}">
                                     <a id="link-home" class="nav-link menu-item mx-lg-2 @if (!isset($_SESSION['uid']) && empty($pageName)) active2 @endif" href="{{ $urlServer }}?show_home=true" aria-label="{{ trans('langHome') }}">
                                         {{ trans('langHome') }}
                                     </a>
                                 </li>
                             @endif
                             @if (!isset($_SESSION['uid']))
-                                <li class="nav-item">
+                                <li class="nav-item" aria-label="{{ trans('langRegistration') }}">
                                     <a id="link-register" class="nav-link menu-item mx-lg-2 @if(get_config('registration_link')=='hide') d-none @endif" href="{{ $urlServer }}modules/auth/registration.php" aria-label="{{ trans('langRegistration') }}">
                                         {{ trans('langRegistration') }}
                                     </a>
                                 </li>
                                 @if (!get_config('dont_display_courses_menu'))
-                                    <li class="nav-item">
+                                    <li class="nav-item" aria-label="{{ trans('langCourses') }}">
                                         <a id="link-lessons" class="nav-link menu-item mx-lg-2" href="{{ $urlServer }}modules/auth/listfaculties.php" aria-label="{{ trans('langCourses') }}">
                                             {{ trans('langCourses') }}
                                         </a>
@@ -43,12 +43,12 @@
                                 @endif
                             @endif
                             @if (isset($_SESSION['uid']))
-                                <li class="nav-item">
+                                <li class="nav-item" aria-label="{{ trans('langPortfolio') }}">
                                     <a id="link-portfolio" class="nav-link menu-item mx-lg-2" href="{{ $urlServer }}main/portfolio.php" aria-label="{{ trans('langPortfolio') }}">
                                         {{ trans('langPortfolio') }}
                                     </a>
                                 </li>
-                                <li class="nav-item">
+                                <li class="nav-item" aria-label="{{ trans('langCourses') }}">
                                     <a id="link-lessons" class="nav-link menu-item mx-lg-2" href="{{ $urlServer }}modules/auth/courses.php" aria-label="{{ trans('langCourses') }}">
                                         {{ trans('langCourses') }}
                                     </a>
@@ -56,7 +56,7 @@
                             @endif
                             @if (!get_config('dont_display_faq_menu'))
                                 @if (faq_exist())
-                                    <li class="nav-item">
+                                    <li class="nav-item" aria-label="{{ trans('langFaqAbbrev') }}">
                                         <a id="link-faq" class="nav-link menu-item mx-lg-2 " href="{{$urlAppend}}info/faq.php" aria-label="{{ trans('langFaqAbbrev') }}">
                                             {{ trans('langFaqAbbrev') }}
                                         </a>

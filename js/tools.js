@@ -100,7 +100,7 @@ function course_checkbox_disabled(id, state)
 function course_list_init() {
     $.course_closed = [];
 
-    var dialog = $('<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal-label" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h4 class="modal-title" id="modal-label"></h4></div><div class="modal-body"></div><div class="modal-footer"><button type="button" class="btn btn-default" data-bs-dismiss="modal"></button><button type="button" class="btn btn-primary"></button></div></div></div></div>');
+    var dialog = $('<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal-label" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h2 class="modal-title" id="modal-label"></h2></div><div class="modal-body"></div><div class="modal-footer"><button type="button" class="btn btn-default" data-bs-dismiss="modal"></button><button type="button" class="btn btn-primary"></button></div></div></div></div>');
     $('.modal-body', dialog).html(lang.reregisterImpossible);
     $('.modal-title', dialog).html(lang.unregCourse);
     $('.btn-default', dialog).html(lang.cancel);

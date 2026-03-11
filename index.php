@@ -234,9 +234,9 @@ if (!$upgrade_begin and $uid and !isset($_GET['redirect_home'])) {
                                         <label for='pass' class='form-label'>$langPass</label>
                                         <div class='input-group flex-nowrap'>
                                             <input type='password' id='pass' class='login-input border-end-0 w-100 mt-0' name='pass' placeholder='&#xf084;' aria-label='reveal Password'>
-                                            <span id='revealPass' class='input-group-text login-input-password-reveal border-start-0 bg-input-default input-border-color'>
+                                            <button id='revealPass' type='button' data-bs-toggle='tooltip' title='$langRevealPass' class='input-group-text login-input-password-reveal border-start-0 bg-input-default input-border-color' aria-label='reveal Password'>
                                                 <i class='fa-solid fa-eye fa-md'></i>
-                                            </span>
+                                            </button>
                                         </div>
                                     </div>
                                     <button type='submit' name='submit' class='btn w-100 login-form-submit mt-4 mb-2'>$langEnter</button>

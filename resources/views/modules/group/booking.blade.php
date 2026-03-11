@@ -49,7 +49,7 @@
                             <div class='modal-dialog'>
                                 <div class='modal-content'>
                                     <div class='modal-header'>
-                                        <div class='modal-title' id='infoEventsLabel'>{{ trans('langInfoColourEvent') }}</div>
+                                        <h2 class='modal-title' id='infoEventsLabel'>{{ trans('langInfoColourEvent') }}</h2>
                                         <button type='button' class='close' data-bs-dismiss='modal' aria-label="{{ trans('langClose') }}"></button>
                                     </div>
                                     <div class='modal-body'>
