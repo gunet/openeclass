@@ -85,7 +85,7 @@
                     <div class='modal-dialog modal-fullscreen' style='margin-top:0px;'>
                         <div class='modal-content'>
                             <div class='modal-header'>
-                                <div class='modal-title' id='view_themes_screensLabel'>{{ trans('langAvailableThemes') }}</div>
+                                <h2 class='modal-title' id='view_themes_screensLabel'>{{ trans('langAvailableThemes') }}</h2>
                                 <button type='button' class='close' data-bs-dismiss='modal' aria-label='{{ trans('langClose') }}'></button>
                             </div>
                             <div class='modal-body'>

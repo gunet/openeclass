@@ -645,7 +645,7 @@ jContent;
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <div class="modal-title" id="treeModalLabel">' . q($langNodeAdd) . '</div>
+                    <h2 class="modal-title" id="treeModalLabel">' . q($langNodeAdd) . '</h2>
                     <button type="button" class="close treeModalClose" aria-label="'.$langClose.'"></button>
 
                 </div>
@@ -725,7 +725,7 @@ jContent;
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                     <div class="modal-title" id="treeModalLabel">' . q($langNodeAdd) . '</div>
+                     <h2 class="modal-title" id="treeModalLabel">' . q($langNodeAdd) . '</h2>
                     <button type="button" class="close treeModalClose" aria-label="'.$langClose.'"></button>
 
                 </div>
