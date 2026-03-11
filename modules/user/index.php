@@ -300,12 +300,8 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH'])
             $user_roles = [$langGuestName];
         } elseif ($myrow->status == USER_STUDENT) {
             $user_roles = [$langStudent];
-            if ($is_collaborative) {
-                if ($view_type == 'sessions' && $myrow->tutor == '1') {
-                    $user_roles = [$langConsultant];
-                } else if ($view_type != 'sessions') {
-                    $user_roles = [$langMember];
-                }
+            if ($is_collaborative && $view_type == 'sessions' && $myrow->tutor == '1') {
+                $user_roles = [$langConsultant];
             }
         }
         if ($is_tutor) {
