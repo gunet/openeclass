@@ -33,6 +33,14 @@ function updateProgress(): string {
         ]);
     }
 
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) {
+        return resp_return_json([
+            'ok' => false,
+            'error' => 'Invalid token',
+            'code' => 'LP_FORBIDDEN',
+        ]);
+    }
+
     if (!isset($_POST['ump_id'])) {
         return resp_return_json([
             'ok' => false,
@@ -56,16 +64,24 @@ function updateProgress(): string {
     }
 
     $lesson_status_value = strtoupper($_POST['lesson_status'] ?? '');
+    $allowed_statuses = ['NOT ATTEMPTED', 'INCOMPLETE', 'COMPLETED', 'PASSED', 'FAILED', 'BROWSED', 'UNKNOWN'];
+    if ($lesson_status_value !== '' && !in_array($lesson_status_value, $allowed_statuses)) {
+        $lesson_status_value = '';
+    }
+
     $credit_value = strtoupper($_POST['credit'] ?? '');
+    if ($credit_value !== '' && !in_array($credit_value, ['CREDIT', 'NO-CREDIT'])) {
+        $credit_value = '';
+    }
 
     // set values for the scores
-    $raw_value = (int) ($_POST['raw'] ?? 0);
-    $scoreMin_value = (int) ($_POST['scoreMin'] ?? 0);
-    $scoreMax_value = (int) ($_POST['scoreMax'] ?? 0);
+    $raw_value = isset($_POST['raw']) && $_POST['raw'] !== '' ? max(0, min(100, (int) $_POST['raw'])) : -1;
+    $scoreMin_value = isset($_POST['scoreMin']) && $_POST['scoreMin'] !== '' ? max(0, min(100, (int) $_POST['scoreMin'])) : -1;
+    $scoreMax_value = isset($_POST['scoreMax']) && $_POST['scoreMax'] !== '' ? max(0, min(100, (int) $_POST['scoreMax'])) : -1;
 
     $progress_measure = null;
     if (isset($_POST['progress_measure']) && $_POST['progress_measure'] !== '') {
-        $progress_measure = (float) $_POST['progress_measure'];
+        $progress_measure = max(0.0, min(1.0, (float) $_POST['progress_measure']));
     }
 
     // next visit of the sco will not be the first so entry must be set to RESUME
@@ -90,7 +106,7 @@ function updateProgress(): string {
     }
 
     //set maxScore to 100 if the SCO didn't change it itself, but gave raw
-    if ($raw_value > 0 && $raw_value <= 100 && $scoreMax_value == 0) {
+    if ($raw_value > 0 && $raw_value <= 100 && $scoreMax_value <= 0) {
         $scoreMax_value = 100;
     }
 

@@ -876,6 +876,7 @@ $commitUrl = $lp_update_url
     function _buildCommitPayload() {
         return {
             'ump_id': _umpId,
+            'token': <?php echo json_encode($_SESSION['csrf_token']); ?>,
             'lesson_location': isSCORM2004 ? values[37] : values[3],
             'lesson_status': values[4],
             'credit': values[5],
