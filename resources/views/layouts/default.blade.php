@@ -291,11 +291,9 @@
                 }
                 const THROTTLE_WAIT = 2000;
 
-                const sessionToken = '<?php echo $_SESSION['csrf_token'] ?? ""; ?>';
-                const baseUrl = '<?php echo $urlAppend; ?>';
-                console.log(baseUrl);
-                const LOGOUT_URL = baseUrl + 'modules/auth/logout.php';
-                console.log(LOGOUT_URL);
+                const sessionToken = '{{ $_SESSION['csrf_token'] ?? '' }}';
+                const baseUrl = '{{ $urlAppend }}';
+                const LOGOUT_URL = '{{ $urlAppend . 'modules/auth/logout.php' }}';
 
 
                 let warningTimeout;
@@ -350,17 +348,7 @@
                 }
 
                 function forceLogout() {
-                    const formData = new FormData();
-                    formData.append('token', sessionToken);
-                    formData.append('submit', '1');
-                    fetch(LOGOUT_URL, {
-                        method: 'POST',
-                        body: formData
-                    }).then(() => {
-                        window.location.href = baseUrl;
-                    }).catch(() => {
-                        window.location.href = LOGOUT_URL;
-                    });
+                    $('#logoutForm').submit();
                 }
 
                 document.getElementById('extendSessionBtn').addEventListener('click', function() {
