@@ -289,6 +289,7 @@
                 if (LOGOUT_TIME <  60000) {
                     LOGOUT_TIME = 60000;
                 }
+
                 const THROTTLE_WAIT = 2000;
 
                 const sessionToken = '{{ $_SESSION['csrf_token'] ?? '' }}';
@@ -348,7 +349,7 @@
                 }
 
                 function forceLogout() {
-                    $('#logoutForm').submit();
+                    document.getElementById('logoutForm').constructor.prototype.submit.call(document.getElementById('logoutForm'));
                 }
 
                 document.getElementById('extendSessionBtn').addEventListener('click', function() {
