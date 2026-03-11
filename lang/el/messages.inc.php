@@ -1792,7 +1792,6 @@ $langCreatorEmail = "Ηλ. Διεύθυνση Συγγραφέα";
 $langFormat = "Τύπος-Κατηγορία";
 $langSubject = "Θέμα";
 $langAuthor = "Συγγραφέας";
-$langUserForum = "Μέλος";
 $langCopyrightedFree = "Ελεύθερο δικαιωμάτων";
 $langChangeMetadata = "Αλλαγή πληροφοριών εγγράφου";
 $langEditMeta = "Επεξεργασία Πληροφοριών";
