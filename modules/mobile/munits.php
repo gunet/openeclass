@@ -53,6 +53,7 @@ function createCourseUnitsDom($course_units) {
     foreach ($course_units as $course_unit) {
         $u = $root->appendChild($dom->createElement('unit'));
         $course_unit_description = ellipsize(html2text($course_unit->comments), 80);
+        $u->appendChild(new DOMAttr('id', $course_unit->id));
         $u->appendChild(new DOMAttr('name', $course_unit->title));
         $u->appendChild(new DOMAttr('description', $course_unit_description));
     }

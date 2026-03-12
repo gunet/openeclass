@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2026-03-09 14:39:58
+// Generated 2026-03-11 16:47:40
 
 $langYes = "Yes";
 $langNo = "No";
@@ -32,9 +32,6 @@ $langAdminUsers = "Users Management";
 $langDeleteAdmin = "Deletion of the administrator by id:";
 $langNotFeasible = "is not feasible";
 $langPassword = "Password";
-$langRevealPass = "Reveal password";
-$langHeaderLinks = "Header links";
-$langFooterLinks = "Footer links";
 $langAdd = "Add";
 $langNotFound = "not found";
 $langWith = "with";
@@ -916,7 +913,7 @@ $langAccountInactive1 = "Inactive Account.";
 $langAccountInactive2 = "Please contact the administrator to activate your account.";
 $langMyCoursesProf = "My courses (".$langsTeachers.")";
 $langMyCoursesUser = "My registered courses (".$langStudent.")";
-$langNoCourses = "There are no courses";
+$langNoCourses = "There are no $langsCourses";
 $langCourseCreate = "Create Course";
 $langMyAgenda = "My Calendar";
 $langMyStats = "User Statistics";
@@ -3639,7 +3636,6 @@ $langBlogSharing = "Blog post sharing in social networks";
 $lang_display_captcha_label = "Security Code (CAPTCHA)";
 $lang_display_captcha_unsupported = 'To enable the security code, the PHP GD library needs TrueType font (TTF) support';
 $langAddGUser = "Add Guest User";
-$langUserForum = "User";
 $langStopNotify = "Stop notification via email if replies are posted";
 $langNoLinkInCategory = "There are no links in this category";
 $langNoLinkCategories = "There are no link categories";
@@ -6085,13 +6081,6 @@ $langHelpFluidWidthInfo = "The width of the header and footer is configured acco
 $langNavSettingsnavsettingsMainSection = "Main Section";
 $langAddOpacityImage = "Add color to background image from background color option";
 $langFavicon = "Favicon";
-$langIdleDetection = "Idle detection";
-$langIdleWarningTime = "Idle warning time (in minutes)";
-$langIdleLogoutTime = "Automatic logout in (in minutes)";
-$langIdleWarningTitle = "Inactivity warning";
-$langIdleExpireSoon = "Your session is about to expire soon due to inactivity.";
-$langIdleStayLoggedIn = "Do you want to stay logged in?";
-$langIdleExtendSession = "Extend session";
 $langCollaborationPlatform = "Collaboration platform";
 $langEnableCollaboration = "Enable collaboration platform";
 $langAlwaysEnabledCollaboration = "Always on";
@@ -6954,3 +6943,13 @@ $langAlignRight = "Right";
 $langExerciseCBCalcGradeMethodLegend = "When performing the exercise, the $langsStudent must also select the degree of certainty of his/her answer. It applies only to 'Multiple choice' and 'True/False' questions.";
 $langExit = "Exit";
 $langConfirmDelAccount = "Delete account confirmation";
+$langRevealPass = "Reveal password";
+$langHeaderLinks = "Header links";
+$langFooterLinks = "Footer links";
+$langIdleDetection = "Idle detection";
+$langIdleWarningTime = "Idle warning time (in minutes)";
+$langIdleLogoutTime = "Automatic logout in (in minutes)";
+$langIdleWarningTitle = "Inactivity warning";
+$langIdleExpireSoon = "Your session is about to expire soon due to inactivity.";
+$langIdleStayLoggedIn = "Do you want to stay logged in?";
+$langIdleExtendSession = "Extend session";

@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2026-03-09 14:39:58
+// Generated 2026-03-11 16:54:14
 
 $langOfConsultant = "Consultant";
 $langConsultants = "Consultants";
@@ -196,10 +196,10 @@ $langTeacher = "Coordinator";
 $langOfTeacher = "Coordinator";
 $langTeachers = "Coordinators";
 $langOfTeachers = "Coordinators";
-$langsTeacher = "consultant";
-$langsOfTeacher = "consultant";
-$langsTeachers = "consultants";
-$langsOfTeachers = "consultants";
+$langsTeacher = "coordinator";
+$langsOfTeacher = "coordinator";
+$langsTeachers = "coordinators";
+$langsOfTeachers = "coordinators";
 $langCTeacher = "COORDINATOR";
 $langConsultant = "Consultant";
 $langCourseAdminTeacher = "Admin - Coordinator";
@@ -218,7 +218,6 @@ $langStudent = "Member";
 $langOfStudent = "Member";
 $langStudents = "Members";
 $langOfStudents = "Members";
-$langCStudent = "MEMBER";
 $langCStudent2 = "MEMBER";
 $langsStudent = "member";
 $langsOfStudent = "member";
@@ -234,13 +233,10 @@ $langsCourse = "collaboration";
 $langsCourses = "collaborations";
 $langsOfCourse = "collaboration";
 $langsOfCourses = "collaborations";
-$langCourseS = $langsCourse;
+$langCourseS = "collaboration";
 $langMyCourses = "My Collaborations";
 $langInfoAbout = "The $siteName platform is a complete Electronic Collaboration Management System. It follows the philosophy of open source software and supports the Asynchronous Distance Learning service without limitations and commitments. Access to the service is done using a simple web browser without requiring specialized technical knowledge.";
-$langSiteUrl = "URL of collaboration platform";
-$langInstall = "Installation of collaboration platform";
 $langLocale = 'el_GR.UTF-8';
-$langIntro = "The <strong>$siteName</strong> platform is an integrated $langOfCourses Electronic Management System and supports the Asynchronous Distance Learning Service at <a href=\"$InstitutionUrl\" target=\"_blank\" class=mainpage>$Institution< /a>.";
 $langTotalCourses = "Number of $langsOfCourses";
 $langInCourses = "in $langsCourse";
 $langInCoursesL = "in $langsCourse";
@@ -1084,30 +1080,11 @@ $langCourseInvitationUsersExcelInfo = "You can send a spreadsheet file (eg xls, 
  The second and third columns can optionally contain the last name and first name of each user.
  Note that users who are already on the platform with the e-mail will be immediately added to the partnership without receiving an invitation and without further notification.";
 $langSendReminder = "Send a reminder";
-$langNoLongerValid = 'The link you followed is no longer valid.';
-$langInvitationAlreadyUsed = 'You have already registered on the platform through
- link you followed. You can now log in with your username
- your e-mail address and the password you had chosen.';
 $langRegisterAsVisitor = 'Register as a guest';
 $langCourseInvitation = 'Invitation to register for the partnership';
 $langPreviewCollaboration = ' collaboration';
 $langUnregCollaboration = 'Unregister from collaboration';
-$langDisableCollaborationModulesHelp = 'You can select which modules will be disabled for all collaborations platform-wide.';
-$langDefaultModulesCollaborationHelp = 'The following modules are enabled by default in all collaborations created on the platform.';
 $langCourseMetadata = "Metadata $langsOfCourse";
-$langInfoAboutCollabRegistration = "The partnership you selected is closed. To register, you must
- to complete the following application, which will be recorded and sent to the administrators of the collaboration.";
-$langLabelCollabUserRequest = "Application for collaboration registration";
-$langRequestReasonsCollab = "State the reasons you wish to register for the collaboration.";
-$m['password_collab'] = "Password for collaboration";
-$lang_openCourse_inModal = "Should the collaboration information be displayed in Modal (Frame) in the open collaborations?</br>
- If you do not select this option, the information of the partnership will be displayed in a new page of your browser.";
-$langGroupWorkIntro = '
-	Assignments available in this collaboration are displayed below. Please select
-	the assignment you wish to submit on behalf of your group and
-	add any comments you want to be read by the collaboration consultant or coordinator. Please note that, when a submission has already been made by you or another member of your group, and you submit a new file for the same assignment, this file will replace the old file in the system (the old file will be deleted).
-	Furthermore, no new submissions are allowed when the assignment has
-	been graded.';
 $langResourceExists = "The resource already exists.";
 $langUsedCertRes = "The activity has already been used by a user.";
 $langUseOfAppInfo = "Choose which collaborations the app will be used in";
