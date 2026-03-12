@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2025-11-21 11:40:41
+// Generated 2026-03-09 14:39:58
 
 $langOfConsultant = "Consultant";
 $langConsultants = "Consultants";
@@ -381,7 +381,7 @@ $langReqRegUser = "$langsOfStudent registration request";
 $langCourseSettings = "$langsOfCourses settings";
 $langCourseOfflineSettings = "Download $langsOfCourse";
 $langCourseOfflineLegend = "$langsStudents can download $langsCourse to their computer.";
-$langUserConsent = "About user consent";
+$langUserConsent = "User consent";
 $langUnsubscribeCourse = "Disable collaboration opt-out";
 $langClassInfoTitle = "Cooperation details";
 $langStuNum = "Number of Members";

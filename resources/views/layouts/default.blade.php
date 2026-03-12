@@ -200,28 +200,72 @@
     <script>
         $(function() {
             $(".datetimepicker table > thead > tr").find("th.prev").each(function() {
-                $(this).attr("aria-label", "{{ trans('langPrevious') }}");
+                if ($(this).find('.visually-hidden').length === 0) {
+                    $(this).append('<span class="visually-hidden">{{ trans("langPrevious") }}</span>');
+                }
             });
+
             $(".datetimepicker table > thead > tr").find("th.next").each(function() {
-                $(this).attr("aria-label", "{{ trans('langNext') }}");
+                if ($(this).find('.visually-hidden').length === 0) {
+                    $(this).append('<span class="visually-hidden">{{ trans("langNext") }}</span>');
+                }
             });
+
             $(".datepicker table > thead > tr").find("th.prev").each(function() {
-                $(this).attr("aria-label", "{{ trans('langPrevious') }}");
+                if ($(this).find('.visually-hidden').length === 0) {
+                    $(this).append('<span class="visually-hidden">{{ trans("langPrevious") }}</span>');
+                }
             });
+
             $(".datepicker table > thead > tr").find("th.next").each(function() {
-                $(this).attr("aria-label", "{{ trans('langNext') }}");
+                if ($(this).find('.visually-hidden').length === 0) {
+                    $(this).append('<span class="visually-hidden">{{ trans("langNext") }}</span>');
+                }
             });
-            $("#cboxPrevious").attr("aria-label","{{ trans('langPrevious') }}");
-            $("#cboxNext").attr("aria-label","{{ trans('langNext') }}");
-            $("#cboxSlideshow").attr("aria-label","{{ trans('langShowTo') }}");
-            $(".table-default thead tr th:last-child:has(.fa-gears)").attr("aria-label","{{ trans('langCommands') }}");
-            $(".table-default thead tr th:last-child:has(.fa-cogs)").attr("aria-label","{{ trans('langCommands') }}");
-            $(".table-default thead tr th:last-child:not(:has(.fa-gears))").attr("aria-label","{{ trans('langCommands') }} / {{ trans('langResults') }}");
-            $(".table-default thead tr th:last-child:not(:has(.fa-cogs))").attr("aria-label","{{ trans('langCommands') }} / {{ trans('langResults') }}");
-            $(".sp-input-container .sp-input").attr("aria-label","{{ trans('langOptForColor') }}");
-            $("ul").find(".select2-search__field").attr("aria-label","{{ trans('langSearch') }}");
-            $("#cal-slide-content ul li .event-item").attr("aria-label","{{ trans('langEvent') }}");
-            $("#cal-day-box .event-item").attr("aria-label","{{ trans('langEvent') }}");
+
+            if ($("#cboxPrevious").find('.visually-hidden').length === 0) {
+                $("#cboxPrevious").append('<span class="visually-hidden">{{ trans("langPrevious") }}</span>');
+            }
+
+            if ($("#cboxNext").find('.visually-hidden').length === 0) {
+                $("#cboxNext").append('<span class="visually-hidden">{{ trans("langNext") }}</span>');
+            }
+
+            if ($("#cboxSlideshow").find('.visually-hidden').length === 0) {
+                $("#cboxSlideshow").append('<span class="visually-hidden">{{ trans("langShowTo") }}</span>');
+            }
+
+            if ($(".table-default thead tr th:last-child:has(.fa-gears)").find('.visually-hidden').length === 0) {
+                $(".table-default thead tr th:last-child:has(.fa-gears)").append('<span class="visually-hidden">{{ trans("langSettingSelect") }}</span>');
+            }
+
+            if ($(".table-default thead tr th:last-child:has(.fa-cogs)").find('.visually-hidden').length === 0) {
+                $(".table-default thead tr th:last-child:has(.fa-cogs)").append("<span class='visually-hidden'>{{ trans('langSettingSelect') }}</span>");
+            }
+
+            if ($(".table-default thead tr th:last-child:not(:has(.fa-gears))").find('.visually-hidden').length === 0) {
+                $(".table-default thead tr th:last-child:not(:has(.fa-gears))").append("<span class='visually-hidden'>{{ trans('langSettingSelect') }} / {{ trans('langResults') }}</span>");
+            }
+
+            if ($(".table-default thead tr th:last-child:not(:has(.fa-cogs))").find('.visually-hidden').length === 0) {
+                $(".table-default thead tr th:last-child:not(:has(.fa-cogs))").append("<span class='visually-hidden'>{{ trans('langSettingSelect') }} / {{ trans('langResults') }}</span>");
+            }
+
+            if ($(".sp-input-container .sp-input").find('.visually-hidden').length === 0) {
+                $(".sp-input-container .sp-input").append("<span class='visually-hidden'>{{ trans('langOptForColor') }}</span>");
+            }
+
+            if ($("ul").find(".select2-search__field").find('.visually-hidden').length === 0) {
+                $("ul").find(".select2-search__field").append("<span class='visually-hidden'>{{ trans('langSearch') }}</span>");
+            }
+
+            if ($("#cal-slide-content ul li .event-item").find('.visually-hidden').length === 0) {
+                $("#cal-slide-content ul li .event-item").append("<span class='visually-hidden'>{{ trans('langEvent') }}</span>");
+            }
+
+            if ($("#cal-day-box .event-item").find('.svisually-hidden').length === 0) {
+                $("#cal-day-box .event-item").append("<span class='visually-hidden'>{{ trans('langEvent') }}</span>");
+            }
 
             @if ($pinned_announce)
                 $('#closeNotificationBar').click(function () {
@@ -233,5 +277,123 @@
         });
     </script>
     @stack('bottom_scripts')
+    @if(isset($_SESSION['uid']) && get_config('enable_idle_detection'))
+        <script type="text/javascript">
+
+            (function() {
+                let WARNING_TIME = '{{ get_config('idle_warning_time') }}';
+                if (WARNING_TIME < 60000) {
+                    WARNING_TIME = 60000;
+                }
+                let LOGOUT_TIME = '{{ get_config('idle_logout_time') }}';
+                if (LOGOUT_TIME <  60000) {
+                    LOGOUT_TIME = 60000;
+                }
+                const THROTTLE_WAIT = 2000;
+
+                const sessionToken = '<?php echo $_SESSION['csrf_token'] ?? ""; ?>';
+                const baseUrl = '<?php echo $urlAppend; ?>';
+                console.log(baseUrl);
+                const LOGOUT_URL = baseUrl + 'modules/auth/logout.php';
+                console.log(LOGOUT_URL);
+
+
+                let warningTimeout;
+                let logoutTimeout;
+                let lastActivity = Date.now();
+                let isWarningVisible = false;
+
+                const modalHTML = `
+                      <div class="modal fade" id="idleWarningModal" tabindex="-1" role="dialog" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+                           <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                <div class="modal-header">
+                                     <h4 class="modal-title">{{trans('langIdleWarningTitle')}}</h4>
+                                </div>
+                                <div class="modal-body">
+                                     <p>{{trans('langIdleExpireSoon')}}</p>
+                                     <p>{{trans('langIdleStayLoggedIn')}}</p>
+                                </div>
+                                <div class="modal-footer">
+                                     <button type="button" class="btn btn-primary" id="extendSessionBtn">{{trans('langIdleExtendSession')}}</button>
+                                </div>
+                                </div>
+                           </div>
+                      </div>
+                 `;
+
+                document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+                function resetTimers() {
+                    if (isWarningVisible) return;
+                    clearTimeout(warningTimeout);
+                    clearTimeout(logoutTimeout);
+                    warningTimeout = setTimeout(showWarning, WARNING_TIME);
+                }
+
+                function showWarning() {
+                    isWarningVisible = true;
+
+                    if (typeof $ !== 'undefined' && $.fn.modal) {
+                        $('#idleWarningModal').modal('show');
+                    } else {
+                        const modalEl = document.getElementById('idleWarningModal');
+                        if (modalEl) {
+                            modalEl.style.display = 'block';
+                            modalEl.classList.add('show');
+                            document.body.classList.add('modal-open');
+                            modalEl.style.backgroundColor = 'rgba(0,0,0,0.5)';
+                        }
+                    }
+
+                    logoutTimeout = setTimeout(forceLogout, LOGOUT_TIME);
+                }
+
+                function forceLogout() {
+                    const formData = new FormData();
+                    formData.append('token', sessionToken);
+                    formData.append('submit', '1');
+                    fetch(LOGOUT_URL, {
+                        method: 'POST',
+                        body: formData
+                    }).then(() => {
+                        window.location.href = baseUrl;
+                    }).catch(() => {
+                        window.location.href = LOGOUT_URL;
+                    });
+                }
+
+                document.getElementById('extendSessionBtn').addEventListener('click', function() {
+                    isWarningVisible = false;
+
+                    if (typeof $ !== 'undefined' && $.fn.modal) {
+                        $('#idleWarningModal').modal('hide');
+                    } else {
+                        const modalEl = document.getElementById('idleWarningModal');
+                        if (modalEl) {
+                            modalEl.style.display = 'none';
+                            modalEl.classList.remove('show');
+                            document.body.classList.remove('modal-open');
+                        }
+                    }
+                    fetch(baseUrl + 'main/portfolio.php', { method: 'HEAD', cache: 'no-store' });
+                    lastActivity = Date.now();
+                    resetTimers();
+                });
+                function onUserActivity() {
+                    const now = Date.now();
+                    if (now - lastActivity > THROTTLE_WAIT) {
+                        lastActivity = now;
+                        resetTimers();
+                    }
+                };
+                const events = ['mousedown', 'keydown', 'touchstart', 'wheel'];
+                events.forEach(event => {
+                    document.addEventListener(event, onUserActivity, { passive: true });
+                });
+                resetTimers();
+            })();
+        </script>
+    @endif
  </body>
 </html>

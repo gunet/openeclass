@@ -85,19 +85,19 @@
                     <div class='col-lg-8 col-12 m-auto border-bottom-footer-text mb-3'></div>
                 @endif
                 <nav class='col-12 d-flex justify-content-between align-items-center'>
-                    <ul class="container-items-footer nav">
+                    <ul class="container-items-footer nav" role="navigation" aria-label="{{ trans('langBreadcrumb') }}">
                         @if (!get_config('dont_display_about_menu'))
-                            <li class="nav-item"><a class="nav-link menu-item a_tools_site_footer ps-2 pe-3" href="{{ $urlAppend }}info/about.php"  @if($_SESSION['provider'] == 'lti_publish') target="_blank" @endif aria-label="{{ trans('langPlatformIdentity') }}">{{ trans('langPlatformIdentity') }}</a></li>
+                            <li class="nav-item" aria-label="{{ trans('langPlatformIdentity') }}"><a class="nav-link menu-item a_tools_site_footer ps-2 pe-3" href="{{ $urlAppend }}info/about.php"  @if($_SESSION['provider'] == 'lti_publish') target="_blank" @endif aria-label="{{ trans('langPlatformIdentity') }}">{{ trans('langPlatformIdentity') }}</a></li>
                         @endif
                         @if (!get_config('dont_display_contact_menu'))
-                            <li class="nav-item"><a class="nav-link menu-item a_tools_site_footer px-3" href="{{ $urlAppend }}info/contact.php"  @if($_SESSION['provider'] == 'lti_publish') target="_blank" @endif aria-label="{{ trans('langContact') }}">{{ trans('langContact') }}</a></li>
+                            <li class="nav-item" aria-label="{{ trans('langContact') }}"><a class="nav-link menu-item a_tools_site_footer px-3" href="{{ $urlAppend }}info/contact.php"  @if($_SESSION['provider'] == 'lti_publish') target="_blank" @endif aria-label="{{ trans('langContact') }}">{{ trans('langContact') }}</a></li>
                         @endif
                         @if (!get_config('dont_display_manual_menu'))
-                            <li class="nav-item"><a class="nav-link menu-item a_tools_site_footer px-3" href="{{ $urlAppend }}info/manual.php"  @if($_SESSION['provider'] == 'lti_publish') target="_blank" @endif aria-label="{{ trans('langManuals') }}">{{ trans('langManuals') }}</a></li>
+                            <li class="nav-item" aria-label="{{ trans('langManuals') }}"><a class="nav-link menu-item a_tools_site_footer px-3" href="{{ $urlAppend }}info/manual.php"  @if($_SESSION['provider'] == 'lti_publish') target="_blank" @endif aria-label="{{ trans('langManuals') }}">{{ trans('langManuals') }}</a></li>
                         @endif
                         <li class="nav-item"><a class="nav-link menu-item a_tools_site_footer px-3" href="{{ $urlAppend }}info/terms.php"  @if($_SESSION['provider'] == 'lti_publish') target="_blank" @endif aria-label="{{ trans('langUsageTerms') }}">{{ trans('langUsageTerms') }}</a></li>
                         @if (get_config('activate_privacy_policy_text'))
-                            <li class="nav-item"><a class="nav-link menu-item a_tools_site_footer px-3" href="{{ $urlAppend }}info/privacy_policy.php"  @if($_SESSION['provider'] == 'lti_publish') target="_blank" @endif aria-label="{{ trans('langPrivacyPolicy') }}">{{ trans('langPrivacyPolicy') }}</a>
+                            <li class="nav-item" aria-label="{{ trans('langPrivacyPolicy') }}"><a class="nav-link menu-item a_tools_site_footer px-3" href="{{ $urlAppend }}info/privacy_policy.php"  @if($_SESSION['provider'] == 'lti_publish') target="_blank" @endif aria-label="{{ trans('langPrivacyPolicy') }}">{{ trans('langPrivacyPolicy') }}</a>
                         @endif
                     </ul>
                     <div class='d-flex justify-content-start align-items-center'>

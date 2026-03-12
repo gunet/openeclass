@@ -4,7 +4,7 @@ require_once 'PointsGame.php';
 require_once 'Game.php';
 
 function course_points_game_widget($uid, $course_id) {
-    global $is_editor, $is_course_admin, $urlAppend, $course_code;
+    global $is_editor, $is_course_admin, $urlAppend, $course_code, $langPointsGames, $langPoints, $langStart, $langToNextLevel;
 
     if (!$uid || $is_editor || $is_course_admin || $_SESSION['status'] != USER_STUDENT) {
         return '';
@@ -32,32 +32,24 @@ function course_points_game_widget($uid, $course_id) {
         $total_points = $info['current_points'];
         $percent = isset($info['progress_percentage']) ? round($info['progress_percentage']) : 0;
         
-        // Get current level name
-        $current_level = 'Level 1';
-        
         // If user has reached a level, use that
         if (isset($info['current_level_title']) && !empty($info['current_level_title'])) {
             $current_level = $info['current_level_title'];
-        } 
-        // If no level yet, get the first level name
-        else {
-            $first_level = Database::get()->querySingle("
-                SELECT friendly_name 
-                FROM points_game_levels 
-                WHERE points_game = ?d
-                ORDER BY required_points ASC 
-                LIMIT 1
-            ", $game->id);
-            
-            if ($first_level && !empty($first_level->friendly_name)) {
-                $current_level = $first_level->friendly_name;
-            }
+        } else {
+            $current_level = $langStart;
+        }
+
+        if (!is_null($info['next_level_id'])) {
+            $next_level = $langToNextLevel;
+        } else {
+            $next_level = '';
         }
 
         $games_data[] = [
             'title' => $game->title,
             'points' => $total_points,
             'level' => $current_level,
+            'next_level' => $next_level,
             'percent' => $percent
         ];
     }
@@ -65,7 +57,7 @@ function course_points_game_widget($uid, $course_id) {
     $html = "
     <div class='card panelCard card-transparent border-0 mt-5 sticky-column-course-home'>
         <div class='card-header card-header-default px-0 py-0 border-0 d-flex justify-content-between align-items-center'>
-            <h3 class='mb-0'>Πόντοι Παιχνιδιών</h3>
+            <h3 class='mb-0'>$langPointsGames</h3>
             <a class='TextRegular text-decoration-underline vsmall-text' href='{$urlAppend}modules/progress/index.php?course={$course_code}&tab=points'>Όλες...</a>
         </div>
         <div class='card-body card-body-default px-0 py-0 mt-3'>
@@ -94,15 +86,16 @@ function course_points_game_widget($uid, $course_id) {
                         <div class='badge-circle'>
                             <i class='fa-solid fa-star'></i>
                         </div>
+                        ".$game['level']."
                     </div>
                     <div class='points-col'>
                         <div class='points-num'>{$game['points']}</div>
-                        <div class='points-txt'>πόντοι</div>
+                        <div class='points-txt'>$langPoints</div>
                     </div>
                     <div class='progress-col'>
                         <div class='progress-label'>ολοκλήρωση</div>
                         <div class='progress-percent'>{$game['percent']}%</div>
-                        <div class='progress-level'>του " . htmlspecialchars($game['level']) . "</div>
+                        <div class='progress-level'>$next_level</div>
                     </div>
                 </div>
             </div>";

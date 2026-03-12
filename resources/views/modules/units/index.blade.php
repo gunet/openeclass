@@ -104,6 +104,11 @@
                                         'icon' => 'fa-regular fa-comment-dots',
                                         'level' => 'secondary',
                                         'show' => !is_module_disable(MODULE_ID_CHAT)),
+                                    array('title' => trans('langAdd') . ' ' . trans('langInsertBlog'),
+                                        'url' => $insertBaseUrl . 'blog',
+                                        'icon' => 'fa-solid fa-globe',
+                                        'level' => 'secondary',
+                                        'show' => !is_module_disable(MODULE_ID_BLOG)),
                                     array('title' => trans('langAdd') . ' ' . trans('langInsertTcMeeting'),
                                         'url' => $insertBaseUrl . 'tc',
                                         'icon' => 'fa fa-exchange',
@@ -136,9 +141,11 @@
                                                 <summary><h3 class='mb-0'>{{ trans('langDisplayAllUnits')}}</h3></summary>
                                                 <ul>
                                                     @foreach ($units as $cu)
-                                                        <li {{ $cu->id == $id ? "class=active-unit" : "" }}>
-                                                            <a class='TextBold{{ $cu->id != $id ? "" : " Success-200-cl" }}' href='{{ $urlServer }}modules/units/index.php?course={{ $course_code }}&amp;id={{ $cu->id }}' @if($cu->id == $id) aria-current="{{ $cu->title }}" @endif>
-                                                                {{ $cu->title }}
+                                                        <li @class([
+                                                            'active-unit' => $cu->id == $id,
+                                                            'disable-branch' => $cu->visible >= 2
+                                                        ])>
+                                                            <a class="TextBold{{ $cu->id == $id ? ' Success-200-cl' : '' }}{{ $cu->visible >= 2 ? ' disabled' : '' }}" @if($cu->visible < 2) href="{{ $urlServer }}modules/units/index.php?course={{ $course_code }}&amp;id={{ $cu->id }}" @endif @if($cu->id == $id) aria-current="{{ $cu->title }}" @endif @if($cu->visible >= 2) style="pointer-events: none; cursor: default; opacity: 0.6;" @endif>                                                                {{ $cu->title }}
                                                             </a>
                                                             <br>
                                                             @if (!is_null($cu->start_week))
@@ -223,7 +230,7 @@
                                         <label class='control-label-notes' for='id' style="min-width: 130px;"></span>&nbsp;{{ trans('langGoTo') }}:</label>
                                         <select name='id' id='id' class='form-select' onchange='document.unitselect.submit()'>
                                             @foreach ($units as $unit)
-                                                <option value='{{ $unit->id }}' {{ $unit->id == $unitId ? 'selected' : '' }}>
+                                                <option value='{{ $unit->id }}' {{ $unit->id == $unitId ? 'selected' : '' }} {{ $unit->visible >= 2 ? 'disabled' : '' }}>
                                                     {{ ellipsize($unit->title, 50) }}
                                                 </option>
                                             @endforeach
@@ -509,7 +516,7 @@
                           <div class="modal-dialog modal-lg modal-dialog-centered">\
                             <div class="modal-content">\
                               <div class="modal-header">\
-                                <h5 class="modal-title"></h5>\
+                                <h2 class="modal-title"></h2>\
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>\
                               </div>\
                               <div class="modal-body"></div>\

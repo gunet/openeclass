@@ -24,8 +24,10 @@ $require_help = true;
 $helpTopic = 'questionnaire';
 
 require_once '../../include/baseTheme.php';
+require_once 'include/course_settings.php';
 require_once 'functions.php';
 require_once 'modules/usage/usage.lib.php';
+require_once 'modules/session/functions.php';
 
 $head_content .= "
 <link rel='stylesheet' type='text/css' href='{$urlAppend}js/c3-0.7.20/c3.css' />";
@@ -39,6 +41,9 @@ $pageName = $langPollCharts;
 $sID = 0;
 if (isset($_GET['from_session_view'])) {
     $sID = $_GET['session'] ?? 0;
+    if (isset($_GET['session'])) {
+        check_user_belongs_in_session($_GET['session']);
+    }
     if ($is_consultant) {
         $is_course_reviewer = true;
     }
@@ -204,22 +209,19 @@ if (isset($_GET['from_session_view'])) {
                         'url' => "$back_link",
                         'icon' => 'fa-reply',
                         'level' => 'primary',
-                        'show' => isset($_REQUEST['unit_id'])
-                    ),
+                        'show' => isset($_REQUEST['unit_id'])),
                     array(
                         'title' => $langBack,
                         'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;pid=$pid",
                         'icon' => 'fa-reply',
                         'level' => 'primary',
-                        'show' => isset($_GET['chart'])
-                    ),
+                        'show' => isset($_GET['chart'])),
                     array(
                         'title' => $langBack,
                         'url' => "pollresults_per_user.php?course=$course_code&amp;pid=$pid",
                         'icon' => 'fa-reply',
                         'level' => 'primary',
-                        'show' => isset($_GET['res_per_u'])
-                    ),
+                        'show' => isset($_GET['res_per_u']) && !$thePoll->anonymized),
                     array('title' => "$langCharts",
                           'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;pid=$pid&amp;chart=true",
                           'icon' => 'fa-solid fa-chart-area',
@@ -229,7 +231,7 @@ if (isset($_GET['from_session_view'])) {
                           'url' => "pollresults_per_user.php?course=$course_code&amp;pid=$pid",
                           'icon' => 'fa-address-card',
                           'level' => 'primary-label',
-                          'show' => !isset($_GET['chart']) && !isset($_GET['res_per_u']) && $is_editor),
+                          'show' => !isset($_GET['chart']) && !isset($_GET['res_per_u']) && !$thePoll->anonymized && $is_editor),
                     array('title' => "$langPollPercentResults ($langDumpExcel)",
                           'url' => "dumppollresults.php?course=$course_code&amp;pid=$pid$res_per_user",
                           'icon' => 'fa-file-excel',
@@ -249,84 +251,126 @@ if (isset($_GET['from_session_view'])) {
 }
 $tool_content .= $action_bar;
 
+$arrParticipants = poll_user_participation();
+$Participated = $arrParticipants['total_participants'];
+$NoParticipated = $arrParticipants['total_users'] - $arrParticipants['total_participants'];
+
+$head_content .= "
+<script src='{$urlAppend}js/chart/chart.js'></script>
+<script type = 'text/javascript'>
+    $(document).ready(function(){
+        // Get context of the canvas element
+        const ctx = document.getElementById('PollPieChart').getContext('2d');
+
+        // Create the pie chart
+        const myPieChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+                labels: ['$langPollUsersParticipation', '$langPollNoUsersParticipation'],
+                datasets: [{
+                    data: [$Participated, $NoParticipated],
+                    backgroundColor: [
+                        'rgba(61, 183, 126, 0.6)', // Color for Option A
+                        'rgba(255, 99, 132, 0.6)' // Color for Option B
+                    ],
+                    borderColor: [
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(255, 99, 132, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+    });
+</script>";
+
 $tool_content .= "<div class='col-12'>
-<div class='card panelCard border-card-left-default px-lg-4 py-lg-3'>
+<div class='card panelCard px-lg-4 py-lg-3'>
     <div class='card-header border-0 d-flex justify-content-between align-items-center'>
         <h3>$langInfoPoll</h3>
-
     </div>
     <div class='card-body'>
-        <ul class='list-group list-group-flush'>
-            <li class='list-group-item element'>
-                <div class='row row-cols-1 row-cols-md-2 g-1'>
-                    <div class='col-md-3 col-12'>
-                        <div class='title-default'>$langTitle</div>
-                    </div>
-                    <div class='col-md-9 col-12 title-default-line-height'>
-                        " . q_math($thePoll->name) . "
-                    </div>
-                </div>
-            </li>
-
-            <li class='list-group-item element $hidden_elements'>
-                <div class='row row-cols-1 row-cols-md-2 g-1'>
-                    <div class='col-md-3 col-12'>
-                        <div class='title-default'>$langPollCreation</div>
-                    </div>
-                    <div class='col-md-9 col-12 title-default-line-height'>
-                        " . format_locale_date(strtotime($thePoll->creation_date)) . "
-                    </div>
-                </div>
-            </li>
-
-            <li class='list-group-item element $hidden_elements'>
-                <div class='row row-cols-1 row-cols-md-2 g-1'>
-                    <div class='col-md-3 col-12'>
-                        <div class='title-default'>$langStart</div>
-                    </div>
-                    <div class='col-md-9 col-12 title-default-line-height'>
-                        " . format_locale_date(strtotime($thePoll->start_date)) . "
-                    </div>
-                </div>
-            </li>
-
-            <li class='list-group-item element $hidden_elements'>
-                <div class='row row-cols-1 row-cols-md-2 g-1'>
-                    <div class='col-md-3 col-12'>
-                        <div class='title-default'>$langPollEnd</div>
-                    </div>
-                    <div class='col-md-9 col-12 title-default-line-height'>
-                        " . format_locale_date(strtotime($thePoll->end_date)) . "
-                    </div>
-                </div>
-            </li>
-
-            <li class='list-group-item element $hidden_elements'>
-                <div class='row row-cols-1 row-cols-md-2 g-1'>
-                    <div class='col-md-3 col-12'>
-                        <div class='title-default'>$langPollTotalAnswers:</div>
-                    </div>
-                    <div class='col-md-9 col-12 title-default-line-height'>
-                        $total_participants
-                    </div>
-                </div>
-            </li>";
-            if ($sID > 0) {
-                $tool_content .= "
-                    <li class='list-group-item element $hidden_elements'>
+        <div class='col-12 d-flex justify-content-center justify-content-md-start align-items-start gap-3 flex-wrap'>
+            <div>
+                <canvas width='250' height='250' id='PollPieChart'></canvas>
+            </div>
+            <div class='flex-fill'>
+                <ul class='list-group list-group-flush'>
+                    <li class='list-group-item element'>
                         <div class='row row-cols-1 row-cols-md-2 g-1'>
                             <div class='col-md-3 col-12'>
-                                <div class='title-default'>$langSSession:</div>
+                                <div class='title-default'>$langTitle</div>
                             </div>
                             <div class='col-md-9 col-12 title-default-line-height'>
-                                $session_title
+                                " . q_math($thePoll->name) . "
                             </div>
                         </div>
                     </li>
-                ";
-            }
-$tool_content .= "
-        </ul>
+                    <li class='list-group-item element $hidden_elements'>
+                        <div class='row row-cols-1 row-cols-md-2 g-1'>
+                            <div class='col-md-3 col-12'>
+                                <div class='title-default'>$langPollCreation</div>
+                            </div>
+                            <div class='col-md-9 col-12 title-default-line-height'>
+                                " . format_locale_date(strtotime($thePoll->creation_date)) . "
+                            </div>
+                        </div>
+                    </li>
+                    <li class='list-group-item element $hidden_elements'>
+                        <div class='row row-cols-1 row-cols-md-2 g-1'>
+                            <div class='col-md-3 col-12'>
+                                <div class='title-default'>$langStart</div>
+                            </div>
+                            <div class='col-md-9 col-12 title-default-line-height'>
+                                " . format_locale_date(strtotime($thePoll->start_date)) . "
+                            </div>
+                        </div>
+                    </li>
+                    <li class='list-group-item element $hidden_elements'>
+                        <div class='row row-cols-1 row-cols-md-2 g-1'>
+                            <div class='col-md-3 col-12'>
+                                <div class='title-default'>$langPollEnd</div>
+                            </div>
+                            <div class='col-md-9 col-12 title-default-line-height'>
+                                " . format_locale_date(strtotime($thePoll->end_date)) . "
+                            </div>
+                        </div>
+                    </li>
+                    <li class='list-group-item element pollTotalAnswers $hidden_elements'>
+                        <div class='row row-cols-1 row-cols-md-2 g-1'>
+                            <div class='col-md-3 col-12'>
+                                <div class='title-default'>$langPollTotalAnswers:</div>
+                            </div>
+                            <div class='col-md-9 col-12 title-default-line-height'>
+                                $total_participants
+                            </div>
+                        </div>
+                    </li>";
+                    if ($sID > 0) {
+                        $tool_content .= "
+                            <li class='list-group-item element $hidden_elements'>
+                                <div class='row row-cols-1 row-cols-md-2 g-1'>
+                                    <div class='col-md-3 col-12'>
+                                        <div class='title-default'>$langSSession:</div>
+                                    </div>
+                                    <div class='col-md-9 col-12 title-default-line-height'>
+                                        $session_title
+                                    </div>
+                                </div>
+                            </li>";
+                    }
+        $tool_content .= "
+                </ul>
+            </div>
+        </div>
     </div>
 </div>
 </div>";
@@ -524,9 +568,12 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COU
 
             $tool_content .= "
             <div class='col-12 mt-4'>
-                <div class='card panelCard card-default px-lg-4 py-lg-3'>
+                <div class='card panelCard card-default card-poll-results poll-border-left border-0 px-lg-4 py-lg-3'>
                     <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                        <h3>$langQuestion $theQuestion->qnumber</h3>
+                        <h3 class='d-flex justify-content-start align-items-start gap-2'>
+                            <strong class='fs-6 text-nowrap'>$theQuestion->qnumber)</strong>
+                            <strong class='fs-6'>$theQuestion->question_text</strong>
+                        </h3>
                     </div>
                     <div class='card-body'>";
                         if ($theQuestion->qtype == QTYPE_MULTIPLE || $theQuestion->qtype == QTYPE_SINGLE) {
@@ -579,8 +626,7 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COU
                                                                                     AND qid = ?d",  $args_array, $theQuestion->pqid)->total;
 
                             $answers_table = "
-                                <p>$theQuestion->question_text</p>
-                                <div class='table-responsive'><table class='table-default'>
+                                <div class='table-responsive mt-0'><table class='table-default table-poll-results'>
                                     <thead><tr class='list-header'>
                                         <th>$langAnswer</th>";  
                                         if (($totalUserAnswer > 1 && isset($_GET['from_session_view'])) or (!isset($_GET['from_session_view']))) {
@@ -647,12 +693,20 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COU
                                             <td>$q_answer</td>";
                                             if (($totalUserAnswer > 1 && isset($_GET['from_session_view'])) or (!isset($_GET['from_session_view']))) {
                                                 $answers_table .= "<td>$answer->count</td>";
-                                                $answers_table .= "<td>$percentage%</td>";
+                                                $answers_table .= "
+                                                <td style='width:25%;'>
+                                                    <div class='progress'>
+                                                        <div class='progress-bar progress-bar-striped progress-bar-poll-results' role='progressbar' style='width: $percentage%;' aria-valuenow='$percentage' aria-valuemin='0' aria-valuemax='100'>
+                                                        $percentage%
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                ";
                                                 if ($theQuestion->require_grade && $theQuestion->has_sub_question != -1) {
-                                                    $answers_table .= "<td>$answer->wgt</td>";
+                                                    $answers_table .= "<td><span class='level-badge'><i class='fa fa-star' style='color:#f59e0b;'></i>$answer->wgt</span></td>";
                                                 }
                                                 if (!$thePoll->anonymized) {
-                                                    $answers_table .= "<td>" . $ellipsized_names_str;
+                                                    $answers_table .= "<td>" . ((isset($_GET['format']) && $_GET['format'] == 'poll_pdf') ? $names_str : $ellipsized_names_str);
                                                     if ($ellipsized_names_str != $names_str) {
                                                         $answers_table .= ' <a href="#" class="trigger_names" data-type="multiple" id="show">' . $langViewShow . '</a>';
                                                     }
@@ -670,7 +724,7 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COU
                                 $tool_content .= "<script type = 'text/javascript'>pollChartData.push(".json_encode($this_chart_data).");</script>";
                                 $tool_content .= "<div class='row plotscontainer mb-4'>";
                                 $tool_content .= "<div class='col-lg-12'>";
-                                $tool_content .= plot_placeholder("poll_chart$chart_counter", q_math($theQuestion->question_text));
+                                $tool_content .= plot_placeholder("poll_chart$chart_counter", '');
                                 $tool_content .= "</div></div>";
                                 $chart_counter++;
                             } else {
@@ -731,8 +785,7 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COU
                                                                                     AND qid = ?d", $args_array, $theQuestion->pqid)->total;
 
                             $answers_table = "
-                                <p>$theQuestion->question_text</p>
-                                <div class='table-responsive'><table class='table-default'>
+                                <div class='table-responsive mt-0'><table class='table-default table-poll-results'>
                                         <thead>
                                             <tr class='list-header'>
                                                 <th>$langAnswer</th>";
@@ -783,10 +836,16 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COU
                                                 <td>" . $arrAnsScale[$answer->answer_text-1] ?? q($answer->answer_text) . "</td>";
                                         if (($totalUserAnswer > 1 && isset($_GET['from_session_view'])) or (!isset($_GET['from_session_view']))) {
                             $answers_table .= " <td>$answer->count</td>
-                                                <td>$percentage%</td>"
+                                                <td style='width:25%;'>
+                                                    <div class='progress'>
+                                                        <div class='progress-bar progress-bar-striped progress-bar-poll-results' role='progressbar' style='width: $percentage%;' aria-valuenow='$percentage' aria-valuemin='0' aria-valuemax='100'>
+                                                        $percentage%
+                                                        </div>
+                                                    </div>
+                                                </td>"
                                             . (($thePoll->anonymized == 1) ?
                                                 '' :
-                                                '<td>'.$ellipsized_names_str.
+                                                '<td>'.((isset($_GET['format']) && $_GET['format'] == 'poll_pdf') ? $names_str : $ellipsized_names_str).
                                                 (($ellipsized_names_str != $names_str)? ' <a href="#" class="trigger_names" data-type="multiple" id="show">'.$langViewShow.'</a>' : '').
                                                 '</td>
                                                 <td class="hidden_names" style="display:none;"><em>'
@@ -804,7 +863,7 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COU
                                 $tool_content .= "<script type = 'text/javascript'>pollChartData.push(".json_encode($this_chart_data).");</script>";
                                 $tool_content .= "<div class='row plotscontainer mb-4'>";
                                 $tool_content .= "<div class='col-lg-12'>";
-                                $tool_content .= plot_placeholder("poll_chart$chart_counter", q($theQuestion->question_text));
+                                $tool_content .= plot_placeholder("poll_chart$chart_counter", '');
                                 $tool_content .= "</div></div>";
                                 $chart_counter++;
                             } else {
@@ -847,7 +906,7 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COU
                                                         $sql_participants_d
                                                         AND (b.email_verification = 1 OR b.email_verification IS NULL)
                                                         GROUP BY a.answer_text, b.uid ORDER BY MIN(a.submit_date) DESC", $theQuestion->pqid, $args_array, $args_array_d);
-                            $answers_table = "<p>$theQuestion->question_text</p><div class='table-responsive'><table class='table-default'>
+                            $answers_table = "<div class='table-responsive mt-0'><table class='table-default table-poll-results'>
                                     <tbody>
                                     <tr class='list-header'>
                                             <th>$langAnswer</th>
@@ -887,7 +946,7 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COU
                                 $row_class = ($k>3) ? 'class="hidden_row" style="display:none;"' : '';
                                 $extra_column = (!$thePoll->anonymized)?
                                     "<td>"
-                                    . $ellipsized_names_str
+                                    . ((isset($_GET['format']) && $_GET['format'] == 'poll_pdf') ? $names_str : $ellipsized_names_str)
                                     . (($ellipsized_names_str != $names_str) ? ' <a href="#" class="trigger_names" data-type="multiple" id="show">'.$langViewShow.'</a>' : '').
                                     "</td>
                                         <td class='hidden_names' style='display:none;'><em>"
@@ -945,8 +1004,6 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COU
                             // $tool_content .= "<div class='panel-body'>
                             //                     <div class='inner-heading'><strong>$theQuestion->question_text</strong></div>
                             //                 </div>";
-
-                            $tool_content .= "<p class='mb-4'>$theQuestion->question_text</p>";
 
                             $sql_participants_d = '';
                             if (isset($_GET['res_per_u'])) {
@@ -1092,6 +1149,7 @@ function pdf_poll_output() {
             td { text-align: left; }
             .ButtonsContent{ display: none; }
             .hidden_names{ display: none; }
+            .trigger_names{display: none;}
             #hide{ display: none; }
             em{ display: none; }
             .hidden-element { display: none; }
@@ -1113,9 +1171,11 @@ function pdf_poll_output() {
     $defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
     $fontData = $defaultFontConfig['fontdata'];
 
+    $image_height_header = setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_WIDTH, $course_id);
+    $image_height_footer = setting_get(SETTING_COURSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id);
     $mpdf = new Mpdf\Mpdf([
-        'margin_top' => 63,     // approx 200px
-        'margin_bottom' => 63,  // approx 200px
+        'margin_top' => $image_height_header+15,     // mm
+        'margin_bottom' => $image_height_footer+15,  // mm
         'tempDir' => _MPDF_TEMP_PATH,
         'fontDir' => array_merge($fontDirs, [ $webDir . '/template/modern/fonts' ]),
         'fontdata' => $fontData + [
@@ -1177,11 +1237,14 @@ function pdf_session_poll_output($sid) {
             h3 { font-size: 10pt; color: #158; border-bottom: 1px solid #158; }
             th { text-align: left; border-bottom: 1px solid #999; }
             td { text-align: left; }
+            .card-poll-results {border-left: 4px solid rgb(255, 255, 255) !important;}
+            table {min-width:100% !important;}
             .ButtonsContent{ display: none; }
             .hidden_names{ display: none; }
             #hide{ display: none; }
             em{ display: none; }
             .hidden-element { display: none; }
+            .pollTotalAnswers{ display: block;}
             td ul { list-style: none !important; padding-left: 0 !important; margin-left: 0 !important; }
             ul { list-style: none !important; padding-left: 0 !important; margin-left: 0 !important; }
             li { list-style: none !important; }
@@ -1262,4 +1325,63 @@ function total_number_of_users_answer_per_question($qid) {
     }
 
     return $total;
+}
+
+function poll_user_participation() {
+    global $course_id;
+
+    $poll = Database::get()->querySingle('SELECT * FROM poll WHERE course_id = ?d AND pid = ?d', $course_id, $_GET['pid']);
+    $allUsers = [];
+
+    $sid = $_GET['session'] ?? 0;
+
+    if ($poll->assign_to_specific) {
+        $assign = Database::get()->queryArray('SELECT * FROM poll_to_specific
+            WHERE poll_id = ?d', $poll->pid);
+        foreach ($assign as $item) {
+            if ($item->user_id) {
+                $allUsers[] = $item->user_id;
+            } elseif ($item->group_id) {
+                $group_members = Database::get()->queryArray('SELECT user_id
+                    FROM group_members WHERE is_tutor = 0 AND group_id = ?d',
+                    $item->group_id);
+                foreach ($group_members as $member) {
+                    $allUsers[] = $member->user_id;
+                }
+            }
+        }
+    } else {
+        $allUsers = Database::get()->queryArray('SELECT user_id FROM course_user
+            WHERE course_id = ?d AND editor = 0 AND status = ' . USER_STUDENT,
+            $course_id);
+        $allUsers = array_map(function ($user) {
+            return $user->user_id;
+        }, $allUsers);
+    }
+
+    $polledUsers = Database::get()->queryArray('SELECT id, uid, email, email_verification FROM poll_user_record WHERE pid = ?d AND session_id = ?d', $poll->pid, $sid);
+    $okUsers = [];
+    $emailUsers = [];
+    $timestamp = [];
+    foreach ($polledUsers as $user) {
+        $ts = Database::get()->querySingle('SELECT submit_date
+                FROM poll_answer_record WHERE poll_user_record_id = ?d LIMIT 1',
+                $user->id)->submit_date;
+        if ($user->uid) {
+            $okUsers[] = $user->uid;
+            $timestamp[$user->uid] = $ts;
+        } elseif ($user->email_verification) {
+            $emailUsers[] = $user->email;
+            $timestamp[$user->email] = $ts;
+        }
+    }
+
+    $allUsers = array_unique(array_merge($allUsers, $okUsers));
+
+    if (isset($_GET['from_session_view'])) {
+        $totalSessionParticipants = Database::get()->querySingle("SELECT COUNT(*) as total FROM mod_session_users
+                                                                    WHERE session_id = ?d AND is_accepted = ?d", $sid, 1)->total;
+    }
+
+    return $arr = ['total_users' => $totalSessionParticipants ?? count($allUsers), 'total_participants' => count($polledUsers)];
 }

@@ -404,7 +404,7 @@ function initialize_lesson_display (pages) {
           placeholder: msg.langSearch + '...'
         });
         $('#portfolio_lessons_wrapper .dt-search label').attr('aria-label', msg.langSearch);
-        $('#portfolio_lessons_wrapper .dt-search label').prepend("<span class='sr-only'>" + msg.langSearch + "</span>")
+        $('#portfolio_lessons_wrapper .dt-search label').prepend("<span class='visually-hidden'>" + msg.langSearch + "</span>")
       },
       "initComplete": build_notification_callback('lesson'),
       "dom": "<'all_courses float-end px-0'>frtip",
@@ -421,7 +421,7 @@ function initialize_lesson_display (pages) {
           placeholder: msg.langSearch + '...'
         });
         $('#portfolio_collaborations_wrapper .dt-search label').attr('aria-label', msg.langSearch);
-        $('#portfolio_collaborations_wrapper .dt-search label').prepend("<span class='sr-only'>" + msg.langSearch + "</span>")
+        $('#portfolio_collaborations_wrapper .dt-search label').prepend("<span class='visually-hidden'>" + msg.langSearch + "</span>")
       },
       "initComplete": build_notification_callback('collaboration'),
       "dom": msg.dataTablesDomParam,

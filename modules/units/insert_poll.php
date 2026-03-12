@@ -23,7 +23,7 @@
  */
 function list_polls() {
 
-    global $course_id, $course_code, $urlServer, $tool_content, $id,
+    global $course_id, $course_code, $urlServer, $tool_content, $id, $langCancel,
             $langPollNone, $langQuestionnaire, $langChoice, $langAddModulesButton, $langSelect;
 
     $result = Database::get()->queryArray("SELECT * FROM poll WHERE course_id = ?d AND active = 1", $course_id);
@@ -52,12 +52,14 @@ function list_polls() {
                 $description_text = '';
             }
             $tool_content .= "<tr>";
-            $tool_content .= "<td><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='poll[]' value='$entry[id]'><span class='checkmark'></span></label></td>";
+            $tool_content .= "<td><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='poll[]' value='$entry[id]'><span class='checkmark'></span></td>";
             $tool_content .= "<td><a href='{$urlServer}modules/questionnaire/pollresults.php?course=$course_code&amp;pid=$entry[id]'>" . q($entry['title']) . "</a>$description_text</td>";
             $tool_content .= "</tr>";
         }
         $tool_content .= "</table></div>";
         $tool_content .= "<div class='d-flex justify-content-start mt-4'>";
-        $tool_content .= "<input class='btn submitAdminBtn' type='submit' name='submit_poll' value='$langAddModulesButton'></div></form>";
+        $tool_content .= "<input class='btn submitAdminBtn' type='submit' name='submit_poll' value='$langAddModulesButton'>";
+        $tool_content .= "<a href='index.php?course=$course_code&id=$id'><input class='btn cancelAdminBtn ms-2' value='$langCancel' /></a></div>";
+        $tool_content .= "</form>";
     }
 }

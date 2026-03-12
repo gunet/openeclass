@@ -205,6 +205,19 @@ function load_js($file, $init='') {
         } elseif ($file == 'bootstrap-combobox') {
             $head_content .= css_link('bootstrap-combobox/css/bootstrap-combobox.css');
             $file = 'bootstrap-combobox/js/bootstrap-combobox.js';
+        } elseif ($file == 'bootstrap-table') {
+            $head_content .= css_link('bootstrap-table/bootstrap-table.min.css');
+            if ($language != 'en') {
+                switch ($language) {
+                    case 'el': $file = 'bootstrap-table/locale/bootstrap-table-el-GR.min.js'; break;
+                    case 'fr': $file = 'bootstrap-table/locale/bootstrap-table-fr-FR.min.js'; break;
+                    case 'de': $file = 'bootstrap-table/locale/bootstrap-table-de-DE.min.js'; break;
+                    case 'it': $file = 'bootstrap-table/locale/bootstrap-table-it-IT.min.js'; break;
+                    case 'es': $file = 'bootstrap-table/locale/bootstrap-table-es-ES.min.js'; break;
+                    default: break;
+                }
+            }
+            $head_content .= js_link('bootstrap-table/bootstrap-table.min.js');
         } elseif ($file == 'spectrum') {
             $head_content .= css_link('spectrum/spectrum.css');
             $file = 'spectrum/spectrum.js';
@@ -1166,7 +1179,7 @@ function display_activation_link($module_id) {
     global $modules;
 
     $script = preg_replace('|.*/|', '', $_SERVER['SCRIPT_NAME']);
-    if (!defined('STATIC_MODULE') and $module_id and array_key_exists($module_id, $modules) and $script == 'index.php' and count($_GET) == 1 and isset($_GET['course']) and $_SERVER['REQUEST_METHOD'] == 'GET') {
+    if (!defined('STATIC_MODULE') and $module_id and array_key_exists($module_id, $modules) and $script == 'index.php' and (count($_GET) == 1 or ($module_id == MODULE_ID_PROGRESS and count($_GET) == 2 and isset($_GET['tab']))) and isset($_GET['course']) and $_SERVER['REQUEST_METHOD'] == 'GET') {
         return true;
     } else {
         return false;
@@ -2108,7 +2121,9 @@ function deleteUser($id, $log) {
             if (count($assignment_data) > 0) { // if assignments found
                 foreach ($assignment_data as $data) {
                     $courseid = Database::get()->querySingle("SELECT course_id FROM assignment WHERE id = $data->assignment_id")->course_id;
-                    unlink($webDir . "/courses/". course_id_to_code($courseid) . "/work/" . $data->file_path);
+                    if (isset($data->file_path)) {
+                        unlink($webDir . "/courses/". course_id_to_code($courseid) . "/work/" . $data->file_path);
+                    }
                 }
             }
             Database::get()->query("DELETE FROM user_badge_criterion WHERE user = ?d", $u);
@@ -2471,6 +2486,7 @@ tinymce.init({
         '{$urlAppend}template/modern/css/default.css',
     ],
     content_style: 'body { margin: 8px; background: none !important; color: $tinymce_color_text;  }',
+    fontsize_formats: '8pt 9pt 10pt 11pt 12pt 14pt 16pt 18pt 20pt 24pt 30pt 36pt',
     extended_valid_elements: 'span[*]',
     noneditable_noneditable_class: 'fa',
     language: '$language',
@@ -2893,7 +2909,7 @@ function icon($name, $title = null, $link = null, $link_attrs = '', $with_title 
         $extra = '';
     }
     if (isset($title) && $with_title) {
-        $img = $sr_only ? "<span class='fa $name' $extra></span><span class='sr-only'>$title</span>" : "<span class='fa $name' $extra></span> $title";
+        $img = $sr_only ? "<span class='fa $name' $extra></span><span class='visually-hidden'>$title</span>" : "<span class='fa $name' $extra></span> $title";
     } else {
         $img = "<span class='fa $name' $extra></span>";
     }
@@ -4862,22 +4878,22 @@ function get_platform_logo($size = 'normal', $position = 'header') {
     require_once 'include/course_settings.php';
 
     if ($position == 'footer') {
-        $footer_path = setting_get_print_image_disk_path(SETTING_COUSE_IMAGE_PRINT_FOOTER, $course_id);
+        $footer_path = setting_get_print_image_disk_path(SETTING_COURSE_IMAGE_PRINT_FOOTER, $course_id);
         if (!$footer_path) {
             return '';
         }
         $logo_img = imageToBase64($footer_path);
-        $image_align = setting_get(SETTING_COUSE_IMAGE_PRINT_FOOTER_ALIGNMENT, $course_id);
+        $image_align = setting_get(SETTING_COURSE_IMAGE_PRINT_FOOTER_ALIGNMENT, $course_id);
         $image_align = ($image_align == 0) ? 'left' : (($image_align == 1) ? 'center' : 'right');
-        $image_width = setting_get(SETTING_COUSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id);
+        $image_width = setting_get(SETTING_COURSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id);
         $bg_color = '#ffffff';
     } else {
-        $header_path = setting_get_print_image_disk_path(SETTING_COUSE_IMAGE_PRINT_HEADER, $course_id);
+        $header_path = setting_get_print_image_disk_path(SETTING_COURSE_IMAGE_PRINT_HEADER, $course_id);
         if ($header_path) {
             $logo_img = imageToBase64($header_path);
-            $image_align = setting_get(SETTING_COUSE_IMAGE_PRINT_HEADER_ALIGNMENT, $course_id);
+            $image_align = setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_ALIGNMENT, $course_id);
             $image_align = ($image_align == 0) ? 'left' : (($image_align == 1) ? 'center' : 'right');
-            $image_width = setting_get(SETTING_COUSE_IMAGE_PRINT_HEADER_WIDTH, $course_id);
+            $image_width = setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_WIDTH, $course_id);
             $bg_color = '#ffffff';
         } else {
             $logo_img = $themeimg . '/eclass-new-logo.svg';
@@ -4899,8 +4915,8 @@ function get_platform_logo($size = 'normal', $position = 'header') {
         }
     }
 
-    $logo = "<div style='clear: right; background-color: $bg_color; padding: 1rem; margin-bottom: 2rem; text-align: $image_align;'>
-                <img style='width: {$image_width}px;' src='$logo_img'>
+    $logo = "<div style='clear: right; background-color: $bg_color; padding: 1rem; text-align: $image_align;'>
+                <img style='height: {$image_width}mm;' src='$logo_img'>
             </div>";
 
     return $logo;
@@ -10515,6 +10531,9 @@ function theme_initialization() {
                     white-space: nowrap;
                     background-color: $theme_options_styles[BgColorProgressBarAndText];
                 }
+                .poll-border-left {
+                    border-left: solid 4px $theme_options_styles[BgColorProgressBarAndText] !important;
+                }
             ";
         }
 
@@ -12463,5 +12482,30 @@ function form_popovers($type, $message): string {
     }
 
     return $html;
+
+}
+
+/**
+ * Retrieve a specific style value from the theme options.
+ *
+ * This function fetches the theme options from the database for the current theme
+ * and retrieves the value of a specific style based on the provided style name.
+ *
+ * @param string $style_name The name of the style to retrieve.
+ *
+ * @global int $theme_id The ID of the current theme.
+ *
+ * @return mixed|null The value of the requested style if it exists, or null if not found.
+ */
+function get_style($style_name) {
+    global $theme_id;
+
+    $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
+
+    if ($theme_options) {
+        $theme_options_styles = unserialize($theme_options->styles);
+    }
+
+    return $theme_options_styles[$style_name] ?? null;
 
 }

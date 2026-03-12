@@ -74,12 +74,15 @@ if (isset($_POST['submit'])) {
     set_config('institution_url', $_POST['formInstitutionUrl']);
     set_config('account_duration', MONTHS * $_POST['formdurationAccount']);
     set_config('min_password_len', intval($_POST['min_password_len']));
+    set_config('idle_warning_time', intval($_POST['idle_warning_time']) * 60 * 1000);
+    set_config('idle_logout_time', intval($_POST['idle_logout_time']) * 60 * 1000);
     set_config('student_upload_whitelist', $_POST['student_upload_whitelist']);
     set_config('teacher_upload_whitelist', $_POST['teacher_upload_whitelist']);
     set_config('show_modal_openCourses', $_POST['show_modal_openCourses']);
     set_config('individual_group_bookings', $_POST['individual_group_bookings']);
     set_config('enable_quick_note', $_POST['enable_quick_note']);
     set_config('user_notifications', $_POST['user_notifications']);
+    set_config('enable_idle_detection', $_POST['enable_idle_detection']);
     if ($_POST['user_notifications'] == 2) {
         set_config('user_notifications_interval', $_POST['user_notifications_interval']);
     } else {
@@ -130,6 +133,7 @@ if (isset($_POST['submit'])) {
         'user_multidep' => true,
         'restrict_owndep' => true,
         'restrict_teacher_owndep' => true,
+        'allow_teacher_import_course' => true,
         'allow_teacher_clone_course' => true,
         'disable_cron_jobs' => true,
         'disable_log_actions' => true,
@@ -169,6 +173,7 @@ if (isset($_POST['submit'])) {
         'show_modal_openCourses' => true,
         'individual_group_bookings' => true,
         'enable_quick_note' => true,
+        'enable_idle_detection' => true,
         'user_notifications' => true,
         'default_course_access' => true,
         'enable_user_consent' => true
@@ -295,6 +300,7 @@ else {     // Display config.php edit form
     $data['cbox_restrict_owndep']  = get_config('restrict_owndep') ? 'checked' : '';
     $data['cbox_restrict_teacher_owndep']  = get_config('restrict_teacher_owndep') ? 'checked' : '';
     $data['cbox_allow_teacher_clone_course']  = get_config('allow_teacher_clone_course') ? 'checked' : '';
+    $data['cbox_allow_teacher_import_course']  = get_config('allow_teacher_import_course') ? 'checked' : '';
     $data['town_dis']  = get_config('restrict_owndep') ? '' : 'disabled';
     $data['cbox_insert_xml_metadata']  = get_config('insert_xml_metadata') ? 'checked' : '';
     $data['cbox_course_metadata']  = get_config('course_metadata') ? 'checked' : '';
@@ -349,6 +355,7 @@ else {     // Display config.php edit form
     $data['cbox_enable_quick_note'] = get_config('enable_quick_note') ? 'checked' : '';
     $data['cbox_user_consent'] = get_config('enable_user_consent') ? 'checked' : '';
     $data['default_course_access'] = intval(get_config('default_course_access', COURSE_REGISTRATION));
+    $data['cbox_idle_detection'] = get_config('enable_idle_detection') ? 'checked' : '';
 
     $user_notifications_interval = get_config('user_notifications_interval');
     $user_notifications = get_config('user_notifications');

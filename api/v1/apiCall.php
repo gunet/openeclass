@@ -95,5 +95,6 @@ if (function_exists('api_method')) {
         ],
     ];
     header('Content-Type: application/json');
+    header('X-Content-Type-Options: nosniff');
     echo json_encode($api_methods, JSON_UNESCAPED_UNICODE);
 }

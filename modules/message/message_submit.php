@@ -89,6 +89,7 @@ if (isset($_POST['submit'])) {
      */
     if (!$error) {
         $recipients = [];
+        $invalid = 0;
         if (!is_array($_POST['recipients'])) { // in personal msg form select2 returns a comma delimited string instead of array
             $_POST['recipients'] = explode(',', $_POST['recipients']);
         }
@@ -176,14 +177,13 @@ if (isset($_POST['submit'])) {
         $msgURL = $urlServer . 'modules/message/index.php?mid=' . $msg->id;
         if (isset($_POST['mailing']) and $_POST['mailing']) { // send mail to recipients
             if ($course_id != 0 || isset($_POST['course'])) {// message in course context
-                $invalid = 0;
                 $list_of_recipients = array();
                 $c = course_id_to_title($cid);
                 $subject_dropbox = "$c (".course_id_to_public_code($cid).") - $langNewDropboxFile";
                 foreach ([...$recipients, $uid] as $userid) {
                     $emailaddr = uid_to_email($userid);
                     if (get_user_email_notification($userid, $cid) and valid_email($emailaddr)) {
-                        array_push($list_of_recipients, $emailaddr);
+                        $list_of_recipients[] = $emailaddr;
                     } else {
                         $invalid++;
                     }
@@ -242,11 +242,10 @@ if (isset($_POST['submit'])) {
             } else { // message in personal context
                 $subject_dropbox = $langNewDropboxFile;
                 $list_of_recipients = array();
-                $invalid = 0;
                 foreach ([...$recipients, $uid] as $userid) {
                     $emailaddr = uid_to_email($userid);
                     if (get_user_email_notification($userid) and valid_email($emailaddr)) {
-                        array_push($list_of_recipients, $emailaddr);
+                        $list_of_recipients[] = $emailaddr;
                     } else {
                         $invalid++;
                     }

@@ -27,7 +27,7 @@ require_once 'include/lib/multimediahelper.class.php';
 function list_videos() {
     global $id, $tool_content, $course_id,
             $langVideo, $langDate, $langChoice, $langAddModulesButton,
-            $langNoVideo, $course_code, $langSelect, $langOpenNewTab;
+            $langNoVideo, $course_code, $langSelect, $langOpenNewTab, $langCancel;
 
     $video_found = FALSE;
     $cnt1 = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM video WHERE course_id = ?d", $course_id)->cnt;
@@ -96,7 +96,11 @@ function list_videos() {
                 }
             }
         }
-        $tool_content .= "</table></div><div class='d-flex justify-content-start mt-4'><input class='btn submitAdminBtn' type='submit' name='submit_video' value='".q($langAddModulesButton)."' />&nbsp;&nbsp;</div></form>";
+        $tool_content .= "</table></div>
+                <div class='d-flex justify-content-start mt-4'><input class='btn submitAdminBtn' type='submit' name='submit_video' value='$langAddModulesButton'>                
+                    <a href='index.php?course=$course_code&id=$id'><input class='btn cancelAdminBtn ms-2' value='$langCancel' /></a>
+                </div>                
+            </form>";
     }
     if (!$video_found) {
         $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoVideo</span></div></div>";

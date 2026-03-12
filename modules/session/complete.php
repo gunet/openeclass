@@ -56,6 +56,9 @@ $element = "badge";
 $display = TRUE;
 
 check_activation_of_collaboration();
+if (isset($_GET['session'])) {
+    check_user_belongs_in_session($_GET['session']);
+}
 
 if ($is_consultant) {
 

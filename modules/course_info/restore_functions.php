@@ -221,6 +221,15 @@ function restore_table($basedir, $table, $options, $url_prefix_map, $backupData,
                 }
             }
         }
+        if (isset($options['offset'])) {
+            foreach ($options['offset'] as $field => $offset) {
+                $newField = $restoreHelper->getField($table, $field);
+                // Don't pass null data through mapping
+                if (!is_null($data[$newField])) {
+                    $data[$newField] = $data[$newField] + $offset;
+                }
+            }
+        }
         $do_insert = true;
         if (isset($options['map_function'])) {
             if (isset($options['map_function_data'])) {

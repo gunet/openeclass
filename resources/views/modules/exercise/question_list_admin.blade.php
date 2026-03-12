@@ -207,10 +207,10 @@
                                 <div class='modal-dialog'>
                                     <div class='modal-content'>
                                         <div class='modal-header'>
-                                            <div class='modal-title'>
+                                            <h2 class='modal-title'>
                                                 {{ trans('langNote') }}
-                                            </div>
-                                            <button type='button' class='close' data-bs-dismiss='modal'><span aria-hidden='true'>&times;</span><span class='sr-only'>{{ trans('langClose') }}</span></button>
+                                            </h2>
+                                            <button type='button' class='close' data-bs-dismiss='modal'><span aria-hidden='true'>&times;</span><span class='visually-hidden'>{{ trans('langClose') }}</span></button>
                                         </div>
                                         <div class='modal-body'>
                                             {!! trans('langUsedInSeveralExercises2') !!}

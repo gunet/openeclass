@@ -295,25 +295,6 @@
                     @endif
                 @endif
             @endif
-
-
-            @if ($uid == $id)
-                <div class="col-12 mt-4">
-                    <div class="card panelCard border-card-left-default px-3 py-2">
-                        <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                            <h3>{{trans('langUnregUser')}}</h3>
-                        </div>
-                        <div class="card-body">
-                            <p class='card-text'>{{ trans('langExplain') }}</p>
-                        </div>
-                        @if ($action_bar_unreg == 1)
-                            <div class='card-footer border-0 d-flex justify-content-start'>
-                                <a class='btn deleteAdminBtn' href='{{ $urlAppend }}main/unreguser.php'>{{ trans('langUnregUser')}}</a>
-                            </div>
-                        @endif
-                    </div>
-                </div>
-            @endif
         </div>
     </div>
 </div>

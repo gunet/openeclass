@@ -23,7 +23,7 @@
 function list_h5p() {
     global $id, $course_id, $tool_content, $urlServer, $webDir, $urlAppend,
            $langAddModulesButton, $langChoice, $langH5pNoContent,
-           $course_code, $langH5p, $langSelect;
+           $course_code, $langH5p, $langSelect, $langCancel;
 
     $result = Database::get()->queryArray("SELECT * FROM h5p_content WHERE course_id = ?d ORDER BY title", $course_id);
     $h5pinfo = array();
@@ -58,9 +58,9 @@ function list_h5p() {
             $tool_content .= "</tr>";
         }
         $tool_content .= "</table></div>";
-        $tool_content .= "<div class='d-flex justify-content-start mt-4'>";
-        $tool_content .= "<input class='btn submitAdminBtn' type='submit' name='submit_h5p' value='$langAddModulesButton'>";
-        $tool_content .= "</div>";
+        $tool_content .= "<div class='d-flex justify-content-start mt-4'><input class='btn submitAdminBtn' type='submit' name='submit_h5p' value='$langAddModulesButton'>                
+                            <a href='index.php?course=$course_code&id=$id'><input class='btn cancelAdminBtn ms-2' value='$langCancel' /></a>
+                        </div>";
         $tool_content .= "</form>";
     }
 }
