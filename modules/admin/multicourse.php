@@ -37,7 +37,7 @@ if (isset($_POST['submit'])) {
     $line = strtok($_POST['courses'], "\n");
 
     // $departments = isset($_POST['department']) ? arrayValuesDirect($_POST['department']) : array();
-    $departments = isset($_POST['department']) ? $_POST['department'] : array();
+    $departments = $_POST['department'] ?? array();
     // validation in case it skipped JS validation for department(s)
     if (count($departments) < 1 || empty($departments[0])) {
         Session::flash('message',$langEmptyAddNode);
@@ -55,18 +55,13 @@ if (isset($_POST['submit'])) {
             $info = explode('|', $line);
             $title = $info[0];
             $prof_uid = null;
-            $prof_not_found = false;
+            $prof_not_found = true;
             if (isset($info[1])) {
                 $prof_info = trim($info[1]);
                 $prof_uid = find_prof(trim($info[1]));
-                if ($prof_info and ! $prof_uid) {
-                    $prof_not_found = true;
+                if ($prof_info and $prof_uid > 0) {
+                    $prof_not_found = false;
                 }
-            }
-            if ($prof_uid) {
-                $prof_name = uid_to_name($prof_uid);
-            } else {
-                $prof_name = '';
             }
             list($code, $cid) = create_course('', $_POST['lang'], $title, '', $departments, $vis, $prof_name, $_POST['password']);
             if ($cid) {
@@ -86,25 +81,15 @@ if (isset($_POST['submit'])) {
                 course_index($code);
             }
             if ($prof_not_found) {
-                $error_messages[] = "<b>" . q($title) . '</b>: ' . q($langMultiCourseCreated).'<br>' .
-                        q($langTeacher) . ': <b>' .
-                        q($prof_info) . '</b>: ' . q($langNoUsersFound2);
+                $message[] = "<strong>" . q($title) . "</strong>: $langMultiCourseCreated<br><br>";
             } else {
-                $sucess_messages[] = "<b>" . q($title) . '</b>: ' . q($langMultiCourseCreated).'<br>'
-                        . q($langTeacher) . ': <b>' . q($prof_name) . '</b>';
+                $message[] = "<strong>" . q($title) . "</strong>: $langMultiCourseCreated -- $langTeacher : <strong>" . q(uid_to_name($prof_uid)) . "</strong><br><br>";
             }
         }
         $line = strtok("\n");
     }
-    if (!empty($sucess_messages)){
-         Session::flash('message',$sucess_messages);
-         Session::flash('alert-class', 'alert-success');
-    }
-    if (!empty($error_messages)){
-         Session::flash('message',$error_messages);
-         Session::flash('alert-class', 'alert-danger');
-    }
-
+    Session::flash('message', $message);
+    Session::flash('alert-class', 'alert-success');
     redirect_to_home_page('modules/admin/multicourse.php');
 }
 
@@ -128,34 +113,24 @@ view('admin.courses.multicourse', $data);
 
 
 /**
- * @brief helper function
- * @param type $sql
- * @param type $terms
- * @return boolean
- */
-function prof_query($sql, $terms) {
-    $result = Database::get()->querySingle("SELECT id FROM user WHERE status = 1 AND ( $sql )", $terms);
-    if ($result) {
-        return $result->id;
-    } else {
-        return false;
-    }
-}
-
-/**
  * @brief find a professor by name ("Name surname") or username
  * @param type $uname
  * @return boolean
  */
 function find_prof($uname) {
-    if (($uid = prof_query('username = ?s', array($uname)))) {
-        return $uid;
-    } else {
-        $names = explode(' ', $uname);
-        if (count($names) == 2 and
-                $uid = prof_query('(surname = ?s AND givenname = ?s) OR (givenname = ?s AND surname = ?s)', array($names[0], $names[1], $names[0], $names[1]))) {
-            return $uid;
+
+    $names = explode(' ', $uname);
+    if (count($names) == 1) {
+        $q = Database::get()->querySingle("SELECT id FROM user WHERE status = " . USER_TEACHER . " AND username = ?s", $names[0]);
+        if ($q) {
+            return $q->id;
+        }
+    } else if (count($names) == 2) {
+        $q = Database::get()->querySingle("SELECT id FROM user WHERE status = " . USER_TEACHER . " AND 
+                    (surname = ?s AND givenname = ?s) OR (givenname = ?s AND surname = ?s)'", $names[0], $names[1], $names[0], $names[1]);
+        if ($q) {
+            return $q->id;
         }
     }
-    return false;
+    return 0;
 }

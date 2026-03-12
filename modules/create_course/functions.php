@@ -50,6 +50,7 @@ function create_course($public_code, $lang, $title, $description, $departments, 
                              public_code = ?s,
                              created = " . DBHelper::timeAfter() . ",
                              password = ?s,
+                             view_type = 'units',
                              glossary_expand = 0,
                              glossary_index = 1", $code, $lang, $title, $description, $vis, $prof, $public_code, $password);
     if ($q) {
