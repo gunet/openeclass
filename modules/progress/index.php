@@ -267,6 +267,7 @@ $head_content .= "
     border: 1px solid #e5e7eb !important;
     border-radius: 12px 12px 0 0 !important;
     padding: 20px 24px !important;
+    min-height: 74px !important;
     cursor: pointer;
     display: flex;
     justify-content: space-between;
@@ -332,6 +333,7 @@ $head_content .= "
     border: 1px solid #e5e7eb !important;
     border-radius: 12px 12px 0 0 !important;
     padding: 20px 24px !important;
+    min-height: 74px !important;
     cursor: pointer;
     display: flex;
     justify-content: space-between;
