@@ -58,7 +58,7 @@ if (!defined('M_NOTERMINATE')) {
 //////////////////////////////////////////////////////////////////////////////////////
 
 function createCoursesDom($coursesArr) {
-    global $langMyCoursesProf, $langMyCoursesUser;
+    global $langMyCoursesProf, $langMyCoursesUser, $urlServer;
 
     $dom = new DomDocument('1.0', 'utf-8');
 
@@ -90,7 +90,7 @@ function createCoursesDom($coursesArr) {
 
             $titleStr = ($course->code === $course->public_code) ? $course->title : $course->title . ' - ' . $course->public_code;
             $descriptionStr = html2text($course->description);
-            $course_image = (!is_null($course->course_image) && $course->course_image != '') ? "image/$course->course_image" : "";
+            $course_image = (!is_null($course->course_image) && $course->course_image != '') ? "{$urlServer}courses/$course->code/image/$course->course_image" : "";
 
             $c->appendChild(new DOMAttr('code', $course->code));
             $c->appendChild(new DOMAttr('title', $titleStr));
