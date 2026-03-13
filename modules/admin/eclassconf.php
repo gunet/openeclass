@@ -78,17 +78,17 @@ if (isset($_POST['submit'])) {
     set_config('idle_logout_time', intval($_POST['idle_logout_time']) * 60 * 1000);
     set_config('student_upload_whitelist', $_POST['student_upload_whitelist']);
     set_config('teacher_upload_whitelist', $_POST['teacher_upload_whitelist']);
-    set_config('show_modal_openCourses', $_POST['show_modal_openCourses']);
-    set_config('individual_group_bookings', $_POST['individual_group_bookings']);
+    set_config('show_modal_openCourses', $_POST['show_modal_openCourses'] ?? '');
+    set_config('individual_group_bookings', $_POST['individual_group_bookings'] ?? '');
     set_config('enable_quick_note', $_POST['enable_quick_note']);
     set_config('user_notifications', $_POST['user_notifications']);
-    set_config('enable_idle_detection', $_POST['enable_idle_detection']);
+    set_config('enable_idle_detection', $_POST['enable_idle_detection'] ?? '');
     if ($_POST['user_notifications'] == 2) {
         set_config('user_notifications_interval', $_POST['user_notifications_interval']);
     } else {
         set_config('user_notifications_interval', '');
     }
-    set_config('enable_user_consent', $_POST['enable_user_consent']);
+    set_config('enable_user_consent', $_POST['enable_user_consent'] ?? '');
 
     //Maintenance Text set
     foreach ($session->active_ui_languages as $langcode) {

@@ -149,6 +149,7 @@
                                      trans('langTill') . ' _END_ ' . trans('langFrom2') .
                                      ' _TOTAL_ ' . trans('langTotalResults')) }}',
                 sInfoEmpty: '',
+                sEmptyTable: '',
                 sInfoFiltered: '',
                 sInfoPostFix:  '',
                 sSearch:       '',
