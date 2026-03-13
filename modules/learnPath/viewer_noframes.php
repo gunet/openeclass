@@ -142,6 +142,8 @@ if (isset($_GET['action']) && $_GET['action'] === 'updateProgress') {
             $status = 401;
         } elseif ($code === 'LP_NOT_FOUND') {
             $status = 404;
+        } elseif ($code === 'LP_TOO_FAST') {
+            $status = 429;
         } else {
             $status = 500;
         }

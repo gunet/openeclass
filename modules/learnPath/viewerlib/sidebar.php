@@ -25,9 +25,11 @@ function sidebar_fragment(int $pathId, int $moduleId, int $attempt): string {
     global $course_code, $course_id, $uid, $is_editor, $langNoModule, $urlAppend;
 
     if ($uid) {
-        $uidCheckString = 'AND UMP.`user_id` = ' . intval($uid);
+        $uidCheckString = 'AND UMP.`user_id` = ?d';
+        $uidParam = intval($uid);
     } else {
         $uidCheckString = 'AND UMP.`user_id` IS NULL ';
+        $uidParam = null;
     }
 
     $sql = "SELECT M.*, LPM.*, A.`path`, UMP.`lesson_status`, UMP.`credit`
@@ -42,13 +44,18 @@ function sidebar_fragment(int $pathId, int $moduleId, int $attempt): string {
               AND LPM.`learnPath_id` = ?d
               AND M.`course_id` = ?d
             ORDER BY LPM.`rank` ASC";
-    $result = Database::get()->queryArray($sql, $attempt, $pathId, $course_id);
+    $queryParams = $uidParam !== null
+        ? [$attempt, $uidParam, $pathId, $course_id]
+        : [$attempt, $pathId, $course_id];
+    $result = Database::get()->queryArray($sql, ...$queryParams);
 
     if (count($result) == 0) {
-        return "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoModule</span></div>";
+        return "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>" . htmlspecialchars($langNoModule) . "</span></div>";
     }
 
     $extendedList = [];
+    $lastLearnPathId = 0;
+    $lastCourseId = 0;
     foreach ($result as $list) {
         $modar = [];
         $modar['module_id'] = $list->module_id;
@@ -75,16 +82,18 @@ function sidebar_fragment(int $pathId, int $moduleId, int $attempt): string {
         $modar['lesson_status'] = $list->lesson_status;
         $modar['credit'] = $list->credit;
         $extendedList[] = $modar;
+        $lastLearnPathId = $modar['learnPath_id'];
+        $lastCourseId = $modar['course_id'];
     }
 
     $q = Database::get()->querySingle("SELECT name, comment FROM lp_learnPath
-                                    WHERE learnpath_id = ?d AND course_id = ?d", $modar['learnPath_id'], $modar['course_id']);
-    $lp_name = $q->name;
+                                    WHERE learnpath_id = ?d AND course_id = ?d", $lastLearnPathId, $lastCourseId);
+    $lp_name = $q ? $q->name : '';
 
     $flatElementList = build_display_element_list(build_element_list($extendedList, 'parent', 'learnPath_module_id'));
     $is_blocked = false;
 
-    $unitParam = isset($_GET['unit']) ? "&amp;unit=$_GET[unit]" : '';
+    $unitParam = isset($_GET['unit']) ? "&amp;unit=" . intval($_GET['unit']) : '';
 
     // Pre-compute indent and is_blocked for each module
     $modules = [];

@@ -1236,6 +1236,17 @@ function extractScorm2004Time(?string $time): array {
     return array($hours, $minutes, $seconds, $primes);
 }
 
+function scormTimeToSeconds(?string $time): int {
+    if (isScorm2004Time($time)) {
+        [$h, $m, $s] = extractScorm2004Time($time);
+    } elseif (isScormTime($time)) {
+        [$h, $m, $s] = extractScormTime($time);
+    } else {
+        return 0;
+    }
+    return $h * 3600 + $m * 60 + $s;
+}
+
 function calculateScormTime(int $hours1, int $minutes1, int $seconds1, int $primes1, int $hours2, int $minutes2, int $seconds2, int $primes2): string {
     // calculate the resulting added hours, seconds, ... for result
     $primesReport = FALSE;
@@ -1637,14 +1648,20 @@ function check_LPM_validity($is_editor, $course_code, $extraQuery = false, $extr
 
         if (!$is_editor) {
             // check for blocked learning path
-            $rank0 = Database::get()->querySingle("SELECT `rank` FROM lp_learnPath
-                                WHERE learnPath_id = ?d AND `course_id` = ?d ORDER BY `rank` LIMIT 1", $_SESSION['path_id'], $course_id)->rank;
+            $rank0Row = Database::get()->querySingle("SELECT `rank` FROM lp_learnPath
+                                WHERE learnPath_id = ?d AND `course_id` = ?d ORDER BY `rank` LIMIT 1", $_SESSION['path_id'], $course_id);
+            if (!$rank0Row) {
+                header("Location: " . $depth . "index.php?course=$course_code");
+                exit();
+            }
+            $rank0 = $rank0Row->rank;
             $lps = Database::get()->queryArray("SELECT `learnPath_id`, `lock` FROM lp_learnPath WHERE `course_id` = ?d AND `rank` < ?d", $course_id, $rank0);
             foreach ($lps as $lp) {
                 if ($lp->lock == 'CLOSE') {
                     $prog = get_learnPath_progress($lp->learnPath_id, $_SESSION['uid']);
                     if ($prog < 100) {
                         header("Location: ./index.php?course=$course_code");
+                        exit();
                     }
                 }
             }
@@ -1663,6 +1680,10 @@ function check_LPM_validity($is_editor, $course_code, $extraQuery = false, $extr
     if (!$is_editor) { // check if we try to overwrite a blocked module
         $lpm_id = Database::get()->querySingle("SELECT `lock`, `rank` FROM lp_rel_learnPath_module
                                 WHERE `learnPath_id` = ?d AND module_id = ?d", $_SESSION['path_id'], $_SESSION['lp_module_id']);
+        if (!$lpm_id) {
+            header("Location: " . $depth . "index.php?course=$course_code");
+            exit();
+        }
         $q = Database::get()->queryArray("SELECT learnPath_module_id
                                             FROM lp_rel_learnPath_module
                                            WHERE learnPath_id = ?d
@@ -1673,7 +1694,7 @@ function check_LPM_validity($is_editor, $course_code, $extraQuery = false, $extr
                                                        WHERE learnPath_module_id = ?d
                                                          AND learnPath_id = ?d
                                                          AND user_id = ?d", $m->learnPath_module_id, $_SESSION['path_id'], $_SESSION['uid']);
-            if (($lpm_id->lock == 'CLOSE') && ($progress->credit != 'CREDIT' || ($progress->lesson_status != 'COMPLETED' && $progress->lesson_status != 'PASSED'))) {
+            if (($lpm_id->lock == 'CLOSE') && (!$progress || $progress->credit != 'CREDIT' || ($progress->lesson_status != 'COMPLETED' && $progress->lesson_status != 'PASSED'))) {
                 header("Location: " . $depth . "index.php?course=$course_code");
                 exit();
             }

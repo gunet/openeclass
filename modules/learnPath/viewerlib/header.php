@@ -30,8 +30,8 @@ function header_fragment(int $pathId, int $moduleId): string {
     $action->record(MODULE_ID_LP);
 
     if (isset($_GET['unit'])) {
-        $unitParam = "&amp;unit=" . $_GET['unit'];
-        $returl = $urlAppend . "modules/units/index.php?course=$course_code&id=" . $_GET['unit'];
+        $unitParam = "&amp;unit=" . intval($_GET['unit']);
+        $returl = $urlAppend . "modules/units/index.php?course=$course_code&id=" . intval($_GET['unit']);
     } else {
         $unitParam = '';
         $returl = $urlAppend . "modules/learnPath/index.php?course=$course_code";
@@ -39,9 +39,11 @@ function header_fragment(int $pathId, int $moduleId): string {
 
 
     if ($uid) {
-        $uidCheckString = "AND UMP.`user_id` = $uid";
+        $uidCheckString = "AND UMP.`user_id` = ?d";
+        $uidParam = intval($uid);
     } else {
         $uidCheckString = "AND UMP.`user_id` IS NULL ";
+        $uidParam = null;
     }
 
     $sql = "SELECT MIN(LPM.`learnPath_module_id`) AS learnPath_module_id,
@@ -70,7 +72,10 @@ function header_fragment(int $pathId, int $moduleId): string {
              AND M.`course_id` = ?d
         GROUP BY LPM.`module_id`
         ORDER BY MIN(LPM.`rank`)";
-    $moduleList = Database::get()->queryArray($sql, $pathId, $course_id);
+    $queryParams = $uidParam !== null
+        ? [$uidParam, $pathId, $course_id]
+        : [$pathId, $course_id];
+    $moduleList = Database::get()->queryArray($sql, ...$queryParams);
 
     $extendedList = [];
     foreach ($moduleList as $module) {
@@ -127,7 +132,7 @@ function header_fragment(int $pathId, int $moduleId): string {
 
     $theme_id = $_SESSION['theme_options_id'] ?? get_config('theme_options_id');
     $theme_options = Database::get()->querySingle('SELECT * FROM theme_options WHERE id = ?d', $theme_id);
-    $theme_options_styles = $theme_options ? unserialize($theme_options->styles) : [];
+    $theme_options_styles = $theme_options ? unserialize($theme_options->styles, ['allowed_classes' => false]) : [];
     $urlThemeData = $urlAppend . 'courses/theme_data/' . $theme_id;
     $logoUrl = isset($theme_options_styles['imageUploadSmall']) ? $urlThemeData . '/' . $theme_options_styles['imageUploadSmall'] : $themeimg . '/eclass-new-logo.svg';
 

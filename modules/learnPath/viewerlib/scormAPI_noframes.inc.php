@@ -44,7 +44,7 @@ $umpId = $scormData['ump_id'];
 $isAnonymous = $scormData['isAnonymous'];
 
 if (isset($_GET['unit'])) {
-    $closeurl = $urlAppend . "modules/units/index.php?course=$course_code&id=" . $_GET['unit'];
+    $closeurl = $urlAppend . "modules/units/index.php?course=$course_code&id=" . intval($_GET['unit']);
 } else {
     $closeurl = "index.php?course=$course_code";
 }
@@ -53,18 +53,19 @@ if (isset($_GET['unit'])) {
 $commitUrl = $lp_update_url
     ?? $urlAppend . "modules/learnPath/viewer_noframes.php?course=" . $course_code . (isset($_GET['unit']) ? ('&unit=' . intval($_GET['unit'])) : '') . "&action=updateProgress";
 
+$_json_flags = JSON_HEX_TAG | JSON_HEX_AMP;
 ?>
 <script type="text/javascript">
 
-    let init_total_time = "<?php echo $sco['total_time']; ?>";
+    let init_total_time = <?php echo json_encode($sco['total_time'], $_json_flags); ?>;
     let item_objectives = [];
     let updatetable_to_list = [];
     let interactions = [];
 
     // ====================================================
     // Mutable commit state (updated by resetScormApi/deactivateScormApi)
-    let _commitUrl = '<?php echo $commitUrl; ?>';
-    let _umpId = '<?php echo $umpId; ?>';
+    let _commitUrl = <?php echo json_encode($commitUrl, $_json_flags);?>;
+    let _umpId = <?php echo json_encode((string)$umpId, $_json_flags);?>;
 
     // ====================================================
     // API Class Constructor
@@ -820,29 +821,29 @@ $commitUrl = $lp_update_url
     elements[49] = 'cmi.progress_measure';
 
     let values = [];
-    values[0] = "<?php echo js_escape($sco['_children']); ?>";
-    values[1] = "<?php echo js_escape($sco['student_id']); ?>";
-    values[2] = "<?php echo js_escape($sco['student_name']); ?>";
-    values[3] = "<?php echo js_escape($sco['lesson_location']); ?>";
-    values[4] = "<?php echo js_escape($sco['lesson_status']); ?>";
-    values[5] = "<?php echo js_escape($sco['credit']); ?>";
-    values[6] = "<?php echo js_escape($sco['entry']); ?>";
-    values[7] = "<?php echo js_escape($sco['score_children']); ?>";
-    values[8] = "<?php echo js_escape($sco['raw']); ?>";
-    values[9] = "<?php echo js_escape($sco['total_time']); ?>";
-    values[10] = "<?php echo js_escape($sco['exit']); ?>";
-    values[11] = "<?php echo js_escape($sco['session_time']); ?>";
-    values[12] = "<?php echo js_escape($sco['suspend_data']); ?>";
-    values[13] = "<?php echo js_escape($sco['launch_data']); ?>";
-    values[14] = "<?php echo js_escape($sco['scoreMin']); ?>";
-    values[15] = "<?php echo js_escape($sco['scoreMax']); ?>";
-    values[16] = "<?php echo js_escape($sco['lesson_status']); ?>"; //we do deal the completion_status element with the old lesson_status element
-    values[17] = "<?php echo js_escape($sco['lesson_status']); ?>"; //we do deal the sucess_status element with the old lesson_status element
-    values[18] = "<?php echo js_escape($sco['session_time']); ?>"; // we do deal the session_time element with the old element
-    values[19] = "<?php echo js_escape($sco['raw']); ?>"; // we do deal the score.raw element with the old element
-    values[20] = "<?php echo js_escape($sco['scoreMin']); ?>"; // we do deal the score.min element with the old element
-    values[21] = "<?php echo js_escape($sco['scoreMax']); ?>"; // we do deal the score.max element with the old element
-    values[22] = "<?php echo js_escape($sco['lesson_mode']); ?>";
+    values[0] = <?php echo json_encode($sco['_children'], $_json_flags);?>;
+    values[1] = <?php echo json_encode($sco['student_id'], $_json_flags); ?>;
+    values[2] = <?php echo json_encode($sco['student_name'], $_json_flags); ?>;
+    values[3] = <?php echo json_encode($sco['lesson_location'], $_json_flags); ?>;
+    values[4] = <?php echo json_encode($sco['lesson_status'], $_json_flags); ?>;
+    values[5] = <?php echo json_encode($sco['credit'], $_json_flags); ?>;
+    values[6] = <?php echo json_encode($sco['entry'], $_json_flags); ?>;
+    values[7] = <?php echo json_encode($sco['score_children'], $_json_flags); ?>;
+    values[8] = <?php echo json_encode($sco['raw'], $_json_flags); ?>;
+    values[9] = <?php echo json_encode($sco['total_time'], $_json_flags); ?>;
+    values[10] = <?php echo json_encode($sco['exit'], $_json_flags); ?>;
+    values[11] = <?php echo json_encode($sco['session_time'], $_json_flags); ?>;
+    values[12] = <?php echo json_encode($sco['suspend_data'], $_json_flags); ?>;
+    values[13] = <?php echo json_encode($sco['launch_data'], $_json_flags); ?>;
+    values[14] = <?php echo json_encode($sco['scoreMin'], $_json_flags); ?>;
+    values[15] = <?php echo json_encode($sco['scoreMax'], $_json_flags); ?>;
+    values[16] = <?php echo json_encode($sco['lesson_status'], $_json_flags); ?>; //we do deal the completion_status element with the old lesson_status element
+    values[17] = <?php echo json_encode($sco['lesson_status'], $_json_flags); ?>; //we do deal the sucess_status element with the old lesson_status element
+    values[18] = <?php echo json_encode($sco['session_time'], $_json_flags); ?>; // we do deal the session_time element with the old element
+    values[19] = <?php echo json_encode($sco['raw'], $_json_flags); ?>; // we do deal the score.raw element with the old element
+    values[20] = <?php echo json_encode($sco['scoreMin'], $_json_flags); ?>; // we do deal the score.min element with the old element
+    values[21] = <?php echo json_encode($sco['scoreMax'], $_json_flags); ?>; // we do deal the score.max element with the old element
+    values[22] = <?php echo json_encode($sco['lesson_mode'], $_json_flags); ?>;
     values[23] = "id,score,status";
     values[24] = item_objectives.length;
     values[25] = "mastery_score,max_time_allowed";
@@ -851,18 +852,18 @@ $commitUrl = $lp_update_url
     values[28] = interactions.length;
 
     // SCORM2004
-    values[37] = "<?php echo js_escape($sco['lesson_location']); ?>";
-    values[38] = "<?php echo js_escape($sco['student_id']); ?>";
-    values[39] = "<?php echo js_escape($sco['student_name']); ?>";
+    values[37] = <?php echo json_encode($sco['lesson_location'], $_json_flags); ?>;
+    values[38] = <?php echo json_encode($sco['student_id'], $_json_flags); ?>;
+    values[39] = <?php echo json_encode($sco['student_name'], $_json_flags); ?>;
     values[41] = 1;
     values[43] = 1;
     values[44] = 0;
 
-    values[45] = "<?php echo js_escape($sco['scoreScaled']); ?>";
-    values[46] = "<?php echo js_escape($sco['exit']); ?>";
+    values[45] = <?php echo json_encode($sco['scoreScaled'], $_json_flags); ?>;
+    values[46] = <?php echo json_encode($sco['exit'], $_json_flags); ?>;
     values[47] = "";
     values[48] = "normal";
-    values[49] = "<?php echo js_escape($sco['progress_measure']); ?>";
+    values[49] = <?php echo json_encode($sco['progress_measure'], $_json_flags); ?>;
 
 
     // ====================================================
@@ -876,7 +877,7 @@ $commitUrl = $lp_update_url
     function _buildCommitPayload() {
         return {
             'ump_id': _umpId,
-            'token': <?php echo json_encode($_SESSION['csrf_token']); ?>,
+            'token': <?php echo json_encode($_SESSION['csrf_token'], $_json_flags);?>,
             'lesson_location': isSCORM2004 ? values[37] : values[3],
             'lesson_status': values[4],
             'credit': values[5],
@@ -906,7 +907,7 @@ $commitUrl = $lp_update_url
         let payload = _buildCommitPayload();
         cdbg('doCommit submitting');
 
-        let closelocation = (window.eclassLP && window.eclassLP.closeUrl) ? window.eclassLP.closeUrl : '<?php echo $closeurl ?>';
+        let closelocation = (window.eclassLP && window.eclassLP.closeUrl) ? window.eclassLP.closeUrl : <?php echo json_encode($closeurl, $_json_flags);?>;
 
         $.ajax({
             type: 'POST',
@@ -1469,7 +1470,7 @@ $commitUrl = $lp_update_url
                         }
                         interactions[elem_id][8] = val;
                         APIError("0");
-                        return "true;"
+                        return "true";
                     default:
                         APIError("401"); // not implemented
                         return "false";

@@ -82,9 +82,12 @@ function buildScormApiData(int $pathId, int $moduleId, int $attempt, ?int $userI
         ];
         $umpId = 0;
     } else {
+        $studentName = $userDetails
+            ? $userDetails->surname . ', ' . $userDetails->givenname
+            : '';
         $sco = [
             'student_id'       => (string) $userId,
-            'student_name'     => $userDetails->surname . ', ' . $userDetails->givenname,
+            'student_name'     => $studentName,
             'lesson_location'  => $userProgressionDetails->lesson_location,
             'credit'           => strtolower($userProgressionDetails->credit),
             'lesson_status'    => strtolower($userProgressionDetails->lesson_status),
@@ -95,7 +98,7 @@ function buildScormApiData(int $pathId, int $moduleId, int $attempt, ?int $userI
             'scoreScaled'      => '',
             'total_time'       => $userProgressionDetails->total_time,
             'suspend_data'     => $userProgressionDetails->suspend_data,
-            'launch_data'      => stripslashes($userProgressionDetails->launch_data),
+            'launch_data'      => $userProgressionDetails->launch_data,
             'progress_measure' => '',
         ];
 

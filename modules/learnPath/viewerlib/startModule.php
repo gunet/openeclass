@@ -139,7 +139,7 @@ function startModule(int $pathId, int $moduleId, int $attempt): false|string {
             unset($_SESSION['exerciseResult']);
             unset($_SESSION['exeStartTime']);
 
-            $moduleStartAssetPage = "showExercise.php?course=$course_code&amp;exerciseId=" . $assetPath;
+            $moduleStartAssetPage = $urlServer . "modules/learnPath/navigation/showExercise.php?course=$course_code&amp;exerciseId=" . urlencode($assetPath);
             break;
         case CTSCORMASSET_ :
             if ($uid) { // Directly pass this module
@@ -149,6 +149,10 @@ function startModule(int $pathId, int $moduleId, int $attempt): false|string {
         case CTSCORM_ :
             // real scorm content method
             $startAssetPage = $assetPath;
+            // Prevent path traversal in SCORM asset paths
+            if (str_contains($startAssetPage, '..')) {
+                return $lp_error('Invalid SCORM asset path', 'LP_BAD_REQUEST');
+            }
             $modulePath = 'path_' . $pathId;
             $moduleStartAssetPage = $clarolineRepositoryWeb . '/scormPackages/' . $modulePath . $startAssetPage;
             break;
@@ -159,9 +163,12 @@ function startModule(int $pathId, int $moduleId, int $attempt): false|string {
             if ($uid) { // Directly pass this module
                 $directly_pass_lp_module((int) $uid, $learnPathModuleId);
             } // else anonymous: record nothing
-            $moduleStartAssetPage = "showCourseDescription.php?course=$course_code";
+            $moduleStartAssetPage = $urlServer . "modules/learnPath/navigation/showCourseDescription.php?course=$course_code";
             break;
         case CTLINK_ :
+            if (!preg_match('#^https?://#i', $assetPath)) {
+                return $lp_error('Invalid link URL', 'LP_BAD_REQUEST');
+            }
             if ($uid) { // Directly pass this module
                 $directly_pass_lp_module((int) $uid, $learnPathModuleId);
             } // else anonymous: record nothing
@@ -172,11 +179,10 @@ function startModule(int $pathId, int $moduleId, int $attempt): false|string {
                 $directly_pass_lp_module((int) $uid, $learnPathModuleId);
             }
             if (MultimediaHelper::isSupportedFile($assetPath)) {
-                $moduleStartAssetPage = "showMedia.php?course=$course_code&amp;id=" . $assetPath . "&amp;viewModule_id=" . $moduleId;
+                $moduleStartAssetPage = $urlServer . "modules/learnPath/navigation/showMedia.php?course=$course_code&id=" . urlencode($assetPath) . "&viewModule_id=" . $moduleId;
             } else {
-                $moduleStartAssetPage = htmlspecialchars($urlServer
-                        . "modules/video/index.php?course=$course_code&action=download&id=" . $assetPath
-                        , ENT_QUOTES);
+                $moduleStartAssetPage = $urlServer
+                        . "modules/video/index.php?course=$course_code&action=download&id=" . urlencode($assetPath);
             }
             break;
         case CTMEDIALINK_ :
@@ -184,8 +190,11 @@ function startModule(int $pathId, int $moduleId, int $attempt): false|string {
                 $directly_pass_lp_module((int) $uid, $learnPathModuleId);
             }
             if (MultimediaHelper::isEmbeddableMedialink($assetPath)) {
-                $moduleStartAssetPage = "showMediaLink.php?course=$course_code&amp;id=" . urlencode($assetPath) . "&amp;viewModule_id=" . $moduleId;
+                $moduleStartAssetPage = $urlServer . "modules/learnPath/navigation/showMediaLink.php?course=$course_code&id=" . urlencode($assetPath) . "&viewModule_id=" . $moduleId;
             } else {
+                if (!preg_match('#^https?://#i', $assetPath)) {
+                    return $lp_error('Invalid link URL', 'LP_BAD_REQUEST');
+                }
                 $moduleStartAssetPage = $assetPath;
             }
             break;

@@ -51,7 +51,9 @@ function updateProgress(): string {
 
     $ump_id = (int) $_POST['ump_id'];
     $ump = Database::get()->querySingle(
-        'SELECT user_module_progress_id, learnPath_id FROM lp_user_module_progress WHERE user_module_progress_id = ?d AND user_id = ?d',
+        'SELECT user_module_progress_id, learnPath_id, lesson_status, started
+         FROM lp_user_module_progress
+         WHERE user_module_progress_id = ?d AND user_id = ?d',
         $ump_id,
         $uid
     );
@@ -84,7 +86,8 @@ function updateProgress(): string {
         $progress_measure = max(0.0, min(1.0, (float) $_POST['progress_measure']));
     }
 
-    // next visit of the sco will not be the first so entry must be set to RESUME
+    // Per SCORM 1.2 spec: normal/time-out exit means start fresh (AB-INITIO),
+    // suspend/logout means resume where left off (RESUME)
     $exit_value = $_POST['exit'] ?? '';
     $entry_value = '';
     if ($exit_value == 'time-out' || $exit_value == 'normal') {
@@ -120,6 +123,25 @@ function updateProgress(): string {
         $session_time_formatted = $_POST['session_time'] ?? '';
     }
 
+    // Minimum session time check
+    if (!defined('SCORM_MIN_SESSION_SECONDS')) {
+        define('SCORM_MIN_SESSION_SECONDS', 30);
+    }
+
+    $is_completing = in_array($lesson_status_value, ['COMPLETED', 'PASSED'])
+        && !in_array($ump->lesson_status, ['COMPLETED', 'PASSED']);
+
+    if ($is_completing) {
+        $started_ts = strtotime($ump->started);
+        if ($started_ts && (time() - $started_ts) < SCORM_MIN_SESSION_SECONDS) {
+            return resp_return_json([
+                'ok' => false,
+                'error' => 'Session too short',
+                'code' => 'LP_TOO_FAST',
+            ]);
+        }
+    }
+
     $sql = "UPDATE `lp_user_module_progress`
             SET
                 `lesson_location` = ?s,
@@ -137,7 +159,7 @@ function updateProgress(): string {
           WHERE `user_module_progress_id` = ?d";
     Database::get()->query(
         $sql,
-        $_POST['lesson_location'] ?? '',
+        mb_substr($_POST['lesson_location'] ?? '', 0, 255),
         $lesson_status_value,
         $entry_value,
         $raw_value,
@@ -146,7 +168,7 @@ function updateProgress(): string {
         $total_time_value,
         $session_time_formatted,
         $progress_measure,
-        $_POST['suspend_data'] ?? '',
+        mb_substr($_POST['suspend_data'] ?? '', 0, 65535),
         $credit_value,
         $ump_id
     );

@@ -44,7 +44,7 @@ function render_lp_partial(string $template, array $data): string {
     if (!is_writable($cacheDir) or !$cacheDir) {
         $cacheDir = sys_get_temp_dir() . '/storage';
         if (!(is_dir($cacheDir) or mkdir($cacheDir, 0755, true))) {
-            die("Error: Unable to find a writable storage directory - tried '$cacheDir'.");
+            die("Error: Unable to find a writable storage directory.");
         }
     }
 
