@@ -829,7 +829,19 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
                   'delete' => array('hits'),
                   'map' => array('category' => $link_category_map, 'user_id' => $userid_map),
                   'return_mapping' => 'id'), $url_prefix_map, $backupData, $restoreHelper);
-        $ebook_map = restore_table($restoreThis, 'ebook', array('set' => array('course_id' => $new_course_id), 'return_mapping' => 'id'), $url_prefix_map, $backupData, $restoreHelper);
+
+        $options = [
+            'set' => ['course_id' => $new_course_id],
+            'return_mapping' => 'id',
+        ];
+        if ($fetch_course) {
+            $options['offset'] = [
+                'order' => 1 + intval(Database::get()->querySingle('SELECT MAX(`order`) AS order_offset
+                        FROM ebook WHERE course_id = ?d',
+                    $new_course_id)->order_offset)
+            ];
+        }
+        $ebook_map = restore_table($restoreThis, 'ebook', $options, $url_prefix_map, $backupData, $restoreHelper);
         foreach ($ebook_map as $old_id => $new_id) {
             // new and old id might overlap as the map contains multiple values!
             rename("$courseDir/ebook/$old_id", "$courseDir/ebook/__during_restore__$new_id");
@@ -869,8 +881,18 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
         restore_table($restoreThis, 'dropbox_index', array('map' => array('msg_id' => $dropbox_map, 'recipient_id' => $userid_map)), $url_prefix_map, $backupData, $restoreHelper);
 
         // Learning Path
-        $lp_learnPath_map = restore_table($restoreThis, 'lp_learnPath', array('set' => array('course_id' => $new_course_id),
-            'return_mapping' => 'learnPath_id'), $url_prefix_map, $backupData, $restoreHelper);
+        $options = [
+            'set' => ['course_id' => $new_course_id],
+            'return_mapping' => 'learnPath_id',
+        ];
+        if ($fetch_course) {
+            $options['offset'] = [
+                'rank' => 1 + intval(Database::get()->querySingle('SELECT MAX(`rank`) AS rank_offset
+                    FROM lp_learnPath WHERE course_id = ?d',
+                    $new_course_id)->rank_offset)
+            ];
+        }
+        $lp_learnPath_map = restore_table($restoreThis, 'lp_learnPath', $options, $url_prefix_map, $backupData, $restoreHelper);
         $lp_module_map = restore_table($restoreThis, 'lp_module', array('set' => array('course_id' => $new_course_id),
             'return_mapping' => 'module_id'), $url_prefix_map, $backupData, $restoreHelper);
         $lp_asset_map = restore_table($restoreThis, 'lp_asset', array('map' => array('module_id' => $lp_module_map),
@@ -1225,11 +1247,18 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
 
         // Course Units
         if (!$weekly_view) {
-            $unit_map = restore_table($restoreThis, 'course_units',
-                array('set' =>
-                    array('course_id' => $new_course_id),
-                    'return_mapping' => 'id',
-                ), $url_prefix_map, $backupData, $restoreHelper);
+            $options = [
+                'set' => ['course_id' => $new_course_id],
+                'return_mapping' => 'id',
+            ];
+            if ($fetch_course) {
+                $options['offset'] = [
+                    'order' => 1 + intval(Database::get()->querySingle('SELECT MAX(`order`) AS order_offset
+                            FROM course_units WHERE course_id = ?d',
+                        $new_course_id)->order_offset)
+                ];
+            }
+            $unit_map = restore_table($restoreThis, 'course_units', $options, $url_prefix_map, $backupData, $restoreHelper);
             restore_table($restoreThis, 'unit_resources', array('delete' => array('id'),
                 'map' => array('unit_id' => $unit_map),
                 'map_function' => 'unit_map_function',
