@@ -4074,6 +4074,8 @@ function display_leaderboard_accordion($points_game_id) {
     global $tool_content, $course_code, $course_id, $langNoUserList, $langSurnameName, $langAutoJudgeRank, $langLevel, $langProgress, 
         $langViewLeaderboard, $langCompletion, $is_editor, $uid, $langAnonymous, $langStart, $langForNextLevel, $langPoints;
 
+    load_js('bootstrap-table');
+
     $anon = false;
     if (!$is_editor) {
         $pg_config = Database::get()->querySingle("SELECT config FROM points_game WHERE id = ?d", $points_game_id);
@@ -4115,7 +4117,7 @@ function display_leaderboard_accordion($points_game_id) {
             <div class='leaderboard-accordion-content'>
                 <div class='leaderboard-accordion-body'>
                     <div class='table-responsive'>
-                        <table class='leaderboard-table'>
+                        <table class='table leaderboard-table' data-toggle='table' data-pagination='true' data-page-size='10'>
                             <thead>
                                 <tr>
                                 <th>$langAutoJudgeRank</th>
