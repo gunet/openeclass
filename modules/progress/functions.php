@@ -4072,7 +4072,7 @@ function student_view_progress() {
  */
 function display_leaderboard_accordion($points_game_id) {
     global $tool_content, $course_code, $course_id, $langNoUserList, $langSurnameName, $langAutoJudgeRank, $langLevel, $langProgress, 
-        $langViewLeaderboard, $langCompletion, $is_editor, $uid, $langAnonymous, $langStart, $langToNextLevel;
+        $langViewLeaderboard, $langCompletion, $is_editor, $uid, $langAnonymous, $langStart, $langForNextLevel, $langPoints;
 
     $anon = false;
     if (!$is_editor) {
@@ -4121,6 +4121,7 @@ function display_leaderboard_accordion($points_game_id) {
                                 <th>$langAutoJudgeRank</th>
                                 <th>$langLevel</th>
                                 <th>$langSurnameName</th>
+                                <th>$langPoints</th>
                                 <th style='width: 250px;'>$langProgress</th>
                                 </tr>
                             </thead>
@@ -4132,24 +4133,21 @@ function display_leaderboard_accordion($points_game_id) {
             $row_class = $is_current_user ? 'current-user-student' : '';
             
             $current_level_display = $langStart; // Default to first level
-            $langForNext = $langToNextLevel;
+            $langForNext = $langForNextLevel;
+
+            $user_progress = PointsGame::getNextLevelInfo($user_data->id,$points_game_id);
 
             if ($user_data->total_points > 0) {
-                $user_progress = PointsGame::getNextLevelInfo($user_data->id,$points_game_id);
-                
-                if (is_null($user_progress['next_level_id'])) {
-                    $langForNext = $langCompletion;
-                }
 
                 // Points display
                 if ($user_progress['current_points'] > 0) {
                     if ($is_editor || $user_data->id == $uid) {
-                        $points_str = "<a class='small-text' href='index.php?course=$course_code&amp;points_game_id=$points_game_id&amp;u=$user_data->id'>".$user_progress['current_points']." pts</a>";
+                        $points_str = "<span><a href='index.php?course=$course_code&amp;points_game_id=$points_game_id&amp;u=$user_data->id'>".$user_progress['current_points']."</a></span>";
                     } else {
-                        $points_str = "<span class='small-text'>" . $user_progress['current_points'] . " pts</span>";
+                        $points_str = "<span>" . $user_progress['current_points'] . "</span>";
                     }
                 } else {
-                    $points_str = "<span class='small-text'>" . $user_progress['current_points'] . " pts</span>";
+                    $points_str = "<span>" . $user_progress['current_points'] . "</span>";
                 }
                 
                 // Current level display - show current level or first level if none reached
@@ -4158,18 +4156,24 @@ function display_leaderboard_accordion($points_game_id) {
                 }
                 
                 // Progress bar with data
-                $info = "<div class='progress'>
+                $progress = "<div class='progress'>
                             <div class='progress-bar' style='width: ".$user_progress['progress_percentage']."%'></div>
-                         </div>
-                         <span class='progress-text'>" . $user_progress['progress_percentage'] . "% $langForNext</span>
-                         <div>$points_str</div>";
+                         </div>";
+                
+                if (is_null($user_progress['next_level_id'])) {
+                    $progress .= "<div class='text-end'><span class='progress-text'>$langCompletion</span></div>";
+                } else {
+                    $progress .= "<div class='text-end'><span class='progress-text'>" . $user_progress['points_needed_for_next'] . " $langPoints $langForNext</span></div>";
+                }
+                
             } else {
                 // No progress - show first level with 0% and 0 pts
-                $info = "<div class='progress'>
+                $progress = "<div class='progress'>
                             <div class='progress-bar' style='width: 0%'></div>
                          </div>
-                         <span class='progress-text'>0% $langForNext</span>
-                         <div><span class='small-text'>0 pts</span></div>";
+                         <div class='text-end'><span class='progress-text'>".$user_progress['points_needed_for_next']." $langPoints $langForNext</span></div>";
+
+                $points_str = "<span>-</span>";
             }
 
 
@@ -4183,8 +4187,9 @@ function display_leaderboard_accordion($points_game_id) {
             $tool_content .= "<tr class='{$row_class}'>
                 <td><span class='rank-number'>#". $cnt++ . "</span></td>
                 <td><span class='level-badge'><i class='fa fa-star' style='color:#f59e0b;'></i> " . $current_level_display . "</span></td>
-                <td><span class='user-name'>" . $user_info . "</span></td>
-                <td>".$info."</td></tr>";
+                <td><span class='user-name'>$user_info</span></td>
+                <td>$points_str</td>
+                <td>$progress</td></tr>";
         }
         $tool_content .= "</tbody></table></div></div></div>";
     } else {
