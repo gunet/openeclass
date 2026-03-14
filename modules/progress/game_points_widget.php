@@ -86,7 +86,6 @@ function course_points_game_widget($uid, $course_id) {
                         <div class='badge-circle'>
                             <i class='fa-solid fa-star'></i>
                         </div>
-                        ".$game['level']."
                     </div>
                     <div class='points-col'>
                         <div class='points-num'>{$game['points']}</div>
@@ -104,140 +103,8 @@ function course_points_game_widget($uid, $course_id) {
     $html .= "</div></div></div></div>";
     
     
-    // Add JavaScript + CSS inline
+    // Add JavaScript
     $html .= "
-    <style>
-    .points-game-carousel {
-        border: 1px solid #e0e0e0;
-        border-radius: 6px;
-        overflow: hidden;
-        background: white;
-        width: 100%;
-        box-sizing: border-box;
-    }
-    
-    .carousel-nav-header {
-        background: #4a5568;
-        padding: 12px 20px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 25px;
-    }
-    
-    .carousel-nav-header .nav-btn {
-        background: none;
-        border: none;
-        color: white;
-        font-size: 16px;
-        cursor: pointer;
-        padding: 0;
-    }
-    
-    .carousel-nav-header .game-name {
-        color: white;
-        font-size: 15px;
-        font-weight: 500;
-    }
-    
-    .carousel-slides {
-        padding: 15px;
-        display: block;
-        width: 100%;
-        box-sizing: border-box;
-    }
-    
-    .carousel-slides .slide-item {
-        display: none !important;
-    }
-    
-    .carousel-slides .slide-item.active {
-        display: block !important;
-        animation: fadeEffect 0.4s;
-        width: 100%;
-    }
-    
-    @keyframes fadeEffect {
-        from { opacity: 0; }
-        to { opacity: 1; }
-    }
-    
-    .game-box {
-        display: flex;
-        align-items: center;
-        justify-content: center; 
-        gap: 20px; 
-        padding: 15px;
-        border: 1px solid #e0e0e0;
-        border-radius: 6px;
-        background: #fafafa;
-        max-width: 100%;
-        margin: 0 auto;
-        box-sizing: border-box;
-    }
-    
-    .badge-col {
-        flex: 0 0 auto;
-    }
-    
-    .badge-circle {
-        width: 45px;
-        height: 45px;
-        border: 2px solid #d0d0d0;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: white;
-    }
-    
-    .badge-circle i {
-        font-size: 20px;
-        color: #FFD700;
-    }
-    
-    .points-col {
-        text-align: center;
-        padding-right: 20px;
-        border-right: 1px solid #d0d0d0;
-        flex: 0 0 auto;
-    }
-    
-    .points-num {
-        font-size: 24px;
-        font-weight: 700;
-        color: #333;
-        line-height: 1;
-    }
-    
-    .points-txt {
-        font-size: 12px;
-        color: #666;
-    }
-    
-    .progress-col {
-        flex: 0 0 auto;
-        text-align: center; 
-    }
-    
-    .progress-label {
-        font-size: 12px;
-        color: #666;
-    }
-    
-    .progress-percent {
-        font-size: 24px;
-        font-weight: 700;
-        color: #5b7ad6;
-        line-height: 1;
-    }
-    
-    .progress-level {
-        font-size: 12px;
-        color: #555;
-    }
-    </style>
-    
     <script>
     $(document).ready(function() {
         let currentSlide = 0;
