@@ -430,7 +430,7 @@ function display_course_completion(): void
  */
 function display_activities($element, $id, $unit_id = 0) {
 
-    global $tool_content, $course_code, $is_editor, $action_bar,
+    global $tool_content, $course_code, $is_editor, $action_bar, $langActions,
            $langNoActivCert, $langAttendanceActList, $langTitle, $langType,
            $langOfAssignment, $langExerciseAsModuleLabel, $langOfBlog,
            $langMediaAsModuleLabel, $langOfEBook, $langOfPoll, $langWiki,
@@ -443,6 +443,8 @@ function display_activities($element, $id, $unit_id = 0) {
            $langNoUnitPrerequisite, $langAssignmentParticipation, $langAttendance,
            $langPointsGameRecActivities, $langPointsGameOneTimeActivities, $langPointsGameNoRecActivities, $langForumParticipation,
            $langPointsGameNoOneTimeActivities, $langPoints, $langActivityMaxPoints, $langActivityMaxPointsInPeriod, $langActivityMaxPointsTimePeriod;
+
+    load_js('bootstrap-table');
 
     if ($unit_id) {
         $link_id = "course=$course_code&amp;manage=1&amp;unit_id=$unit_id&amp;badge_id=$id";
@@ -671,45 +673,44 @@ function display_activities($element, $id, $unit_id = 0) {
                     <div class='progress-module'>
                         <div class='leaderboard-accordion-header'>
                             <h4><i class='fa fa-refresh'></i> $langPointsGameRecActivities</h4>
-                            <div class='d-flex align-items-center gap-3'>";
-                                if ($is_editor) {
-                                    $tool_content .= "<div onclick='event.stopPropagation()'>
-                                        $addRecActivityBtn
-                                    </div>";
-                                }
-            $tool_content .= "
+                            <div class='d-flex align-items-center gap-3'>
                                 <i class='fa fa-chevron-down leaderboard-accordion-icon'></i>
                             </div>
                         </div>
                         <div class='leaderboard-accordion-content'>
                             <div class='leaderboard-accordion-body'>";
+                                if ($is_editor) {
+                                    $tool_content .= "<div class='text-end mb-2'>
+                                        $addRecActivityBtn
+                                    </div>";
+                                }
                                 if (count($result_recurrent) == 0) {
                                     $tool_content .= "<p class='text-center text-muted'>$langPointsGameNoRecActivities</p>";
                                 } else {
-                                $tool_content .= "<div class='table-responsive mt-0'>
-                                                        <table class='table-default' style='table-layout: fixed; width:100%'><thead>
-                                                            <tr class='list-header'>
-                                                                <th style='width: 35%;'>
+                                $tool_content .= "<div class='mt-0'>
+                                                        <table data-toggle='table' data-pagination='true' data-page-size='5' data-mobile-responsive='true'><thead>
+                                                            <tr>
+                                                                <th>
                                                                     $langTitle
                                                                 </th>
-                                                                <th style='width: 10%;'>
+                                                                <th>
                                                                     $langType
                                                                 </th>
-                                                                <th style='width: 10%;'>
+                                                                <th>
                                                                     $langPoints
                                                                 </th>
-                                                                <th style='width: 10%;'>
+                                                                <th>
                                                                     $langActivityMaxPoints
                                                                 </th>
-                                                                <th style='width: 15%;'>
+                                                                <th>
                                                                     $langActivityMaxPointsInPeriod
                                                                 </th>
-                                                                <th style='width: 15%;'>
+                                                                <th>
                                                                     $langActivityMaxPointsTimePeriod
                                                                 </th>
-                                                                <th style='width: 5%;'>";
+                                                                <th>";
                                                                 if ($is_editor) {
-                                                                    $tool_content .= "<i class='fa fa-cogs'></i>";
+                                                                    $tool_content .= $langActions;
                                                                 }
                                 $tool_content .=                "</th>
                                                             </tr></thead>";
@@ -760,23 +761,22 @@ function display_activities($element, $id, $unit_id = 0) {
                     <div class='progress-module'>
                         <div class='leaderboard-accordion-header'>
                             <h4><i class='fa fa-check-circle'></i> $langPointsGameOneTimeActivities</h4>
-                            <div class='d-flex align-items-center gap-3'>";
-                                if ($is_editor) {
-                                    $tool_content .= "<div onclick='event.stopPropagation()'>
-                                        $addActivityBtn
-                                    </div>";
-                                }
-            $tool_content .= "
+                            <div class='d-flex align-items-center gap-3'>
                                 <i class='fa fa-chevron-down leaderboard-accordion-icon'></i>
                             </div>
                         </div>
                         <div class='leaderboard-accordion-content'>
                             <div class='leaderboard-accordion-body'>";
+                                if ($is_editor) {
+                                    $tool_content .= "<div class='text-end mb-2'>
+                                        $addActivityBtn
+                                    </div>";
+                                }
                                 if (count($result_onetime) == 0) {
                                     $tool_content .= "<p class='text-center text-muted'>$langPointsGameNoOneTimeActivities</p>";
                                 } else {
-                                $tool_content .= "<div class='table-responsive mt-0'>
-                                                        <table class='table-default'><thead>
+                                $tool_content .= "<div class='mt-0'>
+                                                        <table data-toggle='table' data-pagination='true' data-page-size='5' data-mobile-responsive='true'><thead>
                                                             <tr class='list-header'>
                                                                 <th>
                                                                     $langTitle
@@ -792,7 +792,7 @@ function display_activities($element, $id, $unit_id = 0) {
                                                                 </th>
                                                                 <th style='width: 5%;'>";
                                                                 if ($is_editor) {
-                                                                    $tool_content .= "<i class='fa fa-cogs'></i>";
+                                                                    $tool_content .= $langActions;
                                                                 }
                                 $tool_content .=                "</th>
                                                             </tr></thead>";
@@ -4116,8 +4116,8 @@ function display_leaderboard_accordion($points_game_id) {
             </div>
             <div class='leaderboard-accordion-content'>
                 <div class='leaderboard-accordion-body'>
-                    <div class='table-responsive'>
-                        <table class='table leaderboard-table' data-toggle='table' data-pagination='true' data-page-size='10'>
+                    <div>
+                        <table class='table leaderboard-table' data-toggle='table' data-pagination='true' data-page-size='10' data-mobile-responsive='true'>
                             <thead>
                                 <tr>
                                 <th>$langAutoJudgeRank</th>
@@ -4735,11 +4735,8 @@ function display_user_points_game_details($points_game_id, $user_id) {
                     <h3>$langAttendanceActivity</h3>
                 </div>
                 <div class='card-body'>
-                    <div class='table-responsive mt-0'>
-                    <table class='table'
-                    data-toggle='table'
-                    data-pagination='true'
-                    data-page-size='5'>
+                    <div class='mt-0'>
+                    <table data-toggle='table' data-pagination='true' data-page-size='5' data-mobile-responsive='true'>
                         <thead>
                             <tr>
                                 <th>$langTitle</th>

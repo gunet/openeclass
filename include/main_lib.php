@@ -218,6 +218,7 @@ function load_js($file, $init='') {
                 }
             }
             $head_content .= js_link('bootstrap-table/bootstrap-table.min.js');
+            $head_content .= js_link('bootstrap-table/extensions/mobile/bootstrap-table-mobile.min.js');
         } elseif ($file == 'spectrum') {
             $head_content .= css_link('spectrum/spectrum.css');
             $file = 'spectrum/spectrum.js';
