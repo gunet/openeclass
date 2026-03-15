@@ -467,23 +467,6 @@ function display_activities($element, $id, $unit_id = 0) {
         }
     }
 
-    $action_bar = action_bar(
-            array(
-                array('title' => $langBack,
-                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-                    'icon' => 'fa-reply',
-                    'level' => 'primary',
-                    'show'  =>  $unit_id ? false : true),
-                array('title' => $langUsers,
-                    'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;progressall=true",
-                    'icon' => 'fa-users',
-                    'level' => 'secondary',
-                    'show'  =>  $show_users)
-            ),
-            false
-        );
-    $tool_content .= $action_bar;
-
     if ($unit_id) {
         // check if unit completion is enabled
         $cc_enable = Database::get()->querySingle("SELECT count(id) as active FROM badge
@@ -841,24 +824,29 @@ function display_activities($element, $id, $unit_id = 0) {
         } else {
             $tool_content .= "
                 <div class='col-12 mt-4'>
-                    <div class='card panelCard card-default px-lg-4 py-lg-3'>
-                        <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-                            <h3>
+                    <div class='progress-module'>
+                        <div class='leaderboard-accordion-header'>
+                            <h4>
+                                <i class='fa fa-check-circle'></i>
                                 $langAttendanceActList
-                            </h3>";
-                        if ($is_editor) {
-                            $tool_content .= "<div>
-                                $addActivityBtn
+                            </h4>
+                            <div class='d-flex align-items-center gap-3'>
+                                <i class='fa fa-chevron-down leaderboard-accordion-icon'></i>
                             </div>";
-                        }
             $tool_content .=  "</div>";
             $tool_content .= "
-                        <div class='card-body'>";
+                        <div class='leaderboard-accordion-content'>
+                            <div class='leaderboard-accordion-body'>";
+                            if ($is_editor) {
+                                $tool_content .= "<div class='text-end mb-2'>
+                                    $addActivityBtn
+                                </div>";
+                            }
                             if (count($result) == 0) {
                                 $tool_content .= "<p class='margin-top-fat text-center text-muted'>$langNoActivCert</p>";
                             } else {
-                            $tool_content .= "<div class='table-responsive mt-0'>
-                                                    <table class='table-default'><thead>
+                            $tool_content .= "<div class='mt-0'>
+                                                    <table data-toggle='table' data-pagination='true' data-page-size='5' data-mobile-responsive='true'><thead>
                                                         <tr class='list-header'>
                                                             <th>
                                                                 $langTitle
@@ -870,7 +858,7 @@ function display_activities($element, $id, $unit_id = 0) {
                                                                 $langValue
                                                             </div>
                                                             <th>
-                                                                <i class='fa fa-cogs'></i>
+                                                                $langActions
                                                             </th>
                                                         </tr></thead>";
                                                         foreach ($result as $details) {
@@ -914,6 +902,7 @@ function display_activities($element, $id, $unit_id = 0) {
                                                 </div>";
                             }
             $tool_content .= "
+                            </div>
                         </div>
                     </div>
                 </div>";
@@ -921,11 +910,6 @@ function display_activities($element, $id, $unit_id = 0) {
         }
 
         if (!$unit_id && $is_editor && $element != 'points_game') {
-            $saved = $tool_content;
-            $tool_content = '';
-            display_users_progress($element, $id);
-            $users_html = $tool_content;
-            $tool_content = $saved;
 
             $tool_content .= "
             <div class='progress-module'>
@@ -934,9 +918,11 @@ function display_activities($element, $id, $unit_id = 0) {
                     <i class='fa fa-chevron-down leaderboard-accordion-icon'></i>
                 </div>
                 <div class='leaderboard-accordion-content'>
-                    <div class='leaderboard-accordion-body'>
-                        $users_html
-                    </div>
+                    <div class='leaderboard-accordion-body'>";
+            
+                    display_users_progress($element, $id);
+
+            $tool_content .=        "</div>
                 </div>
             </div>
             ";
@@ -4358,7 +4344,7 @@ function display_users_progress($element, $element_id) {
 
     if (count($sql) > 0) {
         $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langUsersCertResults $certified_users / $all_users $langUsersS.</span></div></div>";
-        $tool_content .= "<div class='col-sm-12'><div class='table-responsive'><table class='leaderboard-table'>";
+        $tool_content .= "<div class='col-sm-12'><div class='table-responsive'><table class='leaderboard-table' data-toggle='table' data-pagination='true' data-page-size='10' data-mobile-responsive='true'>";
         $tool_content .= "<thead>
                     <tr>
                       <th>$langID</th>
