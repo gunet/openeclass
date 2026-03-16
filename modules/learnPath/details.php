@@ -119,6 +119,7 @@ if ($learnPathName) {
                             <th>$langTotalTimeSpent</th>
                             <th>$langLessonStatus</th>
                             <th>$langProgress</th>
+                            <th>$langScore</th>
                         </tr>
                     </thead>";
 
@@ -126,7 +127,7 @@ if ($learnPathName) {
     $data[] = [ $currentCourseName ];
     $data[] = [ $learnPathName->name ];
     $data[] = [];
-    $data[] = [ $langSurnameName, $langEmail, $langAm, $langGroup, $langAttempts, $langAttemptStarted, $langAttemptAccessed, $langTotalTimeSpent, $langLessonStatus, $langProgress ];
+    $data[] = [ $langSurnameName, $langEmail, $langAm, $langGroup, $langAttempts, $langAttemptStarted, $langAttemptAccessed, $langTotalTimeSpent, $langLessonStatus, $langProgress, $langScore ];
 
     $usersList = Database::get()->queryArray("SELECT U.`surname`, U.`givenname`, U.`id`, U.`email`, U.`am`
                         FROM `user` AS U,
@@ -139,7 +140,8 @@ if ($learnPathName) {
 
     $tool_content .= "<tbody>";
     foreach ($usersList as $user) {
-        list($lpProgress, $lpTotalTime, $lpTotalStarted, $lpTotalAccessed, $lpTotalStatus, $lpAttemptsNb) = get_learnPath_progress_details($path_id, $user->id);
+        list($lpProgress, $lpTotalTime, $lpTotalStarted, $lpTotalAccessed, $lpTotalStatus, $lpAttemptsNb, $lpScore, $lpScoreMax) = get_learnPath_progress_details($path_id, $user->id);
+        $lpDisplay = format_lp_progress_display($lpAttemptsNb, $lpTotalTime, $lpProgress, $lpScore, $lpScoreMax);
         $lpCombinedProgress = get_learnPath_combined_progress($path_id, $user->id);
         $tool_content .= "<tr>";
         if (!isset($_GET['pdf'])) {
@@ -160,12 +162,13 @@ if ($learnPathName) {
                             <td>" . $lp_total_accessed . "</td>
                             <td>" . q($lpTotalTime) . "</td>
                             <td>" . $lp_total_status . "</td>
-                            <td>" . disp_progress_bar($lpCombinedProgress, 1) . "</td>";
+                            <td>" . disp_progress_bar($lpCombinedProgress, 1) . "</td>
+                            <td class='text-end'>" . $lpDisplay['score'] . "</td>";
 
         $tool_content .= "</tr>";
 
         $ug = user_groups($course_id, $user->id, 'csv');
-        $data[] = [ "$user->surname $user->givenname", $user->email, $user->am, $ug, $lpAttemptsNb, $lp_total_started, $lp_total_accessed, $lpTotalTime, $lp_total_status, $lpProgress . '%' ];
+        $data[] = [ "$user->surname $user->givenname", $user->email, $user->am, $ug, $lpAttemptsNb, $lp_total_started, $lp_total_accessed, $lpTotalTime, $lp_total_status, $lpProgress . '%', $lpDisplay['score'] ];
     }
     $tool_content .= "</tbody></table></div>";
 }
@@ -177,11 +180,11 @@ if (isset($_GET['xls'])) {
     $sheet->getDefaultColumnDimension()->setWidth(30);
     $filename = $course_code . " learning_path_results.xlsx";
 
-    $sheet->mergeCells("A1:J1");
-    $sheet->mergeCells("A2:J2");
+    $sheet->mergeCells("A1:K1");
+    $sheet->mergeCells("A2:K2");
     $sheet->getCell('A1')->getStyle()->getFont()->setBold(true);
     $sheet->getCell('A2')->getStyle()->getFont()->setItalic(true);
-    for ($i = 1; $i <= 10; $i++) {
+    for ($i = 1; $i <= 11; $i++) {
         $cells = [$i, 3];
         $sheet->getCell($cells)->getStyle()->getFont()->setBold(true);
     }
