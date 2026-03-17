@@ -4,7 +4,7 @@
  *  * Open eClass
  *  * E-learning and Course Management System
  *  * ========================================================================
- *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  * Copyright 2003-2026, Greek Universities Network - GUnet
  *  *
  *  * Open eClass is an open platform distributed in the hope that it will
  *  * be useful (without any warranty), under the terms of the GNU (General
@@ -25,7 +25,7 @@
  * Defines standard functions and validates variables
  */
 
-define('ECLASS_VERSION', '4.3-dev');
+define('ECLASS_VERSION', '4.3');
 
 // mPDF library temporary file path and font path
 if (isset($webDir)) { // needed for avoiding 'notices' in some files
@@ -3606,11 +3606,6 @@ function csrf_token_error() {
    redirect_to_home_page();
 }
 
-
-
-
-
-
 /**
  * Indirect Reference to Direct Reference Map
  *
@@ -4089,7 +4084,7 @@ function action_button($options, $secondary_menu_options = array(), $fc=false) {
         $tmp_class_title = !empty($secondary_title) ? "<span class='hidden-xs'>$secondary_title</span>" : "";
         $action_button = "
             <button style='border-radius: 4px;' class='btn $secondary_btn_class action-button-dropdown' type='button' id='actionDropdown' data-bs-toggle='dropdown' aria-expanded='false' aria-label='$langListChoices'>
-                <span class='fa $secondary_icon'></span> 
+                <span class='fa $secondary_icon'></span>
                 $tmp_class_title
             </button>
             <div class='m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-border contextual-menu-action-button' aria-labelledby='actionDropdown'>
