@@ -128,7 +128,7 @@ class PointsGame {
             $i++;
         }
 
-        return false;
+        return null;
     }
 
     public static function resetPointsGame($gid, $user = null) {
