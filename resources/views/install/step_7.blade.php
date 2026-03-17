@@ -220,7 +220,7 @@
                 message:  '<div><p>{{ js_escape(trans('langInstallMsg')) }}</p></div>'+
                     '<div class=\"progress\">'+
                     '<div class=\"progress-bar progress-bar-striped active\" role=\"progressbar\" aria-valuenow=\"100\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: 100%\">'+
-                    '<span class=\"sr-only\">{{ js_escape(trans('langCheckNotOk1')) }}</span>'+
+                    '<span class=\"visually-hidden\">{{ js_escape(trans('langCheckNotOk1')) }}</span>'+
                     '</div>'+
                     '</div>',
                 title: '{{ js_escape(trans('langCheckNotOk1')) }}'

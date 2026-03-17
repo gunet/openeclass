@@ -615,7 +615,6 @@
                             {!! html_entity_decode($course_home_main_area_widgets) !!}
                         @endif
 
-
                     </div>
 
 
@@ -727,6 +726,13 @@
                             @endif
                         @endif
 
+
+                        @if ($uid && !$is_editor && (isset($is_collaborative_course) and !$is_collaborative_course))
+                            @if(!empty($points_game_widget))
+                                {!! $points_game_widget !!}
+                            @endif
+                        @endif
+
                         @if(isset($is_collaborative_course) and !$is_collaborative_course)
                             @if (isset($level) && !empty($level))
                                 <div class='card panelCard card-transparent border-0 mt-5 sticky-column-course-home'>
@@ -772,7 +778,7 @@
     <div class='modal-dialog'>
         <div class='modal-content'>
             <div class='modal-header'>
-                <div class='modal-title' id='myModalLabel'>{{ trans('langCitation') }}</div>
+                <h2 class='modal-title' id='myModalLabel'>{{ trans('langCitation') }}</h2>
                 <button type='button' class='close' data-bs-dismiss='modal' aria-label="{{ trans('langClose') }}">
                 </button>
 
@@ -849,3 +855,70 @@
 @endif
 
 @endsection
+@if ($uid && !$is_editor && !empty($points_game_widget))
+<script>
+(function() {
+    // Wait for jQuery to be ready
+    if (typeof jQuery === 'undefined') {
+        console.error('jQuery not loaded yet!');
+        return;
+    }
+    
+    jQuery(document).ready(function($) {
+        console.log('Widget script starting...');
+        
+        var carousel = $('.points-game-carousel');
+        if (carousel.length === 0) {
+            console.log('No carousel found');
+            return;
+        }
+        
+        console.log('Carousel found!');
+        
+        var idx = 0;
+        var total = carousel.find('.slide-item').length;
+        
+        console.log('Total games:', total);
+        
+        function update() {
+            console.log('Updating to index:', idx);
+            
+            // Update slides
+            carousel.find('.slide-item').removeClass('active');
+            carousel.find('.slide-item').eq(idx).addClass('active');
+            
+            // Get and set name
+            var name = carousel.find('.slide-item').eq(idx).attr('data-name');
+            console.log('Game name:', name);
+            
+            carousel.find('.game-name').text(name || 'Παιχνίδι ' + (idx + 1));
+            
+            // Update buttons
+            carousel.find('.prev-btn').prop('disabled', idx === 0);
+            carousel.find('.next-btn').prop('disabled', idx === total - 1);
+        }
+        
+        // Bind events
+        carousel.find('.prev-btn').on('click', function() {
+            if (idx > 0) {
+                idx--;
+                update();
+            }
+        });
+        
+        carousel.find('.next-btn').on('click', function() {
+            if (idx < total - 1) {
+                idx++;
+                update();
+            }
+        });
+        
+        // Initialize
+        if (total > 0) {
+            console.log('Initializing...');
+            update();
+        }
+    });
+})();
+</script>
+@endif

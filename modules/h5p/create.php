@@ -180,7 +180,7 @@ function addActionButtons(): string {
 
             <div class='col-md-9 form-inline felement mt-5' data-fieldtype='group'>
                 <fieldset class='w-100 m-0 p-0 border-0'>
-                    <legend class='sr-only'></legend>
+                    <legend class='visually-hidden'></legend>
                     <div class='d-flex flex-wrap align-items-center'>
                         <div class='form-group fitem'>
                             <span data-fieldtype='submit'>

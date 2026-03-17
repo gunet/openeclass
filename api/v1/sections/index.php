@@ -37,6 +37,7 @@ function api_method($access) {
         WHERE course_id = ?d AND visible = 1
         ORDER BY `order`', $course->id);
     header('Content-Type: application/json');
+    header('X-Content-Type-Options: nosniff');
     echo json_encode($units, JSON_UNESCAPED_UNICODE);
     exit();
 }

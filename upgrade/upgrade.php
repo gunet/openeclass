@@ -117,7 +117,9 @@ if ($command_line or $ajax_call) {
     if (isset($_SESSION['upgrade_step'])) {
         $step = $_SESSION['upgrade_step'];
     }
-
+if (!DBHelper::fieldExists('exercise_answer_record', 'centainty')) {
+        Database::get()->query("ALTER TABLE exercise_answer_record ADD `centainty` INT NOT NULL DEFAULT 0");
+    }
     foreach ($versions as $version) {
         if (version_compare($oldversion, $version, '<')) {
 

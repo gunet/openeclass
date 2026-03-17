@@ -206,8 +206,6 @@ if ($is_editor) {
                          <div class='col-12'>
                         <div class='form-wrapper form-edit rounded'><form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='POST'>
 
-
-
                         <div class='form-group'>
                             <label for='newPathName' class='col-sm-6 control-label-notes'>$langName</label>
                             <div class='col-sm-12'>
@@ -265,10 +263,6 @@ if ($is_editor) {
                                     <input name='newComment' placeholder='$langDescription' type='text' class='form-control' id='newComment'>
                                     </div>
                                 </div>
-
-
-
-
 
                                 <div class='form-group mt-5'>
                                     <div class='col-12 d-flex justify-content-end align-items-center'>
@@ -418,7 +412,8 @@ $tool_content .= "
     <table class='table-default'>
     <thead class='list-header'>
     <tr>
-      <th>$langLearningPaths</th>";
+      <th>$langLearningPaths</th>
+      <th>$langType</th>";
 
 if ($is_editor) {
     // Titles for teachers
@@ -426,7 +421,8 @@ if ($is_editor) {
 } elseif ($uid) {
     // display progression only if user is not teacher && not anonymous
     $tool_content .= "<th>$langTotalTimeSpent</th>
-                      <th>$langProgress</></th>";
+                      <th>$langProgress</></th>
+                      <th>$langScore</></th>";
 }
 // close title line
 $tool_content .= "</tr></thead><tbody id='tosort'>";
@@ -489,7 +485,7 @@ foreach ($result as $list) { // while ... learning path list
     //Display current learning path name
     if (!$is_blocked) {
         // locate 1st module of current learning path
-        $modulessql = "SELECT M.`module_id`
+        $modulessql = "SELECT M.`module_id`, M.`contentType`
                 FROM (`lp_module` AS M,
                       `lp_rel_learnPath_module` AS LPM)
                 WHERE M.`module_id` = LPM.`module_id`
@@ -508,16 +504,16 @@ foreach ($result as $list) { // while ... learning path list
         }
 
         if(!$is_editor) { // student
-            $play_button = "<span class='ps-2'><a href='learningPath.php?course=".$course_code."&amp;path_id=".$list->learnPath_id."'><span class='fa fa-line-chart' data-bs-toggle='tooltip' data-bs-placement='top' title='$langTracking'></span></a></span>";
+            $play_button = "<span class='ps-2'><a href='learningPath.php?course=".$course_code."&amp;path_id=".$list->learnPath_id."'><span class='fa fa-line-chart' data-bs-toggle='tooltip' data-bs-placement='top' title='$langLearningPathData'></span></a></span>";
             if (count($resultmodules) > 0) { // If there are modules
-                $play_url = "<a href='viewer.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "&amp;module_id=" . $resultmodules[0]->module_id . "'>" . q($list->name) . "</a>";
+                $play_url = "<a href='viewer.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "&amp;module_id=" . $resultmodules[0]->module_id . "'>" . htmlspecialchars($list->name) . "</a>";
             } else { // If there are no modules
                 $play_url = htmlspecialchars($list->name);
             }
         } else { //  admin
             $play_button = "";
             if (count($resultmodules) > 0) { // If there are modules
-                $play_url = "<a href='viewer.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "&amp;module_id=" . $resultmodules[0]->module_id . "'>" . q($list->name) . "</a>";
+                $play_url = "<a href='viewer.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "&amp;module_id=" . $resultmodules[0]->module_id . "'>" . htmlspecialchars($list->name) . "</a>";
             } else {
                 $play_url = htmlspecialchars($list->name);
             }
@@ -527,7 +523,7 @@ foreach ($result as $list) { // while ... learning path list
         $tool_content .= "
                     </div>
                 <div class='mt-2'><p>" . q($list->lp_comment) . "<p></div>
-            </td>";
+            </td><td>" . (($resultmodules[0]->contentType === "SCORM") ? $langAltScorm : $langLearnPath) . "</td>";
 
         // --------------TEST IF FOLLOWING PATH MUST BE BLOCKED------------------
         // ---------------------(MUST BE OPTIMIZED)------------------------------
@@ -649,16 +645,17 @@ foreach ($result as $list) { // while ... learning path list
                             </div>
                         </td>";
     } elseif ($uid) {
-        list($lpProgress, $lpTotalTime, $lpTotalStarted, $lpTotalAccessed, $lpTotalStatus, $lpAttemptsNb) = get_learnPath_progress_details($list->learnPath_id, $uid);
+        list($lpProgress, $lpTotalTime, $lpTotalStarted, $lpTotalAccessed, $lpTotalStatus, $lpAttemptsNb, $lpScore, $lpScoreMax) = get_learnPath_progress_details($list->learnPath_id, $uid);
         $total_lpProgress += $lpProgress;
         // time
         if (!empty($lpTotalTime)) {
             $globaltime = addScormTime($globaltime, $lpTotalTime);
         }
-        // % progress
-        $prog = get_learnPath_combined_progress($list->learnPath_id, $uid);
-        $tool_content .= "<td style='width: 15%;'>$lpTotalTime</td>";
-        $tool_content .= "<td style='width: 15%;'>" . disp_progress_bar($prog, 1) . "</td>";
+        $lpDisplay = format_lp_progress_display($lpAttemptsNb, $lpTotalTime, $lpProgress, $lpScore, $lpScoreMax);
+
+        $tool_content .= "<td style='width: 15%;'>" . $lpDisplay['time'] . "</td>";
+        $tool_content .= "<td style='width: 15%;'>" . $lpDisplay['progress_html'] . "</td>";
+        $tool_content .= "<td>" . $lpDisplay['score'] . "</td>";
     }
 
     $tool_content .= "</tr>";
@@ -675,8 +672,10 @@ if (!$is_editor && $iterator != 1 && $uid) {
     $tool_content .= "
     <tr>
       <td class='text-start'><strong>$langTotal</strong>:</td>
+      <td></td>
       <td class='text-start'><strong>$globaltime</strong:</td>
       <td>" . disp_progress_bar($total, 1) . "</td>
+      <td></td>
     </tr>";
 }
 $tool_content .= "</tbody></table></div>";

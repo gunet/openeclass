@@ -73,6 +73,7 @@ if (isset($_POST['submitExercise'])) {
         'exerciseStartDate' => "$langTheField $langStart",
         'exerciseIPLock' => "$langTheField IPs"
     ));
+
     if($v->validate()) {
         $exerciseTitle = trim($_POST['exerciseTitle']);
         $objExercise->updateTitle($exerciseTitle);
@@ -85,7 +86,11 @@ if (isset($_POST['submitExercise'])) {
         }
         $objExercise->updateType($_POST['exerciseType']);
         $objExercise->updateRange($_POST['exerciseRange']);
-        $objExercise->setCalcGradeMethod($_POST['exerciseCalcGradeMethod']);
+        if (isset($_POST['exerciseCalcGradeMethod'])) {
+            $objExercise->setCalcGradeMethod(CALC_GRADE_METHOD_CERTAINTY_BASED);
+        } else {
+            $objExercise->setCalcGradeMethod(CALC_GRADE_METHOD_STANDARD);
+        }
         if (isset($_POST['exerciseIPLock'])) {
             $objExercise->updateIPLock(implode(',', $_POST['exerciseIPLock']));
         } else {

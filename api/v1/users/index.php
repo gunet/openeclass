@@ -19,7 +19,7 @@
  */
 
 function api_method($access) {
-    global $webDir, $username, $firstname, $lastname, $emailaddress, $adt, $password;
+    global $webDir, $username, $firstname, $lastname, $emailaddress, $auth, $adt, $password,$auth_ids,$hybridAuthMethods;
 
     if (!$access->isValid) {
         Access::error(100, "Authentication required");
@@ -33,10 +33,30 @@ function api_method($access) {
             'emailaddress' => true,
             'adt' => false,
             'password' => false,
+            'auth' => false,
         ]);
         if (!$ok) {
-            Access::error(2, 'Required parameters for user creation missing: username, firstname, lastname, emailaddress, [adt], [password]');
+            Access::error(2, 'Required parameters for user creation missing: username, firstname, lastname, emailaddress, [adt], [password], [auth]');
         }
+
+
+        if (!empty($auth)) {
+            require_once __DIR__ . '/../../../modules/auth/auth.inc.php';
+
+            $tempHybridAuthMethods = array_merge($hybridAuthMethods, ['eclass']);
+
+            $active_auth_methods = get_auth_active_methods();
+            $active_auth_names = array_map(function($id) use ($auth_ids) {
+                return isset($auth_ids[$id]) ? $auth_ids[$id] : null;
+            }, $active_auth_methods);
+
+            $allowed_auth_names = array_diff($active_auth_names, $tempHybridAuthMethods);
+
+            if (!in_array($auth, $active_auth_names) || in_array($auth, $tempHybridAuthMethods)) {
+                Access::error(2, 'Invalid authentication method. Allowed methods are: ' . implode(', ', $allowed_auth_names));
+            }
+        }
+
         if (get_config('case_insensitive_usernames')) {
             $qry = "COLLATE utf8mb4_general_ci = ?s";
         } else {
@@ -52,20 +72,29 @@ function api_method($access) {
                 Database::get()->query('UPDATE user SET surname = ?s, givenname = ?s, email = ?s
                     WHERE id = ?d',
                     $lastname, $firstname, $emailaddress, $user->id);
-                if ($password !== '') {
-                    Database::get()->query('UPDATE user SET password = ?s WHERE id = ?d',
-                        password_hash($password, PASSWORD_DEFAULT), $user->id);
+
+                if ( !empty($auth) ) {
+                    Database::get()->query('UPDATE user SET password = ?s WHERE id = ?d', $auth, $user->id);
+                } else if (!$password == '') {
+                    $password_encrypted = password_hash($password, PASSWORD_DEFAULT);
+                    Database::get()->query('UPDATE user SET password = ?s WHERE id = ?d', $password_encrypted, $user->id);
                 }
                 if (isset($_POST['adt'])) {
-                    Database::get()->query('UPDATE user SET am = ?s WHERE id = ?d',
-                        $adt, $user->id);
+                    Database::get()->query('UPDATE user SET am = ?s WHERE id = ?d', $adt, $user->id);
                 }
             }
             $statusmsg = 'updated';
             $user_id = $user->id;
         } else {
-            $password = choose_password_strength();
-            $password_encrypted = password_hash($password, PASSWORD_DEFAULT);
+            if (!empty($auth)) {
+                $password_encrypted = $auth;
+            } else {
+                if ($password == '') {
+                    $password = choose_password_strength();
+                }
+                $password_encrypted = password_hash($password, PASSWORD_DEFAULT);
+            }
+
             $user = Database::get()->query("INSERT INTO user
                 SET surname = ?s, givenname = ?s, username = ?s, password = ?s,
                     email = ?s, status = ?d, registered_at = " . DBHelper::timeAfter() . ",
@@ -84,8 +113,11 @@ function api_method($access) {
         }
         user_hook($user_id);
         header('Content-Type: application/json');
+        header('X-Content-Type-Options: nosniff');
         $response = ['id' => $user_id, 'status' => $statusmsg];
-        if (isset($password) and $password !== '') {
+        if (!empty($auth)) {
+            $response['auth'] = $auth;
+        } elseif (isset($password) && $password !== '') {
             $response['password'] = $password;
         }
         echo json_encode($response);
@@ -153,6 +185,7 @@ function api_method($access) {
             }
         }
         header('Content-Type: application/json');
+        header('X-Content-Type-Options: nosniff');
         echo json_encode([
             'id' => $user->id,
             'username' => $user->username,

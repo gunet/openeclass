@@ -18,6 +18,7 @@
  *
  */
 
+require_once 'PointsGame.php'; 
 require_once 'Criterion.php';
 require_once 'CriterionSet.php';
 require_once 'Game.php';
@@ -33,6 +34,7 @@ class BasicEvent implements Sabre\Event\EventEmitterInterface {
     protected $eventData;
     protected $certificateIds;
     protected $badgeIds;
+    protected $pointsgameIds;
     protected $criterionSet;
 
     public static function trigger($eventname, $eventdata) {
@@ -76,6 +78,7 @@ class BasicEvent implements Sabre\Event\EventEmitterInterface {
             $data = $this->eventData;
             $this->certificateIds = array();
             $this->badgeIds = array();
+            $this->pointsgameIds = array();
             $this->criterionSet = new CriterionSet();
 
             // select certificates not already conquered
@@ -92,9 +95,16 @@ class BasicEvent implements Sabre\Event\EventEmitterInterface {
                 $this->badgeIds[] = $b->id;
             }, $data->courseId, $data->uid);
 
+            //select active point games
+            $pointsgamesQ = "select g.id from points_game g where g.course_id = ?d and g.active = 1 and g.starts <= NOW() and g.expires >= NOW()";
+            Database::get()->queryFunc($pointsgamesQ, function($g) {
+                $this->pointsgameIds[] = $g->id;
+            }, $data->courseId);
+
             $iter = array();
             $iter['certificate'] = $this->certificateIds;
             $iter['badge'] = $this->badgeIds;
+            $iter['points_game'] = $this->pointsgameIds;
 
             foreach ($iter as $key => $ids) {
                 // select criteria not already conquered
@@ -112,12 +122,31 @@ class BasicEvent implements Sabre\Event\EventEmitterInterface {
                         // instead of blindly trusting the DB.
                         $andResource = " and c.resource is null ";
                     }
-                    $critsQ = "select c.*, '$key' as type from {$key}_criterion c"
-                        . " where c.$key in " . $inIds . " "
-                        . " and c.id not in (select {$key}_criterion from user_{$key}_criterion where user = ?d) "
-                        . " and c.activity_type = ?s "
-                        . " and c.module = ?d "
-                        . $andResource;
+
+                    if($key == 'points_game') { //points games
+                        $critsQ = "select c.*, '$key' as type from {$key}_criterion c"
+                            . " where c.$key in " . $inIds . " "
+                            . " and c.criterion_type = 'onetime' AND (c.id not in (select {$key}_criterion from user_{$key}_criterion where user = ?d))"
+                            . " and c.activity_type = ?s "
+                            . " and c.module = ?d "
+                            . $andResource
+                            . "UNION "
+                            . "select c.*, '$key' as type from {$key}_criterion c"
+                            . " where c.$key in " . $inIds . " "
+                            . " and c.criterion_type = 'recurring' "
+                            . " and c.activity_type = ?s "
+                            . " and c.module = ?d ";
+                        $args[] = $data->activityType;
+                        $args[] = $data->module;
+                    } else { //badges and certificates
+                        $critsQ = "select c.*, '$key' as type from {$key}_criterion c"
+                            . " where c.$key in " . $inIds . " "
+                            . " and c.id not in (select {$key}_criterion from user_{$key}_criterion where user = ?d) "
+                            . " and c.activity_type = ?s "
+                            . " and c.module = ?d "
+                            . $andResource;
+                    }
+
                     Database::get()->queryFunc($critsQ, function ($crit) {
                         $this->criterionSet->addCriterion(Criterion::initWithProperties($crit));
                     }, $args);

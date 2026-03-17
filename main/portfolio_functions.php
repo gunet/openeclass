@@ -54,7 +54,7 @@ function getUserCourseInfo($uid): string
     if(!get_config('show_always_collaboration')){
         if ($myCourses) {
             $lesson_content .= "<table id='portfolio_lessons' class='table portfolio-courses-table'>";
-            $lesson_content .= "<thead class='sr-only'><tr><th>$langCourse</th><th>$langActions</th></tr></thead>";
+            $lesson_content .= "<thead class='visually-hidden'><tr><th>$langCourse</th><th>$langActions</th></tr></thead>";
             foreach ($myCourses as $data) {
 
                 $courses[$data->code] = $data->status;
@@ -219,7 +219,7 @@ function getUserCourseInfo($uid): string
             </div>";}
         if($myCollaborations){
                 $lesson_content .= "<table id='portfolio_collaborations' class='table portfolio-collaborations-table'>";
-                $lesson_content .= "<thead class='sr-only'><tr><th>$langCourse</th><th>$langActions</th></tr></thead>";
+                $lesson_content .= "<thead class='visually-hidden'><tr><th>$langCourse</th><th>$langActions</th></tr></thead>";
                 foreach ($myCollaborations as $data) {
 
                     $collaborations[$data->code] = $data->status;
@@ -421,7 +421,7 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
                                         AND (admin_announcement.end >= " . DBHelper::timeAfter() . " OR admin_announcement.end IS NULL)
                                         AND admin_announcement.`date` >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH) $admin_filter_sql
                                  ORDER BY an_date DESC
-                         $sql_append", $languge, $filter_param);
+                         $sql_append", $language, $filter_param);
     } else {
 
         $course_id_sql = implode(', ', array_fill(0, count($lesson_id), '?d'));
@@ -453,7 +453,7 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
                                       AND (admin_announcement.end >= " . DBHelper::timeAfter() . " OR admin_announcement.end IS NULL)
                                       AND admin_announcement.`date` >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH) $admin_filter_sql
                                 ) ORDER BY an_date DESC
-                         $sql_append", $lesson_id, $language, $filter_param, $filter_param);
+                         $sql_append", $lesson_id, $filter_param,  $language, $filter_param);
     }
 
     if ($to_ajax) {

@@ -99,7 +99,10 @@ if (isset($_POST['submitPoll'])) {
         $lti_template = $_POST['lti_template'] ?? NULL;
         $launchcontainer = $_POST['lti_launchcontainer'] ?? NULL;
         $display_position = (isset($_POST['display_position'])) ? $_POST['display_position'] : 0;
-        $require_answer = (isset($_POST['require_answer'])) ? $_POST['require_answer'] : 0;
+        //$require_answer = (isset($_POST['require_answer'])) ? $_POST['require_answer'] : 0;
+        
+        // We have added require answer for a specific question
+        $require_answer = 0;
 
         $msg_gr_arr = [];
         if (isset($_POST['messages']) && isset($_POST['grades'])) {
@@ -210,6 +213,10 @@ if (isset($_POST['submitQuestion'])) {
         if (isset($_POST['require_response']) and $_POST['require_response'] == 'on') {
             $requireResponse = 1;
         }
+        $requireGrade = 0;
+        if (isset($_POST['require_grade']) and $_POST['require_grade'] == 'on') {
+            $requireGrade = 1;
+        }
 
         if (isset($_GET['modifyQuestion'])) {
             $pqid = intval($_GET['modifyQuestion']);
@@ -225,6 +232,7 @@ if (isset($_POST['submitQuestion'])) {
                 $query_columns = '';
             }
             $query_vars[] = $requireResponse;
+            $query_vars[] = $requireGrade;
             array_push($query_vars, $pqid, $pid);
 
             // Redirect if the number of scale is smaller or bigger than answers.
@@ -238,7 +246,7 @@ if (isset($_POST['submitQuestion'])) {
             }
 
             Database::get()->query("UPDATE poll_question
-                    SET question_text = ?s, qtype = ?d, `description` = ?s, `answer_scale` = ?s $query_columns , require_response = ?d
+                    SET question_text = ?s, qtype = ?d, `description` = ?s, `answer_scale` = ?s $query_columns , require_response = ?d, require_grade = ?d
                     WHERE pqid = ?d AND pid = ?d", $query_vars);
         } else {
             $max_position = Database::get()->querySingle("SELECT MAX(q_position) AS position FROM poll_question WHERE pid = ?d", $pid)->position;
@@ -246,9 +254,9 @@ if (isset($_POST['submitQuestion'])) {
             if (is_null($max_page)) {
                 $max_page = 1;
             }
-            $query_columns = "pid, question_text, qtype, q_position, description, answer_scale, page, require_response";
-            $query_values = "?d, ?s, ?d, ?d, ?s, ?s, ?d, ?d";
-            $query_vars = array($pid, $question_text, $qtype, $max_position + 1, $question_description, $answerScale, $max_page, $requireResponse);
+            $query_columns = "pid, question_text, qtype, q_position, description, answer_scale, page, require_response, require_grade";
+            $query_values = "?d, ?s, ?d, ?d, ?s, ?s, ?d, ?d, ?d";
+            $query_vars = array($pid, $question_text, $qtype, $max_position + 1, $question_description, $answerScale, $max_page, $requireResponse, $requireGrade);
             if (isset($_POST['questionScale'])){
                 $query_columns .= ", q_scale";
                 $query_values .=", ?d";
@@ -279,7 +287,7 @@ if (isset($_POST['submitQuestion'])) {
             Database::get()->query("UPDATE poll_question_answer SET sub_qid = ?d WHERE pqaid != ?d AND pqid = ?d", 0, $_POST['sub_pr_ans'], $tmpPqid);
         }
 
-        if ($qtype == QTYPE_FILL || $qtype == QTYPE_LABEL || $qtype == QTYPE_SCALE || $qtype == QTYPE_DATETIME || $qtype == QTYPE_SHORT || $qtype == QTYPE_FILE) {
+        if ($qtype == QTYPE_FILL || $qtype == QTYPE_LABEL || $qtype == QTYPE_SCALE || $qtype == QTYPE_DATETIME || $qtype == QTYPE_SHORT || $qtype == QTYPE_FILE || $qtype == QTYPE_DATE) {
             redirect_to_home_page("modules/questionnaire/admin.php?course=$course_code&pid=$pid");
         } elseif ($qtype == QTYPE_TABLE) {
             redirect_to_home_page("modules/questionnaire/admin.php?course=$course_code&pid=$pid&modifyTableAnswers=$pqid");
@@ -387,7 +395,7 @@ if (isset($_GET['pid'])) {
     $attempt_counter = 0;
 }
 // question type text array
-$aType = array($langUniqueSelect, $langFreeText, $langMultipleSelect, $langLabel.'/'.$langComment, $langScale, $langTable, $langDateTime, $langShortAnswer, $langAIUploadFile);
+$aType = array($langUniqueSelect, $langFreeText, $langMultipleSelect, $langLabel.'/'.$langComment, $langScale, $langTable, $langDateAndTime, $langShortAnswer, $langAIUploadFile, $langDateOnly);
 // Modify/Create poll form
 if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     if (isset($_GET['modifyPoll'])) {
@@ -512,9 +520,11 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     $pageName = isset($_GET['modifyPoll']) ? "$langEditPoll" : "$langCreatePoll";
 
     $disabledAssign = '';
-    $rec_check = Database::get()->querySingle("SELECT id FROM poll_user_record WHERE pid = ?d AND session_id = ?d", $pid, 0);
-    if ($rec_check) {
-        $disabledAssign = 'disabled';
+    if (isset($pid)) {
+        $rec_check = Database::get()->querySingle("SELECT id FROM poll_user_record WHERE pid = ?d AND session_id = ?d", $pid, 0);
+        if ($rec_check) {
+            $disabledAssign = 'disabled';
+        }
     }
 
     $tool_content .= "
@@ -724,58 +734,58 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                         </label>
                     </div>
                 </div>
-            </div>
-            
-            <div class='form-group mt-4'>
-                <div class='col-sm-12 control-label-notes'>$langQuestions</div>
-                <div class='col-sm-12'>
-                    <div class='checkbox'>
-                        <label class='label-container' aria-label='$langSelect'>
-                            <input type='checkbox' name='require_answer' id='require_answer' value='1'" .
-                            ((isset($poll->require_answer) && $poll->require_answer) ? 'checked' : '') . ">
-                            <span class='checkmark'></span>
-                            $langEnableRequiredAnswer
-                        </label>
-                    </div>
-                </div>
-            </div>
-            
-            <div class='form-group mt-4 d-flex justify-content-start align-items-center gap-2'>
-                <label for='addMsg' class='form-label'>$langPollAddMsg:</label>
-                <input id='addMsg' style='width:30px; height:30px;' class='btn submitAdminBtn' type='submit' name='MoreMessages' value='+'>
             </div>";
+            
+            // <div class='form-group mt-4'>
+            //     <div class='col-sm-12 control-label-notes'>$langQuestions</div>
+            //     <div class='col-sm-12'>
+            //         <div class='checkbox'>
+            //             <label class='label-container' aria-label='$langSelect'>
+            //                 <input type='checkbox' name='require_answer' id='require_answer' value='1'" .
+            //                 ((isset($poll->require_answer) && $poll->require_answer) ? 'checked' : '') . ">
+            //                 <span class='checkmark'></span>
+            //                 $langEnableRequiredAnswer
+            //             </label>
+            //         </div>
+            //     </div>
+            // </div>
+            
+// $tool_content .= "<div class='form-group mt-4 d-flex justify-content-start align-items-center gap-2'>
+//                 <label for='addMsg' class='form-label'>$langPollAddMsg:</label>
+//                 <input id='addMsg' style='width:30px; height:30px;' class='btn submitAdminBtn' type='submit' name='MoreMessages' value='+'>
+//             </div>";
 
-            $poll_messages = unserialize($poll->options ?? '');
-            if (is_array($poll_messages) && count($poll_messages) > 0) {
-                foreach ($poll_messages as $opt) {
-                    $_msg = $opt['message'];
-                    $_grade = $opt['grade'];
-                    $tool_content .="
-                    <div class='form-group input-group mt-3'>
-                            <input type='text' class='form-control mt-0 w-75' name='messages[]' value='$_msg'>
-                            <input class='form-control mt-0' type='text' name='grades[]' value='$_grade'>
-                            <div class='form-control-static input-group-text h-40px bg-white input-border-color'>
-                                " . icon('fa-xmark Accent-200-cl', $langDelete, '#', ' class="del_btn"') . "
-                            </div>
-                        </div>";
-                }
-            } else {
-                $tool_content .="
-                <div class='form-group input-group mt-3'>
-                            <input class='form-control mt-0 w-75' type='text' name='messages[]' value='' placeholder='$langMessage'>
-                            <input class='form-control mt-0' type='text' name='grades[]' value='' placeholder='$langGradebookGrade'>
-                            <div class='form-control-static input-group-text h-40px bg-white input-border-color'>
-                                " . icon('fa-xmark Accent-200-cl', $langDelete, '#', ' class="del_btn"') . "
-                            </div>
-                    </div>
-                <div class='form-group input-group mt-3'>
-                        <input class='form-control mt-0 w-75' type='text' name='messages[]' value='' placeholder='$langMessage'>
-                        <input class='form-control mt-0' type='text' name='grades[]' value='' placeholder='$langGradebookGrade'>
-                        <div class='form-control-static input-group-text h-40px bg-white input-border-color'>
-                            " . icon('fa-xmark Accent-200-cl', $langDelete, '#', ' class="del_btn"') . "
-                        </div>
-                    </div>";
-            }
+            // $poll_messages = unserialize($poll->options ?? '');
+            // if (is_array($poll_messages) && count($poll_messages) > 0) {
+            //     foreach ($poll_messages as $opt) {
+            //         $_msg = $opt['message'];
+            //         $_grade = $opt['grade'];
+            //         $tool_content .="
+            //         <div class='form-group input-group mt-3'>
+            //                 <input type='text' class='form-control mt-0 w-75' name='messages[]' value='$_msg'>
+            //                 <input class='form-control mt-0' type='text' name='grades[]' value='$_grade'>
+            //                 <div class='form-control-static input-group-text h-40px bg-white input-border-color'>
+            //                     " . icon('fa-xmark Accent-200-cl', $langDelete, '#', ' class="del_btn"') . "
+            //                 </div>
+            //             </div>";
+            //     }
+            // } else {
+            //     $tool_content .="
+            //     <div class='form-group input-group mt-3'>
+            //                 <input class='form-control mt-0 w-75' type='text' name='messages[]' value='' placeholder='$langMessage'>
+            //                 <input class='form-control mt-0' type='text' name='grades[]' value='' placeholder='$langGradebookGrade'>
+            //                 <div class='form-control-static input-group-text h-40px bg-white input-border-color'>
+            //                     " . icon('fa-xmark Accent-200-cl', $langDelete, '#', ' class="del_btn"') . "
+            //                 </div>
+            //         </div>
+            //     <div class='form-group input-group mt-3'>
+            //             <input class='form-control mt-0 w-75' type='text' name='messages[]' value='' placeholder='$langMessage'>
+            //             <input class='form-control mt-0' type='text' name='grades[]' value='' placeholder='$langGradebookGrade'>
+            //             <div class='form-control-static input-group-text h-40px bg-white input-border-color'>
+            //                 " . icon('fa-xmark Accent-200-cl', $langDelete, '#', ' class="del_btn"') . "
+            //             </div>
+            //         </div>";
+            // }
 
     $head_content .= "<script type='text/javascript'>
             $(document).ready(function(){
@@ -891,7 +901,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         }
         $pageName = $langModify;
         if (($question->qtype != QTYPE_LABEL) and ($question->qtype != QTYPE_FILL) and ($question->qtype != QTYPE_SCALE)
-                and ($question->qtype != QTYPE_DATETIME) and ($question->qtype != QTYPE_SHORT) and ($question->qtype != QTYPE_FILE)) {
+                and ($question->qtype != QTYPE_DATETIME) and ($question->qtype != QTYPE_SHORT) and ($question->qtype != QTYPE_FILE) and ($question->qtype != QTYPE_DATE)) {
             $navigation[] = array(
                 'url' => "admin.php?course=$course_code&amp;pid=$pid&amp;modifyAnswers=$question->pqid",
                 'name' => $langPollManagement
@@ -922,6 +932,10 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     if (isset($question)) {
         $requiredAnswer = $question->require_response;
     }
+    $requiredGrade = 0;
+    if (isset($question)) {
+        $requiredGrade = $question->require_grade;
+    }
 
     $tool_content .= "
     <div class='d-lg-flex gap-4 mt-4'>
@@ -944,6 +958,10 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     } else {
         $head_content .= "<script type='text/javascript'>
         $(function() {
+            var gradeOn = $('.answerType').val();
+            if (gradeOn == 1 || gradeOn == 3) {
+                $('.require_grade_cl').removeClass('d-none').addClass('d-block');
+            }
             $('.answerType').change(function() {
                 if($(this).val()==5){
                     $('#questionScale').prop('disabled', false);
@@ -958,99 +976,184 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                     $('#answerScale').closest('div.form-group').addClass('hidden');
                     $('.require_answer_cl').removeClass('d-none').addClass('d-block');
                 }
+                if ($(this).val()==1 || $(this).val()==3) {
+                    $('.require_grade_cl').removeClass('d-none').addClass('d-block');
+                } else {
+                    $('.require_grade_cl').removeClass('d-block').addClass('d-none');
+                }
             });
         });
         </script>";
-        $tool_content .= "
-            <div class='form-group mt-4'>
-                <div class='col-sm-12 control-label-notes'>$langType</div>
-                <div class='col-sm-12'>
-                    <div class='radio mb-1'>
-                      <label>
-                        <input type='radio' name='answerType' class='answerType' value='".QTYPE_SINGLE."' ".($answerType == QTYPE_SINGLE || !isset($question) ? 'checked' : '').">
-                        ". $aType[QTYPE_SINGLE - 1] . "
-                      </label>
-                    </div>
-                    <div class='radio mb-1'>
-                      <label>
-                        <input type='radio' name='answerType' class='answerType' value='".QTYPE_MULTIPLE."' ".($answerType == QTYPE_MULTIPLE ? 'checked' : '').">
-                        ". $aType[QTYPE_MULTIPLE - 1] . "
-                      </label>
-                    </div>";
-        if (isset($_GET['quickpoll'])) {
-            $tool_content .= "</div></div>";
+
+        $questionTypes = [
+            array('text' => $aType[QTYPE_SINGLE - 1], 'value' => QTYPE_SINGLE, 'show' => true, 'state' => ($answerType == QTYPE_SINGLE || !isset($question) ? 'selected' : '')),
+            array('text' => $aType[QTYPE_MULTIPLE - 1], 'value' => QTYPE_MULTIPLE, 'show' => true, 'state' => ($answerType == QTYPE_MULTIPLE ? 'selected' : '')),
+            array('text' => $aType[QTYPE_FILL - 1], 'value' => QTYPE_FILL, 'show' => (!isset($_GET['quickpoll']) ? true : false), 'state' => ($answerType == QTYPE_FILL ? 'selected' : '')),
+            array('text' => $aType[QTYPE_SCALE - 1], 'value' => QTYPE_SCALE, 'show' => (!isset($_GET['quickpoll']) ? true : false), 'state' => ($answerType == QTYPE_SCALE ? 'selected' : '')),
+            array('text' => $aType[QTYPE_TABLE - 1], 'value' => QTYPE_TABLE, 'show' => (!isset($_GET['quickpoll']) ? true : false), 'state' => ($answerType == QTYPE_TABLE ? 'selected' : '')),
+            array('text' => $aType[QTYPE_DATETIME - 1], 'value' => QTYPE_DATETIME, 'show' => (!isset($_GET['quickpoll']) ? true : false), 'state' => ($answerType == QTYPE_DATETIME ? 'selected' : '')),
+            array('text' => $aType[QTYPE_DATE - 1], 'value' => QTYPE_DATE, 'show' => (!isset($_GET['quickpoll']) ? true : false), 'state' => ($answerType == QTYPE_DATE ? 'selected' : '')),
+            array('text' => $aType[QTYPE_SHORT - 1], 'value' => QTYPE_SHORT, 'show' => (!isset($_GET['quickpoll']) ? true : false), 'state' => ($answerType == QTYPE_SHORT ? 'selected' : '')),
+            array('text' => $aType[QTYPE_FILE - 1], 'value' => QTYPE_FILE, 'show' => (!isset($_GET['quickpoll']) ? true : false), 'state' => ($answerType == QTYPE_FILE ? 'selected' : ''))
+        ];
+
+        $requireAnswerOn = '';
+        if ($answerType == QTYPE_SCALE) {
+            $requireAnswerOn = 'd-none';
         }
-        else {
-            $requireAnswerOn = '';
-            if ($answerType == QTYPE_SCALE) {
-                $requireAnswerOn = 'd-none';
-            }
-            $tool_content .= "
-                    <div class='radio mb-1'>
-                      <label>
-                        <input type='radio' name='answerType' class='answerType' value='".QTYPE_FILL."' ".($answerType == QTYPE_FILL ? 'checked' : '').">
-                        ". $aType[QTYPE_FILL - 1] . "
-                      </label>
-                    </div>
-                    <div class='radio mb-1'>
-                      <label>
-                        <input type='radio' name='answerType' class='answerType' value='".QTYPE_SCALE."' ".($answerType == QTYPE_SCALE ? 'checked' : '').">
-                        ". $aType[QTYPE_SCALE - 1] . "
-                      </label>
-                    </div>
-                    <div class='radio mb-1'>
-                      <label>
-                        <input type='radio' name='answerType' class='answerType' value='".QTYPE_TABLE."' ".($answerType == QTYPE_TABLE ? 'checked' : '').">
-                        ". $aType[QTYPE_TABLE - 1] . "
-                      </label>
-                    </div>
-                    <div class='radio mb-1'>
-                      <label>
-                        <input type='radio' name='answerType' class='answerType' value='".QTYPE_DATETIME."' ".($answerType == QTYPE_DATETIME ? 'checked' : '').">
-                        ". $aType[QTYPE_DATETIME - 1] . "
-                      </label>
-                    </div>
-                    <div class='radio mb-1'>
-                      <label>
-                        <input type='radio' name='answerType' class='answerType' value='".QTYPE_SHORT."' ".($answerType == QTYPE_SHORT ? 'checked' : '').">
-                        ". $aType[QTYPE_SHORT - 1] . "
-                      </label>
-                    </div>
-                    <div class='radio mb-1'>
-                      <label>
-                        <input type='radio' name='answerType' class='answerType' value='".QTYPE_FILE."' ".($answerType == QTYPE_FILE ? 'checked' : '').">
-                        ". $aType[QTYPE_FILE - 1] . "
-                      </label>
-                    </div>
-                </div>
-            </div>
-            <div class='form-group$questionScaleErrorClass$questionScaleShowHide mt-4'>
-                <label for='questionScale' class='col-sm-12 control-label-notes'>$langMax $langScale (1-10):</label>
-                <div class='col-12'>
-                    <input type='text' class='form-control' name='questionScale' id='questionScale' value='".q($questionScale)."'>
-                    <span class='help-block Accent-200-cl'>$questionScaleError</span>
-                </div>
-            </div>
-            <div class='form-group$questionScaleErrorClass$questionScaleShowHide mt-4'>
-                <div class='alert alert-info'>
-                    <i class='fa-solid fa-circle-info fa-lg'></i>
-                    <span>
-                        $langInfoAddSliderLabels
-                    </span>
-                </div>
-                <input type='text' class='form-control' name='answersScale' id='answerScale' value='".(!empty($question->answer_scale) ? $question->answer_scale : '')."'>
-            </div>
-            <div class='form-group mt-4 require_answer_cl $requireAnswerOn'>
-                <div class='checkbox'>
-                    <label class='label-container' aria-label='$langSelect'>
-                        <input type='checkbox' name='require_response' " . ($requiredAnswer ? 'checked' : '') . ">
-                        <span class='checkmark'></span>
-                        $langRequireAnswer
-                    </label>
-                </div>
-            </div>
-            ";
-        }
+
+        $tool_content .= "  <div class='form-group mt-4'>
+                                <label class='form-label' for='questionTypeId'>$langType</label>
+                                <select id='questionTypeId' class='form-select answerType' name='answerType'>";
+                                    foreach ($questionTypes as $type) {
+                                        if ($type['show']) {
+                                            $tool_content .= "<option value='". $type['value'] ."' " . $type['state'] . ">" . $type['text'] . "</option>";
+                                        }
+                                    }
+        $tool_content .= "      </select>
+                            </div>
+                            <div class='form-group$questionScaleErrorClass$questionScaleShowHide mt-4'>
+                                <label for='questionScale' class='col-sm-12 control-label-notes'>$langMax $langScale (1-10):</label>
+                                <div class='col-12'>
+                                    <input type='text' class='form-control' name='questionScale' id='questionScale' value='".q($questionScale)."'>
+                                    <span class='help-block Accent-200-cl'>$questionScaleError</span>
+                                </div>
+                            </div>
+                            <div class='form-group$questionScaleErrorClass$questionScaleShowHide mt-4'>
+                                <div class='alert alert-info'>
+                                    <i class='fa-solid fa-circle-info fa-lg'></i>
+                                    <span>
+                                        $langInfoAddSliderLabels
+                                    </span>
+                                </div>
+                                <input type='text' class='form-control' name='answersScale' id='answerScale' value='".(!empty($question->answer_scale) ? $question->answer_scale : '')."'>
+                            </div>
+                            <div class='form-group mt-4 require_answer_cl $requireAnswerOn'>
+                                <div class='checkbox'>
+                                    <label class='label-container' aria-label='$langSelect'>
+                                        <input type='checkbox' name='require_response' " . ($requiredAnswer ? 'checked' : '') . ">
+                                        <span class='checkmark'></span>
+                                        $langRequireAnswer
+                                    </label>
+                                </div>
+                            </div>
+                            <div class='form-group mt-2 require_grade_cl d-none'>
+                                <div class='checkbox'>
+                                    <label class='label-container' aria-label='$langSelect'>
+                                        <input type='checkbox' name='require_grade' " . ($requiredGrade ? 'checked' : '') . ">
+                                        <span class='checkmark'></span>
+                                        $langScoreActivation
+                                    </label>
+                                </div>
+                            </div>
+                          ";
+
+
+            // $tool_content .= "
+            //     <div class='form-group mt-4'>
+            //         <div class='col-sm-12 control-label-notes'>$langType</div>
+            //         <div class='col-sm-12'>
+            //             <div class='radio mb-1'>
+            //               <label>
+            //                 <input type='radio' name='answerType' class='answerType' value='".QTYPE_SINGLE."' ".($answerType == QTYPE_SINGLE || !isset($question) ? 'checked' : '').">
+            //                 ". $aType[QTYPE_SINGLE - 1] . "
+            //               </label>
+            //             </div>
+            //             <div class='radio mb-1'>
+            //               <label>
+            //                 <input type='radio' name='answerType' class='answerType' value='".QTYPE_MULTIPLE."' ".($answerType == QTYPE_MULTIPLE ? 'checked' : '').">
+            //                 ". $aType[QTYPE_MULTIPLE - 1] . "
+            //               </label>
+            //             </div>";
+            // if (isset($_GET['quickpoll'])) {
+            //     $tool_content .= "</div></div>";
+            // }
+            // else {
+            //     $requireAnswerOn = '';
+            //     if ($answerType == QTYPE_SCALE) {
+            //         $requireAnswerOn = 'd-none';
+            //     }
+            //     $tool_content .= "
+            //             <div class='radio mb-1'>
+            //               <label>
+            //                 <input type='radio' name='answerType' class='answerType' value='".QTYPE_FILL."' ".($answerType == QTYPE_FILL ? 'checked' : '').">
+            //                 ". $aType[QTYPE_FILL - 1] . "
+            //               </label>
+            //             </div>
+            //             <div class='radio mb-1'>
+            //               <label>
+            //                 <input type='radio' name='answerType' class='answerType' value='".QTYPE_SCALE."' ".($answerType == QTYPE_SCALE ? 'checked' : '').">
+            //                 ". $aType[QTYPE_SCALE - 1] . "
+            //               </label>
+            //             </div>
+            //             <div class='radio mb-1'>
+            //               <label>
+            //                 <input type='radio' name='answerType' class='answerType' value='".QTYPE_TABLE."' ".($answerType == QTYPE_TABLE ? 'checked' : '').">
+            //                 ". $aType[QTYPE_TABLE - 1] . "
+            //               </label>
+            //             </div>
+            //             <div class='radio mb-1'>
+            //               <label>
+            //                 <input type='radio' name='answerType' class='answerType' value='".QTYPE_DATETIME."' ".($answerType == QTYPE_DATETIME ? 'checked' : '').">
+            //                 ". $aType[QTYPE_DATETIME - 1] . "
+            //               </label>
+            //             </div>
+            //             <div class='radio mb-1'>
+            //               <label>
+            //                 <input type='radio' name='answerType' class='answerType' value='".QTYPE_DATE."' ".($answerType == QTYPE_DATE ? 'checked' : '').">
+            //                 ". $aType[QTYPE_DATE - 1] . "
+            //               </label>
+            //             </div>
+            //             <div class='radio mb-1'>
+            //               <label>
+            //                 <input type='radio' name='answerType' class='answerType' value='".QTYPE_SHORT."' ".($answerType == QTYPE_SHORT ? 'checked' : '').">
+            //                 ". $aType[QTYPE_SHORT - 1] . "
+            //               </label>
+            //             </div>
+            //             <div class='radio mb-1'>
+            //               <label>
+            //                 <input type='radio' name='answerType' class='answerType' value='".QTYPE_FILE."' ".($answerType == QTYPE_FILE ? 'checked' : '').">
+            //                 ". $aType[QTYPE_FILE - 1] . "
+            //               </label>
+            //             </div>
+            //         </div>
+            //     </div>
+            //     <div class='form-group$questionScaleErrorClass$questionScaleShowHide mt-4'>
+            //         <label for='questionScale' class='col-sm-12 control-label-notes'>$langMax $langScale (1-10):</label>
+            //         <div class='col-12'>
+            //             <input type='text' class='form-control' name='questionScale' id='questionScale' value='".q($questionScale)."'>
+            //             <span class='help-block Accent-200-cl'>$questionScaleError</span>
+            //         </div>
+            //     </div>
+            //     <div class='form-group$questionScaleErrorClass$questionScaleShowHide mt-4'>
+            //         <div class='alert alert-info'>
+            //             <i class='fa-solid fa-circle-info fa-lg'></i>
+            //             <span>
+            //                 $langInfoAddSliderLabels
+            //             </span>
+            //         </div>
+            //         <input type='text' class='form-control' name='answersScale' id='answerScale' value='".(!empty($question->answer_scale) ? $question->answer_scale : '')."'>
+            //     </div>
+            //     <div class='form-group mt-4 require_answer_cl $requireAnswerOn'>
+            //         <div class='checkbox'>
+            //             <label class='label-container' aria-label='$langSelect'>
+            //                 <input type='checkbox' name='require_response' " . ($requiredAnswer ? 'checked' : '') . ">
+            //                 <span class='checkmark'></span>
+            //                 $langRequireAnswer
+            //             </label>
+            //         </div>
+            //     </div>
+            //     <div class='form-group mt-3 require_grade_cl d-none'>
+            //         <div class='checkbox'>
+            //             <label class='label-container' aria-label='$langSelect'>
+            //                 <input type='checkbox' name='require_grade' " . ($requiredGrade ? 'checked' : '') . ">
+            //                 <span class='checkmark'></span>
+            //                 $langScoreActivation
+            //             </label>
+            //         </div>
+            //     </div>
+            //     ";
+            // }
     }
 
     $tool_content .= "
@@ -1087,29 +1190,30 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         $isSubQuestion = true;
     }
 
+    // $isEnabledGrade = pollHasGrade($pid);
+    $isEnabledGrade = $question->require_grade;
+
     $head_content .= "
     <script>
         $(function() {
             var langPoll = {
                 answer: '" . js_escape($langAnswer) . "',
-                grade: '" . js_escape($langGradebookGrade) . "'
+                grade: '" . js_escape($langScore) . "'
             };
-            $(poll_init(langPoll, $isSubQuestion));
+            $(poll_init(langPoll, '".$isSubQuestion."', '".$isEnabledGrade."'));
         });
     </script>";
 
     $answers = Database::get()->queryArray("SELECT * FROM poll_question_answer
                     WHERE pqid = ?d ORDER BY pqaid", $question->pqid);
     if(!$question || $question->qtype == QTYPE_LABEL || $question->qtype == QTYPE_FILL || $question->qtype == QTYPE_SCALE
-        || $question->qtype == QTYPE_DATETIME || $question->qtype == QTYPE_SHORT || $question->qtype == QTYPE_FILE) {
+        || $question->qtype == QTYPE_DATETIME || $question->qtype == QTYPE_SHORT || $question->qtype == QTYPE_FILE || $question->qtype == QTYPE_DATE) {
         redirect_to_home_page("modules/questionnaire/admin.php?course=$course_code&pid=$pid");
     }
     $navigation[] = array(
         'url' => "admin.php?course=$course_code&amp;pid=$pid",
         'name' => $langPollManagement
     );
-
-    $isEnabledGrade = pollHasGrade($pid);
 
     $tool_content .= "
     <div class='col-12 mt-4'>
@@ -1151,7 +1255,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 <div class='form-group input-group mt-3'>
                               <input type='text' class='form-control mt-0 w-75' name='answers[$answer->pqaid]' value='$answer->answer_text' placeholder='$langAnswer'>";
                     if ($isEnabledGrade && !$isSubQuestion) {
-            $tool_content .= "<input class='form-control mt-0' type='text' name='grades[$answer->pqaid]' value='$answer->weight' placeholder='$langGradebookGrade'>";
+            $tool_content .= "<input class='form-control mt-0' type='text' name='grades[$answer->pqaid]' value='$answer->weight' placeholder='$langScore'>";
                     }
             $tool_content .= "<div class='form-control-static input-group-text h-40px bg-white input-border-color'>
                                 " . icon('fa-xmark Accent-200-cl', $langDelete, '#', ' class="del_btn"') . "
@@ -1163,7 +1267,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             <div class='form-group input-group mt-3'>
                               <input class='form-control mt-0 w-75' type='text' name='answers[]' value='' placeholder='$langAnswer'>";
                 if ($isEnabledGrade && !$isSubQuestion) {
-            $tool_content .= "<input class='form-control mt-0' type='text' name='grades[]' value='' placeholder='$langGradebookGrade'>";
+            $tool_content .= "<input class='form-control mt-0' type='text' name='grades[]' value='' placeholder='$langScore'>";
                 }
             $tool_content .= "<div class='form-control-static input-group-text h-40px bg-white input-border-color'>
                             " . icon('fa-xmark Accent-200-cl', $langDelete, '#', ' class="del_btn"') . "
@@ -1172,7 +1276,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             <div class='form-group input-group mt-3'>
                             <input class='form-control mt-0 w-75' type='text' name='answers[]' value='' placeholder='$langAnswer'>";
                 if ($isEnabledGrade && !$isSubQuestion) {
-            $tool_content .= "<input class='form-control mt-0' type='text' name='grades[]' value='' placeholder='$langGradebookGrade'>";
+            $tool_content .= "<input class='form-control mt-0' type='text' name='grades[]' value='' placeholder='$langScore'>";
                     }
         $tool_content .= "<div class='form-control-static input-group-text h-40px bg-white input-border-color'>
                         " . icon('fa-xmark Accent-200-cl', $langDelete, '#', ' class="del_btn"') . "
@@ -1182,7 +1286,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         // Add subquestion to the specific predefined answer
         if (!isset($_GET['subQOn']) && $question->qtype == QTYPE_SINGLE) {
         $subQuestionChecked = (($question->has_sub_question == 1) ? 'checked' : '');
-        $tool_content .= "<div class='form-group mt-4'>
+        $tool_content .= "<div class='input-group mt-4'>
                             <div class='checkbox'>
                                 <label class='label-container' aria-label='$langSelect'>
                                     <input type='checkbox' name='add_subquestion' $subQuestionChecked>
@@ -1689,6 +1793,11 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 } else {
                     $RequiredQuestionHtml = '';
                 }
+                if ($question->require_grade) {
+                    $RequiredQuestionGradeHtml = "<span data-bs-toggle='tooltip' data-bs-placement='top' title='$langScoreOn'>(<i class='fa-solid fa-star text-success'></i>)</span>&nbsp;";
+                } else {
+                    $RequiredQuestionGradeHtml = '';
+                }
                 $typeText = '';
                 if (isset($aType[$question->qtype - 1])) {
                     $typeText = $aType[$question->qtype - 1];
@@ -1699,7 +1808,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 $tool_content .= "  <tr class='even' data-id='$question->pqid'>
                                         <td class='text-nowrap' align='text-right' width='1'>" . ($question->qtype == 0 ? '' : $i.'.') . "</td>
                                         <td>
-                                            <p>$RequiredQuestionHtml";
+                                            <p>$RequiredQuestionHtml $RequiredQuestionGradeHtml";
                                             if ($question->qtype != QTYPE_LABEL) {
                                                 if ($question->qtype == 0) { // page break
                                                     $tool_content .= "<strong>$langPageBreak</strong>";
@@ -1726,7 +1835,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                                                         array(
                                                             'title' => $langEditChange,
                                                             'icon' => 'fa-edit',
-                                                            'url' => (($question->qtype != QTYPE_LABEL) and ($question->qtype != QTYPE_FILL) and ($question->qtype != QTYPE_SCALE) and ($question->qtype != QTYPE_TABLE) and ($question->qtype != QTYPE_DATETIME) and ($question->qtype != QTYPE_SHORT) and ($question->qtype != QTYPE_FILE))?
+                                                            'url' => (($question->qtype != QTYPE_LABEL) and ($question->qtype != QTYPE_FILL) and ($question->qtype != QTYPE_SCALE) and ($question->qtype != QTYPE_TABLE) and ($question->qtype != QTYPE_DATETIME) and ($question->qtype != QTYPE_SHORT) and ($question->qtype != QTYPE_FILE) and ($question->qtype != QTYPE_DATE))?
                                                                             "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;pid=$pid&amp;modifyAnswers=$question->pqid" :
                                                                             "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;pid=$pid&amp;modifyQuestion=$question->pqid",
                                                             'show' => $question->qtype != 0
@@ -1852,7 +1961,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                         array(
                             'title' => $langEditChange,
                             'icon' => 'fa-edit',
-                            'url' => (($question->qtype != QTYPE_LABEL) and ($question->qtype != QTYPE_FILL) and ($question->qtype != QTYPE_SCALE) and ($question->qtype != QTYPE_DATETIME) and ($question->qtype != QTYPE_SHORT) and ($question->qtype != QTYPE_FILE))?
+                            'url' => (($question->qtype != QTYPE_LABEL) and ($question->qtype != QTYPE_FILL) and ($question->qtype != QTYPE_SCALE) and ($question->qtype != QTYPE_DATETIME) and ($question->qtype != QTYPE_SHORT) and ($question->qtype != QTYPE_FILE) and ($question->qtype != QTYPE_DATE))?
                                 "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;pid=$pid&amp;modifyAnswers=$question->pqid" :
                                 "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;pid=$pid&amp;modifyQuestion=$question->pqid",
                         ),

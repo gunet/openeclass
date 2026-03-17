@@ -81,13 +81,13 @@ class LtiServiceGradebookServices extends LtiServiceBase {
      */
     public function getPermittedScopes(): ?array {
         $scopes = array();
-        $ok = !empty($this->getLtiApp());
-        if ($ok) {
-            $scopes[] = self::SCOPE_GRADEBOOKSERVICES_LINEITEM_READ;
-            $scopes[] = self::SCOPE_GRADEBOOKSERVICES_RESULT_READ;
-            $scopes[] = self::SCOPE_GRADEBOOKSERVICES_SCORE;
-            $scopes[] = self::SCOPE_GRADEBOOKSERVICES_LINEITEM;
-        }
+        // $ok = !empty($this->getLtiApp());
+        // if ($ok) {
+        $scopes[] = self::SCOPE_GRADEBOOKSERVICES_LINEITEM_READ;
+        $scopes[] = self::SCOPE_GRADEBOOKSERVICES_RESULT_READ;
+        $scopes[] = self::SCOPE_GRADEBOOKSERVICES_SCORE;
+        $scopes[] = self::SCOPE_GRADEBOOKSERVICES_LINEITEM;
+        // }
 
         return $scopes;
     }

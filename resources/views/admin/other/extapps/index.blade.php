@@ -94,7 +94,7 @@
                         <div class='modal-dialog' role='document'>
                             <div class='modal-content'>
                                 <div class='modal-header'>
-                                    <div class='modal-title' id='myModalLabel'>{{ trans('langNotConfigured') }}</div>
+                                    <h2 class='modal-title' id='myModalLabel'>{{ trans('langNotConfigured') }}</h2>
                                     <button type='button' class='close' data-bs-dismiss='modal' aria-label="{{ trans('langClose') }}">
                                     </button>
                                     

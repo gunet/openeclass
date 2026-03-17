@@ -141,7 +141,7 @@ if (isset($_GET['download'])) {
 // ---------------------------
 
 if(isset($_POST['delete_resource'])){
-    $r = Database::get()->querySingle("SELECT doc_id,from_user,is_completed FROM session_resources 
+    $r = Database::get()->querySingle("SELECT doc_id,from_user,is_completed FROM session_resources
                                                     WHERE res_id = ?d AND session_id = ?d",$_POST['delete_resource'],$sessionID);
     if($r){
         $resource_id = $r->doc_id;
@@ -159,7 +159,7 @@ if(isset($_POST['delete_resource'])){
                                                               AND activity_type = ?s",$badge_id,$resource_id,'document-submit');
             if($badge_criterion){
                 $badge_criterion_id = $badge_criterion->id;
-                Database::get()->query("DELETE FROM user_badge_criterion 
+                Database::get()->query("DELETE FROM user_badge_criterion
                                             WHERE user = ?d AND badge_criterion = ?d",$r->from_user,$badge_criterion_id);
             }
         }
@@ -200,7 +200,7 @@ if(isset($_POST['userBadgeCriterionId'])){
 
     $exists_criterio = Database::get()->querySingle("SELECT id FROM user_badge_criterion WHERE user = ?d AND badge_criterion = ?d",$_POST['userSender'],$_POST['userBadgeCriterionId']);
     if(!$exists_criterio){
-        Database::get()->query("INSERT INTO user_badge_criterion SET 
+        Database::get()->query("INSERT INTO user_badge_criterion SET
                             user = ?d,
                             created = " . DBHelper::timeAfter() . ",
                             badge_criterion = ?d",$_POST['userSender'],$_POST['userBadgeCriterionId']);
@@ -233,8 +233,8 @@ if(isset($_POST['add_comment'])){
 
     Database::get()->query("UPDATE session_resources SET
                                     deliverable_comments = ?s
-                                    WHERE session_id = ?d 
-                                    AND doc_id = ?d 
+                                    WHERE session_id = ?d
+                                    AND doc_id = ?d
                                     AND from_user = ?d",q($_POST['add_comment']), $sessionID, $_POST['for_resource_id'], $_POST['for_user_id']);
 
 
@@ -300,10 +300,10 @@ if($file){
         $download_hidden_link = ($can_upload || visible_module(MODULE_ID_DOCS))?
             "<input type='hidden' value='$download_url'>" : '';
         $file_obj = MediaResourceFactory::initFromDocument($file);
-        $file_obj->setAccessURL(file_url($file->path, $file->filename));
+        $file_obj->setAccessURL(file_url($file->path, $file->filename, extra_path: $file->extra_path));
         $file_obj->setPlayURL(file_playurl($file->path, $file->filename));
         $link = MultimediaHelper::chooseMediaAhref($file_obj);
-    }else{// These files are regarded with session documents
+    } else {// These files are regarded with session documents
         $image = choose_image('.' . $file->format);
         $download_url = "{$urlServer}modules/session/session_space.php?course=$course_code&amp;session=$sessionID&amp;download=" . getInDirectReference($file->path);
         $download_hidden_link = ($can_upload || visible_module(MODULE_ID_DOCS))?
@@ -387,9 +387,9 @@ if(count($docs) > 0){
         $file->deliverable_comment = $refers_temp->deliverable_comments;
         if(($is_consultant || $is_course_reviewer)){
             if($badge_id > 0){
-                $user_badge_criterion = Database::get()->querySingle("SELECT id FROM badge_criterion 
-                                                                        WHERE resource = ?d 
-                                                                        AND activity_type = ?s 
+                $user_badge_criterion = Database::get()->querySingle("SELECT id FROM badge_criterion
+                                                                        WHERE resource = ?d
+                                                                        AND activity_type = ?s
                                                                         AND badge = ?d",$refers_temp->doc_id,'document-submit',$badge_id);
 
                 if($user_badge_criterion){

@@ -68,7 +68,7 @@ $data['text_area_comments'] = rich_text_editor('editComments', 4, 20, $comments)
 $data['form_buttons'] = form_buttons(array(
             array(
                 'class' => 'submitAdminBtn',
-                'text'  =>  $langSave,
+                'text'  =>  $langSubmit,
                 'name'  =>  'saveCourseDescription',
                 'value' =>  $langAdd
             ),

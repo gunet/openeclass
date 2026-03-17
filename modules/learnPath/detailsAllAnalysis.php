@@ -32,6 +32,7 @@ $require_current_course = TRUE;
 $require_course_reviewer = TRUE;
 
 require_once '../../include/baseTheme.php';
+require_once 'include/course_settings.php';
 require_once 'include/lib/learnPathLib.inc.php';
 
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langLearningPaths);
@@ -46,7 +47,7 @@ $head_content .= "<script type='text/javascript'>
                 'bAutoWidth': true,
                 'searchDelay': 1000,
                 'order' : [],
-                'columns': [ { orderable: false }, { orderable: false }, { orderable: false }, { orderable: false }, { orderable: false } ],
+                'columns': [ { orderable: false }, { orderable: false }, { orderable: false }, { orderable: false }, { orderable: false }, { orderable: false } ],
                 'lengthMenu': [10, 20, 30, -1],
                 'oLanguage': {
                    'lengthLabels': {
@@ -111,6 +112,7 @@ $tool_content .= "<div class='table-responsive'>
                 <th>$langAttempts</th>
                 <th>$langTotalTimeSpent</th>
                 <th>$langProgress</th>
+                <th>$langScore</th>
             </tr>
         </thead>";
 
@@ -118,7 +120,7 @@ $course_title = course_code_to_title($_GET['course']);
 
 $data[] = [ $course_title ];
 $data[] = [];
-$data[] = [ $langSurnameName, $langLearnPath, $langAttempts, $langTotalTimeSpent, $langProgress ];
+$data[] = [ $langSurnameName, $langLearnPath, $langAttempts, $langTotalTimeSpent, $langProgress, $langScore ];
 
 $usersList = Database::get()->queryArray("SELECT U.`surname`, U.`givenname`, U.`id`, U.`email`
                 FROM `user` AS U, `course_user` AS CU
@@ -138,24 +140,26 @@ foreach ($usersList as $user) {
 
     foreach ($learningPathList as $learningPath) {
         // % progress
-        list($prog, $lpTotalTime, $lpTotalStarted, $lpTotalAccessed, $lpTotalStatus, $lpAttemptsNb) = get_learnPath_progress_details($learningPath->learnPath_id, $user->id);
+        list($prog, $lpTotalTime, $lpTotalStarted, $lpTotalAccessed, $lpTotalStatus, $lpAttemptsNb, $lpScore, $lpScoreMax) = get_learnPath_progress_details($learningPath->learnPath_id, $user->id);
         if ($prog >= 0) {
             $globalprog += $prog;
         }
         if (!empty($lpTotalTime)) {
             $globaltime = addScormTime($globaltime, $lpTotalTime);
         }
+        $lpDisplay = format_lp_progress_display($lpAttemptsNb, $lpTotalTime, $prog, $lpScore, $lpScoreMax);
 
         // ---- xls format ----
-        $lpContent = array('', $learningPath->name, $lpAttemptsNb, $lpTotalTime, $prog);
+        $lpContent = array('', $learningPath->name, $lpAttemptsNb, $lpDisplay['time'], $lpDisplay['progress_text'], $lpDisplay['score']);
         $lpaths[] = $lpContent;
         // --------------------
         $lp_content .= "<tr>";
         $lp_content .= "<td></td>";
         $lp_content .= "<td><p>" . q($learningPath->name) . "</p></td>";
         $lp_content .= "<td>" . q($lpAttemptsNb) . "</td>";
-        $lp_content .= "<td>" . q($lpTotalTime) . "</td>";
-        $lp_content .= "<td>" . disp_progress_bar($prog, 1) . "</td>";
+        $lp_content .= "<td>" . $lpDisplay['time'] . "</td>";
+        $lp_content .= "<td>" . $lpDisplay['progress_html'] . "</td>";
+        $lp_content .= "<td>" . $lpDisplay['score'] . "</td>";
         $lp_content .= "</tr>";
         $iterator++;
     }
@@ -168,7 +172,7 @@ foreach ($usersList as $user) {
     // ---- xls format ----
     $data[] = ["$user->surname $user->givenname ($user->email)", ' ', ' ', $globaltime, $total . '%'];
     foreach ($lpaths as $lpContent) {
-        $data[] = [$lpContent[0], $lpContent[1], $lpContent[2], $lpContent[3], $lpContent[4] . '%'];
+        $data[] = [$lpContent[0], $lpContent[1], $lpContent[2], $lpContent[3], $lpContent[4], $lpContent[5]];
     }
     // --------------------
 
@@ -184,7 +188,7 @@ foreach ($usersList as $user) {
             <td>" . q($globaltime) . "</td>
             <td>"
             . disp_progress_bar($total, 1) . "
-            </td>";
+            </td><td></td>";
     $tool_content .= "</tr>";
     $tool_content .= $lp_content;
 }
@@ -244,9 +248,11 @@ if (isset($_GET['xls'])) {
     $defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
     $fontData = $defaultFontConfig['fontdata'];
 
+    $image_height_header = setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_WIDTH, $course_id);
+    $image_height_footer = setting_get(SETTING_COURSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id);
     $mpdf = new Mpdf\Mpdf([
-        'margin_top' => 53,     // approx 200px
-        'margin_bottom' => 53,  // approx 200px
+        'margin_top' => $image_height_header+15,     // mm
+        'margin_bottom' => $image_height_footer+15,  // mm
         'tempDir' => _MPDF_TEMP_PATH,
         'fontDir' => array_merge($fontDirs, [ $webDir . '/template/modern/fonts' ]),
         'fontdata' => $fontData + [

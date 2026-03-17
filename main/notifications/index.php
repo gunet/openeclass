@@ -43,6 +43,8 @@ elseif(isset($_GET['m'])){
 }
 
 if(!is_null($res)){
+    header('Content-Type: application/json; charset=utf-8');
+    header('X-Content-Type-Options: nosniff');
     echo json_encode($res);
 } else {
     echo "$x: No data";

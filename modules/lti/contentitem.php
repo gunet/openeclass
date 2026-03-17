@@ -55,10 +55,14 @@ if ($ltiApp->lti_version === LTI_VERSION_1_3) {
 
 // Check access and capabilities.
 $stat = Database::get()->querySingle("SELECT status, tutor, editor, course_reviewer FROM course_user WHERE user_id = ?d AND course_id = ?d", $uid, $courseid);
-if (empty($stat) || empty($stat->status)) {
+if (!$is_admin && (empty($stat) || empty($stat->status))) {
     throw new Exception('LTI Error: course_user not found during contentitem request.');
 }
-if ($stat->status != USER_TEACHER) {
+if ($is_admin && (empty($stat) || empty($stat->status))) {
+    $stat = new stdClass();
+    $stat->status = USER_TEACHER;
+}
+if (!$is_admin && $stat->status != USER_TEACHER) {
     throw new Exception('LTI Error: contentitem action requires course editor access.');
 }
 

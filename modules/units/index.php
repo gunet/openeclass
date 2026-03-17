@@ -60,7 +60,7 @@ $action = new action();
 $action->record(MODULE_ID_UNITS);
 
 $pageName = ''; // delete $pageName set in doc_init.php
-$toolName = $langCourseUnits;
+$toolName = '';
 $lang_editor = $language;
 load_js('tools.js');
 load_js('sortable/Sortable.min.js');
@@ -123,7 +123,6 @@ if ($is_editor) {
 if (isset($id) and $id !== false) {
     $info = Database::get()->querySingle("SELECT * FROM course_units WHERE id = ?d AND course_id = ?d $visibility_check $check_start_week", $id, $course_id);
     if ($info) {
-        $data['pageName'] = $info->title;
         $data['comments'] = standard_text_escape($info->comments);
         $data['unitId'] = $info->id;
         $data['course_start_week'] = $data['course_finish_week'] = '';
@@ -172,6 +171,7 @@ foreach (array('previous', 'next') as $i) {
     $q = Database::get()->querySingle("SELECT id, title, start_week, finish_week, public FROM course_units
                        WHERE course_id = ?d
                              AND id <> ?d
+                             AND visible < 2
                              AND `order` $op $info->order
                              AND `order` >= 0
                              $visibility_check
@@ -196,8 +196,8 @@ foreach (array('previous', 'next') as $i) {
 $moduleTag = new ModuleElement($id);
 $data['id'] = $id;
 $data['tags_list'] = $moduleTag->showTags();
-$data['units'] = Database::get()->queryArray("SELECT id, title, start_week FROM course_units
-             WHERE course_id = ?d AND `order` > 0
+$data['units'] = Database::get()->queryArray("SELECT id, title, start_week, visible FROM course_units
+             WHERE course_id = ?d AND `order` >= 0
                    $visibility_check $check_start_week
              ORDER BY `order`", $course_id);
 

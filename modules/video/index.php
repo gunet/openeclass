@@ -41,8 +41,10 @@ require_once 'include/lib/mediaresource.factory.php';
 require_once 'include/log.class.php';
 require_once 'modules/admin/extconfig/externals.php';
 require_once 'modules/admin/extconfig/opendelosapp.php';
+require_once 'modules/admin/extconfig/uniflixapp.php';
 require_once 'video_functions.php';
 require_once 'delos_functions.php';
+require_once 'uniflix_functions.php';
 
 $toolName = $langVideo;
 $data = array();
@@ -108,6 +110,8 @@ if ($is_editor && !$is_in_tinymce) { // admin actions
             foreach ($q1 as $a) {
                 if (!resource_belongs_to_progress_data(MODULE_ID_VIDEO, $a->id)) {
                     delete_video($a->id, 'video', $course_id, $course_code, $webDir);
+                    Session::flash('message', $langDelWithSuccess);
+                    Session::flash('alert-class', 'alert-success');
                 }   else {
                     Session::flash('message',$langResourceBelongsToCert);
                     Session::flash('alert-class', 'alert-warning');
@@ -123,11 +127,14 @@ if ($is_editor && !$is_in_tinymce) { // admin actions
             $table = select_table($_GET['table']);
             if (!resource_belongs_to_progress_data(MODULE_ID_VIDEO, $_GET['id'])) {
                 delete_video($_GET['id'], $table, $course_id, $course_code, $webDir);
+                Session::flash('message', $langDelWithSuccess);
+                Session::flash('alert-class', 'alert-success');
             } else {
                 Session::flash('message',$langResourceBelongsToCert);
                 Session::flash('alert-class', 'alert-warning');
             }
         }
+        redirect_to_home_page("modules/video/index.php?course=" . $course_code);
     }
 } // end of admin actions
 
@@ -156,6 +163,13 @@ if ($display_tools) {
             'url' => $urlAppend . "modules/video/index.php?course=" . $course_code . "&amp;showQuota=true",
             'icon' => 'fa-pie-chart')
     );
+    if (isUniFlixEnabled()) {
+        $actionBarArray[] = array('title' => $langAddUniFlixVideoLink,
+            'url' => $urlAppend . "modules/video/edit.php?course=" . $course_code . "&amp;form_input=uniflix",
+            'icon' => 'fa-plus-circle',
+            'level' => 'primary-label',
+            'button-class' => 'btn-success');
+    }
     if (isDelosEnabled()) {
         $actionBarArray[] = array('title' => $langAddOpenDelosVideoLink,
             'url' => $urlAppend . "modules/video/edit.php?course=" . $course_code . "&amp;form_input=opendelos",
@@ -189,6 +203,14 @@ if (isset($_GET['form_input']) and $_GET['form_input'] === 'opendelos') {
     $data['checkAuth'] = $checkAuth;
     $data['currentVideoLinks'] = getCurrentVideoLinks();
     view('modules.video.editdelos', $data);
+} else if (isset($_GET['form_input']) and $_GET['form_input'] === 'uniflix') {
+    load_js('datatables');
+    list($jsonPublicObj, $jsonPrivateObj, $checkAuth) = requestUniFlixJSON();
+    $data['jsonPublicObj'] = $jsonPublicObj;
+    $data['jsonPrivateObj'] = $jsonPrivateObj;
+    $data['checkAuth'] = $checkAuth;
+    $data['currentVideoLinks'] = getCurrentVideoLinks();
+    view('modules.video.edituniflix', $data);
 } else {
     view('modules.video.index', $data);
 }

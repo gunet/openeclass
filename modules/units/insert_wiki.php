@@ -23,9 +23,8 @@
  * @brief display list of available wikis (if any)
  */
 function list_wikis() {
-    global $id, $course_id, $tool_content, $urlServer,
+    global $id, $course_id, $tool_content, $urlServer, $langCancel,
     $langWikis, $langAddModulesButton, $langChoice, $langWikiNoWiki, $course_code, $langSelect;
-
 
     $result = Database::get()->queryArray("SELECT * FROM wiki_properties WHERE group_id = 0 AND course_id = ?d", $course_id);
     $wikiinfo = array();
@@ -45,7 +44,8 @@ function list_wikis() {
                     <tr class='list-header'>
                         <th>$langChoice</th>
                         <th>$langWikis</th>
-                    </tr></thead>";
+                    </tr>
+                </thead>";
         foreach ($wikiinfo as $entry) {
             if (!empty($entry['description'])) {
                 $description_text = "<div>" .  $entry['description']. "</div>";
@@ -59,9 +59,10 @@ function list_wikis() {
                             </tr>";
         }
         $tool_content .= "</table></div>
-                <div class='d-flex justify-content-start mt-4'>
-                    <input class='btn submitAdminBtn' type='submit' name='submit_wiki' value='$langAddModulesButton'>
+                <div class='d-flex justify-content-start mt-4'><input class='btn submitAdminBtn' type='submit' name='submit_wiki' value='$langAddModulesButton'>                
+                    <a href='index.php?course=$course_code&id=$id'><input class='btn cancelAdminBtn ms-2' value='$langCancel' /></a>
                 </div>
+               
             </form>";
     }
 }

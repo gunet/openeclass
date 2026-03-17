@@ -77,7 +77,7 @@
                                                                             <div class='modal-dialog'>
                                                                                 <div class='modal-content'>
                                                                                     <div class='modal-header'>
-                                                                                        <div class='modal-title' id='authInstructionLabel'>{{ trans('langInstructionsAuth') }}</div>
+                                                                                        <h2 class='modal-title' id='authInstructionLabel'>{{ trans('langInstructionsAuth') }}</h2>
                                                                                         <button type='button' class='close' data-bs-dismiss='modal' aria-label="{{ trans('langClose') }}"></button>
                                                                                     </div>
                                                                                     <div class='modal-body'>
@@ -115,7 +115,7 @@
                                                                                 <div class='modal-dialog'>
                                                                                     <div class='modal-content'>
                                                                                         <div class='modal-header'>
-                                                                                            <div class='modal-title' id='authInstructionLabel'>{{ trans('langInstructionsAuth') }}</div>
+                                                                                            <h2 class='modal-title' id='authInstructionLabel'>{{ trans('langInstructionsAuth') }}</h2>
                                                                                             <button type='button' class='close' data-bs-dismiss='modal' aria-label="{{ trans('langClose') }}"></button>
                                                                                         </div>
                                                                                         <div class='modal-body'>
@@ -165,9 +165,9 @@
                                                                                     <div class='modal-dialog'>
                                                                                         <div class='modal-content'>
                                                                                             <div class='modal-header'>
-                                                                                                <div class='modal-title' id='LoginFormAnotherOptionLabel-{{ $loop->index }}'>
+                                                                                                <h2 class='modal-title' id='LoginFormAnotherOptionLabel-{{ $loop->index }}'>
                                                                                                     {{ $authLink[count($authLink)-1][2] }}
-                                                                                                </div>
+                                                                                                </h2>
                                                                                                 <button type='button' class='close' data-bs-dismiss='modal' aria-label="{{ trans('langClose') }}"></button>
                                                                                             </div>
                                                                                             <div class='modal-body d-flex justify-content-center align-items-center'>

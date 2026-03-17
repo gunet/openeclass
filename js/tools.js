@@ -100,7 +100,7 @@ function course_checkbox_disabled(id, state)
 function course_list_init() {
     $.course_closed = [];
 
-    var dialog = $('<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal-label" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h4 class="modal-title" id="modal-label"></h4></div><div class="modal-body"></div><div class="modal-footer"><button type="button" class="btn btn-default" data-bs-dismiss="modal"></button><button type="button" class="btn btn-primary"></button></div></div></div></div>');
+    var dialog = $('<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal-label" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h2 class="modal-title" id="modal-label"></h2></div><div class="modal-body"></div><div class="modal-footer"><button type="button" class="btn btn-default" data-bs-dismiss="modal"></button><button type="button" class="btn btn-primary"></button></div></div></div></div>');
     $('.modal-body', dialog).html(lang.reregisterImpossible);
     $('.modal-title', dialog).html(lang.unregCourse);
     $('.btn-default', dialog).html(lang.cancel);
@@ -759,7 +759,7 @@ function secondsToHms(d) {
 }
 
 // Questionnaire / Poll
-function poll_init(langPoll, isSubQuestion) {
+function poll_init(langPoll, isSubQuestion, isGradeOn) {
     delete_init();
     $('input[type=submit][value="+"]').on('click', function (e) {
         e.preventDefault();
@@ -767,8 +767,11 @@ function poll_init(langPoll, isSubQuestion) {
         if (isSubQuestion) {
             var disQ = 'd-none';
         }
-        var last_form_group = $(this).closest('div.form-group').siblings('.form-group:last');
-        last_form_group.before("<div class='form-group input-group mt-3'><input class='form-control mt-0 w-75' type='text' name='answers[]' value='' placeholder='"+langPoll.answer+"'><input class='form-control mt-0 "+disQ+"' type='text' name='grades[]' value='' placeholder='"+langPoll.grade+"'><div class='form-control-static input-group-text h-40px bg-white input-border-color'><a href='#' style='cursor: pointer;' class='del_btn'><i class='fa-solid fa-xmark Accent-200-cl'></i></a></div></div>").next().find('input').removeAttr('value');
+        if (isGradeOn == 0) {
+            var disQ = 'd-none';
+        }
+        var last_form_group = $('div.form-group.input-group').last();
+        last_form_group.after("<div class='form-group input-group mt-3'><input class='form-control mt-0 w-75' type='text' name='answers[]' value='' placeholder='"+langPoll.answer+"'><input class='form-control mt-0 "+disQ+"' type='text' name='grades[]' value='' placeholder='"+langPoll.grade+"'><div class='form-control-static input-group-text h-40px bg-white input-border-color'><a href='#' style='cursor: pointer;' class='del_btn'><i class='fa-solid fa-xmark Accent-200-cl'></i></a></div></div>").next().find('input').removeAttr('value');
         delete_init();
     });
 }

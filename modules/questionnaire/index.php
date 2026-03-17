@@ -65,6 +65,7 @@ $head_content .= "<script type='text/javascript'>
                 'sPaginationType': 'full_numbers',
                 'bAutoWidth': true,
                 'searchDelay': 1000,
+                'responsive': true,
                 'order' : [[1, 'desc']],
                 'oLanguage': {
                    'lengthLabels': {
@@ -128,8 +129,9 @@ if (isset($_GET['cancelPoll'])) {
     unset($_SESSION['question_ids']);
     unset($_SESSION['q_row_columns']);
     unset($_SESSION['loop_init_answers']);
+    unset($_SESSION['loop_init_answers_session']);
     unset($_SESSION['emptyQuestions']);
-    unset($_SESSION['user_removed_file']);
+    unset($_SESSION['onBehalfOfUserId']);
 }
 
 if (isset($_GET['verification_code'])) {
@@ -347,7 +349,8 @@ if ($is_editor) {
             unset($_SESSION['question_ids']);
             unset($_SESSION['q_row_columns']);
             unset($_SESSION['loop_init_answers']);
-            unset($_SESSION['user_removed_file']);
+            unset($_SESSION['loop_init_answers_session']);
+            unset($_SESSION['onBehalfOfUserId']);
             $folder = "$webDir/courses/$course_code/poll_$pid";
             deleteFolderContents($folder);
             Database::get()->query("DELETE FROM poll_user_record WHERE pid = ?d", $pid);
@@ -436,12 +439,13 @@ if ($is_editor) {
                                                    q_column = ?d,
                                                    `page` = ?d,
                                                    require_response = ?d,
+                                                   require_grade = ?d,
                                                    total_weight = ?d,
                                                    has_sub_question = ?d", 
                                                    $new_pid, $question->question_text, $question->qtype, 
                                                    $question->q_position, $question->q_scale, $q_description, 
                                                    $answer_scales, $q_row, $q_column,
-                                                   $question->page, $question->require_response, $total_weight, $question->has_sub_question)->lastInsertID;
+                                                   $question->page, $question->require_response, $question->require_grade, $total_weight, $question->has_sub_question)->lastInsertID;
                     $answers = Database::get()->queryArray("SELECT * FROM poll_question_answer WHERE pqid = ?d ORDER BY pqaid", $question->pqid);
                     foreach ($answers as $answer) {
                         Database::get()->query("INSERT INTO poll_question_answer
@@ -558,7 +562,7 @@ function printPolls() {
     } else {
         // Print active polls
         $tool_content .= "<div class='col-sm-12'>
-                    <div class='table-responsive'>
+                    
               <table id='polls' class='table-default'>
               <thead>
                 <tr class='list-header'>
@@ -733,7 +737,7 @@ function printPolls() {
             }
         }
 
-        $tool_content .= "</tbody></table></div></div>
+        $tool_content .= "</tbody></table></div>
 
             <div class='modal fade' tabindex='-1' role='dialog' id='cloneModal'>
               <div class='modal-dialog' role='document'>

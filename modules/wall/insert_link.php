@@ -21,7 +21,7 @@
 require_once 'include/course_settings.php';
 
 function list_links($id = NULL) {
-    global $course_id, $langNoCategory, $langDescription, $langChoice, $langNoLinksExist, $langLinks, $langSocialCategory, $langSelect, $langOpenNewTab;
+    global $course_id, $langUncategorizedLinks, $langDescription, $langChoice, $langNoLinksExist, $langLinks, $langSocialCategory, $langSelect, $langOpenNewTab;
 
     $ret_string = '';
     $result = Database::get()->queryArray("SELECT * FROM link WHERE course_id = ?d", $course_id);
@@ -79,7 +79,7 @@ function list_links($id = NULL) {
         }
         if (count($linkinfo) > 0) {
             $ret_string .= "<tr>" .
-                "<td colspan='3'><b>$langNoCategory</b></td>" .
+                "<td colspan='3'><b>$langUncategorizedLinks</b></td>" .
                 "</tr>";
             foreach ($linkinfo as $entry) {
                 $checked = '';

@@ -25,12 +25,25 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 $require_current_course = true;
 $require_course_reviewer = true;
 require_once '../../include/baseTheme.php';
+require_once 'include/course_settings.php';
 require_once 'modules/questionnaire/functions.php';
+require_once 'modules/session/functions.php';
 
 if (!isset($_GET['pid'])) {
     redirect_to_home_page();
 } else {
     $pid = intval($_GET['pid']);
+}
+
+// Check if uid is the coordinator or the consultant of the current session.
+if (isset($_GET['session'])) {
+    $check = Database::get()->querySingle("SELECT user_id FROM course_user 
+        WHERE user_id = ?d AND course_id = ?d AND status = ?d AND tutor = ?d", $uid, $course_id, USER_STUDENT, 1);
+    if ($check && !is_session_consultant($_GET['session'],$course_id)) {
+        Session::flash('message', $langForbidden);
+        Session::flash('alert-class', 'alert-warning');
+        redirect_to_home_page("modules/session/index.php?course=$course_code");
+    }
 }
 
 $full = isset($_GET['full']) && $_GET['full'];
@@ -247,9 +260,10 @@ if ($full) { // user questions results
     $session_participants = [];
     if (isset($_GET['dumppoll_session'])) {
         $participants = Database::get()->queryArray("SELECT participants FROM mod_session_users
-                                                             WHERE session_id = ?d AND is_accepted = 1
-                                                             AND participants IN (SELECT uid FROM poll_user_record 
-                                                                                    WHERE pid = ?d AND session_id = ?d)", $_GET['session'], $pid, $_GET['session']);
+                                                     WHERE session_id = ?d 
+                                                     AND is_accepted = 1
+                                                     AND participants IN (SELECT uid FROM poll_user_record WHERE pid = ?d AND session_id = ?d)", $_GET['session'], $pid, $_GET['session']);
+        
         if (count($participants) > 0) {
             foreach ($participants as $p) {
                 $session_participants[] = $p->participants;
@@ -437,9 +451,11 @@ function create_pdf($data) {
     $defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
     $fontData = $defaultFontConfig['fontdata'];
 
+    $image_height_header = setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_WIDTH, $course_id);
+    $image_height_footer = setting_get(SETTING_COURSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id);
     $mpdf = new Mpdf\Mpdf([
-        'margin_top' => 53,     // approx 200px
-        'margin_bottom' => 53,  // approx 200px
+        'margin_top' => $image_height_header+15,     // mm
+        'margin_bottom' => $image_height_footer+15,  // mm
         'tempDir' => _MPDF_TEMP_PATH,
         'fontDir' => array_merge($fontDirs, [ $webDir . '/template/modern/fonts' ]),
         'fontdata' => $fontData + [

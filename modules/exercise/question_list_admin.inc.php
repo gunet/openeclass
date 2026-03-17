@@ -35,6 +35,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     }
 
     $action = $_POST['action'];
+
     if ($action == 'random_criteria') { // random criteria (based upon difficulty)
         if (isset($_POST['questionRandomDrawn']) and intval($_POST['questionRandomDrawn']) > 0) { // random difficulty questions
             $difficultyId = intval($_POST['difficultyId']);
@@ -82,7 +83,6 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         $data = array('success' => true);
 
     } else if ($action == 'add_questions') { // add questions
-
         $category = $_POST['category'];
         $difficulty = $_POST['difficulty'];
         $query_vars = array($course_id);

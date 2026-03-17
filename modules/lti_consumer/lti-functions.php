@@ -129,7 +129,7 @@ function new_lti_app($course_code, $is_template = false, $lti_url_default = '') 
                                         
                                         <div class='form-group mt-4'>
                                             <label for='lti_version' class='col-sm-12 control-label-notes'>$langLTIVersion</label>
-                                            <div class='col-sm-12'>" . selection(lti_get_versions_selection(), 'lti_version', LTI_VERSION_1_1, 'id="lti_version"') . "</div>
+                                            <div class='col-sm-12'>" . selection(lti_get_versions_selection(), 'lti_version', LTI_VERSION_1_3, 'id="lti_version"') . "</div>
                                         </div>
             
           
@@ -1030,8 +1030,8 @@ function lti_get_versions_selection() {
     global $langLTIVersion1_1, $langLTIVersion1_3;
 
     return array(
-        LTI_VERSION_1_1 => $langLTIVersion1_1,
-        LTI_VERSION_1_3 => $langLTIVersion1_3
+        LTI_VERSION_1_3 => $langLTIVersion1_3,
+        LTI_VERSION_1_1 => $langLTIVersion1_1
     );
 }
 

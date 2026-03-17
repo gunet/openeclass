@@ -20,6 +20,7 @@
 
 require_once 'include/lib/mediaresource.class.php';
 require_once 'modules/video/delos_functions.php';
+require_once 'modules/video/uniflix_functions.php';
 
 class MediaResourceFactory {
 
@@ -43,12 +44,23 @@ class MediaResourceFactory {
         if ($url == 'http://' || empty($url) || !filter_var($url, FILTER_VALIDATE_URL) || preg_match('/^javascript/i', preg_replace('/\s+/', '', $url))) {
             $url = '#';
         }
+        // delos support
         if (isDelosEnabled()) {
             if (stringStartsWith($url, getDelosURL())) {
                 $matches = null;
                 if (preg_match('/\?rid=([^&]+)/i', $url, $matches)) {
                     $rid = $matches[1];
                     $url .= '&token=' . getDelosSignedTokenForVideo($rid);
+                }
+            }
+        }
+        // UniF1ix support
+        if (isUniFlixEnabled()) {
+            if (stringStartsWith($url, getUniFlixURL())) {
+                $matches = null;
+                if (preg_match('/\?rid=([^&]+)/i', $url, $matches)) {
+                    $rid = $matches[1];
+                    $url .= '&token=' . getUniFlixSignedTokenForVideo($rid);
                 }
             }
         }

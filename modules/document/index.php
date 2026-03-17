@@ -139,8 +139,11 @@ if ($is_editor) {
                             // remove from index if relevant (except non-main sysbsystems and metadata)
                             Database::get()->queryFunc("SELECT id FROM document WHERE course_id >= 1 AND subsystem = 0
                                                 AND format <> '.meta' AND path LIKE ?s",
-                                function ($r2, $searchEngine) {
-                                    $searchEngine->indexResource(ConstantsUtil::REQUEST_REMOVE, ConstantsUtil::RESOURCE_DOCUMENT, $r2->id);
+                                function ($r2) {
+                                    global $searchEngine;
+                                    if ($searchEngine) {
+                                        $searchEngine->indexResource(ConstantsUtil::REQUEST_REMOVE, ConstantsUtil::RESOURCE_DOCUMENT, $r2->id);
+                                    }
                                     if (resource_belongs_to_progress_data(MODULE_ID_DOCS, $r2->id)) {
                                         Session::Messages(trans('langResourceBelongsToCert'), 'alert-warning');
                                     }
@@ -240,6 +243,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     /* save video recorded data */
     if (isset($_FILES['video-blob'])) {
         $title = $_POST['userFile'];
+        validateUploadedFile($_FILES['video-blob']['name']);
         $file_path = '/' . safe_filename('webm');
         if (!move_uploaded_file($_FILES['video-blob']['tmp_name'], $basedir . $file_path)) {
             Session::flash('message', $langGeneralError);
@@ -250,30 +254,30 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             $file_date = date('Y-m-d G:i:s');
             $file_format = 'webm';
             Database::get()->query("INSERT INTO document SET
-            course_id = ?d,
-            subsystem = ?d,
-            subsystem_id = ?d,
-            path = ?s,
-            extra_path = '',
-            filename = ?s,
-            visible = 1,
-            comment = '',
-            category = 0,
-            title = ?s,
-            creator = ?s,
-            date = ?s,
-            date_modified = ?s,
-            subject = '',
-            description = '',
-            author = ?s,
-            format = ?s,
-            copyrighted = 0,
-            editable = 0,
-            lock_user_id = ?d",
-                $course_id, $subsystem, $subsystem_id, $file_path,
-                $filename, $title, $file_creator,
-                $file_date, $file_date, $file_creator, $file_format,
-                $language, $uid);
+                course_id = ?d,
+                subsystem = ?d,
+                subsystem_id = ?d,
+                path = ?s,
+                extra_path = '',
+                filename = ?s,
+                visible = 1,
+                comment = '',
+                category = 0,
+                title = ?s,
+                creator = ?s,
+                date = ?s,
+                date_modified = ?s,
+                subject = '',
+                description = '',
+                author = ?s,
+                format = ?s,
+                copyrighted = 0,
+                editable = 0,
+                lock_user_id = ?d",
+                    $course_id, $subsystem, $subsystem_id, $file_path,
+                    $filename, $title, $file_creator,
+                    $file_date, $file_date, $file_creator, $file_format,
+                    $language, $uid);
             Session::Messages($langDownloadEnd, 'alert-success');
             exit();
         }
@@ -281,6 +285,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     /* save audio recorded data */
     if (isset($_FILES['audio-blob'])) {
         $title = $_POST['userFile'];
+        validateUploadedFile($_FILES['audio-blob']['name']);
         $file_path = '/' . safe_filename('mka');
         if (!move_uploaded_file($_FILES['audio-blob']['tmp_name'], $basedir . $file_path)) {
             Session::flash('message', $langGeneralError);
@@ -335,6 +340,9 @@ if (defined('COMMON_DOCUMENTS')) {
     $toolName = $langCommonDocs;
     $diskQuotaDocument = $diskUsed + parseSize(ini_get('upload_max_filesize'));
 } elseif (defined('MY_DOCUMENTS')) {
+    if ($session->status == USER_GUEST) {
+        redirect_to_home_page();
+    }
     if ($session->status == USER_TEACHER and !get_config('mydocs_teacher_enable')) {
         redirect_to_home_page();
     }
@@ -394,9 +402,9 @@ $dialogData = [
 if (isset($_GET['mindmap'])) {
     $mindmap = $_GET['mindmap'];
     $title = $_GET['mindtitle'];
-
     $file_path = '/' . safe_filename('jm');
-    if (!file_put_contents($basedir . $file_path, $_GET['mindmap'])) {
+    validateUploadedFile($file_path);
+    if (!file_put_contents($basedir . $file_path, $mindmap)) {
         Session::flash('message', $langGeneralError);
         Session::flash('alert-class', 'alert-danger');
     } else {
@@ -1074,21 +1082,36 @@ if ($can_upload or $user_upload) {
         // check if file exists
         $res = Database::get()->querySingle("SELECT * FROM document
                                              WHERE $group_sql AND
-                                                   path=?s", $commentPath);
+                                                   path = ?s", $commentPath);
         if ($res and (!$uploading_as_user or $res->lock_user_id == $uid)) {
             if ($res->format == '.dir') {
                 Database::get()->query("UPDATE document SET comment = ?s
                      WHERE $group_sql AND path = ?s", $_POST['file_comment'], $commentPath);
             } else {
+                if (isset($_POST['external_url'])) {
+                    $ext_url_sql = ', extra_path = ?s';
+                    $ext_url_arg = $_POST['external_url'];
+                    if (!preg_match('/^https?:\/\//i', $ext_url_arg)) {
+                        Session::Messages($langUnwantedFiletype . ': ' . q($ext_url_arg), 'alert-warning');
+                        Session::flashPost();
+                        http_response_code(303);
+                        $base_url = html_entity_decode($base_url);
+                        header("Location: {$base_url}comment=" . getIndirectReference($commentPath));
+                        exit;
+                    }
+                } else {
+                    $ext_url_sql = '';
+                    $ext_url_arg = [];
+                }
                 Database::get()->query("UPDATE document SET
                                                 comment = ?s,
                                                 title = ?s,
                                                 date_modified = " . DBHelper::timeAfter() . ",
-                                                copyrighted = ?d
+                                                copyrighted = ?d $ext_url_sql
                                         WHERE $group_sql AND
                                               path = ?s"
                     , $_POST['file_comment'], $_POST['file_title']
-                    , $_POST['file_copyrighted'], $commentPath);
+                    , $_POST['file_copyrighted'], $ext_url_arg, $commentPath);
             $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_DOCUMENT, $res->id);
             Log::record($course_id, MODULE_ID_DOCS, LOG_MODIFY, array('path' => $commentPath,
                 'filename' => $res->filename,
@@ -1244,6 +1267,11 @@ if ($can_upload or $user_upload) {
                 'selected_license_title' => $row->copyrighted,
                 'license_title' => $license_title
             );
+            if ($row->extra_path and preg_match('/^https?:\/\//i', $row->extra_path)) {
+                $dialogData['external_url'] = $row->extra_path;
+            } else {
+                $dialogData['external_url'] = false;
+            }
             view('modules.document.comment', $dialogData);
         } else {
             Session::Messages($langFileNotFound, 'alert-danger');
@@ -1542,7 +1570,7 @@ foreach ($result as $row) {
         $dirs[] = (object) $info;
     } else {
         $info['icon'] = choose_image('.' . $row->format);
-        $info['url'] = file_url($row->path, $row->filename);
+        $info['url'] = file_url($row->path, $row->filename, extra_path: $row->extra_path);
         $dObj = MediaResourceFactory::initFromDocument($row);
         $dObj->setAccessURL($info['url']);
         if ($is_in_tinymce && !$compatiblePlugin) {
@@ -1638,7 +1666,8 @@ if (($can_upload or $user_upload) and !$is_in_tinymce) {
               'icon' => 'fa-file'),
         array('title' => $langExternalFile,
               'url' => "upload.php?course=$course_code&amp;{$groupset}uploadPath=$curDirPath&amp;ext=true",
-              'icon' => 'fa-link'),
+              'icon' => 'fa-link',
+              'show' => !defined('EBOOK_DOCUMENTS')),
         array('title' => $langMindmap,
               'url' => "../mindmap/index.php?course=$course_code",
               'icon' => 'fa-solid fa-sitemap'),
@@ -1762,7 +1791,7 @@ function make_clickable_path($path) {
         } else {
             $cur .= rawurlencode("/$component");
             $row = Database::get()->querySingle("SELECT filename FROM document
-                                        WHERE path LIKE '%/$component' AND $group_sql");
+                                        WHERE path LIKE ?s AND $group_sql", "%/$component");
             $dirname = $row->filename;
             $out .= " <span class='fa-solid fa-chevron-right px-2 small-text'></span> <a href='{$base_url}openDir=$cur'>".q($dirname)."</a>";
         }

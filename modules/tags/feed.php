@@ -23,6 +23,9 @@ $require_current_course = true;
 
 require_once '../../include/baseTheme.php';
 
+header('Content-Type: application/json; charset=utf-8');
+header('X-Content-Type-Options: nosniff');
+
 $q = $_GET['q']['term'];
 
 $taglist = Database::get()->queryArray("SELECT id, name FROM tag WHERE name LIKE ?s ORDER BY name", "%$q%");

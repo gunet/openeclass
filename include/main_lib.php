@@ -25,7 +25,7 @@
  * Defines standard functions and validates variables
  */
 
-define('ECLASS_VERSION', '4.2.1');
+define('ECLASS_VERSION', '4.3-dev');
 
 // mPDF library temporary file path and font path
 if (isset($webDir)) { // needed for avoiding 'notices' in some files
@@ -205,6 +205,19 @@ function load_js($file, $init='') {
         } elseif ($file == 'bootstrap-combobox') {
             $head_content .= css_link('bootstrap-combobox/css/bootstrap-combobox.css');
             $file = 'bootstrap-combobox/js/bootstrap-combobox.js';
+        } elseif ($file == 'bootstrap-table') {
+            $head_content .= css_link('bootstrap-table/bootstrap-table.min.css');
+            if ($language != 'en') {
+                switch ($language) {
+                    case 'el': $file = 'bootstrap-table/locale/bootstrap-table-el-GR.min.js'; break;
+                    case 'fr': $file = 'bootstrap-table/locale/bootstrap-table-fr-FR.min.js'; break;
+                    case 'de': $file = 'bootstrap-table/locale/bootstrap-table-de-DE.min.js'; break;
+                    case 'it': $file = 'bootstrap-table/locale/bootstrap-table-it-IT.min.js'; break;
+                    case 'es': $file = 'bootstrap-table/locale/bootstrap-table-es-ES.min.js'; break;
+                    default: break;
+                }
+            }
+            $head_content .= js_link('bootstrap-table/bootstrap-table.min.js');
         } elseif ($file == 'spectrum') {
             $head_content .= css_link('spectrum/spectrum.css');
             $file = 'spectrum/spectrum.js';
@@ -879,6 +892,13 @@ function html2text($string) {
     return html_entity_decode(strip_tags($text));
 }
 
+function base64url_encode($data) {
+    return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
+}
+
+function base64url_decode($data) {
+    return base64_decode(str_pad(strtr($data, '-_', '+/'), strlen($data) % 4, '=', STR_PAD_RIGHT));
+}
 
 /**
  * @brie   completes url contained in the text with "<a href ...".
@@ -1159,7 +1179,7 @@ function display_activation_link($module_id) {
     global $modules;
 
     $script = preg_replace('|.*/|', '', $_SERVER['SCRIPT_NAME']);
-    if (!defined('STATIC_MODULE') and $module_id and array_key_exists($module_id, $modules) and $script == 'index.php' and count($_GET) == 1 and isset($_GET['course']) and $_SERVER['REQUEST_METHOD'] == 'GET') {
+    if (!defined('STATIC_MODULE') and $module_id and array_key_exists($module_id, $modules) and $script == 'index.php' and (count($_GET) == 1 or ($module_id == MODULE_ID_PROGRESS and count($_GET) == 2 and isset($_GET['tab']))) and isset($_GET['course']) and $_SERVER['REQUEST_METHOD'] == 'GET') {
         return true;
     } else {
         return false;
@@ -1590,7 +1610,7 @@ function format_time_duration($sec, $hourLimit = 24, $display_days = true) {
         return append_units($sec, $langsecond, $langseconds);
     }
     $min = floor($sec / 60);
-    $sec = $sec % 60;
+    $sec = intval($sec) % 60;
     if ($min < 2) {
         return append_units($min, $langminute, $langminutes) .
                 (($sec == 0) ? '' : (' ' . append_units($sec, $langsecond, $langseconds)));
@@ -2101,7 +2121,9 @@ function deleteUser($id, $log) {
             if (count($assignment_data) > 0) { // if assignments found
                 foreach ($assignment_data as $data) {
                     $courseid = Database::get()->querySingle("SELECT course_id FROM assignment WHERE id = $data->assignment_id")->course_id;
-                    unlink($webDir . "/courses/". course_id_to_code($courseid) . "/work/" . $data->file_path);
+                    if (isset($data->file_path)) {
+                        unlink($webDir . "/courses/". course_id_to_code($courseid) . "/work/" . $data->file_path);
+                    }
                 }
             }
             Database::get()->query("DELETE FROM user_badge_criterion WHERE user = ?d", $u);
@@ -2464,6 +2486,7 @@ tinymce.init({
         '{$urlAppend}template/modern/css/default.css',
     ],
     content_style: 'body { margin: 8px; background: none !important; color: $tinymce_color_text;  }',
+    fontsize_formats: '8pt 9pt 10pt 11pt 12pt 14pt 16pt 18pt 20pt 24pt 30pt 36pt',
     extended_valid_elements: 'span[*]',
     noneditable_noneditable_class: 'fa',
     language: '$language',
@@ -2886,7 +2909,7 @@ function icon($name, $title = null, $link = null, $link_attrs = '', $with_title 
         $extra = '';
     }
     if (isset($title) && $with_title) {
-        $img = $sr_only ? "<span class='fa $name' $extra></span><span class='sr-only'>$title</span>" : "<span class='fa $name' $extra></span> $title";
+        $img = $sr_only ? "<span class='fa $name' $extra></span><span class='visually-hidden'>$title</span>" : "<span class='fa $name' $extra></span> $title";
     } else {
         $img = "<span class='fa $name' $extra></span>";
     }
@@ -3912,13 +3935,11 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
                 "</$primaryTag>$subMenu$form_end");
         }
 
-        if (count($options) > 1) {
+        if (count($options) > 1 && !(isset($option['options']) && ($level == 'primary' or $level == 'primary-label'))) {
             array_unshift($out_secondary,
                 "<li$wrapped_class>$form_begin<a$confirm_extra  class='$text_class $modal_class $confirm_modal_class $temporary_button_class list-group-item d-flex justify-content-start align-items-start gap-2 py-3'" . $href .
                 " $link_attrs>" .
                 "<span class='fa $option[icon] settings-icons'></span> $title</a>$form_end</li>");
-        } else {
-            $out_secondary = [];
         }
         $i++;
     }
@@ -4010,34 +4031,24 @@ function action_button($options, $secondary_menu_options = array(), $fc=false) {
 
     foreach (array_reverse($options) as $option) {
         $level = $option['level'] ?? 'secondary';
-        // skip items with show=false
         if (isset($option['show']) and !$option['show']) {
             continue;
         }
-        if (isset($option['class'])) {
-            $class = ' ' . $option['class'];
-        } else {
-            $class = '';
-        }
-        if (isset($option['btn_class'])) {
-            $btn_class = ' ' . $option['btn_class'];
-        } else {
-            $btn_class = ' submitAdminBtn';
-        }
-        if (isset($option['link-attrs'])) {
-            $link_attrs = ' ' . $option['link-attrs'];
-        } else {
-            $link_attrs = '';
-        }
-        $disabled = isset($option['disabled']) && $option['disabled'] ? ' disabled' : '';
-        $icon_class = "class='list-group-item $class$disabled";
+        $class = isset($option['class']) ? ' ' . $option['class'] : '';
+        $btn_class = isset($option['btn_class']) ? ' ' . $option['btn_class'] : ' submitAdminBtn';
+        $link_attrs = isset($option['link-attrs']) ? ' ' . $option['link-attrs'] : '';
+
+        $disabled = (isset($option['disabled']) && $option['disabled']) ? ' disabled' : '';
+
+        $icon_class = "class='list-group-item d-flex justify-content-start align-items-start gap-2 py-3$class$disabled";
         if (isset($option['icon-class'])) {
             $icon_class .= " " . $option['icon-class'];
         }
+
         if (isset($option['confirm'])) {
             $title = q($option['confirm_title'] ?? $langConfirmDelete);
             $accept = $option['confirm_button'] ?? $langDelete;
-            $form_begin = "<form class='form-action-button-popover list-group-item-action list-group-item' method=post action='$option[url]'>";
+            $form_begin = "<form class='form-action-button-mydropdowns mb-0' method=post action='$option[url]'>";
             $form_end = '</form>';
             if ($level == 'primary-label' or $level == 'primary') {
                 $primary_form_begin = $form_begin;
@@ -4054,8 +4065,9 @@ function action_button($options, $secondary_menu_options = array(), $fc=false) {
         } else {
             $icon_class .= "'";
             $confirm_extra = $form_begin = $form_end = '';
-            $url = isset($option['url'])? $option['url']: '#';
+            $url = isset($option['url']) ? $option['url'] : '#';
         }
+
         if (isset($option['icon-extra'])) {
             $icon_class .= ' ' . $option['icon-extra'];
         }
@@ -4065,13 +4077,15 @@ function action_button($options, $secondary_menu_options = array(), $fc=false) {
         } elseif ($level == 'primary') {
             array_unshift($out_primary, "<a aria-label='" . q($option['title']) . "' data-bs-placement='bottom' data-bs-toggle='tooltip' title data-bs-original-title='" . q($option['title']) . "' href='$url' class='btn $btn_class$disabled' $link_attrs><span class='fa $option[icon]$primary_icon_class'></span><span class='hidden'></span></a>");
         } else {
-            array_unshift($out_secondary, $form_begin . icon($option['icon'], $option['title'], $url, $icon_class.$link_attrs, true) . $form_end);
+            array_unshift($out_secondary, '<li>' . $form_begin . icon($option['icon'], $option['title'], $url, $icon_class.$link_attrs, true) . $form_end . '</li>');
         }
     }
+
     $primary_buttons = "";
     if (count($out_primary)) {
         $primary_buttons = implode('', $out_primary);
     }
+
     $action_button = "";
     $secondary_title = $secondary_menu_options['secondary_title'] ?? "<span class='hidden'></span>";
 
@@ -4081,19 +4095,21 @@ function action_button($options, $secondary_menu_options = array(), $fc=false) {
         $secondary_icon = $secondary_menu_options['secondary_icon'] ?? "fa-solid fa-gear";
     }
     $secondary_btn_class = $secondary_menu_options['secondary_btn_class'] ?? "submitAdminBtn";
-    if (count($out_secondary)) {
-        $action_list = q("<div class='list-group' id='action_button_menu'>".implode('', $out_secondary)."</div>");
-        if(!empty($secondary_title)){
-            $tmp_class_title = "<span class='hidden-xs'>$secondary_title</span>";
-        }else{
-            $tmp_class_title = "";
-        }
-        $action_button = "
-                <a tabindex='0' role='button' class='menu-popover btn $secondary_btn_class d-flex justify-content-center align-items-center' data-bs-toogle='popover' data-bs-container='body' data-bs-placement='left' data-bs-html='true' data-bs-trigger='manual' data-bs-content='$action_list' aria-label='$langListChoices'>
-                    <span class='fa $secondary_icon'></span>
-                    $tmp_class_title
 
-                </a>";
+    // Instead of a popover menu, display list items directly
+    if (count($out_secondary)) {
+        $list_items = implode('', $out_secondary);
+        $tmp_class_title = !empty($secondary_title) ? "<span class='hidden-xs'>$secondary_title</span>" : "";
+        $action_button = "
+            <button style='border-radius: 4px;' class='btn $secondary_btn_class action-button-dropdown' type='button' id='actionDropdown' data-bs-toggle='dropdown' aria-expanded='false' aria-label='$langListChoices'>
+                <span class='fa $secondary_icon'></span> 
+                $tmp_class_title
+            </button>
+            <div class='m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-border contextual-menu-action-button' aria-labelledby='actionDropdown'>
+                <ul class='list-group list-group-flush'>
+                    $list_items
+                </ul>
+            </div>";
     }
 
     return $primary_form_begin .
@@ -4764,7 +4780,7 @@ function showSecondFactorChallenge(){
  */
 function checkSecondFactorChallenge(){
     $connector = secondfaApp::getsecondfa();
-    if($connector->isEnabled()){
+    if ($connector->isEnabled()) {
         return secondfaApp::checkChallenge($_SESSION['uid']);
     } else {
         return "";
@@ -4862,22 +4878,22 @@ function get_platform_logo($size = 'normal', $position = 'header') {
     require_once 'include/course_settings.php';
 
     if ($position == 'footer') {
-        $footer_path = setting_get_print_image_disk_path(SETTING_COUSE_IMAGE_PRINT_FOOTER, $course_id);
+        $footer_path = setting_get_print_image_disk_path(SETTING_COURSE_IMAGE_PRINT_FOOTER, $course_id);
         if (!$footer_path) {
             return '';
         }
         $logo_img = imageToBase64($footer_path);
-        $image_align = setting_get(SETTING_COUSE_IMAGE_PRINT_FOOTER_ALIGNMENT, $course_id);
+        $image_align = setting_get(SETTING_COURSE_IMAGE_PRINT_FOOTER_ALIGNMENT, $course_id);
         $image_align = ($image_align == 0) ? 'left' : (($image_align == 1) ? 'center' : 'right');
-        $image_width = setting_get(SETTING_COUSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id);
+        $image_width = setting_get(SETTING_COURSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id);
         $bg_color = '#ffffff';
     } else {
-        $header_path = setting_get_print_image_disk_path(SETTING_COUSE_IMAGE_PRINT_HEADER, $course_id);
+        $header_path = setting_get_print_image_disk_path(SETTING_COURSE_IMAGE_PRINT_HEADER, $course_id);
         if ($header_path) {
             $logo_img = imageToBase64($header_path);
-            $image_align = setting_get(SETTING_COUSE_IMAGE_PRINT_HEADER_ALIGNMENT, $course_id);
+            $image_align = setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_ALIGNMENT, $course_id);
             $image_align = ($image_align == 0) ? 'left' : (($image_align == 1) ? 'center' : 'right');
-            $image_width = setting_get(SETTING_COUSE_IMAGE_PRINT_HEADER_WIDTH, $course_id);
+            $image_width = setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_WIDTH, $course_id);
             $bg_color = '#ffffff';
         } else {
             $logo_img = $themeimg . '/eclass-new-logo.svg';
@@ -4899,8 +4915,8 @@ function get_platform_logo($size = 'normal', $position = 'header') {
         }
     }
 
-    $logo = "<div style='clear: right; background-color: $bg_color; padding: 1rem; margin-bottom: 2rem; text-align: $image_align;'>
-                <img style='width: {$image_width}px;' src='$logo_img'>
+    $logo = "<div style='clear: right; background-color: $bg_color; padding: 1rem; text-align: $image_align;'>
+                <img style='height: {$image_width}mm;' src='$logo_img'>
             </div>";
 
     return $logo;
@@ -10515,6 +10531,9 @@ function theme_initialization() {
                     white-space: nowrap;
                     background-color: $theme_options_styles[BgColorProgressBarAndText];
                 }
+                .poll-border-left {
+                    border-left: solid 4px $theme_options_styles[BgColorProgressBarAndText] !important;
+                }
             ";
         }
 
@@ -12463,5 +12482,30 @@ function form_popovers($type, $message): string {
     }
 
     return $html;
+
+}
+
+/**
+ * Retrieve a specific style value from the theme options.
+ *
+ * This function fetches the theme options from the database for the current theme
+ * and retrieves the value of a specific style based on the provided style name.
+ *
+ * @param string $style_name The name of the style to retrieve.
+ *
+ * @global int $theme_id The ID of the current theme.
+ *
+ * @return mixed|null The value of the requested style if it exists, or null if not found.
+ */
+function get_style($style_name) {
+    global $theme_id;
+
+    $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
+
+    if ($theme_options) {
+        $theme_options_styles = unserialize($theme_options->styles);
+    }
+
+    return $theme_options_styles[$style_name] ?? null;
 
 }

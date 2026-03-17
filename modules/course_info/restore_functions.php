@@ -5,7 +5,7 @@
  *  * Open eClass
  *  * E-learning and Course Management System
  *  * ========================================================================
- *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  * Copyright 2003-2025, Greek Universities Network - GUnet
  *  *
  *  * Open eClass is an open platform distributed in the hope that it will
  *  * be useful (without any warranty), under the terms of the GNU (General
@@ -218,6 +218,15 @@ function restore_table($basedir, $table, $options, $url_prefix_map, $backupData,
                     } elseif (!$map_missing_keep) {
                         continue 2;
                     }
+                }
+            }
+        }
+        if (isset($options['offset'])) {
+            foreach ($options['offset'] as $field => $offset) {
+                $newField = $restoreHelper->getField($table, $field);
+                // Don't pass null data through mapping
+                if (!is_null($data[$newField])) {
+                    $data[$newField] = $data[$newField] + $offset;
                 }
             }
         }
@@ -551,8 +560,14 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
                     );
                 } else {
                     $upd_course_sql .= " , view_type = ?s ";
-                    array_push($upd_course_args, $course_data['view_type']);
+                    $upd_course_args[] = $course_data['view_type'];
                 }
+
+                if (isset($course_data['is_collaborative'])) {
+                    $upd_course_sql .= " , is_collaborative = ?d ";
+                    $upd_course_args[] = $course_data['is_collaborative'];
+                }
+
                 $upd_course_sql .= " WHERE id = ?d ";
                 $upd_course_args[] = intval($new_course_id);
                 Database::get()->query($upd_course_sql, $upd_course_args);
@@ -627,7 +642,7 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
                         $accueil['visible'], $new_course_id, $accueil['id']);
                 }
             }
-        } else {
+        } else { // fetch course
             $new_course_id = $GLOBALS['course_id'];
             $new_course_code = $GLOBALS['course_code'];
             $backupData = null;
@@ -669,9 +684,9 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
                     $new_course_code);
 
             move_dir($restoreThis . '/html', $webDir . '/courses/' . $new_course_code);
-
+            course_index($new_course_code);
             recurse_copy($webDir . '/video/' . $course_data['code'], $webDir . '/video/' . $new_course_code);
-        }
+        } // end fetch course
 
         restore_table($restoreThis, 'announcement', array('set' => array('course_id' => $new_course_id), 'delete' => array('id', 'preview')), $url_prefix_map, $backupData, $restoreHelper);
 
@@ -814,7 +829,19 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
                   'delete' => array('hits'),
                   'map' => array('category' => $link_category_map, 'user_id' => $userid_map),
                   'return_mapping' => 'id'), $url_prefix_map, $backupData, $restoreHelper);
-        $ebook_map = restore_table($restoreThis, 'ebook', array('set' => array('course_id' => $new_course_id), 'return_mapping' => 'id'), $url_prefix_map, $backupData, $restoreHelper);
+
+        $options = [
+            'set' => ['course_id' => $new_course_id],
+            'return_mapping' => 'id',
+        ];
+        if ($fetch_course) {
+            $options['offset'] = [
+                'order' => 1 + intval(Database::get()->querySingle('SELECT MAX(`order`) AS order_offset
+                        FROM ebook WHERE course_id = ?d',
+                    $new_course_id)->order_offset)
+            ];
+        }
+        $ebook_map = restore_table($restoreThis, 'ebook', $options, $url_prefix_map, $backupData, $restoreHelper);
         foreach ($ebook_map as $old_id => $new_id) {
             // new and old id might overlap as the map contains multiple values!
             rename("$courseDir/ebook/$old_id", "$courseDir/ebook/__during_restore__$new_id");
@@ -854,8 +881,18 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
         restore_table($restoreThis, 'dropbox_index', array('map' => array('msg_id' => $dropbox_map, 'recipient_id' => $userid_map)), $url_prefix_map, $backupData, $restoreHelper);
 
         // Learning Path
-        $lp_learnPath_map = restore_table($restoreThis, 'lp_learnPath', array('set' => array('course_id' => $new_course_id),
-            'return_mapping' => 'learnPath_id'), $url_prefix_map, $backupData, $restoreHelper);
+        $options = [
+            'set' => ['course_id' => $new_course_id],
+            'return_mapping' => 'learnPath_id',
+        ];
+        if ($fetch_course) {
+            $options['offset'] = [
+                'rank' => 1 + intval(Database::get()->querySingle('SELECT MAX(`rank`) AS rank_offset
+                    FROM lp_learnPath WHERE course_id = ?d',
+                    $new_course_id)->rank_offset)
+            ];
+        }
+        $lp_learnPath_map = restore_table($restoreThis, 'lp_learnPath', $options, $url_prefix_map, $backupData, $restoreHelper);
         $lp_module_map = restore_table($restoreThis, 'lp_module', array('set' => array('course_id' => $new_course_id),
             'return_mapping' => 'module_id'), $url_prefix_map, $backupData, $restoreHelper);
         $lp_asset_map = restore_table($restoreThis, 'lp_asset', array('map' => array('module_id' => $lp_module_map),
@@ -1210,11 +1247,18 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
 
         // Course Units
         if (!$weekly_view) {
-            $unit_map = restore_table($restoreThis, 'course_units',
-                array('set' =>
-                    array('course_id' => $new_course_id),
-                    'return_mapping' => 'id',
-                ), $url_prefix_map, $backupData, $restoreHelper);
+            $options = [
+                'set' => ['course_id' => $new_course_id],
+                'return_mapping' => 'id',
+            ];
+            if ($fetch_course) {
+                $options['offset'] = [
+                    'order' => 1 + intval(Database::get()->querySingle('SELECT MAX(`order`) AS order_offset
+                            FROM course_units WHERE course_id = ?d',
+                        $new_course_id)->order_offset)
+                ];
+            }
+            $unit_map = restore_table($restoreThis, 'course_units', $options, $url_prefix_map, $backupData, $restoreHelper);
             restore_table($restoreThis, 'unit_resources', array('delete' => array('id'),
                 'map' => array('unit_id' => $unit_map),
                 'map_function' => 'unit_map_function',

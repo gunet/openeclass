@@ -22,7 +22,7 @@
  */
 function list_blogs() {
     global $id, $course_id, $tool_content, $urlServer,
-           $langAddModulesButton, $langChoice, $langBlogEmpty,
+           $langAddModulesButton, $langChoice, $langBlogEmpty, $langCancel,
            $langBlogPostTitle, $course_code, $langBlogPosts, $langSelect;
 
     $result = Database::get()->queryArray("SELECT * FROM blog_post WHERE course_id = ?d ORDER BY time DESC", $course_id);
@@ -53,7 +53,9 @@ function list_blogs() {
             $tool_content .= "</tr>";
         }
         $tool_content .= "</table></div>";
-        $tool_content .= "<div class='d-flex justify-content-start mt-4'>";
-        $tool_content .= "<input class='btn submitAdminBtn' type='submit' name='submit_blog' value='$langAddModulesButton'></div></form>";
+        $tool_content .= "<div class='d-flex justify-content-start mt-4'><input class='btn submitAdminBtn' type='submit' name='submit_blog' value='$langAddModulesButton'>                
+                            <a href='index.php?course=$course_code&id=$id'><input class='btn cancelAdminBtn ms-2' value='$langCancel' /></a>
+                        </div>";
+        $tool_content .= "</form>";
     }
 }

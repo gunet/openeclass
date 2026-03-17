@@ -1,0 +1,134 @@
+<?php
+
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
+ *
+ */
+
+class PointsGame {
+
+    public static function levelUpdate($uid, $gid, $points, $curlevel) {
+        global $langLevelPromoted, $is_editor;
+
+        $level  = Database::get()->querySingle("SELECT id, friendly_name FROM points_game_levels 
+                                                WHERE points_game = ?d AND required_points <= ?d 
+                                                ORDER BY required_points DESC LIMIT 1", $gid, $points);
+        if($level) {
+            if($level->id != $curlevel) {
+                Database::get()->query("UPDATE user_points_game_points SET current_level = ?d 
+                                        WHERE user = ?d AND points_game = ?d", $level->id, $uid, $gid);
+                if (!$is_editor) {
+                    Session::flash('message',sprintf($langLevelPromoted, $level->friendly_name));
+                    Session::flash('alert-class', 'alert-success');
+                }
+            }
+        }
+    }
+
+    public static function getNextLevelInfo($uid, $gid) {
+        $points_q = Database::get()->querySingle("SELECT total_points AS p, current_level AS l FROM user_points_game_points WHERE user=?d AND points_game=?d", $uid, $gid);
+        if($points_q) {
+            if($points_q->l) {
+                $q = Database::get()->querySingle("SELECT friendly_name as n, required_points AS p FROM points_game_levels WHERE id=?d",$points_q->l);
+            }
+
+            $performance = [
+                'points' => $points_q->p,
+                'current_level' => $points_q->l,
+                'current_level_min_points' => ($points_q->l) ? $q->p : null,
+                'current_level_title' => ($points_q->l) ? $q->n : null
+            ];
+        } else {
+            $performance = [
+                'points' => 0,
+                'current_level' => null,
+                'current_level_min_points' => null,
+                'current_level_title' => null
+            ];
+        }
+
+        $next_q = Database::get()->querySingle("SELECT id, friendly_name, required_points FROM points_game_levels 
+                                                WHERE points_game = ?d AND required_points > ?d
+                                                ORDER BY required_points ASC LIMIT 1", $gid, $performance['points']);
+
+        //user hasn't reach first level yet
+        if(!$performance['current_level'] && $next_q) {
+            $max = (int) $next_q->required_points;
+            $progress = max(0, $performance['points']);
+            $percent = ($max > 0) ? ($progress / $max) * 100 : 100;
+            $percent = round(min(100, max(0, $percent)));
+
+            return [
+                'current_points' => $performance['points'],
+                'current_level_id' => null,
+                'current_level_title' => null,
+                'next_level_id' => $next_q->id,
+                'next_level_title' => $next_q->friendly_name,
+                'points_needed_for_next' => $max - $performance['points'],
+                'progress_percentage' => $percent
+            ];
+        }
+
+        //user is in max level
+        if($performance['current_level'] && !$next_q) {
+            return [
+                'current_points' => $performance['points'],
+                'current_level_id' => $performance['current_level'],
+                'current_level_title' => $performance['current_level_title'],
+                'next_level_id' => null,
+                'points_needed_for_next' => null,
+                'progress_percentage' => 100
+            ];
+        }
+
+        //typical case where user has reached one level and is progressing to the next one
+        $min = (int) $performance['current_level_min_points'];
+        $max = (int) $next_q->required_points;
+        $span = $max - $min;
+        $progress = $performance['points'] - $min;
+        $percent = ($span > 0) ? ($progress / $span) * 100 : 100;
+        $percent = round(min(100, max(0, $percent)));
+
+        return [
+            'current_points' => $performance['points'],
+            'current_level_id' => $performance['current_level'],
+            'current_level_title' => $performance['current_level_title'],
+            'next_level_id' => $next_q->id,
+            'next_level_title' => $next_q->friendly_name,
+            'points_needed_for_next' => $max - $performance['points'],
+            'progress_percentage' => $percent
+        ];
+    }
+
+    public static function resetPointsGame($gid, $user = null) {
+        if(is_null($user)) {
+            Database::get()->query("DELETE upgc
+                FROM user_points_game_criterion AS upgc
+                JOIN points_game_criterion AS pgc 
+                ON upgc.points_game_criterion = pgc.id
+                WHERE pgc.points_game = ?d", $gid);
+            Database::get()->query("DELETE FROM user_points_game_points WHERE points_game = ?d", $gid);
+        } else {
+            Database::get()->query("DELETE upgc
+                FROM user_points_game_criterion AS upgc
+                JOIN points_game_criterion AS pgc 
+                ON upgc.points_game_criterion = pgc.id
+                WHERE pgc.points_game = ?d AND upgc.user = ?d", $gid, $user);
+            Database::get()->query("DELETE FROM user_points_game_points WHERE points_game = ?d AND user = ?d", $gid, $user);
+        }
+    }
+
+}
