@@ -3605,6 +3605,10 @@ function upgrade_to_4_3() : void {
         Database::get()->query("ALTER TABLE exercise_answer_record ADD certainty INT DEFAULT 0 AFTER weight");
     }
     // Questionnaires
+    if (!DBHelper::fieldExists('poll', 'options')) {
+        Database::get()->query("ALTER TABLE poll ADD `options` TEXT DEFAULT NULL");
+    }
+
     if (!DBHelper::fieldExists('poll_question', 'page')) {
         Database::get()->query("ALTER TABLE poll_question ADD `page` INT NOT NULL DEFAULT 0");
     }
@@ -3692,6 +3696,9 @@ function upgrade_to_4_3() : void {
         Database::get()->query("UPDATE lp_learnPath set force_completed_progress = 1");
     }
 
+    if (!DBHelper::fieldExists('course_lti_app', 'visible')) {
+        Database::get()->query("ALTER TABLE `course_lti_app` ADD `visible` TINYINT(1) NOT NULL DEFAULT 1");
+    }
 }
 
 /**

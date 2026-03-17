@@ -19,16 +19,20 @@
  */
 
 function check_user_belongs_in_session($sid){
-    global $course_id, $course_code, $is_consultant, $is_coordinator, $is_simple_user, $uid;
+    global $course_id, $course_code, $is_consultant, $is_coordinator, $is_simple_user, $uid, $langForbidden;
 
     if($is_consultant && !$is_coordinator){
         $check = Database::get()->querySingle("SELECT creator FROM mod_session WHERE id = ?d AND course_id = ?d",$sid, $course_id);
         if($check && $check->creator != $uid){
+            Session::flash('message', $langForbidden);
+            Session::flash('alert-class', 'alert-warning');
             redirect_to_home_page("modules/session/index.php?course=$course_code");
         }
     }elseif($is_simple_user){
         $check = Database::get()->querySingle("SELECT id FROM mod_session_users WHERE session_id = ?d AND participants = ?d AND is_accepted = ?d",$sid, $uid, 1);
         if(!$check){
+            Session::flash('message', $langForbidden);
+            Session::flash('alert-class', 'alert-warning');
             redirect_to_home_page("modules/session/index.php?course=$course_code");
         }
     }
@@ -340,7 +344,14 @@ function deleteAll($dir) {
  */
 function delete_session($sid = 0){
 
-    global $course_code, $webDir, $course_id;
+    global $course_code, $webDir, $course_id, $is_coordinator, $langForbidden;
+
+    // Check if uid is the coordinator or the consultant of the current session.
+    if (!$is_coordinator && !is_session_consultant($sid,$course_id)) {
+        Session::flash('message', $langForbidden);
+        Session::flash('alert-class', 'alert-warning');
+        redirect_to_home_page("modules/session/index.php?course=$course_code");
+    }
 
     if($sid){
         $sqlbadge = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND session_id = ?d", $course_id, $sid);
@@ -562,7 +573,7 @@ function show_sessionResource($info) {
  */
 function show_session_poll($title, $comments, $resource_id, $poll_id, $visibility) {
 
-    global $course_id, $course_code, $is_consultant, $urlServer, $uid, $langWasDeleted, 
+    global $course_id, $course_code, $is_consultant, $urlServer, $uid, $langWasDeleted,
            $langResourceBelongsToSessionPrereq, $m, $is_course_reviewer, $langUsersAnswers,
            $langWorkToUser, $langWorkAssignTo, $langWorkToGroup;
 
@@ -575,10 +586,10 @@ function show_session_poll($title, $comments, $resource_id, $poll_id, $visibilit
         if ($poll) {
             $poll_user_answers = Database::get()->queryArray("SELECT id FROM poll_user_record WHERE pid = ?d", $poll->pid);
             if (count($poll_user_answers) == 0) {
-                $badge_criterion = Database::get()->querySingle("SELECT id FROM badge_criterion 
+                $badge_criterion = Database::get()->querySingle("SELECT id FROM badge_criterion
                                                                     WHERE activity_type = ?s
                                                                     AND `resource` = ?d
-                                                                    AND badge IN (SELECT id FROM badge WHERE 
+                                                                    AND badge IN (SELECT id FROM badge WHERE
                                                                                     course_id = ?d AND session_id = ?d)", 'questionnaire', $poll->pid, $course_id, $_GET['session']);
 
                 if ($badge_criterion) {
@@ -606,10 +617,10 @@ function show_session_poll($title, $comments, $resource_id, $poll_id, $visibilit
         if ($poll) {
             $poll_user_answers = Database::get()->querySingle("SELECT id FROM poll_user_record WHERE pid = ?d AND `uid` = ?d", $poll->pid, $uid);
             if (!$poll_user_answers) {
-                $badge_criterion = Database::get()->querySingle("SELECT id FROM badge_criterion 
+                $badge_criterion = Database::get()->querySingle("SELECT id FROM badge_criterion
                                                                     WHERE activity_type = ?s
                                                                     AND `resource` = ?d
-                                                                    AND badge IN (SELECT id FROM badge WHERE 
+                                                                    AND badge IN (SELECT id FROM badge WHERE
                                                                                     course_id = ?d AND session_id = ?d)", 'questionnaire', $poll->pid, $course_id, $_GET['session']);
 
                 if ($badge_criterion) {
@@ -617,7 +628,7 @@ function show_session_poll($title, $comments, $resource_id, $poll_id, $visibilit
                 }
             }
 
-            $poll_user_answers_count = Database::get()->querySingle("SELECT COUNT(*) as total FROM poll_user_record 
+            $poll_user_answers_count = Database::get()->querySingle("SELECT COUNT(*) as total FROM poll_user_record
                                                                      WHERE pid = ?d
                                                                      AND uid IN (SELECT participants FROM mod_session_users
                                                                                  WHERE session_id = ?d
@@ -1261,7 +1272,7 @@ function session_actions($res_type, $resource_id, $status, $res_id = false) {
             $poll = Database::get()->querySingle("SELECT res_id FROM session_resources WHERE id = ?d AND `type` = ?s",$resource_id,'poll');
             if($poll){
                 $poll_id = $poll->res_id;
-                $answers_res = Database::get()->queryArray("SELECT id FROM poll_user_record 
+                $answers_res = Database::get()->queryArray("SELECT id FROM poll_user_record
                                                             WHERE pid = ?d
                                                             AND uid IN (SELECT participants FROM mod_session_users
                                                                 WHERE session_id = ?d
@@ -1424,7 +1435,7 @@ function upload_session_doc($sid){
             $langFormErrors, $langTheField , $langTitle, $langEmptyUploadFile,
             $langUploadDocCompleted, $sessionID, $langFileExists, $is_consultant,
             $langDoNotChooseResource, $langPreviousDocDeleted, $langFileExistsWithSameName,
-            $langNotExistUsers, $langResourceNoExists, $langDoNotOverrideDeliverable;
+            $langNotExistUsers, $langResourceNoExists, $langDoNotOverrideDeliverable, $langForbidden;
 
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
 
@@ -1465,10 +1476,30 @@ function upload_session_doc($sid){
         }
     }
 
-    if(!$is_consultant && !isset($_POST['refers_to_resource']) && isset($_POST['fromUser']) > 0){
+    if(!$is_consultant && !isset($_POST['refers_to_resource']) && isset($_POST['fromUser']) && $_POST['fromUser'] > 0){
         Session::flash('message',$langDoNotChooseResource);
         Session::flash('alert-class', 'alert-danger');
         redirect_to_home_page("modules/session/resource_space.php?course=".$course_code."&session=".$sid."&resource_id=".$_POST['for_deliverable']."&file_id=".$_POST['for_file']);
+    }
+
+    // Check if users are participated in the current session
+    if (isset($_POST['fromUser']) && $_POST['fromUser'] > 0) {
+        $partipants_ids = array();
+        $res = Database::get()->queryArray("SELECT participants FROM mod_session_users WHERE session_id = ?d AND is_accepted = ?d", $sid, 1);
+        if(count($res) > 0){
+            foreach($res as $r) {
+                $partipants_ids[] = $r->participants;
+            }
+            if (!in_array($_POST['fromUser'], $partipants_ids)) {
+                Session::flash('message', $langForbidden);
+                Session::flash('alert-class', 'alert-warning');
+                redirect_to_home_page("modules/session/index.php?course=$course_code");
+            }
+        } else {
+            Session::flash('message', $langForbidden);
+            Session::flash('alert-class', 'alert-warning');
+            redirect_to_home_page("modules/session/index.php?course=$course_code");
+        }
     }
 
     // If uploaded file exists do not continue.
@@ -1841,8 +1872,8 @@ function display_session_activities($element, $id, $session_id = 0) {
            $langWithSubmittedUploadedFile, $langWithTCComplited,
            $langContinueToCompletetionWithCompletedTC, $langAddCompletionCriteria,
            $langWithMeetingCompletion, $langContinueToCompletetionWithMeeting,
-           $langWithAttendanceRegistrationByConsultant, $langSettingSelect, $infoPrereqSession, 
-           $langOfSubmitQuestionnaire, $langAutomaticCompletion, $langCompleteCriteriaSession, 
+           $langWithAttendanceRegistrationByConsultant, $langSettingSelect, $infoPrereqSession,
+           $langOfSubmitQuestionnaire, $langAutomaticCompletion, $langCompleteCriteriaSession,
            $langSelect, $langCriteriaBelowParticipateInCompletion, $langCompletedSessionWithMeeting,
            $langListCompletionCriteria, $langUserParticipation;
 
@@ -2016,7 +2047,7 @@ function display_session_activities($element, $id, $session_id = 0) {
                                         <div class='panel-body'>";
 
                                             /////////////////////////////////////////////////////
-                                            $all_resources = Database::get()->queryArray("SELECT * FROM session_resources 
+                                            $all_resources = Database::get()->queryArray("SELECT * FROM session_resources
                                                                                           WHERE session_id = ?d AND doc_id = ?d AND from_user = ?d
                                                                                           AND (type = ?s OR type = ?s OR type = ?s)", $session_id, 0, 0, 'poll', 'doc', 'tc');
                                             if ($badge_id) {
@@ -2033,7 +2064,7 @@ function display_session_activities($element, $id, $session_id = 0) {
                                                 $sqlResourse = '';
                                                 if (count($all_resources) > 0) {
                                                     foreach ($all_resources as $r) {
-                                                        $badge_criterion = Database::get()->querySingle("SELECT id FROM badge_criterion 
+                                                        $badge_criterion = Database::get()->querySingle("SELECT id FROM badge_criterion
                                                                                                          WHERE badge = $badge_id
                                                                                                          AND resource = ?d
                                                                                                          $sqlResourse", $r->res_id);
@@ -2045,7 +2076,7 @@ function display_session_activities($element, $id, $session_id = 0) {
                                                             }
                                                         }
                                                         $selected = '';
-                                                        $selected = Database::get()->querySingle("SELECT id FROM badge_criterion WHERE badge = ?d 
+                                                        $selected = Database::get()->querySingle("SELECT id FROM badge_criterion WHERE badge = ?d
                                                                                                         AND activity_type = ?d AND resource = ?d", $badge_id, $r->type, $r->res_id);
                                                         $tool_content .= "<tr>
                                                                             <td>$r->title</td>
@@ -2135,7 +2166,7 @@ function display_session_activities($element, $id, $session_id = 0) {
                                                                             </td>
                                                                         </tr>";
                                                 }
-                                                
+
                                                 $tool_content .= "</table>
                                                 <input type='hidden' name='badgeId' value='$badge_id'>
                                                 " . generate_csrf_token_form_field() . "
@@ -2625,6 +2656,7 @@ function display_session_available_documents($element, $element_id, $session_id 
             'name' => htmlspecialchars($row->filename),
             'format' => $row->format,
             'path' => $row->path,
+            'extra_path' => $row->extra_path,
             'visible' => $row->visible,
             'comment' => $row->comment,
             'copyrighted' => $row->copyrighted,
@@ -2692,7 +2724,7 @@ function display_session_available_documents($element, $element_id, $session_id 
                     if($entry['subsystem'] == MYSESSIONS){
                         $file_url = session_file_url($entry['path'], $entry['name']);
                     }else{
-                        $file_url = file_url($entry['path'], $entry['name'], $common_docs ? 'common' : $course_code);
+                        $file_url = file_url($entry['path'], $entry['name'], $common_docs ? 'common' : $course_code, extra_path: $entry['extra_path']);
                     }
 
 
@@ -2853,7 +2885,7 @@ function session_completion_without_resources($element, $element_id, $session_id
                                                 completed_criteria = ?d,
                                                 total_criteria = ?d",$p->participants,$element_id,1,1,1);
                     }
-                    
+
                     Database::get()->query("INSERT INTO user_{$element}_criterion SET
                                                 user = ?d,
                                                 created = " . DBHelper::timeAfter() . ",
@@ -3125,7 +3157,7 @@ function check_session_completion_by_tc_completed($session_id = 0, $forUid = 0){
 function display_session_available_polls($element, $element_id, $session_id = 0, int $session_resource_id = 0) {
 
     global $course_id, $course_code, $urlServer, $tool_content,
-            $langPollNone, $langQuestionnaire, $langChoice, 
+            $langPollNone, $langQuestionnaire, $langChoice,
             $langAddModulesButton, $langSelect, $langDescription;
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
@@ -3374,7 +3406,7 @@ function session_resource_completion($session_id, $session_resource_id) {
 function get_cert_percentage_completion_by_user($element, $element_id, $userId) {
 
     // Special case for session polls regarding the current session.
-    
+
     $allCr = Database::get()->queryArray("SELECT * FROM badge_criterion WHERE badge = ?d", $element_id);
     $sid = Database::get()->querySingle("SELECT session_id FROM badge WHERE id = ?d", $element_id);
     if (count($allCr) > 0) {
@@ -3382,11 +3414,11 @@ function get_cert_percentage_completion_by_user($element, $element_id, $userId) 
             if ($c->activity_type == 'questionnaire') {
                 $badgeCrId = $c->id;
                 $check = Database::get()->querySingle("SELECT id FROM poll_user_record
-                                                        WHERE pid = ?d 
-                                                        AND uid = ?d 
+                                                        WHERE pid = ?d
+                                                        AND uid = ?d
                                                         AND session_id = ?d", $c->resource, $userId, $sid->session_id);
                 if (!$check) {
-                    $check2 = Database::get()->querySingle("SELECT id FROM user_badge_criterion 
+                    $check2 = Database::get()->querySingle("SELECT id FROM user_badge_criterion
                                                             WHERE user = ?d AND badge_criterion = ?d", $userId, $badgeCrId);
                     if ($check2) {
                         Database::get()->query("DELETE FROM user_badge_criterion WHERE id = ?d", $check2->id);
@@ -3684,13 +3716,13 @@ function session_resource_exists($rid,$sid){
  */
 function session_completed_resources_by_user($sid,$cid,$user){
 
-    global $langResourceAsActivity, $langCompletedSessionMeeting, $langCompletedSessionWithoutActivity, 
+    global $langResourceAsActivity, $langCompletedSessionMeeting, $langCompletedSessionWithoutActivity,
             $langCommentsByConsultant, $langAttendance, $langAutomaticCompletion, $langWithAttendanceRegistrationByConsultant;
 
     $html = "";
     $criteria = Database::get()->queryArray("SELECT * FROM badge_criterion
                                                         WHERE badge IN (SELECT id FROM badge
-                                                                    WHERE course_id = ?d AND session_id = ?d)",$cid,$sid);                                                              
+                                                                    WHERE course_id = ?d AND session_id = ?d)",$cid,$sid);
 
     if (count($criteria)) {
         $html .= "<div class='resources_list' style='padding: 0px;'>";
@@ -3803,7 +3835,7 @@ function session_completed_resources_by_user($sid,$cid,$user){
                 $completed_cr = database::get()->querySingle("SELECT * FROM user_badge_criterion
                                                                 WHERE user = ?d
                                                                 AND badge_criterion = ?d
-                                                                AND user IN (SELECT uid FROM poll_user_record 
+                                                                AND user IN (SELECT uid FROM poll_user_record
                                                                                 WHERE session_id = ?d)", $user, $c->id, $sid);
 
                 if ($completed_cr) {
@@ -4214,7 +4246,7 @@ function check_session_completion_without_activities($session_id = 0){
     if ($session_id > 0) {
         $badge = Database::get()->querySingle("SELECT id,badge FROM badge_criterion
                                                 WHERE activity_type = ?s
-                                                AND badge IN (SELECT id FROM badge 
+                                                AND badge IN (SELECT id FROM badge
                                                                 WHERE course_id = ?d AND session_id = ?d)",'noactivity',$course_id,$session_id);
 
         if ($badge) {
@@ -4226,11 +4258,11 @@ function check_session_completion_without_activities($session_id = 0){
                     $existUser = Database::get()->querySingle("SELECT id FROM user_badge_criterion WHERE user = ?d AND badge_criterion = ?d", $r->user, $badge_criterion_id);
                     if (!$existUser) {
                         Database::get()->query("INSERT INTO user_badge_criterion SET user = ?d, `created` = " . DBHelper::timeAfter() . ", badge_criterion = ?d", $r->user, $badge_criterion_id);
-                        Database::get()->query("UPDATE user_badge SET completed = 1, completed_criteria = 1, total_criteria = 1 
+                        Database::get()->query("UPDATE user_badge SET completed = 1, completed_criteria = 1, total_criteria = 1
                                                     WHERE user = ?d AND badge = ?d",$r->user, $badge_id);
                     }
                 }
-            }                                   
+            }
         }
     }
 }
@@ -4269,7 +4301,7 @@ function check_session_completion_with_expired_time($sid){
     if($sid){
         $badge = Database::get()->querySingle("SELECT id,badge FROM badge_criterion
                                                     WHERE activity_type = ?s
-                                                    AND badge IN (SELECT id FROM badge 
+                                                    AND badge IN (SELECT id FROM badge
                                                                     WHERE course_id = ?d AND session_id = ?d)",'autocomplete',$course_id,$sid);
 
 

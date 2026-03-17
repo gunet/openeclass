@@ -33,6 +33,7 @@ function api_method($access) {
     $login_url = $GLOBALS['urlServer'] . 'modules/auth/sso.php?user=' . urlencode($user->username) .
         '&token=' . token_generate("login user={$user->username}", true);
     header('Content-Type: application/json');
+    header('X-Content-Type-Options: nosniff');
     echo json_encode(['url' => $login_url], JSON_UNESCAPED_UNICODE);
     exit();
 }

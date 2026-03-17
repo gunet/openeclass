@@ -25,7 +25,7 @@ require_once 'include/course_settings.php';
  */
 function list_links() {
     global $id, $course_id, $tool_content,
-            $langNoCategory, $langAddModulesButton,
+            $langUncategorizedLinks, $langAddModulesButton, $langCancel,
             $langChoice, $langNoLinksExist, $langLinks, $course_code, $langSocialCategory, $langSelect, $langOpenNewTab;
 
     $result = Database::get()->queryArray("SELECT * FROM link WHERE course_id = ?d", $course_id);
@@ -77,7 +77,7 @@ function list_links() {
                 'category' => $row->category);
         }
         if (count($linkinfo) > 0) {
-            $tool_content .= "<tr><td colspan='2'><strong>$langNoCategory</strong></td></tr>";
+            $tool_content .= "<tr><td colspan='2'><strong>$langUncategorizedLinks</strong></td></tr>";
             foreach ($linkinfo as $entry) {
                 if (!empty($entry['comment'])) {
                     $link_description_text = "<div style='margin-top: 10px;'>" .  standard_text_escape($entry['comment']) . "</div>";
@@ -115,7 +115,9 @@ function list_links() {
             }
         }
         $tool_content .= "</table></div>";
-        $tool_content .= "<div class='d-flex justify-content-start mt-4'>" .
-                "<input class='btn submitAdminBtn' type='submit' name='submit_link' value='$langAddModulesButton'></div></form>";
+        $tool_content .= "<div class='d-flex justify-content-start mt-4'><input class='btn submitAdminBtn' type='submit' name='submit_link' value='$langAddModulesButton'>                
+                            <a href='index.php?course=$course_code&id=$id'><input class='btn cancelAdminBtn ms-2' value='$langCancel' /></a>
+                        </div>";
+        $tool_content .= "</form>";
     }
 }

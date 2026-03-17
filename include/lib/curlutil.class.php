@@ -132,7 +132,7 @@ class CurlUtil {
 
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'X-Content-Type-Options: nosniff']);
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($postData));
 
         $response = curl_exec($ch);

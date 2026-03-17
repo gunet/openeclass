@@ -61,6 +61,7 @@ $action->record(MODULE_ID_UNITS);
 
 $pageName = ''; // delete $pageName set in doc_init.php
 $toolName = $langCourseUnits;
+
 $lang_editor = $language;
 load_js('tools.js');
 load_js('sortable/Sortable.min.js');
@@ -107,9 +108,9 @@ if ($access) {
 }
 
 if ($is_editor) {
-    $data['editUrl'] = "info.php?course=$course_code&edit=$id&next=1";
-    $data['manageUrl'] = "manage.php?course=$course_code&manage=1&unit_id=$id";
-    $data['insertBaseUrl'] = $urlAppend . "modules/units/insert.php?course=$course_code&id=$id&type=";
+    $editUrl =  "info.php?course=$course_code&edit=$id&next=1";
+    $manageUrl = "manage.php?course=$course_code&manage=1&unit_id=$id";
+    $insertBaseUrl = $urlAppend . "modules/units/insert.php?course=$course_code&id=$id&type=";
     $visibility_check = $check_start_week = '';
     $query = "SELECT id, title, comments, start_week, finish_week, visible, public FROM course_units "
         . "WHERE course_id = ?d ";
@@ -123,7 +124,7 @@ if ($is_editor) {
 if (isset($id) and $id !== false) {
     $info = Database::get()->querySingle("SELECT * FROM course_units WHERE id = ?d AND course_id = ?d $visibility_check $check_start_week", $id, $course_id);
     if ($info) {
-        $data['pageName'] = $info->title;
+        $data['unit_title'] = $info->title;
         $data['comments'] = standard_text_escape($info->comments);
         $data['unitId'] = $info->id;
         $data['course_start_week'] = $data['course_finish_week'] = '';
@@ -231,9 +232,110 @@ if($is_editor) {
 }
 $cu_indirect = getIndirectReference($id);
 
-$data['q'] = Database::get()->querySingle("SELECT flipped_flag FROM course WHERE code = ?s", $course_code);
+$q = $data['q'] = Database::get()->querySingle("SELECT flipped_flag FROM course WHERE code = ?s", $course_code);
 $data['activities'] = $activities;
 
 $data['tool_content_units'] = show_resources($data['unitId']);
+
+if ($is_editor and $q->flipped_flag != 2) {
+    $action_bar = action_bar(array(
+        array('title' => trans('langEditUnitSection'),
+            'url' => $editUrl,
+            'icon' => 'fa fa-edit',
+            'level' => 'primary-label',
+            'button-class' => 'btn-success'),
+        array('title' => trans('langUnitCompletion'),
+            'url' => $manageUrl,
+            'icon' => 'fa fa-gear',
+            'button-class' => 'btn-success'),
+        array('title' => trans('langAdd') . ' ' . trans('langInsertText'),
+            'url' => $insertBaseUrl . 'text',
+            'icon' => 'fa fa-file-lines',
+            'level' => 'secondary'),
+        array('title' => trans('langAdd') . ' ' . trans('langInsertDivider'),
+            'url' => $insertBaseUrl . 'divider',
+            'icon' => 'fa fa-grip-lines',
+            'level' => 'secondary'),
+        array('title' => trans('langAdd') . ' ' . trans('langInsertExercise'),
+            'url' => $insertBaseUrl . 'exercise',
+            'icon' => 'fa fa-file-pen',
+            'level' => 'secondary',
+            'show' => !is_module_disable(MODULE_ID_EXERCISE)),
+        array('title' => trans('langAdd') . ' ' . trans('langInsertDoc'),
+            'url' => $insertBaseUrl . 'doc',
+            'icon' => 'fa fa-folder',
+            'level' => 'secondary',
+            'show' => !is_module_disable(MODULE_ID_DOCS)),
+        array('title' => trans('langAdd') . ' ' . trans('langInsertLink'),
+            'url' => $insertBaseUrl . 'link',
+            'icon' => 'fa fa-link',
+            'level' => 'secondary',
+            'show' => !is_module_disable(MODULE_ID_LINKS)),
+        array('title' => trans('langAdd') . ' ' . trans('langLearningPath1'),
+            'url' => $insertBaseUrl . 'lp',
+            'icon' => 'fa fa-timeline',
+            'level' => 'secondary',
+            'show' => !is_module_disable(MODULE_ID_LP)),
+        array('title' => trans('langAdd') . ' ' . trans('langInsertVideo'),
+            'url' => $insertBaseUrl . 'video',
+            'icon' => 'fa fa-film',
+            'level' => 'secondary',
+            'show' => !is_module_disable(MODULE_ID_VIDEO)),
+        array('title' => trans('langAdd') . ' ' . trans('langOfH5p'),
+            'url' => $insertBaseUrl . 'h5p',
+            'icon' => 'fa fa-tablet',
+            'level' => 'secondary',
+            'show' => !is_module_disable(MODULE_ID_H5P)),
+        array('title' => trans('langAdd') . ' ' . trans('langInsertForum'),
+            'url' => $insertBaseUrl . 'forum',
+            'icon' => 'fa-regular fa-comment',
+            'level' => 'secondary'),
+        array('title' => trans('langAdd') . ' ' . trans('langInsertEBook'),
+            'url' => $insertBaseUrl . 'ebook',
+            'icon' => 'fa fa-book-atlas',
+            'level' => 'secondary',
+            'show' => !is_module_disable(MODULE_ID_EBOOK)),
+        array('title' => trans('langAdd') . ' ' . trans('langInsertWork'),
+            'url' => $insertBaseUrl . 'work',
+            'icon' => 'fa fa-upload',
+            'level' => 'secondary',
+            'show' => !is_module_disable(MODULE_ID_ASSIGN)),
+        array('title' => trans('langAdd') . ' ' . trans('langInsertPoll'),
+            'url' => $insertBaseUrl . 'poll',
+            'icon' => 'fa fa-question',
+            'level' => 'secondary',
+            'show' => !is_module_disable(MODULE_ID_QUESTIONNAIRE)),
+        array('title' => trans('langAdd') . ' ' . trans('langInsertWiki'),
+            'url' => $insertBaseUrl . 'wiki',
+            'icon' => 'fa fa-w',
+            'level' => 'secondary',
+            'show' => !is_module_disable(MODULE_ID_WIKI)),
+        array('title' => trans('langAdd') . ' ' . trans('langInsertChat'),
+            'url' => $insertBaseUrl . 'chat',
+            'icon' => 'fa-regular fa-comment-dots',
+            'level' => 'secondary',
+            'show' => !is_module_disable(MODULE_ID_CHAT)),
+        array('title' => trans('langAdd') . ' ' . trans('langInsertBlog'),
+            'url' => $insertBaseUrl . 'blog',
+            'icon' => 'fa-solid fa-globe',
+            'level' => 'secondary',
+            'show' => !is_module_disable(MODULE_ID_BLOG)),
+        array('title' => trans('langAdd') . ' ' . trans('langInsertTcMeeting'),
+            'url' => $insertBaseUrl . 'tc',
+            'icon' => 'fa fa-exchange',
+            'level' => 'secondary',
+            'show' => (!is_module_disable(MODULE_ID_TC) && is_enabled_tc_server($course_id)))
+    ));
+
+} else if ($is_editor and $q->flipped_flag == 2) {
+     $action_bar = action_bar(array(
+        array('title' => trans('langEdit'),
+            'url' => $editUrl,
+            'icon' => 'fa fa-edit',
+            'level' => 'primary-label',
+            'button-class' => 'btn-success')
+    ));
+}
+$data['action_bar'] = $action_bar;
 
 view('modules.units.index', $data);

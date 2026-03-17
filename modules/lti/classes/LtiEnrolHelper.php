@@ -381,7 +381,7 @@ class LtiEnrolHelper {
      * @param string|null $type
      * @return void
      */
-    public static function draw_popup_error(string $msg, string $type = null) {
+    public static function draw_popup_error(string $msg, ?string $type = null) {
         global $tool_content;
         if (!empty($type)) {
             $tool_content .= "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$type: $msg</span></div>";

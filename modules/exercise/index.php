@@ -234,6 +234,10 @@ function has_user_participate_in_exercise($eid)
 {
     global $uid;
 
+    if (check_guest()) {
+        return false;
+    }
+
     $data = Database::get()->queryArray("SELECT * FROM exercise_user_record WHERE uid = ?d AND eid = ?d", $uid, $eid);
     if ($data) {
         return true;
@@ -300,8 +304,8 @@ function isExercisePaused($eid, $uid) {
     if ($uid) {
         $q = Database::get()->querySingle("SELECT eurid, attempt
                                              FROM exercise_user_record
-                                             WHERE eid = ?d 
-                                             AND uid = ?d 
+                                             WHERE eid = ?d
+                                             AND uid = ?d
                                              AND attempt_status = " . ATTEMPT_PAUSED . "",
                             $eid, $uid);
         if ($q) {
@@ -322,8 +326,8 @@ function isExercisePaused($eid, $uid) {
  */
 function exerciseUserAttempts($eid, $uid) {
 
-    $currentAttempt = Database::get()->querySingle("SELECT COUNT(*) AS count FROM exercise_user_record 
-                                                     WHERE eid = ?d 
+    $currentAttempt = Database::get()->querySingle("SELECT COUNT(*) AS count FROM exercise_user_record
+                                                     WHERE eid = ?d
                                                      AND uid = ?d",
                                                 $eid, $uid)->count;
     return $currentAttempt;
@@ -336,7 +340,9 @@ function exerciseUserAttempts($eid, $uid) {
  * @return mixed
  */
 function exerciseUserLastScore($eid, $uid) {
-
+    if (check_guest()) {
+        return null;
+    }
     $attempts = Database::get()->querySingle("SELECT COUNT(*) AS count FROM exercise_user_record
                                          WHERE uid = ?d
                                          AND eid = ?d", $uid, $eid)->count;

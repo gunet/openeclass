@@ -34,6 +34,7 @@ require_once 'modules/group/group_functions.php';
 require_once 'modules/progress/ViewingEvent.php';
 require_once 'modules/lti_consumer/lti-functions.php';
 require_once 'include/lib/fileUploadLib.inc.php';
+require_once 'modules/session/functions.php';
 
 load_js('bootstrap-slider');
 load_js('bootstrap-datetimepicker');
@@ -61,6 +62,9 @@ $head_content .= "
 ";
 
 if (isset($_GET['from_session_view'])) {
+    if (isset($_GET['session'])) {
+        check_user_belongs_in_session($_GET['session']);
+    }
     if ($is_consultant) {
         $is_course_reviewer = true;
     }

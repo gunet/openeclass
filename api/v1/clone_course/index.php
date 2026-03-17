@@ -87,6 +87,7 @@ function api_method($access) {
         $course_code = $GLOBALS['currentCourseCode'];
 
         header('Content-Type: application/json');
+        header('X-Content-Type-Options: nosniff');
         echo json_encode([
             'id'                => $course_id,
             'title'             => $course_title,

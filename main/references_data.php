@@ -23,6 +23,9 @@ $require_login = TRUE;
 require_once '../include/baseTheme.php';
 require_once 'include/lib/references.class.php';
 
+header('Content-Type: application/json; charset=utf-8');
+header('X-Content-Type-Options: nosniff');
+
 if (isset($_GET['cid']) && isset($_GET['tid'])) {
     list($c, $cid) = explode(':',$_GET['cid']);
     $course = intval($cid);

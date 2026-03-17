@@ -26,10 +26,10 @@
 .video_status {
   background: white;
   display: inline-block;
-  padding: 4px 4px 2px 4px;
-  -webkit-box-shadow: #858585 1px 1px 4px;
-  -moz-box-shadow: #858585 1px 1px 4px;
-  box-shadow: #858585 1px 1px 4px;
+  /*padding: 4px 4px 2px 4px;*/
+  /*-webkit-box-shadow: #858585 1px 1px 4px;*/
+  /*-moz-box-shadow: #858585 1px 1px 4px;*/
+  /*box-shadow: #858585 1px 1px 4px;*/
   margin-bottom: 12px;
 }
 
@@ -42,4 +42,17 @@
 
 .action-btn {
   color: #000;
+}
+
+.card-header .img-circle {
+  width: 42px!important;
+  height: 42px!important;
+}
+
+.card-body .table-responsive tr {
+  border-bottom: none;
+}
+
+.panelCard {
+    border-radius: 8px
 }

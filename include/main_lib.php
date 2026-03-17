@@ -4,7 +4,7 @@
  *  * Open eClass
  *  * E-learning and Course Management System
  *  * ========================================================================
- *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  * Copyright 2003-2026, Greek Universities Network - GUnet
  *  *
  *  * Open eClass is an open platform distributed in the hope that it will
  *  * be useful (without any warranty), under the terms of the GNU (General
@@ -25,7 +25,7 @@
  * Defines standard functions and validates variables
  */
 
-define('ECLASS_VERSION', '4.3-dev');
+define('ECLASS_VERSION', '4.3');
 
 // mPDF library temporary file path and font path
 if (isset($webDir)) { // needed for avoiding 'notices' in some files
@@ -2111,7 +2111,9 @@ function deleteUser($id, $log) {
             if (count($assignment_data) > 0) { // if assignments found
                 foreach ($assignment_data as $data) {
                     $courseid = Database::get()->querySingle("SELECT course_id FROM assignment WHERE id = $data->assignment_id")->course_id;
-                    unlink($webDir . "/courses/". course_id_to_code($courseid) . "/work/" . $data->file_path);
+                    if (isset($data->file_path)) {
+                        unlink($webDir . "/courses/". course_id_to_code($courseid) . "/work/" . $data->file_path);
+                    }
                 }
             }
             Database::get()->query("DELETE FROM user_badge_criterion WHERE user = ?d", $u);
@@ -2474,6 +2476,7 @@ tinymce.init({
         '{$urlAppend}template/modern/css/default.css',
     ],
     content_style: 'body { margin: 8px; background: none !important; color: $tinymce_color_text;  }',
+    fontsize_formats: '8pt 9pt 10pt 11pt 12pt 14pt 16pt 18pt 20pt 24pt 30pt 36pt',
     extended_valid_elements: 'span[*]',
     noneditable_noneditable_class: 'fa',
     language: '$language',
@@ -3225,7 +3228,7 @@ function removeDir($dirPath) {
     }
 
     // Try to remove the directory recursively if it exists
-    if (!file_exists($dirPath)) {
+    if (!(file_exists($dirPath) or is_dir($dirPath))) {
         return true;
     } else {
         $files = new RecursiveIteratorIterator(
@@ -3605,11 +3608,6 @@ function generate_csrf_token_link_parameter()
 function csrf_token_error() {
    redirect_to_home_page();
 }
-
-
-
-
-
 
 /**
  * Indirect Reference to Direct Reference Map
@@ -4089,7 +4087,7 @@ function action_button($options, $secondary_menu_options = array(), $fc=false) {
         $tmp_class_title = !empty($secondary_title) ? "<span class='hidden-xs'>$secondary_title</span>" : "";
         $action_button = "
             <button style='border-radius: 4px;' class='btn $secondary_btn_class action-button-dropdown' type='button' id='actionDropdown' data-bs-toggle='dropdown' aria-expanded='false' aria-label='$langListChoices'>
-                <span class='fa $secondary_icon'></span> 
+                <span class='fa $secondary_icon'></span>
                 $tmp_class_title
             </button>
             <div class='m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-border contextual-menu-action-button' aria-labelledby='actionDropdown'>
@@ -4865,22 +4863,22 @@ function get_platform_logo($size = 'normal', $position = 'header') {
     require_once 'include/course_settings.php';
 
     if ($position == 'footer') {
-        $footer_path = setting_get_print_image_disk_path(SETTING_COUSE_IMAGE_PRINT_FOOTER, $course_id);
+        $footer_path = setting_get_print_image_disk_path(SETTING_COURSE_IMAGE_PRINT_FOOTER, $course_id);
         if (!$footer_path) {
             return '';
         }
         $logo_img = imageToBase64($footer_path);
-        $image_align = setting_get(SETTING_COUSE_IMAGE_PRINT_FOOTER_ALIGNMENT, $course_id);
+        $image_align = setting_get(SETTING_COURSE_IMAGE_PRINT_FOOTER_ALIGNMENT, $course_id);
         $image_align = ($image_align == 0) ? 'left' : (($image_align == 1) ? 'center' : 'right');
-        $image_width = setting_get(SETTING_COUSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id);
+        $image_width = setting_get(SETTING_COURSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id);
         $bg_color = '#ffffff';
     } else {
-        $header_path = setting_get_print_image_disk_path(SETTING_COUSE_IMAGE_PRINT_HEADER, $course_id);
+        $header_path = setting_get_print_image_disk_path(SETTING_COURSE_IMAGE_PRINT_HEADER, $course_id);
         if ($header_path) {
             $logo_img = imageToBase64($header_path);
-            $image_align = setting_get(SETTING_COUSE_IMAGE_PRINT_HEADER_ALIGNMENT, $course_id);
+            $image_align = setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_ALIGNMENT, $course_id);
             $image_align = ($image_align == 0) ? 'left' : (($image_align == 1) ? 'center' : 'right');
-            $image_width = setting_get(SETTING_COUSE_IMAGE_PRINT_HEADER_WIDTH, $course_id);
+            $image_width = setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_WIDTH, $course_id);
             $bg_color = '#ffffff';
         } else {
             $logo_img = $themeimg . '/eclass-new-logo.svg';
@@ -4902,8 +4900,8 @@ function get_platform_logo($size = 'normal', $position = 'header') {
         }
     }
 
-    $logo = "<div style='clear: right; background-color: $bg_color; padding: 1rem; margin-bottom: 2rem; text-align: $image_align;'>
-                <img style='width: {$image_width}px;' src='$logo_img'>
+    $logo = "<div style='clear: right; background-color: $bg_color; padding: 1rem; text-align: $image_align;'>
+                <img style='height: {$image_width}mm;' src='$logo_img'>
             </div>";
 
     return $logo;
@@ -10518,6 +10516,9 @@ function theme_initialization() {
                     white-space: nowrap;
                     background-color: $theme_options_styles[BgColorProgressBarAndText];
                 }
+                .poll-border-left {
+                    border-left: solid 4px $theme_options_styles[BgColorProgressBarAndText] !important;
+                }
             ";
         }
 
@@ -12466,5 +12467,30 @@ function form_popovers($type, $message): string {
     }
 
     return $html;
+
+}
+
+/**
+ * Retrieve a specific style value from the theme options.
+ *
+ * This function fetches the theme options from the database for the current theme
+ * and retrieves the value of a specific style based on the provided style name.
+ *
+ * @param string $style_name The name of the style to retrieve.
+ *
+ * @global int $theme_id The ID of the current theme.
+ *
+ * @return mixed|null The value of the requested style if it exists, or null if not found.
+ */
+function get_style($style_name) {
+    global $theme_id;
+
+    $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
+
+    if ($theme_options) {
+        $theme_options_styles = unserialize($theme_options->styles);
+    }
+
+    return $theme_options_styles[$style_name] ?? null;
 
 }

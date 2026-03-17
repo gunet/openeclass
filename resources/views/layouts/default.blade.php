@@ -277,5 +277,112 @@
         });
     </script>
     @stack('bottom_scripts')
+    @if(isset($_SESSION['uid']) && get_config('enable_idle_detection'))
+        <script type="text/javascript">
+
+            (function() {
+                let WARNING_TIME = '{{ get_config('idle_warning_time') }}';
+                if (WARNING_TIME < 60000) {
+                    WARNING_TIME = 60000;
+                }
+                let LOGOUT_TIME = '{{ get_config('idle_logout_time') }}';
+                if (LOGOUT_TIME <  60000) {
+                    LOGOUT_TIME = 60000;
+                }
+
+                const THROTTLE_WAIT = 2000;
+
+                const sessionToken = '{{ $_SESSION['csrf_token'] ?? '' }}';
+                const baseUrl = '{{ $urlAppend }}';
+                const LOGOUT_URL = '{{ $urlAppend . 'modules/auth/logout.php' }}';
+
+
+                let warningTimeout;
+                let logoutTimeout;
+                let lastActivity = Date.now();
+                let isWarningVisible = false;
+
+                const modalHTML = `
+                      <div class="modal fade" id="idleWarningModal" tabindex="-1" role="dialog" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+                           <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                <div class="modal-header">
+                                     <h4 class="modal-title">{{trans('langIdleWarningTitle')}}</h4>
+                                </div>
+                                <div class="modal-body">
+                                     <p>{{trans('langIdleExpireSoon')}}</p>
+                                     <p>{{trans('langIdleStayLoggedIn')}}</p>
+                                </div>
+                                <div class="modal-footer">
+                                     <button type="button" class="btn btn-primary" id="extendSessionBtn">{{trans('langIdleExtendSession')}}</button>
+                                </div>
+                                </div>
+                           </div>
+                      </div>
+                 `;
+
+                document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+                function resetTimers() {
+                    if (isWarningVisible) return;
+                    clearTimeout(warningTimeout);
+                    clearTimeout(logoutTimeout);
+                    warningTimeout = setTimeout(showWarning, WARNING_TIME);
+                }
+
+                function showWarning() {
+                    isWarningVisible = true;
+
+                    if (typeof $ !== 'undefined' && $.fn.modal) {
+                        $('#idleWarningModal').modal('show');
+                    } else {
+                        const modalEl = document.getElementById('idleWarningModal');
+                        if (modalEl) {
+                            modalEl.style.display = 'block';
+                            modalEl.classList.add('show');
+                            document.body.classList.add('modal-open');
+                            modalEl.style.backgroundColor = 'rgba(0,0,0,0.5)';
+                        }
+                    }
+
+                    logoutTimeout = setTimeout(forceLogout, LOGOUT_TIME);
+                }
+
+                function forceLogout() {
+                    document.getElementById('logoutForm').constructor.prototype.submit.call(document.getElementById('logoutForm'));
+                }
+
+                document.getElementById('extendSessionBtn').addEventListener('click', function() {
+                    isWarningVisible = false;
+
+                    if (typeof $ !== 'undefined' && $.fn.modal) {
+                        $('#idleWarningModal').modal('hide');
+                    } else {
+                        const modalEl = document.getElementById('idleWarningModal');
+                        if (modalEl) {
+                            modalEl.style.display = 'none';
+                            modalEl.classList.remove('show');
+                            document.body.classList.remove('modal-open');
+                        }
+                    }
+                    fetch(baseUrl + 'main/portfolio.php', { method: 'HEAD', cache: 'no-store' });
+                    lastActivity = Date.now();
+                    resetTimers();
+                });
+                function onUserActivity() {
+                    const now = Date.now();
+                    if (now - lastActivity > THROTTLE_WAIT) {
+                        lastActivity = now;
+                        resetTimers();
+                    }
+                };
+                const events = ['mousedown', 'keydown', 'touchstart', 'wheel'];
+                events.forEach(event => {
+                    document.addEventListener(event, onUserActivity, { passive: true });
+                });
+                resetTimers();
+            })();
+        </script>
+    @endif
  </body>
 </html>

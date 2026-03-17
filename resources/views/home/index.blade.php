@@ -10,7 +10,7 @@
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content shadow-sm border-0 p-0">
                         <div class="modal-header d-flex justify-content-between align-items-center">
-                            <div class="modal-title">{{ trans('langError') }}</div>
+                            <h2 class="modal-title">{{ trans('langError') }}</h2>
                             <button aria-label="{{ trans('langClose') }}" type='button' class='close border-0 bg-transparent' data-bs-dismiss='modal'>
                             </button>
                         </div>
@@ -170,7 +170,7 @@
                                                                                             <div class='modal-dialog'>
                                                                                                 <div class='modal-content'>
                                                                                                     <div class='modal-header'>
-                                                                                                        <div class='modal-title' id='authInstructionLabel'>{{ trans('langInstructionsAuth') }}</div>
+                                                                                                        <h2 class='modal-title' id='authInstructionLabel'>{{ trans('langInstructionsAuth') }}</h2>
                                                                                                         <button type='button' class='close' data-bs-dismiss='modal' aria-label="{{ trans('langClose') }}">
                                                                                                         </button>
                                                                                                     </div>
@@ -282,13 +282,13 @@
                                                                                                         <div class='modal-dialog'>
                                                                                                             <div class='modal-content'>
                                                                                                                 <div class='modal-header'>
-                                                                                                                    <div class='modal-title' id='LoginAnotherOptionLabel-{{ $i }}'>
+                                                                                                                    <h2 class='modal-title' id='LoginAnotherOptionLabel-{{ $i }}'>
                                                                                                                         @if(!empty($authLinks[count($authLinks)-1]['title']))
                                                                                                                             {!! $authLinks[count($authLinks)-1]['title'] !!}
                                                                                                                         @else
                                                                                                                             {{ trans('langLogin') }}
                                                                                                                         @endif
-                                                                                                                    </div>
+                                                                                                                    </h2>
                                                                                                                     <button type='button' class='close' data-bs-dismiss='modal' aria-label="{{ trans('langClose') }}">
                                                                                                                     </button>
                                                                                                                 </div>

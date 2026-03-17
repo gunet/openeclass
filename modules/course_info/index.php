@@ -243,22 +243,22 @@ if (isset($_POST['submit'])) {
                 setting_set(SETTING_FACULTY_USERS_REGISTRATION, 0, $course_id);
             }
             if (isset($_POST['choose_print_header_from_list'])) {
-                setting_set(SETTING_COUSE_IMAGE_PRINT_HEADER, $_POST['choose_print_header_from_list'], $course_id);
+                setting_set(SETTING_COURSE_IMAGE_PRINT_HEADER, $_POST['choose_print_header_from_list'], $course_id);
             }
             if (isset($_POST['choose_print_footer_from_list'])) {
-                setting_set(SETTING_COUSE_IMAGE_PRINT_FOOTER, $_POST['choose_print_footer_from_list'], $course_id);
+                setting_set(SETTING_COURSE_IMAGE_PRINT_FOOTER, $_POST['choose_print_footer_from_list'], $course_id);
             }
             if (isset($_POST['header_image_alignment'])) {
-                setting_set(SETTING_COUSE_IMAGE_PRINT_HEADER_ALIGNMENT, $_POST['header_image_alignment'], $course_id);
+                setting_set(SETTING_COURSE_IMAGE_PRINT_HEADER_ALIGNMENT, $_POST['header_image_alignment'], $course_id);
             }
             if (isset($_POST['footer_image_alignment'])) {
-                setting_set(SETTING_COUSE_IMAGE_PRINT_FOOTER_ALIGNMENT, $_POST['footer_image_alignment'], $course_id);
+                setting_set(SETTING_COURSE_IMAGE_PRINT_FOOTER_ALIGNMENT, $_POST['footer_image_alignment'], $course_id);
             }
             if (isset($_POST['header_image_width'])) {
-                setting_set(SETTING_COUSE_IMAGE_PRINT_HEADER_WIDTH, $_POST['header_image_width'], $course_id);
+                setting_set(SETTING_COURSE_IMAGE_PRINT_HEADER_WIDTH, $_POST['header_image_width'], $course_id);
             }
             if (isset($_POST['footer_image_width'])) {
-                setting_set(SETTING_COUSE_IMAGE_PRINT_FOOTER_WIDTH, $_POST['footer_image_width'], $course_id);
+                setting_set(SETTING_COURSE_IMAGE_PRINT_FOOTER_WIDTH, $_POST['footer_image_width'], $course_id);
             }
 
             // Course settings modified, will get a success message after redirect in current course language
@@ -296,14 +296,14 @@ if (isset($_POST['submit'])) {
         ['title' => $langCloneCourse,
             'url' => "clone_course.php?course=$course_code",
             'icon' => 'fa-archive',
-            'show' => get_config('allow_teacher_clone_course') || $allow_clone],
+            'show' => (get_config('allow_teacher_clone_course') || $allow_clone)],
         ['title' => $langImportCourse,
             'url' => "import_course.php?course=$course_code&fetch=yes",
             'icon' => 'fa-file-import',
             'level' => 'primary-label',
             'modal-class' => 'importCourse',
-            'button-class' => 'btn-success'
-        ],
+            'button-class' => 'btn-success',
+            'show' => ($is_admin || get_config('allow_teacher_import_course') == true)],        
         ['title' => $langCourseMetadata,
             'url' => "../course_metadata/index.php?course=$course_code",
             'icon' => 'fa-file-text',
