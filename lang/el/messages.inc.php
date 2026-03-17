@@ -6944,6 +6944,22 @@ $langMaintenance = "Συντήρηση";
 $langMaintenanceChange = "Αλλαγή κειμένου συντήρησης";
 $langMaintenanceMode = "Λειτουργία συντήρησης";
 
+// sticky notes
+$langStickyNotes = "Sticky Notes";
+$langStickyNotesTopic = "Θέμα";
+$langStickyNotesTopics = "Θέματα Συζήτησης";
+$langStickyNotesTotal = "Σημειώσεις";
+$langStickyNotesTopicCreated = "Το θέμα συζήτησης δημιουργήθηκε";
+$langStickyNotesTopicUpdated = "Το θέμα συζήτησης ενημερώθηκε";
+$langStickyNotesTopicFailed = "Αποτυχία δημιουργίας νέου θέματος συζήτησης";
+$langStickyNotesTopicDeletionFailed = "Η διαγραφή του θέματος απέτυχε";
+$langStickyNotesTopicDeleted = "Το θέμα συζήτησης διαγράφηκε";
+$langStickyNotesTopicNotFound = "Το θέμα συζήτησης δεν βρέθηκε";
+$langNewTopic = "Νέο θέμα συζήτησης";
+$langStickyNotesAllowEdit = "Να επιτρέπεται η επεξεργασία των σημειώσεων από τους δημιουργούς";
+$langStickyNotesAllowDelete = "Να επιτρέπεται η διαγραφή των σημειώσεων από τους δημιουργούς";
+$langStickyNotesNoTopics = "Δεν βρέθηκαν θέματα συζήτησης";
+
 // ticketing (aka request)
 $langRequests = "Αιτήματα";
 $langMyRequests = "Τα αιτήματά μου";

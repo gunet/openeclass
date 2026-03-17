@@ -56,6 +56,7 @@ function getToolsArray($cat) {
                                           " . MODULE_ID_ATTENDANCE . ",
                                           " . MODULE_ID_GRADEBOOK . ",
                                           " . MODULE_ID_REQUEST . ",
+                                          " . MODULE_ID_STICKY_NOTES . ",
                                           " . MODULE_ID_PROGRESS . ",
                                           " . MODULE_ID_LP . ",
                                           " . MODULE_ID_TC . ") AND

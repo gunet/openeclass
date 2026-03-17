@@ -609,6 +609,7 @@ if(isset($is_collaborative_course) and $is_collaborative_course){
         MODULE_ID_WALL => array('title' => $langWall, 'link' => 'wall', 'image' => 'fa-solid fa-quote-left'),
         MODULE_ID_TC => array('title' => $langBBB, 'link' => 'tc', 'image' => 'fa-solid fa-users-rectangle'),
         MODULE_ID_REQUEST => array('title' => $langRequests, 'link' => 'request', 'image' => 'fa-regular fa-clipboard'),
+        MODULE_ID_STICKY_NOTES => array('title' => $langStickyNotes, 'link' => 'sticky_notes', 'image' => 'fa-regular fa-note-sticky'),
         MODULE_ID_ASSIGN => array('title' => $langWorks, 'link' => 'work', 'image' => 'fa-solid fa-upload'),
         MODULE_ID_GRADEBOOK => array('title' => $langGradebook, 'link' => 'gradebook', 'image' => 'fa-solid fa-a'),
         MODULE_ID_ATTENDANCE => array('title' => $langAttendance, 'link' => 'attendance', 'image' => 'fa-solid fa-clipboard-user'),
@@ -640,6 +641,7 @@ if(isset($is_collaborative_course) and $is_collaborative_course){
         MODULE_ID_TC => array('title' => $langBBB, 'link' => 'tc', 'image' => 'fa-solid fa-users-rectangle'),
         MODULE_ID_PROGRESS => array('title' => $langProgress, 'link' => 'progress', 'image' => 'fa-solid fa-arrow-trend-up'),
         MODULE_ID_REQUEST => array('title' => $langRequests, 'link' => 'request', 'image' => 'fa-regular fa-clipboard'),
+        MODULE_ID_STICKY_NOTES => array('title' => $langStickyNotes, 'link' => 'sticky_notes', 'image' => 'fa-regular fa-note-sticky'),
         MODULE_ID_H5P => array('title' => $langH5p, 'link' => 'h5p', 'image' => 'fa-solid fa-arrow-pointer')
 
     );
@@ -666,6 +668,7 @@ $icons_map = array(
         MODULE_ID_ATTENDANCE => 'fa-solid fa-clipboard-user',
         MODULE_ID_GRADEBOOK => 'fa-solid fa-a',
         MODULE_ID_SESSION => 'fa-solid fa-handshake',
+        MODULE_ID_STICKY_NOTES => 'a-regular fa-note-sticky',
     ),
 );
 
