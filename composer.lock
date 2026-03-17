@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "16f29003f31fe8d9f2958219e450a6e4",
+    "content-hash": "624f2adbbf6d9cd9580beca1b4a582d2",
     "packages": [
         {
             "name": "apereo/phpcas",
@@ -675,16 +675,16 @@
         },
         {
             "name": "firebase/php-jwt",
-            "version": "v6.11.1",
+            "version": "v7.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/firebase/php-jwt.git",
-                "reference": "d1e91ecf8c598d073d0995afa8cd5c75c6e19e66"
+                "reference": "28aa0694bcfdfa5e2959c394d5a1ee7a5083629e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/firebase/php-jwt/zipball/d1e91ecf8c598d073d0995afa8cd5c75c6e19e66",
-                "reference": "d1e91ecf8c598d073d0995afa8cd5c75c6e19e66",
+                "url": "https://api.github.com/repos/firebase/php-jwt/zipball/28aa0694bcfdfa5e2959c394d5a1ee7a5083629e",
+                "reference": "28aa0694bcfdfa5e2959c394d5a1ee7a5083629e",
                 "shasum": ""
             },
             "require": {
@@ -732,9 +732,9 @@
             ],
             "support": {
                 "issues": "https://github.com/firebase/php-jwt/issues",
-                "source": "https://github.com/firebase/php-jwt/tree/v6.11.1"
+                "source": "https://github.com/firebase/php-jwt/tree/v7.0.3"
             },
-            "time": "2025-04-09T20:32:01+00:00"
+            "time": "2026-02-25T22:16:40+00:00"
         },
         {
             "name": "google/apiclient",
@@ -1085,16 +1085,16 @@
         },
         {
             "name": "guzzlehttp/psr7",
-            "version": "2.8.0",
+            "version": "2.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/psr7.git",
-                "reference": "21dc724a0583619cd1652f673303492272778051"
+                "reference": "7d0ed42f28e42d61352a7a79de682e5e67fec884"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/psr7/zipball/21dc724a0583619cd1652f673303492272778051",
-                "reference": "21dc724a0583619cd1652f673303492272778051",
+                "url": "https://api.github.com/repos/guzzle/psr7/zipball/7d0ed42f28e42d61352a7a79de682e5e67fec884",
+                "reference": "7d0ed42f28e42d61352a7a79de682e5e67fec884",
                 "shasum": ""
             },
             "require": {
@@ -1110,6 +1110,7 @@
             "require-dev": {
                 "bamarni/composer-bin-plugin": "^1.8.2",
                 "http-interop/http-factory-tests": "0.9.0",
+                "jshttp/mime-db": "1.54.0.1",
                 "phpunit/phpunit": "^8.5.44 || ^9.6.25"
             },
             "suggest": {
@@ -1181,7 +1182,7 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/psr7/issues",
-                "source": "https://github.com/guzzle/psr7/tree/2.8.0"
+                "source": "https://github.com/guzzle/psr7/tree/2.9.0"
             },
             "funding": [
                 {
@@ -1197,20 +1198,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-08-23T21:21:41+00:00"
+            "time": "2026-03-10T16:41:02+00:00"
         },
         {
             "name": "h5p/h5p-core",
-            "version": "1.27.0",
+            "version": "1.28.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/h5p/h5p-php-library.git",
-                "reference": "829524eaf81fe3f3a295d0e843812be4735f51fc"
+                "reference": "2aeb0b83fa603e331381b3a6b8bf42c3773ba140"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/h5p/h5p-php-library/zipball/829524eaf81fe3f3a295d0e843812be4735f51fc",
-                "reference": "829524eaf81fe3f3a295d0e843812be4735f51fc",
+                "url": "https://api.github.com/repos/h5p/h5p-php-library/zipball/2aeb0b83fa603e331381b3a6b8bf42c3773ba140",
+                "reference": "2aeb0b83fa603e331381b3a6b8bf42c3773ba140",
                 "shasum": ""
             },
             "require": {
@@ -1256,9 +1257,9 @@
             ],
             "support": {
                 "issues": "https://github.com/h5p/h5p-php-library/issues",
-                "source": "https://github.com/h5p/h5p-php-library/tree/1.27.0"
+                "source": "https://github.com/h5p/h5p-php-library/tree/1.28.0"
             },
-            "time": "2024-10-25T11:30:55+00:00"
+            "time": "2026-03-03T12:00:37+00:00"
         },
         {
             "name": "h5p/h5p-editor",
@@ -3049,16 +3050,16 @@
         },
         {
             "name": "mpdf/mpdf",
-            "version": "v8.2.7",
+            "version": "v8.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mpdf/mpdf.git",
-                "reference": "b59670a09498689c33ce639bac8f5ba26721dab3"
+                "reference": "2a454ec334109911fdb323a284c19dbf3f049810"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mpdf/mpdf/zipball/b59670a09498689c33ce639bac8f5ba26721dab3",
-                "reference": "b59670a09498689c33ce639bac8f5ba26721dab3",
+                "url": "https://api.github.com/repos/mpdf/mpdf/zipball/2a454ec334109911fdb323a284c19dbf3f049810",
+                "reference": "2a454ec334109911fdb323a284c19dbf3f049810",
                 "shasum": ""
             },
             "require": {
@@ -3082,6 +3083,7 @@
             },
             "suggest": {
                 "ext-bcmath": "Needed for generation of some types of barcodes",
+                "ext-imagick": "Needed if developing the Mpdf library",
                 "ext-xml": "Needed mainly for SVG manipulation",
                 "ext-zlib": "Needed for compression of embedded resources, such as fonts"
             },
@@ -3126,7 +3128,7 @@
                     "type": "custom"
                 }
             ],
-            "time": "2025-12-01T10:18:02+00:00"
+            "time": "2026-03-11T10:58:44+00:00"
         },
         {
             "name": "mpdf/psr-http-message-shim",
@@ -3508,16 +3510,16 @@
         },
         {
             "name": "phpoffice/phpspreadsheet",
-            "version": "3.10.2",
+            "version": "3.10.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPOffice/PhpSpreadsheet.git",
-                "reference": "cd1dd91d6ef2afc0629982e0ea5911b3746fe51e"
+                "reference": "ceba166a6c21830922e145c59999adc855412fe6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPOffice/PhpSpreadsheet/zipball/cd1dd91d6ef2afc0629982e0ea5911b3746fe51e",
-                "reference": "cd1dd91d6ef2afc0629982e0ea5911b3746fe51e",
+                "url": "https://api.github.com/repos/PHPOffice/PhpSpreadsheet/zipball/ceba166a6c21830922e145c59999adc855412fe6",
+                "reference": "ceba166a6c21830922e145c59999adc855412fe6",
                 "shasum": ""
             },
             "require": {
@@ -3539,8 +3541,6 @@
                 "markbaker/complex": "^3.0",
                 "markbaker/matrix": "^3.0",
                 "php": "^8.1",
-                "psr/http-client": "^1.0",
-                "psr/http-factory": "^1.0",
                 "psr/simple-cache": "^1.0 || ^2.0 || ^3.0"
             },
             "require-dev": {
@@ -3591,6 +3591,9 @@
                 },
                 {
                     "name": "Adrien Crivelli"
+                },
+                {
+                    "name": "Owen Leibman"
                 }
             ],
             "description": "PHPSpreadsheet - Read, Create and Write Spreadsheet documents in PHP - Spreadsheet engine",
@@ -3607,9 +3610,9 @@
             ],
             "support": {
                 "issues": "https://github.com/PHPOffice/PhpSpreadsheet/issues",
-                "source": "https://github.com/PHPOffice/PhpSpreadsheet/tree/3.10.2"
+                "source": "https://github.com/PHPOffice/PhpSpreadsheet/tree/3.10.3"
             },
-            "time": "2025-11-24T16:10:02+00:00"
+            "time": "2026-01-11T06:13:14+00:00"
         },
         {
             "name": "pragmarx/google2fa",
@@ -4551,27 +4554,27 @@
         },
         {
             "name": "setasign/fpdi",
-            "version": "v2.6.4",
+            "version": "v2.6.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Setasign/FPDI.git",
-                "reference": "4b53852fde2734ec6a07e458a085db627c60eada"
+                "reference": "de0cf35911be3e9ea63b48e0f307883b1c7c48ac"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Setasign/FPDI/zipball/4b53852fde2734ec6a07e458a085db627c60eada",
-                "reference": "4b53852fde2734ec6a07e458a085db627c60eada",
+                "url": "https://api.github.com/repos/Setasign/FPDI/zipball/de0cf35911be3e9ea63b48e0f307883b1c7c48ac",
+                "reference": "de0cf35911be3e9ea63b48e0f307883b1c7c48ac",
                 "shasum": ""
             },
             "require": {
                 "ext-zlib": "*",
-                "php": "^7.1 || ^8.0"
+                "php": ">=7.2 <=8.5.99999"
             },
             "conflict": {
                 "setasign/tfpdf": "<1.31"
             },
             "require-dev": {
-                "phpunit/phpunit": "^7",
+                "phpunit/phpunit": "^8.5.52",
                 "setasign/fpdf": "~1.8.6",
                 "setasign/tfpdf": "~1.33",
                 "squizlabs/php_codesniffer": "^3.5",
@@ -4611,7 +4614,7 @@
             ],
             "support": {
                 "issues": "https://github.com/Setasign/FPDI/issues",
-                "source": "https://github.com/Setasign/FPDI/tree/v2.6.4"
+                "source": "https://github.com/Setasign/FPDI/tree/v2.6.6"
             },
             "funding": [
                 {
@@ -4619,20 +4622,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-08-05T09:57:14+00:00"
+            "time": "2026-03-13T08:38:20+00:00"
         },
         {
             "name": "smalot/pdfparser",
-            "version": "v2.12.2",
+            "version": "v2.12.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/smalot/pdfparser.git",
-                "reference": "370b7e983fafecb787a9bcfd73baab8038212ad1"
+                "reference": "028d7cc0ceff323bc001d763caa2bbdf611866c4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/smalot/pdfparser/zipball/370b7e983fafecb787a9bcfd73baab8038212ad1",
-                "reference": "370b7e983fafecb787a9bcfd73baab8038212ad1",
+                "url": "https://api.github.com/repos/smalot/pdfparser/zipball/028d7cc0ceff323bc001d763caa2bbdf611866c4",
+                "reference": "028d7cc0ceff323bc001d763caa2bbdf611866c4",
                 "shasum": ""
             },
             "require": {
@@ -4668,9 +4671,9 @@
             ],
             "support": {
                 "issues": "https://github.com/smalot/pdfparser/issues",
-                "source": "https://github.com/smalot/pdfparser/tree/v2.12.2"
+                "source": "https://github.com/smalot/pdfparser/tree/v2.12.4"
             },
-            "time": "2025-09-04T08:49:09+00:00"
+            "time": "2026-03-10T15:39:47+00:00"
         },
         {
             "name": "snapappointments/bootstrap-select",
@@ -4810,16 +4813,16 @@
         },
         {
             "name": "symfony/cache",
-            "version": "v6.4.30",
+            "version": "v6.4.35",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/cache.git",
-                "reference": "eb3272ed2daed13ed24816e862d73f73d995972a"
+                "reference": "77f5eca135d1b5471de4301b99496649e4f62878"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/cache/zipball/eb3272ed2daed13ed24816e862d73f73d995972a",
-                "reference": "eb3272ed2daed13ed24816e862d73f73d995972a",
+                "url": "https://api.github.com/repos/symfony/cache/zipball/77f5eca135d1b5471de4301b99496649e4f62878",
+                "reference": "77f5eca135d1b5471de4301b99496649e4f62878",
                 "shasum": ""
             },
             "require": {
@@ -4886,7 +4889,7 @@
                 "psr6"
             ],
             "support": {
-                "source": "https://github.com/symfony/cache/tree/v6.4.30"
+                "source": "https://github.com/symfony/cache/tree/v6.4.35"
             },
             "funding": [
                 {
@@ -4906,7 +4909,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-12-01T16:41:59+00:00"
+            "time": "2026-03-05T20:47:12+00:00"
         },
         {
             "name": "symfony/cache-contracts",
@@ -5053,16 +5056,16 @@
         },
         {
             "name": "symfony/expression-language",
-            "version": "v6.4.30",
+            "version": "v6.4.32",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/expression-language.git",
-                "reference": "01906f3b379833b347de9abc8ddc326593e9122b"
+                "reference": "89c10ef5ca65968ec7ce7ce033c7f36eeb1b0312"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/expression-language/zipball/01906f3b379833b347de9abc8ddc326593e9122b",
-                "reference": "01906f3b379833b347de9abc8ddc326593e9122b",
+                "url": "https://api.github.com/repos/symfony/expression-language/zipball/89c10ef5ca65968ec7ce7ce033c7f36eeb1b0312",
+                "reference": "89c10ef5ca65968ec7ce7ce033c7f36eeb1b0312",
                 "shasum": ""
             },
             "require": {
@@ -5097,7 +5100,7 @@
             "description": "Provides an engine that can compile and evaluate expressions",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/expression-language/tree/v6.4.30"
+                "source": "https://github.com/symfony/expression-language/tree/v6.4.32"
             },
             "funding": [
                 {
@@ -5117,7 +5120,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-11-09T10:02:06+00:00"
+            "time": "2026-01-04T11:52:13+00:00"
         },
         {
             "name": "symfony/finder",
@@ -5761,16 +5764,16 @@
         },
         {
             "name": "symfony/translation",
-            "version": "v6.4.30",
+            "version": "v6.4.34",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/translation.git",
-                "reference": "d1fdeefd0707d15eb150c04e8837bf0b15ebea39"
+                "reference": "d07d117db41341511671b0a1a2be48f2772189ce"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/translation/zipball/d1fdeefd0707d15eb150c04e8837bf0b15ebea39",
-                "reference": "d1fdeefd0707d15eb150c04e8837bf0b15ebea39",
+                "url": "https://api.github.com/repos/symfony/translation/zipball/d07d117db41341511671b0a1a2be48f2772189ce",
+                "reference": "d07d117db41341511671b0a1a2be48f2772189ce",
                 "shasum": ""
             },
             "require": {
@@ -5836,7 +5839,7 @@
             "description": "Provides tools to internationalize your application",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/translation/tree/v6.4.30"
+                "source": "https://github.com/symfony/translation/tree/v6.4.34"
             },
             "funding": [
                 {
@@ -5856,7 +5859,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-11-24T13:57:00+00:00"
+            "time": "2026-02-16T20:44:03+00:00"
         },
         {
             "name": "symfony/translation-contracts",
