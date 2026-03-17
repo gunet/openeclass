@@ -736,9 +736,9 @@ if ($total_cunits > 0) {
             $cunits_content .= "<div id='unit_$cu_indirect' class='col-12' data-id='$cu->id'><div class='panel clearfix'><div class='col-12'>
                 <div class='item-content mb-2'>
                     <div class='item-header clearfix'>
-                        <div class='item-title d-flex justify-content-between $class_vis gap-3'>";
+                        <div class='item-title d-flex justify-content-between gap-3'>";
 
-            $cunits_content .= "<div class='item-title-container d-flex flex-column justify-content-center'>";
+            $cunits_content .= "<div class='item-title-container $class_vis d-flex flex-column justify-content-center'>";
             if ($not_shown) {
                 $cunits_content .= q($cu->title) ;
             } else {
@@ -871,9 +871,9 @@ if ($total_cunits > 0) {
             }
             $cunits_content .= "<div class='item-content'>
                         <div class='item-header clearfix'>
-                            <div class='item-title d-flex justify-content-between $class_vis gap-3'>";
+                            <div class='item-title d-flex justify-content-between gap-3'>";
 
-            $cunits_content .= "<div class='item-title-container d-flex flex-column justify-content-center'>";
+            $cunits_content .= "<div class='item-title-container $class_vis d-flex flex-column justify-content-center'>";
             if ($not_shown) {
                 $cunits_content .= q($cu->title);
             } else {
