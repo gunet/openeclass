@@ -687,7 +687,7 @@ if ($total_cunits > 0) {
         }
         $cunits_content .=  "</div>";
 
-        $cunits_content .= "<div class='carousel-inner'>";
+        $cunits_content .= "<div class='carousel-inner' style='overflow: visible;'>";
         foreach ($all_units as $cu) {
             $access = $cu->public;
             $vis = $cu->visible;
