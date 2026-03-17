@@ -4460,6 +4460,9 @@ body .delThemeBtn{
   .panelCard .card-body{
     overflow: auto !important;
   }
+  .panelCard .card-body-unit .card-body{
+    overflow: visible !important;
+  }
 }
 .panelCard .card-footer,
 .card .card-footer{
