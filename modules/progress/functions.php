@@ -3083,7 +3083,7 @@ function display_points_game_settings($element_id): void
                     <i class='fa fa-chevron-down leaderboard-accordion-icon'></i>
                 </div>
             </div>
-            <div class='leaderboard-accordion-content'>
+            <div class='leaderboard-accordion-content open'>
                 <div class='leaderboard-accordion-body'>
 
                     <div class='card border rounded-3 mb-2'>
@@ -3210,7 +3210,7 @@ function display_settings($element, $element_id, $unit_id = 0): void
                 </div>
             </div>
 
-            <div class='leaderboard-accordion-content'>
+            <div class='leaderboard-accordion-content open'>
                 <div class='leaderboard-accordion-body'>
                     
                     <div class='card border rounded-3 p-3' style='background-color: #fdfdfd;'>
