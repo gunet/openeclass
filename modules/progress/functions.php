@@ -3047,7 +3047,7 @@ function display_points_game_settings($element_id): void
     global $tool_content, $course_id, $course_code, $langProgressBasicInfo, $langEditChange, $langTitle,
            $langDescription, $langStartDate, $langEndDate, $langActivateLeaderboard, $langAnonymizeLeaderboard,
            $langYes, $langNo, $is_editor, $langPointsGameLevels, $langPointsGameLevelName, $langPointsGameLevelRequiredPoints,
-           $langIsActive, $langTypeInactive;
+           $langIsActive, $langTypeInactive, $langFrom, $langTill, $langDate;
 
     $data = Database::get()->querySingle("SELECT title, description, active, starts, expires, config
                             FROM points_game WHERE id = ?d AND course_id = ?d", $element_id, $course_id);
@@ -3100,10 +3100,10 @@ function display_points_game_settings($element_id): void
                         <hr class='my-0 mx-3'>
 
                         <div class='d-flex justify-content-between align-items-start p-3'>
-                            <div class='text-primary fw-bold'><i class='fa-regular fa-calendar-days me-2'></i><span class='fw-bold' style='color: #4b5563;'>Ημερομηνία</span></div>
+                            <div class='text-primary fw-bold'><i class='fa-regular fa-calendar-days me-2'></i><span class='fw-bold' style='color: #4b5563;'>$langDate</span></div>
                             <div class='text-end' style='color: #4b5563;'>
-                                <div class='mb-1'>Από: &nbsp; $start_date</div>
-                                <div>Έως: &nbsp; $end_date</div>
+                                <div class='mb-1'>$langFrom: &nbsp; $start_date</div>
+                                <div>$langTill: &nbsp; $end_date</div>
                             </div>
                         </div>
                         <hr class='my-0 mx-3'>
