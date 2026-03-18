@@ -1203,7 +1203,7 @@ if (!class_exists('ScormExport')) {
                 return false;
             }
             $this->send();
-            return True;
+            return true;
         }
 
     }
