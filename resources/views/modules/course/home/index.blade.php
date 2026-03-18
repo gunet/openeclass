@@ -403,7 +403,7 @@
                                         </div>
                                     </div>
                                 @endif
-                                <div class='card-body card-body-default px-0 pt-0' id='boxlistSort'>
+                                <div class='card-body card-body-default card-body-unit px-0 pt-0' id='boxlistSort'>
                                     {!! $cunits_content !!}
                                 </div>
                             </div>

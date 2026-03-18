@@ -2277,7 +2277,7 @@ function actions($res_type, $resource_id, $status, $res_id = false) {
  * @return string
  */
 function edit_res($resource_id) {
-    global $id, $urlServer, $langTitle, $langDescription, $langContents, $langSubmit, $course_code, $urlAppend, $langImgFormsDes;
+    global $id, $urlServer, $langTitle, $langDescription, $langContents, $langSubmit, $course_code, $langImgFormsDes, $langCancel;
 
     $ru = Database::get()->querySingle("SELECT id, title, comments, type FROM unit_resources WHERE id = ?d", $resource_id);
     $restitle = " value='" . htmlspecialchars($ru->title, ENT_QUOTES) . "'";
@@ -2298,19 +2298,21 @@ function edit_res($resource_id) {
     } else {
         $message = $langContents;
     }
+
     $content .= "
                 <div class='form-group mt-4'>
                     <label for='rescomments' class='col-sm-6 control-label-notes'>$message</label>
                     <div class='col-sm-12'>" . rich_text_editor('rescomments', 4, 20, $rescomments) . "</div>
-                </div>
-                <div class='col-12 mt-5 d-flex justify-content-end'>
+                </div>                                
+                <div class='col-12 d-flex justify-content-end align-items-center gap-2 mt-5'>
+                    <a class='btn cancelAdminBtn ms-2' href='index.php?course=$course_code&id=$id'>$langCancel</a>
                     <input class='btn submitAdminBtn' type='submit' name='edit_res_submit' value='$langSubmit'>
-
-                </div>
+                </div>                
             </form></div>
-        </div><div class='d-none d-lg-block'>
-        <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
-    </div>
+        </div>
+            <div class='d-none d-lg-block'>
+                <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
+        </div>
     </div>";
     return $content;
 }

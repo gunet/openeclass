@@ -338,7 +338,7 @@
                                     </tr>
                                     <tr>
                                         <td align="center"><br><input class="btn submitAdminBtn" type="button"
-                                                                      value="{{ trans('langOk') }}"
+                                                                      value="{{ trans('langSubmit') }}"
                                                                       onClick="calcScore()"></td>
                                     </tr>
                                 </table>
