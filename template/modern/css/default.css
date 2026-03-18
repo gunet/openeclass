@@ -6833,17 +6833,96 @@ th.grade-col a{
 
 /* Content Box - Centered and Contained */
 .game-box {
-    display: flex;
-    align-items: center;
-    justify-content: center; 
-    gap: 20px; 
-    padding: 15px;
-    border: 1px solid #e0e0e0;
-    border-radius: 6px;
-    background: #fafafa;
-    max-width: 100%;
-    margin: 0 auto;
-    box-sizing: border-box; /* Prevents overflow */
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  background: #fafafa;
+  max-width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.game-top-row {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  flex-wrap: wrap;
+}
+
+.level-star-wrap {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.level-star-bg {
+  font-size: 50px;
+  color: #FFD700;
+  position: absolute;
+  line-height: 1;
+}
+
+.level-star-text {
+  position: relative;
+  z-index: 1;
+  font-size: 12px;
+  font-weight: 700;
+  color: #333;
+  text-align: center;
+  line-height: 1;
+  max-width: 36px;
+  word-break: break-word;
+}
+
+.gi-group {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+}
+
+.gi-label {
+  font-size: 16px;
+  color: #666;
+  font-weight: 500;
+}
+
+.gi-value {
+  font-size: 22px;
+  font-weight: 700;
+  color: #333;
+}
+
+.gi-sep {
+  display: inline-block;
+  width: 12px;
+}
+
+.game-next-str {
+  font-size: 12px;
+  color: #555;
+  text-align: left;
+  align-self: flex-start;
+}
+
+.game-prog-track {
+  height: 6px;
+  background: #e0e0e0;
+  border-radius: 10px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.game-prog-fill {
+  height: 100%;
+  background: #5b7ad6;
+  border-radius: 10px;
+  transition: width 0.3s ease;
 }
 
 .badge-col {
