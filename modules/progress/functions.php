@@ -687,11 +687,6 @@ function display_activities($element, $id, $unit_id = 0) {
                         </div>
                         <div class='leaderboard-accordion-content'>
                             <div class='leaderboard-accordion-body'>";
-                                if ($is_editor) {
-                                    $tool_content .= "<div class='text-end mb-2'>
-                                        $addRecActivityBtn
-                                    </div>";
-                                }
                                 if (count($result_recurrent) == 0) {
                                     $tool_content .= "<p class='text-center text-muted'>$langPointsGameNoRecActivities</p>";
                                 } else {
@@ -777,11 +772,6 @@ function display_activities($element, $id, $unit_id = 0) {
                         </div>
                         <div class='leaderboard-accordion-content'>
                             <div class='leaderboard-accordion-body'>";
-                                if ($is_editor) {
-                                    $tool_content .= "<div class='text-end mb-2'>
-                                        $addActivityBtn
-                                    </div>";
-                                }
                                 if (count($result_onetime) == 0) {
                                     $tool_content .= "<p class='text-center text-muted'>$langPointsGameNoOneTimeActivities</p>";
                                 } else {
