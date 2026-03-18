@@ -139,10 +139,22 @@ function header_fragment(int $pathId, int $moduleId): string {
     $progressValue = null;
     $progressBarHtml = '';
     if ($uid) {
+        // Gradebook: progress is a score-based calculation
         $lpProgress = get_learnPath_progress($pathId, $uid);
-        $progressValue = $lpProgress;
         update_gradebook_book($uid, $pathId, $lpProgress / 100, GRADEBOOK_ACTIVITY_LP);
-        $progressBarHtml = disp_progress_bar($lpProgress, 1);
+
+        // Progress bar: use progress_measure from the current module's latest attempt
+        $pm = Database::get()->querySingle(
+            "SELECT progress_measure FROM lp_user_module_progress
+              WHERE user_id = ?d AND learnPath_id = ?d
+              ORDER BY attempt DESC, user_module_progress_id DESC LIMIT 1",
+            $uid, $pathId
+        );
+        $progressDisplay = $pm && $pm->progress_measure !== null
+            ? (int) round((float) $pm->progress_measure * 100)
+            : 0;
+        $progressValue = $progressDisplay;
+        $progressBarHtml = disp_progress_bar($progressDisplay, 1);
     }
 
     $prevModuleAttr = $previousModule !== '' ? (int) $previousModule : 0;
