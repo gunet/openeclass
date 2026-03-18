@@ -35,17 +35,16 @@ function display_certificates(): void
 
     $tool_content .= "
         <div class='col-12 mt-4'>
-            <div class='card panelCard card-default px-lg-4 py-lg-3'>
-                <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>";
-                if ($is_editor) {
-                    $tool_content .= "<div class='ms-auto'>
-                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newcert=1' class='btn submitAdminBtn'><span class='fa fa-plus'></span><span class='hidden-xs'>&nbsp;&nbsp;&nbsp;$langNewCertificate</span></a>
-                    </div>";
-                }
+            <div class='progress-module'>
+                <div class='card px-lg-4 py-lg-3'>
+                    <div class='card-header border-0 d-flex justify-content-end align-items-center gap-3 flex-wrap'>";
+                        if ($is_editor) {
+                            $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newcert=1' class='btn submitAdminBtn'><span class='fa fa-plus'></span><span class='hidden-xs'>&nbsp;&nbsp;&nbsp;$langNewCertificate</span></a>";
+                        }
     $tool_content .= "
-                </div>
-                <div class='card-body'>
-                    <div class='table-responsive mt-0'>";
+                    </div>
+                    <div class='card-body'>
+                        <div class='table-responsive mt-0'>";
     
     if (count($sql_cer) == 0) {
         if ($is_editor) {
@@ -122,6 +121,7 @@ function display_certificates(): void
     }
 
     $tool_content .= "
+                        </div>
                     </div>
                 </div>
             </div>
@@ -145,20 +145,19 @@ function display_badges(): void
     } else {
         $sql_cer = Database::get()->queryArray("SELECT id, title, description, active, icon FROM badge WHERE course_id = ?d AND active = 1 AND bundle >= 0 ", $course_id);
     }
-    
+
     $tool_content .= "
         <div class='col-12 mt-4'>
-            <div class='card panelCard card-default px-lg-4 py-lg-3'>
-                <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>";
-                if ($is_editor) {
-                    $tool_content .= "<div class='ms-auto'>
-                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newbadge=1' class='btn submitAdminBtn'><span class='fa fa-plus'></span><span class='hidden-xs'>&nbsp;&nbsp;&nbsp;$langNewBadge</span></a>
-                    </div>";
-                }
+            <div class='progress-module'>
+                <div class='card px-lg-4 py-lg-3'>
+                    <div class='card-header border-0 d-flex justify-content-end align-items-center gap-3 flex-wrap'>";
+                        if ($is_editor) {
+                            $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newbadge=1' class='btn submitAdminBtn'><span class='fa fa-plus'></span><span class='hidden-xs'>&nbsp;&nbsp;&nbsp;$langNewBadge</span></a>";
+                        }
     $tool_content .= "
-                </div>
-                <div class='card-body'>
-                    <div class='table-responsive mt-0'>";
+                    </div>
+                    <div class='card-body'>
+                        <div class='table-responsive mt-0'>";
 
     if (count($sql_cer) == 0) {
         if ($is_editor) {
@@ -226,6 +225,7 @@ function display_badges(): void
     }
 
     $tool_content .= "
+                        </div>
                     </div>
                 </div>
             </div>
@@ -237,7 +237,7 @@ function display_badges(): void
  */
 function display_points_games(): void
 {
-    global $course_id, $tool_content, $course_code, $is_editor, 
+    global $course_id, $tool_content, $course_code, $is_editor,
            $langDeleteCourseActivities, $langResetPointsGame, $langConfirmResetPointsGame,
            $langNoPointsGames, $langNoPointsGamesStud, $langEditChange, $langPurge,
            $langActivate, $langDeactivate, $langNewPointsGame, $langState,
@@ -252,40 +252,36 @@ function display_points_games(): void
     
     $tool_content .= "
         <div class='col-12 mt-4'>
-            <div class='card panelCard card-default px-lg-4 py-lg-3'>
-                <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>";
-                if ($is_editor) {
-                    $tool_content .= "<div class='ms-auto'>
-                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newpointsgame=1' class='btn submitAdminBtn'><span class='fa fa-plus'></span><span class='hidden-xs'>&nbsp;&nbsp;&nbsp;$langNewPointsGame</span></a>
-                    </div>";
-                }
+            <div class='progress-module'>
+                <div class='card px-lg-4 py-lg-3'>
+                    <div class='card-header border-0 d-flex justify-content-end align-items-center gap-3 flex-wrap'>";
+                        if ($is_editor) {
+                            $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newpointsgame=1' class='btn submitAdminBtn'><span class='fa fa-plus'></span><span class='hidden-xs'>&nbsp;&nbsp;&nbsp;$langNewPointsGame</span></a>";
+                        }
     $tool_content .= "
-                </div>
-                <div class='card-body'>
-                    <div class='table-responsive mt-0'>";
+                    </div>
+                    <div class='card-body'>
+                        <div class='table-responsive mt-0'>";
 
     if (count($sql_cer) == 0) {
-        if ($is_editor) {
-            $tool_content .= "<p class='text-center text-muted'>$langNoPointsGames</p>";
-        } else {
-            $tool_content .= "<p class='text-center text-muted'>$langNoPointsGamesStud</p>";
-        }
+        $msg = $is_editor ? $langNoPointsGames : $langNoPointsGamesStud;
+        $tool_content .= "<p class='text-center text-muted py-4'>$msg</p>";
     } else {
         $tool_content .= "
-                        <table class='table-default'>
-                            <thead>
-                                <tr class='list-header'>
-                                    <th>$langTitle</th>
-                                    <th>$langStartDate - $langEndDate</th>
-                                    <th class='text-center'>$langState</th>";
+                            <table class='table-default'>
+                                <thead>
+                                    <tr class='list-header'>
+                                        <th style='width: 28%;'>$langTitle</th>
+                                        <th style='width: 38%;'>$langStartDate<br>$langEndDate</th>
+                                        <th style='width: 19%;' class='text-center'>$langState</th>";
         if ($is_editor) {
             $tool_content .= "
-                                    <th class='text-center'>$langActions</th>";
+                                        <th style='width: 15%;' class='text-center'>$langActions</th>";
         }
         $tool_content .= "
-                                </tr>
-                            </thead>
-                            <tbody>";
+                                    </tr>
+                                </thead>
+                                <tbody>";
         
         foreach ($sql_cer as $data) {
             $vis_status = $data->active ? "text-success" : "text-danger";
@@ -295,50 +291,57 @@ function display_points_games(): void
             $end_date = format_locale_date(strtotime($data->expires), 'short');
             
             $tool_content .= "
-                                <tr>
-                                    <td><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;points_game_id=$data->id'>".q($data->title)."</a></td>
-                                    <td>$start_date - $end_date</td>
-                                    <td class='text-center'><span class='fa {$vis_icon} {$vis_status}'></span> <span class='{$vis_status}'>$status_msg</span></td>";
+                                    <tr>
+                                        <td>
+                                            <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;points_game_id=$data->id' class='fw-bold' style='text-decoration: none;'>
+                                                ".q($data->title)."
+                                            </a>
+                                        </td>
+                                        <td class='text-muted small'>$start_date - $end_date</td>
+                                        <td class='text-center'>
+                                            <div class='d-flex align-items-center justify-content-center gap-2 $vis_status' style='font-size: 0.85rem;'>
+                                                <i class='fa {$vis_icon}'></i>
+                                                <span>$status_msg</span>
+                                            </div>
+                                        </td>";
             if ($is_editor) {
                 $tool_content .= "
-                                    <td class='text-center'>" .
+                                        <td class='text-center'>" .
                     action_button(array(
                         array('title' => $langEditChange,
                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;points_game_id=$data->id&amp;edit=1",
-                            'icon' => 'fa-cogs'),
+                            'icon' => 'fa-edit'),
                         array('title' => $data->active ? $langDeactivate : $langActivate,
-                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;points_game_id=$data->id&amp;vis=" .
-                                ($data->active ? '0' : '1'),
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;points_game_id=$data->id&amp;vis=" . ($data->active ? '0' : '1'),
                             'icon' => $data->active ? 'fa-eye-slash' : 'fa-eye'),
                         array('title' => $langResetPointsGame,
                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;reset_points_game=$data->id",
-                            'icon' => 'fa-xmark',
-                            'class' => 'delete',
+                            'icon' => 'fa-arrows-rotate',
                             'confirm' => $langConfirmResetPointsGame),
                         array('title' => $langPurge,
                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;purge_points_game=$data->id",
-                            'icon' => 'fa-xmark',
+                            'icon' => 'fa-trash-can',
                             'class' => 'delete',
                             'confirm' => $langConfirmPurgePointsGame)
                     ))
                     . "</td>";
             }
             $tool_content .= "
-                                </tr>";
+                                    </tr>";
         }
         
         $tool_content .= "
-                            </tbody>
-                        </table>";
+                                </tbody>
+                            </table>";
     }
 
     $tool_content .= "
+                        </div>
                     </div>
                 </div>
             </div>
         </div>";
 }
-
 
 
 /**
@@ -359,8 +362,8 @@ function display_course_completion(): void
     }
 
     $tool_content .= "<div class='col-12 mt-4'>";
-    $tool_content .= "<div class='card panelCard card-default px-lg-4 py-lg-3' style='border-left: 4px solid #3b82f6 !important;'>";
-    $tool_content .= "<div class='card-body'>";
+    $tool_content .= "<div class='card panelCard card-default px-lg-4 py-lg-3' style='border: 1px solid #e5e7eb; border-radius: 8px;'>";
+    $tool_content .= "<div class='card-body' style='padding: 1.5rem;'>";
 
     if (!$data) {
         $tool_content .= "
@@ -372,51 +375,56 @@ function display_course_completion(): void
                 </a>
             </div>";
     } else {
-        $vis_status = $data->active ? "text-success" : "text-danger";
+        $vis_status_color = $data->active ? "#22c55e" : "#ef4444"; // Green or Red
         $vis_icon = $data->active ? "fa-eye" : "fa-eye-slash";
         $status_msg = $data->active ? $langActive : $langInactive;
 
         $tool_content .= "
-            <div class='table-responsive mt-0'>
-                <table class='table' style='border: none; margin-bottom: 0;'>
-                    <tbody>
-                        <tr style='border: none;'>
-                            <td style='width: 60px; border: none; vertical-align: middle;'>
-                                <i class='fa fa-trophy' style='font-size: 2.5rem; color: #3b82f6;'></i>
-                            </td>
-                            <td style='border: none; vertical-align: middle;'>
-                                <h3 class='mb-0' style='font-size: 16px; font-weight: 600;'>
-                                    <a href='{$_SERVER['SCRIPT_NAME']}?course={$course_code}&amp;tab=course_completion&amp;badge_id={$data->id}'>
-                                        " . q($data->title) . "
+            <div class='d-flex align-items-center justify-content-between w-100'>
+                <div class='d-flex align-items-center gap-3'>
+                    <div style='width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;'>
+                        <i class='fa fa-trophy' style='font-size: 1.5rem; color: #3b82f6;'></i>
+                    </div>
+                    <h3 class='mb-0' style='font-size: 16px; font-weight: 500; color: #374151;'>
+                        <a href='{$_SERVER['SCRIPT_NAME']}?course={$course_code}&amp;tab=course_completion&amp;badge_id={$data->id}' style='text-decoration: none; color: #2563eb;'>
+                            " . q($data->title) . "
+                        </a>
+                    </h3>
+                </div>
+
+                <div class='d-flex align-items-center gap-4'>
+                    <div class='d-flex align-items-center gap-2' style='color: {$vis_status_color}; font-size: 14px;'>
+                        <i class='fa {$vis_icon}'></i>
+                        <span>{$status_msg}</span>
+                    </div>
+
+                    ";
+                    if ($is_editor) {
+                        $tool_content .= "
+                        <div class='dropdown custom-course-completion-actions'>
+                            <button class='btn btn-outline-primary p-0 d-flex align-items-center justify-content-center'
+                                    type='button' data-bs-toggle='dropdown' aria-expanded='false'
+                                    style='width: 38px; height: 38px; border-color: #3b82f6; color: #3b82f6; border-radius: 4px;'>
+                                <i class='fa-solid fa-gear'></i>
+                            </button>
+                            <ul class='dropdown-menu dropdown-menu-end'>
+                                <li>
+                                    <a class='dropdown-item' href='{$_SERVER['SCRIPT_NAME']}?course={$course_code}&amp;tab=course_completion&amp;badge_id={$data->id}&amp;vis=" . ($data->active ? '0' : '1') . "'>
+                                        <i class='fa {$vis_icon} me-2'></i> " . ($data->active ? $langDeactivate : $langActivate) . "
                                     </a>
-                                </h3>
-                                <div class='mt-1'>
-                                    <span class='fa {$vis_icon} {$vis_status} small'></span>
-                                    <span class='{$vis_status} ms-1' style='font-size: 13px;'>{$status_msg}</span>
-                                </div>
-                            </td>";
-        
-        if ($is_editor) {
-            $tool_content .= "
-                            <td class='text-end' style='border: none; vertical-align: middle;'>" .
-                action_button(array(
-                    array('title' => $data->active ? $langDeactivate : $langActivate,
-                        'url' => "{$_SERVER['SCRIPT_NAME']}?course={$course_code}&amp;tab=course_completion&amp;badge_id={$data->id}&amp;vis=" .
-                            ($data->active ? '0' : '1'),
-                        'icon' => $data->active ? 'fa-eye-slash' : 'fa-eye'),
-                    array('title' => $langDelete,
-                        'url' => "{$_SERVER['SCRIPT_NAME']}?course={$course_code}&amp;tab=course_completion&amp;del_badge={$data->id}",
-                        'icon' => 'fa-xmark',
-                        'class' => 'delete',
-                        'confirm' => $langConfirmDelete)
-                ))
-                . "</div>";
-        }
-        
+                                </li>
+                                <li><hr class='dropdown-divider'></li>
+                                <li>
+                                    <a class='dropdown-item text-danger' href='{$_SERVER['SCRIPT_NAME']}?course={$course_code}&amp;tab=course_completion&amp;del_badge={$data->id}'
+                                       onclick=\"return confirm('" . addslashes($langConfirmDelete) . "')\">
+                                        <i class='fa-solid fa-trash-can me-2'></i> " . $langDelete . "
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>";
+                    }
         $tool_content .= "
-                        </tr>
-                    </tbody>
-                </table>
+                </div>
             </div>";
     }
 
@@ -471,12 +479,7 @@ function display_activities($element, $id, $unit_id = 0) {
                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
                     'icon' => 'fa-reply',
                     'level' => 'primary',
-                    'show'  =>  $unit_id ? false : true),
-                array('title' => $langUsers,
-                    'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;progressall=true",
-                    'icon' => 'fa-users',
-                    'level' => 'secondary',
-                    'show'  =>  $show_users)
+                    'show'  =>  $unit_id ? false : true)
             ),
             false
         );
@@ -673,7 +676,7 @@ function display_activities($element, $id, $unit_id = 0) {
                             <h4><i class='fa fa-refresh'></i> $langPointsGameRecActivities</h4>
                             <div class='d-flex align-items-center gap-3'>";
                                 if ($is_editor) {
-                                    $tool_content .= "<div onclick='event.stopPropagation()'>
+                                    $tool_content .= "<div class='accordion-header-btn' onclick='event.stopPropagation()'>
                                         $addRecActivityBtn
                                     </div>";
                                 }
@@ -762,7 +765,7 @@ function display_activities($element, $id, $unit_id = 0) {
                             <h4><i class='fa fa-check-circle'></i> $langPointsGameOneTimeActivities</h4>
                             <div class='d-flex align-items-center gap-3'>";
                                 if ($is_editor) {
-                                    $tool_content .= "<div onclick='event.stopPropagation()'>
+                                    $tool_content .= "<div class='accordion-header-btn' onclick='event.stopPropagation()'>
                                         $addActivityBtn
                                     </div>";
                                 }
@@ -849,79 +852,82 @@ function display_activities($element, $id, $unit_id = 0) {
         } else {
             $tool_content .= "
                 <div class='col-12 mt-4'>
-                    <div class='card panelCard card-default px-lg-4 py-lg-3'>
-                        <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-                            <h3>
-                                $langAttendanceActList
-                            </h3>";
-                        if ($is_editor) {
-                            $tool_content .= "<div>
-                                $addActivityBtn
-                            </div>";
-                        }
-            $tool_content .=  "</div>";
-            $tool_content .= "
-                        <div class='card-body'>";
-                            if (count($result) == 0) {
-                                $tool_content .= "<p class='margin-top-fat text-center text-muted'>$langNoActivCert</p>";
-                            } else {
-                            $tool_content .= "<div class='table-responsive mt-0'>
-                                                    <table class='table-default'><thead>
-                                                        <tr class='list-header'>
-                                                            <th>
-                                                                $langTitle
-                                                            </th>
-                                                            <th>
-                                                                $langType
-                                                            </th>
-                                                            <th>
-                                                                $langValue
-                                                            </div>
-                                                            <th>
-                                                                <i class='fa fa-cogs'></i>
-                                                            </th>
-                                                        </tr></thead>";
-                                                        foreach ($result as $details) {
-                                                            $resource_data = get_resource_details($element, $details->id);
-                                                            $tool_content .= "
-                                                            <tr>
-                                                                <td>" . q($resource_data['title']) . "</td>
-                                                                <td>" . $resource_data['type'] . "</td>
-                                                                <td>";
-                                                                    if (!empty($details->operator) && $details->activity_type != AssignmentSubmitEvent::ACTIVITY) {
-                                                                        $op = get_operators();
-                                                                        $tool_content .= $op[$details->operator];
-                                                                    } else {
-                                                                        $tool_content .= "&mdash;";
-                                                                    }
-                                                                    if ($details->activity_type == AssignmentSubmitEvent::ACTIVITY) {
-                                                                        $tool_content .= "</td>";
-                                                                    } else {
-                                                                        $tool_content .= "$details->threshold</td>";
-                                                                    }
-                                                                    $tool_content .= "<td>";
-                                                                    $tool_content .= "<div class='text-end'>".
-                                                                        action_button(array(
-                                                                            array('title' => $langEditChange,
-                                                                                'icon' => 'fa-edit',
-                                                                                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;act_mod=$details->id",
-                                                                                'show' => in_array($details->activity_type, criteria_with_operators())
-                                                                            ),
-                                                                            array('title' => $langDelete,
-                                                                                'icon' => 'fa-xmark',
-                                                                                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;del_cert_res=$details->id",
-                                                                                'confirm' => $langConfirmDelete,
-                                                                                'class' => 'delete'))).
-                                                                    "</div>
-                                                                </td>
-                                                            </tr>";
-                                                        }
-
-                                        $tool_content .= "
-                                                    </table>
-                                                </div>";
+                    <div class='progress-module'>
+                        <div class='leaderboard-accordion-header'>
+                            <h4><i class='fa fa-list'></i> $langAttendanceActList</h4>
+                            <div class='d-flex align-items-center gap-3'>";
+                            if ($is_editor) {
+                                $tool_content .= "<div class='accordion-header-btn' onclick='event.stopPropagation()'>
+                                    $addActivityBtn
+                                </div>";
                             }
             $tool_content .= "
+                                <i class='fa fa-chevron-down leaderboard-accordion-icon'></i>
+                            </div>
+                        </div>
+                        <div class='leaderboard-accordion-content'>
+                            <div class='leaderboard-accordion-body'>";
+                                if (count($result) == 0) {
+                                    $tool_content .= "<p class='margin-top-fat text-center text-muted'>$langNoActivCert</p>";
+                                } else {
+                                $tool_content .= "<div class='table-responsive mt-0'>
+                                                        <table class='table-default'><thead>
+                                                            <tr class='list-header'>
+                                                                <th>
+                                                                    $langTitle
+                                                                </th>
+                                                                <th>
+                                                                    $langType
+                                                                </th>
+                                                                <th>
+                                                                    $langValue
+                                                                </th>
+                                                                <th>
+                                                                    <i class='fa fa-cogs'></i>
+                                                                </th>
+                                                            </tr></thead>";
+                                                            foreach ($result as $details) {
+                                                                $resource_data = get_resource_details($element, $details->id);
+                                                                $tool_content .= "
+                                                                <tr>
+                                                                    <td>" . q($resource_data['title']) . "</td>
+                                                                    <td>" . $resource_data['type'] . "</td>
+                                                                    <td>";
+                                                                        if (!empty($details->operator) && $details->activity_type != AssignmentSubmitEvent::ACTIVITY) {
+                                                                            $op = get_operators();
+                                                                            $tool_content .= $op[$details->operator];
+                                                                        } else {
+                                                                            $tool_content .= "&mdash;";
+                                                                        }
+                                                                        if ($details->activity_type == AssignmentSubmitEvent::ACTIVITY) {
+                                                                            $tool_content .= "</td>";
+                                                                        } else {
+                                                                            $tool_content .= "$details->threshold</td>";
+                                                                        }
+                                                                        $tool_content .= "<td>";
+                                                                        $tool_content .= "<div class='text-end'>".
+                                                                            action_button(array(
+                                                                                array('title' => $langEditChange,
+                                                                                    'icon' => 'fa-edit',
+                                                                                    'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;act_mod=$details->id",
+                                                                                    'show' => in_array($details->activity_type, criteria_with_operators())
+                                                                                ),
+                                                                                array('title' => $langDelete,
+                                                                                    'icon' => 'fa-xmark',
+                                                                                    'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;del_cert_res=$details->id",
+                                                                                    'confirm' => $langConfirmDelete,
+                                                                                    'class' => 'delete'))).
+                                                                        "</div>
+                                                                    </td>
+                                                                </tr>";
+                                                            }
+
+                                            $tool_content .= "
+                                                        </table>
+                                                    </div>";
+                                }
+            $tool_content .= "
+                            </div>
                         </div>
                     </div>
                 </div>";
@@ -953,7 +959,7 @@ function display_activities($element, $id, $unit_id = 0) {
     } else {
             $tool_content .= "<div class='main-content'>
                                 <div class='col-12'>
-                                    <div class='card panelCard card-default px-lg-4 py-lg-3'>
+                                    <div class='card px-lg-4 py-lg-3'>
                                         <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                                             <h3>
                                                 $langUnitCompletion
@@ -3049,8 +3055,9 @@ function display_available_attendances($element, $element_id, $unit_id = 0) {
 function display_points_game_settings($element_id): void
 {
     global $tool_content, $course_id, $course_code, $langProgressBasicInfo, $langEditChange, $langTitle,
-           $langDescription, $langStartDate, $langEndDate, $langActivateLeaderboard, $langAnonymizeLeaderboard, 
-           $langYes, $langNo, $is_editor, $langPointsGameLevels, $langPointsGameLevelName, $langPointsGameLevelRequiredPoints;
+           $langDescription, $langStartDate, $langEndDate, $langActivateLeaderboard, $langAnonymizeLeaderboard,
+           $langYes, $langNo, $is_editor, $langPointsGameLevels, $langPointsGameLevelName, $langPointsGameLevelRequiredPoints,
+           $langIsActive, $langTypeInactive;
 
     $data = Database::get()->querySingle("SELECT title, description, active, starts, expires, config
                             FROM points_game WHERE id = ?d AND course_id = ?d", $element_id, $course_id);
@@ -3058,149 +3065,114 @@ function display_points_game_settings($element_id): void
                             
     $title = $data->title;
     $description = $data->description;
-    $start_date = date_format(date_create_from_format('Y-m-d H:i:s', $data->starts), 'd-m-Y H:i');;
-    $end_date = date_format(date_create_from_format('Y-m-d H:i:s', $data->expires), 'd-m-Y H:i');;
+    $start_date = date_format(date_create_from_format('Y-m-d H:i:s', $data->starts), 'd-m-Y H:i');
+    $end_date = date_format(date_create_from_format('Y-m-d H:i:s', $data->expires), 'd-m-Y H:i');
     $config = json_decode($data->config, TRUE);
+    
     $enable_leaderboard = !empty($config['enable_leaderboard']);
     $anonymize_leaderboard  = !empty($config['anonymize_leaderboard']);
-    $enable_leaderboard_str = $enable_leaderboard ? $langYes : $langNo;
-    $anonymize_leaderboard_str = $anonymize_leaderboard ? $langYes : $langNo;
+
+    // Status Badges
+    $lb_badge = $enable_leaderboard ? "<span class='badge-status-green'>$langIsActive</span>" : "<span class='badge-status-red'>$langTypeInactive</span>";
+    $anon_badge = $anonymize_leaderboard ? "<span class='badge-status-green'>$langIsActive</span>" : "<span class='badge-status-red'>$langTypeInactive</span>";
 
     $tool_content .= "
-                <div class='col-12'>
-                    <div class='card panelCard border-card-left-default px-lg-4 py-lg-3'>
-                        <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-                                <h3>
-                                    $langProgressBasicInfo
-                                </h3>";
-                            if ($is_editor) {
-                                $tool_content .= "<div><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;points_game_id=$element_id&amp;edit=1' class='btn submitAdminBtn gap-2'>"
-                                            . "<span class='fa fa-pencil'></span><span class='hidden-xs'>$langEditChange</span>
-                                            </a>
-                                        </div>";
-                            }
-                        $tool_content .= "</div>
-                        <div class='card-body'>
-                            <div class='d-flex justify-content-md-start justify-content-center align-items-start flex-wrap gap-5'>
-                                <div class='flex-grow-1'>
-                                    <ul class='list-group list-group-flush'>
-                                        <li class='list-group-item element'>
-                                            <div class='row row-cols-1 row-cols-md-2 g-1'>
-                                                <div class='col-md-3 col-12'>
-                                                    <div class='pn-info-title-sct title-default'>$langTitle</div>
-                                                </div>
-                                                <div class='col-md-9 col-12 title-default-line-height'>
-                                                    <div class='pn-info-text-sct'>$title</div>
-                                                </div>
-                                            </div>
-                                        </li>
+    <div class='col-12'>
+        <div class='progress-module'>
+            <div class='leaderboard-accordion-header'>
+                <h4><i class='fa fa-info-circle'></i> $langProgressBasicInfo</h4>
+                <div class='d-flex align-items-center gap-3'>";
+                    if ($is_editor) {
+                        $tool_content .= "<div class='accordion-header-btn' onclick='event.stopPropagation()'>
+                            <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;points_game_id=$element_id&amp;edit=1' class='btn submitAdminBtn gap-2'>
+                                <span class='fa fa-pencil'></span><span class='hidden-xs'>$langEditChange</span>
+                            </a>
+                        </div>";
+                    }
+    $tool_content .= "
+                    <i class='fa fa-chevron-down leaderboard-accordion-icon'></i>
+                </div>
+            </div>
+            <div class='leaderboard-accordion-content'>
+                <div class='leaderboard-accordion-body'>
 
-                                        <li class='list-group-item element'>
-                                            <div class='row row-cols-1 row-cols-md-2 g-1'>
-                                                <div class='col-md-3 col-12'>
-                                                    <div class='pn-info-title-sct title-default'>$langDescription</div>
-                                                </div>
-                                                <div class='col-md-9 col-12 title-default-line-height'>
-                                                    <div class='pn-info-text-sct'>$description</div>
-                                                </div>
-                                            </div>
-                                        </li>
+                    <div class='card border rounded-3 mb-2'>
+                        <div class='d-flex justify-content-between align-items-start p-3'>
+                            <div class='text-primary fw-bold'><i class='fa-regular fa-bookmark me-2'></i><span class='fw-bold' style='color: #4b5563;'>$langTitle</span></div>
+                            <div class='text-end'>
+                                <div class='fw-normal' style='color: #4b5563;'>$title</div>";
+                                if (!empty($description)) {
+                                    $tool_content .= "<div class='fw-normal' style='color: #4b5563;'>$description</div>";
+                                }
+    $tool_content .= "
+                            </div>
+                        </div>
+                        <hr class='my-0 mx-3'>
 
-                                        <li class='list-group-item element'>
-                                            <div class='row row-cols-1 row-cols-md-2 g-1'>
-                                                <div class='col-md-3 col-12'>
-                                                    <div class='pn-info-title-sct title-default'>$langStartDate</div>
-                                                </div>
-                                                <div class='col-md-9 col-12 title-default-line-height'>
-                                                    <div class='pn-info-text-sct'>$start_date</div>
-                                                </div>
-                                            </div>
-                                        </li>
+                        <div class='d-flex justify-content-between align-items-start p-3'>
+                            <div class='text-primary fw-bold'><i class='fa-regular fa-calendar-days me-2'></i><span class='fw-bold' style='color: #4b5563;'>Ημερομηνία</span></div>
+                            <div class='text-end' style='color: #4b5563;'>
+                                <div class='mb-1'>Από: &nbsp; $start_date</div>
+                                <div>Έως: &nbsp; $end_date</div>
+                            </div>
+                        </div>
+                        <hr class='my-0 mx-3'>
 
-                                        <li class='list-group-item element'>
-                                            <div class='row row-cols-1 row-cols-md-2 g-1'>
-                                                <div class='col-md-3 col-12'>
-                                                    <div class='pn-info-title-sct title-default'>$langEndDate</div>
-                                                </div>
-                                                <div class='col-md-9 col-12 title-default-line-height'>
-                                                    <div class='pn-info-text-sct'>$end_date</div>
-                                                </div>
-                                            </div>
-                                        </li>
+                        <div class='d-flex justify-content-between align-items-center p-3'>
+                            <div class='fw-bold' style='color: #4b5563;'>$langActivateLeaderboard</div>
+                            <div>$lb_badge</div>
+                        </div>
+                        <hr class='my-0 mx-3'>
 
-                                        <li class='list-group-item element'>
-                                            <div class='row row-cols-1 row-cols-md-2 g-1'>
-                                                <div class='col-md-3 col-12'>
-                                                    <div class='pn-info-title-sct title-default'>$langActivateLeaderboard</div>
-                                                </div>
-                                                <div class='col-md-9 col-12 title-default-line-height'>
-                                                    <div class='pn-info-text-sct'>$enable_leaderboard_str</div>
-                                                </div>
-                                            </div>
-                                        </li>";
-                                        if ($enable_leaderboard) {
-                                        $tool_content .= "<li class='list-group-item element'>
-                                            <div class='row row-cols-1 row-cols-md-2 g-1'>
-                                                <div class='col-md-3 col-12'>
-                                                    <div class='pn-info-title-sct title-default'>$langAnonymizeLeaderboard</div>
-                                                </div>
-                                                <div class='col-md-9 col-12 title-default-line-height'>
-                                                    <div class='pn-info-text-sct'>$anonymize_leaderboard_str</div>
-                                                </div>
-                                            </div>
-                                        </li>";
-                                        }
-                    $tool_content .= "<li class='list-group-item element'>
-                                        <div class='row row-cols-1 row-cols-md-2 g-1'>
-                        
-                                            <div class='col-md-3 col-12'>
-                                                <div class='pn-info-title-sct title-default'>
-                                                    $langPointsGameLevels
-                                                </div>
-                                            </div>
-                                            <div class='col-md-9 col-12 title-default-line-height'>
-                                                <div class='pn-info-text-sct'>
+                        <div class='d-flex justify-content-between align-items-center p-3'>
+                            <div class='fw-bold' style='color: #4b5563;'>$langAnonymizeLeaderboard</div>
+                            <div>$anon_badge</div>
+                        </div>
+                    </div>
 
-                                                    <div class='table-responsive'>
-                                                        <table class='table table-sm table-borderless text-center mb-0'>
-                                                            <thead>
-                                                                <tr>
-                                                                    <th class='text-start'>$langPointsGameLevelName</th>
-                                                                    <th>$langPointsGameLevelRequiredPoints</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>";
+                    <div class='card border rounded-3'>
+                        <div class='row g-0 align-items-start p-3'>
+                            <div class='col-md-4'>
+                                <div class='text-primary fw-bold'><i class='fa-solid fa-layer-group me-2'></i><span class='fw-bold' style='color: #4b5563;'>$langPointsGameLevels</span></div>
+                            </div>
+                            <div class='col-md-8'>
+                                <div class='table-responsive border-0'>
+                                    <table class='table table-sm mb-0 text-center'>
+                                        <thead style='background-color: #f1f5f9;'>
+                                            <tr>
+                                                <th class='fw-normal py-2 text-muted' style='font-size: 0.85rem;'>$langPointsGameLevelName</th>
+                                                <th class='fw-normal py-2 text-muted' style='font-size: 0.85rem;'>$langPointsGameLevelRequiredPoints</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>";
                                         foreach ($levels as $level) {
-                                            $tool_content .= "<tr>
-                                                                <td class='text-start'><span class='level-badge'><i class='fa fa-star' style='color:#f59e0b;'></i> ".$level->friendly_name."</span></td>
-                                                                <td>".$level->required_points."</td>
-                                                            </tr>";
+                                            $tool_content .= "
+                                            <tr>
+                                                <td class='py-3 border-0' style='color: #4b5563;'>".htmlspecialchars($level->friendly_name)."</td>
+                                                <td class='py-3 border-0' style='color: #4b5563;'>".$level->required_points."</td>
+                                            </tr>";
                                         }
-                    $tool_content .= "                      </tbody>
-                                                        </table>
-                                                    </div>
-
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </li>";
-                    $tool_content .= "</ul>
+    $tool_content .= "
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>";
+
+                </div>
+            </div>
+        </div>
+    </div>";
 }
 
 /**
- * @brief display badge / certificate settings
+ * @brief display badge / certificate settings with Accordion and consistent Button design
  * @param type $element
  * @param type $element_id
  */
 function display_settings($element, $element_id, $unit_id = 0): void
 {
-
     global $tool_content, $course_id, $course_code, $urlServer, $langTitle,
            $langDescription, $langMessage, $langProgressBasicInfo, $langCourseCompletion,
            $langpublisher, $langEditChange, $is_editor;
@@ -3229,88 +3201,77 @@ function display_settings($element, $element_id, $unit_id = 0): void
             $thumbnail_filename = preg_replace('/.html/', '_thumbnail.png', $template_filename);
             $icon_link = $urlServer . CERT_TEMPLATE_PATH . $thumbnail_filename;
         }
+
         $tool_content .= "
-                <div class='col-12'>
-                    <div class='card panelCard border-card-left-default px-lg-4 py-lg-3'>
-                        <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-                                <h3>
-                                    $langProgressBasicInfo
-                                </h3>";
-                            if ($is_editor) {
-                                $tool_content .= "<div><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;{$element}_id=$element_id&amp;edit=1' class='btn submitAdminBtn gap-2'>"
-                                            . "<span class='fa fa-pencil'></span><span class='hidden-xs'>$langEditChange</span>
-                                            </a>
-                                        </div>";
-                            }
-                        $tool_content .= "</div>
-                        <div class='card-body'>
-                            <div class='d-flex justify-content-md-start justify-content-center align-items-start flex-wrap gap-5'>
-                                <div>
-                                    <img class='img-responsive center-block m-auto d-block' src='$icon_link'>
+        <div class='col-12'>
+            <div class='leaderboard-accordion-header'>
+                <h4><i class='fa-solid fa-info-circle'></i> $langProgressBasicInfo</h4>
+                <div class='d-flex align-items-center gap-3'>";
+                    if ($is_editor) {
+                        $tool_content .= "
+                        <div class='accordion-header-btn' onclick='event.stopPropagation()'>
+                            <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;{$element}_id=$element_id&amp;edit=1' class='btn submitAdminBtn gap-2'>
+                                <span class='fa fa-pencil'></span><span class='hidden-xs'>$langEditChange</span>
+                            </a>
+                        </div>";
+                    }
+        $tool_content .= "
+                    <i class='fa fa-chevron-down leaderboard-accordion-icon'></i>
+                </div>
+            </div>
+
+            <div class='leaderboard-accordion-content'>
+                <div class='leaderboard-accordion-body'>
+                    
+                    <div class='card border rounded-3 p-3' style='background-color: #fdfdfd;'>
+                        <div class='row align-items-center g-0'>
+                            
+                            <div class='col-md-3 text-center border-end py-2'>
+                                <img src='$icon_link' class='img-fluid' style='max-height: 120px; width: auto;' alt='Icon'>
+                            </div>
+
+                            <div class='col-md-9 ps-4'>
+                                
+                                <div class='d-flex justify-content-between py-2'>
+                                    <div class='fw-bold' style='color: #4b5563;'>$langTitle</div>
+                                    <div class='text-end' style='color: #4b5563;'>$title</div>
                                 </div>
-                                <div class='flex-grow-1'>
-                                    <ul class='list-group list-group-flush'>
-                                        <li class='list-group-item element'>
-                                            <div class='row row-cols-1 row-cols-md-2 g-1'>
-                                                <div class='col-md-3 col-12'>
-                                                    <div class='pn-info-title-sct title-default'>$langTitle</div>
-                                                </div>
-                                                <div class='col-md-9 col-12 title-default-line-height'>
-                                                    <div class='pn-info-text-sct'>$title</div>
-                                                </div>
-                                            </div>
-                                        </li>
+                                <hr class='my-0 mx-0' style='opacity: 0.1;'>
 
-                                        <li class='list-group-item element'>
-                                            <div class='row row-cols-1 row-cols-md-2 g-1'>
-                                                <div class='col-md-3 col-12'>
-                                                    <div class='pn-info-title-sct title-default'>$langDescription</div>
-                                                </div>
-                                                <div class='col-md-9 col-12 title-default-line-height'>
-                                                    <div class='pn-info-text-sct'>$description</div>
-                                                </div>
-                                            </div>
-                                        </li>
-
-                                        <li class='list-group-item element'>
-                                            <div class='row row-cols-1 row-cols-md-2 g-1'>
-                                                <div class='col-md-3 col-12'>
-                                                    <div class='pn-info-title-sct title-default'>$langMessage</div>
-                                                </div>
-                                                <div class='col-md-9 col-12 title-default-line-height'>
-                                                    <div class='pn-info-text-sct text-start'>$message</div>
-                                                </div>
-                                            </div>
-                                        </li>
-
-                                        <li class='list-group-item element'>
-                                            <div class='row row-cols-1 row-cols-md-2 g-1'>
-                                                <div class='col-md-3 col-12'>
-                                                    <div class='pn-info-title-sct title-default'>$langpublisher</div>
-                                                </div>
-                                                <div class='col-md-9 col-12 title-default-line-height'>
-                                                    <div class='pn-info-text-sct text-start'>$issuer</div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
+                                <div class='d-flex justify-content-between py-2'>
+                                    <div class='fw-bold' style='color: #4b5563;'>$langDescription</div>
+                                    <div class='text-end' style='color: #4b5563;'>$description</div>
                                 </div>
+                                <hr class='my-0 mx-0' style='opacity: 0.1;'>
+
+                                <div class='d-flex justify-content-between py-2'>
+                                    <div class='fw-bold' style='color: #4b5563;'>$langMessage</div>
+                                    <div class='text-end' style='color: #4b5563;'>$message</div>
+                                </div>
+                                <hr class='my-0 mx-0' style='opacity: 0.1;'>
+
+                                <div class='d-flex justify-content-between py-2'>
+                                    <div class='fw-bold' style='color: #4b5563;'>$langpublisher</div>
+                                    <div class='text-end' style='color: #4b5563;'>$issuer</div>
+                                </div>
+
                             </div>
                         </div>
                     </div>
-                </div>";
-    }  else { 
-        if (!$unit_id && !$is_editor) {
-            $tool_content .= "
-            <div class='col-12'>
-                <div class='card panelCard card-default px-lg-4 py-lg-3'>
-                    <div class='card-body'>
 
-                        <h3 class='mb-0 text-center'>$langCourseCompletion</h3>
-
-                    </div>
                 </div>
-            </div>";
+            </div>
+        </div>";
+    } else { 
+        // Handle Course Completion view if needed
+        if (!$unit_id && !$is_editor) {
+             $tool_content .= "
+                <div class='col-12'>
+                    <div class='leaderboard-accordion-header'>
+                        <h4><i class='fa-solid fa-certificate'></i> $langCourseCompletion</h4>
+                        <i class='fa fa-chevron-down leaderboard-accordion-icon'></i>
+                    </div>
+                </div>";
         }
     }
 }
@@ -3852,7 +3813,7 @@ function student_view_progress() {
 
         $tool_content .= "
                 <div class='col-12'>
-                    <div class='card panelCard card-default px-lg-4 py-lg-3'>
+                    <div class='card px-lg-4 py-lg-3'>
                         <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                             <h3>$langCourseCompletion</h3>
                         </div>
@@ -3905,7 +3866,7 @@ function student_view_progress() {
 
             $tool_content .= "
                     <div class='col-12 mt-4'>
-                        <div class='card panelCard card-default px-lg-4 py-lg-3'>
+                        <div class='card px-lg-4 py-lg-3'>
                             <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                                 <h3>$langBadges</h3>
                             </div>
@@ -3962,7 +3923,7 @@ function student_view_progress() {
 
             $tool_content .= "
                     <div class='col-12 mt-4'>
-                        <div class='card panelCard card-default px-lg-4 py-lg-3'>
+                        <div class='card px-lg-4 py-lg-3'>
                             <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                                 <h3>$langCertificates</h3>
                             </div>
@@ -4025,7 +3986,7 @@ function student_view_progress() {
 
             $tool_content .= "
                     <div class='col-12 mt-4'>
-                        <div class='card panelCard card-default px-lg-4 py-lg-3'>
+                        <div class='card px-lg-4 py-lg-3'>
                             <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                                 <h3>$langPointsGames</h3>
                             </div>
@@ -4105,15 +4066,16 @@ function display_leaderboard_accordion($points_game_id) {
                                             upp.total_points DESC,
                                             u.surname ASC,
                                             u.givenname ASC", $points_game_id, $course_id);
+    $tool_content .= "
+        <div class='leaderboard-accordion-header'>
+            <h4><i class='fa fa-trophy'></i> $langViewLeaderboard</h4>
+            <i class='fa fa-chevron-down leaderboard-accordion-icon'></i>
+        </div>
+        <div class='leaderboard-accordion-content'>
+            <div class='leaderboard-accordion-body'>";
+
     if (count($sql) > 0) {
-            // Start accordion
         $tool_content .= "
-            <div class='leaderboard-accordion-header'>
-                <h4><i class='fa fa-trophy'></i> $langViewLeaderboard</h4>
-                <i class='fa fa-chevron-down leaderboard-accordion-icon'></i>
-            </div>
-            <div class='leaderboard-accordion-content'>
-                <div class='leaderboard-accordion-body'>
                     <div class='table-responsive'>
                         <table class='leaderboard-table'>
                             <thead>
@@ -4186,10 +4148,12 @@ function display_leaderboard_accordion($points_game_id) {
                 <td><span class='user-name'>" . $user_info . "</span></td>
                 <td>".$info."</td></tr>";
         }
-        $tool_content .= "</tbody></table></div></div></div>";
+        $tool_content .= "</tbody></table></div>";
     } else {
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langNoUserList</span></div></div>";
+        $tool_content .= "<div class='alert alert-info mt-2'><i class='fa-solid fa-circle-info fa-lg'></i>&nbsp;<span>$langNoUserList</span></div>";
     }
+
+    $tool_content .= "</div></div>";
 }
 
 /**
@@ -4462,7 +4426,7 @@ function display_user_progress_details($element, $element_id, $user_id) {
 
 	$tool_content .= "
             <div class='col-12'>
-                <div class='card panelCard card-default px-lg-4 py-lg-3'>
+                <div class='card px-lg-4 py-lg-3'>
                     <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                         <h3>$element_title</h3>
                     </div>
@@ -4523,7 +4487,7 @@ function display_user_progress_details($element, $element_id, $user_id) {
 
 	$tool_content .= "
         <div class='col-12 mt-4'>
-            <div class='card panelCard card-default px-lg-4 py-lg-3'>
+            <div class='card px-lg-4 py-lg-3'>
                 <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                     <h3>$langAttendanceActivity</h3>
                 </div>
@@ -4674,7 +4638,7 @@ function display_user_points_game_details($points_game_id, $user_id) {
         $user_progress = PointsGame::getNextLevelInfo($user_id, $points_game_id);
         $tool_content .= "
             <div class='col-12'>
-                <div class='card panelCard card-default px-lg-4 py-lg-3'>
+                <div class='card px-lg-4 py-lg-3'>
                     <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                         <h3>$element_title</h3>
                     </div>
@@ -4723,7 +4687,7 @@ function display_user_points_game_details($points_game_id, $user_id) {
 
         $tool_content .= "
         <div class='col-12 mt-4'>
-            <div class='card panelCard card-default px-lg-4 py-lg-3'>
+            <div class='card px-lg-4 py-lg-3'>
                 <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                     <h3>$langAttendanceActivity</h3>
                 </div>

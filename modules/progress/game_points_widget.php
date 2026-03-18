@@ -46,11 +46,11 @@ function course_points_game_widget($uid, $course_id) {
         }
 
         $games_data[] = [
-            'title' => $game->title,
-            'points' => $total_points,
-            'level' => $current_level,
+            'title'      => $game->title,
+            'points'     => $total_points,
+            'level'      => $current_level,
             'next_level' => $next_level,
-            'percent' => $percent
+            'percent'    => $percent
         ];
     }
 
@@ -79,24 +79,25 @@ function course_points_game_widget($uid, $course_id) {
 
     foreach ($games_data as $idx => $game) {
         $active_class = ($idx === 0) ? 'active' : '';
+        $next_str = !empty($game['next_level']) ? "{$game['percent']}% {$game['next_level']}" : "{$game['percent']}% ολοκλήρωση";
+
         $html .= "
             <div class='slide-item {$active_class}' data-name='" . htmlspecialchars($game['title']) . "'>
                 <div class='game-box'>
-                    <div class='badge-col'>
-                        <div class='badge-circle'>
-                            <i class='fa-solid fa-star'></i>
+                    <div class='game-top-row'>
+                        <div class='level-star-wrap'>
+                            <i class='fa-solid fa-star level-star-bg'></i>
+                            <span class='level-star-text'>" . htmlspecialchars($game['level']) . "</span>
                         </div>
-                        ".$game['level']."
+                        <div class='gi-group'>
+                            <span class='gi-value'>" . number_format($game['points']) . "</span>
+                            <span class='gi-label'>$langPoints</span>
+                        </div>
                     </div>
-                    <div class='points-col'>
-                        <div class='points-num'>{$game['points']}</div>
-                        <div class='points-txt'>$langPoints</div>
+                    <div class='game-prog-track'>
+                        <div class='game-prog-fill' style='width:{$game['percent']}%'></div>
                     </div>
-                    <div class='progress-col'>
-                        <div class='progress-label'>ολοκλήρωση</div>
-                        <div class='progress-percent'>{$game['percent']}%</div>
-                        <div class='progress-level'>$next_level</div>
-                    </div>
+                    <div class='game-next-str'>{$next_str}</div>
                 </div>
             </div>";
     }
@@ -164,9 +165,8 @@ function course_points_game_widget($uid, $course_id) {
     
     .game-box {
         display: flex;
-        align-items: center;
-        justify-content: center; 
-        gap: 20px; 
+        flex-direction: column;
+        gap: 8px;
         padding: 15px;
         border: 1px solid #e0e0e0;
         border-radius: 6px;
@@ -175,66 +175,89 @@ function course_points_game_widget($uid, $course_id) {
         margin: 0 auto;
         box-sizing: border-box;
     }
-    
+
+    .game-top-row {
+        display: flex;
+        align-items: center;
+        gap: 22px;
+        flex-wrap: wrap;
+    }
+
     .badge-col {
         flex: 0 0 auto;
     }
-    
-    .badge-circle {
-        width: 45px;
-        height: 45px;
-        border: 2px solid #d0d0d0;
-        border-radius: 50%;
+
+    .level-star-wrap {
+        position: relative;
+        width: 52px;
+        height: 52px;
         display: flex;
         align-items: center;
         justify-content: center;
-        background: white;
     }
-    
-    .badge-circle i {
-        font-size: 20px;
+
+    .level-star-bg {
+        font-size: 50px;
         color: #FFD700;
+        position: absolute;
+        line-height: 1;
     }
-    
-    .points-col {
-        text-align: center;
-        padding-right: 20px;
-        border-right: 1px solid #d0d0d0;
-        flex: 0 0 auto;
-    }
-    
-    .points-num {
-        font-size: 24px;
+
+    .level-star-text {
+        position: relative;
+        z-index: 1;
+        font-size: 12px;
         font-weight: 700;
         color: #333;
+        text-align: center;
         line-height: 1;
+        max-width: 36px;
+        word-break: break-word;
     }
-    
-    .points-txt {
-        font-size: 12px;
+
+    .gi-group {
+        display: flex;
+        align-items: baseline;
+        gap: 5px;
+    }
+
+    .gi-label {
+        font-size: 16px;
         color: #666;
+        font-weight: 500;
     }
-    
-    .progress-col {
-        flex: 0 0 auto;
-        text-align: center; 
-    }
-    
-    .progress-label {
-        font-size: 12px;
-        color: #666;
-    }
-    
-    .progress-percent {
-        font-size: 24px;
+
+    .gi-value {
+        font-size: 22px;
         font-weight: 700;
-        color: #5b7ad6;
-        line-height: 1;
+        color: #333;
     }
-    
-    .progress-level {
+
+    .gi-sep {
+        display: inline-block;
+        width: 12px;
+    }
+
+    .game-next-str {
         font-size: 12px;
         color: #555;
+        text-align: left;
+        align-self: flex-start;
+    }
+
+    .game-prog-track {
+        height: 6px;
+        background: #e0e0e0;
+        border-radius: 10px;
+        overflow: hidden;
+        width: 100%;
+    }
+
+    .game-prog-fill {
+        height: 100%;
+        background: #5b7ad6;
+        border-radius: 10px;
+        transition: width 0.3s ease;
     }
     </style>
     
