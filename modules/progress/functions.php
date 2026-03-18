@@ -863,8 +863,8 @@ function display_activities($element, $id, $unit_id = 0) {
                                 if (count($result) == 0) {
                                     $tool_content .= "<p class='margin-top-fat text-center text-muted'>$langNoActivCert</p>";
                                 } else {
-                                $tool_content .= "<div class='table-responsive mt-0'>
-                                                        <table class='table-default'><thead>
+                                $tool_content .= "<div class='mt-0'>
+                                                        <table data-toggle='table' data-pagination='true' data-page-size='5' data-mobile-responsive='true'><thead>
                                                             <tr class='list-header'>
                                                                 <th>
                                                                     $langTitle
@@ -876,7 +876,7 @@ function display_activities($element, $id, $unit_id = 0) {
                                                                     $langValue
                                                                 </th>
                                                                 <th>
-                                                                    <i class='fa fa-cogs'></i>
+                                                                    $langActions
                                                                 </th>
                                                             </tr></thead>";
                                                             foreach ($result as $details) {
@@ -4069,7 +4069,7 @@ function display_leaderboard_accordion($points_game_id) {
     if (count($sql) > 0) {
         $tool_content .= "
                     <div class='table-responsive'>
-                        <table class='leaderboard-table'>
+                        <table class='table leaderboard-table' data-toggle='table' data-pagination='true' data-page-size='10'>
                             <thead>
                                 <tr>
                                 <th>$langAutoJudgeRank</th>
