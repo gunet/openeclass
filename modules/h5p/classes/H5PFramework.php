@@ -821,6 +821,9 @@ class H5PFramework implements H5PFrameworkInterface {
         return false;
     }
 
+    public function resetHubOrganizationData() {
+    }
+
     /**
      * Convert list of library parameter values to csv.
      *
