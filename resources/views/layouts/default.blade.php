@@ -172,7 +172,7 @@
                         <div class='form-wrapper form-edit'>
                             <form action='{{ $urlAppend }}main/notes/index.php' method='post'>
                                 <div class="mb-3">
-                                    <label for="title-note" class="control-label-notes">{{ trans('langTitle') }}&nbsp<span class='text-danger'>(*)</span></label>
+                                    <label for="title-note" class="control-label-notes">{{ trans('langTitle') }}&nbsp;<span class='text-danger'>(*)</span></label>
                                     <input type="text" class="form-control" name='newTitle' id="title-note">
                                 </div>
                                 <div class="mb-3">

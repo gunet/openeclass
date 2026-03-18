@@ -103,7 +103,7 @@
                         </script>
 
                         <div class='btn submitAdminBtn' tabindex='0'>
-                            <i class='fa-solid fa-chart-bar showResults'></i> 
+                            <i class='fa-solid fa-chart-bar showResults'></i>
                             <i class='fa-regular fa-rectangle-list showPoll'></i>
                         </div>
                 </div>
@@ -119,7 +119,7 @@
                     <div class='panel-body p-0 mt-3 bg-transparent'>{{ trans('langPollAlreadyParticipated') }}</div>
                 @else
                     <div class='panel-body pollQuestionDiv p-0 mt-3 bg-transparent'>
-                        <form id='homePollForm' class='form-horizontal' role='form' action='' id='poll' method='post'>
+                        <form id='poll' class='form-horizontal' role='form' action='' method='post'>
                             {!! $quick_poll_answers_content !!}
                             <input name='qtype' type='hidden' value='{{ $qtype }}'>
                             <input name='pid' type='hidden' value='{{ $pid }}'>
@@ -133,6 +133,6 @@
 
         </div>
     </div>
-    
+
 
 @endif
