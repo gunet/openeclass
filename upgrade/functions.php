@@ -3734,6 +3734,9 @@ function upgrade_to_4_3($tbl_options) : void {
         Database::get()->query("UPDATE lp_learnPath set force_completed_progress = 1");
     }
 
+    if (!DBHelper::fieldExists('course_lti_app', 'visible')) {
+        Database::get()->query("ALTER TABLE `course_lti_app` ADD `visible` TINYINT(1) NOT NULL DEFAULT 1");
+    }
 }
 
 /**

@@ -5744,6 +5744,7 @@ textarea:focus-visible{
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -7315,3 +7316,7 @@ th.grade-col a{
     transition: width 0.3s ease !important;
 }
 
+/*https://github.com/wenzhixin/bootstrap-table/issues/899*/
+.fixed-table-container thead th .th-inner {
+  white-space: normal !important;
+}

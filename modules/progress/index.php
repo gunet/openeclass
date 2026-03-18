@@ -747,6 +747,23 @@ if (isset($display) and $display) {
                 }
             }
             
+            /*$action_bar = action_bar(
+                array(
+                    array('title' => $langBack,
+                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                        'icon' => 'fa-reply',
+                        'level' => 'primary',
+                        'show'  =>  $unit_id ? false : true),
+                    /*array('title' => $langUsers,
+                        'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;progressall=true",
+                        'icon' => 'fa-users',
+                        'level' => 'secondary',
+                        'show'  =>  $show_users)
+                ),
+                false
+            );
+            $tool_content .= $action_bar;*/
+
             // display certificate settings and resources
             display_activities($element, $element_id);
             

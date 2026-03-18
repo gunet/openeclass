@@ -105,7 +105,7 @@ function course_points_game_widget($uid, $course_id) {
     $html .= "</div></div></div></div>";
     
     
-    // Add JavaScript + CSS inline
+    // Add JavaScript
     $html .= "
     <style>
     .points-game-carousel {
@@ -260,7 +260,7 @@ function course_points_game_widget($uid, $course_id) {
         transition: width 0.3s ease;
     }
     </style>
-    
+
     <script>
     $(document).ready(function() {
         let currentSlide = 0;

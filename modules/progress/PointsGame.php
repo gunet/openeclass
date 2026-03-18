@@ -74,6 +74,7 @@ class PointsGame {
             return [
                 'current_points' => $performance['points'],
                 'current_level_id' => null,
+                'current_level_num' => null,
                 'current_level_title' => null,
                 'next_level_id' => $next_q->id,
                 'next_level_title' => $next_q->friendly_name,
@@ -87,6 +88,7 @@ class PointsGame {
             return [
                 'current_points' => $performance['points'],
                 'current_level_id' => $performance['current_level'],
+                'current_level_num' => PointsGame::get_level_number($performance['current_level'],$gid),
                 'current_level_title' => $performance['current_level_title'],
                 'next_level_id' => null,
                 'points_needed_for_next' => null,
@@ -105,12 +107,28 @@ class PointsGame {
         return [
             'current_points' => $performance['points'],
             'current_level_id' => $performance['current_level'],
+            'current_level_num' => PointsGame::get_level_number($performance['current_level'],$gid),
             'current_level_title' => $performance['current_level_title'],
             'next_level_id' => $next_q->id,
             'next_level_title' => $next_q->friendly_name,
             'points_needed_for_next' => $max - $performance['points'],
             'progress_percentage' => $percent
         ];
+    }
+
+    public static function get_level_number($lid, $gid) {
+        $levels = Database::get()->queryArray("SELECT id FROM points_game_levels 
+                                               WHERE points_game = ?d ORDER BY required_points asc", $gid);
+
+        $i = 1;
+        foreach ($levels as $level) {
+            if ($level->id == $lid) {
+                return $i;
+            }
+            $i++;
+        }
+
+        return null;
     }
 
     public static function resetPointsGame($gid, $user = null) {
