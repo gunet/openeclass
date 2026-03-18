@@ -24,12 +24,10 @@
  * Creates a multidimensional array of the user's tools
  * in regard to the user's user level
  * (student | professor | platform administrator)
- *
- * @param bool $rich Whether to include rich text notifications in title
- *
+ **
  * @return array
  */
-function lessonToolsMenu_offline($rich=true, $urlAppend) {
+function lessonToolsMenu_offline($urlAppend) {
     global $langExternalLinks, $offline_course_modules, $langCourseTools;
 
     $sideMenuGroup = array();
@@ -69,10 +67,10 @@ function lessonToolsMenu_offline($rich=true, $urlAppend) {
             if (!visible_module($mid)) {
                 continue;
             }
-            array_push($sideMenuText, q($m['title']));
-            array_push($sideMenuLink, q($urlAppend . 'modules/' . $m['link'] . '.html'));
-            array_push($sideMenuImg, $m['image']);
-            array_push($sideMenuID, $m);
+            $sideMenuText[] = q($m['title']);
+            $sideMenuLink[] = q($urlAppend . 'modules/' . $m['link'] . '.html');
+            $sideMenuImg[] = $m['image'];
+            $sideMenuID[] = $m;
 
         }
         $sideMenuSubGroup[] = $sideMenuText;

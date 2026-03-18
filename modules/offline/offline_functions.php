@@ -25,7 +25,7 @@ function zip_offline_directory($zip_filename, $downloadDir) {
         die("error: cannot open $zip_filename");
     }
 
-    // Create recursive directory iterator
+    // Create a recursive directory iterator
     /** @var SplFileInfo[] $files */
     $files = new RecursiveIteratorIterator(
         new RecursiveDirectoryIterator($downloadDir),
@@ -39,7 +39,7 @@ function zip_offline_directory($zip_filename, $downloadDir) {
             $filePath = $file->getRealPath();
             $relativePath = remove_filename_unsafe_chars($public_code . '-offline') . "/" . substr($filePath, strlen($downloadDir) + 1);
 
-            // Add current file to archive
+            // Add the current file to archive
             $zipfile->addFile($filePath, $relativePath);
         }
     }
@@ -144,7 +144,7 @@ function offline_documents($curDirPath, $curDirName, $curDirPrefix, $bladeData) 
             } else {
                 $newData['logo_img_small'] = $newData['themeimg'] . '/eclass-new-logo.svg';
             }
-            $newData['toolArr'] = lessonToolsMenu_offline(true, $newData['urlAppend']);
+            $newData['toolArr'] = lessonToolsMenu_offline($newData['urlAppend']);
             offline_documents($row->path, $curDirName . '/' . $row->filename, $row->filename, $newData);
 
             $dirs[] = (object) $info;
@@ -175,10 +175,6 @@ function offline_documents($curDirPath, $curDirName, $curDirPrefix, $bladeData) 
 
 /**
  * @brief get / render announcements
- * @global type $blade
- * @global type $course_id
- * @global type $downloadDir
- * @global type $theme_data
  * @param type $bladeData
  */
 function offline_announcements($bladeData) {
@@ -198,7 +194,7 @@ function offline_announcements($bladeData) {
         $bladeData['logo_img_small'] = $bladeData['urlAppend'] . 'resources/img/eclass-new-logo.svg';
     }
 
-    $bladeData['toolArr'] = lessonToolsMenu_offline(true, $bladeData['urlAppend']);
+    $bladeData['toolArr'] = lessonToolsMenu_offline($bladeData['urlAppend']);
 
     $bladeData['announcements'] = $announcements = Database::get()->queryArray("SELECT * FROM announcement WHERE course_id = ?d
                                                 AND visible = 1
@@ -230,7 +226,7 @@ function offline_announcements($bladeData) {
             } else {
                 $bladeData['logo_img_small'] = $bladeData['urlAppend'] . 'resources/img/eclass-new-logo.svg';
             }
-            $bladeData['toolArr'] = lessonToolsMenu_offline(true, $bladeData['urlAppend']);
+            $bladeData['toolArr'] = lessonToolsMenu_offline($bladeData['urlAppend']);
             $bladeData['ann_title'] = $a->title;
             $bladeData['ann_body'] = $a->content;
             $bladeData['ann_date'] = $a->date;
@@ -317,7 +313,7 @@ function offline_unit_resources($bladeData, $downloadDir) {
     } else {
         $bladeData['logo_img_small'] = $bladeData['urlAppend'] . 'resources/img/eclass-new-logo.svg';
     }
-    $bladeData['toolArr'] = lessonToolsMenu_offline(true, $bladeData['urlAppend']);
+    $bladeData['toolArr'] = lessonToolsMenu_offline($bladeData['urlAppend']);
 
     $data = Database::get()->queryArray("SELECT id, title, comments, visible, public, `order` FROM course_units
                                 WHERE course_id = ?d
@@ -367,18 +363,11 @@ function offline_unit_resources($bladeData, $downloadDir) {
 
 /**
  * @brief get / render course exercises
- * @global type $blade
- * @global type $downloadDir
- * @global type $course_id
- * @global type $webDir
- * @global type $langScore
- * @global type $langExerciseDone
- * @global type $theme_data
  * @param type $bladeData
- */
-
-function offline_exercises($bladeData) {
-    global $blade, $downloadDir, $course_id, $webDir, $langScore, $langExerciseDone, $theme_data;
+ **/
+function offline_exercises($bladeData)
+{
+     global $blade, $downloadDir, $course_id, $webDir, $langScore, $langExerciseDone, $theme_data;
 
     $bladeData['exercises'] = $exercises = Database::get()->queryArray("SELECT * FROM exercise WHERE course_id = ?d AND active = 1 ORDER BY start_date DESC", $course_id);
 
@@ -409,7 +398,7 @@ function offline_exercises($bladeData) {
             } else {
                 $bladeData['logo_img_small'] = $bladeData['urlAppend'] . 'resources/img/eclass-new-logo.svg';
             }
-            $bladeData['toolArr'] = lessonToolsMenu_offline(true, $bladeData['urlAppend']);
+            $bladeData['toolArr'] = lessonToolsMenu_offline($bladeData['urlAppend']);
 
             $quiz = new Exercise();
             if (!$quiz->read($e->id)) {
@@ -462,11 +451,8 @@ function offline_blog($bladeData) {
 }
 
 
-
 /**
  * @brief get course description
- * @global type $blade
- * @global type $course_id
  * @param array $bladeData
  * @param type $downloadDir
  */
@@ -523,7 +509,11 @@ function offline_links($bladeData, $downloadDir) {
 }
 
 
-
+/**
+ * @brief get wiki
+ * @param $bladeData
+ * @return void
+ */
 function offline_wiki($bladeData) {
     global $blade, $downloadDir;
 
@@ -591,7 +581,6 @@ function offline_glossary($bladeData, $downloadDir) {
 
 /**
  *
- * @global string $group_sql
  * @param type $type
  * @param type $res_id
  * @return string

@@ -15,10 +15,11 @@
             'lengthMenu': [10, 20, 30, -1],
             'oLanguage': {
                 'lengthLabels': {
-                    '-1': '{{ trans('langAllOfThem' }}'
+                    '-1': '{{ trans('langAllOfThem') }}'
                  },
                 'sLengthMenu':   '{{ trans('langDisplay') }} _MENU_ {{ trans('langResults2') }}',
                 'sZeroRecords':  '{{ trans('langNoResult') }}',
+                'sEmptyTable':  '{{ trans('langNoResult') }}',
                 'sInfo':         '{{ trans('langDisplayed') }} _START_ {{ trans('langTill') }} _END_ {{ trans('langFrom2') }} _TOTAL_ {{ trans('langTotalResults') }}',
                 'sInfoEmpty':    '',
                 'sInfoFiltered': '',
@@ -38,7 +39,7 @@
 </script>
 <script>
     var readMore = '{{ trans('langReadMore') }}';
-    var readLess = '{{ trans('langReadLess) }}';
+    var readLess = '{{ trans('langReadLess') }}';
     $(function () { $('.trunk8').trunk8({
         lines: 3,
         fill: '&hellip; <a class="read-more" href="#">{{ js_escape($GLOBALS['langViewShow']) }}</a>',
