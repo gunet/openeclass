@@ -62,7 +62,6 @@ for ($i = 0; $i < count($toolArr); $i++) {
             $tool->name = $toolArr[$i][1][$j];
             $tool->link = $toolArr[$i][2][$j];
             $tool->img = $toolArr[$i][3][$j];
-            $tool->type = $toolArr[$i][3][$j];
             $tool->active = visible_module($toolArr[$i][4][$j], $course_id);
             $toolsArr[$id][] = $tool;
         }
@@ -79,7 +78,7 @@ exit();
  * @param array $toolsArr An array where keys are group IDs and values are arrays of tool objects associated with the respective group.
  * @return string The generated XML as a string.
  */
-function createDom($groupsArr, $toolsArr) {
+function createDom(array $groupsArr, array $toolsArr) {
     global $status;
 
     $dom = new DomDocument('1.0', 'utf-8');
@@ -89,18 +88,15 @@ function createDom($groupsArr, $toolsArr) {
     foreach ($groupsArr as $group) {
 
         if (isset($toolsArr[$group->id])) {
-
             $g = $root->appendChild($dom->createElement('toolgroup'));
-            $gname = $g->appendChild(new DOMAttr('name', $group->name));
+            $g->appendChild(new DOMAttr('name', $group->name));
 
             foreach ($toolsArr[$group->id] as $tool) {
                 $t = $g->appendChild($dom->createElement('tool'));
-
-                $name = $t->appendChild(new DOMAttr('name', $tool->name));
-                $link = $t->appendChild(new DOMAttr('link', correctLink($tool->link)));
-                $redirect = $t->appendChild(new DOMAttr('redirect', correctRedirect($tool->link)));
-                $type = $t->appendChild(new DOMAttr('type', $tool->type));
-                $acti = $t->appendChild(new DOMAttr('active', $tool->active));
+                $t->appendChild(new DOMAttr('name', $tool->name));
+                $t->appendChild(new DOMAttr('link', correctLink($tool->link)));
+                $t->appendChild(new DOMAttr('redirect', correctRedirect($tool->link)));
+                $t->appendChild(new DOMAttr('active', $tool->active));
             }
         }
     }
