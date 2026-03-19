@@ -38,11 +38,13 @@ load_js('select2');
 if ($is_admin and $require_current_course) {
     $require_course_admin = true; // hide role switcher
 }
-$toolName = $langPortfolio;
+
+
 $pageName = $langDropBox;
 $personal_msgs_allowed = get_config('dropbox_allow_personal_messages');
 
 if (!isset($course_id)) {
+    $toolName = $langPortfolio;
     $course_id = 0;
 }
 
