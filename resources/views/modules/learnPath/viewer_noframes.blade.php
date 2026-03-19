@@ -211,23 +211,45 @@
         if (_navInProgress) return;
         _navInProgress = true;
 
-        // Fire commit and prepareModule in parallel — they are data-independent:
-        // commit writes CURRENT module's progress row; prepareModule reads TARGET module's data.
-        let commitPromise;
+        // Safety timeout: reset nav lock if neither .then() nor .catch() fires
+        let navSafetyTimer = setTimeout(function() {
+            if (_navInProgress) {
+                _navInProgress = false;
+                console.warn('[eclassLP] Navigation safety timeout — resetting lock');
+            }
+        }, 15000);
+
+        // Stop media and abort in-flight video range requests to free connections
+        try {
+            let iframeDoc = document.getElementById('lp-iframe').contentDocument;
+            if (iframeDoc) {
+                iframeDoc.querySelectorAll('video, audio').forEach(function(el) {
+                    el.pause();
+                    el.removeAttribute('src');
+                    el.load();
+                });
+            }
+        } catch(e) { /* cross-origin iframe — ignore */ }
+
+        // Blank iframe to release all network connections from old module
+        document.getElementById('lp-iframe').src = 'about:blank';
+
+        // Fire SCORM commit (best-effort, don't block navigation on it)
         if (window.eclassLP && window.eclassLP.isScorm && typeof doCommitAwaitable === 'function') {
-            commitPromise = doCommitAwaitable();
-        } else {
-            commitPromise = Promise.resolve();
+            doCommitAwaitable();
         }
 
-        let preparePromise = fetch(_buildPrepareUrl(moduleId))
+        // AbortController timeout: abort fetch after 10s to prevent indefinite hang
+        let controller = new AbortController();
+        let fetchTimer = setTimeout(function() { controller.abort(); }, 10000);
+
+        fetch(_buildPrepareUrl(moduleId), { signal: controller.signal })
             .then(function(resp) {
+                clearTimeout(fetchTimer);
                 if (!resp.ok) throw new Error('HTTP ' + resp.status);
                 return resp.json();
-            });
-
-        Promise.all([commitPromise, preparePromise]).then(function(results) {
-            let data = results[1];
+            }).then(function(data) {
+            clearTimeout(navSafetyTimer);
             if (!data.ok) throw new Error(data.error || 'prepareModule failed');
 
             // Update iframe
@@ -256,6 +278,8 @@
 
             _navInProgress = false;
         }).catch(function(err) {
+            clearTimeout(navSafetyTimer);
+            clearTimeout(fetchTimer);
             console.warn('[eclassLP] AJAX navigation failed, falling back to full page reload:', err);
             _navInProgress = false;
             // Graceful fallback: full page reload

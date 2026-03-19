@@ -83,6 +83,9 @@ if (isset($_GET['action']) && $_GET['action'] === 'prepareModule') {
     // Session is now updated by check_LPM_validity_ajax — re-read into locals
     $moduleId = (int) $_SESSION['lp_module_id'];
     $startModuleJson = startModule($pathId, $moduleId, $attempt);
+    // Release session lock early — all session writes are done, remaining work is read-only.
+    // This unblocks concurrent requests (SCORM commit, TOC/header refreshes) that share the session.
+    session_write_close();
     $startModuleResult = $startModuleJson ? json_decode($startModuleJson, true) : null;
 
     if (!$startModuleResult || empty($startModuleResult['ok'])) {
@@ -121,6 +124,8 @@ if (isset($_GET['action']) && $_GET['action'] === 'prepareModule') {
 }
 
 if (isset($_GET['action']) && $_GET['action'] === 'updateProgress') {
+    // Release session lock — updateProgress doesn't need it and holding it blocks concurrent requests
+    session_write_close();
     $payloadJson = updateProgress();
     if ($payloadJson === '') {
         resp_no_content(204);
