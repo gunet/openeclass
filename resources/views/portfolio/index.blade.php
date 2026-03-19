@@ -529,10 +529,12 @@
                                 <div class='flex-grow-1'>
                                     <div class='card card-transparent border-0 bg-transparent'>
                                         <div class='card-header d-md-flex justify-content-md-between align-items-md-center px-0 bg-transparent border-0'>
-                                            <h2>{{ trans('langMyCoursesSide') }}&nbsp;
+                                            <h2>
                                                 @if (!get_config('show_always_collaboration'))
+                                                    {{ trans('langMyCoursesSide') }}&nbsp;
                                                     ({{ $num_of_courses }})
                                                 @else
+                                                    {{ trans('langMyCollaborations') }}&nbsp;
                                                     ({{ $num_of_collaborations }})
                                                 @endif
 
