@@ -734,7 +734,7 @@ if ($userdata) {
                                     </div>
                                     <div class='card-body'>
                                         <p class='TextBold'>$langSubmit:<span class='ms-1 small-text TextRegular'>" . format_locale_date(strtotime($data['timestamp'])) . "</span></p>
-                                        ".ellipsize_html(standard_text_escape($data['content']), 500, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?id=$id&amp;token=$token&amp;action=showBlogPost&amp;er_id=".$post->id."'> <span class='smaller'>[$langMore]</span></a></strong>")."
+                                        ".ellipsize_html(standard_text_escape($data['content']), 500, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?token=".$userdata->eportfolio_token."&amp;action=showBlogPost&amp;er_id=".$post->id."'> <span class='smaller'>[$langMore]</span></a></strong>")."
                                     </div>
                                     <div class='card-footer border-0 d-flex justify-content-start align-items-center'>                                       
                                         <div class='small-text'>$post->course_title</div>
@@ -831,7 +831,7 @@ if ($userdata) {
                                                             <div>".$data['descr']."</div>";
                                 }
                                     $submission_content .= "<div class='mt-3'>
-                                                                <a class='link-color TextBold' href='resources.php?action=get&amp;id=$id&amp;token=$token&amp;type=assignment&amp;er_id=$submission->id'>$langWorkFile</a>
+                                                                <a class='link-color TextBold' href='resources.php?action=get&token=".$userdata->eportfolio_token."&amp;type=assignment&amp;er_id=$submission->id'>$langWorkFile</a>
                                                             </div>";
                                 $submission_content .= "</div>
                                                     </li>
@@ -848,7 +848,7 @@ if ($userdata) {
                 if (!is_null($data['subm_text'])) {
                     $submission_content .= "<div class='mb-3'><p class='title-default'>$langWorkOnlineText</p>".$data['subm_text']."</div>";
                 } else {
-                   $submission_content .= "<div class='mb-3'><a class='link-color TextBold' href='resources.php?action=get&amp;id=$id&amp;token=$token&amp;type=submission&amp;er_id=$submission->id'>$langWorkFile</a></div>";
+                   $submission_content .= "<div class='mb-3'><a class='link-color TextBold' href='resources.php?action=get&amp;token=".$userdata->eportfolio_token."&amp;type=submission&amp;er_id=$submission->id'>$langWorkFile</a></div>";
                 }
 
                 $reflection_comments = (!empty($submission->reflection_comments) && ($submission->user_id == $uid)) ? $langReflectionComment.':"'.$submission->reflection_comments.'"' : '';
@@ -866,7 +866,7 @@ if ($userdata) {
                                             ". action_button(array(
                                                 array(
                                                         'title' => $langePortfolioRemoveResource,
-                                                        'url' => "$_SERVER[SCRIPT_NAME]?token=$token&amp;action=remove&amp;type=work_submission&amp;er_id=".$submission->id,
+                                                        'url' => "$_SERVER[SCRIPT_NAME]?action=remove&amp;type=work_submission&amp;er_id=".$submission->id,
                                                         'icon' => 'fa-xmark',
                                                         'class' => 'delete',
                                                         'confirm' => $langePortfolioSureToRemoveResource,
@@ -917,7 +917,7 @@ if ($userdata) {
                     $filesize = '0 B';
                 } else {
                     $row_class = 'visible';
-                    $file_link = "<a href='resources.php?action=get&amp;id=$id&amp;token=$token&amp;type=mydocs&amp;er_id=$doc->id'>$filename</a>";
+                    $file_link = "<a href='resources.php?action=get&amp;token=".$userdata->eportfolio_token."&amp;type=mydocs&amp;er_id=$doc->id'>$filename</a>";
                     $filesize = format_file_size(filesize($data['file_path']));
                 }
 
@@ -978,7 +978,7 @@ if ($userdata) {
                                        ". action_button(array(
                                                     array(
                                                             'title' => $langePortfolioRemoveResource,
-                                                            'url' => "$_SERVER[SCRIPT_NAME]?token=$token&amp;action=remove&amp;type=my_docs&amp;er_id=".$doc->id,
+                                                            'url' => "$_SERVER[SCRIPT_NAME]?action=remove&amp;type=my_docs&amp;er_id=".$doc->id,
                                                             'icon' => 'fa-xmark',
                                                             'class' => 'delete',
                                                             'confirm' => $langePortfolioSureToRemoveResource,
@@ -1062,7 +1062,7 @@ if ($userdata) {
                                             ". action_button(array(
                                                 array(
                                                     'title' => $langePortfolioRemoveResource,
-                                                    'url' => "$_SERVER[SCRIPT_NAME]?token=$token&amp;action=remove&amp;type=my_badges&amp;er_id=".$mybadge->id,
+                                                    'url' => "$_SERVER[SCRIPT_NAME]?action=remove&amp;type=my_badges&amp;er_id=".$mybadge->id,
                                                     'icon' => 'fa-xmark',
                                                     'class' => 'delete',
                                                     'confirm' => $langePortfolioSureToRemoveResource,
@@ -1161,7 +1161,7 @@ if ($userdata) {
                                             ". action_button(array(
                                                 array(
                                                     'title' => $langePortfolioRemoveResource,
-                                                    'url' => "$_SERVER[SCRIPT_NAME]?token=$token&amp;action=remove&amp;type=my_certificates&amp;er_id=".$mycertificate->id,
+                                                    'url' => "$_SERVER[SCRIPT_NAME]?action=remove&amp;type=my_certificates&amp;er_id=".$mycertificate->id,
                                                     'icon' => 'fa-xmark',
                                                     'class' => 'delete',
                                                     'confirm' => $langePortfolioSureToRemoveResource,
@@ -1259,7 +1259,7 @@ if ($userdata) {
                                             ". action_button(array(
                                                 array(
                                                     'title' => $langePortfolioRemoveResource,
-                                                    'url' => "$_SERVER[SCRIPT_NAME]?token=$token&amp;action=remove&amp;type=note&amp;er_id=".$note->id,
+                                                    'url' => "$_SERVER[SCRIPT_NAME]?action=remove&amp;type=note&amp;er_id=".$note->id,
                                                     'icon' => 'fa-xmark',
                                                     'class' => 'delete',
                                                     'confirm' => $langePortfolioSureToRemoveResource,
