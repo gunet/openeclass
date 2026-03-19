@@ -84,7 +84,7 @@
                 }
                 bootbox.confirm({
                     closeButton: false,
-                    title: "<div class='icon-modal-default'>"+$actionIcon+"</div>"+"<h2 class='modal-title-default text-center mb-0'>"+"{{ js_escape(trans('langEmailUnsubscribe')) }}"+"</h2>",
+                    title: "<div lass='icon-modal-default'>"+$actionIcon+"</div>"+"<h2 class='modal-title-default text-center mb-0'>"+"{{ js_escape(trans('langEmailUnsubscribe')) }}"+"</h2>",
                     message: "<p class='text-center'>"+info_message+"</p>",
                     buttons: {
                         confirm: {
@@ -350,10 +350,10 @@
                                             </div>
                                         </h3>
                                         <div class='d-flex gap-2 flex-wrap'>
-                                            <a id='cu-help-btn' class='helpAdminBtn' href='{{ $urlServer }}modules/help/help.php?language={{$language}}&topic=course_units' class='add-unit-btn d-flex align-items-center' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langHelp') }}" aria-label="{{ trans('langHelp') }}" role="button">
+                                            <a id='cu-help-btn' class='helpAdminBtn add-unit-btn d-flex align-items-center' href='{{ $urlServer }}modules/help/help.php?language={{$language}}&topic=course_units' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langHelp') }}" aria-label="{{ trans('langHelp') }}" role="button">
                                                 <i class="fa-solid fa-circle-question"></i>
                                             </a>
-                                            <button class="btn submitAdminBtn" type="button" id="dropdownToolsUnit" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-expanded="false" aria-label="{{ trans('langCourseInfo') }}" role="button">
+                                            <button class="btn submitAdminBtn" type="button" id="dropdownToolsUnit" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" aria-label="{{ trans('langCourseInfo') }}" role="button">
                                                 <i class="fa-solid fa-ellipsis-vertical"></i>
                                             </button>
                                             <div class="m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-border" aria-labelledby="dropdownToolsUnit" style='z-index:1;'>
