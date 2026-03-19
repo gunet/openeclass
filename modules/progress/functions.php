@@ -242,7 +242,7 @@ function display_points_games(): void
            $langNoPointsGames, $langNoPointsGamesStud, $langEditChange, $langPurge,
            $langActivate, $langDeactivate, $langNewPointsGame, $langState,
            $langActive, $langInactive, $urlServer, $langConfirmPurgePointsGame,
-           $langTitle, $langStartDate, $langEndDate, $langActions;
+           $langTitle, $langStartDate, $langEndDate, $langStartEndDate, $langActions;
 
     if ($is_editor) {
         $sql_cer = Database::get()->queryArray("SELECT id, title, description, active, starts, expires FROM points_game WHERE course_id = ?d", $course_id);
@@ -272,7 +272,7 @@ function display_points_games(): void
                                 <thead>
                                     <tr class='list-header'>
                                         <th style='width: 28%;'>$langTitle</th>
-                                        <th style='width: 38%;'>$langStartDate<br>$langEndDate</th>
+                                        <th style='width: 38%;'>$langStartEndDate</th>
                                         <th style='width: 19%;' class='text-center'>$langState</th>";
         if ($is_editor) {
             $tool_content .= "
@@ -352,7 +352,8 @@ function display_course_completion(): void
     global $course_id, $tool_content, $course_code, $is_editor,
            $langDelete, $langConfirmDelete,
            $langActivate, $langDeactivate,
-           $langActive, $langInactive;
+           $langActive, $langInactive,
+           $langCourseCompletionNotActivated, $langActivateCourseCompletion;
 
     $data = Database::get()->querySingle("SELECT id, title, description, active, icon FROM badge "
                                     . "WHERE course_id = ?d AND bundle = -1 AND unit_id = 0", $course_id);
@@ -369,9 +370,9 @@ function display_course_completion(): void
         $tool_content .= "
             <div class='d-flex flex-column align-items-center justify-content-center py-4 gap-3'>
                 <i class='fa fa-trophy fa-3x text-muted' aria-hidden='true'></i>
-                <p class='text-muted mb-2'>Η ολοκλήρωση μαθήματος δεν έχει ενεργοποιηθεί ακόμα.</p>
+                <p class='text-muted mb-2'>$langCourseCompletionNotActivated</p>
                 <a href='{$_SERVER['SCRIPT_NAME']}?course={$course_code}&amp;tab=course_completion&amp;newcc=1' class='btn submitAdminBtn'>
-                    <span class='fa fa-power-off'></span>&nbsp;&nbsp;Ενεργοποίηση Ολοκλήρωσης Μαθήματος
+                    <span class='fa fa-power-off'></span>&nbsp;&nbsp;$langActivateCourseCompletion
                 </a>
             </div>";
     } else {
@@ -691,28 +692,28 @@ function display_activities($element, $id, $unit_id = 0) {
                                     $tool_content .= "<p class='text-center text-muted'>$langPointsGameNoRecActivities</p>";
                                 } else {
                                 $tool_content .= "<div class='mt-0'>
-                                                        <table data-toggle='table' data-pagination='true' data-page-size='5' data-mobile-responsive='true'><thead>
+                                                        <table class='activity-table' data-toggle='table' data-pagination='true' data-page-size='5' data-mobile-responsive='true'><thead>
                                                             <tr>
-                                                                <th>
+                                                                <th style='width:20%'>
                                                                     $langTitle
                                                                 </th>
-                                                                <th>
+                                                                <th style='width:12%'>
                                                                     $langType
                                                                 </th>
-                                                                <th>
+                                                                <th style='width:12%'>
                                                                     $langPoints
                                                                 </th>
-                                                                <th>
+                                                                <th style='width:16%'>
                                                                     $langActivityMaxPoints
                                                                 </th>
-                                                                <th>
+                                                                <th style='width:16%'>
                                                                     $langActivityMaxPointsInPeriod
                                                                 </th>
-                                                                <th>
+                                                                <th style='width:14%'>
                                                                     $langActivityMaxPointsTimePeriod
                                                                 </th>";
                                                                 if ($is_editor) {
-                                                                    $tool_content .= "<th>".$langActions."</th>";
+                                                                    $tool_content .= "<th class='text-end' style='width:10%'>".$langActions."</th>";
                                                                 }
                                 $tool_content .=                "</tr></thead>";
                                                             foreach ($result_recurrent as $details) {
@@ -776,22 +777,22 @@ function display_activities($element, $id, $unit_id = 0) {
                                     $tool_content .= "<p class='text-center text-muted'>$langPointsGameNoOneTimeActivities</p>";
                                 } else {
                                 $tool_content .= "<div class='mt-0'>
-                                                        <table data-toggle='table' data-pagination='true' data-page-size='5' data-mobile-responsive='true'><thead>
+                                                        <table class='activity-table' data-toggle='table' data-pagination='true' data-page-size='5' data-mobile-responsive='true'><thead>
                                                             <tr class='list-header'>
-                                                                <th>
+                                                                <th style='width:30%'>
                                                                     $langTitle
                                                                 </th>
-                                                                <th>
+                                                                <th style='width:20%'>
                                                                     $langType
                                                                 </th>
-                                                                <th>
+                                                                <th style='width:20%'>
                                                                     $langValue
                                                                 </th>
-                                                                <th>
+                                                                <th style='width:17%'>
                                                                     $langPoints
                                                                 </th>";
                                                                 if ($is_editor) {
-                                                                    $tool_content .= "<th>".$langActions."</th>";
+                                                                    $tool_content .= "<th class='text-end' style='width:13%'>".$langActions."</th>";
                                                                 }
                                 $tool_content .=                "</tr></thead>";
                                                             foreach ($result_onetime as $details) {
@@ -864,18 +865,18 @@ function display_activities($element, $id, $unit_id = 0) {
                                     $tool_content .= "<p class='margin-top-fat text-center text-muted'>$langNoActivCert</p>";
                                 } else {
                                 $tool_content .= "<div class='mt-0'>
-                                                        <table data-toggle='table' data-pagination='true' data-page-size='5' data-mobile-responsive='true'><thead>
+                                                        <table class='activity-table' data-toggle='table' data-pagination='true' data-page-size='5' data-mobile-responsive='true'><thead>
                                                             <tr class='list-header'>
-                                                                <th>
+                                                                <th style='width: 35px;'>
                                                                     $langTitle
                                                                 </th>
-                                                                <th>
+                                                                <th style='width:25%'>
                                                                     $langType
                                                                 </th>
-                                                                <th>
+                                                                <th style='width:25%'>
                                                                     $langValue
                                                                 </th>
-                                                                <th>
+                                                                <th class='text-end' style='width:15%'>
                                                                     $langActions
                                                                 </th>
                                                             </tr></thead>";
@@ -3087,12 +3088,12 @@ function display_points_game_settings($element_id): void
                 <div class='leaderboard-accordion-body'>
 
                     <div class='card border rounded-3 mb-2'>
-                        <div class='d-flex justify-content-between align-items-start p-3'>
-                            <div class='text-primary fw-bold'><i class='fa-regular fa-bookmark me-2'></i><span class='fw-bold' style='color: #4b5563;'>$langTitle</span></div>
-                            <div class='text-end'>
-                                <div class='fw-normal' style='color: #4b5563;'>$title</div>";
+                        <div class='d-flex align-items-start p-3'>
+                            <div class='text-primary fw-bold' style='width: 50%; flex-shrink: 0;'><i class='fa-regular fa-bookmark me-2'></i><span class='fw-bold' style='color: #4b5563;'>$langTitle</span></div>
+                            <div style='width: 50%; color: #4b5563; text-align: right;'>
+                                <div class='fw-normal'>$title</div>";
                                 if (!empty($description)) {
-                                    $tool_content .= "<div class='fw-normal' style='color: #4b5563;'>$description</div>";
+                                    $tool_content .= "<div class='fw-normal mt-1'>$description</div>";
                                 }
     $tool_content .= "
                             </div>
@@ -3127,7 +3128,7 @@ function display_points_game_settings($element_id): void
                             </div>
                             <div class='col-md-8'>
                                 <div class='table-responsive border-0'>
-                                    <table class='table table-sm mb-0 text-center'>
+                                    <table class='table table-sm mb-0 text-center pg-info-table'>
                                         <thead style='background-color: #f1f5f9;'>
                                             <tr>
                                                 <th class='fw-normal py-2 text-muted' style='font-size: 0.85rem;'>$langPointsGameLevelName</th>
@@ -4072,10 +4073,10 @@ function display_leaderboard_accordion($points_game_id) {
                         <table class='table leaderboard-table' data-toggle='table' data-pagination='true' data-page-size='10'>
                             <thead>
                                 <tr>
-                                <th>$langAutoJudgeRank</th>
-                                <th>$langLevel</th>
+                                <th class='text-center'>$langAutoJudgeRank</th>
+                                <th class='text-center'>$langLevel</th>
                                 <th>$langSurnameName</th>
-                                <th>$langPoints</th>
+                                <th class='text-center'>$langPoints</th>
                                 <th style='width: 250px;'>$langProgress</th>
                                 </tr>
                             </thead>
@@ -4087,6 +4088,7 @@ function display_leaderboard_accordion($points_game_id) {
             $row_class = $is_current_user ? 'current-user-student' : '';
             
             $current_level_display = $langStart; // Default to first level
+            $current_level_num = '';
             $langForNext = $langForNextLevel;
 
             $user_progress = PointsGame::getNextLevelInfo($user_data->id,$points_game_id);
@@ -4107,8 +4109,8 @@ function display_leaderboard_accordion($points_game_id) {
                 // Current level display - show current level or first level if none reached
                 if (!is_null($user_progress['current_level_id']) && !empty($user_progress['current_level_title'])) {
                     $current_level_display = $user_progress['current_level_title'];
+                    $current_level_num = isset($user_progress['current_level_num']) ? $user_progress['current_level_num'] : '';
                 }
-                
                 // Progress bar with data
                 $progress = "<div class='progress'>
                             <div class='progress-bar' style='width: ".$user_progress['progress_percentage']."%'></div>
@@ -4139,10 +4141,10 @@ function display_leaderboard_accordion($points_game_id) {
 
             // Display ONLY current level (or first level if no progress)
             $tool_content .= "<tr class='{$row_class}'>
-                <td><span class='rank-number'>#". $cnt++ . "</span></td>
-                <td><span class='level-badge'><i class='fa fa-star' style='color:#f59e0b;'></i> " . $current_level_display . "</span></td>
+                <td class='text-center'><span class='rank-number'>#". $cnt++ . "</span></td>
+                <td class='text-center'><div class='lb-star-wrap'><div class='lb-star-icon'></div><span class='lb-star-num'>" . $current_level_num . "</span></div></td>
                 <td><span class='user-name'>$user_info</span></td>
-                <td>$points_str</td>
+                <td class='text-center'>$points_str</td>
                 <td>$progress</td></tr>";
         }
         $tool_content .= "</tbody></table></div>";

@@ -10,12 +10,11 @@ function course_points_game_widget($uid, $course_id) {
         return '';
     }
 
-    // CHECK FOR COMPLETENESS - Ελέγχει και ενημερώνει τους πόντους του χρήστη
     Game::checkCompleteness($uid, $course_id);
 
     $games = Database::get()->queryArray("
-        SELECT id, title 
-        FROM points_game 
+        SELECT id, title
+        FROM points_game
         WHERE course_id = ?d AND active = 1
         ORDER BY title ASC
     ", $course_id);
@@ -27,15 +26,13 @@ function course_points_game_widget($uid, $course_id) {
     $games_data = [];
     foreach ($games as $game) {
         $info = PointsGame::getNextLevelInfo($uid, $game->id);
-        
-        // Use current_points from getNextLevelInfo (this is total_points)
+
         $total_points = $info['current_points'];
         $percent = isset($info['progress_percentage']) ? round($info['progress_percentage']) : 0;
-        
-        // If user has reached a level, use that
+
         if (isset($info['current_level_title']) && !empty($info['current_level_title'])) {
             $current_level = $info['current_level_title'];
-            $level_num = $info['current_level_num'];
+            $level_num = isset($info['current_level_num']) ? $info['current_level_num'] : '';
         } else {
             $current_level = $langStart;
             $level_num = '';
@@ -64,79 +61,115 @@ function course_points_game_widget($uid, $course_id) {
             <a class='TextRegular text-decoration-underline vsmall-text' href='{$urlAppend}modules/progress/index.php?course={$course_code}&tab=points'>$langReadMore...</a>
         </div>
         <div class='card-body card-body-default px-0 py-0 mt-3'>
-            <div class='points-game-carousel'>
-                <div class='carousel-nav-header'>";
-    
+            <div class='pg-widget-wrapper'>
+                <div class='pg-calendar-style-header'>";
+
     if (count($games_data) > 1) {
-        $html .= "<button type='button' class='nav-btn prev-btn'><i class='fa-solid fa-chevron-left'></i></button>";
+        $html .= "<button type='button' class='pg-arrow prev-btn'><i class='fa-solid fa-chevron-left'></i></button>";
     }
-    
-    $first_game_name = isset($games_data[0]) ? htmlspecialchars($games_data[0]['title']) : '';
-    $html .= "<span class='game-name'>{$first_game_name}</span>";
-    
+
+    $first_title = htmlspecialchars($games_data[0]['title']);
+    $html .= "<span class='pg-title-text'>{$first_title}</span>";
+
     if (count($games_data) > 1) {
-        $html .= "<button type='button' class='nav-btn next-btn'><i class='fa-solid fa-chevron-right'></i></button>";
+        $html .= "<button type='button' class='pg-arrow next-btn'><i class='fa-solid fa-chevron-right'></i></button>";
     }
-    
-    $html .= "</div><div class='carousel-slides'>";
+
+    $html .= "</div><div class='pg-main-content'>";
 
     foreach ($games_data as $idx => $game) {
         $active_class = ($idx === 0) ? 'active' : '';
-        $next_str = !empty($game['next_level']) ? "{$game['percent']}% {$langForNextLevel} ({$game['next_level']})" : "{$game['percent']}% $langCompletion";
+        $footer_text = !empty($game['next_level'])
+            ? "{$game['percent']}% {$langForNextLevel} ({$game['next_level']})"
+            : "{$game['percent']}% $langCompletion";
 
         $html .= "
-            <div class='slide-item {$active_class}' data-name='" . htmlspecialchars($game['title']) . "'>
-                <div class='game-box'>
-                    <div class='game-top-row'>
-                        <div class='level-star-wrap'>
-                            <i class='fa-solid fa-star level-star-bg'></i>
-                            <span class='level-star-text'>" . $game['level_num'] . "</span>
+            <div class='pg-slide {$active_class}' data-name='" . htmlspecialchars($game['title']) . "'>
+                <div class='pg-inner-card'>
+                    <div class='pg-row'>
+                        <div class='pg-star-container'>
+                            <div class='pg-star-gradient-icon'></div>
+                            <span class='pg-level-tag'>" . ($game['level_num'] !== '' && $game['level_num'] !== null ? htmlspecialchars($game['level_num']) : '') . "</span>
                         </div>
-                        <div class='gi-group'>
-                            <span class='gi-value'>" . number_format($game['points']) . "</span>
-                            <span class='gi-label'>$langPoints</span>
+                        <div class='pg-stats'>
+                            <div class='pg-points-wrap'>
+                                <span class='pg-val'>" . number_format($game['points']) . "</span>
+                                <span class='pg-lbl'>$langPoints</span>
+                            </div>
+                            <div class='pg-bar-bg'>
+                                <div class='pg-bar-fill' style='width:{$game['percent']}%'></div>
+                            </div>
                         </div>
                     </div>
-                    <div class='game-prog-track'>
-                        <div class='game-prog-fill' style='width:{$game['percent']}%'></div>
-                    </div>
-                    <div class='game-next-str'>{$next_str}</div>
+                    <div class='pg-line'></div>
+                    <div class='pg-footer'>{$footer_text}</div>
                 </div>
             </div>";
     }
 
     $html .= "</div></div></div></div>";
-    
-    
-    // Add JavaScript
+
     $html .= "
+    <style>
+    .pg-widget-wrapper {
+        background: white; border-radius: 8px; overflow: hidden;
+        border: 1px solid #e1e8ed; box-shadow: 0 4px 12px rgba(0,0,0,0.05); width: 100%;
+    }
+    .pg-calendar-style-header {
+        background: #2c3e50; padding: 12px 15px; display: flex;
+        align-items: center; justify-content: center; gap: 25px; color: white;
+    }
+    .pg-arrow { background: none; border: none; color: white; cursor: pointer; padding: 5px; z-index: 10; }
+    .pg-title-text { font-size: 15px; font-weight: 500; text-align: center; flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    .pg-main-content { padding: 15px; }
+    .pg-slide { display: none; }
+    .pg-slide.active { display: block; animation: pgFade 0.2s ease-in; }
+    @keyframes pgFade { from { opacity: 0; } to { opacity: 1; } }
+
+    .pg-inner-card { border: 1px solid #f0f0f0; border-radius: 8px; padding: 15px; }
+    .pg-row { display: flex; align-items: center; gap: 15px; }
+
+    .pg-star-container { position: relative; width: 50px; height: 50px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+    .pg-star-gradient-icon {
+        width: 100%; height: 100%;
+        background: linear-gradient(135deg, #3498db, #9b59b6);
+        -webkit-mask-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><path d=\"M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z\" fill=\"none\" stroke=\"black\" stroke-width=\"1.5\"/></svg>');
+        mask-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><path d=\"M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z\" fill=\"none\" stroke=\"black\" stroke-width=\"1.5\"/></svg>');
+        -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+        -webkit-mask-size: contain; mask-size: contain;
+        -webkit-mask-position: center; mask-position: center;
+    }
+    .pg-level-tag { position: absolute; font-size: 10px; font-weight: 700; color: #2c3e50; text-align: center; width: 30px; line-height: 1; word-wrap: break-word; }
+
+    .pg-stats { flex: 1; min-width: 0; }
+    .pg-points-wrap { display: flex; align-items: baseline; gap: 5px; margin-bottom: 5px; }
+    .pg-val { font-size: 24px; font-weight: 700; color: #2c3e50; }
+    .pg-lbl { font-size: 16px; color: #5d6d7e; }
+
+    .pg-bar-bg { height: 6px; background: #ebedef; border-radius: 10px; width: 100%; }
+    .pg-bar-fill { height: 100%; background: linear-gradient(90deg, #2ecc71, #3498db); border-radius: 10px; transition: width 0.3s; }
+
+    .pg-line { height: 1px; background: #f1f1f1; margin: 12px 0; }
+    .pg-footer { font-size: 12px; color: #95a5a6; }
+    </style>
+
     <script>
     $(document).ready(function() {
-        let currentSlide = 0;
-        const slides = $('.points-game-carousel .slide-item');
-        const totalSlides = slides.length;
-        const gameName = $('.points-game-carousel .game-name');
-        
-        function showSlide(index) {
-            slides.removeClass('active');
-            $(slides[index]).addClass('active');
-            gameName.text($(slides[index]).data('name'));
-            currentSlide = index;
+        let current = 0;
+        const slides = $('.pg-slide');
+        const title = $('.pg-title-text');
+        if(slides.length <= 1) return;
+        function showSlide(idx) {
+            slides.hide().removeClass('active');
+            const active = $(slides[idx]).show().addClass('active');
+            title.text(active.data('name'));
+            current = idx;
         }
-        
-        $('.points-game-carousel .prev-btn').click(function() {
-            let newIndex = (currentSlide - 1 + totalSlides) % totalSlides;
-            showSlide(newIndex);
-        });
-        
-        $('.points-game-carousel .next-btn').click(function() {
-            let newIndex = (currentSlide + 1) % totalSlides;
-            showSlide(newIndex);
-        });
+        $('.prev-btn').click(function() { showSlide((current - 1 + slides.length) % slides.length); });
+        $('.next-btn').click(function() { showSlide((current + 1) % slides.length); });
     });
-    </script>
-    ";
+    </script>";
 
-    
     return $html;
 }
