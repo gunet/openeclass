@@ -41,14 +41,20 @@ if (!get_config('eportfolio_enable')) {
     exit;
 }
 
-if (isset($_GET['id']) && intval($_GET['id']) > 0) {
-    $id = intval($_GET['id']);
-    if (isset($_SESSION['uid']) && ($id == $_SESSION['uid'])) {
-        $toolName = $langPortfolio;
-        $pageName = $langMyePortfolio;
+if (isset($_GET['token'])) {
+    $eportf_user = Database::get()->querySingle("SELECT id FROM user WHERE eportfolio_token = ?s", $_GET['token']);
+    if (empty($eportf_user)) {
+        redirect_to_home_page();
+        exit;
     } else {
-        $toolName = $langUserePortfolio;
-        $pageName = q(uid_to_name($id));
+        $id = $eportf_user->id;
+        if (isset($_SESSION['uid']) && ($id == $_SESSION['uid'])) {
+            $toolName = $langPortfolio;
+            $pageName = $langMyePortfolio;
+        } else {
+            $toolName = $langUserePortfolio;
+            $pageName = q(uid_to_name($id));
+        }
     }
 } else {
     if ($session->status == 0) {
@@ -60,11 +66,6 @@ if (isset($_GET['id']) && intval($_GET['id']) > 0) {
     }
 }
 
-if (!token_validate('eportfolio' . $id, $_GET['token'])) {
-    redirect_to_home_page();
-}
-
-$token = token_generate('eportfolio' . $id);
 $userdata = Database::get()->querySingle("SELECT surname, givenname, eportfolio_enable, eportfolio_token
                                           FROM user WHERE id = ?d", $id);
 
@@ -86,7 +87,7 @@ if ($userdata) {
             } elseif ($_GET['toggle_val'] == 'off') {
                 Database::get()->query("UPDATE user SET eportfolio_enable = ?d WHERE id = ?d", 0, $id);
             }
-            redirect_to_home_page("main/eportfolio/index.php?id=$id&token=$token");
+            redirect_to_home_page("main/eportfolio/index.php");
         }
 
         if ($userdata->eportfolio_enable == 0) {
@@ -102,7 +103,7 @@ if ($userdata) {
                                     </button>
                                 </div>
                                 <div class='card-body'>
-                                    <input aria-label='$langCopy' class='form-control' id='page-link' value='{$urlServer}main/eportfolio/index.php?id=$id&token=$token'>
+                                    <input aria-label='$langCopy' class='form-control' id='page-link' value='{$urlServer}main/eportfolio/index.php?&token=$userdata->eportfolio_token'>
                                 </div>                              
                             </div>";
             $head_content .= "<script type='text/javascript'>
@@ -124,12 +125,12 @@ if ($userdata) {
         }
 
         if (isset($_GET['view']) && $_GET['view'] == 'public') {
-            $view_str = "&amp;view=public";
+            $view_str = "?view=public";
             $preview_info_div = "<div class='col-12'><div class='alert alert-info '><i class='fa-solid fa-circle-info fa-lg'></i><span>
                     $langePortfolioPreviewAsGuest</span>
                 </div></div>";
         } elseif (isset($_GET['view']) && $_GET['view'] == 'registered') {
-            $view_str = "&amp;view=registered";
+            $view_str = "?view=registered";
             $preview_info_div = "<div class='col-12'><div class='alert alert-info '><i class='fa-solid fa-circle-info fa-lg'></i><span>
                     $langePortfolioPreviewAsRegistered</span>
                 </div></div>";
@@ -140,11 +141,11 @@ if ($userdata) {
         
         $action_bar = action_bar(array(
                                         array('title' => $userdata->eportfolio_enable ? $langViewHide : $langViewShow,
-                                            'url' => $userdata->eportfolio_enable ? "{$urlAppend}main/eportfolio/index.php?id=$id&amp;token=$token&amp;toggle_val=off" : "{$urlAppend}main/eportfolio/index.php?id=$id&amp;token=$token&amp;toggle_val=on",
+                                            'url' => $userdata->eportfolio_enable ? "{$urlAppend}main/eportfolio/index.php?toggle_val=off" : "{$urlAppend}main/eportfolio/index.php?toggle_val=on",
                                             'icon' => $userdata->eportfolio_enable ? 'fa-eye-slash' : 'fa-eye',
                                             'level' => 'primary'),
                                         array('title' => $langBio,
-                                            'url' => "{$urlAppend}main/eportfolio/index.php?action=get_bio&amp;id=$id&amp;token=$token",
+                                            'url' => "{$urlAppend}main/eportfolio/index.php?action=get_bio",
                                             'icon' => 'fa-solid fa-book-open',
                                             'level' => 'primary',
                                             'show' => file_exists("$webDir/courses/eportfolio/userbios/$id/bio.pdf")),
@@ -155,7 +156,7 @@ if ($userdata) {
                                             'url' => "{$urlAppend}main/eportfolio/edit_eportfolio.php",
                                             'icon' => 'fa-edit' ),
                                         array('title' => $langResourcesCollection,
-                                            'url' => "{$urlAppend}main/eportfolio/resources.php?id=$id&amp;token=$token".$view_str,
+                                            'url' => "{$urlAppend}main/eportfolio/resources.php".$view_str,
                                             'icon' => 'fa-solid fa-award',
                                             'level' => 'primary'
                                             )
@@ -164,13 +165,13 @@ if ($userdata) {
 
         $tool_content .= "<div class='d-flex mb-3'><div class='ms-auto'>".action_button(array(
             array('title' => $langNotRegistered,
-                  'url' => "{$urlAppend}main/eportfolio/index.php?id=$id&amp;token=$token&amp;view=public",
+                  'url' => "{$urlAppend}main/eportfolio/index.php?view=public",
                   'icon' => 'fa-globe'),
             array('title' => $langRegisteredUsers,
-                  'url' => "{$urlAppend}main/eportfolio/index.php?id=$id&amp;token=$token&amp;view=registered",
+                  'url' => "{$urlAppend}main/eportfolio/index.php?view=registered",
                   'icon' => 'fa-users'),
             array('title' => $langUser,
-                  'url' => "{$urlAppend}main/eportfolio/index.php?id=$id&amp;token=$token",
+                  'url' => "{$urlAppend}main/eportfolio/index.php",
                   'icon' => 'fa-lock')
             ),
             array('secondary_icon' => 'fa-binoculars', 'secondary_title' => $langSee))."</div></div>";
@@ -207,12 +208,12 @@ if ($userdata) {
 
         $action_bar = action_bar(array(
                                         array('title' => $langBio,
-                                            'url' => "{$urlAppend}main/eportfolio/index.php?action=get_bio&amp;id=$id&amp;token=$token",
+                                            'url' => "{$urlAppend}main/eportfolio/index.php?action=get_bio&amp;token=$userdata->eportfolio_token",
                                             'icon' => 'fa-solid fa-book-open',
                                             'level' => 'primary-label',
                                             'show' => file_exists("$webDir/courses/eportfolio/userbios/$id/bio.pdf")),
                                         array('title' => $langResourcesCollection,
-                                              'url' => "{$urlAppend}main/eportfolio/resources.php?id=$id&amp;token=$token",
+                                              'url' => "{$urlAppend}main/eportfolio/resources.php?token=$userdata->eportfolio_token",
                                               'icon' => 'fa-solid fa-award',
                                               'level' => 'primary-label'),
                                     ));
@@ -290,7 +291,7 @@ if ($userdata) {
     }
 
     if ($userdata->eportfolio_enable == 1 AND $ret_str['panels'] != "") {
-        $social_share = "<div class='float-end mt-4'>".print_sharing_links($urlServer."main/eportfolio/index.php?id=$id&token=$token", $langUserePortfolio)."</div>";
+        $social_share = "<div class='float-end mt-4'>".print_sharing_links($urlServer."main/eportfolio/index.php?token=$userdata->eportfolio_token", $langUserePortfolio)."</div>";
     } else {
         $social_share = '';
     }

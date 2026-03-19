@@ -233,7 +233,7 @@
                                                         @endif
                                                         @if (get_config('eportfolio_enable'))
                                                             <li>
-                                                                <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}main/eportfolio/index.php?id={{$uid}}&token={{ token_generate('eportfolio'.$uid) }}">
+                                                                <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}main/eportfolio/index.php">
                                                                     <i class="fa-regular fa-address-card settings-icons"></i>
                                                                     {{ trans('langMyePortfolio') }}
                                                                 </a>

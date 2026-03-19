@@ -62,14 +62,20 @@ if (!get_config('eportfolio_enable')) {
     exit;
 }
 
-if (isset($_GET['id']) && intval($_GET['id']) > 0) {
-    $id = intval($_GET['id']);
-    if (isset($_SESSION['uid']) && ($id == $_SESSION['uid'])) {
-        $toolName = $langMyePortfolio;
-        $pageName = $langResourcesCollection;
+if (isset($_GET['token'])) {
+    $eportf_user = Database::get()->querySingle("SELECT id FROM user WHERE eportfolio_token = ?s", $_GET['token']);
+    if (empty($eportf_user)) {
+        redirect_to_home_page();
+        exit;
     } else {
-        $toolName = $langUserePortfolio.' - '.$langResourcesCollection;
-        $pageName = q(uid_to_name($id));
+        $id = $eportf_user->id;
+        if (isset($_SESSION['uid']) && ($id == $_SESSION['uid'])) {
+            $toolName = $langMyePortfolio;
+            $pageName = $langResourcesCollection;
+        } else {
+            $toolName = $langUserePortfolio.' - '.$langResourcesCollection;
+            $pageName = q(uid_to_name($id));
+        }
     }
 } else {
     if ($session->status == 0) {
@@ -81,17 +87,12 @@ if (isset($_GET['id']) && intval($_GET['id']) > 0) {
     }
 }
 
-if (!isset($_GET['token']) || !token_validate('eportfolio' . $id, $_GET['token'])) {
-    redirect_to_home_page();
-}
-
-$token = token_generate('eportfolio' . $id);
 if ($uid == $id) {
     $navigation[] = array("url" => "{$urlAppend}main/profile/display_profile.php", "name" => $langMyProfile);
-    $navigation[] = array("url" => "{$urlAppend}main/eportfolio/index.php?id=$id&token=$token", "name" => $langMyePortfolio);
+    $navigation[] = array("url" => "{$urlAppend}main/eportfolio/index.php", "name" => $langMyePortfolio);
 }
 
-$userdata = Database::get()->querySingle("SELECT surname, givenname, eportfolio_enable
+$userdata = Database::get()->querySingle("SELECT surname, givenname, eportfolio_enable, eportfolio_token
                                           FROM user WHERE id = ?d", $id);
 
 if ($userdata) {
@@ -103,7 +104,7 @@ if ($userdata) {
             } elseif ($_GET['toggle_val'] == 'off') {
                 Database::get()->query("UPDATE user SET eportfolio_enable = ?d WHERE id = ?d", 0, $id);
             }
-            redirect_to_home_page("main/eportfolio/resources.php?id=$id&token=$token");
+            redirect_to_home_page("main/eportfolio/resources.php");
         }
 
         if ($userdata->eportfolio_enable == 0) {
@@ -132,12 +133,12 @@ if ($userdata) {
         }
 
         if (isset($_GET['view']) && $_GET['view'] == 'public') {
-            $view_str = "&amp;view=public";
+            $view_str = "?view=public";
             $preview_info_div = "<div class='col-12'><div class='alert alert-info '><i class='fa-solid fa-circle-info fa-lg'></i><span>
                     $langePortfolioPreviewAsGuest</span>
                 </div></div>";
         } elseif (isset($_GET['view']) && $_GET['view'] == 'registered') {
-            $view_str = "&amp;view=registered";
+            $view_str = "?view=registered";
             $preview_info_div = "<div class='col-12'><div class='alert alert-info '><i class='fa-solid fa-circle-info fa-lg'></i><span>
                     $langePortfolioPreviewAsRegistered</span>
                 </div></div>";
@@ -148,11 +149,11 @@ if ($userdata) {
 
         $action_bar = action_bar(array(
             array('title' => $userdata->eportfolio_enable ? $langViewHide : $langViewShow,
-                'url' => $userdata->eportfolio_enable ? "{$urlAppend}main/eportfolio/index.php?id=$id&amp;token=$token&amp;toggle_val=off" : "{$urlAppend}main/eportfolio/index.php?id=$id&amp;token=$token&amp;toggle_val=on",
+                'url' => $userdata->eportfolio_enable ? "{$urlAppend}main/eportfolio/index.php?toggle_val=off" : "{$urlAppend}main/eportfolio/index.php?toggle_val=on",
                 'icon' => $userdata->eportfolio_enable ? 'fa-eye-slash' : 'fa-eye',
                 'level' => 'primary'),
             array('title' => $langBio,
-                'url' => "{$urlAppend}main/eportfolio/index.php?action=get_bio&amp;id=$id&amp;token=$token",
+                'url' => "{$urlAppend}main/eportfolio/index.php?action=get_bio",
                 'icon' => 'fa-solid fa-book-open',
                 'level' => 'primary',
                 'show' => file_exists("$webDir/courses/eportfolio/userbios/$id/bio.pdf")),
@@ -163,7 +164,7 @@ if ($userdata) {
                 'url' => "{$urlAppend}main/eportfolio/edit_eportfolio.php",
                 'icon' => 'fa-edit' ),
             array('title' => $langResourcesCollection,
-                'url' => "{$urlAppend}main/eportfolio/resources.php?id=$id&amp;token=$token".$view_str,
+                'url' => "{$urlAppend}main/eportfolio/resources.php".$view_str,
                 'icon' => 'fa-solid fa-award',
                 'level' => 'primary'
             )
@@ -172,13 +173,13 @@ if ($userdata) {
 
         $tool_content .= "<div class='d-flex mb-3'><div class='ms-auto'>".action_button(array(
             array('title' => $langNotRegistered,
-                  'url' => "{$urlAppend}main/eportfolio/resources.php?id=$id&amp;token=$token&amp;view=public",
+                  'url' => "{$urlAppend}main/eportfolio/resources.php?view=public",
                   'icon' => 'fa-globe'),
             array('title' => $langRegisteredUsers,
-                  'url' => "{$urlAppend}main/eportfolio/resources.php?id=$id&amp;token=$token&amp;view=registered",
+                  'url' => "{$urlAppend}main/eportfolio/resources.php?view=registered",
                   'icon' => 'fa-users'),
             array('title' => $langUser,
-                  'url' => "{$urlAppend}main/eportfolio/resources.php?id=$id&amp;token=$token",
+                  'url' => "{$urlAppend}main/eportfolio/resources.php",
                   'icon' => 'fa-lock')
             ),
             array('secondary_icon' => 'fa-binoculars', 'secondary_title' => $langSee))."</div></div>";
@@ -243,7 +244,7 @@ if ($userdata) {
                             Session::flash('message', $langGeneralError);
                             Session::flash('alert-class', 'alert-danger');
                         }
-                        redirect_to_home_page("main/eportfolio/resources.php?id=$uid&token=$token");
+                        redirect_to_home_page("main/eportfolio/resources.php");
                     } elseif ($rtype == 'work_submission') {
                         $submission = Database::get()->querySingle("SELECT * FROM assignment_submit WHERE assignment_id = ?d AND uid = ?d", $rid, $uid);
                         if($submission) {
@@ -303,7 +304,7 @@ if ($userdata) {
                             Session::flash('message', $langGeneralError);
                             Session::flash('alert-class', 'alert-danger');
                         }
-                        redirect_to_home_page("main/eportfolio/resources.php?id=$uid&token=$token");
+                        redirect_to_home_page("main/eportfolio/resources.php");
                     } elseif ($rtype == 'mydocs') {
                         if (($session->status == USER_TEACHER && get_config('mydocs_teacher_enable')) || ($session->status == USER_STUDENT && get_config('mydocs_student_enable'))) {
                             $document = Database::get()->querySingle("SELECT * FROM document WHERE id = ?d AND subsystem = ?d AND subsystem_id = ?d AND format <> ?s", $rid, MYDOCS, $uid, '.dir');
@@ -340,7 +341,7 @@ if ($userdata) {
                             Session::flash('message', $langGeneralError);
                             Session::flash('alert-class', 'alert-danger');
                         }
-                        redirect_to_home_page("main/eportfolio/resources.php?id=$uid&token=$token");
+                        redirect_to_home_page("main/eportfolio/resources.php");
                     } elseif ($rtype == 'my_badges') {
                         $userBadge = Database::get()->querySingle("SELECT id,completed_criteria,total_criteria FROM user_badge WHERE user = ?d AND badge = ?d", $uid, $rid);
                         if ($userBadge && $userBadge->completed_criteria == $userBadge->total_criteria) {
@@ -399,7 +400,7 @@ if ($userdata) {
                             Session::flash('message', $langGeneralError);
                             Session::flash('alert-class', 'alert-danger');
                         }
-                        redirect_to_home_page("main/eportfolio/resources.php?id=$uid&token=$token");
+                        redirect_to_home_page("main/eportfolio/resources.php");
                     }
                 }
             }
@@ -418,11 +419,11 @@ if ($userdata) {
                 Database::get()->query("DELETE FROM eportfolio_resource WHERE id = ?d", $er_id);
                 Session::flash('message', $langePortfolioResourceRemoved);
                 Session::flash('alert-class', 'alert-success');
-                redirect_to_home_page("main/eportfolio/resources.php?id=$uid&token=$token");
+                redirect_to_home_page("main/eportfolio/resources.php");
             } else {
                 Session::flash('message', $langGeneralError);
                 Session::flash('alert-class', 'alert-danger');
-                redirect_to_home_page("main/eportfolio/resources.php?id=$uid&token=$token");
+                redirect_to_home_page("main/eportfolio/resources.php");
             }
         }
 
@@ -448,12 +449,12 @@ if ($userdata) {
 
         $action_bar = action_bar(array(
                 array('title' => $langBio,
-                      'url' => "{$urlAppend}main/eportfolio/index.php?action=get_bio&amp;id=$id&amp;token=$token",
+                      'url' => "{$urlAppend}main/eportfolio/index.php?action=get_bio&amp;token=$userdata->eportfolio_token",
                       'icon' => 'fa-download',
                       'level' => 'primary-label',
                       'show' => file_exists("$webDir/courses/eportfolio/userbios/$id/bio.pdf")),
                 array('title' => $langBack,
-                      'url' => "{$urlAppend}main/eportfolio/index.php?id=$id&amp;token=$token",
+                      'url' => "{$urlAppend}main/eportfolio/index.php?token=$userdata->eportfolio_token",
                       'icon' => 'fa-reply',
                       'level' => 'primary-label')
             ));
@@ -530,7 +531,7 @@ if ($userdata) {
                                                 ". action_button(array(
                                                                     array(
                                                                             'title' => $langePortfolioRemoveResource,
-                                                                            'url' => "$_SERVER[SCRIPT_NAME]?token=$token&amp;action=remove&amp;type=blog&amp;er_id=".$post->id,
+                                                                            'url' => "$_SERVER[SCRIPT_NAME]?action=remove&amp;type=blog&amp;er_id=".$post->id,
                                                                             'icon' => 'fa-xmark',
                                                                             'class' => 'delete',
                                                                             'confirm' => $langePortfolioSureToRemoveResource,
@@ -723,7 +724,7 @@ if ($userdata) {
                                             ". action_button(array(
                                                 array(
                                                     'title' => $langePortfolioRemoveResource,
-                                                    'url' => "$_SERVER[SCRIPT_NAME]?token=$token&amp;action=remove&amp;type=blog&amp;er_id=".$post->id,
+                                                    'url' => "$_SERVER[SCRIPT_NAME]?action=remove&amp;type=blog&amp;er_id=".$post->id,
                                                     'icon' => 'fa-xmark',
                                                     'class' => 'delete',
                                                     'confirm' => $langePortfolioSureToRemoveResource,
@@ -1285,7 +1286,7 @@ if ($userdata) {
         }
 
         if ($userdata->eportfolio_enable == 1) {
-            $social_share = "<div class='col-12 mt-5'><div class='shadow-sm p-3 rounded float-end rounded-pill'>".print_sharing_links($urlServer."main/resources.php?id=$id&token=$token", $langUserePortfolio)."</div></div>";
+            $social_share = "<div class='col-12 mt-5'><div class='shadow-sm p-3 rounded float-end rounded-pill'>".print_sharing_links($urlServer."main/resources.php?token=$userdata->eportfolio_token", $langUserePortfolio)."</div></div>";
         } else {
             $social_share = '';
         }

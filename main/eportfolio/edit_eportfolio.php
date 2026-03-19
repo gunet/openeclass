@@ -47,9 +47,8 @@ check_guest();
 
 $toolName = $langMyePortfolio;
 $pageName = $langEditChange;
-$token = token_generate('eportfolio' . $uid);
 $navigation[] = array("url" => "{$urlAppend}main/profile/display_profile.php", "name" => $langMyProfile);
-$navigation[] = array('url' => "index.php?id=$uid&token=$token", 'name' => $langMyePortfolio);
+$navigation[] = array('url' => "index.php", 'name' => $langMyePortfolio);
 
 if (!get_config('eportfolio_enable')) {
     $tool_content = "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langePortfolioDisabled</span></div>";
@@ -79,7 +78,7 @@ if (isset($_POST['submit'])) {
         process_eportfolio_fields_data();
         Session::flash('message', $langePortfolioChangeSucc);
         Session::flash('alert-class', 'alert-success');
-        redirect_to_home_page("main/eportfolio/index.php?id=$uid&token=$token");
+        redirect_to_home_page("main/eportfolio/index.php");
     }
 }
 
@@ -106,7 +105,7 @@ $tool_content .= $ret_str['panels'];
 $tool_content .= "
     <div class='form-group mt-5 d-flex justify-content-center align-items-center gap-2'>
         <input class='btn submitAdminBtn' type='submit' name='submit' value='$langSubmit'>     
-        <a href='{$urlAppend}main/eportfolio/index.php?id=$uid&amp;token=$token' class='btn cancelAdminBtn'>$langCancel</a>
+        <a href='{$urlAppend}main/eportfolio/index.php' class='btn cancelAdminBtn'>$langCancel</a>
                   </div>
       ". generate_csrf_token_form_field() ."  
       </div></form>
