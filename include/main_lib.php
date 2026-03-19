@@ -658,16 +658,18 @@ function selection3($entries, $name, $default = '') {
  * @return boolean
  */
 function check_guest($id = null) {
-    if ($id) {
+    if (!is_null($id)) {
         $uid = $id;
     } else {
-        $uid = $GLOBALS['uid'];
+        $uid = $GLOBALS['uid'] ?? null;
     }
-    if (isset($uid) and $uid) {
+    if ($uid) {
         $status = Database::get()->querySingle("SELECT status FROM user WHERE id = ?d", $uid);
         if ($status && $status->status == USER_GUEST) {
             return true;
         }
+    } else {
+        return true;
     }
     return false;
 }

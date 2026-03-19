@@ -268,15 +268,22 @@ function count_exercise_submissions($eid): int
 }
 
 /**
- * @brief check if exercise has imcomplete attempts
+ * @brief Check if exercise has incomplete attempts for a user and if so return the first one
  * @param $eid
  * @param $uid
  * @param $continue_time_limit
- * @return null
+ * @return null|object
  */
-function hasExerciseIncompleteAttempts($eid, $uid, $continue_time_limit) {
+function exerciseIncompleteAttempts($eid, $uid, $continue_time_limit) {
+    static $cache = null;
 
+    if (check_guest($uid)) {
+        return null;
+    }
     if ($continue_time_limit) {
+        if (isset($cache[$eid][$uid])) {
+            return $cache[$eid][$uid];
+        }
         $q = Database::get()->querySingle("SELECT eurid, attempt
                                              FROM exercise_user_record
                                              WHERE eid = ?d AND uid = ?d AND
@@ -285,6 +292,7 @@ function hasExerciseIncompleteAttempts($eid, $uid, $continue_time_limit) {
                                              ORDER BY eurid DESC LIMIT 1",
             $eid, $uid, ATTEMPT_ACTIVE, 60 * $continue_time_limit);
         if ($q) {
+            $cache[$eid][$uid] = $q->eurid;
             return $q->eurid;
         } else {
             return null;
@@ -294,28 +302,35 @@ function hasExerciseIncompleteAttempts($eid, $uid, $continue_time_limit) {
     }
 }
 
-/** @brief check if exercise has been paused by user
+/**
+ * @brief Check if exercise has incomplete attempts for a user and if so return the first one
  * @param $eid
  * @param $uid
- * @return null
+ * @return null|object
  */
-function isExercisePaused($eid, $uid) {
+function exercisePausedAttempts($eid, $uid) {
+    static $cache = null;
 
-    if ($uid) {
+    if (check_guest($uid)) {
+        return null;
+    } else {
+        if (isset($cache[$eid][$uid])) {
+            return $cache[$eid][$uid];
+        }
         $q = Database::get()->querySingle("SELECT eurid, attempt
                                              FROM exercise_user_record
                                              WHERE eid = ?d
                                              AND uid = ?d
-                                             AND attempt_status = " . ATTEMPT_PAUSED . "",
+                                             AND attempt_status = " . ATTEMPT_PAUSED,
                             $eid, $uid);
         if ($q) {
+            $cache[$eid][$uid] = $q->eurid;
             return $q->eurid;
         } else {
             return null;
         }
-    } else {
-        return null;
     }
+    return null;
 }
 
 /**
