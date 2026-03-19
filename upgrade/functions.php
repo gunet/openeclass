@@ -3717,6 +3717,13 @@ function upgrade_to_4_4() : void {
            $langePortfolioVolunteerActivitiesDescr;
 
     //E-portfolio
+    Database::get()->query("ALTER TABLE `user` ADD COLUMN eportfolio_token VARCHAR(64) DEFAULT NULL AFTER eportfolio_enable");
+    
+    $eportf_users = Database::get()->queryArray("SELECT id FROM `user` WHERE eportfolio_enable = ?d", 1);
+    foreach ($eportf_users as $eportf_user) {
+        Database::get()->query("UPDATE `user` SET eportfolio_token = ?s WHERE id = ?d", rtrim(strtr(base64_encode(random_bytes(16)), '+/', '-_'), '='), $eportf_user->id);
+    }
+
     $min_eportf_cat_order = Database::get()->querySingle("SELECT MIN(sortorder) AS min_order FROM eportfolio_fields_category");
     if ($min_eportf_cat_order) {
         $min_eportf_cat_order = $min_eportf_cat_order->min_order - 1;

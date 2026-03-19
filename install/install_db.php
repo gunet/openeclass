@@ -304,6 +304,7 @@ $db->query("CREATE TABLE `user` (
     pic_public TINYINT NOT NULL DEFAULT 0,
     whitelist TEXT CHARACTER SET ascii COLLATE ascii_bin,
     eportfolio_enable TINYINT NOT NULL DEFAULT 0,
+    eportfolio_token VARCHAR(64) DEFAULT NULL,
     last_passreminder DATETIME DEFAULT NULL,
     disable_course_registration TINYINT NULL DEFAULT 0,
     options TEXT CHARACTER SET ascii COLLATE ascii_bin DEFAULT NULL) $tbl_options");

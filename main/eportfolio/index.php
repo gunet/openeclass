@@ -65,7 +65,7 @@ if (!token_validate('eportfolio' . $id, $_GET['token'])) {
 }
 
 $token = token_generate('eportfolio' . $id);
-$userdata = Database::get()->querySingle("SELECT surname, givenname, eportfolio_enable
+$userdata = Database::get()->querySingle("SELECT surname, givenname, eportfolio_enable, eportfolio_token
                                           FROM user WHERE id = ?d", $id);
 
 $navigation[] = array("url" => "{$urlAppend}main/profile/display_profile.php", "name" => $langMyProfile);
@@ -76,7 +76,13 @@ if ($userdata) {
     if ($uid == $id) {
         if (isset($_GET['toggle_val'])) {
             if ($_GET['toggle_val'] == 'on') {
-                Database::get()->query("UPDATE user SET eportfolio_enable = ?d WHERE id = ?d", 1, $id);
+                //Generate token if it is the first time that the user enables eportfolio
+                if (is_null($userdata->eportfolio_token)) {
+                    Database::get()->query("UPDATE user SET eportfolio_enable = ?d, eportfolio_token = ?s 
+                        WHERE id = ?d", 1, rtrim(strtr(base64_encode(random_bytes(16)), '+/', '-_'), '='), $id);
+                } else {
+                    Database::get()->query("UPDATE user SET eportfolio_enable = ?d WHERE id = ?d", 1, $id);
+                }
             } elseif ($_GET['toggle_val'] == 'off') {
                 Database::get()->query("UPDATE user SET eportfolio_enable = ?d WHERE id = ?d", 0, $id);
             }
