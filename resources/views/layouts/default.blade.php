@@ -274,6 +274,24 @@
                     $('.notification-top-bar').hide();
                 });
             @endif
+
+            document.addEventListener('click', (event) => {
+                const dropdowns = document.querySelectorAll('.contextual-menu-action-button');
+                let isAnyOpen = false;
+
+                dropdowns.forEach((dropdown) => {
+                    if (dropdown.classList.contains('show')) {
+                        isAnyOpen = true;
+                    }
+                });
+
+                if (isAnyOpen) {
+                    $('.col_maincontent_active').addClass('action-button-on');
+                } else {
+                    $('.col_maincontent_active').removeClass('action-button-on');
+                }
+            });
+
         });
     </script>
     @stack('bottom_scripts')

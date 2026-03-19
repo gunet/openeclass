@@ -2606,6 +2606,13 @@ body .form-action-button-mydropdowns{
   opacity: 0.5;
 }
 
+.col_maincontent_active.action-button-on{
+  z-index: auto;
+}
+.col_maincontent_active.action-button-on .contextual-menu-action-button.show { 
+  z-index: 1001; 
+}
+
 
 /**********************************************************************************************************************/
 /***************************************** BOOTBOX - MENUPOPOVER -MODALS **********************************************/
