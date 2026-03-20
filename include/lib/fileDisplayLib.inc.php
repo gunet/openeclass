@@ -150,7 +150,7 @@ function public_file_path($disk_path, $filename = null) {
             $dirname = $seen_paths[$disk_path];
         }
     }
-    if (!isset($filename)) {
+    if (is_null($filename)) {
         $filename = Database::get()->querySingle("SELECT TRIM(filename) AS filename FROM document
                                                WHERE $group_sql AND
                                                      path = ?s", $disk_path)->filename;
