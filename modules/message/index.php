@@ -38,11 +38,13 @@ load_js('select2');
 if ($is_admin and $require_current_course) {
     $require_course_admin = true; // hide role switcher
 }
-$toolName = $langPortfolio;
+
+
 $pageName = $langDropBox;
 $personal_msgs_allowed = get_config('dropbox_allow_personal_messages');
 
 if (!isset($course_id)) {
+    $toolName = $langPortfolio;
     $course_id = 0;
 }
 
@@ -471,8 +473,8 @@ $tool_content .= "<div class='col-12'>
 
                                     <div class='form-group mt-5'>
                                         <div class='col-12 d-flex justify-content-end align-items-center'>
-                                    
-                                            
+
+
                                                 ".
                                                 form_buttons(array(
                                                         array(
@@ -487,9 +489,9 @@ $tool_content .= "<div class='col-12'>
                                                         )
                                                 ))
                                                 ."
-                                        
-                                            
-                                        
+
+
+
                                         </div>
                                     </div>
                         </fieldset>
@@ -502,7 +504,7 @@ $tool_content .= "<div class='col-12'>
                     <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
                 </div>
             </div>
-        </div> 
+        </div>
         "; // end col-12
     }
 
@@ -559,7 +561,7 @@ $tool_content .= "<div class='col-12'>
 
                             // trap links to open inside tabs
                             $('.tab-content').on('click', 'a', function(e) {
-                                var in_content = $(e.currentTarget).parents('.panel-body').length;
+                                var in_content = $(e.currentTarget).parents('.panelCard').length;
                                 if (!in_content && e.currentTarget.className != 'outtabs' &&
                                     e.currentTarget.className.indexOf('paginate_button') == -1) {
                                     e.preventDefault();

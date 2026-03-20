@@ -174,19 +174,19 @@ if (file_exists($extra_messages)) {
 } else {
     $extra_messages = false;
 }
+
 require "$webDir/lang/$language/messages.inc.php";
-if (file_exists('config/config.php')) {
-    if (get_config('show_always_collaboration') and get_config('show_collaboration')) {
-        require "$webDir/lang/$language/messages_collaboration.inc.php";
-    }
+if (get_config('show_always_collaboration') and get_config('show_collaboration')) {
+    require "$webDir/lang/$language/common_collaboration.inc.php";
+    require "$webDir/lang/$language/messages.inc.php";
+    require "$webDir/lang/$language/messages_collaboration.inc.php";
 }
+
 if ($extra_messages) {
     include $extra_messages;
 }
 
-
-
-if (!isset($_SESSION['csrf_token']) || empty($_SESSION['csrf_token'])) {
+if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = generate_csrf_token();
 }
 
@@ -397,8 +397,8 @@ if (isset($_SESSION['CurrentReferenceSessionId']) && $_SESSION['CurrentReference
     unset($_SESSION['userId__reference_uploader']);
 }
 
-// If $require_current_course is true, initialise course settings
-// Read properties of current course
+// If $require_current_course is true, initialize course settings
+// Read properties of the current course
 $is_editor = false;
 $is_course_reviewer = false;
 $is_coordinator = false;
@@ -443,6 +443,12 @@ if (isset($require_current_course) and $require_current_course) {
                 }
             },
             $dbname);
+
+        // if course is collaborative include collaborative messages
+        if (isset($is_collaborative_course) and $is_collaborative_course) {
+            require "$webDir/lang/$language/common_collaboration.inc.php";
+        }
+        require "$webDir/lang/$language/messages.inc.php";
 
         if (!isset($course_code) or empty($course_code)) {
             Session::flash('alert-class', 'alert-danger');
@@ -552,6 +558,9 @@ if (isset($require_current_course) and $require_current_course) {
             } else {
                 $extra_messages = false;
             }
+            if (isset($is_collaborative_course) and $is_collaborative_course) {
+                include "lang/$language/common_collaboration.inc.php";
+            }
             include "lang/$language/messages.inc.php";
             if (file_exists('config/config.php')) {
                 if (get_config('show_always_collaboration') and get_config('show_collaboration')){
@@ -586,7 +595,6 @@ require_once "license_info.php";
 // Course modules array
 // user modules
 // ----------------------------------------
-
 if(isset($is_collaborative_course) and $is_collaborative_course){
     $modules = $modules_collaborations = array(
         MODULE_ID_AGENDA => array('title' => $langAgenda, 'link' => 'agenda', 'image' => 'fa-regular fa-calendar'),
