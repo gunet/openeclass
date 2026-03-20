@@ -4870,26 +4870,20 @@ function get_platform_logo($size = 'normal', $position = 'header') {
         $logo_img = imageToBase64($footer_path);
         $image_align = setting_get(SETTING_COURSE_IMAGE_PRINT_FOOTER_ALIGNMENT, $course_id);
         $image_align = ($image_align == 0) ? 'left' : (($image_align == 1) ? 'center' : 'right');
-        $image_width = setting_get(SETTING_COURSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id);
-        $bg_color = '#ffffff';
+        $image_height = setting_get(SETTING_COURSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id);
     } else {
         $header_path = setting_get_print_image_disk_path(SETTING_COURSE_IMAGE_PRINT_HEADER, $course_id);
+        $image_height = setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_WIDTH, $course_id);
+        $image_align = setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_ALIGNMENT, $course_id);
+        $image_align = ($image_align == 0) ? 'left' : (($image_align == 1) ? 'center' : 'right');
         if ($header_path) {
             $logo_img = imageToBase64($header_path);
-            $image_align = setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_ALIGNMENT, $course_id);
-            $image_align = ($image_align == 0) ? 'left' : (($image_align == 1) ? 'center' : 'right');
-            $image_width = setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_WIDTH, $course_id);
-            $bg_color = '#ffffff';
         } else {
             $logo_img = $themeimg . '/eclass-new-logo.svg';
-            $image_width = 200;
-            $image_align = 'left';
-            $bg_color = '#ffffff';
             $theme_id = get_config('theme_options_id');
             if ($theme_id) {
                 $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
                 $theme_options_styles = unserialize($theme_options->styles);
-                $bg_color = $theme_options_styles['leftNavBgColor'];
                 $urlThemeData = $urlAppend . 'courses/theme_data/' . $theme_id;
                 if ($size == 'small' && isset($theme_options_styles['imageUploadSmall'])) {
                     $logo_img = "$urlThemeData/{$theme_options_styles['imageUploadSmall']}";
@@ -4900,8 +4894,8 @@ function get_platform_logo($size = 'normal', $position = 'header') {
         }
     }
 
-    $logo = "<div style='clear: right; background-color: $bg_color; padding: 1rem; text-align: $image_align;'>
-                <img style='height: {$image_width}mm;' src='$logo_img'>
+    $logo = "<div style='clear: right; padding: 1rem; text-align: $image_align;'>
+                <img style='height: {$image_height}mm;' src='$logo_img'>
             </div>";
 
     return $logo;
