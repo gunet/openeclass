@@ -244,6 +244,9 @@ function load_js($file, $init='') {
             $file = 'jquery.ui.touch-punch.min.js';
         } elseif ($file == 'drag-and-drop-shapes') {
             $file = 'drag-and-drop-shapes.js';
+        } elseif ($file == 'codemirror') {
+            $head_content .= css_link('codemirror/lib/codemirror.css');
+            $file = 'codemirror/lib/codemirror.js';
         }
 
         $head_content .= js_link($file);
