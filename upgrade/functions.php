@@ -3605,7 +3605,7 @@ function upgrade_to_4_3($tbl_options): void
                                 ADD `tenant_id` INT(11) DEFAULT NULL AFTER `id`");
 
         Database::get()->query("ALTER TABLE `admin_announcement`
-                                ADD INDEX `idx_tenantId` (`tenantId`)");
+                                ADD INDEX `idx_tenant_id` (`tenant_id`)");
     }
 
     if (!DBHelper::fieldExists('tenant', 'url_active')) {
@@ -3625,9 +3625,9 @@ function upgrade_to_4_3($tbl_options): void
         Database::get()->query(
             'ALTER TABLE `certificate_template`
             ADD `department_id` INT(11) DEFAULT NULL,
-            ADD CONSTRAINT `fk_certificate_template_hierarchy` 
-                FOREIGN KEY (`department_id`) REFERENCES `hierarchy`(`id`) 
-                ON DELETE SET NULL 
+            ADD CONSTRAINT `fk_certificate_template_hierarchy`
+                FOREIGN KEY (`department_id`) REFERENCES `hierarchy`(`id`)
+                ON DELETE SET NULL
                 ON UPDATE CASCADE'
         );
     }
