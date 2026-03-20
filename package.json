@@ -1,6 +1,6 @@
 {
   "name": "open-eclass",
-  "version": "4.3",
+  "version": "4.3.1",
   "license": "GPL-2.0-or-later",
   "homepage": "https://www.openeclass.org/",
   "dependencies": {
