@@ -785,11 +785,11 @@
                                                 <div id="idle-detection-settings" class="d-none mt-3">
                                                     <div class="form-group">
                                                         <label for="idle_warning_time">{{trans('langIdleWarningTime')}}:</label>
-                                                        <input type="number" class="form-control" id="idle_warning_time" name="idle_warning_time" min="1" value="{{ get_config('idle_warning_time') ? (get_config('idle_warning_time') / 1000 / 60) : '' }}" required>
+                                                        <input type="number" class="form-control" id="idle_warning_time" name="idle_warning_time" min="1" value="{{ get_config('idle_warning_time') ? (get_config('idle_warning_time') / 1000 / 60) : '' }}">
                                                     </div>
                                                     <div class="form-group mt-2">
                                                         <label for="idle_logout_time">{{trans('langIdleLogoutTime')}}:</label>
-                                                        <input type="number" class="form-control" id="idle_logout_time" name="idle_logout_time" min="1" value="{{ get_config('idle_logout_time') ? (get_config('idle_logout_time') / 1000 / 60) : '' }}" required>
+                                                        <input type="number" class="form-control" id="idle_logout_time" name="idle_logout_time" min="1" value="{{ get_config('idle_logout_time') ? (get_config('idle_logout_time') / 1000 / 60) : '' }}">
                                                     </div>
                                                 </div>
                                             </div>
@@ -1251,7 +1251,9 @@
     <script>
 
         $('#enable_idle_detection').change(function() {
-            $('#idle-detection-settings').toggleClass('d-none', !this.checked);
+            const isChecked = this.checked;
+            $('#idle-detection-settings').toggleClass('d-none', !isChecked);
+            $('#idle_warning_time, #idle_logout_time').prop('required', isChecked);
         }).change();
 
         function loginFailPanel(e) {

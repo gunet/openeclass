@@ -328,7 +328,7 @@ function generate_infinite_container_html($posts, $posts_per_page, $next_page, $
         $rating_content = $rating->put($is_editor, $uid, $course_id);
 
         $comm = new Commenting('wallpost', $id);
-        $comm_content = "<a class='commentPress href='".$urlServer."modules/wall/index.php?course=$course_code&amp;showPost=".$id."#comments_title'>
+        $comm_content = "<a class='commentPress' href='".$urlServer."modules/wall/index.php?course=$course_code&amp;showPost=".$id."#comments_title'>
                             <span class='vsmall-text'>$langComments (".$comm->getCommentsNum().")</span>
                         </a>";
 

@@ -1524,8 +1524,9 @@ $db->query("CREATE TABLE IF NOT EXISTS `hierarchy` (
     KEY `lftindex` (`lft`),
     KEY `rgtindex` (`rgt`) ) $tbl_options");
 
+$institutionForm = canonicalize_whitespace($institutionForm);
 $db->query("INSERT INTO `hierarchy` (code, name, description, lft, rgt)
-    VALUES ('', ?s, '', 1, 68)", $institutionForm);
+    VALUES ('', ?s, '', 1, 68)", $institutionForm? $institutionForm: $langEclass);
 
 $db->query("INSERT INTO `hierarchy` (code, name, description, number, generator, lft, rgt, allow_course, allow_user)
     VALUES ('TMA', ?s, '', '10', '100', 2, 23, true, true)", $langHierarchyTestDepartment);

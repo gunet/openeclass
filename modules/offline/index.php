@@ -73,6 +73,8 @@ $real_filename = remove_filename_unsafe_chars($public_code . '-offline.zip');
 /////////////////////////////
 $logo_img = "./resources/img/eclass-new-logo.svg";
 $logo_img_small = "./resources/img/eclass-new-logo.svg";
+$favicon_img = "resources/favicon/openeclass_128x128.png";
+$themeimg = $urlAppend . 'resources/img';
 
 $theme_data = get_theme_options();
 
@@ -145,11 +147,11 @@ foreach ($departments as $dep) {
 }
 
 $section_title = $currentCourseName;
-$toolArr = lessonToolsMenu_offline(true, $data['urlAppend']);
+$toolArr = lessonToolsMenu_offline($data['urlAppend']);
 $global_data = compact('is_editor', 'course_code', 'course_id', 'language',
     'urlServer', 'toolName',
     'uid', 'session', 'head_content', 'toolArr', 'module_id',
-    'pageName', 'section_title', 'logo_img', 'logo_img_small', 'styles_str',
+    'pageName', 'section_title', 'logo_img', 'logo_img_small', 'favicon_img', 'themeimg', 'styles_str',
     'require_current_course', 'is_course_admin',
     'currentCourseName','collaboration_platform', 'collaboration_value', 'is_collaborative_course');
 $bladeData = array_merge($global_data, $data);
@@ -177,7 +179,6 @@ mkdir($downloadDir . '/modules');
 $bladeData['lessonStatus'] = '../../';
 $bladeData['urlAppend'] = '../';
 $bladeData['template_base'] = $bladeData['urlAppend'] . 'template/modern';
-$bladeData['themeimg'] = $bladeData['urlAppend'] . 'resources/img';
 
 if (!empty($theme_data['logo_img'])) {
     $bladeData['logo_img'] = $bladeData['urlAppend'] . $theme_data['logo_img'];
@@ -190,7 +191,7 @@ if (!empty($theme_data['logo_img_small'])) {
     $bladeData['logo_img_small'] = $bladeData['themeimg'] . '/eclass-new-logo.svg';
 }
 
-$bladeData['toolArr'] = lessonToolsMenu_offline(true, $bladeData['urlAppend']);
+$bladeData['toolArr'] = lessonToolsMenu_offline($bladeData['urlAppend']);
 
 ////////////////
 // unit resources

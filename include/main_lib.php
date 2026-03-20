@@ -4,7 +4,7 @@
  *  * Open eClass
  *  * E-learning and Course Management System
  *  * ========================================================================
- *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  * Copyright 2003-2026, Greek Universities Network - GUnet
  *  *
  *  * Open eClass is an open platform distributed in the hope that it will
  *  * be useful (without any warranty), under the terms of the GNU (General
@@ -25,7 +25,7 @@
  * Defines standard functions and validates variables
  */
 
-define('ECLASS_VERSION', '4.3-dev');
+define('ECLASS_VERSION', '4.3.1');
 
 // mPDF library temporary file path and font path
 if (isset($webDir)) { // needed for avoiding 'notices' in some files
@@ -671,12 +671,12 @@ function selection3($entries, $name, $default = '') {
  * @return boolean
  */
 function check_guest($id = null) {
-    if ($id) {
+    if (!is_null($id)) {
         $uid = $id;
     } else {
-        $uid = $GLOBALS['uid'];
+        $uid = $GLOBALS['uid'] ?? null;
     }
-    if (isset($uid) and $uid) {
+    if ($uid) {
         $status = Database::get()->querySingle("SELECT status FROM user WHERE id = ?d", $uid);
         if ($status && $status->status == USER_GUEST) {
             return true;
@@ -2914,7 +2914,7 @@ function icon($name, $title = null, $link = null, $link_attrs = '', $with_title 
         $img = "<span class='fa $name' $extra></span>";
     }
     if (isset($link)) {
-        return "<a href='$link'$link_attrs aria-label='$title' aria-pressed='$pressed' role='button'>$img</a>";
+        return "<a href='$link' $link_attrs aria-label='$title' aria-pressed='$pressed' role='button'>$img</a>";
     } else {
         return $img;
     }
@@ -3238,7 +3238,7 @@ function removeDir($dirPath) {
     }
 
     // Try to remove the directory recursively if it exists
-    if (!file_exists($dirPath)) {
+    if (!(file_exists($dirPath) or is_dir($dirPath))) {
         return true;
     } else {
         $files = new RecursiveIteratorIterator(
@@ -3619,11 +3619,6 @@ function csrf_token_error() {
    redirect_to_home_page();
 }
 
-
-
-
-
-
 /**
  * Indirect Reference to Direct Reference Map
  *
@@ -3937,7 +3932,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
 
         if (count($options) > 1 && !(isset($option['options']) && ($level == 'primary' or $level == 'primary-label'))) {
             array_unshift($out_secondary,
-                "<li$wrapped_class>$form_begin<a$confirm_extra  class='$text_class $modal_class $confirm_modal_class $temporary_button_class list-group-item d-flex justify-content-start align-items-start gap-2 py-3'" . $href .
+                "<li$wrapped_class>$form_begin<a$confirm_extra  class='$text_class $modal_class $confirm_modal_class $temporary_button_class list-group-item d-flex justify-content-start align-items-start gap-2 py-3' " . $href .
                 " $link_attrs>" .
                 "<span class='fa $option[icon] settings-icons'></span> $title</a>$form_end</li>");
         }
@@ -4029,6 +4024,8 @@ function action_button($options, $secondary_menu_options = array(), $fc=false) {
     $out_primary = $out_secondary = array();
     $primary_form_begin = $primary_form_end = $primary_icon_class = '';
 
+    static $counter = 1;
+
     foreach (array_reverse($options) as $option) {
         $level = $option['level'] ?? 'secondary';
         if (isset($option['show']) and !$option['show']) {
@@ -4101,16 +4098,17 @@ function action_button($options, $secondary_menu_options = array(), $fc=false) {
         $list_items = implode('', $out_secondary);
         $tmp_class_title = !empty($secondary_title) ? "<span class='hidden-xs'>$secondary_title</span>" : "";
         $action_button = "
-            <button style='border-radius: 4px;' class='btn $secondary_btn_class action-button-dropdown' type='button' id='actionDropdown' data-bs-toggle='dropdown' aria-expanded='false' aria-label='$langListChoices'>
-                <span class='fa $secondary_icon'></span> 
+            <button style='border-radius: 4px;' class='btn $secondary_btn_class action-button-dropdown' type='button' id='actionDropdown_$counter' data-bs-toggle='dropdown' aria-expanded='false' aria-label='$langListChoices'>
+                <span class='fa $secondary_icon'></span>
                 $tmp_class_title
             </button>
-            <div class='m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-border contextual-menu-action-button' aria-labelledby='actionDropdown'>
+            <div class='m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-border contextual-menu-action-button' aria-labelledby='actionDropdown_$counter'>
                 <ul class='list-group list-group-flush'>
                     $list_items
                 </ul>
             </div>";
     }
+    $counter++;
 
     return $primary_form_begin .
          "<div class='btn-group btn-group-sm btn-group-default gap-2' role='group' aria-label='...'>
