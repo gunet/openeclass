@@ -668,8 +668,6 @@ function check_guest($id = null) {
         if ($status && $status->status == USER_GUEST) {
             return true;
         }
-    } else {
-        return true;
     }
     return false;
 }

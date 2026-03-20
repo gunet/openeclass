@@ -234,7 +234,7 @@ function has_user_participate_in_exercise($eid)
 {
     global $uid;
 
-    if (check_guest()) {
+    if (!$uid or check_guest()) {
         return false;
     }
 
@@ -277,7 +277,7 @@ function count_exercise_submissions($eid): int
 function exerciseIncompleteAttempts($eid, $uid, $continue_time_limit) {
     static $cache = null;
 
-    if (check_guest($uid)) {
+    if (!$uid or check_guest($uid)) {
         return null;
     }
     if ($continue_time_limit) {
@@ -311,7 +311,7 @@ function exerciseIncompleteAttempts($eid, $uid, $continue_time_limit) {
 function exercisePausedAttempts($eid, $uid) {
     static $cache = null;
 
-    if (check_guest($uid)) {
+    if (!$uid or check_guest($uid)) {
         return null;
     } else {
         if (isset($cache[$eid][$uid])) {
@@ -355,7 +355,7 @@ function exerciseUserAttempts($eid, $uid) {
  * @return mixed
  */
 function exerciseUserLastScore($eid, $uid) {
-    if (check_guest()) {
+    if (!$uid or check_guest()) {
         return null;
     }
     $attempts = Database::get()->querySingle("SELECT COUNT(*) AS count FROM exercise_user_record
