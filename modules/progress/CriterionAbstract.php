@@ -135,8 +135,7 @@ abstract class CriterionAbstract {
             Database::get()->query("insert into user_points_game_points (user, points_game, total_points) values (?d, ?d, ?d)", $uid, $this->points_game, $total_points);
         }
         if (!$is_editor) {
-            Session::flash('message',sprintf($langPointsWon, $this->points));
-            Session::flash('alert-class', 'alert-success');
+            Session::Messages(sprintf($langPointsWon, $this->points),'alert-success');
         }
         PointsGame::levelUpdate($uid, $this->points_game, $total_points, $current_level);
     }
