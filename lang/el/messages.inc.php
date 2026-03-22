@@ -1921,7 +1921,7 @@ $langMetaHighereducation = "Ανώτερη/Ανώτατη Εκπαίδευση";
  * dropbox.php
  * *********************************************** */
 $langNewPersoMessage = "Νέο προσωπικό μήνυμα";
-$langNewCourseMessage = "Νέο μήνυμα $langsOfCourse";
+$langNewCourseMessage = "Νέο μήνυμα";
 $langBadFormData = "Η αποστολή του αρχείου απέτυχε";
 $langSendTo = "Προς";
 $langReceivedFiles = "Εισερχόμενα";
@@ -7318,8 +7318,8 @@ $langLinkFb = "Σύνδεσμος Facebook";
 $langLinkTw = "Σύνδεσμος Twitter";
 $langLinkLn = "Σύνδεσμος LinkedIn";
 $langLinkBanner = "Σύνδεσμος Banner";
-$langShowCoursesInTable = "Εμφάνιση μαθημάτων σε μορφή πίνακα";
-$langShowCoursesInPics = "Εμφάνιση μαθημάτων σε μορφή εικόνων";
+$langShowCoursesInTable = "Εμφάνιση σε μορφή πίνακα";
+$langShowCoursesInPics = "Εμφάνιση σε μορφή εικόνων";
 $langDeliverableInserted = "Δημιουργήσατε με επιτυχία το παραδοτέο";
 $langCreateDeliverable = "Δημιουργία παραδοτέου";
 $langImgFormsDes = "Συμπληρώστε τα υποχρεωτικά πεδία στην εικονιζόμενη φόρμα";

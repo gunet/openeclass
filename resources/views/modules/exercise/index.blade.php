@@ -202,15 +202,15 @@
                                                     @continue
                                                 @endif
                                                 @if ($currentDate >= dateToObject($row->start_date) && (!dateToObject($row->end_date) !== null || dateToObject($row->end_date) !== null && $currentDate <= dateToObject($row->end_date)))
-                                                    @if (!is_null(hasExerciseIncompleteAttempts($row->id, $uid, $row->continue_time_limit)))
+                                                    @if (exerciseIncompleteAttempts($row->id, $uid, $row->continue_time_limit))
                                                         <td>
                                                             <a class='ex_settings active_exercise @if ($row->password_lock && !$is_editor) password_protected @endif'
-                                                               href='exercise_submit.php?course={{ $course_code }}&exerciseId={{ $row->id }}&eurId={{ hasExerciseIncompleteAttempts($row->id, $uid, $row->continue_time_limit) }}'>{{ $row->title }}</a>&nbsp;&nbsp;(<span
+                                                               href='exercise_submit.php?course={{ $course_code }}&exerciseId={{ $row->id }}&eurId={{ exerciseIncompleteAttempts($row->id, $uid, $row->continue_time_limit) }}'>{{ $row->title }}</a>&nbsp;&nbsp;(<span
                                                                     style='color:darkgrey'>{{ trans('langAttemptActive') }}</span>)
-                                                    @elseif (!is_null(isExercisePaused($row->id, $uid)))
+                                                    @elseif (exercisePausedAttempts($row->id, $uid)))
                                                         <td>
                                                             <a class='ex_settings paused_exercise @if ($row->password_lock && !$is_editor) password_protected @endif'
-                                                               href='exercise_submit.php?course={{ $course_code }}&exerciseId={{ $row->id }}&amp;eurId={{ isExercisePaused($row->id, $uid) }}'> {{ $row->title }}</a>&nbsp;&nbsp;(<span style='color:darkgrey'>{{ trans('langAttemptPausedS') }}</span>)
+                                                               href='exercise_submit.php?course={{ $course_code }}&exerciseId={{ $row->id }}&amp;eurId={{ exercisePausedAttempts($row->id, $uid) }}'> {{ $row->title }}</a>&nbsp;&nbsp;(<span style='color:darkgrey'>{{ trans('langAttemptPausedS') }}</span>)
                                                     @else
                                                         <td>
                                                             <div class='line-height-default'>
