@@ -51,7 +51,7 @@ if (isset($_GET['unit'])) {
 
 // Compute the commit URL (may be overridden by caller via $lp_update_url)
 $commitUrl = $lp_update_url
-    ?? $urlAppend . "modules/learnPath/viewer_noframes.php?course=" . $course_code . (isset($_GET['unit']) ? ('&unit=' . intval($_GET['unit'])) : '') . "&action=updateProgress";
+    ?? $urlAppend . "modules/learnPath/viewer.php?course=" . $course_code . (isset($_GET['unit']) ? ('&unit=' . intval($_GET['unit'])) : '') . "&action=updateProgress";
 
 $_json_flags = JSON_HEX_TAG | JSON_HEX_AMP;
 ?>

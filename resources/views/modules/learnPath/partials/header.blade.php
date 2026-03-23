@@ -8,7 +8,7 @@
             @if ($moduleNb > 1)
                 @if ($previousModule !== '')
                     <div class="prevnext">
-                        <a class="btn btn-primary btn-next-prev text-decoration-none pt-2 lp-nav-link" href="{{ $urlAppend }}modules/learnPath/viewer_noframes.php?course={{ $course_code }}&amp;path_id={{ $path_id }}&amp;module_id={{ $previousModule }}{!! $unitParam !!}" style="min-width: 35px !important; max-width: 35px !important; min-height: 30px !important; max-height: 35px !important;">
+                        <a class="btn btn-primary btn-next-prev text-decoration-none pt-2 lp-nav-link" href="{{ $urlAppend }}modules/learnPath/viewer.php?course={{ $course_code }}&amp;path_id={{ $path_id }}&amp;module_id={{ $previousModule }}{!! $unitParam !!}" style="min-width: 35px !important; max-width: 35px !important; min-height: 30px !important; max-height: 35px !important;">
                             <span class="fa-solid fa-circle-arrow-left fa-lg"></span>
                         </a>
                     </div>
@@ -22,7 +22,7 @@
 
                 @if ($nextModule !== '')
                     <div class="prevnext">
-                        <a class="btn btn-primary btn-next-prev text-decoration-none pt-2 lp-nav-link" href="{{ $urlAppend }}modules/learnPath/viewer_noframes.php?course={{ $course_code }}&amp;path_id={{ $path_id }}&amp;module_id={{ $nextModule }}{!! $unitParam !!}" style="min-width: 35px !important; max-width: 35px !important; min-height: 30px !important; max-height: 35px !important;">
+                        <a class="btn btn-primary btn-next-prev text-decoration-none pt-2 lp-nav-link" href="{{ $urlAppend }}modules/learnPath/viewer.php?course={{ $course_code }}&amp;path_id={{ $path_id }}&amp;module_id={{ $nextModule }}{!! $unitParam !!}" style="min-width: 35px !important; max-width: 35px !important; min-height: 30px !important; max-height: 35px !important;">
                             <span class="fa-solid fa-circle-arrow-right fa-lg"></span>
                         </a>
                     </div>
