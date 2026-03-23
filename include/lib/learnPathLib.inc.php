@@ -138,7 +138,7 @@ function commentBox($type, $mode) {
             $oldComment = Database::get()->querySingle($sql)->$col_name;
 
             $output .= "<div class='card-body'><form method='POST' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
-                <textarea class='form-control' name='insertCommentBox' rows='3'>$oldComment</textarea><br>
+                <textarea class='form-control' name='insertCommentBox' rows='3'>" . q($oldComment) . "</textarea><br>
                 <input type='hidden' name='cmd' value='update$col_name' />
                 <input class='btn submitAdminBtn' type='submit' value=$langSubmit /></form></div>";
         }
