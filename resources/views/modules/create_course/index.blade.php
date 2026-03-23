@@ -797,12 +797,14 @@
                             {{ trans('langWithCourseUnits') }}
                             </label>
                         </div>
+                        @if ($enable_activity)
                         <div class="radio mb-2 @if(get_config('show_collaboration') and get_config('show_always_collaboration')) d-none @endif" id="radio_activity">
                           <label>
                             <input type="radio" name="view_type" value="activity" id="activity">
                             {{trans('langCourseActivityFormat') }}
                           </label>
                         </div>
+                        @endif
                         <div class="radio mb-2 @if(get_config('show_collaboration') and get_config('show_always_collaboration')) d-none @endif" id="radio_wall">
                           <label>
                             <input type='radio' name='view_type' value='wall' id='wall'>
