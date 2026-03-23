@@ -3175,6 +3175,7 @@ $langLearningPathList = "Διαθέσιμες γραμμές μάθησης";
 $langLearningPathData = "Στοιχεία γραμμής μάθησης";
 $langLearningObjectData = "Στοιχεία Εκπαιδευτικού Αντικείμενου";
 $langLearningPathNotFound = "Η γραμμή μάθησης δεν βρέθηκε ";
+$langLessonStatus = "Κατάσταση ενότητας";
 $langLearningPathStatus = "Κατάσταση";
 $langLinkAsModule = "Χρήση Συνδέσμου";
 $langLinkAsModuleLabel = "Συνδέσμου";
