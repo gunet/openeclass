@@ -6739,6 +6739,7 @@ th.grade-col a{
 
 .progress-module .leaderboard-accordion-content.open {
     max-height: 3000px;
+    overflow: visible;
 }
 
 .progress-module .leaderboard-accordion-body {
@@ -6914,10 +6915,14 @@ th.grade-col a{
     width: 100%;
 }
 
-.progress-module .activity-table th,
-.progress-module .activity-table td {
+.progress-module .activity-table th {
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.progress-module .bootstrap-table .fixed-table-container,
+.progress-module .bootstrap-table .fixed-table-body {
+    overflow: visible !important;
 }
 
 /* POINT GAME - BASIC INFO: status pills (active / inactive) */

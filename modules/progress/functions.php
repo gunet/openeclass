@@ -867,7 +867,7 @@ function display_activities($element, $id, $unit_id = 0) {
                                 $tool_content .= "<div class='mt-0'>
                                                         <table class='activity-table' data-toggle='table' data-pagination='true' data-page-size='5' data-mobile-responsive='true'><thead>
                                                             <tr class='list-header'>
-                                                                <th style='width: 35px;'>
+                                                                <th style='width:35%'>
                                                                     $langTitle
                                                                 </th>
                                                                 <th style='width:25%'>
@@ -3088,15 +3088,17 @@ function display_points_game_settings($element_id): void
                 <div class='leaderboard-accordion-body'>
 
                     <div class='card border rounded-3 mb-2'>
-                        <div class='d-flex align-items-start p-3'>
-                            <div class='text-primary fw-bold' style='width: 50%; flex-shrink: 0;'><i class='fa-regular fa-bookmark me-2'></i><span class='fw-bold' style='color: #4b5563;'>$langTitle</span></div>
-                            <div style='width: 50%; color: #4b5563; text-align: right;'>
-                                <div class='fw-normal'>$title</div>";
-                                if (!empty($description)) {
-                                    $tool_content .= "<div class='fw-normal mt-1'>$description</div>";
-                                }
+                        <div class='p-3'>
+                            <div class='d-flex align-items-start'>
+                                <div class='text-primary fw-bold' style='width: 50%; flex-shrink: 0;'><i class='fa-regular fa-bookmark me-2'></i><span class='fw-bold' style='color: #4b5563;'>$langTitle</span></div>
+                                <div style='width: 50%; color: #4b5563; text-align: right;'>
+                                    <div class='fw-normal'>$title</div>
+                                </div>
+                            </div>";
+                            if (!empty($description)) {
+                                $tool_content .= "<div class='fw-normal mt-2' style='color: #4b5563;'>$description</div>";
+                            }
     $tool_content .= "
-                            </div>
                         </div>
                         <hr class='my-0 mx-3'>
 
@@ -4635,49 +4637,34 @@ function display_user_points_game_details($points_game_id, $user_id) {
     } else {
         $element_title = get_cert_title("points_game", $points_game_id);
         $user_progress = PointsGame::getNextLevelInfo($user_id, $points_game_id);
+        $cert_desc = get_cert_desc("points_game", $points_game_id);
         $tool_content .= "
             <div class='col-12'>
-                <div class='card px-lg-4 py-lg-3'>
-                    <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                        <h3>$element_title</h3>
+                <div class='progress-module'>
+                    <div class='leaderboard-accordion-header'>
+                        <h4><i class='fa fa-info-circle'></i> $element_title</h4>
                     </div>
-                    <div class='card-body'>
-                        <div class='row'>
-                            <div class='col-sm-12'>
-                                <div class='row p-2'>
-                                    <div class='col-md-6 col-12'>
-                                        <div class='pn-info-title-sct title-default'>$langPoints:</div>
-                                    </div>
-                                    <div class='col-md-6 col-12'>
-                                        <div class='pn-info-text-sct text-md-end'>
-                                            ".$user_progress['current_points']."
-                                        </div>
-                                    </div>
+                    <div class='leaderboard-accordion-content open'>
+                        <div class='leaderboard-accordion-body'>
+                            <div class='card border rounded-3 mb-2'>
+                                <div class='d-flex justify-content-between align-items-center p-3'>
+                                    <div class='fw-bold' style='color: #4b5563;'><i class='fa-solid fa-star me-2' style='color: #2563eb;'></i>$langPoints</div>
+                                    <div style='color: #4b5563;'>".$user_progress['current_points']."</div>
                                 </div>
-                                <div class='row p-2'>
-                                    <div class='col-md-6 col-12'>
-                                        <div class='pn-info-title-sct title-default'>$langLevel:</div>
-                                    </div>
-                                    <div class='col-md-6 col-12'>
-                                        <div class='pn-info-text-sct text-md-end'>
-                                            <span class='level-badge'><i class='fa fa-star' style='color:#f59e0b;'></i> ".$user_progress['current_level_title']."</span>
-                                        </div>
-                                    </div>
+                                <hr class='my-0 mx-3'>
+                                <div class='d-flex justify-content-between align-items-center p-3'>
+                                    <div class='fw-bold' style='color: #4b5563;'><i class='fa fa-layer-group me-2' style='color: #2563eb;'></i>$langLevel</div>
+                                    <div class='lb-star-wrap'><div class='lb-star-icon'></div><span class='lb-star-num'>".($user_progress['current_level_num'] ?? '')."</span></div>
                                 </div>";
-                            $cert_desc = get_cert_desc("points_game", $points_game_id);
                             if (!empty($cert_desc)) {
                                 $tool_content .= "
-                                    <div class='row p-2'>
-                                        <div class='col-md-6 col-12'>
-                                            <div class='pn-info-title-sct title-default'>$langDescription:</div>
-                                        </div>
-                                        <div class='col-md-6 col-12'>
-                                            <div class='pn-info-text-sct text-md-end'>" . $cert_desc . "</div>
-                                        </div>
-                                    </div>";
-                                }
-                                
-                                $tool_content .= "
+                                <hr class='my-0 mx-3'>
+                                <div class='p-3'>
+                                    <div class='fw-bold mb-2' style='color: #4b5563;'><i class='fa-regular fa-file-lines me-2' style='color: #2563eb;'></i>$langDescription</div>
+                                    <div style='color: #4b5563;'>$cert_desc</div>
+                                </div>";
+                            }
+        $tool_content .= "
                             </div>
                         </div>
                     </div>

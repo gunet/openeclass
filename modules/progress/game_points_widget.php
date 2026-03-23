@@ -88,8 +88,11 @@ function course_points_game_widget($uid, $course_id) {
                 <div class='pg-inner-card'>
                     <div class='pg-row'>
                         <div class='pg-star-container'>
-                            <div class='pg-star-gradient-icon'></div>
-                            <span class='pg-level-tag'>" . ($game['level_num'] !== '' && $game['level_num'] !== null ? htmlspecialchars($game['level_num']) : '') . "</span>
+                            <div class='pg-star-gradient-icon'></div>" .
+                            (($game['level_num'] === '' || $game['level_num'] === null || $game['level_num'] == 0)
+                                ? "<i class='fa-solid fa-flag-checkered pg-level-tag pg-flag-icon'></i>"
+                                : "<span class='pg-level-tag'>" . htmlspecialchars($game['level_num']) . "</span>"
+                            ) . "
                         </div>
                         <div class='pg-stats'>
                             <div class='pg-points-wrap'>
@@ -131,6 +134,7 @@ function course_points_game_widget($uid, $course_id) {
     .pg-row { display: flex; align-items: center; gap: 15px; }
 
     .pg-star-container { position: relative; width: 50px; height: 50px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+    .pg-flag-icon { font-size: 11px; background: linear-gradient(135deg, #3498db, #9b59b6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-top: 4px; }
     .pg-star-gradient-icon {
         width: 100%; height: 100%;
         background: linear-gradient(135deg, #3498db, #9b59b6);
@@ -148,7 +152,7 @@ function course_points_game_widget($uid, $course_id) {
     .pg-lbl { font-size: 16px; color: #5d6d7e; }
 
     .pg-bar-bg { height: 6px; background: #ebedef; border-radius: 10px; width: 100%; }
-    .pg-bar-fill { height: 100%; background: linear-gradient(90deg, #2ecc71, #3498db); border-radius: 10px; transition: width 0.3s; }
+    .pg-bar-fill { height: 100%; background: #3b82f6; border-radius: 10px; transition: width 0.3s; }
 
     .pg-line { height: 1px; background: #f1f1f1; margin: 12px 0; }
     .pg-footer { font-size: 12px; color: #95a5a6; }
