@@ -203,16 +203,16 @@ if ($is_editor && ($exercise_user_record->attempt_status == ATTEMPT_PENDING || $
                         $('table.graded').show('slow');
                     });
                 });
-                
+
                 // AI Evaluation functionality
                 function performAIEvaluation(answerRecordId) {
                     var statusDiv = $('#ai-eval-status-' + answerRecordId);
                     var resultDiv = $('#ai-eval-result-' + answerRecordId);
                     var container = $('#ai-eval-container-' + answerRecordId);
-                    
+
                     // Show loading state
                     statusDiv.html('<div class=\"d-flex align-items-center\"><div class=\"spinner-border spinner-border-sm me-2\" role=\"status\"></div>$langEvaluatingResponseWithAI</div>');
-                    
+
                     // Make AJAX request
                     $.ajax({
                         url: 'ai_evaluate.php?course=' + encodeURIComponent('$course_code'),
@@ -226,14 +226,14 @@ if ($is_editor && ($exercise_user_record->attempt_status == ATTEMPT_PENDING || $
                             if (response.success && response.status === 'completed') {
                                 var eval = response.evaluation;
                                 var confidencePercent = Math.round(eval.confidence * 100);
-                                var confidenceClass = eval.confidence >= 0.8 ? 'text-success' : 
+                                var confidenceClass = eval.confidence >= 0.8 ? 'text-success' :
                                                     (eval.confidence >= 0.5 ? 'text-warning' : 'text-danger');
-                                var confidenceText = eval.confidence >= 0.8 ? '$langHighConfidence' : 
+                                var confidenceText = eval.confidence >= 0.8 ? '$langHighConfidence' :
                                                     (eval.confidence >= 0.5 ? '$langMediumConfidence' : '$langLowConfidence');
-                                
+
                                 // Hide status, show results
                                 statusDiv.hide();
-                                
+
                                 var resultHtml = '<div class=\"row mb-2\">' +
                                     '<div class=\"col-md-6\">' +
                                     '<strong>$langAISuggestion: ' + eval.suggested_score + '/' + eval.max_score + '</strong>' +
@@ -246,7 +246,7 @@ if ($is_editor && ($exercise_user_record->attempt_status == ATTEMPT_PENDING || $
                                     '<strong>$langReasoning:</strong><br>' +
                                     eval.reasoning.replace(/\\n/g, '<br>') +
                                     '</div>';
-                                
+
                                 resultDiv.html(resultHtml).show();
                             } else {
                                 showAIEvaluationError(answerRecordId, response.message || 'AI evaluation failed');
@@ -263,35 +263,35 @@ if ($is_editor && ($exercise_user_record->attempt_status == ATTEMPT_PENDING || $
                         }
                     });
                 }
-                
+
                 function showAIEvaluationError(answerRecordId, errorMessage) {
                     var statusDiv = $('#ai-eval-status-' + answerRecordId);
                     var container = $('#ai-eval-container-' + answerRecordId);
-                    
+
                     // Update container styling to show error
                     container.removeClass('border-info').addClass('border-danger');
                     container.find('h6').removeClass('text-info').addClass('text-danger');
-                    
+
                     var errorHtml = '<div class=\"text-danger mb-2\">' +
                         '<i class=\"fa fa-exclamation-triangle\"></i> ' + errorMessage +
                         '</div>' +
                         '<button type=\"button\" class=\"btn btn-sm btn-outline-primary\" onclick=\"retryAIEvaluation(' + answerRecordId + ')\">' +
                         '<i class=\"fa fa-refresh\"></i> Retry AI Evaluation' +
                         '</button>';
-                    
+
                     statusDiv.html(errorHtml);
                 }
-                
+
                 window.retryAIEvaluation = function(answerRecordId) {
                     var container = $('#ai-eval-container-' + answerRecordId);
                     // Reset styling
                     container.removeClass('border-danger').addClass('border-info');
                     container.find('h6').removeClass('text-danger').addClass('text-info');
-                    
+
                     // Retry the evaluation
                     performAIEvaluation(answerRecordId);
                 };
-                
+
                 // Auto-trigger AI evaluations on page load for pending evaluations
                 $(document).ready(function() {
                     $('.ai-eval-pending').each(function() {
@@ -304,7 +304,7 @@ if ($is_editor && ($exercise_user_record->attempt_status == ATTEMPT_PENDING || $
                         }
                     });
                 });
-                
+
                 </script>";
 }
 
@@ -440,7 +440,7 @@ $tool_content .= "<div class='col-sm-12'>";
     ";
 
     $canonicalized_message_range .= "
-    
+
     <script>
       const minGaugeValueEl = document.getElementById('minGaugeValue');
       const maxGaugeValueEl = document.getElementById('maxGaugeValue');
@@ -457,11 +457,11 @@ $tool_content .= "<div class='col-sm-12'>";
         const span = max - min;
         const relativeValue = span > 0 ? (value - min) / span : 0.5;
         const needleRatio = Math.min(Math.max(relativeValue, 0), 1);
-        
+
         // The gauge is a semi-circle (180 degrees). We map the value to a rotation
         // from -90 degrees (minimum) to +90 degrees (maximum).
         const needleDeg = -90 + needleRatio * 180;
-        
+
         if (needleGroupEl) {
           needleGroupEl.style.transform = 'translateX(-50%) rotate(' + needleDeg + 'deg)';
         }
@@ -476,10 +476,10 @@ $tool_content .= "<div class='col-sm-12'>";
       function initializeGauge() {
         updateGauge(fixedScore, fixedMin, fixedMax);
       }
-      
+
       initializeGauge();
     </script>
-    
+
     ";
 
     if (!is_null($gradePass) && $gradePass > 0) {
@@ -838,8 +838,8 @@ if (isset($_GET['pdf'])) {
     $image_height_header = setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_WIDTH, $course_id);
     $image_height_footer = setting_get(SETTING_COURSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id);
     $mpdf = new Mpdf\Mpdf([
-        'margin_top' => $image_height_header+15,     // mm
-        'margin_bottom' => $image_height_footer+15,  // mm
+        'margin_top' => $image_height_header + 20,     // mm
+        'margin_bottom' => $image_height_footer + 15,  // mm
         'tempDir' => _MPDF_TEMP_PATH,
         'fontDir' => array_merge($fontDirs, [ $webDir . '/template/modern/fonts' ]),
         'fontdata' => $fontData + [

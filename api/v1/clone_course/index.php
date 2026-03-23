@@ -29,9 +29,9 @@ function api_method($access) {
     //Clone course with post request
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-//        if (!$access->isValid) {
-//            Access::error(100, "Authentication required");
-//        }
+        if (!$access->isValid) {
+            Access::error(401, "Authentication required");
+        }
 
         $ok = register_posted_variables([
             'id'                => true,

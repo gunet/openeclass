@@ -36,7 +36,7 @@ require_once 'include/course_settings.php';
 require_once 'include/lib/learnPathLib.inc.php';
 
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langLearningPaths);
-$toolName = $langStatsOfLearnPath;
+$toolName = $langTracking;
 
 if (empty($_REQUEST['path_id'])) { // path id can not be empty
     header("Location: ./index.php?course=$course_code");
@@ -83,14 +83,13 @@ $head_content .= "<script type='text/javascript'>
 $learnPathName = Database::get()->querySingle("SELECT `name` FROM `lp_learnPath` WHERE `learnPath_id` = ?d AND `course_id` = ?d", $path_id, $course_id);
 
 if ($learnPathName) {
-    $titleTab['subTitle'] = q($learnPathName->name);
-    $pageName = $langLearnPath.": ".disp_tool_title($titleTab);
+    $pageName = q($learnPathName->name);
 
     if (isset($_GET['pdf'])) {
         $emailCol = "<th class='text-left'>$langEmail</th>";
     } else {
         $emailCol = '';
-        $tool_content .= action_bar(array(
+        $action_bar = action_bar(array(
             array('title' => $langBack,
                 'url' => "index.php",
                 'icon' => 'fa-reply',
@@ -105,8 +104,8 @@ if ($learnPathName) {
                 'level' => 'primary-label')
 
         ));
+        $tool_content .= $action_bar;
     }
-
     $tool_content .= "<div class='table-responsive'>
                     <table id='lpu_progress' class='table-default table-lpu-progress'>
                     <thead>

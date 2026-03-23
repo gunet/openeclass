@@ -2,14 +2,6 @@
 
 // Message file for language en
 // Generated 2026-03-11 16:54:14
-
-$langOfConsultant = "Consultant";
-$langConsultants = "Consultants";
-$langOfConsultants = "Consultants";
-$langsConsultant = "consultant";
-$langsOfConsultant = "consultant";
-$langsConsultants = "consultants";
-$langsOfConsultants = "consultants";
 $langTeacherStudentTutorials = "Useful Guides $langsOfTeacher - $langsOfStudent";
 $langAdminTutorials = "Useful Guides Administrator";
 $lang_email_required = "$langOfUserS email must be required";

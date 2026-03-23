@@ -1888,7 +1888,7 @@ $langMetaHighereducation = "Ανώτερη/Ανώτατη Εκπαίδευση";
  * dropbox.php
  * *********************************************** */
 $langNewPersoMessage = "Νέο προσωπικό μήνυμα";
-$langNewCourseMessage = "Νέο μήνυμα $langsOfCourse";
+$langNewCourseMessage = "Νέο μήνυμα";
 $langBadFormData = "Η αποστολή του αρχείου απέτυχε";
 $langSendTo = "Προς";
 $langReceivedFiles = "Εισερχόμενα";
@@ -3175,6 +3175,7 @@ $langLearningPathList = "Διαθέσιμες γραμμές μάθησης";
 $langLearningPathData = "Στοιχεία γραμμής μάθησης";
 $langLearningObjectData = "Στοιχεία Εκπαιδευτικού Αντικείμενου";
 $langLearningPathNotFound = "Η γραμμή μάθησης δεν βρέθηκε ";
+$langLessonStatus = "Κατάσταση ενότητας";
 $langLearningPathStatus = "Κατάσταση";
 $langLinkAsModule = "Χρήση Συνδέσμου";
 $langLinkAsModuleLabel = "Συνδέσμου";
@@ -7284,8 +7285,8 @@ $langLinkFb = "Σύνδεσμος Facebook";
 $langLinkTw = "Σύνδεσμος Twitter";
 $langLinkLn = "Σύνδεσμος LinkedIn";
 $langLinkBanner = "Σύνδεσμος Banner";
-$langShowCoursesInTable = "Εμφάνιση μαθημάτων σε μορφή πίνακα";
-$langShowCoursesInPics = "Εμφάνιση μαθημάτων σε μορφή εικόνων";
+$langShowCoursesInTable = "Εμφάνιση σε μορφή πίνακα";
+$langShowCoursesInPics = "Εμφάνιση σε μορφή εικόνων";
 $langDeliverableInserted = "Δημιουργήσατε με επιτυχία το παραδοτέο";
 $langCreateDeliverable = "Δημιουργία παραδοτέου";
 $langImgFormsDes = "Συμπληρώστε τα υποχρεωτικά πεδία στην εικονιζόμενη φόρμα";

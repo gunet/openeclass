@@ -239,24 +239,6 @@ if (!isset($_POST['create_course'])) {
         // create new course code: uppercase, no spaces allowed
         $code = strtoupper(new_code($departments[0]));
         $code = str_replace(' ', '', $code);
-        // include_messages
-        include "lang/$language/common.inc.php";
-        $extra_messages = "config/{$language_codes[$language]}.inc.php";
-        if (file_exists($extra_messages)) {
-            include $extra_messages;
-        } else {
-            $extra_messages = false;
-        }
-        include "lang/$language/messages.inc.php";
-        if (file_exists('config/config.php')) {
-            if (get_config('show_always_collaboration') and get_config('show_collaboration')) {
-                include "lang/$language/messages_collaboration.inc.php";
-            }
-        }
-        if ($extra_messages) {
-            include $extra_messages;
-        }
-
         // create course directories
         if (!create_course_dirs($code)) {
             Session::flash('message', $langGeneralError);

@@ -211,12 +211,13 @@ function getUserCourseInfo($uid): string
         }
     }
 
-    // Create ui for collabations which a user is participated in.
-    if(get_config('show_collaboration')){
-        if(!get_config('show_always_collaboration')){
-        $lesson_content .= "<div class='col-12 mt-5 mb-4'>
-                <h2>$langMyCollaborations&nbsp;&nbsp;(" . count($myCollaborations) . ")</h2>
-            </div>";}
+    // Create ui for collaborations which a user is participated in.
+    if (get_config('show_collaboration')) {
+        if (!get_config('show_always_collaboration')) {
+            $lesson_content .= "<div class='col-12 mt-5 mb-4'>
+                    <h2>$langMyCollaborations&nbsp;&nbsp;(" . count($myCollaborations) . ")</h2>
+                </div>";
+        }
         if($myCollaborations){
                 $lesson_content .= "<table id='portfolio_collaborations' class='table portfolio-collaborations-table'>";
                 $lesson_content .= "<thead class='visually-hidden'><tr><th>$langCourse</th><th>$langActions</th></tr></thead>";

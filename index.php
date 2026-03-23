@@ -129,11 +129,12 @@ if (isset($language)) {
     } else {
         $extra_messages = false;
     }
+    if (get_config('show_always_collaboration') && get_config('show_collaboration')) {
+        require "$webDir/lang/$language/common_collaboration.inc.php";
+    }
     include "lang/$language/messages.inc.php";
-    if (file_exists('config/config.php')) {
-        if(get_config('show_always_collaboration') and get_config('show_collaboration')){
-            include "lang/$language/messages_collaboration.inc.php";
-        }
+    if(get_config('show_always_collaboration') and get_config('show_collaboration')){
+        include "lang/$language/messages_collaboration.inc.php";
     }
     if ($extra_messages) {
         include $extra_messages;
