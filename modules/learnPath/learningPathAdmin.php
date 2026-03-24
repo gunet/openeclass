@@ -51,6 +51,7 @@
  */
 
 $require_current_course = TRUE;
+$require_editor = TRUE;
 $require_help = TRUE;
 $helpTopic = "learningpath";
 $helpSubTopic = 'units';
@@ -70,16 +71,6 @@ if (!add_units_navigation()) {
 // $_SESSION
 if (isset($_GET['path_id']) && $_GET['path_id'] > 0) {
     $_SESSION['path_id'] = intval($_GET['path_id']);
-}
-
-// get user out of here if he is not allowed to edit
-if (!$is_editor) {
-    if (isset($_SESSION['path_id'])) {
-        header("Location: ./learningPath.php?course=$course_code&path_id=" . $_SESSION['path_id']);
-    } else {
-        header("Location: ./index.php?course=$course_code");
-    }
-    exit();
 }
 
 load_js('tools.js');
@@ -390,20 +381,24 @@ if (isset($sortDirection) && $sortDirection) {
     }
 }
 
+// learning path title and comments
 $tool_content .= "<div class='col-sm-12'><div class='card panelCard card-default px-lg-4 py-lg-3'>";
-
 if ($cmd == "updateName") {
-    $tool_content .= disp_message_box(nameBox(LEARNINGPATH_, UPDATE_, $langModify));
+    if (isset($_POST['submit_name'])) {
+        Database::get()->query("UPDATE lp_learnPath 
+                                SET name = ?s, comment = ?s
+                                WHERE learnPath_id = ?d AND course_id = ?d",
+                            $_POST['newName'], $_POST['newComment'], $_POST['path_id'], $course_id);
+        Session::Messages($langBBBUpdateSuccessful, 'alert-success');
+        redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course=' . $course_code . '&path_id=' . $_POST['path_id']);
+    } else {
+        $tool_content .= display_learn_path_title($_SESSION['path_id'], 'updateName');
+    }
 } else {
-    $tool_content .= nameBox(LEARNINGPATH_, DISPLAY_);
+    $tool_content .= display_learn_path_title($_SESSION['path_id']);
 }
-if ($cmd == "updatecomment") {
-    $tool_content .= commentBox(LEARNINGPATH_, UPDATE_);
-} elseif ($cmd == "delcomment") {
-    $tool_content .= commentBox(LEARNINGPATH_, DELETE_);
-} else {
-    $tool_content .= commentBox(LEARNINGPATH_, DISPLAY_);
-}
+
+// learning path progress switch
 $tool_content .= "<div class='card-body'>
     <form method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code'>
         <div class='form-check form-switch'>
@@ -416,7 +411,6 @@ $tool_content .= "<div class='card-body'>
 </div>";
 
 $tool_content .= "</div></div>";
-
 
 if (isset($displayChangePosForm) && $displayChangePosForm) {
     $dialogBox = "

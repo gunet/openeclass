@@ -69,121 +69,6 @@ const SCORM_TIME_MASK = "/^([0-9]{2,4}):([0-9]{2}):([0-9]{2}).?([0-9]?[0-9]?)$/"
 const SCORM_2004_TIME_MASK = "/^PT(([0-9]{1,2})H)?(([0-9]{1,2})M)?(([0-9]{1,2}).?([0-9]?[0-9]?)S)?$/";
 
 /*
- * This function is used to display comments of module or learning path with admin links if needed.
- * Admin links are 'edit' and 'delete' links.
- *
- * @param string $type MODULE_ , LEARNINGPATH_ , LEARNINGPATHMODULE_
- * @param string $mode DISPLAY_ , UPDATE_ , DELETE_
- *
- * @author Thanos Kyritsis <atkyritsis@upnet.gr>
- * @author Piraux Sebastien <pir@cerdecam.be>
- * @author Lederer Guillaume <led@cerdecam.be>
- */
-
-function commentBox($type, $mode) {
-    global $is_editor, $langModify, $langSubmit,
-    $langAdd, $langConfirmDelete, $langDefaultLearningPathComment,
-    $langDefaultModuleComment, $langDefaultModuleAddedComment, $langDelete, $course_code,
-    $course_id;
-
-    // will be set 'true' if the comment has to be displayed
-    $dsp = false;
-    $output = $defaultTxt = "";
-
-    // those vars will be used to build sql queries according to the comment type
-    switch ($type) {
-        case MODULE_ :
-            $defaultTxt = $langDefaultModuleComment;
-            $col_name = 'comment';
-            $tbl_name = 'lp_module';
-            if (isset($_REQUEST['module_id'])) {
-                $module_id = $_REQUEST['module_id'];
-            } else {
-                $module_id = $_SESSION['lp_module_id'];
-            }
-            $where_cond = "`module_id` = " . intval($module_id) . " AND `course_id` = " . intval($course_id);
-            break;
-        case LEARNINGPATH_ :
-            $defaultTxt = $langDefaultLearningPathComment;
-            $col_name = 'comment';
-            $tbl_name = 'lp_learnPath';
-            $where_cond = '`learnPath_id` = ' . intval($_SESSION['path_id']) . " AND `course_id` = " . intval($course_id);
-            break;
-        case LEARNINGPATHMODULE_ :
-            $defaultTxt = $langDefaultModuleAddedComment;
-            $col_name = 'specificComment';
-            $tbl_name = 'lp_rel_learnPath_module';
-            $where_cond = "`learnPath_id` = " . intval($_SESSION['path_id']) . " AND `module_id` = " . intval($_SESSION['lp_module_id']);
-            break;
-    }
-
-    // update mode
-    // allow to choose between
-    // - update and show the comment and the pencil and the delete cross (UPDATE_)
-    // - update and nothing displayed after form sent (UPDATENOTSHOWN_)
-    if (( $mode == UPDATE_ || $mode == UPDATENOTSHOWN_ ) && $is_editor) {
-        if (isset($_POST['insertCommentBox'])) {
-            Database::get()->query("UPDATE $tbl_name SET $col_name = ?s WHERE " . $where_cond . "", $_POST['insertCommentBox']);
-
-            if ($mode == UPDATE_) {
-                $dsp = true;
-            } else if ($mode == UPDATENOTSHOWN_) {
-                $dsp = false;
-            }
-        } else { // display form
-            // get info to fill the form in
-            $sql = "SELECT `" . $col_name . "`
-                       FROM `" . $tbl_name . "`
-                      WHERE " . $where_cond;
-            $oldComment = Database::get()->querySingle($sql)->$col_name;
-
-            $output .= "<div class='card-body'><form method='POST' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
-                <textarea class='form-control' name='insertCommentBox' rows='3'>" . q($oldComment) . "</textarea><br>
-                <input type='hidden' name='cmd' value='update$col_name' />
-                <input class='btn submitAdminBtn' type='submit' value=$langSubmit /></form></div>";
-        }
-    }
-
-    // delete mode
-    if ($mode == DELETE_ && $is_editor) {
-        $sql = "UPDATE `" . $tbl_name . "` SET `" . $col_name . "` = '' WHERE " . $where_cond;
-        Database::get()->query($sql);
-        $dsp = TRUE;
-    }
-
-    // display mode only or display was asked by delete mode or update mode
-    if ($mode == DISPLAY_ || $dsp == TRUE) {
-        $sql = "SELECT `" . $col_name . "` FROM `" . $tbl_name . "` WHERE " . $where_cond;
-
-        $result = Database::get()->querySingle($sql);
-        $currentComment = ($result && !empty($result->$col_name)) ? $result->$col_name : false;
-
-        // display nothing if this is the default comment and not an admin
-        if (($currentComment == $defaultTxt || empty($currentComment)) && !$is_editor) {
-            return $output;
-        }
-
-        $output .= "<div class='card-body'>";
-        if (empty($currentComment)) {
-            // if no comment and user is admin : display link to add a comment
-            if ($is_editor) {
-                $output .= '<a href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmd=update' . $col_name . '">' . $langAdd . '</a>';
-            }
-        } else {
-            $output .=  standard_text_escape($currentComment);
-            if ($is_editor) {
-                $output .= "&nbsp;&nbsp;&nbsp;" . icon('fa-edit', $langModify, $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmd=update' . $col_name . "");
-                $output .= "&nbsp;&nbsp;&nbsp";
-                $output .= icon('fa-xmark link-delete', $langDelete, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;cmd=del$col_name", 'onClick="javascript:if(!confirm(\'' . clean_str_for_javascript($langConfirmDelete) . '\')) return false;"');
-            }
-        }
-        $output .= "</div>";
-    }
-
-    return $output;
-}
-
-/*
  * @brief: This function is used to display name of module or learning path with admin links if needed
  *
  * @param string $type MODULE_ , LEARNINGPATH_
@@ -219,7 +104,7 @@ function nameBox($type, $mode, $formlabel = FALSE) {
     // update mode
     if ($mode == UPDATE_ && $is_editor) {
 
-        if (isset($_POST['newName']) && !empty($_POST['newName'])) {
+        if (!empty($_POST['newName'])) {
             $num = Database::get()->querySingle("SELECT COUNT(`" . $col_name . "`) AS count
                                  FROM `" . $tbl_name . "`
                                 WHERE `" . $col_name . "` = ?s
@@ -244,7 +129,7 @@ function nameBox($type, $mode, $formlabel = FALSE) {
 
             if ($formlabel != FALSE) {
                 $output .= '<div class="col-12"><div class="d-flex justify-content-start align-items-center gap-2">'
-                        . '<input class="form-control max-input-width mt-0" type="text" name="newName" size="50" maxlength="255" value="' . htmlspecialchars($oldName) . '">'
+                        . '<input class="form-control max-input-width mt-0" type="text" name="newName" size="50" maxlength="255" value="' . q($oldName) . '">'
                         . '<button class="btn submitAdminBtn" type="submit" value="'.$langModify.'">'.$langModify.'</button>'
                         . '</div></div>'
                         . '<input type="hidden" name="cmd" value="updateName" />'
@@ -270,12 +155,69 @@ function nameBox($type, $mode, $formlabel = FALSE) {
     return $output;
 }
 
+/**
+ * @brief: This function is used to display - edit the title - description of a learning path
+ * @param $path_id
+ * @return string
+ */
+function display_learn_path_title($path_id, $cmd = ''): string
+{
+    global $course_code, $langSubmit, $langName, $langModify, $langDescription, $is_editor;
+
+    $q = Database::get()->querySingle("SELECT name, comment FROM lp_learnPath WHERE learnPath_id = ?d", $path_id);
+    if ($q) {
+        $oldName = $q->name;
+        $oldComment = $q->comment;
+    } else {
+        $oldName = $oldComment = '';
+    }
+
+    if (isset($cmd) and $cmd == 'updateName') {
+        $output = "<div class='card-body'>
+                    <form class='form-horizontal' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&cmd=updateName'>
+                        <div class='row form-group'>
+                            <label class='col-12 control-label-notes mb-2'>
+                                $langName
+                            </label>
+                            <div class='col-12'>
+                                <input class='form-control' type='text' name='newName' maxlength='255' value='" . q($oldName) . "'>                                                    
+                            </div>
+                        </div>
+                        <div class='row mt-4 form-group'>
+                            <div class='col-12'>
+                                <label for='newContent' class='col-12 control-label-notes'>
+                                    $langDescription
+                                </label>
+                                <textarea class='form-control' name='newComment' rows='3'>" . q($oldComment) . "</textarea>
+                                <input type='hidden' name='path_id' value='$path_id'>
+                                <input class='btn submitAdminBtn mt-3' type='submit' name='submit_name' value='$langSubmit'>
+                            </div>
+                        </div>
+                    </form>
+               </div>";
+    } else {
+            $output = "<div class='card-body'>
+                        <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+                        <h3>" . q($oldName) . "</h3>";
+                        if ($is_editor) {
+                            $output .= icon('fa-edit', $langModify, $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;path_id=' . $_SESSION['path_id'] . '&amp;cmd=updateName');
+                        }
+                        $output .= "</div>
+                        <div class='card-body'>" .
+                            q($oldComment) .
+                       "</div>";
+            }
+
+    return $output;
+}
+
+
 /*
  * This function is used to display the correct image in the modules lists
- * It looks for the correct type in the array, and return the corresponding image name if found
+ * It looks for the correct type in the array and returns the corresponding image name if found
  * else it returns a default image
  *
- * @param  string $contentType type of content in learning path
+ * @param  string $contentType type of content in a learning path
  * @return string name of the image with extension
  *
  * @author Thanos Kyritsis <atkyritsis@upnet.gr>
@@ -1178,7 +1120,7 @@ function get_module_tree($lpModules, $id, $field = 'module_id') {
  * Convert the time recorded in seconds to a scorm type
  *
  * @author Piraux Sebastien <pir@cerdecam.be>
- * @param $time time in seconds to convert to a scorm type time
+ * @param time in seconds to convert to a scorm type time
  * @return string compatible scorm type (smaller format)
  */
 function seconds_to_scorm_time($time) {
@@ -1199,7 +1141,7 @@ function seconds_to_scorm_time($time) {
 }
 
 /**
- * This function allows to see if a time string is the SCORM 2004 requested format:
+ * This function allows seeing if a time string is the SCORM 2004 requested format:
  * timeinterval(second,10,2): PThHmMsS
  *
  * @param ?string $time a suspected SCORM 2004 time value, returned by the javascript API
@@ -1443,33 +1385,6 @@ function disp_message_box($message, $style = FALSE) {
     return "$cell $message";
 }
 
-/*
- * Prepare the display of a clickable button
- *
- * @author Hugues Peeters <hugues.peeters@claroline.net>
- *
- * @param string $url url inserted into the 'href' part of the tag
- * @param string $text text inserted between the two <a>...</a> tags (note : it
- *        could also be an image ...)
- * @param string $confirmMessage (optionnal) introduce a javascript confirmation popup
- * @return string the button
- */
-
-function disp_button($url, $text, $confirmMessage = '') {
-    if (is_javascript_enabled() && !preg_match('~^Mozilla/4\.[1234567]~', $_SERVER['HTTP_USER_AGENT'])) {
-        if ($confirmMessage != '') {
-            $onClickCommand = "if(confirm('" . clean_str_for_javascript($confirmMessage) . "')){document.location='" . $url . "';return false}";
-        } else {
-            $onClickCommand = "document.location='" . $url . "';return false";
-        }
-
-        return '<button onclick="' . $onClickCommand . '">'
-                . $text
-                . '</button>&nbsp;' . "\n";
-    } else {
-        return '[ <a href="' . $url . '">' . $text . '</a> ]';
-    }
-}
 
 /*
  * Function used to draw a progression bar

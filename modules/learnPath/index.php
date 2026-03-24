@@ -213,16 +213,12 @@ if ($is_editor) {
                             </div>
                         </div>
 
-
-
                         <div class='form-group mt-4'>
                             <label for='newComment' class='col-sm-6 control-label-notes'>$langDescription</label>
                             <div class='col-sm-12'>
                               <input name='newComment' type='text' class='form-control' id='newComment'>
                             </div>
                         </div>
-
-
 
                         <div class='form-group mt-5'>
                             <div class='col-12 d-flex justify-content-end align-items-center'>
@@ -260,7 +256,7 @@ if ($is_editor) {
                                 <div class='form-group mt-4'>
                                     <label for='newComment' class='col-sm-6 control-label-notes'>$langDescription</label>
                                     <div class='col-sm-12'>
-                                    <input name='newComment' placeholder='$langDescription' type='text' class='form-control' id='newComment'>
+                                        <textarea class='form-control' name='newComment' id='newComment' rows='3' placeholder='$langDescription'></textarea>                                    
                                     </div>
                                 </div>
 
@@ -523,7 +519,7 @@ foreach ($result as $list) { // while ... learning path list
         $tool_content .= "
                     </div>
                 <div class='mt-2'><p>" . q($list->lp_comment) . "<p></div>
-            </td><td>" . (($resultmodules[0]->contentType === "SCORM") ? $langAltScorm : $langLearnPath) . "</td>";
+            </td><td>" . (((count($resultmodules) > 0) && $resultmodules[0]->contentType === "SCORM") ? $langAltScorm : $langLearnPath) . "</td>";
 
         // --------------TEST IF FOLLOWING PATH MUST BE BLOCKED------------------
         // ---------------------(MUST BE OPTIMIZED)------------------------------
