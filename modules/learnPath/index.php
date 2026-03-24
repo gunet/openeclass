@@ -448,7 +448,6 @@ $tool_content .= "
                 })
 
                 let uploadPath = '" . $urlAppend . "modules/learnPath/importLearningPath.php?course=" . $course_code . "';
-                console.log('Upload Path: ', uploadPath);
 
                 let replaceIdInput = document.querySelector('input[name=\"replace_id\"]');
                 let replaceId = replaceIdInput ? replaceIdInput.value : '';
