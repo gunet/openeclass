@@ -12352,13 +12352,13 @@ function theme_initialization() {
                 textarea:focus-visible{
                     outline: 0 !important;
                     box-shadow: none !important;
-                    border: solid 1px $theme_options_styles[ColorFocus] !important;
+                    border: solid 2px $theme_options_styles[ColorFocus] !important;
                 }
 
                 .input-group:focus-within .input-group-text{
                     outline: 0 !important;
                     box-shadow: none !important;
-                    border: solid 1px $theme_options_styles[ColorFocus] !important;
+                    border: solid 2px $theme_options_styles[ColorFocus] !important;
                     border-left: 0px !important;
                 }
             ";
