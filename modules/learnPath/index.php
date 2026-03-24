@@ -213,12 +213,16 @@ if ($is_editor) {
                             </div>
                         </div>
 
+
+
                         <div class='form-group mt-4'>
                             <label for='newComment' class='col-sm-6 control-label-notes'>$langDescription</label>
                             <div class='col-sm-12'>
                               <input name='newComment' type='text' class='form-control' id='newComment'>
                             </div>
                         </div>
+
+
 
                         <div class='form-group mt-5'>
                             <div class='col-12 d-flex justify-content-end align-items-center'>
@@ -256,7 +260,7 @@ if ($is_editor) {
                                 <div class='form-group mt-4'>
                                     <label for='newComment' class='col-sm-6 control-label-notes'>$langDescription</label>
                                     <div class='col-sm-12'>
-                                        <textarea class='form-control' name='newComment' id='newComment' rows='3' placeholder='$langDescription'></textarea>                                    
+                                    <input name='newComment' placeholder='$langDescription' type='text' class='form-control' id='newComment'>
                                     </div>
                                 </div>
 
@@ -356,7 +360,7 @@ if ($is_editor) {
                         'url' => "importLearningPath.php?course=$course_code",
                         'icon' => 'fa-upload',
                         'level' => 'primary-label',
-                        'button-class' => 'btn-success'),
+                        'button-class' => 'uploadBTN btn-success'),
                     array('title' => $langCreate,
                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;cmd=create",
                         'icon' => 'fa-plus-circle',
@@ -402,6 +406,116 @@ if ($l == 0) {
     draw($tool_content, 2, null, $head_content);
     exit();
 }
+//echo "<pre>";
+//var_dump($_SERVER);
+//echo "</pre>";
+$head_content .= "<link href='".$urlAppend."js/bundle/uppy.min.css' rel='stylesheet' />";
+$tool_content .= "
+    <script>
+        let isUppyLoaded = false;
+
+        async function loadUppy() {
+            try {
+                const { Uppy, Dashboard, XHRUpload, English, French, German, Italian, Spanish, Greek } = await import('" . $urlAppend . "js/bundle/uppy.js');
+
+                const locale_map = {
+                  'de': German,
+                  'el': Greek,
+                  'en': English,
+                  'es': Spanish,
+                  'fr': French,
+                  'it': Italian,
+                }
+
+                const uppy = new Uppy({
+                    autoProceed: false,
+                    restrictions: {
+                        maxFileSize: " . parseSize(ini_get('upload_max_filesize')) . ",
+                        maxTotalFileSize: " . fileUploadMaxSize() . ",
+                        allowedFileTypes: ['.zip'],
+                        maxNumberOfFiles: 1
+                    }
+                })
+
+                uppy.use(Dashboard, {
+                    target: '#uppy',
+                    inline: true,
+                    showProgressDetails: true,
+                    proudlyDisplayPoweredByUppy: false,
+                    height: 500,
+                    thumbnailWidth: 100,
+                    locale: locale_map['" . $language . "'] || English,
+                })
+
+                let uploadPath = '" . $urlAppend . "modules/learnPath/importLearningPath.php?course=" . $course_code . "';
+                console.log('Upload Path: ', uploadPath);
+
+                let replaceIdInput = document.querySelector('input[name=\"replace_id\"]');
+                let replaceId = replaceIdInput ? replaceIdInput.value : '';
+
+                uppy.setMeta({
+                    uploadPath: uploadPath,
+                    token: '" . $_SESSION['csrf_token'] . "',
+                    replace_id: replaceId 
+                });
+
+                uppy.use(XHRUpload, {
+                    endpoint: '" . $urlAppend . "modules/learnPath/importLearningPath.php?course=" . $course_code . "',
+                    formData: true,
+                    fieldName: 'uploadedPackage', 
+                    method: 'POST',
+                    headers: {
+
+                    },
+                    allowedMetaFields: [
+                        'XHRUpload',
+                        'uploadPath',
+                        'token',
+                        'replace_id' 
+                    ],
+                    shouldRetry: () => false,
+                    getResponseData: (responseText, response) => {
+                        return { url: '' }; 
+                    }
+                })
+
+                uppy.setMeta({
+                    uploadPath: '" . $urlAppend . "modules/learnPath/importLearningPath.php?course=" . $course_code . "',
+                    XHRUpload: true,
+                });
+
+                uppy.on('file-added', (file) => {
+                  //  console.log('File added:', file)
+                })
+
+                uppy.on('complete', (result) => {
+                    window.location.href = '" . documentBackLink('') . "';
+                })
+                
+                isUppyLoaded = true;
+                
+            } catch (error) {
+                console.log(error);
+                isUppyLoaded = false;
+            }
+        }
+
+        $(document).ready(function(){
+            loadUppy();
+
+            $('.uploadBTN').on('click', function(event) {
+                event.preventDefault();
+                if (!isUppyLoaded) {
+                    console.log('Uppy not loaded');
+                } else {
+                    $('.drag_and_drop_container').toggleClass('d-none');
+                }
+            });
+        });
+    </script>
+";
+
+$tool_content .= "<div class='col-12 drag_and_drop_container d-none mb-3'><div id='uppy'></div></div>";
 
 $tool_content .= "
 <div class='table-responsive'>
@@ -519,7 +633,7 @@ foreach ($result as $list) { // while ... learning path list
         $tool_content .= "
                     </div>
                 <div class='mt-2'><p>" . q($list->lp_comment) . "<p></div>
-            </td><td>" . (((count($resultmodules) > 0) && $resultmodules[0]->contentType === "SCORM") ? $langAltScorm : $langLearnPath) . "</td>";
+            </td><td>" . ((isset($resultmodules[0]) && $resultmodules[0]->contentType === "SCORM") ? $langAltScorm : $langLearnPath) . "</td>";
 
         // --------------TEST IF FOLLOWING PATH MUST BE BLOCKED------------------
         // ---------------------(MUST BE OPTIMIZED)------------------------------
