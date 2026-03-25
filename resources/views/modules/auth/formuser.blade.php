@@ -65,7 +65,7 @@
                                                     <div class='form-group mt-4'>
                                                         <label for='UserPhone' class='col-sm-12 control-label-notes'>{{ trans('langPhone') }}</label>
                                                         <div class='col-sm-12'>
-                                                            <input id='UserPhone' class='form-control' type='text' name='userphone' value='' size='15' maxlength='15' placeholder='{{ trans('langCompulsory') }}'>
+                                                            <input id='UserPhone' class='form-control' type='text' name='userphone' value='' size='15' maxlength='15' placeholder='{{ trans('langCompulsory') }}' required>
                                                         </div>
                                                     </div>
                                                 </div>

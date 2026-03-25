@@ -114,7 +114,7 @@
                                             </div>
                                         </div>
 
-                                        <div class='row mt-4 form-groum'>
+                                        <div class='row mt-4 form-group'>
                                             <label for='newContent' class='col-12 control-label-notes'>{{ trans('langAnnBody') }}</label>
                                             <div class='col-12'>{!! $contentToModify !!}</div>
                                         </div>

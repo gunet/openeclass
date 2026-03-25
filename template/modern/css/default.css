@@ -5706,12 +5706,12 @@ select:focus-visible,
 textarea:focus-visible{
   outline: 0 !important;
   box-shadow: none !important;
-  border: solid 1px #0073E6 !important;
+  border: solid 2px #0073E6 !important;
 }
 .input-group:focus-within .input-group-text{
   outline: 0 !important;
   box-shadow: none !important;
-  border: solid 1px #0073E6 !important;
+  border: solid 2px #0073E6 !important;
   border-left: 0px !important;
 }
 
