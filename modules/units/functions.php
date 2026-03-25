@@ -2305,8 +2305,8 @@ function edit_res($resource_id) {
                     <div class='col-sm-12'>" . rich_text_editor('rescomments', 4, 20, $rescomments) . "</div>
                 </div>                                
                 <div class='col-12 d-flex justify-content-end align-items-center gap-2 mt-5'>
-                    <a class='btn cancelAdminBtn ms-2' href='index.php?course=$course_code&id=$id'>$langCancel</a>
                     <input class='btn submitAdminBtn' type='submit' name='edit_res_submit' value='$langSubmit'>
+                    <a class='btn cancelAdminBtn ms-2' href='index.php?course=$course_code&id=$id'>$langCancel</a>                    
                 </div>                
             </form></div>
         </div>

@@ -148,6 +148,7 @@
                                         @if ($require_help)
                                             {{-- help icon / link --}}
                                             <a id='help-btn'
+                                               tabindex='0'
                                                href='{{ $urlServer }}modules/help/help.php?language={{ $language }}&topic={{ $helpTopic }}&subtopic={{ $helpSubTopic }}'
                                                class='btn helpAdminBtn text-decoration-none' data-bs-toggle='tooltip'
                                                data-bs-placement='bottom'

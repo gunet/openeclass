@@ -190,16 +190,10 @@ for ($i = 0; $i < sizeof($flatElementList); $i++) {
 /* ================================================================
   OUTPUT STARTS HERE
   ================================================================ */
-
-// comment
+// learning path title and comments
 $tool_content .= "<div class='card panelCard card-default px-lg-4 py-lg-3'>";
-$tool_content .= nameBox(LEARNINGPATH_, DISPLAY_);
-
-if (commentBox(LEARNINGPATH_, DISPLAY_)) {
-    $tool_content .= commentBox(LEARNINGPATH_, DISPLAY_);
-}
+$tool_content .= display_learn_path_title($path_id);
 $tool_content .= "</div>";
-
 // --------------------------- module table header --------------------------
 $tool_content .= "<div class='table-responsive'>";
 $tool_content .= "<table class='table-default'>";

@@ -4871,9 +4871,17 @@ function get_platform_logo($size = 'normal', $position = 'header') {
         $image_align = setting_get(SETTING_COURSE_IMAGE_PRINT_FOOTER_ALIGNMENT, $course_id);
         $image_align = ($image_align == 0) ? 'left' : (($image_align == 1) ? 'center' : 'right');
         $image_height = setting_get(SETTING_COURSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id);
+        // for old courses
+        if ($image_height > 50) {
+            $image_height = 15;
+        }
     } else {
         $header_path = setting_get_print_image_disk_path(SETTING_COURSE_IMAGE_PRINT_HEADER, $course_id);
         $image_height = setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_WIDTH, $course_id);
+        // for old courses
+        if ($image_height > 50) {
+            $image_height = 20;
+        }
         $image_align = setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_ALIGNMENT, $course_id);
         $image_align = ($image_align == 0) ? 'left' : (($image_align == 1) ? 'center' : 'right');
         if ($header_path) {
@@ -12344,13 +12352,13 @@ function theme_initialization() {
                 textarea:focus-visible{
                     outline: 0 !important;
                     box-shadow: none !important;
-                    border: solid 1px $theme_options_styles[ColorFocus] !important;
+                    border: solid 2px $theme_options_styles[ColorFocus] !important;
                 }
 
                 .input-group:focus-within .input-group-text{
                     outline: 0 !important;
                     box-shadow: none !important;
-                    border: solid 1px $theme_options_styles[ColorFocus] !important;
+                    border: solid 2px $theme_options_styles[ColorFocus] !important;
                     border-left: 0px !important;
                 }
             ";

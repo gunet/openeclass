@@ -36,7 +36,7 @@ require_once 'include/course_settings.php';
 require_once 'include/lib/learnPathLib.inc.php';
 
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langLearningPaths);
-$toolName = $langStatsOfLearnPath;
+$toolName = $langTracking;
 
 if (empty($_REQUEST['path_id'])) { // path id can not be empty
     header("Location: ./index.php?course=$course_code");
@@ -83,14 +83,13 @@ $head_content .= "<script type='text/javascript'>
 $learnPathName = Database::get()->querySingle("SELECT `name` FROM `lp_learnPath` WHERE `learnPath_id` = ?d AND `course_id` = ?d", $path_id, $course_id);
 
 if ($learnPathName) {
-    $titleTab['subTitle'] = q($learnPathName->name);
-    $pageName = $langLearnPath.": ".disp_tool_title($titleTab);
+    $pageName = q($learnPathName->name);
 
     if (isset($_GET['pdf'])) {
         $emailCol = "<th class='text-left'>$langEmail</th>";
     } else {
         $emailCol = '';
-        $tool_content .= action_bar(array(
+        $action_bar = action_bar(array(
             array('title' => $langBack,
                 'url' => "index.php",
                 'icon' => 'fa-reply',
@@ -105,8 +104,8 @@ if ($learnPathName) {
                 'level' => 'primary-label')
 
         ));
+        $tool_content .= $action_bar;
     }
-
     $tool_content .= "<div class='table-responsive'>
                     <table id='lpu_progress' class='table-default table-lpu-progress'>
                     <thead>
@@ -232,9 +231,16 @@ if (isset($_GET['xls'])) {
 
     $image_height_header = setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_WIDTH, $course_id);
     $image_height_footer = setting_get(SETTING_COURSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id);
+    // for old courses
+    if ($image_height_header > 50) {
+        $image_height_header = 20;
+    }
+    if ($image_height_footer > 50) {
+        $image_height_footer = 15;
+    }
     $mpdf = new Mpdf\Mpdf([
-        'margin_top' => $image_height_header+15,     // mm
-        'margin_bottom' => $image_height_footer+15,  // mm
+        'margin_top' => $image_height_header + 20,     // mm
+        'margin_bottom' => $image_height_footer + 10,  // mm
         'tempDir' => _MPDF_TEMP_PATH,
         'fontDir' => array_merge($fontDirs, [$webDir . '/template/modern/fonts']),
         'fontdata' => $fontData + [

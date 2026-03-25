@@ -93,6 +93,9 @@
                         'token'
                     ],
                     shouldRetry: () => false,
+                    getResponseData: (responseText, response) => {
+                        return { url: '' };
+                    }
                 })
 
                 uppy.setMeta({

@@ -199,6 +199,23 @@
     </button>
     <script>
         $(function() {
+
+            var inputTreeModal = document.getElementById('dialog-set-value');
+            $('#treeModal').on('hidden.bs.modal', function () {
+                inputTreeModal.focus();
+            });
+            
+            document.addEventListener('keydown', function(event) {
+                const activeElement = document.activeElement;
+                if (activeElement && (activeElement.type === 'checkbox' || activeElement.type === 'radio')) {
+                    if (event.key === 'Enter') {
+                        event.preventDefault();
+                        activeElement.checked = !activeElement.checked;
+                        activeElement.dispatchEvent(new Event('change'));
+                    }
+                }
+            });
+
             $(".datetimepicker table > thead > tr").find("th.prev").each(function() {
                 if ($(this).find('.visually-hidden').length === 0) {
                     $(this).append('<span class="visually-hidden">{{ trans("langPrevious") }}</span>');
