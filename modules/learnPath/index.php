@@ -362,7 +362,8 @@ if ($is_editor) {
                         'url' => "importLearningPath.php?course=$course_code",
                         'icon' => 'fa-upload',
                         'level' => 'primary-label',
-                        'button-class' => 'uploadBTN btn-success'),
+                        'button-class' => 'btn-success',
+                        'text-class' => 'uploadBTN'),
                     array('title' => $langCreate,
                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;cmd=create",
                         'icon' => 'fa-plus-circle',
@@ -411,7 +412,7 @@ if ($l == 0) {
 //echo "<pre>";
 //var_dump($_SERVER);
 //echo "</pre>";
-$head_content .= "<link href='".$urlAppend."js/bundle/uppy.min.css' rel='stylesheet' />";
+$head_content .= "<link href='" . $urlAppend . "js/bundle/uppy.min.css' rel='stylesheet' />";
 $tool_content .= "
     <script>
         let isUppyLoaded = false;
