@@ -2612,6 +2612,9 @@ body .form-action-button-mydropdowns{
 .col_maincontent_active.action-button-on .contextual-menu-action-button.show { 
   z-index: 1001; 
 }
+.contextual-menu-action-button.show{
+  transform: translate(-40px, 0px) !important;
+}
 
 
 /**********************************************************************************************************************/

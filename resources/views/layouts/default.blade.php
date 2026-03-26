@@ -127,6 +127,17 @@
                 $('.dt-scroll-body').removeClass('no-overflow');
             });
         });
+        $(function() {
+            $(document).on('click', '.action-button-dropdown', function() {
+                $(this).find('.fa-gear').removeClass('fa-gear').addClass('fa-chevron-left');
+                if (!$(this).hasClass('show')) {
+                    $(this).find('.fa-chevron-left').removeClass('fa-chevron-left').addClass('fa-gear');
+                }
+            });
+            $(document).on('hide.bs.dropdown', '.action-button-dropdown', function() {
+                $(this).find('.fa-chevron-left').removeClass('fa-chevron-left').addClass('fa-gear');
+            });
+        });
     </script>
 
 </head>
