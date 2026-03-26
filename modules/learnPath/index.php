@@ -260,7 +260,7 @@ if ($is_editor) {
                                 <div class='form-group mt-4'>
                                     <label for='newComment' class='col-sm-6 control-label-notes'>$langDescription</label>
                                     <div class='col-sm-12'>
-                                    <input name='newComment' placeholder='$langDescription' type='text' class='form-control' id='newComment'>
+                                        <textarea class='form-control' name='newComment' id='newComment' rows='3' placeholder='$langDescription'></textarea>
                                     </div>
                                 </div>
 
@@ -303,26 +303,28 @@ load_js('sortable/Sortable.min.js');
 $head_content .= "
     <script>
         $(document).ready(function(){
-            Sortable.create(tosort,{
-                handle: '.fa-arrows',
-                animation: 150,
-                onEnd: function (evt) {
-
-                var itemEl = $(evt.item);
-
-                var idReorder = itemEl.attr('data-id');
-                var prevIdReorder = itemEl.prev().attr('data-id');
-
-                $.ajax({
-                  type: 'post',
-                  dataType: 'text',
-                  data: {
-                          toReorder: idReorder,
-                          prevReorder: prevIdReorder,
-                        }
-                    });
-                }
-            });
+            if ($('#tosort').length > 0) {
+                Sortable.create(tosort,{
+                    handle: '.fa-arrows',
+                    animation: 150,
+                    onEnd: function (evt) {
+    
+                    var itemEl = $(evt.item);
+    
+                    var idReorder = itemEl.attr('data-id');
+                    var prevIdReorder = itemEl.prev().attr('data-id');
+    
+                    $.ajax({
+                      type: 'post',
+                      dataType: 'text',
+                      data: {
+                              toReorder: idReorder,
+                              prevReorder: prevIdReorder,
+                            }
+                        });
+                    }
+                });
+            }            
 
             let confirmLpCleanAttemptHref;
 
@@ -632,7 +634,8 @@ foreach ($result as $list) { // while ... learning path list
         $tool_content .= "
                     </div>
                 <div class='mt-2'><p>" . q($list->lp_comment) . "<p></div>
-            </td><td>" . ((isset($resultmodules[0]) && $resultmodules[0]->contentType === "SCORM") ? $langAltScorm : $langLearnPath) . "</td>";
+            </td><td>" . (((count($resultmodules) > 0) && $resultmodules[0]->contentType === "SCORM") ? $langAltScorm : $langLearnPath) . "</td>";
+
 
         // --------------TEST IF FOLLOWING PATH MUST BE BLOCKED------------------
         // ---------------------(MUST BE OPTIMIZED)------------------------------
