@@ -85,6 +85,78 @@
                                         </div>
                                     </div>
 
+                                    <div class='form-group mt-4'>
+                                        <label for='perPage' class='col-sm-12 control-label-notes'>
+                                            {{ trans('langStickyNotesPerPage') }}
+                                        </label>
+                                        <div class='col-sm-12 col-md-3'>
+                                            <select class='form-select' id='perPage' name='per_page'>
+                                                @foreach([10, 20, 30, 50] as $opt)
+                                                <option value='{{ $opt }}'
+                                                    {{ ($isEdit && $topic && $topic->per_page == $opt) || (!$isEdit && $opt == 20) ? 'selected' : '' }}>
+                                                    {{ $opt }}
+                                                </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class='form-group mt-4'>
+                                        <div class='col-12'>
+                                            <div class='d-flex align-items-center gap-3'>
+                                                <label class='control-label-notes mb-0'>{{ trans('langStickyNotesHasCategories') }}</label>
+                                                <div class='form-check form-switch'>
+                                                    <input class='form-check-input' type='checkbox' role='switch'
+                                                        id='hasCategories' name='has_categories' value='on'
+                                                        {{ ($isEdit && $topic && $topic->has_categories) ? 'checked' : '' }}>
+                                                </div>
+                                            </div>
+                                            <small class='text-muted'>{{ trans('langStickyNotesCategoriesHint') }}</small>
+                                        </div>
+                                    </div>
+
+                                    <div class='form-group mt-3' id='categoriesSection' style='display:none;'>
+                                        <label class='col-sm-12 control-label-notes'>{{ trans('langStickyNotesCategories') }}</label>
+                                        <div class='col-sm-12'>
+                                            <div id='categoriesList' class='d-flex flex-column gap-2'>
+                                                @if($isEdit && $topic && $topic->has_categories)
+                                                @foreach($categories as $cat)
+                                                <div class='category-row d-flex align-items-center gap-2' draggable="true">
+                                                    <span class='drag-handle' style='cursor:grab; color:#aaa; padding: 0 4px;'>
+                                                        <i class='fa fa-bars'></i>
+                                                    </span>
+                                                    <input type='text' class='form-control' name='category_title[]'
+                                                        placeholder="{{ trans('langStickyNotesCategoryName') }}..."
+                                                        value='{{ e($cat->title) }}'>
+                                                    <input type='hidden' name='category_id[]' value='{{ $cat->id }}'>
+                                                    <input type='hidden' name='category_sort[]' value='{{ $cat->sort_order }}'>
+                                                    <button type='button' class='btn btn-sm btn-outline-danger remove-category'>
+                                                        <i class='fa fa-times'></i>
+                                                    </button>
+                                                </div>
+                                                @endforeach
+                                                @endif
+                                            </div>
+                                            <button type='button' class='btn submitAdminBtn btn-sm mt-2 d-flex gap-2' id='addCategory'>
+                                                <i class='fa fa-plus'></i> {{ trans('langAdd') }}
+                                            </button>
+
+                                        </div>
+                                    </div>
+
+                                    <div class='form-group mt-4'>
+                                        <div class='col-12'>
+                                            <div class='checkbox'>
+                                                <label class='label-container' aria-label="{{ trans('langSelect') }}">
+                                                    <input type='checkbox' name='is_active' value='on'
+                                                        {{ (!$isEdit || ($topic && $topic->is_active)) ? 'checked' : '' }}>
+                                                    <span class='checkmark'></span> {{ trans('langStickyNotesIsActive') }}
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
                                     <div class='form-group mt-5'>
                                         <div class='col-12 d-flex justify-content-end align-items-center gap-2'>
                                             <button class='btn submitAdminBtn' type='submit'>
