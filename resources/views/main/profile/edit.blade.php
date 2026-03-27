@@ -160,21 +160,21 @@
                                 <div class='help-block mb-2'>(*) {{ trans('langShowSettingsInfo') }}</div>
                                 <div class='col-sm-12'>
                                     <div class='checkbox'>
-                                        <label class='label-container' aria-label="{{ trans('langSelect') }}" id="email_public_id">
+                                        <label class='label-container' aria-label="{{ trans('langViewShow') }}{{ trans('langEmail') }}" id="email_public_id">
                                             <input for="email_public_id" type='checkbox' name='email_public' value='1' {!! $email_public_selected  !!}>
                                             <span class='checkmark'></span>
                                             {{ trans('langEmail') }}
                                         </label>
                                     </div>
                                     <div class='checkbox'>
-                                        <label class='label-container' aria-label="{{ trans('langSelect') }}" id="phone_public_id">
+                                        <label class='label-container' aria-label="{{ trans('langViewShow') }}{{ trans('langPhone') }}" id="phone_public_id">
                                             <input for='phone_public_id' type='checkbox' name='phone_public' value='1' {!! $phone_public_selected !!}>
                                             <span class='checkmark'></span>
                                             {{ trans('langPhone') }}
                                         </label>
                                     </div>
                                     <div class='checkbox'>
-                                        <label class='label-container' aria-label="{{ trans('langSelect') }}" id='pic_public_id'>
+                                        <label class='label-container' aria-label="{{ trans('langViewShow') }}{{ trans('langProfileImage') }}" id='pic_public_id'>
                                             <input for='pic_public_id' type='checkbox' name='pic_public' value='1' {!! $pic_public_selected !!}>
                                             <span class='checkmark'></span>
                                             {{ trans('langProfileImage') }}

@@ -738,9 +738,9 @@ if ($is_editor) {
                                             <div class='col-12'>
                                             <div class='col-12 d-flex justify-content-center mt-2 mb-3'>
                                                 <nav aria-label='Page navigation example w-100'>
-                                                    <ul class='pagination mycourses-pagination w-100 mb-0'>
-                                                        <li class='page-item page-item-previous' aria-label='$langPreviousPage'>
-                                                            <a class='page-link' aria-label='$langPreviousPage'><span class='fa-solid fa-chevron-left'></span></a>
+                                                    <ul class='pagination mycourses-pagination w-100 mb-0' role='navigation' aria-label='$langPagination'>
+                                                        <li class='page-item page-item-previous'>
+                                                            <button class='page-link' aria-label='$langPreviousPage'><span class='fa-solid fa-chevron-left'></span></button>
                                                         </li>";
                                                         if($pagesPag >=12 ){
                                                             for($i=1; $i<=$pagesPag; $i++){
@@ -749,16 +749,16 @@ if ($is_editor) {
                                                                     if($i==1) {
                                                                         $tool_content .="
                                                                             <li id='KeypageCenter$i' class='page-item page-item-pages'>
-                                                                                <a id='Keypage$i' class='page-link'>$i</a>
+                                                                                <button id='Keypage$i' class='page-link' aria-label='$langPage {$i}'>$i</button>
                                                                             </li>
 
                                                                             <li id='KeystartLi' class='page-item page-item-pages d-flex justify-content-center align-items-end d-none'>
-                                                                                <a>...</a>
+                                                                                <button>...</button>
                                                                             </li>";
                                                                     } else {
                                                                         if($i<$pagesPag){
                                                                             $tool_content .="<li id='KeypageCenter$i' class='page-item page-item-pages'>
-                                                                                                <a id='Keypage$i' class='page-link'>$i</a>
+                                                                                                <button id='Keypage$i' class='page-link' aria-label='$langPage {$i}'>$i</button>
                                                                                             </li>";
                                                                         }
                                                                     }
@@ -766,19 +766,19 @@ if ($is_editor) {
 
                                                                 if($i>=6 && $i<=$pagesPag-1){
                                                                     $tool_content .="<li id='KeypageCenter$i' class='page-item page-item-pages d-none'>
-                                                                                        <a id='Keypage$i' class='page-link'>$i</a>
+                                                                                        <button id='Keypage$i' class='page-link' aria-label='$langPage {$i}'>$i</button>
                                                                                     </li>";
 
                                                                     if($i==$pagesPag-1){
                                                                         $tool_content .="<li id='KeycloseLi' class='page-item page-item-pages d-flex justify-content-center align-items-end d-block'>
-                                                                                            <a>...</a>
+                                                                                            <button>...</button>
                                                                                         </li>";
                                                                     }
                                                                 }
 
                                                                 if($i==$pagesPag){
                                                                     $tool_content .="<li id='KeypageCenter$i' class='page-item page-item-pages'>
-                                                                                        <a id='Keypage$i' class='page-link'>$i</a>
+                                                                                        <button id='Keypage$i' class='page-link' aria-label='$langPage {$i}'>$i</button>
                                                                                     </li>";
                                                                 }
                                                             }
@@ -786,13 +786,13 @@ if ($is_editor) {
                                                         } else {
                                                             for($i=1; $i<=$pagesPag; $i++){
                                                                 $tool_content .="<li id='KeypageCenter$i' class='page-item page-item-pages'>
-                                                                                    <a id='Keypage$i' class='page-link'>$i</a>
+                                                                                    <button id='Keypage$i' class='page-link' aria-label='$langPage {$i}'>$i</button>
                                                                                 </li>";
                                                             }
                                                         }
 
-                                        $tool_content .="<li class='page-item page-item-next' aria-label='$langNextPage'>
-                                                            <a class='page-link' aria-label='$langNextPage'><span class='fa-solid fa-chevron-right'></span></a>
+                                        $tool_content .="<li class='page-item page-item-next'>
+                                                            <button class='page-link' aria-label='$langNextPage'><span class='fa-solid fa-chevron-right'></span></button>
                                                         </li>
                                                     </ul>
                                                 </nav>
@@ -1050,9 +1050,9 @@ if ($is_editor) {
                                             <div class='col-12'>
                                             <div class='col-12 d-flex justify-content-center mt-2 mb-3'>
                                                 <nav aria-label='Page navigation example w-100'>
-                                                    <ul class='pagination mycourses-pagination w-100 mb-0'>
+                                                    <ul class='pagination mycourses-pagination w-100 mb-0' role='navigation' aria-label='$langPagination'>
                                                         <li class='page-item page-item-previous'>
-                                                            <a class='page-link'><span class='fa-solid fa-chevron-left'></span></a>
+                                                            <button class='page-link' aria-label='$langPreviousPage'><span class='fa-solid fa-chevron-left'></span></button>
                                                         </li>";
                                                         if($pagesPag >=12 ){
                                                             for($i=1; $i<=$pagesPag; $i++){
@@ -1061,16 +1061,16 @@ if ($is_editor) {
                                                                     if($i==1){
                                                                         $tool_content .="
                                                                             <li id='KeypageCenter$i' class='page-item page-item-pages'>
-                                                                                <a id='Keypage$i' class='page-link'>$i</a>
+                                                                                <button id='Keypage$i' class='page-link' aria-label='$langPage {$i}'>$i</button>
                                                                             </li>
 
                                                                             <li id='KeystartLi' class='page-item page-item-pages d-flex justify-content-center align-items-end d-none'>
-                                                                                <a>...</a>
+                                                                                <button>...</button>
                                                                             </li>";
                                                                     }else{
                                                                         if($i<$pagesPag){
                                                                             $tool_content .="<li id='KeypageCenter$i' class='page-item page-item-pages'>
-                                                                                                <a id='Keypage$i' class='page-link'>$i</a>
+                                                                                                <button id='Keypage$i' class='page-link' aria-label='$langPage {$i}'>$i</button>
                                                                                             </li>";
                                                                         }
                                                                     }
@@ -1078,19 +1078,19 @@ if ($is_editor) {
 
                                                                 if($i>=6 && $i<=$pagesPag-1){
                                                                     $tool_content .="<li id='KeypageCenter$i' class='page-item page-item-pages d-none'>
-                                                                                        <a id='Keypage$i' class='page-link'>$i</a>
+                                                                                        <button id='Keypage$i' class='page-link' aria-label='$langPage {$i}'>$i</button>
                                                                                     </li>";
 
                                                                     if($i==$pagesPag-1){
                                                                         $tool_content .="<li id='KeycloseLi' class='page-item page-item-pages d-flex justify-content-center align-items-end d-block'>
-                                                                                            <a>...</a>
+                                                                                            <button>...</button>
                                                                                         </li>";
                                                                     }
                                                                 }
 
                                                                 if($i==$pagesPag){
                                                                     $tool_content .="<li id='KeypageCenter$i' class='page-item page-item-pages'>
-                                                                                        <a id='Keypage$i' class='page-link'>$i</a>
+                                                                                        <button id='Keypage$i' class='page-link' aria-label='$langPage {$i}'>$i</button>
                                                                                     </li>";
                                                                 }
                                                             }
@@ -1098,13 +1098,13 @@ if ($is_editor) {
                                                         }else{
                                                             for($i=1; $i<=$pagesPag; $i++){
                                                                 $tool_content .="<li id='KeypageCenter$i' class='page-item page-item-pages'>
-                                                                                    <a id='Keypage$i' class='page-link'>$i</a>
+                                                                                    <button id='Keypage$i' class='page-link' aria-label='$langPage {$i}'>$i</button>
                                                                                 </li>";
                                                             }
                                                         }
 
                                         $tool_content .="<li class='page-item page-item-next'>
-                                                            <a class='page-link'><span class='fa-solid fa-chevron-right'></span></a>
+                                                            <button class='page-link' aria-label='$langNextPage'><span class='fa-solid fa-chevron-right'></span></button>
                                                         </li>
                                                     </ul>
                                                 </nav>

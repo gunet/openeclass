@@ -251,7 +251,7 @@ view('main.my_courses.index', $data);
 
 function GroupCardsPagination($allCourses,$pagesPag){
 
-    global $langPreviousPage, $langNextPage;
+    global $langPreviousPage, $langNextPage, $langPagination, $langPage;
 
   $pagination = "";
 
@@ -261,9 +261,9 @@ function GroupCardsPagination($allCourses,$pagesPag){
 
             <div class='col-12 d-flex justify-content-center Borders p-0 bg-transparent mt-4'>
                 <nav role='navigation' aria-label='Pagination Navigation'>
-                    <ul class='pagination mycourses-pagination w-100 mb-0'>
+                    <ul class='pagination mycourses-pagination w-100 mb-0' role='nagivation' aria-label='$langNavigation'>
                         <li class='page-item page-item-previous'>
-                            <a class='page-link' aria-label='$langPreviousPage'><span class='fa-solid fa-chevron-left'></span></a>
+                            <button class='page-link' aria-label='$langPreviousPage'><span class='fa-solid fa-chevron-left'></span></button>
                         </li>";
                         if($pagesPag >=12 ){
                             for($i=1; $i<=$pagesPag; $i++){
@@ -271,16 +271,16 @@ function GroupCardsPagination($allCourses,$pagesPag){
                                 if($i>=1 && $i<=5){
                                     if($i==1){
                                         $pagination .= "<li id='KeypageCenter{$i}' class='page-item page-item-pages'>
-                                            <a id='Keypage{$i}' class='page-link'>{$i}</a>
+                                            <button id='Keypage{$i}' class='page-link' aria-label='$langPage {$i}'>{$i}</button>
                                         </li>
 
                                         <li id='KeystartLi' class='page-item page-item-pages d-flex justify-content-center align-items-end d-none'>
-                                            <a>...</a>
+                                            <button>...</button>
                                         </li>";
                                     }else{
                                         if($i<$pagesPag){
                                             $pagination .= "<li id='KeypageCenter{$i}' class='page-item page-item-pages'>
-                                                <a id='Keypage{$i}' class='page-link'>{$i}</a>
+                                                <button id='Keypage{$i}' class='page-link' aria-label='$langPage {$i}'>{$i}</button>
                                             </li>";
                                         }
                                     }
@@ -288,19 +288,19 @@ function GroupCardsPagination($allCourses,$pagesPag){
 
                                 if($i>=6 && $i<=$pagesPag-1){
                                     $pagination .= "<li id='KeypageCenter{$i}' class='page-item page-item-pages d-none'>
-                                        <a id='Keypage{$i}' class='page-link'>{$i}</a>
+                                        <button id='Keypage{$i}' class='page-link' aria-label='$langPage {$i}'>{$i}</button>
                                     </li>";
 
                                     if($i==$pagesPag-1){
                                         $pagination .= "<li id='KeycloseLi' class='page-item page-item-pages d-flex justify-content-center align-items-end d-block'>
-                                            <a>...</a>
+                                            <button>...</button>
                                         </li>";
                                     }
                                 }
 
                                 if($i==$pagesPag){
                                     $pagination .= "<li id='KeypageCenter{$i}' class='page-item page-item-pages'>
-                                        <a id='Keypage{$i}' class='page-link'>{$i}</a>
+                                        <button id='Keypage{$i}' class='page-link' aria-label='$langPage {$i}'>{$i}</button>
                                     </li>";
                                 }
                             }
@@ -308,13 +308,13 @@ function GroupCardsPagination($allCourses,$pagesPag){
                         }else{
                             for($i=1; $i<=$pagesPag; $i++){
                                 $pagination .= "<li id='KeypageCenter{$i}' class='page-item page-item-pages'>
-                                    <a id='Keypage{$i}' class='page-link'>{$i}</a>
+                                    <button id='Keypage{$i}' class='page-link' aria-label='$langPage {$i}'>{$i}</button>
                                 </li>";
                             }
                         }
 
                         $pagination .=" <li class='page-item page-item-next'>
-                            <a class='page-link' aria-label='$langNextPage'><span class='fa-solid fa-chevron-right'></span></a>
+                            <button class='page-link' aria-label='$langNextPage'><span class='fa-solid fa-chevron-right'></span></button>
                         </li>
                     </ul>
                 </nav>
