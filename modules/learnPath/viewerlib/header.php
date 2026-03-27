@@ -154,7 +154,9 @@ function header_fragment(int $pathId, int $moduleId): string {
             ? (int) round((float) $pm->progress_measure * 100)
             : 0;
         $progressValue = $progressDisplay;
-        $progressBarHtml = disp_progress_bar($progressDisplay, 1);
+        if ($progressDisplay > 0) {
+            $progressBarHtml = disp_progress_bar($progressDisplay, 1);
+        }
     }
 
     $prevModuleAttr = $previousModule !== '' ? (int) $previousModule : 0;
