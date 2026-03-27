@@ -71,7 +71,7 @@
 
                     @include('layouts.partials.show_alert')
 
-                    <div class="col-12 overflow-auto">
+                    <div class="col-12">
                         <table id='course_results_table' class='table-default display'>
                             <thead>
                                 <tr class='list-header'>

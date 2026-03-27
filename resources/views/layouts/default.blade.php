@@ -111,8 +111,11 @@
 
     <script>
         $(function() {
-            $('.action-button-dropdown').on('click', function () {
-                // Close all other open dropdowns except the one being opened
+            $(document).on('click', '.action-button-dropdown', function() {
+                $(this).find('.fa-gear').removeClass('fa-gear').addClass('fa-chevron-left');
+                if (!$(this).hasClass('show')) {
+                    $(this).find('.fa-chevron-left').removeClass('fa-chevron-left').addClass('fa-gear');
+                }
                 $('.action-button-dropdown.show').not(this).each(function() {
                     $(this).dropdown('hide');
                 });
@@ -120,8 +123,8 @@
                 $('.dt-scroll-head').addClass('no-overflow');
                 $('.dt-scroll-body').addClass('no-overflow');
             });
-
-            $('.action-button-dropdown').on('hide.bs.dropdown', function () {
+            $(document).on('hide.bs.dropdown', '.action-button-dropdown', function() {
+                $(this).find('.fa-chevron-left').removeClass('fa-chevron-left').addClass('fa-gear');
                 $('.table-responsive').removeClass('no-overflow');
                 $('.dt-scroll-head').removeClass('no-overflow');
                 $('.dt-scroll-body').removeClass('no-overflow');
@@ -199,6 +202,23 @@
     </button>
     <script>
         $(function() {
+
+            var inputTreeModal = document.getElementById('dialog-set-value');
+            $('#treeModal').on('hidden.bs.modal', function () {
+                inputTreeModal.focus();
+            });
+            
+            document.addEventListener('keydown', function(event) {
+                const activeElement = document.activeElement;
+                if (activeElement && (activeElement.type === 'checkbox' || activeElement.type === 'radio')) {
+                    if (event.key === 'Enter') {
+                        event.preventDefault();
+                        activeElement.checked = !activeElement.checked;
+                        activeElement.dispatchEvent(new Event('change'));
+                    }
+                }
+            });
+
             $(".datetimepicker table > thead > tr").find("th.prev").each(function() {
                 if ($(this).find('.visually-hidden').length === 0) {
                     $(this).append('<span class="visually-hidden">{{ trans("langPrevious") }}</span>');
@@ -276,19 +296,32 @@
             @endif
 
             document.addEventListener('click', (event) => {
-                const dropdowns = document.querySelectorAll('.contextual-menu-action-button');
-                let isAnyOpen = false;
+                const dropdownsActionButtons = document.querySelectorAll('.contextual-menu-action-button');
+                const dropdownsActionBars = document.querySelectorAll('.contextual-menu-action-bar');
+                let isAnyOpenActionButton = false;
+                let isAnyOpenActionBar = false;
 
-                dropdowns.forEach((dropdown) => {
-                    if (dropdown.classList.contains('show')) {
-                        isAnyOpen = true;
+                dropdownsActionButtons.forEach((dropdownActionButton) => {
+                    if (dropdownActionButton.classList.contains('show')) {
+                        isAnyOpenActionButton = true;
+                    }
+                });
+                dropdownsActionBars.forEach((dropdownActionBar) => {
+                    if (dropdownActionBar.classList.contains('show')) {
+                        isAnyOpenActionBar = true;
                     }
                 });
 
-                if (isAnyOpen) {
+                if (isAnyOpenActionButton) {
                     $('.col_maincontent_active').addClass('action-button-on');
                 } else {
                     $('.col_maincontent_active').removeClass('action-button-on');
+                }
+
+                if (isAnyOpenActionBar) {
+                    $('.col_maincontent_active').addClass('action-bar-on');
+                } else {
+                    $('.col_maincontent_active').removeClass('action-bar-on');
                 }
             });
 

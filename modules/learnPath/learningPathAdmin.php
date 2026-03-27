@@ -51,6 +51,7 @@
  */
 
 $require_current_course = TRUE;
+$require_editor = TRUE;
 $require_help = TRUE;
 $helpTopic = "learningpath";
 $helpSubTopic = 'units';
@@ -72,17 +73,23 @@ if (isset($_GET['path_id']) && $_GET['path_id'] > 0) {
     $_SESSION['path_id'] = intval($_GET['path_id']);
 }
 
-// get user out of here if he is not allowed to edit
-if (!$is_editor) {
-    if (isset($_SESSION['path_id'])) {
-        header("Location: ./learningPath.php?course=$course_code&path_id=" . $_SESSION['path_id']);
-    } else {
-        header("Location: ./index.php?course=$course_code");
+if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+    if (isset($_POST['lp_order']) && is_array($_POST['lp_order'])) {
+        $rank = 1;
+        foreach ($_POST['lp_order'] as $lpm_id) {
+            Database::get()->query("UPDATE lp_rel_learnPath_module
+                                                SET `rank` = ?d
+                                                WHERE learnPath_module_id = ?d AND learnPath_id = ?d",
+                                            $rank, $lpm_id, $_SESSION['path_id']);
+            $rank++;
+        }
+        exit;
     }
-    exit();
 }
 
+
 load_js('tools.js');
+load_js('sortable/Sortable.min.js');
 
 $forceCompletedProgress = 0;
 if (isset($_SESSION['path_id'])) {
@@ -283,16 +290,6 @@ switch ($cmd) {
         }
         break;
 
-    case "moveUp" :
-        $thisLPMId = $_REQUEST['cmdid'];
-        $sortDirection = "DESC";
-        break;
-
-    case "moveDown" :
-        $thisLPMId = $_REQUEST['cmdid'];
-        $sortDirection = "ASC";
-        break;
-
     case "createLabel" :
         // create form sent
         if (isset($_REQUEST["newLabel"]) && trim($_REQUEST["newLabel"]) != "") {
@@ -343,67 +340,24 @@ switch ($cmd) {
         break;
 }
 
-// IF ORDER COMMAND RECEIVED
-// CHANGE ORDER
-
-if (isset($sortDirection) && $sortDirection) {
-
-    // get list of modules with same parent as the moved module
-    $sql = "SELECT LPM.`learnPath_module_id`, LPM.`rank`
-            FROM (`lp_rel_learnPath_module` AS LPM, `lp_learnPath` AS LP)
-              LEFT JOIN `lp_rel_learnPath_module` AS LPM2 ON LPM2.`parent` = LPM.`parent`
-            WHERE LPM2.`learnPath_module_id` = ?d
-              AND LPM.`learnPath_id` = LP.`learnPath_id`
-              AND LP.`learnPath_id` = ?d
-              AND LP.`course_id` = ?d
-            ORDER BY LPM.`rank` $sortDirection";
-
-    $listModules = Database::get()->queryArray($sql, $thisLPMId, $_SESSION['path_id'], $course_id);
-    // LP = learningPath
-    foreach ($listModules as $module) {
-        // STEP 2 : FOUND THE NEXT ANNOUNCEMENT ID AND ORDER.
-        //          COMMIT ORDER SWAP ON THE DB
-
-        if (isset($thisLPMOrderFound) && $thisLPMOrderFound == true) {
-
-            $nextLPMId = $module->learnPath_module_id;
-            $nextLPMOrder = $module->rank;
-
-            Database::get()->query("UPDATE `lp_rel_learnPath_module`
-                    SET `rank` = ?d
-                    WHERE `learnPath_module_id` =  ?d
-                    AND `learnPath_id` = ?d", $nextLPMOrder, $thisLPMId, $_SESSION['path_id']);
-
-            Database::get()->query("UPDATE `lp_rel_learnPath_module`
-                    SET `rank` = ?d
-                    WHERE `learnPath_module_id` =  ?d
-                    AND `learnPath_id` = ?d", $thisLPMOrder, $nextLPMId, $_SESSION['path_id']);
-
-            break;
-        }
-
-        // STEP 1 : FIND THE ORDER OF THE ANNOUNCEMENT
-        if ($module->learnPath_module_id == $thisLPMId) {
-            $thisLPMOrder = $module->rank;
-            $thisLPMOrderFound = true;
-        }
-    }
-}
-
+// learning path title and comments
 $tool_content .= "<div class='col-sm-12'><div class='card panelCard card-default px-lg-4 py-lg-3'>";
-
 if ($cmd == "updateName") {
-    $tool_content .= disp_message_box(nameBox(LEARNINGPATH_, UPDATE_, $langModify));
+    if (isset($_POST['submit_name'])) {
+        Database::get()->query("UPDATE lp_learnPath 
+                                SET name = ?s, comment = ?s
+                                WHERE learnPath_id = ?d AND course_id = ?d",
+                            $_POST['newName'], $_POST['newComment'], $_POST['path_id'], $course_id);
+        Session::Messages($langBBBUpdateSuccessful, 'alert-success');
+        redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course=' . $course_code . '&path_id=' . $_POST['path_id']);
+    } else {
+        $tool_content .= display_learn_path_title($_SESSION['path_id'], 'updateName');
+    }
 } else {
-    $tool_content .= nameBox(LEARNINGPATH_, DISPLAY_);
+    $tool_content .= display_learn_path_title($_SESSION['path_id']);
 }
-if ($cmd == "updatecomment") {
-    $tool_content .= commentBox(LEARNINGPATH_, UPDATE_);
-} elseif ($cmd == "delcomment") {
-    $tool_content .= commentBox(LEARNINGPATH_, DELETE_);
-} else {
-    $tool_content .= commentBox(LEARNINGPATH_, DISPLAY_);
-}
+
+// learning path progress switch
 $tool_content .= "<div class='card-body'>
     <form method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code'>
         <div class='form-check form-switch'>
@@ -582,7 +536,31 @@ if (isset($displayCreateLabelForm) && $displayCreateLabelForm) {
     $tool_content .= $createLabelHTML;
 }
 
+$head_content .= "<script>
+    $(document).ready(function(){
+        var lpList = document.getElementById('lpModulesList');
+        if (lpList) {
+            Sortable.create(lpList, {
+                handle: '.lp-drag-handle',
+                animation: 150,
+                onEnd: function(evt) {
+                    var order = [];
+                    lpList.querySelectorAll('tr[data-id]').forEach(function(tr) {
+                        order.push(tr.getAttribute('data-id'));
+                    });
+                    $.ajax({
+                        type: 'post',
+                        dataType: 'text',
+                        data: { lp_order: order }
+                    });
+                }
+            });
+        }
+    });
+</script>";
+
 // -------------------- LEARNING PATH LIST DISPLAY ---------------------------------
+$tool_content .= "<tbody id='lpModulesList'>";
 foreach ($flatElementList as $module) {
     //-------------visibility-----------------------------
     if ($module['visible'] == 0) {
@@ -609,8 +587,8 @@ foreach ($flatElementList as $module) {
     $colspan = $maxDeep - $module['children'] + 1;
 
     $tool_content .= "
-    <tr " . $style . ">" . $spacingString . "
-      <td colspan=\"" . $colspan . "\">&nbsp;&nbsp;&nbsp;";
+    <tr " . $style . " data-id='" . $module['learnPath_module_id'] . "'>" . $spacingString . "
+      <td colspan=\"" . $colspan . "\">";
 
     if ($module['contentType'] == CTLABEL_) { // chapter head
         $tool_content .= "<font " . $style . " style=\"font-weight: bold\">" . htmlspecialchars($module['name']) . "</font>";
@@ -643,42 +621,32 @@ foreach ($flatElementList as $module) {
     } else {
         $del_conf_text = clean_str_for_javascript($langAreYouSureToRemoveStd);
     }
-    $tool_content .= "<td class='option-btn-cell text-end'>" .
+    $tool_content .= "<td class='option-btn-cell text-end'>";
+    $tool_content .= "<span class='fa fa-arrows lp-drag-handle me-3' style='cursor:grab;' title=''></span>";
+    $tool_content .=
             action_button(array(
                 array('title' => $langEditChange, // Modify command / go to other page
                     'url' => "module.php?course=$course_code&amp;module_id=" . $module['module_id'],
                     'icon' => 'fa-edit'),
-                // VISIBILITY
                 array('title' => $module['visible'] == 0? $langViewShow : $langViewHide,
                     'url' => $module['visible'] == 0? $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkVisibl&amp;cmdid=" . $module['module_id'] : $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkInvisibl&amp;cmdid=" . $module['module_id'],
                     'icon' => $module['visible'] == 0 ? 'fa-eye' : 'fa-eye-slash'),
-                // LOCK
                 array('title' => $module['lock'] == 'OPEN'? $langResourceAccessLock : $langResourceAccessUnlock,
                     'url' => $module['lock'] == 'OPEN'? $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkBlock&amp;cmdid=" . $module['learnPath_module_id'] : $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkUnblock&amp;cmdid=" . $module['learnPath_module_id'],
                     'icon' => $module['lock'] == 'OPEN'? 'fa-lock' : 'fa-unlock'),
                 array('title' => $langMove, // DISPLAY CATEGORY MOVE COMMAND
                     'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=changePos&amp;cmdid=" . $module['learnPath_module_id'],
                     'icon' => 'fa-arrows'),
-                array('title' => $langUp, // DISPLAY MOVE UP COMMAND only if it is not the top learning path
-                    'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=moveUp&amp;cmdid=" . $module['learnPath_module_id'],
-                    'level' => 'primary',
-                    'icon' => 'fa-arrow-up',
-                    'disabled' => !$module['up']),
-                array('title' => $langDown, // DISPLAY MOVE DOWN COMMAND only if it is not the bottom learning path
-                    'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=moveDown&amp;cmdid=" . $module['learnPath_module_id'],
-                    'level' => 'primary',
-                    'icon' => 'fa-arrow-down',
-                    'disabled' => !$module['down']) ,
                 array('title' => $langDelete, // DELETE ROW. In case of SCORM module, the pop-up window to confirm must be different as the action will be different on the server
                     'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=delModule&amp;cmdid=" . $module['learnPath_module_id'],
                     'class' => 'delete',
                     'confirm' => $langAreYouSureDeleteModule,
                     'icon' => 'fa-xmark')
-            )) .
-            "</td>";
+            ));
+    $tool_content .= "</td>";
     $tool_content .= "</tr>";
 } // end of foreach
 
-$tool_content .= "</table></div></div></div></div>";
+$tool_content .= "</tbody></table></div></div></div></div>";
 
 draw($tool_content, 2, null, $head_content, $body_action);

@@ -44,8 +44,12 @@
                                         @endif
                                     </div>
                                     <div class='d-flex justify-content-start align-items-center gap-2 mt-2 flex-wrap'>
-                                        <p>{{ course_id_to_public_code($course_id) }}&nbsp; -
-                                            &nbsp;{{ course_id_to_prof($course_id) }}</p>
+                                        <p>
+                                            @if (course_id_to_public_code($course_id))
+                                                {{ course_id_to_public_code($course_id) }}  -
+                                            @endif
+                                            {{ course_id_to_prof($course_id) }}
+                                        </p>
                                         <div class='course-title-icons d-flex justify-content-start align-items-center gap-2'>
                                             {!! course_access_icon(course_status($course_id)) !!}
                                             @if($courseLicense > 0)
@@ -148,6 +152,7 @@
                                         @if ($require_help)
                                             {{-- help icon / link --}}
                                             <a id='help-btn'
+                                               tabindex='0'
                                                href='{{ $urlServer }}modules/help/help.php?language={{ $language }}&topic={{ $helpTopic }}&subtopic={{ $helpSubTopic }}'
                                                class='btn helpAdminBtn text-decoration-none' data-bs-toggle='tooltip'
                                                data-bs-placement='bottom'

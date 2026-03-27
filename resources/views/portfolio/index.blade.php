@@ -655,7 +655,10 @@
 
                                                                         <div class="lesson-title line-height-default">
                                                                             <a class='TextBold' href="{{$urlServer}}courses/{{$course->code}}/">
-                                                                                {{ $course->title }}&nbsp;({{ $course->public_code }})
+                                                                                {{ $course->title }}&nbsp;
+                                                                                @if ($course->public_code)
+                                                                                    ({{ $course->public_code }})
+                                                                                @endif
                                                                             </a>
                                                                         </div>
 

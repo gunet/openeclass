@@ -74,7 +74,7 @@ $tool_content .= "
                     <div class='col-12'>
                         <h5>$langAttempts ($total_attempts $langSumFrom)</h5>
                         <div class='progress mb-3' style='height: 30px;'>
-                            <div class='progress-bar bg-success' role='progressbar'
+                            <div class='progress-bar' role='progressbar'
                                  data-bs-toggle='tooltip' 
                                  data-bs-placement='top' 
                                  title='" . htmlspecialchars($langAttemptsCompleted, ENT_QUOTES) . ": $completedAttempts'
@@ -208,7 +208,7 @@ $tool_content .= "
             <div class='col-12 col-md-4'>
                 <div class='d-flex flex-column gap-2 h-100'>
                     
-                    <div class='border p-3 flex-fill bg-white rounded'>
+                    <div class='border p-3 flex-fill rounded'>
                         <h5 class='text-muted'>$langStudentsExerciseCompleted</h5>
                         <div class='h5 fw-bold mb-0'>
                             $unique_users
@@ -219,7 +219,7 @@ $tool_content .= "
                         </div>
                     </div>
                     
-                    <div class='border p-3 flex-fill bg-white rounded'>
+                    <div class='border p-3 flex-fill rounded'>
                         <h5 class='text-muted mb-2'>$langAverage $langExerciseDuration</h5>
                         <div class='h5 fw-bold mb-0'>
                             " . format_time_duration($avg_time) . "
