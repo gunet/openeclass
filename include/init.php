@@ -668,7 +668,7 @@ $icons_map = array(
         MODULE_ID_ATTENDANCE => 'fa-solid fa-clipboard-user',
         MODULE_ID_GRADEBOOK => 'fa-solid fa-a',
         MODULE_ID_SESSION => 'fa-solid fa-handshake',
-        MODULE_ID_STICKY_NOTES => 'a-regular fa-note-sticky',
+        MODULE_ID_STICKY_NOTES => 'fa-regular fa-note-sticky',
     ),
 );
 
