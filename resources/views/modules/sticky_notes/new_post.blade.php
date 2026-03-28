@@ -55,10 +55,48 @@
                                         </label>
                                         <div class='col-sm-12'>
                                             <textarea class='form-control' id='content' name='content'
+                                                maxlength="500"
                                                 rows='5' required
                                                 placeholder="{{ trans('langStickyNotesContentPlaceholder') }}...">{{ $isEdit && $post ? e($post->content) : '' }}</textarea>
                                         </div>
+
+                                        {{-- Character counter --}}
+                                        <div class='d-flex justify-content-end mt-1'>
+                                            <small id='content-counter' class='text-muted'>
+                                                <span id='content-char-count'>0</span> / 500
+                                            </small>
+                                        </div>
                                     </div>
+
+                                    <script>
+                                        (function() {
+                                            const textarea = document.getElementById('content');
+                                            const counter = document.getElementById('content-char-count');
+                                            const maxLen = parseInt(textarea.getAttribute('maxlength'), 10);
+
+                                            function updateCounter() {
+                                                const current = textarea.value.length;
+                                                counter.textContent = current;
+
+                                                // Visual feedback as the user approaches the limit
+                                                const indicator = counter.closest('small');
+                                                if (current >= maxLen) {
+                                                    indicator.classList.add('text-danger');
+                                                    indicator.classList.remove('text-warning', 'text-muted');
+                                                } else if (current >= maxLen * 0.85) {
+                                                    indicator.classList.add('text-warning');
+                                                    indicator.classList.remove('text-danger', 'text-muted');
+                                                } else {
+                                                    indicator.classList.add('text-muted');
+                                                    indicator.classList.remove('text-danger', 'text-warning');
+                                                }
+                                            }
+
+                                            updateCounter();
+
+                                            textarea.addEventListener('input', updateCounter);
+                                        })();
+                                    </script>
 
                                     {{-- Color Picker --}}
                                     <div class='form-group mt-4'>
@@ -92,7 +130,7 @@
                                             {{ trans('langStickyNotesCategory') }}
                                         </label>
                                         <div class='col-sm-12 col-md-4'>
-                                            <select class='form-select' id='category_id' name='category_id'>
+                                            <select class='form-select' id='category_id' name='category_id' required>
                                                 <option value=''>— {{ trans('langUncategorized') }} —</option>
                                                 @foreach($categories as $cat)
                                                 <option value='{{ $cat->id }}'
