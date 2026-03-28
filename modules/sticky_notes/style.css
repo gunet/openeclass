@@ -355,13 +355,13 @@
   background: rgba(0, 0, 0, 0.08);
   color: rgba(0, 0, 0, 0.5);
   font-size: 0.72rem;
-  text-decoration: none;
   transition: background 0.15s, color 0.15s;
 }
 
 .note-action-btn:hover {
   background: rgba(0, 0, 0, 0.18);
   color: rgba(0, 0, 0, 0.8);
+  text-decoration: none;
 }
 
 .note-delete-btn:hover {

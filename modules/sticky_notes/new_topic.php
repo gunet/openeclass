@@ -33,10 +33,9 @@ if (isset($_POST['topicTitle'])) {
     $topicDescription = canonicalize_whitespace($_POST['topicDescription']);
     $allowEdit = isset($_POST['allow_edit']) ? 1 : 0;
     $allowDelete = isset($_POST['allow_delete']) ? 1 : 0;
-    $hasCategories   = isset($_POST['has_categories'])   ? 1 : 0;
-    $perPage         = isset($_POST['per_page']) ? intval($_POST['per_page']) : 20;
+    $hasCategories = isset($_POST['has_categories']) ? 1 : 0;
+    $perPage = isset($_POST['per_page']) ? intval($_POST['per_page']) : 20;
     $isActive = isset($_POST['is_active']) ? 1 : 0;
-
 
     if ($title) {
         if ($isEdit) {
@@ -94,7 +93,7 @@ if (isset($_POST['topicTitle'])) {
                     allow_delete = ?d,
                     has_categories = ?d,
                     per_page = ?d,
-                    is_active = ?d,     // ← εδώ
+                    is_active = ?d,
                     created_at = NOW(),
                     created_by = ?d',
                 $course_id,

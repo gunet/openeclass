@@ -9,8 +9,10 @@ $backUrl  = $urlAppend . 'modules/sticky_notes/index.php?course=' . $course_code
 $isEdit   = isset($_POST['post_id']) && intval($_POST['post_id']) > 0;
 $toolName = $isEdit ? $langEditStickyNote : $langNewStickyNote;
 ?>
+
 <link rel="stylesheet" type="text/css" href="<?= $urlServer; ?>/modules/sticky_notes/style.css" />
 <script type="text/javascript" src="<?= $urlServer; ?>modules/sticky_notes/script.js"></script>
+
 <?php
 
 $availableColors = [
@@ -182,7 +184,7 @@ $data['topic']           = $topic;
 $data['topicId']         = $topicId;
 $data['availableColors'] = $availableColors;
 $data['creatorName']     = $_SESSION['givenname'] . ' ' . $_SESSION['surname'];
-$data['backUrl']         = $backUrl;
+$data['backUrl']         = $topicUrl;
 $data['targetUrl']       = $urlAppend . 'modules/sticky_notes/new_post.php?course=' . $course_code . '&topic=' . $topicId;
 
 view('modules.sticky_notes.new_post', $data);

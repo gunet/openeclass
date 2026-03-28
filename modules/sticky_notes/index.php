@@ -130,7 +130,7 @@ if (isset($_GET['topic'])) {
         ]
     ], false);
 
-    $navigation[] = array('url' => $backUrl, 'name' => $langRequests);
+    $navigation[] = array('url' => $backUrl, 'name' => $toolName);
     $pageName = $topic->title;
 
     $data['ajaxUrl'] = $urlAppend . 'modules/sticky_notes/ajax-sticky.php?course=' . $course_code;

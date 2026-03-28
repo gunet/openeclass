@@ -157,7 +157,7 @@
                         <div class="modal-dialog modal-dialog-centered" style="max-width: 380px;">
                             <div class="modal-content border-0 shadow" style="border-radius: 12px;">
                                 <div class="modal-body text-center p-4">
-                                    <h6 class="fw-bold mb-2">{{ trans('langStickyNotesConfirmDelete') }}</h6>
+                                    <h4 class="fw-bold mb-2">{{ trans('langStickyNotesConfirmDelete') }}</h4>
                                     <p class="text-muted small mb-4">{{ trans('langStickyNotesConfirmDeleteSub') }}</p>
                                     <div class="d-flex gap-2 justify-content-center">
                                         <button type="button" class="btn btn-outline-secondary btn-sm px-4" data-bs-dismiss="modal">
