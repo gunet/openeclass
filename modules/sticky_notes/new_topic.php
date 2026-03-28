@@ -22,6 +22,14 @@ $require_current_course = true;
 
 require_once '../../include/baseTheme.php';
 
+global $is_course_admin;
+
+$backUrl = $urlAppend . 'modules/sticky_notes/index.php?course=' . $course_code;
+
+if (!$is_course_admin) {
+    redirect_to_home_page($backUrl, true);
+}
+
 $isEdit = isset($_POST['topic_id']) && intval($_POST['topic_id']) > 0;
 $toolName = $isEdit ? $langEditTopic : $langNewTopic;
 ?>
@@ -204,7 +212,6 @@ if (!isset($_POST['topicTitle']) && $getTopicId > 0) {
     );
 }
 
-$backUrl = $urlAppend . 'modules/sticky_notes/index.php?course=' . $course_code;
 $navigation[] = array('url' => $backUrl, 'name' => $langStickyNotesTopics);
 
 $data['action_bar'] = action_bar(

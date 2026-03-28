@@ -23,7 +23,7 @@ $require_current_course = true;
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 
-global $course_id;
+global $course_id, $is_course_admin;
 
 $toolName = $langStickyNotes . ' - ' . $langStickyNotesTopics;
 $backUrl = $urlAppend . 'modules/sticky_notes/index.php?course=' . $course_code;
@@ -156,7 +156,8 @@ if (isset($_GET['topic'])) {
             'url' => 'new_topic.php?course=' . $course_code,
             'icon' => 'fa-plus-circle',
             'button-class' => 'btn-success',
-            'level' => 'primary-label'
+            'level' => 'primary-label',
+            'show' => $is_course_admin,
         ]
     ], false);
 
