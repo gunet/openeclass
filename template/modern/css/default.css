@@ -2606,12 +2606,25 @@ body .form-action-button-mydropdowns{
   opacity: 0.5;
 }
 
-.col_maincontent_active.action-button-on{
+.col_maincontent_active.action-button-on,
+.col_maincontent_active.action-bar-on{
   z-index: auto;
 }
-.col_maincontent_active.action-button-on .contextual-menu-action-button.show { 
+.col_maincontent_active.action-button-on .contextual-menu-action-button.show,
+.col_maincontent_active.action-bar-on .contextual-menu-action-bar.show { 
   z-index: 1001; 
 }
+@media(min-width: 701px) {
+  .contextual-menu-action-button.show{
+    transform: translate(-40px, 0px) !important;
+  }
+}
+@media(max-width: 700px) {
+  .btn-group.btn-group-default.dropstart {
+    display: block !important;
+  }
+}
+
 
 
 /**********************************************************************************************************************/

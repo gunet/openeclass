@@ -3949,13 +3949,13 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
     $secondary_icon = isset($secondary_menu_options['secondary_icon']) ? $secondary_menu_options['secondary_icon'] : "fa-solid fa-gear";
 
     if (count($out_secondary) > 0) {
-        $action_button .= "<button type='button' id='toolDropdown' class='btn submitAdminBtn' data-bs-toggle='dropdown' aria-expanded='false' aria-label='$langListChoices'>
+        $action_button .= "<button type='button' id='toolDropdown' class='btn submitAdminBtn action-bar-dropdown' data-bs-toggle='dropdown' aria-expanded='false' aria-label='$langListChoices'>
                                 <span class='fa $secondary_icon'></span>
                                 <span class='fa-solid fa-chevron-down ps-2'></span>
                                 <span class='hidden-xs TextBold'>$secondary_title</span>
                                 <span class='caret'></span><span class='hidden'></span>
                             </button>";
-        $action_button .= " <div class='m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-border' aria-labelledby='toolDropdown'>
+        $action_button .= " <div class='m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-border contextual-menu-action-bar' aria-labelledby='toolDropdown'>
                                 <ul class='list-group list-group-flush'>
                                     ".implode('', $out_secondary)."
                                 </ul>
@@ -4112,7 +4112,7 @@ function action_button($options, $secondary_menu_options = array(), $fc=false) {
     $counter++;
 
     return $primary_form_begin .
-         "<div class='btn-group btn-group-sm btn-group-default gap-2' role='group' aria-label='...'>
+         "<div class='btn-group btn-group-sm btn-group-default dropstart gap-2' role='group' aria-label='...'>
                 $primary_buttons
                 $action_button
           </div>" . $primary_form_end;

@@ -12,7 +12,7 @@
                     <div class='modal-dialog modal-dialog-centered'>
                         <div class='modal-content border-0 p-0'>
                             <div class='modal-header d-flex justify-content-between align-items-center'>
-                                <h2 class='modal-title'>{{ trans('langError') }}</h2>
+                                <h2 tabindex="0" class='modal-title'>{{ trans('langError') }}</h2>
                                 <button aria-label="{{ trans('langClose') }}" type='button' class='close' data-bs-dismiss='modal' id="closeBtn"></button>
                             </div>
                             <div class='modal-body'>
@@ -229,6 +229,12 @@
         }).mouseup(function () {
             $('#password_id').attr('type', 'password');
         })
+        $('#revealPass').keydown(function(e) {
+            if (e.keyCode === 13) {
+                e.preventDefault();
+                $('#password_id').attr('type', 'text');
+            }
+        });
     });
 </script>
 

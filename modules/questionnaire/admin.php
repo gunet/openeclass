@@ -89,18 +89,21 @@ if (isset($_POST['submitPoll'])) {
         $PollEnd = date('Y-m-d H:i', strtotime($_POST['PollEnd']));
         $PollDescription = purify($_POST['PollDescription']);
         $PollEndMessage = purify($_POST['PollEndMessage']);
-        $PollAnonymized = (isset($_POST['PollAnonymized'])) ? $_POST['PollAnonymized'] : 0;
-        $PollShowResults = (isset($_POST['PollShowResults'])) ? $_POST['PollShowResults'] : 0;
-        $MulSubmissions = (isset($_POST['MulSubmissions'])) ? $_POST['MulSubmissions'] : 0;
-        $DefaultAnswer = (isset($_POST['DefaultAnswer'])) ? $_POST['DefaultAnswer'] : 0;
-        $PollAssignToSpecific = $_POST['assign_to_specific'];
+        $PollAnonymized = isset($_POST['PollAnonymized']) ? $_POST['PollAnonymized'] : 0;
+        $PollShowResults = isset($_POST['PollShowResults']) ? $_POST['PollShowResults'] : 0;
+        $MulSubmissions = isset($_POST['MulSubmissions']) ? $_POST['MulSubmissions'] : 0;
+        $DefaultAnswer = isset($_POST['DefaultAnswer']) ? $_POST['DefaultAnswer'] : 0;
+        $PollAssignToSpecific = isset($_POST['assign_to_specific']) ? intval($_POST['assign_to_specific']) : 0;
+        if ($PollAssignToSpecific > 2 or $PollAssignToSpecific < 0) {
+            $PollAssignToSpecific = 0;
+        }
         $PollAssignees = filter_input(INPUT_POST, 'ingroup', FILTER_VALIDATE_INT, FILTER_REQUIRE_ARRAY);
         $PollSurveyType = $_POST['survey_type'];
         $lti_template = $_POST['lti_template'] ?? NULL;
         $launchcontainer = $_POST['lti_launchcontainer'] ?? NULL;
         $display_position = (isset($_POST['display_position'])) ? $_POST['display_position'] : 0;
         //$require_answer = (isset($_POST['require_answer'])) ? $_POST['require_answer'] : 0;
-        
+
         // We have added require answer for a specific question
         $require_answer = 0;
 
@@ -465,7 +468,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         if ($poll->assign_to_specific == 2) {
             $assignees = Database::get()->queryArray("SELECT `group`.id AS id, `group`.name
                                    FROM poll_to_specific, `group`
-                                   WHERE `group`.id = poll_to_specific.group_id                                   
+                                   WHERE `group`.id = poll_to_specific.group_id
                                    AND `group`.course_id = ?d
                                    AND poll_to_specific.poll_id = ?d", $course_id, $poll->pid);
             $all_groups = Database::get()->queryArray("SELECT name, id FROM `group` WHERE course_id = ?d", $course_id);
@@ -548,7 +551,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                         <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>
                         <input class='form-control mt-0 border-start-0' name='PollStart' id='PollStart' type='text' value='$PollStart'>
                         <span class='help-block Accent-200-cl'>".Session::getError('PollStart')."</span>
-                    
+
                 </div>
             </div>
 
@@ -558,7 +561,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                     <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>
                     <input class='form-control mt-0 border-start-0' name='PollEnd' id='PollEnd' type='text' value='$PollEnd'>
                     <span class='help-block Accent-200-cl'>".Session::getError('PollEnd')."</span>
-                    
+
                 </div>
             </div>
 
@@ -735,7 +738,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                     </div>
                 </div>
             </div>";
-            
+
             // <div class='form-group mt-4'>
             //     <div class='col-sm-12 control-label-notes'>$langQuestions</div>
             //     <div class='col-sm-12'>
@@ -749,7 +752,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             //         </div>
             //     </div>
             // </div>
-            
+
 // $tool_content .= "<div class='form-group mt-4 d-flex justify-content-start align-items-center gap-2'>
 //                 <label for='addMsg' class='form-label'>$langPollAddMsg:</label>
 //                 <input id='addMsg' style='width:30px; height:30px;' class='btn submitAdminBtn' type='submit' name='MoreMessages' value='+'>
@@ -883,7 +886,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         </form>
     </div>
     </div>
-    
+
     <div class='d-none d-lg-block'>
         <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
     </div>
@@ -1324,9 +1327,9 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                     $.ajax({
                         url: '$_SERVER[SCRIPT_NAME]?course=$course_code&UseCase=1&pid=$pid',
                         method: 'POST',
-                        data: { 
-                            remove_sub_id: sub_q, 
-                            q_id: qid  
+                        data: {
+                            remove_sub_id: sub_q,
+                            q_id: qid
                         },
                         success: function(data){
                             $('#element_sub_q_'+sub_q).remove();
@@ -1379,7 +1382,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                     Session::flash('message',$langNumberColumnsSmallerThanQ);
                     Session::flash('alert-class', 'alert-warning');
                 } else {
-                    database::get()->query("UPDATE poll_question SET q_row = ?d, q_column = ?d 
+                    database::get()->query("UPDATE poll_question SET q_row = ?d, q_column = ?d
                                         WHERE pid = ?d AND pqid = ?d", $q_row, $q_column, $pid, $question_id);
                     Session::flash('message',$langRowsColumnsInsertd);
                     Session::flash('alert-class', 'alert-success');
@@ -1397,7 +1400,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             if ($answer !== '') {
                 $existsSubQ = Database::get()->querySingle("SELECT pqaid FROM poll_question_answer WHERE pqid = ?d AND sub_question = ?d", $question_id, $key);
                 if ($existsSubQ) {
-                    Database::get()->query("UPDATE poll_question_answer SET answer_text = ?s 
+                    Database::get()->query("UPDATE poll_question_answer SET answer_text = ?s
                                             WHERE pqid = ?d AND sub_question = ?d", $answer, $question_id, $key);
                 } else {
                     Database::get()->query("INSERT INTO poll_question_answer (pqid, answer_text, sub_question)
@@ -1614,10 +1617,10 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             <h3>$langInfoPoll &nbsp;".icon('fa-edit', $langEditPoll, "admin.php?course=$course_code&amp;pid=$pid&amp;modifyPoll=yes")."</h3>
           </div>
           <div class='card-body'>
-            
-          
+
+
           <ul class='list-group list-group-flush'>
-            
+
             <li class='list-group-item element'>
                 <div class='row row-cols-1 row-cols-md-2 g-1'>
                     <div class='col-md-3 col-12'>

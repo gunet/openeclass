@@ -111,8 +111,11 @@
 
     <script>
         $(function() {
-            $('.action-button-dropdown').on('click', function () {
-                // Close all other open dropdowns except the one being opened
+            $(document).on('click', '.action-button-dropdown', function() {
+                $(this).find('.fa-gear').removeClass('fa-gear').addClass('fa-chevron-left');
+                if (!$(this).hasClass('show')) {
+                    $(this).find('.fa-chevron-left').removeClass('fa-chevron-left').addClass('fa-gear');
+                }
                 $('.action-button-dropdown.show').not(this).each(function() {
                     $(this).dropdown('hide');
                 });
@@ -120,8 +123,8 @@
                 $('.dt-scroll-head').addClass('no-overflow');
                 $('.dt-scroll-body').addClass('no-overflow');
             });
-
-            $('.action-button-dropdown').on('hide.bs.dropdown', function () {
+            $(document).on('hide.bs.dropdown', '.action-button-dropdown', function() {
+                $(this).find('.fa-chevron-left').removeClass('fa-chevron-left').addClass('fa-gear');
                 $('.table-responsive').removeClass('no-overflow');
                 $('.dt-scroll-head').removeClass('no-overflow');
                 $('.dt-scroll-body').removeClass('no-overflow');
@@ -293,19 +296,32 @@
             @endif
 
             document.addEventListener('click', (event) => {
-                const dropdowns = document.querySelectorAll('.contextual-menu-action-button');
-                let isAnyOpen = false;
+                const dropdownsActionButtons = document.querySelectorAll('.contextual-menu-action-button');
+                const dropdownsActionBars = document.querySelectorAll('.contextual-menu-action-bar');
+                let isAnyOpenActionButton = false;
+                let isAnyOpenActionBar = false;
 
-                dropdowns.forEach((dropdown) => {
-                    if (dropdown.classList.contains('show')) {
-                        isAnyOpen = true;
+                dropdownsActionButtons.forEach((dropdownActionButton) => {
+                    if (dropdownActionButton.classList.contains('show')) {
+                        isAnyOpenActionButton = true;
+                    }
+                });
+                dropdownsActionBars.forEach((dropdownActionBar) => {
+                    if (dropdownActionBar.classList.contains('show')) {
+                        isAnyOpenActionBar = true;
                     }
                 });
 
-                if (isAnyOpen) {
+                if (isAnyOpenActionButton) {
                     $('.col_maincontent_active').addClass('action-button-on');
                 } else {
                     $('.col_maincontent_active').removeClass('action-button-on');
+                }
+
+                if (isAnyOpenActionBar) {
+                    $('.col_maincontent_active').addClass('action-bar-on');
+                } else {
+                    $('.col_maincontent_active').removeClass('action-bar-on');
                 }
             });
 
