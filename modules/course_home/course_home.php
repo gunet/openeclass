@@ -995,7 +995,9 @@ foreach ($course_home_page_sidebar->getCourseAndAdminWidgets($course_id) as $key
 $head_content .= "
 <link rel='stylesheet' type='text/css' href='{$urlAppend}template/default/CSS/default.css' />
 ";
-$data['points_game_widget'] = course_points_game_widget($uid, $course_id);
+if (visible_module(MODULE_ID_PROGRESS,$course_id)) {
+	$data['points_game_widget'] = course_points_game_widget($uid, $course_id);
+}
 
 $data['registered'] = false;
 if ($uid) {

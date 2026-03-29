@@ -21,7 +21,7 @@
 class PointsGame {
 
     public static function levelUpdate($uid, $gid, $points, $curlevel) {
-        global $langLevelPromoted, $is_editor;
+        global $langLevelPromoted, $is_editor, $course_id;
 
         $level  = Database::get()->querySingle("SELECT id, friendly_name FROM points_game_levels 
                                                 WHERE points_game = ?d AND required_points <= ?d 
@@ -30,7 +30,7 @@ class PointsGame {
             if($level->id != $curlevel) {
                 Database::get()->query("UPDATE user_points_game_points SET current_level = ?d 
                                         WHERE user = ?d AND points_game = ?d", $level->id, $uid, $gid);
-                if (!$is_editor) {
+                if (!$is_editor && visible_module(MODULE_ID_PROGRESS,$course_id)) {
                     Session::Messages(sprintf($langLevelPromoted, $level->friendly_name),'alert-success');
                 }
             }

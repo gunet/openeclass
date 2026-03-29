@@ -88,6 +88,7 @@ abstract class CriterionAbstract {
     abstract public function evaluate($context);
 
     protected function assertedAction($context, $points = null) {
+        global $course_id, $is_editor, $langPointsWon;
         $uid = (isset($context['uid'])) ? $context['uid'] : null;
         if ($uid) {
             $exists = Database::get()->querySingle("select count(id) as cnt from $this->table where user = ?d and $this->field = ?d", $uid, $this->id)->cnt;
@@ -107,6 +108,9 @@ abstract class CriterionAbstract {
                         $current_level = NULL;
                         Database::get()->query("insert into user_points_game_points (user, points_game, total_points) values (?d, ?d, ?d)", $uid, $this->points_game, $total_points);
                     }
+                    if (!$is_editor && visible_module(MODULE_ID_PROGRESS,$course_id)) {
+                        Session::Messages(sprintf($langPointsWon, $points),'alert-success');
+                    }
                     PointsGame::levelUpdate($uid, $this->points_game, $total_points, $current_level);
                 }
             }
@@ -121,7 +125,7 @@ abstract class CriterionAbstract {
     }
 
     protected function assignPointsRecurringAction($uid) {
-        global $langPointsWon, $is_editor;
+        global $langPointsWon, $is_editor, $course_id;
         Database::get()->query("insert into user_points_game_criterion (user, points_game_criterion, points_awarded, created) values (?d, ?d, ?d, ?t)", $uid, $this->id, $this->points, gmdate('Y-m-d H:i:s'));
         //add awarded points to user
         $points_q = Database::get()->querySingle("select id, total_points, current_level from user_points_game_points where user = ?d and points_game = ?d", $uid, $this->points_game);
@@ -134,7 +138,7 @@ abstract class CriterionAbstract {
             $current_level = NULL;
             Database::get()->query("insert into user_points_game_points (user, points_game, total_points) values (?d, ?d, ?d)", $uid, $this->points_game, $total_points);
         }
-        if (!$is_editor) {
+        if (!$is_editor && visible_module(MODULE_ID_PROGRESS,$course_id)) {
             Session::Messages(sprintf($langPointsWon, $this->points),'alert-success');
         }
         PointsGame::levelUpdate($uid, $this->points_game, $total_points, $current_level);
