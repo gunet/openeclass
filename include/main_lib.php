@@ -2821,6 +2821,9 @@ function redirect_to_home_page($path='', $absolute=false) {
 
 // Translate Greek characters to Latin
 function greek_to_latin($string) {
+    if (is_null($string)) {
+        return '';
+    }
     return str_replace(
             array(
         'α', 'β', 'γ', 'δ', 'ε', 'ζ', 'η', 'θ', 'ι', 'κ', 'λ', 'μ', 'ν', 'ξ', 'ο', 'π',
@@ -2838,6 +2841,9 @@ function greek_to_latin($string) {
 // Convert to uppercase and remove accent marks
 // Limited coverage for now
 function remove_accents($string) {
+    if (is_null($string)) {
+        return '';
+    }
     return strtr(mb_strtoupper($string, 'UTF-8'),
         ['Ά' => 'Α', 'Έ' => 'Ε', 'Ί' => 'Ι', 'Ή' => 'Η', 'Ύ' => 'Υ',
          'Ό' => 'Ο', 'Ώ' => 'Ω', 'Ϊ' => 'Ι', 'Ϋ' => 'Υ',
