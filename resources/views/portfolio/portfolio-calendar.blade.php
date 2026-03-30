@@ -85,19 +85,19 @@
     <div class='d-flex justify-content-start align-items-center flex-wrap px-0 py-3'>
         <div class='d-flex align-items-center px-2 py-1'>
             <span class='event event-important'></span>
-            <span class="agenda-comment" aria-label="{{ trans('langAgendaDueDay') }}"> {{ trans('langAgendaDueDay') }}</span>
+            <span class="agenda-comment" tabindex='0'> {{ trans('langAgendaDueDay') }}</span>
         </div>
         <div class='d-flex align-items-center px-2 py-1'>
             <span class='event event-info'></span>
-            <span class="agenda-comment" aria-label="{{ trans('langAgendaCourseEvent') }}">{{ trans('langAgendaCourseEvent') }}</span>
+            <span class="agenda-comment" tabindex='0'>{{ trans('langAgendaCourseEvent') }}</span>
         </div>
         <div class='d-flex align-items-center px-2 py-1'>
             <span class='event event-success'></span>
-            <span class="agenda-comment" aria-label="{{ trans('langAgendaSystemEvent') }}">{{ trans('langAgendaSystemEvent') }}</span>
+            <span class="agenda-comment" tabindex='0'>{{ trans('langAgendaSystemEvent') }}</span>
         </div>
         <div class='d-flex align-items-center px-2 py-1'>
             <span class='event event-special'></span>
-            <span class="agenda-comment" aria-label="{{ trans('langAgendaPersonalEvent') }}">{{ trans('langAgendaPersonalEvent') }}</span>
+            <span class="agenda-comment" tabindex='0'>{{ trans('langAgendaPersonalEvent') }}</span>
         </div>
     </div>
 </div>

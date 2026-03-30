@@ -210,11 +210,21 @@
             
             document.addEventListener('keydown', function(event) {
                 const activeElement = document.activeElement;
+                const modalBootBox = document.querySelector('.bootbox.show');
+                const modal = document.querySelector('.modal.show');
                 if (activeElement && (activeElement.type === 'checkbox' || activeElement.type === 'radio')) {
                     if (event.key === 'Enter') {
                         event.preventDefault();
                         activeElement.checked = !activeElement.checked;
                         activeElement.dispatchEvent(new Event('change'));
+                    }
+                }
+                if (event.key === 'Escape' || event.key === 'Esc') {
+                    if (modalBootBox) {
+                        $(modalBootBox).modal('hide');
+                    }
+                    if (modal) {
+                        $(modal).modal('hide');
                     }
                 }
             });

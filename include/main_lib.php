@@ -6849,7 +6849,7 @@ function theme_initialization() {
 
                 .btn-exercise-nav[type=submit]:hover,
                 .btn-exercise-nav[type=submit]:focus{
-                    border: solid 1px $theme_options_styles[whiteButtonHoveredBorderTextColor] !important;
+                    border: solid 2px $theme_options_styles[whiteButtonHoveredBorderTextColor] !important;
                 }
 
                 .dt-paging .dt-paging-button .page-link:hover,
