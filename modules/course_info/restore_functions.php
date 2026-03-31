@@ -497,7 +497,7 @@ function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $f
 }
 
 function create_restored_course(&$tool_content, $restoreThis, $course_code, $course_lang, $course_title, $course_desc, $course_vis, $course_prof, $clone_course = FALSE, $fetch_course = FALSE) {
-    global $webDir, $urlServer, $urlAppend, $langEnter, $langBack, $currentCourseCode;
+    global $webDir, $urlServer, $urlAppend, $langEnter, $langBack, $currentCourseCode, $langImportCourseCompleted;
 
     require_once 'modules/create_course/functions.php';
     require_once 'modules/course_info/restorehelper.class.php';
@@ -1711,20 +1711,24 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
             }
         }
 
-
-        $backUrl = $urlAppend . (isset($currentCourseCode)? "courses/$currentCourseCode/": 'modules/admin/');
-        $tool_content .= action_bar(array(
-            array('title' => $langBack,
-                  'url' => $backUrl,
-                  'icon' => 'fa-reply',
-                  'level' => 'primary'),
-            array('title' => $langEnter,
-                  'url' => $urlAppend . "courses/$new_course_code/",
-                  'icon' => 'fa-arrow-right',
-                  'level' => 'primary-label',
-                  'button-class' => 'btn-success')
+        if ($fetch_course) { //i import course
+            Session::Messages($langImportCourseCompleted, 'alert-info');
+            redirect_to_home_page("courses/" . $course_code);
+        } else { // restore course
+            $backUrl = $urlAppend . (isset($currentCourseCode)? "courses/$currentCourseCode/": 'modules/admin/');
+            $action_bar = action_bar(array(
+                array('title' => $langBack,
+                    'url' => $backUrl,
+                    'icon' => 'fa-reply',
+                    'level' => 'primary'),
+                array('title' => $langEnter,
+                    'url' => $urlAppend . "courses/$new_course_code/",
+                    'icon' => 'fa-arrow-right',
+                    'level' => 'primary-label',
+                    'button-class' => 'btn-success')
             ), false);
-
+            $tool_content .= $action_bar;
+        }
     }
 }
 
