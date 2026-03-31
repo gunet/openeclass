@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2026-03-11 16:47:40
+// Generated 2026-03-31 11:43:38
 
 $langYes = "Yes";
 $langNo = "No";
@@ -354,8 +354,6 @@ $langEmptyAnn = "Clear up list of announcements";
 $professorMessage = "$langTeacher message";
 $langEmailOption = "Send announcement (via email) to registered $langsStudents.";
 $langUp = "Up";
-$langNavigationDoc = "Document navigation path";
-$langDeSelect = "Deselect";
 $langDown = "Down";
 $langNoAnnounce = "There are no announcements";
 $langSureToDelAnnounce = "Are you sure you want to delete this announcement";
