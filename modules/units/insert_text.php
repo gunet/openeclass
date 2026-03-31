@@ -25,7 +25,7 @@ function display_text_form() {
                       <input type='hidden' name='id' value='$id'>";
     $tool_content .= "<fieldset><legend class='mb-0' aria-label='$langForm'></legend>
         " . rich_text_editor('comments', 4, 20, '') . "	        
-        <div class='d-flex justify-content-start mt-4'><input class='btn submitAdminBtn' type='submit' name='submit_text' value='$langAdd'>
+        <div class='d-flex justify-content-end mt-4 gap-2'><input class='btn submitAdminBtn' type='submit' name='submit_text' value='$langAdd'>
             <a href='index.php?course=$course_code&id=$id'><input class='btn cancelAdminBtn ms-2' value='$langCancel' /></a>
         </div>
 	</fieldset>

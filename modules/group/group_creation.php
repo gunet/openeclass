@@ -41,14 +41,14 @@ if (isset($_GET['all'])) {
 
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langGroups);
 
-load_js('tools');
+load_js('tools.js');
 load_js('select2');
 
 $head_content .= "<script type='text/javascript'>
     $(document).ready(function () {
         $('#select-tutor').select2();
-    });
-    </script>    
+    });        
+    </script>
 ";
 
 //check if social bookmarking is enabled for this course

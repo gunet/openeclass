@@ -199,6 +199,8 @@ if (!isset($_POST['create_course'])) {
             error_log("AI availability check failed: " . $e->getMessage());
         }
 
+        $data['enable_activity'] = Database::get()->querySingle('SELECT id FROM activity_content LIMIT 1');
+
         view('modules.create_course.index', $data);
 
 } else if ($_POST['view_type'] == "flippedclassroom") {

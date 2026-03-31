@@ -47,8 +47,8 @@
                                     <div class='form-wrapper form-edit border-0 px-0'>
                                         <div id='unsubscontrols'>
                                         @if(isset($_REQUEST['cid']))
-                                        <label class='label-container' aria-label="{{ trans('langSelect') }}">
-                                            <input type='checkbox' name='c_unsub' value='1' {{ $selected }}>
+                                        <label class='label-container' id="id_selected">
+                                            <input aria-label="{{ $course_title }}" id="id_selected" type='checkbox' name='c_unsub' value='1' {{ $selected }}>
                                             @php $cid = $_GET['cid']; $course_title = course_id_to_title($cid) @endphp
                                             <span class='checkmark'></span>
                                             {{ $course_title }}
@@ -57,8 +57,8 @@
                                         @else
                                             @foreach($_SESSION['courses'] as $code => $status)
                                                 @if (course_status(course_code_to_id($code)) != COURSE_INACTIVE)
-                                                <label class='label-container' aria-label="{{ trans('langSelect') }}">
-                                                    <input type='checkbox' name='c_unsub[{{ $code }}]' value='1' {{ get_user_email_notification($uid, course_code_to_id($code)) ? 'checked' : '' }}>
+                                                <label class='label-container' for="id_{{ $code }}">
+                                                    <input aria-label="{{ course_code_to_title($code) }}" id="id_{{ $code }}" type='checkbox' name='c_unsub[{{ $code }}]' value='1' {{ get_user_email_notification($uid, course_code_to_id($code)) ? 'checked' : '' }}>
                                                     <span class='checkmark'></span>
                                                     {{ course_code_to_title($code) }}
                                                 </label>

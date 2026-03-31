@@ -18,7 +18,7 @@
                     </div>
                     <div class='col-lg-8 col-12 m-auto border-bottom-footer-text mb-3'></div>
                 @endif
-                <div class='col-12 d-flex d-flex justify-content-center align-items-center gap-3 flex-wrap mt-3'>
+                <div class='col-12 d-flex d-flex justify-content-center align-items-center gap-3 flex-wrap mt-3' aria-label="{{ trans('langFooterLinks') }}">
                     @if (!get_config('dont_display_about_menu'))
                         <div>
                             <a class="a_tools_site_footer" href="{{$urlAppend}}info/about.php" @if($_SESSION['provider'] == 'lti_publish') target="_blank" @endif aria-label="{{ trans('langPlatformIdentity') }}">

@@ -97,12 +97,15 @@
                                             <div>
                                                 @if ($mycourse->visible == COURSE_OPEN or $unlock_all_courses or isset($myCourses[$mycourse->id])) {{-- open course or user is registered to it --}}
                                                     <a class='TextBold' href="../../courses/{{ urlencode($mycourse->k) }}/">{{ $mycourse->i }}</a>
-                                                    &nbsp;<small>({{ $mycourse->c }})</small>
                                                 @else
                                                     <span @if (isset($_SESSION['uid'])) id='cid{{ $mycourse->id }}' @endif class='TextBold'>
                                                         {{ $mycourse->i }}
                                                     </span>
-                                                    &nbsp;<small>({{ $mycourse->c }})</small>
+                                                @endif
+                                                @if ($mycourse->c)
+                                                    &nbsp;<small>
+                                                        ({{ $mycourse->c }})
+                                                    </small>
                                                 @endif
                                                 <div>
                                                     <small class='vsmall-text TextRegular'>{{ $mycourse->t }}</small>

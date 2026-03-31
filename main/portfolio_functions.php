@@ -82,16 +82,18 @@ function getUserCourseInfo($uid): string
                     $pressed = 'false';
                 }
                 $license = '';
-                if($data->course_license > 0){
+                if ($data->course_license > 0){
                     $license = copyright_info($data->course_id);
                 }
                 $lesson_content .= "
                     <tr class='$visclass row-course'>
                         <td class='border-top-0 border-start-0 border-end-0'>
                             <div class='d-flex gap-1 flex-wrap'>
-                                <a class='TextBold' href='{$urlServer}courses/$data->code/'>" . q(ellipsize($data->title, 64)) . "</a>
-                                <small>(" .  q($data->public_code) . ")</small>
-                                <a id='btnNotification_{$data->course_id}' class='invisible btn btn-notification-course text-decoration-none' data-bs-toggle='collapse' href='#notification{$data->course_id}'
+                                <a class='TextBold' href='{$urlServer}courses/$data->code/'>" . q(ellipsize($data->title, 64)) . "</a>";
+                if ($data->public_code) {
+                    $lesson_content .= "<small>(" . q($data->public_code) . ")</small>";
+                }
+                $lesson_content .= "<a id='btnNotification_{$data->course_id}' class='invisible btn btn-notification-course text-decoration-none' data-bs-toggle='collapse' href='#notification{$data->course_id}'
                                                 role='button' aria-expanded='false' aria-controls='notification{$data->course_id}' aria-label='$langNotificationsExist'>
                                     <i class='fa-solid fa-bell link-color' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langNotificationsExist'></i>
                                 </a>
@@ -123,15 +125,18 @@ function getUserCourseInfo($uid): string
                                                     " . course_access_icon($data->visible) . "
                                                     $license
                                                 </div>
-                                                <div class='mt-2'>" . q($data->public_code) . "&nbsp; - &nbsp;" . q($data->professor) . "</div>
+                                            <div class='mt-2'>";
+                                            if ($data->public_code) {
+                                                $lesson_content .= q($data->public_code) . "&nbsp; - &nbsp;";
+                                            }
+                                            $lesson_content .= q($data->professor) . "</div>
+                                                </div>
+                                                <div>
+                                                    <button aria-label='$langClose' type='button' class='close'></button>
+                                                </div>    
                                             </div>
-                                            <div>
-                                                <button aria-label='$langClose' type='button' class='close'></button>
-                                            </div>
-
-                                        </div>
-                                        <div class='course-content mt-4'>
-                                            <div class='col-12 d-flex justify-content-center align-items-start'>";
+                                            <div class='course-content mt-4'>
+                                                <div class='col-12 d-flex justify-content-center align-items-start'>";
                 if($data->course_image == NULL) {
                     if ($data->is_collaborative) {
                         $lesson_content .= "<img class='openCourseImg' src='{$urlServer}template/modern/images/default-collaboration.jpg' alt='$langCourseImage' />";

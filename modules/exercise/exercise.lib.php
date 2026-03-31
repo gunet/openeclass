@@ -88,7 +88,7 @@ function showQuestion(&$objQuestionTmp, $question_number, array $exerciseResult 
                 </h3>
             </div>
             <div class='panel-body'>
-                <div class='text-heading-h4 mb-4'>" . q_math($questionName) . "</div>";
+                <div tabindex='0' class='text-heading-h4 mb-4'>" . q_math($questionName) . "</div>";
                 if (!empty($questionDescription) && $answerType != CALCULATED) {
                     $tool_content .= " <div class='mb-4'>$questionDescription</div>";
                 }

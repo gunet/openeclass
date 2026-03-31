@@ -56,7 +56,7 @@
                                                 </div>
 
                                                 <div class='form-group{{ Session::getError('url') ? " has-error" : "" }} mt-4'>
-                                                    <label for='url' class='col-sm-6 control-label-notes'>{{ trans('langGlossaryUrl') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
+                                                    <label for='url' class='col-sm-6 control-label-notes'>{{ trans('langGlossaryUrl') }}</span></label>
                                                     <div class='col-sm-12'>
                                                         <input type='text' placeholder="{{ trans('langGlossaryUrl') }}" class='form-control' id='url' name='url' value='{{ $url }}'>
                                                         <span class='help-block Accent-200-cl'>{{ Session::getError('url') }}</span>

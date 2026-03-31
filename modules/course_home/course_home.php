@@ -690,7 +690,7 @@ if ($total_cunits > 0) {
         }
         $cunits_content .=  "</div>";
 
-        $cunits_content .= "<div class='carousel-inner' style='overflow: visible;'>";
+        $cunits_content .= "<div class='carousel-inner' style='overflow: auto;'>";
         foreach ($all_units as $cu) {
             $access = $cu->public;
             $vis = $cu->visible;
@@ -800,9 +800,8 @@ if ($total_cunits > 0) {
             }
             $cunits_content .= "</div>";
 
-            $cunits_content .= "<div style='height:1px;' class='border-top-default mt-3 mb-3'></div>
-                        <div class='col-sm-12 bg-transparent'>
-
+            $cunits_content .= "
+                        <div class='col-12 bg-transparent d-flex justify-content-between align-items-center mt-3'>
                             <button class='carousel-prev-btn' type='button' data-bs-target='#carouselUnitsControls' data-bs-slide='prev' aria-label='Carousel previous'>
                                 <i class='fa-solid fa-chevron-circle-left fa-xl'></i>
                             </button>";

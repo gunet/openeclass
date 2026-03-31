@@ -25,7 +25,7 @@
  * Defines standard functions and validates variables
  */
 
-define('ECLASS_VERSION', '4.3.1');
+define('ECLASS_VERSION', '4.3.2');
 
 // mPDF library temporary file path and font path
 if (isset($webDir)) { // needed for avoiding 'notices' in some files
@@ -2834,6 +2834,9 @@ function redirect_to_home_page($path='', $absolute=false) {
 
 // Translate Greek characters to Latin
 function greek_to_latin($string) {
+    if (is_null($string)) {
+        return '';
+    }
     return str_replace(
             array(
         'α', 'β', 'γ', 'δ', 'ε', 'ζ', 'η', 'θ', 'ι', 'κ', 'λ', 'μ', 'ν', 'ξ', 'ο', 'π',
@@ -2851,6 +2854,9 @@ function greek_to_latin($string) {
 // Convert to uppercase and remove accent marks
 // Limited coverage for now
 function remove_accents($string) {
+    if (is_null($string)) {
+        return '';
+    }
     return strtr(mb_strtoupper($string, 'UTF-8'),
         ['Ά' => 'Α', 'Έ' => 'Ε', 'Ί' => 'Ι', 'Ή' => 'Η', 'Ύ' => 'Υ',
          'Ό' => 'Ο', 'Ώ' => 'Ω', 'Ϊ' => 'Ι', 'Ϋ' => 'Υ',
@@ -3948,13 +3954,13 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
     $secondary_icon = isset($secondary_menu_options['secondary_icon']) ? $secondary_menu_options['secondary_icon'] : "fa-solid fa-gear";
 
     if (count($out_secondary) > 0) {
-        $action_button .= "<button type='button' id='toolDropdown' class='btn submitAdminBtn' data-bs-toggle='dropdown' aria-expanded='false' aria-label='$langListChoices'>
+        $action_button .= "<button type='button' id='toolDropdown' class='btn submitAdminBtn action-bar-dropdown' data-bs-toggle='dropdown' aria-expanded='false' aria-label='$langListChoices'>
                                 <span class='fa $secondary_icon'></span>
                                 <span class='fa-solid fa-chevron-down ps-2'></span>
                                 <span class='hidden-xs TextBold'>$secondary_title</span>
                                 <span class='caret'></span><span class='hidden'></span>
                             </button>";
-        $action_button .= " <div class='m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-border' aria-labelledby='toolDropdown'>
+        $action_button .= " <div class='m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-border contextual-menu-action-bar' aria-labelledby='toolDropdown'>
                                 <ul class='list-group list-group-flush'>
                                     ".implode('', $out_secondary)."
                                 </ul>
@@ -4111,7 +4117,7 @@ function action_button($options, $secondary_menu_options = array(), $fc=false) {
     $counter++;
 
     return $primary_form_begin .
-         "<div class='btn-group btn-group-sm btn-group-default gap-2' role='group' aria-label='...'>
+         "<div class='btn-group btn-group-sm btn-group-default dropstart gap-2' role='group' aria-label='...'>
                 $primary_buttons
                 $action_button
           </div>" . $primary_form_end;
@@ -4883,26 +4889,28 @@ function get_platform_logo($size = 'normal', $position = 'header') {
         $logo_img = imageToBase64($footer_path);
         $image_align = setting_get(SETTING_COURSE_IMAGE_PRINT_FOOTER_ALIGNMENT, $course_id);
         $image_align = ($image_align == 0) ? 'left' : (($image_align == 1) ? 'center' : 'right');
-        $image_width = setting_get(SETTING_COURSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id);
-        $bg_color = '#ffffff';
+        $image_height = setting_get(SETTING_COURSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id);
+        // for old courses
+        if ($image_height > 50) {
+            $image_height = 15;
+        }
     } else {
         $header_path = setting_get_print_image_disk_path(SETTING_COURSE_IMAGE_PRINT_HEADER, $course_id);
+        $image_height = setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_WIDTH, $course_id);
+        // for old courses
+        if ($image_height > 50) {
+            $image_height = 20;
+        }
+        $image_align = setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_ALIGNMENT, $course_id);
+        $image_align = ($image_align == 0) ? 'left' : (($image_align == 1) ? 'center' : 'right');
         if ($header_path) {
             $logo_img = imageToBase64($header_path);
-            $image_align = setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_ALIGNMENT, $course_id);
-            $image_align = ($image_align == 0) ? 'left' : (($image_align == 1) ? 'center' : 'right');
-            $image_width = setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_WIDTH, $course_id);
-            $bg_color = '#ffffff';
         } else {
             $logo_img = $themeimg . '/eclass-new-logo.svg';
-            $image_width = 200;
-            $image_align = 'left';
-            $bg_color = '#ffffff';
             $theme_id = get_config('theme_options_id');
             if ($theme_id) {
                 $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
                 $theme_options_styles = unserialize($theme_options->styles);
-                $bg_color = $theme_options_styles['leftNavBgColor'];
                 $urlThemeData = $urlAppend . 'courses/theme_data/' . $theme_id;
                 if ($size == 'small' && isset($theme_options_styles['imageUploadSmall'])) {
                     $logo_img = "$urlThemeData/{$theme_options_styles['imageUploadSmall']}";
@@ -4913,8 +4921,8 @@ function get_platform_logo($size = 'normal', $position = 'header') {
         }
     }
 
-    $logo = "<div style='clear: right; background-color: $bg_color; padding: 1rem; text-align: $image_align;'>
-                <img style='height: {$image_width}mm;' src='$logo_img'>
+    $logo = "<div style='clear: right; padding: 1rem; text-align: $image_align;'>
+                <img style='height: {$image_height}mm;' src='$logo_img'>
             </div>";
 
     return $logo;
@@ -6860,7 +6868,7 @@ function theme_initialization() {
 
                 .btn-exercise-nav[type=submit]:hover,
                 .btn-exercise-nav[type=submit]:focus{
-                    border: solid 1px $theme_options_styles[whiteButtonHoveredBorderTextColor] !important;
+                    border: solid 2px $theme_options_styles[whiteButtonHoveredBorderTextColor] !important;
                 }
 
                 .dt-paging .dt-paging-button .page-link:hover,
@@ -12363,13 +12371,13 @@ function theme_initialization() {
                 textarea:focus-visible{
                     outline: 0 !important;
                     box-shadow: none !important;
-                    border: solid 1px $theme_options_styles[ColorFocus] !important;
+                    border: solid 2px $theme_options_styles[ColorFocus] !important;
                 }
 
                 .input-group:focus-within .input-group-text{
                     outline: 0 !important;
                     box-shadow: none !important;
-                    border: solid 1px $theme_options_styles[ColorFocus] !important;
+                    border: solid 2px $theme_options_styles[ColorFocus] !important;
                     border-left: 0px !important;
                 }
             ";

@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2026-03-11 16:47:40
+// Generated 2026-03-31 11:43:38
 
 $langYes = "Yes";
 $langNo = "No";
@@ -1484,8 +1484,8 @@ select the $langsFaculty and then select / unselect the desired course.</p>
 $langDeleteUser = "Are you sure you want to delete the user";
 $langDeleteUser2 = "from this course";
 $langSurnameName = "Full Name";
-$langAskUser = "Search for user you want to add. User must already have an account in the platform.";
-$langAskManyUsers = "<strong>Note</strong>:<br /> Users should already have an account in the platform, in order to register to your course. Enter the usernames or StudentID numbers on separate lines.";
+$langAskUser = "Search for the user you want to add. The user must already have an account in the platform.";
+$langAskManyUsers = "Note: Users should already have an account in the platform in order to register to your course. Enter the usernames or student ID numbers on separate lines.";
 $langAddUser = "Add User";
 $langAddManyUsers = "Add many users";
 $langOneUser = "one user";
