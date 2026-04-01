@@ -3631,6 +3631,56 @@ function upgrade_to_4_3($tbl_options): void
                 ON UPDATE CASCADE'
         );
     }
+
+    //sticky notes
+
+    Database::get()->query("CREATE TABLE IF NOT EXISTS `sticky_notes_topic` (
+        `id` int(11) NOT NULL AUTO_INCREMENT,
+        `course_id` int(11) NOT NULL,
+        `title` varchar(255) NOT NULL,
+        `description` text DEFAULT NULL,
+        `allow_edit` tinyint(1) NOT NULL DEFAULT 1,
+        `allow_delete` tinyint(1) NOT NULL DEFAULT 1,
+        `has_categories` tinyint(1) NOT NULL DEFAULT 0,
+        `per_page` int(11) NOT NULL DEFAULT 20,
+        `is_active` tinyint(1) NOT NULL DEFAULT 1,
+        `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+        `created_by` int(11) NOT NULL,
+        PRIMARY KEY (`id`),
+        KEY `fk_sticky_notes_topics_course` (`course_id`),
+        KEY `fk_sticky_notes_topics_creator` (`created_by`),
+        CONSTRAINT `fk_sticky_notes_topics_course` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE,
+        CONSTRAINT `fk_sticky_notes_topics_creator` FOREIGN KEY (`created_by`) REFERENCES `user` (`id`) ON DELETE CASCADE
+    ) $tbl_options");
+    
+    Database::get()->query("CREATE TABLE IF NOT EXISTS `sticky_notes_category` (
+        `id` int(11) NOT NULL AUTO_INCREMENT,
+        `topic_id` int(11) NOT NULL,
+        `title` varchar(255) NOT NULL,
+        `sort_order` int(11) NOT NULL DEFAULT 0,
+        `created_at` datetime DEFAULT current_timestamp(),
+        PRIMARY KEY (`id`),
+        KEY `topic_id` (`topic_id`),
+        CONSTRAINT `sticky_notes_category_ibfk_1` FOREIGN KEY (`topic_id`) REFERENCES `sticky_notes_topic` (`id`) ON DELETE CASCADE
+    ) $tbl_options");
+    
+    Database::get()->query("CREATE TABLE IF NOT EXISTS `sticky_notes_post` (
+        `id` int(11) NOT NULL AUTO_INCREMENT,
+        `topic_id` int(11) NOT NULL,
+        `category_id` int(11) DEFAULT NULL,
+        `content` varchar(500) NOT NULL,
+        `user_id` int(11) NOT NULL,
+        `color` varchar(10) DEFAULT NULL,
+        `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+        `updated_at` datetime NOT NULL DEFAULT current_timestamp(),
+        PRIMARY KEY (`id`),
+        KEY `fk_sticky_notes_post_topic` (`topic_id`),
+        KEY `fk_sticky_notes_post_creator` (`user_id`),
+        KEY `category_id` (`category_id`),
+        CONSTRAINT `fk_sticky_notes_post_creator` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE,
+        CONSTRAINT `fk_sticky_notes_post_topic` FOREIGN KEY (`topic_id`) REFERENCES `sticky_notes_topic` (`id`) ON DELETE CASCADE,
+        CONSTRAINT `sticky_notes_post_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `sticky_notes_category` (`id`) ON DELETE SET NULL
+    ) $tbl_options");
 }
 
 
