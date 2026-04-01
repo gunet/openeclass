@@ -25,7 +25,7 @@
  * Defines standard functions and validates variables
  */
 
-define('ECLASS_VERSION', '4.3.2');
+define('ECLASS_VERSION', '4.4-dev');
 
 // mPDF library temporary file path and font path
 if (isset($webDir)) { // needed for avoiding 'notices' in some files
@@ -205,6 +205,20 @@ function load_js($file, $init='') {
         } elseif ($file == 'bootstrap-combobox') {
             $head_content .= css_link('bootstrap-combobox/css/bootstrap-combobox.css');
             $file = 'bootstrap-combobox/js/bootstrap-combobox.js';
+        } elseif ($file == 'bootstrap-table') {
+            $head_content .= css_link('bootstrap-table/bootstrap-table.min.css');
+            if ($language != 'en') {
+                switch ($language) {
+                    case 'el': $file = 'bootstrap-table/locale/bootstrap-table-el-GR.min.js'; break;
+                    case 'fr': $file = 'bootstrap-table/locale/bootstrap-table-fr-FR.min.js'; break;
+                    case 'de': $file = 'bootstrap-table/locale/bootstrap-table-de-DE.min.js'; break;
+                    case 'it': $file = 'bootstrap-table/locale/bootstrap-table-it-IT.min.js'; break;
+                    case 'es': $file = 'bootstrap-table/locale/bootstrap-table-es-ES.min.js'; break;
+                    default: break;
+                }
+            }
+            $head_content .= js_link('bootstrap-table/bootstrap-table.min.js');
+            $head_content .= js_link('bootstrap-table/extensions/mobile/bootstrap-table-mobile.min.js');
         } elseif ($file == 'spectrum') {
             $head_content .= css_link('spectrum/spectrum.css');
             $file = 'spectrum/spectrum.js';
@@ -1166,7 +1180,7 @@ function display_activation_link($module_id) {
     global $modules;
 
     $script = preg_replace('|.*/|', '', $_SERVER['SCRIPT_NAME']);
-    if (!defined('STATIC_MODULE') and $module_id and array_key_exists($module_id, $modules) and $script == 'index.php' and count($_GET) == 1 and isset($_GET['course']) and $_SERVER['REQUEST_METHOD'] == 'GET') {
+    if (!defined('STATIC_MODULE') and $module_id and array_key_exists($module_id, $modules) and $script == 'index.php' and (count($_GET) == 1 or ($module_id == MODULE_ID_PROGRESS and count($_GET) == 2 and isset($_GET['tab']))) and isset($_GET['course']) and $_SERVER['REQUEST_METHOD'] == 'GET') {
         return true;
     } else {
         return false;

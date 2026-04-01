@@ -5770,6 +5770,7 @@ textarea:focus-visible{
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -6543,7 +6544,297 @@ th.grade-col a{
 .pollTotalAnswers{
   display: none;
 }
-.level-badge {
+
+/******************************** Progress Module *******************************/
+
+/* TAB NAVIGATION */
+.progress-module .progress-nav-container {
+    background: white;
+    border-bottom: 1px solid #e5e7eb;
+    margin: 0 0 30px 0;
+    padding: 0;
+}
+
+.progress-module .progress-nav-tabs {
+    display: flex;
+    gap: 0;
+    position: relative;
+    overflow-x: auto;
+    padding-left: 0;
+    margin-left: 0;
+}
+
+.progress-module .progress-nav-tab {
+    padding: 16px 24px;
+    background: transparent;
+    border: none;
+    border-bottom: 3px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    color: #6b7280;
+    font-size: 15px;
+    font-weight: 500;
+    white-space: nowrap;
+    position: relative;
+}
+
+.progress-module .progress-nav-tab:hover {
+    color: #374151;
+    background: #f9fafb;
+}
+
+.progress-module .progress-nav-tab.active {
+    color: #2563eb;
+    border-bottom-color: #2563eb;
+}
+
+/* CARD CONTAINERS */
+.progress-module .progress-card,
+.progress-module .panel,
+.progress-module .panel-default,
+.progress-module .panel-success,
+.progress-module .panel-info,
+.progress-module .panel-body-progress,
+.progress-module .card,
+.progress-module .card-default,
+.progress-module .panelCard,
+.progress-module .panelCard.border-card-left-default,
+.progress-module div[class*='panel'],
+.progress-module > div > .panel,
+.progress-module .row > div > .panel {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    border-radius: 12px !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05) !important;
+    margin-bottom: 25px !important;
+}
+
+/* CARD HEADERS */
+.progress-module .panel-heading,
+.progress-module .card-header,
+.progress-module h3.panel-title {
+    background: transparent !important;
+    border: none !important;
+    border-radius: 12px 12px 0 0 !important;
+    padding: 20px 24px !important;
+    margin: 0 !important;
+}
+
+.progress-module .progress-card-header h4,
+.progress-module .panel-heading h4,
+.progress-module .panel-heading h3,
+.progress-module .panel-title,
+.progress-module h3.panel-title {
+    font-weight: 700 !important;
+    color: #1f2937 !important;
+    margin: 0 !important;
+    font-size: 16px !important;
+}
+
+.progress-module .progress-card-header i,
+.progress-module .panel-heading h4 i,
+.progress-module .panel-heading h3 i {
+    margin-right: 10px;
+    color: #3b82f6;
+}
+
+/* CARD BODY */
+.progress-module .panel-body,
+.progress-module .card-body,
+.progress-module .panel-body-progress {
+    padding: 24px !important;
+    background: transparent !important;
+}
+
+/* TABLES IN PROGRESS MODULE (except pg-info-table) */
+.progress-module table:not(.pg-info-table) {
+    margin-bottom: 0 !important;
+    background: transparent !important;
+}
+
+.progress-module table:not(.pg-info-table) thead {
+    background: #f9fafb !important;
+    border-bottom: 2px solid #e5e7eb !important;
+}
+
+.progress-module table:not(.pg-info-table) th {
+    font-weight: 600 !important;
+    color: #374151 !important;
+    padding: 14px 16px !important;
+    font-size: 13px !important;
+    border: none !important;
+}
+
+.progress-module table:not(.pg-info-table) td {
+    padding: 16px !important;
+    color: #4b5563 !important;
+    vertical-align: middle !important;
+    border: none !important;
+}
+
+.progress-module table:not(.pg-info-table) tbody tr {
+    border-bottom: 1px solid #f3f4f6;
+    transition: background-color 0.2s ease;
+}
+
+.progress-module table:not(.pg-info-table) tbody tr:last-child {
+    border-bottom: none;
+}
+
+.progress-module table:not(.pg-info-table) tbody tr:hover {
+    background-color: #f9fafb !important;
+}
+
+/* FORM GROUPS */
+.progress-module .form-group {
+    margin-bottom: 15px;
+}
+
+.progress-module .form-group label {
+    font-weight: 600;
+    color: #374151;
+}
+
+/* LEADERBOARD ACCORDION */
+.progress-module .leaderboard-accordion-header {
+    background: #fff !important;
+    border: 1px solid #e5e7eb !important;
+    border-radius: 12px 12px 0 0 !important;
+    padding: 20px 24px !important;
+    min-height: 74px !important;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.2s ease;
+    margin-top: 40px !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05) !important;
+}
+
+.progress-module .leaderboard-accordion-header:hover {
+    background: #f9fafb !important;
+}
+
+.progress-module .leaderboard-accordion-header h4 {
+    margin: 0 !important;
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    color: #1f2937 !important;
+}
+
+.progress-module .leaderboard-accordion-header h4 i {
+    margin-right: 12px;
+    color: #3b82f6;
+}
+
+.progress-module .leaderboard-accordion-icon {
+    transition: transform 0.3s ease;
+    color: #6b7280;
+    font-size: 16px;
+}
+
+.progress-module .leaderboard-accordion-icon.open {
+    transform: rotate(180deg);
+}
+
+.progress-module .leaderboard-accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+    border: 1px solid #e5e7eb !important;
+    border-top: none !important;
+    border-radius: 0 0 12px 12px !important;
+    background: #fff !important;
+    margin-bottom: 25px !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05) !important;
+}
+
+.progress-module .leaderboard-accordion-content.open {
+    max-height: 3000px;
+    overflow: visible;
+}
+
+.progress-module .leaderboard-accordion-body {
+    padding: 24px !important;
+    background: #fff !important;
+}
+
+/* Accordion header buttons: hidden when closed, visible when open */
+.progress-module .accordion-header-btn {
+    display: none;
+}
+
+.progress-module .leaderboard-accordion-header:has(+ .leaderboard-accordion-content.open) .accordion-header-btn {
+    display: block;
+}
+
+/* LEADERBOARD TABLE */
+.progress-module .leaderboard-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 0 !important;
+    background: transparent !important;
+}
+
+.progress-module .leaderboard-table thead {
+    background: #f9fafb !important;
+    border-bottom: 2px solid #e5e7eb !important;
+}
+
+.progress-module .leaderboard-table th {
+    padding: 14px 16px !important;
+    font-weight: 600 !important;
+    color: #374151 !important;
+    font-size: 13px !important;
+    text-align: left !important;
+    border: none !important;
+}
+
+.progress-module .leaderboard-table th.text-center,
+.progress-module .leaderboard-table td.text-center {
+    text-align: center !important;
+}
+
+.progress-module .leaderboard-table tbody tr {
+    background-color: transparent;
+    border-bottom: 1px solid #f3f4f6;
+    transition: background-color 0.2s ease;
+}
+
+.progress-module .leaderboard-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.progress-module .leaderboard-table tbody tr:hover {
+    background-color: #f9fafb !important;
+}
+
+.progress-module .leaderboard-table td {
+    padding: 16px !important;
+    color: #4b5563 !important;
+    vertical-align: middle !important;
+    border: none !important;
+}
+
+.progress-module .leaderboard-table tr.current-user-student {
+    background: transparent !important;
+    border-left: 3px solid #3b82f6 !important;
+}
+
+.progress-module .leaderboard-table tr.current-user-student td {
+    color: #1f2937 !important;
+    font-weight: 600 !important;
+}
+
+/* LEADERBOARD ELEMENTS */
+.progress-module .rank-number {
+    font-weight: 700;
+    color: #6b7280;
+    font-size: 15px;
+}
+
+.progress-module .level-badge {
     display: inline-flex;
     align-items: center;
     gap: 6px;
@@ -6553,4 +6844,214 @@ th.grade-col a{
     border-radius: 20px;
     font-size: 12px;
     font-weight: 600;
+}
+
+.progress-module .user-name {
+    font-weight: 500;
+    color: #1f2937;
+}
+
+/* Star icon with level number inside (leaderboard level column) */
+.lb-star-wrap {
+    position: relative;
+    width: 34px;
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.lb-star-icon {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #a855f7, #60a5fa);
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27%3E%3Cpath d=%27M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z%27 fill=%27none%27 stroke=%27black%27 stroke-width=%271.5%27/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27%3E%3Cpath d=%27M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z%27 fill=%27none%27 stroke=%27black%27 stroke-width=%271.5%27/%3E%3C/svg%3E");
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    -webkit-mask-position: center;
+    mask-position: center;
+}
+
+.lb-star-num {
+    position: absolute;
+    font-size: 8px;
+    font-weight: 700;
+    color: #7c3aed;
+    text-align: center;
+    line-height: 1;
+    max-width: 22px;
+    word-break: break-word;
+}
+
+.progress-module .leaderboard-table .progress {
+    height: 8px;
+    margin-bottom: 6px;
+    background-color: #e5e7eb;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress-module .leaderboard-table .progress-bar {
+    background-color: #3b82f6;
+    height: 100%;
+    transition: width 0.3s ease;
+}
+
+.progress-module .leaderboard-table .progress-text {
+    font-size: 11px;
+    color: #6b7280;
+    font-weight: 500;
+}
+
+/* PROGRESS BARS IN CARDS */
+.progress-module .card .progress {
+    height: 8px !important;
+    margin-bottom: 6px !important;
+    background-color: #e5e7eb !important;
+    border-radius: 10px !important;
+    overflow: hidden !important;
+}
+
+.progress-module .card .progress-bar {
+    background-color: #3b82f6 !important;
+    height: 100% !important;
+    transition: width 0.3s ease !important;
+}
+
+/* ACTIVITY TABLES - even column distribution */
+.progress-module .activity-table {
+    table-layout: fixed;
+    width: 100%;
+}
+
+.progress-module .activity-table th {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.progress-module .bootstrap-table .fixed-table-container,
+.progress-module .bootstrap-table .fixed-table-body {
+    overflow: visible !important;
+}
+
+/* POINT GAME - BASIC INFO: status pills (active / inactive) */
+.badge-status-green,
+.badge-status-red {
+    display: inline-block;
+    min-width: 85px;
+    box-sizing: border-box;
+    text-align: center;
+    padding: 1px 4px;
+    border-radius: 20px;
+    font-size: 0.78rem;
+}
+
+.badge-status-green {
+    background-color: #f0fdf4;
+    color: #22c55e;
+    border: 1px solid #bbf7d0;
+}
+
+.badge-status-red {
+    background-color: #fef2f2;
+    color: #ef4444;
+    border: 1px solid #fecaca;
+}
+
+/* POINT GAME - BASIC INFO: small levels table */
+.progress-module .table-sm th,
+.progress-module .table-sm td {
+    padding: 0.5rem;
+}
+
+/* https://github.com/wenzhixin/bootstrap-table/issues/899 */
+.fixed-table-container thead th .th-inner {
+    white-space: normal !important;
+}
+
+/******************************** Progress Module - Table Pagination *******************************/
+
+.progress-module .fixed-table-pagination {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 16px;
+    border-top: 1px solid #e5e7eb;
+    background: white;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+/* Remove clearfix — using flexbox instead */
+.progress-module .fixed-table-pagination::after {
+    display: none !important;
+}
+
+/* Override Bootstrap Table float layout */
+.progress-module .fixed-table-pagination > div {
+    float: none !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+/* Hide info text and page-size dropdown — only show nav buttons */
+.progress-module .fixed-table-pagination .pagination-detail {
+    display: none !important;
+}
+
+/* Force pagination nav visible even when Bootstrap Table JS hides it (1 page case) */
+.progress-module .fixed-table-pagination div.pagination {
+    display: flex !important;
+    align-items: center;
+}
+
+.progress-module .fixed-table-pagination ul.pagination {
+    display: flex !important;
+    align-items: center;
+    gap: 2px;
+    list-style: none;
+    margin: 0 !important;
+    padding: 0;
+}
+
+.progress-module .fixed-table-pagination .page-item .page-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    height: 32px;
+    padding: 0 8px;
+    border: none;
+    background: transparent;
+    color: #9ca3af;
+    font-size: 14px;
+    font-weight: 400;
+    text-decoration: none;
+    transition: color 0.15s ease;
+    line-height: 1;
+    cursor: pointer;
+    border-radius: 6px;
+    box-shadow: none;
+}
+
+.progress-module .fixed-table-pagination .page-item .page-link:hover {
+    color: #374151;
+    background: #f3f4f6;
+}
+
+.progress-module .fixed-table-pagination .page-item.active .page-link {
+    color: #2563eb;
+    font-weight: 700;
+    background: transparent;
+}
+
+.progress-module .fixed-table-pagination .page-item.disabled .page-link {
+    color: #d1d5db;
+    cursor: not-allowed;
+    pointer-events: none;
+    background: transparent;
 }
