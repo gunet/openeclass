@@ -3810,24 +3810,22 @@ function upgrade_to_4_4($tbl_options) : void {
     }
 
     if (DBHelper::tableExists('admin_announcement') and !DBHelper::fieldExists('admin_announcement', 'tenant_id')) {
-        Database::get()->query("ALTER TABLE `admin_announcement`
-                                ADD `tenant_id` INT(11) DEFAULT NULL AFTER `id`");
+        Database::get()->query("ALTER TABLE `admin_announcement` ADD `tenant_id` INT(11) DEFAULT NULL AFTER `id`");
 
-        Database::get()->query("ALTER TABLE `admin_announcement`
-                                ADD INDEX `idx_tenant_id` (`tenant_id`)");
+        Database::get()->query("ALTER TABLE `admin_announcement` ADD INDEX `idx_tenant_id` (`tenant_id`)");
     }
 
     if (!DBHelper::fieldExists('tenant', 'url_active')) {
-        Database::get()->query("ALTER TABLE tenant
-        ADD url_active TINYINT(1) NOT NULL DEFAULT 0");
+        Database::get()->query("ALTER TABLE tenant ADD url_active TINYINT(1) NOT NULL DEFAULT 0");
     }
 
     if (!DBHelper::fieldExists('api_token', 'department_id')) {
         Database::get()->query(
             'ALTER TABLE `api_token`
-        ADD `department_id` INT(11),
-        FOREIGN KEY (department_id) REFERENCES hierarchy(id) ON DELETE CASCADE'
-        );
+                        ADD `department_id` INT(11),
+                        ADD CONSTRAINT `fk_department_id`
+                        FOREIGN KEY (department_id) REFERENCES hierarchy(id) ON DELETE CASCADE'
+                        );
     }
 
     if (!DBHelper::fieldExists('certificate_template', 'department_id')) {
@@ -3842,45 +3840,52 @@ function upgrade_to_4_4($tbl_options) : void {
     }
 
     // Gamification
-    Database::get()->query("CREATE TABLE `points_game` (
-        `id` int(11) not null auto_increment primary key,
-        `course_id` int(11) not null,
-        `title` varchar(255) not null,
-        `description` text,
-        `active` tinyint(1) not null default 1,
-        `created` datetime not null DEFAULT CURRENT_TIMESTAMP,
-        `starts` datetime,
-        `expires` datetime,
-        `config` text,
-        index `points_game_course` (`course_id`),
-        foreign key (`course_id`) references `course` (`id`)
-    ) $tbl_options");
-      
-    Database::get()->query("CREATE TABLE `points_game_criterion` (
-        `id` int(11) not null auto_increment primary key,
-        `points_game` int(11) not null,
-        `activity_type` varchar(255),
-        `module` int(11),
-        `resource` int(11),
-        `threshold` decimal(7,2),
-        `operator` varchar(20),
-        `points` int(11),
-        `criterion_type` varchar(20) not null,
-        `max_points_from_criterion` int(11),
-        `max_points_from_criterion_time_period` int(11),
-        `time_period_in_days` int(11),
-        foreign key (`points_game`) references `points_game`(`id`)
-    ) $tbl_options");
-      
-    Database::get()->query("CREATE TABLE `points_game_levels` (
+    if (!DBHelper::tableExists('points_game')) {
+        Database::get()->query("CREATE TABLE `points_game` (
+            `id` int(11) not null auto_increment primary key,
+            `course_id` int(11) not null,
+            `title` varchar(255) not null,
+            `description` text,
+            `active` tinyint(1) not null default 1,
+            `created` datetime not null DEFAULT CURRENT_TIMESTAMP,
+            `starts` datetime,
+            `expires` datetime,
+            `config` text,
+            index `points_game_course` (`course_id`),
+            foreign key (`course_id`) references `course` (`id`)
+        ) $tbl_options");
+    }
+
+    if (!DBHelper::tableExists('points_game_criterion')) {
+        Database::get()->query("CREATE TABLE `points_game_criterion` (
+            `id` int(11) not null auto_increment primary key,
+            `points_game` int(11) not null,
+            `activity_type` varchar(255),
+            `module` int(11),
+            `resource` int(11),
+            `threshold` decimal(7,2),
+            `operator` varchar(20),
+            `points` int(11),
+            `criterion_type` varchar(20) not null,
+            `max_points_from_criterion` int(11),
+            `max_points_from_criterion_time_period` int(11),
+            `time_period_in_days` int(11),
+            foreign key (`points_game`) references `points_game`(`id`)
+        ) $tbl_options");
+    }
+
+    if (!DBHelper::tableExists('points_game_levels')) {
+        Database::get()->query("CREATE TABLE `points_game_levels` (
         `id` int(11) not null auto_increment primary key,
         `points_game` int(11) not null,
         `friendly_name` varchar(255),
         `required_points` int(11) not null,
         foreign key (`points_game`) references `points_game`(`id`)
-    ) $tbl_options");
-      
-    Database::get()->query("CREATE TABLE `user_points_game_criterion` (
+        ) $tbl_options");
+    }
+
+    if (!DBHelper::tableExists('user_points_game_criterion')) {
+        Database::get()->query("CREATE TABLE `user_points_game_criterion` (
         `id` int(11) not null auto_increment primary key,
         `user` int(11) not null,
         `points_game_criterion` int(11) not null,
@@ -3888,21 +3893,23 @@ function upgrade_to_4_4($tbl_options) : void {
         `created` datetime not null DEFAULT CURRENT_TIMESTAMP,
         foreign key (`user`) references `user`(`id`),
         foreign key (`points_game_criterion`) references `points_game_criterion`(`id`)
-    ) $tbl_options");
-      
-    Database::get()->query("CREATE TABLE `user_points_game_points` (
-        `id` int(11) not null auto_increment primary key,
-        `user` int(11) not null,
-        `points_game` int(11) not null,
-        `total_points` int(11) not null,
-        `current_level` int(11),
-        unique key `user_points_game_points` (`user`, `points_game`),
-        index `user_points_game_leaderboard` (`points_game`, `total_points` DESC),
-        foreign key (`user`) references `user`(`id`),
-        foreign key (`points_game`) references `points_game`(`id`),
-        foreign key (`current_level`) references `points_game_levels`(`id`)
-    ) $tbl_options");
+        ) $tbl_options");
+    }
 
+    if (!DBHelper::tableExists('user_points_game_points')) {
+        Database::get()->query("CREATE TABLE `user_points_game_points` (
+            `id` int(11) not null auto_increment primary key,
+            `user` int(11) not null,
+            `points_game` int(11) not null,
+            `total_points` int(11) not null,
+            `current_level` int(11),
+            unique key `user_points_game_points` (`user`, `points_game`),
+            index `user_points_game_leaderboard` (`points_game`, `total_points` DESC),
+            foreign key (`user`) references `user`(`id`),
+            foreign key (`points_game`) references `points_game`(`id`),
+            foreign key (`current_level`) references `points_game_levels`(`id`)
+        ) $tbl_options");
+    }
 }
 
 /**
