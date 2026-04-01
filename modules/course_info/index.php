@@ -74,6 +74,17 @@ if ($is_power_user or $is_admin or ($is_departmentmanage_user and $atleastone)) 
     $allow_clone = true;
 }
 
+$tenant = getCurrentTenant();
+
+if ($tenant) {
+    $tenantOptions = $tenant->options ? unserialize($tenant->options) : [];
+    $allow_clone = $allow_clone || getTenantOption(
+        $tenantOptions,
+        'allow_teacher_clone_course'
+    );
+} else {
+    $allow_clone = $allow_clone || get_config('allow_teacher_clone_course');
+}
 
 $toolName = $langCourseInfo;
 

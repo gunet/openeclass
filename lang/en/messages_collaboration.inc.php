@@ -509,8 +509,11 @@ title on a separate line. If you want it to be added automatically
 moderator in $langsCourse, enter first name or username
 of after the title, separated by the character \"|\".";
 $langMultiCourseTitles = "Titles / Moderators $langOfCourses";
+$langMultiCourseCodes = "$langOfCourses codes";
 $langMultiCourseData = "Data $langOfCourses";
 $langMultiCourseCreated = "$langsCourse was created";
+$langMultiCourseDeleted = "$langsCourse was deleted";
+$langMultiCourseNotDeleted = "$langsCourse failed to delete";
 $langNewPersoMessage = 'New personal message';
 $langNewCourseMessage = "New message $langsOfCourse";
 $langBadFormData = 'File submission failure';

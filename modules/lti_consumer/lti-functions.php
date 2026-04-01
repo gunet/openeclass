@@ -61,12 +61,14 @@ function lti_version_field_wraps() {
                     keysetUrlWrap.css('display', 'block');
                     initiateLoginUrlWrap.css('display', 'block');
                     redirectionUriWrap.css('display', 'block');
+                    $('#lti_url').val('https://lti.int.turnitin.com/launch/tfs');
                 } else {
                     keyWrap.css('display', 'block');
                     secretWrap.css('display', 'block');
                     keysetUrlWrap.css('display', 'none');
                     initiateLoginUrlWrap.css('display', 'none');
                     redirectionUriWrap.css('display', 'none');
+                    $('#lti_url').val('https://api.turnitin.com/api/lti/1p0/assignment');
                 }
             };
             

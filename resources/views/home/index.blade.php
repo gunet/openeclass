@@ -84,12 +84,12 @@
                                     <div class='card bg-transparent card-transparent border-0'>
                                         <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0 gap-3 flex-wrap'>
                                             <div class='jumbotron-intro-text'>
-                                                @if(get_config('homepage_title_'.$language_code))
-                                                    <h1 class='eclass-title' aria-label="{{ trans('langEclass') }}">{{ get_config('homepage_title_'.$language_code) }}</h1>
+                                                @if($platform_title)
+                                                    <h1 class='eclass-title' aria-label="{{ trans('langEclass') }}">{!! $platform_title !!}</h1>
                                                 @endif
 
-                                                @if(get_config('homepage_intro_'.$language_code))
-                                                    <p class='eclassInfo mb-0' aria-label="{{ trans('langInfo') }}">{!! get_config('homepage_intro_'.$language_code) !!}</p>
+                                                @if($platform_intro)
+                                                    <p class='eclassInfo mb-0' aria-label="{{ trans('langInfo') }}">{!! $platform_intro !!}</p>
                                                 @endif
                                             </div>
                                         </div>

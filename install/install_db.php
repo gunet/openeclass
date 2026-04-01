@@ -129,6 +129,7 @@ $db->query("CREATE TABLE `announcement` (
 $db->query("CREATE TABLE `admin_announcement` (
     `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `title` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
+    `tenant_id` INT DEFAULT NULL,
     `body` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci,
     `date` DATETIME NOT NULL,
     `begin` DATETIME DEFAULT NULL,
@@ -1893,7 +1894,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `tc_servers` (
 
 
 $db->query("CREATE TABLE `tc_attendance` (
-    `id` INT NOT NULL DEFAULT '0',
+    `id` INT NOT NULL DEFAULT '0' AUTO_INCREMENT,
     `meetingid` varchar(42) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
     `bbbuserid` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
     `totaltime` INT NOT NULL DEFAULT '0',
@@ -2022,8 +2023,10 @@ $db->query("CREATE TABLE IF NOT EXISTS `theme_options` (
     `id` INT NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
     `styles` LONGTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
+    `tenant_id` int(11) DEFAULT NULL,
     `version` TINYINT,
-    PRIMARY KEY (`id`)) $tbl_options");
+    PRIMARY KEY (`id`)
+    CONSTRAINT FOREIGN KEY (`tenant_id`) REFERENCES `tenant` (`id`)) $tbl_options");
 
 // Tags tables
 $db->query("CREATE TABLE IF NOT EXISTS `tag_element_module` (
@@ -2186,7 +2189,13 @@ $db->query("CREATE TABLE `certificate_template` (
     `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci,
     `filename` varchar(255),
     `orientation` varchar(10),
-    `all_courses` TINYINT not null default 1
+    `all_courses` TINYINT not null default 1,
+    `department_id` int(11) default null,
+    KEY `fk_certificate_template_hierarchy` (`department_id`),
+    CONSTRAINT `fk_certificate_template_hierarchy` 
+        FOREIGN KEY (`department_id`) REFERENCES `hierarchy` (`id`) 
+        ON DELETE SET NULL 
+        ON UPDATE CASCADE
 ) $tbl_options");
 
 $db->query("CREATE TABLE `badge_icon` (
@@ -2622,12 +2631,14 @@ $db->query("CREATE TABLE api_token (
     `id` smallint NOT NULL AUTO_INCREMENT,
     `token` text CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
     `name` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+    `department_id` int(11) NOT NULL,
     `comments` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
     `ip` varchar(45) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
     `enabled` tinyint NOT NULL,
     `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `expired` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT FOREIGN KEY (`department_id`) REFERENCES `hierarchy` (`id`),
     PRIMARY KEY (`id`)) $tbl_options");
 
 $db->query("CREATE TABLE ai_providers (
@@ -2769,6 +2780,31 @@ $db->query("CREATE TABLE `session_user_material` (
           FOREIGN KEY (`session_id`) REFERENCES `mod_session` (`id`) ON DELETE CASCADE) $tbl_options");
 
 
+$db->query("CREATE TABLE `tenant` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `name` varchar(200) NOT NULL,
+    `description` text DEFAULT NULL,
+    `department_id` int(11) NOT NULL,
+    `url` varchar(200) NOT NULL DEFAULT '',
+    `url_active` tinyint(1) NOT NULL DEFAULT '0',
+    `theme_id` int(11) DEFAULT NULL,
+    `created_at` DATETIME NOT NULL,
+    `updated_at` DATETIME NOT NULL,
+    `options` text DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    KEY `department_id` (`department_id`),
+    KEY `theme_id` (`theme_id`),
+    CONSTRAINT FOREIGN KEY (`department_id`) REFERENCES `hierarchy` (`id`),
+    CONSTRAINT FOREIGN KEY (`theme_id`) REFERENCES `theme_options` (`id`)) $tbl_options");
+
+$db->query("CREATE TABLE `course_resource_usage` (
+    `course_id` int(11) NOT NULL,
+    `disk_size` bigint DEFAULT NULL,
+    PRIMARY KEY (`course_id`),
+    KEY `idx_disk_size` (`disk_size`),
+    CONSTRAINT FOREIGN KEY (`course_id`) REFERENCES `course` (`id`)
+        ON DELETE CASCADE ON UPDATE CASCADE
+    ) $tbl_options");
 
 $_SESSION['theme'] = 'modern';
 

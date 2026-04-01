@@ -81,6 +81,13 @@ if (isset($_POST['submit'])) {
     } else {
         $enabled = 0;
     }
+
+    if (isset($_POST['api_category']) && $_POST['api_category'] !== '') {
+        $api_category = intval($_POST['api_category']);
+    } else {
+        $api_category = null;
+    }
+
     $all_courses = (($_POST['api_all_courses'] ?? '') == 'true')? 1: 0;
     $token = null;
     if (isset($_GET['edit'])) {
@@ -94,11 +101,12 @@ if (isset($_POST['submit'])) {
         $result_update = Database::get()->query("UPDATE api_token SET
                             name = ?s,
                             comments = ?s,
+                            department_id = ?d,
                             ip = ?s,
                             enabled = ?d,
                             expired = ?s,
                             all_courses = ?d
-                        WHERE id = ?d", $_POST['name'], $_POST['comments'], $_POST['remote_url'], $enabled, $token_expires_at, $all_courses, $_GET['edit']);
+                        WHERE id = ?d", $_POST['name'], $_POST['comments'], $api_category, $_POST['remote_url'], $enabled, $token_expires_at, $all_courses, $_GET['edit']);
         $token_id = $_GET['edit'];
     } else {
         $token = "eclass_".bin2hex(random_bytes(32));
@@ -106,11 +114,12 @@ if (isset($_POST['submit'])) {
                                 token = ?s,
                                 name = ?s,
                                 comments = ?s,
+                                department_id = ?d,
                                 ip = ?s,
                                 enabled = 1,
                                 created = " . DBHelper::timeAfter() . ",
                                 expired = ?s",
-            $token, $_POST['name'], $_POST['comments'], $_POST['remote_url'], $token_expires_at);
+            $token, $_POST['name'], $_POST['comments'], $api_category, $_POST['remote_url'], $token_expires_at);
         $token_id = $result_insert->lastInsertID;
     }
     Database::get()->query('DELETE FROM api_token_course WHERE token_id = ?d', $token_id);
@@ -178,6 +187,26 @@ if (count($q) > 0) {
     $tool_content .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoApiToken</span></div>";
 }
 
+$tree = new Hierarchy();
+$categories_list = $tree->buildRootsArray();
+$listcategories = "<option value=''>Χωρίς κατηγορία</option>\n" . implode("\n", array_map(function ($category) {
+    // Check if name is serialized (starts with 'a:' pattern for arrays)
+    if (is_string($category->name) && preg_match('/^[aOs]:[0-9]+:/', $category->name)) {
+        $unserialized = @unserialize($category->name);
+        // If it's an array (multilingual), try to get the current language or first available
+        if (is_array($unserialized)) {
+            $display_name = $unserialized['el'] ?? reset($unserialized) ?? '';
+        } else {
+            $display_name = $category->name;
+        }
+    } else {
+        $display_name = $category->name;
+    }
+    
+    return "<option value='{$category->id}'>" . q($display_name) . "</option>";
+}, $categories_list));
+
+
 if (isset($_GET['edit'])) {
     $data = Database::get()->querySingle('SELECT * FROM api_token WHERE id = ?d', $_GET['edit']);
     $courses_list = Database::get()->queryArray("SELECT course.id AS id, code, title, token_id
@@ -220,6 +249,14 @@ if (isset($_GET['edit'])) {
                         <label for='$langComments' class='col-12 control-label-notes'>$langComments</label>
                         <div class='col-12'>
                             <textarea id='$langComments' class='form-control' rows='3' cols='40' name='comments'>" . q($data->comments) . "</textarea>
+                        </div>
+                    </div>
+                    <div id='category-select-field' class='form-group mt-4'>
+                        <label for='select-category' class='col-12 control-label-notes'>$langCategory</label>
+                        <div class='col-sm-12'>
+                            <select class='form-select' name='api_category' class='form-control' id='select-category'>
+                                $listcategories
+                            </select>
                         </div>
                     </div>
                     <div class='input-append date form-group mt-4'>
@@ -288,6 +325,7 @@ if (isset($_GET['edit'])) {
         $listcourses = implode("\n", array_map(function ($course) {
               return "<option value='{$course->id}'>" . q("{$course->title} ({$course->code})") . "</option>";
         }, $courses_list));
+
         $expirationDate = DateTime::createFromFormat("Y-m-d H:i", date('Y-m-d H:i', strtotime("now") + $duration_time));
         $tool_content .= "
         <div class='row extapp'>
@@ -305,6 +343,14 @@ if (isset($_GET['edit'])) {
                             <div class='col-12'>
                                 <input id='$langIpAddress' class='form-control' type='text' name='remote_url'>
                                 <div class='form-text'>$langAPITokenIP</div>
+                            </div>
+                        </div>
+                        <div id='category-select-field' class='form-group mt-4'>
+                            <label for='select-category' class='col-12 control-label-notes'>$langCategory</label>
+                            <div class='col-sm-12'>
+                                <select class='form-select' name='api_category' class='form-control' id='select-category'>
+                                    $listcategories
+                                </select>
                             </div>
                         </div>
                         <div class='form-group mt-4'>
@@ -385,6 +431,7 @@ $head_content .= "
                 }
             });
             $('#select-courses').select2();
+            $('#select-categories').select2();
             $('#selectAll').click(function(e) {
                 e.preventDefault();
                 var stringVal = [];

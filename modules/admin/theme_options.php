@@ -18,7 +18,7 @@
  *
  */
 
-$require_admin = true;
+$require_departmentmanage_user = true;
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 //Default Styles
@@ -77,7 +77,21 @@ $defaults = array(
                 "small-right" => array("loginImgPlacement"),
                 "" => array('fluidContainerWidth','maxHeightJumbotron','maxWidthTextJumbotron', 'sliderWidthImgForm')
             );
-$active_theme = get_config('theme_options_id');
+
+$tenant = getCurrentTenant();
+$tenant_themes = getTenantThemes();
+$tenant_theme_ids = [];
+
+if ($tenant_themes) {
+    $tenant_theme_ids = array_map(fn($t) => intval($t->id), $tenant_themes);
+}
+
+if ($tenant && $tenant->theme_id) {
+    $active_theme = $tenant->theme_id;    
+} else {
+    $active_theme = get_config('theme_options_id');
+}
+
 $preview_theme = $_SESSION['theme_options_id'] ?? NULL;
 $theme_id = $preview_theme ?? $active_theme;
 if (isset($_GET['reset_theme_options'])) {
@@ -267,6 +281,16 @@ if (isset($_POST['optionsSave'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) {
         csrf_token_error();
     }
+
+    $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $active_theme);
+
+    // Abort when user is not an admin and theme doesn't belong to the current tenant.
+    if (!$is_admin && $tenant && $theme_options->tenant_id !== $tenant->id) {
+        Session::flash('message', $langThemeEditNotAllowed);
+        Session::flash('alert-class', 'alert-danger');
+        redirect_to_home_page('modules/admin/theme_options.php');
+    }
+
     upload_images();
 
     //jumbotron image
@@ -388,6 +412,14 @@ if (isset($_POST['optionsSave'])) {
 } elseif (isset($_GET['delThemeId'])) {
     $theme_id = intval($_GET['delThemeId']);
     $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
+
+    // Abort when user is not an admin and theme doesn't belong to the current tenant.
+    if (!$is_admin && $tenant && $theme_options->tenant_id !== $tenant->id) {
+        Session::flash('message', $langThemeEditNotAllowed);
+        Session::flash('alert-class', 'alert-danger');
+        redirect_to_home_page('modules/admin/theme_options.php');
+    }
+
     $theme_options_styles = unserialize($theme_options->styles);
     @removeDir("$webDir/courses/theme_data/$theme_id");
     Database::get()->query("DELETE FROM theme_options WHERE id = ?d", $theme_id);
@@ -400,7 +432,7 @@ if (isset($_POST['optionsSave'])) {
 } elseif (isset($_POST['themeOptionsName'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $theme_options_name = $_POST['themeOptionsName'];
-    $new_theme_id = Database::get()->query("INSERT INTO theme_options (name, styles, version) VALUES(?s, '', 4)", $theme_options_name)->lastInsertID;
+    $new_theme_id = Database::get()->query("INSERT INTO theme_options (name, styles, version, tenant_id) VALUES(?s, '', 4, ?d)", $theme_options_name, $tenant ? $tenant->id : null)->lastInsertID;
     clear_default_settings();
 
     clone_images($new_theme_id); //clone images
@@ -419,7 +451,12 @@ if (isset($_POST['optionsSave'])) {
             $_SESSION['theme_options_id'] = $_POST['active_theme_options'];
         }
     } else {
-        set_config('theme_options_id', $_POST['active_theme_options']);
+        if ($is_admin) {
+            set_config('theme_options_id', $_POST['active_theme_options']);
+        } elseif ($is_departmentmanage_user) {
+            Database::get()->query("UPDATE tenant SET theme_id = ?d WHERE id = ?d", $_POST['active_theme_options'], $tenant->id);
+            $_SESSION['current_user_tenant']->theme_id = $_POST['active_theme_options'];
+        }
         unset($_SESSION['theme_options_id']);
     }
     $_SESSION['theme_changed'] = true;
@@ -430,6 +467,11 @@ if (isset($_POST['optionsSave'])) {
     $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
     load_js('spectrum');
     load_js('bootstrap-slider');
+
+    $tenant_theme_ids_js_array = json_encode($tenant_theme_ids);
+
+    $is_tenant_js = $tenant ? 1 : 0;
+
     $head_content .= "
     <script>
         $(function(){
@@ -584,23 +626,28 @@ if (isset($_POST['optionsSave'])) {
                     }
                 });
             });
+
+            var tenant_theme_ids = $tenant_theme_ids_js_array;
+
             $('select#theme_selection').change(function ()
             {
                 var cur_val = $(this).val();
+
                 if (cur_val == '$active_theme') {
-                    $('a#theme_enable').addClass('hidden');
-                    $('a#theme_preview').addClass('hidden');
+                    $('a#theme_enable').addClass('d-none');
+                    $('a#theme_preview').addClass('d-none');
                 } else {
-                    $('a#theme_enable').removeClass('hidden');
+                    $('a#theme_enable').removeClass('d-none');
                     if (cur_val != '$preview_theme') {
-                        $('a#theme_preview').removeClass('hidden');
+                        $('a#theme_preview').removeClass('d-none');
                     }
                 }
-                if (cur_val == '$preview_theme') $('a#theme_preview').addClass('hidden');
-                if (cur_val == 0) {
-                    $('a#theme_delete').addClass('hidden');
+
+                if (cur_val == '$preview_theme') $('a#theme_preview').addClass('d-none');
+                if (cur_val == 0 || ($is_tenant_js && !tenant_theme_ids.includes(+cur_val))) {
+                    $('a#theme_delete').addClass('d-none');
                 } else {
-                    $('a#theme_delete').removeClass('hidden');
+                    $('a#theme_delete').removeClass('d-none');
                     var formAction = $('a#theme_delete').closest('form').attr('action');
                     var newValue = $('select#theme_selection').val();
                     var newAction = formAction.replace(/(delThemeId=).*/, '$1'+newValue);
@@ -773,7 +820,19 @@ if (isset($_POST['optionsSave'])) {
     $activate_btn = "<a href='#' class='theme_enable btn submitAdminBtn $activate_class' id='theme_enable'>$langActivate</a>";
     $preview_class = ' hidden';
     $preview_btn = "<a href='#' class='btn submitAdminBtn $preview_class' id='theme_preview'>$langSee</a>";
-    $del_class = ($theme_id != 0) ? "" : " hidden";
+
+    if ($theme_id == 0) {
+        $del_class = $options_save_class = " d-none";
+    } else if ($tenant) {
+        if (in_array($theme_id, $tenant_theme_ids)) {
+            $del_class = $options_save_class = "";
+        } else {
+            $del_class = $options_save_class = " d-none";
+        }
+    } else {
+        $del_class = $options_save_class = "";
+    }
+
     $delete_btn = "
                     <form class='form-inline mt-0' style='display:inline;' method='post' action='$_SERVER[SCRIPT_NAME]?delThemeId=$theme_id'>
                         <a class='confirmAction mt-md-0 btn deleteAdminBtn $del_class delThemeBtn' id='theme_delete' data-title='$langConfirmDelete' data-message='$langThemeSettingsDelete' data-cancel-txt='$langCancel' data-action-txt='$langDelete' data-action-class='deleteAdminBtn'>$langDelete</a>
@@ -3263,7 +3322,7 @@ $tool_content .= "
         </div>
             <div class='form-group mt-5'>
                 <div class='col-12 d-flex justify-content-center align-items-center gap-2 flex-wrap'>
-                    ".($theme_id ? "<input class='btn successAdminBtn' name='optionsSave' type='submit' value='$langSave'>" : "")."
+                    ".($theme_id ? "<input class='btn successAdminBtn $options_save_class' name='optionsSave' type='submit' value='$langSave'>" : "")."
                     <input class='btn successAdminBtn' name='optionsSaveAs' id='optionsSaveAs' type='submit' value='$langSaveAs'>
                     ".($theme_id ? "<a class='btn btn-default' href='theme_options.php?export=true'>$langExport</a>" : "")."
                 </div>

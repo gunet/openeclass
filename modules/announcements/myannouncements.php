@@ -56,7 +56,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
 
     $data['aaData'] = array();
     foreach ($announcements as $myrow) {
-        if ($myrow->code != '') {
+        if (isset($myrow->code) && $myrow->code != '') {
             $data['aaData'][] = array(
                 '0' => "<div class='table_td'>
                         <div class='table_td_header clearfix'>
@@ -74,7 +74,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                             <a href='" . $urlAppend . "main/system_announcements.php?an_id=" . $myrow->id . "'>" . standard_text_escape($myrow->title) . "</a>
                         </div>
                         <small class='text-grey'>$langAdminAn&nbsp; <span class='fa-solid fa-user'></span></small>
-                        <div class='table_td_body' data-id='$myrow->id'>" . standard_text_escape($myrow->content) . "</div>
+                        <div class='table_td_body' data-id='$myrow->id'>" . standard_text_escape(isset($myrow->content) ? $myrow->content : "") . "</div>
                         </div>",
                 '1' => format_locale_date(strtotime($myrow->an_date))
             );

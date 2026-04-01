@@ -186,7 +186,28 @@ if ($extra_messages) {
     include $extra_messages;
 }
 
-if (empty($_SESSION['csrf_token'])) {
+// Check if user connected to a tenant URL
+$main_host = parse_url($urlServer, PHP_URL_HOST);
+$http_host = isset($_SERVER['HTTP_HOST'])? $_SERVER['HTTP_HOST']: $main_host;
+
+// localhost is used for tenant domain validity check by web server
+if ($http_host != $main_host and $http_host != 'localhost') {
+    $tenant = Database::get()->querySingle('
+        SELECT tenant.*, hierarchy.lft, hierarchy.rgt 
+        FROM tenant 
+        JOIN hierarchy ON hierarchy.id = tenant.department_id 
+        WHERE url REGEXP ?s', "/$http_host(/|$)"
+    );
+
+    if ($tenant) {
+        $urlServer = $tenant->url;
+        $_SESSION['current_user_tenant'] = $tenant;
+    } else {
+        redirect_to_home_page();
+    }
+}
+
+if (!isset($_SESSION['csrf_token']) || empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = generate_csrf_token();
 }
 
@@ -610,6 +631,7 @@ if(isset($is_collaborative_course) and $is_collaborative_course){
         MODULE_ID_WALL => array('title' => $langWall, 'link' => 'wall', 'image' => 'fa-solid fa-quote-left'),
         MODULE_ID_TC => array('title' => $langBBB, 'link' => 'tc', 'image' => 'fa-solid fa-users-rectangle'),
         MODULE_ID_REQUEST => array('title' => $langRequests, 'link' => 'request', 'image' => 'fa-regular fa-clipboard'),
+        MODULE_ID_STICKY_NOTES => array('title' => $langStickyNotes, 'link' => 'sticky_notes', 'image' => 'fa-regular fa-note-sticky'),
         MODULE_ID_ASSIGN => array('title' => $langWorks, 'link' => 'work', 'image' => 'fa-solid fa-upload'),
         MODULE_ID_GRADEBOOK => array('title' => $langGradebook, 'link' => 'gradebook', 'image' => 'fa-solid fa-a'),
         MODULE_ID_ATTENDANCE => array('title' => $langAttendance, 'link' => 'attendance', 'image' => 'fa-solid fa-clipboard-user'),
@@ -641,6 +663,7 @@ if(isset($is_collaborative_course) and $is_collaborative_course){
         MODULE_ID_TC => array('title' => $langBBB, 'link' => 'tc', 'image' => 'fa-solid fa-users-rectangle'),
         MODULE_ID_PROGRESS => array('title' => $langProgress, 'link' => 'progress', 'image' => 'fa-solid fa-arrow-trend-up'),
         MODULE_ID_REQUEST => array('title' => $langRequests, 'link' => 'request', 'image' => 'fa-regular fa-clipboard'),
+        MODULE_ID_STICKY_NOTES => array('title' => $langStickyNotes, 'link' => 'sticky_notes', 'image' => 'fa-regular fa-note-sticky'),
         MODULE_ID_H5P => array('title' => $langH5p, 'link' => 'h5p', 'image' => 'fa-solid fa-arrow-pointer')
 
     );
@@ -667,6 +690,7 @@ $icons_map = array(
         MODULE_ID_ATTENDANCE => 'fa-solid fa-clipboard-user',
         MODULE_ID_GRADEBOOK => 'fa-solid fa-a',
         MODULE_ID_SESSION => 'fa-solid fa-handshake',
+        MODULE_ID_STICKY_NOTES => 'fa-regular fa-note-sticky',
     ),
 );
 
@@ -940,6 +964,16 @@ get_tinymce_color_text();
 
 // Theme initialization only if not running via cli
 if (php_sapi_name() != 'cli' or isset($_SERVER['REMOTE_ADDR'])) {
+    $tenant = getCurrentTenant();
+
+    if (isset($_SESSION['theme_options_id'])) {
+        $theme_id = $_SESSION['theme_options_id'];
+    } elseif (isset($_SESSION['current_user_tenant']) && $_SESSION['current_user_tenant']->theme_id) {
+        $theme_id = $_SESSION['current_user_tenant']->theme_id;
+    } else {
+        $theme_id = get_config('theme_options_id');
+    }
+
     // User theme override: Check for preview (session) or saved selection (cookie)
     // Must happen BEFORE theme_initialization() to ensure correct CSS generation
     $user_selected_theme_id = 0;
@@ -971,8 +1005,6 @@ if (php_sapi_name() != 'cli' or isset($_SERVER['REMOTE_ADDR'])) {
     // Apply user theme if set, otherwise use admin default theme
     if ($user_selected_theme_id > 0) {
         $theme_id = $user_selected_theme_id;
-    } else {
-        $theme_id = $_SESSION['theme_options_id'] ?? get_config('theme_options_id');
     }
 
     $theme_css = "courses/theme_data/{$theme_id}/style_str.css";

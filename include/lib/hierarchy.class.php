@@ -18,6 +18,8 @@
  *
  */
 
+require_once 'modules/admin/tenant_functions.php';
+
 /**
  * Eclass Hierarchy Coordinating Object.
  *
@@ -329,16 +331,76 @@ class Hierarchy {
 
     /**
      * Compile an array with the root nodes (nodes of 0 depth).
+     * When a tenant restriction is active, only the tenant's root node and tenant independent root nodes are returned.
      *
      * @return array
      */
     public function buildRootsArray() {
-        $roots = array();
-        $cb = function($row) use (&$roots) {
-            $roots[] = $row;
+        $roots = [];
+        $tenantRoot = $this->getTenantRoot();
+
+        // Fetch department ids that belong to tenants
+        $tenantDeptIds = Database::get()->queryArray("SELECT department_id FROM tenant");
+
+        // Convert array of objects to array of ids
+        $tenantDeptIds = array_map(function($obj) {
+            return $obj->department_id;
+        }, $tenantDeptIds);
+
+        $cb = function($row) use (&$roots, $tenantRoot, $tenantDeptIds) {
+            // Include root nodes that don't belong to any tenant
+            $isTenantIndependentRootNode = !in_array($row->id, $tenantDeptIds);
+
+            if (!$tenantRoot or $isTenantIndependentRootNode or ($row->lft >= $tenantRoot->lft and $row->rgt <= $tenantRoot->rgt)) {
+                $roots[] = $row;
+            }
         };
         $this->getNeighbourNodesByLft(1, $cb);
         return $roots;
+    }
+
+    /**
+     * Get the root node for the currently-active tenant, if any
+     * Power users / admins can see all roots in the hierarchy and aren't bound by tenant restriction
+     *
+     * @return object|null
+     */
+    public function getTenantRoot() {
+        global $uid, $is_power_user;
+
+        $tenant = getCurrentTenant();
+        if ($tenant and !$is_power_user) {
+            $root = Database::get()->querySingle('SELECT lft, rgt
+                FROM hierarchy JOIN tenant ON department_id = hierarchy.id
+                WHERE tenant.id = ?d', $tenant->id);
+            if ($root) {
+                return $root;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Get all the nodes of the currently-active tenant, if any
+     *
+     * @return array
+     */
+    public function getTenantNodes($tenant_id = null)
+    {
+        $tenant = $tenant_id ? getTenantById($tenant_id) : getCurrentTenant();
+
+        if (!$tenant) {
+            return [];
+        }
+
+        $tenantNodes = Database::get()->queryArray(
+            'SELECT id, name, lft, rgt FROM hierarchy WHERE lft >= ?d AND rgt <= ?d',
+            $tenant->lft,
+            $tenant->rgt
+        );
+
+        return $tenantNodes;
     }
 
     /**
@@ -1306,26 +1368,55 @@ jContent;
      * @return boolean $allow
      */
     public function checkVisibilityRestrictions($nodeId, $nodeVisibility, $options = array('respectVisibility' => true)) {
-        global $uid;
+        global $uid, $is_admin, $is_departmentmanage_user;
         $allow = true;
 
         // check access restrictions
-        if ($options['respectVisibility'] && ($uid != 1) && $nodeVisibility != NODE_OPEN) {
-            // hide if anonymous user or eponymous but node is hidden
-            if ($uid < 1 || $nodeVisibility == NODE_CLOSED) {
+        if ($options['respectVisibility'] && (!$is_admin) && $nodeVisibility != NODE_OPEN) {
+            // hide if anonymous user or eponymous but node is hidden and user is not a deparment manage user
+            if ($uid < 1 || ($nodeVisibility == NODE_CLOSED && !$is_departmentmanage_user)) {
                 $allow = false;
             } else {
                 // for eponymous users check subscription status
                 require_once('include/lib/user.class.php');
                 $user = new User();
                 $depIds = $user->getDepartmentIds($uid);
-                if (!in_array($nodeId, $depIds)) {
+                $nodeBelongsToTenant = $this->checkIfNodeBelongsToTenant($nodeId);
+
+                if (!in_array($nodeId, $depIds) && !$nodeBelongsToTenant) {
                     $allow = false;
                 }
             }
         }
 
         return $allow;
+    }
+
+    /**
+     * Check if a node belongs to the current tenant.
+     *
+     * @param  int     $nodeId
+     * @return boolean
+    */
+    public function checkIfNodeBelongsToTenant($nodeId) {
+        $tenantRoot = getCurrentTenant();
+
+        if (!$tenantRoot) {
+            return false;
+        }
+
+        $tenantNodes = $this->getTenantNodes();
+        $node = Database::get()->querySingle("SELECT id, name, lft, rgt FROM hierarchy WHERE id = ?d", $nodeId);
+
+        foreach ($tenantNodes as $tenantNode) {
+            if ($tenantNode->id === $node->id) {
+                return true;
+            }
+
+            continue;
+        }
+
+        return false;
     }
 
 }

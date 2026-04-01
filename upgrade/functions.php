@@ -3372,6 +3372,9 @@ function upgrade_to_4_2($tbl_options) : void {
     if (!DBHelper::fieldExists('forum_topic', 'visible')) {
         Database::get()->query("ALTER TABLE forum_topic ADD visible TINYINT NOT NULL DEFAULT 1");
     }
+    if (!DBHelper::fieldExists('forum', 'visible')) {
+        Database::get()->query("ALTER TABLE forum ADD visible TINYINT NOT NULL DEFAULT 1");
+    }
     if (DBHelper::fieldExists('tc_attendance', 'id')) {
         Database::get()->query("ALTER TABLE tc_attendance CHANGE id id INT NOT NULL AUTO_INCREMENT");
     }
@@ -3440,6 +3443,7 @@ function upgrade_to_4_2($tbl_options) : void {
     if (!DBHelper::foreignKeyExists('attendance_users', 'uid', 'user', 'id')) {
         DBHelper::createForeignKey('attendance_users', 'uid', 'user', 'id', DBHelper::FKRefOption_CASCADE, DBHelper::FKRefOption_CASCADE);
     }
+
     if (!DBHelper::tableExists('ai_providers')) {
         Database::get()->query("CREATE TABLE ai_providers (
             `id` smallint NOT NULL AUTO_INCREMENT,
@@ -3536,6 +3540,7 @@ function upgrade_to_4_2($tbl_options) : void {
     if (!DBHelper::fieldExists('lp_user_module_progress', 'progress_measure')) {
         Database::get()->query("ALTER TABLE lp_user_module_progress ADD `progress_measure` FLOAT DEFAULT NULL AFTER `session_time`");
     }
+
     // flipped classroom: index and seed data
     Database::get()->query("ALTER TABLE course_activities ADD UNIQUE KEY(activity_id, activity_type)");
     Database::get()->query("INSERT IGNORE INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unit_id`,`module_id`) VALUES ('FC18', 1, 0, 0, 0)");
@@ -3562,6 +3567,7 @@ function upgrade_to_4_2($tbl_options) : void {
         Database::get()->query("ALTER TABLE assignment ADD results_date DATETIME DEFAULT NULL AFTER submission_date;");
     }
 }
+
 
 /**
  * @brief upgrade queries for 4.3
@@ -3683,8 +3689,81 @@ function upgrade_to_4_3($tbl_options) : void {
  * @return void
  */
 function upgrade_to_4_4($tbl_options) : void {
-    
-    //Gamification
+
+    // tenant table
+    if (!DBHelper::tableExists('tenant')) {
+        Database::get()->query("CREATE TABLE `tenant` (
+            `id` int(11) NOT NULL AUTO_INCREMENT,
+            `name` varchar(200) NOT NULL,
+            `description` text DEFAULT NULL,
+            `department_id` int(11) NOT NULL,
+            `url` varchar(200) NOT NULL DEFAULT '',
+            `theme_id` int(11) DEFAULT NULL,
+            `created_at` DATETIME NOT NULL,
+            `updated_at` DATETIME NOT NULL,
+            `options` text DEFAULT NULL,
+            PRIMARY KEY (`id`),
+            KEY `department_id` (`department_id`),
+            KEY `theme_id` (`theme_id`),
+            CONSTRAINT FOREIGN KEY (`department_id`) REFERENCES `hierarchy` (`id`),
+            CONSTRAINT FOREIGN KEY (`theme_id`) REFERENCES `theme_options` (`id`)) $tbl_options");
+    }
+
+    // course resource usage table
+    if (!DBHelper::tableExists('course_resource_usage')) {
+        Database::get()->query("CREATE TABLE `course_resource_usage` (
+            `course_id` int(11) NOT NULL,
+            `disk_size` bigint DEFAULT NULL,
+            PRIMARY KEY (`course_id`),
+            KEY `idx_disk_size` (`disk_size`),
+            CONSTRAINT FOREIGN KEY (`course_id`) REFERENCES `course` (`id`)
+                ON DELETE CASCADE ON UPDATE CASCADE
+            ) $tbl_options");
+    }
+
+    if (!DBHelper::fieldExists('theme_options', 'tenant_id')) {
+        Database::get()->query("
+            ALTER TABLE theme_options
+            ADD tenant_id INT,
+            ADD CONSTRAINT `tenant_id`
+            FOREIGN KEY (`tenant_id`)
+            REFERENCES `tenant`(`id`)
+        ");
+    }
+
+    if (DBHelper::tableExists('admin_announcement')) {
+        Database::get()->query("ALTER TABLE `admin_announcement`
+                                ADD `tenant_id` INT(11) DEFAULT NULL AFTER `id`");
+
+        Database::get()->query("ALTER TABLE `admin_announcement`
+                                ADD INDEX `idx_tenant_id` (`tenant_id`)");
+    }
+
+    if (!DBHelper::fieldExists('tenant', 'url_active')) {
+        Database::get()->query("ALTER TABLE tenant
+        ADD url_active TINYINT(1) NOT NULL DEFAULT 0");
+    }
+
+    if (!DBHelper::fieldExists('api_token', 'department_id')) {
+        Database::get()->query(
+            'ALTER TABLE `api_token`
+        ADD `department_id` INT(11)
+        FOREIGN KEY (department_id) REFERENCES hierarchy(id) ON DELETE CASCADE'
+        );
+    }
+
+    if (!DBHelper::fieldExists('certificate_template', 'department_id')) {
+        Database::get()->query(
+            'ALTER TABLE `certificate_template`
+            ADD `department_id` INT(11) DEFAULT NULL,
+            ADD CONSTRAINT `fk_certificate_template_hierarchy`
+                FOREIGN KEY (`department_id`) REFERENCES `hierarchy`(`id`)
+                ON DELETE SET NULL
+                ON UPDATE CASCADE'
+        );
+    }
+
+    // Gamification
     Database::get()->query("CREATE TABLE `points_game` (
         `id` int(11) not null auto_increment primary key,
         `course_id` int(11) not null,

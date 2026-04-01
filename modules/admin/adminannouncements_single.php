@@ -36,7 +36,24 @@ $tool_content = action_bar(array(
         'level' => 'primary')),false);
 
 if(isset($ann_id)){
-    $announcement = Database::get()->querySingle("SELECT * FROM admin_announcement WHERE `id`=?d", $ann_id);
+    if ($is_departmentmanage_user && !$is_admin) {
+        $announcement = Database::get()->querySingle(
+            "SELECT * FROM admin_announcement 
+            WHERE `id`=?d 
+            AND (
+                tenant_id = ?d
+                OR tenant_id IS NULL
+           )",
+            $ann_id,
+            getCurrentTenant()->id
+        );
+    } else {
+        $announcement = Database::get()->querySingle(
+            "SELECT * FROM admin_announcement 
+            WHERE `id`=?d",
+            $ann_id
+        );
+    }
     $tool_content .= "
                     
                         <div class='col-12'>

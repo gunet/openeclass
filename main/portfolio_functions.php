@@ -26,6 +26,8 @@ require_once 'include/lib/mediaresource.factory.php';
 require_once 'main/personal_calendar/calendar_events.class.php';
 require_once 'modules/message/class.mailbox.php';
 require_once 'modules/message/class.msg.php';
+require_once 'include/main_lib.php';
+
 /**
  * @brief display user courses
  * @param integer $uid
@@ -189,7 +191,7 @@ function getUserCourseInfo($uid): string
                 $lesson_content .= "</div>
                                 </div>";
 
-                $lesson_content .= icon($favorite_icon, $fav_message, "course_favorite.php?course=" . $data->code . "&amp;fav=$fav_status", "class='portfolio-course-links'", false, false, $pressed);
+                $lesson_content .= icon($favorite_icon, $fav_message, "course_favorite.php?course=" . $data->code . "&amp;fav=$fav_status");
                 if ($data->status == USER_STUDENT) {
                     if (get_config('disable_student_unregister_cours') == 0) {
                         $lesson_content .= icon('fa-minus-circle fa-lg ms-3', $langUnregCourse, "{$urlServer}main/unregcours.php?cid=$data->course_id&amp;uid=$uid", "class='portfolio-course-links'");
@@ -357,7 +359,7 @@ function getUserCourseInfo($uid): string
                     $lesson_content .= "</div>
                                     </div>";
 
-                    $lesson_content .= icon($favorite_icon, $fav_message, "course_favorite.php?course=" . $data->code . "&amp;fav=$fav_status", "class='portfolio-course-links'", false, false, $pressed);
+                    $lesson_content .= icon($favorite_icon, $fav_message, "course_favorite.php?course=" . $data->code . "&amp;fav=$fav_status");
                     if ($data->status == USER_STUDENT) {
                         if (get_config('disable_student_unregister_cours') == 0) {
                             $lesson_content .= icon('fa-minus-circle fa-lg ms-3', $langUnregCollaboration, "{$urlServer}main/unregcours.php?cid=$data->course_id&amp;uid=$uid", "class='portfolio-course-links'");
@@ -398,7 +400,7 @@ function getUserCourseInfo($uid): string
  */
 function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') {
 
-    global $urlAppend, $langAdminAn, $language;
+    global $urlAppend, $langAdminAn, $language,$is_admin,$is_departmentmanage_user;
 
     if ($type == 'more') {
         $sql_append = '';
@@ -416,28 +418,52 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
     }
 
     if (!count($lesson_id)) {
-        $q = Database::get()->queryArray("
-                                SELECT admin_announcement.title,
-                                             admin_announcement.`date` AS an_date,
-                                             admin_announcement.id
-                                FROM admin_announcement
-                                WHERE admin_announcement.visible = 1
-                                        AND lang = ?s
-                                        AND (admin_announcement.begin <= " . DBHelper::timeAfter() . " OR admin_announcement.begin IS NULL)
-                                        AND (admin_announcement.end >= " . DBHelper::timeAfter() . " OR admin_announcement.end IS NULL)
-                                        AND admin_announcement.`date` >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH) $admin_filter_sql
-                                 ORDER BY an_date DESC
-                         $sql_append", $language, $filter_param);
+        if ($is_departmentmanage_user && !$is_admin) {
+            $q = Database::get()->queryArray("
+                            SELECT admin_announcement.title,
+                                   admin_announcement.`date` AS an_date,
+                                   admin_announcement.id
+                            FROM admin_announcement
+                            WHERE admin_announcement.visible = 1
+                                  AND lang = ?s
+                                  AND (
+                                    tenant_id = ?d
+                                    OR tenant_id IS NULL
+                                   )
+                                  AND (admin_announcement.begin <= " . DBHelper::timeAfter() . " OR admin_announcement.begin IS NULL)
+                                  AND (admin_announcement.end >= " . DBHelper::timeAfter() . " OR admin_announcement.end IS NULL)
+                                  AND admin_announcement.`date` >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH) $admin_filter_sql
+                            ORDER BY an_date DESC
+                            $sql_append", 
+                            $language, 
+                            getCurrentTenant()->id,
+                            $filter_param);
+        } else {
+            $q = Database::get()->queryArray("
+                            SELECT admin_announcement.title,
+                                   admin_announcement.`date` AS an_date,
+                                   admin_announcement.id
+                            FROM admin_announcement
+                            WHERE admin_announcement.visible = 1
+                                  AND lang = ?s
+                                  AND (admin_announcement.begin <= " . DBHelper::timeAfter() . " OR admin_announcement.begin IS NULL)
+                                  AND (admin_announcement.end >= " . DBHelper::timeAfter() . " OR admin_announcement.end IS NULL)
+                                  AND admin_announcement.`date` >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH) $admin_filter_sql
+                            ORDER BY an_date DESC
+                            $sql_append", 
+                            $language, 
+                            $filter_param);
+        }
     } else {
-
         $course_id_sql = implode(', ', array_fill(0, count($lesson_id), '?d'));
-
-        $q = Database::get()->queryArray("(SELECT announcement.title,
-                                             announcement.`date` AS an_date,
-                                             announcement.id,
-                                             announcement.content,
-                                             course.code,
-                                             course.title course_title
+        if ($_SESSION['current_user_tenant']) {
+            $q = Database::get()->queryArray(
+                "(SELECT announcement.title,
+                                    announcement.`date` AS an_date,
+                                    announcement.id,
+                                    announcement.content,
+                                    course.code,
+                                    course.title course_title
                             FROM course, course_module, announcement
                             WHERE course.id IN ($course_id_sql)
                                     AND course.id = course_module.course_id
@@ -450,16 +476,62 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
                                     AND course_module.visible = 1 $course_filter_sql)
                             UNION
                                 (SELECT admin_announcement.title,
-                                             admin_announcement.`date` AS admin_an_date,
-                                             admin_announcement.id, admin_announcement.body AS content, '', ''
+                                        admin_announcement.`date` AS admin_an_date,
+                                        admin_announcement.id, admin_announcement.body AS content, '', ''
                                 FROM admin_announcement
                                 WHERE admin_announcement.visible = 1
-                                      AND lang = ?s
-                                      AND (admin_announcement.begin <= " . DBHelper::timeAfter() . " OR admin_announcement.begin IS NULL)
-                                      AND (admin_announcement.end >= " . DBHelper::timeAfter() . " OR admin_announcement.end IS NULL)
-                                      AND admin_announcement.`date` >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH) $admin_filter_sql
+                                    AND lang = ?s
+                                    AND (
+                                        tenant_id = ?d
+                                        OR tenant_id IS NULL
+                                    )
+                                    AND (admin_announcement.begin <= " . DBHelper::timeAfter() . " OR admin_announcement.begin IS NULL)
+                                    AND (admin_announcement.end >= " . DBHelper::timeAfter() . " OR admin_announcement.end IS NULL)
+                                    AND admin_announcement.`date` >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH) $admin_filter_sql
                                 ) ORDER BY an_date DESC
-                         $sql_append", $lesson_id, $filter_param,  $language, $filter_param);
+                            $sql_append",
+                $lesson_id,
+                $language,
+                getCurrentTenant()->id,
+                $filter_param,
+                $filter_param
+            );
+        } else {
+            $q = Database::get()->queryArray(
+                "(SELECT announcement.title,
+                                    announcement.`date` AS an_date,
+                                    announcement.id,
+                                    announcement.content,
+                                    course.code,
+                                    course.title course_title
+                            FROM course, course_module, announcement
+                            WHERE course.id IN ($course_id_sql)
+                                    AND course.id = course_module.course_id
+                                    AND course.id = announcement.course_id
+                                    AND announcement.visible = 1
+                                    AND (announcement.start_display <= " . DBHelper::timeAfter() . " OR announcement.start_display IS NULL)
+                                    AND (announcement.stop_display >= " . DBHelper::timeAfter() . " OR announcement.stop_display IS NULL)
+                                    AND announcement.`date` >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH)
+                                    AND course_module.module_id = " . MODULE_ID_ANNOUNCE . "
+                                    AND course_module.visible = 1 $course_filter_sql)
+                            UNION
+                                (SELECT admin_announcement.title,
+                                        admin_announcement.`date` AS admin_an_date,
+                                        admin_announcement.id, admin_announcement.body AS content, '', ''
+                                FROM admin_announcement
+                                WHERE admin_announcement.visible = 1
+                                    AND lang = ?s
+                                    AND (admin_announcement.begin <= " . DBHelper::timeAfter() . " OR admin_announcement.begin IS NULL)
+                                    AND (admin_announcement.end >= " . DBHelper::timeAfter() . " OR admin_announcement.end IS NULL)
+                                    AND admin_announcement.`date` >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH) $admin_filter_sql
+                                ) ORDER BY an_date DESC
+                            $sql_append",
+                $lesson_id,
+                $language,
+                $filter_param,
+                $filter_param
+            );
+        }
     }
 
     if ($to_ajax) {

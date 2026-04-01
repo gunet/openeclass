@@ -41,7 +41,7 @@
                                     <div class='form-group mt-4'>
                                         <label for='am' class='col-sm-6 control-label-notes'>{{ trans('langAm') }}</label>
                                         <div class='col-sm-12'>
-                                            <input class='form-control' id='am' type='text' name='search_am' value='{!! q($search_am) !!} ' placeholder='{{ trans('langAm') }}'></div>
+                                            <input class='form-control' id='am' type='text' name='search_am' value='{!! q($search_am) !!}' placeholder='{{ trans('langAm') }}'></div>
                                     </div>
                                     <div class='form-group mt-5'>
                                         <div class='col-12 d-flex justify-content-end align-items-center gap-2'>

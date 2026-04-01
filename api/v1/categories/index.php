@@ -1,5 +1,6 @@
 <?php
 
+
 /*
  *  ========================================================================
  *  * Open eClass
@@ -18,17 +19,31 @@
  *
  */
 
-function api_method($access) {
+
+
+function api_method($access)
+{
 
     if (isset($_GET['all'])) {
 
-        $categories = Database::get()->queryArray('SELECT hierarchy.id,hierarchy.code, hierarchy.name, hierarchy.description,
+        // Build department filter if needed
+        $departmentFilter = '';
+        $queryParams = [];
+
+        if ($access && $access->allowedDepartments !== null) {
+            $placeholders = implode(',', array_fill(0, count($access->allowedDepartments), '?d'));
+            $departmentFilter = "WHERE hierarchy.id IN ($placeholders)";
+            $queryParams = $access->allowedDepartments;
+        }
+
+        $categories = Database::get()->queryArray("SELECT hierarchy.id, hierarchy.code, hierarchy.name, hierarchy.description,
                 MIN(course.created) AS timemodified, 0 AS sortorder
             FROM hierarchy
                 LEFT JOIN course_department ON hierarchy.id = course_department.department
                 LEFT JOIN course ON course_department.course = course.id
-            GROUP BY hierarchy.id, hierarchy.name, hierarchy.description
-            ORDER BY hierarchy.id');
+            $departmentFilter
+            GROUP BY hierarchy.id, hierarchy.code, hierarchy.name, hierarchy.description
+            ORDER BY hierarchy.id", ...$queryParams);
         $categories = array_map(function ($item) {
             return [
                 'id' => $item->id,
@@ -40,19 +55,33 @@ function api_method($access) {
             ];
         }, $categories);
 
+
         header('Content-Type: application/json');
         header('X-Content-Type-Options: nosniff');
         echo json_encode($categories, JSON_UNESCAPED_UNICODE);
         exit;
     }
 
+
     if (isset($_GET['id'])) {
-        $category = Database::get()->querySingle('SELECT hierarchy.id, hierarchy.name, hierarchy.description,
+
+        // Build department filter if needed
+        $departmentFilter = '';
+        $queryParams = [$_GET['id']];
+
+        if ($access && $access->allowedDepartments !== null) {
+            $placeholders = implode(',', array_fill(0, count($access->allowedDepartments), '?d'));
+            $departmentFilter = "AND hierarchy.id IN ($placeholders)";
+            $queryParams = array_merge($queryParams, $access->allowedDepartments);
+        }
+
+        $category = Database::get()->querySingle("SELECT hierarchy.id, hierarchy.name, hierarchy.description,
                 MIN(course.created) AS timemodified, 0 AS sortorder
             FROM hierarchy
-                JOIN course_department ON hierarchy.id = course_department.department
-                JOIN course ON course_department.course = course.id
-            WHERE hierarchy.id = ?d', $_GET['id']);
+                LEFT JOIN course_department ON hierarchy.id = course_department.department
+                LEFT JOIN course ON course_department.course = course.id
+            WHERE hierarchy.id = ?d $departmentFilter
+            GROUP BY hierarchy.id, hierarchy.name, hierarchy.description", ...$queryParams);
         if (!$category) {
             Access::error(3, "Category with id '$_GET[id]' not found");
         } else {
@@ -66,23 +95,47 @@ function api_method($access) {
         }
     } else {
         if ($access and !$access->allCourses and $access->courseIDs) {
-            $placeholders = implode(',', array_fill(0, count($access->courseIDs), '?s'));
+            // Filter by course IDs and optionally by allowed departments
+            $whereClause = '';
+            $queryParams = [];
+
+            $coursePlaceholders = implode(',', array_fill(0, count($access->courseIDs), '?d'));
+            $whereClause = "WHERE course.id IN ($coursePlaceholders)";
+            $queryParams = $access->courseIDs;
+
+            if ($access->allowedDepartments !== null) {
+                $deptPlaceholders = implode(',', array_fill(0, count($access->allowedDepartments), '?d'));
+                $whereClause .= " AND hierarchy.id IN ($deptPlaceholders)";
+                $queryParams = array_merge($queryParams, $access->allowedDepartments);
+            }
+
             $categories = Database::get()->queryArray("SELECT hierarchy.id, hierarchy.name, hierarchy.description,
                        MIN(course.created) AS timemodified, 0 AS sortorder
                     FROM hierarchy
                        JOIN course_department ON hierarchy.id = course_department.department
                        JOIN course ON course_department.course = course.id
-                    WHERE course.id IN ($placeholders)
-                    GROUP BY hierarchy.id
-                    ORDER BY name", $access->courseIDs);
+                    $whereClause
+                    GROUP BY hierarchy.id, hierarchy.name, hierarchy.description
+                    ORDER BY name", ...$queryParams);
         } else {
-            $categories = Database::get()->queryArray('SELECT hierarchy.id, hierarchy.name, hierarchy.description,
+            // All courses - optionally filter by allowed departments
+            $whereClause = 'WHERE allow_course = 1';
+            $queryParams = [];
+
+            if ($access && $access->allowedDepartments !== null) {
+                $placeholders = implode(',', array_fill(0, count($access->allowedDepartments), '?d'));
+                $whereClause .= " AND hierarchy.id IN ($placeholders)";
+                $queryParams = $access->allowedDepartments;
+            }
+
+            $categories = Database::get()->queryArray("SELECT hierarchy.id, hierarchy.name, hierarchy.description,
                     MIN(course.created) AS timemodified, 0 AS sortorder
                 FROM hierarchy
                     LEFT JOIN course_department ON hierarchy.id = course_department.department
                     LEFT JOIN course ON course_department.course = course.id
-                WHERE allow_course = 1
-                ORDER BY name');
+                $whereClause
+                GROUP BY hierarchy.id, hierarchy.name, hierarchy.description
+                ORDER BY name", ...$queryParams);
         }
         $categories = array_map(function ($item) {
             return [
@@ -99,6 +152,7 @@ function api_method($access) {
     echo json_encode($categories, JSON_UNESCAPED_UNICODE);
     exit();
 }
+
 
 chdir('..');
 require_once 'apiCall.php';

@@ -36,6 +36,8 @@ require_once 'constants.php';
 require_once 'log.class.php';
 require_once 'lib/session.class.php';
 require_once 'lib/file_cache.class.php';
+require_once 'lib/hierarchy.class.php';
+require_once 'modules/admin/tenant_functions.php';
 
 // ----------------------------------------------------------------------
 // for safety reasons use the functions below
@@ -3234,7 +3236,6 @@ function active_subdirs($base, $filename) {
  * @param  - $dirPath (String) - the path of the directory to delete
  * @return - boolean - true if the delete succeed, false otherwise.
  */
-
 function removeDir($dirPath) {
     global $webDir;
 
@@ -4922,7 +4923,7 @@ function get_platform_logo($size = 'normal', $position = 'header') {
         }
     }
 
-    $logo = "<div style='clear: right; padding: 1rem; text-align: $image_align;'>
+    $logo = "<div style='clear: right; background-color: $bg_color; padding: 1rem; margin-bottom: 2rem; text-align: $image_align;'>
                 <img style='height: {$image_height}mm;' src='$logo_img'>
             </div>";
 
@@ -5106,6 +5107,26 @@ function get_tinymce_color_text() {
 }
 
 
+/**
+ * Formats bytes into human-readable string (B, KB, MB, GB, TB).
+ *
+ * @param int $bytes Bytes to format
+ * @param int $precision [optional] Decimal places (default: 2)
+ * @return string Formatted size (e.g. "1.23 MB")
+ */
+function formatBytes(int $bytes, int $precision = 2): string {
+    if ($bytes == 0) {
+        return '0 B';
+    }
+
+    $units = ['B', 'KB', 'MB', 'GB', 'TB'];
+    $bytes = abs($bytes);
+    $exp = (int) (log($bytes) / log(1024));
+    $size = $bytes / pow(1024, $exp);
+
+    return round($size, $precision) . ' ' . $units[$exp];
+}
+
 
 /**
  * @brief get user courses
@@ -5198,6 +5219,32 @@ function module_path($path) {
     return preg_replace('|^.*modules/([^/]+)/.*$|', '\1', $path);
 }
 
+/**
+ * Replace placeholders in a message with corresponding values.
+ *
+ * This function takes a message string containing placeholders in the format {name}
+ * and replaces them with corresponding values provided in the substitution array.
+ *
+ * @param string $message The original message containing placeholders.
+ * @param array $subst An associative array of substitutions, where keys are placeholder names
+ *                     (without curly braces) and values are their replacements.
+ * @return string The message with all placeholders replaced by their corresponding values.
+ *
+ * @example
+ * $message = "Hello, {name}! You are {age} years old.";
+ * $subst = ['name' => 'John', 'age' => 30];
+ * $result = varmsg($message, $subst);
+ * // Result: "Hello, John! You are 30 years old."
+ */
+function varmsg($message, $subst)
+{
+    $keys = $values = [];
+    foreach ($subst as $key => $value) {
+        $keys[] = '{' . $key . '}';
+        $values[] = q($value);
+    }
+    return str_replace($keys, $values, $message);
+}
 
 /**
  * @brief Theme initialization
@@ -5218,10 +5265,32 @@ function theme_initialization() {
     $eclass_banner_value = 1;
     $container = 'container';
     $forms_image = 'form-image-modules';
-    $logo_img = $themeimg.'/eclass-new-logo.svg';
-    $logo_img_small = $themeimg.'/eclass-new-logo.svg';
+
+    $tenant = getCurrentTenant();
+
+    if (isset($_SESSION['current_user_tenant'])) {
+        $tenant = $_SESSION['current_user_tenant'];
+    }
+
+    $tenantLogo = $tenantLogoSmall = $tenantFavicon = null;
+
+    if ($tenant) {
+        $options = unserialize($tenant->options);
+
+        $tenantLogo = getTenantOption($options, 'imageUpload');
+        $tenantLogoSmall = getTenantOption($options, 'imageUploadSmall');
+        $tenantFavicon = getTenantOption($options, 'faviconUpload');
+
+        $logo_img = $tenantLogo;
+        $logo_img_small = $tenantLogoSmall;
+        $favicon_img = $tenantFavicon;
+    } else {
+        $logo_img = $themeimg.'/eclass-new-logo.svg';
+        $logo_img_small = $themeimg.'/eclass-new-logo.svg';
+        $favicon_img = $urlAppend . 'resources/favicon/openeclass_128x128.png';
+    }
+
     $loginIMG = $themeimg.'/loginIMG.png';
-    $favicon_img = $urlAppend . 'resources/favicon/openeclass_128x128.png';
     $VideoUploadedInJumbotron = 0;
     $enable_box_logo = 0;
 
@@ -5527,7 +5596,7 @@ function theme_initialization() {
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
 
-        if (isset($theme_options_styles['faviconUpload'])){
+        if (isset($theme_options_styles['faviconUpload']) && !$tenantFavicon){
             $favicon_img =  "$urlThemeData/$theme_options_styles[faviconUpload]";
         }
 
@@ -11123,11 +11192,11 @@ function theme_initialization() {
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
 
-        if (isset($theme_options_styles['imageUpload'])){
+        if (isset($theme_options_styles['imageUpload']) && !$tenantLogo){
             $logo_img =  "$urlThemeData/$theme_options_styles[imageUpload]";
         }
 
-        if (isset($theme_options_styles['imageUploadSmall'])){
+        if (isset($theme_options_styles['imageUploadSmall']) && !$tenantLogoSmall){
             $logo_img_small = "$urlThemeData/$theme_options_styles[imageUploadSmall]";
         }
 

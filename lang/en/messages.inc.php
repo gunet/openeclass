@@ -1,4 +1,21 @@
 <?php
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2026, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
+ *
+ */
 
 // Message file for language en
 // Generated 2026-03-31 11:43:38
@@ -2319,6 +2336,7 @@ $langInsertEBook = "e-book";
 $langAddToCourseHome = "Display / Don't display in course home page";
 $langGlossaryExpand = 'Display glossary terms in course pages';
 $langConfig = 'Config settings';
+$langTenantConfig = 'Tenant Config settings';
 $langSections = 'Sections';
 $langJQSelectNum = 'Selected # from #';
 $langJQNoneSelected = 'Select';
@@ -2693,6 +2711,7 @@ $langPurgeExerciseResults = "Delete course exercise results";
 $langClearStats = "Clear Statistics";
 $langStatsCleared = "Statistics cleared";
 $langMultiCourse = 'Multiple course creation';
+$langMultiCourseDelete = "Multiple course deletion";
 $langMultiCourseInfo = 'Enter course titles (one title per line). If you wish to add a course administrator, too then enter his username or name / surname, separated with character "|".';
 $langMultiCourseTitles = 'Courses Titles';
 $langMultiCourseData = 'Course Data';
@@ -3668,6 +3687,7 @@ $langExtAppConfig = 'External Tools';
 $langActiveTheme = 'Active Theme';
 $langPreviewState = 'You are in a preview state of theme';
 $langThemeInstalled = 'Theme was successfully installed';
+$langThemeEditNotAllowed = 'Editing/deleting is not allowed for this theme';
 $langAvailableThemes = 'Available Themes';
 $langLayout = 'Layout';
 $langFluid = 'Fluid';
@@ -4721,6 +4741,7 @@ $langBadgeDetails = "Badge details";
 $langCourseParticipation = "Participation duration";
 $langCourseHoursParticipation = "Hours of participation";
 $langNoCertBadge = "There are no certificates or badges.";
+$langNotAllowedCertBadge = "You do not have permission to edit the certificate or badge.";
 $langResourceBelongsToCert = "Resource belongs to certificate or badge.";
 $langTemplateBelongsToCert = "Template has been used by certificate.";
 $langIconBelongsToBadge = "The icon has beed used by some badge.";
@@ -5993,6 +6014,55 @@ $langBgColorListItem = "Background color to the list item";
 $langBgBorderColorListItem = "Border color to the bottom side of list item";
 $langNotesNotifications = "Notifications";
 $langAnalyticsStatus = 'Level';
+// sticky notes
+$langStickyNotes = "Sticky Notes";
+$langStickyNotesTopic = "Topic";
+$langStickyNotesTopics = "Topics";
+$langStickyNotesTotal = "Notes";
+$langStickyNotesTopicCreated = "The topic was created";
+$langStickyNotesTopicUpdated = "The topic was updated";
+$langStickyNotesTopicFailed = "Failed to create new topic";
+$langStickyNotesTopicDeletionFailed = "Failed to delete the topic";
+$langStickyNotesTopicDeleted = "The topic was deleted";
+$langStickyNotesTopicNotFound = "The topic was not found";
+$langNewTopic = "New topic";
+$langStickyNotesAllowEdit = "Allow creators to edit notes";
+$langStickyNotesAllowDelete = "Allow creators to delete notes";
+$langStickyNotesNoTopics = "No topics found";
+$langNoStickyNotes = "No sticky notes found";
+$langStickyNotesMoved  = 'Note moved successfully!';
+$langStickyNotesMoveError = 'Failed to move note';
+$langStickyNotesConnError = 'Connection error';
+$langStickyNotesDeleted = 'Note deleted successfully';
+$langStickyNotesDeleteError = 'Failed to delete note';
+$langStickyNotesConfirmDelete = 'Are you sure you want to delete this note?';
+$langStickyNotesConfirmDeleteSub = 'This action cannot be undone.';
+$langStickyNotesPerPage  = 'Notes per page';
+$langStickyNotesHasCategories  = 'Categories (Kanban)';
+$langStickyNotesCategoriesHint = 'Enable to organise notes into Kanban-style columns';
+$langStickyNotesCategories     = 'Categories';
+$langStickyNotesCategoryName   = 'Category name';
+$langNewStickyNote  = 'New Note';
+$langEditStickyNote = 'Edit Note';
+$langStickyNotesColor = 'Note colour';
+$langStickyNotesCategory  = 'Category';
+$langStickyNotesPreview  = 'Preview';
+$langStickyNotesPreviewPlaceholder = 'Write something...';
+$langStickyNotesContentPlaceholder = 'Write your note';
+$langStickyNotesPostCreated  = 'Note created successfully';
+$langStickyNotesPostUpdated  = 'Note updated successfully';
+$langStickyNotesPostNotFound = 'Note not found';
+$langStickyColorYellow  = 'Yellow';
+$langStickyColorGreen = 'Green';
+$langStickyColorBlue  = 'Blue';
+$langStickyColorRed  = 'Red';
+$langStickyColorPurple = 'Purple';
+$langStickyColorOrange = 'Orange';
+$langStickyColorWhite = 'White';
+$langStickyColorBrown = 'Brown';
+$langStickyNotesColorHint = 'If no colour is selected, a random colour will be assigned each time the note is displayed.';
+$langStickyNotesIsActive = 'Active topic';
+
 $langRequests = "Requests";
 $langMyRequests = "My requests";
 $langSingleRequest = 'Request';
@@ -6799,7 +6869,7 @@ $langH5pInteractiveContentByStudents = "H5P Interactive Content by $langStudents
 $langMetaLearner = 'Learner';
 $langMetaAuthor = 'Author';
 $langEnableBoxLogo = "Enable background color to the logo container";
-$langButtonInBriefProfile = "Vutton in brief profile";
+$langButtonInBriefProfile = "Button in brief profile";
 $langProviders = 'Providers';
 $langRequestAlreadySent = "A registration request has already been sent for this course";
 $langRejectedRequests = "Rejected User Requests";
@@ -6956,3 +7026,96 @@ $langIdleWarningTitle = "Inactivity warning";
 $langIdleExpireSoon = "Your session is about to expire soon due to inactivity.";
 $langIdleStayLoggedIn = "Do you want to stay logged in?";
 $langIdleExtendSession = "Extend session";
+$langTenants = 'Tenants';
+$langTenantProfile = 'Tenant Profile';
+$langNoTenants = 'No tenants defined';
+$langAddTenant = 'Add Tenant';
+$langTenantAdded = 'The tenant has been added';
+$langTenantUpdated = 'Tenant information updated';
+$langTenantAdminNotFound = 'User could not not be found';
+$langTenantCategoryNotFound = 'The category has not been set or could not be found';
+$langTenantCategoryNotExist = 'No available category exists';
+$langTenantProfileEditNotAllowed = 'Editing this tenant\'s information is not allowed';
+$langTenantActivateURL = 'Activate tenant URL';
+$langTenantURLActivateText = "Tenant {name} activated their URL:\n\n{url}\n";
+$langTenantInvalidURL  = 'The address you\'ve entered (%s) is not valid.';
+$langTenantURLChange = 'Tenant URL changed';
+$langTenantURLChangeText = "Tenant {name} changed their URL from '{oldurl}' to:\n\n{newurl}\n";
+$langTenantURL = 'Platform URL';
+$langTenantURLCheckActivate = 'Check and activate';
+$langTenantURLText = 'The platform can be displayed at your organization\'s URL. In this case, you can define display options (colors, etc.) with greater flexibility, but the relevant settings must be made by your website administrator.';
+$langTenantURLNote = 'Note: the information below will be visible to your platform users after your URL is activated by the service administrators.';
+$langDiskUsage = 'Resource usage';
+$langTenantURLDelete = 'Tenant URL deletion';
+$langTenantURLDeleteText = "Tenant {name} deleted their URL - was: {url}\n";
+$langTenantURLDeleted = 'Your URL (%s) has been deleted. Access to the platform is no longer possible from it.';
+$langTenantURLRegisterInfo = 'Your URL has been registered. You will be notified soon by the platform administrators about the necessary actions.';
+$langTenantURLRegisterActivate = 'Your URL has been registered. Please see the instructions below for the required actions.';
+$langTenantURLChecking = 'Checking...';
+$langTenantURLCheckSuccess = 'The check was successful!';
+$langTenantURLActivating = 'Activating...';
+$langTenantURLActivated = 'Activation was successful!';
+$langTenantGotoURL = 'Go to your URL';
+$langTenantURLCheckFail = 'The check failed. Please verify that the address <b>{host}</b> points to the service server ({server}) and try again. Note that due to DNS record caching, it may take several hours until your change becomes visible to the system.';
+$langTenantURLActivationInfo1 = 'Your URL is not yet active. Before activation, you must perform the following required actions.';
+$langTenantURLActivationInfo2 = 'In order for the platform to work at your organization\'s URL, the DNS address %s must be mapped to the service server address. The following record should be added by the technicians managing the DNS zone %s:';
+$langTenantsCronEnableTitle = 'Instructions for enabling automatic disk usage logging';
+$langTenantsCronEnableInstructions = '
+<p>If the service is hosted in a Unix / Linux environment, you can add the following command as a cron job on the server by entering <code>crontab -e</code>:</p>
+<pre>
+* * * * *  /usr/bin/php {webRoot}/cron-disk-usage.php
+</pre>
+<p>Depending on the hosting system, you may need to modify the full path to the php command.</p>
+<p>Alternatively, you can enable loading of the address / URL:<br>
+<code>{cronURL}</code><br>
+For example, this can be done through an external webcron system.</p>';
+$langTenantsCronRunning = 'Automatic disk usage logging is active.';
+$langTenantsCronStopped = 'Warning! Automatic disk usage logging has stopped! {Check the settings}';
+$langTenantsCronEnable = 'Note: You can enable automatic disk usage logging without additional actions from administrators (opening the logging window). {Read more}';
+$langTenants = 'Tenants';
+$langTenantProfile = 'Tenant Profile';
+$langNoTenants = 'No tenants defined';
+$langAddTenant = 'Add Tenant';
+$langTenantAdded = 'The tenant has been added';
+$langTenantUpdated = 'Tenant information updated';
+$langTenantAdminNotFound = 'User could not not be found';
+$langTenantCategoryNotFound = 'The category has not been set or could not be found';
+$langTenantCategoryNotExist = 'No available category exists';
+$langTenantProfileEditNotAllowed = 'Editing this tenant\'s information is not allowed';
+$langTenantActivateURL = 'Activate tenant URL';
+$langTenantURLActivateText = "Tenant {name} activated their URL:\n\n{url}\n";
+$langTenantInvalidURL  = 'The address you\'ve entered (%s) is not valid.';
+$langTenantURLChange = 'Tenant URL changed';
+$langTenantURLChangeText = "Tenant {name} changed their URL from '{oldurl}' to:\n\n{newurl}\n";
+$langTenantURL = 'Platform URL';
+$langTenantURLCheckActivate = 'Check and activate';
+$langTenantURLText = 'The platform can be displayed at your organization\'s URL. In this case, you can define display options (colors, etc.) with greater flexibility, but the relevant settings must be made by your website administrator.';
+$langTenantURLNote = 'Note: the information below will be visible to your platform users after your URL is activated by the service administrators.';
+$langDiskUsage = 'Resource usage';
+$langTenantURLDelete = 'Tenant URL deletion';
+$langTenantURLDeleteText = "Tenant {name} deleted their URL - was: {url}\n";
+$langTenantURLDeleted = 'Your URL (%s) has been deleted. Access to the platform is no longer possible from it.';
+$langTenantURLRegisterInfo = 'Your URL has been registered. You will be notified soon by the platform administrators about the necessary actions.';
+$langTenantURLRegisterActivate = 'Your URL has been registered. Please see the instructions below for the required actions.';
+$langTenantURLChecking = 'Checking...';
+$langTenantURLCheckSuccess = 'The check was successful!';
+$langTenantURLActivating = 'Activating...';
+$langTenantURLActivated = 'Activation was successful!';
+$langTenantGotoURL = 'Go to your URL';
+$langTenantURLCheckFail = 'The check failed. Please verify that the address <b>{host}</b> points to the service server ({server}) and try again. Note that due to DNS record caching, it may take several hours until your change becomes visible to the system.';
+$langTenantURLActivationInfo1 = 'Your URL is not yet active. Before activation, you must perform the following required actions.';
+$langTenantURLActivationInfo2 = 'In order for the platform to work at your organization\'s URL, the DNS address %s must be mapped to the service server address. The following record should be added by the technicians managing the DNS zone %s:';
+$langTenantsCronEnableTitle = 'Instructions for enabling automatic disk usage logging';
+$langTenantsCronEnableInstructions = '
+<p>If the service is hosted in a Unix / Linux environment, you can add the following command as a cron job on the server by entering <code>crontab -e</code>:</p>
+<pre>
+* * * * *  /usr/bin/php {webRoot}/cron-disk-usage.php
+</pre>
+<p>Depending on the hosting system, you may need to modify the full path to the php command.</p>
+<p>Alternatively, you can enable loading of the address / URL:<br>
+<code>{cronURL}</code><br>
+For example, this can be done through an external webcron system.</p>';
+$langTenantsCronRunning = 'Automatic disk usage logging is active.';
+$langTenantsCronStopped = 'Warning! Automatic disk usage logging has stopped! {Check the settings}';
+$langTenantsCronEnable = 'Note: You can enable automatic disk usage logging without additional actions from administrators (opening the logging window). {Read more}';
+
