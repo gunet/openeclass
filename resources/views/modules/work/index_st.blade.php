@@ -11,6 +11,33 @@
     </script>
 @endpush
 
+@if(get_config('eportfolio_enable'))
+    @push('head_scripts')
+        <script>
+            $(document).on('click', 'a.list-group-item[href*="resources.php?token="]', function(e) {
+                e.preventDefault();
+
+                const href = $(this).attr('href');
+                const url = new URL(href, window.location.origin);
+                const rid = url.searchParams.get('rid');
+
+                const modalId = `modal_work_${rid}`;
+                const modalElement = document.getElementById(modalId);
+
+                if (modalElement) {
+                    const Modal = new bootstrap.Modal(modalElement);
+                    Modal.show();
+
+                    const formSelector = `#vis_form_work_${rid}`;
+                    $(formSelector).attr('action', href);
+                } else {
+                    console.warn('Modal with ID', modalId, 'not found');
+                }
+            });
+        </script>
+    @endpush
+@endif
+
 @section('content')
 
     <div class="col-12 main-section">
@@ -178,6 +205,36 @@
                                                                 )
                                                             ));
                                                         !!}
+                                                        <div class="modal fade" id="modal_work_{{$row->id}}" tabindex="-1" aria-labelledby="workModalLabel_{{$row->id}}" aria-hidden="true">
+                                                            <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                        
+                                                                <div class="modal-header">
+                                                                <h5 class="modal-title" id="workModalLabel_{{$row->id}}">{{ trans('langAddResePortfolio') }} - {{$row->title}}</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ trans('langClose') }}"></button>
+                                                                </div>
+                                                        
+                                                                <div class="modal-body">
+                                                                <form id="vis_form_work_{{$row->id}}" name="vis_form_work_{{$row->id}}" action="" method="post">
+                                                                    <div class="mb-3">
+                                                                        <label for="vis_form_work_{{$row->id}}_select" class="form-label">{{ trans('langePortfolioFieldsVisibilitySettings') }}</label>
+                                                                        <select class="form-select" name="visibility" id="vis_form_work_{{$row->id}}_select">
+                                                                        <option value="{{EPF_VISIBLE_PUBLIC}}">{{ trans('langPublicePortfolioField') }}</option>
+                                                                        <option value="{{EPF_VISIBLE_USERS}}">{{ trans('langOpenToRegisteredUsers') }}</option>
+                                                                        <option value="{{EPF_VISIBLE_PRIVATE}}">{{ trans('langProfileInfoPrivate') }}</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="mb-3">
+                                                                        <label for="vis_form_work_{{$row->id}}_textarea" class="form-label">{{ trans('langePortfolioPromptAddReflComments') }}</label>
+                                                                        <textarea class="form-control" name="reflection_comments" id="vis_form_work_{{$row->id}}_textarea"></textarea>
+                                                                    </div>
+                                                                    <button type="submit" class="btn btn-primary">{{ trans('langSubmit') }}</button>
+                                                                </form>
+                                                                </div>
+                                                        
+                                                            </div>
+                                                            </div>
+                                                        </div>
                                                      </td>
                                                 @endif
                                             </tr>

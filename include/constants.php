@@ -239,6 +239,11 @@ define('GRADEBOOK_ACTIVITY_EXERCISE', 2);
 define('GRADEBOOK_ACTIVITY_LP', 3);
 define('GRADEBOOK_ACTIVITY_TC', 4);
 
+//eportfolio visibility levels
+define('EPF_VISIBLE_PUBLIC', 1);
+define('EPF_VISIBLE_USERS', 2);
+define('EPF_VISIBLE_PRIVATE', 3);
+
 // Subsystem types (used in documents)
 define('MAIN', 0);
 define('GROUP', 1);

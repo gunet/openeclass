@@ -57,6 +57,31 @@ $helpTopic = 'documents';
 doc_init();
 $searchEngine = SearchEngineFactory::create();
 
+if ($subsystem == MYDOCS && $subsystem_id == $uid && get_config('eportfolio_enable')) {
+    $head_content .= 
+    '<script>
+        $(document).on(\'click\', \'a.list-group-item[href*="resources.php?token="]\', function(e) {
+            e.preventDefault();
+
+            const href = $(this).attr(\'href\');
+            const url = new URL(href, window.location.origin);
+            const rid = url.searchParams.get(\'rid\');
+
+            const modalId = `modal_doc_${rid}`;
+            const modalElement = document.getElementById(modalId);
+
+            if (modalElement) {
+                const Modal = new bootstrap.Modal(modalElement);
+                Modal.show();
+
+                const formSelector = `#vis_form_doc_${rid}`;
+                $(formSelector).attr(\'action\', href);
+            } else {
+                console.warn(\'Modal with ID\', modalId, \'not found\');
+            }
+        });
+    </script>';
+}
 
 if ($is_editor) {
 
@@ -1500,6 +1525,42 @@ foreach ($result as $row) {
     if (!$is_in_tinymce) {
         $cmdDirName = getIndirectReference($row->path);
         if ($can_upload) {
+
+            if (!$is_dir && $subsystem == MYDOCS && $subsystem_id == $uid && get_config('eportfolio_enable')) {
+                $info['eportfolio_modal'] = '<div class="modal fade" id="modal_doc_'.$row->id.'" tabindex="-1" aria-labelledby="docModalLabel_'.$row->id.'" aria-hidden="true">
+                <div class="modal-dialog">
+                <div class="modal-content">
+            
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="docModalLabel_'.$row->id.'">'.$langAddResePortfolio.' - '.$row->filename.'</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="'.$langClose.'"></button>
+                    </div>
+            
+                    <div class="modal-body">
+                    <form id="vis_form_doc_'.$row->id.'" name="vis_form_doc_'.$row->id.'" action="" method="post">
+                        <div class="mb-3">
+                            <label for="vis_form_doc_'.$row->id.'_select" class="form-label">'.$langePortfolioFieldsVisibilitySettings.'</label>
+                            <select class="form-select" name="visibility" id="vis_form_doc_'.$row->id.'_select">
+                            <option value="'.EPF_VISIBLE_PUBLIC.'">'.$langPublicePortfolioField.'</option>
+                            <option value="'.EPF_VISIBLE_USERS.'">'.$langOpenToRegisteredUsers.'</option>
+                            <option value="'.EPF_VISIBLE_PRIVATE.'">'.$langProfileInfoPrivate.'</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="vis_form_doc_'.$row->id.'_textarea" class="form-label">'.$langePortfolioPromptAddReflComments.'</label>
+                            <textarea class="form-control" name="reflection_comments" id="vis_form_doc_'.$row->id.'_textarea"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">'.$langSubmit.'</button>
+                    </form>
+                    </div>
+            
+                </div>
+                </div>
+            </div>';
+            } else {
+                $indo['eportfolio_modal'] = '';
+            }
+
             $xmlCmdDirName = ($row->format == ".meta" && get_file_extension($row->path) == 'xml') ? substr($row->path, 0, -4) : $row->path;
             $info['action_button'] = action_button(array(
                 array('title' => $langFileUnzipping,

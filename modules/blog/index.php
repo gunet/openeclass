@@ -110,6 +110,30 @@ $head_content .= '<script type="text/javascript">
                     var langEmptyGroupName = "' . $langEmptyBlogPostTitle . '";
                   </script>';
 
+
+$head_content .= 
+    '<script>
+        $(document).on(\'click\', \'a.list-group-item[href*="resources.php?token="]\', function(e) {
+            e.preventDefault();
+
+            const href = $(this).attr(\'href\');
+            const url = new URL(href, window.location.origin);
+            const rid = url.searchParams.get(\'rid\');
+
+            const modalId = `modal_blog_${rid}`;
+            const modalElement = document.getElementById(modalId);
+
+            if (modalElement) {
+                const Modal = new bootstrap.Modal(modalElement);
+                Modal.show();
+
+                const formSelector = `#vis_form_blog_${rid}`;
+                $(formSelector).attr(\'action\', href);
+            } else {
+                console.warn(\'Modal with ID\', modalId, \'not found\');
+            }
+        });
+    </script>';
 //define allowed actions
 $allowed_actions = array("showBlog", "showPost", "createPost", "editPost", "delPost", "savePost", "settings");
 
@@ -739,6 +763,39 @@ if ($action == "showPost") {
                         </div>
                     </div>";
 
+        if (get_config('eportfolio_enable') && $post->getAuthor()==$uid) {
+            $tool_content .= '<div class="modal fade" id="modal_blog_'.$post->getId().'" tabindex="-1" aria-labelledby="blogModalLabel_'.$post->getId().'" aria-hidden="true">
+                    <div class="modal-dialog">
+                    <div class="modal-content">
+                
+                        <div class="modal-header">
+                        <h5 class="modal-title" id="blogModalLabel_'.$post->getId().'">'.$langAddResePortfolio.' - '.q($post->getTitle()).'</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="'.$langClose.'"></button>
+                        </div>
+                
+                        <div class="modal-body">
+                        <form id="vis_form_blog_'.$post->getId().'" name="vis_form_blog_'.$post->getId().'" action="" method="post">
+                            <div class="mb-3">
+                                <label for="vis_form_blog_'.$post->getId().'_select" class="form-label">'.$langePortfolioFieldsVisibilitySettings.'</label>
+                                <select class="form-select" name="visibility" id="vis_form_blog_'.$post->getId().'_select">
+                                <option value="'.EPF_VISIBLE_PUBLIC.'">'.$langPublicePortfolioField.'</option>
+                                <option value="'.EPF_VISIBLE_USERS.'">'.$langOpenToRegisteredUsers.'</option>
+                                <option value="'.EPF_VISIBLE_PRIVATE.'">'.$langProfileInfoPrivate.'</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="vis_form_blog_'.$post->getId().'_textarea" class="form-label">'.$langePortfolioPromptAddReflComments.'</label>
+                                <textarea class="form-control" name="reflection_comments" id="vis_form_blog_'.$post->getId().'_textarea"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">'.$langSubmit.'</button>
+                        </form>
+                        </div>
+                
+                    </div>
+                    </div>
+                </div>';
+        }
+
         if ($comments_enabled) {
             $tool_content .= "
                     <div class='col-12'>";
@@ -882,6 +939,39 @@ if ($action == "showBlog") {
 
                                 </div>
                              </div>";
+
+            if (get_config('eportfolio_enable') && $post->getAuthor()==$uid) {
+                $tool_content .= '<div class="modal fade" id="modal_blog_'.$post->getId().'" tabindex="-1" aria-labelledby="blogModalLabel_'.$post->getId().'" aria-hidden="true">
+                    <div class="modal-dialog">
+                    <div class="modal-content">
+                
+                        <div class="modal-header">
+                        <h5 class="modal-title" id="blogModalLabel_'.$post->getId().'">'.$langAddResePortfolio.' - '.q($post->getTitle()).'</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="'.$langClose.'"></button>
+                        </div>
+                
+                        <div class="modal-body">
+                        <form id="vis_form_blog_'.$post->getId().'" name="vis_form_blog_'.$post->getId().'" action="" method="post">
+                            <div class="mb-3">
+                                <label for="vis_form_blog_'.$post->getId().'_select" class="form-label">'.$langePortfolioFieldsVisibilitySettings.'</label>
+                                <select class="form-select" name="visibility" id="vis_form_blog_'.$post->getId().'_select">
+                                <option value="'.EPF_VISIBLE_PUBLIC.'">'.$langPublicePortfolioField.'</option>
+                                <option value="'.EPF_VISIBLE_USERS.'">'.$langOpenToRegisteredUsers.'</option>
+                                <option value="'.EPF_VISIBLE_PRIVATE.'">'.$langProfileInfoPrivate.'</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="vis_form_blog_'.$post->getId().'_textarea" class="form-label">'.$langePortfolioPromptAddReflComments.'</label>
+                                <textarea class="form-control" name="reflection_comments" id="vis_form_blog_'.$post->getId().'_textarea"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">'.$langSubmit.'</button>
+                        </form>
+                        </div>
+                
+                    </div>
+                    </div>
+                </div>';
+            }
         }
 
 

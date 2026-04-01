@@ -59,11 +59,19 @@
                                         {{ $userdata->username }}
                                     </div>
                                     @if(get_config('eportfolio_enable'))
-                                        <p class='text-center mt-2'>
-                                            <a class='btn submitAdminBtn d-inline-flex' href='{{ $urlAppend }}main/eportfolio/index.php?id={{ $id }}&token={{ token_generate("eportfolio" . $id) }}'>
-                                                {{ trans('langMyePortfolio') }}
-                                            </a>
-                                        </p>
+										@if ($uid == $id)
+											<p class='text-center mt-2'>
+												<a class='btn submitAdminBtn d-inline-flex' href='{{ $urlAppend }}main/eportfolio/index.php'>
+													{{ trans('langMyePortfolio') }}
+												</a>
+											</p>
+										@elseif($userdata->eportfolio_enable)
+											<p class='text-center mt-2'>
+												<a class='btn submitAdminBtn d-inline-flex' href='{{ $urlAppend }}main/eportfolio/index.php?token={{$userdata->eportfolio_token}}'>
+													{{ trans('langMyePortfolio') }}
+												</a>
+											</p>
+										@endif
                                     @endif
                                     @if(get_config('personal_blog'))
                                         <p class='text-center mt-2'>

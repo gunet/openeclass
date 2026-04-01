@@ -595,6 +595,12 @@ $langGerman = "Deutsch";
 $langGreek = "Griechisch";
 $langItalian = "Italienisch";
 $langSpanish = "Spanisch";
+$langAlbanian = "Albanisch";
+$langArabic = "Arabisch";
+$langChinese = "Chinesisch";
+$langRussian = "Russisch";
+$langTurkish = "Türkisch";
+$langDirectory = "Κατάλογος";
 $langDirectory = "Verzeichnis";
 $langGeneralError = "Ein Fehler ist aufgetreten. Bitte wenden Sie sich an den Administrator der Plattform.";
 $langExercicesView = "Darstellung der Übung";
@@ -4403,16 +4409,35 @@ $langPersInfo = 'Personal info';
 $langEduEmpl = 'Education and employment';
 $langAchievements = 'Achievements';
 $langGoalsSkills = 'Goals and skills';
+$langResearchProfiles = 'Research Profiles';
+$langGoogleScholarProfile = 'Google Scholar Profile';
+$langScopusID = 'Scopus ID';
+$langOrcid = 'ORCID ID';
 $langBirthDate = 'Birth date';
 $langBirthPlace = 'Birth place';
 $langGender = 'Gender';
 $langMale = 'Male';
 $langFemale = 'Female';
 $langAboutMe = 'About me';
-$langAboutMeDescr = '<p>A short description about yourself</p>';
+$langAboutMeDescr = "<p>Write a brief introduction describing who you are, your interests, and the core values or skills that define you.</p>
+<p>This field helps readers get to know you better and understand your profile as a whole.</p>
+<p><strong>It is recommended to include:</strong></p>
+<ul>
+  <li>Basic information about yourself</li>
+  <li>Main interests and motivations</li>
+  <li>What distinguishes you or what you aim for</li>
+</ul>";
 $langPersWebsite = 'Personal Website';
 $langEducation = 'Education';
-$langEducationDescr = '<p>Education history, academic qualifications etc.</p>';
+$langEducationDescr = "<p>Record the degrees or certifications you have obtained. Also include educational experiences that you consider significant.</p>
+<p>Documenting your education presents your learning background and enhances your profile.</p>
+<p><strong>It is recommended to include:</strong></p>
+<ul>
+  <li>Name of the educational institution</li>
+  <li>Title of the program or degree</li>
+  <li>Period of attendance</li>
+  <li>(Optional) Special courses or achievements</li>
+</ul>";
 $langEmployment = 'Employment history';
 $langCertAwards = 'Certificates and awards';
 $langPublications = 'Publications';
@@ -4425,6 +4450,29 @@ $langCareerSkills = 'Career skills';
 $langFBProfile = 'Facebook profile';
 $langTwitterAccount = 'Twitter account';
 $langLinkedInProfile = 'LinkedIn profile';
+$langGScholarURLValidFail = 'Field %s is invalid (required format https://scholar.google.com/citations?user=XXXXXXXXXXX). ';
+$langOrcidURLValidFail = 'Field %s is invalid (required format https://orcid.org/0000-xxxx-xxxx-xxxx). '; 
+$langScopusIDValidFail = 'Field %s is invalid (required format 9 to 11 numeric characters)';
+$langFacebookUrlValidFail = 'Field %s is invalid (required format https://www.facebook.com/xxxxxx ή https://fb.me/xxxxxx)';
+$langTwitterUrlValidFail = 'Field %s is invalid (required format https://twitter.com/xxxxxx ή https://x.com/xxxxxx)';
+$langLinkedInUrlValidFail = 'Field %s is invalid (required format https://www.linkedin.com/in/xxxxxx)';
+$langLangProfLevel = 'Language Proficiency Level';
+$langLangCEFRA1 = 'A1 - Beginner';
+$langLangCEFRA2 = 'Α2 - Elementary';
+$langLangCEFRB1 = 'B1 - Intermediate';
+$langLangCEFRB2 = 'B2 - Upper-Intermediate';
+$langLangCEFRC1 = 'C1 - Advanced';
+$langLangCEFRC2 = 'C2 - Proficient / Mastery';
+$langOtherLanguages = 'Other languages';
+$langePortfolioOtherLanguagesDescr = '<p>List any other languages ​​you may know, as well as your level of proficiency.</p>';
+$langVolontSocialAct = 'Social and Volunteer Activities';
+$langSocialActivities = 'Social Activities';
+$langVolunteerActivities = 'Volunteer Activities';
+$langePortfolioFieldsVisibilitySettings = 'Visibility settings';
+$langPublicePortfolioField = 'Public';
+$langOpenToRegisteredUsers = 'Visible to registered users';
+$langePortfolioPreviewAsGuest = 'You are in preview mode. You are vewing this page as guest user. You can change preview mode using the Preview button.';
+$langePortfolioPreviewAsRegistered = 'You are in preview mode. You are vewing this page as registered user. You can change preview mode using the Preview button.';
 $langBio = 'Curriculum vitae';
 $langBioQuota = 'E-portfolio CV quota';
 $langUploadBioFailSize = 'The CV file size exceeds maximum allowed limit (%d MB)';
@@ -4445,10 +4493,118 @@ $langePortfolioResourceAdded = 'The resource was successfully added to your coll
 $langePortfolioResourceRemoved = 'The resource was successfully removed from your collection';
 $langePortfolioRemoveResource = 'Remove';
 $langePortfolioSureToRemoveResource = 'Are you sure you want to remove this resource from your collection?';
-$langePortfolioCollectionUserInfo = 'In the resource collection of e-Portfolio you can add resources from the following modules (if they are enabled): blog (personal and course), course assignments and personal documents.
+$langePortfolioCollectionUserInfo = 'In the resource collection of e-Portfolio you can add resources from the following modules (if they are enabled): blog (personal and course), course assignments, personal documents, progress (badges and certificates) and personal notes.
 The respective tabs appear only if resources have been added from the relevant module to the collection.';
 $langePortfolioNoResInCollection = 'There are no resources in this collection';
 $langEnabledePortfolioButtonsLabel = 'Enabled e-Portfolio';
+$langResourceExists = "The resource already exists.";
+$langReflectionComment = "Reflection Comment";
+$langePortfolioPromptAddReflComments = "Optionally record some personal, reflective comments about this resource. Answer questions like \"What did I learn from this activity?\" or \"What difficulties and challenges did I face?\", etc.";
+$langePortfolioAddCVPrompt = "Don't forget to upload your CV! It's one of the key elements of a complete e-portfolio.";
+$langePortfolioCertificatesAwardsDescr = "<p>Record official certifications, distinctions, or awards you have received from educational institutions, organizations, or competitions. These may include language certifications, professional licenses, competition participations with honors, or other recognized achievements.</p>
+<p>Filling in this field enhances the credibility of your profile and highlights your skills and efforts.</p>
+<p><strong>It is recommended to include:</strong></p>
+<ul>
+  <li>Title of the certification or award</li>
+  <li>Issuing organization</li>
+  <li>Date obtained</li>
+  <li>Brief description or subject</li>
+  <li>(Optional) Relevant link</li>
+</ul>";
+$langePortfolioPublicationsDescr = "<p>Record scientific articles, papers, presentations, or other written work you have published in journals, conferences, websites, or other official platforms.</p>
+<p>This field highlights your research or writing activity and provides evidence of your expertise in specific areas.</p>
+<p><strong>It is recommended to include:</strong></p>
+<ul>
+  <li>Title of publication</li>
+  <li>Authors (if collaborative work)</li>
+  <li>Place and type of publication (e.g., journal, conference, website)</li>
+  <li>Date of publication</li>
+  <li>(Optional) Relevant link</li>
+</ul>";
+$langePortfolioPersonalGoalsDescr = "<p>Record your individual goals related to learning, professional development, or personal growth. Goals may include skills you want to develop, experiences you seek, or achievements you aim to accomplish.</p>
+<p>Formulating personal goals helps focused progress and gives meaning to your educational and professional choices.</p>
+<p><strong>It is recommended to write:</strong></p>
+<ul>
+  <li>Specific and realistic goal</li>
+  <li>Brief explanation of why it is important to you</li>
+  <li>(Optional) Timeline or plan for achievement</li>
+</ul>";
+$langePortfolioAcademicGoalsDescr = "<p>Record goals related to your studies and learning path. These may include obtaining a degree, improving performance in specific courses, or developing skills in academic fields of interest.</p>
+<p>Formulating academic goals helps plan and monitor your progress, strengthening your commitment to learning.</p>
+<p><strong>It is recommended to write:</strong></p>
+<ul>
+  <li>Specific goal related to studies</li>
+  <li>Brief justification of the goal</li>
+  <li>(Optional) Expected steps or timeline</li>
+</ul>";
+$langePortfolioCareerGoalsDescr = "<p>Record goals related to your career and professional development. These may include job positions you pursue, skills you want to acquire, or significant professional achievements you aim for.</p>
+<p>Recording career goals helps design your path and focus on specific steps to achieve them.</p>
+<p><strong>It is recommended to write:</strong></p>
+<ul>
+  <li>Specific professional goal</li>
+  <li>Reasons why you consider it important</li>
+  <li>(Optional) Action plan or timeline</li>
+</ul>";
+$langePortfolioPersonalSkillsDescr = "<p>Record skills related to your personal development, such as communication, teamwork, time management, or problem-solving.</p>
+<p>These skills are important for effective collaboration and professional success.</p>
+<p><strong>It is recommended to mention:</strong></p>
+<ul>
+  <li>The skills you possess</li>
+  <li>Examples where you have applied them</li>
+  <li>(Optional) Ways to improve or develop</li>
+</ul>";
+$langePortfolioAcademicSkillsDescr = "<p>Record the skills you have developed through your studies, such as research, data analysis, written and oral communication, or the use of specialized tools.</p>
+<p>These skills enhance your academic performance and prepare you for future professional challenges.</p>
+<p><strong>It is recommended to mention:</strong></p>
+<ul>
+  <li>The academic skills you possess</li>
+  <li>Examples of their application</li>
+  <li>(Optional) Areas for further development</li>
+</ul>";
+$langePortfolioCareerSkillsDesc = "<p>Record the skills you have acquired through work or professional experience, such as technical knowledge, project management, leadership, or the use of specialized tools and software.</p>
+<p>These skills enhance your professional efficiency and ability to take on responsibilities.</p>
+<p><strong>It is recommended to mention:</strong></p>
+<ul>
+  <li>The professional skills you possess</li>
+  <li>Examples of their application</li>
+  <li>(Optional) Plan for further improvement</li>
+</ul>";
+$langePortfolioPersonalWebsiteDescr = "<p>If you have a personal website or online profile, record the URL where you present your work or CV. If you don’t have one, you can leave this field blank.</p>
+<p>This allows others to see more about you online, if available.</p>
+<p><strong>It is recommended to include:</strong></p>
+<ul>
+  <li>Valid URL</li>
+  <li>Brief description of the content (optional)</li>
+</ul>";
+$langePortfolioEmploymentDescr = "<p>Record the job positions you have held, along with your main duties and achievements. Mention the employer, duration of employment, and job responsibilities.</p>
+<p>This field highlights your professional path and the skills you have acquired through practical experience.</p>
+<p><strong>It is recommended to include:</strong></p>
+<ul>
+  <li>Job title</li>
+  <li>Employer’s name</li>
+  <li>Duration of employment</li>
+  <li>Main duties and achievements</li>
+</ul>";
+$langePortfolioSocialActivitiesDescr = "<p>Record your participation in activities with social or community character, such as organizations, groups, or initiatives aimed at social development and awareness.</p>
+<p>This field highlights your social responsibility and commitment to improving the community.</p>
+<p><strong>It is recommended to include:</strong></p>
+<ul>
+  <li>Type of activity or organization</li>
+  <li>Role and activities</li>
+  <li>Duration of participation</li>
+  <li>Results or impact</li>
+</ul>";
+$langePortfolioVolunteerActivitiesDescr = "<p>Record your participation in volunteer initiatives where you offer services or assistance without pay, such as charity events, social services, or organizations.</p>
+<p>This field highlights your willingness for selfless contribution and active involvement.</p>
+<p><strong>It is recommended to include:</strong></p>
+<ul>
+  <li>Type of volunteer activity</li>
+  <li>Role and responsibilities</li>
+  <li>Duration and frequency of participation</li>
+  <li>Achievements or experiences</li>
+</ul>";
+$langePortfolioComplBelow30 = "Fill in as many fields as possible to better showcase your skills, experiences, and interests. Your e-portfolio is your personal footprint – start building it today!";
+$langePortfolioComplBelow60 = "Keep completing your e-portfolio to fully highlight your profile. The more complete it is, the stronger your presence will be.";
 $langPageLink = 'Page link:';
 $langCopiedSucc = 'Copied';
 $langCopiedErr = 'Press Ctrl+c to copy';

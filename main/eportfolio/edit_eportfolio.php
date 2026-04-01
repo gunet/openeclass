@@ -47,9 +47,8 @@ check_guest();
 
 $toolName = $langMyePortfolio;
 $pageName = $langEditChange;
-$token = token_generate('eportfolio' . $uid);
 $navigation[] = array("url" => "{$urlAppend}main/profile/display_profile.php", "name" => $langMyProfile);
-$navigation[] = array('url' => "index.php?id=$uid&token=$token", 'name' => $langMyePortfolio);
+$navigation[] = array('url' => "index.php", 'name' => $langMyePortfolio);
 
 if (!get_config('eportfolio_enable')) {
     $tool_content = "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langePortfolioDisabled</span></div>";
@@ -79,36 +78,9 @@ if (isset($_POST['submit'])) {
         process_eportfolio_fields_data();
         Session::flash('message', $langePortfolioChangeSucc);
         Session::flash('alert-class', 'alert-success');
-        redirect_to_home_page("main/eportfolio/index.php?id=$uid&token=$token");
+        redirect_to_home_page("main/eportfolio/index.php");
     }
 }
-
-$head_content .= "<script type='text/javascript'>
-    $(document).ready(function() {
-        /* Check if we are in safari and fix Bootstrap Affix*/
-        if (navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('Chrome') == -1) {
-        var stickywidget = $('#floatMenu');
-        var explicitlySetAffixPosition = function() {
-            stickywidget.css('left',stickywidget.offset().left+'px');
-        };
-        /* Before the element becomes affixed, add left CSS that is equal to the distance of the element from the left of the screen */
-        stickywidget.on('affix.bs.affix',function(){
-            stickywidget.removeAttr('style');
-            explicitlySetAffixPosition();
-        });
-        stickywidget.on('affixed-bottom.bs.affix',function(){
-            stickywidget.css('left', 'auto');
-        });
-        /* On resize of window, un-affix affixed widget to measure where it should be located, set the left CSS accordingly, re-affix it */
-        $(window).resize(function(){
-            if(stickywidget.hasClass('affix')) {
-                stickywidget.removeClass('affix');
-                explicitlySetAffixPosition();
-                stickywidget.addClass('affix');
-            }
-        });
-    });
-    </script>";
 
 $head_content .= "
         <script>
@@ -123,7 +95,7 @@ $sec = $urlServer . 'main/eportfolio/edit_eportfolio.php';
 $tool_content .=
     "<div class='row mt-4'>
         <div class='col-sm-9'>
-            <form class='form-horizontal' role='form' action='$sec' method='post'>
+            <form class='form-horizontal' action='$sec' method='post'>
             <div data-bs-spy='scroll' data-bs-target='#navbar-examplePortfolioEdit' data-bs-offset='0' tabindex='0'>  ";
 
 //add custom profile fields
@@ -133,12 +105,32 @@ $tool_content .= $ret_str['panels'];
 $tool_content .= "
     <div class='form-group mt-5 d-flex justify-content-center align-items-center gap-2'>
         <input class='btn submitAdminBtn' type='submit' name='submit' value='$langSubmit'>     
-        <a href='{$urlAppend}main/eportfolio/index.php?id=$uid&amp;token=$token' class='btn cancelAdminBtn'>$langCancel</a>
+        <a href='{$urlAppend}main/eportfolio/index.php' class='btn cancelAdminBtn'>$langCancel</a>
                   </div>
       ". generate_csrf_token_form_field() ."  
       </div></form>
       </div>
       ".$ret_str['right_menu']."
       </div>";
+
+$head_content .= "
+    <script>
+        $(document).ready(function() {
+            $('.visibility_select').on('change', function() {
+                var selectName = $(this).attr('name');    // Get the select's name
+                var selectValue = $(this).val();          // Get the select's value
+                $('#' + selectName + '_hidden').val(selectValue);     // Set the hidden input's value
+                if (selectValue == 2) {
+                    $('#' + selectName + '_button').html('<i class=\"fa fa-users\"></i>');
+                } else if (selectValue == 3) {
+                    $('#' + selectName + '_button').html('<i class=\"fa fa-lock\"></i>');
+                } else {
+                    $('#' + selectName + '_button').html('<i class=\"fa fa-globe\"></i>');
+                }
+            });
+        });
+    </script>
+";
+
 
 draw($tool_content, 1, null, $head_content);

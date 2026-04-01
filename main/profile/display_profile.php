@@ -78,7 +78,7 @@ if (isset($_GET['view']) and isset($_GET['show_tutor'])) {
 
 $data['action_bar_blog_portfolio'] = $data['action_bar'] = $data['action_bar_unreg'] = '';
 $data['userdata'] = Database::get()->querySingle("SELECT surname, givenname, username, email, status, phone, am, registered_at,
-                                            has_icon, description, password,
+                                            has_icon, description, password, eportfolio_enable, eportfolio_token,
                                             email_public, phone_public, am_public, pic_public
                                         FROM user
                                         WHERE id = ?d", $data['id']);

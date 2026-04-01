@@ -305,6 +305,7 @@ $db->query("CREATE TABLE `user` (
     pic_public TINYINT NOT NULL DEFAULT 0,
     whitelist TEXT CHARACTER SET ascii COLLATE ascii_bin,
     eportfolio_enable TINYINT NOT NULL DEFAULT 0,
+    eportfolio_token VARCHAR(64) DEFAULT NULL,
     last_passreminder DATETIME DEFAULT NULL,
     disable_course_registration TINYINT NULL DEFAULT 0,
     options TEXT CHARACTER SET ascii COLLATE ascii_bin DEFAULT NULL) $tbl_options");
@@ -963,12 +964,14 @@ $db->query("CREATE TABLE IF NOT EXISTS `eportfolio_fields` (
         `categoryid` INT NOT NULL DEFAULT 0,
         `sortorder`  INT NOT NULL DEFAULT 0,
         `required` TINYINT NOT NULL DEFAULT 0,
-        `data` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL) $tbl_options");
+        `data` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
+        UNIQUE (`shortname`)) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `eportfolio_fields_data` (
         `user_id` INT UNSIGNED NOT NULL DEFAULT 0,
         `field_id` INT NOT NULL,
         `data` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
+        `visibility` TINYINT UNSIGNED NOT NULL DEFAULT 1,
         PRIMARY KEY (`user_id`, `field_id`)) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `eportfolio_fields_category` (
@@ -981,30 +984,53 @@ $db->query("INSERT INTO `eportfolio_fields_category` (`id`, `name`, `sortorder`)
         (2, '$langEduEmpl', -1),
         (3, '$langAchievements', -2),
         (4, '$langGoalsSkills', -3),
-        (5, '$langContactInfo', -4)");
+        (5, '$langContactInfo', -4),
+        (6, '$langResearchProfiles', -5),
+        (7, '$langLangProfLevel', -6),
+        (8, '$langVolontSocialAct', -7)");
+
+$gender_options = [$langMale, $langFemale];
+$lang_proficiency_levels = [$langLangCEFRA1, $langLangCEFRA2, $langLangCEFRB1, $langLangCEFRB2, $langLangCEFRC1, $langLangCEFRC2];
 
 $db->query("INSERT INTO `eportfolio_fields` (`id`, `shortname`, `name`, `description`, `datatype`, `categoryid`, `sortorder`, `required`, `data`) VALUES
         (1, 'birth_date', '$langBirthDate', '', '3', 1, 0, 0, ''),
         (2, 'birth_place', '$langBirthPlace', '', '1', 1, -1, 0, ''),
-        (3, 'gender', '$langGender', '', '4', 1, -2, 0, 'a:2:{i:0;s:".strlen($langMale).":\"$langMale\";i:1;s:".strlen($langFemale).":\"$langFemale\";}'),
+        (3, 'gender', '$langGender', '', '4', 1, -2, 0, '".serialize($gender_options)."'),
         (4, 'about_me', '$langAboutMe', '$langAboutMeDescr', '2', 1, -3, 0, ''),
-        (5, 'personal_website', '$langPersWebsite', '', '5', 1, -4, 0, ''),
+        (5, 'personal_website', '$langPersWebsite', '$langePortfolioPersonalWebsiteDescr', '5', 1, -4, 0, ''),
         (6, 'education', '$langEducation', '$langEducationDescr', '2', 2, 0, 0, ''),
-        (7, 'employment', '$langEmployment', '', '2', 2, -1, 0, ''),
-        (8, 'certificates_awards', '$langCertAwards', '', '2', 3, 0, 0, ''),
-        (9, 'publications', '$langPublications', '', '2', 3, -1, 0, ''),
-        (10, 'personal_goals', '$langPersGoals', '', '2', 4, 0, 0, ''),
-        (11, 'academic_goals', '$langAcademicGoals', '', '2', 4, -1, 0, ''),
-        (12, 'career_goals', '$langCareerGoals', '', '2', 4, -2, 0, ''),
-        (13, 'personal_skills', '$langPersSkills', '', '2', 4, -3, 0, ''),
-        (14, 'academic_skills', '$langAcademicSkills', '', '2', 4, -4, 0, ''),
-        (15, 'career_skills', '$langCareerSkills', '', '2', 4, -5, 0, ''),
+        (7, 'employment', '$langEmployment', '$langePortfolioEmploymentDescr', '2', 2, -1, 0, ''),
+        (8, 'certificates_awards', '$langCertAwards', '$langePortfolioCertificatesAwardsDescr', '2', 3, 0, 0, ''),
+        (9, 'publications', '$langPublications', '$langePortfolioPublicationsDescr', '2', 3, -1, 0, ''),
+        (10, 'personal_goals', '$langPersGoals', '$langePortfolioPersonalGoalsDescr', '2', 4, 0, 0, ''),
+        (11, 'academic_goals', '$langAcademicGoals', '$langePortfolioAcademicGoalsDescr', '2', 4, -1, 0, ''),
+        (12, 'career_goals', '$langCareerGoals', '$langePortfolioCareerGoalsDescr', '2', 4, -2, 0, ''),
+        (13, 'personal_skills', '$langPersSkills', '$langePortfolioPersonalSkillsDescr', '2', 4, -3, 0, ''),
+        (14, 'academic_skills', '$langAcademicSkills', '$langePortfolioAcademicSkillsDescr', '2', 4, -4, 0, ''),
+        (15, 'career_skills', '$langCareerSkills', '$langePortfolioCareerSkillsDesc', '2', 4, -5, 0, ''),
         (16, 'email', '$langEmail', '', '1', 5, 0, 0, ''),
         (17, 'phone_number', '$langPhone', '', '1', 5, -1, 0, ''),
         (18, 'Address', '$langAddress', '', '1', 5, -2, 0, ''),
         (19, 'fb', '$langFBProfile', '', '5', 5, -3, 0, ''),
         (20, 'twitter', '$langTwitterAccount', '', '5', 5, -4, 0, ''),
-        (21, 'linkedin', '$langLinkedInProfile', '', '5', 5, -5, 0, '')");
+        (21, 'linkedin', '$langLinkedInProfile', '', '5', 5, -5, 0, ''),
+        (22, 'gscholar', '$langGoogleScholarProfile', '', '5', 6, 0, 0, ''),
+        (23, 'scopus', '$langScopusID', '', '1', 6, -1, 0, ''),
+        (24, 'orcid', '$langOrcid', '', '5', 6, -2, 0, ''),
+        (25, 'el', '$langGreek', '', '4', 7, 0, 0, '".serialize($lang_proficiency_levels)."'),
+        (26, 'en', '$langEnglish', '', '4', 7, -1, 0, '".serialize($lang_proficiency_levels)."'),
+        (27, 'sq', '$langAlbanian', '', '4', 7, -2, 0, '".serialize($lang_proficiency_levels)."'),
+        (28, 'ar', '$langArabic', '', '4', 7, -3, 0, '".serialize($lang_proficiency_levels)."'),
+        (29, 'fr', '$langFrench', '', '4', 7, -4, 0, '".serialize($lang_proficiency_levels)."'),
+        (30, 'de', '$langGerman', '', '4', 7, -5, 0, '".serialize($lang_proficiency_levels)."'),
+        (31, 'it', '$langItalian', '', '4', 7, -6, 0, '".serialize($lang_proficiency_levels)."'),
+        (32, 'es', '$langSpanish', '', '4', 7, -7, 0, '".serialize($lang_proficiency_levels)."'),
+        (33, 'zh', '$langChinese', '', '4', 7, -8, 0, '".serialize($lang_proficiency_levels)."'),
+        (34, 'ru', '$langRussian', '', '4', 7, -9, 0, '".serialize($lang_proficiency_levels)."'),
+        (35, 'tr', '$langTurkish', '', '4', 7, -10, 0, '".serialize($lang_proficiency_levels)."'),
+        (36, 'other_languages', '$langOtherLanguages', '$langePortfolioOtherLanguagesDescr', '2', 7, -11, 0, ''),
+        (37, 'social_activities', '$langSocialActivities', '$langePortfolioSocialActivitiesDescr', '2', 8, 0, 0, ''),
+        (38, 'volunteer_activities', '$langVolunteerActivities', '$langePortfolioVolunteerActivitiesDescr', '2', 8, -1, 0, '')");
 
 $db->query("CREATE TABLE IF NOT EXISTS `eportfolio_resource` (
         `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -1015,6 +1041,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `eportfolio_resource` (
         `course_title` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL DEFAULT '',
         `time_added` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
         `data` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
+        `visibility` TINYINT UNSIGNED NOT NULL DEFAULT 1,
+        `reflection_comments` TEXT NOT NULL,
         INDEX `eportfolio_res_index` (`user_id`,`resource_type`)) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `wall_post` (
