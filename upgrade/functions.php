@@ -3702,11 +3702,13 @@ function upgrade_to_4_4($tbl_options) : void {
            $langePortfolioVolunteerActivitiesDescr;
 
     // E-portfolio
-    Database::get()->query("ALTER TABLE `user` ADD COLUMN eportfolio_token VARCHAR(64) DEFAULT NULL AFTER eportfolio_enable");
-    
-    $eportf_users = Database::get()->queryArray("SELECT id FROM `user` WHERE eportfolio_enable = ?d", 1);
-    foreach ($eportf_users as $eportf_user) {
-        Database::get()->query("UPDATE `user` SET eportfolio_token = ?s WHERE id = ?d", rtrim(strtr(base64_encode(random_bytes(16)), '+/', '-_'), '='), $eportf_user->id);
+    if (!DBHelper::fieldExists('user', 'eportfolio_token')) {
+        Database::get()->query("ALTER TABLE `user` ADD COLUMN eportfolio_token VARCHAR(64) DEFAULT NULL AFTER eportfolio_enable");
+        
+        $eportf_users = Database::get()->queryArray("SELECT id FROM `user` WHERE eportfolio_enable = ?d", 1);
+        foreach ($eportf_users as $eportf_user) {
+            Database::get()->query("UPDATE `user` SET eportfolio_token = ?s WHERE id = ?d", rtrim(strtr(base64_encode(random_bytes(16)), '+/', '-_'), '='), $eportf_user->id);
+        }
     }
 
     $min_eportf_cat_order = Database::get()->querySingle("SELECT MIN(sortorder) AS min_order FROM eportfolio_fields_category");
@@ -3717,15 +3719,15 @@ function upgrade_to_4_4($tbl_options) : void {
     }
 
     $eportf_cat_id = Database::get()->query("INSERT INTO eportfolio_fields_category (name, sortorder) VALUES ('$langResearchProfiles', $min_eportf_cat_order)")->lastInsertID;
-    Database::get()->query("INSERT INTO eportfolio_fields (shortname, name, description, datatype, categoryid, sortorder, required, data) VALUES
+    Database::get()->query("INSERT IGNORE INTO eportfolio_fields (shortname, name, description, datatype, categoryid, sortorder, required, data) VALUES
         ('gscholar', '$langGoogleScholarProfile', '', '5', $eportf_cat_id, 0, 0, ''),
         ('scopus', '$langScopusID', '', '1', $eportf_cat_id, -1, 0, ''),
         ('orcid', '$langOrcid', '', '5', $eportf_cat_id, -2, 0, '')");
     $min_eportf_cat_order--;
 
-    $eportf_cat_id = Database::get()->query("INSERT INTO eportfolio_fields_category (name, sortorder) VALUES ('$langLangProfLevel', $min_eportf_cat_order)")->lastInsertID;
+    $eportf_cat_id = Database::get()->query("INSERT IGNORE INTO eportfolio_fields_category (name, sortorder) VALUES ('$langLangProfLevel', $min_eportf_cat_order)")->lastInsertID;
     $lang_proficiency_levels = [$langLangCEFRA1, $langLangCEFRA2, $langLangCEFRB1, $langLangCEFRB2, $langLangCEFRC1, $langLangCEFRC2];
-    Database::get()->query("INSERT INTO eportfolio_fields (shortname, name, description, datatype, categoryid, sortorder, required, data) VALUES
+    Database::get()->query("INSERT IGNORE INTO eportfolio_fields (shortname, name, description, datatype, categoryid, sortorder, required, data) VALUES
         ('el', '$langGreek', '', '4', $eportf_cat_id, 0, 0, '".serialize($lang_proficiency_levels)."'),
         ('en', '$langEnglish', '', '4', $eportf_cat_id, -1, 0, '".serialize($lang_proficiency_levels)."'),
         ('sq', '$langAlbanian', '', '4', $eportf_cat_id, -2, 0, '".serialize($lang_proficiency_levels)."'),
@@ -3740,29 +3742,31 @@ function upgrade_to_4_4($tbl_options) : void {
         ('other_languages', '$langOtherLanguages', '$langePortfolioOtherLanguagesDescr', '2', $eportf_cat_id, -11, 0, '')");
     $min_eportf_cat_order--;
 
-    $eportf_cat_id = Database::get()->query("INSERT INTO eportfolio_fields_category (name, sortorder) VALUES ('$langVolontSocialAct', $min_eportf_cat_order)")->lastInsertID;
-    Database::get()->query("INSERT INTO eportfolio_fields (shortname, name, description, datatype, categoryid, sortorder, required, data) VALUES
+    $eportf_cat_id = Database::get()->query("INSERT IGNORE INTO eportfolio_fields_category (name, sortorder) VALUES ('$langVolontSocialAct', $min_eportf_cat_order)")->lastInsertID;
+    Database::get()->query("INSERT IGNORE INTO eportfolio_fields (shortname, name, description, datatype, categoryid, sortorder, required, data) VALUES
         ('social_activities', '$langSocialActivities', '', '2', $eportf_cat_id, 0, 0, ''),
         ('volunteer_activities', '$langVolunteerActivities', '', '2', $eportf_cat_id, -1, 0, '')");
 
-    Database::get()->query("ALTER TABLE eportfolio_fields ADD UNIQUE (shortname)");
-    Database::get()->query("ALTER TABLE eportfolio_fields_data ADD visibility TINYINT UNSIGNED NOT NULL DEFAULT 1");
-    Database::get()->query("ALTER TABLE eportfolio_resource ADD visibility TINYINT UNSIGNED NOT NULL DEFAULT 1, ADD reflection_comments TEXT NOT NULL");
-
-    Database::get()->query("UPDATE eportfolio_fields SET description = ?s WHERE shortname = ?s AND (description IS NULL OR description = '')", $langAboutMeDescr, 'about_me');
-    Database::get()->query("UPDATE eportfolio_fields SET description = ?s WHERE shortname = ?s AND (description IS NULL OR description = '')", $langePortfolioPersonalWebsiteDescr, 'personal_website');
-    Database::get()->query("UPDATE eportfolio_fields SET description = ?s WHERE shortname = ?s AND (description IS NULL OR description = '')", $langEducationDescr, 'education');
-    Database::get()->query("UPDATE eportfolio_fields SET description = ?s WHERE shortname = ?s AND (description IS NULL OR description = '')", $langePortfolioEmploymentDescr, 'employment');
-    Database::get()->query("UPDATE eportfolio_fields SET description = ?s WHERE shortname = ?s AND (description IS NULL OR description = '')", $langePortfolioCertificatesAwardsDescr, 'certificates_awards');
-    Database::get()->query("UPDATE eportfolio_fields SET description = ?s WHERE shortname = ?s AND (description IS NULL OR description = '')", $langePortfolioPublicationsDescr, 'publications');
-    Database::get()->query("UPDATE eportfolio_fields SET description = ?s WHERE shortname = ?s AND (description IS NULL OR description = '')", $langePortfolioPersonalGoalsDescr, 'personal_goals');
-    Database::get()->query("UPDATE eportfolio_fields SET description = ?s WHERE shortname = ?s AND (description IS NULL OR description = '')", $langePortfolioAcademicGoalsDescr, 'academic_goals');
-    Database::get()->query("UPDATE eportfolio_fields SET description = ?s WHERE shortname = ?s AND (description IS NULL OR description = '')", $langePortfolioCareerGoalsDescr, 'career_goals');
-    Database::get()->query("UPDATE eportfolio_fields SET description = ?s WHERE shortname = ?s AND (description IS NULL OR description = '')", $langePortfolioPersonalSkillsDescr, 'personal_skills');
-    Database::get()->query("UPDATE eportfolio_fields SET description = ?s WHERE shortname = ?s AND (description IS NULL OR description = '')", $langePortfolioAcademicSkillsDescr, 'academic_skills');
-    Database::get()->query("UPDATE eportfolio_fields SET description = ?s WHERE shortname = ?s AND (description IS NULL OR description = '')", $langePortfolioCareerSkillsDesc, 'career_skills');
-    Database::get()->query("UPDATE eportfolio_fields SET description = ?s WHERE shortname = ?s AND (description IS NULL OR description = '')", $langePortfolioSocialActivitiesDescr, 'social_activities');
-    Database::get()->query("UPDATE eportfolio_fields SET description = ?s WHERE shortname = ?s AND (description IS NULL OR description = '')", $langePortfolioVolunteerActivitiesDescr, 'volunteer_activities');
+    if (!DBHelper::fieldExists('eportfolio_fields_data', 'visibility')) {
+        Database::get()->query("ALTER TABLE eportfolio_fields ADD UNIQUE (shortname)");
+        Database::get()->query("ALTER TABLE eportfolio_fields_data ADD visibility TINYINT UNSIGNED NOT NULL DEFAULT 1");
+        Database::get()->query("ALTER TABLE eportfolio_resource ADD visibility TINYINT UNSIGNED NOT NULL DEFAULT 1, ADD reflection_comments TEXT NOT NULL");
+    
+        Database::get()->query("UPDATE eportfolio_fields SET description = ?s WHERE shortname = ?s AND (description IS NULL OR description = '')", $langAboutMeDescr, 'about_me');
+        Database::get()->query("UPDATE eportfolio_fields SET description = ?s WHERE shortname = ?s AND (description IS NULL OR description = '')", $langePortfolioPersonalWebsiteDescr, 'personal_website');
+        Database::get()->query("UPDATE eportfolio_fields SET description = ?s WHERE shortname = ?s AND (description IS NULL OR description = '')", $langEducationDescr, 'education');
+        Database::get()->query("UPDATE eportfolio_fields SET description = ?s WHERE shortname = ?s AND (description IS NULL OR description = '')", $langePortfolioEmploymentDescr, 'employment');
+        Database::get()->query("UPDATE eportfolio_fields SET description = ?s WHERE shortname = ?s AND (description IS NULL OR description = '')", $langePortfolioCertificatesAwardsDescr, 'certificates_awards');
+        Database::get()->query("UPDATE eportfolio_fields SET description = ?s WHERE shortname = ?s AND (description IS NULL OR description = '')", $langePortfolioPublicationsDescr, 'publications');
+        Database::get()->query("UPDATE eportfolio_fields SET description = ?s WHERE shortname = ?s AND (description IS NULL OR description = '')", $langePortfolioPersonalGoalsDescr, 'personal_goals');
+        Database::get()->query("UPDATE eportfolio_fields SET description = ?s WHERE shortname = ?s AND (description IS NULL OR description = '')", $langePortfolioAcademicGoalsDescr, 'academic_goals');
+        Database::get()->query("UPDATE eportfolio_fields SET description = ?s WHERE shortname = ?s AND (description IS NULL OR description = '')", $langePortfolioCareerGoalsDescr, 'career_goals');
+        Database::get()->query("UPDATE eportfolio_fields SET description = ?s WHERE shortname = ?s AND (description IS NULL OR description = '')", $langePortfolioPersonalSkillsDescr, 'personal_skills');
+        Database::get()->query("UPDATE eportfolio_fields SET description = ?s WHERE shortname = ?s AND (description IS NULL OR description = '')", $langePortfolioAcademicSkillsDescr, 'academic_skills');
+        Database::get()->query("UPDATE eportfolio_fields SET description = ?s WHERE shortname = ?s AND (description IS NULL OR description = '')", $langePortfolioCareerSkillsDesc, 'career_skills');
+        Database::get()->query("UPDATE eportfolio_fields SET description = ?s WHERE shortname = ?s AND (description IS NULL OR description = '')", $langePortfolioSocialActivitiesDescr, 'social_activities');
+        Database::get()->query("UPDATE eportfolio_fields SET description = ?s WHERE shortname = ?s AND (description IS NULL OR description = '')", $langePortfolioVolunteerActivitiesDescr, 'volunteer_activities');
+    }
 
     // tenant table
     if (!DBHelper::tableExists('tenant')) {
@@ -3805,7 +3809,7 @@ function upgrade_to_4_4($tbl_options) : void {
         ");
     }
 
-    if (DBHelper::tableExists('admin_announcement')) {
+    if (DBHelper::tableExists('admin_announcement') and !DBHelper::fieldExists('admin_announcement', 'tenant_id')) {
         Database::get()->query("ALTER TABLE `admin_announcement`
                                 ADD `tenant_id` INT(11) DEFAULT NULL AFTER `id`");
 
@@ -3821,7 +3825,7 @@ function upgrade_to_4_4($tbl_options) : void {
     if (!DBHelper::fieldExists('api_token', 'department_id')) {
         Database::get()->query(
             'ALTER TABLE `api_token`
-        ADD `department_id` INT(11)
+        ADD `department_id` INT(11),
         FOREIGN KEY (department_id) REFERENCES hierarchy(id) ON DELETE CASCADE'
         );
     }

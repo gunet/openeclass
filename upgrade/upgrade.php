@@ -264,6 +264,9 @@ if (!DBHelper::fieldExists('exercise_answer_record', 'centainty')) {
             } elseif ($version === '4.3') {
                 upgrade_to_4_3($tbl_options);
                 steps_finished();
+            } elseif ($version === '4.4') {
+                upgrade_to_4_4($tbl_options);
+                steps_finished();
             }
         }
         if ($command_line) {
