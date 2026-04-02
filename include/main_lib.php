@@ -2910,7 +2910,7 @@ function icon($name, $title = null, $link = null, $link_attrs = '', $with_title 
 
     if (isset($title)) {
         $title = q($title);
-        $extra = "title data-bs-original-title='$title' data-bs-toggle='tooltip' data-bs-placement='bottom'";
+        $extra = "title data-bs-original-title='$title' data-bs-toggle='tooltip' data-bs-placement='bottom' aria-label='$title'";
     } else {
         $extra = '';
     }
