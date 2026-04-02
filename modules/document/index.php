@@ -1522,6 +1522,7 @@ foreach ($result as $row) {
 
     $downloadMessage = $row->format == '.dir' ? $langDownloadDir : $langSave;
     $info['action_button'] = '';
+    $info['eportfolio_modal'] = '';
     if (!$is_in_tinymce) {
         $cmdDirName = getIndirectReference($row->path);
         if ($can_upload) {
@@ -1557,8 +1558,6 @@ foreach ($result as $row) {
                 </div>
                 </div>
             </div>';
-            } else {
-                $info['eportfolio_modal'] = '';
             }
 
             $xmlCmdDirName = ($row->format == ".meta" && get_file_extension($row->path) == 'xml') ? substr($row->path, 0, -4) : $row->path;
