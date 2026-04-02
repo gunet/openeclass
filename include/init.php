@@ -192,12 +192,16 @@ $http_host = isset($_SERVER['HTTP_HOST'])? $_SERVER['HTTP_HOST']: $main_host;
 
 // localhost is used for tenant domain validity check by web server
 if ($http_host != $main_host and $http_host != 'localhost') {
-    $tenant = Database::get()->querySingle('
-        SELECT tenant.*, hierarchy.lft, hierarchy.rgt 
-        FROM tenant 
-        JOIN hierarchy ON hierarchy.id = tenant.department_id 
-        WHERE url REGEXP ?s', "/$http_host(/|$)"
-    );
+    if (defined('UPGRADE')) {
+        $tenant = null;
+    } else {
+        $tenant = Database::get()->querySingle('
+            SELECT tenant.*, hierarchy.lft, hierarchy.rgt
+            FROM tenant
+            JOIN hierarchy ON hierarchy.id = tenant.department_id
+            WHERE url REGEXP ?s', "/$http_host(/|$)"
+        );
+    }
 
     if ($tenant) {
         $urlServer = $tenant->url;
@@ -964,7 +968,7 @@ get_tinymce_color_text();
 
 // Theme initialization only if not running via cli
 if (php_sapi_name() != 'cli' or isset($_SERVER['REMOTE_ADDR'])) {
-    $tenant = getCurrentTenant();
+    $tenant = defined('UPGRADE')? null: getCurrentTenant();
 
     if (isset($_SESSION['theme_options_id'])) {
         $theme_id = $_SESSION['theme_options_id'];

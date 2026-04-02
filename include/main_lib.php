@@ -5266,7 +5266,7 @@ function theme_initialization() {
     $container = 'container';
     $forms_image = 'form-image-modules';
 
-    $tenant = getCurrentTenant();
+    $tenant = defined('UPGRADE')? null: getCurrentTenant();
 
     if (isset($_SESSION['current_user_tenant'])) {
         $tenant = $_SESSION['current_user_tenant'];

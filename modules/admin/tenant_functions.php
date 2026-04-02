@@ -92,7 +92,7 @@ function getTenantAdmins($tenant_id = null)
         SELECT u.id, u.surname, u.givenname, u.email, u.username, u.am
         FROM user u
         JOIN admin a ON a.user_id = u.id
-        WHERE 1=1 
+        WHERE 1=1
             AND a.department_id IN ($tenantNodesIds)
             AND a.privilege = $privilege
     ";
