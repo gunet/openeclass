@@ -47,7 +47,7 @@ if ($user_theme_customization_enabled) {
         $user_selected_theme_id = intval($_SESSION['user_theme_preview_id']);
     } elseif (isset($_COOKIE['user_theme_selection'])) {
         $cookie_theme_id = intval($_COOKIE['user_theme_selection']);
-        
+
         // Verify theme is in admin's allowed list
         $user_selectable_themes_str = get_config('user_selectable_themes', '');
         $allowed = true;
@@ -58,7 +58,7 @@ if ($user_theme_customization_enabled) {
                 $allowed = false;
             }
         }
-        
+
         if ($allowed) {
             $user_selected_theme_id = $cookie_theme_id;
         }
@@ -68,7 +68,7 @@ if ($user_theme_customization_enabled) {
 // Override theme images and styles if user has selected a custom theme
 if ($user_selected_theme_id > 0) {
     $user_theme_data = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $user_selected_theme_id);
-    
+
     if ($user_theme_data) {
         $theme_id = $user_selected_theme_id;
         $theme_options_styles = unserialize($user_theme_data->styles);
@@ -321,19 +321,30 @@ function view($view_file, $view_data = array())
     $max_pinned_announce_id = $pinned_announce = null;
     if (!defined('UPGRADE')) {
         if ($is_departmentmanage_user && !$is_admin) {
-            $important_announcements = Database::get()->queryArray("SELECT * FROM admin_announcement
-                WHERE important = 1 
-                AND visible = 1
-                AND (
-                    tenant_id = ?d
-                    OR tenant_id IS NULL
-                )
-                AND (begin IS NULL OR begin > NOW())
-                AND (end IS NULL OR end < NOW())
-                ORDER BY id DESC", getCurrentTenant()->id);
+            $tenant = getCurrentTenant();;
+            if ($tenant) {
+                $important_announcements = Database::get()->queryArray("SELECT * FROM admin_announcement
+                    WHERE important = 1
+                    AND visible = 1
+                    AND (
+                        tenant_id = ?d
+                        OR tenant_id IS NULL
+                    )
+                    AND (begin IS NULL OR begin > NOW())
+                    AND (end IS NULL OR end < NOW())
+                    ORDER BY id DESC", $tenant->id);
+            } else {
+                $important_announcements = Database::get()->queryArray("SELECT * FROM admin_announcement
+                    WHERE important = 1
+                    AND visible = 1
+                    AND tenant_id IS NULL
+                    AND (begin IS NULL OR begin > NOW())
+                    AND (end IS NULL OR end < NOW())
+                    ORDER BY id DESC");
+            }
         } else {
             $important_announcements = Database::get()->queryArray("SELECT * FROM admin_announcement
-                WHERE important = 1 
+                WHERE important = 1
                 AND visible = 1
                 AND (begin IS NULL OR begin > NOW())
                 AND (end IS NULL OR end < NOW())
