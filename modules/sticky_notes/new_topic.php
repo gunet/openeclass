@@ -194,6 +194,7 @@ $data['categories'] = [];
 $getTopicId = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
 if (!isset($_POST['topicTitle']) && $getTopicId > 0) {
+
     $data['topic'] = Database::get()->querySingle(
         'SELECT * FROM sticky_notes_topic WHERE id = ?d AND course_id = ?d',
         $getTopicId,
@@ -210,6 +211,30 @@ if (!isset($_POST['topicTitle']) && $getTopicId > 0) {
         'SELECT * FROM sticky_notes_category WHERE topic_id = ?d ORDER BY sort_order',
         $getTopicId
     );
+}
+
+if (isset($_GET['id']) && isset($_GET['active'])) {
+    $getTopicId = intval($_GET['id']);
+    $newActiveStatus = intval($_GET['active']);
+
+    $updateResult = Database::get()->query(
+            'UPDATE sticky_notes_topic 
+         SET is_active = ?d 
+         WHERE id = ?d AND course_id = ?d',
+            $newActiveStatus,
+            $getTopicId,
+            $course_id
+    );
+
+    if ($updateResult) {
+        Session::flash('message', trans('langStickyNotesTopicUpdated'));
+        Session::flash('alert-class', 'alert-success');
+    } else {
+        Session::flash('message', trans('langStickyNotesTopicFailed'));
+        Session::flash('alert-class', 'alert-error');
+    }
+
+    redirect_to_home_page("modules/sticky_notes/index.php?course=$course_code");
 }
 
 $navigation[] = array('url' => $backUrl, 'name' => $langStickyNotesTopics);

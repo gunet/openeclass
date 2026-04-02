@@ -52,26 +52,31 @@
                                     </thead>
                                     <tbody>
                                         @foreach ($topics as $topic)
-                                        <tr>
-                                            <td>
-                                                <a href="index.php?course={{$course_code}}&topic={{$topic->id}}">{{ $topic->title }}</a>
-                                            </td>
-                                            <td>{{ $topic->description }}</td>
-                                            <td>{{ $topic->posts }}</td>
-                                            <td>{{ $topic->created_at }}</td>
-                                            @if ($is_course_admin)
-                                            <td class='option_btn_cell text-center'>
-                                                {!! action_button([
-                                                [ 'title' => trans('langEditChange'),
-                                                'icon' => 'fa-edit',
-                                                'url' => "new_topic.php?course=$course_code&id=$topic->id" ],
-                                                [ 'title' => trans('langDelete'),
-                                                'icon' => 'fa-trash',
-                                                'url' => "delete_topic.php?course=$course_code&id=$topic->id" ],
-                                                ]) !!}
-                                            </td>
+                                            @if (!(!$is_course_admin && !$topic->is_active))
+                                                <tr @class(['not_visible' => !$topic->is_active])>
+                                                    <td>
+                                                        <a href="index.php?course={{$course_code}}&topic={{$topic->id}}">{{ $topic->title }}</a>
+                                                    </td>
+                                                    <td>{{ $topic->description }}</td>
+                                                    <td>{{ $topic->posts }}</td>
+                                                    <td>{{ $topic->created_at }}</td>
+                                                    @if ($is_course_admin)
+                                                    <td class='option_btn_cell text-center'>
+                                                        {!! action_button([
+                                                        [ 'title' => trans('langEditChange'),
+                                                        'icon' => 'fa-edit',
+                                                        'url' => "new_topic.php?course=$course_code&id=$topic->id" ],
+                                                        ['title' => $topic->is_active ? trans('langViewHide') : trans('langViewShow'),
+                                                        'icon' => $topic->is_active ? 'fa-eye-slash' : 'fa-eye',
+                                                        'url' => "new_topic.php?course=$course_code&id=$topic->id&active=" . ($topic->is_active ? 0 : 1)],
+                                                        [ 'title' => trans('langDelete'),
+                                                        'icon' => 'fa-trash',
+                                                        'url' => "delete_topic.php?course=$course_code&id=$topic->id" ],
+                                                        ]) !!}
+                                                    </td>
+                                                    @endif
+                                                </tr>
                                             @endif
-                                        </tr>
                                         @endforeach
                                     </tbody>
                                 </table>

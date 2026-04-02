@@ -166,11 +166,12 @@ if (isset($_GET['topic'])) {
             t.id, 
             t.title, 
             t.description, 
-            t.created_at, 
+            t.created_at,
+            t.is_active,
             COUNT(p.id) AS posts
         FROM sticky_notes_topic t
         LEFT JOIN sticky_notes_post p ON p.topic_id = t.id
-        WHERE t.is_active = 1 AND t.course_id = ?d
+        WHERE t.course_id = ?d
         GROUP BY t.id, t.title, t.description, t.created_at
     ", $course_id);
 
