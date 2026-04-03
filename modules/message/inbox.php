@@ -62,16 +62,19 @@ if (isset($_GET['mid'])) {
                   'icon' => 'fa-reply',
                   'button-class' => 'back_index btn-secondary',
                   'temporary-button-class' => '',
+                  'link-attrs' => "aria-label='$langBack' role='button'",
                   'level' => 'primary'),
             array('title' => $langReply,
                   'icon' => 'fa-reply-all',
                   'button-class' => 'btn-reply btn-secondary',
                   'temporary-button-class' => 'btn-reply',
+                  'link-attrs' => "aria-label='$langReply' role='button'",
                   'level' => 'primary-label'),
             array('title' => $langForward,
                   'icon' => 'fa-forward',
                   'button-class' => 'btn-forward btn-secondary',
                   'temporary-button-class' => 'btn-forward',
+                  'link-attrs' => "aria-label='$langForward' role='button'",
                   'level' => 'primary-label'),
             array('title' => $langDelete,
                   'url' => 'javascript:void(0)',
@@ -224,7 +227,7 @@ if (isset($_GET['mid'])) {
                 $out .= generate_csrf_token_form_field() . "
                             <fieldset>
                                     <legend class='mb-0' aria-label='$langForm'></legend>
-                                    <div class='action-bar-title text-center'>$langReply</div>
+                                    <h3 class='action-bar-title text-center'>$langReply</h3>
 
                                     <div class='form-group mt-4'>
                                         <label for='senderName' class='col-sm-12 control-label-notes'>$langSender</label>
@@ -282,8 +285,8 @@ if (isset($_GET['mid'])) {
                                     <div class='form-group mt-4'>
                                         <div class='col-sm-10 col-sm-offset-2'>
                                                 <div class='checkbox'>
-                                                    <label class='label-container' aria-label='$langSelect'>
-                                                        <input type='checkbox' name='mailing' value='1' checked>
+                                                    <label class='label-container' for='mailing_id'>
+                                                        <input id='mailing_id' type='checkbox' name='mailing' value='1' checked>
                                                         <span class='checkmark'></span>
                                                         " . q($langMailToUsers) . "
                                                     </label>
@@ -358,7 +361,7 @@ if (isset($_GET['mid'])) {
 
                     <fieldset>
                         <legend class='mb-0' aria-label='$langForm'></legend>
-                        <div class='action-bar-title text-center'>$langForward</div>
+                        <h3 class='action-bar-title text-center'>$langForward</h3>
 
                         <div class='form-group mt-4'>
                             <label for='forward_senderName' class='col-sm-12 control-label-notes'>$langSender</label>
@@ -426,8 +429,8 @@ if (isset($_GET['mid'])) {
                         <div class='form-group mt-4'>
                             <div class='col-sm-10 col-sm-offset-2'>
                                     <div class='checkbox'>
-                                        <label class='label-container' aria-label='$langSelect'>
-                                            <input type='checkbox' name='mailing' value='1' checked>
+                                        <label class='label-container' for='id_mailing'>
+                                            <input id='id_mailing' type='checkbox' name='mailing' value='1' checked>
                                             <span class='checkmark'></span>
                                             " . q($langMailToUsers) . "
                                         </label>

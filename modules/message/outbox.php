@@ -54,6 +54,7 @@ if (isset($_GET['mid'])) {
                                   'url' => "outbox.php".$urlstr,
                                   'icon' => 'fa-reply',
                                   'button-class' => 'back_index btn-secondary',
+                                  'link-attrs' => "aria-label='$langBack' role='button'",
                                   'level' => 'primary'),
                             array('title' => $langDelete,
                                     'url' => 'javascript:void(0)',

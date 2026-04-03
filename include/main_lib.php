@@ -1552,20 +1552,20 @@ function course_access_icon($visibility) {
 
     switch ($visibility) {
         case COURSE_OPEN: {
-            $access_icon = "<span class='fa fa-lock-open fa-lg fa-fw' data-bs-toggle='tooltip' data-bs-placement='top' title='$langTypeOpen' aria-label='$langTypeOpen'></span>";
+            $access_icon = "<span tabindex='0' class='fa fa-lock-open fa-lg fa-fw' data-bs-toggle='tooltip' data-bs-placement='top' title='$langTypeOpen' aria-label='$langTypeOpen'></span>";
             break;
         }
         case COURSE_REGISTRATION: {
-            $access_icon = "<div class='d-inline-flex align-items-center'><span class='fa fa-lock fa-lg fa-fw access' data-bs-toggle='tooltip' data-bs-placement='top' title='$langTypeRegistration'></span>
-            <span class='fa fa-pencil text-danger fa-custom-lock mt-0' data-bs-toggle='tooltip' data-bs-placement='top' title='$langTypeRegistration' aria-label='$langTypeRegistration' style='margin-left:-5px;'></span></div>";
+            $access_icon = "<div tabindex='0' class='d-inline-flex align-items-center' data-bs-toggle='tooltip' data-bs-placement='top' title='$langTypeRegistration' aria-label='$langTypeRegistration'><span class='fa fa-lock fa-lg fa-fw access'></span>
+            <span class='fa fa-pencil text-danger fa-custom-lock mt-0' style='margin-left:-5px;'></span></div>";
             break;
         }
         case COURSE_CLOSED: {
-            $access_icon = "<span class='fa fa-lock fa-lg fa-fw fa-access' data-bs-toggle='tooltip' data-bs-placement='top' title='$langTypeClosed' aria-label='$langTypeClosed'></span>";
+            $access_icon = "<span tabindex='0' class='fa fa-lock fa-lg fa-fw fa-access' data-bs-toggle='tooltip' data-bs-placement='top' title='$langTypeClosed' aria-label='$langTypeClosed'></span>";
             break;
         }
         case COURSE_INACTIVE: {
-            $access_icon = "<span class='fa fa-ban fa-lg fa-fw' data-bs-toggle='tooltip' data-bs-placement='top' title='$langTypeInactive' aria-label='$langTypeInactive'></span>";
+            $access_icon = "<span tabindex='0' class='fa fa-ban fa-lg fa-fw' data-bs-toggle='tooltip' data-bs-placement='top' title='$langTypeInactive' aria-label='$langTypeInactive'></span>";
             break;
         }
     }
