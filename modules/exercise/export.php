@@ -25,7 +25,7 @@ require_once 'answer.class.php';
 $require_editor = true;
 $require_current_course = true;
 
-include '../../include/baseTheme.php';
+require_once '../../include/baseTheme.php';
 
 $exerciseId = $fromExercise = $difficultyId = $categoryId = null;
 if (isset($_GET['fromExercise'])) {
