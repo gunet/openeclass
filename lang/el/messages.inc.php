@@ -421,8 +421,10 @@ $langCourseEndDate = "Ημερομηνία λήξης $langsOfCourse";
 $langExplainCourseEndDate = "Μετά την ημερομηνία λήξης το $langsOfCourse θα γίνει ανενεργό";
 $langH5PUploadingEnabled = "Δημιουργία περιεχομένου H5P από τους $langsOfStudentss";
 $langImportCourseCompleted = "H εισαγωγή του υλικού του $langsOfCourse ολοκληρώθηκε";
-// listreq.php
+$langCourseHasAlreadyImported = "Στο $langsCourse έχει γίνει ήδη εισαγωγή υλικού! Θέλετε να γίνει πάλι εισαγωγή;";
+$langCourseHasAlreadyImportedExplain = 'Σημ. Η εισαγωγή υλικού θα ξαναπροσθέσει υλικό το οποίο πιθανόν να υπάρχει ήδη!';
 
+// listreq.php
 $langOpenProfessorRequests = "Ανοικτές Αιτήσεις Χρηστών";
 $langProfessorRequestClosed = "Η αίτηση έκλεισε!";
 $langReqHaveClosed = "Κλειστές αιτήσεις";

@@ -94,16 +94,16 @@
                 }
             });
 
-
+            var hasImported = {{ $course_has_import? 'true' : 'false' }};
             $('.importCourse').on('click', function (e) {
                 e.preventDefault();
                 bootbox.dialog({
                     title: '{{ trans('langImportCourse') }}',
-                    message: '<form action=\"{{ $_SERVER['SCRIPT_NAME'] }}\" method=\"POST\" id=\"import_course_form\">' +
-                        '<select class=\"form-select\" id=\"course_id\" name=\"import_course_id\">' +
-                            {!! $courses_options !!}
-                        + '</select>' +
-                        '</form>',
+                    message: "<form action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post' id='import_course_form'>" +
+                                "<select class='form-select' id='course_id' name='import_course_id'>" +
+                                    {!! $courses_options !!}
+                                + "</select>" +
+                             "</form>",
                     buttons: {
                         cancel: {
                             label: '{{ trans('langCancel') }}',
@@ -112,9 +112,32 @@
                         success: {
                             label: '{{ trans('langImport') }}',
                             className: 'submitAdminBtn',
-                            callback: function (d) {
-                                $('#import_course_form').attr('action', 'import_course.php?course={{ $course_code }}&do_fetch=1');
-                                $('#import_course_form').submit();
+                            callback: function () {
+                                if (hasImported) {
+                                    bootbox.confirm({
+                                        message: "<h4>{{ trans('langCourseHasAlreadyImported') }}</h4><span class='help-block'>{{ trans('langCourseHasAlreadyImportedExplain') }}</span>",
+                                        buttons: {
+                                            confirm: {
+                                                label: '{{ trans('langImport') }}',
+                                                className: 'submitAdminBtn'
+                                            },
+                                            cancel: {
+                                                label: '{{ trans('langCancel') }}',
+                                                className: 'cancelAdminBtn'
+                                            }
+                                        },
+                                        callback: function(result) {
+                                            if (result) {
+                                                $('#import_course_form').attr('action', 'import_course.php?course={{ $course_code }}&do_fetch=1');
+                                                $('#import_course_form').submit();
+                                            }
+                                        }
+                                    });
+                                    return false;
+                                } else {
+                                    $('#import_course_form').attr('action', 'import_course.php?course={{ $course_code }}&do_fetch=1');
+                                    $('#import_course_form').submit();
+                                }
                             }
                         }
                     }
@@ -395,9 +418,7 @@
                                                 @endif
                                             </div>
 
-
                                             @if (isset($isOpenCourseCertified))
-                                                {
                                                 <input type='hidden' name='course_license'
                                                        value='{{ getIndirectReference($course_license) }}'>
                                             @endif

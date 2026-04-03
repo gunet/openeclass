@@ -270,6 +270,13 @@ $db->query("CREATE TABLE IF NOT EXISTS `course_description` (
     `update_dt` datetime NOT NULL,
     PRIMARY KEY (`id`)) $tbl_options");
 
+$db->query("CREATE TABLE course_import (
+        id INT NOT NULL AUTO_INCREMENT, 
+        course_id INT NOT NULL, 
+        imported_course_id INT NOT NULL, 
+        imported DATETEIME NOT NULL, 
+        PRIMARY KEY(id)) $tbl_options");
+
 $db->query("CREATE TABLE `course_review` (
     `id` INT NOT NULL AUTO_INCREMENT,
     `course_id` INT NOT NULL,

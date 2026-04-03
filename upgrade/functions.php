@@ -3961,6 +3961,16 @@ function upgrade_to_4_4($tbl_options) : void {
         CONSTRAINT `sticky_notes_post_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `sticky_notes_category` (`id`) ON DELETE SET NULL
     ) $tbl_options");
 
+    if (!DBHelper::tableExists('course_import')) {
+        Database::get()->query("CREATE TABLE course_import (
+            id INT NOT NULL AUTO_INCREMENT, 
+            course_id INT NOT NULL, 
+            imported_course_id INT NOT NULL, 
+            imported DATETEIME NOT NULL, 
+            PRIMARY KEY(id)
+       ) $tbl_options");
+    }
+
 }
 
 /**

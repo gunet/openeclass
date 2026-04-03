@@ -2057,6 +2057,7 @@ function delete_course($cid): void
     Database::get()->query("DELETE FROM attendance WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM tc_session WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM course_external_server WHERE course_id = ?d", $cid);
+    Database::get()->query("DELETE from course_import WHERE course_id = ?d", $cid);
 
     removeDir("$webDir/courses/$course_code");
     removeDir("$webDir/video/$course_code");

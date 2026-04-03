@@ -496,6 +496,21 @@ function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $f
     ";
 }
 
+/**
+ * @brief Create a course from a backup
+ * @param $tool_content
+ * @param $restoreThis
+ * @param $course_code
+ * @param $course_lang
+ * @param $course_title
+ * @param $course_desc
+ * @param $course_vis
+ * @param $course_prof
+ * @param $clone_course
+ * @param $fetch_course
+ * @return void
+ * @throws Exception
+ */
 function create_restored_course(&$tool_content, $restoreThis, $course_code, $course_lang, $course_title, $course_desc, $course_vis, $course_prof, $clone_course = FALSE, $fetch_course = FALSE) {
     global $webDir, $urlServer, $urlAppend, $langEnter, $langBack, $currentCourseCode, $langImportCourseCompleted;
 
@@ -1711,7 +1726,10 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
             }
         }
 
-        if ($fetch_course) { //i import course
+        if ($fetch_course) { // import course
+            Database::get()->query("INSERT INTO course_import (course_id, imported_course_id, imported) 
+                                                    VALUES (?d, ?d, ". DBHelper::timeAfter() . ")",
+                                              $new_course_id, $_POST['import_course_id']);
             Session::Messages($langImportCourseCompleted, 'alert-info');
             redirect_to_home_page("courses/" . $course_code);
         } else { // restore course
