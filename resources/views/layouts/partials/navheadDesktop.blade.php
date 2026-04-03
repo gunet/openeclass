@@ -280,7 +280,7 @@
                                                         @if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
                                                         <li>
                                                             <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}main/gradebookUserTotal/index.php">
-                                                                <i class="fa-solid fa-a settings-icons"></i>
+                                                                <i class="fa-solid fa-a settings-icons" aria-hidden="true"></i>
                                                                 {{ trans('langGradeTotal') }}
                                                             </a>
                                                         </li>

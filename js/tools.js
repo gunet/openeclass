@@ -170,6 +170,7 @@ function course_list_handler() {
             $('#ind' + cid).remove();
             if (result === 'registered') {
                 title_span.html($('<a>', {
+                    class: 'TextBold',
                     href: urlAppend + 'courses/' + courses[cid][0] + '/',
                     text: title_span.text()
                 }

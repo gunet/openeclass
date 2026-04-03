@@ -64,12 +64,12 @@
                         </li>
                         @foreach($courses as $mycourse)
                             <li class="list-group-item element d-flex justify-content-between align-items-center gap-5">
-                                <div class='d-flex justify-content-start align-items-start gap-3'>
+                                <div class='d-flex justify-content-start align-items-start gap-3' tabindex='0'>
                                     @if (isset($_SESSION['uid'])) {{-- logged in user --}}
                                         <div class="d-flex justify-content-center align-items-center gap-3" style="min-width: 30px;">
                                             @if (isset($myCourses[$mycourse->id]))
                                                 @if ($myCourses[$mycourse->id]->status != 1) {{-- display registered courses --}}
-                                                    <label class='label-container' aria-label='{{ trans('langSelect') }}'>
+                                                    <label class='label-container' aria-label='{{ trans('langUnRegister') }}'>
                                                         <input type='checkbox' name='selectCourse[]' value='{{ $mycourse->id }}' checked='checked' @if ($mycourse->visible == COURSE_CLOSED) class='reg_closed' @endif @if (get_config('disable_student_unregister_cours')) 'disabled' @endif>
                                                         <span class='checkmark'></span>
                                                     </label>
@@ -77,7 +77,7 @@
                                                     <i class='fa-solid fa-user fa-lg mt-3'></i>
                                                 @endif
                                             @else {{-- display unregistered courses--}}
-                                                    <label class='label-container gap-0' aria-label='{{ trans('langSelect') }}'>
+                                                    <label class='label-container gap-0' aria-label='{{ trans('langRegister') }}'>
                                                         <input type='checkbox' name='selectCourse[]' value='{{ $mycourse->id }}'
                                                                @if ((($mycourse->visible == COURSE_REGISTRATION or $mycourse->visible == COURSE_OPEN)
                                                                         and setting_get(SETTING_FACULTY_USERS_REGISTRATION, $mycourse->id) == 1
@@ -98,7 +98,7 @@
                                                 @if ($mycourse->visible == COURSE_OPEN or $unlock_all_courses or isset($myCourses[$mycourse->id])) {{-- open course or user is registered to it --}}
                                                     <a class='TextBold' href="../../courses/{{ urlencode($mycourse->k) }}/">{{ $mycourse->i }}</a>
                                                 @else
-                                                    <span @if (isset($_SESSION['uid'])) id='cid{{ $mycourse->id }}' @endif class='TextBold'>
+                                                    <span @if (isset($_SESSION['uid'])) id='cid{{ $mycourse->id }}' @endif class='TextBold' tabindex='0'>
                                                         {{ $mycourse->i }}
                                                     </span>
                                                 @endif

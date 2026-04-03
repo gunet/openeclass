@@ -89,13 +89,13 @@ Class Commenting {
                                     
                                 </a>";
             $out = "$comments_title
-                    <div class='modal fade text-start' id='commentArea-$this->rid' role='dialog'>
+                    <div class='modal fade text-start' id='commentArea-$this->rid' role='dialog' tabindex='-1'>
                       <div class='modal-dialog modal-lg'>
                         <div class='modal-content'>
                           <div class='modal-header'>
                             <div class='modal-title'>
                                 <div class='icon-modal-default'><i class='fa-solid fa-cloud-arrow-up fa-xl Neutral-500-cl'></i></div>
-                                <h2 class='modal-title-default text-center mb-0'>$langComments</h2>
+                                <h2 class='modal-title-default text-center mb-0' tabindex='0'>$langComments</h2>
                             </div>
                            
                               
