@@ -43,7 +43,6 @@ require_once 'modules/document/doc_init.php';
 require_once 'main/personal_calendar/calendar_events.class.php';
 require_once 'modules/course_metadata/CourseXML.php';
 require_once 'modules/progress/process_functions.php';
-require_once 'modules/progress/game_points_widget.php';
 require_once 'modules/wall/wall_wrapper.php';
 require_once 'modules/session/functions.php';
 
@@ -994,7 +993,6 @@ foreach ($course_home_page_sidebar->getCourseAndAdminWidgets($course_id) as $key
 $head_content .= "
 <link rel='stylesheet' type='text/css' href='{$urlAppend}template/default/CSS/default.css' />
 ";
-$data['points_game_widget'] = course_points_game_widget($uid, $course_id);
 
 $data['registered'] = false;
 if ($uid) {
