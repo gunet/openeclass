@@ -6,7 +6,18 @@
     <title>LaTeX Editor</title>
 
     <link rel="stylesheet" href="dialog.css">
+    <style>
+        .symbol-btn {
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
 
+        .mj-render-target {
+            pointer-events: none;
+        }
+    </style>
     <!-- Security Checks -->
     <script>
         (function() {
