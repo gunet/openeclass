@@ -3966,7 +3966,7 @@ function upgrade_to_4_4($tbl_options) : void {
             id INT NOT NULL AUTO_INCREMENT, 
             course_id INT NOT NULL, 
             imported_course_id INT NOT NULL, 
-            imported DATETEIME NOT NULL, 
+            imported DATETIME NOT NULL, 
             PRIMARY KEY(id)
        ) $tbl_options");
     }

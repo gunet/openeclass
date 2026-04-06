@@ -2310,7 +2310,24 @@ function rich_text_editor($name, $rows, $cols, $text, $onFocus = false, $options
         $append_forum = (isset($_REQUEST['forum'])) ? "&originating_forum=" . q($_REQUEST['forum']) : '';
 
         if (isset($course_code) && $course_code) {
-            $filebrowser = "file_browser_callback : openDocsPicker,";
+
+            $url = $urlAppend . "modules/" . $activemodule . "?course=" . $course_code . "&embedtype=tinymce" . $append_module . $append_forum . "&docsfilter=";
+
+            $filebrowser = "file_picker_callback: function (callback, value, meta) {
+                        var url = '" . $url . "' + meta.filetype;
+                        tinymce.activeEditor.windowManager.openUrl({
+                            title: '" . js_escape($langResourceBrowser) . "',
+                            url: url,
+                            width: 800,
+                            height: 600,
+                            onMessage: function (api, data) {
+                                if (data.mceAction === 'fileSelected') {
+                                    callback(data.url, { title: data.title || '' });
+                                    api.close();
+                                }
+                            }
+                        });
+                    },";
             if (!$is_editor) {
                 $cid = course_code_to_id($course_code);
                 $module = Database::get()->querySingle("SELECT * FROM course_module
@@ -2338,14 +2355,29 @@ function rich_text_editor($name, $rows, $cols, $text, $onFocus = false, $options
             }
             $url = $urlAppend . "modules/" . $activemodule . "?course=" . $course_code . "&embedtype=tinymce" . $append_module . $append_forum . "&docsfilter=";
         } elseif ($is_admin) { /* special case for admin announcements */
-            $filebrowser = "file_browser_callback : openDocsPicker,";
+            $url = $urlAppend . "modules/admin/commondocs.php?embedtype=tinymce" . $append_module . $append_forum . "&docsfilter=";
+            $filebrowser = "file_picker_callback: function (callback, value, meta) {
+                        var url = '" . $url . "' + meta.filetype;
+                        tinymce.activeEditor.windowManager.openUrl({
+                            title: '" . js_escape($langResourceBrowser) . "',
+                            url: url,
+                            width: 800,
+                            height: 600,
+                            onMessage: function (api, data) {
+                                if (data.mceAction === 'fileSelected') {
+                                    callback(data.url, { title: data.title || '' });
+                                    api.close();
+                                }
+                            }
+                        });
+                    },";
             $url = $urlAppend . "modules/admin/commondocs.php?embedtype=tinymce" . $append_module . $append_forum . "&docsfilter=";
         }
         $focus_init = ",
                 init_instance_callback: function(editor) {
                     var parent = $(editor.contentAreaContainer.parentElement);
                     (editorToggleSecondToolbar(editor))();
-                    parent.find('.mce-toolbar-grp, .mce-statusbar').attr('style','border:0px');
+                    parent.find('tox-toolbar-grp, tox-statusbar').attr('style','border:0px');
                     if (typeof tinyMceCallback !== 'undefined') {
                         tinyMceCallback(editor);
 
@@ -2382,7 +2414,7 @@ function rich_text_editor($name, $rows, $cols, $text, $onFocus = false, $options
 
                     }";
         if ($onFocus) {
-            $focus_init .= "parent.find('.mce-toolbar-grp').hide();";
+            $focus_init .= "parent.find('tox-toolbar-grp').hide();";
         }
         $focus_init .= "},";
         if ($onFocus) {
@@ -2390,7 +2422,7 @@ function rich_text_editor($name, $rows, $cols, $text, $onFocus = false, $options
                 statusbar: false,
                 setup: function (editor) {
                     var toolbarGrp;
-                    editorAddButtonToggle(editor);
+                    // editorAddButtonToggle(editor);
                     editor.on('focus', function () {
                         toolbarGrp.show();
                     });
@@ -2398,13 +2430,13 @@ function rich_text_editor($name, $rows, $cols, $text, $onFocus = false, $options
                         toolbarGrp.hide();
                     });
                     editor.on('init', function() {
-                        toolbarGrp = $(editor.contentAreaContainer.parentElement).find('.mce-toolbar-grp');
+                        toolbarGrp = $(editor.contentAreaContainer.parentElement).find('tox-toolbar-grp');
                     });
                 }";
         } else {
             $focus_init .= "
                 setup: function (editor) {
-                    editorAddButtonToggle(editor);
+                    // editorAddButtonToggle(editor);
                 },
                 ";
         }
@@ -2449,7 +2481,7 @@ window.latexHelperLang = {
 
 function editorToggleSecondToolbar(editor) {
     return function() {
-        var toolbar = $(editor.contentAreaContainer.parentElement).find('.mce-toolbar-grp .mce-toolbar').eq(1);
+        var toolbar = $(editor.contentAreaContainer.parentElement).find('tox-toolbar-grp tox-toolbar').eq(1);
         toolbar.toggle();
     }
 }
@@ -2458,8 +2490,8 @@ function editorAddButtonToggle (editor) {
     editor.addButton('toggle', {
         title: '".js_escape($langMore)."',
         classes: 'toggle',
-        image: '{$urlAppend}js/tinymce/skins/light/img/toggle.png',
-        onclick: editorToggleSecondToolbar(editor),
+        // image: '{$urlAppend}js/tinymce/skins/light/img/toggle.png',
+        // onclick: editorToggleSecondToolbar(editor),
     });
 }
 
@@ -2482,6 +2514,15 @@ function openDocsPicker(field_name, url, type, win) {
 }
 
 tinymce.init({
+    
+    license_key: 'gpl',
+    selector: 'textarea.mceEditor',
+    content_css: [
+    '{$urlAppend}template/modern/css/bootstrap.min.css',
+    '{$urlAppend}template/modern/css/font-awesome-6.4.0/css/all.css',
+    '{$urlAppend}template/modern/css/default.css',
+    ],
+
     // General options
     selector: 'textarea.mceEditor',
     content_css: [
@@ -2495,8 +2536,6 @@ tinymce.init({
     noneditable_noneditable_class: 'fa',
     language: '$language',
     cache_suffix: '?v=" . CACHE_SUFFIX . "',
-    theme: 'modern',
-    skin: 'light',
     branding: false,
     font_formats:
     'Open Sans=open sans; Roboto=roboto; Andale Mono=andale mono,times; Arial=arial,helvetica,sans-serif; Arial Black=arial black,avant garde; Book Antiqua=book antiqua,palatino; Comic Sans MS=comic sans ms,sans-serif; Courier New=courier new,courier; Georgia=georgia,palatino; Helvetica=helvetica; Impact=impact,chicago; Symbol=symbol; Tahoma=tahoma,arial,helvetica,sans-serif; Terminal=terminal,monaco; Times New Roman=times new roman,times; Trebuchet MS=trebuchet ms,geneva; Verdana=verdana,geneva; Webdings=webdings; Wingdings=wingdings,zapf dingbats',
@@ -2516,7 +2555,9 @@ tinymce.init({
         {title: 'Thumbnail image and responsive', value: 'img-thumbnail img-responsive'},
         {title: 'None', value: ' '}
     ],
-    plugins: 'fullscreen pagebreak save image link media eclmedia print contextmenu paste noneditable visualchars nonbreaking wordcount emoticons preview searchreplace table code textcolor colorpicker lists advlist charmap fontawesome latexhelper autosave$paste_plugin',
+//    plugins: 'fullscreen pagebreak save image link media eclmedia print contextmenu paste noneditable visualchars nonbreaking wordcount emoticons preview searchreplace table code textcolor colorpicker lists advlist charmap fontawesome latexhelper autosave$paste_plugin',
+//    plugins: 'fullscreen pagebreak save image link media code lists eclmedia fontawesome latexhelper advlist charmap wordcount emoticons preview searchreplace visualchars nonbreaking autosave$paste_plugin',
+    plugins: 'fullscreen pagebreak save image link media code lists advlist charmap wordcount emoticons preview searchreplace visualchars nonbreaking autosave eclmedia fontawesome latexhelper',
     $paste_preprocess
     entity_encoding: 'raw',
     relative_urls: false,
@@ -2529,8 +2570,9 @@ tinymce.init({
     menu: true,
     menubar: false,
     // Toolbar options
-    toolbar1: 'toggle bold italic underline | forecolor backcolor | link image media eclmedia | alignleft aligncenter alignright alignjustify | bullist numlist | fullscreen preview restoredraft',
-    toolbar2: 'formatselect | fontselect fontsizeselect | outdent indent | emoticons fontawesome latexhelper strikethrough superscript subscript table $copy_paste| removeformat | searchreplace undo redo | code'
+//    toolbar1: 'toggle bold italic underline | forecolor backcolor | link image media eclmedia | alignleft aligncenter alignright alignjustify | bullist numlist | fullscreen preview restoredraft',
+//    toolbar2: 'formatselect | fontselect fontsizeselect | outdent indent | emoticons fontawesome latexhelper strikethrough superscript subscript table $copy_paste| removeformat | searchreplace undo redo | code'
+    toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | eclmedia fontawesome latexhelper | forecolor backcolor | link image media | alignleft aligncenter alignright alignjustify | bullist numlist | outdent indent | emoticons | superscript subscript | table | removeformat | searchreplace | code fullscreen preview restoredraft'
     $focus_init
 });
 </script>";
@@ -7193,7 +7235,7 @@ function theme_initialization() {
                     z-index: 1;
                 }
 
-                .mce-btn{
+                tox-btn{
                     background-color: $theme_options_styles[buttonBgColor] !important;
                 }
 
@@ -7283,8 +7325,8 @@ function theme_initialization() {
                     background-color: $theme_options_styles[buttonHoverBgColor];
                 }
 
-                .mce-btn:hover,
-                .mce-btn:focus{
+                tox-btn:hover,
+                tox-btn:focus{
                     background-color: $theme_options_styles[buttonHoverBgColor] !important;
                 }
 
@@ -7449,8 +7491,8 @@ function theme_initialization() {
                     color:$theme_options_styles[buttonTextColor];
                 }
 
-                .mce-btn,
-                .mce-btn i{
+                tox-btn,
+                tox-btn i{
                     color: $theme_options_styles[buttonTextColor] !important;
                 }
 
@@ -8596,7 +8638,7 @@ function theme_initialization() {
                     border: 1px solid $theme_options_styles[clBorderSelect];
                 }
 
-                .mce-floatpanel {
+                tox-floatpanel {
                     border: 1px solid $theme_options_styles[clBorderSelect] !important;;
                 }
 
@@ -8671,11 +8713,11 @@ function theme_initialization() {
                     color: $theme_options_styles[clOptionSelect] !important;
                 }
 
-                .mce-menu-item{
+                tox-menu-item{
                     color: $theme_options_styles[clOptionSelect] !important;
                 }
 
-                .mce-menu-item .mce-text {
+                tox-menu-item tox-text {
                     color: $theme_options_styles[clOptionSelect] !important;
                 }
 
@@ -8711,7 +8753,7 @@ function theme_initialization() {
                     background-color: $theme_options_styles[bgHoveredSelectOption] !important;
                 }
 
-                .mce-menu-item:hover{
+                tox-menu-item:hover{
                     background-color: $theme_options_styles[bgHoveredSelectOption] !important;
                 }
 
@@ -8741,15 +8783,15 @@ function theme_initialization() {
                     color: $theme_options_styles[clHoveredSelectOption] !important;
                 }
 
-                .mce-menu-item:hover{
+                tox-menu-item:hover{
                     color: $theme_options_styles[clHoveredSelectOption] !important;
                 }
 
-                .mce-menu-item-normal.mce-active:hover .mce-text {
+                tox-menu-item-normaltox-active:hover tox-text {
                     color: $theme_options_styles[clHoveredSelectOption] !important;
                 }
 
-                .mce-menu-item:hover .mce-text {
+                tox-menu-item:hover tox-text {
                     color: $theme_options_styles[clHoveredSelectOption] !important;
                 }
 
@@ -8778,13 +8820,13 @@ function theme_initialization() {
                     background-color: $theme_options_styles[bgOptionSelected] !important;
                 }
 
-                .mce-menu-item-normal.mce-active {
+                tox-menu-item-normaltox-active {
                     background-color: $theme_options_styles[bgOptionSelected] !important;
                 }
 
-                .mce-menu-item:hover,
-                .mce-menu-item.mce-selected,
-                .mce-menu-item:focus {
+                tox-menu-item:hover,
+                tox-menu-itemtox-selected,
+                tox-menu-item:focus {
                     background-color: $theme_options_styles[bgOptionSelected] !important;
                 }
 
@@ -8818,22 +8860,22 @@ function theme_initialization() {
                     color: $theme_options_styles[clOptionSelected] !important;
                 }
 
-                .mce-menu-item-normal.mce-active {
+                tox-menu-item-normaltox-active {
                     color: $theme_options_styles[clOptionSelected] !important;
                 }
 
-                .mce-menu-item:hover,
-                .mce-menu-item.mce-selected,
-                .mce-menu-item:focus {
+                tox-menu-item:hover,
+                tox-menu-itemtox-selected,
+                tox-menu-item:focus {
                     color: $theme_options_styles[clOptionSelected] !important;
                 }
 
-                .mce-menu-item-normal.mce-active .mce-text {
+                tox-menu-item-normaltox-active tox-text {
                     color: $theme_options_styles[clOptionSelected] !important;
                 }
 
-                .mce-menu-item:hover .mce-text,
-                .mce-menu-item.mce-selected .mce-text {
+                tox-menu-item:hover tox-text,
+                tox-menu-itemtox-selected tox-text {
                     color: $theme_options_styles[clOptionSelected] !important;
                 }
 
@@ -10260,28 +10302,28 @@ function theme_initialization() {
 
         if(!empty($theme_options_styles['BgTextEditor'])){
             $styles_str .= "
-                .mce-container {
+                tox-container {
                     background: $theme_options_styles[BgTextEditor] !important;
                 }
-                .mce-widget {
+                tox-widget {
                     background: $theme_options_styles[BgTextEditor] !important;
                 }
-                .mce-reset {
+                tox-reset {
                     background: $theme_options_styles[BgTextEditor] !important;
                 }
-                .mce-window .mce-container-body {
+                tox-window tox-container-body {
                     background:  $theme_options_styles[BgTextEditor] !important;
                   }
-                  .mce-tab.mce-active {
+                  tox-tabtox-active {
                     background: $theme_options_styles[BgTextEditor] !important;
                   }
-                  .mce-tab {
+                  tox-tab {
                     background:  $theme_options_styles[BgTextEditor] !important;
                   }
-                  .mce-textbox {
+                  tox-textbox {
                     background:  $theme_options_styles[BgTextEditor] !important;
                   }
-                  i.mce-i-checkbox {
+                  itox-i-checkbox {
                     background-image: -webkit-linear-gradient(top,#fff,$theme_options_styles[BgTextEditor]) !important;
                   }
             ";
@@ -10295,7 +10337,7 @@ function theme_initialization() {
 
         if(!empty($theme_options_styles['BgBorderTextEditor'])){
             $styles_str .= "
-                .mce-panel {
+                tox-panel {
                     border: solid 1px $theme_options_styles[BgBorderTextEditor] !important;
                 }
             ";
@@ -10312,26 +10354,26 @@ function theme_initialization() {
             $SVGtools2 = 'transparent url("data:image/svg+xml,%3C' . $SVGtools .'%3E") center / 1em auto no-repeat';
             $styles_str .= "
 
-                .mce-toolbar .mce-btn i {
+                tox-toolbar tox-btn i {
                     color: $theme_options_styles[ClTextEditor] !important;
                 }
 
-                .mce-menubtn span {
+                tox-menubtn span {
                     color: $theme_options_styles[ClTextEditor] !important;
                 }
-                .mce-btn i {
+                tox-btn i {
                     text-shadow: 0px 0px $theme_options_styles[ClTextEditor] !important;
                 }
 
-                .mce-container, .mce-container *, .mce-widget, .mce-widget *, .mce-reset {
+                tox-container, tox-container *, tox-widget, tox-widget *, tox-reset {
                     color: $theme_options_styles[ClTextEditor] !important;
                 }
 
-                .mce-caret {
+                tox-caret {
                     border-top: 4px solid $theme_options_styles[ClTextEditor] !important;
                 }
 
-                .mce-toolbar .mce-btn i.mce-i-none{
+                tox-toolbar tox-btn itox-i-none{
                     background: $SVGtools2 !important;
                 }
 
@@ -10626,7 +10668,7 @@ function theme_initialization() {
                 .tooltip.fade.show *{
                     background-color: $theme_options_styles[bgColorTooltip];
                 }
-                .mce-tooltip *{
+                tox-tooltip *{
                     background-color: $theme_options_styles[bgColorTooltip] !important;
                 }
             ";
@@ -10644,7 +10686,7 @@ function theme_initialization() {
                 .tooltip.fade.show *{
                     color: $theme_options_styles[TextColorTooltip];
                 }
-                .mce-tooltip *{
+                tox-tooltip *{
                     color: $theme_options_styles[TextColorTooltip] !important;
                 }
             ";
