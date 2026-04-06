@@ -130,9 +130,21 @@
                         'sNext':     '&rsaquo;',
                         'sLast':     '&raquo;'
                     }
+                },
+                'tabIndex': -1,
+                'initComplete': function() {
+                    $('#questions_{{ $course_code }} thead .dt-column-order').each(function() {
+                        $(this).removeAttr('aria-label');
+                        $(this).attr('aria-hidden', 'true');
+                    });
                 }
             });
-
+            $('#questions_{{ $course_code }}').on('order.dt', function() {
+                $('#questions_{{ $course_code }} thead .dt-column-order').each(function() {
+                    $(this).removeAttr('aria-label');
+                    $(this).attr('aria-hidden', 'true');
+                });
+            });
             $('.dt-search input').attr({
                 class : 'form-control input-sm mb-3 me-3',
                 placeholder : '{{ trans('langSearch') }}...'

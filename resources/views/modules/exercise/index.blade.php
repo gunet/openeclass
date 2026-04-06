@@ -380,7 +380,20 @@
                         sNext: '&rsaquo;',
                         sLast: '&raquo;'
                     }
+                },
+                tabIndex: -1,
+                initComplete: function() {
+                    $('#ex thead .dt-column-order').each(function() {
+                        $(this).removeAttr('aria-label');
+                        $(this).attr('aria-hidden', 'true');
+                    });
                 }
+            });
+            $('#ex').on('order.dt', function() {
+                $('#ex thead .dt-column-order').each(function() {
+                    $(this).removeAttr('aria-label');
+                    $(this).attr('aria-hidden', 'true');
+                });
             });
             $('.dt-search input').attr({
                 'class' : 'form-control input-sm ms-0 mb-3',

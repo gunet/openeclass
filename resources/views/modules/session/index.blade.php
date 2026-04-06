@@ -72,7 +72,21 @@
                             "sNext":     '&rsaquo;',
                             "sLast":     '&raquo;'
                         }
-                }
+                },
+                'tabIndex': -1,
+                initComplete: function() {
+                    $('#session-indexes-tb .dt-column-order').each(function() {
+                        $(this).removeAttr('aria-label');
+                        $(this).attr('aria-hidden', 'true');
+                    });
+                },
+            });
+
+            $('#session-indexes-tb').on('order.dt', function() {
+                $('#session-indexes-tb thead .dt-column-order').each(function() {
+                    $(this).removeAttr('aria-label');
+                    $(this).attr('aria-hidden', 'true');
+                });
             });
 
             choose_user_consultant();

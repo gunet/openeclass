@@ -204,9 +204,11 @@
         $(function() {
 
             var inputTreeModal = document.getElementById('dialog-set-value');
-            $('#treeModal').on('hidden.bs.modal', function () {
-                inputTreeModal.focus();
-            });
+            if (inputTreeModal) {
+                $('#treeModal').on('hidden.bs.modal', function () {
+                    inputTreeModal.focus();
+                });
+            }
             
             document.addEventListener('keydown', function(event) {
                 const activeElement = document.activeElement;

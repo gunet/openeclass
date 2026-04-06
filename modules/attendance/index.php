@@ -110,7 +110,20 @@ $(function() {
                            'sNext':     '&rsaquo;',
                            'sLast':     '&raquo;'
                        }
-                   }
+                },
+                'tabIndex': -1,
+                'initComplete': function() {
+                    $('#users_table{$course_id} thead .dt-column-order').each(function() {
+                        $(this).removeAttr('aria-label');
+                        $(this).attr('aria-hidden', 'true');
+                    });
+                }
+    });
+    $('#users_table{$course_id}').on('order.dt', function() {
+        $('#users_table{$course_id} thead .dt-column-order').each(function() {
+            $(this).removeAttr('aria-label');
+            $(this).attr('aria-hidden', 'true');
+        });
     });
     $('#user_attendances_form').on('submit', function (e) {
         oTable.rows().nodes().page.len(-1).draw();

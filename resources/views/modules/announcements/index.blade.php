@@ -200,9 +200,22 @@
                     type: 'POST'
                 },
                 lengthMenu: [10, 15, 20 , -1],
+                tabIndex: -1,
                 @if ($is_editor)
                 initComplete: function() {
                     this.api().column(0).visible(false);
+                    $('.table-announcements-indexes .dt-column-order').each(function() {
+                        $(this).removeAttr('aria-label');
+                        $(this).attr('aria-hidden', 'true');
+                    });
+                },
+                @endif
+                @if (!$is_editor)
+                initComplete: function() {
+                    $('.table-announcements-indexes .dt-column-order').each(function() {
+                        $(this).removeAttr('aria-label');
+                        $(this).attr('aria-hidden', 'true');
+                    });
                 },
                 @endif
                 fnDrawCallback: function( oSettings ) {
@@ -243,6 +256,13 @@
                         sLast:     '&raquo;'
                     }
                 }
+            });
+
+            $('.table-announcements-indexes').on('order.dt', function() {
+                $('.table-announcements-indexes thead .dt-column-order').each(function() {
+                    $(this).removeAttr('aria-label');
+                    $(this).attr('aria-hidden', 'true');
+                });
             });
 
             $(document).on( 'click', '.reorder', function(e) {
