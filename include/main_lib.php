@@ -2518,14 +2518,6 @@ tinymce.init({
     license_key: 'gpl',
     selector: 'textarea.mceEditor',
     content_css: [
-    '{$urlAppend}template/modern/css/bootstrap.min.css',
-    '{$urlAppend}template/modern/css/font-awesome-6.4.0/css/all.css',
-    '{$urlAppend}template/modern/css/default.css',
-    ],
-
-    // General options
-    selector: 'textarea.mceEditor',
-    content_css: [
         '{$urlAppend}template/modern/css/bootstrap.min.css',
         '{$urlAppend}template/modern/css/font-awesome-6.4.0/css/all.css',
         '{$urlAppend}template/modern/css/default.css',
@@ -2570,9 +2562,8 @@ tinymce.init({
     menu: true,
     menubar: false,
     // Toolbar options
-//    toolbar1: 'toggle bold italic underline | forecolor backcolor | link image media eclmedia | alignleft aligncenter alignright alignjustify | bullist numlist | fullscreen preview restoredraft',
-//    toolbar2: 'formatselect | fontselect fontsizeselect | outdent indent | emoticons fontawesome latexhelper strikethrough superscript subscript table $copy_paste| removeformat | searchreplace undo redo | code'
-    toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | eclmedia fontawesome latexhelper | forecolor backcolor | link image media | alignleft aligncenter alignright alignjustify | bullist numlist | outdent indent | emoticons | superscript subscript | table | removeformat | searchreplace | code fullscreen preview restoredraft'
+    toolbar_mode: 'wrap',
+    toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough forecolor backcolor | link image media | alignleft aligncenter alignright alignjustify | bullist numlist | outdent indent | emoticons | superscript subscript | table | removeformat | searchreplace | eclmedia fontawesome latexhelper | code fullscreen preview restoredraft'
     $focus_init
 });
 </script>";
