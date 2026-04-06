@@ -167,7 +167,7 @@
                                                 </td>
                                                 <td class='text-center'>
                                                     @if ($submission = find_submissions(is_group_assignment($row->id), $uid, $row->id, $gids))
-                                                        <i class='fa-solid fa-check'></i><br>
+                                                        <i class='fa-solid fa-check' data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ trans('langYes') }}" aria-label="{{ trans('langYes') }}" tabindex="0"></i><br>
                                                         @foreach ($submission as $sub)
                                                             @if (isset($sub->group_id)) {{-- if is a group assignment --}}
                                                                 <div>
@@ -178,7 +178,7 @@
                                                             @endif
                                                         @endforeach
                                                     @else
-                                                        <i class='fa-regular fa-hourglass-half'></i><br>
+                                                        <i class='fa-regular fa-hourglass-half' data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ trans('langNo') }}" aria-label="{{ trans('langNo') }}" tabindex="0"></i><br>
                                                     @endif
                                                 </td>
                                                 <td class='text-center'>
