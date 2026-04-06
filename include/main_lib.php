@@ -2527,14 +2527,14 @@ tinymce.init({
         '{$urlAppend}template/modern/css/default.css',
     ],
     content_style: 'body { margin: 8px; background: none !important; color: $tinymce_color_text;  }',
-    font_size_formats: '8pt 9pt 10pt 11pt 12pt 14pt 16pt 18pt 20pt 24pt 30pt 36pt',
+    font_size_formats: '8pt 9pt 10pt 11pt 12pt 14pt 16pt 18pt 20pt 24pt 30pt 36pt 42pt',
     extended_valid_elements: 'span[*]',
     noneditable_noneditable_class: 'fa',
     fullscreen_native: true,
     language: '$language',
     cache_suffix: '?v=" . CACHE_SUFFIX . "',
     branding: false,
-    font_formats:
+    font_family_formats:
     'Open Sans=open sans; Roboto=roboto; Andale Mono=andale mono,times; Arial=arial,helvetica,sans-serif; Arial Black=arial black,avant garde; Book Antiqua=book antiqua,palatino; Comic Sans MS=comic sans ms,sans-serif; Courier New=courier new,courier; Georgia=georgia,palatino; Helvetica=helvetica; Impact=impact,chicago; Symbol=symbol; Tahoma=tahoma,arial,helvetica,sans-serif; Terminal=terminal,monaco; Times New Roman=times new roman,times; Trebuchet MS=trebuchet ms,geneva; Verdana=verdana,geneva; Webdings=webdings; Wingdings=wingdings,zapf dingbats',
     image_advtab: true,
     image_class_list: [
