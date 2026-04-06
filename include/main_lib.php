@@ -2527,9 +2527,10 @@ tinymce.init({
         '{$urlAppend}template/modern/css/default.css',
     ],
     content_style: 'body { margin: 8px; background: none !important; color: $tinymce_color_text;  }',
-    fontsize_formats: '8pt 9pt 10pt 11pt 12pt 14pt 16pt 18pt 20pt 24pt 30pt 36pt',
+    font_size_formats: '8pt 9pt 10pt 11pt 12pt 14pt 16pt 18pt 20pt 24pt 30pt 36pt',
     extended_valid_elements: 'span[*]',
     noneditable_noneditable_class: 'fa',
+    fullscreen_native: true,
     language: '$language',
     cache_suffix: '?v=" . CACHE_SUFFIX . "',
     branding: false,
@@ -2553,7 +2554,7 @@ tinymce.init({
     ],
 //    plugins: 'fullscreen pagebreak save image link media eclmedia print contextmenu paste noneditable visualchars nonbreaking wordcount emoticons preview searchreplace table code textcolor colorpicker lists advlist charmap fontawesome latexhelper autosave$paste_plugin',
 //    plugins: 'fullscreen pagebreak save image link media code lists eclmedia fontawesome latexhelper advlist charmap wordcount emoticons preview searchreplace visualchars nonbreaking autosave$paste_plugin',
-    plugins: 'fullscreen pagebreak save image link media code lists advlist charmap wordcount emoticons preview searchreplace visualchars nonbreaking autosave eclmedia fontawesome latexhelper',
+    plugins: 'fullscreen pagebreak save image link media code lists advlist charmap wordcount emoticons preview searchreplace visualchars nonbreaking autosave eclmedia fontawesome latexhelper table',
     $paste_preprocess
     entity_encoding: 'raw',
     relative_urls: false,
@@ -2566,8 +2567,8 @@ tinymce.init({
     menu: true,
     menubar: false,
     // Toolbar options
-    toolbar_mode: 'wrap',
-    toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough forecolor backcolor | link image media | alignleft aligncenter alignright alignjustify | bullist numlist | outdent indent | emoticons | superscript subscript | table | removeformat | searchreplace | eclmedia fontawesome latexhelper | code fullscreen preview restoredraft'
+    toolbar_mode: 'sliding',
+    toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough forecolor backcolor | link image media | alignleft aligncenter alignright alignjustify | bullist numlist | outdent indent | emoticons | superscript subscript | table $copy_paste | removeformat | searchreplace | eclmedia fontawesome latexhelper | code fullscreen preview restoredraft'
     $focus_init
 });
 </script>";
