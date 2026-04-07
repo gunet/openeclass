@@ -2575,7 +2575,7 @@ tinymce.init({
     menubar: false,
     // Toolbar options
     toolbar_mode: 'sliding',
-    toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough removeformat forecolor backcolor | link image media eclmedia | alignleft aligncenter alignright alignjustify | bullist numlist | outdent indent | emoticons fontawesome | superscript subscript | latexhelper | table $copy_paste  | searchreplace code preview restoredraft fullscreen'
+    toolbar: ' bold italic underline alignleft aligncenter alignright alignjustify bullist numlist outdent indent table | link image media eclmedia | blocks fontfamily fontsize | strikethrough removeformat forecolor backcolor | emoticons fontawesome | superscript subscript latexhelper | $copy_paste  | undo redo searchreplace code preview restoredraft fullscreen'
     $focus_init
 });
 </script>";
