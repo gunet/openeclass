@@ -7234,7 +7234,7 @@ $langMaintenanceChange = "Αλλαγή κειμένου συντήρησης";
 $langMaintenanceMode = "Λειτουργία συντήρησης";
 
 // sticky notes
-$langStickyNotes = "Sticky Notes";
+$langStickyNotes = "Σημειώματα";
 $langStickyNotesTopic = "Θέμα";
 $langStickyNotesTopics = "Θέματα Συζήτησης";
 $langStickyNotesTotal = "Σημειώσεις";
