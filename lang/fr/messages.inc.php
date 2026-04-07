@@ -1697,7 +1697,6 @@ $langProfAccount = "Compte $langTeacher"
 ;
 $langUserAccountInfo1 = 'Demander un nouveau compte';
 $langUserAccountInfo2 = 'Créer un nouveau compte';
-$langUserAccountInfo3 = 'Alternativement, vous pouvez choisir';
 $langNewAccount = 'Nouveau compte';
 $langNewAccountActivation = 'Activation du compte';
 $langNewUserAccountActivation = "Activation du compte $langStudent"
@@ -2462,7 +2461,6 @@ $langNewForumCat = "Nouvelle catégorie";
 $langNewForum = "Nouveau forum";
 $langEditedBy = "Corrigé par";
 $langCaptchaWrong = "Le code de sécurité que vous avez saisi est incorrect.";
-$langUserAccountInfo4 = 'Se connecter avec un autre compte';
 $langMultiRegUserData = "Données des Comptes Utilisateurs";
 $langRegistrationDateShort = "Date <br />d'inscription";
 $langUserDurationAccount = "Durée de validité des comptes utilisateurs";
