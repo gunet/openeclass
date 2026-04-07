@@ -2473,6 +2473,13 @@ function rich_text_editor($name, $rows, $cols, $text, $onFocus = false, $options
             'Chemical Symbols' => $langLatexCatChemicalSymbols
         );
         $head_content .= "
+<style>
+    body.tox-fullscreen {overflow: hidden !important;}
+    body.tox-fullscreen header {z-index: 0 !important;}
+    body.tox-fullscreen main {z-index: 99999 !important;position: relative !important;}
+    .tox.tox-tinymce.tox-fullscreen {z-index: 100000 !important;}
+    .tox-tinymce-aux, .tox-dialog-wrap {z-index: 100001 !important;}
+</style>
 <script type='text/javascript'>
 window.latexHelperLang = {
     title: '" . js_escape($langLatexDialogTitle) . "',
@@ -2568,7 +2575,7 @@ tinymce.init({
     menubar: false,
     // Toolbar options
     toolbar_mode: 'sliding',
-    toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough forecolor backcolor | link image media | alignleft aligncenter alignright alignjustify | bullist numlist | outdent indent | emoticons | superscript subscript | table $copy_paste | removeformat | searchreplace | eclmedia fontawesome latexhelper | code fullscreen preview restoredraft'
+    toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough removeformat forecolor backcolor | link image media eclmedia | alignleft aligncenter alignright alignjustify | bullist numlist | outdent indent | emoticons fontawesome | superscript subscript | latexhelper | table $copy_paste  | searchreplace code preview restoredraft fullscreen'
     $focus_init
 });
 </script>";
