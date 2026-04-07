@@ -23,21 +23,21 @@
                                             @foreach ($auth as $k => $v)
                                                 @if ($v != 1)  <!--  bypass the eclass auth method -->
                                                     @if ($v < 8)
-                                                        <li class="list-group-item element"><a class='TextBold' href='altnewuser.php?auth={{ $v }}'>{{ get_auth_info($v) }}</a></li>
+                                                        <li class="list-group-item element"><a class='TextBold' href='altnewuser.php?auth={{ $v }}'>{{ get_auth_info($v) }}</a><br>{{ trans('langUserAccountHelp1') }}</li>
                                                     @else
                                                         @if($eclass_stud_reg == 1)
-                                                            <li class="list-group-item element"><a class='TextBold' href='newuser.php?auth={{ $v }}'>{{ get_auth_info($v) }}</a></li>
+                                                            <li class="list-group-item element"><a class='TextBold' href='newuser.php?auth={{ $v }}'>{{ get_auth_info($v) }}</a><br>{{ trans('langUserAccountHelp2') }}</li>
                                                         @else
-                                                            <li class="list-group-item element"><a class='TextBold' href='newuser.php?auth={{ $v }}'>{{ get_auth_info($v) }}</a></li>
+                                                            <li class="list-group-item element"><a class='TextBold' href='newuser.php?auth={{ $v }}'>{{ get_auth_info($v) }}</a><br>{{ trans('langUserAccountHelp3') }}</li>
                                                         @endif
                                                     @endif
                                                 @endif
                                             @endforeach
                                         @endif
                                         @if ($eclass_stud_reg == 2) <!--  allow student registration via eclass -->
-                                            <li class="list-group-item element"><a class='TextBold' href='newuser.php{{ $provider }}{{$provider_user_data}}'>{{ trans('langUserAccountInfo2') }}</a></li>
+                                            <li class="list-group-item element"><a class='TextBold' href='newuser.php{{ $provider }}{{$provider_user_data}}'>{{ trans('langUserAccountInfo2') }}</a><br>{{ trans('langUserAccountHelp4') }}</li>
                                         @elseif ($eclass_stud_reg == 1) <!-- allow student registration via request -->
-                                            <li class="list-group-item element"><a class='TextBold' href='newuser.php{{ $provider }}{{ $provider_user_data }}'>{{ trans('langUserAccountInfo1') }}</a></li>
+                                            <li class="list-group-item element"><a class='TextBold' href='newuser.php{{ $provider }}{{ $provider_user_data }}'>{{ trans('langUserAccountInfo1') }}</a><br>{{ trans('langUserAccountHelp5') }}</li>
                                         @endif
                                     </ul>
                                 </div>

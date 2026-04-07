@@ -1697,6 +1697,11 @@ $langProfAccount = "Compte $langTeacher"
 ;
 $langUserAccountInfo1 = 'Demander un nouveau compte';
 $langUserAccountInfo2 = 'Créer un nouveau compte';
+$langUserAccountHelp1 = '';
+$langUserAccountHelp2 = '';
+$langUserAccountHelp3 = '';
+$langUserAccountHelp4 = '';
+$langUserAccountHelp5 = '';
 $langNewAccount = 'Nouveau compte';
 $langNewAccountActivation = 'Activation du compte';
 $langNewUserAccountActivation = "Activation du compte $langStudent"
