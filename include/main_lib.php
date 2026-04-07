@@ -2479,6 +2479,7 @@ function rich_text_editor($name, $rows, $cols, $text, $onFocus = false, $options
     body.tox-fullscreen main {z-index: 99999 !important;position: relative !important;}
     .tox.tox-tinymce.tox-fullscreen {z-index: 100000 !important;}
     .tox-tinymce-aux, .tox-dialog-wrap {z-index: 100001 !important;}
+    .tox-tinymce-aux div[id^='aria-controls_'] {position: relative;z-index: 100001;}
 </style>
 <script type='text/javascript'>
 window.latexHelperLang = {
