@@ -899,7 +899,7 @@ class Exercise
      */
     public function delete(): void
     {
-        global $course_id;
+        global $course_id, $webDir, $course_code;
 
         $id = $this->id;
         Database::get()->query("DELETE FROM `exercise_with_questions` WHERE exercise_id = ?d", $id);
@@ -907,6 +907,10 @@ class Exercise
                                             WHERE course_id = ?d AND id = ?d", $course_id, $id);
         Database::get()->query("DELETE FROM `exercise_to_specific` WHERE exercise_id = ?d", $id);
         $deleted_rows = Database::get()->query("DELETE FROM `exercise` WHERE course_id = ?d AND id = ?d", $course_id, $id)->affectedRows;
+        if (file_exists("$webDir/courses/$course_code/exercise_seb_$id")) {
+            unlink("$webDir/courses/$course_code/exercise_seb_$id/config.seb");
+            rmdir("$webDir/courses/$course_code/exercise_seb_$id");
+        }
         if ($deleted_rows > 0) {
             Log::record($course_id, MODULE_ID_EXERCISE, LOG_DELETE, array('title' => $title));
         }
@@ -1836,5 +1840,92 @@ class Exercise
             return false;
         }
     }
+
+    /**
+     * @brief Generates and saves a Safe Exam Browser (SEB) configuration file in XML format.
+     *
+     * @return void
+     */
+    public function createSafeExamBrowserConfigFile(): void
+    {
+        global $urlServer, $webDir, $course_code;
+
+        $start_url = $urlServer . "modules/exercise/exercise_submit.php?course=" . $course_code . "&exerciseId=" . $this->id;
+
+        $dom = new DOMImplementation();
+        $dtd = $dom->createDocumentType(
+            'plist',
+            '-//Apple//DTD PLIST 1.0//EN',
+            'http://www.apple.com/DTDs/PropertyList-1.0.dtd'
+        );
+
+        $xml = $dom->createDocument(null, 'plist', $dtd);
+        $xml->encoding = 'UTF-8';
+        $xml->formatOutput = true; // Set to false if you want it all on one line
+
+        $plist = $xml->documentElement;
+        $plist->setAttribute('version', '1.0');
+
+        $dict = $xml->createElement('dict');
+        $plist->appendChild($dict);
+
+        $settings = [
+            'showTaskBar'                  => true,
+            'allowWlan'                    => false,
+            'showReloadButton'             => false,
+            'showTime'                     => true,
+            'showInputLanguage'            => true,
+            'allowQuit'                    => true,
+            'quitURLConfirm'               => true,
+            'audioControlEnabled'          => false,
+            'audioMute'                    => false,
+            'allowSpellCheck'              => false,
+            'browserWindowAllowReload'     => false,
+            'URLFilterEnable'              => false,
+            'URLFilterEnableContentFilter' => false,
+            'URLFilterRules'               => 'array', // Special case for an empty array
+            'startURL'                     => $start_url,
+            'sendBrowserExamKey'           => true,
+            'browserWindowWebView'         => 3,
+            'examSessionClearCookiesOnStart'=> false,
+            'allowPreferencesWindow'       => false,
+        ];
+
+        foreach ($settings as $key => $value) {
+            $dict->appendChild($xml->createElement('key', $key));
+            if (is_bool($value)) {
+                $dict->appendChild($xml->createElement($value ? 'true' : 'false'));
+            } elseif (is_int($value)) {
+                $dict->appendChild($xml->createElement('integer', $value));
+            } elseif ($value === 'array') {
+                $dict->appendChild($xml->createElement('array'));
+            } else {
+                $dict->appendChild($xml->createElement('string', urlencode($value)));
+            }
+        }
+
+        /* header('Content-Type: application/xml');
+        echo $xml->saveXML();
+        exit; */
+        if (!file_exists("$webDir/courses/$course_code/exercise_seb_$this->id")) {
+            mkdir("$webDir/courses/$course_code/exercise_seb_$this->id");
+        }
+        $xml->save("$webDir/courses/$course_code/exercise_seb_$this->id/config.seb");
+    }
+
+    public function LaunchSafeExamBrowser()
+    {
+        global $course_code, $webDir;
+
+        $sebConfigXml = file_get_contents("$webDir/courses/$course_code/exercise_seb_$this->id/config.seb");
+
+        header('Content-Type: application/xml');
+        //header('Content-Type: application/seb');
+        header('Content-Disposition: attachment; filename="config.seb"');
+        header('Content-Length: ' . strlen($sebConfigXml));
+        echo $sebConfigXml;
+        exit;
+    }
+
 }
 

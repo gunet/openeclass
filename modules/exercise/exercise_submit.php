@@ -158,12 +158,12 @@ if (isset($_COOKIE['inExercise'])) {
     redirect_to_home_page($back_url);
 }
 
-// Check if an exercise ID exists in the URL
-// and if so it gets the exercise object either by the session (if it exists there)
+// Check if an exercise ID exists in the URL,
+// and if so, it gets the exercise object either by the session (if it exists there)
 // or by initializing it using the exercise ID
 if (isset($_REQUEST['exerciseId'])) {
     $exerciseId = intval($_REQUEST['exerciseId']);
-    // Check if exercise object exists in session
+    // Check if an exercise object exists in session
     if (isset($_SESSION['objExercise'][$exerciseId])) {
         $objExercise = $_SESSION['objExercise'][$exerciseId];
     } else {
@@ -191,6 +191,12 @@ if ($objExercise->isExam()) {
         $next = str_replace($urlAppend, '/', $_SERVER['REQUEST_URI']);
         header("Location:" . $urlServer . "main/login_form.php?next=" . urlencode($next));
     }
+}
+
+// Safe Exam Browser intro
+if (isset($_GET['seb'])) {
+    view('modules.exercise.seb', ['course_code' => $course_code, 'eid' => $objExercise->selectId()]);
+    exit;
 }
 
 $pageName = $objExercise->selectTitle();

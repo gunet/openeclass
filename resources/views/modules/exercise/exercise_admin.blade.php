@@ -352,13 +352,24 @@
                                         </div>
 
                                         <div class='row form-group mt-4 d-none' id='stricter_exam'>
-                                            <div class='col-sm-12 control-label-notes mb-1'>{{ trans('langStricterExamRestriction') }}:</div>
+                                            <div class='col-sm-12 control-label-notes mb-1'>
+                                                {{ trans('langStricterExamRestriction') }}:
+                                            </div>
                                             <div class='col-12'>
                                                 <div class='checkbox'>
                                                     <label class='label-container' aria-label='{{ trans('langSelect') }}'>
                                                         <input name='stricterExamRestriction' type='checkbox' @if($exerciseStricterExamRestriction) checked @endif>
                                                         <span class='checkmark'></span>
                                                         {{ trans('langExerciseWillBeCanceledInStrictMode') }}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class='col-12'>
+                                                <div class='checkbox'>
+                                                    <label class='label-container' aria-label='{{ trans('langSelect') }}'>
+                                                        <input name='useSafeExamBrowser' type='checkbox' @if($exerciseUseSafeExamBrowser) checked @endif>
+                                                        <span class='checkmark'></span>
+                                                        Χρήση Safe Exam Browser
                                                     </label>
                                                 </div>
                                             </div>

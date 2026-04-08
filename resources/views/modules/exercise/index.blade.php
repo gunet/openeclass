@@ -214,8 +214,13 @@
                                                     @else
                                                         <td>
                                                             <div class='line-height-default'>
-                                                                <a class='ex_settings @if ($row->password_lock && !$is_editor) password_protected @endif'
-                                                                   href='exercise_submit.php?course={{ $course_code }}&exerciseId={{ $row->id }}'> {{ $row->title }}</a>
+                                                                @if (isSebEnabled($row->id))
+                                                                    <a class='ex_settings @if ($row->password_lock && !$is_editor) password_protected @endif'
+                                                                       href='exercise_submit.php?course={{ $course_code }}&exerciseId={{ $row->id }}&seb=1'> {{ $row->title }}</a>
+                                                                @else
+                                                                    <a class='ex_settings @if ($row->password_lock && !$is_editor) password_protected @endif'
+                                                                       href='exercise_submit.php?course={{ $course_code }}&exerciseId={{ $row->id }}'> {{ $row->title }}</a>
+                                                                @endif
                                                                 @if (!$row->public)
                                                                     &nbsp;{{ icon('fa-lock', trans('langNonPublicFile')) }}
                                                                 @endif
