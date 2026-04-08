@@ -24,6 +24,7 @@ $helpTopic = 'external_tools';
 $helpSubTopic = 'big_blue_button';
 require_once '../../include/baseTheme.php';
 require_once 'modules/tc/functions.php';
+require_once 'modules/tc/bbb-api.php';
 require_once 'include/lib/hierarchy.class.php';
 require_once 'include/lib/course.class.php';
 
@@ -269,7 +270,7 @@ if (isset($_GET['add_course_to_tc'])) {
 
     view('admin.other.extapps.bbb.config', $data);
 
-} else if (isset($_GET['add_server']) || isset($_GET['edit_server'])) { // edit server form
+} else if (isset($_GET['add_server']) || isset($_GET['edit_server']) || isset($_GET['fetch_recordings'])) { // edit server form
     $pageName = isset($_GET['add_server']) ? $langAddServer : $langEdit;
     $toolName = $langBBBConf;
     $navigation[] = array('url' => 'bbbmoduleconf.php', 'name' => $langBBBConf);
@@ -293,7 +294,7 @@ if (isset($_GET['add_course_to_tc'])) {
         foreach ($courses_list as $c) {
             $data['listcourses'] .= "<option value='$c->id'>" . q($c->title) . " (" . q($c->code) . ")</option>";
         }
-    } else {
+    } elseif (isset($_GET['edit_server'])) {
         $data['bbb_server'] = $_GET['edit_server'];
         $data['server'] = Database::get()->querySingle("SELECT * FROM tc_servers WHERE id = ?d", $data['bbb_server']);
         if ($data['server']->enable_recordings == "false") {
@@ -325,8 +326,107 @@ if (isset($_GET['add_course_to_tc'])) {
             $listcourses .= "<option value='$c->id'>" . q($c->title) . " (" . q($c->code) . ")</option>";
         }
         $data['listcourses'] = $listcourses;
+    } else {
+
+        $data['server_id'] = $server_id = intval($_GET['server_id']);
+        $serverBBB = Database::get()->querySingle("SELECT * FROM tc_servers WHERE id = ?d", $server_id);
+        $bbbServerUrl = $serverBBB->api_url;
+        $securitySalt = $serverBBB->server_key;
+
+        //////////////////////////////////////////////
+        // Delete specific recording from bbb server//
+        //////////////////////////////////////////////
+
+        if (isset($_POST['del_recording_id'])) {
+            if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+            
+            $recording_id = $_POST['del_recording_id'];
+            $apiMethod = 'deleteRecordings';
+
+            // Parameters
+            $params = "recordID=$recording_id";
+
+            // Generate checksum
+            $checksumString = $apiMethod . $params . $securitySalt;
+            $checksum = sha1($checksumString);
+
+            // Build API URL
+            $apiUrl = rtrim($bbbServerUrl, '/') . "/api/" . $apiMethod . "?" . $params . "&checksum=" . $checksum;
+
+            //cURL request
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $apiUrl);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            $response = curl_exec($ch);
+
+            if (curl_errno($ch)) {
+                // handle cURL error
+                $error_msg = curl_error($ch);
+                // Log or display error
+            }
+            curl_close($ch);
+
+            Session::flash('message', $langLinkDeleted . '&nbsp; record ID: &nbsp;' . $recording_id);
+            Session::flash('alert-class', 'alert-success');
+            redirect_to_home_page("modules/admin/bbbmoduleconf.php?server_id=$server_id&fetch_recordings=1");
+            
+        } else {
+
+            /////////////////////////////////////////////////////
+            // Fetch all recordings for the specific bbb server//
+            /////////////////////////////////////////////////////
+            
+            $apiMethod = 'getRecordings';
+            $apiUrl = $bbbServerUrl . "api/" . $apiMethod;
+
+            // Generate the checksum
+            $params = '';
+            $checksumString = $apiMethod . $params . $securitySalt;
+            $checksum = sha1($checksumString);
+
+            // Build the full URL
+            $requestUrl = $apiUrl . "?checksum=" . $checksum;
+
+            // Make the GET request
+            $response = file_get_contents($requestUrl);
+
+            if ($response === FALSE) {
+                die("Error fetching recordings");
+            }
+
+            // Parse the XML response
+            $xml = simplexml_load_string($response);
+
+            if ($xml === false) {
+                die("Error parsing XML");
+            }
+
+            // Check if there are recordings
+            $arr_recordings = [];
+            $total_size_mb = 0;
+            if (isset($xml->recordings->recording)) {
+                foreach ($xml->recordings->recording as $recording) {
+                    $arr_recordings[] = [
+                        'recordID' => $recording->recordID,
+                        'meetingID' => $recording->meetingID,
+                        'name' => $recording->name,
+                        'url' => $recording->playback->format->url,
+                        'size' => round($recording->playback->format->size / 1048576, 2) . " MB"
+                    ];
+                    $total_size_mb = $total_size_mb + round($recording->playback->format->size / 1048576, 2);
+                }
+            }
+            $data['total_size_gb'] = $total_size_mb . " MB" ?? 0;
+            $data['arr_recordings'] = $arr_recordings;
+        }
     }
-    view('admin.other.extapps.bbb.create', $data);
+
+    if (isset($_GET['fetch_recordings'])) {
+        view('admin.other.extapps.bbb.recordings', $data);
+    } else {
+        view('admin.other.extapps.bbb.create', $data);
+    }
+    
 } else { //display available BBB servers and running meetings
     $data['action_bar'] = action_bar(array(
         array('title' => $langBack,
@@ -447,6 +547,9 @@ if (isset($_GET['add_course_to_tc'])) {
                     array('title' => $langEditChange,
                         'url' => "$_SERVER[SCRIPT_NAME]?edit_server=$srv->id",
                         'icon' => 'fa-edit'),
+                    array('title' => $langViewListRecordings,
+                        'url' => "$_SERVER[SCRIPT_NAME]?server_id=$srv->id&fetch_recordings=1",
+                        'icon' => 'fa-solid fa-film'),
                     array('title' => $langDelete,
                         'url' => "$_SERVER[SCRIPT_NAME]?delete_server=$srv->id",
                         'icon' => 'fa-times',

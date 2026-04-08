@@ -5982,6 +5982,11 @@ $langBBBCronEnableInstructions = '
 <code>{cronURL}</code><br>
 Για παράδειγμα, αυτό μπορεί να γίνει μέσω κάποιου εξωτερικού συστήματος webcron.</p>
 <p>Σε κάθε περίπτωση, η κλήση πρέπει να γίνεται κάθε ένα λεπτό προκειμένου τα δεδομένα καταγραφής να είναι ακριβή.</p>';
+$langViewRecording = "Δείτε το βίντεο";
+$langViewListRecordings = "Καταγεγραμμένα βίντεο";
+$langTotalSizeRecordings = "Συνολικό μέγεθος καταγεγραμμένων βίντεο";
+$langNoAvailableRecordings = "Δεν υπάρχουν καταγεγραμμένα βίντεο";
+
 
 /* * ******************************************
   Messages for Zoom API

@@ -5602,6 +5602,10 @@ $langBBBCronEnableInstructions = '
 <code>{cronURL}</code><br>
 This can be done, for instance, via an external webcron service.</p>
 <p>In any case, the call must be made every minute in order for the log data to be accurate.</p>';
+$langViewRecording = "Watch the video";
+$langViewListRecordings = "Recorded videos";
+$langTotalSizeRecordings = "Total size of recorded videos";
+$langNoAvailableRecordings = "There are no recorded videos.";
 $langAPITokenLongDesc = "Information for calls currently supported by the API can be found
 <a href='https://docs.openeclass.org/el/developers/eclass_api' target='_blank'>here</a>.";
 $langAPITokenCreated = "Token created. Please copy it for use in your application.";
