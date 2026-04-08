@@ -328,6 +328,10 @@
                                     </div>
                                 </div>
                             @endif
+                        @else
+                            @if ($assignment_type == ASSIGNMENT_TYPE_TURNITIN)
+                                {!! show_turnitin_integration($id) !!}
+                            @endif
                         @endif
                     </div>
                 </div>
