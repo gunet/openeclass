@@ -41,6 +41,9 @@ $require_valid_uid = true;
 
 require_once '../../include/baseTheme.php';
 require_once 'main/eportfolio/eportfolio_functions.php';
+require_once 'include/lib/fileUploadLib.inc.php';
+
+$image_path = $webDir . '/courses/userimg/' . $uid;
 
 check_uid();
 check_guest();
@@ -64,6 +67,19 @@ if ($userdata->eportfolio_enable == 0) {
 
 load_js('tools.js');
 
+// Handle AJAX image delete
+if (isset($_POST['delete_userimage'])) {
+    $images = glob($image_path . '_*');
+    if ($images) {
+        foreach ($images as $img) { unlink($img); }
+    }
+    Database::get()->query("UPDATE user SET has_icon = 0 WHERE id = ?d", $uid);
+    $_SESSION['profile_image_cache_buster'] = time();
+    header('Content-Type: application/json');
+    echo json_encode(['success' => true]);
+    exit;
+}
+
 if (isset($_POST['submit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
 
@@ -75,6 +91,19 @@ if (isset($_POST['submit'])) {
         Session::flashPost()->Messages($langFormErrors, 'alert-danger')->Errors($v->errors());
         redirect_to_home_page("main/eportfolio/edit_eportfolio.php");
     } else {
+        // Handle photo upload
+        if (isset($_FILES['userimage']) && is_uploaded_file($_FILES['userimage']['tmp_name'])) {
+            if (!file_exists($webDir . '/courses/userimg/')) {
+                make_dir($webDir . '/courses/userimg/');
+            }
+            validateUploadedFile($_FILES['userimage']['name'], 1);
+            $type = $_FILES['userimage']['type'];
+            $image_base = $image_path . '_' . profile_image_hash($uid) . '_';
+            copy_resized_image($_FILES['userimage']['tmp_name'], $type, IMAGESIZE_LARGE, IMAGESIZE_LARGE, $image_base . IMAGESIZE_LARGE . '.jpg');
+            copy_resized_image($_FILES['userimage']['tmp_name'], $type, IMAGESIZE_SMALL, IMAGESIZE_SMALL, $image_base . IMAGESIZE_SMALL . '.jpg');
+            Database::get()->query("UPDATE user SET has_icon = 1 WHERE id = ?d", $uid);
+            $_SESSION['profile_image_cache_buster'] = time();
+        }
         process_eportfolio_fields_data();
         Session::flash('message', $langePortfolioChangeSucc);
         Session::flash('alert-class', 'alert-success');
@@ -85,17 +114,41 @@ if (isset($_POST['submit'])) {
 $head_content .= "
         <script>
         $(function() {
-            $('body').scrollspy({ target: '#affixedSideNav' });
+            var navLinks = \$('#navbar-examplePortfolioEdit .nav-link');
+
+            function updateActive() {
+                var scrollTop = \$(window).scrollTop();
+                var offset = 90;
+                var current = null;
+
+                \$('[id^=\"EditPortfolio\"]').each(function() {
+                    if (\$(this).offset().top - offset <= scrollTop) {
+                        current = \$(this).attr('id');
+                    }
+                });
+
+                navLinks.removeClass('active');
+                if (current) {
+                    navLinks.filter('[href=\"#' + current + '\"]').addClass('active');
+                } else {
+                    navLinks.first().addClass('active');
+                }
+            }
+
+            \$(window).on('scroll', updateActive);
+            updateActive();
         });
         </script>
     ";
+
+$user_has_icon_js = (int) Database::get()->querySingle("SELECT has_icon FROM user WHERE id = ?d", $uid)->has_icon;
 
 $sec = $urlServer . 'main/eportfolio/edit_eportfolio.php';
 
 $tool_content .=
     "<div class='row mt-4'>
         <div class='col-sm-9'>
-            <form class='form-horizontal' action='$sec' method='post'>
+            <form class='form-horizontal' action='$sec' method='post' enctype='multipart/form-data'>
             <div data-bs-spy='scroll' data-bs-target='#navbar-examplePortfolioEdit' data-bs-offset='0' tabindex='0'>  ";
 
 //add custom profile fields
@@ -103,15 +156,15 @@ $ret_str = render_eportfolio_fields_form();
 $tool_content .= $ret_str['panels'];
 
 $tool_content .= "
-    <div class='form-group mt-5 d-flex justify-content-center align-items-center gap-2'>
-        <input class='btn submitAdminBtn' type='submit' name='submit' value='$langSubmit'>     
+    <div class='form-group mt-5 d-flex justify-content-end align-items-center gap-2'>
+        <input class='btn submitAdminBtn' type='submit' name='submit' value='$langSubmit'>
         <a href='{$urlAppend}main/eportfolio/index.php' class='btn cancelAdminBtn'>$langCancel</a>
-                  </div>
-      ". generate_csrf_token_form_field() ."  
-      </div></form>
-      </div>
-      ".$ret_str['right_menu']."
-      </div>";
+    </div>
+    ". generate_csrf_token_form_field() ."
+    </div></form>
+    </div>
+    ".$ret_str['right_menu']."
+    </div>";
 
 $head_content .= "
     <script>
@@ -132,5 +185,70 @@ $head_content .= "
     </script>
 ";
 
+
+$head_content .= "
+    <script>
+    $(function() {
+        var originalSrc = \$('#profile-img-preview').attr('src');
+        var hasExistingIcon = " . $user_has_icon_js . ";
+
+        // Preview new image immediately on file select
+        \$('input[name=\"userimage\"]').on('change', function() {
+            var file = this.files[0];
+            if (!file) return;
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                \$('#profile-img-preview').attr('src', e.target.result);
+                \$('#delete-profile-img').show();
+                \$('.pic-label').text('$langReplacePicture');
+                syncInputWidth();
+            };
+            reader.readAsDataURL(file);
+        });
+
+        function syncInputWidth() {
+            if (\$('#delete-profile-img').is(':visible')) {
+                \$('input[name=\"userimage\"]').css('max-width', 'calc(100% - 54px)');
+            } else {
+                \$('input[name=\"userimage\"]').css('max-width', '');
+            }
+        }
+        syncInputWidth();
+
+        // Delete button: if a new file was selected, just clear the input and revert preview
+        // If it's an existing saved image, do AJAX delete
+        \$('#delete-profile-img').on('click', function() {
+            var \$input = \$('input[name=\"userimage\"]');
+            var hasPendingFile = \$input[0].files && \$input[0].files.length > 0;
+
+            if (hasPendingFile) {
+                // Just clear the pending selection
+                \$input.val('');
+                if (hasExistingIcon) {
+                    \$('#profile-img-preview').attr('src', originalSrc);
+                    \$('.pic-label').text('$langReplacePicture');
+                    syncInputWidth();
+                } else {
+                    \$('#profile-img-preview').attr('src', '$themeimg/default_" . IMAGESIZE_LARGE . ".png');
+                    \$('.pic-label').text('$langAddPicture');
+                    \$(this).hide();
+                    syncInputWidth();
+                }
+            } else {
+                // Delete the saved image via AJAX
+                var \$btn = \$(this);
+                $.post('{$urlAppend}main/eportfolio/edit_eportfolio.php', { delete_userimage: 1 }, function() {
+                    hasExistingIcon = 0;
+                    originalSrc = '$themeimg/default_" . IMAGESIZE_LARGE . ".png';
+                    \$('#profile-img-preview').attr('src', originalSrc);
+                    \$('.pic-label').text('$langAddPicture');
+                    \$btn.hide();
+                    syncInputWidth();
+                });
+            }
+        });
+    });
+    </script>
+";
 
 draw($tool_content, 1, null, $head_content);

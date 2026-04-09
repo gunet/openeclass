@@ -30,37 +30,50 @@ define('EPF_LINK', 5);
  */
 function render_eportfolio_fields_content($uid) {
 
+    global $langEduEmpl, $langAchievements, $langGoalsSkills, $langContactInfo;
+
+    // These fields are displayed in the profile card — skip them from category cards
+    $profile_shortnames = ['birth_date', 'birth_place', 'gender', 'about_me', 'personal_website'];
+
     $showAll = false;
 
     $return_string = array();
     $return_string['panels'] = "";
-    $return_string['right_menu'] = "<div class='d-none col-sm-3 hidden-xs' id='affixedSideNav'>
-    <nav id='navbar-exampleIndexPortfolio' class='navbar navbar-light mt-4 bg-light flex-column align-items-stretch p-3 sticky-top shadow-lg' style='z-index:1;'>
+    $return_string['right_menu'] = "<div class='col-sm-3 hidden-xs' id='affixedSideNav'>
+    <nav id='navbar-exampleIndexPortfolio' class='card-affixed flex-column align-items-stretch px-3 pb-3 sticky-top' style='z-index:0; top:70px; max-height:calc(100vh - 80px); overflow-y:auto;'>
         <nav class='nav nav-pills flex-column'>";
 
     $result = Database::get()->queryArray("SELECT id, name FROM eportfolio_fields_category ORDER BY sortorder DESC");
+
+    $category_icons = [
+        $langEduEmpl      => 'fa-solid fa-graduation-cap',
+        $langAchievements => 'fa-solid fa-award',
+        $langGoalsSkills  => 'fa-solid fa-bullseye',
+        $langContactInfo  => 'fa-regular fa-address-book',
+    ];
 
     $j = 0;
 
     foreach ($result as $c) {
 
         $showCat = false;
+        $cat_rows = [];
         $cat_return_string = array();
         $cat_return_string['panels'] = "";
         $cat_return_string['right_menu'] = "";
+
+        $cat_icon = isset($category_icons[$c->name]) ? $category_icons[$c->name] : 'fa-solid fa-circle-dot';
 
         $res = Database::get()->queryArray("SELECT id, shortname, name, datatype, data FROM eportfolio_fields WHERE categoryid = ?d ORDER BY sortorder DESC", $c->id);
 
         if (count($res) > 0) {
             $cat_return_string['panels'] .= '
-            <div class="col">
-            <div class="card panelCard border-card-left-default px-3 py-2 h-100" id="IndexPortfolio'.$c->id.'">
-                                                <div class="card-header border-0 d-flex justify-content-between align-items-center">
-                                                    <h3>'. q($c->name) .'</h3>
-                                                </div>
-                                                 <div class="card-body">
-                                                     
-                                                     <ul class="list-group list-group-flush">';
+            <div class="card panelCard card-default rounded-3" style="border: 1px solid #dee2e6; scroll-margin-top: 70px;" id="IndexPortfolio'.$c->id.'">
+                <div class="card-body px-3 py-0">
+                <div class="d-flex align-items-center gap-2 border-bottom py-3">
+                    <i class="'.$cat_icon.' Primary-500-cl"></i>
+                    <h3 class="mb-0">'. q($c->name) .'</h3>
+                </div>';
 
             if ($j == 0) {
                 $active = " class='active'";
@@ -76,6 +89,10 @@ function render_eportfolio_fields_content($uid) {
 
                 if (isset($fdata)) {
                     unset($fdata);
+                }
+
+                if (in_array($f->shortname, $profile_shortnames)) {
+                    continue;
                 }
 
                 if (!isset($_SESSION['uid'])) {
@@ -102,46 +119,45 @@ function render_eportfolio_fields_content($uid) {
                     $showCat = true;
                     $showAll = true;
 
-                    $cat_return_string['panels'] .= '<li class="list-group-item element">';
-                    $cat_return_string['panels'] .= '<div class="row row-cols-1 row-cols-md-2 g-1">
-                                                        <div class="col-md-3 col-12">
-                                                            <div class="title-default">'.q($f->name).': </div>
-                                                        </div>';
-                    $cat_return_string['panels'] .= '   <div class="col-md-9 col-12 title-default-line-height">';
-
+                    $row  = '<div class="d-flex align-items-start border-bottom py-3">';
+                    $row .= '<div class="col-4">'.q($f->name).'</div>';
+                    $row .= '<div class="col-8">';
 
                     switch ($f->datatype) {
                         case EPF_DATE:
                         case EPF_TEXTBOX:
                             if ($f->shortname == 'scopus') {
-                                $cat_return_string['panels'] .= "<a href='https://www.scopus.com/authid/detail.uri?authorId=".q($fdata_res->data)."'>".q($fdata_res->data)."</a>";
+                                $row .= "<a href='https://www.scopus.com/authid/detail.uri?authorId=".q($fdata_res->data)."'>".q($fdata_res->data)."</a>";
                             } else {
-                                $cat_return_string['panels'] .= q($fdata_res->data);
+                                $row .= q($fdata_res->data);
                             }
                             break;
                         case EPF_TEXTAREA:
-                            $cat_return_string['panels'] .= "".standard_text_escape($fdata_res->data)."";
+                            $row .= standard_text_escape($fdata_res->data);
                             break;
                         case EPF_MENU:
                             $options = unserialize($f->data);
                             $options = array_combine(range(1, count($options)), array_values($options));
                             $options[0] = "";
                             ksort($options);
-                            $cat_return_string['panels'] .= "".q($options[$fdata_res->data])."";
+                            $row .= q($options[$fdata_res->data]);
                             break;
                         case EPF_LINK:
-                            $cat_return_string['panels'] .= "<a href='".q($fdata_res->data)."'>".q($fdata_res->data)."</a>";
+                            $row .= "<a href='".q($fdata_res->data)."'>".q($fdata_res->data)."</a>";
                             break;
                     }
-                    $cat_return_string['panels'] .= "  </div>
-                                                     </div>
-                                                     </li>";
+                    $row .= "</div></div>";
+                    $cat_rows[] = $row;
                 }
             }
-            $cat_return_string['panels'] .= '</ul>
-                       </div>
-                   </div>
-                </div>';
+
+           
+            if (!empty($cat_rows)) {
+                $last = array_pop($cat_rows);
+                $cat_rows[] = str_replace('border-bottom py-3', 'py-3', $last);
+            }
+            $cat_return_string['panels'] .= implode('', $cat_rows);
+            $cat_return_string['panels'] .= '</div></div>';
 
 
         }
@@ -155,8 +171,7 @@ function render_eportfolio_fields_content($uid) {
 
     }
 
-    $return_string['right_menu'] .= '</nav></nav>
-                                 </div>';
+    $return_string['right_menu'] .= '</nav></nav></div>';
 
     if (!$showAll) {
         $return_string['panels'] = "";
@@ -167,17 +182,159 @@ function render_eportfolio_fields_content($uid) {
 }
 
 /**
+ * Render the e-portfolio top profile card (photo, name, demographics, bio, link)
+ * @param int $uid
+ * @return string
+ */
+function render_eportfolio_profile_card($uid) {
+    global $urlServer, $langCopy, $langCopiedSucc, $langCopiedErr;
+
+    // Same visibility logic as render_eportfolio_fields_content
+    if (!isset($_SESSION['uid'])) {
+        $visibility_query = '=' . EPF_VISIBLE_PUBLIC;
+    } elseif ($_SESSION['uid'] == $uid) {
+        $visibility_query = '<=' . EPF_VISIBLE_PRIVATE;
+        if (isset($_GET['view'])) {
+            if ($_GET['view'] == 'public') {
+                $visibility_query = '=' . EPF_VISIBLE_PUBLIC;
+            } elseif ($_GET['view'] == 'registered') {
+                $visibility_query = '<=' . EPF_VISIBLE_USERS;
+            }
+        }
+    } else {
+        $visibility_query = '<=' . EPF_VISIBLE_USERS;
+    }
+
+    $user = Database::get()->querySingle(
+        "SELECT surname, givenname, eportfolio_enable, eportfolio_token FROM user WHERE id = ?d", $uid
+    );
+    if (!$user) return '';
+
+    $name    = q($user->givenname) . ' ' . q($user->surname);
+
+    // Always show the photo on eportfolio regardless of pic_public setting
+    global $webDir, $urlAppend, $themeimg;
+    $hash = profile_image_hash($uid);
+    $hashed_file = "courses/userimg/{$uid}_{$hash}_" . IMAGESIZE_LARGE . ".jpg";
+    if (file_exists($webDir . '/' . $hashed_file)) {
+        $photo = $urlAppend . $hashed_file;
+    } elseif (file_exists($webDir . "/courses/userimg/{$uid}_" . IMAGESIZE_LARGE . ".jpg")) {
+        $photo = $urlAppend . "courses/userimg/{$uid}_" . IMAGESIZE_LARGE . ".jpg";
+    } else {
+        $photo = "$themeimg/default_" . IMAGESIZE_LARGE . ".png";
+    }
+
+    $demographics  = [];
+    $about_me_html = '';
+
+    $fields = Database::get()->queryArray(
+        "SELECT f.id, f.shortname, f.datatype, f.data
+         FROM eportfolio_fields f
+         WHERE f.shortname IN ('birth_date', 'birth_place', 'gender', 'about_me')
+         ORDER BY f.sortorder DESC"
+    );
+
+    foreach ($fields as $f) {
+        $fdata_res = Database::get()->querySingle(
+            "SELECT data FROM eportfolio_fields_data
+             WHERE user_id = ?d AND field_id = ?d AND visibility " . $visibility_query,
+            $uid, $f->id
+        );
+        if (!$fdata_res || $fdata_res->data === '' || ($f->datatype == EPF_MENU && $fdata_res->data == 0)) {
+            continue;
+        }
+        switch ($f->shortname) {
+            case 'birth_place':
+            case 'birth_date':
+                $demographics[] = q($fdata_res->data);
+                break;
+            case 'gender':
+                $options = unserialize($f->data);
+                $options = array_combine(range(1, count($options)), array_values($options));
+                if (!empty($options[$fdata_res->data])) {
+                    $demographics[] = q($options[$fdata_res->data]);
+                }
+                break;
+            case 'about_me':
+                $about_me_html = standard_text_escape($fdata_res->data);
+                break;
+        }
+    }
+
+    $demographics_html = !empty($demographics)
+        ? "<p class='small Neutral-900-cl mb-1 mt-1'>" . implode(' &nbsp;|&nbsp; ', $demographics) . "</p>"
+        : '';
+    $about_html = $about_me_html ? "<p class='small mb-0 mt-1'>$about_me_html</p>" : '';
+
+    $link_html = '';
+    if ($user->eportfolio_token) {
+        $public_url = $urlServer . 'main/eportfolio/index.php?token=' . $user->eportfolio_token;
+        $link_html = "
+            <div class='me-4' style='margin-top:10px;'>
+                <div style='border-top: 1px solid #dee2e6; margin-bottom: 10px;'></div>
+                <div class='d-flex align-items-center gap-2'>
+                    <div class='d-flex align-items-center border rounded-2 flex-grow-1 px-3' style='height:32px;'>
+                        <i class='fa-solid fa-link Primary-500-cl me-2 flex-shrink-0' style='line-height:1;'></i>
+                        <input id='page-link-card' type='text'
+                               class='form-control border-0 shadow-none px-0 bg-transparent'
+                               style='font-size:0.85rem; padding-top:2px; padding-bottom:0; line-height:1;'
+                               value='" . q($public_url) . "' readonly>
+                    </div>
+                    <button class='btn btn-light border rounded-2 flex-shrink-0 p-0' id='copy-btn-card'
+                            data-bs-toggle='tooltip' data-bs-placement='bottom' title='" . q($langCopy) . "'
+                            style='width:32px;height:32px;'>
+                        <i class='fa-regular fa-copy Neutral-500-cl'></i>
+                    </button>
+                </div>
+            </div>
+            <script>
+            $(function() {
+                if (typeof Clipboard !== 'undefined') {
+                    var cbCard = new Clipboard('#copy-btn-card', {
+                        target: function() { return document.getElementById('page-link-card'); }
+                    });
+                    cbCard.on('success', function(e) {
+                        e.clearSelection();
+                        \$('#copy-btn-card').attr('title', '" . js_escape($langCopiedSucc) . "').tooltip('fixTitle').tooltip('show');
+                    });
+                    cbCard.on('error', function(e) {
+                        \$('#copy-btn-card').attr('title', '" . js_escape($langCopiedErr) . "').tooltip('fixTitle').tooltip('show');
+                    });
+                }
+            });
+            </script>";
+    }
+
+    return "
+        <div class='card panelCard card-default rounded-3' style='border: 1px solid #dee2e6;'>
+            <div class='card-body px-3 py-3'>
+                <div class='d-flex align-items-start gap-4'>
+                    <img class='rounded-circle flex-shrink-0 ms-4 mt-2' style='width:120px;height:120px;object-fit:cover;'
+                         src='" . q($photo) . "' alt='" . $name . "'>
+                    <div class='flex-grow-1'>
+                        <div class='fs-6 fw-bold'>$name</div>
+                        $demographics_html
+                        $about_html
+                        $link_html
+                    </div>
+                </div>
+            </div>
+        </div>";
+}
+
+/**
  * Render e-portfolio fields in e-portfolio form
  * @return string
  */
 function render_eportfolio_fields_form() {
-    global $uid, $langOptional, $langCompulsory, $langForm, $langProfileInfoPrivate, $langPublicePortfolioField, $langOpenToRegisteredUsers, 
-        $langePortfolioFieldsVisibilitySettings, $langClose;
+    global $uid, $langOptional, $langCompulsory, $langForm, $langProfileInfoPrivate, $langPublicePortfolioField, $langOpenToRegisteredUsers,
+        $langePortfolioFieldsVisibilitySettings, $langClose,
+        $langPersInfo, $langAddPicture, $langReplacePicture, $langDeletePicture;
 
     $return_string = array();
     $return_string['panels'] = "";
-    $return_string['right_menu'] = "<div class='col-sm-3 hidden-xs' id='affixedSideNav' style='margin-top:-23px;'>
-    <nav id='navbar-examplePortfolioEdit' class='card-affixed mt-4 flex-column align-items-stretch p-3 sticky-top' style='z-index:0;'>
+    $return_string['right_menu'] = "<div class='col-sm-3 hidden-xs' id='affixedSideNav'>
+    <nav id='navbar-examplePortfolioEdit' class='card-affixed flex-column align-items-stretch px-3 pb-3 sticky-top' style='z-index:0; top:70px; max-height:calc(100vh - 80px); overflow-y:auto;'>
         <nav class='nav nav-pills flex-column'>";
 
     $result = Database::get()->queryArray("SELECT id, name FROM eportfolio_fields_category ORDER BY sortorder DESC");
@@ -193,7 +350,7 @@ function render_eportfolio_fields_form() {
 
 
             $return_string['panels'] .= '
-           
+
             <div class="card panelCard card-default px-lg-4 py-lg-3 mb-4" id="EditPortfolio'.$c->id.'">
                                        <div class="card-header border-0 d-flex justify-content-between align-items-center">
                                            <h3>' . q($c->name) .'</h3>
@@ -209,6 +366,27 @@ function render_eportfolio_fields_form() {
             $j++;
 
             $return_string['right_menu'] .= "<a class='nav-link nav-link-adminTools Neutral-900-cl' href='#EditPortfolio$c->id'>" . q($c->name) . "</a>";
+
+            // Photo upload field in personal info category
+            if ($c->name == $langPersInfo) {
+                $user_has_icon = Database::get()->querySingle("SELECT has_icon FROM user WHERE id = ?d", $uid)->has_icon;
+                $photo_url = user_icon($uid, IMAGESIZE_LARGE);
+                $pic_label = $user_has_icon ? $langReplacePicture : $langAddPicture;
+                $delete_display = $user_has_icon ? '' : ' style="display:none;"';
+                $return_string['panels'] .= '
+                <div class="form-group mb-4 d-flex align-items-center gap-3">
+                    <img id="profile-img-preview" class="rounded-circle flex-shrink-0" style="width:80px;height:80px;object-fit:cover;" src="' . q($photo_url) . '" alt="">
+                    <div class="flex-grow-1">
+                        <label class="pic-label control-label-notes mb-2">' . $pic_label . '</label>
+                        <div class="d-flex align-items-center gap-2">
+                            <input type="file" name="userimage" class="form-control" accept="image/*">
+                            <button type="button" id="delete-profile-img" class="btn deleteAdminBtn flex-shrink-0"' . $delete_display . '>
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>';
+            }
 
             foreach ($res as $f) {
 

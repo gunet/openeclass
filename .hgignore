@@ -48,3 +48,5 @@ syntax: regexp
 \.sass-cache
 
 ^modules/drives/plugins/googledrive_key.p12
+
+^\.claude/
