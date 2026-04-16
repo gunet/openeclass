@@ -17,124 +17,55 @@
  *
  */
 
-/* * ===========================================================================
-  scromAPI.inc.php
-  @last update: 28-08-2009 by Thanos Kyritsis
-  @authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
-
-  based on Claroline version 1.7 licensed under GPL
-  copyright (c) 2001, 2006 Universite catholique de Louvain (UCL)
-
-  original file: scormAPI.inc.php Revision: 1.12.2.2
-
-  Claroline authors: Piraux Sebastien <pir@cerdecam.be>
-  Lederer Guillaume <led@cerdecam.be>
-  ==============================================================================
-  @Description: This file must be included when the module browsed is SCORM
-  conformant. This script supplies the SCORM API
-  implementation in javascript for browsers like NS and
-  Mozilla. This script is the client side API javascript
-  generated for user with browser like NS and Mozilla.
-
-  @Comments:
-
-  @todo:
-  ==============================================================================
- */
-
 /**
  * @var integer $uid
  * @var integer $course_id
+ * @var bool $isAnonymous
  */
-if ($uid) {
-    // Get user first and last name
-    $userDetails = Database::get()->querySingle("SELECT surname, givenname
-              FROM `user` AS U WHERE U.`id` = ?d", $uid);
 
-    // Get general information to generate the right API inmplementation
-    $sql = "SELECT *
-              FROM `lp_user_module_progress` AS UMP,
-                   `lp_rel_learnPath_module` AS LPM,
-                   `lp_module` AS M
-             WHERE UMP.`user_id` = ?d
-               AND UMP.`learnPath_module_id` = LPM.`learnPath_module_id`
-               AND M.`module_id` = LPM.`module_id`
-               AND LPM.`learnPath_id` = ?d
-               AND LPM.`module_id` = ?d
-               AND M.`course_id` = ?d
-               AND UMP.`attempt` = ?d";
-    $userProgressionDetails = Database::get()->querySingle($sql, $uid, $_SESSION['path_id'], $_SESSION['lp_module_id'], $course_id, $_SESSION['lp_attempt']);
-    $userProgressionDetailsPrev = null;
-    // fetch previous attempt user progression details if available
-    if ($_SESSION['lp_attempt'] > 1 && (!isset($_SESSION['lp_attempt_clean']) || !$_SESSION['lp_attempt_clean'])) {
-        $userProgressionDetailsPrev = Database::get()->querySingle($sql, $uid, $_SESSION['path_id'], $_SESSION['lp_module_id'], $course_id, $_SESSION['lp_attempt']-1);
-    }
+require_once __DIR__ . '/scormData.php';
+
+if (!isset($isAnonymous)) {
+    $isAnonymous = !$uid;
 }
 
-if (!$uid || !$userProgressionDetails) {
-    $sco['student_id'] = "-1";
-    $sco['student_name'] = "Anonymous, User";
-    $sco['lesson_location'] = "";
-    $sco['credit'] = "no-credit";
-    $sco['lesson_status'] = "NOT ATTEMPTED";
-    $sco['entry'] = "AB-INITIO";
-    $sco['raw'] = "";
-    $sco['scoreMin'] = "";
-    $sco['scoreMax'] = "";
-    $sco['scoreScaled'] = "";
-    $sco['total_time'] = "0000:00:00.00";
-    $sco['suspend_data'] = "";
-    $sco['launch_data'] = "";
-    $sco['progress_measure'] = "";
-} else { // authenticated user and no error in query
-    // set vars
-    $sco['student_id'] = $uid;
-    $sco['student_name'] = $userDetails->surname . ', ' . $userDetails->givenname;
-    $sco['lesson_location'] = $userProgressionDetails->lesson_location;
-    $sco['credit'] = strtolower($userProgressionDetails->credit);
-    $sco['lesson_status'] = strtolower($userProgressionDetails->lesson_status);
-    $sco['entry'] = strtolower($userProgressionDetails->entry);
-    $sco['raw'] = ($userProgressionDetails->raw == -1) ? "" : "" . $userProgressionDetails->raw;
-    $sco['scoreMin'] = ($userProgressionDetails->scoreMin == -1) ? "" : "" . $userProgressionDetails->scoreMin;
-    $sco['scoreMax'] = ($userProgressionDetails->scoreMax == -1) ? "" : "" . $userProgressionDetails->scoreMax;
-    $sco['scoreScaled'] = "";
-    if ($userProgressionDetails->raw > 0 && $userProgressionDetails->scoreMax > 0) {
-        $sco['scoreScaled'] = $userProgressionDetails->raw / $userProgressionDetails->scoreMax;
-    }
-    $sco['total_time'] = $userProgressionDetails->total_time;
-    $sco['suspend_data'] = $userProgressionDetails->suspend_data;
-    // user suspend data from previous attempt if available. this will enable resuming if previous attempt was not completed
-    if ($userProgressionDetailsPrev && $userProgressionDetailsPrev->suspend_data) {
-        $sco['suspend_data'] = $userProgressionDetailsPrev->suspend_data;
-    }
-    $sco['launch_data'] = stripslashes($userProgressionDetails->launch_data);
-    if (property_exists($userProgressionDetails, 'progress_measure') && $userProgressionDetails->progress_measure !== null) {
-        $sco['progress_measure'] = $userProgressionDetails->progress_measure;
-    } else {
-        $sco['progress_measure'] = "";
-    }
-}
-
-//common vars
-$sco['lesson_mode'] = "normal";
-$sco['_children'] = "student_id,student_name,lesson_location,credit,lesson_status,entry,score,total_time,exit,session_time";
-$sco['score_children'] = "raw,min,max";
-$sco['exit'] = "";
-$sco['session_time'] = "0000:00:00.00";
+// Build SCORM data using the extracted helper (reusable by prepareModule endpoint)
+// Caller (viewer) must set $lp_pathId, $lp_moduleId, $lp_attempt, $lp_attemptClean
+$scormData = buildScormApiData(
+    $lp_pathId,
+    $lp_moduleId,
+    $lp_attempt,
+    $uid,
+    $course_id,
+    $lp_attemptClean
+);
+$sco = $scormData['sco'];
+$umpId = $scormData['ump_id'];
+$isAnonymous = $scormData['isAnonymous'];
 
 if (isset($_GET['unit'])) {
-    $closeurl = $urlAppend . "modules/units/index.php?course=$course_code&id=" . $_GET['unit'];
+    $closeurl = $urlAppend . "modules/units/index.php?course=$course_code&id=" . intval($_GET['unit']);
 } else {
     $closeurl = "index.php?course=$course_code";
 }
 
+// Compute the commit URL (may be overridden by caller via $lp_update_url)
+$commitUrl = $lp_update_url
+    ?? $urlAppend . "modules/learnPath/viewer.php?course=" . $course_code . (isset($_GET['unit']) ? ('&unit=' . intval($_GET['unit'])) : '') . "&action=updateProgress";
+
+$_json_flags = JSON_HEX_TAG | JSON_HEX_AMP;
 ?>
 <script type="text/javascript">
 
-    let init_total_time = "<?php echo $sco['total_time']; ?>";
+    let init_total_time = <?php echo json_encode($sco['total_time'], $_json_flags); ?>;
     let item_objectives = [];
     let updatetable_to_list = [];
     let interactions = [];
+
+    // ====================================================
+    // Mutable commit state (updated by resetScormApi/deactivateScormApi)
+    let _commitUrl = <?php echo json_encode($commitUrl, $_json_flags);?>;
+    let _umpId = <?php echo json_encode((string)$umpId, $_json_flags);?>;
 
     // ====================================================
     // API Class Constructor
@@ -227,9 +158,25 @@ if (isset($_GET['unit'])) {
             }
             this.APIError("0");
 
-            do_commit();
+            // Use sendBeacon for the final commit — it survives page unload,
+            // unlike $.ajax which gets killed if the page navigates away.
+            if (!(window.eclassLP && window.eclassLP.isAnonymous)
+                && navigator && navigator.sendBeacon) {
+                let payload = _buildCommitPayload();
+                let params = new URLSearchParams();
+                for (let key in payload) {
+                    if (payload.hasOwnProperty(key)) {
+                        params.append(key, payload[key]);
+                    }
+                }
+                navigator.sendBeacon(_commitUrl, params);
+                _beaconCommitted = true;
+            } else {
+                do_commit();
+            }
 
             APIInitialized = false;
+            _terminated = true;
             return "true";
         } else {
             this.APIError("301"); // not initialized
@@ -444,7 +391,7 @@ if (isset($_GET['unit'])) {
                     //-------------------------------
                     // Deal with SCORM 2004 element :
                     // completion_status and success_status are new element,
-                    // we use them together with the old element lesson_status in the claro DB
+                    // we use them together with the old element lesson_status in the DB
                     //-------------------------------
                     case 'cmi.completion_status':
                         upperCaseVal = val.toUpperCase();
@@ -453,7 +400,7 @@ if (isset($_GET['unit'])) {
                             return "false";
                         }
                         ele = 'cmi.core.lesson_status';
-                        values[4] = val;  // deal with lesson_status element from scorm 1.2 instead
+                        values[4] = val; // deal with lesson_status element from scorm 1.2 instead
                         values[i] = val;
                         APIError("0");
                         return "true";
@@ -464,7 +411,7 @@ if (isset($_GET['unit'])) {
                             return "false";
                         }
                         ele = 'cmi.core.lesson_status';
-                        values[4] = val;  // deal with lesson_status element from scorm 1.2 instead
+                        values[4] = val; // deal with lesson_status element from scorm 1.2 instead
                         values[i] = val;
                         APIError("0");
                         return "true";
@@ -874,29 +821,29 @@ if (isset($_GET['unit'])) {
     elements[49] = 'cmi.progress_measure';
 
     let values = [];
-    values[0] = "<?php echo js_escape($sco['_children']); ?>";
-    values[1] = "<?php echo js_escape($sco['student_id']); ?>";
-    values[2] = "<?php echo js_escape($sco['student_name']); ?>";
-    values[3] = "<?php echo js_escape($sco['lesson_location']); ?>";
-    values[4] = "<?php echo js_escape($sco['lesson_status']); ?>";
-    values[5] = "<?php echo js_escape($sco['credit']); ?>";
-    values[6] = "<?php echo js_escape($sco['entry']); ?>";
-    values[7] = "<?php echo js_escape($sco['score_children']); ?>";
-    values[8] = "<?php echo js_escape($sco['raw']); ?>";
-    values[9] = "<?php echo js_escape($sco['total_time']); ?>";
-    values[10] = "<?php echo js_escape($sco['exit']); ?>";
-    values[11] = "<?php echo js_escape($sco['session_time']); ?>";
-    values[12] = "<?php echo js_escape($sco['suspend_data']); ?>";
-    values[13] = "<?php echo js_escape($sco['launch_data']); ?>";
-    values[14] = "<?php echo js_escape($sco['scoreMin']); ?>";
-    values[15] = "<?php echo js_escape($sco['scoreMax']); ?>";
-    values[16] = "<?php echo js_escape($sco['lesson_status']); ?>"; //we do deal the completion_status element with the old lesson_status element, this will change in further versions...
-    values[17] = "<?php echo js_escape($sco['lesson_status']); ?>"; //we do deal the sucess_status element with the old lesson_status element, this will change in further versions...
-    values[18] = "<?php echo js_escape($sco['session_time']); ?>"; // we do deal the session_time element with the old element
-    values[19] = "<?php echo js_escape($sco['raw']); ?>"; // we do deal the score.raw element with the old element
-    values[20] = "<?php echo js_escape($sco['scoreMin']); ?>"; // we do deal the score.min element with the old element
-    values[21] = "<?php echo js_escape($sco['scoreMax']); ?>"; // we do deal the score.max element with the old element
-    values[22] = "<?php echo js_escape($sco['lesson_mode']); ?>";
+    values[0] = <?php echo json_encode($sco['_children'], $_json_flags);?>;
+    values[1] = <?php echo json_encode($sco['student_id'], $_json_flags); ?>;
+    values[2] = <?php echo json_encode($sco['student_name'], $_json_flags); ?>;
+    values[3] = <?php echo json_encode($sco['lesson_location'], $_json_flags); ?>;
+    values[4] = <?php echo json_encode($sco['lesson_status'], $_json_flags); ?>;
+    values[5] = <?php echo json_encode($sco['credit'], $_json_flags); ?>;
+    values[6] = <?php echo json_encode($sco['entry'], $_json_flags); ?>;
+    values[7] = <?php echo json_encode($sco['score_children'], $_json_flags); ?>;
+    values[8] = <?php echo json_encode($sco['raw'], $_json_flags); ?>;
+    values[9] = <?php echo json_encode($sco['total_time'], $_json_flags); ?>;
+    values[10] = <?php echo json_encode($sco['exit'], $_json_flags); ?>;
+    values[11] = <?php echo json_encode($sco['session_time'], $_json_flags); ?>;
+    values[12] = <?php echo json_encode($sco['suspend_data'], $_json_flags); ?>;
+    values[13] = <?php echo json_encode($sco['launch_data'], $_json_flags); ?>;
+    values[14] = <?php echo json_encode($sco['scoreMin'], $_json_flags); ?>;
+    values[15] = <?php echo json_encode($sco['scoreMax'], $_json_flags); ?>;
+    values[16] = <?php echo json_encode($sco['lesson_status'], $_json_flags); ?>; //we do deal the completion_status element with the old lesson_status element
+    values[17] = <?php echo json_encode($sco['lesson_status'], $_json_flags); ?>; //we do deal the sucess_status element with the old lesson_status element
+    values[18] = <?php echo json_encode($sco['session_time'], $_json_flags); ?>; // we do deal the session_time element with the old element
+    values[19] = <?php echo json_encode($sco['raw'], $_json_flags); ?>; // we do deal the score.raw element with the old element
+    values[20] = <?php echo json_encode($sco['scoreMin'], $_json_flags); ?>; // we do deal the score.min element with the old element
+    values[21] = <?php echo json_encode($sco['scoreMax'], $_json_flags); ?>; // we do deal the score.max element with the old element
+    values[22] = <?php echo json_encode($sco['lesson_mode'], $_json_flags); ?>;
     values[23] = "id,score,status";
     values[24] = item_objectives.length;
     values[25] = "mastery_score,max_time_allowed";
@@ -905,126 +852,82 @@ if (isset($_GET['unit'])) {
     values[28] = interactions.length;
 
     // SCORM2004
-    values[37] = "<?php echo js_escape($sco['lesson_location']); ?>";
-    values[38] = "<?php echo js_escape($sco['student_id']); ?>";
-    values[39] = "<?php echo js_escape($sco['student_name']); ?>";
+    values[37] = <?php echo json_encode($sco['lesson_location'], $_json_flags); ?>;
+    values[38] = <?php echo json_encode($sco['student_id'], $_json_flags); ?>;
+    values[39] = <?php echo json_encode($sco['student_name'], $_json_flags); ?>;
     values[41] = 1;
     values[43] = 1;
     values[44] = 0;
 
-    values[45] = "<?php echo js_escape($sco['scoreScaled']); ?>";
-    values[46] = "<?php echo js_escape($sco['exit']); ?>";
+    values[45] = <?php echo json_encode($sco['scoreScaled'], $_json_flags); ?>;
+    values[46] = <?php echo json_encode($sco['exit'], $_json_flags); ?>;
     values[47] = "";
     values[48] = "normal";
-    values[49] = "<?php echo js_escape($sco['progress_measure']); ?>";
+    values[49] = <?php echo json_encode($sco['progress_measure'], $_json_flags); ?>;
 
 
     // ====================================================
+    // Commit functions
     //
-    //
+
+    /**
+     * _buildCommitPayload — build the key/value object for SCORM commit.
+     * Used by do_commit, do_commit_beacon, and doCommitAwaitable.
+     */
+    function _buildCommitPayload() {
+        return {
+            'ump_id': _umpId,
+            'token': <?php echo json_encode($_SESSION['csrf_token'], $_json_flags);?>,
+            'lesson_location': isSCORM2004 ? values[37] : values[3],
+            'lesson_status': values[4],
+            'credit': values[5],
+            'entry': values[6],
+            'raw': values[8],
+            'total_time': values[9],
+            'exit': values[10],
+            'session_time': values[11],
+            'suspend_data': values[12],
+            'scoreMin': values[14],
+            'scoreMax': values[15],
+            'scoreScaled': values[45],
+            'progress_measure': values[49]
+        };
+    }
+
     function do_commit() {
+        if (_terminated) { return; }
+        if (window.eclassLP && window.eclassLP.isAnonymous) { return; }
+
         let cdbg = function (val) {
             if (debug_commit_) {
                 console.debug(val);
             }
         };
 
-        // target form is in a hidden frame
-        let cmiform = null;
-        let safeToUseUpFrame = false;
-        try {
-            // Try accessing the frame and its form
-            if (typeof upFrame !== 'undefined' && upFrame && upFrame.document && upFrame.document.forms.length > 0) {
-                cmiform = upFrame.document.forms[0];
-                safeToUseUpFrame = true;
-            }
-        } catch (err) {
-            // Accessing upFrame threw an exception (likely due to being destroyed or cross-origin)
-            safeToUseUpFrame = false;
-        }
+        let payload = _buildCommitPayload();
+        cdbg('doCommit submitting');
 
-        if (!safeToUseUpFrame) {
-            cdbg('upFrame is not available. Constructing fallback form.');
-
-            let fallbackForm = document.createElement('form');
-            fallbackForm.method = 'POST';
-            fallbackForm.action = '<?php echo $urlAppend . "modules/learnPath/navigation/updateProgress.php?course=" . $course_code . (isset($_GET['unit'])? ('&unit=' . intval($_GET['unit'])): '') ?>';
-
-            // replicate original inputs
-            fallbackForm.appendChild(makeHiddenInput('ump_id', null));
-            fallbackForm.appendChild(makeHiddenInput('lesson_status', null));
-            fallbackForm.appendChild(makeHiddenInput('lesson_location', null));
-            fallbackForm.appendChild(makeHiddenInput('credit', null));
-            fallbackForm.appendChild(makeHiddenInput('entry', null));
-            fallbackForm.appendChild(makeHiddenInput('raw', null));
-            fallbackForm.appendChild(makeHiddenInput('total_time', null));
-            fallbackForm.appendChild(makeHiddenInput('session_time', null));
-            fallbackForm.appendChild(makeHiddenInput('suspend_data', null));
-            fallbackForm.appendChild(makeHiddenInput('scoreMin', null));
-            fallbackForm.appendChild(makeHiddenInput('scoreMax', null));
-            fallbackForm.appendChild(makeHiddenInput('scoreScaled', null));
-            fallbackForm.appendChild(makeHiddenInput('progress_measure', null));
-            fallbackForm.appendChild(makeHiddenInput('exit', null));
-
-            cmiform = fallbackForm;
-        }
-
-        // user module progress id
-        cmiform.ump_id.value = "<?php echo $userProgressionDetails->user_module_progress_id ?>";
-
-        // values to set in DB
-        if (isSCORM2004) {
-            cmiform.lesson_location.value = values[37];
-        } else {
-            cmiform.lesson_location.value = values[3];
-        }
-        cmiform.lesson_location.value = values[3];
-        cmiform.lesson_status.value = values[4];
-        cmiform.credit.value = values[5];
-        cmiform.entry.value = values[6];
-        cmiform.raw.value = values[8];
-        cmiform.total_time.value = values[9];
-        cmiform.exit.value = values[10];
-        cmiform.session_time.value = values[11];
-        cmiform.suspend_data.value = values[12];
-        cmiform.scoreMin.value = values[14];
-        cmiform.scoreMax.value = values[15];
-        cmiform.scoreScaled.value = values[45];
-        cmiform.progress_measure.value = values[49];
-
-        let cmiformVars = $(cmiform).serialize();
-        let closelocation = null;
-        let safeToUseTocFrame = false;
-        try {
-            if (typeof tocFrame !== 'undefined' && tocFrame && tocFrame.document) {
-                closelocation = tocFrame.document.getElementById('close-btn').getElementsByTagName('a')[0].href;
-                safeToUseTocFrame = true;
-            }
-        } catch (err) {
-            safeToUseTocFrame = false;
-            closelocation = '<?php echo $closeurl ?>';
-        }
-        cdbg('doCommit cmiform submit');
+        let closelocation = (window.eclassLP && window.eclassLP.closeUrl) ? window.eclassLP.closeUrl : <?php echo json_encode($closeurl, $_json_flags);?>;
 
         $.ajax({
             type: 'POST',
-            url: cmiform.action,
-            data: cmiformVars
-        }).done(function() {
+            url: _commitUrl,
+            data: payload
+        }).done(function(resp) {
             cdbg('doCommit ajax XHR OK');
+            if (window.eclassLP && typeof window.eclassLP.onCommit === 'function') {
+                window.eclassLP.onCommit(resp || { ok: true });
+            }
         }).fail(function() {
             cdbg('doCommit ajax XHR failed, falling back to navigator.sendBeacon API');
             if (navigator && navigator.sendBeacon) {
-                let beaconVars = cmiformVars.split('&');
-                let pair, key, value;
-                let cmiformData = new FormData();
-                for (let i = 0; i < beaconVars.length; i++) {
-                    pair = beaconVars[i].split('=');
-                    key = decodeURIComponent(pair[0]);
-                    value = decodeURIComponent(pair[1]);
-                    cmiformData.append(key, value);
+                let params = new URLSearchParams();
+                for (let key in payload) {
+                    if (payload.hasOwnProperty(key)) {
+                        params.append(key, payload[key]);
+                    }
                 }
-                let result = navigator.sendBeacon(cmiform.action, cmiformData);
+                let result = navigator.sendBeacon(_commitUrl, params);
                 let resultMsg = (result) ? 'doCommit navigator.sendBeacon OK' : 'doCommit Failed to utilize navigator.sendBeacon API';
                 cdbg(resultMsg);
             } else {
@@ -1032,16 +935,161 @@ if (isset($_GET['unit'])) {
             }
         }).always(function() {
             cdbg('doCommit exiting...');
-            if (safeToUseTocFrame) {
-                tocFrame.document.location.reload();
-                // adl.nav.request
-                if (values[47].length > 0) {
-                    setTimeout(function () {
-                        window.top.location.href = closelocation;
-                    }, 300);
-                }
+            if (values[47].length > 0) {
+                setTimeout(function () {
+                    window.top.location.href = closelocation;
+                }, 300);
             }
         });
+    }
+
+    /**
+     * do_commit_beacon — fire-and-forget commit via navigator.sendBeacon.
+     * Used exclusively from the beforeunload handler. Skipped when the SCO
+     * already called LMSFinish/Terminate (_terminated) or for anonymous users.
+     */
+    function do_commit_beacon() {
+        if (_terminated || _beaconCommitted) { return; }
+        if (window.eclassLP && window.eclassLP.isAnonymous) { return; }
+        if (!navigator || !navigator.sendBeacon) { return; }
+
+        let payload = _buildCommitPayload();
+        let params = new URLSearchParams();
+        for (let key in payload) {
+            if (payload.hasOwnProperty(key)) {
+                params.append(key, payload[key]);
+            }
+        }
+
+        navigator.sendBeacon(_commitUrl, params);
+    }
+
+    /**
+     * doCommitAwaitable — returns a Promise that resolves after SCORM commit completes.
+     * Used by AJAX navigation to await commit before switching modules.
+     * If SCORM is inactive or user is anonymous, resolves immediately.
+     */
+    function doCommitAwaitable() {
+        if (_terminated) { return Promise.resolve(); }
+        if (window.eclassLP && window.eclassLP.isAnonymous) { return Promise.resolve(); }
+        if (!(window.eclassLP && window.eclassLP.isScorm)) { return Promise.resolve(); }
+
+        let payload = _buildCommitPayload();
+
+        return new Promise(function(resolve) {
+            $.ajax({
+                type: 'POST',
+                url: _commitUrl,
+                data: payload,
+                timeout: 5000
+            }).done(function(resp) {
+                if (window.eclassLP && typeof window.eclassLP.onCommit === 'function') {
+                    window.eclassLP.onCommit(resp || { ok: true });
+                }
+                resolve();
+            }).fail(function() {
+                // Best-effort: try beacon as fallback, then resolve anyway
+                if (navigator && navigator.sendBeacon) {
+                    let params = new URLSearchParams();
+                    for (let key in payload) {
+                        if (payload.hasOwnProperty(key)) {
+                            params.append(key, payload[key]);
+                        }
+                    }
+                    navigator.sendBeacon(_commitUrl, params);
+                }
+                resolve();
+            });
+        });
+    }
+
+    /**
+     * resetScormApi — re-initialize SCORM API state for a new SCORM module.
+     * Called during AJAX navigation when switching between SCORM modules.
+     * The API objects (window.API, window.API_1484_11) persist; only internal state is reset.
+     *
+     * @param {Object} data - Object with keys: sco (CMI values), ump_id, commitUrl
+     */
+    function resetScormApi(data) {
+        let sco = data.sco;
+
+        // Reset execution state
+        APIInitialized = false;
+        APILastError = "0";
+        _terminated = false;
+        _beaconCommitted = false;
+        isSCORM2004 = false;
+
+        // Reset runtime arrays
+        item_objectives = [];
+        updatetable_to_list = [];
+        interactions = [];
+
+        // Update mutable commit state
+        _umpId = String(data.ump_id || 0);
+        if (data.commitUrl) {
+            _commitUrl = data.commitUrl;
+        }
+
+        // Reset CMI values from server data
+        init_total_time = sco.total_time || "0000:00:00.00";
+
+        values[0] = sco._children || "student_id,student_name,lesson_location,credit,lesson_status,entry,score,total_time,exit,session_time";
+        values[1] = String(sco.student_id || "");
+        values[2] = sco.student_name || "";
+        values[3] = sco.lesson_location || "";
+        values[4] = sco.lesson_status || "";
+        values[5] = sco.credit || "";
+        values[6] = sco.entry || "";
+        values[7] = sco.score_children || "raw,min,max";
+        values[8] = sco.raw || "";
+        values[9] = sco.total_time || "0000:00:00.00";
+        values[10] = sco.exit || "";
+        values[11] = sco.session_time || "0000:00:00.00";
+        values[12] = sco.suspend_data || "";
+        values[13] = sco.launch_data || "";
+        values[14] = sco.scoreMin || "";
+        values[15] = sco.scoreMax || "";
+        values[16] = sco.lesson_status || ""; // completion_status
+        values[17] = sco.lesson_status || ""; // success_status
+        values[18] = sco.session_time || "0000:00:00.00";
+        values[19] = sco.raw || ""; // score.raw (2004)
+        values[20] = sco.scoreMin || ""; // score.min (2004)
+        values[21] = sco.scoreMax || ""; // score.max (2004)
+        values[22] = sco.lesson_mode || "normal";
+        values[23] = "id,score,status";
+        values[24] = 0;
+        values[25] = "mastery_score,max_time_allowed";
+        values[26] = "";
+        values[27] = "id,time,type,correct_responses,weighting,student_response,result,latency";
+        values[28] = 0;
+        // SCORM2004
+        values[37] = sco.lesson_location || "";
+        values[38] = String(sco.student_id || "");
+        values[39] = sco.student_name || "";
+        values[41] = 1;
+        values[43] = 1;
+        values[44] = 0;
+        values[45] = (sco.scoreScaled !== undefined && sco.scoreScaled !== null) ? String(sco.scoreScaled) : "";
+        values[46] = sco.exit || "";
+        values[47] = "";
+        values[48] = "normal";
+        values[49] = (sco.progress_measure !== undefined && sco.progress_measure !== null) ? String(sco.progress_measure) : "";
+
+        // Mark SCORM as active
+        window.eclassLP.isScorm = true;
+    }
+
+    /**
+     * deactivateScormApi — disable SCORM API for non-SCORM modules.
+     * Called during AJAX navigation when switching from SCORM to non-SCORM.
+     * The API objects remain defined (no errors if SCO tries to call them),
+     * but commits become non operable and isScorm is set to false.
+     */
+    function deactivateScormApi() {
+        APIInitialized = false;
+        _terminated = true; // prevents any commit attempts
+        window.eclassLP.isScorm = false;
     }
 
     function array_indexOf (arr, val) {
@@ -1067,6 +1115,8 @@ if (isset($_GET['unit'])) {
 
     APIInitialized = false;
     APILastError = "0";
+    _terminated = false;
+    let _beaconCommitted = false;
 
     // Declare Scorm API object for 1.2
 
@@ -1082,6 +1132,11 @@ if (isset($_GET['unit'])) {
     api_1484_11.version = "1.0";
 
     isSCORM2004 = false;
+
+    // Expose flags for viewer (beforeunload, presence recorder)
+    window.eclassLP = window.eclassLP || {};
+    window.eclassLP.isScorm = true;
+    window.eclassLP.isAnonymous = <?php echo $isAnonymous ? 'true' : 'false'; ?>;
 
     let CMIDataModel = {
         //'CMITime': '^([0-2]{1}[0-9]{1}):([0-5]{1}[0-9]{1}):([0-5]{1}[0-9]{1})(\.[0-9]{1,2})?$',
@@ -1198,7 +1253,7 @@ if (isset($_GET['unit'])) {
                         return "";
                     } else if (myres[3] === '._children') {
                         APIError("0");
-                        return "raw,min,max"; //non-standard, added for NetG
+                        return "raw,min,max"; // non-standard
                     } else if (myres[3] === '.raw') {
                         APIError("0");
                         return "";
@@ -1230,7 +1285,7 @@ if (isset($_GET['unit'])) {
                         return "";
                     } else if (myres[3] === '._children') {
                         APIError("0");
-                        return "raw,min,max"; //non-standard, added for NetG
+                        return "raw,min,max"; // non-standard
                     } else if (myres[3] === '.raw') {
                         if (item_objectives[obj_id][2] != null) {
                             APIError("0");
@@ -1294,7 +1349,7 @@ if (isset($_GET['unit'])) {
             elem_id = myres[1];
             elem_attrib = myres[2];
 
-            if (elem_id > correct_responses.length) { //objectives setting should start at 0
+            if (elem_id > correct_responses.length) { // objectives setting should start at 0
                 APIError("201"); // invalid argument
                 return "false";
             } else {
@@ -1330,7 +1385,7 @@ if (isset($_GET['unit'])) {
             elem_id = myres[1];
             elem_attrib = myres[2];
 
-            if (elem_id > interactions.length) { //objectives setting should start at 0
+            if (elem_id > interactions.length) { // objectives setting should start at 0
                 APIError("201"); // invalid argument
                 return "false";
             } else {
@@ -1364,9 +1419,9 @@ if (isset($_GET['unit'])) {
                         APIError("0");
                         return "true";
                     case "correct_responses":
-                        //do nothing yet
-                        //not supported to push
-                        //interactions[elem_id][4].push(val);
+                        // do nothing yet
+                        // not supported to push
+                        // interactions[elem_id][4].push(val);
 
                         return handleSetCorrectResponses(ele, val, interactions[elem_id][3]);
 
@@ -1402,8 +1457,8 @@ if (isset($_GET['unit'])) {
                         APIError("0");
                         return "true";
                     case "objectives":
-                        //var myres = '';
-                        //var item_objectives = new Array();
+                        //let myres = '';
+                        //let item_objectives = new Array();
                         //interactions[elem_id][8] = new Array();
                         return handleSetObjectives(ele, val, interactions[elem_id][8]);
                         //APIError("401");
@@ -1415,7 +1470,7 @@ if (isset($_GET['unit'])) {
                         }
                         interactions[elem_id][8] = val;
                         APIError("0");
-                        return "true;"
+                        return "true";
                     default:
                         APIError("401"); // not implemented
                         return "false";
@@ -1516,6 +1571,12 @@ if (isset($_GET['unit'])) {
             APIError("403"); // read only
             return "false";
         }
+    }
+
+    // Allow runtime activation: window.eclassLP.debugScorm = true
+    if (window.eclassLP && window.eclassLP.debugScorm) {
+        debug_ = true;
+        debug_commit_ = true;
     }
 
     // debug mode

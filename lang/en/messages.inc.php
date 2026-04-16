@@ -5704,6 +5704,7 @@ $lang_allow_rec_audio = "Allow creation of audio recordings in $langsCourse docu
 $langLearningPathCleanAttempt = "Start over on next attempt";
 $langConfirmLpCleanAttemptTitle = "Confirmation for starting over on next attempt";
 $langConfirmLpCleanAttemptBody = "With this option the next attempt of the Learning Path <u>will not</u> use the saved data to continue from where you last left off.<br/><br/><em>Cancel</em> your choice if you <u>do not</u> wish to start over on the next attempt.";
+$langLearningPathProgressOutdated = "Progress display may be outdated. It will refresh automatically.";
 $langAssignmentParticipation = "Assignment Participation";
 $langParticipateSimple = "Simple Participation";
 $langQuickSurvey = "Quick Poll";
