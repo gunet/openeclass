@@ -493,26 +493,34 @@
                         </div>
                     </div>
 
-                    <div class='col-xl-5 col-md-12 col-12 d-flex justify-content-xl-end justify-content-md-start justify-content-center align-items-center gap-2 flex-wrap mt-xl-0 mt-4'>
-                        <a class='btn myProfileBtn' type='button' href='{{ $urlAppend }}main/profile/display_profile.php'>
-                            {{ trans('langMyProfile') }}
-                        </a>
-                        <a class='btn myProfileBtn' type='button' href='{{ $urlAppend }}modules/usage/index.php?t=u'>
-                            {{ trans('langMyStats') }}
-                        </a>
+                    <ul style='list-style-type: none;' class='col-xl-5 col-md-12 col-12 d-flex justify-content-xl-end justify-content-md-start justify-content-center align-items-center gap-2 flex-wrap mt-xl-0 mt-4' role='navigation' aria-label="{{ trans('langProfileLinks') }}">
+                        <li class='nav-item' aria-label="{{ trans('langMyProfile') }}">
+                            <a class='btn myProfileBtn nav-link' href='{{ $urlAppend }}main/profile/display_profile.php'>
+                                {{ trans('langMyProfile') }}
+                            </a>
+                        </li>
+                        <li class='nav-item' aria-label="{{ trans('langMyStats') }}">
+                            <a class='btn myProfileBtn nav-link' href='{{ $urlAppend }}modules/usage/index.php?t=u'>
+                                {{ trans('langMyStats') }}
+                            </a>
+                        </li>
                         @if ((isset($is_admin) and $is_admin) or
                             (isset($is_power_user) and $is_power_user) or
                             (isset($is_usermanage_user) and ($is_usermanage_user)) or
                             (isset($is_departmentmanage_user) and $is_departmentmanage_user))
-                                <a class="btn myProfileBtn" type="button" href="{{ $urlAppend }}modules/admin/index.php">
-                                    {{ trans('langAdminTool') }}
-                                </a>
+                                <li class='nav-item' aria-label="{{ trans('langAdminTool') }}">
+                                    <a class="btn myProfileBtn nav-link" href="{{ $urlAppend }}modules/admin/index.php">
+                                        {{ trans('langAdminTool') }}
+                                    </a>
+                                </li>
                         @elseif ($_SESSION['status'] == USER_STUDENT)
-                            <a class="btn myProfileBtn" type="button" href="{{ $urlAppend }}modules/auth/formuser.php">
-                                {{ trans('langMyRequests') }}
-                            </a>
+                            <li class='nav-item' aria-label="{{ trans('langMyRequests') }}">
+                                <a class="btn myProfileBtn nav-link" href="{{ $urlAppend }}modules/auth/formuser.php">
+                                    {{ trans('langMyRequests') }}
+                                </a>
+                            </li>
                         @endif
-                    </div>
+                    </ul>
 
                 </div>
             </div>

@@ -2770,6 +2770,7 @@ $langPublicAccess = "ανοικτό";
 $langForumType = "Τύπος περιοχής συζητήσεων";
 $langPropModify = "Αλλαγή ρυθμίσεων";
 $langGroupAccess = "Πρόσβαση";
+$NavCatCourses = "Διαδρομή πλοήγησης στις κατηγορίες μαθημάτων";
 $langGroupFilledGroups = "Οι ομάδες χρηστών έχουν συμπληρωθεί από " . $langsOfStudentss . " που βρίσκονται στον κατάλογο «Χρήστες».";
 $langGroupInfo = "Στοιχεία Ομάδας";
 $langGroupMembersInfo = "Μέλη Ομάδας";
@@ -4881,6 +4882,7 @@ $langLegendRequiredFields = "<span class=\"required\">*</span> δείχνει α
 $langProfileMenu = "Μενού Προφίλ Χρήστη";
 $langProfileImage = "Εικόνα Προφίλ";
 $langMyProfile = "Το προφίλ μου";
+$langProfileLinks = "Σύνδεσμοι σύντομου προφίλ χρήστη";
 $langModifyProfile = "Αλλαγή του Προφίλ μου";
 $langOfficialCode = "Κωδικός διαχείρισης";
 $langPersonalCourseList = "Προσωπική λίστα $langsOfCourse";

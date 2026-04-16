@@ -725,6 +725,10 @@ em span {
   font-size: 13px !important;
 }
 
+.active-course{
+  font-size: 14px;
+}
+
 
 /************************* ABOUT LINKS ***************************/
 a{

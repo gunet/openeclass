@@ -46,10 +46,8 @@
                     {!! $buildRoots !!}
                 @endif
                 <div class='col-12'>
+                    <h2 tabindex='0' class='text-heading-h3 mb-2' aria-label="{{ trans('NavCatCourses') }}">{!! $tree->getFullPath($fc, false, $_SERVER['SCRIPT_NAME'] . '?fc=') !!}</h2>
                     <ul class='list-group list-group-flush'>
-                        <li class="list-group-item list-group-item-action d-flex justify-content-start align-items-center flex-wrap gap-2">
-                            {!! $tree->getFullPath($fc, false, $_SERVER['SCRIPT_NAME'] . '?fc=') !!}
-                        </li>
                         {!! $childHTML !!}
                     </ul>
                 </div>
@@ -57,11 +55,11 @@
 
             @if (count($courses) > 0)
                 <div class='col-12 mt-4'>
+                    <div class='d-flex justify-content-between align-items-center'>
+                        <h2 class='text-heading-h3 mb-2'>{{ trans('langCourse') }}</h2>
+                        <h2 class='text-heading-h3 mb-2'>{{ trans('langGroupAccess') }}</h2>
+                    </div>
                     <ul class='list-group list-group-flush'>
-                        <li class='list-group-item list-group-item-action d-flex justify-content-between align-items-center'>
-                            <div>{{ trans('langCourse') }}</div>
-                            <div>{{ trans('langGroupAccess') }}</div>
-                        </li>
                         @foreach($courses as $mycourse)
                             <li class="list-group-item element d-flex justify-content-between align-items-center gap-5">
                                 <div class='d-flex justify-content-start align-items-start gap-3' tabindex='0'>
