@@ -26,7 +26,8 @@ require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'modules/progress/process_functions.php';
 
-load_js('select2');
+load_js('tools.js');
+load_js('slimselect');
 
 function has_full_rights_on_certificate($certificate_department_id) {
     global $is_admin, $is_departmentmanage_user;
@@ -57,7 +58,13 @@ $tenant_department_id = $tenant ? $tenant->department_id : null;
 
 $head_content .= "<script type='text/javascript'>
 $(document).ready(function() {   
-    $('#select-courses').select2();
+    slimSelectFun (
+        '#select-courses', 
+        '" . js_escape(trans('langSearch')) . "', 
+        '" . js_escape(trans('langWelcomeSelect')) . "', 
+        '" . js_escape(trans('langSelectAll')) . "', 
+        '" . js_escape(trans('langListChoices')) . "'
+    );
     $('#selectAll').click(function(e) {
         e.preventDefault();
         var stringVal = [];
@@ -410,7 +417,7 @@ if (isset($_GET['action'])) {
                                 <label for='select-courses' class='col-sm-12 control-label-notes'>$langWorkAssignTo:&nbsp;&nbsp;
                                 <span class='fa fa-info-circle' data-bs-toggle='tooltip' data-bs-placement='right' title='$langToAllCoursesInfo'></span></label>
                                 <div class='col-sm-12'>
-                                <select class='form-control' name='cert_template_courses[]' multiple class='form-control' id='select-courses'>";
+                                <select class='form-control' name='cert_template_courses[]' multiple id='select-courses'>";
                                 $courses_list = Database::get()->queryArray("SELECT id, code, title FROM course
                                                                     WHERE id NOT IN (SELECT course_id FROM course_certificate_template)
                                                                     ORDER BY title");
@@ -435,7 +442,6 @@ if (isset($_GET['action'])) {
                                     $tool_content .= "<option value='$c->id'>" . q($c->title) . " (" . q($c->code) . ")</option>";
                                 }
                                 $tool_content .= "</select>
-                                        <a href='#' id='allCourses'>$langToAllCourses</a> | <a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a>
                                     </div>
                                 </div>
 

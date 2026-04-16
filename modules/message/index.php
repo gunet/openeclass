@@ -33,6 +33,8 @@ require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
 
+load_js('tools.js');
+load_js('slimselect');
 load_js('select2');
 
 if ($is_admin and $require_current_course) {
@@ -286,7 +288,7 @@ $tool_content .= "<div class='col-12'>
                                     <div class='form-group mt-4'>
                                         <label for='select-recipients' class='col-sm-12 control-label-notes'>$langSendTo <span class='asterisk Accent-200-cl'>(*)</span></label>
                                         <div class='col-sm-12'>
-                                            <select name='recipients[]' multiple='multiple' class='form-select' id='select-recipients'>";
+                                            <select name='recipients[]' multiple='multiple' class='form-control' id='select-recipients'>";
 
                                     if ($course_id != 0) {//course messages
                                         $student_to_student_allow = get_config('dropbox_allow_student_to_student');
@@ -381,7 +383,7 @@ $tool_content .= "<div class='col-12'>
                                         }
                                     }
 
-                                    $tool_content .= "</select><a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a>
+                                    $tool_content .= "</select>
                                         </div>
                                     </div>";
                                 } elseif ($type == 'pm' && $course_id == 0) {//personal messages
@@ -462,8 +464,8 @@ $tool_content .= "<div class='col-12'>
                                     <div class='form-group mt-4'>
                                         <div class='col-xs-10 col-xs-offset-2'>
                                             <div class='checkbox'>
-                                            <label class='label-container' aria-label='$langSelect'>
-                                                <input type='checkbox' name='mailing' value='1' checked />
+                                            <label class='label-container' for='send_mail_id'>
+                                                <input id='send_mail_id' type='checkbox' name='mailing' value='1' checked />
                                                 <span class='checkmark'></span>
                                                 $langMailToUsers
                                             </label>
@@ -519,7 +521,13 @@ $tool_content .= "<div class='col-12'>
         $head_content .= "<script type='text/javascript'>
             $(document).ready(function () {
 
-                $('#select-recipients').select2();
+                slimSelectFun (
+                    '#select-recipients', 
+                    '" . js_escape(trans('langSearch')) . "', 
+                    '" . js_escape(trans('langWelcomeSelect')) . "', 
+                    '" . js_escape(trans('langSelectAll')) . "', 
+                    '" . js_escape(trans('langListChoices')) . "'
+                );
                 $('#selectAll').click(function(e) {
                     e.preventDefault();
                     var stringVal = [];

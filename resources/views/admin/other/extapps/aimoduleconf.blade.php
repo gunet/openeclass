@@ -132,10 +132,9 @@
                                     <label for='select-courses' class='col-12 control-label-notes'>{{ trans('langUseOfService') }}&nbsp;&nbsp;
                                     <span class='fa fa-info-circle' data-bs-toggle='tooltip' data-bs-placement='right' title='{{ trans('langUseOfServiceInfo') }}'></span></label>
                                     <div class='col-12'>
-                                        <select id='select-courses' class='form-select' name='ai_courses[]' multiple>
+                                        <select id='select-courses' class='form-control' name='ai_courses[]' multiple>
                                             {!! $courses_content !!}
                                         </select>
-                                        <a href='#' id='selectAll'>{{ trans('langJQCheckAll') }}</a> | <a href='#' id='removeAll'>{{ trans('langJQUncheckAll') }}</a>
                                     </div>
                                 </div>
 
@@ -421,7 +420,13 @@
                 });
             });
 
-            $('#select-courses').select2();
+            slimSelectFun (
+                    '#select-courses', 
+                    '{{ js_escape(trans('langSearch')) }}', 
+                    '{{ js_escape(trans('langWelcomeSelect')) }}', 
+                    '{{ js_escape(trans('langSelectAll')) }}', 
+                    '{{ js_escape(trans('langListChoices')) }}'
+                );
             $('#selectAll').click(function(e) {
                 e.preventDefault();
                 let stringVal = [];

@@ -430,7 +430,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         $tool_content .= "<div class='form-group mt-4'>
                 <label for='select-groups' class='col-sm-12 control-label-notes'>$langParticipants</label>
                 <div class='col-sm-12'>
-                <select name='groups[]' multiple='multiple' class='form-select' id='select-groups'>";
+                <select name='groups[]' multiple='multiple' class='form-control' id='select-groups'>";
 
         if (empty($r_group) or (count($r_group)>=1 and in_array("0", $r_group))) {
             $tool_content .= "<option value='0' selected><h2>$langAllUsers</h2></option>";
@@ -473,7 +473,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
             }
         }
 
-        $tool_content .= "</select><a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a>
+        $tool_content .= "</select>
                 </div>
             </div>";
 

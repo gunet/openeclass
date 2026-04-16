@@ -206,7 +206,7 @@ function new_lti_app($course_code, $is_template = false, $lti_url_default = '') 
                                             <label for='select-courses' class='col-sm-12 control-label-notes'>$langUseOfApp:&nbsp;&nbsp;
                                             <span class='fa fa-info-circle' data-bs-toggle='tooltip' data-bs-placement='bottom' title='$langUseOfAppInfo'></span></label>
                                             <div class='col-sm-12'>
-                                                <select id='select-courses' class='form-select' name='lti_courses[]' multiple>";
+                                                <select id='select-courses' class='form-control' name='lti_courses[]' multiple>";
                                             $courses_list = Database::get()->queryArray("SELECT id, code, title FROM course
                                                                                     WHERE visible <> " . COURSE_INACTIVE . "
                                                                                     ORDER BY title");
@@ -215,7 +215,6 @@ function new_lti_app($course_code, $is_template = false, $lti_url_default = '') 
                                                 $tool_content .= "<option value='$c->id'>" . q($c->title) . " (" . q($c->code) . ")</option>";
                                             }
                             $tool_content .= "</select>
-                                                <a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a>
                                             </div>
                                         </div>";
                                     } else {
@@ -447,7 +446,7 @@ function edit_lti_app($session_id) {
                             <div class='col-sm-12 control-label-notes'>$langUseOfApp:&nbsp;&nbsp;
                             <span class='fa fa-info-circle' data-bs-toggle='tooltip' data-bs-placement='bottom' title='$langUseOfAppInfo'></span></div>
                             <div class='col-sm-12'>
-                                <select class='form-select' name='lti_courses[]' multiple class='form-control' id='select-courses'>";
+                                <select class='form-control' name='lti_courses[]' multiple id='select-courses'>";
                                 $courses_list = Database::get()->queryArray("SELECT id, code, title FROM course
                                                                     WHERE id NOT IN (SELECT course_id FROM course_lti_app WHERE lti_app = ?d)
                                                                     AND visible != " . COURSE_INACTIVE . "
@@ -468,7 +467,6 @@ function edit_lti_app($session_id) {
                                     $tool_content .= "<option value='$c->id'>" . q($c->title) . " (" . q($c->code) . ")</option>";
                                 }
                             $tool_content .= "</select>
-                                <a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a>
                             </div>
                         </div>";
                     } else {

@@ -36,11 +36,17 @@ $colmoocapp = ExtAppManager::getApp(strtolower(ColmoocApp::NAME));
 
 load_js('tools.js');
 load_js('validation.js');
-load_js('select2');
+load_js('slimselect');
 
 $head_content .= "<script type='text/javascript'>
     $(document).ready(function () {
-        $('#select-chatusers').select2();
+        slimSelectFun (
+            '#select-chatusers', 
+            '" . js_escape(trans('langSearch')) . "', 
+            '" . js_escape(trans('langWelcomeSelect')) . "', 
+            '" . js_escape(trans('langSelectAll')) . "', 
+            '" . js_escape(trans('langListChoices')) . "'
+        );
         $('#selectAll').click(function(e) {
             e.preventDefault();
             var stringVal = [];
@@ -122,7 +128,7 @@ if ($is_editor) {
             <div class='form-group mt-4'>
                 <div class='col-sm-12'>
                     <label for='select-chatusers' class='col-12 control-label-notes'>$langChatToSpecUsers</label>
-                    <select class='form-select' name='chat_users[]' multiple class='form-control' id='select-chatusers'>";
+                    <select name='chat_users[]' multiple class='form-control' id='select-chatusers'>";
             $chat_users = Database::get()->queryArray("SELECT cu.user_id, CONCAT(u.surname, ' ', u.givenname) name, u.username
                                                         FROM course_user cu
                                                             JOIN user u ON cu.user_id=u.id
@@ -134,7 +140,6 @@ if ($is_editor) {
                 $tool_content .= "<option value='" . q($cu->user_id) . "'>" . q($cu->name) . " (" . q($cu->username) . ")</option>";
             }
             $tool_content .= "</select>
-                    <a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a>
                 </div>
             </div>";
 
@@ -270,7 +275,7 @@ if ($is_editor) {
         <div class='form-group mt-4'>
             <div class='col-sm-12'>
                 <label for='select-chatusers' class='col-12 control-label-notes'>$langChatToSpecUsers</label>
-                <select class='form-select' name='chat_users[]' multiple class='form-control' id='select-chatusers'>";
+                <select name='chat_users[]' multiple class='form-control' id='select-chatusers'>";
 
         if ($conf->user_id > 0) { // existing chat users (if exist)
             $existing_chat_users = explode(',', $conf->user_id);
@@ -303,7 +308,6 @@ if ($is_editor) {
             $tool_content .= "<option value='" . q($cu->user_id) . "'>" . q($cu->name) . " (" . q($cu->username) . ")</option>";
         }
         $tool_content .= "</select>
-                <a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a>
             </div>
         </div>";
 

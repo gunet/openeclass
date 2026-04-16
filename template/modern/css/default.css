@@ -721,6 +721,10 @@ em span {
   font-style: italic;
 }
 
+.ss-content .ss-list .ss-optgroup .ss-optgroup-label .ss-optgroup-actions .ss-selectall span{
+  font-size: 13px !important;
+}
+
 
 /************************* ABOUT LINKS ***************************/
 a{

@@ -44,7 +44,7 @@ $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $la
 $navigation[] = array('url' => 'session_space.php?course=' . $course_code . "&session=" . $_GET['session'] , 'name' => $sessionTitle);
 
 load_js('tools.js');
-load_js('select2');
+load_js('slimselect');
 load_js('bootstrap-datetimepicker');
 
 if(isset($_POST['modify'])){

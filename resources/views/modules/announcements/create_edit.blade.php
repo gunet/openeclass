@@ -46,7 +46,13 @@
             }
         });
 
-        $('#select-recipients').select2();
+        slimSelectFun (
+                    '#select-recipients', 
+                    '{{ js_escape(trans('langSearch')) }}', 
+                    '{{ js_escape(trans('langWelcomeSelect')) }}', 
+                    '{{ js_escape(trans('langSelectAll')) }}', 
+                    '{{ js_escape(trans('langListChoices')) }}'
+                );
         $('#selectAll').click(function(e) {
             e.preventDefault();
             var stringVal = [];
@@ -122,13 +128,13 @@
                                         <div id='recipients-form-group' class='row mt-4 form-group @if (!$checked_public) not_visible @endif'>
                                             <label for='select-recipients' class='col-12 control-label-notes'>{{ trans('langEmailOption') }}</label>
                                             <div class='col-12'>
-                                                <select class='form-select' name='recipients[]' multiple='multiple' id='select-recipients'>
+                                                <select class='form-control' name='recipients[]' multiple='multiple' id='select-recipients'>
                                                     <option value='-1' selected>{{ trans('langAllUsers') }}</option>
                                                     @foreach ($course_users as $cu)
                                                         <option value='{{ $cu->user_id }}'>{{$cu->name}} ({{$cu->email}})</option>
                                                     @endforeach
                                                 </select>
-                                                <a href='#' id='selectAll'>{{ trans('langJQCheckAll') }}</a> | <a href='#' id='removeAll'>{{ trans('langJQUncheckAll') }}</a>
+                                                
                                             </div>
                                         </div>
 

@@ -1021,3 +1021,34 @@ function formReqChecker(formID,alertMSG) {
 function q(str) {
     return str.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
 }
+
+
+function slimSelectFun (element_id, langSearch, langWelcomeSelect, langSelectAll, langListChoices) {
+    var selectIdOption = $(element_id);
+    var optionsData = [];
+    selectIdOption.find('option').each(function() {
+        optionsData.push({
+            text: $(this).text(),
+            value: $(this).val(),
+            selected: $(this).is(':selected'),
+            disabled: $(this).is(':disabled')
+        });
+    });
+    // Wrap all options into a group
+    var groupedData = [
+        {
+            label: langListChoices,
+            selectAll: true,
+            selectAllText: langSelectAll,
+            options: optionsData
+        }
+    ];
+    new SlimSelect({
+        select: element_id,
+        settings: {
+            placeholderText: langWelcomeSelect,
+            searchPlaceholder: langSearch
+        },
+        data: groupedData
+    });
+}

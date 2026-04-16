@@ -167,6 +167,9 @@ function load_js($file, $init='') {
             css_link('select2-4.0.13/dist/css/override_select2_design.css?v=4.0-dev') .
             js_link('select2-4.0.13/dist/js/select2.full.min.js');
             $file = "select2-4.0.13/dist/js/i18n/$language.js";
+        } elseif ($file == 'slimselect') {
+            $head_content .= css_link('slim-select/slimselect.css') 
+            . js_link('slim-select/slimselect.js');
         } elseif ($file == 'bootstrap-calendar') {
             $file = 'bootstrap-calendar-master/js/calendar.js';
             if ($language != 'en') {
@@ -7210,6 +7213,11 @@ function theme_initialization() {
                     background-color: $theme_options_styles[buttonBgColor] !important;
                 }
 
+                .ss-main .ss-values .ss-value{
+                    border-color: $theme_options_styles[buttonBgColor] !important;
+                    background-color: $theme_options_styles[buttonBgColor] !important;
+                }
+
             ";
 
             $colorChevronLeftRight = "$theme_options_styles[buttonBgColor]";
@@ -7375,12 +7383,17 @@ function theme_initialization() {
                     background-color: $theme_options_styles[buttonHoverBgColor] !important;
                 }
 
+                .ss-main .ss-values .ss-value{
+                    border-color: $theme_options_styles[buttonHoverBgColor] !important;
+                    background-color: $theme_options_styles[buttonHoverBgColor] !important;
+                }
+
             ";
         }
 
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////// TEXT COLOR OF COLORFUL BUTTON //////////////////////////////
+        //////////////////////// TEXT COLOR OF PRIMARY BUTTON //////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
 
@@ -7541,6 +7554,14 @@ function theme_initialization() {
                 .dt-paging .dt-paging-button.active .page-link:hover,
                 .dt-paging .dt-paging-button.active .page-link:focus{
                     color:$theme_options_styles[buttonTextColor] !important;
+                }
+
+                .ss-main .ss-values .ss-value .ss-value-text{
+                    color:$theme_options_styles[buttonTextColor] !important;
+                }
+
+                .ss-main .ss-values .ss-value .ss-value-delete svg path{
+                    stroke: $theme_options_styles[buttonTextColor] !important;
                 }
 
             ";
@@ -8729,6 +8750,15 @@ function theme_initialization() {
                     color: $theme_options_styles[clOptionSelect] !important;
                 }
 
+                .ss-content .ss-list .ss-option,
+                .ss-main .ss-values .ss-placeholder,
+                .ss-content .ss-list .ss-optgroup .ss-optgroup-label .ss-optgroup-label-text{
+                    color: $theme_options_styles[clOptionSelect] !important;
+                }
+                .ss-main .ss-arrow path{
+                   stroke: $theme_options_styles[clOptionSelect] !important;
+                }
+
             ";
         }
 
@@ -8761,6 +8791,9 @@ function theme_initialization() {
                     background-color: $theme_options_styles[bgHoveredSelectOption] !important;
                 }
 
+                .ss-content .ss-list .ss-option:hover:not(.ss-disabled){
+                    background-color: $theme_options_styles[bgHoveredSelectOption] !important;
+                }
 
 
             ";
@@ -8796,6 +8829,10 @@ function theme_initialization() {
                 }
 
                 tox-menu-item:hover tox-text {
+                    color: $theme_options_styles[clHoveredSelectOption] !important;
+                }
+
+                .ss-content .ss-list .ss-option:hover:not(.ss-disabled){
                     color: $theme_options_styles[clHoveredSelectOption] !important;
                 }
 
@@ -8836,6 +8873,10 @@ function theme_initialization() {
 
                 .dropdown-item.active,
                 .dropdown-item:active {
+                    background-color:  $theme_options_styles[bgOptionSelected] !important;
+                }
+
+                .ss-content .ss-list .ss-option.ss-highlighted, .ss-content .ss-list .ss-option:not(.ss-disabled).ss-selected{
                     background-color:  $theme_options_styles[bgOptionSelected] !important;
                 }
 
@@ -8885,6 +8926,10 @@ function theme_initialization() {
 
                 .dropdown-item.active,
                 .dropdown-item:active {
+                    color: $theme_options_styles[clOptionSelected] !important;
+                }
+
+                .ss-content .ss-list .ss-option.ss-highlighted, .ss-content .ss-list .ss-option:not(.ss-disabled).ss-selected{
                     color: $theme_options_styles[clOptionSelected] !important;
                 }
 

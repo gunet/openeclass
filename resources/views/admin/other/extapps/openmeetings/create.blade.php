@@ -110,10 +110,10 @@
                                 <div class='form-group mt-4'>
                                     <label for='select-courses' class='col-sm-12 control-label-notes'>{{ trans('langUseOfTc') }}</label>
                                     <div class="col-sm-12">
-                                        <select class='form-select' name='tc_courses[]' multiple class='form-control' id='select-courses'>                        
+                                        <select name='tc_courses[]' multiple class='form-control' id='select-courses'>                        
                                             {!! $listcourses !!}
                                         </select>            
-                                        <a href='#' id='selectAll'>{{ trans('langJQCheckAll') }}</a> | <a href='#' id='removeAll'>{{ trans('langJQUncheckAll') }}</a>
+                                        
                                     </div>
                                 </div>
                                 @if (isset($server))

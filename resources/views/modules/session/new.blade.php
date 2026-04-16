@@ -99,7 +99,13 @@
             });
 
             $('#group_session').on('change',function(){
-                $('#select_users_group_session').select2();
+                slimSelectFun (
+                    '#select_users_group_session', 
+                    '{{ js_escape(trans('langSearch')) }}', 
+                    '{{ js_escape(trans('langWelcomeSelect')) }}', 
+                    '{{ js_escape(trans('langSelectAll')) }}', 
+                    '{{ js_escape(trans('langListChoices')) }}'
+                );
                 $('#select_one_session').removeClass('d-block');
                 $('#select_one_session').addClass('d-none');
                 $('#select_group_session').removeClass('d-none');
@@ -229,12 +235,12 @@
                                                 @endif
                                             </div>
                                             <div id='select_group_session' class='d-none mt-1'>
-                                                <select aria-label="{{ trans('langSessionParticipants') }}" id='select_users_group_session' name='many_participants[]' class='form-select' multiple>
+                                                <select aria-label="{{ trans('langSessionParticipants') }}" id='select_users_group_session' name='many_participants[]' class='form-control' multiple>
                                                     @foreach($simple_users as $u)
                                                         <option value='{{ $u->user_id }}'>{{ $u->givenname }}&nbsp;{{ $u->surname }}</option>
                                                     @endforeach
                                                 </select>
-                                                <a href='#' id='selectAll'>{{ trans('langJQCheckAll') }}</a> | <a href='#' id='removeAll'>{{ trans('langJQUncheckAll') }}</a>
+                                                
                                                 @if(Session::getError('many_participants'))
                                                     <span class='help-block Accent-200-cl'>{!! Session::getError('many_participants') !!}</span>
                                                 @endif

@@ -241,14 +241,14 @@ if (isset($_GET['mid'])) {
                                     <div class='form-group mt-4'>
                                         <label for='select-recipients' class='col-sm-12 control-label-notes'>$langSendTo <span class='asterisk Accent-200-cl'>(*)</span></label>
                                         <div class='col-sm-12'>
-                                            <select name='recipients[]' multiple='multiple' class='form-select' id='select-recipients'>";
+                                            <select name='recipients[]' multiple='multiple' class='form-control' id='select-recipients'>";
 
                                         // mail sender
                                         $out .= "<option value='$msg->author_id' selected>". q(uid_to_name($msg->author_id)) . "</option>";
 
                                         addRecipientOptions();
 
-                                        $out .= "</select><a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a>
+                                        $out .= "</select>
                                         </div>
                                     </div>";
 
@@ -373,11 +373,11 @@ if (isset($_GET['mid'])) {
                         <div class='form-group mt-4'>
                             <label for='select-recipients-forward' class='col-sm-12 control-label-notes'>$langSendTo</label>
                             <div class='col-sm-12'>
-                                <select name='recipients[]' multiple='multiple' class='form-select' id='select-recipients-forward'>";
+                                <select name='recipients[]' multiple='multiple' class='form-control' id='select-recipients-forward'>";
 
                         addRecipientOptions();
 
-                        $out .= "</select><a href='#' id='removeAllForward'>$langJQUncheckAll</a>
+                        $out .= "</select>
                             </div>
                         </div>
 
@@ -496,11 +496,13 @@ if (isset($_GET['mid'])) {
                             $('html, body').animate({
                                 scrollTop: $('#replyBox').offset().top
                             }, 500);
-                            $('#select-recipients').select2({
-                                placeholder: '".js_escape($langSearch)."',
-                                multiple: true,
-                                cache: true
-                            });
+                            slimSelectFun (
+                                '#select-recipients', 
+                                '" . js_escape(trans('langSearch')) . "', 
+                                '" . js_escape(trans('langWelcomeSelect')) . "', 
+                                '" . js_escape(trans('langSelectAll')) . "', 
+                                '" . js_escape(trans('langListChoices')) . "'
+                            );
                             return false;
                         });
                         $('.btn-forward').on('click', function(e) {
@@ -512,11 +514,13 @@ if (isset($_GET['mid'])) {
                             $('html, body').animate({
                                 scrollTop: $('#forwardBox').offset().top
                             }, 500);
-                            $('#select-recipients-forward').select2({
-                                placeholder: '".js_escape($langSearch)."',
-                                multiple: true,
-                                cache: true
-                            });
+                            slimSelectFun (
+                                '#select-recipients-forward', 
+                                '" . js_escape(trans('langSearch')) . "', 
+                                '" . js_escape(trans('langWelcomeSelect')) . "', 
+                                '" . js_escape(trans('langSelectAll')) . "', 
+                                '" . js_escape(trans('langListChoices')) . "'
+                            );
                             return false;
                         });
                         $('#cancelReply').on('click', function(e){

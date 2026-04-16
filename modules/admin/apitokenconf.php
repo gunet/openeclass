@@ -27,7 +27,8 @@ require_once 'modules/admin/extconfig/externals.php';
 require_once 'modules/admin/extconfig/apitokenapp.php';
 
 load_js('bootstrap-datetimepicker');
-load_js('select2');
+load_js('tools.js');
+load_js('slimselect');
 
 $head_content .= "
     <script type='text/javascript'>
@@ -387,10 +388,9 @@ if (isset($_GET['edit'])) {
                         </div>
                         <div id='courses-select-field' class='form-group d-none'>
                             <div class='col-sm-12'>
-                                <select class='form-select' name='api_courses[]' multiple class='form-control' id='select-courses'>
+                                <select class='form-control' name='api_courses[]' multiple id='select-courses'>
                                     $listcourses
                                 </select>
-                                <a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a>
                             </div>
                         </div>
                         <div class='form-group mt-4'>
@@ -430,8 +430,20 @@ $head_content .= "
                     $('#courses-select-field').slideUp(400);
                 }
             });
-            $('#select-courses').select2();
-            $('#select-categories').select2();
+            slimSelectFun (
+                '#select-courses', 
+                '" . js_escape(trans('langSearch')) . "', 
+                '" . js_escape(trans('langWelcomeSelect')) . "', 
+                '" . js_escape(trans('langSelectAll')) . "', 
+                '" . js_escape(trans('langListChoices')) . "'
+            );
+            slimSelectFun (
+                '#select-categories', 
+                '" . js_escape(trans('langSearch')) . "', 
+                '" . js_escape(trans('langWelcomeSelect')) . "', 
+                '" . js_escape(trans('langSelectAll')) . "', 
+                '" . js_escape(trans('langListChoices')) . "'
+            );
             $('#selectAll').click(function(e) {
                 e.preventDefault();
                 var stringVal = [];

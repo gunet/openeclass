@@ -19,7 +19,8 @@
  */
 
 load_js('bootstrap-slider');
-load_js('select2');
+load_js('tools.js');
+load_js('slimselect');
 
 $head_content .= "<script>
 $(function() {
@@ -34,7 +35,14 @@ $(function() {
         }, 100);
     }
 
-    $('#questionCat').select2();
+
+    slimSelectFun (
+        '#questionCat', 
+        '" . js_escape(trans('langSearch')) . "', 
+        '" . js_escape(trans('langWelcomeSelect')) . "', 
+        '" . js_escape(trans('langSelectAll')) . "', 
+        '" . js_escape(trans('langListChoices')) . "'
+    );
     var diffArray = ['$langQuestionNotDefined','$langQuestionVeryEasy', '$langQuestionEasy', '$langQuestionModerate', '$langQuestionDifficult', '$langQuestionVeryDifficult']
     $('#questionDifficulty').slider({
         tooltip: 'hide',
@@ -401,7 +409,7 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
                 <div class='row form-group mt-4'>
                     <label for='questionCat' class='col-12 control-label-notes mb-1'>$langQuestionCat</label>
                     <div class='col-12'>
-                        <select name='category' id='questionCat' class='form-select'>
+                        <select name='category' id='questionCat' class='form-control'>
                             $options
                         </select>
                     </div>
