@@ -440,7 +440,7 @@ function render_eportfolio_fields_form() {
                 }
 
                 $return_string['panels'] .= '<div class="'.$form_class.'">';
-                $return_string['panels'] .= '<div class="d-flex align-items-center"><label class="mb-0 title-default" for="epf_'.$f->shortname.'">'.q($f->name).'</label><button type="button" id="visibility_epf_'.$f->shortname.'_button" class="btn btn-link p-0 ms-2" data-bs-toggle="modal" data-bs-target="#visibilityModal-epf_'.$f->shortname.'" title="'.$fa_icon_title.'">'.$visibility_fa_icon.'</button></div>';
+                $return_string['panels'] .= '<div class="d-flex align-items-center"><label class="mb-0 title-default" for="epf_'.$f->shortname.'">'.q($f->name).'</label><button type="button" id="visibility_epf_'.$f->shortname.'_button" class="btn p-0 ms-2" style="color:#adb5bd;" data-bs-toggle="modal" data-bs-target="#visibilityModal-epf_'.$f->shortname.'" title="'.$fa_icon_title.'">'.$visibility_fa_icon.'</button></div>';
                 $return_string['panels'] .= '<div class="col-sm-12">';
                 $return_string['panels'] .= $hidden_visibility_element;
 
