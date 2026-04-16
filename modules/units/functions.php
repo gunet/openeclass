@@ -988,7 +988,7 @@ function show_lp($title, $comments, $resource_id, $lp_id, $act_name): string
         if ($suspend_data) {
             $lp_susp_button = "
                 <span class='pull-right' data-bs-toggle='tooltip' data-bs-placement='top' title='$langLearningPathCleanAttempt'>
-                    <a data-href='{$urlAppend}modules/units/view.php?course=$course_code&amp;res_type=lp&amp;path_id=$lp_id&amp;module_id=$module_id&amp;unit=$id&amp;cleanattempt=on' data-toggle='modal' data-target='#confirmLpCleanAttemptDialog'>
+                    <a data-href='{$urlAppend}modules/units/view.php?course=$course_code&amp;res_type=lp&amp;path_id=$lp_id&amp;module_id=$module_id&amp;unit=$id&amp;cleanattempt=on' data-bs-toggle='modal' data-bs-target='#confirmLpCleanAttemptDialog'>
                         <span class='fa fa-repeat' style='font-size:15px;'></span>
                     </a>
                 </span>";
@@ -1026,16 +1026,16 @@ function show_lp($title, $comments, $resource_id, $lp_id, $act_name): string
           <div class='text-start w-100'>
             <div class='module-name'>$langLearnPath</div>
             <div class='row m-0 flex-column flex-lg-row'>
-                <div class='col-lg-9 p-0 m-0 d-flex flex-column'> 
-                    <div>$link</div> 
+                <div class='col-lg-9 p-0 m-0 d-flex flex-column'>
+                    <div>$link</div>
                     <div class='content'>$comment_box</div>
                 </div>
                 <div class='col-lg-3 p-0 m-0 d-flex flex-column align-items-lg-end'>
                     <div class='mt-2'>$lp_bar</div>
-                    <div class='d-flex gap-2'>$res_prereq_icon $lp_susp_button $lp_results_button $lp_results</div> 
+                    <div class='d-flex gap-2'>$res_prereq_icon $lp_susp_button $lp_results_button $lp_results</div>
                 </div>
             </div>
-                
+
             </div>" .
 
             actions('lp', $resource_id, $status) . "</div>";
@@ -1273,9 +1273,9 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility, $act_
           <div class='unitIcon' width='1'>$imagelink</div>
           " . (!empty($act_name) ? "<div class='text-start act_label'>$act_name</div>" : "") . "
           <div class='text-start w-100'>
-              <div class='module-name'>$langWorks</div> 
+              <div class='module-name'>$langWorks</div>
               <div class='row m-0 flex-column flex-lg-row gap-2 gap-lg-0'>
-                <div class='col-lg-9 p-0 m-0 d-flex flex-column'> 
+                <div class='col-lg-9 p-0 m-0 d-flex flex-column'>
                     <div>$exlink</div>
                     <div class='content'>$comment_box</div>
                 </div>
@@ -1499,7 +1499,7 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
           <div class='unitIcon' width='3'>$imagelink</div>
           " . (!empty($act_name) ? "<div class='text-start act_label'>$act_name</div>" : "") . "
           <div class='text-start w-100'>
-          <div class='module-name'>$langExercises</div> 
+          <div class='module-name'>$langExercises</div>
             $exlink $res_prereq_icon $comment_box
           </div>" . actions('lp', $resource_id, $visibility) . "
         </div>";
@@ -2303,11 +2303,11 @@ function edit_res($resource_id) {
                 <div class='form-group mt-4'>
                     <label for='rescomments' class='col-sm-6 control-label-notes'>$message</label>
                     <div class='col-sm-12'>" . rich_text_editor('rescomments', 4, 20, $rescomments) . "</div>
-                </div>                                
+                </div>
                 <div class='col-12 d-flex justify-content-end align-items-center gap-2 mt-5'>
                     <input class='btn submitAdminBtn' type='submit' name='edit_res_submit' value='$langSubmit'>
-                    <a class='btn cancelAdminBtn ms-2' href='index.php?course=$course_code&id=$id'>$langCancel</a>                    
-                </div>                
+                    <a class='btn cancelAdminBtn ms-2' href='index.php?course=$course_code&id=$id'>$langCancel</a>
+                </div>
             </form></div>
         </div>
             <div class='d-none d-lg-block'>
