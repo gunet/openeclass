@@ -12542,6 +12542,20 @@ function theme_initialization() {
                     border: solid 2px $theme_options_styles[ColorFocus] !important;
                     border-left: 0px !important;
                 }
+
+                .dt-container.dt-bootstrap5 select:focus{
+                    border: solid 2px $theme_options_styles[ColorFocus] !important;
+                }
+
+                .dt-container.dt-bootstrap5 input[type='text']:focus,
+                .dt-container.dt-bootstrap5 input[type='number']:focus,
+                .dt-container.dt-bootstrap5 input[type='email']:focus, 
+                .dt-container.dt-bootstrap5 input[type='url']:focus, 
+                .dt-container.dt-bootstrap5 input[type='search']:focus, 
+                .dt-container.dt-bootstrap5 .form-control:focus, 
+                .dt-container.dt-bootstrap5 .uneditable-input:focus{
+                    border: solid 2px $theme_options_styles[ColorFocus] !important;
+                }
             ";
         }
 
