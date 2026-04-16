@@ -17,11 +17,12 @@
  *
  */
 
-require_once '../vendor/autoload.php';
-require_once '../include/main_lib.php';
+chdir('..');
+require_once 'vendor/autoload.php';
+require_once 'include/main_lib.php';
 
-$viewsDir = '../resources/views/install';
-$cacheDir = '../storage/views/';
+$viewsDir = 'resources/views/install';
+$cacheDir = 'storage/views/';
 if (!is_dir($cacheDir)) {
     $tempDir = $cacheDir;
     $cacheDir = null;
