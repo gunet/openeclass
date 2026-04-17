@@ -156,11 +156,11 @@ if (count($lpList) == 0) {
                         <td colspan='4'><strong>$langTotal</strong></td>
                         <td>" . q($totalTimeSpent) . "</td>
                         <td></td>
-                        <td>" . disp_progress_bar($total_progress, 1) . "</td>
+                        <td>" . (($total_progress <= 0) ? "-" : disp_progress_bar($total_progress, 1)) . "</td>
                         <td></td>
                       </tr>";
     $data[] = [];
-    $data[] = [ $langTotal, '', '', '', $totalTimeSpent, '', $total_progress . '%' ];
+    $data[] = [ $langTotal, '', '', '', $totalTimeSpent, '', (($total_progress <= 0) ? "-" : $total_progress . '%') ];
 }
 $tool_content .= "</table></div>";
 

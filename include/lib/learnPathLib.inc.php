@@ -687,7 +687,7 @@ function format_lp_progress_display($attempts, $totalTime, $progress, $score, $s
     $hasAttempts = !empty($attempts);
 
     $showTime = $hasAttempts || $totalTime !== "00:00:00";
-    $showProgress = $hasAttempts || !empty($progress);
+    $showProgress = ($hasAttempts || !empty($progress)) && $progress > 0;
     $showScore = ($hasAttempts || !empty($score)) && (!empty($scoreMax) && $scoreMax > 0);
 
     return [
