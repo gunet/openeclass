@@ -161,13 +161,13 @@ if ($learnPathName) {
                             <td>" . $lp_total_accessed . "</td>
                             <td>" . q($lpTotalTime) . "</td>
                             <td>" . $lp_total_status . "</td>
-                            <td>" . disp_progress_bar($lpCombinedProgress, 1) . "</td>
+                            <td>" . (($lpCombinedProgress <= 0) ? "-" : disp_progress_bar($lpCombinedProgress, 1)) . "</td>
                             <td class='text-end'>" . $lpDisplay['score'] . "</td>";
 
         $tool_content .= "</tr>";
 
         $ug = user_groups($course_id, $user->id, 'csv');
-        $data[] = [ "$user->surname $user->givenname", $user->email, $user->am, $ug, $lpAttemptsNb, $lp_total_started, $lp_total_accessed, $lpTotalTime, $lp_total_status, $lpProgress . '%', $lpDisplay['score'] ];
+        $data[] = [ "$user->surname $user->givenname", $user->email, $user->am, $ug, $lpAttemptsNb, $lp_total_started, $lp_total_accessed, $lpTotalTime, $lp_total_status, (($lpProgress <= 0) ? "-" : $lpProgress . '%'), $lpDisplay['score'] ];
     }
     $tool_content .= "</tbody></table></div>";
 }

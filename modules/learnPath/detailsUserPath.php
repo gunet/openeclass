@@ -260,7 +260,7 @@ foreach ($elementList as $module) {
     $tool_content .= "<td style='width:15%;'>" . disp_lesson_status($module['lesson_status']) . "</td>";
     //-- progression
     $displayScore = ($score === 0 && $module['raw'] <= 0 && $module['scoreMax'] <= 0) ? "-" : $score . "%" ;
-    $displayProgress = ((int)$progress === 0 && (is_null($module['progress_measure']) || $module['progress_measure'] <= 0)) ? "-" : disp_progress_bar($progress, 1) ;
+    $displayProgress = ((int)$progress === 0 && (is_null($module['progress_measure']) || $module['progress_measure'] <= 0)) ? "-" : disp_progress_bar($progress, 1);
     if ($module['contentType'] != CTLABEL_) {
         // display the progress value for current module
         $tool_content .= "<td>" . $displayProgress . "</td><td class='text-end'>" . $displayScore . "</td>";
@@ -315,14 +315,14 @@ if ($moduleNbT == 0) {
                         <th class='ps-1' colspan='" . ($maxDeep + 4) . "'>" . ($totalTime != "0000:00:00" ? $langTotal : '&nbsp;') . "</></th>
                         <th><small>" . ($totalTime != "0000:00:00" ? $totalTime : '&nbsp;') . "</small></th>
                         <th>&nbsp;</th>
-                        <th class='ms-1 p-2'>" . disp_progress_bar($lpCombinedProgress, 1) . "</th>
+                        <th class='ms-1 p-2'>" . (($lpCombinedProgress <= 0) ? "-" : disp_progress_bar($lpCombinedProgress, 1)) . "</th>
                         <th class='ms-1 p-2 text-end'>$globalScoreDisplay</th>
                     </tr>";
     $data[] = [];
     if ($totalTime != "0000:00:00") {
         $data[] = [ $langTimeInLearnPath, $totalTime ];
     }
-    $data[] = [ $langTotalPercentCompleteness, $lpCombinedProgress . "%" ];
+    $data[] = [ $langTotalPercentCompleteness, (($lpCombinedProgress <= 0) ? "-" : $lpCombinedProgress . "%")];
     $data[] = [ $langMaxScore, $globalScoreDisplay];
 }
 $tool_content .= "</table></div>";
