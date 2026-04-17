@@ -260,7 +260,7 @@ foreach ($elementList as $module) {
     $tool_content .= "<td style='width:15%;'>" . disp_lesson_status($module['lesson_status']) . "</td>";
     //-- progression
     $displayScore = ($score === 0 && $module['raw'] <= 0 && $module['scoreMax'] <= 0) ? "-" : $score . "%" ;
-    $displayProgress = ($progress === 0 && is_null($module['progress_measure'])) ? "-" : disp_progress_bar($progress, 1) ;
+    $displayProgress = ((int)$progress === 0 && (is_null($module['progress_measure']) || $module['progress_measure'] <= 0)) ? "-" : disp_progress_bar($progress, 1) ;
     if ($module['contentType'] != CTLABEL_) {
         // display the progress value for current module
         $tool_content .= "<td>" . $displayProgress . "</td><td class='text-end'>" . $displayScore . "</td>";

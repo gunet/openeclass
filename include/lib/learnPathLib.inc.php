@@ -1451,7 +1451,7 @@ function enum_lesson_status(string $lessonStatus): int {
     } else if ($lessonStatus == "BROWSED") {
         return 4;
     } else if ($lessonStatus == "PASSED") {
-        return 5;
+        return 4;
     } else {
         return 0;
     }
