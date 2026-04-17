@@ -216,7 +216,7 @@ function upload_file($sid){
 
                                                 <div class='form-group mt-4'>
                                                     <label for='comments' class='col-12 control-label-notes'>$langDescription</label>
-                                                    " . rich_text_editor('comments', 5, 40, '') . "
+                                                    " . rich_text_editor('comments', 5, 40, '', options: array('id' => 'comments')) . "
                                                 </div>";
 
                                                 if(!$is_consultant){
@@ -330,7 +330,7 @@ function upload_file_reference($sid){
 
                                                 <div class='create-file form-group mt-4' style='display:none;'>
                                                     <label for='content_reference' class='col-12 control-label-notes'>$langContent <span class='asterisk Accent-200-cl'>(*)</span></label>
-                                                    " . rich_text_editor('content_reference', 5, 40, '') . "
+                                                    " . rich_text_editor('content_reference', 5, 40, '', options: array('id' => 'content_reference')) . "
                                                 </div>";
 
 

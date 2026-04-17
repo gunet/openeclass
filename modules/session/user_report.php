@@ -336,7 +336,7 @@ if (isset($_GET['u'])) { //  stats per user
                                 <input type='hidden' name='aboutU' value='{$row->id}' />
                                 <input type='hidden' name='aboutSession' value='{$sessionID}' />
                                 <input type='hidden' name='aboutTutor' value='{$tutorSession}' />
-                                " . rich_text_editor('addContent', 4, 20, $contentToModify) . "
+                                " . rich_text_editor('addContent', 4, 20, $contentToModify, options: array('id' => 'addContent')) . "
                             </div>
                             <div class='modal-footer d-flex justify-content-center align-items-center'>
                                 <a class='btn cancelAdminBtn' href='' data-bs-dismiss='modal'>$langCancel</a>

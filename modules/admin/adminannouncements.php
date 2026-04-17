@@ -210,7 +210,7 @@ if (isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
                                                     lang, `order`, visible FROM admin_announcement WHERE id = ?d", $id);
     }
     if (isset($announcement)) {
-        $data['newContentTextarea'] = rich_text_editor('newContent', 5, 40, standard_text_escape($data['announcement']->body));
+        $data['newContentTextarea'] = rich_text_editor('newContent', 5, 40, standard_text_escape($data['announcement']->body), options: array('id' => 'newContent'));
         $begindate = NULL;
         if (!is_null($announcement->begin) and !empty($announcement->begin)) {
             $begindate = DateTime::createFromFormat('Y-m-d H:i:s', $announcement->begin);
@@ -239,7 +239,7 @@ if (isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
         if (Session::has('newContent')) {
             $newContent = Session::get('newContent');
         }
-        $data['newContentTextarea'] = rich_text_editor('newContent', 5, 40, $newContent);
+        $data['newContentTextarea'] = rich_text_editor('newContent', 5, 40, $newContent, options: array('id' => 'newContent'));
 
         $data['checked_public'] = " checked";
         $data['start_checkbox'] = $data['end_checkbox'] = '';

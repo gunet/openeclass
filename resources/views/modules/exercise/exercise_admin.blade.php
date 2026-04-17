@@ -39,7 +39,7 @@
                                         <div class='row form-group mt-4'>
                                             <label for='exerciseDescription' class='col-12 control-label-notes mb-1'>{{ trans('langDescription') }}</label>
                                             <div class='col-12'>
-                                                {!! rich_text_editor('exerciseDescription', 4, 30, $exerciseDescription) !!}
+                                                {!! rich_text_editor('exerciseDescription', 4, 30, $exerciseDescription, options: array('id' => 'exerciseDescription')) !!}
                                             </div>
                                         </div>
 
@@ -48,7 +48,7 @@
                                                 <span class='fa-solid fa-circle-info ps-1' data-bs-toggle='tooltip' data-bs-placement='top' title='{{ trans('langEndMessageInfo') }}' style='margin-bottom: 10px;'></span>
                                             </label>
                                             <div class='col-12'>
-                                                {!! rich_text_editor('exerciseEndMessage', 4, 30, $exerciseEndMessage) !!}
+                                                {!! rich_text_editor('exerciseEndMessage', 4, 30, $exerciseEndMessage, options: array('id' => 'exerciseEndMessage')) !!}
                                             </div>
                                         </div>
 

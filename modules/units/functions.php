@@ -2302,7 +2302,7 @@ function edit_res($resource_id) {
     $content .= "
                 <div class='form-group mt-4'>
                     <label for='rescomments' class='col-sm-6 control-label-notes'>$message</label>
-                    <div class='col-sm-12'>" . rich_text_editor('rescomments', 4, 20, $rescomments) . "</div>
+                    <div class='col-sm-12'>" . rich_text_editor('rescomments', 4, 20, $rescomments, options: array('id' => 'rescomments')) . "</div>
                 </div>
                 <div class='col-12 d-flex justify-content-end align-items-center gap-2 mt-5'>
                     <input class='btn submitAdminBtn' type='submit' name='edit_res_submit' value='$langSubmit'>

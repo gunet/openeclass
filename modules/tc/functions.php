@@ -152,7 +152,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         }
         $enableEndDate = Session::has('BBBEndDate') ? Session::get('BBBEndDate') : ($BBBEndDate ? 1 : 0);
 
-        $textarea = rich_text_editor('desc', 4, 20, $row->description);
+        $textarea = rich_text_editor('desc', 4, 20, $row->description, options: array('id' => 'desc'));
         $value_title = q($row->title);
         $value_session_users = $row->sessionUsers;
         $external_users = trim($row->external_users ?? '');
@@ -194,7 +194,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         $start_session = $start_date->format('d-m-Y H:i');
         $end_date = new DateTime;
         $BBBEndDate = $end_date->format('d-m-Y H:i');
-        $textarea = rich_text_editor('desc', 4, 20, '');
+        $textarea = rich_text_editor('desc', 4, 20, '', options: array('id' => 'desc'));
         $value_title = '';
         $init_external_users = '';
         if ($tc_type == 'jitsi') {

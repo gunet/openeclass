@@ -1131,7 +1131,7 @@
                                             <div class='form-group mt-4'>
                                                 <label for='maintenance_text_{{ $langCode }}' class='col-sm-12 control-label-notes'>{{ trans('langText') }}:({{ $langName }})</label>
                                                 <div class='col-sm-12'>
-                                                    {!! rich_text_editor('maintenance_text_'.$langCode, 5, 20, $maintenance_text) !!}
+                                                    {!! rich_text_editor('maintenance_text_'.$langCode, 5, 20, $maintenance_text, options: array('id' => 'maintenance_text_'.$langCode)) !!}
                                                 </div>
                                             </div>
                                         @endforeach

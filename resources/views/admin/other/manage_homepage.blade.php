@@ -123,9 +123,9 @@
 
 
                                         <div class='form-group mt-4'>
-                                            <label for='homepage_intro' class='col-sm-12 control-label-notes'>{{trans('langHomePageIntroText')}} - {{$langName}}</label>
+                                            <label for='homepage_intro_{{$langCode}}' class='col-sm-12 control-label-notes'>{{trans('langHomePageIntroText')}} - {{$langName}}</label>
                                             <div class='col-sm-12'>
-                                                {!! rich_text_editor('homepage_intro_'.$langCode, 5, 20, get_config('homepage_intro_'.$langCode)) !!}
+                                                {!! rich_text_editor('homepage_intro_'.$langCode, 5, 20, get_config('homepage_intro_'.$langCode), options: array('id' => 'homepage_intro_'.$langCode)) !!}
                                                 <p class='help-block mt-1'>{{ trans('langHomePageIntroTextHelp') }}</p>
                                             </div>
                                         </div>

@@ -183,7 +183,7 @@ if (isset($_GET['add']) or isset($_GET['modify'])) {
 
     // add comment
     if (!isset($_GET['modify'])) {
-        $data['rich_text_editor_comments'] = rich_text_editor('comments', 5, 40, '');
+        $data['rich_text_editor_comments'] = rich_text_editor('comments', 5, 40, '', options: array('id' => 'comments'));
         $data['participants'] = $participants = Database::get()->queryArray("SELECT user.givenname,user.surname,mod_session_users.participants FROM mod_session_users
                                                                              LEFT JOIN user ON mod_session_users.participants=user.id
                                                                              WHERE mod_session_users.session_id = ?d
@@ -192,7 +192,7 @@ if (isset($_GET['add']) or isset($_GET['modify'])) {
         if (isset($_GET['comment'])) {
             $comment = Database::get()->querySingle("SELECT * FROM session_poll_comments WHERE id = ?d", $_GET['comment']);
             if ($comment) {
-                $data['rich_text_editor_comments'] = rich_text_editor('comments', 5, 40, $comment->comments);
+                $data['rich_text_editor_comments'] = rich_text_editor('comments', 5, 40, $comment->comments, options: array('id' => 'comments'));
                 $data['comment_id'] = $comment->id;
                 $data['title'] = $comment->title;
                 $data['user_u'] = $comment->user_id;

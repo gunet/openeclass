@@ -186,7 +186,7 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
                 <div class='form-group mt-4'>
                   <label for='newContent' class='col-sm-12 control-label-notes'>$langNoteBody</label>
                   <div class='col-sm-12'>
-                    " . rich_text_editor('newContent', 4, 20, $contentToModify) . "
+                    " . rich_text_editor('newContent', 4, 20, $contentToModify, options: array('id' => 'newContent')) . "
                   </div>
                 </div>
                 <div class='form-group mt-4'>

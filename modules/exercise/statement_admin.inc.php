@@ -403,7 +403,7 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
                     <label for='questionDescription' class='col-12 control-label-notes mb-1'>$langQuestionDescription</label>
                     <div class='col-12'>
 
-                      ". rich_text_editor('questionDescription', 4, 50, $questionDescription) ."
+                      ". rich_text_editor('questionDescription', 4, 50, $questionDescription, options: array('id' => 'questionDescription')) ."
                     </div>
                 </div>
                 <div class='row form-group mt-4'>
@@ -428,7 +428,7 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
                 <div class='row form-group mt-4'>
                     <label for='questionFeedback' class='col-12 control-label-notes mb-1'>$langQuestionFeedback</label>
                     <div class='col-12'>
-                      ". rich_text_editor('questionFeedback', 4, 50, $questionFeedback) ."
+                      ". rich_text_editor('questionFeedback', 4, 50, $questionFeedback, options: array('id' => 'questionFeedback')) ."
                     </div>
                 </div>
                 <div class='row'>

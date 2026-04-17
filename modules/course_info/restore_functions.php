@@ -422,7 +422,7 @@ function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $f
                                 <div class='form-group mt-4'>
                                     <label for='course_desc' class='col-12 control-label-notes'>$langCourseDescription</label>
                                     <div class='col-sm-12'>
-                                        " . rich_text_editor('course_desc', 10, 40, purify($desc)) . "
+                                        " . rich_text_editor('course_desc', 10, 40, purify($desc), options: array('id' => 'course_desc')) . "
                                     </div>
                                 </div>
                                 <div class='form-group mt-4'>

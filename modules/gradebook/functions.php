@@ -1617,7 +1617,7 @@ function add_gradebook_other_activity($gradebook_id) {
                         <div class='form-group mt-4'>
                             <label for='actDesc' class='col-sm-12 control-label-notes'>$langComments</label>
                             <div class='col-sm-12'>
-                                " . rich_text_editor('actDesc', 4, 20, $contentToModify) . "
+                                " . rich_text_editor('actDesc', 4, 20, $contentToModify, options: array('id' => 'actDesc')) . "
                             </div>
                         </div>";
                         if (isset($module_auto_id) && $module_auto_id != 0) { //accept the auto booking mechanism

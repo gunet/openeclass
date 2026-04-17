@@ -183,6 +183,6 @@ list($js, $html) = $tree->buildUserNodePicker(array('params' => 'name="departmen
 $head_content .= $js;
 $data['buildusernode'] = $html;
 
-$data['body_mail_rich_text'] = rich_text_editor('body_mail', 10, 20, $body_mail);
+$data['body_mail_rich_text'] = rich_text_editor('body_mail', 10, 20, $body_mail, options: array('id' => 'body_mail'));
 
 view('admin.users.mailtoprof', $data);

@@ -289,7 +289,7 @@ function render_eportfolio_fields_form() {
                         } elseif (isset($_REQUEST['epf_'.$f->shortname]) && isset($_REQUEST['epf_'.$f->shortname]) != '') {
                             $val = $_REQUEST['epf_'.$f->shortname];
                         }
-                        $return_string['panels'] .= rich_text_editor('epf_'.$f->shortname, 8, 20, $val);
+                        $return_string['panels'] .= rich_text_editor('epf_'.$f->shortname, 8, 20, $val, options: array('id' => 'epf_'.$f->shortname));
                         if ($f->required == 0) {
                             $req_label = $langOptional;
                         } else {

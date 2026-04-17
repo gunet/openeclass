@@ -288,7 +288,7 @@ if($is_coordinator){// is the tutor course
   $data['creators'] = Database::get()->queryArray("SELECT id,givenname,surname FROM user WHERE id = ?d",$uid);
 }
 
-$data['comments'] = rich_text_editor('comments', 5, 40, '' );
+$data['comments'] = rich_text_editor('comments', 5, 40, '', options: array('id' => 'comments'));
 
 
 $sql = "";

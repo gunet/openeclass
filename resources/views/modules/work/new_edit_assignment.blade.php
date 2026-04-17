@@ -39,7 +39,7 @@
                                             <div class='row form-group mt-4'>
                                                 <label for='desc' class='col-12 control-label-notes mb-1'>{{ trans('langDescription') }}</label>
                                                 <div class='col-12'>
-                                                    {!! rich_text_editor('desc', 4, 20, $desc) !!}
+                                                    {!! rich_text_editor('desc', 4, 20, $desc, options: array('id' => 'desc')) !!}
                                                 </div>
                                             </div>
                                             <div class='row form-group mt-4'>

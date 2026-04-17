@@ -447,9 +447,9 @@ if ($action == "createPost") {
                                     </div>
             
                                     <div class='form-group mt-4'>
-                                        <label for='newContent' class='col-sm-12 control-label-notes'>$langBlogPostBody</label>
+                                        <label for='newContentId' class='col-sm-12 control-label-notes'>$langBlogPostBody</label>
                                         <div class='col-sm-12'>
-                                            ".rich_text_editor('newContent', 4, 20, 'id="newContent"')."
+                                            ".rich_text_editor('newContent', 4, 20, '', options: array('id' => 'newContentId'))."
                                         </div>
                                     </div>
                                     $commenting_setting            
@@ -563,9 +563,9 @@ if ($action == "editPost") {
                 
                 
                                         <div class='form-group mt-4'>
-                                            <label for='newContent' class='col-sm-12 control-label-notes'>$langBlogPostBody:</label>
+                                            <label for='newContentId' class='col-sm-12 control-label-notes'>$langBlogPostBody:</label>
                                             <div class='col-sm-12'>
-                                                ".rich_text_editor('newContent', 4, 20, $post->getContent())."
+                                                ".rich_text_editor('newContent', 4, 20, $post->getContent(), options: array('id' => 'newContentId'))."
                                             </div>
                                         </div>
                                         $commenting_setting

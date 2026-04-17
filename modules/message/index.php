@@ -444,7 +444,7 @@ $tool_content .= "<div class='col-12'>
                                     <div class='form-group mt-4'>
                                         <label for='body' class='col-sm-12 control-label-notes'>$langMessage</label>
                                         <div class='col-sm-12'>
-                                            ".rich_text_editor('body', 4, 20, '')."
+                                            ".rich_text_editor('body', 4, 20, '', options: array('id' => 'body'))."
                                         </div>
                                     </div>";
                                 if ($course_id != 0 || ($type == 'cm' && $course_id == 0)) {

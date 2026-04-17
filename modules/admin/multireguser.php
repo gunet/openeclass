@@ -222,7 +222,7 @@ if (isset($_POST['submit']) and isset($_FILES['userfile'])) {
                 </ul></p>
             </div>
         </div>";
-    $data['rich_text_editor'] = rich_text_editor('emailNewBodyEditor', 4, 20, "$emailNewBody");
+    $data['rich_text_editor'] = rich_text_editor('emailNewBodyEditor', 4, 20, "$emailNewBody", options: array('id' => 'emailNewBodyEditor'));
     $view = 'admin.users.multireguser';
 }
 

@@ -369,7 +369,7 @@ $data['session_info'] = $session_info = Database::get()->querySingle("SELECT * F
 $data['title'] = $session_info->title;
 $data['creator'] = $session_info->creator;
 $data['modifyStartDateEvent'] = date('Y-m-d',strtotime($session_info->start));
-$data['comments'] = rich_text_editor('comments', 5, 40, $session_info->comments);
+$data['comments'] = rich_text_editor('comments', 5, 40, $session_info->comments, options: array('id' => 'comments'));
 $data['session_type'] = $session_info->type;
 $startDate_obj = DateTime::createFromFormat('Y-m-d H:i:s', $session_info->start);
 $data['start'] = q($startDate_obj->format('d-m-Y H:i'));

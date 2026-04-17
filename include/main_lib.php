@@ -2584,12 +2584,18 @@ tinymce.init({
 });
 </script>";
     }
+
+    $textarea_id = '';
+    if (isset($options['id'])) {
+        $textarea_id = "id=" . $options['id'];
+    }
+    
     if (!is_null($text)) {
         $textarea_text = q(str_replace('{', '&#123;', $text));
     } else {
         $textarea_text = '';
     }
-    return "<textarea class='mceEditor' name='$name' rows='$rows' cols='$cols' aria-label='$langInputTextEditor'>" . $textarea_text . "</textarea>\n";
+    return "<textarea $textarea_id class='mceEditor' name='$name' rows='$rows' cols='$cols'>" . $textarea_text . "</textarea>\n";
 }
 
 // Display a simple textarea with name $name

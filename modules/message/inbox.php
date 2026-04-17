@@ -265,7 +265,7 @@ if (isset($_GET['mid'])) {
                                     <div class='form-group mt-4'>
                                         <label for='body' class='col-sm-12 control-label-notes'>$langMessage</label>
                                         <div class='col-sm-12'>
-                                            ".rich_text_editor('body', 4, 20, $msg->body . "<hr align='left' width='70%'><br><br>")."
+                                            ".rich_text_editor('body', 4, 20, $msg->body . "<hr align='left' width='70%'><br><br>", options: array('id' => 'body'))."
                                         </div>
                                     </div>";
 
@@ -390,9 +390,9 @@ if (isset($_GET['mid'])) {
                         </div>
 
                         <div class='form-group mt-4'>
-                            <div class='col-sm-12 control-label-notes'>$langMessage</div>
+                            <label for='body' class='col-sm-12 control-label-notes'>$langMessage</label>
                             <div class='col-sm-12'>
-                                ".rich_text_editor('body', 4, 20, $msg->body . "<hr align='left' width='70%'><br><br>")."
+                                ".rich_text_editor('body', 4, 20, $msg->body . "<hr align='left' width='70%'><br><br>", options: array('id' => 'body'))."
                             </div>
                         </div>";
 

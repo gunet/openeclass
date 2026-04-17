@@ -82,7 +82,7 @@ if ($is_editor) {
         $pageName = $langAdd;
         $navigation[] = ['url' => "{$urlServer}modules/chat/index.php?course=$course_code", 'name' => $langChat];
 
-        $textarea = rich_text_editor('description', 4, 20, '');
+        $textarea = rich_text_editor('description', 4, 20, '', options: array('id' => 'description'));
 
         $tool_content .= "<div class='d-lg-flex gap-4 mt-4'>
         <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>";
@@ -251,7 +251,7 @@ if ($is_editor) {
         $conf_id = $_GET['edit_conference'];
 
         $conf = Database::get()->querySingle("SELECT * FROM conference WHERE conf_id = ?d", $conf_id);
-        $textarea = rich_text_editor('description', 4, 20, $conf->conf_description);
+        $textarea = rich_text_editor('description', 4, 20, $conf->conf_description, options: array('id' => 'description'));
 
         $tool_content .= "<div class='d-lg-flex gap-4 mt-4'>
                             <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>";

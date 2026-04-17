@@ -301,7 +301,7 @@ if (isset($_GET['rubric_id']) or isset($_GET['new_rubric'])) { // edit rubric or
                 <div class='row form-group mt-4'>
                         <label for='desc' class='col-12 control-label-notes mb-1'>$langRubricDesc</label>
                         <div class='col-12'>
-                            " . @rich_text_editor('desc', 4, 20, $rubric_data->description) . "
+                            " . @rich_text_editor('desc', 4, 20, $rubric_data->description, options: array('id' => 'desc')) . "
                         </div>
                 </div>";
 

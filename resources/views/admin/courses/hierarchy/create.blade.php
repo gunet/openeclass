@@ -108,7 +108,7 @@
                             <div class='form-group mt-4'>
                                 <label for='description-{{ $langcode }}' class='col-sm-12 control-label-notes'>{{ trans('langNodeDescription') }}</label>
                                 <div class='col-sm-12'>
-                                    {!! rich_text_editor('description-' . $langcode, 8, 20, $descriptions[$langcode]) !!}
+                                    {!! rich_text_editor('description-' . $langcode, 8, 20, $descriptions[$langcode], options: array('id' => 'description-'.$langcode)) !!}
                                 </div>
                             </div>
                         @endforeach

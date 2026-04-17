@@ -409,7 +409,7 @@ if (isset($_GET['action'])) {
                             <div class='form-group mt-4'>
                             <label for='description' class='col-sm-12 control-label-notes'>$langDescription</label>
                                 <div class='col-sm-12'>
-                                    " . rich_text_editor('description', 2, 60, $cert_description) . "
+                                    " . rich_text_editor('description', 2, 60, $cert_description, options: array('id' => 'description')) . "
                                 </div>
                             </div>
 
@@ -510,7 +510,7 @@ if (isset($_GET['action'])) {
                             <div class='form-group mt-4'>
                             <label for='description' class='col-sm-12 control-label-notes'>$langDescription: </label>
                                 <div class='col-sm-12'>
-                                    " . rich_text_editor('description', 2, 60, $badge_description) . "
+                                    " . rich_text_editor('description', 2, 60, $badge_description, options: array('id' => 'description')) . "
                                 </div>
                             </div>
                             $badge_hidden_id

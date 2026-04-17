@@ -100,7 +100,7 @@ function new_lti_app($course_code, $is_template = false, $lti_url_default = '') 
 
     lti_version_field_wraps();
 
-    $textarea = rich_text_editor('desc', 4, 20, '');
+    $textarea = rich_text_editor('desc', 4, 20, '', options: array('id' => 'desc'));
   $tool_content .= "<div class='d-lg-flex gap-4 mt-4'>
                         <div class='flex-grow-1'>
                             <div class='form-wrapper form-edit border-0 px-0'>
@@ -332,7 +332,7 @@ function edit_lti_app($session_id) {
 
     lti_version_field_wraps();
 
-    $textarea = rich_text_editor('desc', 4, 20, $row->description);
+    $textarea = rich_text_editor('desc', 4, 20, $row->description, options: array('id' => 'desc'));
     $tool_content .= "<div class='d-lg-flex gap-4 mt-4'>
     <div class='flex-grow-1'>
                 <div class='form-wrapper form-edit border-0 px-0'>

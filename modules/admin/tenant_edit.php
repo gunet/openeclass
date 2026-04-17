@@ -128,7 +128,7 @@ if (isset($_GET['id'])) {
     );
 }
 
-$data['description_editor'] = rich_text_editor('description', 4, 20, $data['tenant']->description ?? '');
+$data['description_editor'] = rich_text_editor('description', 4, 20, $data['tenant']->description ?? '', options: array('id' => 'description'));
 
 
 view('admin.other.tenants.edit', $data);

@@ -388,7 +388,7 @@ $tool_content .= action_bar([
     <div class='form-group mt-4'>
       <label for='platform_intro' class='col-md-3 col-form-label'>$langSiteDescr</label>
       <div class='col-md-9'>
-        " . rich_text_editor('platform_intro', 4, 50, $platform_intro) . "
+        " . rich_text_editor('platform_intro', 4, 50, $platform_intro, options: array('id' => 'platform_intro')) . "
       </div>
     </div>
     

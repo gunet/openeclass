@@ -568,14 +568,14 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             <div class='form-group mt-4'>
               <label for='PollDescription' class='col-sm-12 control-label-notes'>$langDescription</label>
               <div class='col-sm-12'>
-                ".rich_text_editor('PollDescription', 4, 52, $PollDescription)."
+                ".rich_text_editor('PollDescription', 4, 52, $PollDescription, options: array('id' => 'PollDescription'))."
               </div>
             </div>
 
             <div class='form-group mt-4'>
               <label for='PollEndMessage' class='col-sm-12 control-label-notes'>$langPollEndMessage</label>
               <div class='col-sm-12'>
-                ".rich_text_editor('PollEndMessage', 4, 52, $PollEndMessage)."
+                ".rich_text_editor('PollEndMessage', 4, 52, $PollEndMessage, options: array('id' => 'PollEndMessage'))."
               </div>
             </div>
 
@@ -948,13 +948,13 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             <div class='form-group $questionNameErrorClass'>
                 <label for='questionName' class='col-sm-12 control-label-notes'>".(isset($_GET['questionType']) ? $langLabel : $langQuestion)." <span class='asterisk Accent-200-cl'>(*)</span></label>
                 <div class='col-sm-12'>
-                  ".(isset($_GET['questionType']) || isset($question) && $question->qtype == QTYPE_LABEL ? rich_text_editor('questionName', 10, 10, $questionName) :"<input type='text' class='form-control' id='questionName' name='questionName' value='".q($questionName)."'>")."
+                  ".(isset($_GET['questionType']) || isset($question) && $question->qtype == QTYPE_LABEL ? rich_text_editor('questionName', 10, 10, $questionName, options: array('id' => 'questionName')) :"<input type='text' class='form-control' id='questionName' name='questionName' value='".q($questionName)."'>")."
                   <span class='help-block Accent-200-cl'>$questionNameError</span>
                 </div>
             </div>
             <div class='form-group mt-4'>
                 <label for='description_question' class='col-sm-12 control-label-notes'>$langDescription</label>
-                ".rich_text_editor('description_question', 4, 52, $description_question)."
+                ".rich_text_editor('description_question', 4, 52, $description_question, options: array('id' => 'description_question'))."
             </div>";
     if (isset($_GET['questionType']) || isset($question) && $question->qtype == QTYPE_LABEL) {
         $tool_content .= "<input type='hidden' name='answerType' value='".QTYPE_LABEL."'>";

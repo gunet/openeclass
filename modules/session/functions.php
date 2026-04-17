@@ -3620,7 +3620,7 @@ function passage_insertion($sid){
                         <legend class='mb-0' aria-label='$langForm'></legend>
                         <div class='form-group'>
                             <label for='add_passage' class='col-12 control-label-notes'>$langInsertPassage</label>
-                            " . rich_text_editor('add_passage', 5, 40, '') . "
+                            " . rich_text_editor('add_passage', 5, 40, '', options: array('id' => 'add_passage')) . "
                         </div>";
 
 

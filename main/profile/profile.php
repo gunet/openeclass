@@ -541,7 +541,7 @@ if ($data['icon']) {
 }
 enableCheckFileSize();
 
-$data['info_text_area'] = rich_text_editor('desc_form', 5, 20, $data['desc_form']);
+$data['info_text_area'] = rich_text_editor('desc_form', 5, 20, $data['desc_form'], options: array('id' => 'desc_form'));
 
 
 foreach ($hybridAuthMethods as $provider) {
