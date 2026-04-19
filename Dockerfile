@@ -17,6 +17,7 @@ COPY --from=composer_stage /app/vendor ./vendor
 # Copy needed app files
 COPY js js
 COPY include include
+COPY modules modules
 COPY package.json .
 # Install JS dependencies and run postinstall script (php ./js/build/build.php)
 RUN bun install --frozen-lockfile
