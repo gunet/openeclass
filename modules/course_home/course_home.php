@@ -865,7 +865,7 @@ if ($total_cunits > 0) {
                 $legendViewContent = 'legendViewContent';
             }
 
-            $cunits_content .= "<div id='unit_$cu_indirect' class='col-12 $legendViewContent my-3' data-id='$cu->id'>";
+            $cunits_content .= "<li id='unit_$cu_indirect' class='col-12 nav-item $legendViewContent my-3' data-id='$cu->id' aria-label='".q($cu->title)."'>";
             if ($vis == 2) {
                 $cunits_content .= "<div class='px-lg-2 py-lg-2 h-100'><div class='card-body'>";
             } else {
@@ -942,7 +942,7 @@ if ($total_cunits > 0) {
                 $cunits_content .= ($cu->comments == ' ')? '': standard_text_escape($cu->comments);
                 $cunits_content .= "</div>";
             }
-            $cunits_content .= "</div></div></div></div>";
+            $cunits_content .= "</div></div></div></li>";
 
 
         }
@@ -954,7 +954,7 @@ if ($total_cunits > 0) {
                             </div>";
     }
 }
-
+$data['carousel_or_row'] = $carousel_or_row;
 $data['cunits_content'] = $cunits_content;
 
 if (($total_cunits > 0 or $is_editor) and ($course_info->view_type != 'simple')) {

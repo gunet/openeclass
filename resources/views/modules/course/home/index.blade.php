@@ -404,7 +404,13 @@
                                     </div>
                                 @endif
                                 <div class='card-body card-body-default card-body-unit px-0 pt-0' id='boxlistSort'>
-                                    {!! $cunits_content !!}
+                                    @if ($carousel_or_row != 0)
+                                    <ul class='m-0 p-0' role='navigation' aria-label="{{ trans('langCourseUnits') }}" style='list-style-type: none;'>
+                                    @endif
+                                        {!! $cunits_content !!}
+                                    @if ($carousel_or_row != 0)
+                                    </ul>
+                                    @endif
                                 </div>
                             </div>
                         @endif
