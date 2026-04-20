@@ -2024,7 +2024,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `tc_servers` (
 
 
 $db->query("CREATE TABLE `tc_attendance` (
-    `id` INT NOT NULL DEFAULT '0' AUTO_INCREMENT,
+    `id` INT NOT NULL AUTO_INCREMENT,
     `meetingid` varchar(42) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
     `bbbuserid` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
     `totaltime` INT NOT NULL DEFAULT '0',
