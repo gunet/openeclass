@@ -61,6 +61,9 @@
                             @case(15)
                                 @include('admin.users.auth.methods.oauth2')
                             @break
+                            @case(16)
+                                @include('admin.users.auth.methods.openid')
+                            @break
                         @endswitch
                         {!! showSecondFactorChallenge() !!}
 

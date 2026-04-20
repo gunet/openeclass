@@ -5736,6 +5736,7 @@ $langFCDigitalStorytelling = "Digital Storytelling";
 $langFCSupportingMaterial = "Supporting Material";
 $langAddNewAuthMethod = 'Add new authentication mode';
 $langViaOAuth2 = 'authentication via OAuth 2.0';
+$langViaOpenID = 'authentication via OpenID (Keycloak)';
 $langAvailable = "available";
 $langNoQuestionWeight = "The question does not have a grade";
 $langNoQuestionAnswers = "There are no answers to the question";

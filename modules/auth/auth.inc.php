@@ -53,6 +53,7 @@ $auth_ids = [
     13 => 'linkedin',
     14 => 'lti_publish',
     15 => 'oauth2',
+    16 => 'openid',
 ];
 
 $authFullName = [
@@ -63,9 +64,10 @@ $authFullName = [
     12 => 'Yahoo!',
     13 => 'LinkedIn',
     15 => 'OAuth 2.0',
+    16 => 'OpenID (Keycloak)',
 ];
 
-$extAuthMethods = ['cas', 'shibboleth', 'oauth2'];
+$extAuthMethods = ['cas', 'shibboleth', 'oauth2', 'openid'];
 $hybridAuthMethods = ['facebook', 'twitter', 'google', 'live', 'yahoo', 'linkedin'];
 
 
@@ -189,6 +191,8 @@ function get_auth_info($auth)
             case '13': $m = $GLOBALS['langViaLinkedIn'];
             break;
             case '15': $m = $GLOBALS['langViaOAuth2'];
+            break;
+            case '16': $m = $GLOBALS['langViaOpenID'];
             break;
             default: $m = 0;
             break;
@@ -1349,8 +1353,8 @@ function alt_login($user_info_object, $uname, $pass, $mobile = false) {
 }
 
 /**
- * @brief Authenticate user via Shibboleth, CAS or OAuth 2.0
- * @param $type is 'shibboleth', 'cas' or 'oauth2'
+ * @brief Authenticate user via Shibboleth, CAS, OAuth 2.0 or OpenID
+ * @param $type is 'shibboleth', 'cas', 'oauth2' or 'openid'
  */
 function shib_cas_login($type) {
     global $surname, $givenname, $email, $status, $language, $session,
@@ -1382,6 +1386,12 @@ function shib_cas_login($type) {
         $am = $_SESSION['cas_userstudentid'] ?? '';
     } elseif ($type == 'oauth2') {
         $uname = $_SESSION['auth_id'] ?? '';
+        $surname = $_SESSION['auth_surname'] ?? '';
+        $givenname = $_SESSION['auth_givenname'] ?? '';
+        $email = $_SESSION['auth_email'] ?? '';
+        $am = $_SESSION['auth_studentid'] ?? '';
+    } elseif ($type == 'openid') {
+        $uname = $_SESSION['openid_uname'] ?? '';
         $surname = $_SESSION['auth_surname'] ?? '';
         $givenname = $_SESSION['auth_givenname'] ?? '';
         $email = $_SESSION['auth_email'] ?? '';
