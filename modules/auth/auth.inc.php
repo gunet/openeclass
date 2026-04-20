@@ -1255,6 +1255,20 @@ function alt_login($user_info_object, $uname, $pass, $mobile = false) {
         }
     }
 
+    // openid
+    if ($auth == 16) {
+        $openid_settings = get_auth_settings($auth);
+        $altauth = intval($openid_settings['altauth']);
+        if ($altauth > 0 && check_auth_configured($altauth)) {
+            $auth = $altauth;
+            // fetch settings of alt auth
+            $auth_method_settings = get_auth_settings($auth);
+            $user_info_object->password = $auth_method_settings['auth_name'];
+        } else {
+            return 16; // Redirect to OpenID
+        }
+    }
+
     if ($auth == 6) {
         return 6; // Redirect to Shibboleth login
     }
