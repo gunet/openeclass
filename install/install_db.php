@@ -2149,14 +2149,37 @@ $db->query("CREATE TABLE IF NOT EXISTS `idx_queue_async` (
     `resource_id` INT NOT NULL,
     PRIMARY KEY (`id`)) $tbl_options");
 
+$db->query("CREATE TABLE `tenant` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `name` varchar(200) NOT NULL,
+    `description` text DEFAULT NULL,
+    `department_id` int(11) NOT NULL,
+    `url` varchar(200) NOT NULL DEFAULT '',
+    `url_active` tinyint(1) NOT NULL DEFAULT '0',
+    `theme_id` int(11) DEFAULT NULL,
+    `created_at` DATETIME NOT NULL,
+    `updated_at` DATETIME NOT NULL,
+    `options` text DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    KEY `department_id` (`department_id`),
+    KEY `theme_id` (`theme_id`),
+    CONSTRAINT FOREIGN KEY (`department_id`) REFERENCES `hierarchy` (`id`)) $tbl_options");
+
 $db->query("CREATE TABLE IF NOT EXISTS `theme_options` (
     `id` INT NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
     `styles` LONGTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
     `tenant_id` int(11) DEFAULT NULL,
     `version` TINYINT,
-    PRIMARY KEY (`id`)
-    CONSTRAINT FOREIGN KEY (`tenant_id`) REFERENCES `tenant` (`id`)) $tbl_options");
+    PRIMARY KEY (`id`)) $tbl_options");
+
+$db->query("ALTER TABLE `theme_options`
+    ADD CONSTRAINT `fk_theme_options_tenant`
+	 FOREIGN KEY (`tenant_id`) REFERENCES `tenant` (`id`)");
+
+$db->query("ALTER TABLE `tenant`
+    ADD CONSTRAINT `fk_tenant_theme`
+	 FOREIGN KEY (`theme_id`) REFERENCES `theme_options` (`id`)");
 
 // Tags tables
 $db->query("CREATE TABLE IF NOT EXISTS `tag_element_module` (
@@ -2908,24 +2931,6 @@ $db->query("CREATE TABLE `session_user_material` (
           PRIMARY KEY (`id`),
           FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE,
           FOREIGN KEY (`session_id`) REFERENCES `mod_session` (`id`) ON DELETE CASCADE) $tbl_options");
-
-
-$db->query("CREATE TABLE `tenant` (
-    `id` int(11) NOT NULL AUTO_INCREMENT,
-    `name` varchar(200) NOT NULL,
-    `description` text DEFAULT NULL,
-    `department_id` int(11) NOT NULL,
-    `url` varchar(200) NOT NULL DEFAULT '',
-    `url_active` tinyint(1) NOT NULL DEFAULT '0',
-    `theme_id` int(11) DEFAULT NULL,
-    `created_at` DATETIME NOT NULL,
-    `updated_at` DATETIME NOT NULL,
-    `options` text DEFAULT NULL,
-    PRIMARY KEY (`id`),
-    KEY `department_id` (`department_id`),
-    KEY `theme_id` (`theme_id`),
-    CONSTRAINT FOREIGN KEY (`department_id`) REFERENCES `hierarchy` (`id`),
-    CONSTRAINT FOREIGN KEY (`theme_id`) REFERENCES `theme_options` (`id`)) $tbl_options");
 
 $db->query("CREATE TABLE `course_resource_usage` (
     `course_id` int(11) NOT NULL,
