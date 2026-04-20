@@ -274,7 +274,7 @@ $db->query("CREATE TABLE course_import (
         id INT NOT NULL AUTO_INCREMENT, 
         course_id INT NOT NULL, 
         imported_course_id INT NOT NULL, 
-        imported DATETEIME NOT NULL, 
+        imported DATETIME NOT NULL,
         PRIMARY KEY(id)) $tbl_options");
 
 $db->query("CREATE TABLE `course_review` (
