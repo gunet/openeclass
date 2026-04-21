@@ -216,7 +216,7 @@ function get_auth_settings($auth) {
     $auth = intval($auth);
     $result = Database::get()->querySingle("SELECT * FROM auth WHERE auth_id = ?d", $auth);
     if (!$result) {
-        return 0;
+        return [];
     }
 
     $settings['auth_id'] = $result->auth_id;

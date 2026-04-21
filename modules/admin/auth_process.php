@@ -344,9 +344,9 @@ if (isset($_POST['submit'])) {
             } else {
                 $data['auth_data']['id'] = $data['auth_data']['key'] = $data['auth_data']['secret'] = '';
             }
-            $data['auth_title'] = $r->auth_title;
-            $data['auth_instructions'] = $r->auth_instructions;
-            $authName = q(ucfirst($r->auth_name));
+            $data['auth_title'] = !empty($r->auth_title) ? $r->auth_title : '';
+            $data['auth_instructions'] = !empty($r->auth_instructions) ? $r->auth_instructions : '';
+            $authName = !empty($r->auth_name) ? q(ucfirst($r->auth_name)) : '';
             if (isset($_SERVER['HTTPS'])) {
                 $protocol = ($_SERVER['HTTPS'] && $_SERVER['HTTPS'] != "off") ? "https" : "http";
             } else {
