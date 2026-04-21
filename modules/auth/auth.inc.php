@@ -53,7 +53,7 @@ $auth_ids = [
     13 => 'linkedin',
     14 => 'lti_publish',
     15 => 'oauth2',
-    16 => 'openid',
+    16 => 'keycloak',
 ];
 
 $authFullName = [
@@ -64,10 +64,10 @@ $authFullName = [
     12 => 'Yahoo!',
     13 => 'LinkedIn',
     15 => 'OAuth 2.0',
-    16 => 'OpenID (Keycloak)',
+    16 => 'Keycloak (OpenID)',
 ];
 
-$extAuthMethods = ['cas', 'shibboleth', 'oauth2', 'openid'];
+$extAuthMethods = ['cas', 'shibboleth', 'oauth2', 'keycloak'];
 $hybridAuthMethods = ['facebook', 'twitter', 'google', 'live', 'yahoo', 'linkedin'];
 
 
@@ -192,7 +192,7 @@ function get_auth_info($auth)
             break;
             case '15': $m = $GLOBALS['langViaOAuth2'];
             break;
-            case '16': $m = $GLOBALS['langViaOpenID'];
+            case '16': $m = $GLOBALS['langViaKeycloak'];
             break;
             default: $m = 0;
             break;
@@ -1255,17 +1255,17 @@ function alt_login($user_info_object, $uname, $pass, $mobile = false) {
         }
     }
 
-    // openid
+    // keycloak
     if ($auth == 16) {
-        $openid_settings = get_auth_settings($auth);
-        $altauth = intval($openid_settings['altauth']);
+        $keycloak_settings = get_auth_settings($auth);
+        $altauth = intval($keycloak_settings['altauth']);
         if ($altauth > 0 && check_auth_configured($altauth)) {
             $auth = $altauth;
             // fetch settings of alt auth
             $auth_method_settings = get_auth_settings($auth);
             $user_info_object->password = $auth_method_settings['auth_name'];
         } else {
-            return 16; // Redirect to OpenID
+            return 16; // Redirect to Keycloak
         }
     }
 
@@ -1367,8 +1367,8 @@ function alt_login($user_info_object, $uname, $pass, $mobile = false) {
 }
 
 /**
- * @brief Authenticate user via Shibboleth, CAS, OAuth 2.0 or OpenID
- * @param $type is 'shibboleth', 'cas', 'oauth2' or 'openid'
+ * @brief Authenticate user via Shibboleth, CAS, OAuth 2.0 or Keycloak
+ * @param $type is 'shibboleth', 'cas', 'oauth2' or 'keycloak'
  */
 function shib_cas_login($type) {
     global $surname, $givenname, $email, $status, $language, $session,
@@ -1404,8 +1404,8 @@ function shib_cas_login($type) {
         $givenname = $_SESSION['auth_givenname'] ?? '';
         $email = $_SESSION['auth_email'] ?? '';
         $am = $_SESSION['auth_studentid'] ?? '';
-    } elseif ($type == 'openid') {
-        $uname = $_SESSION['openid_uname'] ?? '';
+    } elseif ($type == 'keycloak') {
+        $uname = $_SESSION['keycloak_uname'] ?? '';
         $surname = $_SESSION['auth_surname'] ?? '';
         $givenname = $_SESSION['auth_givenname'] ?? '';
         $email = $_SESSION['auth_email'] ?? '';

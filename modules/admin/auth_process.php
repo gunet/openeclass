@@ -112,7 +112,7 @@ register_posted_variables([
     // OAuth 2.0 options
     'apiBaseUrl' => true, 'authorizePath' => true, 'accessTokenPath' => true, 'profileMethod' => true,
     'apiID' => true, 'apiSecret' => true,
-    // OpenID options
+    // Keycloak options
     'realm' => true, 'userstudentid' => true, 'altauth' => true, 'altauth_use' => true,
 ], 'all');
 

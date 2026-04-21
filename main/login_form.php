@@ -79,8 +79,8 @@ foreach ($q as $l) {
                 $path = 'modules/auth/oauth2.php';
                 break;
             */
-            case 'openid':
-                $path = 'modules/auth/openid.php';
+            case 'keycloak':
+                $path = 'modules/auth/keycloak.php';
                 break;
             default:
                 $path = 'secure/';

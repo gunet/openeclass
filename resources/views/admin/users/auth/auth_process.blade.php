@@ -62,7 +62,7 @@
                                 @include('admin.users.auth.methods.oauth2')
                             @break
                             @case(16)
-                                @include('admin.users.auth.methods.openid')
+                                @include('admin.users.auth.methods.keycloak')
                             @break
                         @endswitch
                         {!! showSecondFactorChallenge() !!}

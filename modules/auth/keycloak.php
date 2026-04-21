@@ -39,7 +39,7 @@ final class CustomProvider extends Keycloak
 
 $auth_settings = get_auth_settings(16);
 $adapter = new CustomProvider([
-    'callback' => $urlServer . 'modules/auth/openid.php',
+    'callback' => $urlServer . 'modules/auth/keycloak.php',
     'url' => $auth_settings['apiBaseUrl'],
     'realm' => $auth_settings['realm'],
     'keys' => [
@@ -50,13 +50,13 @@ $adapter = new CustomProvider([
 $adapter->authenticate();
 $userProfile = $adapter->getUserProfile();
 
-if (isset($_SESSION['openid_test'])) {
-    unset($_SESSION['openid_test']);
+if (isset($_SESSION['keycloak_test'])) {
+    unset($_SESSION['keycloak_test']);
     $_SESSION['auth_user_info'] = (array) $userProfile;
     redirect_to_home_page('modules/admin/auth_test.php?auth=16');
 } else {
     $_SESSION['auth_attributes'] = (array) $userProfile;
-    $_SESSION['openid_uname'] = $userProfile->displayName; // preferred_username
+    $_SESSION['keycloak_uname'] = $userProfile->displayName; // preferred_username
     $_SESSION['auth_email'] = $userProfile->email;
     $_SESSION['auth_surname'] = $userProfile->lastName;
     $_SESSION['auth_givenname'] = $userProfile->firstName;

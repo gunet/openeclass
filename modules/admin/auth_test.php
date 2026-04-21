@@ -80,15 +80,15 @@ if ($auth == 7) { // CAS
         $_SESSION['oauth2_test'] = true;
         redirect_to_home_page('modules/auth/oauth2.php');
     }
-} elseif ($auth == 16) { // OpenID
+} elseif ($auth == 16) { // Keycloak
     if (isset($_SESSION['auth_user_info'])) {
         Session::flash('message', $langConnYes);
         Session::flash('message', "<p>$langCASRetAttr:<br>" . array2html($_SESSION['auth_user_info']) . "</p>");
         Session::flash('alert-class', 'alert-success');
         unset($_SESSION['auth_user_info']);
     } else {
-        $_SESSION['openid_test'] = true;
-        redirect_to_home_page('modules/auth/openid.php');
+        $_SESSION['keycloak_test'] = true;
+        redirect_to_home_page('modules/auth/keycloak.php');
     }
 } elseif (in_array($auth_ids[$auth], $hybridAuthMethods)) {
     include_once 'modules/auth/methods/hybridauth/config.php';
