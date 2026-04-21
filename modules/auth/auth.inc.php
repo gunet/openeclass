@@ -611,7 +611,7 @@ function get_cas_attrs($phpCASattrs, $settings) {
 function process_login() {
     global $warning, $session, $langInvalidId, $langAccountInactive1, $langInvalidAuth,
         $langAccountInactive2, $langNoCookies, $langEnterPlatform, $urlServer,
-        $langHere, $auth_ids, $inactive_uid, $langTooManyFails, $urlAppend;
+        $langHere, $auth_ids, $inactive_uid, $langTooManyFails;
 
     if (isset($_POST['uname'])) {
         $posted_uname = canonicalize_whitespace($_POST['uname']);
@@ -653,7 +653,7 @@ function process_login() {
 
                 $myrow = Database::get()->querySingle(
                     "SELECT user.id, surname, givenname, password,
-                            username, status, email, lang, verified_mail, am
+                            username, status, email, lang, verified_mail, am, options 
                         FROM user, user_department, hierarchy
                         WHERE username $sqlLogin AND
                               user.id = user_department.user AND
@@ -668,7 +668,7 @@ function process_login() {
                 if (!$myrow) {
                     $myrow = Database::get()->querySingle(
                         "SELECT user.id, surname, givenname, password,
-                            username, status, email, lang, verified_mail, am
+                            username, status, email, lang, verified_mail, am, options 
                         FROM user, user_department, hierarchy
                         WHERE email = ?s AND
                             user.id = user_department.user AND
@@ -682,11 +682,11 @@ function process_login() {
                 }
             } else {
                 $myrow = Database::get()->querySingle("SELECT id, surname, givenname, password,
-                                                        username, status, email, lang, verified_mail, am
+                                                        username, status, email, lang, verified_mail, am, options 
                                                     FROM user WHERE username $sqlLogin", $posted_uname);
                 if (!$myrow) {
                     $myrow = Database::get()->querySingle("SELECT id, surname, givenname, password,
-                                                                username, status, email, lang, verified_mail, am
+                                                                username, status, email, lang, verified_mail, am, options 
                                                             FROM user WHERE email = ?s", $posted_uname);
                     $posted_uname = $myrow ? $myrow->username : '';
                 }
