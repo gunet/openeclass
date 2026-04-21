@@ -56,8 +56,9 @@ try {
     // Token is invalid logout and retry
     $adapter->disconnect(); // clears stored tokens
 
-	 $adapter->authenticate(); // fresh login
-	 $userProfile = $adapter->getUserProfile();
+    $adapter->authenticate(); // fresh login
+    $userProfile = $adapter->getUserProfile();
+
 }
 
 if (isset($_SESSION['keycloak_test'])) {
