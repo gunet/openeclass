@@ -167,8 +167,8 @@ function show_post_form(): void
                                 </div>
                                 <div id="resources_panel" class="card panelCard collapse mt-3 border-0">
                                     <div class="card-body border-0">
-                                        <ul class="nav nav-tabs border-0" role="tablist">
-                                            <li class="nav-item"><a id="nav_extvideo" class="nav-link active" data-bs-toggle="tab" href="#extvideo_video_div" role="tab" aria-controls="extvideo_video_div">'.$langWallExtVideo.'</a></li>
+                                        <ul class="nav nav-tabs border-0 wall-tablist" role="tablist">
+                                            <li class="nav-item"><a id="nav_extvideo" class="nav-link active" aria-selected="true" data-bs-toggle="tab" href="#extvideo_video_div" role="tab" aria-controls="extvideo_video_div">'.$langWallExtVideo.'</a></li>
                                             '.$video_li.'
                                             '.$docs_li.'
                                             '.$mydocs_li.'
@@ -215,27 +215,6 @@ function show_post_form(): void
 
         //auto-expand textarea while typing
         $tool_content .= "<script>autosize(document.querySelector('textarea'));</script>";
-
-        // Accessibility
-        $head_content .= "
-        <script type='text/javascript'>
-            $(document).ready(function(){
-                const tabs = document.querySelectorAll('.nav-link');
-                tabs.forEach(tab => {
-                    tab.addEventListener('click', () => {
-                        tabs.forEach(t => {
-                            if (t.getAttribute('aria-selected') === 'true') {
-                                t.setAttribute('aria-selected', 'false');
-                                t.setAttribute('tabindex', '-1');
-                            }
-                        });
-                        tab.setAttribute('aria-selected', 'true');
-                        tab.setAttribute('tabindex', '0');
-                        tab.focus();
-                    });
-                });
-            });
-        </script>";
     }
 }
 

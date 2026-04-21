@@ -93,22 +93,53 @@
     </script>
 
     <!-- Accessibility -->
-    <script type='text/javascript'>
-        $(document).ready(function(){
-            const tabs = document.querySelectorAll('.nav-link');
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tabs = document.querySelectorAll('.wall-tablist .nav-link');
+
             tabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    tabs.forEach(t => {
-                        if (t.getAttribute('aria-selected') === 'true') {
-                            t.setAttribute('aria-selected', 'false');
-                            t.setAttribute('tabindex', '-1');
-                        }
-                    });
-                    tab.setAttribute('aria-selected', 'true');
+                if (tab.getAttribute('aria-selected') === 'true') {
                     tab.setAttribute('tabindex', '0');
-                    tab.focus();
+                } else {
+                    tab.setAttribute('tabindex', '-1');
+                }
+            });
+
+            // Function to activate tab
+            function activateTabs(currentTabs) {
+                currentTabs.forEach(t => {
+                    t.setAttribute('aria-selected', 'false');
+                    t.setAttribute('tabindex', '-1');
+                    t.classList.remove('tab-active');
+                });
+            }
+            
+            tabs.forEach((tab) => {
+                tab.addEventListener('keydown', (e) => {
+                    const currentTabs = document.querySelectorAll('.wall-tablist .nav-link');
+                    const currentIndex = Array.prototype.indexOf.call(currentTabs, document.activeElement);
+                    if (currentIndex === -1) return; // safety check
+
+                    if (e.key === 'ArrowRight') {
+                        e.preventDefault();
+                        const nextIndex = (currentIndex + 1) % currentTabs.length;
+                        activateTabs(currentTabs);
+                        currentTabs[nextIndex].setAttribute('aria-selected', 'true');
+                        currentTabs[nextIndex].setAttribute('tabindex', '0');
+                        currentTabs[nextIndex].classList.add('tab-active');
+                        currentTabs[nextIndex].focus();
+                    } else if (e.key === 'ArrowLeft') {
+                        e.preventDefault();
+                        const prevIndex = (currentIndex - 1 + currentTabs.length) % currentTabs.length;
+                        activateTabs(currentTabs);
+                        currentTabs[prevIndex].setAttribute('aria-selected', 'true');
+                        currentTabs[prevIndex].setAttribute('tabindex', '0');
+                        currentTabs[prevIndex].classList.add('tab-active');
+                        currentTabs[prevIndex].focus();
+                    }
                 });
             });
+
         });
     </script>
 
@@ -136,8 +167,8 @@
                             </div>
                             <div id="resources_panel" class="panel panel-default collapse mt-3 border-0">
                                 <div class="panel-body border-0">
-                                    <ul class="nav nav-tabs border-0" role="tablist">
-                                        <li class="nav-item"><a id="nav_extvideo" class="nav-link active" data-bs-toggle="tab" href="#extvideo_video_div" role="tab" aria-controls="extvideo_video_div">{{ trans('langWallExtVideo') }}</a></li>
+                                    <ul class="nav nav-tabs border-0 wall-tablist" role="tablist">
+                                        <li class="nav-item"><a id="nav_extvideo" class="nav-link active" aria-selected="true" data-bs-toggle="tab" href="#extvideo_video_div" role="tab" aria-controls="extvideo_video_div">{{ trans('langWallExtVideo') }}</a></li>
                                         @if ($is_editor || visible_module(MODULE_ID_VIDEO))
                                             <li class="nav-item"><a id="nav_video" class="nav-link" data-bs-toggle="tab" href="#videos_div" role="tab" aria-controls="extvideo_video_div">{{ trans('langVideo') }}</a></li>
                                         @endif
