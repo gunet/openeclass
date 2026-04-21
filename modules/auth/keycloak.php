@@ -25,6 +25,7 @@ require_once 'modules/auth/auth.inc.php';
 use Hybridauth\Provider\Keycloak;
 use Hybridauth\Exception;
 use Hybridauth\Exception\UnexpectedValueException;
+use Hybridauth\Exception\HttpRequestFailedException;
 use Hybridauth\Data;
 use Hybridauth\User;
 
@@ -47,8 +48,17 @@ $adapter = new CustomProvider([
         'secret' => $auth_settings['secret'],
     ],
 ]);
-$adapter->authenticate();
-$userProfile = $adapter->getUserProfile();
+
+try {
+    $adapter->authenticate();
+    $userProfile = $adapter->getUserProfile();
+} catch (HttpRequestFailedException $e) {
+    // Token is invalid logout and retry
+    $adapter->disconnect(); // clears stored tokens
+
+	 $adapter->authenticate(); // fresh login
+	 $userProfile = $adapter->getUserProfile();
+}
 
 if (isset($_SESSION['keycloak_test'])) {
     unset($_SESSION['keycloak_test']);
