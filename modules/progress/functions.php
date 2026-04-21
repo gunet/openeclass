@@ -819,7 +819,7 @@ function display_activities($element, $id, $unit_id = 0) {
                                                                                     action_button(array(
                                                                                         array('title' => $langEditChange,
                                                                                             'icon' => 'fa-edit',
-                                                                                            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;act_rec_mod=$details->id",
+                                                                                            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;act_mod=$details->id",
                                                                                             'show' => in_array($details->activity_type, criteria_with_operators())
                                                                                         ),
                                                                                         array('title' => $langDelete,
