@@ -64,7 +64,7 @@ $authFullName = [
     12 => 'Yahoo!',
     13 => 'LinkedIn',
     15 => 'OAuth 2.0',
-    16 => 'Keycloak (OpenID)',
+    16 => 'Keycloak (OIDC)',
 ];
 
 $extAuthMethods = ['cas', 'shibboleth', 'oauth2', 'keycloak'];
