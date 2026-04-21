@@ -30,6 +30,7 @@ require_once 'modules/auth/auth.inc.php';
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'auth.php', 'name' => $langUserAuthentication);
 $debugCAS = true;
+$showUsernamePasswordForm = true;
 
 use Hybridauth\Exception\Exception;
 use Hybridauth\Hybridauth;
@@ -44,6 +45,7 @@ if (!isset($auth) or !isset($auth_ids[$auth])) {
 }
 
 if ($auth == 7) { // CAS
+    $showUsernamePasswordForm = false;
     $cas_ret = cas_authenticate(7);
     if (phpCAS::checkAuthentication()) {
         Session::flash('message',$langConnYes);
@@ -59,6 +61,7 @@ if ($auth == 7) { // CAS
         }
     }
 } elseif ($auth == 6) { // Shibboleth
+    $showUsernamePasswordForm = false;
     if (isset($_SESSION['shib_auth_test']) and $_SESSION['shib_auth_test']) {
         // logged-in successfully with Shibboleth
         unset($_SESSION['shib_auth_test']);
@@ -71,6 +74,7 @@ if ($auth == 7) { // CAS
         redirect_to_home_page('secure/index.php');
     }
 } elseif ($auth == 15) { // OAuth 2.0
+    $showUsernamePasswordForm = false;
     if (isset($_SESSION['auth_user_info'])) {
         Session::flash('message', $langConnYes);
         Session::flash('message', "<p>$langCASRetAttr:<br>" . array2html($_SESSION['auth_user_info']) . "</p>");
@@ -81,6 +85,7 @@ if ($auth == 7) { // CAS
         redirect_to_home_page('modules/auth/oauth2.php');
     }
 } elseif ($auth == 16) { // Keycloak
+    $showUsernamePasswordForm = false;
     if (isset($_SESSION['auth_user_info'])) {
         Session::flash('message', $langConnYes);
         Session::flash('message', "<p>$langCASRetAttr:<br>" . array2html($_SESSION['auth_user_info']) . "</p>");
@@ -91,6 +96,7 @@ if ($auth == 7) { // CAS
         redirect_to_home_page('modules/auth/keycloak.php');
     }
 } elseif (in_array($auth_ids[$auth], $hybridAuthMethods)) {
+    $showUsernamePasswordForm = false;
     include_once 'modules/auth/methods/hybridauth/config.php';
     $config = get_hybridauth_config();
 
@@ -178,4 +184,5 @@ if ($submit and $test_username !== '' and $data['test_password'] !== '') {
 }
 
 $data['auth_ids'] = $auth_ids;
+$data['showUsernamePasswordForm'] = $showUsernamePasswordForm;
 view('admin.users.auth.auth_test', $data);

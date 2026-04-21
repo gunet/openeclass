@@ -23,6 +23,7 @@
                                 <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                                 <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>{{ trans('langTestAccount') }} ({{ $auth_ids[$auth] }})</span></div>
 
+                            @if ($showUsernamePasswordForm)
                                 <div class='form-group mt-4'>
                                     <label for='test_username' class='col-sm-12 control-label-notes'>{{ trans('langUsername') }}:</label>
                                     <div class='col-sm-12'>
@@ -38,8 +39,7 @@
                                         <input class='form-control' type='password' name='test_password' id='test_password' value='{{ $test_password }}' autocomplete='off'>
                                     </div>
                                 </div>
-
-
+                            @endif
 
                                 <div class='form-group mt-5'>
                                     <div class='col-12 d-flex justify-content-end align-items-center gap-2'>
