@@ -70,6 +70,7 @@ if (isset($_SESSION['keycloak_test'])) {
     $_SESSION['auth_email'] = $userProfile->email;
     $_SESSION['auth_surname'] = $userProfile->lastName;
     $_SESSION['auth_givenname'] = $userProfile->firstName;
+    $_SESSION['auth_verified_mail'] = $userProfile->emailVerified;
 
     if (isset($_GET['next'])) {
         header("Location: $urlServer?next=" . urlencode($_GET['next']));

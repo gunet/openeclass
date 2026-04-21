@@ -1410,10 +1410,16 @@ function shib_cas_login($type) {
         $givenname = $_SESSION['auth_givenname'] ?? '';
         $email = $_SESSION['auth_email'] ?? '';
         $am = $_SESSION['auth_studentid'] ?? '';
+        // get mail verification status from provider
+        $auth_verified_mail = $_SESSION['auth_verified_mail'];
     }
     if ($email) {
         // Email is considered verified if it came from CAS or Shibboleth
         $verified_mail = EMAIL_VERIFIED;
+    }
+
+    if (isset($auth_verified_mail) && empty($auth_verified_mail)) {
+        $verified_mail = EMAIL_UNVERIFIED;
     }
 
     // Attributes passed to login_hook()
