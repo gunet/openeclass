@@ -454,6 +454,14 @@ function display_activities($element, $id, $unit_id = 0) {
            $langPointsGameNoOneTimeActivities, $langPoints, $langActivityMaxPoints, $langActivityMaxPointsInPeriod, $langActivityMaxPointsTimePeriod;
 
     load_js('bootstrap-table');
+    
+    //fix for delete confirmation not showing due to bootstrap-table plugin
+    $tool_content .= "<script>
+    $(document).on('post-body.bs.table', function () {
+        $('.confirmAction').off('click');
+        act_confirm();
+    });
+    </script>";
 
     if ($unit_id) {
         $link_id = "course=$course_code&amp;manage=1&amp;unit_id=$unit_id&amp;badge_id=$id";
