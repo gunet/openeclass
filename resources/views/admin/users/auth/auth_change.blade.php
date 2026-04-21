@@ -33,7 +33,6 @@
                                 {!! selection($auth_methods_active, 'auth_change', '', "class='form-control' id='auth_change_id'") !!}
                             </div>
                         </div>
-                        <input type='hidden' name='auth' value='{{ getIndirectReference(intval($auth)) }}'>
                         <div class='col-12 mt-5 d-flex justify-content-end align-items-center'>
                             <input class='btn submitAdminBtn' type='submit' name='submit' value='{{ trans('langSubmit') }}'>
                         </div>
