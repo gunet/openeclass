@@ -19,8 +19,7 @@
                         <div class="alert alert-info">
                             Οδηγίες
                         </div>
-
-                        <form class='form-horizontal' role='form' method='post' action='https://{{ $urlServer }}modules/exercise/launch_seb.php?course={{ $course_code }}&exerciseId={{ $eid }}'>
+                        <form class='form-horizontal' role='form' method='post' action='{{ preg_replace('/https/', 'sebs', $urlServer) }}modules/exercise/launch_seb.php?course={{ $course_code }}&exerciseId={{ $eid }}'>
                             <div class='form-group mt-5'>
                                 <div class='col-12 d-flex justify-content-center align-items-center gap-2'>
                                     <input class='btn successAdminBtn' type='submit' name='LaunchSeb' value='Launch Safe Exam Browser'>

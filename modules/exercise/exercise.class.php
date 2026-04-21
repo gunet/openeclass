@@ -1919,8 +1919,8 @@ class Exercise
 
         $sebConfigXml = file_get_contents("$webDir/courses/$course_code/exercise_seb_$this->id/config.seb");
 
-        header('Content-Type: application/xml');
-        //header('Content-Type: application/seb');
+        //header('Content-Type: application/xml');
+        header('Content-Type: application/seb');
         header('Content-Disposition: attachment; filename="config.seb"');
         header('Content-Length: ' . strlen($sebConfigXml));
         echo $sebConfigXml;
