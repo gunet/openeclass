@@ -74,7 +74,7 @@ foreach ($q as $l) {
             case 'cas':
                 $path = 'modules/auth/cas.php';
                 break;
-            /* I believe this is also missing
+            /* XXX: bilias: I believe this is also missing
             case 'oauth2':
                 $path = 'modules/auth/oauth2.php';
                 break;
