@@ -79,8 +79,11 @@ function showQuestion(&$objQuestionTmp, $question_number, array $exerciseResult 
         updateWildCardsWithRandomVariables($questionId, $exerciseType);
     }
 
+    // Refers to tab pattern in accessibility
+    $ariaLabeledBy = $exerciseType == MULTIPLE_PAGE_TYPE ? "aria-labelledby='tab-link-{$questionId}'" : '';
+
     $tool_content .= "
-            <div class='card panelCard px-lg-4 py-lg-3 qPanel panelCard-exercise mt-4' id='qPanel$questionId'>
+            <div class='card panelCard px-lg-4 py-lg-3 qPanel panelCard-exercise mt-4' id='qPanel$questionId' $ariaLabeledBy>
               <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                 <h3 class='mb-0 d-flex justify-content-start align-items-center gap-2 flex-wrap'>$langQuestion $qNumber
                     <small>($questionTypeWord &mdash; $questionWeight $message)</small>&nbsp;

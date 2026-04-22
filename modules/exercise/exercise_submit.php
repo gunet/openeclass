@@ -1019,10 +1019,83 @@ if ($questionList) {
         $questionId = $questionList[$questionNumber];
 
         if ($exerciseType == MULTIPLE_PAGE_TYPE) {
+
+            // Accessibility
+            $head_content .= "
+            <script type='text/javascript'>
+
+                document.addEventListener('DOMContentLoaded', () => {
+                    const tabs = document.querySelectorAll('.exercise-tablist .question-tab');
+
+                    tabs.forEach(tab => {
+                        if (tab.getAttribute('aria-selected') === 'true') {
+                            tab.setAttribute('tabindex', '0');
+                        } else {
+                            tab.setAttribute('tabindex', '-1');
+                        }
+                    });
+
+                    // Function to activate tab
+                    function activateTabs(currentTabs) {
+                        currentTabs.forEach(t => {
+                            t.setAttribute('aria-selected', 'false');
+                            t.setAttribute('tabindex', '-1');
+                            t.classList.remove('tab-active');
+                        });
+                    }
+                    
+                    tabs.forEach((tab) => {
+                        tab.addEventListener('keydown', (e) => {
+                            const currentTabs = document.querySelectorAll('.exercise-tablist .question-tab');
+                            const currentIndex = Array.prototype.indexOf.call(currentTabs, document.activeElement);
+                            if (currentIndex === -1) return;
+                            if (e.key === 'ArrowRight') {
+                                e.preventDefault();
+                                const nextIndex = (currentIndex + 1) % currentTabs.length;
+                                activateTabs(currentTabs);
+                                currentTabs[nextIndex].setAttribute('aria-selected', 'true');
+                                currentTabs[nextIndex].setAttribute('tabindex', '0');
+                                currentTabs[nextIndex].classList.add('tab-active');
+                                currentTabs[nextIndex].focus();
+                            } else if (e.key === 'ArrowLeft') {
+                                e.preventDefault();
+                                const prevIndex = (currentIndex - 1 + currentTabs.length) % currentTabs.length;
+                                activateTabs(currentTabs);
+                                currentTabs[prevIndex].setAttribute('aria-selected', 'true');
+                                currentTabs[prevIndex].setAttribute('tabindex', '0');
+                                currentTabs[prevIndex].classList.add('tab-active');
+                                currentTabs[prevIndex].focus();
+                            }
+                        });
+                    });
+                });
+
+                $(function() {
+                    $('.question-tab[data-qid=$questionNumber]').focus();
+                    $('.question-tab').on('click keydown', function (e) {
+                        if (e.type === 'click' || (e.type === 'keydown' && e.key === 'Enter')) {
+                            e.preventDefault();
+                            $('#hidden_qid').prop('disabled', false);
+                            var qid = $(this).data('qid');
+                            $('#hidden_qid').val(qid);
+                            document.getElementById('hidden_qid').click();
+                        }
+                    });
+                    $(document).click(function(event) {
+                        if (!$(event.target).hasClass('question-tab')) {
+                            $('#hidden_qid').prop('disabled', true);
+                        }
+                    });
+                });
+            </script>";
+
             // display question numbering buttons
             $tool_content .= "<div class='card panelCard card-transparent p-0 border-0'>";
             $tool_content .= "<div class='card-body p-0 border-0'>";
-            $tool_content .= "<div class='d-flex justify-content-center p-0 flex-wrap gap-2 border-0'>";
+            $tool_content .= "<input type='hidden' id='hidden_qid' name='q_id'>";
+            $tool_content .= "<ul class='nav nav-tabs border-0 exercise-tablist p-2' role='tablist'>";
+            $tab_counter = 1;
+            $ariaSelected = '';
             foreach ($questionList as $k => $q_id) {
                 $answered = in_array($q_id, $answeredIds);
                 if ($answered) {
@@ -1037,12 +1110,19 @@ if ($questionList) {
                 } else {
                     $extra_style = '';
                 }
+                if ($tab_counter == 1) {
+                    $ariaSelected = 'true';
+                } else {
+                    $ariaSelected = 'false';
+                }
+                $ariaLabelTitle = q($langQuestion) . ' ' . $k . ' ' . $title;
                 $tool_content .= "
-                    <div class='p-2' style='display: inline-block; margin-right: 10px;'>
-                        <input tabindex='0' class='btn $class' $extra_style type='submit' name='q_id' id='q_num$k' value='$k' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title='$title'>
-                    </div>";
+                    <li class='nav-item' style='display: inline-block; margin-right: 10px; margin-bottom: 10px;' data-bs-toggle='tooltip' data-bs-placement='top' title='$title'>
+                        <a id='tab-link-{$q_id}' aria-controls='qPanel{$q_id}' aria-selected='$ariaSelected' class='btn $class nav-link question-tab' $extra_style type='submit' data-qid='$k' data-bs-toggle='tab' role='tab' aria-label='$ariaLabelTitle'>$k</a>
+                    </li>";
+                $tab_counter++;
             }
-            $tool_content .= "</div></div></div>";
+            $tool_content .= "</ul></div></div>";
         }
 
         $question = $questions[$questionList[$questionNumber]];
@@ -1058,7 +1138,7 @@ if ($questionList) {
 
 // "Temporary save" button
 if ($uid and $exerciseTempSave) {
-    $tempSaveButton = "<input class='btn submitAdminBtn blockUI' type='submit' name='buttonSave' value='$langTemporarySave'>";
+    $tempSaveButton = "<button class='btn submitAdminBtn blockUI' type='submit' name='buttonSave'>$langTemporarySave</button>";
 } else {
     $tempSaveButton = '';
 }
@@ -1111,10 +1191,10 @@ if ($exerciseType != SINGLE_PAGE_TYPE) {
 $tool_content .= "<div class='col-12 d-flex justify-content-end align-items-center gap-2 flex-wrap' style='margin-top:100px;'>";
 
 // "Cancel" button
-$tool_content .= "<input class='btn btn-default' type='submit' name='buttonCancel' id='cancelButton' value='$langCancel'>";
+$tool_content .= "<button class='btn btn-default' type='submit' name='buttonCancel' id='cancelButton'>$langCancel</button>";
 
 // "Submit" button
-$tool_content .= "<input class='btn successAdminBtn blockUI' type='submit' name='buttonFinish' value='$langExerciseFinalSubmit'>";
+$tool_content .= "<button class='btn successAdminBtn blockUI' type='submit' name='buttonFinish'>$langExerciseFinalSubmit</button>";
 if ($exerciseType != SINGLE_PAGE_TYPE) {
     $tool_content .= "<input type='hidden' name='questionId' value='$questionId'>";
 }
