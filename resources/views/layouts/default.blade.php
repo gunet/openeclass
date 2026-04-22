@@ -152,9 +152,16 @@
                 </div>
             </div>
         @endif
-        @include('layouts.partials.navheadDesktop',['logo_img' => $logo_img])
+
+        @unless(isset($_SESSION['mobile']))
+            @include('layouts.partials.navheadDesktop', ['logo_img' => $logo_img])
+        @endunless
+
         <main id="main">@yield('content')</main>
-        @include('layouts.partials.footerDesktop')
+
+        @unless(isset($_SESSION['mobile']))
+            @include('layouts.partials.footerDesktop')
+        @endunless
     </div>
 
     @if(isset($_SESSION['uid']) && get_config('enable_quick_note'))

@@ -114,7 +114,7 @@ function createDom(array $groupsArr, array $toolsArr) {
 
 function correctLink($value) {
     global $urlServer, $urlAppend;
-    $link = $urlServer . substr($value, strlen($urlAppend));
+    $link = $urlServer . substr($value, strlen($urlAppend)) . '&view=mobile';
     $profile = (isset($_SESSION['profile'])) ? '?profile=' . $_SESSION['profile'] . '&' : '?';
     $redirect = 'redirect=' . urlencode($link);
     return $urlServer . 'modules/mobile/mlogin.php' . $profile . $redirect;
@@ -122,5 +122,5 @@ function correctLink($value) {
 
 function correctRedirect($value) {
     global $urlServer, $urlAppend;
-    return $urlServer . substr($value, strlen($urlAppend));
+    return $urlServer . substr($value, strlen($urlAppend)) . urlencode('&view=mobile');
 }

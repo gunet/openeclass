@@ -138,6 +138,7 @@ function view($view_file, $view_data = array())
     }
 
     $pageTitle = $siteName;
+    $is_mobile = (isset($_SESSION['mobile']) && $_SESSION['mobile'] == true);
 
     if (isset($_SESSION['current_user_tenant'])) {
         $tenant = $_SESSION['current_user_tenant'];
@@ -145,8 +146,6 @@ function view($view_file, $view_data = array())
         $tenant_platform_title = getTenantOption($tenantOptions, 'platform_title');
         $pageTitle = $tenant_platform_title;
     }
-
-    $is_mobile = (isset($_SESSION['mobile']) && $_SESSION['mobile'] == true);
 
     $toolArr = [];
     if (isset($course_id) and !$is_mobile) {

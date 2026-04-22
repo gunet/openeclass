@@ -3,7 +3,7 @@
 
     <div class='d-inline-flex align-items-top overflow-hidden'>
         <!-- this is toggle-button in breadcrumb -->
-        @if($course_code and !$is_in_tinymce and $currentCourseName and !isset($_GET['fromFlipped']))
+        @if($course_code and !$is_in_tinymce and $currentCourseName and !isset($_GET['fromFlipped']) and !isset($_SESSION['mobile']))
             <nav class="me-lg-0 me-2" role="navigation" aria-label="{{ trans('langBreadcrumb') }}">
                 <a class="btn d-lg-none p-0" type="button" data-bs-toggle="offcanvas" href="#collapseTools" role="button" aria-controls="collapseTools" aria-label="{{ trans('langOpenCloseTools') }}">
                     <svg id='collapse-left-menu-icon' width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" role="presentation">

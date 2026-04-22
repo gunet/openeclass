@@ -230,6 +230,11 @@ if (isset($_SESSION['SSO_USER_TRANSITION']) and !isset($transition_script)) {
     redirect_to_home_page('modules/auth/transition/auth_transition.php');
 }
 
+// mobile view
+if (isset($_GET['view']) and $_GET['view'] == 'mobile') {
+    $_SESSION['mobile'] = true;
+}
+
 // check if we are admin or power user or manageuser_user
 if (isset($_SESSION['is_admin']) and $_SESSION['is_admin']) {
     $is_admin = true;
