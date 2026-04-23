@@ -1859,16 +1859,14 @@ function display_session_settings($element, $element_id, $session_id = 0): void
  */
 function display_session_activities($element, $id, $session_id = 0) {
 
-    global $tool_content, $course_code, $is_consultant,
-           $langNoActivCert, $langAttendanceActList, $langTitle, $langType,
-           $langOfAssignment, $langOfPoll, $langConfirmDelete, $langDelete, $langEditChange,
-           $langDocumentAsModuleLabel, $langCourseParticipation,
-           $langAdd, $langBack, $langUsers,
-           $langValue, $langOfCourseCompletion, $langOfUnitCompletion,
-           $course_id, $langUnitCompletion, $langSessionPrerequisites, $langNewUnitPrerequisite,
-           $langNoSessionPrerequisite, $langSessionCompletion, $langWithoutCompletedResource,
+    global $tool_content, $course_code,
+           $langNoActivCert, $langTitle, $langType,
+           $langConfirmDelete, $langDelete, $langEditChange,
+           $langBack, $langUsers,
+           $course_id, $langSessionPrerequisites, $langNewUnitPrerequisite,
+           $langNoSessionPrerequisite, $langSessionCompletion,
            $langCompletedSession, $langNotCompletedSession, $langSubmit, $langCancel,
-           $langContinueToCompletetionWithoutAct, $langOfSubmitAssignment, $langOfSubmitDocument,
+           $langContinueToCompletetionWithoutAct,
            $langWithSubmittedUploadedFile, $langWithTCComplited,
            $langContinueToCompletetionWithCompletedTC, $langAddCompletionCriteria,
            $langWithMeetingCompletion, $langContinueToCompletetionWithMeeting,

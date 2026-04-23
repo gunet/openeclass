@@ -440,7 +440,7 @@ function display_course_completion(): void
 function display_activities($element, $id, $unit_id = 0) {
 
     global $tool_content, $course_code, $is_editor, $action_bar, $langActions,
-           $langNoActivCert, $langAttendanceActList, $langTitle, $langType,
+           $langNoActivCert, $langActivities, $langTitle, $langType,
            $langOfAssignment, $langExerciseAsModuleLabel, $langOfBlog,
            $langMediaAsModuleLabel, $langOfEBook, $langOfPoll, $langWiki,
            $langNumInForum, $langOfBlogComments, $langConfirmDelete,
@@ -856,7 +856,7 @@ function display_activities($element, $id, $unit_id = 0) {
                 <div class='col-12 mt-4'>
                     <div class='progress-module'>
                         <div class='leaderboard-accordion-header'>
-                            <h4><i class='fa fa-list'></i> $langAttendanceActList</h4>
+                            <h4><i class='fa fa-list'></i> $langActivities</h4>
                             <div class='d-flex align-items-center gap-3'>";
                             if ($is_editor) {
                                 $tool_content .= "<div class='accordion-header-btn' onclick='event.stopPropagation()'>
