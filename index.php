@@ -110,6 +110,9 @@ if (isset($_SESSION['shib_uname'])) {
 } elseif (isset($_SESSION['auth_id'])) {
     // authenticate via OAuth 2.0
     shib_cas_login('oauth2');
+} elseif (isset($_SESSION['keycloak_uname'])) {
+    // authenticate via Keycloak
+    shib_cas_login('keycloak');
 } elseif (isset($_GET['provider'])) {
     //hybridauth authentication (Facebook, Twitter, Google, Yahoo, Live, LinkedIn)
     hybridauth_login();

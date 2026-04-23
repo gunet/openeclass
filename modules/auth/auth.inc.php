@@ -53,6 +53,7 @@ $auth_ids = [
     13 => 'linkedin',
     14 => 'lti_publish',
     15 => 'oauth2',
+    16 => 'keycloak',
 ];
 
 $authFullName = [
@@ -63,9 +64,10 @@ $authFullName = [
     12 => 'Yahoo!',
     13 => 'LinkedIn',
     15 => 'OAuth 2.0',
+    16 => 'Keycloak (OIDC)',
 ];
 
-$extAuthMethods = ['cas', 'shibboleth', 'oauth2'];
+$extAuthMethods = ['cas', 'shibboleth', 'oauth2', 'keycloak'];
 $hybridAuthMethods = ['facebook', 'twitter', 'google', 'live', 'yahoo', 'linkedin'];
 
 
@@ -190,6 +192,8 @@ function get_auth_info($auth)
             break;
             case '15': $m = $GLOBALS['langViaOAuth2'];
             break;
+            case '16': $m = $GLOBALS['langViaKeycloak'];
+            break;
             default: $m = 0;
             break;
         }
@@ -212,7 +216,7 @@ function get_auth_settings($auth) {
     $auth = intval($auth);
     $result = Database::get()->querySingle("SELECT * FROM auth WHERE auth_id = ?d", $auth);
     if (!$result) {
-        return 0;
+        return [];
     }
 
     $settings['auth_id'] = $result->auth_id;
@@ -1251,6 +1255,20 @@ function alt_login($user_info_object, $uname, $pass, $mobile = false) {
         }
     }
 
+    // keycloak
+    if ($auth == 16) {
+        $keycloak_settings = get_auth_settings($auth);
+        $altauth = intval($keycloak_settings['altauth']);
+        if ($altauth > 0 && check_auth_configured($altauth)) {
+            $auth = $altauth;
+            // fetch settings of alt auth
+            $auth_method_settings = get_auth_settings($auth);
+            $user_info_object->password = $auth_method_settings['auth_name'];
+        } else {
+            return 16; // Redirect to Keycloak
+        }
+    }
+
     if ($auth == 6) {
         return 6; // Redirect to Shibboleth login
     }
@@ -1349,8 +1367,8 @@ function alt_login($user_info_object, $uname, $pass, $mobile = false) {
 }
 
 /**
- * @brief Authenticate user via Shibboleth, CAS or OAuth 2.0
- * @param $type is 'shibboleth', 'cas' or 'oauth2'
+ * @brief Authenticate user via Shibboleth, CAS, OAuth 2.0 or Keycloak
+ * @param $type is 'shibboleth', 'cas', 'oauth2' or 'keycloak'
  */
 function shib_cas_login($type) {
     global $surname, $givenname, $email, $status, $language, $session,
@@ -1386,10 +1404,22 @@ function shib_cas_login($type) {
         $givenname = $_SESSION['auth_givenname'] ?? '';
         $email = $_SESSION['auth_email'] ?? '';
         $am = $_SESSION['auth_studentid'] ?? '';
+    } elseif ($type == 'keycloak') {
+        $uname = $_SESSION['keycloak_uname'] ?? '';
+        $surname = $_SESSION['auth_surname'] ?? '';
+        $givenname = $_SESSION['auth_givenname'] ?? '';
+        $email = $_SESSION['auth_email'] ?? '';
+        $am = $_SESSION['auth_studentid'] ?? '';
+        // get mail verification status from provider
+        $auth_verified_mail = $_SESSION['auth_verified_mail'];
     }
     if ($email) {
         // Email is considered verified if it came from CAS or Shibboleth
         $verified_mail = EMAIL_VERIFIED;
+    }
+
+    if (isset($auth_verified_mail) && empty($auth_verified_mail)) {
+        $verified_mail = EMAIL_UNVERIFIED;
     }
 
     // Attributes passed to login_hook()
