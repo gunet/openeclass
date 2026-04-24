@@ -530,7 +530,7 @@ if (isset($_GET['action'])) {
     }
 } else { // display available certificates / badges
     $sql1 = Database::get()->queryArray("SELECT * FROM certificate_template");
-    $tool_content .= "<h3>$langCertificates</h3>";
+    $tool_content .= "<h2 class='text-heading-h3'>$langCertificates</h2>";
     $tool_content .= "<div class='table-responsive'>
                         <table class='table-default'>
                         <thead>
@@ -582,7 +582,7 @@ if (isset($_GET['action'])) {
     $tool_content .= "</div>";
 
     $sql2 = Database::get()->queryArray("SELECT * FROM badge_icon");
-    $tool_content .= "<h3 class='mt-5'>$langBadges</h3>";
+    $tool_content .= "<h2 class='text-heading-h3 mt-5'>$langBadges</h2>";
     $tool_content .= "<div class='table-responsive'>
                         <table class='table-default'>
                         <thead>

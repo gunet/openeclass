@@ -789,7 +789,7 @@ switch ($action) {
                                             '</head><body>';
 
                     $printable_content .= '<h2>'.$htmltitle. '</h2>'."\n";
-                    $printable_content .= '<h3>'.$toolTitle['mainTitle'].'</h3><hr/>'."\n";
+                    $printable_content .= '<h2 class="text-heading-h3">'.$toolTitle['mainTitle'].'</h2><hr/>'."\n";
                     //remove the toc script (if it exists) with preg_replace
                     $printable_content .= preg_replace('#<script(.*?)>(.*?)</script>#is', '', $wikiRenderer->render($wikiPage->getContent()))."\n";
                     $printable_content .= '<hr>';
@@ -946,11 +946,11 @@ if ($action == 'show' && (!isset($_GET['printable']) || $_GET['printable']!="yes
                             <div class='card panelCard card-default px-lg-4 py-lg-3'>
                                 <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                                     
-                                        <h3>
+                                        <h2 class='text-heading-h3'>
                                           
                                                 ". ( $wiki_title != "__MainPage__" ? $wiki_title : $langWikiMainPage) ."
                                             
-                                        </h3>
+                                        </h2>
                                         <div>
                                             <div>
                                                 ".action_button(array(

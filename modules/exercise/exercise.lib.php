@@ -85,10 +85,10 @@ function showQuestion(&$objQuestionTmp, $question_number, array $exerciseResult 
     $tool_content .= "
             <div class='card panelCard px-lg-4 py-lg-3 qPanel panelCard-exercise mt-4' id='qPanel$questionId' $ariaLabeledBy>
               <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                <h3 class='mb-0 d-flex justify-content-start align-items-center gap-2 flex-wrap'>$langQuestion $qNumber
+                <h2 class='text-heading-h3 mb-0 d-flex justify-content-start align-items-center gap-2 flex-wrap'>$langQuestion $qNumber
                     <small>($questionTypeWord &mdash; $questionWeight $message)</small>&nbsp;
                     <span title='$langHasAnswered' id='qCheck$question_number'></span>
-                </h3>
+                </h2>
             </div>
             <div class='panel-body'>
                 <div tabindex='0' class='text-heading-h4 mb-4'>" . q_math($questionName) . "</div>";
@@ -204,13 +204,13 @@ function display_exercise($exercise_id): void
     $tool_content .= "
     <div class='col-12 mb-4'><div class='card panelCard card-default px-lg-4 py-lg-3'>
             <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-              <h3>" . q_math($exercise->selectTitle());
+              <h2 class='text-heading-h3'>" . q_math($exercise->selectTitle());
               if ($is_editor) {
                     $tool_content .= "<a class='ms-2' href='admin.php?course=$course_code&amp;exerciseId=$exercise_id&amp;modifyExercise=yes' aria-label='$langModify'>
                       <span class='fa-solid fa-edit' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langModify'></span>
                     </a>";
                 }
-              $tool_content .= "</h3>
+              $tool_content .= "</h2>
             </div>
             <div class='card-body'>" . standard_text_escape($exercise->selectDescription()) . "</div>
         </div>

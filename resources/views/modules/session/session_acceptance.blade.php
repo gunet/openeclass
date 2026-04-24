@@ -33,7 +33,7 @@
                         <div class='flex-grow-1'>
                             <div class="card panelCard border-card-left-default px-lg-4 py-lg-3">
                                 <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                    <h3 class='mb-0'>{{ trans('langDetailsSession') }}</h3>
+                                    <h2 class='text-heading-h3 mb-0'>{{ trans('langDetailsSession') }}</h2>
                                 </div>
                                 <div class='card-body'>
                                     @if(is_session_visible($course_id,$sessionID))

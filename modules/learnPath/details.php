@@ -219,7 +219,7 @@ if (isset($_GET['xls'])) {
         <body>
         <h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
         <h2> " . q($langStatsOfLearnPath) . "</h2>
-        <h3>" . disp_tool_title($titleTab) . "</h3>";
+        <h2 class='text-heading-h3'>" . disp_tool_title($titleTab) . "</h2>";
 
     $pdf_content .= $tool_content;
     $pdf_content .= "</body></html>";

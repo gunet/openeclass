@@ -266,7 +266,7 @@
                                             $facetLabel = $results['facetLabels'][$facetField] ?? $facetField;
                                         ?>
                                         <section class="filters__section">
-                                            <h3>{{ $facetLabel }}</h3>
+                                            <h2 class='text-heading-h3'>{{ $facetLabel }}</h2>
                                             <ul>
                                                 @foreach ($facetBuckets as $bucket)
                                                     <?php

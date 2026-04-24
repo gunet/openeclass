@@ -40,7 +40,7 @@
                                     <ul class="tree-units">
                                         <li>
                                             <details>
-                                                <summary><h3 class='mb-0'>{{ trans('langDisplayAllUnits')}}</h3></summary>
+                                                <summary><h2 class='text-heading-h3 mb-0'>{{ trans('langDisplayAllUnits')}}</h2></summary>
                                                 <ul>
                                                     @foreach ($units as $cu)
                                                         <li @class([
@@ -72,7 +72,7 @@
                     <div class='col-12 mt-4'>
                         <div class="card panelCard card-default px-lg-4 py-lg-3">
                             <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-                                <h3>{{ $unit_title }}</h3>
+                                <h2 class='text-heading-h3'>{{ $unit_title }}</h2>
                                 @if ($is_editor and $q->flipped_flag == 2)
                                 <a aria-label="{{ trans('langActivities') }}" href="{{ $urlAppend }}modules/create_course/course_units_activities.php?course={{ $course_code }}&edit_act={{ $id }}"
                                                            data-bs-toggle="tooltip" data-bs-placement="bottom" title data-bs-original-title="{{ trans('langActivities') }}">

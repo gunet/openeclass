@@ -69,7 +69,7 @@
                                         @else
                                             <td style="background-color: aliceblue">
                                                 {{ date_format(date_create($data['month']), "n / Y") }}
-                                                <h3><a href="{{ $_SERVER['SCRIPT_NAME'] }}?d=1&amp;m={{ $data['month'] }}&fc={{ $fc }}">{{ trans('langDetails') }}</a></h3>
+                                                <h2 class='text-heading-h3'><a href="{{ $_SERVER['SCRIPT_NAME'] }}?d=1&amp;m={{ $data['month'] }}&fc={{ $fc }}">{{ trans('langDetails') }}</a></h2>
                                             </td>
                                         @endif
                                         <td style="text-align: center;">{{ $data['teachers'] }}</td>

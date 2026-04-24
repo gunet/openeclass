@@ -156,7 +156,7 @@ function show_post_form(): void
             <div class="col-12 mt-3">
                 <div class="card panelCard px-lg-4 py-lg-3 wallWrapper">
                     <div class="card-header border-0">
-                        <h3>'.$langWall.'&nbsp;'.$langOfCourse.'</h3>
+                        <h2 class="text-heading-h3">'.$langWall.'&nbsp;'.$langOfCourse.'</h2>
                     </div>
                     <div class="card-body">
                         <form id="wall_form" method="post" action="'.$urlServer.'modules/wall/index.php?course='.$course_code.'" enctype="multipart/form-data">

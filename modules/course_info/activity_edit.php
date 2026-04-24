@@ -76,7 +76,7 @@ foreach ($items as $item) {
             <div class='col'>
                 <div class='card panelCard card-default px-lg-4 py-lg-3 h-100'>
                     <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                        <h3>" . q(getSerializedMessage($item->heading)) . "</h3>
+                        <h2 class='text-heading-h3'>" . q(getSerializedMessage($item->heading)) . "</h2>
                     </div>
                     <div class='card-body'>" .
                         rich_text_editor("content[{$item->heading_id}]", 5, 40, $item->content, true) . "</div>";

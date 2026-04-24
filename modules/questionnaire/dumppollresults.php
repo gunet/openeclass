@@ -440,7 +440,7 @@ function create_pdf($data) {
         </head>
         <body>
         <h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
-         <h3>" . q($langResults) . "</h3>
+         <h2 class='text-heading-h3'>" . q($langResults) . "</h2>
          <p></p>";
 
     $pdf_content .= $content;

@@ -64,7 +64,7 @@ $total_users = Database::get()->querySingle("SELECT COUNT(DISTINCT uid) AS count
 $tool_content .= "
     <div class='card panelCard card-default px-lg-4 py-lg-3'>
         <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-            <h3>" . $objExercise->selectTitle() . "</h3>
+            <h2 class='text-heading-h3'>" . $objExercise->selectTitle() . "</h2>
         </div>
         <div class='row g-3'>
         
@@ -242,7 +242,7 @@ $tool_content .= "
     <div class='col-12 mt-4'>
         <div class='card panelCard card-default px-lg-4 py-lg-3'>
             <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                <h3>$langQuestions</h3>";
+                <h2 class='text-heading-h3'>$langQuestions</h2>";
                 if ($exerciseCalcGradeMethod == CALC_GRADE_METHOD_CERTAINTY_BASED) {
                     $tool_content .= "
                                 <div class='d-flex gap-1'>

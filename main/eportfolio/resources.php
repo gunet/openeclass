@@ -526,7 +526,7 @@ if ($userdata) {
 
             $tool_content .= "<div class='card panelCard card-default px-lg-4 py-lg-3 mb-3'>
                                     <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>                                                                                 
-                                            <h3>".q($data['title'])."</h3>
+                                            <h2 class='text-heading-h3'>".q($data['title'])."</h2>
                                             <div>
                                                 ". action_button(array(
                                                                     array(
@@ -718,7 +718,7 @@ if ($userdata) {
 
                 $tool_content .= "<div class='card panelCard card-default px-lg-4 py-lg-3 mt-3 h-100'>
                                     <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>                                           
-                                        <h3>".q($data['title']).$title_vis_icon."</h3>"
+                                        <h2 class='text-heading-h3'>".q($data['title']).$title_vis_icon."</h2>"
                                         .$vis_modal_form.                                    
                                         "<div>
                                             ". action_button(array(
@@ -812,7 +812,7 @@ if ($userdata) {
                     $vis_modal_form = "";
                 }
 
-                $submission_header_content = "<h3>".q($data['title']).$title_vis_icon."</h3>".$vis_modal_form;
+                $submission_header_content = "<h2 class='text-heading-h3'>".q($data['title']).$title_vis_icon."</h2>".$vis_modal_form;
                 $submission->course_title = $langCourse.': '. q($submission->course_title);
 
                 $submission_content = " <div class='well panel border-bottom-default mb-3'>
@@ -1056,7 +1056,7 @@ if ($userdata) {
 
                 $tool_content .= "<div class='card panelCard card-default px-lg-4 py-lg-3 mt-3 h-100'>
                                     <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>                                           
-                                        <h3>".q($data['title']).$title_vis_icon."</h3>"
+                                        <h2 class='text-heading-h3'>".q($data['title']).$title_vis_icon."</h2>"
                                         .$vis_modal_form.
                                         "<div>
                                             ". action_button(array(
@@ -1155,7 +1155,7 @@ if ($userdata) {
 
                 $tool_content .= "<div class='card panelCard card-default px-lg-4 py-lg-3 mt-3 h-100'>
                                     <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>                                           
-                                        <h3>".q($data['title']).$title_vis_icon."</h3>"
+                                        <h2 class='text-heading-h3'>".q($data['title']).$title_vis_icon."</h2>"
                                         .$vis_modal_form.
                                         "<div>
                                             ". action_button(array(
@@ -1253,7 +1253,7 @@ if ($userdata) {
 
                 $tool_content .= "<div class='card panelCard card-default px-lg-4 py-lg-3 mt-3 h-100'>
                                     <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>                                           
-                                        <h3>".q($data['title']).$title_vis_icon."</h3>"
+                                        <h2 class='text-heading-h3'>".q($data['title']).$title_vis_icon."</h2>"
                                         .$vis_modal_form.                                  
                                         "<div>
                                             ". action_button(array(

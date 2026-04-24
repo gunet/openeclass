@@ -386,11 +386,11 @@ function display_course_completion(): void
                     <div style='width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;'>
                         <i class='fa fa-trophy' style='font-size: 1.5rem; color: #3b82f6;'></i>
                     </div>
-                    <h3 class='mb-0' style='font-size: 16px; font-weight: 500; color: #374151;'>
+                    <h2 class='text-heading-h3 mb-0' style='font-size: 16px; font-weight: 500; color: #374151;'>
                         <a href='{$_SERVER['SCRIPT_NAME']}?course={$course_code}&amp;tab=course_completion&amp;badge_id={$data->id}' style='text-decoration: none; color: #2563eb;'>
                             " . q($data->title) . "
                         </a>
-                    </h3>
+                    </h2>
                 </div>
 
                 <div class='d-flex align-items-center gap-4'>
@@ -960,9 +960,9 @@ function display_activities($element, $id, $unit_id = 0) {
                                 <div class='col-12'>
                                     <div class='card px-lg-4 py-lg-3'>
                                         <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-                                            <h3>
+                                            <h2 class='text-heading-h3'>
                                                 $langUnitCompletion
-                                            </h3>
+                                            </h2>
                                             <div>
                                                 $addActivityBtn
                                             </div>
@@ -1063,9 +1063,9 @@ function display_activities($element, $id, $unit_id = 0) {
 
                         <div class='card panelCard card-default px-lg-4 py-lg-3 mt-3'>
                             <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-                                <h3>
+                                <h2 class='text-heading-h3'>
                                     $langUnitPrerequisites
-                                </h3>
+                                </h2>
                                 <div>
                                     $addPrereqBtn
                                 </div>
@@ -3816,7 +3816,7 @@ function student_view_progress() {
                 <div class='col-12'>
                     <div class='card px-lg-4 py-lg-3'>
                         <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                            <h3>$langCourseCompletion</h3>
+                            <h2 class='text-heading-h3'>$langCourseCompletion</h2>
                         </div>
                         <div class='card-body'>
                             <div class='res-table-wrapper'>
@@ -3869,7 +3869,7 @@ function student_view_progress() {
                     <div class='col-12 mt-4'>
                         <div class='card px-lg-4 py-lg-3'>
                             <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                <h3>$langBadges</h3>
+                                <h2 class='text-heading-h3'>$langBadges</h2>
                             </div>
                             <div class='card-body'>";
 
@@ -3926,7 +3926,7 @@ function student_view_progress() {
                     <div class='col-12 mt-4'>
                         <div class='card px-lg-4 py-lg-3'>
                             <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                <h3>$langCertificates</h3>
+                                <h2 class='text-heading-h3'>$langCertificates</h2>
                             </div>
                             <div class='card-body'>";
 
@@ -3989,7 +3989,7 @@ function student_view_progress() {
                     <div class='col-12 mt-4'>
                         <div class='card px-lg-4 py-lg-3'>
                             <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                <h3>$langPointsGames</h3>
+                                <h2 class='text-heading-h3'>$langPointsGames</h2>
                             </div>
                             <div class='card-body'>";
 
@@ -4437,7 +4437,7 @@ function display_user_progress_details($element, $element_id, $user_id) {
             <div class='col-12'>
                 <div class='card px-lg-4 py-lg-3'>
                     <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                        <h3>$element_title</h3>
+                        <h2 class='text-heading-h3'>$element_title</h2>
                     </div>
                     <div class='card-body'>
                         <div class='row'>
@@ -4498,7 +4498,7 @@ function display_user_progress_details($element, $element_id, $user_id) {
         <div class='col-12 mt-4'>
             <div class='card px-lg-4 py-lg-3'>
                 <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                    <h3>$langAttendanceActivity</h3>
+                    <h2 class='text-heading-h3'>$langAttendanceActivity</h2>
                 </div>
                 <div class='card-body'>
                     <div class='table-responsive mt-0'>
@@ -4683,7 +4683,7 @@ function display_user_points_game_details($points_game_id, $user_id) {
         <div class='col-12 mt-4'>
             <div class='card px-lg-4 py-lg-3'>
                 <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                    <h3>$langAttendanceActivity</h3>
+                    <h2 class='text-heading-h3'>$langAttendanceActivity</h2>
                 </div>
                 <div class='card-body'>
                     <div class='mt-0'>

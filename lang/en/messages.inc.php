@@ -7139,6 +7139,7 @@ $langUniFlixNewFileVersion = "There is a newwer verion of file in UniFlix.";
 $langUniFlixRequireAuth = ", UniFlix authentication is required, in order to display private multimedia files";
 $langWillEnd = 'will end in';
 $langUnitCompletionLegend = "Unit completion is enabled or the unit has prerequisites";
+$langNewMaterial = "New material";
 $langUserThemeCustomization = 'User Theme Customization';
 $langEnableUserThemeCustomization = 'Enable user theme customization';
 $langEnableUserThemeCustomizationHelp = 'Allow users to select and customize their own theme preferences. Users can choose from available themes and save their selection in a cookie.';
@@ -7283,4 +7284,7 @@ For example, this can be done through an external webcron system.</p>';
 $langTenantsCronRunning = 'Automatic disk usage logging is active.';
 $langTenantsCronStopped = 'Warning! Automatic disk usage logging has stopped! {Check the settings}';
 $langTenantsCronEnable = 'Note: You can enable automatic disk usage logging without additional actions from administrators (opening the logging window). {Read more}';
-
+$langDtFirstPage = "First page";
+$langDtNextPage = "Next page";
+$langDtPrevPage = "Previous page";
+$langDtLastPage = "Last page";

@@ -157,7 +157,7 @@ $maxDeep = 1; // used to compute colspan of <td> cells - only single level depth
 
 $toolName = $LPname;
 
-$tool_content .= "<h3>" . q(uid_to_name($uInfo)) . "</h3>";
+$tool_content .= "<h2 class='text-heading-h3'>" . q(uid_to_name($uInfo)) . "</h2>";
 
 $tool_content .= "<div class='table-responsive'>
     <table class='table-default'>

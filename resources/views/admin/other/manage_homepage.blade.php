@@ -241,7 +241,7 @@
                                     @php $urlEdit = ''; @endphp
                                     <div class='card panelCard card-default px-lg-4 py-lg-3 p-3 mb-4' data-id='{{ $p->id }}'>
                                         <div class='card-header border-0 d-flex justify-content-between align-items-center p-0 gap-3 flex-wrap'>
-                                            <h3 class='mb-0'>
+                                            <h2 class='text-heading-h3 mb-0'>
                                                 @if($p->title == 'announcements')
                                                     {{ trans('langAnnouncements')}}
                                                     @php $urlEdit = $urlServer . 'modules/admin/adminannouncements.php'; @endphp
@@ -267,7 +267,7 @@
                                                     {{ trans('langOpenCourses')}}
                                                     @php $urlEdit = $urlServer . 'modules/admin/eclassconf.php'; @endphp
                                                 @endif
-                                            </h3>
+                                            </h2>
 
                                             @php ($p->visible==1 ? $vis=0 : $vis=1); @endphp
 

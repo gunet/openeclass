@@ -601,6 +601,10 @@
 <script>
     let current_url = document.URL;
 
+    if(!current_url.includes('/modules/link/index.php') && localStorage.getItem('open-category') !== null) {
+        localStorage.removeItem('open-category');
+    }
+
     localStorage.setItem("menu-item", "homepage");
 
     if(current_url.includes('/?redirect_home')){

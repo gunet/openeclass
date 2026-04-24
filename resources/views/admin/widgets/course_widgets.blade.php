@@ -38,7 +38,7 @@
                             @include('layouts.partials.show_alert') 
 
                             <div class="col-md-4 col-12">
-                                <h3 class="">{{ trans('langInstalledWidgets') }}</h3>
+                                <h2 class="text-heading-h3">{{ trans('langInstalledWidgets') }}</h2>
                                 <hr>
                                 @if (count($installed_widgets) > 0)
                                 <div id="widgets">

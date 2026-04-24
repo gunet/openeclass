@@ -144,8 +144,8 @@ $tool_content .= "
             <div class='flex-grow-1'>
                 <div class='card panelCard card-default px-lg-4 py-lg-3 h-100'>
                     <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-                        <h3>$langAIQuestionGeneration" .
-                        ($exercise ? " - " . htmlspecialchars($exercise->selectTitle()) : "") . "</h3>
+                        <h2 class='text-heading-h3'>$langAIQuestionGeneration" .
+                        ($exercise ? " - " . htmlspecialchars($exercise->selectTitle()) : "") . "</h2>
                     </div>
                     <div class='card-body'>
                         <div class='alert alert-info'>
@@ -238,7 +238,7 @@ if (!empty($_SESSION['ai_generated_questions'])) {
         <div class='col-12 mt-4'>
             <div class='card panelCard card-default px-lg-4 py-lg-3 h-100'>
                 <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                    <h3>$langGeneratedQuestions: " .  count($questions) . "</h3>
+                    <h2 class='text-heading-h3'>$langGeneratedQuestions: " .  count($questions) . "</h2>
                 </div>
                 <div class='card-body'>
                     <form method='post'>
@@ -335,7 +335,7 @@ $tool_content .= "
     <div class='col-12 mt-4'>
         <div class='card panelCard card-default px-lg-4 py-lg-3 h-100'>
             <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                <h3>" . ($langUsageTips ?? 'Usage Tips') . "</h3>
+                <h2 class='text-heading-h3'>" . ($langUsageTips ?? 'Usage Tips') . "</h2>
             </div>
             <div class='card-body'>
                 <ul>

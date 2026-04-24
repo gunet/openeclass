@@ -57,6 +57,7 @@ $head_content .= "
                 language: '".$language."',
                 autoclose: true
             });
+            $('.alert-success.submit-ok').focus();
         });
     </script>
 ";
@@ -621,7 +622,7 @@ function printPollForm() {
                 <div class='col-12 mb-4'>
                     <div class='card panelCard card-default px-lg-4 py-lg-3 mb-4'>
                         <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                            <h3>$langSubmissionOnBehalfOfUser</h3>
+                            <h2 class='text-heading-h3'>$langSubmissionOnBehalfOfUser</h2>
                         </div>
                         <div class='card-body'>
                             <form id='onBehalfOfSelectionForm' method='post' action='$actionPoll'>
@@ -661,7 +662,7 @@ function printPollForm() {
             $tool_content .= "<div class='col-12 mb-4'>
                                 <div class='card panelCard card-default px-lg-4 py-lg-3 mb-4'>
                                     <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                        <h3>$langDescription</h3>
+                                        <h2 class='text-heading-h3'>$langDescription</h2>
                                     </div>
                                     <div class='card-body'>
                                         " . standard_text_escape($thePoll->description) . "
@@ -733,7 +734,7 @@ function printPollForm() {
             $tool_content .= "
                 <div class='card panelCard card-default px-lg-4 py-lg-3 mb-4'>
                     <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                        <h3>$langPollParticipantInfo</h3>
+                        <h2 class='text-heading-h3'>$langPollParticipantInfo</h2>
                     </div>
                     <div class='card-body'>
                         <div class='form-group$email_error'>
@@ -848,7 +849,7 @@ function printPollForm() {
                 <div class='col-12'>
                     <div class='card panelCard px-lg-4 py-lg-3 h-100 panelCard-questionnaire poll-panel mb-4' $emptyQuestionStyle>
                         <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                            <h3>$langQuestion $_SESSION[q_counter] $RequiredQuestionHtml</h3>
+                            <h2 class='text-heading-h3'>$langQuestion $_SESSION[q_counter] $RequiredQuestionHtml</h2>
                         </div>
                         <div class='card-body'>";
                             $tool_content .= "<p tabindex='0' class='TextMedium Neutral-900-cl mb-2'>".q_math($theQuestion->question_text)."</p>";
@@ -1565,7 +1566,7 @@ function submitPoll() {
             )
         );
         $end_message = Database::get()->querySingle("SELECT end_message FROM poll WHERE pid = ?d", $pid)->end_message;
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>".$langPollSubmitted."</span></div></div>";
+        $tool_content .= "<div class='col-sm-12'><div tabindex='0' class='alert alert-success submit-ok'><i class='fa-solid fa-circle-check fa-lg'></i><span>".$langPollSubmitted."</span></div></div>";
         if ($poll->end_message) {
             $tool_content .=  $end_message;
         }

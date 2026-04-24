@@ -72,7 +72,7 @@ function render_eportfolio_fields_content($uid) {
                 <div class="card-body px-3 py-0">
                 <div class="d-flex align-items-center gap-2 border-bottom py-3">
                     <i class="'.$cat_icon.' Primary-500-cl"></i>
-                    <h3 class="mb-0">'. q($c->name) .'</h3>
+                    <h2 class="text-heading-h3 mb-0">'. q($c->name) .'</h2>
                 </div>';
 
             if ($j == 0) {
@@ -353,7 +353,7 @@ function render_eportfolio_fields_form() {
 
             <div class="card panelCard card-default px-lg-4 py-lg-3 mb-4" id="EditPortfolio'.$c->id.'">
                                        <div class="card-header border-0 d-flex justify-content-between align-items-center">
-                                           <h3>' . q($c->name) .'</h3>
+                                           <h2 class="text-heading-h3">' . q($c->name) .'</h2>
                                        </div>
                                        <div class="card-body">
                                            <fieldset><legend class="mb-0" aria-label="'.$langForm.'"></legend>';

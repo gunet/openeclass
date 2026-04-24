@@ -96,7 +96,7 @@ if (isset($_GET['mid'])) {
                             <div class='col'>
                                 <div class='card panelCard border-card-left-default px-lg-4 py-lg-3 h-100'>
                                     <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                        <h3>$langMessageInfo</h3>
+                                        <h2 class='text-heading-h3'>$langMessageInfo</h2>
                                     </div>
                                     <div class='card-body'>
                                         <ul class='list-group list-group-flush'>
@@ -162,7 +162,7 @@ if (isset($_GET['mid'])) {
                             <div class='col'>
                                 <div class='card panelCard border-card-left-default px-lg-4 py-lg-3 h-100'>
                                     <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                        <h3>$langMessageContent</h3>
+                                        <h2 class='text-heading-h3'>$langMessageContent</h2>
                                     </div>
                                     <div class='card-body'>
                                         
@@ -227,7 +227,7 @@ if (isset($_GET['mid'])) {
                 $out .= generate_csrf_token_form_field() . "
                             <fieldset>
                                     <legend class='mb-0' aria-label='$langForm'></legend>
-                                    <h3 class='action-bar-title text-center'>$langReply</h3>
+                                    <div class='text-heading-h3 action-bar-title text-center'>$langReply</div>
 
                                     <div class='form-group mt-4'>
                                         <label for='senderName' class='col-sm-12 control-label-notes'>$langSender</label>
@@ -361,7 +361,7 @@ if (isset($_GET['mid'])) {
 
                     <fieldset>
                         <legend class='mb-0' aria-label='$langForm'></legend>
-                        <h3 class='action-bar-title text-center'>$langForward</h3>
+                        <h2 class='text-heading-h3 action-bar-title text-center'>$langForward</h2>
 
                         <div class='form-group mt-4'>
                             <label for='forward_senderName' class='col-sm-12 control-label-notes'>$langSender</label>

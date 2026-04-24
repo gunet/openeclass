@@ -379,7 +379,7 @@ if (!isset($_GET['pdf'])) {
 
 $tool_content .= "<div class='col-12 mt-4'><div class='card panelCard card-default px-lg-4 py-lg-3'>
                       <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                            <h3>" . q_math($exerciseTitle) . "</h3>
+                            <h2 class='text-heading-h3'>" . q_math($exerciseTitle) . "</h2>
                       </div>";
 
 if (!empty($exerciseDescription)) {
@@ -408,11 +408,11 @@ $tool_content .= "<div class='col-sm-12'>";
     $tool_content .= "<div class='card-header border-0 d-flex justify-content-between align-items-center'>"; //card-header
 
     if ($user) { // user details
-        $tool_content .= "<h3>" . q($user->surname) . " " . q($user->givenname);
+        $tool_content .= "<h2 class='text-heading-h3'>" . q($user->surname) . " " . q($user->givenname);
         if ($user->am) {
             $tool_content .= " ($langAmShort: " . q($user->am) . ")";
         }
-        $tool_content .= "</h3>";
+        $tool_content .= "</h2>";
     }
     $tool_content .= "</div>"; //card-header end
 

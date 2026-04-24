@@ -774,6 +774,7 @@ $langConfirmDeleteUnit = "Θέλετε σίγουρα να αφαιρέσετε 
 $langConfirmDeleteGoal = "Θέλετε σίγουρα να αφαιρέσετε το συγκεκριμένο μαθησιακό στόχο;";
 $langDisplayAllUnits = "Εμφάνιση όλων των ενοτήτων";
 $langDoubleLoginLockOption = 'Αποκλεισμός ταυτόχρονων συνδέσεων με τον ίδιο λογαριασμό.';
+$langNewMaterial = "Συμπληρωματικό υλικό";
 
 // admin announcements
 $langAdminAn = "Ανακοινώσεις Διαχειριστή";
@@ -7611,7 +7612,7 @@ $langCreateDeliverable = "Δημιουργία παραδοτέου";
 $langImgFormsDes = "Συμπληρώστε τα υποχρεωτικά πεδία στην εικονιζόμενη φόρμα";
 $langThePageIs = "Βρίσκεστε στην σελίδα:";
 $langFrameOpens = "Άνοιγμα παραθύρου";
-$langListChoices = "Λίστα επιλογών";
+$langListChoices = "Άνοιγμα μενού επιλογών";
 $langAccuratePath = "Ακριβής διαδρομή";
 $langOptForColor = "Επιλογή χρώματος";
 $langDisplayOptionsImg = "Απεικόνιση ρυθμίσεων";
@@ -7926,3 +7927,9 @@ $langLatexCatFunctions = "Συναρτήσεις";
 $langLatexCatMathStructures = "Μαθηματικές Δομές";
 $langLatexCatMiscellaneous = "Διάφορα";
 $langLatexCatChemicalSymbols = "Χημικά Σύμβολα";
+
+// Datatables / Aria labels
+$langDtFirstPage = "Πρώτη σελίδα πίνακα";
+$langDtNextPage = "Επόμενη σελίδα πίνακα";
+$langDtPrevPage = "Προηγούμενη σελίδα πίνακα";
+$langDtLastPage = "Τελευταία σελίδα πίνακα";

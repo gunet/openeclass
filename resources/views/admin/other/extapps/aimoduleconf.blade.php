@@ -167,12 +167,12 @@
 
                 @else
                 {{-- list of AI providers --}}
-                    <h3>
+                    <h2 class='text-heading-h3'>
                         {{ trans('langProviders') }}
                         <a href="{{ $_SERVER['SCRIPT_NAME'] }}?add_provider">
                             <span class="fa-solid fa-circle-plus fa-lg" title="{{ trans('langAddProvider') }}" data-bs-original-title="{{ trans('langAddProvider') }}" data-bs-toggle="tooltip" data-bs-placement="top"></span>
                         </a>
-                    </h3>
+                    </h2>
                     <div class='table-responsive'>
                         <table class='table-default'>
                             <thead>
@@ -211,12 +211,12 @@
 
 
                     {{-- list of AI modules --}}
-                    <h3 class='mt-4'>
+                    <h2 class='text-heading-h3 mt-4'>
                         {{ trans('langAIServices') }}
                         <a href="{{ $_SERVER['SCRIPT_NAME'] }}?add_service">
                             <span class="fa-solid fa-circle-plus fa-lg" title="{{ trans('langAssignAIToModule') }}" data-bs-original-title="{{ trans('langAssignAIToModule') }}" data-bs-toggle="tooltip" data-bs-placement="top"></span>
                         </a>
-                    </h3>
+                    </h2>
                     <div class='table-responsive'>
                         <table class='table-default'>
                             <thead>

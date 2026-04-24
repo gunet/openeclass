@@ -16,15 +16,6 @@
             {{ $pageTitle }}
         @endif
     </h1>
-    <h2 class='visually-hidden'>
-        @if($course_code)
-            {{ trans('langCode') }} : {{ $course_code }}
-        @elseif($pageName)
-            {{ trans('langThePageIs') }} {{ $pageName }}
-        @elseif($toolName)
-            {{ trans('langThePageIs') }} {{ $toolName }}
-        @endif
-    </h2>
     @if ($course_code or $require_help or $breadcrumbs)
         <div class='col-12 mt-4 @if (!isset($action_bar) or empty($action_bar)) mb-3 @endif'>
             @else
@@ -37,10 +28,11 @@
                                 <div class='col-12 mb-2'>
                                     <div class='d-flex justify-content-start align-items-center gap-2 flex-wrap'>
                                         @if (isset($course_code))
-                                            <a href="{{$urlAppend}}courses/{{$course_code}}/"><h2
-                                                        class='mb-0'>{{ $currentCourseName }}</h2></a>
+                                            <a class='text-heading-h2 mb-0' href="{{$urlAppend}}courses/{{$course_code}}/">
+                                                {{ $currentCourseName }}
+                                            </a>
                                         @else
-                                            <h2 class='mb-0'>{{ $currentCourseName }}</h2>
+                                            <div class='text-heading-h2 mb-0'>{{ $currentCourseName }}</div>
                                         @endif
                                     </div>
                                     <div class='d-flex justify-content-start align-items-center gap-2 mt-2 flex-wrap'>
@@ -60,12 +52,12 @@
                                     @if (!isset($action_bar) or empty($action_bar))
                                         <div class="col-12 d-md-flex justify-content-md-between align-items-lg-start my-3">
                                             <div class='col-12 d-inline-flex'>
-                                                <h2 class="action-bar-title mb-0">
+                                                <div class="action-bar-title mb-0">
                                                     {{ $toolName }}
                                                     @if ($pageName and ($pageName != $toolName))
                                                         - {{ $pageName }}
                                                     @endif
-                                                </h2>
+                                                </div>
                                             </div>
                                         </div>
                                     @endif
@@ -73,16 +65,16 @@
                             @else
                                 @if($toolName)
                                     <div class='col-12 d-inline-flex'>
-                                        <h2>
+                                        <div class='text-heading-h2'>
                                             {{ $toolName }}
-                                        </h2>
+                                        </div>
                                     </div>
                                     @if (!isset($action_bar) or empty($action_bar))
                                         <div class='col-12 d-inline-flex mt-2'>
                                             @if ($pageName and ($pageName != $toolName))
-                                                <h3>
+                                                <div class='text-heading-h3'>
                                                     {{ $pageName }}
-                                                </h3>
+                                                </div>
                                             @endif
                                         </div>
                                     @endif

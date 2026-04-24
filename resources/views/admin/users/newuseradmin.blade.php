@@ -70,7 +70,7 @@
                             <div class='col-12 mb-4'>
                                 <div class='card panelCard border-card-left-default px-3 py-2 h-100'>
                                     <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                        <h3>{{ getValue('givenname_form', $pn) }} {{ getValue('surname_form', $ps) }}</h3>
+                                        <h2 class='text-heading-h3'>{{ getValue('givenname_form', $pn) }} {{ getValue('surname_form', $ps) }}</h2>
                                     </div>
                                     <div class='card-body'>
                                         <div class='row row-cols-1 g-3'>

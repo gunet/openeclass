@@ -36,14 +36,14 @@
                                 <div class='col-12 mb-4'>
                                     <div class='card panelCard card-default px-lg-4 py-lg-3'>
                                         <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-                                            <h3>
+                                            <h2 class='text-heading-h3'>
                                                 {{ $course_desc->title}}
                                                 @if ($course_desc->visible && $is_editor)
                                                     <a aria-label="{{ trans('langSeenToCourseHome') }}" data-bs-original-title='{{ trans('langSeenToCourseHome') }}' data-bs-toggle='tooltip' data-bs-placement='bottom'>
                                                         <i class='fa fa-eye'></i>
                                                     </a>
                                                 @endif
-                                            </h3>
+                                            </h2>
                                             @if ($is_editor)
 
                                                 <div>

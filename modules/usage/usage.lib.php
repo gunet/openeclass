@@ -865,9 +865,9 @@ function plot_placeholder($plot_id, $title = null)
 {
     $p = "<div class='panel panel-default'><div class='panel-body'>";
     if (!is_null($title)) {
-        $p .= "<div class='inner-heading'><h3 id='{$plot_id}_title'>"
+        $p .= "<div class='inner-heading'><h2 class='text-heading-h3' id='{$plot_id}_title'>"
             . q($title)
-            . "</h3>"
+            . "</h2>"
 
             . "</div>";
     }
@@ -889,9 +889,9 @@ function table_placeholder($table_id, $table_class, $table_schema, $title = null
     $t = "<div class='panel-body'>";
     if (!is_null($title)) {
         $t .= "<div class='inner-heading d-flex justify-content-between align-items-start gap-3 flex-wrap'>"
-            . "<h3 id='" . $table_id . "_title'>"
+            . "<h2 class='text-heading-h3' id='" . $table_id . "_title'>"
             . q($title)
-            . "</h3>"
+            . "</h2>"
             . "<div id='{$table_id}_buttons'></div>"
             . "</div>";
     }
@@ -936,18 +936,16 @@ function user_duration_per_course($u)
 
         $tool_content .= "<div class='text-center mb-4'>
                         <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langInfoUserDuration</span></div>
-                        <h3>"  . q(uid_to_name($_SESSION['uid'])) . "</h3>
+                        <div class='text-heading-h3'>"  . q(uid_to_name($_SESSION['uid'])) . "</div>
                         <span><strong>$langTotalDuration:</strong> " . $totalDuration . "</span>
                         
                     </div>";
 
         $tool_content .= "
+                <h2 class='text-heading-h3'>$langDurationVisitsPerCourse</h2>
                 <div class='margin-bottom-fat margin-top-fat mb-4'>
                   <div class='col-12'>
-                    <ul class='list-group list-group-flush'>
-                      <li class='list-group-item list-group-item-action'>
-                          <div>$langDurationVisitsPerCourse</div>
-                      </li>";
+                    <ul class='list-group list-group-flush'>";
         foreach ($duration as $code => $time) {
             $tool_content .= "
                       <li class='list-group-item element d-flex justify-content-between align-items-center gap-3 flex-wrap'>
@@ -1006,10 +1004,8 @@ function user_last_logins($u)
     if (count($result) > 0) {
         $tool_content .= "<div class='margin-bottom-fat margin-top-fat mb-3'>
                   <div class='col-12'>
-                    <ul class='list-group list-group-flush'>
-                       <li class='list-group-item list-group-item-action'>
-                            <div>$langLastVisits</div>
-                        </li>";
+                    <h2 class='text-heading-h3'>$langLastVisits</div>
+                    <ul class='list-group list-group-flush'>";
 
         foreach ($result as $lastVisit) {
             $tool_content .= "<li class='list-group-item element'>

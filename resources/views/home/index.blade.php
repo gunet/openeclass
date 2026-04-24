@@ -1,7 +1,7 @@
 @extends('layouts.default')
 
 @section('content')
-
+<h1 class='visually-hidden'>{{ trans('langHomePage') }}</h1>
 <div class="col-12 main-section qqe">
 
         @if($warning)
@@ -357,11 +357,11 @@
                                         <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0 gap-2 flex-wrap'>
                                             <div class='d-flex justify-content-start align-items-center gap-2 flex-wrap'>
                                                 <h2 class='text-heading-h3 mb-0'>{{ trans('langAnnouncements') }}</h2>
-                                                <h3 class='mb-0' aria-label='Rss'><a href='{{ $urlServer }}rss.php' aria-label='Rss'><i class="fa-solid fa-rss"></i></a></h3>
+                                                <h2 class='text-heading-h3 mb-0' aria-label='Rss'><a href='{{ $urlServer }}rss.php' aria-label='Rss'><i class="fa-solid fa-rss"></i></a></h2>
                                         </div>
                                             @if(count($announcements) > 0)
                                                 <div class='d-flex justify-content-end align-items-center'>
-                                                    <h3 class='mb-0'><a class='TextRegular text-decoration-underline msmall-text mb-2' href="{{ $urlAppend }}main/system_announcements.php">{{ trans('langAllAnnouncements') }}...</a></h3>
+                                                    <h2 class='text-heading-h3 mb-0'><a class='TextRegular text-decoration-underline msmall-text mb-2' href="{{ $urlAppend }}main/system_announcements.php">{{ trans('langAllAnnouncements') }}...</a></h2>
                                                 </div>
                                             @endif
                                         </div>
@@ -386,9 +386,9 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class='col-md-10 mt-md-0 mt-2'>
-                                                                    <h3 class='mb-0'><a class='TextBold' style='font-size: 16px;' href='{{ $urlAppend }}main/system_announcements.php?an_id={{ $announcement->id }}'>
+                                                                    <h2 class='text-heading-h3 mb-0'><a class='TextBold' style='font-size: 16px;' href='{{ $urlAppend }}main/system_announcements.php?an_id={{ $announcement->id }}'>
                                                                         {!! $announcement->title !!}
-                                                                    </a></h3>
+                                                                    </a></h2>
                                                                     <div class='truncate-announcement'>{!! $announcement->body !!}</div>
                                                                 </div>
                                                             </div>
@@ -447,13 +447,13 @@
                                                                 </a>
                                                                 <div class='card-body'>
                                                                     <div class="col-12 text-center mt-2 line-height-default">
-                                                                        <h3 class='mb-0'>
+                                                                        <h2 class='text-heading-h3 mb-0'>
                                                                             <div class='line-height-default'>
                                                                                 <a class='TextBold msmall-text' href='{{$urlAppend}}courses/{{$pop_course->code}}/index.php'>
                                                                                     {{$pop_course->title}} ({{$pop_course->public_code}})
                                                                                 </a>
                                                                             </div>
-                                                                        </h3>
+                                                                        </h2>
                                                                         <p class='TextRegular msmall-text Neutral-900-cl mt-2'>{{$pop_course->prof_names}}</p>
                                                                     </div>
                                                                 </div>

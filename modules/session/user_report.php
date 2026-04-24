@@ -120,7 +120,7 @@ if (isset($_GET['u'])) { //  stats per user
     <div class='col-12'>
         <div class='card panelCard border-card-left-default px-lg-4 py-lg-3'>
             <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>                            
-                    <h3>$langAttendance</h3>";
+                    <h2 class='text-heading-h3'>$langAttendance</h2>";
                     if(($is_consultant or $is_course_reviewer) && !isset($_GET['format'])){
                         $tool_content .= "<a class='btn submitAdminBtn' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;session=$sessionID&amp;u=$_GET[u]&amp;format=pdf' target='_blank' aria-label='$langOpenNewTab'>$langDumpPDF</a>";
                     }
@@ -699,8 +699,8 @@ function pdf_user_material_output($sid,$content_m,$user_n) {
         <body>
         <h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
         <h2> " . q($sessionTitle) . "&nbsp;&nbsp;&nbsp;($startSession - $finishSession)</h2>
-        <h3>$langConsultant:&nbsp;&nbsp;$infoConsultant->givenname&nbsp;$infoConsultant->surname</h3>
-        <h3>$langMaterialForUser:&nbsp;&nbsp;" . q($nameUser) . "<h3>";
+        <h2 class='text-heading-h3'>$langConsultant:&nbsp;&nbsp;$infoConsultant->givenname&nbsp;$infoConsultant->surname</h2>
+        <h2 class='text-heading-h3'>$langMaterialForUser:&nbsp;&nbsp;" . q($nameUser) . "<h2>";
 
     $pdf_mcontent .= $content_m;
 

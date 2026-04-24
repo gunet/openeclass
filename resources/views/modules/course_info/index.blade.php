@@ -808,7 +808,7 @@
                                             @endphp
 
                                             <div class='form-group mt-4'>
-                                                <h3>{{ trans('langCoursePrintSetting') }}</h3>
+                                                <h2 class='text-heading-h3'>{{ trans('langCoursePrintSetting') }}</h2>
                                                 <div class='col-sm-12 control-label-notes mt-3'>
                                                     {{ trans('langCoursePrintHeaderImage') }}
                                                     <span class="ms-2"><small>{{ trans('langReportImageNotFound') }}</small></span>

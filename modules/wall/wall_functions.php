@@ -291,7 +291,7 @@ function generate_infinite_container_html($posts, $posts_per_page, $next_page, $
         <div class="card panelCard card-transparent border-0 mt-5">
           <div class="card-header card-header-default px-0 py-0 border-0 d-md-flex justify-content-md-between align-items-md-center">
 
-                <h3>'.$langWallPostsShow.'</h3>
+                <h2 class="text-heading-h3">'.$langWallPostsShow.'</h2>
 
           </div>
           <div class="card-body card-body-default p-0 mt-4">

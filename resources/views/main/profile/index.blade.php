@@ -54,7 +54,7 @@
                                     <div id='profile-avatar'>
                                         {!! $profile_img !!}
                                     </div>
-                                    <h3 class='text-center mt-3'> {{ $userdata->surname }} {{ $userdata->givenname }} </h3>
+                                    <h2 class='text-heading-h3 text-center mt-3'> {{ $userdata->surname }} {{ $userdata->givenname }} </h2>
                                     <div class='text-center title-default-line-height m-3'>
                                         {{ $userdata->username }}
                                     </div>
@@ -88,7 +88,7 @@
                     <div class="col">
                         <div class="card panelCard border-card-left-default px-3 py-2 h-100">
                             <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                <h3>{{ trans('langPersInfo') }}</h3>
+                                <h2 class='text-heading-h3'>{{ trans('langPersInfo') }}</h2>
                             </div>
                             <div class="card-body">
                                 <ul class='list-group list-group-flush'>
@@ -227,7 +227,7 @@
                         <div class='col-12 mt-4'>
                             <div class="card panelCard border-card-left-default px-3 py-2">
                                 <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                    <h3>{{ trans('langMyCertificates') }}</h3>
+                                    <h2 class='text-heading-h3'>{{ trans('langMyCertificates') }}</h2>
                                 </div>
                                 <div class="card-body">
                                     @if (count($cert_completed) == 1)
@@ -268,7 +268,7 @@
                         <div class='col-12 mt-4'>
                             <div class="card panelCard border-card-left-default px-3 py-2">
                                 <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                    <h3>{{ trans('langBadges') }}</h3>
+                                    <h2 class='text-heading-h3'>{{ trans('langBadges') }}</h2>
                                 </div>
                                 <div class="card-body">
                                     @if(count($badge_completed) == 1)

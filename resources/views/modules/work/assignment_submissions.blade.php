@@ -181,9 +181,9 @@
                         <div class="col-12">
                             <div class="card panelCard px-lg-4 py-lg-3" @if($assign->deadline && $cdate > $assign->deadline) style="opacity: 0.65;" @endif>
                                 <div class="card-header d-flex justify-content-between align-items-center">
-                                    <h3 class="mb-0" style="line-height: 14px;">
+                                    <h2 class="text-heading-h3 mb-0" style="line-height: 14px;">
                                         <em>{{ trans('langAssignmentsSubmission')}}</em>
-                                    </h3>
+                                    </h2>
                                     <small><em>{{ trans('langPhase') }} (1)</em></small>
                                 </div>
                                 <div class="card-body">
@@ -249,9 +249,9 @@
                             </div>
                             <div class="card panelCard px-lg-4 py-lg-3 @if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE) d-block @else d-none @endif" @if($assign->due_date_review && ($cdate > $assign->due_date_review or $cdate < $assign->start_date_review)) style="opacity: 0.65;" @endif>
                                 <div class="card-header d-flex justify-content-between align-items-center">
-                                    <h3 class="mb-0" style="line-height: 14px;">
+                                    <h2 class="text-heading-h3 mb-0" style="line-height: 14px;">
                                         <em>{{ trans('langGradeReviews') }}</em>
-                                    </h3>
+                                    </h2>
                                     <small><em>{{ trans('langPhase') }} (2)</em></small>
                                 </div>
                                 <div class="card-body">
@@ -356,9 +356,9 @@
                             </div>
                             <div class="card panelCard px-lg-4 py-lg-3" @if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE && $cdate <= $assign->due_date_review) style="opacity: 0.65;" @endif>
                                 <div class="card-header d-flex justify-content-between align-items-center">
-                                    <h3 class="mb-0" style="line-height: 14px;">
+                                    <h2 class="text-heading-h3 mb-0" style="line-height: 14px;">
                                         <em>{{ trans('langFinalGrade') }}</em>
-                                    </h3>
+                                    </h2>
                                     <small>
                                         @if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE)
                                             <em>{{ trans('langPhase') }} (3)</em>

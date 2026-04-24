@@ -54,7 +54,18 @@ $head_content .=
         user = $statsuser;
         course = null;
         stats = 'u';
-    </script>";
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('#udetails1').on('order.dt', function() {
+                $('#udetails1 thead .dt-column-order').each(function() {
+                    $(this).removeAttr('aria-label');
+                    $(this).attr('aria-hidden', 'true');
+                });
+            });
+        });
+    </script>
+";
 
 require_once 'modules/usage/form.php';
 

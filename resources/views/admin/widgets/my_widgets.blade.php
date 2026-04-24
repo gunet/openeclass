@@ -15,7 +15,7 @@
 
 
                         <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12">
-                            <h3 class="">{{ trans('langInstalledWidgets') }}</h3>
+                            <h2 class="text-heading-h3">{{ trans('langInstalledWidgets') }}</h2>
                             <hr>
                             @if (count($installed_widgets))
                             <div id="widgets">

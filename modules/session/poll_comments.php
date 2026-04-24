@@ -220,7 +220,7 @@ if (isset($_GET['view_comment'])) {
             <div class='col-12'>
                 <div class='card panelCard card-default px-lg-4 py-lg-3'>
                     <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                        <h3> " . q($info_comment->title) . "</h3>
+                        <h2 class='text-heading-h3'> " . q($info_comment->title) . "</h2>
                     </div>
                     <div class='card-body'>
                         <p>" . purify($info_comment->comments) . "</p>

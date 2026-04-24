@@ -88,6 +88,19 @@
     <script type="text/javascript" src="{{ $urlAppend }}js/viewStudentTeacher.js?v={{ $cache_suffix }}"></script>
     <script type="text/javascript" src="{{ $urlAppend }}js/sidebar_slider_action.js?v={{ $cache_suffix }}"></script>
 
+    {{-- This script below runs before any datatables are initialized --}}
+    <script>
+        $(document).ready(function() {
+            $(document).on('init.dt', function(e, settings) {
+                $('.dt-paging nav').attr('aria-label', '{{ js_escape(trans('langPagination')) }}');
+                $('li.dt-paging-button button.first').attr('aria-label', '{{ js_escape(trans('langDtFirstPage')) }}');
+                $('li.dt-paging-button button.previous').attr('aria-label', '{{ js_escape(trans('langDtPrevPage')) }}');
+                $('li.dt-paging-button button.next').attr('aria-label', '{{ js_escape(trans('langDtNextPage')) }}');
+                $('li.dt-paging-button button.last').attr('aria-label', '{{ js_escape(trans('langDtLastPage')) }}');
+            });
+        });
+    </script>
+
     {!! $head_content !!}
 
     @stack('head_scripts')
@@ -209,6 +222,8 @@
     </button>
     <script>
         $(function() {
+
+            $('.focusable-alert').focus();
 
             var inputTreeModal = document.getElementById('dialog-set-value');
             if (inputTreeModal) {

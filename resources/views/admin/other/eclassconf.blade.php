@@ -66,7 +66,7 @@
                         <div data-bs-spy="scroll" data-bs-target="#navbar-card-affixed" data-bs-offset="0" tabindex="0">
                             <div class='card panelCard card-default px-lg-4 py-lg-3' data-id="one" id='one'>
                                 <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                    <h3>{{ trans('langBasicCfgSetting') }}</h3>
+                                    <h2 class='text-heading-h3'>{{ trans('langBasicCfgSetting') }}</h2>
 
                                 </div>
                                 <div class='card-body'>
@@ -126,7 +126,7 @@
 
                             <div class='card panelCard card-default px-lg-4 py-lg-3 d-none' data-id="two" id='two'>
                                 <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                    <h3>{{ trans('langUpgReg') }}</h3>
+                                    <h2 class='text-heading-h3'>{{ trans('langUpgReg') }}</h2>
                                 </div>
                                 <div class='card-body'>
                                     <fieldset>
@@ -329,7 +329,7 @@
 
                             <div class='card panelCard card-default px-lg-4 py-lg-3 d-none' data-id="three" id='three'>
                                 <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                    <h3>{{ trans('langSupportedLanguages') }}</h3>
+                                    <h2 class='text-heading-h3'>{{ trans('langSupportedLanguages') }}</h2>
                                 </div>
                                 <div class='card-body'>
                                     <fieldset>
@@ -361,7 +361,7 @@
                             <div class='card panelCard card-default px-lg-4 py-lg-3 d-none' data-id="five" id='five'>
                                 <div class='card-header border-0 d-flex justify-content-between align-items-center'>
 
-                                    <h3>{{ trans('langEmailSettings') }}</h3>
+                                    <h2 class='text-heading-h3'>{{ trans('langEmailSettings') }}</h2>
 
                                 </div>
                                 <div class='card-body'>
@@ -462,7 +462,7 @@
 
                             <div class='card panelCard card-default px-lg-4 py-lg-3 d-none' data-id="six" id='six'>
                                 <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                    <h3>{{ trans('langCourseSettings') }}</h3>
+                                    <h2 class='text-heading-h3'>{{ trans('langCourseSettings') }}</h2>
                                 </div>
                                 <div class='card-body'>
                                     <fieldset>
@@ -586,7 +586,7 @@
 
                                     <div class='card-header border-0 d-flex justify-content-between align-items-center'>
 
-                                        <h3>{{ trans('langMetaCommentary') }}</h3>
+                                        <h2 class='text-heading-h3'>{{ trans('langMetaCommentary') }}</h2>
 
                                     </div>
                                     <div class='card-body'>
@@ -625,7 +625,7 @@
                             <div class='card panelCard card-default px-lg-4 py-lg-3 d-none' data-id="eight" id='eight'>
                                 <div class='card-header border-0 d-flex justify-content-between align-items-center'>
 
-                                    <h3>{{ trans('langOtherOptions') }}</h3>
+                                    <h2 class='text-heading-h3'>{{ trans('langOtherOptions') }}</h2>
 
                                 </div>
                                 <div class='card-body'>
@@ -857,7 +857,7 @@
 
                                 <div class='card-header border-0 d-flex justify-content-between align-items-center'>
 
-                                    <h3>{{ trans('langDocumentSettings') }}</h3>
+                                    <h2 class='text-heading-h3'>{{ trans('langDocumentSettings') }}</h2>
 
                                 </div>
                                 <div class='card-body'>
@@ -935,7 +935,7 @@
                             <div class='card panelCard card-default px-lg-4 py-lg-3 d-none' data-id="ten" id='ten'>
                                 <div class='card-header border-0 d-flex justify-content-between align-items-center'>
 
-                                    <h3>{{ trans('langDefaultQuota') }}</h3>
+                                    <h2 class='text-heading-h3'>{{ trans('langDefaultQuota') }}</h2>
 
                                 </div>
                                 <div class='card-body'>
@@ -973,7 +973,7 @@
 
                                 <div class='card-header border-0 d-flex justify-content-between align-items-center'>
 
-                                    <h3>{{ trans('langUploadWhitelist') }}</h3>
+                                    <h2 class='text-heading-h3'>{{ trans('langUploadWhitelist') }}</h2>
 
                                 </div>
                                 <div class='card-body'>
@@ -1002,7 +1002,7 @@
 
                                 <div class='card-header border-0 d-flex justify-content-between align-items-center'>
 
-                                    <h3>{{ trans('langLogActions') }}</h3>
+                                    <h2 class='text-heading-h3'>{{ trans('langLogActions') }}</h2>
 
                                 </div>
                                 <div class='card-body'>
@@ -1058,7 +1058,7 @@
 
                                 <div class='card-header border-0 d-flex justify-content-between align-items-center'>
 
-                                    <h3>{{ trans('langLoginFailCheck') }}</h3>
+                                    <h2 class='text-heading-h3'>{{ trans('langLoginFailCheck') }}</h2>
 
                                 </div>
                                 <div class='card-body'>
@@ -1109,7 +1109,7 @@
                             <div class='card panelCard card-default px-lg-4 py-lg-3 d-none' data-id="fourteen" id='fourteen'>
 
                                 <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                    <h3>{{ trans('langMaintenance') }}</h3>
+                                    <h2 class='text-heading-h3'>{{ trans('langMaintenance') }}</h2>
                                 </div>
                                 <div class='card-body'>
                                     <fieldset>

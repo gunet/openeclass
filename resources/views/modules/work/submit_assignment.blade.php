@@ -34,9 +34,9 @@
                                         <div class="col-12">
                                             <div class="card panelCard px-lg-4 py-lg-3" @if($row->due_date_review && ($cdate > $row->due_date_review or $cdate < $row->start_date_review)) style="opacity: 0.65;" @endif>
                                                 <div class="card-header d-flex justify-content-between align-items-center">
-                                                    <h3 class="mb-0" style="line-height: 14px;">
+                                                    <h2 class="text-heading-h3 mb-0" style="line-height: 14px;">
                                                         <em>{{ trans('langGradeReviews') }}</em>
-                                                    </h3>
+                                                    </h2>
                                                 </div>
                                                 <div class="card-body">
                                                     @if ($cdate < $row->start_date_review)
@@ -71,9 +71,9 @@
                                     <div class="col-12">
                                         <div class="card panelCard px-lg-4 py-lg-3" @if($row->due_date_review && ($cdate > $row->due_date_review or $cdate < $row->start_date_review)) style="opacity: 0.65;" @endif>
                                             <div class="card-header d-flex justify-content-between align-items-center">
-                                                <h3 class="mb-0" style="line-height: 14px;">
+                                                <h2 class="text-heading-h3 mb-0" style="line-height: 14px;">
                                                     <em>{{ trans('langGradeReviews') }}</em>
-                                                </h3>
+                                                </h2>
                                             </div>
                                             <div class="card-body">
                                                 <p class="text-warning TextBold small-text" style="line-height:14px;">{{ trans('langGradeReviewHasNotStarted') }}</p>
@@ -106,9 +106,9 @@
                                 <div class="col-12 mt-4">
                                     <div class="card panelCard px-lg-4 py-lg-3" @if($row->deadline && $cdate > $row->deadline) style="opacity: 0.65;" @endif>
                                         <div class="card-header d-flex justify-content-between align-items-center">
-                                            <h3 class="mb-0" style="line-height: 14px;">
+                                            <h2 class="text-heading-h3 mb-0" style="line-height: 14px;">
                                                 <em>{{ trans('langAssignmentsSubmission')}}</em>
-                                            </h3>
+                                            </h2>
                                         </div>
                                         <div class="card-body">
                                             <div class='d-lg-flex gap-4'>

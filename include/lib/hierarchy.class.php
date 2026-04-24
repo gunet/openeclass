@@ -979,8 +979,12 @@ jContent;
         }
 
         $ret .= ($c == 0) ? '' : '» ';
-        $ret .= self::unserializeLangField($node->name) . ' ';
-
+        if ($c > 0) {
+            $ret .= "<span aria-current='" . self::unserializeLangField($node->name) ."'>".self::unserializeLangField($node->name) . ' '."</span>";
+        } else {
+            $ret .= self::unserializeLangField($node->name) . ' ';
+        }
+        
         return $ret;
     }
 

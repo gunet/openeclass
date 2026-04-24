@@ -1295,9 +1295,9 @@ if (isset($_GET['modifyAnswers'])) {
 
     $tool_content .= "<div class='col-12'><div class='card panelCard card-default px-lg-4 py-lg-3'>
                       <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                        <h3>$langQuestion &nbsp;" .
+                        <h2 class='text-heading-h3'>$langQuestion &nbsp;" .
                             icon('fa-edit', $langModify, $_SERVER['SCRIPT_NAME'] . "?course=$course_code".(isset($exerciseId) ? "&amp;exerciseId=$exerciseId" : "")."&amp;modifyQuestion=" . $questionId)."
-                        </h3>
+                        </h2>
                       </div>
                       <div class='card-body' style='overflow:auto;'>
                             <h5>$questionTypeWord<br>" . nl2br(q_math($questionName)) . "</h5>
@@ -1309,12 +1309,12 @@ if (isset($_GET['modifyAnswers'])) {
     if ($answerType != FREE_TEXT and $answerType != ORAL) {
         $tool_content .= "<div class='col-12 mt-4'><div class='card panelCard card-default px-lg-4 py-lg-3'>
                            <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                             <h3>$langQuestionAnswers";
+                             <h2 class='text-heading-h3'>$langQuestionAnswers";
                              if ($answerType == MULTIPLE_ANSWER) {
                                  $tool_content .= "<br><small class='msmall-text'>$langNegativeScoreLegend</small>";
                              }
 
-        $tool_content .= "   </h3>
+        $tool_content .= "   </h2>
                            </div>
                        <div class='card-body'>";
 
@@ -2317,7 +2317,7 @@ $(document).ready(function() {
                <div class='col-12 mt-4'>
                    <div class='card panelCard card-default px-lg-4 py-lg-3'>
                        <div class='card-header border-0'>
-                           <h3>$langAIEvaluation</h3>
+                           <h2 class='text-heading-h3'>$langAIEvaluation</h2>
                        </div>
                        <div class='card-body'>
                            <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code" . ((isset($exerciseId)) ? "&amp;exerciseId=$exerciseId" : "") . "&amp;modifyAnswers=" . urlencode($_GET['modifyAnswers']) . "'>

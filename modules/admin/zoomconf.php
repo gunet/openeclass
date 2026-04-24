@@ -373,7 +373,7 @@ if (isset($_POST['submit'])) {
                             <div class='col-lg-6 col-12'>
                                 <div class='card panelCard card-default px-lg-4 py-lg-3 h-100'>
                                     <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                        <h3>$langZoomConnect</h3>
+                                        <h2 class='text-heading-h3'>$langZoomConnect</h2>
                                     </div>
                                     <div class='card-body'>
                                         <div class='d-flex justify-content-center align-items-center gap-3 flex-wrap'>

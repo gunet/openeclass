@@ -4031,7 +4031,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
             $titleHeader = (!empty($pageName) ? q($pageName) : $toolName);
             if(!empty($titleHeader)) {
                 return "<div class='col-12 d-md-flex justify-content-md-between align-items-lg-start my-3'>
-                            <div class='col-lg-5 col-md-6 col-12'><h2 class='action-bar-title mb-0'>$titleHeader</h2></div>
+                            <div class='col-lg-5 col-md-6 col-12'><div class='action-bar-title mb-0'>$titleHeader</div></div>
                             <div class='col-lg-7 col-md-6 col-12 action_bar d-flex justify-content-md-end justify-content-start align-items-start px-0 mt-md-0 mt-4'>
                                 <div class='margin-top-thin margin-bottom-fat hidden-print w-100'>
                                     <div class='ButtonsContent d-flex justify-content-end align-items-center flex-wrap gap-2'>
@@ -4058,7 +4058,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
         } else {
             $titleHeader = (!empty($pageName) ? q($pageName) : '');
             return "<div class='col-12 d-md-flex justify-content-md-between align-items-lg-start my-4'>
-                        <div class='col-lg-5 col-md-6 col-12'><h2 class='action-bar-title mb-0'>$titleHeader</h2></div>
+                        <div class='col-lg-5 col-md-6 col-12'><div class='action-bar-title mb-0'>$titleHeader</div></div>
                         <div class='col-lg-7 col-md-6 col-12 action_bar d-flex justify-content-md-end justify-content-start align-items-start px-0 mt-md-0 mt-4'>
                             <div class='margin-top-thin margin-bottom-fat hidden-print w-100'>
                                 <div class='ButtonsContent d-flex justify-content-end align-items-center flex-wrap gap-2'>
@@ -4084,7 +4084,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
  *
  */
 function action_button($options, $secondary_menu_options = array(), $fc=false) {
-    global $langConfirmDelete, $langCancel, $langDelete, $langListChoices;
+    global $langConfirmDelete, $langCancel, $langDelete, $langConfig;
     $out_primary = $out_secondary = array();
     $primary_form_begin = $primary_form_end = $primary_icon_class = '';
 
@@ -4162,7 +4162,7 @@ function action_button($options, $secondary_menu_options = array(), $fc=false) {
         $list_items = implode('', $out_secondary);
         $tmp_class_title = !empty($secondary_title) ? "<span class='hidden-xs'>$secondary_title</span>" : "";
         $action_button = "
-            <button style='border-radius: 4px;' class='btn $secondary_btn_class action-button-dropdown' type='button' id='actionDropdown_$counter' data-bs-toggle='dropdown' aria-expanded='false' aria-label='$langListChoices'>
+            <button style='border-radius: 4px;' class='btn $secondary_btn_class action-button-dropdown' type='button' id='actionDropdown_$counter' data-bs-toggle='dropdown' aria-expanded='false' aria-label='$langConfig'>
                 <span class='fa $secondary_icon'></span>
                 $tmp_class_title
             </button>

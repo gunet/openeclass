@@ -155,7 +155,7 @@
     <div class="col-12 mt-5">
         <div class='card panelCard card-transparent border-0'>
             <div class='card-header card-header-default px-0 py-0 border-0 d-md-flex justify-content-md-between align-items-md-center'>
-                <h3 class='mb-0'>{{trans('langWall')}}</h3>
+                <h2 class='text-heading-h3 mb-0'>{{trans('langWall')}}</h2>
             </div>
             <div class='card-body card-body-default px-0 py-0'>
                 <div class="form-wrapper form-edit rounded">

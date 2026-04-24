@@ -388,7 +388,7 @@ function render_profile_fields_content($context) {
                                             }
 
                                             $return_str .= "<div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                                                <h3>".$cat->name."</h3>
+                                                                <h2 class='text-heading-h3'>".$cat->name."</h2>
                                                             </div>
 
                                                             <div class='card-body'>";

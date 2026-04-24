@@ -261,7 +261,7 @@ function GroupCardsPagination($allCourses,$pagesPag){
 
             <div class='col-12 d-flex justify-content-center Borders p-0 bg-transparent mt-4'>
                 <nav role='navigation' aria-label='Pagination Navigation'>
-                    <ul class='pagination mycourses-pagination w-100 mb-0' role='nagivation' aria-label='$langNavigation'>
+                    <ul class='pagination mycourses-pagination w-100 mb-0' role='nagivation' aria-label='$langPagination'>
                         <li class='page-item page-item-previous'>
                             <button class='page-link' aria-label='$langPreviousPage'><span class='fa-solid fa-chevron-left'></span></button>
                         </li>";

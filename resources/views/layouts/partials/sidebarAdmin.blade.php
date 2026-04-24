@@ -2,7 +2,7 @@
 <div class='col-12 mb-4'>
     <div class='card panelCard card-default px-lg-4 py-lg-3'>
         <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-            <h3>{{ trans('langNewEclassVersion') }}</h3>
+            <h2 class='text-heading-h3'>{{ trans('langNewEclassVersion') }}</h2>
         </div>
         <div class='card-body'>
             {!! sprintf( trans('langNewEclassVersionInfo'), "<strong>" . q($release_info->release) . "</strong>", "<a href='https://www.openeclass.org/' aria-label='trans(' langOpenNewTab')' target='_blank'>www.openeclass.org</a>") !!}
@@ -89,11 +89,11 @@
         <div class='col'>
             <div class='card panelCard p-0 card-transparent m-auto h-100 border-0'>
                 <div class='card-body px-0'>
+                    <h2 class='text-heading-h3'>
+                        <i class="fa-solid fa-user-group settings-icons-lg"></i>
+                        {{ trans('langUsers') }}
+                    </h2>
                     <ul class='list-group list-group-flush'>
-                        <li class="list-group-item list-group-item-action border-0 pb-3">
-                            <i class="fa-solid fa-user-group settings-icons-lg"></i>
-                            {{ trans('langUsers') }}
-                        </li>
                         <li class="list-group-item element">
                             <a class='TextBold' href="{{$urlAppend}}modules/admin/search_user.php">
                                 {{ trans('langSearchUser') }}
@@ -164,11 +164,11 @@
         <div class='col'>
             <div class='card panelCard p-0 card-transparent m-auto h-100 border-0'>
                 <div class='card-body px-0'>
+                    <h2 class='text-heading-h3'>
+                        <i class="fa-solid fa-book-open settings-icons-lg"></i>
+                        {{ trans('langCourses') }}
+                    </h2>
                     <ul class='list-group list-group-flush'>
-                        <li class="list-group-item list-group-item-action border-0 pb-3">
-                            <i class="fa-solid fa-book-open settings-icons-lg"></i>
-                            {{ trans('langCourses') }}
-                        </li>
                         <li class="list-group-item element">
                             <a class='TextBold' href="{{$urlAppend}}modules/admin/searchcours.php">
                                 {{ trans('langSearchCourse') }}
@@ -224,11 +224,11 @@
         <div class='col'>
             <div class='card panelCard p-0 border-0 card-transparent h-100'>
                 <div class='card-body px-0'>
+                    <h2 class='text-heading-h3'>
+                        <i class="fa-solid fa-gear settings-icons-lg"></i>
+                        {{ trans('langAdminTool') }}
+                    </h2>
                     <ul class='list-group list-group-flush'>
-                        <li class="list-group-item list-group-item-action border-0 pb-3">
-                            <i class="fa-solid fa-gear settings-icons-lg"></i>
-                            {{ trans('langAdminTool') }}
-                        </li>
                         <li class="list-group-item element">
                             <a class='TextBold' href="{{$urlAppend}}modules/admin/eclassconf.php">
                                 {{ trans('langConfig') }}
@@ -310,11 +310,11 @@
 <div class='col-12'>
     <div class='card panelCard p-0 border-0 card-transparent h-100'>
         <div class='card-body px-0'>
+            <h2 class='text-heading-h3'>
+                <i class="fa-solid fa-toolbox settings-icons-lg"></i>
+                {{ trans('langAdministratorTools') }}
+            </h2>
             <ul class='list-group list-group-flush'>
-                <li class="list-group-item list-group-item-action border-0 pb-3">
-                    <i class="fa-solid fa-toolbox settings-icons-lg"></i>
-                    {{ trans('langAdministratorTools') }}
-                </li>
                 <li class="list-group-item element">
                     <a class='TextBold' href="{{$urlAppend}}modules/admin/addadmin.php">
                         {{ trans('langAdmins') }}
@@ -339,11 +339,11 @@
         <div class='col'>
             <div class='card panelCard p-0 border-0 card-transparent h-100'>
                 <div class='card-body px-0'>
+                    <h2 class='text-heading-h3'>
+                        <i class="fa-solid fa-toolbox settings-icons-lg"></i>
+                        {{ trans('langAdministratorTools') }}
+                    </h2>
                     <ul class='list-group list-group-flush'>
-                        <li class="list-group-item list-group-item-action border-0 pb-3">
-                            <i class="fa-solid fa-toolbox settings-icons-lg"></i>
-                            {{ trans('langAdministratorTools') }}
-                        </li>
                         @if ($is_admin)
                         <li class="list-group-item element">
                             <a class='TextBold' href="{{$urlAppend}}modules/admin/addadmin.php">
@@ -372,11 +372,11 @@
             @if($is_admin)
             <div class='card panelCard p-0 border-0 card-transparent h-100'>
                 <div class='card-body px-0'>
+                    <h2 class='text-heading-h3'>
+                        <i class="fa-solid fa-list-ul settings-icons-lg"></i>
+                        {{ trans('langFaculties') }}
+                    </h2>
                     <ul class='list-group list-group-flush'>
-                        <li class="list-group-item list-group-item-action border-0 pb-3">
-                            <i class="fa-solid fa-list-ul settings-icons-lg"></i>
-                            {{ trans('langFaculties') }}
-                        </li>
                         <li class="list-group-item element">
                             <a href="{{$urlAppend}}modules/admin/hierarchy.php" class='TextBold'>
                                 {{ trans('langHierarchy') }}
@@ -396,11 +396,11 @@
             @if($is_admin)
             <div class='card panelCard p-0 border-0 card-transparent h-100'>
                 <div class='card-body px-0'>
+                    <h2 class='text-heading-h3'>
+                        <i class="fa-solid fa-sitemap settings-icons-lg"></i>
+                        {{ trans('langEclassThemes') }}
+                    </h2>
                     <ul class='list-group list-group-flush'>
-                        <li class="list-group-item list-group-item-action border-0 pb-3">
-                            <i class="fa-solid fa-sitemap settings-icons-lg"></i>
-                            {{ trans('langEclassThemes') }}
-                        </li>
                         <li class="list-group-item element">
                             <a href="{{$urlAppend}}modules/admin/theme_options.php" class='TextBold'>
                                 {{ trans('langThemeSettings') }}

@@ -49,7 +49,7 @@
                         <div class="card panelCard border-card-left-default px-lg-4 py-lg-3">
                             <div class='card-header border-0'>
                                 <div class='d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-                                    <h3>{{ trans('langDetails') }}</h3>
+                                    <h2 class='text-heading-h3'>{{ trans('langDetails') }}</h2>
                                 </div>
                             </div>
                             <div class="card-body">

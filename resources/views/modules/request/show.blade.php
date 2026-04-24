@@ -35,12 +35,12 @@
                         <div class='card panelCard card-default px-lg-4 py-lg-3'>
 
                             <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                <h3>
+                                <h2 class='text-heading-h3'>
                                     {{ $request->title }}
                                     @if ($request->type_id)
                                         <small>&nbsp;->&nbsp;{{ $type->name }}</small>
                                     @endif
-                                </h3>
+                                </h2>
                             </div>
 
 

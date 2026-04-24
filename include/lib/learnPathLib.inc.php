@@ -145,11 +145,11 @@ function nameBox($type, $mode, $formlabel = FALSE) {
         $result = Database::get()->querySingle($sql, $course_id);
 
         $currentName = ($result && !empty($result->name)) ? $result->name : false;
-        $output .= "<div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'><h3>" . q($currentName);
+        $output .= "<div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'><h2 class='text-heading-h3'>" . q($currentName);
         if ($is_editor) {
             $output .= '&nbsp;&nbsp;&nbsp;'.icon('fa-edit', $langModify, $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmd=updateName');
         }
-        $output .= "</h3></div>";
+        $output .= "</h2></div>";
     }
 
     return $output;
@@ -198,7 +198,7 @@ function display_learn_path_title($path_id, $cmd = ''): string
     } else {
             $output = "<div class='card-body'>
                         <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-                        <h3>" . q($oldName) . "</h3>";
+                        <h2 class='text-heading-h3'>" . q($oldName) . "</h2>";
                         if ($is_editor) {
                             $output .= icon('fa-edit', $langModify, $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;path_id=' . $_SESSION['path_id'] . '&amp;cmd=updateName');
                         }

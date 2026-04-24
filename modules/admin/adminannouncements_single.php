@@ -59,9 +59,9 @@ if(isset($ann_id)){
                         <div class='col-12'>
                             <div class='card panelCard card-default px-lg-4 py-lg-3'>
                                 <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                    <h3>
+                                    <h2 class='text-heading-h3'>
                                             ".standard_text_escape($announcement->title)."
-                                    </h3>
+                                    </h2>
                                 </div>
                                 <div class='card-body'>
                                     <div class='single_announcement'>

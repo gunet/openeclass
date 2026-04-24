@@ -210,7 +210,7 @@
                 <div class='col-lg-6 col-12 mt-lg-0 mt-4'>
                     <div class='card panelCard card-default px-lg-4 py-lg-3 h-100'>
                         <div class="card-header border-0 d-flex justify-content-start">
-                            <h3>{{ trans('langStudentParticipation') }}</h3>
+                            <h2 class='text-heading-h3'>{{ trans('langStudentParticipation') }}</h2>
                         </div>
                         <div class='card-body'>
                             <div class='table-responsive mt-0'>

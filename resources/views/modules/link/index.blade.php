@@ -3,15 +3,11 @@
 @section('content')
 
 <div class="col-12 main-section">
-<div class='{{ $container }} module-container py-lg-0'>
+    <div class='{{ $container }} module-container py-lg-0'>
         <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
-
             @include('layouts.partials.left_menu')
-
             <div class="col_maincontent_active">
-
                 <div class="row">
-
                     @if(!$is_in_tinymce)
 
                         @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
@@ -36,7 +32,7 @@
                             <table class='table-default nocategory-links' role='presentation'>
                             @if (count($general_category->links) > 0)
                                 <thead><tr class='list-header'>
-                                    <th class='text-start'><h3 class='mb-0 form-label'>{{ trans('langNoCategory') }}</h3></th>
+                                    <th class='text-start'><h2 class='text-heading-h3 mb-0 form-label'>{{ trans('langNoCategory') }}</h2></th>
                                     @if ($display_tools)
                                     <th>{!! icon('fa-cogs') !!}</th>
                                     @endif
@@ -44,7 +40,7 @@
                                 @include('modules.link.common.linkList', ['category' => $general_category])
                             @else
                                 <thead><tr class='list-header'>
-                                    <th class='text-start'><h3 class='mb-0 form-label'>{{ trans('langNoCategory') }}</h3></th>
+                                    <th class='text-start'><h2 class='text-heading-h3 mb-0 form-label'>{{ trans('langNoCategory') }}</h2></th>
                                 </tr></thead>
                                 <tr>
                                     <td class='text-start not_visible nocategory-link'> - {{ trans('langNoLinkInCategory') }} - </td>
@@ -95,7 +91,7 @@
                         <div class='table-responsive mb-4'>
                             <table class='table-default category-links' role='presentation'>
                             <thead><tr class='list-header'>
-                                    <th><h3 class='mb-0 form-label'>{{ trans('langCategorisedLinks').'   ' }}
+                                    <th><h2 class='text-heading-h3 mb-0 form-label'>{{ trans('langCategorisedLinks').'   ' }}
                                     @if ($categories)
                                         @if (intval($urlview) == 0)
                                             <a href='index.php?course={{ $course_code }}&amp;urlview={{ str_repeat('1', count($categories)) . $tinymce_params . $socialview_param }}'>
@@ -106,7 +102,7 @@
                                                 {!! icon('fa-folder-open', trans('langViewHide')) !!}
                                             </a>
                                         @endif
-                                    @endif</h3>
+                                    @endif</h2>
                                     </th>
                                     @if ($categories && $display_tools)
                                         <th style='width:109px;'>{!! icon('fa-cogs') !!}</th>
@@ -121,7 +117,7 @@
                                         ?>
                                         <tr class='link-subcategory-title'>
                                             <th class = 'text-start category-link' style='padding-left:12px;'> {!! icon('fa-folder-open', trans('langViewHide')) !!}
-                                                <a role='button' href='index.php?course={{ $course_code }}&amp;urlview={{ $newurlview.$tinymce_params.$socialview_param }}' class='open-category'>
+                                                <a id='category_{{ $key }}' role='button' href='index.php?course={{ $course_code }}&amp;urlview={{ $newurlview.$tinymce_params.$socialview_param }}' class='open-category'>
                                                     {{ $category->name }}
                                                 </a>
                                                 @if (!empty($description))
@@ -168,7 +164,7 @@
                                     @else
                                         <tr class='link-subcategory-title'>
                                             <th class = 'text-start category-link' style='padding-left:12px;'>{!! icon('fa-folder-open', trans('langViewShow')) !!}
-                                                <a role='button' href='index.php?course={{ $course_code }}&amp;urlview={{ empty($urlview) ? makedefaultviewcode($key, count($categories)) : substr_replace($urlview, '1', $key, 1) }}{{ $tinymce_params }}' class='open-category'>
+                                                <a id='category_{{ $key }}' role='button' href='index.php?course={{ $course_code }}&amp;urlview={{ empty($urlview) ? makedefaultviewcode($key, count($categories)) : substr_replace($urlview, '1', $key, 1) }}{{ $tinymce_params }}' class='open-category'>
                                                     {{ $category->name }}
                                                 </a>
                                                 @if (!empty($description))
@@ -211,13 +207,29 @@
                             </table>
                         </div>
                     </div>
-
-
                 </div>
             </div>
-
         </div>
+    </div>
+</div>
 
-</div>
-</div>
+
+<script>
+    $(function() {
+        @if (!isset($_GET['urlview']))
+            localStorage.removeItem('open-category');
+        @endif
+
+        if (localStorage.getItem('open-category') !== null) {
+            $('#' + localStorage.getItem('open-category')).focus();
+        }
+
+        $('.open-category, .open-link').on('click keydown', function (e) {
+            if (e.type === 'click' || (e.type === 'keydown' && e.key === 'Enter')) {
+                localStorage.setItem("open-category", $(this).attr('id'));
+            }
+        });
+    });
+</script>
+
 @endsection

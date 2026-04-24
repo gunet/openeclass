@@ -131,13 +131,13 @@
                                         <li>
                                             <details>
                                                 <summary>
-                                                    <h3 class='mb-0'>
+                                                    <h2 class='text-heading-h3 mb-0'>
                                                         @if($is_consultant)
                                                             {{ trans('langAllSessions') }}
                                                         @else
                                                             {{ trans('langMySessions')}}
                                                         @endif
-                                                    </h3>
+                                                    </h2>
                                                 </summary>
                                                 <ul>
                                                     @foreach ($all_session as $cu)
@@ -183,11 +183,11 @@
                         <div class="card panelCard card-default px-lg-4 py-lg-3">
                             <div class='card-header border-0'>
                                 <div class='d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-                                    <h3>{{ $pageName }} <span class='small-text'>({{ $consultant_name->givenname }}&nbsp;{{ $consultant_name->surname }})</span>
+                                    <h2 class='text-heading-h3'>{{ $pageName }} <span class='small-text'>({{ $consultant_name->givenname }}&nbsp;{{ $consultant_name->surname }})</span>
                                         @if($finish_session->finish < $current_time) 
                                             &nbsp;<span class='Accent-200-cl TextBold text-decoration-underline'>{{ trans('langSessionHasExpired') }}</span>
                                         @endif
-                                    </h3>
+                                    </h2>
                                     <a class='link-color' data-bs-toggle='modal' data-bs-target='#session-participants'>
                                         {{ trans('langParticipants') }}
                                     </a>

@@ -235,7 +235,7 @@
 
                             <div class='card-header card-header-default px-0 py-0 border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                                 <div>
-                                    <h3 class='mb-0'>{{ trans('langCourseProgram') }}</h3>
+                                    <h2 class='text-heading-h3 mb-0'>{{ trans('langCourseProgram') }}</h2>
                                 </div>
                                 <div>
                                     {!! $action_bar !!}
@@ -344,11 +344,9 @@
                             <div class='card panelCard card-transparent px-0 py-0 mt-4 border-0 mb-5'>
                                 @if ($is_editor)
                                     <div class='card-header card-header-default border-0 d-flex justify-content-between align-items-center px-0 py-0 mb-3'>
-                                        <h3>
-                                            <div class='d-flex gap-2'>
-                                                {{ trans('langCourseUnits') }}
-                                            </div>
-                                        </h3>
+                                        <h2 class='text-heading-h3'>
+                                            {{ trans('langCourseUnits') }}
+                                        </h2>
                                         <div class='d-flex gap-2 flex-wrap'>
                                             <a id='cu-help-btn' class='helpAdminBtn add-unit-btn d-flex align-items-center' href='{{ $urlServer }}modules/help/help.php?language={{$language}}&topic=course_units' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langHelp') }}" aria-label="{{ trans('langHelp') }}" role="button">
                                                 <i class="fa-solid fa-circle-question"></i>
@@ -492,7 +490,7 @@
                         @if($course_info->view_type == 'sessions' && count($course_sessions) > 0)
                             <div class='card panelCard card-transparent card-sessions px-lg-4 py-lg-3 p-3 mt-4 mb-5'>
                                 <div class='card-header card-header-default border-0 d-flex justify-content-between align-items-center px-0 py-0 mb-2'>
-                                    <h3>{{ trans('langSession') }}</h3>
+                                    <h2 class='text-heading-h3'>{{ trans('langSession') }}</h2>
                                     <a class='TextRegular text-decoration-underline vsmall-text'
                                          href="{{ $urlAppend }}modules/session/index.php?course={{ $course_code }}">
                                          {{ trans('langAllSessions') }}
@@ -628,7 +626,7 @@
                     <div class="@if(!$right_col_display) d-none @else d-block @endif">
                         <div class='card bg-transparent card-transparent border-0 sticky-column-course-home mb-3 mt-4 mt-xl-0'>
                             <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
-                                <h3 class='mb-0'>{{ trans('langAgenda') }}</h3>
+                                <h2 class='text-heading-h3 mb-0'>{{ trans('langAgenda') }}</h2>
                             </div>
                         </div>
                         <div class="panel panel-admin panel-admin-calendar card-transparent p-0 border-0 sticky-column-course-home">
@@ -661,7 +659,7 @@
 
                         <div class="card panelCard card-transparent border-0 mt-5 sticky-column-course-home">
                             <div class='card-header card-header-default px-0 py-0 border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-                                <h3 class='mb-0'>{{ trans('langAnnouncements') }}</h3>
+                                <h2 class='text-heading-h3 mb-0'>{{ trans('langAnnouncements') }}</h2>
                                 <a class='TextRegular text-decoration-underline vsmall-text' href="{{ $urlAppend }}modules/announcements/index.php?course={{ $course_code }}">{{ trans('langAllAnnouncements') }}...</a>
                             </div>
                             <div class='card-body card-body-default px-0 py-0'>
@@ -675,7 +673,7 @@
                             @if(isset($course_completion_id) and $course_completion_id > 0)
                                 <div class="card panelCard card-transparent border-0 mt-5 sticky-column-course-home">
                                     <div class='card-header card-header-default px-0 py-0 border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-                                        <h3 class='mb-0'>{{ trans('langCourseCompletion') }}</h3>
+                                        <h2 class='text-heading-h3 mb-0'>{{ trans('langCourseCompletion') }}</h2>
                                         @if ($is_editor)
                                             <a class='Course-home-ellipsis TextRegular text-decoration-underline vsmall-text' href='{{ $urlServer }}modules/progress/index.php?course={{ $course_code }}&badge_id={{ $course_completion_id }}&progressall=true'>
                                                 {{ $certified_users}}/{{ $studentUsers }} {{ trans('langUsersS') }}...
@@ -743,7 +741,7 @@
                             @if (isset($level) && !empty($level))
                                 <div class='card panelCard card-transparent border-0 mt-5 sticky-column-course-home'>
                                     <div class='card-header px-0 py-0 border-0 d-flex justify-content-between align-items-center'>
-                                        <h3 class='mb-3'>{{ trans('langOpenCourseShort') }}</h3>
+                                        <h2 class='text-heading-h3 mb-3'>{{ trans('langOpenCourseShort') }}</h2>
                                     </div>
                                     <div class='card-body card-body-default px-0 py-0'>
                                         <div class='card panelCard card-default px-lg-4 py-lg-3 p-3'>
@@ -761,7 +759,7 @@
                             @if($course_home_sidebar_widgets)
                                 <div class='card panelCard card-transparent border-0 mt-5 sticky-column-course-home'>
                                     <div class='card-header card-header-default px-0 py-0 border-0 d-flex justify-content-between align-items-center'>
-                                        <h3>{{ trans('langWidgets') }}</h3>
+                                        <h2 class='text-heading-h3'>{{ trans('langWidgets') }}</h2>
                                     </div>
                                     <div class='card-body card-body-default px-0 py-0'>
                                         {!! html_entity_decode($course_home_sidebar_widgets) !!}

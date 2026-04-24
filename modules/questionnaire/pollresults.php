@@ -295,7 +295,7 @@ $head_content .= "
 $tool_content .= "<div class='col-12'>
 <div class='card panelCard px-lg-4 py-lg-3'>
     <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-        <h3>$langInfoPoll</h3>
+        <h2 class='text-heading-h3'>$langInfoPoll</h2>
     </div>
     <div class='card-body'>
         <div class='col-12 d-flex justify-content-center justify-content-md-start align-items-start gap-3 flex-wrap'>
@@ -562,7 +562,7 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COU
                 $uInfo = Database::get()->querySingle("SELECT poll_user_record.uid,user.id,user.givenname,user.surname FROM poll_user_record
                                                         LEFT JOIN user ON poll_user_record.uid=user.id
                                                         WHERE poll_user_record.pid=?d AND poll_user_record.session_id=?d", $pid, $_GET['session']);
-                $tool_content .= "<div class='card panelCard card-default my-4 px-lg-4'><div class='card-body'><h3 class='mb-0'>$langUser: <span>$uInfo->givenname $uInfo->surname</span></h3></div></div>";
+                $tool_content .= "<div class='card panelCard card-default my-4 px-lg-4'><div class='card-body'><h2 class='text-heading-h3 mb-0'>$langUser: <span>$uInfo->givenname $uInfo->surname</span></h2></div></div>";
                 $loopTmp++;
             }
 
@@ -570,10 +570,10 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COU
             <div class='col-12 mt-4'>
                 <div class='card panelCard card-default card-poll-results poll-border-left border-0 px-lg-4 py-lg-3'>
                     <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                        <h3 class='d-flex justify-content-start align-items-start gap-2'>
+                        <h2 class='text-heading-h3 d-flex justify-content-start align-items-start gap-2'>
                             <strong class='fs-6 text-nowrap'>$theQuestion->qnumber)</strong>
                             <strong class='fs-6'>$theQuestion->question_text</strong>
-                        </h3>
+                        </h2>
                     </div>
                     <div class='card-body'>";
                         if ($theQuestion->qtype == QTYPE_MULTIPLE || $theQuestion->qtype == QTYPE_SINGLE) {
@@ -1053,7 +1053,7 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COU
                                         $answers_table ="<div class='card panelCard card-default card-user-answers mb-4'>";
                                         if (!$thePoll->anonymized) {
                                             $answers_table .= "<div class='card-header'>
-                                                                <h3 style='margin-bottom:0px;'>$p->givenname&nbsp;$p->surname</h3>
+                                                                <h2 class='text-heading-h3' style='margin-bottom:0px;'>$p->givenname&nbsp;$p->surname</h2>
                                                             </div>";
                                         }       
                                         $answers_table .= " <div class='card-body'>";   

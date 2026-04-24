@@ -37,7 +37,7 @@
                     <div class='col-12'>
                         <div class="card panelCard card-default px-lg-4 py-lg-3 mt-3">
                             <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                <h3>{{ trans('langActivateCourseTools') }}</h3>
+                                <h2 class='text-heading-h3'>{{ trans('langActivateCourseTools') }}</h2>
                             </div>
                             <div class='card-body'>
                                 <form name="courseTools" action="{{ $post_url }}" method="post" enctype="multipart/form-data">
@@ -85,9 +85,9 @@
                         <div class='card panelCard card-default px-lg-4 py-lg-3'>
                             <div class='card-header border-0 d-flex justify-content-between align-items-center'>
 
-                                <h3>
+                                <h2 class='text-heading-h3'>
                                     {{ trans('langExternalLinks') }}
-                                </h3>
+                                </h2>
                                 <div>
                                     <a class='btn submitAdminBtn' href='{{ $post_url }}&amp;add=link'><span class='fa fa-plus-circle'></span> <span class='hidden-xs hidden-lg ps-2'>{{ trans('langAddExtLink') }}</span></a>
                                 </div>
@@ -126,9 +126,9 @@
                         <div class='card panelCard card-default px-lg-4 py-lg-3'>
                             <div class='card-header border-0 d-flex justify-content-between align-items-center'>
 
-                                <h3>
+                                <h2 class='text-heading-h3'>
                                     {{ trans('langLtiConsumer') }}
-                                </h3>
+                                </h2>
 
                                 <div>
                                     <a class='btn submitAdminBtn' href='../lti_consumer/index.php?course={{ $course_code }}&amp;add=1'>
@@ -205,9 +205,9 @@
                         <div class='card panelCard card-default px-lg-4 py-lg-3'>
                             <div class='card-header border-0 d-flex justify-content-between align-items-center'>
 
-                                <h3>
+                                <h2 class='text-heading-h3'>
                                     {{ trans('langLtiPublishTool') }}
-                                </h3>
+                                </h2>
 
                                 <div>
                                     <a class='btn submitAdminBtn' href='editpublish.php?course={{ $course_code }}'>
