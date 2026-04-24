@@ -393,9 +393,11 @@ function display_attendance_activities($attendance_id) {
  * @brief display available exercises for adding them to attendance
  * @param int $attendance_id
  */
-function attendance_display_available_exercises($attendance_id) {
+function attendance_display_available_exercises($attendance_id): void
+{
 
-    global $course_id, $course_code, $tool_content, $langDescription, $langAdd, $langAttendanceNoActMessageExe4, $langTitle, $urlServer, $langSettingSelect;
+    global $course_id, $course_code, $tool_content, $langDescription, $langAdd,
+           $langAttendanceNoActMessageExe4, $langTitle, $urlServer, $langSettingSelect;
 
     $checkForExer = Database::get()->queryArray("SELECT * FROM exercise WHERE exercise.course_id = ?d
                                 AND exercise.active = 1 AND exercise.id
@@ -417,6 +419,13 @@ function attendance_display_available_exercises($attendance_id) {
             $tool_content .= "</td></tr>";
         }
         $tool_content .= "</table></div>";
+        $tool_content .= "<div class='form-group mt-5'>
+                    <div class='col-12 d-flex justify-content-end align-items-center'>".form_buttons(array(
+                        array(
+                            'class' => 'cancelAdminBtn ms-1',
+                            'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id={$attendance_id}"
+                        )
+                    ))."</div></div>";
     } else {
         $tool_content .= "
         <div class='col-12'>
@@ -428,10 +437,11 @@ function attendance_display_available_exercises($attendance_id) {
  * @brief display available assignments for adding them to attendance
  * @param int $attendance_id
  */
-function attendance_display_available_assignments($attendance_id) {
+function attendance_display_available_assignments($attendance_id): void
+{
 
     global $course_id, $course_code, $tool_content, $urlServer,
-           $m, $langDescription, $langAttendanceNoActMessageAss4,
+           $langDescription, $langAttendanceNoActMessageAss4,
            $langAdd, $langTitle, $langSettingSelect, $langWorkAssignTo;
 
     $checkForAss = Database::get()->queryArray("SELECT * FROM assignment WHERE assignment.course_id = ?d
@@ -466,6 +476,16 @@ function attendance_display_available_assignments($attendance_id) {
             $tool_content .= "</td></tr>";
         } // end of while
         $tool_content .= "</table></div>";
+        $tool_content .= "<div class='form-group mt-5'>
+                            <div class='col-12 d-flex justify-content-end align-items-center'>".
+                                form_buttons(array(
+                                    array(
+                                        'class' => 'cancelAdminBtn ms-1',
+                                        'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id={$attendance_id}"
+                                    )
+                                )).
+                                "</div>
+                        </div>";
     } else {
         $tool_content .= "
         <div class='col-12'>
@@ -477,8 +497,8 @@ function attendance_display_available_assignments($attendance_id) {
  * @brief display available tc sessions for adding them to attendance
  * @param type $attendance_id
  */
-function attendance_display_available_tc($attendance_id) {
-
+function attendance_display_available_tc($attendance_id): void
+{
     global $tool_content, $course_code, $course_id, $langGradebookActivityDate,
             $langTitle, $langAdd, $langAttendanceNoActMessageTc, $langSettingSelect;
 
@@ -503,6 +523,16 @@ function attendance_display_available_tc($attendance_id) {
             $tool_content .= "<td class='text-end'>".icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;addCourseActivity=" . $data->id . "&amp;type=4");
         } // end of while
         $tool_content .= "</tr></table></div>";
+        $tool_content .= "<div class='form-group mt-5'>
+                            <div class='col-12 d-flex justify-content-end align-items-center'>".
+                            form_buttons(array(
+                                array(
+                                    'class' => 'cancelAdminBtn ms-1',
+                                    'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id={$attendance_id}"
+                                )
+                            )).
+                            "</div>
+                        </div>";
     } else {
         $tool_content .= "
         <div class='col-12'>
@@ -514,11 +544,12 @@ function attendance_display_available_tc($attendance_id) {
  * @brief add other attendance activity
  * @param type $attendance_id
  */
-function add_attendance_other_activity($attendance_id) {
+function add_attendance_other_activity($attendance_id): void
+{
 
     global $tool_content, $course_code, $langDescription,
            $langTitle, $langAttendanceInsAut, $langAdd, $langSave,
-           $langAttendanceActivityDate, $language, $head_content, $urlAppend,
+           $langAttendanceActivityDate, $language, $head_content,
            $langImgFormsDes, $langSelect, $langForm;
 
     load_js('bootstrap-datetimepicker');
@@ -628,7 +659,6 @@ function add_attendance_other_activity($attendance_id) {
 
 /**
  * @brief add available activity in attendance
- * @global type $course_id
  * @param type $attendance_id
  * @param type $id
  * @param type $type
@@ -636,6 +666,7 @@ function add_attendance_other_activity($attendance_id) {
 function add_attendance_activity($attendance_id, $id, $type) {
 
     global $course_id;
+
     $actTitle = "";
     if ($type == GRADEBOOK_ACTIVITY_ASSIGNMENT) { //  add  assignments
         //checking if it's new or not
@@ -1206,12 +1237,23 @@ function user_attendance_settings($attendance_id) {
  * @brief display user presences (student view)
  * @param int $attendance_id
  */
-function student_view_attendance($attendance_id) {
+function student_view_attendance($attendance_id): void
+{
 
     global $tool_content, $uid, $langAttendanceAbsencesNo, $langAttendanceAbsencesFrom,
            $langAttendanceAbsencesFrom2, $langAttendanceStudentFailure,
-           $langTitle, $langDate, $langDescription,
-           $langAttendanceAbsencesYes;
+           $langTitle, $langDate, $langDescription, $langBack,
+           $langAttendanceAbsencesYes, $course_code;
+
+    $action_bar = action_bar(
+        array(
+            array('title' => $langBack,
+                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                'icon' => 'fa-reply',
+                'level' => 'primary')
+        ));
+
+    $tool_content .= $action_bar;
 
     $attendance_limit = get_attendance_limit($attendance_id);
     //check if there are attendance records for the user, otherwise alert message that there is no input
@@ -1222,8 +1264,7 @@ function student_view_attendance($attendance_id) {
                                             AND attendance_activities.attendance_id = ?d", $uid, $attendance_id)->count;
 
     if (!$checkForRecords) {
-        $tool_content .="
-        <div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langAttendanceStudentFailure</span></div></div>";
+        $tool_content .= "<div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langAttendanceStudentFailure</span></div></div>";
     }
 
     $result = Database::get()->queryArray("SELECT * FROM attendance_activities WHERE attendance_id = ?d ORDER BY `DATE` DESC", $attendance_id);
@@ -1231,9 +1272,12 @@ function student_view_attendance($attendance_id) {
 
     if ($results > 0) {
         if ($checkForRecords) {
-            $range = Database::get()->querySingle("SELECT `limit` FROM attendance WHERE id = ?d", $attendance_id)->limit;
-            $tool_content .= "
-            <div class='col-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>" . userAttendTotal($attendance_id, $uid) ." ". $langAttendanceAbsencesFrom . " ". q($attendance_limit) . " " . $langAttendanceAbsencesFrom2. " </span></div></div>";
+            $tool_content .= "<div class='col-12'>
+                                <div class='alert alert-info'>
+                                    <i class='fa-solid fa-circle-info fa-lg'></i>
+                                    <span>" . userAttendTotal($attendance_id, $uid) ." ". $langAttendanceAbsencesFrom . " ". q($attendance_limit) . " " . $langAttendanceAbsencesFrom2. " </span>
+                                </div>
+                            </div>";
         }
 
         $tool_content .= " <div class='col-12'>
@@ -1406,8 +1450,6 @@ function update_attendance_book($uid, $id, $activity, $attendance_id = 0) {
 
 /**
  * @brief delete attendance
- * @global type $course_id
- * @global type $langAttendanceDeleted
  * @param type $attendance_id
  */
 function delete_attendance($attendance_id) {
