@@ -368,6 +368,15 @@ class Exercise
         return $this->is_exam;
     }
 
+    public function isSeb(): bool
+    {
+        if ($this->getOption('useSafeExamBrowser')) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public function getPassingGrade()
     {
         return $this->passing_grade;
@@ -1871,7 +1880,7 @@ class Exercise
 
         $settings = [
             'showTaskBar'                  => true,
-            'allowWlan'                    => false,
+            'allowWlan'                    => true,
             'showReloadButton'             => false,
             'showTime'                     => true,
             'showInputLanguage'            => true,
@@ -1886,7 +1895,7 @@ class Exercise
             'URLFilterRules'               => 'array', // Special case for an empty array
             'startURL'                     => $start_url,
             'sendBrowserExamKey'           => true,
-            'browserWindowWebView'         => 3,
+            'browserWindowWebView'         => 2, // Chromium/WebView2 engine - recommended for Windows
             'examSessionClearCookiesOnStart'=> false,
             'allowPreferencesWindow'       => false,
         ];
@@ -1900,7 +1909,7 @@ class Exercise
             } elseif ($value === 'array') {
                 $dict->appendChild($xml->createElement('array'));
             } else {
-                $dict->appendChild($xml->createElement('string', urlencode($value)));
+                $dict->appendChild($xml->createElement('string', preg_replace('/&/','&amp;', $value)));
             }
         }
 
@@ -1919,7 +1928,6 @@ class Exercise
 
         $sebConfigXml = file_get_contents("$webDir/courses/$course_code/exercise_seb_$this->id/config.seb");
 
-        //header('Content-Type: application/xml');
         header('Content-Type: application/seb');
         header('Content-Disposition: attachment; filename="config.seb"');
         header('Content-Length: ' . strlen($sebConfigXml));
