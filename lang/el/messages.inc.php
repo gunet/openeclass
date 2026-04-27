@@ -3182,7 +3182,7 @@ $langAlertBlockingMakedInvisible = "Αυτή η ενότητα είναι φρα
 $langAlertBlockingPathMadeInvisible = "Αυτή η γραμμή είναι φραγμένη. Κάνοντάς την μη ορατή θα επιτραπεί στους " . $langsOfStudentss . " η είσοδος στην επόμενη γραμμή χωρίς να χρειάζεται να ολοκληρώσουν την παρούσα. Επιβεβαιώστε την επιλογή σας";
 $langAlreadyBrowsed = "Ολοκληρώθηκε";
 $langCompleted = 'Ολοκληρώθηκε';
-$langIncomplete = 'Μή ολοκληρωμένο';
+$langIncomplete = 'Μη ολοκληρωμένο';
 $langAltMakeNotBlocking = "Αποδέσμευση";
 $langAltScorm = "Scorm";
 $langAreYouSureDeleteModule = "Επιβεβαίωση διαγραφής της ενότητας";
@@ -6285,7 +6285,7 @@ $langFBProfile = 'Facebook προφίλ';
 $langTwitterAccount = 'Twitter λογαριασμός';
 $langLinkedInProfile = 'LinkedIn προφίλ';
 $langGScholarURLValidFail = 'Το πεδίο %s δεν είναι έγκυρο (απαιτούμενη μορφή https://scholar.google.com/citations?user=XXXXXXXXXXX). ';
-$langOrcidURLValidFail = 'Το πεδίο %s δεν είναι έγκυρο (απαιτούμενη μορφή https://orcid.org/0000-xxxx-xxxx-xxxx). '; 
+$langOrcidURLValidFail = 'Το πεδίο %s δεν είναι έγκυρο (απαιτούμενη μορφή https://orcid.org/0000-xxxx-xxxx-xxxx). ';
 $langScopusIDValidFail = 'Το πεδίο %s δεν είναι έγκυρο (απαιτούμενη μορφή 9 έως 11 αριθμητικοί χαρακτήρες)';
 $langFacebookUrlValidFail = 'Το πεδίο %s δεν είναι έγκυρο (απαιτούμενη μορφή https://www.facebook.com/xxxxxx ή https://fb.me/xxxxxx)';
 $langTwitterUrlValidFail = 'Το πεδίο %s δεν είναι έγκυρο (απαιτούμενη μορφή https://twitter.com/xxxxxx ή https://x.com/xxxxxx)';
