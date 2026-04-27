@@ -180,7 +180,7 @@ function display_learn_path_title($path_id, $cmd = ''): string
                                 $langName
                             </label>
                             <div class='col-12'>
-                                <input class='form-control' type='text' name='newName' maxlength='255' value='" . q($oldName) . "'>                                                    
+                                <input class='form-control' type='text' name='newName' maxlength='255' value='" . q($oldName) . "'>
                             </div>
                         </div>
                         <div class='row mt-4 form-group'>
@@ -536,7 +536,7 @@ function get_learnPath_progress($lpid, $lpUid) {
     return calculate_learnPath_progress($lpid, $modules);
 }
 
-function get_learnPath_progress_details($lpid, $lpUid, $total=true, $from_date = null, $course_id = null): array {
+function get_learnPath_progress_details($lpid, $lpUid, $total=true, $from_date = null, $course_id = null, $return_null_score = false): array {
 
     if ($course_id == null) {
         $course_id = $GLOBALS['course_id'];
@@ -654,14 +654,18 @@ function get_learnPath_progress_details($lpid, $lpUid, $total=true, $from_date =
     $totalTime = ($totalTime == '0000:00:00') ? '00:00:00': $totalTime;
     if ($total) {
         $score = $totalProgress;
-        $totalProgress = $max_progress_measure ? (100 * $max_progress_measure) : $totalProgress;
+        if ($return_null_score && !$totalProgress) {
+            $totalProgress = null;
+        } else {
+            $totalProgress = $max_progress_measure ? (100 * $max_progress_measure) : $totalProgress;
+        }
         return array($totalProgress, $totalTime, $totalStarted, $totalAccessed, $totalStatus, $maxAttempt, $score, $totalScoreMax);
     } else {
         $attempts = [];
         for ($i = 1; $i <= $maxAttempt; $i++) {
             if ($global_started[$i]) {
                 $attempts[$i] = [
-                    $global_progress[$i],
+                    ($return_null_score && !$global_score_max[$i]) ? null : $global_progress[$i],
                     $global_time[$i],
                     $global_started[$i],
                     $global_accessed[$i],

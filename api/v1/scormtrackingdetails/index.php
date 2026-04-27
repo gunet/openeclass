@@ -131,7 +131,7 @@ function api_method($access) {
         $path_id = $scorm[0];
         $sco_id = (string)$scorm[1];
         foreach ($users as $user_id) {
-            $attempts = get_learnPath_progress_details($path_id, $user_id, false, $from_date);
+            $attempts = get_learnPath_progress_details($path_id, $user_id, false, $from_date, return_null_score: true);
             foreach ($attempts as $attempt) {
                 list($progress, $time, $started, $accessed, $status, $attemptNb) = $attempt;
                 $data = [
@@ -142,6 +142,7 @@ function api_method($access) {
                     'endtime' => $accessed,
                     'duration' => $time,
                     'attempt' => $attemptNb,
+                    'score' => $progress,
                 ];
                 if (isset($_GET['group_id'])) {
                     $data['groupid'] = $_GET['group_id'];
