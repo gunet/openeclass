@@ -779,6 +779,14 @@ function process_login() {
                     VALUES (?d, ?s, " . DBHelper::timeAfter() . ", 'LOGIN')", $_SESSION['uid'], $ip);
             $session->setLoginTimestamp();
 
+            $next = '';
+            if (get_config('email_verification_required') and
+                get_mail_ver_status($_SESSION['uid']) == EMAIL_VERIFICATION_REQUIRED) {
+                $_SESSION['mail_verification_required'] = 1;
+                $next = 'modules/auth/mail_verify_change.php';
+            } elseif (isset($_REQUEST['next'])) {
+                $next = $_REQUEST['next'];
+            }
             if (!is_null($myrow->options)) {
                 $options = json_decode($myrow->options, true);
                 $option_force_password_change = $options['force_password_change'];
@@ -786,14 +794,6 @@ function process_login() {
                     $_SESSION['force_password_change'] = 1;
                     $next = 'modules/auth/password_change.php';
                 }
-            } elseif (get_config('email_verification_required') and
-                    get_mail_ver_status($_SESSION['uid']) == EMAIL_VERIFICATION_REQUIRED) {
-                $_SESSION['mail_verification_required'] = 1;
-                $next = 'modules/auth/mail_verify_change.php';
-            } elseif (isset($_POST['next'])) {
-                $next = $_POST['next'];
-            } else {
-                $next = '';
             }
             resetLoginFailure();
             redirect_to_home_page($next);
