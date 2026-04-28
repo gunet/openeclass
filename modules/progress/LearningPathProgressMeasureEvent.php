@@ -20,9 +20,9 @@
 
 require_once 'BasicEvent.php';
 
-class LearningPathEvent extends BasicEvent {
+class LearningPathProgressMeasureEvent extends BasicEvent {
 
-    const ACTIVITY = 'learning path';
+    const ACTIVITY = 'learning path progress measure';
     const UPDPROGRESS = 'learning-path-accessed';
 
     public function __construct() {
@@ -31,10 +31,23 @@ class LearningPathEvent extends BasicEvent {
         $this->on(self::UPDPROGRESS, function($data) {
             $threshold = 0;
 
-            // fetch learning path score from DB and use it as threshold
-            list(, , , , , , $score, ) = get_learnPath_progress_details($data->resource, $data->uid, true, null, $data->courseId);
-            if ($score && floatval($score) > 0) {
-                $threshold = floatval($score);
+            // average per-module max progress_measure across visible LP modules, scaled to 0..100
+            $row = Database::get()->querySingle(
+                "SELECT AVG(per_module_max) AS avg_pm FROM (
+                    SELECT MAX(COALESCE(UMP.progress_measure, 0)) AS per_module_max
+                      FROM lp_rel_learnPath_module LPM
+                      JOIN lp_module M ON M.module_id = LPM.module_id
+                 LEFT JOIN lp_user_module_progress UMP
+                        ON UMP.learnPath_module_id = LPM.learnPath_module_id
+                       AND UMP.user_id = ?d
+                     WHERE LPM.learnPath_id = ?d
+                       AND LPM.visible = 1
+                       AND M.contentType != ?s
+                  GROUP BY LPM.learnPath_module_id
+                 ) sub",
+                $data->uid, $data->resource, CTLABEL_);
+            if ($row && $row->avg_pm !== null) {
+                $threshold = floatval($row->avg_pm) * 100.0;
             }
 
             $this->setEventData($data);

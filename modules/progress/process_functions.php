@@ -160,6 +160,29 @@ function add_lp_to_certificate($element, $element_id, $activity_type) {
 }
 
 /**
+ * @brief add LP lesson_status (boolean) entries in criterion
+ * @param string $element  'certificate' or 'badge'
+ * @param int    $element_id
+ */
+function add_lp_lessonstatus_to_certificate($element, $element_id) {
+    if (isset($_POST['lp'])) {
+        foreach ($_POST['lp'] as $datakey => $data) {
+            Database::get()->query("INSERT INTO {$element}_criterion
+                                SET $element = ?d,
+                                module = " . MODULE_ID_LP . ",
+                                resource = ?d,
+                                activity_type = ?s,
+                                operator = 'eq',
+                                threshold = 1",
+                $element_id,
+                $_POST['lp'][$datakey],
+                LearningPathLessonStatusEvent::ACTIVITY);
+        }
+    }
+    return;
+}
+
+/**
  * @brief add course participation db entries in criterion
  * @param type $element
  * @param type $element_id
@@ -1078,7 +1101,8 @@ function get_resource_details($element, $resource_id) {
             $langBlog, $langForums, $langWikiPages, $langNumOfBlogs, $langCourseParticipation,
             $langWiki, $langAllActivities, $langComments, $langCommentsBlog, $langCommentsCourse,
             $langPersoValue, $langCourseSocialBookmarks, $langForumRating, $langCourseHoursParticipation, $langGradebook,
-            $langGradeCourseCompletion, $langCourseCompletion, $langOfLearningPathDuration, $langAssignmentParticipation,
+            $langGradeCourseCompletion, $langCourseCompletion, $langOfLearningPath, $langOfLearningPathDuration,
+           $langOfLearningPathProgressMeasure, $langOfLearningPathLessonStatus, $langAssignmentParticipation,
             $langAttendance, $langCompletedSessionWithoutActivity, $langSubmittedUploadedFile, $langFileName, $langTCComplited,
             $langCompletedSessionWithMeeting, $langWithAttendanceRegistrationByConsultant;
 
@@ -1117,7 +1141,7 @@ function get_resource_details($element, $resource_id) {
                 if ($q) {
                     $title = $q->name;
                 }
-                $type = $langLearnPath;
+                $type = $langOfLearningPath;
             break;
         case LearningPathDurationEvent::ACTIVITY:
             $q = Database::get()->querySingle("SELECT name FROM lp_learnPath WHERE lp_learnPath.course_id = ?d AND lp_learnPath.learnPath_id = ?d", $course_id, $resource);
@@ -1125,6 +1149,20 @@ function get_resource_details($element, $resource_id) {
                 $title = $q->name;
             }
             $type = $langOfLearningPathDuration;
+            break;
+        case LearningPathProgressMeasureEvent::ACTIVITY:
+            $q = Database::get()->querySingle("SELECT name FROM lp_learnPath WHERE lp_learnPath.course_id = ?d AND lp_learnPath.learnPath_id = ?d", $course_id, $resource);
+            if ($q) {
+                $title = $q->name;
+            }
+            $type = $langOfLearningPathProgressMeasure;
+            break;
+        case LearningPathLessonStatusEvent::ACTIVITY:
+            $q = Database::get()->querySingle("SELECT name FROM lp_learnPath WHERE lp_learnPath.course_id = ?d AND lp_learnPath.learnPath_id = ?d", $course_id, $resource);
+            if ($q) {
+                $title = $q->name;
+            }
+            $type = $langOfLearningPathLessonStatus;
             break;
         case ViewingEvent::DOCUMENT_ACTIVITY:
                 $cer_res = Database::get()->queryArray("SELECT (CASE WHEN title IS NULL OR title=' ' THEN filename ELSE title END) AS file_details FROM document
@@ -1400,6 +1438,8 @@ function refresh_user_progress($element, $element_id): void
     require_once "modules/progress/ExerciseEvent.php";
     require_once "modules/progress/LearningPathEvent.php";
     require_once "modules/progress/LearningPathDurationEvent.php";
+    require_once "modules/progress/LearningPathProgressMeasureEvent.php";
+    require_once "modules/progress/LearningPathLessonStatusEvent.php";
     require_once "modules/progress/AttendanceEvent.php";
     require_once "include/lib/learnPathLib.inc.php";
     require_once "modules/attendance/functions.php";
@@ -1438,6 +1478,8 @@ function refresh_user_progress($element, $element_id): void
                     break;
                 case LearningPathEvent::ACTIVITY:
                 case LearningPathDurationEvent::ACTIVITY:
+                case LearningPathProgressMeasureEvent::ACTIVITY:
+                case LearningPathLessonStatusEvent::ACTIVITY:
                         triggerLPGame($course_id, $u, $data->resource, LearningPathEvent::UPDPROGRESS);
                     break;
                 case AttendanceEvent::ACTIVITY:

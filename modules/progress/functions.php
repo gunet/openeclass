@@ -264,8 +264,8 @@ function display_activities($element, $id, $unit_id = 0) {
            $langOfAssignment, $langExerciseAsModuleLabel, $langOfBlog,
            $langMediaAsModuleLabel, $langOfEBook, $langOfPoll, $langWiki,
            $langNumInForum, $langOfBlogComments, $langConfirmDelete,
-           $langOfLearningPath, $langOfLearningPathDuration, $langDelete, $langEditChange,
-           $langDocumentAsModuleLabel, $langCourseParticipation,
+           $langOfLearningPath, $langOfLearningPathDuration, $langOfLearningPathProgressMeasure, $langOfLearningPathLessonStatus,
+           $langDelete, $langEditChange, $langDocumentAsModuleLabel, $langCourseParticipation,
            $langAdd, $langBack, $langUsers, $langOfGradebook,
            $langValue, $langNumInForumTopic, $langOfCourseCompletion, $langOfUnitCompletion,
            $course_id, $langUnitCompletion, $langUnitPrerequisites, $langNewUnitPrerequisite,
@@ -378,6 +378,16 @@ function display_activities($element, $id, $unit_id = 0) {
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=lpduration",
             'icon' => 'fa fa-ellipsis-h fa-fw',
             'class' => ''),
+        array('title' => $langOfLearningPathProgressMeasure,
+            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=lpprogressmeasure",
+            'icon' => 'fa fa-ellipsis-h fa-fw',
+            'class' => '',
+            'show' => $element != 'points_game'),
+        array('title' => $langOfLearningPathLessonStatus,
+            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=lplessonstatus",
+            'icon' => 'fa fa-ellipsis-h fa-fw',
+            'class' => '',
+            'show' => $element != 'points_game'),
         /*array('title' => $langOfLikesSocial,
               'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=likesocial",
               'icon' => 'fa fa-edit space-after-icon',
@@ -724,6 +734,12 @@ function insert_activity($element, $element_id, $activity, $unit_id = 0, $unit_r
             break;
         case 'lpduration':
             display_available_lps($element, $element_id, LearningPathDurationEvent::ACTIVITY, $unit_id, $unit_resource_id);
+            break;
+        case 'lpprogressmeasure':
+            display_available_lps($element, $element_id, LearningPathProgressMeasureEvent::ACTIVITY, $unit_id, $unit_resource_id);
+            break;
+        case 'lplessonstatus':
+            display_available_lps($element, $element_id, LearningPathLessonStatusEvent::ACTIVITY, $unit_id, $unit_resource_id);
             break;
         case 'likesocial';
         case 'likeforum';
@@ -1429,9 +1445,15 @@ function display_available_lps($element, $element_id, $activity_type, int $unit_
     $element_name = ($element == 'certificate') ? 'certificate_id' : 'badge_id';
     $threshold_col_title = $langPercentage;
     $form_submit_name = 'add_lp';
+    $show_threshold = true;
     if ($activity_type == LearningPathDurationEvent::ACTIVITY) {
         $threshold_col_title = $langHours;
         $form_submit_name = 'add_lpduration';
+    } elseif ($activity_type == LearningPathProgressMeasureEvent::ACTIVITY) {
+        $form_submit_name = 'add_lpprogressmeasure';
+    } elseif ($activity_type == LearningPathLessonStatusEvent::ACTIVITY) {
+        $form_submit_name = 'add_lplessonstatus';
+        $show_threshold = false;
     }
 
     if ($unit_id) {
@@ -1484,8 +1506,8 @@ function display_available_lps($element, $element_id, $activity_type, int $unit_
                 "<div class='table-responsive'><table class='table-default'>" .
                 "<thead><tr class='list-header'>" .
                 "<th>$langLearningPaths</th>" .
-                "<th style='width:5px;'>$langOperator</th>" .
-                "<th style='width:50px;'>$threshold_col_title</th>" .
+                ($show_threshold ? "<th style='width:5px;'>$langOperator</th>" .
+                "<th style='width:50px;'>$threshold_col_title</th>" : '') .
                 "<th style='width:10px;'>$langChoice</th>" .
                 "</tr></thead>";
 
@@ -1498,8 +1520,10 @@ function display_available_lps($element, $element_id, $activity_type, int $unit_
                 $comments = empty($entry['comment']) ? '' : "<div style='margin-top: 10px;' class='text-muted'>". $entry['comment']. "</div>";
                 $tool_content .= "<tr>";
                 $tool_content .= "<td>&nbsp;".icon('fa-ellipsis-h')."&nbsp;&nbsp;<a href='{$urlServer}modules/learnPath/viewer.php?course=$course_code&amp;path_id=$lp_id&amp;module_id=$m_id->module_id'>" . q($entry['name']) . "</a>" . $comments . "</td>";
-                $tool_content .= "<td>". selection(get_operators(), "operator[$lp_id]") . "</td>";
-                $tool_content .= "<td><input aria-label='$langPollFillText' class='form-control' type='text' name='threshold[$lp_id]' value=''></td>";
+                if ($show_threshold) {
+                    $tool_content .= "<td>". selection(get_operators(), "operator[$lp_id]") . "</td>";
+                    $tool_content .= "<td><input aria-label='$langPollFillText' class='form-control' type='text' name='threshold[$lp_id]' value=''></td>";
+                }
                 $tool_content .= "<td><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='lp[]' value='$lp_id'><span class='checkmark'></span></label></td>";
                 $tool_content .= "</tr>";
             }
@@ -3022,6 +3046,7 @@ function criteria_with_operators() {
                  ExerciseEvent::ACTIVITY,
                  LearningPathEvent::ACTIVITY,
                  LearningPathDurationEvent::ACTIVITY,
+                 LearningPathProgressMeasureEvent::ACTIVITY,
                  WikiEvent::ACTIVITY,
                  ForumEvent::ACTIVITY,
                  ForumTopicEvent::ACTIVITY,

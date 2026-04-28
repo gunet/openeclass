@@ -36,6 +36,8 @@
 
 require_once 'modules/progress/LearningPathEvent.php';
 require_once 'modules/progress/LearningPathDurationEvent.php';
+require_once 'modules/progress/LearningPathProgressMeasureEvent.php';
+require_once 'modules/progress/LearningPathLessonStatusEvent.php';
 require_once 'modules/analytics/LpAnalyticsEvent.php';
 require_once 'include/lib/mediaresource.factory.php';
 
@@ -591,7 +593,7 @@ function get_learnPath_progress_details($lpid, $lpUid, $total=true, $from_date =
             $global_status[$i] = "";
             $global_time[$i] = "0000:00:00";
             // total progress calculation
-            $global_progress[$i] = calculate_learnPath_progress($lpid, $modsForProg[$i]);
+            $global_progress[$i] = (isset($modsForProg[$i])) ? calculate_learnPath_progress($lpid, $modsForProg[$i]) : 0;
         }
 
         foreach ($modules as $module) {
@@ -1675,6 +1677,12 @@ function triggerLPGame($courseId, $uid, $lpId, $eventName) {
 
     $eventData->activityType = LearningPathDurationEvent::ACTIVITY;
     LearningPathDurationEvent::trigger($eventName, $eventData);
+
+    $eventData->activityType = LearningPathProgressMeasureEvent::ACTIVITY;
+    LearningPathProgressMeasureEvent::trigger($eventName, $eventData);
+
+    $eventData->activityType = LearningPathLessonStatusEvent::ACTIVITY;
+    LearningPathLessonStatusEvent::trigger($eventName, $eventData);
 }
 
 /**

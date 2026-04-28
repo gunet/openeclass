@@ -302,7 +302,9 @@ if ($moduleNbT == 0) {
     if (is_numeric($nbrOfVisibleModules)) {
         $bestProgress = @round($globalProg[$bestAttempt] / $nbrOfVisibleModules);
     }
-    if ($totalProgressMeasure) {
+    if ($bestProgress) {
+        $lpCombinedProgress = $bestProgress;
+    } else if ($totalProgressMeasure) {
         $lpCombinedProgress = $totalProgressMeasure;
     } else {
         $lpCombinedProgress = get_learnPath_combined_progress($path_id, $uInfo);
