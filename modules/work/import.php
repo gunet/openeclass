@@ -45,9 +45,11 @@ if (isset($_FILES['userfile'])) {
         $data = [];
         $cellIterator = $row->getCellIterator();
         foreach ($cellIterator as $cell) {
-            $value = trim($cell->getValue());
-            if ($value !== '') {
-                $data[] = $value;
+            if (!is_null($cell->getValue())) {
+                $value = trim($cell->getValue());
+                if ($value !== '') {
+                    $data[] = $value;
+                }
             }
         }
 
