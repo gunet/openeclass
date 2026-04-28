@@ -2,21 +2,21 @@
 
 @section('content')
 
-<div class="col-12 main-section">
+<main id="main" class="col-12 main-section">
     <div class='{{ $container }} main-container'>
         <div class="row m-auto">
                     @if (isset($_SESSION['uid']))
                         @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
                     @endif
-{!!
-    action_bar([
-      [ 'title' => trans('langBack'),
-        'url' => $_SERVER['SCRIPT_NAME'],
-        'icon' => 'fa-reply',
-        'level' => 'primary',
-        'button-class' => 'btn-secondary' ]
-    ], false);
-!!}
+                    {!!
+                        action_bar([
+                        [ 'title' => trans('langBack'),
+                            'url' => $_SERVER['SCRIPT_NAME'],
+                            'icon' => 'fa-reply',
+                            'level' => 'primary',
+                            'button-class' => 'btn-secondary' ]
+                        ], false);
+                    !!}
 
                     <div class="col-12">
                         <div class="card panelCard card-default px-lg-4 py-lg-3">
@@ -44,6 +44,6 @@
         </div>
 
     </div>
-</div>
+</main>
 
 @endsection

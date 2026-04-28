@@ -84,14 +84,10 @@
     });
 </script>
 
-    <div class="col-12 main-section">
         <div class='{{ $container }} module-container py-lg-0'>
             <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
-
-                @include('layouts.partials.left_menu')
-
-                <div class="col_maincontent_active">
-
+                <aside class='aside-sidebar'>@include('layouts.partials.left_menu')</aside>
+                <main id="main" class="col-12 main-maincontent col_maincontent_active">
                     <div class="row">
 
                         @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
@@ -108,10 +104,9 @@
                         @include('layouts.partials.legend_view')
 
                         <div class='d-lg-flex gap-4 mt-3'>
-                        <div class='flex-grow-1'>
-                            <div class='form-wrapper form-edit rounded'>
-                                <form class="form-horizontal" role="form" method="post" action="{{$urlAppend}}modules/announcements/submit.php?course={{$course_code}}">
-
+                            <div class='flex-grow-1'>
+                                <div class='form-wrapper form-edit rounded'>
+                                    <form class="form-horizontal" role="form" method="post" action="{{$urlAppend}}modules/announcements/submit.php?course={{$course_code}}">
                                         <div class="row form-group {{ $antitle_error }}">
                                             <label for="AnnTitle" class="col-12 control-label-notes">{{ trans('langAnnTitle') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
                                             <div class="col-12">
@@ -134,7 +129,6 @@
                                                         <option value='{{ $cu->user_id }}'>{{$cu->name}} ({{$cu->email}})</option>
                                                     @endforeach
                                                 </select>
-                                                
                                             </div>
                                         </div>
 
@@ -211,9 +205,8 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </main>
             </div>
         </div>
-    </div>
 
 @endsection

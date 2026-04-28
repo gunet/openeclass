@@ -1,9 +1,9 @@
 @extends('layouts.default')
 
 @section('content')
-<h1 class='visually-hidden'>{{ trans('langHomePage') }}</h1>
-<div class="col-12 main-section qqe">
 
+<main id="main" class="col-12 main-section qqq">
+<h1 class='visually-hidden'>{{ trans('langHomePage') }}</h1>
         @if($warning)
             <input id='showWarningModal' type='hidden' value='1'>
             <div class="modal fade" id="WarningModal" aria-hidden="true" tabindex="0">
@@ -632,7 +632,7 @@
             @endif
 
         </div>
-</div>
+</main>
 
 
 <script>

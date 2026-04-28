@@ -170,7 +170,7 @@
             @include('layouts.partials.navheadDesktop', ['logo_img' => $logo_img])
         @endunless
 
-        <main id="main">@yield('content')</main>
+        @yield('content')
 
         @unless(isset($_SESSION['mobile']) || isset($_SESSION['safe_exam_browser_view']))
             @include('layouts.partials.footerDesktop')

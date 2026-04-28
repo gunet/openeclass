@@ -574,7 +574,7 @@ if (isset($_GET['mid'])) {
                         
                         bootbox.confirm({
                             closeButton: false,
-                            title: "<div class=\"icon-modal-default\"><i class=\"fa-regular fa-trash-can fa-xl Accent-200-cl\"></i></div><h2 class=\"modal-title-default text-center mb-0\">'.js_escape($langConfirmDelete).'</h2>",
+                            title: "<div class=\"icon-modal-default\"><i class=\"fa-regular fa-trash-can fa-xl Accent-200-cl\"></i></div><div class=\"modal-title-default text-center mb-0\">'.js_escape($langConfirmDelete).'</div>",
                             message: "<p class=\"text-center\">'.js_escape($langConfirmDelete).'</p>",
                             buttons: {
                                 cancel: {
@@ -702,7 +702,7 @@ if (isset($_GET['mid'])) {
                     
                     bootbox.confirm({
                         closeButton: false,
-                        title: '<div class=\'icon-modal-default\'><i class=\'fa-regular fa-trash-can fa-xl Accent-200-cl\'></i></div><h2 class=\'modal-title-default text-center mb-0\'>".js_escape($langConfirmDelete)."</h2>',
+                        title: '<div class=\'icon-modal-default\'><i class=\'fa-regular fa-trash-can fa-xl Accent-200-cl\'></i></div><div class=\'modal-title-default text-center mb-0\'>".js_escape($langConfirmDelete)."</div>',
                         message: '<p class=\'text-center\'>".js_escape($langConfirmDelete)."</p>',
                         buttons: {
                             cancel: {
@@ -744,7 +744,7 @@ if (isset($_GET['mid'])) {
                 $('.delete_all_in').click(function() {                    
                     bootbox.confirm({
                         closeButton: false,
-                        title: '<div class=\'icon-modal-default\'><i class=\'fa-regular fa-trash-can fa-xl Accent-200-cl\'></i></div><h2 class=\'modal-title-default text-center mb-0\'>".js_escape($langConfirmDelete)."</h2>',
+                        title: '<div class=\'icon-modal-default\'><i class=\'fa-regular fa-trash-can fa-xl Accent-200-cl\'></i></div><div class=\'modal-title-default text-center mb-0\'>".js_escape($langConfirmDelete)."</div>',
                         message: '<p class=\'text-center\'>".js_escape($langConfirmDeleteAllMsgs)."</p>',
                         buttons: {
                             cancel: {

@@ -65,7 +65,7 @@
     <link href="{{ $urlAppend }}template/modern/css/new_calendar.css?v={{ CACHE_SUFFIX }}" rel="stylesheet" type="text/css">
 @endpush
 
-<div class='card bg-transparent card-transparent border-0 sticky-column-course-home mb-3'>
+<div class='card bg-transparent card-transparent border-0 mb-3 w-100'>
     <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
         <h2 class='text-heading-h3 mb-0'>
             {{ trans('langAgenda') }}
@@ -75,13 +75,11 @@
         </a>
     </div>
 </div>
-<div class='panel panel-admin panel-admin-calendar card-transparent border-0 mt-lg-0 mt-2 sticky-column-course-home'>
-
+<div class='panel panel-admin panel-admin-calendar card-transparent border-0 mt-lg-0 mt-2'>
     {!! $user_personal_calendar !!}
-
 </div>
 
-<div class='card bg-transparent card-transparent border-0 sticky-column-course-home'>
+<div class='card bg-transparent card-transparent border-0'>
     <div class='d-flex justify-content-start align-items-center flex-wrap px-0 py-3'>
         <div class='d-flex align-items-center px-2 py-1'>
             <span class='event event-important'></span>

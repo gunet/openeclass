@@ -2,8 +2,8 @@
 
 @section('content')
 
-<div class="col-12 main-section">
-<div class='{{ $container }} main-container'>
+<main id="main" class="col-12 main-section">
+    <div class='{{ $container }} main-container'>
         <div class="row m-auto">
 
             @if(isset($_SESSION['uid']))
@@ -117,6 +117,6 @@
         </div>
 
     </div>
-</div>
+</main>
 
 @endsection

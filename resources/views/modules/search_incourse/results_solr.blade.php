@@ -213,13 +213,10 @@
         }
     </style>
 
-    <div class="col-12 main-section">
-        <div class='{{ $container }} module-container py-lg-0'>
-            <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
-
-                @include('layouts.partials.left_menu')
-
-                <div class="col_maincontent_active">
+<div class='{{ $container }} module-container py-lg-0'>
+        <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
+            <aside class='aside-sidebar'>@include('layouts.partials.left_menu')</aside>
+            <main id="main" class="col-12 main-maincontent col_maincontent_active">
 
                     <div class="row">
 
@@ -390,10 +387,9 @@
                         </div> {{-- page --}}
 
                     </div>
-                </div>
+                </main>
             </div>
         </div>
-    </div>
 
 
 

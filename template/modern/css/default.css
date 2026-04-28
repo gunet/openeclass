@@ -5474,19 +5474,19 @@ body .delThemeBtn{
 }
 
 @media(min-width:992px) and (max-width:1199px){
-  .main-section:has(.course-wrapper) .form-image-modules{
+  body:has(.course-wrapper) .form-image-modules{
     max-width:220px;
     float:right;
   }
 }
 @media(min-width:1200px) and (max-width:1399px){
-  .main-section:has(.course-wrapper) .form-image-modules{
+  body:has(.course-wrapper) .form-image-modules{
     max-width:270px;
     float:right;
   }
 }
 @media(min-width:1400px){
-  .main-section:has(.course-wrapper) .form-image-modules{
+  body:has(.course-wrapper) .form-image-modules{
     max-width: 300px;
     float:right;
   }
@@ -7062,4 +7062,16 @@ th.grade-col a{
     cursor: not-allowed;
     pointer-events: none;
     background: transparent;
+}
+
+@media(max-width: 991px) {
+  .main-maincontent {
+    margin-top: 56px;
+  }
+}
+@media(min-width: 992px) {
+  .aside-sidebar,
+  .main-maincontent {
+    margin-top: 80px;
+  }
 }

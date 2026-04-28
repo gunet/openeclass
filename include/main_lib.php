@@ -9010,7 +9010,7 @@ function theme_initialization() {
             $FormWidth = $MainContentWidth ."px";
             $styles_str .= "
                 @media(min-width:992px){
-                    .main-section:has(.course-wrapper) .form-image-modules{
+                    body:has(.course-wrapper) .form-image-modules{
                         width: $FormWidth;
                         float:right;
                         padding-bottom: 0px;

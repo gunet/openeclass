@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <div class="col-12 main-section">
+    <main id="main" class="col-12 main-section">
         <div class='{{ $container }} main-container'>
 
             @include('layouts.partials.show_alert')
@@ -223,7 +223,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </main>
 
 <script type='text/javascript'>
     $(document).ready(function() {

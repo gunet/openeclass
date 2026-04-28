@@ -1,7 +1,7 @@
 @extends('layouts.default')
 
 @section('content')
-    <div class="col-12 main-section">
+    <main id="main" class="col-12 main-section">
         <div class='{{ $container }} main-container'>
             <div class="row m-auto">
 
@@ -44,5 +44,5 @@
                 @endif
             </div>
         </div>
-    </div>
+    </main>
 @endsection

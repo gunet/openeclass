@@ -105,6 +105,20 @@ if(isset($_GET['term'])){
                 foreach($myCourses as $course){
                     $temp_pages++;
 
+                    $courseType = '';
+                    if ($course->visible == 1) {
+                        $courseType .= "<span>$langRegCourse</span>";
+                    }
+                    elseif ($course->visible == 2) {
+                        $courseType .= "<span>$langOpenCourse</span>";
+                    }
+                    elseif ($course->visible == 0) {
+                        $courseType .= "<span>$langClosedCourse</span>";
+                    }
+                    elseif ($course->visible == 3){
+                        $courseType .= "<span>$langInactiveCourse</span>";
+                    }
+
                   $html .= "<div class='col cardCourse$pagesPag'>
                         <div class='card h-100 card$pagesPag Borders border-card card-default px-2 py-3'>";
 
@@ -117,26 +131,6 @@ if(isset($_GET['term'])){
 
                       $html .= "<div class='card-header border-0'>
                                 <div class='card-title d-flex justify-content-start align-items-start gap-2 mb-0'>";
-                                    if($course->visible == 1){
-                                        $html .= "<button class='btn btn-transparent p-0' data-bs-toggle='tooltip' data-bs-placement='bottom' title='$langRegCourse' aria-label='$langRegCourse'>
-                                            <i class='fa-solid fa-square-pen title-default fa-lg'></i>
-                                        </button>";
-                                    }
-                                    if($course->visible == 2){
-                                        $html .= "<button class='btn btn-transparent p-0' data-bs-toggle='tooltip' data-bs-placement='bottom' title='$langOpenCourse' aria-label='$langOpenCourse'>
-                                            <i class='fa-solid fa-lock-open title-default fa-lg'></i>
-                                        </button>";
-                                    }
-                                    if($course->visible == 0){
-                                        $html .= "<button class='btn btn-transparent p-0' data-bs-toggle='tooltip' data-bs-placement='bottom' title='$langClosedCourse' aria-label='$langClosedCourse'>
-                                            <i class='fa-solid fa-lock title-default fa-lg'></i>
-                                        </button>";
-                                    }
-                                    if($course->visible == 3){
-                                        $html .= "<button class='btn btn-transparent p-0' data-bs-toggle='tooltip' data-bs-placement='bottom' title='$langInactiveCourse' aria-label='$langInactiveCourse'>
-                                            <i class='fa-solid fa-triangle-exclamation title-default fa-lg'></i>
-                                        </button>";
-                                    }
                                     $invisibleCourse = '';
                                     if($course->visible == 3){
                                       $invisibleCourse = 'InvisibleCourse';
@@ -155,6 +149,10 @@ if(isset($_GET['term'])){
                                 <div class='card-text'>
                                     <p class='d-inline $invisibleCourse mb-0 TextBold'>$langTeacher:</p>
                                     &nbsp;<p class='d-inline $invisibleCourse'>".q($course->professor)."</p>
+                                </div>
+                                <div class='card-text'>
+                                    <p class='d-inline $invisibleCourse mb-0 TextBold'>$langType:</p>
+                                    &nbsp;<p class='d-inline $invisibleCourse'>".$courseType."</p>
                                 </div>
 
                             </div>

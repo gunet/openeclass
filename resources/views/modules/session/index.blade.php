@@ -105,13 +105,10 @@
 @section('content')
 
 
-<div class="col-12 main-section">
-    <div class='{{ $container }} module-container py-lg-0'>
+<div class='{{ $container }} module-container py-lg-0'>
         <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
-
-            @include('layouts.partials.left_menu')
-
-            <div class="col_maincontent_active">
+            <aside class='aside-sidebar'>@include('layouts.partials.left_menu')</aside>
+            <main id="main" class="col-12 main-maincontent col_maincontent_active">
 
                 <div class="row">
 
@@ -381,12 +378,11 @@
                     </div>
 
                 </div>
-            </div>
+            </main>
 
         </div>
 
     </div>
-</div>
 
 <div class='modal fade' id='RegistrationInSession' tabindex='-1' aria-labelledby='RegistrationInSessionLabel' aria-hidden='true'>
     <form method='post' action="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}">
