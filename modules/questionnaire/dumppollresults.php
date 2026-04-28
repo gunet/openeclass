@@ -344,7 +344,7 @@ if ($full) { // user questions results
                         $answer_text[] = $a->answer;
                     }
                 } else {
-                    $answer_text[] = $a->answer_text;
+                    $answer_text[] = get_default_scale_answer_text($a->answer_text);
                 }
             }
             $data[] = [ '', $langResults, $langResults . ' (%)' ];

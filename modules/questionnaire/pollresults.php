@@ -734,8 +734,9 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COU
                         } elseif ($theQuestion->qtype == QTYPE_SCALE) {
 
                             $answerScale = Database::get()->querySingle("SELECT answer_scale FROM poll_question WHERE pqid = ?d", $theQuestion->pqid)->answer_scale;
-                            $arrAnsScale = explode('|', $answerScale);
-
+                            if ($answerScale) {
+                                $arrAnsScale = explode('|', $answerScale);
+                            }
                             $sql_participants_a = '';
                             $sql_participants_b = '';
                             $sql_participants_c = '';
@@ -761,10 +762,6 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COU
                             }
 
                             $names_array = array();
-                            $ans_scale = explode('|', $theQuestion->answer_scale);
-                            foreach ($ans_scale as $an_text) {
-                                $this_chart_data['answer_text'][] = "$an_text";
-                            }
                             for ($i=1;$i<=$theQuestion->q_scale;$i++) {
                                 $this_chart_data['answer'][] = "$i";
                                 $this_chart_data['percentage'][] = 0;
@@ -789,12 +786,12 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COU
                                         <thead>
                                             <tr class='list-header'>
                                                 <th>$langAnswer</th>";
-                                        if (($totalUserAnswer > 1 && isset($_GET['from_session_view'])) or (!isset($_GET['from_session_view']))) {
-                            $answers_table .= " <th>$langSurveyTotalAnswers</th>
+                            if (($totalUserAnswer > 1 && isset($_GET['from_session_view'])) or (!isset($_GET['from_session_view']))) {
+                                $answers_table .= " <th>$langSurveyTotalAnswers</th>
                                                 <th>$langPercentage</th>
                                             " . (($thePoll->anonymized == 1) ? '' : '<th>' . $langStudents . '</th>') . "";
                                         }
-                        $answers_table .= "</tr>
+                            $answers_table .= "</tr>
                                         </thead>";
                             foreach ($answers as $answer) {
                                 $percentage = round(100 * ($answer->count / $answer_total),2);
@@ -833,9 +830,17 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COU
                                 }
                                 $answers_table .= "
                                             <tr>
-                                                <td>" . $arrAnsScale[$answer->answer_text-1] ?? q($answer->answer_text) . "</td>";
-                                        if (($totalUserAnswer > 1 && isset($_GET['from_session_view'])) or (!isset($_GET['from_session_view']))) {
-                            $answers_table .= " <td>$answer->count</td>
+                                                <td>";
+                                if (isset($arrAnsScale)) {
+                                    $answers_table .= $arrAnsScale[$answer->answer_text-1];
+                                    $this_chart_data['answer_text'][] = $arrAnsScale[$answer->answer_text-1];
+                                } else {
+                                    $answers_table .= get_default_scale_answer_text($answer->answer_text);
+                                    $this_chart_data['answer_text'][] = get_default_scale_answer_text($answer->answer_text);
+                                }
+                                $answers_table .= "</td>";
+                                if (($totalUserAnswer > 1 && isset($_GET['from_session_view'])) or (!isset($_GET['from_session_view']))) {
+                                    $answers_table .= " <td>$answer->count</td>
                                                 <td style='width:25%;'>
                                                     <div class='progress'>
                                                         <div class='progress-bar progress-bar-striped progress-bar-poll-results' role='progressbar' style='width: $percentage%;' aria-valuenow='$percentage' aria-valuemin='0' aria-valuemax='100'>
