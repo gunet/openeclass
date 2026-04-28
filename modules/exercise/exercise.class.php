@@ -1898,6 +1898,7 @@ class Exercise
             'browserWindowWebView'         => 2, // Chromium/WebView2 engine - recommended for Windows
             'examSessionClearCookiesOnStart'=> false,
             'allowPreferencesWindow'       => false,
+            'browserUserAgent'             => 'Open-eClass-Exam'
         ];
 
         foreach ($settings as $key => $value) {

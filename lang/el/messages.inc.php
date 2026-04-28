@@ -2164,6 +2164,8 @@ $langExerciseCBCalcGradeMethod = "Με βαθμό βεβαιότητας";
 $langExerciseCBCalcGradeMethodLegend = "Κατά την εκτέλεση της άσκησης ο $langsStudent θα πρέπει να επιλέξει επιπλέον τον βαθμό βεβαιότητας της απάντησης του. Ισχύει μόνο για τις ερωτήσεις 'Πολλαπλής επιλογής' και 'Σωστό / Λάθος'";
 $langExerciseCalcGradeMethod = "Τρόπος Βαθμολόγησης";
 $langNegativeGrading = "Προσοχή, έχετε δώσει θετικό βαθμό σε λανθασμένη απάντηση. Αν επιθυμείτε αρνητική βαθμολόγηση βάλτε αρνητικό αριθμό.";
+$langLaunchSafeExamBrowser = "Εκκίνηση Safe Exam Browser";
+$langDownloadSafeExamBrowser = "Κατέβασμα Safe Exam Browser";
 
 // admin.php
 $langExerciseManagement = "Διαχείριση Άσκησης";

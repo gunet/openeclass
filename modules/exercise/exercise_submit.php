@@ -194,14 +194,11 @@ if ($objExercise->isExam()) {
 }
 // check if exercise uses SEB (Safe Exam Browser)
 if ($objExercise->isSeb() and !isset($_GET['seb'])) {
-    Session::flash('message', "Access Denied: You must use Safe Exam Browser to take this exam.");
-    Session::flash('alert-class', 'alert-warning');
-    redirect_to_home_page($back_url);
-/*    $userAgent = $_SERVER['HTTP_USER_AGENT'];
-    error_log("User Agent $userAgent");
-    if (!str_contains($userAgent, 'OpeneClassExam')) {
-        die("Access Denied: You must use Safe Exam Browser to take this exam.");
-    } */
+    if (!str_contains($_SERVER['HTTP_USER_AGENT'], 'Open-eClass-Exam')) { // User is NOT using SEB
+        Session::flash('message', "SEB Browser is required !!");
+        Session::flash('alert-class', 'alert-warning');
+        redirect_to_home_page($back_url);
+    }
 }
 
 // Safe Exam Browser intro

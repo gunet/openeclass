@@ -235,6 +235,11 @@ if (isset($_GET['view']) and $_GET['view'] == 'mobile') {
     $_SESSION['mobile'] = true;
 }
 
+// Safe Exam Browser view
+if (str_contains($_SERVER['HTTP_USER_AGENT'], 'Open-eClass-Exam')) { // User is NOT using SEB
+    $_SESSION['safe_exam_browser_view'] = true;
+}
+
 // check if we are admin or power user or manageuser_user
 if (isset($_SESSION['is_admin']) and $_SESSION['is_admin']) {
     $is_admin = true;

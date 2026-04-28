@@ -1,4 +1,4 @@
-@unless(isset($_SESSION['mobile']))
+@unless(isset($_SESSION['mobile']) || isset($_SESSION['safe_exam_browser_view']))
     <div id="leftnav" class="col-12 sidebar float-menu pt-3">
 
         <div class='col-12 text-end d-none d-lg-block'>

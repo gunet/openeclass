@@ -166,57 +166,61 @@
             </div>
         @endif
 
-        @unless(isset($_SESSION['mobile']))
+        @unless(isset($_SESSION['mobile']) || isset($_SESSION['safe_exam_browser_view']))
             @include('layouts.partials.navheadDesktop', ['logo_img' => $logo_img])
         @endunless
 
         <main id="main">@yield('content')</main>
 
-        @unless(isset($_SESSION['mobile']))
+        @unless(isset($_SESSION['mobile']) || isset($_SESSION['safe_exam_browser_view']))
             @include('layouts.partials.footerDesktop')
         @endunless
     </div>
 
-    @if(isset($_SESSION['uid']) && get_config('enable_quick_note'))
-        <a type="button" class="btn btn-quick-note submitAdminBtnDefault" data-bs-toggle="modal" href="#quickNote" aria-label="{{ trans('langQuickNotesSide') }}">
-            <span class="fa-solid fa-paperclip" data-bs-toggle='tooltip'
-                    data-bs-placement='bottom' data-bs-title="{{ trans('langQuickNotesSide') }}"></span>
-        </a>
-        <div class="modal fade" id="quickNote" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <div class='modal-title'>
-                            <div class='icon-modal-default'><i class='fa-solid fa-cloud-arrow-up fa-xl Neutral-500-cl'></i></div>
-                            <h2 class='modal-title-default text-center mb-0'>{{ trans('langQuickNotesSide') }}</h2>
+    {{-- Quick note button --}}
+    @unless(isset($_SESSION['mobile']) || isset($_SESSION['safe_exam_browser_view']))
+        @if(isset($_SESSION['uid']) && get_config('enable_quick_note'))
+            <a type="button" class="btn btn-quick-note submitAdminBtnDefault" data-bs-toggle="modal" href="#quickNote" aria-label="{{ trans('langQuickNotesSide') }}">
+                <span class="fa-solid fa-paperclip" data-bs-toggle='tooltip'
+                        data-bs-placement='bottom' data-bs-title="{{ trans('langQuickNotesSide') }}"></span>
+            </a>
+            <div class="modal fade" id="quickNote" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <div class='modal-title'>
+                                <div class='icon-modal-default'><i class='fa-solid fa-cloud-arrow-up fa-xl Neutral-500-cl'></i></div>
+                                <h2 class='modal-title-default text-center mb-0'>{{ trans('langQuickNotesSide') }}</h2>
+                            </div>
                         </div>
-                    </div>
-                    <div class="modal-body">
-                        <div class='form-wrapper form-edit'>
-                            <form action='{{ $urlAppend }}main/notes/index.php' method='post'>
-                                <div class="mb-3">
-                                    <label for="title-note" class="control-label-notes">{{ trans('langTitle') }}&nbsp;<span class='text-danger'>(*)</span></label>
-                                    <input type="text" class="form-control" name='newTitle' id="title-note">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="content-note" class="control-label-notes">{{ trans('langContent') }}</label>
-                                    <textarea class="form-control" id="content-note" name='newContent'></textarea>
-                                </div>
-                                <div class="mb-5">
-                                    <a class='small-text text-decoration-underline' href='{{ $urlAppend }}main/notes/index.php'>{{ trans('langAllNotes') }}</a>
-                                </div>
-                                {!! generate_csrf_token_form_field() !!}
-                                <div class='d-flex justify-content-end align-items-center gap-2 flex-wrap'>
-                                    <button type="button" class="btn cancelAdminBtn" data-bs-dismiss="modal">{{ trans('langClose') }}</button>
-                                    <button type="submit" class="btn submitAdminBtn" name='submitNote'>{{ trans('langSubmit') }}</button>
-                                </div>
-                            </form>
+                        <div class="modal-body">
+                            <div class='form-wrapper form-edit'>
+                                <form action='{{ $urlAppend }}main/notes/index.php' method='post'>
+                                    <div class="mb-3">
+                                        <label for="title-note" class="control-label-notes">{{ trans('langTitle') }}&nbsp;<span class='text-danger'>(*)</span></label>
+                                        <input type="text" class="form-control" name='newTitle' id="title-note">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="content-note" class="control-label-notes">{{ trans('langContent') }}</label>
+                                        <textarea class="form-control" id="content-note" name='newContent'></textarea>
+                                    </div>
+                                    <div class="mb-5">
+                                        <a class='small-text text-decoration-underline' href='{{ $urlAppend }}main/notes/index.php'>{{ trans('langAllNotes') }}</a>
+                                    </div>
+                                    {!! generate_csrf_token_form_field() !!}
+                                    <div class='d-flex justify-content-end align-items-center gap-2 flex-wrap'>
+                                        <button type="button" class="btn cancelAdminBtn" data-bs-dismiss="modal">{{ trans('langClose') }}</button>
+                                        <button type="submit" class="btn submitAdminBtn" name='submitNote'>{{ trans('langSubmit') }}</button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    @endif
+        @endif
+    @endunless
+
     <button class="btnScrollToTop" data-bs-scroll="up" aria-label="{{ trans('langScrollToTop') }}">
         <i class="fa-solid fa-arrow-up-from-bracket"></i>
     </button>
