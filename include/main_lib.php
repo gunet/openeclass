@@ -4935,7 +4935,7 @@ function trans($var_name, $var_array = []) {
 }
 
 function get_platform_logo($size = 'normal', $position = 'header') {
-    global $themeimg, $urlAppend, $course_id;
+    global $themeimg, $urlAppend, $course_id, $bg_color;
 
     require_once 'include/course_settings.php';
 
