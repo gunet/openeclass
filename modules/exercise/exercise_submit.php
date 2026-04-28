@@ -195,7 +195,7 @@ if ($objExercise->isExam()) {
 // check if exercise uses SEB (Safe Exam Browser)
 if ($objExercise->isSeb() and !isset($_GET['seb'])) {
     if (!str_contains($_SERVER['HTTP_USER_AGENT'], 'Open-eClass-Exam')) { // User is NOT using SEB
-        Session::flash('message', "SEB Browser is required !!");
+        Session::flash('message', "$langSEBInfo1");
         Session::flash('alert-class', 'alert-warning');
         redirect_to_home_page($back_url);
     }

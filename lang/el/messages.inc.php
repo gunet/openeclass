@@ -2166,7 +2166,11 @@ $langExerciseCalcGradeMethod = "Τρόπος Βαθμολόγησης";
 $langNegativeGrading = "Προσοχή, έχετε δώσει θετικό βαθμό σε λανθασμένη απάντηση. Αν επιθυμείτε αρνητική βαθμολόγηση βάλτε αρνητικό αριθμό.";
 $langLaunchSafeExamBrowser = "Εκκίνηση Safe Exam Browser";
 $langDownloadSafeExamBrowser = "Κατέβασμα Safe Exam Browser";
-
+$langSEBInfo1 = "Για την εκτέλεση της άσκησης απαιτείται η χρήση του Safe Exam Browser !";
+$langSEBInfo2 = "Πρώτα, θα πρέπει να εγκαταστήσετε στον υπολογιστή τον Safe Exam Browser κάνοντας κλικ στο 'Κατέβασμα' (αν τον έχετε ήδη εγκαταστήσει δεν χρειάζεται να τον ξανακατεβάσετε). 
+Αφού τον εγκαταστήσετε, κάντε κλικ στο 'Εκκίνηση' για να εκτελέσετε την άσκηση.";
+$langSafeExamBrowserInfo = "Η άσκηση θα εκτελεστεί μόνο μέσω Safe Exam Browser";
+$langSafeExamBrowserLegend = "Οι χρήστες θα χρειαστεί να εγκαταστήσουν τον Safe Exam Browser στον υπολογιστή τους. Υποστηρίζεται μόνο σε Windows, MacOS και iOS";
 // admin.php
 $langExerciseManagement = "Διαχείριση Άσκησης";
 $langExerciseModify = "Τροποποίηση Άσκησης";

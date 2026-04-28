@@ -369,7 +369,8 @@
                                                     <label class='label-container' aria-label='{{ trans('langSelect') }}'>
                                                         <input name='useSafeExamBrowser' type='checkbox' @if($exerciseUseSafeExamBrowser) checked @endif>
                                                         <span class='checkmark'></span>
-                                                        Χρήση Safe Exam Browser
+                                                        {{ trans('langSafeExamBrowserInfo') }}
+                                                        <span class='fa-solid fa-circle-info ps-1' data-bs-toggle='tooltip' data-bs-placement='right' title='{{ trans('langSafeExamBrowserLegend') }}' style='margin-top: 5px;'></span>
                                                     </label>
                                                 </div>
                                             </div>
