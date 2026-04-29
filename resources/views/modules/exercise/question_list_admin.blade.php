@@ -34,7 +34,7 @@
 
                                         @if ($periodLabel)
                                             <div class='col-12'>
-                                                {!! $periodLabel !!} <strong>{{ $periodInfo }}</strong>
+                                                {!! $periodLabel !!} <strong>{!! $periodInfo !!}</strong>
                                             </div>
                                         @endif
 
