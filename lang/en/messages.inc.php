@@ -7103,6 +7103,7 @@ $langPartiallyCorrect = "Partially Correct";
 $langIPUnlockLegend = "in IP(s) or CIDR(s) format";
 $langCertainty = "Certainty";
 $langGradeMethod = "Certainty Distribution";
+$langNotAnswered = "Not Answered";
 $lang_allow_teacher_import_course = "Allow $langsOfCourses material to be imported by $langsTeachers";
 $langForceCompletedProgress = "Automatic progress completion";
 $langForceCompletedProgressInfo = "Set module progress to 100% when status is Completed.";

@@ -2553,6 +2553,7 @@ $langHasExpiredS = "έχει λήξει";
 $langHasExpired = "Έχει λήξει";
 $langSuccessPercentage = "Ποσοστό επιτυχίας";
 $langGradeMethod = "Κατανομή Βεβαιότητας";
+$langNotAnswered = "Μη Απαντημένο";
 
 // import exercise.php
 $langImportExercise = "Εισαγωγή Άσκησης";
