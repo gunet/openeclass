@@ -204,7 +204,7 @@
                                                             <a class='ex_settings active_exercise @if ($row->password_lock && !$is_editor) password_protected @endif'
                                                                href='exercise_submit.php?course={{ $course_code }}&exerciseId={{ $row->id }}&eurId={{ exerciseIncompleteAttempts($row->id, $uid, $row->continue_time_limit) }}'>{{ $row->title }}</a>&nbsp;&nbsp;(<span
                                                                     style='color:darkgrey'>{{ trans('langAttemptActive') }}</span>)
-                                                    @elseif (exercisePausedAttempts($row->id, $uid)))
+                                                    @elseif (exercisePausedAttempts($row->id, $uid))
                                                         <td>
                                                             <a class='ex_settings paused_exercise @if ($row->password_lock && !$is_editor) password_protected @endif'
                                                                href='exercise_submit.php?course={{ $course_code }}&exerciseId={{ $row->id }}&amp;eurId={{ exercisePausedAttempts($row->id, $uid) }}'> {{ $row->title }}</a>&nbsp;&nbsp;(<span style='color:darkgrey'>{{ trans('langAttemptPausedS') }}</span>)

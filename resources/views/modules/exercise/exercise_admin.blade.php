@@ -189,7 +189,7 @@
                                             </div>
                                         </div>
 
-                                        <div class='row form-group mt-4'>
+                                        <div class='row form-group mt-4' id='exerciseTempSaveDiv'>
                                             <div class='col-12 control-label-notes mb-1'>
                                                 {{ trans('langTemporarySave') }}
                                             </div>
@@ -364,7 +364,7 @@
                                             <div class='col-12'>
                                                 <div class='checkbox'>
                                                     <label class='label-container' aria-label='{{ trans('langSelect') }}'>
-                                                        <input name='useSafeExamBrowser' type='checkbox' @if($exerciseUseSafeExamBrowser) checked @endif>
+                                                        <input name='useSafeExamBrowser' type='checkbox' id='useSafeExamBrowser' @if($exerciseUseSafeExamBrowser) checked @endif>
                                                         <span class='checkmark'></span>
                                                         {{ trans('langSafeExamBrowserInfo') }}
                                                         <span class='fa-solid fa-circle-info ps-1' data-bs-toggle='tooltip' data-bs-placement='right' title='{{ trans('langSafeExamBrowserLegend') }}' style='margin-top: 5px;'></span>
@@ -454,7 +454,7 @@
                 <div class='d-none d-lg-block'>
                     <img class='form-image-modules' src='{{ get_form_image() }}' alt='{{ trans('langImgFormsDes') }}'>
                 </div>
-                </div>
+            </div>
         </main>
     </div>
 </div>
@@ -573,6 +573,15 @@
                 $(this).find('input[name^="feedback_grade"]').attr('name', 'feedback_grade[' + newIndex + ']');
             })
         });
+
+        $('#useSafeExamBrowser').change(function() {
+            if ($(this).is(':checked')) {
+                $('#exerciseTempSaveDiv').hide();
+            } else {
+                $('#exerciseTempSaveDiv').show();
+            }
+        }).trigger('change');
+
     });
 
     function ajaxAssignees()

@@ -1199,7 +1199,9 @@ if ($exerciseType != SINGLE_PAGE_TYPE) {
 $tool_content .= "<div class='col-12 d-flex justify-content-end align-items-center gap-2 flex-wrap' style='margin-top:100px;'>";
 
 // "Cancel" button
-$tool_content .= "<button class='btn btn-default' type='submit' name='buttonCancel' id='cancelButton'>$langCancel</button>";
+if (!isset($_SESSION['safe_exam_browser_view'])) {
+    $tool_content .= "<button class='btn btn-default' type='submit' name='buttonCancel' id='cancelButton'>$langCancel</button>";
+}
 
 // "Submit" button
 $tool_content .= "<button class='btn successAdminBtn blockUI' type='submit' name='buttonFinish'>$langExerciseFinalSubmit</button>";

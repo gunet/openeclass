@@ -1886,7 +1886,7 @@ class Exercise
             'showInputLanguage'            => true,
             'allowQuit'                    => true,
             'quitURLConfirm'               => true,
-            'audioControlEnabled'          => false,
+            'audioControlEnabled'          => true,
             'audioMute'                    => false,
             'allowSpellCheck'              => false,
             'browserWindowAllowReload'     => false,
@@ -1914,9 +1914,6 @@ class Exercise
             }
         }
 
-        /* header('Content-Type: application/xml');
-        echo $xml->saveXML();
-        exit; */
         if (!file_exists("$webDir/courses/$course_code/exercise_seb_$this->id")) {
             mkdir("$webDir/courses/$course_code/exercise_seb_$this->id");
         }

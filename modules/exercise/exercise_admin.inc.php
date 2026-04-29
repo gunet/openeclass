@@ -73,7 +73,6 @@ if (isset($_POST['submitExercise'])) {
         'exerciseStartDate' => "$langTheField $langStart",
         'exerciseIPLock' => "$langTheField IPs"
     ));
-
     if($v->validate()) {
         $exerciseTitle = trim($_POST['exerciseTitle']);
         $objExercise->updateTitle($exerciseTitle);
@@ -142,6 +141,7 @@ if (isset($_POST['submitExercise'])) {
             $objExercise->setOption('useSafeExamBrowser', false);
         } else {
             $objExercise->setOption('useSafeExamBrowser', true);
+            $objExercise->updateTempSave(0); // disable temp save for safe exam browser
         }
 
         $objExercise->save();
