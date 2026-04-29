@@ -52,6 +52,31 @@
                     calendar.view($this.data("calendar-view"));
                 });
             });
+
+            // After the calendar renders, disable click on cells without .events-link
+            setTimeout(function() {
+                document.querySelectorAll('.cal-month-box .cal-cell1').forEach(day => {
+                    const hasHoliday = day.querySelector('.cal-day-holiday') !== null;
+                    const hasEventsList = day.querySelector('.events-list') !== null;
+                    if (!hasHoliday && !hasEventsList) {
+                        day.style.pointerEvents = 'none'; // disable clickability
+                        day.classList.add('not-clickable');
+                    }
+                });
+            }, 100);
+
+            $('.month-prev-btn, .month-next-btn').on('click', function () {
+                setTimeout(function() {
+                        document.querySelectorAll('.cal-month-box .cal-cell1').forEach(day => {
+                            const hasHoliday = day.querySelector('.cal-day-holiday') !== null;
+                            const hasEventsList = day.querySelector('.events-list') !== null;
+                            if (!hasHoliday && !hasEventsList) {
+                                day.style.pointerEvents = 'none'; // disable clickability
+                                day.classList.add('not-clickable');
+                            }
+                        });
+                }, 100);
+            });
         });
 
         function show_month(day,month,year){
