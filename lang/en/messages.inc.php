@@ -7291,3 +7291,162 @@ $langDtFirstPage = "First page";
 $langDtNextPage = "Next page";
 $langDtPrevPage = "Previous page";
 $langDtLastPage = "Last page";
+
+// Backpack Provider Management
+$langBackpackExternalProvider = "Add External OpenBadge Backpack Provider";
+$langBackpackExternalProviderTitle = "Title";
+$langBackpackExternalProviderDescription = "Description";
+$langBackpackExternalProviderEnabled = "Enabled";
+$langBackpackExternalProviderDisabled = "Disabled";
+$langBackpackExternalProviderAPIURL = "API URL";
+$langBackpackExternalProviderBasicAuthAccessToken = "Basic Auth Access Token";
+$langNewBackpackProvider = "Add new Backpack provider";
+$langNoAvailableBackpackProvider = "No available OpenBadge backpack providers";
+$langBackpackProvider = "Backpack Provider Name";
+$langBackpackProviderUrl = "API Backpack URL";
+$langOpenBadgesShortDescription = "Integration with Open Badges service";
+$langOpenBadgesLongDescription = "Integration with Open Badges service";
+$langBackpackProviderAdded = "Backpack provider added successfully";
+$langBackpackProviderAddFailed = "Backpack provider add failed";
+$langProviderNotFound = "Provider not found";
+$langBackpackProviderUpdated = "Backpack provider updated successfully";
+$langBackpackProviderUpdateFailed = "Backpack provider update failed";
+$langBackpackProviderDeleted = "Backpack provider deleted successfully";
+$langBackpackProviderDeleteFailed = "Backpack provider delete failed";
+$langBackpackProviderHasConnectedUsers = "This provider has %s connected users. All their connections will be permanently deleted.";
+$langBackpackProviderDeleteConfirm = "Are you sure you want to delete this provider and all associated user connections?";
+$langOpenBadgeVersion = "Open Badge Version";
+$langEnableProvider = "Enable Provider";
+$langProviderNameRequired = "Provider name required";
+$langApiUrlRequired = "API URL required";
+$langVersionRequired = "Version required";
+
+// My Backpacks Page
+$langMyBackpacks = "My Backpacks";
+$langMyBackpacksInfo = "Connect your OpenBadges backpack to sync and manage your digital badges.";
+$langConnectedBackpack = "Connected Backpack";
+$langConnectBackpack = "Connect Backpack";
+$langDisconnectBackpack = "Disconnect Backpack";
+$langSelectBackpackProvider = "Select Backpack Provider";
+$langSelectProvider = "-- Select Provider --";
+$langProtocol = "Protocol";
+$langDisconnected = "Disconnected";
+$langLastSync = "Last Sync";
+$langNever = "Never";
+$langEmailAddress = "Email Address";
+$langOB3Info = "OB_V3: This provider uses the OpenBadges 3.0 protocol. Click connect to proceed with OAuth verification.";
+
+// Connection Management
+$langBackpackProviderRequired = "Please select a backpack provider.";
+$langBackpackProviderNotFound = "The selected backpack provider was not found or is disabled.";
+$langBackpackCredentialsRequired = "Email and password are required for this provider.";
+$langBackpackConnectedSuccessfully = "Backpack connected successfully!";
+$langBackpackConnectionFailed = "Backpack connection failed. Please try again.";
+$langBackpackDisconnectedSuccessfully = "Backpack disconnected successfully!";
+$langBackpackDisconnectionFailed = "Backpack disconnection failed. Please try again.";
+$langConfirmDisconnectBackpack = "Are you sure you want to disconnect your backpack?";
+$langProviderDiscoveryFailed = "Provider discovery failed";
+$langProviderNotCompatible = "Provider is not compatible with OpenEClass";
+$langProviderRegistrationFailed = "Provider registration failed";
+$langProviderProcessingFailed = "Provider processing failed";
+
+// OAuth Configuration
+$langClientId = "Client ID";
+$langClientSecret = "Client Secret";
+$langClientIdHelp = "OAuth Client ID for authentication with the backpack provider";
+$langClientSecretHelp = "OAuth Client Secret for authentication with the backpack provider";
+
+// Publishing Modal
+$langPublishBadgeToBackpack = "Publish to Backpack";
+$langSelectBackpackProvider = "Select Provider";
+$langSelectProviderHelp = "Choose a backpack provider where you want to publish this badge";
+$langSelectedProvider = "Selected Provider:";
+$langPublishBadgeInfo = "This badge will be published to your selected backpack provider.";
+$langPublish = "Publish";
+$langPublishing = "Publishing";
+$langPublishToBackpack = "Publish to External Backpack";
+$langPublishedToBackpack = "Published to Backpack";
+$langPublishBadgeTooltip = "Publish this badge to your connected backpack";
+$langPublishBadgeAriaLabel = "Publish badge to backpack";
+$langNoBackpackConnected = "No backpack connected";
+$langNoProvidersConnected = "You don't have any backpack providers connected";
+$langBadgePublishedSuccessfully = "Badge published successfully!";
+$langBadgePublishError = "Failed to publish badge. Please make sure you have not already published this badge.";
+$langSelectProviderAlert = "Please select a backpack provider";
+
+// Badge Collections
+$langMyBadgeCollections = "My Badge Collections";
+$langFetchCollections = "Fetch Collections";
+$langLoadingCollections = "Loading Collections";
+$langNoCollectionsFound = "No collections found";
+$langClickToFetchCollections = "Click the button above to fetch your badge collections from your connected backpack";
+$langTestConnectionInfo = "Test the connection before saving";
+$langTesting = "Testing";
+$langTestResults = "Test Results";
+$langResponse = "Response";
+$langSelectCollection = "Select a Collection";
+$langChooseCollection = "Choose a collection";
+$langUseThisCollection = "Use This Collection";
+$langSelectedCollection = "Selected Collection";
+$langCollectionID = "Collection ID";
+$langBadgeCount = "Badge Count";
+$langBackpackConnectedWantRefresh = "Backpack connected successfully! Would you like to refresh the page?";
+$langPleaseSelectProviderAndCredentials = "Please select a provider and enter your credentials";
+
+// Badge Synchronization
+$langSyncCollectionInfo = "Select a collection from your external backpack to sync its badges into your OpenEClass portfolio. This will import all badges from the selected collection.";
+$langSelectCollectionToSync = "Select Collection to Sync";
+$langChooseCollectionToSync = "Choose a collection to sync";
+$langSelectCollectionHelpText = "Select the collection you want to sync to your portfolio";
+$langSyncCollection = "Sync Collection";
+$langSyncing = "Syncing";
+$langSyncingBadges = "Syncing Badges";
+$langPreparingSyncOperation = "Preparing sync operation";
+$langFetchingBadgesFromCollection = "Fetching badges from collection";
+$langNoSyncableBadges = "No syncable badges found in this collection";
+$langCollectionIsEmpty = "The collection '{name}' contains no badges to sync";
+$langFoundBadgesToSync = "Found {count} badges to sync";
+$langSyncingBadge = "Syncing badge";
+$langEmpty = "Empty";
+$langSyncComplete = "Sync complete!";
+$langSyncFailed = "Sync Failed";
+$langSyncCompletedSuccessfully = "Sync Completed Successfully";
+$langBadgeSyncedSuccessfully = "Badge synced successfully";
+$langBadgeAlreadyExists = "Badge already exists in your portfolio";
+$langBadgeOriginatedLocally = "Skipped - This badge was originally earned on this platform";
+$langBadgeSyncFailed = "Failed to sync badge";
+$langTotalBadges = "Total";
+$langSynced = "Synced";
+$langSkipped = "Skipped";
+$langViewDetailedResults = "View Detailed Results";
+$langViewMyPortfolio = "View My Portfolio";
+$langCollection = "Collection";
+$langExternalBadges = "External Badges";
+$langSyncedFromBackpack = "Synced from Backpack";
+$langExternalBadge = "External Badge";
+$langUnknownIssuer = "Unknown Issuer";
+
+// OpenBadges Statistics
+$langOpenBadgesStatistics = "OpenBadges Statistics";
+$langUsersWithBackpack = "Users with Connected Backpack";
+$langActiveBackpackUsers = "Users with Import/Export Activity";
+$langExportedBadges = "Local Badges Exported";
+$langImportedBadges = "External Badges Imported";
+$langTotalLocalBadges = "Total Local Badges";
+$langTotalBadgeAwards = "Total Badge Awards";
+$langUsersWithBadges = "Users with Badges";
+$langActiveBackpackProviders = "Active Backpack Providers";
+$langMostExportedBadge = "Most Exported Badge";
+$langExports = "exports";
+$langCourseMostExports = "Course with Most Exports";
+$langRecentSyncActivity = "Recent Sync Activity";
+$langUsersLast30Days = "users in the last 30 days";
+$langLastActivity = "Last Activity";
+$langLastImport = "Last Import";
+$langLastExport = "Last Export";
+
+// Badge Export Settings
+$langAllowBadgeExport = "Allow Badge Export";
+$langAllowBadgeExportHelp = "Allow students to export this badge to external backpack providers";
+$langBadgeExportDisabled = "Badge export is disabled by the instructor";
+$langBadgeExportDisabledShort = "Export disabled";

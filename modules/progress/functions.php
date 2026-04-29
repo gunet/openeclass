@@ -3574,7 +3574,8 @@ function certificate_settings($element, $element_id = 0) {
            $langTemplate, $course_id, $language, $langMessage,
            $langTitle, $langSubmit, $langInsert, $langCertDeadlineHelp,
            $langDescription, $langpublisher, $langIcon, $langCertificateDeadline,
-           $urlServer, $langImgFormsDes, $langSelect;
+           $urlServer, $langImgFormsDes, $langSelect,
+           $langAllowBadgeExport, $langAllowBadgeExportHelp;
 
     load_js('bootstrap-datetimepicker');
     load_js('select2');
@@ -3662,7 +3663,7 @@ function certificate_settings($element, $element_id = 0) {
 
     if ($element_id > 0) {      // edit
         $field = ($element == 'certificate')? 'template' : 'icon';
-        $data = Database::get()->querySingle("SELECT issuer, $field, title, description, message, active, bundle, expires
+        $data = Database::get()->querySingle("SELECT issuer, $field, title, description, message, active, bundle, expires, allow_export
                                 FROM $element WHERE id = ?d AND course_id = ?d", $element_id, $course_id);
         $issuer = $data->issuer;
         $template = $data->$field;
@@ -3680,6 +3681,12 @@ function certificate_settings($element, $element_id = 0) {
             $check_certdeadline = '';
             $statuscertdeadline = "";
         }
+        // Set allow_export checkbox state (only for badges, not certificates)
+        if ($element == 'badge') {
+            $check_allow_export = ($data->allow_export == 1) ? " checked" : "";
+        } else {
+            $check_allow_export = "";
+        }
     } else {        // add
         $issuer = q(get_config('institution'));
         $template = '';
@@ -3691,6 +3698,8 @@ function certificate_settings($element, $element_id = 0) {
         $certdeadline = '';
         $check_certdeadline = '';
         $statuscertdeadline = '';
+        // Default: allow export for new badges
+        $check_allow_export = ($element == 'badge') ? " checked" : "";
     }
     $tool_content .= "<div class='d-lg-flex gap-4 mt-4'>
     <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>
@@ -3763,7 +3772,26 @@ function certificate_settings($element, $element_id = 0) {
                        </div>
                        <span class='help-block'>&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i>$langCertDeadlineHelp</span>
                     </div>
-                </div>
+                </div>";
+                
+                // Add allow_export toggle only for badges (not certificates)
+                if ($element == 'badge') {
+                    $tool_content .= "
+                <div class='form-group mt-4'>
+                    <div class='col-sm-12'>
+                        <div class='checkbox'>
+                            <label class='label-container'>
+                                <input type='checkbox' id='allow_badge_export' name='allow_badge_export' value='1' $check_allow_export>
+                                <span class='checkmark'></span>
+                                $langAllowBadgeExport
+                            </label>
+                        </div>
+                        <span class='help-block'>&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i>$langAllowBadgeExportHelp</span>
+                    </div>
+                </div>";
+                }
+                
+                $tool_content .= "
                 $cert_id";
                 $tool_content .= "<div class='form-group mt-5'>
                     <div class='col-12 d-flex justify-content-end align-items-center'>

@@ -7942,3 +7942,163 @@ $langDtFirstPage = "Πρώτη σελίδα πίνακα";
 $langDtNextPage = "Επόμενη σελίδα πίνακα";
 $langDtPrevPage = "Προηγούμενη σελίδα πίνακα";
 $langDtLastPage = "Τελευταία σελίδα πίνακα";
+
+// Backpack Provider Management
+$langBackpackExternalProvider = "Προσθήκη Εξωτερικού Παρόχου OpenBadge Backpack";
+$langBackpackExternalProviderTitle = "Τίτλος";
+$langBackpackExternalProviderDescription = "Περιγραφή";
+$langBackpackExternalProviderEnabled = "Ενεργοποιημένο";
+$langBackpackExternalProviderDisabled = "Απενεργοποιημένο";
+$langBackpackExternalProviderAPIURL = "API URL";
+$langBackpackExternalProviderBasicAuthAccessToken = "Διακριτικό Πρόσβασης Βασικής Εξουσιοδότησης";
+$langNewBackpackProvider = "Προσθήκη νέου παρόχου Backpack";
+$langNoAvailableBackpackProvider = "Δεν υπάρχουν διαθέσιμοι πάροχοι OpenBadge backpack";
+$langBackpackProvider = "Όνομα παρόχου Backpack";
+$langBackpackProviderUrl = "API Backpack URL";
+$langOpenBadgesShortDescription = "Διασύνδεση με υπηρεσία Open Badges";
+$langOpenBadgesLongDescription = "Διασύνδεση με υπηρεσία Open Badges";
+$langBackpackProviderAdded = "Ο πάροχος Backpack προστέθηκε με επιτυχία";
+$langBackpackProviderAddFailed = "Η προσθήκη του παρόχου Backpack απέτυχε";
+$langProviderNotFound = "Ο πάροχος δεν βρέθηκε";
+$langBackpackProviderUpdated = "Ο πάροχος Backpack ενημερώθηκε με επιτυχία";
+$langBackpackProviderUpdateFailed = "Η ενημέρωση του παρόχου Backpack απέτυχε";
+$langBackpackProviderDeleted = "Ο πάροχος Backpack διαγράφηκε με επιτυχία";
+$langBackpackProviderDeleteFailed = "Η διαγραφή του παρόχου Backpack απέτυχε";
+$langBackpackProviderHasConnectedUsers = "Αυτός ο πάροχος έχει %s συνδεδεμένους χρήστες. Όλες οι συνδέσεις τους θα διαγραφούν οριστικά.";
+$langBackpackProviderDeleteConfirm = "Είστε σίγουροι ότι θέλετε να διαγράψετε αυτόν τον πάροχο και όλες τις συνδεδεμένες συνδέσεις χρηστών;";
+$langOpenBadgeVersion = "Έκδοση Open Badge";
+$langEnableProvider = "Ενεργοποίηση Παρόχου";
+$langProviderNameRequired = "Απαιτείται όνομα παρόχου";
+$langApiUrlRequired = "Απαιτείται API URL";
+$langVersionRequired = "Απαιτείται έκδοση";
+
+// My Backpacks Page
+$langMyBackpacks = "Τα Backpack μου";
+$langMyBackpacksInfo = "Συνδέστε το OpenBadges backpack σας για συγχρονισμό και διαχείριση των ψηφιακών σας σημάτων.";
+$langConnectedBackpack = "Συνδεδεμένο Backpack";
+$langConnectBackpack = "Σύνδεση Backpack";
+$langDisconnectBackpack = "Αποσύνδεση Backpack";
+$langSelectBackpackProvider = "Επιλογή Παρόχου Backpack";
+$langSelectProvider = "-- Επιλέξτε Πάροχο --";
+$langProtocol = "Πρωτόκολλο";
+$langDisconnected = "Αποσυνδεδεμένο";
+$langLastSync = "Τελευταίος Συγχρονισμός";
+$langNever = "Ποτέ";
+$langEmailAddress = "Διεύθυνση Email";
+$langOB3Info = "OB_V3: Αυτός ο πάροχος χρησιμοποιεί το πρωτόκολλο OpenBadges 3.0. Κάντε κλικ στη σύνδεση για να προχωρήσετε με την OAuth επαλήθευση.";
+
+// Connection Management
+$langBackpackProviderRequired = "Παρακαλώ επιλέξτε έναν πάροχο backpack.";
+$langBackpackProviderNotFound = "Ο επιλεγμένος πάροχος backpack δεν βρέθηκε ή είναι απενεργοποιημένος.";
+$langBackpackCredentialsRequired = "Το email και ο κωδικός πρόσβασης είναι απαραίτητα για αυτόν τον πάροχο.";
+$langBackpackConnectedSuccessfully = "Το backpack συνδέθηκε επιτυχώς!";
+$langBackpackConnectionFailed = "Αποτυχία σύνδεσης backpack. Παρακαλώ δοκιμάστε ξανά.";
+$langBackpackDisconnectedSuccessfully = "Το backpack αποσυνδέθηκε επιτυχώς!";
+$langBackpackDisconnectionFailed = "Αποτυχία αποσύνδεσης backpack. Παρακαλώ δοκιμάστε ξανά.";
+$langConfirmDisconnectBackpack = "Είστε σίγουροι ότι θέλετε να αποσυνδέσετε το backpack σας;";
+$langProviderDiscoveryFailed = "Η ανακάλυψη παρόχου απέτυχε";
+$langProviderNotCompatible = "Ο πάροχος δεν είναι συμβατός με το OpenEClass";
+$langProviderRegistrationFailed = "Η εγγραφή παρόχου απέτυχε";
+$langProviderProcessingFailed = "Η επεξεργασία παρόχου απέτυχε";
+
+// OAuth Configuration
+$langClientId = "Client ID";
+$langClientSecret = "Client Secret";
+$langClientIdHelp = "OAuth Client ID για πιστοποίηση με τον πάροχο backpack";
+$langClientSecretHelp = "OAuth Client Secret για πιστοποίηση με τον πάροχο backpack";
+
+// Badge Collections
+$langMyBadgeCollections = "Οι Συλλογές Σημάτων μου";
+$langFetchCollections = "Ανάκτηση Συλλογών";
+$langLoadingCollections = "Φόρτωση Συλλογών";
+$langNoCollectionsFound = "Δεν βρέθηκαν συλλογές";
+$langClickToFetchCollections = "Κάντε κλικ στο παραπάνω κουμπί για να ανακτήσετε τις συλλογές σημάτων σας από το συνδεδεμένο backpack";
+$langTestConnectionInfo = "Δοκιμάστε τη σύνδεση πριν την αποθήκευση";
+$langTesting = "Δοκιμή";
+$langTestResults = "Αποτελέσματα Δοκιμής";
+$langResponse = "Απόκριση";
+$langSelectCollection = "Επιλέξτε μια Συλλογή";
+$langChooseCollection = "Επιλέξτε μια συλλογή";
+$langUseThisCollection = "Χρήση Αυτής της Συλλογής";
+$langSelectedCollection = "Επιλεγμένη Συλλογή";
+$langCollectionID = "Αναγνωριστικό Συλλογής";
+$langBadgeCount = "Αριθμός Σημάτων";
+$langBackpackConnectedWantRefresh = "Το backpack συνδέθηκε επιτυχώς! Θέλετε να ανανεώσετε τη σελίδα;";
+$langPleaseSelectProviderAndCredentials = "Παρακαλώ επιλέξτε έναν πάροχο και εισάγετε τα διαπιστευτήριά σας";
+
+// Badge Synchronization
+$langSyncCollectionInfo = "Επιλέξτε μια συλλογή από το εξωτερικό σας backpack για να συγχρονίσετε τα σήματά της στο χαρτοφυλάκιό σας OpenEClass. Αυτό θα εισαγάγει όλα τα σήματα από την επιλεγμένη συλλογή.";
+$langSelectCollectionToSync = "Επιλέξτε Συλλογή για Συγχρονισμό";
+$langChooseCollectionToSync = "Επιλέξτε μια συλλογή για συγχρονισμό";
+$langSelectCollectionHelpText = "Επιλέξτε τη συλλογή που θέλετε να συγχρονίσετε στο χαρτοφυλάκιό σας";
+$langSyncCollection = "Συγχρονισμός Συλλογής";
+$langSyncing = "Συγχρονισμός";
+$langSyncingBadges = "Συγχρονισμός Σημάτων";
+$langPreparingSyncOperation = "Προετοιμασία λειτουργίας συγχρονισμού";
+$langFetchingBadgesFromCollection = "Ανάκτηση σημάτων από τη συλλογή";
+$langNoSyncableBadges = "Δεν βρέθηκαν σήματα προς συγχρονισμό σε αυτή τη συλλογή";
+$langCollectionIsEmpty = "Η συλλογή '{name}' δεν περιέχει σήματα για συγχρονισμό";
+$langFoundBadgesToSync = "Βρέθηκαν {count} σήματα για συγχρονισμό";
+$langSyncingBadge = "Συγχρονισμός σήματος";
+$langEmpty = "Άδειο";
+$langSyncComplete = "Ο συγχρονισμός ολοκληρώθηκε!";
+$langSyncFailed = "Ο Συγχρονισμός Απέτυχε";
+$langSyncCompletedSuccessfully = "Ο Συγχρονισμός Ολοκληρώθηκε Επιτυχώς";
+$langBadgeSyncedSuccessfully = "Το σήμα συγχρονίστηκε επιτυχώς";
+$langBadgeAlreadyExists = "Το σήμα υπάρχει ήδη στο χαρτοφυλάκιό σας";
+$langBadgeOriginatedLocally = "Παραλείφθηκε - Το σήμα αυτό κερδίστηκε αρχικά σε αυτήν την πλατφόρμα";
+$langBadgeSyncFailed = "Αποτυχία συγχρονισμού σήματος";
+$langTotalBadges = "Σύνολο";
+$langSynced = "Συγχρονίστηκαν";
+$langSkipped = "Παραλείφθηκαν";
+$langViewDetailedResults = "Προβολή Λεπτομερών Αποτελεσμάτων";
+$langViewMyPortfolio = "Προβολή Χαρτοφυλακίου μου";
+$langCollection = "Συλλογή";
+$langExternalBadges = "Εξωτερικά Σήματα";
+$langSyncedFromBackpack = "Συγχρονισμένα από Backpack";
+$langExternalBadge = "Εξωτερικό Σήμα";
+$langUnknownIssuer = "Άγνωστος Εκδότης";
+
+// Badge Publication
+$langPublishBadgeToBackpack = "Δημοσίευση στο Backpack";
+$langSelectBackpackProvider = "Επιλέξτε Πάροχο";
+$langSelectProviderHelp = "Επιλέξτε έναν πάροχο backpack όπου θέλετε να δημοσιεύσετε αυτό το σήμα";
+$langSelectedProvider = "Επιλεγμένος Πάροχος:";
+$langPublishBadgeInfo = "Αυτό το σήμα θα δημοσιευθεί στον επιλεγμένο πάροχο backpack σας.";
+$langPublish = "Δημοσίευση";
+$langPublishing = "Δημοσίευση";
+$langPublishToBackpack = "Δημοσίευση σε Εξωτερικό Backpack";
+$langPublishedToBackpack = "Δημοσιεύτηκε στο Backpack";
+$langPublishBadgeTooltip = "Δημοσιεύστε αυτό το σήμα στο συνδεδεμένο backpack σας";
+$langPublishBadgeAriaLabel = "Δημοσίευση σήματος σε backpack";
+$langNoBackpackConnected = "Κανένα συνδεδεμένο backpack";
+$langNoProvidersConnected = "Δεν έχετε συνδέσει κανέναν πάροχο backpack";
+$langBadgePublishedSuccessfully = "Το σήμα δημοσιεύθηκε με επιτυχία!";
+$langBadgePublishError = "Η δημοσίευση του σήματος απέτυχε. Παρακαλώ βεβαιωθείτε ότι δεν έχετε ήδη δημοσιεύσει αυτό το σήμα.";
+$langSelectProviderAlert = "Παρακαλώ επιλέξτε έναν πάροχο backpack";
+
+// OpenBadges Statistics
+$langOpenBadgesStatistics = "Στατιστικά OpenBadges";
+$langUsersWithBackpack = "Χρήστες με Συνδεδεμένο Backpack";
+$langActiveBackpackUsers = "Χρήστες με Δραστηριότητα Εισαγωγής/Εξαγωγής";
+$langExportedBadges = "Τοπικά Σήματα που Εξήχθησαν";
+$langImportedBadges = "Εξωτερικά Σήματα που Εισήχθησαν";
+$langTotalLocalBadges = "Σύνολο Τοπικών Σημάτων";
+$langTotalBadgeAwards = "Σύνολο Απονομών Σημάτων";
+$langUsersWithBadges = "Χρήστες με Σήματα";
+$langActiveBackpackProviders = "Ενεργοί Πάροχοι Backpack";
+$langMostExportedBadge = "Περισσότερο Εξαγόμενο Σήμα";
+$langExports = "εξαγωγές";
+$langCourseMostExports = "Μάθημα με τις Περισσότερες Εξαγωγές";
+$langRecentSyncActivity = "Πρόσφατη Δραστηριότητα Συγχρονισμού";
+$langUsersLast30Days = "χρήστες τις τελευταίες 30 ημέρες";
+$langLastActivity = "Τελευταία Δραστηριότητα";
+$langLastImport = "Τελευταία Εισαγωγή";
+$langLastExport = "Τελευταία Εξαγωγή";
+
+// Badge Export Settings
+$langAllowBadgeExport = "Επιτρέπεται η Εξαγωγή Σήματος";
+$langAllowBadgeExportHelp = "Επιτρέψτε στους φοιτητές να εξάγουν αυτό το σήμα σε εξωτερικούς παρόχους backpack";
+$langBadgeExportDisabled = "Η εξαγωγή του σήματος έχει απενεργοποιηθεί από τον εκπαιδευτή";
+$langBadgeExportDisabledShort = "Η εξαγωγή είναι απενεργοποιημένη";
+

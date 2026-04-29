@@ -92,12 +92,12 @@ RUN chmod +x /usr/local/bin/entrypoint.sh && \
 
 EXPOSE 80
 
-ENV TZ=Europe/Athens
-ENV MYSQL_LOCATION=db
-ENV MYSQL_ROOT_USER=root
-ENV MYSQL_ROOT_PASSWORD=secret
-ENV MYSQL_DB=eclass
-ENV ADMIN_USERNAME=admin
-ENV PHP_MAX_UPLOAD=256M
+ENV TZ=Europe/Athens \
+    MYSQL_LOCATION=db \
+    MYSQL_ROOT_USER=root \
+    MYSQL_ROOT_PASSWORD=secret \
+    MYSQL_DB=eclass \
+    ADMIN_USERNAME=admin \
+    PHP_MAX_UPLOAD=256M
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]

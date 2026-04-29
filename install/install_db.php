@@ -2393,7 +2393,9 @@ $db->query("CREATE TABLE `badge` (
   `created` datetime,
   `expires` datetime,
   `bundle` INT not null default 0,
+  `allow_export` tinyint(1) not null default 1 COMMENT 'Controls if badge can be exported to external backpack',
   index `badge_course` (`course_id`),
+  index `idx_allow_export` (`allow_export`),
   foreign key (`course_id`) references `course` (`id`)
 ) $tbl_options");
 
@@ -2411,6 +2413,64 @@ $db->query("CREATE TABLE `user_certificate` (
   foreign key (`certificate`) references `certificate` (`id`)
 ) $tbl_options");
 
+$db->query("CREATE TABLE IF NOT EXISTS `backpack_provider` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `name` VARCHAR(255) NOT NULL,
+    `api_url` VARCHAR(512) NOT NULL,
+    `ob_version` VARCHAR(50) DEFAULT 'OpenBadge v2.0',
+    `basic_auth_access_token` VARCHAR(512) DEFAULT NULL,
+    `refresh_access_token` VARCHAR(512) DEFAULT NULL,
+    `client_id` VARCHAR(255) DEFAULT NULL,
+    `client_secret` VARCHAR(255) DEFAULT NULL,
+    `authorization_endpoint` VARCHAR(512) DEFAULT NULL,
+    `token_endpoint` VARCHAR(512) DEFAULT NULL,
+    `registration_endpoint` VARCHAR(512) DEFAULT NULL,
+    `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    `active` TINYINT(1) NOT NULL DEFAULT 1,
+    UNIQUE KEY (`name`)
+) $tbl_options");
+
+$db->query("CREATE TABLE IF NOT EXISTS `user_backpack_connection` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `user_id` INT(11) NOT NULL,
+    `backpack_provider_id` INT(11) NOT NULL,
+    `email` VARCHAR(255) DEFAULT NULL,
+    `password` VARCHAR(255) DEFAULT NULL,
+    `access_token` VARCHAR(512) DEFAULT NULL,
+    `refresh_token` VARCHAR(512) DEFAULT NULL,
+    `status` ENUM('connected', 'disconnected', 'error') DEFAULT 'disconnected',
+    `last_sync` DATETIME DEFAULT NULL,
+    `selected_collection_id` VARCHAR(512) DEFAULT NULL COMMENT 'Last selected collection for sync',
+    `selected_collection_name` VARCHAR(255) DEFAULT NULL COMMENT 'Display name of selected collection',
+    `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE KEY `user_provider` (`user_id`, `backpack_provider_id`),
+    FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`backpack_provider_id`) REFERENCES `backpack_provider`(`id`) ON DELETE CASCADE
+) $tbl_options");
+
+$db->query("CREATE TABLE IF NOT EXISTS `user_badge_external` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `user_id` INT(11) NOT NULL,
+    `backpack_provider_id` INT(11) NOT NULL,
+    `title` VARCHAR(255) NOT NULL,
+    `description` TEXT,
+    `image_url` VARCHAR(512),
+    `issuer` VARCHAR(255),
+    `issued_on` DATETIME,
+    `external_assertion_id` VARCHAR(512) NOT NULL,
+    `external_collection_id` VARCHAR(512),
+    `badge_data` LONGTEXT,
+    `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE KEY `user_assertion` (`user_id`, `external_assertion_id`),
+    INDEX `user_id_idx` (`user_id`),
+    INDEX `backpack_provider_id_idx` (`backpack_provider_id`),
+    FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`backpack_provider_id`) REFERENCES `backpack_provider`(`id`) ON DELETE CASCADE
+) $tbl_options");
+
 $db->query("CREATE TABLE `user_badge` (
   `id` INT not null auto_increment primary key,
   `user` INT not null,
@@ -2420,7 +2480,9 @@ $db->query("CREATE TABLE `user_badge` (
   `total_criteria` INT,
   `updated` datetime,
   `assigned` datetime,
+  `external_assertion_id` VARCHAR(512) DEFAULT NULL COMMENT 'External assertion ID if published to backpack',
   unique key `user_badge` (`user`, `badge`),
+  INDEX `external_assertion_idx` (`external_assertion_id`),
   foreign key (`user`) references `user`(`id`),
   foreign key (`badge`) references `badge` (`id`)
 ) $tbl_options");

@@ -236,7 +236,7 @@ if (isset($_GET['view']) and $_GET['view'] == 'mobile') {
 }
 
 // Safe Exam Browser view
-if (str_contains($_SERVER['HTTP_USER_AGENT'], 'Open-eClass-Exam')) { // User is NOT using SEB
+if (str_contains($_SERVER['HTTP_USER_AGENT'] ?? '', 'Open-eClass-Exam')) { // User is NOT using SEB
     $_SESSION['safe_exam_browser_view'] = true;
 }
 

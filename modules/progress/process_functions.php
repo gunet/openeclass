@@ -1131,7 +1131,7 @@ function add_points_game($title, $description, $startdate, $enddate, $level_name
  * @return type
  * @global type $course_id
  */
-function add_certificate($table, $title, $description, $message, $icon, $issuer, $active, $bundle, $expiration_day, $unit_id = 0, $session_id = 0) {
+function add_certificate($table, $title, $description, $message, $icon, $issuer, $active, $bundle, $expiration_day, $unit_id = 0, $session_id = 0, $allow_export = 1) {
 
     global $course_id;
 
@@ -1147,7 +1147,8 @@ function add_certificate($table, $title, $description, $message, $icon, $issuer,
                                 issuer = ?s,
                                 active = ?d,
                                 bundle = ?d,
-                                expires = ?t", $course_id, $unit_id, $session_id, $title, $description, $message, $icon, $issuer, $active, $bundle, $expiration_day)->lastInsertID;
+                                expires = ?t,
+                                allow_export = ?d", $course_id, $unit_id, $session_id, $title, $description, $message, $icon, $issuer, $active, $bundle, $expiration_day, $allow_export)->lastInsertID;
     } else {
         if ($table == 'certificate') {
             $new_id = Database::get()->query("INSERT INTO certificate
@@ -1170,7 +1171,8 @@ function add_certificate($table, $title, $description, $message, $icon, $issuer,
                                 issuer = ?s,
                                 active = ?d,
                                 bundle = ?d,
-                                expires = ?t", $course_id, $title, $description, $message, $icon, $issuer, $active, $bundle, $expiration_day)->lastInsertID;
+                                expires = ?t,
+                                allow_export = ?d", $course_id, $title, $description, $message, $icon, $issuer, $active, $bundle, $expiration_day, $allow_export)->lastInsertID;
         }
     }
 
@@ -1220,18 +1222,31 @@ function modify_points_game($points_game_id, $title, $description, $startdate, $
  * @param type $template
  * @param type $issuer
  * @param type $active
+ * @param type $allow_export
  */
-function modify($element, $element_id, $title, $description, $message, $value, $issuer) {
+function modify($element, $element_id, $title, $description, $message, $value, $issuer, $allow_export = 1) {
 
     global $course_id;
     $field = ($element == 'certificate')? 'template' : 'icon';
-    Database::get()->query("UPDATE $element SET title = ?s,
-                                                   description = ?s,
-                                                   message = ?s,
-                                                   $field = ?d,
-                                                   issuer = ?s
-                                                WHERE id = ?d AND course_id = ?d",
-                                    $title, $description, $message, $value, $issuer, $element_id, $course_id);
+    
+    if ($element == 'badge') {
+        Database::get()->query("UPDATE $element SET title = ?s,
+                                                       description = ?s,
+                                                       message = ?s,
+                                                       $field = ?d,
+                                                       issuer = ?s,
+                                                       allow_export = ?d
+                                                    WHERE id = ?d AND course_id = ?d",
+                                        $title, $description, $message, $value, $issuer, $allow_export, $element_id, $course_id);
+    } else {
+        Database::get()->query("UPDATE $element SET title = ?s,
+                                                       description = ?s,
+                                                       message = ?s,
+                                                       $field = ?d,
+                                                       issuer = ?s
+                                                    WHERE id = ?d AND course_id = ?d",
+                                        $title, $description, $message, $value, $issuer, $element_id, $course_id);
+    }
 
 }
 
