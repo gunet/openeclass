@@ -44,6 +44,14 @@ $newAnswer = $deleteAnswer = $modifyWildCards = false;
 
 $htopic = 0;
 
+$head_content .= "{
+    <style>
+        .tox-tinymce {max-height: 200px;}
+        .accordion-item .tox-tinymce {max-height: 130px;}
+        .accordion-button {font-size: 0.8rem;padding-left: 1rem !important;padding-right: 1rem !important;}
+    </style>
+}";
+
 if (isset($_GET['htopic'])) { //new question
     $htopic = $_GET['htopic'];
 }
@@ -1334,7 +1342,6 @@ if (isset($_GET['modifyAnswers'])) {
                           <th aria-label='$langTotal'></th>
                           <th>$langCorrect</th>
                           <th>$langAnswer</th>
-                          <th>$langComment</th>
                           <th>$langGradebookGrade</th>
                         </tr>";
 
@@ -1364,16 +1371,30 @@ if (isset($_GET['modifyAnswers'])) {
                     $thisWeighting = 0;
                 }
 
+                $tool_content .= "<td style='width:80%'>";
                 if (isset($_POST['reponse'][$i])) {
-                    $tool_content .= "<td style='width:40%'>" . rich_text_editor("reponse[$i]", 7, 40, $_POST['reponse'][$i], true) . "</td>";
+                    $tool_content .= rich_text_editor("reponse[$i]", 5, 40, $_POST['reponse'][$i], true);
                 } else {
-                    $tool_content .= "<td style='width:40%'>" . rich_text_editor("reponse[$i]", 7, 40, $reponse[$i], true) . "</td>";
+                    $tool_content .= rich_text_editor("reponse[$i]", 5, 40, $reponse[$i], true);
                 }
-                if (isset($_POST['comment'][$i])) {
-                    $tool_content .= "<td style='width:40%'>" . rich_text_editor("comment[$i]", 7, 40, $_POST['comment'][$i], true) . "</td>";
-                } else {
-                    $tool_content .= "<td style='width:40%'>" . rich_text_editor("comment[$i]", 7, 40, $comment[$i], true) . "</td>";
-                }
+
+                $comment_val = isset($_POST['comment'][$i]) ? $_POST['comment'][$i] : $comment[$i];
+                $tool_content .= "
+                    <div class='accordion mt-2' id='accordionComment$i'>
+                        <div class='accordion-item'>
+                            <h2 class='accordion-header' id='headingComment$i'>
+                                <button class='accordion-button collapsed p-2' type='button' data-bs-toggle='collapse' data-bs-target='#collapseComment$i' aria-expanded='false' aria-controls='collapseComment$i'>
+                                    $langQuestionFeedback
+                                </button>
+                            </h2>
+                            <div id='collapseComment$i' class='accordion-collapse collapse' aria-labelledby='headingComment$i' data-bs-parent='#accordionComment$i'>
+                                <div class='accordion-body p-2'>
+                                    " . rich_text_editor("comment[$i]", 3, 40, $comment_val, true) . "
+                                </div>
+                            </div>
+                        </div>
+                    </div>";
+                $tool_content .= "</td>";
                 $tool_content .= "<td><input class='form-control' type='text' name='weighting[$i]' value='$thisWeighting'></td></tr>";
             }
             $tool_content .= "<tr>
@@ -1594,19 +1615,48 @@ if (isset($_GET['modifyAnswers'])) {
              <table class='table table-default'>
              <tr>
                <td style='width: 10%;' colspan='2'><strong>$langAnswer</strong></td>
-               <td><strong>$langComment</strong></td>
                <td style='width: 15%;'><strong>$langGradebookGrade</strong></td>
              </tr>
              <tr>
                <td style='width: 10%;'>$langTrue</td>
-               <td><input type='radio' value='1' name='correct'$setChecked[1]></td>
-               <td>"  . rich_text_editor('comment[1]', 4, 30, @$comment[1], true) . "</td>
+               <td>
+                    <input type='radio' value='1' name='correct'$setChecked[1]>
+                    <div class='accordion mt-2' id='accordionComment1'>
+                        <div class='accordion-item'>
+                            <h2 class='accordion-header' id='headingComment1'>
+                                <button class='accordion-button collapsed p-2' type='button' data-bs-toggle='collapse' data-bs-target='#collapseComment1' aria-expanded='false' aria-controls='collapseComment1'>
+                                    $langComment
+                                </button>
+                            </h2>
+                            <div id='collapseComment1' class='accordion-collapse collapse' aria-labelledby='headingComment1' data-bs-parent='#accordionComment1'>
+                                <div class='accordion-body p-2'>
+                                    "  . rich_text_editor('comment[1]', 4, 30, @$comment[1], true) . "
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+               </td>
                <td style='width: 15%'><input class='form-control' type='text' name='weighting[1]' value='$setWeighting[1]'></td>
              </tr>
              <tr>
                <td>$langFalse</td>
-               <td><input type='radio' value='2' name='correct'$setChecked[2]></td>
-               <td>" . rich_text_editor("comment[2]", 4, 40, @$comment[2]) . "</td>
+               <td>
+                    <input type='radio' value='2' name='correct'$setChecked[2]>
+                    <div class='accordion mt-2' id='accordionComment2'>
+                        <div class='accordion-item'>
+                            <h2 class='accordion-header' id='headingComment2'>
+                                <button class='accordion-button collapsed p-2' type='button' data-bs-toggle='collapse' data-bs-target='#collapseComment2' aria-expanded='false' aria-controls='collapseComment2'>
+                                    $langComment
+                                </button>
+                            </h2>
+                            <div id='collapseComment2' class='accordion-collapse collapse' aria-labelledby='headingComment2' data-bs-parent='#accordionComment2'>
+                                <div class='accordion-body p-2'>
+                                    " . rich_text_editor("comment[2]", 4, 40, @$comment[2]) . "
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+               </td>
                <td><input class='form-control' type='text' name='weighting[2]' size='5' value='$setWeighting[2]'></td>
              </tr>
            </table>";
