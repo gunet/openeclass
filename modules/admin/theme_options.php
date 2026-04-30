@@ -31,7 +31,7 @@ $defaults = array(
                                                     'BgMenuPopover', 'BgMenuPopoverOption', 'BgTextEditor', 'BgScrollBar' ,'BackProgressBar', 'TextColorActiveDateTime', 'TextColorTooltip', 'clDeleteButtonColor',
                                                     'clHoveredDeleteButtonColor', 'clSuccessButtonColor', 'clHoveredSuccessButtonColor', 'clHelpButtonColor', 'clHoveredHelpButtonColor', 'BgBorderForms',
                                                     'BgColorAnnouncementHomepageLink','clBadgeSuccess','clBadgeWarning','clBadgeNeutral','clBadgePrimary','clBadgeAccent', 'BoxShadowPanels', 'AboutChatContainerBoxShadow', 'AboutCourseInfoContainerBoxShadow', 'AboutUnitsContainerBoxShadow', 'FormsBoxShadow',
-                                                    'BoxShadowRowTables', 'bgPanelEvents', 'bgBorderHoveredPanels', 'BgColorStatisticsHomepage', 'BgColorPopularCoursesHomepage', 'BgColorTextsHomepage', 'BgColorStatisticsHomepage_gr', 'BgColorPopularCoursesHomepage_gr', 'BgColorTextsHomepage_gr', 'bgCardAnnouncementDate'),
+                                                    'BoxShadowRowTables', 'bgPanelEvents', 'bgBorderHoveredPanels', 'BgColorStatisticsHomepage', 'BgColorPopularCoursesHomepage', 'BgColorTextsHomepage', 'BgColorStatisticsHomepage_gr', 'BgColorPopularCoursesHomepage_gr', 'BgColorTextsHomepage_gr', 'bgCardAnnouncementDate', 'bgColorBreadcrumb'),
                 'rgba(247, 249, 254, 1)' => array('BriefProfilePortfolioBgColor', 'BriefProfilePortfolioBgColor_gr', 'loginJumbotronRadialBgColor','loginJumbotronBgColor','bgRadialWrapperJumbotron','BgColorAnnouncementHomepage', 'BgColorAnnouncementHomepage_gr', 'AboutUnitsContainer', 'AboutCourseInfoContainer'),
                 'rgb(0, 115, 230, 1)' => array('leftMenuFontColor','buttonBgColor', 'bgColorPortfolioButtons', 'whiteButtonTextColor','whiteButtonBorderTextColor', 'whiteButtonHoveredTextColor', 'whiteButtonHoveredBorderTextColor', 'BgClRadios', 'BgActiveCheckboxes', 'clHoveredMenuPopoverOption', 'clLinkImportantAnnouncement'),
                 'rgba(43, 57, 68, 1)' => array('linkColorHeader','linkColorFooter','loginTextColor', 'leftSubMenuFontColor','ColorHyperTexts', 'clLabelForms', 'clListMenuUsername',
@@ -2125,6 +2125,15 @@ $tool_content .= "
                                 <label for='leftMenuSelectedLinkColor' class='control-label-notes mb-2 me-2'>$langSubMenuLinkColorActive:</label>
                                 <input name='leftMenuSelectedLinkColor' type='text' class='form-control colorpicker' id='leftMenuSelectedLinkColor' value='$theme_options_styles[leftMenuSelectedLinkColor]'>
                             </div>
+                            <div class='form-group mt-4'>
+                                <div class='checkbox'>
+                                    <label class='label-container'>
+                                        <input type='checkbox' name='enable_aside_main_cards' id='enable_aside_main_cards' value='1' ".((isset($theme_options_styles['enable_aside_main_cards']))? 'checked' : '').">
+                                        <span class='checkmark'></span>
+                                        Εμφάνιση αριστερού και κύριου περιεχομένου σε card
+                                    </label>
+                                </div>
+                            </div>
                         </div>
                         <div class='d-flex justify-content-center align-items-start'>
                             <figure class='figure'>
@@ -3288,6 +3297,12 @@ $tool_content .= "
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='ColorFocus' class='control-label-notes mb-2 me-2'>$langColorFocus:</label>
                         <input name='ColorFocus' type='text' class='form-control colorpicker' id='ColorFocus' value='$theme_options_styles[ColorFocus]'>
+                    </div>
+                    <hr>
+                    <h2 class='theme_options_legend text-decoration-underline mt-4 text-heading-h3'>Breadcrumbs</h2>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='bgColorBreadcrumb' class='control-label-notes mb-2 me-2'>$langBgColor:</label>
+                        <input name='bgColorBreadcrumb' type='text' class='form-control colorpicker' id='bgColorBreadcrumb' value='$theme_options_styles[bgColorBreadcrumb]'>
                     </div>
                     <hr>
                     <div class='d-flex justify-content-between align-items-start flex-wrap gap-3'>

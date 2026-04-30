@@ -11284,6 +11284,24 @@ function theme_initialization() {
             ";
         }
 
+        if(!empty($theme_options_styles['enable_aside_main_cards'])){
+            $head_content .= "
+            <script type='text/javascript'>
+                $(document).ready(function () {
+                    setNewCookieSlider('asideBarOn','true',30);
+                });
+            </script>";
+        } else {
+            $head_content .= "
+            <script type='text/javascript'>
+                $(document).ready(function () {
+                    setNewCookieSlider('asideBarOn','true',0);
+                });
+            </script>";
+        }
+
+
+
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         //////////////////////////////////// UPLOAD LOGO ////////////////////////////////////
@@ -12561,6 +12579,25 @@ function theme_initialization() {
                 .dt-container.dt-bootstrap5 .form-control:focus, 
                 .dt-container.dt-bootstrap5 .uneditable-input:focus{
                     border: solid 2px $theme_options_styles[ColorFocus] !important;
+                }
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////// BREADCRUMBS BG COLOR  ///////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['bgColorBreadcrumb'])){
+            $styles_str .= "
+                .breadcrumbs-init {
+                    background-color: $theme_options_styles[bgColorBreadcrumb];
+                    border-radius: 10px;
+                }
+                .breadcrumbs-init {
+                    padding-top: 0.25rem !important;
+                    padding: 10px 15px 5px 15px;
                 }
             ";
         }

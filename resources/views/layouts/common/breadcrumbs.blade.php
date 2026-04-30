@@ -1,6 +1,6 @@
 @unless(isset($_SESSION['safe_exam_browser_view']))
     <div class='col-12 breadcrumbs-container @if(!$course_code) d-flex justify-content-md-start justify-content-start @endif overflow-hidden'>
-        <div class='d-inline-flex align-items-top overflow-hidden'>
+        <div class='breadcrumbs-init d-inline-flex align-items-top overflow-hidden w-100'>
             <!-- this is toggle-button in breadcrumb -->
             @if($course_code and !$is_in_tinymce and $currentCourseName and !isset($_GET['fromFlipped']) and !isset($_SESSION['mobile']))
                 <nav class="me-lg-0 me-2" role="navigation" aria-label="{{ trans('langBreadcrumb') }}">
