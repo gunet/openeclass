@@ -3720,8 +3720,8 @@ function upgrade_to_4_4($tbl_options) : void {
         $min_eportf_cat_order = 0;
     }
 
-    $RPfc = Database::get()->query("SELECT * FROM eportfolio_fields_category WHERE name = ?s",$langResearchProfiles);
-    if (!$RPfc) {
+    $RPfc = Database::get()->querySingle("SELECT COUNT(id) AS cnt FROM eportfolio_fields_category WHERE name = ?s",$langResearchProfiles);
+    if ($RPfc->cnt == 0) {
         $eportf_cat_id = Database::get()->query("INSERT INTO eportfolio_fields_category (name, sortorder) VALUES ('$langResearchProfiles', $min_eportf_cat_order)")->lastInsertID;
         Database::get()->query("INSERT IGNORE INTO eportfolio_fields (shortname, name, description, datatype, categoryid, sortorder, required, data) VALUES
             ('gscholar', '$langGoogleScholarProfile', '', '5', $eportf_cat_id, 0, 0, ''),
@@ -3730,8 +3730,8 @@ function upgrade_to_4_4($tbl_options) : void {
         $min_eportf_cat_order--;
     }
 
-    $RPlp = Database::get()->query("SELECT * FROM eportfolio_fields_category WHERE name = ?s",$langLangProfLevel);
-    if (!$RPlp) {
+    $RPlp = Database::get()->querySingle("SELECT COUNT(id) AS cnt FROM eportfolio_fields_category WHERE name = ?s",$langLangProfLevel);
+    if ($RPlp->cnt == 0) {
         $eportf_cat_id = Database::get()->query("INSERT INTO eportfolio_fields_category (name, sortorder) VALUES ('$langLangProfLevel', $min_eportf_cat_order)")->lastInsertID;
         $lang_proficiency_levels = [$langLangCEFRA1, $langLangCEFRA2, $langLangCEFRB1, $langLangCEFRB2, $langLangCEFRC1, $langLangCEFRC2];
         Database::get()->query("INSERT IGNORE INTO eportfolio_fields (shortname, name, description, datatype, categoryid, sortorder, required, data) VALUES
@@ -3750,8 +3750,8 @@ function upgrade_to_4_4($tbl_options) : void {
         $min_eportf_cat_order--;
     }
 
-    $RPvsa = Database::get()->query("SELECT * FROM eportfolio_fields_category WHERE name = ?s",$langVolontSocialAct);
-    if (!$RPvsa) {
+    $RPvsa = Database::get()->querySingle("SELECT COUNT(id) AS cnt FROM eportfolio_fields_category WHERE name = ?s",$langVolontSocialAct);
+    if ($RPvsa->cnt == 0) {
     $eportf_cat_id = Database::get()->query("INSERT INTO eportfolio_fields_category (name, sortorder) VALUES ('$langVolontSocialAct', $min_eportf_cat_order)")->lastInsertID;
     Database::get()->query("INSERT IGNORE INTO eportfolio_fields (shortname, name, description, datatype, categoryid, sortorder, required, data) VALUES
         ('social_activities', '$langSocialActivities', '', '2', $eportf_cat_id, 0, 0, ''),
