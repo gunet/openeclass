@@ -7076,6 +7076,9 @@ th.grade-col a{
   body:not(:has(.sidebar-card)) .main-maincontent {
     margin-top: 56px;
   }
+  body:has(.sidebar-card) .main-maincontent {
+    margin-top: 56px;
+  }
   
 }
 @media(min-width: 992px) {
