@@ -2148,6 +2148,8 @@ function deleteUser($id, $log) {
             Database::get()->query("DELETE FROM user_badge WHERE user = ?d", $u);
             Database::get()->query("DELETE FROM user_certificate_criterion WHERE user = ?d", $u);
             Database::get()->query("DELETE FROM user_certificate WHERE user = ?d", $u);
+            Database::get()->query("DELETE FROM user_points_game_criterion WHERE user = ?d", $u);
+            Database::get()->query("DELETE FROM user_points_game_points WHERE user = ?d", $u);
             Database::get()->query("DELETE FROM gradebook_users WHERE uid = ?d", $u);
             Database::get()->query("DELETE FROM gradebook_book WHERE uid = ?d", $u);
             Database::get()->query("DELETE FROM attendance_users WHERE uid = ?d", $u);
