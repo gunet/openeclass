@@ -1957,6 +1957,13 @@ function delete_course($cid): void
     Database::get()->query("DELETE d FROM user_certificate d,certificate s WHERE d.certificate=s.id AND s.course_id = ?d", $cid);
     Database::get()->query("DELETE FROM certificate WHERE course_id = ?d", $cid);
 
+    Database::get()->query("DELETE d FROM user_points_game_criterion d, points_game_criterion c, points_game s WHERE d.points_game_criterion = c.id
+        AND c.points_game = s.id AND s.course_id = ?d", $cid);
+    Database::get()->query("DELETE d FROM user_points_game_points d, points_game s WHERE d.points_game = s.id AND s.course_id = ?d", $cid);
+    Database::get()->query("DELETE d FROM points_game_criterion d , points_game s WHERE d.points_game = s.id AND s.course_id = ?d", $cid);
+    Database::get()->query("DELETE d FROM points_game_levels d, points_game s WHERE d.points_game = s.id AND s.course_id = ?d ", $cid);
+    Database::get()->query("DELETE FROM points_game WHERE course_id = ?d", $cid);
+
     Database::get()->query("DELETE FROM announcement WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM document WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE d FROM ebook_subsection d,ebook_section s,ebook s2 WHERE d.section_id=s.id AND s.ebook_id = s2.id AND s2.course_id = ?d", $cid);
