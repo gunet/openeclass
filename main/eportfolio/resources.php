@@ -522,7 +522,7 @@ if ($userdata) {
                 $post->course_title = $langUserBlog;
             }
 
-            $reflection_comments = (!empty($post->reflection_comments) && ($post->user_id == $uid)) ? $langReflectionComment.':"'.$post->reflection_comments.'"' : '';
+            $reflection_comments = (!empty($post->reflection_comments) && ($post->user_id == $uid)) ? $langReflectionComment.':"'.q($post->reflection_comments).'"' : '';
 
             $tool_content .= "<div class='card panelCard card-default px-lg-4 py-lg-3 mb-3'>
                                     <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>                                                                                 
@@ -669,7 +669,7 @@ if ($userdata) {
                     $post->course_title = $langUserBlog;
                 }
 
-                $reflection_comments = (!empty($post->reflection_comments) && ($post->user_id == $uid)) ? $langReflectionComment.':"'.$post->reflection_comments.'"' : '';
+                $reflection_comments = (!empty($post->reflection_comments) && ($post->user_id == $uid)) ? $langReflectionComment.':"'.q($post->reflection_comments).'"' : '';
 
                 if(!isset($_GET['view']) && ($post->user_id == $uid)) {
                     $title_vis_icon = "<span>&nbsp;
@@ -851,7 +851,7 @@ if ($userdata) {
                    $submission_content .= "<div class='mb-3'><a class='link-color TextBold' href='resources.php?action=get&amp;token=".$userdata->eportfolio_token."&amp;type=submission&amp;er_id=$submission->id'>$langWorkFile</a></div>";
                 }
 
-                $reflection_comments = (!empty($submission->reflection_comments) && ($submission->user_id == $uid)) ? $langReflectionComment.':"'.$submission->reflection_comments.'"' : '';
+                $reflection_comments = (!empty($submission->reflection_comments) && ($submission->user_id == $uid)) ? $langReflectionComment.':"'.q($submission->reflection_comments).'"' : '';
 
                 $submission_footer = "<div class='card-footer border-0 d-flex justify-content-start align-items-center'>                                         
                                               <div class='small-text'>$submission->course_title</div>                                          
@@ -966,7 +966,7 @@ if ($userdata) {
                     $vis_modal_form = "";
                 }
 
-                $reflection_comment_td = ($id == $uid) ? "<td style='width:30%'><em>".$doc->reflection_comments."</em></td>" : "";
+                $reflection_comment_td = ($id == $uid) ? "<td style='width:30%'><em>".q($doc->reflection_comments)."</em></td>" : "";
 
                 $tool_content .= "<tr class='$row_class'>
                                     <td><span class='fa ".choose_image('.' . $data['format'])."'></span></td>
@@ -1052,7 +1052,7 @@ if ($userdata) {
                     $vis_modal_form = "";
                 }
 
-                $reflection_comments = (!empty($mybadge->reflection_comments) && ($mybadge->user_id == $uid)) ? $langReflectionComment.':"'.$mybadge->reflection_comments.'"' : '';
+                $reflection_comments = (!empty($mybadge->reflection_comments) && ($mybadge->user_id == $uid)) ? $langReflectionComment.':"'.q($mybadge->reflection_comments).'"' : '';
 
                 $tool_content .= "<div class='card panelCard card-default px-lg-4 py-lg-3 mt-3 h-100'>
                                     <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>                                           
@@ -1151,7 +1151,7 @@ if ($userdata) {
                     $vis_modal_form = "";
                 }
 
-                $reflection_comments = (!empty($mycertificate->reflection_comments) && ($mycertificate->user_id == $uid)) ? $langReflectionComment.':"'.$mycertificate->reflection_comments.'"' : '';
+                $reflection_comments = (!empty($mycertificate->reflection_comments) && ($mycertificate->user_id == $uid)) ? $langReflectionComment.':"'.q($mycertificate->reflection_comments).'"' : '';
 
                 $tool_content .= "<div class='card panelCard card-default px-lg-4 py-lg-3 mt-3 h-100'>
                                     <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>                                           
@@ -1204,7 +1204,7 @@ if ($userdata) {
                     $note_course_title = "";
                 }
 
-                $reflection_comments = (!empty($note->reflection_comments) && ($note->user_id == $uid)) ? $langReflectionComment.':"'.$note->reflection_comments.'"' : '';
+                $reflection_comments = (!empty($note->reflection_comments) && ($note->user_id == $uid)) ? $langReflectionComment.':"'.q($note->reflection_comments).'"' : '';
 
                 if(!isset($_GET['view']) && ($note->user_id == $uid)) {
                     $title_vis_icon = "<span>&nbsp;
