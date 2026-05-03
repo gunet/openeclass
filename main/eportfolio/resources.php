@@ -362,6 +362,24 @@ if ($userdata) {
                             Session::flash('alert-class', 'alert-warning');
                         }
                         redirect_to_home_page("main/mycertificates.php");
+                    } elseif ($rtype == 'external_badges') {
+                        $userBadge = Database::get()->querySingle("SELECT * FROM user_badge_external WHERE user_id = ?d AND id = ?d", $uid, $rid);
+                        if ($userBadge) {
+                            $data = array('title' => $userBadge->title, 'issuer' => $userBadge->issuer, 'description' => $userBadge->description, 
+                                        'icon' => $userBadge->image_url, 'issued_on' => $userBadge->issued_on, 'badgeId' => $rid);
+    
+                            $visibility = (isset($_POST['visibility'])) ? intval($_POST['visibility']) : EPF_VISIBLE_PUBLIC;
+                            $reflection_comments = (!empty($_POST['reflection_comments'])) ? $_POST['reflection_comments'] : '';
+                            Database::get()->query("INSERT INTO eportfolio_resource (user_id,resource_id,resource_type,course_id,course_title,data,visibility,reflection_comments)
+                                                    VALUES (?d,?d,?s,?d,?s,?s,?d,?s)", $uid, $rid, 'external_badges', 0, '', serialize($data), $visibility, $reflection_comments);
+    
+                            Session::flash('message', $langePortfolioResourceAdded);
+                            Session::flash('alert-class','alert-success');
+                        } else {
+                            Session::flash('message', $langGeneralError);
+                            Session::flash('alert-class', 'alert-warning');
+                        }
+                        redirect_to_home_page("main/profile/display_profile.php");
                     } elseif ($rtype == 'my_certificates') {
                         $userCertificate = Database::get()->querySingle("SELECT id,completed_criteria,total_criteria FROM user_certificate WHERE user = ?d AND `certificate` = ?d", $uid, $rid);
                         if ($userCertificate && $userCertificate->completed_criteria == $userCertificate->total_criteria) {
