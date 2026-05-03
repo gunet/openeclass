@@ -14,7 +14,7 @@
 @if(get_config('eportfolio_enable'))
     @push('head_scripts')
         <script>
-            $(document).on('click', 'a.list-group-item[href*="resources.php?token="]', function(e) {
+            $(document).on('click', 'a.list-group-item[href*="resources.php"]', function(e) {
                 e.preventDefault();
 
                 const href = $(this).attr('href');
@@ -197,7 +197,7 @@
                                                         {!! action_button(array(
                                                             array(
                                                                 'title' => trans('langAddResePortfolio'),
-                                                                'url' => $urlAppend . "main/eportfolio/resources.php?token=" .token_generate('eportfolio' . $uid) ."&amp;action=add&amp;type=work_submission&amp;rid=$row->id",
+                                                                'url' => $urlAppend . "main/eportfolio/resources.php?action=add&amp;type=work_submission&amp;rid=$row->id",
                                                                 'icon' => 'fa-star'
                                                                 )
                                                             ));

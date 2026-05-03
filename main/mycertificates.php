@@ -36,7 +36,7 @@ $content = false;
 if (get_config('eportfolio_enable')) {
     $head_content .= 
         '<script>
-            $(document).on(\'click\', \'a.list-group-item[href*="resources.php?token="]\', function(e) {
+            $(document).on(\'click\', \'a.list-group-item[href*="resources.php"]\', function(e) {
                 e.preventDefault();
 
                 const href = $(this).attr(\'href\');
@@ -141,7 +141,7 @@ if (count($courses) > 0) {
                                 ". action_button(array(
                                     array(
                                         'title' => $langAddResePortfolio,
-                                        'url' => "$urlServer"."main/eportfolio/resources.php?token=".token_generate('eportfolio' . $uid)."&amp;action=add&amp;type=my_certificates&amp;rid=".$data->cert_id,
+                                        'url' => "$urlServer"."main/eportfolio/resources.php?action=add&amp;type=my_certificates&amp;rid=".$data->cert_id,
                                         'icon' => 'fa-star',
                                         'show' => (get_config('eportfolio_enable'))
                                     ),
@@ -256,7 +256,7 @@ if (count($courses) > 0) {
                                 ". action_button(array(
                                     array(
                                         'title' => $langAddResePortfolio,
-                                        'url' => "$urlServer"."main/eportfolio/resources.php?token=".token_generate('eportfolio' . $uid)."&amp;action=add&amp;type=my_badges&amp;rid=".$badge->badge,
+                                        'url' => "$urlServer"."main/eportfolio/resources.php?action=add&amp;type=my_badges&amp;rid=".$badge->badge,
                                         'icon' => 'fa-star',
                                         'show' => (get_config('eportfolio_enable'))
                                     ),

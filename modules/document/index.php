@@ -60,7 +60,7 @@ $searchEngine = SearchEngineFactory::create();
 if ($subsystem == MYDOCS && $subsystem_id == $uid && get_config('eportfolio_enable')) {
     $head_content .=
     '<script>
-        $(document).on(\'click\', \'a.list-group-item[href*="resources.php?token="]\', function(e) {
+        $(document).on(\'click\', \'a.list-group-item[href*="resources.php"]\', function(e) {
             e.preventDefault();
 
             const href = $(this).attr(\'href\');
@@ -1606,7 +1606,7 @@ foreach ($result as $row) {
                       'url' => $download_url,
                       'icon' => 'fa-download'),
                 array('title' => $langAddResePortfolio,
-                      'url' => "{$urlAppend}main/eportfolio/resources.php?token=".token_generate('eportfolio' . $uid)."&amp;action=add&amp;type=mydocs&amp;rid=".$row->id,
+                      'url' => "{$urlAppend}main/eportfolio/resources.php?action=add&amp;type=mydocs&amp;rid=".$row->id,
                       'icon' => 'fa-star',
                       'show' => !$is_dir && $subsystem == MYDOCS && $subsystem_id == $uid && get_config('eportfolio_enable')),
                 array('title' => $langDelete,

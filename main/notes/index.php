@@ -70,7 +70,7 @@ $head_content .= "<script>
 
 $head_content .= 
     '<script>
-        $(document).on(\'click\', \'a.list-group-item[href*="resources.php?token="]\', function(e) {
+        $(document).on(\'click\', \'a.list-group-item[href*="resources.php"]\', function(e) {
             e.preventDefault();
 
             const href = $(this).attr(\'href\');
@@ -236,7 +236,7 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
                                 'icon' => 'fa-xmark'),
                             array(
                                 'title' => $langAddResePortfolio,
-                                'url' => "$urlServer"."main/eportfolio/resources.php?token=".token_generate('eportfolio' . $uid)."&amp;action=add&amp;type=note&amp;rid=".$note->id,
+                                'url' => "$urlServer"."main/eportfolio/resources.php?action=add&amp;type=note&amp;rid=".$note->id,
                                 'icon' => 'fa-star',
                                 'show' => (get_config('eportfolio_enable') && $note->user_id==$uid))
                         ))
@@ -376,7 +376,7 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
                         'icon' => 'fa-xmark'),
                     array(
                         'title' => $langAddResePortfolio,
-                        'url' => "$urlServer"."main/eportfolio/resources.php?token=".token_generate('eportfolio' . $uid)."&amp;action=add&amp;type=note&amp;rid=".$note->id,
+                        'url' => "$urlServer"."main/eportfolio/resources.php?action=add&amp;type=note&amp;rid=".$note->id,
                         'icon' => 'fa-star',
                         'show' => (get_config('eportfolio_enable') && $note->user_id==$uid)),
                     array('title' => $langMove . " " . $langUp,
