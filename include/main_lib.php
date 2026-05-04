@@ -2071,7 +2071,8 @@ function delete_course($cid): void
     Database::get()->query("DELETE FROM attendance WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM tc_session WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM course_external_server WHERE course_id = ?d", $cid);
-    Database::get()->query("DELETE from course_import WHERE course_id = ?d", $cid);
+    Database::get()->query("DELETE FROM seb_courses WHERE course_id = ?d", $cid);
+    Database::get()->query("DELETE FROM course_import WHERE course_id = ?d", $cid);
 
     removeDir("$webDir/courses/$course_code");
     removeDir("$webDir/video/$course_code");
@@ -5192,6 +5193,31 @@ function formatBytes(int $bytes, int $precision = 2): string {
     return round($size, $precision) . ' ' . $units[$exp];
 }
 
+
+/**
+ * @brief check if Safe Exam Browser is enabled for course
+ * @return bool
+ */
+function CourseHasSafeExamBrowserEnabled(): bool
+{
+    global $course_id;
+
+    if (get_config('ext_seb_enabled') == 1) {
+        $q = Database::get()->queryArray("SELECT * FROM seb_courses");
+        if (count($q) > 0) {
+            $q1 = Database::get()->querySingle("SELECT * FROM seb_courses WHERE course_id = ?d", $course_id);
+            if ($q1) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return true;
+        }
+    } else {
+        return false;
+    }
+}
 
 /**
  * @brief get user courses

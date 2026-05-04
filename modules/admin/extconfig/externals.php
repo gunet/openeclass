@@ -28,7 +28,7 @@ require_once realpath(dirname(__FILE__)) . '/../../db/database.php';
 class ExtAppManager {
 
     public static $AppCategories = [
-        'general' => ['APITokenApp', 'H5PApp', 'aiapp', 'TurnitinApp', 'LtiPublishApp', 'LimesurveyApp', 'PanoptoApp', 'SolrApp', 'OpenBadgesApp'],
+        'general' => ['APITokenApp', 'H5PApp', 'aiapp', 'TurnitinApp', 'SebApp', 'LtiPublishApp', 'LimesurveyApp', 'PanoptoApp', 'SolrApp', 'OpenBadgesApp'],
         'teleconference' => ['BBBApp', 'ZoomApp', 'WebexApp','GoogleMeetApp', 'JitsiApp', 'MicrosoftTeamsApp', 'OpenDelosApp', 'UniFlixApp'],
         'cloud' => ['GoogleDriveApp', 'OneDriveApp', 'DropBoxApp', 'OwnCloudApp', 'WebDAVApp', 'FTPApp'],
         'other' => ['AnalyticsApp', 'AntivirusApp', 'secondfaApp', 'UserWayApp', 'AutojudgeApp'],
@@ -237,9 +237,9 @@ abstract class ExtParam {
     private $defaultValue;
     private $type;
 
-    const TYPE_STRING = 0;
-    const TYPE_BOOLEAN = 1;
-    const TYPE_MULTILINE = 2;
+    const int TYPE_STRING = 0;
+    const int TYPE_BOOLEAN = 1;
+    const int TYPE_MULTILINE = 2;
 
     function __construct($display, $name, $defaultValue = "", $type = ExtParam::TYPE_STRING) {
         $this->display = $display;

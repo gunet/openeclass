@@ -944,3 +944,27 @@ function getRandomFloat($min, $max, $decimals) {
     $randomInt = mt_rand($min * $scale, $max * $scale);
     return $randomInt / $scale;
 }
+
+/**
+ * @brief check if the exercise is Safe Exam Browser enabled
+ * @param $eid
+ * @param $eid
+ * @return bool
+ */
+function isSebEnabled($eid): bool
+{
+    if (!CourseHasSafeExamBrowserEnabled()) {
+        return false;
+    } else {
+        $Exercise = new Exercise();
+        if ($Exercise->read($eid)) {
+            if ($Exercise->getOption('useSafeExamBrowser')) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+}

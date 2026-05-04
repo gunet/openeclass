@@ -1396,6 +1396,12 @@ $db->query("CREATE TABLE exercise_ai_evaluation (
         FOREIGN KEY (`exercise_id`) REFERENCES `exercise`(`id`) ON DELETE CASCADE,
         FOREIGN KEY (`student_record_id`) REFERENCES `exercise_user_record`(`eurid`) ON DELETE CASCADE) $tbl_options");
 
+$db->query("CREATE TABLE `seb_courses` (
+        `id` int NOT NULL AUTO_INCREMENT,
+        `course_id` int NOT NULL,
+         PRIMARY KEY (`id`),
+         UNIQUE KEY `course_id` (`course_id`)) $tbl_options");
+
 $db->query("CREATE TABLE IF NOT EXISTS lti_apps (
     `id` INT NOT NULL AUTO_INCREMENT,
     `course_id` INT DEFAULT NULL,

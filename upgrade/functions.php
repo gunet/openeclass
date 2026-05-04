@@ -3691,10 +3691,11 @@ function upgrade_to_4_3($tbl_options) : void {
  * @param $tbl_options
  * @return void
  */
-function upgrade_to_4_4($tbl_options) : void {
+function upgrade_to_4_4($tbl_options) : void
+{
 
     global $langResearchProfiles, $langGoogleScholarProfile, $langScopusID, $langOrcid,
-           $langGreek, $langEnglish, $langAlbanian, $langArabic, $langFrench, $langGerman, $langSpanish, $langItalian, $langChinese, $langRussian, $langTurkish, 
+           $langGreek, $langEnglish, $langAlbanian, $langArabic, $langFrench, $langGerman, $langSpanish, $langItalian, $langChinese, $langRussian, $langTurkish,
            $langOtherLanguages, $langePortfolioOtherLanguagesDescr, $langLangProfLevel, $langLangCEFRA1, $langLangCEFRA2, $langLangCEFRB1, $langLangCEFRB2, $langLangCEFRC1,
            $langLangCEFRC2, $langSocialActivities, $langVolunteerActivities, $langVolontSocialAct,
            $langAboutMeDescr, $langePortfolioPersonalWebsiteDescr, $langEducationDescr, $langePortfolioEmploymentDescr,
@@ -3706,7 +3707,7 @@ function upgrade_to_4_4($tbl_options) : void {
     // E-portfolio
     if (!DBHelper::fieldExists('user', 'eportfolio_token')) {
         Database::get()->query("ALTER TABLE `user` ADD COLUMN eportfolio_token VARCHAR(64) DEFAULT NULL AFTER eportfolio_enable");
-        
+
         $eportf_users = Database::get()->queryArray("SELECT id FROM `user` WHERE eportfolio_enable = ?d", 1);
         foreach ($eportf_users as $eportf_user) {
             Database::get()->query("UPDATE `user` SET eportfolio_token = ?s WHERE id = ?d", rtrim(strtr(base64_encode(random_bytes(16)), '+/', '-_'), '='), $eportf_user->id);
@@ -3720,7 +3721,7 @@ function upgrade_to_4_4($tbl_options) : void {
         $min_eportf_cat_order = 0;
     }
 
-    $RPfc = Database::get()->querySingle("SELECT COUNT(id) AS cnt FROM eportfolio_fields_category WHERE name = ?s",$langResearchProfiles);
+    $RPfc = Database::get()->querySingle("SELECT COUNT(id) AS cnt FROM eportfolio_fields_category WHERE name = ?s", $langResearchProfiles);
     if ($RPfc->cnt == 0) {
         $eportf_cat_id = Database::get()->query("INSERT INTO eportfolio_fields_category (name, sortorder) VALUES ('$langResearchProfiles', $min_eportf_cat_order)")->lastInsertID;
         Database::get()->query("INSERT IGNORE INTO eportfolio_fields (shortname, name, description, datatype, categoryid, sortorder, required, data) VALUES
@@ -3730,35 +3731,35 @@ function upgrade_to_4_4($tbl_options) : void {
         $min_eportf_cat_order--;
     }
 
-    $RPlp = Database::get()->querySingle("SELECT COUNT(id) AS cnt FROM eportfolio_fields_category WHERE name = ?s",$langLangProfLevel);
+    $RPlp = Database::get()->querySingle("SELECT COUNT(id) AS cnt FROM eportfolio_fields_category WHERE name = ?s", $langLangProfLevel);
     if ($RPlp->cnt == 0) {
         $eportf_cat_id = Database::get()->query("INSERT INTO eportfolio_fields_category (name, sortorder) VALUES ('$langLangProfLevel', $min_eportf_cat_order)")->lastInsertID;
         $lang_proficiency_levels = [$langLangCEFRA1, $langLangCEFRA2, $langLangCEFRB1, $langLangCEFRB2, $langLangCEFRC1, $langLangCEFRC2];
         Database::get()->query("INSERT IGNORE INTO eportfolio_fields (shortname, name, description, datatype, categoryid, sortorder, required, data) VALUES
-            ('el', '$langGreek', '', '4', $eportf_cat_id, 0, 0, '".serialize($lang_proficiency_levels)."'),
-            ('en', '$langEnglish', '', '4', $eportf_cat_id, -1, 0, '".serialize($lang_proficiency_levels)."'),
-            ('sq', '$langAlbanian', '', '4', $eportf_cat_id, -2, 0, '".serialize($lang_proficiency_levels)."'),
-            ('ar', '$langArabic', '', '4', $eportf_cat_id, -3, 0, '".serialize($lang_proficiency_levels)."'),
-            ('fr', '$langFrench', '', '4', $eportf_cat_id, -4, 0, '".serialize($lang_proficiency_levels)."'),
-            ('de', '$langGerman', '', '4', $eportf_cat_id, -5, 0, '".serialize($lang_proficiency_levels)."'),
-            ('it', '$langItalian', '', '4', $eportf_cat_id, -6, 0, '".serialize($lang_proficiency_levels)."'),
-            ('es', '$langSpanish', '', '4', $eportf_cat_id, -7, 0, '".serialize($lang_proficiency_levels)."'),
-            ('zh', '$langChinese', '', '4', $eportf_cat_id, -8, 0, '".serialize($lang_proficiency_levels)."'),
-            ('ru', '$langRussian', '', '4', $eportf_cat_id, -9, 0, '".serialize($lang_proficiency_levels)."'),
-            ('tr', '$langTurkish', '', '4', $eportf_cat_id, -10, 0, '".serialize($lang_proficiency_levels)."'),
+            ('el', '$langGreek', '', '4', $eportf_cat_id, 0, 0, '" . serialize($lang_proficiency_levels) . "'),
+            ('en', '$langEnglish', '', '4', $eportf_cat_id, -1, 0, '" . serialize($lang_proficiency_levels) . "'),
+            ('sq', '$langAlbanian', '', '4', $eportf_cat_id, -2, 0, '" . serialize($lang_proficiency_levels) . "'),
+            ('ar', '$langArabic', '', '4', $eportf_cat_id, -3, 0, '" . serialize($lang_proficiency_levels) . "'),
+            ('fr', '$langFrench', '', '4', $eportf_cat_id, -4, 0, '" . serialize($lang_proficiency_levels) . "'),
+            ('de', '$langGerman', '', '4', $eportf_cat_id, -5, 0, '" . serialize($lang_proficiency_levels) . "'),
+            ('it', '$langItalian', '', '4', $eportf_cat_id, -6, 0, '" . serialize($lang_proficiency_levels) . "'),
+            ('es', '$langSpanish', '', '4', $eportf_cat_id, -7, 0, '" . serialize($lang_proficiency_levels) . "'),
+            ('zh', '$langChinese', '', '4', $eportf_cat_id, -8, 0, '" . serialize($lang_proficiency_levels) . "'),
+            ('ru', '$langRussian', '', '4', $eportf_cat_id, -9, 0, '" . serialize($lang_proficiency_levels) . "'),
+            ('tr', '$langTurkish', '', '4', $eportf_cat_id, -10, 0, '" . serialize($lang_proficiency_levels) . "'),
             ('other_languages', '$langOtherLanguages', '$langePortfolioOtherLanguagesDescr', '2', $eportf_cat_id, -11, 0, '')");
         $min_eportf_cat_order--;
     }
 
-    $RPvsa = Database::get()->querySingle("SELECT COUNT(id) AS cnt FROM eportfolio_fields_category WHERE name = ?s",$langVolontSocialAct);
+    $RPvsa = Database::get()->querySingle("SELECT COUNT(id) AS cnt FROM eportfolio_fields_category WHERE name = ?s", $langVolontSocialAct);
     if ($RPvsa->cnt == 0) {
-    $eportf_cat_id = Database::get()->query("INSERT INTO eportfolio_fields_category (name, sortorder) VALUES ('$langVolontSocialAct', $min_eportf_cat_order)")->lastInsertID;
-    Database::get()->query("INSERT IGNORE INTO eportfolio_fields (shortname, name, description, datatype, categoryid, sortorder, required, data) VALUES
+        $eportf_cat_id = Database::get()->query("INSERT INTO eportfolio_fields_category (name, sortorder) VALUES ('$langVolontSocialAct', $min_eportf_cat_order)")->lastInsertID;
+        Database::get()->query("INSERT IGNORE INTO eportfolio_fields (shortname, name, description, datatype, categoryid, sortorder, required, data) VALUES
         ('social_activities', '$langSocialActivities', '', '2', $eportf_cat_id, 0, 0, ''),
         ('volunteer_activities', '$langVolunteerActivities', '', '2', $eportf_cat_id, -1, 0, '')");
     }
 
-    if (!DBHelper::indexExists('eportfolio_fields','shortname')) {
+    if (!DBHelper::indexExists('eportfolio_fields', 'shortname')) {
         Database::get()->query("ALTER TABLE eportfolio_fields ADD UNIQUE (shortname)");
     }
 
@@ -3842,7 +3843,7 @@ function upgrade_to_4_4($tbl_options) : void {
                         ADD `department_id` INT(11),
                         ADD CONSTRAINT `fk_department_id`
                         FOREIGN KEY (department_id) REFERENCES hierarchy(id) ON DELETE CASCADE'
-                        );
+        );
     }
 
     if (!DBHelper::fieldExists('certificate_template', 'department_id')) {
@@ -3929,7 +3930,6 @@ function upgrade_to_4_4($tbl_options) : void {
     }
 
     //sticky notes
-
     Database::get()->query("CREATE TABLE IF NOT EXISTS `sticky_notes_topic` (
         `id` int(11) NOT NULL AUTO_INCREMENT,
         `course_id` int(11) NOT NULL,
@@ -3948,7 +3948,7 @@ function upgrade_to_4_4($tbl_options) : void {
         CONSTRAINT `fk_sticky_notes_topics_course` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE,
         CONSTRAINT `fk_sticky_notes_topics_creator` FOREIGN KEY (`created_by`) REFERENCES `user` (`id`) ON DELETE CASCADE
     ) $tbl_options");
-    
+
     Database::get()->query("CREATE TABLE IF NOT EXISTS `sticky_notes_category` (
         `id` int(11) NOT NULL AUTO_INCREMENT,
         `topic_id` int(11) NOT NULL,
@@ -3959,7 +3959,7 @@ function upgrade_to_4_4($tbl_options) : void {
         KEY `topic_id` (`topic_id`),
         CONSTRAINT `sticky_notes_category_ibfk_1` FOREIGN KEY (`topic_id`) REFERENCES `sticky_notes_topic` (`id`) ON DELETE CASCADE
     ) $tbl_options");
-    
+
     Database::get()->query("CREATE TABLE IF NOT EXISTS `sticky_notes_post` (
         `id` int(11) NOT NULL AUTO_INCREMENT,
         `topic_id` int(11) NOT NULL,
@@ -3988,8 +3988,15 @@ function upgrade_to_4_4($tbl_options) : void {
        ) $tbl_options");
     }
 
+    if (!DBHelper::tableExists('seb_courses')) {
+        Database::get()->query("CREATE TABLE `seb_courses` (
+                            `id` int NOT NULL AUTO_INCREMENT,
+                            `course_id` int NOT NULL,
+                             PRIMARY KEY(`id`),
+                             UNIQUE KEY `course_id` (`course_id`)
+       ) $tbl_options");
+    }
 }
-
 /**
  * @brief OpenBadges Backpack Integration - Database Migration
  * Creates tables and fields for external backpack provider integration

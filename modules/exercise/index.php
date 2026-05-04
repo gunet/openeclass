@@ -31,6 +31,7 @@ $require_help = TRUE;
 $helpTopic = 'exercises';
 
 require_once '../../include/baseTheme.php';
+require_once 'modules/exercise/exercise.lib.php';
 require_once 'modules/group/group_functions.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
@@ -397,27 +398,6 @@ function dateToObject($date): ?DateTime
         return null;
     }
 }
-
-/**
- * @brief check if the exercise is SEB enabled
- * @param $eid
- * @param $eid
- * @return bool
- */
-function isSebEnabled($eid): bool
-{
-    $Exercise = new Exercise();
-    if ($Exercise->read($eid)) {
-        if ($Exercise->getOption('useSafeExamBrowser')) {
-            return true;
-        } else {
-            return false;
-        }
-    } else {
-        return false;
-    }
-}
-
 
 // ----------------------------------------
 // TO BE FIXED

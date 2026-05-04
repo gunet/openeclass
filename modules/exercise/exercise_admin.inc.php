@@ -17,11 +17,10 @@
  *  * ========================================================================
  *
  */
-global $count;
 
 /**
  * @file exercise_admin.inc.php
- * @brief Create new exercise or modify an existing one
+ * @brief Create a new exercise or modify an existing one
  */
 require_once 'modules/search/classes/ConstantsUtil.php';
 require_once 'modules/search/classes/SearchEngineFactory.php';

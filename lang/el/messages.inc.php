@@ -2169,7 +2169,7 @@ $langDownloadSafeExamBrowser = "Κατέβασμα Safe Exam Browser";
 $langSEBInfo1 = "Για την εκτέλεση της άσκησης απαιτείται η χρήση του Safe Exam Browser !";
 $langSEBInfo2 = "Πρώτα, θα πρέπει να εγκαταστήσετε στον υπολογιστή τον Safe Exam Browser κάνοντας κλικ στο 'Κατέβασμα' (αν τον έχετε ήδη εγκαταστήσει δεν χρειάζεται να τον ξανακατεβάσετε). 
 Αφού τον εγκαταστήσετε, κάντε κλικ στο 'Εκκίνηση' για να εκτελέσετε την άσκηση.";
-$langSafeExamBrowserInfo = "Η άσκηση θα εκτελεστεί μόνο μέσω Safe Exam Browser";
+$langSafeExamBrowserInfo = "Η άσκηση θα εκτελεστεί μόνο μέσω του Safe Exam Browser.";
 $langSafeExamBrowserLegend = "Οι χρήστες θα χρειαστεί να εγκαταστήσουν τον Safe Exam Browser στον υπολογιστή τους. Υποστηρίζεται μόνο σε Windows, MacOS και iOS";
 // admin.php
 $langExerciseManagement = "Διαχείριση Άσκησης";
@@ -6936,6 +6936,8 @@ $langMsTeamsShortDescription = "Σύνδεση με την υπηρεσία τη
 $langMsTeamsLongDescription = "Σύνδεση με την υπηρεσία τηλεδιάσκεψης Microsoft Teams.";
 $langAIShortDescription = "Υπηρεσία Τ.Ν.";
 $langAILongDescription = "Υπηρεσία Τ.Ν.";
+$langSafeExamBrowserShortDescription = "Χρήση του Safe Exam Browser στις 'Ασκήσεις' των $langsOfCourses.";
+$langSafeExamBrowserLongDescription = "Χρήση του Safe Exam Browser στις 'Ασκήσεις' των $langsOfCourses.";
 $langZoomShortDescription = "Σύνδεση με την υπηρεσία τηλεδιάσκεψης Zoom.";
 $langZoomLongDescription = "Σύνδεση με την υπηρεσία τηλεδιάσκεψης Zoom.";
 $langWebexShortDescription = "Σύνδεση με την υπηρεσία τηλεδιάσκεψης Webex.";

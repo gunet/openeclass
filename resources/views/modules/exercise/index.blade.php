@@ -57,7 +57,6 @@
                                         @endif
 
                                         <tr @if (!$row->active) class='not_visible' @endif>
-
                                             @if ($is_course_reviewer)
                                                 <td>
                                                     <div class='line-height-default'><a href='admin.php?course={{ $course_code }}&amp;exerciseId={{ $row->id }}&amp;preview=1'>{{ $row->title }}</a>
@@ -68,9 +67,12 @@
                                                             {{-- exercise has expired --}}
                                                             &nbsp;&nbsp;<span class='text-danger'>({{ trans('langHasExpiredS') }})</span>
                                                         @endif
-                                                        @if ($row->is_exam == 1)
-                                                            &nbsp;
-                                                            &nbsp;{!! icon('fa-solid fa-chalkboard-user', trans('langExam')) !!}
+                                                        @if ($row->is_exam == 1)&nbsp;
+                                                            @if (isSebEnabled($row->id))
+                                                                &nbsp;{!! icon('fa-solid fa-chalkboard-user', trans('langSafeExamBrowserInfo')) !!}
+                                                            @else
+                                                                &nbsp;{!! icon('fa-solid fa-chalkboard-user', trans('langExam')) !!}
+                                                            @endif
                                                         @endif
                                                     </div>
                                                     @if (!empty($row->description))
@@ -212,8 +214,7 @@
                                                         <td>
                                                             <div class='line-height-default'>
                                                                 @if (isSebEnabled($row->id))
-                                                                    <a class='ex_settings @if ($row->password_lock && !$is_editor) password_protected @endif'
-                                                                       href='exercise_submit.php?course={{ $course_code }}&exerciseId={{ $row->id }}&seb=1'> {{ $row->title }}</a>
+                                                                    <a href='exercise_submit.php?course={{ $course_code }}&exerciseId={{ $row->id }}&seb=1'> {{ $row->title }}</a>
                                                                 @else
                                                                     <a class='ex_settings @if ($row->password_lock && !$is_editor) password_protected @endif'
                                                                        href='exercise_submit.php?course={{ $course_code }}&exerciseId={{ $row->id }}'> {{ $row->title }}</a>
@@ -239,7 +240,11 @@
                                                                     </span>
                                                                 @endif
                                                                 @if ($row->is_exam == 1)&nbsp;
-                                                                    &nbsp;{!! icon('fa-solid fa-chalkboard-user', trans('langExam')) !!}
+                                                                    @if (isSebEnabled($row->id))
+                                                                        &nbsp;{!! icon('fa-solid fa-chalkboard-user', trans('langSafeExamBrowserInfo')) !!}
+                                                                    @else
+                                                                        &nbsp;{!! icon('fa-solid fa-chalkboard-user', trans('langExam')) !!}
+                                                                    @endif
                                                                 @endif
                                                     @endif
                                                         @elseif ($currentDate <= dateToObject(($row->start_date)))
