@@ -168,8 +168,8 @@ function load_js($file, $init='') {
             js_link('select2-4.0.13/dist/js/select2.full.min.js');
             $file = "select2-4.0.13/dist/js/i18n/$language.js";
         } elseif ($file == 'slimselect') {
-            $head_content .= css_link('slim-select/slimselect.css') 
-            . js_link('slim-select/slimselect.js');
+            $head_content .= css_link('slim-select/slimselect.css');
+            $file = 'slim-select/slimselect.js';
         } elseif ($file == 'bootstrap-calendar') {
             $file = 'bootstrap-calendar-master/js/calendar.js';
             if ($language != 'en') {
