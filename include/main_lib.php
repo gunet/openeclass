@@ -11985,6 +11985,11 @@ function theme_initialization() {
                 .card-transparent .panel-footer{
                    box-shadow: none !important;
                 }
+
+                .ContentLeftNav, 
+                .main-maincontent {
+                    box-shadow: 0px 0 30px $theme_options_styles[BoxShadowPanels] !important;
+                }
             ";
         }
 
