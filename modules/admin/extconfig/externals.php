@@ -222,9 +222,9 @@ abstract class ExtParam {
     private $defaultValue;
     private $type;
 
-    const int TYPE_STRING = 0;
-    const int TYPE_BOOLEAN = 1;
-    const int TYPE_MULTILINE = 2;
+    const TYPE_STRING = 0;
+    const TYPE_BOOLEAN = 1;
+    const TYPE_MULTILINE = 2;
 
     function __construct($display, $name, $defaultValue = "", $type = ExtParam::TYPE_STRING) {
         $this->display = $display;
