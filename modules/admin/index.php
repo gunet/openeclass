@@ -26,7 +26,6 @@ require_once 'include/lib/user.class.php';
 require_once 'modules/admin/modalconfirmation.php';
 
 $toolName = $langAdmin;
-define('HIDE_TOOL_TITLE', 1);
 
 $col_size = '';
 

@@ -43,13 +43,7 @@
 
             @include('layouts.partials.show_alert')
 
-            {!! action_bar([
-                  [ 'title' => trans('langAddTenant'),
-                    'url' => "tenant_edit.php",
-                    'icon' => 'fa-solid fa-plus-circle',
-                    'level' => 'primary-label',
-                    'button-class' => 'btn-success' ],
-                ]) !!}
+            {!! $action_bar !!}
 
             @if (!$disk_usage_cron_running)
                 @include('admin.other.tenants.tenants_cron_modal')

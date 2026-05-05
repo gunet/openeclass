@@ -25,12 +25,14 @@ require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'include/sendMail.inc.php';
 require_once 'modules/admin/tenant_functions.php';
 
-$organizationLogoFullPath = '';
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
-
-global $webDir;
+$navigation[] = array('url' => 'tenants.php', 'name' => $langTenants);
 
 $tenant_id = $_GET['id'];
+
+if (!get_config('enable_tenant')) {
+    redirect_to_home_page("modules/admin/index.php");
+}
 
 if (!$tenant_id) {
     redirect_to_home_page("main/portfolio.php");
@@ -50,7 +52,7 @@ if (!$is_admin) {
 
 $tenant = getTenantById($tenant_id);
 $tenantOptions = $tenant->options ? unserialize($tenant->options) : [];
-
+$organizationLogoFullPath = '';
 $urlMessage = '';
 $urlStatus = '';
 $tenantUrl = q($tenant->url);
@@ -180,48 +182,11 @@ if (isset($_POST['optionsSave'])) {
     redirect_to_home_page("modules/admin/tenant_options.php?id=$tenant_id");
 }
 
-// Move uploaded files to final destination and update DB
-function upload_images($tenantInfo)
-{
-    global $webDir, $tenantOptions, $tenant;
-
-    $basePath = "/courses/tenant/$tenant->id/logos";
-    make_dir($webDir . $basePath, 0755, true);
-
-    $images = [
-        'imageUpload',
-        'imageUploadSmall',
-        'faviconUpload'
-    ];
-
-    foreach ($images as $image) {
-        if (isset($_FILES[$image]) && is_uploaded_file($_FILES[$image]['tmp_name'])) {
-            $file_name = $_FILES[$image]['name'];
-            $ext = strtolower(get_file_extension($file_name));
-            validateUploadedFile($file_name, 2);
-
-            if ($tenantOptions[$image]) {
-                $fullPath = $webDir . $tenantOptions[$image];
-                unlink($fullPath);
-                $fullPath = dirname($fullPath);
-                if (!glob($fullPath . '/*')) {
-                    rmdir($fullPath);
-                }
-            }
-            $imagePath = "$basePath/$image.$ext";
-            move_uploaded_file($_FILES[$image]['tmp_name'], $webDir . $imagePath);
-            $tenantInfo[$image] = $imagePath;
-        }
-    }
-
-    return $tenantInfo;
-}
-
-$pageName = "$langTenantProfile - $tenant->name";
+$toolName = "$langTenantProfile - $tenant->name";
 
 if ($tenantLogo) {
     $logo_field = "
-        <img src='$tenantLogo' style='max-height:100px;max-width:150px;' alt='Logo upload' /> <a class='btn deleteAdminBtn' href='$_SERVER[SCRIPT_NAME]?id=$tenant_id&delete_image=imageUpload'>$langDelete</a>
+        <img src='{$urlServer}$tenantLogo' style='max-height:100px;max-width:150px;' alt='Logo upload' /><a class='btn deleteAdminBtn ms-2' href='$_SERVER[SCRIPT_NAME]?id=$tenant_id&delete_image=imageUpload'>$langDelete</a>
         <input type='hidden' name='imageUpload' value='$tenantLogo'>";
 } else {
     $logo_field = "<input type='file' name='imageUpload' id='imageUpload' class='form-control-file'>";
@@ -229,7 +194,7 @@ if ($tenantLogo) {
 
 if ($tenantLogoSmall) {
     $small_logo_field = "
-        <img src='$tenantLogoSmall' style='max-height:100px;max-width:150px;' alt='Small logo upload' /> <a class='btn deleteAdminBtn' href='$_SERVER[SCRIPT_NAME]?id=$tenant_id&delete_image=imageUploadSmall'>$langDelete</a>
+        <img src='{$urlServer}$tenantLogoSmall' style='max-height:100px;max-width:150px;' alt='Small logo upload' /> <a class='btn deleteAdminBtn ms-2' href='$_SERVER[SCRIPT_NAME]?id=$tenant_id&delete_image=imageUploadSmall'>$langDelete</a>
         <input type='hidden' name='imageUploadSmall' value='$tenantLogoSmall'>";
 } else {
     $small_logo_field = "<input type='file' name='imageUploadSmall' id='imageUploadSmall' class='form-control-file'>";
@@ -237,7 +202,7 @@ if ($tenantLogoSmall) {
 
 if ($tenantFavicon) {
     $faviconUpload = "
-            <img src='$tenantFavicon' style='max-height:100px;max-width:150px;' alt='Favicon upload' /> <a class='btn deleteAdminBtn' href='$_SERVER[SCRIPT_NAME]?id=$tenant_id&delete_image=faviconUpload'>$langDelete</a>
+            <img src='{$urlServer}$tenantFavicon' style='max-height:100px;max-width:150px;' alt='Favicon upload' /> <a class='btn deleteAdminBtn ms-2' href='$_SERVER[SCRIPT_NAME]?id=$tenant_id&delete_image=faviconUpload'>$langDelete</a>
             <input type='hidden' name='faviconUpload' value='$tenantFavicon'>";
 } else {
     $faviconUpload = "<label for='faviconUpload' aria-label='$langFavicon'></label><input type='file' name='faviconUpload' id='faviconUpload'>";
@@ -285,7 +250,7 @@ if ($tenantUrl) {
                 </p>
               </div>
               <div class='modal-footer'>
-                <button type='button' class='btn btn-secondary' data-bs-dismiss='modal' id='modal-close-btn'>$langCancel</button>
+                <button type='button' class='btn btn-secondary' data-bs-dismiss='modal' id='modal-close-btn'>$langClose</button>
               </div>
             </div>
           </div>
@@ -327,16 +292,18 @@ if ($tenantUrl) {
     }
 }
 
-$tool_content .= action_bar([
+$action_bar = action_bar([
     [
         'title' => $langBack,
         'url' => "{$urlAppend}modules/admin/index.php",
         'icon' => 'fa-reply',
         'level' => 'primary'
     ]
-], false) . "
+], false);
 
-<form id='tenant_options_form' class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?id=$tenant_id' enctype='multipart/form-data' method='post'>
+$tool_content .= $action_bar;
+
+$tool_content .= "<form id='tenant_options_form' class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?id=$tenant_id' enctype='multipart/form-data' method='post'>
   <div class='container-fluid'>
     <div class='form-group'>
         <div class='col-sm-12 control-label-notes mb-2'>$langLogo <small>$langLogoNormal</small>:</div>
@@ -422,7 +389,7 @@ $tool_content .= "
 $tool_content .= "
     <div class='form-group mt-4'>
       <div class='col-md-9 d-flex justify-content-end'>
-        <input class='btn btn-primary' name='optionsSave' type='submit' value='$langSave'>
+        <input class='btn btn-primary' name='optionsSave' type='submit' value='$langSubmit'>
       </div>
     </div>
   </div>" . generate_csrf_token_form_field() . "
@@ -492,7 +459,7 @@ foreach ($tenant_admins as $admin) {
 $tool_content .= "
     <div class='container-fluid'>
         <div class='col-md-9 mt-5 mb-5'>
-            <h2> Διαχειριστές </h2>
+            <h3> $langAdmins </h3>
 
             <div class='table-responsive'>
                 <table id='admins-table' class='table-default '>
@@ -513,5 +480,41 @@ $tool_content .= "
         </div>
     </div>";
 
-
 draw($tool_content, 3, null, $head_content);
+
+
+// Move uploaded files to the final destination and update DB
+function upload_images($tenantInfo)
+{
+    global $webDir, $tenantOptions, $tenant;
+
+    $basePath = "/courses/tenant/$tenant->id/logos";
+    make_dir($webDir . $basePath);
+
+    $images = [
+        'imageUpload',
+        'imageUploadSmall',
+        'faviconUpload'
+    ];
+
+    foreach ($images as $image) {
+        if (isset($_FILES[$image]) && is_uploaded_file($_FILES[$image]['tmp_name'])) {
+            $file_name = $_FILES[$image]['name'];
+            $ext = strtolower(get_file_extension($file_name));
+            validateUploadedFile($file_name, 2);
+
+            if ($tenantOptions[$image]) {
+                $fullPath = $webDir . $tenantOptions[$image];
+                unlink($fullPath);
+                $fullPath = dirname($fullPath);
+                if (!glob($fullPath . '/*')) {
+                    rmdir($fullPath);
+                }
+            }
+            $imagePath = "$basePath/$image.$ext";
+            move_uploaded_file($_FILES[$image]['tmp_name'], $webDir . $imagePath);
+            $tenantInfo[$image] = $imagePath;
+        }
+    }
+    return $tenantInfo;
+}

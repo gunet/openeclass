@@ -26,11 +26,13 @@ require_once '../../include/baseTheme.php';
 
 load_js('datatables');
 
-$toolName = $langAdmin;
-$pageName = $langTenants;
+$toolName = $langTenants;
 
 $navigation[] = ['url' => 'index.php', 'name' => $langAdmin];
 
+if (!get_config('enable_tenant')) {
+    redirect_to_home_page("modules/admin/index.php");
+}
 /**
  * Check disk usage cron job status
  */
@@ -146,8 +148,6 @@ $data['cron_icon'] = $messageConfig['icon'];
 $data['cron_class'] = $messageConfig['class'];
 
 if (!$cronStatus['running']) {
-    global $webDir, $urlServer, $langTenantsCronEnableInstructions;
-    
     $replacements = [
         '{webRoot}' => $webDir,
         '{cronURL}' => $urlServer . 'cron_disk_usage.php'
@@ -167,5 +167,15 @@ if (!$cronStatus['running']) {
 }
 
 $data['tenants'] = getTenantStatistics();
+
+$data['action_bar'] = action_bar([
+                    [
+                        'title' => trans('langAddTenant'),
+                        'url' => "tenant_edit.php",
+                        'icon' => 'fa-solid fa-plus-circle',
+                        'level' => 'primary-label',
+                        'button-class' => 'btn-success'
+                    ]
+                ]);
 
 view('admin.other.tenants.index', $data);

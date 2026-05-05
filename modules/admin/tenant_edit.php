@@ -27,6 +27,10 @@ require_once 'include/lib/hierarchy.class.php';
 
 $tree = new Hierarchy();
 
+if (!get_config('enable_tenant')) {
+    redirect_to_home_page("modules/admin/index.php");
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) {
         csrf_token_error();
@@ -130,5 +134,12 @@ if (isset($_GET['id'])) {
 
 $data['description_editor'] = rich_text_editor('description', 4, 20, $data['tenant']->description ?? '', options: array('id' => 'description'));
 
+$data['action_bar'] = action_bar([
+                            [ 'title' => trans('langBack'),
+                                'url' => "tenants.php",
+                                'icon' => 'fa-reply',
+                                'level' => 'primary-label'
+                            ],
+                        ]);
 
 view('admin.other.tenants.edit', $data);

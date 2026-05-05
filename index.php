@@ -51,7 +51,6 @@ if (preg_match('|/courses/([a-zA-Z0-9_-]+)/[^/]*$|', $_SERVER['REQUEST_URI'], $m
     exit;
 }
 
-define('HIDE_TOOL_TITLE', 1);
 $guest_allowed = true;
 
 require_once 'include/baseTheme.php';

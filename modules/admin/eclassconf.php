@@ -176,7 +176,8 @@ if (isset($_POST['submit'])) {
         'enable_idle_detection' => true,
         'user_notifications' => true,
         'default_course_access' => true,
-        'enable_user_consent' => true
+        'enable_user_consent' => true,
+        'enable_tenant' => true,
         ];
 
     register_posted_variables($config_vars, 'all', 'intval');
@@ -356,6 +357,7 @@ else {     // Display config.php edit form
     $data['cbox_user_consent'] = get_config('enable_user_consent') ? 'checked' : '';
     $data['default_course_access'] = intval(get_config('default_course_access', COURSE_REGISTRATION));
     $data['cbox_idle_detection'] = get_config('enable_idle_detection') ? 'checked' : '';
+    $data['cbox_enable_tenant'] = get_config('enable_tenant') ? 'checked' : '';
 
     $user_notifications_interval = get_config('user_notifications_interval');
     $user_notifications = get_config('user_notifications');

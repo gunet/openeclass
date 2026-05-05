@@ -23,7 +23,6 @@ use Widgets\WidgetArea;
 $require_current_course = true;
 $guest_allowed = true;
 
-define('HIDE_TOOL_TITLE', 1);
 define('STATIC_MODULE', 1);
 
 require_once '../../include/baseTheme.php';
