@@ -1,2 +1,0 @@
-----------/etc/slackware-version----------
-Slackware 8.1

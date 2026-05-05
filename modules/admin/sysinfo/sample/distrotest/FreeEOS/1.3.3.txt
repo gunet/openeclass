@@ -1,2 +1,0 @@
-----------/etc/eos-release----------
-AFPA Free-EOS Serveur V1.3
