@@ -580,7 +580,7 @@ if ($userdata) {
     $blog_posts = Database::get()->queryArray("SELECT * FROM eportfolio_resource WHERE user_id = ?d AND resource_type = ?s AND $visibility_query ORDER BY time_added DESC", $id, 'blog');
     $submissions = Database::get()->queryArray("SELECT * FROM eportfolio_resource WHERE user_id = ?d AND resource_type = ?s AND $visibility_query ORDER BY time_added DESC", $id, 'work_submission');
     $docs = Database::get()->queryArray("SELECT * FROM eportfolio_resource WHERE user_id = ?d AND resource_type = ?s AND $visibility_query ORDER BY time_added DESC", $id, 'mydocs');
-    $myBadges = Database::get()->queryArray("SELECT * FROM eportfolio_resource WHERE user_id = ?d AND resource_type = ?s AND $visibility_query ORDER BY time_added DESC", $id, 'my_badges');
+    $myBadges = Database::get()->queryArray("SELECT * FROM eportfolio_resource WHERE user_id = ?d AND (resource_type = ?s OR resource_type = ?s) AND $visibility_query ORDER BY time_added DESC", $id, 'my_badges', 'external_badges');
     $myCertificates = Database::get()->queryArray("SELECT * FROM eportfolio_resource WHERE user_id = ?d AND resource_type = ?s AND $visibility_query ORDER BY time_added DESC", $id, 'my_certificates');
     $notes = Database::get()->queryArray("SELECT * FROM eportfolio_resource WHERE user_id = ?d AND resource_type = ?s AND $visibility_query ORDER BY time_added DESC", $id, 'note');
 
@@ -1025,6 +1025,12 @@ if ($userdata) {
                     $mybadge->course_title = $langBadges;
                 }
 
+                if ($mybadge->resource_type == "external_badges") {
+                    $ext_badge_str = "(".$langExternalBadge.") ";
+                } else {
+                    $ext_badge_str = "";
+                }
+
                 if(!isset($_GET['view']) && ($mybadge->user_id == $uid)) {
                     $title_vis_icon = "<span>&nbsp;
                                             <i class=\"fa ".$visibility_vars[$mybadge->visibility]['fa_icon']." 
@@ -1074,7 +1080,7 @@ if ($userdata) {
 
                 $tool_content .= "<div class='card panelCard card-default px-lg-4 py-lg-3 mt-3 h-100'>
                                     <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>                                           
-                                        <h2 class='text-heading-h3'>".q($data['title']).$title_vis_icon."</h2>"
+                                        <h2 class='text-heading-h3'>".q($data['title']).$ext_badge_str.$title_vis_icon."</h2>"
                                         .$vis_modal_form.
                                         "<div>
                                             ". action_button(array(
@@ -1088,16 +1094,51 @@ if ($userdata) {
                                                 )))."
                                         </div>                                          
                                     </div>
-                                    <div class='card-body'>
-                                        <img style='height:150px; width:150px;' src='{$urlServer}" . BADGE_TEMPLATE_PATH . get_badge_filename($data['badgeId']) ."' class='card-img-top m-auto d-block mt-3' alt='badge'>
-                                        <div class='card-body text-center'>
+                                    <div class='card-body text-center'>";
+                if ($mybadge->resource_type == 'my_badges') {
+                      $tool_content .= "<img style='height:150px; width:150px; object-fit: contain;' src='{$urlServer}" . BADGE_TEMPLATE_PATH . get_badge_filename($data['badgeId']) ."' class='card-img-top ms-auto me-auto mt-3' alt='badge'>
+                                        <div class='card-body'>
                                             <a class='link-color' href='{$urlServer}modules/progress/index.php?course=" . course_id_to_code($mybadge->course_id) . "&amp;badge_id= " .  $data['badgeId'] . "&amp;u=" . $mybadge->user_id . "'>
                                                 " . ellipsize($data['title'], 40) . "
                                                 " . format_locale_date(strtotime($data['date_created'] ?? ''), null, false) . "
                                                 " . $data['issuer'] . "
                                             </a>
-                                        </div>
-                                    </div>
+                                        </div>";
+                }
+                elseif ($mybadge->resource_type == 'external_badges') {
+                    if (!empty($data['icon'])) {
+                        $tool_content .= "<img style='height:150px; width:150px; object-fit: contain;' 
+                                                             src='".$data['icon']."'
+                                                             class='card-img-top ms-auto me-auto mt-3'
+                                                             alt='external badge'
+                                                             onerror='this.src=\'".$urlServer."resources/img/game/badge.png\'>";
+                    } else {
+                        $tool_content .= "<img style='height:150px; width:150px;' 
+                                                             src='".$urlServer."resources/img/game/badge.png'
+                                                             class='card-img-top ms-auto me-auto mt-3' 
+                                                             alt='external badge'>";
+                    }
+                      $tool_content .= "<div class='card-body'>
+                                                <div class='text-heading-h5'>" . ellipsize($data['title'], 40) . "</div>";
+                        if (!empty($data['issued_on'])) {
+                              $tool_content .= "<div class='badge_date text-center text-success'>" . format_locale_date(strtotime($data['issued_on']), null, false). "</div>";
+                        }
+
+                        if (!empty($data['issuer'])) {
+                              $tool_content .= "<div class='bagde_panel_issuer'>" . $data['issuer'] . "</div>";
+                        } else {
+                              $tool_content .= "<div class='bagde_panel_issuer'>" . $langUnknownIssuer . "</div>";
+                        }
+
+                        if (!empty($data['description'])) {
+                            $tool_content .= "<div class='badge_description text-center text-muted mt-2' style='font-size: 0.9em;'>"
+                                    . ellipsize($data['description'], 100) .
+                                "</div>";
+                        }
+
+                        $tool_content .= "</div>"; 
+                }
+                   $tool_content .= "</div>
                                     <div class='card-footer border-0 d-flex justify-content-start align-items-center'>                                       
                                         <div class='small-text'><em>$reflection_comments</em></div>
                                     </div>
