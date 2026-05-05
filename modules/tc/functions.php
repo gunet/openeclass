@@ -2191,9 +2191,6 @@ function get_enabled_tc_services() {
     if (get_config('ext_microsoftteams_enabled')) {
         $tc_services[] = 'microsoftteams';
     }
-    /* if (get_config('ext_openmeetings_enabled')) {
-        $tc_services = 'om';
-    } */
     return $tc_services;
 }
 
