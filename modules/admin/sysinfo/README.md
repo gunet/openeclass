@@ -2,10 +2,10 @@ phpSysInfo
 ==============
 
 * Copyright (c), 1999-2008, Uriah Welcome ([sf.net/users/precision](https://sf.net/users/precision))
-* Copyright (c), 1999-2009, Michael Cramer ([sf.net/users/bigmichi1](https://sf.net/users/bigmichi1))
+* Copyright (c), 1999-2009, Michael Cramer ([github.com/bigmichi1](https://github.com/bigmichi1), [sf.net/users/bigmichi1](https://sf.net/users/bigmichi1))
 * Copyright (c), 2007-2008, Audun Larsen ([sf.net/users/xqus](https://sf.net/users/xqus))
 * Copyright (c), 2007-2015, Erkan Valentin ([github.com/rk4an](https://github.com/rk4an), [sf.net/users/jacky672](https://sf.net/users/jacky672))
-* Copyright (c), 2009-2022, Mieczyslaw Nalewaj ([github.com/namiltd](https://github.com/namiltd), [sf.net/users/namiltd](https://sf.net/users/namiltd))
+* Copyright (c), 2009-2025, Mieczyslaw Nalewaj ([github.com/namiltd](https://github.com/namiltd), [sf.net/users/namiltd](https://sf.net/users/namiltd))
 * Copyright (c), 2010-2012, Damien Roth ([sf.net/users/iysaak](https://sf.net/users/iysaak))
 
 
@@ -29,7 +29,7 @@ CURRENT TESTED PLATFORMS
 - NetBSD
 - DragonFly
 - HP-UX
-- Darwin / Mac OS / OS X
+- Darwin / Mac OS / OS X / iOS
 - Windows 2000 / XP / 2003 / Vista / 2008 / 7 / 2011 / 2012 / 8 / 8.1 / 10 / 10 IoT / 2016 / 2019 / 2022 / 11
 - Android
 
@@ -40,9 +40,12 @@ CURRENT TESTED PLATFORMS
 - ReactOS
 - IBM AIX
 - QNX
+- GNU Hurd
+- FortiOS (via SSH)
+- DrayOS (via SSH)
 
 If your platform is not here try checking out the mailing list archives or
-the message boards on SourceForge.
+the message boards on Github.
 
 INSTALLATION AND CONFIGURATION
 ------------------------------
@@ -123,5 +126,5 @@ in the [phpSysInfo](https://github.com/phpsysinfo/phpsysinfo) repository.
 LICENSING
 ---------
 
-This program is released under the GNU Public License Version 2 or 
+This program is released under the GNU Public License Version 2 or
 (at your option) any later version, see [COPYING](COPYING) for details.

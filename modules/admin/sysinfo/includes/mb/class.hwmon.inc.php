@@ -36,12 +36,16 @@ class Hwmon extends Sensors
                 if (($buf = CommonFunctions::rolv($sensor[$i], "/_input$/", "_label"))!==null) {
                     $dev->setName($buf.$name);
                 } else {
-                    $labelname = trim(preg_replace("/_input$/", "", pathinfo($sensor[$i], PATHINFO_BASENAME)));
-                    if (($name == " (drivetemp)") && (count($buf = CommonFunctions::gdc($hwpath . "device/block", false)))) {
-                        $labelname = "/dev/" . $buf[0];
-                        if (($buf = CommonFunctions::rolv($hwpath . "device/model"))!==null) {
-                            $labelname .= " (".$buf.")";
-                            $name = "";
+                    if (($total == 1) && ($buf = parse_ini_file($hwpath . "device/uevent")) && ($buf["DEVTYPE"] == "PHY") && ($buf["DRIVER"] != "") ) {
+                        $labelname = $buf["DRIVER"];
+                    } else {
+                        $labelname = trim(preg_replace("/_input$/", "", pathinfo($sensor[$i], PATHINFO_BASENAME)));
+                        if (($name == " (drivetemp)") && (count($buf = CommonFunctions::gdc($hwpath . "device/block", false)))) {
+                            $labelname = "/dev/" . $buf[0];
+                            if (($buf = CommonFunctions::rolv($hwpath . "device/model"))!==null) {
+                                $labelname .= " (".$buf.")";
+                                $name = "";
+                            }
                         }
                     }
                     if ($labelname !== "") {
@@ -85,7 +89,11 @@ class Hwmon extends Sensors
                 if (($buf = CommonFunctions::rolv($sensor[$i], "/_input$/", "_label"))!==null) {
                     $dev->setName($buf.$name);
                 } else {
-                    $labelname = trim(preg_replace("/_input$/", "", pathinfo($sensor[$i], PATHINFO_BASENAME)));
+                    if (($total == 1) && ($buf = parse_ini_file($hwpath . "device/uevent")) && ($buf["DEVTYPE"] == "PHY") && ($buf["DRIVER"] != "") ) {
+                        $labelname = $buf["DRIVER"];
+                    } else {
+                        $labelname = trim(preg_replace("/_input$/", "", pathinfo($sensor[$i], PATHINFO_BASENAME)));
+                    }
                     if ($labelname !== "") {
                         $dev->setName($labelname.$name);
                     } else {
@@ -128,7 +136,11 @@ class Hwmon extends Sensors
                 if (($buf = CommonFunctions::rolv($sensor[$i], "/_input$/", "_label"))!==null) {
                     $dev->setName($buf.$name);
                 } else {
-                    $labelname = trim(preg_replace("/_input$/", "", pathinfo($sensor[$i], PATHINFO_BASENAME)));
+                    if (($total == 1) && ($buf = parse_ini_file($hwpath . "device/uevent")) && ($buf["DEVTYPE"] == "PHY") && ($buf["DRIVER"] != "") ) {
+                        $labelname = $buf["DRIVER"];
+                    } else {
+                        $labelname = trim(preg_replace("/_input$/", "", pathinfo($sensor[$i], PATHINFO_BASENAME)));
+                    }
                     if ($labelname !== "") {
                         $dev->setName($labelname.$name);
                     } else {
@@ -173,7 +185,11 @@ class Hwmon extends Sensors
                 if (($buf = CommonFunctions::rolv($sensor[$i], "/_input$/", "_label"))!==null) {
                     $dev->setName($buf.$name);
                 } else {
-                    $labelname = trim(preg_replace("/_input$/", "", pathinfo($sensor[$i], PATHINFO_BASENAME)));
+                    if (($total == 1) && ($buf = parse_ini_file($hwpath . "device/uevent")) && ($buf["DEVTYPE"] == "PHY") && ($buf["DRIVER"] != "") ) {
+                        $labelname = $buf["DRIVER"];
+                    } else {
+                        $labelname = trim(preg_replace("/_input$/", "", pathinfo($sensor[$i], PATHINFO_BASENAME)));
+                    }
                     if ($labelname !== "") {
                         $dev->setName($labelname.$name);
                     } else {
@@ -216,7 +232,11 @@ class Hwmon extends Sensors
                 if (($buf = CommonFunctions::rolv($sensor[$i], "/_input$/", "_label"))!==null) {
                     $dev->setName($buf.$name);
                 } else {
-                    $labelname = trim(preg_replace("/_input$/", "", pathinfo($sensor[$i], PATHINFO_BASENAME)));
+                    if (($total == 1) && ($buf = parse_ini_file($hwpath . "device/uevent")) && ($buf["DEVTYPE"] == "PHY") && ($buf["DRIVER"] != "") ) {
+                        $labelname = $buf["DRIVER"];
+                    } else {
+                        $labelname = trim(preg_replace("/_input$/", "", pathinfo($sensor[$i], PATHINFO_BASENAME)));
+                    }
                     if ($labelname !== "") {
                         $dev->setName($labelname.$name);
                     } else {
@@ -246,7 +266,7 @@ class Hwmon extends Sensors
      */
     public function build()
     {
-        if ((PSI_OS == 'Linux') && !defined('PSI_EMU_HOSTNAME')) {
+        if ((PSI_OS == 'Linux') && (!defined('PSI_EMU_HOSTNAME') || defined('PSI_EMU_PORT'))) {
             $hwpaths = CommonFunctions::findglob("/sys/class/hwmon/hwmon*/", GLOB_NOSORT);
             if (is_array($hwpaths) && (count($hwpaths) > 0)) {
                 $hwpaths2 = CommonFunctions::findglob("/sys/class/hwmon/hwmon*/device/", GLOB_NOSORT);
