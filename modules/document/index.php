@@ -1730,7 +1730,8 @@ if (($can_upload or $user_upload) and !$is_in_tinymce) {
               'show' => !defined('EBOOK_DOCUMENTS')),
         array('title' => $langMindmap,
               'url' => "../mindmap/index.php?course=$course_code",
-              'icon' => 'fa-solid fa-sitemap'),
+              'icon' => 'fa-solid fa-sitemap',
+              'show' => !(defined('MY_DOCUMENTS') || defined('COMMON_DOCUMENTS'))),
         array('title' => $langCommonDocs,
               'url' => "../units/insert.php?course=$course_code&amp;dir=$curDirPath&amp;type=doc&amp;id=-1",
               'icon' => 'fa-share-alt',
@@ -1738,7 +1739,6 @@ if (($can_upload or $user_upload) and !$is_in_tinymce) {
         array('title' => $langQuotaBar,
               'url' => "{$base_url}showQuota=true",
               'icon' => 'fa-pie-chart')
-
         ), false);
 } else {
     $data['action_bar'] = $data['dialogBox'] = '';
