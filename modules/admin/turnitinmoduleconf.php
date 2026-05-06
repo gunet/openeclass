@@ -34,6 +34,17 @@ $toolName = $langTurnitinConf;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'extapp.php', 'name' => $langExtAppConfig);
 
+if (!get_config('third_party_cookies')) {
+    $head_content .= "<style>.tpc-config-link:hover { filter: brightness(0.1); }</style>";
+    $tool_content .= "<div class='alert alert-warning'>" .
+        "<i class='fa-solid fa-triangle-exclamation fa-lg me-2'></i>" .
+        "<span>$langThirdPartyCookiesRequired</span> " .
+        "<a class='tpc-config-link' href='eclassconf.php#eight'>$langEclassConf</a>" .
+        "</div>";
+    draw($tool_content, 3, null, $head_content);
+    exit;
+}
+
 load_js('tools.js');
 load_js('bootstrap-datetimepicker');
 load_js('validation.js');

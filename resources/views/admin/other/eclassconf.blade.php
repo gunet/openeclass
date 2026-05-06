@@ -750,6 +750,13 @@
                                                 </div>
                                                 <div class='checkbox'>
                                                     <label class='label-container' aria-label="{{ trans('langSelect') }}">
+                                                        <input type='checkbox' name='third_party_cookies' value='1' {{ $cbox_third_party_cookies }}>
+                                                        <span class='checkmark'></span>
+                                                        {{ trans('langThirdPartyCookies') }}
+                                                    </label>
+                                                </div>
+                                                <div class='checkbox'>
+                                                    <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                         <input id='individual_group_bookings' type='checkbox' name='individual_group_bookings' value='1' {{ $cbox_individual_group_bookings }}>
                                                         <span class='checkmark'></span>
                                                         {{ trans('langIndividualGroupBookings') }}
@@ -1482,6 +1489,12 @@
                 $('[data-menuID]').removeClass('active');
                 $(this).addClass('active');
             });
+
+            // Deep-link via #<menuID> hash (e.g. eclassconf.php#eight)
+            var deepLinkHash = window.location.hash.replace('#', '');
+            if (deepLinkHash && $('[data-menuID="' + deepLinkHash + '"]').length) {
+                $('[data-menuID="' + deepLinkHash + '"]').trigger('click');
+            }
 
             $('input[name=user_notifications]').change(function () {
                 if ($('#user_notifications_interval').is(":checked")) {

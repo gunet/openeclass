@@ -1767,6 +1767,8 @@ $default_config = array(
     0,
     'enable_quick_note',
     0,
+    'third_party_cookies',
+    0,
     'email_required',
     0,
     'email_from',
