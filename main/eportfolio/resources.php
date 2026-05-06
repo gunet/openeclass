@@ -343,12 +343,12 @@ if ($userdata) {
                         }
                         redirect_to_home_page("main/eportfolio/resources.php");
                     } elseif ($rtype == 'my_badges') {
-                        $userBadge = Database::get()->querySingle("SELECT id,completed_criteria,total_criteria FROM user_badge WHERE user = ?d AND badge = ?d", $uid, $rid);
+                        $userBadge = Database::get()->querySingle("SELECT id,completed_criteria,total_criteria,assigned FROM user_badge WHERE user = ?d AND badge = ?d", $uid, $rid);
                         if ($userBadge && $userBadge->completed_criteria == $userBadge->total_criteria) {
                             $badgeInfo = Database::get()->querySingle("SELECT * FROM badge WHERE id = ?d", $rid);
                             $data = array('title' => $badgeInfo->title, 'issuer' => $badgeInfo->issuer, 'description' => $badgeInfo->description, 
                                         'icon' => $badgeInfo->icon, 'course_id' => course_id_to_title($badgeInfo->course_id),
-                                        'date_created' => $badgeInfo->created, 'date_expired' => $badgeInfo->expires, 'badgeId' => $rid);
+                                        'date_created' => $badgeInfo->created, 'date_expired' => $badgeInfo->expires, 'assigned' => $userBadge->assigned, 'badgeId' => $rid);
     
                             $visibility = (isset($_POST['visibility'])) ? intval($_POST['visibility']) : EPF_VISIBLE_PUBLIC;
                             $reflection_comments = (!empty($_POST['reflection_comments'])) ? $_POST['reflection_comments'] : '';
@@ -1098,11 +1098,16 @@ if ($userdata) {
                 if ($mybadge->resource_type == 'my_badges') {
                       $tool_content .= "<img style='height:150px; width:150px; object-fit: contain;' src='{$urlServer}" . BADGE_TEMPLATE_PATH . get_badge_filename($data['badgeId']) ."' class='card-img-top ms-auto me-auto mt-3' alt='badge'>
                                         <div class='card-body'>
-                                            <a class='link-color' href='{$urlServer}modules/progress/index.php?course=" . course_id_to_code($mybadge->course_id) . "&amp;badge_id= " .  $data['badgeId'] . "&amp;u=" . $mybadge->user_id . "'>
-                                                " . ellipsize($data['title'], 40) . "
-                                                " . format_locale_date(strtotime($data['date_created'] ?? ''), null, false) . "
-                                                " . $data['issuer'] . "
-                                            </a>
+                                            <div class='text-heading-h5'>
+                                                <a href='{$urlServer}modules/progress/index.php?course=" . course_id_to_code($mybadge->course_id) . "&amp;badge_id= " .  $data['badgeId'] . "&amp;u=" . $mybadge->user_id . "'>"
+                                                 . ellipsize($data['title'], 40) . "
+                                                 </a>
+                                            </div>
+                                            <div class='badge_date text-center text-success'>" . format_locale_date(strtotime($data['assigned']), null, false). "</div>
+                                            <div class='bagde_panel_issuer'>" . $data['issuer'] . "</div>
+                                            <div class='badge_description text-center text-muted mt-2' style='font-size: 0.9em;'>"
+                                                . ellipsize($data['description'], 100) .
+                                            "</div>
                                         </div>";
                 }
                 elseif ($mybadge->resource_type == 'external_badges') {
