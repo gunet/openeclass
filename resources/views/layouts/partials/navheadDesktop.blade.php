@@ -2,68 +2,67 @@
     <div id="bgr-cheat-header" class="navbar navbar-eclass py-0 fixed-top">
         <div class='{{ $container }} header-container py-0'>
 
-
             <div class='d-none d-lg-block w-100 header-large-screen'>
                 <div class='col-12 h-100 d-flex justify-content-between align-items-center gap-5'>
                     <nav class='d-flex justify-content-start align-items-center h-100'>
 
                         @if($enable_box_logo)
-                        <div class='box-logo d-flex justify-content-center align-items-center px-3'>
-                            <a href="@if($_SESSION['provider'] !== 'lti_publish'){{ $urlAppend }}@endif" aria-label="{{ trans('langHomePage') }}">
+                            <div class='box-logo d-flex justify-content-center align-items-center px-3'>
+                                <a href="@if($_SESSION['provider'] !== 'lti_publish'){{ $urlAppend }}@endif" aria-label="{{ trans('langHomePage') }}">
+                                    <img class="eclass-nav-icon m-auto d-block" src="{{ $logo_img }}" alt="{{ trans('langLogo') }}"/>
+                                </a>
+                            </div>
+                        @else
+                            <a class='me-lg-4 me-xl-5' href="@if($_SESSION['provider'] !== 'lti_publish'){{ $urlAppend }}@endif" aria-label="{{ trans('langHomePage') }}">
                                 <img class="eclass-nav-icon m-auto d-block" src="{{ $logo_img }}" alt="{{ trans('langLogo') }}"/>
                             </a>
-                        </div>
-                        @else
-                        <a class='me-lg-4 me-xl-5' href="@if($_SESSION['provider'] !== 'lti_publish'){{ $urlAppend }}@endif" aria-label="{{ trans('langHomePage') }}">
-                            <img class="eclass-nav-icon m-auto d-block" src="{{ $logo_img }}" alt="{{ trans('langLogo') }}"/>
-                        </a>
                         @endif
 
                         @if($_SESSION['provider'] !== 'lti_publish')
-                        <ul class="container-items nav" role="navigation" aria-label="{{ trans('langHeaderLinks') }}">
-                            @if(!get_config('hide_login_link'))
-                                <li class="nav-item" aria-label="{{ trans('langHome') }}">
-                                    <a id="link-home" class="nav-link menu-item mx-lg-2 @if (!isset($_SESSION['uid']) && empty($pageName)) active2 @endif" href="{{ $urlServer }}?show_home=true" aria-label="{{ trans('langHome') }}">
-                                        {{ trans('langHome') }}
-                                    </a>
-                                </li>
-                            @endif
-                            @if (!isset($_SESSION['uid']))
-                                <li class="nav-item" aria-label="{{ trans('langRegistration') }}">
-                                    <a id="link-register" class="nav-link menu-item mx-lg-2 @if(get_config('registration_link')=='hide') d-none @endif" href="{{ $urlServer }}modules/auth/registration.php" aria-label="{{ trans('langRegistration') }}">
-                                        {{ trans('langRegistration') }}
-                                    </a>
-                                </li>
-                                @if (!get_config('dont_display_courses_menu'))
+                            <ul class="container-items nav" role="navigation" aria-label="{{ trans('langHeaderLinks') }}">
+                                @if(!get_config('hide_login_link'))
+                                    <li class="nav-item" aria-label="{{ trans('langHome') }}">
+                                        <a id="link-home" class="nav-link menu-item mx-lg-2 @if (!isset($_SESSION['uid']) && empty($pageName)) active2 @endif" href="{{ $urlServer }}?show_home=true" aria-label="{{ trans('langHome') }}">
+                                            {{ trans('langHome') }}
+                                        </a>
+                                    </li>
+                                @endif
+                                @if (!isset($_SESSION['uid']))
+                                    <li class="nav-item" aria-label="{{ trans('langRegistration') }}">
+                                        <a id="link-register" class="nav-link menu-item mx-lg-2 @if(get_config('registration_link')=='hide') d-none @endif" href="{{ $urlServer }}modules/auth/registration.php" aria-label="{{ trans('langRegistration') }}">
+                                            {{ trans('langRegistration') }}
+                                        </a>
+                                    </li>
+                                    @if (!get_config('dont_display_courses_menu'))
+                                        <li class="nav-item" aria-label="{{ trans('langCourses') }}">
+                                            <a id="link-lessons" class="nav-link menu-item mx-lg-2" href="{{ $urlServer }}modules/auth/listfaculties.php" aria-label="{{ trans('langCourses') }}">
+                                                {{ trans('langCourses') }}
+                                            </a>
+                                        </li>
+                                    @endif
+                                @endif
+                                @if (isset($_SESSION['uid']))
+                                    <li class="nav-item" aria-label="{{ trans('langPortfolio') }}">
+                                        <a id="link-portfolio" class="nav-link menu-item mx-lg-2" href="{{ $urlServer }}main/portfolio.php" aria-label="{{ trans('langPortfolio') }}">
+                                            {{ trans('langPortfolio') }}
+                                        </a>
+                                    </li>
                                     <li class="nav-item" aria-label="{{ trans('langCourses') }}">
-                                        <a id="link-lessons" class="nav-link menu-item mx-lg-2" href="{{ $urlServer }}modules/auth/listfaculties.php" aria-label="{{ trans('langCourses') }}">
+                                        <a id="link-lessons" class="nav-link menu-item mx-lg-2" href="{{ $urlServer }}modules/auth/courses.php" aria-label="{{ trans('langCourses') }}">
                                             {{ trans('langCourses') }}
                                         </a>
                                     </li>
                                 @endif
-                            @endif
-                            @if (isset($_SESSION['uid']))
-                                <li class="nav-item" aria-label="{{ trans('langPortfolio') }}">
-                                    <a id="link-portfolio" class="nav-link menu-item mx-lg-2" href="{{ $urlServer }}main/portfolio.php" aria-label="{{ trans('langPortfolio') }}">
-                                        {{ trans('langPortfolio') }}
-                                    </a>
-                                </li>
-                                <li class="nav-item" aria-label="{{ trans('langCourses') }}">
-                                    <a id="link-lessons" class="nav-link menu-item mx-lg-2" href="{{ $urlServer }}modules/auth/courses.php" aria-label="{{ trans('langCourses') }}">
-                                        {{ trans('langCourses') }}
-                                    </a>
-                                </li>
-                            @endif
-                            @if (!get_config('dont_display_faq_menu'))
-                                @if (faq_exist())
-                                    <li class="nav-item" aria-label="{{ trans('langFaqAbbrev') }}">
-                                        <a id="link-faq" class="nav-link menu-item mx-lg-2 " href="{{$urlAppend}}info/faq.php" aria-label="{{ trans('langFaqAbbrev') }}">
-                                            {{ trans('langFaqAbbrev') }}
-                                        </a>
-                                    </li>
+                                @if (!get_config('dont_display_faq_menu'))
+                                    @if (faq_exist())
+                                        <li class="nav-item" aria-label="{{ trans('langFaqAbbrev') }}">
+                                            <a id="link-faq" class="nav-link menu-item mx-lg-2 " href="{{$urlAppend}}info/faq.php" aria-label="{{ trans('langFaqAbbrev') }}">
+                                                {{ trans('langFaqAbbrev') }}
+                                            </a>
+                                        </li>
+                                    @endif
                                 @endif
-                            @endif
-                        </ul>
+                            </ul>
                         @endif
                     </nav>
                     <div class='d-flex justify-content-end align-items-center h-100 pe-0 gap-3'>
@@ -240,22 +239,20 @@
                                                             </li>
                                                         @endif
                                                         @if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
-                                                        <li>
-                                                            <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}modules/usage/index.php?t=u">
-                                                                <i class="fa-solid fa-chart-line settings-icons"></i>
-                                                                {{ trans('langMyStats') }}
-                                                            </a>
-                                                        </li>
-                                                        @endif
-                                                        @if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
-                                                        @if (get_config('personal_blog'))
                                                             <li>
-                                                                <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}modules/blog/index.php?user_id={{$uid}}&token={{ token_generate('personal_blog'.$uid) }}">
-                                                                    <i class="fa-solid fa-globe settings-icons"></i>
-                                                                    {{ trans('langMyBlog') }}
+                                                                <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}modules/usage/index.php?t=u">
+                                                                    <i class="fa-solid fa-chart-line settings-icons"></i>
+                                                                    {{ trans('langMyStats') }}
                                                                 </a>
                                                             </li>
-                                                        @endif
+                                                            @if (get_config('personal_blog'))
+                                                                <li>
+                                                                    <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}modules/blog/index.php?user_id={{$uid}}&token={{ token_generate('personal_blog'.$uid) }}">
+                                                                        <i class="fa-solid fa-globe settings-icons"></i>
+                                                                        {{ trans('langMyBlog') }}
+                                                                    </a>
+                                                                </li>
+                                                            @endif
                                                         @endif
                                                         <li>
                                                         <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}modules/message/index.php">
@@ -270,28 +267,24 @@
                                                             </a>
                                                         </li>
                                                         @if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
-                                                        <li>
-                                                            <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}main/my_widgets.php">
-                                                                <i class="fa-solid fa-layer-group settings-icons"></i>
-                                                                {{ trans('langMyWidgets') }}
-                                                            </a>
-                                                        </li>
-                                                        @endif
-                                                        @if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
-                                                        <li>
-                                                            <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}main/gradebookUserTotal/index.php">
-                                                                <i class="fa-solid fa-a settings-icons" aria-hidden="true"></i>
-                                                                {{ trans('langGradeTotal') }}
-                                                            </a>
-                                                        </li>
-                                                        @endif
-                                                        @if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
-                                                        <li>
-                                                            <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}main/mycertificates.php">
-                                                                <i class="fa-solid fa-award settings-icons"></i>
-                                                                {{ trans('langMyCertificates') }}
-                                                            </a>
-                                                        </li>
+                                                            <li>
+                                                                <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}main/my_widgets.php">
+                                                                    <i class="fa-solid fa-layer-group settings-icons"></i>
+                                                                    {{ trans('langMyWidgets') }}
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}main/gradebookUserTotal/index.php">
+                                                                    <i class="fa-solid fa-a settings-icons" aria-hidden="true"></i>
+                                                                    {{ trans('langGradeTotal') }}
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}main/mycertificates.php">
+                                                                    <i class="fa-solid fa-award settings-icons"></i>
+                                                                    {{ trans('langMyCertificates') }}
+                                                                </a>
+                                                            </li>
                                                         @endif
                                                         @php
                                                             $openBadgesAppNav = ExtAppManager::getApp('openbadges');
@@ -301,9 +294,14 @@
                                                         <li>
                                                             <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}main/mybackpacks.php">
                                                                 <i class="fa-regular fa-file settings-icons"></i>
-                                                                Tα backpack μου
+                                                                {{ trans('langMyBackpacks') }}
                                                             </a>
                                                         </li>
+                                                        @endif
+                                                        @if (($session->status == USER_TEACHER and get_config('mydocs_teacher_enable')) or ($session->status == USER_STUDENT and get_config('mydocs_student_enable')) or ($session->status == ADMIN_USER and get_config('mydocs_teacher_enable')))
+                                                            <li>
+                                                                <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}main/mydocs/index.php"><i class="fa-regular fa-file settings-icons"></i> {{ trans('langMyDocs') }}</a>
+                                                            </li>
                                                         @endif
                                                         <li>
                                                             <form id='logoutForm' method='post' action='{{ $urlAppend }}modules/auth/logout.php' style='height:40px;'>
@@ -446,9 +444,7 @@
                                         <li>
                                             <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}modules/usage/index.php?t=u"><i class="fa-solid fa-chart-line settings-icons"></i>{{ trans('langMyStats') }}</a>
                                         </li>
-                                    @endif
-                                    @if (get_config('personal_blog'))
-                                        @if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
+                                        @if (get_config('personal_blog'))
                                             <li>
                                                 <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}modules/blog/index.php?user_id={{$uid}}&token={{ token_generate('personal_blog'.$uid) }}"><i class="fa-solid fa-globe settings-icons"></i>{{ trans('langMyBlog') }}</a>
                                             </li>
@@ -464,42 +460,38 @@
                                         <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}main/profile/display_profile.php"><i class="fa-solid fa-user settings-icons"></i> {{ trans('langMyProfile') }}</a>
                                     </li>
                                     @if (get_config('enable_user_theme_customization'))
-                                    <li>
-                                        <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}main/profile/theme_settings.php">
-                                            <i class="fa-solid fa-palette settings-icons"></i> {{ trans('langThemeSettings')}}
-                                        </a>
-                                    </li>
+                                        <li>
+                                            <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}main/profile/theme_settings.php">
+                                                <i class="fa-solid fa-palette settings-icons"></i> {{ trans('langThemeSettings')}}
+                                            </a>
+                                        </li>
                                     @endif
                                     @if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
-                                    <li>
-                                        <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}main/my_widgets.php"><i class="fa-solid fa-layer-group settings-icons"></i> {{ trans('langMyWidgets') }}</a>
-                                    </li>
-                                    @endif
-                                    @if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
-                                    <li>
-                                        <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}main/gradebookUserTotal/index.php"><i class="fa-solid fa-a settings-icons"></i> {{ trans('langGradeTotal') }}</a>
-                                    </li>
-                                    @endif
-                                    @if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
-                                    <li>
-                                        <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}main/mycertificates.php"><i class="fa-solid fa-award settings-icons"></i> {{ trans('langMyCertificates') }}</a>
-                                    </li>
+                                        <li>
+                                            <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}main/my_widgets.php"><i class="fa-solid fa-layer-group settings-icons"></i> {{ trans('langMyWidgets') }}</a>
+                                        </li>
+                                        <li>
+                                            <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}main/gradebookUserTotal/index.php"><i class="fa-solid fa-a settings-icons"></i> {{ trans('langGradeTotal') }}</a>
+                                        </li>
+                                        <li>
+                                            <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}main/mycertificates.php"><i class="fa-solid fa-award settings-icons"></i> {{ trans('langMyCertificates') }}</a>
+                                        </li>
                                     @endif
                                     @php
                                         $openBadgesAppNav2 = ExtAppManager::getApp('openbadges');
                                         $openBadgesEnabledNav2 = $openBadgesAppNav2 && $openBadgesAppNav2->isEnabled();
                                     @endphp
                                     @if ($openBadgesEnabledNav2)
-                                    <li>
-                                        <a class="list-group-item d-flex 
-                                        justify-content-start align-items-start py-3 gap-2"
-                                         href="{{ $urlAppend }}main/mybackpacks.php"><i class="fa-solid fa-award settings-icons"></i> Τα backpack μου </a>
-                                    </li>
+                                        <li>
+                                            <a class="list-group-item d-flex
+                                            justify-content-start align-items-start py-3 gap-2"
+                                             href="{{ $urlAppend }}main/mybackpacks.php"><i class="fa-solid fa-award settings-icons"></i> {{ trans('langMyBackpacks') }}</a>
+                                        </li>
                                     @endif
                                     @if (($session->status == USER_TEACHER and get_config('mydocs_teacher_enable')) or ($session->status == USER_STUDENT and get_config('mydocs_student_enable')) or ($session->status == ADMIN_USER and get_config('mydocs_teacher_enable')))
-                                    <li>
-                                        <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}main/mydocs/index.php"><i class="fa-regular fa-file settings-icons"></i> {{ trans('langMyDocs') }}</a>
-                                    </li>
+                                        <li>
+                                            <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}main/mydocs/index.php"><i class="fa-regular fa-file settings-icons"></i> {{ trans('langMyDocs') }}</a>
+                                        </li>
                                     @endif
                                     <li>
                                         <form method='post' action='{{ $urlAppend }}modules/auth/logout.php' style='height:49px;'>
@@ -516,10 +508,6 @@
 
                 </div>
             </div>
-
-
-
-
 
 
             <div class="offcanvas offcanvas-start d-lg-none offCanvas-Tools" tabindex="-1" id="offcanvasScrollingTools">
