@@ -45,7 +45,11 @@
                                     <div class='col-sm-12'>
                                         @if (isset($course_image))
                                             <div class='col-12 d-flex justify-content-start align-items-center flex-wrap gap-2'>
-                                                <img style="max-height:100px;max-width:150px;" src='{{ $urlAppend }}courses/{{ $course_code }}/image/{{ $course_image }}' alt="{{ trans('langCourseImage') }}"> &nbsp;&nbsp;
+                                                @if (empty($course_image))
+                                                    <img style="max-height:100px;max-width:150px;" src='{{ $urlAppend }}resources/img/ph1.jpg' alt="{{ trans('langCourseImage') }}">
+                                                @else
+                                                    <img style="max-height:100px;max-width:150px;" src='{{ $urlAppend }}courses/{{ $course_code }}/image/{{ $course_image }}' alt="{{ trans('langCourseImage') }}">
+                                                @endif
                                                 <a class='btn deleteAdminBtn' href='{{$_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&delete_image=true&{!! generate_csrf_token_link_parameter() !!}'>
                                                     {{ trans('langDelete') }}
                                                 </a>
