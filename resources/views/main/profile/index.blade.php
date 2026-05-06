@@ -47,6 +47,32 @@
             const BADGE_PUBLISHED_TO_BACKPACK = "{{ trans('langPublishedToBackpack') }}";
         </script>
     @endif
+
+    @if ($uid == $id)
+        <script>
+            $(document).on('click', 'a.list-group-item[href*="resources.php"]', function(e) {
+                e.preventDefault();
+
+                const href = $(this).attr('href');
+                const url = new URL(href, window.location.origin);
+                const rid = url.searchParams.get('rid');
+
+                const modalId = `modal_blog_${rid}`;
+                const modalElement = document.getElementById(modalId);
+
+                if (modalElement) {
+                    const Modal = new bootstrap.Modal(modalElement);
+                    Modal.show();
+
+                    const formSelector = `#vis_form_blog_${rid}`;
+                    $(formSelector).attr('action', href);
+                } else {
+                    console.warn('Modal with ID', modalId, 'not found');
+                }
+            });
+        </script>
+    @endif
+
 @endpush
 
 @section('content')
@@ -382,6 +408,50 @@
                                     @endif
                                         @foreach ($badge_external as $key => $badge)
                                             <div class='col'>
+
+                                                @if (get_config('eportfolio_enable') && ($id == $uid))
+                                                <div class="text-end">
+                                                    {!!
+                                                        action_button(array(
+                                                            array(
+                                                                'title' => trans('langAddResePortfolio'),
+                                                                'url' => "$urlServer"."main/eportfolio/resources.php?action=add&amp;type=external_badges&amp;rid=".$badge->user_badge_id,
+                                                                'icon' => 'fa-star'
+                                                            ),
+                                                        ))
+                                                    !!}
+                                                </div>
+                                                <div class="modal fade" id="modal_blog_{{$badge->user_badge_id}}" tabindex="-1" aria-labelledby="blogModalLabel_{{$badge->user_badge_id}}" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="blogModalLabel_{{$badge->user_badge_id}}">{{trans('langAddResePortfolio')}} - {{ellipsize($badge->title, 40)}}</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="'.$langClose.'"></button>
+                                                            </div>
+                
+                                                            <div class="modal-body">
+                                                                <form id="vis_form_blog_{{$badge->user_badge_id}}" name="vis_form_blog_{{$badge->user_badge_id}}" action="" method="post">
+                                                                    <div class="mb-3">
+                                                                        <label for="vis_form_blog_{{$badge->user_badge_id}}_select" class="form-label">{{trans('langePortfolioFieldsVisibilitySettings')}}</label>
+                                                                        <select class="form-select" name="visibility" id="vis_form_blog_{{$badge->user_badge_id}}_select">
+                                                                            <option value="{{EPF_VISIBLE_PUBLIC}}">{{trans('langPublicePortfolioField')}}</option>
+                                                                            <option value="{{EPF_VISIBLE_USERS}}">{{trans('langOpenToRegisteredUsers')}}</option>
+                                                                            <option value="{{EPF_VISIBLE_PRIVATE}}">{{trans('langProfileInfoPrivate')}}</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="mb-3">
+                                                                        <label for="vis_form_blog_{{$badge->user_badge_id}}_textarea" class="form-label">{{trans('langePortfolioPromptAddReflComments')}}</label>
+                                                                        <textarea class="form-control" name="reflection_comments" id="vis_form_blog_{{$badge->user_badge_id}}_textarea"></textarea>
+                                                                    </div>
+                                                                    <button type="submit" class="btn btn-primary">{{trans('langSubmit')}}</button>
+                                                                </form>
+                                                            </div>
+                
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                @endif
+
                                                 <div class="card h-100 border-0 badge-card-wrapper external-badge">
                                                     @if(!empty($badge->image_url))
                                                         <img style='height:150px; width:150px; object-fit: contain;' 
