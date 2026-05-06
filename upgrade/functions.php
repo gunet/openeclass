@@ -3767,8 +3767,8 @@ function upgrade_to_4_4($tbl_options) : void
         Database::get()->query("ALTER TABLE eportfolio_fields_data ADD visibility TINYINT UNSIGNED NOT NULL DEFAULT 1");
     }
 
-    if (!DBHelper::fieldExists('eportfolio_resource', 'visibility')) {
-        Database::get()->query("ALTER TABLE eportfolio_resource ADD visibility TINYINT UNSIGNED NOT NULL DEFAULT 1, ADD reflection_comments TEXT NOT NULL");
+    if (!DBHelper::fieldExists('eportfolio_resource', 'reflection_comments')) {
+        Database::get()->query("ALTER TABLE eportfolio_resource ADD reflection_comments TEXT NULL");
     }
 
     Database::get()->query("UPDATE eportfolio_fields SET description = ?s WHERE shortname = ?s AND (description IS NULL OR description = '')", $langAboutMeDescr, 'about_me');
