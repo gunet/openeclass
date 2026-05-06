@@ -17,6 +17,7 @@
  *  * ========================================================================
  *
  */
+
 /**
  * @file listusers.php
  * @brief display list of users
@@ -27,6 +28,9 @@ require_once 'modules/auth/auth.inc.php';
 require_once 'include/lib/user.class.php';
 require_once 'include/lib/hierarchy.class.php';
 require_once 'hierarchy_validations.php';
+require_once 'modules/admin/tenant_functions.php';
+
+global $is_power_user;
 
 if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
     $tree = new Hierarchy();
@@ -105,7 +109,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
 
     // first name search
     if (!empty($fname)) {
-        $criteria[] = 'givenname LIKE ?s '. $cs;
+        $criteria[] = 'givenname LIKE ?s ' . $cs;
         $terms[] = $l1 . $fname . $l2;
         add_param('fname');
     }
@@ -118,9 +122,11 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     }
 
     // mail verified
-    if ($verified_mail === EMAIL_VERIFICATION_REQUIRED or
-            $verified_mail === EMAIL_VERIFIED or
-            $verified_mail === EMAIL_UNVERIFIED) {
+    if (
+        $verified_mail === EMAIL_VERIFICATION_REQUIRED or
+        $verified_mail === EMAIL_VERIFIED or
+        $verified_mail === EMAIL_UNVERIFIED
+    ) {
         $criteria[] = 'verified_mail = ?d';
         $terms[] = $verified_mail;
         add_param('verified_mail');
@@ -165,30 +171,56 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         add_param('search', 'wexpire');
     }
 
-    // Department search
     $depqryadd = '';
-    $dep = (isset($_GET['department'])) ? intval($_GET['department']) : 0;
-    if ($dep || isDepartmentAdmin()) {
-        $depqryadd = ', user_department';
+    $dep = isset($_GET['department']) ? intval($_GET['department']) : 0;
+    
+    // Filtering applies only to non-power users.
+    // Power users skip this entire block.
+    if (!$is_power_user) {
+        $tenant = getCurrentTenant();
+        // Case 1: Department Admin Users
+        // These users must be restricted only to their managed departments.
+        if (isDepartmentAdmin() && !$tenant) {
+            // Join with user_department table.
+            $depqryadd = ', user_department';
 
-        $subs = array();
-        if ($dep) {
-            $subs = $tree->buildSubtrees(array($dep));
-            add_param('department', $dep);
-        } else if (isDepartmentAdmin()) {
-            $subs = $user->getAdminDepartmentIds($uid);
+            $adminDepartments = $user->getAdminDepartmentIds($uid);
+            // If a specific department is selected, restrict results further,
+            // including any sub-departments.
+            if ($dep) {
+                add_param('department', $dep);
+                $adminDepartments = $tree->buildSubtrees([$dep]);
+            }
+    
+            // Construct the allowed department list.
+            $allowedDeps = implode(',', array_map('intval', $adminDepartments));
+    
+            // Apply filtering conditions.
+            $criteria[] = 'user.id = user_department.user';
+            $criteria[] = "department IN ($allowedDeps)";
         }
-
-        $ids = '';
-        foreach ($subs as $key => $id) {
-            $ids .= $id . ',';
-            validateNode($id, isDepartmentAdmin());
+    
+        // Case 2: Regular non-power users without department privileges
+        else {
+    
+            // Retrieve users belonging to this tenant.
+            $currentTenantUsers = getTenantUsers();
+            $tenantUserIds = array_map(fn($u) => intval($u->id), $currentTenantUsers);
+    
+            // If the tenant has no users, return an empty result set.
+            if (empty($tenantUserIds)) {
+                echo json_encode([
+                    'recordsTotal' => 0,
+                    'recordsFiltered' => 0,
+                    'aaData' => []
+                ]);
+                exit();
+            }
+    
+            // Apply tenant-level restriction.
+            $tenantIdList = implode(',', $tenantUserIds);
+            $criteria[] = "user.id IN ($tenantIdList)";
         }
-        // remove last ',' from $ids
-        $deps = substr($ids, 0, -1);
-
-        $criteria[] = 'user.id = user_department.user';
-        $criteria[] = 'department IN (' . $deps . ')';
     }
 
     // auth type search
@@ -196,8 +228,8 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         if ($auth_type >= 2 && $auth_type < 8) {
             $criteria[] = "password = '{$auth_ids[$auth_type]}'";
         } elseif ($auth_type == 1) {
-            $q1 = "'". implode("','", $auth_ids) . "'";
-            $criteria[] = 'password NOT IN ('.$q1.')';
+            $q1 = "'" . implode("','", $auth_ids) . "'";
+            $criteria[] = 'password NOT IN (' . $q1 . ')';
         } else {
             $depqryadd .= ', user_ext_uid';
             // ext auth uid's from user_ext_uid table
@@ -226,11 +258,30 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         $keywords = array_fill(0, 4, '%');
     }
 
+    if (!$is_power_user) {
+        $currentTenantUsers = getTenantUsers();
+        $tenantUserIds = array_map(fn($u) => intval($u->id), $currentTenantUsers);
+
+        // if no users → return empty result
+        if (empty($tenantUserIds)) {
+            echo json_encode([
+                'recordsTotal' => 0,
+                'recordsFiltered' => 0,
+                'aaData' => []
+            ]);
+            exit();
+        }
+
+        $ids = implode(',', $tenantUserIds);
+        $criteria[] = "user.id IN ($ids)";
+    }
+
     if (count($criteria)) {
         $qry_criteria = implode(' AND ', $criteria);
     } else {
         $qry_criteria = '';
     }
+
 
     // end filter/criteria
     if ($c) { // users per course
@@ -250,7 +301,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             $qry_base .= ' AND ' . $qry_criteria;
         }
         $qry = "SELECT DISTINCT id, surname, givenname, username, email, verified_mail, status " .
-                $qry_base;
+            $qry_base;
         add_param('search', 'no_login');
     } else {
         $qry_base = ' FROM user' . $depqryadd;
@@ -258,24 +309,27 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             $qry_base .= ' WHERE ' . $qry_criteria;
         }
         $qry = 'SELECT DISTINCT user.id, surname, givenname, username, email, status, verified_mail' .
-                $qry_base;
+            $qry_base;
     }
     $terms_base[] = $terms;
 
     // sorting
     if (!empty($_POST['order'][0]['column'])) {
         switch ($_POST['order'][0]['column']) {
-            case '0': $qry .= ' ORDER BY surname ';
+            case '0':
+                $qry .= ' ORDER BY surname ';
                 break;
-            case '1': $qry .= ' ORDER BY givenname ';
+            case '1':
+                $qry .= ' ORDER BY givenname ';
                 break;
-            case '2': $qry .= ' ORDER BY username ';
+            case '2':
+                $qry .= ' ORDER BY username ';
                 break;
         }
         $qry .= (isset($_POST['order'][0]['dir']) && $_POST['order'][0]['dir'] == 'desc' ? 'DESC' : '');
     } else {
         $qry .= ' ORDER BY status, surname ' .
-                (isset($_POST['order'][0]['dir']) && $_POST['order'][0]['dir'] == 'desc' ? 'DESC' : '');
+            (isset($_POST['order'][0]['dir']) && $_POST['order'][0]['dir'] == 'desc' ? 'DESC' : '');
     }
     //pagination
     if ($limit > 0) {
@@ -392,9 +446,9 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                     'url' => "../usage/index.php?t=u&u=$myrow->id"
                 ),
                 array(
-                    'title' => ($inactive_user)? "$langActivate" : "$langDeactivate",
-                    'icon' => ($inactive_user)? "fa-plus-circle" : "fa-minus-circle",
-                    'url' => ($inactive_user)? "$_SERVER[SCRIPT_NAME]?&u=$myrow->id&amp;action=activate&amp;" . generate_csrf_token_link_parameter() : "$_SERVER[SCRIPT_NAME]?&u=$myrow->id&amp;action=deactivate&amp;" . generate_csrf_token_link_parameter(),
+                    'title' => ($inactive_user) ? "$langActivate" : "$langDeactivate",
+                    'icon' => ($inactive_user) ? "fa-plus-circle" : "fa-minus-circle",
+                    'url' => ($inactive_user) ? "$_SERVER[SCRIPT_NAME]?&u=$myrow->id&amp;action=activate&amp;" . generate_csrf_token_link_parameter() : "$_SERVER[SCRIPT_NAME]?&u=$myrow->id&amp;action=deactivate&amp;" . generate_csrf_token_link_parameter(),
                     'show' => $show
                 ),
                 array(
@@ -423,17 +477,18 @@ if (isset($_GET['action']) and isset($_GET['u'])) {
     if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();
     switch ($_GET['action']) {
         case 'deactivate':
-                Database::get()->query("UPDATE user SET expires_at = " .DBHelper::timeAfter() . " WHERE id = ?d" , $_GET['u']);
-                Session::flash('message', sprintf($langUserDeactivated, uid_to_name($_GET['u'])));
-                Session::flash('alert-class', 'alert-info');
+            Database::get()->query("UPDATE user SET expires_at = " . DBHelper::timeAfter() . " WHERE id = ?d", $_GET['u']);
+            Session::flash('message', sprintf($langUserDeactivated, uid_to_name($_GET['u'])));
+            Session::flash('alert-class', 'alert-info');
             break;
         case 'activate':
-                $expires_at = new DateTime(date('Y-m-d H:i', strtotime("now") + get_config('account_duration')));
-                Database::get()->query("UPDATE user SET expires_at = ?t WHERE id = ?d" , $expires_at->format("Y-m-d H:i"), $_GET['u']);
-                Session::flash('message', sprintf($langUserActivated, uid_to_name($_GET['u'])));
-                Session::flash('alert-class', 'alert-info');
+            $expires_at = new DateTime(date('Y-m-d H:i', strtotime("now") + get_config('account_duration')));
+            Database::get()->query("UPDATE user SET expires_at = ?t WHERE id = ?d", $expires_at->format("Y-m-d H:i"), $_GET['u']);
+            Session::flash('message', sprintf($langUserActivated, uid_to_name($_GET['u'])));
+            Session::flash('alert-class', 'alert-info');
             break;
-        default: break;
+        default:
+            break;
     }
 }
 
@@ -460,9 +515,9 @@ $head_content .= "<script>
                 var column = api.column(0);
                 var select = $('<select id=\'select_role\' aria-label=\'" . js_escape($langAll) . "\'>'+
                                  '<option value=\'0\'>-- " . js_escape($langAll) . " --</option>'+
-                                 '<option value=\'".USER_TEACHER."\'>" . js_escape($langUsersWithRightsS) . "</option>'+
-                                 '<option value=\'".USER_STUDENT."\'>" . js_escape($langUsersWithNoRightsS) . "</option>'+
-                                 '<option value=\'".USER_GUEST."\'>" . js_escape($langGuests) . "</option>'+
+                                 '<option value=\'" . USER_TEACHER . "\'>" . js_escape($langUsersWithRightsS) . "</option>'+
+                                 '<option value=\'" . USER_STUDENT . "\'>" . js_escape($langUsersWithNoRightsS) . "</option>'+
+                                 '<option value=\'" . USER_GUEST . "\'>" . js_escape($langGuests) . "</option>'+
                                '</select>')
                              .appendTo( $(column.footer()).empty() );
             },
@@ -536,25 +591,33 @@ $pageName = $langListUsersActions;
 
 // Display Actions Toolbar
 $data['action_bar'] = action_bar(array(
-    array('title' => $langBack,
+    array(
+        'title' => $langBack,
         'url' => "search_user.php",
         'icon' => 'fa-reply',
-        'level' => 'primary'),
-    array('title' => $langAllUsers,
+        'level' => 'primary'
+    ),
+    array(
+        'title' => $langAllUsers,
         'url' => "$_SERVER[SCRIPT_NAME]",
         'icon' => 'fa-solid fa-users',
-        'level' => 'primary-label'),
-    array('title' => $langActiveUsers,
+        'level' => 'primary-label'
+    ),
+    array(
+        'title' => $langActiveUsers,
         'url' => "$_SERVER[SCRIPT_NAME]?search=active",
         'icon' => 'fa-solid fa-user-check',
         'level' => 'primary-label',
-        'show' => !(isset($_GET['search']) and $_GET['search'] == 'active')),
-    array('title' => $langInactiveUsers,
+        'show' => !(isset($_GET['search']) and $_GET['search'] == 'active')
+    ),
+    array(
+        'title' => $langInactiveUsers,
         'url' => "$_SERVER[SCRIPT_NAME]?search=inactive",
         'icon' => 'fa-solid fa-user-xmark',
         'level' => 'primary-label',
-        'show' => !(isset($_GET['search']) and $_GET['search'] == 'inactive'))
-    ));
+        'show' => !(isset($_GET['search']) and $_GET['search'] == 'inactive')
+    )
+));
 
 // display search results
 view('admin.users.list_users', $data);
@@ -565,7 +628,8 @@ view('admin.users.list_users', $data);
  * @param type $name
  * @param type $value
  */
-function add_param($name, $value = null) {
+function add_param($name, $value = null)
+{
     global $params;
     if (!isset($value)) {
         $value = $GLOBALS[$name];

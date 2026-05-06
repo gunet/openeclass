@@ -92,6 +92,57 @@
 
     </script>
 
+    <!-- Accessibility -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tabs = document.querySelectorAll('.wall-tablist .nav-link');
+
+            tabs.forEach(tab => {
+                if (tab.getAttribute('aria-selected') === 'true') {
+                    tab.setAttribute('tabindex', '0');
+                } else {
+                    tab.setAttribute('tabindex', '-1');
+                }
+            });
+
+            // Function to activate tab
+            function activateTabs(currentTabs) {
+                currentTabs.forEach(t => {
+                    t.setAttribute('aria-selected', 'false');
+                    t.setAttribute('tabindex', '-1');
+                    t.classList.remove('tab-active');
+                });
+            }
+            
+            tabs.forEach((tab) => {
+                tab.addEventListener('keydown', (e) => {
+                    const currentTabs = document.querySelectorAll('.wall-tablist .nav-link');
+                    const currentIndex = Array.prototype.indexOf.call(currentTabs, document.activeElement);
+                    if (currentIndex === -1) return; // safety check
+
+                    if (e.key === 'ArrowRight') {
+                        e.preventDefault();
+                        const nextIndex = (currentIndex + 1) % currentTabs.length;
+                        activateTabs(currentTabs);
+                        currentTabs[nextIndex].setAttribute('aria-selected', 'true');
+                        currentTabs[nextIndex].setAttribute('tabindex', '0');
+                        currentTabs[nextIndex].classList.add('tab-active');
+                        currentTabs[nextIndex].focus();
+                    } else if (e.key === 'ArrowLeft') {
+                        e.preventDefault();
+                        const prevIndex = (currentIndex - 1 + currentTabs.length) % currentTabs.length;
+                        activateTabs(currentTabs);
+                        currentTabs[prevIndex].setAttribute('aria-selected', 'true');
+                        currentTabs[prevIndex].setAttribute('tabindex', '0');
+                        currentTabs[prevIndex].classList.add('tab-active');
+                        currentTabs[prevIndex].focus();
+                    }
+                });
+            });
+
+        });
+    </script>
+
 @endpush
 
 @if (allow_to_post($course_id, $uid, $is_editor))
@@ -104,7 +155,7 @@
     <div class="col-12 mt-5">
         <div class='card panelCard card-transparent border-0'>
             <div class='card-header card-header-default px-0 py-0 border-0 d-md-flex justify-content-md-between align-items-md-center'>
-                <h3 class='mb-0'>{{trans('langWall')}}</h3>
+                <h2 class='text-heading-h3 mb-0'>{{trans('langWall')}}</h2>
             </div>
             <div class='card-body card-body-default px-0 py-0'>
                 <div class="form-wrapper form-edit rounded">
@@ -116,34 +167,34 @@
                             </div>
                             <div id="resources_panel" class="panel panel-default collapse mt-3 border-0">
                                 <div class="panel-body border-0">
-                                    <ul class="nav nav-tabs border-0">
-                                        <li class="nav-item"><a id="nav_extvideo" class="nav-link active" data-bs-toggle="tab" href="#extvideo_video_div">{{ trans('langWallExtVideo') }}</a></li>
+                                    <ul class="nav nav-tabs border-0 wall-tablist" role="tablist">
+                                        <li class="nav-item"><a id="nav_extvideo" class="nav-link active" aria-selected="true" data-bs-toggle="tab" href="#extvideo_video_div" role="tab" aria-controls="extvideo_video_div">{{ trans('langWallExtVideo') }}</a></li>
                                         @if ($is_editor || visible_module(MODULE_ID_VIDEO))
-                                            <li class="nav-item"><a id="nav_video" class="nav-link" data-bs-toggle="tab" href="#videos_div">{{ trans('langVideo') }}</a></li>
+                                            <li class="nav-item"><a id="nav_video" class="nav-link" data-bs-toggle="tab" href="#videos_div" role="tab" aria-controls="extvideo_video_div">{{ trans('langVideo') }}</a></li>
                                         @endif
                                         @if ($is_editor || visible_module(MODULE_ID_DOCS))
-                                            <li class="nav-item"><a id="nav_docs" class="nav-link" data-bs-toggle="tab" href="#docs_div">{{ trans('langDoc') }}</a></li>
+                                            <li class="nav-item"><a id="nav_docs" class="nav-link" data-bs-toggle="tab" href="#docs_div" role="tab" aria-controls="docs_div">{{ trans('langDoc') }}</a></li>
                                         @endif
                                         @if (($is_editor && get_config('mydocs_teacher_enable')) || (!$is_editor && get_config('mydocs_student_enable')))
-                                            <li class="nav-item"><a id="nav_mydocs" class="nav-link" data-bs-toggle="tab" href="#mydocs_div">{{ trans('langMyDocs') }}</a></li>
+                                            <li class="nav-item"><a id="nav_mydocs" class="nav-link" data-bs-toggle="tab" href="#mydocs_div" role="tab" aria-controls="mydocs_div">{{ trans('langMyDocs') }}</a></li>
                                         @endif
                                         @if ($is_editor || visible_module(MODULE_ID_LINKS))
-                                            <li class="nav-item"><a id="nav_links" class="nav-link" data-bs-toggle="tab" href="#links_div">{{ trans('langLinks') }}</a></li>
+                                            <li class="nav-item"><a id="nav_links" class="nav-link" data-bs-toggle="tab" href="#links_div" role="tab" aria-controls="links_div">{{ trans('langLinks') }}</a></li>
                                         @endif
                                         @if ($is_editor || visible_module(MODULE_ID_EXERCISE))
-                                            <li class="nav-item"><a id="nav_exercises" class="nav-link" data-bs-toggle="tab" href="#exercises_div">{{ trans('langExercises') }}</a></li>
+                                            <li class="nav-item"><a id="nav_exercises" class="nav-link" data-bs-toggle="tab" href="#exercises_div" role="tab" aria-controls="exercises_div">{{ trans('langExercises') }}</a></li>
                                         @endif
                                         @if ($is_editor || visible_module(MODULE_ID_ASSIGN))
-                                            <li class="nav-item"><a id="nav_assigments" class="nav-link" data-bs-toggle="tab" href="#assignments_div">{{ trans('langWorks') }}</a></li>
+                                            <li class="nav-item"><a id="nav_assigments" class="nav-link" data-bs-toggle="tab" href="#assignments_div" role="tab" aria-controls="assignments_div">{{ trans('langWorks') }}</a></li>
                                         @endif
                                         @if ($is_editor || visible_module(MODULE_ID_CHAT))
-                                            <li class="nav-item"><a id="nav_chats" class="nav-link" data-bs-toggle="tab" href="#chats_div">{{ trans('langChat') }}</a></li>
+                                            <li class="nav-item"><a id="nav_chats" class="nav-link" data-bs-toggle="tab" href="#chats_div" role="tab" aria-controls="chats_div">{{ trans('langChat') }}</a></li>
                                         @endif
                                         @if ($is_editor || visible_module(MODULE_ID_QUESTIONNAIRE))
-                                            <li class="nav-item"><a id="nav_polls" class="nav-link" data-bs-toggle="tab" href="#polls_div">{{ trans('langQuestionnaire') }}</a></li>
+                                            <li class="nav-item"><a id="nav_polls" class="nav-link" data-bs-toggle="tab" href="#polls_div" role="tab" aria-controls="polls_div">{{ trans('langQuestionnaire') }}</a></li>
                                         @endif
                                         @if ($is_editor || visible_module(MODULE_ID_FORUM))
-                                            <li class="nav-item"><a id="nav_forums" class="nav-link" data-bs-toggle="tab" href="#forums_div">{{ trans('langForum') }}</a></li>
+                                            <li class="nav-item"><a id="nav_forums" class="nav-link" data-bs-toggle="tab" href="#forums_div" role="tab" aria-controls="forums_div">{{ trans('langForum') }}</a></li>
                                         @endif
                                     </ul>
                                     <div class="tab-content mt-4">

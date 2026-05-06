@@ -3,7 +3,7 @@
 @section('content')
 
 
-<div class="col-12 main-section">
+<main id="main" class="col-12 main-section">
 <div class='{{ $container }} main-container'>
         <div class="row m-auto">
 
@@ -29,7 +29,7 @@
                                     <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
 
 
-                                                <h3>{{ trans('langAutoEnrollRule') }} {{ $key + 1 }}</h3>
+                                                <h2 class='text-heading-h3'>{{ trans('langAutoEnrollRule') }} {{ $key + 1 }}</h2>
 
 
                                                 <div>
@@ -106,5 +106,5 @@
         </div>
 </div>
 
-</div>
+</main>
 @endsection

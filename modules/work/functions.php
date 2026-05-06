@@ -586,7 +586,7 @@ function display_student_assignment($id, $on_behalf_of = false): void
     $data['group_select_hidden_input'] = $group_select_hidden_input;
     $data['group_select_form'] = $group_select_form;
     $data['grade_field'] = $grade_field;
-    $data['rich_text_editor'] = rich_text_editor('submission_text', 10, 20, '');
+    $data['rich_text_editor'] = rich_text_editor('submission_text', 10, 20, '', options: array('id' => 'submission_text'));
     $data['id'] = $id;
     $data['on_behalf_of'] = $on_behalf_of;
     $data['submissions_exist'] = $submissions_exist;
@@ -1217,7 +1217,15 @@ function display_submission_details($id) {
 
     $data['file_comments_link'] = $file_comments_link;
 
-    if ($assignment->submission_type == ASSIGNMENT_RUBRIC_GRADE) {    // multiple files
+    if ($assignment->assignment_type == ASSIGNMENT_TYPE_TURNITIN || $assignment->submission_type == ASSIGNMENT_STANDARD_GRADE) { // single file
+        if (isset($_GET['unit'])) {
+            $url = "{$urlAppend}modules/units/view.php?course=$course_code&amp;res_type=assignment&amp;get=$sub->id";
+        } else {
+            $url = "{$urlAppend}modules/work/index.php?course=$course_code&amp;get=$sub->id";
+        }
+        $filelink = MultimediaHelper::chooseMediaAhrefRaw($url, $url, $sub->file_name, $sub->file_name);
+        $data['filelink'] = $filelink;
+    } elseif ($assignment->submission_type == ASSIGNMENT_RUBRIC_GRADE) {    // multiple files
         $links = implode('<br>',
             array_map(function ($item) {
                 global $course_code, $urlAppend;
@@ -1231,15 +1239,6 @@ function display_submission_details($id) {
                     WHERE assignment_id = ?d AND uid = ?d AND group_id = ?d ORDER BY id',
                 $sub->assignment_id, $sub->uid, $sub->group_id)));
         $data['links'] = $links;
-    } elseif ($assignment->submission_type == ASSIGNMENT_STANDARD_GRADE) {
-        // single file
-        if (isset($_GET['unit'])) {
-            $url = "{$urlAppend}modules/units/view.php?course=$course_code&amp;res_type=assignment&amp;get=$sub->id";
-        } else {
-            $url = "{$urlAppend}modules/work/index.php?course=$course_code&amp;get=$sub->id";
-        }
-        $filelink = MultimediaHelper::chooseMediaAhrefRaw($url, $url, $sub->file_name, $sub->file_name);
-        $data['filelink'] = $filelink;
     }
 
     $data['preview_rubric'] = $preview_rubric;

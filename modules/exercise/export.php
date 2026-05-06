@@ -25,7 +25,7 @@ require_once 'answer.class.php';
 $require_editor = true;
 $require_current_course = true;
 
-include '../../include/baseTheme.php';
+require_once '../../include/baseTheme.php';
 
 $exerciseId = $fromExercise = $difficultyId = $categoryId = null;
 if (isset($_GET['fromExercise'])) {
@@ -155,7 +155,7 @@ foreach ($result as $row) {
     $question_category_legend = $question->selectCategoryName($question->selectCategory());
     if ($question_category_legend) {
         if ($last_category_legend != $question_category_legend) {
-            $tool_content .= "<h3 style='margin-top: 2em'>$langQuestionCat: $question_category_legend</h3>";
+            $tool_content .= "<h2 class='text-heading-h3' style='margin-top: 2em'>$langQuestionCat: $question_category_legend</h2>";
         }
         $question_category_legend = "<span class='label'>$langQuestionCat:</span> $question_category_legend<br>";
     }
@@ -173,7 +173,7 @@ foreach ($result as $row) {
     $answer_legend = $question->hasAnswered()? "<span class='label'>$langHasAnswered</span>": '';
     $picturePath = "courses/$course_code/image/quiz-{$row->id}";
     $tool_content .= "
-        <h3>$question_title</h3>
+        <h2 class='text-heading-h3'>$question_title</h2>
         <small>$question_type_legend &ndash; Νο: {$row->id}</small><br>" .
         (file_exists($picturePath)? "<img class='img-responsive' src='$picturePath' alt=''>": '') .
         $question_description .

@@ -154,7 +154,7 @@ if (isset($_POST['submit'])) {
                 $options = json_encode(['force_password_change' => 0]);
             }
 
-            if (isset($_POST['user_date_expires_at'])) {
+            if (isset($_POST['user_date_expires_at']) && $_POST['user_date_expires_at'] !== "") {
                 $expires_at = DateTime::createFromFormat("d-m-Y H:i", $_POST['user_date_expires_at']);
                 $user_expires_at = $expires_at->format("Y-m-d H:i");
                 $user_date_expires_at = $expires_at->format("d-m-Y H:i");

@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="col-12 main-section">
+<main id="main" class="col-12 main-section">
     <div class='{{ $container }} main-container'>
         <div class="row m-auto">
             @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
@@ -11,8 +11,8 @@
 
             <div class='mt-4'></div>
 
-            @include('layouts.partials.show_alert') 
-            
+            @include('layouts.partials.show_alert')
+
             <div class='col-12'>
                 <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>
                     <label>{{ trans('langMethods') }}</label>
@@ -78,14 +78,14 @@
                                         [
                                             'title' => trans('langSecondaryAuthType'),
                                             'url' => "$_SERVER[PHP_SELF]?auth=" . $authMethod->auth_id . "&amp;p=0",
-                                            'icon' => 'fa-circle-o',
+                                            'icon' => 'fa-regular fa-circle',
                                             'show' => $authMethod->auth_default > 1
                                         ],
                                         [
                                             'title' => trans('langConnTest'),
                                             'url' => "auth_test.php?auth=$authMethod->auth_id",
                                             'icon' => 'fa-plug',
-                                            'show' => $authMethod->auth_id != 1 && $authMethod->auth_settings
+                                            'show' => $authMethod->auth_id != 1 || $authMethod->auth_settings
                                         ],
                                         [
                                             'title' => $authMethod->auth_default ? trans('langDeactivate') : trans('langActivate'),
@@ -126,5 +126,5 @@
             </div>
         </div>
     </div>
-</div>
+</main>
 @endsection

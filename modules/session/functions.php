@@ -1770,9 +1770,9 @@ function display_session_settings($element, $element_id, $session_id = 0): void
                 <div class='col-12'>
                     <div class='card panelCard border-card-left-default px-lg-4 py-lg-3'>
                         <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-                                <h3>
+                                <h2 class='text-heading-h3'>
                                     $langProgressBasicInfo
-                                </h3>";
+                                </h2>";
                             if ($is_consultant) {
                                 $tool_content .= "<div><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;{$element}_id=$element_id&amp;edit=1&amp;session={$session_id}' class='btn submitAdminBtn gap-2'>"
                                             . "<span class='fa fa-pencil'></span><span class='hidden-xs'>$langEditChange</span>
@@ -1843,7 +1843,7 @@ function display_session_settings($element, $element_id, $session_id = 0): void
                 <div class='card panelCard card-default px-lg-4 py-lg-3'>
                     <div class='card-body'>
 
-                        <h3 class='mb-0 text-center'>$langCourseCompletion</h3>
+                        <h2 class='text-heading-h3 mb-0 text-center'>$langCourseCompletion</h2>
 
                     </div>
                 </div>
@@ -1859,16 +1859,14 @@ function display_session_settings($element, $element_id, $session_id = 0): void
  */
 function display_session_activities($element, $id, $session_id = 0) {
 
-    global $tool_content, $course_code, $is_consultant,
-           $langNoActivCert, $langAttendanceActList, $langTitle, $langType,
-           $langOfAssignment, $langOfPoll, $langConfirmDelete, $langDelete, $langEditChange,
-           $langDocumentAsModuleLabel, $langCourseParticipation,
-           $langAdd, $langBack, $langUsers,
-           $langValue, $langOfCourseCompletion, $langOfUnitCompletion,
-           $course_id, $langUnitCompletion, $langSessionPrerequisites, $langNewUnitPrerequisite,
-           $langNoSessionPrerequisite, $langSessionCompletion, $langWithoutCompletedResource,
+    global $tool_content, $course_code,
+           $langNoActivCert, $langTitle, $langType,
+           $langConfirmDelete, $langDelete, $langEditChange,
+           $langBack, $langUsers,
+           $course_id, $langSessionPrerequisites, $langNewUnitPrerequisite,
+           $langNoSessionPrerequisite, $langSessionCompletion,
            $langCompletedSession, $langNotCompletedSession, $langSubmit, $langCancel,
-           $langContinueToCompletetionWithoutAct, $langOfSubmitAssignment, $langOfSubmitDocument,
+           $langContinueToCompletetionWithoutAct,
            $langWithSubmittedUploadedFile, $langWithTCComplited,
            $langContinueToCompletetionWithCompletedTC, $langAddCompletionCriteria,
            $langWithMeetingCompletion, $langContinueToCompletetionWithMeeting,
@@ -2037,9 +2035,9 @@ function display_session_activities($element, $id, $session_id = 0) {
                                 <div class='col-12'>
                                     <div class='card panelCard card-default px-lg-4 py-lg-3'>
                                         <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-                                            <h3>
+                                            <h2 class='text-heading-h3'>
                                                 $langSessionCompletion </br>
-                                            </h3>
+                                            </h2>
                                             <div>
                                                 $addActivityBtn
                                             </div>
@@ -2181,7 +2179,7 @@ function display_session_activities($element, $id, $session_id = 0) {
                                             } else {
 
                                                 $tool_content .= "  <div class='col-12 mt-5'>
-                                                                        <h3>$langCriteriaBelowParticipateInCompletion</h3>
+                                                                        <h2 class='text-heading-h3'>$langCriteriaBelowParticipateInCompletion</h2>
                                                                     </div>
                                                                     <div class='res-table-wrapper'>
                                                                         <div class='table-responsive'>
@@ -2261,9 +2259,9 @@ function display_session_activities($element, $id, $session_id = 0) {
 
                         <div class='card panelCard card-default px-lg-4 py-lg-3 mt-3'>
                             <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-                                <h3>
+                                <h2 class='text-heading-h3'>
                                     $langSessionPrerequisites
-                                </h3>
+                                </h2>
                                 <div>
                                     $addPrereqBtn
                                 </div>
@@ -3620,7 +3618,7 @@ function passage_insertion($sid){
                         <legend class='mb-0' aria-label='$langForm'></legend>
                         <div class='form-group'>
                             <label for='add_passage' class='col-12 control-label-notes'>$langInsertPassage</label>
-                            " . rich_text_editor('add_passage', 5, 40, '') . "
+                            " . rich_text_editor('add_passage', 5, 40, '', options: array('id' => 'add_passage')) . "
                         </div>";
 
 

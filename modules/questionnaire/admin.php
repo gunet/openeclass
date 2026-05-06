@@ -568,14 +568,14 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             <div class='form-group mt-4'>
               <label for='PollDescription' class='col-sm-12 control-label-notes'>$langDescription</label>
               <div class='col-sm-12'>
-                ".rich_text_editor('PollDescription', 4, 52, $PollDescription)."
+                ".rich_text_editor('PollDescription', 4, 52, $PollDescription, options: array('id' => 'PollDescription'))."
               </div>
             </div>
 
             <div class='form-group mt-4'>
               <label for='PollEndMessage' class='col-sm-12 control-label-notes'>$langPollEndMessage</label>
               <div class='col-sm-12'>
-                ".rich_text_editor('PollEndMessage', 4, 52, $PollEndMessage)."
+                ".rich_text_editor('PollEndMessage', 4, 52, $PollEndMessage, options: array('id' => 'PollEndMessage'))."
               </div>
             </div>
 
@@ -812,7 +812,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         $lti_disabled = ($PollSurveyType == POLL_LIMESURVEY) ? '' : ' disabled';
         $lti_launchcontainer = (isset($poll)) ? $poll->launchcontainer : LTI_LAUNCHCONTAINER_EMBED;
         $tool_content .= "<div class='container-fluid form-group $lti_hidden px-lg-3 py-lg-4 p-3 mt-4' id='lti_label'>
-                <h3>$langLimesurveyLTIOptions</h3>
+                <h2 class='text-heading-h3'>$langLimesurveyLTIOptions</h2>
                 <div class='form-group $lti_hidden'>
                     <label for='lti_templates' class='col-sm-12 control-label-notes'>$langLimesurveyApp:</label>
                     <div class='col-sm-12'>
@@ -948,13 +948,13 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             <div class='form-group $questionNameErrorClass'>
                 <label for='questionName' class='col-sm-12 control-label-notes'>".(isset($_GET['questionType']) ? $langLabel : $langQuestion)." <span class='asterisk Accent-200-cl'>(*)</span></label>
                 <div class='col-sm-12'>
-                  ".(isset($_GET['questionType']) || isset($question) && $question->qtype == QTYPE_LABEL ? rich_text_editor('questionName', 10, 10, $questionName) :"<input type='text' class='form-control' id='questionName' name='questionName' value='".q($questionName)."'>")."
+                  ".(isset($_GET['questionType']) || isset($question) && $question->qtype == QTYPE_LABEL ? rich_text_editor('questionName', 10, 10, $questionName, options: array('id' => 'questionName')) :"<input type='text' class='form-control' id='questionName' name='questionName' value='".q($questionName)."'>")."
                   <span class='help-block Accent-200-cl'>$questionNameError</span>
                 </div>
             </div>
             <div class='form-group mt-4'>
                 <label for='description_question' class='col-sm-12 control-label-notes'>$langDescription</label>
-                ".rich_text_editor('description_question', 4, 52, $description_question)."
+                ".rich_text_editor('description_question', 4, 52, $description_question, options: array('id' => 'description_question'))."
             </div>";
     if (isset($_GET['questionType']) || isset($question) && $question->qtype == QTYPE_LABEL) {
         $tool_content .= "<input type='hidden' name='answerType' value='".QTYPE_LABEL."'>";
@@ -1222,9 +1222,9 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     <div class='col-12 mt-4'>
         <div class='card panelCard card-default px-lg-4 py-lg-3'>
             <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                <h3>$langQuestion&nbsp;"
+                <h2 class='text-heading-h3'>$langQuestion&nbsp;"
                     . icon('fa-edit fa-lg', $langEditChange, $_SERVER['SCRIPT_NAME']."?course=$course_code&pid=$pid&modifyQuestion=$question->pqid") .
-                "</h3>
+                "</h2>
             </div>
             <div class='card-body'>
                   <p>" . q($question->question_text) . "<br><small class='TextBold'><em>".$aType[$question->qtype - 1]."</em></small></p>
@@ -1241,7 +1241,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     <div class='col-12 mt-4'>
         <div class='card panelCard card-default px-lg-4 py-lg-3'>
             <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                <h3>$langQuestionAnswers</h3>
+                <h2 class='text-heading-h3'>$langQuestionAnswers</h2>
             </div>
             <div class='card-body'>
                     <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;pid=$pid&amp;modifyAnswers=$question_id$subQOn_' method='post'>
@@ -1357,9 +1357,9 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     <div class='col-12 mt-4'>
         <div class='card panelCard card-default px-lg-4 py-lg-3'>
             <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                <h3>$langQuestion&nbsp;"
+                <h2 class='text-heading-h3'>$langQuestion&nbsp;"
                     . icon('fa-edit fa-lg', $langEditChange, $_SERVER['SCRIPT_NAME']."?course=$course_code&pid=$pid&modifyQuestion=$question->pqid") .
-                "</h3>
+                "</h2>
             </div>
             <div class='card-body'>
                   <p>" . q($question->question_text) . "</p>
@@ -1520,7 +1520,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     $tool_content .= "
     <div class='card panelCard card-default px-lg-4 py-lg-3'>
         <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-            <h3>$langAddSubQuestion</h3>
+            <h2 class='text-heading-h3'>$langAddSubQuestion</h2>
         </div>
         <div class='card-body'>
             <form method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&pid=$pid$newOrEditQ'>
@@ -1614,7 +1614,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     <div class='col-12 mb-4'>
         <div class='card panelCard border-card-left-default px-lg-4 py-lg-3'>
           <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-            <h3>$langInfoPoll &nbsp;".icon('fa-edit', $langEditPoll, "admin.php?course=$course_code&amp;pid=$pid&amp;modifyPoll=yes")."</h3>
+            <h2 class='text-heading-h3'>$langInfoPoll &nbsp;".icon('fa-edit', $langEditPoll, "admin.php?course=$course_code&amp;pid=$pid&amp;modifyPoll=yes")."</h2>
           </div>
           <div class='card-body'>
 

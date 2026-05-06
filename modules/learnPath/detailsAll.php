@@ -151,7 +151,7 @@ foreach ($usersList as $user) {
     $total = round($globalprog / ($iterator - 1));
     // ---- xls format ----
     $ug = user_groups($course_id, $user->id, false);
-    $data[] = [ "$user->surname $user->givenname", $user->email, $user->am, $ug, $globaltime, $total . '%' ];
+    $data[] = [ "$user->surname $user->givenname", $user->email, $user->am, $ug, $globaltime, (($total <= 0) ? "-" : $total . '%') ];
     // --------------------
 
     if ($globaltime === "00:00:00") {
@@ -172,7 +172,7 @@ foreach ($usersList as $user) {
     }
     $tool_content .= "<td>" . q($globaltime) . "</td>
             <td>"
-            . disp_progress_bar($total, 1) . "
+            . (($total <= 0) ? "-" : disp_progress_bar($total, 1)) . "
             </td>";
     $tool_content .= "</tr>";
 }

@@ -174,7 +174,7 @@ if (isset($_POST['submit'])) {
             <div class='form-group mt-4'>
               <label for='message' class='col-sm-12 control-label-notes'>$langBodyMessage</label>
               <div class='col-sm-12'>
-                " . rich_text_editor('message', 14, 50, '') . "
+                " . rich_text_editor('message', 14, 50, '', options: array('id' => 'message')) . "
               </div>
             </div>
             <div class='form-group mt-4'>

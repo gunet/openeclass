@@ -224,7 +224,7 @@ if (!isset($_POST['next'])) {
                         <div class='form-group mt-4'>
                             <label for='description' class='col-sm-12 control-label-notes'>$langCont <small>$langOptional</small></label>
                             <div class='col-sm-12'>
-                                  " .  rich_text_editor('description', 4, 20, purify($_SESSION['description'])) . "
+                                  " .  rich_text_editor('description', 4, 20, purify($_SESSION['description']), options: array('id' => 'description')) . "
                             </div>
                         </div>
                         <div class='form-group mt-4'>

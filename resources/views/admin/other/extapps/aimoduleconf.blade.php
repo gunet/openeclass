@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <div class="col-12 main-section">
+    <main id="main" class="col-12 main-section">
         <div class='{{ $container }} main-container'>
             <div class="row m-auto">
 
@@ -132,10 +132,9 @@
                                     <label for='select-courses' class='col-12 control-label-notes'>{{ trans('langUseOfService') }}&nbsp;&nbsp;
                                     <span class='fa fa-info-circle' data-bs-toggle='tooltip' data-bs-placement='right' title='{{ trans('langUseOfServiceInfo') }}'></span></label>
                                     <div class='col-12'>
-                                        <select id='select-courses' class='form-select' name='ai_courses[]' multiple>
+                                        <select id='select-courses' class='form-control' name='ai_courses[]' multiple>
                                             {!! $courses_content !!}
                                         </select>
-                                        <a href='#' id='selectAll'>{{ trans('langJQCheckAll') }}</a> | <a href='#' id='removeAll'>{{ trans('langJQUncheckAll') }}</a>
                                     </div>
                                 </div>
 
@@ -168,12 +167,12 @@
 
                 @else
                 {{-- list of AI providers --}}
-                    <h3>
+                    <h2 class='text-heading-h3'>
                         {{ trans('langProviders') }}
                         <a href="{{ $_SERVER['SCRIPT_NAME'] }}?add_provider">
                             <span class="fa-solid fa-circle-plus fa-lg" title="{{ trans('langAddProvider') }}" data-bs-original-title="{{ trans('langAddProvider') }}" data-bs-toggle="tooltip" data-bs-placement="top"></span>
                         </a>
-                    </h3>
+                    </h2>
                     <div class='table-responsive'>
                         <table class='table-default'>
                             <thead>
@@ -212,12 +211,12 @@
 
 
                     {{-- list of AI modules --}}
-                    <h3 class='mt-4'>
+                    <h2 class='text-heading-h3 mt-4'>
                         {{ trans('langAIServices') }}
                         <a href="{{ $_SERVER['SCRIPT_NAME'] }}?add_service">
                             <span class="fa-solid fa-circle-plus fa-lg" title="{{ trans('langAssignAIToModule') }}" data-bs-original-title="{{ trans('langAssignAIToModule') }}" data-bs-toggle="tooltip" data-bs-placement="top"></span>
                         </a>
-                    </h3>
+                    </h2>
                     <div class='table-responsive'>
                         <table class='table-default'>
                             <thead>
@@ -270,7 +269,7 @@
 
             </div>
         </div>
-    </div>
+    </main>
 
     <script type='text/javascript'>
         function doSelectedCourses() {
@@ -421,7 +420,13 @@
                 });
             });
 
-            $('#select-courses').select2();
+            slimSelectFun (
+                    '#select-courses', 
+                    '{{ js_escape(trans('langSearch')) }}', 
+                    '{{ js_escape(trans('langWelcomeSelect')) }}', 
+                    '{{ js_escape(trans('langSelectAll')) }}', 
+                    '{{ js_escape(trans('langListChoices')) }}'
+                );
             $('#selectAll').click(function(e) {
                 e.preventDefault();
                 let stringVal = [];

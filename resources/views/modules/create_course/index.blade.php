@@ -542,7 +542,7 @@
 
 @section('content')
 
-<div class="col-12 main-section">
+<main id="main" class="col-12 main-section">
     <div class='{{ $container }} main-container'>
         <div class="row m-auto">
 
@@ -565,9 +565,9 @@
                  <div class='col-12 mb-4'>
                     <div class='card panelCard card-default px-lg-4 py-lg-3 h-100'>
                         <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                            <h3 class='mb-0'>
+                            <h2 class='text-heading-h3 mb-0'>
                                 <i class='fa-solid fa-robot me-2'></i>{{ trans('langAIGenerateCourse') }}
-                            </h3>
+                            </h2>
                             <button type='button' class='btn submitAdminBtnDefault' id='toggleAIAssistant'>
                                  {{ trans('langAIToggleAssistant') }} <i class='fa-solid fa-chevron-down'></i>
                             </button>
@@ -963,5 +963,5 @@
           </div>
         </div>
     </div>
-</div>
+</main>
 @endsection

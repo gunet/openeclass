@@ -79,16 +79,19 @@ function showQuestion(&$objQuestionTmp, $question_number, array $exerciseResult 
         updateWildCardsWithRandomVariables($questionId, $exerciseType);
     }
 
+    // Refers to tab pattern in accessibility
+    $ariaLabeledBy = $exerciseType == MULTIPLE_PAGE_TYPE ? "aria-labelledby='tab-link-{$questionId}'" : '';
+
     $tool_content .= "
-            <div class='card panelCard px-lg-4 py-lg-3 qPanel panelCard-exercise mt-4' id='qPanel$questionId'>
+            <div class='card panelCard px-lg-4 py-lg-3 qPanel panelCard-exercise mt-4' id='qPanel$questionId' $ariaLabeledBy>
               <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                <h3 class='mb-0 d-flex justify-content-start align-items-center gap-2 flex-wrap'>$langQuestion $qNumber
+                <h2 class='text-heading-h3 mb-0 d-flex justify-content-start align-items-center gap-2 flex-wrap'>$langQuestion $qNumber
                     <small>($questionTypeWord &mdash; $questionWeight $message)</small>&nbsp;
                     <span title='$langHasAnswered' id='qCheck$question_number'></span>
-                </h3>
+                </h2>
             </div>
             <div class='panel-body'>
-                <div class='text-heading-h4 mb-4'>" . q_math($questionName) . "</div>";
+                <div tabindex='0' class='text-heading-h4 mb-4'>" . q_math($questionName) . "</div>";
                 if (!empty($questionDescription) && $answerType != CALCULATED) {
                     $tool_content .= " <div class='mb-4'>$questionDescription</div>";
                 }
@@ -201,13 +204,13 @@ function display_exercise($exercise_id): void
     $tool_content .= "
     <div class='col-12 mb-4'><div class='card panelCard card-default px-lg-4 py-lg-3'>
             <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-              <h3>" . q_math($exercise->selectTitle());
+              <h2 class='text-heading-h3'>" . q_math($exercise->selectTitle());
               if ($is_editor) {
                     $tool_content .= "<a class='ms-2' href='admin.php?course=$course_code&amp;exerciseId=$exercise_id&amp;modifyExercise=yes' aria-label='$langModify'>
                       <span class='fa-solid fa-edit' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langModify'></span>
                     </a>";
                 }
-              $tool_content .= "</h3>
+              $tool_content .= "</h2>
             </div>
             <div class='card-body'>" . standard_text_escape($exercise->selectDescription()) . "</div>
         </div>
@@ -940,4 +943,28 @@ function getRandomFloat($min, $max, $decimals) {
     $scale = pow(10, $decimals);
     $randomInt = mt_rand($min * $scale, $max * $scale);
     return $randomInt / $scale;
+}
+
+/**
+ * @brief check if the exercise is Safe Exam Browser enabled
+ * @param $eid
+ * @param $eid
+ * @return bool
+ */
+function isSebEnabled($eid): bool
+{
+    if (!CourseHasSafeExamBrowserEnabled()) {
+        return false;
+    } else {
+        $Exercise = new Exercise();
+        if ($Exercise->read($eid)) {
+            if ($Exercise->getOption('useSafeExamBrowser')) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
 }

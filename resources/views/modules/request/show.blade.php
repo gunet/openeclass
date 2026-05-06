@@ -3,13 +3,10 @@
 @section('content')
 
 
-<div class="col-12 main-section">
 <div class='{{ $container }} module-container py-lg-0'>
         <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
-
-            @include('layouts.partials.left_menu')
-
-            <div class="col_maincontent_active">
+            <aside class='aside-sidebar'>@include('layouts.partials.left_menu')</aside>
+            <main id="main" class="col-12 main-maincontent col_maincontent_active">
 
                 <div class="row">
 
@@ -35,12 +32,12 @@
                         <div class='card panelCard card-default px-lg-4 py-lg-3'>
 
                             <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                <h3>
+                                <h2 class='text-heading-h3'>
                                     {{ $request->title }}
                                     @if ($request->type_id)
                                         <small>&nbsp;->&nbsp;{{ $type->name }}</small>
                                     @endif
-                                </h3>
+                                </h2>
                             </div>
 
 
@@ -249,9 +246,8 @@
 
 
                 </div>
-            </div>
+            </main>
         </div>
 
-</div>
 </div>
 @endsection

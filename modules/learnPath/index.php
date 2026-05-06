@@ -787,7 +787,7 @@ if (!$is_editor && $iterator != 1 && $uid) {
       <td class='text-start'><strong>$langTotal</strong>:</td>
       <td></td>
       <td class='text-start'><strong>$globaltime</strong:</td>
-      <td>" . disp_progress_bar($total, 1) . "</td>
+      <td>" . (($total <= 0) ? "-" : disp_progress_bar($total, 1)) . "</td>
       <td></td>
     </tr>";
 }

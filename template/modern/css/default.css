@@ -721,6 +721,14 @@ em span {
   font-style: italic;
 }
 
+.ss-content .ss-list .ss-optgroup .ss-optgroup-label .ss-optgroup-actions .ss-selectall span{
+  font-size: 13px !important;
+}
+
+.active-course{
+  font-size: 14px;
+}
+
 
 /************************* ABOUT LINKS ***************************/
 a{
@@ -5466,19 +5474,19 @@ body .delThemeBtn{
 }
 
 @media(min-width:992px) and (max-width:1199px){
-  .main-section:has(.course-wrapper) .form-image-modules{
+  body:has(.course-wrapper) .form-image-modules{
     max-width:220px;
     float:right;
   }
 }
 @media(min-width:1200px) and (max-width:1399px){
-  .main-section:has(.course-wrapper) .form-image-modules{
+  body:has(.course-wrapper) .form-image-modules{
     max-width:270px;
     float:right;
   }
 }
 @media(min-width:1400px){
-  .main-section:has(.course-wrapper) .form-image-modules{
+  body:has(.course-wrapper) .form-image-modules{
     max-width: 300px;
     float:right;
   }
@@ -7054,4 +7062,74 @@ th.grade-col a{
     cursor: not-allowed;
     pointer-events: none;
     background: transparent;
+}
+
+
+
+/* ************************************************************************************************************************************* */
+/* ************************************************************************************************************************************* */
+/*********************************************** SIDEBAR AND MAIN-CONTENT AS CARDS *******************************************************/
+/* ************************************************************************************************************************************* */
+/* ************************************************************************************************************************************* */
+@media(max-width: 991px) { 
+  /* without cards */
+  body:not(:has(.sidebar-card)) .main-maincontent {
+    margin-top: 56px;
+  }
+  body:has(.sidebar-card) .main-maincontent {
+    margin-top: 56px;
+  }
+  
+}
+@media(min-width: 992px) {
+  /* without cards */
+  body:not(:has(.sidebar-card)) .aside-sidebar,
+  body:not(:has(.sidebar-card)) .main-maincontent {
+    margin-top: 80px;
+  }
+
+
+  /* with cards */
+  body:has(.sidebar-card) .aside-sidebar {
+    margin-top: 80px;
+  }
+  .sidebar-card {
+    padding: 25px 0px 25px 25px;
+  }
+  .sidebar-card .ContentLeftNav {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 0px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 0px;
+  }
+  body:has(.active-cont) .ContentLeftNav {
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+  }
+  body:has(.active-cont) .menu-items {
+    opacity: 0;
+  }
+  body:has(.sidebar-card) .main-maincontent {
+    margin-top: 105px;
+    margin-bottom: 25px;
+    margin-right: 15px;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 10px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 10px;
+  }
+  body:has(.active-cont) .main-maincontent {
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+  }
+
+
+ /* announcement top fixed */
+  body:has(.notification-top-bar) .aside-sidebar{
+    margin-top: 140px;
+  }
+  body:has(.notification-top-bar) .main-maincontent{
+    margin-top: 165px;
+  }
+
 }

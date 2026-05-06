@@ -64,15 +64,15 @@
                                         @include('step_8')
                                     @else
                                         <div class='col-sm-12 text-center'>
-                                            <h3 class='mt-3'>
+                                            <h2 class='text-heading-h3 mt-3'>
                                                 {{ trans('langWelcomeWizard') }}
-                                            </h3>
+                                            </h2>
                                             <div class='col-12 col-md-6 m-auto d-block mt-3'>
                                                 <div class='card panelCard card-default px-lg-4 py-lg-3'>
                                                     <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                                        <h3>
+                                                        <h2 class='text-heading-h3'>
                                                             {{ trans('langThisWizard') }}
-                                                        </h3>
+                                                        </h2>
                                                     </div>
                                                     <div class='card-body'>
                                                         <ul class='list-group list-group-flush'>

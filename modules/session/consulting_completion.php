@@ -409,7 +409,7 @@ $tool_content .= "
         if(count($users_actions) > 0){
  $tool_content .= " <div class='card panelCard border-card-left-default px-lg-4 py-lg-3'>
                         <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-                            <h3 class='title_reports mb-0'>$langUserReferences</h3>
+                            <h2 class='text-heading-h3 title_reports mb-0'>$langUserReferences</h2>
                         </div>
                         <div class='card-body'>
                             <div class='d-flex justify-content-between align-items-center gap-3 flex-wrap'>";
@@ -512,7 +512,7 @@ $tool_content .= "
                 $tool_content .= "<div class='card cardReports' style='margin-bottom:25px;'>
                                         <div class='d-flex justify-content-start align-items-center gap-3'>
                                             <img class='card-img-top' style='width:40px; height:40xp; object-fit:cover;' src='".user_icon($key, IMAGESIZE_LARGE)."' alt='$langUser:".participant_name($key)."'>
-                                            <h3 class='mb-0'>" . participant_name($key) . "</h3>
+                                            <h2 class='text-heading-h3 mb-0'>" . participant_name($key) . "</h2>
                                         </div>
                                         <div class='card-body'>";
                 $tool_content .= "  

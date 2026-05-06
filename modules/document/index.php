@@ -57,6 +57,31 @@ $helpTopic = 'documents';
 doc_init();
 $searchEngine = SearchEngineFactory::create();
 
+if ($subsystem == MYDOCS && $subsystem_id == $uid && get_config('eportfolio_enable')) {
+    $head_content .=
+    '<script>
+        $(document).on(\'click\', \'a.list-group-item[href*="resources.php"]\', function(e) {
+            e.preventDefault();
+
+            const href = $(this).attr(\'href\');
+            const url = new URL(href, window.location.origin);
+            const rid = url.searchParams.get(\'rid\');
+
+            const modalId = `modal_doc_${rid}`;
+            const modalElement = document.getElementById(modalId);
+
+            if (modalElement) {
+                const Modal = new bootstrap.Modal(modalElement);
+                Modal.show();
+
+                const formSelector = `#vis_form_doc_${rid}`;
+                $(formSelector).attr(\'action\', href);
+            } else {
+                console.warn(\'Modal with ID\', modalId, \'not found\');
+            }
+        });
+    </script>';
+}
 
 if ($is_editor) {
 
@@ -1497,9 +1522,44 @@ foreach ($result as $row) {
 
     $downloadMessage = $row->format == '.dir' ? $langDownloadDir : $langSave;
     $info['action_button'] = '';
+    $info['eportfolio_modal'] = '';
     if (!$is_in_tinymce) {
         $cmdDirName = getIndirectReference($row->path);
         if ($can_upload) {
+
+            if (!$is_dir && $subsystem == MYDOCS && $subsystem_id == $uid && get_config('eportfolio_enable')) {
+                $info['eportfolio_modal'] = '<div class="modal fade" id="modal_doc_'.$row->id.'" tabindex="-1" aria-labelledby="docModalLabel_'.$row->id.'" aria-hidden="true">
+                <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="docModalLabel_'.$row->id.'">'.$langAddResePortfolio.' - '.$row->filename.'</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="'.$langClose.'"></button>
+                    </div>
+
+                    <div class="modal-body">
+                    <form id="vis_form_doc_'.$row->id.'" name="vis_form_doc_'.$row->id.'" action="" method="post">
+                        <div class="mb-3">
+                            <label for="vis_form_doc_'.$row->id.'_select" class="form-label">'.$langePortfolioFieldsVisibilitySettings.'</label>
+                            <select class="form-select" name="visibility" id="vis_form_doc_'.$row->id.'_select">
+                            <option value="'.EPF_VISIBLE_PUBLIC.'">'.$langPublicePortfolioField.'</option>
+                            <option value="'.EPF_VISIBLE_USERS.'">'.$langOpenToRegisteredUsers.'</option>
+                            <option value="'.EPF_VISIBLE_PRIVATE.'">'.$langProfileInfoPrivate.'</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="vis_form_doc_'.$row->id.'_textarea" class="form-label">'.$langePortfolioPromptAddReflComments.'</label>
+                            <textarea class="form-control" name="reflection_comments" id="vis_form_doc_'.$row->id.'_textarea"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">'.$langSubmit.'</button>
+                    </form>
+                    </div>
+
+                </div>
+                </div>
+            </div>';
+            }
+
             $xmlCmdDirName = ($row->format == ".meta" && get_file_extension($row->path) == 'xml') ? substr($row->path, 0, -4) : $row->path;
             $info['action_button'] = action_button(array(
                 array('title' => $langFileUnzipping,
@@ -1546,7 +1606,7 @@ foreach ($result as $row) {
                       'url' => $download_url,
                       'icon' => 'fa-download'),
                 array('title' => $langAddResePortfolio,
-                      'url' => "{$urlAppend}main/eportfolio/resources.php?token=".token_generate('eportfolio' . $uid)."&amp;action=add&amp;type=mydocs&amp;rid=".$row->id,
+                      'url' => "{$urlAppend}main/eportfolio/resources.php?action=add&amp;type=mydocs&amp;rid=".$row->id,
                       'icon' => 'fa-star',
                       'show' => !$is_dir && $subsystem == MYDOCS && $subsystem_id == $uid && get_config('eportfolio_enable')),
                 array('title' => $langDelete,
@@ -1670,7 +1730,8 @@ if (($can_upload or $user_upload) and !$is_in_tinymce) {
               'show' => !defined('EBOOK_DOCUMENTS')),
         array('title' => $langMindmap,
               'url' => "../mindmap/index.php?course=$course_code",
-              'icon' => 'fa-solid fa-sitemap'),
+              'icon' => 'fa-solid fa-sitemap',
+              'show' => !(defined('MY_DOCUMENTS') || defined('COMMON_DOCUMENTS'))),
         array('title' => $langCommonDocs,
               'url' => "../units/insert.php?course=$course_code&amp;dir=$curDirPath&amp;type=doc&amp;id=-1",
               'icon' => 'fa-share-alt',
@@ -1678,7 +1739,6 @@ if (($can_upload or $user_upload) and !$is_in_tinymce) {
         array('title' => $langQuotaBar,
               'url' => "{$base_url}showQuota=true",
               'icon' => 'fa-pie-chart')
-
         ), false);
 } else {
     $data['action_bar'] = $data['dialogBox'] = '';

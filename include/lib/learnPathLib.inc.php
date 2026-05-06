@@ -36,6 +36,8 @@
 
 require_once 'modules/progress/LearningPathEvent.php';
 require_once 'modules/progress/LearningPathDurationEvent.php';
+require_once 'modules/progress/LearningPathProgressMeasureEvent.php';
+require_once 'modules/progress/LearningPathLessonStatusEvent.php';
 require_once 'modules/analytics/LpAnalyticsEvent.php';
 require_once 'include/lib/mediaresource.factory.php';
 
@@ -145,11 +147,11 @@ function nameBox($type, $mode, $formlabel = FALSE) {
         $result = Database::get()->querySingle($sql, $course_id);
 
         $currentName = ($result && !empty($result->name)) ? $result->name : false;
-        $output .= "<div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'><h3>" . q($currentName);
+        $output .= "<div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'><h2 class='text-heading-h3'>" . q($currentName);
         if ($is_editor) {
             $output .= '&nbsp;&nbsp;&nbsp;'.icon('fa-edit', $langModify, $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmd=updateName');
         }
-        $output .= "</h3></div>";
+        $output .= "</h2></div>";
     }
 
     return $output;
@@ -180,7 +182,7 @@ function display_learn_path_title($path_id, $cmd = ''): string
                                 $langName
                             </label>
                             <div class='col-12'>
-                                <input class='form-control' type='text' name='newName' maxlength='255' value='" . q($oldName) . "'>                                                    
+                                <input class='form-control' type='text' name='newName' maxlength='255' value='" . q($oldName) . "'>
                             </div>
                         </div>
                         <div class='row mt-4 form-group'>
@@ -198,7 +200,7 @@ function display_learn_path_title($path_id, $cmd = ''): string
     } else {
             $output = "<div class='card-body'>
                         <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-                        <h3>" . q($oldName) . "</h3>";
+                        <h2 class='text-heading-h3'>" . q($oldName) . "</h2>";
                         if ($is_editor) {
                             $output .= icon('fa-edit', $langModify, $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;path_id=' . $_SESSION['path_id'] . '&amp;cmd=updateName');
                         }
@@ -536,7 +538,7 @@ function get_learnPath_progress($lpid, $lpUid) {
     return calculate_learnPath_progress($lpid, $modules);
 }
 
-function get_learnPath_progress_details($lpid, $lpUid, $total=true, $from_date = null, $course_id = null): array {
+function get_learnPath_progress_details($lpid, $lpUid, $total=true, $from_date = null, $course_id = null, $return_null_score = false): array {
 
     if ($course_id == null) {
         $course_id = $GLOBALS['course_id'];
@@ -591,7 +593,7 @@ function get_learnPath_progress_details($lpid, $lpUid, $total=true, $from_date =
             $global_status[$i] = "";
             $global_time[$i] = "0000:00:00";
             // total progress calculation
-            $global_progress[$i] = calculate_learnPath_progress($lpid, $modsForProg[$i]);
+            $global_progress[$i] = (isset($modsForProg[$i])) ? calculate_learnPath_progress($lpid, $modsForProg[$i]) : 0;
         }
 
         foreach ($modules as $module) {
@@ -650,18 +652,23 @@ function get_learnPath_progress_details($lpid, $lpUid, $total=true, $from_date =
         //    $totalStatus = "INCOMPLETE";
         //}
     }
+    $totalScoreMax = $totalScoreMax ?? null;
 
     $totalTime = ($totalTime == '0000:00:00') ? '00:00:00': $totalTime;
     if ($total) {
         $score = $totalProgress;
-        $totalProgress = $max_progress_measure ? (100 * $max_progress_measure) : $totalProgress;
+        if ($return_null_score && !$totalProgress) {
+            $totalProgress = null;
+        } else {
+            $totalProgress = $max_progress_measure ? (100 * $max_progress_measure) : $totalProgress;
+        }
         return array($totalProgress, $totalTime, $totalStarted, $totalAccessed, $totalStatus, $maxAttempt, $score, $totalScoreMax);
     } else {
         $attempts = [];
         for ($i = 1; $i <= $maxAttempt; $i++) {
             if ($global_started[$i]) {
                 $attempts[$i] = [
-                    $global_progress[$i],
+                    ($return_null_score && !$global_score_max[$i]) ? null : $global_progress[$i],
                     $global_time[$i],
                     $global_started[$i],
                     $global_accessed[$i],
@@ -687,7 +694,7 @@ function format_lp_progress_display($attempts, $totalTime, $progress, $score, $s
     $hasAttempts = !empty($attempts);
 
     $showTime = $hasAttempts || $totalTime !== "00:00:00";
-    $showProgress = $hasAttempts || !empty($progress);
+    $showProgress = ($hasAttempts || !empty($progress)) && $progress > 0;
     $showScore = ($hasAttempts || !empty($score)) && (!empty($scoreMax) && $scoreMax > 0);
 
     return [
@@ -1177,6 +1184,17 @@ function extractScorm2004Time(?string $time): array {
     return array($hours, $minutes, $seconds, $primes);
 }
 
+function scormTimeToSeconds(?string $time): int {
+    if (isScorm2004Time($time)) {
+        [$h, $m, $s] = extractScorm2004Time($time);
+    } elseif (isScormTime($time)) {
+        [$h, $m, $s] = extractScormTime($time);
+    } else {
+        return 0;
+    }
+    return $h * 3600 + $m * 60 + $s;
+}
+
 function calculateScormTime(int $hours1, int $minutes1, int $seconds1, int $primes1, int $hours2, int $minutes2, int $seconds2, int $primes2): string {
     // calculate the resulting added hours, seconds, ... for result
     $primesReport = FALSE;
@@ -1451,7 +1469,7 @@ function enum_lesson_status(string $lessonStatus): int {
     } else if ($lessonStatus == "BROWSED") {
         return 4;
     } else if ($lessonStatus == "PASSED") {
-        return 5;
+        return 4;
     } else {
         return 0;
     }
@@ -1551,14 +1569,20 @@ function check_LPM_validity($is_editor, $course_code, $extraQuery = false, $extr
 
         if (!$is_editor) {
             // check for blocked learning path
-            $rank0 = Database::get()->querySingle("SELECT `rank` FROM lp_learnPath
-                                WHERE learnPath_id = ?d AND `course_id` = ?d ORDER BY `rank` LIMIT 1", $_SESSION['path_id'], $course_id)->rank;
+            $rank0Row = Database::get()->querySingle("SELECT `rank` FROM lp_learnPath
+                                WHERE learnPath_id = ?d AND `course_id` = ?d ORDER BY `rank` LIMIT 1", $_SESSION['path_id'], $course_id);
+            if (!$rank0Row) {
+                header("Location: " . $depth . "index.php?course=$course_code");
+                exit();
+            }
+            $rank0 = $rank0Row->rank;
             $lps = Database::get()->queryArray("SELECT `learnPath_id`, `lock` FROM lp_learnPath WHERE `course_id` = ?d AND `rank` < ?d", $course_id, $rank0);
             foreach ($lps as $lp) {
                 if ($lp->lock == 'CLOSE') {
                     $prog = get_learnPath_progress($lp->learnPath_id, $_SESSION['uid']);
                     if ($prog < 100) {
                         header("Location: ./index.php?course=$course_code");
+                        exit();
                     }
                 }
             }
@@ -1577,6 +1601,10 @@ function check_LPM_validity($is_editor, $course_code, $extraQuery = false, $extr
     if (!$is_editor) { // check if we try to overwrite a blocked module
         $lpm_id = Database::get()->querySingle("SELECT `lock`, `rank` FROM lp_rel_learnPath_module
                                 WHERE `learnPath_id` = ?d AND module_id = ?d", $_SESSION['path_id'], $_SESSION['lp_module_id']);
+        if (!$lpm_id) {
+            header("Location: " . $depth . "index.php?course=$course_code");
+            exit();
+        }
         $q = Database::get()->queryArray("SELECT learnPath_module_id
                                             FROM lp_rel_learnPath_module
                                            WHERE learnPath_id = ?d
@@ -1587,12 +1615,91 @@ function check_LPM_validity($is_editor, $course_code, $extraQuery = false, $extr
                                                        WHERE learnPath_module_id = ?d
                                                          AND learnPath_id = ?d
                                                          AND user_id = ?d", $m->learnPath_module_id, $_SESSION['path_id'], $_SESSION['uid']);
-            if (($lpm_id->lock == 'CLOSE') && ($progress->credit != 'CREDIT' || ($progress->lesson_status != 'COMPLETED' && $progress->lesson_status != 'PASSED'))) {
+            if (($lpm_id->lock == 'CLOSE') && (!$progress || $progress->credit != 'CREDIT' || ($progress->lesson_status != 'COMPLETED' && $progress->lesson_status != 'PASSED'))) {
                 header("Location: " . $depth . "index.php?course=$course_code");
                 exit();
             }
         }
     }
+}
+
+/**
+ * AJAX-safe module validity check.
+ *
+ * Similar to check_LPM_validity() but designed for AJAX requests:
+ * - Does NOT redirect (header("Location:...")) on failure
+ * - Sets $_SESSION['lp_module_id'] to the requested module on success
+ * - Returns an array ['ok' => true/false, 'error' => string, 'code' => string]
+ *
+ * @param int    $moduleId    The requested module ID
+ * @param bool   $is_editor   Whether user is course editor
+ * @return array              ['ok' => true] on success, ['ok' => false, 'error' => ..., 'code' => ...] on failure
+ */
+function check_LPM_validity_ajax(int $moduleId, bool $is_editor): array {
+    global $course_id;
+
+    if (empty($_SESSION['path_id']) || empty($moduleId)) {
+        return ['ok' => false, 'error' => 'Missing path or module id', 'code' => 'LP_BAD_REQUEST'];
+    }
+
+    // Check learning path visibility
+    $lp = Database::get()->querySingle("SELECT visible FROM lp_learnPath WHERE learnPath_id = ?d AND `course_id` = ?d", $_SESSION['path_id'], $course_id);
+    if (!$lp) {
+        return ['ok' => false, 'error' => 'Learning path not found', 'code' => 'LP_NOT_FOUND'];
+    }
+    if (!$is_editor && $lp->visible == 0) {
+        return ['ok' => false, 'error' => 'Learning path not accessible', 'code' => 'LP_FORBIDDEN'];
+    }
+
+    // Check blocked learning paths (prerequisite paths)
+    if (!$is_editor) {
+        $rank0 = Database::get()->querySingle("SELECT `rank` FROM lp_learnPath
+                            WHERE learnPath_id = ?d AND `course_id` = ?d ORDER BY `rank` LIMIT 1", $_SESSION['path_id'], $course_id);
+        if ($rank0) {
+            $lps = Database::get()->queryArray("SELECT `learnPath_id`, `lock` FROM lp_learnPath WHERE `course_id` = ?d AND `rank` < ?d", $course_id, $rank0->rank);
+            foreach ($lps as $prereqLp) {
+                if ($prereqLp->lock == 'CLOSE') {
+                    $prog = get_learnPath_progress($prereqLp->learnPath_id, $_SESSION['uid']);
+                    if ($prog < 100) {
+                        return ['ok' => false, 'error' => 'Prerequisite learning path not completed', 'code' => 'LP_FORBIDDEN'];
+                    }
+                }
+            }
+        }
+    }
+
+    // Check module exists in path and is visible
+    $lpm = Database::get()->querySingle("SELECT visible, `lock`, `rank` FROM lp_rel_learnPath_module
+        WHERE learnPath_id = ?d AND module_id = ?d", $_SESSION['path_id'], $moduleId);
+    if (!$lpm) {
+        return ['ok' => false, 'error' => 'Module not found in this learning path', 'code' => 'LP_NOT_FOUND'];
+    }
+    if (!$is_editor && $lpm->visible == 0) {
+        return ['ok' => false, 'error' => 'Module not accessible', 'code' => 'LP_FORBIDDEN'];
+    }
+
+    // Check lock enforcement for non-editors
+    if (!$is_editor && $lpm->lock == 'CLOSE') {
+        $predecessors = Database::get()->queryArray("SELECT learnPath_module_id
+                                        FROM lp_rel_learnPath_module
+                                       WHERE learnPath_id = ?d
+                                         AND `rank` < ?d", $_SESSION['path_id'], $lpm->rank);
+        foreach ($predecessors as $m) {
+            $progress = Database::get()->querySingle("SELECT credit, lesson_status
+                                                FROM lp_user_module_progress
+                                               WHERE learnPath_module_id = ?d
+                                                 AND learnPath_id = ?d
+                                                 AND user_id = ?d", $m->learnPath_module_id, $_SESSION['path_id'], $_SESSION['uid']);
+            if (!$progress || ($progress->credit != 'CREDIT' || ($progress->lesson_status != 'COMPLETED' && $progress->lesson_status != 'PASSED'))) {
+                return ['ok' => false, 'error' => 'Module is locked', 'code' => 'LP_FORBIDDEN'];
+            }
+        }
+    }
+
+    // All checks passed — update session
+    $_SESSION['lp_module_id'] = $moduleId;
+
+    return ['ok' => true];
 }
 
 function deleteLearningPath($pathId) {
@@ -1671,6 +1778,12 @@ function triggerLPGame($courseId, $uid, $lpId, $eventName) {
 
     $eventData->activityType = LearningPathDurationEvent::ACTIVITY;
     LearningPathDurationEvent::trigger($eventName, $eventData);
+
+    $eventData->activityType = LearningPathProgressMeasureEvent::ACTIVITY;
+    LearningPathProgressMeasureEvent::trigger($eventName, $eventData);
+
+    $eventData->activityType = LearningPathLessonStatusEvent::ACTIVITY;
+    LearningPathLessonStatusEvent::trigger($eventName, $eventData);
 }
 
 /**

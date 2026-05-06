@@ -405,7 +405,7 @@ if ($is_editor) {
                                                         /**** end of recursion paramneters *****/
                                                         $tool_content .= "<div class='row form-group mt-4'>
                                                                                 <label for='content' class='col-12 control-label-notes text-capitalize'>$langDetail</label>
-                                                                                <div class='col-12'>" . rich_text_editor('content', 4, 20, $content) . "</div>
+                                                                                <div class='col-12'>" . rich_text_editor('content', 4, 20, $content, options: array('id' => 'content')) . "</div>
                                                                             </div>
 
 
@@ -637,7 +637,7 @@ if ($is_editor) {
 
                                             <div class='row form-group mt-4'>
                                                 <label for='content' class='col-12 control-label-notes text-capitalize'>$langDetail</label>
-                                                <div class='col-12'>" . rich_text_editor('content', 4, 20, $content) . "</div>
+                                                <div class='col-12'>" . rich_text_editor('content', 4, 20, $content, options: array('id' => 'content')) . "</div>
                                             </div>";
 
                             $tool_content .="<div class='input-append bootstrap-timepicker form-group mt-4'>

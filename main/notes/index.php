@@ -68,6 +68,30 @@ $head_content .= "<script>
         });
 </script>";
 
+$head_content .= 
+    '<script>
+        $(document).on(\'click\', \'a.list-group-item[href*="resources.php"]\', function(e) {
+            e.preventDefault();
+
+            const href = $(this).attr(\'href\');
+            const url = new URL(href, window.location.origin);
+            const rid = url.searchParams.get(\'rid\');
+
+            const modalId = `modal_note_${rid}`;
+            const modalElement = document.getElementById(modalId);
+
+            if (modalElement) {
+                const Modal = new bootstrap.Modal(modalElement);
+                Modal.show();
+
+                const formSelector = `#vis_form_note_${rid}`;
+                $(formSelector).attr(\'action\', href);
+            } else {
+                console.warn(\'Modal with ID\', modalId, \'not found\');
+            }
+        });
+    </script>';
+
 $noteNumber = Notes::count_user_notes();
 
 $displayForm = true;
@@ -162,7 +186,7 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
                 <div class='form-group mt-4'>
                   <label for='newContent' class='col-sm-12 control-label-notes'>$langNoteBody</label>
                   <div class='col-sm-12'>
-                    " . rich_text_editor('newContent', 4, 20, $contentToModify) . "
+                    " . rich_text_editor('newContent', 4, 20, $contentToModify, options: array('id' => 'newContent')) . "
                   </div>
                 </div>
                 <div class='form-group mt-4'>
@@ -198,7 +222,7 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
     <div class='col-12'>
         <div class='card panelCard card-default px-lg-4 py-lg-3'>
             <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-                <h3>".q($note->title)."</h3>
+                <h2 class='text-heading-h3'>".q($note->title)."</h2>
                 <div>
                 ".
                         action_button(array(
@@ -209,7 +233,12 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
                                 'url' => "$_SERVER[SCRIPT_NAME]?delete=".getIndirectReference($note->id),
                                 'confirm' => $langSureToDelNote,
                                 'class' => 'delete',
-                                'icon' => 'fa-xmark')
+                                'icon' => 'fa-xmark'),
+                            array(
+                                'title' => $langAddResePortfolio,
+                                'url' => "$urlServer"."main/eportfolio/resources.php?action=add&amp;type=note&amp;rid=".$note->id,
+                                'icon' => 'fa-star',
+                                'show' => (get_config('eportfolio_enable') && $note->user_id==$uid))
                         ))
                 ."
                 </div>
@@ -221,6 +250,40 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
                 <p class='small-text'>". format_locale_date(strtotime($note->date_time)). "</p>
             </div>
         </div></div>";
+
+        if (get_config('eportfolio_enable') && $note->user_id==$uid) {
+            $tool_content .= '<div class="modal fade" id="modal_note_'.$note->id.'" tabindex="-1" aria-labelledby="noteModalLabel_'.$note->id.'" aria-hidden="true">
+                <div class="modal-dialog">
+                <div class="modal-content">
+            
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="noteModalLabel_'.$note->id.'">'.$langAddResePortfolio.' - '.q($note->title).'</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="'.$langClose.'"></button>
+                    </div>
+            
+                    <div class="modal-body">
+                    <form id="vis_form_note_'.$note->id.'" name="vis_form_note_'.$note->id.'" action="" method="post">
+                        <div class="mb-3">
+                            <label for="vis_form_note_'.$note->id.'_select" class="form-label">'.$langePortfolioFieldsVisibilitySettings.'</label>
+                            <select class="form-select" name="visibility" id="vis_form_note_'.$note->id.'_select">
+                            <option value="'.EPF_VISIBLE_PUBLIC.'">'.$langPublicePortfolioField.'</option>
+                            <option value="'.EPF_VISIBLE_USERS.'">'.$langOpenToRegisteredUsers.'</option>
+                            <option value="'.EPF_VISIBLE_PRIVATE.'">'.$langProfileInfoPrivate.'</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="vis_form_note_'.$note->id.'_textarea" class="form-label">'.$langePortfolioPromptAddReflComments.'</label>
+                            <textarea class="form-control" name="reflection_comments" id="vis_form_note_'.$note->id.'_textarea"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">'.$langSubmit.'</button>
+                    </form>
+                    </div>
+            
+                </div>
+                </div>
+            </div>';
+        }
+
 } else {
     /* display actions toolbar */
     $action_bar = action_bar(array(
@@ -265,6 +328,40 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
             $tool_content .= "<br><small>$langReferencedObject: " . References::item_link($note->reference_obj_module, $note->reference_obj_type, $note->reference_obj_id, $note->reference_obj_course) . "</small>";
         }
         $tool_content .= "<div class = 'note-content' data-id= '" . getIndirectReference($note->id) . "'>$content</div>";
+
+        if (get_config('eportfolio_enable') && $note->user_id==$uid) {
+            $tool_content .= '<div class="modal fade" id="modal_note_'.$note->id.'" tabindex="-1" aria-labelledby="noteModalLabel_'.$note->id.'" aria-hidden="true">
+                <div class="modal-dialog">
+                <div class="modal-content">
+            
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="noteModalLabel_'.$note->id.'">'.$langAddResePortfolio.' - '.q($note->title).'</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="'.$langClose.'"></button>
+                    </div>
+            
+                    <div class="modal-body">
+                    <form id="vis_form_note_'.$note->id.'" name="vis_form_note_'.$note->id.'" action="" method="post">
+                        <div class="mb-3">
+                            <label for="vis_form_note_'.$note->id.'_select" class="form-label">'.$langePortfolioFieldsVisibilitySettings.'</label>
+                            <select class="form-select" name="visibility" id="vis_form_note_'.$note->id.'_select">
+                            <option value="'.EPF_VISIBLE_PUBLIC.'">'.$langPublicePortfolioField.'</option>
+                            <option value="'.EPF_VISIBLE_USERS.'">'.$langOpenToRegisteredUsers.'</option>
+                            <option value="'.EPF_VISIBLE_PRIVATE.'">'.$langProfileInfoPrivate.'</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="vis_form_note_'.$note->id.'_textarea" class="form-label">'.$langePortfolioPromptAddReflComments.'</label>
+                            <textarea class="form-control" name="reflection_comments" id="vis_form_note_'.$note->id.'_textarea"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">'.$langSubmit.'</button>
+                    </form>
+                    </div>
+            
+                </div>
+                </div>
+            </div>';
+        }
+
         $tool_content .= "</td>";
 
         $tool_content .= "<td class='option-btn-cell text-end'>" .
@@ -277,6 +374,11 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
                         'confirm' => $langSureToDelNote,
                         'class' => 'delete',
                         'icon' => 'fa-xmark'),
+                    array(
+                        'title' => $langAddResePortfolio,
+                        'url' => "$urlServer"."main/eportfolio/resources.php?action=add&amp;type=note&amp;rid=".$note->id,
+                        'icon' => 'fa-star',
+                        'show' => (get_config('eportfolio_enable') && $note->user_id==$uid)),
                     array('title' => $langMove . " " . $langUp,
                         'url' => "$_SERVER[SCRIPT_NAME]?up=" . getIndirectReference($note->id),
                         'level' => 'primary',

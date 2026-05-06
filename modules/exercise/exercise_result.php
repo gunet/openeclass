@@ -379,7 +379,7 @@ if (!isset($_GET['pdf'])) {
 
 $tool_content .= "<div class='col-12 mt-4'><div class='card panelCard card-default px-lg-4 py-lg-3'>
                       <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                            <h3>" . q_math($exerciseTitle) . "</h3>
+                            <h2 class='text-heading-h3'>" . q_math($exerciseTitle) . "</h2>
                       </div>";
 
 if (!empty($exerciseDescription)) {
@@ -408,11 +408,11 @@ $tool_content .= "<div class='col-sm-12'>";
     $tool_content .= "<div class='card-header border-0 d-flex justify-content-between align-items-center'>"; //card-header
 
     if ($user) { // user details
-        $tool_content .= "<h3>" . q($user->surname) . " " . q($user->givenname);
+        $tool_content .= "<h2 class='text-heading-h3'>" . q($user->surname) . " " . q($user->givenname);
         if ($user->am) {
             $tool_content .= " ($langAmShort: " . q($user->am) . ")";
         }
-        $tool_content .= "</h3>";
+        $tool_content .= "</h2>";
     }
     $tool_content .= "</div>"; //card-header end
 
@@ -556,6 +556,36 @@ if (count($exercise_question_ids) > 0) {
         $answer_class = ($question_weight == $questionWeighting) ? 'correct_div' : (($question_weight > 0) ? 'partial_div' : 'wrong_div');
         $answer_text = ($question_weight == $questionWeighting) ? $langTrue : (($question_weight > 0) ? $langPartiallyCorrect : $langIncorrect);
 
+        $is_unanswered = false;
+
+        if (is_null($choice) || (is_string($choice) && trim($choice) === '')) {
+            $is_unanswered = true;
+        }
+        elseif ($choice === 0 || $choice === '0') {
+            $is_unanswered = true;
+        }
+        elseif (is_array($choice)) {
+            if (count($choice) === 1 && isset($choice[0]) && $choice[0] == 1) {
+                $is_unanswered = true;
+            }
+            else {
+                $is_unanswered = true;
+
+                foreach ($choice as $value) {
+                    $clean_value = trim((string)$value);
+
+                    if ($clean_value !== '' && $clean_value !== '0') {
+                        $is_unanswered = false;
+                        break;
+                    }
+                }
+            }
+        }
+
+        if ($answer_text == $langIncorrect && $question_weight == 0 && $is_unanswered) {
+            $answer_text .= " ($langNotAnswered)";
+        }
+
         $tool_content .= "<div class='table-responsive question-container mb-5 $answer_class' style='border-radius: 10px;overflow: hidden;'>";
         $tool_content .= "
             <table class='table ".(($question_graded)? 'graded' : 'ungraded')." table-default table-exercise table-exercise-secondary' style='margin: 0;'>
@@ -573,7 +603,6 @@ if (count($exercise_question_ids) > 0) {
             $arithmetic_expression_str = $objAn->replaceItemsBracesWithWildCards($arithmetic_expression, $questionId);
             unset($objAn);
         }
-//        $tool_content .= "<div class='questionName'><p>" . q_math($questionName) . "</p></div><div class='questionDescription'>" . standard_text_escape($questionDescription) . "</div>" . $arithmetic_expression_str;
         $tool_content .= "<div class='questionDescription'>" . standard_text_escape($questionDescription) . "</div>" . $arithmetic_expression_str;
 
         $classImg = '';
@@ -590,7 +619,6 @@ if (count($exercise_question_ids) > 0) {
                                 <canvas id='drawingCanvas-$row->question_id' class='$classCanvas'></canvas>
                               </div>";
         }
-//        $tool_content .= "<span class='fw-lighter m-2'><small>($questionType$qid_display)</small></span>$edit_link"; // question type
 
         $tool_content .= "</div><div class='col-2 text-end d-flex flex-column'>" . $answer_text;
         if ($answerType == FREE_TEXT or $answerType == ORAL) {
@@ -611,7 +639,6 @@ if (count($exercise_question_ids) > 0) {
                     $qw_legend1 = "$question_weight";
                     $qw_legend2 = "";
                 }
-//                $tool_content .= " <span class='fw-light m-1'><small>($langGradebookGrade: <strong>$qw_legend1 / $questionWeighting</strong>$qw_legend2)</small></span>";
                 $tool_content .= " <span class='fw-light m-1'><strong>$qw_legend1 / $questionWeighting</strong></span>";
             }
         }
@@ -621,40 +648,7 @@ if (count($exercise_question_ids) > 0) {
         if ($questionDescription) {
 
         }
-//        $tool_content .= "<tr><td colspan='2' class='question-text d-flex flex-column gap-2'>";
-//        $arithmetic_expression_str = '';
-//        if ($answerType == CALCULATED) {
-//            $des_arr = unserialize($questionDescription);
-//            $questionDescription = $des_arr['question_description'];
-//
-//            $objAn = new Answer($questionId);
-//            $arithmetic_expression = $des_arr['arithmetic_expression'];
-//            $arithmetic_expression_str = $objAn->replaceItemsBracesWithWildCards($arithmetic_expression, $questionId);
-//            unset($objAn);
-//        }
-////        $tool_content .= "<div class='questionName'><p>" . q_math($questionName) . "</p></div><div class='questionDescription'>" . standard_text_escape($questionDescription) . "</div>" . $arithmetic_expression_str;
-//        $tool_content .= "<div class='questionDescription'>" . standard_text_escape($questionDescription) . "</div>" . $arithmetic_expression_str;
-//
-//        $classImg = '';
-//        $classContainer = '';
-//        $classCanvas = '';
-//        if ($answerType == DRAG_AND_DROP_MARKERS) {
-//            $classImg = 'drag-and-drop-markers-img';
-//            $classContainer = 'drag-and-drop-markers-container';
-//            $classCanvas = 'drag-and-drop-markers-canvas';
-//        }
-//        if (file_exists($picturePath . '/quiz-' . $row->question_id)) {
-//            $tool_content .= "<div class='$classContainer' id='image-container-$row->question_id' style='position: relative; display: inline-block;'>
-//                                <img class='$classImg' id='img-quiz-$row->question_id' src='../../$picturePath/quiz-$row->question_id' style='width: 100%;'>
-//                                <canvas id='drawingCanvas-$row->question_id' class='$classCanvas'></canvas>
-//                              </div>";
-//        }
-//
-//        $tool_content .= "</td></tr>";
 
-//        if (!is_null($choice)) {
-//            $tool_content .= "<tr class='active'><th colspan='2'><u>$langAnswer</u></th></tr>";
-//        }
         $questionScore = 0;
 
         // display results

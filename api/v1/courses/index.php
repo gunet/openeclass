@@ -1,5 +1,6 @@
 <?php
 
+
 /*
  *  ========================================================================
  *  * Open eClass
@@ -18,19 +19,26 @@
  *
  */
 
+
 require_once '../../../include/lib/course.class.php';
 require_once '../../../modules/create_course/functions.php';
 
-function api_method($access) {
+
+function api_method($access)
+{
+
 
     if (!$access->isValid) {
         Access::error(100, "Authentication required");
     }
 
+
     //Create course with post request
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
+
         $course = new Course();
+
 
         $ok = register_posted_variables([
             'title'             => true,
@@ -50,15 +58,26 @@ function api_method($access) {
             'view_type'         => false,
         ]);
 
+
         if (!$ok) {
             Access::error(2, 'For creating a cousre, the following inputs are mandatory: title, department_id');
         }
 
+
         $title = $GLOBALS['title'];
         $department_id = $GLOBALS['department_id'];
 
+
+        // Check if department is allowed for this token
+        if ($access->allowedDepartments !== null && !in_array($department_id, $access->allowedDepartments)) {
+            Access::error(403, 'Access denied: You do not have permission to create courses in this department', 403);
+        }
+
+
+
         $code = strtoupper(new_code($department_id));
         $code = str_replace(' ', '', $code);
+
 
         $description = isset($_POST['description']) ? $GLOBALS['description'] : "";
         $password = isset($_POST['password']) ? $_POST['password'] : "";
@@ -66,25 +85,30 @@ function api_method($access) {
         $flipped_flag = isset($_POST['flipped_flag']) ? $GLOBALS['flipped_flag'] : 0;
         $public_code = isset($_POST['public_code']) ? $GLOBALS['public_code'] : $code;
 
+
         $doc_quota = isset($_POST['doc_quota']) && intval($GLOBALS['doc_quota']) > 0 ? $GLOBALS['doc_quota'] : get_config('doc_quota');
         if (isset($_POST['doc_quota']) && intval($GLOBALS['doc_quota']) <= 0) {
             Access::error(20, 'doc_quota input must be a number and higher than zero');
         }
+
 
         $group_quota = isset($_POST['group_quota']) && intval($GLOBALS['group_quota']) > 0 ? $GLOBALS['group_quota'] : get_config('group_quota');
         if (isset($_POST['group_quota']) && intval($GLOBALS['group_quota']) <= 0) {
             Access::error(20, 'group_quota input must be a number and higher than zero');
         }
 
+
         $video_quota = isset($_POST['video_quota']) && intval($GLOBALS['video_quota']) > 0 ? $GLOBALS['video_quota'] : get_config('video_quota');
         if (isset($_POST['video_quota']) && intval($GLOBALS['video_quota']) <= 0) {
             Access::error(20, 'video_quota input must be a number and higher than zero');
         }
 
+
         $dropbox_quota = isset($_POST['dropbox_quota']) && intval($GLOBALS['dropbox_quota']) > 0 ? $GLOBALS['dropbox_quota'] : get_config('dropbox_quota');
         if (isset($_POST['dropbox_quota']) && intval($GLOBALS['dropbox_quota']) <= 0) {
             Access::error(20, 'dropbox_quota input must be a number and higher than zero');
         }
+
 
         if (isset($_POST['lang'])) {
             $session = new Session();
@@ -97,6 +121,7 @@ function api_method($access) {
         } else {
             $lang = 'el';
         }
+
 
         if (isset($_POST['visible'])) {
             $visible_mapping = array(
@@ -114,6 +139,7 @@ function api_method($access) {
             $visible = '2';
         }
 
+
         if (isset($_POST['course_license'])) {
             $license_mapping = array(
                 'No' => 0,
@@ -130,10 +156,10 @@ function api_method($access) {
             } else {
                 Access::error(20, 'course_license input must be one of the following: No (No license specified) / AllRights (All rights reserved) / CC (CC - Attribution) / CC-ShareAlike (CC - Attribution-ShareAlike) / CC-NoDerivatives (CC - Attribution-NoDerivatives) / CC-NonCommercial (CC - Attribution-NonCommercial) / CC-NonCommercialShareAlike (CC - Attribution-NonCommercial-ShareAlike) / CC-NonCommercialNoDerivatives (CC - Attribution-NonCommercial-NoDerivatives)');
             }
-
         } else {
             $course_license = '0';
         }
+
 
         if (isset($_POST['view_type'])) {
             $valid_view_types = ['simple', 'units', 'wall', 'flippedclassroom'];
@@ -146,11 +172,14 @@ function api_method($access) {
             $view_type = 'simple';
         }
 
+
         if (!create_course_dirs($code)) {
             Access::error(20, 'An error has occurred. Please contact the platform administrator.');
         }
 
-        $result = Database::get()->query("INSERT INTO course SET
+
+        $result = Database::get()->query(
+            "INSERT INTO course SET
                         code = ?s,
                         lang = ?s,
                         title = ?s,
@@ -171,17 +200,34 @@ function api_method($access) {
                         glossary_expand = 0,
                         glossary_index = 1,
                         description = ?s",
-            $code, $lang, $title, $visible,
-            $course_license, $prof_names, $public_code, $doc_quota * 1024 * 1024,
-            $video_quota * 1024 * 1024, $group_quota * 1024 * 1024,
-            $dropbox_quota * 1024 * 1024, $password, $flipped_flag, $view_type, $description);
+            $code,
+            $lang,
+            $title,
+            $visible,
+            $course_license,
+            $prof_names,
+            $public_code,
+            $doc_quota * 1024 * 1024,
+            $video_quota * 1024 * 1024,
+            $group_quota * 1024 * 1024,
+            $dropbox_quota * 1024 * 1024,
+            $password,
+            $flipped_flag,
+            $view_type,
+            $description
+        );
+
+
 
         $new_course_id = $result->lastInsertID;
         create_modules($new_course_id);
 
+
         $course->refresh($new_course_id, [$department_id]);
 
+
         course_index($code);
+
 
         header('Content-Type: application/json');
         header('X-Content-Type-Options: nosniff');
@@ -204,30 +250,52 @@ function api_method($access) {
             'dropbox_quota'     => $dropbox_quota,
 
 
+
         ], JSON_UNESCAPED_UNICODE);
         exit();
     }
 
-    if ( isset($_GET['course_id']) && isset($_GET['uname']) ) {
+
+    if (isset($_GET['course_id']) && isset($_GET['uname'])) {
+
 
         $courseCode = $_GET['course_id'];
         $userName = $_GET['uname'];
+        // Build department filter if needed
+        $departmentFilter = '';
+        $queryParams = [$courseCode, $userName];
+
+
+        if ($access->allowedDepartments !== null) {
+            $placeholders = implode(',', array_fill(0, count($access->allowedDepartments), '?d'));
+            $departmentFilter = " AND EXISTS (
+                SELECT 1 FROM course_department cd 
+                WHERE cd.course = c.id 
+                AND cd.department IN ($placeholders)
+            )";
+            $queryParams = array_merge($queryParams, $access->allowedDepartments);
+        }
+
 
         $course = Database::get()->queryArray("SELECT cu.status, cu.editor, cu.reg_date, cu.course_id, cu.user_id
             FROM course_user cu
             JOIN user u ON cu.user_id = u.id
             JOIN course c ON cu.course_id = c.id
-            WHERE c.code = ?s AND u.username = ?s",$courseCode, $userName );
+            WHERE c.code = ?s AND u.username = ?s" . $departmentFilter, ...$queryParams);
+
 
         $result = array();
 
+
         if (count($course) > 0) {
+
 
             $result['registered'] = true;
             $result['course_code'] = $courseCode;
             $result['course_id'] = $course[0]->course_id;
             $result['uname'] = $userName;
             $result['user_id'] = $course[0]->user_id;
+
 
 
             switch ($course[0]->status) {
@@ -246,11 +314,12 @@ function api_method($access) {
                     break;
             }
 
-            $result['reg_date'] = $course[0]->reg_date;
 
+            $result['reg_date'] = $course[0]->reg_date;
         } else {
             $result['registered'] = false;
         }
+
 
         header('Content-Type: application/json');
         header('X-Content-Type-Options: nosniff');
@@ -258,11 +327,31 @@ function api_method($access) {
         exit();
     }
 
-    if ( isset($_GET['course_id']) ) {
+
+    if (isset($_GET['course_id'])) {
+
 
         $courseCode = $_GET['course_id'];
 
-        $course = Database::get()->queryArray("SELECT * FROM course WHERE code = ?s",$courseCode );
+
+        // Build department filter if needed
+        $departmentFilter = '';
+        $queryParams = [$courseCode];
+
+
+        if ($access->allowedDepartments !== null) {
+            $placeholders = implode(',', array_fill(0, count($access->allowedDepartments), '?d'));
+            $departmentFilter = " AND EXISTS (
+                SELECT 1 FROM course_department cd 
+                WHERE cd.course = course.id 
+                AND cd.department IN ($placeholders)
+            )";
+            $queryParams = array_merge($queryParams, $access->allowedDepartments);
+        }
+
+
+        $course = Database::get()->queryArray("SELECT * FROM course WHERE code = ?s" . $departmentFilter, ...$queryParams);
+
 
         header('Content-Type: application/json');
         header('X-Content-Type-Options: nosniff');
@@ -270,15 +359,33 @@ function api_method($access) {
         exit();
     }
 
-    if ( isset($_GET['uname']) ) {
+
+    if (isset($_GET['uname'])) {
+
 
         $userName = $_GET['uname'];
+        // Build department filter if needed
+        $departmentFilter = '';
+        $queryParams = [$userName];
+
+
+        if ($access->allowedDepartments !== null) {
+            $placeholders = implode(',', array_fill(0, count($access->allowedDepartments), '?d'));
+            $departmentFilter = " AND EXISTS (
+                SELECT 1 FROM course_department cd 
+                WHERE cd.course = c.id 
+                AND cd.department IN ($placeholders)
+            )";
+            $queryParams = array_merge($queryParams, $access->allowedDepartments);
+        }
+
 
         $course = Database::get()->queryArray("SELECT c.*
                         FROM course c
                         JOIN course_user cu ON cu.course_id = c.id
                         JOIN user u ON u.id = cu.user_id
-                        WHERE cu.status = 1 AND u.username = ?s",$userName );
+                        WHERE cu.status = 1 AND u.username = ?s" . $departmentFilter, ...$queryParams);
+
 
         header('Content-Type: application/json');
         header('X-Content-Type-Options: nosniff');
@@ -286,7 +393,21 @@ function api_method($access) {
         exit();
     }
 
+
+    // List all courses endpoint
     if ($access->allCourses) {
+        $whereClause = "WHERE visible <> " . COURSE_INACTIVE;
+        $queryParams = [];
+
+
+        // Add department filtering if set
+        if ($access->allowedDepartments !== null) {
+            $placeholders = implode(',', array_fill(0, count($access->allowedDepartments), '?d'));
+            $whereClause .= " AND course_department.department IN ($placeholders)";
+            $queryParams = $access->allowedDepartments;
+        }
+
+
         $courses = Database::get()->queryArray("SELECT course.code AS id,
                 course.title AS name,
                 course.title AS shortname,
@@ -297,11 +418,27 @@ function api_method($access) {
                 created AS timemodified
             FROM course
                 JOIN course_department ON course.id = course_department.course
-            WHERE visible <> " . COURSE_INACTIVE . "
-            ORDER BY course.title");
+            $whereClause
+            ORDER BY course.title", ...$queryParams);
     } else {
         if ($access->courseIDs) {
-            $placeholders = implode(',', array_fill(0, count($access->courseIDs), '?d'));
+            $whereClause = "WHERE visible <> " . COURSE_INACTIVE;
+            $queryParams = [];
+
+
+            // Combine course IDs and department filtering
+            $courseIdPlaceholders = implode(',', array_fill(0, count($access->courseIDs), '?d'));
+            $whereClause .= " AND course.id IN ($courseIdPlaceholders)";
+            $queryParams = array_merge($queryParams, $access->courseIDs);
+
+
+            if ($access->allowedDepartments !== null) {
+                $deptPlaceholders = implode(',', array_fill(0, count($access->allowedDepartments), '?d'));
+                $whereClause .= " AND course_department.department IN ($deptPlaceholders)";
+                $queryParams = array_merge($queryParams, $access->allowedDepartments);
+            }
+
+
             $courses = Database::get()->queryArray("SELECT course.code AS id,
                     course.title AS name,
                     course.title AS shortname,
@@ -312,18 +449,20 @@ function api_method($access) {
                     created AS timemodified
                 FROM course
                     JOIN course_department ON course.id = course_department.course
-                WHERE visible <> " . COURSE_INACTIVE . " AND course.id IN ($placeholders)
-                ORDER BY course.title", $access->courseIDs);
+                $whereClause
+                ORDER BY course.title", ...$queryParams);
         } else {
             $courses = [];
         }
     }
+
 
     header('Content-Type: application/json');
     header('X-Content-Type-Options: nosniff');
     echo json_encode($courses, JSON_UNESCAPED_UNICODE);
     exit();
 }
+
 
 chdir('..');
 //require_once 'index.php';

@@ -57,7 +57,7 @@ function course_points_game_widget($uid, $course_id) {
     $html = "
     <div class='card panelCard card-transparent border-0 mt-5 sticky-column-course-home'>
         <div class='card-header card-header-default px-0 py-0 border-0 d-flex justify-content-between align-items-center'>
-            <h3 class='mb-0'>$langPointsGames</h3>
+            <h2 class='text-heading-h3 mb-0'>$langPointsGames</h2>
             <a class='TextRegular text-decoration-underline vsmall-text' href='{$urlAppend}modules/progress/index.php?course={$course_code}&tab=points'>$langReadMore...</a>
         </div>
         <div class='card-body card-body-default px-0 py-0 mt-3'>

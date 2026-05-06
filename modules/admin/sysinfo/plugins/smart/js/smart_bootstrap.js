@@ -5,13 +5,19 @@ function renderPlugin_smart(data) {
         var html = '';
         var i,j;
         var smartid;
+        var attribute_name;
 
         html+="<thead>";
         html+="<tr>";
         html+="<th id=\"smart_name\" class=\"rightCell\">"+genlang(2, 'smart')+"</th>"; // Name
         for (i = 0; i < smartitems.length ; i++) {
-            smartid = smartitems[i]["@attributes"].id;
-            html+="<th class=\"sorttable_numeric rightCell\">"+ genlang(100+parseInt(smartid, 10), 'smart', smartid) + "</th>";
+            attribute_name = smartitems[i]["@attributes"].attribute_name;
+            if (typeof attribute_name === 'string')
+                attribute_name = attribute_name.replace(/_/g, " ").replace(/;/g, "<br>");
+            else
+                attribute_name = "Attribute " + smartitems[i]["@attributes"].id;
+
+            html+="<th class=\"sorttable_numeric rightCell\">"+ attribute_name + "</th>";
         }
         html+="</tr>";
         html+="</thead>";
@@ -24,7 +30,7 @@ function renderPlugin_smart(data) {
                 html += '<th class="rightCell"><table class="borderless table-hover table-nopadding" style="float:right;"><tbody><tr><td>'+ diskitems[i]["@attributes"].name + ' </td><td><img style="vertical-align:middle;width:20px;" src="./gfx/attention.gif" alt="!" title="' + diskitems[i]["@attributes"].event + '"/></td></tr></tbody></table></th>';
             else
                 html += '<th class="rightCell">'+ diskitems[i]["@attributes"].name + '</th>';
-            attribitems = items(diskitems[i].attribute);
+            var attribitems = items(diskitems[i].attribute);
             var valarray = [];
             for (j = 0;j < attribitems.length; j++) {
                 valarray[attribitems[j]["@attributes"].id] = attribitems[j]["@attributes"];
@@ -46,7 +52,7 @@ function renderPlugin_smart(data) {
                     html += '<td></td>';
                 }
             }
-            html += '</tr>'; 
+            html += '</tr>';
         }
         html += '</tbody>';
         $('#smart').empty().append(html);

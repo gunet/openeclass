@@ -2,8 +2,8 @@
 
 @section('content')
 
-    <div class="col-12 main-section">
-    <div class='{{ $container }} main-container'>
+    <main id="main" class="col-12 main-section">
+        <div class='{{ $container }} main-container'>
             <div class="row m-auto">
 
                         @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
@@ -17,9 +17,9 @@
                         <div class='col-12'>
                             <div class='card panelCard card-default px-lg-4 py-lg-3'>
                                 <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                    <h3>
+                                    <h2 class='text-heading-h3'>
                                        {!! $announcement->title !!}
-                                    </h3>
+                                    </h2>
                                 </div>
                                 <div class='card-body'>
                                     {!! $announcement->content !!}
@@ -38,7 +38,7 @@
             </div>
 
         </div>
-    </div>
+    </main>
 
 
 @endsection

@@ -92,7 +92,9 @@ class XML
         } else {
             $this->_complete_request = false;
         }
-        if (defined('PSI_EMU_HOSTNAME')) {
+        if (defined('PSI_EMU_PORT')) {
+            $os = 'SSH';
+        } elseif (defined('PSI_EMU_HOSTNAME')) {
             $os = 'WINNT';
         } else {
             $os = PSI_OS;
@@ -161,10 +163,12 @@ class XML
             }
         }
 
-        if (defined('PSI_EMU_HOSTNAME')) {
-            $vitals->addAttribute('OS', 'WINNT');
+        if (($os = $this->_sys->getOS()) == 'Android') {
+            $vitals->addAttribute('OS', 'Linux');
+        } elseif ($os == 'GNU') {
+            $vitals->addAttribute('OS', 'Hurd');
         } else {
-            $vitals->addAttribute('OS', (PSI_OS=='Android')?'Linux':PSI_OS);
+            $vitals->addAttribute('OS', $os);
         }
     }
 
@@ -203,12 +207,36 @@ class XML
             if (!$hide) {
                 $device = $network->addChild('NetDevice');
                 $device->addAttribute('Name', $dev->getName());
-                $device->addAttribute('RxBytes', $dev->getRxBytes());
-                $device->addAttribute('TxBytes', $dev->getTxBytes());
+                $rxbytes = $dev->getRxBytes();
+                $txbytes = $dev->getTxBytes();
+                $device->addAttribute('RxBytes', $rxbytes);
+                $device->addAttribute('TxBytes', $txbytes);
+                if (defined('PSI_SHOW_NETWORK_ACTIVE_SPEED') && PSI_SHOW_NETWORK_ACTIVE_SPEED) {
+                    if (($rxbytes == 0) && ($txbytes == 0)) {
+                        $rxrate = $dev->getRxRate();
+                        $txrate = $dev->getTxRate();
+                        if (($rxrate !== null) || ($txrate !== null)) {
+                            if ($rxrate !== null) {
+                                $device->addAttribute('RxRate', $rxrate);
+                            } else {
+                                $device->addAttribute('RxRate', 0);
+                            }
+                            if ($txrate !== null) {
+                                $device->addAttribute('TxRate', $txrate);
+                            } else {
+                                $device->addAttribute('TxRate', 0);
+                            }
+                        }
+                    }
+                }
                 $device->addAttribute('Err', $dev->getErrors());
                 $device->addAttribute('Drops', $dev->getDrops());
-                if (defined('PSI_SHOW_NETWORK_INFOS') && PSI_SHOW_NETWORK_INFOS && $dev->getInfo())
+                if (defined('PSI_SHOW_NETWORK_BRIDGE') && PSI_SHOW_NETWORK_BRIDGE && $dev->getBridge()) {
+                    $device->addAttribute('Bridge', $dev->getBridge());
+                }
+                if (defined('PSI_SHOW_NETWORK_INFOS') && PSI_SHOW_NETWORK_INFOS && $dev->getInfo()) {
                     $device->addAttribute('Info', $dev->getInfo());
+                }
             }
         }
     }
@@ -222,16 +250,29 @@ class XML
     {
         $hardware = $this->_xml->addChild('Hardware');
         if (($machine = $this->_sys->getMachine()) != "") {
-            if ((preg_match('/^(.* (.*\/.*\/.*))\/(.*\/.*\/.*)(, BIOS .*)$/', $machine, $mbuf)
-               || preg_match('/^(.* (.*\/.*))\/(.*\/.*)(, BIOS .*)$/', $machine, $mbuf)
-               || preg_match('/^(.* (.*))\/(.*)(, BIOS .*)$/', $machine, $mbuf)
-               || preg_match('/^((.*\/.*\/.*))\/(.*\/.*\/.*)(, BIOS .*)$/', $machine, $mbuf)
-               || preg_match('/^((.*\/.*))\/(.*\/.*)(, BIOS .*)$/', $machine, $mbuf)
-               || preg_match('/^((.*))\/(.*)(, BIOS .*)$/', $machine, $mbuf))
-               && ($mbuf[2] === $mbuf[3])) { // find duplicates
-                $machine = $mbuf[1].$mbuf[4]; // minimized machine name
+            $machine = trim(preg_replace("/\s+/", " ", preg_replace("/^\s*[\/,]*/", "", preg_replace("/\/\s+,/", "/,", $machine)))); // remove leading slash or comma and unnecessary spaces
+            if (preg_match('/, BIOS .*$/', $machine, $mbuf, PREG_OFFSET_CAPTURE)) {
+                $comapos = $mbuf[0][1];
+                $endstr = $mbuf[0][0];
+                $offset = 0;
+                while (($offset < $comapos)
+                     && (($slashpos = strpos($machine, "/", $offset)) !== false)
+                     && ($slashpos < $comapos)) {
+                    $len1 = $comapos - $slashpos - 1;
+                    $str1 = substr($machine, $slashpos + 1, $len1);
+                    $begstr  = substr($machine, 0, $slashpos);
+                    if ($len1 > 0) { // no empty
+                        $str2 = substr($begstr, -$len1 - 1);
+                    } else {
+                        $str2 = " ";
+                    }
+                    if ((" ".$str1 === $str2) || ($str1 === $begstr)) { // duplicates
+                        $machine = $begstr.$endstr;
+                        break;
+                    }
+                    $offset = $slashpos + 1;
+                }
             }
-            $machine = trim(preg_replace("/^\s*\/?,?/", "", $machine)); // remove leading slash and comma
 
             if ($machine != "") {
                 $hardware->addAttribute('Name', $machine);
@@ -240,22 +281,23 @@ class XML
 
         if (defined('PSI_SHOW_VIRTUALIZER_INFO') && PSI_SHOW_VIRTUALIZER_INFO) {
             $virt = $this->_sys->getVirtualizer();
-            $first = true;
             $virtstring = "";
             foreach ($virt as $virtkey=>$virtvalue) if ($virtvalue) {
-                if ($first) {
-                    $first = false;
-                } else {
+                if ($virtstring !== "") {
                     $virtstring .= ", ";
                 }
                 if ($virtkey === 'microsoft') {
-                    $virtstring .= 'hyper-v';
+                    if (!isset($virt["wsl"]) || !$virt["wsl"]) {
+                        $virtstring .= 'hyper-v';
+                    }
                 } elseif ($virtkey === 'kvm') {
                     $virtstring .= 'qemu-kvm';
                 } elseif ($virtkey === 'oracle') {
                     $virtstring .= 'virtualbox';
                 } elseif ($virtkey === 'zvm') {
                     $virtstring .= 'z/vm';
+                } elseif ($virtkey === 'sre') {
+                    $virtstring .= 'lmhs sre';
                 } else {
                     $virtstring .= $virtkey;
                 }
@@ -618,124 +660,149 @@ class XML
     {
         $mbinfo = $this->_xml->addChild('MBInfo');
         $temp = $fan = $volt = $power = $current = $other = null;
+        $hideSensors = array();
 
         if (sizeof(unserialize(PSI_MBINFO))>0) {
+            if (defined('PSI_HIDE_SENSORS') && is_string(PSI_HIDE_SENSORS)) {
+                 if (preg_match(ARRAY_EXP, PSI_HIDE_SENSORS)) {
+                    $hideSensors = eval(PSI_HIDE_SENSORS);
+                } else {
+                    $hideSensors = array(PSI_HIDE_SENSORS);
+                }
+            }
             foreach (unserialize(PSI_MBINFO) as $mbinfoclass) {
                 $mbinfo_data = new $mbinfoclass();
                 $mbinfo_detail = $mbinfo_data->getMBInfo();
-
-                if (!$this->_sysinfo->getBlockName() || $this->_sysinfo->getBlockName()==='temperature') foreach ($mbinfo_detail->getMbTemp() as $dev) {
-                    if ($temp == null) {
-                        $temp = $mbinfo->addChild('Temperature');
-                    }
-                    $item = $temp->addChild('Item');
-                    $item->addAttribute('Label', $dev->getName());
-                    $item->addAttribute('Value', $dev->getValue());
-                    $alarm = false;
-                    if ($dev->getMax() !== null) {
-                        $item->addAttribute('Max', $dev->getMax());
-                        $alarm = true;
-                    }
-                    if (defined('PSI_SENSOR_EVENTS') && PSI_SENSOR_EVENTS && ($dev->getEvent() !== "") && (((strtolower($dev->getEvent())) !== "alarm") || $alarm || ($dev->getValue() == 0))) {
-                        $item->addAttribute('Event', ucfirst(strtolower($dev->getEvent())));
-                    }
-                }
-
-                if (!$this->_sysinfo->getBlockName() || $this->_sysinfo->getBlockName()==='fans') foreach ($mbinfo_detail->getMbFan() as $dev) {
-                    if ($fan == null) {
-                        $fan = $mbinfo->addChild('Fans');
-                    }
-                    $item = $fan->addChild('Item');
-                    $item->addAttribute('Label', $dev->getName());
-                    $item->addAttribute('Value', $dev->getValue());
-                    $alarm = false;
-                    if ($dev->getMin() !== null) {
-                        $item->addAttribute('Min', $dev->getMin());
-                        $alarm = true;
-                    }
-                    if ($dev->getUnit() !== "") {
-                        $item->addAttribute('Unit', $dev->getUnit());
-                    }
-                    if (defined('PSI_SENSOR_EVENTS') && PSI_SENSOR_EVENTS && ($dev->getEvent() !== "") && (((strtolower($dev->getEvent())) !== "alarm") || $alarm || ($dev->getValue() == 0))) {
-                        $item->addAttribute('Event', ucfirst(strtolower($dev->getEvent())));
-                    }
-                }
-
-                if (!$this->_sysinfo->getBlockName() || $this->_sysinfo->getBlockName()==='voltage') foreach ($mbinfo_detail->getMbVolt() as $dev) {
-                    if ($volt == null) {
-                        $volt = $mbinfo->addChild('Voltage');
-                    }
-                    $item = $volt->addChild('Item');
-                    $item->addAttribute('Label', $dev->getName());
-                    $item->addAttribute('Value', $dev->getValue());
-                    $alarm = false;
-                    if (($dev->getMin() === null) || ($dev->getMin() != 0) || ($dev->getMax() === null) || ($dev->getMax() != 0)) {
-                        if ($dev->getMin() !== null) {
-                            $item->addAttribute('Min', $dev->getMin());
-                            $alarm = true;
+                if (!$this->_sysinfo->getBlockName() || $this->_sysinfo->getBlockName()==='temperature' || $this->_sysinfo->getBlockName()==='mbinfo') foreach ($mbinfo_detail->getMbTemp() as $dev) {
+                    $mbinfo_name = $dev->getName();
+                    if (!in_array($mbinfo_name, $hideSensors, true)) {
+                        if ($temp == null) {
+                            $temp = $mbinfo->addChild('Temperature');
                         }
+                        $item = $temp->addChild('Item');
+                        $item->addAttribute('Label', $mbinfo_name);
+                        $item->addAttribute('Value', $dev->getValue());
+                        $alarm = false;
                         if ($dev->getMax() !== null) {
                             $item->addAttribute('Max', $dev->getMax());
                             $alarm = true;
                         }
-                    }
-                    if (defined('PSI_SENSOR_EVENTS') && PSI_SENSOR_EVENTS && ($dev->getEvent() !== "") && (((strtolower($dev->getEvent())) !== "alarm") || $alarm || ($dev->getValue() == 0))) {
-                        $item->addAttribute('Event', ucfirst(strtolower($dev->getEvent())));
-                    }
-                }
-
-                if (!$this->_sysinfo->getBlockName() || $this->_sysinfo->getBlockName()==='power') foreach ($mbinfo_detail->getMbPower() as $dev) {
-                    if ($power == null) {
-                        $power = $mbinfo->addChild('Power');
-                    }
-                    $item = $power->addChild('Item');
-                    $item->addAttribute('Label', $dev->getName());
-                    $item->addAttribute('Value', $dev->getValue());
-                    $alarm = false;
-                    if ($dev->getMax() !== null) {
-                        $item->addAttribute('Max', $dev->getMax());
-                        $alarm = true;
-                    }
-                    if (defined('PSI_SENSOR_EVENTS') && PSI_SENSOR_EVENTS && ($dev->getEvent() !== "") && (((strtolower($dev->getEvent())) !== "alarm") || $alarm || ($dev->getValue() == 0))) {
-                        $item->addAttribute('Event', ucfirst(strtolower($dev->getEvent())));
+                        if (defined('PSI_SENSOR_EVENTS') && PSI_SENSOR_EVENTS && ($dev->getEvent() !== "") && (((strtolower($dev->getEvent())) !== "alarm") || $alarm || ($dev->getValue() == 0))) {
+                            $item->addAttribute('Event', ucfirst(strtolower($dev->getEvent())));
+                        }
                     }
                 }
 
-                if (!$this->_sysinfo->getBlockName() || $this->_sysinfo->getBlockName()==='current') foreach ($mbinfo_detail->getMbCurrent() as $dev) {
-                    if ($current == null) {
-                        $current = $mbinfo->addChild('Current');
-                    }
-                    $item = $current->addChild('Item');
-                    $item->addAttribute('Label', $dev->getName());
-                    $item->addAttribute('Value', $dev->getValue());
-                    $alarm = false;
-                    if (($dev->getMin() === null) || ($dev->getMin() != 0) || ($dev->getMax() === null) || ($dev->getMax() != 0)) {
+                if (!$this->_sysinfo->getBlockName() || $this->_sysinfo->getBlockName()==='fans' || $this->_sysinfo->getBlockName()==='mbinfo') foreach ($mbinfo_detail->getMbFan() as $dev) {
+                    $mbinfo_name = $dev->getName();
+                    if (!in_array($mbinfo_name, $hideSensors, true)) {
+                        if ($fan == null) {
+                            $fan = $mbinfo->addChild('Fans');
+                        }
+                        $item = $fan->addChild('Item');
+                        $item->addAttribute('Label', $mbinfo_name);
+                        $item->addAttribute('Value', $dev->getValue());
+                        $alarm = false;
                         if ($dev->getMin() !== null) {
                             $item->addAttribute('Min', $dev->getMin());
                             $alarm = true;
                         }
+                        if ($dev->getUnit() !== "") {
+                            $item->addAttribute('Unit', $dev->getUnit());
+                        }
+                        if (defined('PSI_SENSOR_EVENTS') && PSI_SENSOR_EVENTS && ($dev->getEvent() !== "") && (((strtolower($dev->getEvent())) !== "alarm") || $alarm || ($dev->getValue() == 0))) {
+                            $item->addAttribute('Event', ucfirst(strtolower($dev->getEvent())));
+                        }
+                    }
+                }
+
+                if (!$this->_sysinfo->getBlockName() || $this->_sysinfo->getBlockName()==='voltage' || $this->_sysinfo->getBlockName()==='mbinfo') foreach ($mbinfo_detail->getMbVolt() as $dev) {
+                    $mbinfo_name = $dev->getName();
+                    if (!in_array($mbinfo_name, $hideSensors, true)) {
+                        if ($volt == null) {
+                            $volt = $mbinfo->addChild('Voltage');
+                        }
+                        $item = $volt->addChild('Item');
+                        $item->addAttribute('Label', $mbinfo_name);
+                        $item->addAttribute('Value', $dev->getValue());
+                        $alarm = false;
+                        if (($dev->getMin() === null) || ($dev->getMin() != 0) || ($dev->getMax() === null) || ($dev->getMax() != 0)) {
+                            if ($dev->getMin() !== null) {
+                                $item->addAttribute('Min', $dev->getMin());
+                                $alarm = true;
+                            }
+                            if ($dev->getMax() !== null) {
+                                $item->addAttribute('Max', $dev->getMax());
+                                $alarm = true;
+                            }
+                        }
+                        if (defined('PSI_SENSOR_EVENTS') && PSI_SENSOR_EVENTS && ($dev->getEvent() !== "") && (((strtolower($dev->getEvent())) !== "alarm") || $alarm || ($dev->getValue() == 0))) {
+                            $item->addAttribute('Event', ucfirst(strtolower($dev->getEvent())));
+                        }
+                    }
+                }
+
+                if (!$this->_sysinfo->getBlockName() || $this->_sysinfo->getBlockName()==='power' || $this->_sysinfo->getBlockName()==='mbinfo') foreach ($mbinfo_detail->getMbPower() as $dev) {
+                    $mbinfo_name = $dev->getName();
+                    if (!in_array($mbinfo_name, $hideSensors, true)) {
+                        if ($power == null) {
+                            $power = $mbinfo->addChild('Power');
+                        }
+                        $item = $power->addChild('Item');
+                        $item->addAttribute('Label', $mbinfo_name);
+                        $item->addAttribute('Value', $dev->getValue());
+                        $alarm = false;
                         if ($dev->getMax() !== null) {
                             $item->addAttribute('Max', $dev->getMax());
                             $alarm = true;
                         }
-                    }
-                    if (defined('PSI_SENSOR_EVENTS') && PSI_SENSOR_EVENTS && ($dev->getEvent() !== "") && (((strtolower($dev->getEvent())) !== "alarm") || $alarm || ($dev->getValue() == 0))) {
-                        $item->addAttribute('Event', ucfirst(strtolower($dev->getEvent())));
+                        if (defined('PSI_SENSOR_EVENTS') && PSI_SENSOR_EVENTS && ($dev->getEvent() !== "") && (((strtolower($dev->getEvent())) !== "alarm") || $alarm || ($dev->getValue() == 0))) {
+                            $item->addAttribute('Event', ucfirst(strtolower($dev->getEvent())));
+                        }
                     }
                 }
 
-                if (!$this->_sysinfo->getBlockName() || $this->_sysinfo->getBlockName()==='other') foreach ($mbinfo_detail->getMbOther() as $dev) {
-                    if ($other == null) {
-                        $other = $mbinfo->addChild('Other');
+                if (!$this->_sysinfo->getBlockName() || $this->_sysinfo->getBlockName()==='current' || $this->_sysinfo->getBlockName()==='mbinfo') foreach ($mbinfo_detail->getMbCurrent() as $dev) {
+                    $mbinfo_name = $dev->getName();
+                    if (!in_array($mbinfo_name, $hideSensors, true)) {
+                        if ($current == null) {
+                            $current = $mbinfo->addChild('Current');
+                        }
+                        $item = $current->addChild('Item');
+                        $item->addAttribute('Label', $mbinfo_name);
+                        $item->addAttribute('Value', $dev->getValue());
+                        $alarm = false;
+                        if (($dev->getMin() === null) || ($dev->getMin() != 0) || ($dev->getMax() === null) || ($dev->getMax() != 0)) {
+                            if ($dev->getMin() !== null) {
+                                $item->addAttribute('Min', $dev->getMin());
+                                $alarm = true;
+                            }
+                            if ($dev->getMax() !== null) {
+                                $item->addAttribute('Max', $dev->getMax());
+                                $alarm = true;
+                            }
+                        }
+                        if (defined('PSI_SENSOR_EVENTS') && PSI_SENSOR_EVENTS && ($dev->getEvent() !== "") && (((strtolower($dev->getEvent())) !== "alarm") || $alarm || ($dev->getValue() == 0))) {
+                            $item->addAttribute('Event', ucfirst(strtolower($dev->getEvent())));
+                        }
                     }
-                    $item = $other->addChild('Item');
-                    $item->addAttribute('Label', $dev->getName());
-                    $item->addAttribute('Value', $dev->getValue());
-                    if ($dev->getUnit() !== "") {
-                        $item->addAttribute('Unit', $dev->getUnit());
-                    }
-                    if (defined('PSI_SENSOR_EVENTS') && PSI_SENSOR_EVENTS && $dev->getEvent() !== "") {
-                        $item->addAttribute('Event', ucfirst(strtolower($dev->getEvent())));
+                }
+
+                if (!$this->_sysinfo->getBlockName() || $this->_sysinfo->getBlockName()==='other' || $this->_sysinfo->getBlockName()==='mbinfo') foreach ($mbinfo_detail->getMbOther() as $dev) {
+                    $mbinfo_name = $dev->getName();
+                    if (!in_array($mbinfo_name, $hideSensors, true)) {
+                        if ($other == null) {
+                            $other = $mbinfo->addChild('Other');
+                        }
+                        $item = $other->addChild('Item');
+                        $item->addAttribute('Label', $mbinfo_name);
+                        $item->addAttribute('Value', $dev->getValue());
+                        if ($dev->getUnit() !== "") {
+                            $item->addAttribute('Unit', $dev->getUnit());
+                        }
+                        if (defined('PSI_SENSOR_EVENTS') && PSI_SENSOR_EVENTS && $dev->getEvent() !== "") {
+                            $item->addAttribute('Event', ucfirst(strtolower($dev->getEvent())));
+                        }
                     }
                 }
             }
@@ -854,7 +921,7 @@ class XML
             if (!$this->_sysinfo->getBlockName() || $this->_sysinfo->getBlockName()==='hardware') $this->_buildHardware();
             if (!$this->_sysinfo->getBlockName() || $this->_sysinfo->getBlockName()==='memory') $this->_buildMemory();
             if (!$this->_sysinfo->getBlockName() || $this->_sysinfo->getBlockName()==='filesystem') $this->_buildFilesystems();
-            if (!$this->_sysinfo->getBlockName() || in_array($this->_sysinfo->getBlockName(), array('voltage','current','temperature','fans','power','other'))) $this->_buildMbinfo();
+            if (!$this->_sysinfo->getBlockName() || in_array($this->_sysinfo->getBlockName(), array('mbinfo','voltage','current','temperature','fans','power','other'))) $this->_buildMbinfo();
             if (!$this->_sysinfo->getBlockName() || $this->_sysinfo->getBlockName()==='ups') $this->_buildUpsinfo();
         }
         if (!$this->_sysinfo->getBlockName()) $this->_buildPlugins();
@@ -890,7 +957,9 @@ class XML
                 $plugins = array($this->_plugin);
             }
             foreach ($plugins as $plugin) {
-                if (!$this->_complete_request || !defined('PSI_PLUGIN_'.strtoupper($plugin).'_WMI_HOSTNAME') ||
+                if (!$this->_complete_request ||
+                   (!defined('PSI_PLUGIN_'.strtoupper($plugin).'_SSH_HOSTNAME') && !defined('PSI_PLUGIN_'.strtoupper($plugin).'_WMI_HOSTNAME')) ||
+                   (defined('PSI_SSH_HOSTNAME') && (PSI_SSH_HOSTNAME == constant('PSI_PLUGIN_'.strtoupper($plugin).'_SSH_HOSTNAME'))) ||
                    (defined('PSI_WMI_HOSTNAME') && (PSI_WMI_HOSTNAME == constant('PSI_PLUGIN_'.strtoupper($plugin).'_WMI_HOSTNAME')))) {
                     $object = new $plugin($this->_sysinfo->getEncoding());
                     $object->execute();

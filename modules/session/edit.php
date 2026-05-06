@@ -44,7 +44,7 @@ $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $la
 $navigation[] = array('url' => 'session_space.php?course=' . $course_code . "&session=" . $_GET['session'] , 'name' => $sessionTitle);
 
 load_js('tools.js');
-load_js('select2');
+load_js('slimselect');
 load_js('bootstrap-datetimepicker');
 
 if(isset($_POST['modify'])){
@@ -369,7 +369,7 @@ $data['session_info'] = $session_info = Database::get()->querySingle("SELECT * F
 $data['title'] = $session_info->title;
 $data['creator'] = $session_info->creator;
 $data['modifyStartDateEvent'] = date('Y-m-d',strtotime($session_info->start));
-$data['comments'] = rich_text_editor('comments', 5, 40, $session_info->comments);
+$data['comments'] = rich_text_editor('comments', 5, 40, $session_info->comments, options: array('id' => 'comments'));
 $data['session_type'] = $session_info->type;
 $startDate_obj = DateTime::createFromFormat('Y-m-d H:i:s', $session_info->start);
 $data['start'] = q($startDate_obj->format('d-m-Y H:i'));
