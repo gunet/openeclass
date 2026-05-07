@@ -25,18 +25,23 @@ require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'include/sendMail.inc.php';
 require_once 'modules/admin/tenant_functions.php';
 
-$navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
-$navigation[] = array('url' => 'tenants.php', 'name' => $langTenants);
-
-$tenant_id = $_GET['id'];
-
 if (!get_config('enable_tenant')) {
     redirect_to_home_page("modules/admin/index.php");
 }
 
-if (!$tenant_id) {
+$navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
+if ($is_admin) {
+    $navigation[] = array('url' => 'tenants.php', 'name' => $langTenants);
+}
+
+
+if (isset($_GET['id'])) {
+    $tenant_id = $_GET['id'];
+} else {
     redirect_to_home_page("main/portfolio.php");
 }
+
+load_js('datatables');
 
 if (!$is_admin) {
     $tenantUserIds = array_map(fn($u) => intval($u->id), getTenantUsers([], $tenant_id));
@@ -67,7 +72,7 @@ $contact_phone = q(getTenantOption($tenantOptions, 'contact_phone'));
 $contact_address = q(getTenantOption($tenantOptions, 'contact_address'));
 $contact_email = q(getTenantOption($tenantOptions, 'contact_email'));
 $platform_title = q(getTenantOption($tenantOptions, 'platform_title'));
-$platform_intro = q(getTenantOption($tenantOptions, 'platform_intro'));
+$platform_intro = getTenantOption($tenantOptions, 'platform_intro');
 
 $allow_teacher_clone_course = getTenantOption($tenantOptions, 'allow_teacher_clone_course');
 $cbox_allow_teacher_clone_course = $allow_teacher_clone_course ? 'checked' : '';
@@ -116,7 +121,6 @@ if (isset($_POST['optionsSave'])) {
             if ($var == 'contact_email' and $value and !valid_email($value)) {
                 Session::Messages(sprintf($msgInvalidEmail, q($value)), 'alert-danger');
             }
-
             $tenantInfo[$var] = $value;
         }
     }
@@ -208,8 +212,6 @@ if ($tenantFavicon) {
     $faviconUpload = "<label for='faviconUpload' aria-label='$langFavicon'></label><input type='file' name='faviconUpload' id='faviconUpload'>";
 }
 
-load_js('datatables');
-
 if ($tenantUrl) {
     $host = parse_url($tenantUrl, PHP_URL_HOST);
     if ($tenantUrlActive) {
@@ -274,10 +276,10 @@ if ($tenantUrl) {
                     } else {
                         $('#dns-check-result').removeClass('text-center');
                         msg = '" .
-            varmsg(
-                $GLOBALS['langTenantURLCheckFail'],
-                ['host' => $host, 'server' => $server]
-            ) . "';
+                            varmsg(
+                                $GLOBALS['langTenantURLCheckFail'],
+                                ['host' => $host, 'server' => $server]
+                            ) . "';
                     }
                     $('#dns-check-result').html('<p>' + msg + '</p>');
                 });
@@ -292,10 +294,15 @@ if ($tenantUrl) {
     }
 }
 
+if ($is_admin) {
+    $back_url = "{$urlAppend}modules/admin/tenants.php";
+} else {
+    $back_url = "{$urlAppend}modules/admin/index.php";
+}
 $action_bar = action_bar([
     [
         'title' => $langBack,
-        'url' => "{$urlAppend}modules/admin/index.php",
+        'url' => $back_url,
         'icon' => 'fa-reply',
         'level' => 'primary'
     ]
@@ -304,74 +311,78 @@ $action_bar = action_bar([
 $tool_content .= $action_bar;
 
 $tool_content .= "<form id='tenant_options_form' class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?id=$tenant_id' enctype='multipart/form-data' method='post'>
-  <div class='container-fluid'>
-    <div class='form-group'>
-        <div class='col-sm-12 control-label-notes mb-2'>$langLogo <small>$langLogoNormal</small>:</div>
-        <div class='col-sm-12 d-inline-flex justify-content-start align-items-center'>
-            $logo_field
-        </div>
-    </div>
-    <div class='form-group mt-4'>
-        <div class='col-sm-12 control-label-notes mb-2'>$langLogo <small>$langLogoSmall</small>:</div>
-        <div class='col-sm-12 d-inline-flex justify-content-start align-items-center'>
-            $small_logo_field
-        </div>
-    </div>
-    <div class='form-group mt-4'>
-        <div class='col-sm-12 control-label-notes mb-2'>$langFavicon </div>
-        <div class='col-sm-12 d-inline-flex justify-content-start align-items-center'>
-            $faviconUpload
-        </div>
-    </div>
+      <div class='container-fluid'>";
 
-    <div class='form-group mt-4'>
-      <label for='contact_phone' class='col-md-3 col-form-label'>$langPhone</label>
-      <div class='col-md-9'>
-        <input type='tel' class='form-control' name='contact_phone' id='contact_phone' value='$contact_phone'>
-      </div>
-    </div>
+if (get_config('enable_white_label')) {
+      $tool_content .= "<div class='form-group'>
+          <label for='urlField' class='col-md-3 col-form-label'>$langTenantURL</label>
+          <div class='col-md-9'>
+            <small class='d-block text-muted'>$langTenantURLText</small>
+            <input type='text' class='form-control' name='url' id='urlField' placeholder='https://eclass.example.com/' value='$tenantUrl'>
+            $urlMessage
+          </div>
+        </div>
+        
+        <div class='form-group mt-4'>
+          <label for='platform_title' class='col-md-3 col-form-label'>$langSiteTitle</label>
+          <div class='col-md-9'>
+            <input type='text' class='form-control' name='platform_title' id='platform_title' value='$platform_title'>
+          </div>
+        </div>
+    
+        <div class='form-group mt-4'>
+          <label for='platform_intro' class='col-md-3 col-form-label'>$langSiteDescr</label>
+          <div class='col-md-9'>
+            " . rich_text_editor('platform_intro', 4, 50, $platform_intro, options: array('id' => 'platform_intro')) . "
+          </div>
+        </div>
+        
+        <div class='form-group mt-4'>
+            <div class='col-sm-12 control-label-notes mb-2'>$langLogo <small>$langLogoNormal</small>:</div>
+            <div class='col-sm-12 d-inline-flex justify-content-start align-items-center'>
+                $logo_field
+            </div>
+        </div>
+        <div class='form-group mt-4'>
+            <div class='col-sm-12 control-label-notes mb-2'>$langLogo <small>$langLogoSmall</small>:</div>
+            <div class='col-sm-12 d-inline-flex justify-content-start align-items-center'>
+                $small_logo_field
+            </div>
+        </div>
+        <div class='form-group mt-4'>
+            <div class='col-sm-12 control-label-notes mb-2'>$langFavicon </div>
+            <div class='col-sm-12 d-inline-flex justify-content-start align-items-center'>
+                $faviconUpload
+            </div>
+        </div>";
+    }
 
-    <div class='form-group mt-4'>
+    $tool_content .= "<div class='form-group mt-4'>
       <label for='contact_email' class='col-md-3 col-form-label'>$langEmail</label>
       <div class='col-md-9'>
         <input type='email' class='form-control' name='contact_email' id='contact_email' value='$contact_email'>
       </div>
     </div>
-
+    
     <div class='form-group mt-4'>
+      <label for='contact_phone' class='col-md-3 col-form-label'>$langPhone</label>
+      <div class='col-md-9'>
+        <input type='tel' class='form-control' name='contact_phone' id='contact_phone' value='$contact_phone'>
+      </div>
+    </div>   
+    
+     <div class='form-group mt-4'>
       <label for='contact_address' class='col-md-3 col-form-label'>$langPostMail</label>
       <div class='col-md-9'>
         <textarea id='contact_address' name='contact_address' class='form-control' rows='3'>$contact_address</textarea>
       </div>
-    </div>
-
-    <div class='form-group mt-4'>
-      <label for='platform_title' class='col-md-3 col-form-label'>$langSiteTitle</label>
-      <div class='col-md-9'>
-        <input type='text' class='form-control' name='platform_title' id='platform_title' value='$platform_title'>
-      </div>
-    </div>
-
-    <div class='form-group mt-4'>
-      <label for='platform_intro' class='col-md-3 col-form-label'>$langSiteDescr</label>
-      <div class='col-md-9'>
-        " . rich_text_editor('platform_intro', 4, 50, $platform_intro, options: array('id' => 'platform_intro')) . "
-      </div>
-    </div>
-    
-    <div class='form-group mt-4'>
-      <label for='urlField' class='col-md-3 col-form-label'>$langTenantURL</label>
-      <div class='col-md-9'>
-        <small class='d-block text-muted'>$langTenantURLText</small>
-        <input type='text' class='form-control' name='url' id='urlField' placeholder='https://eclass.example.com/' value='$tenantUrl'>
-        $urlMessage
-      </div>
-    </div>";
+    </div>    
+    ";
 
 $tool_content .= "
     <div class='form-group mt-5'>
         <div class='col-sm-12'>
-            <h4 class='mb-3'>$langTenantConfig</h4>
+            <h4 class='mb-3'>$langConfig</h4>
 
             <div class='checkbox'>
                 <label class='label-container'>
@@ -420,27 +431,27 @@ $head_content .= "<script type='text/javascript'>
                 $('#admins-table_wrapper .dt-search label').attr('aria-label', '$langSearch');
                 },
                 'sPaginationType': 'full_numbers',
-            'bSort': false,
-            'oLanguage': {
-                    'lengthLabels': {
-                        '-1': '$langAllOfThem'
-                    },                       
-                    'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
-                    'sZeroRecords':  '" . $langNoResult . "',
-                    'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
-                    'sInfoEmpty':    '',
-                    'sInfoFiltered': '',
-                    'sInfoPostFix':  '',
-                    'sSearch':       '',
-                    'oPaginate': {
-                        'sFirst':    '&laquo;',
-                        'sPrevious': '&lsaquo;',
-                        'sNext':     '&rsaquo;',
-                        'sLast':     '&raquo;'
+                'bSort': false,
+                'oLanguage': {
+                        'lengthLabels': {
+                            '-1': '$langAllOfThem'
+                        },                       
+                        'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
+                        'sZeroRecords':  '" . $langNoResult . "',
+                        'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
+                        'sInfoEmpty':    '',
+                        'sInfoFiltered': '',
+                        'sInfoPostFix':  '',
+                        'sSearch':       '',
+                        'oPaginate': {
+                            'sFirst':    '&laquo;',
+                            'sPrevious': '&lsaquo;',
+                            'sNext':     '&rsaquo;',
+                            'sLast':     '&raquo;'
+                        }
                     }
-                }
-            });
-    });
+                });
+        });
     </script>";
 
 $tenant_admins = getTenantAdmins($tenant_id);
@@ -459,7 +470,7 @@ foreach ($tenant_admins as $admin) {
 $tool_content .= "
     <div class='container-fluid'>
         <div class='col-md-9 mt-5 mb-5'>
-            <h3> $langAdmins </h3>
+            <h4>$langAdmins</h4>
 
             <div class='table-responsive'>
                 <table id='admins-table' class='table-default '>
@@ -503,7 +514,7 @@ function upload_images($tenantInfo)
             $ext = strtolower(get_file_extension($file_name));
             validateUploadedFile($file_name, 2);
 
-            if ($tenantOptions[$image]) {
+            if (isset($tenantOptions[$image])) {
                 $fullPath = $webDir . $tenantOptions[$image];
                 unlink($fullPath);
                 $fullPath = dirname($fullPath);

@@ -70,20 +70,26 @@
 
                                 <tr>
                                     <td>{{ $tenant->id }}</td>
-                                    <td>{{ $tenant->name }}</td>
+                                    <td><a href="tenant_options.php?id={{ $tenant->id }}">{{ $tenant->name }}</a></td>
                                     <td>{{ $tenant->url }}</td>
                                     <td>{{ $tenant->total_users }}</td>
                                     <td>{{ $tenant->total_courses }}</td>
                                     <td>{{ $disk_usage }}</td>
                                     <td class='option_btn_cell text-center'>
                                         {!! action_button([
-                                              [ 'title' => trans('langEditChange'),
+                                              [
+                                                'title' => trans('langTenantProfile'),
                                                 'icon' => 'fa-edit',
-                                                'url' => "tenant_edit.php?id=$tenant->id" ],
-                                              [ 'title' => trans('langTenantProfile'),
-                                                'icon' => 'fa-edit',
-                                                'url' => "tenant_options.php?id=$tenant->id" ],
-                                            ]) !!}
+                                                'url' => "tenant_edit.php?id=$tenant->id"
+                                              ],
+                                              [
+                                                'title' => trans('langWhiteLabel'),
+                                                'icon' => 'fa-user',
+                                                'url' => "tenant_options.php?id=$tenant->id",
+                                                'show' => get_config('enable_white_label')
+                                              ],
+                                            ])
+                                        !!}
                                     </td>
                                 </tr>
                             @endforeach

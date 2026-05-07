@@ -272,7 +272,9 @@
                                     <div class='col-lg-6 col-12'>
                                         <div>
                                             @if ($lastCreatedCourse)
-                                                <b>{{ $lastCreatedCourse->title }}</b>
+                                                <strong>
+                                                    {{ $lastCreatedCourse->title }}
+                                                </strong>
                                                 ({{ $lastCreatedCourse->code }}, {{ $lastCreatedCourse->prof_names }})
                                             @else
                                                 {{ trans('langNoCourses') }}
@@ -286,8 +288,14 @@
                                     </div>
                                     <div class='col-lg-6 col-12'>
                                         <div>
-                                            <b>{{ $lastProfReg->givenname . " " . $lastProfReg->surname }}</b>
-                                            ({{ $lastProfReg->username }}, {{ date("j/n/Y H:i", strtotime($lastProfReg->registered_at)) }})
+                                            @if ($lastProfReg)
+                                                <strong>
+                                                    {{ $lastProfReg->givenname . " " . $lastProfReg->surname }}
+                                                </strong>
+                                                ({{ $lastProfReg->username }}, {{ date("j/n/Y H:i", strtotime($lastProfReg->registered_at)) }})
+                                            @else
+                                                {{ trans('langLastStudNone') }}
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -298,7 +306,9 @@
                                     <div class='col-lg-6 col-12'>
                                         <div>
                                             @if ($lastStudReg)
-                                                <b>{{ $lastStudReg->givenname . " " . $lastStudReg->surname }}</b>
+                                                <strong>
+                                                    {{ $lastStudReg->givenname . " " . $lastStudReg->surname }}
+                                                </strong>
                                                 ({{ $lastStudReg->username . ", " . date("j/n/Y H:i", strtotime($lastStudReg->registered_at)) }})
                                             @else
                                                 {{ trans('langLastStudNone') }}
@@ -315,11 +325,11 @@
                                             {{ trans('langAfterLastLogin') }}
                                             <ul class='custom_list'>
                                                 <li>
-                                                    <b>{{ $lastregisteredprofs }}</b>
+                                                    <strong>{{ $lastregisteredprofs }}</strong>
                                                     {{ trans('langTeachers') }}
                                                 </li>
                                                 <li>
-                                                    <b>{{ $lastregisteredstuds }}</b>
+                                                    <strong>{{ $lastregisteredstuds }}</strong>
                                                     {{ trans('langStudents') }}
                                                 </li>
                                             </ul>

@@ -106,7 +106,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $toolName = $langAdmin;
-$pageName = $langAddTenant;
+$pageName = $langTenantProfile;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'tenants.php', 'name' => $langTenants);
 

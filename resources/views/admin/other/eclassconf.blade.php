@@ -1086,6 +1086,19 @@
                                                 </div>
                                             </div>
                                         </div>
+
+                                        <div class='form-group'>
+                                            <div class='col-sm-12'>
+                                                <div class='checkbox'>
+                                                    <label class='label-container' aria-label="{{ trans('langSelect') }}">
+                                                        <input type='checkbox' name='enable_white_label' value='1' {{ $cbox_enable_white_label }}>
+                                                        <span class='checkmark'></span>
+                                                        {{ trans('langWhiteLabelEnable') }}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+
                                     </fieldset>
                                 </div>
                             </div>
@@ -1503,6 +1516,10 @@
                     $('#notifications_interval').hide();
                 }
             }).change();
+
+            $('input[name="enable_tenant"]').on('change', function() {
+                $('input[name="enable_white_label"]').prop('disabled', !this.checked);
+            }).trigger('change');
 
         });
 

@@ -118,12 +118,10 @@ function getCurrentTenant()
     if (!$uid) {
         return null;
     }
-
     // Get the current user's tenant and cache it in the session if found
     if (!isset($_SESSION['current_user_tenant'])) {
         $_SESSION['current_user_tenant'] = getUserTenant($uid);
     }
-
     return $_SESSION['current_user_tenant'];
 }
 

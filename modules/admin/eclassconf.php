@@ -178,6 +178,7 @@ if (isset($_POST['submit'])) {
         'default_course_access' => true,
         'enable_user_consent' => true,
         'enable_tenant' => true,
+        'enable_white_label' => true,
         'third_party_cookies' => true,
         ];
 
@@ -360,6 +361,7 @@ else {     // Display config.php edit form
     $data['default_course_access'] = intval(get_config('default_course_access', COURSE_REGISTRATION));
     $data['cbox_idle_detection'] = get_config('enable_idle_detection') ? 'checked' : '';
     $data['cbox_enable_tenant'] = get_config('enable_tenant') ? 'checked' : '';
+    $data['cbox_enable_white_label'] = get_config('enable_white_label') ? 'checked' : '';
 
     $user_notifications_interval = get_config('user_notifications_interval');
     $user_notifications = get_config('user_notifications');

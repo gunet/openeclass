@@ -34,12 +34,14 @@
         </a>
     @endif
 
-    @php $tenant = getCurrentTenant() @endphp
+    @php $tenant = getCurrentTenant(); @endphp
 
-    @if(($is_admin or $is_departmentmanage_user or $is_power_user) and $tenant)
-        <a href="tenant_options.php?id={!! $tenant->id !!}" class='quickLink'>
-            <i class="fa-solid fa-id-card settings-icon"></i>{{ trans('langTenantProfile') }}
-        </a>
+    @if (get_config('enable_tenant'))
+        @if (($is_admin || $is_departmentmanage_user || $is_power_user) && $tenant)
+            <a href="tenant_options.php?id={!! $tenant->id !!}" class='quickLink'>
+                <i class="fa-solid fa-id-card settings-icon"></i>{{ trans('langTenantProfile') }}
+            </a>
+        @endif
     @endif
 
     @if($is_admin or $is_departmentmanage_user)
@@ -52,33 +54,16 @@
         </a>
     @endif
 
-    @if($is_admin)
+    @if ($is_admin)
         <a href="hierarchy.php" class='quickLink'>
             <i class="fa-solid fa-sitemap settings-icon"></i>{{ trans('langHierarchy') }}
         </a>
-    @else
-        <a tabindex="0" role="button" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="focus" title="{{trans('langForbidden')}}" class='quickLink opacity-help'>
-            <i class="fa-solid fa-sitemap settings-icon"></i>{{ trans('langHierarchy') }}
-        </a>
-    @endif
 
-    @if($is_admin)
         <a href="eclassconf.php" class='quickLink'>
             <i class="fa-solid fa-gear settings-icon"></i>{{ trans('langConfig') }}
         </a>
-    @else
-        <a tabindex="0" role="button" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="focus" title="{{trans('langForbidden')}}" class='quickLink opacity-help'>
-            <i class="fa-solid fa-gear settings-icon"></i>{{ trans('langConfig') }}
-        </a>
-    @endif
-
-    @if($is_admin)
         <a href="extapp.php" class='quickLink'>
             <i class="fa-solid fa-wrench settings-icon"></i>{{ trans('langExternalTools') }}
-        </a>
-    @else
-        <a tabindex="0" role="button" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="focus" title="{{trans('langForbidden')}}" class='quickLink opacity-help'>
-            <i class="fa-solid fa-wrench Primary-500-cl settings-icon"></i>{{ trans('langExternalTools') }}
         </a>
     @endif
 
@@ -110,31 +95,31 @@
                             </a>
                         </li>
                         @if ($is_admin)
-                        <li class="list-group-item element">
-                            <a class='TextBold' href="{{$urlAppend}}modules/admin/auth.php">
-                                {{ trans('langUserAuthentication') }}
-                            </a>
-                        </li>
-                        <li class="list-group-item element">
-                            <a class='TextBold' href="{{$urlAppend}}modules/admin/mail_ver_settings.php">
-                                {{ trans('langMailVerification') }}
-                            </a>
-                        </li>
-                        <li class="list-group-item element">
-                            <a class='TextBold' href="{{$urlAppend}}modules/admin/change_user.php">
-                                {{ trans('langChangeUser') }}
-                            </a>
-                        </li>
-                        <li class="list-group-item element">
-                            <a class='TextBold' href="{{$urlAppend}}modules/admin/custom_profile_fields.php">
-                                {{ trans('langCPFAdminSideMenuLink') }}
-                            </a>
-                        </li>
-                        <li class="list-group-item element">
-                            <a class='TextBold' href="{{$urlAppend}}modules/admin/eportfolio_fields.php">
-                                {{ trans('langEPFAdminSideMenuLink') }}
-                            </a>
-                        </li>
+                            <li class="list-group-item element">
+                                <a class='TextBold' href="{{$urlAppend}}modules/admin/auth.php">
+                                    {{ trans('langUserAuthentication') }}
+                                </a>
+                            </li>
+                            <li class="list-group-item element">
+                                <a class='TextBold' href="{{$urlAppend}}modules/admin/mail_ver_settings.php">
+                                    {{ trans('langMailVerification') }}
+                                </a>
+                            </li>
+                            <li class="list-group-item element">
+                                <a class='TextBold' href="{{$urlAppend}}modules/admin/change_user.php">
+                                    {{ trans('langChangeUser') }}
+                                </a>
+                            </li>
+                            <li class="list-group-item element">
+                                <a class='TextBold' href="{{$urlAppend}}modules/admin/custom_profile_fields.php">
+                                    {{ trans('langCPFAdminSideMenuLink') }}
+                                </a>
+                            </li>
+                            <li class="list-group-item element">
+                                <a class='TextBold' href="{{$urlAppend}}modules/admin/eportfolio_fields.php">
+                                    {{ trans('langEPFAdminSideMenuLink') }}
+                                </a>
+                            </li>
                         @endif
                         <li class="list-group-item element">
                             <a class='TextBold' href="{{$urlAppend}}modules/admin/multireguser.php">
@@ -190,30 +175,30 @@
                                 </a>
                             </li>
                             @if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
-                            <li class="list-group-item element">
-                                <a class='TextBold' href="{{$urlAppend}}modules/admin/certbadge.php">
-                                    {{ trans('langCertBadge') }}
-                                </a>
-                            </li>
+                                <li class="list-group-item element">
+                                    <a class='TextBold' href="{{$urlAppend}}modules/admin/certbadge.php">
+                                        {{ trans('langCertBadge') }}
+                                    </a>
+                                </li>
                             @endif
                             @if ($is_admin)
-                            <li class="list-group-item element">
-                                <a class='TextBold' href="{{$urlAppend}}modules/admin/autoenroll.php">
-                                    {{ trans('langAutoEnroll') }}
-                                </a>
-                            </li>
-                            <li class="list-group-item element">
-                                <a class='TextBold' href="{{$urlAppend}}modules/admin/modules.php">
-                                    {{ trans('langDisableModules') }}
-                                </a>
-                            </li>
-                            @if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
-                            <li class="list-group-item element">
-                                <a class='TextBold' href="{{$urlAppend}}modules/admin/activity.php">
-                                    {{ trans('langActivityCourse') }}
-                                </a>
-                            </li>
-                            @endif
+                                <li class="list-group-item element">
+                                    <a class='TextBold' href="{{$urlAppend}}modules/admin/autoenroll.php">
+                                        {{ trans('langAutoEnroll') }}
+                                    </a>
+                                </li>
+                                <li class="list-group-item element">
+                                    <a class='TextBold' href="{{$urlAppend}}modules/admin/modules.php">
+                                        {{ trans('langDisableModules') }}
+                                    </a>
+                                </li>
+                                @if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
+                                    <li class="list-group-item element">
+                                        <a class='TextBold' href="{{$urlAppend}}modules/admin/activity.php">
+                                            {{ trans('langActivityCourse') }}
+                                        </a>
+                                    </li>
+                                @endif
                             @endif
                         </ul>
                     </div>
@@ -221,115 +206,113 @@
             </div>
         @endif
         @if ($is_admin)
-        <div class='col'>
-            <div class='card panelCard p-0 border-0 card-transparent h-100'>
-                <div class='card-body px-0'>
-                    <h2 class='text-heading-h3'>
-                        <i class="fa-solid fa-gear settings-icons-lg"></i>
-                        {{ trans('langAdminTool') }}
-                    </h2>
-                    <ul class='list-group list-group-flush'>
-                        <li class="list-group-item element">
-                            <a class='TextBold' href="{{$urlAppend}}modules/admin/eclassconf.php">
-                                {{ trans('langConfig') }}
-                            </a>
-                        </li>
-                        <li class="list-group-item element">
-                            <a class='TextBold' href="{{$urlAppend}}modules/admin/extapp.php">
-                                {{ trans('langExtAppConfig') }}
-                            </a>
-                        </li>
-                        <li class="list-group-item element">
-                            <a class='TextBold' href="{{$urlAppend}}modules/admin/collaboration_enable.php">
-                                {{ trans('langCollaborationPlatform') }}
-                            </a>
-                        </li>
-                        @if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
-                        <li class="list-group-item element">
-                            <a class='TextBold' href="{{$urlAppend}}modules/admin/widgets.php">
-                                {{ trans('langWidgets') }}
-                            </a>
-                        </li>
-                        @endif
-                        @if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
-                        <li class="list-group-item element">
-                            <a class='TextBold' href="{{$urlAppend}}modules/admin/coursecategory.php">
-                                {{ trans('langCourseCategoryActions') }}
-                            </a>
-                        </li>
-                        @endif
-                        @if (get_config('phpMyAdminURL'))
-                        <li class="list-group-item element">
-                            <a class='TextBold' href="{{ get_config('phpMyAdminURL') }}">
-                                {{ trans('langDBaseAdmin') }}
-                            </a>
-                        </li>
-                        @endif
-                        <li class="list-group-item element">
-                            <a class='TextBold' href="{{$urlAppend}}modules/usage/index.php?t=a">
-                                {{ trans('langUsage') }}
-                            </a>
-                        </li>
-                        @if (get_config('enable_common_docs'))
+            <div class='col'>
+                <div class='card panelCard p-0 border-0 card-transparent h-100'>
+                    <div class='card-body px-0'>
+                        <h2 class='text-heading-h3'>
+                            <i class="fa-solid fa-gear settings-icons-lg"></i>
+                            {{ trans('langAdminTool') }}
+                        </h2>
+                        <ul class='list-group list-group-flush'>
                             <li class="list-group-item element">
-                                <a class='TextBold' href="{{$urlAppend}}modules/admin/commondocs.php">
-                                    {{ trans('langCommonDocs') }}
+                                <a class='TextBold' href="{{$urlAppend}}modules/admin/eclassconf.php">
+                                    {{ trans('langConfig') }}
                                 </a>
                             </li>
-                        @endif
-                        <li class="list-group-item element">
-                            <a class='TextBold' href="{{$urlAppend}}modules/admin/cleanup.php">
-                                {{ trans('langCleanUp') }}
-                            </a>
-                        </li>
-                        @if (get_config('phpSysInfoURL'))
                             <li class="list-group-item element">
-                                <a class='TextBold' href="{{ get_config('phpSysInfoURL') }}">
-                                    {{ trans('langSysInfo') }}
+                                <a class='TextBold' href="{{$urlAppend}}modules/admin/extapp.php">
+                                    {{ trans('langExtAppConfig') }}
                                 </a>
                             </li>
-                        @endif
-                        <li class="list-group-item element">
-                            <a class='TextBold' href="{{$urlAppend}}modules/admin/phpInfo.php">
-                                {{ trans('langPHPInfo') }}
-                            </a>
-                        </li>
-                        <li class="list-group-item element">
-                            <a class='TextBold' href="{{$urlServer}}upgrade/index.php">
-                                {{ trans('langUpgradeBase') }}
-                            </a>
-                        </li>
-                    </ul>
+                            <li class="list-group-item element">
+                                <a class='TextBold' href="{{$urlAppend}}modules/admin/collaboration_enable.php">
+                                    {{ trans('langCollaborationPlatform') }}
+                                </a>
+                            </li>
+                            @if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
+                                <li class="list-group-item element">
+                                    <a class='TextBold' href="{{$urlAppend}}modules/admin/widgets.php">
+                                        {{ trans('langWidgets') }}
+                                    </a>
+                                </li>
+                                <li class="list-group-item element">
+                                    <a class='TextBold' href="{{$urlAppend}}modules/admin/coursecategory.php">
+                                        {{ trans('langCourseCategoryActions') }}
+                                    </a>
+                                </li>
+                            @endif
+                            @if (get_config('phpMyAdminURL'))
+                                <li class="list-group-item element">
+                                    <a class='TextBold' href="{{ get_config('phpMyAdminURL') }}">
+                                        {{ trans('langDBaseAdmin') }}
+                                    </a>
+                                </li>
+                            @endif
+                            <li class="list-group-item element">
+                                <a class='TextBold' href="{{$urlAppend}}modules/usage/index.php?t=a">
+                                    {{ trans('langUsage') }}
+                                </a>
+                            </li>
+                            @if (get_config('enable_common_docs'))
+                                <li class="list-group-item element">
+                                    <a class='TextBold' href="{{$urlAppend}}modules/admin/commondocs.php">
+                                        {{ trans('langCommonDocs') }}
+                                    </a>
+                                </li>
+                            @endif
+                            <li class="list-group-item element">
+                                <a class='TextBold' href="{{$urlAppend}}modules/admin/cleanup.php">
+                                    {{ trans('langCleanUp') }}
+                                </a>
+                            </li>
+                            @if (get_config('phpSysInfoURL'))
+                                <li class="list-group-item element">
+                                    <a class='TextBold' href="{{ get_config('phpSysInfoURL') }}">
+                                        {{ trans('langSysInfo') }}
+                                    </a>
+                                </li>
+                            @endif
+                            <li class="list-group-item element">
+                                <a class='TextBold' href="{{$urlAppend}}modules/admin/phpInfo.php">
+                                    {{ trans('langPHPInfo') }}
+                                </a>
+                            </li>
+                            <li class="list-group-item element">
+                                <a class='TextBold' href="{{$urlServer}}upgrade/index.php">
+                                    {{ trans('langUpgradeBase') }}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
-        </div>
         @endif
     </div>
 </div>
 @if ($is_departmentmanage_user && !$is_admin)
-<div class='col-12'>
-    <div class='card panelCard p-0 border-0 card-transparent h-100'>
-        <div class='card-body px-0'>
-            <h2 class='text-heading-h3'>
-                <i class="fa-solid fa-toolbox settings-icons-lg"></i>
-                {{ trans('langAdministratorTools') }}
-            </h2>
-            <ul class='list-group list-group-flush'>
-                <li class="list-group-item element">
-                    <a class='TextBold' href="{{$urlAppend}}modules/admin/addadmin.php">
-                        {{ trans('langAdmins') }}
-                    </a>
-                </li>
+    <div class='col-12'>
+        <div class='card panelCard p-0 border-0 card-transparent h-100'>
+            <div class='card-body px-0'>
+                <h2 class='text-heading-h3'>
+                    <i class="fa-solid fa-toolbox settings-icons-lg"></i>
+                    {{ trans('langAdministratorTools') }}
+                </h2>
+                <ul class='list-group list-group-flush'>
+                    <li class="list-group-item element">
+                        <a class='TextBold' href="{{$urlAppend}}modules/admin/addadmin.php">
+                            {{ trans('langAdmins') }}
+                        </a>
+                    </li>
 
-                <li class="list-group-item element">
-                    <a class='TextBold' href="{{$urlAppend}}modules/admin/adminannouncements.php">
-                        {{ trans('langAnnouncements') }}
-                    </a>
-                </li>
-            </ul>
+                    <li class="list-group-item element">
+                        <a class='TextBold' href="{{$urlAppend}}modules/admin/adminannouncements.php">
+                            {{ trans('langAnnouncements') }}
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
-</div>
 @endif
 
 
@@ -396,46 +379,46 @@
         </div>
         <div class='col'>
             @if($is_admin)
-            <div class='card panelCard p-0 border-0 card-transparent h-100'>
-                <div class='card-body px-0'>
-                    <h2 class='text-heading-h3'>
-                        <i class="fa-solid fa-sitemap settings-icons-lg"></i>
-                        {{ trans('langEclassThemes') }}
-                    </h2>
-                    <ul class='list-group list-group-flush'>
-                        <li class="list-group-item element">
-                            <a href="{{$urlAppend}}modules/admin/theme_options.php" class='TextBold'>
-                                {{ trans('langThemeSettings') }}
-                            </a>
-                        </li>
-                        <li class="list-group-item element">
-                            <a href="{{$urlAppend}}modules/admin/manage_home.php" class='TextBold'>
-                                {{ trans('langAdminManageHomepage') }}
-                            </a>
-                        </li>
-                        <li class="list-group-item element">
-                            <a href="{{$urlAppend}}modules/admin/manage_footer.php" class='TextBold'>
-                                {{ trans('langAdminManageFooter') }}
-                            </a>
-                        </li>
-                        <li class="list-group-item element">
-                            <a href="{{$urlAppend}}modules/admin/faq_create.php" class='TextBold'>
-                                {{ trans('langAdminCreateFaq') }}
-                            </a>
-                        </li>
-                        <li class="list-group-item element">
-                            <a href="{{$urlAppend}}modules/admin/privacy_policy_conf.php" class='TextBold'>
-                                {{ trans('langPrivacyPolicy') }}
-                            </a>
-                        </li>
-                        <li class="list-group-item element">
-                            <a href="{{$urlAppend}}modules/admin/contact_info.php" class='TextBold'>
-                                {{ trans('langUpgContact') }}
-                            </a>
-                        </li>
-                    </ul>
+                <div class='card panelCard p-0 border-0 card-transparent h-100'>
+                    <div class='card-body px-0'>
+                        <h2 class='text-heading-h3'>
+                            <i class="fa-solid fa-sitemap settings-icons-lg"></i>
+                            {{ trans('langEclassThemes') }}
+                        </h2>
+                        <ul class='list-group list-group-flush'>
+                            <li class="list-group-item element">
+                                <a href="{{$urlAppend}}modules/admin/theme_options.php" class='TextBold'>
+                                    {{ trans('langThemeSettings') }}
+                                </a>
+                            </li>
+                            <li class="list-group-item element">
+                                <a href="{{$urlAppend}}modules/admin/manage_home.php" class='TextBold'>
+                                    {{ trans('langAdminManageHomepage') }}
+                                </a>
+                            </li>
+                            <li class="list-group-item element">
+                                <a href="{{$urlAppend}}modules/admin/manage_footer.php" class='TextBold'>
+                                    {{ trans('langAdminManageFooter') }}
+                                </a>
+                            </li>
+                            <li class="list-group-item element">
+                                <a href="{{$urlAppend}}modules/admin/faq_create.php" class='TextBold'>
+                                    {{ trans('langAdminCreateFaq') }}
+                                </a>
+                            </li>
+                            <li class="list-group-item element">
+                                <a href="{{$urlAppend}}modules/admin/privacy_policy_conf.php" class='TextBold'>
+                                    {{ trans('langPrivacyPolicy') }}
+                                </a>
+                            </li>
+                            <li class="list-group-item element">
+                                <a href="{{$urlAppend}}modules/admin/contact_info.php" class='TextBold'>
+                                    {{ trans('langUpgContact') }}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
             @endif
         </div>
     </div>
