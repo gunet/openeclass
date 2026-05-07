@@ -76,6 +76,13 @@ $db->query("CREATE TABLE `course_learning_objectives` (
     `course_code` VARCHAR(20) NOT NULL,
     `title` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
     PRIMARY KEY (`id`)) $tbl_options");
+
+$db->query("CREATE TABLE IF NOT EXISTS `suppressed_words` (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `word` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
+    `added_by` INT DEFAULT NULL,
+    `created_at` DATETIME NOT NULL,
+    PRIMARY KEY (`id`)) $tbl_options");
 // end of flipped classroom
 
 $db->query("CREATE TABLE IF NOT EXISTS `course_module` (
@@ -258,6 +265,18 @@ $db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `vi
 $db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unit_id`,`module_id`) VALUES ('FC16',2,0,0,0)");
 //$db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unit_id`,`module_id`) VALUES ('FC17',0,0,0,0)");
 $db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unit_id`,`module_id`) VALUES ('FC18',1,0,0,0)");
+
+$db->query("INSERT INTO `suppressed_words` (`word`, `created_at`) VALUES
+    ('χαζός', NOW()),
+    ('βλαμμένος', NOW()),
+    ('ανόητος', NOW()),
+    ('στόκος', NOW()),
+    ('τούβλο', NOW()),
+    ('moron', NOW()),
+    ('dumb', NOW()),
+    ('idiot', NOW()),
+    ('imbecile', NOW()),
+    ('jerk', NOW())");
 
 $db->query("CREATE TABLE IF NOT EXISTS `course_description` (
     `id` INT NOT NULL AUTO_INCREMENT,

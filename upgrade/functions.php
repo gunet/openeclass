@@ -3996,6 +3996,27 @@ function upgrade_to_4_4($tbl_options) : void
                              UNIQUE KEY `course_id` (`course_id`)
        ) $tbl_options");
     }
+
+    if (!DBHelper::tableExists('suppressed_words')) {
+        Database::get()->query("CREATE TABLE `suppressed_words` (
+            `id` INT NOT NULL AUTO_INCREMENT,
+            `word` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
+            `added_by` INT DEFAULT NULL,
+            `created_at` DATETIME NOT NULL,
+            PRIMARY KEY (`id`)) $tbl_options");
+
+        Database::get()->query("INSERT INTO `suppressed_words` (`word`, `created_at`) VALUES
+            ('χαζός', NOW()),
+            ('βλαμμένος', NOW()),
+            ('ανόητος', NOW()),
+            ('στόκος', NOW()),
+            ('τούβλο', NOW()),
+            ('moron', NOW()),
+            ('dumb', NOW()),
+            ('idiot', NOW()),
+            ('imbecile', NOW()),
+            ('jerk', NOW())");
+    }
 }
 /**
  * @brief OpenBadges Backpack Integration - Database Migration
