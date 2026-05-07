@@ -323,6 +323,19 @@
                                                             {{ isset($_SESSION['surname']) ? mb_strtoupper(mb_substr(trim($_SESSION['surname']), 0, 1, 'UTF-8'), 'UTF-8') : '' }}
                                                         </span>
                                                     </div>
+                                                    <form action='{{ $urlAppend }}modules/auth/logout.php' method='post' class='lti-logout-form'>
+                                                        <input type='hidden' name='token' value='{{ $_SESSION['csrf_token'] }}'>
+                                                        <button class='btn btn-transparent p-0 border-0' style="background-color: transparent;" type='submit' name='submit' data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ trans('langLogout2') }}">
+                                                            <i class="fa-solid fa-arrow-right-from-bracket Accent-200-cl"></i>
+                                                        </button>
+                                                    </form>
+                                                    <script>
+                                                        $(function() {
+                                                            if (window.self !== window.top) {
+                                                                $('.lti-logout-form').hide();
+                                                            }
+                                                        });
+                                                    </script>
                                                 </div>
                                                 @endif
                                             </div>

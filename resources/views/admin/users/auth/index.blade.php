@@ -18,28 +18,50 @@
                     <label>{{ trans('langMethods') }}</label>
                     <ul>
                     @foreach ($auth_ids as $auth_id => $auth_name)
-                        <?php $auth_count = count_auth_users($auth_id); ?>
-                        @if ($auth_count > 0 or in_array($auth_id, $auth_active_ids))
-                            <li>
-                                {{ get_auth_info($auth_id) }}
-                                ({{ trans('langNbUsers') }}:
+                        @if ($auth_id != 14)
+                            <?php $auth_count = count_auth_users($auth_id); ?>
+                            @if ($auth_count > 0 or in_array($auth_id, $auth_active_ids))
+                                <li>
+                                    {{ get_auth_info($auth_id) }}
+                                    ({{ trans('langNbUsers') }}:
+                                    @if ($auth_count == 0)
+                                        0
+                                    @else
+                                        <a href='listusers.php?fname=&amp;lname=&amp;am=&amp;user_type=0&amp;auth_type={{ $auth_id }}&amp;reg_flag=1&amp;user_registered_at=&verified_mail=3&amp;email=&amp;uname=&amp;department=0'>{{ $auth_count }}</a>
+                                    @endif
+                                    @if ($auth_id != 1 and $auth_count > 0)
+                                        - <a href='auth_change.php?auth={{ $auth_id }}'>{{ trans('langAuthChangeUser') }}</a>
+                                    @endif
+                                    )
+                                    @if (!in_array($auth_id, $auth_active_ids))
+                                        <br>
+                                        <span class='label label-warning'>{{ trans('langAuthWarnInactive') }}</span>
+                                    @endif
+                                </li>
+                            @endif
+                        @endif
+                    @endforeach
+                    </ul>
+                    @if (isset($auth_ids[14]))
+                        <?php $auth_count = count_auth_users(14); ?>
+                        @if ($auth_count > 0 or in_array(14, $auth_active_ids))
+                            <div class='mt-3 ps-3'>
+                                {{ get_auth_info(14) }}
+                                ( {{ trans('langNbUsers') }}:
                                 @if ($auth_count == 0)
                                     0
                                 @else
-                                    <a href='listusers.php?fname=&amp;lname=&amp;am=&amp;user_type=0&amp;auth_type={{ $auth_id }}&amp;reg_flag=1&amp;user_registered_at=&verified_mail=3&amp;email=&amp;uname=&amp;department=0'>{{ $auth_count }}</a>
-                                @endif
-                                @if ($auth_id != 1 and $auth_count > 0)
-                                    - <a href='auth_change.php?auth={{ $auth_id }}'>{{ trans('langAuthChangeUser') }}</a>
+                                    {{ $auth_count }}
                                 @endif
                                 )
-                                @if (!in_array($auth_id, $auth_active_ids))
-                                    <br>
-                                    <span class='label label-warning'>{{ trans('langAuthWarnInactive') }}</span>
-                                @endif
-                            </li>
+{{--                                @if (!in_array(14, $auth_active_ids))--}}
+{{--                                    <br>--}}
+{{--                                    <span class='label label-warning'>{{ trans('langAuthWarnInactive') }}</span>--}}
+{{--                                @endif--}}
+                            </div>
                         @endif
-                    @endforeach
-                    </ul></span>
+                    @endif
+                </span>
                 </div>
             </div>
 

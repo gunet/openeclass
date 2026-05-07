@@ -992,6 +992,7 @@ $langViaYahoo = "Πιστοποίηση μέσω Yahoo!";
 $langViaLinkedIn = "Πιστοποίηση μέσω Linked In";
 $langViaOAuth2 = 'Πιστοποίηση μέσω OAuth 2.0';
 $langViaKeycloak = 'Πιστοποίηση μέσω Keycloak (OIDC)';
+$langViaLTI = 'Μέσω διασύνδεσης LTI';
 $langHasActivate = "O τρόπος πιστοποίησης που επιλέξατε έχει ενεργοποιηθεί";
 $langAlreadyActiv = "O τρόπος πιστοποίησης που επιλέξατε είναι ήδη ενεργοποιημένος";
 $langCASnochange = "Πρέπει να κλείσετε τον browser σας για να αλλάξετε τις ρυθμίσεις του CAS";
@@ -8101,3 +8102,7 @@ $langAllowBadgeExportHelp = "Επιτρέψτε στους φοιτητές να
 $langBadgeExportDisabled = "Η εξαγωγή του σήματος έχει απενεργοποιηθεί από τον εκπαιδευτή";
 $langBadgeExportDisabledShort = "Η εξαγωγή είναι απενεργοποιημένη";
 
+// Suppressed Words
+$langSuppressedWords = "Λέξεις λογοκρισίας";
+$langSuppressedwordDeleteSuccess = "Η λέξη διαγράφηκε με επιτυχία.";
+$langNoAuthorization = "Δεν έχετε εξουσιοδότηση για να εκτελέσετε αυτή την ενέργεια.";

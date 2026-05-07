@@ -190,6 +190,8 @@ function get_auth_info($auth)
             break;
             case '13': $m = $GLOBALS['langViaLinkedIn'];
             break;
+            case '14': $m = $GLOBALS['langViaLTI'];
+            break;
             case '15': $m = $GLOBALS['langViaOAuth2'];
             break;
             case '16': $m = $GLOBALS['langViaKeycloak'];

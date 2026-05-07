@@ -5799,6 +5799,7 @@ $langFCSupportingMaterial = "Supporting Material";
 $langAddNewAuthMethod = 'Add new authentication mode';
 $langViaOAuth2 = 'authentication via OAuth 2.0';
 $langViaKeycloak = 'authentication via Keycloak (OIDC)';
+$langViaLTI = 'authentication via LTI';
 $langAvailable = "available";
 $langNoQuestionWeight = "The question does not have a grade";
 $langNoQuestionAnswers = "There are no answers to the question";
