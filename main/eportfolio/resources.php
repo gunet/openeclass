@@ -406,8 +406,8 @@ if ($userdata) {
                             $visibility = (isset($_POST['visibility'])) ? intval($_POST['visibility']) : EPF_VISIBLE_PUBLIC;
                             $reflection_comments = (!empty($_POST['reflection_comments'])) ? $_POST['reflection_comments'] : '';
                             if (empty($note->reference_obj_course)) {
-                                Database::get()->query("INSERT INTO eportfolio_resource (user_id,resource_id,resource_type,data,visibility,reflection_comments)
-                                    VALUES (?d,?d,?s,?s,?d,?s)", $uid, $rid, 'note', serialize($data), $visibility,$reflection_comments);
+                                Database::get()->query("INSERT INTO eportfolio_resource (user_id,resource_id,resource_type,course_id,course_title,data,visibility,reflection_comments)
+                                    VALUES (?d,?d,?s,?d,?s,?s,?d,?s)", $uid, $rid, 'note', 0, '', serialize($data), $visibility,$reflection_comments);
                             } else {
                                 Database::get()->query("INSERT INTO eportfolio_resource (user_id,resource_id,resource_type, course_id,course_title,data,visibility,reflection_comments)
                                     VALUES (?d,?d,?s,?d,?s,?s,?d,?s)", $uid, $rid, 'note', $note->reference_obj_course, course_id_to_title($note->reference_obj_course), serialize($data),$visibility,$reflection_comments);
