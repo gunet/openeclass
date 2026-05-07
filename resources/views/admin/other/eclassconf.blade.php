@@ -36,22 +36,22 @@
                     <div class="sticky-top" style="z-index: 1;top:5rem;">
                         <div id="navbar-card-affixed" class="card card-affixed flex-column align-items-stretch p-3 " style="z-index:0;">
                             <nav class="nav nav-pills flex-column flex-xs-row flex-sm-row flex-md-row">
-                                <a class="nav-link nav-link-adminTools Neutral-900-cl active" data-menuID="one" href="#">{{ trans('langBasicCfgSetting') }}</a>
-                                <a class="nav-link nav-link-adminTools Neutral-900-cl" data-menuID="two" href="#">{{ trans('langUpgReg') }}</a>
-                                <a class="nav-link nav-link-adminTools Neutral-900-cl" data-menuID="three" href="#">{{ trans('langSupportedLanguages') }}</a>
-                                <a class="nav-link nav-link-adminTools Neutral-900-cl" data-menuID="five" href="#">{{ trans('langEmailSettings') }}</a>
-                                <a class="nav-link nav-link-adminTools Neutral-900-cl" data-menuID="six" href="#">{{ trans('langCourseSettings') }}</a>
-                                <a class="nav-link nav-link-adminTools Neutral-900-cl" data-menuID="eight" href="#">{{ trans('langOtherOptions') }}</a>
-                                <a class="nav-link nav-link-adminTools Neutral-900-cl" data-menuID="nine" href="#">{{ trans('langDocumentSettings') }}</a>
-                                <a class="nav-link nav-link-adminTools Neutral-900-cl" data-menuID="ten" href="#">{{ trans('langDefaultQuota') }}</a>
-                                <a class="nav-link nav-link-adminTools Neutral-900-cl" data-menuID="eleven" href="#">{{ trans('langUploadWhitelist') }}</a>
-                                <a class="nav-link nav-link-adminTools Neutral-900-cl" data-menuID="twelve" href="#">{{ trans('langLogActions') }}</a>
-                                <a class="nav-link nav-link-adminTools Neutral-900-cl" data-menuID="thirteen" href="#">{{ trans('langLoginFailCheck') }}</a>
-                                <a class="nav-link nav-link-adminTools Neutral-900-cl" data-menuID="fourteen" href="#">{{ trans('langTenantSettings') }}</a>
+                                <a class="nav-link nav-link-adminTools Neutral-900-cl w-100 active" data-menuID="one" href="#">{{ trans('langBasicCfgSetting') }}</a>
+                                <a class="nav-link nav-link-adminTools Neutral-900-cl w-100" data-menuID="two" href="#">{{ trans('langUpgReg') }}</a>
+                                <a class="nav-link nav-link-adminTools Neutral-900-cl w-100" data-menuID="three" href="#">{{ trans('langSupportedLanguages') }}</a>
+                                <a class="nav-link nav-link-adminTools Neutral-900-cl w-100" data-menuID="five" href="#">{{ trans('langEmailSettings') }}</a>
+                                <a class="nav-link nav-link-adminTools Neutral-900-cl w-100" data-menuID="six" href="#">{{ trans('langCourseSettings') }}</a>
+                                <a class="nav-link nav-link-adminTools Neutral-900-cl w-100" data-menuID="eight" href="#">{{ trans('langOtherOptions') }}</a>
+                                <a class="nav-link nav-link-adminTools Neutral-900-cl w-100" data-menuID="nine" href="#">{{ trans('langDocumentSettings') }}</a>
+                                <a class="nav-link nav-link-adminTools Neutral-900-cl w-100" data-menuID="ten" href="#">{{ trans('langDefaultQuota') }}</a>
+                                <a class="nav-link nav-link-adminTools Neutral-900-cl w-100" data-menuID="eleven" href="#">{{ trans('langUploadWhitelist') }}</a>
+                                <a class="nav-link nav-link-adminTools Neutral-900-cl w-100" data-menuID="twelve" href="#">{{ trans('langLogActions') }}</a>
+                                <a class="nav-link nav-link-adminTools Neutral-900-cl w-100" data-menuID="thirteen" href="#">{{ trans('langLoginFailCheck') }}</a>
+                                <a class="nav-link nav-link-adminTools Neutral-900-cl w-100" data-menuID="fourteen" href="#">{{ trans('langTenantSettings') }}</a>
                                 @if ((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
-                                    <a class="nav-link nav-link-adminTools Neutral-900-cl" data-menuID="seven" href="#">{{ trans('langMetaCommentary') }}</a>
+                                    <a class="nav-link nav-link-adminTools Neutral-900-cl w-100" data-menuID="seven" href="#">{{ trans('langMetaCommentary') }}</a>
                                 @endif
-                                <a class="nav-link nav-link-adminTools Neutral-900-cl" data-menuID="fifteen" href="#">{{ trans('langMaintenance') }}</a>
+                                <a class="nav-link nav-link-adminTools Neutral-900-cl w-100" data-menuID="fifteen" href="#">{{ trans('langMaintenance') }}</a>
                             </nav>
 
                         </div>

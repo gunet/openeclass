@@ -12774,3 +12774,31 @@ function get_style($style_name) {
     return $theme_options_styles[$style_name] ?? null;
 
 }
+
+
+function get_suppressed_words_data($action = 'words') {
+    if ($action === 'version') {
+        $sql = "SELECT MAX(created_at) AS last_update FROM suppressed_words";
+        $result = Database::get()->querySingle($sql);
+
+        if ($result && $result->last_update) {
+            return $result->last_update;
+        }
+        return '2000-01-01 00:00:00';
+    }
+
+    if ($action === 'words') {
+        $sql = "SELECT word FROM suppressed_words";
+        $results = Database::get()->queryArray($sql);
+
+        $words = [];
+        if ($results) {
+            foreach ($results as $row) {
+                $words[] = $row->word;
+            }
+        }
+        return $words;
+    }
+
+    return false;
+}

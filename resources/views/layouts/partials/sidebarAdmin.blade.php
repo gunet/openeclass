@@ -235,6 +235,11 @@
                                         {{ trans('langWidgets') }}
                                     </a>
                                 </li>
+                        <li class="list-group-item element">
+                            <a class='TextBold' href="{{$urlAppend}}modules/admin/suppressed_words.php">
+                                {{ trans('langSuppressedWords') }}
+                            </a>
+                        </li>
                                 <li class="list-group-item element">
                                     <a class='TextBold' href="{{$urlAppend}}modules/admin/coursecategory.php">
                                         {{ trans('langCourseCategoryActions') }}

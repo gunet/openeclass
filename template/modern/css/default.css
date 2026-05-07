@@ -7133,3 +7133,12 @@ th.grade-col a{
   }
 
 }
+
+/* SuppressedWords */
+.censored-blur {
+    filter: blur(5px);
+    background-color: #eee;
+    transition: filter 0.3s;
+    border-radius: 3px;
+    padding: 0 2px;
+}

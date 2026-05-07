@@ -24,16 +24,22 @@ require_once '../../include/baseTheme.php';
 require_once 'modules/wall/wall_wrapper.php';
 
 ModalBoxHelper::loadModalBox(false);
-
 $head_content .= '<link rel="stylesheet" type="text/css" href="css/wall.css">';
 
 load_js('waypoints-infinite');
 load_js('screenfull/screenfull.min.js');
+load_js('suppressedWords/suppressedWords.js');
 
 $head_content .= "<script>
+            var urlAppend = '$urlAppend';
             $(function() {
+                initSuppressedWordsBlur();
+
                 var infinite = new Waypoint.Infinite({
-                  element: $('.infinite-container')[0]
+                  element: $('.infinite-container')[0],
+                  onAfterPageLoad: function() {
+                      initSuppressedWordsBlur();
+                  }
                 })
                 
                 $('.coloboxframe').click(function() {
