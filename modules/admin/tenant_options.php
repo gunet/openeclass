@@ -63,10 +63,10 @@ $tenantUrlActive = $tenant->url_active;
 $tenantLogo = getTenantOption($tenantOptions, 'imageUpload');
 $tenantLogoSmall = getTenantOption($tenantOptions, 'imageUploadSmall');
 $tenantFavicon = getTenantOption($tenantOptions, 'faviconUpload');
-$contact_phone = q(getTenantOption($tenantOptions, 'contact_phone'));
-$contact_address = q(getTenantOption($tenantOptions, 'contact_address'));
-$contact_email = q(getTenantOption($tenantOptions, 'contact_email'));
-$platform_title = q(getTenantOption($tenantOptions, 'platform_title'));
+$contact_phone = getTenantOption($tenantOptions, 'contact_phone');
+$contact_address = getTenantOption($tenantOptions, 'contact_address');
+$contact_email = getTenantOption($tenantOptions, 'contact_email');
+$platform_title = getTenantOption($tenantOptions, 'platform_title');
 $platform_intro = getTenantOption($tenantOptions, 'platform_intro');
 
 $allow_teacher_clone_course = getTenantOption($tenantOptions, 'allow_teacher_clone_course');

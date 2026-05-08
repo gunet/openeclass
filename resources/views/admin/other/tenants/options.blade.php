@@ -73,7 +73,6 @@
                                         @else
                                             <input type='file' name='imageUploadSmall' id='imageUploadSmall' class='form-control-file'>
                                         @endif
-
                                     </div>
                                 </div>
                                 <div class='form-group mt-4'>
@@ -97,7 +96,7 @@
                             </div>
 
                             <div class='form-group mt-4'>
-                                <label for='contact_phone' class='col-md-3 col-form-label'>{{ trans('langPhone') }}$langPhone</label>
+                                <label for='contact_phone' class='col-md-3 col-form-label'>{{ trans('langPhone') }}</label>
                                 <div class='col-md-9'>
                                     <input type='tel' class='form-control' name='contact_phone' id='contact_phone' value='{{ $contact_phone }}'>
                                 </div>
