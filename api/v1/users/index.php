@@ -255,6 +255,24 @@ function api_method($access) {
             'adt' => $user->am,
         ], JSON_UNESCAPED_UNICODE);
         exit;
+    } elseif (isset($_GET['emailaddress'])) {
+        $users = Database::get()->queryArray("SELECT * FROM user WHERE email = ?s", $_GET['emailaddress']);
+        if (!$users) {
+            Access::error(404, "No user with email '$_GET[emailaddress]' found");
+        }
+        header('Content-Type: application/json');
+        header('X-Content-Type-Options: nosniff');
+        echo json_encode(array_map(function ($user) {
+            return [
+                'id' => $user->id,
+                'username' => $user->username,
+                'firstname' => $user->givenname,
+                'lastname' => $user->surname,
+                'emailaddress' => $user->email,
+                'adt' => $user->am,
+            ];
+        }, $users), JSON_UNESCAPED_UNICODE);
+        exit;
     } else {
         Access::error(2, 'Required POST parameters for user creation missing: username, firstname, lastname, emailaddress, adt');
     }
