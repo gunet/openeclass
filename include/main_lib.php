@@ -5355,7 +5355,6 @@ function theme_initialization() {
     $PositionFormLogin = 0;
     $eclass_banner_value = 1;
     $container = 'container';
-    $forms_image = 'form-image-modules';
 
     $tenant = defined('UPGRADE')? null: getCurrentTenant();
 
@@ -5372,9 +5371,9 @@ function theme_initialization() {
         $tenantLogoSmall = getTenantOption($options, 'imageUploadSmall');
         $tenantFavicon = getTenantOption($options, 'faviconUpload');
 
-        $logo_img = $tenantLogo;
-        $logo_img_small = $tenantLogoSmall;
-        $favicon_img = $tenantFavicon;
+        $logo_img = $urlAppend . $tenantLogo;
+        $logo_img_small = $urlAppend. $tenantLogoSmall;
+        $favicon_img = $urlAppend . $tenantFavicon;
     } else {
         $logo_img = $themeimg.'/eclass-new-logo.svg';
         $logo_img_small = $themeimg.'/eclass-new-logo.svg';

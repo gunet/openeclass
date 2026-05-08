@@ -34,7 +34,6 @@ if ($is_admin) {
     $navigation[] = array('url' => 'tenants.php', 'name' => $langTenants);
 }
 
-
 if (isset($_GET['id'])) {
     $tenant_id = $_GET['id'];
 } else {
@@ -55,14 +54,10 @@ if (!$is_admin) {
     }
 }
 
+$host = $server = $organizationLogoFullPath = $urlMessage = $customerUrl = '';
 $tenant = getTenantById($tenant_id);
 $tenantOptions = $tenant->options ? unserialize($tenant->options) : [];
-$organizationLogoFullPath = '';
-$urlMessage = '';
-$urlStatus = '';
 $tenantUrl = q($tenant->url);
-$customUrlEnabled = false;
-$checkModal = '';
 $tenantName = $tenant->name;
 $tenantUrlActive = $tenant->url_active;
 $tenantLogo = getTenantOption($tenantOptions, 'imageUpload');
@@ -87,7 +82,6 @@ if (isset($_GET['delete_image'])) {
     unset($tenantOptions[$logo_type]);
     $serialized_data = serialize($tenantOptions);
     Database::get()->query("UPDATE tenant SET options = ?s WHERE id = ?d", $serialized_data, $tenant_id);
-
     $_SESSION['current_user_tenant'] = getTenantById($tenant_id);
 
     redirect_to_home_page("modules/admin/tenant_options.php?id=$tenant_id");
@@ -99,7 +93,6 @@ if (isset($_POST['optionsSave'])) {
     }
 
     $tenantInfo = [];
-
     $tenantInfo = upload_images($tenantInfo);
     $tenantInfo['allow_teacher_clone_course'] = isset($_POST['allow_teacher_clone_course']) ? 1 : 0;
 
@@ -127,10 +120,8 @@ if (isset($_POST['optionsSave'])) {
 
     // platform URL
     $validUrl = true;
-
     if (isset($_POST['url']) and $_POST['url']) {
         $newUrl = strtolower(trim($_POST['url']));
-
         if ($tenantUrl != $newUrl) {
             if (!preg_match('|^https://[.a-zA-Z0-9-]+/?$|', $newUrl)) {
                 if (preg_match('|^[.a-zA-Z0-9-]+$|', $newUrl) and !preg_match('/\.\.|--/', $newUrl)) {
@@ -179,50 +170,23 @@ if (isset($_POST['optionsSave'])) {
     if (!$is_admin) {
         $_SESSION['current_user_tenant'] = getTenantById($tenant_id);
     }
-
     Session::flash('message', $langTenantUpdated);
     Session::flash('alert-class', 'alert-success');
-
     redirect_to_home_page("modules/admin/tenant_options.php?id=$tenant_id");
 }
 
-$toolName = "$langTenantProfile - $tenant->name";
 
-if ($tenantLogo) {
-    $logo_field = "
-        <img src='{$urlServer}$tenantLogo' style='max-height:100px;max-width:150px;' alt='Logo upload' /><a class='btn deleteAdminBtn ms-2' href='$_SERVER[SCRIPT_NAME]?id=$tenant_id&delete_image=imageUpload'>$langDelete</a>
-        <input type='hidden' name='imageUpload' value='$tenantLogo'>";
-} else {
-    $logo_field = "<input type='file' name='imageUpload' id='imageUpload' class='form-control-file'>";
-}
-
-if ($tenantLogoSmall) {
-    $small_logo_field = "
-        <img src='{$urlServer}$tenantLogoSmall' style='max-height:100px;max-width:150px;' alt='Small logo upload' /> <a class='btn deleteAdminBtn ms-2' href='$_SERVER[SCRIPT_NAME]?id=$tenant_id&delete_image=imageUploadSmall'>$langDelete</a>
-        <input type='hidden' name='imageUploadSmall' value='$tenantLogoSmall'>";
-} else {
-    $small_logo_field = "<input type='file' name='imageUploadSmall' id='imageUploadSmall' class='form-control-file'>";
-}
-
-if ($tenantFavicon) {
-    $faviconUpload = "
-            <img src='{$urlServer}$tenantFavicon' style='max-height:100px;max-width:150px;' alt='Favicon upload' /> <a class='btn deleteAdminBtn ms-2' href='$_SERVER[SCRIPT_NAME]?id=$tenant_id&delete_image=faviconUpload'>$langDelete</a>
-            <input type='hidden' name='faviconUpload' value='$tenantFavicon'>";
-} else {
-    $faviconUpload = "<label for='faviconUpload' aria-label='$langFavicon'></label><input type='file' name='faviconUpload' id='faviconUpload'>";
-}
+$toolName = "$langWhiteLabelΤenant - $tenant->name";
 
 if ($tenantUrl) {
     $host = parse_url($tenantUrl, PHP_URL_HOST);
     if ($tenantUrlActive) {
-        $urlStatus = 'has-success';
         $urlMessage = "<p class='text-success small'>$langTenantURLActivated</p>";
-        $customUrlEnabled = true;
     } else {
+        $customerUrl = $tenantUrl . 'modules/auth/redirect.php?token=' . session_id();
         $server = q(parse_url($urlServer, PHP_URL_HOST));
         $zone = q(preg_replace('/^[^.]+\./', '', $host));
-        $hostName = q(preg_replace('/\..*$/', '', $host));
-        $urlStatus = 'has-warning';
+
         $urlMessage = "
             <p class='text-warning small'>
                 $langTenantURLActivationInfo1
@@ -231,66 +195,11 @@ if ($tenantUrl) {
             sprintf($langTenantURLActivationInfo2, q($host), $zone) . "
             </p>
             <code class='d-block p-2 my-2 bg-light text-muted'>
-                $hostName CNAME $server.
+                "  . q(preg_replace('/\..*$/', '', $host)) . " CNAME $server.
             </code>
             <p class='small'>
                 <button type='button' class='btn btn-warning' data-bs-toggle='modal' data-bs-target='#checkModal'>$langTenantURLCheckActivate</button>
             </p>";
-        $customerUrl = $tenantUrl . 'modules/auth/redirect.php?token=' . session_id();
-        $checkModal = "
-        <div class='modal fade' id='checkModal' tabindex='-1' aria-labelledby='checkModalLabel' aria-hidden='true'>
-          <div class='modal-dialog'>
-            <div class='modal-content'>
-              <div class='modal-header'>
-                <h5 class='modal-title' id='checkModalLabel'>$langTenantActivateURL</h5>
-                <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
-              </div>
-              <div class='modal-body text-center'>
-                <p id='dns-check-result'>
-                    <span class='spinner-border spinner-border-sm' role='status' aria-hidden='true'></span>
-                    $langTenantURLChecking
-                </p>
-              </div>
-              <div class='modal-footer'>
-                <button type='button' class='btn btn-secondary' data-bs-dismiss='modal' id='modal-close-btn'>$langClose</button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <script>
-            var checkServer = function () {
-                $.get('{$urlAppend}modules/admin/check_server.php', function (data) {
-                    var msg;
-                    if (data == 'OK') {
-                        msg = '$langTenantURLCheckSuccess<br><span class=\"spinner-border spinner-border-sm\" role=\"status\" aria-hidden=\"true\"></span> $langTenantURLActivating';
-                        setTimeout(checkServer, 5000); // Poll every 5 seconds
-                    } else if (data == 'ENABLED') {
-                        msg = '$langTenantURLActivated';
-                        $('#modal-close-btn')
-                            .removeClass('btn-secondary')
-                            .addClass('btn-primary')
-                            .html('$langTenantGotoURL')
-                            .click(function () {
-                                window.location.href = '{$customerUrl}';
-                            });
-                    } else {
-                        $('#dns-check-result').removeClass('text-center');
-                        msg = '" .
-                            varmsg(
-                                $GLOBALS['langTenantURLCheckFail'],
-                                ['host' => $host, 'server' => $server]
-                            ) . "';
-                    }
-                    $('#dns-check-result').html('<p>' + msg + '</p>');
-                });
-            };
-            $(function () {
-                var checkModal = document.getElementById('checkModal');
-                checkModal.addEventListener('shown.bs.modal', function () {
-                    checkServer();
-                });
-            });
-        </script>";
     }
 }
 
@@ -299,6 +208,7 @@ if ($is_admin) {
 } else {
     $back_url = "{$urlAppend}modules/admin/index.php";
 }
+
 $action_bar = action_bar([
     [
         'title' => $langBack,
@@ -308,191 +218,28 @@ $action_bar = action_bar([
     ]
 ], false);
 
-$tool_content .= $action_bar;
 
-$tool_content .= "<form id='tenant_options_form' class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?id=$tenant_id' enctype='multipart/form-data' method='post'>
-      <div class='container-fluid'>";
+$data['rich_text_editor'] = rich_text_editor('platform_intro', 4, 50, $platform_intro, options: array('id' => 'platform_intro'));
+$data['cbox_allow_teacher_clone_course'] = $cbox_allow_teacher_clone_course;
+$data['tenantLogo'] = $tenantLogo;
+$data['tenantLogoSmall'] = $tenantLogoSmall;
+$data['tenantFavicon'] = $tenantFavicon;
+$data['tenantUrl'] = $tenantUrl;
+$data['tenantUrlActive'] = $tenantUrlActive;
+$data['customerUrl'] = $customerUrl;
+$data['urlMessage'] = $urlMessage;
+$data['platform_title'] = $platform_title;
+$data['action_bar'] = $action_bar;
+$data['tenant_admins'] = $tenant_admins = getTenantAdmins($tenant_id);
+$data['tenant_id'] = $tenant_id;
+$data['contact_email'] = $contact_email;
+$data['contact_phone'] = $contact_phone;
+$data['contact_address'] = $contact_address;
+$data['platform_intro'] = $platform_intro;
+$data['host'] = $host;
+$data['server'] = $server;
 
-if (get_config('enable_white_label')) {
-      $tool_content .= "<div class='form-group'>
-          <label for='urlField' class='col-md-3 col-form-label'>$langTenantURL</label>
-          <div class='col-md-9'>
-            <small class='d-block text-muted'>$langTenantURLText</small>
-            <input type='text' class='form-control' name='url' id='urlField' placeholder='https://eclass.example.com/' value='$tenantUrl'>
-            $urlMessage
-          </div>
-        </div>
-        
-        <div class='form-group mt-4'>
-          <label for='platform_title' class='col-md-3 col-form-label'>$langSiteTitle</label>
-          <div class='col-md-9'>
-            <input type='text' class='form-control' name='platform_title' id='platform_title' value='$platform_title'>
-          </div>
-        </div>
-    
-        <div class='form-group mt-4'>
-          <label for='platform_intro' class='col-md-3 col-form-label'>$langSiteDescr</label>
-          <div class='col-md-9'>
-            " . rich_text_editor('platform_intro', 4, 50, $platform_intro, options: array('id' => 'platform_intro')) . "
-          </div>
-        </div>
-        
-        <div class='form-group mt-4'>
-            <div class='col-sm-12 control-label-notes mb-2'>$langLogo <small>$langLogoNormal</small>:</div>
-            <div class='col-sm-12 d-inline-flex justify-content-start align-items-center'>
-                $logo_field
-            </div>
-        </div>
-        <div class='form-group mt-4'>
-            <div class='col-sm-12 control-label-notes mb-2'>$langLogo <small>$langLogoSmall</small>:</div>
-            <div class='col-sm-12 d-inline-flex justify-content-start align-items-center'>
-                $small_logo_field
-            </div>
-        </div>
-        <div class='form-group mt-4'>
-            <div class='col-sm-12 control-label-notes mb-2'>$langFavicon </div>
-            <div class='col-sm-12 d-inline-flex justify-content-start align-items-center'>
-                $faviconUpload
-            </div>
-        </div>";
-    }
-
-    $tool_content .= "<div class='form-group mt-4'>
-      <label for='contact_email' class='col-md-3 col-form-label'>$langEmail</label>
-      <div class='col-md-9'>
-        <input type='email' class='form-control' name='contact_email' id='contact_email' value='$contact_email'>
-      </div>
-    </div>
-    
-    <div class='form-group mt-4'>
-      <label for='contact_phone' class='col-md-3 col-form-label'>$langPhone</label>
-      <div class='col-md-9'>
-        <input type='tel' class='form-control' name='contact_phone' id='contact_phone' value='$contact_phone'>
-      </div>
-    </div>   
-    
-     <div class='form-group mt-4'>
-      <label for='contact_address' class='col-md-3 col-form-label'>$langPostMail</label>
-      <div class='col-md-9'>
-        <textarea id='contact_address' name='contact_address' class='form-control' rows='3'>$contact_address</textarea>
-      </div>
-    </div>    
-    ";
-
-$tool_content .= "
-    <div class='form-group mt-5'>
-        <div class='col-sm-12'>
-            <h4 class='mb-3'>$langConfig</h4>
-
-            <div class='checkbox'>
-                <label class='label-container'>
-                    <input type='checkbox'
-                           name='allow_teacher_clone_course'
-                           value='1'
-                           $cbox_allow_teacher_clone_course>
-                    <span class='checkmark'></span>
-                    $lang_allow_teacher_clone_course
-                </label>
-            </div>
-        </div>
-    </div>";
-
-$tool_content .= "
-    <div class='form-group mt-4'>
-      <div class='col-md-9 d-flex justify-content-end'>
-        <input class='btn btn-primary' name='optionsSave' type='submit' value='$langSubmit'>
-      </div>
-    </div>
-  </div>" . generate_csrf_token_form_field() . "
-</form>" . $checkModal;
-
-$head_content .= "<script type='text/javascript'>
-    $(document).ready(function() {
-
-        var oTable = $('#admins-table').DataTable ({
-            'bStateSave': true,
-            'bProcessing': false,
-            'bServerSide': false,
-            'sScrollX': true,
-            'responsive': true,
-            'searchDelay': 1000,
-            'lengthMenu': [10, 15, 20 , -1],
-            'fnDrawCallback': function( oSettings ) {
-                $('.table_td_body').each(function() {
-                    $(this).trunk8({
-                        lines: '3',
-                        fill: '&hellip;<div class=\"clearfix\"></div><a style=\"float:right;\" href=\"$_SERVER[SCRIPT_NAME]?an_id='+ $(this).data('id')+'\">$langMore</div>'
-                    })
-                });
-                $('#admins-table_wrapper .dt-search input').attr({
-                    'class' : 'form-control input-sm ms-0 mb-3',
-                    'placeholder' : '$langSearch...'
-                });
-                $('#admins-table_wrapper .dt-search label').attr('aria-label', '$langSearch');
-                },
-                'sPaginationType': 'full_numbers',
-                'bSort': false,
-                'oLanguage': {
-                        'lengthLabels': {
-                            '-1': '$langAllOfThem'
-                        },                       
-                        'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
-                        'sZeroRecords':  '" . $langNoResult . "',
-                        'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
-                        'sInfoEmpty':    '',
-                        'sInfoFiltered': '',
-                        'sInfoPostFix':  '',
-                        'sSearch':       '',
-                        'oPaginate': {
-                            'sFirst':    '&laquo;',
-                            'sPrevious': '&lsaquo;',
-                            'sNext':     '&rsaquo;',
-                            'sLast':     '&raquo;'
-                        }
-                    }
-                });
-        });
-    </script>";
-
-$tenant_admins = getTenantAdmins($tenant_id);
-$tenant_admins_rows = "";
-
-foreach ($tenant_admins as $admin) {
-    $tenant_admins_rows .= "<tr>
-            <td>$admin->id</td>
-            <td>$admin->givenname</td>
-            <td>$admin->surname</td>
-            <td>$admin->email</td>
-            <td>$admin->username</td>
-        </tr>";
-}
-
-$tool_content .= "
-    <div class='container-fluid'>
-        <div class='col-md-9 mt-5 mb-5'>
-            <h4>$langAdmins</h4>
-
-            <div class='table-responsive'>
-                <table id='admins-table' class='table-default '>
-                    <thead>
-                    <tr class='list-header'>
-                        <th>ID</th>
-                        <th>$langName</th>
-                        <th>$langSurname</th>
-                        <th>$langEmail</th>
-                        <th>$langUsername</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                        $tenant_admins_rows
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>";
-
-draw($tool_content, 3, null, $head_content);
-
+view('admin.other.tenants.options', $data);
 
 // Move uploaded files to the final destination and update DB
 function upload_images($tenantInfo)

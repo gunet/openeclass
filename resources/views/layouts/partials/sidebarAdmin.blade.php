@@ -44,12 +44,8 @@
         @endif
     @endif
 
-    @if($is_admin or $is_departmentmanage_user)
+    @if($is_admin or ($is_departmentmanage_user && get_config('enable_white_label')))
         <a href="theme_options.php" class='quickLink'>
-            <i class="fa-solid fa-display settings-icon"></i>{{ trans('langThemeSettings') }}
-        </a>
-    @else
-        <a tabindex="0" role="button" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="focus" title="{{trans('langForbidden')}}" class='quickLink opacity-help'>
             <i class="fa-solid fa-display settings-icon"></i>{{ trans('langThemeSettings') }}
         </a>
     @endif
