@@ -2169,7 +2169,7 @@ $langDownloadSafeExamBrowser = "Κατέβασμα Safe Exam Browser";
 $langSEBInfo1 = "Για την εκτέλεση της άσκησης απαιτείται η χρήση του Safe Exam Browser !";
 $langSEBInfo2 = "Πρώτα, θα πρέπει να εγκαταστήσετε στον υπολογιστή τον Safe Exam Browser κάνοντας κλικ στο 'Κατέβασμα' (αν τον έχετε ήδη εγκαταστήσει δεν χρειάζεται να τον ξανακατεβάσετε). 
 Αφού τον εγκαταστήσετε, κάντε κλικ στο 'Εκκίνηση' για να εκτελέσετε την άσκηση.";
-$langSafeExamBrowserInfo = "Η άσκηση θα εκτελεστεί μόνο μέσω του Safe Exam Browser.";
+$langSafeExamBrowserInfo = "Η άσκηση εκτελείται μόνο μέσω του Safe Exam Browser.";
 $langSafeExamBrowserLegend = "Οι χρήστες θα χρειαστεί να εγκαταστήσουν τον Safe Exam Browser στον υπολογιστή τους. Υποστηρίζεται μόνο σε Windows, MacOS και iOS";
 // admin.php
 $langExerciseManagement = "Διαχείριση Άσκησης";
@@ -2511,6 +2511,7 @@ $langContinueAttemptExplanation = 'Ενεργοποίηση δυνατότητα
     του χρήστη.';
 $langContinueAttemptTime = 'Χρονικό περιθώριο: [] λεπτά.';
 $langWarnOneWayExercise = "Προσοχή: οι ερωτήσεις εμφανίζονται μία ανά σελίδα και δεν έχετε δυνατότητα επιστροφής σε προηγούμενες σελίδες.";
+$langActivateExamMode = "Ενεργοποίηση εξέτασης";
 $langExam = "Εξέταση";
 $langRequireCourseUserLogin = "Οι χρήστες πρέπει να είναι συνδεδεμένοι στη πλατφόρμα και εγγεγραμμένοι στο $langsCourse.";
 $langExerciseRequireLogin = "Θα πρέπει να συνδεθείτε πρώτα στην πλατφόρμα έτσι ώστε να εκτελέσετε την άσκηση";

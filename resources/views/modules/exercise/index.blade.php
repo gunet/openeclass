@@ -67,9 +67,9 @@
                                                             {{-- exercise has expired --}}
                                                             &nbsp;&nbsp;<span class='text-danger'>({{ trans('langHasExpiredS') }})</span>
                                                         @endif
-                                                        @if ($row->is_exam == 1)&nbsp;
+                                                        @if ($row->is_exam == 1)&nbsp; {{-- Exam Mode --}}
                                                             @if (isSebEnabled($row->id))
-                                                                &nbsp;{!! icon('fa-solid fa-chalkboard-user', trans('langSafeExamBrowserInfo')) !!}
+                                                                &nbsp;<img src="{{ $urlAppend }}resources/icons/seb.png" width="25" height="25" data-bs-original-title="{{ trans('langSafeExamBrowserInfo') }}" data-bs-toggle="tooltip" data-bs-placement="bottom" aria-label="{{ trans('langSafeExamBrowserInfo') }}">
                                                             @else
                                                                 &nbsp;{!! icon('fa-solid fa-chalkboard-user', trans('langExam')) !!}
                                                             @endif
@@ -241,7 +241,7 @@
                                                                 @endif
                                                                 @if ($row->is_exam == 1)&nbsp;
                                                                     @if (isSebEnabled($row->id))
-                                                                        &nbsp;{!! icon('fa-solid fa-chalkboard-user', trans('langSafeExamBrowserInfo')) !!}
+                                                                        &nbsp;&nbsp;<img src="{{ $urlAppend }}resources/icons/seb.png" width="25" height="25" data-bs-original-title="{{ trans('langSafeExamBrowserInfo') }}" data-bs-toggle="tooltip" data-bs-placement="bottom" aria-label="{{ trans('langSafeExamBrowserInfo') }}">
                                                                     @else
                                                                         &nbsp;{!! icon('fa-solid fa-chalkboard-user', trans('langExam')) !!}
                                                                     @endif

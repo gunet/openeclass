@@ -436,7 +436,6 @@
                                         </div>
 
                                         <div class='row form-group mt-4'>
-                                            <div class='col-12 control-label-notes mb-1'>{{ trans('langExerciseType') }}</div>
                                             <div class='col-12'>
                                                 <div class='checkbox'>
                                                     <label class='label-container'
@@ -444,7 +443,7 @@
                                                         <input id='isExam_' name='isExam' type='checkbox'
                                                                @if ($isExam) checked @endif>
                                                         <span class='checkmark'></span>
-                                                        {{ trans('langExam') }}
+                                                        {{ trans('langActivateExamMode') }}
                                                     </label>
                                                     <div class='help-block'>
                                                         {{ trans('langRequireCourseUserLogin') }}
@@ -454,9 +453,6 @@
                                         </div>
 
                                         <div class='row form-group mt-4 d-none' id='stricter_exam'>
-                                            <div class='col-sm-12 control-label-notes mb-1'>
-                                                {{ trans('langStricterExamRestriction') }}:
-                                            </div>
                                             <div class='col-12'>
                                                 <div class='checkbox'>
                                                     <label class='label-container'
