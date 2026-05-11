@@ -5609,6 +5609,7 @@ This can be done, for instance, via an external webcron service.</p>
 <p>In any case, the call must be made every minute in order for the log data to be accurate.</p>';
 $langViewRecording = "Watch the video";
 $langViewListRecordings = "Recorded videos";
+$langViewDeletedListRecordings = "Deleted recorded videos";
 $langTotalSizeRecordings = "Total size of recorded videos";
 $langNoAvailableRecordings = "There are no recorded videos.";
 $langAPITokenLongDesc = "Information for calls currently supported by the API can be found
@@ -7145,7 +7146,6 @@ $langUniFlixNewFileVersion = "There is a newwer verion of file in UniFlix.";
 $langUniFlixRequireAuth = ", UniFlix authentication is required, in order to display private multimedia files";
 $langWillEnd = 'will end in';
 $langUnitCompletionLegend = "Unit completion is enabled or the unit has prerequisites";
-$langNewMaterial = "New material";
 $langUserThemeCustomization = 'User Theme Customization';
 $langEnableUserThemeCustomization = 'Enable user theme customization';
 $langEnableUserThemeCustomizationHelp = 'Allow users to select and customize their own theme preferences. Users can choose from available themes and save their selection in a cookie.';

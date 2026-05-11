@@ -774,7 +774,6 @@ $langConfirmDeleteUnit = "Θέλετε σίγουρα να αφαιρέσετε 
 $langConfirmDeleteGoal = "Θέλετε σίγουρα να αφαιρέσετε το συγκεκριμένο μαθησιακό στόχο;";
 $langDisplayAllUnits = "Εμφάνιση όλων των ενοτήτων";
 $langDoubleLoginLockOption = 'Αποκλεισμός ταυτόχρονων συνδέσεων με τον ίδιο λογαριασμό.';
-$langNewMaterial = "Συμπληρωματικό υλικό";
 
 // admin announcements
 $langAdminAn = "Ανακοινώσεις Διαχειριστή";
@@ -6012,6 +6011,7 @@ $langBBBCronEnableInstructions = '
 <p>Σε κάθε περίπτωση, η κλήση πρέπει να γίνεται κάθε ένα λεπτό προκειμένου τα δεδομένα καταγραφής να είναι ακριβή.</p>';
 $langViewRecording = "Δείτε το βίντεο";
 $langViewListRecordings = "Καταγεγραμμένα βίντεο";
+$langViewDeletedListRecordings = "Διεγραμμένα καταγεγραμμένα βίντεο";
 $langTotalSizeRecordings = "Συνολικό μέγεθος καταγεγραμμένων βίντεο";
 $langNoAvailableRecordings = "Δεν υπάρχουν καταγεγραμμένα βίντεο";
 

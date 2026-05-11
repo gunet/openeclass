@@ -280,7 +280,7 @@ function show_resources($unit_id)
     global $max_resource_id, $is_editor,
            $head_content, $langDownload, $langPrint, $langCancel,
            $langFullScreen, $langNewTab, $langActInHome, $langActInClass, $langActAfterClass, 
-           $course_code, $langNewMaterial;
+           $course_code;
 
     $html = '';
 
@@ -731,7 +731,6 @@ function show_resources($unit_id)
         </script>";
             $max_resource_id = Database::get()->querySingle("SELECT id FROM unit_resources
                                 WHERE unit_id = ?d ORDER BY `order` DESC LIMIT 1", $unit_id)->id;
-            $html .= "<h2 class='text-heading-h3'>$langNewMaterial</h2>";
             $html .= "<div class='spacer card-units'></div>";
             $html .= "<div class='table-responsive'>";
             $html .= "<div class='table table-striped table-hover table-default'><div id='unitResources'>";

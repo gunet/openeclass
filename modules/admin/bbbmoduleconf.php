@@ -377,16 +377,27 @@ if (isset($_GET['add_course_to_tc'])) {
             // Fetch all recordings for the specific bbb server//
             /////////////////////////////////////////////////////
             
-            $apiMethod = 'getRecordings';
-            $apiUrl = $bbbServerUrl . "api/" . $apiMethod;
+            if (isset($_GET['fetch_recordings']) && !isset($_GET['state'])) {
+                $apiMethod = 'getRecordings';
+                $apiUrl = $bbbServerUrl . "api/" . $apiMethod;
 
-            // Generate the checksum
-            $params = '';
-            $checksumString = $apiMethod . $params . $securitySalt;
-            $checksum = sha1($checksumString);
+                // Generate the checksum
+                $params = '';
+                $checksumString = $apiMethod . $params . $securitySalt;
+                $checksum = sha1($checksumString);
 
-            // Build the full URL
-            $requestUrl = $apiUrl . "?checksum=" . $checksum;
+                // Build the full URL
+                $requestUrl = $apiUrl . "?checksum=" . $checksum;
+            } elseif (isset($_GET['fetch_recordings']) && isset($_GET['state']) && $_GET['state'] == 'deleted') {
+                $baseUrl = $bbbServerUrl . "api/";
+                $secret = $securitySalt;
+                $params = [
+                    "state" => "deleted"
+                ];
+                $query = http_build_query($params);
+                $checksum = sha1("getRecordings" . $query . $secret);
+                $requestUrl = $baseUrl . "getRecordings?" . $query . "&checksum=" . $checksum;
+            }
 
             // Make the GET request
             $response = file_get_contents($requestUrl);
@@ -550,6 +561,9 @@ if (isset($_GET['add_course_to_tc'])) {
                         'icon' => 'fa-edit'),
                     array('title' => $langViewListRecordings,
                         'url' => "$_SERVER[SCRIPT_NAME]?server_id=$srv->id&fetch_recordings=1",
+                        'icon' => 'fa-solid fa-film'),
+                    array('title' => $langViewDeletedListRecordings,
+                        'url' => "$_SERVER[SCRIPT_NAME]?server_id=$srv->id&fetch_recordings=1&state=deleted",
                         'icon' => 'fa-solid fa-film'),
                     array('title' => $langDelete,
                         'url' => "$_SERVER[SCRIPT_NAME]?delete_server=$srv->id",
