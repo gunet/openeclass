@@ -591,16 +591,28 @@ if ($userdata) {
 
         $active_class = ' class="nav-item"';
 
-        if ($blog_posts) {
-            $blog_li = '<li class="nav-item" role="presentation"><button id="blogtab" class="nav-link active" data-bs-toggle="tab" data-bs-target="#blog">'.$langBlogPosts.'</button></li>';
+        if ($myCertificates) {
+            $myCertificates_li = '<li class="nav-item" role="presentation"><button id="certificatestab" class="nav-link active" data-bs-toggle="tab" data-bs-target="#mycertificates">'.$langCertificates.'</button></li>';
             if ($active_class != '') {
-                $blog_div_class = 'tab-pane fade show active';
+                $myCertificates_div_class = 'tab-pane fade show active';
             } else {
-                $blog_div_class = 'tab-pane fade';
+                $myCertificates_div_class = 'tab-pane fade';
             }
             $active_class = '';
         } else {
-            $blog_li = '';
+            $myCertificates_li = '';
+        }
+
+        if ($myBadges) {
+            $myBadges_li = '<li class="nav-item" role="presentation"><button id="badgestab" class="nav-link" data-bs-toggle="tab" data-bs-target="#mybadges">'.$langBadges.'</button></li>';
+            if ($active_class != '') {
+                $myBadges_div_class = 'tab-pane fade show active';
+            } else {
+                $myBadges_div_class = 'tab-pane fade';
+            }
+            $active_class = '';
+        } else {
+            $myBadges_li = '';
         }
 
         if ($submissions) {
@@ -627,28 +639,16 @@ if ($userdata) {
             $mydocs_li = '';
         }
 
-        if ($myBadges) {
-            $myBadges_li = '<li class="nav-item" role="presentation"><button id="badgestab" class="nav-link" data-bs-toggle="tab" data-bs-target="#mybadges">'.$langBadges.'</button></li>';
+        if ($blog_posts) {
+            $blog_li = '<li class="nav-item" role="presentation"><button id="blogtab" class="nav-link" data-bs-toggle="tab" data-bs-target="#blog">'.$langBlogPosts.'</button></li>';
             if ($active_class != '') {
-                $myBadges_div_class = 'tab-pane fade show active';
+                $blog_div_class = 'tab-pane fade show active';
             } else {
-                $myBadges_div_class = 'tab-pane fade';
+                $blog_div_class = 'tab-pane fade';
             }
             $active_class = '';
         } else {
-            $myBadges_li = '';
-        }
-
-        if ($myCertificates) {
-            $myCertificates_li = '<li class="nav-item" role="presentation"><button id="certificatestab" class="nav-link" data-bs-toggle="tab" data-bs-target="#mycertificates">'.$langCertificates.'</button></li>';
-            if ($active_class != '') {
-                $myCertificates_div_class = 'tab-pane fade show active';
-            } else {
-                $myCertificates_div_class = 'tab-pane fade';
-            }
-            $active_class = '';
-        } else {
-            $myCertificates_li = '';
+            $blog_li = '';
         }
 
         if ($notes) {
@@ -664,62 +664,61 @@ if ($userdata) {
         }
 
         $tool_content .= '<div class="col-12"><ul class="nav nav-tabs" role="tablist">
-                            '.$blog_li.'
+                            '.$myCertificates_li.'
+                            '.$myBadges_li.'
                             '.$work_li.'
                             '.$mydocs_li.'
-                            '.$myBadges_li.'
-                            '.$myCertificates_li.'
+                            '.$blog_li.'
                             '.$notes_li.'
                           </ul></div>';
         $tool_content .= '<div class="col-12"><div class="tab-content pb-4">';
 
-        //show blog_posts
-        if ($blog_posts) {
-            $tool_content .= '<div id="blog" role="tabpanel" class="'.$blog_div_class.'" aria-labelledby="blogtab" >';
+        //show my certificates collection
+        if ($myCertificates) {
+            $tool_content .= '<div id="mycertificates" role="tabpanel" class="'.$myCertificates_div_class.'" aria-labelledby="mycertificatestab" >';
             $tool_content .= "<div class='row row-cols-1 row-cols-md-2 g-4'>";
 
-            foreach ($blog_posts as $post) {
+            foreach ($myCertificates as $mycertificate) {
                 $tool_content .= "<div class='col'>";
-                $data = unserialize($post->data);
-                if (!empty($post->course_title)) {
-                    $post->course_title = $langCourse.': '.q($post->course_title);
+                $data = unserialize($mycertificate->data);
+                if (!empty($mycertificate->course_title)) {
+                    $mycertificate->course_title = $langCourse.': '.q($mycertificate->course_title);
                 } else {
-                    $post->course_title = $langUserBlog;
+                    $mycertificate->course_title = $langCertificates;
                 }
+                $identifier = Database::get()->querySingle("SELECT identifier FROM certified_users WHERE cert_id = ?d AND template_id = ?d AND user_id = ?d", $mycertificate->resource_id, $data['template'], $mycertificate->user_id)->identifier;
 
-                $reflection_comments = (!empty($post->reflection_comments) && ($post->user_id == $uid)) ? $langReflectionComment.':"'.q($post->reflection_comments).'"' : '';
-
-                if(!isset($_GET['view']) && ($post->user_id == $uid)) {
+                if(!isset($_GET['view']) && ($mycertificate->user_id == $uid)) {
                     $title_vis_icon = "<span>&nbsp;
-                                            <i class=\"fa ".$visibility_vars[$post->visibility]['fa_icon']." 
+                                            <i class=\"fa ".$visibility_vars[$mycertificate->visibility]['fa_icon']." 
                                                 role=\"button\" 
                                                 style=\"cursor:pointer;\" 
                                                 data-bs-toggle=\"modal\" 
-                                                data-bs-target=\"#modal_blog_".$post->resource_id."\"
+                                                data-bs-target=\"#modal_my_certificates_".$mycertificate->resource_id."\"
                                                 data-bs-toggle=\"tooltip\"
                                                 data-bs-placement=\"top\"
-                                                title=\"".$visibility_vars[$post->visibility]['fa_icon_title']."\"\">
+                                                title=\"".$visibility_vars[$mycertificate->visibility]['fa_icon_title']."\"\">
                                             </i>
                                         </span>";
                     
-                    $vis_modal_form = '<div class="modal fade" id="modal_blog_'.$post->resource_id.'" tabindex="-1" aria-labelledby="blogModalLabel_'.$post->resource_id.'" aria-hidden="true">
+                    $vis_modal_form = '<div class="modal fade" id="modal_my_certificates_'.$mycertificate->resource_id.'" tabindex="-1" aria-labelledby="my_certificatesModalLabel_'.$mycertificate->resource_id.'" aria-hidden="true">
                     <div class="modal-dialog">
                       <div class="modal-content">
                   
                         <div class="modal-header">
-                          <h5 class="modal-title" id="blogModalLabel_'.$post->resource_id.'">'.$langePortfolioFieldsVisibilitySettings.' - '.q($data['title']).'</h5>
+                          <h5 class="modal-title" id="my_certificatesModalLabel_'.$mycertificate->resource_id.'">'.$langePortfolioFieldsVisibilitySettings.' - '.q($data['title']).'</h5>
                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="'.$langClose.'"></button>
                         </div>
                   
                         <div class="modal-body">
-                          <form name="vis_form_blog_'.$post->resource_id.'" action="" method="post">
-                            <input type="hidden" name="resource_type" value="blog">
-                            <input type="hidden" name="resource_id" value="'.$post->resource_id.'">
+                          <form name="vis_form_my_certificates_'.$mycertificate->resource_id.'" action="" method="post">
+                            <input type="hidden" name="resource_type" value="my_certificates">
+                            <input type="hidden" name="resource_id" value="'.$mycertificate->resource_id.'">
                             <div class="mb-3">
                                 <select class="form-select" name="visibility">
-                                <option value="'.EPF_VISIBLE_PUBLIC.'" '.$visibility_vars[$post->visibility]['public_selected'].'>'.$langPublicePortfolioField.'</option>
-                                <option value="'.EPF_VISIBLE_USERS.'" '.$visibility_vars[$post->visibility]['users_selected'].'>'.$langOpenToRegisteredUsers.'</option>
-                                <option value="'.EPF_VISIBLE_PRIVATE.'" '.$visibility_vars[$post->visibility]['private_selected'].'>'.$langProfileInfoPrivate.'</option>
+                                <option value="'.EPF_VISIBLE_PUBLIC.'" '.$visibility_vars[$mycertificate->visibility]['public_selected'].'>'.$langPublicePortfolioField.'</option>
+                                <option value="'.EPF_VISIBLE_USERS.'" '.$visibility_vars[$mycertificate->visibility]['users_selected'].'>'.$langOpenToRegisteredUsers.'</option>
+                                <option value="'.EPF_VISIBLE_PRIVATE.'" '.$visibility_vars[$mycertificate->visibility]['private_selected'].'>'.$langProfileInfoPrivate.'</option>
                                 </select>
                             </div>
                             <button type="submit" class="btn btn-primary">'.$langSubmit.'</button>
@@ -734,29 +733,178 @@ if ($userdata) {
                     $vis_modal_form = "";
                 }
 
+                $reflection_comments = (!empty($mycertificate->reflection_comments) && ($mycertificate->user_id == $uid)) ? $langReflectionComment.':"'.q($mycertificate->reflection_comments).'"' : '';
+
                 $tool_content .= "<div class='card panelCard card-default px-lg-4 py-lg-3 mt-3 h-100'>
                                     <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>                                           
                                         <h2 class='text-heading-h3'>".q($data['title']).$title_vis_icon."</h2>"
-                                        .$vis_modal_form.                                    
+                                        .$vis_modal_form.
                                         "<div>
                                             ". action_button(array(
                                                 array(
                                                     'title' => $langePortfolioRemoveResource,
-                                                    'url' => "$_SERVER[SCRIPT_NAME]?action=remove&amp;type=blog&amp;er_id=".$post->id,
+                                                    'url' => "$_SERVER[SCRIPT_NAME]?action=remove&amp;type=my_certificates&amp;er_id=".$mycertificate->id,
                                                     'icon' => 'fa-xmark',
                                                     'class' => 'delete',
                                                     'confirm' => $langePortfolioSureToRemoveResource,
-                                                    'show' => ($post->user_id == $uid)
+                                                    'show' => ($mycertificate->user_id == $uid)
                                                 )))."
                                         </div>                                          
                                     </div>
                                     <div class='card-body'>
-                                        <p class='TextBold'>$langSubmit:<span class='ms-1 small-text TextRegular'>" . format_locale_date(strtotime($data['timestamp'])) . "</span></p>
-                                        ".ellipsize_html(standard_text_escape($data['content']), 500, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?token=".$userdata->eportfolio_token."&amp;action=showBlogPost&amp;er_id=".$post->id."'> <span class='smaller'>[$langMore]</span></a></strong>")."
+                                        <img style='height:150px; width:150px;' src='{$urlServer}resources/img/game/badge.png' target='_blank' class='card-img-top m-auto d-block mt-3' alt='certificate'>
+                                        <div class='card-body text-center'>
+                                            <a class='link-color' href='{$urlServer}main/out.php?i={$identifier}'>
+                                                " . ellipsize($data['title'], 40) . "
+                                                " . format_locale_date(strtotime($data['date_created'] ?? ''), null, false) . "
+                                                " . $data['issuer'] . "
+                                            </a>
+                                        </div>
                                     </div>
                                     <div class='card-footer border-0 d-flex justify-content-start align-items-center'>                                       
-                                        <div class='small-text'>$post->course_title</div>
+                                        <div class='small-text'><em>$reflection_comments</em></div>
                                     </div>
+                                </div>";
+            $tool_content .= "</div>";
+            }
+            $tool_content .= "
+                            </div>
+                          </div>";
+        }
+
+        //show mybadges collection
+        if ($myBadges) {
+            $tool_content .= '<div id="mybadges" role="tabpanel" class="'.$myBadges_div_class.'" aria-labelledby="mybadgestab" >';
+            $tool_content .= "<div class='row row-cols-1 row-cols-md-2 g-4'>";
+
+            foreach ($myBadges as $mybadge) {
+                $tool_content .= "<div class='col'>";
+                $data = unserialize($mybadge->data);
+                if (!empty($mybadge->course_title)) {
+                    $mybadge->course_title = $langCourse.': '.q($mybadge->course_title);
+                } else {
+                    $mybadge->course_title = $langBadges;
+                }
+
+                if ($mybadge->resource_type == "external_badges") {
+                    $ext_badge_str = "(".$langExternalBadge.") ";
+                } else {
+                    $ext_badge_str = "";
+                }
+
+                if(!isset($_GET['view']) && ($mybadge->user_id == $uid)) {
+                    $title_vis_icon = "<span>&nbsp;
+                                            <i class=\"fa ".$visibility_vars[$mybadge->visibility]['fa_icon']." 
+                                                role=\"button\" 
+                                                style=\"cursor:pointer;\" 
+                                                data-bs-toggle=\"modal\" 
+                                                data-bs-target=\"#modal_my_badges_".$mybadge->resource_id."\"
+                                                data-bs-toggle=\"tooltip\"
+                                                data-bs-placement=\"top\"
+                                                title=\"".$visibility_vars[$mybadge->visibility]['fa_icon_title']."\"\">
+                                            </i>
+                                        </span>";
+                    
+                    $vis_modal_form = '<div class="modal fade" id="modal_my_badges_'.$mybadge->resource_id.'" tabindex="-1" aria-labelledby="my_badgesModalLabel_'.$mybadge->resource_id.'" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                  
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="my_badgesModalLabel_'.$mybadge->resource_id.'">'.$langePortfolioFieldsVisibilitySettings.' - '.q($data['title']).'</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="'.$langClose.'"></button>
+                        </div>
+                  
+                        <div class="modal-body">
+                          <form name="vis_form_my_badges_'.$mybadge->resource_id.'" action="" method="post">
+                            <input type="hidden" name="resource_type" value="my_badges">
+                            <input type="hidden" name="resource_id" value="'.$mybadge->resource_id.'">
+                            <div class="mb-3">
+                                <select class="form-select" name="visibility">
+                                <option value="'.EPF_VISIBLE_PUBLIC.'" '.$visibility_vars[$mybadge->visibility]['public_selected'].'>'.$langPublicePortfolioField.'</option>
+                                <option value="'.EPF_VISIBLE_USERS.'" '.$visibility_vars[$mybadge->visibility]['users_selected'].'>'.$langOpenToRegisteredUsers.'</option>
+                                <option value="'.EPF_VISIBLE_PRIVATE.'" '.$visibility_vars[$mybadge->visibility]['private_selected'].'>'.$langProfileInfoPrivate.'</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">'.$langSubmit.'</button>
+                          </form>
+                        </div>
+                  
+                      </div>
+                    </div>
+                  </div>';
+                } else {
+                    $title_vis_icon = "";
+                    $vis_modal_form = "";
+                }
+
+                $reflection_comments = (!empty($mybadge->reflection_comments) && ($mybadge->user_id == $uid)) ? $langReflectionComment.':"'.q($mybadge->reflection_comments).'"' : '';
+
+                $tool_content .= "<div class='card panelCard card-default px-lg-4 py-lg-3 mt-3 h-100'>
+                                    <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>                                           
+                                        <h2 class='text-heading-h3'>".q($data['title']).$ext_badge_str.$title_vis_icon."</h2>"
+                                        .$vis_modal_form.
+                                        "<div>
+                                            ". action_button(array(
+                                                array(
+                                                    'title' => $langePortfolioRemoveResource,
+                                                    'url' => "$_SERVER[SCRIPT_NAME]?action=remove&amp;type=my_badges&amp;er_id=".$mybadge->id,
+                                                    'icon' => 'fa-xmark',
+                                                    'class' => 'delete',
+                                                    'confirm' => $langePortfolioSureToRemoveResource,
+                                                    'show' => ($mybadge->user_id == $uid)
+                                                )))."
+                                        </div>                                          
+                                    </div>
+                                    <div class='card-body text-center'>";
+                if ($mybadge->resource_type == 'my_badges') {
+                      $tool_content .= "<img style='height:150px; width:150px; object-fit: contain;' src='{$urlServer}" . BADGE_TEMPLATE_PATH . get_badge_filename($data['badgeId']) ."' class='card-img-top ms-auto me-auto mt-3' alt='badge'>
+                                        <div class='card-body'>
+                                            <div class='text-heading-h5'>
+                                                <a href='{$urlServer}modules/progress/index.php?course=" . course_id_to_code($mybadge->course_id) . "&amp;badge_id= " .  $data['badgeId'] . "&amp;u=" . $mybadge->user_id . "'>"
+                                                 . ellipsize($data['title'], 40) . "
+                                                 </a>
+                                            </div>
+                                            <div class='badge_date text-center text-success'>" . format_locale_date(strtotime($data['assigned']), null, false). "</div>
+                                            <div class='bagde_panel_issuer'>" . $data['issuer'] . "</div>
+                                            <div class='badge_description text-center text-muted mt-2' style='font-size: 0.9em;'>"
+                                                . ellipsize($data['description'], 100) .
+                                            "</div>
+                                        </div>";
+                }
+                elseif ($mybadge->resource_type == 'external_badges') {
+                    if (!empty($data['icon'])) {
+                        $tool_content .= "<img style='height:150px; width:150px; object-fit: contain;' 
+                                                             src='".$data['icon']."'
+                                                             class='card-img-top ms-auto me-auto mt-3'
+                                                             alt='external badge'
+                                                             onerror='this.src=\'".$urlServer."resources/img/game/badge.png\'>";
+                    } else {
+                        $tool_content .= "<img style='height:150px; width:150px;' 
+                                                             src='".$urlServer."resources/img/game/badge.png'
+                                                             class='card-img-top ms-auto me-auto mt-3' 
+                                                             alt='external badge'>";
+                    }
+                      $tool_content .= "<div class='card-body'>
+                                                <div class='text-heading-h5'>" . ellipsize($data['title'], 40) . "</div>";
+                        if (!empty($data['issued_on'])) {
+                              $tool_content .= "<div class='badge_date text-center text-success'>" . format_locale_date(strtotime($data['issued_on']), null, false). "</div>";
+                        }
+
+                        if (!empty($data['issuer'])) {
+                              $tool_content .= "<div class='bagde_panel_issuer'>" . $data['issuer'] . "</div>";
+                        } else {
+                              $tool_content .= "<div class='bagde_panel_issuer'>" . $langUnknownIssuer . "</div>";
+                        }
+
+                        if (!empty($data['description'])) {
+                            $tool_content .= "<div class='badge_description text-center text-muted mt-2' style='font-size: 0.9em;'>"
+                                    . ellipsize($data['description'], 100) .
+                                "</div>";
+                        }
+
+                        $tool_content .= "</div>"; 
+                }
+                   $tool_content .= "</div>
                                     <div class='card-footer border-0 d-flex justify-content-start align-items-center'>                                       
                                         <div class='small-text'><em>$reflection_comments</em></div>
                                     </div>
@@ -1011,57 +1159,53 @@ if ($userdata) {
                             </div>";
         }
 
-        //show mybadges collection
-        if ($myBadges) {
-            $tool_content .= '<div id="mybadges" role="tabpanel" class="'.$myBadges_div_class.'" aria-labelledby="mybadgestab" >';
+        //show blog_posts
+        if ($blog_posts) {
+            $tool_content .= '<div id="blog" role="tabpanel" class="'.$blog_div_class.'" aria-labelledby="blogtab" >';
             $tool_content .= "<div class='row row-cols-1 row-cols-md-2 g-4'>";
 
-            foreach ($myBadges as $mybadge) {
+            foreach ($blog_posts as $post) {
                 $tool_content .= "<div class='col'>";
-                $data = unserialize($mybadge->data);
-                if (!empty($mybadge->course_title)) {
-                    $mybadge->course_title = $langCourse.': '.q($mybadge->course_title);
+                $data = unserialize($post->data);
+                if (!empty($post->course_title)) {
+                    $post->course_title = $langCourse.': '.q($post->course_title);
                 } else {
-                    $mybadge->course_title = $langBadges;
+                    $post->course_title = $langUserBlog;
                 }
 
-                if ($mybadge->resource_type == "external_badges") {
-                    $ext_badge_str = "(".$langExternalBadge.") ";
-                } else {
-                    $ext_badge_str = "";
-                }
+                $reflection_comments = (!empty($post->reflection_comments) && ($post->user_id == $uid)) ? $langReflectionComment.':"'.q($post->reflection_comments).'"' : '';
 
-                if(!isset($_GET['view']) && ($mybadge->user_id == $uid)) {
+                if(!isset($_GET['view']) && ($post->user_id == $uid)) {
                     $title_vis_icon = "<span>&nbsp;
-                                            <i class=\"fa ".$visibility_vars[$mybadge->visibility]['fa_icon']." 
+                                            <i class=\"fa ".$visibility_vars[$post->visibility]['fa_icon']." 
                                                 role=\"button\" 
                                                 style=\"cursor:pointer;\" 
                                                 data-bs-toggle=\"modal\" 
-                                                data-bs-target=\"#modal_my_badges_".$mybadge->resource_id."\"
+                                                data-bs-target=\"#modal_blog_".$post->resource_id."\"
                                                 data-bs-toggle=\"tooltip\"
                                                 data-bs-placement=\"top\"
-                                                title=\"".$visibility_vars[$mybadge->visibility]['fa_icon_title']."\"\">
+                                                title=\"".$visibility_vars[$post->visibility]['fa_icon_title']."\"\">
                                             </i>
                                         </span>";
                     
-                    $vis_modal_form = '<div class="modal fade" id="modal_my_badges_'.$mybadge->resource_id.'" tabindex="-1" aria-labelledby="my_badgesModalLabel_'.$mybadge->resource_id.'" aria-hidden="true">
+                    $vis_modal_form = '<div class="modal fade" id="modal_blog_'.$post->resource_id.'" tabindex="-1" aria-labelledby="blogModalLabel_'.$post->resource_id.'" aria-hidden="true">
                     <div class="modal-dialog">
                       <div class="modal-content">
                   
                         <div class="modal-header">
-                          <h5 class="modal-title" id="my_badgesModalLabel_'.$mybadge->resource_id.'">'.$langePortfolioFieldsVisibilitySettings.' - '.q($data['title']).'</h5>
+                          <h5 class="modal-title" id="blogModalLabel_'.$post->resource_id.'">'.$langePortfolioFieldsVisibilitySettings.' - '.q($data['title']).'</h5>
                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="'.$langClose.'"></button>
                         </div>
                   
                         <div class="modal-body">
-                          <form name="vis_form_my_badges_'.$mybadge->resource_id.'" action="" method="post">
-                            <input type="hidden" name="resource_type" value="my_badges">
-                            <input type="hidden" name="resource_id" value="'.$mybadge->resource_id.'">
+                          <form name="vis_form_blog_'.$post->resource_id.'" action="" method="post">
+                            <input type="hidden" name="resource_type" value="blog">
+                            <input type="hidden" name="resource_id" value="'.$post->resource_id.'">
                             <div class="mb-3">
                                 <select class="form-select" name="visibility">
-                                <option value="'.EPF_VISIBLE_PUBLIC.'" '.$visibility_vars[$mybadge->visibility]['public_selected'].'>'.$langPublicePortfolioField.'</option>
-                                <option value="'.EPF_VISIBLE_USERS.'" '.$visibility_vars[$mybadge->visibility]['users_selected'].'>'.$langOpenToRegisteredUsers.'</option>
-                                <option value="'.EPF_VISIBLE_PRIVATE.'" '.$visibility_vars[$mybadge->visibility]['private_selected'].'>'.$langProfileInfoPrivate.'</option>
+                                <option value="'.EPF_VISIBLE_PUBLIC.'" '.$visibility_vars[$post->visibility]['public_selected'].'>'.$langPublicePortfolioField.'</option>
+                                <option value="'.EPF_VISIBLE_USERS.'" '.$visibility_vars[$post->visibility]['users_selected'].'>'.$langOpenToRegisteredUsers.'</option>
+                                <option value="'.EPF_VISIBLE_PRIVATE.'" '.$visibility_vars[$post->visibility]['private_selected'].'>'.$langProfileInfoPrivate.'</option>
                                 </select>
                             </div>
                             <button type="submit" class="btn btn-primary">'.$langSubmit.'</button>
@@ -1075,173 +1219,29 @@ if ($userdata) {
                     $title_vis_icon = "";
                     $vis_modal_form = "";
                 }
-
-                $reflection_comments = (!empty($mybadge->reflection_comments) && ($mybadge->user_id == $uid)) ? $langReflectionComment.':"'.q($mybadge->reflection_comments).'"' : '';
-
-                $tool_content .= "<div class='card panelCard card-default px-lg-4 py-lg-3 mt-3 h-100'>
-                                    <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>                                           
-                                        <h2 class='text-heading-h3'>".q($data['title']).$ext_badge_str.$title_vis_icon."</h2>"
-                                        .$vis_modal_form.
-                                        "<div>
-                                            ". action_button(array(
-                                                array(
-                                                    'title' => $langePortfolioRemoveResource,
-                                                    'url' => "$_SERVER[SCRIPT_NAME]?action=remove&amp;type=my_badges&amp;er_id=".$mybadge->id,
-                                                    'icon' => 'fa-xmark',
-                                                    'class' => 'delete',
-                                                    'confirm' => $langePortfolioSureToRemoveResource,
-                                                    'show' => ($mybadge->user_id == $uid)
-                                                )))."
-                                        </div>                                          
-                                    </div>
-                                    <div class='card-body text-center'>";
-                if ($mybadge->resource_type == 'my_badges') {
-                      $tool_content .= "<img style='height:150px; width:150px; object-fit: contain;' src='{$urlServer}" . BADGE_TEMPLATE_PATH . get_badge_filename($data['badgeId']) ."' class='card-img-top ms-auto me-auto mt-3' alt='badge'>
-                                        <div class='card-body'>
-                                            <div class='text-heading-h5'>
-                                                <a href='{$urlServer}modules/progress/index.php?course=" . course_id_to_code($mybadge->course_id) . "&amp;badge_id= " .  $data['badgeId'] . "&amp;u=" . $mybadge->user_id . "'>"
-                                                 . ellipsize($data['title'], 40) . "
-                                                 </a>
-                                            </div>
-                                            <div class='badge_date text-center text-success'>" . format_locale_date(strtotime($data['assigned']), null, false). "</div>
-                                            <div class='bagde_panel_issuer'>" . $data['issuer'] . "</div>
-                                            <div class='badge_description text-center text-muted mt-2' style='font-size: 0.9em;'>"
-                                                . ellipsize($data['description'], 100) .
-                                            "</div>
-                                        </div>";
-                }
-                elseif ($mybadge->resource_type == 'external_badges') {
-                    if (!empty($data['icon'])) {
-                        $tool_content .= "<img style='height:150px; width:150px; object-fit: contain;' 
-                                                             src='".$data['icon']."'
-                                                             class='card-img-top ms-auto me-auto mt-3'
-                                                             alt='external badge'
-                                                             onerror='this.src=\'".$urlServer."resources/img/game/badge.png\'>";
-                    } else {
-                        $tool_content .= "<img style='height:150px; width:150px;' 
-                                                             src='".$urlServer."resources/img/game/badge.png'
-                                                             class='card-img-top ms-auto me-auto mt-3' 
-                                                             alt='external badge'>";
-                    }
-                      $tool_content .= "<div class='card-body'>
-                                                <div class='text-heading-h5'>" . ellipsize($data['title'], 40) . "</div>";
-                        if (!empty($data['issued_on'])) {
-                              $tool_content .= "<div class='badge_date text-center text-success'>" . format_locale_date(strtotime($data['issued_on']), null, false). "</div>";
-                        }
-
-                        if (!empty($data['issuer'])) {
-                              $tool_content .= "<div class='bagde_panel_issuer'>" . $data['issuer'] . "</div>";
-                        } else {
-                              $tool_content .= "<div class='bagde_panel_issuer'>" . $langUnknownIssuer . "</div>";
-                        }
-
-                        if (!empty($data['description'])) {
-                            $tool_content .= "<div class='badge_description text-center text-muted mt-2' style='font-size: 0.9em;'>"
-                                    . ellipsize($data['description'], 100) .
-                                "</div>";
-                        }
-
-                        $tool_content .= "</div>"; 
-                }
-                   $tool_content .= "</div>
-                                    <div class='card-footer border-0 d-flex justify-content-start align-items-center'>                                       
-                                        <div class='small-text'><em>$reflection_comments</em></div>
-                                    </div>
-                                </div>";
-            $tool_content .= "</div>";
-            }
-            $tool_content .= "
-                            </div>
-                          </div>";
-        }
-
-        //show my certificates collection
-        if ($myCertificates) {
-            $tool_content .= '<div id="mycertificates" role="tabpanel" class="'.$myCertificates_div_class.'" aria-labelledby="mycertificatestab" >';
-            $tool_content .= "<div class='row row-cols-1 row-cols-md-2 g-4'>";
-
-            foreach ($myCertificates as $mycertificate) {
-                $tool_content .= "<div class='col'>";
-                $data = unserialize($mycertificate->data);
-                if (!empty($mycertificate->course_title)) {
-                    $mycertificate->course_title = $langCourse.': '.q($mycertificate->course_title);
-                } else {
-                    $mycertificate->course_title = $langCertificates;
-                }
-                $identifier = Database::get()->querySingle("SELECT identifier FROM certified_users WHERE cert_id = ?d AND template_id = ?d AND user_id = ?d", $mycertificate->resource_id, $data['template'], $mycertificate->user_id)->identifier;
-
-                if(!isset($_GET['view']) && ($mycertificate->user_id == $uid)) {
-                    $title_vis_icon = "<span>&nbsp;
-                                            <i class=\"fa ".$visibility_vars[$mycertificate->visibility]['fa_icon']." 
-                                                role=\"button\" 
-                                                style=\"cursor:pointer;\" 
-                                                data-bs-toggle=\"modal\" 
-                                                data-bs-target=\"#modal_my_certificates_".$mycertificate->resource_id."\"
-                                                data-bs-toggle=\"tooltip\"
-                                                data-bs-placement=\"top\"
-                                                title=\"".$visibility_vars[$mycertificate->visibility]['fa_icon_title']."\"\">
-                                            </i>
-                                        </span>";
-                    
-                    $vis_modal_form = '<div class="modal fade" id="modal_my_certificates_'.$mycertificate->resource_id.'" tabindex="-1" aria-labelledby="my_certificatesModalLabel_'.$mycertificate->resource_id.'" aria-hidden="true">
-                    <div class="modal-dialog">
-                      <div class="modal-content">
-                  
-                        <div class="modal-header">
-                          <h5 class="modal-title" id="my_certificatesModalLabel_'.$mycertificate->resource_id.'">'.$langePortfolioFieldsVisibilitySettings.' - '.q($data['title']).'</h5>
-                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="'.$langClose.'"></button>
-                        </div>
-                  
-                        <div class="modal-body">
-                          <form name="vis_form_my_certificates_'.$mycertificate->resource_id.'" action="" method="post">
-                            <input type="hidden" name="resource_type" value="my_certificates">
-                            <input type="hidden" name="resource_id" value="'.$mycertificate->resource_id.'">
-                            <div class="mb-3">
-                                <select class="form-select" name="visibility">
-                                <option value="'.EPF_VISIBLE_PUBLIC.'" '.$visibility_vars[$mycertificate->visibility]['public_selected'].'>'.$langPublicePortfolioField.'</option>
-                                <option value="'.EPF_VISIBLE_USERS.'" '.$visibility_vars[$mycertificate->visibility]['users_selected'].'>'.$langOpenToRegisteredUsers.'</option>
-                                <option value="'.EPF_VISIBLE_PRIVATE.'" '.$visibility_vars[$mycertificate->visibility]['private_selected'].'>'.$langProfileInfoPrivate.'</option>
-                                </select>
-                            </div>
-                            <button type="submit" class="btn btn-primary">'.$langSubmit.'</button>
-                          </form>
-                        </div>
-                  
-                      </div>
-                    </div>
-                  </div>';
-                } else {
-                    $title_vis_icon = "";
-                    $vis_modal_form = "";
-                }
-
-                $reflection_comments = (!empty($mycertificate->reflection_comments) && ($mycertificate->user_id == $uid)) ? $langReflectionComment.':"'.q($mycertificate->reflection_comments).'"' : '';
 
                 $tool_content .= "<div class='card panelCard card-default px-lg-4 py-lg-3 mt-3 h-100'>
                                     <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>                                           
                                         <h2 class='text-heading-h3'>".q($data['title']).$title_vis_icon."</h2>"
-                                        .$vis_modal_form.
+                                        .$vis_modal_form.                                    
                                         "<div>
                                             ". action_button(array(
                                                 array(
                                                     'title' => $langePortfolioRemoveResource,
-                                                    'url' => "$_SERVER[SCRIPT_NAME]?action=remove&amp;type=my_certificates&amp;er_id=".$mycertificate->id,
+                                                    'url' => "$_SERVER[SCRIPT_NAME]?action=remove&amp;type=blog&amp;er_id=".$post->id,
                                                     'icon' => 'fa-xmark',
                                                     'class' => 'delete',
                                                     'confirm' => $langePortfolioSureToRemoveResource,
-                                                    'show' => ($mycertificate->user_id == $uid)
+                                                    'show' => ($post->user_id == $uid)
                                                 )))."
                                         </div>                                          
                                     </div>
                                     <div class='card-body'>
-                                        <img style='height:150px; width:150px;' src='{$urlServer}resources/img/game/badge.png' target='_blank' class='card-img-top m-auto d-block mt-3' alt='certificate'>
-                                        <div class='card-body text-center'>
-                                            <a class='link-color' href='{$urlServer}main/out.php?i={$identifier}'>
-                                                " . ellipsize($data['title'], 40) . "
-                                                " . format_locale_date(strtotime($data['date_created'] ?? ''), null, false) . "
-                                                " . $data['issuer'] . "
-                                            </a>
-                                        </div>
+                                        <p class='TextBold'>$langSubmit:<span class='ms-1 small-text TextRegular'>" . format_locale_date(strtotime($data['timestamp'])) . "</span></p>
+                                        ".ellipsize_html(standard_text_escape($data['content']), 500, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?token=".$userdata->eportfolio_token."&amp;action=showBlogPost&amp;er_id=".$post->id."'> <span class='smaller'>[$langMore]</span></a></strong>")."
+                                    </div>
+                                    <div class='card-footer border-0 d-flex justify-content-start align-items-center'>                                       
+                                        <div class='small-text'>$post->course_title</div>
                                     </div>
                                     <div class='card-footer border-0 d-flex justify-content-start align-items-center'>                                       
                                         <div class='small-text'><em>$reflection_comments</em></div>
