@@ -426,7 +426,7 @@ function gradebook_settings($gradebook_id) {
                                         ),
                                         array(
                                             'class' => 'cancelAdminBtn ms-1',
-                                            'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook->id) . ""
+                                            'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code&"
                                         )
                                     ))."
 
@@ -791,7 +791,7 @@ function display_gradebook($gradebook) {
 
     global $course_code, $urlServer, $tool_content, $langGradebookGradeAlert, $langGradebookNoActMessage1,
            $langTitle, $langViewShow, $langScore, $langHere, $action_bar,
-           $langGradebookActivityDate2, $langGradebookWeight, $langGradebookNoTitle, $langType,
+           $langGradebookWeight, $langGradebookNoTitle, $langType,
            $langGradebookAutoGrade, $langGradebookNoAutoGrade, $langAttendanceActivity, $langDelete, $langConfirmDelete,
            $langEditChange, $langYes, $langNo, $langPreview, $langAssignment, $langGradebookActivityAct, $langGradebookGradeAlert3,
            $langGradebookExams, $langGradebookLabs, $langGradebookOral, $langGradebookProgress, $langGradebookOtherType,
@@ -874,8 +874,7 @@ function display_gradebook($gradebook) {
                                 <table class='table-default'>
                                 <thead>
                                     <tr class='list-header'>
-                                        <th style='width:30%;'>$langTitle</th>
-                                        <th>$langGradebookActivityDate2</th>
+                                        <th style='width:30%;'>$langTitle</th>                                        
                                         <th style='width:30%;'>$langType</th><th>$langGradebookWeight</th>
                                         <th>$langViewShow</th>
                                         <th>$langScore</th>";
@@ -886,7 +885,6 @@ function display_gradebook($gradebook) {
 
         foreach ($result as $details) {
             $activity_id = getIndirectReference($details->id);
-            $content = ellipsize_html($details->description, 50);
             $tool_content .= "<tr><td>";
             if ($is_editor) {
                 $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;ins=$activity_id'>" . (!empty($details->title) ? q($details->title) : $langGradebookNoTitle) . "</a>";
@@ -903,10 +901,6 @@ function display_gradebook($gradebook) {
                  default : $tool_content .= "";
              }
             $tool_content .= "</small></div>";
-            $tool_content .= "</td><td>";
-            if (!empty($details->date)) {
-                $tool_content .= "<div class='smaller'>" . format_locale_date(strtotime($details->date), 'short', false) . "</div>";
-            }
             $tool_content .= "</td>";
 
             if ($details->module_auto_id) {
@@ -920,17 +914,18 @@ function display_gradebook($gradebook) {
                     $tool_content .= "<td class='smaller'>$langGradebookActivityAct";
                 }
 
+                $tool_content .= " <div class='help-block'>";
                 if ($details->auto) {
-                    $tool_content .= " <small class='help-block'> ($langGradebookAutoGrade)</small>";
+                    $tool_content .= " ($langGradebookAutoGrade)";
                 } else {
-                    $tool_content .= " <small class='help-block'> ($langGradebookNoAutoGrade)</small>";
-                    }
-                $tool_content .= "</td>";
+                    $tool_content .= " ($langGradebookNoAutoGrade)";
+                }
+                $tool_content .= "</div></td>";
             } else {
                 $tool_content .= "<td class='smaller'>$langAttendanceActivity</td>";
             }
 
-            if (fmod($details->weight, 1) !== 0.00) { // if number doesn't contain `.00`
+            if (fmod($details->weight, 1) !== 0.00) { // if the number doesn't contain `.00`
                 $tool_content .= "<td>" . $details->weight . "%</td>";
             } else {
                 $tool_content .= "<td>" . round($details->weight) . "%</td>";
