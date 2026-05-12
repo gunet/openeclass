@@ -403,6 +403,19 @@ class Hierarchy {
         return $tenantNodes;
     }
 
+    public function getTenantChildren($tenant_id = null)
+    {
+        $tenant = $tenant_id ? getTenantById($tenant_id) : getCurrentTenant();
+
+        if (!$tenant) {
+            return [];
+        }
+
+        $tenantChildren = Database::get()->queryArray('SELECT id, name, lft, rgt FROM hierarchy WHERE lft > ?d AND rgt < ?d', $tenant->lft, $tenant->rgt);
+
+        return $tenantChildren;
+    }
+
     /**
      * Locate immediate subordinates of parent node with given lft and their subtrees.
      *

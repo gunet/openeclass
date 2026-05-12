@@ -92,7 +92,18 @@ if (!isset($_GET['action'])) {
                     ORDER BY node.lft) AS hierarchydepth";
     $data['maxdepth'] = Database::get()->querySingle($query)->maxdepth;
 
-    $options = array('codesuffix' => true, 'defaults' => $user->getDepartmentIds($uid), 'allow_only_defaults' => (!$is_admin));
+    $tenant = getUserTenant($uid);
+    if ($tenant) {
+        $tenant_id = $tenant->id;
+        $tenant_dep_id = [];
+        foreach ($tree->getTenantChildren($tenant_id) as $value) {
+            $tenant_dep_id[] = $value->id;
+        }
+        $options = array('codesuffix' => true, 'allowables' => $tenant_dep_id);
+    } else {
+        $options = array('codesuffix' => true, 'defaults' => $user->getDepartmentIds($uid), 'allow_only_defaults' => (!$is_admin));
+    }
+
     $joptions = json_encode($options);
 
     $head_content .= <<<hContent
@@ -152,7 +163,7 @@ function customMenu(node) {
         }
     };
 
-    if (node.a_attr.class == 'nosel') {
+    if (node.a_attr.class.includes('nosel')) {
         delete items.editItem;
         delete items.deleteItem;
     }
@@ -167,7 +178,7 @@ hContent;
     $view = 'admin.courses.hierarchy.index';
 }
 // Add a new node
-elseif (isset($_GET['action']) && $_GET['action'] == 'add') {
+elseif ($_GET['action'] == 'add') {
     if (isset($_POST['add'])) {
 
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) { csrf_token_error(); }
@@ -292,7 +303,7 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add') {
     }
 }
 // Delete node
-elseif (isset($_GET['action']) and $_GET['action'] == 'delete') {
+elseif ($_GET['action'] == 'delete') {
     $id = intval($_GET['id']);
     validateNode($id, isDepartmentAdmin());
 
@@ -325,7 +336,7 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'delete') {
     }
 }
 // Edit a node
-elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
+elseif ($_GET['action'] == 'edit') {
     $id = intval($_REQUEST['id']);
     validateNode($id, isDepartmentAdmin());
 

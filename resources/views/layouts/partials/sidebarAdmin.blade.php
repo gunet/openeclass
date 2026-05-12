@@ -50,11 +50,12 @@
         </a>
     @endif
 
-    @if ($is_admin)
+    @if ($is_admin || $tenant)
         <a href="hierarchy.php" class='quickLink'>
             <i class="fa-solid fa-sitemap settings-icon"></i>{{ trans('langHierarchy') }}
         </a>
-
+    @endif
+    @if ($is_admin)
         <a href="eclassconf.php" class='quickLink'>
             <i class="fa-solid fa-gear settings-icon"></i>{{ trans('langConfig') }}
         </a>
