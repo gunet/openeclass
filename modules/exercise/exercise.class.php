@@ -1839,6 +1839,7 @@ class Exercise
         global $urlServer, $webDir, $course_code;
 
         $start_url = $urlServer . "modules/exercise/exercise_submit.php?course=" . $course_code . "&exerciseId=" . $this->id;
+        $quit_url = $urlServer . "modules/exercise/index.php?course=" . $course_code;
 
         $dom = new DOMImplementation();
         $dtd = $dom->createDocumentType(
@@ -1865,6 +1866,8 @@ class Exercise
             'showInputLanguage'            => true,
             'allowQuit'                    => true,
             'quitURLConfirm'               => true,
+            'quitURL'                      => $quit_url,
+            'exitKeyCombinations'          => false, // don't use keyboard shortcut
             'audioControlEnabled'          => true,
             'audioMute'                    => false,
             'allowSpellCheck'              => false,

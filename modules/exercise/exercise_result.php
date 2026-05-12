@@ -377,6 +377,15 @@ if (!isset($_GET['pdf'])) {
     $tool_content .= $action_bar;
 }
 
+// Safe Exam Browser quit URL
+if (isSebEnabled($objExercise->selectId()) && $objExercise->isSeb()) { // exercise is SEB enabled?
+    if (str_contains($_SERVER['HTTP_USER_AGENT'], 'Open-eClass-Exam')) { // are we in SEB?
+        $tool_content .= "<div class='col-12 d-flex justify-content-center align-items-center gap-4 mt-4'>                            
+                            <a class='btn submitAdminBtnDefault' href='{$urlServer}modules/exercise/index.php?course=$course_code'>$langSafeExamBrowserQuitMessage</a>                      
+                    </div>";
+    }
+}
+
 $tool_content .= "<div class='col-12 mt-4'><div class='card panelCard card-default px-lg-4 py-lg-3'>
                       <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                             <h2 class='text-heading-h3'>" . q_math($exerciseTitle) . "</h2>
@@ -401,27 +410,28 @@ $tool_content .= "
     </div>
   </div>";
 
+
 $tool_content .= "<div class='col-sm-12'>";
 
-    $tool_content .= "<div class='card panelCard card-default px-lg-4 py-lg-3'>"; //panelCard
+$tool_content .= "<div class='card panelCard card-default px-lg-4 py-lg-3'>"; //panelCard
 
-    $tool_content .= "<div class='card-header border-0 d-flex justify-content-between align-items-center'>"; //card-header
+$tool_content .= "<div class='card-header border-0 d-flex justify-content-between align-items-center'>"; //card-header
 
-    if ($user) { // user details
-        $tool_content .= "<h2 class='text-heading-h3'>" . q($user->surname) . " " . q($user->givenname);
-        if ($user->am) {
-            $tool_content .= " ($langAmShort: " . q($user->am) . ")";
-        }
-        $tool_content .= "</h2>";
+if ($user) { // user details
+    $tool_content .= "<h2 class='text-heading-h3'>" . q($user->surname) . " " . q($user->givenname);
+    if ($user->am) {
+        $tool_content .= " ($langAmShort: " . q($user->am) . ")";
     }
-    $tool_content .= "</div>"; //card-header end
+    $tool_content .= "</h2>";
+}
 
-    $tool_content .= "<div class='card-body row'>"; // card-body
-    $tool_content .= "<div class='col-md-6'>";
+$tool_content .= "</div>"; //card-header end
 
-    $message_range = $grade_icon = '';
-//    $canonicalized_message_range = "<strong>$exercise_user_record->total_score / $exercise_user_record->total_weighting</strong>";
-    $canonicalized_message_range = "
+$tool_content .= "<div class='card-body row'>"; // card-body
+$tool_content .= "<div class='col-md-6'>";
+
+$message_range = $grade_icon = '';
+$canonicalized_message_range = "
         <div class='gauge-container'>
           <div class='gauge-wrap' aria-label='Score gauge'>
             <div class='gauge-clip'>
@@ -439,7 +449,7 @@ $tool_content .= "<div class='col-sm-12'>";
         </div>
     ";
 
-    $canonicalized_message_range .= "
+$canonicalized_message_range .= "
 
     <script>
       const minGaugeValueEl = document.getElementById('minGaugeValue');
@@ -498,7 +508,7 @@ $tool_content .= "<div class='col-sm-12'>";
         $tool_content .= "<p><h5>$langTotalScore</h5> $canonicalized_message_range&nbsp;&nbsp;$message_range $grade_icon</p>";
     }
 
-    $tool_content .= "</div>"; // leftt end
+    $tool_content .= "</div>"; // left end
     $tool_content .= "<div class='col-md-6'>"; // right
     $tool_content .= "
             <p><h5>$langStart</h5><em>" . format_locale_date(strtotime($exercise_user_record->record_start_date), 'short') . "</em><br><br>
@@ -506,8 +516,8 @@ $tool_content .= "<div class='col-sm-12'>";
         ($user && $exerciseAttemptsAllowed ? "<p>$langAttempt: <em>{$exercise_user_record->attempt}</em></p>" : '');
 
 $tool_content .= "</div>"; // right end
-    $tool_content .= "</div>"; // card-body end
-    $tool_content .= "</div>"; // card end
+$tool_content .= "</div>"; // card-body end
+$tool_content .= "</div>"; // card end
 $tool_content .= "</div>";
 
 if ($is_editor and in_array($exercise_user_record->attempt_status, [ATTEMPT_COMPLETED, ATTEMPT_PENDING]) and isset($_POST['regrade'])) {
