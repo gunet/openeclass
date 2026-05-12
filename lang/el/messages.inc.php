@@ -2059,6 +2059,7 @@ $langInfoGrades = "βαθμοί";
 $langInfoGrade = "βαθμός";
 $langChooseRandomQuestions = "Επιλογή τυχαίων ερωτήσεων από τις ερωτήσεις της άσκησης";
 $langFromRandomQuestions = "τυχαίες ερωτήσεις από το σύνολο των ερωτήσεων της άσκησης";
+$langNoRandomization ="Καμία τυχαιοποίηση";
 $langFromRandomDifficultyQuestions = "ερωτήσεις με βαθμό δυσκολίας";
 $langFromRandomCategoryQuestions = "ερωτήσεις από την κατηγορία";
 $langRandomQuestionsWithCriteria = "Δυναμική επιλογή ερωτήσεων";
