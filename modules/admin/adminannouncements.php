@@ -20,8 +20,7 @@
 
 $require_departmentmanage_user = true;
 $require_help = true;
-$helpTopic = 'system_settings';
-$helpSubTopic = 'admin_announcements';
+$helpTopic = 'admin_announcements';
 
 require_once '../../include/baseTheme.php';
 require_once 'include/log.class.php';

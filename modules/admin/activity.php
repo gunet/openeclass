@@ -21,7 +21,8 @@ $require_admin = true;
 $require_help = true;
 require_once '../../include/baseTheme.php';
 
-$helpTopic = 'users_administration';
+$helpTopic = 'course_administration';
+$helpSubTopic = 'courses_activities';
 
 $toolName = $langAdmin;
 $pageName = $langActivityCourse;

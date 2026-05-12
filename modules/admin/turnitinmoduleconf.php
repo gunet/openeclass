@@ -25,7 +25,7 @@ const LTI_TYPE = 'turnitin';
 $require_admin = true;
 $require_help = true;
 $helpTopic = 'external_tools';
-$helpSubTopic = 'turntit_in';
+$helpSubTopic = 'turntitin';
 require_once '../../include/baseTheme.php';
 require_once 'modules/lti_consumer/lti-functions.php';
 require_once 'modules/lti/classes/JwksHelper.php';

@@ -42,13 +42,15 @@ if (isset($_GET['edit'])) {
         case 'ftp':
                 $helpSubTopic = 'ftp';
             break;
+        case 'userway':
+                $helpSubTopic = 'userway';
+            break;
         default:
                 $helpSubTopic = 'external_tools';
             break;
     }
 } else {
-    $helpTopic = 'system_settings';
-    $helpSubTopic = 'external_tools';
+    $helpTopic = 'external_tools';
 }
 
 require_once '../../include/baseTheme.php';

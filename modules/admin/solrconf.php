@@ -18,9 +18,6 @@
  */
 
 $require_admin = true;
-$require_help = true;
-$helpTopic = 'external_tools';
-$helpSubTopic = 'solr';
 
 require_once '../../include/baseTheme.php';
 require_once 'modules/admin/extconfig/externals.php';

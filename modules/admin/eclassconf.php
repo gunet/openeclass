@@ -20,8 +20,7 @@
 
 $require_admin = true;
 $require_help = true;
-$helpTopic = 'system_settings';
-$helpSubTopic = 'general_settings';
+$helpTopic = 'general_settings';
 
 require_once '../../include/baseTheme.php';
 require_once 'modules/auth/auth.inc.php';

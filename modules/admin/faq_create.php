@@ -20,8 +20,7 @@
 
 $require_admin = TRUE;
 $require_help = true;
-$helpTopic = 'system_settings';
-$helpSubTopic = 'faq_creation';
+$helpTopic = 'faq_creation';
 
 require_once '../../include/baseTheme.php';
 

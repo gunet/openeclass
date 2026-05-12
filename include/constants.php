@@ -22,6 +22,9 @@
 @brief Enter only platform constants here.
 */
 
+/* version */
+define('ECLASS_VERSION', '4.4-dev');
+
 /* course status */
 define('COURSE_CLOSED', 0);
 define('COURSE_REGISTRATION', 1);
