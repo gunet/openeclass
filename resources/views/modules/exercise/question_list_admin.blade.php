@@ -419,13 +419,12 @@
                     }
                 }).find('div.modal-dialog').addClass('modal-lg');
             });
-            $('.menu-popover').on('shown.bs.popover', function () {
-                $('.warnLink').on('click', function(e){
-                    var modifyAllLink = $(this).attr('href');
-                    var modifyOneLink = modifyAllLink.concat('&clone=true');
-                    $('a#modifyAll').attr('href', modifyAllLink);
-                    $('a#modifyOne').attr('href', modifyOneLink);
-                });
+
+            $('.warnLink').on('click', function(e){
+                var modifyAllLink = $(this).attr('href');
+                var modifyOneLink = modifyAllLink.concat('&clone=true');
+                $('a#modifyAll').attr('href', modifyAllLink);
+                $('a#modifyOne').attr('href', modifyOneLink);
             });
 
             $(document).on('click', '.previewQuestion', function(e) {
