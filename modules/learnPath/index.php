@@ -399,19 +399,6 @@ if ($is_editor) {
     $tool_content .= $action_bar;
 }
 
-// check if there are learning paths available
-$l = Database::get()->querySingle("SELECT COUNT(*) AS count FROM `lp_learnPath` WHERE `course_id` = ?d", $course_id)->count;
-if ($l == 0) {
-    $tool_content .= "
-                      <div class='col-12'>
-                        <div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoLearningPath</span></div>
-                      </div>";
-    draw($tool_content, 2, null, $head_content);
-    exit();
-}
-//echo "<pre>";
-//var_dump($_SERVER);
-//echo "</pre>";
 $head_content .= "<link href='" . $urlAppend . "js/bundle/uppy.min.css' rel='stylesheet' />";
 $tool_content .= "
     <script>
@@ -518,6 +505,18 @@ $tool_content .= "
 ";
 
 $tool_content .= "<div class='col-12 drag_and_drop_container d-none mb-3'><div id='uppy'></div></div>";
+
+// check if there are learning paths available
+$l = Database::get()->querySingle("SELECT COUNT(*) AS count FROM `lp_learnPath` WHERE `course_id` = ?d", $course_id)->count;
+if ($l == 0) {
+    $tool_content .= "
+                      <div class='col-12'>
+                        <div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoLearningPath</span></div>
+                      </div>";
+    draw($tool_content, 2, null, $head_content);
+    exit();
+}
+
 
 $tool_content .= "
 <div class='table-responsive'>
