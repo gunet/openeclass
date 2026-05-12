@@ -46,7 +46,7 @@
                     {!! $buildRoots !!}
                 @endif
                 <div class='col-12'>
-                    <h2 tabindex='0' class='text-heading-h3 mb-2' aria-label="{{ trans('NavCatCourses') }}">{!! $tree->getFullPath($fc, false, $_SERVER['SCRIPT_NAME'] . '?fc=') !!}</h2>
+                    <h2 tabindex='0' class='text-heading-h3 mb-2' aria-label="{{ trans('NavCatCourses') }}">{!! $tree->getFullPath($fc, false, $_SERVER['SCRIPT_NAME'] . '?fc=', true) !!}</h2>
                     <ul class='list-group list-group-flush'>
                         {!! $childHTML !!}
                     </ul>

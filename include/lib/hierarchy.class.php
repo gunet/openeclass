@@ -964,7 +964,7 @@ jContent;
      * @param  string  $href      - If provided (and not left empty or null), then the breadcrump is clickable towards the provided href with the node's id appended to it
      * @return string  $ret       - The return HTML output
      */
-    public function getFullPath($id, $skipfirst = true, $href = '') {
+    public function getFullPath($id, $skipfirst = true, $href = '', $accessibility_on = false) {
         $ret = "";
 
         if ($id === null || intval($id) <= 0) {
@@ -992,7 +992,7 @@ jContent;
         }
 
         $ret .= ($c == 0) ? '' : '» ';
-        if ($c > 0) {
+        if ($c > 0 && $accessibility_on) {
             $ret .= "<span aria-current='" . self::unserializeLangField($node->name) ."'>".self::unserializeLangField($node->name) . ' '."</span>";
         } else {
             $ret .= self::unserializeLangField($node->name) . ' ';
