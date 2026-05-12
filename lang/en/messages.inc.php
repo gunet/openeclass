@@ -2452,6 +2452,7 @@ $langDropBoxIncompatible = "Attention! 'Dropbox' probably hasn't been restored p
 $langInfoGrades = "grades";
 $langInfoGrade = "grade";
 $langFromRandomQuestions = "random questions from";
+$langNoRandomization ="No randomization";
 $lang_email_verification_required = "Email verification of $langOfUser is required";
 $langCategoryDeletedGlossary = "Category has been deleted. The terms belonging to it are now unclassified.";
 $langEmailVerified = "email has been verified";
