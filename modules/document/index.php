@@ -1609,6 +1609,11 @@ foreach ($result as $row) {
                       'url' => "{$urlAppend}main/eportfolio/resources.php?action=add&amp;type=mydocs&amp;rid=".$row->id,
                       'icon' => 'fa-star',
                       'show' => !$is_dir && $subsystem == MYDOCS && $subsystem_id == $uid && get_config('eportfolio_enable')),
+                array('title' => $langAddResePortfolioExternalAchievements,
+                      'url' => "{$urlAppend}main/eportfolio/resources.php?action=add&amp;type=external_achievements&amp;rid=".$row->id,
+                      'icon' => 'fa-star',
+                      'show' => !$is_dir && $subsystem == MYDOCS && $subsystem_id == $uid && get_config('eportfolio_enable')),
+                
                 array('title' => $langDelete,
                       'url' => "{$base_url}filePath=$cmdDirName&amp;delete=1&amp;" . generate_csrf_token_link_parameter() ,
                       'class' => 'delete',

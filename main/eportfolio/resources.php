@@ -342,6 +342,43 @@ if ($userdata) {
                             Session::flash('alert-class', 'alert-danger');
                         }
                         redirect_to_home_page("main/eportfolio/resources.php");
+                    } elseif ($rtype == 'external_achievements') {
+                        if (($session->status == USER_TEACHER && get_config('mydocs_teacher_enable')) || ($session->status == USER_STUDENT && get_config('mydocs_student_enable'))) {
+                            $document = Database::get()->querySingle("SELECT * FROM document WHERE id = ?d AND subsystem = ?d AND subsystem_id = ?d AND format <> ?s", $rid, MYDOCS, $uid, '.dir');
+
+                            if ($document) {
+                                $data = array('title' => $document->title, 'filename' => $document->filename, 'comment' => $document->comment,
+                                            'subject' => $document->subject, 'description' => $document->description, 'date' => $document->date,
+                                            'date_modified' => $document->date_modified, 'format' => $document->format);
+
+                                //create dir for user
+                                if (!file_exists($webDir."/courses/eportfolio/mydocs/".$uid)) {
+                                    @mkdir($webDir."/courses/eportfolio/mydocs/".$uid, 0777);
+                                }
+
+                                if ($document->extra_path) {
+                                    $data['extra_path'] = $document->extra_path;
+                                } else {
+                                    $file_source = $urlServer.'courses/mydocs/'.$uid.$document->path;
+                                    $path_extension = pathinfo($file_source, PATHINFO_EXTENSION);
+                                    $file_dest = 'courses/eportfolio/mydocs/'.$uid.'/'.uniqid().'.'.$path_extension;
+                                    copy($file_source,$file_dest);
+                                    $data['file_path'] = $file_dest;
+                                }
+
+                                $visibility = (isset($_POST['visibility'])) ? intval($_POST['visibility']) : EPF_VISIBLE_PUBLIC;
+                                $reflection_comments = (!empty($_POST['reflection_comments'])) ? $_POST['reflection_comments'] : '';
+                                Database::get()->query("INSERT INTO eportfolio_resource (user_id,resource_id,resource_type,course_id,course_title,data,visibility,reflection_comments)
+                                        VALUES (?d,?d,?s,?d,?s,?s,?d,?s)", $uid, $rid, 'external_achievements', 0 ,'', serialize($data), $visibility,$reflection_comments);
+
+                                Session::flash('message', $langePortfolioResourceAdded);
+                                Session::flash('alert-class', 'alert-success');
+                            }
+                        } else {
+                            Session::flash('message', $langGeneralError);
+                            Session::flash('alert-class', 'alert-danger');
+                        }
+                        redirect_to_home_page("main/eportfolio/resources.php");
                     } elseif ($rtype == 'my_badges') {
                         $userBadge = Database::get()->querySingle("SELECT id,completed_criteria,total_criteria,assigned FROM user_badge WHERE user = ?d AND badge = ?d", $uid, $rid);
                         if ($userBadge && $userBadge->completed_criteria == $userBadge->total_criteria) {
@@ -526,6 +563,16 @@ if ($userdata) {
                     $extension = pathinfo($file, PATHINFO_EXTENSION);
                     send_file_to_client($file, 'file.'.$extension, null, true);
                 }
+            } elseif ($_GET['type'] == 'external_achievements') {
+                $info = Database::get()->querySingle("SELECT data FROM eportfolio_resource WHERE user_id = ?d
+                                    AND resource_type = ?d AND id = ?d AND ".$visibility_query, $id, 'external_achievements', intval($_GET['er_id']));
+
+                if ($info) {
+                    $data_array = unserialize($info->data);
+                    $file = str_replace('\\', '/', $webDir)."/".$data_array['file_path'];
+                    $extension = pathinfo($file, PATHINFO_EXTENSION);
+                    send_file_to_client($file, 'file.'.$extension, null, true);
+                }
             }
         }
     }
@@ -583,9 +630,10 @@ if ($userdata) {
     $myBadges = Database::get()->queryArray("SELECT * FROM eportfolio_resource WHERE user_id = ?d AND (resource_type = ?s OR resource_type = ?s) AND $visibility_query ORDER BY time_added DESC", $id, 'my_badges', 'external_badges');
     $myCertificates = Database::get()->queryArray("SELECT * FROM eportfolio_resource WHERE user_id = ?d AND resource_type = ?s AND $visibility_query ORDER BY time_added DESC", $id, 'my_certificates');
     $notes = Database::get()->queryArray("SELECT * FROM eportfolio_resource WHERE user_id = ?d AND resource_type = ?s AND $visibility_query ORDER BY time_added DESC", $id, 'note');
+    $external_achievements = Database::get()->queryArray("SELECT * FROM eportfolio_resource WHERE user_id = ?d AND resource_type = ?s AND $visibility_query ORDER BY time_added DESC", $id, 'external_achievements');
 
     //hide tabs when there are no resources
-    if (!$blog_posts && !$submissions && !$docs && !$myBadges && !$myCertificates && !$notes) {
+    if (!$blog_posts && !$submissions && !$external_achievements && !$docs && !$myBadges && !$myCertificates && !$notes) {
         $tool_content .= "<div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langePortfolioNoResInCollection</span></div></div>";
     } else {
 
@@ -613,6 +661,18 @@ if ($userdata) {
             $active_class = '';
         } else {
             $myBadges_li = '';
+        }
+
+        if ($external_achievements) {
+            $external_achievements_li = '<li class="nav-item" role="presentation"><button id="externalachievementstab" class="nav-link" data-bs-toggle="tab" data-bs-target="#externalachievements">'.$langExternalAchievements.'</button></li>';
+            if ($active_class != '') {
+                $external_achievements_div_class = 'tab-pane fade show active';
+            } else {
+                $external_achievements_div_class = 'tab-pane fade';
+            }
+            $active_class = '';
+        } else {
+            $external_achievements_li = '';
         }
 
         if ($submissions) {
@@ -666,6 +726,7 @@ if ($userdata) {
         $tool_content .= '<div class="col-12"><ul class="nav nav-tabs" role="tablist">
                             '.$myCertificates_li.'
                             '.$myBadges_li.'
+                            '.$external_achievements_li.'
                             '.$work_li.'
                             '.$mydocs_li.'
                             '.$blog_li.'
@@ -914,6 +975,114 @@ if ($userdata) {
             $tool_content .= "
                             </div>
                           </div>";
+        }
+
+        //show external achievements collection
+        if ($external_achievements) {
+            $reflection_comment_th = ($id == $uid) ? "<th>$langReflectionComment</th>" : "";
+
+            $tool_content .= '<div id="externalachievements" role="tabpanel" class="'.$external_achievements_div_class.'" aria-labelledby="blogtab" style="padding-top:20px">';
+            $tool_content .= "<div class='table-responsive'>
+                                <table class='table-default'>
+                                  <tbody>
+                                    <tr class='list-header'>
+                                      <th>$langType</th>
+                                      <th>$langName</th>
+                                      $reflection_comment_th
+                                      <th>$langDate</th>
+                                      <th>$langSize</th>";
+            if ($id == $uid) {
+                $tool_content .= "<th class='text-end' aria-label='$langSettingSelect'>".icon('fa-gears', $langActions)."</th>";
+            }
+
+            $tool_content .= "</tr>";
+            foreach ($external_achievements as $ext_achieve) {
+                $data = unserialize($ext_achieve->data);
+                if (empty($data['title'])) {
+                    $filename = q($data['filename']);
+                } else {
+                    $filename = q($data['title']);
+                }
+                if (isset($data['extra_path'])) {
+                    $row_class = 'not_visible';
+                    $file_link = '<a href="'.$data['extra_path'].'">'.$filename.'</a> '.icon('fa-external-link', $langExternalFile);
+                    $filesize = '0 B';
+                } else {
+                    $row_class = 'visible';
+                    $file_link = "<a href='resources.php?action=get&amp;token=".$userdata->eportfolio_token."&amp;type=external_achievements&amp;er_id=$ext_achieve->id'>$filename</a>";
+                    $filesize = format_file_size(filesize($data['file_path']));
+                }
+
+                if(!isset($_GET['view']) && ($ext_achieve->user_id == $uid)) {
+                    $title_vis_icon = "<span>&nbsp;
+                                            <i class=\"fa ".$visibility_vars[$ext_achieve->visibility]['fa_icon']." 
+                                                role=\"button\" 
+                                                style=\"cursor:pointer;\" 
+                                                data-bs-toggle=\"modal\" 
+                                                data-bs-target=\"#modal_myexternalachievements_".$ext_achieve->resource_id."\"
+                                                data-bs-toggle=\"tooltip\"
+                                                data-bs-placement=\"top\"
+                                                title=\"".$visibility_vars[$ext_achieve->visibility]['fa_icon_title']."\"\">
+                                            </i>
+                                        </span>";
+                    
+                    $vis_modal_form = '<div class="modal fade" id="modal_myexternalachievements_'.$ext_achieve->resource_id.'" tabindex="-1" aria-labelledby="myexternalachievementsModalLabel_'.$ext_achieve->resource_id.'" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                  
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="myexternalachievementsModalLabel_'.$ext_achieve->resource_id.'">'.$langePortfolioFieldsVisibilitySettings.' - '.$filename.'</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="'.$langClose.'"></button>
+                        </div>
+                  
+                        <div class="modal-body">
+                          <form name="vis_form_myexternalachievements_'.$ext_achieve->resource_id.'" action="" method="post">
+                            <input type="hidden" name="resource_type" value="external_achievements">
+                            <input type="hidden" name="resource_id" value="'.$ext_achieve->resource_id.'">
+                            <div class="mb-3">
+                                <select class="form-select" name="visibility">
+                                <option value="'.EPF_VISIBLE_PUBLIC.'" '.$visibility_vars[$ext_achieve->visibility]['public_selected'].'>'.$langPublicePortfolioField.'</option>
+                                <option value="'.EPF_VISIBLE_USERS.'" '.$visibility_vars[$ext_achieve->visibility]['users_selected'].'>'.$langOpenToRegisteredUsers.'</option>
+                                <option value="'.EPF_VISIBLE_PRIVATE.'" '.$visibility_vars[$ext_achieve->visibility]['private_selected'].'>'.$langProfileInfoPrivate.'</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">'.$langSubmit.'</button>
+                          </form>
+                        </div>
+                  
+                      </div>
+                    </div>
+                  </div>';
+                } else {
+                    $title_vis_icon = "";
+                    $vis_modal_form = "";
+                }
+
+                $reflection_comment_td = ($id == $uid) ? "<td style='width:30%'><em>".q($ext_achieve->reflection_comments)."</em></td>" : "";
+
+                $tool_content .= "<tr class='$row_class'>
+                                    <td><span class='fa ".choose_image('.' . $data['format'])."'></span></td>
+                                    <td>".$file_link.$title_vis_icon.$vis_modal_form."</td>
+                                    $reflection_comment_td
+                                    <td>".format_locale_date(strtotime($data['date_modified']), 'short', false)."</td>
+                                    <td>$filesize</td>
+                                    <td class='text-end'>
+                                       ". action_button(array(
+                                                    array(
+                                                            'title' => $langePortfolioRemoveResource,
+                                                            'url' => "$_SERVER[SCRIPT_NAME]?action=remove&amp;type=external_achievements&amp;er_id=".$ext_achieve->id,
+                                                            'icon' => 'fa-xmark',
+                                                            'class' => 'delete',
+                                                            'confirm' => $langePortfolioSureToRemoveResource,
+                                                            'show' => ($ext_achieve->user_id == $uid)
+                                                    )))."
+                                    </td>
+                                  </tr>";
+            }
+            $tool_content .= "    </tbody>
+                                </table>
+                              </div>
+                            </div>";
         }
 
         //show assignment submissions
