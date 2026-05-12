@@ -2392,10 +2392,8 @@ function rich_text_editor($name, $rows, $cols, $text, $onFocus = false, $options
         }
         $focus_init = ",
                 init_instance_callback: function(editor) {
-                    var rows = $(editor.getElement()).attr('rows');
-                    if (rows > 0) {
-                        editor.getContainer().style.height = ((rows * 30) + 100) + 'px';
-                    }
+                    var rows = $(editor.getElement()).attr('rows') || 6;
+                    editor.getContainer().style.height = ((rows * 30) + 100) + 'px';
                     var parent = $(editor.contentAreaContainer.parentElement);
                     (editorToggleSecondToolbar(editor))();
                     parent.find('tox-toolbar-grp, tox-statusbar').attr('style','border:0px');
