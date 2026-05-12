@@ -136,28 +136,33 @@
 
 @if($course_info->view_type == 'units' and $countUnits > 0)
   @push('head_scripts')
-    <script src="{{ $urlServer }}/js/sortable/Sortable.min.js"></script>
+    <script src="{{ $urlServer }}js/sortable/Sortable.min.js"></script>
     <script type='text/javascript'>
         $(document).ready(function(){
-            Sortable.create(boxlistSort, {
-                    animation: 350,
-                    handle: '.fa-arrows',
-                    animation: 150,
-                    onUpdate: function (evt) {
-                        var itemEl = $(evt.item);
-                        var idReorder = itemEl.attr('data-id');
-                        var prevIdReorder = itemEl.prev().attr('data-id');
+            var el = document.getElementById('boxlistSort');
+            if (el) {
+                var sortableEl = el.querySelector('ul');
+                if (sortableEl) {
+                    Sortable.create(sortableEl, {
+                        handle: '.fa-arrows',
+                        animation: 150,
+                        onUpdate: function (evt) {
+                            var itemEl = $(evt.item);
+                            var idReorder = itemEl.attr('data-id');
+                            var prevIdReorder = itemEl.prev().attr('data-id');
 
-                        $.ajax({
-                        type: 'post',
-                        dataType: 'text',
-                        data: {
-                            toReorder: idReorder,
-                            prevReorder: prevIdReorder,
+                            $.ajax({
+                                type: 'post',
+                                dataType: 'text',
+                                data: {
+                                    toReorder: idReorder,
+                                    prevReorder: prevIdReorder,
+                                }
+                            });
                         }
-                        });
-                    }
-                });
+                    });
+                }
+            }
         });
     </script>
   @endpush
