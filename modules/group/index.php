@@ -737,8 +737,8 @@ if ($is_editor) {
                                             <input type='hidden' id='KeypagesGroup' value='$pagesPag'>
                                             <div class='col-12'>
                                             <div class='col-12 d-flex justify-content-center mt-2 mb-3'>
-                                                <nav aria-label='Page navigation example w-100'>
-                                                    <ul class='pagination mycourses-pagination w-100 mb-0' role='navigation' aria-label='$langPagination'>
+                                                <nav aria-label='$langPagination'>
+                                                    <ul class='pagination mycourses-pagination w-100 mb-0'>
                                                         <li class='page-item page-item-previous'>
                                                             <button class='page-link' aria-label='$langPreviousPage'><span class='fa-solid fa-chevron-left'></span></button>
                                                         </li>";
@@ -1049,8 +1049,8 @@ if ($is_editor) {
                                             <input type='hidden' id='KeypagesGroup' value='$pagesPag'>
                                             <div class='col-12'>
                                             <div class='col-12 d-flex justify-content-center mt-2 mb-3'>
-                                                <nav aria-label='Page navigation example w-100'>
-                                                    <ul class='pagination mycourses-pagination w-100 mb-0' role='navigation' aria-label='$langPagination'>
+                                                <nav aria-label='$langPagination'>
+                                                    <ul class='pagination mycourses-pagination w-100 mb-0'>
                                                         <li class='page-item page-item-previous'>
                                                             <button class='page-link' aria-label='$langPreviousPage'><span class='fa-solid fa-chevron-left'></span></button>
                                                         </li>";

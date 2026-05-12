@@ -489,7 +489,7 @@
                     </p>
                 </div>
             </div>
-            <ul style='list-style-type: none;' class='col-xl-5 col-md-12 col-12 d-flex justify-content-xl-end justify-content-md-start justify-content-center align-items-center gap-2 flex-wrap mt-xl-0 mt-4' role='navigation' aria-label="{{ trans('langProfileLinks') }}">
+            <ul style='list-style-type: none;' class='col-xl-5 col-md-12 col-12 d-flex justify-content-xl-end justify-content-md-start justify-content-center align-items-center gap-2 flex-wrap mt-xl-0 mt-4' aria-label="{{ trans('langProfileLinks') }}">
                 <li class='nav-item' aria-label="{{ trans('langMyProfile') }}">
                     <a class='btn myProfileBtn nav-link' href='{{ $urlAppend }}main/profile/display_profile.php'>
                         {{ trans('langMyProfile') }}

@@ -4,7 +4,7 @@
 
             <div class='d-none d-lg-block w-100 header-large-screen'>
                 <div class='col-12 h-100 d-flex justify-content-between align-items-center gap-5'>
-                    <nav class='d-flex justify-content-start align-items-center h-100'>
+                    <nav class='d-flex justify-content-start align-items-center h-100' aria-label="{{ trans('langHeaderLinks') }}">
 
                         @if($enable_box_logo)
                             <div class='box-logo d-flex justify-content-center align-items-center px-3'>
@@ -19,7 +19,7 @@
                         @endif
 
                         @if($_SESSION['provider'] !== 'lti_publish')
-                            <ul class="container-items nav" role="navigation" aria-label="{{ trans('langHeaderLinks') }}">
+                            <ul class="container-items nav">
                                 @if(!get_config('hide_login_link'))
                                     <li class="nav-item" aria-label="{{ trans('langHome') }}">
                                         <a id="link-home" class="nav-link menu-item mx-lg-2 @if (!isset($_SESSION['uid']) && empty($pageName)) active2 @endif" href="{{ $urlServer }}?show_home=true" aria-label="{{ trans('langHome') }}">

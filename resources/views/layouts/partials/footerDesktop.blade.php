@@ -84,8 +84,8 @@
                     </div>
                     <div class='col-lg-8 col-12 m-auto border-bottom-footer-text mb-3'></div>
                 @endif
-                <nav class='col-12 d-flex justify-content-between align-items-center'>
-                    <ul class="container-items-footer nav" role="navigation" aria-label="{{ trans('langBreadcrumb') }}">
+                <nav class='col-12 d-flex justify-content-between align-items-center' aria-label="{{ trans('langBreadcrumb') }}">
+                    <ul class="container-items-footer nav">
                         @if (!get_config('dont_display_about_menu'))
                             <li class="nav-item" aria-label="{{ trans('langPlatformIdentity') }}"><a class="nav-link menu-item a_tools_site_footer ps-2 pe-3" href="{{ $urlAppend }}info/about.php"  @if($_SESSION['provider'] == 'lti_publish') target="_blank" @endif aria-label="{{ trans('langPlatformIdentity') }}">{{ trans('langPlatformIdentity') }}</a></li>
                         @endif

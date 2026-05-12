@@ -295,7 +295,7 @@ function generate_infinite_container_html($posts, $posts_per_page, $next_page, $
 
           </div>
           <div class="card-body card-body-default p-0 mt-4">
-            <ul class="infinite-container m-0 p-0" role="navigation" aria-label="'.$langWallPostsShow.'" style="list-style-type: none;">';
+            <ul class="infinite-container m-0 p-0" aria-label="'.$langWallPostsShow.'" style="list-style-type: none;">';
 
     foreach ($posts as $post) {
         $user_id = $post->user_id;

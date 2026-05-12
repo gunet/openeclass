@@ -33,7 +33,7 @@
         <div class="container-fluid main-container p-0 bg-light">
             <div class="row m-auto">
                 @if (isset($_SESSION['step']) and isset($StepTitle))
-                    <nav role="navigation" class="col-12">
+                    <nav class="col-12">
                         <ol class="breadcrumb">
                             <li><a href='#'>{{ trans('langStep') }} {{ $_SESSION['step'] }} {{ trans('langFrom2') }} 8</a>: </li>
                             <li class="ms-2 text-secondary">{{ $StepTitle }}</li>
