@@ -46,8 +46,6 @@ $htopic = 0;
 
 $head_content .= "{
     <style>
-        .tox-tinymce {max-height: 200px;}
-        .accordion-item .tox-tinymce {max-height: 130px;}
         .accordion-button {font-size: 0.8rem;padding-left: 1rem !important;padding-right: 1rem !important;}
     </style>
 }";
@@ -1373,9 +1371,9 @@ if (isset($_GET['modifyAnswers'])) {
 
                 $tool_content .= "<td style='width:80%'>";
                 if (isset($_POST['reponse'][$i])) {
-                    $tool_content .= rich_text_editor("reponse[$i]", 5, 40, $_POST['reponse'][$i], true);
+                    $tool_content .= rich_text_editor("reponse[$i]", 6, 40, $_POST['reponse'][$i], false);
                 } else {
-                    $tool_content .= rich_text_editor("reponse[$i]", 5, 40, $reponse[$i], true);
+                    $tool_content .= rich_text_editor("reponse[$i]", 6, 40, $reponse[$i], false);
                 }
 
                 $comment_val = isset($_POST['comment'][$i]) ? $_POST['comment'][$i] : $comment[$i];
@@ -1389,7 +1387,7 @@ if (isset($_GET['modifyAnswers'])) {
                             </h2>
                             <div id='collapseComment$i' class='accordion-collapse collapse' aria-labelledby='headingComment$i' data-bs-parent='#accordionComment$i'>
                                 <div class='accordion-body p-2'>
-                                    " . rich_text_editor("comment[$i]", 3, 40, $comment_val, true) . "
+                                    " . rich_text_editor("comment[$i]", 3, 40, $comment_val, false) . "
                                 </div>
                             </div>
                         </div>
@@ -1630,7 +1628,7 @@ if (isset($_GET['modifyAnswers'])) {
                             </h2>
                             <div id='collapseComment1' class='accordion-collapse collapse' aria-labelledby='headingComment1' data-bs-parent='#accordionComment1'>
                                 <div class='accordion-body p-2'>
-                                    "  . rich_text_editor('comment[1]', 4, 30, @$comment[1], true) . "
+                                    "  . rich_text_editor('comment[1]', 5, 30, @$comment[1], false) . "
                                 </div>
                             </div>
                         </div>
@@ -1651,7 +1649,7 @@ if (isset($_GET['modifyAnswers'])) {
                             </h2>
                             <div id='collapseComment2' class='accordion-collapse collapse' aria-labelledby='headingComment2' data-bs-parent='#accordionComment2'>
                                 <div class='accordion-body p-2'>
-                                    " . rich_text_editor("comment[2]", 4, 40, @$comment[2]) . "
+                                    " . rich_text_editor("comment[2]", 5, 40, @$comment[2]) . "
                                 </div>
                             </div>
                         </div>
