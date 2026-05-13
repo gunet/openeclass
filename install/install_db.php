@@ -2883,6 +2883,15 @@ $db->query("CREATE TABLE api_token (
     CONSTRAINT FOREIGN KEY (`department_id`) REFERENCES `hierarchy` (`id`),
     PRIMARY KEY (`id`)) $tbl_options");
 
+$db->query("CREATE TABLE `api_token_course` (
+   `id` int(11) NOT NULL AUTO_INCREMENT,
+   `course_id` int(11) NOT NULL,
+   `token_id` smallint(11) NOT NULL,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`token_id`) REFERENCES `api_token` (`id`) ON DELETE CASCADE) 
+    $tbl_options");
+
 $db->query("CREATE TABLE ai_providers (
     `id` smallint NOT NULL AUTO_INCREMENT,
     `name` text CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
