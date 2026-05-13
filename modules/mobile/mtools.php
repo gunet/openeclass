@@ -38,7 +38,7 @@ $tool = new stdClass();
 // course description
 $tool->id = 0;
 $tool->name = $langCourseProgram;
-$tool->link = $urlAppend . 'courses/' . $course_code;
+$tool->link = $urlAppend . 'courses/' . $course_code . '/index.php?course=' . $course_code;
 $tool->img = 'coursedescription';
 $tool->type = 'coursedescription';
 $tool->active = true;
@@ -114,13 +114,16 @@ function createDom(array $groupsArr, array $toolsArr) {
 
 function correctLink($value) {
     global $urlServer, $urlAppend;
+
     $link = $urlServer . substr($value, strlen($urlAppend)) . '&view=mobile';
     $profile = (isset($_SESSION['profile'])) ? '?profile=' . $_SESSION['profile'] . '&' : '?';
     $redirect = 'redirect=' . urlencode($link);
+
     return $urlServer . 'modules/mobile/mlogin.php' . $profile . $redirect;
 }
 
 function correctRedirect($value) {
     global $urlServer, $urlAppend;
+
     return $urlServer . substr($value, strlen($urlAppend)) . urlencode('&view=mobile');
 }
