@@ -21,18 +21,22 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 
-if (!isset($_GET['session']) or !isset($_GET['u'])) {
+// Check if uid is the coordinator or the consultant of the course.
+$check = false;
+if (!$is_coordinator && !$is_consultant) {
+    $check = true;
+} elseif (!isset($_GET['format']) or (isset($_GET['format']) && $_GET['format'] != 'excel')) {
+    $check = true;
+}
+
+if ($check) {
     Session::flash('message', $langForbidden);
     Session::flash('alert-class', 'alert-warning');
     redirect_to_home_page("modules/session/index.php?course=$course_code"); 
 }
 
-// Check if uid is the coordinator or the consultant of the current session.
-if (isset($_GET['session']) && !$is_coordinator && !is_session_consultant(intval($_GET['session']),$course_id)) {
-    Session::flash('message', $langForbidden);
-    Session::flash('alert-class', 'alert-warning');
-    redirect_to_home_page("modules/session/index.php?course=$course_code"); 
-}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // =========================================
 // Initialize data array
@@ -48,7 +52,6 @@ $heading = [
     $langName,
     $langSSession,
     $langConsultant,
-    $langDate,
     $langStartSession,
     $langFinishSession,
     $langCompletionResources,
@@ -58,43 +61,44 @@ $heading = [
 $data[] = $heading;
 
 // =========================================
-// Resources processing
+// Data rows
 // =========================================
 
-$resources = session_completed_resources_by_user(
-    (int)$_GET['session'],
-    $course_id,
-    (int)$_GET['u']
-);
+foreach ($users_actions as $user_key => $session) {
 
-// Remove HTML tags
-$resources = strip_tags($resources);
+    foreach ($session as $s) {
 
-// Decode HTML entities
-$resources = html_entity_decode(
-    $resources,
-    ENT_QUOTES | ENT_HTML5,
-    'UTF-8'
-);
+        $resources = session_completed_resources_by_user(
+            $s->id,
+            $course_id,
+            $user_key
+        );
 
-// Replace symbols
-$resources = str_replace('✘', '(OXI)', $resources);
-$resources = str_replace('✔', '(NAI)', $resources);
-$consultantName = str_replace('&nbsp;', ' ', $user_information['tutor']);
-// =========================================
-// Data row
-// =========================================
+        // Remove HTML
+        $resources = strip_tags($resources);
 
-$data[] = [
-    (string) uid_to_name((int)$_GET['u']),
-    (string) $user_information['title'],
-    (string) $consultantName,
-    (string) $user_information['date'],
-    (string) $user_information['start_date'],
-    (string) $user_information['end_date'],
-    (string) $resources,
-    (string) ($user_information['percentage'] . '%')
-];
+        // Decode HTML entities
+        $resources = html_entity_decode(
+            $resources,
+            ENT_QUOTES | ENT_HTML5,
+            'UTF-8'
+        );
+
+        // Replace symbols
+        $resources = str_replace('✘', '(OXI)', $resources);
+        $resources = str_replace('✔', '(NAI)', $resources);
+
+        $data[] = [
+            (string) uid_to_name((int)$user_key),
+            (string) $s->title,
+            (string) uid_to_name((int)$s->creator),
+            (string) $s->start,
+            (string) $s->finish,
+            (string) $resources,
+            (string) ($s->percentage . '%')
+        ];
+    }
+}
 
 // =========================================
 // Create spreadsheet
@@ -139,7 +143,7 @@ for ($col = 1; $col <= count($heading); $col++) {
 }
 
 // =========================================
-// Wrap text
+// Wrap text for all cells
 // =========================================
 
 $lastRow = count($data);
@@ -157,15 +161,13 @@ $sheet->freezePane('A2');
 // =========================================
 // Safe filename
 // =========================================
-
+$fileTitle = isset($_GET['user_rep']) ? (string) uid_to_name($_GET['user_rep']) : $langAll;
 $filename = preg_replace(
     '/[^\p{L}\p{N}_\-]/u',
-    '_',
-    $course_code .
-    '_____ΠΑΡΟΥΣΙΟΛΟΓΙΟ_____' .
-    $user_information['title'] .
-    '_____' .
-    uid_to_name((int)$_GET['u'])
+    '_____',
+    $course_code . '_____' .
+    $langReportAttendances . '_____' .
+    $fileTitle
 );
 
 $filename .= '.xlsx';
@@ -191,10 +193,6 @@ header(
 );
 
 header('Cache-Control: max-age=0');
-
-header('Expires: 0');
-
-header('Pragma: public');
 
 // =========================================
 // Save file

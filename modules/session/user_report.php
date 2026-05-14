@@ -124,7 +124,7 @@ if (isset($_GET['u'])) { //  stats per user
                     if(($is_consultant or $is_course_reviewer) && !isset($_GET['format'])){
                         $tool_content .= "<div class='d-flex gap-2'>";
                         $tool_content .= "<a class='btn submitAdminBtn' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;session=$sessionID&amp;u=$_GET[u]&amp;format=pdf' target='_blank' aria-label='$langOpenNewTab'>$langDumpPDF</a>";
-                        $tool_content .= "<a class='btn submitAdminBtn' href='{$urlAppend}modules/session/user_report_dump.php?course=$course_code&amp;session=$sessionID&amp;u=$_GET[u]&amp;per=$user_information[percentage]'>$langDumpExcel</a>";
+                        $tool_content .= "<a class='btn submitAdminBtn' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;session=$sessionID&amp;u=$_GET[u]&amp;format=excel'>$langDumpExcel</a>";
                         $tool_content .= "</div>";
                     }
     $tool_content .= "
@@ -239,6 +239,8 @@ if (isset($_GET['u'])) { //  stats per user
 
     if (isset($_GET['format']) and $_GET['format'] == 'pdf') { // pdf format
         pdf_session_output($sessionID, intval($_GET['u']));
+    } elseif (isset($_GET['format']) and $_GET['format'] == 'excel') {
+        require_once 'modules/session/user_report_dump.php';
     } else {
         draw($tool_content, 2);
     }

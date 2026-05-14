@@ -339,6 +339,10 @@ $tool_content .= "
                                             <a class='btn submitAdminBtn docs-pdf-btn gap-1 mb-3' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;user_docs=$user_selected$statusComplete'>
                                                 <i class='fa-solid fa-download'></i>
                                                 $langDocsUser
+                                            </a>
+                                            <a class='btn submitAdminBtn export-excel-btn gap-1 mb-3' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;format=excel$user_pdf$statusComplete' target='_blank' aria-label='$langOpenNewTab'>
+                                                <i class='fa-solid fa-file-excel'></i>
+                                                $langDumpExcel
                                             </a>";
                                 } else {
                                     $tool_content .= "
@@ -485,7 +489,9 @@ if (isset($_GET['format']) and $_GET['format'] == 'pdf') { // pdf format
         $uId = 0;
     }
     pdf_reports_output($uId);
-}else{
+} elseif (isset($_GET['format']) and $_GET['format'] == 'excel') {
+    require_once 'modules/session/consulting_completion_dump.php';
+} else{
     $data['tool_content'] = $tool_content;
     view('modules.session.consulting_completion', $data);
 }
