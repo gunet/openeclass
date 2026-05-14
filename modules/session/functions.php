@@ -21,15 +21,12 @@
 function check_user_belongs_in_session($sid){
     global $course_id, $course_code, $is_consultant, $is_coordinator, $is_simple_user, $uid, $langForbidden;
 
-    if($is_consultant && !$is_coordinator){
-        $check = Database::get()->querySingle("SELECT creator FROM mod_session WHERE id = ?d AND course_id = ?d",$sid, $course_id);
-        if($check && $check->creator != $uid){
-            Session::flash('message', $langForbidden);
-            Session::flash('alert-class', 'alert-warning');
-            redirect_to_home_page("modules/session/index.php?course=$course_code");
-        }
+    if($is_consultant && !$is_coordinator && !is_session_consultant(intval($sid), $course_id)){
+        Session::flash('message', $langForbidden);
+        Session::flash('alert-class', 'alert-warning');
+        redirect_to_home_page("modules/session/index.php?course=$course_code");
     }elseif($is_simple_user){
-        $check = Database::get()->querySingle("SELECT id FROM mod_session_users WHERE session_id = ?d AND participants = ?d AND is_accepted = ?d",$sid, $uid, 1);
+        $check = Database::get()->querySingle("SELECT id FROM mod_session_users WHERE session_id = ?d AND participants = ?d AND is_accepted = ?d", intval($sid), $uid, 1);
         if(!$check){
             Session::flash('message', $langForbidden);
             Session::flash('alert-class', 'alert-warning');
@@ -1097,7 +1094,7 @@ function session_actions($res_type, $resource_id, $status, $res_id = false) {
     $langViewHide, $langViewShow, $langReorder, $langAlreadyBrowsed,
     $langNeverBrowsed, $langAddToUnitCompletion, $urlAppend, $langDownload,
     $sessionID, $is_course_reviewer, $is_simple_user, $urlServer, $langUsersAnswers,
-    $langCommentsByConsultant, $langSubmissionOnBehalfOfUser;
+    $langCommentsByConsultant, $langSubmissionOnBehalfOfUser, $langPurgeExercises;
 
     $res_types_sessions_completion = ['work', 'doc', 'poll', 'tc'];
     if (in_array($res_type, $res_types_sessions_completion)) {
@@ -1253,6 +1250,12 @@ function session_actions($res_type, $resource_id, $status, $res_id = false) {
                                         'url' => $urlServer . "modules/session/poll_comments.php?course=$course_code&amp;session=$_GET[session]&amp;pid=$poll_id",
                                         'icon' => 'fa-comments',
                                         'show' => ($status != 'del' && $res_type != 'doc_reference' && $poll_id > 0)),
+                                    array('title' => $langPurgeExercises,
+                                        'url' => $urlServer . "modules/questionnaire/pollresults.php?course=$course_code&amp;session=$_GET[session]&amp;pid=$poll_id&amp;from_session_view=true&amp;del_user_answers=true",
+                                        'icon' => 'fa-trash',
+                                        'class' => 'delete',
+                                        'confirm' => $langConfirmDelete,
+                                        'show' => ($status != 'del' && $res_type != 'doc_reference' && $poll_id > 0 && $exist_answers)),
                                     array('title' => $langDelete,
                                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$_GET[session]&amp;del=$resource_id",
                                         'icon' => 'fa-xmark',
@@ -2883,7 +2886,7 @@ function session_completion_without_resources($element, $element_id, $session_id
                                                 completed_criteria = ?d,
                                                 total_criteria = ?d",$p->participants,$element_id,1,1,1);
                     }
-
+                    
                     Database::get()->query("INSERT INTO user_{$element}_criterion SET
                                                 user = ?d,
                                                 created = " . DBHelper::timeAfter() . ",
@@ -3005,11 +3008,20 @@ function check_session_completion_by_meeting_completed($session_id = 0, $forUid 
     global $course_id;
 
     if($session_id){
-        $badge_criterion = Database::get()->querySingle("SELECT * FROM badge_criterion
-                                                            WHERE badge IN (SELECT id FROM badge
-                                                                            WHERE course_id = ?d
-                                                                            AND session_id = ?d)
-                                                            AND activity_type = ?s",$course_id, $session_id,'meeting-completed');
+        // $badge_criterion = Database::get()->querySingle("SELECT * FROM badge_criterion
+        //                                                     WHERE badge IN (SELECT id FROM badge
+        //                                                                     WHERE course_id = ?d
+        //                                                                     AND session_id = ?d)
+        //                                                     AND activity_type = ?s",$course_id, $session_id,'meeting-completed');
+    
+        $badge_criterion = Database::get()->querySingle("
+            SELECT bc.*
+            FROM badge_criterion bc
+            INNER JOIN badge b ON b.id = bc.badge
+            WHERE b.course_id = ?d
+            AND b.session_id = ?d
+            AND bc.activity_type = ?s
+        ", $course_id, $session_id, 'meeting-completed');
 
         if($badge_criterion){
             $badge_id = $badge_criterion->badge;
@@ -3073,11 +3085,20 @@ function check_session_completion_by_tc_completed($session_id = 0, $forUid = 0){
     global $course_id;
 
     if($session_id){
-        $badge_criterion = Database::get()->queryArray("SELECT * FROM badge_criterion
-                                                            WHERE badge IN (SELECT id FROM badge
-                                                                            WHERE course_id = ?d
-                                                                            AND session_id = ?d)
-                                                            AND activity_type = ?s",$course_id, $session_id,'tc-completed');
+        // $badge_criterion = Database::get()->queryArray("SELECT * FROM badge_criterion
+        //                                                     WHERE badge IN (SELECT id FROM badge
+        //                                                                     WHERE course_id = ?d
+        //                                                                     AND session_id = ?d)
+        //                                                     AND activity_type = ?s",$course_id, $session_id,'tc-completed');
+
+        $badge_criterion = Database::get()->queryArray("
+            SELECT bc.*
+            FROM badge_criterion bc
+            INNER JOIN badge b ON b.id = bc.badge
+            WHERE b.course_id = ?d
+            AND b.session_id = ?d
+            AND bc.activity_type = ?s
+        ", $course_id, $session_id, 'tc-completed');
 
         $badge_id = 0;
         $badge_criterion_id = 0;
@@ -3155,7 +3176,7 @@ function check_session_completion_by_tc_completed($session_id = 0, $forUid = 0){
 function display_session_available_polls($element, $element_id, $session_id = 0, int $session_resource_id = 0) {
 
     global $course_id, $course_code, $urlServer, $tool_content,
-            $langPollNone, $langQuestionnaire, $langChoice,
+            $langPollNone, $langQuestionnaire, $langChoice, 
             $langAddModulesButton, $langSelect, $langDescription;
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
@@ -3714,13 +3735,24 @@ function session_resource_exists($rid,$sid){
  */
 function session_completed_resources_by_user($sid,$cid,$user){
 
-    global $langResourceAsActivity, $langCompletedSessionMeeting, $langCompletedSessionWithoutActivity,
+    global $langResourceAsActivity, $langCompletedSessionMeeting, $langCompletedSessionWithoutActivity, 
             $langCommentsByConsultant, $langAttendance, $langAutomaticCompletion, $langWithAttendanceRegistrationByConsultant;
 
     $html = "";
-    $criteria = Database::get()->queryArray("SELECT * FROM badge_criterion
-                                                        WHERE badge IN (SELECT id FROM badge
-                                                                    WHERE course_id = ?d AND session_id = ?d)",$cid,$sid);
+    // $criteria = Database::get()->queryArray("SELECT * FROM badge_criterion
+    //                                                     WHERE badge IN (SELECT id FROM badge
+    //                                                                 WHERE course_id = ?d AND session_id = ?d)",$cid,$sid);                  
+    
+    $criteria = Database::get()->queryArray("
+        SELECT bc.*
+        FROM badge_criterion bc
+
+        INNER JOIN badge b
+            ON b.id = bc.badge
+
+        WHERE b.course_id = ?d
+        AND b.session_id = ?d
+    ", $cid, $sid);
 
     if (count($criteria)) {
         $html .= "<div class='resources_list' style='padding: 0px;'>";
@@ -3830,11 +3862,23 @@ function session_completed_resources_by_user($sid,$cid,$user){
 
             }elseif ($c->activity_type == 'questionnaire') {
                 $pollItem = Database::get()->querySingle("SELECT `name` FROM poll WHERE pid = ?d AND course_id = ?d", $c->resource, $cid);
-                $completed_cr = database::get()->querySingle("SELECT * FROM user_badge_criterion
-                                                                WHERE user = ?d
-                                                                AND badge_criterion = ?d
-                                                                AND user IN (SELECT uid FROM poll_user_record
-                                                                                WHERE session_id = ?d)", $user, $c->id, $sid);
+                // $completed_cr = database::get()->querySingle("SELECT * FROM user_badge_criterion
+                //                                                 WHERE user = ?d
+                //                                                 AND badge_criterion = ?d
+                //                                                 AND user IN (SELECT uid FROM poll_user_record 
+                //                                                                 WHERE session_id = ?d)", $user, $c->id, $sid);
+
+                $completed_cr = Database::get()->querySingle("
+                    SELECT ubc.*
+                    FROM user_badge_criterion ubc
+
+                    INNER JOIN poll_user_record pur
+                        ON pur.uid = ubc.user
+                    AND pur.session_id = ?d
+
+                    WHERE ubc.user = ?d
+                    AND ubc.badge_criterion = ?d
+                ", $sid, $user, $c->id);
 
                 if ($completed_cr) {
                     $resource_info = "  <div class='d-flex justify-content-start align-items-start gap-2'>
@@ -4242,10 +4286,19 @@ function check_session_completion_without_activities($session_id = 0){
     global $course_id;
 
     if ($session_id > 0) {
-        $badge = Database::get()->querySingle("SELECT id,badge FROM badge_criterion
-                                                WHERE activity_type = ?s
-                                                AND badge IN (SELECT id FROM badge
-                                                                WHERE course_id = ?d AND session_id = ?d)",'noactivity',$course_id,$session_id);
+        // $badge = Database::get()->querySingle("SELECT id,badge FROM badge_criterion
+        //                                         WHERE activity_type = ?s
+        //                                         AND badge IN (SELECT id FROM badge 
+        //                                                         WHERE course_id = ?d AND session_id = ?d)",'noactivity',$course_id,$session_id);
+
+        $badge = Database::get()->querySingle("
+            SELECT bc.id, bc.badge
+            FROM badge_criterion bc
+            INNER JOIN badge b ON b.id = bc.badge
+            WHERE bc.activity_type = ?s
+            AND b.course_id = ?d
+            AND b.session_id = ?d
+        ", 'noactivity', $course_id, $session_id);
 
         if ($badge) {
             $badge_id = $badge->badge;
@@ -4256,11 +4309,11 @@ function check_session_completion_without_activities($session_id = 0){
                     $existUser = Database::get()->querySingle("SELECT id FROM user_badge_criterion WHERE user = ?d AND badge_criterion = ?d", $r->user, $badge_criterion_id);
                     if (!$existUser) {
                         Database::get()->query("INSERT INTO user_badge_criterion SET user = ?d, `created` = " . DBHelper::timeAfter() . ", badge_criterion = ?d", $r->user, $badge_criterion_id);
-                        Database::get()->query("UPDATE user_badge SET completed = 1, completed_criteria = 1, total_criteria = 1
+                        Database::get()->query("UPDATE user_badge SET completed = 1, completed_criteria = 1, total_criteria = 1 
                                                     WHERE user = ?d AND badge = ?d",$r->user, $badge_id);
                     }
                 }
-            }
+            }                                   
         }
     }
 }
@@ -4297,10 +4350,19 @@ function check_session_completion_with_expired_time($sid){
     global $course_id, $course_code;
 
     if($sid){
-        $badge = Database::get()->querySingle("SELECT id,badge FROM badge_criterion
-                                                    WHERE activity_type = ?s
-                                                    AND badge IN (SELECT id FROM badge
-                                                                    WHERE course_id = ?d AND session_id = ?d)",'autocomplete',$course_id,$sid);
+        // $badge = Database::get()->querySingle("SELECT id,badge FROM badge_criterion
+        //                                             WHERE activity_type = ?s
+        //                                             AND badge IN (SELECT id FROM badge 
+        //                                                             WHERE course_id = ?d AND session_id = ?d)",'autocomplete',$course_id,$sid);
+
+        $badge = Database::get()->querySingle("
+            SELECT bc.id, bc.badge
+            FROM badge_criterion bc
+            INNER JOIN badge b ON b.id = bc.badge
+            WHERE bc.activity_type = ?s
+            AND b.course_id = ?d
+            AND b.session_id = ?d
+        ", 'autocomplete', $course_id, $sid);
 
 
         $participants = session_participants_ids($sid);

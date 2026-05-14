@@ -82,6 +82,18 @@ if(isset($_POST['submit'])){
       Session::flash('alert-class', 'alert-danger');
       redirect_to_home_page("modules/session/new.php?course=".$course_code);
     }
+
+    // By default the duration has to be at least 45 min
+    $startSessionDate = date('d-m-Y H:i:s', strtotime($_POST['start_session']));
+    $endSessionDate = date('d-m-Y H:i:s', strtotime($_POST['end_session']));
+    $duration_text = '+45 minutes';
+    $endSessionDateDefaultDuration = date('d-m-Y H:i:s', strtotime($startSessionDate . $duration_text));
+    if ($endSessionDate < $endSessionDateDefaultDuration) {
+      Session::flash('message', 'Η συνεδρία δεν δημιουργήθηκε. Η διάρκεια της πρέπει να είναι τουλάχιστον 45 λεπτά.');
+      Session::flash('alert-class', 'alert-warning');
+      redirect_to_home_page("modules/session/index.php?course=$course_code");
+    }
+
     $creator = isset($_POST['creators']) ? $_POST['creators'] : 0;
     // Not allow consultant creates a session for other user ids
     if ($is_consultant && !$is_coordinator && $creator != $uid) {
