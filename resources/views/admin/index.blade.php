@@ -178,7 +178,13 @@
                                                     <div class='form-label'>{{ trans('langLastUpdate') }}</div>
                                                 </div>
                                                 <div class='col-lg-6 col-12'>
-                                                    <div>{!! format_locale_date((new DateTime($coreStats['lastModified']))->getTimestamp()) !!}</div>
+                                                    <div>
+                                                        @if (!empty($coreStats['lastModified']))
+                                                            {!! format_locale_date((new DateTime($coreStats['lastModified']))->getTimestamp()) !!}
+                                                        @else
+                                                            &mdash;
+                                                        @endif
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class='row p-2 margin-bottom-thin'>
