@@ -841,7 +841,7 @@ if (isset($_POST['optionsSave'])) {
 
     if (isset($theme_options_styles['imageUpload'])) {
         $logo_field = "<img src='$urlThemeData/$theme_options_styles[imageUpload]' style='max-height:100px;max-width:150px;' alt='Image upload for large screen'>";
-            if ($tenant && in_array($theme_id, $tenant_theme_ids)) {
+            if (($tenant && in_array($theme_id, $tenant_theme_ids)) || $is_admin) {
                 $logo_field .= "&nbsp;&nbsp;<a class='btn deleteAdminBtn' href='$_SERVER[SCRIPT_NAME]?delete_image=imageUpload'>$langDelete</a>";
             }
         $logo_field .= "<input type='hidden' name='imageUpload' value='$theme_options_styles[imageUpload]'>";
@@ -850,7 +850,7 @@ if (isset($_POST['optionsSave'])) {
     }
     if (isset($theme_options_styles['imageUploadSmall'])) {
         $small_logo_field = "<img src='$urlThemeData/$theme_options_styles[imageUploadSmall]' style='max-height:100px;max-width:150px;' alt='Image upload for small screen'>";
-        if ($tenant && in_array($theme_id, $tenant_theme_ids)) {
+        if (($tenant && in_array($theme_id, $tenant_theme_ids)) || $is_admin) {
             $small_logo_field .= "&nbsp;&nbsp;<a class='btn deleteAdminBtn' href='$_SERVER[SCRIPT_NAME]?delete_image=imageUploadSmall'>$langDelete</a>";
         }
         $small_logo_field .= "<input type='hidden' name='imageUploadSmall' value='$theme_options_styles[imageUploadSmall]'>";
@@ -859,7 +859,7 @@ if (isset($_POST['optionsSave'])) {
     }
     if (isset($theme_options_styles['imageUploadFooter'])) {
         $image_footer_field = "<img src='$urlThemeData/$theme_options_styles[imageUploadFooter]' style='max-height:100px;max-width:150px;' alt='Image upload for footer'>";
-        if ($tenant && in_array($theme_id, $tenant_theme_ids)) {
+        if (($tenant && in_array($theme_id, $tenant_theme_ids)) || $is_admin) {
             $image_footer_field .= "&nbsp;&nbsp;<a class='btn deleteAdminBtn' href='$_SERVER[SCRIPT_NAME]?delete_image=imageUploadFooter'>$langDelete</a>";
         }
         $image_footer_field .= "<input type='hidden' name='imageUploadFooter' value='$theme_options_styles[imageUploadFooter]'>";
@@ -869,7 +869,7 @@ if (isset($_POST['optionsSave'])) {
     if (isset($theme_options_styles['bgImage'])) {
         $bg_field = "<div class='col-12 d-flex justify-content-start align-items-center flex-wrap gap-2'>
                 <img src='$urlThemeData/$theme_options_styles[bgImage]' style='max-height:100px;max-width:150px;' alt='Image upload for background'>";
-        if ($tenant && in_array($theme_id, $tenant_theme_ids)) {
+        if (($tenant && in_array($theme_id, $tenant_theme_ids)) || $is_admin) {
             $bg_field .= "<a class='btn deleteAdminBtn' href='$_SERVER[SCRIPT_NAME]?delete_image=bgImage'>$langDelete</a>";
         }
         $bg_field .= "</div><input type='hidden' name='bgImage' value='$theme_options_styles[bgImage]'>";
@@ -881,7 +881,7 @@ if (isset($_POST['optionsSave'])) {
             <div class='col-sm-12 control-label-notes mb-2'>$langBgImg (jumbotron):</div>
             <div class='col-12 d-flex justify-content-start align-items-center flex-wrap gap-2'>
             <img src='$urlThemeData/$theme_options_styles[loginImg]' style='max-height:100px;max-width:150px;' alt='Image upload for login form'>";
-        if ($tenant && in_array($theme_id, $tenant_theme_ids)) {
+        if (($tenant && in_array($theme_id, $tenant_theme_ids)) || $is_admin) {
             $login_image_field .= "<a class='btn deleteAdminBtn' href='$_SERVER[SCRIPT_NAME]?delete_image=loginImg'>$langDelete</a>";
         }
         $login_image_field .= "</div><input type='hidden' name='loginImg' value='$theme_options_styles[loginImg]'>";
@@ -919,7 +919,7 @@ if (isset($_POST['optionsSave'])) {
             <div class='col-sm-12 control-label-notes mb-2'>$langLoginImg:</div>
             <div class='col-12 d-flex justify-content-start align-items-center flex-wrap gap-2'>
                 <img src='$urlThemeData/$theme_options_styles[loginImgL]' style='max-height:100px;max-width:150px;' alt='Image upload'>";
-        if ($tenant && in_array($theme_id, $tenant_theme_ids)) {
+        if (($tenant && in_array($theme_id, $tenant_theme_ids)) || $is_admin) {
             $login_image_fieldL .= "<a class='btn deleteAdminBtn' href='$_SERVER[SCRIPT_NAME]?delete_image=loginImgL'>$langDelete</a>";
         }
         $login_image_fieldL .= "</div><input type='hidden' name='loginImgL' value='$theme_options_styles[loginImgL]'>";
@@ -957,7 +957,7 @@ if (isset($_POST['optionsSave'])) {
         $form_image_fieldL = "<div class='col-12 control-label-notes'>$langFormUploadImage</div>
             <div class='col-12 d-flex justify-content-start align-items-center flex-wrap gap-2'>
                 <img src='$urlThemeData/$theme_options_styles[imageUploadForm]' style='max-height:100px;max-width:150px;' alt='$langDownloadFile'>";
-        if ($tenant && in_array($theme_id, $tenant_theme_ids)) {
+        if (($tenant && in_array($theme_id, $tenant_theme_ids)) || $is_admin) {
             $form_image_fieldL .= "<a class='btn deleteAdminBtn' href='$_SERVER[SCRIPT_NAME]?delete_image=imageUploadForm'>$langDelete</a>";
         }
         $form_image_fieldL .= "</div><input type='hidden' name='imageUploadForm' value='$theme_options_styles[imageUploadForm]'>";
@@ -992,7 +992,7 @@ if (isset($_POST['optionsSave'])) {
         $registration_image_fieldL = "<div class='col-sm-12 control-label-notes mb-2'>$langRegistrationUploadImage:</div>
             <div class='col-12 d-flex justify-content-start align-items-center flex-wrap gap-2'>
                 <img src='$urlThemeData/$theme_options_styles[imageUploadRegistration]' style='max-height:100px;max-width:150px;' alt='Image upload'>";
-        if ($tenant && in_array($theme_id, $tenant_theme_ids)) {
+        if (($tenant && in_array($theme_id, $tenant_theme_ids)) || $is_admin) {
             $registration_image_fieldL .= "<a class='btn deleteAdminBtn' href='$_SERVER[SCRIPT_NAME]?delete_image=imageUploadRegistration'>$langDelete</a>";
         }
         $registration_image_fieldL .= "</div><input type='hidden' name='imageUploadRegistration' value='$theme_options_styles[imageUploadRegistration]'>";
@@ -1030,7 +1030,7 @@ if (isset($_POST['optionsSave'])) {
         $faq_image_fieldL = "<div class='col-sm-12 control-label-notes mb-2'>$langFaqUploadImage:</div>
             <div class='col-12 d-flex justify-content-start align-items-center flex-wrap gap-2'>
             <img src='$urlThemeData/$theme_options_styles[imageUploadFaq]' style='max-height:100px;max-width:150px;' alt='Image upload'>";
-        if ($tenant && in_array($theme_id, $tenant_theme_ids)) {
+        if (($tenant && in_array($theme_id, $tenant_theme_ids)) || $is_admin) {
             $faq_image_fieldL .= "<a class='btn deleteAdminBtn' href='$_SERVER[SCRIPT_NAME]?delete_image=imageUploadFaq'>$langDelete</a>";
         }
         $faq_image_fieldL .= "</div><input type='hidden' name='imageUploadFaq' value='$theme_options_styles[imageUploadFaq]'>";
@@ -1063,7 +1063,7 @@ if (isset($_POST['optionsSave'])) {
 
     if (isset($theme_options_styles['RightColumnCourseBgImage'])) {
         $RightColumnCourseBgImage = "<img src='$urlThemeData/$theme_options_styles[RightColumnCourseBgImage]' style='max-height:100px;max-width:150px;' alt='Image upload for course content'>";
-        if ($tenant && in_array($theme_id, $tenant_theme_ids)) {
+        if (($tenant && in_array($theme_id, $tenant_theme_ids)) || $is_admin) {
             $RightColumnCourseBgImage .= "&nbsp;&nbsp;<a class='btn deleteAdminBtn' href='$_SERVER[SCRIPT_NAME]?delete_image=RightColumnCourseBgImage'>$langDelete</a>";
         }
         $RightColumnCourseBgImage .= "<input type='hidden' name='RightColumnCourseBgImage' value='$theme_options_styles[RightColumnCourseBgImage]' id='RightColumnCourseBgImage'>";
@@ -1073,7 +1073,7 @@ if (isset($_POST['optionsSave'])) {
 
     if (isset($theme_options_styles['faviconUpload'])) {
         $faviconUpload = "<img src='$urlThemeData/$theme_options_styles[faviconUpload]' style='max-height:100px;max-width:150px;' alt='Favicon upload'>";
-        if ($tenant && in_array($theme_id, $tenant_theme_ids)) {
+        if (($tenant && in_array($theme_id, $tenant_theme_ids)) || $is_admin) {
             $faviconUpload .= "&nbsp;&nbsp;<a class='btn deleteAdminBtn' href='$_SERVER[SCRIPT_NAME]?delete_image=faviconUpload'>$langDelete</a>";
         }
         $faviconUpload .= "<input type='hidden' name='faviconUpload' value='$theme_options_styles[faviconUpload]'>";
@@ -1083,7 +1083,7 @@ if (isset($_POST['optionsSave'])) {
 
     if (isset($theme_options_styles['contactUpload'])) {
         $contactUpload = "<img src='$urlThemeData/$theme_options_styles[contactUpload]' style='max-height:100px;max-width:150px;' alt='Contact upload'>";
-        if ($tenant && in_array($theme_id, $tenant_theme_ids)) {
+        if (($tenant && in_array($theme_id, $tenant_theme_ids)) || $is_admin) {
             $contactUpload .= "&nbsp;&nbsp;<a class='btn deleteAdminBtn' href='$_SERVER[SCRIPT_NAME]?delete_image=contactUpload'>$langDelete</a>";
         }
         $contactUpload .= "<input type='hidden' name='contactUpload' value='$theme_options_styles[contactUpload]'>";
