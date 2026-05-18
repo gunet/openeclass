@@ -89,9 +89,7 @@ function createDom(array $groupsArr, array $toolsArr) {
         $stname = ($status == USER_TEACHER) ? 'teacher' : 'student';
         $st = $root->appendChild($dom->createElement('status'));
         $st->appendChild(new DOMAttr('name', $stname));
-        $st = $root->appendChild($dom->createElement('user'));
-        $st->appendChild(new DOMAttr('givenname', q(uid_to_name($uid, 'givenname'))));
-        $st->appendChild(new DOMAttr('surname', q(uid_to_name($uid, 'surname'))));
+
     }
 
     $dom->formatOutput = true;
