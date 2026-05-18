@@ -2,9 +2,9 @@
 
 @section('content')
 
-<div class="col-12 main-section">
-    <div class='{{ $container }} main-container'>
-        <div class="row m-auto">
+<main id="main" class="col-12 main-section">
+        <div class='{{ $container }} main-container'>
+            <div class="row m-auto">
                 @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
                 @include('layouts.partials.legend_view')
@@ -51,5 +51,5 @@
                 @endif
             </div>
         </div>
-    </div>
+</main>
 @endsection

@@ -166,7 +166,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
     $tool_content .= "</div>";
 
     $tool_content .= "<div class='form-group mt-4'><label for='fielddescr' class='col-sm-12 control-label-notes'>$langDescription</label>
-                      <div class='col-sm-12'>".rich_text_editor('fielddescr', 8, 20, '')."</div>";
+                      <div class='col-sm-12'>".rich_text_editor('fielddescr', 8, 20, '', options: array('id' => 'fielddescr'))."</div>";
 
     $tool_content .= "</div>";
     $tool_content .= "<div class='form-group mt-4'>";
@@ -328,7 +328,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
                           <div class='col-sm-12'><input id='shortname' class='form-control' type='text' name='field_shortname' value='$shortname'></div>";
         $tool_content .= "</div>";
         $tool_content .= "<div class='form-group mt-4'><label for='fielddescr' class='col-sm-12 control-label-notes'>$langDescription</label>
-                          <div class='col-sm-12'>".rich_text_editor('fielddescr', 8, 20, $description)."</div>";
+                          <div class='col-sm-12'>".rich_text_editor('fielddescr', 8, 20, $description, options: array('id' => 'fielddescr'))."</div>";
 
         $tool_content .= "</div>";
         $tool_content .= "<div class='form-group mt-4'>";

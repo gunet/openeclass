@@ -30,11 +30,28 @@
             });
         </script>
     @endif
+
+    <!-- Badge Publication Module -->
+    @if ($uid == $id && !isset($_GET['id']) && !isset($_GET['token']))
+        <link rel="stylesheet" href="{{ $urlAppend }}modules/backpack/css/badge-publication.css">
+        <script src="{{ $urlAppend }}modules/backpack/js/badge-publication.js"></script>
+        <script>
+            // Language strings for JavaScript
+            const BADGE_SELECT_PROVIDER = "{{ trans('langSelectProvider') }}";
+            const BADGE_NO_PROVIDERS_CONNECTED = "{{ trans('langNoProvidersConnected') }}";
+            const BADGE_PUBLISH_SUCCESS = "{{ trans('langBadgePublishedSuccessfully') }}";
+            const BADGE_PUBLISH_ERROR = "{{ trans('langBadgePublishError') }}";
+            const BADGE_SELECT_PROVIDER_ALERT = "{{ trans('langSelectProviderAlert') }}";
+            const BADGE_PUBLISHING = "{{ trans('langPublishing') }}...";
+            const BADGE_PUBLISH = "{{ trans('langPublish') }}";
+            const BADGE_PUBLISHED_TO_BACKPACK = "{{ trans('langPublishedToBackpack') }}";
+        </script>
+    @endif
 @endpush
 
 @section('content')
 
-<div class="col-12 main-section">
+<main id="main" class="col-12 main-section">
     <div class='{{ $container }} main-container'>
         <div class="row m-auto">
             @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
@@ -54,16 +71,24 @@
                                     <div id='profile-avatar'>
                                         {!! $profile_img !!}
                                     </div>
-                                    <h3 class='text-center mt-3'> {{ $userdata->surname }} {{ $userdata->givenname }} </h3>
+                                    <h2 class='text-heading-h3 text-center mt-3'> {{ $userdata->surname }} {{ $userdata->givenname }} </h2>
                                     <div class='text-center title-default-line-height m-3'>
                                         {{ $userdata->username }}
                                     </div>
                                     @if(get_config('eportfolio_enable'))
-                                        <p class='text-center mt-2'>
-                                            <a class='btn submitAdminBtn d-inline-flex' href='{{ $urlAppend }}main/eportfolio/index.php?id={{ $id }}&token={{ token_generate("eportfolio" . $id) }}'>
-                                                {{ trans('langMyePortfolio') }}
-                                            </a>
-                                        </p>
+										@if ($uid == $id)
+											<p class='text-center mt-2'>
+												<a class='btn submitAdminBtn d-inline-flex' href='{{ $urlAppend }}main/eportfolio/index.php'>
+													{{ trans('langMyePortfolio') }}
+												</a>
+											</p>
+										@elseif($userdata->eportfolio_enable)
+											<p class='text-center mt-2'>
+												<a class='btn submitAdminBtn d-inline-flex' href='{{ $urlAppend }}main/eportfolio/index.php?token={{$userdata->eportfolio_token}}'>
+													{{ trans('langMyePortfolio') }}
+												</a>
+											</p>
+										@endif
                                     @endif
                                     @if(get_config('personal_blog'))
                                         <p class='text-center mt-2'>
@@ -80,7 +105,7 @@
                     <div class="col">
                         <div class="card panelCard border-card-left-default px-3 py-2 h-100">
                             <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                <h3>{{ trans('langPersInfo') }}</h3>
+                                <h2 class='text-heading-h3'>{{ trans('langPersInfo') }}</h2>
                             </div>
                             <div class="card-body">
                                 <ul class='list-group list-group-flush'>
@@ -219,7 +244,7 @@
                         <div class='col-12 mt-4'>
                             <div class="card panelCard border-card-left-default px-3 py-2">
                                 <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                    <h3>{{ trans('langMyCertificates') }}</h3>
+                                    <h2 class='text-heading-h3'>{{ trans('langMyCertificates') }}</h2>
                                 </div>
                                 <div class="card-body">
                                     @if (count($cert_completed) == 1)
@@ -260,7 +285,7 @@
                         <div class='col-12 mt-4'>
                             <div class="card panelCard border-card-left-default px-3 py-2">
                                 <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                    <h3>{{ trans('langBadges') }}</h3>
+                                    <h2 class='text-heading-h3'>{{ trans('langBadges') }}</h2>
                                 </div>
                                 <div class="card-body">
                                     @if(count($badge_completed) == 1)
@@ -270,7 +295,7 @@
                                     @endif
                                         @foreach ($badge_completed as $key => $badge)
                                             <div class='col'>
-                                                <div class="card h-100 border-0">
+                                                <div class="card h-100 border-0 badge-card-wrapper">
                                                     <img style='height:150px; width:150px;' src="{{ $urlServer . BADGE_TEMPLATE_PATH . get_badge_filename($badge->badge) }}" class="card-img-top ms-auto me-auto mt-3" alt="badge">
                                                     <div class="card-body">
                                                         <a href='../../modules/progress/index.php?course={{ course_id_to_code($badge->course_id) }}&amp;badge_id={{ $badge->badge }}&amp;u={{ $badge->user }}'>
@@ -285,6 +310,109 @@
                                                             </div>
                                                         </a>
                                                     </div>
+                                                    <!-- Badge Publish Status -->
+                                                    @if ($uid == $id && isset($openBadgesEnabled) && $openBadgesEnabled)
+                                                    <div class='badge-card-footer d-flex flex-wrap align-items-center justify-content-between gap-2'>
+                                                        @if (!empty($badge->external_assertion_id))
+                                                            <!-- Badge is published -->
+                                                            <div class='badge-published-status d-flex align-items-center gap-2 mb-0'>
+                                                                <i class='fa fa-check-circle text-success'></i>
+                                                                <span class='text-success'>{{ trans('langPublishedToBackpack') }}</span>
+                                                            </div>
+                                                        @elseif (isset($badge->allow_export) && $badge->allow_export == 0)
+                                                            <!-- Badge export is disabled by instructor -->
+                                                            <div class='badge-card-footer-text text-muted mb-0'>
+                                                                {{ trans('langPublishToBackpack') }}
+                                                            </div>
+                                                            <div class='badge-card-actions d-flex align-items-center gap-2 flex-wrap'>
+                                                                <button class='badge-publish-btn disabled' 
+                                                                        disabled
+                                                                        data-bs-toggle='tooltip'
+                                                                        data-bs-placement='left'
+                                                                        title='{{ trans('langBadgeExportDisabled') }}'
+                                                                        style='opacity: 0.5; cursor: not-allowed;'>
+                                                                    <i class='fa fa-cloud-upload'></i>
+                                                                </button>
+                                                                <span class='text-muted small'>
+                                                                    {{ trans('langBadgeExportDisabledShort') }}
+                                                                </span>
+                                                            </div>
+                                                        @else
+                                                            <!-- Badge not published yet -->
+                                                            <div class='badge-card-footer-text mb-0'>
+                                                                {{ trans('langPublishToBackpack') }}
+                                                            </div>
+                                                            <div class='badge-card-actions d-flex align-items-center gap-2 flex-wrap'>
+                                                                <button class='badge-publish-btn disabled' 
+                                                                        data-user-badge-id='{{ $badge->user_badge_id }}'
+                                                                        data-bs-toggle='tooltip'
+                                                                        data-bs-placement='left'
+                                                                        title='{{ trans('langPublishBadgeTooltip') }}'
+                                                                        aria-label='{{ trans('langPublishBadgeAriaLabel') }}'>
+                                                                    <i class='fa fa-cloud-upload'></i>
+                                                                </button>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+                    
+                    {{-- External Badges from Backpack --}}
+                    @if (isset($openBadgesEnabled) && $openBadgesEnabled && isset($badge_external) && count($badge_external) > 0)
+                        <div class='col-12 mt-4'>
+                            <div class="card panelCard border-card-left-default px-3 py-2">
+                                <div class='card-header border-0 d-flex justify-content-between align-items-center'>
+                                    <h3>
+                                        {{ trans('langExternalBadges') }}
+                                        <small class='text-muted ms-2'>({{ trans('langSyncedFromBackpack') }})</small>
+                                    </h3>
+                                </div>
+                                <div class="card-body">
+                                    @if(count($badge_external) == 1)
+                                    <div class='row row-cols-1 row-cols-md-1 g-4'>
+                                    @else
+                                    <div class='row row-cols-1 row-cols-md-2 g-4'>
+                                    @endif
+                                        @foreach ($badge_external as $key => $badge)
+                                            <div class='col'>
+                                                <div class="card h-100 border-0 badge-card-wrapper external-badge">
+                                                    @if(!empty($badge->image_url))
+                                                        <img style='height:150px; width:150px; object-fit: contain;' 
+                                                             src="{{ $badge->image_url }}" 
+                                                             class="card-img-top ms-auto me-auto mt-3" 
+                                                             alt="external badge"
+                                                             onerror="this.src='{{ $urlServer }}resources/img/game/badge.png'">
+                                                    @else
+                                                        <img style='height:150px; width:150px;' 
+                                                             src="{{ $urlServer }}resources/img/game/badge.png" 
+                                                             class="card-img-top ms-auto me-auto mt-3" 
+                                                             alt="external badge">
+                                                    @endif
+                                                    <div class="card-body">
+                                                        <div class='text-heading-h5 text-center'>
+                                                            {{ ellipsize($badge->title, 40) }}
+                                                        </div>
+                                                        @if(!empty($badge->created))
+                                                            <div class='badge_date text-center text-success'>
+                                                                {!! format_locale_date(strtotime($badge->created), null, false) !!}
+                                                            </div>
+                                                        @endif
+                                                        <div class='bagde_panel_issuer text-center'>
+                                                            {{ $badge->issuer ?? trans('langUnknownIssuer') }}
+                                                        </div>
+                                                        @if(!empty($badge->description))
+                                                            <div class='badge_description text-center text-muted mt-2' style='font-size: 0.9em;'>
+                                                                {{ ellipsize($badge->description, 100) }}
+                                                            </div>
+                                                        @endif
+                                                    </div>
                                                 </div>
                                             </div>
                                         @endforeach
@@ -297,6 +425,11 @@
             @endif
         </div>
     </div>
-</div>
+</main>
+
+<!-- Include Publish Badge Modal -->
+@if ($uid == $id && !isset($_GET['id']) && !isset($_GET['token']))
+    @include('modules.backpack.templates.publish_badge_modal')
+@endif
 
 @endsection

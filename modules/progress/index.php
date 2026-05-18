@@ -37,6 +37,8 @@ require_once 'ForumEvent.php';
 require_once 'ForumTopicEvent.php';
 require_once 'LearningPathEvent.php';
 require_once 'LearningPathDurationEvent.php';
+require_once 'LearningPathProgressMeasureEvent.php';
+require_once 'LearningPathLessonStatusEvent.php';
 require_once 'RatingEvent.php';
 require_once 'ViewingEvent.php';
 require_once 'CourseParticipationEvent.php';
@@ -347,7 +349,9 @@ if ($is_editor) {
             if (isset($_POST['enablecertdeadline'])) {
                 $expires = date_format(date_create_from_format('d-m-Y H:i', $_POST['enddatepicker']), 'Y-m-d H:i');
             }
-            add_certificate($table, $_POST['title'], $_POST['description'], $_POST['message'], $icon, $_POST['issuer'], 0, 0, $expires);
+            // Get allow_export value (only for badges, default to 1 if checked or not set)
+            $allow_export = ($table == 'badge' && isset($_POST['allow_badge_export'])) ? 1 : (($table == 'badge') ? 0 : 1);
+            add_certificate($table, $_POST['title'], $_POST['description'], $_POST['message'], $icon, $_POST['issuer'], 0, 0, $expires, 0, 0, $allow_export);
             Session::flash('message',$langNewCertificateSuc);
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/progress/index.php?course=$course_code".$tab_q);
@@ -437,7 +441,9 @@ if ($is_editor) {
             'title' => "$langTheField $langTitle",
         ));
         if($v->validate()) {
-            modify($element, $element_id, $_POST['title'], $_POST['description'], $_POST['message'], $_POST['template'], $_POST['issuer']);
+            // Get allow_export value (only for badges)
+            $allow_export = ($element == 'badge' && isset($_POST['allow_badge_export'])) ? 1 : (($element == 'badge') ? 0 : 1);
+            modify($element, $element_id, $_POST['title'], $_POST['description'], $_POST['message'], $_POST['template'], $_POST['issuer'], $allow_export);
             Session::flash('message',$langQuotaSuccess);
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/progress/index.php?course=$course_code$tab_q");
@@ -543,6 +549,16 @@ if ($is_editor) {
         redirect_to_home_page("modules/progress/index.php?course=$course_code&$param_name=$element_id");
     } elseif (isset($_POST['add_lpduration'])) { // add learning path duration activity in certificate
         add_lp_to_certificate($element, $element_id, LearningPathDurationEvent::ACTIVITY);
+        Session::flash('message',$langQuotaSuccess);
+        Session::flash('alert-class', 'alert-success');
+        redirect_to_home_page("modules/progress/index.php?course=$course_code&$param_name=$element_id");
+    } elseif (isset($_POST['add_lpprogressmeasure'])) { // add learning path progress_measure activity in certificate
+        add_lp_to_certificate($element, $element_id, LearningPathProgressMeasureEvent::ACTIVITY);
+        Session::flash('message',$langQuotaSuccess);
+        Session::flash('alert-class', 'alert-success');
+        redirect_to_home_page("modules/progress/index.php?course=$course_code&$param_name=$element_id");
+    } elseif (isset($_POST['add_lplessonstatus'])) { // add learning path lesson_status activity in certificate
+        add_lp_lessonstatus_to_certificate($element, $element_id);
         Session::flash('message',$langQuotaSuccess);
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/progress/index.php?course=$course_code&$param_name=$element_id");

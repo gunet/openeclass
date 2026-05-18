@@ -2,13 +2,10 @@
 
 @section('content')
 
-    <div class="col-12 main-section">
-        <div class='{{ $container }} module-container py-lg-0'>
-            <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
-
-                @include('layouts.partials.left_menu')
-
-                <div class="col_maincontent_active">
+    <div class='{{ $container }} module-container py-lg-0'>
+        <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
+            <aside class='aside-sidebar'>@include('layouts.partials.left_menu')</aside>
+            <main id="main" class="col-12 main-maincontent col_maincontent_active">
                     <div class="row">
                         @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
@@ -24,7 +21,7 @@
                         <div class='col-12 mb-4'>
                             <div class='card panelCard border-card-left-default px-3 py-2 h-100'>
                                 <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                    <h3>{{ $exerciseTitle }}</h3>
+                                    <h2 class='text-heading-h3'>{{ $exerciseTitle }}</h2>
                                 </div>
                                 <div class='card-body'>
                                     <div class='row row-cols-1 g-3'>
@@ -37,7 +34,7 @@
 
                                         @if ($periodLabel)
                                             <div class='col-12'>
-                                                {!! $periodLabel !!} <strong>{{ $periodInfo }}</strong>
+                                                {!! $periodLabel !!} <strong>{!! $periodInfo !!}</strong>
                                             </div>
                                         @endif
 
@@ -232,8 +229,7 @@
                         @endif
 
                     </div>
-                </div>
-            </div>
+            </main>
         </div>
     </div>
 

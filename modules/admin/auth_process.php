@@ -112,6 +112,8 @@ register_posted_variables([
     // OAuth 2.0 options
     'apiBaseUrl' => true, 'authorizePath' => true, 'accessTokenPath' => true, 'profileMethod' => true,
     'apiID' => true, 'apiSecret' => true,
+    // Keycloak options
+    'realm' => true, 'userstudentid' => true, 'altauth' => true, 'altauth_use' => true,
 ], 'all');
 
 if (empty($ldap_login_attr)) {
@@ -253,6 +255,17 @@ if (isset($_POST['submit'])) {
                 'casuserlastattr' => $casuserlastattr,
                 'casuserstudentid' => $casuserstudentid];
             break;
+        case 16:
+            $settings = [
+                'apiBaseUrl' => $apiBaseUrl,
+                'realm' => $realm,
+                'id' => $apiID,
+                'secret' => $apiSecret,
+                'userstudentid' => $userstudentid,
+                'altauth' => $altauth,
+                'altauth_use' => $altauth_use,
+            ];
+            break;
         default:
             break;
     }
@@ -319,8 +332,8 @@ if (isset($_POST['submit'])) {
             $data['checkedshib'] = $data['shibseparator'] = '';
         }
     } else {
-        if (in_array($auth, [8, 9, 10, 11, 12, 13])) {
-            $r = Database::get()->querySingle("SELECT auth_settings, auth_instructions, auth_name FROM auth WHERE auth_id = ?d", $auth);
+        if (in_array($auth, [8, 9, 10, 11, 12, 13, 15, 16])) {
+            $r = Database::get()->querySingle("SELECT auth_settings, auth_instructions, auth_name, auth_title FROM auth WHERE auth_id = ?d", $auth);
             if (!empty($data['auth_data']['auth_settings'])) {
                 foreach (unserialize($data['auth_data']['auth_settings']) as $key => $auth_setting) {
                     $data['auth_data'][$key] = $auth_setting;
@@ -331,8 +344,9 @@ if (isset($_POST['submit'])) {
             } else {
                 $data['auth_data']['id'] = $data['auth_data']['key'] = $data['auth_data']['secret'] = '';
             }
-            $auth_instructions = $r->auth_instructions;
-            $authName = q(ucfirst($r->auth_name));
+            $data['auth_title'] = !empty($r->auth_title) ? $r->auth_title : '';
+            $data['auth_instructions'] = !empty($r->auth_instructions) ? $r->auth_instructions : '';
+            $authName = !empty($r->auth_name) ? q(ucfirst($r->auth_name)) : '';
             if (isset($_SERVER['HTTPS'])) {
                 $protocol = ($_SERVER['HTTPS'] && $_SERVER['HTTPS'] != "off") ? "https" : "http";
             } else {

@@ -200,7 +200,7 @@ $data['action_bar'] = action_bar(
               'level' => 'primary' ]
         ], false);
 
-$data['descriptionEditor'] = rich_text_editor('requestDescription', 4, 20, $requestDescription);
+$data['descriptionEditor'] = rich_text_editor('requestDescription', 4, 20, $requestDescription, options: array('id' => 'requestDescription'));
 $data['creatorName'] = $_SESSION['givenname'] . ' ' . $_SESSION['surname'];
 $data['backUrl'] = $backUrl;
 $data['targetUrl'] = $urlAppend . 'modules/request/new.php?course=' . $course_code;;

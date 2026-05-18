@@ -34,6 +34,7 @@ if (!$found) { // exercise not found
     redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
 }
 
+$exercise_range = $objExercise->selectRange();
 $toolName = $langUsage;
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langExercices);
 
@@ -45,7 +46,7 @@ $total_attempts = $completedAttempts + $pausedAttempts + $pendingAttempts + $can
 
 $grade_stats = Database::get()->querySingle("SELECT COUNT(DISTINCT uid) AS unique_users, 
                                                 ROUND(AVG(TIME_TO_SEC(TIMEDIFF(record_end_date, record_start_date))),1) AS avg_time, 
-                                                ROUND(AVG(total_score),2) AS avg_grade, 
+                                                AVG(total_score) AS avg_grade, 
                                                 MIN(total_score) AS min_grade, 
                                                 MAX(total_score) AS max_grade 
                                             FROM exercise_user_record WHERE eid = ?d 
@@ -54,6 +55,17 @@ $total_grade = $objExercise->selectTotalWeighting();
 $max_grade = $grade_stats->max_grade;
 $min_grade = $grade_stats->min_grade;
 $avg_grade = $grade_stats->avg_grade;
+
+if ($exercise_range > 0 && $total_grade > 0) {
+    $avg_grade = round(($avg_grade / $total_grade) * $exercise_range, 2);
+    $min_grade = round(($min_grade / $total_grade) * $exercise_range, 2);
+    $max_grade = round(($max_grade / $total_grade) * $exercise_range, 2);
+    $total_grade = $exercise_range;
+} else {
+    $avg_grade = round($avg_grade, 2);
+}
+
+$avg_time = $grade_stats->avg_time;
 $avg_time = $grade_stats->avg_time;
 $unique_users = $grade_stats->unique_users;
 $total_users = Database::get()->querySingle("SELECT COUNT(DISTINCT uid) AS count FROM exercise_user_record WHERE eid = ?d", $exerciseId)->count;
@@ -64,7 +76,7 @@ $total_users = Database::get()->querySingle("SELECT COUNT(DISTINCT uid) AS count
 $tool_content .= "
     <div class='card panelCard card-default px-lg-4 py-lg-3'>
         <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-            <h3>" . $objExercise->selectTitle() . "</h3>
+            <h2 class='text-heading-h3'>" . $objExercise->selectTitle() . "</h2>
         </div>
         <div class='row g-3'>
         
@@ -242,7 +254,7 @@ $tool_content .= "
     <div class='col-12 mt-4'>
         <div class='card panelCard card-default px-lg-4 py-lg-3'>
             <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                <h3>$langQuestions</h3>";
+                <h2 class='text-heading-h3'>$langQuestions</h2>";
                 if ($exerciseCalcGradeMethod == CALC_GRADE_METHOD_CERTAINTY_BASED) {
                     $tool_content .= "
                                 <div class='d-flex gap-1'>

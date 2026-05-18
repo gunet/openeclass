@@ -57,6 +57,7 @@ $head_content .= "
                 language: '".$language."',
                 autoclose: true
             });
+            $('.alert-success.submit-ok').focus();
         });
     </script>
 ";
@@ -621,7 +622,7 @@ function printPollForm() {
                 <div class='col-12 mb-4'>
                     <div class='card panelCard card-default px-lg-4 py-lg-3 mb-4'>
                         <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                            <h3>$langSubmissionOnBehalfOfUser</h3>
+                            <h2 class='text-heading-h3'>$langSubmissionOnBehalfOfUser</h2>
                         </div>
                         <div class='card-body'>
                             <form id='onBehalfOfSelectionForm' method='post' action='$actionPoll'>
@@ -661,7 +662,7 @@ function printPollForm() {
             $tool_content .= "<div class='col-12 mb-4'>
                                 <div class='card panelCard card-default px-lg-4 py-lg-3 mb-4'>
                                     <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                        <h3>$langDescription</h3>
+                                        <h2 class='text-heading-h3'>$langDescription</h2>
                                     </div>
                                     <div class='card-body'>
                                         " . standard_text_escape($thePoll->description) . "
@@ -733,7 +734,7 @@ function printPollForm() {
             $tool_content .= "
                 <div class='card panelCard card-default px-lg-4 py-lg-3 mb-4'>
                     <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                        <h3>$langPollParticipantInfo</h3>
+                        <h2 class='text-heading-h3'>$langPollParticipantInfo</h2>
                     </div>
                     <div class='card-body'>
                         <div class='form-group$email_error'>
@@ -836,7 +837,7 @@ function printPollForm() {
                 }
                 $RequiredQuestionHtml = '';
                 if ($theQuestion->require_response) {
-                    $RequiredQuestionHtml = "&nbsp; <span data-bs-toggle='tooltip' data-bs-placement='top' title='$langRequireAnswer'>(<i class='fa-solid fa-asterisk fa-lg text-danger'></i>)</span>";
+                    $RequiredQuestionHtml = "&nbsp; <span tabindex='0' data-bs-toggle='tooltip' data-bs-placement='top' title='$langRequireAnswer' aria-label='$langRequireAnswer'>(<i class='fa-solid fa-asterisk fa-lg text-danger'></i>)</span>";
                 }
 
                 // Highlight to the card question only if is empty.
@@ -848,10 +849,10 @@ function printPollForm() {
                 <div class='col-12'>
                     <div class='card panelCard px-lg-4 py-lg-3 h-100 panelCard-questionnaire poll-panel mb-4' $emptyQuestionStyle>
                         <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                            <h3>$langQuestion $_SESSION[q_counter] $RequiredQuestionHtml</h3>
+                            <h2 class='text-heading-h3'>$langQuestion $_SESSION[q_counter] $RequiredQuestionHtml</h2>
                         </div>
                         <div class='card-body'>";
-                            $tool_content .= "<p class='TextMedium Neutral-900-cl mb-2'>".q_math($theQuestion->question_text)."</p>";
+                            $tool_content .= "<p tabindex='0' class='TextMedium Neutral-900-cl mb-2'>".q_math($theQuestion->question_text)."</p>";
                                             if(!empty($q_description)){
                                                 $tool_content .= "<div class='col-12 my-4'>$q_description</div>";
                                             }
@@ -881,8 +882,8 @@ function printPollForm() {
                                         <div class='form-group'>
                                             <div class='col-sm-offset-1 col-sm-11'>
                                                 <div class='$type_attr QuestionType_{$qtype} QuestionNumber_{$pqid}'>
-                                                    <label class='$class_type_attr' aria-label='$langSelect'>
-                                                        <input class='single_type_answer' type='$type_attr' name='answer[$pqid]$name_ext' value='$theAnswer->pqaid' $checked data-question-type='$qtype' data-main-question='$pqid'>
+                                                    <label class='$class_type_attr' for='AccessibilityCheck_{$pqid}_{$theAnswer->pqaid}'>
+                                                        <input id='AccessibilityCheck_{$pqid}_{$theAnswer->pqaid}' class='single_type_answer' type='$type_attr' name='answer[$pqid]$name_ext' value='$theAnswer->pqaid' $checked data-question-type='$qtype' data-main-question='$pqid'>
                                                         $checkMark_class
                                                         ".q_math($theAnswer->answer_text)."
                                                     </label>
@@ -910,7 +911,7 @@ function printPollForm() {
                                         $tool_content .= "<div class='col-12 sub_question_temp_{$pqid} sub_question_{$theAnswer->pqaid} $subQDisplay' style='border-top: solid 1px rgb(30, 43, 52) !important; $borderBottom padding-top: 25px; margin-top: 25px;'>";
                                         if ($qTypeSubQuestion == QTYPE_SINGLE) {
                                             $resSubQAnswers = Database::get()->queryArray("SELECT * FROM poll_question_answer WHERE pqid = ?d", $theAnswer->sub_qid);
-                                            $tool_content .= "<p class='mb-2'>$SubQuestionText</p>";
+                                            $tool_content .= "<p tabindex='0' class='mb-2'>$SubQuestionText</p>";
                                             foreach ($resSubQAnswers as $an) {
                                                 $checkedSubQ = '';
                                                 if (isset($_SESSION['data_answers'][$an->pqid]) && $_SESSION['data_answers'][$an->pqid] == $an->pqaid) {
@@ -920,8 +921,8 @@ function printPollForm() {
                                                 <div class='form-group'>
                                                     <div class='col-sm-offset-1 col-sm-11'>
                                                         <div class='radio QuestionType_{$qTypeSubQuestion} QuestionNumber_{$an->pqid}'>
-                                                            <label class='radio-label' aria-label='$langSelect'>
-                                                                <input type='radio' name='answer[$an->pqid]' value='$an->pqaid' $checkedSubQ data-question-type='$qTypeSubQuestion'>
+                                                            <label class='radio-label' for='AccessibilitySubCheck_{$an->pqid}_{$an->pqaid}'>
+                                                                <input id='AccessibilitySubCheck_{$an->pqid}_{$an->pqaid}' type='radio' name='answer[$an->pqid]' value='$an->pqaid' $checkedSubQ data-question-type='$qTypeSubQuestion'>
                                                                 ".q_math($an->answer_text)."
                                                             </label>
                                                         </div>
@@ -933,7 +934,7 @@ function printPollForm() {
                                             $resSubQAnswers = Database::get()->queryArray("SELECT * FROM poll_question_answer WHERE pqid = ?d", $theAnswer->sub_qid);
                                             $tool_content .= "<input type='hidden' name='question[$theAnswer->sub_qid]' value='$qTypeSubQuestion'>
                                                               <input type='hidden' name='answer[$theAnswer->sub_qid]' value='-1'>";
-                                            $tool_content .= "<p class='mb-2'>$SubQuestionText</p>";
+                                            $tool_content .= "<p tabindex='0' class='mb-2'>$SubQuestionText</p>";
                                             foreach ($resSubQAnswers as $an) {
                                                 $checkedSubQ = '';
                                                 if (isset($_SESSION['data_answers'][$an->pqid])) {
@@ -946,8 +947,8 @@ function printPollForm() {
                                                 <div class='form-group'>
                                                     <div class='col-sm-offset-1 col-sm-11'>
                                                         <div class='checkbox QuestionType_{$qTypeSubQuestion} QuestionNumber_{$an->pqid}'>
-                                                            <label class='label-container' aria-label='$langSelect'>
-                                                                <input class='single_type_answer' type='checkbox' name='answer[$an->pqid][]' value='$an->pqaid' $checkedSubQ data-question-type='$qTypeSubQuestion'>
+                                                            <label class='label-container' for='AccessibilitySubCheck_{$an->pqid}_{$an->pqaid}'>
+                                                                <input id='AccessibilitySubCheck_{$an->pqid}_{$an->pqaid}' class='single_type_answer' type='checkbox' name='answer[$an->pqid][]' value='$an->pqaid' $checkedSubQ data-question-type='$qTypeSubQuestion'>
                                                                 <span class='checkmark'></span>
                                                                 ".q_math($an->answer_text)."
                                                             </label>
@@ -962,7 +963,7 @@ function printPollForm() {
                                                 $text = $_SESSION['data_answers'][$theAnswer->sub_qid];
                                             }
                                             $tool_content .= "
-                                            <p class='TextMedium Neutral-900-cl mb-2'>$QText</p>
+                                            <p tabindex='0' class='TextMedium Neutral-900-cl mb-2'>$QText</p>
                                             <div class='form-group margin-bottom-fat'>
                                                 <div class='col-sm-12 margin-top-thin QuestionType_{$qTypeSubQuestion} QuestionNumber_{$theAnswer->sub_qid}'>
                                                     <textarea class='form-control' name='answer[$theAnswer->sub_qid]' aria-label='$langTypeOutMessage' data-question-type='$qTypeSubQuestion'>$text</textarea>
@@ -985,8 +986,8 @@ function printPollForm() {
                                         <div class='form-group'>
                                             <div class='col-sm-offset-1 col-sm-11'>
                                                 <div class='$type_attr QuestionType_{$qtype} QuestionNumber_{$pqid}'>
-                                                    <label class='$class_type_attr'>
-                                                        <input class='single_type_answer' type='$type_attr' name='answer[$pqid]' value='-1' data-question-type='$qtype' data-main-question='$pqid' $checked>
+                                                    <label class='$class_type_attr' for='AccessibilityChecker_{$pqid}'>
+                                                        <input id='AccessibilityChecker_{$pqid}' class='single_type_answer' type='$type_attr' name='answer[$pqid]' value='-1' data-question-type='$qtype' data-main-question='$pqid' $checked>
                                                         $checkMark_class
                                                         $langPollUnknown
                                                     </label>
@@ -996,7 +997,7 @@ function printPollForm() {
                                 }
 
                                 $tool_content .= "<div class='col-12 d-flex justify-content-end align-items-center mt-4'>
-                                                    <a id='{$qtype}_{$pqid}' class='btn deleteAdminBtn clearUpBtn gap-1' data-question-clean='$pqid' data-sub-question='$sSubQ'><i class='fa-regular fa-trash-can'></i>$langCleanup</a>
+                                                    <button id='{$qtype}_{$pqid}' class='btn deleteAdminBtn clearUpBtn gap-1' data-question-clean='$pqid' data-sub-question='$sSubQ'><i class='fa-regular fa-trash-can'></i>$langCleanup</button>
                                                   </div>";
                             } elseif ($qtype == QTYPE_SCALE) {
                                 $slider_value = 0;
@@ -1034,7 +1035,7 @@ function printPollForm() {
                                     </div>";
 
                                     $tool_content .= "<div class='col-12 d-flex justify-content-end align-items-center mt-4'>
-                                                            <a id='{$qtype}_{$pqid}' class='btn deleteAdminBtn clearUpBtn gap-1' data-question-clean='$pqid'><i class='fa-regular fa-trash-can'></i>$langCleanup</a>
+                                                            <button id='{$qtype}_{$pqid}' class='btn deleteAdminBtn clearUpBtn gap-1' data-question-clean='$pqid'><i class='fa-regular fa-trash-can'></i>$langCleanup</button>
                                                         </div>";
                             } elseif ($qtype == QTYPE_TABLE) {
 
@@ -1056,7 +1057,7 @@ function printPollForm() {
                                                     <thead>
                                                         <tr>";
                                                             foreach ($user_questions as $q) {
-                                                                $tool_content .= "<th style='min-width:250px;'><p>" . q($q->answer_text) . "</p></th>";
+                                                                $tool_content .= "<th style='min-width:250px;'><p tabindex='0'>" . q($q->answer_text) . "</p></th>";
                                                             }
                                     $tool_content .= "</tr>
                                                     </thead>
@@ -1092,7 +1093,7 @@ function printPollForm() {
                                     }
 
                                     $tool_content .= "<div class='col-12 d-flex justify-content-end align-items-center mt-4'>
-                                                            <a id='{$qtype}_{$pqid}' class='btn deleteAdminBtn clearUpBtn gap-1' data-question-clean='$pqid'><i class='fa-regular fa-trash-can'></i>$langCleanup</a>
+                                                            <button id='{$qtype}_{$pqid}' class='btn deleteAdminBtn clearUpBtn gap-1' data-question-clean='$pqid'><i class='fa-regular fa-trash-can'></i>$langCleanup</button>
                                                         </div>";
                                 }
                             } elseif ($qtype == QTYPE_DATETIME || $qtype == QTYPE_SHORT || $qtype == QTYPE_DATE) {
@@ -1136,7 +1137,7 @@ function printPollForm() {
                                
 
                                     $tool_content .= "<div class='col-12 d-flex justify-content-end align-items-center mt-4'>
-                                                            <a id='{$qtype}_{$pqid}' class='btn deleteAdminBtn clearUpBtn gap-1' data-question-clean='$pqid'><i class='fa-regular fa-trash-can'></i>$langCleanup</a>
+                                                            <button id='{$qtype}_{$pqid}' class='btn deleteAdminBtn clearUpBtn gap-1' data-question-clean='$pqid'><i class='fa-regular fa-trash-can'></i>$langCleanup</button>
                                                         </div>";
                             } elseif ($qtype == QTYPE_FILE) {
                                 poll_upload_file($pid, $form_link, $qtype, $pqid, $userDefault);
@@ -1565,7 +1566,7 @@ function submitPoll() {
             )
         );
         $end_message = Database::get()->querySingle("SELECT end_message FROM poll WHERE pid = ?d", $pid)->end_message;
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>".$langPollSubmitted."</span></div></div>";
+        $tool_content .= "<div class='col-sm-12'><div tabindex='0' class='alert alert-success submit-ok'><i class='fa-solid fa-circle-check fa-lg'></i><span>".$langPollSubmitted."</span></div></div>";
         if ($poll->end_message) {
             $tool_content .=  $end_message;
         }

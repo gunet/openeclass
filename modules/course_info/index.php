@@ -36,7 +36,7 @@ require_once 'include/lib/hierarchy.class.php';
 require_once 'include/course_settings.php';
 require_once 'modules/sharing/sharing.php';
 
-// Get success message from current course language
+// Get a success message from the current course language
 if (Session::has('course-modify-success')) {
     Session::flash('message', $langModifDone);
     Session::flash('alert-class', 'alert-success');
@@ -74,6 +74,17 @@ if ($is_power_user or $is_admin or ($is_departmentmanage_user and $atleastone)) 
     $allow_clone = true;
 }
 
+$tenant = getCurrentTenant();
+
+if ($tenant) {
+    $tenantOptions = $tenant->options ? unserialize($tenant->options) : [];
+    $allow_clone = $allow_clone || getTenantOption(
+        $tenantOptions,
+        'allow_teacher_clone_course'
+    );
+} else {
+    $allow_clone = $allow_clone || get_config('allow_teacher_clone_course');
+}
 
 $toolName = $langCourseInfo;
 
@@ -282,6 +293,16 @@ if (isset($_POST['submit'])) {
     $data['courses_options'] = $courses_options;
 
     warnCourseInvalidDepartment();
+
+    // check if the course has imported course material
+    $q_imp = Database::get()->querySingle("SELECT * from course_import WHERE course_id = ?d", $course_id);
+    if ($q_imp) {
+        $course_has_import = true;
+    } else {
+        $course_has_import = false;
+    }
+
+    $data['course_has_import'] = $course_has_import;
 
     $data['action_bar'] = action_bar([
         ['title' => $langSyllabus,

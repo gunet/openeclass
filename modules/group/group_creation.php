@@ -42,11 +42,17 @@ if (isset($_GET['all'])) {
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langGroups);
 
 load_js('tools.js');
-load_js('select2');
+load_js('slimselect');
 
 $head_content .= "<script type='text/javascript'>
     $(document).ready(function () {
-        $('#select-tutor').select2();
+        slimSelectFun (
+            '#select-tutor', 
+            '" . js_escape(trans('langSearch')) . "', 
+            '" . js_escape(trans('langWelcomeSelect')) . "', 
+            '" . js_escape(trans('langSelectAll')) . "', 
+            '" . js_escape(trans('langListChoices')) . "'
+        );
     });        
     </script>
 ";
@@ -118,7 +124,7 @@ if (isset($_GET['all'])) {
     </div>";
 } else {
     if ($is_editor) {
-            $tool_content_tutor = "<select name='tutor[]' multiple id='select-tutor' class='form-select h-100 rounded-0'>";
+            $tool_content_tutor = "<select name='tutor[]' multiple id='select-tutor' class='form-control'>";
             $q = Database::get()->queryArray("SELECT user.id AS user_id, surname, givenname
                                                 FROM course_user, user
                                                 WHERE course_user.user_id = user.id AND

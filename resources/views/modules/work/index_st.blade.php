@@ -11,15 +11,39 @@
     </script>
 @endpush
 
+@if(get_config('eportfolio_enable'))
+    @push('head_scripts')
+        <script>
+            $(document).on('click', 'a.list-group-item[href*="resources.php"]', function(e) {
+                e.preventDefault();
+
+                const href = $(this).attr('href');
+                const url = new URL(href, window.location.origin);
+                const rid = url.searchParams.get('rid');
+
+                const modalId = `modal_work_${rid}`;
+                const modalElement = document.getElementById(modalId);
+
+                if (modalElement) {
+                    const Modal = new bootstrap.Modal(modalElement);
+                    Modal.show();
+
+                    const formSelector = `#vis_form_work_${rid}`;
+                    $(formSelector).attr('action', href);
+                } else {
+                    console.warn('Modal with ID', modalId, 'not found');
+                }
+            });
+        </script>
+    @endpush
+@endif
+
 @section('content')
 
-    <div class="col-12 main-section">
-        <div class='{{ $container }} module-container py-lg-0'>
-            <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
-
-                @include('layouts.partials.left_menu')
-
-                <div class="col_maincontent_active">
+<div class='{{ $container }} module-container py-lg-0'>
+    <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
+            <aside class='aside-sidebar'>@include('layouts.partials.left_menu')</aside>
+            <main id="main" class="col-12 main-maincontent col_maincontent_active">
                     <div class="row">
                         @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
@@ -140,7 +164,7 @@
                                                 </td>
                                                 <td class='text-center'>
                                                     @if ($submission = find_submissions(is_group_assignment($row->id), $uid, $row->id, $gids))
-                                                        <i class='fa-solid fa-check'></i><br>
+                                                        <i class='fa-solid fa-check' data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ trans('langYes') }}" aria-label="{{ trans('langYes') }}" tabindex="0"></i><br>
                                                         @foreach ($submission as $sub)
                                                             @if (isset($sub->group_id)) {{-- if is a group assignment --}}
                                                                 <div>
@@ -151,7 +175,7 @@
                                                             @endif
                                                         @endforeach
                                                     @else
-                                                        <i class='fa-regular fa-hourglass-half'></i><br>
+                                                        <i class='fa-regular fa-hourglass-half' data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ trans('langNo') }}" aria-label="{{ trans('langNo') }}" tabindex="0"></i><br>
                                                     @endif
                                                 </td>
                                                 <td class='text-center'>
@@ -173,11 +197,41 @@
                                                         {!! action_button(array(
                                                             array(
                                                                 'title' => trans('langAddResePortfolio'),
-                                                                'url' => $urlAppend . "main/eportfolio/resources.php?token=" .token_generate('eportfolio' . $uid) ."&amp;action=add&amp;type=work_submission&amp;rid=$row->id",
+                                                                'url' => $urlAppend . "main/eportfolio/resources.php?action=add&amp;type=work_submission&amp;rid=$row->id",
                                                                 'icon' => 'fa-star'
                                                                 )
                                                             ));
                                                         !!}
+                                                        <div class="modal fade" id="modal_work_{{$row->id}}" tabindex="-1" aria-labelledby="workModalLabel_{{$row->id}}" aria-hidden="true">
+                                                            <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                        
+                                                                <div class="modal-header">
+                                                                <h5 class="modal-title" id="workModalLabel_{{$row->id}}">{{ trans('langAddResePortfolio') }} - {{$row->title}}</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ trans('langClose') }}"></button>
+                                                                </div>
+                                                        
+                                                                <div class="modal-body">
+                                                                <form id="vis_form_work_{{$row->id}}" name="vis_form_work_{{$row->id}}" action="" method="post">
+                                                                    <div class="mb-3">
+                                                                        <label for="vis_form_work_{{$row->id}}_select" class="form-label">{{ trans('langePortfolioFieldsVisibilitySettings') }}</label>
+                                                                        <select class="form-select" name="visibility" id="vis_form_work_{{$row->id}}_select">
+                                                                        <option value="{{EPF_VISIBLE_PUBLIC}}">{{ trans('langPublicePortfolioField') }}</option>
+                                                                        <option value="{{EPF_VISIBLE_USERS}}">{{ trans('langOpenToRegisteredUsers') }}</option>
+                                                                        <option value="{{EPF_VISIBLE_PRIVATE}}">{{ trans('langProfileInfoPrivate') }}</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="mb-3">
+                                                                        <label for="vis_form_work_{{$row->id}}_textarea" class="form-label">{{ trans('langePortfolioPromptAddReflComments') }}</label>
+                                                                        <textarea class="form-control" name="reflection_comments" id="vis_form_work_{{$row->id}}_textarea"></textarea>
+                                                                    </div>
+                                                                    <button type="submit" class="btn btn-primary">{{ trans('langSubmit') }}</button>
+                                                                </form>
+                                                                </div>
+                                                        
+                                                            </div>
+                                                            </div>
+                                                        </div>
                                                      </td>
                                                 @endif
                                             </tr>
@@ -196,10 +250,10 @@
                         @endif
 
                     </div>
-                </div>
+                </main>
             </div>
         </div>
-    </div>
+
 
     <script type='text/javascript'>
         $(document).ready(function() {
@@ -232,7 +286,20 @@
                         'sNext': '&rsaquo;',
                         'sLast': '&raquo;'
                     }
+                },
+                'tabIndex': -1,
+                'initComplete': function() {
+                    $('#assignment_table_{{ $course_code }} thead .dt-column-order').each(function() {
+                        $(this).removeAttr('aria-label');
+                        $(this).attr('aria-hidden', 'true');
+                    });
                 }
+            });
+            $('#assignment_table_{{ $course_code }}').on('order.dt', function() {
+                $('#assignment_table_{{ $course_code }} thead .dt-column-order').each(function() {
+                    $(this).removeAttr('aria-label');
+                    $(this).attr('aria-hidden', 'true');
+                });
             });
             $('.dt-search input').attr({
                 'class': 'form-control input-sm ms-0 mb-3',

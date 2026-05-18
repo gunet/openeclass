@@ -149,7 +149,7 @@ if ($is_editor) {
         }
         $data['name'] = Session::has('name') ? Session::get('name') : ( isset($_GET['add']) ? "" : $data['glossary_cat']->name );
         $description = Session::has('description') ? Session::get('description') : ( isset($_GET['add']) ? "" : $data['glossary_cat']->description);
-        $data['description_rich'] = rich_text_editor('description', 4, 60, $description);
+        $data['description_rich'] = rich_text_editor('description', 4, 60, $description, options: array('id' => 'description'));
         $data['form_buttons'] = form_buttons(array(
                                     array(
                                         'class' => 'submitAdminBtn',

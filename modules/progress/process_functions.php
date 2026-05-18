@@ -220,6 +220,29 @@ function add_lp_to_certificate($element, $element_id, $activity_type) {
 }
 
 /**
+ * @brief add LP lesson_status (boolean) entries in criterion
+ * @param string $element  'certificate' or 'badge'
+ * @param int    $element_id
+ */
+function add_lp_lessonstatus_to_certificate($element, $element_id) {
+    if (isset($_POST['lp'])) {
+        foreach ($_POST['lp'] as $datakey => $data) {
+            Database::get()->query("INSERT INTO {$element}_criterion
+                                SET $element = ?d,
+                                module = " . MODULE_ID_LP . ",
+                                resource = ?d,
+                                activity_type = ?s,
+                                operator = 'eq',
+                                threshold = 1",
+                $element_id,
+                $_POST['lp'][$datakey],
+                LearningPathLessonStatusEvent::ACTIVITY);
+        }
+    }
+    return;
+}
+
+/**
  * @brief add course participation db entries in criterion
  * @param type $element
  * @param type $element_id
@@ -1108,7 +1131,7 @@ function add_points_game($title, $description, $startdate, $enddate, $level_name
  * @return type
  * @global type $course_id
  */
-function add_certificate($table, $title, $description, $message, $icon, $issuer, $active, $bundle, $expiration_day, $unit_id = 0, $session_id = 0) {
+function add_certificate($table, $title, $description, $message, $icon, $issuer, $active, $bundle, $expiration_day, $unit_id = 0, $session_id = 0, $allow_export = 1) {
 
     global $course_id;
 
@@ -1124,7 +1147,8 @@ function add_certificate($table, $title, $description, $message, $icon, $issuer,
                                 issuer = ?s,
                                 active = ?d,
                                 bundle = ?d,
-                                expires = ?t", $course_id, $unit_id, $session_id, $title, $description, $message, $icon, $issuer, $active, $bundle, $expiration_day)->lastInsertID;
+                                expires = ?t,
+                                allow_export = ?d", $course_id, $unit_id, $session_id, $title, $description, $message, $icon, $issuer, $active, $bundle, $expiration_day, $allow_export)->lastInsertID;
     } else {
         if ($table == 'certificate') {
             $new_id = Database::get()->query("INSERT INTO certificate
@@ -1147,7 +1171,8 @@ function add_certificate($table, $title, $description, $message, $icon, $issuer,
                                 issuer = ?s,
                                 active = ?d,
                                 bundle = ?d,
-                                expires = ?t", $course_id, $title, $description, $message, $icon, $issuer, $active, $bundle, $expiration_day)->lastInsertID;
+                                expires = ?t,
+                                allow_export = ?d", $course_id, $title, $description, $message, $icon, $issuer, $active, $bundle, $expiration_day, $allow_export)->lastInsertID;
         }
     }
 
@@ -1197,18 +1222,31 @@ function modify_points_game($points_game_id, $title, $description, $startdate, $
  * @param type $template
  * @param type $issuer
  * @param type $active
+ * @param type $allow_export
  */
-function modify($element, $element_id, $title, $description, $message, $value, $issuer) {
+function modify($element, $element_id, $title, $description, $message, $value, $issuer, $allow_export = 1) {
 
     global $course_id;
     $field = ($element == 'certificate')? 'template' : 'icon';
-    Database::get()->query("UPDATE $element SET title = ?s,
-                                                   description = ?s,
-                                                   message = ?s,
-                                                   $field = ?d,
-                                                   issuer = ?s
-                                                WHERE id = ?d AND course_id = ?d",
-                                    $title, $description, $message, $value, $issuer, $element_id, $course_id);
+    
+    if ($element == 'badge') {
+        Database::get()->query("UPDATE $element SET title = ?s,
+                                                       description = ?s,
+                                                       message = ?s,
+                                                       $field = ?d,
+                                                       issuer = ?s,
+                                                       allow_export = ?d
+                                                    WHERE id = ?d AND course_id = ?d",
+                                        $title, $description, $message, $value, $issuer, $allow_export, $element_id, $course_id);
+    } else {
+        Database::get()->query("UPDATE $element SET title = ?s,
+                                                       description = ?s,
+                                                       message = ?s,
+                                                       $field = ?d,
+                                                       issuer = ?s
+                                                    WHERE id = ?d AND course_id = ?d",
+                                        $title, $description, $message, $value, $issuer, $element_id, $course_id);
+    }
 
 }
 
@@ -1593,7 +1631,8 @@ function get_resource_details($element, $resource_id) {
             $langBlog, $langForums, $langWikiPages, $langWikiCreateWiki, $langNumOfBlogs, $langCourseParticipation,
             $langWiki, $langAllActivities, $langComments, $langCommentsBlog, $langCommentsCourse,
             $langPersoValue, $langCourseSocialBookmarks, $langForumRating, $langCourseHoursParticipation, $langGradebook,
-            $langGradeCourseCompletion, $langCourseCompletion, $langOfLearningPathDuration, $langAssignmentParticipation,
+            $langGradeCourseCompletion, $langCourseCompletion, $langOfLearningPath, $langOfLearningPathDuration,
+           $langOfLearningPathProgressMeasure, $langOfLearningPathLessonStatus, $langAssignmentParticipation,
             $langAttendance, $langCompletedSessionWithoutActivity, $langSubmittedUploadedFile, $langFileName, $langTCComplited,
             $langCompletedSessionWithMeeting, $langWithAttendanceRegistrationByConsultant, $langBlogPost, $langForumParticipation;
 
@@ -1638,7 +1677,7 @@ function get_resource_details($element, $resource_id) {
                 if ($q) {
                     $title = $q->name;
                 }
-                $type = $langLearnPath;
+                $type = $langOfLearningPath;
             break;
         case LearningPathDurationEvent::ACTIVITY:
             $q = Database::get()->querySingle("SELECT name FROM lp_learnPath WHERE lp_learnPath.course_id = ?d AND lp_learnPath.learnPath_id = ?d", $course_id, $resource);
@@ -1646,6 +1685,20 @@ function get_resource_details($element, $resource_id) {
                 $title = $q->name;
             }
             $type = $langOfLearningPathDuration;
+            break;
+        case LearningPathProgressMeasureEvent::ACTIVITY:
+            $q = Database::get()->querySingle("SELECT name FROM lp_learnPath WHERE lp_learnPath.course_id = ?d AND lp_learnPath.learnPath_id = ?d", $course_id, $resource);
+            if ($q) {
+                $title = $q->name;
+            }
+            $type = $langOfLearningPathProgressMeasure;
+            break;
+        case LearningPathLessonStatusEvent::ACTIVITY:
+            $q = Database::get()->querySingle("SELECT name FROM lp_learnPath WHERE lp_learnPath.course_id = ?d AND lp_learnPath.learnPath_id = ?d", $course_id, $resource);
+            if ($q) {
+                $title = $q->name;
+            }
+            $type = $langOfLearningPathLessonStatus;
             break;
         case ViewingEvent::DOCUMENT_ACTIVITY:
                 $cer_res = Database::get()->queryArray("SELECT (CASE WHEN title IS NULL OR title=' ' THEN filename ELSE title END) AS file_details FROM document
@@ -1828,7 +1881,7 @@ function get_resource_details($element, $resource_id) {
  */
 function cert_output_to_pdf($certificate_id, $user, $certificate_title = null, $certificate_message = null, $certificate_issuer = null, $certificate_date = null, $certificate_template_id = null, $certificate_identifier = null, bool $preview = false) {
 
-    global $webDir, $urlServer, $langCertAuthenticity, $langpublisher;
+    global $webDir, $urlServer, $langCertAuthenticity, $langpublisher, $siteName;
 
     if (isset($preview) and $preview) { // certificate preview
         $certificate_id = $certificate_template_id;
@@ -1862,6 +1915,25 @@ function cert_output_to_pdf($certificate_id, $user, $certificate_title = null, $
         $cert_link = $langCertAuthenticity . ":&nbsp;&nbsp;&nbsp;" . $urlServer . "main/out.php?i=" .$certificate_identifier;
         $student_name = $user;
     }
+
+    $logo = "<img src='{$webDir}/resources/img/logo-eclass-small-theme.svg'>";
+    $platform_title = $siteName;
+
+    if (isset($_SESSION['current_user_tenant'])) {
+        $tenant = $_SESSION['current_user_tenant'];
+        $tenantOptions = $tenant->options ? unserialize($tenant->options) : [];
+        $tenantLogo = getTenantOption($tenantOptions, 'imageUpload');
+        $tenantPlatformTitle = getTenantOption($tenantOptions, 'platform_title');
+
+        if ($tenantLogo) {
+            $logo = "<img src='{$webDir}$tenantLogo'>";
+        }
+
+        if ($tenantPlatformTitle) {
+            $platform_title = $tenantPlatformTitle;
+        }
+    }
+
     // init pdf
     $mpdf = new \Mpdf\Mpdf([
         'mode' => 'utf-8',
@@ -1885,6 +1957,8 @@ function cert_output_to_pdf($certificate_id, $user, $certificate_title = null, $
     $html_certificate = preg_replace('(%message%)', $certificate_message, $html_certificate);
     $html_certificate = preg_replace('(%date%)', $certificate_date, $html_certificate);
     $html_certificate = preg_replace('(%link%)', $cert_link, $html_certificate);
+    $html_certificate = preg_replace('(%logo%)', $logo, $html_certificate);
+    $html_certificate = preg_replace('(%platform_title%)', $platform_title, $html_certificate);
 
     $mpdf->WriteHTML($html_certificate);
     $mpdf->Output();
@@ -1940,6 +2014,8 @@ function refresh_user_progress($element, $element_id): void
     require_once "modules/progress/ExerciseEvent.php";
     require_once "modules/progress/LearningPathEvent.php";
     require_once "modules/progress/LearningPathDurationEvent.php";
+    require_once "modules/progress/LearningPathProgressMeasureEvent.php";
+    require_once "modules/progress/LearningPathLessonStatusEvent.php";
     require_once "modules/progress/AttendanceEvent.php";
     require_once "include/lib/learnPathLib.inc.php";
     require_once "modules/attendance/functions.php";
@@ -1978,6 +2054,8 @@ function refresh_user_progress($element, $element_id): void
                     break;
                 case LearningPathEvent::ACTIVITY:
                 case LearningPathDurationEvent::ACTIVITY:
+                case LearningPathProgressMeasureEvent::ACTIVITY:
+                case LearningPathLessonStatusEvent::ACTIVITY:
                         triggerLPGame($course_id, $u, $data->resource, LearningPathEvent::UPDPROGRESS);
                     break;
                 case AttendanceEvent::ACTIVITY:

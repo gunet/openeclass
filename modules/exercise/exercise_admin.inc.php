@@ -17,11 +17,10 @@
  *  * ========================================================================
  *
  */
-global $count;
 
 /**
  * @file exercise_admin.inc.php
- * @brief Create new exercise or modify an existing one
+ * @brief Create a new exercise or modify an existing one
  */
 require_once 'modules/search/classes/ConstantsUtil.php';
 require_once 'modules/search/classes/SearchEngineFactory.php';
@@ -73,7 +72,6 @@ if (isset($_POST['submitExercise'])) {
         'exerciseStartDate' => "$langTheField $langStart",
         'exerciseIPLock' => "$langTheField IPs"
     ));
-
     if($v->validate()) {
         $exerciseTitle = trim($_POST['exerciseTitle']);
         $objExercise->updateTitle($exerciseTitle);
@@ -138,8 +136,18 @@ if (isset($_POST['submitExercise'])) {
         } else {
             $objExercise->setOption('stricterExamRestriction', true);
         }
+        if (!isset($_POST['useSafeExamBrowser'])) {
+            $objExercise->setOption('useSafeExamBrowser', false);
+        } else {
+            $objExercise->setOption('useSafeExamBrowser', true);
+            $objExercise->updateTempSave(0); // disable temp save for safe exam browser
+        }
 
         $objExercise->save();
+
+        if (isset($_POST['useSafeExamBrowser'])) {
+            $objExercise->createSafeExamBrowserConfigFile();
+        }
         // reads the exercise ID (only useful for a new exercise)
         $exerciseId = $objExercise->selectId();
 
@@ -208,6 +216,7 @@ if (isset($_POST['submitExercise'])) {
     }
     $exercisePreventCopy = Session::has('jsPreventCopy') ? Session::get('jsPreventCopy') : $objExercise->getOption('jsPreventCopy');
     $exerciseStricterExamRestriction = Session::has('stricterExamRestriction') ? Session::get('stricterExamRestriction') : $objExercise->getOption('stricterExamRestriction');
+    $exerciseUseSafeExamBrowser = Session::has('useSafeExamBrowser') ? Session::get('useSafeExamBrowser') : $objExercise->getOption('useSafeExamBrowser');
     $exercisePasswordLock = Session::has('exercisePasswordLock') ? Session::get('exercisePasswordLock') : $objExercise->selectPasswordLock();
     $exerciseAssignToSpecific = Session::has('assign_to_specific') ? Session::get('assign_to_specific') : $objExercise->selectAssignToSpecific();
     $assignee_options = $unassigned_options = '';
@@ -276,6 +285,7 @@ if (isset($_POST['submitExercise'])) {
     $data['unassigned_options'] = $unassigned_options;
     $data['assignee_options'] = $assignee_options;
     $data['exerciseStricterExamRestriction'] = $exerciseStricterExamRestriction;
+    $data['exerciseUseSafeExamBrowser'] = $exerciseUseSafeExamBrowser;
     $data['isExam'] = $isExam;
     $data['continueTimeLimit'] = $continueTimeLimit;
     $data['continueTimeField'] = $continueTimeField;

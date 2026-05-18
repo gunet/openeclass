@@ -418,7 +418,7 @@ if(count($docs) > 0){
 }
 $data['docs'] = $docs;
 
-$data['comments_text'] = rich_text_editor('comments', 5, 40, '');
+$data['comments_text'] = rich_text_editor('comments', 5, 40, '', options: array('id' => 'comments'));
 
 $data['users_participants'] = session_participants_ids($sessionID);
 

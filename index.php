@@ -26,10 +26,11 @@
  */
 
 use Widgets\WidgetArea;
+
 session_start();
 
 if (isset($_POST['admin_login'])) {
-   define('MAINTENANCE_PAGE', true);
+    define('MAINTENANCE_PAGE', true);
 }
 
 // Handle alias of .../courses/<CODE>/... to index.php for course homes
@@ -40,7 +41,7 @@ if (preg_match('|/courses/([a-zA-Z0-9_-]+)/[^/]*$|', $_SERVER['REQUEST_URI'], $m
         echo '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
                 <html><head><title>404 Not Found</title></head><body>
                 <h1>Not Found</h1>
-                <p>The requested URL ',htmlspecialchars($_SERVER['REQUEST_URI']),' was not found on this server.</p>
+                <p>The requested URL ', htmlspecialchars($_SERVER['REQUEST_URI']), ' was not found on this server.</p>
                 </body></html>';
         exit;
     }
@@ -50,7 +51,6 @@ if (preg_match('|/courses/([a-zA-Z0-9_-]+)/[^/]*$|', $_SERVER['REQUEST_URI'], $m
     exit;
 }
 
-define('HIDE_TOOL_TITLE', 1);
 $guest_allowed = true;
 
 require_once 'include/baseTheme.php';
@@ -78,24 +78,24 @@ $warning = '';
 
 $Selected_Language = '';
 foreach ($session->active_ui_languages as $code) {
-    if($code == $session->language){
-        $data['language_code'] = $code;
+    if ($code == $session->language) {
+        $data['language_code'] = $language_code = $code;
     }
 }
 
 
-if(isset($_SESSION['hybridauth_callback'])) {
-    switch($_SESSION['hybridauth_callback']) {
+if (isset($_SESSION['hybridauth_callback'])) {
+    switch ($_SESSION['hybridauth_callback']) {
         case 'login':
             $_GET['provider'] = $_SESSION['hybridauth_provider'] ?? '';
             break;
         case 'profile':
             $provider = $_SESSION['hybridauth_provider'] ?? '';
-            header('Location: /main/profile/profile.php?action=connect&provider='.$provider.'&'.$_SERVER['QUERY_STRING']);
+            header('Location: /main/profile/profile.php?action=connect&provider=' . $provider . '&' . $_SERVER['QUERY_STRING']);
             exit;
         case 'auth_test':
             $provider = $_SESSION['hybridauth_provider'] ?? '';
-            header('Location: /modules/admin/auth_test.php?auth='.$provider.'&'.$_SERVER['QUERY_STRING']);
+            header('Location: /modules/admin/auth_test.php?auth=' . $provider . '&' . $_SERVER['QUERY_STRING']);
             exit;
     }
 }
@@ -109,6 +109,9 @@ if (isset($_SESSION['shib_uname'])) {
 } elseif (isset($_SESSION['auth_id'])) {
     // authenticate via OAuth 2.0
     shib_cas_login('oauth2');
+} elseif (isset($_SESSION['keycloak_uname'])) {
+    // authenticate via Keycloak
+    shib_cas_login('keycloak');
 } elseif (isset($_GET['provider'])) {
     //hybridauth authentication (Facebook, Twitter, Google, Yahoo, Live, LinkedIn)
     hybridauth_login();
@@ -133,8 +136,10 @@ if (isset($language)) {
         require "$webDir/lang/$language/common_collaboration.inc.php";
     }
     include "lang/$language/messages.inc.php";
-    if(get_config('show_always_collaboration') and get_config('show_collaboration')){
-        include "lang/$language/messages_collaboration.inc.php";
+    if (file_exists('config/config.php')) {
+        if (get_config('show_always_collaboration') and get_config('show_collaboration')) {
+            include "lang/$language/messages_collaboration.inc.php";
+        }
     }
     if ($extra_messages) {
         include $extra_messages;
@@ -157,14 +162,12 @@ if (!$upgrade_begin and $uid and !isset($_GET['redirect_home'])) {
     }
 
     // if user is logged in redirect him to homepage
-    if(isset($_GET['show_home'])){
+    if (isset($_GET['show_home'])) {
         header("Location: {$urlServer}?redirect_home=true");
-    }else{
+    } else {
         // if user is not guest redirect him to portfolio
         header("Location: {$urlServer}main/portfolio.php");
     }
-
-
 } else {
     // check authentication methods
     $hybridLinkId = null;
@@ -199,7 +202,8 @@ if (!$upgrade_begin and $uid and !isset($_GET['redirect_home'])) {
                     'showTitle' => true,
                     'class' => 'login-option login-option-sso',
                     'title' => empty($l->auth_title) ? "$langLogInWith {$l->auth_name}" : q(getSerializedMessage($l->auth_title)),
-                    'html' => "<div class='form-wrapper form-edit wrapper-sso w-100'><a class='btn submitAdminBtnDefault sso-btn d-inline-flex' href='" . $urlServer . ($l->auth_name == 'cas' ? 'modules/auth/cas.php' : 'secure/') . "'>$authNameDefault</a></div>");
+                    'html' => "<div class='form-wrapper form-edit wrapper-sso w-100'><a class='btn submitAdminBtnDefault sso-btn d-inline-flex' href='" . $urlServer . ($l->auth_name == 'cas' ? 'modules/auth/cas.php' : 'secure/') . "'>$authNameDefault</a></div>"
+                );
                 $data['auth_url'] = $urlServer . ($l->auth_name == 'cas' ? 'modules/auth/cas.php' : 'secure/');
                 $data['auth_title'] = $authNameDefault;
             } elseif (in_array($l->auth_name, $hybridAuthMethods)) {
@@ -212,7 +216,8 @@ if (!$upgrade_begin and $uid and !isset($_GET['redirect_home'])) {
                         'nameAuth' => $l->auth_name,
                         'showTitle' => true,
                         'class' => 'login-option',
-                        'title' => $langViaSocialNetwork);
+                        'title' => $langViaSocialNetwork
+                    );
                     $hybridLinkId = count($authLinks) - 1;
                 }
             } elseif (!$loginFormEnabled) {
@@ -244,7 +249,8 @@ if (!$upgrade_begin and $uid and !isset($_GET['redirect_home'])) {
                                 </form></div></div>
                                 <div class='col-12 d-flex justify-content-md-start justify-content-center align-items-center mt-4'>
                                     <a class='text-decoration-underline' href='modules/auth/lostpass.php'>$lang_forgot_pass</a>
-                                </div>");
+                                </div>"
+                );
             }
         }
 
@@ -287,7 +293,6 @@ if (!$upgrade_begin and $uid and !isset($_GET['redirect_home'])) {
             // home page login form with more than 3 buttons not supported
             $data['authLinks'] = array($authLinks[0]);
         }
-
     }
 
     $data['total_collaboration_courses'] = Database::get()->querySingle("SELECT COUNT(*) AS total FROM course WHERE is_collaborative = ?d", 1)->total;
@@ -295,14 +300,27 @@ if (!$upgrade_begin and $uid and !isset($_GET['redirect_home'])) {
     $data['popular_courses'] = Database::get()->queryArray('SELECT * FROM `course`
                                                 WHERE `popular_course` = ?d AND `visible` != ?d AND lang=?s', 1, 3, $language);
 
-
-    $data['announcements'] = Database::get()->queryArray("SELECT `id`, `date`, `title`, `body`, `order` FROM `admin_announcement`
+    if ($is_departmentmanage_user && !$is_admin) {
+        $data['announcements'] = Database::get()->queryArray("SELECT `id`, `date`, `title`, `body`, `order` FROM `admin_announcement`
                                             WHERE `visible` = 1
                                                     AND `important` = 0
+                                                    AND (
+                                                        tenant_id = ?d
+                                                        OR tenant_id IS NULL
+                                                    )
                                                     AND lang=?s
                                                     AND (`begin` <= NOW() or `begin` IS null)
                                                     AND (NOW() <= `end` or `end` IS null)
-                                            ORDER BY `order` DESC", $language);
+                                            ORDER BY `order` DESC", getCurrentTenant()->id, $language);
+    } else {
+        $data['announcements'] = Database::get()->queryArray("SELECT `id`, `date`, `title`, `body`, `order` FROM `admin_announcement`
+    WHERE `visible` = 1
+            AND `important` = 0
+            AND lang=?s
+            AND (`begin` <= NOW() or `begin` IS null)
+            AND (NOW() <= `end` or `end` IS null)
+    ORDER BY `order` DESC", $language);
+    }
 
     $data['texts'] = Database::get()->queryArray("SELECT * FROM `homepageTexts` WHERE `lang` = ?s AND `type` = ?d ORDER BY `order` ASC", $language, 1);
     $data['testimonials'] = Database::get()->queryArray("SELECT * FROM `homepageTexts` WHERE `lang` = ?s AND `type` = ?d ORDER BY `order` ASC", $language, 2);
@@ -364,6 +382,24 @@ if (!$upgrade_begin and $uid and !isset($_GET['redirect_home'])) {
             $digit_separator = ',';
         }
         $data['digit_separator'] = $digit_separator;
+    }
+
+    $data['platform_title'] = get_config('homepage_title_' . $language_code);
+    $data['platform_intro'] = get_config('homepage_intro_' . $language_code);
+
+    if (isset($_SESSION['current_user_tenant'])) {
+        $tenant = $_SESSION['current_user_tenant'];
+        $tenantOptions = $tenant->options ? unserialize($tenant->options) : [];
+        $tenant_platform_title = getTenantOption($tenantOptions, 'platform_title');
+        $tenant_platform_intro = getTenantOption($tenantOptions, 'platform_intro');
+
+        if ($tenant_platform_title) {
+            $data['platform_title'] = $tenant_platform_title;
+        }
+
+        if ($tenant_platform_intro) {
+            $data['platform_intro'] = $tenant_platform_intro;
+        }
     }
 
     view('home.index', $data);

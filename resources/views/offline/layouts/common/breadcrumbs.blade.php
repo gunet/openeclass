@@ -1,7 +1,7 @@
 
 <div class='col-12 breadcrumbs-container'>
 
-    <div class='d-inline-flex align-items-top overflow-hidden'>
+    <div class='breadcrumbs-init d-inline-flex align-items-top overflow-hidden w-100'>
 
         <!-- this is toggle-button in breadcrumb -->
         <nav class="me-lg-0 me-2" role="navigation" aria-label="Navigation">

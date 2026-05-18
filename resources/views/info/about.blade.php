@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="col-12 main-section">
+<main id="main" class="col-12 main-section">
     
             <div class='about-content about-content-1 d-flex flex-column align-items-center'>
                 <div class='{{ $container }} padding-default p-lg-5'>
@@ -86,7 +86,7 @@
 
        
  
-</div>
+</main>
 
 
 <script type="text/javascript">

@@ -94,7 +94,7 @@
 
 @section('content')
 
-<div class="col-12 main-section">
+<main id="main" class="col-12 main-section">
     <div class='{{ $container }} main-container'>
         <div class="row m-auto">
 
@@ -166,10 +166,10 @@
                                 <div class='card panelCard card-default px-lg-4 py-lg-3 mb-4' data-id='{{ $text->id }}'>
                                     <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
 
-                                        <h3>
+                                        <h2 class='text-heading-h3'>
                                             {!! $text->title !!}
                                             @if($text->type == 2) <span>({{ trans('lang_testimonials') }})</span> @endif
-                                        </h3>
+                                        </h2>
 
                                         <div class='d-flex gap-3'>
                                             <a href='{{$urlAppend}}modules/admin/homepageTexts_create.php?homepageText=modify&id={{$text->id}}' aria-label="{{trans('langEdit')}}">
@@ -198,7 +198,7 @@
         </div>
     </div>
 
-</div>
+</main>
 
 
 @endsection

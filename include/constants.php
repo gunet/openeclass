@@ -108,6 +108,7 @@ define('MODULE_ID_H5P', 52);
 define('MODULE_ID_COURSE_WIDGETS', 44);
 define('MODULE_ID_REQUEST', 100);
 define('MODULE_ID_SESSION', 101);
+define('MODULE_ID_STICKY_NOTES', 102);
 //user activities
 define('MODULE_ID_EBOOK_READ','FC1');
 define('MODULE_ID_VIDEO_WATCH','FC2');
@@ -237,6 +238,11 @@ define('GRADEBOOK_ACTIVITY_ASSIGNMENT', 1);
 define('GRADEBOOK_ACTIVITY_EXERCISE', 2);
 define('GRADEBOOK_ACTIVITY_LP', 3);
 define('GRADEBOOK_ACTIVITY_TC', 4);
+
+//eportfolio visibility levels
+define('EPF_VISIBLE_PUBLIC', 1);
+define('EPF_VISIBLE_USERS', 2);
+define('EPF_VISIBLE_PRIVATE', 3);
 
 // Subsystem types (used in documents)
 define('MAIN', 0);

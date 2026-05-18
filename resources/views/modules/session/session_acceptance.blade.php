@@ -2,13 +2,10 @@
 
 @section('content')
 
-<div class="col-12 main-section">
-    <div class='{{ $container }} module-container py-lg-0'>
-        <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
-
-            @include('layouts.partials.left_menu')
-
-            <div class="col_maincontent_active">
+<div class='{{ $container }} module-container py-lg-0'>
+    <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
+            <aside class='aside-sidebar'>@include('layouts.partials.left_menu')</aside>
+            <main id="main" class="col-12 main-maincontent col_maincontent_active">
                     
                 <div class="row">
 
@@ -33,7 +30,7 @@
                         <div class='flex-grow-1'>
                             <div class="card panelCard border-card-left-default px-lg-4 py-lg-3">
                                 <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                    <h3 class='mb-0'>{{ trans('langDetailsSession') }}</h3>
+                                    <h2 class='text-heading-h3 mb-0'>{{ trans('langDetailsSession') }}</h2>
                                 </div>
                                 <div class='card-body'>
                                     @if(is_session_visible($course_id,$sessionID))
@@ -144,9 +141,8 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </main>
         </div>
     </div>
-</div>
 
 @endsection

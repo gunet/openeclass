@@ -129,7 +129,7 @@ $showScore = $displayScore == 1
 
 $tool_content .= "<div class='col-12'><div class='card panelCard card-default px-lg-4 py-lg-3'>
     <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-        <h3>" . q_math($exerciseTitle) . "</h3></div>";
+        <h2 class='text-heading-h3'>" . q_math($exerciseTitle) . "</h2></div>";
 if ($exerciseDescription_temp) {
     $tool_content .= "<div class='card-body'>" . standard_text_escape($exerciseDescription_temp) . "</div>";
 }

@@ -85,7 +85,21 @@ $head_content .= "<script type='text/javascript'>
                        'sNext':     '&rsaquo;',
                        'sLast':     '&raquo;'
                    }
-               }
+               },
+               'tabIndex': -1,
+                'initComplete': function() {
+                    $('#polls thead .dt-column-order').each(function() {
+                        $(this).removeAttr('aria-label');
+                        $(this).attr('aria-hidden', 'true');
+                    });
+                }
+            });
+
+            $('#polls').on('order.dt', function() {
+                $('#polls thead .dt-column-order').each(function() {
+                    $(this).removeAttr('aria-label');
+                    $(this).attr('aria-hidden', 'true');
+                });
             });
 
             $('.dt-search input').attr({

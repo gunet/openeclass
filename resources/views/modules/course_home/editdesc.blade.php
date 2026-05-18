@@ -3,13 +3,10 @@
 
 @section('content')
 
-<div class="col-12 main-section">
     <div class='{{ $container }} module-container py-lg-0'>
         <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
-
-            @include('layouts.partials.left_menu')
-
-            <div class="col_maincontent_active">
+            <aside class='aside-sidebar'>@include('layouts.partials.left_menu')</aside>
+            <main id="main" class="col-12 main-maincontent col_maincontent_active">
 
                 <div class="row">
 
@@ -48,7 +45,11 @@
                                     <div class='col-sm-12'>
                                         @if (isset($course_image))
                                             <div class='col-12 d-flex justify-content-start align-items-center flex-wrap gap-2'>
-                                                <img style="max-height:100px;max-width:150px;" src='{{ $urlAppend }}courses/{{ $course_code }}/image/{{ $course_image }}' alt="{{ trans('langCourseImage') }}"> &nbsp;&nbsp;
+                                                @if (empty($course_image))
+                                                    <img style="max-height:100px;max-width:150px;" src='{{ $urlAppend }}resources/img/ph1.jpg' alt="{{ trans('langCourseImage') }}">
+                                                @else
+                                                    <img style="max-height:100px;max-width:150px;" src='{{ $urlAppend }}courses/{{ $course_code }}/image/{{ $course_image }}' alt="{{ trans('langCourseImage') }}">
+                                                @endif
                                                 <a class='btn deleteAdminBtn' href='{{$_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&delete_image=true&{!! generate_csrf_token_link_parameter() !!}'>
                                                     {{ trans('langDelete') }}
                                                 </a>
@@ -118,10 +119,10 @@
                         <img class='form-image-modules' src='{{ get_form_image() }}' alt="{{ trans('langImgFormsDes') }}">
                     </div>
                 </div>
-            </div>
+            </main>
         </div>
     </div>
-</div>
+
 
 <script>
     $(function(){

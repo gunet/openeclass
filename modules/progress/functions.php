@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 /*
  *  ========================================================================
@@ -483,8 +483,7 @@ function display_course_completion(): void
                         <i class='fa fa-trophy fa-3x text-muted mb-3'></i>
                         <p class='text-muted'>$langCourseCompletionNotActivated</p>
                         <a href='{$_SERVER['SCRIPT_NAME']}?course={$course_code}&amp;tab=course_completion&amp;newcc=1' class='btn submitAdminBtn'>
-                            <i class='fa fa-power-off'></i>&nbsp;&nbsp;$langActivateCourseCompletion
-                        </a>
+                            <i class='fa fa-power-off'></i>&nbsp;&nbsp;$langActivateCourseCompletion                        </a>
                     </div>
                 </div>
             </div>";
@@ -648,12 +647,12 @@ function display_course_completion(): void
 function display_activities($element, $id, $unit_id = 0) {
 
     global $tool_content, $course_code, $is_editor, $action_bar, $langActions,
-           $langNoActivCert, $langAttendanceActList, $langTitle, $langType,
+           $langNoActivCert, $langActivities, $langTitle, $langType,
            $langOfAssignment, $langExerciseAsModuleLabel, $langOfBlog,
            $langMediaAsModuleLabel, $langOfEBook, $langOfPoll, $langWiki,
            $langNumInForum, $langOfBlogComments, $langConfirmDelete,
-           $langOfLearningPath, $langOfLearningPathDuration, $langDelete, $langEditChange,
-           $langDocumentAsModuleLabel, $langCourseParticipation,
+           $langOfLearningPath, $langOfLearningPathDuration, $langOfLearningPathProgressMeasure, $langOfLearningPathLessonStatus,
+           $langDelete, $langEditChange, $langDocumentAsModuleLabel, $langCourseParticipation,
            $langAdd, $langBack, $langUsers, $langOfGradebook,
            $langValue, $langNumInForumTopic, $langOfCourseCompletion, $langOfUnitCompletion,
            $course_id, $langUnitCompletion, $langUnitPrerequisites, $langNewUnitPrerequisite,
@@ -663,6 +662,14 @@ function display_activities($element, $id, $unit_id = 0) {
            $langRubricCrit, $head_content, $uid, $langCompleted, $langSurveyNotStarted, $urlServer;
 
     load_js('bootstrap-table');
+    
+    //fix for delete confirmation not showing due to bootstrap-table plugin
+    $tool_content .= "<script>
+    $(document).on('post-body.bs.table', function () {
+        $('.confirmAction').off('click');
+        act_confirm();
+    });
+    </script>";
 
     $head_content .= "<style>
         .progress-activity-card {
@@ -800,6 +807,16 @@ function display_activities($element, $id, $unit_id = 0) {
             'show' => $element != 'points_game'),
         array('title' => $langOfLearningPathDuration,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=lpduration",
+            'icon' => 'fa fa-ellipsis-h fa-fw',
+            'class' => '',
+            'show' => $element != 'points_game'),
+        array('title' => $langOfLearningPathProgressMeasure,
+            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=lpprogressmeasure",
+            'icon' => 'fa fa-ellipsis-h fa-fw',
+            'class' => '',
+            'show' => $element != 'points_game'),
+        array('title' => $langOfLearningPathLessonStatus,
+            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=lplessonstatus",
             'icon' => 'fa fa-ellipsis-h fa-fw',
             'class' => '',
             'show' => $element != 'points_game'),
@@ -1041,8 +1058,7 @@ function display_activities($element, $id, $unit_id = 0) {
                                                             " . ($criteria_text ? "<div class='progress-activity-criteria'>$criteria_text</div>" : "") . "
                                                             <div class='progress-activity-criteria'>$langPoints: {$details->points}</div>
                                                         </div>
-                                                        $editor_btn_one
-                                                    </div>";
+                                                        $editor_btn_one                                                    </div>";
                                         if (!$is_editor) {
                                             $is_completed = Database::get()->querySingle(
                                                 "SELECT COUNT(*) as cnt FROM user_points_game_criterion WHERE points_game_criterion = ?d AND user = ?d",
@@ -1070,8 +1086,7 @@ function display_activities($element, $id, $unit_id = 0) {
                     <div class='card border rounded-3'>
                         <div class='card-body p-4'>
                             <div class='d-flex justify-content-between align-items-center mb-3'>
-                                <h5 class='fw-bold mb-0' style='color:#1f2937;'>$langAttendanceActList</h5>";
-                            if ($is_editor) {
+                                <h5 class='fw-bold mb-0' style='color:#1f2937;'>$langAttendanceActList</h5>";                            if ($is_editor) {
                                 $tool_content .= "<div>$addActivityBtn</div>";
                             }
             $tool_content .= "
@@ -1174,9 +1189,9 @@ function display_activities($element, $id, $unit_id = 0) {
                                 <div class='col-12'>
                                     <div class='card px-lg-4 py-lg-3'>
                                         <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-                                            <h3>
+                                            <h2 class='text-heading-h3'>
                                                 $langUnitCompletion
-                                            </h3>
+                                            </h2>
                                             <div>
                                                 $addActivityBtn
                                             </div>
@@ -1277,9 +1292,9 @@ function display_activities($element, $id, $unit_id = 0) {
 
                         <div class='card panelCard card-default px-lg-4 py-lg-3 mt-3'>
                             <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-                                <h3>
+                                <h2 class='text-heading-h3'>
                                     $langUnitPrerequisites
-                                </h3>
+                                </h2>
                                 <div>
                                     $addPrereqBtn
                                 </div>
@@ -1388,6 +1403,16 @@ function insert_activity($element, $element_id, $activity, $unit_id = 0, $unit_r
         case 'lpduration':
             if ($element != 'points_game') {
                 display_available_lps($element, $element_id, LearningPathDurationEvent::ACTIVITY, $unit_id, $unit_resource_id);
+            }
+            break;
+        case 'lpprogressmeasure':
+            if ($element != 'points_game') {
+                display_available_lps($element, $element_id, LearningPathProgressMeasureEvent::ACTIVITY, $unit_id, $unit_resource_id);
+            }
+            break;
+        case 'lplessonstatus':
+            if ($element != 'points_game') {
+                display_available_lps($element, $element_id, LearningPathLessonStatusEvent::ACTIVITY, $unit_id, $unit_resource_id);
             }
             break;
         case 'likesocial';
@@ -2479,9 +2504,15 @@ function display_available_lps($element, $element_id, $activity_type, int $unit_
     $element_name = ($element == 'certificate') ? 'certificate_id' : 'badge_id';
     $threshold_col_title = $langPercentage;
     $form_submit_name = 'add_lp';
+    $show_threshold = true;
     if ($activity_type == LearningPathDurationEvent::ACTIVITY) {
         $threshold_col_title = $langHours;
         $form_submit_name = 'add_lpduration';
+    } elseif ($activity_type == LearningPathProgressMeasureEvent::ACTIVITY) {
+        $form_submit_name = 'add_lpprogressmeasure';
+    } elseif ($activity_type == LearningPathLessonStatusEvent::ACTIVITY) {
+        $form_submit_name = 'add_lplessonstatus';
+        $show_threshold = false;
     }
 
     if ($unit_id) {
@@ -2534,8 +2565,8 @@ function display_available_lps($element, $element_id, $activity_type, int $unit_
                 "<div class='table-responsive'><table class='table-default'>" .
                 "<thead><tr class='list-header'>" .
                 "<th>$langLearningPaths</th>" .
-                "<th style='width:5px;'>$langOperator</th>" .
-                "<th style='width:50px;'>$threshold_col_title</th>" .
+                ($show_threshold ? "<th style='width:5px;'>$langOperator</th>" .
+                "<th style='width:50px;'>$threshold_col_title</th>" : '') .
                 "<th style='width:10px;'>$langChoice</th>" .
                 "</tr></thead>";
 
@@ -2548,8 +2579,10 @@ function display_available_lps($element, $element_id, $activity_type, int $unit_
                 $comments = empty($entry['comment']) ? '' : "<div style='margin-top: 10px;' class='text-muted'>". $entry['comment']. "</div>";
                 $tool_content .= "<tr>";
                 $tool_content .= "<td>&nbsp;".icon('fa-ellipsis-h')."&nbsp;&nbsp;<a href='{$urlServer}modules/learnPath/viewer.php?course=$course_code&amp;path_id=$lp_id&amp;module_id=$m_id->module_id'>" . q($entry['name']) . "</a>" . $comments . "</td>";
-                $tool_content .= "<td>". selection(get_operators(), "operator[$lp_id]") . "</td>";
-                $tool_content .= "<td><input aria-label='$langPollFillText' class='form-control' type='text' name='threshold[$lp_id]' value=''></td>";
+                if ($show_threshold) {
+                    $tool_content .= "<td>". selection(get_operators(), "operator[$lp_id]") . "</td>";
+                    $tool_content .= "<td><input aria-label='$langPollFillText' class='form-control' type='text' name='threshold[$lp_id]' value=''></td>";
+                }
                 $tool_content .= "<td><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='lp[]' value='$lp_id'><span class='checkmark'></span></label></td>";
                 $tool_content .= "</tr>";
             }
@@ -3840,7 +3873,8 @@ function certificate_settings($element, $element_id = 0) {
            $langTemplate, $course_id, $language, $langMessage,
            $langTitle, $langSubmit, $langInsert, $langCertDeadlineHelp,
            $langDescription, $langpublisher, $langIcon, $langCertificateDeadline,
-           $urlServer, $langImgFormsDes, $langSelect;
+           $urlServer, $langImgFormsDes, $langSelect,
+           $langAllowBadgeExport, $langAllowBadgeExportHelp;
 
     load_js('bootstrap-datetimepicker');
     load_js('select2');
@@ -3928,7 +3962,7 @@ function certificate_settings($element, $element_id = 0) {
 
     if ($element_id > 0) {      // edit
         $field = ($element == 'certificate')? 'template' : 'icon';
-        $data = Database::get()->querySingle("SELECT issuer, $field, title, description, message, active, bundle, expires
+        $data = Database::get()->querySingle("SELECT issuer, $field, title, description, message, active, bundle, expires, allow_export
                                 FROM $element WHERE id = ?d AND course_id = ?d", $element_id, $course_id);
         $issuer = $data->issuer;
         $template = $data->$field;
@@ -3946,6 +3980,12 @@ function certificate_settings($element, $element_id = 0) {
             $check_certdeadline = '';
             $statuscertdeadline = "";
         }
+        // Set allow_export checkbox state (only for badges, not certificates)
+        if ($element == 'badge') {
+            $check_allow_export = ($data->allow_export == 1) ? " checked" : "";
+        } else {
+            $check_allow_export = "";
+        }
     } else {        // add
         $issuer = q(get_config('institution'));
         $template = '';
@@ -3957,6 +3997,8 @@ function certificate_settings($element, $element_id = 0) {
         $certdeadline = '';
         $check_certdeadline = '';
         $statuscertdeadline = '';
+        // Default: allow export for new badges
+        $check_allow_export = ($element == 'badge') ? " checked" : "";
     }
     $tool_content .= "<div class='d-lg-flex gap-4 mt-4'>
     <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>
@@ -4029,7 +4071,26 @@ function certificate_settings($element, $element_id = 0) {
                        </div>
                        <span class='help-block'>&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i>$langCertDeadlineHelp</span>
                     </div>
-                </div>
+                </div>";
+                
+                // Add allow_export toggle only for badges (not certificates)
+                if ($element == 'badge') {
+                    $tool_content .= "
+                <div class='form-group mt-4'>
+                    <div class='col-sm-12'>
+                        <div class='checkbox'>
+                            <label class='label-container'>
+                                <input type='checkbox' id='allow_badge_export' name='allow_badge_export' value='1' $check_allow_export>
+                                <span class='checkmark'></span>
+                                $langAllowBadgeExport
+                            </label>
+                        </div>
+                        <span class='help-block'>&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i>$langAllowBadgeExportHelp</span>
+                    </div>
+                </div>";
+                }
+                
+                $tool_content .= "
                 $cert_id";
                 $tool_content .= "<div class='form-group mt-5'>
                     <div class='col-12 d-flex justify-content-end align-items-center'>
@@ -4110,7 +4171,7 @@ function student_view_progress() {
                 <div class='col-12'>
                     <div class='card px-lg-4 py-lg-3'>
                         <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                            <h3>$langCourseCompletion</h3>
+                            <h2 class='text-heading-h3'>$langCourseCompletion</h2>
                         </div>
                         <div class='card-body'>
                             <div class='res-table-wrapper'>
@@ -4163,7 +4224,7 @@ function student_view_progress() {
                     <div class='col-12 mt-4'>
                         <div class='card px-lg-4 py-lg-3'>
                             <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                <h3>$langBadges</h3>
+                                <h2 class='text-heading-h3'>$langBadges</h2>
                             </div>
                             <div class='card-body'>";
 
@@ -4220,7 +4281,7 @@ function student_view_progress() {
                     <div class='col-12 mt-4'>
                         <div class='card px-lg-4 py-lg-3'>
                             <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                <h3>$langCertificates</h3>
+                                <h2 class='text-heading-h3'>$langCertificates</h2>
                             </div>
                             <div class='card-body'>";
 
@@ -4283,7 +4344,7 @@ function student_view_progress() {
                     <div class='col-12 mt-4'>
                         <div class='card px-lg-4 py-lg-3'>
                             <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                <h3>$langPointsGames</h3>
+                                <h2 class='text-heading-h3'>$langPointsGames</h2>
                             </div>
                             <div class='card-body'>";
 
@@ -4965,8 +5026,7 @@ function display_user_progress_details($element, $element_id, $user_id) {
                             <div style='font-size:18px;font-weight:700;color:#1f2937;'>$element_title</div>
                             $desc_html
                             $issuer_html
-                            $cert_link_html
-                        </div>
+                            $cert_link_html                        </div>
                     </div>
                 </div>
             </div>
@@ -5051,7 +5111,6 @@ function display_user_progress_details($element, $element_id, $user_id) {
                 <div class='card-body p-4'>
                     <h5 class='fw-bold mb-3' style='color:#1f2937;'>$langAttendanceActList</h5>
                     <div class='row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-3'>";
-
     // completed criteria
 	foreach ($sql as $user_criterion) {
         if ($element == 'badge') {
@@ -5170,6 +5229,7 @@ function criteria_with_operators() {
                  ExerciseEvent::ACTIVITY,
                  LearningPathEvent::ACTIVITY,
                  LearningPathDurationEvent::ACTIVITY,
+                 LearningPathProgressMeasureEvent::ACTIVITY,
                  WikiEvent::ACTIVITY,
                  ForumEvent::ACTIVITY,
                  ForumTopicEvent::ACTIVITY,
@@ -5281,7 +5341,7 @@ function display_user_points_game_details($points_game_id, $user_id) {
         <div class='col-12 mt-4'>
             <div class='card px-lg-4 py-lg-3'>
                 <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                    <h3>$langAttendanceActivity</h3>
+                    <h2 class='text-heading-h3'>$langAttendanceActivity</h2>
                 </div>
                 <div class='card-body'>
                     <div class='row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-3 mt-1'>";

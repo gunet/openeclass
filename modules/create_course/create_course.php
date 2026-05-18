@@ -162,7 +162,7 @@ if (!isset($_POST['create_course'])) {
         $data['icon_course_closed'] = course_access_icon(COURSE_CLOSED);
         $data['icon_course_inactive'] = course_access_icon(COURSE_INACTIVE);
         $data['lang_select_options'] = lang_select_options('localize', "class='form-control' id='lang_selected'");
-        $data['rich_text_editor'] = rich_text_editor('description', 4, 20, $description);
+        $data['rich_text_editor'] = rich_text_editor('description', 4, 20, $description, options: array('id' => 'description'));
         $data['selection_license'] = selection($cc_license, 'cc_use', "",'class="form-select" id="course_license_id"');
         $data['cancel_link'] = "{$urlServer}main/portfolio.php";
         generate_csrf_token_form_field();

@@ -18,7 +18,7 @@
  *
  */
 
-$require_admin = TRUE;
+$require_departmentmanage_user = true;
 $require_help = true;
 $helpTopic = 'system_settings';
 $helpSubTopic = 'admin_announcements';
@@ -36,22 +36,37 @@ if (isset($_GET['vis'])) {
     $vis = $_GET['vis'] ? 0 : 1;
     Database::get()->query("UPDATE admin_announcement SET visible = ?d WHERE id = ?d", $vis, $id);
     redirect_to_home_page('modules/admin/adminannouncements.php');
-} elseif(isset($_GET['imp'])){
-    if($_GET['imp'] == 0){
-        $check = database::get()->queryArray("SELECT * FROM admin_announcement WHERE important = ?d",1);
-        if(count($check) == 0){
+} elseif (isset($_GET['imp'])) {
+    if ($_GET['imp'] == 0) {
+        if ($is_departmentmanage_user && !$is_admin) {
+            $check = Database::get()->queryArray(
+                "SELECT * FROM admin_announcement 
+                WHERE important = ?d 
+                AND (
+                tenant_id = ?d
+                OR tenant_id IS NULL
+           )",
+                1,
+                getCurrentTenant()->id
+            );
+        } else {
+            $check = Database::get()->queryArray(
+                "SELECT * FROM admin_announcement 
+                WHERE important = ?d",1);
+        }
+        if (count($check) == 0) {
             $id = $_GET['id'];
             Database::get()->query("UPDATE admin_announcement SET important = ?d WHERE id = ?d", 1, $id);
-            Session::flash('message',$langFaqEditSuccess);
+            Session::flash('message', $langFaqEditSuccess);
             Session::flash('alert-class', 'alert-success');
-        }else{
-            Session::flash('message',$langExistImportantAnnounce);
+        } else {
+            Session::flash('message', $langExistImportantAnnounce);
             Session::flash('alert-class', 'alert-danger');
         }
-    }else{
+    } else {
         $id = $_GET['id'];
         Database::get()->query("UPDATE admin_announcement SET important = ?d WHERE id = ?d", 0, $id);
-        Session::flash('message',$langFaqEditSuccess);
+        Session::flash('message', $langFaqEditSuccess);
         Session::flash('alert-class', 'alert-success');
     }
     redirect_to_home_page('modules/admin/adminannouncements.php');
@@ -61,16 +76,17 @@ if (isset($_GET['vis'])) {
     Database::get()->query("DELETE FROM admin_announcement WHERE id = ?d", $id)->affectedRows;
     $message = $langAdminAnnDel;
 } elseif (isset($_POST['submitAnnouncement'])) {
+
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $v = new Valitron\Validator($_POST);
     $v->rule('required', array('title'));
     $v->labels(array('title' => "$langTheField $langAnnTitle"));
-    if($v->validate()) {
+    if ($v->validate()) {
         $title = $_POST['title'];
         $lang_admin_ann = $_POST['lang_admin_ann'];
         // submit announcement command
         $dates = array();
-        if (isset($_POST['show_public'])){
+        if (isset($_POST['show_public'])) {
             $show_public =  1;
         } else {
             $show_public =  0;
@@ -103,14 +119,20 @@ if (isset($_GET['vis'])) {
             // order
             $orderMax = Database::get()->querySingle("SELECT MAX(`order`) as max FROM admin_announcement")->max;
             $order = $orderMax + 1;
+            $tenant_id = null;
+            if ($is_departmentmanage_user && !$is_admin) {
+                $tenant_id = getCurrentTenant()->id;
+            }
             Database::get()->query("INSERT INTO admin_announcement
-                            SET title = ?s,
+                            SET 
+                            tenant_id = ?d, 
+                            title = ?s,
                                 body = ?s,
                                 lang = ?s,
                                 `date` = " . DBHelper::timeAfter() . ",
                                 `order` = ?d,
                                 $start_sql,
-                                $end_sql, `visible`=?d", $title, $newContent, $lang_admin_ann, $order, $dates, $show_public);
+                                $end_sql, `visible`=?d", $tenant_id, $title, $newContent, $lang_admin_ann, $order, $dates, $show_public);
             $message = $langAdminAnnAdd;
         }
     } else {
@@ -125,13 +147,28 @@ if (isset($_GET['vis'])) {
     $sortDirection = "ASC";
 }
 // if there are announcements without ordering -> order by id, latest is first
-$no_order = Database::get()->querySingle("SELECT id, `order` FROM admin_announcement WHERE `order`=0");
+if ($is_departmentmanage_user && !$is_admin) {
+    $no_order = Database::get()->querySingle(
+        "SELECT id, `order` 
+        FROM admin_announcement 
+        WHERE `order`=0 
+        AND (
+        tenant_id = ?d
+        OR tenant_id IS NULL
+        )",
+        getCurrentTenant()->id
+    );
+} else {
+    $no_order = Database::get()->querySingle("SELECT id, `order` 
+                                              FROM admin_announcement 
+                                              WHERE `order`=0");
+}
 if ($no_order) {
     Database::get()->query("UPDATE admin_announcement SET `order`=`id`+1");
 }
 
 if (isset($thisAnnouncementId) && $thisAnnouncementId && isset($sortDirection) && $sortDirection) {
-    Database::get()->queryFunc("SELECT id, `order` FROM admin_announcement ORDER BY `order` $sortDirection", function ($announcement) use(&$thisAnnouncementOrderFound, &$nextAnnouncementId, &$nextAnnouncementOrder, &$thisAnnouncementOrder, &$thisAnnouncementId) {
+    Database::get()->queryFunc("SELECT id, `order` FROM admin_announcement ORDER BY `order` $sortDirection", function ($announcement) use (&$thisAnnouncementOrderFound, &$nextAnnouncementId, &$nextAnnouncementOrder, &$thisAnnouncementOrder, &$thisAnnouncementId) {
         if (isset($thisAnnouncementOrderFound) && $thisAnnouncementOrderFound == true) {
             $nextAnnouncementId = $announcement->id;
             $nextAnnouncementOrder = $announcement->order;
@@ -145,12 +182,11 @@ if (isset($thisAnnouncementId) && $thisAnnouncementId && isset($sortDirection) &
             $thisAnnouncementOrderFound = true;
         }
     });
-
 }
 
 // action message
 if (isset($message) && !empty($message)) {
-    Session::flash('message',$message);
+    Session::flash('message', $message);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("/modules/admin/adminannouncements.php");
 }
@@ -160,13 +196,13 @@ load_js('bootstrap-datetimepicker');
 load_js('trunk8');
 
 if (isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
-        if (isset($_GET['addAnnounce'])) {
-            $pageName = $langAdminAddAnn;
-        } else {
-            $pageName = $langModify;
-        }
-        // display add announcement command
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]", "name" => $langAdminAn);
+    if (isset($_GET['addAnnounce'])) {
+        $pageName = $langAdminAddAnn;
+    } else {
+        $pageName = $langModify;
+    }
+    // display add announcement command
+    $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]", "name" => $langAdminAn);
 
     if (isset($_GET['modify'])) {
         $id = $_GET['modify'];
@@ -174,37 +210,36 @@ if (isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
                                                     lang, `order`, visible FROM admin_announcement WHERE id = ?d", $id);
     }
     if (isset($announcement)) {
-        $data['newContentTextarea'] = rich_text_editor('newContent', 5, 40, standard_text_escape($data['announcement']->body));
+        $data['newContentTextarea'] = rich_text_editor('newContent', 5, 40, standard_text_escape($data['announcement']->body), options: array('id' => 'newContent'));
         $begindate = NULL;
-        if(!is_null($announcement->begin) and !empty($announcement->begin)){
+        if (!is_null($announcement->begin) and !empty($announcement->begin)) {
             $begindate = DateTime::createFromFormat('Y-m-d H:i:s', $announcement->begin);
         }
         $enddate = NULL;
-        if(!is_null($announcement->end) and !empty($announcement->end)){
+        if (!is_null($announcement->end) and !empty($announcement->end)) {
             $enddate = DateTime::createFromFormat('Y-m-d H:i:s', $announcement->end);
         }
 
 
         $data['checked_public'] = $announcement->visible == 1 ? " checked" : "";
         $data['start_checkbox'] = !is_null($begindate) ? " checked" : "";
-        if($begindate){
+        if ($begindate) {
             $data['startdate'] = $begindate->format("d-m-Y H:i");
-        }else{
+        } else {
             $data['startdate'] = NULL;
         }
         $data['end_checkbox'] = !is_null($enddate) ? " checked" : "";
-        if($enddate){
+        if ($enddate) {
             $data['enddate'] = $enddate->format("d-m-Y H:i");
-        }else{
+        } else {
             $data['enddate'] = NULL;
         }
-
     } else {
         $newContent = '';
         if (Session::has('newContent')) {
             $newContent = Session::get('newContent');
         }
-        $data['newContentTextarea'] = rich_text_editor('newContent', 5, 40, $newContent);
+        $data['newContentTextarea'] = rich_text_editor('newContent', 5, 40, $newContent, options: array('id' => 'newContent'));
 
         $data['checked_public'] = " checked";
         $data['start_checkbox'] = $data['end_checkbox'] = '';
@@ -225,10 +260,8 @@ if (isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
         }
     }
     $view = 'admin.other.announcements.create';
-}
-
-elseif (isset($_GET['ann_id'])) {
-    $row = Database::get()->querySingle("SELECT * FROM admin_announcement WHERE id = ". intval($_GET['ann_id']));
+} elseif (isset($_GET['ann_id'])) {
+    $row = Database::get()->querySingle("SELECT * FROM admin_announcement WHERE id = " . intval($_GET['ann_id']));
     if (empty($row)) {
         redirect_to_home_page("modules/admin/adminannouncements.php");
     } else {
@@ -237,15 +270,28 @@ elseif (isset($_GET['ann_id'])) {
     }
 } else {
     $data['action_bar'] = action_bar([
-                                [
-                                    'title' => $langAdminAddAnn,
-                                    'url' => $_SERVER['SCRIPT_NAME'] . "?addAnnounce=1",
-                                    'icon' => 'fa-plus-circle',
-                                    'level' => 'primary-label',
-                                    'button-class' => 'btn-success'
-                                ]
-                            ]);
-    $data['announcements'] = Database::get()->queryArray("SELECT * FROM admin_announcement ORDER BY `order` DESC");
+        [
+            'title' => $langAdminAddAnn,
+            'url' => $_SERVER['SCRIPT_NAME'] . "?addAnnounce=1",
+            'icon' => 'fa-plus-circle',
+            'level' => 'primary-label',
+            'button-class' => 'btn-success'
+        ]
+    ]);
+    if ($is_departmentmanage_user && !$is_admin) {
+        $data['announcements'] = Database::get()->queryArray(
+            "SELECT * FROM admin_announcement 
+            WHERE  (
+                        tenant_id = ?d
+                        OR tenant_id IS NULL
+                    )
+            ORDER BY `order` DESC",
+            getCurrentTenant()->id
+        );
+    } else {
+        $data['announcements'] = Database::get()->queryArray("SELECT * FROM admin_announcement 
+        ORDER BY `order` DESC");
+    }
     $view = 'admin.other.announcements.index';
 }
 

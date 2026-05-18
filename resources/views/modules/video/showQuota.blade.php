@@ -2,19 +2,15 @@
 
 @section('content')
 
-    <div class="col-12 main-section">
-        <div class='{{ $container }} @if($course_code) module-container py-lg-0 @else main-container @endif'>
-            <div class="@if($course_code) course-wrapper d-lg-flex align-items-lg-strech w-100 @else row m-auto @endif">
+<div class='{{ $container }} @if($course_code) module-container py-lg-0 @else main-container @endif'>
+    <div class="@if($course_code) course-wrapper d-lg-flex align-items-lg-strech w-100 @else row m-auto @endif">
+        @if($course_code)
+            <aside class='aside-sidebar'>@include('layouts.partials.left_menu')</aside>
+            <main id="main" class="col-12 main-maincontent col_maincontent_active">
+        @else
+            <div class="col-12">
+        @endif
 
-                @if($course_code)
-                    @include('layouts.partials.left_menu')
-                @endif
-
-                @if($course_code)
-                    <div class="col_maincontent_active">
-                @else
-                    <div class="col-12">
-                @endif
 
                     <div class="row">
 
@@ -66,9 +62,12 @@
                             </div>
                         </div>
                     </div>
+                @if ($course_code)
+                </main>
+                @else
                 </div>
+                @endif
             </div>
         </div>
-    </div>
 @endsection
 

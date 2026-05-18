@@ -43,8 +43,8 @@ class MultipleChoiceMultipleAnswer extends QuestionType
             $checked = (isset($exerciseResult[$this->question_id][$answerId]) && $exerciseResult[$this->question_id][$answerId] == 1) ? 'checked="checked"' : '';
             $html_content .= "
                         <div class='checkbox mb-1'>
-                            <label class='label-container' aria-label='$langSelect'>
-                                <input type='checkbox' name='choice[$this->question_id][$answerId]' value='1' $checked onClick='updateQuestionNavButton(" . $question_number . ");'>
+                            <label class='label-container' for='AccessibilityMultipleCheck{$this->question_id}_{$answerId}'>
+                                <input id='AccessibilityMultipleCheck{$this->question_id}_{$answerId}' type='checkbox' name='choice[$this->question_id][$answerId]' value='1' $checked onClick='updateQuestionNavButton(" . $question_number . ");'>
                                 <span class='checkmark'></span>
                                 " . standard_text_escape($answerTitle) . "
                           </label>

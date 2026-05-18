@@ -72,13 +72,6 @@ if (isset($_GET['do_fetch'])) {
         // fetch and create course
         create_restored_course($tool_content, $restoreThis, $course_code, $course_lang, $course_title, $course_desc, $course_vis, $course_prof, false, true);
     }
-
-    $tool_content .= "<div class='col-12'>
-                        <div class='alert alert-info'>
-                            <i class='fa-solid fa-circle-info fa-lg'></i><span>$langImportCourseCompleted</span>
-                        </div>
-                     </div>";
-
     stop_output_buffering();
 }
 

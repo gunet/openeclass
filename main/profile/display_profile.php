@@ -78,7 +78,7 @@ if (isset($_GET['view']) and isset($_GET['show_tutor'])) {
 
 $data['action_bar_blog_portfolio'] = $data['action_bar'] = $data['action_bar_unreg'] = '';
 $data['userdata'] = Database::get()->querySingle("SELECT surname, givenname, username, email, status, phone, am, registered_at,
-                                            has_icon, description, password,
+                                            has_icon, description, password, eportfolio_enable, eportfolio_token,
                                             email_public, phone_public, am_public, pic_public
                                         FROM user
                                         WHERE id = ?d", $data['id']);
@@ -190,9 +190,15 @@ if ($data['userdata']) {
                                         . "FROM certified_users "
                                         . "WHERE user_fullname = ?s OR user_id = ?d", uid_to_name($uid, 'fullname'), $uid);
 
-    //get completed badges
+    // Check if OpenBadges is enabled
+    $openBadgesApp = ExtAppManager::getApp('openbadges');
+    $openBadgesEnabled = $openBadgesApp && $openBadgesApp->isEnabled();
+    $data['openBadgesEnabled'] = $openBadgesEnabled;
+
+    //get completed badges (always fetch, but export functionality will be hidden if disabled)
     $gameQ = "SELECT a.*, b.title,"
-            . " b.description, b.issuer, b.active, b.created, b.id, b.course_id"
+            . " b.description, b.issuer, b.active, b.created, b.id as badge_id, b.course_id,"
+            . " a.id as user_badge_id, a.external_assertion_id, b.allow_export"
             . " FROM user_badge a "
             . " JOIN badge b ON (a.badge = b.id) "
             . " WHERE a.user = ?d "
@@ -201,6 +207,20 @@ if ($data['userdata']) {
             . "AND b.bundle != -1 "
             . "AND (b.expires IS NULL OR b.expires > NOW())";
     $data['badge_completed'] = Database::get()->queryArray($gameQ, $uid);
+
+    // Get external badges synced from backpack (only if OpenBadges is enabled)
+    if ($openBadgesEnabled) {
+    $externalBadgesQ = "SELECT id as user_badge_id, "
+            . " title, description, issuer, image_url, issued_on as created, "
+            . " external_assertion_id, external_collection_id, "
+            . " created_at, updated_at "
+            . " FROM user_badge_external "
+            . " WHERE user_id = ?d "
+            . " ORDER BY issued_on DESC";
+    $data['badge_external'] = Database::get()->queryArray($externalBadgesQ, $uid);
+    } else {
+        $data['badge_external'] = [];
+    }
 
 }
 

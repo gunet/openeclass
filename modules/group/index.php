@@ -974,7 +974,7 @@ if ($is_editor) {
                                                                         if ($max_members > 0 and $max_members == $member_count) {
                                                                             $full_group_message = " <span class='badge Warning-200-bg TextBold text-capitalize'>$langGroupFull</span>";
                                                                         }
-                                                                            $tool_content .= "<h3 class='mb-0'>".q($group_name)."</h3>" . "$full_group_message";
+                                                                            $tool_content .= "<h2 class='text-heading-h3 mb-0'>".q($group_name)."</h2>" . "$full_group_message";
                                                                     }
                                             $tool_content .= "</div>
                                                             <div class='card-body rounded-0'>

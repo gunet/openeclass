@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "apereo/phpcas",
-            "version": "1.6.1",
+            "version": "1.6.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/apereo/phpCAS.git",
-                "reference": "c129708154852656aabb13d8606cd5b12dbbabac"
+                "reference": "b413d2981947fd4f97079f715e0571d0c8f2a2c5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/apereo/phpCAS/zipball/c129708154852656aabb13d8606cd5b12dbbabac",
-                "reference": "c129708154852656aabb13d8606cd5b12dbbabac",
+                "url": "https://api.github.com/repos/apereo/phpCAS/zipball/b413d2981947fd4f97079f715e0571d0c8f2a2c5",
+                "reference": "b413d2981947fd4f97079f715e0571d0c8f2a2c5",
                 "shasum": ""
             },
             "require": {
@@ -73,9 +73,9 @@
             ],
             "support": {
                 "issues": "https://github.com/apereo/phpCAS/issues",
-                "source": "https://github.com/apereo/phpCAS/tree/1.6.1"
+                "source": "https://github.com/apereo/phpCAS/tree/1.6.2"
             },
-            "time": "2023-02-19T19:52:35+00:00"
+            "time": "2026-04-22T09:20:37+00:00"
         },
         {
             "name": "bacon/bacon-qr-code",
@@ -675,16 +675,16 @@
         },
         {
             "name": "firebase/php-jwt",
-            "version": "v7.0.3",
+            "version": "v7.0.5",
             "source": {
                 "type": "git",
-                "url": "https://github.com/firebase/php-jwt.git",
-                "reference": "28aa0694bcfdfa5e2959c394d5a1ee7a5083629e"
+                "url": "https://github.com/googleapis/php-jwt.git",
+                "reference": "47ad26bab5e7c70ae8a6f08ed25ff83631121380"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/firebase/php-jwt/zipball/28aa0694bcfdfa5e2959c394d5a1ee7a5083629e",
-                "reference": "28aa0694bcfdfa5e2959c394d5a1ee7a5083629e",
+                "url": "https://api.github.com/repos/googleapis/php-jwt/zipball/47ad26bab5e7c70ae8a6f08ed25ff83631121380",
+                "reference": "47ad26bab5e7c70ae8a6f08ed25ff83631121380",
                 "shasum": ""
             },
             "require": {
@@ -692,6 +692,7 @@
             },
             "require-dev": {
                 "guzzlehttp/guzzle": "^7.4",
+                "phpfastcache/phpfastcache": "^9.2",
                 "phpspec/prophecy-phpunit": "^2.0",
                 "phpunit/phpunit": "^9.5",
                 "psr/cache": "^2.0||^3.0",
@@ -731,10 +732,10 @@
                 "php"
             ],
             "support": {
-                "issues": "https://github.com/firebase/php-jwt/issues",
-                "source": "https://github.com/firebase/php-jwt/tree/v7.0.3"
+                "issues": "https://github.com/googleapis/php-jwt/issues",
+                "source": "https://github.com/googleapis/php-jwt/tree/v7.0.5"
             },
-            "time": "2026-02-25T22:16:40+00:00"
+            "time": "2026-04-01T20:38:03+00:00"
         },
         {
             "name": "google/apiclient",
@@ -2203,16 +2204,16 @@
         },
         {
             "name": "hybridauth/hybridauth",
-            "version": "v3.12.2",
+            "version": "v3.13.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/hybridauth/hybridauth.git",
-                "reference": "c6184bf92404394e918353a0ea0d35a97ac3b0fe"
+                "reference": "5f799ed5fd35e21f06cf42310f9f6ed3f7bbe7df"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hybridauth/hybridauth/zipball/c6184bf92404394e918353a0ea0d35a97ac3b0fe",
-                "reference": "c6184bf92404394e918353a0ea0d35a97ac3b0fe",
+                "url": "https://api.github.com/repos/hybridauth/hybridauth/zipball/5f799ed5fd35e21f06cf42310f9f6ed3f7bbe7df",
+                "reference": "5f799ed5fd35e21f06cf42310f9f6ed3f7bbe7df",
                 "shasum": ""
             },
             "require": {
@@ -2259,9 +2260,9 @@
             "support": {
                 "gitter": "https://gitter.im/hybridauth/hybridauth",
                 "issues": "https://github.com/hybridauth/hybridauth/issues",
-                "source": "https://github.com/hybridauth/hybridauth/tree/v3.12.2"
+                "source": "https://github.com/hybridauth/hybridauth/tree/v3.13.0"
             },
-            "time": "2025-06-18T11:58:48+00:00"
+            "time": "2026-04-02T19:11:26+00:00"
         },
         {
             "name": "illuminate/bus",
@@ -3510,16 +3511,16 @@
         },
         {
             "name": "phpoffice/phpspreadsheet",
-            "version": "3.10.3",
+            "version": "3.10.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPOffice/PhpSpreadsheet.git",
-                "reference": "ceba166a6c21830922e145c59999adc855412fe6"
+                "reference": "13f709c73e417c3c8cadc87ac88f809fd8d1fa45"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPOffice/PhpSpreadsheet/zipball/ceba166a6c21830922e145c59999adc855412fe6",
-                "reference": "ceba166a6c21830922e145c59999adc855412fe6",
+                "url": "https://api.github.com/repos/PHPOffice/PhpSpreadsheet/zipball/13f709c73e417c3c8cadc87ac88f809fd8d1fa45",
+                "reference": "13f709c73e417c3c8cadc87ac88f809fd8d1fa45",
                 "shasum": ""
             },
             "require": {
@@ -3610,9 +3611,9 @@
             ],
             "support": {
                 "issues": "https://github.com/PHPOffice/PhpSpreadsheet/issues",
-                "source": "https://github.com/PHPOffice/PhpSpreadsheet/tree/3.10.3"
+                "source": "https://github.com/PHPOffice/PhpSpreadsheet/tree/3.10.5"
             },
-            "time": "2026-01-11T06:13:14+00:00"
+            "time": "2026-04-19T05:54:30+00:00"
         },
         {
             "name": "pragmarx/google2fa",
@@ -4626,16 +4627,16 @@
         },
         {
             "name": "smalot/pdfparser",
-            "version": "v2.12.4",
+            "version": "v2.12.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/smalot/pdfparser.git",
-                "reference": "028d7cc0ceff323bc001d763caa2bbdf611866c4"
+                "reference": "2cfa0d92bd557875c9f52a75fde0e8392302a354"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/smalot/pdfparser/zipball/028d7cc0ceff323bc001d763caa2bbdf611866c4",
-                "reference": "028d7cc0ceff323bc001d763caa2bbdf611866c4",
+                "url": "https://api.github.com/repos/smalot/pdfparser/zipball/2cfa0d92bd557875c9f52a75fde0e8392302a354",
+                "reference": "2cfa0d92bd557875c9f52a75fde0e8392302a354",
                 "shasum": ""
             },
             "require": {
@@ -4671,9 +4672,9 @@
             ],
             "support": {
                 "issues": "https://github.com/smalot/pdfparser/issues",
-                "source": "https://github.com/smalot/pdfparser/tree/v2.12.4"
+                "source": "https://github.com/smalot/pdfparser/tree/v2.12.5"
             },
-            "time": "2026-03-10T15:39:47+00:00"
+            "time": "2026-04-17T11:37:58+00:00"
         },
         {
             "name": "snapappointments/bootstrap-select",
@@ -4813,16 +4814,16 @@
         },
         {
             "name": "symfony/cache",
-            "version": "v6.4.35",
+            "version": "v6.4.36",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/cache.git",
-                "reference": "77f5eca135d1b5471de4301b99496649e4f62878"
+                "reference": "5b94fba945d1f9e7929cffd50e7a17f1ac36f10b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/cache/zipball/77f5eca135d1b5471de4301b99496649e4f62878",
-                "reference": "77f5eca135d1b5471de4301b99496649e4f62878",
+                "url": "https://api.github.com/repos/symfony/cache/zipball/5b94fba945d1f9e7929cffd50e7a17f1ac36f10b",
+                "reference": "5b94fba945d1f9e7929cffd50e7a17f1ac36f10b",
                 "shasum": ""
             },
             "require": {
@@ -4889,7 +4890,7 @@
                 "psr6"
             ],
             "support": {
-                "source": "https://github.com/symfony/cache/tree/v6.4.35"
+                "source": "https://github.com/symfony/cache/tree/v6.4.36"
             },
             "funding": [
                 {
@@ -4909,7 +4910,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-03-05T20:47:12+00:00"
+            "time": "2026-03-30T14:52:43+00:00"
         },
         {
             "name": "symfony/cache-contracts",
@@ -5187,16 +5188,16 @@
         },
         {
             "name": "symfony/polyfill-iconv",
-            "version": "v1.33.0",
+            "version": "v1.37.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-iconv.git",
-                "reference": "5f3b930437ae03ae5dff61269024d8ea1b3774aa"
+                "reference": "2c5729fd241b4b22f6e4b436bc3354a4f262df57"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-iconv/zipball/5f3b930437ae03ae5dff61269024d8ea1b3774aa",
-                "reference": "5f3b930437ae03ae5dff61269024d8ea1b3774aa",
+                "url": "https://api.github.com/repos/symfony/polyfill-iconv/zipball/2c5729fd241b4b22f6e4b436bc3354a4f262df57",
+                "reference": "2c5729fd241b4b22f6e4b436bc3354a4f262df57",
                 "shasum": ""
             },
             "require": {
@@ -5247,7 +5248,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-iconv/tree/v1.33.0"
+                "source": "https://github.com/symfony/polyfill-iconv/tree/v1.37.0"
             },
             "funding": [
                 {
@@ -5267,11 +5268,11 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-09-17T14:58:18+00:00"
+            "time": "2026-04-10T16:19:22+00:00"
         },
         {
             "name": "symfony/polyfill-intl-idn",
-            "version": "v1.33.0",
+            "version": "v1.37.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-intl-idn.git",
@@ -5334,7 +5335,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-intl-idn/tree/v1.33.0"
+                "source": "https://github.com/symfony/polyfill-intl-idn/tree/v1.37.0"
             },
             "funding": [
                 {
@@ -5358,7 +5359,7 @@
         },
         {
             "name": "symfony/polyfill-intl-normalizer",
-            "version": "v1.33.0",
+            "version": "v1.37.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-intl-normalizer.git",
@@ -5419,7 +5420,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-intl-normalizer/tree/v1.33.0"
+                "source": "https://github.com/symfony/polyfill-intl-normalizer/tree/v1.37.0"
             },
             "funding": [
                 {
@@ -5443,16 +5444,16 @@
         },
         {
             "name": "symfony/polyfill-mbstring",
-            "version": "v1.33.0",
+            "version": "v1.37.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "6d857f4d76bd4b343eac26d6b539585d2bc56493"
+                "reference": "6a21eb99c6973357967f6ce3708cd55a6bec6315"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/6d857f4d76bd4b343eac26d6b539585d2bc56493",
-                "reference": "6d857f4d76bd4b343eac26d6b539585d2bc56493",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/6a21eb99c6973357967f6ce3708cd55a6bec6315",
+                "reference": "6a21eb99c6973357967f6ce3708cd55a6bec6315",
                 "shasum": ""
             },
             "require": {
@@ -5504,7 +5505,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.33.0"
+                "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.37.0"
             },
             "funding": [
                 {
@@ -5524,7 +5525,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-12-23T08:48:59+00:00"
+            "time": "2026-04-10T17:25:58+00:00"
         },
         {
             "name": "symfony/polyfill-php72",
@@ -5593,16 +5594,16 @@
         },
         {
             "name": "symfony/polyfill-php80",
-            "version": "v1.33.0",
+            "version": "v1.37.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-php80.git",
-                "reference": "0cc9dd0f17f61d8131e7df6b84bd344899fe2608"
+                "reference": "dfb55726c3a76ea3b6459fcfda1ec2d80a682411"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-php80/zipball/0cc9dd0f17f61d8131e7df6b84bd344899fe2608",
-                "reference": "0cc9dd0f17f61d8131e7df6b84bd344899fe2608",
+                "url": "https://api.github.com/repos/symfony/polyfill-php80/zipball/dfb55726c3a76ea3b6459fcfda1ec2d80a682411",
+                "reference": "dfb55726c3a76ea3b6459fcfda1ec2d80a682411",
                 "shasum": ""
             },
             "require": {
@@ -5653,7 +5654,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-php80/tree/v1.33.0"
+                "source": "https://github.com/symfony/polyfill-php80/tree/v1.37.0"
             },
             "funding": [
                 {
@@ -5673,7 +5674,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-01-02T08:10:11+00:00"
+            "time": "2026-04-10T16:19:22+00:00"
         },
         {
             "name": "symfony/service-contracts",
@@ -5945,16 +5946,16 @@
         },
         {
             "name": "symfony/var-exporter",
-            "version": "v6.4.26",
+            "version": "v6.4.36",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/var-exporter.git",
-                "reference": "466fcac5fa2e871f83d31173f80e9c2684743bfc"
+                "reference": "f9c4a9695a9e2bbc65c920e147d8d7ae28f8d79a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/var-exporter/zipball/466fcac5fa2e871f83d31173f80e9c2684743bfc",
-                "reference": "466fcac5fa2e871f83d31173f80e9c2684743bfc",
+                "url": "https://api.github.com/repos/symfony/var-exporter/zipball/f9c4a9695a9e2bbc65c920e147d8d7ae28f8d79a",
+                "reference": "f9c4a9695a9e2bbc65c920e147d8d7ae28f8d79a",
                 "shasum": ""
             },
             "require": {
@@ -6002,7 +6003,7 @@
                 "serialize"
             ],
             "support": {
-                "source": "https://github.com/symfony/var-exporter/tree/v6.4.26"
+                "source": "https://github.com/symfony/var-exporter/tree/v6.4.36"
             },
             "funding": [
                 {
@@ -6022,7 +6023,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-09-11T09:57:09+00:00"
+            "time": "2026-03-10T15:06:19+00:00"
         },
         {
             "name": "vlucas/valitron",

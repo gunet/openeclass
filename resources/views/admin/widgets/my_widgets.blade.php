@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="col-12 main-section">
+<main id="main" class="col-12 main-section">
 <div class='{{ $container }} main-container'>
         <div class="row m-auto">
 
@@ -15,7 +15,7 @@
 
 
                         <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12">
-                            <h3 class="">{{ trans('langInstalledWidgets') }}</h3>
+                            <h2 class="text-heading-h3">{{ trans('langInstalledWidgets') }}</h2>
                             <hr>
                             @if (count($installed_widgets))
                             <div id="widgets">
@@ -78,7 +78,7 @@
         </div>
 
 </div>
-</div>
+</main>
 
 
 

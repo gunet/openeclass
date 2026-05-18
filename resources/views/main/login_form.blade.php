@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <div class="col-12 main-section">
+    <main id="main" class="col-12 main-section">
         <div class='{{ $container }} main-container'>
 
             @include('layouts.partials.show_alert')
@@ -12,7 +12,7 @@
                     <div class='modal-dialog modal-dialog-centered'>
                         <div class='modal-content border-0 p-0'>
                             <div class='modal-header d-flex justify-content-between align-items-center'>
-                                <h2 tabindex="0" class='modal-title'>{{ trans('langError') }}</h2>
+                                <h2 tabindex="0" class='modal-title' id='modal-title-id'>{{ trans('langError') }}</h2>
                                 <button aria-label="{{ trans('langClose') }}" type='button' class='close' data-bs-dismiss='modal' id="closeBtn"></button>
                             </div>
                             <div class='modal-body'>
@@ -25,17 +25,20 @@
                     </div>
                 </div>
                 @push('bottom_scripts')
-                    <script>
-                        var warningModal = new bootstrap.Modal(document.getElementById('warning-modal'), {});
-                        const focusTarget = document.getElementById('closeBtn');
-                        warningModal.show();
-                        document.getElementById('warning-modal').addEventListener('shown.bs.modal', function () {
-                            focusTarget.focus();
-                        });
-                        document.body.addEventListener('keydown', function(e) {
-                          if (e.key == "Escape") {
-                            warningModal.hide();
-                          }
+                    <script type="text/javascript">
+                        $(document).ready(function() {
+                            var warningModalElement = document.getElementById('warning-modal');
+                            var warningModal = new bootstrap.Modal(warningModalElement, {});
+                            var focusTarget = document.getElementById('modal-title-id');
+                            warningModal.show();
+                            warningModalElement.addEventListener('shown.bs.modal', function () {
+                                focusTarget.focus();
+                            });
+                            document.body.addEventListener('keydown', function(e) {
+                                if (e.key === "Escape") {
+                                    warningModal.hide();
+                                }
+                            });
                         });
                     </script>
                 @endpush
@@ -220,7 +223,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </main>
 
 <script type='text/javascript'>
     $(document).ready(function() {

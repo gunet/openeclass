@@ -45,10 +45,16 @@ $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $la
 $navigation[] = array('url' => "group_space.php?course=$course_code&amp;group_id=$group_id", 'name' => q($group_name));
 
 load_js('tools.js');
-load_js('select2');
+load_js('slimselect');
 $head_content .= "<script type='text/javascript'>
     $(document).ready(function () {
-        $('#select-tutor').select2();
+        slimSelectFun (
+            '#select-tutor', 
+            '" . js_escape(trans('langSearch')) . "', 
+            '" . js_escape(trans('langWelcomeSelect')) . "', 
+            '" . js_escape(trans('langSelectAll')) . "', 
+            '" . js_escape(trans('langListChoices')) . "'
+        );
     });
     </script>    
 ";
@@ -198,7 +204,7 @@ if ($is_editor) {
     $checked['public_users_list'] = ($group->public_users_list? 'checked':'');
     $checked['booking'] = ($group->booking? 'checked':'');
 
-    $tool_content_tutor = "<select name='tutor[]' multiple id='select-tutor' class='form-select'>\n";
+    $tool_content_tutor = "<select name='tutor[]' multiple id='select-tutor' class='form-control'>\n";
     $q = Database::get()->queryArray("SELECT user.id AS user_id, surname, givenname,
                                    user.id IN (SELECT user_id FROM group_members
                                                               WHERE group_id = ?d AND

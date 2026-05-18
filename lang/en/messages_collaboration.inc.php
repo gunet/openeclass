@@ -1,7 +1,8 @@
 <?php
 
 // Message file for language en
-// Generated 2026-03-11 16:54:14
+// Generated 2026-03-31 11:43:38
+
 $langTeacherStudentTutorials = "Useful Guides $langsOfTeacher - $langsOfStudent";
 $langAdminTutorials = "Useful Guides Administrator";
 $lang_email_required = "$langOfUserS email must be required";
@@ -183,53 +184,19 @@ $langInfoIfTcExists = "The live mode option has been disabled as there is a vide
 $langInfoIfMeetingExists = "The remote type option has been disabled as the live meeting completion criterion is active.";
 $infoPrereqSession = "The session you select as a prerequisite must have at least one completion criterion.</br>
  Otherwise the system will ignore the session prerequisite calculation process.";
-$langEclass = "Platform for Cooperation on Climate Change and Cultural Heritage";
-$langTeacher = "Coordinator";
-$langOfTeacher = "Coordinator";
-$langTeachers = "Coordinators";
-$langOfTeachers = "Coordinators";
-$langsTeacher = "coordinator";
-$langsOfTeacher = "coordinator";
-$langsTeachers = "coordinators";
-$langsOfTeachers = "coordinators";
-$langCTeacher = "COORDINATOR";
-$langConsultant = "Consultant";
-$langCourseAdminTeacher = "Admin - Coordinator";
-$langOfCourseAdminTeacher = "Admin - Coordinator";
-$langCourseAdminTeachers = "Administrators - Coordinators";
-$langOfCourseAdminTeachers = "Administrators - Coordinators";
 $langsCourseAdminTeacher = "admin - coordinator";
 $langsOfCourseAdminTeacher = "admin - coordinator";
 $langsCourseAdminTeachers = "administrators - coordinators";
 $langsOfCourseAdminTeachers = "administrators - coordinators";
-$langEditor = "Assistant coordinator";
-$langOfEditor = "Assistant coordinator";
-$langsEditor = "assistant coordinator";
-$langsOfEditor = "assistant coordinator";
-$langStudent = "Member";
-$langOfStudent = "Member";
-$langStudents = "Members";
-$langOfStudents = "Members";
-$langCStudent2 = "MEMBER";
 $langsStudent = "member";
-$langsOfStudent = "member";
-$langsStudents = "members";
-$langsOfStudents = "members";
-$langsOfStudentss = "members";
 $langsstudent_acc = "member";
 $langCourse = "Collaboration";
-$langCourses = "Collaborations";
-$langOfCourses = "Collaborations";
-$langOfCourse = "Collaboration";
 $langsCourse = "collaboration";
 $langsCourses = "collaborations";
 $langsOfCourse = "collaboration";
 $langsOfCourses = "collaborations";
-$langCourseS = "collaboration";
 $langMyCourses = "My Collaborations";
-$langInfoAbout = "The $siteName platform is a complete Electronic Collaboration Management System. It follows the philosophy of open source software and supports the Asynchronous Distance Learning service without limitations and commitments. Access to the service is done using a simple web browser without requiring specialized technical knowledge.";
 $langLocale = 'el_GR.UTF-8';
-$langTotalCourses = "Number of $langsOfCourses";
 $langInCourses = "in $langsCourse";
 $langInCoursesL = "in $langsCourse";
 $langUserWithRights = "User with rights to create collaborations";
@@ -311,8 +278,6 @@ $langStatsCourse = "Statistics $langOfCourse";
 $langCourseEditSuccess = "$langsOfCourse details changed successfully!";
 $langCourseInfoEdit = "Change $langsOfCourse elements";
 $langBackCourse = "Return to the $langsOfCourse home page";
-$langCourseFormat = "Format $langsOfCourse";
-$langWithCourseUnits = "$langCourse with modules (weekly, thematic)";
 $langsCourseSharing = "$langsOfCourse sharing on social networks";
 $langsCourseRating = "$langsOfCourse assessment";
 $langCourseComment = "$langsOfCourse annotation";
@@ -544,8 +509,11 @@ title on a separate line. If you want it to be added automatically
 moderator in $langsCourse, enter first name or username
 of after the title, separated by the character \"|\".";
 $langMultiCourseTitles = "Titles / Moderators $langOfCourses";
+$langMultiCourseCodes = "$langOfCourses codes";
 $langMultiCourseData = "Data $langOfCourses";
 $langMultiCourseCreated = "$langsCourse was created";
+$langMultiCourseDeleted = "$langsCourse was deleted";
+$langMultiCourseNotDeleted = "$langsCourse failed to delete";
 $langNewPersoMessage = 'New personal message';
 $langNewCourseMessage = "New message $langsOfCourse";
 $langBadFormData = 'File submission failure';
@@ -778,7 +746,6 @@ $searchuser = "Search Moderators / Users";
 $langAsProf = "as $langsTeacher";
 $langCourseVisits = "Collaboration Visits";
 $langDurationVisitsPerCourse = "Duration of participation per $langsCourse";
-$langStudentCannotRegister = "To register as a user with $langsOfStudent rights, contact the platform administrators.";
 $langTeacherCannotRegister = "To register as a $langsOfTeacher user, please contact the platform administrators.";
 $langUserAccount = "Account $langOfStudent";
 $langProfAccount = "Account $langOfTeacher";
@@ -921,8 +888,6 @@ $langRequestStudent = "$langsOfStudent's application is closed!";
 $langAddToCourseHome = "Display on its main page $langsOfCourse";
 $langSeenToCourseHome = "It appears on its main page $langsOfCourse";
 $langRemoveFromCourseHome = "Hide from its main page $langsOfCourse";
-$langStudentViewEnable = "View page as $langsStudent";
-$langStudentViewDisable = "View page as $langsTeacher";
 $langMailNotVerified = "Your email is not confirmed. You will not be able to receive emails from $langsCourses until you confirm this.
 To confirm it click";
 $langEventcourse = "Facts $langsOfCourses";

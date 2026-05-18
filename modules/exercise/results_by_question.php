@@ -62,7 +62,7 @@ $pageName = q_math($exerciseTitle) ;
 $questionList = $objExercise->selectQuestionList();
 //display exercise description if there is one
 if($exerciseDescription) {
-    // $tool_content .= "<h3>$langExerciseDescription</h3>
+    // $tool_content .= "<h2 class='text-heading-h3'>$langExerciseDescription</h2>
     //     <div class='table-responsive'>
     //         <table class='table-default'>
     //             <tr>
@@ -73,7 +73,7 @@ if($exerciseDescription) {
 
     $tool_content .= "<div class='panel panel-default mb-4'>
                         <div class='panel-heading'>
-                            <h3 class='mb-0'>$langExerciseDescription</h3>
+                            <h2 class='text-heading-h3 mb-0'>$langExerciseDescription</h2>
                         </div>
                         <div class='panel-body'>
                             " . standard_text_escape($exerciseDescription) . "
@@ -85,7 +85,7 @@ $tool_content .= "
    
     <div class='panel panel-default'>
     <div class='panel-heading'>
-        <h3 class='mb-0'>$langTableFreeText</h3>
+        <h2 class='text-heading-h3 mb-0'>$langTableFreeText</h2>
     </div>
     <div class='panel-body'>
     <div class='table-responsive mt-0'>
@@ -130,7 +130,7 @@ $tool_content .= "
 
 $tool_content .= "<div class='card panelCard card-default px-lg-4 py-lg-3 mt-4'>
   <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-    <h3 class='mb-0'>" . $langOpenQuestionPageTitle . "</h3>
+    <h2 class='text-heading-h3 mb-0'>" . $langOpenQuestionPageTitle . "</h2>
   </div>
     <div class='card-body'>";
     $question_types = Database::get()->queryArray("SELECT exq.question, exwq.q_position, exq.id, eur.eid "

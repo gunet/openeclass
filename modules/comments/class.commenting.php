@@ -89,20 +89,20 @@ Class Commenting {
                                     
                                 </a>";
             $out = "$comments_title
-                    <div class='modal fade text-start' id='commentArea-$this->rid' role='dialog'>
+                    <div class='modal fade text-start' id='commentArea-$this->rid' role='dialog' tabindex='-1'>
                       <div class='modal-dialog modal-lg'>
                         <div class='modal-content'>
                           <div class='modal-header'>
                             <div class='modal-title'>
                                 <div class='icon-modal-default'><i class='fa-solid fa-cloud-arrow-up fa-xl Neutral-500-cl'></i></div>
-                                <h2 class='modal-title-default text-center mb-0'>$langComments</h2>
+                                <h2 class='modal-title-default text-center mb-0' tabindex='0'>$langComments</h2>
                             </div>
                            
                               
                           </div>
                           <div class='modal-body px-lg-5 px-0' id='comments-$this->rid'>";
         } else {
-            $comments_title = "<h3 id='comments_title'>$langComments (<span class='fs-5' id='commentsNum-$this->rid'>$commentsNum</span>)</h3>";
+            $comments_title = "<h2 id='comments_title' class='text-heading-h3'>$langComments (<span class='fs-5' id='commentsNum-$this->rid'>$commentsNum</span>)</h2>";
             $out = "<div class='commenting pt-3 pb-3 mt-3'>
                         $comments_title
                     <div class='commentArea' id='commentArea-$this->rid'>

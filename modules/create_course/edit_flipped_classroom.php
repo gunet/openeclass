@@ -288,7 +288,7 @@ if (!isset($_POST['next'])) {
                 <div class='form-group mt-4'>
                     <label for='description' class='col-sm-12 control-label-notes mb-1'>$langCont <small>$langOptional</small>:</label>
                     <div class='col-sm-12'>
-                          " .  rich_text_editor('description', 4, 20, purify($q4->description)) . "
+                          " .  rich_text_editor('description', 4, 20, purify($q4->description), options: array('id' => 'description')) . "
                     </div>
                 </div>";
                 if($q4->lectures_model==2){
@@ -483,9 +483,9 @@ if (!isset($_POST['next'])) {
                 <form class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]?fromFlipped=1' onsubmit=\"return validateNodePickerForm();\">
                 <div class='card border-0'>
                     <div class='card-header border-0 px-0'>
-                        <h3>
+                        <h2 class='text-heading-h3'>
                             $langActSelect
-                        </h3>
+                        </h2>
                     </div>
                 </div>
 

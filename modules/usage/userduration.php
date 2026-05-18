@@ -287,7 +287,7 @@ if (isset($_GET['u'])) { //  stats per user
             $tool_content .= selection_course_modules();
             $tool_content .= "<div class='col-sm-12 mt-3'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>" . which_module($module) . "</span></div></div>";
         } else {
-            $tool_content .= "<h3>" . which_module($module) . "</h3>";
+            $tool_content .= "<h2 class='text-heading-h3'>" . which_module($module) . "</h2>";
         }
         $tool_content .= "
         <div class='col-sm-12'>

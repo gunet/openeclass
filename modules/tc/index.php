@@ -103,6 +103,7 @@ $head_content .= "<script type='text/javascript'>
     </script>";
 
 load_js('select2');
+load_js('slimselect');
 
 $head_content .= "<script type='text/javascript'>
     $(document).ready(function () {
@@ -111,7 +112,14 @@ $head_content .= "<script type='text/javascript'>
             return false;
         });
 
-        $('#select-groups').select2();
+        
+        slimSelectFun (
+            '#select-groups', 
+            '" . js_escape(trans('langSearch')) . "', 
+            '" . js_escape(trans('langWelcomeSelect')) . "', 
+            '" . js_escape(trans('langSelectAll')) . "', 
+            '" . js_escape(trans('langListChoices')) . "'
+        );
         $('#selectAll').click(function(e) {
             e.preventDefault();
             var stringVal = [];
