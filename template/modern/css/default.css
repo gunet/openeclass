@@ -6544,6 +6544,7 @@ th.grade-col a{
 .pollTotalAnswers{
   display: none;
 }
+/*  */
 
 /******************************** Progress Module *******************************/
 
@@ -6559,9 +6560,9 @@ th.grade-col a{
     display: flex;
     gap: 0;
     position: relative;
-    overflow-x: auto;
     padding-left: 0;
     margin-left: 0;
+    flex-wrap: wrap;
 }
 
 .progress-module .progress-nav-tab {
@@ -6577,6 +6578,15 @@ th.grade-col a{
     font-weight: 500;
     white-space: nowrap;
     position: relative;
+}
+
+@media (max-width: 575.98px) {
+    .progress-module .progress-nav-tab {
+        flex: 1 1 auto;
+        text-align: center;
+        padding: 11px 8px;
+        font-size: 13px;
+    }
 }
 
 .progress-module .progress-nav-tab:hover {
@@ -7054,4 +7064,92 @@ th.grade-col a{
     cursor: not-allowed;
     pointer-events: none;
     background: transparent;
+}
+
+
+/* The circular progress header seen in image_002223.png */
+.completion-header-card {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    padding: 30px;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    margin-bottom: 30px;
+}
+
+.progress-circle-container {
+    position: relative;
+    width: 100px;
+    height: 100px;
+}
+
+/* Container for the activities grid */
+.activities-card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+    padding: 20px 0;
+}
+
+/* Individual Activity Card */
+.activity-card-item {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 140px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.activity-card-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    border-color: #3b82f6;
+}
+
+/* Icon box inside the card */
+.activity-card-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    color: white;
+    margin-right: 15px;
+}
+
+/* Specific Activity Colors */
+.bg-assignment { background-color: #3b82f6; } 
+.bg-exercise { background-color: #3b82f6; }  
+.bg-blog { background-color: #22c55e; }       
+.bg-poll { background-color: #f97316; }      
+
+.status-label {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 20px;
+    width: fit-content;
+    margin-top: 15px;
+    border: 1px solid;
+}
+
+.status-label-pending {
+    background: #fff7ed;
+    color: #c2410c;
+    border-color: #ffedd5;
+}
+
+.status-label-success {
+    background: #f0fdf4;
+    color: #15803d;
+    border-color: #dcfce7;
 }
