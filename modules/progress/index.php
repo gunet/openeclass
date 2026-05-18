@@ -50,6 +50,74 @@ $toolName = $langProgress;
 
 load_js('tools.js');
 
+$head_content .= "
+<style>
+    .progress-module .alert-info,
+    .progress-module .alert-info h1, .progress-module .alert-info h2,
+    .progress-module .alert-info h3, .progress-module .alert-info h4,
+    .progress-module .alert-info h5, .progress-module .alert-info h6,
+    .progress-module .alert-info div, .progress-module .alert-info small,
+    .progress-module .alert-info span, .progress-module .alert-info p,
+    .progress-module .alert-info b, .progress-module .alert-info strong,
+    .progress-module .alert-info li, .progress-module .alert-info label,
+    .progress-module .alert-info i, .progress-module .alert-info svg {
+        color: #0073E6 !important;
+    }
+    .progress-module .alert-info {
+        background-color: #fff !important;
+        border: 1.5px solid #0073E6 !important;
+    }
+
+    .progress-module .alert-success,
+    .progress-module .alert-success h1, .progress-module .alert-success h2,
+    .progress-module .alert-success h3, .progress-module .alert-success h4,
+    .progress-module .alert-success h5, .progress-module .alert-success h6,
+    .progress-module .alert-success div, .progress-module .alert-success small,
+    .progress-module .alert-success span, .progress-module .alert-success p,
+    .progress-module .alert-success b, .progress-module .alert-success strong,
+    .progress-module .alert-success li, .progress-module .alert-success label,
+    .progress-module .alert-success i, .progress-module .alert-success svg {
+        color: #1E7E0E !important;
+    }
+    .progress-module .alert-success {
+        background-color: #fff !important;
+        border: 1.5px solid #1E7E0E !important;
+    }
+
+    .progress-module .alert-warning,
+    .progress-module .alert-warning h1, .progress-module .alert-warning h2,
+    .progress-module .alert-warning h3, .progress-module .alert-warning h4,
+    .progress-module .alert-warning h5, .progress-module .alert-warning h6,
+    .progress-module .alert-warning div, .progress-module .alert-warning small,
+    .progress-module .alert-warning span, .progress-module .alert-warning p,
+    .progress-module .alert-warning b, .progress-module .alert-warning strong,
+    .progress-module .alert-warning li, .progress-module .alert-warning label,
+    .progress-module .alert-warning i, .progress-module .alert-warning svg {
+        color: #F57600 !important;
+    }
+    .progress-module .alert-warning {
+        background-color: #fff !important;
+        border: 1.5px solid #F57600 !important;
+    }
+
+    .progress-module .alert-danger,
+    .progress-module .alert-danger h1, .progress-module .alert-danger h2,
+    .progress-module .alert-danger h3, .progress-module .alert-danger h4,
+    .progress-module .alert-danger h5, .progress-module .alert-danger h6,
+    .progress-module .alert-danger div, .progress-module .alert-danger small,
+    .progress-module .alert-danger span, .progress-module .alert-danger p,
+    .progress-module .alert-danger b, .progress-module .alert-danger strong,
+    .progress-module .alert-danger li, .progress-module .alert-danger label,
+    .progress-module .alert-danger i, .progress-module .alert-danger svg {
+        color: #C44601 !important;
+    }
+    .progress-module .alert-danger {
+        background-color: #fff !important;
+        border: 1.5px solid #C44601 !important;
+    }
+</style>
+";
+
 // Initialize tool_content
 $tool_content = '';
 
@@ -88,8 +156,7 @@ if ($show_tabs) {
     } else {
        $course_completion_tab = "
     <button class='progress-nav-tab " . ($active_tab == 'course_completion' ? 'active' : '') . "' data-tab='course_completion'>
-        <i class='fa-solid fa-calendar-check'></i>&nbsp &nbsp &nbsp;" . $langCourseCompletion . "
-    </button>
+     $langCourseCompletion 
 ";
     }
 
@@ -101,13 +168,13 @@ if ($show_tabs) {
         <div class='progress-nav-tabs'>
             $course_completion_tab
             <button class='progress-nav-tab " . ($active_tab == 'badges' ? 'active' : '') . "' data-tab='badges'>
-                 <i class='fa-solid fa-award'></i>&nbsp &nbsp &nbsp;" . $langBadges . "
+                 $langBadges 
             </button>
             <button class='progress-nav-tab " . ($active_tab == 'certificates' ? 'active' : '') . "' data-tab='certificates'>
-                <i class='fa-solid fa-certificate'></i>&nbsp &nbsp &nbsp;" . $langCertificates . "
+                 $langCertificates 
             </button>
             <button class='progress-nav-tab " . ($active_tab == 'points' ? 'active' : '') . "' data-tab='points'>
-                <i class='fa-solid fa-gamepad'></i>&nbsp &nbsp &nbsp;" . $langPointsGames . "
+                  $langPointsGames 
             </button>
         </div>
     </div>
@@ -827,13 +894,13 @@ if (isset($display) and $display) {
                     display_users_points_game_progress($element_id);
                 } else {
                     display_activities($element, $element_id);
-    
+
                     // Show leaderboard accordion if enabled by teacher
                     $game_config = Database::get()->querySingle("SELECT config FROM points_game WHERE id = ?d", $element_id);
                     if ($game_config) {
                         $config = json_decode($game_config->config, true);
                         $leaderboard_enabled = isset($config['enable_leaderboard']) && $config['enable_leaderboard'];
-                        
+
                         if ($leaderboard_enabled) {
                             display_leaderboard_accordion($element_id);
                         }
