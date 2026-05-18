@@ -1832,10 +1832,22 @@ function cert_output_to_pdf($certificate_id, $user, $certificate_title = null, $
 
     global $webDir, $urlServer, $langCertAuthenticity, $langpublisher, $siteName;
 
+    $newCertificates = false;
+    $cert_path = '';
     if (isset($preview) and $preview) { // certificate preview
         $certificate_id = $certificate_template_id;
         $q = Database::get()->querySingle("SELECT * FROM certificate_template WHERE id = ?d", $certificate_id);
-        $cert_file = $q->filename;
+
+        if (isset($_GET['newCertificates'])) {
+            $newCertificates = true;
+            $cert_path = getFilepaths('newCertificatePath', $q->filename);
+            $tmp_cert_file = getFilenames('newCertificatePath', $q->filename, 'html');
+            $cert_file_arr = explode('/', $tmp_cert_file);
+            $cert_file = $cert_file_arr[count($cert_file_arr) - 1];
+        } else {
+            $cert_file = $q->filename;
+        }
+        
         $student_name = uid_to_name($user);
         $orientation = $q->orientation;
         $cert_link = $langCertAuthenticity . ":&nbsp;&nbsp;&nbsp;" . certificate_link($certificate_id, $user, true);
@@ -1897,7 +1909,11 @@ function cert_output_to_pdf($certificate_id, $user, $certificate_title = null, $
     ]);
 
     $mpdf->AddFontDirectory(_MPDF_TTFONTDATAPATH);
-    chdir("$webDir" . CERT_TEMPLATE_PATH . dirname($cert_file));
+    if ($newCertificates) {
+        chdir($cert_path);
+    } else {
+        chdir("$webDir" . CERT_TEMPLATE_PATH . dirname($cert_file));
+    }
 
     $html_certificate = file_get_contents(basename($cert_file));
     $html_certificate = preg_replace('(%certificate_title%)', $certificate_title, $html_certificate);
@@ -2097,4 +2113,62 @@ function check_session_progress($session_id = 0, $forUser = 0) {
     Game::checkCompleteness($forUser, $course_id, 0, $session_id);
 
     return true;
+}
+
+/**
+ * @brief get new certificates path
+ * @param $certifatesStatus
+ * @param $filePath
+ * @return type
+ */
+function getFilepaths($certifatesStatus, $filePath) {
+    global $webDir;
+
+    if ($certifatesStatus == 'newCertificatePath') {
+        $tmpFilePath = explode('/', $filePath);
+        $filePath = $webDir . '/courses/user_progress_data/cert_templates/' . $tmpFilePath[0];
+        $files = scandir($filePath);
+        foreach ($files as $f) {
+            $certPath = $webDir . '/courses/user_progress_data/cert_templates/' . $tmpFilePath[0] . '/' . $f;
+            if (is_dir($certPath) && $f != '.' && $f != '..' && !str_contains('.zip', $f)) {
+                return $certPath;
+            }  
+        }
+    }
+
+    return;
+}
+
+/**
+ * @brief get new certificates name
+ * @param $certifatesStatus
+ * @param $filePath
+ * @param $fileType
+ * @return type
+ */
+function getFilenames($certifatesStatus, $filePath, $fileType) {
+    global $webDir, $urlServer;
+
+    // Old certificate path
+    $theFile = $urlServer . "courses/user_progress_data/cert_templates/" . $filePath;
+
+    if ($certifatesStatus == 'newCertificatePath') {
+        $tmpFilePath = explode('/', $filePath);
+        $filePath = $webDir . '/courses/user_progress_data/cert_templates/' . $tmpFilePath[0];
+        $files = scandir($filePath);
+        foreach ($files as $f) {
+            $certPath = $webDir . '/courses/user_progress_data/cert_templates/' . $tmpFilePath[0] . '/' . $f;
+            if (is_dir($certPath) && $f != '.' && $f != '..' && !str_contains('.zip', $f)) {
+                $cert_files = scandir($certPath);
+                foreach ($cert_files as $cf) {
+                    if (str_contains($cf, $fileType)) {
+                        $cert_image_path = $certPath . '/' . $cf;
+                        $theFile = $urlServer . "courses/user_progress_data/cert_templates/" . $tmpFilePath[0] . "/" . $f . "/" . $cf;  
+                    }
+                }
+            }  
+        }
+    }
+
+    return $theFile;
 }

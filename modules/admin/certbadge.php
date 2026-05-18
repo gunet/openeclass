@@ -110,6 +110,31 @@ $action_bar = action_bar(array(
 
 $tool_content .= $action_bar;
 
+if (isset($_GET['download_cert'])) {
+    $certId = intval($_GET['cid']);
+    $filename = Database::get()->querySingle("SELECT `filename` FROM certificate_template WHERE id = ?d", $certId)->filename;
+    $tmp_folder = explode('/', $filename);
+    $folder = "$webDir/courses/user_progress_data/cert_templates/" . $tmp_folder[0];
+
+    // find .zip
+    $zipFiles = glob($folder . '/*.zip');
+
+    if (empty($zipFiles)) {
+        http_response_code(404);
+        exit('Δεν βρέθηκε ZIP αρχείο.');
+    }
+
+    // first zip
+    $zipFile = $zipFiles[0];
+
+    header('Content-Type: application/zip');
+    header('Content-Disposition: attachment; filename="' . basename($zipFile) . '"');
+    header('Content-Length: ' . filesize($zipFile));
+
+    readfile($zipFile);
+    exit;
+}
+
 if (isset($_GET['preview'])) { // certificate preview
     cert_output_to_pdf(intval($_GET['certificate_id']), $uid, $langTitle, $langMessage, get_config('site_name'), time(), intval($_GET['certificate_id']), null, true);
 }
@@ -530,6 +555,7 @@ if (isset($_GET['action'])) {
     }
 } else { // display available certificates / badges
     $sql1 = Database::get()->queryArray("SELECT * FROM certificate_template");
+    $newThumbnailPath = '';
     $tool_content .= "<h2 class='text-heading-h3'>$langCertificates</h2>";
     $tool_content .= "<div class='table-responsive'>
                         <table class='table-default'>
@@ -544,12 +570,26 @@ if (isset($_GET['action'])) {
 
                 foreach ($sql1 as $cert_data) {
                     $is_allowed_to_configure_certificate = has_full_rights_on_certificate($cert_data->department_id);
-                    $cert_image_path = $webDir . "/courses/user_progress_data/cert_templates/certificate{$cert_data->id}_thumbnail.png";
-                    $cert_image_path_file = '';
+                    $oldCert = false;
+                    if (!str_contains($cert_data->filename, '.html')) { // new way
+                        $cert_image_path = getFilepaths('newCertificatePath', $cert_data->filename);
+                        $newThumbnailPath = getFilenames('newCertificatePath', $cert_data->filename, 'thumbnail');
+                    } else { // old way
+                        $oldCert = true;
+                        $cert_image_path = $webDir . "/courses/user_progress_data/cert_templates/certificate{$cert_data->id}_thumbnail.png";
+                        $cert_image_path_file = '';
+                    }
                     if (file_exists($cert_image_path)) {
-                        $cert_image_path_file = "<a href='$_SERVER[SCRIPT_NAME]?certificate_id=$cert_data->id&amp;preview=1' target='_blank'>
-                                                    <img data-bs-toggle='tooltip' title='$langPreview' style='width:50px; height:50px;' src='{$urlServer}courses/user_progress_data/cert_templates/certificate{$cert_data->id}_thumbnail.png'>
-                                                 </a>";
+                        if ($oldCert) {
+                            $cert_image_path_file = "<a href='$_SERVER[SCRIPT_NAME]?certificate_id=$cert_data->id&amp;preview=1' target='_blank'>
+                                                        <img data-bs-toggle='tooltip' title='$langPreview' style='width:50px; height:50px;' src='{$urlServer}courses/user_progress_data/cert_templates/certificate{$cert_data->id}_thumbnail.png'>
+                                                    </a>";
+                        } else {
+                            $cert_image_path_file = "<a href='$_SERVER[SCRIPT_NAME]?certificate_id=$cert_data->id&amp;preview=1&amp;newCertificates=true' target='_blank'>
+                                                        <img data-bs-toggle='tooltip' title='$langPreview' style='width:50px; height:50px;' src='{$newThumbnailPath}'>
+                                                    </a>";
+                        }
+                        
                     }
                     $tool_content .= "<tr>
                                         <td style='width:30%;'>
@@ -564,6 +604,10 @@ if (isset($_GET['action'])) {
                                         array('title' => $langEdit,
                                             'icon' => 'fa-edit',
                                             'url' => "$_SERVER[SCRIPT_NAME]?action=edit_cert&amp;cid=$cert_data->id"
+                                            ),
+                                        array('title' => $langDownload,
+                                            'icon' => 'fa-download',
+                                            'url' => "$_SERVER[SCRIPT_NAME]?download_cert=true&amp;cid=$cert_data->id"
                                             ),
                                         array('title' => $langDelete,
                                             'icon' => 'fa-xmark',
